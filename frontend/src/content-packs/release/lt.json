@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Iš naujo aktyvuoti mazgą Workflow viduje",
+    "releaseTour": {
+      "label": "Naujiena „Heym“",
+      "introTitle": "Naujiena šiame leidime",
+      "introDescription": "Trumpa apžvalga naujovių nuo paskutinio atnaujinimo. Užtruks apie minutę.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable mazgas: iš naujo aktyvuoti mazgą Workflow viduje",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Naujasis **Enable mazgas** yra **Disable mazgo** atitikmuo. Pasirinkite mazgą pagal pavadinimą, kad jį vėl aktyvuotumėte, ir išsaugokite pakeitimą. Deaktyvuotas **Cron** Trigger vėl bus vykdomas kitu suplanuotu laiku. Jei mazgas yra toliau eigoje ir dar nebuvo vykdytas, jis bus vykdomas iš karto dabartinio vykdymo metu."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deaktyvuotas Trigger niekada savarankiškai nepaleidžia vykdymo. Todėl įdėkite Enable mazgą po kito įėjimo taško, pavyzdžiui, **Input** Trigger. **Wait** mazgas dabar palaiko ir ilgesnes pauzes: iki 15 minučių vietoj vienos."
+          }
+        ],
+        "tour": {
+          "description": "Iš naujo aktyvuoti deaktyvuotą mazgą tiesiogiai iš Workflow, pvz., pristabdytą Cron Trigger.",
+          "useCases": [
+            "Paleisti deaktyvuotą Cron Trigger pagal poreikį per Webhook",
+            "Kombinuoti su Disable mazgu, kad mazgai būtų įjungiami ir išjungiami priklausomai nuo būsenos",
+            "Pristabdyti Workflow su Wait mazgu iki 15 minučių"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Peržiūrėkite laukiančius žmogiškuosius patvirtinimus tiesiog prietaisų skydelyje",
+    "releaseTour": {
+      "label": "Naujiena „Heym“",
+      "introTitle": "Naujiena šiame leidime",
+      "introDescription": "Trumpa naujienų nuo paskutinio atnaujinimo apžvalga. Užtruks apie minutę.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Atlikite laukiančias peržiūras naudodami prietaisų skydelio valdiklį",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Pridėkite **HITL** valdiklį ir antraštėje bus rodomas laukiančių peržiūrų skaičius kaip `1/n ausstehend`. Naršykite po įrašus rodyklių klavišais. Workflow pavadinimas atidaro vykdymą tiesiog drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** užbaigia juodraštį. Istorijos piktograma atidaro vykdymą istorijos dialoge tame pačiame puslapyje. Eilė yra asmeninė: bendrinamas prietaisų skydelis nerodo svetimų juodraščių."
+          }
+        ],
+        "tour": {
+          "description": "Priestaisų skydelio karuselė, skirta jūsų laukiantiems patvirtinimams, su skaitikliu antraštėje.",
+          "useCases": [
+            "Pamatyti, kiek peržiūrų laukia, prieš atidarant pirmąją",
+            "Patvirtinti, prašyti pakeitimų arba atmesti neišeinant iš prietaisų skydelio",
+            "Atidaryti šį vykdymą per piktogramą šalia valdiklio pavadinimo istorijos dialoge"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Prietaisų skydelis"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "DI asistentas testuoja savo Workflow ir kuria duomenų lenteles",
+    "releaseTour": {
+      "label": "Naujiena „Heym“",
+      "introTitle": "Naujiena šiame leidime",
+      "introDescription": "Trumpa naujienų nuo paskutinio atnaujinimo apžvalga. Užtruks apie minutę.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO režimas: DI asistentas testuoja tai, ką sukuria",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Įjungus **YOLO režimą** Canvas **DI asistentas** nebesustoja pritaikęs Workflow. Jis vykdo Workflow kaip per **Run**, nuskaito rezultatą ir savarankiškai koreguoja Workflow iki penkių kartų per žinutę. Kiekvienas atsakymas rodo veiksmus tiesiogiai."
+          },
+          {
+            "type": "prose",
+            "markdown": "Prieš pirmą paleidimą jis paprašo testinių įvesties duomenų su pasiūlytomis reikšmėmis ir jas naudoja pakartotinai. Jis taip pat gali vykdyti kitus Workflow, jei reikia jų rezultatų. Jei reikia sprendimo ar prisijungimo duomenų, jis klausia įprastos klausimų kortelės. Tikri paleidimai: YOLO režimas pagal numatytuosius nustatymus išjungtas, o **Stop** bet kada nutraukia eigą."
+          }
+        ],
+        "tour": {
+          "description": "DI asistentas vykdo sukurtus Workflow, tikrina rezultatą ir savarankiškai taiso klaidas, kol jie veikia.",
+          "useCases": [
+            "Aprašyti Workflow ir iš karto gauti ištestuotą versiją",
+            "Leisti asistentui automatiškai aptikti ir ištaisyti klaidingus mazgus",
+            "Patikrinti kitų Workflow grąžinamas reikšmes prieš susiejant"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "DI asistentas pasirenka arba sukuria duomenų lenteles",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kai Workflow išsaugo duomenų įrašus, **DI asistentas** dabar atpažįsta jūsų **DataTables**. Nurodykite lentelę ir jis ją naudos. Priešingu atveju jis paklaus apie tinkamą lentelę arba pasiūlys **Sukurti naują lentelę** su reikiamais stulpeliais."
+          },
+          {
+            "type": "prose",
+            "markdown": "Veikia Canvas asistente, YOLO režimu, **Chat**, dokumentacijoje ir per MCP su `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "DI asistentas paklausia apie tinkamą duomenų lentelę arba sukuria naują su reikiamais stulpeliais.",
+          "useCases": [
+            "Automatiškai rinkti potencialius klientus į lenteles ir kartu generuoti Workflow bei lentelę",
+            "Pasirinkti esamas lenteles pagal stulpelius ir tipus",
+            "Kurti ir sujungti lenteles tiesiogiai iš Chat arba per MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Kurti kelis Dashboard ir bendrinti juos su komanda",
+    "releaseTour": {
+      "label": "Naujiena „Heym“",
+      "introTitle": "Naujiena šiame leidime",
+      "introDescription": "Trumpa naujienų nuo paskutinio atnaujinimo apžvalga. Užtruks apie minutę.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Kurti kelis Dashboard ir bendrinti juos su komanda",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Skirtukas **Dashboard** dabar palaiko neribotą skaičių Dashboard. Patogiai perjunkite naudodami pasirinkimą skirtuko viršuje arba sukurkite naują paspaudę **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Bendrinkite Dashboard su asmenimis ar komandomis per **Nustatymus**. **Skaitymas** leidžia peržiūrėti ir atnaujinti; **Rašymas** leidžia redaguoti valdiklius. Valdikliai visada naudoja savininko prisijungimo duomenis."
+          }
+        ],
+        "tour": {
+          "description": "Tvarkykite kelis Dashboard, perjunkite tarp jų ir bendrinkite juos tik skaitymo arba redagavimo teisėmis.",
+          "useCases": [
+            "Atskirus Dashboard struktūrizuokite pagal komandą, produktą ar klientą",
+            "Suinteresuotosioms šalims suteikite tik skaitymo peržiūrą",
+            "Iš anksto išbandykite diagramų tipus su pavyzdiniais duomenimis"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

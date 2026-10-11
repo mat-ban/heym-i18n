@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { MessagesSquare, ToggleLeft, ToggleRight } from "lucide-vue-next";
 
 import type { CredentialListItem, LLMModel } from "@/types/credential";
@@ -24,6 +25,7 @@ const emit = defineEmits<{
 }>();
 
 const aiDefaults = useAiDefaults();
+const { t } = useI18n();
 
 const models = ref<LLMModel[]>([]);
 const loadingModels = ref(false);
@@ -63,9 +65,9 @@ const isConfigured = computed(
 );
 
 const statusText = computed(() => {
-  if (!props.chatTool.enabled) return "Disabled, heym_chat is not listed as an MCP tool";
-  if (!isConfigured.value) return "Pick a credential and a model so heym_chat can run";
-  return "Enabled, MCP clients can call heym_chat";
+  if (!props.chatTool.enabled) return t("mcp.chatTool.disabled");
+  if (!isConfigured.value) return t("mcp.chatTool.unconfigured");
+  return t("mcp.chatTool.enabled");
 });
 
 async function loadModels(credentialId: string | null): Promise<void> {
@@ -135,7 +137,7 @@ function onModelSelect(value: string | undefined): void {
         </div>
         <div class="min-w-0">
           <p :class="cn('font-medium', compact ? 'text-sm' : 'text-base')">
-            Heym Chat Tool
+            {{ $t("mcp.chatTool.title") }}
           </p>
           <p class="text-xs text-muted-foreground mt-0.5">
             {{ statusText }}
@@ -146,7 +148,7 @@ function onModelSelect(value: string | undefined): void {
         class="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
         :disabled="saving"
         :aria-pressed="chatTool.enabled"
-        aria-label="Toggle the Heym chat tool"
+        :aria-label="$t('mcp.chatTool.toggleAria')"
         data-testid="mcp-chat-tool-toggle"
         @click="toggleEnabled"
       >
@@ -165,9 +167,7 @@ function onModelSelect(value: string | undefined): void {
       v-if="!compact"
       class="text-sm text-muted-foreground mt-3"
     >
-      Turns the Chat tab engine into one <code class="px-1 py-0.5 bg-muted rounded">heym_chat</code> tool.
-      MCP clients send a plain message and Heym handles the rest: workflows, analytics, boards, schedules,
-      docs, and anything the Chat tab picks up later. Every call lands in your Chat history.
+      {{ $t("mcp.chatTool.description") }}
     </p>
 
     <div
@@ -176,14 +176,14 @@ function onModelSelect(value: string | undefined): void {
     >
       <div class="min-w-0">
         <label class="text-xs font-medium text-muted-foreground block mb-1.5">
-          Credential
+          {{ $t("board.credential") }}
         </label>
         <SearchableSelect
           :model-value="effectiveCredentialId ?? ''"
           :options="credentialOptions"
-          placeholder="Select credential..."
-          search-placeholder="Search credentials..."
-          empty-text="No LLM credentials found."
+          :placeholder="$t('mcp.chatTool.selectCredential')"
+          :search-placeholder="$t('credentials.searchPlaceholder')"
+          :empty-text="$t('mcp.chatTool.noLlmCredentials')"
           select-class="h-9 rounded-md border-input bg-background shadow-none"
           content-class="z-[60]"
           data-testid="mcp-chat-tool-credential"
@@ -192,14 +192,14 @@ function onModelSelect(value: string | undefined): void {
       </div>
       <div class="min-w-0">
         <label class="text-xs font-medium text-muted-foreground block mb-1.5">
-          Model
+          {{ $t("board.model") }}
         </label>
         <SearchableSelect
           :model-value="effectiveModel ?? ''"
           :options="modelOptions"
-          :placeholder="loadingModels ? 'Loading models...' : 'Select model...'"
-          search-placeholder="Search models..."
-          empty-text="No models found."
+          :placeholder="loadingModels ? $t('mcp.chatTool.loadingModels') : $t('mcp.chatTool.selectModel')"
+          :search-placeholder="$t('board.searchModels')"
+          :empty-text="$t('mcp.chatTool.noModelsFound')"
           :disabled="!effectiveCredentialId || loadingModels || modelsError"
           select-class="h-9 rounded-md border-input bg-background shadow-none"
           content-class="z-[60]"
@@ -213,13 +213,13 @@ function onModelSelect(value: string | undefined): void {
       v-if="chatTool.enabled && modelsError"
       class="text-xs text-amber-600 dark:text-amber-400 mt-2"
     >
-      This credential's model list could not be loaded. Pick another credential.
+      {{ $t("mcp.chatTool.modelsError") }}
     </p>
     <p
       v-else-if="chatTool.enabled && !isConfigured"
       class="text-xs text-amber-600 dark:text-amber-400 mt-2"
     >
-      heym_chat is listed but calls will fail until a credential and model are selected.
+      {{ $t("mcp.chatTool.notConfiguredWarning") }}
     </p>
   </div>
 </template>

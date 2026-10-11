@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import type { TraceTimeRange } from "@/types/trace";
 
@@ -14,13 +15,14 @@ interface Emits {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+const { t } = useI18n();
 
 const options = computed<Array<{ value: TraceTimeRange; label: string }>>(() => [
-  { value: "1h", label: "Last 1 hour" },
-  { value: "24h", label: "Last 24 hours" },
-  { value: "7d", label: "Last 7 days" },
-  { value: "30d", label: "Last 30 days" },
-  { value: "all", label: "All time" },
+  { value: "1h", label: t("traces.timeRange1h") },
+  { value: "24h", label: t("traces.timeRange24h") },
+  { value: "7d", label: t("traces.timeRange7d") },
+  { value: "30d", label: t("traces.timeRange30d") },
+  { value: "all", label: t("traces.timeRangeAll") },
 ]);
 
 const internal = computed({

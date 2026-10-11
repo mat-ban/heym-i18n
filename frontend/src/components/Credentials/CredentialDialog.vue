@@ -1702,7 +1702,7 @@ async function handleSave(): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    :title="isEditing ? 'Edit Credential' : 'New Credential'"
+    :title="isEditing ? $t('credentials.editDialogTitle') : $t('credentials.newCredential')"
     :size="type === 'model_router' ? '3xl' : undefined"
     @close="emit('close')"
   >
@@ -1711,24 +1711,24 @@ async function handleSave(): Promise<void> {
       @submit.prevent="handleSave"
     >
       <div class="space-y-2">
-        <Label for="cred-name">Name</Label>
+        <Label for="cred-name">{{ $t('common.name') }}</Label>
         <Input
           id="cred-name"
           v-model="name"
-          placeholder="my-api-key"
+          :placeholder="$t('credentials.namePlaceholder')"
           :disabled="saving"
         />
         <p
           v-if="type !== 'codex'"
           class="text-xs text-muted-foreground"
         >
-          Access via: <code class="bg-muted px-1 rounded">${{ `credentials.${name || 'name'}` }}</code>
+          {{ $t('credentials.accessVia') }}: <code class="bg-muted px-1 rounded">${{ `credentials.${name || 'name'}` }}</code>
         </p>
         <p
           v-else
           class="text-xs text-muted-foreground"
         >
-          Codex tokens are only exposed to the isolated Codex runner.
+          {{ $t('credentials.codexTokensNotice') }}
         </p>
       </div>
 
@@ -1736,19 +1736,19 @@ async function handleSave(): Promise<void> {
         v-if="!isEditing"
         class="space-y-2"
       >
-        <Label for="cred-type">Type</Label>
+        <Label for="cred-type">{{ $t('common.type') }}</Label>
         <SearchableSelect
           id="cred-type"
           :model-value="type"
           :options="typeOptions"
-          placeholder="Select credential type..."
-          search-placeholder="Search credential types..."
-          empty-text="No credential types found."
+          :placeholder="$t('credentials.selectType')"
+          :search-placeholder="$t('credentials.searchTypes')"
+          :empty-text="$t('credentials.noTypesFound')"
           :disabled="saving"
           @update:model-value="type = ($event || 'openai') as CredentialType"
         />
         <p class="text-xs text-muted-foreground">
-          {{ CREDENTIAL_TYPE_DESCRIPTIONS[type] }}
+          {{ $te(`credentials.types.${type}.description`) ? $t(`credentials.types.${type}.description`) : CREDENTIAL_TYPE_DESCRIPTIONS[type] }}
         </p>
       </div>
 
@@ -1756,7 +1756,7 @@ async function handleSave(): Promise<void> {
         v-if="type === 'openai' || type === 'google' || type === 'github' || type === 'sentry' || type === 'elevenlabs' || type === 'opencode'"
         class="space-y-2"
       >
-        <Label for="cred-api-key">API Key</Label>
+        <Label for="cred-api-key">{{ $t('credentials.apiKey') }}</Label>
         <div class="relative">
           <Input
             id="cred-api-key"
@@ -3889,14 +3889,14 @@ async function handleSave(): Promise<void> {
           :disabled="saving"
           @click="emit('close')"
         >
-          Cancel
+          {{ $t('common.cancel') }}
         </Button>
         <Button
           type="submit"
           :loading="saving"
           :disabled="!isValid"
         >
-          {{ isEditing ? 'Save Changes' : ((type === 'google_sheets' && gsOAuthConnected) || (type === 'google_drive' && gdOAuthConnected) || (type === 'bigquery' && bqOAuthConnected) ? 'Done' : 'Create') }}
+          {{ isEditing ? $t('common.saveChanges') : ((type === 'google_sheets' && gsOAuthConnected) || (type === 'google_drive' && gdOAuthConnected) || (type === 'bigquery' && bqOAuthConnected) ? $t('common.done') : $t('common.create')) }}
         </Button>
       </div>
     </form>

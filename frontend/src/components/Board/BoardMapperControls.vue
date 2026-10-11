@@ -85,30 +85,30 @@ function onModelChange(value: string | undefined): void {
   <div class="flex flex-col gap-2">
     <div class="flex items-center gap-2">
       <span class="text-xs font-semibold uppercase text-muted-foreground">
-        Agentic Kanban Model
+        {{ $t("board.agenticKanbanModel") }}
       </span>
       <span
         v-if="!configured"
         class="text-xs font-medium text-amber-500"
       >
-        Required
+        {{ $t("board.required") }}
       </span>
     </div>
     <SearchableSelect
       :model-value="credentialId"
       :options="credentialOptions"
-      placeholder="Credential"
-      search-placeholder="Search credentials…"
-      aria-label="Agentic Kanban Model credential"
+      :placeholder="$t('board.credential')"
+      :search-placeholder="$t('credentials.searchPlaceholder')"
+      :aria-label="$t('board.agenticKanbanModel') + ' ' + $t('board.credential')"
       @update:model-value="onCredentialChange"
     />
     <SearchableSelect
       :model-value="model"
       :options="modelOptions"
-      placeholder="Model"
-      search-placeholder="Search models…"
+      :placeholder="$t('board.model')"
+      :search-placeholder="$t('board.searchModels')"
       :disabled="!credentialId || loadingModels"
-      aria-label="Agentic Kanban Model model"
+      :aria-label="$t('board.agenticKanbanModel') + ' ' + $t('board.model')"
       @update:model-value="onModelChange"
     />
   </div>

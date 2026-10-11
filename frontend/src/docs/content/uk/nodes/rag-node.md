@@ -1,0 +1,225 @@
+# RAG / Vector Store
+
+Вузол **RAG / Vector Store** виконує вставлення, upsert, видалення та пошук документів у векторному сховищі для Retrieval Augmented Generation (RAG). Використовуйте його, щоб доповнювати контекст LLM релевантними документами та підтримувати цей контекст у відповідності до системи, з якої походять документи.
+
+Вузол має спадний список **Database**, який вибирає бекенд:
+
+- **Qdrant** – зберігає вектори на зовнішньому сервері Qdrant (потрібні облікові дані *RAG: Qdrant + OpenAI*).
+- **Postgres (pgvector)** – зберігає вектори у власній базі даних Postgres платформи Heym, без зовнішнього сервісу (потрібні облікові дані *RAG: Psql + OpenAI*).
+
+Типовим є **Qdrant** для зворотної сумісності. Зміна Database фільтрує список **Vector Store** до сховищ, що підтримуються цією базою даних. Обидва бекенди підтримують однакові операції, фільтрування метаданих і переранжування Cohere.
+
+До будь-якого з бекендів також можна звернутися через облікові дані *RAG: Custom Embeddings*, які
+замінюють OpenAI на будь-який endpoint вбудовування, сумісний з OpenAI, і вказують власне векторне
+сховище. Сховище, створене з таких облікових даних, з'являється під тією Database, на яку
+воно націлене. Див. [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag).
+
+## Огляд
+
+| Властивість | Значення |
+|----------|-------|
+| Входи | 1 |
+| Виходи | 1 |
+| Вихід | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+
+## Параметри
+
+| Параметр | Тип | Опис |
+|-----------|------|-------------|
+| `dbType` | `"qdrant"` \| `"pgvector"` | Бекенд векторного сховища (типово: `"qdrant"`) |
+| `vectorStoreId` | UUID | Векторне сховище з вкладки [Vectorstores](../tabs/vectorstores-tab.md) |
+| `ragOperation` | `"insert"` \| `"upsert"` \| `"delete"` \| `"search"` | Тип операції (також `operation`) |
+| `documentContent` | expression | Текст документа для збереження (insert, upsert) |
+| `documentMetadata` | JSON string | Метадані для збережених документів (insert, upsert); значення підтримують вирази |
+| `documentIdField` | string | Поле Payload, що містить унікальний id (upsert, delete; типово `doc_id`) |
+| `documentId` | expression | Значення унікального id (upsert, delete) |
+| `queryText` | expression | Пошуковий запит (лише search) |
+| `searchLimit` | number | Максимум результатів (типово: 5) |
+| `metadataFilters` | JSON string | Фільтри метаданих для пошуку (значення підтримують вирази) |
+| `enableReranker` | boolean | Використовувати Cohere для переранжування результатів пошуку |
+| `rerankerCredentialId` | UUID | Облікові дані Cohere для переранжування |
+| `rerankerTopN` | number | Кількість найкращих результатів, які слід залишити після переранжування |
+
+## Операції
+
+### Insert
+
+Додає документи до векторного сховища.
+
+| Поле | Обов'язкове | Опис |
+|-------|----------|-------------|
+| `documentContent` | так | Текст для вбудовування та збереження |
+| `documentMetadata` | ні | Об'єкт JSON, наприклад `{"source": "user", "category": "general"}` |
+
+**Вихід:** `$nodeLabel.status`, `$nodeLabel.inserted_ids`
+
+### Вирази в метаданих
+
+Значення метаданих приймають вирази, тож документ можна зберегти з контекстом із цього запуску:
+
+```json
+{ "url": "$start.url", "category": "faq" }
+```
+
+Вирази обчислюються після розбору JSON, а не шляхом підстановки тексту в нього, тож
+значення, що містить лапку або символ нового рядка, не може розірвати об'єкт. Значення, яке є одним
+цілим виразом, зберігає свій обчислений тип — `{"count": "$start.count"}` зберігає число, а не
+`"7"` — що важливо, оскільки `metadataFilters` пошуку зіставляються за точним типом. Змішаний текст, як-от
+`"page $start.count"`, обчислюється як рядок, а вкладені об'єкти та масиви також обходяться.
+
+Те саме стосується `upsert` і `metadataFilters` пошуку: спершу виконується розбір, а потім
+обчислюються його значення за тими самими правилами. Тож фільтр, записаний як `{"count": "$start.count"}`,
+зіставляється з числом, яке зберіг insert, а не з рядком `"7"`.
+
+### Який workflow зберіг документ
+
+Документ, збережений без власного `source`, позначається workflow, який його зберіг,
+як `source: "workflow:<workflow name>"`. Вкладка [Vectorstores](../tabs/vectorstores-tab.md)
+групує такі під **Added workflow: _name_**, тож вміст сховища вказує, звідки походить кожен документ,
+і документи одного workflow можна видалити як групу. Якщо задати `source` самостійно
+в `documentMetadata`, це завжди має перевагу над позначкою.
+
+### Upsert
+
+Вставляє документ або замінює той, що вже збережений під тим самим унікальним id.
+
+Id — це поле **всередині payload**, а не внутрішній point id сховища, тож документ
+зберігає ідентифікатор, який уже використовує Ваша система — id запису CRM, SKU, slug сторінки.
+`documentIdField` називає це поле, а `documentId` містить його значення.
+
+| Поле | Обов'язкове | Опис |
+|-------|----------|-------------|
+| `documentId` | так | Унікальний id документа (підтримує вирази) |
+| `documentContent` | так | Текст для вбудовування та збереження |
+| `documentIdField` | ні | Поле Payload, у якому міститься id (типово `doc_id`) |
+| `documentMetadata` | ні | Об'єкт JSON, наприклад `{"source": "crm", "url": "$start.url"}` (значення підтримують вирази) |
+
+Спершу видаляється кожна точка, чиє поле id збігається, тож документ, який раніше
+зберігався як кілька фрагментів, замінюється як одне ціле, а не дублюється. Поле id
+записується в payload за Вас, а point id залишається стабільним між upsert одного
+й того самого документа.
+
+**Вихід:** `$nodeLabel.point_id`, `$nodeLabel.document_id`, `$nodeLabel.replaced` (boolean —
+чи було замінено наявну версію), `$nodeLabel.replaced_count`
+### Видалення
+
+Видалення документа за тим самим унікальним ідентифікатором.
+
+| Поле | Обов'язкове | Опис |
+|-------|----------|-------------|
+| `documentId` | так | Унікальний ідентифікатор документа (підтримує вирази) |
+| `documentIdField` | ні | Поле Payload, у якому міститься ідентифікатор (типово `doc_id`) |
+
+**Вивід:** `$nodeLabel.deleted` – `true`, якщо збігся хоча б один запис, `false`, якщо ідентифікатора
+не було у сховищі. `$nodeLabel.deleted_count` містить кількість видалених записів.
+
+Видалення ідентифікатора, якого немає, не є помилкою: вузол завершується успішно з `deleted: false`, тож
+гілка очищення не потребує захисної перевірки перед собою.
+
+### Пошук
+
+Семантичний пошук схожих документів.
+
+| Поле | Обов'язкове | Опис |
+|-------|----------|-------------|
+| `queryText` | так | Пошуковий запит |
+| `searchLimit` | ні | Максимальна кількість результатів (типово: 5) |
+| `metadataFilters` | ні | Фільтр за метаданими (JSON-об'єкт точної відповідності, значення підтримують вирази) |
+| `enableReranker` | ні | Увімкнути повторне ранжування Cohere для кращої релевантності |
+| `rerankerCredentialId` | за повторного ранжування | Облікові дані Cohere |
+| `rerankerTopN` | ні | Остаточна кількість результатів після повторного ранжування |
+
+**Вивід:** `$nodeLabel.results` – масив `{ id, text, score, metadata }`
+
+Коли повторне ранжування увімкнено:
+
+- `$nodeLabel.reranked` стає `true`
+- Кожен результат також містить `relevance_score`
+- `score` залишається початковою оцінкою векторної схожості
+- `relevance_score` – це оцінка повторного ранжувальника Cohere
+
+## Доступ до результатів
+
+- `$ragNode.results.first().text` – вміст найкращого результату
+- `$ragNode.results.first().score` – оцінка схожості (0–1)
+- `$ragNode.results.first().metadata.source` – метадані найкращого результату
+- `$ragNode.results.map("item.text").join("\n\n")` – об'єднання для контексту LLM
+- `$ragNode.reranked` – чи було застосовано повторне ранжування
+- `$ragNode.count` – кількість повернутих результатів
+- `$ragNode.replaced` – чи upsert замінив наявний документ
+- `$ragNode.deleted` – чи видалення щось прибрало
+
+## Приклад – Пошук
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "searchDocs",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "metadataFilters": "{\"category\": \"faq\"}",
+    "enableReranker": true,
+    "rerankerCredentialId": "cohere-credential-uuid",
+    "rerankerTopN": 5
+  }
+}
+```
+
+## Приклад – Вставлення
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "insertDoc",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "insert",
+    "documentContent": "$userInput.body.text",
+    "documentMetadata": "{\"source\": \"user_input\"}"
+  }
+}
+```
+
+## Приклад – Upsert
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "syncDoc",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "upsert",
+    "documentIdField": "doc_id",
+    "documentId": "$userInput.body.id",
+    "documentContent": "$userInput.body.text",
+    "documentMetadata": "{\"source\": \"crm\"}"
+  }
+}
+```
+
+## Приклад – Видалення
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "removeDoc",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "delete",
+    "documentIdField": "doc_id",
+    "documentId": "$userInput.body.id"
+  }
+}
+```
+
+## Пов'язане
+
+- [Чому Heym](../getting-started/why-heym.md) – Вбудований RAG як частина середовища виконання агента
+- [Типи вузлів](../reference/node-types.md) – Огляд усіх типів вузлів
+- [Вкладка «Векторні сховища»](../tabs/vectorstores-tab.md) – Створення векторних сховищ і керування ними
+- [Сторонні інтеграції](../reference/integrations.md#qdrant) – Налаштування облікових даних Qdrant і Postgres (pgvector)
+- [Вузол агента](./agent-node.md) – Використання результатів RAG як контексту агента
+- [Вузол LLM](./llm-node.md) – Передавання результатів RAG у системний prompt LLM

@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Kreirajte, organizirajte, uvezite i upravljajte Workflowima za svoje AI automatizacije.",
+    "bullets": [
+      "Brzo otvorite Workflowe, održavajte mape preglednima i nastavite izravno s nedavnim zadacima.",
+      "Koristite paletu naredbi za brz pristup bez dugog pretraživanja u mreži.",
+      "Koristite ovu karticu kao svoju osnovu za sve aktivnosti u editoru."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Središnji pregled",
+        "title": "Biblioteka Workflowa",
+        "description": "Pregledajte root objekte, mape i Workflowe predviđene za brisanje na jednom mjestu.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Brzi pristup",
+        "title": "Brzo stvaranje",
+        "description": "Stvorite nove Workflowe ili izravno uvezite JSON.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktura",
+        "title": "Organizirajte unaprijed",
+        "description": "Mape i pričvršćivanje održavaju rastuće skupove automatizacije preglednima.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Pročitajte vodič za Workflow",
+        "description": "Otvorite potpunu referencu kartice Workflows.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Kartica Workflows"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Otvorite predloške",
+        "description": "Prijeđite na karticu Predlošci za ponovno upotrebljive početne točke.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Što ovdje pripada",
+        "content": "Koristite ovo područje za zadatke životnog ciklusa Workflowa: stvaranje, preimenovanje, premještanje, uvoz, arhiviranje i odabir."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Ostanite jednostavni",
+        "content": "Ako vam je potrebno samo brzo izvršavanje s druge stranice, koristite Quick Drawer. Vratite se ovdje za upravljanje i strukturu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Kartica Workflows"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Kanban ploča temeljena na agentima. Svaka kartica je trajni posao s kontekstom, poviješću i izlazima – premještanje kartice pokreće lanac Workflowa stupca.",
+    "bullets": [
+      "Stvorite tekstualne kartice u Backlogu i povucite ih preko stupaca.",
+      "Povežite poredane Workflowe sa svakim stupcem; pomicanje kartica pokreće ih kao Trigger.",
+      "Kartice postaju zelene pri uspjehu, crvene pri greškama i žute tijekom izvršavanja.",
+      "Komentari i prethodni izlazi ulaze u kontekst sljedećeg pokretanja."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ključna ideja",
+        "title": "Kartice su poslovi, ne bilješke",
+        "description": "Svaka kartica nosi svoju potpunu povijest: komentare, pomicanja i izlaz svakog Workflowa.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Petlja planiranja",
+        "title": "Naknadne runde",
+        "description": "Odgovorite u komentarima i ponovno izvršite – lanac vidi cijeli akumulirani kontekst.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Dokumentacija ploče",
+        "description": "Lanci stupaca, ugovor o Card-Payloadu i naknadne runde.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Kako se izvršavaju lanci stupaca",
+        "content": "Workflowi povezani sa stupcem izvršavaju se sekvencijalno kada kartica stigne. Izlaz svakog Workflowa dodaje se kontekstu kartice; greška zaustavlja lanac."
+      },
+      {
+        "id": "board-context",
+        "title": "Što Workflowi primaju",
+        "content": "Ulaz izvršavanja sadrži karticu (naslov, sadržaj, metapodatke, komentare, povijest, prethodne izlaze), ploču, pomicanje i poziciju u lancu. Pročitajte to pomoću izraza $input.card."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Predlošci",
+    "summary": "Započnite s višekratno upotrebljivim Workflow nacrtima umjesto da iste obrasce ponovno gradite svaki put.",
+    "bullets": [
+      "Koristite predloške kada je struktura Workflowa poznata, ali detalji još variraju.",
+      "Dobri predlošci skraćuju uvođenje i smanjuju ponovljeni rad na platnu.",
+      "Podijelite obrasce ovdje i prilagodite ih u editoru prema potrebi."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Višekratna upotreba",
+        "title": "Pristup temeljen na nacrtima",
+        "description": "Zabilježite provjerene strukture Workflowa i brzo ih ponovno primijenite.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Timska brzina",
+        "title": "Ujednačene početne točke",
+        "description": "Predlošci pomažu timovima da se usuglase oko istih provjerenih obrazaca.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Učinkovitost",
+        "title": "Manje zastoja",
+        "description": "Odaberite gotov okvir i prilagodite samo ono što je ključno.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Otvorite dokumentaciju o predlošcima",
+        "description": "Saznajte kako se predlošci uklapaju u tijek Dashboarda.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Kartica Predlošci"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Natrag na Workflows",
+        "description": "Povratak na glavnu biblioteku za Workflows.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Zašto su predlošci važni",
+        "content": "Pretvaraju ponovljene rasporede čvorova u višekratno upotrebljive resurse – idealno za timove koji isporučuju varijacije istog obrasca Workflowa."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimalna primjena",
+        "content": "Koristite predloške kada je struktura stabilna, ali nazivi, Prompti, vjerodajnice ili ciljevi variraju od slučaja do slučaja."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Kartica Predlošci"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Varijable",
+    "summary": "Pohranite dijeljene vrijednosti centralno i referencirajte ih kroz Workflows bez dupliciranja istih podataka na svim mjestima.",
+    "bullets": [
+      "Često korištene vrijednosti čuvajte na jednom centralnom, trajnom mjestu.",
+      "Varijable smanjuju odstupanje Promptova i dvostruke konfiguracije.",
+      "Ciljano dijelite vrijednosti kada više Workflowa treba iste podatke."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Trajnost",
+        "title": "Pohrana koja nadilazi izvršavanja",
+        "description": "Globalne vrijednosti nadživljavaju pojedinačna izvršavanja Workflowa.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompaktna konfiguracija",
+        "title": "Manje redundancije",
+        "description": "Ažurirajte jednom centralno umjesto ručnog prilagođavanja mnogih polja čvorova.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Izrazi",
+        "title": "Podrška u DSL-u",
+        "description": "Referencirajte vrijednosti izravno u izrazima čvorova i Promptovima.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Pročitajte dokumentaciju o varijablama",
+        "description": "Otvorite vodič za varijable u Dashboardu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Kartica Varijable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Tipični obrasci",
+        "content": "Pohranite Endpointe, dijeljene fragmente Promptova, postavke specifične za okruženje ili ID-ove koje više Workflowa mora čitati."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Što ovdje ne pripada",
+        "content": "Tajne i autentifikacije pružatelja usluga pripadaju u vjerodajnice, a ne u globalne varijable."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Kartica Varijable"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Koristite Dashboard Chat kao brzu dijalogom vođenu ulaznu točku za svoje Workflowe i zadatke na platformi.",
+    "bullets": [
+      "Izvrstan za brza pitanja, pomoć s Workflowom i lagane izvedbe.",
+      "Usmjeren na brzinu i iteraciju umjesto pune kontrole u editoru.",
+      "Čim struktura stoji, prijeđite izravno u Workflow ili dokumentaciju."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Prirodni jezik",
+        "title": "Brza interakcija",
+        "description": "Koristite jednostavan jezik umjesto ručnog pretraživanja cijele aplikacije.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Most",
+        "title": "Od ideje do akcije",
+        "description": "Chat pomaže kada je cilj jasan, ali točan put tek treba razraditi.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Pratitelj",
+        "title": "Nadopunjuje dokumentaciju",
+        "description": "Koristite zajedno s dokumentacijom kako biste odgovore i reference imali pri ruci.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Otvori Chat dokumentaciju",
+        "description": "Pročitajte vodič za Dashboard Chat.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat kartica"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Referenca AI asistenta",
+        "description": "Saznajte kako Heym asistent podržava izradu Workflowa.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI asistent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Najbolji slučajevi upotrebe",
+        "content": "Koristite Chat za brza pitanja o Workflowu, kratke upute o platformi i operativne korake koji ne zahtijevaju dubok rad na Canvasu."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Kada promijeniti prikaz",
+        "content": "Prijeđite u Editor čim je potrebna kontrola na razini čvora ili u dokumentaciju za trajne reference."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat kartica"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Upravljajte i dijelite datoteke koje su generirali vaši Workflow Skills.",
+    "bullets": [
+      "Skills zapisuju datoteke u izlazni direktorij; Heym ih automatski evidentira.",
+      "Dijelite datoteke putem Token linkova ili Basic Auth URL-ova zaštićenih lozinkom.",
+      "Preuzmite datoteke jednim klikom."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Pohrana",
+        "title": "Automatski evidentirane datoteke",
+        "description": "Skills zapisuju u _OUTPUT_DIR; datoteke se pojavljuju ovdje odmah nakon izvršenja.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Dijeljenje",
+        "title": "Fleksibilna kontrola pristupa",
+        "description": "Javni linkovi, zaštita lozinkom, datumi isteka i ograničenja preuzimanja.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formati",
+        "title": "PDF, DOCX, CSV i više",
+        "description": "Generirajte bilo koje vrste datoteka pomoću reportlab, python-docx ili standardnog Pythona.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Otvori Drive dokumentaciju",
+        "description": "Pročitajte potpunu referencu Drive kartice.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive kartica"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Vodič za generiranje datoteka",
+        "description": "Saznajte kako Skills stvaraju datoteke.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Generiranje datoteka"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Kako datoteke dospijevaju ovdje",
+        "content": "Kada Skill pohrani datoteke u direktorij _OUTPUT_DIR, Heym ih trajno pohranjuje i generira tokene za preuzimanje."
+      },
+      {
+        "id": "drive-share",
+        "title": "Opcije dijeljenja",
+        "content": "Stvorite javne Token linkove za svakoga ili URL-ove zaštićene lozinkom, uključujući datume isteka i ograničenja preuzimanja."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive kartica"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Vjerodajnice",
+    "summary": "Upravljajte ključevima, tokenima i pojedinostima veze kako bi Workflowi sigurno komunicirali s vanjskim sustavima.",
+    "bullets": [
+      "Pohranite pristupne podatke centralizirano umjesto da ih raspršujete po pojedinačnim čvorovima.",
+      "Vjerodajnice upravljaju LLM-ovima, integracijama, vektorskim spremištima i drugim.",
+      "Ciljano odobrite pristup kada timovi trebaju istu vezu bez kopija ključeva."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Sigurnost",
+        "title": "Sigurne vjerodajnice",
+        "description": "Pohranite autentifikaciju jednom i sigurno je ponovno upotrijebite u Workflowima.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integracije",
+        "title": "Široka podrška",
+        "description": "Podržava pružatelje usluga kao što su OpenAI, DeepSeek, Slack, Redis, Qdrant i Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Suradnja",
+        "title": "Ciljano dijeljenje",
+        "description": "Koristite dijeljenje s timom ili korisnikom umjesto stvaranja duplikata.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Pročitajte dokumentaciju o vjerodajnicama",
+        "description": "Otvorite vodič za nadzornu ploču vjerodajnica.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Kartica Vjerodajnice"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Pregledajte integracije",
+        "description": "Pretražite pojedinosti o postavljanju integracija trećih strana.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Integracije trećih strana"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Gdje se koriste",
+        "content": "Vjerodajnice se referenciraju u konfiguraciji čvora i sigurno se razrješavaju tijekom izvođenja."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Model prilagođen timu",
+        "content": "Preferirajte dijeljenje kada više developera treba pristup istom pružatelju usluga; to osigurava dosljedno ponašanje i jednostavne revizije."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Kartica Vjerodajnice"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektorska spremišta",
+    "summary": "Pripremite Retrieval pozadine za Workflowe kojima je potrebno semantičko pretraživanje, memorija ili RAG kontekst.",
+    "bullets": [
+      "Vektorska spremišta čine podatkovnu osnovu za Workflowe temeljene na Retrievalu.",
+      "Koristite ih zajedno s RAG čvorovima i AI tokovima za precizno dokumentirano utemeljenje.",
+      "Ova kartica služi kao infrastruktura za utemeljene Promptove."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG infrastruktura",
+        "title": "Pretraživa memorija",
+        "description": "Pripremite dokumente za semantički Retrieval kada Workflowi trebaju kontekst.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kvaliteta",
+        "title": "Utemeljeno groundiranje",
+        "description": "Retrieval smanjuje rizik od halucinacija pružanjem dokaza.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Operacije",
+        "title": "Upravljajte centralizirano",
+        "description": "Stvorite vektorska spremišta i ponovno ih upotrijebite u više Workflowa.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Otvorite dokumentaciju o vektorskim spremištima",
+        "description": "Pročitajte vodič za nadzornu ploču vektorskih spremišta.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Kartica Vektorska spremišta"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Pogledajte dokumentaciju RAG čvora",
+        "description": "Otvorite referencu za Qdrant RAG čvor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Razvrstavanje",
+        "content": "Ova kartica priprema sloj spremišta. Sama logika Retrievala nalazi se unutar Workflowa (npr. putem RAG ili agentnih uzoraka)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Vrijeme upotrebe",
+        "content": "Odaberite vektorska spremišta kada vaš Workflow mora pretraživati nestrukturirane izvore znanja, umjesto da se oslanja samo na LLM memoriju."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Kartica Vektorska spremišta"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Upravljajte vezama Model Context Protocol kako bi agentni Workflowi sigurno pristupali alatima i vanjskim funkcijama.",
+    "bullets": [
+      "MCP pretvara vanjske ekosustave alata u iskoristiv kontekst agenta.",
+      "Koristite ovu karticu kada agentima trebaju bogatiji alati od statičnih Promptova.",
+      "Kvaliteta veze izravno određuje mogućnosti vaših agenata."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Alati agenta",
+        "title": "Vanjski sloj funkcija",
+        "description": "Postavite Tool servere koje agenti mogu pozivati tijekom zaključivanja.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kontrola izvođenja",
+        "title": "Postavljanje veze",
+        "description": "Konfigurirajte Endpointe, oznake i transport za pouzdane Workflowe.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Dubina platforme",
+        "title": "Izvan Promptova",
+        "description": "MCP omogućuje Heym Workflowima da djeluju, a ne samo da odgovaraju.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Otvori MCP dokumentaciju",
+        "description": "Pročitajte vodič za MCP karticu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP kartica"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Arhitektura agenta",
+        "description": "Saznajte kako je MCP integriran u izvođenje agenta.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Arhitektura agenta"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Značenje",
+        "content": "Posebno važno kada vaš agent treba alate, pristup okruženju ili integracije sustava izvan pojedinačnih čvorova."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Operativni pristup",
+        "content": "Tretirajte MCP veze kao infrastrukturu: stabilne oznake i jasne odgovornosti pojednostavljuju otklanjanje pogrešaka."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP kartica"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Izvršavanja",
+    "summary": "Pregledajte detaljne Traceove izvršavanja AI-ja i Workflowa kako biste razumjeli što se dogodilo – ne samo je li uspjelo.",
+    "bullets": [
+      "Koristite Traceove za otklanjanje pogrešaka, analizu performansi i provjere kvalitete Promptova.",
+      "Traceovi objašnjavaju ponašanje modela, latencije i putanje izvršavanja.",
+      "Prvo mjesto za provjeru kod neočekivanih rezultata ili nestabilnih pokretanja."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Otklanjanje pogrešaka",
+        "title": "Vidite skrivene korake",
+        "description": "Trace podaci otkrivaju što su Workflow i model stvarno izvršili.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Evaluacija",
+        "title": "Podržite iteracije",
+        "description": "Koristite Traceove pri optimizaciji Promptova, alata i modela.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Pouzdanost",
+        "title": "Pratite rezultate",
+        "description": "Dobri Traceovi smanjuju nagađanja pri analizi pogrešaka.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Otvori dokumentaciju izvršavanja",
+        "description": "Pročitajte vodič za nadzornu ploču izvršavanja.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Kartica izvršavanja"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Kada su Traceovi neizostavni",
+        "content": "Čim Workflowi postanu višestupanjski, intenzivni s modelima ili temeljeni na alatima, sam prikaz statusa više nije dovoljan."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. povijest",
+        "content": "Povijest pokazuje DA se izvršavanje dogodilo. Traceovi objašnjavaju ZAŠTO se tako ponašalo."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Kartica izvršavanja"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Upozorenja",
+    "summary": "Definirajte pragove kroz vremenske okvire i primajte automatske obavijesti čim se prekorače.",
+    "bullets": [
+      "Četiri tipa: broj pogrešaka, trajanje izvršavanja, pragovi Tokena/troškova i brojači izvršavanja.",
+      "Svako upozorenje procjenjuje se kroz odabrani vremenski okvir, nikada na temelju pojedinačnih događaja.",
+      "Opišite zahtjev prirodnim jezikom i asistent će konfigurirati upozorenje."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Vremenski okvir",
+        "title": "Nakupljanje umjesto odstupanja",
+        "description": "Jedno neuspješno izvršavanje je šum. Dvanaest u deset minuta je incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Prije spremanja",
+        "title": "Retroaktivno testiranje uvjeta",
+        "description": "Korak provjere testira se na stvarnoj povijesti kako bi se pragovi unaprijed kalibrirali.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reakcija",
+        "title": "Pokreni Workflow pri alarmu",
+        "description": "Alert-Payload postaje ulaz za Workflow za automatske obavijesti putem Slacka ili e-pošte.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Otvori dokumentaciju o upozorenjima",
+        "description": "Pročitajte kako funkcioniraju tipovi alarma, okviri i asistent.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Kartica Upozorenja"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Svrha",
+        "content": "Analize i Tracevi odgovaraju na pitanja koja aktivno postavljate. Upozorenja omogućuju Heymu da proaktivno govori kada se prekorače kritični pragovi."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Zašto se izbjegavaju lažni alarmi",
+        "content": "Upozorenje se aktivira jednom i čeka dok se metrika ne oporavi – to sprječava poplavu obavijesti."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Kartica Upozorenja"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analitika",
+    "summary": "Pratite obrasce korištenja i ponašanje sustava kako biste razumjeli aktivnost, rast i promjene tijekom vremena.",
+    "bullets": [
+      "Prepoznajte prihvaćanje, propusnost i neuobičajene vrhove pomoću analitike.",
+      "Pogled na razini platforme umjesto pojedinačnog alata za otklanjanje pogrešaka.",
+      "Kombinirajte analitiku s Traces i poviješću za signal i objašnjenje."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signali",
+        "title": "Transparentnost korištenja",
+        "description": "Prepoznajte trendove umjesto izoliranog promatranja pojedinačnih izvršavanja.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapacitet",
+        "title": "Operativna svijest",
+        "description": "Pravovremeno prepoznajte i istražite vršna opterećenja i padove.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Podrška odlučivanju",
+        "title": "Ciljana optimizacija",
+        "description": "Analitika pomaže u prioritizaciji najvažnijih Workflowa.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Otvori dokumentaciju o analitici",
+        "description": "Pročitajte vodič za analitički dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Kartica Analitika"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Svrha",
+        "content": "Koristite analitiku za obrasce, propusnost i agregirano ponašanje kroz cjelokupno poslovanje platforme."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Postupak",
+        "content": "Ovdje prepoznajte signale, zatim prijeđite na Traces, povijest ili editor za analizu uzroka."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Kartica Analitika"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Nadzorna ploča",
+    "summary": "Izradite mrežu widgeta s dijagramima, od kojih svaki napaja vlastiti Workflow – sve ključne metrike na jednom mjestu.",
+    "bullets": [
+      "Svaki widget pokreće Workflow koji dostavlja podatke u čvor Chart Output.",
+      "Koristite widgete sa stupcima, linijama, krugovima, tablicama i brojevima u skladu s metrikom.",
+      "Generirajte ili prilagodite widgete pomoću AI i cachirajte rezultate za brzo učitavanje.",
+      "Izradite više nadzornih ploča i podijelite ih s osobama ili timovima za čitanje ili pisanje."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kompozicija",
+        "title": "Dijagrami napajani Workflowom",
+        "description": "Svi podaci koje generira Workflow vizualiziraju se kao dijagram.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Performanse",
+        "title": "Cachirani rezultati",
+        "description": "Cachiranje widgeta izbjegava ponovna pokretanja Workflowa pri svakom učitavanju stranice.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI podrška",
+        "title": "Generiranje i prilagodba",
+        "description": "Opišite metriku i pustite da AI automatski izradi widget.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Otvori dokumentaciju nadzorne ploče",
+        "description": "Saznajte kako se izrađuju widgeti nadzorne ploče.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Kartica Nadzorna ploča"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Svrha",
+        "content": "Koristite nadzornu ploču za trajne preglede važnih metrika iz vlastitih Workflowa."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Izrada",
+        "content": "Dodajte widget, konfigurirajte Workflow tako da posljednji čvor prije Chart Output vraća retke i rasporedite ih u mreži."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Kartica Nadzorna ploča"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Timovi",
+    "summary": "Upravljajte zajedničkim pristupom kako bi se Workflowi, vjerodajnice, varijable i vektorske pohrane koristili suradnički bez duplikata.",
+    "bullets": [
+      "Timovi su najčišći način za skalabilno dijeljenje platformskih resursa.",
+      "Koristite timove kada dozvole trebaju slijediti grupu umjesto pojedinaca.",
+      "Osigurajte strukturiranu suradnju u rastućem radnom prostoru."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Suradnja",
+        "title": "Grupna dijeljenja",
+        "description": "Dodijelite pristup jednom timu umjesto ručnog autoriziranja pojedinačnih korisnika.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Jasnoća",
+        "title": "Čiste odgovornosti",
+        "description": "Upravljanje resursima slijedi stvarne timske strukture.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skaliranje",
+        "title": "Manje administrativnog napora",
+        "description": "Novi članovi automatski nasljeđuju pristupna prava putem tima.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Otvori dokumentaciju timova",
+        "description": "Pročitajte vodič za nadzornu ploču timova.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Kartica Timovi"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Dijeljenje resursa",
+        "description": "Pročitajte pojedinosti o dijeljenju resursa.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Dijeljenje vjerodajnica"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Prednosti timova",
+        "content": "Timovi povezuju identitet i pristup resursima za nesmetanu suradnju."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktični savjet",
+        "content": "Preferirajte timska dijeljenja kada Workflow ili vjerodajnica pripada trajnoj radnoj grupi."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Kartica Timovi"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protokoli",
+    "summary": "Čitajte logove na razini Stacka kada su Vam potrebni uvidi u infrastrukturu izvan Workflow izlaza.",
+    "bullets": [
+      "Koristite logove za otklanjanje pogrešaka u servisima, stanja Containera i probleme s okolinom.",
+      "Pomaže kada se uzroci nalaze ispod razine Workflowa.",
+      "Koristite zajedno s Traces za dokaze na razini aplikacije i sustava."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktura",
+        "title": "Transparentnost Containera",
+        "description": "Vidjeti što backend servisi izvršavaju ispod Heym sučelja.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Otklanjanje pogrešaka",
+        "title": "Pronalaženje uzroka",
+        "description": "Logovi pomažu kod problema s pokretanjem, padova ili integracijskih pogrešaka.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Dopunski",
+        "title": "Razlika prema Workflow rezultatima",
+        "description": "Workflow izlazi prikazuju rezultate; logovi prikazuju ponašanje sustava.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Otvori dokumentaciju protokola",
+        "description": "Pročitajte vodič za dashboard protokola.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Tab protokola"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Vrijeme korištenja",
+        "content": "Prijeđite ovdje kada problemi izgledaju kao posljedica deploymenta, servisa ili okoline."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Najbolja kombinacija",
+        "content": "Koristite logove zajedno s Traces i poviješću kako biste od simptoma brzo došli do uzroka."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Tab protokola"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Evaluacija",
+    "summary": "Izradite reproducibilne benchmarke za agentske Workflowe kako biste pouzdano usporedili promjene Promptova, modela i Workflowa.",
+    "bullets": [
+      "Suitovi i testni slučajevi pretvaraju subjektivnu kvalitetu Workflowa u mjerljive pokazatelje.",
+      "Idealno mjesto za regresijske provjere prije uvođenja ažuriranja Promptova ili modela.",
+      "Usporedite više modela na istom skupu podataka i istom metodom ocjenjivanja."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Petlja kvalitete",
+        "title": "Benchmarking agenata",
+        "description": "Ponovno pokrenite isti suit umjesto oslanjanja na slučajne provjere.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Usporedba",
+        "title": "Testovi modela i Promptova",
+        "description": "Vidjeti kako se različite postavke ponašaju na istom testnom skupu.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Sigurnost",
+        "title": "Pouzdana iteracija",
+        "description": "Dokažite poboljšanja prije uvođenja.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Otvori dokumentaciju evaluacije",
+        "description": "Pročitajte vodič za stranicu evaluacije.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Tab evaluacije"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Referenca Agent čvora",
+        "description": "Pogledajte Workflow područje na koje se većina eval suitova odnosi.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent čvor"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Koncipiranje suitova",
+        "content": "Dobar suit odražava stvarne korisničke slučajeve, rubne uvjete i korake odobrenja koji moraju ostati stabilni."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Parametri usporedbe",
+        "content": "Tipične usporedbe uključuju varijante Promptova, odabir modela, postavke Temperature i revizije Workflowa na istom skupu podataka."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Tab evaluacije"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentacija",
+    "summary": "Pretražujte precizne referentne materijale platforme izravno u aplikaciji i produbite znanje prema potrebi.",
+    "bullets": [
+      "Heym dokumentacija osmišljena je za brzo usvajanje i ciljano pretraživanje.",
+      "Bočna traka, pretraga i unakrsne reference omogućuju brzo prebacivanje između koncepata.",
+      "Showcase izravno upućuje na trenutačno otvoreni članak."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Referenca u aplikaciji",
+        "title": "Uvijek pri ruci",
+        "description": "Dokumentacija ostaje unutar toka proizvoda, bez potrebe za otvaranjem vanjskih kartica.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pregled",
+        "title": "Najvažnije prvo",
+        "description": "Članci započinju ključnim točkama i granaju se putem poveznica."
+      },
+      {
+        "eyebrow": "Svjesno konteksta",
+        "title": "Trenutačni članak",
+        "description": "Prilikom čitanja dokumenta, radnja 'Saznajte više' izravno prati taj članak."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Pogledajte uvod",
+        "description": "Otvorite uvod u dokumentaciju kao zadanu ulaznu točku.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Uvod"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Brza navigacija",
+        "content": "Koristite bočnu traku za kategorije i pretragu naredbi ako vam je tema već poznata."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Podrška kroz Showcase",
+        "content": "Showcase drži sažetke kompaktnima i prema potrebi upućuje na iscrpnu dokumentaciju."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Uvod"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Rasporedi",
+    "summary": "Pregledajte sve aktivne Cron Workflowe na vizualnom kalendaru i kontrolirajte vremena izvršavanja.",
+    "bullets": [
+      "Prebacujte se između dnevnog, tjednog i mjesečnog prikaza za odgovarajuću razlučivost.",
+      "Pređite pokazivačem preko bloka za Cron izraz; kliknite za izravan skok na Canvas.",
+      "Koristite ovu karticu za provjeru gustoće izvršavanja i prepoznavanje preklapanja."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparentnost",
+        "title": "Prikaz kalendara",
+        "description": "Aktivni Cron Workflowi pojavljuju se kao blokovi u planiranim terminima.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigacija",
+        "title": "Jednim klikom do Canvas-a",
+        "description": "Kliknite na blok za izravno otvaranje Workflow editora.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Rasponi",
+        "title": "Dan, tjedan ili mjesec",
+        "description": "Prilagodite razlučivost za pregled pojedinačnih sati ili planiranje cijelog mjeseca.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Otvorite dokumentaciju o rasporedima",
+        "description": "Pročitajte referencu kartice Rasporedi.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Kartica Rasporedi"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Referenca Cron čvora",
+        "description": "Saznajte kako se Cron Triggeri konfiguriraju na Canvas-u.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Vrijeme upotrebe",
+        "content": "Provjerite planirane automatizacije, prepoznajte sukobe termina i osigurajte da važni Workflowi ostanu aktivni."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Kodiranje bojama",
+        "content": "Svaki Workflow dobiva dosljednu boju na temelju svog ID-a, koja ostaje identična u dnevnom, tjednom i mjesečnom prikazu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Kartica Rasporedi"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Podatkovne tablice",
+    "summary": "Izradite strukturirane podatkovne tablice izravno u Heymu i koristite ih programski u Workflowima.",
+    "bullets": [
+      "Izradite tablice s tipiziranim stupcima, ručno ih ispunite ili uvezite putem CSV-a.",
+      "Koristite DataTable Workflow čvor za programsko čitanje, pisanje i pretraživanje redaka.",
+      "Podijelite tablice s korisnicima ili timovima s pravima čitanja ili pisanja."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integrirani podaci",
+        "title": "Integrirana pohrana",
+        "description": "Pohranite strukturirane podatke bez vanjskih baza podataka ili API ključeva.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow integracija",
+        "title": "DataTable čvor",
+        "description": "Pronađite, umetnite, ažurirajte i izbrišite retke u bilo kojem Workflowu.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Suradnja",
+        "title": "Dijeljenje i prava",
+        "description": "Dodijelite granulirani pristup čitanju i pisanju za korisnike i timove.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Dokumentacija kartice Podatkovne tablice",
+        "description": "Pročitajte referencu kartice Podatkovne tablice.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Podatkovne tablice"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "Dokumentacija DataTable čvora",
+        "description": "Pročitajte referencu DataTable čvora.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Što su podatkovne tablice?",
+        "content": "Podatkovne tablice su integrirana strukturirana pohrana u Heymu: tipizirani stupci (String, Number, Boolean, Date, JSON), inline uređivanje te CSV uvoz/izvoz."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Korištenje u Workflowima",
+        "content": "DataTable čvor podržava find, getAll, getById, insert, update, remove i upsert – bez Credentials izravno kroz vlasnika Workflowa."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Podatkovne tablice"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow Editor",
+    "summary": "Izradite, testirajte, otklanjajte pogreške i optimizirajte Workflowe na Canvasu – izravno u kontekstu izvršavanja.",
+    "bullets": [
+      "U Editoru se spajaju dizajn čvorova, tok podataka i ponašanje izvršavanja.",
+      "Koristite bočne trake i povijest za brzo prebacivanje između izrade i otklanjanja pogrešaka.",
+      "Showcase ovdje ostaje namjerno kompaktan kako bi pružio maksimalan prostor za Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Vizualni dizajn Workflowa",
+        "description": "Povežite čvorove, granajte logiku i modelirajte tijek izvršavanja izravno.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteracija",
+        "title": "Otklanjanje pogrešaka tijekom izrade",
+        "description": "Koristite povijest, Debug panele i rezultate izvršavanja za brze povratne informacije."
+      },
+      {
+        "eyebrow": "Opseg funkcionalnosti",
+        "title": "Napredne funkcije pri ruci",
+        "description": "Portal, dijeljenja, predlošci i validacija nalaze se izravno na Canvasu."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Otvori Canvas dokumentaciju",
+        "description": "Pročitajte referencu Canvas funkcija.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas funkcije"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Tipkovnički prečaci",
+        "description": "Otvorite pregled tipkovničkih prečaca u Editoru.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Tipkovnički prečaci"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Radni ritam",
+        "content": "Modelirajte na Canvasu, provjerite pretpostavke o izlazima i prilagodite parametre u bočnim trakama bez gubitka fokusa."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompaktan Showcase",
+        "content": "Budući da Editor već pruža mnogo informacija, Showcase služi kao sažeta orijentacijska pomoć."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas funkcije"
+    }
+  }
+}

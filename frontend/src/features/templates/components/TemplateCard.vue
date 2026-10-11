@@ -165,7 +165,7 @@ const thumbnailMaxZoom = computed((): number => {
               <button
                 class="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors opacity-0 group-hover:opacity-100"
                 type="button"
-                title="Edit template"
+                :title="$t('templates.editTemplate')"
                 @click.stop="emit('edit')"
               >
                 <Pencil class="w-3.5 h-3.5" />
@@ -173,7 +173,7 @@ const thumbnailMaxZoom = computed((): number => {
               <button
                 class="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
                 type="button"
-                title="Delete template"
+                :title="$t('templates.deleteTemplate')"
                 @click.stop="startDelete"
               >
                 <Trash2 class="w-3.5 h-3.5" />
@@ -185,7 +185,7 @@ const thumbnailMaxZoom = computed((): number => {
               :disabled="useLoading"
               @click.stop="emit('use')"
             >
-              {{ useLoading ? "…" : "Use" }}
+              {{ useLoading ? "…" : $t('templates.use') }}
             </button>
           </div>
         </div>
@@ -196,21 +196,21 @@ const thumbnailMaxZoom = computed((): number => {
           class="flex items-center justify-between gap-2"
           @click.stop
         >
-          <span class="text-xs text-destructive font-medium">Delete this template?</span>
+          <span class="text-xs text-destructive font-medium">{{ $t('templates.confirmDelete') }}</span>
           <div class="flex gap-1.5 shrink-0">
             <button
               class="px-2.5 py-1 text-xs rounded-lg border border-border/50 hover:bg-muted/60 transition-colors"
               type="button"
               @click.stop="cancelDelete"
             >
-              Cancel
+              {{ $t('common.cancel') }}
             </button>
             <button
               class="px-2.5 py-1 text-xs rounded-lg bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
               type="button"
               @click.stop="confirmDelete"
             >
-              Delete
+              {{ $t('common.delete') }}
             </button>
           </div>
         </div>

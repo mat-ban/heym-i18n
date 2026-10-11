@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Tạo, sắp xếp, nhập và quản lý các Workflow cho tự động hóa AI của bạn.",
+    "bullets": [
+      "Mở nhanh các Workflow, giữ thư mục của bạn ngăn nắp và tiếp tục trực tiếp các tác vụ gần đây.",
+      "Sử dụng bảng lệnh để truy cập nhanh mà không cần tìm kiếm lâu trong lưới.",
+      "Sử dụng tab này làm cơ sở cho mọi hoạt động của bạn trong trình chỉnh sửa."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Chế độ xem trung tâm",
+        "title": "Thư viện Workflow",
+        "description": "Xem tất cả các đối tượng gốc, thư mục và Workflow được đánh dấu để xóa ở một nơi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Truy cập nhanh",
+        "title": "Tạo nhanh",
+        "description": "Tạo Workflow mới hoặc nhập trực tiếp từ JSON.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Cấu trúc",
+        "title": "Tổ chức trước",
+        "description": "Thư mục và ghim giữ cho các bộ tự động hóa đang phát triển của bạn được ngăn nắp.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Đọc hướng dẫn Workflow",
+        "description": "Mở tài liệu tham khảo đầy đủ về tab Workflow.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Tab Workflow"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Mở mẫu",
+        "description": "Chuyển sang tab Mẫu để có điểm khởi đầu có thể tái sử dụng.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Những gì thuộc về đây",
+        "content": "Sử dụng phần này cho các tác vụ vòng đời Workflow: tạo, đổi tên, di chuyển, nhập, lưu trữ và chọn."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Duy trì hiệu quả",
+        "content": "Nếu bạn chỉ cần thực thi nhanh từ trang khác, hãy sử dụng Quick Drawer. Quay lại đây để quản lý và cấu trúc."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Tab Workflow"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Một bảng Kanban dựa trên tác nhân. Mỗi thẻ là một job liên tục với ngữ cảnh, lịch sử và đầu ra – di chuyển thẻ sẽ thực thi chuỗi Workflow của cột.",
+    "bullets": [
+      "Tạo thẻ văn bản trong Backlog và kéo thả chúng giữa các cột.",
+      "Liên kết các Workflow có thứ tự với mỗi cột; di chuyển thẻ sẽ kích hoạt chúng như Trigger.",
+      "Thẻ chuyển màu xanh khi thành công, đỏ khi lỗi và vàng trong khi thực thi.",
+      "Bình luận và đầu ra trước đó cung cấp ngữ cảnh cho lần thực thi tiếp theo."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ý tưởng chính",
+        "title": "Thẻ là job, không phải ghi chú",
+        "description": "Mỗi thẻ mang toàn bộ lịch sử: bình luận, di chuyển và đầu ra của từng Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Vòng lặp lập kế hoạch",
+        "title": "Lượt tiếp theo",
+        "description": "Trả lời trong bình luận và chạy lại – chuỗi sẽ thấy toàn bộ ngữ cảnh tích lũy.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Tài liệu Board",
+        "description": "Chuỗi cột, hợp đồng Payload của thẻ và các lượt tiếp theo.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Cách chuỗi cột thực thi",
+        "content": "Các Workflow gắn với một cột sẽ thực thi tuần tự ngay khi thẻ đến. Đầu ra của mỗi Workflow được thêm vào ngữ cảnh của thẻ; lỗi sẽ dừng chuỗi."
+      },
+      {
+        "id": "board-context",
+        "title": "Những gì Workflow nhận được",
+        "content": "Đầu vào thực thi chứa thẻ (tiêu đề, nội dung, siêu dữ liệu, bình luận, lịch sử, đầu ra trước đó), Board, di chuyển và vị trí trong chuỗi. Đọc điều này với biểu thức $input.card."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Mẫu",
+    "summary": "Bắt đầu với các blueprint Workflow có thể tái sử dụng thay vì xây dựng lại cùng một mẫu mỗi lần.",
+    "bullets": [
+      "Sử dụng mẫu khi cấu trúc Workflow đã biết, nhưng chi tiết vẫn còn thay đổi.",
+      "Mẫu tốt giúp rút ngắn quá trình làm quen và giảm công việc lặp lại trên canvas.",
+      "Chia sẻ mẫu ở đây và điều chỉnh chúng trong trình chỉnh sửa theo nhu cầu của bạn."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tái sử dụng",
+        "title": "Cách tiếp cận blueprint",
+        "description": "Ghi lại các cấu trúc Workflow đã được chứng minh và áp dụng lại nhanh chóng.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Nhịp độ nhóm",
+        "title": "Điểm khởi đầu thống nhất",
+        "description": "Mẫu giúp các nhóm thống nhất về các mẫu đã được chứng minh.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Hiệu quả",
+        "title": "Ít thời gian chết",
+        "description": "Chọn một khung sẵn sàng sử dụng và chỉ điều chỉnh những gì cần thiết.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Mở tài liệu mẫu",
+        "description": "Tìm hiểu cách mẫu tích hợp vào luồng Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Tab Mẫu"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Quay lại Workflow",
+        "description": "Quay lại thư viện Workflow chính.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Tại sao mẫu quan trọng",
+        "content": "Chúng biến các bố cục nút lặp lại thành tài sản có thể tái sử dụng – lý tưởng cho các nhóm triển khai biến thể của cùng một mẫu Workflow."
+      },
+      {
+        "id": "templates-when",
+        "title": "Sử dụng tối ưu",
+        "content": "Sử dụng mẫu khi cấu trúc ổn định, nhưng tên, Prompt, Credentials hoặc mục tiêu thay đổi tùy theo trường hợp sử dụng."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Tab Mẫu"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Biến",
+    "summary": "Lưu trữ tập trung các giá trị chia sẻ và tham chiếu chúng xuyên suốt các Workflow mà không cần sao chép cùng một dữ liệu ở mọi nơi.",
+    "bullets": [
+      "Giữ các giá trị thường được tái sử dụng ở một vị trí trung tâm và liên tục.",
+      "Biến giúp giảm sự sai lệch của Prompt và cấu hình trùng lặp.",
+      "Chia sẻ giá trị một cách có mục tiêu khi nhiều Workflow cần cùng một cơ sở dữ liệu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Liên tục",
+        "title": "Lưu trữ giữa các lần thực thi",
+        "description": "Các giá trị toàn cục tồn tại qua các lần thực thi riêng lẻ của Workflow.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Cấu hình gọn gàng",
+        "title": "Ít dư thừa hơn",
+        "description": "Cập nhật một lần ở trung tâm thay vì điều chỉnh thủ công nhiều trường nút.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Biểu thức",
+        "title": "Hỗ trợ trong DSL",
+        "description": "Tham chiếu giá trị trực tiếp trong biểu thức nút và Prompt.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Đọc tài liệu biến",
+        "description": "Mở hướng dẫn về biến trong Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Tab Biến"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Mẫu điển hình",
+        "content": "Lưu trữ Endpoint, đoạn Prompt chia sẻ, tham số cụ thể theo môi trường hoặc ID mà nhiều Workflow cần đọc."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Những gì không thuộc về đây",
+        "content": "Bí mật và xác thực nhà cung cấp thuộc về thông tin xác thực, không phải biến toàn cục."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Tab Biến"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Sử dụng Chat của Dashboard như điểm vào nhanh và đối thoại cho các Workflow và tác vụ nền tảng của bạn.",
+    "bullets": [
+      "Tuyệt vời cho các câu hỏi nhanh, trợ giúp về Workflow và thực thi nhẹ.",
+      "Tập trung vào tốc độ và lặp lại thay vì kiểm soát đầy đủ trình chỉnh sửa.",
+      "Khi cấu trúc đã sẵn sàng, chuyển trực tiếp đến Workflow hoặc tài liệu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ngôn ngữ tự nhiên",
+        "title": "Tương tác nhanh",
+        "description": "Sử dụng ngôn ngữ đơn giản thay vì duyệt thủ công toàn bộ ứng dụng.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Cầu nối",
+        "title": "Từ ý tưởng đến hành động",
+        "description": "Chat giúp khi mục tiêu rõ ràng, nhưng đường đi chính xác vẫn cần được xây dựng.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Đồng hành",
+        "title": "Bổ sung tài liệu",
+        "description": "Sử dụng cùng với tài liệu để có câu trả lời và tham chiếu trong tầm tay.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Mở tài liệu Chat",
+        "description": "Đọc hướng dẫn về Chat của Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Tab Chat"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Tham chiếu trợ lý AI",
+        "description": "Tìm hiểu cách trợ lý Heym hỗ trợ tạo Workflow.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "Trợ lý AI"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Trường hợp sử dụng tốt nhất",
+        "content": "Sử dụng Chat cho các câu hỏi nhanh về Workflow, hướng dẫn ngắn về nền tảng và các bước vận hành không cần làm việc sâu trên canvas."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Khi nào chuyển chế độ xem",
+        "content": "Chuyển sang trình chỉnh sửa ngay khi cần kiểm soát ở cấp nút, hoặc sang tài liệu để có tham chiếu lâu dài."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Tab Chat"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Quản lý và chia sẻ các tệp được tạo bởi các kỹ năng Workflow của bạn.",
+    "bullets": [
+      "Các kỹ năng ghi tệp vào thư mục đầu ra; Heym tự động thu thập chúng.",
+      "Chia sẻ tệp qua liên kết Token hoặc URL Basic-Auth được bảo vệ bằng mật khẩu.",
+      "Tải xuống tệp chỉ với một cú nhấp chuột."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Lưu trữ",
+        "title": "Tệp được thu thập tự động",
+        "description": "Các kỹ năng ghi vào _OUTPUT_DIR; các tệp xuất hiện trực tiếp tại đây sau khi thực thi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Chia sẻ",
+        "title": "Kiểm soát truy cập linh hoạt",
+        "description": "Liên kết công khai, bảo vệ bằng mật khẩu, ngày hết hạn và giới hạn tải xuống.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Định dạng",
+        "title": "PDF, DOCX, CSV và hơn thế nữa",
+        "description": "Tạo bất kỳ loại tệp nào với reportlab, python-docx hoặc Python tiêu chuẩn.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Mở tài liệu Drive",
+        "description": "Xem tài liệu tham khảo đầy đủ về tab Drive.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Tab Drive"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Hướng dẫn tạo tệp",
+        "description": "Tìm hiểu cách các kỹ năng tạo tệp.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Tạo tệp"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Cách tệp đến đây",
+        "content": "Khi một kỹ năng đặt tệp vào thư mục _OUTPUT_DIR, Heym lưu trữ chúng một cách bền vững và tạo Token tải xuống."
+      },
+      {
+        "id": "drive-share",
+        "title": "Tùy chọn chia sẻ",
+        "content": "Tạo liên kết Token công khai cho mọi người hoặc URL được bảo vệ bằng mật khẩu, bao gồm ngày hết hạn và giới hạn tải xuống."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Tab Drive"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Thông tin xác thực",
+    "summary": "Quản lý khóa, Token và chi tiết kết nối để các Workflow giao tiếp an toàn với hệ thống bên ngoài.",
+    "bullets": [
+      "Lưu trữ thông tin xác thực tập trung thay vì phân tán trên các nút riêng lẻ.",
+      "Thông tin xác thực kiểm soát LLM, tích hợp, Vector Store và hơn thế nữa.",
+      "Cấp quyền truy cập có mục tiêu khi các nhóm cần cùng kết nối mà không cần sao chép khóa."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Bảo mật",
+        "title": "Thông tin xác thực an toàn",
+        "description": "Cấu hình xác thực một lần và tái sử dụng an toàn trong các Workflow.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Tích hợp",
+        "title": "Hỗ trợ rộng rãi",
+        "description": "Hỗ trợ các nhà cung cấp như OpenAI, DeepSeek, Slack, Redis, Qdrant và Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Cộng tác",
+        "title": "Chia sẻ có mục tiêu",
+        "description": "Sử dụng chia sẻ nhóm hoặc người dùng thay vì tạo bản sao.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Đọc tài liệu thông tin xác thực",
+        "description": "Mở hướng dẫn về bảng điều khiển thông tin xác thực.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Tab Thông tin xác thực"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Xem tích hợp",
+        "description": "Duyệt chi tiết cấu hình tích hợp bên thứ ba.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Tích hợp bên thứ ba"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Nơi chúng được sử dụng",
+        "content": "Thông tin xác thực được tham chiếu trong cấu hình nút và được giải quyết an toàn trong quá trình thực thi."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Mô hình phù hợp với nhóm",
+        "content": "Ưu tiên chia sẻ khi nhiều nhà phát triển cần cùng quyền truy cập nhà cung cấp; điều này đảm bảo hành vi nhất quán và kiểm toán đơn giản."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Tab Thông tin xác thực"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vector Stores",
+    "summary": "Chuẩn bị backend truy xuất cho các Workflow yêu cầu tìm kiếm ngữ nghĩa, bộ nhớ hoặc tích hợp ngữ cảnh RAG.",
+    "bullets": [
+      "Vector Stores tạo thành cơ sở dữ liệu cho các Workflow được hỗ trợ truy xuất.",
+      "Sử dụng chúng với các nút RAG và luồng AI để neo tài liệu chính xác.",
+      "Tab này đóng vai trò cơ sở hạ tầng cho các Prompt có căn cứ."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Cơ sở hạ tầng RAG",
+        "title": "Bộ nhớ có thể truy vấn",
+        "description": "Giữ tài liệu sẵn sàng cho truy xuất ngữ nghĩa khi Workflow cần ngữ cảnh.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Chất lượng",
+        "title": "Neo có căn cứ",
+        "description": "Truy xuất giảm rủi ro ảo giác bằng cách cung cấp bằng chứng.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Vận hành",
+        "title": "Quản lý tập trung duy nhất",
+        "description": "Tạo Vector Store và tái sử dụng trên nhiều Workflow.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Mở tài liệu Vector Stores",
+        "description": "Đọc hướng dẫn về bảng điều khiển Vector Stores.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Tab Vector Stores"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Xem tài liệu nút RAG",
+        "description": "Mở tài liệu tham khảo nút Qdrant RAG.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Vị trí",
+        "content": "Tab này chuẩn bị lớp lưu trữ. Logic truy xuất thực tế nằm trong các Workflow (ví dụ qua mô hình RAG hoặc agent)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Thời điểm sử dụng",
+        "content": "Chọn Vector Store khi Workflow của bạn cần duyệt kiến thức phi cấu trúc thay vì chỉ dựa vào bộ nhớ của LLM."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Tab Vector Stores"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Quản lý kết nối Model Context Protocol để các Workflow agent tiếp cận an toàn với công cụ và chức năng bên ngoài.",
+    "bullets": [
+      "MCP biến hệ sinh thái công cụ bên ngoài thành ngữ cảnh agent có thể khai thác.",
+      "Sử dụng tab này khi agent cần công cụ phong phú hơn Prompt tĩnh.",
+      "Chất lượng kết nối quyết định trực tiếp khả năng của agent."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Công cụ agent",
+        "title": "Lớp chức năng bên ngoài",
+        "description": "Cung cấp máy chủ công cụ mà agent có thể gọi trong quá trình suy luận.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kiểm soát thực thi",
+        "title": "Cấu hình kết nối",
+        "description": "Cấu hình Endpoint, nhãn và transport cho Workflow đáng tin cậy.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Độ sâu nền tảng",
+        "title": "Vượt xa Prompt",
+        "description": "MCP cho phép Workflow Heym hành động, không chỉ trả lời.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Mở tài liệu MCP",
+        "description": "Đọc hướng dẫn về tab MCP.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "Tab MCP"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Kiến trúc agent",
+        "description": "Tìm hiểu cách MCP được tích hợp vào thực thi agent.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Kiến trúc agent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Tầm quan trọng",
+        "content": "Đặc biệt quan trọng khi agent của bạn cần công cụ, quyền truy cập môi trường hoặc tích hợp hệ thống ngoài các nút riêng lẻ."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Cách tiếp cận vận hành",
+        "content": "Coi kết nối MCP như cơ sở hạ tầng: nhãn ổn định và trách nhiệm rõ ràng giúp gỡ lỗi dễ dàng hơn."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "Tab MCP"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Thực thi",
+    "summary": "Kiểm tra Trace chi tiết của các lần thực thi AI và Workflow để hiểu điều gì đã xảy ra – không chỉ là nó có hoạt động không.",
+    "bullets": [
+      "Sử dụng Trace để gỡ lỗi, phân tích hiệu suất và kiểm tra chất lượng Prompt.",
+      "Trace giải thích hành vi mô hình, độ trễ và đường dẫn thực thi.",
+      "Điểm vào đầu tiên khi có kết quả bất ngờ hoặc thực thi không ổn định."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Gỡ lỗi",
+        "title": "Xem các bước ẩn",
+        "description": "Dữ liệu Trace tiết lộ những gì Workflow và mô hình thực sự đã thực thi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Đánh giá",
+        "title": "Hỗ trợ lặp lại",
+        "description": "Sử dụng Trace khi tối ưu hóa Prompt, công cụ và mô hình.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Độ tin cậy",
+        "title": "Hiểu kết quả",
+        "description": "Trace tốt giảm phỏng đoán khi phân tích lỗi.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Mở tài liệu thực thi",
+        "description": "Đọc hướng dẫn về bảng điều khiển thực thi.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Tab Thực thi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Khi Trace trở nên thiết yếu",
+        "content": "Ngay khi Workflow có nhiều bước, sử dụng nhiều mô hình hoặc dựa trên công cụ, chỉ hiển thị trạng thái là không đủ."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace so với lịch sử",
+        "content": "Lịch sử cho thấy một lần thực thi ĐÃ xảy ra. Trace giải thích TẠI SAO nó hành xử như vậy."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Tab Thực thi"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Cảnh báo",
+    "summary": "Thiết lập các ngưỡng trên khung thời gian và tự động nhận thông báo ngay khi chúng bị vượt qua.",
+    "bullets": [
+      "Bốn loại: số lỗi, thời gian thực thi, ngưỡng Token/chi phí và bộ đếm thực thi.",
+      "Mỗi cảnh báo được đánh giá trên một khung thời gian đã chọn, không bao giờ trên các sự kiện riêng lẻ.",
+      "Mô tả yêu cầu bằng ngôn ngữ tự nhiên và trợ lý sẽ cấu hình cảnh báo."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Khung thời gian",
+        "title": "Tích lũy thay vì giá trị ngoại lai",
+        "description": "Một lần thực thi thất bại là nhiễu. Mười hai lần trong mười phút tạo thành sự cố.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Trước khi lưu",
+        "title": "Kiểm tra điều kiện hồi tố",
+        "description": "Bước xác minh kiểm tra trên lịch sử thực tế để hiệu chỉnh ngưỡng trước.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Phản ứng",
+        "title": "Chạy Workflow khi có cảnh báo",
+        "description": "Payload của cảnh báo trở thành đầu vào của Workflow để gửi thông báo tự động qua Slack hoặc email.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Mở tài liệu về cảnh báo",
+        "description": "Xem cách hoạt động của các loại cảnh báo, khung thời gian và trợ lý.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Tab Cảnh báo"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Mục đích",
+        "content": "Phân tích và Traces trả lời các câu hỏi bạn chủ động đặt ra. Cảnh báo cho phép Heym chủ động lên tiếng khi các ngưỡng quan trọng bị vượt qua."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Tại sao tránh cảnh báo sai",
+        "content": "Một cảnh báo kích hoạt một lần và chờ chỉ số phục hồi – điều này tránh dòng thông báo tràn lan."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Tab Cảnh báo"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Phân tích",
+    "summary": "Theo dõi các mẫu sử dụng và hành vi hệ thống để hiểu hoạt động, tăng trưởng và thay đổi theo thời gian.",
+    "bullets": [
+      "Xác định việc áp dụng, thông lượng và các đỉnh bất thường nhờ phân tích.",
+      "Một góc nhìn ở cấp nền tảng thay vì công cụ gỡ lỗi cá nhân.",
+      "Kết hợp phân tích với Traces và lịch sử để có tín hiệu và giải thích."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tín hiệu",
+        "title": "Minh bạch sử dụng",
+        "description": "Phát hiện xu hướng thay vì xem xét các lần thực thi riêng lẻ.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Năng lực",
+        "title": "Nhận thức vận hành",
+        "description": "Phát hiện và xem xét các đỉnh và giảm tải đủ sớm.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Hỗ trợ quyết định",
+        "title": "Tối ưu hóa có mục tiêu",
+        "description": "Phân tích giúp ưu tiên các Workflow quan trọng nhất.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Mở tài liệu về phân tích",
+        "description": "Đọc hướng dẫn về bảng điều khiển phân tích.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Tab Phân tích"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Mục đích",
+        "content": "Sử dụng phân tích cho các mẫu, thông lượng và hành vi tổng hợp trên toàn bộ hoạt động của nền tảng."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Quy trình",
+        "content": "Xác định tín hiệu ở đây, sau đó chuyển sang Traces, lịch sử hoặc trình chỉnh sửa để phân tích nguyên nhân."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Tab Phân tích"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Tạo lưới các widget biểu đồ, mỗi widget được cung cấp bởi Workflow riêng – tất cả chỉ số trong nháy mắt.",
+    "bullets": [
+      "Mỗi widget được cung cấp bởi một Workflow cung cấp dữ liệu cho nút Chart Output.",
+      "Sử dụng widget dạng thanh, đường, tròn, bảng và số phù hợp với chỉ số.",
+      "Tạo hoặc điều chỉnh widget bằng AI và lưu kết quả vào bộ nhớ đệm để tải nhanh.",
+      "Tạo nhiều Dashboard và chia sẻ quyền đọc hoặc ghi với cá nhân hoặc nhóm."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Thành phần",
+        "title": "Biểu đồ được cung cấp bởi Workflow",
+        "description": "Tất cả dữ liệu do Workflow tạo ra được hiển thị dưới dạng biểu đồ.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Hiệu suất",
+        "title": "Kết quả được lưu vào bộ nhớ đệm",
+        "description": "Lưu widget vào bộ nhớ đệm tránh thực thi Workflow lặp lại mỗi lần tải trang.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Hỗ trợ AI",
+        "title": "Tạo và điều chỉnh",
+        "description": "Mô tả chỉ số và để widget được AI tạo tự động.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Mở tài liệu về Dashboard",
+        "description": "Khám phá cách tạo widget Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Tab Dashboard"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Mục đích",
+        "content": "Sử dụng Dashboard để có cái nhìn tổng quan liên tục về các chỉ số chính từ Workflow của bạn."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Tạo",
+        "content": "Thêm widget, cấu hình Workflow sao cho nút cuối cùng trước Chart Output cung cấp các hàng, và sắp xếp nó trong lưới."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Tab Dashboard"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Nhóm",
+    "summary": "Quản lý quyền truy cập chia sẻ để Workflow, Credentials, biến và kho vector được sử dụng cộng tác mà không trùng lặp.",
+    "bullets": [
+      "Nhóm là cách sạch nhất để chia sẻ tài nguyên nền tảng một cách có thể mở rộng.",
+      "Sử dụng nhóm khi quyền cần theo nhóm thay vì cá nhân.",
+      "Đảm bảo cộng tác có cấu trúc trong Workspace đang phát triển."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Cộng tác",
+        "title": "Chia sẻ dựa trên nhóm",
+        "description": "Cấp quyền truy cập một lần cho nhóm thay vì ủy quyền thủ công cho từng người dùng.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Rõ ràng",
+        "title": "Trách nhiệm rõ ràng",
+        "description": "Quản lý tài nguyên theo cấu trúc nhóm thực tế.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Khả năng mở rộng",
+        "title": "Giảm gánh nặng quản trị",
+        "description": "Thành viên mới tự động kế thừa quyền truy cập qua nhóm.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Mở tài liệu về nhóm",
+        "description": "Đọc hướng dẫn về bảng điều khiển nhóm.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Tab Nhóm"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Chia sẻ tài nguyên",
+        "description": "Xem chi tiết về chia sẻ tài nguyên.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Chia sẻ thông tin xác thực"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Lợi ích của nhóm",
+        "content": "Nhóm kết nối danh tính và quyền truy cập tài nguyên để cộng tác liền mạch."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Mẹo thực tế",
+        "content": "Ưu tiên chia sẻ nhóm khi một Workflow hoặc Credential thuộc về một nhóm làm việc lâu dài."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Tab Nhóm"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Nhật ký",
+    "summary": "Xem log ở cấp Stack khi bạn cần thông tin chi tiết về cơ sở hạ tầng ngoài đầu ra của Workflow.",
+    "bullets": [
+      "Sử dụng log để gỡ lỗi dịch vụ, trạng thái container và vấn đề môi trường.",
+      "Hữu ích khi nguyên nhân nằm dưới cấp Workflow.",
+      "Sử dụng cùng với Traces để có bằng chứng ở cấp ứng dụng và hệ thống."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Cơ sở hạ tầng",
+        "title": "Minh bạch container",
+        "description": "Xem các dịch vụ backend đang chạy gì dưới giao diện Heym.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Khắc phục sự cố",
+        "title": "Tìm nguyên nhân",
+        "description": "Log giúp ích khi có vấn đề khởi động, sự cố hoặc lỗi tích hợp.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Bổ sung",
+        "title": "Khác biệt với kết quả Workflow",
+        "description": "Đầu ra Workflow hiển thị kết quả; log hiển thị hành vi hệ thống.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Mở tài liệu về nhật ký",
+        "description": "Đọc hướng dẫn về bảng điều khiển nhật ký.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Tab Nhật ký"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Thời điểm sử dụng",
+        "content": "Chuyển đến đây khi vấn đề có vẻ liên quan đến triển khai, dịch vụ hoặc môi trường."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Kết hợp tốt nhất",
+        "content": "Sử dụng log cùng với Traces và lịch sử để nhanh chóng đi từ triệu chứng đến nguyên nhân."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Tab Nhật ký"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Đánh giá",
+    "summary": "Tạo các benchmark có thể tái tạo cho Workflow của agent để so sánh đáng tin cậy các thay đổi về Prompt, model và Workflow.",
+    "bullets": [
+      "Các bộ kiểm thử và trường hợp kiểm thử biến chất lượng chủ quan của một Workflow thành các chỉ số đo lường được.",
+      "Nơi lý tưởng để kiểm tra hồi quy trước khi triển khai cập nhật Prompt hoặc model.",
+      "So sánh nhiều model trên cùng một tập dữ liệu và cùng phương pháp đánh giá."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Vòng lặp chất lượng",
+        "title": "Benchmark agent",
+        "description": "Chạy lặp lại cùng một bộ kiểm thử thay vì dựa vào kiểm tra ngẫu nhiên.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "So sánh",
+        "title": "Kiểm thử model và Prompt",
+        "description": "Quan sát hành vi của các tham số khác nhau trên cùng một tập kiểm thử.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "An toàn",
+        "title": "Lặp lại đáng tin cậy",
+        "description": "Chứng minh cải tiến trước khi triển khai.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Mở tài liệu đánh giá",
+        "description": "Xem hướng dẫn trang đánh giá.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Tab Đánh giá"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Tham chiếu node Agent",
+        "description": "Xem phần Workflow được hầu hết các bộ đánh giá nhắm đến.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Node Agent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Thiết kế bộ kiểm thử",
+        "content": "Một bộ kiểm thử tốt phản ánh các trường hợp sử dụng thực tế, điều kiện biên và các bước phê duyệt cần giữ ổn định."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Tham số so sánh",
+        "content": "Các so sánh điển hình bao gồm biến thể Prompt, lựa chọn model, tham số temperature và các bản sửa đổi Workflow trên cùng một tập dữ liệu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Tab Đánh giá"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Tài liệu",
+    "summary": "Duyệt các tham chiếu chính xác của nền tảng ngay trong ứng dụng và tìm hiểu sâu khi cần.",
+    "bullets": [
+      "Tài liệu Heym được thiết kế để tiếp thu nhanh và tra cứu có mục tiêu.",
+      "Thanh bên, tìm kiếm và tham chiếu chéo giúp điều hướng nhanh giữa các khái niệm.",
+      "Showcase liên kết trực tiếp đến bài viết đang mở."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tham chiếu tích hợp",
+        "title": "Luôn trong tầm tay",
+        "description": "Tài liệu nằm trong luồng sản phẩm, không cần mở tab bên ngoài.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tổng quan",
+        "title": "Điểm chính trước tiên",
+        "description": "Các bài viết bắt đầu bằng những điểm chính và phân nhánh qua liên kết."
+      },
+      {
+        "eyebrow": "Nhạy cảm ngữ cảnh",
+        "title": "Bài viết hiện tại",
+        "description": "Khi đọc một tài liệu, hành động \"Tìm hiểu thêm\" sẽ theo trực tiếp bài viết đó."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Xem phần giới thiệu",
+        "description": "Mở phần giới thiệu tài liệu làm điểm vào mặc định.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Giới thiệu"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Điều hướng nhanh",
+        "content": "Sử dụng thanh bên cho các danh mục và tìm kiếm bằng lệnh khi đã biết chủ đề."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Hỗ trợ qua Showcase",
+        "content": "Showcase giữ tóm tắt ngắn gọn và liên kết đến tài liệu chi tiết khi cần."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Giới thiệu"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Lịch trình",
+    "summary": "Tổng quan tất cả Workflow Cron đang hoạt động trên lịch trực quan và kiểm soát thời gian chạy.",
+    "bullets": [
+      "Chuyển đổi giữa chế độ xem ngày, tuần và tháng để có độ phân giải phù hợp.",
+      "Di chuột qua một khối để xem biểu thức Cron; nhấp để truy cập trực tiếp vào Canvas.",
+      "Sử dụng tab này để kiểm tra mật độ chạy và phát hiện chồng chéo."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Minh bạch",
+        "title": "Chế độ xem lịch",
+        "description": "Các Workflow Cron đang hoạt động xuất hiện dưới dạng khối tại thời điểm đã lên lịch.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Điều hướng",
+        "title": "Truy cập Canvas một nhấp",
+        "description": "Nhấp vào một khối để mở trực tiếp trình chỉnh sửa Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Phạm vi",
+        "title": "Ngày, tuần hoặc tháng",
+        "description": "Điều chỉnh độ phân giải để xem từng giờ hoặc lập kế hoạch cả tháng.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Mở tài liệu lịch trình",
+        "description": "Xem tham chiếu tab Lịch trình.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Tab Lịch trình"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Tham chiếu node Cron",
+        "description": "Tìm hiểu cách cấu hình Trigger Cron trên Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Thời điểm sử dụng",
+        "content": "Kiểm tra tự động hóa đã lên lịch, phát hiện xung đột lịch và đảm bảo các Workflow quan trọng vẫn hoạt động."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Mã màu",
+        "content": "Mỗi Workflow nhận một màu nhất quán dựa trên ID của nó, giống nhau trong chế độ xem ngày, tuần và tháng."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Tab Lịch trình"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Bảng dữ liệu",
+    "summary": "Tạo bảng dữ liệu có cấu trúc trực tiếp trong Heym và sử dụng chúng theo cách lập trình trong Workflow.",
+    "bullets": [
+      "Tạo bảng với các cột có kiểu, điền thủ công hoặc nhập qua CSV.",
+      "Sử dụng node Workflow DataTable để đọc, ghi và truy vấn hàng theo cách lập trình.",
+      "Chia sẻ bảng với người dùng hoặc nhóm với quyền đọc hoặc ghi."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Dữ liệu tích hợp",
+        "title": "Lưu trữ tích hợp",
+        "description": "Lưu trữ dữ liệu có cấu trúc mà không cần cơ sở dữ liệu bên ngoài hoặc API key.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tích hợp Workflow",
+        "title": "Node DataTable",
+        "description": "Tìm kiếm, chèn, cập nhật và xóa hàng trong bất kỳ Workflow nào.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Cộng tác",
+        "title": "Chia sẻ và quyền",
+        "description": "Gán quyền đọc và ghi chi tiết cho người dùng và nhóm.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Tài liệu tab Bảng dữ liệu",
+        "description": "Xem tham chiếu tab Bảng dữ liệu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Bảng dữ liệu"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "Tài liệu node DataTable",
+        "description": "Xem tham chiếu node DataTable.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Bảng dữ liệu là gì?",
+        "content": "Bảng dữ liệu là lưu trữ có cấu trúc tích hợp trong Heym: cột có kiểu (String, Number, Boolean, Date, JSON), chỉnh sửa trực tuyến cũng như nhập/xuất CSV."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Sử dụng trong Workflow",
+        "content": "Node DataTable hỗ trợ find, getAll, getById, insert, update, remove và upsert – không cần Credentials, trực tiếp qua chủ sở hữu Workflow."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Bảng dữ liệu"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Trình chỉnh sửa Workflow",
+    "summary": "Tạo, kiểm thử, gỡ lỗi và tối ưu Workflow trên Canvas – ngay trong ngữ cảnh thực thi.",
+    "bullets": [
+      "Trong trình chỉnh sửa, thiết kế node, luồng dữ liệu và hành vi thực thi hội tụ.",
+      "Sử dụng thanh bên và lịch sử để chuyển nhanh giữa tạo và gỡ lỗi.",
+      "Showcase được giữ cố ý ngắn gọn ở đây để cung cấp không gian tối đa cho Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Thiết kế Workflow trực quan",
+        "description": "Kết nối các node, phân nhánh logic và mô hình hóa trực tiếp luồng thực thi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Lặp lại",
+        "title": "Gỡ lỗi khi tạo",
+        "description": "Sử dụng lịch sử, bảng gỡ lỗi và kết quả thực thi để có vòng phản hồi nhanh."
+      },
+      {
+        "eyebrow": "Phạm vi chức năng",
+        "title": "Tính năng nâng cao trong tầm tay",
+        "description": "Portal, chia sẻ, mẫu và xác thực được truy cập trực tiếp trên Canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Mở tài liệu Canvas",
+        "description": "Xem tham chiếu các tính năng của Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Tính năng Canvas"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Phím tắt",
+        "description": "Mở tổng quan phím tắt trong trình chỉnh sửa.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Phím tắt"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Nhịp làm việc",
+        "content": "Mô hình hóa trên Canvas, kiểm tra giả định trên đầu ra và điều chỉnh tham số trong thanh bên mà không mất tập trung."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Showcase ngắn gọn",
+        "content": "Vì trình chỉnh sửa đã cung cấp nhiều thông tin, Showcase đóng vai trò hướng dẫn định hướng nhẹ nhàng."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Tính năng Canvas"
+    }
+  }
+}

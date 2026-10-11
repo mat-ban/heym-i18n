@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Sneller bouwen in Workflows",
+    "description": "Kies een Workflow om Trigger, laatste uitvoering en stappen direct naast de lijst te bekijken. Filter op status, voer direct uit en behoud overzicht met mappen."
+  },
+  "dashboard:board": {
+    "title": "Taken aansturen via een agentgebaseerd board",
+    "description": "Sleep kaarten door kolommen om Workflow-ketens te activeren met de volledige context van de kaart. Resultaten stromen direct terug naar de kaart."
+  },
+  "dashboard:templates": {
+    "title": "Start met bewezen sjablonen",
+    "description": "Gebruik vooraf gebouwde Workflow-patronen om installatietijd te besparen en consistentie te waarborgen."
+  },
+  "dashboard:globalvariables": {
+    "title": "Gedeelde variabelen centraliseren",
+    "description": "Sla herbruikbare waarden eenmalig op en verwijs ernaar vanuit alle Workflows."
+  },
+  "dashboard:chat": {
+    "title": "Chat gebruiken voor snelle iteratie",
+    "description": "Stel snelle vragen, test ideeën en schakel over naar de editor zodra de Workflow-aanpak duidelijk is."
+  },
+  "dashboard:credentials": {
+    "title": "Geheimen veilig beheren",
+    "description": "Beheer provider-sleutels en Tokens centraal, zodat Workflows veilige verbindingen kunnen gebruiken zonder geheimen prijs te geven."
+  },
+  "dashboard:vectorstores": {
+    "title": "Retrieval-gebaseerde Workflows ondersteunen",
+    "description": "Bereid vectorstores voor op onderbouwde AI-antwoorden, semantisch zoeken en schaalbare RAG-pipelines."
+  },
+  "dashboard:mcp": {
+    "title": "Externe tool-ecosystemen aansluiten",
+    "description": "Configureer MCP-verbindingen zodat agenten gestructureerde tools en acties kunnen uitvoeren die verder gaan dan eenvoudige Prompts."
+  },
+  "dashboard:traces": {
+    "title": "Uitvoeringsgedrag begrijpen",
+    "description": "Analyseer trace-details om resultaten te debuggen, uitvoeringen te vergelijken en betrouwbaarheid te verhogen."
+  },
+  "dashboard:alerts": {
+    "title": "Meldingen ontvangen voordat problemen escaleren",
+    "description": "Stel drempelwaarden in voor fouten, duur, kosten en uitvoeringsaantal en ontvang waarschuwingen bij overschrijding."
+  },
+  "dashboard:analytics": {
+    "title": "Platformprestaties volgen",
+    "description": "Monitor gebruiks- en uitvoeringstrends om gericht te optimaliseren op basis van echte signalen."
+  },
+  "dashboard:dashboard": {
+    "title": "Eigen dashboards bouwen",
+    "description": "Stel Workflow-gedreven diagram-widgets samen om belangrijke metrieken in één oogopslag te zien."
+  },
+  "dashboard:teams": {
+    "title": "Samenwerking netjes opschalen",
+    "description": "Verdeel Workflows en resources over teams om toegangsrechten en verantwoordelijkheden transparant te houden."
+  },
+  "dashboard:logs": {
+    "title": "Problemen op systeemniveau diagnosticeren",
+    "description": "Gebruik logs bij infrastructuur- of omgevingsproblemen voor diepere runtime-inzichten."
+  },
+  "dashboard:drive": {
+    "title": "Gegenereerde bestanden beheren",
+    "description": "Bekijk, download en deel Workflow-uitvoer via veilige links en gecontroleerde toegangsopties."
+  },
+  "dashboard:datatable": {
+    "title": "Native met gestructureerde data werken",
+    "description": "Maak getypeerde tabellen en stuur deze direct vanuit Workflows aan voor reproduceerbare lees- en schrijfacties."
+  },
+  "dashboard:schedules": {
+    "title": "Automatiseringsschema's overzien",
+    "description": "Bekijk alle actieve Cron-Workflows in een kalenderweergave (dag, week, maand). Klik op een blok om direct naar het canvas te gaan."
+  },
+  "evals": {
+    "title": "Kwaliteit betrouwbaar beoordelen",
+    "description": "Voer herhaalbare test-suites uit om Prompt- en modelwijzigingen vóór productie-uitrol gefundeerd te vergelijken."
+  },
+  "docs": {
+    "title": "Snelle oriëntatie in de app",
+    "description": "Doorzoek compacte referenties en verdiep u gericht, zonder de huidige Workflow te verlaten."
+  },
+  "editor": {
+    "title": "Ontwerpen en debuggen op het canvas",
+    "description": "Verbind knopen visueel, voer direct uit en verfijn gedrag met directe feedback in één werkruimte."
+  }
+}

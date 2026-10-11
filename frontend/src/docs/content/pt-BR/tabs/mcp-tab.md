@@ -1,0 +1,137 @@
+# Aba MCP
+
+A aba **MCP** configura a integração com o Model Context Protocol (MCP). O MCP permite que clientes de IA (Claude, Cursor e qualquer ferramenta compatível com MCP) chamem seus Workflows do Heym como ferramentas.
+
+O Heym oferece suporte a dois modos: um **servidor padrão** que expõe todos os Workflows habilitados para MCP sob um único Endpoint, e **servidores nomeados** que concedem a cada grupo lógico de Workflows sua própria URL dedicada e chave de API.
+
+Ambos os modos podem expor dois tipos de ferramentas: **Workflows** individuais e a **ferramenta de chat do Heym** — todo o motor da [aba Chat](./chat-tab.md) por trás de uma única ferramenta `heym_chat`.
+
+<video src="/features/showcase/mcp.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/mcp.webm">▶ Assistir à demonstração do MCP</a></p>
+
+## Servidor MCP Padrão
+
+O servidor padrão está sempre disponível em `{origin}/api/mcp/sse`. Todos os Workflows com o MCP ativado aparecem como ferramentas aqui.
+
+### Chave de API do MCP
+
+- As chaves são armazenadas como resumos SHA-256, portanto o Heym não consegue exibir uma chave existente. A aba informa se uma chave está definida, mas não qual é.
+- **Generate** / **Regenerate** – A nova chave é exibida uma única vez, logo após a criação. Copie-a nesse momento; ao recarregar a aba, ela ficará oculta permanentemente.
+- Use esta chave ao conectar o Claude Desktop, o Cursor ou outros clientes MCP ao Heym
+- Perdeu uma chave? Regenere-a. A chave anterior deixa de funcionar imediatamente.
+
+### Métodos de Conexão
+
+- **API Key** – Use a chave de API do MCP para conexões programáticas. A aba pode copiar uma configuração JSON pronta para uso e inclui um botão **Add to Cursor** para configuração do Cursor com um clique.
+- **Claude** – A aba exibe a URL do servidor MCP e as etapas de configuração para o Claude. Deixe OAuth Client ID e Secret em branco; o Claude se registra automaticamente e autentica via OAuth do Heym.
+
+### Toggle de MCP do Workflow
+
+Cada Workflow pode ser exposto como uma ferramenta MCP:
+
+- **Enable** – As ferramentas do Workflow ficam disponíveis para todos os clientes conectados ao servidor padrão
+- **Disable** – O Workflow não é exposto
+
+Os cards de Workflow exibem a descrição e uma prévia dos nomes dos campos de entrada, para que você veja o que cada ferramenta espera antes de habilitá-la.
+
+## Ferramenta de Chat do Heym
+
+A seção **Heym Capabilities** transforma o motor da aba Chat em uma única ferramenta MCP chamada `heym_chat`. Habilite-a no servidor padrão, em qualquer servidor nomeado, ou em ambos — cada superfície mantém seu próprio toggle e seleção de modelo.
+
+Quando ativada, `heym_chat` aparece em `tools/list` junto com suas ferramentas de Workflow. Um cliente MCP envia uma mensagem em linguagem natural e o motor do Heym assume a partir daí, com as mesmas capacidades da aba Chat:
+
+- Construir, editar, inspecionar e executar Workflows por meio do Workflow AI Builder
+- Reportar análises, execuções recentes e agendamentos Cron futuros
+- Reportar o histórico de execução de um Workflow: quantas vezes ele foi executado, contagens de status, quando foi executado e, sob solicitação, as entradas, saídas e erros por Nó de uma única execução
+- Reportar o que está em execução no momento: quantas execuções estão ativas, seus nomes de Workflow, há quanto tempo cada uma está em execução, o Nó em que cada uma está no momento e um link para a execução ao vivo
+- Listar boards, criar cards e ler detalhes de cards na [aba Board](./board-tab.md)
+- Listar suas tabelas de dados com suas colunas, criar novas e conectá-las aos Workflows que constrói
+- Ler equipes e variáveis globais, e pesquisar a documentação
+- Aprovar, editar ou recusar revisões pendentes de human-in-the-loop
+
+Capacidades adicionadas à aba Chat posteriormente tornam-se disponíveis automaticamente por meio de `heym_chat` — não há toggle por capacidade a ser sincronizado.
+
+As credenciais permanecem na UI: `heym_chat` nunca as lista, escolhe ou cria. Quando constrói ou edita um Workflow, novos Nós que precisam de uma credencial são deixados vazios e a resposta os nomeia, para que você possa configurá-los no editor.
+
+As tabelas de dados são diferentes. Uma tabela não contém segredos, então `heym_chat` pode listar suas tabelas, perguntar qual delas um Workflow deve usar e criar uma nova com suas colunas. Ele nunca lê ou grava linhas.
+
+### Credencial e modelo
+
+`heym_chat` executa o motor na sua conta do Heym, portanto precisa de uma credencial de LLM própria:
+
+| Campo | Comportamento |
+|-------|----------|
+| **Credential** | Escolha qualquer credencial OpenAI, Google ou Custom à qual você tenha acesso. Pré-preenchida a partir da credencial preferida em [Settings](../reference/user-settings.md) quando você não escolheu uma. |
+| **Model** | Carregado a partir da credencial selecionada. Pré-preenchido a partir do seu modelo preferido quando a credencial corresponde. |
+
+Se qualquer um dos dois estiver ausente, a ferramenta ainda aparece em `tools/list`, mas cada chamada retorna um erro informando que você deve concluir a configuração nesta aba.
+
+### Argumentos e histórico
+
+| Argumento | Obrigatório | Descrição |
+|----------|----------|-------------|
+| `message` | Sim | A instrução ou pergunta, em linguagem natural. |
+| `conversation_id` | Não | Um `conversation_id` de um resultado anterior de `heym_chat`, para continuar aquela conversa. |
+
+Cada chamada é gravada no histórico da sua [aba Chat](./chat-tab.md) como uma conversa normal, marcada com um ícone de plug na lista de conversas. Mensagens, cards de ferramentas e pausas para esclarecimento se parecem exatamente com uma conversa iniciada por você mesmo, e você pode abrir a conversa e continuar falando no navegador. Cada resultado retorna seu `conversation_id` para que o cliente MCP possa continuar a mesma conversa em vez de abrir uma nova a cada chamada.
+
+Quando o assistente precisa de esclarecimento, ele pausa e avisa; responda com as respostas usando o mesmo `conversation_id`.
+## Servidores MCP Nomeados
+
+Servidores nomeados permitem segmentar workflows em endpoints MCP isolados. Cada servidor tem sua própria URL e API key, para que diferentes clientes de IA, equipes ou casos de uso possam se conectar exatamente aos workflows de que precisam.
+
+### Criando um Servidor Nomeado
+
+1. Digite um nome no campo de entrada na parte inferior da aba MCP (ex.: **CRM Tools**)
+2. Clique em **Create** — um novo card de servidor aparece imediatamente
+3. Clique no card para expandi-lo
+
+### Configurações por Servidor
+
+Cada card de servidor exibe:
+
+| Configuração | Descrição |
+|---------|-------------|
+| **SSE Endpoint** | URL única: `{origin}/api/mcp/servers/{uuid}/sse` |
+| **API Key** | Key independente, exibida uma única vez quando gerada ou regenerada. Copie-a imediatamente; ela é armazenada com hash e não pode ser revelada posteriormente |
+| **How to connect** | **Copy JSON** copia a configuração MCP pronta para colar; **Add to Cursor** instala em um clique |
+| **Heym Capabilities** | Ative ou desative a ferramenta `heym_chat` para este servidor e escolha sua credencial e modelo |
+| **Assigned Workflows** | Ative ou desative quais dos seus workflows este servidor expõe |
+
+### Atribuição de Workflows
+
+A atribuição de workflows é por servidor e independente do toggle do servidor padrão. Um workflow pode ser habilitado no servidor padrão e em múltiplos servidores nomeados simultaneamente, ou em nenhum.
+
+Alternar um workflow o move para o topo da lista de atribuídos, para que a linha que você acabou de alterar permaneça visível em vez de rolar para fora da tela.
+
+### Autenticação
+
+Servidores nomeados suportam os mesmos métodos de autenticação do servidor padrão:
+
+- **Header X-MCP-Key** – Passe a API key do servidor diretamente (clientes de API, Cursor). Somente via header: keys não são aceitas como parâmetro de query `?key=`, porque URLs acabam em logs de acesso, logs de proxy e histórico do navegador.
+- **Claude OAuth** – Adicione a URL do servidor às integrações do Claude; deixe as credenciais em branco e o Claude se registra via OAuth automaticamente. O bearer token deve trafegar no header `Authorization`, não como `?token=`.
+- **Session token** – Emitido durante o handshake SSE; com escopo restrito ao servidor específico, de modo que tokens de um servidor nomeado não podem acessar outro. Este parâmetro `?session=` de curta duração não é afetado.
+
+### Excluindo um Servidor Nomeado
+
+Clique no ícone **X** no cabeçalho de um card de servidor. A exclusão remove o servidor e todas as suas atribuições de workflow; os workflows em si não são afetados.
+
+## SSE Endpoint
+
+| Servidor | Endpoint |
+|--------|----------|
+| Padrão | `{origin}/api/mcp/sse` |
+| Nomeado | `{origin}/api/mcp/servers/{server-uuid}/sse` |
+
+Ambos os endpoints suportam o transporte SSE (GET, MCP spec 2024-11-05) e o transporte Streamable HTTP (POST, MCP spec 2025-03-26). O Claude usa OAuth 2.1 / PKCE para login seguro em ambos.
+
+## Relacionados
+
+- [Why Heym](../getting-started/why-heym.md) – MCP como primitivo de primeira classe no Heym
+- [Agent Node](../nodes/agent-node.md) – Nó Agente com suporte a ferramentas MCP
+- [Agent Architecture](../reference/agent-architecture.md) – Cliente MCP, despacho de ferramentas, orquestrador
+- [Triggers](../reference/triggers.md) – MCP como ponto de entrada de workflow
+- [Chat Tab](./chat-tab.md) – O motor por trás da ferramenta `heym_chat`
+- [Workflows Tab](./workflows-tab.md) – Crie e gerencie workflows
+- [Node Types](../reference/node-types.md) – Visão geral dos nós de IA
+- [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacto de páginas para superfícies do dashboard

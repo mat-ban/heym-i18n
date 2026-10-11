@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import {
   Database,
   Edit2,
@@ -37,6 +38,7 @@ import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { t } = useI18n();
 const teams = ref<Team[]>([]);
 const loading = ref(true);
 const showCreateDialog = ref(false);
@@ -99,7 +101,7 @@ async function createTeam(): Promise<void> {
     showCreateDialog.value = false;
   } catch (e: unknown) {
     const err = e as { response?: { data?: { detail?: string } } };
-    createError.value = err.response?.data?.detail || "Failed to create team";
+    createError.value = err.response?.data?.detail || t("teams.failedCreateTeam");
   } finally {
     creating.value = false;
   }
@@ -169,7 +171,7 @@ async function saveEdit(): Promise<void> {
     showEditDialog.value = false;
   } catch (e: unknown) {
     const err = e as { response?: { data?: { detail?: string } } };
-    editError.value = err.response?.data?.detail || "Failed to update team";
+    editError.value = err.response?.data?.detail || t("teams.failedUpdateTeam");
   } finally {
     editing.value = false;
   }
@@ -187,7 +189,7 @@ async function addMember(): Promise<void> {
     addMemberEmail.value = "";
   } catch (e: unknown) {
     const err = e as { response?: { data?: { detail?: string } } };
-    addMemberError.value = err.response?.data?.detail || "Failed to add member";
+    addMemberError.value = err.response?.data?.detail || t("teams.failedAddMember");
   } finally {
     addingMember.value = false;
   }
@@ -196,26 +198,26 @@ async function addMember(): Promise<void> {
 async function removeMember(userId: string): Promise<void> {
   if (!selectedTeam.value) return;
   if (userId === selectedTeam.value.creator_id) return;
-  if (!confirm("Remove this member from the team?")) return;
+  if (!confirm(t("teams.confirmRemoveMember"))) return;
   try {
     await teamsApi.removeMember(selectedTeam.value.id, userId);
     const updated = await teamsApi.get(selectedTeam.value.id);
     selectedTeam.value = updated;
   } catch {
-    addMemberError.value = "Failed to remove member";
+    addMemberError.value = t("teams.failedRemoveMember");
   }
 }
 
 async function deleteTeam(): Promise<void> {
   if (!selectedTeam.value) return;
   if (selectedTeam.value.creator_id !== authStore.user?.id) return;
-  if (!confirm("Delete this team? All team shares will be removed.")) return;
+  if (!confirm(t("teams.confirmDeleteTeam"))) return;
   try {
     await teamsApi.delete(selectedTeam.value.id);
     teams.value = teams.value.filter((t) => t.id !== selectedTeam.value!.id);
     closeDetailDialog();
   } catch {
-    addMemberError.value = "Failed to delete team";
+    addMemberError.value = t("teams.failedDeleteTeam");
   }
 }
 
@@ -247,10 +249,10 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
       <div>
         <h2 class="text-2xl md:text-3xl font-bold tracking-tight">
-          Teams
+          {{ $t('teams.title') }}
         </h2>
         <p class="text-muted-foreground mt-1">
-          Create teams and share workflows, credentials, and more
+          {{ $t('teams.description') }}
         </p>
       </div>
       <Button
@@ -258,7 +260,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
         @click="openCreateDialog"
       >
         <Plus class="w-4 h-4" />
-        New Team
+        {{ $t('teams.newTeam') }}
       </Button>
     </div>
 
@@ -290,17 +292,17 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
         <Users class="w-10 h-10 text-primary" />
       </div>
       <h3 class="text-xl font-semibold mb-2">
-        No teams yet
+        {{ $t('teams.noTeams') }}
       </h3>
       <p class="text-muted-foreground mb-6 max-w-sm mx-auto">
-        Create a team to share workflows, credentials, and variables with others
+        {{ $t('teams.noTeamsDescription') }}
       </p>
       <Button
         variant="gradient"
         @click="openCreateDialog"
       >
         <Plus class="w-4 h-4" />
-        Create Team
+        {{ $t('teams.createTeam') }}
       </Button>
     </div>
 
@@ -324,7 +326,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
                 {{ team.name }}
               </h3>
               <p class="text-xs text-muted-foreground">
-                {{ team.member_count }} member{{ team.member_count !== 1 ? "s" : "" }}
+                {{ team.member_count }} {{ team.member_count === 1 ? $t('teams.member') : $t('teams.members') }}
               </p>
             </div>
           </div>
@@ -336,33 +338,33 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
           {{ team.description }}
         </p>
         <p class="text-xs text-muted-foreground mt-2">
-          Created by {{ team.creator_name }}
+          {{ $t('teams.createdBy', { name: team.creator_name }) }}
         </p>
       </Card>
     </div>
 
     <Dialog
       :open="showCreateDialog"
-      title="Create Team"
+      :title="$t('teams.createTeam')"
       @close="showCreateDialog = false"
     >
       <div class="space-y-4">
         <div>
-          <Label for="new-name">Name</Label>
+          <Label for="new-name">{{ $t('common.name') }}</Label>
           <Input
             id="new-name"
             v-model="newTeamName"
-            placeholder="Team name"
+            :placeholder="$t('teams.teamName')"
             class="mt-1"
             @keyup.enter="createTeam"
           />
         </div>
         <div>
-          <Label for="new-desc">Description (optional)</Label>
+          <Label for="new-desc">{{ $t('common.descriptionOptional') }}</Label>
           <Textarea
             id="new-desc"
             v-model="newTeamDescription"
-            placeholder="Brief description"
+            :placeholder="$t('teams.briefDescription')"
             :rows="2"
             class="mt-1"
           />
@@ -378,13 +380,13 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             variant="outline"
             @click="showCreateDialog = false"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             :disabled="!newTeamName.trim() || creating"
             @click="createTeam"
           >
-            Create
+            {{ $t('common.create') }}
           </Button>
         </div>
       </div>
@@ -411,7 +413,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
               {{ selectedTeam.description }}
             </p>
             <p class="text-xs text-muted-foreground mt-1">
-              Created by {{ selectedTeam.creator_name }} · {{ selectedTeam.member_count }} member{{ selectedTeam.member_count !== 1 ? "s" : "" }}
+              {{ $t('teams.createdBy', { name: selectedTeam.creator_name }) }} · {{ selectedTeam.member_count }} {{ selectedTeam.member_count === 1 ? $t('teams.member') : $t('teams.members') }}
             </p>
           </div>
           <div
@@ -422,7 +424,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
               variant="ghost"
               size="icon"
               class="h-8 w-8"
-              title="Edit"
+              :title="$t('common.edit')"
               @click="openEditDialog"
             >
               <Edit2 class="w-4 h-4" />
@@ -431,7 +433,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
               variant="ghost"
               size="icon"
               class="h-8 w-8 text-destructive hover:text-destructive"
-              title="Delete team"
+              :title="$t('teams.deleteTeam')"
               @click="deleteTeam"
             >
               <Trash2 class="w-4 h-4" />
@@ -444,7 +446,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
           class="space-y-4"
         >
           <div>
-            <Label for="edit-name">Name</Label>
+            <Label for="edit-name">{{ $t('common.name') }}</Label>
             <Input
               id="edit-name"
               v-model="editTeamName"
@@ -452,7 +454,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             />
           </div>
           <div>
-            <Label for="edit-desc">Description</Label>
+            <Label for="edit-desc">{{ $t('common.description') }}</Label>
             <Textarea
               id="edit-desc"
               v-model="editTeamDescription"
@@ -471,13 +473,13 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
               variant="outline"
               @click="showEditDialog = false"
             >
-              Cancel
+              {{ $t('common.cancel') }}
             </Button>
             <Button
               :disabled="editing"
               @click="saveEdit"
             >
-              Save
+              {{ $t('common.save') }}
             </Button>
           </div>
         </div>
@@ -498,7 +500,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             @click="addMember"
           >
             <UserPlus class="w-4 h-4" />
-            Add
+            {{ $t('common.add') }}
           </Button>
         </div>
 
@@ -513,7 +515,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
           v-if="!showEditDialog"
           class="space-y-2"
         >
-          <Label>Members</Label>
+          <Label>{{ $t('teams.members') }}</Label>
           <div class="space-y-2 max-h-48 overflow-y-auto">
             <div
               v-for="member in selectedTeam.members"
@@ -534,7 +536,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
                       v-if="isCreatorMember(member)"
                       class="text-xs text-muted-foreground"
                     >
-                      (creator)
+                      ({{ $t('teams.creator') }})
                     </span>
                   </p>
                   <p class="truncate text-xs text-muted-foreground">
@@ -559,18 +561,18 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
           v-if="!showEditDialog"
           class="space-y-2"
         >
-          <Label>Shared with team</Label>
+          <Label>{{ $t('teams.sharedWithTeam') }}</Label>
           <div
             v-if="loadingSharedEntities"
             class="py-4 text-center text-sm text-muted-foreground"
           >
-            Loading...
+            {{ $t('common.loading') }}
           </div>
           <div
             v-else-if="!hasAnySharedEntities(sharedEntities)"
             class="py-4 text-center text-sm text-muted-foreground rounded bg-muted/30"
           >
-            No resources shared with this team yet.
+            {{ $t('teams.noResourcesShared') }}
           </div>
           <div
             v-else
@@ -622,7 +624,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             >
               <p class="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
                 <Variable class="w-3.5 h-3.5" />
-                Variables
+                {{ $t('teams.variables') }}
               </p>
               <div class="space-y-1">
                 <button
@@ -642,7 +644,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             >
               <p class="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
                 <Database class="w-3.5 h-3.5" />
-                Vector Stores
+                {{ $t('teams.vectorStores') }}
               </p>
               <div class="space-y-1">
                 <button
@@ -662,7 +664,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             >
               <p class="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
                 <HardDrive class="w-3.5 h-3.5" />
-                Files
+                {{ $t('teams.files') }}
               </p>
               <div class="space-y-1">
                 <button
@@ -682,7 +684,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             >
               <p class="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
                 <LayoutTemplate class="w-3.5 h-3.5" />
-                Workflow Templates
+                {{ $t('teams.workflowTemplates') }}
               </p>
               <div class="space-y-1">
                 <button
@@ -702,7 +704,7 @@ function hasAnySharedEntities(entities: TeamSharedEntities | null): boolean {
             >
               <p class="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
                 <Layout class="w-3.5 h-3.5" />
-                Node Templates
+                {{ $t('teams.nodeTemplates') }}
               </p>
               <div class="space-y-1">
                 <button

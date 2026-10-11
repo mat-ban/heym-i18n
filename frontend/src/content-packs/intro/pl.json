@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Szybsze budowanie w Workflows",
+    "description": "Wybór Workflow um podgląd Triggerów, ostatniego wykonania i kroków bezpośrednio obok listy. Filtrowanie według statusu, uruchamianie bezpośrednio i zachowanie przejrzystości dzięki folderom."
+  },
+  "dashboard:board": {
+    "title": "Sterowanie zadaniami za pomocą tablicy agentowej",
+    "description": "Przeciąganie kart między kolumnami w celu wyzwalania łańcuchów Workflow z pełnym kontekstem karty. Wyniki wracają bezpośrednio do karty."
+  },
+  "dashboard:templates": {
+    "title": "Rozpoczęcie pracy ze sprawdzonymi szablonami",
+    "description": "Korzystanie z gotowych wzorców Workflow w celu oszczędności czasu konfiguracji i zapewnienia spójności."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizacja zmiennych współdzielonych",
+    "description": "Jednorazowe zapisanie wartości wielokrotnego użytku i odwoływanie się do nich we wszystkich Workflows."
+  },
+  "dashboard:chat": {
+    "title": "Wykorzystanie czatu do szybkiej iteracji",
+    "description": "Zadawanie szybkich pytań, testowanie pomysłów i przejście do edytora, gdy przebieg Workflow jest jasny."
+  },
+  "dashboard:credentials": {
+    "title": "Bezpieczne zarządzanie sekretami",
+    "description": "Centralne zarządzanie kluczami providerów i Tokenami, aby Workflows mogły korzystać z bezpiecznych połączeń bez ujawniania sekretów."
+  },
+  "dashboard:vectorstores": {
+    "title": "Wsparcie dla Workflows opartych na wyszukiwaniu",
+    "description": "Przygotowanie magazynów wektorowych dla uzasadnionych odpowiedzi AI, wyszukiwania semantycznego i skalowalnych pipeline'ów RAG."
+  },
+  "dashboard:mcp": {
+    "title": "Podłączanie zewnętrznych ekosystemów narzędzi",
+    "description": "Konfiguracja połączeń MCP, aby agenci mogli wykonywać strukturalne narzędzia i akcje wykraczające poza proste Prompty."
+  },
+  "dashboard:traces": {
+    "title": "Zrozumienie zachowania wykonania",
+    "description": "Analiza szczegółów Wykonań w celu debugowania wyników, porównywania wykonań i zwiększania niezawodności."
+  },
+  "dashboard:alerts": {
+    "title": "Otrzymywanie powiadomień, zanim problemy eskalują",
+    "description": "Ustawianie progów dla błędów, czasu trwania, kosztów i liczby wykonań oraz otrzymywanie ostrzeżeń przy przekroczeniu."
+  },
+  "dashboard:analytics": {
+    "title": "Śledzenie wydajności platformy",
+    "description": "Monitorowanie trendów użytkowania i wykonań w celu ukierunkowanej optymalizacji na podstawie rzeczywistych sygnałów."
+  },
+  "dashboard:dashboard": {
+    "title": "Tworzenie własnych dashboardów",
+    "description": "Komponowanie widgetów wykresów opartych na Workflows w celu przeglądu kluczowych metryk na pierwszy rzut oka."
+  },
+  "dashboard:teams": {
+    "title": "Czyste skalowanie współpracy",
+    "description": "Podział Workflows i zasobów według zespołów w celu zachowania przejrzystości uprawnień dostępu i odpowiedzialności."
+  },
+  "dashboard:logs": {
+    "title": "Diagnozowanie problemów na poziomie systemu",
+    "description": "Wykorzystanie logów przy problemach z infrastrukturą lub środowiskiem w celu głębszego wglądu w działanie."
+  },
+  "dashboard:drive": {
+    "title": "Zarządzanie generowanymi plikami",
+    "description": "Sprawdzanie, pobieranie i udostępnianie wyników Workflow za pomocą bezpiecznych linków i kontrolowanych opcji dostępu."
+  },
+  "dashboard:datatable": {
+    "title": "Natywna praca z danymi strukturalnymi",
+    "description": "Tworzenie typowanych tabel i sterowanie nimi bezpośrednio z Workflows w celu powtarzalnych operacji odczytu i zapisu."
+  },
+  "dashboard:schedules": {
+    "title": "Przegląd harmonogramów automatyzacji",
+    "description": "Podgląd wszystkich aktywnych Workflows Cron w widoku kalendarza (dzień, tydzień, miesiąc). Kliknięcie bloku prowadzi bezpośrednio do Canvas."
+  },
+  "evals": {
+    "title": "Rzetelna ocena jakości",
+    "description": "Wykonywanie powtarzalnych zestawów testów w celu rzetelnego porównania zmian Promptów i modeli przed wdrożeniami produkcyjnymi."
+  },
+  "docs": {
+    "title": "Szybka orientacja w aplikacji",
+    "description": "Przeglądanie kompaktowych referencji i ukierunkowane pogłębianie wiedzy bez opuszczania bieżącego Workflow."
+  },
+  "editor": {
+    "title": "Projektowanie i debugowanie na Canvas",
+    "description": "Wizualne łączenie węzłów, natychmiastowe uruchamianie i udoskonalanie zachowania dzięki bezpośredniemu feedbackowi w jednym obszarze roboczym."
+  }
+}

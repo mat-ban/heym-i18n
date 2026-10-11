@@ -102,6 +102,6 @@ const style = computed((): StatusStyle => STATUS_STYLES[props.status]);
       />
       <span :class="cn('relative inline-flex h-1.5 w-1.5 rounded-full', style.dot)" />
     </span>
-    {{ style.label }}
+    {{ $t(`statusFilter.${status}`) }}
   </span>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 import type { CredentialListItem } from "@/types/credential";
 
@@ -31,6 +32,7 @@ import { useAuthStore } from "@/stores/auth";
 
 import AiDefaultsTab from "@/components/Layout/aiDefaults/AiDefaultsTab.vue";
 import { clearPluginIconCache } from "@/components/Panels/PluginIcon.vue";
+import { getCurrentLocale, setLocale, isSupportedLocale, SUPPORTED_LOCALES, type SupportedLocale } from "@/i18n";
 
 import type { PluginSummary } from "@/types/workflow";
 
@@ -56,8 +58,19 @@ const emit = defineEmits<{
 
 const authStore = useAuthStore();
 const router = useRouter();
+const { t } = useI18n();
 
 const activeTab = ref<SettingsTab>("profile");
+const selectedLocale = ref<SupportedLocale>(getCurrentLocale());
+
+const languageOptions = SUPPORTED_LOCALES;
+
+async function handleLocaleChange(val: string | undefined): Promise<void> {
+  if (val && isSupportedLocale(val)) {
+    selectedLocale.value = val;
+    await setLocale(val);
+  }
+}
 
 const observabilityStatus = ref<ObservabilityStatus | null>(null);
 const loadingObservability = ref(false);
@@ -161,11 +174,11 @@ const voiceError = ref<string | null>(null);
 const savingVoice = ref(false);
 
 const credentialOptions = computed(() => [
-  { value: "", label: "Select a credential" },
+  { value: "", label: t("settings.selectCredential") },
   ...elevenlabsCredentials.value.map((c) => ({ value: c.id, label: c.name })),
 ]);
 const voiceOptions = computed(() => [
-  { value: "", label: "Select a voice" },
+  { value: "", label: t("settings.selectVoice") },
   ...voices.value.map((v) => ({ value: v.voice_id, label: v.name })),
 ]);
 
@@ -183,7 +196,7 @@ async function loadVoices(): Promise<void> {
   try {
     voices.value = await voiceApi.listVoices(selectedTtsCredentialId.value);
   } catch {
-    voiceError.value = "Could not load voices. Check the credential.";
+    voiceError.value = t("settings.voiceLoadError");
     voices.value = [];
   } finally {
     loadingVoices.value = false;
@@ -253,6 +266,7 @@ watch(
       name.value = authStore.user.name;
       userRules.value = authStore.user.user_rules || "";
       activeTab.value = props.initialTab ?? "profile";
+      selectedLocale.value = getCurrentLocale();
       currentPassword.value = "";
       newPassword.value = "";
       confirmNewPassword.value = "";
@@ -373,7 +387,7 @@ async function handleChangePassword(): Promise<void> {
 <template>
   <Dialog
     :open="props.open"
-    title="Settings"
+    :title="$t('settings.title')"
     content-class="!max-w-[532px]"
     @close="emit('close')"
   >
@@ -404,7 +418,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'profile' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'profile'"
           >
-            Profile
+            {{ $t('settings.profile') }}
           </button>
           <button
             type="button"
@@ -412,7 +426,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'security' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'security'"
           >
-            Security
+            {{ $t('settings.security') }}
           </button>
           <button
             type="button"
@@ -420,7 +434,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'voice' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'voice'"
           >
-            Voice
+            {{ $t('settings.voice') }}
           </button>
           <button
             type="button"
@@ -428,7 +442,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'ai-defaults' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'ai-defaults'"
           >
-            AI Defaults
+            {{ $t('settings.aiDefaults') }}
           </button>
           <button
             type="button"
@@ -436,7 +450,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'observability' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'observability'"
           >
-            Observability
+            {{ $t('settings.observability') }}
           </button>
           <button
             type="button"
@@ -444,7 +458,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'plugins' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'plugins'"
           >
-            Plugins
+            {{ $t('settings.plugins') }}
           </button>
           <button
             v-if="authStore.user?.is_admin"
@@ -453,7 +467,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'sso' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'sso'"
           >
-            SSO
+            {{ $t('settings.sso') }}
           </button>
           <button
             v-if="authStore.user?.is_admin"
@@ -462,7 +476,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'work' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'work'"
           >
-            Heym Work
+            {{ $t('settings.work') }}
           </button>
           <button
             v-if="authStore.user?.is_admin"
@@ -471,7 +485,7 @@ async function handleChangePassword(): Promise<void> {
             :class="activeTab === 'instances' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
             @click="activeTab = 'instances'"
           >
-            Instances
+            {{ $t('settings.instances') }}
           </button>
         </div>
       </div>
@@ -492,38 +506,46 @@ async function handleChangePassword(): Promise<void> {
             class="h-12 w-12 bg-primary/15 text-lg font-semibold text-primary dark:bg-primary/25 dark:text-accent-foreground"
           />
           <p class="min-w-0 text-xs text-muted-foreground">
-            Your picture comes from
+            {{ $t('settings.pictureFrom') }}
             <a
               href="https://gravatar.com"
               target="_blank"
               rel="noopener noreferrer"
               class="font-medium text-primary hover:underline dark:text-accent-foreground"
             >Gravatar</a>
-            for <span class="break-all font-medium text-foreground">{{ authStore.user.email }}</span>.
-            Without one, Heym shows your initial.
+            for <span class="break-all font-medium text-foreground">{{ authStore.user.email }}</span>{{ $t('settings.gravatarNotice') }}
           </p>
         </div>
 
         <div class="space-y-2">
-          <Label for="user-name">Name</Label>
+          <Label for="user-name">{{ $t('settings.name') }}</Label>
           <Input
             id="user-name"
             v-model="name"
-            placeholder="Your name"
+            :placeholder="$t('settings.namePlaceholder')"
             required
           />
         </div>
 
         <div class="space-y-2">
-          <Label for="user-rules">User Rules</Label>
+          <Label for="user-language">{{ $t('settings.language') }}</Label>
+          <Select
+            id="user-language"
+            :model-value="selectedLocale"
+            :options="languageOptions"
+            @update:model-value="handleLocaleChange"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <Label for="user-rules">{{ $t('settings.userRules') }}</Label>
           <p class="text-xs text-muted-foreground">
-            Custom instructions included in every AI request (workflow builder and dashboard
-            chat). Use this to define your preferences, coding style, or specific requirements.
+            {{ $t('settings.userRulesDescription') }}
           </p>
           <Textarea
             id="user-rules"
             v-model="userRules"
-            placeholder="e.g., Always use Turkish for labels, prefer concise responses, include error handling in all workflows..."
+            :placeholder="$t('settings.userRulesPlaceholder')"
             :rows="6"
           />
         </div>
@@ -534,14 +556,14 @@ async function handleChangePassword(): Promise<void> {
             type="button"
             @click="emit('close')"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             type="submit"
             :loading="savingProfile"
             :disabled="!name.trim()"
           >
-            Save Changes
+            {{ $t('settings.saveChanges') }}
           </Button>
         </div>
       </form>
@@ -552,7 +574,7 @@ async function handleChangePassword(): Promise<void> {
         @submit.prevent="handleChangePassword"
       >
         <div class="space-y-2">
-          <Label for="current-password">Current Password</Label>
+          <Label for="current-password">{{ $t('settings.currentPassword') }}</Label>
           <Input
             id="current-password"
             v-model="currentPassword"
@@ -563,7 +585,7 @@ async function handleChangePassword(): Promise<void> {
         </div>
 
         <div class="space-y-2">
-          <Label for="new-password">New Password</Label>
+          <Label for="new-password">{{ $t('settings.newPassword') }}</Label>
           <Input
             id="new-password"
             v-model="newPassword"
@@ -572,12 +594,12 @@ async function handleChangePassword(): Promise<void> {
             required
           />
           <p class="text-xs text-muted-foreground">
-            Minimum 6 characters. Use a strong, unique password for better security.
+            {{ $t('settings.passwordRequirements') }}
           </p>
         </div>
 
         <div class="space-y-2">
-          <Label for="confirm-new-password">Confirm New Password</Label>
+          <Label for="confirm-new-password">{{ $t('settings.confirmNewPassword') }}</Label>
           <Input
             id="confirm-new-password"
             v-model="confirmNewPassword"
@@ -606,13 +628,13 @@ async function handleChangePassword(): Promise<void> {
             type="button"
             @click="emit('close')"
           >
-            Close
+            {{ $t('common.close') }}
           </Button>
           <Button
             type="submit"
             :loading="savingPassword"
           >
-            Update Password
+            {{ $t('settings.changePassword') }}
           </Button>
         </div>
       </form>
@@ -622,9 +644,9 @@ async function handleChangePassword(): Promise<void> {
         class="space-y-5"
       >
         <div class="space-y-2">
-          <Label>ElevenLabs Credential</Label>
+          <Label>{{ $t("settings.voiceCredential") }}</Label>
           <p class="text-xs text-muted-foreground">
-            Used to read messages aloud and power interactive voice mode in chat.
+            {{ $t("settings.voiceCredentialDescription") }}
           </p>
           <Select
             v-model="selectedTtsCredentialId"
@@ -636,12 +658,12 @@ async function handleChangePassword(): Promise<void> {
             class="mt-1"
             @click="goToCredentialsTab"
           >
-            Add credential
+            {{ $t("settings.addCredential") }}
           </Button>
         </div>
 
         <div class="space-y-2">
-          <Label>Voice</Label>
+          <Label>{{ $t("settings.voiceSelect") }}</Label>
           <Select
             v-model="selectedVoiceId"
             :options="voiceOptions"
@@ -661,7 +683,7 @@ async function handleChangePassword(): Promise<void> {
             type="button"
             @click="emit('close')"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             type="button"
@@ -669,7 +691,7 @@ async function handleChangePassword(): Promise<void> {
             :disabled="!selectedTtsCredentialId || !selectedVoiceId"
             @click="handleSaveVoice"
           >
-            Save Voice Settings
+            {{ $t('settings.saveVoiceSettings') }}
           </Button>
         </div>
       </div>
@@ -684,17 +706,14 @@ async function handleChangePassword(): Promise<void> {
         class="space-y-5"
       >
         <p class="text-xs text-muted-foreground">
-          OpenTelemetry traces every workflow and node execution so you can inspect them in
-          any OTLP-compatible backend (Jaeger, Grafana Tempo, Honeycomb, Datadog, and more).
-          Configure it with the <code>HEYM_OTEL_*</code> environment variables; this panel is
-          read-only.
+          {{ $t('settings.observabilityDescription') }}
         </p>
 
         <div
           v-if="loadingObservability"
           class="text-xs text-muted-foreground"
         >
-          Loading status…
+          {{ $t('common.loading') }}
         </div>
 
         <div
@@ -702,20 +721,20 @@ async function handleChangePassword(): Promise<void> {
           class="space-y-3"
         >
           <div class="flex items-center gap-2">
-            <span class="text-sm font-medium">Status</span>
+            <span class="text-sm font-medium">{{ $t('common.status') }}</span>
             <span
               class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold"
               :class="observabilityStatus.enabled
                 ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
                 : 'bg-muted text-muted-foreground'"
             >
-              {{ observabilityStatus.enabled ? "Enabled" : "Disabled" }}
+              {{ observabilityStatus.enabled ? $t('common.enabled') : $t('common.disabled') }}
             </span>
           </div>
 
           <dl class="grid grid-cols-[max-content_1fr] items-baseline gap-x-4 gap-y-1.5 text-sm">
             <dt class="text-muted-foreground">
-              Service name
+              {{ $t('settings.serviceName') }}
             </dt>
             <dd class="font-mono text-xs break-all">
               {{ observabilityStatus.service_name }}
@@ -723,35 +742,35 @@ async function handleChangePassword(): Promise<void> {
 
             <template v-if="observabilityStatus.enabled">
               <dt class="text-muted-foreground">
-                OTLP endpoint
+                {{ $t('settings.otlpEndpoint') }}
               </dt>
               <dd class="font-mono text-xs break-all">
-                {{ observabilityStatus.endpoint || "(SDK default)" }}
+                {{ observabilityStatus.endpoint || $t('settings.sdkDefault') }}
               </dd>
 
               <dt class="text-muted-foreground">
-                Sampler ratio
+                {{ $t('settings.samplerRatio') }}
               </dt>
               <dd class="font-mono text-xs">
                 {{ observabilityStatus.sampler_ratio }}
               </dd>
 
               <dt class="text-muted-foreground">
-                Capture node I/O
+                {{ $t('settings.captureNodeIo') }}
               </dt>
               <dd class="font-mono text-xs">
-                {{ observabilityStatus.capture_node_io ? "on" : "off" }}
+                {{ observabilityStatus.capture_node_io ? $t('common.on') : $t('common.off') }}
               </dd>
 
               <dt class="text-muted-foreground">
-                Instrumented
+                {{ $t('settings.instrumented') }}
               </dt>
               <dd class="text-xs">
                 {{ observabilityStatus.instrumented.join(", ") }}
               </dd>
 
               <dt class="text-muted-foreground">
-                Spans
+                {{ $t('settings.spans') }}
               </dt>
               <dd class="text-xs">
                 {{ observabilityStatus.spans.join(", ") }}
@@ -764,9 +783,9 @@ async function handleChangePassword(): Promise<void> {
             class="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground space-y-1"
           >
             <p class="font-medium text-foreground">
-              Enable tracing
+              {{ $t('settings.enableTracing') }}
             </p>
-            <p>Set these environment variables on the backend, then restart:</p>
+            <p>{{ $t('settings.enableTracingHint') }}</p>
             <pre class="mt-1 whitespace-pre-wrap font-mono leading-relaxed">HEYM_OTEL_ENABLED=true
 HEYM_OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
 HEYM_OTEL_EXPORTER_OTLP_HEADERS=authorization=Bearer &lt;token&gt;</pre>
@@ -777,7 +796,7 @@ HEYM_OTEL_EXPORTER_OTLP_HEADERS=authorization=Bearer &lt;token&gt;</pre>
           v-else
           class="text-xs text-destructive"
         >
-          Could not load observability status.
+          {{ $t('settings.observabilityLoadError') }}
         </div>
 
         <div class="flex justify-end gap-3 pt-2">
@@ -786,7 +805,7 @@ HEYM_OTEL_EXPORTER_OTLP_HEADERS=authorization=Bearer &lt;token&gt;</pre>
             type="button"
             @click="emit('close')"
           >
-            Close
+            {{ $t('common.close') }}
           </Button>
         </div>
       </div>
@@ -904,7 +923,7 @@ HEYM_PLUGIN_ADMIN_EMAILS=you@example.com</pre>
             type="button"
             @click="emit('close')"
           >
-            Close
+            {{ $t('common.close') }}
           </Button>
         </div>
       </div>

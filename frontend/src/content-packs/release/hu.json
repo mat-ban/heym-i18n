@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Csomópont újraaktiválása egy Workflow-n belül",
+    "releaseTour": {
+      "label": "Új a Heym-ben",
+      "introTitle": "Új funkciók ebben a kiadásban",
+      "introDescription": "Rövid áttekintés az Ön legutóbbi frissítése óta bevezetett újdonságokról. Körülbelül egy percet vesz igénybe.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable csomópont: Egy csomópont újraaktiválása egy Workflow-n belül",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Az új **Enable csomópont** a **Disable csomópont** ellenpárja. Válassza ki a csomópontot a megnevezése alapján, hogy újraaktiválja, majd mentse a módosítást. Egy deaktivált **Cron** Trigger a következő ütemezett időpontban ismét végrehajtásra kerül. Ha a csomópont hátrébb található a folyamatban, és még nem került végrehajtásra, akkor közvetlenül az aktuális végrehajtás során fut le."
+          },
+          {
+            "type": "prose",
+            "markdown": "Egy deaktivált Trigger soha nem indít önállóan futtatást. Helyezze ezért az Enable csomópontot egy másik belépési pont, például egy **Input** Trigger mögé. A **Wait** csomópont mostantól hosszabb szüneteket is támogat: akár 15 percet az egyetlen perc helyett."
+          }
+        ],
+        "tour": {
+          "description": "Egy deaktivált csomópont újraaktiválása közvetlenül a Workflow-ból, például egy szüneteltetett Cron Trigger esetében.",
+          "useCases": [
+            "Egy deaktivált Cron Trigger indítása szükség esetén Webhook-on keresztül",
+            "Kombinálás Disable csomóponttal a csomópontok állapotfüggő be- és kikapcsolásához",
+            "Egy Workflow szüneteltetése a Wait csomóponttal akár 15 percig"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Függőben lévő emberi jóváhagyások közvetlen ellenőrzése a Dashboardon",
+    "releaseTour": {
+      "label": "Új a Heymben",
+      "introTitle": "Új funkciók ebben a kiadásban",
+      "introDescription": "Rövid áttekintés az utolsó frissítés óta bevezetett újdonságokról. Körülbelül egy percet vesz igénybe.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Függőben lévő review-k elvégzése egy Dashboard-widget segítségével",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Adjon hozzá egy **HITL**-widgetet, és a fejléc a várakozó review-k számát `1/n ausstehend` formában jeleníti meg. A nyílbillentyűkkel navigálhat a bejegyzések között. A Workflow neve közvetlenül a Canvasen nyitja meg a futást. A **Jóváhagyás**, a **Módosítások kérése** és az **Elutasítás** lezárja a piszkozatot. Az előzmények ikon ugyanazon az oldalon nyitja meg a futást az előzmények párbeszédablakban. A várakozási sor személyes: a megosztott Dashboard nem jeleníti meg mások piszkozatait."
+          }
+        ],
+        "tour": {
+          "description": "Egy Dashboard-karusszel a függőben lévő jóváhagyásaihoz, számlálóval a fejlécben.",
+          "useCases": [
+            "Látni, hány review vár, mielőtt az elsőt megnyitná",
+            "Jóváhagyás, módosítások kérése vagy elutasítás anélkül, hogy elhagyná a Dashboardot",
+            "A futás megnyitása az előzmények párbeszédablakban a widget címe melletti ikon segítségével"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "Az AI-asszisztens teszteli a Workflow-jait és adattáblákat hoz létre",
+    "releaseTour": {
+      "label": "Új a Heym-ben",
+      "introTitle": "Új ebben a kiadásban",
+      "introDescription": "Rövid áttekintés az Ön legutóbbi frissítése óta bevezetett újdonságokról. Körülbelül egy percet vesz igénybe.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO-mód: Az AI-asszisztens teszteli, amit épít",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Aktiválja a **YOLO-módot** a Canvas **AI-asszisztensében**, és az nem áll le többé egy Workflow alkalmazása után. A Workflow-t a **Run** funkcióhoz hasonlóan futtatja, kiolvassa az eredményt, és önállóan korrigálja a Workflow-t üzenetenként legfeljebb ötször. Minden válasz élőben listázza a lépéseket."
+          },
+          {
+            "type": "prose",
+            "markdown": "Az első futtatás előtt teszt-bemeneteket kér javasolt értékekkel, és ezeket újra felhasználja. Más Workflow-kat is futtathat, ha azok eredményeire szüksége van. Ha döntésre vagy hozzáférési adatokra van szüksége, a megszokott kérdéskártyával kérdez rá. Valódi futtatások: A YOLO-mód alapértelmezés szerint ki van kapcsolva, és a **Stop** bármikor leállítja a folyamatot."
+          }
+        ],
+        "tour": {
+          "description": "Az AI-asszisztens futtatja a létrehozott Workflow-kat, ellenőrzi az eredményt, és önállóan javítja a hibákat, amíg az működik.",
+          "useCases": [
+            "Egy Workflow leírása és azonnal egy tesztelt verzió átvétele",
+            "Az asszisztenssel a hibás csomópontokat automatikusan felkutatni és kijavítani",
+            "Más Workflow-k visszatérési értékeinek ellenőrzése az összekapcsolás előtt"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "Az AI-asszisztens adattáblákat választ vagy hoz létre",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Ha egy Workflow adatrekordokat tárol, az **AI-asszisztens** most felismeri az Ön **DataTables**-eit. Nevezzen meg egy táblát, és használni fogja azt. Ellenkező esetben rákérdez a megfelelő táblára, vagy javasolja a **Neue Tabelle erstellen** lehetőséget a szükséges oszlopokkal."
+          },
+          {
+            "type": "prose",
+            "markdown": "Működik a Canvas-asszisztensben, a YOLO-módban, a **Chat**-ben, a dokumentációban és MCP-n keresztül a `heym_chat` segítségével."
+          }
+        ],
+        "tour": {
+          "description": "Az AI-asszisztens rákérdez a megfelelő adattáblára, vagy létrehoz egy újat a szükséges oszlopokkal.",
+          "useCases": [
+            "Leadek automatikus rögzítése táblákban, valamint a Workflow és a tábla együttes generálása",
+            "Meglévő táblák kiválasztása oszlopok és típusok alapján",
+            "Táblák létrehozása és összekapcsolása közvetlenül a Chat-ből vagy MCP-n keresztül"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Több Dashboard létrehozása és megosztása a csapattal",
+    "releaseTour": {
+      "label": "Új a Heym-ben",
+      "introTitle": "Új ebben a kiadásban",
+      "introDescription": "Rövid áttekintés az Ön legutóbbi frissítése óta történt újdonságokról. Körülbelül egy percet vesz igénybe.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Több Dashboard létrehozása és megosztása a csapattal",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "A **Dashboard** fül mostantól tetszőleges számú Dashboardot támogat. Kényelmesen válthat a fül tetején található választóval, vagy hozzon létre újat a **+** gombbal."
+          },
+          {
+            "type": "prose",
+            "markdown": "Ossza meg a Dashboardokat személyekkel vagy csapatokkal a **Beállítások** segítségével. A **Olvasás** engedélyezi a megjelenítést és a frissítést; az **Írás** engedélyezi a widgetek szerkesztését. A widgetek mindig a tulajdonos hitelesítő adatait használják."
+          }
+        ],
+        "tour": {
+          "description": "Több Dashboard kezelése, a köztük való váltás, valamint megosztásuk írásvédett vagy szerkeszthető módban.",
+          "useCases": [
+            "Külön Dashboardok strukturálása csapat, termék vagy bérlő szerint",
+            "Írásvédett nézet biztosítása az érintettek számára",
+            "Diagramtípusok előzetes tesztelése példaadatokkal"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

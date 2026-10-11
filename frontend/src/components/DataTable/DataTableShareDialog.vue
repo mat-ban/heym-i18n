@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { ChevronDown, Trash2, Users } from "lucide-vue-next";
 
 import type { DataTableShare, DataTableTeamShare } from "@/types/dataTable";
@@ -12,6 +13,8 @@ import { dataTablesApi, teamsApi } from "@/services/api";
 
 const props = defineProps<{ tableId: string }>();
 const emit = defineEmits<{ close: [] }>();
+
+const { t } = useI18n();
 
 const email = ref("");
 const permission = ref<"read" | "write">("read");
@@ -35,7 +38,7 @@ async function load() {
     teamShares.value = ts;
     teams.value = t.map((team: { id: string; name: string }) => ({ id: team.id, name: team.name }));
   } catch {
-    error.value = "Failed to load shares";
+    error.value = t("tables.failedLoadShares");
   } finally {
     loading.value = false;
   }
@@ -48,7 +51,7 @@ async function addShare() {
     email.value = "";
     await load();
   } catch {
-    error.value = "Failed to add share";
+    error.value = t("tables.failedAddShare");
   }
 }
 
@@ -57,7 +60,7 @@ async function removeShare(userId: string) {
     await dataTablesApi.removeShare(props.tableId, userId);
     await load();
   } catch {
-    error.value = "Failed to remove share";
+    error.value = t("tables.failedRemoveShare");
   }
 }
 
@@ -68,7 +71,7 @@ async function addTeamShare() {
     selectedTeamId.value = "";
     await load();
   } catch {
-    error.value = "Failed to add team share";
+    error.value = t("tables.failedAddTeamShare");
   }
 }
 
@@ -77,7 +80,7 @@ async function removeTeamShare(teamId: string) {
     await dataTablesApi.removeTeamShare(props.tableId, teamId);
     await load();
   } catch {
-    error.value = "Failed to remove team share";
+    error.value = t("tables.failedRemoveTeamShare");
   }
 }
 
@@ -87,7 +90,7 @@ onMounted(load);
 <template>
   <Dialog
     :open="true"
-    title="Share DataTable"
+    :title="$t('tables.shareTable')"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 pb-2">
@@ -100,7 +103,7 @@ onMounted(load);
 
       <!-- Share with user -->
       <div>
-        <Label>Share with user</Label>
+        <Label>{{ $t('tables.shareWithUser') }}</Label>
         <div class="mt-1 flex gap-2">
           <Input
             v-model="email"
@@ -114,10 +117,10 @@ onMounted(load);
               class="h-full appearance-none rounded border bg-background py-1 pl-3 pr-7 text-sm"
             >
               <option value="read">
-                Read
+                {{ $t('tables.permissionRead') }}
               </option>
               <option value="write">
-                Write
+                {{ $t('tables.permissionWrite') }}
               </option>
             </select>
             <ChevronDown class="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -126,7 +129,7 @@ onMounted(load);
             size="sm"
             @click="addShare"
           >
-            Share
+            {{ $t('common.share') }}
           </Button>
         </div>
       </div>
@@ -163,7 +166,7 @@ onMounted(load);
 
       <!-- Share with team -->
       <div v-if="teams.length > 0">
-        <Label>Share with team</Label>
+        <Label>{{ $t('tables.shareWithTeam') }}</Label>
         <div class="mt-1 flex gap-2">
           <div class="relative flex-1">
             <select
@@ -171,7 +174,7 @@ onMounted(load);
               class="h-full w-full appearance-none rounded border bg-background py-1 pl-3 pr-7 text-sm"
             >
               <option value="">
-                Select a team
+                {{ $t('tables.selectTeam') }}
               </option>
               <option
                 v-for="team in teams"
@@ -189,10 +192,10 @@ onMounted(load);
               class="h-full appearance-none rounded border bg-background py-1 pl-3 pr-7 text-sm"
             >
               <option value="read">
-                Read
+                {{ $t('tables.permissionRead') }}
               </option>
               <option value="write">
-                Write
+                {{ $t('tables.permissionWrite') }}
               </option>
             </select>
             <ChevronDown class="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -201,7 +204,7 @@ onMounted(load);
             size="sm"
             @click="addTeamShare"
           >
-            Share
+            {{ $t('common.share') }}
           </Button>
         </div>
       </div>

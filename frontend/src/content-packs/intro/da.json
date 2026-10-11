@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Hurtigere opbygning i Workflows",
+    "description": "Vælg en Workflow for at se Trigger, seneste kørsel og trin direkte ved siden af listen. Filtrer efter status, kør direkte, og bevar overblikket med mapper."
+  },
+  "dashboard:board": {
+    "title": "Styring af opgaver via et agentbaseret board",
+    "description": "Træk kort gennem kolonner for at udløse Workflow-kæder med kortets fulde kontekst. Resultater flyder direkte tilbage til kortet."
+  },
+  "dashboard:templates": {
+    "title": "Start med gennemprøvede skabeloner",
+    "description": "Brug færdiglavede Workflow-mønstre for at spare opsætningstid og sikre konsistens."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralisering af delte variabler",
+    "description": "Gem genanvendelige værdier én gang og referer til dem på tværs af alle Workflows."
+  },
+  "dashboard:chat": {
+    "title": "Brug af chat til hurtig iteration",
+    "description": "Stil hurtige spørgsmål, test idéer, og skift til editoren, når Workflow-forløbet er klart."
+  },
+  "dashboard:credentials": {
+    "title": "Sikker håndtering af hemmeligheder",
+    "description": "Administrer provider-nøgler og Tokens centralt, så Workflows kan bruge sikre forbindelser uden at afsløre hemmeligheder."
+  },
+  "dashboard:vectorstores": {
+    "title": "Understøttelse af retrieval-baserede Workflows",
+    "description": "Forbered vektorlagre til funderede AI-svar, semantisk søgning og skalerbare RAG-pipelines."
+  },
+  "dashboard:mcp": {
+    "title": "Tilslutning af eksterne værktøjsøkosystemer",
+    "description": "Konfigurer MCP-forbindelser, så agenter kan udføre strukturerede værktøjer og handlinger ud over simple Prompts."
+  },
+  "dashboard:traces": {
+    "title": "Forståelse af kørselsadfærd",
+    "description": "Analyser Trace-detaljer for at debugge resultater, sammenligne kørsler og øge pålideligheden."
+  },
+  "dashboard:alerts": {
+    "title": "Modtag underretninger, før problemer eskalerer",
+    "description": "Fastlæg tærskelværdier for fejl, varighed, omkostninger og antal kørsler, og bliv advaret ved overskridelse."
+  },
+  "dashboard:analytics": {
+    "title": "Overvågning af platformens ydeevne",
+    "description": "Overvåg brugs- og kørselstendenser for målrettet optimering baseret på reelle signaler."
+  },
+  "dashboard:dashboard": {
+    "title": "Oprettelse af egne dashboards",
+    "description": "Sammensæt Workflow-understøttede diagram-widgets for at se vigtige metrics på et øjeblik."
+  },
+  "dashboard:teams": {
+    "title": "Skalering af samarbejde på en struktureret måde",
+    "description": "Opdel Workflows og ressourcer efter teams for at holde adgangsrettigheder og ansvarsområder transparente."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosticering af problemer på systemniveau",
+    "description": "Brug logs ved infrastruktur- eller miljøproblemer for dybere runtime-indsigt."
+  },
+  "dashboard:drive": {
+    "title": "Håndtering af genererede filer",
+    "description": "Gennemse, download og del Workflow-output via sikre links og kontrollerede adgangsindstillinger."
+  },
+  "dashboard:datatable": {
+    "title": "Nativt arbejde med strukturerede data",
+    "description": "Opret typede tabeller og styr dem direkte fra Workflows for reproducerbare læse- og skriveoperationer."
+  },
+  "dashboard:schedules": {
+    "title": "Overblik over automatiseringsplaner",
+    "description": "Se alle aktive Cron-Workflows i en kalendervisning (dag, uge, måned). Klik på en blok for at gå direkte til Canvas."
+  },
+  "evals": {
+    "title": "Pålidelig vurdering af kvalitet",
+    "description": "Kør repeterbare test-suiter for at sammenligne Prompt- og modelændringer grundigt før produktionsudrulning."
+  },
+  "docs": {
+    "title": "Hurtig orientering i appen",
+    "description": "Gennemsøg kompakte referencer og gå i dybden målrettet uden at forlade den aktuelle Workflow."
+  },
+  "editor": {
+    "title": "Design og debug på Canvas",
+    "description": "Forbind noder visuelt, kør med det samme, og forfin adfærd med direkte feedback i ét arbejdsområde."
+  }
+}

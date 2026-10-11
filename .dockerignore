@@ -31,3 +31,9 @@ frontend/.e2e-artifacts
 
 # Logs
 **/*.log
+
+# Any env file other than the committed templates may hold real credentials
+**/*.env
+**/.env.*
+!.env.example
+!frontend/.env.development

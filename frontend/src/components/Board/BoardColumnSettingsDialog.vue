@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { ArrowDown, ArrowUp, ExternalLink, Trash2, X } from "lucide-vue-next";
@@ -13,6 +14,7 @@ import { boardApi, workflowApi } from "@/services/api";
 import { useBoardStore } from "@/stores/board";
 
 const router = useRouter();
+const { t } = useI18n();
 
 function openWorkflow(workflowId: string): void {
   const href = router.resolve({ name: "editor", params: { id: workflowId } }).href;
@@ -103,26 +105,25 @@ async function save(): Promise<void> {
       const status = saveError.response?.status;
       const detail = saveError.response?.data?.detail;
       if (!saveError.response) {
-        error.value = "Unable to reach the server. Check your connection and try again.";
+        error.value = t("board.networkError");
       } else if (status === 401 || status === 403) {
-        error.value =
-          "You do not have permission to update this column. Ask the board owner for write access.";
+        error.value = t("board.permissionError");
       } else if (status === 400 || status === 422) {
         error.value =
           typeof detail === "string"
-            ? `The column could not be saved: ${detail}`
-            : "Some column settings are invalid. Review them and try again.";
+            ? t("board.columnSaveErrorWithDetail", { detail })
+            : t("board.invalidSettingsError");
       } else {
         error.value =
           typeof detail === "string"
-            ? `Unable to save the column: ${detail}`
-            : "Unable to save the column right now. Please try again.";
+            ? t("board.columnSaveFailedWithDetail", { detail })
+            : t("board.saveFailedError");
       }
     } else {
       error.value =
         saveError instanceof Error && saveError.message
-          ? `Unable to save the column: ${saveError.message}`
-          : "Unable to save the column right now. Please try again.";
+          ? t("board.columnSaveFailedWithDetail", { detail: saveError.message })
+          : t("board.saveFailedError");
     }
   } finally {
     saving.value = false;
@@ -132,13 +133,13 @@ async function save(): Promise<void> {
 async function removeColumn(): Promise<void> {
   const board = boardStore.activeBoard;
   if (!board || !props.columnId) return;
-  if (!window.confirm("Delete this column? It must be empty.")) return;
+  if (!window.confirm(t("board.confirmDeleteColumn"))) return;
   try {
     await boardApi.deleteColumn(board.id, props.columnId);
     await boardStore.refreshActiveBoard();
     emit("close");
   } catch {
-    window.alert("Move or delete the cards in this column first.");
+    window.alert(t("board.deleteColumnNotEmpty"));
   }
 }
 </script>
@@ -146,7 +147,7 @@ async function removeColumn(): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    title="Column settings"
+    :title="$t('board.columnSettings')"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 p-1 text-sm">
@@ -160,16 +161,16 @@ async function removeColumn(): Promise<void> {
       </div>
       <div>
         <label class="mb-1 block text-xs font-semibold uppercase text-muted-foreground">
-          Name
+          {{ $t("common.name") }}
         </label>
         <Input
           v-model="name"
-          placeholder="Column name"
+          :placeholder="$t('board.columnName')"
         />
       </div>
       <div>
         <span class="mb-1 block text-xs font-semibold uppercase text-muted-foreground">
-          Color
+          {{ $t("board.color") }}
         </span>
         <div class="flex gap-2">
           <button
@@ -178,14 +179,14 @@ async function removeColumn(): Promise<void> {
             class="h-6 w-6 rounded-full border"
             :class="color === option ? 'ring-2 ring-primary ring-offset-1' : ''"
             :style="{ backgroundColor: option ?? 'transparent' }"
-            :aria-label="option ?? 'No color'"
+            :aria-label="option ?? $t('board.noColor')"
             @click="color = option"
           />
         </div>
       </div>
       <div>
         <span class="mb-1 block text-xs font-semibold uppercase text-muted-foreground">
-          Workflow chain (runs in order when a card enters)
+          {{ $t("board.workflowChain") }}
         </span>
         <div class="flex flex-col gap-1.5">
           <div
@@ -201,29 +202,29 @@ async function removeColumn(): Promise<void> {
             <span class="truncate">{{ workflow.name }}</span>
             <button
               class="ml-auto p-0.5 text-foreground hover:text-primary"
-              aria-label="Open workflow in new tab"
-              title="Open workflow in new tab"
+              :aria-label="$t('board.openWorkflowInNewTab')"
+              :title="$t('board.openWorkflowInNewTab')"
               @click="openWorkflow(workflow.id)"
             >
               <ExternalLink class="h-3.5 w-3.5" />
             </button>
             <button
               class="p-0.5"
-              aria-label="Move up"
+              :aria-label="$t('board.moveUp')"
               @click="moveLink(index, -1)"
             >
               <ArrowUp class="h-3.5 w-3.5" />
             </button>
             <button
               class="p-0.5"
-              aria-label="Move down"
+              :aria-label="$t('board.moveDown')"
               @click="moveLink(index, 1)"
             >
               <ArrowDown class="h-3.5 w-3.5" />
             </button>
             <button
               class="p-0.5 text-red-500"
-              aria-label="Remove"
+              :aria-label="$t('board.remove')"
               @click="chain = chain.filter((w) => w.id !== workflow.id)"
             >
               <X class="h-3.5 w-3.5" />
@@ -232,21 +233,21 @@ async function removeColumn(): Promise<void> {
           <SearchableSelect
             :model-value="''"
             :options="availableOptions"
-            placeholder="Add workflow…"
-            search-placeholder="Search workflows…"
-            aria-label="Add workflow to chain"
+            :placeholder="$t('board.addWorkflow')"
+            :search-placeholder="$t('board.searchWorkflows')"
+            :aria-label="$t('board.addWorkflowToChain')"
             @update:model-value="addToChain"
           />
         </div>
       </div>
       <div>
         <span class="mb-1 block text-xs font-semibold uppercase text-muted-foreground">
-          AI Instructions
+          {{ $t("board.aiInstructions") }}
         </span>
         <Textarea
           v-model="aiInstructions"
           :rows="3"
-          placeholder="Command for the AI mapper when this column runs (e.g. what this column should achieve)"
+          :placeholder="$t('board.aiInstructionsPlaceholder')"
           data-testid="column-ai-instructions"
         />
       </div>
@@ -256,21 +257,21 @@ async function removeColumn(): Promise<void> {
           class="text-red-500"
           @click="removeColumn"
         >
-          <Trash2 class="mr-1 h-4 w-4" /> Delete column
+          <Trash2 class="mr-1 h-4 w-4" /> {{ $t("board.deleteColumn") }}
         </Button>
         <div class="flex gap-2">
           <Button
             variant="ghost"
             @click="emit('close')"
           >
-            Cancel
+            {{ $t("common.cancel") }}
           </Button>
           <Button
             :disabled="saving"
             data-testid="column-settings-save"
             @click="save"
           >
-            Save
+            {{ $t("common.save") }}
           </Button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { Plus, Share2, Trash2, Users, Variable, X } from "lucide-vue-next";
 
 import type {
@@ -21,6 +22,7 @@ import { refreshGlobalVariablesCache } from "@/composables/useExpressionCompleti
 import { formatDate } from "@/lib/utils";
 import { globalVariablesApi, teamsApi } from "@/services/api";
 
+const { t } = useI18n();
 const variables = ref<GlobalVariableListItem[]>([]);
 const loading = ref(true);
 const showDialog = ref(false);
@@ -271,7 +273,7 @@ async function removeVariableShare(userId: string): Promise<void> {
 const variableTeamOptions = computed(() => {
   const shared = new Set(variableTeamShares.value.map((s) => s.team_id));
   return [
-    { value: "", label: "Select a team" },
+    { value: "", label: t("variables.selectTeam") },
     ...teams.value
       .filter((t) => !shared.has(t.id))
       .map((t) => ({ value: t.id, label: t.name })),
@@ -310,10 +312,10 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
         <h2 class="text-2xl md:text-3xl font-bold tracking-tight">
-          Global Variables
+          {{ $t('variables.title') }}
         </h2>
         <p class="text-muted-foreground mt-1">
-          Persistent variables available across workflows via $global.name
+          {{ $t('variables.subtitle') }}
         </p>
       </div>
       <div class="flex items-center gap-2">
@@ -322,7 +324,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
           @click="openCreateDialog"
         >
           <Plus class="w-4 h-4" />
-          New Variable
+          {{ $t('variables.newVariable') }}
         </Button>
       </div>
     </div>
@@ -349,17 +351,17 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
         <Variable class="w-10 h-10 text-primary" />
       </div>
       <h3 class="text-xl font-semibold mb-2">
-        No global variables yet
+        {{ $t('variables.noVariablesYet') }}
       </h3>
       <p class="text-muted-foreground mb-6 max-w-sm mx-auto">
-        Create variables to reuse values across workflows
+        {{ $t('variables.noVariablesDescription') }}
       </p>
       <Button
         variant="gradient"
         @click="openCreateDialog"
       >
         <Plus class="w-4 h-4" />
-        Add Variable
+        {{ $t('variables.addVariable') }}
       </Button>
     </div>
 
@@ -372,16 +374,16 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
           <thead>
             <tr class="border-b border-border">
               <th class="text-left p-4 font-medium">
-                Name
+                {{ $t('common.name') }}
               </th>
               <th class="text-left p-4 font-medium">
-                Value
+                {{ $t('common.value') }}
               </th>
               <th class="text-left p-4 font-medium w-24">
-                Type
+                {{ $t('common.type') }}
               </th>
               <th class="text-left p-4 font-medium w-36">
-                Updated
+                {{ $t('common.updated') }}
               </th>
               <th class="text-right p-4 w-24" />
             </tr>
@@ -401,14 +403,14 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
                     v-if="v.is_shared"
                     class="inline-flex items-center rounded-full bg-blue-500/10 px-2 py-0.5 text-xs font-medium text-blue-500 ring-1 ring-inset ring-blue-500/20"
                   >
-                    Shared
+                    {{ $t('common.shared') }}
                   </span>
                 </div>
                 <p
                   v-if="v.is_shared && v.shared_by"
                   class="text-xs text-muted-foreground mt-0.5"
                 >
-                  Shared by {{ v.shared_by }}
+                  {{ $t('variables.sharedBy', { name: v.shared_by }) }}
                 </p>
               </td>
               <td class="p-4 font-mono text-muted-foreground text-xs max-w-[280px] truncate">
@@ -427,7 +429,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
                     variant="ghost"
                     size="icon"
                     class="h-8 w-8 text-muted-foreground hover:text-primary"
-                    title="Share"
+                    :title="$t('common.share')"
                     @click.stop="openShareDialog(v, $event)"
                   >
                     <Share2 class="w-4 h-4" />
@@ -437,7 +439,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
                     variant="ghost"
                     size="icon"
                     class="h-8 w-8 text-muted-foreground hover:text-destructive"
-                    title="Delete"
+                    :title="$t('common.delete')"
                     @click.stop="deleteVariable(v.id, $event)"
                   >
                     <Trash2 class="w-4 h-4" />
@@ -453,7 +455,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
     <!-- Create / Edit dialog -->
     <Dialog
       :open="showDialog"
-      :title="editingId ? 'Edit Variable' : 'New Variable'"
+      :title="editingId ? $t('variables.editVariable') : $t('variables.newVariable')"
       @close="closeDialog"
     >
       <form
@@ -461,7 +463,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
         @submit.prevent="saveVariable"
       >
         <div class="space-y-2">
-          <Label for="gv-name">Name</Label>
+          <Label for="gv-name">{{ $t('common.name') }}</Label>
           <Input
             id="gv-name"
             v-model="formName"
@@ -470,7 +472,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
           />
         </div>
         <div class="space-y-2">
-          <Label for="gv-value">Value</Label>
+          <Label for="gv-value">{{ $t('common.value') }}</Label>
           <Textarea
             id="gv-value"
             v-model="formValue"
@@ -480,12 +482,12 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
           />
         </div>
         <div class="space-y-2">
-          <Label for="gv-type">Value Type</Label>
+          <Label for="gv-type">{{ $t('variables.valueType') }}</Label>
           <Select
             id="gv-type"
             v-model="formValueType"
             :options="VALUE_TYPE_OPTIONS"
-            placeholder="Auto-detect"
+            :placeholder="$t('variables.autoDetect')"
           />
         </div>
         <p
@@ -500,7 +502,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
             type="button"
             @click="() => closeDialog()"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             type="submit"
@@ -508,7 +510,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
             :loading="saving"
             :disabled="!formName.trim()"
           >
-            {{ editingId ? "Save" : "Create" }}
+            {{ editingId ? $t('common.save') : $t('common.create') }}
           </Button>
         </div>
       </form>
@@ -517,18 +519,17 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
     <!-- Share dialog -->
     <Dialog
       :open="showShareDialog"
-      title="Share Variable"
+      :title="$t('variables.shareVariable')"
       @close="showShareDialog = false"
     >
       <div class="space-y-4">
         <p class="text-sm text-muted-foreground">
-          Share <strong>{{ sharingVariable?.name }}</strong> with other users.
-          They will be able to use this variable in their workflows (read-only).
+          {{ $t('variables.shareDescription', { name: sharingVariable?.name }) }}
         </p>
 
         <div class="space-y-3">
           <div>
-            <Label class="text-xs">Share with user</Label>
+            <Label class="text-xs">{{ $t('variables.shareWithUser') }}</Label>
             <div class="flex gap-2 mt-1">
               <Input
                 v-model="shareEmail"
@@ -541,12 +542,12 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
                 :disabled="!shareEmail.trim() || sharingLoading"
                 @click="addVariableShare"
               >
-                Share
+                {{ $t('common.share') }}
               </Button>
             </div>
           </div>
           <div>
-            <Label class="text-xs">Share with team</Label>
+            <Label class="text-xs">{{ $t('variables.shareWithTeam') }}</Label>
             <div class="flex gap-2 mt-1">
               <Select
                 v-model="shareTeamId"
@@ -558,7 +559,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
                 @click="addVariableTeamShare"
               >
                 <Users class="w-4 h-4" />
-                Add
+                {{ $t('common.add') }}
               </Button>
             </div>
           </div>
@@ -572,7 +573,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
         </p>
 
         <div class="space-y-2">
-          <Label>Shared with users:</Label>
+          <Label>{{ $t('variables.sharedWithUsers') }}</Label>
           <div
             v-if="variableShares.length > 0"
             class="space-y-2 max-h-32 overflow-y-auto"
@@ -612,11 +613,11 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
             v-else-if="!sharingLoading"
             class="text-sm text-muted-foreground"
           >
-            No users
+            {{ $t('variables.noUsers') }}
           </p>
         </div>
         <div class="space-y-2">
-          <Label>Shared with teams:</Label>
+          <Label>{{ $t('variables.sharedWithTeams') }}</Label>
           <div
             v-if="variableTeamShares.length > 0"
             class="space-y-2 max-h-32 overflow-y-auto"
@@ -643,7 +644,7 @@ async function removeVariableTeamShare(teamId: string): Promise<void> {
             v-else-if="!sharingLoading"
             class="text-sm text-muted-foreground"
           >
-            No teams
+            {{ $t('variables.noTeams') }}
           </p>
         </div>
       </div>

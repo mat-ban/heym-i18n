@@ -37,7 +37,7 @@ const errorWorkflowOptions = computed(() =>
     <div class="flex-1 flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
       <Settings class="w-10 h-10 mx-auto mb-3 opacity-50" />
       <p class="text-sm">
-        Select a node to view its properties
+        {{ $t('propertiesPanel.selectNodePrompt') }}
       </p>
     </div>
 
@@ -48,27 +48,25 @@ const errorWorkflowOptions = computed(() =>
       <div class="pb-4">
         <div class="flex items-center gap-2 mb-2">
           <AlertTriangle class="w-4 h-4 text-muted-foreground shrink-0" />
-          <span class="text-sm font-medium">On error, run workflow</span>
+          <span class="text-sm font-medium">{{ $t('propertiesPanel.onErrorRunWorkflow') }}</span>
         </div>
         <SearchableSelect
           :model-value="errorWorkflowId"
-          :options="[{ value: '', label: 'None' }, ...errorWorkflowOptions]"
-          placeholder="None"
-          search-placeholder="Search workflows..."
+          :options="[{ value: '', label: $t('common.none') }, ...errorWorkflowOptions]"
+          :placeholder="$t('common.none')"
+          :search-placeholder="$t('workflows.searchWorkflows')"
           :disabled="!isWorkflowOwner"
           @update:model-value="onChangeErrorWorkflow"
         />
         <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
-          Runs the selected workflow if this one fails — unless the canvas
-          already has an Error Handler node. Not triggered on manual test
-          runs.
+          {{ $t('propertiesPanel.onErrorDescription') }}
         </p>
       </div>
 
       <div class="border-t border-border/40 pt-4 pb-4">
         <div class="flex items-center gap-2 mb-2">
           <Clock class="w-4 h-4 text-muted-foreground shrink-0" />
-          <span class="text-sm font-medium">Time saved per run (min)</span>
+          <span class="text-sm font-medium">{{ $t('propertiesPanel.timeSavedPerRun') }}</span>
         </div>
         <input
           id="workflow-minutes-saved"
@@ -82,15 +80,14 @@ const errorWorkflowOptions = computed(() =>
           @change="onChangeMinutesSaved(($event.target as HTMLInputElement).value)"
         >
         <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
-          Estimated minutes this automation saves per successful run.
-          Surfaced as total Time Saved in Analytics.
+          {{ $t('propertiesPanel.timeSavedDescription') }}
         </p>
       </div>
 
       <div class="border-t border-border/40 pt-4 pb-4">
         <div class="flex items-center gap-2 mb-2">
           <Clock class="w-4 h-4 text-muted-foreground shrink-0" />
-          <span class="text-sm font-medium">Workflow timeout (seconds)</span>
+          <span class="text-sm font-medium">{{ $t('propertiesPanel.workflowTimeout') }}</span>
         </div>
         <input
           type="number"
@@ -99,12 +96,11 @@ const errorWorkflowOptions = computed(() =>
           class="w-full text-sm rounded-md border border-border bg-background px-2 py-1.5 disabled:opacity-50"
           :value="workflowTimeoutSeconds ?? ''"
           :disabled="!isWorkflowOwner"
-          placeholder="0 = no timeout"
+          :placeholder="$t('propertiesPanel.workflowTimeoutPlaceholder')"
           @change="onChangeWorkflowTimeout(($event.target as HTMLInputElement).value)"
         >
         <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
-          Fail the run if it exceeds this many seconds. 0 disables the
-          timeout. Applies to manual, API, and triggered runs.
+          {{ $t('propertiesPanel.workflowTimeoutDescription') }}
         </p>
       </div>
 
@@ -112,7 +108,7 @@ const errorWorkflowOptions = computed(() =>
         <div class="flex items-center justify-between gap-3">
           <div class="flex items-center gap-2 min-w-0">
             <RotateCcw class="w-4 h-4 text-muted-foreground shrink-0" />
-            <span class="text-sm font-medium">Auto-recover runs</span>
+            <span class="text-sm font-medium">{{ $t('propertiesPanel.autoRecoverRuns') }}</span>
           </div>
           <button
             type="button"
@@ -130,9 +126,7 @@ const errorWorkflowOptions = computed(() =>
           </button>
         </div>
         <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
-          If the server restarts mid-run, re-runs it from scratch with the
-          same inputs. Off = mark interrupted runs as
-          <span class="font-medium">skipped</span>.
+          {{ $t('propertiesPanel.autoRecoverDescription') }}
         </p>
       </div>
 
@@ -146,11 +140,10 @@ const errorWorkflowOptions = computed(() =>
           @click="openAnalyzer"
         >
           <Sparkles class="w-4 h-4" />
-          Run Analyzer
+          {{ $t('propertiesPanel.runAnalyzer') }}
         </button>
         <p class="text-xs text-muted-foreground mt-2 leading-relaxed">
-          This workflow has no analysis yet. Open the analyzer to generate
-          a report.
+          {{ $t('propertiesPanel.runAnalyzerDescription') }}
         </p>
       </div>
     </div>

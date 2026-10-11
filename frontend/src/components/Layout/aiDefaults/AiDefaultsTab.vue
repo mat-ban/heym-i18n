@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 import type {
   CodexUsage,
@@ -19,6 +20,7 @@ import { useAuthStore } from "@/stores/auth";
 
 const emit = defineEmits<{ close: [] }>();
 
+const { t } = useI18n();
 const authStore = useAuthStore();
 const aiDefaults = useAiDefaults();
 
@@ -30,11 +32,11 @@ const loadingModels = ref(false);
 const saving = ref(false);
 
 const credentialOptions = computed(() => [
-  { value: "", label: "No preference" },
+  { value: "", label: t("settings.noPreference") },
   ...credentials.value.map((c) => ({ value: c.id, label: c.name })),
 ]);
 const modelOptions = computed(() => [
-  { value: "", label: "Select a model" },
+  { value: "", label: t("settings.selectModel") },
   ...models.value.map((m) => ({ value: m.id, label: m.name })),
 ]);
 
@@ -125,16 +127,15 @@ onMounted(async () => {
 <template>
   <div class="space-y-5">
     <div class="space-y-2">
-      <Label>Preferred LLM credential</Label>
+      <Label>{{ $t('settings.preferredLlmCredential') }}</Label>
       <p class="text-xs text-muted-foreground">
-        Used as the default for every AI feature (chat, assistant, board, widgets, and more)
-        when a surface has no saved selection. You can always change it per surface.
+        {{ $t('settings.preferredLlmDescription') }}
       </p>
       <SearchableSelect
         :model-value="selectedCredentialId"
         :options="credentialOptions"
-        placeholder="No preference"
-        search-placeholder="Search credentials…"
+        :placeholder="$t('settings.noPreference')"
+        :search-placeholder="$t('credentials.searchPlaceholder')"
         @update:model-value="onCredentialChange"
       />
     </div>
@@ -143,12 +144,12 @@ onMounted(async () => {
       v-if="selectedCredentialId"
       class="space-y-2"
     >
-      <Label>Preferred model</Label>
+      <Label>{{ $t('settings.preferredModel') }}</Label>
       <SearchableSelect
         v-model="selectedModel"
         :options="modelOptions"
-        placeholder="Select a model"
-        search-placeholder="Search models…"
+        :placeholder="$t('settings.selectModel')"
+        :search-placeholder="$t('chat.searchModels')"
         :disabled="loadingModels"
       />
     </div>
@@ -157,8 +158,7 @@ onMounted(async () => {
       v-if="preferredInvalid"
       class="text-xs text-amber-500"
     >
-      Your previously preferred credential is no longer available. Pick a new one, or leave it
-      as "No preference".
+      {{ $t('settings.preferredInvalidNotice') }}
     </p>
 
     <div
@@ -166,14 +166,14 @@ onMounted(async () => {
       class="space-y-2 pt-2 border-t border-border"
     >
       <div class="flex items-center justify-between">
-        <Label>Coding package usage</Label>
+        <Label>{{ $t('settings.codingPackageUsage') }}</Label>
         <Button
           variant="outline"
           size="sm"
           type="button"
           @click="loadCodingUsage"
         >
-          Refresh
+          {{ $t('common.refresh') }}
         </Button>
       </div>
       <CodexUsageCard
@@ -198,14 +198,14 @@ onMounted(async () => {
         type="button"
         @click="emit('close')"
       >
-        Cancel
+        {{ $t('common.cancel') }}
       </Button>
       <Button
         type="button"
         :loading="saving"
         @click="handleSave"
       >
-        Save AI Defaults
+        {{ $t('settings.saveAiDefaults') }}
       </Button>
     </div>
   </div>

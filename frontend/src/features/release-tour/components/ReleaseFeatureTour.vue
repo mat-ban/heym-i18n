@@ -3,11 +3,13 @@ import { computed, onMounted, onUnmounted, ref, watch, type CSSProperties } from
 import { useWindowSize } from "@vueuse/core";
 import { ArrowLeft, ArrowRight, BookOpen, X } from "lucide-vue-next";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 import { getDocPath } from "@/docs/manifest";
 import { resolveTourVisual } from "@/features/release-tour/tourVisuals";
 import type { ReleaseTour } from "@/features/release-tour/releaseTour.types";
 import { onDismissOverlays, pushOverlayState } from "@/composables/useOverlayBackHandler";
+import { getIntlLocale } from "@/i18n/format";
 
 interface Props {
   release: ReleaseTour | null;
@@ -31,6 +33,7 @@ const VIEWPORT_MARGIN = 16;
 const ANCHOR_GAP = 8;
 
 const router = useRouter();
+const { locale, t } = useI18n();
 const { width: windowWidth } = useWindowSize();
 const panelRef = ref<HTMLDivElement | null>(null);
 /** -1 is the intro screen; 0..n-1 are slides. */
@@ -66,7 +69,8 @@ const panelStyle = computed<CSSProperties>(() => {
 const publishedLabel = computed(() => {
   const publishedAt = currentSlide.value?.publishedAt ?? props.release?.publishedAt;
   if (!publishedAt) return "";
-  return publishedAt.toLocaleDateString(undefined, {
+  const loc = getIntlLocale(locale.value);
+  return publishedAt.toLocaleDateString(loc, {
     month: "long",
     year: "numeric",
   });
@@ -198,7 +202,7 @@ onUnmounted(() => {
           <button
             type="button"
             class="-mr-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Close what's new"
+            :aria-label="t('releaseTour.close')"
             @click="complete"
           >
             <X class="h-3.5 w-3.5" />
@@ -227,7 +231,7 @@ onUnmounted(() => {
             class="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             @click="startTour"
           >
-            Start tour
+            {{ $t('releaseTour.startTour') }}
             <ArrowRight class="h-3.5 w-3.5" />
           </button>
         </div>
@@ -280,14 +284,14 @@ onUnmounted(() => {
             @click="openDocs"
           >
             <BookOpen class="h-3 w-3" />
-            {{ currentSlide.docTarget.title ?? "Read the docs" }}
+            {{ currentSlide.docTarget.title ?? $t('releaseTour.readTheDocs') }}
           </button>
 
           <div class="mt-4 flex items-center gap-2">
             <button
               type="button"
               class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-label="Previous feature"
+              :aria-label="t('releaseTour.previousFeature')"
               @click="goBack"
             >
               <ArrowLeft class="h-3.5 w-3.5" />
@@ -300,7 +304,7 @@ onUnmounted(() => {
                 type="button"
                 class="h-1.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 :class="index === slideIndex ? 'w-4 bg-primary' : 'w-1.5 bg-border hover:bg-muted-foreground/50'"
-                :aria-label="`Go to ${slide.title}`"
+                :aria-label="t('releaseTour.goToFeature', { title: slide.title })"
                 :aria-current="index === slideIndex"
                 @click="goToSlide(index)"
               />
@@ -311,7 +315,7 @@ onUnmounted(() => {
               class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               @click="goNext"
             >
-              {{ isLastSlide ? "Done" : "Next" }}
+              {{ isLastSlide ? $t('common.done') : $t('common.next') }}
               <ArrowRight
                 v-if="!isLastSlide"
                 class="h-3.5 w-3.5"

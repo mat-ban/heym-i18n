@@ -18,7 +18,7 @@ defineEmits<{
         >
           <Play class="h-6 w-6 text-muted-foreground transition-colors duration-200 group-hover:text-foreground" />
           <span class="text-[11px] font-medium leading-tight text-foreground">
-            Run the runbook
+            {{ $t("canvas.runRunbook") }}
           </span>
         </button>
         <button
@@ -28,7 +28,7 @@ defineEmits<{
         >
           <LayoutTemplate class="h-6 w-6 text-muted-foreground transition-colors duration-200 group-hover:text-foreground" />
           <span class="text-[11px] font-medium leading-tight text-foreground">
-            Browse templates
+            {{ $t("canvas.browseTemplates") }}
           </span>
         </button>
       </div>

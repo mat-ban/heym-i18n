@@ -24,7 +24,7 @@ function highlightClass(tone: string | undefined): string {
   <section class="space-y-3">
     <div class="flex items-center justify-between gap-3">
       <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-        Highlights
+        {{ $t("showcase.highlights") }}
       </h3>
       <div class="h-px flex-1 bg-gradient-to-r from-primary/25 via-border/70 to-transparent" />
     </div>

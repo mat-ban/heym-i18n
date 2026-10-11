@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   Activity,
   BarChart3,
@@ -119,6 +120,7 @@ const emit = defineEmits<{
 
 const { getRecent } = useRecentWorkflows();
 const { pluginDocCategories, loadPluginDocCategories } = usePluginDocCategories();
+const { locale } = useI18n();
 const folderStore = useFolderStore();
 const workflowTemplates = ref<WorkflowTemplate[]>([]);
 const nodeTemplates = ref<NodeTemplate[]>([]);
@@ -212,7 +214,7 @@ const filteredNodeTemplates = computed(() => {
 
 const filteredDocs = computed(() => {
   const query = searchQuery.value.toLowerCase().trim();
-  const items = getAllDocItems(pluginDocCategories.value);
+  const items = getAllDocItems(pluginDocCategories.value, locale.value);
   if (!query) return items;
   return items.filter(
     (item) =>

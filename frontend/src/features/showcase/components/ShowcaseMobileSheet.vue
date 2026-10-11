@@ -56,17 +56,17 @@ const introContent = computed(() => getShowcaseIntroContent(props.definition.id)
             <div>
               <div class="inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-600 dark:text-sky-300">
                 <Sparkles class="h-3.5 w-3.5" />
-                Page Guide
+                {{ $t('showcase.guidelines') }}
               </div>
               <p class="mt-2 text-sm text-muted-foreground">
-                Quick orientation for this surface.
+                {{ $t('showcase.guidelinesDesc') }}
               </p>
             </div>
 
             <button
               type="button"
               class="flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              aria-label="Close showcase sheet"
+              :aria-label="$t('showcase.closeShowcaseSheet')"
               @click="emit('close')"
             >
               <X class="h-4 w-4" />

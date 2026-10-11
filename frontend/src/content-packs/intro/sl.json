@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Hitrejše ustvarjanje v Workflowih",
+    "description": "Izberite Workflow, da si neposredno ob seznamu ogledate Triggerje, zadnjo izvedbo in korake. Filtrirajte po statusu, zaženite neposredno in ohranite pregled z mapami."
+  },
+  "dashboard:board": {
+    "title": "Upravljanje nalog prek agentnega Boarda",
+    "description": "Povlecite kartice med stolpci, da sprožite Workflow-verige s polnim kontekstom kartice. Rezultati se stekajo neposredno nazaj h kartici."
+  },
+  "dashboard:templates": {
+    "title": "Začnite s preverjenimi predlogami",
+    "description": "Uporabite pripravljene Workflow-vzorce, da prihranite čas pri nastavitvi in zagotovite doslednost."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizirajte deljene spremenljivke",
+    "description": "Vrednosti, ki jih lahko večkrat uporabite, shranite enkrat in nanje sklicujte v vseh Workflowih."
+  },
+  "dashboard:chat": {
+    "title": "Uporabite Chat za hitro iteracijo",
+    "description": "Postavite hitra vprašanja, preizkusite ideje in se pomaknite v urejevalnik, ko je potek Workflowa jasen."
+  },
+  "dashboard:credentials": {
+    "title": "Varno upravljajte skrivnosti",
+    "description": "Centralno upravljajte ključe ponudnikov in Tokene, da lahko Workflowi uporabljajo varne povezave brez razkritja skrivnosti."
+  },
+  "dashboard:vectorstores": {
+    "title": "Podprite Workflowe, ki temeljijo na iskanju",
+    "description": "Pripravite vektorske shrambe za podprte odgovore AI, semantično iskanje in skalabilne RAG-pipeline."
+  },
+  "dashboard:mcp": {
+    "title": "Povežite zunanje ekosisteme orodij",
+    "description": "Konfigurirajte MCP-povezave, da lahko agenti izvajajo strukturirana orodja in dejanja onkraj preprostih Promptov."
+  },
+  "dashboard:traces": {
+    "title": "Razumejte vedenje izvajanja",
+    "description": "Analizirajte podrobnosti Trace, da odpravite napake v rezultatih, primerjate izvedbe in povečate zanesljivost."
+  },
+  "dashboard:alerts": {
+    "title": "Prejmite obvestila, preden težave eskalirajo",
+    "description": "Nastavite pragove za napake, trajanje, stroške in število izvedb ter bodite opozorjeni ob prekoračitvi."
+  },
+  "dashboard:analytics": {
+    "title": "Spremljajte zmogljivost platforme",
+    "description": "Spremljajte trende uporabe in izvajanja, da ciljno optimizirate na podlagi resničnih signalov."
+  },
+  "dashboard:dashboard": {
+    "title": "Ustvarite lastne Dashboarde",
+    "description": "Sestavite gradnike diagramov, podprte z Workflowi, da na prvi pogled vidite ključne metrike."
+  },
+  "dashboard:teams": {
+    "title": "Čisto skalirajte sodelovanje",
+    "description": "Razdelite Workflowe in vire po ekipah, da ohranite preglednost dostopnih pravic in odgovornosti."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosticirajte težave na sistemski ravni",
+    "description": "Uporabite Loge pri težavah z infrastrukturo ali okoljem za globlji vpogled v delovanje."
+  },
+  "dashboard:drive": {
+    "title": "Upravljajte ustvarjene datoteke",
+    "description": "Preglejte, prenesite in delite izhode Workflowa prek varnih povezav in nadzorovanih možnosti dostopa."
+  },
+  "dashboard:datatable": {
+    "title": "Delajte z strukturiranimi podatki na izvorni ravni",
+    "description": "Ustvarite tipizirane tabele in jih upravljajte neposredno iz Workflowov za ponovljive bralne in pisalne operacije."
+  },
+  "dashboard:schedules": {
+    "title": "Preglejte urnike avtomatizacije",
+    "description": "Oglejte si vse aktivne Cron-Workflowe v koledarskem pogledu (dan, teden, mesec). Klik na blok vas vodi neposredno na Canvas."
+  },
+  "evals": {
+    "title": "Zanesljivo ocenite kakovost",
+    "description": "Zaženite ponovljive testne suite, da pred produkcijskimi uvedbami utemeljeno primerjate spremembe Promptov in modelov."
+  },
+  "docs": {
+    "title": "Hitra orientacija v aplikaciji",
+    "description": "Brskajte po jedrnatih referencah in ciljno poglobite znanje, ne da bi zapustili trenutni Workflow."
+  },
+  "editor": {
+    "title": "Oblikujte in odpravljajte napake na Canvasu",
+    "description": "Vizualno povežite vozlišča, takoj zaženite in izboljšajte vedenje s takojšnjimi povratnimi informacijami v enem delovnem prostoru."
+  }
+}

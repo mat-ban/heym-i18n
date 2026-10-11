@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { RefreshCw } from "lucide-vue-next";
 
 import Button from "@/components/ui/Button.vue";
@@ -12,6 +13,8 @@ import {
 } from "@/services/cluster";
 
 import type { ClusterInstance, ClusterInstanceUpdate, ClusterSettings } from "@/types/cluster";
+
+const { t } = useI18n();
 
 const config = ref<ClusterSettings | null>(null);
 const loading = ref(false);
@@ -58,13 +61,20 @@ const excluded = computed<ClusterInstance[]>(() =>
   ),
 );
 
+const excludedDetail = computed<string>(() => {
+  if (excluded.value.length === 0) return "";
+  const list = excluded.value.map((instance) => instance.name || instance.id).join(", ");
+  const verb = excluded.value.length === 1 ? t("settings.cluster.verbIs") : t("settings.cluster.verbAre");
+  return t("settings.cluster.runsSharedDetail", { list, verb });
+});
+
 async function load(): Promise<void> {
   loading.value = true;
   error.value = null;
   try {
     config.value = await getClusterSettings();
   } catch {
-    error.value = "Failed to load load distribution settings.";
+    error.value = t("settings.cluster.loadError");
   } finally {
     loading.value = false;
   }
@@ -89,7 +99,7 @@ async function handleAutomaticWeighting(value: boolean): Promise<void> {
     config.value = await setAutomaticWeighting(value);
   } catch {
     if (config.value) config.value.automatic_weighting = previous;
-    error.value = "Failed to change automatic weighting.";
+    error.value = t("settings.cluster.saveFailed");
   }
 }
 
@@ -108,7 +118,7 @@ async function handleSave(): Promise<void> {
     }
     config.value = await saveClusterInstances(updates);
   } catch {
-    error.value = "Failed to save load distribution settings.";
+    error.value = t("settings.cluster.saveFailed");
   } finally {
     saving.value = false;
   }
@@ -121,15 +131,14 @@ onMounted(load);
   <div class="space-y-4">
     <div class="flex items-center justify-between gap-4">
       <p class="text-sm text-muted-foreground">
-        Share background workflow execution across the instances connected to this database. Work
-        that touches files, coding-agent workspaces or plugins always runs on the main instance.
+        {{ $t('settings.cluster.description') }}
       </p>
       <Button
         variant="outline"
         size="sm"
         class="shrink-0 px-2"
-        title="Refresh"
-        aria-label="Refresh"
+        :title="$t('common.refresh')"
+        :aria-label="$t('common.refresh')"
         :disabled="loading"
         @click="load"
       >
@@ -141,8 +150,7 @@ onMounted(load);
       v-if="config && !config.cluster_enabled"
       class="text-sm text-muted-foreground"
     >
-      Load distribution is off. Set <code>HEYM_CLUSTER_ENABLED=true</code> on the main instance to
-      turn it on.
+      {{ $t('settings.cluster.disabledNotice') }}
     </p>
 
     <div
@@ -152,13 +160,11 @@ onMounted(load);
       <SettingsToggle
         id="cluster-automatic-weighting"
         :model-value="config.automatic_weighting"
-        label="Give new instances a share automatically"
+        :label="$t('settings.cluster.automaticWeightingLabel')"
         @update:model-value="handleAutomaticWeighting"
       />
       <p class="mt-1.5 text-xs text-muted-foreground">
-        An instance that joins starts at 0 and would receive no work. With this on, it is given
-        an equal share once, and the existing weights are scaled down keeping their ratios. An
-        instance you set yourself is never changed.
+        {{ $t('settings.cluster.automaticWeightingDesc') }}
       </p>
     </div>
 
@@ -167,12 +173,10 @@ onMounted(load);
       class="text-sm text-muted-foreground"
     >
       <template v-if="config.placement_ratio.mainOnlyPercent > 0">
-        {{ config.placement_ratio.mainOnlyPercent }}% of the last 24 hours' runs could only
-        execute on the main instance, so the weights below cannot move that work.
+        {{ $t('settings.cluster.mainOnlyWork', { percent: config.placement_ratio.mainOnlyPercent }) }}
       </template>
       <template v-else>
-        Every run in the last 24 hours could execute anywhere, so the weights below govern all
-        of it.
+        {{ $t('settings.cluster.allWorkShared') }}
       </template>
     </p>
 
@@ -185,11 +189,11 @@ onMounted(load);
       <div
         class="hidden items-center gap-2 border-b border-border pb-2 text-xs uppercase text-muted-foreground sm:flex"
       >
-        <span class="mr-4 w-32 shrink-0 pl-2">Name</span>
-        <span class="w-16 shrink-0">Role</span>
-        <span class="min-w-0 flex-1">Status</span>
-        <span class="ml-2 w-11 shrink-0">On</span>
-        <span class="w-16 shrink-0 text-center">Weight</span>
+        <span class="mr-4 w-32 shrink-0 pl-2">{{ $t('settings.cluster.colName') }}</span>
+        <span class="w-16 shrink-0">{{ $t('settings.cluster.colRole') }}</span>
+        <span class="min-w-0 flex-1">{{ $t('settings.cluster.colStatus') }}</span>
+        <span class="ml-2 w-11 shrink-0">{{ $t('settings.cluster.colOn') }}</span>
+        <span class="w-16 shrink-0 text-center">{{ $t('settings.cluster.colWeight') }}</span>
       </div>
       <ClusterInstanceRow
         v-for="instance in config.instances"
@@ -203,13 +207,10 @@ onMounted(load);
       v-if="effectiveSplit"
       class="text-sm text-muted-foreground"
     >
-      Runs are being shared
+      {{ $t('settings.cluster.runsShared') }}
       <span class="text-foreground">{{ effectiveSplit }}</span>.
       <template v-if="excluded.length">
-        The weights above are shares of the instances that can take work, so they read
-        differently once
-        {{ excluded.map((instance) => instance.name || instance.id).join(", ") }}
-        {{ excluded.length === 1 ? "is" : "are" }} out of the pool.
+        {{ excludedDetail }}
       </template>
     </p>
 
@@ -217,7 +218,7 @@ onMounted(load);
       v-if="config && !canSave"
       class="text-sm text-destructive"
     >
-      Give at least one enabled instance a weight above zero, or nothing can be scheduled.
+      {{ $t('settings.cluster.weightRequirement') }}
     </p>
     <p
       v-if="error"
@@ -230,7 +231,7 @@ onMounted(load);
       :disabled="!canSave || saving"
       @click="handleSave"
     >
-      Save
+      {{ $t('common.save') }}
     </Button>
   </div>
 </template>

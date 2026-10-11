@@ -113,13 +113,13 @@ onMounted(async () => {
             class="w-20 h-20 mb-7"
           >
           <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-center">
-            Welcome back
+            {{ $t('auth.welcomeBack') }}
           </h1>
           <p class="text-muted-foreground text-base mt-3 text-center max-w-[340px]">
             {{
               passwordFormVisible
-                ? "Sign in to continue building powerful AI workflows"
-                : "This workspace signs in through your identity provider"
+                ? $t('auth.signInSubtitle')
+                : $t('auth.ssoSubtitle')
             }}
           </p>
         </div>
@@ -156,13 +156,13 @@ onMounted(async () => {
               for="email"
               class="text-sm font-medium"
             >
-              Email address
+              {{ $t('auth.email') }}
             </Label>
             <Input
               id="email"
               v-model="email"
               type="email"
-              placeholder="you@example.com"
+              :placeholder="$t('auth.emailPlaceholder')"
               required
               class="h-12"
             />
@@ -173,13 +173,13 @@ onMounted(async () => {
               for="password"
               class="text-sm font-medium"
             >
-              Password
+              {{ $t('auth.password') }}
             </Label>
             <Input
               id="password"
               v-model="password"
               type="password"
-              placeholder="Enter your password"
+              :placeholder="$t('auth.passwordPlaceholder')"
               required
               class="h-12"
             />
@@ -191,7 +191,7 @@ onMounted(async () => {
             class="w-full h-12 min-h-[44px] text-base"
             :loading="loading"
           >
-            Sign in
+            {{ $t('auth.signIn') }}
             <ArrowRight class="w-4 h-4 ml-1" />
           </Button>
         </form>
@@ -204,7 +204,7 @@ onMounted(async () => {
             <div class="w-full border-t border-border" />
           </div>
           <div class="relative flex justify-center text-xs uppercase">
-            <span class="bg-card px-3 text-muted-foreground">or</span>
+            <span class="bg-card px-3 text-muted-foreground">{{ $t('common.or') }}</span>
           </div>
         </div>
 
@@ -217,7 +217,7 @@ onMounted(async () => {
             @click="startSso"
           >
             <KeyRound class="w-4 h-4 mr-1" />
-            {{ sso.button_label }}
+            {{ sso.button_label || $t('auth.signInWithSso') }}
           </Button>
 
           <button
@@ -226,14 +226,14 @@ onMounted(async () => {
             class="w-full text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
             @click="showAdminSignIn = true"
           >
-            Sign in with a password instead
+            {{ $t('auth.signInWithPassword') }}
           </button>
 
           <p
             v-if="!sso.password_login_enabled && showAdminSignIn"
             class="text-xs text-muted-foreground text-center"
           >
-            Password sign-in is off here. Only instance administrators can use this form.
+            {{ $t('auth.passwordDisabledAdminOnly') }}
           </p>
         </div>
 
@@ -245,7 +245,7 @@ onMounted(async () => {
             <div class="w-full border-t border-border" />
           </div>
           <div class="relative flex justify-center text-xs uppercase">
-            <span class="bg-card px-3 text-muted-foreground">New to Heym?</span>
+            <span class="bg-card px-3 text-muted-foreground">{{ $t('auth.newToHeym') }}</span>
           </div>
         </div>
 
@@ -255,7 +255,7 @@ onMounted(async () => {
           class="register-link flex items-center justify-center gap-3 w-full h-12 min-h-[44px] rounded-xl border border-border bg-muted/30 text-sm font-medium text-foreground hover:bg-muted/50 hover:border-primary/30 transition-all duration-300"
         >
           <Zap class="w-4 h-4 text-primary" />
-          Create an account
+          {{ $t('auth.createAccount') }}
         </router-link>
       </Card>
     </div>

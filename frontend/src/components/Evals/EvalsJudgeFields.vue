@@ -95,14 +95,14 @@ onMounted(async () => {
 <template>
   <div>
     <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-      Judge Credential (optional)
+      {{ $t('evals.judgeCredentialOptional') }}
     </Label>
     <Select
       :model-value="credentialId"
       :options="credentialOptions"
-      placeholder="None: each model scores itself"
+      :placeholder="$t('evals.judgeNoneSelfScore')"
       clearable
-      clear-aria-label="Remove judge"
+      :clear-aria-label="$t('evals.removeJudge')"
       data-testid="eval-judge-credential"
       @update:model-value="(value) => emit('update:credentialId', value ?? '')"
     />
@@ -112,7 +112,7 @@ onMounted(async () => {
   </div>
   <div>
     <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-      Judge Model
+      {{ $t('evals.judgeModel') }}
     </Label>
     <Input
       :model-value="model"
@@ -126,7 +126,7 @@ onMounted(async () => {
       v-if="missingModel"
       class="text-xs text-destructive mt-1"
     >
-      Enter the judge model to run with this judge.
+      {{ $t('evals.enterJudgeModel') }}
     </p>
   </div>
 </template>

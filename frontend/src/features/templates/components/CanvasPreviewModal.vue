@@ -130,7 +130,7 @@ onUnmounted(() => {
           </div>
 
           <p class="text-xs text-muted-foreground">
-            Click a node to inspect its saved configuration. The canvas stays read-only here.
+            {{ $t('templates.readOnlyNotice') }}
           </p>
 
           <div class="min-h-0 flex-1">
@@ -138,7 +138,7 @@ onUnmounted(() => {
               :nodes="previewGraph.nodes"
               :edges="previewGraph.edges"
               :selected-node="selectedNode"
-              :empty-message="kind === 'workflow' ? 'No nodes in this template' : 'No node to preview'"
+              :empty-message="kind === 'workflow' ? $t('templates.noNodesInTemplate') : $t('templates.noNodeToPreview')"
               @update:selected-node="selectedNode = $event"
             />
           </div>
@@ -152,7 +152,7 @@ onUnmounted(() => {
             @click="emit('edit')"
           >
             <Pencil class="h-4 w-4" />
-            Edit
+            {{ $t('common.edit') }}
           </button>
           <div
             v-else
@@ -164,7 +164,7 @@ onUnmounted(() => {
               type="button"
               @click="emit('close')"
             >
-              Cancel
+              {{ $t('common.cancel') }}
             </button>
             <button
               class="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
@@ -173,7 +173,7 @@ onUnmounted(() => {
               @click="emit('use')"
             >
               <Zap class="h-4 w-4" />
-              {{ loading ? "Loading…" : "Use This Template" }}
+              {{ loading ? $t('common.loading') : $t('templates.useThisTemplate') }}
             </button>
           </div>
         </div>

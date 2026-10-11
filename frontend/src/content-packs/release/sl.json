@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Ponovno aktiviranje vozlišča znotraj Workflowa",
+    "releaseTour": {
+      "label": "Novo v Heym",
+      "introTitle": "Novo v tej izdaji",
+      "introDescription": "Kratek pregled novosti od vaše zadnje posodobitve. Traja približno eno minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Vozlišče Enable: Ponovno aktiviranje vozlišča znotraj Workflowa",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Novo **vozlišče Enable** je protipostavka **vozlišča Disable**. Izberite vozlišče po imenu, da ga ponovno aktivirate in shranite spremembo. Deaktiviran **Cron**-Trigger se bo tako znova izvedel ob naslednjem načrtovanem času. Če se vozlišče nahaja bolj na koncu poteka in še ni bilo izvedeno, se bo izvedlo neposredno v trenutni izvedbi."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deaktiviran Trigger nikoli samodejno ne začne izvajanja. Zato vozlišče Enable postavite za drugim vstopnim mestom, kot je **Input**-Trigger. Vozlišče **Wait** zdaj podpira tudi daljše premore: do 15 minut namesto le ene."
+          }
+        ],
+        "tour": {
+          "description": "Ponovno aktivirajte deaktivirano vozlišče neposredno iz Workflowa, na primer začasno ustavljen Cron-Trigger.",
+          "useCases": [
+            "Zagon deaktiviranega Cron-Triggerja po potrebi prek Webhooka",
+            "Kombiniranje z vozliščem Disable za vklop in izklop vozlišč glede na stanje",
+            "Premor Workflowa z vozliščem Wait do 15 minut"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Preglejte čakajoča človeška odobritve neposredno na nadzorni plošči",
+    "releaseTour": {
+      "label": "Novo v Heym",
+      "introTitle": "Novo v tej izdaji",
+      "introDescription": "Kratek pregled novosti od vaše zadnje posodobitve. Traja približno eno minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Opravite čakajoča preglede prek gradnika nadzorne plošče",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Dodajte gradnik **HITL** in glava bo prikazala število čakajočih pregledov kot `1/n ausstehend`. S tipkami s puščicami se pomikajte po vnosih. Ime Workflow odpre zagon neposredno na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** zaključijo osnutek. Ikona zgodovine odpre zagon v pogovornem oknu zgodovine na isti strani. Čakalna vrsta je osebna: deljena nadzorna plošča ne prikazuje tujih osnutkov."
+          }
+        ],
+        "tour": {
+          "description": "Vrtiljak nadzorne plošče za vaše čakajoče odobritve s števcem v glavi.",
+          "useCases": [
+            "Poglejte, koliko pregledov čaka, preden odprete prvega",
+            "Odobrite, zahtevajte spremembe ali zavrnite, ne da bi zapustili nadzorno ploščo",
+            "Odprite ta zagon prek ikone poleg naslova gradnika v pogovornem oknu zgodovine"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Nadzorna plošča"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI Assistant preizkusi svoje Workflowe in ustvari podatkovne tabele",
+    "releaseTour": {
+      "label": "Novo v Heymu",
+      "introTitle": "Novo v tej izdaji",
+      "introDescription": "Kratek pregled novosti od vaše zadnje posodobitve. Traja približno eno minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "Način YOLO: AI Assistant preizkusi, kar zgradi",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Če v Canvasu **AI Assistant** aktivirate **način YOLO**, ta po uporabi Workflowa ne bo več ustavil. Workflow bo izvedel kot prek **Run**, prebral rezultat in samodejno popravljal Workflow do petkrat na sporočilo. Vsak odgovor sproti navaja korake."
+          },
+          {
+            "type": "prose",
+            "markdown": "Pred prvo izvedbo vpraša po testnih vhodnih podatkih s predlaganimi vrednostmi in jih ponovno uporabi. Izvesti zna tudi druge Workflowe, če potrebuje njihove rezultate. Če potrebuje odločitev ali poverilnice, vpraša z običajno kartico z vprašanjem. Prave izvedbe: način YOLO je privzeto izklopljen, **Stop** pa postopek kadar koli ustavi."
+          }
+        ],
+        "tour": {
+          "description": "AI Assistant izvede ustvarjene Workflowe, preveri rezultat in samodejno odpravi napake, dokler ne deluje.",
+          "useCases": [
+            "Opišite Workflow in takoj prejmite preizkušeno različico",
+            "Pustite, da Assistant samodejno odkrije in odpravi okvarjena vozlišča",
+            "Pred povezovanjem preverite povratne vrednosti drugih Workflowov"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI Assistant izbere ali ustvari podatkovne tabele",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Ko Workflow shranjuje zapise, **AI Assistant** zdaj prepozna vaše **DataTables**. Navedite tabelo in uporabil jo bo. V nasprotnem primeru vpraša po ustrezni tabeli ali predlaga **Ustvari novo tabelo** z zahtevanimi stolpci."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deluje v Assistantu v Canvasu, v načinu YOLO, v **Chatu**, v dokumentaciji in prek MCP z `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "AI Assistant vpraša po ustrezni podatkovni tabeli ali ustvari novo s potrebnimi stolpci.",
+          "useCases": [
+            "Samodejno zajemanje potencialnih strank v tabele ter skupno ustvarjanje Workflowa in tabele",
+            "Izbira obstoječih tabel glede na stolpce in tipe",
+            "Ustvarjanje in povezovanje tabel neposredno iz Chata ali prek MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Ustvarjanje več Dashboardov in deljenje z ekipo",
+    "releaseTour": {
+      "label": "Novo v Heymu",
+      "introTitle": "Novo v tej izdaji",
+      "introDescription": "Kratek pregled novosti od vaše zadnje posodobitve. Traja približno eno minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Ustvarjanje več Dashboardov in deljenje z ekipo",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Zavihek **Dashboard** zdaj podpira poljubno število Dashboardov. Udobno preklapljajte prek izbirnika na vrhu zavihka ali ustvarite novega s **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Delite Dashboarde z osebami ali ekipami prek **nastavitev**. **Branje** omogoča prikaz in osveževanje; **Pisanje** omogoča urejanje gradnikov. Gradniki vedno uporabljajo poverilnice lastnika."
+          }
+        ],
+        "tour": {
+          "description": "Upravljajte več Dashboardov, preklapljajte med njimi in jih delite z možnostjo samo branja ali urejanja.",
+          "useCases": [
+            "Ločeni Dashboardi glede na ekipo, izdelek ali najemnika",
+            "Deležnikom zagotovite pogled samo za branje",
+            "Vnaprej preizkusite vrste diagramov s primeri podatkov"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

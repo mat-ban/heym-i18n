@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Atkārtoti aktivizēt mezglu Workflow ietvaros",
+    "releaseTour": {
+      "label": "Jauns pakalpojumā Heym",
+      "introTitle": "Jaunumi šajā laidienā",
+      "introDescription": "Īss pārskats par jaunumiem kopš Jūsu pēdējā atjauninājuma. Aizņem apmēram vienu minūti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable mezgls: atkārtoti aktivizēt mezglu Workflow ietvaros",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Jaunais **Enable mezgls** ir pretstats **Disable mezglam**. Izvēlieties mezglu pēc nosaukuma, lai to atkārtoti aktivizētu un saglabātu izmaiņas. Deaktivizēts **Cron** Trigger tādējādi atkal tiks izpildīts nākamajā ieplānotajā laikā. Ja mezgls atrodas tālāk plūsmā un vēl nav izpildīts, tas tiks izpildīts uzreiz aktuālajā izpildē."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deaktivizēts Trigger nekad neuzsāk palaišanu patstāvīgi. Tāpēc novietojiet Enable mezglu aiz cita ieejas punkta, piemēram, **Input** Trigger. **Wait** mezgls tagad atbalsta arī garākus pārtraukumus: līdz pat 15 minūtēm, nevis tikai vienu."
+          }
+        ],
+        "tour": {
+          "description": "Atkārtoti aktivizēt deaktivizētu mezglu tieši no Workflow, piemēram, pauzētu Cron Trigger.",
+          "useCases": [
+            "Palaist deaktivizētu Cron Trigger pēc vajadzības, izmantojot Webhook",
+            "Kombinēt ar Disable mezglu, lai ieslēgtu un izslēgtu mezglus atkarībā no stāvokļa",
+            "Pauzēt Workflow ar Wait mezglu līdz pat 15 minūtēm"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Pārbaudiet gaidošos cilvēka apstiprinājumus tieši informācijas panelī",
+    "releaseTour": {
+      "label": "Jaunums Heym",
+      "introTitle": "Jaunumi šajā laidienā",
+      "introDescription": "Īss pārskats par jaunumiem kopš Jūsu pēdējā atjauninājuma. Aizņem apmēram vienu minūti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Veiciet gaidošos pārskatus, izmantojot informācijas paneļa logrīku",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Pievienojiet **HITL** logrīku, un galvene rādīs gaidošo pārskatu skaitu kā `1/n ausstehend`. Pārvietojieties starp ierakstiem ar bultiņu taustiņiem. Workflow nosaukums atver palaišanu tieši uz Canvas. **Apstiprināt**, **Pieprasīt izmaiņas** un **Noraidīt** pabeidz melnrakstu. Vēstures ikona atver palaišanu vēstures dialogā tajā pašā lapā. Rinda ir personīga: koplietots informācijas panelis nerāda citu personu melnrakstus."
+          }
+        ],
+        "tour": {
+          "description": "Informācijas paneļa karuselis Jūsu gaidošajiem apstiprinājumiem ar skaitītāju galvenē.",
+          "useCases": [
+            "Redzēt, cik pārskatu gaida, pirms tiek atvērts pirmais",
+            "Apstiprināt, pieprasīt izmaiņas vai noraidīt, neizejot no informācijas paneļa",
+            "Atvērt šo palaišanu vēstures dialogā, izmantojot ikonu blakus logrīka nosaukumam"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Informācijas panelis"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI Assistant pārbauda savus Workflow un izveido datu tabulas",
+    "releaseTour": {
+      "label": "Jauns Heym",
+      "introTitle": "Jaunumi šajā laidienā",
+      "introDescription": "Īss pārskats par jaunumiem kopš Jūsu pēdējā atjauninājuma. Aizņem apmēram vienu minūti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO režīms: AI Assistant pārbauda, ko tas izveido",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Aktivizējiet **YOLO režīmu** Canvas **AI Assistant**, un tas vairs neapstāsies pēc Workflow piemērošanas. Tas izpilda Workflow tāpat kā ar **Run**, nolasa rezultātu un patstāvīgi labo Workflow līdz piecām reizēm katrā ziņojumā. Katra atbilde uzskaita soļus tiešraidē."
+          },
+          {
+            "type": "prose",
+            "markdown": "Pirms pirmās palaišanas tas jautā par testa ievadi ar ieteiktajām vērtībām un izmanto tās atkārtoti. Tas var arī izpildīt citus Workflow, ja nepieciešami to rezultāti. Ja nepieciešams lēmums vai piekļuves dati, tas jautā ar ierasto jautājumu karti. Īstas palaišanas: YOLO režīms pēc noklusējuma ir izslēgts, un **Stop** jebkurā brīdī pārtrauc procesu."
+          }
+        ],
+        "tour": {
+          "description": "AI Assistant izpilda izveidotos Workflow, pārbauda rezultātu un patstāvīgi labo kļūdas, līdz tas darbojas.",
+          "useCases": [
+            "Aprakstīt Workflow un uzreiz saņemt pārbaudītu versiju",
+            "Ļaut asistentam automātiski atklāt un novērst kļūdainus mezglus",
+            "Pārbaudīt citu Workflow atgrieztās vērtības pirms savienošanas"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI Assistant izvēlas vai izveido datu tabulas",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kad Workflow saglabā datu ierakstus, **AI Assistant** tagad atpazīst Jūsu **DataTables**. Nosauciet tabulu, un tas to izmantos. Pretējā gadījumā tas jautās par piemērotu tabulu vai ieteiks **Izveidot jaunu tabulu** ar nepieciešamajām kolonnām."
+          },
+          {
+            "type": "prose",
+            "markdown": "Darbojas Canvas asistentā, YOLO režīmā, **Chat**, dokumentācijā un, izmantojot MCP ar `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "AI Assistant jautā par piemērotu datu tabulu vai izveido jaunu ar nepieciešamajām kolonnām.",
+          "useCases": [
+            "Automātiski reģistrēt potenciālos klientus tabulās un kopā ģenerēt Workflow un tabulu",
+            "Izvēlēties esošās tabulas pēc kolonnām un tipiem",
+            "Izveidot un savienot tabulas tieši no Chat vai, izmantojot MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Izveidojiet vairākus informācijas paneļus un kopīgojiet tos ar komandu",
+    "releaseTour": {
+      "label": "Jauns Heym",
+      "introTitle": "Jaunumi šajā laidienā",
+      "introDescription": "Īss pārskats par jaunumiem kopš Jūsu pēdējā atjauninājuma. Aizņem apmēram vienu minūti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Izveidojiet vairākus informācijas paneļus un kopīgojiet tos ar komandu",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Cilne **Dashboard** tagad atbalsta neierobežotu skaitu informācijas paneļu. Ērti pārslēdzieties, izmantojot izvēlni cilnes augšdaļā, vai izveidojiet jaunu ar **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Kopīgojiet informācijas paneļus ar personām vai komandām, izmantojot **Iestatījumus**. **Lasīšana** ļauj skatīt un atjaunināt; **Rakstīšana** ļauj rediģēt logrīkus. Logrīki vienmēr izmanto īpašnieka piekļuves datus."
+          }
+        ],
+        "tour": {
+          "description": "Pārvaldiet vairākus informācijas paneļus, pārslēdzieties starp tiem un kopīgojiet tos tikai lasāmus vai rediģējamus.",
+          "useCases": [
+            "Strukturējiet atsevišķus informācijas paneļus pēc komandas, produkta vai nomnieka",
+            "Nodrošiniet ieinteresētajām personām tikai lasāmu skatu",
+            "Iepriekš pārbaudiet diagrammu veidus ar parauga datiem"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

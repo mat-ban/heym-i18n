@@ -5,9 +5,10 @@ import { useRoute } from "vue-router";
 import { ChevronDown, ChevronRight, Mail, Search, X } from "lucide-vue-next";
 
 import type { DocCategory } from "@/docs/manifest";
+import { useI18n } from "vue-i18n";
 
 import Input from "@/components/ui/Input.vue";
-import { DOCS_MANIFEST, getDocPath } from "@/docs/manifest";
+import { DOCS_MANIFEST, getDocPath, getDocsManifest } from "@/docs/manifest";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -25,11 +26,12 @@ const emit = defineEmits<{
 }>();
 
 const route = useRoute();
+const { locale } = useI18n({ useScope: "global" });
 
 const searchInput = ref("");
 const searchQuery = ref("");
 const allCategories = computed<Record<string, DocCategory>>(() => ({
-  ...DOCS_MANIFEST,
+  ...getDocsManifest(locale.value),
   ...props.extraCategories,
 }));
 
@@ -181,14 +183,14 @@ watch(
         <Input
           v-model="searchInput"
           type="text"
-          placeholder="Search docs..."
+          :placeholder="$t('docs.searchPlaceholder')"
           :class="cn('pl-9 h-10', hasSearchText ? 'pr-10' : '')"
         />
         <button
           v-show="hasSearchText"
           type="button"
           class="absolute right-2 top-1/2 -translate-y-1/2 z-[1] inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
-          aria-label="Clear search"
+          :aria-label="$t('docs.clearSearch')"
           @click="clearDocsSearch()"
         >
           <X class="w-4 h-4" />
@@ -205,14 +207,14 @@ watch(
         class="px-3 py-6 text-center space-y-2"
       >
         <p class="text-sm text-muted-foreground">
-          No results for "{{ searchQuery }}"
+          {{ $t('docs.noResults', { query: searchQuery }) }}
         </p>
         <a
           href="mailto:support@heym.run"
           class="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <Mail class="w-3.5 h-3.5" />
-          <span>Contact support</span>
+          <span>{{ $t('docs.contactSupport') }}</span>
         </a>
       </div>
 

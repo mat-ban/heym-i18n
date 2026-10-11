@@ -8,7 +8,7 @@ import {
   type MaybeRefOrGetter,
 } from "vue";
 
-import { RELEASE_REGISTRY } from "@/features/release-tour/releaseRegistry";
+import { getReleaseRegistry } from "@/features/release-tour/releaseRegistry";
 import {
   buildReleaseTourCatalog,
   buildReleaseTours,
@@ -33,8 +33,9 @@ export interface UseReleaseTourResult {
  * host page's own visibility rule; the tour never auto-opens without it.
  */
 export function useReleaseTour(eligible: MaybeRefOrGetter<boolean>): UseReleaseTourResult {
-  const tours = buildReleaseTours(RELEASE_REGISTRY);
-  const catalogTour = buildReleaseTourCatalog(RELEASE_REGISTRY);
+  const registry = getReleaseRegistry();
+  const tours = buildReleaseTours(registry);
+  const catalogTour = buildReleaseTourCatalog(registry);
   const seenReleaseIds = ref<string[]>(readSeenReleaseIds());
   const isOpen = ref(false);
   const isBrowsingCatalog = ref(false);

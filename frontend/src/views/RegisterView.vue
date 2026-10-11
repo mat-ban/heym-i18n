@@ -153,10 +153,10 @@ const features = [
             class="w-16 h-16 mb-4"
           >
           <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-center">
-            Create your account
+            {{ $t('auth.createAccountTitle') }}
           </h1>
           <p class="text-muted-foreground text-sm mt-1.5 text-center max-w-[280px]">
-            Join thousands building AI workflows
+            {{ $t('auth.joinThousands') }}
           </p>
         </div>
 
@@ -195,13 +195,13 @@ const features = [
               for="name"
               class="text-sm font-medium"
             >
-              Full name
+              {{ $t('auth.fullName') }}
             </Label>
             <Input
               id="name"
               v-model="name"
               type="text"
-              placeholder="John Doe"
+              :placeholder="$t('auth.fullNamePlaceholder')"
               required
               class="h-11 min-h-[44px]"
             />
@@ -212,13 +212,13 @@ const features = [
               for="email"
               class="text-sm font-medium"
             >
-              Email address
+              {{ $t('auth.email') }}
             </Label>
             <Input
               id="email"
               v-model="email"
               type="email"
-              placeholder="you@example.com"
+              :placeholder="$t('auth.emailPlaceholder')"
               required
               class="h-11 min-h-[44px]"
             />
@@ -230,14 +230,14 @@ const features = [
                 for="password"
                 class="text-sm font-medium"
               >
-                Password
+                {{ $t('auth.password') }}
               </Label>
               <Input
                 id="password"
                 v-model="password"
                 type="password"
                 autocomplete="new-password"
-                placeholder="New password"
+                :placeholder="$t('settings.newPassword')"
                 required
                 class="h-11 min-h-[44px]"
               />
@@ -248,14 +248,14 @@ const features = [
                 for="confirmPassword"
                 class="text-sm font-medium"
               >
-                Confirm
+                {{ $t('auth.confirmPassword') }}
               </Label>
               <Input
                 id="confirmPassword"
                 v-model="confirmPassword"
                 type="password"
                 autocomplete="new-password"
-                placeholder="Confirm"
+                :placeholder="$t('auth.confirmPasswordPlaceholder')"
                 required
                 class="h-11 min-h-[44px]"
               />
@@ -290,7 +290,7 @@ const features = [
             class="w-full h-12 min-h-[44px] text-base"
             :loading="loading"
           >
-            Create account
+            {{ $t('auth.createAccountButton') }}
             <ArrowRight class="w-4 h-4 ml-1" />
           </Button>
         </form>
@@ -300,7 +300,7 @@ const features = [
             <div class="w-full border-t border-border" />
           </div>
           <div class="relative flex justify-center text-xs uppercase">
-            <span class="bg-card px-3 text-muted-foreground">Already have an account?</span>
+            <span class="bg-card px-3 text-muted-foreground">{{ $t('auth.alreadyHaveAccount') }}</span>
           </div>
         </div>
 
@@ -309,7 +309,7 @@ const features = [
           class="login-link flex items-center justify-center gap-3 w-full h-12 min-h-[44px] rounded-xl border border-border bg-muted/30 text-sm font-medium text-foreground hover:bg-muted/50 hover:border-primary/30 transition-all duration-300"
         >
           <LogIn class="w-4 h-4 text-primary" />
-          Sign in instead
+          {{ $t('auth.signInInstead') }}
         </router-link>
       </Card>
     </div>

@@ -73,13 +73,13 @@ async function submit(): Promise<void> {
   <div class="rounded-lg border border-dashed border-primary/40 bg-primary/5 p-4">
     <div class="mb-2 flex items-center gap-2 text-sm font-medium">
       <Sparkles class="h-4 w-4 text-primary" />
-      Describe what you want to be told about
+      {{ $t('alerts.aiPrompt.describe') }}
     </div>
 
     <Textarea
       v-model="prompt"
       :rows="2"
-      placeholder="Warn me if the invoice sync fails more than 5 times in 10 minutes"
+      :placeholder="$t('alerts.aiPrompt.placeholder')"
       :disabled="loading"
       @keydown.enter.ctrl.exact.prevent="submit"
       @keydown.enter.meta.exact.prevent="submit"
@@ -93,9 +93,9 @@ async function submit(): Promise<void> {
         <SearchableSelect
           :model-value="selectedCredentialId ?? undefined"
           :options="credentialOptions"
-          placeholder="Credential"
-          search-placeholder="Search credentials..."
-          empty-text="No credentials found"
+          :placeholder="$t('settings.voiceCredential')"
+          :search-placeholder="$t('common.searchPlaceholder')"
+          :empty-text="$t('common.noResults')"
           @update:model-value="selectCredential"
         />
       </div>
@@ -104,8 +104,8 @@ async function submit(): Promise<void> {
           v-model="selectedModel"
           :options="modelOptions"
           :placeholder="modelPlaceholder"
-          search-placeholder="Search models..."
-          empty-text="No models found"
+          :search-placeholder="$t('common.searchPlaceholder')"
+          :empty-text="$t('common.noResults')"
         />
       </div>
       <Button
@@ -113,14 +113,14 @@ async function submit(): Promise<void> {
         size="sm"
         class="ml-auto"
         :disabled="!prompt.trim() || !isReady || loading"
-        :title="navigatorPlatformIsMac ? 'Fill the form (⌘Enter)' : 'Fill the form (Ctrl+Enter)'"
+        :title="`${$t('alerts.aiPrompt.fillForm')} (${navigatorPlatformIsMac ? '⌘Enter' : 'Ctrl+Enter'})`"
         @click="submit"
       >
         <Loader2
           v-if="loading"
           class="mr-1 h-3.5 w-3.5 animate-spin"
         />
-        Fill the form
+        {{ $t('alerts.aiPrompt.fillForm') }}
         <span class="text-[11px] font-normal tracking-wide text-primary-foreground/80">
           {{ navigatorPlatformIsMac ? "⌘↵" : "⌃↵" }}
         </span>

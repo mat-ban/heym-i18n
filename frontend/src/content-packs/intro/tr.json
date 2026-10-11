@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Workflow'lar içinde daha hızlı oluşturun",
+    "description": "Trigger'ları, son çalıştırmayı ve adımları doğrudan listenin yanında görüntülemek için bir Workflow seçin. Duruma göre filtreleyin, doğrudan çalıştırın ve klasörler sayesinde genel bir görünümü koruyun."
+  },
+  "dashboard:board": {
+    "title": "Görevleri ajanik bir board üzerinden yönetin",
+    "description": "Kartların tam bağlamıyla Workflow zincirlerini tetiklemek için kartları sütunlar arasında taşıyın. Sonuçlar doğrudan karta geri döner."
+  },
+  "dashboard:templates": {
+    "title": "Kanıtlanmış şablonlarla başlayın",
+    "description": "Yapılandırma süresinden tasarruf etmek ve tutarlılığı garanti etmek için kullanıma hazır Workflow şablonlarını kullanın."
+  },
+  "dashboard:globalvariables": {
+    "title": "Paylaşılan değişkenleri merkezileştirin",
+    "description": "Yeniden kullanılabilir değerleri bir kez kaydedin ve tüm Workflow'larda bunlara başvurun."
+  },
+  "dashboard:chat": {
+    "title": "Hızlı yineleme için chat'i kullanın",
+    "description": "Hızlı sorular sorun, fikirleri test edin ve Workflow'un akışı netleşir netleşmez editöre geçin."
+  },
+  "dashboard:credentials": {
+    "title": "Sırları güvenli bir şekilde yönetin",
+    "description": "Sağlayıcı anahtarlarını ve Token'ları merkezi olarak yönetin, böylece Workflow'lar sırları ifşa etmeden güvenli bağlantılar kullanabilir."
+  },
+  "dashboard:vectorstores": {
+    "title": "Retrieval tabanlı Workflow'ları destekleyin",
+    "description": "Temellendirilmiş AI yanıtları, anlamsal arama ve ölçeklenebilir RAG pipeline'ları için vektör depoları hazırlayın."
+  },
+  "dashboard:mcp": {
+    "title": "Harici araç ekosistemlerini bağlayın",
+    "description": "Ajanların basit Prompt'ların ötesinde yapılandırılmış araçları ve eylemleri yürütebilmesi için MCP bağlantılarını yapılandırın."
+  },
+  "dashboard:traces": {
+    "title": "Yürütme davranışını anlayın",
+    "description": "Sonuçları hata ayıklamak, çalıştırmaları karşılaştırmak ve güvenilirliği artırmak için trace ayrıntılarını analiz edin."
+  },
+  "dashboard:alerts": {
+    "title": "Sorunlar kötüleşmeden önce bildirim alın",
+    "description": "Hatalar, süre, maliyetler ve çalıştırma sayısı için eşikler tanımlayın ve aşıldığında uyarı alın."
+  },
+  "dashboard:analytics": {
+    "title": "Platform performansını takip edin",
+    "description": "Gerçek sinyallere dayalı olarak hedefli optimizasyon yapmak için kullanım ve yürütme eğilimlerini izleyin."
+  },
+  "dashboard:dashboard": {
+    "title": "Kendi dashboard'larınızı oluşturun",
+    "description": "Temel metrikleri bir bakışta görselleştirmek için Workflow'larınız tarafından beslenen grafik widget'larını bir araya getirin."
+  },
+  "dashboard:teams": {
+    "title": "İşbirliğini düzenli şekilde ölçeklendirin",
+    "description": "Şeffaf erişim hakları ve sorumlulukları korumak için Workflow'ları ve kaynakları ekiplere göre paylaştırın."
+  },
+  "dashboard:logs": {
+    "title": "Sorunları sistem düzeyinde teşhis edin",
+    "description": "Altyapı veya ortam sorunları durumunda runtime hakkında daha derin bilgi edinmek için log'ları kullanın."
+  },
+  "dashboard:drive": {
+    "title": "Oluşturulan dosyaları yönetin",
+    "description": "Workflow çıktılarını güvenli bağlantılar ve kontrollü erişim seçenekleri aracılığıyla görüntüleyin, indirin ve paylaşın."
+  },
+  "dashboard:datatable": {
+    "title": "Yapılandırılmış verilerle yerel olarak çalışın",
+    "description": "Tipli tablolar oluşturun ve tekrarlanabilir okuma ve yazma işlemleri için bunları doğrudan Workflow'lardan yönetin."
+  },
+  "dashboard:schedules": {
+    "title": "Otomasyon planlamalarına genel bakış",
+    "description": "Tüm aktif Cron Workflow'larını bir takvim görünümünde (gün, hafta, ay) görüntüleyin. Bir bloğa tıklamak sizi doğrudan Canvas'a götürür."
+  },
+  "evals": {
+    "title": "Kaliteyi güvenilir şekilde değerlendirin",
+    "description": "Üretim dağıtımlarından önce Prompt ve model değişikliklerini objektif olarak karşılaştırmak için tekrarlanabilir test paketleri çalıştırın."
+  },
+  "docs": {
+    "title": "Uygulama içinde hızlı yönlendirme",
+    "description": "Mevcut Workflow'dan ayrılmadan kompakt referanslara göz atın ve hedefli şekilde derinlemesine inceleyin."
+  },
+  "editor": {
+    "title": "Canvas üzerinde tasarlayın ve hata ayıklayın",
+    "description": "Düğümleri görsel olarak bağlayın, anında çalıştırın ve tek bir çalışma alanında doğrudan geri bildirimle davranışı iyileştirin."
+  }
+}

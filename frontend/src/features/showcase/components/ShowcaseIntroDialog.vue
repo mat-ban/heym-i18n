@@ -115,22 +115,22 @@ onUnmounted(() => {
     <div
       class="fixed bottom-8 left-1/2 z-[55] w-[min(92vw,460px)] -translate-x-1/2"
       role="dialog"
-      aria-label="Screen showcase"
+      :aria-label="$t('showcase.screenShowcase')"
     >
       <div class="rounded-xl border border-border/70 bg-card/98 p-3 shadow-2xl backdrop-blur-sm">
         <div class="mb-2 flex items-center justify-between gap-3">
           <div class="min-w-0">
             <p class="truncate text-sm font-semibold text-foreground">
-              {{ content?.title ?? "Welcome to this screen" }}
+              {{ content?.title ?? $t('showcase.quickOverview') }}
             </p>
             <p class="mt-0.5 text-xs text-muted-foreground">
-              {{ content?.description ?? "Watch this quick overview before you continue." }}
+              {{ content?.description ?? $t('showcase.quickOverviewDesc') }}
             </p>
           </div>
           <button
             type="button"
             class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            aria-label="Close showcase"
+            :aria-label="$t('showcase.closeShowcase')"
             @click="dismiss"
           >
             <X class="h-4 w-4" />
@@ -148,7 +148,7 @@ onUnmounted(() => {
           controls
         />
         <p class="mt-2 text-[11px] text-muted-foreground">
-          Press <kbd class="rounded border border-border bg-muted px-1 py-0.5 text-[10px] font-semibold">Esc</kbd> to close
+          {{ $t('common.pressEscToClose') }}
         </p>
       </div>
     </div>

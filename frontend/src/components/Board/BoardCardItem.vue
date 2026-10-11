@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   Loader2,
   CheckCircle2,
@@ -18,6 +19,7 @@ import { useBoardStore } from "@/stores/board";
 
 const boardStore = useBoardStore();
 const { showToast } = useToast();
+const { t } = useI18n();
 // No board actions until the Agentic Kanban Model is selected.
 const canAct = computed<boolean>(() => boardStore.mapperConfigured && boardStore.canWrite);
 
@@ -86,7 +88,7 @@ async function saveTitle(): Promise<void> {
   const title = editedTitle.value.trim();
   if (!title) {
     editedTitle.value = props.card.title;
-    showToast("Card title cannot be empty", "error");
+    showToast(t("board.cardTitleEmpty"), "error");
     await nextTick();
     titleInput.value?.focus();
     return;
@@ -103,7 +105,7 @@ async function saveTitle(): Promise<void> {
     editingTitle.value = false;
   } catch {
     editedTitle.value = props.card.title;
-    showToast("Failed to update card title", "error");
+    showToast(t("board.cardTitleUpdateFailed"), "error");
     savingTitle.value = false;
     await nextTick();
     titleInput.value?.focus();
@@ -181,7 +183,7 @@ function onCardClick(): void {
             class="w-full resize-none rounded border border-primary/60 bg-background px-1 py-0.5 font-medium leading-5 text-foreground outline-none ring-1 ring-primary/30 disabled:pr-6"
             :disabled="savingTitle"
             :data-testid="`board-card-title-input-${card.id}`"
-            :aria-label="`Edit title for ${card.title}`"
+            :aria-label="$t('board.editTitleFor', { title: card.title })"
             @blur="saveTitle"
             @click.stop
           />
@@ -202,7 +204,7 @@ function onCardClick(): void {
       <span
         v-if="attachmentCount"
         class="mt-0.5 inline-flex shrink-0 items-center gap-0.5 text-xs text-muted-foreground"
-        :title="`${attachmentCount} attachment${attachmentCount > 1 ? 's' : ''}`"
+        :title="$t('board.attachmentsCount', { count: attachmentCount })"
         :data-testid="`board-card-attachments-${card.id}`"
       >
         <Paperclip class="h-3 w-3" />
@@ -235,8 +237,8 @@ function onCardClick(): void {
           <button
             v-if="card.run_status === 'failed'"
             class="flex items-center justify-center gap-0.5 rounded p-0.5 text-red-500 underline decoration-dotted transition-colors hover:bg-red-500/10 hover:text-red-400"
-            aria-label="View error history"
-            title="View error history"
+            :aria-label="$t('board.viewErrorHistory')"
+            :title="$t('board.viewErrorHistory')"
             :data-testid="`board-card-error-history-${card.id}`"
             @click.stop="emit('openErrorHistory', card.id)"
           >
@@ -245,7 +247,7 @@ function onCardClick(): void {
           </button>
           <button
             class="flex items-center justify-center rounded p-0.5 text-muted-foreground hover:text-primary"
-            aria-label="Clone card"
+            :aria-label="$t('board.cloneCard')"
             :data-testid="`board-card-clone-${card.id}`"
             @click.stop="emit('clone', card.id)"
           >
@@ -253,7 +255,7 @@ function onCardClick(): void {
           </button>
           <button
             class="flex items-center justify-center rounded p-0.5 text-muted-foreground hover:text-red-500"
-            aria-label="Delete card"
+            :aria-label="$t('board.deleteCard')"
             :data-testid="`board-card-delete-${card.id}`"
             @click.stop="emit('delete', card.id)"
           >

@@ -161,7 +161,7 @@ function toggleQuickDrawer(): void {
         <div class="quick-drawer-trigger__inner">
           <Sparkles class="quick-drawer-trigger__icon h-3.5 w-3.5 text-primary/90" />
           <div class="quick-drawer-trigger__label">
-            Quick Workflows
+            {{ $t('canvas.quickWorkflows') }}
           </div>
           <ChevronLeft
             class="quick-drawer-trigger__chevron h-3.5 w-3.5 text-muted-foreground/80 transition-transform duration-300"

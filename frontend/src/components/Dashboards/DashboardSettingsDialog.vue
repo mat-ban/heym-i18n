@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { Trash2 } from "lucide-vue-next";
 
 import Dialog from "@/components/ui/Dialog.vue";
@@ -15,6 +16,7 @@ const emit = defineEmits<{
 }>();
 
 const dashboardStore = useDashboardStore();
+const { t } = useI18n();
 const name = ref("");
 const saving = ref(false);
 
@@ -45,7 +47,7 @@ async function submit(): Promise<void> {
 async function remove(): Promise<void> {
   const dashboard = dashboardStore.activeDashboard;
   if (!dashboard || !canDelete.value) return;
-  if (!window.confirm(`Delete dashboard "${dashboard.name}" and all of its widgets?`)) return;
+  if (!window.confirm(t("dashboards.deleteDashboardConfirm", { name: dashboard.name }))) return;
   await dashboardStore.deleteDashboard(dashboard.id);
   emit("deleted");
   emit("close");
@@ -55,13 +57,13 @@ async function remove(): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    title="Dashboard settings"
+    :title="$t('dashboards.dashboardSettings')"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 p-1">
       <Input
         v-model="name"
-        placeholder="Dashboard name"
+        :placeholder="$t('dashboards.dashboardName')"
         data-testid="dashboard-settings-name"
         @keydown.enter="submit"
       />
@@ -77,26 +79,26 @@ async function remove(): Promise<void> {
           variant="ghost"
           class="text-destructive hover:bg-destructive/10 hover:text-destructive"
           :disabled="!canDelete"
-          :title="canDelete ? 'Delete dashboard' : 'You need at least one dashboard of your own'"
+          :title="canDelete ? $t('dashboards.deleteDashboard') : $t('dashboards.atLeastOneDashboardRequired')"
           data-testid="dashboard-settings-delete"
           @click="remove"
         >
           <Trash2 class="mr-1 h-4 w-4" />
-          Delete
+          {{ $t("common.delete") }}
         </Button>
         <div class="flex gap-2">
           <Button
             variant="ghost"
             @click="emit('close')"
           >
-            Cancel
+            {{ $t("common.cancel") }}
           </Button>
           <Button
             :disabled="!canSave"
             data-testid="dashboard-settings-save"
             @click="submit"
           >
-            Save
+            {{ $t("common.save") }}
           </Button>
         </div>
       </div>

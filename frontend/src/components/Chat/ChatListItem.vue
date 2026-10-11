@@ -106,8 +106,8 @@ function handleSelect(): void {
     <Plug
       v-if="conversation.source === 'mcp'"
       class="w-3 h-3 shrink-0 text-primary opacity-70"
-      aria-label="Started by an MCP client"
-      title="Started by an MCP client"
+      :aria-label="$t('chat.startedByMcp')"
+      :title="$t('chat.startedByMcp')"
     />
 
     <div class="flex-1 min-w-0">
@@ -134,7 +134,7 @@ function handleSelect(): void {
     <div
       v-if="conversation.has_unread && !isActive && !isEditing && !isConfirmingDelete"
       class="w-2 h-2 rounded-full bg-primary shrink-0 shadow-[0_0_6px_rgba(99,102,241,0.6)]"
-      aria-label="Unread message"
+      :aria-label="$t('chat.unreadMessage')"
     />
 
     <div
@@ -144,7 +144,7 @@ function handleSelect(): void {
     >
       <button
         class="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
-        :title="conversation.is_pinned ? 'Unpin' : 'Pin to top'"
+        :title="conversation.is_pinned ? $t('chat.unpin') : $t('chat.pinToTop')"
         @click="emit('togglePin', conversation.id)"
       >
         <PinOff
@@ -158,14 +158,14 @@ function handleSelect(): void {
       </button>
       <button
         class="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
-        title="Rename"
+        :title="$t('common.rename')"
         @click="startEdit"
       >
         <Pencil class="w-3.5 h-3.5" />
       </button>
       <button
         class="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive"
-        title="Delete"
+        :title="$t('common.delete')"
         @click="confirmDelete"
       >
         <Trash2 class="w-3.5 h-3.5" />
@@ -181,14 +181,14 @@ function handleSelect(): void {
         ref="confirmDeleteButtonRef"
         type="button"
         class="p-1 rounded bg-destructive/10 text-destructive hover:bg-destructive/20"
-        title="Confirm delete"
+        :title="$t('chat.confirmDelete')"
         @click="doDelete"
       >
         <Check class="w-3.5 h-3.5" />
       </button>
       <button
         class="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
-        title="Cancel"
+        :title="$t('common.cancel')"
         @click="cancelDelete"
       >
         <X class="w-3.5 h-3.5" />

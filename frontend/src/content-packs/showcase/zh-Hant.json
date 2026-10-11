@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "建立、整理、匯入並管理您的 AI 自動化 Workflow。",
+    "bullets": [
+      "快速開啟 Workflow、保持資料夾井然有序，並直接從最近的任務繼續作業。",
+      "使用指令面板快速存取，無需在網格中長時間搜尋。",
+      "將此分頁作為您在編輯器中所有活動的基礎。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "集中總覽",
+        "title": "Workflow 資料庫",
+        "description": "在同一處檢視根物件、資料夾以及標記為待刪除的 Workflow。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "快速存取",
+        "title": "快速建立",
+        "description": "建立新的 Workflow 或直接匯入 JSON。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "結構",
+        "title": "預先整理",
+        "description": "透過資料夾與釘選功能，讓持續成長的自動化組合保持井然有序。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "閱讀 Workflow 指南",
+        "description": "開啟 Workflow 分頁的完整參考文件。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflows 分頁"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "開啟範本",
+        "description": "切換至範本分頁，取得可重複使用的起始點。",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "此處涵蓋的內容",
+        "content": "使用此區域處理 Workflow 生命週期任務：建立、重新命名、移動、匯入、封存與選取。"
+      },
+      {
+        "id": "workflows-speed",
+        "title": "保持精簡",
+        "content": "若您只需要從其他頁面快速執行，請使用 Quick Drawer。需要管理與結構時再回到這裡。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflows 分頁"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "以代理為基礎的 Kanban Board。每張卡片都是一個帶有脈絡、歷史與輸出的持久性 Job——移動卡片會執行該欄的 Workflow 鏈。",
+    "bullets": [
+      "在 Backlog 中建立文字卡片，並以拖放方式將其移過各欄。",
+      "將有序的 Workflow 連結至各欄；卡片移動會將其作為 Trigger 觸發。",
+      "卡片成功時變為綠色、發生錯誤時變為紅色、執行期間則為黃色。",
+      "留言與先前的輸出會流入下一次執行的脈絡中。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "核心概念",
+        "title": "卡片是 Job，不是筆記",
+        "description": "每張卡片都帶有完整歷史：留言、移動紀錄，以及每個 Workflow 的輸出。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "規劃循環",
+        "title": "後續回合",
+        "description": "在留言中回覆並重新執行——鏈會看到所有累積的脈絡。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board 文件",
+        "description": "欄鏈、Card Payload 契約與後續回合。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "欄鏈的執行方式",
+        "content": "附加至欄的 Workflow 會在卡片進入時依序執行。每個 Workflow 的輸出會附加至卡片脈絡；發生錯誤會停止該鏈。"
+      },
+      {
+        "id": "board-context",
+        "title": "Workflow 接收的內容",
+        "content": "執行輸入包含卡片（標題、內容、中繼資料、留言、歷史、先前的輸出）、Board、移動以及鏈中的位置。請使用 $input.card 運算式讀取。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "範本",
+    "summary": "從可重複使用的 Workflow 藍圖開始，不必每次都重新建構相同的模式。",
+    "bullets": [
+      "當 Workflow 結構已知、但細節仍會變動時，請使用範本。",
+      "良好的範本可縮短上手時間並減少重複的 Canvas 作業。",
+      "在此分享模式，並視需要在編輯器中進行調整。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "重複使用",
+        "title": "藍圖方法",
+        "description": "擷取經過驗證的 Workflow 結構並快速再次套用。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "團隊步調",
+        "title": "一致的起始點",
+        "description": "範本可協助團隊對相同的成熟模式達成共識。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "效率",
+        "title": "減少空轉",
+        "description": "選擇現成框架，只調整必要部分。",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "開啟範本文件",
+        "description": "了解範本如何融入 Dashboard 流程。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "範本分頁"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "返回 Workflows",
+        "description": "返回 Workflow 主資料庫。",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "範本為何重要",
+        "content": "它們將重複的節點版面轉化為可重複使用的資產——非常適合部署相同 Workflow 模式之變體的團隊。"
+      },
+      {
+        "id": "templates-when",
+        "title": "最佳使用時機",
+        "content": "當結構穩定，但名稱、Prompt、Credentials 或目標會因使用情境而異時，請使用範本。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "範本分頁"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "變數",
+    "summary": "集中儲存共用值，並跨 Workflow 參照，無需在各處重複相同的資料。",
+    "bullets": [
+      "將經常重複使用的值保存在集中且持久的位置。",
+      "變數可減少 Prompt 漂移與重複的設定。",
+      "當多個 Workflow 需要相同資料基礎時，可針對性地共用值。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "持久性",
+        "title": "跨執行儲存",
+        "description": "全域值可跨越個別 Workflow 執行而持續存在。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "精簡設定",
+        "title": "減少冗餘",
+        "description": "只需集中更新一次，不必手動調整許多節點欄位。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "運算式",
+        "title": "DSL 支援",
+        "description": "直接在節點運算式與 Prompt 中參照值。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "閱讀變數文件",
+        "description": "開啟 Dashboard 中變數的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "變數分頁"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "典型模式",
+        "content": "儲存多個 Workflow 需要讀取的 Endpoint、共用的 Prompt 片段、環境特定設定或 ID。"
+      },
+      {
+        "id": "variables-boundary",
+        "title": "不屬於此處的內容",
+        "content": "機密與 Provider 驗證應放在 Credentials 中，而非全域變數。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "變數分頁"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "將 Dashboard Chat 作為您 Workflow 與平台任務的快速對話式進入點。",
+    "bullets": [
+      "非常適合快速提問、Workflow 協助與輕量執行。",
+      "著重於速度與迭代，而非完整的編輯器控制。",
+      "結構確定後，直接切換至 Workflow 或文件。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "自然語言",
+        "title": "快速互動",
+        "description": "使用簡單語言，不必手動搜尋整個應用程式。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "橋樑",
+        "title": "從想法到行動",
+        "description": "當目標明確、但確切路徑仍待梳理時，Chat 能提供協助。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "夥伴",
+        "title": "補充文件",
+        "description": "搭配文件使用，讓答案與參考資料隨手可得。",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "開啟 Chat 文件",
+        "description": "閱讀 Dashboard Chat 指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat 分頁"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "AI 助理參考",
+        "description": "了解 Heym 助理如何在 Workflow 建立過程中提供協助。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI 助理"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "最佳使用情境",
+        "content": "使用 Chat 處理快速 Workflow 問題、簡短平台指引，以及不需要深入 Canvas 作業的操作步驟。"
+      },
+      {
+        "id": "chat-next-step",
+        "title": "何時切換檢視",
+        "content": "當需要節點層級控制時切換至編輯器，或前往文件取得長期參考資料。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat 分頁"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "管理並分享由您的 Workflow 技能所產生的檔案。",
+    "bullets": [
+      "技能會將檔案寫入輸出目錄；Heym 會自動擷取它們。",
+      "透過 Token 連結或受密碼保護的 Basic-Auth URL 分享檔案。",
+      "一鍵下載檔案。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "儲存",
+        "title": "自動擷取的檔案",
+        "description": "技能會寫入 _OUTPUT_DIR；執行後檔案會直接顯示於此。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "分享",
+        "title": "彈性的存取控制",
+        "description": "公開連結、密碼保護、到期日與下載次數限制。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "格式",
+        "title": "PDF、DOCX、CSV 及更多",
+        "description": "使用 reportlab、python-docx 或標準 Python 產生任意檔案類型。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "開啟 Drive 文件",
+        "description": "閱讀 Drive 分頁的完整參考。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive 分頁"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "檔案產生指南",
+        "description": "了解技能如何產生檔案。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "檔案產生"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "檔案如何到達此處",
+        "content": "當技能將檔案放入 _OUTPUT_DIR 目錄時，Heym 會將其持久儲存並產生下載 Token。"
+      },
+      {
+        "id": "drive-share",
+        "title": "分享選項",
+        "content": "建立供任何人使用的公開 Token 連結，或建立受密碼保護的 URL，包含到期日與下載次數限制。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive 分頁"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "認證資料",
+    "summary": "管理金鑰、Token 與連線詳細資訊，讓 Workflow 能安全地與外部系統通訊。",
+    "bullets": [
+      "集中儲存存取憑證，而非分散於各個節點。",
+      "認證資料可驅動 LLM、整合、向量儲存及更多功能。",
+      "當團隊需要共用相同連線而不複製金鑰時，可精準開放存取。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "安全性",
+        "title": "安全的存取憑證",
+        "description": "一次設定驗證，即可在 Workflow 中安全重複使用。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "整合",
+        "title": "廣泛支援",
+        "description": "支援 OpenAI、DeepSeek、Slack、Redis、Qdrant 與 Grist 等供應商。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "協作",
+        "title": "精準分享",
+        "description": "使用團隊或使用者分享，而非建立重複項目。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "閱讀認證資料文件",
+        "description": "開啟認證資料 Dashboard 的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "認證資料分頁"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "檢視整合",
+        "description": "瀏覽第三方整合設定的詳細資訊。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "第三方整合"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "使用位置",
+        "content": "認證資料會在節點設定中被參照，並於執行期間安全解析。"
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "適合團隊的模式",
+        "content": "當多位開發人員需要相同的供應商存取權時，請優先使用分享；這能確保行為一致並簡化稽核。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "認證資料分頁"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "向量儲存",
+    "summary": "為需要語意搜尋、記憶或 RAG 上下文嵌入的 Workflow 準備檢索後端。",
+    "bullets": [
+      "向量儲存構成檢索導向 Workflow 的資料基礎。",
+      "搭配 RAG 節點與 AI 流程使用，以實現精準的文件 grounding。",
+      "此分頁可作為有根據的 Prompt 的基礎設施。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG 基礎設施",
+        "title": "可搜尋的記憶",
+        "description": "當 Workflow 需要上下文時，準備文件以供語意檢索。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "品質",
+        "title": "有根據的 Grounding",
+        "description": "檢索透過提供佐證來降低幻覺風險。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "營運",
+        "title": "一次集中管理",
+        "description": "建立向量儲存並在多個 Workflow 中重複使用。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "開啟向量儲存文件",
+        "description": "閱讀向量儲存 Dashboard 的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "向量儲存分頁"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "檢視 RAG 節點文件",
+        "description": "開啟 Qdrant RAG 節點的參考。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "定位",
+        "content": "此分頁用於準備儲存層。實際的檢索邏輯位於 Workflow 內部（例如透過 RAG 或 Agent 模式）。"
+      },
+      {
+        "id": "vectors-choice",
+        "title": "使用時機",
+        "content": "當您的 Workflow 需要搜尋非結構化知識庫，而非僅依賴 LLM 記憶時，請選擇向量儲存。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "向量儲存分頁"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "管理 Model Context Protocol 連線，讓 Agent Workflow 能安全地存取工具與外部功能。",
+    "bullets": [
+      "MCP 將外部工具生態系統轉化為可用的 Agent 上下文。",
+      "當 Agent 需要比靜態 Prompt 更豐富的工具時，請使用此分頁。",
+      "連線品質直接決定您 Agent 的能力。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Agent 工具",
+        "title": "外部功能層",
+        "description": "提供 Agent 在推理期間可呼叫的工具伺服器。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "執行階段控制",
+        "title": "連線設定",
+        "description": "設定 Endpoint、標籤與傳輸方式，以確保 Workflow 可靠。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "平台深度",
+        "title": "超越 Prompt",
+        "description": "MCP 讓 Heym Workflow 能夠採取行動，而不只是回應。",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "開啟 MCP 文件",
+        "description": "閱讀 MCP 分頁的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP 分頁"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Agent 架構",
+        "description": "了解 MCP 如何整合至 Agent 執行流程。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Agent 架構"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "重要性",
+        "content": "當您的 Agent 需要個別節點以外的工具、環境存取或系統整合時，尤其重要。"
+      },
+      {
+        "id": "mcp-ops",
+        "title": "營運方針",
+        "content": "將 MCP 連線視為基礎設施：穩定的標籤與明確的職責歸屬可簡化除錯。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP 分頁"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "執行紀錄",
+    "summary": "檢視 AI 與 Workflow 執行的詳細 Trace，以了解發生了什麼，而不只是是否成功。",
+    "bullets": [
+      "使用 Trace 進行除錯、效能分析與 Prompt 品質檢查。",
+      "Trace 可解釋模型行為、延遲與執行路徑。",
+      "遇到非預期結果或不穩定執行時的第一站。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "除錯",
+        "title": "看見隱藏的步驟",
+        "description": "Trace 資料會揭露 Workflow 與模型實際執行的內容。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "評估",
+        "title": "支援迭代",
+        "description": "在最佳化 Prompt、工具與模型時使用 Trace。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "可靠性",
+        "title": "追溯結果",
+        "description": "良好的 Trace 可減少錯誤分析時的臆測。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "開啟執行紀錄文件",
+        "description": "閱讀執行紀錄 Dashboard 的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "執行紀錄分頁"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Trace 何時不可或缺",
+        "content": "一旦 Workflow 涉及多步驟、大量模型或工具導向，僅靠狀態顯示已不足夠。"
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace 與歷史紀錄",
+        "content": "歷史紀錄顯示某次執行「發生過」。Trace 則解釋它「為何」如此表現。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "執行紀錄分頁"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "警示",
+    "summary": "定義跨時間窗口的閾值，一旦超過即自動收到通知。",
+    "bullets": [
+      "四種類型：錯誤次數、執行時長、Token／成本閾值與執行計數器。",
+      "每個警示皆以選定的時間窗口進行評估，絕不依據單一事件。",
+      "以自然語言描述需求，助理便會自動配置警示。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "時間窗口",
+        "title": "看趨勢而非離群值",
+        "description": "單次執行失敗只是雜訊。十分鐘內十二次失敗才是事故。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "儲存前",
+        "title": "回溯測試條件",
+        "description": "檢查步驟會以真實歷史資料測試，以便事先校準閾值。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "反應",
+        "title": "警報時執行 Workflow",
+        "description": "Alert Payload 會成為 Workflow 的輸入，用於透過 Slack 或電子郵件自動發送通知。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "開啟警示文件",
+        "description": "閱讀警示類型、窗口與助理的運作方式。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "警示分頁"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "用途",
+        "content": "分析與 Trace 回答的是您主動提出的問題。警示則讓 Heym 在關鍵閾值被超過時主動發聲。"
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "為何能避免誤報",
+        "content": "警示觸發一次後會等待指標恢復，這能防止通知洪水。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "警示分頁"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "分析",
+    "summary": "追蹤使用模式與系統行為，以了解活動、成長及隨時間的變化。",
+    "bullets": [
+      "透過分析辨識採用率、吞吐量與異常尖峰。",
+      "平台層級的視野，而非單一除錯工具。",
+      "結合分析與 Trace 及歷史記錄，同時取得訊號與解釋。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "訊號",
+        "title": "使用透明度",
+        "description": "辨識趨勢，而非孤立檢視個別執行。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "容量",
+        "title": "營運意識",
+        "description": "及早發現負載尖峰與驟降並進行調查。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "決策輔助",
+        "title": "精準最佳化",
+        "description": "分析有助於排定最重要 Workflow 的優先順序。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "開啟分析文件",
+        "description": "閱讀分析 Dashboard 的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "分析分頁"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "用途",
+        "content": "使用分析來掌握整個平台營運的模式、吞吐量與彙總行為。"
+      },
+      {
+        "id": "analytics-followup",
+        "title": "後續步驟",
+        "content": "在此辨識訊號，然後切換至 Trace、歷史記錄或編輯器以分析原因。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "分析分頁"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "建立由圖表 Widget 組成的網格，每個 Widget 皆由各自的 Workflow 提供資料——所有指標一目了然。",
+    "bullets": [
+      "每個 Widget 由一個 Workflow 驅動，將資料送至 Chart Output 節點。",
+      "依指標選用長條圖、折線圖、圓餅圖、表格與數字 Widget。",
+      "以 AI 生成或調整 Widget，並快取結果以加快載入速度。",
+      "建立多個 Dashboard，並以唯讀或可寫權限分享給個人或團隊。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "組合",
+        "title": "Workflow 驅動的圖表",
+        "description": "Workflow 產生的所有資料皆以圖表視覺化呈現。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "效能",
+        "title": "快取結果",
+        "description": "Widget 快取可避免每次開啟頁面時重複執行 Workflow。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI 輔助",
+        "title": "生成與調整",
+        "description": "描述指標，讓 AI 自動建立 Widget。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "開啟 Dashboard 文件",
+        "description": "了解如何建立 Dashboard Widget。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard 分頁"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "用途",
+        "content": "使用 Dashboard 持續掌握來自您自身 Workflow 的重要指標概覽。"
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "建立方式",
+        "content": "新增 Widget、配置 Workflow 使 Chart Output 前的最後一個節點輸出資料列，並在網格中排列。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard 分頁"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Teams",
+    "summary": "管理共享存取權，讓 Workflow、Credentials、變數與向量儲存能協作使用而不重複。",
+    "bullets": [
+      "Teams 是可擴展地共享平台資源最簡潔的方式。",
+      "當權限應依群組而非個人劃分時，請使用 Teams。",
+      "在成長中的 Workspace 中確保結構化協作。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "協作",
+        "title": "群組式共享",
+        "description": "一次為整個 Team 授予存取權，而非手動逐一授權個別使用者。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "清晰",
+        "title": "明確的職責歸屬",
+        "description": "資源管理依循實際的團隊結構。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "擴展",
+        "title": "減少管理負擔",
+        "description": "新成員透過 Team 自動繼承存取權限。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "開啟 Teams 文件",
+        "description": "閱讀 Teams Dashboard 的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Teams 分頁"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "資源共享",
+        "description": "閱讀資源共享的詳細說明。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Credentials 共享"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Teams 的優勢",
+        "content": "Teams 將身分與資源存取結合，實現順暢協作。"
+      },
+      {
+        "id": "teams-tip",
+        "title": "實務建議",
+        "content": "當 Workflow 或 Credential 屬於長期工作群組時，請優先採用 Team 共享。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Teams 分頁"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "日誌",
+    "summary": "當您需要 Workflow 輸出以外的基礎架構洞察時，閱讀 Stack 層級的 Log。",
+    "bullets": [
+      "使用 Log 進行服務除錯、Container 狀態與環境問題排查。",
+      "當問題根源位於 Workflow 層級之下時特別有幫助。",
+      "與 Trace 搭配使用，取得應用與系統層級的佐證。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "基礎架構",
+        "title": "Container 透明度",
+        "description": "查看後端服務在 Heym 介面之下執行的內容。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "疑難排解",
+        "title": "找出根本原因",
+        "description": "Log 有助於診斷啟動問題、當機或整合錯誤。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "互補",
+        "title": "與 Workflow 結果的差異",
+        "description": "Workflow 輸出顯示結果；Log 顯示系統行為。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "開啟日誌文件",
+        "description": "閱讀日誌 Dashboard 的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "日誌分頁"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "使用時機",
+        "content": "當問題看似與部署、服務或環境相關時，請切換至此處。"
+      },
+      {
+        "id": "logs-combo",
+        "title": "最佳組合",
+        "content": "將 Log 與 Trace 及歷史記錄搭配使用，從症狀迅速找到根本原因。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "日誌分頁"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "評估",
+    "summary": "為 Agent 的 Workflow 建立可重現的基準測試，以便可靠地比較 Prompt、模型與 Workflow 的變更。",
+    "bullets": [
+      "測試套件與測試案例將主觀的 Workflow 品質轉化為可量測的指標。",
+      "在部署 Prompt 或模型更新前進行回歸檢查的理想場所。",
+      "針對同一資料集與同一評估方法比較多個模型。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "品質循環",
+        "title": "Agent 基準測試",
+        "description": "重複執行同一套件，而非依賴隨機抽查。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "比較",
+        "title": "模型與 Prompt 測試",
+        "description": "觀察不同設定在同一測試集上的表現。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "安全性",
+        "title": "可靠的迭代",
+        "description": "在部署前以實證方式證明改進。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "開啟評估文件",
+        "description": "閱讀評估頁面的指南。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "評估分頁"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent 節點參考",
+        "description": "查看大多數評估套件所針對的 Workflow 區域。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent 節點"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "套件設計",
+        "content": "良好的套件會反映真實使用者案例、邊界條件，以及必須保持穩定的核准步驟。"
+      },
+      {
+        "id": "evals-usage",
+        "title": "比較參數",
+        "content": "典型的比較包括在同一資料集上的 Prompt 變體、模型選擇、Temperature 設定與 Workflow 修訂。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "評估分頁"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "文件",
+    "summary": "直接在應用程式內搜尋精確的平台參考資料，並在需要時深入閱讀。",
+    "bullets": [
+      "Heym 文件專為快速掌握與精準查閱而設計。",
+      "側邊欄、搜尋與交叉參照可讓您快速切換不同概念。",
+      "Showcase 會直接連結至目前開啟的文章。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "應用程式內參考",
+        "title": "隨時可取用",
+        "description": "文件留在產品流程中，無需開啟外部分頁。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "概覽",
+        "title": "重點優先",
+        "description": "文章以核心要點開頭，並透過連結延伸。"
+      },
+      {
+        "eyebrow": "情境感知",
+        "title": "目前文章",
+        "description": "閱讀文件時，「深入了解」動作會直接跟隨該文章。"
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "查看簡介",
+        "description": "開啟文件簡介作為預設進入點。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "簡介"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "快速導覽",
+        "content": "若已熟悉主題，可使用分類側邊欄與指令搜尋。"
+      },
+      {
+        "id": "docs-depth",
+        "title": "Showcase 的輔助",
+        "content": "Showcase 會保持摘要精簡，並在需要時引導至詳細文件。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "簡介"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "排程",
+    "summary": "在視覺化日曆上總覽所有啟用中的 Cron Workflow，並控管執行時間。",
+    "bullets": [
+      "在日、週與月檢視之間切換，以取得合適的解析度。",
+      "將游標懸停在區塊上可查看 Cron 表達式；點擊即可直接跳至 Canvas。",
+      "使用此分頁檢查執行密度並找出重疊。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "透明度",
+        "title": "日曆檢視",
+        "description": "啟用中的 Cron Workflow 會以區塊形式顯示在其排定時間。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "導覽",
+        "title": "一鍵前往 Canvas",
+        "description": "點擊區塊即可直接開啟 Workflow 編輯器。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "範圍",
+        "title": "日、週或月",
+        "description": "調整解析度以檢查個別小時或規劃整個月份。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "開啟排程文件",
+        "description": "閱讀排程分頁的參考資料。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "排程分頁"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron 節點參考",
+        "description": "了解如何在 Canvas 上設定 Cron Trigger。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "使用時機",
+        "content": "檢查排定的自動化、找出時程衝突，並確保重要 Workflow 保持啟用。"
+      },
+      {
+        "id": "schedules-color",
+        "title": "顏色編碼",
+        "content": "每個 Workflow 會依其 ID 取得一致的顏色，並在日、週與月檢視中保持相同。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "排程分頁"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "資料表",
+    "summary": "直接在 Heym 中建立結構化資料表，並在 Workflow 中以程式化方式使用。",
+    "bullets": [
+      "建立具有型別欄位的資料表，手動填入或透過 CSV 匯入。",
+      "使用 DataTable Workflow 節點以程式化方式讀取、寫入與查詢資料列。",
+      "將資料表分享給使用者或團隊，並設定讀取或寫入權限。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "整合資料",
+        "title": "內建儲存",
+        "description": "無需外部資料庫或 API Key 即可儲存結構化資料。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow 整合",
+        "title": "DataTable 節點",
+        "description": "在任何 Workflow 中尋找、插入、更新與刪除資料列。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "協作",
+        "title": "分享與權限",
+        "description": "為使用者與團隊指派細緻的讀取與寫入存取權。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "資料表分頁文件",
+        "description": "閱讀資料表分頁的參考資料。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "資料表"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable 節點文件",
+        "description": "閱讀 DataTable 節點的參考資料。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "什麼是資料表？",
+        "content": "資料表是 Heym 中的內建結構化儲存：具型別欄位（String、Number、Boolean、Date、JSON）、行內編輯，以及 CSV 匯入／匯出。"
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "在 Workflow 中的使用",
+        "content": "DataTable 節點支援 find、getAll、getById、insert、update、remove 與 upsert，且無需 Credentials，直接由 Workflow 擁有者執行。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "資料表"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow 編輯器",
+    "summary": "直接在執行情境中於 Canvas 上建立、測試、除錯與最佳化 Workflow。",
+    "bullets": [
+      "在編輯器中，節點設計、資料流與執行行為匯聚在一起。",
+      "使用側邊欄與歷史記錄，在建立與除錯之間快速切換。",
+      "Showcase 在此刻意保持精簡，以提供 Canvas 最大空間。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "視覺化 Workflow 設計",
+        "description": "連接節點、分支邏輯，並直接建模執行時流程。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "迭代",
+        "title": "邊建立邊除錯",
+        "description": "使用歷史記錄、除錯面板與執行結果，實現快速回饋循環。"
+      },
+      {
+        "eyebrow": "功能範圍",
+        "title": "進階功能隨手可得",
+        "description": "Portal、分享、範本與驗證都直接在 Canvas 上。"
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "開啟 Canvas 文件",
+        "description": "閱讀 Canvas 功能的參考資料。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas 功能"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "鍵盤快速鍵",
+        "description": "開啟編輯器中鍵盤快速鍵的總覽。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "鍵盤快速鍵"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "工作節奏",
+        "content": "在 Canvas 上建模、檢查輸出的假設，並在側邊欄調整參數，而不會失去焦點。"
+      },
+      {
+        "id": "editor-complexity",
+        "title": "精簡的 Showcase",
+        "content": "由於編輯器已提供大量資訊，Showcase 可作為輕量的方向指引。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas 功能"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import type { ShowcaseContext } from "@/features/showcase/showcase.types";
+import { getLocalizedIntro } from "@/content-packs";
 
 export interface ShowcaseIntroContent {
   title: string;
@@ -116,6 +117,90 @@ export const SHOWCASE_INTRO_CONTENT_BY_CONTEXT: Record<ShowcaseContext, Showcase
   },
 };
 
+export const SHOWCASE_INTRO_CONTENT_BY_CONTEXT_DE: Record<ShowcaseContext, ShowcaseIntroContent> = {
+  "dashboard:workflows": {
+    title: "Schneller bauen in Workflows",
+    description: "Wähle einen Workflow, um Trigger, letzte Ausführung und Schritte direkt neben der Liste einzusehen. Nach Status filtern, direkt ausführen und mit Ordnern Übersicht behalten.",
+  },
+  "dashboard:board": {
+    title: "Aufgaben über ein agentenbasiertes Board steuern",
+    description:
+      "Karten durch Spalten ziehen, um Workflow-Ketten mit dem vollen Kontext der Karte auszulösen. Ergebnisse fließen direkt zur Karte zurück.",
+  },
+  "dashboard:templates": {
+    title: "Mit bewährten Vorlagen starten",
+    description: "Vorgefertigte Workflow-Muster nutzen, um Einrichtungszeit zu sparen und Konsistenz zu gewährleisten.",
+  },
+  "dashboard:globalvariables": {
+    title: "Geteilte Variablen zentralisieren",
+    description: "Wiederverwendbare Werte einmal speichern und über alle Workflows hinweg referenzieren.",
+  },
+  "dashboard:chat": {
+    title: "Chat für schnelle Iteration nutzen",
+    description: "Schnelle Fragen stellen, Ideen testen und zum Editor wechseln, sobald der Workflow-Ablauf klar ist.",
+  },
+  "dashboard:credentials": {
+    title: "Geheimnisse sicher verwalten",
+    description: "Provider-Schlüssel und Tokens zentral verwalten, damit Workflows sichere Verbindungen ohne Offenlegung von Geheimnissen nutzen können.",
+  },
+  "dashboard:vectorstores": {
+    title: "Retrieval-basierte Workflows unterstützen",
+    description: "Vektorspeicher für fundierte KI-Antworten, semantische Suche und skalierbare RAG-Pipelines vorbereiten.",
+  },
+  "dashboard:mcp": {
+    title: "Externe Tool-Ökosysteme anbinden",
+    description: "MCP-Verbindungen konfigurieren, damit Agenten strukturierte Tools und Aktionen über einfache Prompts hinaus ausführen können.",
+  },
+  "dashboard:traces": {
+    title: "Ausführungsverhalten verstehen",
+    description: "Trace-Details analysieren, um Ergebnisse zu debuggen, Ausführungen zu vergleichen und Zuverlässigkeit zu steigern.",
+  },
+  "dashboard:alerts": {
+    title: "Benachrichtigungen erhalten, bevor Probleme eskalieren",
+    description: "Schwellenwerte für Fehler, Dauer, Kosten und Ausführungsanzahl festlegen und sich bei Überschreitung warnen lassen.",
+  },
+  "dashboard:analytics": {
+    title: "Plattformleistung verfolgen",
+    description: "Nutzungs- und Ausführungstrends überwachen, um gezielt auf Basis realer Signale zu optimieren.",
+  },
+  "dashboard:dashboard": {
+    title: "Eigene Dashboards erstellen",
+    description: "Workflow-gestützte Diagramm-Widgets zusammenstellen, um wichtige Metriken auf einen Blick zu sehen.",
+  },
+  "dashboard:teams": {
+    title: "Zusammenarbeit sauber skalieren",
+    description: "Workflows und Ressourcen nach Teams aufteilen, um Zugriffsberechtigungen und Verantwortlichkeiten transparent zu halten.",
+  },
+  "dashboard:logs": {
+    title: "Probleme auf Systemebene diagnostizieren",
+    description: "Logs bei Infrastruktur- oder Umgebungsproblemen für tiefere Laufzeiteinblicke nutzen.",
+  },
+  "dashboard:drive": {
+    title: "Generierte Dateien verwalten",
+    description: "Workflow-Ausgaben über sichere Links und kontrollierte Zugriffsoptionen prüfen, herunterladen und teilen.",
+  },
+  "dashboard:datatable": {
+    title: "Nativ mit strukturierten Daten arbeiten",
+    description: "Typisierte Tabellen erstellen und direkt aus Workflows für reproduzierbare Lese- und Schreiboperationen ansteuern.",
+  },
+  "dashboard:schedules": {
+    title: "Automatisierungszeitpläne überblicken",
+    description: "Alle aktiven Cron-Workflows in einer Kalenderansicht (Tag, Woche, Monat) einsehen. Klick auf einen Block führt direkt zum Canvas.",
+  },
+  evals: {
+    title: "Qualität verlässlich bewerten",
+    description: "Wiederholbare Test-Suites ausführen, um Prompt- und Modelländerungen vor Produktiv-Rollouts fundiert zu vergleichen.",
+  },
+  docs: {
+    title: "Schnelle Orientierung in der App",
+    description: "Kompakte Referenzen durchsuchen und gezielt vertiefen, ohne den aktuellen Workflow zu verlassen.",
+  },
+  editor: {
+    title: "Auf dem Canvas entwerfen und debuggen",
+    description: "Knoten visuell verknüpfen, sofort ausführen und Verhalten mit direktem Feedback in einem Arbeitsbereich verfeinern.",
+  },
+};
+
 export function getShowcaseIntroVideo(context: ShowcaseContext | null): string | null {
   if (!context) return null;
   return SHOWCASE_INTRO_VIDEO_BY_CONTEXT[context] ?? null;
@@ -123,6 +208,12 @@ export function getShowcaseIntroVideo(context: ShowcaseContext | null): string |
 
 export function getShowcaseIntroContent(context: ShowcaseContext | null): ShowcaseIntroContent | null {
   if (!context) return null;
+  try {
+    const localized = getLocalizedIntro(context);
+    if (localized) return localized;
+  } catch {
+    // fallback
+  }
   return SHOWCASE_INTRO_CONTENT_BY_CONTEXT[context] ?? null;
 }
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-vue-next";
 import { useRouter } from "vue-router";
@@ -18,6 +19,7 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
+const { t } = useI18n();
 const reportHistoryTarget = inject(setHitlHistoryTargetKey, null);
 const preview = computed(() => props.seedItems !== undefined);
 const items = ref<HitlWidgetItem[]>(props.seedItems ?? []);
@@ -34,8 +36,8 @@ const current = computed(() => items.value[index.value] ?? null);
 const atStart = computed(() => index.value <= 0);
 const atEnd = computed(() => items.value.length === 0 || index.value >= items.value.length - 1);
 const positionLabel = computed(() => {
-  if (items.value.length === 0) return `${pendingTotal.value} pending`;
-  return `${index.value + 1}/${items.value.length} pending`;
+  if (items.value.length === 0) return t("dashboards.hitl.pendingCount", { count: pendingTotal.value });
+  return t("dashboards.hitl.positionPending", { current: index.value + 1, total: items.value.length });
 });
 const currentHtml = computed(() => renderChartMarkdown(current.value?.text ?? ""));
 watch(
@@ -148,7 +150,7 @@ async function decide(action: "accept" | "edit" | "refuse"): Promise<void> {
   if (!current.value || preview.value || submitting.value) return;
   const text = editText.value.trim();
   if (action === "edit" && !text) {
-    actionError.value = "Edited text is required.";
+    actionError.value = t("dashboards.hitl.editedTextRequired");
     return;
   }
   submitting.value = true;
@@ -160,7 +162,7 @@ async function decide(action: "accept" | "edit" | "refuse"): Promise<void> {
     });
     dropCurrent();
   } catch (error: unknown) {
-    actionError.value = inboxError(error, "Failed to submit the review.");
+    actionError.value = inboxError(error, t("dashboards.hitl.failedToSubmitReview"));
   } finally {
     submitting.value = false;
   }
@@ -184,7 +186,7 @@ onMounted(() => {
         variant="ghost"
         size="icon"
         class="disabled:!opacity-25"
-        aria-label="Previous review"
+        :aria-label="$t('dashboards.hitl.previousReview')"
         :disabled="atStart"
         @click="step(-1)"
       >
@@ -197,7 +199,7 @@ onMounted(() => {
         variant="ghost"
         size="icon"
         class="disabled:!opacity-25"
-        aria-label="Next review"
+        :aria-label="$t('dashboards.hitl.nextReview')"
         :disabled="atEnd"
         @click="step(1)"
       >
@@ -209,7 +211,7 @@ onMounted(() => {
       v-if="loading"
       class="flex flex-1 items-center justify-center text-sm text-muted-foreground"
     >
-      Loading reviews…
+      {{ $t("dashboards.hitl.loadingReviews") }}
     </div>
     <div
       v-else-if="loadError"
@@ -221,7 +223,7 @@ onMounted(() => {
         size="sm"
         @click="loadInbox"
       >
-        Retry
+        {{ $t("dashboards.hitl.retry") }}
       </Button>
     </div>
 
@@ -229,7 +231,7 @@ onMounted(() => {
       v-else-if="!current"
       class="flex flex-1 items-center justify-center text-sm text-muted-foreground"
     >
-      No pending reviews
+      {{ $t("dashboards.hitl.noPendingReviews") }}
     </div>
 
     <div

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { Plus, Settings, SquareKanban, Trash2 } from "lucide-vue-next";
 
@@ -20,6 +21,7 @@ const boardStore = useBoardStore();
 const route = useRoute();
 const router = useRouter();
 const { showToast } = useToast();
+const { t } = useI18n();
 const createOpen = ref(false);
 const editOpen = ref(false);
 const openCardId = ref<string | null>(null);
@@ -73,7 +75,7 @@ async function selectBoard(boardId: string | undefined): Promise<void> {
 async function removeActiveBoard(): Promise<void> {
   const board = boardStore.activeBoard;
   if (!board) return;
-  if (!window.confirm(`Delete board "${board.name}" and all of its cards?`)) return;
+  if (!window.confirm(t("board.confirmDeleteBoard", { name: board.name }))) return;
   await boardStore.deleteBoard(board.id);
   if (boardStore.boards.length > 0) {
     await openBoardWithUrl(boardStore.boards[0].id);
@@ -98,7 +100,7 @@ async function openErrorHistory(cardId: string): Promise<void> {
       (run) => run.status === "failed" && run.workflow_id !== null,
     );
     if (!failedRun?.workflow_id) {
-      showToast("No workflow error history is available for this card", "error");
+      showToast(t("board.noErrorHistoryAvailable"), "error");
       return;
     }
 
@@ -107,7 +109,7 @@ async function openErrorHistory(cardId: string): Promise<void> {
     historyWorkflowId.value = failedRun.workflow_id;
     historyOpen.value = true;
   } catch {
-    showToast("Failed to load card error history", "error");
+    showToast(t("board.failedToLoadErrorHistory"), "error");
   }
 }
 
@@ -129,7 +131,7 @@ function closeErrorHistory(): void {
     >
       <div class="mr-auto flex min-w-0 flex-1 flex-col sm:mr-0 sm:flex-initial sm:shrink">
         <h2 class="text-xl font-bold tracking-tight md:text-2xl">
-          Board
+          {{ $t("board.title") }}
         </h2>
         <p
           v-if="boardStore.activeBoard?.description"
@@ -152,9 +154,9 @@ function closeErrorHistory(): void {
           :key="boardStore.activeBoard?.name ?? ''"
           :model-value="boardStore.activeBoard?.id ?? ''"
           :options="boardOptions"
-          placeholder="Select board"
-          search-placeholder="Search boards…"
-          aria-label="Select board"
+          :placeholder="$t('board.selectBoard')"
+          :search-placeholder="$t('board.searchBoards')"
+          :aria-label="$t('board.selectBoard')"
           @update:model-value="selectBoard"
         />
       </div>
@@ -162,20 +164,20 @@ function closeErrorHistory(): void {
         size="sm"
         variant="outline"
         class="shrink-0 px-3 sm:px-4"
-        aria-label="New board"
+        :aria-label="$t('board.newBoard')"
         data-testid="board-new"
         @click="createOpen = true"
       >
         <Plus class="h-4 w-4 sm:mr-1" />
-        <span>New<span class="hidden sm:inline"> board</span></span>
+        <span>{{ $t("board.newBoard") }}</span>
       </Button>
       <Button
         v-if="boardStore.isOwner"
         size="sm"
         variant="ghost"
         class="w-11 shrink-0 px-0 sm:w-auto sm:px-4"
-        aria-label="Board settings"
-        title="Board settings"
+        :aria-label="$t('board.boardSettings')"
+        :title="$t('board.boardSettings')"
         data-testid="board-edit"
         @click="editOpen = true"
       >
@@ -186,7 +188,7 @@ function closeErrorHistory(): void {
         size="sm"
         variant="ghost"
         class="w-11 shrink-0 px-0 sm:w-auto sm:px-4"
-        aria-label="Delete board"
+        :aria-label="$t('board.deleteBoard')"
         @click="removeActiveBoard"
       >
         <Trash2 class="h-4 w-4 text-muted-foreground" />
@@ -199,14 +201,13 @@ function closeErrorHistory(): void {
     >
       <SquareKanban class="h-10 w-10 text-muted-foreground" />
       <p class="max-w-md text-sm text-muted-foreground">
-        No boards yet. Cards are agentic jobs — moving one into a column runs that column's
-        workflows with the card's full context.
+        {{ $t("board.noBoardsYet") }}
       </p>
       <Button
         data-testid="board-empty-create"
         @click="createOpen = true"
       >
-        Create your first board
+        {{ $t("board.createFirstBoard") }}
       </Button>
     </div>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 import AlertAiPrompt from "./AlertAiPrompt.vue";
 import StepCondition from "./StepCondition.vue";
@@ -37,9 +38,16 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), { editing: null });
 const emit = defineEmits<{ close: []; saved: [alert: Alert] }>();
 
+const { t } = useI18n();
 const alertsStore = useAlertsStore();
 
-const STEP_TITLES = ["Type", "Scope", "Condition", "Response", "Review"];
+const STEP_TITLES = computed(() => [
+  t("alerts.wizard.stepType"),
+  t("alerts.wizard.stepScope"),
+  t("alerts.wizard.stepCondition"),
+  t("alerts.wizard.stepResponse"),
+  t("alerts.wizard.stepReview"),
+]);
 
 const step = ref(0);
 const name = ref("");
@@ -61,7 +69,7 @@ const isEditing = computed((): boolean => props.editing !== null);
 
 const dialogTitle = computed(
   (): string =>
-    `${isEditing.value ? "Edit alert" : "New alert"} — ${STEP_TITLES[step.value]}`,
+    `${isEditing.value ? t("alerts.editAlert") : t("alerts.newAlert")} — ${STEP_TITLES.value[step.value]}`,
 );
 
 const workflowName = computed(
@@ -305,7 +313,7 @@ async function save(): Promise<void> {
           variant="ghost"
           @click="step -= 1"
         >
-          Back
+          {{ $t('common.back') }}
         </Button>
         <span v-else />
 
@@ -314,21 +322,21 @@ async function save(): Promise<void> {
             variant="ghost"
             @click="emit('close')"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             v-if="step < 4"
             :disabled="!canAdvance"
             @click="step += 1"
           >
-            Next
+            {{ $t('common.next') }}
           </Button>
           <Button
             v-else
             :disabled="!canSave"
             @click="save"
           >
-            {{ isEditing ? "Save changes" : "Create alert" }}
+            {{ isEditing ? $t('common.saveChanges') : $t('alerts.createAlert') }}
           </Button>
         </div>
       </div>

@@ -456,12 +456,12 @@ async function runGenerateTestData(): Promise<void> {
   <div class="h-full flex flex-col overflow-hidden">
     <div class="p-4 shrink-0 flex items-center justify-between gap-2">
       <h3 class="text-sm font-semibold">
-        Performance
+        {{ $t('evals.performance') }}
         <span
           v-if="runs.length > 0"
           class="font-normal text-muted-foreground ml-1"
         >
-          · Overall: {{ overallAvg }}%
+          · {{ $t('evals.overall') }}: {{ overallAvg }}%
         </span>
       </h3>
       <div
@@ -478,7 +478,7 @@ async function runGenerateTestData(): Promise<void> {
             v-if="isGenerating"
             class="w-4 h-4 animate-spin"
           />
-          Generate Test Data
+          {{ $t('evals.generateTestData') }}
         </Button>
         <Button
           size="sm"
@@ -486,7 +486,7 @@ async function runGenerateTestData(): Promise<void> {
           @click="addRow"
         >
           <Plus class="w-4 h-4" />
-          Add Row
+          {{ $t('evals.addRow') }}
         </Button>
       </div>
     </div>
@@ -497,7 +497,7 @@ async function runGenerateTestData(): Promise<void> {
       class="shrink-0 overflow-visible px-4 -mt-2 pb-1 space-y-1"
     >
       <div class="text-xs font-medium text-muted-foreground -mt-1">
-        Last run: {{ lastRunDate }}
+        {{ $t('evals.lastRun', { date: lastRunDate }) }}
       </div>
       <apexchart
         type="line"
@@ -511,7 +511,7 @@ async function runGenerateTestData(): Promise<void> {
         :key="testCasesKey"
       >
         <h4 class="px-4 pt-1 pb-2 text-sm font-semibold">
-          Test Cases
+          {{ $t('evals.testCases') }}
         </h4>
         <table class="w-full border-collapse text-sm table-fixed">
           <colgroup>
@@ -531,10 +531,10 @@ async function runGenerateTestData(): Promise<void> {
                 #
               </th>
               <th class="px-2 py-2 text-left font-medium text-muted-foreground">
-                Input
+                {{ $t('evals.input') }}
               </th>
               <th class="px-2 py-2 text-left font-medium text-muted-foreground">
-                Expected Output
+                {{ $t('evals.expectedOutput') }}
               </th>
               <th
                 v-for="m in modelsFromRun"
@@ -566,7 +566,7 @@ async function runGenerateTestData(): Promise<void> {
                   v-else
                   :value="tc.input"
                   class="w-full min-h-[60px] max-h-[60px] rounded-lg border border-border/60 bg-background px-2 py-1.5 text-xs font-mono resize-none overflow-y-auto focus:outline-none focus:ring-1 focus:ring-primary/40"
-                  placeholder="Input..."
+                  :placeholder="$t('evals.inputPlaceholder')"
                   @input="(e) => debouncedSaveTc(tc.id, 'input', (e.target as HTMLTextAreaElement).value)"
                 />
               </td>
@@ -581,7 +581,7 @@ async function runGenerateTestData(): Promise<void> {
                   v-else
                   :value="tc.expected_output"
                   class="w-full min-h-[60px] max-h-[60px] rounded-lg border border-border/60 bg-background px-2 py-1.5 text-xs font-mono resize-none overflow-y-auto focus:outline-none focus:ring-1 focus:ring-primary/40"
-                  placeholder="Expected..."
+                  :placeholder="$t('evals.expectedPlaceholder')"
                   @input="(e) => debouncedSaveTc(tc.id, 'expected_output', (e.target as HTMLTextAreaElement).value)"
                 />
               </td>
@@ -608,7 +608,7 @@ async function runGenerateTestData(): Promise<void> {
                   <template v-if="getResultForCell(tc.id, m)">
                     <span class="shrink-0">
                       <template v-if="getResultForCell(tc.id, m)!.error">
-                        Error
+                        {{ $t('common.error') }}
                       </template>
                       <template v-else>
                         {{ getAggregateForCell(tc.id, m) ?? formatScore(getResultForCell(tc.id, m)!.score) }}
@@ -635,14 +635,14 @@ async function runGenerateTestData(): Promise<void> {
                         v-if="getResultForCell(tc.id, m)!.error"
                         class="rounded-lg bg-destructive/10 border border-destructive/30 px-3 py-2 text-xs text-destructive"
                       >
-                        <span class="font-medium">Error: </span>
+                        <span class="font-medium">{{ $t('common.error') }}: </span>
                         {{ getResultForCell(tc.id, m)!.error }}
                       </div>
                       <div
                         v-if="getResultForCell(tc.id, m)!.explanation"
                         class="rounded-lg bg-muted/50 px-3 py-2 text-xs"
                       >
-                        <span class="font-medium text-muted-foreground">Evaluation: </span>
+                        <span class="font-medium text-muted-foreground">{{ $t('evals.evaluation') }} </span>
                         {{ getResultForCell(tc.id, m)!.explanation }}
                       </div>
                       <div
@@ -672,26 +672,26 @@ async function runGenerateTestData(): Promise<void> {
           v-if="testCases.length === 0"
           class="p-8 text-center text-muted-foreground text-sm"
         >
-          No test cases. Add a row or generate test data.
+          {{ $t('evals.noTestCases') }}
         </div>
       </div>
     </div>
 
     <Dialog
       :open="generateDialogOpen"
-      title="Generate Test Data"
+      :title="$t('evals.generateTestData')"
       size="lg"
       @close="generateDialogOpen = false"
     >
       <div class="space-y-4">
         <div>
           <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-            Model
+            {{ $t('evals.model') }}
           </Label>
           <Select
             v-model="selectedGenerateModelId"
             :options="generateModels.map((m) => ({ value: m.id, label: m.name }))"
-            placeholder="Select model"
+            :placeholder="$t('evals.selectModel')"
           />
         </div>
         <div class="flex gap-2 justify-end">
@@ -699,14 +699,14 @@ async function runGenerateTestData(): Promise<void> {
             variant="outline"
             @click="generateDialogOpen = false"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             :loading="isGenerating"
             :disabled="!selectedGenerateModelId"
             @click="runGenerateTestData"
           >
-            Generate
+            {{ $t('evals.generate') }}
           </Button>
         </div>
       </div>

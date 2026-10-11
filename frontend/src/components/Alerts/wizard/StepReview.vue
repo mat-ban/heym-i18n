@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { AlertTriangle, Loader2 } from "lucide-vue-next";
 
 import Input from "@/components/ui/Input.vue";
@@ -38,6 +39,7 @@ const emit = defineEmits<{
   "update:description": [value: string | null];
 }>();
 
+const { t, te } = useI18n();
 const alertsStore = useAlertsStore();
 
 const LOOKBACK_OPTIONS = [
@@ -62,13 +64,13 @@ const descriptionModel = computed({
 });
 
 const scopeLabel = computed((): string =>
-  props.scope === "system" ? "All my workflows" : (props.workflowName ?? "One workflow"),
+  props.scope === "system" ? t("alerts.wizard.allMyWorkflows") : (props.workflowName ?? t("alerts.wizard.oneWorkflow")),
 );
 
 const renotifyLabel = computed((): string =>
   props.renotifyMode === "on_recovery"
-    ? "Notify once, until it recovers"
-    : `Repeat every ${props.cooldownMinutes ?? 60} minutes`,
+    ? t("alerts.wizard.notifyOnce")
+    : `${t("alerts.wizard.repeatEvery")} ${props.cooldownMinutes ?? 60} min`,
 );
 
 /** A threshold that would have fired constantly is almost certainly set too low. */
@@ -107,7 +109,7 @@ watch(lookbackHours, runBacktest);
 <template>
   <div class="space-y-6">
     <div class="space-y-2">
-      <Label for="alert-name">Name</Label>
+      <Label for="alert-name">{{ $t('common.name') }}</Label>
       <Input
         id="alert-name"
         v-model="nameModel"
@@ -118,12 +120,12 @@ watch(lookbackHours, runBacktest);
         v-if="isAiFilled('name')"
         class="text-xs text-primary"
       >
-        Filled by AI
+        {{ $t('alerts.wizard.filledByAi') }}
       </p>
     </div>
 
     <div class="space-y-2">
-      <Label for="alert-description">Description (optional)</Label>
+      <Label for="alert-description">{{ $t('common.descriptionOptional') }}</Label>
       <Textarea
         id="alert-description"
         v-model="descriptionModel"
@@ -135,13 +137,13 @@ watch(lookbackHours, runBacktest);
       <dl class="grid gap-2 sm:grid-cols-2">
         <div>
           <dt class="text-xs text-muted-foreground">
-            Type
+            {{ $t('alerts.wizard.stepType') }}
           </dt>
-          <dd>{{ ALERT_TYPE_LABELS[alertType] }}</dd>
+          <dd>{{ te('alerts.types.' + alertType) ? t('alerts.types.' + alertType) : ALERT_TYPE_LABELS[alertType] }}</dd>
         </div>
         <div>
           <dt class="text-xs text-muted-foreground">
-            Watching
+            {{ $t('alerts.wizard.watching') }}
           </dt>
           <dd>{{ scopeLabel }}</dd>
         </div>
@@ -190,7 +192,7 @@ watch(lookbackHours, runBacktest);
           class="flex items-center gap-2 text-muted-foreground"
         >
           <Loader2 class="h-4 w-4 animate-spin" />
-          Checking what this would have done...
+          {{ $t('alerts.wizard.checkingPreview') }}
         </div>
 
         <p

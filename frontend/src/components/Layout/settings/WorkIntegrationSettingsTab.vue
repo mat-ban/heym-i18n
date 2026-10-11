@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { Check, Copy, KeyRound } from "lucide-vue-next";
 
@@ -15,6 +16,8 @@ import {
   saveWorkIntegrationConfig,
 } from "@/services/workIntegration";
 
+const { t } = useI18n();
+
 const config = ref<WorkIntegrationConfig | null>(null);
 const workUrl = ref("");
 const freshKey = ref<string | null>(null);
@@ -26,7 +29,7 @@ const error = ref<string | null>(null);
 
 const lastSeen = computed((): string => {
   const value = config.value?.last_seen_at;
-  return value ? new Date(value).toLocaleString() : "Never";
+  return value ? new Date(value).toLocaleString() : t("settings.workSection.never");
 });
 
 function errorDetail(err: unknown, fallback: string): string {
@@ -102,8 +105,7 @@ onMounted(load);
 <template>
   <div class="space-y-5">
     <p class="text-sm text-muted-foreground">
-      Heym Work is a second interface for business teams. People sign in through Heym, and every
-      job runs here.
+      {{ $t('settings.workSection.intro') }}
     </p>
 
     <p
@@ -117,14 +119,14 @@ onMounted(load);
       v-if="loading"
       class="text-sm text-muted-foreground"
     >
-      Loading...
+      {{ $t('common.loading') }}
     </p>
 
     <template v-if="config">
       <div class="space-y-2">
-        <Label for="work-url">Heym Work address</Label>
+        <Label for="work-url">{{ $t('settings.workSection.address') }}</Label>
         <p class="text-xs text-muted-foreground">
-          Where Heym Work runs, for example https://work.example.com. Sign-in returns there.
+          {{ $t('settings.workSection.addressDescription') }}
         </p>
         <div class="flex gap-2">
           <Input
@@ -137,15 +139,15 @@ onMounted(load);
             :loading="saving"
             @click="save()"
           >
-            Save
+            {{ $t('common.save') }}
           </Button>
         </div>
       </div>
 
       <div class="space-y-2">
-        <Label>Integration key</Label>
+        <Label>{{ $t('settings.workSection.integrationKey') }}</Label>
         <p class="text-xs text-muted-foreground">
-          Enter this key in Heym Work's setup. It is shown only once.
+          {{ $t('settings.workSection.integrationKeyDescription') }}
         </p>
         <div
           v-if="freshKey"
@@ -157,7 +159,7 @@ onMounted(load);
           <Button
             variant="outline"
             size="icon"
-            :aria-label="copied ? 'Copied' : 'Copy key'"
+            :aria-label="copied ? $t('settings.workSection.copied') : $t('settings.workSection.copyKey')"
             @click="copyKey"
           >
             <Check
@@ -174,7 +176,7 @@ onMounted(load);
           v-else
           class="text-sm"
         >
-          {{ config.key_set ? "Key configured" : "No key yet" }}
+          {{ config.key_set ? $t('settings.workSection.keyConfigured') : $t('settings.workSection.noKeyYet') }}
         </p>
         <Button
           variant="outline"
@@ -182,30 +184,30 @@ onMounted(load);
           @click="rotateKey"
         >
           <KeyRound class="w-4 h-4" />
-          {{ config.key_set ? "Rotate key" : "Generate key" }}
+          {{ config.key_set ? $t('settings.workSection.rotateKey') : $t('settings.workSection.generateKey') }}
         </Button>
       </div>
 
       <SettingsToggle
         id="work-enabled"
         :model-value="config.enabled"
-        label="Enable Heym Work"
+        :label="$t('settings.workSection.enable')"
         :disabled="saving"
         @update:model-value="save"
       />
 
       <div class="rounded-lg border border-border p-3 text-sm space-y-1">
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Last seen</span>
+          <span class="text-muted-foreground">{{ $t('settings.workSection.lastSeen') }}</span>
           <span>{{ lastSeen }}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Work version</span>
-          <span>{{ config.last_work_version || "Unknown" }}</span>
+          <span class="text-muted-foreground">{{ $t('settings.workSection.workVersion') }}</span>
+          <span>{{ config.last_work_version || $t('settings.workSection.unknown') }}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-muted-foreground">License</span>
-          <span>{{ config.last_license_status || "Unknown" }}</span>
+          <span class="text-muted-foreground">{{ $t('settings.workSection.license') }}</span>
+          <span>{{ config.last_license_status || $t('settings.workSection.unknown') }}</span>
         </div>
       </div>
     </template>

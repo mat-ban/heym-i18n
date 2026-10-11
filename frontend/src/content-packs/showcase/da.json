@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Opret, organisér, importér og administrér Workflows til AI-automatiseringer.",
+    "bullets": [
+      "Åbn Workflows hurtigt, hold mapper overskuelige og fortsæt direkte med nylige opgaver.",
+      "Brug kommandopaletten for hurtig adgang uden langvarig søgning i grid'et.",
+      "Brug denne fane som basis for alle aktiviteter i editoren."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Centralt overblik",
+        "title": "Workflow-bibliotek",
+        "description": "Root-objekter, mapper og Workflows markeret til sletning kan ses på ét sted.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Hurtig adgang",
+        "title": "Hurtig oprettelse",
+        "description": "Nye Workflows oprettes eller JSON importeres direkte.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktur",
+        "title": "Organisér på forhånd",
+        "description": "Mapper og fastgørelse holder voksende automatiserings-sæt overskuelige.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Læs Workflow-guide",
+        "description": "Åbn den fuldstændige reference for Workflows-fanen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflows-fanen"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Åbn skabeloner",
+        "description": "Skift til skabelon-fanen for genanvendelige startpunkter.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Hvad hører til her",
+        "content": "Brug dette område til Workflow-livscyklusopgaver: Oprettelse, omdøbning, flytning, import, arkivering og valg."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Forbliv strømlinet",
+        "content": "Hvis der kun er behov for en hurtig udførelse fra en anden side, benyttes Quick Drawer. Vend tilbage hertil for administration og struktur."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflows-fanen"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Et agentbaseret Kanban-board. Hvert kort er et persistent job med kontekst, historik og output – flytning af et kort udfører kolonnens Workflow-kæde.",
+    "bullets": [
+      "Opret tekstkort i Backlog og træk dem via drag & drop over kolonnerne.",
+      "Forbind ordnede Workflows med hver kolonne; kortbevægelser udløser disse som Trigger.",
+      "Kort bliver grønne ved succes, røde ved fejl og gule under udførelse.",
+      "Kommentarer og tidligere output indgår i konteksten for næste kørsel."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kerneidé",
+        "title": "Kort er jobs, ikke noter",
+        "description": "Hvert kort bærer sin fuldstændige historik: Kommentarer, bevægelser og output fra hver Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Planlægningsloop",
+        "title": "Opfølgende runder",
+        "description": "Svar i kommentarer og udfør igen – kæden ser den samlede akkumulerede kontekst.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board-dokumentation",
+        "description": "Kolonne-kæder, Card-Payload-kontrakt og opfølgende runder.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Hvordan kolonne-kæder udføres",
+        "content": "Workflows knyttet til en kolonne kører sekventielt, når et kort ankommer. Output fra hver Workflow tilføjes kortets kontekst; en fejl stopper kæden."
+      },
+      {
+        "id": "board-context",
+        "title": "Hvad Workflows modtager",
+        "content": "Udførelses-input indeholder kortet (titel, indhold, metadata, kommentarer, historik, tidligere output), boardet, bevægelsen og positionen i kæden. Dette læses med $input.card-udtryk."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Skabeloner",
+    "summary": "Start med genanvendelige Workflow-blueprints i stedet for at bygge de samme mønstre igen hver gang.",
+    "bullets": [
+      "Brug skabeloner, når Workflow-strukturen er kendt, men detaljerne stadig varierer.",
+      "Gode skabeloner forkorter onboarding og reducerer gentaget canvas-arbejde.",
+      "Del mønstre her og tilpas dem i editoren efter behov."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Genanvendelse",
+        "title": "Blueprint-tilgang",
+        "description": "Anerkendte Workflow-strukturer registreres og anvendes hurtigt igen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Team-tempo",
+        "title": "Ensartede startpunkter",
+        "description": "Skabeloner hjælper teams med at blive enige om de samme anerkendte mønstre.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Effektivitet",
+        "title": "Mindre tomgang",
+        "description": "Vælg en færdig ramme og tilpas kun det væsentlige.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Åbn skabelon-dokumentation",
+        "description": "Lær, hvordan skabeloner passer ind i Dashboard-flowet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Skabelon-fanen"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Tilbage til Workflows",
+        "description": "Tilbage til hovedbiblioteket for Workflows.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Hvorfor skabeloner er vigtige",
+        "content": "De omdanner gentagne node-layouts til genanvendelige assets – ideelt for teams, der leverer variationer af samme Workflow-mønster."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimal anvendelse",
+        "content": "Brug skabeloner, når strukturen er stabil, men navne, Prompts, Credentials eller mål varierer fra anvendelsestilfælde til anvendelsestilfælde."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Skabelon-fanen"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Variabler",
+    "summary": "Delte værdier gemmes centralt og refereres på tværs af Workflows uden at duplikere de samme data overalt.",
+    "bullets": [
+      "Ofte genanvendte værdier opbevares på et centralt, persistent sted.",
+      "Variabler reducerer Prompt-drift og dobbelte konfigurationer.",
+      "Værdier deles målrettet, når flere Workflows har behov for samme datagrundlag."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Persistens",
+        "title": "Lager på tværs af kørsler",
+        "description": "Globale værdier overlever enkelte Workflow-udførelser.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompakt konfiguration",
+        "title": "Mindre redundans",
+        "description": "Opdater centralt én gang i stedet for manuelt at tilpasse mange node-felter.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Udtryk",
+        "title": "Understøttelse i DSL",
+        "description": "Referer værdier direkte i node-udtryk og Prompts.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Læs variabel-dokumentation",
+        "description": "Åbn guiden for variabler i Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Variabel-fanen"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Typiske mønstre",
+        "content": "Endpoints, delte Prompt-fragmenter, miljøspecifikke indstillinger eller ID'er, som flere Workflows skal læse, gemmes her."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Hvad hører ikke til her",
+        "content": "Hemmeligheder og provider-autentificering hører i Credentials, ikke i globale variabler."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Variabel-fanen"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Dashboard-chatten anvendes som hurtigt dialogbaseret indgangspunkt for Workflows og platformopgaver.",
+    "bullets": [
+      "Fremragende til hurtige spørgsmål, Workflow-hjælp og letvægtsudførelser.",
+      "Fokuseret på tempo og iteration frem for fuld editor-kontrol.",
+      "Så snart strukturen er på plads, skiftes direkte til Workflow eller dokumentation."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Naturligt sprog",
+        "title": "Hurtig interaktion",
+        "description": "Anvend enkelt sprog i stedet for manuelt at gennemsøge hele appen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Bro",
+        "title": "Fra idé til handling",
+        "description": "Chat hjælper, når målet er klart, men den præcise vej endnu skal udarbejdes.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Ledsager",
+        "title": "Supplerer dokumentationen",
+        "description": "Anvend sammen med dokumentationen for at have svar og referencer ved hånden.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Åbn Chat-dokumentation",
+        "description": "Læs guide for Dashboard-chatten.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat-fanen"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "AI-assistent reference",
+        "description": "Lær, hvordan Heym-assistenten understøtter Workflow-oprettelse.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI-assistent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Bedste anvendelsestilfælde",
+        "content": "Chat anvendes til hurtige Workflow-spørgsmål, korte platformvejledninger og operationelle trin, der ikke kræver dybt canvas-arbejde."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Hvornår visningen skiftes",
+        "content": "Skift til editoren, så snart kontrol på node-niveau er nødvendig, eller til dokumentationen for varige referencer."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat-fanen"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Administrer og del filer, der er genereret af Workflow-skills.",
+    "bullets": [
+      "Skills skriver filer til output-biblioteket; Heym registrerer dem automatisk.",
+      "Del filer via Token-links eller adgangskodebeskyttede Basic-Auth-URLs.",
+      "Download filer med ét klik."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Lagring",
+        "title": "Automatisk registrerede filer",
+        "description": "Skills skriver til _OUTPUT_DIR; filer vises her direkte efter udførelse.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Deling",
+        "title": "Fleksibel adgangskontrol",
+        "description": "Offentlige links, adgangskodebeskyttelse, udløbsdatoer og download-begrænsninger.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formater",
+        "title": "PDF, DOCX, CSV og mere",
+        "description": "Vilkårlige filtyper genereres med reportlab, python-docx eller standard-Python.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Åbn Drive-dokumentation",
+        "description": "Læs den fuldstændige reference for Drive-fanen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive-fane"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Guide til filgenerering",
+        "description": "Få indsigt i, hvordan skills genererer filer.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Filgenerering"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Hvordan filer når hertil",
+        "content": "Når en skill placerer filer i biblioteket _OUTPUT_DIR, gemmer Heym dem persistent og genererer download-tokens."
+      },
+      {
+        "id": "drive-share",
+        "title": "Delingsmuligheder",
+        "content": "Opret offentlige Token-links for alle eller adgangskodebeskyttede URLs inklusive udløbsdatoer og download-begrænsninger."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive-fane"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Legitimationsoplysninger",
+    "summary": "Administrer nøgler, Tokens og forbindelsesdetaljer, så Workflows sikkert kan kommunikere med eksterne systemer.",
+    "bullets": [
+      "Opbevar adgangsdata centralt i stedet for at sprede dem over enkelte noder.",
+      "Legitimationsoplysninger styrer LLM'er, integrationer, vektorlagre og mere.",
+      "Tildel målrettet adgang, når teams har brug for samme forbindelse uden at kopiere nøgler."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Sikkerhed",
+        "title": "Sikre adgangsdata",
+        "description": "Konfigurer godkendelse én gang og genbrug den sikkert i Workflows.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrationer",
+        "title": "Bred support",
+        "description": "Understøtter udbydere som OpenAI, DeepSeek, Slack, Redis, Qdrant og Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Samarbejde",
+        "title": "Målrettet deling",
+        "description": "Anvend team- eller brugerdelinger i stedet for at oprette dubletter.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Læs dokumentation for legitimationsoplysninger",
+        "description": "Åbn guiden for dashboardet for legitimationsoplysninger.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Fane for legitimationsoplysninger"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Se integrationer",
+        "description": "Gennemse detaljer om opsætning af tredjepartsintegrationer.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Tredjepartsintegrationer"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Hvor de anvendes",
+        "content": "Legitimationsoplysninger refereres i nodekonfigurationen og løses sikkert under udførelsen."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Teamvenlig model",
+        "content": "Foretræk delinger, når flere udviklere har brug for samme udbyderadgang; det sikrer konsistent adfærd og enkel revision."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Fane for legitimationsoplysninger"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektorlagre",
+    "summary": "Forbered Retrieval-backends til Workflows, der kræver semantisk søgning, hukommelse eller RAG-kontekstintegration.",
+    "bullets": [
+      "Vektorlagre udgør datagrundlaget for retrieval-baserede Workflows.",
+      "Anvend sammen med RAG-noder og AI-flows for præcis dokument-grounding.",
+      "Denne fane fungerer som infrastruktur for funderede Prompts."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG-infrastruktur",
+        "title": "Søgbart hukommelseslager",
+        "description": "Hold dokumenter klar til semantisk retrieval, når Workflows kræver kontekst.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kvalitet",
+        "title": "Fundamenteret grounding",
+        "description": "Retrieval reducerer risikoen for hallucinationer ved at levere belæg.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Drift",
+        "title": "Central administration",
+        "description": "Opret vektorlagre og genbrug dem på tværs af flere Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Åbn dokumentation for vektorlagre",
+        "description": "Læs guiden for dashboardet for vektorlagre.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Fane for vektorlagre"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Se dokumentation for RAG-node",
+        "description": "Åbn referencen for Qdrant-RAG-noden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Placering",
+        "content": "Denne fane forbereder lagringslaget. Den egentlige retrieval-logik ligger inden for Workflows (f.eks. via RAG- eller agentmønstre)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Anvendelsestidspunkt",
+        "content": "Vælg vektorlagre, når Workflowet skal gennemsøge ustrukturerede vidensmængder i stedet for kun at stole på LLM-hukommelsen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Fane for vektorlagre"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Administrer Model Context Protocol-forbindelser, så agent-Workflows sikkert kan nå værktøjer og eksterne funktioner.",
+    "bullets": [
+      "MCP omdanner eksterne værktøjsøkosystemer til anvendelig agentkontekst.",
+      "Anvend denne fane, når agenter kræver rigere værktøjer end statiske Prompts.",
+      "Forbindelseskvaliteten bestemmer direkte agenternes kapaciteter."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Agent-værktøjer",
+        "title": "Ekstern funktionslag",
+        "description": "Stil værktøjsservere til rådighed, som agenter kan kalde under reasoning.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Runtime-kontrol",
+        "title": "Forbindelsesopsætning",
+        "description": "Konfigurer Endpoints, labels og transport for pålidelige Workflows.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Platformsdybde",
+        "title": "Ud over Prompts",
+        "description": "MCP gør det muligt for Heym-Workflows at handle, ikke blot svare.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Åbn MCP-dokumentation",
+        "description": "Læs guiden for MCP-fanen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP-fane"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Agent-arkitektur",
+        "description": "Få indsigt i, hvordan MCP er integreret i agentudførelsen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Agent-arkitektur"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Betydning",
+        "content": "Særligt vigtigt, når agenten kræver værktøjer, miljøadgang eller systemintegrationer uden for enkelte noder."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Driftstilgang",
+        "content": "Behandl MCP-forbindelser som infrastruktur: Stabile labels og klare ansvarsområder forenkler fejlfinding."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP-fane"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Udførelser",
+    "summary": "Inspicér detaljerede traces af AI- og Workflow-udførelser for at forstå, hvad der skete – ikke blot om det virkede.",
+    "bullets": [
+      "Anvend traces til debugging, performance-analyser og kvalitetskontrol af Prompts.",
+      "Traces forklarer modeladfærd, latenstider og udførelsesforløb.",
+      "Det første sted at kigge ved uventede resultater eller ustabile kørsler."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Debugging",
+        "title": "Se skjulte trin",
+        "description": "Trace-data afdækker, hvad Workflow og model faktisk udførte.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Evaluering",
+        "title": "Understøt iterationer",
+        "description": "Anvend traces ved optimering af Prompts, værktøjer og modeller.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Pålidelighed",
+        "title": "Spor resultater",
+        "description": "Gode traces reducerer gætteri ved fejlanalyse.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Åbn udførelsesdokumentation",
+        "description": "Læs guiden for udførelsesdashboardet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Udførelsesfane"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Hvornår traces er uundværlige",
+        "content": "Så snart Workflows er flertrins, modelintensive eller værktøjsbaserede, er den rene statusvisning ikke længere tilstrækkelig."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. historik",
+        "content": "Historikken viser, AT en kørsel fandt sted. Traces forklarer, HVORFOR den opførte sig som den gjorde."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Udførelsesfane"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Advarsler",
+    "summary": "Tærskelværdier defineres over tidsvinduer, og der gives automatisk besked, når disse overskrides.",
+    "bullets": [
+      "Fire typer: Fejlantal, køretidsvarighed, Token-/omkostningstærskler og udførelsestællere.",
+      "Hver advarsel vurderes over et valgt tidsvindue, aldrig ud fra enkelthændelser.",
+      "Kravet beskrives i naturligt sprog, og assistenten konfigurerer advarslen."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tidsvindue",
+        "title": "Ophobninger frem for afvigelser",
+        "description": "Et mislykket kørselsforløb er støj. Tolv på ti minutter er en incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Før lagring",
+        "title": "Betingelse testes retrospektivt",
+        "description": "Testtrinnet tester mod reel historik for at kalibrere tærskelværdier på forhånd.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reaktion",
+        "title": "Workflow udføres ved alarm",
+        "description": "Alert-Payload bliver Workflow-input til automatiske notifikationer via Slack eller e-mail.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Åbn advarselsdokumentation",
+        "description": "Læs om funktionsmåden for alarmtyper, vinduer og assistenten.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Advarselsfane"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Formål",
+        "content": "Analyser og traces besvarer spørgsmål, der stilles aktivt. Advarsler lader Heym tale proaktivt, når kritiske tærskler overskrides."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Hvorfor falske alarmer undgås",
+        "content": "En advarsel udløses én gang og afventer, indtil metrikken er genoprettet – dette forhindrer oversvømmelse af notifikationer."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Advarselsfane"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analyser",
+    "summary": "Brugsmønstre og systemadfærd følges for at forstå aktivitet, vækst og ændringer over tid.",
+    "bullets": [
+      "Accept, gennemstrømning og usædvanlige spidser identificeres med analyser.",
+      "Et overblik på platformniveau frem for et enkelt fejlfindingsværktøj.",
+      "Analyser kombineres med traces og historik for signal og forklaring."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signaler",
+        "title": "Brugsgennemsigtighed",
+        "description": "Tendenser identificeres frem for at betragte enkelte kørselsforløb isoleret.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapacitet",
+        "title": "Operationel bevidsthed",
+        "description": "Belastningstop og fald identificeres og undersøges tidligt.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Beslutningsstøtte",
+        "title": "Målrettet optimering",
+        "description": "Analyser hjælper med prioritering af de vigtigste Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Åbn analysedokumentation",
+        "description": "Læs vejledning til analysedashboardet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analysefane"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Formål",
+        "content": "Analyser anvendes til mønstre, gennemstrømning og aggregeret adfærd på tværs af hele platformdriften."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Fremgangsmåde",
+        "content": "Signaler identificeres her, hvorefter der skiftes til traces, historik eller editoren for at analysere årsager."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analysefane"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Der oprettes et gitter af diagram-widgets, som hver især forsynes af egne Workflows – alle nøgletal på ét overblik.",
+    "bullets": [
+      "Hver widget drives af et Workflow, der leverer data til en Chart-Output-node.",
+      "Søjle-, linje-, cirkel-, tabel- og tal-widgets anvendes passende til metrikken.",
+      "Widgets genereres eller tilpasses med AI, og resultater caches for hurtige indlæsningstider.",
+      "Flere dashboards oprettes og deles med personer eller teams med læse- eller skriveadgang."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Komposition",
+        "title": "Workflow-forsynede diagrammer",
+        "description": "Alle data, som et Workflow genererer, visualiseres som diagram.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ydeevne",
+        "title": "Cachede resultater",
+        "description": "Widget-caching forhindrer gentagne Workflow-udførelser ved hver sidevisning.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI-understøttelse",
+        "title": "Generering og tilpasning",
+        "description": "Metrikken beskrives, og widgetten oprettes automatisk ved hjælp af AI.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Åbn dashboarddokumentation",
+        "description": "Læs om, hvordan dashboard-widgets oprettes.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard-fane"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Formål",
+        "content": "Dashboardet anvendes til vedvarende oversigter over vigtige nøgletal fra egne Workflows."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Oprettelse",
+        "content": "Widget tilføjes, Workflow konfigureres, så den sidste node før Chart Output leverer rækker, og der arrangeres i gitteret."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard-fane"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Teams",
+    "summary": "Delte adgange administreres, så Workflows, Credentials, variabler og vektorlagre anvendes kollaborativt uden dubletter.",
+    "bullets": [
+      "Teams er den reneste måde at dele platformressourcer skalerbart.",
+      "Teams anvendes, når rettigheder skal følge en gruppe frem for enkeltpersoner.",
+      "Sikrer struktureret samarbejde i et voksende workspace."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kollaboration",
+        "title": "Gruppebaserede delinger",
+        "description": "Adgang gives én gang til et team frem for manuel tildeling til enkeltbrugere.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Klarhed",
+        "title": "Rene ansvarsområder",
+        "description": "Ressourceadministration følger de reelle teamstrukturer.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skalering",
+        "title": "Mindre administrationsarbejde",
+        "description": "Nye medlemmer arver automatisk adgangsrettigheder via teamet.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Åbn teamsdokumentation",
+        "description": "Læs vejledning til teamsdashboardet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Teams-fane"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Ressourcedelinger",
+        "description": "Læs detaljer om deling af ressourcer.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Deling af loginoplysninger"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Fordele ved Teams",
+        "content": "Teams forbinder identitet og ressourceadgang for problemfrit samarbejde."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktisk tip",
+        "content": "Teamdelinger foretrækkes, når et Workflow eller Credential tilhører en permanent arbejdsgruppe."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Teams-fane"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Logfiler",
+    "summary": "Logs læses på stack-niveau, når der er behov for infrastrukturindsigt ud over Workflow-output.",
+    "bullets": [
+      "Logs anvendes til service-fejlfinding, container-tilstande og miljøproblemer.",
+      "Hjælper, når årsager ligger under Workflow-niveauet.",
+      "Anvendes sammen med traces for beviser på applikations- og systemniveau."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktur",
+        "title": "Container-gennemsigtighed",
+        "description": "Se, hvad backend-tjenester udfører under Heym-grænsefladen.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Fejlretning",
+        "title": "Årsager findes",
+        "description": "Logs hjælper ved opstartsproblemer, nedbrud eller integrationsfejl.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Supplerende",
+        "title": "Forskel fra Workflow-resultater",
+        "description": "Workflow-output viser resultater; logs viser systemadfærd.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Åbn logdokumentation",
+        "description": "Læs vejledning til logdashboardet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Logfane"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Anvendelsestidspunkt",
+        "content": "Der skiftes hertil, når problemer synes at være deployment-, service- eller miljøbetingede."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Bedste kombination",
+        "content": "Logs anvendes sammen med traces og historik for hurtigt at komme fra symptomer til årsag."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Logfane"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Evaluering",
+    "summary": "Der oprettes reproducerbare benchmarks til agent-workflows, så prompt-, model- og workflow-ændringer kan sammenlignes pålideligt.",
+    "bullets": [
+      "Suiteter og testcases omdanner subjektiv workflow-kvalitet til målbare nøgletal.",
+      "Det ideelle sted for regressionsprøver inden udrulning af prompt- eller modelopdateringer.",
+      "Der sammenlignes flere modeller mod samme datasæt og samme evalueringsmetode."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kvalitetsloop",
+        "title": "Benchmark af agenter",
+        "description": "Samme suite køres gentagne gange i stedet for at stole på tilfældige prøver.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Sammenligning",
+        "title": "Model- og prompt-tests",
+        "description": "Det ses, hvordan forskellige indstillinger opfører sig på samme testsæt.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Sikkerhed",
+        "title": "Pålidelig iteration",
+        "description": "Forbedringer dokumenteres beviseligt inden rollout.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Åbn evalueringsdokumentation",
+        "description": "Læs vejledningen til evalueringssiden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Evaluerings-tab"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent-node-reference",
+        "description": "Se det workflow-område, som de fleste eval-suiteter retter sig mod.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent-node"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Design af suiter",
+        "content": "En god suite afspejler reelle brugercases, randbetingelser og godkendelsestrin, som skal forblive stabile."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Sammenligningsparametre",
+        "content": "Typiske sammenligninger omfatter prompt-varianter, modelvalg, temperature-indstillinger og workflow-revisioner på samme datasæt."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Evaluerings-tab"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentation",
+    "summary": "Præcise platform-referencer gennemsøges direkte i appen og uddybes efter behov.",
+    "bullets": [
+      "Heym-dokumentation er designet til hurtig opfattelse og målrettet opslag.",
+      "Sidepanel, søgning og krydsreferencer muliggør hurtig skift mellem koncepter.",
+      "Showcase henviser direkte til den aktuelt åbne artikel."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "In-app-reference",
+        "title": "Altid inden for rækkevidde",
+        "description": "Dokumentation forbliver i produktflowet uden at skulle åbne eksterne tabs.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Overblik",
+        "title": "Det væsentlige først",
+        "description": "Artikler starter med kerne punkterne og forgrener sig via links."
+      },
+      {
+        "eyebrow": "Kontekstbevidst",
+        "title": "Aktuel artikel",
+        "description": "Ved læsning af et dokument følger 'Lær mere'-handlingen direkte denne artikel."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Se introduktion",
+        "description": "Åbn dokumentationsintroduktionen som standardindgangspunkt.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Introduktion"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Hurtig navigation",
+        "content": "Sidepanel til kategorier og kommandosøgning anvendes, når emnet allerede er kendt."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Støtte via Showcase",
+        "content": "Showcase holder resuméer kompakte og fører ved behov til den udførlige dokumentation."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Introduktion"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Tidsplaner",
+    "summary": "Alle aktive cron-workflows overskues på en visuel kalender, og køretider kontrolleres.",
+    "bullets": [
+      "Der skiftes mellem dag-, uge- og månedsvisning for den passende opløsning.",
+      "Der holdes musen over en blok for cron-udtrykket; der klikkes for at springe direkte til canvas.",
+      "Denne tab anvendes til at kontrollere udførelsestæthed og identificere overlapninger."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparens",
+        "title": "Kalendervisning",
+        "description": "Aktive cron-workflows vises som blokke på deres planlagte tidspunkter.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigation",
+        "title": "Et klik til canvas",
+        "description": "Der klikkes på en blok for at åbne workflow-editoren direkte.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Områder",
+        "title": "Dag, uge eller måned",
+        "description": "Opløsningen tilpasses for at kontrollere enkelte timer eller planlægge hele måneden.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Åbn tidsplan-dokumentation",
+        "description": "Læs referencen til tidsplan-tabben.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Tidsplan-tab"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron-node-reference",
+        "description": "Det erfares, hvordan cron-triggere konfigureres på canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Anvendelsestidspunkt",
+        "content": "Planlagte automatiseringer kontrolleres, terminkonflikter identificeres, og det sikres, at vigtige workflows forbliver aktive."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Farvkodning",
+        "content": "Hver workflow tildeles en konsistent farve fra sit id, som forbliver identisk på tværs af dag-, uge- og månedsvisning."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Tidsplan-tab"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Datatabeller",
+    "summary": "Strukturerede datatabeller oprettes direkte i Heym og anvendes programmatisk i workflows.",
+    "bullets": [
+      "Tabeller oprettes med typiserede kolonner, udfyldes manuelt eller importeres via CSV.",
+      "DataTable-workflow-noden anvendes til programmatisk at læse, skrive og forespørge rækker.",
+      "Tabeller deles med brugere eller teams med læse- eller skriverettigheder."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integrerede data",
+        "title": "Integreret lager",
+        "description": "Strukturerede data gemmes uden eksterne databaser eller API-nøgler.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow-integration",
+        "title": "DataTable-node",
+        "description": "Rækker findes, indsættes, opdateres og slettes i vilkårlige workflows.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Samarbejde",
+        "title": "Deling og rettigheder",
+        "description": "Granulære læse- og skriveadgange tildeles brugere og teams.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Datatabel-tab dokumentation",
+        "description": "Læs referencen til datatabel-tabben.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Datatabeller"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable-node dokumentation",
+        "description": "Læs referencen til DataTable-noden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Hvad er datatabeller?",
+        "content": "Datatabeller er integreret struktureret lager i Heym: Typiserede kolonner (String, Number, Boolean, Date, JSON), inline-redigering samt CSV-import/-eksport."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Anvendelse i workflows",
+        "content": "DataTable-noden understøtter find, getAll, getById, insert, update, remove og upsert – uden credentials direkte gennem workflow-ejeren."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Datatabeller"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow-editor",
+    "summary": "Workflows oprettes, testes, debugges og optimeres på canvas – direkte i udførelseskonteksten.",
+    "bullets": [
+      "I editoren smelter node-design, dataflow og udførelsesadfærd sammen.",
+      "Sidepaneler og historik anvendes til hurtigt at skifte mellem oprettelse og debugging.",
+      "Showcase forbliver bevidst kompakt her for at give maksimal plads til canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Visuelt workflow-design",
+        "description": "Noder forbindes, logik forgrenes, og runtime-flowet modelleres direkte.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteration",
+        "title": "Debugging under oprettelse",
+        "description": "Historik, debug-paneler og udførelsesresultater anvendes til hurtige feedback-loops."
+      },
+      {
+        "eyebrow": "Funktionsomfang",
+        "title": "Avancerede funktioner inden for rækkevidde",
+        "description": "Portal, delinger, skabeloner og validering ligger direkte ved canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Åbn canvas-dokumentation",
+        "description": "Læs referencen til canvas-funktionerne.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas-funktioner"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Tastaturgenveje",
+        "description": "Åbn oversigten over tastaturgenveje i editoren.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Tastaturgenveje"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Arbejdsrytme",
+        "content": "Der modelleres på canvas, antagelser om output kontrolleres, og parametre justeres i sidepaneler uden at miste fokus."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompakt Showcase",
+        "content": "Da editoren allerede leverer mange informationer, fungerer Showcase som en slank orienteringshjælp."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas-funktioner"
+    }
+  }
+}

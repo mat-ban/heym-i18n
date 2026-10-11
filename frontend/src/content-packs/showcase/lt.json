@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Kurkite, tvarkykite, importuokite ir valdykite savo DI automatizavimo Workflows.",
+    "bullets": [
+      "Greitai atidarykite Workflows, tvarkingai laikykite aplankus ir tęskite tiesiogiai nuo naujausių užduočių.",
+      "Naudokite komandų paletę greitai prieigai be ilgos paieškos tinklelyje.",
+      "Naudokite šį skirtuką kaip pagrindą visai veiklai redaktoriuje."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Centrinė apžvalga",
+        "title": "Workflow biblioteka",
+        "description": "Peržiūrėkite šakninius objektus, aplankus ir ištrynimui pažymėtus Workflows vienoje vietoje.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Greitoji prieiga",
+        "title": "Greitas kūrimas",
+        "description": "Kurkite naujus Workflows arba tiesiogiai importuokite JSON.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktūra",
+        "title": "Išankstinis organizavimas",
+        "description": "Aplankai ir prisegimas padeda išlaikyti augančius automatizavimo rinkinius tvarkingus.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Skaityti Workflow vadovą",
+        "description": "Atidaryti išsamią Workflows skirtuko nuorodą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflows skirtukas"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Atidaryti šablonus",
+        "description": "Pereiti į šablonų skirtuką dėl daugkartinio naudojimo pradžios taškų.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Kas čia priklauso",
+        "content": "Naudokite šią sritį Workflow gyvavimo ciklo užduotims: kūrimui, pervadinimui, perkėlimui, importavimui, archyvavimui ir pasirinkimui."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Išlikite liekni",
+        "content": "Jei jums reikia tik greito vykdymo iš kito puslapio, naudokite Quick Drawer. Grįžkite čia dėl valdymo ir struktūros."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflows skirtukas"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Agentais pagrįsta Kanban lenta. Kiekviena kortelė yra nuolatinė užduotis su kontekstu, istorija ir išvestimis – kortelės perkėlimas vykdo stulpelio Workflow grandinę.",
+    "bullets": [
+      "Kurkite tekstines korteles Backlog ir tempkite jas per stulpelius.",
+      "Susiekite tvarkingus Workflows su kiekvienu stulpeliu; kortelių judėjimas suaktyvina juos kaip Trigger.",
+      "Kortelės tampa žalios sėkmės atveju, raudonos klaidų atveju ir geltonos vykdymo metu.",
+      "Komentarai ir ankstesnės išvestys patenka į kito paleidimo kontekstą."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Pagrindinė idėja",
+        "title": "Kortelės yra užduotys, ne užrašai",
+        "description": "Kiekviena kortelė neša visą savo istoriją: komentarus, judėjimus ir kiekvieno Workflow išvestį.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Planavimo ciklas",
+        "title": "Tolesni raundai",
+        "description": "Atsakykite komentaruose ir vykdykite iš naujo – grandinė mato visą sukauptą kontekstą.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board dokumentacija",
+        "description": "Stulpelių grandinės, Card Payload sutartis ir tolesni raundai.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Kaip vykdomos stulpelių grandinės",
+        "content": "Prie stulpelio prijungti Workflows vykdomi nuosekliai, kai tik atvyksta kortelė. Kiekvieno Workflow išvestis pridedama prie kortelės konteksto; klaida sustabdo grandinę."
+      },
+      {
+        "id": "board-context",
+        "title": "Ką gauna Workflows",
+        "content": "Vykdymo įvestis apima kortelę (pavadinimą, turinį, metaduomenis, komentarus, istoriją, ankstesnes išvestis), Board, judėjimą ir poziciją grandinėje. Skaitykite tai su $input.card išraiškomis."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Šablonai",
+    "summary": "Pradėkite nuo daugkartinio naudojimo Workflow šablonų, o ne kiekvieną kartą kurkite tuos pačius modelius iš naujo.",
+    "bullets": [
+      "Naudokite šablonus, kai Workflow struktūra yra žinoma, bet detalės dar gali skirtis.",
+      "Gerai sukurti šablonai pagreitina įvedimą ir sumažina pasikartojantį darbą Canvas aplinkoje.",
+      "Bendrinkite modelius čia ir prireikus juos pritaikykite redaktoriuje."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Daugkartinis naudojimas",
+        "title": "Šablono principas",
+        "description": "Užfiksuokite patikrintas Workflow struktūras ir greitai jas pritaikykite iš naujo.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Komandos tempas",
+        "title": "Vieningi pradžios taškai",
+        "description": "Šablonai padeda komandoms susitarti dėl tų pačių patikrintų modelių.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Efektyvumas",
+        "title": "Mažiau tuščios eigos",
+        "description": "Pasirinkite paruoštą karkasą ir pritaikykite tik esmines dalis.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Atidaryti šablonų dokumentaciją",
+        "description": "Sužinokite, kaip šablonai dera su Dashboard eiga.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Šablonų skirtukas"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Grįžti į Workflow",
+        "description": "Grįžti į pagrindinę Workflow biblioteką.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Kodėl šablonai svarbūs",
+        "content": "Jie paverčia pasikartojančius mazgų išdėstymus daugkartinio naudojimo ištekliais – idealu komandoms, kurios diegia to paties Workflow modelio variantus."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimalus naudojimas",
+        "content": "Naudokite šablonus, kai struktūra yra stabili, bet pavadinimai, Prompt, kredencialai ar tikslai skiriasi priklausomai nuo naudojimo atvejo."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Šablonų skirtukas"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Kintamieji",
+    "summary": "Saugokite bendrinamas reikšmes centralizuotai ir naudokite jas per Workflow, nedubliuodami tų pačių duomenų visur.",
+    "bullets": [
+      "Dažnai naudojamas reikšmes laikykite vienoje centrinėje, patvarioje vietoje.",
+      "Kintamieji sumažina Prompt nukrypimą ir dvigubą konfigūraciją.",
+      "Bendrinkite reikšmes tikslingai, kai keli Workflow turi naudoti tuos pačius duomenis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Patvarumas",
+        "title": "Išliekanti saugykla",
+        "description": "Globalios reikšmės išlieka tarp atskirų Workflow vykdymų.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompaktiška konfigūracija",
+        "title": "Mažiau pertekliškumo",
+        "description": "Atnaujinkite vieną kartą centralizuotai, o ne rankiniu būdu koreguokite daug mazgų laukų.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Išraiškos",
+        "title": "Palaikymas DSL",
+        "description": "Naudokite reikšmes tiesiogiai mazgų išraiškose ir Prompt.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Skaityti kintamųjų dokumentaciją",
+        "description": "Atidaryti kintamųjų Dashboard vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Kintamųjų skirtukas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Tipiniai modeliai",
+        "content": "Saugokite Endpoint, bendrinamus Prompt fragmentus, aplinkai būdingus nustatymus ar ID, kuriuos turi skaityti keli Workflow."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Ko čia nereikėtų dėti",
+        "content": "Paslaptys ir tiekėjų autentifikavimas priklauso kredencialams, o ne globaliems kintamiesiems."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Kintamųjų skirtukas"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Naudokite Dashboard pokalbį kaip greitą dialogu pagrįstą pradžios tašką savo Workflow ir platformos užduotims.",
+    "bullets": [
+      "Puikiai tinka greitiems klausimams, Workflow pagalbai ir lengviems vykdymams.",
+      "Sutelktas į greitį ir iteraciją, o ne į visišką redaktoriaus kontrolę.",
+      "Kai struktūra jau aiški, pereikite tiesiai į Workflow arba dokumentaciją."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Natūrali kalba",
+        "title": "Greita interakcija",
+        "description": "Naudokite paprastą kalbą, o ne rankiniu būdu naršykite visoje programoje.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tiltas",
+        "title": "Nuo idėjos iki veiksmo",
+        "description": "Chat padeda, kai tikslas aiškus, bet tikslus kelias dar turi būti išsiaiškintas.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Palydovas",
+        "title": "Papildo dokumentaciją",
+        "description": "Naudokite kartu su dokumentacija, kad atsakymai ir nuorodos būtų po ranka.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Atidaryti Chat dokumentaciją",
+        "description": "Skaitykite Dashboard pokalbio vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat skirtukas"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "AI asistento nuoroda",
+        "description": "Sužinokite, kaip Heym asistentas padeda kuriant Workflow.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI asistentas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Geriausi naudojimo atvejai",
+        "content": "Naudokite Chat greitiems Workflow klausimams, trumpiems platformos nurodymams ir operaciniams veiksmams, kuriems nereikia gilaus Canvas darbo."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Kada perjungti vaizdą",
+        "content": "Pereikite į redaktorių, kai reikia mazgo lygio kontrolės, arba į dokumentaciją nuolatinėms nuorodoms."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat skirtukas"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Tvarkykite ir bendrinkite failus, sugeneruotus jūsų Workflow įgūdžių.",
+    "bullets": [
+      "Įgūdžiai rašo failus į išvesties katalogą; Heym automatiškai juos užfiksuoja.",
+      "Bendrinkite failus per Token nuorodas arba slaptažodžiu apsaugotus Basic-Auth URL.",
+      "Atsisiųskite failus vienu paspaudimu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Saugykla",
+        "title": "Automatiškai užfiksuoti failai",
+        "description": "Įgūdžiai rašo į _OUTPUT_DIR; failai pasirodo čia iškart po vykdymo.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Bendrinimas",
+        "title": "Lanksti prieigos kontrolė",
+        "description": "Viešos nuorodos, slaptažodžio apsauga, galiojimo datos ir atsisiuntimo limitai.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formatai",
+        "title": "PDF, DOCX, CSV ir daugiau",
+        "description": "Generuokite bet kokio tipo failus su reportlab, python-docx arba standartiniu Python.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Atidaryti Drive dokumentaciją",
+        "description": "Skaitykite visą Drive skirtuko nuorodą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive skirtukas"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Failų generavimo vadovas",
+        "description": "Sužinokite, kaip įgūdžiai kuria failus.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Failų generavimas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Kaip failai patenka čia",
+        "content": "Kai įgūdis įrašo failus į _OUTPUT_DIR katalogą, Heym juos išsaugo ir sukuria atsisiuntimo Token."
+      },
+      {
+        "id": "drive-share",
+        "title": "Bendrinimo parinktys",
+        "content": "Kurkite viešas Token nuorodas visiems arba slaptažodžiu apsaugotus URL, įskaitant galiojimo datas ir atsisiuntimo limitus."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive skirtukas"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Prisijungimo duomenys",
+    "summary": "Tvarkykite raktus, Token ir ryšio duomenis, kad Workflow galėtų saugiai bendrauti su išorinėmis sistemomis.",
+    "bullets": [
+      "Saugokite prisijungimo duomenis centralizuotai, o ne išbarstykite juos per atskirus mazgus.",
+      "Prisijungimo duomenys valdo LLM, integracijas, vektorines saugyklas ir kt.",
+      "Suteikite prieigą tikslingai, kai komandoms reikia to paties ryšio be raktų kopijų."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Saugumas",
+        "title": "Saugūs prisijungimo duomenys",
+        "description": "Autentifikavimą nustatykite vieną kartą ir saugiai naudokite pakartotinai Workflow.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integracijos",
+        "title": "Platus palaikymas",
+        "description": "Palaikomi teikėjai, tokie kaip OpenAI, DeepSeek, Slack, Redis, Qdrant ir Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Bendradarbiavimas",
+        "title": "Tikslingas bendrinimas",
+        "description": "Naudokite komandos arba vartotojo bendrinimą, o ne kurkite dublikatus.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Skaityti prisijungimo duomenų dokumentaciją",
+        "description": "Atidaryti prisijungimo duomenų prietaisų skydelio vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Prisijungimo duomenų skirtukas"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Peržiūrėti integracijas",
+        "description": "Naršyti trečiųjų šalių integracijų nustatymo detales.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Trečiųjų šalių integracijos"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Kur jie naudojami",
+        "content": "Prisijungimo duomenys nurodomi mazgo konfigūracijoje ir saugiai išsprendžiami vykdymo metu."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Komandai palankus modelis",
+        "content": "Teikite pirmenybę bendrinimui, kai keli kūrėjai turi naudoti tą pačią teikėjo prieigą; tai užtikrina nuoseklų veikimą ir paprastą auditą."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Prisijungimo duomenų skirtukas"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektorinės saugyklos",
+    "summary": "Paruoškite paieškos pagrindus Workflow, kuriems reikia semantinės paieškos, atminties arba RAG konteksto integravimo.",
+    "bullets": [
+      "Vektorinės saugyklos sudaro duomenų pagrindą paieška pagrįstiems Workflow.",
+      "Naudokite kartu su RAG mazgais ir AI srautais tiksliam dokumentų pagrindimui.",
+      "Šis skirtukas tarnauja kaip infrastruktūra pagrįstiems Prompt."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG infrastruktūra",
+        "title": "Ieškoma atmintis",
+        "description": "Laikykite dokumentus paruoštus semantinei paieškai, kai Workflow reikia konteksto.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kokybė",
+        "title": "Pagrįstas pagrindimas",
+        "description": "Paieška sumažina halucinacijos riziką teikiant įrodymus.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Operacijos",
+        "title": "Tvarkykite centralizuotai vieną kartą",
+        "description": "Kurkite vektorines saugyklas ir naudokite pakartotinai keliose Workflow.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Atidaryti vektorinių saugyklų dokumentaciją",
+        "description": "Skaityti vektorinių saugyklų prietaisų skydelio vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Vektorinių saugyklų skirtukas"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Peržiūrėti RAG mazgo dokumentaciją",
+        "description": "Atidaryti Qdrant RAG mazgo nuorodą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Priskyrimas",
+        "content": "Šis skirtukas paruošia saugyklos sluoksnį. Pati paieškos logika yra Workflow viduje (pvz., per RAG arba agentų šablonus)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Naudojimo laikas",
+        "content": "Rinkitės vektorines saugyklas, kai jūsų Workflow turi ieškoti nestruktūrizuotų žinių rinkinių, o ne pasikliauti tik LLM atmintimi."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Vektorinių saugyklų skirtukas"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Tvarkykite Model Context Protocol ryšius, kad agentų Workflow galėtų saugiai pasiekti įrankius ir išorines funkcijas.",
+    "bullets": [
+      "MCP paverčia išorines įrankių ekosistemas naudojamu agentų kontekstu.",
+      "Naudokite šį skirtuką, kai agentams reikia turtingesnių įrankių nei statiniai Prompt.",
+      "Ryšio kokybė tiesiogiai lemia jūsų agentų galimybes."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Agentų įrankiai",
+        "title": "Išorinių funkcijų sluoksnis",
+        "description": "Pateikite įrankių serverius, kuriuos agentai gali iškviesti samprotavimo metu.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Vykdymo kontrolė",
+        "title": "Ryšio nustatymas",
+        "description": "Konfigūruokite Endpoint, etiketes ir transportą patikimiems Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Platformos gylis",
+        "title": "Daugiau nei Prompt",
+        "description": "MCP leidžia Heym-Workflow veikti, o ne tik atsakyti.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Atidaryti MCP dokumentaciją",
+        "description": "Skaityti MCP skirtuko vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP skirtukas"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Agentų architektūra",
+        "description": "Sužinokite, kaip MCP integruotas į agentų vykdymą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Agentų architektūra"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Reikšmė",
+        "content": "Ypač svarbu, kai jūsų agentui reikia įrankių, aplinkos prieigos ar sistemų integracijų už atskirų mazgų ribų."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Veiklos metodas",
+        "content": "MCP ryšius traktuokite kaip infrastruktūrą: stabilios etiketės ir aiškūs atsakomybės sričių priskyrimai supaprastina derinimą."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP skirtukas"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Vykdymai",
+    "summary": "Naršykite išsamius DI ir Workflow vykdymo Trace, kad suprastumėte, kas įvyko – ne tik ar tai veikė.",
+    "bullets": [
+      "Naudokite Trace derinimui, našumo analizei ir Prompt kokybės patikrinimams.",
+      "Trace paaiškina modelio elgesį, delsą ir vykdymo kelius.",
+      "Pirmoji vieta, kur kreiptis, kai rezultatai netikėti ar vykdymai nestabilūs."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Derinimas",
+        "title": "Pamatykite paslėptus veiksmus",
+        "description": "Trace duomenys atskleidžia, ką iš tikrųjų atliko Workflow ir modelis.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Vertinimas",
+        "title": "Palaikykite iteracijas",
+        "description": "Naudokite Trace optimizuodami Prompt, įrankius ir modelius.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Patikimumas",
+        "title": "Atsekite rezultatus",
+        "description": "Gerai Trace sumažina spėliones analizuojant klaidas.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Atidaryti vykdymų dokumentaciją",
+        "description": "Skaityti vykdymų prietaisų skydelio vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Vykdymų skirtukas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Kada Trace tampa būtini",
+        "content": "Kai Workflow yra daugiapakopiai, imlūs modeliams ar pagrįsti įrankiais, vien tik būsenos rodymo nebeužtenka."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace prieš istoriją",
+        "content": "Istorija parodo, KAD vykdymas įvyko. Trace paaiškina, KODĖL jis elgėsi būtent taip."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Vykdymų skirtukas"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Įspėjimai",
+    "summary": "Apibrėžkite slenksčius pagal laiko langus ir gaukite automatinius pranešimus, kai jie viršijami.",
+    "bullets": [
+      "Keturi tipai: klaidų skaičius, vykdymo trukmė, Tokenų-/išlaidų slenksčiai ir vykdymų skaičius.",
+      "Kiekvienas įspėjimas vertinamas pagal pasirinktą laiko langą, niekada pagal atskirus įvykius.",
+      "Aprašykite reikalavimą natūralia kalba, o asistentas sukonfigūruos įspėjimą."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Laiko langas",
+        "title": "Sankaupos, o ne išskirtys",
+        "description": "Vienas nepavykęs vykdymas yra triukšmas. Dvylika per dešimt minučių yra incidentas.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Prieš išsaugant",
+        "title": "Sąlygos patikrinimas atgaline data",
+        "description": "Patikros žingsnis testuoja pagal tikrą istoriją, kad slenksčiai būtų sukalibruoti iš anksto.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reakcija",
+        "title": "Paleisti Workflow suveikus aliarmui",
+        "description": "Įspėjimo Payload tampa Workflow įvestimi automatiniams pranešimams per Slack arba el. paštą.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Atidaryti įspėjimų dokumentaciją",
+        "description": "Perskaitykite, kaip veikia aliarmų tipai, langai ir asistentas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Įspėjimų skirtukas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Paskirtis",
+        "content": "Analizės ir Trace atsako į klausimus, kuriuos užduodate aktyviai. Įspėjimai leidžia Heym kalbėti proaktyviai, kai viršijami kritiniai slenksčiai."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Kodėl išvengiama klaidingų aliarmų",
+        "content": "Įspėjimas suveikia vieną kartą ir laukia, kol metrika atsistatys – tai apsaugo nuo pranešimų antplūdžio."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Įspėjimų skirtukas"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analizės",
+    "summary": "Stebėkite naudojimo modelius ir sistemos elgseną, kad suprastumėte aktyvumą, augimą ir pokyčius laikui bėgant.",
+    "bullets": [
+      "Atraskite priėmimą, pralaidumą ir neįprastus šuolius naudodami analizes.",
+      "Platformos lygmens vaizdas, o ne atskiras derinimo įrankis.",
+      "Sujunkite analizes su Trace ir istorija, kad gautumėte signalą ir paaiškinimą."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signalai",
+        "title": "Naudojimo skaidrumas",
+        "description": "Atraskite tendencijas, o ne atskirus vykdymus izoliuotai.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pajėgumai",
+        "title": "Operacinis sąmoningumas",
+        "description": "Anksti atpažinkite ir ištirkite apkrovos šuolius ir nuosmukius.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Sprendimų pagalba",
+        "title": "Tikslingas optimizavimas",
+        "description": "Analizės padeda nustatyti svarbiausių Workflow prioritetus.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Atidaryti analizių dokumentaciją",
+        "description": "Skaitykite analizių prietaisų skydelio vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analizių skirtukas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Paskirtis",
+        "content": "Naudokite analizes modeliams, pralaidumui ir agreguotai elgsenai visoje platformos veikloje stebėti."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Veiksmų seka",
+        "content": "Atraskite signalus čia, tada pereikite prie Trace, istorijos ar redaktoriaus, kad išanalizuotumėte priežastis."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analizių skirtukas"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Sukurkite diagramų valdiklių tinklelį, kurių kiekvienas maitinamas atskirų Workflow – visi rodikliai vienu žvilgsniu.",
+    "bullets": [
+      "Kiekvienas valdiklis valdomas Workflow, kuris tiekia duomenis į Chart Output mazgą.",
+      "Naudokite stulpelių, linijų, skritulinių, lentelių ir skaičių valdiklius pagal metriką.",
+      "Generuokite arba pritaikykite valdiklius su AI ir kaupkite rezultatus spartesniam įkėlimui.",
+      "Kurkite kelis Dashboard ir bendrinkite juos su asmenimis ar komandomis skaitymo arba rašymo teisėmis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kompozicija",
+        "title": "Workflow maitinami diagramai",
+        "description": "Visi duomenys, kuriuos sukuria Workflow, vizualizuojami kaip diagrama.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Našumas",
+        "title": "Talpykloje saugomi rezultatai",
+        "description": "Valdiklių talpykla išvengia pakartotinio Workflow vykdymo kiekvieną kartą įkeliant puslapį.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI pagalba",
+        "title": "Generavimas ir pritaikymas",
+        "description": "Aprašykite metriką ir leiskite AI automatiškai sukurti valdiklį.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Atidaryti Dashboard dokumentaciją",
+        "description": "Sužinokite, kaip kuriami Dashboard valdikliai.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard skirtukas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Paskirtis",
+        "content": "Naudokite Dashboard nuolatinėms svarbiausių rodiklių iš savo Workflow apžvalgoms."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Sukūrimas",
+        "content": "Pridėkite valdiklį, sukonfigūruokite Workflow, kad paskutinis mazgas prieš Chart Output pateiktų eilutes, ir išdėstykite tinklelyje."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard skirtukas"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Komandos",
+    "summary": "Tvarkykite bendrinamą prieigą, kad Workflow, Credentials, kintamieji ir vektorinė saugykla būtų naudojami bendradarbiaujant be dublikatų.",
+    "bullets": [
+      "Komandos yra švariausias būdas skalabiliai bendrinti platformos išteklius.",
+      "Naudokite komandas, kai teisės turėtų priklausyti grupei, o ne atskiriems asmenims.",
+      "Užtikrinkite struktūrizuotą bendradarbiavimą augančioje Workspace."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Bendradarbiavimas",
+        "title": "Grupiniai bendrinimai",
+        "description": "Suteikite prieigą vienai komandai, o ne rankiniu būdu atskiriems naudotojams.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Aiškumas",
+        "title": "Švarios atsakomybės",
+        "description": "Išteklių valdymas atitinka realias komandos struktūras.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skalavimas",
+        "title": "Mažiau administravimo",
+        "description": "Nauji nariai automatiškai paveldi prieigos teises per komandą.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Atidaryti Komandų dokumentaciją",
+        "description": "Skaitykite Komandų Dashboard vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Komandų skirtukas"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Išteklių bendrinimas",
+        "description": "Skaitykite išsamią informaciją apie išteklių bendrinimą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Credentials bendrinimas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Komandų privalumai",
+        "content": "Komandos sujungia tapatybę ir prieigą prie išteklių sklandžiam bendradarbiavimui."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktinis patarimas",
+        "content": "Teikite pirmenybę komandos bendrinimui, kai Workflow ar Credential priklauso nuolatinei darbo grupei."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Komandų skirtukas"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Žurnalai",
+    "summary": "Skaitykite žurnalus kaip viso Stack lygmeniu, kai reikia infrastruktūros įžvalgų, viršijančių Workflow išvestis.",
+    "bullets": [
+      "Naudokite žurnalus paslaugų derinimui, konteinerių būsenoms ir aplinkos problemoms spręsti.",
+      "Padeda, kai priežastys yra žemiau Workflow lygmens.",
+      "Naudokite kartu su Traces, kad gautumėte įrodymų programos ir sistemos lygmeniu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktūra",
+        "title": "Konteinerių skaidrumas",
+        "description": "Matykite, ką backend paslaugos atlieka žemiau Heym sąsajos.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Triktčių šalinimas",
+        "title": "Raskite priežastis",
+        "description": "Žurnalai padeda sprendžiant paleidimo problemas, strigtis ar integracijos klaidas.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Papildoma",
+        "title": "Skirtumas nuo Workflow rezultatų",
+        "description": "Workflow išvestys rodo rezultatus; žurnalai rodo sistemos elgseną.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Atidaryti žurnalų dokumentaciją",
+        "description": "Skaitykite žurnalų prietaisų skydelio vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Žurnalų skirtukas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Naudojimo laikas",
+        "content": "Pereikite čia, kai problemos atrodo susijusios su diegimu, paslauga ar aplinka."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Geriausia kombinacija",
+        "content": "Naudokite žurnalus kartu su Traces ir istorija, kad nuo simptomų greitai pereitumėte prie priežasties."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Žurnalų skirtukas"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Vertinimas",
+    "summary": "Kurkite pakartojamus Agentų Workflow etalonus, kad galėtumėte patikimai palyginti Prompt, modelio ir Workflow pakeitimus.",
+    "bullets": [
+      "Rinkiniai ir testų atvejai subjektyvią Workflow kokybę paverčia išmatuojamais rodikliais.",
+      "Ideali vieta regresijos patikroms prieš išleidžiant Prompt ar modelio atnaujinimus.",
+      "Palyginkite kelis modelius su tuo pačiu duomenų rinkiniu ir ta pačia vertinimo metodika."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kokybės ciklas",
+        "title": "Agentų etalonavimas",
+        "description": "Vykdykite tą patį rinkinį pakartotinai, o ne pasikliaukite atsitiktinėmis patikromis.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Palyginimas",
+        "title": "Modelių ir Prompt testai",
+        "description": "Matykite, kaip skirtingi nustatymai veikia su tuo pačiu testų rinkiniu.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Saugumas",
+        "title": "Patikimas iteravimas",
+        "description": "Įrodykite patobulinimus prieš išleidimą.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Atidaryti vertinimo dokumentaciją",
+        "description": "Skaitykite vertinimo puslapio vadovą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Vertinimo skirtukas"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent mazgo nuoroda",
+        "description": "Peržiūrėkite Workflow sritį, į kurią nukreipta dauguma eval rinkinių.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent mazgas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Rinkinių koncepcija",
+        "content": "Geras rinkinys atspindi realius naudotojų atvejus, ribines sąlygas ir patvirtinimo veiksmus, kurie turi išlikti stabilūs."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Palyginimo parametrai",
+        "content": "Tipiniai palyginimai apima Prompt variantus, modelio pasirinkimą, Temperature nustatymus ir Workflow revizijas su tuo pačiu duomenų rinkiniu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Vertinimo skirtukas"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentacija",
+    "summary": "Tiksliai naršykite platformos nuorodas tiesiogiai programėlėje ir prireikus gilinkitės.",
+    "bullets": [
+      "Heym dokumentacija sukurta greitam suvokimui ir tikslingai paieškai.",
+      "Šoninė juosta, paieška ir kryžminės nuorodos leidžia greitai pereiti tarp koncepcijų.",
+      "Showcase tiesiogiai nurodo šiuo metu atidarytą straipsnį."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Programėlės nuoroda",
+        "title": "Visada po ranka",
+        "description": "Dokumentacija išlieka produkto eigoje, nereikia atidaryti išorinių skirtukų.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Apžvalga",
+        "title": "Svarbiausia pirma",
+        "description": "Straipsniai pradedami nuo pagrindinių punktų ir išsišakoja per nuorodas."
+      },
+      {
+        "eyebrow": "Kontekstą suprantantis",
+        "title": "Dabartinis straipsnis",
+        "description": "Skaitant dokumentą, veiksmas „Sužinoti daugiau“ nukreipia tiesiai į šį straipsnį."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Peržiūrėti įvadą",
+        "description": "Atidaryti dokumentacijos įvadą kaip numatytąjį pradinį tašką.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Įvadas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Greita navigacija",
+        "content": "Naudokite šoninę juostą kategorijoms ir komandų paiešką, jei tema jau žinoma."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Pagalba per Showcase",
+        "content": "Showcase pateikia glaustas santraukas ir prireikus nukreipia į išsamią dokumentaciją."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Įvadas"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Tvarkaraščiai",
+    "summary": "Visus aktyvius Cron Workflow peržiūrėkite vizualiame kalendoriuje ir kontroliuokite vykdymo laikus.",
+    "bullets": [
+      "Perjunkite tarp dienos, savaitės ir mėnesio rodinių, kad gautumėte tinkamą raišką.",
+      "Užveskite pelę ant bloko, kad pamatytumėte Cron išraišką; spustelėkite, kad pereitumėte tiesiai į Canvas.",
+      "Naudokite šį skirtuką vykdymo tankiui patikrinti ir persidengimams nustatyti."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Skaidrumas",
+        "title": "Kalendoriaus rodinys",
+        "description": "Aktyvūs Cron Workflow rodomi kaip blokai jų suplanuotu laiku.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigacija",
+        "title": "Vienu spustelėjimu į Canvas",
+        "description": "Spustelėkite bloką, kad tiesiogiai atidarytumėte Workflow redaktorių.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Diapazonai",
+        "title": "Diena, savaitė ar mėnuo",
+        "description": "Koreguokite raišką, kad patikrintumėte atskiras valandas arba planuotumėte visą mėnesį.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Atidaryti tvarkaraščių dokumentaciją",
+        "description": "Skaityti tvarkaraščių skirtuko nuorodą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Tvarkaraščių skirtukas"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron mazgo nuoroda",
+        "description": "Sužinokite, kaip konfigūruojami Cron Trigger Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Naudojimo laikas",
+        "content": "Patikrinkite suplanuotus automatizavimus, nustatykite terminų konfliktus ir užtikrinkite, kad svarbūs Workflow išliktų aktyvūs."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Spalvų kodavimas",
+        "content": "Kiekvienas Workflow gauna nuoseklią spalvą pagal savo ID, kuri išlieka identiška dienos, savaitės ir mėnesio rodiniuose."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Tvarkaraščių skirtukas"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Duomenų lentelės",
+    "summary": "Kurkite struktūrizuotas duomenų lenteles tiesiogiai Heym ir naudokite jas Workflow programiškai.",
+    "bullets": [
+      "Kurkite lenteles su tipizuotais stulpeliais, pildykite rankiniu būdu arba importuokite iš CSV.",
+      "Naudokite DataTable Workflow mazgą, kad programiškai skaitytumėte, rašytumėte ir užklaustumėte eilutes.",
+      "Bendrinkite lenteles su vartotojais ar komandomis suteikdami skaitymo arba rašymo teises."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integruoti duomenys",
+        "title": "Integruota saugykla",
+        "description": "Saugokite struktūrizuotus duomenis be išorinių duomenų bazių ar API raktų.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow integracija",
+        "title": "DataTable mazgas",
+        "description": "Raskite, įterpkite, atnaujinkite ir ištrinkite eilutes bet kuriuose Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Bendradarbiavimas",
+        "title": "Bendrinimas ir teisės",
+        "description": "Suteikite detalius skaitymo ir rašymo leidimus vartotojams bei komandoms.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Duomenų lentelių skirtuko dokumentacija",
+        "description": "Skaitykite duomenų lentelių skirtuko nuorodą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Duomenų lentelės"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable mazgo dokumentacija",
+        "description": "Skaitykite DataTable mazgo nuorodą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Kas yra duomenų lentelės?",
+        "content": "Duomenų lentelės yra integruota struktūrizuota saugykla Heym: tipizuoti stulpeliai (String, Number, Boolean, Date, JSON), tiesioginis redagavimas bei CSV importas/eksportas."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Naudojimas Workflow",
+        "content": "DataTable mazgas palaiko find, getAll, getById, insert, update, remove ir upsert – be kredencialų, tiesiogiai per Workflow savininką."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Duomenų lentelės"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow redaktorius",
+    "summary": "Kurkite, testuokite, derinkite ir optimizuokite Workflow drobėje – tiesiogiai vykdymo kontekste.",
+    "bullets": [
+      "Redaktoriuje susilieja mazgų dizainas, duomenų srautas ir vykdymo elgsena.",
+      "Naudokite šonines juostas ir istoriją, kad greitai perjungtumėte tarp kūrimo ir derinimo.",
+      "Showcase čia sąmoningai išlieka kompaktiškas, kad būtų suteikta maksimali erdvė drobei."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Drobė",
+        "title": "Vizualus Workflow dizainas",
+        "description": "Junkite mazgus, šakokite logiką ir modeliuokite vykdymo srautą tiesiogiai.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteracija",
+        "title": "Derinimas kuriant",
+        "description": "Naudokite istoriją, derinimo skydus ir vykdymo rezultatus greitam grįžtamajam ryšiui."
+      },
+      {
+        "eyebrow": "Funkcijų apimtis",
+        "title": "Išplėstinės funkcijos po ranka",
+        "description": "Portalas, bendrinimas, šablonai ir validacija yra tiesiai prie drobės."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Atidaryti drobės dokumentaciją",
+        "description": "Skaitykite drobės funkcijų nuorodą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Drobės funkcijos"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Spartieji klavišai",
+        "description": "Atidaryti redaktoriaus klaviatūros spartieji klavišų apžvalgą.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Spartieji klavišai"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Darbo ritmas",
+        "content": "Modeliuokite drobėje, tikrinkite išvesties prielaidas ir koreguokite parametrus šoninėse juostose neprarasdami dėmesio."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompaktiškas Showcase",
+        "content": "Kadangi redaktorius jau teikia daug informacijos, Showcase tarnauja kaip lieknas orientyras."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Drobės funkcijos"
+    }
+  }
+}

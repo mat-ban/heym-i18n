@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Gyorsabb építés Workflow-kban",
+    "description": "Válasszon ki egy Workflow-t, hogy a Trigger-eket, a legutóbbi futtatást és a lépéseket közvetlenül a lista mellett tekinthesse meg. Szűrjön állapot szerint, futtasson közvetlenül, és tartson rendet mappákkal."
+  },
+  "dashboard:board": {
+    "title": "Feladatok irányítása ügynökalapú táblán",
+    "description": "Húzza a kártyákat az oszlopok között, hogy Workflow-láncokat indítson el a kártya teljes kontextusával. Az eredmények közvetlenül a kártyára folynak vissza."
+  },
+  "dashboard:templates": {
+    "title": "Induljon bevált sablonokkal",
+    "description": "Használjon előre elkészített Workflow-mintákat a beállítási idő megtakarításához és a konzisztencia biztosításához."
+  },
+  "dashboard:globalvariables": {
+    "title": "Megosztott változók központosítása",
+    "description": "Tárolja el egyszer a újrafelhasználható értékeket, és hivatkozzon rájuk az összes Workflow-n keresztül."
+  },
+  "dashboard:chat": {
+    "title": "Chat használata a gyors iterációhoz",
+    "description": "Tegyen fel gyors kérdéseket, tesztelje az ötleteket, és váltson át a szerkesztőre, amint a Workflow-folyamat világossá válik."
+  },
+  "dashboard:credentials": {
+    "title": "Titkok biztonságos kezelése",
+    "description": "Kezelje központilag a szolgáltatói kulcsokat és Token-eket, hogy a Workflow-k biztonságos kapcsolatokat használhassanak a titkok felfedése nélkül."
+  },
+  "dashboard:vectorstores": {
+    "title": "Retrieval-alapú Workflow-k támogatása",
+    "description": "Készítsen elő vektortárakat megalapozott KI-válaszokhoz, szemantikus kereséshez és skálázható RAG-pipeline-okhoz."
+  },
+  "dashboard:mcp": {
+    "title": "Külső eszközök ökoszisztémáinak csatlakoztatása",
+    "description": "Konfiguráljon MCP-kapcsolatokat, hogy az ügynökök strukturált eszközöket és műveleteket hajthassanak végre az egyszerű Prompt-okon túl."
+  },
+  "dashboard:traces": {
+    "title": "Végrehajtási viselkedés megértése",
+    "description": "Elemezze a Trace-részleteket az eredmények hibakereséséhez, a végrehajtások összehasonlításához és a megbízhatóság növeléséhez."
+  },
+  "dashboard:alerts": {
+    "title": "Értesítések fogadása, mielőtt a problémák eszkalálódnak",
+    "description": "Állítson be küszöbértékeket hibákra, időtartamra, költségekre és végrehajtási számra, és kapjon figyelmeztetést túllépés esetén."
+  },
+  "dashboard:analytics": {
+    "title": "Platformteljesítmény nyomon követése",
+    "description": "Figyelje a használati és végrehajtási trendeket, hogy célzottan, valós jelzések alapján optimalizálhasson."
+  },
+  "dashboard:dashboard": {
+    "title": "Saját irányítópultok létrehozása",
+    "description": "Állítson össze Workflow-alapú diagram-widget-eket, hogy a kulcsfontosságú metrikákat egy pillantásra láthassa."
+  },
+  "dashboard:teams": {
+    "title": "Együttműködés tisztán skálázható",
+    "description": "Ossza fel a Workflow-kat és erőforrásokat csapatok szerint, hogy a hozzáférési jogosultságok és felelősségek átláthatóak maradjanak."
+  },
+  "dashboard:logs": {
+    "title": "Rendszerszintű problémák diagnosztizálása",
+    "description": "Használja a Log-okat infrastrukturális vagy környezeti problémák esetén mélyebb futásidejű betekintéshez."
+  },
+  "dashboard:drive": {
+    "title": "Generált fájlok kezelése",
+    "description": "Tekintse meg, töltse le és ossza meg a Workflow-kimeneteket biztonságos linkeken és ellenőrzött hozzáférési lehetőségeken keresztül."
+  },
+  "dashboard:datatable": {
+    "title": "Natív munka strukturált adatokkal",
+    "description": "Hozzon létre tipizált táblázatokat, és irányítsa azokat közvetlenül Workflow-kból reprodukálható olvasási és írási műveletekhez."
+  },
+  "dashboard:schedules": {
+    "title": "Automatizálási ütemtervek áttekintése",
+    "description": "Tekintse meg az összes aktív Cron-Workflow-t naptárnézetben (nap, hét, hónap). Egy blokkra kattintva közvetlenül a Canvas-ra jut."
+  },
+  "evals": {
+    "title": "Minőség megbízható értékelése",
+    "description": "Futtasson ismételhető tesztcsomagokat, hogy a Prompt- és modellváltozásokat megalapozottan hasonlíthassa össze a produkciós bevezetések előtt."
+  },
+  "docs": {
+    "title": "Gyors tájékozódás az alkalmazásban",
+    "description": "Böngésszen tömör referenciákban, és mélyüljön el célzottan anélkül, hogy elhagyná az aktuális Workflow-t."
+  },
+  "editor": {
+    "title": "Tervezés és hibakeresés a Canvas-on",
+    "description": "Kapcsolja össze a csomópontokat vizuálisan, futtassa azonnal, és finomítsa a viselkedést közvetlen visszajelzéssel egy munkaterületen."
+  }
+}

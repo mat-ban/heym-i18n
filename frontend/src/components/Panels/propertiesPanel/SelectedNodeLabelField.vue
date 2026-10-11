@@ -15,7 +15,7 @@ const {
 <template>
   <template v-if="selectedNode">
     <div class="space-y-2">
-      <Label>Label</Label>
+      <Label>{{ $t('propertiesPanel.label') }}</Label>
       <Input
         :model-value="selectedNode.data.label"
         placeholder="camelCaseOnly"

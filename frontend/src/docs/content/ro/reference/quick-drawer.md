@@ -1,0 +1,76 @@
+# Quick Drawer
+
+**Quick Drawer** este un panou de execuție rapidă pe partea dreaptă pentru workflow-uri. Acesta apare pe paginile autentificate, precum tabul [Workflows](../tabs/workflows-tab.md) din dashboard, Docs și Evaluare.
+
+## Acces
+
+- Faceți clic pe trigger-ul fix **Quick / Workflows** de pe marginea din dreapta-mijloc a ecranului
+- Când [Contextual Showcase](./contextual-showcase.md) este de asemenea disponibil, trigger-ul său **Page Guide** se află deasupra Quick Workflows
+- Panoul se deschide din dreapta și deplasează pagina curentă spre stânga cu o redimensionare subtilă
+- Pe mobil, Quick Drawer este ascuns
+- Panoul nu este afișat în editorul de workflow, pe paginile de login/register, portal sau HITL review
+
+## Căutare Workflow-uri
+
+Utilizați câmpul de filtrare din partea de sus a panoului pentru a căuta workflow-uri după:
+
+- Numele workflow-ului
+- Descrierea workflow-ului
+
+Căutarea nu ține cont de majuscule/minuscule și actualizează lista imediat.
+
+## Workflow-uri Fixate
+
+Fixați workflow-urile pentru a le păstra în partea de sus a panoului.
+
+- Workflow-urile fixate apar în propria secțiune deasupra listei complete
+- Fixările noi sunt adăugate în partea de sus
+- Ordinea fixărilor este păstrată între reîncărcări în stocarea browserului
+
+## Rularea Workflow-urilor
+
+Selectați un workflow pentru a deschide formularul său de intrare.
+
+- Câmpurile de intrare sunt afișate vertical în ordinea panoului
+- Faceți clic pe **Run Workflow** pentru a executa workflow-ul selectat
+- Faceți clic pe **Stop Workflow** pentru a anula o execuție în curs din panou
+- Workflow-urile fără câmpuri de intrare pot fi rulate direct
+
+Panoul utilizează același API de execuție a workflow-urilor ca alte suprafețe de rulare Heym, astfel încât rezultatele și comportamentul la runtime rămân consecvente.
+
+Oprirea unei rulări din panou anulează de asemenea execuția activă din backend, inclusiv orice job Playwright în curs pentru acea rulare de workflow.
+
+## Progres și Rezultate
+
+După pornirea unei rulări, panoul afișează:
+
+- Progresul pașilor în streaming pentru noduri pe măsură ce acestea încep și se termină
+- Starea finală: `success`, `error` sau `pending`
+- Rezultatele finale într-un panou JSON compact
+- Intrări în Istoric etichetate cu `Quick Drawer`
+
+`pending` înseamnă că workflow-ul așteaptă o acțiune ulterioară, precum o revizuire umană.
+
+## Stocarea în Browser
+
+Quick Drawer stochează preferințele personale în `localStorage`:
+
+- ID-urile workflow-urilor fixate
+- Ultimul workflow selectat
+
+Panoul **nu** persistă valorile de intrare în această versiune.
+
+## Domeniu de Aplicare
+
+Quick Drawer este în mod intenționat o suprafață de execuție ușoară.
+
+- Inclus: căutare, fixare, selectare, intrare, rulare, progres, rezultat
+- Exclus: crearea de workflow-uri, editare, gestionarea folderelor și acțiuni pe canvas
+
+## Resurse Asociate
+
+- [Workflows Tab](../tabs/workflows-tab.md) – Lista principală de workflow-uri, foldere și gestionare
+- [Quick Start](../getting-started/quick-start.md) – Construiți și rulați primul dumneavoastră workflow
+- [Execution History](./execution-history.md) – Examinați rulările anterioare
+- [Webhooks](./webhooks.md) – Declanșați workflow-uri prin HTTP
+- [Contextual Showcase](./contextual-showcase.md) – Ghidaj la nivel de pagină care completează Quick Drawer

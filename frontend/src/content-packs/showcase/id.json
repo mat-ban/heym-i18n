@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflow",
+    "summary": "Buat, atur, impor, dan kelola Workflow untuk otomatisasi AI Anda.",
+    "bullets": [
+      "Buka Workflow dengan cepat, jaga folder tetap rapi, dan lanjutkan langsung ke tugas terbaru.",
+      "Gunakan command palette untuk akses cepat tanpa perlu mencari lama di grid.",
+      "Gunakan tab ini sebagai basis untuk semua aktivitas di editor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ringkasan Terpusat",
+        "title": "Pustaka Workflow",
+        "description": "Lihat objek root, folder, dan Workflow yang ditandai untuk dihapus dalam satu tempat.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Akses Cepat",
+        "title": "Pembuatan Cepat",
+        "description": "Buat Workflow baru atau impor JSON secara langsung.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktur",
+        "title": "Atur Sejak Awal",
+        "description": "Folder dan pin menjaga kumpulan otomatisasi yang terus bertambah tetap teratur.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Baca panduan Workflow",
+        "description": "Buka referensi lengkap tab Workflow.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Tab Workflow"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Buka template",
+        "description": "Beralih ke tab template untuk titik awal yang dapat digunakan kembali.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Apa yang termasuk di sini",
+        "content": "Gunakan area ini untuk tugas siklus hidup Workflow: membuat, mengganti nama, memindahkan, mengimpor, mengarsipkan, dan memilih."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Tetap ringkas",
+        "content": "Jika Anda hanya memerlukan eksekusi cepat dari halaman lain, gunakan Quick Drawer. Kembali ke sini untuk pengelolaan dan struktur."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Tab Workflow"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Board Kanban berbasis agen. Setiap kartu adalah job persisten dengan konteks, riwayat, dan output – memindahkan kartu akan menjalankan rantai Workflow pada kolom tersebut.",
+    "bullets": [
+      "Buat kartu teks di Backlog dan seret lepas ke seluruh kolom.",
+      "Hubungkan Workflow terurut ke setiap kolom; pergerakan kartu akan memicunya sebagai Trigger.",
+      "Kartu berubah hijau saat berhasil, merah saat error, dan kuning selama eksekusi.",
+      "Komentar dan output sebelumnya mengalir ke konteks eksekusi berikutnya."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ide Inti",
+        "title": "Kartu adalah job, bukan catatan",
+        "description": "Setiap kartu membawa riwayat lengkapnya: komentar, pergerakan, dan output dari setiap Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Siklus Perencanaan",
+        "title": "Putaran lanjutan",
+        "description": "Balas di komentar dan jalankan ulang – rantai akan melihat seluruh konteks yang terakumulasi.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Dokumentasi Board",
+        "description": "Rantai kolom, kontrak Card-Payload, dan putaran lanjutan.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Cara rantai kolom dijalankan",
+        "content": "Workflow yang dilampirkan ke kolom berjalan secara berurutan saat kartu masuk. Output setiap Workflow ditambahkan ke konteks kartu; error akan menghentikan rantai."
+      },
+      {
+        "id": "board-context",
+        "title": "Apa yang diterima Workflow",
+        "content": "Input eksekusi mencakup kartu (judul, konten, metadata, komentar, riwayat, output sebelumnya), Board, pergerakan, dan posisi dalam rantai. Baca ini dengan ekspresi $input.card."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Template",
+    "summary": "Mulai dengan blueprint Workflow yang dapat digunakan kembali, alih-alih membangun pola yang sama dari awal setiap kali.",
+    "bullets": [
+      "Gunakan template saat struktur Workflow sudah diketahui, tetapi detailnya masih bervariasi.",
+      "Template yang baik mempercepat onboarding dan mengurangi pekerjaan canvas yang berulang.",
+      "Bagikan pola di sini dan sesuaikan di editor sesuai kebutuhan."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Penggunaan Ulang",
+        "title": "Pendekatan Blueprint",
+        "description": "Tangkap struktur Workflow yang terbukti dan terapkan kembali dengan cepat.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kecepatan Tim",
+        "title": "Titik awal yang seragam",
+        "description": "Template membantu tim menyepakati pola terbaik yang sama.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Efisiensi",
+        "title": "Lebih sedikit waktu terbuang",
+        "description": "Pilih kerangka yang sudah jadi dan sesuaikan hanya bagian esensialnya.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Buka dokumentasi template",
+        "description": "Pelajari bagaimana template cocok dengan alur Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Tab Template"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Kembali ke Workflow",
+        "description": "Kembali ke pustaka utama untuk Workflow.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Mengapa template penting",
+        "content": "Template mengubah tata letak node yang berulang menjadi aset yang dapat digunakan kembali – ideal untuk tim yang menyediakan variasi dari pola Workflow yang sama."
+      },
+      {
+        "id": "templates-when",
+        "title": "Penggunaan optimal",
+        "content": "Gunakan template saat strukturnya stabil, tetapi nama, Prompt, Credentials, atau tujuan bervariasi dari satu kasus ke kasus lainnya."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Tab Template"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Variabel",
+    "summary": "Simpan nilai bersama secara terpusat dan referensikan di seluruh Workflow, tanpa menduplikasi data yang sama di mana-mana.",
+    "bullets": [
+      "Simpan nilai yang sering digunakan kembali di satu tempat terpusat yang persisten.",
+      "Variabel mengurangi Prompt drift dan konfigurasi ganda.",
+      "Bagikan nilai secara terarah saat beberapa Workflow memerlukan basis data yang sama."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Persistensi",
+        "title": "Penyimpanan lintas eksekusi",
+        "description": "Nilai global bertahan di antara eksekusi Workflow individual.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Konfigurasi Ringkas",
+        "title": "Lebih sedikit redundansi",
+        "description": "Perbarui sekali secara terpusat, alih-alih menyesuaikan banyak field node secara manual.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ekspresi",
+        "title": "Dukungan di DSL",
+        "description": "Referensikan nilai langsung di ekspresi node dan Prompt.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Baca dokumentasi Variabel",
+        "description": "Buka panduan untuk Variabel di Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Tab Variabel"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Pola umum",
+        "content": "Simpan Endpoint, fragmen Prompt bersama, pengaturan spesifik lingkungan, atau ID yang perlu dibaca oleh beberapa Workflow."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Apa yang tidak termasuk di sini",
+        "content": "Secret dan autentikasi provider termasuk dalam kredensial, bukan Variabel global."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Tab Variabel"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Gunakan Chat Dashboard sebagai titik masuk berbasis dialog yang cepat untuk Workflow dan tugas platform Anda.",
+    "bullets": [
+      "Sangat baik untuk pertanyaan cepat, bantuan Workflow, dan eksekusi ringan.",
+      "Berfokus pada kecepatan dan iterasi, bukan kontrol editor penuh.",
+      "Setelah strukturnya jelas, langsung beralih ke Workflow atau dokumentasi."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Bahasa Alami",
+        "title": "Interaksi cepat",
+        "description": "Gunakan bahasa sederhana, alih-alih menelusuri seluruh aplikasi secara manual.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Jembatan",
+        "title": "Dari ide ke aksi",
+        "description": "Chat membantu saat tujuannya jelas, tetapi jalur pastinya masih perlu disusun.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Pendamping",
+        "title": "Melengkapi dokumentasi",
+        "description": "Gunakan bersama dokumentasi agar jawaban dan referensi selalu siap di tangan.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Buka dokumentasi Chat",
+        "description": "Baca panduan untuk Chat Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Tab Chat"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Referensi Asisten AI",
+        "description": "Pelajari bagaimana Asisten Heym membantu pembuatan Workflow.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "Asisten AI"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Kasus penggunaan terbaik",
+        "content": "Gunakan Chat untuk pertanyaan Workflow cepat, panduan platform singkat, dan langkah operasional yang tidak memerlukan pekerjaan canvas mendalam."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Kapan beralih tampilan",
+        "content": "Beralih ke editor saat kontrol tingkat node diperlukan, atau ke dokumentasi untuk referensi permanen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Tab Chat"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Kelola dan bagikan file yang dihasilkan oleh Workflow skill Anda.",
+    "bullets": [
+      "Skill menulis file ke direktori output; Heym secara otomatis menangkapnya.",
+      "Bagikan file melalui tautan Token atau URL Basic-Auth yang dilindungi kata sandi.",
+      "Unduh file dengan satu klik."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Penyimpanan",
+        "title": "File yang ditangkap secara otomatis",
+        "description": "Skill menulis ke _OUTPUT_DIR; file muncul di sini segera setelah eksekusi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Berbagi",
+        "title": "Kontrol akses yang fleksibel",
+        "description": "Tautan publik, perlindungan kata sandi, tanggal kedaluwarsa, dan batas unduhan.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Format",
+        "title": "PDF, DOCX, CSV, dan lainnya",
+        "description": "Hasilkan berbagai jenis file dengan reportlab, python-docx, atau Python standar.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Buka Dokumentasi Drive",
+        "description": "Baca referensi lengkap tab Drive.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Tab Drive"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Panduan Pembuatan File",
+        "description": "Pelajari cara Skill menghasilkan file.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Pembuatan File"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Bagaimana file sampai ke sini",
+        "content": "Ketika sebuah Skill menempatkan file di direktori _OUTPUT_DIR, Heym menyimpannya secara persisten dan menghasilkan Token unduhan."
+      },
+      {
+        "id": "drive-share",
+        "title": "Opsi berbagi",
+        "content": "Buat tautan Token publik untuk siapa saja atau URL yang dilindungi kata sandi termasuk tanggal kedaluwarsa dan batas unduhan."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Tab Drive"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Kredensial",
+    "summary": "Kelola kunci, Token, dan detail koneksi agar Workflow dapat berkomunikasi dengan sistem eksternal secara aman.",
+    "bullets": [
+      "Simpan kredensial secara terpusat, bukan tersebar di setiap node.",
+      "Kredensial mengendalikan LLM, integrasi, penyimpanan vektor, dan lainnya.",
+      "Berikan akses secara terarah saat tim membutuhkan koneksi yang sama tanpa salinan kunci."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Keamanan",
+        "title": "Kredensial yang aman",
+        "description": "Simpan autentikasi sekali dan gunakan kembali dengan aman di Workflow.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrasi",
+        "title": "Dukungan luas",
+        "description": "Mendukung penyedia seperti OpenAI, DeepSeek, Slack, Redis, Qdrant, dan Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kolaborasi",
+        "title": "Berbagi secara terarah",
+        "description": "Gunakan berbagi tim atau pengguna, bukan membuat duplikat.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Baca Dokumentasi Kredensial",
+        "description": "Buka panduan untuk dasbor Kredensial.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Tab Kredensial"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Lihat Integrasi",
+        "description": "Telusuri detail penyiapan integrasi pihak ketiga.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Integrasi Pihak Ketiga"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Di mana digunakan",
+        "content": "Kredensial direferensikan dalam konfigurasi node dan diselesaikan secara aman selama eksekusi."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Model ramah tim",
+        "content": "Utamakan berbagi ketika beberapa pengembang membutuhkan akses penyedia yang sama; ini memastikan perilaku konsisten dan audit yang mudah."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Tab Kredensial"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Penyimpanan Vektor",
+    "summary": "Siapkan backend Retrieval untuk Workflow yang membutuhkan pencarian semantik, memori, atau pengikatan konteks RAG.",
+    "bullets": [
+      "Penyimpanan vektor membentuk basis data untuk Workflow berbasis Retrieval.",
+      "Gunakan bersama node RAG dan alur AI untuk pengikatan dokumen yang presisi.",
+      "Tab ini berfungsi sebagai infrastruktur untuk Prompt yang terarah."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktur RAG",
+        "title": "Memori yang dapat dicari",
+        "description": "Siapkan dokumen untuk Retrieval semantik saat Workflow membutuhkan konteks.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kualitas",
+        "title": "Pengikatan yang terarah",
+        "description": "Retrieval mengurangi risiko halusinasi dengan menyediakan bukti.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Operasional",
+        "title": "Kelola sekali secara terpusat",
+        "description": "Buat penyimpanan vektor dan gunakan kembali di beberapa Workflow.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Buka Dokumentasi Penyimpanan Vektor",
+        "description": "Baca panduan untuk dasbor Penyimpanan Vektor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Tab Penyimpanan Vektor"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Lihat Dokumentasi Node RAG",
+        "description": "Buka referensi untuk node Qdrant RAG.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Penempatan",
+        "content": "Tab ini menyiapkan lapisan penyimpanan. Logika Retrieval yang sebenarnya berada di dalam Workflow (misalnya melalui pola RAG atau agen)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Waktu penggunaan",
+        "content": "Pilih penyimpanan vektor ketika Workflow Anda perlu menelusuri basis pengetahuan tidak terstruktur, bukan hanya mengandalkan memori LLM."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Tab Penyimpanan Vektor"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Kelola koneksi Model Context Protocol agar Workflow agen dapat mengakses alat dan fungsi eksternal dengan aman.",
+    "bullets": [
+      "MCP mengubah ekosistem alat eksternal menjadi konteks agen yang dapat digunakan.",
+      "Gunakan tab ini ketika agen membutuhkan alat yang lebih kaya daripada Prompt statis.",
+      "Kualitas koneksi secara langsung menentukan kemampuan agen Anda."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Alat Agen",
+        "title": "Lapisan fungsi eksternal",
+        "description": "Sediakan server alat yang dapat dipanggil agen selama penalaran.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kontrol Runtime",
+        "title": "Penyiapan koneksi",
+        "description": "Konfigurasikan Endpoint, label, dan transport untuk Workflow yang andal.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Kedalaman Platform",
+        "title": "Melampaui Prompt",
+        "description": "MCP memungkinkan Workflow Heym untuk bertindak, bukan hanya menjawab.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Buka Dokumentasi MCP",
+        "description": "Baca panduan untuk tab MCP.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "Tab MCP"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Arsitektur Agen",
+        "description": "Pelajari bagaimana MCP terintegrasi dalam eksekusi agen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Arsitektur Agen"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Signifikansi",
+        "content": "Sangat penting ketika agen Anda membutuhkan alat, akses lingkungan, atau integrasi sistem di luar node individual."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Pendekatan operasional",
+        "content": "Perlakukan koneksi MCP seperti infrastruktur: label yang stabil dan tanggung jawab yang jelas menyederhanakan debugging."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "Tab MCP"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Eksekusi",
+    "summary": "Periksa Trace terperinci dari eksekusi AI dan Workflow untuk memahami apa yang terjadi – bukan hanya apakah berhasil.",
+    "bullets": [
+      "Gunakan Trace untuk debugging, analisis performa, dan pemeriksaan kualitas Prompt.",
+      "Trace menjelaskan perilaku model, latensi, dan jalur eksekusi.",
+      "Tempat pertama yang dituju saat hasil tidak terduga atau eksekusi tidak stabil."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Debugging",
+        "title": "Lihat langkah tersembunyi",
+        "description": "Data Trace mengungkap apa yang sebenarnya dijalankan oleh Workflow dan model.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Evaluasi",
+        "title": "Dukung iterasi",
+        "description": "Gunakan Trace saat mengoptimalkan Prompt, alat, dan model.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Keandalan",
+        "title": "Lacak hasil",
+        "description": "Trace yang baik mengurangi dugaan saat analisis kesalahan.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Buka Dokumentasi Eksekusi",
+        "description": "Baca panduan untuk dasbor Eksekusi.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Tab Eksekusi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Kapan Trace menjadi penting",
+        "content": "Ketika Workflow bersifat multi-tahap, intensif model, atau berbasis alat, tampilan status saja tidak lagi memadai."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. Riwayat",
+        "content": "Riwayat menunjukkan BAHWA suatu eksekusi terjadi. Trace menjelaskan MENGAPA perilakunya demikian."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Tab Eksekusi"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Peringatan",
+    "summary": "Tentukan ambang batas berdasarkan jendela waktu dan dapatkan notifikasi otomatis begitu ambang tersebut terlampaui.",
+    "bullets": [
+      "Empat jenis: jumlah kesalahan, durasi eksekusi, ambang Token/biaya, dan penghitung eksekusi.",
+      "Setiap peringatan dinilai berdasarkan jendela waktu yang dipilih, bukan berdasarkan peristiwa individual.",
+      "Jelaskan persyaratan dalam bahasa alami dan asisten akan mengonfigurasi peringatan tersebut."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Jendela Waktu",
+        "title": "Akumulasi, bukan anomali",
+        "description": "Satu eksekusi gagal hanyalah noise. Dua belas dalam sepuluh menit adalah sebuah insiden.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Sebelum Menyimpan",
+        "title": "Uji kondisi secara retrospektif",
+        "description": "Langkah pengujian menguji terhadap riwayat nyata untuk mengkalibrasi ambang batas terlebih dahulu.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reaksi",
+        "title": "Jalankan Workflow saat alarm berbunyi",
+        "description": "Payload peringatan menjadi input Workflow untuk notifikasi otomatis melalui Slack atau email.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Buka Dokumentasi Peringatan",
+        "description": "Pelajari cara kerja jenis alarm, jendela waktu, dan asisten.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Tab Peringatan"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Tujuan",
+        "content": "Analitik dan Trace menjawab pertanyaan yang Anda ajukan secara aktif. Peringatan membuat Heym berbicara secara proaktif ketika ambang batas kritis terlampaui."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Mengapa Peringatan Palsu Dihindari",
+        "content": "Sebuah peringatan dipicu sekali dan menunggu hingga metrik pulih – ini mencegah banjir notifikasi."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Tab Peringatan"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analitik",
+    "summary": "Lacak pola penggunaan dan perilaku sistem untuk memahami aktivitas, pertumbuhan, dan perubahan seiring waktu.",
+    "bullets": [
+      "Kenali adopsi, throughput, dan lonjakan tidak biasa dengan analitik.",
+      "Pandangan tingkat platform, bukan alat debugging individual.",
+      "Kombinasikan analitik dengan Trace dan riwayat untuk sinyal dan penjelasan."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Sinyal",
+        "title": "Transparansi penggunaan",
+        "description": "Kenali tren, bukan melihat eksekusi individual secara terisolasi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapasitas",
+        "title": "Kesadaran operasional",
+        "description": "Kenali lonjakan beban dan penurunan sejak dini dan selidiki.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Bantuan Keputusan",
+        "title": "Optimasi terarah",
+        "description": "Analitik membantu memprioritaskan Workflow terpenting.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Buka Dokumentasi Analitik",
+        "description": "Baca panduan untuk dasbor Analitik.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Tab Analitik"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Tujuan",
+        "content": "Gunakan analitik untuk pola, throughput, dan perilaku agregat di seluruh operasi platform."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Prosedur",
+        "content": "Kenali sinyal di sini, lalu beralih ke Trace, riwayat, atau editor untuk menganalisis penyebab."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Tab Analitik"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dasbor",
+    "summary": "Buat kisi widget diagram yang masing-masing didukung oleh Workflow sendiri – semua metrik dalam satu tampilan.",
+    "bullets": [
+      "Setiap widget dijalankan oleh Workflow yang menyediakan data ke node Chart Output.",
+      "Gunakan widget batang, garis, lingkaran, tabel, dan angka sesuai metrik.",
+      "Buat atau sesuaikan widget dengan AI dan cache hasilnya untuk waktu muat yang cepat.",
+      "Buat beberapa dasbor dan bagikan dengan orang atau tim dengan akses baca atau tulis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Komposisi",
+        "title": "Diagram yang didukung Workflow",
+        "description": "Semua data yang dihasilkan Workflow divisualisasikan sebagai diagram.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kinerja",
+        "title": "Hasil yang di-cache",
+        "description": "Caching widget menghindari eksekusi Workflow berulang pada setiap pemuatan halaman.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Dukungan AI",
+        "title": "Buat dan sesuaikan",
+        "description": "Jelaskan metrik dan biarkan widget dibuat secara otomatis oleh AI.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Buka Dokumentasi Dasbor",
+        "description": "Pelajari cara membuat widget Dasbor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Tab Dasbor"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Tujuan",
+        "content": "Gunakan Dasbor untuk ringkasan persisten metrik penting dari Workflow Anda sendiri."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Pembuatan",
+        "content": "Tambahkan widget, konfigurasikan Workflow sehingga node terakhir sebelum Chart Output menyediakan baris, dan atur dalam kisi."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Tab Dasbor"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Tim",
+    "summary": "Kelola akses bersama agar Workflow, Credential, variabel, dan penyimpanan vektor dapat digunakan secara kolaboratif tanpa duplikasi.",
+    "bullets": [
+      "Tim adalah cara terbersih untuk berbagi sumber daya platform secara skalabel.",
+      "Gunakan Tim ketika izin harus mengikuti grup, bukan individu.",
+      "Pastikan kolaborasi terstruktur di workspace yang berkembang."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kolaborasi",
+        "title": "Berbagi berbasis grup",
+        "description": "Berikan akses sekali untuk satu tim, bukan memberikan izin ke pengguna individual secara manual.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kejelasan",
+        "title": "Tanggung jawab yang rapi",
+        "description": "Manajemen sumber daya mengikuti struktur tim yang nyata.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skalabilitas",
+        "title": "Beban administrasi lebih sedikit",
+        "description": "Anggota baru mewarisi hak akses secara otomatis melalui tim.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Buka Dokumentasi Tim",
+        "description": "Baca panduan untuk dasbor Tim.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Tab Tim"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Berbagi Sumber Daya",
+        "description": "Baca detail tentang berbagi sumber daya.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Berbagi Kredensial"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Manfaat Tim",
+        "content": "Tim menghubungkan identitas dan akses sumber daya untuk kolaborasi yang lancar."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Tips Praktis",
+        "content": "Utamakan berbagi melalui Tim ketika sebuah Workflow atau Credential dimiliki oleh grup kerja permanen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Tab Tim"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Log",
+    "summary": "Baca Log pada tingkat stack ketika Anda memerlukan wawasan infrastruktur di luar output Workflow.",
+    "bullets": [
+      "Gunakan Log untuk debugging layanan, status Container, dan masalah lingkungan.",
+      "Membantu ketika penyebab berada di bawah tingkat Workflow.",
+      "Gunakan bersama Trace untuk bukti pada tingkat aplikasi dan sistem."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktur",
+        "title": "Transparansi Container",
+        "description": "Lihat apa yang dijalankan layanan backend di bawah antarmuka Heym.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Pemecahan Masalah",
+        "title": "Temukan penyebab",
+        "description": "Log membantu mengatasi masalah startup, crash, atau kesalahan integrasi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pelengkap",
+        "title": "Perbedaan dengan hasil Workflow",
+        "description": "Output Workflow menunjukkan hasil; Log menunjukkan perilaku sistem.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Buka Dokumentasi Log",
+        "description": "Baca panduan untuk dasbor Log.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Tab Log"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Waktu Penggunaan",
+        "content": "Beralih ke sini ketika masalah tampak terkait deployment, layanan, atau lingkungan."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Kombinasi Terbaik",
+        "content": "Gunakan Log bersama Trace dan riwayat untuk berpindah dari gejala ke penyebab dengan cepat."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Tab Log"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Evaluasi",
+    "summary": "Buat benchmark yang dapat direproduksi untuk Workflow agen guna membandingkan perubahan Prompt, model, dan Workflow secara andal.",
+    "bullets": [
+      "Suite dan kasus uji mengubah kualitas Workflow subjektif menjadi metrik yang terukur.",
+      "Tempat ideal untuk pemeriksaan regresi sebelum meluncurkan pembaruan Prompt atau model.",
+      "Bandingkan beberapa model terhadap dataset dan metode penilaian yang sama."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Siklus Kualitas",
+        "title": "Benchmark agen",
+        "description": "Jalankan suite yang sama berulang kali, bukan mengandalkan pemeriksaan acak.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Perbandingan",
+        "title": "Uji model dan Prompt",
+        "description": "Lihat bagaimana pengaturan berbeda berperilaku pada set pengujian yang sama.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Keamanan",
+        "title": "Iterasi yang andal",
+        "description": "Buktikan peningkatan secara terukur sebelum peluncuran.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Buka dokumentasi Evaluasi",
+        "description": "Baca panduan untuk halaman Evaluasi.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Tab Evaluasi"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Referensi node Agen",
+        "description": "Lihat area Workflow yang menjadi target sebagian besar suite eval.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Node Agen"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Perancangan suite",
+        "content": "Suite yang baik mencerminkan kasus pengguna nyata, kondisi batas, dan langkah persetujuan yang harus tetap stabil."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Parameter perbandingan",
+        "content": "Perbandingan umum mencakup varian Prompt, pemilihan model, pengaturan temperature, dan revisi Workflow pada dataset yang sama."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Tab Evaluasi"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentasi",
+    "summary": "Telusuri referensi platform yang presisi langsung di dalam aplikasi dan perdalam sesuai kebutuhan.",
+    "bullets": [
+      "Dokumentasi Heym dirancang untuk pemahaman cepat dan pencarian yang terarah.",
+      "Sidebar, pencarian, dan referensi silang memungkinkan perpindahan cepat antar konsep.",
+      "Showcase merujuk langsung ke artikel yang sedang dibuka."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Referensi dalam Aplikasi",
+        "title": "Selalu siap diakses",
+        "description": "Dokumentasi tetap berada dalam alur produk, tanpa perlu membuka tab eksternal.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ikhtisar",
+        "title": "Hal penting terlebih dahulu",
+        "description": "Artikel dimulai dengan poin-poin inti dan bercabang melalui tautan."
+      },
+      {
+        "eyebrow": "Sadar Konteks",
+        "title": "Artikel saat ini",
+        "description": "Saat membaca dokumen, aksi 'Pelajari lebih lanjut' mengikuti artikel tersebut secara langsung."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Lihat pengantar",
+        "description": "Buka pengantar dokumentasi sebagai titik masuk default.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Pengantar"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Navigasi cepat",
+        "content": "Gunakan sidebar untuk kategori dan pencarian perintah jika topik sudah diketahui."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Dukungan melalui Showcase",
+        "content": "Showcase menjaga ringkasan tetap ringkas dan mengarahkan ke dokumentasi terperinci bila diperlukan."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Pengantar"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Jadwal",
+    "summary": "Pantau semua Workflow Cron aktif pada kalender visual dan kendalikan waktu eksekusi.",
+    "bullets": [
+      "Beralih antara tampilan harian, mingguan, dan bulanan untuk resolusi yang sesuai.",
+      "Arahkan kursor ke blok untuk melihat ekspresi Cron; klik untuk langsung menuju Canvas.",
+      "Gunakan tab ini untuk memeriksa kepadatan eksekusi dan mengidentifikasi tumpang tindih."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparansi",
+        "title": "Tampilan kalender",
+        "description": "Workflow Cron aktif muncul sebagai blok pada waktu yang dijadwalkan.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigasi",
+        "title": "Satu klik ke Canvas",
+        "description": "Klik blok untuk membuka editor Workflow secara langsung.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Rentang",
+        "title": "Hari, minggu, atau bulan",
+        "description": "Sesuaikan resolusi untuk memeriksa jam tertentu atau merencanakan sebulan penuh.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Buka dokumentasi Jadwal",
+        "description": "Baca referensi tab Jadwal.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Tab Jadwal"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Referensi node Cron",
+        "description": "Pelajari cara mengonfigurasi Trigger Cron di Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Waktu penggunaan",
+        "content": "Periksa otomatisasi terjadwal, kenali konflik jadwal, dan pastikan Workflow penting tetap aktif."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Kode warna",
+        "content": "Setiap Workflow mendapatkan warna konsisten dari ID-nya, yang tetap sama di tampilan harian, mingguan, dan bulanan."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Tab Jadwal"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Tabel Data",
+    "summary": "Buat tabel data terstruktur langsung di Heym dan gunakan secara programatik dalam Workflow.",
+    "bullets": [
+      "Buat tabel dengan kolom bertipe, isi secara manual, atau impor melalui CSV.",
+      "Gunakan node Workflow DataTable untuk membaca, menulis, dan menanyakan baris secara programatik.",
+      "Bagikan tabel kepada pengguna atau tim dengan hak baca atau tulis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Data Terintegrasi",
+        "title": "Penyimpanan terintegrasi",
+        "description": "Simpan data terstruktur tanpa database eksternal atau API key.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Integrasi Workflow",
+        "title": "Node DataTable",
+        "description": "Temukan, sisipkan, perbarui, dan hapus baris di Workflow mana pun.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Kolaborasi",
+        "title": "Berbagi dan hak akses",
+        "description": "Berikan akses baca dan tulis yang terperinci untuk pengguna dan tim.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Dokumentasi tab Tabel Data",
+        "description": "Baca referensi tab Tabel Data.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Tabel Data"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "Dokumentasi node DataTable",
+        "description": "Baca referensi node DataTable.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Apa itu Tabel Data?",
+        "content": "Tabel Data adalah penyimpanan terstruktur terintegrasi di Heym: Kolom bertipe (String, Number, Boolean, Date, JSON), pengeditan inline, serta impor/ekspor CSV."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Penggunaan dalam Workflow",
+        "content": "Node DataTable mendukung find, getAll, getById, insert, update, remove, dan upsert – tanpa kredensial langsung melalui pemilik Workflow."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Tabel Data"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Editor Workflow",
+    "summary": "Buat, uji, debug, dan optimalkan Workflow di Canvas – langsung dalam konteks eksekusi.",
+    "bullets": [
+      "Di editor, desain node, aliran data, dan perilaku eksekusi menyatu.",
+      "Gunakan sidebar dan riwayat untuk beralih cepat antara pembuatan dan debugging.",
+      "Showcase sengaja tetap ringkas di sini untuk memberikan ruang maksimal bagi Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Desain Workflow visual",
+        "description": "Hubungkan node, cabangkan logika, dan modelkan alur runtime secara langsung.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iterasi",
+        "title": "Debugging saat membuat",
+        "description": "Gunakan riwayat, panel debug, dan hasil eksekusi untuk siklus umpan balik yang cepat."
+      },
+      {
+        "eyebrow": "Cakupan Fitur",
+        "title": "Fitur lanjutan siap diakses",
+        "description": "Portal, berbagi, template, dan validasi tersedia langsung di Canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Buka dokumentasi Canvas",
+        "description": "Baca referensi fitur Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Fitur Canvas"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Pintasan keyboard",
+        "description": "Buka ikhtisar pintasan keyboard di editor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Pintasan Keyboard"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Irama kerja",
+        "content": "Modelkan di Canvas, periksa asumsi tentang output, dan sesuaikan parameter di sidebar tanpa kehilangan fokus."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Showcase ringkas",
+        "content": "Karena editor sudah menyediakan banyak informasi, Showcase berfungsi sebagai panduan orientasi yang ramping."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Fitur Canvas"
+    }
+  }
+}

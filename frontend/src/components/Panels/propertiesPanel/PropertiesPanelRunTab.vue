@@ -131,14 +131,14 @@ const {
           v-if="hasNodes"
           class="hidden sm:block text-xs text-muted-foreground text-center break-words"
         >
-          Press <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono">Ctrl+Enter</kbd> to run
+          {{ $t('propertiesPanel.pressCtrlEnterToRun') }}
         </p>
 
         <p
           v-if="!hasNodes"
           class="text-xs text-muted-foreground text-center"
         >
-          Add nodes to your workflow to run it
+          {{ $t('propertiesPanel.addNodesToRun') }}
         </p>
       </div>
 
@@ -152,7 +152,7 @@ const {
         <div class="space-y-2">
           <div class="flex items-center gap-2">
             <CheckCircle2 class="w-4 h-4 text-primary" />
-            <Label class="text-sm font-medium">Last Executed Node</Label>
+            <Label class="text-sm font-medium">{{ $t('propertiesPanel.lastExecutedNode') }}</Label>
           </div>
           <div class="rounded-md bg-muted/50 p-2">
             <p class="text-sm font-medium text-foreground">

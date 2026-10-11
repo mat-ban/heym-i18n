@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import type { Component } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import {
@@ -43,6 +44,7 @@ const emit = defineEmits<{
 
 const payload = ref<ChartPayload | null>(null);
 const markdownTaskSaving = ref(false);
+const { t } = useI18n();
 // Only surface http(s) links. The url can come from a dynamic expression over upstream
 // data, so reject javascript:/data:/relative values to avoid an injected-link XSS.
 const externalUrl = computed<string | null>(() => {
@@ -71,41 +73,41 @@ interface WidgetAction {
   run: () => void;
 }
 
-const actions: WidgetAction[] = [
+const actions = computed<WidgetAction[]>(() => [
   {
     key: "refine",
     icon: Sparkles,
-    label: "Fine-tune with AI",
+    label: t("dashboards.actions.refine"),
     run: () => emit("refine", props.widget),
   },
-  { key: "refresh", icon: RefreshCw, label: "Refresh", run: () => void loadData(true) },
+  { key: "refresh", icon: RefreshCw, label: t("dashboards.actions.refresh"), run: () => void loadData(true) },
   {
     key: "edit",
     icon: Pencil,
-    label: "Edit workflow",
+    label: t("dashboards.actions.editWorkflow"),
     run: () => emit("edit", props.widget.workflow_id),
   },
   {
     key: "clone",
     icon: Copy,
-    label: "Clone widget",
+    label: t("dashboards.actions.cloneWidget"),
     disabled: () => props.cloning,
     run: () => emit("clone", props.widget.id),
   },
   {
     key: "settings",
     icon: Settings,
-    label: "Settings",
+    label: t("dashboards.actions.settings"),
     run: () => emit("settings", props.widget),
   },
   {
     key: "delete",
     icon: Trash2,
-    label: "Delete widget",
+    label: t("dashboards.actions.deleteWidget"),
     danger: true,
     run: () => emit("delete", props.widget.id),
   },
-];
+]);
 
 const openHitlHistory = inject(openHitlHistoryKey, null);
 const hitlTarget = ref<HitlHistoryTarget | null>(null);
@@ -122,13 +124,13 @@ function openWidgetHistory(): void {
 // A read-only share keeps only Refresh; every other action changes the widget.
 // History stays first so it shares the same gap as the widget icons.
 const visibleActions = computed<WidgetAction[]>(() => {
-  const base = props.canWrite ? actions : actions.filter((action) => action.key === "refresh");
+  const base = props.canWrite ? actions.value : actions.value.filter((action) => action.key === "refresh");
   if (!hitlTarget.value) return base;
   return [
     {
       key: "history",
       icon: History,
-      label: "Open history",
+      label: t("dashboards.actions.openHistory"),
       run: openWidgetHistory,
     },
     ...base,
@@ -199,7 +201,7 @@ async function loadData(force = false): Promise<void> {
     payload.value = response.payload;
     error.value = response.error ?? null;
   } catch (e) {
-    error.value = e instanceof Error ? e.message : "Failed to load widget";
+    error.value = e instanceof Error ? e.message : t("dashboards.actions.failedToLoadWidget");
   } finally {
     loading.value = false;
   }
@@ -222,7 +224,7 @@ async function onMarkdownTaskToggle(lineIndex: number): Promise<void> {
     error.value = response.error ?? null;
   } catch (e) {
     payload.value = previousPayload;
-    error.value = e instanceof Error ? e.message : "Failed to update checkbox";
+    error.value = e instanceof Error ? e.message : t("dashboards.actions.failedToUpdateCheckbox");
   } finally {
     markdownTaskSaving.value = false;
   }
@@ -321,7 +323,7 @@ onBeforeUnmount(() => {
         target="_blank"
         rel="noopener noreferrer"
         class="shrink-0 rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-        title="Open link"
+        :title="$t('dashboards.actions.openLink')"
       >
         <ExternalLink class="h-3.5 w-3.5" />
       </a>
@@ -355,7 +357,7 @@ onBeforeUnmount(() => {
       >
         <button
           class="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-          title="Actions"
+          :title="$t('dashboards.actions.actions')"
           @click.stop="toggleMenu"
         >
           <MoreVertical class="h-4 w-4" />

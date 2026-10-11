@@ -27,15 +27,15 @@ const {
 <template>
   <template v-if="selectedNode">
     <div class="space-y-2">
-      <Label>Operation</Label>
+      <Label>{{ $t("drive.nodeProperties.operation") }}</Label>
       <SearchableSelect
         :model-value="selectedNode.data.driveOperation || ''"
         :options="driveOperationOptions"
-        search-placeholder="Search Drive operations..."
+        :search-placeholder="$t('drive.nodeProperties.searchOperations')"
         @update:model-value="updateNodeData('driveOperation', $event || undefined)"
       />
       <p class="text-xs text-muted-foreground">
-        File operation to perform
+        {{ $t("drive.nodeProperties.operationDescription") }}
       </p>
     </div>
 
@@ -43,7 +43,7 @@ const {
       v-if="selectedNode.data.driveOperation === 'downloadUrl'"
       class="space-y-2"
     >
-      <Label>Source URL</Label>
+      <Label>{{ $t("drive.nodeProperties.sourceUrl") }}</Label>
       <ExpressionInput
         :model-value="selectedNode.data.driveSourceUrl || ''"
         placeholder="https://example.com/file.pdf"
@@ -58,7 +58,7 @@ const {
         @update:model-value="updateNodeData('driveSourceUrl', $event)"
       />
       <p class="text-xs text-muted-foreground">
-        URL of the file to download and store in Drive
+        {{ $t("drive.nodeProperties.sourceUrlDescription") }}
       </p>
     </div>
 
@@ -67,7 +67,7 @@ const {
       class="space-y-4"
     >
       <div class="space-y-2">
-        <Label>Filename</Label>
+        <Label>{{ $t("drive.nodeProperties.filename") }}</Label>
         <ExpressionInput
           ref="driveFilenameExpressionInputRef"
           :model-value="selectedNode.data.driveFilename || ''"
@@ -89,11 +89,11 @@ const {
           @update:model-value="updateNodeData('driveFilename', $event)"
         />
         <p class="text-xs text-muted-foreground">
-          Full filename including extension (for example, 1.mp3)
+          {{ $t("drive.nodeProperties.filenameDescription") }}
         </p>
       </div>
       <div class="space-y-2">
-        <Label>Base64 Content</Label>
+        <Label>{{ $t("drive.nodeProperties.base64Content") }}</Label>
         <ExpressionInput
           ref="driveBase64ContentExpressionInputRef"
           :model-value="selectedNode.data.driveBase64Content || ''"
@@ -115,7 +115,7 @@ const {
           @update:model-value="updateNodeData('driveBase64Content', $event)"
         />
         <p class="text-xs text-muted-foreground">
-          Raw base64 string or data URL to decode and store in Drive
+          {{ $t("drive.nodeProperties.base64ContentDescription") }}
         </p>
       </div>
     </div>
@@ -125,7 +125,7 @@ const {
       class="space-y-2"
     >
       <div class="flex items-center justify-between gap-2">
-        <Label>File ID</Label>
+        <Label>{{ $t("drive.nodeProperties.fileId") }}</Label>
         <AgentFieldToggle
           :node-id="selectedNode.id"
           field-key="driveFileId"
@@ -135,9 +135,9 @@ const {
         <SearchableSelect
           :model-value="selectedNode.data.driveFileId || ''"
           :options="driveFileOptions"
-          placeholder="Select file..."
-          search-placeholder="Search files by name..."
-          empty-text="No files found."
+          :placeholder="$t('drive.nodeProperties.selectFile')"
+          :search-placeholder="$t('drive.nodeProperties.searchFilesByName')"
+          :empty-text="$t('drive.nodeProperties.noFilesFound')"
           :disabled="isDriveFileIdAgentProvided"
           @update:model-value="updateNodeData('driveFileId', $event || undefined)"
         />
@@ -196,7 +196,7 @@ const {
         />
       </template>
       <p class="text-xs text-muted-foreground">
-        ID of the file to manage
+        {{ $t("drive.nodeProperties.fileIdDescription") }}
       </p>
     </div>
 
@@ -204,7 +204,7 @@ const {
       v-if="selectedNode.data.driveOperation === 'getAll'"
       class="space-y-2"
     >
-      <Label>Limit</Label>
+      <Label>{{ $t("drive.nodeProperties.limit") }}</Label>
       <Input
         type="number"
         :model-value="selectedNode.data.driveLimit ?? ''"
@@ -213,7 +213,7 @@ const {
         @update:model-value="updateNodeData('driveLimit', $event !== '' ? Number($event) : undefined)"
       />
       <p class="text-xs text-muted-foreground">
-        Maximum number of files to return
+        {{ $t("drive.nodeProperties.limitDescription") }}
       </p>
     </div>
 
@@ -221,7 +221,7 @@ const {
       v-if="selectedNode.data.driveOperation === 'get'"
       class="space-y-2"
     >
-      <Label>Options</Label>
+      <Label>{{ $t("drive.nodeProperties.options") }}</Label>
       <div class="flex items-center gap-2">
         <input
           id="drive-include-binary"
@@ -246,11 +246,11 @@ const {
       v-if="selectedNode.data.driveOperation === 'setPassword'"
       class="space-y-2"
     >
-      <Label>Password</Label>
+      <Label>{{ $t("drive.nodeProperties.password") }}</Label>
       <ExpressionInput
         ref="drivePasswordExpressionInputRef"
         :model-value="selectedNode.data.drivePassword || ''"
-        placeholder="Enter password or expression"
+        :placeholder="$t('drive.nodeProperties.passwordPlaceholder')"
         :rows="1"
         :nodes="workflowStore.nodes"
         :node-results="workflowStore.nodeResults"
@@ -268,7 +268,7 @@ const {
         @update:model-value="updateNodeData('drivePassword', $event)"
       />
       <p class="text-xs text-muted-foreground">
-        Password to protect the file download link
+        {{ $t("drive.nodeProperties.passwordDescription") }}
       </p>
     </div>
 
@@ -276,7 +276,7 @@ const {
       v-if="selectedNode.data.driveOperation === 'setTtl'"
       class="space-y-2"
     >
-      <Label>TTL (Hours)</Label>
+      <Label>{{ $t("drive.nodeProperties.ttlHours") }}</Label>
       <Input
         type="number"
         :model-value="selectedNode.data.driveTtlHours ?? ''"
@@ -285,7 +285,7 @@ const {
         @update:model-value="updateNodeData('driveTtlHours', $event !== '' ? Number($event) : undefined)"
       />
       <p class="text-xs text-muted-foreground">
-        Hours until the file download link expires
+        {{ $t("drive.nodeProperties.ttlHoursDescription") }}
       </p>
     </div>
 
@@ -293,7 +293,7 @@ const {
       v-if="selectedNode.data.driveOperation === 'setMaxDownloads'"
       class="space-y-2"
     >
-      <Label>Max Downloads</Label>
+      <Label>{{ $t("drive.nodeProperties.maxDownloads") }}</Label>
       <Input
         type="number"
         :model-value="selectedNode.data.driveMaxDownloads ?? ''"
@@ -302,65 +302,65 @@ const {
         @update:model-value="updateNodeData('driveMaxDownloads', $event !== '' ? Number($event) : undefined)"
       />
       <p class="text-xs text-muted-foreground">
-        Maximum number of times the file can be downloaded
+        {{ $t("drive.nodeProperties.maxDownloadsDescription") }}
       </p>
     </div>
 
     <div class="rounded-lg bg-muted/50 p-3 space-y-1">
       <p class="text-xs font-medium text-foreground">
-        Output
+        {{ $t("drive.nodeProperties.output") }}
       </p>
       <div class="text-xs text-muted-foreground space-y-0.5 font-mono">
         <template v-if="selectedNode.data.driveOperation === 'get'">
-          <div>${{ selectedNode.data.label }}.id - file UUID</div>
-          <div>${{ selectedNode.data.label }}.filename - file name</div>
-          <div>${{ selectedNode.data.label }}.mime_type - MIME type</div>
-          <div>${{ selectedNode.data.label }}.size_bytes - file size</div>
-          <div>${{ selectedNode.data.label }}.download_url - public download URL</div>
-          <div>${{ selectedNode.data.label }}.file_base64 - base64 content (if enabled)</div>
+          <div>${{ selectedNode.data.label }}.id - {{ $t("drive.nodeProperties.outputFileUuid") }}</div>
+          <div>${{ selectedNode.data.label }}.filename - {{ $t("drive.nodeProperties.outputFilename") }}</div>
+          <div>${{ selectedNode.data.label }}.mime_type - {{ $t("drive.nodeProperties.outputMimeType") }}</div>
+          <div>${{ selectedNode.data.label }}.size_bytes - {{ $t("drive.nodeProperties.outputFileSize") }}</div>
+          <div>${{ selectedNode.data.label }}.download_url - {{ $t("drive.nodeProperties.outputDownloadUrl") }}</div>
+          <div>${{ selectedNode.data.label }}.file_base64 - {{ $t("drive.nodeProperties.outputFileBase64") }}</div>
         </template>
         <template v-else-if="selectedNode.data.driveOperation === 'getAll'">
-          <div>${{ selectedNode.data.label }}.files - file metadata array</div>
-          <div>${{ selectedNode.data.label }}.count - number of files</div>
-          <div>${{ selectedNode.data.label }}.files[0].filename - file name</div>
-          <div>${{ selectedNode.data.label }}.files[0].size_bytes - file size</div>
-          <div>${{ selectedNode.data.label }}.files[0].download_url - public download URL</div>
+          <div>${{ selectedNode.data.label }}.files - {{ $t("drive.nodeProperties.outputFilesArray") }}</div>
+          <div>${{ selectedNode.data.label }}.count - {{ $t("drive.nodeProperties.outputFilesCount") }}</div>
+          <div>${{ selectedNode.data.label }}.files[0].filename - {{ $t("drive.nodeProperties.outputFilename") }}</div>
+          <div>${{ selectedNode.data.label }}.files[0].size_bytes - {{ $t("drive.nodeProperties.outputFileSize") }}</div>
+          <div>${{ selectedNode.data.label }}.files[0].download_url - {{ $t("drive.nodeProperties.outputDownloadUrl") }}</div>
         </template>
         <template v-else-if="selectedNode.data.driveOperation === 'downloadUrl'">
-          <div>${{ selectedNode.data.label }}.id - new file UUID</div>
-          <div>${{ selectedNode.data.label }}.filename - file name</div>
-          <div>${{ selectedNode.data.label }}.mime_type - MIME type</div>
-          <div>${{ selectedNode.data.label }}.size_bytes - file size</div>
-          <div>${{ selectedNode.data.label }}.download_url - Drive download URL</div>
+          <div>${{ selectedNode.data.label }}.id - {{ $t("drive.nodeProperties.outputFileUuid") }}</div>
+          <div>${{ selectedNode.data.label }}.filename - {{ $t("drive.nodeProperties.outputFilename") }}</div>
+          <div>${{ selectedNode.data.label }}.mime_type - {{ $t("drive.nodeProperties.outputMimeType") }}</div>
+          <div>${{ selectedNode.data.label }}.size_bytes - {{ $t("drive.nodeProperties.outputFileSize") }}</div>
+          <div>${{ selectedNode.data.label }}.download_url - {{ $t("drive.nodeProperties.outputDriveDownloadUrl") }}</div>
         </template>
         <template v-else-if="selectedNode.data.driveOperation === 'save'">
-          <div>${{ selectedNode.data.label }}.id - new file UUID</div>
-          <div>${{ selectedNode.data.label }}.filename - file name</div>
-          <div>${{ selectedNode.data.label }}.mime_type - MIME type</div>
-          <div>${{ selectedNode.data.label }}.size_bytes - file size</div>
-          <div>${{ selectedNode.data.label }}.download_url - Drive download URL</div>
+          <div>${{ selectedNode.data.label }}.id - {{ $t("drive.nodeProperties.outputFileUuid") }}</div>
+          <div>${{ selectedNode.data.label }}.filename - {{ $t("drive.nodeProperties.outputFilename") }}</div>
+          <div>${{ selectedNode.data.label }}.mime_type - {{ $t("drive.nodeProperties.outputMimeType") }}</div>
+          <div>${{ selectedNode.data.label }}.size_bytes - {{ $t("drive.nodeProperties.outputFileSize") }}</div>
+          <div>${{ selectedNode.data.label }}.download_url - {{ $t("drive.nodeProperties.outputDriveDownloadUrl") }}</div>
         </template>
         <template v-else-if="selectedNode.data.driveOperation === 'delete'">
           <div>${{ selectedNode.data.label }}.status - "deleted"</div>
-          <div>${{ selectedNode.data.label }}.file_id - deleted file ID</div>
+          <div>${{ selectedNode.data.label }}.file_id - {{ $t("drive.nodeProperties.outputDeletedFileId") }}</div>
         </template>
         <template v-else-if="selectedNode.data.driveOperation === 'shareWithMyTeams'">
           <div>${{ selectedNode.data.label }}.status - "success"</div>
-          <div>${{ selectedNode.data.label }}.file_id - file ID</div>
-          <div>${{ selectedNode.data.label }}.shared_team_count - number of teams shared with</div>
+          <div>${{ selectedNode.data.label }}.file_id - {{ $t("drive.nodeProperties.fileId") }}</div>
+          <div>${{ selectedNode.data.label }}.shared_team_count - {{ $t("drive.nodeProperties.outputSharedTeamCount") }}</div>
         </template>
         <template v-else-if="selectedNode.data.driveOperation === 'unshareWithMyTeams'">
           <div>${{ selectedNode.data.label }}.status - "success"</div>
-          <div>${{ selectedNode.data.label }}.file_id - file ID</div>
-          <div>${{ selectedNode.data.label }}.shared_team_count - 0 after unsharing</div>
+          <div>${{ selectedNode.data.label }}.file_id - {{ $t("drive.nodeProperties.fileId") }}</div>
+          <div>${{ selectedNode.data.label }}.shared_team_count - {{ $t("drive.nodeProperties.outputUnsharedCount") }}</div>
         </template>
         <template v-else-if="selectedNode.data.driveOperation === 'setPassword' || selectedNode.data.driveOperation === 'setTtl' || selectedNode.data.driveOperation === 'setMaxDownloads'">
           <div>${{ selectedNode.data.label }}.status - "updated"</div>
-          <div>${{ selectedNode.data.label }}.file_id - file ID</div>
-          <div>${{ selectedNode.data.label }}.download_url - new access URL</div>
+          <div>${{ selectedNode.data.label }}.file_id - {{ $t("drive.nodeProperties.fileId") }}</div>
+          <div>${{ selectedNode.data.label }}.download_url - {{ $t("drive.nodeProperties.outputNewAccessUrl") }}</div>
         </template>
         <template v-else>
-          <div>Select an operation to see output fields</div>
+          <div>{{ $t("drive.nodeProperties.selectOperationToSeeOutput") }}</div>
         </template>
       </div>
     </div>

@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Construiți mai rapid în Workflow-uri",
+    "description": "Selectați un Workflow pentru a vizualiza Trigger-ele, ultima execuție și pașii direct lângă listă. Filtrați după status, executați direct și mențineți o vedere de ansamblu cu ajutorul folderelor."
+  },
+  "dashboard:board": {
+    "title": "Gestionați sarcini printr-un board bazat pe agenți",
+    "description": "Trageți cardurile între coloane pentru a declanșa lanțuri de Workflow cu contextul complet al cardului. Rezultatele se întorc direct la card."
+  },
+  "dashboard:templates": {
+    "title": "Începeți cu șabloane dovedite",
+    "description": "Utilizați modele de Workflow predefinite pentru a economisi timp de configurare și a asigura consistența."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizați variabilele partajate",
+    "description": "Stocați o singură dată valorile reutilizabile și referiți-le în toate Workflow-urile."
+  },
+  "dashboard:chat": {
+    "title": "Utilizați chat-ul pentru iterație rapidă",
+    "description": "Adresați întrebări rapide, testați idei și treceți la editor de îndată ce fluxul Workflow-ului este clar."
+  },
+  "dashboard:credentials": {
+    "title": "Gestionați în siguranță secretele",
+    "description": "Administrați central cheile și Token-urile furnizorilor, astfel încât Workflow-urile să poată utiliza conexiuni sigure fără dezvăluirea secretelor."
+  },
+  "dashboard:vectorstores": {
+    "title": "Susțineți Workflow-uri bazate pe retrieval",
+    "description": "Pregătiți vector store-uri pentru răspunsuri AI fundamentate, căutare semantică și pipeline-uri RAG scalabile."
+  },
+  "dashboard:mcp": {
+    "title": "Conectați ecosisteme externe de tool-uri",
+    "description": "Configurați conexiuni MCP astfel încât agenții să poată executa tool-uri și acțiuni structurate dincolo de simple Prompt-uri."
+  },
+  "dashboard:traces": {
+    "title": "Înțelegeți comportamentul de execuție",
+    "description": "Analizați detaliile Trace pentru a depana rezultatele, a compara execuțiile și a crește fiabilitatea."
+  },
+  "dashboard:alerts": {
+    "title": "Primiți notificări înainte ca problemele să escaladeze",
+    "description": "Stabiliți praguri pentru erori, durată, costuri și număr de execuții și primiți alertă la depășirea acestora."
+  },
+  "dashboard:analytics": {
+    "title": "Urmăriți performanța platformei",
+    "description": "Monitorizați tendințele de utilizare și execuție pentru a optimiza țintit pe baza semnalelor reale."
+  },
+  "dashboard:dashboard": {
+    "title": "Creați dashboard-uri proprii",
+    "description": "Asamblați widget-uri de diagrame bazate pe Workflow pentru a vedea metricile importante dintr-o privire."
+  },
+  "dashboard:teams": {
+    "title": "Scalați colaborarea în mod curat",
+    "description": "Împărțiți Workflow-urile și resursele pe echipe pentru a menține transparente permisiunile de acces și responsabilitățile."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosticați probleme la nivel de sistem",
+    "description": "Utilizați log-urile în cazul problemelor de infrastructură sau de mediu pentru informații aprofundate despre runtime."
+  },
+  "dashboard:drive": {
+    "title": "Gestionați fișierele generate",
+    "description": "Examinați, descărcați și partajați rezultatele Workflow-urilor prin link-uri sigure și opțiuni de acces controlat."
+  },
+  "dashboard:datatable": {
+    "title": "Lucrați nativ cu date structurate",
+    "description": "Creați tabele tipizate și accesați-le direct din Workflow-uri pentru operațiuni de citire și scriere reproductibile."
+  },
+  "dashboard:schedules": {
+    "title": "Supravegheați programările de automatizare",
+    "description": "Vizualizați toate Workflow-urile Cron active într-o vedere de calendar (zi, săptămână, lună). Click pe un bloc duce direct la Canvas."
+  },
+  "evals": {
+    "title": "Evaluați calitatea în mod fiabil",
+    "description": "Executați suite de teste reproductibile pentru a compara fundamentat modificările de Prompt și model înainte de rollout-urile în producție."
+  },
+  "docs": {
+    "title": "Orientare rapidă în aplicație",
+    "description": "Consultați referințe compacte și aprofundați țintit, fără a părăsi Workflow-ul curent."
+  },
+  "editor": {
+    "title": "Proiectați și depanați pe Canvas",
+    "description": "Conectați vizual noduri, executați imediat și rafinați comportamentul cu feedback direct într-un singur spațiu de lucru."
+  }
+}

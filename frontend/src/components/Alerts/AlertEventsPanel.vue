@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { Check, History } from "lucide-vue-next";
 
 import Button from "@/components/ui/Button.vue";
@@ -19,12 +20,14 @@ const emit = defineEmits<{
   "update:timeRange": [value: AlertEventTimeRange];
 }>();
 
-const TIME_RANGES = [
-  { value: "24h", label: "Last 24 hours" },
-  { value: "7d", label: "Last 7 days" },
-  { value: "30d", label: "Last 30 days" },
-  { value: "all", label: "All time" },
-];
+const { t, te } = useI18n();
+
+const TIME_RANGES = computed(() => [
+  { value: "24h", label: t("alerts.last24Hours") },
+  { value: "7d", label: t("alerts.last7Days") },
+  { value: "30d", label: t("alerts.last30Days") },
+  { value: "all", label: t("alerts.allTime") },
+]);
 
 const NOTIFY_CLASSES: Record<string, string> = {
   succeeded: "text-emerald-700 dark:text-emerald-400",
@@ -59,7 +62,7 @@ function metricLabel(event: AlertEvent, value: number): string {
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h2 class="flex items-center gap-2 text-sm font-semibold">
         <History class="h-4 w-4 text-muted-foreground" />
-        Firing history
+        {{ $t('alerts.firingHistory') }}
       </h2>
       <Select
         v-model="rangeModel"
@@ -72,14 +75,14 @@ function metricLabel(event: AlertEvent, value: number): string {
       v-if="loading"
       class="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground"
     >
-      Loading history...
+      {{ $t('alerts.loadingHistory') }}
     </p>
 
     <p
       v-else-if="events.length === 0"
       class="rounded-xl border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground"
     >
-      Nothing has fired in this period.
+      {{ $t('alerts.nothingFired') }}
     </p>
 
     <ul
@@ -98,16 +101,16 @@ function metricLabel(event: AlertEvent, value: number): string {
             <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span class="min-w-0 truncate font-medium">{{ event.alert_name }}</span>
               <span class="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
-                {{ ALERT_TYPE_LABELS[event.alert_type] }}
+                {{ te('alerts.types.' + event.alert_type) ? t('alerts.types.' + event.alert_type) : ALERT_TYPE_LABELS[event.alert_type] }}
               </span>
             </div>
 
             <div class="mt-1.5 text-muted-foreground">
-              Observed
+              {{ $t('alerts.observed') }}
               <span class="font-semibold tabular-nums text-foreground">
                 {{ metricLabel(event, event.observed_value) }}
               </span>
-              against a threshold of
+              {{ $t('alerts.againstThreshold') }}
               <span class="font-semibold tabular-nums text-foreground">
                 {{ metricLabel(event, event.threshold_value) }}
               </span>
@@ -134,12 +137,12 @@ function metricLabel(event: AlertEvent, value: number): string {
               v-if="!event.acknowledged_at"
               variant="outline"
               size="sm"
-              aria-label="Acknowledge"
-              title="Acknowledge this firing"
+              :aria-label="$t('alerts.acknowledge')"
+              :title="$t('alerts.acknowledge')"
               @click="emit('acknowledge', event)"
             >
               <Check class="mr-1.5 h-3.5 w-3.5" />
-              Acknowledge
+              {{ $t('alerts.acknowledge') }}
             </Button>
             <!-- Acknowledging has to leave a mark, otherwise pressing the button
                  looks like nothing happened. -->
@@ -149,7 +152,7 @@ function metricLabel(event: AlertEvent, value: number): string {
               :title="`Acknowledged ${formatTime(event.acknowledged_at)}`"
             >
               <Check class="h-3 w-3" />
-              Acknowledged
+              {{ $t('alerts.acknowledged') }}
             </span>
           </div>
         </div>

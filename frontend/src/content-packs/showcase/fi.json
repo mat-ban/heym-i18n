@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflowt",
+    "summary": "Luodaan, järjestellään, tuodaan ja hallitaan tekoälyautomaatioiden Workflow-prosesseja.",
+    "bullets": [
+      "Workflowt avataan nopeasti, kansiot pidetään selkeinä ja viimeisimpiä tehtäviä jatketaan suoraan.",
+      "Käytetään komentopalettia nopeaan käyttöön ilman pitkää etsimistä ruudukosta.",
+      "Tätä välilehteä käytetään kaikkien editorin toimintojen perustana."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Keskeinen yleisnäkymä",
+        "title": "Workflow-kirjasto",
+        "description": "Juuriobjektit, kansiot ja poistettaviksi merkityt Workflowt tarkastellaan yhdessä paikassa.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pikakäyttö",
+        "title": "Nopea luonti",
+        "description": "Uusia Workflow-prosesseja luodaan tai JSON tuodaan suoraan.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Rakenne",
+        "title": "Järjestely etukäteen",
+        "description": "Kansiot ja kiinnitykset pitävät kasvavat automaatiosarjat selkeinä.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Lue Workflow-opas",
+        "description": "Avataan Workflow-välilehden täydellinen viite.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflow-välilehti"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Avaa mallit",
+        "description": "Siirrytään mallivälilehdelle uudelleenkäytettäviä aloituspisteitä varten.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Mitä tänne kuuluu",
+        "content": "Tätä aluetta käytetään Workflow-elinkaaren tehtäviin: luominen, uudelleennimeäminen, siirtäminen, tuominen, arkistointi ja valitseminen."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Pysytään kevyenä",
+        "content": "Jos tarvitaan vain nopea suoritus toiselta sivulta, käytetään Quick Draweria. Hallintaa ja rakennetta varten palataan tänne."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflow-välilehti"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Agenttipohjainen Kanban-board. Jokainen kortti on pysyvä työtehtävä, jolla on konteksti, historia ja tulosteet – kortin siirtäminen suorittaa sarakkeen Workflow-ketjun.",
+    "bullets": [
+      "Luodaan tekstikortteja Backlogiin ja vedetään ne drag & drop -menetelmällä sarakkeiden yli.",
+      "Järjestetyt Workflowt linkitetään jokaiseen sarakkeeseen; korttien siirrot laukaisevat ne Triggerinä.",
+      "Kortit muuttuvat vihreiksi onnistuessa, punaisiksi virheistä ja keltaisiksi suorituksen aikana.",
+      "Kommentit ja aiemmat tulosteet virtaavat seuraavan ajon kontekstiin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ydinidea",
+        "title": "Kortit ovat työtehtäviä, eivät muistiinpanoja",
+        "description": "Jokainen kortti kantaa täydellisen historiansa: kommentit, siirrot ja jokaisen Workflow-prosessin tulosteen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Suunnittelusilmukka",
+        "title": "Jatkokierrokset",
+        "description": "Vastataan kommenteissa ja suoritetaan uudelleen – ketju näkee koko kertyneen kontekstin.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board-dokumentaatio",
+        "description": "Sarakkeiden ketjut, Card-Payload-sopimus ja jatkokierrokset.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Miten sarakkeiden ketjut suoritetaan",
+        "content": "Sarakkeeseen liitetyt Workflowt suoritetaan peräkkäin, kun kortti saapuu. Jokaisen Workflow-prosessin tuloste liitetään kortin kontekstiin; virhe pysäyttää ketjun."
+      },
+      {
+        "id": "board-context",
+        "title": "Mitä Workflowt vastaanottavat",
+        "content": "Suorituksen syöte sisältää kortin (otsikko, sisältö, metatiedot, kommentit, historia, aiemmat tulosteet), Boardin, siirron ja sijainnin ketjussa. Tämä luetaan $input.card-lausekkeilla."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Mallit",
+    "summary": "Aloitetaan uudelleenkäytettävistä Workflow-blueprinteistä sen sijaan, että samat mallit rakennettaisiin joka kerta uudelleen.",
+    "bullets": [
+      "Malleja käytetään, kun Workflow-rakenne on tiedossa, mutta yksityiskohdat vaihtelevat vielä.",
+      "Hyvät mallit lyhentävät perehdytystä ja vähentävät toistuvaa Canvas-työtä.",
+      "Mallit jaetaan täällä ja mukautetaan editorissa tarpeen mukaan."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Uudelleenkäyttö",
+        "title": "Blueprint-lähestymistapa",
+        "description": "Tallennetaan todistetut Workflow-rakenteet ja käytetään niitä nopeasti uudelleen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tiimin tahti",
+        "title": "Yhtenäiset aloituspisteet",
+        "description": "Mallit auttavat tiimejä sopimaan samoista todistetuista käytännöistä.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Tehokkuus",
+        "title": "Vähemmän tyhjäkäyntiä",
+        "description": "Valitaan valmis kehys ja mukautetaan vain olennainen.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Avaa mallidokumentaatio",
+        "description": "Tutustu siihen, miten mallit sopivat Dashboard-virtaukseen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Malli-välilehti"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Takaisin Workflowihin",
+        "description": "Palataan Workflow-pääkirjastoon.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Miksi mallit ovat tärkeitä",
+        "content": "Ne muuttavat toistuvat solmuasettelut uudelleenkäytettäviksi resursseiksi – ihanteellisia tiimeille, jotka toimittavat saman Workflow-mallin muunnelmia."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimaalinen käyttö",
+        "content": "Malleja käytetään, kun rakenne on vakaa, mutta nimet, Promptit, Credentialit tai tavoitteet vaihtelevat käyttötapauksesta toiseen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Malli-välilehti"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Muuttujat",
+    "summary": "Jaetut arvot tallennetaan keskitetysti ja viitataan niihin Workflow-prosessien välillä ilman, että samoja tietoja monistetaan kaikkialle.",
+    "bullets": [
+      "Usein uudelleenkäytettävät arvot säilytetään keskitetyssä, pysyvässä paikassa.",
+      "Muuttujat vähentävät Prompt-poikkeamaa ja päällekkäisiä konfiguraatioita.",
+      "Arvoja jaetaan kohdennetusti, kun useat Workflowt tarvitsevat saman tietopohjan."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Pysyvyys",
+        "title": "Ajojen välinen tallennus",
+        "description": "Globaalit arvot säilyvät yksittäisten Workflow-suoritusten yli.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompakti konfiguraatio",
+        "title": "Vähemmän redundanssia",
+        "description": "Päivitetään kerran keskitetysti sen sijaan, että mukautetaan manuaalisesti monia solmukenttiä.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Lausekkeet",
+        "title": "Tuki DSL:ssä",
+        "description": "Arvoihin viitataan suoraan solmulausekkeissa ja Promptissa.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Lue muuttujadokumentaatio",
+        "description": "Avataan Dashboardin muuttujien opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Muuttuja-välilehti"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Tyypilliset mallit",
+        "content": "Tallennetaan Endpointit, jaetut Prompt-fragmentit, ympäristökohtaiset asetukset tai ID:t, joita useiden Workflow-prosessien on luettava."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Mikä ei kuulu tänne",
+        "content": "Salaisuudet ja palveluntarjoajan todennukset kuuluvat kirjautumistietoihin, eivät globaaleihin muuttujiin."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Muuttuja-välilehti"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Dashboard-Chatia käytetään nopeana dialogipohjaisena aloituspisteenä Workflow-prosesseille ja alustatehtäville.",
+    "bullets": [
+      "Erinomainen nopeisiin kysymyksiin, Workflow-apuun ja kevyisiin suorituksiin.",
+      "Keskittyy nopeuteen ja iterointiin täyden editorihallinnan sijaan.",
+      "Kun rakenne on valmis, siirrytään suoraan Workflowiin tai dokumentaatioon."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Luonnollinen kieli",
+        "title": "Nopea vuorovaikutus",
+        "description": "Käytetään yksinkertaista kieltä sen sijaan, että koko sovellus selattaisiin manuaalisesti läpi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Silta",
+        "title": "Ideasta toimintaan",
+        "description": "Chat auttaa, kun tavoite on selvä, mutta tarkka polku on vielä työstettävä.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Kumppani",
+        "title": "Täydentää dokumentaatiota",
+        "description": "Käytetään yhdessä dokumentaation kanssa, jotta vastaukset ja viitteet ovat käsillä.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Avaa Chat-dokumentaatio",
+        "description": "Luetaan Dashboard-Chatin opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat-välilehti"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Tekoälyavustajan viite",
+        "description": "Tutustu siihen, miten Heym-avustaja tukee Workflow-luontia.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "Tekoälyavustaja"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Parhaat käyttötapaukset",
+        "content": "Chatia käytetään nopeisiin Workflow-kysymyksiin, lyhyisiin alustaohjeisiin ja operatiivisiin vaiheisiin, jotka eivät vaadi syvällistä Canvas-työtä."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Milloin vaihdetaan näkymää",
+        "content": "Siirrytään editoriin, kun tarvitaan solmutason hallintaa, tai dokumentaatioon pysyviä viitteitä varten."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat-välilehti"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Hallinnoi ja jaa Workflow-skillien tuottamia tiedostoja.",
+    "bullets": [
+      "Skillit kirjoittavat tiedostoja tulostehakemistoon; Heym tallentaa ne automaattisesti.",
+      "Jaa tiedostoja Token-linkkien tai salasanasuojattujen Basic-Auth-URL-osoitteiden kautta.",
+      "Lataa tiedostot yhdellä napsautuksella."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tallennustila",
+        "title": "Automaattisesti tallennetut tiedostot",
+        "description": "Skillit kirjoittavat hakemistoon _OUTPUT_DIR; tiedostot ilmestyvät tähän välittömästi suorituksen jälkeen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Jakaminen",
+        "title": "Joustava käyttöoikeuksien hallinta",
+        "description": "Julkiset linkit, salasanasuojaus, vanhenemispäivät ja latausrajoitukset.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Tiedostomuodot",
+        "title": "PDF, DOCX, CSV ja muut",
+        "description": "Tuota mitä tahansa tiedostotyyppejä reportlabin, python-docx:n tai vakio-Pythonin avulla.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Avaa Drive-dokumentaatio",
+        "description": "Lue Drive-välilehden täydellinen viite.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive-välilehti"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Tiedostojen luonnin opas",
+        "description": "Lue, miten Skillit tuottavat tiedostoja.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Tiedostojen luonti"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Miten tiedostot päätyvät tänne",
+        "content": "Kun Skill tallentaa tiedostoja _OUTPUT_DIR-hakemistoon, Heym tallentaa ne pysyvästi ja luo lataus-Tokenit."
+      },
+      {
+        "id": "drive-share",
+        "title": "Jakamisvaihtoehdot",
+        "content": "Luo julkisia Token-linkkejä kaikille tai salasanasuojattuja URL-osoitteita, mukaan lukien vanhenemispäivät ja latausrajoitukset."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive-välilehti"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Kirjautumistiedot",
+    "summary": "Hallinnoi avaimia, Tokeneita ja yhteystietoja, jotta Workflowt voivat kommunikoida turvallisesti ulkoisten järjestelmien kanssa.",
+    "bullets": [
+      "Tallenna käyttöoikeustiedot keskitetysti sen sijaan, että ne hajautettaisiin yksittäisiin solmuihin.",
+      "Kirjautumistiedot ohjaavat LLM:iä, integraatioita, vektoritallennustiloja ja muuta.",
+      "Myönnä käyttöoikeus kohdennetusti, kun tiimit tarvitsevat saman yhteyden ilman avainten kopiointia."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Turvallisuus",
+        "title": "Turvalliset käyttöoikeustiedot",
+        "description": "Määritä todennus kerran ja käytä sitä uudelleen turvallisesti Workflowissa.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integraatiot",
+        "title": "Laaja tuki",
+        "description": "Tukee palveluntarjoajia kuten OpenAI, DeepSeek, Slack, Redis, Qdrant ja Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Yhteistyö",
+        "title": "Kohdennettu jakaminen",
+        "description": "Käytä tiimi- tai käyttäjäkohtaisia jakoja sen sijaan, että loisit kopioita.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Lue kirjautumistietojen dokumentaatio",
+        "description": "Avaa kirjautumistietojen hallintapaneelin opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Kirjautumistietojen välilehti"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Näytä integraatiot",
+        "description": "Selaa kolmannen osapuolen integraatioiden määrityksen yksityiskohtia.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Kolmannen osapuolen integraatiot"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Missä niitä käytetään",
+        "content": "Kirjautumistietoihin viitataan solmun kokoonpanossa, ja ne ratkaistaan turvallisesti suorituksen aikana."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Tiimiystävällinen malli",
+        "content": "Suosi jakamista, kun useat kehittäjät tarvitsevat saman palveluntarjoajan käyttöoikeuden; tämä takaa johdonmukaisen toiminnan ja helpon valvonnan."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Kirjautumistietojen välilehti"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektoritallennustilat",
+    "summary": "Valmistele retrieval-taustaohjelmistot Workflowille, jotka tarvitsevat semanttista hakua, muistia tai RAG-kontekstin liittämistä.",
+    "bullets": [
+      "Vektoritallennustilat muodostavat tietopohjan retrieval-pohjaisille Workflowille.",
+      "Käytä yhdessä RAG-solmujen ja tekoälyvirtojen kanssa tarkkaa dokumenttien taustoitusta varten.",
+      "Tämä välilehti toimii infrastruktuurina perustelluille Promptille."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG-infrastruktuuri",
+        "title": "Haettava muisti",
+        "description": "Pidä dokumentit valmiina semanttista retrievalia varten, kun Workflowt tarvitsevat kontekstia.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Laatu",
+        "title": "Perusteltu taustoitus",
+        "description": "Retrieval vähentää hallusinaatioriskiä tarjoamalla todisteita.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Ylläpito",
+        "title": "Keskitetty hallinta",
+        "description": "Luo vektoritallennustiloja ja käytä niitä uudelleen useissa Workflowissa.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Avaa vektoritallennustilojen dokumentaatio",
+        "description": "Lue vektoritallennustilojen hallintapaneelin opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Vektoritallennustilojen välilehti"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Näytä RAG-solmujen dokumentaatio",
+        "description": "Avaa Qdrant-RAG-solmun viite.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Luokittelu",
+        "content": "Tämä välilehti valmistelee tallennustason. Varsinainen retrieval-logiikka sijaitsee Workflowien sisällä (esim. RAG- tai agenttimallien kautta)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Käyttöajankohta",
+        "content": "Valitse vektoritallennustilat, kun Workflowin on haettava jäsentämättömiä tietokantoja sen sijaan, että luotettaisiin pelkästään LLM:n muistiin."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Vektoritallennustilojen välilehti"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Hallinnoi Model Context Protocol -yhteyksiä, jotta agentti-Workflowt voivat käyttää työkaluja ja ulkoisia toimintoja turvallisesti.",
+    "bullets": [
+      "MCP muuttaa ulkoiset työkaluekosysteemit käyttökelpoiseksi agenttikontekstiksi.",
+      "Käytä tätä välilehteä, kun agentit tarvitsevat monipuolisempia työkaluja kuin staattiset Promptit.",
+      "Yhteyden laatu määrittää suoraan agenttiesi kyvykkyydet."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Agenttityökalut",
+        "title": "Ulkoinen toimintotaso",
+        "description": "Tarjoa työkalupalvelimia, joita agentit voivat kutsua päättelynsä aikana.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Suorituksenaikainen hallinta",
+        "title": "Yhteyden määritys",
+        "description": "Määritä Endpointit, tunnisteet ja siirto luotettavia Workflowja varten.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Alustan syvyys",
+        "title": "Promptien tuolle puolen",
+        "description": "MCP mahdollistaa Heym-Workflowien toiminnan, ei pelkästään vastaamisen.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Avaa MCP-dokumentaatio",
+        "description": "Lue MCP-välilehden opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP-välilehti"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Agenttiarkkitehtuuri",
+        "description": "Lue, miten MCP on integroitu agenttien suoritukseen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Agenttiarkkitehtuuri"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Merkitys",
+        "content": "Erityisen tärkeä, kun agenttisi tarvitsee työkaluja, ympäristön käyttöoikeutta tai järjestelmäintegraatioita yksittäisten solmujen ulkopuolella."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Toimintatapa",
+        "content": "Käsittele MCP-yhteyksiä kuin infrastruktuuria: vakaat tunnisteet ja selkeät vastuut yksinkertaistavat virheenkorjausta."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP-välilehti"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Suoritukset",
+    "summary": "Tutki tekoälyn ja Workflowien suoritusten yksityiskohtaisia Trace-tietoja ymmärtääksesi, mitä tapahtui – ei vain sitä, toimiko se.",
+    "bullets": [
+      "Käytä Trace-tietoja virheenkorjaukseen, suorituskykyanalyyseihin ja Promptien laadun tarkistuksiin.",
+      "Trace-tiedot selittävät mallin käyttäytymistä, latensseja ja suorituspolkuja.",
+      "Ensimmäinen paikka, josta aloittaa odottamattomien tulosten tai epävakaiden suoritusten yhteydessä."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Virheenkorjaus",
+        "title": "Näe piilotetut vaiheet",
+        "description": "Trace-tiedot paljastavat, mitä Workflow ja malli todella suorittivat.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Arviointi",
+        "title": "Tue iteraatioita",
+        "description": "Käytä Trace-tietoja Promptien, työkalujen ja mallien optimointiin.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Luotettavuus",
+        "title": "Jäljitä tulokset",
+        "description": "Hyvät Trace-tiedot vähentävät arvailua virheanalyysissä.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Avaa suoritusten dokumentaatio",
+        "description": "Lue suoritusten hallintapaneelin opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Suoritusten välilehti"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Milloin Trace-tiedot ovat välttämättömiä",
+        "content": "Kun Workflowt ovat monivaiheisia, mallipainotteisia tai työkalupohjaisia, pelkkä tilanäyttö ei enää riitä."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. historia",
+        "content": "Historia näyttää, ETTÄ suoritus tapahtui. Trace-tiedot selittävät, MIKSI se käyttäytyi niin kuin käyttäytyi."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Suoritusten välilehti"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Hälytykset",
+    "summary": "Määritä kynnysarvot aikaväleille ja saa automaattinen ilmoitus, kun ne ylittyvät.",
+    "bullets": [
+      "Neljä tyyppiä: virheiden määrä, suorituksen kesto, Token-/kustannuskynnykset ja suorituslaskurit.",
+      "Jokaista hälytystä arvioidaan valitun aikavälin perusteella, ei koskaan yksittäisten tapahtumien perusteella.",
+      "Kuvaile vaatimus luonnollisella kielellä, ja avustaja määrittää hälytyksen."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Aikaväli",
+        "title": "Kertymiä poikkeamien sijaan",
+        "description": "Yksi epäonnistunut suoritus on kohinaa. Kaksitoista kymmenessä minuutissa on incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ennen tallennusta",
+        "title": "Testaa ehto takautuvasti",
+        "description": "Tarkistusvaihe testaa todellista historiaa vasten kynnysarvojen kalibroimiseksi etukäteen.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reaktio",
+        "title": "Suorita Workflow hälytyksen lauetessa",
+        "description": "Alert-Payload toimii Workflow-inputina automaattisille ilmoituksille Slackin tai sähköpostin kautta.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Avaa hälytysten dokumentaatio",
+        "description": "Lue lisää hälytystyyppien, aikavälien ja avustajan toiminnasta.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Hälytykset-välilehti"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Käyttötarkoitus",
+        "content": "Analytiikka ja tracet vastaavat kysymyksiin, jotka esität aktiivisesti. Hälytykset antavat Heymin puhua proaktiivisesti, kun kriittiset kynnykset ylittyvät."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Miksi vääriä hälytyksiä vältetään",
+        "content": "Hälytys laukeaa kerran ja odottaa, kunnes metriikka palautuu – tämä estää ilmoitustulvan."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Hälytykset-välilehti"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analytiikka",
+    "summary": "Seuraa käyttömalleja ja järjestelmän käyttäytymistä ymmärtääksesi aktiivisuutta, kasvua ja muutoksia ajan kuluessa.",
+    "bullets": [
+      "Tunnista käyttöönotto, läpäisykyky ja epätavalliset piikit analytiikan avulla.",
+      "Näkymä alustatasolla yksittäisen virheenkorjaustyökalun sijaan.",
+      "Yhdistä analytiikka tracceihin ja historiaan signaalin ja selityksen saamiseksi."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signaalit",
+        "title": "Käytön läpinäkyvyys",
+        "description": "Tunnista trendit sen sijaan, että tarkastelisit yksittäisiä suorituksia erillään.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapasiteetti",
+        "title": "Operatiivinen tietoisuus",
+        "description": "Tunnista kuormitushuiput ja laskut varhaisessa vaiheessa ja tutki niitä.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Päätöksenteon tuki",
+        "title": "Kohdennettu optimointi",
+        "description": "Analytiikka auttaa priorisoimaan tärkeimmät Workflow't.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Avaa analytiikan dokumentaatio",
+        "description": "Lue analytiikka-dashboardin opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analytiikka-välilehti"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Käyttötarkoitus",
+        "content": "Käytä analytiikkaa mallien, läpäisyn ja aggregoidun käyttäytymisen tarkasteluun koko alustan toiminnassa."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Toimintatapa",
+        "content": "Tunnista signaalit täällä ja siirry sitten tracceihin, historiaan tai editoriin syiden analysoimiseksi."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analytiikka-välilehti"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Luo ruudukko kaavio-widgeteistä, joita kukin syötetään omilla Workflow'illa – kaikki tunnusluvut yhdellä silmäyksellä.",
+    "bullets": [
+      "Jokaista widgetiä pyörittää Workflow, joka toimittaa dataa Chart-Output-solmuun.",
+      "Käytä palkki-, viiva-, ympyrä-, taulukko- ja lukuwidgetejä metriikkaan sopivalla tavalla.",
+      "Luo tai mukauta widgetejä tekoälyllä ja välimuistita tulokset nopeita latausaikoja varten.",
+      "Luo useita dashboardeja ja jaa niitä henkilöiden tai tiimien kanssa luku- tai kirjoitusoikeuksin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Koostumus",
+        "title": "Workflow-syötteiset kaaviot",
+        "description": "Kaikki data, jonka Workflow tuottaa, visualisoidaan kaaviona.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Suorituskyky",
+        "title": "Välimuistitetut tulokset",
+        "description": "Widget-välimuisti estää toistuvat Workflow-suoritukset joka sivulatauksella.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Tekoälytuki",
+        "title": "Generoi ja mukauta",
+        "description": "Kuvaile metriikka ja anna widgetin luoda automaattisesti tekoälyn avulla.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Avaa dashboardin dokumentaatio",
+        "description": "Lue, miten dashboard-widgetejä luodaan.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard-välilehti"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Käyttötarkoitus",
+        "content": "Käytä dashboardia pysyviin yleiskatsauksiin tärkeimmistä tunnusluvuista omista Workflow'istasi."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Luominen",
+        "content": "Lisää widget, määritä Workflow niin, että viimeinen solmu ennen Chart Output -solmua toimittaa rivejä, ja järjestä ruudukkoon."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard-välilehti"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Tiimit",
+    "summary": "Hallinnoi jaettuja käyttöoikeuksia, jotta Workflow't, Credentialit, muuttujat ja vektoritallennustilat ovat yhteiskäytössä ilman duplikaatteja.",
+    "bullets": [
+      "Tiimit ovat siistein tapa jakaa alustan resursseja skaalautuvasti.",
+      "Käytä tiimejä, kun käyttöoikeuksien tulee seurata ryhmää yksilöiden sijaan.",
+      "Varmistaa jäsennellyn yhteistyön kasvavassa työtilassa."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Yhteistyö",
+        "title": "Ryhmäpohjaiset jaot",
+        "description": "Myönnä käyttöoikeus kerran tiimille sen sijaan, että valtuuttaisit yksittäisiä käyttäjiä manuaalisesti.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Selkeys",
+        "title": "Selkeät vastuut",
+        "description": "Resurssienhallinta seuraa todellisia tiimirakenteita.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skaalautuvuus",
+        "title": "Vähemmän hallintatyötä",
+        "description": "Uudet jäsenet perivät käyttöoikeudet automaattisesti tiimin kautta.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Avaa tiimien dokumentaatio",
+        "description": "Lue tiimit-dashboardin opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Tiimit-välilehti"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Resurssien jakaminen",
+        "description": "Lue lisätietoja resurssien jakamisesta.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Anmeldedaten jakaminen"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Tiimien edut",
+        "content": "Tiimit yhdistävät identiteetin ja resurssien käyttöoikeuden sujuvaa yhteistyötä varten."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Käytännön vinkki",
+        "content": "Suosi tiimijakoja, kun Workflow tai Credential kuuluu pysyvälle työryhmälle."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Tiimit-välilehti"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Lokit",
+    "summary": "Lue lokeja stack-tasolla, kun tarvitset infrastruktuurinäkemyksiä Workflow-tulosteiden ulkopuolelta.",
+    "bullets": [
+      "Käytä lokeja palveluiden virheenkorjaukseen, konttien tiloihin ja ympäristöongelmiin.",
+      "Auttaa, kun syyt ovat Workflow-tason alapuolella.",
+      "Käytä yhdessä traccejen kanssa todisteiden saamiseksi sovellus- ja järjestelmätasolla."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktuuri",
+        "title": "Konttien läpinäkyvyys",
+        "description": "Näe, mitä backend-palvelut suorittavat Heym-käyttöliittymän alapuolella.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Vianmääritys",
+        "title": "Löydä syyt",
+        "description": "Lokit auttavat käynnistysongelmissa, kaatumisissa tai integraatiovirheissä.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Täydentävä",
+        "title": "Ero Workflow-tuloksiin",
+        "description": "Workflow-tulosteet näyttävät tulokset; lokit näyttävät järjestelmän käyttäytymisen.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Avaa lokien dokumentaatio",
+        "description": "Lue loki-dashboardin opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Loki-välilehti"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Käyttöajankohta",
+        "content": "Siirry tänne, kun ongelmat vaikuttavat deployment-, palvelu- tai ympäristöperusteisilta."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Paras yhdistelmä",
+        "content": "Käytä lokeja yhdessä traccejen ja historian kanssa päästäksesi nopeasti oireista syyhyn."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Loki-välilehti"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Arviointi",
+    "summary": "Luodaan toistettavia benchmarkeja agentti-Workflowille, jotta Prompt-, mallimuutokset ja Workflow-muutokset voidaan vertailla luotettavasti.",
+    "bullets": [
+      "Sviitit ja testitapaukset muuttavat subjektiivisen Workflow-laadun mitattaviksi tunnusluvuiksi.",
+      "Ihanteellinen paikka regressiotarkistuksille ennen Prompt- tai mallipäivitysten käyttöönottoa.",
+      "Vertaillaan useita malleja samaa aineistoa ja samaa arviointimenetelmää vasten."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Laatusilmukka",
+        "title": "Agenttien benchmarkkaus",
+        "description": "Suoritetaan sama sviitti toistuvasti sen sijaan, että luotettaisiin satunnaistarkistuksiin.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Vertailu",
+        "title": "Malli- ja Prompt-testit",
+        "description": "Nähdään, miten eri asetukset käyttäytyvät samassa testijoukossa.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Turvallisuus",
+        "title": "Luotettava iterointi",
+        "description": "Parannukset voidaan todentaa ennen käyttöönottoa.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Avaa arviointidokumentaatio",
+        "description": "Luetaan arviointisivun opas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Arviointi-välilehti"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent-solmun viite",
+        "description": "Tarkastellaan Workflow-aluetta, johon useimmat arviointisviitit kohdistuvat.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent-solmu"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Sviittien suunnittelu",
+        "content": "Hyvä sviitti heijastaa todellisia käyttötapauksia, reunaehtoja ja hyväksyntävaiheita, joiden on pysyttävä vakaina."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Vertailuparametrit",
+        "content": "Tyypillisiä vertailuja ovat Prompt-variantit, mallivalinta, Temperature-asetukset ja Workflow-revisiot samassa aineistossa."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Arviointi-välilehti"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentaatio",
+    "summary": "Selataan tarkkoja alustaviitteitä suoraan sovelluksessa ja syvennetään tarvittaessa.",
+    "bullets": [
+      "Heym-dokumentaatio on suunniteltu nopeaan hahmottamiseen ja kohdennettuun hakuun.",
+      "Sivupalkki, haku ja ristiviittaukset mahdollistavat nopean siirtymisen käsitteiden välillä.",
+      "Showcase viittaa suoraan parhaillaan avoinna olevaan artikkeliin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Sovelluksen sisäinen viite",
+        "title": "Aina käsillä",
+        "description": "Dokumentaatio pysyy tuotteen työnkulussa ilman ulkoisten välilehtien avaamista.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Yleiskatsaus",
+        "title": "Olennaisin ensin",
+        "description": "Artikkelit alkavat ydinkohdilla ja haarautuvat linkkien kautta."
+      },
+      {
+        "eyebrow": "Kontekstitietoinen",
+        "title": "Nykyinen artikkeli",
+        "description": "Dokumenttia luettaessa 'Lue lisää' -toiminto seuraa suoraan kyseistä artikkelia."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Näytä johdanto",
+        "description": "Avataan dokumentaation johdanto oletusaloituspisteenä.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Johdanto"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Nopea navigointi",
+        "content": "Käytetään sivupalkkia kategorioille ja komentohakua, kun aihe on jo tiedossa."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Showcasen tuki",
+        "content": "Showcase pitää yhteenvedot tiiviinä ja ohjaa tarvittaessa yksityiskohtaiseen dokumentaatioon."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Johdanto"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Aikataulut",
+    "summary": "Hallitaan kaikkia aktiivisia Cron-Workflowita visuaalisessa kalenterissa ja valvotaan suoritusaikoja.",
+    "bullets": [
+      "Vaihdetaan päivä-, viikko- ja kuukausinäkymän välillä sopivan tarkkuuden saavuttamiseksi.",
+      "Viedään kursori lohkon päälle Cron-lausekkeen näyttämiseksi; napsautetaan siirtyäkseen suoraan Canvasille.",
+      "Käytetään tätä välilehteä suoritustiheyksien tarkistamiseen ja päällekkäisyyksien havaitsemiseen."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Läpinäkyvyys",
+        "title": "Kalenterinäkymä",
+        "description": "Aktiiviset Cron-Workflowit näkyvät lohkoina suunniteltuina aikoina.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigointi",
+        "title": "Yhdellä napsautuksella Canvasille",
+        "description": "Napsautetaan lohkoa Workflow-editorin avaamiseksi suoraan.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Alueet",
+        "title": "Päivä, viikko tai kuukausi",
+        "description": "Säädetään tarkkuutta yksittäisten tuntien tarkistamiseksi tai koko kuukauden suunnittelemiseksi.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Avaa aikatauludokumentaatio",
+        "description": "Luetaan aikatauluvälilehden viite.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Aikataulut-välilehti"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron-solmun viite",
+        "description": "Tutustutaan siihen, miten Cron-Triggerit konfiguroidaan Canvasilla.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Käyttöajankohta",
+        "content": "Tarkistetaan ajoitetut automaatiot, tunnistetaan aikatauluristiriidat ja varmistetaan, että tärkeät Workflowit pysyvät aktiivisina."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Värikoodaus",
+        "content": "Jokainen Workflow saa johdonmukaisen värin ID:stään, joka pysyy samana päivä-, viikko- ja kuukausinäkymässä."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Aikataulut-välilehti"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Datataulukot",
+    "summary": "Luodaan jäsenneltyjä datataulukoita suoraan Heymissä ja käytetään niitä ohjelmallisesti Workflowissa.",
+    "bullets": [
+      "Luodaan taulukoita tyypitetyillä sarakkeilla, täytetään manuaalisesti tai tuodaan CSV:nä.",
+      "Käytetään DataTable-Workflow-solmua rivien ohjelmalliseen lukemiseen, kirjoittamiseen ja kyselyyn.",
+      "Jaetaan taulukoita käyttäjille tai tiimeille luku- tai kirjoitusoikeuksin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integroitu data",
+        "title": "Integroitu tallennus",
+        "description": "Tallennetaan jäsenneltyä dataa ilman ulkoisia tietokantoja tai API-avaimia.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow-integraatio",
+        "title": "DataTable-solmu",
+        "description": "Etsitään, lisätään, päivitetään ja poistetaan rivejä missä tahansa Workflowissa.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Yhteistyö",
+        "title": "Jaot ja oikeudet",
+        "description": "Myönnetään yksityiskohtaiset luku- ja kirjoitusoikeudet käyttäjille ja tiimeille.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Datataulukot-välilehden dokumentaatio",
+        "description": "Luetaan datataulukot-välilehden viite.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Datataulukot"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable-solmun dokumentaatio",
+        "description": "Luetaan DataTable-solmun viite.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Mitä datataulukot ovat?",
+        "content": "Datataulukot ovat Heymin integroitu jäsennelty tallennus: tyypitetyt sarakkeet (String, Number, Boolean, Date, JSON), inline-muokkaus sekä CSV-tuonti/-vienti."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Käyttö Workflowissa",
+        "content": "DataTable-solmu tukee toimintoja find, getAll, getById, insert, update, remove ja upsert – ilman Credentials suoraan Workflow'n omistajan kautta."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Datataulukot"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow-editori",
+    "summary": "Luodaan, testataan, debugataan ja optimoidaan Workflowita Canvasilla – suoraan suorituskontekstissa.",
+    "bullets": [
+      "Editorissa solmujen suunnittelu, datavirta ja suorituskäyttäytyminen yhdistyvät.",
+      "Käytetään sivupalkkeja ja historiaa nopeaan siirtymiseen luonnin ja debuggauksen välillä.",
+      "Showcase pysyy tässä tarkoituksella tiiviinä, jotta Canvasille jää mahdollisimman paljon tilaa."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Visuaalinen Workflow-suunnittelu",
+        "description": "Yhdistetään solmuja, haarautetaan logiikkaa ja mallinnetaan suoritusvirta suoraan.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iterointi",
+        "title": "Debuggaus luonnin aikana",
+        "description": "Käytetään historiaa, debug-paneeleja ja suoritustuloksia nopeisiin palautesilmukoihin."
+      },
+      {
+        "eyebrow": "Toimintojen laajuus",
+        "title": "Edistyneet toiminnot käsillä",
+        "description": "Portaali, jaot, mallipohjat ja validointi sijaitsevat suoraan Canvasilla."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Avaa Canvas-dokumentaatio",
+        "description": "Luetaan Canvas-toimintojen viite.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas-toiminnot"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Pikanäppäimet",
+        "description": "Avataan editorin pikanäppäinten yleiskatsaus.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Pikanäppäimet"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Työrytmi",
+        "content": "Mallinnetaan Canvasilla, tarkistetaan tulosteiden oletukset ja säädetään parametreja sivupalkeissa menettämättä fokusta."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Tiivis Showcase",
+        "content": "Koska editori tarjoaa jo paljon tietoa, Showcase toimii kevyenä suunnannäyttäjänä."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas-toiminnot"
+    }
+  }
+}

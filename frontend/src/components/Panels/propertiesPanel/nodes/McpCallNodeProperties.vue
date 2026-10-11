@@ -36,12 +36,12 @@ const {
       <div class="space-y-2">
         <Label class="text-muted-foreground flex items-center gap-1">
           <Plug class="w-3.5 h-3.5" />
-          MCP Connection
+          {{ $t("mcp.nodeProperties.mcpConnection") }}
         </Label>
         <div class="rounded border p-3 space-y-2">
           <div class="flex gap-2">
             <div class="flex-1">
-              <Label class="text-xs">Transport</Label>
+              <Label class="text-xs">{{ $t("mcp.nodeProperties.transport") }}</Label>
               <Select
                 :model-value="selectedNode.data.connection?.transport ?? 'sse'"
                 :options="[
@@ -53,7 +53,7 @@ const {
               />
             </div>
             <div class="w-24">
-              <Label class="text-xs">Timeout (s)</Label>
+              <Label class="text-xs">{{ $t("mcp.nodeProperties.timeoutSeconds") }}</Label>
               <Input
                 type="number"
                 :model-value="String(selectedNode.data.connection?.timeoutSeconds ?? 30)"
@@ -65,7 +65,7 @@ const {
             </div>
           </div>
           <div>
-            <Label class="text-xs">Label (optional)</Label>
+            <Label class="text-xs">{{ $t("mcp.nodeProperties.labelOptional") }}</Label>
             <Input
               :model-value="selectedNode.data.connection?.label ?? ''"
               placeholder="my-mcp-server"
@@ -74,7 +74,7 @@ const {
           </div>
           <template v-if="selectedNode.data.connection?.transport === 'stdio'">
             <div>
-              <Label class="text-xs">Command</Label>
+              <Label class="text-xs">{{ $t("mcp.nodeProperties.command") }}</Label>
               <Input
                 :model-value="selectedNode.data.connection?.command ?? ''"
                 placeholder="npx"
@@ -82,7 +82,7 @@ const {
               />
             </div>
             <div>
-              <Label class="text-xs">Args (JSON array)</Label>
+              <Label class="text-xs">{{ $t("mcp.nodeProperties.args") }}</Label>
               <Textarea
                 :model-value="formatMCPJsonValue(selectedNode.data.connection?.args, [])"
                 placeholder="[&quot;-y&quot;, &quot;@modelcontextprotocol/server-filesystem&quot;]"
@@ -93,7 +93,7 @@ const {
               />
             </div>
             <div>
-              <Label class="text-xs">Env (JSON object)</Label>
+              <Label class="text-xs">{{ $t("mcp.nodeProperties.env") }}</Label>
               <ExpressionInput
                 ref="mcpCallConnectionEnvInputRef"
                 :model-value="formatMCPJsonValue(selectedNode.data.connection?.env, {})"
@@ -113,7 +113,7 @@ const {
           </template>
           <template v-else-if="selectedNode.data.connection?.transport === 'sse' || selectedNode.data.connection?.transport === 'streamable_http'">
             <div>
-              <Label class="text-xs">URL</Label>
+              <Label class="text-xs">{{ $t("mcp.nodeProperties.url") }}</Label>
               <Input
                 :model-value="selectedNode.data.connection?.url ?? ''"
                 :placeholder="selectedNode.data.connection?.transport === 'streamable_http' ? 'https://example.com/mcp' : 'https://example.com/mcp/sse'"
@@ -121,7 +121,7 @@ const {
               />
             </div>
             <div>
-              <Label class="text-xs">Headers (JSON object)</Label>
+              <Label class="text-xs">{{ $t("mcp.nodeProperties.headers") }}</Label>
               <Textarea
                 :model-value="formatMCPJsonValue(selectedNode.data.connection?.headers, {})"
                 placeholder="{&quot;Authorization&quot;: &quot;Bearer ...&quot;}"
@@ -153,7 +153,7 @@ const {
                 v-else
                 class="w-3.5 h-3.5"
               />
-              {{ mcpCallFetchState.loading ? "Connecting…" : "Fetch tools" }}
+              {{ mcpCallFetchState.loading ? $t("mcp.nodeProperties.connecting") : $t("mcp.nodeProperties.fetchTools") }}
             </Button>
             <span
               v-if="mcpCallFetchState.error"
@@ -163,7 +163,7 @@ const {
             <span
               v-else-if="mcpCallFetchState.tools.length > 0"
               class="text-xs text-muted-foreground"
-            >{{ mcpCallFetchState.tools.length }} tool(s) found</span>
+            >{{ $t("mcp.nodeProperties.toolsFound", { count: mcpCallFetchState.tools.length }) }}</span>
           </div>
         </div>
       </div>
@@ -171,7 +171,7 @@ const {
       <!-- Tool selection (required) -->
       <div class="space-y-2">
         <Label class="text-xs flex items-center gap-1">
-          Tool
+          {{ $t("mcp.nodeProperties.tool") }}
           <span class="text-destructive">*</span>
         </Label>
         <Select
@@ -184,7 +184,7 @@ const {
           v-if="!selectedNode.data.selectedTool"
           class="text-xs text-destructive"
         >
-          A tool must be selected — this node will not run without one.
+          {{ $t("mcp.nodeProperties.toolRequired") }}
         </p>
         <p
           v-else-if="mcpCallSelectedTool?.description"
@@ -199,12 +199,12 @@ const {
         v-if="mcpCallSelectedTool"
         class="space-y-2"
       >
-        <Label class="text-xs text-muted-foreground">Arguments</Label>
+        <Label class="text-xs text-muted-foreground">{{ $t("mcp.nodeProperties.arguments") }}</Label>
         <div
           v-if="Object.keys(mcpCallSelectedTool.inputSchema?.properties ?? {}).length === 0"
           class="text-xs text-muted-foreground italic"
         >
-          This tool takes no arguments.
+          {{ $t("mcp.nodeProperties.noArguments") }}
         </div>
         <div
           v-for="(propDef, propKey) in (mcpCallSelectedTool.inputSchema?.properties ?? {})"
@@ -227,7 +227,7 @@ const {
           <ExpressionInput
             :ref="(el) => setMCPCallArgumentInputRef(String(propKey), el)"
             :model-value="String(selectedNode.data.toolArguments?.[propKey] ?? '')"
-            placeholder="value or $expr"
+            :placeholder="$t('mcp.nodeProperties.valueOrExprPlaceholder')"
             single-line
             :nodes="workflowStore.nodes"
             :node-results="workflowStore.nodeResults"
@@ -238,22 +238,22 @@ const {
             :navigation-index="mcpCallArgumentKeys.indexOf(String(propKey))"
             :navigation-total="mcpCallExpressionFieldCount"
             :dialog-node-label="selectedNodeEvaluateDialogLabel"
-            :dialog-key-label="`MCP argument · ${String(propKey)}`"
+            :dialog-key-label="$t('mcp.nodeProperties.dialogKeyLabel', { key: String(propKey) })"
             @update:model-value="updateMCPCallArgument(String(propKey), $event)"
             @navigate="handleMCPCallExpressionFieldNavigate"
             @register-field-index="onMCPCallRegisterExpressionFieldIndex"
           />
         </div>
         <p class="text-xs text-muted-foreground">
-          Values support DSL expressions: <code class="bg-muted px-1 rounded">$nodeLabel.field</code>
+          {{ $t("mcp.nodeProperties.dslExpressionSupport") }}
         </p>
       </div>
 
       <!-- Output reference -->
       <div class="space-y-1 pt-2 border-t">
-        <Label class="text-xs text-muted-foreground">Output</Label>
+        <Label class="text-xs text-muted-foreground">{{ $t("mcp.nodeProperties.output") }}</Label>
         <div class="text-xs font-mono">
-          <div>${{ selectedNode.data.label }}.result — tool result (object or string)</div>
+          <div>${{ selectedNode.data.label }}.result — {{ $t('mcp.nodeProperties.toolResultDescription') }}</div>
         </div>
       </div>
     </div>

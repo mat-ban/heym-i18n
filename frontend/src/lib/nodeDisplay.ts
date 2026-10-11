@@ -4,6 +4,7 @@ import { LayoutTemplate } from "lucide-vue-next";
 import { NODE_DEFINITIONS } from "@/types/node";
 import type { NodeData, NodeType, WorkflowNode } from "@/types/workflow";
 import { isTileFillingIcon, nodeIconColorClass, nodeIcons } from "@/lib/nodeIcons";
+import { i18n } from "@/i18n";
 import { describeNode, humanizeNodeType } from "@/lib/workflowPreview";
 
 const SUMMARY_KEYS = ["url", "path", "operation", "model", "prompt", "message", "code"];
@@ -50,7 +51,10 @@ export function resolveNodeDisplay(
 ): NodeDisplayMetadata {
   const knownType = knownNodeType(nodeType);
   const definition = knownType ? NODE_DEFINITIONS[knownType] : undefined;
-  const typeLabel = definition?.label || humanizeNodeType(nodeType) || "Unknown node";
+  const catalogKey = `nodes.${nodeType}.label`;
+  const typeLabel = i18n.global.locale.value !== "en" && i18n.global.te(catalogKey)
+    ? i18n.global.t(catalogKey)
+    : definition?.label || humanizeNodeType(nodeType) || "Unknown node";
   const label = typeof data.label === "string" && data.label.trim()
     ? data.label.trim()
     : typeLabel;

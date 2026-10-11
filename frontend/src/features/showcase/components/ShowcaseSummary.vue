@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <section class="space-y-4">
     <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-      Page Guide
+      {{ $t("showcase.pageGuide") }}
     </div>
 
     <div class="space-y-3">

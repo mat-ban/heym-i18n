@@ -32,7 +32,7 @@ const {
 <template>
   <template v-if="selectedNode">
     <div class="space-y-2">
-      <Label>Google Drive Credential</Label>
+      <Label>{{ $t("drive.googleDrive.credential") }}</Label>
       <Select
         :model-value="selectedNode.data.credentialId || ''"
         :options="googleDriveCredentialOptions"
@@ -42,7 +42,7 @@ const {
       <div v-if="!selectedNode.data.credentialId">
         <p class="text-xs text-amber-500 flex items-center gap-1">
           <AlertTriangle class="h-3 w-3" />
-          Credential is required.
+          {{ $t("drive.googleDrive.credentialRequired") }}
         </p>
         <p class="text-xs text-muted-foreground mt-1">
           <a
@@ -55,11 +55,11 @@ const {
     </div>
 
     <div class="space-y-2">
-      <Label>Operation</Label>
+      <Label>{{ $t("drive.googleDrive.operation") }}</Label>
       <SearchableSelect
         :model-value="selectedNode.data.gdOperation || ''"
         :options="googleDriveOperationOptions"
-        search-placeholder="Search Google Drive operations..."
+        :search-placeholder="$t('drive.googleDrive.searchOperations')"
         @update:model-value="updateNodeData('gdOperation', $event)"
       />
     </div>
@@ -70,7 +70,7 @@ const {
         v-if="['listFolderFiles', 'removeFolder'].includes(selectedNode.data.gdOperation)"
         class="space-y-2"
       >
-        <Label>Folder ID or URL</Label>
+        <Label>{{ $t("drive.googleDrive.folderIdOrUrl") }}</Label>
         <ExpressionInput
           ref="googleDriveFolderIdExpressionInputRef"
           :model-value="selectedNode.data.gdFolderId || ''"
@@ -93,7 +93,7 @@ const {
           v-if="selectedNode.data.gdOperation === 'listFolderFiles'"
           class="text-xs text-muted-foreground"
         >
-          Leave empty to list the Drive root.
+          {{ $t("drive.googleDrive.folderRootHint") }}
         </p>
       </div>
 
@@ -106,7 +106,7 @@ const {
         "
         class="space-y-2"
       >
-        <Label>File ID or URL</Label>
+        <Label>{{ $t("drive.googleDrive.fileIdOrUrl") }}</Label>
         <ExpressionInput
           ref="googleDriveFileIdExpressionInputRef"
           :model-value="selectedNode.data.gdFileId || ''"
@@ -126,14 +126,14 @@ const {
           @update:model-value="updateNodeData('gdFileId', $event)"
         />
         <p class="text-xs text-muted-foreground">
-          Accepts a full Drive or Docs URL, or a bare file ID.
+          {{ $t("drive.googleDrive.fileIdOrUrlHint") }}
         </p>
       </div>
 
       <!-- listFolderFiles extras -->
       <template v-if="selectedNode.data.gdOperation === 'listFolderFiles'">
         <div class="space-y-2">
-          <Label>Max Results (optional)</Label>
+          <Label>{{ $t("drive.googleDrive.maxResults") }}</Label>
           <ExpressionInput
             ref="googleDriveMaxResultsExpressionInputRef"
             :model-value="selectedNode.data.gdMaxResults ?? '100'"
@@ -159,7 +159,7 @@ const {
         </div>
 
         <div class="space-y-2">
-          <Label>Filter Query (optional)</Label>
+          <Label>{{ $t("drive.googleDrive.filterQuery") }}</Label>
           <ExpressionInput
             ref="googleDriveQueryExpressionInputRef"
             :model-value="selectedNode.data.gdQuery || ''"
@@ -203,7 +203,7 @@ const {
         v-if="['downloadFile', 'syncToHeymDrive'].includes(selectedNode.data.gdOperation)"
         class="space-y-2"
       >
-        <Label>Export Format</Label>
+        <Label>{{ $t("drive.googleDrive.exportFormat") }}</Label>
         <Select
           :model-value="selectedNode.data.gdExportFormat || ''"
           :options="googleDriveExportFormatOptions"
@@ -220,11 +220,11 @@ const {
         v-if="selectedNode.data.gdOperation === 'syncToHeymDrive'"
         class="space-y-2"
       >
-        <Label>Heym Drive Filename (optional)</Label>
+        <Label>{{ $t("drive.googleDrive.heymDriveFilename") }}</Label>
         <ExpressionInput
           ref="googleDriveFilenameExpressionInputRef"
           :model-value="selectedNode.data.gdFilename || ''"
-          placeholder="Leave empty to keep the Google Drive name"
+          :placeholder="$t('drive.googleDrive.keepGoogleDriveName')"
           :nodes="workflowStore.nodes"
           :node-results="workflowStore.nodeResults"
           :edges="workflowStore.edges"
@@ -233,7 +233,7 @@ const {
           :navigation-index="1"
           :navigation-total="googleDriveExpressionFieldCount"
           :dialog-node-label="selectedNodeEvaluateDialogLabel"
-          dialog-key-label="Heym Drive filename"
+          :dialog-key-label="$t('drive.googleDrive.dialogKeyHeymDriveFilename')"
           field-key="gdFilename"
           @navigate="handleGoogleDriveExpressionFieldNavigate"
           @register-field-index="onGoogleDriveRegisterExpressionFieldIndex"
@@ -244,7 +244,7 @@ const {
       <!-- updateFile extras -->
       <template v-if="selectedNode.data.gdOperation === 'updateFile'">
         <div class="space-y-2">
-          <Label>New Content (base64, optional)</Label>
+          <Label>{{ $t("drive.googleDrive.newContent") }}</Label>
           <ExpressionInput
             ref="googleDriveContentExpressionInputRef"
             :model-value="selectedNode.data.gdBase64Content || ''"
@@ -257,7 +257,7 @@ const {
             :navigation-index="1"
             :navigation-total="googleDriveExpressionFieldCount"
             :dialog-node-label="selectedNodeEvaluateDialogLabel"
-            dialog-key-label="New content"
+            :dialog-key-label="$t('drive.googleDrive.dialogKeyNewContent')"
             field-key="gdBase64Content"
             @navigate="handleGoogleDriveExpressionFieldNavigate"
             @register-field-index="onGoogleDriveRegisterExpressionFieldIndex"
@@ -266,7 +266,7 @@ const {
         </div>
 
         <div class="space-y-2">
-          <Label>New Name (optional)</Label>
+          <Label>{{ $t("drive.googleDrive.newName") }}</Label>
           <ExpressionInput
             ref="googleDriveNewNameExpressionInputRef"
             :model-value="selectedNode.data.gdNewName || ''"
@@ -279,7 +279,7 @@ const {
             :navigation-index="2"
             :navigation-total="googleDriveExpressionFieldCount"
             :dialog-node-label="selectedNodeEvaluateDialogLabel"
-            dialog-key-label="New name"
+            :dialog-key-label="$t('drive.googleDrive.dialogKeyNewName')"
             field-key="gdNewName"
             @navigate="handleGoogleDriveExpressionFieldNavigate"
             @register-field-index="onGoogleDriveRegisterExpressionFieldIndex"
@@ -288,7 +288,7 @@ const {
         </div>
 
         <div class="space-y-2">
-          <Label>Move to Folder (optional)</Label>
+          <Label>{{ $t("drive.googleDrive.moveToFolder") }}</Label>
           <ExpressionInput
             ref="googleDriveNewParentExpressionInputRef"
             :model-value="selectedNode.data.gdNewParentId || ''"
@@ -301,7 +301,7 @@ const {
             :navigation-index="3"
             :navigation-total="googleDriveExpressionFieldCount"
             :dialog-node-label="selectedNodeEvaluateDialogLabel"
-            dialog-key-label="Move to folder"
+            :dialog-key-label="$t('drive.googleDrive.dialogKeyMoveToFolder')"
             field-key="gdNewParentId"
             @navigate="handleGoogleDriveExpressionFieldNavigate"
             @register-field-index="onGoogleDriveRegisterExpressionFieldIndex"
@@ -310,7 +310,7 @@ const {
         </div>
 
         <p class="text-xs text-muted-foreground">
-          Fill at least one of the three. Fields left empty are not changed.
+          {{ $t("drive.googleDrive.fillAtLeastOne") }}
         </p>
       </template>
 
@@ -327,7 +327,7 @@ const {
           <label
             for="gd-permanent-delete"
             class="text-xs cursor-pointer select-none"
-          >Delete permanently</label>
+          >{{ $t("drive.googleDrive.deletePermanently") }}</label>
         </div>
         <p
           v-if="selectedNode.data.gdPermanentDelete"
@@ -335,15 +335,15 @@ const {
         >
           <AlertTriangle class="h-3 w-3 mt-0.5 shrink-0" />
           <span v-if="selectedNode.data.gdOperation === 'removeFolder'">
-            The folder and everything inside it will be destroyed and cannot be recovered.
+            {{ $t("drive.googleDrive.permanentDeleteFolderWarning") }}
           </span>
-          <span v-else>This file will be destroyed and cannot be recovered.</span>
+          <span v-else>{{ $t("drive.googleDrive.permanentDeleteFileWarning") }}</span>
         </p>
         <p
           v-else
           class="text-xs text-muted-foreground"
         >
-          The item is moved to Google Drive trash and can be restored.
+          {{ $t("drive.googleDrive.trashNotice") }}
         </p>
       </template>
     </template>

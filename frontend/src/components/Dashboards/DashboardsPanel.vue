@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { Loader2, Plus, Sparkles } from "lucide-vue-next";
@@ -26,6 +27,7 @@ import { playSuccessSound } from "@/utils/audio";
 const route = useRoute();
 const router = useRouter();
 const dashboardStore = useDashboardStore();
+const { t } = useI18n();
 
 const editMode = ref(false);
 const showAdd = ref(false);
@@ -45,7 +47,7 @@ async function openDashboardWithUrl(dashboardId: string): Promise<void> {
   try {
     await dashboardStore.openDashboard(dashboardId);
   } catch {
-    loadError.value = "Failed to load the dashboard";
+    loadError.value = t("dashboards.loadError");
     return;
   }
   if (route.query.dashboard !== dashboardId) {
@@ -57,7 +59,7 @@ async function loadDashboards(): Promise<void> {
   try {
     await dashboardStore.fetchDashboards();
   } catch {
-    loadError.value = "Failed to load dashboards";
+    loadError.value = t("dashboards.loadDashboardsError");
     return;
   }
   const requested = typeof route.query.dashboard === "string" ? route.query.dashboard : null;
@@ -223,7 +225,7 @@ onMounted(() => {
         v-else-if="dashboardStore.widgets.length === 0"
         class="flex h-full flex-col items-center justify-center gap-3 text-center text-muted-foreground"
       >
-        <p>No widgets yet.</p>
+        <p>{{ $t("dashboards.noWidgetsYet") }}</p>
         <div
           v-if="dashboardStore.canWrite"
           class="flex gap-2"
@@ -232,14 +234,14 @@ onMounted(() => {
             size="sm"
             @click="showAdd = true"
           >
-            <Plus class="mr-1 h-4 w-4" /> Add widget
+            <Plus class="mr-1 h-4 w-4" /> {{ $t("dashboards.addWidget") }}
           </Button>
           <Button
             variant="ghost"
             size="sm"
             @click="showAi = true"
           >
-            <Sparkles class="mr-1 h-4 w-4" /> Generate with AI
+            <Sparkles class="mr-1 h-4 w-4" /> {{ $t("dashboards.generateWithAi") }}
           </Button>
         </div>
       </div>
@@ -272,9 +274,9 @@ onMounted(() => {
     />
     <AiWidgetDialog
       v-if="refineWidget"
-      heading="Fine-tune widget with AI"
-      placeholder="e.g. Make it a horizontal bar chart and only show the top 5"
-      submit-label="Apply"
+      :heading="$t('dashboards.aiWidget.fineTuneHeading')"
+      :placeholder="$t('dashboards.aiWidget.fineTunePlaceholder')"
+      :submit-label="$t('dashboards.aiWidget.apply')"
       @close="refineWidget = null"
       @generate="handleRefine"
     />

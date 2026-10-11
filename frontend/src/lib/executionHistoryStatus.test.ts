@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { getHistoryStatusBadgeClass, HISTORY_STATUS_OPTIONS } from "./executionHistoryStatus";
+import { i18n } from "@/i18n";
+
+import {
+  getHistoryStatusBadgeClass,
+  HISTORY_STATUS_OPTIONS,
+  localizeHistoryStatusOptions,
+} from "./executionHistoryStatus";
 
 describe("HISTORY_STATUS_OPTIONS", () => {
   it("starts with the unfiltered entry", () => {
@@ -28,5 +34,34 @@ describe("getHistoryStatusBadgeClass", () => {
   it("returns null for statuses without a badge", () => {
     expect(getHistoryStatusBadgeClass("success")).toBeNull();
     expect(getHistoryStatusBadgeClass("unknown")).toBeNull();
+  });
+});
+
+describe("localizeHistoryStatusOptions", () => {
+  const { t } = i18n.global;
+
+  it("keeps the option values and labels every entry from the catalog", () => {
+    const localized = localizeHistoryStatusOptions((key) => t(key));
+    expect(localized.map((option) => option.value)).toEqual(
+      HISTORY_STATUS_OPTIONS.map((option) => option.value),
+    );
+    expect(localized.map((option) => option.label)).toEqual([
+      "All Statuses",
+      "Success",
+      "Error",
+      "Cached",
+      "Cancelled",
+    ]);
+  });
+
+  it("uses the translated labels when the catalog says so", () => {
+    const labels = localizeHistoryStatusOptions((key) => `[${key}]`).map((option) => option.label);
+    expect(labels).toEqual([
+      "[history.allStatuses]",
+      "[history.statusOptions.success]",
+      "[history.statusOptions.error]",
+      "[history.statusOptions.cached]",
+      "[history.statusOptions.cancelled]",
+    ]);
   });
 });

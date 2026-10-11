@@ -1,0 +1,128 @@
+# Onglet Chat
+
+L'onglet **Chat** fournit une interface de conversation directe avec un LLM. Utilisez-le pour tester des modèles, poser des questions, exécuter des workflows existants ou créer un nouveau workflow à partir d'une requête en langage naturel.
+
+<video src="/features/showcase/chat.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/chat.webm">▶ Regarder la démo du Chat</a></p>
+
+## Configuration
+
+1. Sélectionnez un [identifiant](./credentials-tab.md) (clé API pour OpenAI, Google, etc.)
+2. Choisissez un modèle dans la liste déroulante (les modèles sont chargés à partir de l'identifiant sélectionné)
+3. Commencez à saisir du texte pour envoyer des messages
+
+Vous pouvez également démarrer une conversation depuis la zone de chat de l'[onglet Workflows](./workflows-tab.md). Le premier message est envoyé et la nouvelle conversation s'ouvre ici avec la réponse déjà en cours de streaming.
+
+## Fonctionnalités
+
+- **Contexte des variables globales** – Vos [Variables globales](../reference/global-variables.md) sont accessibles au LLM, ce qui permet de l'interroger sur les valeurs stockées ou d'y faire référence
+- **Contexte des modèles de l'espace de travail** – Les modèles de workflows et de nœuds partagés dans votre espace de travail sont inclus comme contexte, ce qui permet au Chat de répondre aux questions sur les modèles disponibles
+- **Agent longue durée** – Le Chat continue de fonctionner en arrière-plan même si le navigateur est fermé ; vous pouvez donc revenir depuis un autre appareil et poursuivre la même conversation
+- **Création de workflow** – Demandez au Chat de créer ou de configurer un workflow : il utilise le même moteur Workflow AI Builder que l'assistant de l'éditeur pour générer et enregistrer le workflow
+- **Création de tâches Kanban** – Demandez naturellement d'ajouter une tâche ou de créer une carte. Le Chat l'ajoute à la première colonne du tableau demandé ; lorsque plusieurs tableaux existent et qu'aucun n'est nommé, le Chat présente un sélecteur de tableau avant de créer la carte
+- **Messages de suivi en file d'attente** – Envoyez d'autres messages pendant qu'une réponse est en cours de streaming. Les messages en file d'attente sont persistés, peuvent être modifiés ou supprimés avant leur démarrage, et s'exécutent dans l'ordre après la réponse active
+- **Pauses de planification** – Lorsque le Chat a besoin de détails de planification, il pose des questions de clarification et suspend les messages de suivi en file d'attente jusqu'à votre réponse. Une fois la réponse de planification terminée, les messages en file d'attente reprennent
+- **Identifiants** – Lorsqu'un workflow créé ou modifié par le Chat nécessite un identifiant, le Chat demande lequel utiliser, propose d'en créer un nouveau dans la conversation, ou permet de continuer sans. Vous pouvez également demander au Chat de créer un identifiant ou de mettre à jour l'un des vôtres ; il ouvre le formulaire d'identifiant dans la conversation. Le modèle voit le nom et le type de l'identifiant, jamais ses valeurs. Voir [Assistant IA › Identifiants](../reference/ai-assistant.md#credentials)
+- **Tables de données** – Lorsqu'un workflow créé ou modifié par le Chat stocke des enregistrements, le Chat demande quelle [table de données](./datatable-tab.md) utiliser ou propose d'en créer une avec les colonnes nécessaires au workflow. Il peut également lister vos tables et leurs colonnes. Il ne lit ni n'écrit jamais de lignes. Voir [Assistant IA › Tables de données](../reference/ai-assistant.md#data-tables)
+- **Réponses en streaming** – Visualisez la sortie du modèle au fur et à mesure de son streaming
+- **Arrêt de la réponse** – Interrompez à tout moment la réponse en cours de streaming ; l'arrêt efface également les messages en file d'attente pour cette conversation
+- **Rendu Markdown** – Les réponses prennent en charge le formatage markdown, y compris les images en ligne
+- **Affichage des images** – Les images intégrées aux réponses (par ex. issues de la génération d'images par le LLM) apparaissent en ligne ; cliquez sur une image pour l'afficher en plein écran. Appuyez sur **Échap** ou sur le bouton retour (mobile) pour fermer la vue plein écran
+- **Copie des messages** – Copiez n'importe quel message dans le presse-papiers
+- **Effacement du chat** – Démarrez une nouvelle conversation
+- **Saisie vocale** – Utilisez le bouton microphone pour la reconnaissance vocale (prise en charge par le navigateur). À l'arrêt de l'enregistrement, Heym peut légèrement nettoyer la transcription avant son envoi
+- **Workflows planifiés** – Demandez quand les workflows cron s'exécutent (aujourd'hui, cette semaine, ce mois-ci ou une plage de dates personnalisée). L'assistant utilise les mêmes données de planification que l'[onglet Planifications](./scheduled-tab.md) et peut limiter les résultats aux workflows que vous possédez ou inclure ceux partagés avec vous
+- **Historique d'exécution des workflows** – Posez des questions sur un workflow (« combien de fois le rapport quotidien s'est-il exécuté ? », « a-t-il échoué ? », « quand a-t-il été exécuté pour la dernière fois ? »). Le Chat recherche le workflow par son ID et répond à partir de son nombre d'exécutions, de la répartition des statuts, des heures de première et dernière exécution et de la durée moyenne. Demandez pourquoi une exécution a échoué ou ce qu'elle a renvoyé, et le Chat ouvre alors cette exécution unique pour lire ses entrées, ses sorties et les erreurs par nœud
+- **Statut des exécutions en direct** – Demandez ce qui s'exécute en ce moment et le Chat répond avec le nombre, les noms des workflows, la durée de chaque exécution, le nœud en cours et un lien direct vers l'exécution en direct
+
+## Utiliser le Chat depuis un client MCP
+
+Le moteur de Chat est également accessible depuis l'extérieur du navigateur. Activez l'outil **Heym Chat Tool** dans l'[onglet MCP](./mcp-tab.md) et les clients MCP — Claude, Cursor, et tout autre client compatible MCP — obtiennent un unique outil `heym_chat` qui exécute ce même moteur avec l'ensemble de ses capacités.
+
+Ces conversations apparaissent dans l'historique de cet onglet, marquées d'une icône de prise dans la liste des conversations. Ouvrez-en une pour lire ce que le client a demandé, consulter les cartes d'outils déclenchées et poursuivre le fil vous-même. Répondre à une question de clarification fonctionne de la même manière, que le tour ait débuté ici ou depuis un client MCP.
+
+Via MCP, le Chat ne liste, ne sélectionne ni ne crée d'identifiants. Les Workflows qu'il construit laissent les champs d'identifiants vides, et la réponse nomme les nœuds nécessitant un identifiant afin que vous puissiez les configurer dans l'éditeur.
+
+Les tables de données fonctionnent également via MCP : le Chat liste vos tables, en crée de nouvelles et les intègre aux Workflows qu'il construit. Sa question sur les tables arrive sous forme de texte dans le résultat ; répondez-y avec le même `conversation_id`.
+
+## Limite de contexte
+
+Le Chat conserve jusqu'à 25 messages récents dans le contexte. Les messages plus anciens sont tronqués afin de respecter les limites du modèle.
+
+## Créer des Workflows
+
+Lorsque vous demandez au Chat de créer, construire, générer ou configurer un Workflow, il crée un nouveau Workflow enregistré avec un nom et une description générés. La réponse inclut un aperçu en lecture seule du canvas des nœuds et des arêtes générés, ainsi qu'un lien **Open workflow** qui ouvre l'éditeur de Workflow dans un nouvel onglet du navigateur. Utilisez le bouton **Run** de la carte d'aperçu pour exécuter le Workflow.
+
+Les retours complémentaires dans le même Chat modifient ce Workflow au lieu d'en créer un autre. Par exemple, après que le Chat a créé un Workflow, vous pouvez dire « add an approval step », « change the output format » ou « şöyle yap » et le Chat met à jour le Workflow enregistré et actualise l'aperçu.
+
+Cette approche convient aux demandes où vous souhaitez que le travail soit réalisé sous forme d'automatisation réutilisable, et non comme une simple réponse ponctuelle.
+
+## Créer des tâches Kanban
+
+Demandez au Chat en langage naturel, par exemple « Add a task called Fix login bug » ou
+« Create a new card Update documentation on the Launch board ». Vous pouvez inclure une
+description dans la même requête. Le Chat crée toujours la carte dans la première colonne
+du tableau sélectionné.
+
+Si votre espace de travail comporte plusieurs tableaux et que vous n'en identifiez aucun, le Chat
+s'interrompt avec un sélecteur de tableau à choix unique. Sélectionnez un tableau pour finaliser la
+création de la carte. Aucune commande slash ni format de message particulier n'est requis.
+
+## Demander ce qui est en cours d'exécution
+
+Posez la question en langage naturel — « what is running? », « how many workflows are active right now? »,
+« which node is the nightly report on? » — et le Chat fournit un état en temps réel :
+
+- **Combien** d'exécutions sont en cours, réparties entre celles en cours d'exécution et celles en attente de revue humaine
+- **À quels Workflows** elles appartiennent, par leur nom
+- **Depuis combien de temps** chaque exécution est en cours (par exemple `1m 35s`, `3h 25m`)
+- **Quel nœud** s'exécute actuellement, par son libellé sur le canvas, ainsi que le dernier nœud terminé
+- **Un lien** vers chaque exécution en cours, qui ouvre le canvas avec cette exécution en rejeu
+
+Les exécutions en pause pour une revue [Human-in-the-Loop](../reference/human-in-the-loop.md) ou Codex sont signalées comme
+en attente de votre intervention, et non comme en cours d'exécution. Il s'agit des mêmes données que le badge d'exécutions actives dans l'en-tête,
+de sorte que le Chat et le badge ne divergent jamais. Pour les exécutions déjà terminées, demandez plutôt les exécutions récentes
+— cela consulte l'[Historique des exécutions](../reference/execution-history.md).
+
+## Poser des questions sur les alertes
+
+Le Chat peut répondre aux questions concernant les [alertes](./alerts-tab.md) que vous avez définies :
+
+- **Ce qui existe** — « what alerts do I have? », « is there an alert on the invoice workflow? »,
+  « which alerts are firing right now? »
+- **Comment l'une est configurée** — « what is the threshold on the cost alert? », « how is that configured? »
+- **Pourquoi et quand elle s'est déclenchée** — « why did the cost alert fire? », « when did this last trigger? »
+
+Pour une question du type « pourquoi s'est-elle déclenchée », le Chat lit l'enregistrement de déclenchement et cite la valeur
+réellement observée, le seuil et la fenêtre exacte évaluée, ainsi que le détail contributif :
+les identifiants d'exécutions en échec et les messages d'erreur pour les alertes d'erreur, la dépense par modèle pour les alertes de coût, ou
+la répartition par source de Trigger pour les alertes de nombre d'exécutions. Il rapporte ce qui était vrai au moment où l'alerte
+s'est déclenchée plutôt que de recalculer la fenêtre, car celle-ci est passée et un nouveau calcul
+peut donner un résultat différent.
+
+## Règles utilisateur
+
+Les [Règles utilisateur](../reference/user-settings.md) (configurées dans les Paramètres) sont automatiquement injectées dans chaque conversation Chat en tant qu'instructions au niveau système. Définissez-les une fois pour appliquer des préférences persistantes à toutes les requêtes de Chat.
+
+## Associé
+
+- [Onglet MCP](./mcp-tab.md) – Exposez ce moteur aux clients MCP en tant qu'outil `heym_chat`
+- [Paramètres](../reference/user-settings.md) – Définissez les Règles utilisateur appliquées à toutes les requêtes de chat
+- [Onglet Identifiants](./credentials-tab.md) – Ajoutez et gérez les clés API
+- [Onglet Variables](./global-variables-tab.md) – Variables globales accessibles au Chat
+- [Types de nœuds](../reference/node-types.md) – Nœuds LLM et Agent pour les workflows
+- [Nœud Agent](../nodes/agent-node.md) – Agent IA avec appel d'outils
+- [Assistant IA](../reference/ai-assistant.md) – Assistant d'édition propulsé par le même DSL de construction de workflows
+- [Historique des exécutions](../reference/execution-history.md) – Consultez les exécutions passées (bouton Historique dans l'en-tête)
+- [Onglet Planifications](./scheduled-tab.md) – Calendrier des exécutions cron à venir (mêmes données que le Chat peut résumer)
+- [Onglet Alertes](./alerts-tab.md) – Alertes de seuil que le Chat peut lister et expliquer
+- [Présentation contextuelle](../reference/contextual-showcase.md) – Orientation compacte intégrée à l'application pour cette page
+- [Voix du Chat (TTS et STT)](../reference/chat-voice.md) – Lisez les messages à voix haute et parlez mains libres avec ElevenLabs
+
+## Appels d'outils et taille du contexte
+
+Chaque fois que l'assistant invoque un outil (exécution d'un workflow, listage des exécutions, création d'un nouveau workflow), une carte repliable apparaît dans la conversation. La carte se déploie automatiquement pendant l'exécution de l'outil, affichant les arguments exacts. Lorsque l'outil se termine, la carte se replie en un résumé d'une ligne avec le temps écoulé. Cliquez sur n'importe quelle carte pour redéployer les arguments et le résumé de la réponse.
+
+Un petit badge circulaire sous le champ de saisie indique l'utilisation actuelle du contexte en pourcentage de la fenêtre du modèle (par ex. `12% · ~9.2k`). Survolez le badge pour afficher une répartition : prompt système, AGENTS.md, bloc workflows, règles utilisateur, historique et votre saisie en cours. Lorsque l'utilisation dépasse 80 %, l'anneau devient ambre ; à 95 %, il devient rouge.
+
+Si l'utilisation approche de la limite, Heym compresse automatiquement les messages plus anciens en un court résumé, selon le même mécanisme que celui utilisé par les nœuds Agent. Une carte « Contexte compressé » apparaît alors en ligne pour indiquer ce qui s'est produit.

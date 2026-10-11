@@ -37,10 +37,10 @@ const emit = defineEmits<{
       class="rounded-xl border border-dashed border-border px-6 py-10 text-center"
     >
       <p class="font-medium">
-        No alerts yet
+        {{ $t('alerts.noAlerts') }}
       </p>
       <p class="mt-1 text-sm text-muted-foreground">
-        Create one to be told when errors, duration, cost, or run count cross a line.
+        {{ $t('alerts.noAlertsDescription') }}
       </p>
     </div>
 

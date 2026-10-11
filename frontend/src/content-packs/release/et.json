@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Knoteni uuesti aktiveerimine Workflow' sees",
+    "releaseTour": {
+      "label": "Uus Heymis",
+      "introTitle": "Selles releases uut",
+      "introDescription": "Lühike ülevaade uuendustest alates teie viimasest uuendusest. Kestab umbes ühe minuti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable-knot: Knoteni uuesti aktiveerimine Workflow' sees",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Uus **Enable-knot** on **Disable-knoti** vastand. Valige knot nimetuse järgi, et see uuesti aktiveerida ja muudatus salvestada. Deaktiveeritud **Cron**-Trigger käivitub taas järgmisel planeeritud ajal. Kui knot asub voos hiljem ja seda pole veel käivitatud, jookseb see kohe käimasolevas käivituses kaasa."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deaktiveeritud Trigger ei käivita kunagi iseseisvalt tööd. Seetõttu paigutage Enable-knot mõne teise sisendpunkti, näiteks **Input**-Triggeri, järele. **Wait**-knot toetab nüüd ka pikemaid pause: kuni 15 minutit senise ühe minuti asemel."
+          }
+        ],
+        "tour": {
+          "description": "Aktiveerige deaktiveeritud knot otse Workflow'st, näiteks peatatud Cron-Trigger.",
+          "useCases": [
+            "Deaktiveeritud Cron-Triggeri käivitamine vajadusel Webhooki kaudu",
+            "Kombineerimine Disable-knotiga, et knotisid oleku põhjal sisse ja välja lülitada",
+            "Workflow' peatamine Wait-knotiga kuni 15 minutiks"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Vaadake ootel inimkinnitusi otse armatuurlaual",
+    "releaseTour": {
+      "label": "Uus Heymis",
+      "introTitle": "Selles väljaandes uut",
+      "introDescription": "Lühike ülevaade uuendustest alates teie viimasest uuendusest. Kestab umbes ühe minuti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Ootel ülevaadete lahendamine armatuurlaua vidina kaudu",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Lisage **HITL**-vidin ja päis kuvab ootavate ülevaadete arvu kujul `1/n ootel`. Liikuge kirjete vahel nooleklahvidega. Workflow nimi avab käivituse otse lõuendil. **Kinnita**, **Taotle muudatusi** ja **Lükka tagasi** lõpetavad mustandi. Ajaloo ikoon avab käivituse ajaloo dialoogis samal lehel. Järjekord on isiklik: jagatud armatuurlaud ei kuva võõraid mustandeid."
+          }
+        ],
+        "tour": {
+          "description": "Armatuurlaua karussell teie ootel kinnituste jaoks, loenduriga päises.",
+          "useCases": [
+            "Näete, kui palju ülevaateid ootab, enne kui esimese avate",
+            "Kinnitage, taotlege muudatusi või lükake tagasi armatuurlaualt lahkumata",
+            "Avage see käivitus vidina pealkirja kõrval oleva ikooni kaudu ajaloo dialoogis"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Armatuurlaud"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI-assistent testib oma Workflow'sid ja loob andmetabeleid",
+    "releaseTour": {
+      "label": "Uus Hey mis",
+      "introTitle": "Selles releases uut",
+      "introDescription": "Lühike ülevaade uuendustest alates teie viimasest uuendusest. Kestab umbes minuti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO-režiim: AI-assistent testib seda, mida ta ehitab",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kui aktiveerite **YOLO-režiimi** Canvas **AI-assistendis**, ei lõpeta see enam Workflow rakendamise järel. See käivitab Workflow nagu **Run** kaudu, loeb tulemust ja parandab Workflow'd iseseisvalt kuni viis korda sõnumi kohta. Iga vastus loetleb sammud reaalajas."
+          },
+          {
+            "type": "prose",
+            "markdown": "Enne esimest käivitust küsib see test-sisendeid koos pakutud väärtustega ja kasutab neid uuesti. See võib käivitada ka teisi Workflow'sid, kui vajab nende tulemusi. Kui see vajab otsust või volitusi, küsib see tavapärase küsimuskaardi abil. Päris käivitused: YOLO-režiim on vaikimisi väljas ja **Stop** peatab protsessi igal ajal."
+          }
+        ],
+        "tour": {
+          "description": "AI-assistent käivitab loodud Workflow'sid, kontrollib tulemust ja parandab vigu iseseisvalt, kuni see töötab.",
+          "useCases": [
+            "Kirjeldage Workflow'd ja saate kohe testitud versiooni",
+            "Laske assistendil vigased noodid automaatselt üles leida ja parandada",
+            "Kontrollige teiste Workflow'de tagastusväärtusi enne nende ühendamist"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI-assistent valib või loob andmetabeleid",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kui Workflow salvestab kirjeid, tuvastab **AI-assistent** nüüd teie **DataTables**. Nimetage tabel ja see kasutab seda. Vastasel juhul küsib see sobivat tabelit või pakub **Loo uus tabel** koos vajalike veergudega."
+          },
+          {
+            "type": "prose",
+            "markdown": "Töötab Canvas-assistendis, YOLO-režiimis, **Chat**'is, dokumentatsioonis ja MCP kaudu `heym_chat`-iga."
+          }
+        ],
+        "tour": {
+          "description": "AI-assistent küsib sobivat andmetabelit või loob uue vajalike veergudega.",
+          "useCases": [
+            "Salvestage leadid automaatselt tabelitesse ja genereerige Workflow & tabel koos",
+            "Valige olemasolevad tabelid veergude ja tüüpide järgi",
+            "Looge ja ühendage tabeleid otse Chat'ist või MCP kaudu"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Mitme Dashboardi loomine ja meeskonnaga jagamine",
+    "releaseTour": {
+      "label": "Uus Heyris",
+      "introTitle": "Selles väljaandes uut",
+      "introDescription": "Lühike ülevaade uuendustest alates teie viimasest uuendusest. Kestab umbes ühe minuti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Mitme Dashboardi loomine ja meeskonnaga jagamine",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Vahekaart **Dashboard** toetab nüüd suvalist arvu Dashboarde. Vahetage mugavalt vahekaardi ülaosas oleva valiku kaudu või looge uus, kasutades **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Jagage Dashboarde isikute või meeskondadega jaotise **Seaded** kaudu. **Lugemine** lubab vaadata ja värskendada; **Kirjutamine** lubab vidinaid redigeerida. Vidinad kasutavad alati omaniku volitusi."
+          }
+        ],
+        "tour": {
+          "description": "Hallake mitut Dashboardi, vahetage nende vahel ning jagage neid kirjutuskaitstult või redigeeritavalt.",
+          "useCases": [
+            "Eraldage Dashboardid meeskonna, toote või rentniku järgi",
+            "Pakkuge sidusrühmadele kirjutuskaitstud vaadet",
+            "Testige diagrammitüüpe eelnevalt näidisandmetega"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

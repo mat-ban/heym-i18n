@@ -168,7 +168,7 @@ onUnmounted(() => {
           <button
             v-if="isMobileViewport && !chatStore.isSidebarOpen"
             class="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-            title="Open chat list"
+            :title="$t('chat.openChatList')"
             @click="chatStore.toggleSidebar"
           >
             <ChevronRight class="w-4 h-4" />
@@ -182,7 +182,7 @@ onUnmounted(() => {
             @click="historyOpen = true; pushOverlayState()"
           >
             <History class="w-4 h-4" />
-            <span class="hidden sm:inline">History</span>
+            <span class="hidden sm:inline">{{ $t('header.history') }}</span>
           </Button>
         </template>
       </AppHeader>
@@ -238,7 +238,7 @@ onUnmounted(() => {
               >
                 <Send class="w-10 h-10 sm:w-12 sm:h-12 opacity-50" />
                 <p class="text-xs sm:text-sm max-w-[280px] sm:max-w-none text-center">
-                  Ask to run a workflow, list workflows, or ask about your data.
+                  {{ $t('chat.emptyStatePrompt') }}
                 </p>
                 <button
                   class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50 transition-colors"
@@ -246,7 +246,7 @@ onUnmounted(() => {
                   @click="createNew"
                 >
                   <SquarePen class="w-4 h-4" />
-                  New Chat
+                  {{ $t('chat.newChat') }}
                 </button>
               </div>
             </div>

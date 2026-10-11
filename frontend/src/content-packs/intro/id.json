@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Membangun lebih cepat di Workflow",
+    "description": "Pilih Workflow untuk melihat Trigger, eksekusi terakhir, dan langkah-langkah langsung di samping daftar. Filter berdasarkan status, jalankan segera, dan tetap terorganisir dengan folder."
+  },
+  "dashboard:board": {
+    "title": "Kelola tugas melalui papan berbasis agen",
+    "description": "Seret kartu antar kolom untuk memicu rantai Workflow dengan konteks kartu lengkap. Hasilnya mengalir langsung kembali ke kartu."
+  },
+  "dashboard:templates": {
+    "title": "Mulai dengan template yang terbukti",
+    "description": "Gunakan pola Workflow yang sudah dibuat sebelumnya untuk menghemat waktu penyiapan dan memastikan konsistensi."
+  },
+  "dashboard:globalvariables": {
+    "title": "Sentralisasi variabel bersama",
+    "description": "Simpan nilai yang dapat digunakan kembali satu kali dan referensikan di semua Workflow."
+  },
+  "dashboard:chat": {
+    "title": "Gunakan chat untuk iterasi cepat",
+    "description": "Ajukan pertanyaan cepat, uji ide, dan beralih ke editor begitu alur Workflow sudah jelas."
+  },
+  "dashboard:credentials": {
+    "title": "Kelola rahasia dengan aman",
+    "description": "Kelola kunci penyedia dan Token secara terpusat, sehingga Workflow dapat menggunakan koneksi aman tanpa mengekspos rahasia."
+  },
+  "dashboard:vectorstores": {
+    "title": "Dukung Workflow berbasis retrieval",
+    "description": "Siapkan penyimpanan vektor untuk respons AI yang berdasar, pencarian semantik, dan pipeline RAG yang skalabel."
+  },
+  "dashboard:mcp": {
+    "title": "Hubungkan ekosistem alat eksternal",
+    "description": "Konfigurasikan koneksi MCP agar agen dapat menjalankan alat dan tindakan terstruktur di luar Prompt sederhana."
+  },
+  "dashboard:traces": {
+    "title": "Pahami perilaku eksekusi",
+    "description": "Analisis detail Trace untuk men-debug hasil, membandingkan eksekusi, dan meningkatkan keandalan."
+  },
+  "dashboard:alerts": {
+    "title": "Terima notifikasi sebelum masalah membesar",
+    "description": "Tetapkan ambang batas untuk error, durasi, biaya, dan jumlah eksekusi dan dapatkan peringatan saat terlampaui."
+  },
+  "dashboard:analytics": {
+    "title": "Pantau kinerja platform",
+    "description": "Monitor tren penggunaan dan eksekusi untuk mengoptimalkan secara terarah berdasarkan sinyal nyata."
+  },
+  "dashboard:dashboard": {
+    "title": "Buat dashboard kustom",
+    "description": "Susun widget grafik yang didukung Workflow untuk memvisualisasikan metrik penting secara sekilas."
+  },
+  "dashboard:teams": {
+    "title": "Skalakan kolaborasi secara terorganisir",
+    "description": "Bagi Workflow dan sumber daya per tim untuk menjaga izin akses dan tanggung jawab tetap transparan."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosis masalah di tingkat sistem",
+    "description": "Gunakan log jika terjadi masalah infrastruktur atau lingkungan untuk mendapatkan wawasan lebih dalam tentang runtime."
+  },
+  "dashboard:drive": {
+    "title": "Kelola file yang dihasilkan",
+    "description": "Lihat, unduh, dan bagikan hasil Workflow melalui tautan aman dan opsi akses terkontrol."
+  },
+  "dashboard:datatable": {
+    "title": "Bekerja secara native dengan data terstruktur",
+    "description": "Buat tabel bertipe dan akses langsung dari Workflow untuk operasi baca dan tulis yang dapat direproduksi."
+  },
+  "dashboard:schedules": {
+    "title": "Awasi jadwal otomatisasi",
+    "description": "Lihat semua Workflow Cron aktif dalam tampilan kalender (hari, minggu, bulan). Klik blok untuk langsung menuju Canvas."
+  },
+  "evals": {
+    "title": "Evaluasi kualitas dengan andal",
+    "description": "Jalankan suite pengujian yang dapat diulang untuk membandingkan perubahan Prompt dan model secara berdasar sebelum peluncuran ke produksi."
+  },
+  "docs": {
+    "title": "Panduan cepat dalam aplikasi",
+    "description": "Lihat referensi ringkas dan pelajari topik spesifik tanpa meninggalkan Workflow saat ini."
+  },
+  "editor": {
+    "title": "Rancang dan debug di Canvas",
+    "description": "Hubungkan node secara visual, jalankan segera, dan sempurnakan perilaku dengan umpan balik langsung dalam satu ruang kerja."
+  }
+}

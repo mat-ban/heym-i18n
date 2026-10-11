@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import {
   ArrowDownToLine,
@@ -34,7 +35,7 @@ import {
 } from "@/composables/useAutoRefresh";
 import {
   getHistoryStatusBadgeClass,
-  HISTORY_STATUS_OPTIONS,
+  localizeHistoryStatusOptions,
 } from "@/lib/executionHistoryStatus";
 import { collectRunImageSrcs, getOutputImageSrcs } from "@/lib/executionImages";
 import {
@@ -59,6 +60,8 @@ const emit = defineEmits<{
 
 const authStore = useAuthStore();
 const workflowStore = useWorkflowStore();
+const { t } = useI18n();
+const historyStatusOptions = computed(() => localizeHistoryStatusOptions(t));
 
 const isOwner = computed(() => {
   const ownerId = workflowStore.currentWorkflow?.owner_id;
@@ -149,7 +152,7 @@ const triggerSourceOptions = computed<Array<{ value: string | undefined; label: 
   }
 
   return [
-    { value: undefined, label: "All Tags" },
+    { value: undefined, label: t("history.allTags") },
     ...Array.from(sourceSet)
       .sort((left, right) => left.localeCompare(right))
       .map((source) => ({ value: source, label: source })),
@@ -175,7 +178,7 @@ const instanceOptions = computed<Array<{ value: string | undefined; label: strin
   }
 
   return [
-    { value: undefined, label: "All Instances" },
+    { value: undefined, label: t("history.allInstances") },
     ...Array.from(names.entries())
       .sort(([, left], [, right]) => left.localeCompare(right))
       .map(([id, name]) => ({ value: id, label: name })),
@@ -589,11 +592,11 @@ function getHitlHistory(output: unknown): HITLResolvedPayload[] {
 function getHitlDecisionLabel(decision: HITLResolvedPayload["decision"]): string {
   switch (decision) {
     case "accepted":
-      return "Accepted";
+      return t("history.accepted");
     case "edited":
-      return "Edited";
+      return t("history.edited");
     case "refused":
-      return "Refused";
+      return t("history.refused");
   }
 }
 
@@ -719,7 +722,7 @@ function bringToCanvas(): void {
 <template>
   <Dialog
     :open="open"
-    title="Execution History"
+    :title="$t('workflows.executionHistory')"
     size="5xl"
     :close-on-escape="!searchActive || !searchQuery"
     @close="emit('close')"
@@ -730,10 +733,10 @@ function bringToCanvas(): void {
       <p class="order-1 self-center flex shrink-0 items-center gap-2 text-base leading-none text-muted-foreground">
         <template v-if="isHistoryLoading">
           <Loader2 class="w-3 h-3 animate-spin" />
-          Loading...
+          {{ $t('common.loading') }}
         </template>
         <template v-else>
-          {{ executionHistoryTotal }} run(s)
+          {{ $t('history.runsCount', { count: executionHistoryTotal }) }}
         </template>
       </p>
       <div class="order-2 ml-auto flex items-center gap-0.5 sm:order-3 sm:col-start-3 sm:gap-1 shrink-0 flex-wrap justify-end">
@@ -776,16 +779,16 @@ function bringToCanvas(): void {
           @click="clearHistory"
         >
           <Trash2 class="w-4 h-4" />
-          <span class="hidden lg:inline">Clear history</span>
+          <span class="hidden lg:inline">{{ $t('history.clearHistory') }}</span>
         </Button>
       </div>
       <div class="order-3 w-full grid grid-cols-1 gap-2 min-[400px]:grid-cols-2 min-[400px]:max-sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:order-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:grid-cols-3 sm:min-w-0">
         <SearchableSelect
           v-if="executionHistoryTotal > 0 || hasActiveFilters"
           v-model="selectedStatus"
-          :options="[...HISTORY_STATUS_OPTIONS]"
+          :options="historyStatusOptions"
           placeholder=""
-          search-placeholder="Search statuses..."
+          :search-placeholder="$t('history.searchStatuses')"
           class="min-w-0 w-full"
           hide-trigger-icon
           data-testid="execution-history-status-filter"
@@ -795,7 +798,7 @@ function bringToCanvas(): void {
           v-model="selectedTriggerSource"
           :options="triggerSourceOptions"
           placeholder=""
-          search-placeholder="Search tags..."
+          :search-placeholder="$t('history.searchTags')"
           class="min-w-0 w-full"
           hide-trigger-icon
         />
@@ -804,7 +807,7 @@ function bringToCanvas(): void {
           v-model="selectedInstanceId"
           :options="instanceOptions"
           placeholder=""
-          search-placeholder="Search instances..."
+          :search-placeholder="$t('history.searchInstances')"
           class="min-w-0 w-full"
           hide-trigger-icon
         />
@@ -821,7 +824,7 @@ function bringToCanvas(): void {
           ref="searchInputRef"
           :value="searchQuery"
           type="text"
-          placeholder="Search by status, tag, inputs, outputs..."
+          :placeholder="$t('history.searchPlaceholder')"
           class="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-border/50 bg-muted/30 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-colors"
           @input="onSearchInput"
         >
@@ -841,7 +844,7 @@ function bringToCanvas(): void {
       v-if="executionHistoryTotal === 0 && activeExecutions.length === 0 && !hasActiveFilters"
       class="text-sm text-muted-foreground text-center py-16"
     >
-      No executions yet.
+      {{ $t('history.noExecutionsYet') }}
     </div>
 
     <!-- Two-column layout -->
@@ -863,7 +866,7 @@ function bringToCanvas(): void {
           >
             <div class="flex items-center gap-1.5">
               <Loader2 class="w-3 h-3 text-blue-400 animate-spin shrink-0" />
-              <span class="text-xs font-medium text-blue-400">Running</span>
+              <span class="text-xs font-medium text-blue-400">{{ $t('statusFilter.running') }}</span>
               <Button
                 variant="outline"
                 size="sm"
@@ -872,7 +875,7 @@ function bringToCanvas(): void {
                 @click="openActiveExecution(active)"
               >
                 <Radio class="mr-0.5 h-3 w-3" />
-                Open live
+                {{ $t('history.openLive') }}
               </Button>
             </div>
             <div class="mt-1 flex min-w-0 items-center justify-between gap-2">
@@ -893,7 +896,7 @@ function bringToCanvas(): void {
                   v-if="isCancellingId === active.execution_id"
                   class="w-3 h-3 animate-spin mr-0.5"
                 />
-                Cancel
+                {{ $t('common.cancel') }}
               </Button>
             </div>
           </div>
@@ -908,7 +911,7 @@ function bringToCanvas(): void {
           v-if="filteredExecutionHistoryList.length === 0 && hasActiveFilters"
           class="text-xs text-muted-foreground text-center py-6"
         >
-          No runs match the current filters.
+          {{ $t('history.noRunsMatchFilters') }}
         </div>
 
         <!-- Run list -->
@@ -923,7 +926,7 @@ function bringToCanvas(): void {
             :key="entry.id"
             class="w-full text-left p-2.5 rounded-md border bg-muted/20 hover:bg-muted/40 transition-colors"
             :class="cn(selectedEntry?.id === entry.id && 'border-primary/60 bg-primary/10')"
-            title="Double-click to bring this run to the canvas"
+            :title="$t('history.doubleClickToBringToCanvas')"
             :data-testid="`execution-history-entry-${entry.id}`"
             @click="selectEntry(entry.id)"
             @dblclick="openEntryOnCanvas(entry.id)"
@@ -938,7 +941,7 @@ function bringToCanvas(): void {
             </div>
             <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 mt-0.5 pl-5">
               <span class="text-[10px] text-muted-foreground">
-                <template v-if="entry.status === 'pending'">Pending review</template>
+                <template v-if="entry.status === 'pending'">{{ $t('history.pendingReview') }}</template>
                 <template v-else>{{ entry.execution_time_ms.toFixed(2) }}ms</template>
               </span>
               <span
@@ -964,7 +967,7 @@ function bringToCanvas(): void {
               <span
                 v-if="entry.recovered"
                 class="px-1 py-0.5 rounded bg-amber-500/20 text-amber-400 inline-flex items-center"
-                title="This run was automatically re-run after a server restart"
+                :title="$t('history.recoveredSuccess')"
               >
                 <RotateCcw class="w-2.5 h-2.5" />
               </span>
@@ -986,13 +989,13 @@ function bringToCanvas(): void {
           class="flex items-center justify-center h-full text-sm text-muted-foreground gap-2"
         >
           <Loader2 class="w-4 h-4 animate-spin" />
-          Loading details...
+          {{ $t('history.loadingDetails') }}
         </div>
         <div
           v-else-if="!selectedEntry"
           class="flex items-center justify-center h-full text-sm text-muted-foreground"
         >
-          Select an execution to view details.
+          {{ $t('history.selectExecutionToViewDetails') }}
         </div>
         <div
           v-else
@@ -1005,19 +1008,19 @@ function bringToCanvas(): void {
           >
             <RotateCcw class="w-3.5 h-3.5 shrink-0" />
             <span v-if="selectedEntry?.status === 'skipped'">
-              Skipped after a server restart because auto-recover is off for this workflow.
+              {{ $t('history.recoveredSkipped') }}
             </span>
             <span v-else-if="selectedEntry?.status === 'failed'">
-              Recovery failed after a server restart.
+              {{ $t('history.recoveredFailed') }}
             </span>
             <span v-else>
-              Recovered run, automatically re-run after a server restart.
+              {{ $t('history.recoveredSuccess') }}
             </span>
           </div>
           <!-- Inputs -->
           <div class="flex items-center justify-between gap-2">
             <div class="text-sm font-semibold">
-              Inputs
+              {{ $t('common.input') }}
             </div>
             <div class="flex items-center gap-0.5 sm:gap-1 flex-wrap justify-end">
               <Button
@@ -1028,7 +1031,7 @@ function bringToCanvas(): void {
                 @click="openExternal(pendingHitlUrl)"
               >
                 <ExternalLink class="w-3 h-3" />
-                <span class="text-xs">HITL Review</span>
+                <span class="text-xs">{{ $t('history.hitlReview') }}</span>
               </Button>
               <Button
                 variant="ghost"
@@ -1037,7 +1040,7 @@ function bringToCanvas(): void {
                 @click="bringToCanvas"
               >
                 <ArrowDownToLine class="w-3 h-3" />
-                <span class="text-xs">Bring to Canvas</span>
+                <span class="text-xs">{{ $t('history.bringToCanvas') }}</span>
               </Button>
               <Button
                 variant="ghost"
@@ -1049,7 +1052,7 @@ function bringToCanvas(): void {
                   :is="copiedField === 'inputs' ? Check : Copy"
                   class="w-3 h-3"
                 />
-                <span class="text-xs">{{ copiedField === 'inputs' ? 'Copied' : 'Copy' }}</span>
+                <span class="text-xs">{{ copiedField === 'inputs' ? $t('common.copied') : $t('common.copy') }}</span>
               </Button>
             </div>
           </div>
@@ -1058,7 +1061,7 @@ function bringToCanvas(): void {
           <!-- Outputs -->
           <div class="flex items-center justify-between gap-2">
             <div class="text-sm font-semibold">
-              Outputs
+              {{ $t('common.output') }}
             </div>
             <Button
               variant="ghost"
@@ -1070,7 +1073,7 @@ function bringToCanvas(): void {
                 :is="copiedField === 'outputs' ? Check : Copy"
                 class="w-3 h-3"
               />
-              <span class="text-xs">{{ copiedField === 'outputs' ? 'Copied' : 'Copy' }}</span>
+              <span class="text-xs">{{ copiedField === 'outputs' ? $t('common.copied') : $t('common.copy') }}</span>
             </Button>
           </div>
           <pre class="text-xs bg-muted/30 p-3 rounded-md max-h-40 overflow-auto whitespace-pre-wrap break-all">{{ JSON.stringify(selectedEntry?.result?.outputs ?? {}, null, 2) }}</pre>
@@ -1081,14 +1084,14 @@ function bringToCanvas(): void {
             class="space-y-2"
           >
             <div class="text-sm font-semibold">
-              Screenshots ({{ runScreenshots.length }})
+              {{ $t('history.screenshots') }} ({{ runScreenshots.length }})
             </div>
             <div class="flex flex-wrap gap-2">
               <img
                 v-for="(src, idx) in runScreenshots"
                 :key="idx"
                 :src="src"
-                :alt="`Screenshot ${idx + 1}`"
+                :alt="$t('history.screenshotWithIndex', { index: idx + 1 })"
                 class="w-20 h-20 rounded-md border object-cover cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all"
                 @click="openImageLightbox(src, runScreenshots)"
               >
@@ -1102,7 +1105,7 @@ function bringToCanvas(): void {
           >
             <div class="flex items-center justify-between gap-2">
               <div class="text-sm font-semibold">
-                Node Execution Logs
+                {{ $t('history.nodeExecutionLogs') }}
               </div>
               <div class="flex gap-1">
                 <Button
@@ -1111,7 +1114,7 @@ function bringToCanvas(): void {
                   class="text-xs h-6 px-2"
                   @click="expandAll"
                 >
-                  Expand All
+                  {{ $t('history.expandAll') }}
                 </Button>
                 <Button
                   variant="ghost"
@@ -1119,7 +1122,7 @@ function bringToCanvas(): void {
                   class="text-xs h-6 px-2"
                   @click="collapseAll"
                 >
-                  Collapse All
+                  {{ $t('history.collapseAll') }}
                 </Button>
               </div>
             </div>
@@ -1151,7 +1154,7 @@ function bringToCanvas(): void {
                     v-if="node.isRetryAttempt && node.retryAttempt && node.retryMaxAttempts"
                     class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 shrink-0"
                   >
-                    attempt {{ node.retryAttempt }}/{{ node.retryMaxAttempts }} failed
+                    {{ $t('history.attemptFailed', { attempt: node.retryAttempt, max: node.retryMaxAttempts }) }}
                   </span>
                   <span class="text-xs text-muted-foreground shrink-0">
                     {{ node.node_type }}
@@ -1170,13 +1173,13 @@ function bringToCanvas(): void {
                     class="space-y-1"
                   >
                     <div class="text-xs font-medium text-red-500">
-                      Error
+                      {{ $t('common.error') }}
                     </div>
                     <div
                       v-if="Array.isArray((node.output as Record<string, unknown>)?.guardrail_violated_categories) && ((node.output as Record<string, unknown>).guardrail_violated_categories as string[]).length > 0"
                       class="text-xs font-medium mb-1"
                     >
-                      Blocked by: {{ ((node.output as Record<string, unknown>).guardrail_violated_categories as string[]).join(", ") }}
+                      {{ $t('history.blockedBy', { categories: ((node.output as Record<string, unknown>).guardrail_violated_categories as string[]).join(', ') }) }}
                     </div>
                     <pre class="text-xs bg-red-500/10 text-red-400 p-2 rounded-md whitespace-pre-wrap break-all">{{ node.error }}</pre>
                   </div>
@@ -1186,7 +1189,7 @@ function bringToCanvas(): void {
                     class="space-y-1"
                   >
                     <div class="text-xs font-medium text-muted-foreground">
-                      Skills Used
+                      {{ $t('history.skillsUsed') }}
                     </div>
                     <div class="flex flex-wrap gap-1">
                       <span
@@ -1204,7 +1207,7 @@ function bringToCanvas(): void {
                     class="space-y-1"
                   >
                     <div class="text-xs font-medium text-muted-foreground">
-                      Tool Calls
+                      {{ $t('history.toolCalls') }}
                     </div>
                     <div class="space-y-1.5">
                       <div
@@ -1241,7 +1244,7 @@ function bringToCanvas(): void {
                     class="rounded border border-emerald-500/20 bg-emerald-500/5 p-3 text-xs"
                   >
                     <div class="font-medium text-emerald-600 dark:text-emerald-300">
-                      Human review history
+                      {{ $t('history.humanReviewHistory') }}
                     </div>
                     <div class="mt-2 space-y-2">
                       <div
@@ -1271,7 +1274,7 @@ function bringToCanvas(): void {
                   <div class="space-y-1">
                     <div class="flex items-center justify-between gap-2">
                       <div class="text-xs font-medium text-muted-foreground">
-                        Output
+                        {{ $t('common.output') }}
                       </div>
                       <div
                         v-if="getHitlReviewUrl(node.output)"
@@ -1285,7 +1288,7 @@ function bringToCanvas(): void {
                           @click="copyToClipboard(getHitlShareMarkdown(node.output), `share-${node.node_id}`)"
                         >
                           <Copy class="w-3 h-3" />
-                          <span class="text-xs">Copy Share Text</span>
+                          <span class="text-xs">{{ $t('history.copyShareText') }}</span>
                         </Button>
                         <Button
                           variant="ghost"
@@ -1294,7 +1297,7 @@ function bringToCanvas(): void {
                           @click="copyToClipboard(getHitlReviewUrl(node.output), `review-${node.node_id}`)"
                         >
                           <Copy class="w-3 h-3" />
-                          <span class="text-xs">Copy Review Link</span>
+                          <span class="text-xs">{{ $t('history.copyReviewLink') }}</span>
                         </Button>
                         <Button
                           variant="ghost"
@@ -1303,7 +1306,7 @@ function bringToCanvas(): void {
                           @click="openExternal(getHitlReviewUrl(node.output)!)"
                         >
                           <ExternalLink class="w-3 h-3" />
-                          <span class="text-xs">Open</span>
+                          <span class="text-xs">{{ $t('history.open') }}</span>
                         </Button>
                       </div>
                     </div>
@@ -1316,7 +1319,7 @@ function bringToCanvas(): void {
                         v-for="(src, idx) in getOutputImageSrcs(node.output)"
                         :key="idx"
                         :src="src"
-                        :alt="`Screenshot ${idx + 1}`"
+                        :alt="$t('history.screenshotWithIndex', { index: idx + 1 })"
                         class="w-16 h-16 rounded border object-cover cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all"
                         @click="openImageLightbox(src, runScreenshots)"
                       >
@@ -1333,7 +1336,7 @@ function bringToCanvas(): void {
     <ImageLightbox
       :src="imageLightboxSrc"
       :srcs="imageLightboxSrcs"
-      alt="Execution screenshot"
+      :alt="$t('history.executionScreenshot')"
       @update:src="imageLightboxSrc = $event"
       @close="closeImageLightbox"
     />

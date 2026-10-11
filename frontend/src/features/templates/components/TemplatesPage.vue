@@ -152,13 +152,13 @@ onMounted(async () => {
           type="button"
           @click="switchKind('node')"
         >
-          Nodes
+          {{ $t('templates.nodes') }}
         </button>
       </div>
 
       <TemplateSearchBar
         :model-value="''"
-        :placeholder="activeKind === 'node' ? 'Search nodes…' : 'Search templates…'"
+        :placeholder="activeKind === 'node' ? $t('templates.searchNodes') : $t('templates.searchTemplates')"
         @update:model-value="onSearchChange"
       />
 
@@ -168,7 +168,7 @@ onMounted(async () => {
         @click="showBrowseDialog = true"
       >
         <Globe class="h-4 w-4" />
-        Browse Public Templates
+        {{ $t('templates.browsePublic') }}
       </button>
     </div>
 
@@ -197,7 +197,7 @@ onMounted(async () => {
         type="button"
         @click="fetchTemplates"
       >
-        Retry
+        {{ $t('common.retry') }}
       </button>
     </div>
 
@@ -209,10 +209,10 @@ onMounted(async () => {
       <LayoutTemplate class="w-12 h-12 text-muted-foreground/40" />
       <div>
         <p class="text-sm font-medium text-foreground">
-          No templates found
+          {{ $t('templates.noTemplatesFound') }}
         </p>
         <p class="text-xs text-muted-foreground mt-1">
-          Share a workflow or node to create your first template.
+          {{ $t('templates.shareToCreate') }}
         </p>
       </div>
     </div>

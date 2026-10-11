@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Nopeampi rakentaminen Workflowissa",
+    "description": "Valitse Workflow, niin näet Triggerit, viimeisimmän suorituksen ja vaiheet suoraan luettelon vieressä. Suodata tilan mukaan, suorita suoraan ja pidä kokonaisuus hallinnassa kansioiden avulla."
+  },
+  "dashboard:board": {
+    "title": "Tehtävien ohjaaminen agenttipohjaisen boardin kautta",
+    "description": "Siirrä kortteja sarakkeiden välillä käynnistääksesi Workflow-ketjuja kortin täydellä kontekstilla. Tulokset palautuvat suoraan kortille."
+  },
+  "dashboard:templates": {
+    "title": "Aloita hyväksi havaituilla malleilla",
+    "description": "Hyödynnä valmiita Workflow-malleja, säästä käyttöönottoaikaa ja varmista yhdenmukaisuus."
+  },
+  "dashboard:globalvariables": {
+    "title": "Keskitä jaetut muuttujat",
+    "description": "Tallenna uudelleenkäytettävät arvot kerran ja viittaa niihin kaikissa Workflowissa."
+  },
+  "dashboard:chat": {
+    "title": "Chat nopeaan iterointiin",
+    "description": "Esitä nopeita kysymyksiä, testaa ideoita ja siirry editoriin, kun Workflow-kulku on selvillä."
+  },
+  "dashboard:credentials": {
+    "title": "Hallitse salaisuuksia turvallisesti",
+    "description": "Hallitse Provider-avaimet ja Tokenit keskitetysti, jotta Workflowt voivat käyttää turvallisia yhteyksiä paljastamatta salaisuuksia."
+  },
+  "dashboard:vectorstores": {
+    "title": "Tue retrieval-pohjaisia Workflowita",
+    "description": "Valmistele vektoritallennustilat perusteltuja tekoälyvastauksia, semanttista hakua ja skaalautuvia RAG-putkia varten."
+  },
+  "dashboard:mcp": {
+    "title": "Yhdistä ulkoisia työkaluekosysteemejä",
+    "description": "Määritä MCP-yhteydet, jotta agentit voivat suorittaa jäsenneltyjä työkaluja ja toimintoja pelkkien Promptien lisäksi."
+  },
+  "dashboard:traces": {
+    "title": "Ymmärrä suorituskäyttäytymistä",
+    "description": "Analysoi Trace-tietoja tulosten virheenkorjausta, suoritusten vertailua ja luotettavuuden parantamista varten."
+  },
+  "dashboard:alerts": {
+    "title": "Hälytykset ennen ongelmien eskaloitumista",
+    "description": "Aseta kynnysarvot virheille, kestolle, kustannuksille ja suoritusmäärälle sekä vastaanota varoitus ylityksestä."
+  },
+  "dashboard:analytics": {
+    "title": "Seuraa alustan suorituskykyä",
+    "description": "Valvo käyttö- ja suoritustrendejä optimoidaksesi kohdennetusti todellisten signaalien perusteella."
+  },
+  "dashboard:dashboard": {
+    "title": "Luo omia Dashboardeja",
+    "description": "Kokoa Workflow-pohjaisia kaavio-widgettejä, jotta näet tärkeimmät mittarit yhdellä silmäyksellä."
+  },
+  "dashboard:teams": {
+    "title": "Skaalaa yhteistyötä hallitusti",
+    "description": "Jaa Workflowt ja resurssit tiimeittäin pitääksesi käyttöoikeudet ja vastuut läpinäkyvinä."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosoi järjestelmätason ongelmia",
+    "description": "Käytä Logeja infrastruktuuri- tai ympäristöongelmissa syvällisempään ajonaikaiseen näkyvyyteen."
+  },
+  "dashboard:drive": {
+    "title": "Hallitse generoituja tiedostoja",
+    "description": "Tarkastele, lataa ja jaa Workflow-tulosteita turvallisten linkkien ja hallittujen käyttöoikeusvaihtoehtojen kautta."
+  },
+  "dashboard:datatable": {
+    "title": "Työskentele natiivisti jäsennellyn datan kanssa",
+    "description": "Luo tyypitettyjä taulukoita ja ohjaa niitä suoraan Workflowista toistettavia luku- ja kirjoitusoperaatioita varten."
+  },
+  "dashboard:schedules": {
+    "title": "Hallitse automaatioaikatauluja",
+    "description": "Tarkastele kaikkia aktiivisia Cron-Workflowita kalenterinäkymässä (päivä, viikko, kuukausi). Lohkon napsautus vie suoraan Canvasille."
+  },
+  "evals": {
+    "title": "Arvioi laatua luotettavasti",
+    "description": "Suorita toistettavia testisarjoja Prompt- ja mallimuutosten perusteltuun vertailuun ennen tuotantokäyttöönottoja."
+  },
+  "docs": {
+    "title": "Nopea suunnistus sovelluksessa",
+    "description": "Selaa tiiviitä viitteitä ja syvennä kohdennetusti poistumatta nykyisestä Workflowista."
+  },
+  "editor": {
+    "title": "Suunnittele ja virheenkorjaa Canvasilla",
+    "description": "Yhdistä solmut visuaalisesti, suorita välittömästi ja hio käyttäytymistä välittömän palautteen avulla yhdessä työtilassa."
+  }
+}

@@ -49,22 +49,22 @@ function handleSave() {
 <template>
   <Dialog
     :open="true"
-    :title="column ? 'Edit Column' : 'Add Column'"
+    :title="column ? $t('tables.editColumn') : $t('tables.addColumn')"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 p-4">
       <div>
-        <Label>Name</Label>
+        <Label>{{ $t('common.name') }}</Label>
         <Input
           v-model="name"
-          placeholder="Column name"
+          :placeholder="$t('tables.columnNamePlaceholder')"
           class="mt-1"
           @keydown.enter="handleSave"
         />
       </div>
 
       <div>
-        <Label>Type</Label>
+        <Label>{{ $t('common.type') }}</Label>
         <div class="relative mt-1">
           <select
             v-model="type"
@@ -97,7 +97,7 @@ function handleSave() {
             type="checkbox"
             class="rounded"
           >
-          Required
+          {{ $t('tables.required') }}
         </label>
         <label
           v-if="type !== 'boolean'"
@@ -108,15 +108,15 @@ function handleSave() {
             type="checkbox"
             class="rounded"
           >
-          Unique
+          {{ $t('tables.unique') }}
         </label>
       </div>
 
       <div>
-        <Label>Default Value (optional)</Label>
+        <Label>{{ $t('tables.defaultValue') }}</Label>
         <Input
           v-model="defaultValue"
-          placeholder="Default value"
+          :placeholder="$t('tables.defaultValuePlaceholder')"
           class="mt-1"
         />
       </div>
@@ -126,7 +126,7 @@ function handleSave() {
           :disabled="!name.trim()"
           @click="handleSave"
         >
-          {{ column ? "Update" : "Add" }}
+          {{ column ? $t('common.update') : $t('common.add') }}
         </Button>
       </div>
     </div>

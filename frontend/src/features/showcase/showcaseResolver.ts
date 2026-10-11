@@ -1,5 +1,5 @@
 import { getAllDocItems } from "@/docs/manifest";
-import { SHOWCASE_DEFINITIONS } from "@/features/showcase/showcaseRegistry";
+import { getShowcaseDefinition } from "@/features/showcase/showcaseRegistry";
 import type {
   ResolveShowcaseContextOptions,
   ResolveShowcaseDefinitionOptions,
@@ -52,7 +52,7 @@ export function resolveShowcaseDefinition(
 ): ShowcaseDefinition | null {
   if (!options.context) return null;
 
-  const definition = SHOWCASE_DEFINITIONS[options.context];
+  const definition = getShowcaseDefinition(options.context);
   if (!definition) return null;
 
   if (options.context !== "docs") {

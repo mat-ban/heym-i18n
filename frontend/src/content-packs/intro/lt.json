@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Greitesnis kūrimas Workflow aplinkoje",
+    "description": "Pasirinkite Workflow, kad šalia sąrašo matytumėte Trigger, paskutinį vykdymą ir veiksmus. Filtruokite pagal būseną, vykdykite tiesiogiai ir išlaikykite tvarką naudodami aplankus."
+  },
+  "dashboard:board": {
+    "title": "Valdykite užduotis naudodami agentais pagrįstą lentą",
+    "description": "Vilkite korteles per stulpelius, kad suaktyvintumėte Workflow grandines su visu kortelės kontekstu. Rezultatai grąžinami tiesiai į kortelę."
+  },
+  "dashboard:templates": {
+    "title": "Pradėkite nuo patikrintų šablonų",
+    "description": "Naudokite paruoštus Workflow šablonus, kad sutaupytumėte sąrankos laiko ir užtikrintumėte nuoseklumą."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizuokite bendrinamus kintamuosius",
+    "description": "Išsaugokite daugkartinio naudojimo reikšmes vieną kartą ir naudokite jas visuose Workflow."
+  },
+  "dashboard:chat": {
+    "title": "Naudokite pokalbį greitam iteravimui",
+    "description": "Užduokite greitus klausimus, išbandykite idėjas ir pereikite prie redaktoriaus, kai Workflow eiga bus aiški."
+  },
+  "dashboard:credentials": {
+    "title": "Saugiai tvarkykite paslaptis",
+    "description": "Centralizuotai tvarkykite tiekėjų raktus ir Token, kad Workflow galėtų naudoti saugius ryšius neatskleisdami paslapčių."
+  },
+  "dashboard:vectorstores": {
+    "title": "Palaikykite paieška pagrįstus Workflow",
+    "description": "Paruoškite vektorines saugyklas pagrįstiems AI atsakymams, semantinei paieškai ir plečiamoms RAG pipeline."
+  },
+  "dashboard:mcp": {
+    "title": "Prijunkite išorines įrankių ekosistemas",
+    "description": "Konfigūruokite MCP ryšius, kad agentai galėtų vykdyti struktūrizuotus įrankius ir veiksmus, viršijančius paprastus Prompt."
+  },
+  "dashboard:traces": {
+    "title": "Supraskite vykdymo elgseną",
+    "description": "Analizuokite Trace detales, kad galėtumėte derinti rezultatus, palyginti vykdymus ir padidinti patikimumą."
+  },
+  "dashboard:alerts": {
+    "title": "Gaukite pranešimus, kol problemos neeskalavo",
+    "description": "Nustatykite klaidų, trukmės, išlaidų ir vykdymų skaičiaus slenksčius ir gaukite įspėjimus, kai jie viršijami."
+  },
+  "dashboard:analytics": {
+    "title": "Stebėkite platformos našumą",
+    "description": "Stebėkite naudojimo ir vykdymo tendencijas, kad galėtumėte tikslingai optimizuoti pagal realius signalus."
+  },
+  "dashboard:dashboard": {
+    "title": "Kurkite savo Dashboard",
+    "description": "Sudarykite Workflow pagrįstus diagramų valdiklius, kad iš karto matytumėte svarbiausius rodiklius."
+  },
+  "dashboard:teams": {
+    "title": "Kokybiškai plečkite bendradarbiavimą",
+    "description": "Padalinkite Workflow ir išteklius pagal komandas, kad prieigos teisės ir atsakomybės išliktų skaidrios."
+  },
+  "dashboard:logs": {
+    "title": "Diagnozuokite sistemos lygmens problemas",
+    "description": "Naudokite Logs infrastruktūros ar aplinkos problemoms, kad gautumėte gilesnį vykdymo laiko įžvalgą."
+  },
+  "dashboard:drive": {
+    "title": "Tvarkykite sugeneruotus failus",
+    "description": "Peržiūrėkite, atsisiųskite ir bendrinkite Workflow išvestis naudodami saugias nuorodas ir kontroliuojamas prieigos parinktis."
+  },
+  "dashboard:datatable": {
+    "title": "Dirbkite su struktūrizuotais duomenimis natūraliai",
+    "description": "Kurkite tipizuotas lenteles ir valdykite jas tiesiogiai iš Workflow, kad skaitymo ir rašymo operacijos būtų atkuriamos."
+  },
+  "dashboard:schedules": {
+    "title": "Peržiūrėkite automatizavimo tvarkaraščius",
+    "description": "Peržiūrėkite visus aktyvius Cron Workflow kalendoriaus rodinyje (diena, savaitė, mėnuo). Spustelėję bloką pateksite tiesiai į Canvas."
+  },
+  "evals": {
+    "title": "Patikimai vertinkite kokybę",
+    "description": "Vykdykite pakartojamus testų rinkinius, kad galėtumėte pagrįstai palyginti Prompt ir modelio pakeitimus prieš diegdami į produkciją."
+  },
+  "docs": {
+    "title": "Greita orientacija programoje",
+    "description": "Naršykite kompaktiškas nuorodas ir gilinkitės tikslingai, nepalikdami dabartinio Workflow."
+  },
+  "editor": {
+    "title": "Kurkite ir derinkite Canvas",
+    "description": "Vizualiai sujunkite mazgus, vykdykite iš karto ir tobulinkite elgseną naudodami tiesioginį grįžtamąjį ryšį vienoje darbo srityje."
+  }
+}

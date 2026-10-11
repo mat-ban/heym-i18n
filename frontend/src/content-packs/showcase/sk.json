@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Vytvárajte, organizujte, importujte a spravujte Workflows pre vaše AI automatizácie.",
+    "bullets": [
+      "Rýchlo otvárajte Workflows, udržujte priečinky prehľadné a pokračujte priamo v nedávnych úlohách.",
+      "Využite paletu príkazov na rýchly prístup bez zdĺhavého hľadania v mriežke.",
+      "Použite túto kartu ako základ pre všetky aktivity v editore."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Centrálny prehľad",
+        "title": "Knižnica Workflows",
+        "description": "Zobrazte root objekty, priečinky a Workflows označené na vymazanie na jednom mieste.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Rýchly prístup",
+        "title": "Rýchle vytvorenie",
+        "description": "Vytvorte nové Workflows alebo importujte priamo JSON.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Štruktúra",
+        "title": "Organizujte vopred",
+        "description": "Priečinky a pripnutie udržujú rastúce sady automatizácií prehľadné.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Prečítať príručku Workflows",
+        "description": "Otvoriť úplnú referenciu karty Workflows.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Karta Workflows"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Otvoriť šablóny",
+        "description": "Prepnúť na kartu šablón pre opakovane použiteľné východiskové body.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Čo sem patrí",
+        "content": "Použite túto oblasť na úlohy životného cyklu Workflows: vytváranie, premenovanie, presúvanie, importovanie, archivovanie a výber."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Zostaňte štíhli",
+        "content": "Ak potrebujete len rýchle spustenie z inej stránky, použite Quick Drawer. Vráťte sa sem na správu a štruktúru."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Karta Workflows"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Kanban Board založený na agentoch. Každá karta je perzistentná úloha s kontextom, históriou a výstupmi – presunutie karty spustí reťazec Workflows v stĺpci.",
+    "bullets": [
+      "Vytvorte textové karty v Backlogu a presúvajte ich pomocou Drag & Drop cez stĺpce.",
+      "Prepojte usporiadané Workflows s každým stĺpcom; pohyby kariet ich spúšťajú ako Trigger.",
+      "Karty sa zmenia na zelenú pri úspechu, červenú pri chybách a žltú počas vykonávania.",
+      "Komentáre a predchádzajúce výstupy sa zahrnú do kontextu ďalšieho spustenia."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kľúčová myšlienka",
+        "title": "Karty sú úlohy, nie poznámky",
+        "description": "Každá karta nesie svoju úplnú históriu: komentáre, pohyby a výstup každého Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Plánovacia slučka",
+        "title": "Následné kolá",
+        "description": "Odpovedzte v komentároch a spustite znova – reťazec vidí celý akumulovaný kontext.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Dokumentácia Board",
+        "description": "Reťazce stĺpcov, kontrakt Card Payload a následné kolá.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Ako sa spúšťajú reťazce stĺpcov",
+        "content": "Workflows pripojené k stĺpcu sa spúšťajú sekvenčne, keď dorazí karta. Výstup každého Workflow sa pripojí ku kontextu karty; chyba zastaví reťazec."
+      },
+      {
+        "id": "board-context",
+        "title": "Čo Workflows dostávajú",
+        "content": "Vstup vykonávania obsahuje kartu (názov, obsah, metadáta, komentáre, história, predchádzajúce výstupy), Board, pohyb a pozíciu v reťazci. Čítajte to pomocou výrazov $input.card."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Šablóny",
+    "summary": "Začnite s opakovane použiteľnými Workflow blueprintmi namiesto opätovného vytvárania tých istých vzorov.",
+    "bullets": [
+      "Použite šablóny, keď je štruktúra Workflow známa, ale detaily sa ešte menia.",
+      "Dobré šablóny skracujú onboarding a znižujú opakovanú prácu na plátne.",
+      "Zdieľajte vzory tu a prispôsobte ich v editore podľa potreby."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Opakované použitie",
+        "title": "Prístup Blueprint",
+        "description": "Zachyťte osvedčené štruktúry Workflow a rýchlo ich znova použite.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tímové tempo",
+        "title": "Jednotné východiskové body",
+        "description": "Šablóny pomáhajú tímom dohodnúť sa na rovnakých osvedčených vzoroch.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Efektivita",
+        "title": "Menej prestojov",
+        "description": "Vyberte hotový rámec a prispôsobte len to podstatné.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Otvoriť dokumentáciu šablón",
+        "description": "Zistite, ako šablóny zapadajú do toku Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Karta Šablóny"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Späť na Workflows",
+        "description": "Späť do hlavnej knižnice pre Workflows.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Prečo sú šablóny dôležité",
+        "content": "Premieňajú opakované rozloženia uzlov na opakovane použiteľné aktíva – ideálne pre tímy, ktoré nasadzujú variácie toho istého vzoru Workflow."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimálne použitie",
+        "content": "Použite šablóny, keď je štruktúra stabilná, ale názvy, Prompts, Credentials alebo ciele sa líšia od prípadu použitia k prípadu použitia."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Karta Šablóny"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Premenné",
+    "summary": "Uložte zdieľané hodnoty centrálne a odkazujte na ne naprieč Workflows bez duplikovania tých istých údajov všade.",
+    "bullets": [
+      "Uchovávajte často opakovane používané hodnoty na jednom centrálnom, perzistentnom mieste.",
+      "Premenné znižujú Prompt drift a duplicitné konfigurácie.",
+      "Zdieľajte hodnoty cielene, keď viacero Workflows potrebuje rovnaký dátový základ."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Perzistencia",
+        "title": "Úložisko medzi spusteniami",
+        "description": "Globálne hodnoty pretrvávajú jednotlivé vykonania Workflow.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompaktná konfigurácia",
+        "title": "Menej redundancie",
+        "description": "Aktualizujte raz centrálne namiesto manuálneho prispôsobovania mnohých polí uzlov.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Výrazy",
+        "title": "Podpora v DSL",
+        "description": "Odkazujte na hodnoty priamo vo výrazoch uzlov a Prompts.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Prečítať dokumentáciu premenných",
+        "description": "Otvoriť príručku pre premenné v Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Karta Premenné"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Typické vzory",
+        "content": "Uložte Endpoints, zdieľané fragmenty Prompt, nastavenia špecifické pre prostredie alebo ID, ktoré musí čítať viacero Workflows."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Čo sem nepatrí",
+        "content": "Tajomstvá a autentifikácie poskytovateľov patria do prihlasovacích údajov, nie do globálnych premenných."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Karta Premenné"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Použite Dashboard Chat ako rýchly dialogový vstupný bod pre vaše Workflows a úlohy platformy.",
+    "bullets": [
+      "Vynikajúci pre rýchle otázky, pomoc s Workflow a ľahké vykonania.",
+      "Zameraný na tempo a iteráciu namiesto plnej kontroly editora.",
+      "Keď je štruktúra hotová, prepnite priamo do Workflow alebo dokumentácie."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Prirodzený jazyk",
+        "title": "Rýchla interakcia",
+        "description": "Použite jednoduchý jazyk namiesto manuálneho prehľadávania celej aplikácie.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Most",
+        "title": "Od nápadu k akcii",
+        "description": "Chat pomáha, keď je cieľ jasný, ale presná cesta ešte musí byť vypracovaná.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Spojenec",
+        "title": "Dopĺňa dokumentáciu",
+        "description": "Použite spolu s dokumentáciou, aby ste mali odpovede a referencie poruke.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Otvoriť dokumentáciu Chat",
+        "description": "Prečítať príručku pre Dashboard Chat.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Karta Chat"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Referencia AI asistenta",
+        "description": "Zistite, ako Heym asistent podporuje vytváranie Workflow.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI asistent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Najlepšie prípady použitia",
+        "content": "Použite Chat na rýchle otázky o Workflow, krátke pokyny k platforme a operatívne kroky, ktoré nevyžadujú hĺbkovú prácu na plátne."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Kedy prepnúť zobrazenie",
+        "content": "Prepnite do editora, keď je potrebná kontrola na úrovni uzlov, alebo do dokumentácie pre trvalé referencie."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Karta Chat"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Spravujte a zdieľajte súbory vygenerované vašimi Workflow-skills.",
+    "bullets": [
+      "Skills zapisujú súbory do výstupného adresára; Heym ich automaticky zachytáva.",
+      "Zdieľajte súbory prostredníctvom Token-odkazov alebo URL adries chránených heslom pomocou Basic-Auth.",
+      "Stiahnite súbory jedným kliknutím."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Úložisko",
+        "title": "Automaticky zachytené súbory",
+        "description": "Skills zapisujú do _OUTPUT_DIR; súbory sa zobrazia priamo tu po vykonaní.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Zdieľanie",
+        "title": "Flexibilná kontrola prístupu",
+        "description": "Verejné odkazy, ochrana heslom, dátumy expirácie a limity sťahovania.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formáty",
+        "title": "PDF, DOCX, CSV a ďalšie",
+        "description": "Generujte ľubovoľné typy súborov pomocou reportlab, python-docx alebo štandardného Pythonu.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Otvoriť dokumentáciu Drive",
+        "description": "Prečítajte si kompletnú referenciu karte Drive.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Karta Drive"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Sprievodca generovaním súborov",
+        "description": "Zistite, ako skills vytvárajú súbory.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Generovanie súborov"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Ako sa súbory dostanú sem",
+        "content": "Keď skill uloží súbory do adresára _OUTPUT_DIR, Heym ich trvalo uloží a vytvorí download-Tokeny."
+      },
+      {
+        "id": "drive-share",
+        "title": "Možnosti zdieľania",
+        "content": "Vytvorte verejné Token-odkazy pre kohokoľvek alebo URL adresy chránené heslom vrátane dátumov expirácie a limitov sťahovania."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Karta Drive"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Prihlasovacie údaje",
+    "summary": "Spravujte kľúče, Tokeny a podrobnosti pripojenia, aby Workflows mohli bezpečne komunikovať s externými systémami.",
+    "bullets": [
+      "Ukladajte prístupové údaje centrálne namiesto ich rozptyľovania medzi jednotlivé uzly.",
+      "Prihlasovacie údaje ovládajú LLM, integrácie, vektorové úložiská a ďalšie.",
+      "Cielene udeľujte prístup, keď tímy potrebujú rovnaké pripojenie bez kopírovania kľúčov."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Bezpečnosť",
+        "title": "Bezpečné prístupové údaje",
+        "description": "Nakonfigurujte autentifikáciu raz a bezpečne ju znovu použite vo Workflows.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrácie",
+        "title": "Široká podpora",
+        "description": "Podporuje poskytovateľov ako OpenAI, DeepSeek, Slack, Redis, Qdrant a Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Spolupráca",
+        "title": "Cielené zdieľanie",
+        "description": "Využite zdieľanie pre tím alebo používateľa namiesto vytvárania duplikátov.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Prečítať dokumentáciu prihlasovacích údajov",
+        "description": "Otvorte sprievodcu pre dashboard prihlasovacích údajov.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Karta prihlasovacích údajov"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Zobraziť integrácie",
+        "description": "Prezrite si podrobnosti o nastavení integrácií tretích strán.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Integrácie tretích strán"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Kde sa používajú",
+        "content": "Prihlasovacie údaje sa odkazujú v konfigurácii uzla a počas vykonávania sa bezpečne rozlišujú."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Model priateľský k tímu",
+        "content": "Uprednostnite zdieľanie, keď viacerí vývojári potrebujú rovnaký prístup k poskytovateľovi; to zabezpečuje konzistentné správanie a jednoduché audity."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Karta prihlasovacích údajov"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektorové úložiská",
+    "summary": "Pripravte Retrieval-backendy pre Workflows, ktoré potrebujú sémantické vyhľadávanie, pamäť alebo RAG-kontextovú integráciu.",
+    "bullets": [
+      "Vektorové úložiská tvoria dátovú základňu pre retrieval-gestützte Workflows.",
+      "Použite ich spolu s RAG-uzlami a AI-flows pre presné dokumentové groundovanie.",
+      "Táto karta slúži ako infraštruktúra pre podložené Prompty."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG-infraštruktúra",
+        "title": "Prehľadávateľná pamäť",
+        "description": "Pripravte dokumenty pre sémantické Retrieval, keď Workflows potrebujú kontext.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kvalita",
+        "title": "Podložené groundovanie",
+        "description": "Retrieval znižuje riziko halucinácií poskytovaním dôkazov.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Prevádzka",
+        "title": "Raz centrálne spravovať",
+        "description": "Vytvorte vektorové úložiská a znovu ich použite naprieč viacerými Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Otvoriť dokumentáciu vektorových úložísk",
+        "description": "Prečítajte si sprievodcu pre dashboard vektorových úložísk.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Karta vektorových úložísk"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Zobraziť dokumentáciu RAG-uzla",
+        "description": "Otvorte referenciu pre Qdrant-RAG-uzol.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Zaradenie",
+        "content": "Táto karta pripravuje úložnú vrstvu. Samotná logika Retrieval sa nachádza v rámci Workflows (napr. prostredníctvom RAG alebo agentových vzorov)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Kedy použiť",
+        "content": "Zvoľte vektorové úložiská, keď váš Workflow musí prehľadávať neštruktúrované znalostné zásoby namiesto spoliehania sa len na pamäť LLM."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Karta vektorových úložísk"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Spravujte Model Context Protocol pripojenia, aby agentové Workflows mohli bezpečne dosiahnuť nástroje a externé funkcie.",
+    "bullets": [
+      "MCP premieňa externé ekosystémy nástrojov na použiteľný kontext agenta.",
+      "Použite túto kartu, keď agenti potrebujú bohatšie nástroje ako statické Prompty.",
+      "Kvalita pripojenia priamo určuje schopnosti vašich agentov."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Nástroje agenta",
+        "title": "Externá funkčná vrstva",
+        "description": "Poskytnite Tool-servery, ktoré agenti môžu volať počas reasoningu.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kontrola behu",
+        "title": "Nastavenie pripojenia",
+        "description": "Konfigurujte Endpoints, štítky a transport pre spoľahlivé Workflows.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Hĺbka platformy",
+        "title": "Nad rámec Promptov",
+        "description": "MCP umožňuje Heym-Workflows konať, nielen odpovedať.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Otvoriť dokumentáciu MCP",
+        "description": "Prečítajte si sprievodcu pre kartu MCP.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "Karta MCP"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Architektúra agenta",
+        "description": "Zistite, ako je MCP integrovaný do vykonávania agenta.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Architektúra agenta"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Význam",
+        "content": "Obzvlášť dôležité, keď váš agent potrebuje nástroje, prístup k prostrediu alebo systémové integrácie mimo jednotlivých uzlov."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Prevádzkový prístup",
+        "content": "Zaobchádzajte s MCP-pripojeniami ako s infraštruktúrou: Stabilné štítky a jasné zodpovednosti zjednodušujú debugging."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "Karta MCP"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Vykonania",
+    "summary": "Skúmajte podrobné Traces vykonaní AI a Workflow, aby ste pochopili, čo sa stalo – nielen či to fungovalo.",
+    "bullets": [
+      "Použite Traces na debugging, analýzy výkonu a kontroly kvality Promptov.",
+      "Traces vysvetľujú správanie modelu, latencie a cesty vykonávania.",
+      "Prvé miesto, kam sa obrátiť pri neočakávaných výsledkoch alebo nestabilných behoch."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Debugging",
+        "title": "Vidieť skryté kroky",
+        "description": "Trace-dáta odhaľujú, čo Workflow a model skutočne vykonali.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Evaluácia",
+        "title": "Podpora iterácií",
+        "description": "Využite Traces pri optimalizácii Promptov, nástrojov a modelov.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Spoľahlivosť",
+        "title": "Pochopiť výsledky",
+        "description": "Dobré Traces znižujú dohady pri analýze chýb.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Otvoriť dokumentáciu vykonaní",
+        "description": "Prečítajte si sprievodcu pre dashboard vykonaní.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Karta vykonaní"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Kedy sú Traces nevyhnutné",
+        "content": "Akonáhle sú Workflows viacstupňové, modelovo intenzívne alebo založené na nástrojoch, samotné zobrazenie stavu už nestačí."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. história",
+        "content": "História ukazuje, ŽE beh prebehol. Traces vysvetľujú, PREČO sa správal tak, ako sa správal."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Karta vykonaní"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Upozornenia",
+    "summary": "Definujte prahové hodnoty cez časové okná a budete automaticky upozornení, hneď ako budú prekročené.",
+    "bullets": [
+      "Štyri typy: počet chýb, trvanie behu, prahové hodnoty Token-/nákladov a počítadlo vykonaní.",
+      "Každé upozornenie sa vyhodnocuje cez zvolené časové okno, nikdy nie na základe jednotlivých udalostí.",
+      "Opíšte požiadavku v prirodzenom jazyku a asistent nakonfiguruje upozornenie."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Časové okno",
+        "title": "Zhluky namiesto odľahlých hodnôt",
+        "description": "Jeden neúspešný beh je šum. Dvanásť za desať minút je incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pred uložením",
+        "title": "Testovanie podmienky spätne",
+        "description": "Kontrolný krok testuje proti reálnej histórii, aby sa prahové hodnoty vopred kalibrovali.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reakcia",
+        "title": "Spustenie Workflow pri alarme",
+        "description": "Alert-Payload sa stáva vstupom Workflow pre automatické upozornenia cez Slack alebo e-mail.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Otvoriť dokumentáciu upozornení",
+        "description": "Prečítajte si, ako fungujú typy alarmov, okná a asistent.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Karta Upozornenia"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Účel",
+        "content": "Analýzy a Traces odpovedajú na otázky, ktoré aktívne kladiete. Upozornenia nechávajú Heym hovoriť proaktívne, keď sú prekročené kritické prahové hodnoty."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Prečo sa vyhýbame falošným poplachom",
+        "content": "Upozornenie sa spustí raz a čaká, kým sa metrika nezotaví – to zabraňuje záplave notifikácií."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Karta Upozornenia"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analýzy",
+    "summary": "Sledujte vzory používania a správanie systému, aby ste porozumeli aktivite, rastu a zmenám v čase.",
+    "bullets": [
+      "Rozpoznajte akceptáciu, priepustnosť a neobvyklé špičky pomocou analýz.",
+      "Pohľad na úrovni platformy namiesto nástroja na individuálne ladenie.",
+      "Kombinujte analýzy s Traces a históriou pre signál a vysvetlenie."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signály",
+        "title": "Transparentnosť používania",
+        "description": "Rozpoznajte trendy namiesto izolovaného pohľadu na jednotlivé behy.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapacita",
+        "title": "Operatívne povedomie",
+        "description": "Včas rozpoznajte a preskúmajte špičky zaťaženia a poklesy.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Pomoc pri rozhodovaní",
+        "title": "Cielená optimalizácia",
+        "description": "Analýzy pomáhajú pri prioritizácii najdôležitejších Workflow.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Otvoriť dokumentáciu analýz",
+        "description": "Prečítajte si príručku pre dashboard analýz.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Karta Analýzy"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Účel",
+        "content": "Využite analýzy pre vzory, priepustnosť a agregované správanie v rámci celej prevádzky platformy."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Postup",
+        "content": "Rozpoznajte signály tu, potom prejdite do Traces, histórie alebo editora, aby ste analyzovali príčiny."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Karta Analýzy"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Vytvorte mriežku z widgetov s grafmi, z ktorých každý je napájaný vlastnými Workflow – všetky kľúčové ukazovatele na jednom mieste.",
+    "bullets": [
+      "Každý widget je poháňaný Workflow, ktorý dodáva dáta do uzla Chart Output.",
+      "Použite stĺpcové, čiarové, koláčové, tabuľkové a číselné widgety podľa metriky.",
+      "Generujte alebo upravujte widgety pomocou AI a cachujte výsledky pre rýchle načítanie.",
+      "Vytvorte viacero dashboardov a zdieľajte ich s osobami alebo tímami na čítanie alebo zápis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kompozícia",
+        "title": "Grafy napájané Workflow",
+        "description": "Všetky dáta, ktoré Workflow vytvorí, sa vizualizujú ako graf.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Výkon",
+        "title": "Cachované výsledky",
+        "description": "Cachovanie widgetov zabraňuje opakovaným vykonaniam Workflow pri každom načítaní stránky.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Podpora AI",
+        "title": "Generovanie a úprava",
+        "description": "Opíšte metriku a nechajte widget automaticky vytvoriť pomocou AI.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Otvoriť dokumentáciu dashboardu",
+        "description": "Zistite, ako sa vytvárajú widgety dashboardu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Karta Dashboard"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Účel",
+        "content": "Využite dashboard pre pretrvávajúce prehľady dôležitých ukazovateľov z vašich vlastných Workflow."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Vytvorenie",
+        "content": "Pridajte widget, nakonfigurujte Workflow tak, aby posledný uzol pred Chart Output dodával riadky, a usporiadajte ich v mriežke."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Karta Dashboard"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Tímy",
+    "summary": "Spravujte zdieľané prístupy, aby sa Workflow, Credentials, premenné a vektorové úložiská využívali kolaboratívne bez duplikátov.",
+    "bullets": [
+      "Tímy sú najčistejší spôsob, ako škálovateľne zdieľať zdroje platformy.",
+      "Využite tímy, keď majú oprávnenia nasledovať skupinu namiesto jednotlivcov.",
+      "Zabezpečte štruktúrovanú spoluprácu v rastúcom Workspace."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kolaborácia",
+        "title": "Zdieľanie na základe skupín",
+        "description": "Prideľte prístup raz pre tím namiesto manuálneho oprávnenia jednotlivých používateľov.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Jasnosť",
+        "title": "Čisté zodpovednosti",
+        "description": "Správa zdrojov nasleduje reálne tímové štruktúry.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Škálovanie",
+        "title": "Menej administratívnej záťaže",
+        "description": "Noví členovia automaticky dedia prístupové práva prostredníctvom tímu.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Otvoriť dokumentáciu tímov",
+        "description": "Prečítajte si príručku pre dashboard tímov.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Karta Tímy"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Zdieľanie zdrojov",
+        "description": "Prečítajte si podrobnosti o zdieľaní zdrojov.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Zdieľanie prihlasovacích údajov"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Výhody tímov",
+        "content": "Tímy spájajú identitu a prístup k zdrojom pre plynulú spoluprácu."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktický tip",
+        "content": "Uprednostnite zdieľanie tímov, keď Workflow alebo Credential patrí trvalej pracovnej skupine."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Karta Tímy"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protokoly",
+    "summary": "Čítajte logy na úrovni stacku, keď potrebujete pohľad na infraštruktúru nad rámec výstupov Workflow.",
+    "bullets": [
+      "Využite logy na ladenie služieb, stavy kontajnerov a problémy prostredia.",
+      "Pomáha, keď príčiny ležia pod úrovňou Workflow.",
+      "Využite spolu s Traces pre dôkazy na úrovni aplikácie a systému."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infraštruktúra",
+        "title": "Transparentnosť kontajnerov",
+        "description": "Vidieť, čo backendové služby vykonávajú pod rozhraním Heym.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Riešenie problémov",
+        "title": "Nájsť príčiny",
+        "description": "Logy pomáhajú pri problémoch so štartom, pádmi alebo chybami integrácie.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Doplnkové",
+        "title": "Rozdiel od výsledkov Workflow",
+        "description": "Výstupy Workflow zobrazujú výsledky; logy zobrazujú správanie systému.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Otvoriť dokumentáciu protokolov",
+        "description": "Prečítajte si príručku pre dashboard protokolov.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Karta Protokol"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Kedy použiť",
+        "content": "Prejdite sem, keď problémy pôsobia ako deployment-, service- alebo environment-related."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Najlepšia kombinácia",
+        "content": "Využite logy spolu s Traces a históriou, aby ste sa od symptómov rýchlo dostali k príčine."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Karta Protokol"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Vyhodnocovanie",
+    "summary": "Vytvárajte reprodukovateľné benchmarky pre agentové Workflow, aby ste spoľahlivo porovnali zmeny Prompt, modelov a Workflow.",
+    "bullets": [
+      "Súpravy a testovacie prípady premieňajú subjektívnu kvalitu Workflow na merateľné ukazovatele.",
+      "Ideálne miesto na regresné kontroly pred nasadením aktualizácií Prompt alebo modelov.",
+      "Porovnajte viacero modelov na tom istom datasete a tou istou metódou hodnotenia."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Slučka kvality",
+        "title": "Benchmarking agentov",
+        "description": "Opakovane spúšťajte tú istú súpravu namiesto spoliehania sa na náhodné kontroly.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Porovnanie",
+        "title": "Testy modelov a Prompt",
+        "description": "Sledujte, ako sa rôzne nastavenia správajú na tej istej testovacej sade.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Bezpečnosť",
+        "title": "Spoľahlivá iterácia",
+        "description": "Preukázateľne doložte zlepšenia pred nasadením.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Otvoriť dokumentáciu vyhodnocovania",
+        "description": "Prečítajte si príručku pre stránku vyhodnocovania.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Karta vyhodnocovania"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Referencia uzla agenta",
+        "description": "Pozrite si oblasť Workflow, na ktorú sa zameriava väčšina eval súprav.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Uzol agenta"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Koncipovanie súprav",
+        "content": "Dobrá súprava odráža reálne používateľské prípady, okrajové podmienky a schvaľovacie kroky, ktoré musia zostať stabilné."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Parametre porovnania",
+        "content": "Typické porovnania zahŕňajú varianty Prompt, výber modelu, nastavenia Temperature a revízie Workflow na tom istom datasete."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Karta vyhodnocovania"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentácia",
+    "summary": "Prehľadávajte presné referencie platformy priamo v aplikácii a v prípade potreby sa ponorte hlbšie.",
+    "bullets": [
+      "Dokumentácia Heym je navrhnutá na rýchle pochopenie a cielené vyhľadávanie.",
+      "Bočný panel, vyhľadávanie a krížové odkazy umožňujú rýchle prepínanie medzi konceptmi.",
+      "Showcase odkazuje priamo na aktuálne otvorený článok."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Referencia v aplikácii",
+        "title": "Vždy poruke",
+        "description": "Dokumentácia zostáva v toku produktu bez potreby otvárania externých kariet.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Prehľad",
+        "title": "Najprv to podstatné",
+        "description": "Články začínajú kľúčovými bodmi a vetvia sa cez odkazy."
+      },
+      {
+        "eyebrow": "Kontextovo uvedomelé",
+        "title": "Aktuálny článok",
+        "description": "Pri čítaní dokumentu akcia 'Zistiť viac' sleduje priamo tento článok."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Zobraziť úvod",
+        "description": "Otvorte úvod do dokumentácie ako predvolený vstupný bod.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Úvod"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Rýchla navigácia",
+        "content": "Použite bočný panel pre kategórie a vyhľadávanie príkazov, ak už tému poznáte."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Podpora prostredníctvom Showcase",
+        "content": "Showcase udržiava zhrnutia kompaktné a v prípade potreby odkazuje na podrobnú dokumentáciu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Úvod"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Plány",
+    "summary": "Prehľad všetkých aktívnych Cron Workflow vo vizuálnom kalendári a kontrola časov spustenia.",
+    "bullets": [
+      "Prepínajte medzi denným, týždenným a mesačným zobrazením pre vhodné rozlíšenie.",
+      "Prejdite kurzorom na blok pre zobrazenie výrazu Cron; kliknutím skočíte priamo na Canvas.",
+      "Použite túto kartu na kontrolu hustoty spustení a identifikáciu prekrytí."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparentnosť",
+        "title": "Zobrazenie kalendára",
+        "description": "Aktívne Cron Workflow sa zobrazujú ako bloky v naplánovaných časoch.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigácia",
+        "title": "Jedným kliknutím na Canvas",
+        "description": "Kliknutím na blok otvoríte priamo editor Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Rozsahy",
+        "title": "Deň, týždeň alebo mesiac",
+        "description": "Upravte rozlíšenie na kontrolu jednotlivých hodín alebo plánovanie celého mesiaca.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Otvoriť dokumentáciu plánov",
+        "description": "Prečítajte si referenciu karty plánov.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Karta plánov"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Referencia uzla Cron",
+        "description": "Zistite, ako sa konfigurujú Cron Trigger na Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Čas použitia",
+        "content": "Kontrolujte naplánované automatizácie, odhaľte konflikty termínov a uistite sa, že dôležité Workflow zostanú aktívne."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Farebné kódovanie",
+        "content": "Každý Workflow dostane konzistentnú farbu zo svojho ID, ktorá zostáva identická v dennom, týždennom aj mesačnom zobrazení."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Karta plánov"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Dátové tabuľky",
+    "summary": "Vytvárajte štruktúrované dátové tabuľky priamo v Heym a programovo ich používajte vo Workflow.",
+    "bullets": [
+      "Vytvárajte tabuľky s typovanými stĺpcami, napĺňajte ich manuálne alebo importujte cez CSV.",
+      "Použite uzol Workflow DataTable na programové čítanie, zápis a dotazovanie riadkov.",
+      "Zdieľajte tabuľky pre používateľov alebo tímy s právami na čítanie alebo zápis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integrované dáta",
+        "title": "Integrované úložisko",
+        "description": "Ukladajte štruktúrované dáta bez externých databáz alebo API kľúčov.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Integrácia Workflow",
+        "title": "Uzol DataTable",
+        "description": "Vyhľadávajte, vkladajte, aktualizujte a odstraňujte riadky v ľubovoľných Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Spolupráca",
+        "title": "Zdieľanie a práva",
+        "description": "Prideľte granulárne prístupy na čítanie a zápis pre používateľov a tímy.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Dokumentácia karty dátových tabuliek",
+        "description": "Prečítajte si referenciu karty dátových tabuliek.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Dátové tabuľky"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "Dokumentácia uzla DataTable",
+        "description": "Prečítajte si referenciu uzla DataTable.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Čo sú dátové tabuľky?",
+        "content": "Dátové tabuľky sú integrované štruktúrované úložisko v Heym: Typované stĺpce (String, Number, Boolean, Date, JSON), inline úpravy a import/export CSV."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Použitie vo Workflow",
+        "content": "Uzol DataTable podporuje find, getAll, getById, insert, update, remove a upsert – bez Credentials priamo prostredníctvom vlastníka Workflow."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Dátové tabuľky"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Editor Workflow",
+    "summary": "Vytvárajte, testujte, ladite a optimalizujte Workflow na Canvas – priamo v kontexte spustenia.",
+    "bullets": [
+      "V editore sa spájajú návrh uzlov, tok dát a správanie pri spustení.",
+      "Použite bočné panely a históriu na rýchle prepínanie medzi tvorbou a ladením.",
+      "Showcase tu zostáva zámerne kompaktný, aby poskytol maximálny priestor pre Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Vizuálny návrh Workflow",
+        "description": "Prepájajte uzly, vetvite logiku a modelujte tok za behu priamo.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iterácia",
+        "title": "Ladenie počas vytvárania",
+        "description": "Použite históriu, debug panely a výsledky spustenia pre rýchle spätnoväzbové slučky."
+      },
+      {
+        "eyebrow": "Rozsah funkcií",
+        "title": "Pokročilé funkcie poruke",
+        "description": "Portál, zdieľanie, šablóny a validácia sú priamo na Canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Otvoriť dokumentáciu Canvas",
+        "description": "Prečítajte si referenciu funkcií Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Funkcie Canvas"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Klávesové skratky",
+        "description": "Otvorte prehľad klávesových skratiek v editore.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Klávesové skratky"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Pracovný rytmus",
+        "content": "Modelujte na Canvas, kontrolujte predpoklady o výstupoch a upravujte parametre v bočných paneloch bez straty fokusu."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompaktný Showcase",
+        "content": "Keďže editor už poskytuje veľa informácií, Showcase slúži ako štíhla orientačná pomôcka."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Funkcie Canvas"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { LayoutGrid, Pencil, Plus, RefreshCw, Settings, Sparkles } from "lucide-vue-next";
 
 import DashboardAutoRefreshControl from "@/components/Dashboards/DashboardAutoRefreshControl.vue";
@@ -24,19 +25,20 @@ const emit = defineEmits<{
 }>();
 
 const dashboardStore = useDashboardStore();
+const { t } = useI18n();
 
 const selectGroups = computed(() => {
   const own = dashboardStore.dashboards.filter((dashboard) => dashboard.permission === "owner");
   const shared = dashboardStore.dashboards.filter((dashboard) => dashboard.permission !== "owner");
   const groups = [
     {
-      label: "My dashboards",
+      label: t("dashboards.myDashboards"),
       options: own.map((dashboard) => ({ value: dashboard.id, label: dashboard.name })),
     },
   ];
   if (shared.length) {
     groups.push({
-      label: "Shared with me",
+      label: t("dashboards.sharedWithMe"),
       options: shared.map((dashboard) => ({
         value: dashboard.id,
         label: `${dashboard.name} · ${dashboard.owner_name || dashboard.shared_by}`,
@@ -50,7 +52,7 @@ const sharedBadge = computed<string | null>(() => {
   const dashboard = dashboardStore.activeDashboard;
   if (!dashboard || dashboard.permission === "owner") return null;
   const owner = dashboard.owner_name || dashboard.shared_by;
-  return `Shared by ${owner} · ${dashboard.permission === "write" ? "Can edit" : "Can view"}`;
+  return t("dashboards.sharedBadge", { owner, permission: dashboard.permission === "write" ? t("dashboards.canEdit") : t("dashboards.canView") });
 });
 
 function onSelect(dashboardId: string | undefined): void {
@@ -75,9 +77,9 @@ function onSelect(dashboardId: string | undefined): void {
           :key="dashboardStore.activeDashboard?.name ?? ''"
           :model-value="dashboardStore.activeDashboard?.id ?? ''"
           :groups="selectGroups"
-          placeholder="Select dashboard"
-          search-placeholder="Search dashboards…"
-          aria-label="Select dashboard"
+          :placeholder="$t('dashboards.selectDashboard')"
+          :search-placeholder="$t('dashboards.searchDashboards')"
+          :aria-label="$t('dashboards.selectDashboard')"
           data-testid="dashboard-select"
           @update:model-value="onSelect"
         />
@@ -86,8 +88,8 @@ function onSelect(dashboardId: string | undefined): void {
         variant="ghost"
         size="icon"
         class="shrink-0"
-        title="New dashboard"
-        aria-label="New dashboard"
+        :title="$t('dashboards.newDashboard')"
+        :aria-label="$t('dashboards.newDashboard')"
         data-testid="dashboard-new"
         @click="emit('create')"
       >
@@ -98,8 +100,8 @@ function onSelect(dashboardId: string | undefined): void {
         variant="ghost"
         size="icon"
         class="shrink-0"
-        title="Dashboard settings and sharing"
-        aria-label="Dashboard settings"
+        :title="$t('dashboards.settingsAndSharing')"
+        :aria-label="$t('dashboards.dashboardSettings')"
         data-testid="dashboard-settings"
         @click="emit('settings')"
       >
@@ -128,12 +130,12 @@ function onSelect(dashboardId: string | undefined): void {
         variant="ghost"
         size="sm"
         class="h-11 w-11 shrink-0 justify-center px-0 sm:h-auto sm:w-auto sm:px-3"
-        title="Refresh dashboard"
-        aria-label="Refresh dashboard"
+        :title="$t('dashboards.actions.refreshDashboard')"
+        :aria-label="$t('dashboards.actions.refreshDashboard')"
         @click="emit('refresh')"
       >
         <RefreshCw class="h-4 w-4 sm:mr-1" />
-        <span class="hidden sm:inline">Refresh</span>
+        <span class="hidden sm:inline">{{ $t("dashboards.actions.refresh") }}</span>
       </Button>
       <template v-if="dashboardStore.canWrite">
         <Button
@@ -141,45 +143,45 @@ function onSelect(dashboardId: string | undefined): void {
           variant="ghost"
           size="sm"
           class="h-11 w-11 shrink-0 justify-center px-0 sm:h-auto sm:w-auto sm:px-3"
-          title="Rearrange widgets into a random tidy grid"
-          aria-label="Tidy up dashboard"
+          :title="$t('dashboards.tidyUpTooltip')"
+          :aria-label="$t('dashboards.tidyUp')"
           @click="emit('tidy')"
         >
           <LayoutGrid class="h-4 w-4 sm:mr-1" />
-          <span class="hidden sm:inline">Tidy up</span>
+          <span class="hidden sm:inline">{{ $t("dashboards.tidyUp") }}</span>
         </Button>
         <Button
           :variant="editMode ? 'default' : 'ghost'"
           size="sm"
           class="h-11 w-11 shrink-0 justify-center px-0 sm:h-auto sm:w-auto sm:px-3"
-          :title="editMode ? 'Finish editing dashboard' : 'Edit dashboard'"
-          :aria-label="editMode ? 'Finish editing dashboard' : 'Edit dashboard'"
+          :title="editMode ? $t('dashboards.finishEditing') : $t('dashboards.editDashboard')"
+          :aria-label="editMode ? $t('dashboards.finishEditing') : $t('dashboards.editDashboard')"
           @click="emit('toggle-edit')"
         >
           <Pencil class="h-4 w-4 sm:mr-1" />
-          <span class="hidden sm:inline">{{ editMode ? "Done" : "Edit" }}</span>
+          <span class="hidden sm:inline">{{ editMode ? $t("dashboards.done") : $t("dashboards.edit") }}</span>
         </Button>
         <Button
           variant="ghost"
           size="sm"
           class="h-11 w-11 shrink-0 justify-center px-0 sm:h-auto sm:w-auto sm:px-3"
-          title="Generate widget with AI"
-          aria-label="Generate widget with AI"
+          :title="$t('dashboards.generateWithAi')"
+          :aria-label="$t('dashboards.generateWithAi')"
           @click="emit('ai')"
         >
           <Sparkles class="h-4 w-4 sm:mr-1" />
-          <span class="hidden sm:inline">AI</span>
+          <span class="hidden sm:inline">{{ $t("dashboards.ai") }}</span>
         </Button>
         <Button
           size="sm"
           class="h-11 min-w-[4.5rem] flex-1 justify-center px-2 sm:h-auto sm:min-w-0 sm:flex-none sm:px-3"
-          title="Add widget"
-          aria-label="Add widget"
+          :title="$t('dashboards.addWidget')"
+          :aria-label="$t('dashboards.addWidget')"
           @click="emit('add')"
         >
           <Plus class="mr-1 h-4 w-4" />
-          <span class="sm:hidden">Add</span>
-          <span class="hidden sm:inline">Add widget</span>
+          <span class="sm:hidden">{{ $t("common.add") }}</span>
+          <span class="hidden sm:inline">{{ $t("dashboards.addWidget") }}</span>
         </Button>
       </template>
     </div>

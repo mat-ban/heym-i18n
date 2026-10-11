@@ -1,0 +1,262 @@
+# Sortie de graphique
+
+Le nœud **Sortie de graphique** est le nœud terminal d'un workflow de [widget de tableau de bord](../tabs/dashboard-tab.md). Il prend les lignes produites par les nœuds en amont et les transforme en un payload de graphique standardisé que le tableau de bord affiche.
+
+## Aperçu
+
+| Propriété | Valeur |
+|----------|-------|
+| Entrées | 1 |
+| Sorties | 0 (terminal) |
+| Sortie | Payload de graphique standardisé |
+
+Placez ce nœud **en dernier** dans un workflow de widget de tableau de bord. Le nœud qui le précède doit produire un tableau d'objets ligne, par exemple :
+
+```json
+[
+  { "month": "Jan", "revenue": 120 },
+  { "month": "Feb", "revenue": 150 }
+]
+```
+
+Lorsque vous ne disposez que de données d'exemple (sans source réelle), produisez ces lignes avec un nœud **Set** en utilisant `$array(dict(...), dict(...))` — par exemple `$array(dict(month="Jan", revenue=120), dict(month="Feb", revenue=150))`. N'utilisez **pas** `${...}` ni de littéraux d'objet `{...}` bruts ; Heym construit les objets uniquement avec `dict(key=value)`.
+
+## Paramètres
+
+| Paramètre | Type | Description |
+|-----------|------|-------------|
+| `label` | string | Identifiant du nœud (camelCase) |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` ou `hitl` |
+| `orientation` | string | `vertical` ou `horizontal` (graphiques à barres uniquement) |
+| `dataPath` | string | Chemin pointé vers le tableau de lignes dans la sortie en amont (par ex. `data` ou `result.items`). Laissez vide pour une détection automatique. |
+| `labelField` | string | Clé de ligne utilisée comme libellé de catégorie (pie/bar/line) |
+| `valueField` | string | Clé de ligne utilisée comme valeur numérique (pie/bar/line/numeric/gauge) |
+| `series` | array | Définition optionnelle multi-séries `[{ "name": "Sent", "field": "sent" }]` pour bar/line (remplace `valueField`) |
+| `columns` | array | Liste optionnelle de colonnes pour `table` (par défaut, les clés de la première ligne) |
+| `xField` / `yField` | string | Clés de ligne pour les axes numériques X et Y (scatter) |
+| `min` / `max` | number | Plage numérique pour `gauge` (par défaut `0` / `100`) |
+| `unit` | string | Unité optionnelle affichée à côté d'une valeur `numeric` ou `gauge` |
+| `text` | string | Message Markdown pour le type de graphique `text`. Laissez vide et définissez `valueField` pour afficher un message dynamique issu des données en amont. |
+| `title` | string | Titre de graphique optionnel |
+
+## Types de graphiques
+
+- **bar / line / area / pie** — graphiques catégoriels pilotés par `labelField` + `valueField` (ou `series` pour les bar/line/area multi-séries). `area` est un graphique de tendance rempli.
+- **table** — lignes brutes affichées sous forme de tableau défilable à l'aide de `columns`.
+- **numeric** — une valeur KPI unique issue de la première ligne, avec une `unit` optionnelle.
+- **gauge** — une valeur unique affichée sur une plage `min`–`max` (par ex. un pourcentage). Utilise `valueField`.
+- **scatter** — points X/Y issus de `xField` et `yField` pour des graphiques de corrélation.
+- **proportion** — une barre horizontale unique divisée en parts avec une légende en pourcentage (par ex. une répartition linguistique). Utilise `labelField` + `valueField`.
+- **barGauge** — une jauge horizontale par ligne avec un dégradé rouge→vert et une valeur (par ex. l'espace disque libre). Utilise `labelField` + `valueField`, avec `unit` et `max` optionnels (par défaut, la valeur de ligne la plus élevée).
+- **text** — un message markdown (par ex. une note de statut comme « Dernière exécution à 19:47 »). Placez le markdown dans `text` pour un message statique, ou laissez `text` vide et définissez `valueField` pour afficher une chaîne produite en amont. Prend en charge les titres, le gras/l'italique, les [listes](../nodes/chart-output-node.md#interactive-task-lists), les liens et le code en ligne.
+- **hitl** — un carrousel de vos revues humaines en attente. L'en-tête affiche `1/n pending` ; la flèche gauche est désactivée sur la première carte et la flèche droite sur la dernière. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** la résolvent, et l'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique sur la même page. Ce type de graphique ignore les lignes en amont, de sorte que le workflow du widget se compose uniquement du nœud Sortie de graphique. Chaque personne connectée voit les revues des workflows dont elle est propriétaire.
+### Listes de tâches interactives
+
+Utilisez la syntaxe de liste de tâches Markdown de type GitHub dans le champ statique `text` :
+
+```markdown
+- [x] Option 1
+- [ ] Option 2
+- [ ] Option 3
+```
+
+Sur le [Dashboard](../tabs/dashboard-tab.md), les cases à cocher s'affichent sous forme de contrôles cliquables (compatibles mode sombre et mode clair). Le fait de cocher une case met à jour le champ `text` du workflow du widget et persiste après actualisation.
+
+**Édition en ligne :** double-cliquez sur le libellé d'une tâche pour le modifier sur place. Appuyez sur Entrée ou cliquez ailleurs pour enregistrer ; appuyez sur Échap pour annuler. Effacez complètement le libellé pour supprimer cet élément de la liste.
+
+**Liens dans les éléments de tâche :** lorsqu'un libellé contient un lien Markdown (`[titre](url)`), cliquer sur le lien ouvre l'URL sans cocher la case. Cliquez ailleurs sur la ligne pour basculer l'état.
+
+**Texte statique uniquement :** l'interactivité nécessite la syntaxe de liste de tâches GFM (`- [ ]` / `- [x]`). Les messages de statut dynamiques simples, sans éléments de tâche, restent en lecture seule. Lorsque le Markdown provient de `valueField`, le premier basculement le copie dans le champ statique `text` afin que les modifications persistent.
+
+### Listes numérotées
+
+Les widgets de texte affichent le Markdown en **préservant les numéros de ligne explicites**. Préfixez chaque ligne avec le numéro que vous souhaitez afficher (par ex. `9.`, `8.`, `7.`). Heym ne renumérote pas les lignes à votre place.
+
+**Pourquoi des numéros explicites ?** Les listes ordonnées Markdown standard (`1.`, `2.`, `3.`) deviennent des listes HTML `<ol>`, qui ne comptent que **vers le haut** à partir du premier numéro. Une liste écrite sous la forme `9.` / `8.` / `7.` s'afficherait comme `9`, `10`, `11` dans un rendu Markdown classique. Préfixer chaque ligne avec le numéro souhaité évite ce problème.
+
+**Listes décroissantes (par ex. du plus récent au plus ancien) :** construisez le Markdown dans une boucle de workflow et calculez le numéro d'affichage pour chaque élément :
+
+```
+${loop.total - loop.index}. [${item.title}](https://example.com/watch?v=${item.id})
+```
+
+Schéma type :
+
+1. Récupérez ou construisez un tableau d'éléments (par ex. HTTP → `body.videos`).
+2. Effectuez une [Boucle](./loop-node.md) sur le tableau ; à l'intérieur du corps, utilisez une [Variable](./variable-node.md) avec `.add()` pour ajouter une ligne numérotée par itération.
+3. Après la branche **done** de la boucle, utilisez [Set](./set-node.md) avec `join("\n")` sur le tableau accumulé (ou équivalent) pour produire une seule chaîne Markdown.
+4. Pointez le `valueField` de **Chart Output** vers cette chaîne (ou définissez le `text` statique).
+
+Exemple d'expression de ligne à l'intérieur de la boucle (libellé `processVideos`, éléments avec `title` et `id`) :
+
+```
+$processVideos.total - $processVideos.index + ". [" + $processVideos.item.title + "](https://www.youtube.com/watch?v=" + $processVideos.item.id + ")"
+```
+
+Markdown résultant :
+
+```markdown
+9. [Latest video](https://www.youtube.com/watch?v=abc)
+8. [Previous video](https://www.youtube.com/watch?v=def)
+1. [Oldest video](https://www.youtube.com/watch?v=xyz)
+```
+
+Pour une liste croissante simple commençant à 1, préfixez chaque ligne (`1.`, `2.`, `3.`) ou utilisez une boucle avec `$loop.index + 1`. Utilisez des [listes à puces](#interactive-task-lists) (`- item`) lorsque vous n'avez pas besoin de numéros.
+
+## Comment les données sont résolues
+
+1. Si `dataPath` est défini, le nœud suit ce chemin pointé dans la sortie en amont.
+2. Sinon, il recherche un tableau : une liste de premier niveau, un tableau `data`, ou le premier champ de type liste.
+3. Pour `table`, chaque ligne devient une ligne de tableau en utilisant `columns` (ou les clés de la première ligne).
+4. Pour `numeric` et `gauge`, la valeur provient de `valueField` sur la première ligne (ou du premier champ numérique).
+5. Pour `scatter`, chaque ligne devient un point `[xField, yField]`.
+6. Pour `text`, le message est extrait de `valueField` sur la première ligne lorsqu'il est défini, sinon de la configuration statique `text` (ou, à défaut, du premier champ de type chaîne de la première ligne).
+## Exemple
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "revenueChart",
+    "chartType": "bar",
+    "orientation": "vertical",
+    "dataPath": "data",
+    "labelField": "month",
+    "valueField": "revenue",
+    "title": "Monthly revenue"
+  }
+}
+```
+
+Gauge (valeur unique vs. une plage) :
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "cpuGauge",
+    "chartType": "gauge",
+    "dataPath": "rows",
+    "valueField": "value",
+    "min": 0,
+    "max": 100,
+    "unit": "%"
+  }
+}
+```
+
+Scatter (points X/Y) :
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "correlation",
+    "chartType": "scatter",
+    "dataPath": "rows",
+    "xField": "x",
+    "yField": "y"
+  }
+}
+```
+
+Proportion (une barre segmentée par part + légende en pourcentage) :
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "languages",
+    "chartType": "proportion",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "title": "Most Used Languages"
+  }
+}
+```
+
+Area (tendance multi-séries remplie) :
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "memCpu",
+    "chartType": "area",
+    "dataPath": "rows",
+    "labelField": "time",
+    "series": [
+      { "name": "Memory", "field": "memory" },
+      { "name": "CPU", "field": "cpu" }
+    ],
+    "title": "Memory / CPU"
+  }
+}
+```
+
+Bar gauge (jauge à dégradé par ligne avec valeurs) :
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "freeDisk",
+    "chartType": "barGauge",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "unit": "GB",
+    "title": "Free disk space"
+  }
+}
+```
+
+Text (un message markdown statique — aucune ligne en amont requise) :
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "statusNote",
+    "chartType": "text",
+    "text": "**Last execution** at `19:47` — all checks passed ✅",
+    "title": "Status"
+  }
+}
+```
+
+Text (dynamique — la chaîne du message est produite en amont et récupérée via `valueField`) :
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "lastRun",
+    "chartType": "text",
+    "dataPath": "rows",
+    "valueField": "message"
+  }
+}
+```
+
+## Exemples de prompts IA
+
+Lors de la génération d'un widget avec l'**IA**, des prompts comme ceux-ci correspondent directement à chaque type :
+
+- **Bar** — « Affichez le chiffre d'affaires mensuel des 6 derniers mois sous forme de graphique à barres verticales avec des données d'exemple. »
+- **Line** — « Tracez les utilisateurs actifs quotidiens sur les 14 derniers jours sous forme de graphique en courbes. »
+- **Area** — « Affichez l'utilisation de la mémoire et du CPU sur les dernières 24 heures sous forme de graphique en aires avec deux séries. Utilisez des données d'exemple. »
+- **Pie** — « Décomposez le statut d'exécution (succès, erreur, annulé) sous forme de graphique circulaire. »
+- **Table** — « Affichez les 10 principaux workflows par nombre d'exécutions sous forme de tableau défilable avec les colonnes nom et exécutions. Utilisez des données d'exemple. »
+- **Numeric** — « Affichez le total des exécutions de workflows du jour sous forme d'un KPI unique avec l'unité 'runs'. Utilisez des données d'exemple. »
+- **Gauge** — « Affichez l'utilisation actuelle du CPU sous forme de jauge de 0 à 100 pour cent. »
+- **Scatter** — « Tracez la latence des requêtes en fonction de la taille du payload sous forme de graphique en nuage de points avec des données d'exemple. »
+- **Proportion** — « Affichez mes langages les plus utilisés sous forme de barre de proportion : Kotlin 49,64 %, JavaScript 23,73 %, TypeScript 11,64 %, Java 8,92 %, Python 6,06 %. Utilisez des données d'exemple. »
+- **Bar gauge** — « Affichez l'espace disque libre par volume (sda1 à sda7) sous forme de bar gauge en GB. Utilisez des données d'exemple. »
+- **Text** — « Ajoutez un widget texte avec une liste de contrôle markdown (un élément coché, deux non cochés), ou listez les 5 dernières vidéos de tutoriel par ordre décroissant (de 5. à 1.) avec des liens YouTube — préfixez chaque ligne par un numéro explicite (`5. Titre`, `4. Titre`, …). »
+
+## Voir aussi
+
+- [Onglet Dashboard](../tabs/dashboard-tab.md) — construire et organiser les widgets
+- [Nœud Output](output-node.md) — nœud terminal pour les workflows classiques

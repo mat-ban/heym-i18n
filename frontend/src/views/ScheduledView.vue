@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 import CalendarGrid from "@/components/Calendar/CalendarGrid.vue";
 import { useAuthStore } from "@/stores/auth";
 import { getScheduleEvents } from "@/services/schedules";
+import { getIntlLocale } from "@/i18n/format";
 import type { CalendarView, ScheduleEvent } from "@/types/schedule";
 
 const view = ref<CalendarView>("week");
@@ -14,11 +16,13 @@ const events = ref<ScheduleEvent[]>([]);
 const loading = ref(false);
 const includeShared = ref(true);
 const authStore = useAuthStore();
+const { locale } = useI18n();
 
 function getViewLabel(): string {
   const d = currentDate.value;
+  const loc = getIntlLocale(locale.value);
   if (view.value === "day") {
-    return d.toLocaleDateString([], {
+    return d.toLocaleDateString(loc, {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -30,9 +34,9 @@ function getViewLabel(): string {
     monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
-    return `${monday.toLocaleDateString([], { month: "short", day: "numeric" })} – ${sunday.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}`;
+    return `${monday.toLocaleDateString(loc, { month: "short", day: "numeric" })} – ${sunday.toLocaleDateString(loc, { month: "short", day: "numeric", year: "numeric" })}`;
   }
-  return d.toLocaleDateString([], { month: "long", year: "numeric" });
+  return d.toLocaleDateString(loc, { month: "long", year: "numeric" });
 }
 
 function getRange(): { start: Date; end: Date } {
@@ -100,7 +104,7 @@ onMounted(fetchEvents);
           class="rounded px-3 py-1 text-sm border border-border hover:bg-accent transition-colors"
           @click="goToday"
         >
-          {{ view === "month" ? "This Month" : view === "week" ? "This Week" : "Today" }}
+          {{ view === "month" ? $t('schedules.thisMonth') : view === "week" ? $t('schedules.thisWeek') : $t('schedules.today') }}
         </button>
         <button
           class="rounded p-1 border border-border hover:bg-accent transition-colors"
@@ -119,7 +123,7 @@ onMounted(fetchEvents);
             type="checkbox"
             class="rounded border-border accent-violet-600 w-3.5 h-3.5 cursor-pointer"
           >
-          {{ authStore.user?.is_admin ? "Show all workflows" : "Show shared with me" }}
+          {{ authStore.user?.is_admin ? $t('schedules.showAll') : $t('schedules.showShared') }}
         </label>
         <div class="flex items-center gap-1 border border-border rounded-md p-0.5 text-sm">
           <button
@@ -131,7 +135,7 @@ onMounted(fetchEvents);
             "
             @click="view = v"
           >
-            {{ v }}
+            {{ $t('schedules.' + v) }}
           </button>
         </div>
       </div>
@@ -142,7 +146,7 @@ onMounted(fetchEvents);
       v-if="loading"
       class="flex-1 flex items-center justify-center text-muted-foreground text-sm"
     >
-      Loading schedule...
+      {{ $t('common.loading') }}
     </div>
 
     <!-- Calendar -->

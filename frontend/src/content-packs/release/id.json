@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Mengaktifkan Kembali Node di Dalam Workflow",
+    "releaseTour": {
+      "label": "Baru di Heym",
+      "introTitle": "Baru dalam Rilis Ini",
+      "introDescription": "Ringkasan singkat mengenai pembaruan sejak pembaruan terakhir Anda. Hanya memerlukan waktu sekitar satu menit.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Node Enable: Mengaktifkan Kembali Node di Dalam Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Node Enable** yang baru merupakan pasangan dari **Node Disable**. Pilih sebuah node berdasarkan namanya untuk mengaktifkannya kembali dan menyimpan perubahan. **Trigger Cron** yang dinonaktifkan akan dijalankan kembali pada jadwal berikutnya. Jika node berada di bagian selanjutnya dalam alur dan belum dijalankan, node tersebut akan langsung ikut berjalan pada eksekusi saat ini."
+          },
+          {
+            "type": "prose",
+            "markdown": "Trigger yang dinonaktifkan tidak akan pernah memulai eksekusi secara mandiri. Oleh karena itu, tempatkan Node Enable di belakang titik masuk lain, seperti **Trigger Input**. **Node Wait** kini juga mendukung jeda yang lebih lama: hingga 15 menit, bukan hanya satu menit."
+          }
+        ],
+        "tour": {
+          "description": "Mengaktifkan kembali node yang dinonaktifkan langsung dari dalam Workflow, misalnya Trigger Cron yang dijeda.",
+          "useCases": [
+            "Menjalankan Trigger Cron yang dinonaktifkan sesuai kebutuhan melalui Webhook",
+            "Mengombinasikan dengan Node Disable untuk menyalakan dan mematikan node berdasarkan kondisi",
+            "Menjeda Workflow dengan Node Wait hingga 15 menit"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Tinjau persetujuan manusia yang tertunda langsung di Dashboard",
+    "releaseTour": {
+      "label": "Baru di Heym",
+      "introTitle": "Baru dalam rilis ini",
+      "introDescription": "Ringkasan singkat tentang pembaruan sejak pembaruan terakhir Anda. Memerlukan waktu sekitar satu menit.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Selesaikan review yang tertunda melalui widget Dashboard",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Tambahkan widget **HITL** dan header akan menampilkan jumlah review yang menunggu sebagai `1/n tertunda`. Navigasikan melalui entri dengan tombol panah. Nama Workflow akan membuka eksekusi langsung di Canvas. **Setujui**, **Minta perubahan**, dan **Tolak** akan menyelesaikan draf. Ikon riwayat membuka eksekusi di dialog riwayat pada halaman yang sama. Antrean bersifat personal: Dashboard yang dibagikan tidak menampilkan draf milik orang lain."
+          }
+        ],
+        "tour": {
+          "description": "Karusel Dashboard untuk persetujuan tertunda Anda dengan penghitung di header.",
+          "useCases": [
+            "Melihat berapa banyak review yang menunggu sebelum membuka yang pertama",
+            "Menyetujui, meminta perubahan, atau menolak tanpa meninggalkan Dashboard",
+            "Membuka eksekusi ini melalui ikon di samping judul widget di dialog riwayat"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "Asisten AI menguji Workflow-nya dan menyiapkan tabel data",
+    "releaseTour": {
+      "label": "Baru di Heym",
+      "introTitle": "Baru dalam rilis ini",
+      "introDescription": "Ringkasan singkat tentang pembaruan sejak pembaruan terakhir Anda. Hanya membutuhkan waktu sekitar satu menit.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "Mode YOLO: Asisten AI menguji apa yang ia bangun",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Aktifkan **Mode YOLO** di **Asisten AI** pada Canvas, maka ia tidak lagi berhenti setelah menerapkan sebuah Workflow. Ia menjalankan Workflow seperti melalui **Run**, membaca hasilnya, dan mengoreksi Workflow secara mandiri hingga lima kali per pesan. Setiap respons menampilkan langkah-langkahnya secara langsung."
+          },
+          {
+            "type": "prose",
+            "markdown": "Sebelum menjalankan pertama kali, ia menanyakan input pengujian dengan nilai yang disarankan dan menggunakannya kembali. Ia juga dapat menjalankan Workflow lain jika membutuhkan hasilnya. Jika ia memerlukan keputusan atau kredensial, ia menanyakannya melalui kartu pertanyaan yang biasa. Eksekusi nyata: Mode YOLO dinonaktifkan secara default dan **Stop** menghentikan proses kapan saja."
+          }
+        ],
+        "tour": {
+          "description": "Asisten AI menjalankan Workflow yang dibuat, memeriksa hasilnya, dan mengoreksi kesalahan secara mandiri hingga berfungsi.",
+          "useCases": [
+            "Menjelaskan sebuah Workflow dan langsung mendapatkan versi yang telah teruji",
+            "Membiarkan asisten mendeteksi dan memperbaiki node yang bermasalah secara otomatis",
+            "Memeriksa nilai kembalian Workflow lain sebelum menghubungkannya"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "Asisten AI memilih atau membuat tabel data",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Ketika sebuah Workflow menyimpan data, **Asisten AI** kini mengenali **DataTables** Anda. Sebutkan sebuah tabel dan ia akan menggunakannya. Jika tidak, ia akan menanyakan tabel yang sesuai atau mengusulkan **Buat tabel baru** dengan kolom yang diperlukan."
+          },
+          {
+            "type": "prose",
+            "markdown": "Berfungsi di asisten Canvas, dalam Mode YOLO, di **Chat**, dalam dokumentasi, dan melalui MCP dengan `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "Asisten AI menanyakan tabel data yang sesuai atau membuat tabel baru dengan kolom yang dibutuhkan.",
+          "useCases": [
+            "Mencatat lead secara otomatis ke dalam tabel dan menghasilkan Workflow & tabel sekaligus",
+            "Memilih tabel yang sudah ada berdasarkan kolom dan tipe",
+            "Membuat dan menghubungkan tabel langsung dari Chat atau melalui MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Membuat Beberapa Dashboard dan Membagikannya kepada Tim",
+    "releaseTour": {
+      "label": "Baru di Heym",
+      "introTitle": "Baru dalam rilis ini",
+      "introDescription": "Ringkasan singkat mengenai pembaruan sejak pembaruan terakhir Anda. Memerlukan waktu sekitar satu menit.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Membuat Beberapa Dashboard dan Membagikannya kepada Tim",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Tab **Dashboard** kini mendukung jumlah Dashboard yang tidak terbatas. Beralihlah dengan mudah melalui pemilih di bagian atas tab atau buat Dashboard baru dengan **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Bagikan Dashboard kepada individu atau tim melalui **Pengaturan**. **Baca** memungkinkan untuk menampilkan dan memperbarui; **Tulis** memungkinkan untuk mengedit Widget. Widget selalu menggunakan kredensial milik pemiliknya."
+          }
+        ],
+        "tour": {
+          "description": "Mengelola beberapa Dashboard, beralih di antaranya, dan membagikannya dengan akses hanya-baca atau dapat diedit.",
+          "useCases": [
+            "Menata Dashboard terpisah berdasarkan tim, produk, atau tenant",
+            "Menyediakan tampilan hanya-baca bagi para pemangku kepentingan",
+            "Menguji jenis diagram dengan data contoh terlebih dahulu"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

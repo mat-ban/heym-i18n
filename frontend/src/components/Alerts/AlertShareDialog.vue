@@ -92,18 +92,17 @@ async function removeTeamShare(share: AlertTeamShareEntry): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    title="Share alert"
+    :title="$t('alerts.shareAlert')"
     size="md"
     @close="emit('close')"
   >
     <div class="space-y-5">
       <p class="text-xs text-muted-foreground">
-        People you share with can see the alert and its firing history. Only you can edit, pause, or
-        delete it.
+        {{ $t('alerts.shareDescription') }}
       </p>
 
       <div class="space-y-2">
-        <Label for="alert-share-email">Share with a person</Label>
+        <Label for="alert-share-email">{{ $t('alerts.shareWithPerson') }}</Label>
         <div class="flex gap-2">
           <Input
             id="alert-share-email"
@@ -116,7 +115,7 @@ async function removeTeamShare(share: AlertTeamShareEntry): Promise<void> {
             :disabled="!email.trim()"
             @click="addShare"
           >
-            Add
+            {{ $t('common.add') }}
           </Button>
         </div>
 
@@ -150,20 +149,20 @@ async function removeTeamShare(share: AlertTeamShareEntry): Promise<void> {
       </div>
 
       <div class="space-y-2">
-        <Label for="alert-share-team">Share with a team</Label>
+        <Label for="alert-share-team">{{ $t('alerts.shareWithTeam') }}</Label>
         <div class="flex gap-2">
           <Select
             id="alert-share-team"
             v-model="selectedTeamId"
             :options="teamOptions"
-            placeholder="Choose a team..."
+            :placeholder="$t('alerts.chooseTeam')"
             class="flex-1"
           />
           <Button
             :disabled="!selectedTeamId"
             @click="addTeamShare"
           >
-            Add
+            {{ $t('common.add') }}
           </Button>
         </div>
 
@@ -199,7 +198,7 @@ async function removeTeamShare(share: AlertTeamShareEntry): Promise<void> {
         v-if="loading"
         class="text-sm text-muted-foreground"
       >
-        Loading...
+        {{ $t('common.loading') }}
       </p>
     </div>
   </Dialog>

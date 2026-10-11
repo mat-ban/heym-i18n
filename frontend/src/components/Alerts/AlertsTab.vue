@@ -88,10 +88,10 @@ async function acknowledge(event: AlertEvent): Promise<void> {
     <header class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div class="min-w-0">
         <h1 class="text-lg font-semibold tracking-tight">
-          Alerts
+          {{ $t('alerts.title') }}
         </h1>
         <p class="mt-0.5 text-sm text-muted-foreground">
-          Threshold rules over a time window on errors, duration, LLM spend, and run count.
+          {{ $t('alerts.subtitle') }}
         </p>
       </div>
       <Button
@@ -99,7 +99,7 @@ async function acknowledge(event: AlertEvent): Promise<void> {
         @click="openCreate"
       >
         <Plus class="mr-1.5 h-4 w-4" />
-        New alert
+        {{ $t('alerts.newAlert') }}
       </Button>
     </header>
 

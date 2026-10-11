@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Noder i ett Workflow återaktiveras",
+    "releaseTour": {
+      "label": "Nytt i Heym",
+      "introTitle": "Nytt i denna release",
+      "introDescription": "En kort översikt över nyheterna sedan senaste uppdateringen. Tar cirka en minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable-nod: Återaktivera en nod i ett Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Den nya **Enable-noden** är motsvarigheten till **Disable-noden**. Välj en nod efter beteckning för att återaktivera den och spara ändringen. En inaktiverad **Cron**-Trigger körs då igen vid nästa schemalagda tidpunkt. Om noden befinner sig längre fram i flödet och ännu inte har körts, körs den direkt i den aktuella körningen."
+          },
+          {
+            "type": "prose",
+            "markdown": "En inaktiverad Trigger startar aldrig en körning på egen hand. Placera därför Enable-noden efter en annan startpunkt, som en **Input**-Trigger. **Wait**-noden stöder nu även längre pauser: upp till 15 minuter i stället för endast en."
+          }
+        ],
+        "tour": {
+          "description": "Återaktivera en inaktiverad nod direkt från Workflowet, t.ex. en pausad Cron-Trigger.",
+          "useCases": [
+            "Starta en inaktiverad Cron-Trigger vid behov via en Webhook",
+            "Kombinera med Disable-noden för att slå på och av noder beroende på tillstånd",
+            "Pausa ett Workflow med Wait-noden i upp till 15 minuter"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Utstående mänskliga godkännanden granskas direkt i Dashboard",
+    "releaseTour": {
+      "label": "Nytt i Heym",
+      "introTitle": "Nytt i denna release",
+      "introDescription": "En kort översikt över nyheterna sedan senaste uppdateringen. Tar cirka en minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Utstående Reviews hanteras via en Dashboard-widget",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Lägg till en **HITL**-widget och headern visar antalet väntande Reviews som `1/n utstående`. Navigera genom posterna med piltangenterna. Workflow-namnet öppnar körningen direkt på Canvas. **Godkänn**, **begär ändringar** och **avslå** slutför utkastet. Historikikonen öppnar körningen i historikdialogen på samma sida. Kön är personlig: en delad Dashboard visar inte andras utkast."
+          }
+        ],
+        "tour": {
+          "description": "En Dashboard-karusell för utstående godkännanden med räknare i headern.",
+          "useCases": [
+            "Se hur många Reviews som väntar innan den första öppnas",
+            "Godkänna, begära ändringar eller avslå utan att lämna Dashboard",
+            "Öppna denna körning via ikonen bredvid widget-titeln i historikdialogen"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI-assistenten testar sina Workflows och skapar datatabeller",
+    "releaseTour": {
+      "label": "Nytt i Heym",
+      "introTitle": "Nytt i denna release",
+      "introDescription": "En kort översikt över nyheterna sedan den senaste uppdateringen. Tar cirka en minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO-läge: AI-assistenten testar det som byggs",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Aktivera **YOLO-läget** i Canvas **AI-assistenten**; den stoppar inte längre efter att ett Workflow har tillämpats. Den kör Workflowet som via **Run**, läser resultatet och korrigerar Workflowet självständigt upp till fem gånger per meddelande. Varje svar listar stegen live."
+          },
+          {
+            "type": "prose",
+            "markdown": "Före den första körningen frågar den efter testindata med föreslagna värden och återanvänder dessa. Den kan även köra andra Workflows när deras resultat behövs. Om ett beslut eller inloggningsuppgifter krävs, frågar den med det vanliga frågekortet. Riktiga körningar: YOLO-läget är avstängt som standard och **Stop** avslutar flödet när som helst."
+          }
+        ],
+        "tour": {
+          "description": "AI-assistenten kör skapade Workflows, granskar resultatet och korrigerar fel självständigt tills det fungerar.",
+          "useCases": [
+            "Beskriva ett Workflow och direkt få en testad version",
+            "Låta assistenten automatiskt spåra upp och åtgärda felaktiga noder",
+            "Granska returvärden från andra Workflows före sammankoppling"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI-assistenten väljer eller skapar datatabeller",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "När ett Workflow sparar dataposter identifierar **AI-assistenten** nu **DataTables**. Ange en tabell och den använder den. Annars frågar den efter lämplig tabell eller föreslår **Skapa ny tabell** med de nödvändiga kolumnerna."
+          },
+          {
+            "type": "prose",
+            "markdown": "Fungerar i Canvas-assistenten, i YOLO-läget, i **Chat**, i dokumentationen och via MCP med `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "AI-assistenten frågar efter lämplig datatabell eller skapar en ny med de kolumner som behövs.",
+          "useCases": [
+            "Registrera leads automatiskt i tabeller och generera Workflow och tabell tillsammans",
+            "Välja befintliga tabeller utifrån kolumner och typer",
+            "Skapa och koppla ihop tabeller direkt från Chat eller via MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Flera dashboards skapas och delas med teamet",
+    "releaseTour": {
+      "label": "Nytt i Heym",
+      "introTitle": "Nytt i denna release",
+      "introDescription": "En kort översikt över nyheterna sedan senaste uppdateringen. Tar cirka en minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Flera dashboards skapas och delas med teamet",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Fliken **Dashboard** stöder nu valfritt antal dashboards. Växla smidigt via urvalet högst upp i fliken eller skapa en ny med **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Dela dashboards med personer eller team via **Inställningar**. **Läsbehörighet** tillåter visning och uppdatering; **Skrivbehörighet** tillåter redigering av widgets. Widgets använder alltid ägarens autentiseringsuppgifter."
+          }
+        ],
+        "tour": {
+          "description": "Hantera flera dashboards, växla mellan dem och dela dem skrivskyddat eller redigerbart.",
+          "useCases": [
+            "Strukturera separata dashboards efter team, produkt eller klient",
+            "Tillhandahålla en skrivskyddad vy för intressenter",
+            "Testa diagramtyper i förväg med exempeldata"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

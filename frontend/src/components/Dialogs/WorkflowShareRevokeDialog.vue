@@ -30,7 +30,7 @@ watch(
 <template>
   <Dialog
     :open="open"
-    title="Remove access"
+    :title="$t('workflows.revokeAccessTitle')"
     size="sm"
     @close="emit('cancel')"
   >
@@ -39,9 +39,11 @@ watch(
       data-testid="workflow-share-revoke-dialog"
     >
       <p class="text-sm text-muted-foreground">
-        <strong class="font-medium text-foreground">{{ subject }}</strong>
-        {{ kind === "team" ? "members" : "" }} will no longer be able to open or run this
-        workflow.
+        {{
+          kind === "team"
+            ? $t("workflows.revokeAccessSubjectTeam", { subject })
+            : $t("workflows.revokeAccessSubjectUser", { subject })
+        }}
       </p>
       <label class="flex items-start gap-2 text-sm">
         <input
@@ -51,9 +53,9 @@ watch(
           data-testid="workflow-share-revoke-stop-alerts"
         >
         <span>
-          Also stop their alerts on this workflow
+          {{ $t("workflows.stopAlerts") }}
           <span class="block text-xs text-muted-foreground">
-            Uncheck to keep those alerts reporting this workflow's run metrics.
+            {{ $t("workflows.stopAlertsHint") }}
           </span>
         </span>
       </label>
@@ -62,7 +64,7 @@ watch(
           variant="outline"
           @click="emit('cancel')"
         >
-          Cancel
+          {{ $t("common.cancel") }}
         </Button>
         <Button
           variant="destructive"
@@ -70,7 +72,7 @@ watch(
           data-testid="workflow-share-revoke-confirm"
           @click="emit('confirm', stopAlerts)"
         >
-          Remove
+          {{ $t("common.remove") }}
         </Button>
       </div>
     </div>

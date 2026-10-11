@@ -147,8 +147,8 @@ function onDocSelect(categoryId: string, slug: string, event?: MouseEvent | Keyb
             variant="ghost"
             size="icon"
             class="md:hidden h-11 w-11 min-h-[44px] min-w-[44px] text-foreground"
-            title="Open documentation menu"
-            aria-label="Open documentation menu"
+            :title="$t('docs.openMenu')"
+            :aria-label="$t('docs.openMenu')"
             @click="mobileDrawerOpen = true; pushOverlayState()"
           >
             <Menu class="w-5 h-5" />
@@ -164,12 +164,12 @@ function onDocSelect(categoryId: string, slug: string, event?: MouseEvent | Keyb
           <button
             type="button"
             class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-purple-600 px-3 text-sm font-medium text-white transition-all duration-250 hover:bg-purple-700 active:scale-[0.97] min-h-[44px] min-w-[44px] md:h-9 md:min-h-[36px]"
-            title="Chat with Heym"
-            aria-label="Chat with Heym"
+            :title="$t('docs.chatWithHeym')"
+            :aria-label="$t('docs.chatWithHeym')"
             @click="docsChatOpen = true; pushOverlayState()"
           >
             <Wand2 class="h-4 w-4 shrink-0" />
-            <span class="hidden sm:inline text-xs font-medium">Chat with Heym</span>
+            <span class="hidden sm:inline text-xs font-medium">{{ $t('docs.chatWithHeym') }}</span>
           </button>
           <GitHubStarButton />
           <Button
@@ -180,7 +180,7 @@ function onDocSelect(categoryId: string, slug: string, event?: MouseEvent | Keyb
             @click="historyOpen = true; pushOverlayState()"
           >
             <History class="w-4 h-4" />
-            <span class="hidden sm:inline">History</span>
+            <span class="hidden sm:inline">{{ $t('header.history') }}</span>
           </Button>
         </template>
       </AppHeader>
@@ -207,19 +207,19 @@ function onDocSelect(categoryId: string, slug: string, event?: MouseEvent | Keyb
             />
             <div v-else>
               <h1 class="text-2xl font-bold text-foreground">
-                Documentation
+                {{ $t('docs.welcomeTitle') }}
               </h1>
               <p class="mt-2 text-muted-foreground">
-                Welcome to Heym.
+                {{ $t('docs.welcomeSubtitle') }}
                 <template v-if="isMobile">
-                  Use the menu above to browse topics.
+                  {{ $t('docs.browseTopicsMobile') }}
                 </template>
                 <template v-else>
-                  Select a topic from the sidebar.
+                  {{ $t('docs.browseTopicsDesktop') }}
                 </template>
               </p>
               <p class="mt-4 text-sm text-muted-foreground">
-                Need help? Reach us at
+                {{ $t('docs.needHelp') }}
                 <a
                   href="mailto:support@heym.run"
                   class="text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity"

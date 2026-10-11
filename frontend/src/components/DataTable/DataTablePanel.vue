@@ -694,7 +694,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
           <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             v-model="searchQuery"
-            placeholder="Search data tables..."
+            :placeholder="$t('tables.searchPlaceholder')"
             class="pl-9"
           />
         </div>
@@ -702,14 +702,14 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
           size="sm"
           @click="showCreateDialog = true"
         >
-          <Plus class="mr-1 h-4 w-4" /> New DataTable
+          <Plus class="mr-1 h-4 w-4" /> {{ $t('tables.newTable') }}
         </Button>
         <Button
           size="sm"
           variant="outline"
           @click="openAICreate"
         >
-          <Sparkles class="mr-1 h-4 w-4" /> Generate with AI
+          <Sparkles class="mr-1 h-4 w-4" /> {{ $t('tables.generateWithAi') }}
         </Button>
         <Button
           size="sm"
@@ -725,7 +725,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
 
       <div class="space-y-2">
         <div class="text-xs uppercase tracking-wide text-muted-foreground">
-          System tables
+          {{ $t('tables.systemTables') }}
         </div>
         <div
           class="group relative cursor-pointer rounded-lg border bg-card p-4 transition-colors hover:border-primary/40 hover:bg-accent/30"
@@ -735,10 +735,10 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             <Coins class="w-5 h-5 text-primary mt-0.5" />
             <div>
               <div class="font-medium">
-                LLM Cost Table
+                {{ $t('tables.llmCostTable') }}
               </div>
               <div class="text-xs text-muted-foreground">
-                Per-model pricing used by the Traces cost charts
+                {{ $t('tables.llmCostTableSubtitle') }}
               </div>
             </div>
           </div>
@@ -761,14 +761,14 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
         <Table2 class="h-12 w-12 text-muted-foreground/50" />
         <div>
           <p class="text-lg font-medium">
-            No data tables yet
+            {{ $t('tables.noTablesYet') }}
           </p>
           <p class="text-sm text-muted-foreground">
-            Create a data table to store and manage structured data.
+            {{ $t('tables.noTablesSubtitle') }}
           </p>
         </div>
         <Button @click="showCreateDialog = true">
-          <Plus class="mr-1 h-4 w-4" /> Create DataTable
+          <Plus class="mr-1 h-4 w-4" /> {{ $t('tables.newTable') }}
         </Button>
       </div>
 
@@ -812,21 +812,21 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             <div class="ml-2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100">
               <button
                 class="rounded p-1 hover:bg-accent"
-                title="Rename"
+                :title="$t('tables.rename')"
                 @click.stop="startRename(table)"
               >
                 <Pencil class="h-3.5 w-3.5 text-muted-foreground" />
               </button>
               <button
                 class="rounded p-1 hover:bg-accent"
-                title="Duplicate"
+                :title="$t('tables.duplicate')"
                 @click.stop="handleDuplicate(table.id)"
               >
                 <Copy class="h-3.5 w-3.5 text-muted-foreground" />
               </button>
               <button
                 class="rounded p-1 hover:bg-destructive/10"
-                title="Delete"
+                :title="$t('common.delete')"
                 @click.stop="handleDelete(table.id)"
               >
                 <Trash2 class="h-4 w-4 text-destructive" />
@@ -834,12 +834,12 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             </div>
           </div>
           <div class="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
-            <span class="font-semibold">{{ table.row_count }} rows</span>
+            <span class="font-semibold">{{ table.row_count }} {{ $t('tables.rows') }}</span>
             <span
               v-if="table.is_shared"
               class="text-blue-500"
             >
-              shared{{ table.shared_by ? ` by ${table.shared_by}` : "" }}{{ table.shared_by_team ? ` via ${table.shared_by_team}` : "" }}
+              {{ $t('credentials.shared') }}{{ table.shared_by ? ` ${$t('common.by')} ${table.shared_by}` : "" }}{{ table.shared_by_team ? ` ${$t('common.via')} ${table.shared_by_team}` : "" }}
             </span>
           </div>
           <div class="mt-1 text-xs text-muted-foreground">
@@ -868,7 +868,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
                 {{ selectedTable.name }}
               </h2>
               <span class="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                {{ rowTotal }} rows
+                {{ rowTotal }} {{ $t('tables.rows') }}
               </span>
             </div>
             <p
@@ -890,7 +890,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             <RefreshCw
               class="mr-1 h-4 w-4"
               :class="{ 'animate-spin': rowsLoading }"
-            /> Refresh
+            /> {{ $t('common.refresh') }}
           </Button>
           <Button
             size="sm"
@@ -898,7 +898,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             class="shrink-0"
             @click="showShareDialog = true"
           >
-            <Share2 class="mr-1 h-4 w-4" /> Share
+            <Share2 class="mr-1 h-4 w-4" /> {{ $t('tables.share') }}
           </Button>
           <Button
             size="sm"
@@ -906,7 +906,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             class="shrink-0"
             @click="showImportDialog = true"
           >
-            <Upload class="mr-1 h-4 w-4" /> Import
+            <Upload class="mr-1 h-4 w-4" /> {{ $t('common.import') }}
           </Button>
           <Button
             size="sm"
@@ -914,7 +914,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             class="shrink-0"
             @click="handleExport"
           >
-            <Download class="mr-1 h-4 w-4" /> Export
+            <Download class="mr-1 h-4 w-4" /> {{ $t('common.export') }}
           </Button>
           <Button
             v-if="rowTotal > 0"
@@ -923,14 +923,14 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             class="shrink-0 text-destructive hover:bg-destructive/10"
             @click="handleClearRows"
           >
-            <Trash2 class="mr-1 h-4 w-4" /> Clear
+            <Trash2 class="mr-1 h-4 w-4" /> {{ $t('common.clear') }}
           </Button>
         </div>
       </div>
 
       <!-- Column management -->
       <div class="flex flex-wrap items-center gap-2">
-        <span class="text-sm font-medium">Columns:</span>
+        <span class="text-sm font-medium">{{ $t('tables.columns') }}:</span>
         <div
           v-for="col in sortedColumns"
           :key="col.id"
@@ -955,7 +955,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
           class="h-7 text-xs"
           @click="openAddColumn"
         >
-          <Plus class="mr-1 h-3 w-3" /> Column
+          <Plus class="mr-1 h-3 w-3" /> {{ $t('tables.column') }}
         </Button>
         <Button
           size="sm"
@@ -963,7 +963,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
           class="h-7 text-xs"
           @click="openAIExtend"
         >
-          <Sparkles class="mr-1 h-3 w-3" /> AI columns
+          <Sparkles class="mr-1 h-3 w-3" /> {{ $t('tables.aiColumns') }}
         </Button>
       </div>
 
@@ -1007,7 +1007,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
                   class="inline-flex items-center justify-end gap-1 rounded px-1 py-0.5 whitespace-nowrap hover:bg-accent hover:text-foreground"
                   @click="toggleRowSort('created_at')"
                 >
-                  Created
+                  {{ $t('workflows.created') }}
                   <ArrowUp
                     v-if="rowSortField === 'created_at' && rowSortDirection === 'asc'"
                     class="h-3.5 w-3.5"
@@ -1023,7 +1023,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
                   class="inline-flex items-center justify-end gap-1 rounded px-1 py-0.5 whitespace-nowrap hover:bg-accent hover:text-foreground"
                   @click="toggleRowSort('updated_at')"
                 >
-                  Updated
+                  {{ $t('common.updated') }}
                   <ArrowUp
                     v-if="rowSortField === 'updated_at' && rowSortDirection === 'asc'"
                     class="h-3.5 w-3.5"
@@ -1038,7 +1038,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
                 ID
               </th>
               <th class="w-24 min-w-24 py-2 pr-[22px] text-right font-medium">
-                Delete
+                {{ $t('common.delete') }}
               </th>
             </tr>
           </thead>
@@ -1221,7 +1221,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
                 :colspan="sortedColumns.length + 5"
                 class="px-3 py-8 text-center text-muted-foreground"
               >
-                No rows yet. Click "Add Row" to get started.
+                {{ $t('tables.noRows') }}
               </td>
             </tr>
           </tbody>
@@ -1236,10 +1236,10 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
           :disabled="sortedColumns.length === 0"
           @click="startAddRow"
         >
-          <Plus class="mr-1 h-4 w-4" /> Add Row
+          <Plus class="mr-1 h-4 w-4" /> {{ $t('tables.addRow') }}
         </Button>
         <div class="flex items-center gap-3 text-sm text-muted-foreground">
-          <span>{{ rowTotal }} rows</span>
+          <span>{{ $t('tables.rowsCount', { count: rowTotal }) }}</span>
           <label class="flex items-center">
             <span class="relative inline-flex">
               <select
@@ -1282,25 +1282,25 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
     <!-- ════════ CREATE DIALOG ════════ -->
     <Dialog
       :open="showCreateDialog"
-      title="New DataTable"
+      :title="$t('tables.createTableTitle')"
       @close="showCreateDialog = false"
     >
       <div class="flex flex-col gap-4 p-4">
         <div>
-          <Label>Name</Label>
+          <Label>{{ $t('tables.tableName') }}</Label>
           <Input
             ref="createNameInputRef"
             v-model="newName"
-            placeholder="My Table"
+            :placeholder="$t('tables.tableNamePlaceholder')"
             class="mt-1"
             @keydown.enter="handleCreate"
           />
         </div>
         <div>
-          <Label>Description (optional)</Label>
+          <Label>{{ $t('tables.tableDescription') }}</Label>
           <Textarea
             v-model="newDescription"
-            placeholder="What is this table for?"
+            :placeholder="$t('tables.tableDescriptionPlaceholder')"
             class="mt-1"
             :rows="2"
           />
@@ -1310,7 +1310,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleCreateDialogEscape
             :disabled="!newName.trim() || creating"
             @click="handleCreate"
           >
-            {{ creating ? "Creating..." : "Create" }}
+            {{ creating ? $t('tables.creating') : $t('common.create') }}
           </Button>
         </div>
       </div>

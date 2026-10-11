@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "在 Workflow 中更快速地建構",
+    "description": "選擇一個 Workflow，即可在清單旁直接查看 Trigger、最近執行與步驟。依狀態篩選、直接執行，並透過資料夾保持井然有序。"
+  },
+  "dashboard:board": {
+    "title": "透過代理式看板掌控任務",
+    "description": "拖曳卡片跨越欄位，以卡片完整脈絡觸發 Workflow 鏈。結果會直接回流至卡片。"
+  },
+  "dashboard:templates": {
+    "title": "從經過驗證的範本開始",
+    "description": "使用預先製作的 Workflow 模式，節省設定時間並確保一致性。"
+  },
+  "dashboard:globalvariables": {
+    "title": "集中管理共用變數",
+    "description": "將可重複使用的值儲存一次，並在所有 Workflow 中參照使用。"
+  },
+  "dashboard:chat": {
+    "title": "運用 Chat 快速迭代",
+    "description": "快速提出問題、測試想法，並在 Workflow 流程明確後切換至編輯器。"
+  },
+  "dashboard:credentials": {
+    "title": "安全地管理機密",
+    "description": "集中管理供應商金鑰與 Token，讓 Workflow 使用安全連線而無需揭露機密。"
+  },
+  "dashboard:vectorstores": {
+    "title": "支援以檢索為基礎的 Workflow",
+    "description": "為有根據的 AI 回應、語意搜尋與可擴展的 RAG 管線準備向量儲存。"
+  },
+  "dashboard:mcp": {
+    "title": "連接外部工具生態系",
+    "description": "設定 MCP 連線，讓代理能執行結構化工具與動作，而不僅限於簡單的 Prompt。"
+  },
+  "dashboard:traces": {
+    "title": "理解執行行為",
+    "description": "分析 Trace 詳細資料，以偵錯結果、比較執行並提升可靠性。"
+  },
+  "dashboard:alerts": {
+    "title": "在問題升級前收到通知",
+    "description": "設定錯誤、時長、成本與執行次數的閾值，並在超出時收到警示。"
+  },
+  "dashboard:analytics": {
+    "title": "追蹤平台效能",
+    "description": "監控使用量與執行趨勢，以根據真實訊號進行精準最佳化。"
+  },
+  "dashboard:dashboard": {
+    "title": "建立專屬 Dashboard",
+    "description": "組合由 Workflow 驅動的圖表小工具，讓重要指標一目了然。"
+  },
+  "dashboard:teams": {
+    "title": "井然有序地擴展協作",
+    "description": "依團隊劃分 Workflow 與資源，讓存取權限與職責保持透明。"
+  },
+  "dashboard:logs": {
+    "title": "診斷系統層級問題",
+    "description": "在基礎架構或環境問題發生時使用 Log，以取得更深入的執行階段洞察。"
+  },
+  "dashboard:drive": {
+    "title": "管理產生的檔案",
+    "description": "透過安全連結與受控的存取選項，檢視、下載並分享 Workflow 輸出。"
+  },
+  "dashboard:datatable": {
+    "title": "原生處理結構化資料",
+    "description": "建立具型別的表格，並直接從 Workflow 操作，以實現可重現的讀寫作業。"
+  },
+  "dashboard:schedules": {
+    "title": "總覽自動化排程",
+    "description": "在日曆檢視（日、週、月）中查看所有作用中的 Cron Workflow。點擊區塊即可直接前往 Canvas。"
+  },
+  "evals": {
+    "title": "可靠地評估品質",
+    "description": "執行可重複的測試套件，在正式推出前對 Prompt 與模型變更進行有根據的比較。"
+  },
+  "docs": {
+    "title": "在應用程式中快速找到方向",
+    "description": "瀏覽精簡參考資料並深入特定主題，無需離開目前的 Workflow。"
+  },
+  "editor": {
+    "title": "在 Canvas 上設計與偵錯",
+    "description": "以視覺化方式連接節點、立即執行，並在同一個工作區中透過直接回饋精進行為。"
+  }
+}

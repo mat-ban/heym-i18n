@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Crie, organize, importe e gerencie os Workflows para suas automações de IA.",
+    "bullets": [
+      "Abra Workflows rapidamente, mantenha pastas organizadas e continue diretamente tarefas recentes.",
+      "Use a paleta de comandos para acesso rápido sem longas buscas na grade.",
+      "Use esta aba como sua base para todas as atividades no editor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Visão Central",
+        "title": "Biblioteca de Workflows",
+        "description": "Visualize objetos raiz, pastas e Workflows marcados para exclusão em um só lugar.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Acesso Rápido",
+        "title": "Criação Rápida",
+        "description": "Crie novos Workflows ou importe JSON diretamente.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Estrutura",
+        "title": "Organize Antecipadamente",
+        "description": "Pastas e fixações mantêm conjuntos crescentes de automação organizados.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Ler Guia de Workflow",
+        "description": "Abrir referência completa da aba Workflows.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Aba Workflows"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Abrir Modelos",
+        "description": "Mudar para a aba de Modelos para pontos de partida reutilizáveis.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "O que pertence aqui",
+        "content": "Use esta área para tarefas do ciclo de vida do Workflow: criar, renomear, mover, importar, arquivar e selecionar."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Mantenha-se enxuto",
+        "content": "Se você precisar apenas de uma execução rápida de outra página, use o Quick Drawer. Volte aqui para gerenciamento e estrutura."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Aba Workflows"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Um Kanban baseado em agentes. Cada cartão é um job persistente com contexto, histórico e saídas – mover um cartão executa a cadeia de Workflow da coluna.",
+    "bullets": [
+      "Crie cartões de texto no Backlog e arraste-os pelas colunas.",
+      "Vincule Workflows ordenados a cada coluna; movimentos de cartões os disparam como Trigger.",
+      "Cartões ficam verdes em caso de sucesso, vermelhos em caso de erro e amarelos durante a execução.",
+      "Comentários e saídas anteriores fluem para o contexto da próxima execução."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ideia Central",
+        "title": "Cartões são jobs, não notas",
+        "description": "Cada cartão carrega seu histórico completo: comentários, movimentos e a saída de cada Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ciclo de Planejamento",
+        "title": "Rodadas de Acompanhamento",
+        "description": "Responda em comentários e execute novamente – a cadeia vê todo o contexto acumulado.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Documentação do Board",
+        "description": "Cadeias de colunas, contrato de payload do cartão e rodadas de acompanhamento.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Como as cadeias de colunas são executadas",
+        "content": "Workflows anexados a uma coluna são executados sequencialmente assim que um cartão chega. A saída de cada Workflow é anexada ao contexto do cartão; um erro interrompe a cadeia."
+      },
+      {
+        "id": "board-context",
+        "title": "O que os Workflows recebem",
+        "content": "O input de execução contém o cartão (título, conteúdo, metadados, comentários, histórico, saídas anteriores), o Board, o movimento e a posição na cadeia. Leia isso com expressões $input.card."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Modelos",
+    "summary": "Comece com blueprints de Workflow reutilizáveis em vez de reconstruir os mesmos padrões toda vez.",
+    "bullets": [
+      "Use Modelos quando a estrutura do Workflow é conhecida, mas os detalhes ainda variam.",
+      "Bons Modelos encurtam o onboarding e reduzem trabalho repetitivo no canvas.",
+      "Compartilhe padrões aqui e ajuste-os no editor conforme necessário."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Reutilização",
+        "title": "Abordagem de Blueprint",
+        "description": "Capture estruturas de Workflow comprovadas e reaplique-as rapidamente.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ritmo da Equipe",
+        "title": "Pontos de Partida Unificados",
+        "description": "Modelos ajudam equipes a concordar com os mesmos padrões comprovados.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Eficiência",
+        "title": "Menos Tempo Ocioso",
+        "description": "Escolha uma estrutura pronta e ajuste apenas o essencial.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Abrir Documentação de Modelos",
+        "description": "Saiba como os Modelos se encaixam no fluxo do Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Aba Modelos"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Voltar para Workflows",
+        "description": "Voltar para a biblioteca principal de Workflows.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Por que Modelos são importantes",
+        "content": "Eles transformam layouts de nós repetidos em ativos reutilizáveis – ideal para equipes que implantam variações do mesmo padrão de Workflow."
+      },
+      {
+        "id": "templates-when",
+        "title": "Uso Ideal",
+        "content": "Use Modelos quando a estrutura é estável, mas nomes, Prompts, credenciais ou objetivos variam de caso para caso."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Aba Modelos"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Variáveis",
+    "summary": "Armazene valores compartilhados centralmente e referencie-os entre Workflows sem duplicar os mesmos dados em todos os lugares.",
+    "bullets": [
+      "Mantenha valores frequentemente reutilizados em um local central e persistente.",
+      "Variáveis reduzem a deriva de Prompt e configurações duplicadas.",
+      "Compartilhe valores seletivamente quando vários Workflows precisam da mesma base de dados."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Persistência",
+        "title": "Armazenamento entre Execuções",
+        "description": "Valores globais persistem além de execuções individuais de Workflow.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Configuração Compacta",
+        "title": "Menos Redundância",
+        "description": "Atualize uma vez centralmente em vez de ajustar manualmente muitos campos de nós.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Expressões",
+        "title": "Suporte na DSL",
+        "description": "Referencie valores diretamente em expressões de nós e Prompts.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Ler Documentação de Variáveis",
+        "description": "Abrir o guia para Variáveis no Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Aba Variáveis"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Padrões Típicos",
+        "content": "Armazene Endpoints, fragmentos de Prompt compartilhados, configurações específicas de ambiente ou IDs que vários Workflows precisam ler."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "O que não pertence aqui",
+        "content": "Segredos e autenticações de provedores pertencem a credenciais, não a Variáveis globais."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Aba Variáveis"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Use o Chat do Dashboard como um ponto de entrada rápido baseado em diálogo para seus Workflows e tarefas da plataforma.",
+    "bullets": [
+      "Excelente para perguntas rápidas, ajuda com Workflow e execuções leves.",
+      "Focado em velocidade e iteração em vez de controle total do editor.",
+      "Assim que a estrutura estiver pronta, mude diretamente para o Workflow ou a documentação."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Linguagem Natural",
+        "title": "Interação Rápida",
+        "description": "Use linguagem simples em vez de navegar manualmente por todo o aplicativo.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ponte",
+        "title": "Da Ideia à Ação",
+        "description": "O Chat ajuda quando o objetivo é claro, mas o caminho exato ainda precisa ser elaborado.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Companheiro",
+        "title": "Complementa a Documentação",
+        "description": "Use junto com a documentação para ter respostas e referências à mão.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Abrir Documentação do Chat",
+        "description": "Ler o guia para o Chat do Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Aba Chat"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Referência do Assistente de IA",
+        "description": "Saiba como o Assistente Heym apoia na criação de Workflows.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "Assistente de IA"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Melhores Casos de Uso",
+        "content": "Use o Chat para perguntas rápidas sobre Workflow, instruções curtas da plataforma e etapas operacionais que não exigem trabalho profundo no canvas."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Quando Mudar de Visão",
+        "content": "Mude para o editor assim que precisar de controle no nível do nó, ou para a documentação para referências duradouras."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Aba Chat"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Gerencie e compartilhe arquivos gerados pelas habilidades do seu Workflow.",
+    "bullets": [
+      "As habilidades gravam arquivos no diretório de saída; o Heym os captura automaticamente.",
+      "Compartilhe arquivos por meio de links com Token ou URLs com autenticação básica protegidas por senha.",
+      "Baixe arquivos com um clique."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Armazenamento",
+        "title": "Arquivos capturados automaticamente",
+        "description": "As habilidades gravam em _OUTPUT_DIR; os arquivos aparecem aqui logo após a execução.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Compartilhamento",
+        "title": "Controle de acesso flexível",
+        "description": "Links públicos, proteção por senha, datas de expiração e limites de download.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formatos",
+        "title": "PDF, DOCX, CSV e mais",
+        "description": "Gere qualquer tipo de arquivo com reportlab, python-docx ou Python padrão.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Abrir documentação do Drive",
+        "description": "Leia a referência completa da aba Drive.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Aba Drive"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Guia de geração de arquivos",
+        "description": "Saiba como as habilidades geram arquivos.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Geração de arquivos"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Como os arquivos chegam aqui",
+        "content": "Quando uma habilidade coloca arquivos no diretório _OUTPUT_DIR, o Heym os armazena de forma persistente e gera Tokens de download."
+      },
+      {
+        "id": "drive-share",
+        "title": "Opções de compartilhamento",
+        "content": "Crie links públicos com Token para qualquer pessoa ou URLs protegidas por senha, incluindo datas de expiração e limites de download."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Aba Drive"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Credenciais",
+    "summary": "Gerencie chaves, Tokens e detalhes de conexão para que os Workflows se comuniquem com sistemas externos com segurança.",
+    "bullets": [
+      "Armazene credenciais de forma centralizada em vez de espalhá-las por nós individuais.",
+      "As credenciais controlam LLMs, integrações, armazenamentos vetoriais e muito mais.",
+      "Conceda acesso de forma direcionada quando as equipes precisarem da mesma conexão sem cópias de chaves."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Segurança",
+        "title": "Credenciais seguras",
+        "description": "Configure a autenticação uma vez e reutilize-a com segurança nos Workflows.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrações",
+        "title": "Ampla compatibilidade",
+        "description": "Suporta provedores como OpenAI, DeepSeek, Slack, Redis, Qdrant e Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Colaboração",
+        "title": "Compartilhamento direcionado",
+        "description": "Use compartilhamentos de equipe ou de usuário em vez de criar duplicatas.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Ler documentação de credenciais",
+        "description": "Abra o guia do painel de credenciais.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Aba Credenciais"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Ver integrações",
+        "description": "Explore detalhes sobre a configuração de integrações de terceiros.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Integrações de terceiros"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Onde são usadas",
+        "content": "As credenciais são referenciadas na configuração do nó e resolvidas com segurança durante a execução."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Modelo amigável para equipes",
+        "content": "Prefira compartilhamentos quando vários desenvolvedores precisarem do mesmo acesso ao provedor; isso garante comportamento consistente e auditorias simples."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Aba Credenciais"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Armazenamentos vetoriais",
+    "summary": "Prepare backends de recuperação para Workflows que precisam de busca semântica, memória ou integração de contexto RAG.",
+    "bullets": [
+      "Os armazenamentos vetoriais formam a base de dados para Workflows com recuperação.",
+      "Use em conjunto com nós RAG e fluxos de IA para fundamentação precisa de documentos.",
+      "Esta aba serve como infraestrutura para Prompts fundamentados."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infraestrutura RAG",
+        "title": "Memória pesquisável",
+        "description": "Mantenha documentos prontos para recuperação semântica quando os Workflows precisarem de contexto.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Qualidade",
+        "title": "Fundamentação sólida",
+        "description": "A recuperação reduz riscos de alucinação ao fornecer evidências.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Operação",
+        "title": "Gerencie centralmente uma vez",
+        "description": "Crie armazenamentos vetoriais e reutilize-os em vários Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Abrir documentação de armazenamentos vetoriais",
+        "description": "Leia o guia do painel de armazenamentos vetoriais.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Aba Armazenamentos vetoriais"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Ver documentação do nó RAG",
+        "description": "Abra a referência do nó Qdrant RAG.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Posicionamento",
+        "content": "Esta aba prepara a camada de armazenamento. A lógica de recuperação em si fica dentro dos Workflows (por exemplo, via padrões RAG ou de agente)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Quando usar",
+        "content": "Escolha armazenamentos vetoriais quando seu Workflow precisar pesquisar bases de conhecimento não estruturadas em vez de depender apenas da memória do LLM."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Aba Armazenamentos vetoriais"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Gerencie conexões do Model Context Protocol para que Workflows de agente acessem ferramentas e funções externas com segurança.",
+    "bullets": [
+      "O MCP transforma ecossistemas externos de ferramentas em contexto de agente utilizável.",
+      "Use esta aba quando os agentes precisarem de ferramentas mais ricas do que Prompts estáticos.",
+      "A qualidade da conexão determina diretamente as capacidades dos seus agentes."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ferramentas de agente",
+        "title": "Camada de funções externas",
+        "description": "Disponibilize servidores de ferramentas que os agentes podem chamar durante o raciocínio.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Controle em tempo de execução",
+        "title": "Configuração de conexão",
+        "description": "Configure Endpoints, rótulos e transporte para Workflows confiáveis.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Profundidade da plataforma",
+        "title": "Além dos Prompts",
+        "description": "O MCP permite que os Workflows do Heym ajam, não apenas respondam.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Abrir documentação do MCP",
+        "description": "Leia o guia da aba MCP.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "Aba MCP"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Arquitetura de agente",
+        "description": "Saiba como o MCP está integrado à execução de agentes.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Arquitetura de agente"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Importância",
+        "content": "Particularmente importante quando seu agente precisa de ferramentas, acesso ao ambiente ou integrações de sistema fora de nós individuais."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Abordagem operacional",
+        "content": "Trate as conexões MCP como infraestrutura: rótulos estáveis e responsabilidades claras simplificam o debugging."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "Aba MCP"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Execuções",
+    "summary": "Inspecione Traces detalhados de execuções de IA e Workflow para entender o que aconteceu — não apenas se funcionou.",
+    "bullets": [
+      "Use Traces para debugging, análises de desempenho e verificações de qualidade de Prompt.",
+      "Os Traces explicam o comportamento do modelo, latências e caminhos de execução.",
+      "O primeiro ponto de parada em caso de resultados inesperados ou execuções instáveis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Debugging",
+        "title": "Ver etapas ocultas",
+        "description": "Os dados de Trace revelam o que o Workflow e o modelo realmente executaram.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Avaliação",
+        "title": "Apoiar iterações",
+        "description": "Use Traces ao otimizar Prompts, ferramentas e modelos.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Confiabilidade",
+        "title": "Rastrear resultados",
+        "description": "Bons Traces reduzem suposições na análise de erros.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Abrir documentação de execuções",
+        "description": "Leia o guia do painel de execuções.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Aba Execuções"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Quando os Traces se tornam indispensáveis",
+        "content": "Assim que os Workflows se tornam multietapas, intensivos em modelos ou baseados em ferramentas, a simples exibição de status deixa de ser suficiente."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. histórico",
+        "content": "O histórico mostra QUE uma execução ocorreu. Os Traces explicam POR QUE ela se comportou dessa forma."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Aba Execuções"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Alertas",
+    "summary": "Defina limites ao longo de janelas de tempo e seja notificado automaticamente assim que forem ultrapassados.",
+    "bullets": [
+      "Quatro tipos: contagem de erros, duração de execução, limites de Token/custo e contadores de execução.",
+      "Cada alerta é avaliado ao longo de uma janela de tempo selecionada, nunca com base em eventos isolados.",
+      "Descreva o requisito em linguagem natural e o assistente configura o alerta."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Janela de tempo",
+        "title": "Acúmulos em vez de outliers",
+        "description": "Uma execução com falha é ruído. Doze em dez minutos são um incidente.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Antes de salvar",
+        "title": "Testar a condição retroativamente",
+        "description": "A etapa de verificação testa contra o histórico real para calibrar os limites antecipadamente.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reação",
+        "title": "Executar Workflow ao disparar o alarme",
+        "description": "O Payload do alerta se torna o input do Workflow para notificações automáticas via Slack ou e-mail.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Abrir documentação de Alertas",
+        "description": "Consulte o funcionamento dos tipos de alarme, janelas e do assistente.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Aba de Alertas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Propósito",
+        "content": "Análises e traces respondem a perguntas que você faz ativamente. Os alertas fazem o Heym falar proativamente quando limites críticos são ultrapassados."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Por que falsos alarmes são evitados",
+        "content": "Um alerta dispara uma vez e aguarda até que a métrica se recupere — isso evita enxurradas de notificações."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Aba de Alertas"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Análises",
+    "summary": "Acompanhe padrões de uso e o comportamento do sistema para entender atividade, crescimento e mudanças ao longo do tempo.",
+    "bullets": [
+      "Identifique aceitação, throughput e picos incomuns com análises.",
+      "Uma visão em nível de plataforma em vez de uma ferramenta de debugging individual.",
+      "Combine análises com traces e histórico para obter sinal e explicação."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Sinais",
+        "title": "Transparência de uso",
+        "description": "Reconheça tendências em vez de observar execuções isoladas.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Capacidade",
+        "title": "Consciência operacional",
+        "description": "Identifique e investigue picos de carga e quedas com antecedência.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Apoio à decisão",
+        "title": "Otimização direcionada",
+        "description": "As análises ajudam a priorizar os Workflows mais importantes.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Abrir documentação de Análises",
+        "description": "Leia o guia do dashboard de Análises.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Aba de Análises"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Propósito",
+        "content": "Use as análises para padrões, throughput e comportamento agregado em toda a operação da plataforma."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Procedimento",
+        "content": "Identifique sinais aqui e depois vá para traces, histórico ou o editor para analisar as causas."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Aba de Análises"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Crie uma grade de widgets de gráfico, cada um alimentado por seus próprios Workflows — todas as métricas em um só lugar.",
+    "bullets": [
+      "Cada widget é operado por um Workflow que fornece dados a um nó de saída de gráfico.",
+      "Use widgets de barras, linhas, pizza, tabela e números conforme a métrica.",
+      "Gere ou ajuste widgets com IA e faça cache dos resultados para tempos de carregamento rápidos.",
+      "Crie vários dashboards e compartilhe com pessoas ou equipes em modo leitura ou escrita."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Composição",
+        "title": "Gráficos alimentados por Workflow",
+        "description": "Todos os dados gerados por um Workflow são visualizados como gráfico.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Desempenho",
+        "title": "Resultados em cache",
+        "description": "O cache de widgets evita execuções repetidas de Workflow a cada carregamento de página.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Suporte de IA",
+        "title": "Gerar e ajustar",
+        "description": "Descreva a métrica e deixe o widget ser criado automaticamente pela IA.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Abrir documentação de Dashboard",
+        "description": "Saiba como criar widgets de Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Aba de Dashboard"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Propósito",
+        "content": "Use o Dashboard para visões gerais persistentes de métricas importantes dos seus próprios Workflows."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Criação",
+        "content": "Adicione um widget, configure o Workflow para que o último nó antes do Chart Output forneça linhas e organize na grade."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Aba de Dashboard"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Equipes",
+    "summary": "Gerencie acessos compartilhados para que Workflows, Credentials, variáveis e armazenamento vetorial sejam usados colaborativamente sem duplicatas.",
+    "bullets": [
+      "Equipes são a forma mais limpa de compartilhar recursos da plataforma de maneira escalável.",
+      "Use Equipes quando as permissões devem seguir um grupo em vez de indivíduos.",
+      "Garante colaboração estruturada em um workspace em crescimento."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Colaboração",
+        "title": "Compartilhamentos baseados em grupo",
+        "description": "Conceda acesso uma vez para uma equipe em vez de autorizar usuários individuais manualmente.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Clareza",
+        "title": "Responsabilidades bem definidas",
+        "description": "O gerenciamento de recursos segue as estruturas reais das equipes.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Escala",
+        "title": "Menos esforço administrativo",
+        "description": "Novos membros herdam direitos de acesso automaticamente por meio da equipe.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Abrir documentação de Equipes",
+        "description": "Leia o guia do dashboard de Equipes.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Aba de Equipes"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Compartilhamento de recursos",
+        "description": "Consulte detalhes sobre o compartilhamento de recursos.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Compartilhamento de credenciais"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Vantagens das Equipes",
+        "content": "Equipes conectam identidade e acesso a recursos para uma colaboração fluida."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Dica prática",
+        "content": "Prefira compartilhamentos de equipe quando um Workflow ou Credential pertence a um grupo de trabalho permanente."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Aba de Equipes"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Logs",
+    "summary": "Leia logs em nível de stack quando precisar de insights de infraestrutura além das saídas de Workflow.",
+    "bullets": [
+      "Use logs para debugging de serviços, estados de contêiner e problemas de ambiente.",
+      "Ajuda quando as causas estão abaixo do nível de Workflow.",
+      "Use junto com traces para evidências em nível de aplicação e sistema."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infraestrutura",
+        "title": "Transparência de contêiner",
+        "description": "Veja o que os serviços de backend executam abaixo da interface do Heym.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Solução de problemas",
+        "title": "Encontrar causas",
+        "description": "Logs ajudam em problemas de inicialização, travamentos ou falhas de integração.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Complementar",
+        "title": "Diferença em relação aos resultados de Workflow",
+        "description": "Saídas de Workflow mostram resultados; logs mostram o comportamento do sistema.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Abrir documentação de Logs",
+        "description": "Leia o guia do dashboard de Logs.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Aba de Logs"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Quando usar",
+        "content": "Mude para cá quando os problemas parecerem relacionados a deployment, serviço ou ambiente."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Melhor combinação",
+        "content": "Use logs junto com traces e histórico para ir rapidamente dos sintomas à causa."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Aba de Logs"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Avaliação",
+    "summary": "Crie benchmarks reproduzíveis para Workflows de agentes, a fim de comparar alterações de Prompt, modelo e Workflow de forma confiável.",
+    "bullets": [
+      "Suítes e casos de teste transformam a qualidade subjetiva do Workflow em métricas mensuráveis.",
+      "O local ideal para verificações de regressão antes de implantar atualizações de Prompt ou modelo.",
+      "Compare vários modelos com o mesmo conjunto de dados e o mesmo método de avaliação."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ciclo de qualidade",
+        "title": "Benchmark de agentes",
+        "description": "Execute a mesma suíte repetidamente em vez de depender de verificações aleatórias.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Comparação",
+        "title": "Testes de modelo e Prompt",
+        "description": "Veja como configurações diferentes se comportam no mesmo conjunto de testes.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Segurança",
+        "title": "Iteração confiável",
+        "description": "Comprove melhorias antes da implantação.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Abrir documentação de Avaliação",
+        "description": "Leia o guia da página de Avaliação.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Aba de Avaliação"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Referência do nó de Agente",
+        "description": "Veja a área do Workflow à qual a maioria das suítes de avaliação se destina.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Nó de Agente"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Concepção de suítes",
+        "content": "Uma boa suíte reflete casos de uso reais, condições de contorno e etapas de aprovação que devem permanecer estáveis."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Parâmetros de comparação",
+        "content": "Comparações típicas incluem variantes de Prompt, seleção de modelo, configurações de Temperature e revisões de Workflow no mesmo conjunto de dados."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Aba de Avaliação"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Documentação",
+    "summary": "Pesquise referências precisas da plataforma diretamente no aplicativo e aprofunde-se quando necessário.",
+    "bullets": [
+      "A documentação do Heym foi projetada para compreensão rápida e consulta direcionada.",
+      "Barra lateral, pesquisa e referências cruzadas permitem alternar rapidamente entre conceitos.",
+      "O Showcase aponta diretamente para o artigo aberto no momento."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Referência no aplicativo",
+        "title": "Sempre à mão",
+        "description": "A documentação permanece no fluxo do produto, sem precisar abrir abas externas.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Visão geral",
+        "title": "O essencial primeiro",
+        "description": "Os artigos começam com os pontos principais e se ramificam por meio de links."
+      },
+      {
+        "eyebrow": "Consciente do contexto",
+        "title": "Artigo atual",
+        "description": "Ao ler um documento, a ação 'Saiba mais' segue diretamente esse artigo."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Ver introdução",
+        "description": "Abra a introdução da documentação como ponto de entrada padrão.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Introdução"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Navegação rápida",
+        "content": "Use a barra lateral para categorias e a pesquisa de comandos quando o tema já for conhecido."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Suporte por meio do Showcase",
+        "content": "O Showcase mantém os resumos compactos e direciona para a documentação detalhada quando necessário."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Introdução"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Agendamentos",
+    "summary": "Visualize todos os Workflows Cron ativos em um calendário visual e controle os horários de execução.",
+    "bullets": [
+      "Alterne entre as visualizações diária, semanal e mensal para a resolução adequada.",
+      "Passe o mouse sobre um bloco para ver a expressão Cron; clique para ir diretamente ao Canvas.",
+      "Use esta aba para verificar densidades de execução e identificar sobreposições."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparência",
+        "title": "Visualização em calendário",
+        "description": "Workflows Cron ativos aparecem como blocos nos horários planejados.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navegação",
+        "title": "Com um clique para o Canvas",
+        "description": "Clique em um bloco para abrir diretamente o editor de Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Intervalos",
+        "title": "Dia, semana ou mês",
+        "description": "Ajuste a resolução para verificar horas individuais ou planejar o mês inteiro.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Abrir documentação de Agendamentos",
+        "description": "Leia a referência da aba de Agendamentos.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Aba de Agendamentos"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Referência do nó Cron",
+        "description": "Saiba como configurar Triggers Cron no Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Momento de uso",
+        "content": "Verifique automações agendadas, identifique conflitos de horário e garanta que Workflows importantes permaneçam ativos."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Codificação por cores",
+        "content": "Cada Workflow recebe uma cor consistente a partir do seu ID, que permanece idêntica nas visualizações diária, semanal e mensal."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Aba de Agendamentos"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Tabelas de dados",
+    "summary": "Crie tabelas de dados estruturadas diretamente no Heym e use-as programaticamente em Workflows.",
+    "bullets": [
+      "Crie tabelas com colunas tipadas, preencha manualmente ou importe via CSV.",
+      "Use o nó de Workflow DataTable para ler, gravar e consultar linhas programaticamente.",
+      "Compartilhe tabelas com usuários ou equipes com permissões de leitura ou escrita."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Dados integrados",
+        "title": "Armazenamento integrado",
+        "description": "Armazene dados estruturados sem bancos de dados externos ou chaves de API.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Integração com Workflow",
+        "title": "Nó DataTable",
+        "description": "Encontre, insira, atualize e exclua linhas em qualquer Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Colaboração",
+        "title": "Compartilhamentos e permissões",
+        "description": "Conceda acessos granulares de leitura e escrita para usuários e equipes.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Documentação da aba de Tabelas de dados",
+        "description": "Leia a referência da aba de Tabelas de dados.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Tabelas de dados"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "Documentação do nó DataTable",
+        "description": "Leia a referência do nó DataTable.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "O que são Tabelas de dados?",
+        "content": "Tabelas de dados são armazenamento estruturado integrado no Heym: colunas tipadas (String, Number, Boolean, Date, JSON), edição em linha e importação/exportação CSV."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Uso em Workflows",
+        "content": "O nó DataTable oferece suporte a find, getAll, getById, insert, update, remove e upsert – sem Credentials, diretamente pelo proprietário do Workflow."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Tabelas de dados"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Editor de Workflow",
+    "summary": "Crie, teste, depure e otimize Workflows no Canvas – diretamente no contexto de execução.",
+    "bullets": [
+      "No editor, design de nós, fluxo de dados e comportamento de execução se unem.",
+      "Use barras laterais e histórico para alternar rapidamente entre criação e depuração.",
+      "O Showcase permanece intencionalmente compacto aqui para oferecer o máximo de espaço ao Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Design visual de Workflow",
+        "description": "Conecte nós, ramifique a lógica e modele o fluxo de execução diretamente.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteração",
+        "title": "Depuração durante a criação",
+        "description": "Use histórico, painéis de depuração e resultados de execução para ciclos de feedback rápidos."
+      },
+      {
+        "eyebrow": "Escopo funcional",
+        "title": "Recursos avançados à mão",
+        "description": "Portal, compartilhamentos, modelos e validação ficam diretamente no Canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Abrir documentação do Canvas",
+        "description": "Leia a referência dos recursos do Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Recursos do Canvas"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Atalhos de teclado",
+        "description": "Abra a visão geral dos atalhos de teclado no editor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Atalhos de teclado"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Ritmo de trabalho",
+        "content": "Modele no Canvas, verifique suposições sobre saídas e ajuste parâmetros nas barras laterais sem perder o foco."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Showcase compacto",
+        "content": "Como o editor já fornece muitas informações, o Showcase serve como um guia de orientação enxuto."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Recursos do Canvas"
+    }
+  }
+}

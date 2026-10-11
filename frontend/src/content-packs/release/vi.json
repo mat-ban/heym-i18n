@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Kích hoạt lại một nút trong Workflow",
+    "releaseTour": {
+      "label": "Mới trong Heym",
+      "introTitle": "Có gì mới trong bản phát hành này",
+      "introDescription": "Tổng quan nhanh về những điểm mới kể từ lần cập nhật gần nhất của bạn. Thời gian ước tính: khoảng một phút.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Nút Enable: kích hoạt lại một nút trong Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Nút Enable** mới là phiên bản tương ứng của **nút Disable**. Hãy chọn một nút theo nhãn của nó để kích hoạt lại, sau đó lưu thay đổi. Một Trigger **Cron** đã bị vô hiệu hóa sẽ được thực thi trở lại vào thời điểm đã lên lịch tiếp theo. Nếu nút nằm ở vị trí xa hơn trong luồng và chưa được thực thi, nó sẽ được thực thi trực tiếp trong lần chạy hiện tại."
+          },
+          {
+            "type": "prose",
+            "markdown": "Một Trigger đã bị vô hiệu hóa sẽ không bao giờ tự động kích hoạt một lần chạy. Vì vậy, hãy đặt nút Enable ở phía sau một điểm vào khác, chẳng hạn như Trigger **Input**. **Nút Wait** hiện đã hỗ trợ thời gian tạm dừng lâu hơn: tối đa 15 phút thay vì chỉ một phút."
+          }
+        ],
+        "tour": {
+          "description": "Kích hoạt lại một nút đã bị vô hiệu hóa trực tiếp từ Workflow, ví dụ như một Trigger Cron đang tạm dừng.",
+          "useCases": [
+            "Khởi động một Trigger Cron đã bị vô hiệu hóa theo yêu cầu thông qua Webhook",
+            "Kết hợp với nút Disable để bật và tắt các nút tùy theo trạng thái của chúng",
+            "Tạm dừng một Workflow tối đa 15 phút với nút Wait"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Xem các phê duyệt thủ công đang chờ trực tiếp trong Dashboard",
+    "releaseTour": {
+      "label": "Mới trong Heym",
+      "introTitle": "Có gì mới trong phiên bản này",
+      "introDescription": "Tổng quan nhanh về những điểm mới kể từ lần cập nhật gần nhất của bạn. Thời lượng ước tính: khoảng một phút.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Xử lý các đánh giá đang chờ qua widget Dashboard",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Thêm một widget **HITL** và phần tiêu đề sẽ hiển thị số lượng đánh giá đang chờ dưới dạng `1/n đang chờ`. Điều hướng giữa các mục bằng các phím mũi tên. Tên Workflow sẽ mở trực tiếp lượt thực thi trên Canvas. **Phê duyệt**, **Yêu cầu chỉnh sửa** và **Từ chối** sẽ đóng bản nháp. Biểu tượng lịch sử sẽ mở lượt thực thi trong hộp thoại lịch sử trên cùng trang. Hàng đợi là riêng tư: một Dashboard được chia sẻ sẽ không hiển thị bản nháp của người dùng khác."
+          }
+        ],
+        "tour": {
+          "description": "Một băng chuyền Dashboard cho các phê duyệt đang chờ của bạn, kèm bộ đếm ở phần tiêu đề.",
+          "useCases": [
+            "Xem có bao nhiêu đánh giá đang chờ trước khi mở mục đầu tiên",
+            "Phê duyệt, yêu cầu chỉnh sửa hoặc từ chối mà không cần rời khỏi Dashboard",
+            "Mở lượt thực thi đó qua biểu tượng bên cạnh tiêu đề widget trong hộp thoại lịch sử"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "Trợ lý AI tự kiểm thử Workflow và cấu hình DataTable",
+    "releaseTour": {
+      "label": "Mới trong Heym",
+      "introTitle": "Có gì mới trong phiên bản này",
+      "introDescription": "Tổng quan nhanh về những điểm mới kể từ lần cập nhật gần nhất của bạn. Thời lượng: khoảng một phút.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "Chế độ YOLO: Trợ lý AI tự kiểm thử những gì mình tạo ra",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Bật **chế độ YOLO** trong **trợ lý AI** của Canvas: trợ lý sẽ không dừng lại sau khi áp dụng một Workflow nữa. Nó thực thi Workflow như khi dùng **Run**, đọc kết quả và tự động sửa Workflow tối đa năm lần cho mỗi tin nhắn. Mỗi phản hồi liệt kê các bước theo thời gian thực."
+          },
+          {
+            "type": "prose",
+            "markdown": "Trước lần thực thi đầu tiên, trợ lý sẽ yêu cầu dữ liệu kiểm thử kèm giá trị gợi ý và tái sử dụng chúng. Trợ lý cũng có thể thực thi các Workflow khác khi cần kết quả của chúng. Nếu cần một quyết định hoặc thông tin đăng nhập, trợ lý sẽ hỏi qua thẻ câu hỏi thông thường. Đây là các lần thực thi thật: chế độ YOLO mặc định bị tắt và **Stop** có thể ngắt quá trình bất cứ lúc nào."
+          }
+        ],
+        "tour": {
+          "description": "Trợ lý AI thực thi các Workflow đã tạo, kiểm tra kết quả và tự động sửa lỗi cho đến khi hoạt động được.",
+          "useCases": [
+            "Mô tả một Workflow và nhận ngay phiên bản đã được kiểm thử",
+            "Để trợ lý tự phát hiện và sửa các nút bị lỗi",
+            "Kiểm tra giá trị trả về của các Workflow khác trước khi kết nối chúng"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "Trợ lý AI chọn hoặc tạo DataTable",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Khi một Workflow lưu bản ghi, **trợ lý AI** giờ đây sẽ nhận diện các **DataTable** của bạn. Nếu bạn đặt tên cho bảng, trợ lý sẽ dùng bảng đó. Nếu không, trợ lý sẽ hỏi bảng phù hợp hoặc đề xuất **Tạo bảng mới** với các cột cần thiết."
+          },
+          {
+            "type": "prose",
+            "markdown": "Hoạt động trong trợ lý của Canvas, ở chế độ YOLO, trong **Chat**, trong tài liệu và qua MCP với `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "Trợ lý AI hỏi DataTable phù hợp hoặc tạo bảng mới với các cột cần thiết.",
+          "useCases": [
+            "Tự động lưu lead vào bảng và tạo Workflow cùng bảng song song",
+            "Chọn các bảng hiện có dựa trên cột và kiểu dữ liệu",
+            "Tạo và kết nối bảng trực tiếp từ Chat hoặc qua MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Tạo nhiều dashboard và chia sẻ chúng với nhóm của bạn",
+    "releaseTour": {
+      "label": "Mới trong Heym",
+      "introTitle": "Có gì mới trong phiên bản này",
+      "introDescription": "Tổng quan nhanh về những điểm mới kể từ lần cập nhật trước của bạn. Thời lượng ước tính: khoảng một phút.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Tạo nhiều dashboard và chia sẻ chúng với nhóm của bạn",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Tab **Dashboard** hiện hỗ trợ không giới hạn số lượng dashboard. Bạn có thể dễ dàng chuyển đổi qua lại bằng trình chọn ở đầu tab hoặc tạo dashboard mới bằng nút **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Chia sẻ dashboard với từng cá nhân hoặc nhóm thông qua **Cài đặt**. Chế độ **Chỉ đọc** cho phép xem và làm mới dữ liệu; chế độ **Chỉnh sửa** cho phép thay đổi các widget. Các widget luôn sử dụng thông tin đăng nhập của chủ sở hữu."
+          }
+        ],
+        "tour": {
+          "description": "Quản lý nhiều dashboard, chuyển đổi giữa chúng và chia sẻ ở chế độ chỉ đọc hoặc chỉnh sửa.",
+          "useCases": [
+            "Tổ chức các dashboard riêng biệt theo nhóm, sản phẩm hoặc khách hàng",
+            "Cung cấp chế độ xem chỉ đọc cho các bên liên quan",
+            "Thử nghiệm trước các loại biểu đồ với dữ liệu mẫu"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

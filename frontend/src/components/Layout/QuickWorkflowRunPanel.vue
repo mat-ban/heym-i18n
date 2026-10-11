@@ -23,6 +23,7 @@ import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
 import { useToast } from "@/composables/useToast";
 import { useQuickDrawerStore } from "@/stores/quickDrawer";
+import { useI18n } from "vue-i18n";
 
 interface Props {
   showClose?: boolean;
@@ -49,6 +50,7 @@ const emit = defineEmits<{
 
 const quickDrawerStore = useQuickDrawerStore();
 const { showToast } = useToast();
+const { t } = useI18n();
 const selectedImageSrc = ref<string | null>(null);
 
 const { currentInputValues, runState, selectedWorkflow } = storeToRefs(quickDrawerStore);
@@ -173,9 +175,9 @@ async function copyFinalOutput(): Promise<void> {
 
   try {
     await navigator.clipboard.writeText(formatJson(runState.value.outputs));
-    showToast("Final output copied", "success");
+    showToast(t("quickDrawer.outputCopied"), "success");
   } catch {
-    showToast("Failed to copy final output", "error");
+    showToast(t("quickDrawer.outputCopyFailed"), "error");
   }
 }
 </script>
@@ -221,7 +223,7 @@ async function copyFinalOutput(): Promise<void> {
               v-if="showEyebrow"
               class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground"
             >
-              Selected Workflow
+              {{ $t("quickDrawer.selectedWorkflow") }}
             </div>
             <div
               class="truncate font-semibold text-foreground"
@@ -235,7 +237,7 @@ async function copyFinalOutput(): Promise<void> {
               :class="compact ? 'mt-0.5' : 'mt-1'"
               @click="emit('goToWorkflow', $event)"
             >
-              <span>Go to workflow</span>
+              <span>{{ $t("quickDrawer.goToWorkflow") }}</span>
               <MoveRight class="h-3.5 w-3.5" />
             </button>
           </div>
@@ -245,7 +247,7 @@ async function copyFinalOutput(): Promise<void> {
             v-if="showPin"
             type="button"
             class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border/60 text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary"
-            :aria-label="selectedWorkflow.pinned ? `Unpin ${selectedWorkflow.name}` : `Pin ${selectedWorkflow.name}`"
+            :aria-label="selectedWorkflow.pinned ? t('quickDrawer.unpin', { name: selectedWorkflow.name }) : t('quickDrawer.pin', { name: selectedWorkflow.name })"
             @click="quickDrawerStore.togglePin(selectedWorkflow.id)"
           >
             <Pin
@@ -258,7 +260,7 @@ async function copyFinalOutput(): Promise<void> {
             variant="ghost"
             size="icon"
             class="h-10 w-10 shrink-0"
-            aria-label="Close quick workflows drawer"
+            :aria-label="$t('quickDrawer.closeDrawer')"
             @click="emit('close')"
           >
             <X class="h-4 w-4" />
@@ -278,7 +280,7 @@ async function copyFinalOutput(): Promise<void> {
       <div class="space-y-5">
         <section class="rounded-3xl border border-border/60 bg-background/80 p-4">
           <div class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            Inputs
+            {{ $t("quickDrawer.inputs") }}
           </div>
 
           <div class="mt-4 space-y-3">
@@ -306,7 +308,7 @@ async function copyFinalOutput(): Promise<void> {
               v-else
               class="rounded-2xl border border-dashed border-border/60 px-4 py-3 text-sm text-muted-foreground"
             >
-              This workflow does not require any input fields.
+              {{ $t("quickDrawer.noInputsRequired") }}
             </div>
           </div>
 
@@ -319,7 +321,7 @@ async function copyFinalOutput(): Promise<void> {
               @click="quickDrawerStore.runSelectedWorkflow()"
             >
               <Play class="h-4 w-4" />
-              <span>Run Workflow</span>
+              <span>{{ $t("propertiesPanel.runWorkflow") }}</span>
             </Button>
             <Button
               v-else
@@ -329,7 +331,7 @@ async function copyFinalOutput(): Promise<void> {
               @click="quickDrawerStore.stopSelectedWorkflowExecution()"
             >
               <Square class="h-4 w-4" />
-              <span>Stop Workflow</span>
+              <span>{{ $t("quickDrawer.stopWorkflow") }}</span>
             </Button>
           </div>
         </section>
@@ -338,7 +340,7 @@ async function copyFinalOutput(): Promise<void> {
           <div class="flex items-center justify-between gap-3">
             <div>
               <div class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                Progress & Result
+                {{ $t("quickDrawer.progressAndResult") }}
               </div>
               <div
                 class="mt-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium"
@@ -376,7 +378,7 @@ async function copyFinalOutput(): Promise<void> {
                 {{ formatExecutionTime(runState.executionTimeMs) }}
               </div>
               <div v-if="runState.executionHistoryId">
-                History: {{ runState.executionHistoryId }}
+                {{ $t("quickDrawer.historyId", { id: runState.executionHistoryId }) }}
               </div>
             </div>
           </div>
@@ -385,7 +387,7 @@ async function copyFinalOutput(): Promise<void> {
             v-if="runState.status === 'idle'"
             class="mt-4 rounded-2xl border border-dashed border-border/60 px-4 py-6 text-sm text-muted-foreground"
           >
-            Choose a workflow and run it to see progress here.
+            {{ $t("quickDrawer.chooseWorkflowPrompt") }}
           </div>
 
           <div
@@ -404,7 +406,7 @@ async function copyFinalOutput(): Promise<void> {
               class="space-y-2"
             >
               <div class="text-sm font-medium text-foreground">
-                Step Progress
+                {{ $t("quickDrawer.stepProgress") }}
               </div>
               <div class="space-y-2">
                 <div
@@ -455,7 +457,7 @@ async function copyFinalOutput(): Promise<void> {
             >
               <div class="flex items-center gap-2 text-sm font-medium text-foreground">
                 <ImageIcon class="h-4 w-4 text-primary" />
-                Images
+                {{ $t("quickDrawer.images") }}
               </div>
               <div class="grid grid-cols-2 gap-3">
                 <button
@@ -480,7 +482,7 @@ async function copyFinalOutput(): Promise<void> {
             >
               <div class="flex items-center justify-between gap-3">
                 <div class="text-sm font-medium text-foreground">
-                  Final Output
+                  {{ $t("quickDrawer.finalOutput") }}
                 </div>
                 <Button
                   variant="outline"
@@ -488,7 +490,7 @@ async function copyFinalOutput(): Promise<void> {
                   @click="copyFinalOutput"
                 >
                   <Copy class="h-4 w-4" />
-                  Copy
+                  {{ $t("common.copy") }}
                 </Button>
               </div>
               <pre class="max-h-64 overflow-auto rounded-2xl border border-border/60 bg-slate-950 px-4 py-3 text-xs text-slate-100">{{ formatJson(runState.outputs) }}</pre>

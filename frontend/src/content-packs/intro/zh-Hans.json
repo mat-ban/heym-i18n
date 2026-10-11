@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "在 Workflow 中更快构建",
+    "description": "选择一个 Workflow，即可在列表旁查看 Trigger、最近执行和步骤。按状态筛选、直接运行，并通过文件夹保持条理清晰。"
+  },
+  "dashboard:board": {
+    "title": "通过基于 Agent 的看板管理任务",
+    "description": "拖动卡片跨列，以卡片的完整上下文触发 Workflow 链。结果会直接回流到卡片。"
+  },
+  "dashboard:templates": {
+    "title": "从经过验证的模板开始",
+    "description": "使用预制的 Workflow 模式，节省设置时间并确保一致性。"
+  },
+  "dashboard:globalvariables": {
+    "title": "集中管理共享变量",
+    "description": "将可复用的值保存一次，即可在所有 Workflow 中引用。"
+  },
+  "dashboard:chat": {
+    "title": "利用 Chat 快速迭代",
+    "description": "快速提问、测试想法，并在 Workflow 流程明确后切换到编辑器。"
+  },
+  "dashboard:credentials": {
+    "title": "安全管理密钥",
+    "description": "集中管理 Provider 密钥和 Token，使 Workflow 能够使用安全连接而无需暴露密钥。"
+  },
+  "dashboard:vectorstores": {
+    "title": "支持基于检索的 Workflow",
+    "description": "为有依据的 AI 回答、语义搜索和可扩展的 RAG 管道准备向量存储。"
+  },
+  "dashboard:mcp": {
+    "title": "连接外部工具生态",
+    "description": "配置 MCP 连接，使 Agent 能够执行超越简单 Prompt 的结构化工具和操作。"
+  },
+  "dashboard:traces": {
+    "title": "理解执行行为",
+    "description": "分析 Trace 详情，以调试结果、比较执行并提升可靠性。"
+  },
+  "dashboard:alerts": {
+    "title": "在问题升级前收到通知",
+    "description": "为错误、时长、成本和执行次数设置阈值，并在超出时收到警告。"
+  },
+  "dashboard:analytics": {
+    "title": "跟踪平台性能",
+    "description": "监控使用和执行趋势，以便基于真实信号进行有针对性的优化。"
+  },
+  "dashboard:dashboard": {
+    "title": "创建自定义 Dashboard",
+    "description": "组合由 Workflow 驱动的图表 Widget，一目了然地查看关键指标。"
+  },
+  "dashboard:teams": {
+    "title": "有序扩展协作",
+    "description": "按团队划分 Workflow 和资源，使访问权限和职责保持透明。"
+  },
+  "dashboard:logs": {
+    "title": "诊断系统级问题",
+    "description": "在基础设施或环境问题出现时使用日志，获取更深入的运行时洞察。"
+  },
+  "dashboard:drive": {
+    "title": "管理生成的文件",
+    "description": "通过安全链接和受控访问选项查看、下载和分享 Workflow 输出。"
+  },
+  "dashboard:datatable": {
+    "title": "原生处理结构化数据",
+    "description": "创建类型化表格，并直接从 Workflow 驱动，实现可复现的读写操作。"
+  },
+  "dashboard:schedules": {
+    "title": "总览自动化计划",
+    "description": "在日历视图（日、周、月）中查看所有活跃的 Cron Workflow。点击某个区块可直接跳转到 Canvas。"
+  },
+  "evals": {
+    "title": "可靠地评估质量",
+    "description": "运行可重复的测试套件，以便在生产发布前对 Prompt 和模型变更进行有依据的比较。"
+  },
+  "docs": {
+    "title": "在应用内快速定位",
+    "description": "浏览简明参考并针对性深入，无需离开当前 Workflow。"
+  },
+  "editor": {
+    "title": "在 Canvas 上设计与调试",
+    "description": "可视化连接节点、立即运行，并在一个工作区内通过直接反馈优化行为。"
+  }
+}

@@ -852,7 +852,7 @@ onUnmounted(() => {
         <div class="flex flex-col items-center gap-2 text-primary/70">
           <Paperclip class="w-10 h-10" />
           <p class="text-sm font-medium">
-            Drop file to attach
+            {{ $t('chat.dropFileToAttach') }}
           </p>
         </div>
       </div>
@@ -862,7 +862,7 @@ onUnmounted(() => {
         <button
           v-if="!chatStore.isSidebarOpen"
           class="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-          title="Open chat list"
+          :title="$t('chat.openChatList')"
           @click="chatStore.toggleSidebar"
         >
           <ChevronRight class="w-4 h-4" />
@@ -904,9 +904,9 @@ onUnmounted(() => {
               id="chat-credential-select"
               :model-value="selectedCredentialId"
               :options="credentialOptions"
-              placeholder="Select..."
-              search-placeholder="Search credentials..."
-              empty-text="No credentials found."
+              :placeholder="$t('common.select')"
+              :search-placeholder="$t('credentials.searchPlaceholder')"
+              :empty-text="$t('credentials.noCredentialsFound')"
               select-class="min-h-[44px] sm:min-h-0 sm:h-9 md:h-9 rounded-lg border-input bg-background shadow-none"
               content-class="z-[60]"
               @update:model-value="onCredentialSelect"
@@ -922,8 +922,8 @@ onUnmounted(() => {
               :model-value="selectedModel"
               :options="modelOptions"
               :placeholder="modelSelectPlaceholder"
-              search-placeholder="Search models..."
-              empty-text="No models found."
+              :search-placeholder="$t('chat.searchModels')"
+              :empty-text="$t('chat.noModelsFound')"
               :disabled="!selectedCredentialId || isLoadingModels || modelsLoadFailed"
               select-class="min-h-[44px] sm:min-h-0 sm:h-9 md:h-9 rounded-lg border-input bg-background shadow-none"
               content-class="z-[60]"
@@ -954,7 +954,7 @@ onUnmounted(() => {
         >
           <Bot class="w-10 h-10 sm:w-12 sm:h-12 text-primary opacity-50" />
           <p class="text-xs sm:text-sm text-muted-foreground text-center max-w-[280px] sm:max-w-none">
-            Ask to run a workflow, list workflows, or ask about your data.
+            {{ $t('chat.emptyStatePrompt') }}
           </p>
           <div class="w-full flex flex-col gap-1.5 mt-2">
             <div
@@ -978,7 +978,7 @@ onUnmounted(() => {
                 <button
                   type="button"
                   class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-muted/80 text-muted-foreground hover:text-foreground"
-                  title="Edit prompt"
+                  :title="$t('chat.editPrompt')"
                   @click.stop="qpStartEdit(index)"
                 >
                   <Pencil class="w-3.5 h-3.5" />
@@ -1353,7 +1353,7 @@ onUnmounted(() => {
                   <button
                     type="button"
                     class="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
-                    title="Cancel edit"
+                    :title="$t('chat.cancelEdit')"
                     :disabled="queueBusyIds.has(queued.id)"
                     @click="cancelQueuedEdit"
                   >
@@ -1362,7 +1362,7 @@ onUnmounted(() => {
                   <button
                     type="button"
                     class="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
-                    title="Save queued message"
+                    :title="$t('chat.saveQueuedMessage')"
                     :disabled="!queueEditingValue.trim() || queueBusyIds.has(queued.id)"
                     @click="saveQueuedEdit(queued)"
                   >
@@ -1394,7 +1394,7 @@ onUnmounted(() => {
                 <button
                   type="button"
                   class="absolute right-8 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-40"
-                  title="Edit queued message"
+                  :title="$t('chat.editQueuedMessage')"
                   :disabled="queueBusyIds.has(queued.id)"
                   @click="startQueuedEdit(queued)"
                 >
@@ -1403,7 +1403,7 @@ onUnmounted(() => {
                 <button
                   type="button"
                   class="absolute right-1.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-40"
-                  title="Delete queued message"
+                  :title="$t('chat.deleteQueuedMessage')"
                   :disabled="queueBusyIds.has(queued.id)"
                   @click="deleteQueuedMessage(queued)"
                 >
@@ -1450,8 +1450,8 @@ onUnmounted(() => {
           type="button"
           class="shrink-0 h-7 w-7 sm:h-9 sm:w-9 min-h-7 min-w-7 sm:min-h-[36px] sm:min-w-[36px] rounded-lg sm:rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 disabled:opacity-50 disabled:pointer-events-none touch-manipulation transition-colors"
           :disabled="attachmentLoading"
-          title="Attach file"
-          aria-label="Attach file"
+          :title="$t('chat.attachFile')"
+          :aria-label="$t('chat.attachFile')"
           @click="openFilePicker"
         >
           <Loader2

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import CalendarEventBlock from "./CalendarEventBlock.vue";
 import CalendarOverflowEvents from "./CalendarOverflowEvents.vue";
@@ -11,6 +12,16 @@ const props = defineProps<{
   events: ScheduleEvent[];
   showHourLabels?: boolean;
 }>();
+
+const { t } = useI18n();
+
+const DAY_MAP = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
+
+const headerText = computed(() => {
+  const dayKey = DAY_MAP[props.date.getDay()];
+  const dayLabel = t(`schedules.days.${dayKey}`);
+  return `${dayLabel} ${props.date.getDate()}`;
+});
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const OVERFLOW_THRESHOLD = 3;
@@ -41,7 +52,7 @@ const isToday = computed(() => {
       :class="isToday ? 'text-violet-400' : 'text-muted-foreground'"
     >
       <slot name="header">
-        {{ date.toLocaleDateString([], { weekday: "short", day: "numeric" }) }}
+        {{ headerText }}
       </slot>
     </div>
     <!-- Hour rows -->

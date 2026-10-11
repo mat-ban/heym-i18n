@@ -86,7 +86,7 @@ async function handleLogout(): Promise<void> {
             >
               <span>{{ appVersion }}</span>
               <span class="inline-flex items-center gap-1 rounded-full border border-violet-500/30 bg-violet-500/15 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-violet-700 dark:text-violet-300">
-                Update
+                {{ $t('header.update') }}
                 <ExternalLink class="h-2.5 w-2.5" />
               </span>
             </a>
@@ -111,13 +111,13 @@ async function handleLogout(): Promise<void> {
           class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-foreground hover:bg-muted/50 transition-colors min-h-[44px] md:min-h-0"
         >
           <BookOpen class="w-4 h-4 shrink-0" />
-          <span class="hidden sm:inline">Documentation</span>
+          <span class="hidden sm:inline">{{ $t('header.documentation') }}</span>
         </router-link>
         <button
           v-if="authStore.user"
           type="button"
           class="user-badge flex items-center justify-center md:justify-start gap-2.5 text-sm text-foreground h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl cursor-pointer hover:bg-muted/50 transition-colors md:mr-2 md:h-auto md:w-auto md:min-h-0 md:min-w-0 md:px-3 md:py-2 md:hover:bg-transparent md:hover:opacity-80 md:transition-opacity text-left"
-          title="Settings"
+          :title="$t('header.settings')"
           @click="settingsInitialTab = 'profile'; showSettingsDialog = true; pushOverlayState()"
         >
           <!-- --primary is the same 62% lightness in both themes, so on the dark
@@ -139,7 +139,7 @@ async function handleLogout(): Promise<void> {
           variant="ghost"
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] md:h-9 md:w-9 text-foreground"
-          title="Search (Ctrl+K)"
+          :title="$t('header.search')"
           @click="onOpenCommandPalette()"
         >
           <Search class="w-4 h-4" />
@@ -149,6 +149,7 @@ async function handleLogout(): Promise<void> {
           variant="ghost"
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] md:h-9 md:w-9 text-foreground"
+          :title="themeStore.isDark ? $t('header.lightMode') : $t('header.darkMode')"
           @click="themeStore.toggle"
         >
           <Sun
@@ -168,13 +169,14 @@ async function handleLogout(): Promise<void> {
           @click="handleLogout"
         >
           <LogOut class="w-4 h-4" />
-          <span class="hidden md:inline">Logout</span>
+          <span class="hidden md:inline">{{ $t('header.logout') }}</span>
         </Button>
 
         <Button
           variant="ghost"
           size="icon"
           class="sm:hidden h-11 w-11 min-h-[44px] min-w-[44px] text-foreground"
+          :title="$t('header.logout')"
           @click="handleLogout"
         >
           <LogOut class="w-4 h-4" />

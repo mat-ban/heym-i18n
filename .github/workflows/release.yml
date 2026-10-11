@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version
+        id: get_version
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG_NAME#v}"
+          echo "tag=$TAG_NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Determine Upstream Base
+        id: get_upstream
+        run: |
+          UPSTREAM_VER="v0.0.128"
+          echo "upstream_version=$UPSTREAM_VER" >> "$GITHUB_OUTPUT"
+
+      - name: Generate Release Notes
+        run: |
+          TAG="${{ steps.get_version.outputs.tag }}"
+          UPSTREAM="${{ steps.get_upstream.outputs.upstream_version }}"
+          cat << EOF > release_body.md
+          ## Heym i18n ${TAG}
+
+          > 🔗 **Upstream Release Base:** Based on upstream Heym [${UPSTREAM}](https://github.com/heymrun/heym/releases/tag/${UPSTREAM})
+
+          ### 🌍 Key Highlights
+          * **Complete 32-Language Internationalization (i18n):**
+            * 100% UI key parity across 32 platform languages (2,011 leaf keys each).
+            * Complete documentation coverage: **4,128 localized documents** (129 documents for each of the 32 languages) with reactive in-app switching and zero DOM key leaks.
+            * Strict adherence to formal registers, CLDR pluralization rules, and English technical terms (\`Workflow\`, \`Trigger\`, \`Webhook\`, \`API\`, \`Endpoint\`, \`Token\`, \`Docker\`, \`MCP\`).
+            * Dynamic locale chunking and automated Tier-A coverage gates.
+          * **Self-Hosting & Authentication Enhancements (Backend):**
+            * **Private LAN / RFC-1918 Cookie Support:** Seamless local network hosting on private IPs (\`192.168.x.x\`, \`10.x.x.x\`) without HTTPS redirect loops caused by premature \`Secure\` cookie flags. Includes \`COOKIE_SECURE\` environment variable override.
+            * **Case-Insensitive Authentication:** Robust email matching eliminating casing and whitespace login failures.
+          EOF
+
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Heym i18n ${{ steps.get_version.outputs.tag }}
+          body_path: release_body.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Izveidojiet, organizējiet, importējiet un pārvaldiet Workflows savām AI automatizācijām.",
+    "bullets": [
+      "Ātri atveriet Workflows, uzturiet mapes pārskatāmas un turpiniet tieši pie nesenajiem uzdevumiem.",
+      "Izmantojiet komandu paleti ātrai piekļuvei bez ilgas meklēšanas režģī.",
+      "Izmantojiet šo cilni kā pamatu visām darbībām redaktorā."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Centrālais pārskats",
+        "title": "Workflow bibliotēka",
+        "description": "Saknes objekti, mapes un dzēšanai atzīmētie Workflows vienuviet.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ātrā piekļuve",
+        "title": "Ātra izveide",
+        "description": "Izveidojiet jaunus Workflows vai importējiet JSON tieši.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktūra",
+        "title": "Organizējiet jau iepriekš",
+        "description": "Mapes un piespraušana uztur augošos automatizācijas kopumus pārskatāmus.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Lasīt Workflow rokasgrāmatu",
+        "description": "Atvērt pilnīgu Workflows cilnes atsauci.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflows cilne"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Atvērt veidnes",
+        "description": "Pārslēgties uz veidņu cilni atkārtoti lietojamiem sākumpunktiem.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Kas šeit ietilpst",
+        "content": "Izmantojiet šo sadaļu Workflow dzīves cikla uzdevumiem: izveide, pārdēvēšana, pārvietošana, importēšana, arhivēšana un atlase."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Palieciet raiti",
+        "content": "Ja nepieciešama tikai ātra izpilde no citas lapas, izmantojiet Quick Drawer. Atgriezieties šeit pārvaldībai un struktūrai."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflows cilne"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Uz aģentiem balstīts Kanban dēlis. Katra kartīte ir pastāvīgs darbs ar kontekstu, vēsturi un izvadēm – kartītes pārvietošana izpilda kolonnas Workflow ķēdi.",
+    "bullets": [
+      "Izveidojiet teksta kartītes Backlog un velciet tās ar Drag & Drop starp kolonnām.",
+      "Saistiet sakārtotus Workflows ar katru kolonnu; kartīšu kustības tos izraisa kā Trigger.",
+      "Kartītes kļūst zaļas veiksmes gadījumā, sarkanas kļūdu gadījumā un dzeltenas izpildes laikā.",
+      "Komentāri un iepriekšējās izvades iekļaujas nākamā palaišanas kontekstā."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Pamatideja",
+        "title": "Kartītes ir darbi, nevis piezīmes",
+        "description": "Katra kartīte nes pilnīgu vēsturi: komentārus, kustības un katra Workflow izvadi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Plānošanas cilpa",
+        "title": "Turpmākās kārtas",
+        "description": "Atbildiet komentāros un izpildiet vēlreiz – ķēde redz visu uzkrāto kontekstu.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board dokumentācija",
+        "description": "Kolonnu ķēdes, Card Payload līgums un turpmākās kārtas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Kā tiek izpildītas kolonnu ķēdes",
+        "content": "Kolonai pievienotie Workflows tiek izpildīti secīgi, tiklīdz ierodas kartīte. Katra Workflow izvade tiek pievienota kartītes kontekstam; kļūda pārtrauc ķēdi."
+      },
+      {
+        "id": "board-context",
+        "title": "Ko saņem Workflows",
+        "content": "Izpildes ievade satur kartīti (virsraksts, saturs, metadati, komentāri, vēsture, iepriekšējās izvades), Board, kustību un pozīciju ķēdē. Lasiet to ar $input.card izteiksmēm."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Veidnes",
+    "summary": "Sāciet ar atkārtoti lietojamiem Workflow paraugiem, nevis veidojiet vienus un tos pašus modeļus no jauna katru reizi.",
+    "bullets": [
+      "Izmantojiet veidnes, ja Workflow struktūra ir zināma, bet detaļas vēl mainās.",
+      "Labas veidnes saīsina ievadapmācību un samazina atkārtotu darbu Canvas vidē.",
+      "Kopīgojiet modeļus šeit un pielāgojiet tos Editor pēc vajadzības."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Atkārtota izmantošana",
+        "title": "Parauga pieeja",
+        "description": "Apkopojiet pārbaudītas Workflow struktūras un ātri izmantojiet tās atkārtoti.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Komandas temps",
+        "title": "Vienoti sākumpunkti",
+        "description": "Veidnes palīdz komandām vienoties par vieniem un tiem pašiem pārbaudītajiem modeļiem.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Efektivitāte",
+        "title": "Mazāk dīkstāves",
+        "description": "Izvēlieties gatavu ietvaru un pielāgojiet tikai būtisko.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Atvērt veidņu dokumentāciju",
+        "description": "Uzziniet, kā veidnes iekļaujas Dashboard plūsmā.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Veidņu cilne"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Atgriezties pie Workflows",
+        "description": "Atgriezties pie galvenās Workflow bibliotēkas.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Kāpēc veidnes ir svarīgas",
+        "content": "Tās pārvērš atkārtotus mezglu izkārtojumus atkārtoti lietojamos resursos – ideāli piemērotas komandām, kas izvieto tā paša Workflow modeļa variācijas."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimāla izmantošana",
+        "content": "Izmantojiet veidnes, ja struktūra ir stabila, bet nosaukumi, Prompt, Credentials vai mērķi atšķiras atkarībā no lietošanas gadījuma."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Veidņu cilne"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Mainīgie",
+    "summary": "Glabājiet koplietotās vērtības centralizēti un atsaucieties uz tām starp Workflows, nedublējot vienus un tos pašus datus visur.",
+    "bullets": [
+      "Bieži atkārtoti izmantotās vērtības glabājiet vienā centralizētā, pastāvīgā vietā.",
+      "Mainīgie samazina Prompt novirzes un dublētas konfigurācijas.",
+      "Koplietojiet vērtības mērķtiecīgi, ja vairākiem Workflows nepieciešami vieni un tie paši datu avoti."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Pastāvība",
+        "title": "Starpizpildes krātuve",
+        "description": "Globālās vērtības saglabājas starp atsevišķām Workflow izpildēm.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompakta konfigurācija",
+        "title": "Mazāk redundances",
+        "description": "Atjauniniet vienreiz centralizēti, nevis manuāli pielāgojiet daudzus mezglu laukus.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Izteiksmes",
+        "title": "Atbalsts DSL",
+        "description": "Atsaucieties uz vērtībām tieši mezglu izteiksmēs un Prompt.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Lasīt mainīgo dokumentāciju",
+        "description": "Atvērt mainīgo rokasgrāmatu Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Mainīgo cilne"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Tipiski modeļi",
+        "content": "Glabājiet Endpoint, koplietotus Prompt fragmentus, videi specifiskus iestatījumus vai ID, kas jālasa vairākiem Workflows."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Kas šeit neiederās",
+        "content": "Noslēpumi un pakalpojumu sniedzēju autentifikācija pieder Credentials, nevis globālajiem mainīgajiem."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Mainīgo cilne"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Tērzēšana",
+    "summary": "Izmantojiet informācijas paneļa tērzēšanu kā ātru dialogbalstītu sākumpunktu saviem Workflow un platformas uzdevumiem.",
+    "bullets": [
+      "Lieliski piemērota ātriem jautājumiem, Workflow palīdzībai un vieglām izpildēm.",
+      "Koncentrējas uz ātrumu un iterāciju, nevis pilnīgu redaktora kontroli.",
+      "Tiklīdz struktūra ir gatava, nekavējoties pārslēdzieties uz Workflow vai dokumentāciju."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Dabiskā valoda",
+        "title": "Ātra mijiedarbība",
+        "description": "Izmantojiet vienkāršu valodu, nevis manuāli pārlūkojiet visu lietotni.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tilts",
+        "title": "No idejas līdz darbībai",
+        "description": "Tērzēšana palīdz, ja mērķis ir skaidrs, bet precīzais ceļš vēl jāizstrādā.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Pavadoņa",
+        "title": "Papildina dokumentāciju",
+        "description": "Izmantojiet kopā ar dokumentāciju, lai atbildes un atsauces būtu pieejamas.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Atvērt tērzēšanas dokumentāciju",
+        "description": "Lasīt informācijas paneļa tērzēšanas rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Tērzēšanas cilne"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "AI asistenta atsauce",
+        "description": "Uzziniet, kā Heym asistenta atbalsta Workflow izveidi.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI asistenta"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Labākie lietošanas gadījumi",
+        "content": "Izmantojiet tērzēšanu ātriem Workflow jautājumiem, īsām platformas instrukcijām un operatīviem soļiem, kas neprasa dziļu Canvas darbu."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Kad mainīt skatu",
+        "content": "Pārslēdzieties uz redaktoru, tiklīdz nepieciešama kontrole mezgla līmenī, vai uz dokumentāciju pastāvīgām atsaucēm."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Tērzēšanas cilne"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Pārvaldiet un kopīgojiet failus, kas ģenerēti no jūsu Workflow Skills.",
+    "bullets": [
+      "Skills ieraksta failus izvades direktorijā; Heym tos automātiski uztver.",
+      "Kopīgojiet failus, izmantojot Token saites vai ar paroli aizsargātus Basic-Auth URL.",
+      "Lejupielādējiet failus ar vienu klikšķi."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Krātuve",
+        "title": "Automātiski uztvertie faili",
+        "description": "Skills ieraksta _OUTPUT_DIR; faili parādās šeit uzreiz pēc izpildes.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kopīgošana",
+        "title": "Elastīga piekļuves kontrole",
+        "description": "Publiskas saites, paroles aizsardzība, derīguma termiņi un lejupielādes ierobežojumi.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formāti",
+        "title": "PDF, DOCX, CSV un citi",
+        "description": "Ģenerējiet jebkāda veida failus ar reportlab, python-docx vai standarta Python.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Atvērt Drive dokumentāciju",
+        "description": "Lasīt pilnīgu Drive cilnes atsauci.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive cilne"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Failu ģenerēšanas rokasgrāmata",
+        "description": "Uzziniet, kā Skills ģenerē failus.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Failu ģenerēšana"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Kā faili nonāk šeit",
+        "content": "Kad Skill ievieto failus direktorijā _OUTPUT_DIR, Heym tos saglabā pastāvīgi un ģenerē lejupielādes Token."
+      },
+      {
+        "id": "drive-share",
+        "title": "Kopīgošanas iespējas",
+        "content": "Izveidojiet publiskas Token saites ikvienam vai ar paroli aizsargātus URL, iekļaujot derīguma termiņus un lejupielādes ierobežojumus."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive cilne"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Akreditācijas dati",
+    "summary": "Pārvaldiet atslēgas, Token un savienojuma informāciju, lai Workflow droši sazinātos ar ārējām sistēmām.",
+    "bullets": [
+      "Glabājiet akreditācijas datus centralizēti, nevis izkaisiet tos pa atsevišķiem mezgliem.",
+      "Akreditācijas dati kontrolē LLM, integrācijas, vektoru krātuves un citus resursus.",
+      "Piešķiriet piekļuvi mērķtiecīgi, ja komandām nepieciešams viens un tas pats savienojums bez atslēgu kopijām."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Drošība",
+        "title": "Droši akreditācijas dati",
+        "description": "Vienreiz ievadiet autentifikāciju un droši izmantojiet to atkārtoti Workflow.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrācijas",
+        "title": "Plašs atbalsts",
+        "description": "Atbalsta tādus pakalpojumu sniedzējus kā OpenAI, DeepSeek, Slack, Redis, Qdrant un Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Sadarbība",
+        "title": "Mērķtiecīga koplietošana",
+        "description": "Izmantojiet komandas vai lietotāja koplietošanu, nevis veidojiet dublikātus.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Lasīt akreditācijas datu dokumentāciju",
+        "description": "Atvērt akreditācijas datu paneļa rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Akreditācijas datu cilne"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Skatīt integrācijas",
+        "description": "Pārlūkot informāciju par trešo pušu integrāciju iestatīšanu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Trešo pušu integrācijas"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Kur tie tiek izmantoti",
+        "content": "Akreditācijas dati tiek atsaukti mezgla konfigurācijā un droši izšķirti izpildes laikā."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Komandai draudzīgs modelis",
+        "content": "Dodiet priekšroku koplietošanai, ja vairākiem izstrādātājiem nepieciešama viena un tā pati pakalpojumu sniedzēja piekļuve; tas nodrošina konsekventu darbību un vienkāršu auditu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Akreditācijas datu cilne"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektoru krātuves",
+    "summary": "Sagatavojiet Retrieval aizmugursistēmas Workflow, kuriem nepieciešama semantiskā meklēšana, atmiņa vai RAG konteksta iekļaušana.",
+    "bullets": [
+      "Vektoru krātuves veido datu bāzi uz retrieval balstītiem Workflow.",
+      "Izmantojiet kopā ar RAG mezgliem un AI plūsmām precīzai dokumentu pamatošanai.",
+      "Šī cilne kalpo kā infrastruktūra pamatotiem Prompt."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG infrastruktūra",
+        "title": "Meklējama atmiņa",
+        "description": "Sagatavojiet dokumentus semantiskajai retrieval, kad Workflow nepieciešams konteksts.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kvalitāte",
+        "title": "Pamatota groundēšana",
+        "description": "Retrieval samazina halucinācijas riskus, nodrošinot pierādījumus.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Darbība",
+        "title": "Pārvaldiet vienreiz centralizēti",
+        "description": "Izveidojiet vektoru krātuves un izmantojiet tās atkārtoti vairākos Workflow.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Atvērt vektoru krātuves dokumentāciju",
+        "description": "Lasīt vektoru krātuves paneļa rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Vektoru krātuves cilne"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Skatīt RAG mezgla dokumentāciju",
+        "description": "Atvērt Qdrant RAG mezgla atsauci.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Ievads",
+        "content": "Šī cilne sagatavo krātuves slāni. Faktiskā retrieval loģika atrodas Workflow iekšienē (piemēram, izmantojot RAG vai aģentu modeļus)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Izmantošanas laiks",
+        "content": "Izvēlieties vektoru krātuves, ja jūsu Workflow ir jāmeklē nestrukturēti zināšanu krājumi, nevis jāpaļaujas tikai uz LLM atmiņu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Vektoru krātuves cilne"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Pārvaldiet Model Context Protocol savienojumus, lai aģentu Workflow droši piekļūtu rīkiem un ārējām funkcijām.",
+    "bullets": [
+      "MCP pārvērš ārējo rīku ekosistēmas izmantojamā aģentu kontekstā.",
+      "Izmantojiet šo cilni, ja aģentiem nepieciešami bagātīgāki rīki nekā statiski Prompt.",
+      "Savienojuma kvalitāte tieši nosaka Jūsu aģentu iespējas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Aģentu rīki",
+        "title": "Ārējo funkciju līmenis",
+        "description": "Nodrošiniet rīku serverus, kurus aģenti var izsaukt spriešanas laikā.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Izpildes kontrole",
+        "title": "Savienojuma iestatīšana",
+        "description": "Konfigurējiet Endpoint, etiķetes un transportu uzticamiem Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Platformas dziļums",
+        "title": "Vairāk nekā Prompt",
+        "description": "MCP ļauj Heym Workflow rīkoties, ne tikai atbildēt.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Atvērt MCP dokumentāciju",
+        "description": "Lasīt MCP cilnes rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP cilne"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Aģentu arhitektūra",
+        "description": "Uzziniet, kā MCP ir integrēts aģentu izpildē.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Aģentu arhitektūra"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Nozīme",
+        "content": "Īpaši svarīgi, ja Jūsu aģentam nepieciešami rīki, vides piekļuve vai sistēmu integrācijas ārpus atsevišķiem mezgliem."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Darbības pieeja",
+        "content": "IzTurieties pret MCP savienojumiem kā pret infrastruktūru: stabili etiķetes un skaidras atbildības vienkāršo atkļūdošanu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP cilne"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Izpildes",
+    "summary": "Pārbaudiet detalizētus AI un Workflow izpildes Trace, lai saprastu, kas notika – ne tikai to, vai tas darbojās.",
+    "bullets": [
+      "Izmantojiet Trace atkļūdošanai, veiktspējas analīzei un Prompt kvalitātes pārbaudēm.",
+      "Trace izskaidro modeļa uzvedību, latentumu un izpildes ceļus.",
+      "Pirmā pieturvieta negaidītu rezultātu vai nestabilu palaišanas gadījumos."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Atkļūdošana",
+        "title": "Redzēt slēptos soļus",
+        "description": "Trace dati atklāj, ko Workflow un modelis faktiski izpildīja.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Novērtēšana",
+        "title": "Atbalstīt iterācijas",
+        "description": "Izmantojiet Trace, optimizējot Prompt, rīkus un modeļus.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Uzticamība",
+        "title": "Izsekot rezultātiem",
+        "description": "Labi Trace samazina minējumus kļūdu analīzē.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Atvērt izpildes dokumentāciju",
+        "description": "Lasīt izpildes Dashboard rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Izpildes cilne"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Kad Trace kļūst neaizstājami",
+        "content": "Tiklīdz Workflow ir daudzpakāpju, modeli ietilpīgi vai balstīti uz rīkiem, tikai statusa rādījums vairs nav pietiekams."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace pret vēsturi",
+        "content": "Vēsture parāda, KA palaišana notika. Trace izskaidro, KĀPĒC tā uzvedās tā."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Izpildes cilne"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Brīdinājumi",
+    "summary": "Definējiet sliekšņa vērtības laika periodiem un saņemiet automātiskus paziņojumus, tiklīdz tās tiek pārsniegtas.",
+    "bullets": [
+      "Četri veidi: kļūdu skaits, izpildes ilgums, Token/izmaksu sliekšņi un izpildes skaitītāji.",
+      "Katrs brīdinājums tiek novērtēts izvēlētā laika periodā, nevis pēc atsevišķiem notikumiem.",
+      "Aprakstiet prasību dabiskā valodā, un asistents konfigurēs brīdinājumu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Laika periods",
+        "title": "Biežums, nevis atsevišķi gadījumi",
+        "description": "Viens neveiksmīgs izpildījums ir troksnis. Divpadsmit desmit minūtēs ir incidents.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pirms saglabāšanas",
+        "title": "Pārbaudīt nosacījumu retrospektīvi",
+        "description": "Pārbaudes solis pārbauda pret reālu vēsturi, lai iepriekš kalibrētu sliekšņa vērtības.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reakcija",
+        "title": "Palaist Workflow pie trauksmes",
+        "description": "Alert-Payload kļūst par Workflow-Input automātiskiem paziņojumiem, izmantojot Slack vai e-pastu.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Atvērt brīdinājumu dokumentāciju",
+        "description": "Izlasiet par trauksmes veidu, logu un asistenta darbību.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Brīdinājumu cilne"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Mērķis",
+        "content": "Analīzes un Traces atbild uz jautājumiem, ko jūs aktīvi uzdodat. Brīdinājumi ļauj Heym runāt proaktīvi, kad tiek pārsniegti kritiski sliekšņi."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Kāpēc tiek izvairīts no viltus trauksmēm",
+        "content": "Brīdinājums aktivizējas vienreiz un gaida, līdz metrika atjaunojas – tas novērš paziņojumu plūdus."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Brīdinājumu cilne"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analīzes",
+    "summary": "Sekojiet lietošanas modeļiem un sistēmas uzvedībai, lai saprastu aktivitāti, izaugsmi un izmaiņas laika gaitā.",
+    "bullets": [
+      "Atklājiet pieņemšanu, caurlaidspēju un neparastus maksimumus ar analīzēm.",
+      "Skats platformas līmenī, nevis atsevišķs atkļūdošanas rīks.",
+      "Apvienojiet analīzes ar Traces un vēsturi, lai iegūtu signālu un skaidrojumu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signāli",
+        "title": "Lietošanas caurskatāmība",
+        "description": "Atklājiet tendences, nevis skatieties atsevišķus izpildījumus izolēti.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapacitāte",
+        "title": "Operatīvā apziņa",
+        "description": "Savlaicīgi atklājiet un izpētiet slodzes maksimumus un kritumus.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Lēmumu atbalsts",
+        "title": "Mērķtiecīga optimizācija",
+        "description": "Analīzes palīdz noteikt svarīgāko Workflow prioritātes.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Atvērt analīžu dokumentāciju",
+        "description": "Lasiet analīžu informācijas paneļa rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analīžu cilne"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Mērķis",
+        "content": "Izmantojiet analīzes, lai iegūtu modeļus, caurlaidspēju un apkopotu uzvedību visā platformas darbībā."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Turpmākā rīcība",
+        "content": "Atklājiet signālus šeit, pēc tam pārejiet uz Traces, vēsturi vai redaktoru, lai analizētu cēloņus."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analīžu cilne"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Izveidojiet diagrammu logrīku režģi, kur katru no tiem baro savi Workflow — visas kopsavilkuma vērtības vienā skatā.",
+    "bullets": [
+      "Katru logrīku darbina Workflow, kas piegādā datus Chart Output mezglam.",
+      "Izmantojiet joslu, līniju, sektoru, tabulu un skaitļu logrīkus atbilstoši metrikai.",
+      "Ģenerējiet vai pielāgojiet logrīkus ar AI un kešatmiņā saglabājiet rezultātus ātrai ielādei.",
+      "Izveidojiet vairākus Dashboard un kopīgojiet tos ar personām vai komandām lasīšanas vai rakstīšanas režīmā."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kompozīcija",
+        "title": "Workflow barotas diagrammas",
+        "description": "Visi dati, ko ģenerē Workflow, tiek vizualizēti kā diagramma.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Veiktspēja",
+        "title": "Kešatmiņā saglabāti rezultāti",
+        "description": "Logrīku kešatmiņa novērš atkārtotu Workflow izpildi katrā lapas ielādē.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI atbalsts",
+        "title": "Ģenerēšana un pielāgošana",
+        "description": "Aprakstiet metriku un ļaujiet AI automātiski izveidot logrīku.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Atvērt Dashboard dokumentāciju",
+        "description": "Uzziniet, kā izveidot Dashboard logrīkus.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard cilne"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Mērķis",
+        "content": "Izmantojiet Dashboard, lai pastāvīgi pārskatītu svarīgas kopsavilkuma vērtības no saviem Workflow."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Izveide",
+        "content": "Pievienojiet logrīku, konfigurējiet Workflow tā, lai pēdējais mezgls pirms Chart Output piegādā rindas, un sakārtojiet to režģī."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard cilne"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Komandas",
+    "summary": "Pārvaldiet koplietotos piekļuves, lai Workflow, akreditācijas dati, mainīgie un vektoru krātuves tiktu izmantotas sadarbībā bez dublikātiem.",
+    "bullets": [
+      "Komandas ir tīrākais veids, kā mērogojami koplietot platformas resursus.",
+      "Izmantojiet komandas, ja atļaujām jāseko grupai, nevis atsevišķām personām.",
+      "Nodrošiniet strukturētu sadarbību augošā Workspace."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Sadarbība",
+        "title": "Uz grupām balstīta koplietošana",
+        "description": "Piešķiriet piekļuvi vienreiz komandai, nevis manuāli atsevišķiem lietotājiem.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Skaidrība",
+        "title": "Skaidras atbildības",
+        "description": "Resursu pārvaldība atbilst reālajām komandas struktūrām.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Mērogošana",
+        "title": "Mazāk administrēšanas",
+        "description": "Jauni dalībnieki automātiski manto piekļuves tiesības no komandas.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Atvērt Komandu dokumentāciju",
+        "description": "Lasiet Komandu Dashboard rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Komandu cilne"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Resursu koplietošana",
+        "description": "Uzziniet sīkāk par resursu koplietošanu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Akreditācijas datu koplietošana"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Komandu priekšrocības",
+        "content": "Komandas savieno identitāti un resursu piekļuvi nevainojamai sadarbībai."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktisks padoms",
+        "content": "Dodiet priekšroku komandas koplietošanai, ja Workflow vai akreditācijas dati pieder pastāvīgai darba grupai."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Komandu cilne"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protokoli",
+    "summary": "Lasiet Logs stack līmenī, ja nepieciešams ieskats infrastruktūrā ārpus Workflow izvadēm.",
+    "bullets": [
+      "Izmantojiet Logs pakalpojumu atkļūdošanai, konteineru stāvokļu un vides problēmu risināšanai.",
+      "Palīdz, ja cēloņi atrodas zemāk par Workflow līmeni.",
+      "Izmantojiet kopā ar Traces, lai iegūtu pierādījumus lietojumprogrammu un sistēmas līmenī."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktūra",
+        "title": "Konteineru pārskatāmība",
+        "description": "Redzēt, ko aizmugursistēmas pakalpojumi veic zem Heym saskarnes.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Problēmu novēršana",
+        "title": "Atrast cēloņus",
+        "description": "Logs palīdz pie palaišanas problēmām, avarēm vai integrācijas kļūdām.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Papildinoši",
+        "title": "Atšķirība no Workflow rezultātiem",
+        "description": "Workflow izvades parāda rezultātus; Logs parāda sistēmas uzvedību.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Atvērt protokolu dokumentāciju",
+        "description": "Lasīt protokolu dashboard rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Protokolu cilne"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Lietošanas brīdis",
+        "content": "Pārslēdzieties šeit, ja problēmas šķiet saistītas ar izvietošanu, pakalpojumu vai vidi."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Labākā kombinācija",
+        "content": "Izmantojiet Logs kopā ar Traces un vēsturi, lai ātri no simptomiem nonāktu līdz cēlonim."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Protokolu cilne"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Novērtēšana",
+    "summary": "Izveidojiet reproducējamus etalonus aģentu Workflow, lai droši salīdzinātu Prompt, modeļa un Workflow izmaiņas.",
+    "bullets": [
+      "Suitas un testa gadījumi pārvērš subjektīvu Workflow kvalitāti izmērāmos rādītājos.",
+      "Ideāla vieta regresijas pārbaudēm pirms Prompt vai modeļa atjauninājumu izvietošanas.",
+      "Salīdziniet vairākus modeļus pret vienu un to pašu datu kopu un vienu un to pašu novērtēšanas metodi."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kvalitātes cilpa",
+        "title": "Aģentu etalonēšana",
+        "description": "Atkārtoti palaist vienu un to pašu suitu, nevis paļauties uz nejaušām pārbaudēm.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Salīdzinājums",
+        "title": "Modeļa un Prompt testi",
+        "description": "Redzēt, kā dažādi iestatījumi uzvedas vienā un tajā pašā testu kopā.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Drošība",
+        "title": "Uzticama iterācija",
+        "description": "Pārbaudāmi pierādīt uzlabojumus pirms izvietošanas.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Atvērt novērtēšanas dokumentāciju",
+        "description": "Lasīt novērtēšanas lapas rokasgrāmatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Novērtēšanas cilne"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Aģenta mezgla atsauce",
+        "description": "Apskatīt Workflow sadaļu, uz kuru vērsta lielākā daļa eval suitu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Aģenta mezgls"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Suišu koncepcija",
+        "content": "Laba suita atspoguļo reālus lietotāju gadījumus, robežnosacījumus un apstiprināšanas soļus, kuriem jāpaliek stabiliem."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Salīdzināšanas parametri",
+        "content": "Tipiski salīdzinājumi ietver Prompt variantus, modeļa izvēli, Temperature iestatījumus un Workflow revīzijas vienā un tajā pašā datu kopā."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Novērtēšanas cilne"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentācija",
+    "summary": "Pārskatiet precīzas platformas atsauces tieši lietotnē un nepieciešamības gadījumā iedziļinieties tēmā.",
+    "bullets": [
+      "Heym dokumentācija ir veidota ātrai uztverei un mērķtiecīgai uzmeklēšanai.",
+      "Sānjosla, meklēšana un savstarpējās atsauces ļauj ātri pārslēgties starp konceptiem.",
+      "Showcase tieši norāda uz pašlaik atvērto rakstu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Lietotnē pieejama atsauce",
+        "title": "Vienmēr pa rokai",
+        "description": "Dokumentācija paliek produkta plūsmā, nav jāatver ārējas cilnes.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pārskats",
+        "title": "Vispirms būtiskākais",
+        "description": "Raksti sākas ar galvenajiem punktiem un zarojas tālāk caur saitēm."
+      },
+      {
+        "eyebrow": "Kontekstu apzināts",
+        "title": "Pašreizējais raksts",
+        "description": "Lasot dokumentu, darbība 'Uzzināt vairāk' seko tieši šim rakstam."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Skatīt ievadu",
+        "description": "Atvērt dokumentācijas ievadu kā noklusējuma sākumpunktu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Ievads"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Ātra navigācija",
+        "content": "Izmantojiet sānjoslu kategorijām un komandu meklēšanu, ja tēma jau ir zināma."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Atbalsts no Showcase",
+        "content": "Showcase sniedz kodolīgus kopsavilkumus un nepieciešamības gadījumā novirza uz detalizēto dokumentāciju."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Ievads"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Grafiki",
+    "summary": "Pārskatiet visus aktīvos Cron Workflow vizuālā kalendārā un kontrolējiet izpildes laikus.",
+    "bullets": [
+      "Pārslēdzieties starp dienas, nedēļas un mēneša skatu, lai iegūtu piemērotu detalizāciju.",
+      "Novietojiet kursoru uz bloka, lai redzētu Cron izteiksmi; noklikšķiniet, lai pārietu tieši uz Canvas.",
+      "Izmantojiet šo cilni, lai pārbaudītu izpildes blīvumu un atklātu pārklāšanos."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Caurredzamība",
+        "title": "Kalendāra skats",
+        "description": "Aktīvie Cron Workflow parādās kā bloki to plānotajos laikos.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigācija",
+        "title": "Ar vienu klikšķi uz Canvas",
+        "description": "Noklikšķiniet uz bloka, lai tieši atvērtu Workflow redaktoru.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Diapazoni",
+        "title": "Diena, nedēļa vai mēnesis",
+        "description": "Pielāgojiet detalizāciju, lai pārbaudītu atsevišķas stundas vai plānotu visu mēnesi.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Atvērt grafiku dokumentāciju",
+        "description": "Lasīt grafiku cilnes atsauci.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Grafiku cilne"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron mezgla atsauce",
+        "description": "Uzziniet, kā konfigurēt Cron Trigger uz Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Izmantošanas laiks",
+        "content": "Pārbaudiet plānotās automatizācijas, atklājiet termiņu konfliktus un pārliecinieties, ka svarīgi Workflow paliek aktīvi."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Krāsu kodējums",
+        "content": "Katrs Workflow iegūst konsekventu krāsu no sava ID, kas paliek nemainīga dienas, nedēļas un mēneša skatā."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Grafiku cilne"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Datu tabulas",
+    "summary": "Veidojiet strukturētas datu tabulas tieši Heym un izmantojiet tās Workflow programmatiski.",
+    "bullets": [
+      "Veidojiet tabulas ar tipizētām kolonnām, aizpildiet tās manuāli vai importējiet no CSV.",
+      "Izmantojiet DataTable Workflow mezglu, lai programmatiski lasītu, rakstītu un vaicātu rindas.",
+      "Koplietojiet tabulas lietotājiem vai komandām ar lasīšanas vai rakstīšanas tiesībām."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integrēti dati",
+        "title": "Integrēta krātuve",
+        "description": "Glabājiet strukturētus datus bez ārējām datubāzēm vai API atslēgām.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow integrācija",
+        "title": "DataTable mezgls",
+        "description": "Atrodiet, ievietojiet, atjauniniet un dzēsiet rindas jebkurā Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Sadarbība",
+        "title": "Koplietošana un tiesības",
+        "description": "Piešķiriet granulētas lasīšanas un rakstīšanas piekļuves lietotājiem un komandām.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Datu tabulu cilnes dokumentācija",
+        "description": "Lasiet datu tabulu cilnes atsauci.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Datu tabulas"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable mezgla dokumentācija",
+        "description": "Lasiet DataTable mezgla atsauci.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Kas ir datu tabulas?",
+        "content": "Datu tabulas ir integrēta strukturēta krātuve Heym: tipizētas kolonnas (String, Number, Boolean, Date, JSON), iekļautā rediģēšana, kā arī CSV imports/eksports."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Izmantošana Workflow",
+        "content": "DataTable mezgls atbalsta find, getAll, getById, insert, update, remove un upsert – bez akreditācijas datiem tieši caur Workflow īpašnieku."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Datu tabulas"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow redaktors",
+    "summary": "Veidojiet, testējiet, atkļūdojiet un optimizējiet Workflow uz audekla – tieši izpildes kontekstā.",
+    "bullets": [
+      "Redaktorā saplūst mezglu dizains, datu plūsma un izpildes uzvedība.",
+      "Izmantojiet sānjoslas un vēsturi, lai ātri pārslēgtos starp veidošanu un atkļūdošanu.",
+      "Šis showcase ir apzināti kompakts, lai nodrošinātu maksimālu vietu audeklam."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Audekls",
+        "title": "Vizuāls Workflow dizains",
+        "description": "Savienojiet mezglus, sazarojiet loģiku un modelējiet izpildes plūsmu tieši.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iterācija",
+        "title": "Atkļūdošana veidošanas laikā",
+        "description": "Izmantojiet vēsturi, atkļūdošanas paneļus un izpildes rezultātus ātriem atgriezeniskās saites cikliem."
+      },
+      {
+        "eyebrow": "Funkcionalitāte",
+        "title": "Paplašinātas funkcijas pie rokas",
+        "description": "Portāls, koplietošana, veidnes un validācija atrodas tieši pie audekla."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Atvērt audekla dokumentāciju",
+        "description": "Lasiet audekla funkciju atsauci.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Audekla funkcijas"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Tastatūras saīsnes",
+        "description": "Atvērt redaktora tastatūras saīsņu pārskatu.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Tastatūras saīsnes"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Darba ritms",
+        "content": "Modelējiet uz audekla, pārbaudiet pieņēmumus par izvadi un pielāgojiet parametrus sānjoslās, nezaudējot fokusu."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompakts showcase",
+        "content": "Tā kā redaktors jau sniedz daudz informācijas, showcase kalpo kā kodolīgs orientieris."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Audekla funkcijas"
+    }
+  }
+}

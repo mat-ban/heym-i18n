@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Snabbare byggnation i Workflows",
+    "description": "Välj ett Workflow för att se Trigger, senaste körning och steg direkt bredvid listan. Filtrera efter status, kör direkt och behåll översikten med mappar."
+  },
+  "dashboard:board": {
+    "title": "Styr uppgifter via en agentbaserad tavla",
+    "description": "Dra kort mellan kolumner för att utlösa Workflow-kedjor med kortets fulla kontext. Resultat flödar direkt tillbaka till kortet."
+  },
+  "dashboard:templates": {
+    "title": "Starta med beprövade mallar",
+    "description": "Använd färdiga Workflow-mönster för att spara uppsättningstid och säkerställa konsekvens."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralisera delade variabler",
+    "description": "Lagra återanvändbara värden en gång och referera till dem över alla Workflows."
+  },
+  "dashboard:chat": {
+    "title": "Använd Chat för snabb iteration",
+    "description": "Ställ snabba frågor, testa idéer och växla till editorn så snart Workflow-flödet är klart."
+  },
+  "dashboard:credentials": {
+    "title": "Hantera hemligheter säkert",
+    "description": "Hantera Provider-nycklar och Tokens centralt så att Workflows kan använda säkra anslutningar utan att avslöja hemligheter."
+  },
+  "dashboard:vectorstores": {
+    "title": "Stöd Retrieval-baserade Workflows",
+    "description": "Förbered vektorlager för underbyggda AI-svar, semantisk sökning och skalbara RAG-pipelines."
+  },
+  "dashboard:mcp": {
+    "title": "Anslut externa verktygsekosystem",
+    "description": "Konfigurera MCP-anslutningar så att agenter kan utföra strukturerade verktyg och åtgärder bortom enkla Prompts."
+  },
+  "dashboard:traces": {
+    "title": "Förstå körningsbeteende",
+    "description": "Analysera Trace-detaljer för att felsöka resultat, jämföra körningar och öka tillförlitligheten."
+  },
+  "dashboard:alerts": {
+    "title": "Få aviseringar innan problem eskalerar",
+    "description": "Ange tröskelvärden för fel, varaktighet, kostnad och antal körningar och bli varnad vid överskridande."
+  },
+  "dashboard:analytics": {
+    "title": "Följ plattformsprestanda",
+    "description": "Övervaka användnings- och körningstrender för att optimera riktat baserat på verkliga signaler."
+  },
+  "dashboard:dashboard": {
+    "title": "Skapa egna Dashboards",
+    "description": "Sätt samman Workflow-drivna diagram-widgets för att se viktiga mätvärden i en överblick."
+  },
+  "dashboard:teams": {
+    "title": "Skala samarbete smidigt",
+    "description": "Dela upp Workflows och resurser per team för att hålla åtkomstbehörigheter och ansvarsområden transparenta."
+  },
+  "dashboard:logs": {
+    "title": "Diagnostisera problem på systemnivå",
+    "description": "Använd Logs vid infrastruktur- eller miljöproblem för djupare insikter i körtiden."
+  },
+  "dashboard:drive": {
+    "title": "Hantera genererade filer",
+    "description": "Granska, ladda ner och dela Workflow-utdata via säkra länkar och kontrollerade åtkomstalternativ."
+  },
+  "dashboard:datatable": {
+    "title": "Arbeta nativt med strukturerad data",
+    "description": "Skapa typade tabeller och styr dem direkt från Workflows för reproducerbara läs- och skrivoperationer."
+  },
+  "dashboard:schedules": {
+    "title": "Överblicka automatiseringsscheman",
+    "description": "Se alla aktiva Cron-Workflows i en kalendervy (dag, vecka, månad). Klick på ett block leder direkt till Canvas."
+  },
+  "evals": {
+    "title": "Utvärdera kvalitet tillförlitligt",
+    "description": "Kör repeterbara Test-Suites för att grundligt jämföra Prompt- och modelländringar före produktionsutrullningar."
+  },
+  "docs": {
+    "title": "Snabb orientering i appen",
+    "description": "Sök i kompakta referenser och fördjupa dig riktat utan att lämna aktuellt Workflow."
+  },
+  "editor": {
+    "title": "Designa och felsök på Canvas",
+    "description": "Koppla noder visuellt, kör omedelbart och förfina beteendet med direkt återkoppling i en arbetsyta."
+  }
+}

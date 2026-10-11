@@ -77,14 +77,14 @@ function cancelClearAll(): void {
 <template>
   <aside class="flex flex-col h-full w-64 shrink-0 border-r border-border/50 bg-card/40">
     <div class="flex items-center justify-between px-3 py-3 border-b border-border/40">
-      <span class="text-sm font-semibold text-foreground">Chats</span>
+      <span class="text-sm font-semibold text-foreground">{{ $t('chat.chats') }}</span>
       <div class="flex items-center gap-1">
         <template v-if="isConfirmingClearAll">
           <button
             ref="confirmClearAllButtonRef"
             type="button"
             class="p-1.5 rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
-            title="Confirm clear all"
+            :title="$t('chat.confirmClearAll')"
             @click="clearAll"
           >
             <Check class="w-4 h-4" />
@@ -92,7 +92,7 @@ function cancelClearAll(): void {
           <button
             type="button"
             class="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-            title="Cancel"
+            :title="$t('common.cancel')"
             @click="cancelClearAll"
           >
             <X class="w-4 h-4" />
@@ -101,7 +101,7 @@ function cancelClearAll(): void {
         <button
           v-else
           class="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive disabled:pointer-events-none disabled:opacity-40 transition-colors"
-          title="Clear all chats"
+          :title="$t('chat.clearAll')"
           :disabled="chatStore.sortedConversations.length === 0"
           @click="confirmClearAll"
         >
@@ -109,7 +109,7 @@ function cancelClearAll(): void {
         </button>
         <button
           class="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-50 transition-colors"
-          title="New chat"
+          :title="$t('chat.newChatTitle')"
           :disabled="isCreatingConversation"
           @click="createNew"
         >
@@ -117,7 +117,7 @@ function cancelClearAll(): void {
         </button>
         <button
           class="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-          title="Close panel"
+          :title="$t('chat.closePanel')"
           @click="chatStore.toggleSidebar"
         >
           <ChevronLeft class="w-4 h-4" />
@@ -130,13 +130,13 @@ function cancelClearAll(): void {
         v-if="chatStore.isLoadingConversations && chatStore.sortedConversations.length === 0"
         class="px-3 py-4 text-sm text-muted-foreground text-center"
       >
-        Loading…
+        {{ $t('common.loading') }}
       </div>
       <div
         v-else-if="chatStore.sortedConversations.length === 0"
         class="px-3 py-4 text-sm text-muted-foreground text-center"
       >
-        No conversations yet
+        {{ $t('chat.noConversations') }}
       </div>
       <ChatListItem
         v-for="conv in chatStore.sortedConversations"

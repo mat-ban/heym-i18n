@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Looge, korraldage, importige ja haldake oma AI-automaatika Workflow'sid.",
+    "bullets": [
+      "Avage Workflow'd kiiresti, hoidke kaustad korras ja jätkake otse hiljutiste ülesannetega.",
+      "Kasutage käsurea paletti kiireks juurdepääsuks ilma pika otsimiseta ruudustikus.",
+      "Kasutage seda vahekaarti oma baasina kõigi redaktori tegevuste jaoks."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Keskne ülevaade",
+        "title": "Workflow-teek",
+        "description": "Vaadake juurobjekte, kaustu ja kustutamiseks märgitud Workflow'sid ühes kohas.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kiirjuurdepääs",
+        "title": "Kiire loomine",
+        "description": "Looge uusi Workflow'sid või importige otse JSON.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktuur",
+        "title": "Korraldage eelnevalt",
+        "description": "Kaustad ja kinnitamine hoiavad kasvavad automatiseerimiskomplektid korras.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Lugege Workflow juhendit",
+        "description": "Avage Workflow'de vahekaardi täielik viide.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflow'de vahekaart"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Avage mallid",
+        "description": "Minge mallide vahekaardile taaskasutatavate alguspunktide jaoks.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Mis siia kuulub",
+        "content": "Kasutage seda ala Workflow elutsükli ülesannete jaoks: loomine, ümbernimetamine, teisaldamine, importimine, arhiveerimine ja valimine."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Püsige saledana",
+        "content": "Kui vajate ainult kiiret käivitamist mõnelt teiselt lehelt, kasutage Quick Drawer'it. Naaske siia haldamise ja struktuuri jaoks."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflow'de vahekaart"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Agendipõhine Kanban-tahvel. Iga kaart on püsiv töö konteksti, ajaloo ja väljunditega – kaardi teisaldamine käivitab veeru Workflow-ahela.",
+    "bullets": [
+      "Looge tekstikaarte Backlog'is ja lohistage neid veergude vahel.",
+      "Seostage järjestatud Workflow'd iga veeruga; kaartide liikumine käivitab need Trigger'ina.",
+      "Kaardid muutuvad roheliseks õnnestumisel, punaseks vigade korral ja kollaseks käivitamise ajal.",
+      "Kommentaarid ja varasemad väljundid lisatakse järgmise käivituse konteksti."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Põhiidee",
+        "title": "Kaardid on tööd, mitte märkmed",
+        "description": "Iga kaart kannab oma täielikku ajalugu: kommentaarid, liikumised ja iga Workflow väljundi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Planeerimistsükkel",
+        "title": "Järgmised voorud",
+        "description": "Vastake kommentaarides ja käivitage uuesti – ahel näeb kogu kogunenud konteksti.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board dokumentatsioon",
+        "description": "Veeruahelad, kaardi Payload leping ja järgmised voorud.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Kuidas veeruahelaid käivitatakse",
+        "content": "Veeruga seotud Workflow'd käivitatakse järjestikku, kui kaart saabub. Iga Workflow väljund lisatakse kaardi konteksti; viga peatab ahela."
+      },
+      {
+        "id": "board-context",
+        "title": "Mida Workflow'd vastu võtavad",
+        "content": "Käivituse sisend sisaldab kaarti (pealkiri, sisu, metaandmed, kommentaarid, ajalugu, varasemad väljundid), tahvlit, liikumist ja asukohta ahelas. Lugege seda $input.card-avaldistega."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Mallid",
+    "summary": "Alustage taaskasutatavate Workflow'i plaanidega, selle asemel et iga kord samu mustreid uuesti luua.",
+    "bullets": [
+      "Kasutage malle, kui Workflow' struktuur on teada, kuid detailid võivad veel varieeruda.",
+      "Head mallid lühendavad onboarding'ut ja vähendavad korduvat Canvas'i tööd.",
+      "Jagage mustreid siin ja kohandage neid vastavalt vajadusele redaktoris."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Taaskasutus",
+        "title": "Plaanipõhine lähenemine",
+        "description": "Jäädvustage tõestatud Workflow' struktuurid ja rakendage neid kiiresti uuesti.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Meeskonna tempo",
+        "title": "Ühtsed alguspunktid",
+        "description": "Mallid aitavad meeskondadel kokku leppida samades tõestatud mustrites.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Tõhusus",
+        "title": "Vähem seisakuid",
+        "description": "Valige valmis raamistik ja kohandage ainult olulist.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Ava mallide dokumentatsioon",
+        "description": "Uurige, kuidas mallid Dashboard'i voogu sobivad.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Mallide vahekaart"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Tagasi Workflow'de juurde",
+        "description": "Tagasi Workflow'de peamise teegi juurde.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Miks mallid on olulised",
+        "content": "Need muudavad korduvad sõlmede paigutused taaskasutatavateks varadeks – ideaalne meeskondadele, kes juurutavad sama Workflow' mustri variatsioone."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimaalne kasutus",
+        "content": "Kasutage malle, kui struktuur on stabiilne, kuid nimed, Prompt'id, Credential'id või eesmärgid erinevad kasutusjuhtumite lõikes."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Mallide vahekaart"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Muutujad",
+    "summary": "Salvestage jagatud väärtused keskselt ja viidake neile Workflow'de lõikes, ilma et peaksite samu andmeid kõikjal dubleerima.",
+    "bullets": [
+      "Hoidke sageli taaskasutatavaid väärtusi ühes keskses, püsivas kohas.",
+      "Muutujad vähendavad Prompt'ide triivimist ja dubleerivat konfiguratsiooni.",
+      "Jagage väärtusi sihipäraselt, kui mitmed Workflow'd vajavad sama andmealust."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Püsivus",
+        "title": "Käivitustevaheline salvestusruum",
+        "description": "Globaalsed väärtused püsivad üksikute Workflow' täitmiste vahel.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompaktne konfiguratsioon",
+        "title": "Vähem liiasust",
+        "description": "Uuendage üks kord keskselt, selle asemel et käsitsi paljusid sõlmevälju kohandada.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Avaldised",
+        "title": "Tugi DSL-is",
+        "description": "Viidake väärtustele otse sõlmeavaldistes ja Prompt'ides.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Lugege muutujate dokumentatsiooni",
+        "description": "Avage Dashboard'i muutujate juhend.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Muutujate vahekaart"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Tüüpilised mustrid",
+        "content": "Salvestage Endpoint'id, jagatud Prompt'ide fragmendid, keskkonnaspetsiifilised seaded või ID-d, mida mitmed Workflow'd peavad lugema."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Mis siia ei kuulu",
+        "content": "Saladused ja teenusepakkuja autentimine kuuluvad Credential'ite alla, mitte globaalsetesse muutujatesse."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Muutujate vahekaart"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Kasutage armatuurlaua vestlust kiire dialoogipõhise alguspunktina oma Workflow'de ja platvormiülesannete jaoks.",
+    "bullets": [
+      "Suurepärane kiirete küsimuste, Workflow-abivajaduste ja kergete täitmiste jaoks.",
+      "Keskendub kiirusele ja iteratsioonile, mitte täielikule redaktori kontrollile.",
+      "Kui struktuur on paigas, liikuge otse Workflow'sse või dokumentatsiooni."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Loomulik keel",
+        "title": "Kiire suhtlus",
+        "description": "Kasutage lihtsat keelt, selle asemel et kogu rakendust käsitsi läbi otsida.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Sild",
+        "title": "Ideest tegevuseni",
+        "description": "Chat aitab siis, kui eesmärk on selge, kuid täpne tee vajab veel väljatöötamist.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Kaaslane",
+        "title": "Täiendab dokumentatsiooni",
+        "description": "Kasutage koos dokumentatsiooniga, et vastused ja viited oleksid käepärast.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Ava Chat'i dokumentatsioon",
+        "description": "Lugege armatuurlaua Chat'i juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat'i vahekaart"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "KI-assistendi viide",
+        "description": "Uurige, kuidas Heym-assistent aitab Workflow'de loomisel.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "KI-assistent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Parimad kasutusjuhud",
+        "content": "Kasutage Chati kiirete Workflow-küsimuste, lühikeste platvormijuhiste ja operatiivsete sammude jaoks, mis ei nõua sügavat Canvas-tööd."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Millal vaadet vahetada",
+        "content": "Liikuge redaktorisse, kui on vaja kontrolli sõlmetasandil, või dokumentatsiooni püsivate viidete jaoks."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat'i vahekaart"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Hallake ja jagage faile, mille on genereerinud teie Workflow-skills.",
+    "bullets": [
+      "Skills kirjutavad failid väljundkataloogi; Heym salvestab need automaatselt.",
+      "Jagage faile Token-linkide või parooliga kaitstud Basic Auth URL-ide kaudu.",
+      "Laadige failid alla ühe klõpsuga."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Salvestusruum",
+        "title": "Automaatselt salvestatud failid",
+        "description": "Skills kirjutavad kausta _OUTPUT_DIR; failid ilmuvad pärast täitmist otse siia.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Jagamine",
+        "title": "Paindlik juurdepääsukontroll",
+        "description": "Avalikud lingid, paroolikaitse, aegumiskuupäevad ja allalaadimispiirangud.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Vormingud",
+        "title": "PDF, DOCX, CSV ja palju muud",
+        "description": "Genereerige mis tahes failitüüpe, kasutades reportlab, python-docx või standardset Pythonit.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Ava Drive'i dokumentatsioon",
+        "description": "Lugege Drive'i vahekaardi täielikku viidet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive'i vahekaart"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Failide genereerimise juhend",
+        "description": "Uurige, kuidas Skills faile loovad.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Failide genereerimine"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Kuidas failid siia jõuavad",
+        "content": "Kui Skill salvestab failid kataloogi _OUTPUT_DIR, salvestab Heym need püsivalt ja loob allalaadimise Token'id."
+      },
+      {
+        "id": "drive-share",
+        "title": "Jagamise valikud",
+        "content": "Looge avalikke Token-linke kõigile või parooliga kaitstud URL-e, sealhulgas aegumiskuupäevad ja allalaadimispiirangud."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive'i vahekaart"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Kasutajatunnused",
+    "summary": "Hallake võtmeid, Tokeneid ja ühenduse üksikasju, et Workflow'd saaksid väliste süsteemidega turvaliselt suhelda.",
+    "bullets": [
+      "Salvestage juurdepääsuandmed keskselt, selle asemel et neid üksikute sõlmede vahel laiali jaotada.",
+      "Kasutajatunnused juhivad LLM-e, integratsioone, vektorhoidlaid ja palju muud.",
+      "Andke juurdepääs sihipäraselt, kui meeskonnad vajavad sama ühendust ilma võtmekoopiaid tegemata."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Turvalisus",
+        "title": "Turvalised kasutajatunnused",
+        "description": "Salvestage autentimine üks kord ja kasutage seda Workflow'des turvaliselt uuesti.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integratsioonid",
+        "title": "Lai toetus",
+        "description": "Toetab pakkujaid nagu OpenAI, DeepSeek, Slack, Redis, Qdrant ja Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Koostöö",
+        "title": "Sihipärane jagamine",
+        "description": "Kasutage meeskonna- või kasutajapõhist jagamist duplikaatide loomise asemel.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Lugege kasutajatunnuste dokumentatsiooni",
+        "description": "Avage kasutajatunnuste armatuurlaua juhend.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Kasutajatunnuste vahekaart"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Vaadake integratsioone",
+        "description": "Sirvige kolmandate osapoolte integratsioonide seadistamise üksikasju.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Kolmandate osapoolte integratsioonid"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Kus neid kasutatakse",
+        "content": "Kasutajatunnustele viidatakse sõlme konfiguratsioonis ja need lahendatakse täitmise ajal turvaliselt."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Meeskonnasõbralik mudel",
+        "content": "Eelistage jagamist, kui mitu arendajat vajavad sama pakkuja juurdepääsu; see tagab järjepideva käitumise ja lihtsa auditeerimise."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Kasutajatunnuste vahekaart"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektorhoidlad",
+    "summary": "Valmistage ette Retrieval-taustsüsteemid Workflow'de jaoks, mis vajavad semantilist otsingut, mälu või RAG-konteksti kaasamist.",
+    "bullets": [
+      "Vektorhoidlad moodustavad Retrieval-põhiste Workflow'de andmebaasi.",
+      "Kasutage koos RAG-sõlmede ja AI-voogudega täpse dokumendi põhistamise jaoks.",
+      "See vahekaart toimib infrastruktuurina põhjendatud Prompt'ide jaoks."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG-infrastruktuur",
+        "title": "Otsitav mälu",
+        "description": "Hoidke dokumente semantilise Retrieval'i jaoks valmis, kui Workflow'd vajavad konteksti.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kvaliteet",
+        "title": "Põhjendatud põhistamine",
+        "description": "Retrieval vähendab hallutsinatsiooniriski, pakkudes tõendeid.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Haldamine",
+        "title": "Üks kord keskselt hallata",
+        "description": "Looge vektorhoidlad ja kasutage neid mitmes Workflow's uuesti.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Avage vektorhoidlate dokumentatsioon",
+        "description": "Lugege vektorhoidlate armatuurlaua juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Vektorhoidlate vahekaart"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Vaadake RAG-sõlme dokumentatsiooni",
+        "description": "Avage Qdrant RAG-sõlme viide.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Paigutus",
+        "content": "See vahekaart valmistab ette salvestuskihi. Tegelik Retrieval-loogika asub Workflow'de sees (nt RAG- või agendimustrite kaudu)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Kasutamise aeg",
+        "content": "Valige vektorhoidlad, kui teie Workflow peab otsima struktureerimata teadmisi, mitte lootma ainult LLM-i mälule."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Vektorhoidlate vahekaart"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Hallake Model Context Protocol ühendusi, et agentide Workflow'd pääseksid turvaliselt ligi tööriistadele ja välistele funktsioonidele.",
+    "bullets": [
+      "MCP muudab välised tööriistade ökosüsteemid kasutatavaks agentide kontekstiks.",
+      "Kasutage seda vahekaarti, kui agentidel on vaja rikkalikumaid tööriistu kui staatilised Prompt'id.",
+      "Ühenduse kvaliteet määrab otseselt teie agentide võimekuse."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Agendi tööriistad",
+        "title": "Väline funktsioonikiht",
+        "description": "Pakkuge tööriistaservereid, mida agendid saavad arutlemise käigus kutsuda.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Käitusaegne kontroll",
+        "title": "Ühenduse seadistamine",
+        "description": "Seadistage Endpoint'id, sildid ja transport usaldusväärsete Workflow'de jaoks.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Platvormi sügavus",
+        "title": "Kaugemale kui Prompt'id",
+        "description": "MCP võimaldab Heym-Workflow'del tegutseda, mitte ainult vastata.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Ava MCP dokumentatsioon",
+        "description": "Lugege MCP vahekaardi juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP vahekaart"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Agendi arhitektuur",
+        "description": "Uurige, kuidas MCP on integreeritud agentide täitmisse.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Agendi arhitektuur"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Tähtsus",
+        "content": "Eriti oluline, kui teie agent vajab tööriistu, keskkonna juurdepääsu või süsteemiintegratsioone väljaspool üksikuid sõlmi."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Töövõtt",
+        "content": "Käsitlege MCP ühendusi nagu infrastruktuuri: stabiilsed sildid ja selged vastutusalad lihtsustavad silumist."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP vahekaart"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Täitmised",
+    "summary": "Uurige AI ja Workflow täitmiste üksikasjalikke jälgi, et mõista, mis juhtus – mitte ainult seda, kas see töötas.",
+    "bullets": [
+      "Kasutage jälgi silumiseks, jõudluse analüüsiks ja Prompt'ide kvaliteedi kontrollimiseks.",
+      "Jäljed selgitavad mudeli käitumist, latentsust ja täitmisteid.",
+      "Esimene koht, kuhu pöörduda ootamatute tulemuste või ebastabiilsete käivituste korral."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Silumine",
+        "title": "Näete peidetud samme",
+        "description": "Jäljeandmed paljastavad, mida Workflow ja mudel tegelikult täitsid.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Hindamine",
+        "title": "Toetage iteratsioone",
+        "description": "Kasutage jälgi Prompt'ide, tööriistade ja mudelite optimeerimisel.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Usaldusväärsus",
+        "title": "Mõistke tulemusi",
+        "description": "Head jäljed vähendavad oletusi vigade analüüsimisel.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Ava täitmise dokumentatsioon",
+        "description": "Lugege täitmise armatuurlaua juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Täitmise vahekaart"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Millal jäljed on hädavajalikud",
+        "content": "Kui Workflow'd on mitmeastmelised, mudelimahukad või tööriistapõhised, ei piisa ainult oleku kuvamisest."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Jälg vs ajalugu",
+        "content": "Ajalugu näitab, ET käivitus toimus. Jäljed selgitavad, MIKS see nii käitus."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Täitmise vahekaart"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Hoiatused",
+    "summary": "Määratlege lävendid ajavahemike kaupa ja saage automaatselt teavitus, kui need ületatakse.",
+    "bullets": [
+      "Neli tüüpi: vigade arv, käitusaeg, Tokeni-/kululävendid ja täitmiste loendur.",
+      "Iga hoiatust hinnatakse valitud ajavahemiku põhjal, mitte kunagi üksikute sündmuste järgi.",
+      "Kirjeldage nõuet loomulikus keeles ja assistent seadistab hoiatuse."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ajavahemik",
+        "title": "Kuhjumised, mitte kõrvalekalded",
+        "description": "Üks ebaõnnestunud käivitus on müra. Kaksteist kümne minuti jooksul on intsident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Enne salvestamist",
+        "title": "Testige tingimust tagasiulatuvalt",
+        "description": "Kontrolli samm testib tegeliku ajaloo vastu, et lävendid eelnevalt kalibreerida.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reaktsioon",
+        "title": "Käivitage Workflow häire korral",
+        "description": "Alert-Payload saab Workflow-sisendiks automaatsete teavituste jaoks Slacki või e-posti kaudu.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Avage hoiatuste dokumentatsioon",
+        "description": "Lugege, kuidas häiretüübid, ajavahemikud ja assistent töötavad.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Hoiatuste vahekaart"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Eesmärk",
+        "content": "Analüüsid ja jälgimised vastavad küsimustele, mille te aktiivselt esitate. Hoiatused lasevad Heymil proaktiivselt teatada, kui kriitilised lävendid on ületatud."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Miks valehäireid välditakse",
+        "content": "Hoiatus käivitub üks kord ja ootab, kuni mõõdik taastub – see hoiab ära teavituste üleujutuse."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Hoiatuste vahekaart"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analüüsid",
+    "summary": "Jälgige kasutusmustreid ja süsteemi käitumist, et mõista aktiivsust, kasvu ja muutusi ajas.",
+    "bullets": [
+      "Tuvastage analüüside abil kasutuselevõtt, läbilaskevõime ja ebatavalised tipud.",
+      "Platvormitasandil vaade, mitte üksik silumisvahend.",
+      "Kombineerige analüüse jälgimiste ja ajalooga, et saada signaal ja selgitus."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signaalid",
+        "title": "Kasutuse läbipaistvus",
+        "description": "Tuvastage trende, mitte ei vaatle üksikuid käivitusi isoleeritult.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Mahutavus",
+        "title": "Operatiivne teadlikkus",
+        "description": "Tuvastage ja uurige koormuse tippe ja langusi varakult.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Otsustustugi",
+        "title": "Sihipärane optimeerimine",
+        "description": "Analüüsid aitavad prioriseerida olulisemaid Workflow'sid.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Avage analüüside dokumentatsioon",
+        "description": "Lugege analüüside armatuurlaua juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analüüside vahekaart"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Eesmärk",
+        "content": "Kasutage analüüse mustrite, läbilaskevõime ja koondatud käitumise jaoks kogu platvormi tegevuses."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Toimimisviis",
+        "content": "Tuvastage signaalid siin, seejärel liikuge jälgimiste, ajaloo või redaktori juurde, et põhjuseid analüüsida."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analüüside vahekaart"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Töölaud",
+    "summary": "Looge diagrammi vidinate ruudustik, mida toidavad eraldi Workflow'd – kõik näitajad ühe pilguga.",
+    "bullets": [
+      "Iga vidinat käitab Workflow, mis edastab andmeid Chart Output sõlme.",
+      "Kasutage tulp-, joon-, ring-, tabeli- ja arvuvidinaid vastavalt mõõdikule.",
+      "Looge või kohandage vidinaid AI abil ja vahemällu salvestage tulemused kiirete laadimisaegade tagamiseks.",
+      "Looge mitu töölauda ja jagage neid isikute või tiimidega lugemis- või kirjutamisõigusega."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kompositsioon",
+        "title": "Workflow'st toidetud diagrammid",
+        "description": "Kõik andmed, mida Workflow loob, visualiseeritakse diagrammina.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Jõudlus",
+        "title": "Vahemällu salvestatud tulemused",
+        "description": "Vidina vahemällu salvestamine väldib korduvaid Workflow käivitusi igal lehe külastusel.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI tugi",
+        "title": "Genereerimine ja kohandamine",
+        "description": "Kirjeldage mõõdikut ja laske vidinal automaatselt AI abil luua.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Ava töölaua dokumentatsioon",
+        "description": "Õppige, kuidas töölaua vidinaid luua.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Töölaua vaheleht"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Eesmärk",
+        "content": "Kasutage töölauda püsivate ülevaadete jaoks olulistest näitajatest teie enda Workflow'dest."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Loomine",
+        "content": "Lisage vidin, seadistage Workflow nii, et viimane sõlm enne Chart Output edastab ridu, ja paigutage see ruudustikku."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Töölaua vaheleht"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Tiimid",
+    "summary": "Hallake jagatud juurdepääsu, et Workflow'sid, Credentials, muutujaid ja vektorsalvestust saaks kasutada koostöös ilma duplikaatideta.",
+    "bullets": [
+      "Tiimid on puhtaim viis platvormi ressursse skaleeritavalt jagada.",
+      "Kasutage tiime, kui õigused peaksid järgima gruppi, mitte üksikisikuid.",
+      "Tagage struktureeritud koostöö kasvavas tööruumis."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Koostöö",
+        "title": "Grupipõhised jagamised",
+        "description": "Andke juurdepääs korraga tiimile, mitte ärge volitage üksikkasutajaid käsitsi.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Selgus",
+        "title": "Selged vastutused",
+        "description": "Ressursside haldamine järgib tegelikke tiimistruktuure.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skaleerimine",
+        "title": "Vähem halduskoormust",
+        "description": "Uued liikmed pärivad juurdepääsuõigused automaatselt tiimi kaudu.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Ava tiimide dokumentatsioon",
+        "description": "Lugege tiimide töölaua juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Tiimide vaheleht"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Ressursside jagamine",
+        "description": "Lugege lähemalt ressursside jagamise kohta.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Credentials jagamine"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Tiimide eelised",
+        "content": "Tiimid ühendavad identiteedi ja ressursile juurdepääsu sujuvaks koostööks."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktiline nõuanne",
+        "content": "Eelistage tiimijagamist, kui Workflow või Credential kuulub püsivale töörühmale."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Tiimide vaheleht"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protokollid",
+    "summary": "Lugege logisid stacki tasandil, kui vajate infrastruktuuri ülevaadet väljaspool Workflow' väljundeid.",
+    "bullets": [
+      "Kasutage logisid teenuste silumiseks, konteinerite oleku ja keskkonnaprobleemide tuvastamiseks.",
+      "Aitab, kui põhjused asuvad allpool Workflow' tasandit.",
+      "Kasutage koos jälgimistega tõendite kogumiseks rakenduse ja süsteemi tasandil."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktuur",
+        "title": "Konteinerite läbipaistvus",
+        "description": "Näete, mida taustateenused teostavad Heym'i liidese all.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Veaotsing",
+        "title": "Põhjuste leidmine",
+        "description": "Logid aitavad käivitusprobleemide, kokkujooksmiste või integratsioonivigade korral.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Täiendav",
+        "title": "Erinevus Workflow' tulemustest",
+        "description": "Workflow' väljundid näitavad tulemusi; logid näitavad süsteemi käitumist.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Ava protokolli dokumentatsioon",
+        "description": "Lugege protokolli armatuurlaua juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Protokolli vahekaart"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Kasutushetk",
+        "content": "Lülituge siia, kui probleemid tunduvad olevat seotud juurutamise, teenuse või keskkonnaga."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Parim kombinatsioon",
+        "content": "Kasutage logisid koos jälgimiste ja ajalooga, et jõuda sümptomitest kiiresti põhjuseni."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Protokolli vahekaart"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Hindamine",
+    "summary": "Looge agentide Workflow'de jaoks korratavaid võrdlusaluseid, et usaldusväärselt võrrelda Prompt'i, mudeli ja Workflow' muudatusi.",
+    "bullets": [
+      "Sviidid ja testjuhtumid muudavad subjektiivse Workflow' kvaliteedi mõõdetavateks näitajateks.",
+      "Ideaalne koht regressioonikontrollideks enne Prompt'i või mudeli uuenduste juurutamist.",
+      "Võrrelge mitut mudelit sama andmestiku ja hindamismeetodi vastu."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kvaliteeditsükkel",
+        "title": "Agentide võrdlemine",
+        "description": "Käivitage sama sviiti korduvalt, selle asemel et loota juhuslikele kontrollidele.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Võrdlus",
+        "title": "Mudeli- ja Prompt'i testid",
+        "description": "Näete, kuidas erinevad seaded käituvad sama testkomplekti puhul.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Turvalisus",
+        "title": "Usaldusväärne iteratsioon",
+        "description": "Tõestage täiustusi enne juurutamist.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Ava hindamise dokumentatsioon",
+        "description": "Lugege hindamislehe juhendit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Hindamise vahekaart"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agendi sõlme viide",
+        "description": "Vaadake Workflow' piirkonda, millele enamik hindamissviite on suunatud.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agendi sõlm"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Sviitide kavandamine",
+        "content": "Hea sviit peegeldab tõelisi kasutusjuhtumeid, piiranguid ja kinnitusetappe, mis peavad püsima stabiilsena."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Võrdlusparameetrid",
+        "content": "Tüüpilised võrdlused hõlmavad Prompt'i variante, mudeli valikut, Temperature'i seadeid ja Workflow' redaktsioone samal andmestikul."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Hindamise vahekaart"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentatsioon",
+    "summary": "Otsige täpseid platvormi viiteid otse rakenduses ja süvenege vajadusel.",
+    "bullets": [
+      "Heymi dokumentatsioon on loodud kiireks mõistmiseks ja sihipäraseks otsimiseks.",
+      "Külgriba, otsing ja ristviited võimaldavad kiiret liikumist kontseptsioonide vahel.",
+      "Showcase viitab otse hetkel avatud artiklile."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Rakendusesisene viide",
+        "title": "Alati käepärast",
+        "description": "Dokumentatsioon püsib tootevoos, ilma et peaksite avama väliseid vahelehti.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ülevaade",
+        "title": "Olulisim kõigepealt",
+        "description": "Artiklid algavad põhipunktidega ja hargnevad linkide kaudu."
+      },
+      {
+        "eyebrow": "Kontekstitundlik",
+        "title": "Praegune artikkel",
+        "description": "Dokumendi lugemisel järgib 'Lisateave' toiming otse seda artiklit."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Vaata sissejuhatust",
+        "description": "Avage dokumentatsiooni sissejuhatus vaikimisi alguspunktina.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Sissejuhatus"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Kiire navigeerimine",
+        "content": "Kasutage külgriba kategooriate jaoks ja käsukäsku, kui teema on juba tuttav."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Showcase'i tugi",
+        "content": "Showcase hoiab kokkuvõtted kompaktsed ja suunab vajadusel üksikasjaliku dokumentatsiooni juurde."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Sissejuhatus"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Ajakavad",
+    "summary": "Vaadake kõiki aktiivseid Cron-töövooge visuaalsel kalendril ja kontrollige käitusaegu.",
+    "bullets": [
+      "Vahetage päeva-, nädala- ja kuuvaate vahel sobiva detailsuse saavutamiseks.",
+      "Hõljutage ploki kohal, et näha Cron-avaldist; klõpsake, et hüpata otse lõuendile.",
+      "Kasutage seda vahekaarti käitustiheduse kontrollimiseks ja kattumiste tuvastamiseks."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Läbipaistvus",
+        "title": "Kalendrivaade",
+        "description": "Aktiivsed Cron-töövood kuvatakse plokkidena nende planeeritud aegadel.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigeerimine",
+        "title": "Ühe klõpsuga lõuendile",
+        "description": "Klõpsake plokil, et avada töövoo redaktor otse.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Vahemikud",
+        "title": "Päev, nädal või kuu",
+        "description": "Kohandage detailsust, et kontrollida üksikuid tunde või planeerida tervet kuud.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Ava ajakavade dokumentatsioon",
+        "description": "Lugege ajakavade vahekaardi viidet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Ajakavade vahekaart"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron-sõlme viide",
+        "description": "Uurige, kuidas Cron-triggereid lõuendil konfigureerida.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Kasutushetk",
+        "content": "Kontrollige planeeritud automatiseerimisi, tuvastage ajakavakonflikte ja veenduge, et olulised töövood püsiksid aktiivsed."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Värvikodeering",
+        "content": "Iga töövoog saab oma ID-st järjepideva värvi, mis püsib samana päeva-, nädala- ja kuuvaates."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Ajakavade vahekaart"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Andmetabelid",
+    "summary": "Looge struktureeritud andmetabeleid otse Heymis ja kasutage neid Workflow'des programmiliselt.",
+    "bullets": [
+      "Looge tüpiseeritud veergudega tabeleid, täitke neid käsitsi või importige CSV-failist.",
+      "Kasutage DataTable Workflow' sõlme ridade programmiliseks lugemiseks, kirjutamiseks ja pärimiseks.",
+      "Jagage tabeleid kasutajatele või meeskondadele lugemis- või kirjutamisõigustega."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integreeritud andmed",
+        "title": "Integreeritud salvestusruum",
+        "description": "Salvestage struktureeritud andmeid ilma väliste andmebaaside või API-võtmeteta.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow' integratsioon",
+        "title": "DataTable sõlm",
+        "description": "Leidke, lisage, värskendage ja kustutage ridu mis tahes Workflow's.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Koostöö",
+        "title": "Jagamine ja õigused",
+        "description": "Määrake kasutajatele ja meeskondadele üksikasjalikud lugemis- ja kirjutamisõigused.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Andmetabelite vahekaardi dokumentatsioon",
+        "description": "Lugege andmetabelite vahekaardi viidet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Andmetabelid"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable sõlme dokumentatsioon",
+        "description": "Lugege DataTable sõlme viidet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Mis on andmetabelid?",
+        "content": "Andmetabelid on Heymis integreeritud struktureeritud salvestusruum: tüpiseeritud veerud (String, Number, Boolean, Date, JSON), reaalajas redigeerimine ning CSV import/eksport."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Kasutamine Workflow'des",
+        "content": "DataTable sõlm toetab find, getAll, getById, insert, update, remove ja upsert – ilma volitusteta otse Workflow' omaniku kaudu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Andmetabelid"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow' redaktor",
+    "summary": "Looge, testige, siluge ja optimeerige Workflow'sid lõuendil – otse täitmiskontekstis.",
+    "bullets": [
+      "Redaktoris ühinevad sõlmede disain, andmevoog ja täitmiskäitumine.",
+      "Kasutage külgpaneele ja ajalugu, et kiiresti vahetada loomise ja silumise vahel.",
+      "Showcase on siin teadlikult kompaktne, et pakkuda maksimaalset ruumi lõuendile."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Lõuend",
+        "title": "Visuaalne Workflow' disain",
+        "description": "Ühendage sõlmi, harutage loogikat ja modelleerige käitusvoogu otse.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteratsioon",
+        "title": "Silumine loomise ajal",
+        "description": "Kasutage ajalugu, silumispaneeli ja täitmise tulemusi kiirete tagasisideahelate jaoks."
+      },
+      {
+        "eyebrow": "Funktsionaalsus",
+        "title": "Täiustatud funktsioonid käepärast",
+        "description": "Portaal, jagamised, mallid ja valideerimine asuvad otse lõuendil."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Ava lõuendi dokumentatsioon",
+        "description": "Lugege lõuendi funktsioonide viidet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Lõuendi funktsioonid"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Kiirklahvid",
+        "description": "Avage redaktori kiirklahvide ülevaade.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Kiirklahvid"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Töörütm",
+        "content": "Modelleerige lõuendil, kontrollige väljundite eeldusi ja kohandage parameetreid külgpaneelidel, ilma fookust kaotamata."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompaktne showcase",
+        "content": "Kuna redaktor pakub juba palju teavet, toimib showcase saleda orientiirina."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Lõuendi funktsioonid"
+    }
+  }
+}

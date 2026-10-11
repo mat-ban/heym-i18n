@@ -19,6 +19,9 @@ import { refreshCredentialsCache } from "@/composables/useExpressionCompletion";
 import { cn, formatDate } from "@/lib/utils";
 import { credentialsApi, teamsApi } from "@/services/api";
 import { CREDENTIAL_TYPE_LABELS } from "@/types/credential";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const credentials = ref<CredentialListItem[]>([]);
 const loading = ref(true);
@@ -83,7 +86,7 @@ const searchShortcutLabel = computed((): string => {
 
 const searchPlaceholder = computed((): string => {
   const label = searchShortcutLabel.value;
-  return label ? `Search credentials (${label})` : "Search credentials";
+  return label ? `${t('credentials.searchPlaceholder')} (${label})` : t('credentials.searchPlaceholder');
 });
 
 function clearCredentialSearch(): void {
@@ -350,7 +353,7 @@ async function removeCredentialShare(userId: string): Promise<void> {
 const teamOptions = computed(() => {
   const shared = new Set(credentialTeamShares.value.map((s) => s.team_id));
   return [
-    { value: "", label: "Select a team" },
+    { value: "", label: t("credentials.selectTeam") },
     ...teams.value
       .filter((t) => !shared.has(t.id))
       .map((t) => ({ value: t.id, label: t.name })),
@@ -390,7 +393,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
       <div>
         <div class="flex items-center gap-3">
           <h2 class="text-2xl md:text-3xl font-bold tracking-tight">
-            Credentials
+            {{ $t('credentials.title') }}
           </h2>
           <span
             v-if="!loading && credentials.length > 0"
@@ -400,7 +403,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
           </span>
         </div>
         <p class="text-muted-foreground mt-1">
-          Manage API keys and authentication credentials
+          {{ $t('credentials.subtitle') }}
         </p>
       </div>
       <div class="flex flex-col sm:flex-row sm:items-center justify-end gap-2 sm:gap-3">
@@ -434,7 +437,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
           @click="openCreateDialog"
         >
           <Plus class="w-4 h-4" />
-          New Credential
+          {{ $t('credentials.newCredential') }}
         </Button>
       </div>
     </div>
@@ -468,17 +471,17 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
         <Key class="w-10 h-10 text-primary" />
       </div>
       <h3 class="text-xl font-semibold mb-2">
-        No credentials yet
+        {{ $t('credentials.noCredentialsYet') }}
       </h3>
       <p class="text-muted-foreground mb-6 max-w-sm mx-auto">
-        Add your first credential to connect to AI providers
+        {{ $t('credentials.noCredentialsSubtitle') }}
       </p>
       <Button
         variant="gradient"
         @click="openCreateDialog"
       >
         <Plus class="w-4 h-4" />
-        Add Credential
+        {{ $t('credentials.addCredential') }}
       </Button>
     </div>
 
@@ -488,10 +491,10 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
     >
       <Search class="mb-3 h-8 w-8 text-muted-foreground/60" />
       <p class="text-sm font-medium text-foreground">
-        No credentials found
+        {{ $t('credentials.noCredentialsFound') }}
       </p>
       <p class="mt-1 max-w-md text-xs text-muted-foreground">
-        Try a different name or type.
+        {{ $t('credentials.tryDifferentSearch') }}
       </p>
     </div>
 
@@ -533,7 +536,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
                   class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-accent-blue/10 text-accent-blue"
                 >
                   <Users class="w-3 h-3" />
-                  Shared
+                  {{ $t('credentials.shared') }}
                 </span>
               </div>
               <p class="text-xs text-muted-foreground">
@@ -549,7 +552,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
               variant="ghost"
               size="icon"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary h-8 w-8"
-              title="Share credential"
+              :title="$t('canvas.share')"
               @click="openShareDialog(credential, $event)"
             >
               <Share2 class="w-4 h-4" />
@@ -559,7 +562,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
               size="icon"
               :data-testid="`credential-delete-${credential.id}`"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive h-8 w-8"
-              title="Delete credential"
+              :title="$t('common.delete')"
               @click="deleteCredential(credential.id, $event)"
             >
               <Trash2 class="w-4 h-4" />
@@ -579,7 +582,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
               Shared by {{ credential.shared_by }}
             </span>
             <span v-else>
-              Created {{ formatDate(credential.created_at) }}
+              {{ $t('workflows.created') }} {{ formatDate(credential.created_at) }}
             </span>
           </div>
         </div>
@@ -601,18 +604,17 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
 
     <Dialog
       :open="showShareDialog"
-      title="Share Credential"
+      :title="$t('credentials.shareCredentialTitle')"
       @close="showShareDialog = false"
     >
       <div class="space-y-4">
         <p class="text-sm text-muted-foreground">
-          Share <strong>{{ sharingCredential?.name }}</strong> with other users.
-          They will be able to use this credential in their workflows.
+          {{ $t('credentials.shareCredentialDesc', { name: sharingCredential?.name }) }}
         </p>
 
         <div class="space-y-3">
           <div>
-            <Label class="text-xs">Share with user</Label>
+            <Label class="text-xs">{{ $t('vectorStores.shareWithUser') }}</Label>
             <div class="flex gap-2 mt-1">
               <Input
                 v-model="shareEmail"
@@ -625,12 +627,12 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
                 :disabled="!shareEmail.trim() || sharingLoading"
                 @click="addCredentialShare"
               >
-                Share
+                {{ $t('canvas.share') }}
               </Button>
             </div>
           </div>
           <div>
-            <Label class="text-xs">Share with team</Label>
+            <Label class="text-xs">{{ $t('vectorStores.shareWithTeam') }}</Label>
             <div class="flex gap-2 mt-1">
               <Select
                 v-model="shareTeamId"
@@ -642,7 +644,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
                 @click="addCredentialTeamShare"
               >
                 <Users class="w-4 h-4" />
-                Add
+                {{ $t('common.add') }}
               </Button>
             </div>
           </div>
@@ -656,7 +658,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
         </p>
 
         <div class="space-y-2">
-          <Label>Shared with users:</Label>
+          <Label>{{ $t('credentials.sharedWithUsers') }}</Label>
           <div
             v-if="credentialShares.length > 0"
             class="space-y-2 max-h-32 overflow-y-auto"
@@ -696,11 +698,11 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
             v-else-if="!sharingLoading"
             class="text-sm text-muted-foreground"
           >
-            No users
+            {{ $t('credentials.noUsers') }}
           </p>
         </div>
         <div class="space-y-2">
-          <Label>Shared with teams:</Label>
+          <Label>{{ $t('credentials.sharedWithTeams') }}</Label>
           <div
             v-if="credentialTeamShares.length > 0"
             class="space-y-2 max-h-32 overflow-y-auto"
@@ -727,7 +729,7 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
             v-else-if="!sharingLoading"
             class="text-sm text-muted-foreground"
           >
-            No teams
+            {{ $t('credentials.noTeams') }}
           </p>
         </div>
       </div>

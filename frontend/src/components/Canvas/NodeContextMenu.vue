@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { Ban, Copy, ExternalLink, FlaskConical, LayoutTemplate, Power, Trash2 } from "lucide-vue-next";
 
 interface EvalNodeData {
@@ -32,36 +33,38 @@ const emit = defineEmits<{
   (e: "shareAsTemplate"): void;
 }>();
 
+const { t } = useI18n();
+
 const menuRef = ref<HTMLDivElement | null>(null);
 const adjustedPosition = ref({ x: 0, y: 0 });
 
 const menuItems = computed(() => [
   {
-    label: props.selectedCount > 1 ? "Extract to Sub-Workflow" : "Extract to Sub-Workflow",
+    label: t("canvas.extractSubWorkflow"),
     icon: ExternalLink,
     action: () => emit("extract"),
     show: true,
   },
   {
-    label: "Eval Agent",
+    label: t("canvas.evalAgent"),
     icon: FlaskConical,
     action: () => emit("evalAgent"),
     show: !!props.evalNode,
   },
   {
-    label: props.allDisabled ? "Enable" : "Disable",
+    label: props.allDisabled ? t("common.enable") : t("common.disable"),
     icon: props.allDisabled ? Power : Ban,
     action: () => emit("disable"),
     show: true,
   },
   {
-    label: "Duplicate",
+    label: t("common.duplicate"),
     icon: Copy,
     action: () => emit("duplicate"),
     show: true,
   },
   {
-    label: "Share as Template",
+    label: t("canvas.shareAsTemplate"),
     icon: LayoutTemplate,
     action: () => { emit("shareAsTemplate"); emit("close"); },
     show: props.allowShareAsTemplate && props.selectedCount === 1,
@@ -71,7 +74,7 @@ const menuItems = computed(() => [
     show: true,
   },
   {
-    label: "Delete",
+    label: t("common.delete"),
     icon: Trash2,
     action: () => emit("delete"),
     show: true,

@@ -1,0 +1,262 @@
+# Diagramutdata
+
+Noden **Diagramutdata** är slutnoden i ett workflow för en [dashboard-widget](../tabs/dashboard-tab.md). Den tar raderna som produceras av de uppströms noderna och omvandlar dem till en standardiserad diagram-payload som dashboarden renderar.
+
+## Översikt
+
+| Egenskap | Värde |
+|----------|-------|
+| Indata | 1 |
+| Utdata | 0 (slutnod) |
+| Utdata | Standardiserad diagram-payload |
+
+Placera denna nod **sist** i ett workflow för en dashboard-widget. Noden före den bör producera en array av radobjekt, till exempel:
+
+```json
+[
+  { "month": "Jan", "revenue": 120 },
+  { "month": "Feb", "revenue": 150 }
+]
+```
+
+När endast exempel-/provdata finns tillgänglig (ingen verklig källa) produceras dessa rader med en **Set**-nod med `$array(dict(...), dict(...))` — till exempel `$array(dict(month="Jan", revenue=120), dict(month="Feb", revenue=150))`. Använd **inte** `${...}` eller enkla `{...}`-objektliteraler; Heym bygger objekt endast med `dict(key=value)`.
+
+## Parametrar
+
+| Parameter | Typ | Beskrivning |
+|-----------|-----|-------------|
+| `label` | string | Nodidentifierare (camelCase) |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` eller `hitl` |
+| `orientation` | string | `vertical` eller `horizontal` (endast stapeldiagram) |
+| `dataPath` | string | Punktseparerad sökväg till radarrayen i den uppströms nodens utdata (t.ex. `data` eller `result.items`). Lämna tom för automatisk identifiering. |
+| `labelField` | string | Radnyckel som används som kategorietikett (pie/bar/line) |
+| `valueField` | string | Radnyckel som används som numeriskt värde (pie/bar/line/numeric/gauge) |
+| `series` | array | Valfri definition för flera serier `[{ "name": "Sent", "field": "sent" }]` för bar/line (åsidosätter `valueField`) |
+| `columns` | array | Valfri kolumnlista för `table` (standardvärdet är nycklarna i den första raden) |
+| `xField` / `yField` | string | Radnycklar för de numeriska X- och Y-axlarna (scatter) |
+| `min` / `max` | number | Numeriskt intervall för `gauge` (standard `0` / `100`) |
+| `unit` | string | Valfri enhet som visas bredvid ett `numeric`- eller `gauge`-värde |
+| `text` | string | Markdown-meddelande för diagramtypen `text`. Lämna tomt och ange `valueField` för att rendera ett dynamiskt meddelande hämtat från uppströms data. |
+| `title` | string | Valfri diagramtitel |
+
+## Diagramtyper
+
+- **bar / line / area / pie** — kategoriska diagram som styrs av `labelField` + `valueField` (eller `series` för flera serier i bar/line/area). `area` är ett fyllt trenddiagram.
+- **table** — råa rader renderade som en rullningsbar tabell med `columns`.
+- **numeric** — ett enskilt KPI-värde från den första raden, med valfri `unit`.
+- **gauge** — ett enskilt värde som visas mot ett `min`–`max`-intervall (t.ex. en procentandel). Använder `valueField`.
+- **scatter** — X/Y-punkter från `xField` och `yField` för korrelationsdiagram.
+- **proportion** — en enskild horisontell stapel uppdelad i andelar med en procentteckenförklaring (t.ex. en språkfördelning). Använder `labelField` + `valueField`.
+- **barGauge** — en horisontell gauge per rad med en röd→grön gradient och ett värde (t.ex. ledigt diskutrymme). Använder `labelField` + `valueField`, valfri `unit` och `max` (standardvärdet är det största radvärdet).
+- **text** — ett markdown-meddelande (t.ex. en statusnotis som "Senaste körning kl. 19:47"). Placera markdown-texten i `text` för ett statiskt meddelande, eller lämna `text` tomt och ange `valueField` för att rendera en sträng som producerats uppströms. Stöder rubriker, fetstil/kursiv stil, [listor](../nodes/chart-output-node.md#interactive-task-lists), länkar och inline-kod.
+- **hitl** — en karusell med väntande mänskliga granskningar. Rubriken visar `1/n pending`; vänsterpilen är inaktiverad på det första kortet och högerpilen på det sista. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den, och historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på samma sida. Denna diagramtyp ignorerar uppströms rader, så widgetens workflow består endast av noden Diagramutdata. Varje inloggad person ser granskningarna för de workflows som personen äger.
+
+### Interaktiva uppgiftslistor
+
+Använd GitHub-flavored markdown-syntax för uppgiftslistor i det statiska `text`-fältet:
+
+```markdown
+- [x] Option 1
+- [ ] Option 2
+- [ ] Option 3
+```
+
+På [Dashboard](../tabs/dashboard-tab.md) renderas kryssrutor som klickbara kontroller (anpassade för mörkt och ljust läge). Att växla en kryssruta uppdaterar widgetens workflow-`text`-fält och bevaras mellan uppdateringar.
+
+**Inline-redigering:** dubbelklicka på etiketten för ett uppgiftsobjekt för att redigera den på plats. Tryck på Enter eller klicka utanför för att spara; tryck på Escape för att avbryta. Rensa etiketten helt för att ta bort objektet från listan.
+
+**Länkar i uppgiftsobjekt:** när en etikett innehåller en markdown-länk (`[title](url)`) öppnas URL:en när länken klickas, utan att kryssrutan växlas. Klicka någon annanstans på raden för att växla.
+
+**Endast statisk text:** interaktivitet kräver GFM-syntax för uppgiftslistor (`- [ ]` / `- [x]`). Vanliga dynamiska statusmeddelanden utan uppgiftsobjekt förblir skrivskyddade. När markdown kommer från `valueField` kopieras den vid första växlingen till det statiska `text`-fältet så att ändringarna bevaras.
+### Numrerade listor
+
+Textwidgetar renderar markdown med **explicita radnummer bevarade**. Varje rad prefixas med det nummer som ska visas (t.ex. `9.`, `8.`, `7.`). Heym numrerar inte om raderna automatiskt.
+
+**Varför explicita nummer?** Standardmarkdowns ordnade listor (`1.`, `2.`, `3.`) blir HTML-`<ol>`-listor, som endast räknar **uppåt** från det första numret. En lista skriven som `9.` / `8.` / `7.` skulle visas som `9`, `10`, `11` i en vanlig markdown-renderare. Genom att prefixa varje rad med det avsedda numret undviks detta.
+
+**Fallande listor (t.ex. nyast först):** bygg markdown i en workflow-loop och beräkna visningsnumret per objekt:
+
+```
+${loop.total - loop.index}. [${item.title}](https://example.com/watch?v=${item.id})
+```
+
+Typiskt mönster:
+
+1. Hämta eller bygg en array av objekt (t.ex. HTTP → `body.videos`).
+2. [Loop](./loop-node.md) över arrayen; använd i body en [Variable](./variable-node.md) med `.add()` för att lägga till en numrerad rad per iteration.
+3. Efter loopens **done**-gren, använd [Set](./set-node.md) `join("\n")` på den ackumulerade arrayen (eller motsvarande) till en enda markdown-sträng.
+4. Peka **Chart Output** `valueField` mot den strängen (eller ange statisk `text`).
+
+Exempel på raduttryck inuti loopen (etikett `processVideos`, objekt med `title` och `id`):
+
+```
+$processVideos.total - $processVideos.index + ". [" + $processVideos.item.title + "](https://www.youtube.com/watch?v=" + $processVideos.item.id + ")"
+```
+
+Resulterande markdown:
+
+```markdown
+9. [Latest video](https://www.youtube.com/watch?v=abc)
+8. [Previous video](https://www.youtube.com/watch?v=def)
+1. [Oldest video](https://www.youtube.com/watch?v=xyz)
+```
+
+För en enkel stigande lista som börjar på 1, antingen prefixa varje rad (`1.`, `2.`, `3.`) eller använd en loop med `$loop.index + 1`. Använd [punktlistor](#interactive-task-lists) (`- item`) när nummer inte behövs.
+
+## Hur data löses upp
+
+1. Om `dataPath` är angivet följer noden den punktsökvägen in i uppströmsutdata.
+2. Annars letas efter en array: en lista på toppnivå, en `data`-array eller det första listvärderade fältet.
+3. För `table` blir varje rad en tabellrad med hjälp av `columns` (eller den första radens nycklar).
+4. För `numeric` och `gauge` hämtas värdet från `valueField` på den första raden (eller det första numeriska fältet).
+5. För `scatter` blir varje rad en `[xField, yField]`-punkt.
+6. För `text` hämtas meddelandet från `valueField` på den första raden när det är angivet, annars från den statiska `text`-konfigurationen (annars det första strängfältet på den första raden).
+
+## Exempel
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "revenueChart",
+    "chartType": "bar",
+    "orientation": "vertical",
+    "dataPath": "data",
+    "labelField": "month",
+    "valueField": "revenue",
+    "title": "Monthly revenue"
+  }
+}
+```
+
+Gauge (ensamt värde mot ett intervall):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "cpuGauge",
+    "chartType": "gauge",
+    "dataPath": "rows",
+    "valueField": "value",
+    "min": 0,
+    "max": 100,
+    "unit": "%"
+  }
+}
+```
+
+Scatter (X/Y-punkter):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "correlation",
+    "chartType": "scatter",
+    "dataPath": "rows",
+    "xField": "x",
+    "yField": "y"
+  }
+}
+```
+
+Proportion (en stapel uppdelad efter andel + procentlegend):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "languages",
+    "chartType": "proportion",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "title": "Most Used Languages"
+  }
+}
+```
+
+Area (fylld trend med flera serier):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "memCpu",
+    "chartType": "area",
+    "dataPath": "rows",
+    "labelField": "time",
+    "series": [
+      { "name": "Memory", "field": "memory" },
+      { "name": "CPU", "field": "cpu" }
+    ],
+    "title": "Memory / CPU"
+  }
+}
+```
+
+Bar gauge (gradientmätare per rad med värden):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "freeDisk",
+    "chartType": "barGauge",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "unit": "GB",
+    "title": "Free disk space"
+  }
+}
+```
+
+Text (ett statiskt markdown-meddelande — inga uppströmsrader krävs):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "statusNote",
+    "chartType": "text",
+    "text": "**Last execution** at `19:47` — all checks passed ✅",
+    "title": "Status"
+  }
+}
+```
+
+Text (dynamisk — meddelandesträngen produceras uppströms och hämtas via `valueField`):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "lastRun",
+    "chartType": "text",
+    "dataPath": "rows",
+    "valueField": "message"
+  }
+}
+```
+## Exempel på AI-prompts
+
+Vid generering av en widget med **AI** mappas prompts som dessa direkt till respektive typ:
+
+- **Stapel** — "Visa månatlig intäkt för de senaste 6 månaderna som ett vertikalt stapeldiagram med exempeldata."
+- **Linje** — "Rita dagliga aktiva användare över de senaste 14 dagarna som ett linjediagram."
+- **Yta** — "Visa minnes- och CPU-användning över de senaste 24 timmarna som ett ytdiagram med två serier. Använd exempeldata."
+- **Cirkel** — "Bryt ner körningsstatus (lyckad, fel, avbruten) som ett cirkeldiagram."
+- **Tabell** — "Visa de 10 främsta workflowen efter antal körningar som en rullningsbar tabell med kolumnerna namn och körningar. Använd exempeldata."
+- **Numerisk** — "Visa dagens totala antal workflow-körningar som ett enskilt KPI med enheten 'runs'. Använd exempeldata."
+- **Mätare** — "Visa aktuell CPU-användning som en mätare från 0 till 100 procent."
+- **Punktdiagram** — "Rita förfrågans latens mot payload-storlek som ett punktdiagram med exempeldata."
+- **Andel** — "Visa mina mest använda språk som en andelsstapel: Kotlin 49,64 %, JavaScript 23,73 %, TypeScript 11,64 %, Java 8,92 %, Python 6,06 %. Använd exempeldata."
+- **Stapelmätare** — "Visa ledigt diskutrymme per volym (sda1 till sda7) som en stapelmätare i GB. Använd exempeldata."
+- **Text** — "Lägg till en textwidget med en markdown-checklista (en markerad post, två omarkerade), eller lista de 5 senaste handledningsvideorna i fallande ordning (5. ner till 1.) med YouTube-länkar — prefixa varje rad med ett explicit nummer (`5. Title`, `4. Title`, …)."
+
+## Relaterat
+
+- [Fliken Dashboard](../tabs/dashboard-tab.md) — bygg och arrangera widgetar
+- [Utmatningsnod](output-node.md) — terminalnod för vanliga workflow

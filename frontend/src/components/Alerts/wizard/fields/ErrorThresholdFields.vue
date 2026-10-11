@@ -22,7 +22,7 @@ const thresholdCount = computed({
 
 <template>
   <div class="space-y-2">
-    <Label for="alert-threshold-count">Error count</Label>
+    <Label for="alert-threshold-count">{{ $t('alerts.wizard.errorCount') }}</Label>
     <Input
       id="alert-threshold-count"
       v-model="thresholdCount"
@@ -30,7 +30,7 @@ const thresholdCount = computed({
       min="1"
     />
     <p class="text-xs text-muted-foreground">
-      Fires when this many runs fail inside the window.
+      {{ $t('alerts.wizard.errorCountDesc') }}
     </p>
   </div>
 </template>

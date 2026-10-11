@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Workflow 내의 노드를 다시 활성화",
+    "releaseTour": {
+      "label": "Heym의 새로운 기능",
+      "introTitle": "이번 릴리스의 새로운 기능",
+      "introDescription": "마지막 업데이트 이후의 새로운 기능을 간략히 소개합니다. 약 1분 정도 소요됩니다.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable 노드: Workflow 내의 노드를 다시 활성화",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "새로운 **Enable 노드**는 **Disable 노드**의 반대 역할을 합니다. 이름으로 노드를 선택하여 다시 활성화하고 변경 사항을 저장하십시오. 비활성화된 **Cron** Trigger는 다음 예정된 시간에 다시 실행됩니다. 노드가 흐름의 뒤쪽에 위치하고 아직 실행되지 않았다면 현재 실행에서 바로 실행됩니다."
+          },
+          {
+            "type": "prose",
+            "markdown": "비활성화된 Trigger는 절대 스스로 실행을 시작하지 않습니다. 따라서 Enable 노드를 **Input** Trigger와 같은 다른 진입점 뒤에 배치하십시오. **Wait** 노드는 이제 더 긴 일시 중지를 지원합니다: 1분이 아닌 최대 15분까지 가능합니다."
+          }
+        ],
+        "tour": {
+          "description": "비활성화된 노드를 Workflow에서 직접 다시 활성화하십시오. 예를 들어 일시 중지된 Cron Trigger를 다시 활성화할 수 있습니다.",
+          "useCases": [
+            "비활성화된 Cron Trigger를 필요 시 Webhook을 통해 시작",
+            "Disable 노드와 결합하여 노드를 상태에 따라 켜고 끄기",
+            "Wait 노드를 사용하여 Workflow를 최대 15분까지 일시 중지"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "대시보드에서 직접 대기 중인 사람의 승인을 검토하십시오",
+    "releaseTour": {
+      "label": "Heym의 새로운 기능",
+      "introTitle": "이번 릴리스의 새로운 기능",
+      "introDescription": "마지막 업데이트 이후의 변경 사항을 간략히 소개합니다. 약 1분 정도 소요됩니다.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "대시보드 위젯을 통해 대기 중인 리뷰를 처리하십시오",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**HITL** 위젯을 추가하면 헤더에 대기 중인 리뷰 수가 `1/n 대기 중`으로 표시됩니다. 화살표 키로 항목을 탐색하십시오. Workflow 이름을 클릭하면 캔버스에서 해당 실행이 직접 열립니다. **승인**, **변경 요청**, **거부**를 통해 초안을 완료할 수 있습니다. 기록 아이콘을 클릭하면 같은 페이지의 기록 대화상자에서 해당 실행이 열립니다. 대기열은 개인별로 관리되므로, 공유 대시보드에서는 다른 사람의 초안이 표시되지 않습니다."
+          }
+        ],
+        "tour": {
+          "description": "헤더에 카운터가 표시되는, 대기 중인 승인을 위한 대시보드 캐러셀입니다.",
+          "useCases": [
+            "첫 번째 리뷰를 열기 전에 대기 중인 리뷰 수를 확인하십시오",
+            "대시보드를 떠나지 않고 승인, 변경 요청 또는 거부하십시오",
+            "위젯 제목 옆의 아이콘을 통해 기록 대화상자에서 이 실행을 여십시오"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "대시보드"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI 어시스턴트가 Workflow를 테스트하고 데이터 테이블을 설정합니다",
+    "releaseTour": {
+      "label": "Heym의 새로운 기능",
+      "introTitle": "이번 릴리스의 새로운 기능",
+      "introDescription": "마지막 업데이트 이후의 새로운 기능을 간략히 소개합니다. 약 1분 정도 소요됩니다.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO 모드: AI 어시스턴트가 빌드한 것을 테스트합니다",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Canvas **AI 어시스턴트**에서 **YOLO 모드**를 활성화하시면, Workflow를 적용한 후에도 중단되지 않습니다. **Run**을 통해 Workflow를 실행하고, 결과를 읽고, 메시지당 최대 5회까지 Workflow를 스스로 수정합니다. 각 응답은 단계를 실시간으로 나열합니다."
+          },
+          {
+            "type": "prose",
+            "markdown": "첫 실행 전에 제안된 값과 함께 테스트 입력을 요청하고 이를 재사용합니다. 필요한 경우 다른 Workflow의 결과를 실행할 수도 있습니다. 결정이나 자격 증명이 필요한 경우 익숙한 질문 카드로 요청합니다. 실제 실행: YOLO 모드는 기본적으로 꺼져 있으며 **Stop**은 언제든지 흐름을 종료합니다."
+          }
+        ],
+        "tour": {
+          "description": "AI 어시스턴트가 생성된 Workflow를 실행하고, 결과를 확인하며, 작동할 때까지 오류를 스스로 수정합니다.",
+          "useCases": [
+            "Workflow를 설명하고 바로 테스트된 버전을 받기",
+            "어시스턴트가 오류가 있는 노드를 자동으로 찾아 수정하도록 하기",
+            "연결하기 전에 다른 Workflow의 반환 값을 확인하기"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI 어시스턴트가 데이터 테이블을 선택하거나 생성합니다",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Workflow가 레코드를 저장할 때 **AI 어시스턴트**가 이제 **DataTables**를 인식합니다. 테이블을 지정하시면 이를 사용합니다. 그렇지 않으면 적합한 테이블을 묻거나 필요한 열이 포함된 **새 테이블 생성**을 제안합니다."
+          },
+          {
+            "type": "prose",
+            "markdown": "Canvas 어시스턴트, YOLO 모드, **Chat**, 문서 및 MCP를 통한 `heym_chat`에서 작동합니다."
+          }
+        ],
+        "tour": {
+          "description": "AI 어시스턴트가 적합한 데이터 테이블을 묻거나 필요한 열이 포함된 새 테이블을 생성합니다.",
+          "useCases": [
+            "리드를 자동으로 테이블에 기록하고 Workflow와 테이블을 함께 생성하기",
+            "열과 유형을 기준으로 기존 테이블 선택하기",
+            "Chat 또는 MCP를 통해 테이블을 직접 생성하고 연결하기"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "여러 Dashboard를 생성하고 팀과 공유하십시오",
+    "releaseTour": {
+      "label": "Heym의 새로운 기능",
+      "introTitle": "이번 릴리스의 새로운 기능",
+      "introDescription": "마지막 업데이트 이후의 변경 사항을 간략히 소개합니다. 약 1분 정도 소요됩니다.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "여러 Dashboard를 생성하고 팀과 공유하십시오",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Dashboard** 탭에서 이제 원하는 만큼 많은 Dashboard를 지원합니다. 탭 상단의 선택 메뉴를 통해 편리하게 전환하거나 **+**를 눌러 새로 생성하십시오."
+          },
+          {
+            "type": "prose",
+            "markdown": "**설정**을 통해 개인 또는 팀과 Dashboard를 공유하십시오. **읽기**는 보기 및 새로 고침을 허용하며, **쓰기**는 위젯 편집을 허용합니다. 위젯은 항상 소유자의 자격 증명을 사용합니다."
+          }
+        ],
+        "tour": {
+          "description": "여러 Dashboard를 관리하고, 이들 사이를 전환하며, 읽기 전용 또는 편집 가능으로 공유하십시오.",
+          "useCases": [
+            "팀, 제품 또는 테넌트별로 별도의 Dashboard 구성",
+            "이해관계자에게 읽기 전용 보기 제공",
+            "예시 데이터로 차트 유형을 미리 테스트"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

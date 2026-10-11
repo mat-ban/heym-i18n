@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Solmun uudelleenaktivoiminen Workflow'n sisällä",
+    "releaseTour": {
+      "label": "Uutta Heymissä",
+      "introTitle": "Uutta tässä julkaisussa",
+      "introDescription": "Lyhyt katsaus edellisen päivityksen jälkeisiin uudistuksiin. Kestää noin minuutin.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable-solmu: Solmun uudelleenaktivoiminen Workflow'n sisällä",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Uusi **Enable-solmu** on **Disable-solmun** vastinpari. Valitse solmu nimen perusteella aktivoidaksesi se uudelleen ja tallentaaksesi muutoksen. Deaktivoitu **Cron**-Trigger suoritetaan tämän jälkeen jälleen seuraavana suunniteltuna ajankohtana. Jos solmu sijaitsee myöhempänä kulussa eikä sitä ole vielä suoritettu, se suoritetaan välittömästi nykyisessä suorituksessa."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deaktivoitu Trigger ei koskaan käynnistä suoritusta itsenäisesti. Sijoita Enable-solmu siksi toisen aloituspisteen, kuten **Input**-Triggerin, taakse. **Wait**-solmu tukee nyt myös pidempiä taukoja: jopa 15 minuuttia yhden minuutin sijaan."
+          }
+        ],
+        "tour": {
+          "description": "Aktivoi deaktivoitu solmu uudelleen suoraan Workflow'sta, esimerkiksi keskeytetty Cron-Trigger.",
+          "useCases": [
+            "Käynnistä deaktivoitu Cron-Trigger tarvittaessa Webhookin kautta",
+            "Yhdistä Disable-solmuun solmujen tilariippuvaiseksi päälle ja pois kytkemiseksi",
+            "Keskeytä Workflow Wait-solmun avulla jopa 15 minuutiksi"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Odottavat ihmisen tekemät hyväksynnät voi tarkistaa suoraan Dashboard-näkymässä",
+    "releaseTour": {
+      "label": "Uutta Heymissä",
+      "introTitle": "Uutta tässä julkaisussa",
+      "introDescription": "Lyhyt katsaus edellisen päivityksen jälkeen tulleisiin uudistuksiin. Kestää noin minuutin.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Odottavat Reviews-kohteet voi käsitellä Dashboard-widgetin kautta",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Lisää **HITL**-widget, jolloin ylätunniste näyttää odottavien Reviews-kohteiden määrän muodossa `1/n ausstehend`. Siirry merkintöjen välillä nuolinäppäimillä. Workflow-nimi avaa kyseisen ajon suoraan Canvas-näkymässä. **Genehmigen**, **Änderungen anfordern** ja **Ablehnen** päättävät luonnoksen käsittelyn. Historia-kuvake avaa ajon kyseisellä sivulla olevan historiaikkunan kautta. Jono on henkilökohtainen: jaettu Dashboard ei näytä muiden luonnoksia."
+          }
+        ],
+        "tour": {
+          "description": "Dashboard-karuselli odottaville hyväksynnöille ja laskuri ylätunnisteessa.",
+          "useCases": [
+            "Näe, kuinka monta Reviews-kohdetta odottaa, ennen kuin ensimmäinen avataan",
+            "Hyväksy, pyydä muutoksia tai hylkää poistumatta Dashboard-näkymästä",
+            "Avaa kyseinen ajo widgetin otsikon vieressä olevan kuvakkeen kautta historiaikkunassa"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "Tekoälyavustaja testaa Workflowit ja ottaa datataulukot käyttöön",
+    "releaseTour": {
+      "label": "Uutta Heymissä",
+      "introTitle": "Uutta tässä julkaisussa",
+      "introDescription": "Lyhyt katsaus edellisen päivityksen jälkeen tulleisiin uudistuksiin. Kestää noin minuutin.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO-tila: tekoälyavustaja testaa sen, mitä rakentaa",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kun **YOLO-tila** aktivoidaan Canvasin **tekoälyavustajassa**, se ei enää pysähdy Workflowin käyttöönoton jälkeen. Se suorittaa Workflowin kuten **Run**-toiminnolla, lukee tuloksen ja korjaa Workflowia itsenäisesti enintään viisi kertaa viestiä kohden. Jokainen vastaus luettelee vaiheet reaaliajassa."
+          },
+          {
+            "type": "prose",
+            "markdown": "Ennen ensimmäistä suoritusta se kysyy testisyötteitä ehdotetuilla arvoilla ja käyttää niitä uudelleen. Se voi suorittaa myös muita Workfloweja, jos tarvitsee niiden tuloksia. Jos se tarvitsee päätöksen tai käyttöoikeustiedot, se kysyy totutulla kyselykortilla. Oikeat suoritukset: YOLO-tila on oletuksena pois päältä ja **Stop** keskeyttää prosessin milloin tahansa."
+          }
+        ],
+        "tour": {
+          "description": "Tekoälyavustaja suorittaa luodut Workflowit, tarkistaa tuloksen ja korjaa virheet itsenäisesti, kunnes se toimii.",
+          "useCases": [
+            "Kuvaile Workflow ja saa suoraan testattu versio",
+            "Anna avustajan havaita ja korjata virheelliset solmut automaattisesti",
+            "Tarkista muiden Workflowien paluuarvot ennen yhdistämistä"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "Tekoälyavustaja valitsee tai luo datataulukoita",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kun Workflow tallentaa tietueita, **tekoälyavustaja** tunnistaa nyt **DataTables**-taulukot. Nimeä taulukko, niin se käyttää sitä. Muussa tapauksessa se kysyy sopivaa taulukkoa tai ehdottaa **Luo uusi taulukko** tarvittavilla sarakkeilla."
+          },
+          {
+            "type": "prose",
+            "markdown": "Toimii Canvas-avustajassa, YOLO-tilassa, **Chat**-keskustelussa, dokumentaatiossa ja MCP:n kautta komennolla `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "Tekoälyavustaja kysyy sopivaa datataulukkoa tai luo uuden tarvittavilla sarakkeilla.",
+          "useCases": [
+            "Tallenna liidit automaattisesti taulukoihin ja luo Workflow ja taulukko yhdessä",
+            "Valitse olemassa olevat taulukot sarakkeiden ja tyyppien perusteella",
+            "Luo ja kytke taulukoita suoraan Chat-keskustelusta tai MCP:n kautta"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Useiden Dashboardien luominen ja jakaminen tiimin kanssa",
+    "releaseTour": {
+      "label": "Uutta Heymissä",
+      "introTitle": "Uutta tässä julkaisussa",
+      "introDescription": "Lyhyt katsaus päivityksiin edellisen päivityksen jälkeen. Kestää noin minuutin.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Useiden Dashboardien luominen ja jakaminen tiimin kanssa",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Dashboard**-välilehti tukee nyt rajattoman monta Dashboardia. Vaihtaminen onnistuu kätevästi välilehden yläosassa olevasta valinnasta tai uusi Dashboard luodaan **+**-painikkeella."
+          },
+          {
+            "type": "prose",
+            "markdown": "Dashboardit voidaan jakaa henkilöille tai tiimeille **asetuksissa**. **Luku** sallii näyttämisen ja päivittämisen; **Kirjoitus** sallii widgettien muokkaamisen. Widgetit käyttävät aina omistajan kirjautumistietoja."
+          }
+        ],
+        "tour": {
+          "description": "Useiden Dashboardien hallinta, niiden välinen vaihtaminen sekä jakaminen vain luku -oikeudella tai muokkausoikeudella.",
+          "useCases": [
+            "Erillisten Dashboardien jäsentäminen tiimin, tuotteen tai asiakkuuden mukaan",
+            "Vain luku -näkymän tarjoaminen sidosryhmille",
+            "Kaaviotyyppien testaaminen etukäteen esimerkkidatalla"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

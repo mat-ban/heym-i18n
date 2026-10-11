@@ -50,10 +50,10 @@ function selectScope(scope: AlertScope): void {
         @click="selectScope('workflow')"
       >
         <div class="font-medium">
-          One workflow
+          {{ $t('alerts.wizard.oneWorkflow') }}
         </div>
         <div class="mt-1 text-xs text-muted-foreground">
-          Watch a single workflow.
+          {{ $t('alerts.wizard.oneWorkflowDesc') }}
         </div>
       </button>
 
@@ -70,10 +70,10 @@ function selectScope(scope: AlertScope): void {
         @click="selectScope('system')"
       >
         <div class="font-medium">
-          All my workflows
+          {{ $t('alerts.wizard.allMyWorkflows') }}
         </div>
         <div class="mt-1 text-xs text-muted-foreground">
-          Every workflow you can access, measured together.
+          {{ $t('alerts.wizard.allMyWorkflowsDesc') }}
         </div>
       </button>
     </div>
@@ -82,12 +82,12 @@ function selectScope(scope: AlertScope): void {
       v-if="scope === 'workflow'"
       class="space-y-2"
     >
-      <Label for="alert-workflow">Workflow</Label>
+      <Label for="alert-workflow">{{ $t('common.workflow') }}</Label>
       <SearchableSelect
         id="alert-workflow"
         v-model="selectedWorkflow"
         :options="workflows"
-        placeholder="Choose a workflow..."
+        :placeholder="$t('alerts.wizard.chooseWorkflow')"
       />
     </div>
   </div>

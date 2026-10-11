@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Workflow でより迅速に構築",
+    "description": "Workflow を選択すると、リストの横で Trigger、直近の実行、ステップを直接確認できます。ステータスでフィルタリングし、そのまま実行し、フォルダーで全体を整理できます。"
+  },
+  "dashboard:board": {
+    "title": "エージェントベースのボードでタスクを管理",
+    "description": "カードを列間でドラッグして、カードの完全なコンテキストを伴う Workflow チェーンを起動します。結果はカードに直接反映されます。"
+  },
+  "dashboard:templates": {
+    "title": "実績あるテンプレートで開始",
+    "description": "事前構築済みの Workflow パターンを活用して、セットアップ時間を短縮し、一貫性を確保します。"
+  },
+  "dashboard:globalvariables": {
+    "title": "共有変数を一元管理",
+    "description": "再利用可能な値を一度保存し、すべての Workflow から参照できます。"
+  },
+  "dashboard:chat": {
+    "title": "Chat で迅速にイテレーション",
+    "description": "素早く質問し、アイデアを試し、Workflow の流れが明確になったらエディターに切り替えます。"
+  },
+  "dashboard:credentials": {
+    "title": "シークレットを安全に管理",
+    "description": "プロバイダーキーと Token を一元管理し、Workflow がシークレットを公開せずに安全な接続を利用できるようにします。"
+  },
+  "dashboard:vectorstores": {
+    "title": "Retrieval ベースの Workflow を支援",
+    "description": "根拠に基づく AI 応答、セマンティック検索、スケーラブルな RAG パイプラインのためにベクトルストアを準備します。"
+  },
+  "dashboard:mcp": {
+    "title": "外部ツールエコシステムを接続",
+    "description": "MCP 接続を構成し、エージェントが単純な Prompt を超えて構造化されたツールとアクションを実行できるようにします。"
+  },
+  "dashboard:traces": {
+    "title": "実行動作を理解",
+    "description": "Trace の詳細を分析して、結果をデバッグし、実行を比較し、信頼性を向上させます。"
+  },
+  "dashboard:alerts": {
+    "title": "問題が深刻化する前に通知を受け取る",
+    "description": "エラー、期間、コスト、実行回数のしきい値を設定し、超過時に警告を受け取ります。"
+  },
+  "dashboard:analytics": {
+    "title": "プラットフォームのパフォーマンスを追跡",
+    "description": "使用状況と実行トレンドを監視し、実際のシグナルに基づいて的を絞った最適化を行います。"
+  },
+  "dashboard:dashboard": {
+    "title": "独自のダッシュボードを作成",
+    "description": "Workflow を活用したチャートウィジェットを組み立て、重要なメトリクスを一目で確認できます。"
+  },
+  "dashboard:teams": {
+    "title": "コラボレーションをクリーンに拡張",
+    "description": "Workflow とリソースをチームごとに分割し、アクセス権限と責任を透明に保ちます。"
+  },
+  "dashboard:logs": {
+    "title": "システムレベルの問題を診断",
+    "description": "インフラストラクチャや環境の問題が発生した際に Logs を活用し、より深いランタイムインサイトを得ます。"
+  },
+  "dashboard:drive": {
+    "title": "生成されたファイルを管理",
+    "description": "Workflow の出力を安全なリンクと制御されたアクセスオプションを通じて確認、ダウンロード、共有します。"
+  },
+  "dashboard:datatable": {
+    "title": "構造化データをネイティブに操作",
+    "description": "型付きテーブルを作成し、Workflow から直接操作して再現可能な読み書き操作を実現します。"
+  },
+  "dashboard:schedules": {
+    "title": "自動化スケジュールを俯瞰",
+    "description": "すべてのアクティブな Cron Workflow をカレンダー表示（日、週、月）で確認できます。ブロックをクリックすると Canvas に直接移動します。"
+  },
+  "evals": {
+    "title": "品質を確実に評価",
+    "description": "再現可能なテストスイートを実行し、Prompt とモデルの変更を本番ロールアウト前に根拠を持って比較します。"
+  },
+  "docs": {
+    "title": "アプリ内で迅速に情報を把握",
+    "description": "コンパクトなリファレンスを検索し、現在の Workflow を離れずに的を絞って深掘りできます。"
+  },
+  "editor": {
+    "title": "Canvas 上で設計とデバッグ",
+    "description": "ノードを視覚的に接続し、即座に実行し、直接的なフィードバックを得ながら一つのワークスペースで動作を洗練させます。"
+  }
+}

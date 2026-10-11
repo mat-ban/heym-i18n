@@ -346,7 +346,7 @@ const apexOptions = computed((): Record<string, unknown> => {
       v-if="isEmpty"
       class="flex h-full min-h-[120px] items-center justify-center text-sm text-muted-foreground"
     >
-      No data
+      {{ $t("dashboards.noData") }}
     </div>
 
     <HitlCarousel

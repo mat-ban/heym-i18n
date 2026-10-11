@@ -36,14 +36,14 @@ function resetText(seconds?: number | null): string {
       v-if="props.loading"
       class="text-xs text-muted-foreground"
     >
-      Loading usage…
+      {{ $t('settings.loadingUsage') }}
     </p>
 
     <p
       v-else-if="!props.usage || !props.usage.available"
       class="text-xs text-muted-foreground"
     >
-      Usage unavailable.
+      {{ $t('settings.usageUnavailable') }}
     </p>
 
     <template v-else>
@@ -55,7 +55,7 @@ function resetText(seconds?: number | null): string {
         <div class="flex items-center justify-between text-xs">
           <span>{{ w.label }}</span>
           <span class="text-muted-foreground">
-            {{ remaining(w.used_percent).toFixed(0) }}% left
+            {{ $t('settings.percentLeft', { percent: remaining(w.used_percent).toFixed(0) }) }}
             <template v-if="resetText(w.reset_after_seconds)">
               · {{ resetText(w.reset_after_seconds) }}
             </template>

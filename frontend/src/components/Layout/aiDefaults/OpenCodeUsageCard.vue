@@ -33,14 +33,14 @@ function resetText(seconds?: number | null): string {
       v-if="props.loading"
       class="text-xs text-muted-foreground"
     >
-      Loading usage…
+      {{ $t('settings.loadingUsage') }}
     </p>
 
     <p
       v-else-if="!props.usage || !props.usage.available"
       class="text-xs text-muted-foreground"
     >
-      Usage unavailable<template v-if="props.usage?.error">
+      {{ $t('settings.usageUnavailable') }}<template v-if="props.usage?.error">
         — {{ props.usage.error }}
       </template>.
     </p>
@@ -57,7 +57,7 @@ function resetText(seconds?: number | null): string {
             :class="w.status === 'rate-limited' ? 'text-amber-500' : 'text-muted-foreground'"
           >
             <template v-if="w.status === 'rate-limited'">limit reached</template>
-            <template v-else>{{ remaining(w.used_percent).toFixed(0) }}% left</template>
+            <template v-else>{{ $t('settings.percentLeft', { percent: remaining(w.used_percent).toFixed(0) }) }}</template>
             <template v-if="resetText(w.reset_after_seconds)">
               · {{ resetText(w.reset_after_seconds) }}
             </template>

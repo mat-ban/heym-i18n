@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Ponovno aktiviranje čvora unutar Workflowa",
+    "releaseTour": {
+      "label": "Novo u Heymu",
+      "introTitle": "Novo u ovom izdanju",
+      "introDescription": "Kratak pregled novosti od Vašeg posljednjeg ažuriranja. Traje otprilike jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable čvor: Ponovno aktiviranje čvora unutar Workflowa",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Novi **Enable čvor** pandan je **Disable čvoru**. Odaberite čvor prema nazivu kako biste ga ponovno aktivirali i spremili promjenu. Deaktivirani **Cron** Trigger ponovno će se izvršiti u sljedećem planiranom terminu. Ako se čvor nalazi dalje u tijeku i još nije izvršen, pokrenut će se izravno u trenutnom izvršavanju."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deaktivirani Trigger nikada samostalno ne pokreće izvršavanje. Stoga postavite Enable čvor iza druge ulazne točke, poput **Input** Triggera. **Wait** čvor sada podržava i dulje pauze: do 15 minuta umjesto samo jedne."
+          }
+        ],
+        "tour": {
+          "description": "Ponovno aktivirajte deaktivirani čvor izravno iz Workflowa, npr. pauzirani Cron Trigger.",
+          "useCases": [
+            "Pokretanje deaktiviranog Cron Triggera prema potrebi putem Webhooka",
+            "Kombiniranje s Disable čvorom za uključivanje i isključivanje čvorova ovisno o stanju",
+            "Pauziranje Workflowa s Wait čvorom do 15 minuta"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Provjerite otvorena ljudska odobrenja izravno na nadzornoj ploči",
+    "releaseTour": {
+      "label": "Novo u Heymu",
+      "introTitle": "Novo u ovom izdanju",
+      "introDescription": "Kratak pregled novosti od Vašeg posljednjeg ažuriranja. Traje otprilike jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Obavite otvorene recenzije putem widgeta na nadzornoj ploči",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Dodajte **HITL** widget i zaglavlje će prikazati broj recenzija koje čekaju kao `1/n ausstehend`. Krećite se strelicama kroz stavke. Naziv Workflowa otvara izvođenje izravno na platnu. **Odobri**, **Zatraži izmjene** i **Odbij** dovršavaju nacrt. Ikona povijesti otvara izvođenje u dijalogu povijesti na istoj stranici. Red čekanja je osoban: podijeljena nadzorna ploča ne prikazuje tuđe nacrte."
+          }
+        ],
+        "tour": {
+          "description": "Vrtuljak na nadzornoj ploči za Vaša otvorena odobrenja s brojačem u zaglavlju.",
+          "useCases": [
+            "Vidjeti koliko recenzija čeka prije nego što se prva otvori",
+            "Odobriti, zatražiti izmjene ili odbiti bez napuštanja nadzorne ploče",
+            "Otvoriti ovo izvođenje putem ikone pokraj naslova widgeta u dijalogu povijesti"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Nadzorna ploča"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI Assistant testira svoje Workflowe i postavlja DataTables",
+    "releaseTour": {
+      "label": "Novo u Heymu",
+      "introTitle": "Novo u ovom izdanju",
+      "introDescription": "Kratak pregled novosti od Vašeg posljednjeg ažuriranja. Traje oko minute.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO način rada: AI Assistant testira ono što gradi",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Aktivirajte **YOLO način rada** u Canvas **AI Assistantu** i on više neće stati nakon primjene Workflowa. Pokrenut će Workflow kao putem **Run**, pročitati rezultat i samostalno ispraviti Workflow do pet puta po poruci. Svaki odgovor prikazuje korake uživo."
+          },
+          {
+            "type": "prose",
+            "markdown": "Prije prvog pokretanja pita za testne ulaze s predloženim vrijednostima i ponovno ih koristi. Može pokrenuti i druge Workflowe ako su mu potrebni njihovi rezultati. Ako mu je potrebna odluka ili pristupni podaci, pita putem uobičajene kartice s pitanjem. Stvarna pokretanja: YOLO način rada standardno je isključen, a **Stop** zaustavlja proces u svakom trenutku."
+          }
+        ],
+        "tour": {
+          "description": "AI Assistant izvršava izrađene Workflowe, provjerava rezultat i samostalno ispravlja pogreške dok ne proradi.",
+          "useCases": [
+            "Opišite Workflow i odmah primite testiranu verziju",
+            "Neka Assistant automatski pronađe i ispravi neispravne čvorove",
+            "Provjerite povratne vrijednosti drugih Workflowa prije povezivanja"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI Assistant odabire ili stvara DataTables",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kada Workflow pohranjuje zapise, **AI Assistant** sada prepoznaje Vaše **DataTables**. Navedite tablicu i on će je koristiti. U suprotnom pita za odgovarajuću tablicu ili predlaže **Stvori novu tablicu** s potrebnim stupcima."
+          },
+          {
+            "type": "prose",
+            "markdown": "Funkcionira u Canvas Assistantu, YOLO načinu rada, **Chatu**, dokumentaciji i putem MCP-a s `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "AI Assistant pita za odgovarajuću DataTable ili stvara novu s potrebnim stupcima.",
+          "useCases": [
+            "Automatski bilježite leadove u tablice i zajedno generirajte Workflow i tablicu",
+            "Odaberite postojeće tablice prema stupcima i tipovima",
+            "Stvorite i povežite tablice izravno iz Chata ili putem MCP-a"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Izradite više Dashboarda i podijelite ih s timom",
+    "releaseTour": {
+      "label": "Novo u Heymu",
+      "introTitle": "Novo u ovom izdanju",
+      "introDescription": "Kratak pregled novosti od Vašeg posljednjeg ažuriranja. Traje otprilike jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Izradite više Dashboarda i podijelite ih s timom",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Kartica **Dashboard** sada podržava neograničen broj Dashboarda. Jednostavno se prebacujte putem izbornika pri vrhu kartice ili izradite novi pomoću **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Podijelite Dashboards s osobama ili timovima putem **postavki**. **Čitanje** omogućuje prikaz i ažuriranje; **Pisanje** omogućuje uređivanje widgeta. Widgeti uvijek koriste vjerodajnice vlasnika."
+          }
+        ],
+        "tour": {
+          "description": "Upravljajte s više Dashboarda, prebacujte se između njih i podijelite ih s pravom čitanja ili uređivanja.",
+          "useCases": [
+            "Strukturirajte odvojene Dashboards prema timu, proizvodu ili klijentu",
+            "Omogućite dionicima prikaz samo za čitanje",
+            "Prethodno testirajte vrste dijagrama s primjerima podataka"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

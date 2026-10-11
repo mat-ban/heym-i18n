@@ -19,6 +19,35 @@ venv/
 .env
 .env.local
 .env.*.local
+# Any other env file (e.g. deployment.env, prod.env, .env.production) may hold real
+# credentials. Only the committed templates below are allowed.
+*.env
+.env.*
+!.env.example
+!frontend/.env.development
+
+# Secrets & credentials (never commit)
+*github_token*
+*github_pat*
+.github_token
+github-credentials.env
+deployment.env
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
+secrets/
+credentials.json
+service-account*.json
+*.secret
+*.secrets
+# Playwright / browser session state (contains auth cookies & tokens)
+**/.auth/
+storage_state*.json
+storageState*.json
 
 # IDE
 .idea/
@@ -72,3 +101,13 @@ frontend/e2e/.auth/
 frontend/playwright-report/
 frontend/test-results/
 frontend/.e2e-artifacts/
+
+# Local helper scripts & build/coverage artifacts
+frontend/**/*.py
+/*.py
+/scratch/
+/screenshots/
+coverage/
+docs/i18n/coverage-report.md
+docs/i18n/*.json
+

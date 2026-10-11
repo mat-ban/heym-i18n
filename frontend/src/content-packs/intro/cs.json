@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Rychlejší tvorba ve Workflows",
+    "description": "Vyberte Workflow a zobrazte Trigger, poslední spuštění a kroky přímo vedle seznamu. Filtrujte podle stavu, spouštějte přímo a udržujte přehled pomocí složek."
+  },
+  "dashboard:board": {
+    "title": "Řiďte úkoly pomocí agentního boardu",
+    "description": "Přetahujte karty mezi sloupci a spouštějte Workflow řetězce s plným kontextem karty. Výsledky se vrací přímo ke kartě."
+  },
+  "dashboard:templates": {
+    "title": "Začněte s osvědčenými šablonami",
+    "description": "Využijte předpřipravené vzory Workflow pro úsporu času při nastavení a zajištění konzistence."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizujte sdílené proměnné",
+    "description": "Uložte znovupoužitelné hodnoty jednou a odkazujte na ně napříč všemi Workflows."
+  },
+  "dashboard:chat": {
+    "title": "Využijte chat pro rychlé iterace",
+    "description": "Klást rychlé dotazy, testovat nápady a přepnout do editoru, jakmile je tok Workflow jasný."
+  },
+  "dashboard:credentials": {
+    "title": "Bezpečně spravujte tajemství",
+    "description": "Centrálně spravujte klíče poskytovatelů a Tokeny, aby Workflows mohly využívat bezpečná připojení bez odhalení tajemství."
+  },
+  "dashboard:vectorstores": {
+    "title": "Podpora Workflows založených na retrieval",
+    "description": "Připravte vektorové úložiště pro podložené AI odpovědi, sémantické vyhledávání a škálovatelné RAG pipelines."
+  },
+  "dashboard:mcp": {
+    "title": "Propojte externí ekosystémy nástrojů",
+    "description": "Nakonfigurujte MCP připojení, aby agenti mohli spouštět strukturované nástroje a akce nad rámec jednoduchých Promptů."
+  },
+  "dashboard:traces": {
+    "title": "Pochopte chování při spouštění",
+    "description": "Analyzujte detaily Trace pro ladění výsledků, porovnávání spuštění a zvyšování spolehlivosti."
+  },
+  "dashboard:alerts": {
+    "title": "Dostávejte upozornění dříve, než problémy eskalují",
+    "description": "Nastavte prahové hodnoty pro chyby, dobu trvání, náklady a počet spuštění a nechte si zaslat upozornění při jejich překročení."
+  },
+  "dashboard:analytics": {
+    "title": "Sledujte výkon platformy",
+    "description": "Sledujte trendy využití a spouštění pro cílenou optimalizaci na základě reálných signálů."
+  },
+  "dashboard:dashboard": {
+    "title": "Vytvářejte si vlastní dashboardy",
+    "description": "Sestavte si diagramové widgety podporované Workflows a mějte klíčové metriky na jednom místě."
+  },
+  "dashboard:teams": {
+    "title": "Škálujte spolupráci přehledně",
+    "description": "Rozdělte Workflows a zdroje podle týmů, aby přístupová oprávnění a odpovědnosti zůstaly transparentní."
+  },
+  "dashboard:logs": {
+    "title": "Diagnostikujte problémy na systémové úrovni",
+    "description": "Využijte Logy při problémech s infrastrukturou nebo prostředím pro hlubší vhled do běhu."
+  },
+  "dashboard:drive": {
+    "title": "Spravujte generované soubory",
+    "description": "Prohlížejte, stahujte a sdílejte výstupy Workflow prostřednictvím bezpečných odkazů a kontrolovaných možností přístupu."
+  },
+  "dashboard:datatable": {
+    "title": "Pracujte nativně se strukturovanými daty",
+    "description": "Vytvářejte typované tabulky a přistupujte k nim přímo z Workflows pro reprodukovatelné operace čtení a zápisu."
+  },
+  "dashboard:schedules": {
+    "title": "Přehled plánů automatizace",
+    "description": "Zobrazte všechny aktivní Cron Workflows v kalendářním zobrazení (den, týden, měsíc). Kliknutím na blok přejdete přímo na Canvas."
+  },
+  "evals": {
+    "title": "Spolehlivě hodnoťte kvalitu",
+    "description": "Spouštějte opakovatelné testovací sady pro podložené porovnání změn Promptů a modelů před nasazením do produkce."
+  },
+  "docs": {
+    "title": "Rychlá orientace v aplikaci",
+    "description": "Procházejte kompaktní reference a cíleně se ponořte hlouběji, aniž byste opustili aktuální Workflow."
+  },
+  "editor": {
+    "title": "Navrhujte a laďte na Canvas",
+    "description": "Vizuálně propojte uzly, okamžitě spouštějte a vylaďujte chování s přímou zpětnou vazbou v jednom pracovním prostoru."
+  }
+}

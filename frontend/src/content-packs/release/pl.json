@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Ponowna aktywacja węzła w ramach Workflow",
+    "releaseTour": {
+      "label": "Nowość w Heym",
+      "introTitle": "Nowości w tym wydaniu",
+      "introDescription": "Krótki przegląd nowości od czasu ostatniej aktualizacji. Zajmuje około minuty.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Węzeł Enable: ponowna aktywacja węzła w ramach Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Nowy **węzeł Enable** jest odpowiednikiem **węzła Disable**. Należy wybrać węzeł po nazwie, aby go ponownie aktywować i zapisać zmianę. Dezaktywowany **Trigger Cron** zostanie ponownie uruchomiony o najbliższym zaplanowanym czasie. Jeżeli węzeł znajduje się dalej w przebiegu i nie został jeszcze wykonany, zostanie uruchomiony bezpośrednio w bieżącym wykonaniu."
+          },
+          {
+            "type": "prose",
+            "markdown": "Dezaktywowany Trigger nigdy nie rozpoczyna przebiegu samodzielnie. Węzeł Enable należy zatem umieścić za innym punktem wejścia, takim jak **Trigger Input**. **Węzeł Wait** obsługuje teraz również dłuższe pauzy: do 15 minut zamiast tylko jednej."
+          }
+        ],
+        "tour": {
+          "description": "Ponowna aktywacja dezaktywowanego węzła bezpośrednio z poziomu Workflow, np. wstrzymanego Triggera Cron.",
+          "useCases": [
+            "Uruchomienie dezaktywowanego Triggera Cron w razie potrzeby poprzez Webhook",
+            "Połączenie z węzłem Disable w celu włączania i wyłączania węzłów w zależności od stanu",
+            "Wstrzymanie Workflow z węzłem Wait na czas do 15 minut"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Oczekujące zatwierdzenia ręczne bezpośrednio w Dashboardzie",
+    "releaseTour": {
+      "label": "Nowość w Heym",
+      "introTitle": "Nowości w tym wydaniu",
+      "introDescription": "Krótki przegląd zmian od ostatniej aktualizacji. Zajmuje około minuty.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Realizacja oczekujących przeglądów przez widget Dashboardu",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Dodaj widget **HITL**, a nagłówek wyświetli liczbę oczekujących przeglądów jako `1/n ausstehend`. Nawigacja między wpisami odbywa się za pomocą klawiszy strzałek. Nazwa Workflow otwiera wykonanie bezpośrednio na Canvas. **Zatwierdź**, **Poproś o zmiany** i **Odrzuć** kończą szkic. Ikona historii otwiera wykonanie w oknie dialogowym historii na tej samej stronie. Kolejka jest osobista: współdzielony Dashboard nie wyświetla cudzych szkiców."
+          }
+        ],
+        "tour": {
+          "description": "Karuzela Dashboardu dla oczekujących zatwierdzeń z licznikiem w nagłówku.",
+          "useCases": [
+            "Sprawdzenie, ile przeglądów oczekuje przed otwarciem pierwszego",
+            "Zatwierdzanie, prośba o zmiany lub odrzucanie bez opuszczania Dashboardu",
+            "Otwarcie tego wykonania przez ikonę obok tytułu widgetu w oknie dialogowym historii"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "Asystent AI testuje swoje Workflows i tworzy tabele danych",
+    "releaseTour": {
+      "label": "Nowości w Heym",
+      "introTitle": "Nowości w tym wydaniu",
+      "introDescription": "Krótki przegląd nowości od ostatniej aktualizacji. Zajmuje około minuty.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "Tryb YOLO: Asystent AI testuje to, co buduje",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Po włączeniu **trybu YOLO** w Canvas **Asystenta AI** nie zatrzymuje się on po zastosowaniu Workflow. Uruchamia Workflow jak przez **Run**, odczytuje wynik i samodzielnie koryguje Workflow do pięciu razy na wiadomość. Każda odpowiedź wyświetla kroki na żywo."
+          },
+          {
+            "type": "prose",
+            "markdown": "Przed pierwszym uruchomieniem pyta o dane wejściowe testu z proponowanymi wartościami i używa ich ponownie. Może również uruchamiać inne Workflows, jeśli potrzebuje ich wyników. Jeśli potrzebuje decyzji lub danych dostępowych, pyta za pomocą znanej karty pytań. Rzeczywiste uruchomienia: tryb YOLO jest domyślnie wyłączony, a **Stop** kończy proces w dowolnym momencie."
+          }
+        ],
+        "tour": {
+          "description": "Asystent AI uruchamia utworzone Workflows, sprawdza wynik i samodzielnie koryguje błędy, aż wszystko działa.",
+          "useCases": [
+            "Opisać Workflow i od razu otrzymać przetestowaną wersję",
+            "Pozwolić asystentowi automatycznie wykrywać i naprawiać błędne węzły",
+            "Sprawdzić wartości zwracane innych Workflows przed połączeniem"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "Asystent AI wybiera lub tworzy tabele danych",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Gdy Workflow zapisuje rekordy, **Asystent AI** rozpoznaje teraz **DataTables**. Po wskazaniu tabeli używa jej. W przeciwnym razie pyta o odpowiednią tabelę lub proponuje **Utwórz nową tabelę** z wymaganymi kolumnami."
+          },
+          {
+            "type": "prose",
+            "markdown": "Działa w asystencie Canvas, w trybie YOLO, w **Chat**, w dokumentacji oraz przez MCP z `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "Asystent AI pyta o odpowiednią tabelę danych lub tworzy nową z potrzebnymi kolumnami.",
+          "useCases": [
+            "Automatycznie rejestrować leady w tabelach i generować Workflow oraz tabelę razem",
+            "Wybierać istniejące tabele na podstawie kolumn i typów",
+            "Tworzyć i podłączać tabele bezpośrednio z Chat lub przez MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Tworzenie wielu Dashboardów i udostępnianie ich zespołowi",
+    "releaseTour": {
+      "label": "Nowość w Heym",
+      "introTitle": "Nowości w tym wydaniu",
+      "introDescription": "Krótki przegląd nowości od ostatniej aktualizacji. Zajmuje około minuty.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Tworzenie wielu Dashboardów i udostępnianie ich zespołowi",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Zakładka **Dashboard** obsługuje teraz dowolną liczbę Dashboardów. Przełączanie odbywa się wygodnie za pomocą selektora u góry zakładki, a nowy Dashboard można utworzyć przyciskiem **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Dashboardy można udostępniać osobom lub zespołom w **Ustawieniach**. **Odczyt** pozwala na wyświetlanie i aktualizowanie; **Zapis** pozwala na edycję widgetów. Widgety zawsze korzystają z danych dostępowych właściciela."
+          }
+        ],
+        "tour": {
+          "description": "Zarządzanie wieloma Dashboardami, przełączanie między nimi oraz udostępnianie ich w trybie tylko do odczytu lub z możliwością edycji.",
+          "useCases": [
+            "Strukturyzacja oddzielnych Dashboardów według zespołu, produktu lub mandanta",
+            "Udostępnienie interesariuszom widoku tylko do odczytu",
+            "Testowanie typów wykresów na danych przykładowych"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

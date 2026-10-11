@@ -17,6 +17,22 @@ export const HISTORY_STATUS_OPTIONS: readonly HistoryStatusOption[] = [
   { value: "cancelled", label: "Cancelled" },
 ];
 
+/**
+ * `HISTORY_STATUS_OPTIONS` with labels in the active UI language. `translate` is the
+ * `t` function of the calling component, so the labels follow language switches.
+ */
+export function localizeHistoryStatusOptions(
+  translate: (key: string) => string,
+): HistoryStatusOption[] {
+  return HISTORY_STATUS_OPTIONS.map((option) => ({
+    value: option.value,
+    label:
+      option.value === undefined
+        ? translate("history.allStatuses")
+        : translate(`history.statusOptions.${option.value}`),
+  }));
+}
+
 /** Statuses that get a text badge in the run list; success is already the icon. */
 const BADGE_CLASSES: Readonly<Record<string, string>> = {
   skipped: "bg-gray-500/20 text-gray-400",

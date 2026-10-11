@@ -23,6 +23,64 @@ import {
 } from "lucide-vue-next";
 
 import { cn } from "@/lib/utils";
+import { useI18n } from "vue-i18n";
+import { i18n } from "@/i18n";
+
+let i18nT: ((key: string) => string) | null = null;
+let i18nTe: ((key: string) => boolean) | null = null;
+
+try {
+  const comp = useI18n();
+  i18nT = comp.t;
+  i18nTe = comp.te;
+} catch {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = i18n.global as any;
+    if (g?.t) {
+      i18nT = g.t.bind(g);
+      i18nTe = g.te.bind(g);
+    }
+  } catch {
+    // fallback
+  }
+}
+
+function getTabLabel(tabId: string, fallback: string): string {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = i18n?.global as any;
+    const _loc = g?.locale?.value ?? g?.locale;
+    void _loc;
+    if (g?.te && g.te(`nav.${tabId}`) && g?.t) {
+      return g.t(`nav.${tabId}`);
+    }
+    if (i18nTe && i18nT && i18nTe(`nav.${tabId}`)) {
+      return i18nT(`nav.${tabId}`);
+    }
+  } catch {
+    // ignore
+  }
+  return fallback;
+}
+
+function getTabHint(): string {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = i18n?.global as any;
+    const _loc = g?.locale?.value ?? g?.locale;
+    void _loc;
+    if (g?.te && g.te("nav.openInNewTabHint") && g?.t) {
+      return g.t("nav.openInNewTabHint");
+    }
+    if (i18nTe && i18nT && i18nTe("nav.openInNewTabHint")) {
+      return i18nT("nav.openInNewTabHint");
+    }
+  } catch {
+    // ignore
+  }
+  return "Ctrl+click to open in new tab";
+}
 
 const router = useRouter();
 const route = useRoute();
@@ -201,7 +259,7 @@ watch(activeTab, () => {
         v-for="tab in tabs"
         :key="tab.id"
         :data-tab-id="tab.id"
-        :title="`${tab.label} (Ctrl+click to open in new tab)`"
+        :title="`${getTabLabel(tab.id, tab.label)} (${getTabHint()})`"
         :class="cn(
           'tab-item flex shrink-0 items-center justify-center gap-1.5 px-2 sm:px-2.5 py-1.5 min-h-[36px] rounded-lg text-sm font-medium transition-all duration-250 whitespace-nowrap',
           activeTab === tab.id
@@ -214,7 +272,7 @@ watch(activeTab, () => {
           :is="tab.icon"
           class="tab-icon w-4 h-4"
         />
-        <span class="hidden sm:inline">{{ tab.label }}</span>
+        <span class="hidden sm:inline">{{ getTabLabel(tab.id, tab.label) }}</span>
       </button>
     </div>
   </div>

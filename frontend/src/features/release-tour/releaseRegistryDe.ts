@@ -1,0 +1,219 @@
+import type { ReleaseEntry } from "@/features/release-tour/releaseTour.types";
+
+export const RELEASE_REGISTRY_DE: ReleaseEntry[] = [
+  {
+    releaseId: "2026.18",
+    publishedAt: new Date("2026-10-03T12:00:00Z"),
+    headline: "Knoten innerhalb eines Workflows wieder aktivieren",
+    releaseTour: {
+      label: "Neu in Heym",
+      introTitle: "Neu in diesem Release",
+      introDescription:
+        "Ein kurzer Überblick über die Neuerungen seit Ihrem letzten Update. Dauert etwa eine Minute.",
+      tourEnabled: true,
+      sectionOrder: ["enable-node"],
+    },
+    sections: [
+      {
+        id: "enable-node",
+        title: "Enable-Knoten: Einen Knoten innerhalb eines Workflows wieder aktivieren",
+        publishedAt: new Date("2026-10-03T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Der neue **Enable-Knoten** ist das Gegenstück zum **Disable-Knoten**. Wählen Sie einen Knoten nach Bezeichnung aus, um ihn wieder zu aktivieren und die Änderung zu speichern. Ein deaktivierter **Cron**-Trigger wird so zum nächsten geplanten Zeitpunkt wieder ausgeführt. Befindet sich der Knoten weiter hinten im Ablauf und wurde noch nicht ausgeführt, läuft er direkt in der aktuellen Ausführung mit.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Ein deaktivierter Trigger startet niemals selbstständig einen Lauf. Platzieren Sie den Enable-Knoten daher hinter einem anderen Einstiegspunkt, wie einem **Input**-Trigger. Der **Wait**-Knoten unterstützt nun auch längere Pausen: bis zu 15 Minuten statt nur einer.",
+          },
+        ],
+        tour: {
+          description:
+            "Einen deaktivierten Knoten direkt aus dem Workflow heraus wieder aktivieren, z. B. einen pausierten Cron-Trigger.",
+          useCases: [
+            "Einen deaktivierten Cron-Trigger bei Bedarf über einen Webhook starten",
+            "Mit Disable-Knoten kombinieren, um Knoten zustandsabhängig ein- und auszuschalten",
+            "Einen Workflow mit dem Wait-Knoten bis zu 15 Minuten pausieren",
+          ],
+          tourVisual: "enable-node",
+          docTarget: {
+            categoryId: "nodes",
+            slug: "enable-node",
+            title: "Enable Node",
+          },
+        },
+      },
+    ],
+  },
+  {
+    releaseId: "2026.17",
+    publishedAt: new Date("2026-09-28T18:00:00Z"),
+    headline: "Ausstehende menschliche Freigaben direkt im Dashboard prüfen",
+    releaseTour: {
+      label: "Neu in Heym",
+      introTitle: "Neu in diesem Release",
+      introDescription:
+        "Ein kurzer Überblick über die Neuerungen seit Ihrem letzten Update. Dauert etwa eine Minute.",
+      tourEnabled: true,
+      sectionOrder: ["dashboard-hitl"],
+    },
+    sections: [
+      {
+        id: "dashboard-hitl",
+        title: "Ausstehende Reviews über ein Dashboard-Widget erledigen",
+        publishedAt: new Date("2026-09-28T18:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Fügen Sie ein **HITL**-Widget hinzu und der Header zeigt die Anzahl wartender Reviews als `1/n ausstehend` an. Navigieren Sie per Pfeiltasten durch die Einträge. Der Workflow-Name öffnet den Lauf direkt auf dem Canvas. **Genehmigen**, **Änderungen anfordern** und **Ablehnen** schließen den Entwurf ab. Das Verlaufs-Icon öffnet den Lauf im Verlaufsdialog auf derselben Seite. Die Warteschlange ist persönlich: ein geteiltes Dashboard zeigt keine fremden Entwürfe an.",
+          },
+        ],
+        tour: {
+          description:
+            "Ein Dashboard-Karussell für Ihre ausstehenden Freigaben mit Zähler im Header.",
+          useCases: [
+            "Sehen, wie viele Reviews warten, bevor das erste geöffnet wird",
+            "Freigeben, Änderungen anfordern oder ablehnen, ohne das Dashboard zu verlassen",
+            "Diesen Lauf über das Icon neben dem Widget-Titel im Verlaufsdialog öffnen",
+          ],
+          tourVisual: "dashboard-hitl",
+          docTarget: {
+            categoryId: "tabs",
+            slug: "dashboard-tab",
+            title: "Dashboard",
+          },
+        },
+      },
+    ],
+  },
+  {
+    releaseId: "2026.16",
+    publishedAt: new Date("2026-09-27T00:00:00Z"),
+    headline: "Der KI-Assistent testet seine Workflows und richtet Datentabellen ein",
+    releaseTour: {
+      label: "Neu in Heym",
+      introTitle: "Neu in diesem Release",
+      introDescription:
+        "Ein kurzer Überblick über die Neuerungen seit Ihrem letzten Update. Dauert etwa eine Minute.",
+      tourEnabled: true,
+      sectionOrder: ["assistant-yolo-mode", "assistant-data-tables"],
+    },
+    sections: [
+      {
+        id: "assistant-yolo-mode",
+        title: "YOLO-Modus: Der KI-Assistent testet, was er baut",
+        publishedAt: new Date("2026-09-27T10:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Aktivieren Sie den **YOLO-Modus** im Canvas **KI-Assistenten**, stoppt er nicht mehr nach dem Anwenden eines Workflows. Er führt den Workflow wie über **Run** aus, liest das Ergebnis und korrigiert den Workflow selbstständig bis zu fünfmal pro Nachricht. Jede Antwort listet die Schritte live auf.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Vor dem ersten Lauf fragt er nach Test-Eingaben mit vorgeschlagenen Werten und verwendet diese wieder. Er kann auch andere Workflows ausführen, wenn er deren Ergebnisse benötigt. Benötigt er eine Entscheidung oder Zugangsdaten, fragt er mit der gewohnten Fragekarte nach. Echte Läufe: YOLO-Modus ist standardmäßig aus und **Stop** beendet den Ablauf jederzeit.",
+          },
+        ],
+        tour: {
+          description:
+            "Der KI-Assistent führt erstellte Workflows aus, prüft das Ergebnis und korrigiert Fehler selbstständig bis es funktioniert.",
+          useCases: [
+            "Einen Workflow beschreiben und direkt eine getestete Version erhalten",
+            "Den Assistenten fehlerhafte Knoten automatisch aufspüren und beheben lassen",
+            "Rückgabewerte anderer Workflows vor dem Verknüpfen prüfen",
+          ],
+          tourVisual: "assistant-yolo-mode",
+          docTarget: {
+            categoryId: "reference",
+            slug: "ai-assistant",
+            title: "AI Assistant",
+          },
+        },
+      },
+      {
+        id: "assistant-data-tables",
+        title: "Der KI-Assistent wählt oder erstellt Datentabellen",
+        publishedAt: new Date("2026-09-28T10:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Wenn ein Workflow Datensätze speichert, erkennt der **KI-Assistent** nun Ihre **DataTables**. Nennen Sie eine Tabelle und er verwendet sie. Andernfalls fragt er nach der passenden Tabelle oder schlägt **Neue Tabelle erstellen** mit den erforderlichen Spalten vor.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Funktioniert im Canvas-Assistenten, im YOLO-Modus, im **Chat**, in der Dokumentation und über MCP mit `heym_chat`.",
+          },
+        ],
+        tour: {
+          description:
+            "Der KI-Assistent fragt nach der passenden Datentabelle oder erstellt eine neue mit den benötigten Spalten.",
+          useCases: [
+            "Leads automatisch in Tabellen erfassen und Workflow & Tabelle zusammen generieren",
+            "Bestehende Tabellen anhand von Spalten und Typen auswählen",
+            "Tabellen direkt aus dem Chat oder per MCP anlegen und verdrahten",
+          ],
+          tourVisual: "assistant-data-tables",
+          docTarget: {
+            categoryId: "reference",
+            slug: "ai-assistant",
+            title: "AI Assistant",
+          },
+        },
+      },
+    ],
+  },
+  {
+    releaseId: "2026.15",
+    publishedAt: new Date("2026-09-23T00:00:00Z"),
+    headline: "Mehrere Dashboards anlegen und mit dem Team teilen",
+    releaseTour: {
+      label: "Neu in Heym",
+      introTitle: "Neu in diesem Release",
+      introDescription:
+        "Ein kurzer Überblick über die Neuerungen seit Ihrem letzten Update. Dauert etwa eine Minute.",
+      tourEnabled: true,
+      sectionOrder: ["dashboard-sharing"],
+    },
+    sections: [
+      {
+        id: "dashboard-sharing",
+        title: "Mehrere Dashboards anlegen und mit dem Team teilen",
+        publishedAt: new Date("2026-09-24T10:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Der **Dashboard**-Tab unterstützt nun beliebig viele Dashboards. Wechseln Sie bequem über die Auswahl oben im Tab oder erstellen Sie ein neues mit **+**.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Teilen Sie Dashboards mit Personen oder Teams über die **Einstellungen**. **Lesen** erlaubt das Anzeigen und Aktualisieren; **Schreiben** erlaubt das Bearbeiten von Widgets. Widgets nutzen stets die Zugangsdaten des Eigentümers.",
+          },
+        ],
+        tour: {
+          description:
+            "Mehrere Dashboards verwalten, zwischen ihnen wechseln und sie schreibgeschützt oder bearbeitbar teilen.",
+          useCases: [
+            "Separate Dashboards nach Team, Produkt oder Mandant strukturieren",
+            "Stakeholdern eine schreibgeschützte Ansicht bereitstellen",
+            "Diagrammtypen mit Beispieldaten vorab testen",
+          ],
+          tourVisual: "dashboard-sharing",
+          docTarget: {
+            categoryId: "tabs",
+            slug: "dashboard-tab",
+            title: "Dashboard",
+          },
+        },
+      },
+    ],
+  },
+];

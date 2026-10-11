@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { Users } from "lucide-vue-next";
 
@@ -31,11 +32,12 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits<{ (e: "close"): void }>();
+const { t } = useI18n();
 
-const PERMISSION_OPTIONS: Array<{ value: WorkflowSharePermission; label: string }> = [
-  { value: "read", label: "Read" },
-  { value: "write", label: "Write" },
-];
+const permissionOptions = computed<Array<{ value: WorkflowSharePermission; label: string }>>(() => [
+  { value: "read", label: t("board.read") },
+  { value: "write", label: t("board.write") },
+]);
 const ROW_SELECT_CLASS = "h-9 min-h-0 md:h-9 rounded-lg py-1 pl-3 text-xs";
 
 const shareEmail = ref("");
@@ -55,7 +57,7 @@ const pendingRevoke = ref<PendingRevoke | null>(null);
 const workflowTeamOptions = computed(() => {
   const shared = new Set(workflowTeamShares.value.map((s) => s.team_id));
   return [
-    { value: "", label: "Select a team" },
+    { value: "", label: t("tables.selectTeam") },
     ...teams.value.filter((t) => !shared.has(t.id)).map((t) => ({ value: t.id, label: t.name })),
   ];
 });
@@ -85,7 +87,7 @@ async function loadShares(): Promise<void> {
     workflowTeamShares.value = teamShares;
     teams.value = teamList;
   } catch (error: unknown) {
-    shareError.value = errorMessage(error, "Failed to load shares");
+    shareError.value = errorMessage(error, t("workflows.failedToLoadShares"));
   } finally {
     shareLoading.value = false;
   }
@@ -107,7 +109,7 @@ async function addShare(): Promise<void> {
     workflowShares.value.sort((a, b) => a.email.localeCompare(b.email));
     shareEmail.value = "";
   } catch (error: unknown) {
-    shareError.value = errorMessage(error, "Failed to share workflow");
+    shareError.value = errorMessage(error, t("workflows.failedToShareWorkflow"));
   } finally {
     shareSubmitting.value = false;
   }
@@ -125,7 +127,7 @@ async function updateSharePermission(
     const updated = await workflowApi.addShare(props.workflowId, share.email, permission);
     share.permission = updated.permission;
   } catch (error: unknown) {
-    shareError.value = errorMessage(error, "Failed to update permission");
+    shareError.value = errorMessage(error, t("workflows.failedToUpdatePermission"));
   } finally {
     sharePermissionSaving.value = null;
   }
@@ -138,7 +140,7 @@ async function removeShare(userId: string, stopAlerts: boolean): Promise<void> {
     await workflowApi.removeShare(props.workflowId, userId, stopAlerts);
     workflowShares.value = workflowShares.value.filter((share) => share.user_id !== userId);
   } catch (error: unknown) {
-    shareError.value = errorMessage(error, "Failed to remove share");
+    shareError.value = errorMessage(error, t("workflows.failedToRemoveShare"));
   } finally {
     shareRemoving.value = null;
   }
@@ -157,7 +159,7 @@ async function addWorkflowTeamShare(): Promise<void> {
     workflowTeamShares.value = [...workflowTeamShares.value, share];
     shareTeamId.value = "";
   } catch (error: unknown) {
-    shareError.value = errorMessage(error, "Failed to share with team");
+    shareError.value = errorMessage(error, t("workflows.failedToShareTeam"));
   } finally {
     shareSubmitting.value = false;
   }
@@ -175,7 +177,7 @@ async function updateTeamSharePermission(
     const updated = await workflowApi.addTeamShare(props.workflowId, share.team_id, permission);
     share.permission = updated.permission;
   } catch (error: unknown) {
-    shareError.value = errorMessage(error, "Failed to update permission");
+    shareError.value = errorMessage(error, t("workflows.failedToUpdatePermission"));
   } finally {
     sharePermissionSaving.value = null;
   }
@@ -188,7 +190,7 @@ async function removeWorkflowTeamShare(teamId: string, stopAlerts: boolean): Pro
     await workflowApi.removeTeamShare(props.workflowId, teamId, stopAlerts);
     workflowTeamShares.value = workflowTeamShares.value.filter((s) => s.team_id !== teamId);
   } catch (error: unknown) {
-    shareError.value = errorMessage(error, "Failed to remove team share");
+    shareError.value = errorMessage(error, t("workflows.failedToRemoveShare"));
   } finally {
     shareRemoving.value = null;
   }
@@ -218,7 +220,7 @@ watch(
 <template>
   <Dialog
     :open="open"
-    title="Share workflow"
+    :title="$t('workflows.shareWorkflow')"
     @close="emit('close')"
   >
     <div
@@ -226,15 +228,11 @@ watch(
       data-testid="workflow-share-dialog"
     >
       <p class="text-sm text-muted-foreground">
-        <strong class="font-medium text-foreground">Read</strong> lets collaborators view and run
-        this workflow. <strong class="font-medium text-foreground">Write</strong> also lets them
-        edit it. Credentials and sub-workflows used by this workflow are not shared automatically.
-        Share each credential and sub-workflow with the same users or teams so recipients can run
-        the workflow.
+        {{ $t('workflows.shareExplanation') }}
       </p>
       <div class="space-y-3">
         <div class="space-y-2">
-          <Label>Invite by email</Label>
+          <Label>{{ $t('workflows.inviteByEmail') }}</Label>
           <div class="flex gap-2">
             <Input
               v-model="shareEmail"
@@ -245,7 +243,7 @@ watch(
             />
             <Select
               :model-value="emailPermission"
-              :options="PERMISSION_OPTIONS"
+              :options="permissionOptions"
               :placeholder="''"
               class="w-32 shrink-0"
               data-testid="workflow-share-email-permission"
@@ -256,12 +254,12 @@ watch(
               data-testid="workflow-share-add"
               @click="addShare"
             >
-              Add
+              {{ $t('common.add') }}
             </Button>
           </div>
         </div>
         <div class="space-y-2">
-          <Label>Share with team</Label>
+          <Label>{{ $t('workflows.shareWithTeam') }}</Label>
           <div class="flex gap-2">
             <Select
               v-model="shareTeamId"
@@ -270,7 +268,7 @@ watch(
             />
             <Select
               :model-value="teamPermission"
-              :options="PERMISSION_OPTIONS"
+              :options="permissionOptions"
               :placeholder="''"
               class="w-32 shrink-0"
               data-testid="workflow-share-team-permission"
@@ -283,7 +281,7 @@ watch(
               @click="addWorkflowTeamShare"
             >
               <Users class="w-4 h-4" />
-              Add
+              {{ $t('common.add') }}
             </Button>
           </div>
         </div>
@@ -295,18 +293,18 @@ watch(
         </p>
       </div>
       <div class="space-y-2">
-        <Label>Shared with users</Label>
+        <Label>{{ $t('workflows.sharedWithUsers') }}</Label>
         <div
           v-if="shareLoading"
           class="text-sm text-muted-foreground"
         >
-          Loading...
+          {{ $t('common.loading') }}
         </div>
         <div
           v-else-if="workflowShares.length === 0"
           class="text-sm text-muted-foreground"
         >
-          No users
+          {{ $t('workflows.noUsers') }}
         </div>
         <div
           v-else
@@ -337,7 +335,7 @@ watch(
             <div class="flex shrink-0 items-center gap-1">
               <Select
                 :model-value="share.permission"
-                :options="PERMISSION_OPTIONS"
+                :options="permissionOptions"
                 :placeholder="''"
                 :disabled="sharePermissionSaving === share.user_id"
                 :select-class="ROW_SELECT_CLASS"
@@ -353,25 +351,25 @@ watch(
                 :data-testid="`workflow-share-remove-${share.email}`"
                 @click="pendingRevoke = { kind: 'user', id: share.user_id, subject: share.name }"
               >
-                Remove
+                {{ $t('common.remove') }}
               </Button>
             </div>
           </div>
         </div>
       </div>
       <div class="space-y-2">
-        <Label>Shared with teams</Label>
+        <Label>{{ $t('workflows.sharedWithTeams') }}</Label>
         <div
           v-if="shareLoading"
           class="text-sm text-muted-foreground"
         >
-          Loading...
+          {{ $t('common.loading') }}
         </div>
         <div
           v-else-if="workflowTeamShares.length === 0"
           class="text-sm text-muted-foreground"
         >
-          No teams
+          {{ $t('workflows.noTeams') }}
         </div>
         <div
           v-else
@@ -389,7 +387,7 @@ watch(
             <div class="flex shrink-0 items-center gap-1">
               <Select
                 :model-value="share.permission"
-                :options="PERMISSION_OPTIONS"
+                :options="permissionOptions"
                 :placeholder="''"
                 :disabled="sharePermissionSaving === share.team_id"
                 :select-class="ROW_SELECT_CLASS"
@@ -407,7 +405,7 @@ watch(
                   pendingRevoke = { kind: 'team', id: share.team_id, subject: share.team_name }
                 "
               >
-                Remove
+                {{ $t('common.remove') }}
               </Button>
             </div>
           </div>

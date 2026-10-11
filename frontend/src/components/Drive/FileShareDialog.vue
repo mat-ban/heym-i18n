@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { Check, Copy, Link, Trash2, Users } from "lucide-vue-next";
 
 import type { FileAccessToken, CreateShareRequest } from "@/types/file";
@@ -27,6 +28,7 @@ const emit = defineEmits<{
 const shares = ref<FileAccessToken[]>([]);
 const loading = ref(false);
 const error = ref("");
+const { t } = useI18n();
 const copied = ref(false);
 
 const expiresHours = ref<string>("");
@@ -63,7 +65,7 @@ async function loadShares() {
   try {
     shares.value = await filesApi.listShares(props.fileId);
   } catch {
-    error.value = "Failed to load shares";
+    error.value = t("drive.failedToLoadShares");
   } finally {
     loading.value = false;
   }
@@ -84,7 +86,7 @@ async function createShare() {
     maxDownloads.value = "";
     await loadShares();
   } catch {
-    error.value = "Failed to create share";
+    error.value = t("drive.failedToCreateShare");
   } finally {
     creating.value = false;
   }
@@ -95,7 +97,7 @@ async function revokeShare(tokenId: string) {
     await filesApi.revokeShare(props.fileId, tokenId);
     await loadShares();
   } catch {
-    error.value = "Failed to revoke share";
+    error.value = t("drive.failedToRevokeShare");
   }
 }
 
@@ -109,7 +111,7 @@ async function updateTeamSharing(event: Event): Promise<void> {
     emit("updated");
   } catch {
     teamSharingEnabled.value = !enabled;
-    error.value = "Failed to update team sharing";
+    error.value = t("drive.failedToUpdateTeamSharing");
   } finally {
     updatingTeamSharing.value = false;
   }
@@ -125,7 +127,7 @@ async function copyLink(url: string) {
 <template>
   <Dialog
     :open="open"
-    :title="`Share &quot;${filename}&quot;`"
+    :title="$t('drive.shareFileTitle', { filename })"
     @close="emit('close')"
   >
     <div class="space-y-4">
@@ -133,7 +135,7 @@ async function copyLink(url: string) {
       <div class="space-y-2 p-3 rounded-lg border border-border bg-muted/30">
         <p class="text-sm font-medium flex items-center gap-2">
           <Users class="w-3.5 h-3.5" />
-          Team sharing
+          {{ $t("drive.teamSharing") }}
         </p>
         <label class="flex items-center gap-2 text-sm">
           <input
@@ -143,43 +145,43 @@ async function copyLink(url: string) {
             :disabled="updatingTeamSharing"
             @change="updateTeamSharing"
           >
-          Share with my teams
+          {{ $t("drive.shareWithMyTeams") }}
         </label>
         <p class="text-xs text-muted-foreground">
-          Members of your current teams can view and download this file, but cannot manage it.
+          {{ $t("drive.teamSharingHelp") }}
         </p>
       </div>
 
       <!-- Create new share -->
       <div class="space-y-3 p-3 rounded-lg border border-border bg-muted/30">
         <p class="text-sm font-medium">
-          Create new share link
+          {{ $t("drive.createNewShareLink") }}
         </p>
         <div class="grid grid-cols-3 gap-2">
           <div>
-            <Label class="text-xs">Expires (hours)</Label>
+            <Label class="text-xs">{{ $t("drive.expiresHours") }}</Label>
             <Input
               v-model="expiresHours"
               type="number"
-              placeholder="No expiry"
+              :placeholder="$t('drive.noExpiry')"
               class="text-xs"
             />
           </div>
           <div>
-            <Label class="text-xs">Password</Label>
+            <Label class="text-xs">{{ $t("drive.password") }}</Label>
             <Input
               v-model="basicAuthPassword"
               type="password"
-              placeholder="No password"
+              :placeholder="$t('drive.noPassword')"
               class="text-xs"
             />
           </div>
           <div>
-            <Label class="text-xs">Max downloads</Label>
+            <Label class="text-xs">{{ $t("drive.maxDownloads") }}</Label>
             <Input
               v-model="maxDownloads"
               type="number"
-              placeholder="Unlimited"
+              :placeholder="$t('drive.unlimited')"
               class="text-xs"
             />
           </div>
@@ -190,7 +192,7 @@ async function copyLink(url: string) {
           @click="createShare"
         >
           <Link class="w-3.5 h-3.5 mr-1" />
-          {{ creating ? "Creating..." : "Create Link" }}
+          {{ creating ? $t("drive.creating") : $t("drive.createLink") }}
         </Button>
       </div>
 
@@ -199,14 +201,14 @@ async function copyLink(url: string) {
         v-if="loading"
         class="text-sm text-muted-foreground text-center py-4"
       >
-        Loading...
+        {{ $t("common.loading") }}
       </div>
 
       <div
         v-else-if="shares.length === 0"
         class="text-sm text-muted-foreground text-center py-4"
       >
-        No share links yet
+        {{ $t("drive.noShareLinksYet") }}
       </div>
 
       <div
@@ -226,15 +228,15 @@ async function copyLink(url: string) {
               <span
                 v-if="share.basic_auth_enabled"
                 class="text-amber-500"
-              >Username: <span class="font-mono">file</span></span>
-              <span v-if="share.expires_at">Expires {{ formatDate(share.expires_at) }}</span>
-              <span>{{ share.download_count }} downloads</span>
-              <span v-if="share.max_downloads">/ {{ share.max_downloads }} max</span>
+              >{{ $t("drive.username") }} <span class="font-mono">file</span></span>
+              <span v-if="share.expires_at">{{ $t("drive.expiresAt", { date: formatDate(share.expires_at) }) }}</span>
+              <span>{{ $t("drive.downloadsCount", { count: share.download_count }) }}</span>
+              <span v-if="share.max_downloads">{{ $t("drive.maxDownloadsCount", { max: share.max_downloads }) }}</span>
             </div>
           </div>
           <button
             class="p-1 rounded hover:bg-muted"
-            title="Copy link"
+            :title="$t('drive.copyLink')"
             @click="copyLink(share.download_url)"
           >
             <Check
@@ -248,7 +250,7 @@ async function copyLink(url: string) {
           </button>
           <button
             class="p-1 rounded hover:bg-destructive/10 text-destructive"
-            title="Revoke"
+            :title="$t('drive.revoke')"
             @click="revokeShare(share.id)"
           >
             <Trash2 class="w-3.5 h-3.5" />

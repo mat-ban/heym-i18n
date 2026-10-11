@@ -55,7 +55,7 @@ function save(): void {
 <template>
   <Dialog
     :open="open"
-    title="Choose Folder Icon"
+    :title="$t('workflows.chooseFolderIcon')"
     size="2xl"
     @close="emit('close')"
   >
@@ -71,10 +71,10 @@ function save(): void {
         </div>
         <div class="min-w-0">
           <p class="text-sm font-medium truncate">
-            {{ folderName || "Folder" }}
+            {{ folderName || $t('workflows.folder') }}
           </p>
           <p class="text-xs text-muted-foreground">
-            {{ selectedIcon ? humanizeIconKey(selectedIcon) : "Default folder icon" }}
+            {{ selectedIcon ? humanizeIconKey(selectedIcon) : $t('workflows.defaultFolderIcon') }}
           </p>
         </div>
       </div>
@@ -92,7 +92,7 @@ function save(): void {
             @click="clearIcon"
           >
             <Folder class="w-5 h-5 text-amber-500" />
-            <span class="text-[10px] leading-none text-muted-foreground">Default</span>
+            <span class="text-[10px] leading-none text-muted-foreground">{{ $t('common.default') }}</span>
           </button>
           <button
             v-for="option in folderIconOptions"
@@ -124,13 +124,13 @@ function save(): void {
           type="button"
           @click="emit('close')"
         >
-          Cancel
+          {{ $t('common.cancel') }}
         </Button>
         <Button
           type="button"
           @click="save"
         >
-          Save
+          {{ $t('common.save') }}
         </Button>
       </div>
     </div>

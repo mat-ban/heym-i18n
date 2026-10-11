@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Rýchlejšia tvorba vo Workflow",
+    "description": "Vyberte Workflow a zobrazte Trigger, posledné spustenie a kroky přímo vedľa zoznamu. Filtrujte podľa stavu, spúšťajte přímo a udržujte prehľad pomocou priečinkov."
+  },
+  "dashboard:board": {
+    "title": "Riadenie úloh pomocou agentového boardu",
+    "description": "Presúvajte karty medzi stĺpcami a spúšťajte Workflow reťazce s plným kontextom karty. Výsledky sa vracajú přímo ku karte."
+  },
+  "dashboard:templates": {
+    "title": "Začnite s overenými šablónami",
+    "description": "Využite hotové vzory Workflow na úsporu času pri nastavení a zabezpečenie konzistencie."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizujte zdieľané premenné",
+    "description": "Uložte opakovane použiteľné hodnoty raz a odkazujte na ne naprieč všetkými Workflow."
+  },
+  "dashboard:chat": {
+    "title": "Využite chat na rýchlu iteráciu",
+    "description": "Kláďte rýchle otázky, testujte nápady a prepnite do editora, keď je tok Workflow jasný."
+  },
+  "dashboard:credentials": {
+    "title": "Bezpečná správa tajomstiev",
+    "description": "Spravujte kľúče poskytovateľov a Tokeny centrálne, aby Workflow mohli využívať bezpečné pripojenia bez odhalenia tajomstiev."
+  },
+  "dashboard:vectorstores": {
+    "title": "Podpora Workflow založených na retrievale",
+    "description": "Pripravte vektorové úložiská pre podložené AI odpovede, sémantické vyhľadávanie a škálovateľné RAG pipelines."
+  },
+  "dashboard:mcp": {
+    "title": "Prepojenie externých ekosystémov nástrojov",
+    "description": "Konfigurujte MCP pripojenia, aby agenti mohli vykonávať štruktúrované nástroje a akcie nad rámec jednoduchých Promptov."
+  },
+  "dashboard:traces": {
+    "title": "Porozumenie správaniu pri spustení",
+    "description": "Analyzujte detaily Trace na ladenie výsledkov, porovnávanie spustení a zvyšovanie spoľahlivosti."
+  },
+  "dashboard:alerts": {
+    "title": "Upozornenia skôr, než problémy eskalujú",
+    "description": "Nastavte prahové hodnoty pre chyby, trvanie, náklady a počet spustení a nechajte sa upozorniť pri ich prekročení."
+  },
+  "dashboard:analytics": {
+    "title": "Sledovanie výkonu platformy",
+    "description": "Monitorujte trendy využitia a spustení, aby ste cielene optimalizovali na základe reálnych signálov."
+  },
+  "dashboard:dashboard": {
+    "title": "Vytvorte si vlastné dashboardy",
+    "description": "Zostavte diagramové widgety podporované Workflow a majte kľúčové metriky na jednom mieste."
+  },
+  "dashboard:teams": {
+    "title": "Čisté škálovanie spolupráce",
+    "description": "Rozdeľte Workflow a zdroje podľa tímov, aby boli prístupové práva a zodpovednosti transparentné."
+  },
+  "dashboard:logs": {
+    "title": "Diagnostika problémov na systémovej úrovni",
+    "description": "Využite logy pri problémoch s infraštruktúrou alebo prostredím na hlbší pohľad do behu."
+  },
+  "dashboard:drive": {
+    "title": "Správa generovaných súborov",
+    "description": "Prezerajte, sťahujte a zdieľajte výstupy Workflow prostredníctvom bezpečných odkazov a kontrolovaných možností prístupu."
+  },
+  "dashboard:datatable": {
+    "title": "Natívna práca so štruktúrovanými dátami",
+    "description": "Vytvárajte typované tabuľky a ovládajte ich přímo z Workflow pre reprodukovateľné operácie čítania a zápisu."
+  },
+  "dashboard:schedules": {
+    "title": "Prehľad časových plánov automatizácie",
+    "description": "Zobrazte všetky aktívne Cron Workflow v kalendárovom zobrazení (deň, týždeň, mesiac). Kliknutie na blok vedie přímo na Canvas."
+  },
+  "evals": {
+    "title": "Spoľahlivé hodnotenie kvality",
+    "description": "Spúšťajte opakovateľné testovacie sady na fundované porovnanie zmien Promptov a modelov pred nasadením do produkcie."
+  },
+  "docs": {
+    "title": "Rýchla orientácia v aplikácii",
+    "description": "Prehľadávajte kompaktné referencie a cielene sa ponorte hlbšie bez opustenia aktuálneho Workflow."
+  },
+  "editor": {
+    "title": "Dizajn a ladenie na Canvas",
+    "description": "Vizuálne prepájajte uzly, okamžite spúšťajte a vylaďujte správanie s okamžitou spätnou väzbou v jednom pracovnom priestore."
+  }
+}

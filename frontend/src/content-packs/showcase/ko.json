@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "AI 자동화를 위한 Workflows를 생성, 구성, 가져오기 및 관리하십시오.",
+    "bullets": [
+      "Workflows를 빠르게 열고, 폴더를 깔끔하게 유지하며, 최근 작업을 바로 이어서 진행하십시오.",
+      "명령 팔레트를 사용하여 그리드에서 오래 검색하지 않고 빠르게 접근하십시오.",
+      "이 탭을 에디터의 모든 활동을 위한 기반으로 활용하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "중앙 개요",
+        "title": "Workflow 라이브러리",
+        "description": "루트 객체, 폴더 및 삭제 예정인 Workflows를 한 곳에서 확인하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "빠른 접근",
+        "title": "빠른 생성",
+        "description": "새 Workflows를 생성하거나 JSON을 직접 가져오십시오.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "구조",
+        "title": "사전 구성",
+        "description": "폴더와 고정 기능으로 늘어나는 자동화 세트를 체계적으로 관리하십시오.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Workflow 가이드 읽기",
+        "description": "Workflows 탭의 전체 참조를 여십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflows 탭"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "템플릿 열기",
+        "description": "재사용 가능한 시작점을 위해 템플릿 탭으로 이동하십시오.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "여기에 포함되는 항목",
+        "content": "이 영역을 Workflow 수명 주기 작업에 사용하십시오: 생성, 이름 변경, 이동, 가져오기, 보관 및 선택."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "간결하게 유지",
+        "content": "다른 페이지에서 빠른 실행만 필요한 경우 Quick Drawer를 사용하십시오. 관리 및 구조를 위해 여기로 돌아오십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflows 탭"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "에이전트 기반 Kanban 보드입니다. 각 카드는 컨텍스트, 기록 및 출력이 있는 지속적인 작업이며, 카드를 이동하면 열의 Workflow 체인이 실행됩니다.",
+    "bullets": [
+      "백로그에 텍스트 카드를 만들고 드래그 앤 드롭으로 열을 이동하십시오.",
+      "각 열에 정렬된 Workflows를 연결하십시오. 카드 이동이 Trigger로 작동합니다.",
+      "카드는 성공 시 녹색, 오류 시 빨간색, 실행 중에는 노란색으로 표시됩니다.",
+      "댓글과 이전 출력이 다음 실행의 컨텍스트에 포함됩니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "핵심 아이디어",
+        "title": "카드는 작업이지 메모가 아닙니다",
+        "description": "각 카드는 전체 기록을 담고 있습니다: 댓글, 이동 및 각 Workflow의 출력.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "계획 루프",
+        "title": "후속 라운드",
+        "description": "댓글로 응답하고 다시 실행하십시오. 체인은 누적된 전체 컨텍스트를 확인합니다.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board 문서",
+        "description": "열 체인, 카드 Payload 계약 및 후속 라운드.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "열 체인 실행 방법",
+        "content": "열에 연결된 Workflows는 카드가 도착하면 순차적으로 실행됩니다. 각 Workflow의 출력이 카드 컨텍스트에 추가되며, 오류가 발생하면 체인이 중지됩니다."
+      },
+      {
+        "id": "board-context",
+        "title": "Workflows가 받는 항목",
+        "content": "실행 입력에는 카드(제목, 내용, 메타데이터, 댓글, 기록, 이전 출력), 보드, 이동 및 체인 내 위치가 포함됩니다. $input.card 표현식으로 읽으십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "템플릿",
+    "summary": "동일한 패턴을 매번 새로 구축하는 대신 재사용 가능한 Workflow 블루프린트로 시작하십시오.",
+    "bullets": [
+      "Workflow 구조는 알려져 있지만 세부 사항이 아직 다양한 경우 템플릿을 사용하십시오.",
+      "좋은 템플릿은 온보딩을 단축하고 반복적인 캔버스 작업을 줄입니다.",
+      "여기에서 패턴을 공유하고 필요에 따라 에디터에서 조정하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "재사용",
+        "title": "블루프린트 접근 방식",
+        "description": "검증된 Workflow 구조를 캡처하고 빠르게 다시 적용하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "팀 속도",
+        "title": "통일된 시작점",
+        "description": "템플릿은 팀이 동일한 검증된 패턴에 동의하도록 돕습니다.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "효율성",
+        "title": "유휴 시간 감소",
+        "description": "완성된 프레임을 선택하고 필수 사항만 조정하십시오.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "템플릿 문서 열기",
+        "description": "템플릿이 Dashboard 흐름에 어떻게 맞는지 알아보십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "템플릿 탭"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Workflows로 돌아가기",
+        "description": "Workflows의 기본 라이브러리로 돌아가십시오.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "템플릿이 중요한 이유",
+        "content": "반복되는 노드 레이아웃을 재사용 가능한 자산으로 전환합니다. 동일한 Workflow 패턴의 변형을 배포하는 팀에 이상적입니다."
+      },
+      {
+        "id": "templates-when",
+        "title": "최적의 사용 시기",
+        "content": "구조는 안정적이지만 이름, Prompts, 자격 증명 또는 목표가 사용 사례마다 다른 경우 템플릿을 사용하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "템플릿 탭"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "변수",
+    "summary": "공유 값을 중앙에 저장하고 동일한 데이터를 모든 곳에 복제하지 않고 Workflows 전반에서 참조하십시오.",
+    "bullets": [
+      "자주 재사용되는 값을 중앙의 지속적인 위치에 보관하십시오.",
+      "변수는 Prompt 드리프트와 중복 구성을 줄입니다.",
+      "여러 Workflows가 동일한 데이터 기반을 필요로 할 때 값을 선택적으로 공유하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "지속성",
+        "title": "실행 간 저장소",
+        "description": "전역 값은 개별 Workflow 실행을 초월하여 유지됩니다.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "간결한 구성",
+        "title": "중복 감소",
+        "description": "많은 노드 필드를 수동으로 조정하는 대신 한 번 중앙에서 업데이트하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "표현식",
+        "title": "DSL 지원",
+        "description": "노드 표현식과 Prompts에서 값을 직접 참조하십시오.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "변수 문서 읽기",
+        "description": "Dashboard의 변수 가이드를 여십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "변수 탭"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "일반적인 패턴",
+        "content": "Endpoints, 공유 Prompt 조각, 환경별 설정 또는 여러 Workflows가 읽어야 하는 ID를 저장하십시오."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "여기에 포함되지 않는 항목",
+        "content": "비밀과 공급자 인증은 전역 변수가 아닌 자격 증명에 속합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "변수 탭"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Dashboard Chat을 Workflows 및 플랫폼 작업을 위한 빠른 대화형 진입점으로 사용하십시오.",
+    "bullets": [
+      "빠른 질문, Workflow 도움말 및 가벼운 실행에 탁월합니다.",
+      "전체 에디터 제어보다 속도와 반복에 중점을 둡니다.",
+      "구조가 준비되면 Workflow 또는 문서로 직접 전환하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "자연어",
+        "title": "빠른 상호 작용",
+        "description": "전체 앱을 수동으로 검색하는 대신 간단한 언어를 사용하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "다리",
+        "title": "아이디어에서 행동으로",
+        "description": "목표는 명확하지만 정확한 경로를 아직 개발해야 할 때 Chat이 도움이 됩니다.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "동반자",
+        "title": "문서 보완",
+        "description": "답변과 참조를 손쉽게 사용할 수 있도록 문서와 함께 사용하십시오.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Chat 문서 열기",
+        "description": "Dashboard Chat 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat 탭"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "AI 어시스턴트 참조",
+        "description": "Heym 어시스턴트가 Workflow 생성에 어떻게 도움을 주는지 알아보십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI 어시스턴트"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "최적의 사용 사례",
+        "content": "빠른 Workflow 질문, 짧은 플랫폼 안내 및 깊은 캔버스 작업이 필요 없는 운영 단계에 Chat을 사용하십시오."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "뷰 전환 시기",
+        "content": "노드 수준 제어가 필요하면 에디터로 전환하거나 지속적인 참조를 위해 문서로 이동하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat 탭"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "드라이브",
+    "summary": "Workflow 스킬에서 생성된 파일을 관리하고 공유하십시오.",
+    "bullets": [
+      "스킬이 출력 디렉터리에 파일을 작성하면 Heym이 자동으로 수집합니다.",
+      "Token 링크 또는 비밀번호로 보호된 Basic Auth URL을 통해 파일을 공유하십시오.",
+      "클릭 한 번으로 파일을 다운로드하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "저장소",
+        "title": "자동 수집 파일",
+        "description": "스킬이 _OUTPUT_DIR에 작성하면 실행 후 파일이 여기에 바로 나타납니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "공유",
+        "title": "유연한 접근 제어",
+        "description": "공개 링크, 비밀번호 보호, 만료일 및 다운로드 제한을 설정하십시오.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "형식",
+        "title": "PDF, DOCX, CSV 등",
+        "description": "reportlab, python-docx 또는 표준 Python을 사용하여 모든 파일 형식을 생성하십시오.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "드라이브 문서 열기",
+        "description": "드라이브 탭의 전체 참조를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "드라이브 탭"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "파일 생성 가이드",
+        "description": "스킬이 파일을 생성하는 방법을 알아보십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "파일 생성"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "파일이 여기에 도달하는 방법",
+        "content": "스킬이 _OUTPUT_DIR 디렉터리에 파일을 배치하면 Heym이 이를 영구 저장하고 다운로드 Token을 생성합니다."
+      },
+      {
+        "id": "drive-share",
+        "title": "공유 옵션",
+        "content": "모든 사람을 위한 공개 Token 링크 또는 만료일 및 다운로드 제한이 포함된 비밀번호 보호 URL을 생성하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "드라이브 탭"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "자격 증명",
+    "summary": "Workflow가 외부 시스템과 안전하게 통신할 수 있도록 키, Token 및 연결 세부 정보를 관리하십시오.",
+    "bullets": [
+      "개별 노드에 분산하는 대신 자격 증명을 중앙에서 저장하십시오.",
+      "자격 증명은 LLM, 통합, 벡터 저장소 등을 제어합니다.",
+      "팀이 키 복사 없이 동일한 연결을 필요로 할 때 액세스를 선택적으로 공유하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "보안",
+        "title": "안전한 자격 증명",
+        "description": "인증을 한 번 저장하고 Workflow에서 안전하게 재사용하십시오.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "통합",
+        "title": "광범위한 지원",
+        "description": "OpenAI, DeepSeek, Slack, Redis, Qdrant 및 Grist와 같은 공급자를 지원합니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "협업",
+        "title": "선택적 공유",
+        "description": "중복을 생성하는 대신 팀 또는 사용자 공유를 사용하십시오.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "자격 증명 문서 읽기",
+        "description": "자격 증명 대시보드 가이드를 여십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "자격 증명 탭"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "통합 보기",
+        "description": "타사 통합 설정에 대한 세부 정보를 찾아보십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "타사 통합"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "사용 위치",
+        "content": "자격 증명은 노드 구성에서 참조되며 실행 중에 안전하게 해결됩니다."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "팀 친화적 모델",
+        "content": "여러 개발자가 동일한 공급자 액세스를 필요로 할 때 공유를 선호하십시오. 이는 일관된 동작과 간편한 감사를 보장합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "자격 증명 탭"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "벡터 저장소",
+    "summary": "의미론적 검색, 메모리 또는 RAG 컨텍스트 통합이 필요한 Workflow를 위한 검색 백엔드를 준비하십시오.",
+    "bullets": [
+      "벡터 저장소는 검색 기반 Workflow의 데이터 기반을 형성합니다.",
+      "RAG 노드 및 AI 흐름과 함께 사용하여 정확한 문서 그라운딩을 실현하십시오.",
+      "이 탭은 근거 있는 Prompt를 위한 인프라 역할을 합니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG 인프라",
+        "title": "검색 가능한 메모리",
+        "description": "Workflow가 컨텍스트를 필요로 할 때 의미론적 검색을 위해 문서를 준비하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "품질",
+        "title": "근거 있는 그라운딩",
+        "description": "검색은 증거를 제공하여 환각 위험을 줄입니다.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "운영",
+        "title": "중앙에서 한 번 관리",
+        "description": "벡터 저장소를 생성하고 여러 Workflow에서 재사용하십시오.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "벡터 저장소 문서 열기",
+        "description": "벡터 저장소 대시보드 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "벡터 저장소 탭"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "RAG 노드 문서 보기",
+        "description": "Qdrant RAG 노드 참조를 여십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "역할",
+        "content": "이 탭은 저장소 계층을 준비합니다. 실제 검색 로직은 Workflow 내에 있습니다 (예: RAG 또는 에이전트 패턴을 통해)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "사용 시점",
+        "content": "Workflow가 LLM 메모리에만 의존하지 않고 비정형 지식 기반을 검색해야 할 때 벡터 저장소를 선택하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "벡터 저장소 탭"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "에이전트 Workflow가 도구와 외부 기능에 안전하게 접근할 수 있도록 Model Context Protocol 연결을 관리하십시오.",
+    "bullets": [
+      "MCP는 외부 도구 생태계를 사용 가능한 에이전트 컨텍스트로 변환합니다.",
+      "에이전트가 정적 Prompt보다 풍부한 도구를 필요로 할 때 이 탭을 사용하십시오.",
+      "연결 품질은 에이전트의 능력을 직접 결정합니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "에이전트 도구",
+        "title": "외부 기능 계층",
+        "description": "에이전트가 추론 중에 호출할 수 있는 도구 서버를 제공하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "런타임 제어",
+        "title": "연결 설정",
+        "description": "안정적인 Workflow를 위해 Endpoint, 레이블 및 전송을 구성하십시오.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "플랫폼 깊이",
+        "title": "Prompt를 넘어서",
+        "description": "MCP는 Heym Workflow가 응답할 뿐만 아니라 행동할 수 있게 합니다.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "MCP 문서 열기",
+        "description": "MCP 탭 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP 탭"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "에이전트 아키텍처",
+        "description": "MCP가 에이전트 실행에 어떻게 통합되는지 알아보십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "에이전트 아키텍처"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "중요성",
+        "content": "에이전트가 개별 노드 외부의 도구, 환경 액세스 또는 시스템 통합을 필요로 할 때 특히 중요합니다."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "운영 접근 방식",
+        "content": "MCP 연결을 인프라처럼 취급하십시오. 안정적인 레이블과 명확한 책임은 디버깅을 단순화합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP 탭"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "실행",
+    "summary": "AI 및 Workflow 실행의 상세 Trace를 검사하여 무슨 일이 일어났는지 이해하십시오. 단순히 작동 여부만이 아닙니다.",
+    "bullets": [
+      "디버깅, 성능 분석 및 Prompt 품질 검사에 Trace를 사용하십시오.",
+      "Trace는 모델 동작, 지연 시간 및 실행 경로를 설명합니다.",
+      "예상치 못한 결과나 불안정한 실행 시 첫 번째로 확인할 곳입니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "디버깅",
+        "title": "숨겨진 단계 보기",
+        "description": "Trace 데이터는 Workflow와 모델이 실제로 수행한 작업을 드러냅니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "평가",
+        "title": "반복 지원",
+        "description": "Prompt, 도구 및 모델을 최적화할 때 Trace를 사용하십시오.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "신뢰성",
+        "title": "결과 추적",
+        "description": "좋은 Trace는 오류 분석 시 추측을 줄입니다.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "실행 문서 열기",
+        "description": "실행 대시보드 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "실행 탭"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Trace가 필수적인 경우",
+        "content": "Workflow가 다단계, 모델 집약적 또는 도구 기반이 되면 단순 상태 표시로는 충분하지 않습니다."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. 기록",
+        "content": "기록은 실행이 발생했음을 보여줍니다. Trace는 왜 그렇게 동작했는지 설명합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "실행 탭"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "경고",
+    "summary": "시간 창을 기준으로 임계값을 정의하고, 초과 시 자동으로 알림을 받으십시오.",
+    "bullets": [
+      "네 가지 유형: 오류 수, 실행 시간, Token/비용 임계값, 실행 횟수.",
+      "각 경고는 선택한 시간 창을 기준으로 평가되며, 단일 이벤트로 판단하지 않습니다.",
+      "자연어로 요구 사항을 설명하면 어시스턴트가 경고를 구성합니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "시간 창",
+        "title": "이상치보다 빈도",
+        "description": "한 번의 실패한 실행은 노이즈입니다. 10분 내 12번은 인시던트입니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "저장 전",
+        "title": "조건 사후 테스트",
+        "description": "검증 단계에서 실제 기록을 테스트하여 임계값을 미리 보정합니다.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "반응",
+        "title": "알람 시 Workflow 실행",
+        "description": "Alert Payload가 Workflow 입력으로 전달되어 Slack 또는 이메일을 통한 자동 알림이 가능합니다.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "경고 문서 열기",
+        "description": "알람 유형, 창, 어시스턴트의 작동 방식을 확인하십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "경고 탭"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "목적",
+        "content": "분석과 Traces는 직접 질문에 답합니다. 경고는 중요한 임계값이 초과될 때 Heym이 능동적으로 알리도록 합니다."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "오경보를 피하는 이유",
+        "content": "경고는 한 번 발생하고 지표가 회복될 때까지 기다리므로 알림 폭주를 방지합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "경고 탭"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "분석",
+    "summary": "사용 패턴과 시스템 동작을 추적하여 시간 경과에 따른 활동, 성장 및 변화를 파악하십시오.",
+    "bullets": [
+      "분석을 통해 수용도, 처리량 및 비정상적인 급증을 파악하십시오.",
+      "개별 디버깅 도구가 아닌 플랫폼 수준의 뷰를 제공합니다.",
+      "분석을 Traces 및 기록과 결합하여 신호와 설명을 함께 확인하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "신호",
+        "title": "사용 투명성",
+        "description": "개별 실행을 개별적으로 보는 대신 추세를 파악하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "용량",
+        "title": "운영 인식",
+        "description": "부하 급증과 급감을 조기에 감지하고 조사하십시오.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "의사 결정 지원",
+        "title": "목표 최적화",
+        "description": "분석은 가장 중요한 Workflow의 우선순위를 정하는 데 도움이 됩니다.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "분석 문서 열기",
+        "description": "분석 Dashboard 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "분석 탭"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "목적",
+        "content": "전체 플랫폼 운영에 걸친 패턴, 처리량 및 집계된 동작을 분석에 사용하십시오."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "접근 방식",
+        "content": "여기서 신호를 파악한 후 Traces, 기록 또는 편집기로 전환하여 원인을 분석하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "분석 탭"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "각각 자체 Workflow에서 데이터를 공급받는 차트 위젯 그리드를 생성하여 모든 지표를 한눈에 확인하십시오.",
+    "bullets": [
+      "각 위젯은 Chart Output 노드에 데이터를 제공하는 Workflow에 의해 구동됩니다.",
+      "지표에 맞게 막대, 선, 원형, 표 및 숫자 위젯을 사용하십시오.",
+      "AI로 위젯을 생성하거나 조정하고, 빠른 로딩을 위해 결과를 캐시하십시오.",
+      "여러 Dashboard를 생성하고 개인 또는 팀과 읽기 또는 쓰기 권한으로 공유하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "구성",
+        "title": "Workflow 기반 차트",
+        "description": "Workflow가 생성하는 모든 데이터가 차트로 시각화됩니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "성능",
+        "title": "캐시된 결과",
+        "description": "위젯 캐싱은 페이지 로드 시마다 반복적인 Workflow 실행을 방지합니다.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI 지원",
+        "title": "생성 및 조정",
+        "description": "지표를 설명하면 AI가 위젯을 자동으로 생성합니다.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Dashboard 문서 열기",
+        "description": "Dashboard 위젯 생성 방법을 알아보십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard 탭"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "목적",
+        "content": "자체 Workflow에서 생성된 주요 지표의 지속적인 개요를 위해 Dashboard를 사용하십시오."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "생성",
+        "content": "위젯을 추가하고, Chart Output 전 마지막 노드가 행을 제공하도록 Workflow를 구성한 후 그리드에 배치하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard 탭"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "팀",
+    "summary": "공유 액세스를 관리하여 Workflow, Credentials, 변수 및 벡터 저장소를 중복 없이 협업적으로 사용하십시오.",
+    "bullets": [
+      "팀은 플랫폼 리소스를 확장 가능하게 공유하는 가장 깔끔한 방법입니다.",
+      "권한이 개인이 아닌 그룹을 따라야 할 때 팀을 사용하십시오.",
+      "성장하는 Workspace에서 구조화된 협업을 보장합니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "협업",
+        "title": "그룹 기반 공유",
+        "description": "개별 사용자를 수동으로 권한 부여하는 대신 팀에 한 번에 액세스 권한을 부여하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "명확성",
+        "title": "깔끔한 책임",
+        "description": "리소스 관리가 실제 팀 구조를 따릅니다.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "확장",
+        "title": "관리 부담 감소",
+        "description": "새 멤버는 팀을 통해 자동으로 액세스 권한을 상속받습니다.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "팀 문서 열기",
+        "description": "팀 Dashboard 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "팀 탭"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "리소스 공유",
+        "description": "리소스 공유에 대한 세부 정보를 확인하십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "자격 증명 공유"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "팀의 이점",
+        "content": "팀은 원활한 협업을 위해 ID와 리소스 액세스를 연결합니다."
+      },
+      {
+        "id": "teams-tip",
+        "title": "실용 팁",
+        "content": "Workflow 또는 Credential이 지속적인 작업 그룹에 속하는 경우 팀 공유를 선호하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "팀 탭"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "로그",
+    "summary": "Workflow 출력 이상의 인프라 통찰력이 필요할 때 스택 수준 로그를 읽으십시오.",
+    "bullets": [
+      "서비스 디버깅, 컨테이너 상태 및 환경 문제에 로그를 사용하십시오.",
+      "원인이 Workflow 수준 아래에 있을 때 도움이 됩니다.",
+      "애플리케이션 및 시스템 수준 증거를 위해 Traces와 함께 사용하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "인프라",
+        "title": "컨테이너 투명성",
+        "description": "Heym 인터페이스 아래에서 백엔드 서비스가 수행하는 작업을 확인하십시오.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "문제 해결",
+        "title": "원인 찾기",
+        "description": "로그는 시작 문제, 충돌 또는 통합 오류에 도움이 됩니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "보완",
+        "title": "Workflow 결과와의 차이",
+        "description": "Workflow 출력은 결과를 보여주고, 로그는 시스템 동작을 보여줍니다.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "로그 문서 열기",
+        "description": "로그 Dashboard 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "로그 탭"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "사용 시점",
+        "content": "문제가 배포, 서비스 또는 환경 관련으로 보일 때 여기로 전환하십시오."
+      },
+      {
+        "id": "logs-combo",
+        "title": "최적 조합",
+        "content": "증상에서 원인으로 빠르게 이동하려면 로그를 Traces 및 기록과 함께 사용하십시오."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "로그 탭"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "평가",
+    "summary": "에이전트 Workflow에 대한 재현 가능한 벤치마크를 생성하여 Prompt, 모델 및 Workflow 변경 사항을 안정적으로 비교하십시오.",
+    "bullets": [
+      "스위트와 테스트 케이스를 통해 주관적인 Workflow 품질을 측정 가능한 지표로 전환합니다.",
+      "Prompt 또는 모델 업데이트를 배포하기 전에 회귀 테스트를 수행하기에 이상적인 장소입니다.",
+      "동일한 데이터 세트와 동일한 평가 방법을 사용하여 여러 모델을 비교하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "품질 루프",
+        "title": "에이전트 벤치마킹",
+        "description": "무작위 검사에 의존하는 대신 동일한 스위트를 반복 실행하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "비교",
+        "title": "모델 및 Prompt 테스트",
+        "description": "동일한 테스트 세트에서 다양한 설정이 어떻게 작동하는지 확인하십시오.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "안전성",
+        "title": "신뢰할 수 있는 반복",
+        "description": "배포 전에 개선 사항을 입증하십시오.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "평가 문서 열기",
+        "description": "평가 페이지 가이드를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "평가 탭"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "에이전트 노드 참조",
+        "description": "대부분의 평가 스위트가 대상으로 하는 Workflow 영역을 확인하십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "에이전트 노드"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "스위트 설계",
+        "content": "좋은 스위트는 안정적으로 유지되어야 하는 실제 사용자 사례, 경계 조건 및 승인 단계를 반영합니다."
+      },
+      {
+        "id": "evals-usage",
+        "title": "비교 매개변수",
+        "content": "일반적인 비교에는 동일한 데이터 세트에서의 Prompt 변형, 모델 선택, Temperature 설정 및 Workflow 개정이 포함됩니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "평가 탭"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "문서",
+    "summary": "앱 내에서 정확한 플랫폼 참조를 검색하고 필요에 따라 더 깊이 탐구하십시오.",
+    "bullets": [
+      "Heym 문서는 빠른 이해와 특정 참조를 위해 설계되었습니다.",
+      "사이드바, 검색 및 상호 참조를 통해 개념 간 빠른 전환이 가능합니다.",
+      "쇼케이스는 현재 열려 있는 문서를 직접 참조합니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "앱 내 참조",
+        "title": "항상 준비된",
+        "description": "문서는 외부 탭을 열 필요 없이 제품 흐름 내에 유지됩니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "개요",
+        "title": "핵심 먼저",
+        "description": "문서는 핵심 사항으로 시작하고 링크를 통해 분기됩니다."
+      },
+      {
+        "eyebrow": "컨텍스트 인식",
+        "title": "현재 문서",
+        "description": "문서를 읽을 때 '자세히 알아보기' 작업이 해당 문서를 직접 따릅니다."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "소개 보기",
+        "description": "기본 진입점으로 문서 소개를 엽니다.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "소개"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "빠른 탐색",
+        "content": "주제를 이미 알고 있는 경우 사이드바에서 카테고리와 명령 검색을 사용하십시오."
+      },
+      {
+        "id": "docs-depth",
+        "title": "쇼케이스 지원",
+        "content": "쇼케이스는 요약을 간결하게 유지하고 필요할 때 자세한 문서로 안내합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "소개"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "일정",
+    "summary": "시각적 캘린더에서 모든 활성 Cron Workflow를 개요하고 실행 시간을 제어하십시오.",
+    "bullets": [
+      "일, 주, 월 보기 간에 전환하여 적절한 해상도를 선택하십시오.",
+      "블록 위에 마우스를 올려 Cron 표현식을 확인하고 클릭하여 Canvas로 바로 이동하십시오.",
+      "이 탭을 사용하여 실행 밀도를 확인하고 중복을 식별하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "투명성",
+        "title": "캘린더 보기",
+        "description": "활성 Cron Workflow가 예정된 시간에 블록으로 표시됩니다.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "탐색",
+        "title": "클릭 한 번으로 Canvas로",
+        "description": "블록을 클릭하여 Workflow 편집기를 직접 엽니다.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "범위",
+        "title": "일, 주 또는 월",
+        "description": "해상도를 조정하여 개별 시간을 확인하거나 전체 월을 계획하십시오.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "일정 문서 열기",
+        "description": "일정 탭 참조를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "일정 탭"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron 노드 참조",
+        "description": "Canvas에서 Cron Trigger를 구성하는 방법을 알아보십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "사용 시점",
+        "content": "예약된 자동화를 확인하고 일정 충돌을 감지하며 중요한 Workflow가 활성 상태로 유지되도록 하십시오."
+      },
+      {
+        "id": "schedules-color",
+        "title": "색상 코드",
+        "content": "각 Workflow는 ID에서 일관된 색상을 받아 일, 주, 월 보기에서 동일하게 유지됩니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "일정 탭"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "데이터 테이블",
+    "summary": "Heym에서 직접 구조화된 데이터 테이블을 생성하고 Workflow에서 프로그래밍 방식으로 사용하십시오.",
+    "bullets": [
+      "유형이 지정된 열이 있는 테이블을 생성하고 수동으로 채우거나 CSV를 통해 가져오십시오.",
+      "DataTable Workflow 노드를 사용하여 행을 프로그래밍 방식으로 읽고, 쓰고, 쿼리하십시오.",
+      "읽기 또는 쓰기 권한이 있는 사용자 또는 팀과 테이블을 공유하십시오."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "통합 데이터",
+        "title": "내장 스토리지",
+        "description": "외부 데이터베이스나 API 키 없이 구조화된 데이터를 저장하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow 통합",
+        "title": "DataTable 노드",
+        "description": "모든 Workflow에서 행을 찾고, 삽입하고, 업데이트하고, 삭제하십시오.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "협업",
+        "title": "공유 및 권한",
+        "description": "사용자 및 팀에 대한 세분화된 읽기 및 쓰기 액세스 권한을 부여하십시오.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "데이터 테이블 탭 문서",
+        "description": "데이터 테이블 탭 참조를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "데이터 테이블"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable 노드 문서",
+        "description": "DataTable 노드 참조를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "데이터 테이블이란?",
+        "content": "데이터 테이블은 Heym의 내장 구조화된 스토리지입니다: 유형이 지정된 열(String, Number, Boolean, Date, JSON), 인라인 편집 및 CSV 가져오기/내보내기."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Workflow에서 사용",
+        "content": "DataTable 노드는 Workflow 소유자가 자격 증명 없이 직접 find, getAll, getById, insert, update, remove 및 upsert를 지원합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "데이터 테이블"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow 편집기",
+    "summary": "실행 컨텍스트 내에서 직접 Canvas에서 Workflow를 생성, 테스트, 디버그 및 최적화하십시오.",
+    "bullets": [
+      "편집기에서 노드 디자인, 데이터 흐름 및 실행 동작이 함께 모입니다.",
+      "사이드바와 기록을 사용하여 생성과 디버깅 사이를 빠르게 전환하십시오.",
+      "쇼케이스는 Canvas를 위한 최대 공간을 제공하기 위해 여기에서 의도적으로 간결하게 유지됩니다."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "시각적 Workflow 디자인",
+        "description": "노드를 연결하고, 논리를 분기하고, 런타임 흐름을 직접 모델링하십시오.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "반복",
+        "title": "생성 중 디버깅",
+        "description": "기록, 디버그 패널 및 실행 결과를 사용하여 빠른 피드백 루프를 만드십시오."
+      },
+      {
+        "eyebrow": "기능 범위",
+        "title": "고급 기능 준비",
+        "description": "포털, 공유, 템플릿 및 유효성 검사가 Canvas에 직접 있습니다."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Canvas 문서 열기",
+        "description": "Canvas 기능 참조를 읽으십시오.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas 기능"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "키보드 단축키",
+        "description": "편집기의 키보드 단축키 개요를 엽니다.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "키보드 단축키"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "작업 리듬",
+        "content": "Canvas에서 모델링하고, 출력에 대한 가정을 확인하고, 집중력을 잃지 않고 사이드바에서 매개변수를 조정하십시오."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "간결한 쇼케이스",
+        "content": "편집기가 이미 많은 정보를 제공하므로 쇼케이스는 간결한 방향 안내 역할을 합니다."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas 기능"
+    }
+  }
+}

@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Workflow 内のノードを再度有効化",
+    "releaseTour": {
+      "label": "Heym の新機能",
+      "introTitle": "このリリースの新機能",
+      "introDescription": "前回のアップデート以降の新機能を簡単にご紹介します。所要時間は約1分です。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable ノード：Workflow 内のノードを再度有効化する",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "新しい **Enable ノード** は **Disable ノード** の対となる機能です。名前でノードを選択して再度有効化し、変更を保存してください。無効化されていた **Cron** Trigger は、次回のスケジュール時刻に再び実行されます。ノードがフローの後方にあり、まだ実行されていない場合は、現在の実行でそのまま実行されます。"
+          },
+          {
+            "type": "prose",
+            "markdown": "無効化された Trigger は決して自ら実行を開始しません。そのため、Enable ノードは **Input** Trigger などの別のエントリーポイントの後に配置してください。**Wait** ノードはより長い待機時間にも対応しました。最大15分間（従来は1分のみ）待機できます。"
+          }
+        ],
+        "tour": {
+          "description": "無効化されたノードを Workflow から直接再度有効化します。例えば、一時停止中の Cron Trigger などです。",
+          "useCases": [
+            "無効化された Cron Trigger を必要に応じて Webhook 経由で開始する",
+            "Disable ノードと組み合わせて、状態に応じてノードを有効・無効にする",
+            "Wait ノードを使用して Workflow を最大15分間一時停止する"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "保留中の人的承認をDashboard上で直接確認できます",
+    "releaseTour": {
+      "label": "Heymの新機能",
+      "introTitle": "今回のリリースの新機能",
+      "introDescription": "前回のアップデート以降の変更点を簡単にご紹介します。所要時間は約1分です。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Dashboardウィジェットから保留中のレビューを処理する",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**HITL**ウィジェットを追加すると、ヘッダーに待機中のレビュー件数が`1/n 件保留中`として表示されます。矢印キーで項目間を移動できます。Workflow名をクリックすると、Canvas上で該当の実行が直接開きます。**承認**、**変更をリクエスト**、**却下**の各操作でドラフトを完了できます。履歴アイコンをクリックすると、同じページの履歴ダイアログで該当の実行が開きます。キューは個人単位です。共有Dashboardには他のユーザーのドラフトは表示されません。"
+          }
+        ],
+        "tour": {
+          "description": "保留中の承認を確認できるDashboardカルーセルです。ヘッダーには件数が表示されます。",
+          "useCases": [
+            "最初の1件を開く前に、待機中のレビュー件数を確認する",
+            "Dashboardを離れることなく、承認・変更リクエスト・却下を行う",
+            "ウィジェットタイトル横のアイコンから、履歴ダイアログで該当の実行を開く"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AIアシスタントが自身のWorkflowをテストし、データテーブルをセットアップ",
+    "releaseTour": {
+      "label": "Heymの新機能",
+      "introTitle": "このリリースの新機能",
+      "introDescription": "前回のアップデート以降の変更点を簡単にご紹介します。所要時間は約1分です。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLOモード：AIアシスタントが構築したものをテスト",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Canvasの**AIアシスタント**で**YOLOモード**を有効にすると、Workflowを適用した後も停止しなくなります。**Run**と同様にWorkflowを実行し、結果を読み取り、1メッセージにつき最大5回までWorkflowを自律的に修正します。各応答ではステップがリアルタイムで一覧表示されます。"
+          },
+          {
+            "type": "prose",
+            "markdown": "初回実行の前に、提案された値とともにテスト入力について確認し、それらを再利用します。必要に応じて他のWorkflowの結果を必要とする場合、それらも実行できます。判断や認証情報が必要な場合は、いつもの質問カードで確認します。実際の実行：YOLOモードはデフォルトでオフになっており、**Stop**でいつでもフローを終了できます。"
+          }
+        ],
+        "tour": {
+          "description": "AIアシスタントが作成したWorkflowを実行し、結果を確認し、機能するまでエラーを自律的に修正します。",
+          "useCases": [
+            "Workflowを説明し、テスト済みのバージョンを直接取得する",
+            "アシスタントにエラーのあるノードを自動的に検出・修正させる",
+            "連携前に他のWorkflowの戻り値を確認する"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AIアシスタントがデータテーブルを選択または作成",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Workflowがレコードを保存する場合、**AIアシスタント**がお客様の**DataTables**を認識するようになりました。テーブルを指定するとそれを使用します。指定しない場合は、適切なテーブルを確認するか、必要な列を備えた**新規テーブルを作成**を提案します。"
+          },
+          {
+            "type": "prose",
+            "markdown": "Canvasアシスタント、YOLOモード、**Chat**、ドキュメント、および`heym_chat`を介したMCPで動作します。"
+          }
+        ],
+        "tour": {
+          "description": "AIアシスタントが適切なデータテーブルを確認するか、必要な列を備えた新しいテーブルを作成します。",
+          "useCases": [
+            "リードを自動的にテーブルに取り込み、Workflowとテーブルをまとめて生成する",
+            "列と型に基づいて既存のテーブルを選択する",
+            "ChatまたはMCPから直接テーブルを作成して接続する"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "複数のDashboardを作成してチームと共有",
+    "releaseTour": {
+      "label": "Heymの新機能",
+      "introTitle": "今回のリリースの新機能",
+      "introDescription": "前回のアップデート以降の変更点を簡単にご紹介します。所要時間は約1分です。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "複数のDashboardを作成してチームと共有",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Dashboard**タブでは、任意の数のDashboardを管理できるようになりました。タブ上部の選択メニューから簡単に切り替えたり、**+**で新しいDashboardを作成したりできます。"
+          },
+          {
+            "type": "prose",
+            "markdown": "**設定**から、Dashboardを個人またはチームと共有できます。**読み取り**では表示と更新が可能で、**書き込み**ではウィジェットの編集が可能です。ウィジェットは常に所有者の認証情報を使用します。"
+          }
+        ],
+        "tour": {
+          "description": "複数のDashboardを管理し、切り替え、読み取り専用または編集可能な権限で共有できます。",
+          "useCases": [
+            "チーム、製品、テナントごとに個別のDashboardを構成する",
+            "ステークホルダーに読み取り専用のビューを提供する",
+            "サンプルデータでグラフタイプを事前にテストする"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

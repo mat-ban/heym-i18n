@@ -22,7 +22,7 @@ const {
       @click="activeTab = 'properties'"
     >
       <Settings class="w-4 h-4" />
-      <span class="hidden md:inline">Properties</span>
+      <span class="hidden md:inline">{{ $t('propertiesPanel.properties') }}</span>
     </button>
     <button
       data-runbook-run
@@ -38,7 +38,7 @@ const {
       @mouseenter="revealRunTabForRunbook"
     >
       <Zap class="w-4 h-4" />
-      <span class="hidden md:inline">Run</span>
+      <span class="hidden md:inline">{{ $t('propertiesPanel.run') }}</span>
     </button>
   </div>
 </template>

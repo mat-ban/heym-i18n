@@ -50,7 +50,7 @@ const {
             <div class="flex items-center gap-2">
               <AlertTriangle class="w-5 h-5 text-destructive" />
               <h3 class="font-semibold text-destructive">
-                Configuration Required
+                {{ $t("canvas.configurationRequired") }}
               </h3>
             </div>
             <button
@@ -62,7 +62,7 @@ const {
           </div>
           <div class="p-4">
             <p class="text-sm text-muted-foreground mb-4">
-              Please fix the following issues before running the workflow:
+              {{ $t("canvas.fixIssues") }}
             </p>
             <div class="space-y-2 max-h-[300px] overflow-y-auto">
               <div
@@ -92,7 +92,7 @@ const {
               class="w-full"
               @click="closeValidationDialog"
             >
-              Close
+              {{ $t("common.close") }}
             </Button>
           </div>
         </div>

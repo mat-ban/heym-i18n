@@ -85,7 +85,7 @@ const columnNames = props.columns.map((c) => c.name);
 <template>
   <Dialog
     :open="true"
-    title="Import CSV"
+    :title="$t('tables.importCsv')"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 p-4">
@@ -101,7 +101,7 @@ const columnNames = props.columns.map((c) => c.name);
           v-if="!file"
           class="text-sm text-muted-foreground"
         >
-          Drag &amp; drop a CSV file here, or
+          {{ $t('tables.dragDropCsv') }}
         </p>
         <p
           v-else
@@ -110,7 +110,7 @@ const columnNames = props.columns.map((c) => c.name);
           {{ file.name }}
         </p>
         <label class="cursor-pointer rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-          Browse
+          {{ $t('common.browse') }}
           <input
             type="file"
             accept=".csv"
@@ -126,7 +126,7 @@ const columnNames = props.columns.map((c) => c.name);
         class="text-sm"
       >
         <p class="font-medium">
-          CSV Columns:
+          {{ $t('tables.csvColumns') }}:
         </p>
         <div class="mt-1 flex flex-wrap gap-1">
           <span
@@ -147,7 +147,7 @@ const columnNames = props.columns.map((c) => c.name);
           </span>
         </div>
         <p class="mt-1 text-xs text-muted-foreground">
-          Green columns match table schema. Yellow columns will be ignored.
+          {{ $t('tables.columnMatchingHelp') }}
         </p>
       </div>
 
@@ -225,7 +225,7 @@ const columnNames = props.columns.map((c) => c.name);
           class="mt-2"
           @click="emit('imported')"
         >
-          Done
+          {{ $t('common.done') }}
         </Button>
       </div>
 
@@ -242,7 +242,7 @@ const columnNames = props.columns.map((c) => c.name);
           @click="handleImport"
         >
           <Upload class="mr-1 h-4 w-4" />
-          {{ importing ? "Importing..." : "Import" }}
+          {{ importing ? $t('common.loading') : $t('common.import') }}
         </Button>
       </div>
     </div>

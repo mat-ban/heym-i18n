@@ -45,13 +45,13 @@ async function run(): Promise<void> {
     <button
       type="button"
       class="inline-flex h-5 items-center gap-1 rounded-md border border-border bg-background px-1.5 text-[10px] font-medium leading-none text-foreground shadow-sm transition-colors hover:border-primary/40 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40 disabled:pointer-events-none disabled:opacity-50"
-      :aria-label="`Run to ${label}`"
-      title="Run this node and its upstream dependencies"
+      :aria-label="$t('canvas.runToNode', { label })"
+      :title="$t('canvas.runNodeDependencies')"
       :disabled="preparing || workflowStore.isExecuting || workflowStore.isSaving"
       @click="run"
     >
       <Play class="h-2.5 w-2.5" />
-      Run
+      {{ $t('canvas.run') }}
     </button>
   </div>
 </template>

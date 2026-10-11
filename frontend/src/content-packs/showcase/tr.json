@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Yapay zeka otomasyonlarınız için Workflow'ları oluşturun, düzenleyin, içe aktarın ve yönetin.",
+    "bullets": [
+      "Workflow'ları hızlıca açın, klasörlerinizi düzenli tutun ve doğrudan son görevlere devam edin.",
+      "Uzun aramalar yapmadan hızlı erişim için komut paletini kullanın.",
+      "Bu sekme, editördeki tüm etkinlikleriniz için temel olarak kullanılır."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Merkezi görünüm",
+        "title": "Workflow Kütüphanesi",
+        "description": "Kök nesneleri, klasörleri ve silinmek üzere işaretlenmiş Workflow'ları tek bir yerde görüntüleyin.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Hızlı erişim",
+        "title": "Hızlı oluşturma",
+        "description": "Yeni Workflow'lar oluşturun veya doğrudan JSON içe aktarın.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Yapı",
+        "title": "Önceden planlı organizasyon",
+        "description": "Klasörler ve sabitlemeler, büyüyen otomasyon setlerinizi düzenli tutar.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Workflow kılavuzunu okuyun",
+        "description": "Workflow sekmesinin tam referansını açın.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflow Sekmesi"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Şablonları aç",
+        "description": "Yeniden kullanılabilir başlangıç noktaları için Şablonlar sekmesine geçin.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Buraya neler uygun",
+        "content": "Bu bölümü Workflow yaşam döngüsü görevleri için kullanın: oluşturma, yeniden adlandırma, taşıma, içe aktarma, arşivleme ve seçme."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Verimli kalın",
+        "content": "Başka bir sayfadan yalnızca hızlı bir çalıştırma yapmanız gerekiyorsa, Quick Drawer'ı kullanın. Yönetim ve yapı için buraya dönün."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflow Sekmesi"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Ajan tabanlı bir Kanban panosu. Her kart, bağlam, geçmiş ve çıktılarla kalıcı bir iştir – bir kartı taşımak, sütunun Workflow zincirini çalıştırır.",
+    "bullets": [
+      "Backlog'da metin kartları oluşturun ve bunları sütunlar arasında sürükleyip bırakın.",
+      "Her sütuna sıralı Workflow'lar atayın; kart hareketleri bunları Trigger olarak tetikler.",
+      "Kartlar başarı durumunda yeşil, hata durumunda kırmızı ve çalışma sırasında sarı olur.",
+      "Yorumlar ve önceki çıktılar, bir sonraki çalıştırmanın bağlamını besler."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ana fikir",
+        "title": "Kartlar not değil, işlerdir",
+        "description": "Her kart tam geçmişini taşır: yorumlar, hareketler ve her Workflow'un çıktısı.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Planlama döngüsü",
+        "title": "Sonraki turlar",
+        "description": "Yorumlarda yanıtlayın ve yeniden başlatın – zincir biriken tüm bağlamı görür.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board dokümantasyonu",
+        "description": "Sütun zincirleri, kart Payload sözleşmesi ve sonraki turlar.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Sütun zincirleri nasıl çalışır",
+        "content": "Bir sütuna bağlı Workflow'lar, bir kart geldiğinde sırayla çalışır. Her Workflow'un çıktısı kartın bağlamına eklenir; bir hata zinciri durdurur."
+      },
+      {
+        "id": "board-context",
+        "title": "Workflow'lar ne alır",
+        "content": "Çalıştırma girdisi kartı (başlık, içerik, meta veriler, yorumlar, geçmiş, önceki çıktılar), Board'u, hareketi ve zincirdeki konumu içerir. Bunu $input.card ifadeleriyle okuyun."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Şablonlar",
+    "summary": "Aynı desenleri her seferinde yeniden oluşturmak yerine yeniden kullanılabilir Workflow planlarıyla başlayın.",
+    "bullets": [
+      "Workflow yapısı biliniyorsa ancak ayrıntılar hala değişiyorsa şablonları kullanın.",
+      "İyi şablonlar, katılım süresini kısaltır ve tuvaldeki tekrarlayan işleri azaltır.",
+      "Desenleri burada paylaşın ve ihtiyaçlarınıza göre editörde uyarlayın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Yeniden kullanım",
+        "title": "Plan yaklaşımı",
+        "description": "Kanıtlanmış Workflow yapılarını yakalayın ve hızla yeniden uygulayın.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ekip ritmi",
+        "title": "Tek tip başlangıç noktaları",
+        "description": "Şablonlar, ekiplerin aynı kanıtlanmış desenler üzerinde anlaşmasına yardımcı olur.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Verimlilik",
+        "title": "Daha az boş zaman",
+        "description": "Kullanıma hazır bir çerçeve seçin ve yalnızca gerekli olanı ayarlayın.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Şablon dokümanını aç",
+        "description": "Şablonların Dashboard akışına nasıl entegre olduğunu keşfedin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Şablonlar Sekmesi"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Workflow'lara dön",
+        "description": "Ana Workflow kütüphanesine geri dönün.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Şablonlar neden önemlidir",
+        "content": "Tekrarlayan düğüm düzenlerini yeniden kullanılabilir varlıklara dönüştürürler – aynı Workflow deseninin varyantlarını dağıtan ekipler için idealdir."
+      },
+      {
+        "id": "templates-when",
+        "title": "En iyi kullanım",
+        "content": "Yapı sabit olduğunda ancak adlar, Prompt'lar, Credentials veya hedefler kullanım durumuna göre değiştiğinde şablonları kullanın."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Şablonlar Sekmesi"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Değişkenler",
+    "summary": "Paylaşılan değerleri merkezi olarak saklayın ve aynı verileri her yerde çoğaltmadan Workflow'lar arasında bunlara başvurun.",
+    "bullets": [
+      "Sık kullanılan değerleri merkezi ve kalıcı bir konumda tutun.",
+      "Değişkenler, Prompt sapmasını ve yinelenen yapılandırmaları azaltır.",
+      "Birden fazla Workflow aynı veri tabanına ihtiyaç duyduğunda değerleri hedefli bir şekilde paylaşın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kalıcılık",
+        "title": "Çalıştırmalar arası depolama",
+        "description": "Global değerler, bireysel Workflow çalıştırmalarından sonra da kalır.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompakt yapılandırma",
+        "title": "Daha az yineleme",
+        "description": "Birçok düğüm alanını manuel olarak ayarlamak yerine merkezi olarak bir kez güncelleyin.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "İfadeler",
+        "title": "DSL desteği",
+        "description": "Değerlere doğrudan düğüm ifadelerinde ve Prompt'larda başvurun.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Değişken dokümanını okuyun",
+        "description": "Dashboard'daki değişken kılavuzunu açın.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Değişkenler Sekmesi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Tipik desenler",
+        "content": "Endpoint'leri, paylaşılan Prompt parçalarını, ortama özgü parametreleri veya birden fazla Workflow'un okuması gereken ID'leri saklayın."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Buraya neler uygun değil",
+        "content": "Sırlar ve sağlayıcı kimlik doğrulamaları global değişkenlere değil, kimlik bilgilerine aittir."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Değişkenler Sekmesi"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Dashboard Chat'i, Workflow'larınız ve platform görevleriniz için hızlı ve diyalog tabanlı bir giriş noktası olarak kullanın.",
+    "bullets": [
+      "Hızlı sorular, Workflow yardımı ve hafif çalıştırmalar için mükemmeldir.",
+      "Tam editör kontrolü yerine hız ve yinelemeye odaklanır.",
+      "Yapı oluşturulduktan sonra doğrudan Workflow'a veya dokümana geçin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Doğal dil",
+        "title": "Hızlı etkileşim",
+        "description": "Tüm uygulamada manuel gezinmek yerine basit bir dil kullanın.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Köprü",
+        "title": "Fikirden eyleme",
+        "description": "Chat, hedef net olduğunda ancak tam yolun hala çözülmesi gerektiğinde yardımcı olur.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Yardımcı",
+        "title": "Dokümantasyonu tamamlar",
+        "description": "Yanıtlar ve referanslar elinizin altında olsun diye dokümantasyonla birlikte kullanın.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Chat dokümanını aç",
+        "description": "Dashboard Chat kılavuzunu okuyun.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat Sekmesi"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Yapay zeka asistanı referansı",
+        "description": "Heym asistanının Workflow oluşturmaya nasıl yardımcı olduğunu keşfedin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "Yapay Zeka Asistanı"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "En iyi kullanım durumları",
+        "content": "Chat'i hızlı Workflow soruları, kısa platform talimatları ve tuval üzerinde derinlemesine çalışma gerektirmeyen operasyonel adımlar için kullanın."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Ne zaman görünüm değiştirilir",
+        "content": "Düğüm düzeyinde kontrol gerekli olduğunda editöre veya kalıcı referanslar için dokümana geçin."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat Sekmesi"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Workflow yetenekleriniz tarafından oluşturulan dosyaları yönetin ve paylaşın.",
+    "bullets": [
+      "Yetenekler çıktı dizinine dosya yazar; Heym bunları otomatik olarak yakalar.",
+      "Dosyaları Token bağlantıları veya parola korumalı Basic-Auth URL'leri aracılığıyla paylaşın.",
+      "Dosyaları tek tıklamayla indirin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Depolama",
+        "title": "Otomatik yakalanan dosyalar",
+        "description": "Yetenekler _OUTPUT_DIR dizinine yazar; dosyalar çalıştırmadan hemen sonra burada görünür.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Paylaşım",
+        "title": "Esnek erişim kontrolü",
+        "description": "Herkese açık bağlantılar, parola koruması, son kullanma tarihleri ve indirme sınırları.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formatlar",
+        "title": "PDF, DOCX, CSV ve daha fazlası",
+        "description": "reportlab, python-docx veya standart Python ile her tür dosyayı oluşturun.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Drive dokümantasyonunu açın",
+        "description": "Drive sekmesinin tam referansını inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive Sekmesi"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Dosya oluşturma kılavuzu",
+        "description": "Yeteneklerin dosyaları nasıl oluşturduğunu öğrenin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Dosya Oluşturma"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Dosyalar buraya nasıl gelir",
+        "content": "Bir yetenek _OUTPUT_DIR dizinine dosya bıraktığında, Heym bunları kalıcı olarak saklar ve indirme Token'ları oluşturur."
+      },
+      {
+        "id": "drive-share",
+        "title": "Paylaşım seçenekleri",
+        "content": "Herkes için herkese açık Token bağlantıları veya son kullanma tarihleri ve indirme sınırları içeren parola korumalı URL'ler oluşturun."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive Sekmesi"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Kimlik Bilgileri",
+    "summary": "Workflow'ların harici sistemlerle güvenli bir şekilde iletişim kurması için anahtarları, Token'ları ve bağlantı ayrıntılarını yönetin.",
+    "bullets": [
+      "Kimlik bilgilerini tek tek düğümlere dağıtmak yerine merkezi olarak saklayın.",
+      "Kimlik bilgileri LLM'leri, entegrasyonları, Vector Store'ları ve daha fazlasını kontrol eder.",
+      "Ekipler aynı bağlantıya ihtiyaç duyduğunda anahtar kopyaları olmadan hedefli erişim verin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Güvenlik",
+        "title": "Güvenli kimlik bilgileri",
+        "description": "Kimlik doğrulamayı bir kez yapılandırın ve Workflow'larda güvenle yeniden kullanın.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Entegrasyonlar",
+        "title": "Geniş destek",
+        "description": "OpenAI, DeepSeek, Slack, Redis, Qdrant ve Grist gibi sağlayıcıları destekler.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "İşbirliği",
+        "title": "Hedefli paylaşım",
+        "description": "Kopya oluşturmak yerine ekip veya kullanıcı paylaşımlarını kullanın.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Kimlik bilgileri dokümantasyonunu okuyun",
+        "description": "Kimlik bilgileri panosu kılavuzunu açın.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Kimlik Bilgileri Sekmesi"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Entegrasyonları görüntüleyin",
+        "description": "Üçüncü taraf entegrasyon yapılandırma ayrıntılarına göz atın.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Üçüncü Taraf Entegrasyonları"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Nerede kullanılırlar",
+        "content": "Kimlik bilgileri düğüm yapılandırmasında referans alınır ve çalışma zamanında güvenli bir şekilde çözümlenir."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Ekipler için uygun model",
+        "content": "Birden fazla geliştiricinin aynı sağlayıcı erişimine ihtiyaç duyduğu durumlarda paylaşımları tercih edin; bu, tutarlı davranış ve basit denetim sağlar."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Kimlik Bilgileri Sekmesi"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vector Store'lar",
+    "summary": "Anlamsal arama, bellek veya RAG bağlam entegrasyonu gerektiren Workflow'lar için retrieval arka uçlarını hazırlayın.",
+    "bullets": [
+      "Vector Store'lar, retrieval destekli Workflow'lar için veritabanını oluşturur.",
+      "Bunları RAG düğümleri ve yapay zeka akışlarıyla hassas belge dayanağı için kullanın.",
+      "Bu sekme, temellendirilmiş Prompt'lar için altyapı görevi görür."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG Altyapısı",
+        "title": "Sorgulanabilir bellek",
+        "description": "Workflow'lar bağlama ihtiyaç duyduğunda belgeleri anlamsal retrieval için hazır tutun.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kalite",
+        "title": "Temellendirilmiş dayanak",
+        "description": "Retrieval, kanıt sağlayarak halüsinasyon riskini azaltır.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Operasyonlar",
+        "title": "Tek merkezi yönetim",
+        "description": "Vector Store'lar oluşturun ve birden fazla Workflow'da yeniden kullanın.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Vector Store dokümantasyonunu açın",
+        "description": "Vector Store panosu kılavuzunu okuyun.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Vector Store Sekmesi"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "RAG düğümü dokümantasyonunu görüntüleyin",
+        "description": "Qdrant RAG düğümü referansını açın.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Konumlandırma",
+        "content": "Bu sekme depolama katmanını hazırlar. Asıl retrieval mantığı Workflow'larda bulunur (örneğin RAG veya ajan modelleri aracılığıyla)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Ne zaman kullanılmalı",
+        "content": "Workflow'unuz yalnızca LLM belleğine güvenmek yerine yapılandırılmamış bilgileri taramak zorunda olduğunda Vector Store'ları seçin."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Vector Store Sekmesi"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Ajan Workflow'larının harici araçlara ve işlevlere güvenli bir şekilde erişmesi için Model Context Protocol bağlantılarını yönetin.",
+    "bullets": [
+      "MCP, harici araç ekosistemlerini kullanılabilir ajan bağlamına dönüştürür.",
+      "Ajanlar statik Prompt'lardan daha zengin araçlara ihtiyaç duyduğunda bu sekmeyi kullanın.",
+      "Bağlantı kalitesi, ajanlarınızın yeteneklerini doğrudan belirler."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ajan araçları",
+        "title": "Harici işlev katmanı",
+        "description": "Ajanların akıl yürütme sırasında çağırabileceği araç sunucuları sağlayın.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Yürütme kontrolü",
+        "title": "Bağlantı yapılandırması",
+        "description": "Güvenilir Workflow'lar için Endpoint'leri, etiketleri ve taşımayı yapılandırın.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Platform derinliği",
+        "title": "Prompt'ların ötesinde",
+        "description": "MCP, Heym Workflow'larının yalnızca yanıt vermesini değil, harekete geçmesini sağlar.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "MCP dokümantasyonunu açın",
+        "description": "MCP sekmesi kılavuzunu okuyun.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP Sekmesi"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Ajan mimarisi",
+        "description": "MCP'nin ajan yürütmesine nasıl entegre edildiğini öğrenin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Ajan Mimarisi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Önemi",
+        "content": "Ajanınızın tek tek düğümlerin dışında araçlara, ortam erişimine veya sistem entegrasyonlarına ihtiyaç duyduğunda özellikle önemlidir."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Operasyonel yaklaşım",
+        "content": "MCP bağlantılarını bir altyapı olarak ele alın: kararlı etiketler ve net sorumluluklar hata ayıklamayı kolaylaştırır."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP Sekmesi"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Yürütmeler",
+    "summary": "Yapay zeka ve Workflow yürütmelerinin ayrıntılı Trace'lerini inceleyerek ne olduğunu anlayın – sadece işe yarayıp yaramadığını değil.",
+    "bullets": [
+      "Trace'leri hata ayıklama, performans analizi ve Prompt kalite kontrolleri için kullanın.",
+      "Trace'ler model davranışını, gecikmeleri ve yürütme yollarını açıklar.",
+      "Beklenmedik sonuçlar veya kararsız yürütmeler durumunda ilk başvuru noktası."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Hata Ayıklama",
+        "title": "Gizli adımları görün",
+        "description": "Trace verileri, Workflow ve modelin gerçekte ne yürüttüğünü ortaya koyar.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Değerlendirme",
+        "title": "Yinelemeleri destekleyin",
+        "description": "Prompt'ları, araçları ve modelleri optimize ederken Trace'leri kullanın.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Güvenilirlik",
+        "title": "Sonuçları anlayın",
+        "description": "İyi Trace'ler, hataları analiz ederken tahminleri azaltır.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Yürütme dokümantasyonunu açın",
+        "description": "Yürütmeler panosu kılavuzunu okuyun.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Yürütmeler Sekmesi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Trace'ler ne zaman vazgeçilmez olur",
+        "content": "Workflow'lar çok adımlı, model yoğun veya araç tabanlı olduğunda, yalnızca durum görüntülemek yeterli olmaz."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. geçmiş",
+        "content": "Geçmiş, bir yürütmenin gerçekleştiğini gösterir. Trace'ler ise neden bu şekilde davrandığını açıklar."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Yürütmeler Sekmesi"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Uyarılar",
+    "summary": "Zaman pencereleri üzerinde eşik değerleri tanımlayın ve bu değerler aşıldığında otomatik olarak bilgilendirilin.",
+    "bullets": [
+      "Dört tür: hata sayısı, yürütme süresi, Token/maliyet eşikleri ve yürütme sayaçları.",
+      "Her uyarı, seçilen bir zaman penceresi üzerinde değerlendirilir, asla izole olaylar üzerinde değil.",
+      "Gereksinimi doğal dilde tanımlayın ve asistan uyarıyı yapılandırır."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Zaman penceresi",
+        "title": "Aykırı değerler yerine birikimler",
+        "description": "Başarısız bir yürütme gürültüdür. On dakikada on iki yürütme ise bir olaydır.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kaydetmeden önce",
+        "title": "Koşulu geriye dönük test edin",
+        "description": "Doğrulama adımı, eşikleri önceden kalibre etmek için gerçek geçmiş üzerinde test eder.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Tepki",
+        "title": "Alarm durumunda bir Workflow yürütün",
+        "description": "Uyarının Payload'ı, Slack veya e-posta yoluyla otomatik bildirimler için Workflow'un girdisi olur.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Uyarılar dokümantasyonunu açın",
+        "description": "Uyarı türlerinin, pencerelerin ve asistanın nasıl çalıştığını inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Uyarılar Sekmesi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Amaç",
+        "content": "Analizler ve Traces, aktif olarak sorduğunuz soruları yanıtlar. Uyarılar ise kritik eşikler aşıldığında Heym'in proaktif olarak bildirimde bulunmasını sağlar."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Yanlış uyarılar neden önlenir",
+        "content": "Bir uyarı bir kez tetiklenir ve metrik normale dönene kadar bekler – bu, bildirim akışlarını önler."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Uyarılar Sekmesi"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analizler",
+    "summary": "Etkinliği, büyümeyi ve zaman içindeki değişimleri anlamak için kullanım modellerini ve sistem davranışını takip edin.",
+    "bullets": [
+      "Analizler sayesinde benimsemeyi, verimi ve olağandışı zirveleri belirleyin.",
+      "Tekil bir hata ayıklama aracı yerine platform düzeyinde bir görünüm.",
+      "Sinyal ve açıklama için analizleri Traces ve geçmişle birleştirin."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Sinyaller",
+        "title": "Kullanım şeffaflığı",
+        "description": "İzole yürütmeleri incelemek yerine eğilimleri tespit edin.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapasite",
+        "title": "Operasyonel farkındalık",
+        "description": "Yük zirvelerini ve düşüşlerini yeterince erken tespit edin ve inceleyin.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Karar desteği",
+        "title": "Hedefli optimizasyon",
+        "description": "Analizler, en önemli Workflow'lara öncelik vermeye yardımcı olur.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Analizler dokümantasyonunu açın",
+        "description": "Analizler panosu kılavuzunu okuyun.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analizler Sekmesi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Amaç",
+        "content": "Analizleri, platformun genel işleyişi genelinde modeller, verim ve toplu davranış için kullanın."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Yaklaşım",
+        "content": "Sinyalleri burada belirleyin, ardından nedenleri analiz etmek için Traces, geçmiş veya düzenleyiciye geçin."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analizler Sekmesi"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Her biri kendi Workflow'ları tarafından beslenen bir grafik widget'ları ızgarası oluşturun – tüm göstergeler bir bakışta.",
+    "bullets": [
+      "Her widget, bir Chart Output düğümüne veri sağlayan bir Workflow tarafından beslenir.",
+      "Metriğe uygun çubuk, çizgi, pasta, tablo ve sayı widget'larını kullanın.",
+      "Widget'ları yapay zeka ile oluşturun veya uyarlayın ve hızlı yükleme süreleri için sonuçları önbelleğe alın.",
+      "Birden fazla Dashboard oluşturun ve bunları kişiler veya ekiplerle okuma ya da yazma olarak paylaşın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kompozisyon",
+        "title": "Workflow tarafından beslenen grafikler",
+        "description": "Bir Workflow tarafından üretilen tüm veriler grafik olarak görselleştirilir.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Performans",
+        "title": "Önbelleğe alınmış sonuçlar",
+        "description": "Widget'ların önbelleğe alınması, her sayfa yüklemesinde Workflow'un tekrar tekrar yürütülmesini önler.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Yapay zeka desteği",
+        "title": "Oluştur ve uyarla",
+        "description": "Metriği tanımlayın ve widget'ın yapay zeka tarafından otomatik olarak oluşturulmasını sağlayın.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Dashboard dokümantasyonunu açın",
+        "description": "Dashboard widget'larının nasıl oluşturulacağını keşfedin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard Sekmesi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Amaç",
+        "content": "Dashboard'u, kendi Workflow'larınızdan gelen temel göstergelerin kalıcı genel görünümleri için kullanın."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Oluşturma",
+        "content": "Bir widget ekleyin, Workflow'u Chart Output'tan önceki son düğüm satırlar sağlayacak şekilde yapılandırın ve ızgaraya yerleştirin."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard Sekmesi"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Ekipler",
+    "summary": "Workflow'lar, Credentials, değişkenler ve vektör depolamaların yinelenmeden işbirliği içinde kullanılması için paylaşılan erişimleri yönetin.",
+    "bullets": [
+      "Ekipler, platform kaynaklarını ölçeklenebilir şekilde paylaşmanın en temiz yoludur.",
+      "Yetkilerin bireyler yerine bir grubu takip etmesi gerektiğinde ekipleri kullanın.",
+      "Büyüyen bir Workspace'te yapılandırılmış işbirliği sağlayın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "İşbirliği",
+        "title": "Gruba dayalı paylaşımlar",
+        "description": "Her kullanıcıyı manuel olarak yetkilendirmek yerine bir ekibe bir kez erişim verin.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Netlik",
+        "title": "Net sorumluluklar",
+        "description": "Kaynak yönetimi gerçek ekip yapılarını takip eder.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Ölçeklenebilirlik",
+        "title": "Daha az idari yük",
+        "description": "Yeni üyeler, ekip üzerinden erişim haklarını otomatik olarak devralır.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Ekipler dokümantasyonunu açın",
+        "description": "Ekipler panosu kılavuzunu okuyun.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Ekipler Sekmesi"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Kaynak paylaşımları",
+        "description": "Kaynak paylaşımıyla ilgili ayrıntıları inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Kimlik Bilgileri Paylaşımı"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Ekiplerin avantajları",
+        "content": "Ekipler, sorunsuz işbirliği için kimlik ve kaynak erişimini birbirine bağlar."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Pratik ipucu",
+        "content": "Bir Workflow veya Credential kalıcı bir çalışma grubuna ait olduğunda ekip paylaşımlarını tercih edin."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Ekipler Sekmesi"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Günlükler",
+    "summary": "Workflow çıktılarının ötesinde altyapı içgörülerine ihtiyaç duyduğunuzda Stack düzeyindeki logları inceleyin.",
+    "bullets": [
+      "Logları hizmet hata ayıklama, konteyner durumları ve ortam sorunları için kullanın.",
+      "Nedenler Workflow düzeyinin altında olduğunda faydalıdır.",
+      "Uygulama ve sistem düzeyinde kanıtlar için Traces ile birlikte kullanın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Altyapı",
+        "title": "Konteyner şeffaflığı",
+        "description": "Backend hizmetlerinin Heym arayüzü altında ne yürüttüğünü görün.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Sorun giderme",
+        "title": "Nedenleri bulma",
+        "description": "Loglar, başlatma sorunları, çökmeler veya entegrasyon hataları durumunda yardımcı olur.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tamamlayıcı",
+        "title": "Workflow sonuçlarından farkı",
+        "description": "Workflow çıktıları sonuçları gösterir; loglar sistem davranışını gösterir.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Günlükler dokümantasyonunu açın",
+        "description": "Günlükler panosu kılavuzunu okuyun.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Günlükler Sekmesi"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Kullanım zamanı",
+        "content": "Sorunlar dağıtım, hizmet veya ortamla ilgili göründüğünde buraya geçin."
+      },
+      {
+        "id": "logs-combo",
+        "title": "En iyi kombinasyon",
+        "content": "Semptomlardan nedene hızlıca geçmek için logları Traces ve geçmişle birlikte kullanın."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Günlükler Sekmesi"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Değerlendirmeler",
+    "summary": "Ajan Workflow'ları için tekrarlanabilir kıyaslamalar oluşturun; böylece Prompt, model ve Workflow değişikliklerini güvenilir şekilde karşılaştırabilirsiniz.",
+    "bullets": [
+      "Test paketleri ve test durumları, bir Workflow'un öznel kalitesini ölçülebilir göstergelere dönüştürür.",
+      "Prompt veya model güncellemelerini dağıtmadan önce regresyon kontrolleri için ideal yerdir.",
+      "Aynı veri kümesi ve aynı değerlendirme yöntemi üzerinde birden çok modeli karşılaştırın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kalite döngüsü",
+        "title": "Ajanları kıyaslayın",
+        "description": "Rastgele kontrollere güvenmek yerine aynı paketi tekrar tekrar çalıştırın.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Karşılaştırma",
+        "title": "Model ve Prompt testleri",
+        "description": "Farklı parametrelerin aynı test kümesindeki davranışını gözlemleyin.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Güvenlik",
+        "title": "Güvenilir yineleme",
+        "description": "İyileştirmeleri dağıtımdan önce kanıtlayın.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Değerlendirme dokümantasyonunu açın",
+        "description": "Değerlendirme sayfası kılavuzunu inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Değerlendirmeler sekmesi"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent düğümü referansı",
+        "description": "Çoğu değerlendirme paketinin hedeflediği Workflow bölümünü inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent düğümü"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Paket tasarımı",
+        "content": "İyi bir paket; gerçek kullanım senaryolarını, sınır durumlarını ve kararlı kalması gereken onay adımlarını yansıtır."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Karşılaştırma parametreleri",
+        "content": "Tipik karşılaştırmalar; Prompt varyantlarını, model seçimini, sıcaklık parametrelerini ve aynı veri kümesi üzerindeki Workflow revizyonlarını içerir."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Değerlendirmeler sekmesi"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokümantasyon",
+    "summary": "Platformun doğru referanslarına doğrudan uygulama içinde göz atın ve ihtiyacınıza göre derinleşin.",
+    "bullets": [
+      "Heym dokümantasyonu hızlı özümseme ve hedefli başvuru için tasarlanmıştır.",
+      "Kenar çubuğu, arama ve çapraz referanslar kavramlar arasında hızlı gezinmenizi sağlar.",
+      "Showcase doğrudan o anda açık olan makaleye yönlendirir."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Yerleşik referans",
+        "title": "Her zaman elinizin altında",
+        "description": "Dokümantasyon, harici sekmeler açmanıza gerek kalmadan ürün akışında kalır.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Genel bakış",
+        "title": "Önce en önemlisi",
+        "description": "Makaleler önemli noktalarla başlar ve bağlantılar aracılığıyla dallanır."
+      },
+      {
+        "eyebrow": "Bağlama duyarlı",
+        "title": "Geçerli makale",
+        "description": "Bir belgeyi okurken \"Daha fazla bilgi edinin\" eylemi doğrudan o makaleyi takip eder."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Girişi inceleyin",
+        "description": "Varsayılan giriş noktası olarak dokümantasyon girişini açın.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Giriş"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Hızlı gezinme",
+        "content": "Kategoriler için kenar çubuğunu, konu zaten biliniyorsa komut aramasını kullanın."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Showcase üzerinden destek",
+        "content": "Showcase özetleri kısa tutar ve gerektiğinde ayrıntılı dokümantasyona yönlendirir."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Giriş"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Planlamalar",
+    "summary": "Etkin tüm Cron Workflow'larına görsel bir takvim üzerinde genel bakış ve yürütme zamanlarının kontrolü.",
+    "bullets": [
+      "Uygun çözünürlük için gün, hafta ve ay görünümleri arasında geçiş yapın.",
+      "Cron ifadesini görüntülemek için bir bloğun üzerine gelin; doğrudan Canvas'a gitmek için tıklayın.",
+      "Yürütme yoğunluklarını kontrol etmek ve çakışmaları tespit etmek için bu sekmeyi kullanın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Şeffaflık",
+        "title": "Takvim görünümü",
+        "description": "Etkin Cron Workflow'ları planlanan saatlerinde bloklar halinde görünür.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Gezinme",
+        "title": "Tek tıkla Canvas erişimi",
+        "description": "Workflow düzenleyicisini doğrudan açmak için bir bloğa tıklayın.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Aralıklar",
+        "title": "Gün, hafta veya ay",
+        "description": "Tek tek saatleri incelemek veya tüm ayı planlamak için çözünürlüğü ayarlayın.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Planlama dokümantasyonunu açın",
+        "description": "Planlamalar sekmesi referansını inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Planlamalar sekmesi"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron düğümü referansı",
+        "description": "Canvas üzerinde Cron Trigger'ların nasıl yapılandırılacağını keşfedin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Ne zaman kullanılır",
+        "content": "Planlanmış otomasyonları kontrol edin, takvim çakışmalarını tespit edin ve önemli Workflow'ların etkin kaldığından emin olun."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Renk kodlaması",
+        "content": "Her Workflow, ID'sinden türetilen ve gün, hafta ve ay görünümlerinde aynı olan tutarlı bir renk alır."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Planlamalar sekmesi"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Veri tabloları",
+    "summary": "Yapılandırılmış veri tablolarını doğrudan Heym içinde oluşturun ve bunları Workflow'larda programatik olarak kullanın.",
+    "bullets": [
+      "Tipli sütunlarla tablolar oluşturun, bunları manuel olarak doldurun veya CSV ile içe aktarın.",
+      "Satırları programatik olarak okumak, yazmak ve sorgulamak için Workflow DataTable düğümünü kullanın.",
+      "Tabloları kullanıcılar veya ekiplerle okuma ya da yazma haklarıyla paylaşın."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Yerleşik veri",
+        "title": "Yerleşik depolama",
+        "description": "Yapılandırılmış verileri harici veritabanları veya API anahtarları olmadan saklayın.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow entegrasyonu",
+        "title": "DataTable düğümü",
+        "description": "Herhangi bir Workflow'da satırları arayın, ekleyin, güncelleyin ve silin.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "İş birliği",
+        "title": "Paylaşımlar ve haklar",
+        "description": "Kullanıcılara ve ekiplere ayrıntılı okuma ve yazma erişimleri atayın.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Veri tabloları sekmesi dokümantasyonu",
+        "description": "Veri tabloları sekmesi referansını inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Veri tabloları"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable düğümü dokümantasyonu",
+        "description": "DataTable düğümü referansını inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Veri tabloları nedir?",
+        "content": "Veri tabloları, Heym içinde yerleşik yapılandırılmış bir depolamadır: tipli sütunlar (String, Number, Boolean, Date, JSON), satır içi düzenleme ve CSV içe/dışa aktarma."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Workflow'larda kullanım",
+        "content": "DataTable düğümü find, getAll, getById, insert, update, remove ve upsert işlemlerini destekler – Credentials olmadan, doğrudan Workflow sahibi üzerinden."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Veri tabloları"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow düzenleyicisi",
+    "summary": "Workflow'ları Canvas üzerinde oluşturun, test edin, hata ayıklayın ve optimize edin – doğrudan yürütme bağlamında.",
+    "bullets": [
+      "Düzenleyicide düğüm tasarımı, veri akışı ve yürütme davranışı bir araya gelir.",
+      "Oluşturma ve hata ayıklama arasında hızlı geçiş yapmak için kenar çubuklarını ve geçmişi kullanın.",
+      "Showcase burada Canvas'a maksimum alan sağlamak için bilinçli olarak kısa tutulmuştur."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Görsel Workflow tasarımı",
+        "description": "Düğümleri bağlayın, mantığı dallandırın ve yürütme akışını doğrudan modelleyin.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Yineleme",
+        "title": "Oluştururken hata ayıklama",
+        "description": "Hızlı geri bildirim döngüleri için geçmişi, hata ayıklama panellerini ve yürütme sonuçlarını kullanın."
+      },
+      {
+        "eyebrow": "İşlevsel kapsam",
+        "title": "Gelişmiş işlevler elinizin altında",
+        "description": "Portal, paylaşımlar, şablonlar ve doğrulama doğrudan Canvas üzerinde erişilebilir."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Canvas dokümantasyonunu açın",
+        "description": "Canvas işlevleri referansını inceleyin.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas işlevleri"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Klavye kısayolları",
+        "description": "Düzenleyicideki klavye kısayollarına genel bakışı açın.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Klavye kısayolları"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Çalışma ritmi",
+        "content": "Canvas üzerinde modelleyin, çıktılar üzerindeki varsayımları doğrulayın ve odağınızı kaybetmeden kenar çubuklarındaki parametreleri ayarlayın."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompakt Showcase",
+        "content": "Düzenleyici zaten çok sayıda bilgi sunduğundan Showcase hafif bir yönlendirme kılavuzu işlevi görür."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas işlevleri"
+    }
+  }
+}

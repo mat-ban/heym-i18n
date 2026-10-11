@@ -5,6 +5,7 @@ import { storeToRefs } from "pinia";
 import { useMediaQuery } from "@vueuse/core";
 import { Compass } from "lucide-vue-next";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 import ShowcaseMobileSheet from "@/features/showcase/components/ShowcaseMobileSheet.vue";
 import ShowcasePanel from "@/features/showcase/components/ShowcasePanel.vue";
@@ -75,12 +76,15 @@ const currentDocPath = computed<string | null>(() => {
   return Array.isArray(pathMatch) ? pathMatch.join("/") : String(pathMatch);
 });
 
-const definition = computed(() =>
-  resolveShowcaseDefinition({
+const { locale, t } = useI18n();
+
+const definition = computed(() => {
+  void locale.value;
+  return resolveShowcaseDefinition({
     context: props.enabled ? props.context : null,
     currentDocPath: currentDocPath.value,
-  })
-);
+  });
+});
 
 const teaserVisible = computed(() => {
   return visibleTeaserContext.value !== null && visibleTeaserContext.value === props.context;
@@ -103,15 +107,15 @@ const shouldShowFloatingButton = computed(() => {
 });
 const askButtonLabel = computed(() => {
   if (props.context === "docs" && definition.value?.docsTarget?.title) {
-    return "Ask About This Doc";
+    return t("showcase.askAboutDoc");
   }
-  return "Ask About This Page";
+  return t("showcase.askAboutPage");
 });
 const askButtonDescription = computed(() => {
   if (props.context === "docs" && definition.value?.docsTarget?.title) {
-    return "Open Chat with a ready-to-edit prompt about this documentation page.";
+    return t("showcase.askAboutDocDescription");
   }
-  return "Open Chat with a ready-to-edit prompt about the current page.";
+  return t("showcase.askAboutPageDescription");
 });
 const floatingButtonWrapperStyle = computed<CSSProperties>(() => {
   if (!isMobile.value) {
@@ -466,7 +470,7 @@ onUnmounted(() => {
           heartbeatActive && 'contextual-showcase-fab--heartbeat',
           'transition-transform duration-300 active:scale-[0.98]'
         )"
-        aria-label="Open page guide"
+        :aria-label="$t('showcase.openPageGuide')"
         @click="handleFabClick"
       >
         <Compass class="h-5 w-5 text-sky-500" />

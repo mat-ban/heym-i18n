@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { GripVertical, Plus, Settings2, Trash2, Workflow } from "lucide-vue-next";
 
 import type { BoardCard, BoardColumn } from "@/types/board";
@@ -22,6 +23,7 @@ const emit = defineEmits<{
 
 const boardStore = useBoardStore();
 const { showToast } = useToast();
+const { t } = useI18n();
 const dragOver = ref(false);
 const touchDragOver = ref(false);
 const columnDragOver = ref(false);
@@ -54,7 +56,7 @@ function blocksCrossColumnMove(cardId: string, targetColumnId: string): boolean 
   const card = boardStore.activeBoard?.cards.find((c) => c.id === cardId);
   if (!card || card.column_id === targetColumnId) return false;
   if (card.run_status !== "running") return false;
-  showToast("This card is still running; wait for it to finish before moving it.", "error");
+  showToast(t("board.cardRunningMoveBlocked"), "error");
   return true;
 }
 
@@ -153,12 +155,12 @@ async function addCard(): Promise<void> {
 
 async function deleteCard(cardId: string): Promise<void> {
   const card = cards.value.find((c) => c.id === cardId);
-  if (!window.confirm(`Delete card "${card?.title ?? ""}"?`)) return;
+  if (!window.confirm(t("board.confirmDeleteCard", { title: card?.title ?? "" }))) return;
   await boardStore.deleteCard(cardId);
 }
 
 async function emptyColumn(): Promise<void> {
-  if (!window.confirm(`Delete all cards in "${props.column.name}" column?`)) return;
+  if (!window.confirm(t("board.confirmEmptyColumn", { name: props.column.name }))) return;
   await boardStore.emptyColumn(props.column.id);
 }
 </script>
@@ -209,7 +211,7 @@ async function emptyColumn(): Promise<void> {
         <button
           v-if="boardStore.canWrite && cards.length > 0"
           class="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-          :aria-label="`Empty ${column.name}`"
+          :aria-label="$t('board.emptyColumnAria', { name: column.name })"
           @click="emptyColumn"
         >
           <Trash2 class="h-4 w-4" />
@@ -217,7 +219,7 @@ async function emptyColumn(): Promise<void> {
         <button
           v-if="boardStore.canWrite"
           class="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-          :aria-label="`Configure ${column.name}`"
+          :aria-label="$t('board.configureColumnAria', { name: column.name })"
           :data-testid="`board-column-settings-${column.id}`"
           @click="emit('openSettings', column.id)"
         >
@@ -252,8 +254,8 @@ async function emptyColumn(): Promise<void> {
         v-model="newCardTitle"
         type="text"
         :disabled="!canAct"
-        :placeholder="canAct ? 'Add a card' : 'Set the Agentic Kanban Model in board settings first'"
-        :title="canAct ? '' : 'Pick a credential and model above to use the board'"
+        :placeholder="canAct ? $t('board.addCard') : $t('board.setAgenticModelFirst')"
+        :title="canAct ? '' : $t('board.pickCredentialModelTooltip')"
         class="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
         @keydown.enter="addCard"
       >

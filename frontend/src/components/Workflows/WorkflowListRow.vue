@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { Copy, Pin, PinOff, RotateCcw, Settings, Trash2 } from "lucide-vue-next";
 
 import type { WorkflowListItem, WorkflowRowStatus } from "@/types/workflow";
@@ -57,6 +58,8 @@ const iconComponent = computed(() => {
   return type && nodeIcons[type] ? nodeIcons[type] : WorkflowIcon;
 });
 
+const { t } = useI18n();
+
 const iconFillsTile = computed((): boolean => {
   const type = props.workflow.first_node_type;
   return type !== null && isTileFillingIcon(type);
@@ -64,7 +67,7 @@ const iconFillsTile = computed((): boolean => {
 
 const timestampLabel = computed((): string => {
   if (isTrashed.value && props.workflow.scheduled_for_deletion) {
-    return `Scheduled ${formatDate(props.workflow.scheduled_for_deletion)}`;
+    return t("workflows.scheduledForDeletionDate", { date: formatDate(props.workflow.scheduled_for_deletion) });
   }
   return formatDate(props.workflow.updated_at);
 });
@@ -197,7 +200,7 @@ function handleRowKeydown(event: KeyboardEvent): void {
         variant="ghost"
         size="icon"
         class="h-8 w-8 rounded-lg text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary md:h-7 md:w-7"
-        title="Edit workflow"
+        :title="$t('workflows.editWorkflow')"
         @click="emit('edit', workflow, $event)"
       >
         <Settings class="h-3.5 w-3.5" />
@@ -206,7 +209,7 @@ function handleRowKeydown(event: KeyboardEvent): void {
         variant="ghost"
         size="icon"
         class="h-8 w-8 rounded-lg text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary md:h-7 md:w-7"
-        title="Copy workflow"
+        :title="$t('workflows.copyWorkflow')"
         :disabled="copyingId === workflow.id"
         @click="emit('copy', workflow.id, $event)"
       >
@@ -220,7 +223,7 @@ function handleRowKeydown(event: KeyboardEvent): void {
         variant="ghost"
         size="icon"
         class="h-8 w-8 rounded-lg text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary md:h-7 md:w-7"
-        title="Restore workflow"
+        :title="$t('workflows.restoreWorkflow')"
         @click="emit('restore', workflow.id, $event)"
       >
         <RotateCcw class="h-3.5 w-3.5" />
@@ -231,7 +234,7 @@ function handleRowKeydown(event: KeyboardEvent): void {
         size="icon"
         class="h-8 w-8 rounded-lg transition-colors hover:bg-primary/10 md:h-7 md:w-7"
         :class="pinned ? 'text-primary' : 'text-muted-foreground hover:text-primary'"
-        :title="pinned ? 'Unpin workflow' : 'Pin workflow'"
+        :title="pinned ? $t('workflows.unpinWorkflow') : $t('workflows.pinWorkflow')"
         @click="emit('togglePin', workflow.id)"
       >
         <PinOff
@@ -248,7 +251,7 @@ function handleRowKeydown(event: KeyboardEvent): void {
         size="icon"
         :data-testid="`workflow-delete-${workflow.id}`"
         class="h-8 w-8 rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive dark:hover:text-red-300 md:h-7 md:w-7"
-        :title="isTrashed ? 'Delete immediately' : 'Delete workflow'"
+        :title="isTrashed ? $t('workflows.deleteImmediately') : $t('workflows.deleteWorkflow')"
         @click="emit('delete', workflow.id, $event)"
       >
         <Trash2 class="h-3.5 w-3.5" />

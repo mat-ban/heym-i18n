@@ -34,14 +34,14 @@ async function submit(): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    title="New dashboard"
+    :title="$t('dashboards.newDashboard')"
     size="sm"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 p-1">
       <Input
         v-model="name"
-        placeholder="Dashboard name"
+        :placeholder="$t('dashboards.dashboardName')"
         data-testid="dashboard-create-name"
         @keydown.enter="submit"
       />
@@ -50,14 +50,14 @@ async function submit(): Promise<void> {
           variant="ghost"
           @click="emit('close')"
         >
-          Cancel
+          {{ $t("common.cancel") }}
         </Button>
         <Button
           :disabled="!canCreate"
           data-testid="dashboard-create-submit"
           @click="submit"
         >
-          Create dashboard
+          {{ $t("dashboards.createDashboard") }}
         </Button>
       </div>
     </div>

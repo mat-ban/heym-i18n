@@ -155,7 +155,20 @@ export default {
         "2xl": "calc(var(--radius) + 8px)",
       },
       fontFamily: {
-        sans: ["Geist", "system-ui", "sans-serif"],
+        sans: [
+          "Geist",
+          "Inter",
+          "PingFang SC",
+          "Noto Sans SC",
+          "Microsoft YaHei",
+          "Noto Sans",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "sans-serif",
+        ],
         mono: ["JetBrains Mono", "monospace"],
       },
       backgroundImage: {

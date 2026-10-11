@@ -6,6 +6,7 @@ import { renderToString } from "vue/server-renderer";
 import QuickWorkflowRunPanel from "@/components/Layout/QuickWorkflowRunPanel.vue";
 import { useQuickDrawerStore } from "@/stores/quickDrawer";
 import type { QuickDrawerRunState, QuickDrawerWorkflowViewModel } from "@/types/quickDrawer";
+import i18n from "@/i18n";
 
 function workflow(inputKeys: string[]): QuickDrawerWorkflowViewModel {
   return {
@@ -37,6 +38,7 @@ async function renderPanel(pinia: ReturnType<typeof createPinia>): Promise<strin
     }),
   });
   app.use(pinia);
+  app.use(i18n);
   return renderToString(app);
 }
 

@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflow-ok",
+    "summary": "Hozza létre, rendezze, importálja és kezelje a Workflow-okat a KI-automatizálásaihoz.",
+    "bullets": [
+      "Nyissa meg gyorsan a Workflow-okat, tartsa rendezetten a mappákat, és folytassa közvetlenül a legutóbbi feladatokkal.",
+      "Használja a parancspalettát a gyors eléréshez, hogy ne kelljen hosszan keresgélnie a rácsban.",
+      "Használja ezt a lapot az editorban végzett összes tevékenység kiindulópontjaként."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Központi áttekintés",
+        "title": "Workflow-könyvtár",
+        "description": "A gyökér objektumok, mappák és törlésre megjelölt Workflow-ok egy helyen tekinthetők meg.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Gyorselérés",
+        "title": "Gyors létrehozás",
+        "description": "Új Workflow-ok létrehozása vagy JSON közvetlen importálása.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktúra",
+        "title": "Előzetes rendszerezés",
+        "description": "A mappák és a rögzítés átláthatóan tartják a növekvő automatizálási készleteket.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Workflow-útmutató elolvasása",
+        "description": "A Workflow-ok lap teljes referenciájának megnyitása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflow-ok lap"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Sablonok megnyitása",
+        "description": "Váltás a Sablonok lapra az újrafelhasználható kiindulópontokért.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Mi tartozik ide",
+        "content": "Ezt a területet a Workflow életciklus-feladatokhoz használja: létrehozás, átnevezés, áthelyezés, importálás, archiválás és kiválasztás."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Maradjon karcsú",
+        "content": "Ha csak egy gyors futtatásra van szüksége egy másik oldalról, használja a Quick Drawer-t. Térjen vissza ide a kezeléshez és a struktúrához."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflow-ok lap"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Ügynök-alapú Kanban-Board. Minden kártya egy perzisztens Job kontextussal, előzményekkel és kimenetekkel – a kártya áthelyezése végrehajtja az oszlop Workflow-láncát.",
+    "bullets": [
+      "Hozzon létre szövegkártyákat a Backlog-ban, és húzza át őket Drag & Drop-pal az oszlopokon.",
+      "Rendeljen rendezett Workflow-okat minden oszlophoz; a kártyamozgások Trigger-ként indítják el ezeket.",
+      "A kártyák zöldre váltanak siker esetén, pirosra hiba esetén és sárgára a végrehajtás alatt.",
+      "A kommentek és a korábbi kimenetek befolynak a következő futás kontextusába."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Alapgondolat",
+        "title": "A kártyák Job-ok, nem jegyzetek",
+        "description": "Minden kártya hordozza a teljes előzményét: kommentek, mozgások és az egyes Workflow-ok kimenete.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Tervezési ciklus",
+        "title": "Következő körök",
+        "description": "Válaszoljon kommentekben, és futtassa újra – a lánc látja a teljes felhalmozott kontextust.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board-dokumentáció",
+        "description": "Oszlopláncok, Card-Payload-szerződés és következő körök.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Hogyan hajtódnak végre az oszlopláncok",
+        "content": "Az oszlophoz csatolt Workflow-ok szekvenciálisan futnak le, amint egy kártya megérkezik. Az egyes Workflow-ok kimenete hozzáfűződik a kártya kontextusához; egy hiba leállítja a láncot."
+      },
+      {
+        "id": "board-context",
+        "title": "Mit kapnak a Workflow-ok",
+        "content": "A végrehajtási input tartalmazza a kártyát (cím, tartalom, metaadatok, kommentek, előzmények, korábbi kimenetek), a Board-ot, a mozgást és a láncban elfoglalt pozíciót. Olvassa ki ezeket $input.card-kifejezésekkel."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Sablonok",
+    "summary": "Induljon újrafelhasználható Workflow-blueprintekkel, ahelyett hogy ugyanazokat a mintákat minden alkalommal újra felépítené.",
+    "bullets": [
+      "Használjon sablonokat, ha a Workflow-struktúra ismert, de a részletek még változnak.",
+      "A jó sablonok lerövidítik az onboardingot és csökkentik az ismétlődő Canvas-munkát.",
+      "Ossza meg a mintákat itt, és szükség szerint igazítsa őket az editorban."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Újrafelhasználás",
+        "title": "Blueprint-megközelítés",
+        "description": "Bevált Workflow-struktúrák rögzítése és gyors újbóli alkalmazása.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Csapattempó",
+        "title": "Egységes kiindulópontok",
+        "description": "A sablonok segítenek a csapatoknak ugyanazokban a bevált mintákban megállapodni.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Hatékonyság",
+        "title": "Kevesebb üresjárat",
+        "description": "Válasszon egy kész keretet, és csak a lényeget igazítsa.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Sablon-dokumentáció megnyitása",
+        "description": "Tudja meg, hogyan illeszkednek a sablonok a Dashboard-folyamatba.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Sablonok lap"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Vissza a Workflow-okhoz",
+        "description": "Vissza a Workflow-ok fő könyvtárához.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Miért fontosak a sablonok",
+        "content": "Az ismétlődő csomópont-elrendezéseket újrafelhasználható eszközökké alakítják – ideálisak olyan csapatok számára, amelyek ugyanazon Workflow-minta változatait telepítik."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimális használat",
+        "content": "Használjon sablonokat, ha a struktúra stabil, de a nevek, Prompt-ok, Credential-ek vagy célok használati esetenként változnak."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Sablonok lap"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Változók",
+    "summary": "Tárolja központilag a megosztott értékeket, és hivatkozzon rájuk Workflow-okon keresztül anélkül, hogy ugyanazokat az adatokat mindenhol duplikálná.",
+    "bullets": [
+      "A gyakran újrafelhasznált értékeket egy központi, perzisztens helyen tárolja.",
+      "A változók csökkentik a Prompt-eltolódást és a duplikált konfigurációkat.",
+      "Célzottan ossza meg az értékeket, ha több Workflow-nak ugyanarra az adatalapra van szüksége."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Perzisztencia",
+        "title": "Futásokon átívelő tároló",
+        "description": "A globális értékek túlélik az egyes Workflow-végrehajtásokat.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompakt konfiguráció",
+        "title": "Kevesebb redundancia",
+        "description": "Egyszer frissítse központilag, ahelyett hogy sok csomópontmezőt manuálisan igazítana.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kifejezések",
+        "title": "Támogatás a DSL-ben",
+        "description": "Hivatkozzon az értékekre közvetlenül csomópont-kifejezésekben és Prompt-okban.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Változók dokumentációjának elolvasása",
+        "description": "A Dashboard változóinak útmutatójának megnyitása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Változók lap"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Tipikus minták",
+        "content": "Tároljon Endpoint-okat, megosztott Prompt-töredékeket, környezetspecifikus beállításokat vagy ID-kat, amelyeket több Workflow-nak kell olvasnia."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Mi nem tartozik ide",
+        "content": "A titkok és a szolgáltatói hitelesítések a Credential-ekbe tartoznak, nem a globális változókba."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Változók lap"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Használja a Dashboard-Chat-et gyors, párbeszédalapú belépési pontként a Workflow-okhoz és a platformfeladatokhoz.",
+    "bullets": [
+      "Kiváló gyors kérdésekhez, Workflow-segítséghez és könnyűsúlyú végrehajtásokhoz.",
+      "A tempóra és az iterációra összpontosít a teljes editor-kontroll helyett.",
+      "Amint a struktúra áll, váltson közvetlenül a Workflow-ra vagy a dokumentációra."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Természetes nyelv",
+        "title": "Gyors interakció",
+        "description": "Használjon egyszerű nyelvet, ahelyett hogy a teljes alkalmazást manuálisan böngészné.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Híd",
+        "title": "Az ötlettől a cselekvésig",
+        "description": "A Chat segít, ha a cél világos, de a pontos út még kidolgozásra vár.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Kísérő",
+        "title": "Kiegészíti a dokumentációt",
+        "description": "A dokumentációval együtt használja, hogy a válaszok és hivatkozások kéznél legyenek.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Chat-dokumentáció megnyitása",
+        "description": "A Dashboard-Chat útmutatójának elolvasása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat lap"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "KI-asszisztens referencia",
+        "description": "Tudja meg, hogyan segít a Heym-asszisztens a Workflow-létrehozásban.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "KI-asszisztens"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Legjobb felhasználási esetek",
+        "content": "Használja a Chat-et gyors Workflow-kérdésekhez, rövid platform-útmutatásokhoz és operatív lépésekhez, amelyek nem igényelnek mély Canvas-munkát."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Mikor váltson nézetet",
+        "content": "Váltson az editorra, amint csomópontszintű kontrollra van szükség, vagy a dokumentációra tartós referenciákért."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat lap"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Kezelje és ossza meg a Workflow-skilljei által generált fájlokat.",
+    "bullets": [
+      "A skillek fájlokat írnak a kimeneti könyvtárba; a Heym automatikusan rögzíti azokat.",
+      "Ossza meg a fájlokat Token-linkekkel vagy jelszóval védett Basic-Auth URL-ekkel.",
+      "Töltse le a fájlokat egy kattintással."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tárolás",
+        "title": "Automatikusan rögzített fájlok",
+        "description": "A skillek a _OUTPUT_DIR könyvtárba írnak; a fájlok a végrehajtás után azonnal megjelennek itt.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Megosztás",
+        "title": "Rugalmas hozzáférés-vezérlés",
+        "description": "Nyilvános linkek, jelszóvédelem, lejárati dátumok és letöltési limitek.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formátumok",
+        "title": "PDF, DOCX, CSV és egyebek",
+        "description": "Bármilyen fájltípus generálható reportlab, python-docx vagy szabványos Python segítségével.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Drive-dokumentáció megnyitása",
+        "description": "A Drive-tab teljes referenciájának elolvasása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive-tab"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Fájlgenerálási útmutató",
+        "description": "Ismerje meg, hogyan hoznak létre fájlokat a skillek.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Fájlgenerálás"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Hogyan kerülnek ide a fájlok",
+        "content": "Amikor egy skill fájlokat helyez el a _OUTPUT_DIR könyvtárban, a Heym azokat tartósan tárolja és letöltési Tokeneket generál."
+      },
+      {
+        "id": "drive-share",
+        "title": "Megosztási lehetőségek",
+        "content": "Hozzon létre nyilvános Token-linkeket bárki számára, vagy jelszóval védett URL-eket, beleértve a lejárati dátumokat és letöltési limiteket."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive-tab"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Hitelesítő adatok",
+    "summary": "Kezelje a kulcsokat, Tokeneket és kapcsolati adatokat, hogy a Workflow-k biztonságosan kommunikálhassanak külső rendszerekkel.",
+    "bullets": [
+      "A hozzáférési adatokat központilag tárolja, ahelyett hogy azokat az egyes csomópontok között szétszórná.",
+      "A hitelesítő adatok vezérlik az LLM-eket, integrációkat, vektortárakat és egyebeket.",
+      "Célzottan adjon hozzáférést, amikor a csapatoknak ugyanarra a kapcsolatra van szükségük kulcsmásolatok nélkül."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Biztonság",
+        "title": "Biztonságos hozzáférési adatok",
+        "description": "A hitelesítést egyszer adja meg, és biztonságosan használja újra a Workflow-kban.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrációk",
+        "title": "Széles körű támogatás",
+        "description": "Támogatja az olyan szolgáltatókat, mint az OpenAI, DeepSeek, Slack, Redis, Qdrant és Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Együttműködés",
+        "title": "Célzott megosztás",
+        "description": "Használjon csapat- vagy felhasználói megosztásokat a duplikátumok létrehozása helyett.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Hitelesítő adatok dokumentációjának elolvasása",
+        "description": "A hitelesítő adatok irányítópultjának útmutatójának megnyitása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Hitelesítő adatok-tab"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Integrációk megtekintése",
+        "description": "A harmadik féltől származó integrációk beállításának részleteinek böngészése.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Harmadik féltől származó integrációk"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Hol használják őket",
+        "content": "A hitelesítő adatokra a csomópontkonfigurációban hivatkoznak, és a végrehajtás során biztonságosan oldódnak fel."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Csapatbarát modell",
+        "content": "Reszesítse előnyben a megosztásokat, amikor több fejlesztőnek ugyanarra a szolgáltatói hozzáférésre van szüksége; ez konzisztens viselkedést és egyszerű auditálást biztosít."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Hitelesítő adatok-tab"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektortárak",
+    "summary": "Készítsen elő Retrieval-backendeket olyan Workflow-khoz, amelyek szemantikus keresést, memóriát vagy RAG-kontextusbevonást igényelnek.",
+    "bullets": [
+      "A vektortárak képezik a retrieval-alapú Workflow-k adatbázisát.",
+      "Használja őket RAG-csomópontokkal és KI-folyamatokkal a pontos dokumentum-alapú grounding érdekében.",
+      "Ez a tab infrastruktúraként szolgál a megalapozott Promptokhoz."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG-infrastruktúra",
+        "title": "Kereshető memória",
+        "description": "Tartsa készen a dokumentumokat szemantikus retrievalhez, amikor a Workflow-k kontextusra van szükségük.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Minőség",
+        "title": "Megalapozott grounding",
+        "description": "A retrieval csökkenti a hallucinációs kockázatokat azáltal, hogy bizonyítékokat biztosít.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Üzemeltetés",
+        "title": "Egyszer központilag kezelni",
+        "description": "Hozzon létre vektortárakat, és használja újra azokat több Workflow között.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Vektortárak dokumentációjának megnyitása",
+        "description": "A vektortárak irányítópultjának útmutatójának elolvasása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Vektortárak-tab"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "RAG-csomópont dokumentációjának megtekintése",
+        "description": "A Qdrant-RAG-csomópont referenciájának megnyitása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Besorolás",
+        "content": "Ez a tab készíti elő a tárolási szintet. A tényleges retrieval-logika a Workflow-kon belül található (pl. RAG- vagy ügynökminták segítségével)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Alkalmazás időpontja",
+        "content": "Válasszon vektortárakat, amikor a Workflow-jának strukturálatlan tudásbázisokat kell keresnie, ahelyett hogy csak az LLM-memóriára támaszkodna."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Vektortárak-tab"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Kezelje a Model Context Protocol kapcsolatokat, hogy az ügynök-Workflow-k biztonságosan elérhessék az eszközöket és külső funkciókat.",
+    "bullets": [
+      "Az MCP használható ügynökkontextussá alakítja a külső eszközök ökoszisztémáit.",
+      "Használja ezt a tabot, amikor az ügynököknek gazdagabb eszközökre van szükségük, mint a statikus Promptok.",
+      "A kapcsolat minősége közvetlenül meghatározza az ügynökök képességeit."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Ügynök-eszközök",
+        "title": "Külső funkciószint",
+        "description": "Olyan eszköz-szerverek biztosítása, amelyeket az ügynökök a reasoning során meghívhatnak.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Futásidejű vezérlés",
+        "title": "Kapcsolatbeállítás",
+        "description": "Endpointek, címkék és transport konfigurálása megbízható Workflow-khoz.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Platformmélység",
+        "title": "A Promptokon túl",
+        "description": "Az MCP lehetővé teszi, hogy a Heym-Workflow-k cselekedjenek, ne csak válaszoljanak.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "MCP-dokumentáció megnyitása",
+        "description": "Az MCP-tab útmutatójának elolvasása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP-tab"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Ügynök-architektúra",
+        "description": "Ismerje meg, hogyan integrálódik az MCP az ügynökvégrehajtásba.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Ügynök-architektúra"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Jelentőség",
+        "content": "Különösen fontos, amikor az ügynökének eszközökre, környezeti hozzáférésre vagy rendszerintegrációkra van szüksége az egyes csomópontokon kívül."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Üzemeltetési megközelítés",
+        "content": "Kezelje az MCP-kapcsolatokat infrastruktúraként: a stabil címkék és a világos felelősségi körök egyszerűsítik a hibakeresést."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP-tab"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Végrehajtások",
+    "summary": "Vizsgálja meg a KI- és Workflow-végrehajtások részletes Trace-eit, hogy megértse, mi történt – nem csak azt, hogy működött-e.",
+    "bullets": [
+      "Használja a Trace-eket hibakereséshez, teljesítményelemzéshez és Prompt-minőségellenőrzésekhez.",
+      "A Trace-ek magyarázzák a modell viselkedését, a latenciákat és a végrehajtási útvonalakat.",
+      "Az első kiindulópont váratlan eredmények vagy instabil futások esetén."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Hibakeresés",
+        "title": "Rejtett lépések megtekintése",
+        "description": "A Trace-adatok felfedik, hogy a Workflow és a modell valójában mit hajtott végre.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Értékelés",
+        "title": "Iterációk támogatása",
+        "description": "Használja a Trace-eket a Promptok, eszközök és modellek optimalizálásához.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Megbízhatóság",
+        "title": "Eredmények nyomon követése",
+        "description": "A jó Trace-ek csökkentik a találgatásokat a hibaelemzés során.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Végrehajtási dokumentáció megnyitása",
+        "description": "A végrehajtási irányítópult útmutatójának elolvasása.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Végrehajtási-tab"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Amikor a Trace-ek nélkülözhetetlenné válnak",
+        "content": "Amint a Workflow-k több lépcsős, modellintenzív vagy eszközalapúak, a pusztán állapotjelzés már nem elegendő."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. előzmények",
+        "content": "Az előzmények megmutatják, HOGY egy futás megtörtént. A Trace-ek megmagyarázzák, MIÉRT viselkedett úgy, ahogy."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Végrehajtási-tab"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Figyelmeztetések",
+    "summary": "Határozzon meg küszöbértékeket időablakokra, és értesüljön automatikusan, amint azokat túllépik.",
+    "bullets": [
+      "Négy típus: hibaarány, futási időtartam, Token-/költség-küszöbök és végrehajtási számlálók.",
+      "Minden figyelmeztetés egy kiválasztott időablak alapján kerül kiértékelésre, soha nem egyedi események alapján.",
+      "Írja le a követelményt természetes nyelven, és az asszisztens konfigurálja a figyelmeztetést."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Időablak",
+        "title": "Halmozódás a kiugró értékek helyett",
+        "description": "Egy sikertelen futás zaj. Tizenkettő tíz perc alatt már egy incidens.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Mentés előtt",
+        "title": "Feltétel visszamenőleges tesztelése",
+        "description": "Az ellenőrzési lépés valós előzmények ellen tesztel, hogy a küszöbértékeket előre kalibrálhassa.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reakció",
+        "title": "Workflow futtatása riasztás esetén",
+        "description": "Az Alert-Payload a Workflow bemenetévé válik az automatikus értesítésekhez Slack vagy e-mail útján.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Figyelmeztetések dokumentációjának megnyitása",
+        "description": "Olvassa el a riasztástípusok, időablakok és az asszisztens működését.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Figyelmeztetések lap"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Cél",
+        "content": "Az elemzések és nyomkövetések olyan kérdésekre válaszolnak, amelyeket Ön aktívan tesz fel. A figyelmeztetések lehetővé teszik, hogy a Heym proaktívan szóljon, amikor kritikus küszöbértékeket lépnek túl."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Miért kerüljük el a téves riasztásokat",
+        "content": "Egy figyelmeztetés egyszer aktiválódik, és megvárja, amíg a metrika helyreáll – ez megakadályozza az értesítések elárasztását."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Figyelmeztetések lap"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Elemzések",
+    "summary": "Kövesse nyomon a használati mintákat és a rendszer viselkedését, hogy megértse az aktivitást, a növekedést és az időbeli változásokat.",
+    "bullets": [
+      "Ismerje fel az elfogadást, az átviteli teljesítményt és a szokatlan csúcsokat az elemzések segítségével.",
+      "Platformszintű nézet egyedi hibakeresési eszköz helyett.",
+      "Kombinálja az elemzéseket nyomkövetésekkel és előzményekkel a jelzés és a magyarázat érdekében."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Jelzések",
+        "title": "Használati átláthatóság",
+        "description": "Trendek felismerése ahelyett, hogy az egyes futásokat elszigetelten vizsgálná.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapacitás",
+        "title": "Operatív tudatosság",
+        "description": "A terhelési csúcsok és visszaesések korai felismerése és vizsgálata.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Döntéstámogatás",
+        "title": "Célzott optimalizálás",
+        "description": "Az elemzések segítenek a legfontosabb Workflow-k priorizálásában.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Elemzések dokumentációjának megnyitása",
+        "description": "Olvassa el az elemzések irányítópult útmutatóját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Elemzések lap"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Cél",
+        "content": "Használja az elemzéseket a minták, az átviteli teljesítmény és a teljes platformüzemeltetés során megfigyelhető aggregált viselkedés vizsgálatához."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Eljárás",
+        "content": "Ismerje fel a jelzéseket itt, majd váltson át a nyomkövetésekre, az előzményekre vagy a szerkesztőre az okok elemzéséhez."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Elemzések lap"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Irányítópult",
+    "summary": "Hozzon létre diagram-widgetekből álló rácsot, amelyeket egyenként saját Workflow-k táplálnak – minden kulcsfontosságú mutató egy pillantásra.",
+    "bullets": [
+      "Minden widgetet egy Workflow működtet, amely adatokat szolgáltat egy Chart-Output csomópontnak.",
+      "Oszlop-, vonal-, kör-, táblázat- és szám-widgeteket a metrikának megfelelően alkalmazzon.",
+      "Widgeteket AI-val generálhat vagy módosíthat, és az eredményeket gyorsítótárazhatja a gyors betöltési idők érdekében.",
+      "Több irányítópultot hozhat létre, és megoszthatja azokat személyekkel vagy csapatokkal olvasási vagy írási jogosultsággal."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kompozíció",
+        "title": "Workflow-val táplált diagramok",
+        "description": "Minden adat, amelyet egy Workflow előállít, diagramként jelenik meg.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Teljesítmény",
+        "title": "Gyorsítótárazott eredmények",
+        "description": "A widget-gyorsítótárazás elkerüli az ismételt Workflow-végrehajtásokat minden oldalmegtekintésnél.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI-támogatás",
+        "title": "Generálás és módosítás",
+        "description": "Írja le a metrikát, és hagyja, hogy a widgetet automatikusan az AI hozza létre.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Irányítópult dokumentációjának megnyitása",
+        "description": "Tudja meg, hogyan hozhat létre irányítópult-widgeteket.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Irányítópult lap"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Cél",
+        "content": "Használja az irányítópultot a saját Workflow-iból származó fontos mutatók állandó áttekintéséhez."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Létrehozás",
+        "content": "Adjon hozzá widgetet, konfigurálja a Workflow-t úgy, hogy az utolsó csomópont a Chart Output előtt sorokat szolgáltasson, és rendezze el a rácsban."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Irányítópult lap"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Csapatok",
+    "summary": "Kezelje a megosztott hozzáféréseket, hogy a Workflow-k, Credential-ök, változók és vektortárak együttműködve, duplikátumok nélkül legyenek használhatók.",
+    "bullets": [
+      "A csapatok a legtisztább módja a platformerőforrások skálázható megosztásának.",
+      "Használjon csapatokat, amikor a jogosultságoknak egy csoportot kell követniük egyének helyett.",
+      "Biztosítja a strukturált együttműködést a növekvő munkaterületen."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Együttműködés",
+        "title": "Csoportalapú megosztások",
+        "description": "A hozzáférést egyszer egy csapatnak adja meg, ahelyett hogy egyéni felhasználókat jogosítana fel manuálisan.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Átláthatóság",
+        "title": "Tiszta felelősségi körök",
+        "description": "Az erőforrás-kezelés a valós csapatszerkezeteket követi.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skálázás",
+        "title": "Kevesebb adminisztrációs teher",
+        "description": "Az új tagok automatikusan öröklik a hozzáférési jogokat a csapaton keresztül.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Csapatok dokumentációjának megnyitása",
+        "description": "Olvassa el a csapatok irányítópult útmutatóját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Csapatok lap"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Erőforrás-megosztások",
+        "description": "Olvassa el az erőforrások megosztásának részleteit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Hitelesítési adatok megosztása"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "A csapatok előnyei",
+        "content": "A csapatok összekapcsolják az identitást és az erőforrás-hozzáférést a zökkenőmentes együttműködés érdekében."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Gyakorlati tipp",
+        "content": "Részesítse előnyben a csapatmegosztásokat, ha egy Workflow vagy Credential egy állandó munkacsoporthoz tartozik."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Csapatok lap"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protokollok",
+    "summary": "Olvassa a logokat stack szinten, amikor a Workflow-kimeneteken túlmutató infrastruktúra-betekintésekre van szüksége.",
+    "bullets": [
+      "Használja a logokat szolgáltatás-hibakereséshez, konténer-állapotokhoz és környezeti problémákhoz.",
+      "Segít, ha az okok a Workflow szintje alatt vannak.",
+      "Használja a nyomkövetésekkel együtt az alkalmazás- és rendszerszintű bizonyítékokhoz."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktúra",
+        "title": "Konténer-átláthatóság",
+        "description": "Lássa, mit végeznek a backend-szolgáltatások a Heym felülete alatt.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Hibaelhárítás",
+        "title": "Okok megtalálása",
+        "description": "A logok segítenek indítási problémák, összeomlások vagy integrációs hibák esetén.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kiegészítő",
+        "title": "Különbség a Workflow-eredményekhez képest",
+        "description": "A Workflow-kimenetek eredményeket mutatnak; a logok rendszerviselkedést mutatnak.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Protokoll dokumentációjának megnyitása",
+        "description": "Olvassa el a protokoll irányítópult útmutatóját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Protokoll lap"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Alkalmazás időpontja",
+        "content": "Váltson ide, ha a problémák deployment-, szolgáltatás- vagy környezetfüggőnek tűnnek."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Legjobb kombináció",
+        "content": "Használja a logokat a nyomkövetésekkel és az előzményekkel együtt, hogy a tünetektől gyorsan eljusson az okig."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Protokoll lap"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Értékelés",
+    "summary": "Hozzon létre reprodukálható benchmarkokat agent Workflow-khoz, hogy a Prompt-, modell- és Workflow-módosításokat megbízhatóan összehasonlíthassa.",
+    "bullets": [
+      "A tesztsorozatok és tesztesetek a szubjektív Workflow-minőséget mérhető mutatószámokká alakítják.",
+      "Az ideális hely a regressziós vizsgálatokhoz a Prompt- vagy modellfrissítések kivezetése előtt.",
+      "Hasonlítson össze több modellt ugyanazon adathalmaz és ugyanazon értékelési módszer ellenében."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Minőségi ciklus",
+        "title": "Agentek benchmarkolása",
+        "description": "Ugyanazt a tesztsorozatot ismételten futtassa a véletlenszerű ellenőrzésekre támaszkodás helyett.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Összehasonlítás",
+        "title": "Modell- és Prompt-tesztek",
+        "description": "Tekintse meg, hogyan viselkednek a különböző beállítások ugyanazon a teszthalmazon.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Biztonság",
+        "title": "Megbízható iteráció",
+        "description": "A fejlesztéseket a kivezetés előtt bizonyíthatóan igazolja.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Értékelési dokumentáció megnyitása",
+        "description": "Olvassa el az értékelési oldal útmutatóját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Értékelési lap"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent-csomópont referencia",
+        "description": "Tekintse meg azt a Workflow-területet, amelyre a legtöbb eval tesztsorozat irányul.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent-csomópont"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Tesztsorozatok tervezése",
+        "content": "Egy jó tesztsorozat valós felhasználói eseteket, peremfeltételeket és jóváhagyási lépéseket tükröz, amelyeknek stabilnak kell maradniuk."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Összehasonlítási paraméterek",
+        "content": "A tipikus összehasonlítások Prompt-variánsokat, modellválasztást, Temperature-beállításokat és Workflow-revíziókat foglalnak magukban ugyanazon az adathalmazon."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Értékelési lap"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentáció",
+    "summary": "Böngéssze a pontos platform-referenciákat közvetlenül az alkalmazásban, és mélyüljön el szükség szerint.",
+    "bullets": [
+      "A Heym dokumentációja a gyors áttekintésre és a célzott utánanézésre lett tervezve.",
+      "Az oldalsáv, a keresés és a kereszthivatkozások lehetővé teszik a gyors váltást a fogalmak között.",
+      "A Showcase közvetlenül az aktuálisan megnyitott cikkre hivatkozik."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Alkalmazáson belüli referencia",
+        "title": "Mindig kéznél",
+        "description": "A dokumentáció a termékfolyamaton belül marad, külső lapok megnyitása nélkül.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Áttekintés",
+        "title": "Először a lényeg",
+        "description": "A cikkek a kulcspontokkal kezdődnek, és hivatkozásokon keresztül ágaznak el."
+      },
+      {
+        "eyebrow": "Kontextus-tudatos",
+        "title": "Aktuális cikk",
+        "description": "Egy dokumentum olvasásakor a 'Tudjon meg többet' művelet közvetlenül erre a cikkre mutat."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Bevezetés megtekintése",
+        "description": "Nyissa meg a dokumentáció bevezetését alapértelmezett belépési pontként.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Bevezetés"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Gyors navigáció",
+        "content": "Használja az oldalsávot a kategóriákhoz és a parancskeresést, ha a téma már ismert."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Támogatás a Showcase által",
+        "content": "A Showcase az összefoglalókat tömören tartja, és szükség esetén a részletes dokumentációhoz vezet."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Bevezetés"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Ütemezések",
+    "summary": "Tekintse át az összes aktív Cron-Workflow-t egy vizuális naptáron, és ellenőrizze a futási időket.",
+    "bullets": [
+      "Váltson napi, heti és havi nézet között a megfelelő felbontáshoz.",
+      "Vigye az egérmutatót egy blokk fölé a Cron-kifejezésért; kattintson a Canvas-ra ugráshoz.",
+      "Használja ezt a lapot a végrehajtási sűrűségek ellenőrzéséhez és az átfedések felismeréséhez."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Átláthatóság",
+        "title": "Naptárnézet",
+        "description": "Az aktív Cron-Workflow-k blokkokként jelennek meg a tervezett időpontokban.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigáció",
+        "title": "Egy kattintással a Canvas-ra",
+        "description": "Kattintson egy blokkra a Workflow-szerkesztő közvetlen megnyitásához.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Területek",
+        "title": "Nap, hét vagy hónap",
+        "description": "Állítsa be a felbontást az egyes órák ellenőrzéséhez vagy a teljes hónap tervezéséhez.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Ütemezések dokumentáció megnyitása",
+        "description": "Olvassa el az ütemezések lap referenciáját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Ütemezések lap"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron-csomópont referencia",
+        "description": "Tudja meg, hogyan konfigurálhatók a Cron-Triggerek a Canvas-on.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Alkalmazás időpontja",
+        "content": "Ellenőrizze az ütemezett automatizálásokat, ismerje fel az ütközéseket, és győződjön meg arról, hogy a fontos Workflow-k aktívak maradnak."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Színkódolás",
+        "content": "Minden Workflow konzisztens színt kap az azonosítójából, amely a napi, heti és havi nézetben azonos marad."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Ütemezések lap"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Adattáblák",
+    "summary": "Hozzon létre strukturált adattáblákat közvetlenül a Heym-ben, és használja azokat programozottan a Workflow-kban.",
+    "bullets": [
+      "Hozzon létre táblákat tipizált oszlopokkal, töltse fel manuálisan vagy importáljon CSV-n keresztül.",
+      "Használja a DataTable Workflow-csomópontot a sorok programozott olvasásához, írásához és lekérdezéséhez.",
+      "Ossza meg a táblákat felhasználókkal vagy csapatokkal olvasási vagy írási jogosultságokkal."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integrált adatok",
+        "title": "Integrált tároló",
+        "description": "Tároljon strukturált adatokat külső adatbázisok vagy API-kulcsok nélkül.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow-integráció",
+        "title": "DataTable-csomópont",
+        "description": "Keressen, szúrjon be, frissítsen és töröljön sorokat bármely Workflow-ban.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Együttműködés",
+        "title": "Megosztások és jogosultságok",
+        "description": "Adjon részletes olvasási és írási hozzáférést felhasználóknak és csapatoknak.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Adattáblák lap dokumentáció",
+        "description": "Olvassa el az adattáblák lap referenciáját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Adattáblák"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable-csomópont dokumentáció",
+        "description": "Olvassa el a DataTable-csomópont referenciáját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Mik az adattáblák?",
+        "content": "Az adattáblák a Heym integrált strukturált tárolója: tipizált oszlopok (String, Number, Boolean, Date, JSON), beágyazott szerkesztés, valamint CSV-import/-export."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Használat Workflow-kban",
+        "content": "A DataTable-csomópont támogatja a find, getAll, getById, insert, update, remove és upsert műveleteket – Credentials nélkül, közvetlenül a Workflow tulajdonosán keresztül."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Adattáblák"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow-szerkesztő",
+    "summary": "Hozzon létre, teszteljen, debugoljon és optimalizáljon Workflow-kat a Canvas-on – közvetlenül a végrehajtási kontextusban.",
+    "bullets": [
+      "A szerkesztőben a csomóponttervezés, az adatfolyam és a végrehajtási viselkedés egyesül.",
+      "Használja az oldalsávokat és az előzményeket a gyors váltáshoz a létrehozás és a debugging között.",
+      "A Showcase itt szándékosan kompakt marad, hogy maximális teret biztosítson a Canvas-nak."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Vizuális Workflow-tervezés",
+        "description": "Kapcsolja össze a csomópontokat, ágaztassa el a logikát, és modellezze közvetlenül a futásidejű folyamatot.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteráció",
+        "title": "Debugging létrehozás közben",
+        "description": "Használja az előzményeket, debug-paneleket és végrehajtási eredményeket a gyors visszacsatolási ciklusokhoz."
+      },
+      {
+        "eyebrow": "Funkciók köre",
+        "title": "Speciális funkciók kéznél",
+        "description": "A Portal, a megosztások, a sablonok és az érvényesítés közvetlenül a Canvas-on találhatók."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Canvas-dokumentáció megnyitása",
+        "description": "Olvassa el a Canvas-funkciók referenciáját.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas-funkciók"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Billentyűparancsok",
+        "description": "Nyissa meg a szerkesztő billentyűparancsainak áttekintését.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Billentyűparancsok"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Munkaritmus",
+        "content": "Modellezzen a Canvas-on, ellenőrizze a kimenetekre vonatkozó feltételezéseket, és módosítsa a paramétereket az oldalsávokon anélkül, hogy elveszítené a fókuszt."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompakt Showcase",
+        "content": "Mivel a szerkesztő már sok információt nyújt, a Showcase karcsú orientációs segítségként szolgál."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas-funkciók"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   ComboboxAnchor,
   ComboboxContent,
@@ -60,12 +61,12 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: "",
   options: () => [],
   groups: undefined,
-  placeholder: "Select...",
-  searchPlaceholder: "Search...",
-  emptyText: "No results found.",
+  placeholder: undefined,
+  searchPlaceholder: undefined,
+  emptyText: undefined,
   disabled: false,
   clearable: false,
-  clearAriaLabel: "Clear selection",
+  clearAriaLabel: undefined,
   hideTriggerIcon: false,
   class: undefined,
   selectClass: undefined,
@@ -75,6 +76,13 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: "update:modelValue", value: string | undefined): void;
 }>();
+
+const { t } = useI18n();
+
+const effectivePlaceholder = computed(() => props.placeholder ?? t("common.select"));
+const effectiveSearchPlaceholder = computed(() => props.searchPlaceholder ?? t("common.searchPlaceholder"));
+const effectiveEmptyText = computed(() => props.emptyText ?? t("common.noResults"));
+const effectiveClearAriaLabel = computed(() => props.clearAriaLabel ?? t("common.clearSelection"));
 
 const open = ref(false);
 const searchTerm = ref("");
@@ -111,7 +119,7 @@ const hasValue = computed<boolean>(() => {
 });
 
 const triggerSizingText = computed<string>(() => {
-  return selectedOption.value?.label ?? props.placeholder;
+  return selectedOption.value?.label ?? effectivePlaceholder.value;
 });
 
 /** The search icon always returns while open, where the trigger acts as a search field. */
@@ -267,13 +275,13 @@ function clearValue(): void {
         <ComboboxInput
           :id="id"
           :class="inputClass"
-          :placeholder="open ? searchPlaceholder : placeholder"
+          :placeholder="open ? effectiveSearchPlaceholder : effectivePlaceholder"
           :disabled="disabled"
         />
         <button
           v-if="clearable && hasValue && !disabled"
           type="button"
-          :aria-label="clearAriaLabel"
+          :aria-label="effectiveClearAriaLabel"
           class="mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 pointer-events-none transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto"
           @mousedown.prevent.stop
           @click.prevent.stop="clearValue"
@@ -301,7 +309,7 @@ function clearValue(): void {
       >
         <ComboboxViewport class="max-h-72 overflow-y-auto p-1">
           <ComboboxEmpty class="px-3 py-6 text-center text-sm text-muted-foreground">
-            {{ emptyText }}
+            {{ effectiveEmptyText }}
           </ComboboxEmpty>
           <ComboboxGroup
             v-for="group in optionGroups"

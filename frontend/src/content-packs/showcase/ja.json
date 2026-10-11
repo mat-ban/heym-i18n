@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflow",
+    "summary": "AI自動化のためのWorkflowを作成、整理、インポート、管理します。",
+    "bullets": [
+      "Workflowをすばやく開き、フォルダを整理して、最近のタスクから直接作業を再開できます。",
+      "コマンドパレットを使えば、グリッド内を長く検索せずにすばやくアクセスできます。",
+      "このタブをエディター内のすべてのアクティビティの拠点として活用してください。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "中央概要",
+        "title": "Workflowライブラリ",
+        "description": "ルートオブジェクト、フォルダ、削除予定のWorkflowを一か所で確認できます。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "クイックアクセス",
+        "title": "すばやく作成",
+        "description": "新しいWorkflowを作成するか、JSONを直接インポートします。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "構造",
+        "title": "事前に整理",
+        "description": "フォルダとピン留めで、増え続ける自動化セットを整理された状態に保ちます。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Workflowガイドを読む",
+        "description": "Workflowタブの完全なリファレンスを開きます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflowタブ"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "テンプレートを開く",
+        "description": "再利用可能な開始点のためにテンプレートタブへ移動します。",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "ここに含まれるもの",
+        "content": "この領域はWorkflowのライフサイクルタスクに使用します：作成、名前変更、移動、インポート、アーカイブ、選択。"
+      },
+      {
+        "id": "workflows-speed",
+        "title": "シンプルに保つ",
+        "content": "別のページからすばやく実行したいだけの場合は、Quick Drawerを使用してください。管理と構造のためにここに戻ってきてください。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflowタブ"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "ボード",
+    "summary": "エージェントベースのカンバンボード。各カードはコンテキスト、履歴、出力を持つ永続的なジョブであり、カードを移動すると列のWorkflowチェーンが実行されます。",
+    "bullets": [
+      "バックログにテキストカードを作成し、列間でドラッグ＆ドロップします。",
+      "各列に順序付けられたWorkflowをリンクし、カードの移動がTriggerとしてそれらを起動します。",
+      "カードは成功時に緑、エラー時に赤、実行中に黄色になります。",
+      "コメントと以前の出力は次の実行のコンテキストに流れ込みます。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "核心的な考え方",
+        "title": "カードはジョブであり、メモではない",
+        "description": "各カードは完全な履歴を保持します：コメント、移動、各Workflowの出力。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "計画ループ",
+        "title": "フォローアップラウンド",
+        "description": "コメントで返信して再実行すると、チェーンは蓄積されたすべてのコンテキストを参照します。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "ボードのドキュメント",
+        "description": "列チェーン、カードPayload契約、フォローアップラウンド。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "ボード"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "列チェーンの実行方法",
+        "content": "列にアタッチされたWorkflowは、カードが到着すると順次実行されます。各Workflowの出力はカードコンテキストに追加され、エラーが発生するとチェーンが停止します。"
+      },
+      {
+        "id": "board-context",
+        "title": "Workflowが受け取るもの",
+        "content": "実行入力にはカード（タイトル、内容、メタデータ、コメント、履歴、以前の出力）、ボード、移動、チェーン内の位置が含まれます。$input.card式で読み取ります。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "ボード"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "テンプレート",
+    "summary": "同じパターンを毎回作り直すのではなく、再利用可能なWorkflowブループリントから始めましょう。",
+    "bullets": [
+      "Workflow構造はわかっているが詳細がまだ変動する場合は、テンプレートを使用します。",
+      "優れたテンプレートはオンボーディングを短縮し、繰り返しのキャンバス作業を減らします。",
+      "ここでパターンを共有し、必要に応じてエディターで調整します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "再利用",
+        "title": "ブループリントアプローチ",
+        "description": "実証済みのWorkflow構造をキャプチャし、すばやく再適用します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "チームの速度",
+        "title": "統一された開始点",
+        "description": "テンプレートはチームが同じ実証済みパターンに合意するのに役立ちます。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "効率",
+        "title": "アイドル時間の削減",
+        "description": "既成のフレームワークを選び、本質的な部分だけを調整します。",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "テンプレートドキュメントを開く",
+        "description": "テンプレートがダッシュボードフローにどのように適合するかを学びます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "テンプレートタブ"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Workflowに戻る",
+        "description": "Workflowのメインライブラリに戻ります。",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "テンプレートが重要な理由",
+        "content": "繰り返しのノードレイアウトを再利用可能な資産に変換します。同じWorkflowパターンのバリエーションを提供するチームに最適です。"
+      },
+      {
+        "id": "templates-when",
+        "title": "最適な使用タイミング",
+        "content": "構造は安定しているが、名前、Prompt、認証情報、ターゲットがユースケースごとに変わる場合にテンプレートを使用します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "テンプレートタブ"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "変数",
+    "summary": "共有値を一元管理し、同じデータをどこでも重複させることなく、Workflow間で参照できます。",
+    "bullets": [
+      "頻繁に再利用される値を一元化された永続的な場所に保持します。",
+      "変数はPromptのドリフトと重複設定を減らします。",
+      "複数のWorkflowが同じデータソースを必要とする場合に、値を選択的に共有します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "永続性",
+        "title": "実行をまたぐストレージ",
+        "description": "グローバル値は個々のWorkflow実行を超えて持続します。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "コンパクトな設定",
+        "title": "冗長性の削減",
+        "description": "多くのノードフィールドを手動で調整する代わりに、一度中央で更新します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "式",
+        "title": "DSLでのサポート",
+        "description": "ノード式とPromptで値を直接参照します。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "変数ドキュメントを読む",
+        "description": "ダッシュボードの変数ガイドを開きます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "変数タブ"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "典型的なパターン",
+        "content": "複数のWorkflowが読み取る必要があるEndpoint、共有Promptフラグメント、環境固有の設定、IDを保存します。"
+      },
+      {
+        "id": "variables-boundary",
+        "title": "ここに含まれないもの",
+        "content": "シークレットとプロバイダー認証は認証情報に属し、グローバル変数には属しません。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "変数タブ"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "チャット",
+    "summary": "ダッシュボードチャットを、Workflowとプラットフォームタスクのための迅速な対話型エントリポイントとして使用します。",
+    "bullets": [
+      "簡単な質問、Workflowヘルプ、軽量な実行に最適です。",
+      "完全なエディター制御よりもスピードと反復に焦点を当てています。",
+      "構造が固まったら、Workflowまたはドキュメントに直接移動します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "自然言語",
+        "title": "迅速なインタラクション",
+        "description": "アプリ全体を手動で検索する代わりに、簡単な言葉を使用します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "橋渡し",
+        "title": "アイデアからアクションへ",
+        "description": "目標は明確だが正確な道筋をまだ練る必要がある場合にチャットが役立ちます。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "コンパニオン",
+        "title": "ドキュメントを補完",
+        "description": "ドキュメントと一緒に使用して、回答と参照を手元に置きます。",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "チャットドキュメントを開く",
+        "description": "ダッシュボードチャットのガイドを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "チャットタブ"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "AIアシスタントリファレンス",
+        "description": "HeymアシスタントがWorkflow作成をどのように支援するかを学びます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AIアシスタント"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "最適なユースケース",
+        "content": "チャットは、簡単なWorkflowの質問、短いプラットフォームガイダンス、深いキャンバス作業を必要としない操作手順に使用します。"
+      },
+      {
+        "id": "chat-next-step",
+        "title": "ビューを切り替えるタイミング",
+        "content": "ノードレベルの制御が必要になったらエディターに切り替えるか、永続的な参照のためにドキュメントに移動します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "チャットタブ"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Workflowスキルによって生成されたファイルを管理および共有します。",
+    "bullets": [
+      "スキルは出力ディレクトリにファイルを書き込み、Heymが自動的にそれらをキャプチャします。",
+      "Tokenリンクまたはパスワード保護されたBasic認証URLを介してファイルを共有します。",
+      "ワンクリックでファイルをダウンロードします。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "ストレージ",
+        "title": "自動キャプチャされたファイル",
+        "description": "スキルは_OUTPUT_DIRに書き込み、実行後すぐにファイルがここに表示されます。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "共有",
+        "title": "柔軟なアクセス制御",
+        "description": "公開リンク、パスワード保護、有効期限、ダウンロード制限。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "フォーマット",
+        "title": "PDF、DOCX、CSVなど",
+        "description": "reportlab、python-docx、または標準Pythonを使用して任意のファイルタイプを生成します。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Driveドキュメントを開く",
+        "description": "Driveタブの完全なリファレンスを読む。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Driveタブ"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "ファイル生成ガイド",
+        "description": "スキルがファイルを生成する方法を学ぶ。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "ファイル生成"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "ファイルがここに来る仕組み",
+        "content": "スキルが_OUTPUT_DIRディレクトリにファイルを配置すると、Heymはそれらを永続的に保存し、ダウンロードTokenを生成します。"
+      },
+      {
+        "id": "drive-share",
+        "title": "共有オプション",
+        "content": "誰でもアクセス可能な公開Tokenリンク、または有効期限とダウンロード制限を含むパスワード保護されたURLを作成します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Driveタブ"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "認証情報",
+    "summary": "Workflowが外部システムと安全に通信するためのキー、Token、接続詳細を管理します。",
+    "bullets": [
+      "個々のノードに散らばるのではなく、認証情報を一元管理します。",
+      "認証情報はLLM、統合、ベクトルストアなどを制御します。",
+      "チームがキーをコピーせずに同じ接続を必要とする場合、アクセスを選択的に共有します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "セキュリティ",
+        "title": "安全な認証情報",
+        "description": "認証を一度設定し、Workflowで安全に再利用します。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "統合",
+        "title": "幅広いサポート",
+        "description": "OpenAI、DeepSeek、Slack、Redis、Qdrant、Gristなどのプロバイダーをサポートします。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "コラボレーション",
+        "title": "選択的共有",
+        "description": "重複を作成するのではなく、チームまたはユーザー共有を使用します。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "認証情報ドキュメントを読む",
+        "description": "認証情報ダッシュボードのガイドを開く。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "認証情報タブ"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "統合を表示",
+        "description": "サードパーティ統合の設定の詳細を参照する。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "サードパーティ統合"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "使用場所",
+        "content": "認証情報はノード設定で参照され、実行中に安全に解決されます。"
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "チームフレンドリーなモデル",
+        "content": "複数の開発者が同じプロバイダーアクセスを必要とする場合は共有を優先します。これにより一貫した動作と簡単な監査が保証されます。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "認証情報タブ"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "ベクトルストア",
+    "summary": "セマンティック検索、メモリ、またはRAGコンテキスト統合を必要とするWorkflowのための検索バックエンドを準備します。",
+    "bullets": [
+      "ベクトルストアは検索ベースのWorkflowのデータ基盤を形成します。",
+      "RAGノードとAIフローと共に使用して、正確なドキュメントグラウンディングを実現します。",
+      "このタブは根拠のあるPromptのためのインフラストラクチャとして機能します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAGインフラストラクチャ",
+        "title": "検索可能なメモリ",
+        "description": "Workflowがコンテキストを必要とする場合に、セマンティック検索用のドキュメントを準備します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "品質",
+        "title": "根拠のあるグラウンディング",
+        "description": "検索は証拠を提供することでハルシネーションリスクを低減します。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "運用",
+        "title": "一元管理",
+        "description": "ベクトルストアを作成し、複数のWorkflow間で再利用します。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "ベクトルストアドキュメントを開く",
+        "description": "ベクトルストアダッシュボードのガイドを読む。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "ベクトルストアタブ"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "RAGノードドキュメントを表示",
+        "description": "Qdrant RAGノードのリファレンスを開く。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "位置づけ",
+        "content": "このタブはストレージレイヤーを準備します。実際の検索ロジックはWorkflow内にあります（例：RAGまたはエージェントパターン経由）。"
+      },
+      {
+        "id": "vectors-choice",
+        "title": "使用タイミング",
+        "content": "WorkflowがLLMメモリだけに頼るのではなく、非構造化知識ベースを検索する必要がある場合にベクトルストアを選択します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "ベクトルストアタブ"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Model Context Protocol接続を管理し、エージェントWorkflowがツールと外部機能に安全にアクセスできるようにします。",
+    "bullets": [
+      "MCPは外部ツールエコシステムを利用可能なエージェントコンテキストに変換します。",
+      "エージェントが静的Promptよりも豊富なツールを必要とする場合にこのタブを使用します。",
+      "接続品質はエージェントの能力に直接影響します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "エージェントツール",
+        "title": "外部機能レイヤー",
+        "description": "エージェントが推論中に呼び出せるツールサーバーを提供します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "ランタイム制御",
+        "title": "接続設定",
+        "description": "信頼性の高いWorkflowのためにEndpoint、ラベル、トランスポートを設定します。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "プラットフォームの深さ",
+        "title": "Promptを超えて",
+        "description": "MCPにより、Heym Workflowは応答するだけでなく行動できます。",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "MCPドキュメントを開く",
+        "description": "MCPタブのガイドを読む。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCPタブ"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "エージェントアーキテクチャ",
+        "description": "MCPがエージェント実行にどのように統合されているかを学ぶ。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "エージェントアーキテクチャ"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "重要性",
+        "content": "エージェントが個々のノードを超えてツール、環境アクセス、またはシステム統合を必要とする場合に特に重要です。"
+      },
+      {
+        "id": "mcp-ops",
+        "title": "運用アプローチ",
+        "content": "MCP接続をインフラストラクチャのように扱います：安定したラベルと明確な責任がデバッグを簡素化します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCPタブ"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "実行",
+    "summary": "AIおよびWorkflow実行の詳細なトレースを検査し、何が起こったかを理解します—機能したかどうかだけでなく。",
+    "bullets": [
+      "デバッグ、パフォーマンス分析、Prompt品質チェックにトレースを使用します。",
+      "トレースはモデル動作、レイテンシ、実行パスを説明します。",
+      "予期しない結果や不安定な実行の最初の参照ポイント。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "デバッグ",
+        "title": "隠れたステップを表示",
+        "description": "トレースデータはWorkflowとモデルが実際に実行した内容を明らかにします。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "評価",
+        "title": "反復をサポート",
+        "description": "Prompt、ツール、モデルの最適化にトレースを使用します。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "信頼性",
+        "title": "結果を追跡",
+        "description": "優れたトレースはエラー分析における推測を減らします。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "実行ドキュメントを開く",
+        "description": "実行ダッシュボードのガイドを読む。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "実行タブ"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "トレースが不可欠になる時",
+        "content": "Workflowが多段階、モデル集約的、またはツールベースになると、単なるステータス表示では不十分になります。"
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "トレース vs. 履歴",
+        "content": "履歴は実行が行われたことを示します。トレースはなぜそのように動作したかを説明します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "実行タブ"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "アラート",
+    "summary": "時間枠ごとにしきい値を定義し、超過した際に自動で通知を受け取れます。",
+    "bullets": [
+      "4つのタイプ：エラー数、実行時間、Token/コストしきい値、実行カウンター。",
+      "各アラートは選択した時間枠で評価され、単一のイベントで判断されることはありません。",
+      "要件を自然言語で記述すると、アシスタントがアラートを構成します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "時間枠",
+        "title": "外れ値ではなく頻発を検知",
+        "description": "1回の失敗はノイズです。10分間に12回ならインシデントです。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "保存前",
+        "title": "条件を遡ってテスト",
+        "description": "検証ステップが実際の履歴に対してテストし、しきい値を事前に調整できます。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "対応",
+        "title": "アラーム時にWorkflowを実行",
+        "description": "AlertのPayloadがWorkflowの入力となり、Slackやメール経由で自動通知されます。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "アラートドキュメントを開く",
+        "description": "アラートタイプ、時間枠、アシスタントの仕組みを確認できます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "アラートタブ"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "目的",
+        "content": "分析とTraceは、あなたが能動的に行う質問に答えます。アラートは、重要なしきい値を超えたときにHeymが能動的に通知する仕組みです。"
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "誤検知を避ける理由",
+        "content": "アラートは一度だけ発火し、メトリクスが回復するまで待機します。これにより通知の氾濫を防ぎます。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "アラートタブ"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "分析",
+    "summary": "利用パターンとシステム動作を追跡し、アクティビティ、成長、時間経過による変化を把握します。",
+    "bullets": [
+      "分析で採用状況、スループット、異常なスパイクを検出します。",
+      "個別のデバッグツールではなく、プラットフォーム全体のビューです。",
+      "分析をTraceや履歴と組み合わせて、シグナルと説明を得ます。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "シグナル",
+        "title": "利用状況の可視化",
+        "description": "個々の実行を孤立して見るのではなく、トレンドを把握します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "キャパシティ",
+        "title": "運用上の意識",
+        "description": "負荷の急増や落ち込みを早期に検知し、調査します。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "意思決定支援",
+        "title": "的を絞った最適化",
+        "description": "分析は重要なWorkflowの優先順位付けに役立ちます。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "分析ドキュメントを開く",
+        "description": "分析ダッシュボードのガイドを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "分析タブ"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "目的",
+        "content": "プラットフォーム運用全体のパターン、スループット、集約された動作を分析で把握します。"
+      },
+      {
+        "id": "analytics-followup",
+        "title": "進め方",
+        "content": "ここでシグナルを検出し、Trace、履歴、またはエディタに移動して原因を分析します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "分析タブ"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "ダッシュボード",
+    "summary": "それぞれ独自のWorkflowから供給されるチャートウィジェットのグリッドを作成し、すべての指標を一目で確認できます。",
+    "bullets": [
+      "各ウィジェットは、Chart Outputノードにデータを供給するWorkflowによって動作します。",
+      "棒、折れ線、円、テーブル、数値ウィジェットを指標に合わせて使い分けます。",
+      "AIでウィジェットを生成または調整し、結果をキャッシュして高速な読み込みを実現します。",
+      "複数のダッシュボードを作成し、個人やチームと読み取りまたは書き込みで共有します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "構成",
+        "title": "Workflow供給のチャート",
+        "description": "Workflowが生成するすべてのデータがチャートとして可視化されます。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "パフォーマンス",
+        "title": "キャッシュされた結果",
+        "description": "ウィジェットのキャッシュにより、ページ表示のたびにWorkflowが再実行されるのを防ぎます。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI支援",
+        "title": "生成と調整",
+        "description": "指標を記述すると、AIがウィジェットを自動で作成します。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "ダッシュボードドキュメントを開く",
+        "description": "ダッシュボードウィジェットの作成方法を確認できます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "ダッシュボードタブ"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "目的",
+        "content": "独自のWorkflowから得られる重要な指標を持続的に一覧表示するためにダッシュボードを使用します。"
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "作成",
+        "content": "ウィジェットを追加し、Chart Outputの前の最後のノードが行を返すようにWorkflowを構成し、グリッドに配置します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "ダッシュボードタブ"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "チーム",
+    "summary": "共有アクセスを管理し、Workflow、Credentials、変数、ベクトルストアを重複なく共同利用できます。",
+    "bullets": [
+      "チームはプラットフォームリソースをスケーラブルに共有する最もクリーンな方法です。",
+      "個人ではなくグループに権限を付与したい場合にチームを使用します。",
+      "成長するワークスペースで構造化されたコラボレーションを実現します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "コラボレーション",
+        "title": "グループベースの共有",
+        "description": "個々のユーザーを手動で認可するのではなく、チームに一度アクセスを付与します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "明確さ",
+        "title": "クリーンな責任範囲",
+        "description": "リソース管理が実際のチーム構造に従います。",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "スケーリング",
+        "title": "管理負荷の軽減",
+        "description": "新しいメンバーはチームを通じて自動的にアクセス権を継承します。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "チームドキュメントを開く",
+        "description": "チームダッシュボードのガイドを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "チームタブ"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "リソース共有",
+        "description": "リソース共有の詳細を確認できます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "認証情報の共有"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "チームの利点",
+        "content": "チームはアイデンティティとリソースアクセスを結びつけ、円滑なコラボレーションを実現します。"
+      },
+      {
+        "id": "teams-tip",
+        "title": "実践のヒント",
+        "content": "WorkflowやCredentialが恒久的な作業グループに属する場合は、チーム共有を優先してください。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "チームタブ"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "ログ",
+    "summary": "Workflow出力を超えたインフラストラクチャの洞察が必要な場合、スタックレベルのログを読みます。",
+    "bullets": [
+      "サービスデバッグ、コンテナ状態、環境問題にはログを使用します。",
+      "原因がWorkflowレベルより下にある場合に役立ちます。",
+      "アプリケーションとシステムレベルの証拠としてTraceと併用します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "インフラストラクチャ",
+        "title": "コンテナの可視化",
+        "description": "Heymのインターフェースの下でバックエンドサービスが何を実行しているかを確認します。",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "トラブルシューティング",
+        "title": "原因の特定",
+        "description": "ログは起動問題、クラッシュ、統合エラーの解決に役立ちます。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "補完的",
+        "title": "Workflow結果との違い",
+        "description": "Workflow出力は結果を示し、ログはシステム動作を示します。",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "ログドキュメントを開く",
+        "description": "ログダッシュボードのガイドを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "ログタブ"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "使用タイミング",
+        "content": "問題がデプロイ、サービス、または環境に起因すると思われる場合にここへ移動します。"
+      },
+      {
+        "id": "logs-combo",
+        "title": "最適な組み合わせ",
+        "content": "ログをTraceや履歴と併用して、症状から原因へ迅速にたどり着きます。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "ログタブ"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "評価",
+    "summary": "Agent Workflowの再現可能なベンチマークを作成し、Prompt、モデル、Workflowの変更を信頼性高く比較できます。",
+    "bullets": [
+      "スイートとテストケースにより、主観的なWorkflow品質を測定可能な指標に変換します。",
+      "Promptやモデルの更新を展開する前の回帰テストに最適な場所です。",
+      "同じデータセットと同じ評価方法に対して複数のモデルを比較できます。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "品質ループ",
+        "title": "Agentのベンチマーク",
+        "description": "ランダムなチェックに頼らず、同じスイートを繰り返し実行します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "比較",
+        "title": "モデルとPromptのテスト",
+        "description": "同じテストセットで異なる設定がどのように動作するかを確認できます。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "安全性",
+        "title": "信頼性の高いイテレーション",
+        "description": "ロールアウト前に改善を証明可能な形で示します。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "評価ドキュメントを開く",
+        "description": "評価ページのガイドを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "評価タブ"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agentノードリファレンス",
+        "description": "ほとんどのEvalスイートが対象とするWorkflow領域を確認します。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agentノード"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "スイートの設計",
+        "content": "優れたスイートは、安定している必要がある実際のユーザーケース、エッジケース、承認ステップを反映します。"
+      },
+      {
+        "id": "evals-usage",
+        "title": "比較パラメータ",
+        "content": "一般的な比較には、同じデータセットに対するPromptバリアント、モデル選択、Temperature設定、Workflowリビジョンが含まれます。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "評価タブ"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "ドキュメント",
+    "summary": "正確なプラットフォームリファレンスをアプリ内で検索し、必要に応じて深く掘り下げます。",
+    "bullets": [
+      "Heymドキュメントは、素早い把握と的を絞った参照のために設計されています。",
+      "サイドバー、検索、相互参照により、概念間を素早く移動できます。",
+      "ショーケースは現在開いている記事を直接参照します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "アプリ内リファレンス",
+        "title": "いつでも手元に",
+        "description": "外部タブを開くことなく、ドキュメントが製品フロー内に留まります。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "概要",
+        "title": "要点を最初に",
+        "description": "記事は核心的なポイントから始まり、リンクで分岐します。"
+      },
+      {
+        "eyebrow": "コンテキスト認識",
+        "title": "現在の記事",
+        "description": "ドキュメントを読む際、「詳細を見る」アクションはその記事に直接従います。"
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "紹介を見る",
+        "description": "ドキュメントの紹介をデフォルトのエントリポイントとして開きます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "紹介"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "クイックナビゲーション",
+        "content": "トピックが既にわかっている場合は、カテゴリのサイドバーとコマンド検索を使用します。"
+      },
+      {
+        "id": "docs-depth",
+        "title": "ショーケースによるサポート",
+        "content": "ショーケースは要約を簡潔に保ち、必要に応じて詳細なドキュメントへ導きます。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "紹介"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "スケジュール",
+    "summary": "すべてのアクティブなCron Workflowを視覚的なカレンダーで把握し、実行時間を管理します。",
+    "bullets": [
+      "日、週、月表示を切り替えて、適切な解像度を選択します。",
+      "ブロックにホバーしてCron式を表示し、クリックしてCanvasに直接ジャンプします。",
+      "このタブを使用して、実行密度を確認し、重複を特定します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "透明性",
+        "title": "カレンダー表示",
+        "description": "アクティブなCron Workflowが予定時刻にブロックとして表示されます。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "ナビゲーション",
+        "title": "ワンクリックでCanvasへ",
+        "description": "ブロックをクリックしてWorkflowエディタを直接開きます。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "範囲",
+        "title": "日、週、月",
+        "description": "解像度を調整して、個々の時間を確認したり、月全体を計画したりします。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "スケジュールドキュメントを開く",
+        "description": "スケジュールタブのリファレンスを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "スケジュールタブ"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cronノードリファレンス",
+        "description": "CanvasでCron Triggerを設定する方法を学びます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "使用タイミング",
+        "content": "スケジュールされた自動化を確認し、スケジュールの競合を検出し、重要なWorkflowがアクティブなままであることを確認します。"
+      },
+      {
+        "id": "schedules-color",
+        "title": "色分け",
+        "content": "各WorkflowにはIDから一貫した色が割り当てられ、日、週、月表示で同じままです。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "スケジュールタブ"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "データテーブル",
+    "summary": "構造化データテーブルをHeym内で直接作成し、Workflowでプログラム的に使用します。",
+    "bullets": [
+      "型付き列を持つテーブルを作成し、手動で入力するかCSV経由でインポートします。",
+      "DataTable Workflowノードを使用して、行をプログラム的に読み取り、書き込み、クエリします。",
+      "読み取りまたは書き込み権限を持つユーザーまたはチームとテーブルを共有します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "統合データ",
+        "title": "統合ストレージ",
+        "description": "外部データベースやAPIキーなしで構造化データを保存します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow統合",
+        "title": "DataTableノード",
+        "description": "任意のWorkflowで行を検索、挿入、更新、削除します。",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "コラボレーション",
+        "title": "共有と権限",
+        "description": "ユーザーとチームにきめ細かい読み取りおよび書き込みアクセスを付与します。",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "データテーブルタブドキュメント",
+        "description": "データテーブルタブのリファレンスを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "データテーブル"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTableノードドキュメント",
+        "description": "DataTableノードのリファレンスを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "データテーブルとは？",
+        "content": "データテーブルはHeymの統合構造化ストレージです：型付き列（String、Number、Boolean、Date、JSON）、インライン編集、CSVインポート/エクスポート。"
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Workflowでの使用",
+        "content": "DataTableノードはfind、getAll、getById、insert、update、remove、upsertをサポートし、Workflow所有者を通じて直接Credentialsなしで実行できます。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "データテーブル"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflowエディタ",
+    "summary": "Canvas上でWorkflowを作成、テスト、デバッグ、最適化し、実行コンテキストで直接操作します。",
+    "bullets": [
+      "エディタでは、ノード設計、データフロー、実行動作が融合します。",
+      "サイドバーと履歴を使用して、作成とデバッグを素早く切り替えます。",
+      "ショーケースはここでは意図的にコンパクトに保ち、Canvasに最大限のスペースを提供します。"
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "ビジュアルWorkflow設計",
+        "description": "ノードを接続し、ロジックを分岐し、ランタイムフローを直接モデル化します。",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "イテレーション",
+        "title": "作成中のデバッグ",
+        "description": "履歴、デバッグパネル、実行結果を使用して迅速なフィードバックループを実現します。"
+      },
+      {
+        "eyebrow": "機能範囲",
+        "title": "高度な機能が手元に",
+        "description": "ポータル、共有、テンプレート、検証がCanvas上に直接あります。"
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Canvasドキュメントを開く",
+        "description": "Canvas機能のリファレンスを読みます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas機能"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "キーボードショートカット",
+        "description": "エディタのキーボードショートカットの概要を開きます。",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "キーボードショートカット"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "作業リズム",
+        "content": "Canvas上でモデル化し、出力の仮定を確認し、集中を切らさずにサイドバーでパラメータを調整します。"
+      },
+      {
+        "id": "editor-complexity",
+        "title": "コンパクトなショーケース",
+        "content": "エディタは既に多くの情報を提供しているため、ショーケースはスリムなガイドとして機能します。"
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas機能"
+    }
+  }
+}

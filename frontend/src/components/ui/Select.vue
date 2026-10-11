@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { ChevronDown, X } from "lucide-vue-next";
 
 import { cn } from "@/lib/utils";
@@ -25,10 +26,10 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: "",
-  placeholder: "Select...",
+  placeholder: undefined,
   disabled: false,
   clearable: false,
-  clearAriaLabel: "Clear selection",
+  clearAriaLabel: undefined,
   class: undefined,
   selectClass: undefined,
 });
@@ -36,6 +37,16 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: "update:modelValue", value: string | undefined): void;
 }>();
+
+const { t } = useI18n();
+
+const effectivePlaceholder = computed(() => {
+  return props.placeholder ?? t("common.select");
+});
+
+const effectiveClearAriaLabel = computed(() => {
+  return props.clearAriaLabel ?? t("common.clearSelection");
+});
 
 const hasValue = computed<boolean>(() => {
   return typeof props.modelValue === "string" && props.modelValue.length > 0;
@@ -79,11 +90,11 @@ function clearValue(): void {
       @change="handleChange"
     >
       <option
-        v-if="placeholder"
+        v-if="effectivePlaceholder"
         value=""
         disabled
       >
-        {{ placeholder }}
+        {{ effectivePlaceholder }}
       </option>
       <option
         v-for="option in options"
@@ -98,7 +109,7 @@ function clearValue(): void {
     <button
       v-if="clearable && hasValue && !disabled"
       type="button"
-      :aria-label="clearAriaLabel"
+      :aria-label="effectiveClearAriaLabel"
       class="absolute right-2.5 top-1/2 z-10 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground opacity-0 pointer-events-none transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto"
       @mousedown.prevent.stop
       @click.prevent.stop="clearValue"

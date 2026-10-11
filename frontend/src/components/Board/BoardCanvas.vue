@@ -84,7 +84,7 @@ async function addColumn(): Promise<void> {
         @click="addingColumn = true"
       >
         <Plus class="h-5 w-5" />
-        <span>Add column</span>
+        <span>{{ $t("board.addColumn") }}</span>
       </button>
       <div
         v-else
@@ -93,7 +93,7 @@ async function addColumn(): Promise<void> {
         <input
           v-model="newColumnName"
           type="text"
-          placeholder="Column name"
+          :placeholder="$t('board.columnName')"
           class="w-full bg-transparent text-sm outline-none"
           @keydown.enter="addColumn"
           @keydown.esc="addingColumn = false"

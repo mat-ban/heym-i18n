@@ -104,7 +104,7 @@ onUnmounted(() => {
                 id="browse-public-templates-title"
                 class="truncate text-base font-semibold text-foreground"
               >
-                Browse Public Templates
+                {{ $t('templates.browsePublic') }}
               </h2>
             </div>
             <div class="flex shrink-0 items-center gap-1">
@@ -113,7 +113,7 @@ onUnmounted(() => {
                 target="_blank"
                 rel="noopener noreferrer"
                 class="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
-                title="Open templates page"
+                :title="$t('templates.openTemplatesPage')"
               >
                 <ExternalLink class="h-5 w-5" />
               </a>
@@ -143,7 +143,7 @@ onUnmounted(() => {
               :src="templatesBrowseIframeSrc"
               class="h-full min-h-[min(64vh,600px)] w-full rounded-xl border border-border/40 bg-background"
               :class="iframeLoaded ? 'opacity-100' : 'pointer-events-none opacity-0'"
-              title="Heym Public Templates"
+              :title="$t('templates.publicTemplates')"
               allow="clipboard-read; clipboard-write"
               @load="handleLoad"
             />

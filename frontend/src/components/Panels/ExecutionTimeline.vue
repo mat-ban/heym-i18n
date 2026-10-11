@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ExternalLink, Eye, EyeOff } from "lucide-vue-next";
 
@@ -38,6 +39,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const router = useRouter();
+const { t } = useI18n();
 
 const emit = defineEmits<{
   selectNode: [payload: TimelineSelectPayload];
@@ -339,9 +341,13 @@ function retrySummaryText(span: SpanItem): string | null {
     span.retryMaxAttempts !== null ? `/${span.retryMaxAttempts}` : "";
   const retryLabel =
     span.retryFailedAttempts === 1
-      ? "1 retry"
-      : `${span.retryFailedAttempts} retries`;
-  return `attempt ${span.retryFinalAttempt}${maxAttemptsSuffix} · ${retryLabel}`;
+      ? t("history.timeline.oneRetry")
+      : t("history.timeline.nRetries", { count: span.retryFailedAttempts });
+  const attemptText = t("history.timeline.attempt", {
+    current: span.retryFinalAttempt,
+    max: maxAttemptsSuffix,
+  });
+  return `${attemptText} · ${retryLabel}`;
 }
 
 function toggleRowVisibility(rowKey: string): void {
@@ -365,26 +371,26 @@ function showAllRows(): void {
       v-show="!detailsOpen"
       class="flex items-center gap-3 px-2 py-1.5 border-b border-border/20 bg-background/40 text-[10px] text-muted-foreground"
     >
-      <span class="font-medium text-foreground/80">Execution summary</span>
+      <span class="font-medium text-foreground/80">{{ $t("history.timeline.executionSummary") }}</span>
       <span>{{ formatTimelineMs(timelineSummary.totalDurationMs) }}</span>
-      <span>{{ timelineSummary.spanCount }} spans</span>
+      <span>{{ $t("history.timeline.spansCount", { count: timelineSummary.spanCount }) }}</span>
       <span
         v-if="timelineSummary.failedSpanCount > 0"
         class="text-destructive"
       >
-        {{ timelineSummary.failedSpanCount }} failed
+        {{ $t("history.timeline.failedCount", { count: timelineSummary.failedSpanCount }) }}
       </span>
       <span
         v-if="timelineSummary.retryCount > 0"
         class="text-amber-600"
       >
-        {{ timelineSummary.retryCount }} retries
+        {{ $t("history.timeline.retriesCount", { count: timelineSummary.retryCount }) }}
       </span>
       <span
         v-if="timelineSummary.failedSpanCount === 0 && timelineSummary.retryCount === 0"
         class="text-emerald-600"
       >
-        Healthy
+        {{ $t("history.timeline.healthy") }}
       </span>
     </div>
     <div
@@ -422,14 +428,14 @@ function showAllRows(): void {
       class="flex items-center gap-2 px-2 py-1.5 border-b border-border/20 bg-muted/10 overflow-x-auto"
     >
       <span class="text-[10px] uppercase tracking-wide text-muted-foreground shrink-0">
-        Hidden
+        {{ $t("history.timeline.hidden") }}
       </span>
       <button
         v-for="row in hiddenRows"
         :key="`hidden-${row.key}`"
         type="button"
         class="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border/40 bg-background/60 text-[11px] text-muted-foreground hover:text-foreground hover:border-border transition-colors shrink-0"
-        :title="`Show ${row.nodeLabel}`"
+        :title="$t('history.timeline.showNode', { label: row.nodeLabel })"
         @click="toggleRowVisibility(row.key)"
       >
         <EyeOff class="w-3 h-3" />
@@ -440,7 +446,7 @@ function showAllRows(): void {
         class="inline-flex items-center gap-1.5 h-6 px-2 rounded-md border border-border/40 bg-background/60 text-[11px] text-muted-foreground hover:text-foreground hover:border-border transition-colors shrink-0"
         @click="showAllRows"
       >
-        Show all
+        {{ $t("history.timeline.showAll") }}
       </button>
     </div>
 
@@ -488,7 +494,7 @@ function showAllRows(): void {
           <button
             type="button"
             class="inline-flex h-5 w-5 items-center justify-center rounded-sm text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-colors shrink-0"
-            :title="`Hide ${row.nodeLabel}`"
+            :title="$t('history.timeline.hideNode', { label: row.nodeLabel })"
             @click.stop="toggleRowVisibility(row.key)"
           >
             <Eye class="w-3.5 h-3.5" />
@@ -512,7 +518,7 @@ function showAllRows(): void {
               :data-testid="`execution-timeline-span-${span.nodeId}-${span.resultListIndex}`"
               role="button"
               tabindex="0"
-              :aria-label="`Open details for ${span.nodeLabel}`"
+              :aria-label="$t('history.timeline.openSpanDetails', { label: span.nodeLabel })"
               :aria-pressed="selectedSpan?.key === span.key"
               :class="[
                 selectedSpan?.key === span.key
@@ -549,7 +555,7 @@ function showAllRows(): void {
                 v-if="isTraceableSpan(span)"
                 type="button"
                 class="trace-span-action"
-                title="Open trace in new tab"
+                :title="$t('history.timeline.openTraceNewTab')"
                 @click="openTraceInNewTab(span, $event)"
               >
                 <ExternalLink class="w-3 h-3" />
@@ -584,14 +590,14 @@ function showAllRows(): void {
         v-if="visibleRows.length === 0 && hiddenRows.length > 0"
         class="px-3 py-5 text-xs text-muted-foreground flex items-center justify-between gap-3"
       >
-        <span>All timeline rows are hidden.</span>
+        <span>{{ $t("history.timeline.allRowsHidden") }}</span>
         <button
           type="button"
           class="inline-flex items-center gap-1.5 h-7 px-2 rounded-md border border-border/40 bg-background/60 text-[11px] hover:text-foreground hover:border-border transition-colors shrink-0"
           @click="showAllRows"
         >
           <EyeOff class="w-3.5 h-3.5" />
-          Show all rows
+          {{ $t("history.timeline.showAllRows") }}
         </button>
       </div>
     </div>
@@ -608,7 +614,7 @@ function showAllRows(): void {
         :style="{ backgroundColor: `hsl(var(--${hoveredSpan.colorVar}))` }"
       />
       <span class="font-medium text-foreground">
-        <template v-if="hoveredSpan.isHitlWait">HITL wait · </template>{{ hoveredSpan.nodeLabel }}<template v-if="!hoveredSpan.isHitlWait && hoveredSpan.occurrenceCount > 1"> #{{ hoveredSpan.occurrence }}</template>
+        <template v-if="hoveredSpan.isHitlWait">{{ $t("history.timeline.hitlWait") }} · </template>{{ hoveredSpan.nodeLabel }}<template v-if="!hoveredSpan.isHitlWait && hoveredSpan.occurrenceCount > 1"> #{{ hoveredSpan.occurrence }}</template>
       </span>
       <span class="text-muted-foreground font-mono">
         {{ hoveredSpan.durationMs >= 1000
@@ -616,7 +622,7 @@ function showAllRows(): void {
           : `${hoveredSpan.durationMs.toFixed(1)}ms` }}
       </span>
       <span class="text-muted-foreground/80 font-mono">
-        at {{ hoveredSpan.startOffsetMs >= 1000
+        {{ $t("history.timeline.at") }} {{ hoveredSpan.startOffsetMs >= 1000
           ? `${(hoveredSpan.startOffsetMs / 1000).toFixed(2)}s`
           : `${hoveredSpan.startOffsetMs.toFixed(1)}ms` }}
         <template v-if="hoveredSpan.endOffsetMs > hoveredSpan.startOffsetMs">

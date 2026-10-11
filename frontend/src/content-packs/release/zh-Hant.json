@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "在 Workflow 內重新啟用節點",
+    "releaseTour": {
+      "label": "Heym 新功能",
+      "introTitle": "本次 Release 的新功能",
+      "introDescription": "簡要介紹自您上次更新以來的新功能。約需一分鐘。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable 節點：在 Workflow 內重新啟用節點",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "全新的 **Enable 節點**是 **Disable 節點**的對應功能。請依名稱選擇節點，即可重新啟用並儲存變更。被停用的 **Cron** Trigger 將於下一個排定時間再次執行。若該節點位於流程較後段且尚未執行，則會直接在目前的執行中一併執行。"
+          },
+          {
+            "type": "prose",
+            "markdown": "被停用的 Trigger 永遠不會自行啟動執行。因此請將 Enable 節點置於其他進入點之後，例如 **Input** Trigger。**Wait** 節點現在也支援更長的暫停時間：最多可達 15 分鐘，而不僅是一分鐘。"
+          }
+        ],
+        "tour": {
+          "description": "直接從 Workflow 中重新啟用被停用的節點，例如已暫停的 Cron Trigger。",
+          "useCases": [
+            "需要時透過 Webhook 啟動已停用的 Cron Trigger",
+            "搭配 Disable 節點，依狀態開啟與關閉節點",
+            "使用 Wait 節點將 Workflow 暫停最多 15 分鐘"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "直接在 Dashboard 中審核待處理的人工核准",
+    "releaseTour": {
+      "label": "Heym 新功能",
+      "introTitle": "此版本的新功能",
+      "introDescription": "簡要介紹自上次更新以來的新功能。約需一分鐘。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "透過 Dashboard 小工具完成待處理的審核",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "新增一個 **HITL** 小工具，標題列會顯示等待中的審核數量為 `1/n 待處理`。使用方向鍵瀏覽各項目。Workflow 名稱會直接在 Canvas 上開啟該次執行。**核准**、**要求變更** 與 **拒絕** 可完成草稿。歷史記錄圖示會在同一頁面的歷史記錄對話框中開啟該次執行。佇列是個人專屬的：共用 Dashboard 不會顯示他人的草稿。"
+          }
+        ],
+        "tour": {
+          "description": "用於您待處理核准的 Dashboard 輪播，並在標題列顯示計數。",
+          "useCases": [
+            "在開啟第一筆之前，先查看有多少審核正在等待",
+            "不需離開 Dashboard 即可核准、要求變更或拒絕",
+            "透過小工具標題旁的圖示，在歷史記錄對話框中開啟該次執行"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI 助理會測試自己的 Workflow 並建立資料表",
+    "releaseTour": {
+      "label": "Heym 新功能",
+      "introTitle": "本次版本的新功能",
+      "introDescription": "快速概覽自上次更新以來的全新功能。大約需要一分鐘。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO 模式：AI 助理會測試自己建立的內容",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "在 Canvas 的 **AI 助理**中啟用 **YOLO 模式**後，它套用 Workflow 之後不會再停下來。它會像透過 **Run** 一樣執行 Workflow、讀取結果，並在每則訊息中自主修正 Workflow 最多五次。每個回覆都會即時列出各個步驟。"
+          },
+          {
+            "type": "prose",
+            "markdown": "首次執行前，它會詢問測試輸入並附上建議值，之後會重複使用這些值。當它需要其他 Workflow 的結果時，也能執行這些 Workflow。若需要做出決定或提供存取憑證，它會透過熟悉的问题卡片詢問。實際執行：YOLO 模式預設為關閉，**Stop** 可隨時結束流程。"
+          }
+        ],
+        "tour": {
+          "description": "AI 助理會執行建立的 Workflow、檢查結果，並自主修正錯誤直到能正常運作。",
+          "useCases": [
+            "描述一個 Workflow，直接取得已測試過的版本",
+            "讓助理自動找出並修復有問題的節點",
+            "在連結之前先檢查其他 Workflow 的回傳值"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI 助理會選擇或建立資料表",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "當 Workflow 儲存資料時，**AI 助理**現在會辨識您的 **DataTables**。只要指定資料表名稱，它就會使用該資料表。否則，它會詢問合適的資料表，或建議**建立新資料表**並附上所需的欄位。"
+          },
+          {
+            "type": "prose",
+            "markdown": "可在 Canvas 助理、YOLO 模式、**Chat**、文件中，以及透過 MCP 搭配 `heym_chat` 使用。"
+          }
+        ],
+        "tour": {
+          "description": "AI 助理會詢問合適的資料表，或建立一個包含所需欄位的新資料表。",
+          "useCases": [
+            "自動將潛在客戶記錄到資料表中，並同時產生 Workflow 與資料表",
+            "根據欄位與類型選擇現有的資料表",
+            "直接從 Chat 或透過 MCP 建立並連接資料表"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "建立多個 Dashboard 並與團隊分享",
+    "releaseTour": {
+      "label": "Heym 新功能",
+      "introTitle": "本次發佈的新功能",
+      "introDescription": "簡要介紹自上次更新以來的新功能。大約需要一分鐘。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "建立多個 Dashboard 並與團隊分享",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Dashboard** 分頁現在支援任意數量的 Dashboard。您可以透過分頁上方的選單輕鬆切換，或使用 **+** 建立新的 Dashboard。"
+          },
+          {
+            "type": "prose",
+            "markdown": "透過 **設定** 將 Dashboard 分享給個人或團隊。**讀取** 允許檢視和重新整理；**寫入** 允許編輯 Widget。Widget 一律使用擁有者的存取憑證。"
+          }
+        ],
+        "tour": {
+          "description": "管理多個 Dashboard、在它們之間切換，並以唯讀或可編輯的方式分享。",
+          "useCases": [
+            "依團隊、產品或租戶分別建立獨立的 Dashboard",
+            "為利害關係人提供唯讀檢視",
+            "使用範例資料預先測試圖表類型"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

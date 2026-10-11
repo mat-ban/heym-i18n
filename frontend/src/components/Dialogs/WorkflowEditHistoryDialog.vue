@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   AlertCircle,
   ChevronDown,
@@ -53,6 +54,7 @@ const emit = defineEmits<{
 }>();
 
 const workflowStore = useWorkflowStore();
+const { t } = useI18n();
 const versions = ref<WorkflowVersion[]>([]);
 const versionsWithChanges = ref<WorkflowVersion[]>([]);
 const loading = ref(false);
@@ -226,9 +228,9 @@ async function loadVersions(): Promise<void> {
     versionsWithChanges.value = filteredVersions;
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      error.value = err.response?.data?.detail || "Failed to load versions";
+      error.value = err.response?.data?.detail || t("workflowHistory.failedToLoadVersions");
     } else {
-      error.value = "Failed to load versions";
+      error.value = t("workflowHistory.failedToLoadVersions");
     }
     versionsWithChanges.value = versions.value;
   } finally {
@@ -247,9 +249,9 @@ async function loadDiff(versionId: string): Promise<void> {
     }
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      error.value = err.response?.data?.detail || "Failed to load diff";
+      error.value = err.response?.data?.detail || t("workflowHistory.failedToLoadDiff");
     } else {
-      error.value = "Failed to load diff";
+      error.value = t("workflowHistory.failedToLoadDiff");
     }
   } finally {
     loadingDiff.value = false;
@@ -373,7 +375,7 @@ function filterChanges(changes: Array<{ field: string; old_value: unknown; new_v
 
 async function revertToVersion(): Promise<void> {
   if (!selectedVersion.value || isCurrentVersion.value) return;
-  if (!confirm(`Are you sure you want to revert to version ${selectedVersion.value.version_number}? This will replace the current workflow with this version.`)) {
+  if (!confirm(t("workflowHistory.confirmRevert", { number: selectedVersion.value.version_number }))) {
     return;
   }
 
@@ -389,9 +391,9 @@ async function revertToVersion(): Promise<void> {
     window.location.reload();
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      error.value = err.response?.data?.detail || "Failed to revert workflow";
+      error.value = err.response?.data?.detail || t("workflowHistory.failedToRevert");
     } else {
-      error.value = "Failed to revert workflow";
+      error.value = t("workflowHistory.failedToRevert");
     }
   } finally {
     reverting.value = false;
@@ -405,7 +407,7 @@ async function refreshVersionHistory(): Promise<void> {
 }
 
 async function clearVersionHistory(): Promise<void> {
-  if (!confirm("Are you sure you want to clear all version history? This action cannot be undone.")) {
+  if (!confirm(t("workflowHistory.confirmClear"))) {
     return;
   }
 
@@ -418,9 +420,9 @@ async function clearVersionHistory(): Promise<void> {
     await loadDiff("current");
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
-      error.value = err.response?.data?.detail || "Failed to clear version history";
+      error.value = err.response?.data?.detail || t("workflowHistory.failedToClearVersions");
     } else {
-      error.value = "Failed to clear version history";
+      error.value = t("workflowHistory.failedToClearVersions");
     }
   } finally {
     clearing.value = false;
@@ -431,7 +433,7 @@ async function clearVersionHistory(): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    title="Edit History"
+    :title="$t('workflowHistory.title')"
     size="4xl"
     :close-on-escape="false"
     @escape="handleDialogEscape"
@@ -482,7 +484,7 @@ async function clearVersionHistory(): Promise<void> {
         class="flex items-center justify-center py-12"
       >
         <Loader2 class="w-5 h-5 animate-spin text-muted-foreground mr-2" />
-        <span class="text-sm text-muted-foreground">Checking for changes...</span>
+        <span class="text-sm text-muted-foreground">{{ $t('workflowHistory.checkingForChanges') }}</span>
       </div>
 
       <div
@@ -491,10 +493,10 @@ async function clearVersionHistory(): Promise<void> {
       >
         <GitBranch class="w-12 h-12 mx-auto mb-4 opacity-50" />
         <p class="text-sm">
-          No edit history yet
+          {{ $t('workflowHistory.noEditHistoryYet') }}
         </p>
         <p class="text-xs mt-1">
-          Versions will be created when you save changes to your workflow
+          {{ $t('workflowHistory.versionsSubtitle') }}
         </p>
       </div>
 
@@ -505,9 +507,9 @@ async function clearVersionHistory(): Promise<void> {
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-semibold">
-              Versions
+              {{ $t('workflowHistory.versions') }}
             </h3>
-            <span class="text-xs text-muted-foreground">{{ allVersions.length }} version(s)</span>
+            <span class="text-xs text-muted-foreground">{{ $t('workflowHistory.versionsCount', { count: allVersions.length }) }}</span>
           </div>
 
           <div class="space-y-2 max-h-[600px] overflow-y-auto pr-2">
@@ -529,13 +531,13 @@ async function clearVersionHistory(): Promise<void> {
                   <div class="flex items-center gap-2 mb-1">
                     <GitBranch class="w-4 h-4 text-muted-foreground shrink-0" />
                     <span class="text-sm font-semibold">
-                      {{ version.id === 'current' ? 'Current' : `Version ${version.version_number}` }}
+                      {{ version.id === 'current' ? $t('workflowHistory.current') : $t('workflowHistory.versionNumber', { number: version.version_number }) }}
                     </span>
                     <span
                       v-if="version.id === 'current'"
                       class="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium"
                     >
-                      Latest
+                      {{ $t('workflowHistory.latest') }}
                     </span>
                   </div>
                   <div class="flex items-center gap-2 text-xs text-muted-foreground mb-2">
@@ -561,7 +563,7 @@ async function clearVersionHistory(): Promise<void> {
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-semibold">
-              Changes
+              {{ $t('workflowHistory.changes') }}
             </h3>
             <div
               v-if="selectedVersion && !isCurrentVersion"
@@ -574,7 +576,7 @@ async function clearVersionHistory(): Promise<void> {
                 @click="openPreview(selectedVersion!)"
               >
                 <Eye class="w-4 h-4" />
-                Preview
+                {{ $t('workflowHistory.preview') }}
               </Button>
               <Button
                 variant="outline"
@@ -585,7 +587,7 @@ async function clearVersionHistory(): Promise<void> {
                 @click="revertToVersion"
               >
                 <RotateCcw class="w-4 h-4" />
-                Revert
+                {{ $t('workflowHistory.revert') }}
               </Button>
             </div>
           </div>
@@ -602,10 +604,10 @@ async function clearVersionHistory(): Promise<void> {
             class="text-center py-12 text-muted-foreground text-sm"
           >
             <p v-if="isCurrentVersion">
-              This is the current version
+              {{ $t('workflowHistory.isCurrentVersion') }}
             </p>
             <p v-else>
-              Select a version to view changes
+              {{ $t('workflowHistory.selectVersionToViewChanges') }}
             </p>
           </div>
 
@@ -618,7 +620,7 @@ async function clearVersionHistory(): Promise<void> {
               class="space-y-2"
             >
               <h4 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Nodes ({{ diff.node_changes.length }})
+                {{ $t('workflowHistory.nodes', { count: diff.node_changes.length }) }}
               </h4>
               <div
                 v-for="nodeChange in diff.node_changes"
@@ -666,7 +668,7 @@ async function clearVersionHistory(): Promise<void> {
                     class="space-y-1"
                   >
                     <div class="text-xs font-medium text-muted-foreground mb-1">
-                      Changed Fields:
+                      {{ $t('workflowHistory.changedFields') }}
                     </div>
                     <div
                       v-for="change in filterChanges(nodeChange.changes)"
@@ -697,7 +699,7 @@ async function clearVersionHistory(): Promise<void> {
               class="space-y-2"
             >
               <h4 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Edges ({{ diff.edge_changes.length }})
+                {{ $t('workflowHistory.edges', { count: diff.edge_changes.length }) }}
               </h4>
               <div
                 v-for="(edgeChange, index) in diff.edge_changes"
@@ -729,7 +731,7 @@ async function clearVersionHistory(): Promise<void> {
               class="space-y-2"
             >
               <h4 class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Configuration ({{ diff.config_changes.length }})
+                {{ $t('workflowHistory.configuration', { count: diff.config_changes.length }) }}
               </h4>
               <div
                 v-for="configChange in diff.config_changes"

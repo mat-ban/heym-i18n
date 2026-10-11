@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { Copy, X } from "lucide-vue-next";
 import type { SpanInput } from "@/components/Panels/executionSpanInput";
 import type { SpanItem } from "@/components/Panels/executionTimeline";
@@ -35,6 +36,16 @@ const emit = defineEmits<{
   next: [event: MouseEvent];
   jump: [index: number];
 }>();
+const { t, te } = useI18n();
+
+function formatSpanStatus(status: string): string {
+  const key = `nodes.runStatuses.${status.toLowerCase()}`;
+  if (te(key)) return t(key);
+  const commonKey = `common.${status.toLowerCase()}`;
+  if (te(commonKey)) return t(commonKey);
+  return status;
+}
+
 const traceIdCopied = ref(false);
 // Live ticks replace `span` every frame but keep its output reference, so the scans below stay cached.
 const settledOutput = computed((): unknown => (isSpanSettled(props.span) ? props.span.output : null));
@@ -87,8 +98,8 @@ onBeforeUnmount(() => {
         <button
           type="button"
           class="inline-flex h-6 w-6 items-center justify-center rounded text-muted-foreground hover:bg-muted"
-          title="Close span details"
-          aria-label="Close span details"
+          :title="$t('history.closeSpanDetails')"
+          :aria-label="$t('history.closeSpanDetails')"
           @click="emit('close')"
         >
           <X class="h-3.5 w-3.5" />
@@ -97,29 +108,29 @@ onBeforeUnmount(() => {
     </div>
     <div class="grid grid-cols-2 gap-x-4 gap-y-1 px-2 py-2 text-[10px] sm:grid-cols-3 lg:grid-cols-6">
       <div>
-        <span class="text-muted-foreground">Status</span><div class="font-medium capitalize">
-          {{ span.status }}
+        <span class="text-muted-foreground">{{ $t('common.status') }}</span><div class="font-medium capitalize">
+          {{ formatSpanStatus(span.status) }}
         </div>
       </div>
       <div>
-        <span class="text-muted-foreground">Duration</span><div class="font-mono">
+        <span class="text-muted-foreground">{{ $t('traces.duration') }}</span><div class="font-mono">
           {{ formatTimelineMs(span.durationMs) }}
         </div>
       </div>
-      <div><span class="text-muted-foreground">Attempts</span><div>{{ span.retryFinalAttempt ?? 1 }}<span v-if="span.retryMaxAttempts"> / {{ span.retryMaxAttempts }}</span></div></div>
+      <div><span class="text-muted-foreground">{{ $t('history.attempts') }}</span><div>{{ span.retryFinalAttempt ?? 1 }}<span v-if="span.retryMaxAttempts"> / {{ span.retryMaxAttempts }}</span></div></div>
       <div v-if="span.tokenUsage">
-        <span class="text-muted-foreground">Tokens</span><div
+        <span class="text-muted-foreground">{{ $t('traces.tokens') }}</span><div
           class="font-mono"
           data-testid="span-token-usage"
         >
           {{ span.tokenUsage.total.toLocaleString() }}<span
             v-if="span.tokenUsage.prompt !== null && span.tokenUsage.completion !== null"
             class="text-muted-foreground"
-          > · {{ span.tokenUsage.prompt.toLocaleString() }} in / {{ span.tokenUsage.completion.toLocaleString() }} out</span>
+          > · {{ span.tokenUsage.prompt.toLocaleString() }} {{ $t('history.inTokens') }} / {{ span.tokenUsage.completion.toLocaleString() }} {{ $t('history.outTokens') }}</span>
         </div>
       </div>
       <div v-if="costUsd !== null">
-        <span class="text-muted-foreground">Cost</span><div
+        <span class="text-muted-foreground">{{ $t('traces.cost') }}</span><div
           class="font-mono"
           data-testid="span-cost"
         >
@@ -127,7 +138,7 @@ onBeforeUnmount(() => {
         </div>
       </div>
       <div v-if="span.modelRouting">
-        <span class="text-muted-foreground">Model</span><div
+        <span class="text-muted-foreground">{{ $t('common.model') }}</span><div
           class="font-medium"
           data-testid="span-model-routing"
         >
@@ -140,7 +151,7 @@ onBeforeUnmount(() => {
       class="mx-2 mb-2 space-y-0.5 rounded border border-border/40 px-2 py-1.5 text-[10px]"
     >
       <div class="text-muted-foreground">
-        Routed per turn
+        {{ $t('history.routedPerTurn') }}
       </div>
       <div
         v-for="(call, index) in span.modelRouting.calls"
@@ -153,20 +164,20 @@ onBeforeUnmount(() => {
         >{{ call.option }}</span><span
           v-if="call.fallback"
           class="text-amber-600"
-        >fallback</span>
+        >{{ $t('history.fallback') }}</span>
       </div>
     </div>
     <div
       v-if="span.error"
       class="mx-2 mb-2 rounded border border-destructive/30 bg-destructive/5 px-2 py-1.5 text-[10px] text-destructive"
     >
-      <span class="font-medium">Error:</span> {{ span.error }}
+      <span class="font-medium">{{ $t('common.error') }}:</span> {{ span.error }}
     </div>
     <div
       v-else-if="span.retryLastError"
       class="mx-2 mb-2 rounded border border-amber-500/30 bg-amber-500/5 px-2 py-1.5 text-[10px] text-amber-700"
     >
-      <span class="font-medium">Previous attempt error:</span> {{ span.retryLastError }}
+      <span class="font-medium">{{ $t('history.previousAttemptError') }}</span> {{ span.retryLastError }}
     </div>
     <div
       v-if="span.traceId"
@@ -175,7 +186,7 @@ onBeforeUnmount(() => {
       <span class="text-muted-foreground">Trace</span><code class="min-w-0 truncate font-mono">{{ span.traceId }}</code><button
         type="button"
         class="inline-flex h-5 w-5 items-center justify-center rounded text-muted-foreground hover:bg-muted"
-        :title="traceIdCopied ? 'Copied' : 'Copy trace ID'"
+        :title="traceIdCopied ? $t('common.copied') : $t('history.copyTraceId')"
         @click="copyTraceId"
       >
         <Copy class="h-3 w-3" />
@@ -184,7 +195,7 @@ onBeforeUnmount(() => {
         class="text-primary hover:underline"
         @click="emit('openTrace', $event)"
       >
-        Open trace
+        {{ $t('history.openTrace') }}
       </button>
     </div>
     <!-- JSON always sits in the left column; a reply text reads as the message on the right. -->
@@ -202,7 +213,7 @@ onBeforeUnmount(() => {
           data-testid="execution-span-input"
         >
           <div class="mb-1 text-[10px] font-medium text-muted-foreground">
-            Input
+            {{ $t('common.input') }}
           </div>
           <div
             v-if="input.note"
@@ -226,7 +237,7 @@ onBeforeUnmount(() => {
           data-testid="execution-span-output"
         >
           <div class="mb-1 text-[10px] font-medium text-muted-foreground">
-            Output
+            {{ $t('common.output') }}
           </div>
           <ExecutionSpanImages
             v-if="outputImageSrcs.length > 0"
@@ -258,7 +269,7 @@ onBeforeUnmount(() => {
         data-testid="execution-span-message"
       >
         <div class="mb-1 text-[10px] font-medium text-muted-foreground">
-          Message
+          {{ $t('history.message') }}
         </div>
         <div
           v-if="outputParts.message"
@@ -270,7 +281,7 @@ onBeforeUnmount(() => {
           v-else
           class="text-[10px] text-muted-foreground"
         >
-          Empty reply.
+          {{ $t('history.emptyReply') }}
         </div>
       </section>
     </div>

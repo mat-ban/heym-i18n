@@ -1,0 +1,262 @@
+# Výstup grafu
+
+Uzol **Výstup grafu** je koncový uzol workflowu [widgetu dashboardu](../tabs/dashboard-tab.md). Preberá riadky vytvorené predchádzajúcimi uzlami a mení ich na štandardizovaný payload grafu, ktorý dashboard vykresľuje.
+
+## Prehľad
+
+| Vlastnosť | Hodnota |
+|----------|-------|
+| Vstupy | 1 |
+| Výstupy | 0 (koncový) |
+| Výstup | Štandardizovaný payload grafu |
+
+Umiestnite tento uzol **ako posledný** vo workflowe widgetu dashboardu. Uzol pred ním by mal vytvárať pole objektov riadkov, napríklad:
+
+```json
+[
+  { "month": "Jan", "revenue": 120 },
+  { "month": "Feb", "revenue": 150 }
+]
+```
+
+Ak máte k dispozícii iba ukážkové/vzorové údaje (žiadny skutočný zdroj), vytvorte tieto riadky pomocou uzla **Set** s `$array(dict(...), dict(...))` — napríklad `$array(dict(month="Jan", revenue=120), dict(month="Feb", revenue=150))`. **Nepoužívajte** `${...}` ani holé objektové literály `{...}`; Heym vytvára objekty iba pomocou `dict(key=value)`.
+
+## Parametre
+
+| Parameter | Typ | Popis |
+|-----------|------|-------------|
+| `label` | string | Identifikátor uzla (camelCase) |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` alebo `hitl` |
+| `orientation` | string | `vertical` alebo `horizontal` (iba pre stĺpcové grafy) |
+| `dataPath` | string | Bodková cesta k poľu riadkov vo výstupe predchádzajúceho uzla (napr. `data` alebo `result.items`). Ponechajte prázdne pre automatickú detekciu. |
+| `labelField` | string | Kľúč riadka použitý ako označenie kategórie (pie/bar/line) |
+| `valueField` | string | Kľúč riadka použitý ako číselná hodnota (pie/bar/line/numeric/gauge) |
+| `series` | array | Voliteľná definícia viacerých sérií `[{ "name": "Sent", "field": "sent" }]` pre bar/line (nahrádza `valueField`) |
+| `columns` | array | Voliteľný zoznam stĺpcov pre `table` (predvolene kľúče prvého riadka) |
+| `xField` / `yField` | string | Kľúče riadkov pre číselné osi X a Y (scatter) |
+| `min` / `max` | number | Číselný rozsah pre `gauge` (predvolene `0` / `100`) |
+| `unit` | string | Voliteľná jednotka zobrazená vedľa hodnoty `numeric` alebo `gauge` |
+| `text` | string | Markdown správa pre typ grafu `text`. Ponechajte prázdne a nastavte `valueField` na vykreslenie dynamickej správy prevzatej z údajov predchádzajúceho uzla. |
+| `title` | string | Voliteľný názov grafu |
+
+## Typy grafov
+
+- **bar / line / area / pie** — kategorické grafy riadené pomocou `labelField` + `valueField` (alebo `series` pre viacsériové bar/line/area). `area` je vyplnený trendový graf.
+- **table** — surové riadky vykreslené ako posúvateľná tabuľka pomocou `columns`.
+- **numeric** — jedna hodnota KPI z prvého riadka s voliteľnou `unit`.
+- **gauge** — jedna hodnota zobrazená v rozsahu `min`–`max` (napr. percento). Používa `valueField`.
+- **scatter** — body X/Y z `xField` a `yField` pre korelačné grafy.
+- **proportion** — jeden horizontálny pruh rozdelený na podiely s percentuálnou legendou (napr. rozpis jazykov). Používa `labelField` + `valueField`.
+- **barGauge** — jeden horizontálny gauge na riadok s prechodom od červenej po zelenú a hodnotou (napr. voľné miesto na disku). Používa `labelField` + `valueField`, voliteľné `unit` a `max` (predvolene najväčšia hodnota riadka).
+- **text** — markdown správa (napr. stavová poznámka ako „Posledné spustenie o 19:47"). Pre statickú správu vložte markdown do `text`, alebo ponechajte `text` prázdne a nastavte `valueField` na vykreslenie reťazca vytvoreného v predchádzajúcom uzle. Podporuje nadpisy, tučné/kurzíva, [zoznamy](../nodes/chart-output-node.md#interactive-task-lists), odkazy a inline kód.
+- **hitl** — karusel vašich čakajúcich ľudských recenzií. Hlavička zobrazuje `1/n pending`; ľavá šípka je zakázaná na prvej karte a pravá na poslednej. Názov workflowu otvorí dané spustenie na plátne. **Approve**, **Request changes** a **Reject** ho vyriešia a ikona histórie vedľa názvu widgetu otvorí dané spustenie v dialógu histórie na tej istej stránke. Tento typ grafu ignoruje riadky z predchádzajúcich uzlov, takže workflow widgetu pozostáva iba z uzla Výstup grafu. Každá prihlásená osoba vidí recenzie na workflowoch, ktoré vlastní.
+
+### Interaktívne zoznamy úloh
+
+Použite syntax zoznamu úloh v štýle GitHub-flavored markdown v statickom poli `text`:
+
+```markdown
+- [x] Option 1
+- [ ] Option 2
+- [ ] Option 3
+```
+
+Na [Dashboarde](../tabs/dashboard-tab.md) sa zaškrtávacie políčka vykresľujú ako klikateľné ovládacie prvky (vhodné pre tmavý aj svetlý režim). Prepnutie zaškrtávacieho políčka aktualizuje pole `text` workflowu widgetu a pretrváva aj po obnovení.
+
+**Inline úpravy:** dvojkliknutím na označenie položky úlohy ju upravíte priamo na mieste. Stlačením Enter alebo kliknutím mimo uložíte; stlačením Escape zrušíte. Úplným vymazaním označenia odstránite danú položku zo zoznamu.
+
+**Odkazy v položkách úloh:** ak označenie obsahuje markdown odkaz (`[title](url)`), kliknutím na odkaz sa otvorí URL bez prepnutia zaškrtávacieho políčka. Pre prepnutie kliknite kamkoľvek inam na riadok.
+
+**Iba statický text:** interaktivita vyžaduje syntax zoznamu úloh GFM (`- [ ]` / `- [x]`). Obyčajné dynamické stavové správy bez položiek úloh zostávajú iba na čítanie. Ak markdown pochádza z `valueField`, prvé prepnutie ho skopíruje do statického poľa `text`, aby sa zmeny zachovali.
+### Číslované zoznamy
+
+Textové widgety vykresľujú markdown so **zachovanými explicitnými číslami riadkov**. Každý riadok uveďte číslom, ktoré chcete zobraziť (napr. `9.`, `8.`, `7.`). Heym riadky automaticky neprečísluje.
+
+**Prečo explicitné čísla?** Štandardné usporiadané zoznamy v markdowne (`1.`, `2.`, `3.`) sa menia na HTML zoznamy `<ol>`, ktoré počítajú iba **nahor** od prvého čísla. Zoznam napísaný ako `9.` / `8.` / `7.` by sa v bežnom markdown rendereri zobrazil ako `9`, `10`, `11`. Uvedenie zamýšľaného čísla na začiatku každého riadku tomu zabráni.
+
+**Zostupné zoznamy (napr. najnovšie ako prvé):** zostavte markdown v slučke workflowu a vypočítajte zobrazované číslo pre každú položku:
+
+```
+${loop.total - loop.index}. [${item.title}](https://example.com/watch?v=${item.id})
+```
+
+Typický postup:
+
+1. Načítajte alebo zostavte pole položiek (napr. HTTP → `body.videos`).
+2. Prejdite pole pomocou [Loop](./loop-node.md); v tele použite [Variable](./variable-node.md) s `.add()` na pridanie jedného očíslovaného riadku pri každej iterácii.
+3. Po vetve **done** slučky použite [Set](./set-node.md) s `join("\n")` na akumulované pole (alebo ekvivalent) do jedného markdown reťazca.
+4. Nasmerujte **Chart Output** `valueField` na tento reťazec (alebo nastavte statický `text`).
+
+Príklad výrazu riadku vnútri slučky (label `processVideos`, položky s `title` a `id`):
+
+```
+$processVideos.total - $processVideos.index + ". [" + $processVideos.item.title + "](https://www.youtube.com/watch?v=" + $processVideos.item.id + ")"
+```
+
+Výsledný markdown:
+
+```markdown
+9. [Latest video](https://www.youtube.com/watch?v=abc)
+8. [Previous video](https://www.youtube.com/watch?v=def)
+1. [Oldest video](https://www.youtube.com/watch?v=xyz)
+```
+
+Pre jednoduchý vzostupný zoznam začínajúci od 1 buď uveďte číslo na začiatku každého riadku (`1.`, `2.`, `3.`), alebo použite slučku s `$loop.index + 1`. Použite [zoznamy s odrážkami](#interactive-task-lists) (`- item`), keď čísla nepotrebujete.
+
+## Ako sa údaje spracúvajú
+
+1. Ak je nastavené `dataPath`, uzol nasleduje túto bodkovú cestu do výstupu predchádzajúceho uzla.
+2. V opačnom prípade hľadá pole: zoznam na najvyššej úrovni, pole `data` alebo prvé pole s hodnotou typu zoznam.
+3. Pre `table` sa každý riadok stane riadkom tabuľky pomocou `columns` (alebo kľúčov prvého riadku).
+4. Pre `numeric` a `gauge` hodnota pochádza z `valueField` v prvom riadku (alebo z prvého číselného poľa).
+5. Pre `scatter` sa každý riadok stane bodom `[xField, yField]`.
+6. Pre `text` sa správa prevezme z `valueField` v prvom riadku, ak je nastavené, inak zo statickej konfigurácie `text` (v opačnom prípade z prvého reťazcového poľa prvého riadku).
+
+## Príklad
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "revenueChart",
+    "chartType": "bar",
+    "orientation": "vertical",
+    "dataPath": "data",
+    "labelField": "month",
+    "valueField": "revenue",
+    "title": "Monthly revenue"
+  }
+}
+```
+
+Gauge (jedna hodnota voči rozsahu):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "cpuGauge",
+    "chartType": "gauge",
+    "dataPath": "rows",
+    "valueField": "value",
+    "min": 0,
+    "max": 100,
+    "unit": "%"
+  }
+}
+```
+
+Scatter (body X/Y):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "correlation",
+    "chartType": "scatter",
+    "dataPath": "rows",
+    "xField": "x",
+    "yField": "y"
+  }
+}
+```
+
+Proportion (jeden pruh rozdelený podľa podielu + percentuálna legenda):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "languages",
+    "chartType": "proportion",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "title": "Most Used Languages"
+  }
+}
+```
+
+Area (vyplnený trend s viacerými sériami):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "memCpu",
+    "chartType": "area",
+    "dataPath": "rows",
+    "labelField": "time",
+    "series": [
+      { "name": "Memory", "field": "memory" },
+      { "name": "CPU", "field": "cpu" }
+    ],
+    "title": "Memory / CPU"
+  }
+}
+```
+
+Bar gauge (gradientový gauge pre každý riadok s hodnotami):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "freeDisk",
+    "chartType": "barGauge",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "unit": "GB",
+    "title": "Free disk space"
+  }
+}
+```
+
+Text (statická markdown správa — nevyžaduje riadky z predchádzajúceho uzla):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "statusNote",
+    "chartType": "text",
+    "text": "**Last execution** at `19:47` — all checks passed ✅",
+    "title": "Status"
+  }
+}
+```
+
+Text (dynamický — reťazec správy sa vytvorí v predchádzajúcom uzle a prevezme sa cez `valueField`):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "lastRun",
+    "chartType": "text",
+    "dataPath": "rows",
+    "valueField": "message"
+  }
+}
+```
+## Príklady AI promptov
+
+Pri generovaní widgetu pomocou **AI** sa prompty ako tieto čisto mapujú na jednotlivé typy:
+
+- **Bar** — „Zobraz mesačný obrat za posledných 6 mesiacov ako zvislý stĺpcový graf s ukážkovými údajmi."
+- **Line** — „Vykresli denných aktívnych používateľov za posledných 14 dní ako čiarový graf."
+- **Area** — „Zobraz využitie pamäte a CPU za posledných 24 hodín ako plošný graf s dvomi sériami. Použi ukážkové údaje."
+- **Pie** — „Rozdeľ stav spustení (úspech, chyba, zrušené) ako koláčový graf."
+- **Table** — „Zobraz 10 najlepších workflowov podľa počtu spustení ako posúvateľnú tabuľku so stĺpcami name a runs. Použi ukážkové údaje."
+- **Numeric** — „Zobraz dnešný celkový počet spustení workflowov ako jediný KPI s jednotkou 'runs'. Použi ukážkové údaje."
+- **Gauge** — „Zobraz aktuálne využitie CPU ako gauge od 0 do 100 percent."
+- **Scatter** — „Vykresli latenciu požiadaviek voči veľkosti payloadu ako bodový graf s ukážkovými údajmi."
+- **Proportion** — „Zobraz moje najpoužívanejšie jazyky ako proporčný pruh: Kotlin 49,64 %, JavaScript 23,73 %, TypeScript 11,64 %, Java 8,92 %, Python 6,06 %. Použi ukážkové údaje."
+- **Bar gauge** — „Zobraz voľné miesto na disku pre každý zväzok (sda1 až sda7) ako bar gauge v GB. Použi ukážkové údaje."
+- **Text** — „Pridaj textový widget s markdown kontrolným zoznamom (jedna zaškrtnutá položka, dve nezaškrtnuté) alebo vypíš 5 najnovších výukových videí v zostupnom poradí (od 5. po 1.) s odkazmi na YouTube — každý riadok uveď explicitným číslom (`5. Title`, `4. Title`, …)."
+
+## Súvisiace
+
+- [Karta Dashboard](../tabs/dashboard-tab.md) — vytvárajte a usporadúvajte widgety
+- [Uzol Output](output-node.md) — koncový uzol pre bežné workflowy

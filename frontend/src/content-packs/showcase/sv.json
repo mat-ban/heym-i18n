@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Skapa, organisera, importera och hantera Workflows för AI-automatiseringar.",
+    "bullets": [
+      "Öppna Workflows snabbt, håll ordning i mappar och fortsätt direkt med nyliga uppgifter.",
+      "Använd kommandopaletten för snabb åtkomst utan långsökt sökning i rutnätet.",
+      "Använd denna flik som bas för all aktivitet i editorn."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Central översikt",
+        "title": "Workflow-bibliotek",
+        "description": "Visa rotobjekt, mappar och Workflows markerade för borttagning på ett ställe.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Snabbåtkomst",
+        "title": "Snabb skapning",
+        "description": "Skapa nya Workflows eller importera JSON direkt.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Struktur",
+        "title": "Organisera i förväg",
+        "description": "Mappar och fästning håller växande automatiseringsuppsättningar överskådliga.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Läs Workflow-guiden",
+        "description": "Öppna fullständig referens för Workflows-fliken.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflows-flik"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Öppna mallar",
+        "description": "Byt till mallen-fliken för återanvändbara startpunkter.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Vad som hör hit",
+        "content": "Använd detta område för Workflow-livscykeluppgifter: skapa, byta namn, flytta, importera, arkivera och välja."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Håll det enkelt",
+        "content": "Om endast en snabb körning behövs från en annan sida, använd Quick Drawer. Återvänd hit för hantering och struktur."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflows-flik"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "En agentbaserad Kanban-board. Varje kort är ett persistent jobb med kontext, historik och utdata – att flytta ett kort kör Workflow-kedjan för kolumnen.",
+    "bullets": [
+      "Skapa textkort i Backlog och dra dem över kolumnerna.",
+      "Koppla ordnade Workflows till varje kolumn; kortrörelser utlöser dessa som Trigger.",
+      "Kort blir gröna vid framgång, röda vid fel och gula under körning.",
+      "Kommentarer och tidigare utdata flödar in i kontexten för nästa körning."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kärnidé",
+        "title": "Kort är jobb, inte anteckningar",
+        "description": "Varje kort bär sin fullständiga historik: kommentarer, rörelser och utdata från varje Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Planeringsslinga",
+        "title": "Uppföljningsrundor",
+        "description": "Svara i kommentarer och kör igen – kedjan ser hela den ackumulerade kontexten.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board-dokumentation",
+        "description": "Kolumnkedjor, Card-Payload-kontrakt och uppföljningsrundor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Hur kolumnkedjor körs",
+        "content": "Workflows kopplade till en kolumn körs sekventiellt när ett kort anländer. Utdata från varje Workflow läggs till kortets kontext; ett fel stoppar kedjan."
+      },
+      {
+        "id": "board-context",
+        "title": "Vad Workflows tar emot",
+        "content": "Körnings-input innehåller kortet (titel, innehåll, metadata, kommentarer, historik, tidigare utdata), boarden, rörelsen och positionen i kedjan. Läs detta med $input.card-uttryck."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Mallar",
+    "summary": "Starta med återanvändbara Workflow-blueprints istället för att bygga samma mönster varje gång.",
+    "bullets": [
+      "Använd mallar när Workflow-strukturen är känd men detaljer fortfarande varierar.",
+      "Bra mallar förkortar onboarding och minskar upprepat Canvas-arbete.",
+      "Dela mönster här och anpassa dem i editorn efter behov."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Återanvändning",
+        "title": "Blueprint-ansats",
+        "description": "Fånga beprövade Workflow-strukturer och återanvänd dem snabbt.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Team-tempo",
+        "title": "Enhetliga startpunkter",
+        "description": "Mallar hjälper team att enas om samma beprövade mönster.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Effektivitet",
+        "title": "Mindre tomgång",
+        "description": "Välj en färdig ram och anpassa endast det väsentliga.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Öppna mall-dokumentation",
+        "description": "Lär dig hur mallar passar in i Dashboard-flödet.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Mallar-flik"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Tillbaka till Workflows",
+        "description": "Tillbaka till huvudbiblioteket för Workflows.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Varför mallar är viktiga",
+        "content": "De omvandlar upprepade nod-layouter till återanvändbara tillgångar – idealiskt för team som levererar variationer av samma Workflow-mönster."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimal användning",
+        "content": "Använd mallar när strukturen är stabil men namn, Prompts, Credentials eller mål varierar från användningsfall till användningsfall."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Mallar-flik"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Variabler",
+    "summary": "Lagra delade värden centralt och referera dem över Workflows utan att duplicera samma data överallt.",
+    "bullets": [
+      "Förvara ofta återanvända värden på en central, persistent plats.",
+      "Variabler minskar Prompt-drift och dubbla konfigurationer.",
+      "Dela värden selektivt när flera Workflows behöver samma datagrund."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Persistens",
+        "title": "Lagring över körningar",
+        "description": "Globala värden överlever enskilda Workflow-körningar.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Kompakt konfiguration",
+        "title": "Mindre redundans",
+        "description": "Uppdatera centralt en gång istället för att manuellt justera många nod-fält.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Uttryck",
+        "title": "Stöd i DSL",
+        "description": "Referera värden direkt i nod-uttryck och Prompts.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Läs variabel-dokumentation",
+        "description": "Öppna guiden för variabler i Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Variabler-flik"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Typiska mönster",
+        "content": "Lagra Endpoints, delade Prompt-fragment, miljöspecifika inställningar eller ID:n som flera Workflows behöver läsa."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Vad som inte hör hit",
+        "content": "Hemligheter och Provider-autentisering hör till Credentials, inte till globala variabler."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Variabler-flik"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Använd Dashboard-chatten som en snabb dialogbaserad ingångspunkt för Workflows och plattformsuppgifter.",
+    "bullets": [
+      "Utmärkt för snabba frågor, Workflow-hjälp och lättviktskörningar.",
+      "Fokuserar på tempo och iteration istället för full Editor-kontroll.",
+      "När strukturen står klar, byt direkt till Workflow eller dokumentation."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Naturligt språk",
+        "title": "Snabb interaktion",
+        "description": "Använd enkelt språk istället för att manuellt söka igenom hela appen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Brygga",
+        "title": "Från idé till handling",
+        "description": "Chat hjälper när målet är klart men den exakta vägen ännu måste arbetas ut.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Följeslagare",
+        "title": "Kompletterar dokumentationen",
+        "description": "Använd tillsammans med dokumentationen för att ha svar och referenser till hands.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Öppna Chat-dokumentation",
+        "description": "Läs guiden för Dashboard-chatten.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat-flik"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "AI-assistent Referens",
+        "description": "Lär dig hur Heym-assistenten stödjer Workflow-skapning.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "AI-assistent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Bästa användningsfall",
+        "content": "Använd Chat för snabba Workflow-frågor, korta plattformsanvisningar och operativa steg som inte kräver djupt Canvas-arbete."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "När vyn ska bytas",
+        "content": "Byt till editorn när kontroll på nod-nivå behövs, eller till dokumentationen för varaktiga referenser."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat-flik"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Hantera och dela filer som genererats av Workflow-skills.",
+    "bullets": [
+      "Skills skriver filer till utdatakatalogen; Heym samlar in dem automatiskt.",
+      "Dela filer via Token-länkar eller lösenordsskyddade Basic-Auth-URL:er.",
+      "Ladda ned filer med ett klick."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Lagring",
+        "title": "Automatiskt insamlade filer",
+        "description": "Skills skriver till _OUTPUT_DIR; filer visas här direkt efter körning.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Delning",
+        "title": "Flexibel åtkomstkontroll",
+        "description": "Publika länkar, lösenordsskydd, utgångsdatum och nedladdningsgränser.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Format",
+        "title": "PDF, DOCX, CSV med mera",
+        "description": "Generera valfria filtyper med reportlab, python-docx eller standard-Python.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Öppna Drive-dokumentation",
+        "description": "Läs fullständig referens för Drive-fliken.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive-fliken"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Guide för filgenerering",
+        "description": "Lär dig hur Skills skapar filer.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Filgenerering"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Hur filer hamnar här",
+        "content": "När en Skill placerar filer i katalogen _OUTPUT_DIR sparar Heym dem persistent och skapar nedladdnings-Tokens."
+      },
+      {
+        "id": "drive-share",
+        "title": "Delningsalternativ",
+        "content": "Skapa publika Token-länkar för alla eller lösenordsskyddade URL:er inklusive utgångsdatum och nedladdningsgränser."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive-fliken"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Autentiseringsuppgifter",
+    "summary": "Hantera nycklar, Tokens och anslutningsdetaljer så att Workflows kommunicerar säkert med externa system.",
+    "bullets": [
+      "Lagra autentiseringsuppgifter centralt istället för att sprida dem över enskilda noder.",
+      "Autentiseringsuppgifter styr LLM:er, integrationer, vektorlager och mer.",
+      "Bevilja åtkomst selektivt när team behöver samma anslutning utan nyckelkopior."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Säkerhet",
+        "title": "Säkra autentiseringsuppgifter",
+        "description": "Konfigurera autentisering en gång och återanvänd säkert i Workflows.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrationer",
+        "title": "Brett stöd",
+        "description": "Stöder leverantörer som OpenAI, DeepSeek, Slack, Redis, Qdrant och Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Samarbete",
+        "title": "Selektiv delning",
+        "description": "Använd team- eller användardelning istället för att skapa dubbletter.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Läs dokumentation för autentiseringsuppgifter",
+        "description": "Öppna guide för dashboarden för autentiseringsuppgifter.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Fliken Autentiseringsuppgifter"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Visa integrationer",
+        "description": "Bläddra i detaljer för konfiguration av tredjepartsintegrationer.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Tredjepartsintegrationer"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Var de används",
+        "content": "Autentiseringsuppgifter refereras i nodkonfigurationen och löses säkert under körning."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Teamvänlig modell",
+        "content": "Föredra delning när flera utvecklare behöver samma leverantörsåtkomst; det ger konsekvent beteende och enkla revisioner."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Fliken Autentiseringsuppgifter"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vektorlager",
+    "summary": "Förbered Retrieval-backends för Workflows som behöver semantisk sökning, minne eller RAG-kontextintegrering.",
+    "bullets": [
+      "Vektorlager utgör databasen för retrieval-baserade Workflows.",
+      "Använd tillsammans med RAG-noder och AI-flöden för precis dokument-grounding.",
+      "Denna flik fungerar som infrastruktur för underbyggda Prompts."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG-infrastruktur",
+        "title": "Sökbart minne",
+        "description": "Håll dokument redo för semantisk retrieval när Workflows behöver kontext.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kvalitet",
+        "title": "Underbyggd grounding",
+        "description": "Retrieval minskar hallucinationsrisker genom att tillhandahålla bevis.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Drift",
+        "title": "Hantera centralt en gång",
+        "description": "Skapa vektorlager och återanvänd över flera Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Öppna dokumentation för vektorlager",
+        "description": "Läs guide för dashboarden för vektorlager.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Fliken Vektorlager"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Visa dokumentation för RAG-nod",
+        "description": "Öppna referens för Qdrant-RAG-noden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Klassificering",
+        "content": "Denna flik förbereder lagringsnivån. Den faktiska Retrieval-logiken ligger inom Workflows (t.ex. via RAG- eller agentmönster)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Användningstidpunkt",
+        "content": "Välj vektorlager när Workflow behöver söka igenom ostrukturerade kunskapsbaser istället för att enbart förlita sig på LLM-minne."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Fliken Vektorlager"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Hantera Model Context Protocol-anslutningar så att agent-Workflows säkert når verktyg och externa funktioner.",
+    "bullets": [
+      "MCP omvandlar externa verktygsekosystem till användbar agentkontext.",
+      "Använd denna flik när agenter behöver rikare verktyg än statiska Prompts.",
+      "Anslutningskvalitet avgör direkt agenternas förmågor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Agent-verktyg",
+        "title": "Extern funktionsnivå",
+        "description": "Tillhandahåll Tool-servrar som agenter kan anropa under reasoning.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Körtidskontroll",
+        "title": "Anslutningskonfiguration",
+        "description": "Konfigurera Endpoints, etiketter och transport för pålitliga Workflows.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Plattformsdjup",
+        "title": "Bortom Prompts",
+        "description": "MCP gör det möjligt för Heym-Workflows att agera, inte bara svara.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Öppna MCP-dokumentation",
+        "description": "Läs guide för MCP-fliken.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP-fliken"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Agent-arkitektur",
+        "description": "Lär dig hur MCP integreras i agentkörning.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Agent-arkitektur"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Betydelse",
+        "content": "Särskilt viktigt när agenten behöver verktyg, miljöåtkomst eller systemintegrationer utanför enskilda noder."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Driftansats",
+        "content": "Behandla MCP-anslutningar som infrastruktur: Stabil etikettering och tydliga ansvarsområden förenklar felsökning."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP-fliken"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Körningar",
+    "summary": "Inspektera detaljerade Traces av AI- och Workflow-körningar för att förstå vad som hände – inte bara om det fungerade.",
+    "bullets": [
+      "Använd Traces för felsökning, prestandaanalys och kvalitetskontroll av Prompts.",
+      "Traces förklarar modellbeteende, latenser och körningsvägar.",
+      "Den första anhalten vid oväntade resultat eller instabila körningar."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Felsökning",
+        "title": "Se dolda steg",
+        "description": "Trace-data avslöjar vad Workflow och modell faktiskt körde.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Utvärdering",
+        "title": "Stöd för iterationer",
+        "description": "Använd Traces vid optimering av Prompts, verktyg och modeller.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Tillförlitlighet",
+        "title": "Spåra resultat",
+        "description": "Bra Traces minskar gissningar vid felanalys.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Öppna körningsdokumentation",
+        "description": "Läs guide för körningsdashboarden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Körningsfliken"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "När Traces blir oumbärliga",
+        "content": "Så snart Workflows är flerstegs, modellintensiva eller verktygsbaserade räcker inte enbart statusvisning."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. historik",
+        "content": "Historiken visar ATT en körning ägde rum. Traces förklarar VARFÖR den betedde sig som den gjorde."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Körningsfliken"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Varningar",
+    "summary": "Definiera tröskelvärden över tidsfönster och bli automatiskt meddelad så snart de överskrids.",
+    "bullets": [
+      "Fyra typer: felantal, körtidslängd, Token-/kostnadströsklar och utförandeantal.",
+      "Varje varning bedöms över ett valt tidsfönster, aldrig utifrån enskilda händelser.",
+      "Beskriv kravet i naturligt språk och assistenten konfigurerar varningen."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tidsfönster",
+        "title": "Ansamlingar istället för avvikelser",
+        "description": "En misslyckad körning är brus. Tolv på tio minuter är en incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Före sparande",
+        "title": "Testa villkoret retroaktivt",
+        "description": "Teststeget testar mot verklig historik för att kalibrera tröskelvärden i förväg.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reaktion",
+        "title": "Kör Workflow vid larm",
+        "description": "Alert-Payload blir Workflow-input för automatiska aviseringar via Slack eller e-post.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Öppna varningsdokumentation",
+        "description": "Läs om hur larmtyper, fönster och assistenten fungerar.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Varningar-flik"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Syfte",
+        "content": "Analyser och Traces besvarar frågor som ställs aktivt. Varningar låter Heym tala proaktivt när kritiska tröskelvärden överskrids."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Varför falsklarm undviks",
+        "content": "En varning utlöses en gång och väntar tills metriken återhämtar sig – det förhindrar översvämning av aviseringar."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Varningar-flik"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analyser",
+    "summary": "Följ användningsmönster och systembeteende för att förstå aktivitet, tillväxt och förändringar över tid.",
+    "bullets": [
+      "Identifiera acceptans, genomströmning och ovanliga toppar med analyser.",
+      "En vy på plattformsnivå istället för ett enskilt felsökningsverktyg.",
+      "Kombinera analyser med Traces och historik för signal och förklaring."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signaler",
+        "title": "Användningstransparens",
+        "description": "Identifiera trender istället för att betrakta enskilda körningar isolerat.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kapacitet",
+        "title": "Operativ medvetenhet",
+        "description": "Identifiera belastningstoppar och nedgångar i tid och undersök dem.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Beslutsstöd",
+        "title": "Riktad optimering",
+        "description": "Analyser hjälper till att prioritera de viktigaste Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Öppna analysdokumentation",
+        "description": "Läs guide för analysdashboarden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analyser-flik"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Syfte",
+        "content": "Använd analyser för mönster, genomströmning och aggregerat beteende över hela plattformsdriften."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Tillvägagångssätt",
+        "content": "Identifiera signaler här, växla sedan till Traces, historik eller editorn för att analysera orsaker."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analyser-flik"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Skapa ett rutnät av diagram-widgets, som var och en matas av egna Workflows – alla nyckeltal i en överblick.",
+    "bullets": [
+      "Varje widget drivs av ett Workflow som levererar data till en Chart-Output-nod.",
+      "Använd stapel-, linje-, cirkel-, tabell- och siffer-widgets anpassade till metriken.",
+      "Generera eller anpassa widgets med AI och cacha resultat för snabba laddningstider.",
+      "Skapa flera dashboards och dela dem med personer eller team för läsning eller skrivning."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Komposition",
+        "title": "Workflow-matade diagram",
+        "description": "All data som ett Workflow genererar visualiseras som diagram.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Prestanda",
+        "title": "Cachade resultat",
+        "description": "Widget-cachning undviker upprepade Workflow-körningar vid varje sidladdning.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI-stöd",
+        "title": "Generera och anpassa",
+        "description": "Beskriv metriken och låt widgeten skapas automatiskt av AI.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Öppna dashboarddokumentation",
+        "description": "Lär dig hur dashboard-widgets skapas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard-flik"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Syfte",
+        "content": "Använd dashboarden för beständiga översikter av viktiga nyckeltal från egna Workflows."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Skapande",
+        "content": "Lägg till widget, konfigurera Workflow så att sista noden före Chart Output levererar rader, och arrangera i rutnätet."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard-flik"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Team",
+    "summary": "Hantera delade åtkomster så att Workflows, Credentials, variabler och vektorlagring används kollaborativt utan dubbletter.",
+    "bullets": [
+      "Team är det renaste sättet att skalbart dela plattformsresurser.",
+      "Använd team när behörigheter ska följa en grupp istället för enskilda personer.",
+      "Säkerställer strukturerat samarbete i en växande workspace."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kollaboration",
+        "title": "Gruppbaserade delningar",
+        "description": "Bevilja åtkomst en gång för ett team, istället för att manuellt auktorisera enskilda användare.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Klarhet",
+        "title": "Tydliga ansvarsområden",
+        "description": "Resurshantering följer de verkliga teamstrukturerna.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Skalning",
+        "title": "Mindre administrationsarbete",
+        "description": "Nya medlemmar ärver åtkomsträttigheter automatiskt via teamet.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Öppna teamdokumentation",
+        "description": "Läs guide för teamdashboarden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Team-flik"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Resursdelningar",
+        "description": "Läs detaljer om delning av resurser.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Delning av inloggningsuppgifter"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Fördelar med team",
+        "content": "Team kopplar samman identitet och resursåtkomst för smidigt samarbete."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktiskt tips",
+        "content": "Föredra teamdelningar när ett Workflow eller Credential tillhör en permanent arbetsgrupp."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Team-flik"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protokoll",
+    "summary": "Läs loggar på stacknivå när infrastrukturinsikter bortom Workflow-utdata behövs.",
+    "bullets": [
+      "Använd loggar för service-felsökning, container-tillstånd och miljöproblem.",
+      "Hjälper när orsaker ligger under Workflow-nivån.",
+      "Använd tillsammans med Traces för bevis på applikations- och systemnivå."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastruktur",
+        "title": "Container-transparens",
+        "description": "Se vad backend-tjänster utför under Heym-gränssnittet.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Felsökning",
+        "title": "Hitta orsaker",
+        "description": "Loggar hjälper vid startproblem, krascher eller integrationsfel.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kompletterande",
+        "title": "Skillnad mot Workflow-resultat",
+        "description": "Workflow-utdata visar resultat; loggar visar systembeteende.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Öppna protokolldokumentation",
+        "description": "Läs guide för protokolldashboarden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Protokoll-flik"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Användningstillfälle",
+        "content": "Växla hit när problem verkar bero på deployment, service eller miljö."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Bästa kombination",
+        "content": "Använd loggar tillsammans med Traces och historik för att snabbt gå från symptom till orsak."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Protokoll-flik"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Utvärdering",
+    "summary": "Skapa reproducerbara benchmarks för agent-Workflows för att tillförlitligt jämföra Prompt-, modell- och Workflow-ändringar.",
+    "bullets": [
+      "Sviterna och testfallen omvandlar subjektiv Workflow-kvalitet till mätbara nyckeltal.",
+      "Den ideala platsen för regressionskontroller före utrullning av Prompt- eller modelluppdateringar.",
+      "Jämför flera modeller mot samma datamängd och samma utvärderingsmetod."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kvalitetsslinga",
+        "title": "Benchmarka agenter",
+        "description": "Kör samma svit upprepade gånger i stället för att förlita sig på slumpmässiga kontroller.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Jämförelse",
+        "title": "Modell- och Prompt-tester",
+        "description": "Se hur olika inställningar beter sig mot samma testuppsättning.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Säkerhet",
+        "title": "Tillförlitlig iteration",
+        "description": "Bevisa förbättringar före utrullning.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Öppna utvärderingsdokumentation",
+        "description": "Läs guiden för utvärderingssidan.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Utvärderingsflik"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent-nodreferens",
+        "description": "Visa Workflow-området som de flesta eval-sviter riktar in sig på.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent-nod"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Utformning av sviter",
+        "content": "En bra svit speglar verkliga användarfall, randvillkor och godkännandesteg som måste förbli stabila."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Jämförelseparametrar",
+        "content": "Typiska jämförelser omfattar Prompt-varianter, modellval, Temperature-inställningar och Workflow-revisioner mot samma datamängd."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Utvärderingsflik"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Dokumentation",
+    "summary": "Sök igenom exakta plattformsreferenser direkt i appen och fördjupa vid behov.",
+    "bullets": [
+      "Heym-dokumentationen är utformad för snabb överblick och riktade uppslag.",
+      "Sidofält, sökning och korsreferenser möjliggör snabba växlingar mellan koncept.",
+      "Showcase refererar direkt till den aktuellt öppnade artikeln."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "In-app-referens",
+        "title": "Alltid till hands",
+        "description": "Dokumentationen förblir i produktflödet utan att externa flikar behöver öppnas.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Översikt",
+        "title": "Det väsentliga först",
+        "description": "Artiklar inleds med kärnpunkterna och förgrenar sig via länkar."
+      },
+      {
+        "eyebrow": "Kontextmedveten",
+        "title": "Aktuell artikel",
+        "description": "Vid läsning av ett dokument följer åtgärden 'Läs mer' direkt denna artikel."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Visa introduktion",
+        "description": "Öppna dokumentationsintroduktionen som standardstartpunkt.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Introduktion"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Snabb navigering",
+        "content": "Använd sidofältet för kategorier och kommandosökningen när ämnet redan är känt."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Stöd via Showcase",
+        "content": "Showcase håller sammanfattningar kompakta och hänvisar vid behov till den utförliga dokumentationen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Introduktion"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Scheman",
+    "summary": "Överskåda alla aktiva Cron-Workflows i en visuell kalender och kontrollera körtider.",
+    "bullets": [
+      "Växla mellan dag-, vecko- och månadsvy för lämplig upplösning.",
+      "Hovra över ett block för Cron-uttrycket; klicka för att hoppa direkt till Canvas.",
+      "Använd denna flik för att granska körningstäthet och upptäcka överlappningar."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparens",
+        "title": "Kalendervy",
+        "description": "Aktiva Cron-Workflows visas som block vid sina schemalagda tider.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigering",
+        "title": "Ett klick till Canvas",
+        "description": "Klicka på ett block för att öppna Workflow-editorn direkt.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Omfång",
+        "title": "Dag, vecka eller månad",
+        "description": "Justera upplösning för att granska enskilda timmar eller planera hela månaden.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Öppna schemadokumentation",
+        "description": "Läs referensen för scheman-fliken.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Scheman-flik"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron-nodreferens",
+        "description": "Lär dig hur Cron-Triggers konfigureras på Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Användningstillfälle",
+        "content": "Granska schemalagda automatiseringar, upptäck tidskonflikter och säkerställ att viktiga Workflows förblir aktiva."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Färgkodning",
+        "content": "Varje Workflow tilldelas en konsekvent färg från sitt id, som förblir identisk över dag-, vecko- och månadsvy."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Scheman-flik"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Datatabeller",
+    "summary": "Skapa strukturerade datatabeller direkt i Heym och använd dem programmatiskt i Workflows.",
+    "bullets": [
+      "Skapa tabeller med typade kolumner, fyll i manuellt eller importera via CSV.",
+      "Använd DataTable-Workflow-noden för att läsa, skriva och fråga rader programmatiskt.",
+      "Dela tabeller för användare eller team med läs- eller skrivbehörighet."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Integrerad data",
+        "title": "Integrerad lagring",
+        "description": "Lagra strukturerad data utan externa databaser eller API-nycklar.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow-integration",
+        "title": "DataTable-nod",
+        "description": "Hitta, infoga, uppdatera och ta bort rader i valfria Workflows.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Samarbete",
+        "title": "Delningar och behörigheter",
+        "description": "Tilldela granulär läs- och skrivåtkomst för användare och team.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Datatabeller-flik dokumentation",
+        "description": "Läs referensen för datatabeller-fliken.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Datatabeller"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable-nod dokumentation",
+        "description": "Läs referensen för DataTable-noden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Vad är datatabeller?",
+        "content": "Datatabeller är integrerad strukturerad lagring i Heym: Typade kolumner (String, Number, Boolean, Date, JSON), inline-redigering samt CSV-import/-export."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Användning i Workflows",
+        "content": "DataTable-noden stöder find, getAll, getById, insert, update, remove och upsert – utan credentials direkt genom Workflow-ägaren."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Datatabeller"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow-editor",
+    "summary": "Skapa, testa, felsöka och optimera Workflows på Canvas – direkt i körningskontexten.",
+    "bullets": [
+      "I editorn sammanflödar noddesign, dataflöde och körningsbeteende.",
+      "Använd sidofält och historik för att snabbt växla mellan skapande och felsökning.",
+      "Showcase förblir medvetet kompakt här för att ge maximalt utrymme åt Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Visuell Workflow-design",
+        "description": "Anslut noder, förgrena logik och modellera körtidsflödet direkt.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteration",
+        "title": "Felsökning vid skapande",
+        "description": "Använd historik, debug-paneler och körningsresultat för snabba återkopplingsslingor."
+      },
+      {
+        "eyebrow": "Funktionsomfång",
+        "title": "Avancerade funktioner till hands",
+        "description": "Portal, delningar, mallar och validering finns direkt på Canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Öppna Canvas-dokumentation",
+        "description": "Läs referensen för Canvas-funktionerna.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas-funktioner"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Tangentbordsgenvägar",
+        "description": "Öppna översikten över tangentbordsgenvägar i editorn.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Tangentbordsgenvägar"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Arbetsrytm",
+        "content": "Modellera på Canvas, verifiera antaganden om utdata och justera parametrar i sidofält utan att tappa fokus."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Kompakt Showcase",
+        "content": "Eftersom editorn redan tillhandahåller mycket information fungerar Showcase som en smidig orienteringshjälp."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas-funktioner"
+    }
+  }
+}

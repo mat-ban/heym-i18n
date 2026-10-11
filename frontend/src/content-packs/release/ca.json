@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Reactivar un node dins d'un Workflow",
+    "releaseTour": {
+      "label": "Novetats a Heym",
+      "introTitle": "Novetats d'aquesta versió",
+      "introDescription": "Un resum breu de les novetats des de la vostra darrera actualització. Dura aproximadament un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Node Enable: reactivar un node dins d'un Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "El nou **node Enable** és la contrapartida del **node Disable**. Seleccioneu un node pel seu nom per reactivar-lo i desar el canvi. Un Trigger **Cron** desactivat tornarà a executar-se en el proper moment planificat. Si el node es troba més endavant en el flux i encara no s'ha executat, s'executarà directament en l'execució actual."
+          },
+          {
+            "type": "prose",
+            "markdown": "Un Trigger desactivat mai no inicia una execució pel seu compte. Per tant, col·loqueu el node Enable darrere d'un altre punt d'entrada, com ara un Trigger **Input**. El **node Wait** ara també admet pauses més llargues: fins a 15 minuts en lloc d'un de sol."
+          }
+        ],
+        "tour": {
+          "description": "Reactivar un node desactivat directament des del Workflow, per exemple un Trigger Cron en pausa.",
+          "useCases": [
+            "Iniciar un Trigger Cron desactivat quan calgui mitjançant un Webhook",
+            "Combinar amb el node Disable per activar i desactivar nodes segons l'estat",
+            "Pausar un Workflow amb el node Wait fins a 15 minuts"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Reviseu les aprovacions humanes pendents directament al Dashboard",
+    "releaseTour": {
+      "label": "Novetats de Heym",
+      "introTitle": "Novetats d'aquesta versió",
+      "introDescription": "Una visió general breu de les novetats des de la vostra darrera actualització. Dura aproximadament un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Completeu les revisions pendents mitjançant un widget del Dashboard",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Afegiu un widget **HITL** i la capçalera mostrarà el nombre de revisions en espera com a `1/n pendents`. Navegueu per les entrades amb les tecles de fletxa. El nom del Workflow obre l'execució directament al Canvas. **Aprovar**, **sol·licitar canvis** i **rebutjar** tanquen l'esborrany. La icona d'historial obre l'execució al diàleg d'historial de la mateixa pàgina. La cua és personal: un Dashboard compartit no mostra esborranys d'altres usuaris."
+          }
+        ],
+        "tour": {
+          "description": "Un carrusel al Dashboard per a les vostres aprovacions pendents, amb un comptador a la capçalera.",
+          "useCases": [
+            "Veure quantes revisions estan en espera abans d'obrir la primera",
+            "Aprovar, sol·licitar canvis o rebutjar sense sortir del Dashboard",
+            "Obrir aquesta execució al diàleg d'historial mitjançant la icona adjacent al títol del widget"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "L'assistent d'IA prova els seus Workflows i configura taules de dades",
+    "releaseTour": {
+      "label": "Novetats a Heym",
+      "introTitle": "Novetats d'aquesta versió",
+      "introDescription": "Una visió general breu de les novetats des de la vostra darrera actualització. Dura aproximadament un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "Mode YOLO: l'assistent d'IA prova allò que construeix",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Activeu el **mode YOLO** al **assistent d'IA** del Canvas i ja no s'aturarà després d'aplicar un Workflow. Executa el Workflow com si féssiu servir **Run**, llegeix el resultat i corregeix el Workflow de manera autònoma fins a cinc vegades per missatge. Cada resposta enumera els passos en directe."
+          },
+          {
+            "type": "prose",
+            "markdown": "Abans de la primera execució, demana dades de prova amb valors suggerits i els reutilitza. També pot executar altres Workflows si necessita els seus resultats. Si necessita una decisió o credencials, ho demana amb la targeta de pregunta habitual. Execucions reals: el mode YOLO està desactivat per defecte i **Stop** atura el procés en qualsevol moment."
+          }
+        ],
+        "tour": {
+          "description": "L'assistent d'IA executa els Workflows creats, comprova el resultat i corregeix els errors de manera autònoma fins que funcionen.",
+          "useCases": [
+            "Descriure un Workflow i obtenir directament una versió provada",
+            "Fer que l'assistent detecti i corregeixi automàticament els nodes defectuosos",
+            "Comprovar els valors de retorn d'altres Workflows abans d'enllaçar-los"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "L'assistent d'IA selecciona o crea taules de dades",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Quan un Workflow desa registres, l'**assistent d'IA** ara reconeix les vostres **DataTables**. Indiqueu una taula i la farà servir. En cas contrari, demana la taula adequada o proposa **Crear una taula nova** amb les columnes necessàries."
+          },
+          {
+            "type": "prose",
+            "markdown": "Funciona a l'assistent del Canvas, al mode YOLO, al **Chat**, a la documentació i mitjançant MCP amb `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "L'assistent d'IA demana la taula de dades adequada o en crea una de nova amb les columnes necessàries.",
+          "useCases": [
+            "Registrar Leads automàticament a taules i generar Workflow i taula conjuntament",
+            "Seleccionar taules existents segons les columnes i els tipus",
+            "Crear i connectar taules directament des del Chat o mitjançant MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Creeu diversos Dashboards i compartiu-los amb l'equip",
+    "releaseTour": {
+      "label": "Novetats a Heym",
+      "introTitle": "Novetats d'aquesta versió",
+      "introDescription": "Una visió general breu de les novetats des del vostre darrer update. Dura aproximadament un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Creeu diversos Dashboards i compartiu-los amb l'equip",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "La pestanya **Dashboard** ara admet tants Dashboards com vulgueu. Canvieu còmodament des del selector de la part superior de la pestanya o creeu-ne un de nou amb **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Compartiu Dashboards amb persones o equips des de la **Configuració**. **Lectura** permet visualitzar i actualitzar; **Escriptura** permet editar widgets. Els widgets sempre utilitzen les credencials del propietari."
+          }
+        ],
+        "tour": {
+          "description": "Gestioneu diversos Dashboards, canvieu entre ells i compartiu-los en mode només lectura o editable.",
+          "useCases": [
+            "Estructurar Dashboards separats per equip, producte o client",
+            "Proporcionar una vista de només lectura als stakeholders",
+            "Provar tipus de gràfics amb dades d'exemple prèviament"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

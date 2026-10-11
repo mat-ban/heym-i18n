@@ -8,6 +8,9 @@ import { useRouter } from "vue-router";
 import type { ActiveExecutionItem } from "@/types/workflow";
 import ActiveWorkflowsDropdown from "@/components/Layout/ActiveWorkflowsDropdown.vue";
 import { workflowApi } from "@/services/api";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const POLL_INTERVAL_MS = 10_000;
 
@@ -34,28 +37,24 @@ const runningCount = computed(
 const badgeTitle = computed((): string => {
   if (refreshFailed.value) {
     return activeWorkflowCount.value > 0
-      ? `${activeWorkflowCount.value} active · Latest refresh failed`
-      : "Active workflows unavailable";
+      ? t("activeWorkflows.activeRefreshFailed", { count: activeWorkflowCount.value })
+      : t("activeWorkflows.activeUnavailable");
   }
   if (activeWorkflowCount.value === 0) {
-    return "No active workflows";
+    return t("activeWorkflows.noActiveWorkflows");
   }
   const parts: string[] = [];
   if (runningCount.value > 0) {
-    parts.push(
-      `${runningCount.value} running`,
-    );
+    parts.push(t("activeWorkflows.running", { count: runningCount.value }));
   }
   if (pendingReviewCount.value > 0) {
-    parts.push(
-      `${pendingReviewCount.value} pending review${pendingReviewCount.value === 1 ? "" : "s"}`,
-    );
+    parts.push(t("activeWorkflows.pendingReview", { count: pendingReviewCount.value }, pendingReviewCount.value));
   }
   return parts.join(" · ");
 });
 const badgeAriaLabel = computed((): string => {
   const summary = badgeTitle.value;
-  return `${summary}. Open live workflow list`;
+  return `${summary}. ${t("activeWorkflows.openLiveList")}`;
 });
 const hasPendingOnly = computed(
   (): boolean => pendingReviewCount.value > 0 && runningCount.value === 0,

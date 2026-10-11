@@ -1,3 +1,4 @@
+import { i18n } from "@/i18n";
 import type { NodeData, Workflow, WorkflowEdge, WorkflowNode } from "@/types/workflow";
 
 /** Nodes that never appear as a step in the preview panel. */
@@ -48,6 +49,17 @@ export function humanizeNodeType(nodeType: string): string {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
+/**
+ * Display name of a node type in the active UI language. English keeps the humanized
+ * type id (the upstream behaviour); other languages use the `nodes.<type>.label`
+ * catalog entry and fall back to the humanized id for types without one (e.g. plugins).
+ */
+export function localizedNodeTypeLabel(nodeType: string): string {
+  const { t, te, locale } = i18n.global;
+  const key = `nodes.${nodeType}.label`;
+  return locale.value !== "en" && te(key) ? t(key) : humanizeNodeType(nodeType);
+}
+
 function firstNonEmpty(...values: (string | undefined | null)[]): string | null {
   for (const value of values) {
     if (typeof value === "string" && value.trim().length > 0) return value.trim();
@@ -72,7 +84,7 @@ export function describeNode(node: WorkflowNode): string {
   );
 
   if (specific) return specific;
-  return humanizeNodeType(node.type);
+  return localizedNodeTypeLabel(node.type);
 }
 
 /** Every integration node names its own operation field (`githubOperation`, `s3Operation`, ...). */
@@ -128,7 +140,7 @@ export function orderWorkflowSteps(
   return ordered.map((node, index) => ({
     id: node.id,
     order: index + 1,
-    title: firstNonEmpty(node.data?.label) ?? humanizeNodeType(node.type),
+    title: firstNonEmpty(node.data?.label) ?? localizedNodeTypeLabel(node.type),
     subtitle: describeNode(node),
     active: node.data?.active !== false,
   }));
@@ -147,21 +159,26 @@ export function summarizeTrigger(workflow: Workflow): TriggerSummary {
   if (node) {
     const paused = node.data?.active === false;
     if (node.type === "cron") {
-      const expression = firstNonEmpty(node.data?.cronExpression) ?? "not configured";
+      const { t } = i18n.global;
+      const expression =
+        firstNonEmpty(node.data?.cronExpression) ?? t("workflows.preview.notConfigured");
       return {
-        headline: `Schedule: ${expression}`,
-        detail: paused ? "Cron trigger is deactivated" : "Runs on the configured cron schedule",
+        headline: t("workflows.preview.schedule", { expression }),
+        detail: paused
+          ? t("workflows.preview.cronDeactivated")
+          : t("workflows.preview.cronRuns"),
         portalUrl,
       };
     }
     const label = firstNonEmpty(node.data?.label);
+    const { t } = i18n.global;
     return {
-      headline: humanizeNodeType(node.type),
+      headline: localizedNodeTypeLabel(node.type),
       detail: paused
-        ? "Trigger is deactivated"
+        ? t("workflows.preview.triggerDeactivated")
         : label
-          ? `Listening on "${label}"`
-          : "Listening for incoming events",
+          ? t("workflows.preview.listeningOn", { label })
+          : t("workflows.preview.listeningForEvents"),
       portalUrl,
     };
   }

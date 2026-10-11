@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Creeu, organitzeu, importeu i gestioneu els Workflows per a les vostres automatitzacions d'IA.",
+    "bullets": [
+      "Obriu Workflows ràpidament, manteniu les carpetes ordenades i reprengueu directament les tasques recents.",
+      "Utilitzeu la paleta de comandes per a un accés ràpid sense haver de cercar llargament a la graella.",
+      "Utilitzeu aquesta pestanya com a base per a totes les activitats de l'editor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Visió central",
+        "title": "Biblioteca de Workflows",
+        "description": "Consulteu en un sol lloc els objectes arrel, les carpetes i els Workflows marcats per a eliminació.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Accés ràpid",
+        "title": "Creació ràpida",
+        "description": "Creeu Workflows nous o importeu JSON directament.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Estructura",
+        "title": "Organitzeu per endavant",
+        "description": "Les carpetes i els elements fixats mantenen ordenats els conjunts d'automatització creixents.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Llegiu la guia de Workflows",
+        "description": "Obriu la referència completa de la pestanya Workflows.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Pestanya Workflows"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Obriu les plantilles",
+        "description": "Canvieu a la pestanya de plantilles per a punts de partida reutilitzables.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Què hi pertany",
+        "content": "Utilitzeu aquesta àrea per a tasques del cicle de vida dels Workflows: crear, canviar el nom, moure, importar, arxivar i seleccionar."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Manteniu-ho àgil",
+        "content": "Si només necessiteu una execució ràpida des d'una altra pàgina, utilitzeu el Quick Drawer. Torneu aquí per a la gestió i l'estructura."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Pestanya Workflows"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Un tauler Kanban basat en agents. Cada targeta és un treball persistent amb context, historial i sortides: moure una targeta executa la cadena de Workflows de la columna.",
+    "bullets": [
+      "Creeu targetes de text al Backlog i arrossegueu-les per les columnes.",
+      "Vinculeu Workflows ordenats a cada columna; els moviments de les targetes els activen com a Trigger.",
+      "Les targetes es tornen verdes en cas d'èxit, vermelles en cas d'error i grogues durant l'execució.",
+      "Els comentaris i les sortides anteriors flueixen cap al context de la propera execució."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Idea clau",
+        "title": "Les targetes són treballs, no notes",
+        "description": "Cada targeta porta el seu historial complet: comentaris, moviments i la sortida de cada Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Bucle de planificació",
+        "title": "Rondes de seguiment",
+        "description": "Responeu als comentaris i torneu a executar: la cadena veu tot el context acumulat.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Documentació del Board",
+        "description": "Cadenes de columnes, contracte de Card-Payload i rondes de seguiment.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Com s'executen les cadenes de columnes",
+        "content": "Els Workflows adjunts a una columna s'executen seqüencialment quan hi arriba una targeta. La sortida de cada Workflow s'adjunta al context de la targeta; un error atura la cadena."
+      },
+      {
+        "id": "board-context",
+        "title": "Què reben els Workflows",
+        "content": "L'entrada d'execució conté la targeta (títol, contingut, metadades, comentaris, historial, sortides anteriors), el Board, el moviment i la posició a la cadena. Llegiu-ho amb expressions $input.card."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Plantilles",
+    "summary": "Comenceu amb blueprints de Workflows reutilitzables en lloc de reconstruir els mateixos patrons cada vegada.",
+    "bullets": [
+      "Utilitzeu plantilles quan l'estructura del Workflow és coneguda però els detalls encara varien.",
+      "Les bones plantilles escurcen l'onboarding i redueixen la feina repetitiva al Canvas.",
+      "Compartiu patrons aquí i adapteu-los a l'editor segons calgui."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Reutilització",
+        "title": "Enfocament de blueprint",
+        "description": "Captureu estructures de Workflow provades i torneu-les a aplicar ràpidament.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ritme d'equip",
+        "title": "Punts de partida unificats",
+        "description": "Les plantilles ajuden els equips a posar-se d'acord en els mateixos patrons provats.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Eficiència",
+        "title": "Menys temps mort",
+        "description": "Trieu un marc ja fet i adapteu només l'essencial.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Obriu la documentació de plantilles",
+        "description": "Descobriu com encaixen les plantilles al flux del Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Pestanya Plantilles"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Torneu a Workflows",
+        "description": "Torneu a la biblioteca principal de Workflows.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Per què són importants les plantilles",
+        "content": "Transformen dissenys de nodes repetits en actius reutilitzables: ideals per a equips que despleguen variacions del mateix patró de Workflow."
+      },
+      {
+        "id": "templates-when",
+        "title": "Ús òptim",
+        "content": "Utilitzeu plantilles quan l'estructura és estable però els noms, els Prompts, les credencials o els objectius varien d'un cas d'ús a un altre."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Pestanya Plantilles"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Variables",
+    "summary": "Emmagatzemeu valors compartits de manera central i referencieu-los entre Workflows sense duplicar les mateixes dades a tot arreu.",
+    "bullets": [
+      "Conserveu els valors reutilitzats freqüentment en un lloc central i persistent.",
+      "Les variables redueixen la deriva dels Prompts i les configuracions duplicades.",
+      "Compartiu valors selectivament quan diversos Workflows necessiten la mateixa base de dades."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Persistència",
+        "title": "Emmagatzematge entre execucions",
+        "description": "Els valors globals perduren més enllà de les execucions individuals dels Workflows.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Configuració compacta",
+        "title": "Menys redundància",
+        "description": "Actualitzeu-ho una vegada de manera central en lloc d'ajustar manualment molts camps de nodes.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Expressions",
+        "title": "Suport a la DSL",
+        "description": "Referencieu valors directament en expressions de nodes i Prompts.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Llegiu la documentació de variables",
+        "description": "Obriu la guia de variables al Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Pestanya Variables"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Patrons típics",
+        "content": "Emmagatzemeu Endpoints, fragments de Prompt compartits, configuracions específiques d'entorn o IDs que diversos Workflows han de llegir."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Què no hi pertany",
+        "content": "Els secrets i les autenticacions de proveïdors pertanyen a les credencials, no a les variables globals."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Pestanya Variables"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Utilitzeu el Chat del Dashboard com a punt d'entrada ràpid basat en diàleg per als vostres Workflows i tasques de la plataforma.",
+    "bullets": [
+      "Excel·lent per a preguntes ràpides, ajuda amb Workflows i execucions lleugeres.",
+      "Centrat en la velocitat i la iteració en lloc del control total de l'editor.",
+      "Quan l'estructura estigui a punt, canvieu directament al Workflow o a la documentació."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Llenguatge natural",
+        "title": "Interacció ràpida",
+        "description": "Utilitzeu un llenguatge senzill en lloc de navegar manualment per tota l'aplicació.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Pont",
+        "title": "De la idea a l'acció",
+        "description": "El Chat ajuda quan l'objectiu és clar però encara cal elaborar el camí exacte.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Complement",
+        "title": "Complementa la documentació",
+        "description": "Utilitzeu-lo juntament amb la documentació per tenir respostes i referències a mà.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Obriu la documentació del Chat",
+        "description": "Llegiu la guia del Chat del Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Pestanya Chat"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Referència de l'assistent d'IA",
+        "description": "Descobriu com l'assistent de Heym ajuda en la creació de Workflows.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "Assistent d'IA"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Millors casos d'ús",
+        "content": "Utilitzeu el Chat per a preguntes ràpides sobre Workflows, instruccions breus de la plataforma i passos operatius que no requereixen una feina profunda al Canvas."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Quan canviar de vista",
+        "content": "Canvieu a l'editor quan calgui control a nivell de node, o a la documentació per a referències permanents."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Pestanya Chat"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Gestioneu i compartiu fitxers generats per les habilitats del vostre Workflow.",
+    "bullets": [
+      "Les habilitats escriuen fitxers al directori de sortida; Heym els captura automàticament.",
+      "Compartiu fitxers mitjançant enllaços amb Token o URL amb autenticació bàsica protegides per contrasenya.",
+      "Descarregueu fitxers amb un sol clic."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Emmagatzematge",
+        "title": "Fitxers capturats automàticament",
+        "description": "Les habilitats escriuen a _OUTPUT_DIR; els fitxers apareixen aquí directament després de l'execució.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Compartició",
+        "title": "Control d'accés flexible",
+        "description": "Enllaços públics, protecció per contrasenya, dates de caducitat i límits de descàrrega.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formats",
+        "title": "PDF, DOCX, CSV i més",
+        "description": "Genereu qualsevol tipus de fitxer amb reportlab, python-docx o Python estàndard.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Obrir la documentació de Drive",
+        "description": "Llegiu la referència completa de la pestanya Drive.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Pestanya Drive"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Guia de generació de fitxers",
+        "description": "Descobriu com les habilitats generen fitxers.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Generació de fitxers"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Com arriben els fitxers aquí",
+        "content": "Quan una habilitat col·loca fitxers al directori _OUTPUT_DIR, Heym els emmagatzema de manera persistent i genera Tokens de descàrrega."
+      },
+      {
+        "id": "drive-share",
+        "title": "Opcions de compartició",
+        "content": "Creeu enllaços públics amb Token per a tothom o URL protegides per contrasenya, incloent dates de caducitat i límits de descàrrega."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Pestanya Drive"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Credencials",
+    "summary": "Gestioneu claus, Tokens i detalls de connexió perquè els Workflows es comuniquin de manera segura amb sistemes externs.",
+    "bullets": [
+      "Emmagatzemeu les credencials de manera centralitzada en lloc de dispersar-les per nodes individuals.",
+      "Les credencials controlen LLM, integracions, magatzems vectorials i més.",
+      "Concediu accés selectivament quan els equips necessiten la mateixa connexió sense còpies de claus."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Seguretat",
+        "title": "Credencials segures",
+        "description": "Configureu l'autenticació una vegada i reutilitzeu-la de manera segura als Workflows.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integracions",
+        "title": "Suport ampli",
+        "description": "Compatible amb proveïdors com OpenAI, DeepSeek, Slack, Redis, Qdrant i Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Col·laboració",
+        "title": "Compartició selectiva",
+        "description": "Utilitzeu compartició per equip o usuari en lloc de crear duplicats.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Llegir la documentació de credencials",
+        "description": "Obriu la guia del tauler de credencials.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Pestanya Credencials"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Veure integracions",
+        "description": "Consulteu els detalls de configuració d'integracions de tercers.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Integracions de tercers"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "On s'utilitzen",
+        "content": "Les credencials es referencien a la configuració del node i es resolen de manera segura durant l'execució."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Model col·laboratiu",
+        "content": "Preferiu la compartició quan diversos desenvolupadors necessiten el mateix accés al proveïdor; això garanteix un comportament consistent i auditories senzilles."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Pestanya Credencials"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Magatzems vectorials",
+    "summary": "Prepareu backends de retrieval per a Workflows que necessiten cerca semàntica, memòria o integració de context RAG.",
+    "bullets": [
+      "Els magatzems vectorials formen la base de dades per a Workflows assistits per retrieval.",
+      "Utilitzeu-los juntament amb nodes RAG i fluxos d'IA per a un grounding precís de documents.",
+      "Aquesta pestanya serveix com a infraestructura per a Prompts fonamentats."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infraestructura RAG",
+        "title": "Memòria cercable",
+        "description": "Prepareu documents per a retrieval semàntic quan els Workflows necessiten context.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Qualitat",
+        "title": "Grounding fonamentat",
+        "description": "El retrieval redueix el risc d'al·lucinacions proporcionant evidències.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Operació",
+        "title": "Gestió centralitzada única",
+        "description": "Creeu magatzems vectorials i reutilitzeu-los en múltiples Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Obrir la documentació de magatzems vectorials",
+        "description": "Llegiu la guia del tauler de magatzems vectorials.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Pestanya Magatzems vectorials"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Veure la documentació del node RAG",
+        "description": "Obriu la referència del node Qdrant RAG.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Ubicació",
+        "content": "Aquesta pestanya prepara la capa d'emmagatzematge. La lògica de retrieval real es troba dins dels Workflows (per exemple, mitjançant patrons RAG o d'agent)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Moment d'ús",
+        "content": "Trieu magatzems vectorials quan el vostre Workflow hagi de cercar en bases de coneixement no estructurades en lloc de dependre només de la memòria del LLM."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Pestanya Magatzems vectorials"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Gestioneu les connexions del Model Context Protocol perquè els Workflows d'agent accedeixin de manera segura a eines i funcions externes.",
+    "bullets": [
+      "MCP transforma ecosistemes externs d'eines en context d'agent utilitzable.",
+      "Utilitzeu aquesta pestanya quan els agents necessitin eines més riques que Prompts estàtics.",
+      "La qualitat de la connexió determina directament les capacitats dels vostres agents."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Eines d'agent",
+        "title": "Capa de funcions externes",
+        "description": "Proporcioneu servidors d'eines que els agents poden invocar durant el raonament.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Control d'execució",
+        "title": "Configuració de connexions",
+        "description": "Configureu Endpoints, etiquetes i transport per a Workflows fiables.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Profunditat de plataforma",
+        "title": "Més enllà dels Prompts",
+        "description": "MCP permet que els Workflows de Heym actuïn, no només responguin.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Obrir la documentació de MCP",
+        "description": "Llegiu la guia de la pestanya MCP.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "Pestanya MCP"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Arquitectura d'agent",
+        "description": "Descobriu com s'integra MCP en l'execució de l'agent.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Arquitectura d'agent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Importància",
+        "content": "Especialment important quan el vostre agent necessita eines, accés a l'entorn o integracions de sistema fora de nodes individuals."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Enfocament operatiu",
+        "content": "Tracteu les connexions MCP com a infraestructura: etiquetes estables i responsabilitats clares simplifiquen la depuració."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "Pestanya MCP"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Execucions",
+    "summary": "Inspeccioneu Traces detallats d'execucions d'IA i Workflow per entendre què ha passat, no només si ha funcionat.",
+    "bullets": [
+      "Utilitzeu Traces per a depuració, anàlisis de rendiment i comprovacions de qualitat de Prompts.",
+      "Els Traces expliquen el comportament del model, les latències i les rutes d'execució.",
+      "El primer lloc on acudir davant de resultats inesperats o execucions inestables."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Depuració",
+        "title": "Veure passos ocults",
+        "description": "Les dades de Trace revelen què han executat realment el Workflow i el model.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Avaluació",
+        "title": "Donar suport a les iteracions",
+        "description": "Utilitzeu Traces per optimitzar Prompts, eines i models.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Fiabilitat",
+        "title": "Comprendre els resultats",
+        "description": "Els bons Traces redueixen les conjectures en l'anàlisi d'errors.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Obrir la documentació d'execucions",
+        "description": "Llegiu la guia del tauler d'execucions.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Pestanya Execucions"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Quan els Traces esdevenen indispensables",
+        "content": "Quan els Workflows són multi-etapa, intensius en models o basats en eines, la simple visualització d'estat ja no és suficient."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. historial",
+        "content": "L'historial mostra QUE s'ha produït una execució. Els Traces expliquen PER QUÈ s'ha comportat d'aquesta manera."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Pestanya Execucions"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Alertes",
+    "summary": "Definiu llindars per franges temporals i rebeu notificacions automàtiques quan se superin.",
+    "bullets": [
+      "Quatre tipus: nombre d'errors, durada d'execució, llindars de Token/cost i comptadors d'execució.",
+      "Cada alerta s'avalua en una franja temporal seleccionada, mai a partir d'esdeveniments individuals.",
+      "Descriu el requisit en llenguatge natural i l'assistent configurarà l'alerta."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Franja temporal",
+        "title": "Acumulacions, no valors atípics",
+        "description": "Una execució fallida és soroll. Dotze en deu minuts són un incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Abans de desar",
+        "title": "Provar la condició retroactivament",
+        "description": "El pas de comprovació prova contra historial real per calibrar els llindars per endavant.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reacció",
+        "title": "Executar el Workflow en activar-se l'alarma",
+        "description": "El Payload de l'alerta es converteix en l'entrada del Workflow per a notificacions automàtiques via Slack o correu electrònic.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Obrir la documentació d'alertes",
+        "description": "Consulteu el funcionament dels tipus d'alarma, les franges i l'assistent.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Pestanya d'alertes"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Propòsit",
+        "content": "Les anàlisis i els Traces responen preguntes que formuleu activament. Les alertes fan que Heym parli de manera proactiva quan se superen llindars crítics."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Per què s'eviten les falses alarmes",
+        "content": "Una alerta s'activa una vegada i espera que la mètrica es recuperi; això evita allaus de notificacions."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Pestanya d'alertes"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Anàlisis",
+    "summary": "Seguiu els patrons d'ús i el comportament del sistema per entendre l'activitat, el creixement i els canvis al llarg del temps.",
+    "bullets": [
+      "Detecteu l'adopció, el rendiment i pics inusuals amb les anàlisis.",
+      "Una visió a nivell de plataforma en lloc d'una eina de depuració individual.",
+      "Combineu les anàlisis amb Traces i historial per obtenir senyal i explicació."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Senyals",
+        "title": "Transparència d'ús",
+        "description": "Detecteu tendències en lloc de considerar execucions individuals de manera aïllada.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Capacitat",
+        "title": "Consciència operativa",
+        "description": "Detecteu i investigueu pics i caigudes de càrrega amb antelació.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Suport a la decisió",
+        "title": "Optimització específica",
+        "description": "Les anàlisis ajuden a prioritzar els Workflows més importants.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Obrir la documentació d'anàlisis",
+        "description": "Llegiu la guia del tauler d'anàlisis.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Pestanya d'anàlisis"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Propòsit",
+        "content": "Utilitzeu les anàlisis per a patrons, rendiment i comportament agregat en tot el funcionament de la plataforma."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Procediment",
+        "content": "Detecteu senyals aquí i, després, canvieu a Traces, historial o l'editor per analitzar les causes."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Pestanya d'anàlisis"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Creeu una graella de ginys de diagrama, cadascun alimentat pels seus propis Workflows: totes les mètriques d'un cop d'ull.",
+    "bullets": [
+      "Cada giny és impulsat per un Workflow que proporciona dades a un node de sortida de gràfic.",
+      "Utilitzeu ginys de barres, línies, cercles, taules i números segons la mètrica.",
+      "Genereu o adapteu ginys amb IA i emmagatzemeu els resultats a la memòria cau per a temps de càrrega ràpids.",
+      "Creeu diversos Dashboards i compartiu-los amb persones o equips amb permisos de lectura o escriptura."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Composició",
+        "title": "Diagrames alimentats per Workflow",
+        "description": "Totes les dades que genera un Workflow es visualitzen com a diagrama.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Rendiment",
+        "title": "Resultats a la memòria cau",
+        "description": "La memòria cau dels ginys evita execucions repetides del Workflow a cada càrrega de pàgina.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Suport d'IA",
+        "title": "Generar i adaptar",
+        "description": "Descriviu la mètrica i deixeu que la IA creï el giny automàticament.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Obrir la documentació del Dashboard",
+        "description": "Descobriu com es creen els ginys del Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Pestanya del Dashboard"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Propòsit",
+        "content": "Utilitzeu el Dashboard per a visions generals persistents de mètriques clau dels vostres propis Workflows."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Creació",
+        "content": "Afegiu un giny, configureu el Workflow perquè l'últim node abans de Chart Output proporcioni files i organitzeu-lo a la graella."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Pestanya del Dashboard"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Equips",
+    "summary": "Gestioneu accessos compartits perquè els Workflows, les Credentials, les variables i l'emmagatzematge vectorial es puguin utilitzar de manera col·laborativa sense duplicats.",
+    "bullets": [
+      "Els equips són la manera més neta de compartir recursos de plataforma de manera escalable.",
+      "Utilitzeu equips quan els permisos hagin de seguir un grup en lloc d'individus.",
+      "Assegureu una col·laboració estructurada en un espai de treball en creixement."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Col·laboració",
+        "title": "Comparticions basades en grups",
+        "description": "Concediu accés una vegada per a un equip en lloc d'autoritzar usuaris individuals manualment.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Claredat",
+        "title": "Responsabilitats clares",
+        "description": "La gestió de recursos segueix les estructures reals dels equips.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Escalabilitat",
+        "title": "Menys càrrega administrativa",
+        "description": "Els nous membres hereten automàticament els drets d'accés a través de l'equip.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Obrir la documentació d'equips",
+        "description": "Llegiu la guia del tauler d'equips.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Pestanya d'equips"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Comparticions de recursos",
+        "description": "Consulteu els detalls sobre la compartició de recursos.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Compartició de credencials"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Avantatges dels equips",
+        "content": "Els equips connecten identitat i accés a recursos per a una col·laboració fluida."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Consell pràctic",
+        "content": "Preferiu les comparticions d'equip quan un Workflow o una Credential pertany a un grup de treball permanent."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Pestanya d'equips"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Registres",
+    "summary": "Llegiu els registres a nivell de pila quan necessiteu informació d'infraestructura més enllà de les sortides del Workflow.",
+    "bullets": [
+      "Utilitzeu els registres per a la depuració de serveis, estats de contenidors i problemes d'entorn.",
+      "Ajuda quan les causes es troben per sota del nivell del Workflow.",
+      "Utilitzeu-los juntament amb els Traces per obtenir proves a nivell d'aplicació i sistema."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infraestructura",
+        "title": "Transparència de contenidors",
+        "description": "Vegeu què fan els serveis de backend per sota de la interfície de Heym.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Resolució de problemes",
+        "title": "Trobar les causes",
+        "description": "Els registres ajuden en problemes d'inici, bloquejos o errors d'integració.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Complementari",
+        "title": "Diferència respecte als resultats del Workflow",
+        "description": "Les sortides del Workflow mostren resultats; els registres mostren el comportament del sistema.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Obrir la documentació de registres",
+        "description": "Llegiu la guia del tauler de registres.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Pestanya de registres"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Moment d'ús",
+        "content": "Canvieu aquí quan els problemes semblin relacionats amb el desplegament, el servei o l'entorn."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Millor combinació",
+        "content": "Utilitzeu els registres juntament amb els Traces i l'historial per passar ràpidament dels símptomes a la causa."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Pestanya de registres"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Avaluació",
+    "summary": "Creeu benchmarks reproduïbles per als Workflows d'agents, per comparar de manera fiable els canvis de Prompt, model i Workflow.",
+    "bullets": [
+      "Les suites i els casos de prova converteixen la qualitat subjectiva del Workflow en mètriques mesurables.",
+      "El lloc ideal per a les proves de regressió abans de desplegar actualitzacions de Prompt o de model.",
+      "Compareu diversos models amb el mateix conjunt de dades i el mateix mètode d'avaluació."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Cicle de qualitat",
+        "title": "Benchmark d'agents",
+        "description": "Executeu la mateixa suite repetidament en lloc de dependre de proves aleatòries.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Comparació",
+        "title": "Proves de model i Prompt",
+        "description": "Vegeu com es comporten configuracions diferents amb el mateix conjunt de proves.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Seguretat",
+        "title": "Iteració fiable",
+        "description": "Demostreu les millores abans del desplegament.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Obrir la documentació d'avaluació",
+        "description": "Llegiu la guia de la pàgina d'avaluació.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Pestanya d'avaluació"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Referència del node Agent",
+        "description": "Consulteu la secció del Workflow a la qual apunten la majoria de suites d'avaluació.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Node Agent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Disseny de suites",
+        "content": "Una bona suite reflecteix casos d'ús reals, condicions límit i passos d'aprovació que han de romandre estables."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Paràmetres de comparació",
+        "content": "Les comparacions típiques inclouen variants de Prompt, selecció de model, configuracions de temperatura i revisions de Workflow amb el mateix conjunt de dades."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Pestanya d'avaluació"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Documentació",
+    "summary": "Consulteu referències precises de la plataforma directament a l'aplicació i aprofundiu-hi quan calgui.",
+    "bullets": [
+      "La documentació d'Heym està dissenyada per a una comprensió ràpida i consultes puntuals.",
+      "La barra lateral, la cerca i les referències creuades permeten canviar ràpidament entre conceptes.",
+      "El Showcase enllaça directament amb l'article obert actualment."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Referència integrada",
+        "title": "Sempre a mà",
+        "description": "La documentació roman dins del flux del producte, sense necessitat d'obrir pestanyes externes.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Visió general",
+        "title": "El més essencial primer",
+        "description": "Els articles comencen amb els punts clau i es ramifiquen mitjançant enllaços."
+      },
+      {
+        "eyebrow": "Conscient del context",
+        "title": "Article actual",
+        "description": "En llegir un document, l'acció 'Més informació' segueix directament aquest article."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Veure la introducció",
+        "description": "Obriu la introducció de la documentació com a punt d'entrada predeterminat.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Introducció"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Navegació ràpida",
+        "content": "Utilitzeu la barra lateral per a les categories i la cerca d'ordres quan ja conegueu el tema."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Suport del Showcase",
+        "content": "El Showcase manté els resums compactes i condueix a la documentació detallada quan cal."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Introducció"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Planificacions",
+    "summary": "Visualitzeu tots els Workflows Cron actius en un calendari visual i controleu els temps d'execució.",
+    "bullets": [
+      "Canvieu entre la vista diària, setmanal i mensual per a la resolució adequada.",
+      "Passeu el cursor per sobre d'un bloc per veure l'expressió Cron; feu clic per saltar directament al Canvas.",
+      "Utilitzeu aquesta pestanya per comprovar les densitats d'execució i detectar solapaments."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparència",
+        "title": "Vista de calendari",
+        "description": "Els Workflows Cron actius apareixen com a blocs en les seves hores planificades.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navegació",
+        "title": "Al Canvas amb un clic",
+        "description": "Feu clic en un bloc per obrir directament l'editor de Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Àmbits",
+        "title": "Dia, setmana o mes",
+        "description": "Ajusteu la resolució per revisar hores concretes o planificar tot el mes.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Obrir la documentació de planificacions",
+        "description": "Llegiu la referència de la pestanya de planificacions.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Pestanya de planificacions"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Referència del node Cron",
+        "description": "Descobriu com es configuren els Trigger Cron al Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Moment d'ús",
+        "content": "Reviseu les automatitzacions planificades, detecteu conflictes d'horaris i assegureu-vos que els Workflows importants romanguin actius."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Codificació per colors",
+        "content": "Cada Workflow rep un color consistent a partir del seu ID, que es manté idèntic a les vistes diària, setmanal i mensual."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Pestanya de planificacions"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Taules de dades",
+    "summary": "Creeu taules de dades estructurades directament a Heym i utilitzeu-les programàticament en Workflows.",
+    "bullets": [
+      "Creeu taules amb columnes tipificades, ompliu-les manualment o importeu-les via CSV.",
+      "Utilitzeu el node de Workflow DataTable per llegir, escriure i consultar files programàticament.",
+      "Compartiu taules amb usuaris o equips amb permisos de lectura o escriptura."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Dades integrades",
+        "title": "Emmagatzematge integrat",
+        "description": "Emmagatzemeu dades estructurades sense bases de dades externes ni API-keys.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Integració amb Workflow",
+        "title": "Node DataTable",
+        "description": "Cerqueu, inseriu, actualitzeu i suprimiu files en qualsevol Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Col·laboració",
+        "title": "Comparticions i permisos",
+        "description": "Atorgueu accessos de lectura i escriptura granulars per a usuaris i equips.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Documentació de la pestanya de taules de dades",
+        "description": "Llegiu la referència de la pestanya de taules de dades.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Taules de dades"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "Documentació del node DataTable",
+        "description": "Llegiu la referència del node DataTable.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Què són les taules de dades?",
+        "content": "Les taules de dades són emmagatzematge estructurat integrat a Heym: columnes tipificades (String, Number, Boolean, Date, JSON), edició en línia i importació/exportació CSV."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Ús en Workflows",
+        "content": "El node DataTable admet find, getAll, getById, insert, update, remove i upsert – sense credencials, directament a través del propietari del Workflow."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Taules de dades"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Editor de Workflow",
+    "summary": "Creeu, proveu, depureu i optimitzeu Workflows al Canvas – directament en el context d'execució.",
+    "bullets": [
+      "A l'editor conflueixen el disseny de nodes, el flux de dades i el comportament d'execució.",
+      "Utilitzeu les barres laterals i l'historial per canviar ràpidament entre creació i depuració.",
+      "El Showcase es manté deliberadament compacte aquí per oferir el màxim espai al Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Disseny visual de Workflow",
+        "description": "Connecteu nodes, ramifiqueu la lògica i modelleu directament el flux d'execució.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteració",
+        "title": "Depuració durant la creació",
+        "description": "Utilitzeu l'historial, els panells de depuració i els resultats d'execució per a cicles de retroalimentació ràpids."
+      },
+      {
+        "eyebrow": "Abast funcional",
+        "title": "Funcions avançades a mà",
+        "description": "El Portal, les comparticions, les plantilles i la validació es troben directament al Canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Obrir la documentació del Canvas",
+        "description": "Llegiu la referència de les funcions del Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Funcions del Canvas"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Dreceres de teclat",
+        "description": "Obriu la visió general de les dreceres de teclat a l'editor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Dreceres de teclat"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Ritme de treball",
+        "content": "Modelleu al Canvas, comproveu les hipòtesis sobre les sortides i ajusteu paràmetres a les barres laterals sense perdre el focus."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Showcase compacte",
+        "content": "Com que l'editor ja proporciona molta informació, el Showcase serveix com a guia d'orientació lleugera."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Funcions del Canvas"
+    }
+  }
+}

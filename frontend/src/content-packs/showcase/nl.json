@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflows",
+    "summary": "Maak, organiseer, importeer en beheer de Workflows voor uw KI-automatiseringen.",
+    "bullets": [
+      "Workflows snel openen, mappen overzichtelijk houden en direct verderwerken aan recente taken.",
+      "Gebruik de opdrachtpalette voor snelle toegang zonder lang zoeken in het grid.",
+      "Gebruik dit tabblad als uw basis voor alle activiteiten in de editor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Centraal overzicht",
+        "title": "Workflow-bibliotheek",
+        "description": "Root-objecten, mappen en voor verwijdering gemarkeerde Workflows op één plek bekijken.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Snelle toegang",
+        "title": "Snelle creatie",
+        "description": "Nieuwe Workflows aanmaken of direct JSON importeren.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Structuur",
+        "title": "Vooraf organiseren",
+        "description": "Mappen en vastpinnen houden groeiende automatiseringssets overzichtelijk.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Workflow-handleiding lezen",
+        "description": "Volledige referentie van het Workflows-tabblad openen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Workflows-tabblad"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Sjablonen openen",
+        "description": "Naar het Sjablonen-tabblad gaan voor herbruikbare startpunten.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Wat hier thuishoort",
+        "content": "Gebruik dit gebied voor Workflow-levenscyclus-taken: aanmaken, hernoemen, verplaatsen, importeren, archiveren en selecteren."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Slank blijven",
+        "content": "Als u alleen een snelle uitvoering vanaf een andere pagina nodig hebt, gebruik de Quick Drawer. Keer hier terug voor beheer en structuur."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Workflows-tabblad"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Een agentgebaseerd Kanban-board. Elke kaart is een persistente job met context, historie en uitvoer – het verplaatsen van een kaart voert de Workflow-keten van de kolom uit.",
+    "bullets": [
+      "Maak tekstkaarten in de Backlog en sleep ze via drag & drop over de kolommen.",
+      "Koppel geordende Workflows aan elke kolom; kaartbewegingen activeren deze als Trigger.",
+      "Kaarten worden groen bij succes, rood bij fouten en geel tijdens de uitvoering.",
+      "Opmerkingen en eerdere uitvoer stromen in de context van de volgende run."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kernidee",
+        "title": "Kaarten zijn jobs, geen notities",
+        "description": "Elke kaart draagt zijn volledige historie: opmerkingen, bewegingen en de uitvoer van elke Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Planningslus",
+        "title": "Vervolgronde",
+        "description": "Antwoord in opmerkingen en voer opnieuw uit – de keten ziet de volledige geaccumuleerde context.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Board-documentatie",
+        "description": "Kolomketens, Card-Payload-contract en vervolgronde.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Hoe kolomketens worden uitgevoerd",
+        "content": "Workflows die aan een kolom zijn gekoppeld, lopen sequentieel zodra een kaart aankomt. De uitvoer van elke Workflow wordt aan de kaartcontext toegevoegd; een fout stopt de keten."
+      },
+      {
+        "id": "board-context",
+        "title": "Wat Workflows ontvangen",
+        "content": "De uitvoerings-Input bevat de kaart (titel, inhoud, metadata, opmerkingen, historie, eerdere uitvoer), het Board, de beweging en de positie in de keten. Lees dit uit met $input.card-expressies."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Sjablonen",
+    "summary": "Start met herbruikbare Workflow-blueprints in plaats van dezelfde patronen elke keer opnieuw te bouwen.",
+    "bullets": [
+      "Gebruik sjablonen wanneer de Workflow-structuur bekend is, maar details nog variëren.",
+      "Goede sjablonen verkorten het onboarding en verminderen herhaald canvas-werk.",
+      "Deel patronen hier en pas ze indien nodig aan in de editor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Hergebruik",
+        "title": "Blueprint-aanpak",
+        "description": "Bewezen Workflow-structuren vastleggen en snel opnieuw toepassen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Team-tempo",
+        "title": "Uniforme startpunten",
+        "description": "Sjablonen helpen teams om het eens te worden over dezelfde bewezen patronen.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Efficiëntie",
+        "title": "Minder leegloop",
+        "description": "Kies een kant-en-klaar kader en pas alleen het essentiële aan.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Sjablonen-documentatie openen",
+        "description": "Ontdek hoe sjablonen in de Dashboard-flow passen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Sjablonen-tabblad"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Terug naar Workflows",
+        "description": "Terug naar de hoofdbibliotheek voor Workflows.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "Waarom sjablonen belangrijk zijn",
+        "content": "Ze veranderen herhaalde node-layouts in herbruikbare assets – ideaal voor teams die variaties van hetzelfde Workflow-patroon implementeren."
+      },
+      {
+        "id": "templates-when",
+        "title": "Optimaal gebruik",
+        "content": "Gebruik sjablonen wanneer de structuur stabiel is, maar namen, Prompts, Credentials of doelen van use case tot use case variëren."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Sjablonen-tabblad"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Variabelen",
+    "summary": "Sla gedeelde waarden centraal op en verwijs ernaar via Workflows, zonder dezelfde gegevens overal te dupliceren.",
+    "bullets": [
+      "Vaak hergebruikte waarden op een centrale, persistente plek bewaren.",
+      "Variabelen verminderen Prompt-drift en dubbele configuraties.",
+      "Waarden gericht delen wanneer meerdere Workflows dezelfde gegevensbasis nodig hebben."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Persistentie",
+        "title": "Opslag over runs heen",
+        "description": "Globale waarden overleven individuele Workflow-uitvoeringen.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Compacte configuratie",
+        "title": "Minder redundantie",
+        "description": "Eenmalig centraal bijwerken in plaats van veel node-velden handmatig aan te passen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Expressies",
+        "title": "Ondersteuning in de DSL",
+        "description": "Waarden direct in node-expressies en Prompts refereren.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Variabelen-documentatie lezen",
+        "description": "De handleiding voor Variabelen in het Dashboard openen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Variabelen-tabblad"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Typische patronen",
+        "content": "Endpoints, gedeelde Prompt-fragmenten, omgevingsspecifieke instellingen of ID's opslaan die meerdere Workflows moeten lezen."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Wat hier niet thuishoort",
+        "content": "Geheimen en Provider-authenticatie horen in aanmeldgegevens, niet in globale variabelen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Variabelen-tabblad"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Gebruik de Dashboard-chat als snel dialooggebaseerd startpunt voor uw Workflows en platformtaken.",
+    "bullets": [
+      "Uitstekend voor snelle vragen, Workflow-hulp en lichtgewicht uitvoeringen.",
+      "Gericht op tempo en iteratie in plaats van volledige editor-controle.",
+      "Zodra de structuur staat, direct naar de Workflow of de documentatie gaan."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Natuurlijke taal",
+        "title": "Snelle interactie",
+        "description": "Eenvoudige taal gebruiken in plaats van de hele app handmatig te doorzoeken.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Brug",
+        "title": "Van idee naar actie",
+        "description": "Chat helpt wanneer het doel duidelijk is, maar het exacte pad nog moet worden uitgewerkt.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Begeleider",
+        "title": "Vult de documentatie aan",
+        "description": "Samen met de documentatie gebruiken om antwoorden en referenties bij de hand te hebben.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Chat-documentatie openen",
+        "description": "Handleiding voor de Dashboard-chat lezen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Chat-tabblad"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "KI-assistent referentie",
+        "description": "Ontdek hoe de Heym-assistent ondersteunt bij het maken van Workflows.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "KI-assistent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Beste use cases",
+        "content": "Chat gebruiken voor snelle Workflow-vragen, korte platforminstructies en operationele stappen die geen diepgaand canvas-werk vereisen."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Wanneer van weergave wisselen",
+        "content": "Naar de editor gaan zodra controle op node-niveau nodig is, of naar de documentatie voor blijvende referenties."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Chat-tabblad"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Beheer en deel bestanden die door uw Workflow-skills zijn gegenereerd.",
+    "bullets": [
+      "Skills schrijven bestanden naar de uitvoermap; Heym registreert deze automatisch.",
+      "Deel bestanden via Token-links of met een wachtwoord beveiligde Basic Auth-URL's.",
+      "Download bestanden met één klik."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Opslag",
+        "title": "Automatisch geregistreerde bestanden",
+        "description": "Skills schrijven naar _OUTPUT_DIR; bestanden verschijnen na uitvoering direct hier.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Delen",
+        "title": "Flexibele toegangscontrole",
+        "description": "Openbare links, wachtwoordbeveiliging, vervaldata en downloadlimieten.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formaten",
+        "title": "PDF, DOCX, CSV en meer",
+        "description": "Genereer elk bestandstype met reportlab, python-docx of standaard Python.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Drive-documentatie openen",
+        "description": "Lees de volledige referentie van het tabblad Drive.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Drive-tabblad"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Handleiding bestandsgeneratie",
+        "description": "Ontdek hoe skills bestanden aanmaken.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Bestandsgeneratie"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Hoe bestanden hier terechtkomen",
+        "content": "Wanneer een skill bestanden in de map _OUTPUT_DIR plaatst, slaat Heym deze persistent op en genereert download-Tokens."
+      },
+      {
+        "id": "drive-share",
+        "title": "Deelopties",
+        "content": "Maak openbare Token-links voor iedereen of met een wachtwoord beveiligde URL's, inclusief vervaldata en downloadlimieten."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Drive-tabblad"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Inloggegevens",
+    "summary": "Beheer sleutels, Tokens en verbindingsgegevens zodat Workflows veilig met externe systemen communiceren.",
+    "bullets": [
+      "Sla inloggegevens centraal op in plaats van ze over afzonderlijke nodes te verspreiden.",
+      "Inloggegevens sturen LLM's, integraties, vectorstores en meer aan.",
+      "Verleen gericht toegang wanneer teams dezelfde verbinding nodig hebben zonder sleutels te kopiëren."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Beveiliging",
+        "title": "Veilige inloggegevens",
+        "description": "Stel authenticatie eenmalig in en hergebruik deze veilig in Workflows.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integraties",
+        "title": "Brede ondersteuning",
+        "description": "Ondersteunt providers zoals OpenAI, DeepSeek, Slack, Redis, Qdrant en Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Samenwerking",
+        "title": "Gericht delen",
+        "description": "Gebruik team- of gebruikersdeling in plaats van duplicaten aan te maken.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Documentatie inloggegevens lezen",
+        "description": "Open de handleiding voor het dashboard Inloggegevens.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Tabblad Inloggegevens"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Integraties bekijken",
+        "description": "Doorzoek details over het instellen van integraties van derden.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Integraties van derden"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Waar ze worden gebruikt",
+        "content": "Inloggegevens worden gerefereerd in de nodeconfiguratie en tijdens de uitvoering veilig opgelost."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Teamvriendelijk model",
+        "content": "Geef de voorkeur aan delen wanneer meerdere ontwikkelaars dezelfde providertoegang nodig hebben; dit zorgt voor consistent gedrag en eenvoudige audits."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Tabblad Inloggegevens"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vectorstores",
+    "summary": "Bereid retrieval-backends voor op Workflows die semantisch zoeken, geheugen of RAG-contextintegratie nodig hebben.",
+    "bullets": [
+      "Vectorstores vormen de databasis voor retrieval-gestuurde Workflows.",
+      "Gebruik ze samen met RAG-nodes en AI-flows voor nauwkeurige document-grounding.",
+      "Dit tabblad dient als infrastructuur voor onderbouwde Prompts."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "RAG-infrastructuur",
+        "title": "Doorzoekbaar geheugen",
+        "description": "Houd documenten gereed voor semantische retrieval wanneer Workflows context nodig hebben.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Kwaliteit",
+        "title": "Onderbouwde grounding",
+        "description": "Retrieval vermindert het risico op hallucinaties door bewijs te leveren.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Beheer",
+        "title": "Eenmalig centraal beheren",
+        "description": "Maak vectorstores aan en hergebruik ze in meerdere Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Documentatie vectorstores openen",
+        "description": "Lees de handleiding voor het dashboard Vectorstores.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Tabblad Vectorstores"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Documentatie RAG-node bekijken",
+        "description": "Open de referentie voor de Qdrant RAG-node.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Positionering",
+        "content": "Dit tabblad bereidt de opslaglaag voor. De eigenlijke retrieval-logica bevindt zich in de Workflows (bijv. via RAG- of agentpatronen)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Wanneer te gebruiken",
+        "content": "Kies vectorstores wanneer uw Workflow ongestructureerde kennisbanken moet doorzoeken in plaats van alleen te vertrouwen op het LLM-geheugen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Tabblad Vectorstores"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Beheer Model Context Protocol-verbindingen zodat agent-Workflows veilig toegang krijgen tot tools en externe functies.",
+    "bullets": [
+      "MCP verandert externe tool-ecosystemen in bruikbare agentcontext.",
+      "Gebruik dit tabblad wanneer agenten rijkere tools nodig hebben dan statische Prompts.",
+      "Verbindingskwaliteit bepaalt direct de mogelijkheden van uw agenten."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Agent-tools",
+        "title": "Externe functielaag",
+        "description": "Stel tool-servers beschikbaar die agenten tijdens het redeneren kunnen aanroepen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Runtime-controle",
+        "title": "Verbindingsconfiguratie",
+        "description": "Configureer Endpoints, labels en transport voor betrouwbare Workflows.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Platformdiepgang",
+        "title": "Verder dan Prompts",
+        "description": "MCP stelt Heym-Workflows in staat te handelen, niet alleen te antwoorden.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "MCP-documentatie openen",
+        "description": "Lees de handleiding voor het MCP-tabblad.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "MCP-tabblad"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Agent-architectuur",
+        "description": "Ontdek hoe MCP is geïntegreerd in de agentuitvoering.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Agent-architectuur"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Betekenis",
+        "content": "Bijzonder belangrijk wanneer uw agent tools, omgevingstoegang of systeemintegraties buiten afzonderlijke nodes nodig heeft."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Operationele aanpak",
+        "content": "Behandel MCP-verbindingen als infrastructuur: stabiele labels en duidelijke verantwoordelijkheden vereenvoudigen het debuggen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "MCP-tabblad"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Uitvoeringen",
+    "summary": "Inspecteer gedetailleerde Traces van AI- en Workflow-uitvoeringen om te begrijpen wat er is gebeurd – niet alleen of het heeft gewerkt.",
+    "bullets": [
+      "Gebruik Traces voor debugging, prestatieanalyses en Prompt-kwaliteitscontroles.",
+      "Traces verklaren modelgedrag, latenties en uitvoerpaden.",
+      "De eerste plek om te kijken bij onverwachte resultaten of instabiele runs."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Debugging",
+        "title": "Verborgen stappen zien",
+        "description": "Trace-gegevens onthullen wat Workflow en model daadwerkelijk hebben uitgevoerd.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Evaluatie",
+        "title": "Iteraties ondersteunen",
+        "description": "Gebruik Traces bij het optimaliseren van Prompts, tools en modellen.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Betrouwbaarheid",
+        "title": "Resultaten navolgbaar maken",
+        "description": "Goede Traces verminderen giswerk bij foutanalyse.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Documentatie uitvoeringen openen",
+        "description": "Lees de handleiding voor het dashboard Uitvoeringen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Tabblad Uitvoeringen"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Wanneer Traces onmisbaar worden",
+        "content": "Zodra Workflows meerstaps, modelintensief of toolgebaseerd zijn, volstaat de enkele statusweergave niet meer."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. geschiedenis",
+        "content": "De geschiedenis toont DAT een run heeft plaatsgevonden. Traces verklaren WAAROM deze zich zo heeft gedragen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Tabblad Uitvoeringen"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Waarschuwingen",
+    "summary": "Definieer drempelwaarden over tijdvensters en word automatisch op de hoogte gesteld zodra deze worden overschreden.",
+    "bullets": [
+      "Vier typen: foutenaantal, uitvoeringsduur, token-/kostendrempels en uitvoeringstellers.",
+      "Elke waarschuwing wordt beoordeeld over een gekozen tijdvenster, nooit op basis van afzonderlijke gebeurtenissen.",
+      "Beschrijf de vereiste in natuurlijke taal en de assistent configureert de waarschuwing."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Tijdvenster",
+        "title": "Ophopingen in plaats van uitschieters",
+        "description": "Een mislukte uitvoering is ruis. Twaalf in tien minuten is een incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Vóór opslaan",
+        "title": "Voorwaarde retrospectief testen",
+        "description": "De controleerstap test tegen echte historie om drempelwaarden vooraf te kalibreren.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reactie",
+        "title": "Workflow uitvoeren bij alarm",
+        "description": "De alert-payload wordt de Workflow-input voor automatische meldingen via Slack of e-mail.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Waarschuwingen-documentatie openen",
+        "description": "Lees na hoe alarmtypen, vensters en de assistent werken.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Waarschuwingen-tab"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Doel",
+        "content": "Analyses en traces beantwoorden vragen die u actief stelt. Waarschuwingen laten Heym proactief spreken wanneer kritieke drempels worden overschreden."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "Waarom valse alarmen worden vermeden",
+        "content": "Een waarschuwing wordt eenmaal geactiveerd en wacht tot de metriek zich herstelt – dat voorkomt een stortvloed aan meldingen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Waarschuwingen-tab"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analyses",
+    "summary": "Volg gebruikspatronen en systeemgedrag om activiteit, groei en veranderingen in de tijd te begrijpen.",
+    "bullets": [
+      "Herken acceptatie, doorvoer en ongewone pieken met analyses.",
+      "Een weergave op platformniveau in plaats van een individueel debugging-hulpmiddel.",
+      "Combineer analyses met traces en historie voor signaal en verklaring."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Signalen",
+        "title": "Gebruikstransparantie",
+        "description": "Trends herkennen in plaats van afzonderlijke uitvoeringen geïsoleerd te bekijken.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Capaciteit",
+        "title": "Operationeel bewustzijn",
+        "description": "Belastingspieken en -dalingen tijdig herkennen en onderzoeken.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Beslissingsondersteuning",
+        "title": "Gerichte optimalisatie",
+        "description": "Analyses helpen bij het prioriteren van de belangrijkste Workflows.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Analyses-documentatie openen",
+        "description": "Lees de handleiding voor het Analyses-dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Analyses-tab"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Doel",
+        "content": "Gebruik analyses voor patronen, doorvoer en geaggregeerd gedrag over de gehele platformwerking."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Werkwijze",
+        "content": "Herken signalen hier en schakel vervolgens over naar traces, historie of de editor om oorzaken te analyseren."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Analyses-tab"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Maak een raster van diagram-widgets, elk gevoed door eigen Workflows – alle kerncijfers in één oogopslag.",
+    "bullets": [
+      "Elke widget wordt aangedreven door een Workflow die gegevens levert aan een Chart Output-knooppunt.",
+      "Gebruik staaf-, lijn-, cirkel-, tabel- en getalwidgets passend bij de metriek.",
+      "Genereer of pas widgets aan met AI en cache resultaten voor snelle laadtijden.",
+      "Maak meerdere dashboards aan en deel deze lezend of schrijvend met personen of teams."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Compositie",
+        "title": "Workflow-gevoede diagrammen",
+        "description": "Alle gegevens die een Workflow produceert, worden als diagram gevisualiseerd.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Prestatie",
+        "title": "Gecachte resultaten",
+        "description": "Widget-caching voorkomt herhaalde Workflow-uitvoeringen bij elke paginaweergave.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "AI-ondersteuning",
+        "title": "Genereren en aanpassen",
+        "description": "Beschrijf de metriek en laat de widget automatisch door AI aanmaken.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Dashboard-documentatie openen",
+        "description": "Ontdek hoe Dashboard-widgets worden gemaakt.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Dashboard-tab"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Doel",
+        "content": "Gebruik het Dashboard voor persistente overzichten van belangrijke kerncijfers uit uw eigen Workflows."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Aanmaak",
+        "content": "Voeg een widget toe, configureer de Workflow zodat het laatste knooppunt vóór Chart Output rijen levert, en rangschik deze in het raster."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Dashboard-tab"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Teams",
+    "summary": "Beheer gedeelde toegangen zodat Workflows, Credentials, variabelen en vectoropslag collaboratief zonder duplicaten worden gebruikt.",
+    "bullets": [
+      "Teams zijn de zuiverste manier om platformresources schaalbaar te delen.",
+      "Gebruik Teams wanneer rechten een groep in plaats van individuen moeten volgen.",
+      "Zorgt voor gestructureerde samenwerking in een groeiende Workspace."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Collaboratie",
+        "title": "Groepsgebaseerde vrijgaven",
+        "description": "Verleen toegang eenmaal voor een team in plaats van individuele gebruikers handmatig te machtigen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Helderheid",
+        "title": "Zuivere verantwoordelijkheden",
+        "description": "Resourcebeheer volgt de werkelijke teamstructuren.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Schaalvergroting",
+        "title": "Minder administratieve inspanning",
+        "description": "Nieuwe leden erven automatisch toegangsrechten via het team.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Teams-documentatie openen",
+        "description": "Lees de handleiding voor het Teams-dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Teams-tab"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Resourcevrijgaven",
+        "description": "Lees details over het vrijgeven van resources na.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Vrijgave van aanmeldgegevens"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Voordelen van Teams",
+        "content": "Teams verbinden identiteit en resourcetoegang voor soepele samenwerking."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Praktische tip",
+        "content": "Geef de voorkeur aan teamvrijgaven wanneer een Workflow of Credential toebehoort aan een blijvende werkgroep."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Teams-tab"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protocollen",
+    "summary": "Lees logs op stackniveau wanneer u infrastructuurinzichten nodig hebt buiten Workflow-uitvoer om.",
+    "bullets": [
+      "Gebruik logs voor service-debugging, containerstatussen en omgevingsproblemen.",
+      "Helpt wanneer oorzaken onder het Workflow-niveau liggen.",
+      "Gebruik samen met traces voor bewijs op applicatie- en systeemniveau."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastructuur",
+        "title": "Containertransparantie",
+        "description": "Zien wat backend-services onder de Heym-interface uitvoeren.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Foutoplossing",
+        "title": "Oorzaken vinden",
+        "description": "Logs helpen bij opstartproblemen, crashes of integratiefouten.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Aanvullend",
+        "title": "Verschil met Workflow-resultaten",
+        "description": "Workflow-uitvoer toont resultaten; logs tonen systeemgedrag.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Protocol-documentatie openen",
+        "description": "Lees de handleiding voor het Protocol-dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Protocol-tab"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Inzetmoment",
+        "content": "Schakel hierheen over wanneer problemen deployment-, service- of omgevingsgerelateerd lijken."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Beste combinatie",
+        "content": "Gebruik logs samen met traces en historie om van symptomen snel bij de oorzaak te komen."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Protocol-tab"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Evaluatie",
+    "summary": "Creëer reproduceerbare benchmarks voor agent-workflows om Prompt-, model- en Workflow-wijzigingen betrouwbaar te vergelijken.",
+    "bullets": [
+      "Suites en testcases veranderen subjectieve Workflow-kwaliteit in meetbare kengetallen.",
+      "De ideale plek voor regressietests voordat u Prompt- of model-updates uitrolt.",
+      "Vergelijk meerdere modellen tegen dezelfde dataset en dezelfde beoordelingsmethode."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Kwaliteitslus",
+        "title": "Agenten benchmarken",
+        "description": "Dezelfde suite herhaaldelijk uitvoeren in plaats van te vertrouwen op steekproeven.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Vergelijking",
+        "title": "Model- en Prompt-tests",
+        "description": "Zien hoe verschillende instellingen zich gedragen op dezelfde testset.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Veiligheid",
+        "title": "Betrouwbare iteratie",
+        "description": "Verbeteringen aantoonbaar onderbouwen vóór de uitrol.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Evaluatie-documentatie openen",
+        "description": "Lees de handleiding voor de evaluatiepagina.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Evaluatie-tab"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Agent-node referentie",
+        "description": "Bekijk het Workflow-gedeelte waarop de meeste eval-suites zich richten.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Agent-node"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Ontwerp van suites",
+        "content": "Een goede suite weerspiegelt echte gebruikersscenario's, randvoorwaarden en goedkeuringsstappen die stabiel moeten blijven."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Vergelijkingsparameters",
+        "content": "Typische vergelijkingen omvatten Prompt-varianten, modelkeuze, temperature-instellingen en Workflow-revisies op dezelfde dataset."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Evaluatie-tab"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Documentatie",
+    "summary": "Doorzoek nauwkeurige platformreferenties direct in de app en verdiep u indien nodig.",
+    "bullets": [
+      "Heym-documentatie is ontworpen voor snel begrip en gericht opzoeken.",
+      "Zijbalk, zoeken en kruisverwijzingen maken snelle wisseling tussen concepten mogelijk.",
+      "De showcase verwijst direct naar het momenteel geopende artikel."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "In-app referentie",
+        "title": "Altijd binnen handbereik",
+        "description": "Documentatie blijft in de productflow, zonder externe tabbladen te openen.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Overzicht",
+        "title": "Het essentiële eerst",
+        "description": "Artikelen beginnen met de kernpunten en vertakken via links."
+      },
+      {
+        "eyebrow": "Contextbewust",
+        "title": "Huidig artikel",
+        "description": "Bij het lezen van een document volgt de 'Meer informatie'-actie direct dit artikel."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Inleiding bekijken",
+        "description": "Open de documentatie-inleiding als standaard startpunt.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Inleiding"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Snelle navigatie",
+        "content": "Gebruik de zijbalk voor categorieën en de opdrachtzoekfunctie als het onderwerp al bekend is."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Ondersteuning door showcase",
+        "content": "De showcase houdt samenvattingen compact en verwijst indien nodig naar de uitgebreide documentatie."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Inleiding"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Planning",
+    "summary": "Overzie alle actieve Cron-workflows op een visuele kalender en controleer looptijden.",
+    "bullets": [
+      "Wissel tussen dag-, week- en maandweergave voor de juiste resolutie.",
+      "Zweef over een blok voor de Cron-expressie; klik om direct naar het canvas te springen.",
+      "Gebruik dit tabblad om uitvoeringsdichtheden te controleren en overlappingen te herkennen."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparantie",
+        "title": "Kalenderweergave",
+        "description": "Actieve Cron-workflows verschijnen als blokken op hun geplande tijden.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigatie",
+        "title": "Met één klik naar het canvas",
+        "description": "Klik op een blok om de Workflow-editor direct te openen.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Bereiken",
+        "title": "Dag, week of maand",
+        "description": "Pas de resolutie aan om individuele uren te bekijken of de hele maand te plannen.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Planning-documentatie openen",
+        "description": "Lees de referentie van het tabblad Planning.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Planning-tab"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Cron-node referentie",
+        "description": "Ontdek hoe Cron-triggers op het canvas worden geconfigureerd.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Gebruiksmoment",
+        "content": "Controleer geplande automatiseringen, herken planningsconflicten en zorg dat belangrijke Workflows actief blijven."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Kleurcodering",
+        "content": "Elke Workflow krijgt een consistente kleur op basis van zijn ID, die identiek blijft in dag-, week- en maandweergave."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Planning-tab"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Datatabellen",
+    "summary": "Creëer gestructureerde datatabellen direct in Heym en gebruik ze programmatisch in Workflows.",
+    "bullets": [
+      "Tabellen met getypeerde kolommen aanmaken, handmatig vullen of importeren via CSV.",
+      "Gebruik de DataTable-Workflow-node om rijen programmatisch te lezen, schrijven en op te vragen.",
+      "Tabellen delen met gebruikers of teams met lees- of schrijfrechten."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Geïntegreerde data",
+        "title": "Geïntegreerde opslag",
+        "description": "Sla gestructureerde data op zonder externe databases of API-keys.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Workflow-integratie",
+        "title": "DataTable-node",
+        "description": "Rijen vinden, invoegen, bijwerken en verwijderen in elke Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Samenwerking",
+        "title": "Delingen en rechten",
+        "description": "Verleen granulaire lees- en schrijftoegang voor gebruikers en teams.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Datatabellen-tab documentatie",
+        "description": "Lees de referentie van het tabblad Datatabellen.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Datatabellen"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "DataTable-node documentatie",
+        "description": "Lees de referentie van de DataTable-node.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Wat zijn datatabellen?",
+        "content": "Datatabellen zijn geïntegreerde gestructureerde opslag in Heym: getypeerde kolommen (String, Number, Boolean, Date, JSON), inline bewerking en CSV-import/-export."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Gebruik in Workflows",
+        "content": "De DataTable-node ondersteunt find, getAll, getById, insert, update, remove en upsert – zonder credentials, direct via de Workflow-eigenaar."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Datatabellen"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Workflow-editor",
+    "summary": "Creëer, test, debug en optimaliseer Workflows op het canvas – direct in de uitvoeringscontext.",
+    "bullets": [
+      "In de editor komen nodeontwerp, datastroom en uitvoeringsgedrag samen.",
+      "Gebruik zijbalken en geschiedenis om snel te wisselen tussen creatie en debugging.",
+      "De showcase blijft hier bewust compact om maximale ruimte voor het canvas te bieden."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Visueel Workflow-ontwerp",
+        "description": "Verbind nodes, vertak logica en modelleer de runtime-flow direct.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iteratie",
+        "title": "Debuggen tijdens het bouwen",
+        "description": "Gebruik geschiedenis, debug-panels en uitvoeringsresultaten voor snelle feedbackloops."
+      },
+      {
+        "eyebrow": "Functionaliteit",
+        "title": "Geavanceerde functies binnen handbereik",
+        "description": "Portaal, delingen, sjablonen en validatie bevinden zich direct op het canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Canvas-documentatie openen",
+        "description": "Lees de referentie van de canvas-functies.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Canvas-functies"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Sneltoetsen",
+        "description": "Open het overzicht van sneltoetsen in de editor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Sneltoetsen"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Werkritme",
+        "content": "Modelleer op het canvas, controleer aannames over uitvoer en pas parameters aan in zijbalken zonder de focus te verliezen."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Compacte showcase",
+        "content": "Omdat de editor al veel informatie biedt, dient de showcase als beknopte oriëntatiehulp."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Canvas-functies"
+    }
+  }
+}

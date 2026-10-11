@@ -183,7 +183,7 @@ async function handleSave(): Promise<void> {
   <Dialog
     :open="true"
     size="2xl"
-    :title="mode === 'create' ? 'Generate Table with AI' : 'Generate Columns with AI'"
+    :title="mode === 'create' ? $t('tables.generateTableWithAi') : $t('tables.generateColumnsWithAi')"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 p-4">
@@ -191,22 +191,22 @@ async function handleSave(): Promise<void> {
       <template v-if="phase === 'input'">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <Label>LLM Credential</Label>
+            <Label>{{ $t('tables.llmCredential') }}</Label>
             <SearchableSelect
               v-model="credentialId"
               :options="credentialOptions"
-              placeholder="Credential"
-              search-placeholder="Search credentials…"
+              :placeholder="$t('chat.credential')"
+              :search-placeholder="$t('credentials.searchPlaceholder')"
               class="mt-1"
             />
           </div>
           <div>
-            <Label>Model</Label>
+            <Label>{{ $t('common.model') }}</Label>
             <SearchableSelect
               v-model="modelName"
               :options="modelOptions"
-              placeholder="Model"
-              search-placeholder="Search models…"
+              :placeholder="$t('common.model')"
+              :search-placeholder="$t('chat.searchModels')"
               :disabled="!credentialId"
               class="mt-1"
             />
@@ -214,11 +214,11 @@ async function handleSave(): Promise<void> {
         </div>
 
         <div>
-          <Label>Describe your table, or paste JSON</Label>
+          <Label>{{ $t('tables.describeOrPasteJson') }}</Label>
           <Textarea
             ref="promptInputRef"
             v-model="prompt"
-            placeholder="e.g. A table of books with title, author, page count and whether I've read it"
+            :placeholder="$t('tables.describePlaceholder')"
             class="mt-1"
             :rows="5"
           />
@@ -228,7 +228,7 @@ async function handleSave(): Promise<void> {
           v-if="credentials.length === 0"
           class="text-sm text-muted-foreground"
         >
-          No LLM credentials found. Add one in Settings to use AI generation.
+          {{ $t('tables.noLlmCredentialsNotice') }}
         </p>
 
         <div
@@ -244,7 +244,7 @@ async function handleSave(): Promise<void> {
             @click="handleGenerate"
           >
             <Sparkles class="mr-1 h-4 w-4" />
-            {{ generating ? "Generating..." : "Generate" }}
+            {{ generating ? $t('tables.generating') : $t('tables.generate') }}
           </Button>
         </div>
       </template>
@@ -256,15 +256,15 @@ async function handleSave(): Promise<void> {
           class="flex flex-col gap-3"
         >
           <div>
-            <Label>Name</Label>
+            <Label>{{ $t('common.name') }}</Label>
             <Input
               v-model="name"
-              placeholder="Table name"
+              :placeholder="$t('tables.tableNamePlaceholder')"
               class="mt-1"
             />
           </div>
           <div>
-            <Label>Description (optional)</Label>
+            <Label>{{ $t('common.descriptionOptional') }}</Label>
             <Textarea
               v-model="description"
               class="mt-1"
@@ -275,7 +275,7 @@ async function handleSave(): Promise<void> {
 
         <!-- existing columns (extend mode, read-only) -->
         <div v-if="mode === 'extend' && existingColumns.length > 0">
-          <Label>Existing columns</Label>
+          <Label>{{ $t('tables.existingColumns') }}</Label>
           <div class="mt-1 flex flex-wrap gap-1">
             <span
               v-for="col in existingColumns"
@@ -288,7 +288,7 @@ async function handleSave(): Promise<void> {
         </div>
 
         <div>
-          <Label>{{ mode === "extend" ? "New columns" : "Columns" }}</Label>
+          <Label>{{ mode === "extend" ? $t('tables.newColumns') : $t('tables.columns') }}</Label>
           <div class="mt-1 flex flex-col gap-2">
             <div
               v-for="col in columns"
@@ -297,7 +297,7 @@ async function handleSave(): Promise<void> {
             >
               <Input
                 v-model="col.name"
-                placeholder="column name"
+                :placeholder="$t('tables.columnNamePlaceholder')"
                 class="min-w-0 flex-1"
               />
               <div class="relative shrink-0">
@@ -317,7 +317,7 @@ async function handleSave(): Promise<void> {
               </div>
               <Input
                 v-model="col.defaultValue as string"
-                placeholder="default"
+                :placeholder="$t('common.default')"
                 class="w-20 shrink-0"
               />
               <label class="flex shrink-0 items-center gap-1 text-xs">
@@ -325,14 +325,14 @@ async function handleSave(): Promise<void> {
                   v-model="col.unique"
                   type="checkbox"
                 >
-                unique
+                {{ $t('tables.unique') }}
               </label>
               <label class="flex shrink-0 items-center gap-1 text-xs">
                 <input
                   v-model="col.required"
                   type="checkbox"
                 >
-                notEmpty
+                {{ $t('tables.required') }}
               </label>
               <button
                 type="button"
@@ -350,7 +350,7 @@ async function handleSave(): Promise<void> {
             @click="addColumn"
           >
             <Plus class="mr-1 h-4 w-4" />
-            Add column
+            {{ $t('tables.addColumn') }}
           </Button>
         </div>
 
@@ -366,13 +366,13 @@ async function handleSave(): Promise<void> {
             variant="outline"
             @click="phase = 'input'"
           >
-            Back
+            {{ $t('common.back') }}
           </Button>
           <Button
             :disabled="!canSave || saving"
             @click="handleSave"
           >
-            {{ saving ? "Saving..." : mode === "create" ? "Create Table" : "Add Columns" }}
+            {{ saving ? $t('common.saving') : mode === "create" ? $t('tables.createTable') : $t('tables.addColumns') }}
           </Button>
         </div>
       </template>

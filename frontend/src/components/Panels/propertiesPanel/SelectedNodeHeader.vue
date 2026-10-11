@@ -64,12 +64,12 @@ function typeLabelColor(nodeType: string): string {
             <span
               class="text-xs text-muted-foreground"
               :style="{ color: typeLabelColor(selectedNode.type) }"
-            >{{ selectedNodeTypeLabel
+            >{{ $te('nodes.' + selectedNode.type + '.label') ? $t('nodes.' + selectedNode.type + '.label') : selectedNodeTypeLabel
             }}</span>
             <span
               v-if="!isNodeActive"
               class="text-[10px] text-gray-500 bg-gray-800 px-1 py-0.5 rounded"
-            >disabled</span>
+            >{{ $t('canvas.disabled') }}</span>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ function typeLabelColor(nodeType: string): string {
           variant="ghost"
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] md:h-8 md:w-8 text-muted-foreground hover:text-foreground"
-          title="View documentation"
+          :title="$t('propertiesPanel.viewDocs')"
           @click.prevent="$router.push(`/docs/nodes/${nodeDocSlugMap[selectedNode.type]}`)"
         >
           <BookOpen class="w-4 h-4" />
@@ -88,7 +88,7 @@ function typeLabelColor(nodeType: string): string {
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] md:h-8 md:w-8"
           :class="isNodeActive ? 'text-green-500 hover:text-green-600' : 'text-gray-500 hover:text-gray-400'"
-          :title="isNodeActive ? 'Disable node (D)' : 'Enable node (D)'"
+          :title="isNodeActive ? $t('propertiesPanel.disableNode') : $t('propertiesPanel.enableNode')"
           @click="toggleActive"
         >
           <Power class="w-4 h-4" />
@@ -97,6 +97,7 @@ function typeLabelColor(nodeType: string): string {
           variant="ghost"
           size="icon"
           class="text-destructive h-11 w-11 min-h-[44px] min-w-[44px] md:h-8 md:w-8"
+          :title="$t('propertiesPanel.deleteNode')"
           @click="deleteNode"
         >
           <Trash2 class="w-4 h-4" />

@@ -52,7 +52,7 @@ const introContent = computed(() => getShowcaseIntroContent(props.definition.id)
       open ? 'translate-x-0' : 'translate-x-full pointer-events-none'
     )"
     :style="{ width: 'var(--showcase-width)' }"
-    aria-label="Contextual showcase panel"
+    :aria-label="$t('showcase.contextualShowcasePanel')"
   >
     <div class="relative flex h-full flex-col overflow-hidden">
       <div class="border-b border-border/60 px-5 py-4">
@@ -60,10 +60,10 @@ const introContent = computed(() => getShowcaseIntroContent(props.definition.id)
           <div>
             <div class="inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-600 dark:text-sky-300">
               <Sparkles class="h-3.5 w-3.5" />
-              Guidelines
+              {{ $t("showcase.guidelines") }}
             </div>
             <p class="mt-3 text-sm text-muted-foreground">
-              A short, contextual explanation of what this page is for.
+              {{ $t("showcase.guidelinesDesc") }}
             </p>
           </div>
 
@@ -71,7 +71,7 @@ const introContent = computed(() => getShowcaseIntroContent(props.definition.id)
             variant="ghost"
             size="icon"
             class="h-10 w-10 shrink-0"
-            aria-label="Close showcase panel"
+            :aria-label="$t('showcase.closePanel')"
             @click="emit('close')"
           >
             <X class="h-4 w-4" />
@@ -85,10 +85,10 @@ const introContent = computed(() => getShowcaseIntroContent(props.definition.id)
           class="rounded-2xl border border-border/70 bg-background/70 p-3"
         >
           <p class="text-sm font-semibold text-foreground">
-            {{ introContent?.title ?? "Quick overview" }}
+            {{ introContent?.title ?? $t("showcase.quickOverview") }}
           </p>
           <p class="mt-1 text-xs text-muted-foreground">
-            {{ introContent?.description ?? "Watch this short guide for the current screen." }}
+            {{ introContent?.description ?? $t("showcase.quickOverviewDesc") }}
           </p>
           <video
             class="mt-3 w-full overflow-hidden rounded-lg border border-border/60 bg-black/90"
@@ -153,10 +153,10 @@ const introContent = computed(() => getShowcaseIntroContent(props.definition.id)
           >
             <div class="min-w-0">
               <p class="text-sm font-medium text-foreground">
-                Run the Runbook
+                {{ $t("showcase.runTheRunbook") }}
               </p>
               <p class="mt-1 text-xs leading-5 text-muted-foreground">
-                Watch Heym build &amp; run a workflow end-to-end.
+                {{ $t("showcase.runbookDesc") }}
               </p>
             </div>
             <Play class="h-4 w-4 shrink-0 text-indigo-500 transition-transform duration-200 group-hover:translate-x-0.5" />

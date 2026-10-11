@@ -42,7 +42,7 @@ const unitHint = computed((): string =>
 <template>
   <div class="space-y-4">
     <div class="space-y-2">
-      <Label for="alert-cost-metric">Measure spend in</Label>
+      <Label for="alert-cost-metric">{{ $t('alerts.wizard.measureSpendIn') }}</Label>
       <Select
         id="alert-cost-metric"
         v-model="metric"
@@ -51,7 +51,7 @@ const unitHint = computed((): string =>
     </div>
 
     <div class="space-y-2">
-      <Label for="alert-cost-threshold">Budget for the window</Label>
+      <Label for="alert-cost-threshold">{{ $t('alerts.wizard.budgetForWindow') }}</Label>
       <Input
         id="alert-cost-threshold"
         v-model="threshold"

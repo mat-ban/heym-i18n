@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import {
@@ -26,6 +27,7 @@ defineProps<Props>();
 
 const quickDrawerStore = useQuickDrawerStore();
 const router = useRouter();
+const { t } = useI18n();
 
 const {
   filterText,
@@ -47,12 +49,12 @@ function isSelectedWorkflow(workflowId: string): boolean {
 
 function workflowSubtitle(workflow: QuickDrawerWorkflowViewModel): string {
   if (workflow.outputNode?.label) {
-    return `Output: ${workflow.outputNode.label}`;
+    return t("quickDrawer.outputLabel", { label: workflow.outputNode.label });
   }
   if (workflow.description) {
     return workflow.description;
   }
-  return "Quick run";
+  return t("quickDrawer.quickRun");
 }
 
 function goToSelectedWorkflow(_event: MouseEvent): void {
@@ -72,7 +74,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
       open ? 'translate-x-0' : 'translate-x-full pointer-events-none'
     )"
     :style="{ width: 'var(--quick-drawer-width)' }"
-    aria-label="Quick workflows drawer"
+    :aria-label="$t('quickDrawer.title')"
   >
     <div class="relative flex h-full flex-col overflow-hidden">
       <div class="border-b border-border/60 px-5 py-4">
@@ -83,17 +85,17 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
               Quick Drawer
             </div>
             <h2 class="mt-3 text-xl font-semibold text-foreground">
-              Workflows
+              {{ $t("quickDrawer.workflows") }}
             </h2>
             <p class="mt-1 text-sm text-muted-foreground">
-              Search, pin, and run workflows without leaving the page.
+              {{ $t("quickDrawer.subtitle") }}
             </p>
           </div>
           <Button
             variant="ghost"
             size="icon"
             class="h-10 w-10 shrink-0"
-            aria-label="Close quick workflows drawer"
+            :aria-label="$t('quickDrawer.closeDrawer')"
             @click="quickDrawerStore.closeDrawer()"
           >
             <X class="h-4 w-4" />
@@ -106,7 +108,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
           <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             :model-value="filterText"
-            placeholder="Filter workflows"
+            :placeholder="$t('quickDrawer.filterPlaceholder')"
             class="pl-10"
             @update:model-value="quickDrawerStore.updateFilter"
           />
@@ -119,7 +121,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
           class="flex items-center gap-2 text-sm text-muted-foreground"
         >
           <Loader2 class="h-4 w-4 animate-spin" />
-          Loading quick workflows...
+          {{ $t("quickDrawer.loading") }}
         </div>
 
         <div
@@ -136,7 +138,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
           >
             <div class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               <Pin class="h-3.5 w-3.5" />
-              Pinned
+              {{ $t("quickDrawer.pinned") }}
             </div>
             <div
               v-for="workflow in filteredPinnedWorkflows"
@@ -167,7 +169,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
               <button
                 type="button"
                 class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-primary transition-colors hover:bg-primary/10"
-                :aria-label="`Unpin ${workflow.name}`"
+                :aria-label="t('quickDrawer.unpin', { name: workflow.name })"
                 @click.stop="quickDrawerStore.togglePin(workflow.id)"
               >
                 <Pin class="h-4 w-4 fill-current" />
@@ -181,7 +183,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
           >
             <div class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               <Workflow class="h-3.5 w-3.5" />
-              All Workflows
+              {{ $t("quickDrawer.allWorkflows") }}
             </div>
 
             <div
@@ -213,7 +215,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
               <button
                 type="button"
                 class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
-                :aria-label="`Pin ${workflow.name}`"
+                :aria-label="t('quickDrawer.pin', { name: workflow.name })"
                 @click.stop="quickDrawerStore.togglePin(workflow.id)"
               >
                 <Pin class="h-4 w-4" />
@@ -224,7 +226,7 @@ function goToSelectedWorkflow(_event: MouseEvent): void {
               v-if="!hasAnyWorkflowMatch"
               class="rounded-2xl border border-dashed border-border/60 px-4 py-6 text-center text-sm text-muted-foreground"
             >
-              No workflows match this filter.
+              {{ $t("quickDrawer.noMatch") }}
             </div>
           </div>
         </template>

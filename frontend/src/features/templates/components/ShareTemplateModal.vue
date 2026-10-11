@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { onDismissOverlays } from "@/composables/useOverlayBackHandler";
 import { X, Plus, Users } from "lucide-vue-next";
 
@@ -33,6 +34,7 @@ const emit = defineEmits<{
 
 const { loading, shareWorkflow, shareNode } = useShareTemplate();
 const { showToast } = useToast();
+const { t } = useI18n();
 
 const name = ref("");
 const description = ref("");
@@ -66,7 +68,7 @@ function removeSharedWith(v: string): void {
 const teamOptions = computed(() => {
   const shared = new Set(sharedWithTeams.value);
   return [
-    { value: "", label: "Select a team" },
+    { value: "", label: t("tables.selectTeam") },
     ...teams.value
       .filter((t) => !shared.has(t.id))
       .map((t) => ({ value: t.id, label: t.name })),

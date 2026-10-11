@@ -56,20 +56,20 @@ async function submit(): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    title="Board settings"
+    :title="$t('board.boardSettings')"
     @close="emit('close')"
   >
     <div class="flex flex-col gap-4 p-1">
       <div class="flex flex-col gap-2">
         <Input
           v-model="name"
-          placeholder="Board name"
+          :placeholder="$t('board.boardName')"
           data-testid="board-edit-name"
           @keydown.enter="submit"
         />
         <Input
           v-model="description"
-          placeholder="Description (optional)"
+          :placeholder="$t('board.descriptionOptional')"
           data-testid="board-edit-description"
           @keydown.enter="submit"
         />
@@ -91,14 +91,14 @@ async function submit(): Promise<void> {
           variant="ghost"
           @click="emit('close')"
         >
-          Cancel
+          {{ $t("common.cancel") }}
         </Button>
         <Button
           data-testid="board-edit-save"
           :disabled="!canSave"
           @click="submit"
         >
-          Save
+          {{ $t("common.save") }}
         </Button>
       </div>
     </div>

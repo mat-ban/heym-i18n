@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { Loader2, Sparkles, X } from "lucide-vue-next";
 
 import Button from "@/components/ui/Button.vue";
@@ -15,9 +16,9 @@ const props = withDefaults(
     submitLabel?: string;
   }>(),
   {
-    heading: "Generate widget with AI",
-    placeholder: "e.g. Workflow success rate over the last 30 days as a bar chart",
-    submitLabel: "Generate",
+    heading: "",
+    placeholder: "",
+    submitLabel: "",
   },
 );
 
@@ -27,6 +28,7 @@ const emit = defineEmits<{
 }>();
 
 const aiDefaults = useAiDefaults();
+const { t } = useI18n();
 const prompt = ref("");
 const promptInputRef = ref<HTMLTextAreaElement | null>(null);
 const credentials = ref<CredentialListItem[]>([]);
@@ -104,7 +106,7 @@ onMounted(async () => {
       loadError.value = "No LLM credentials found. Add one in the Credentials tab.";
     }
   } catch {
-    loadError.value = "Failed to load credentials.";
+    loadError.value = t("dashboards.aiWidget.failedToLoadCredentials");
   }
 });
 </script>
@@ -118,7 +120,7 @@ onMounted(async () => {
       <div class="w-full max-w-lg rounded-lg border bg-card p-5 shadow-lg">
         <div class="mb-4 flex items-center justify-between">
           <h2 class="flex items-center gap-2 text-base font-semibold">
-            <Sparkles class="h-4 w-4" /> {{ props.heading }}
+            <Sparkles class="h-4 w-4" /> {{ props.heading || $t("dashboards.aiWidget.defaultHeading") }}
           </h2>
           <button
             class="rounded p-1 text-muted-foreground hover:bg-accent"
@@ -137,36 +139,36 @@ onMounted(async () => {
 
         <div class="space-y-3">
           <div class="space-y-1">
-            <label class="text-sm font-medium">What should this widget show?</label>
+            <label class="text-sm font-medium">{{ $t("dashboards.aiWidget.promptLabel") }}</label>
             <textarea
               ref="promptInputRef"
               v-model="prompt"
               rows="3"
               class="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring"
-              :placeholder="props.placeholder"
+              :placeholder="props.placeholder || $t('dashboards.aiWidget.defaultPlaceholder')"
             />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div class="space-y-1">
-              <label class="text-sm font-medium">Credential</label>
+              <label class="text-sm font-medium">{{ $t("dashboards.aiWidget.credential") }}</label>
               <SearchableSelect
                 v-model="selectedCredentialId"
                 :options="credentialOptions"
-                placeholder="Select credential..."
-                search-placeholder="Search credentials..."
-                empty-text="No credentials found."
+                :placeholder="$t('dashboards.aiWidget.selectCredential')"
+                :search-placeholder="$t('dashboards.aiWidget.searchCredentials')"
+                :empty-text="$t('dashboards.aiWidget.noCredentials')"
               />
             </div>
             <div class="space-y-1">
-              <label class="text-sm font-medium">Model</label>
+              <label class="text-sm font-medium">{{ $t("dashboards.aiWidget.model") }}</label>
               <SearchableSelect
                 v-model="selectedModel"
                 :options="modelOptions"
                 :disabled="!selectedCredentialId"
-                :placeholder="selectedCredentialId ? 'Select model...' : 'Select credential first...'"
-                search-placeholder="Search models..."
-                :empty-text="selectedCredentialId ? 'No models found.' : 'Select a credential first.'"
+                :placeholder="selectedCredentialId ? $t('dashboards.aiWidget.selectModel') : $t('dashboards.aiWidget.selectCredentialFirst')"
+                :search-placeholder="$t('dashboards.aiWidget.searchModels')"
+                :empty-text="selectedCredentialId ? $t('dashboards.aiWidget.noModelsFound') : $t('dashboards.aiWidget.selectCredentialFirst')"
               />
             </div>
           </div>
@@ -177,7 +179,7 @@ onMounted(async () => {
             variant="ghost"
             @click="emit('close')"
           >
-            Cancel
+            {{ $t("common.cancel") }}
           </Button>
           <Button
             :disabled="!canGenerate"
@@ -187,7 +189,7 @@ onMounted(async () => {
               v-if="generating"
               class="mr-1 h-4 w-4 animate-spin"
             />
-            {{ props.submitLabel }}
+            {{ props.submitLabel || $t("dashboards.aiWidget.generate") }}
           </Button>
         </div>
       </div>

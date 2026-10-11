@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Xây dựng nhanh hơn trong Workflow",
+    "description": "Chọn một Workflow để xem Trigger, lần chạy gần nhất và các bước ngay bên cạnh danh sách. Lọc theo trạng thái, chạy trực tiếp và giữ tổng quan nhờ các thư mục."
+  },
+  "dashboard:board": {
+    "title": "Điều khiển công việc qua board agentic",
+    "description": "Di chuyển thẻ giữa các cột để kích hoạt chuỗi Workflow với ngữ cảnh đầy đủ của thẻ. Kết quả trả về trực tiếp trên thẻ."
+  },
+  "dashboard:templates": {
+    "title": "Bắt đầu với các mẫu đã được kiểm chứng",
+    "description": "Sử dụng các mẫu Workflow sẵn dùng để tiết kiệm thời gian cấu hình và đảm bảo tính nhất quán."
+  },
+  "dashboard:globalvariables": {
+    "title": "Tập trung hóa các biến dùng chung",
+    "description": "Lưu một lần các giá trị có thể tái sử dụng và tham chiếu chúng trong mọi Workflow."
+  },
+  "dashboard:chat": {
+    "title": "Dùng chat để lặp nhanh",
+    "description": "Đặt câu hỏi nhanh, thử nghiệm ý tưởng và chuyển sang trình chỉnh sửa ngay khi luồng Workflow đã rõ ràng."
+  },
+  "dashboard:credentials": {
+    "title": "Quản lý bí mật an toàn",
+    "description": "Quản lý tập trung khóa nhà cung cấp và Token để Workflow có thể dùng kết nối an toàn mà không tiết lộ bí mật."
+  },
+  "dashboard:vectorstores": {
+    "title": "Hỗ trợ Workflow dựa trên retrieval",
+    "description": "Chuẩn bị vector store cho câu trả lời AI có căn cứ, tìm kiếm ngữ nghĩa và pipeline RAG có thể mở rộng."
+  },
+  "dashboard:mcp": {
+    "title": "Kết nối hệ sinh thái công cụ bên ngoài",
+    "description": "Cấu hình kết nối MCP để agent có thể thực thi công cụ và hành động có cấu trúc vượt ra ngoài Prompt đơn thuần."
+  },
+  "dashboard:traces": {
+    "title": "Hiểu hành vi thực thi",
+    "description": "Phân tích chi tiết trace để gỡ lỗi kết quả, so sánh các lần chạy và nâng cao độ tin cậy."
+  },
+  "dashboard:alerts": {
+    "title": "Nhận thông báo trước khi vấn đề trở nên nghiêm trọng",
+    "description": "Đặt ngưỡng cho lỗi, thời lượng, chi phí và số lần chạy, và được cảnh báo khi vượt ngưỡng."
+  },
+  "dashboard:analytics": {
+    "title": "Theo dõi hiệu suất của nền tảng",
+    "description": "Giám sát các xu hướng sử dụng và thực thi để tối ưu hóa một cách có mục tiêu dựa trên các tín hiệu thực tế."
+  },
+  "dashboard:dashboard": {
+    "title": "Tạo dashboard của riêng bạn",
+    "description": "Kết hợp các widget biểu đồ được cung cấp bởi Workflow của bạn để trực quan hóa các chỉ số quan trọng trong nháy mắt."
+  },
+  "dashboard:teams": {
+    "title": "Mở rộng cộng tác một cách gọn gàng",
+    "description": "Phân chia Workflow và tài nguyên theo nhóm để duy trì quyền truy cập và trách nhiệm minh bạch."
+  },
+  "dashboard:logs": {
+    "title": "Chẩn đoán sự cố ở cấp hệ thống",
+    "description": "Sử dụng log khi gặp sự cố về cơ sở hạ tầng hoặc môi trường để có thông tin chuyên sâu hơn về runtime."
+  },
+  "dashboard:drive": {
+    "title": "Quản lý các tệp được tạo",
+    "description": "Xem, tải xuống và chia sẻ đầu ra của Workflow thông qua các liên kết an toàn và tùy chọn truy cập được kiểm soát."
+  },
+  "dashboard:datatable": {
+    "title": "Làm việc gốc với dữ liệu có cấu trúc",
+    "description": "Tạo các bảng có kiểu và điều khiển chúng trực tiếp từ Workflow để có các thao tác đọc và ghi có thể tái tạo."
+  },
+  "dashboard:schedules": {
+    "title": "Tổng quan về lịch lập trình tự động hóa",
+    "description": "Xem tất cả các Workflow Cron đang hoạt động trong chế độ xem lịch (ngày, tuần, tháng). Nhấp vào một khối sẽ dẫn trực tiếp đến Canvas."
+  },
+  "evals": {
+    "title": "Đánh giá chất lượng một cách đáng tin cậy",
+    "description": "Chạy các bộ kiểm thử có thể tái tạo để so sánh khách quan các thay đổi về Prompt và mô hình trước khi triển khai lên production."
+  },
+  "docs": {
+    "title": "Định hướng nhanh trong ứng dụng",
+    "description": "Duyệt qua các tài liệu tham khảo ngắn gọn và tìm hiểu sâu có mục tiêu mà không cần rời khỏi Workflow hiện tại."
+  },
+  "editor": {
+    "title": "Thiết kế và gỡ lỗi trên Canvas",
+    "description": "Kết nối trực quan các nút, thực thi ngay lập tức và tinh chỉnh hành vi với phản hồi trực tiếp trong một không gian làm việc duy nhất."
+  }
+}

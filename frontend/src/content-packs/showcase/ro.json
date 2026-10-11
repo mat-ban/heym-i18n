@@ -1,0 +1,1318 @@
+{
+  "dashboard:workflows": {
+    "id": "dashboard:workflows",
+    "title": "Workflow-uri",
+    "summary": "Creați, organizați, importați și gestionați Workflow-urile pentru automatizările dumneavoastră AI.",
+    "bullets": [
+      "Deschideți rapid Workflow-urile, mențineți folderele ordonate și continuați direct lucrul la sarcinile recente.",
+      "Utilizați paleta de comenzi pentru acces rapid fără căutare îndelungată în grilă.",
+      "Utilizați acest tab ca bază pentru toate activitățile din editor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Privire centrală",
+        "title": "Bibliotecă de Workflow-uri",
+        "description": "Vizualizați obiectele rădăcină, folderele și Workflow-urile marcate pentru ștergere într-un singur loc.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Acces rapid",
+        "title": "Creare rapidă",
+        "description": "Creați Workflow-uri noi sau importați direct JSON.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Structură",
+        "title": "Organizare prealabilă",
+        "description": "Folderele și fixarea mențin seturile de automatizare în creștere ordonate.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "workflow-docs",
+        "label": "Citiți ghidul Workflow-urilor",
+        "description": "Deschideți referința completă a tab-ului Workflow-uri.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "workflows-tab",
+          "title": "Tab-ul Workflow-uri"
+        }
+      },
+      {
+        "id": "open-templates",
+        "label": "Deschideți șabloanele",
+        "description": "Comutați la tab-ul Șabloane pentru puncte de pornire reutilizabile.",
+        "kind": "route",
+        "to": "/?tab=templates"
+      }
+    ],
+    "details": [
+      {
+        "id": "workflows-structure",
+        "title": "Ce aparține aici",
+        "content": "Utilizați această secțiune pentru sarcini de ciclu de viață al Workflow-urilor: creare, redenumire, mutare, importare, arhivare și selectare."
+      },
+      {
+        "id": "workflows-speed",
+        "title": "Rămâneți concis",
+        "content": "Dacă aveți nevoie doar de o execuție rapidă dintr-o altă pagină, utilizați Quick Drawer. Reveniți aici pentru gestionare și structură."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "workflows-tab",
+      "title": "Tab-ul Workflow-uri"
+    }
+  },
+  "dashboard:board": {
+    "id": "dashboard:board",
+    "title": "Board",
+    "summary": "Un Board Kanban bazat pe agenți. Fiecare card este un job persistent cu context, istoric și rezultate – mutarea unui card execută lanțul de Workflow-uri al coloanei.",
+    "bullets": [
+      "Creați carduri text în Backlog și trageți-le prin coloane cu drag & drop.",
+      "Asociați Workflow-uri ordonate fiecărei coloane; mișcările cardurilor le declanșează ca Trigger.",
+      "Cardurile devin verzi la succes, roșii la erori și galbene în timpul execuției.",
+      "Comentariile și rezultatele anterioare se integrează în contextul următoarei rulări."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Idee centrală",
+        "title": "Cardurile sunt joburi, nu notițe",
+        "description": "Fiecare card poartă istoricul său complet: comentarii, mișcări și rezultatul fiecărui Workflow.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Buclă de planificare",
+        "title": "Runde ulterioare",
+        "description": "Răspundeți în comentarii și executați din nou – lanțul vede întregul context acumulat.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "board-docs",
+        "label": "Documentație Board",
+        "description": "Lanțuri de coloane, contractul Card-Payload și runde ulterioare.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "board-tab",
+          "title": "Board"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "board-chains",
+        "title": "Cum se execută lanțurile de coloane",
+        "content": "Workflow-urile atașate unei coloane rulează secvențial de îndată ce un card sosește. Rezultatul fiecărui Workflow este atașat contextului cardului; o eroare oprește lanțul."
+      },
+      {
+        "id": "board-context",
+        "title": "Ce primesc Workflow-urile",
+        "content": "Input-ul execuției conține cardul (titlu, conținut, metadate, comentarii, istoric, rezultate anterioare), Board-ul, mișcarea și poziția în lanț. Citiți acestea cu expresii $input.card."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "board-tab",
+      "title": "Board"
+    }
+  },
+  "dashboard:templates": {
+    "id": "dashboard:templates",
+    "title": "Șabloane",
+    "summary": "Începeți cu blueprint-uri de Workflow-uri reutilizabile, în loc să reconstruiți aceleași modele de fiecare dată.",
+    "bullets": [
+      "Utilizați șabloanele când structura Workflow-ului este cunoscută, dar detaliile încă variază.",
+      "Șabloanele bune scurtează onboarding-ul și reduc munca repetitivă pe canvas.",
+      "Partajați modelele aici și adaptați-le în editor după necesitate."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Reutilizare",
+        "title": "Abordare Blueprint",
+        "description": "Capturați structuri de Workflow-uri dovedite și aplicați-le rapid din nou.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Ritm de echipă",
+        "title": "Puncte de pornire unitare",
+        "description": "Șabloanele ajută echipele să convină asupra acelorași modele dovedite.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Eficiență",
+        "title": "Mai puțin timp inactiv",
+        "description": "Alegeți un cadru gata făcut și adaptați doar elementele esențiale.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "templates-docs",
+        "label": "Deschideți documentația șabloanelor",
+        "description": "Aflați cum se integrează șabloanele în fluxul Dashboard-ului.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "templates-tab",
+          "title": "Tab-ul Șabloane"
+        }
+      },
+      {
+        "id": "open-workflows",
+        "label": "Înapoi la Workflow-uri",
+        "description": "Înapoi la biblioteca principală pentru Workflow-uri.",
+        "kind": "route",
+        "to": "/"
+      }
+    ],
+    "details": [
+      {
+        "id": "templates-why",
+        "title": "De ce sunt importante șabloanele",
+        "content": "Ele transformă layout-urile repetate de noduri în active reutilizabile – ideal pentru echipele care implementează variații ale aceluiași model de Workflow."
+      },
+      {
+        "id": "templates-when",
+        "title": "Utilizare optimă",
+        "content": "Utilizați șabloanele când structura este stabilă, dar numele, Prompt-urile, Credentials sau țintele variază de la caz la caz."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "templates-tab",
+      "title": "Tab-ul Șabloane"
+    }
+  },
+  "dashboard:globalvariables": {
+    "id": "dashboard:globalvariables",
+    "title": "Variabile",
+    "summary": "Stocați valori partajate central și referiți-le între Workflow-uri, fără a duplica aceleași date peste tot.",
+    "bullets": [
+      "Păstrați valorile frecvent reutilizate într-un loc central și persistent.",
+      "Variabilele reduc derivarea Prompt-urilor și configurațiile duplicate.",
+      "Partajați valorile țintit când mai multe Workflow-uri necesită aceeași bază de date."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Persistență",
+        "title": "Memorie între rulări",
+        "description": "Valorile globale persistă peste execuțiile individuale ale Workflow-urilor.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Configurare compactă",
+        "title": "Mai puțină redundanță",
+        "description": "Actualizați o dată central, în loc să ajustați manual multe câmpuri de noduri.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Expresii",
+        "title": "Suport în DSL",
+        "description": "Referiți valorile direct în expresiile nodurilor și în Prompt-uri.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "variables-docs",
+        "label": "Citiți documentația variabilelor",
+        "description": "Deschideți ghidul pentru variabile în Dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "global-variables-tab",
+          "title": "Tab-ul Variabile"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "variables-pattern",
+        "title": "Modele tipice",
+        "content": "Stocați Endpoint-uri, fragmente de Prompt partajate, setări specifice mediului sau ID-uri pe care mai multe Workflow-uri trebuie să le citească."
+      },
+      {
+        "id": "variables-boundary",
+        "title": "Ce nu aparține aici",
+        "content": "Secretele și autentificările furnizorilor aparțin în Credentials, nu în variabile globale."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "global-variables-tab",
+      "title": "Tab-ul Variabile"
+    }
+  },
+  "dashboard:chat": {
+    "id": "dashboard:chat",
+    "title": "Chat",
+    "summary": "Utilizați Chat-ul Dashboard-ului ca punct de intrare rapid bazat pe dialog pentru Workflow-urile și sarcinile dumneavoastră de platformă.",
+    "bullets": [
+      "Excelent pentru întrebări rapide, asistență pentru Workflow-uri și execuții ușoare.",
+      "Concentrat pe viteză și iterație, nu pe control complet în editor.",
+      "Odată ce structura este stabilită, comutați direct la Workflow sau la documentație."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Limbaj natural",
+        "title": "Interacțiune rapidă",
+        "description": "Utilizați limbaj simplu, în loc să parcurgeți manual întreaga aplicație.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Punte",
+        "title": "De la idee la acțiune",
+        "description": "Chat-ul ajută când obiectivul este clar, dar calea exactă trebuie încă elaborată.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Însoțitor",
+        "title": "Completează documentația",
+        "description": "Utilizați împreună cu documentația pentru a avea răspunsuri și referințe la îndemână.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "chat-docs",
+        "label": "Deschideți documentația Chat",
+        "description": "Citiți ghidul pentru Chat-ul Dashboard-ului.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "chat-tab",
+          "title": "Tab-ul Chat"
+        }
+      },
+      {
+        "id": "assistant-docs",
+        "label": "Referință asistent AI",
+        "description": "Aflați cum asistentul Heym sprijină crearea Workflow-urilor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "ai-assistant",
+          "title": "Asistent AI"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "chat-intent",
+        "title": "Cele mai bune cazuri de utilizare",
+        "content": "Utilizați Chat-ul pentru întrebări rapide despre Workflow-uri, instrucțiuni scurte de platformă și pași operaționali care nu necesită muncă aprofundată pe canvas."
+      },
+      {
+        "id": "chat-next-step",
+        "title": "Când să schimbați vizualizarea",
+        "content": "Comutați la editor de îndată ce este necesar control la nivel de nod, sau la documentație pentru referințe durabile."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "chat-tab",
+      "title": "Tab-ul Chat"
+    }
+  },
+  "dashboard:drive": {
+    "id": "dashboard:drive",
+    "title": "Drive",
+    "summary": "Gestionați și partajați fișierele generate de abilitățile dumneavoastră de Workflow.",
+    "bullets": [
+      "Abilitățile scriu fișiere în directorul de ieșire; Heym le colectează automat.",
+      "Partajați fișiere prin linkuri cu Token sau URL-uri Basic-Auth protejate prin parolă.",
+      "Descărcați fișierele cu un singur clic."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Stocare",
+        "title": "Fișiere colectate automat",
+        "description": "Abilitățile scriu în _OUTPUT_DIR; fișierele apar aici imediat după execuție.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Partajare",
+        "title": "Control flexibil al accesului",
+        "description": "Linkuri publice, protecție prin parolă, date de expirare și limite de descărcare.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Formate",
+        "title": "PDF, DOCX, CSV și altele",
+        "description": "Generați orice tip de fișier cu reportlab, python-docx sau Python standard.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "drive-docs",
+        "label": "Deschideți documentația Drive",
+        "description": "Citiți referința completă a tabului Drive.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "drive-tab",
+          "title": "Tab Drive"
+        }
+      },
+      {
+        "id": "file-gen-docs",
+        "label": "Ghid de generare a fișierelor",
+        "description": "Aflați cum abilitățile generează fișiere.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "file-generation",
+          "title": "Generare de fișiere"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "drive-how",
+        "title": "Cum ajung fișierele aici",
+        "content": "Când o abilitate plasează fișiere în directorul _OUTPUT_DIR, Heym le stochează persistent și generează Token-uri de descărcare."
+      },
+      {
+        "id": "drive-share",
+        "title": "Opțiuni de partajare",
+        "content": "Creați linkuri publice cu Token pentru oricine sau URL-uri protejate prin parolă, inclusiv date de expirare și limite de descărcare."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "drive-tab",
+      "title": "Tab Drive"
+    }
+  },
+  "dashboard:credentials": {
+    "id": "dashboard:credentials",
+    "title": "Date de autentificare",
+    "summary": "Gestionați chei, Token-uri și detalii de conexiune pentru ca Workflow-urile să comunice în siguranță cu sisteme externe.",
+    "bullets": [
+      "Stocați centralizat datele de acces, în loc să le împrăștiați prin noduri individuale.",
+      "Datele de autentificare controlează LLM-uri, integrări, vector store-uri și altele.",
+      "Acordați acces țintit atunci când echipele au nevoie de aceeași conexiune fără copii ale cheilor."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Securitate",
+        "title": "Date de acces sigure",
+        "description": "Configurați autentificarea o singură dată și reutilizați-o în siguranță în Workflow-uri.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Integrări",
+        "title": "Suport extins",
+        "description": "Acceptă furnizori precum OpenAI, DeepSeek, Slack, Redis, Qdrant și Grist.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Colaborare",
+        "title": "Partajare țintită",
+        "description": "Utilizați partajarea la nivel de echipă sau utilizator, în loc să creați duplicate.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "credentials-docs",
+        "label": "Citiți documentația privind datele de autentificare",
+        "description": "Deschideți ghidul pentru tabul Date de autentificare.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "credentials-tab",
+          "title": "Tab Date de autentificare"
+        }
+      },
+      {
+        "id": "integrations-docs",
+        "label": "Vizualizați integrările",
+        "description": "Consultați detaliile privind configurarea integrărilor terțe.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "integrations",
+          "title": "Integrări terțe"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "credentials-use",
+        "title": "Unde sunt utilizate",
+        "content": "Datele de autentificare sunt referite în configurația nodului și sunt rezolvate în siguranță în timpul execuției."
+      },
+      {
+        "id": "credentials-sharing",
+        "title": "Model prietenos pentru echipe",
+        "content": "Preferința este partajarea atunci când mai mulți dezvoltatori au nevoie de același acces la furnizor; astfel se asigură un comportament consecvent și audituri simple."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "credentials-tab",
+      "title": "Tab Date de autentificare"
+    }
+  },
+  "dashboard:vectorstores": {
+    "id": "dashboard:vectorstores",
+    "title": "Vector store-uri",
+    "summary": "Pregătiți backend-uri de retrieval pentru Workflow-uri care necesită căutare semantică, memorie sau integrare de context RAG.",
+    "bullets": [
+      "Vector store-urile constituie baza de date pentru Workflow-urile bazate pe retrieval.",
+      "Utilizați-le împreună cu noduri RAG și fluxuri AI pentru ancorare precisă în documente.",
+      "Acest tab servește drept infrastructură pentru Prompt-uri fundamentate."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastructură RAG",
+        "title": "Memorie căutabilă",
+        "description": "Păstrați documente pregătite pentru retrieval semantic atunci când Workflow-urile necesită context.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Calitate",
+        "title": "Ancorare fundamentată",
+        "description": "Retrieval-ul reduce riscurile de halucinație prin furnizarea de dovezi.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Operare",
+        "title": "Gestionare centralizată unică",
+        "description": "Creați vector store-uri și reutilizați-le în mai multe Workflow-uri.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "vectors-docs",
+        "label": "Deschideți documentația Vector store-urilor",
+        "description": "Citiți ghidul pentru tabul Vector store-uri.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "vectorstores-tab",
+          "title": "Tab Vector store-uri"
+        }
+      },
+      {
+        "id": "rag-docs",
+        "label": "Vizualizați documentația nodului RAG",
+        "description": "Deschideți referința pentru nodul Qdrant RAG.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "rag-node",
+          "title": "Qdrant RAG"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "vectors-role",
+        "title": "Încadrare",
+        "content": "Acest tab pregătește nivelul de stocare. Logica efectivă de retrieval se află în interiorul Workflow-urilor (de exemplu, prin modele RAG sau de agenți)."
+      },
+      {
+        "id": "vectors-choice",
+        "title": "Momentul utilizării",
+        "content": "Alegeți vector store-uri atunci când Workflow-ul dumneavoastră trebuie să caute în baze de cunoștințe nestructurate, în loc să se bazeze doar pe memoria LLM."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "vectorstores-tab",
+      "title": "Tab Vector store-uri"
+    }
+  },
+  "dashboard:mcp": {
+    "id": "dashboard:mcp",
+    "title": "MCP",
+    "summary": "Gestionați conexiunile Model Context Protocol pentru ca Workflow-urile de agenți să acceseze în siguranță instrumente și funcții externe.",
+    "bullets": [
+      "MCP transformă ecosistemele externe de instrumente în context utilizabil pentru agenți.",
+      "Utilizați acest tab atunci când agenții necesită instrumente mai bogate decât Prompt-urile statice.",
+      "Calitatea conexiunii determină direct capacitățile agenților dumneavoastră."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Instrumente pentru agenți",
+        "title": "Nivel extern de funcții",
+        "description": "Furnizați servere de instrumente pe care agenții le pot apela în timpul raționamentului.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Control la runtime",
+        "title": "Configurarea conexiunii",
+        "description": "Configurați Endpoint-uri, etichete și transport pentru Workflow-uri fiabile.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Profunzimea platformei",
+        "title": "Dincolo de Prompt-uri",
+        "description": "MCP permite Workflow-urilor Heym să acționeze, nu doar să răspundă.",
+        "tone": "amber"
+      }
+    ],
+    "actions": [
+      {
+        "id": "mcp-docs",
+        "label": "Deschideți documentația MCP",
+        "description": "Citiți ghidul pentru tabul MCP.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "mcp-tab",
+          "title": "Tab MCP"
+        }
+      },
+      {
+        "id": "agent-architecture-docs",
+        "label": "Arhitectura agenților",
+        "description": "Aflați cum este integrat MCP în execuția agenților.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "agent-architecture",
+          "title": "Arhitectura agenților"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "mcp-fit",
+        "title": "Semnificație",
+        "content": "Deosebit de important atunci când agentul dumneavoastră necesită instrumente, acces la mediu sau integrări de sistem în afara nodurilor individuale."
+      },
+      {
+        "id": "mcp-ops",
+        "title": "Abordare operațională",
+        "content": "Tratați conexiunile MCP ca infrastructură: etichetele stabile și responsabilitățile clare simplifică depanarea."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "mcp-tab",
+      "title": "Tab MCP"
+    }
+  },
+  "dashboard:traces": {
+    "id": "dashboard:traces",
+    "title": "Execuții",
+    "summary": "Inspectați Trace-uri detaliate ale execuțiilor AI și Workflow pentru a înțelege ce s-a întâmplat – nu doar dacă a funcționat.",
+    "bullets": [
+      "Utilizați Trace-urile pentru depanare, analize de performanță și verificări ale calității Prompt-urilor.",
+      "Trace-urile explică comportamentul modelului, latențele și căile de execuție.",
+      "Primul punct de plecare în cazul rezultatelor neașteptate sau al rulărilor instabile."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Depanare",
+        "title": "Vizualizați pașii ascunși",
+        "description": "Datele Trace dezvăluie ce au executat efectiv Workflow-ul și modelul.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Evaluare",
+        "title": "Sprijină iterațiile",
+        "description": "Utilizați Trace-urile la optimizarea Prompt-urilor, instrumentelor și modelelor.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Fiabilitate",
+        "title": "Urmăriți rezultatele",
+        "description": "Trace-urile bune reduc presupunerile în analiza erorilor.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "traces-docs",
+        "label": "Deschideți documentația Execuțiilor",
+        "description": "Citiți ghidul pentru tabul Execuții.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "traces-tab",
+          "title": "Tab Execuții"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "traces-when",
+        "title": "Când Trace-urile devin indispensabile",
+        "content": "De îndată ce Workflow-urile sunt multi-etapă, intensive în model sau bazate pe instrumente, simpla afișare a stării nu mai este suficientă."
+      },
+      {
+        "id": "traces-vs-history",
+        "title": "Trace vs. istoric",
+        "content": "Istoricul arată CĂ a avut loc o rulare. Trace-urile explică DE CE s-a comportat astfel."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "traces-tab",
+      "title": "Tab Execuții"
+    }
+  },
+  "dashboard:alerts": {
+    "id": "dashboard:alerts",
+    "title": "Alerte",
+    "summary": "Definiți praguri pe intervale de timp și primiți notificări automate imediat ce acestea sunt depășite.",
+    "bullets": [
+      "Patru tipuri: număr de erori, durată de execuție, praguri de Token/costuri și contoare de execuție.",
+      "Fiecare alertă este evaluată pe un interval de timp selectat, niciodată pe baza unor evenimente individuale.",
+      "Descrieți cerința în limbaj natural, iar asistentul configurează alerta."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Interval de timp",
+        "title": "Concentrări, nu valori aberante",
+        "description": "O execuție eșuată este zgomot. Douăsprezece în zece minute reprezintă un incident.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Înainte de salvare",
+        "title": "Testați condiția retroactiv",
+        "description": "Pasul de verificare testează pe istoricul real pentru a calibra pragurile în prealabil.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Reacție",
+        "title": "Executați Workflow-ul la alarmă",
+        "description": "Payload-ul alertei devine input pentru Workflow în scopul notificărilor automate via Slack sau e-mail.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "alerts-docs",
+        "label": "Deschideți documentația pentru Alerte",
+        "description": "Citiți despre funcționarea tipurilor de alarmă, a intervalelor și a asistentului.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "alerts-tab",
+          "title": "Tab-ul Alerte"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "alerts-purpose",
+        "title": "Scop",
+        "content": "Analizele și Trace-urile răspund la întrebări pe care le adresați activ. Alertele permit Heym să comunice proactiv atunci când pragurile critice sunt depășite."
+      },
+      {
+        "id": "alerts-quiet",
+        "title": "De ce se evită alarmele false",
+        "content": "O alertă se declanșează o singură dată și așteaptă până când metrica se recuperează – astfel se previne inundarea cu notificări."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "alerts-tab",
+      "title": "Tab-ul Alerte"
+    }
+  },
+  "dashboard:analytics": {
+    "id": "dashboard:analytics",
+    "title": "Analize",
+    "summary": "Urmăriți modelele de utilizare și comportamentul sistemului pentru a înțelege activitatea, creșterea și schimbările în timp.",
+    "bullets": [
+      "Identificați adoptarea, debitul și vârfurile neobișnuite cu ajutorul analizelor.",
+      "O perspectivă la nivel de platformă, nu un instrument de depanare individuală.",
+      "Combinați analizele cu Trace-uri și istoricul pentru semnal și explicație."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Semnale",
+        "title": "Transparența utilizării",
+        "description": "Identificați tendințe în loc să priviți execuții individuale izolat.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Capacitate",
+        "title": "Conștientizare operațională",
+        "description": "Identificați și investigați din timp vârfurile și scăderile de sarcină.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Suport decizional",
+        "title": "Optimizare țintită",
+        "description": "Analizele ajută la prioritizarea celor mai importante Workflow-uri.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "analytics-docs",
+        "label": "Deschideți documentația pentru Analize",
+        "description": "Citiți ghidul pentru dashboard-ul de Analize.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "analytics-tab",
+          "title": "Tab-ul Analize"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "analytics-purpose",
+        "title": "Scop",
+        "content": "Utilizați Analizele pentru modele, debit și comportament agregat pe întreaga operare a platformei."
+      },
+      {
+        "id": "analytics-followup",
+        "title": "Procedură",
+        "content": "Identificați semnalele aici, apoi treceți la Trace-uri, istoric sau editor pentru a analiza cauzele."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "analytics-tab",
+      "title": "Tab-ul Analize"
+    }
+  },
+  "dashboard:dashboard": {
+    "id": "dashboard:dashboard",
+    "title": "Dashboard",
+    "summary": "Creați o grilă de widget-uri grafice, fiecare alimentat de propriile Workflow-uri – toate indicatorii cheie la o privire.",
+    "bullets": [
+      "Fiecare widget este operat de un Workflow care furnizează date către un nod Chart Output.",
+      "Utilizați widget-uri cu bare, linii, circulare, tabele și numerice în funcție de metrică.",
+      "Generați sau adaptați widget-uri cu IA și stocați rezultatele în cache pentru timpi de încărcare rapizi.",
+      "Creați mai multe dashboard-uri și partajați-le cu persoane sau echipe cu drepturi de citire sau scriere."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Compoziție",
+        "title": "Diagrame alimentate de Workflow",
+        "description": "Toate datele generate de un Workflow sunt vizualizate ca diagramă.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Performanță",
+        "title": "Rezultate în cache",
+        "description": "Cache-ul widget-urilor evită execuțiile repetate ale Workflow-ului la fiecare accesare a paginii.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Suport IA",
+        "title": "Generare și adaptare",
+        "description": "Descrieți metrica și lăsați widget-ul să fie creat automat prin IA.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "dashboard-docs",
+        "label": "Deschideți documentația pentru Dashboard",
+        "description": "Aflați cum se creează widget-urile de dashboard.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "dashboard-tab",
+          "title": "Tab-ul Dashboard"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "dashboard-purpose",
+        "title": "Scop",
+        "content": "Utilizați Dashboard-ul pentru prezentări persistente ale indicatorilor cheie din propriile Workflow-uri."
+      },
+      {
+        "id": "dashboard-followup",
+        "title": "Creare",
+        "content": "Adăugați widget, configurați Workflow-ul astfel încât ultimul nod înainte de Chart Output să furnizeze rânduri și aranjați în grilă."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "dashboard-tab",
+      "title": "Tab-ul Dashboard"
+    }
+  },
+  "dashboard:teams": {
+    "id": "dashboard:teams",
+    "title": "Echipe",
+    "summary": "Gestionați accesele partajate astfel încât Workflow-urile, Credentials, variabilele și vector store-ul să fie utilizate colaborativ fără duplicate.",
+    "bullets": [
+      "Echipele sunt cea mai curată cale de a partaja resursele platformei la scară.",
+      "Utilizați Echipele atunci când permisiunile trebuie să urmeze unui grup, nu unei persoane individuale.",
+      "Asigură colaborarea structurată într-un workspace în creștere."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Colaborare",
+        "title": "Partajări bazate pe grup",
+        "description": "Acordați accesul o dată pentru o echipă, în loc să autorizați manual utilizatori individuali.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Claritate",
+        "title": "Responsabilități clare",
+        "description": "Gestionarea resurselor urmează structurile reale ale echipelor.",
+        "tone": "green"
+      },
+      {
+        "eyebrow": "Scalare",
+        "title": "Mai puțin efort administrativ",
+        "description": "Membrii noi moștenesc automat drepturile de acces prin echipă.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "teams-docs",
+        "label": "Deschideți documentația pentru Echipe",
+        "description": "Citiți ghidul pentru dashboard-ul de Echipe.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "teams-tab",
+          "title": "Tab-ul Echipe"
+        }
+      },
+      {
+        "id": "sharing-docs",
+        "label": "Partajări de resurse",
+        "description": "Citiți detalii despre partajarea resurselor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "credentials-sharing",
+          "title": "Partajarea datelor de autentificare"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "teams-role",
+        "title": "Avantajele Echipelor",
+        "content": "Echipele conectează identitatea și accesul la resurse pentru o colaborare fără fricțiuni."
+      },
+      {
+        "id": "teams-tip",
+        "title": "Sfat practic",
+        "content": "Preferați partajările de echipă atunci când un Workflow sau un Credential aparține unui grup de lucru permanent."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "teams-tab",
+      "title": "Tab-ul Echipe"
+    }
+  },
+  "dashboard:logs": {
+    "id": "dashboard:logs",
+    "title": "Protocoale",
+    "summary": "Citiți log-urile la nivel de stack atunci când aveți nevoie de perspective asupra infrastructurii dincolo de rezultatele Workflow-urilor.",
+    "bullets": [
+      "Utilizați log-urile pentru depanarea serviciilor, starea containerelor și probleme de mediu.",
+      "Ajută atunci când cauzele se află sub nivelul Workflow-ului.",
+      "Utilizați împreună cu Trace-urile pentru dovezi la nivel de aplicație și sistem."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Infrastructură",
+        "title": "Transparența containerelor",
+        "description": "Vedeți ce execută serviciile backend sub interfața Heym.",
+        "tone": "amber"
+      },
+      {
+        "eyebrow": "Depanare",
+        "title": "Găsirea cauzelor",
+        "description": "Log-urile ajută la probleme de pornire, blocaje sau erori de integrare.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Complementar",
+        "title": "Diferența față de rezultatele Workflow-ului",
+        "description": "Rezultatele Workflow-ului arată rezultate; log-urile arată comportamentul sistemului.",
+        "tone": "blue"
+      }
+    ],
+    "actions": [
+      {
+        "id": "logs-docs",
+        "label": "Deschideți documentația pentru Protocoale",
+        "description": "Citiți ghidul pentru dashboard-ul de Protocoale.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "logs-tab",
+          "title": "Tab-ul Protocoale"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "logs-boundary",
+        "title": "Momentul utilizării",
+        "content": "Treceți aici atunci când problemele par a fi legate de deployment, serviciu sau mediu."
+      },
+      {
+        "id": "logs-combo",
+        "title": "Cea mai bună combinație",
+        "content": "Utilizați log-urile împreună cu Trace-urile și istoricul pentru a ajunge rapid de la simptome la cauză."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "logs-tab",
+      "title": "Tab-ul Protocoale"
+    }
+  },
+  "evals": {
+    "id": "evals",
+    "title": "Evaluare",
+    "summary": "Creați benchmark-uri reproductibile pentru Workflow-urile agenților, pentru a compara în mod fiabil modificările de Prompt, model și Workflow.",
+    "bullets": [
+      "Suitele și cazurile de test transformă calitatea subiectivă a Workflow-ului în indicatori măsurabili.",
+      "Locul ideal pentru verificări de regresie înainte de implementarea actualizărilor de Prompt sau model.",
+      "Comparați mai multe modele pe același set de date și aceeași metodă de evaluare."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Bucla de calitate",
+        "title": "Benchmark pentru agenți",
+        "description": "Rulați aceeași suită în mod repetat, în loc să vă bazați pe verificări aleatorii.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Comparație",
+        "title": "Teste de model și Prompt",
+        "description": "Observați cum se comportă diferite configurații pe același set de teste.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Siguranță",
+        "title": "Iterație fiabilă",
+        "description": "Demonstrați îmbunătățirile înainte de implementare.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "evals-docs",
+        "label": "Deschide documentația de evaluare",
+        "description": "Citiți ghidul pentru pagina de evaluare.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "evals-tab",
+          "title": "Tab Evaluare"
+        }
+      },
+      {
+        "id": "agent-docs",
+        "label": "Referință nod Agent",
+        "description": "Consultați zona de Workflow vizată de majoritatea suitelor de evaluare.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "agent-node",
+          "title": "Nod Agent"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "evals-design",
+        "title": "Conceperea suitelor",
+        "content": "O suită bună reflectă cazuri reale de utilizare, condiții limită și pași de aprobare care trebuie să rămână stabili."
+      },
+      {
+        "id": "evals-usage",
+        "title": "Parametri de comparație",
+        "content": "Comparațiile tipice includ variante de Prompt, selecția modelului, setările de temperatură și reviziile de Workflow pe același set de date."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "evals-tab",
+      "title": "Tab Evaluare"
+    }
+  },
+  "docs": {
+    "id": "docs",
+    "title": "Documentație",
+    "summary": "Consultați referințe precise ale platformei direct în aplicație și aprofundați după necesitate.",
+    "bullets": [
+      "Documentația Heym este concepută pentru înțelegere rapidă și consultare țintită.",
+      "Bara laterală, căutarea și trimiterile încrucișate permit comutarea rapidă între concepte.",
+      "Showcase-ul face referire direct la articolul deschis în prezent."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Referință în aplicație",
+        "title": "Mereu la îndemână",
+        "description": "Documentația rămâne în fluxul produsului, fără a fi nevoie să deschideți tab-uri externe.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Privire generală",
+        "title": "Esențialul mai întâi",
+        "description": "Articolele încep cu punctele cheie și se ramifică prin link-uri."
+      },
+      {
+        "eyebrow": "Conștient de context",
+        "title": "Articolul curent",
+        "description": "La citirea unui document, acțiunea 'Aflați mai multe' urmează direct acest articol."
+      }
+    ],
+    "actions": [
+      {
+        "id": "docs-home",
+        "label": "Vizualizați introducerea",
+        "description": "Deschideți introducerea documentației ca punct de intrare implicit.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "getting-started",
+          "slug": "introduction",
+          "title": "Introducere"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "docs-nav",
+        "title": "Navigare rapidă",
+        "content": "Utilizați bara laterală pentru categorii și căutarea prin comenzi atunci când subiectul este deja cunoscut."
+      },
+      {
+        "id": "docs-depth",
+        "title": "Suport prin Showcase",
+        "content": "Showcase-ul menține rezumatele compacte și conduce la documentația detaliată atunci când este necesar."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "getting-started",
+      "slug": "introduction",
+      "title": "Introducere"
+    }
+  },
+  "dashboard:schedules": {
+    "id": "dashboard:schedules",
+    "title": "Programări",
+    "summary": "Cuprindeți toate Workflow-urile Cron active într-un calendar vizual și controlați timpii de execuție.",
+    "bullets": [
+      "Comutați între vizualizarea zilnică, săptămânală și lunară pentru rezoluția potrivită.",
+      "Treceți cu cursorul peste un bloc pentru expresia Cron; faceți clic pentru a sări direct la Canvas.",
+      "Utilizați acest tab pentru a verifica densitatea execuțiilor și a identifica suprapunerile."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Transparență",
+        "title": "Vizualizare calendar",
+        "description": "Workflow-urile Cron active apar ca blocuri la orele planificate.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Navigare",
+        "title": "Cu un clic la Canvas",
+        "description": "Faceți clic pe un bloc pentru a deschide direct editorul de Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Intervale",
+        "title": "Zi, săptămână sau lună",
+        "description": "Ajustați rezoluția pentru a examina ore individuale sau pentru a planifica întreaga lună.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "schedules-docs",
+        "label": "Deschide documentația de programări",
+        "description": "Citiți referința tab-ului Programări.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "scheduled-tab",
+          "title": "Tab Programări"
+        }
+      },
+      {
+        "id": "cron-node-docs",
+        "label": "Referință nod Cron",
+        "description": "Aflați cum se configurează Trigger-ele Cron pe Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "cron-node",
+          "title": "Cron"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "schedules-when",
+        "title": "Momentul utilizării",
+        "content": "Verificați automatizările planificate, identificați conflictele de programare și asigurați-vă că Workflow-urile importante rămân active."
+      },
+      {
+        "id": "schedules-color",
+        "title": "Codificare cromatică",
+        "content": "Fiecare Workflow primește o culoare consecventă derivată din ID-ul său, care rămâne identică în vizualizarea zilnică, săptămânală și lunară."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "scheduled-tab",
+      "title": "Tab Programări"
+    }
+  },
+  "dashboard:datatable": {
+    "id": "dashboard:datatable",
+    "title": "Tabele de date",
+    "summary": "Creați tabele de date structurate direct în Heym și utilizați-le programatic în Workflow-uri.",
+    "bullets": [
+      "Creați tabele cu coloane tipizate, completați manual sau importați prin CSV.",
+      "Utilizați nodul de Workflow DataTable pentru a citi, scrie și interoga rânduri în mod programatic.",
+      "Partajați tabelele cu utilizatori sau echipe cu drepturi de citire sau scriere."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Date integrate",
+        "title": "Stocare integrată",
+        "description": "Stocați date structurate fără baze de date externe sau chei API.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Integrare Workflow",
+        "title": "Nod DataTable",
+        "description": "Găsiți, inserați, actualizați și ștergeți rânduri în orice Workflow.",
+        "tone": "blue"
+      },
+      {
+        "eyebrow": "Colaborare",
+        "title": "Partajări și drepturi",
+        "description": "Acordați acces granular de citire și scriere pentru utilizatori și echipe.",
+        "tone": "green"
+      }
+    ],
+    "actions": [
+      {
+        "id": "datatable-docs",
+        "label": "Documentație tab Tabele de date",
+        "description": "Citiți referința tab-ului Tabele de date.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "tabs",
+          "slug": "datatable-tab",
+          "title": "Tabele de date"
+        }
+      },
+      {
+        "id": "datatable-node-docs",
+        "label": "Documentație nod DataTable",
+        "description": "Citiți referința nodului DataTable.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "nodes",
+          "slug": "datatable-node",
+          "title": "DataTable"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "datatable-overview",
+        "title": "Ce sunt tabelele de date?",
+        "content": "Tabelele de date sunt stocare structurată integrată în Heym: coloane tipizate (String, Number, Boolean, Date, JSON), editare inline și import/export CSV."
+      },
+      {
+        "id": "datatable-workflow",
+        "title": "Utilizare în Workflow-uri",
+        "content": "Nodul DataTable suportă find, getAll, getById, insert, update, remove și upsert – fără Credentials, direct prin proprietarul Workflow-ului."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "tabs",
+      "slug": "datatable-tab",
+      "title": "Tabele de date"
+    }
+  },
+  "editor": {
+    "id": "editor",
+    "title": "Editor de Workflow",
+    "summary": "Creați, testați, depanați și optimizați Workflow-uri pe Canvas – direct în contextul execuției.",
+    "bullets": [
+      "În editor, designul nodurilor, fluxul de date și comportamentul de execuție converg.",
+      "Utilizați barele laterale și istoricul pentru a comuta rapid între creare și depanare.",
+      "Showcase-ul rămâne intenționat compact aici, pentru a oferi spațiu maxim pentru Canvas."
+    ],
+    "highlights": [
+      {
+        "eyebrow": "Canvas",
+        "title": "Design vizual de Workflow",
+        "description": "Conectați noduri, ramificați logica și modelați direct fluxul de execuție.",
+        "tone": "primary"
+      },
+      {
+        "eyebrow": "Iterație",
+        "title": "Depanare în timpul creării",
+        "description": "Utilizați istoricul, panourile de depanare și rezultatele execuției pentru bucle de feedback rapide."
+      },
+      {
+        "eyebrow": "Arie funcțională",
+        "title": "Funcții avansate la îndemână",
+        "description": "Portalul, partajările, șabloanele și validarea se află direct pe Canvas."
+      }
+    ],
+    "actions": [
+      {
+        "id": "canvas-docs",
+        "label": "Deschide documentația Canvas",
+        "description": "Citiți referința funcțiilor Canvas.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "canvas-features",
+          "title": "Funcții Canvas"
+        }
+      },
+      {
+        "id": "shortcuts-docs",
+        "label": "Scurtături de tastatură",
+        "description": "Deschideți prezentarea generală a scurtăturilor de tastatură din editor.",
+        "kind": "docs",
+        "docTarget": {
+          "categoryId": "reference",
+          "slug": "keyboard-shortcuts",
+          "title": "Scurtături de tastatură"
+        }
+      }
+    ],
+    "details": [
+      {
+        "id": "editor-flow",
+        "title": "Ritm de lucru",
+        "content": "Modelați pe Canvas, verificați ipotezele despre ieșiri și ajustați parametrii în barele laterale, fără a pierde focalizarea."
+      },
+      {
+        "id": "editor-complexity",
+        "title": "Showcase compact",
+        "content": "Deoarece editorul oferă deja multe informații, Showcase-ul servește ca ghid de orientare suplu."
+      }
+    ],
+    "docsTarget": {
+      "categoryId": "reference",
+      "slug": "canvas-features",
+      "title": "Funcții Canvas"
+    }
+  }
+}

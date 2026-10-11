@@ -5,6 +5,7 @@ import JSZip from "jszip";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useMediaQuery } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
 import {
   AlertTriangle,
   Check,
@@ -95,6 +96,7 @@ import ScheduledView from "@/views/ScheduledView.vue";
 
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 const { startRunbookNewWorkflow } = useRunbookPlayer();
 const authStore = useAuthStore();
 const folderStore = useFolderStore();
@@ -645,7 +647,7 @@ const searchShortcutLabel = computed((): string => {
 
 const searchPlaceholder = computed((): string => {
   const label = searchShortcutLabel.value;
-  return label ? `Search workflows (${label})` : "Search workflows";
+  return label ? `${t('workflows.searchWorkflows')} (${label})` : t('workflows.searchWorkflows');
 });
 
 function isFolderExpandedForDisplay(folderId: string): boolean {
@@ -1755,10 +1757,12 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
             variant="ghost"
             size="sm"
             class="gap-2 min-h-[44px] min-w-[44px] sm:min-w-auto text-foreground"
+            :title="$t('header.history')"
+            :aria-label="$t('header.history')"
             @click="openExecutionHistory()"
           >
             <History class="w-4 h-4" />
-            <span class="hidden sm:inline">History</span>
+            <span class="hidden sm:inline">{{ $t('header.history') }}</span>
           </Button>
         </template>
       </AppHeader>
@@ -1793,7 +1797,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   <div class="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
                     <FileJson class="w-10 h-10" />
                   </div>
-                  <span class="text-lg font-medium">Drop JSON or ZIP to import</span>
+                  <span class="text-lg font-medium">{{ $t('dashboard.dropToImport') }}</span>
                 </div>
               </div>
             </Transition>
@@ -1818,7 +1822,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   </span>
                 </div>
                 <p class="text-muted-foreground mt-0.5 text-sm">
-                  Create, orchestrate and run your modular autonomous agents
+                  {{ $t('dashboard.subtitle') }}
                   <span class="sm:hidden"> · Long press for move/delete</span>
                 </p>
               </div>
@@ -1832,7 +1836,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   @click="restoreChatComposer"
                 >
                   <Sparkles class="w-4 h-4" />
-                  Ask AI
+                  {{ $t('dashboard.askAi') }}
                 </Button>
                 <div
                   v-if="!loading && (workflows.length > 0 || folderStore.folderTree.length > 0)"
@@ -1880,7 +1884,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   @click="openCreateFolderDialog(null)"
                 >
                   <FolderPlus class="w-3.5 h-3.5" />
-                  New Folder
+                  {{ $t('workflows.newFolder') }}
                 </Button>
                 <Button
                   variant="gradient"
@@ -1890,8 +1894,8 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   @click="showCreateDialog = true; pushOverlayState()"
                 >
                   <Plus class="w-3.5 h-3.5" />
-                  <span class="hidden sm:inline">New Workflow</span>
-                  <span class="sm:hidden">New</span>
+                  <span class="hidden sm:inline">{{ $t('workflows.newWorkflow') }}</span>
+                  <span class="sm:hidden">{{ $t('common.add') }}</span>
                 </Button>
               </div>
             </div>
@@ -1920,7 +1924,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
             >
               <Workflow class="w-12 h-12 text-primary opacity-50" />
               <p class="text-sm text-muted-foreground max-w-md">
-                Create a workflow or start from a template
+                {{ $t('dashboard.emptyTitle') }}
               </p>
 
               <!-- Template chips -->
@@ -1930,7 +1934,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
               >
                 <div class="flex items-center gap-2 text-xs text-muted-foreground/70">
                   <LayoutTemplate class="w-3.5 h-3.5" />
-                  <span>Quick start templates</span>
+                  <span>{{ $t('dashboard.quickStartTemplates') }}</span>
                 </div>
                 <div class="flex flex-wrap justify-center gap-2">
                   <button
@@ -1947,7 +1951,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                     type="button"
                     @click="activeTab = 'templates'"
                   >
-                    Browse all →
+                    {{ $t('dashboard.browseAll') }}
                   </button>
                 </div>
               </div>
@@ -1961,7 +1965,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   @click="showCreateDialog = true; pushOverlayState()"
                 >
                   <Plus class="w-4 h-4" />
-                  Create Workflow
+                  {{ $t('workflows.newWorkflow') }}
                 </Button>
                 <Button
                   variant="outline"
@@ -1970,7 +1974,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   @click="openCreateFolderDialog(null)"
                 >
                   <FolderPlus class="w-4 h-4" />
-                  New Folder
+                  {{ $t('workflows.newFolder') }}
                 </Button>
               </div>
             </div>
@@ -1989,12 +1993,10 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                 >
                   <Search class="mb-3 h-8 w-8 text-muted-foreground/60" />
                   <p class="text-sm font-medium text-foreground">
-                    No workflows found
+                    {{ $t('workflows.noWorkflows') }}
                   </p>
                   <p class="mt-1 max-w-md text-xs text-muted-foreground">
-                    {{ statusFilter === 'all'
-                      ? 'Try a different title or description.'
-                      : 'Try a different title, description or status filter.' }}
+                    {{ $t('dashboard.noWorkflowsMatch') }}
                   </p>
                   <Button
                     v-if="statusFilter !== 'all'"
@@ -2152,10 +2154,10 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                     </div>
                     <div>
                       <h3 class="text-sm font-semibold text-muted-foreground">
-                        Scheduled for Deletion
+                        {{ $t("workflows.scheduledForDeletion") }}
                       </h3>
                       <p class="hidden text-xs text-muted-foreground/70 sm:block">
-                        Drag workflows here - they will be deleted at 23:59 if all start nodes are deactivated
+                        {{ $t("workflows.dragToDeleteNotice") }}
                       </p>
                     </div>
                   </div>
@@ -2164,7 +2166,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                     v-if="draggedWorkflowId && !workflows.find((w) => w.id === draggedWorkflowId)?.scheduled_for_deletion"
                     class="mb-4 mt-4 rounded-xl border border-dashed border-destructive/30 py-4 text-center text-sm text-destructive"
                   >
-                    Drop here to schedule for deletion
+                    {{ $t("workflows.dropToScheduleDeletion") }}
                   </div>
 
                   <div
@@ -2268,7 +2270,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
 
       <Dialog
         :open="showCreateDialog"
-        title="Create New Workflow"
+        :title="$t('workflows.createNewWorkflowTitle')"
         @close="showCreateDialog = false"
       >
         <form
@@ -2276,20 +2278,20 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
           @submit.prevent="createWorkflow"
         >
           <div class="space-y-2">
-            <Label for="name">Name</Label>
+            <Label for="name">{{ $t('common.name') }}</Label>
             <Input
               id="name"
               v-model="newWorkflowName"
-              placeholder="My Workflow"
+              :placeholder="$t('workflows.myWorkflow')"
               required
             />
           </div>
           <div class="space-y-2">
-            <Label for="description">Description (optional)</Label>
+            <Label for="description">{{ $t('workflows.descriptionOptional') }}</Label>
             <Textarea
               id="description"
               v-model="newWorkflowDescription"
-              placeholder="What does this workflow do?"
+              :placeholder="$t('workflows.descriptionPlaceholder')"
               :rows="3"
             />
           </div>
@@ -2299,7 +2301,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
               type="button"
               @click="showCreateDialog = false"
             >
-              Cancel
+              {{ $t('common.cancel') }}
             </Button>
             <Button
               type="submit"
@@ -2307,7 +2309,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
               :loading="creating"
               :disabled="!newWorkflowName.trim()"
             >
-              Create Workflow
+              {{ $t('workflows.createWorkflowButton') }}
             </Button>
           </div>
         </form>
@@ -2315,7 +2317,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
 
       <Dialog
         :open="showEditDialog"
-        title="Workflow Settings"
+        :title="$t('header.settings')"
         @close="showEditDialog = false"
       >
         <form
@@ -2323,20 +2325,20 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
           @submit.prevent="updateWorkflow"
         >
           <div class="space-y-2">
-            <Label for="edit-name">Name</Label>
+            <Label for="edit-name">{{ $t('common.name') }}</Label>
             <Input
               id="edit-name"
               v-model="editWorkflowName"
-              placeholder="Workflow name"
+              :placeholder="$t('workflows.workflowName')"
               required
             />
           </div>
           <div class="space-y-2">
-            <Label for="edit-description">Description (optional)</Label>
+            <Label for="edit-description">{{ $t('common.description') }} ({{ $t('common.optional') }})</Label>
             <Textarea
               id="edit-description"
               v-model="editWorkflowDescription"
-              placeholder="What does this workflow do?"
+              :placeholder="$t('workflows.descriptionPlaceholder')"
               :rows="3"
             />
           </div>
@@ -2346,14 +2348,14 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
               type="button"
               @click="showEditDialog = false"
             >
-              Cancel
+              {{ $t('common.cancel') }}
             </Button>
             <Button
               type="submit"
               :loading="editing"
               :disabled="!editWorkflowName.trim()"
             >
-              Save Changes
+              {{ $t('common.save') }}
             </Button>
           </div>
         </form>
@@ -2361,7 +2363,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
 
       <Dialog
         :open="showFolderDialog"
-        title="Create New Folder"
+        :title="$t('workflows.newFolder')"
         @close="showFolderDialog = false"
       >
         <form
@@ -2369,20 +2371,20 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
           @submit.prevent="createFolder"
         >
           <div class="space-y-2">
-            <Label for="folder-name">Folder Name</Label>
+            <Label for="folder-name">{{ $t('workflows.folderName') }}</Label>
             <Input
               id="folder-name"
               v-model="newFolderName"
-              placeholder="My Folder"
+              :placeholder="$t('workflows.myFolder')"
               required
             />
           </div>
           <div class="space-y-2">
-            <Label for="folder-description">Description</Label>
+            <Label for="folder-description">{{ $t('common.description') }}</Label>
             <Textarea
               id="folder-description"
               v-model="newFolderDescription"
-              placeholder="What lives in this folder? (optional)"
+              :placeholder="$t('workflows.folderDescriptionPlaceholder')"
               :rows="2"
               maxlength="500"
             />
@@ -2393,14 +2395,14 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
               type="button"
               @click="showFolderDialog = false"
             >
-              Cancel
+              {{ $t('common.cancel') }}
             </Button>
             <Button
               type="submit"
               :loading="creatingFolder"
               :disabled="!newFolderName.trim()"
             >
-              Create
+              {{ $t('common.create') }}
             </Button>
           </div>
         </form>
@@ -2408,7 +2410,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
 
       <Dialog
         :open="showRenameFolderDialog"
-        title="Edit Folder"
+        :title="$t('workflows.editFolder')"
         @close="showRenameFolderDialog = false"
       >
         <form
@@ -2416,20 +2418,20 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
           @submit.prevent="renameFolder"
         >
           <div class="space-y-2">
-            <Label for="rename-folder-name">Folder Name</Label>
+            <Label for="rename-folder-name">{{ $t('workflows.folderName') }}</Label>
             <Input
               id="rename-folder-name"
               v-model="renameFolderName"
-              placeholder="Folder name"
+              :placeholder="$t('workflows.folderNamePlaceholder')"
               required
             />
           </div>
           <div class="space-y-2">
-            <Label for="rename-folder-description">Description</Label>
+            <Label for="rename-folder-description">{{ $t('common.description') }}</Label>
             <Textarea
               id="rename-folder-description"
               v-model="renameFolderDescription"
-              placeholder="What lives in this folder? (optional)"
+              :placeholder="$t('workflows.folderDescriptionPlaceholder')"
               :rows="2"
               maxlength="500"
             />
@@ -2440,14 +2442,14 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
               type="button"
               @click="showRenameFolderDialog = false"
             >
-              Cancel
+              {{ $t('common.cancel') }}
             </Button>
             <Button
               type="submit"
               :loading="savingFolderRename"
               :disabled="!renameFolderName.trim()"
             >
-              Save
+              {{ $t('common.save') }}
             </Button>
           </div>
         </form>
@@ -2473,7 +2475,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
             @click="openCreateFolderDialog(contextMenuFolder.id)"
           >
             <FolderPlus class="w-4 h-4" />
-            New Subfolder
+            {{ $t('workflows.newSubfolder') }}
           </button>
           <div class="border-t border-border/50 my-1.5" />
           <button
@@ -2482,7 +2484,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
             @click="openRenameFolderDialog(contextMenuFolder)"
           >
             <Edit2 class="w-4 h-4" />
-            Rename
+            {{ $t('workflows.renameFolder') }}
           </button>
           <div class="border-t border-border/50 my-1.5" />
           <button
@@ -2491,7 +2493,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
             @click="openFolderIconDialog(contextMenuFolder)"
           >
             <Palette class="w-4 h-4" />
-            Change icon
+            {{ $t('workflows.changeIcon') }}
           </button>
           <div class="border-t border-border/50 my-1.5" />
           <button
@@ -2500,7 +2502,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
             @click="downloadFolderAsZip(contextMenuFolder); showContextMenu = false"
           >
             <Download class="w-4 h-4" />
-            Download as ZIP
+            {{ $t('workflows.downloadAsZip') }}
           </button>
           <div class="border-t border-border/50 my-1.5" />
           <button
@@ -2509,7 +2511,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
             @click="deleteFolder(contextMenuFolder)"
           >
             <Trash2 class="w-4 h-4" />
-            Delete
+            {{ $t('common.delete') }}
           </button>
         </div>
       </Teleport>

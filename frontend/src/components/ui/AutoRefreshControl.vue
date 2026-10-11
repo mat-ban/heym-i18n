@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { Clock } from "lucide-vue-next";
 
 import Button from "@/components/ui/Button.vue";
@@ -46,12 +47,26 @@ const emit = defineEmits<{
   (e: "refresh"): void;
 }>();
 
+const { t } = useI18n();
+
 type PresetValue = string;
 
 const selectedPreset = ref<PresetValue>("off");
 const customSecondsInput = ref(props.defaultCustomSeconds);
 const customError = ref<string | null>(null);
 const appliedCustomSeconds = ref<number | null>(null);
+
+const localizedPresetOptions = computed<PresetOption[]>(() =>
+  props.presetOptions.map((opt) => {
+    if (opt.value === "off") {
+      return { ...opt, label: t("common.off") };
+    }
+    if (opt.value === "custom") {
+      return { ...opt, label: t("common.custom") };
+    }
+    return opt;
+  }),
+);
 
 const minSeconds = computed<number>(() => props.bounds.minSeconds ?? AUTO_REFRESH_MIN_SECONDS);
 const maxSeconds = computed<number>(() => props.bounds.maxSeconds ?? AUTO_REFRESH_MAX_SECONDS);
@@ -139,9 +154,9 @@ watch(
   <div class="flex shrink-0 items-center gap-1.5">
     <SearchableSelect
       :model-value="selectedPreset"
-      :options="presetOptions"
+      :options="localizedPresetOptions"
       placeholder=""
-      search-placeholder="Search refresh interval..."
+      :search-placeholder="$t('dashboards.autoRefresh.searchPlaceholder')"
       class="w-28"
       select-class="h-9 min-h-0 py-1.5 text-xs sm:text-sm"
       hide-trigger-icon
@@ -154,7 +169,7 @@ watch(
         type="number"
         :min="minSeconds"
         :max="maxSeconds"
-        placeholder="Seconds"
+        :placeholder="$t('dashboards.autoRefresh.secondsPlaceholder')"
         class="w-16 sm:w-20"
         @keydown.enter.prevent="applyCustomInterval"
       />
@@ -164,14 +179,14 @@ watch(
         class="h-9 px-2 text-xs"
         @click="applyCustomInterval"
       >
-        Apply
+        {{ $t('dashboards.autoRefresh.apply') }}
       </Button>
     </template>
 
     <div
       v-if="countdownLabel"
       class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md border border-border/60 bg-muted/40 px-2 py-1 text-xs text-muted-foreground tabular-nums"
-      :title="`Next refresh in ${formatCountdown(secondsRemaining ?? 0)}`"
+      :title="$t('dashboards.autoRefresh.nextRefreshIn', { time: formatCountdown(secondsRemaining ?? 0) })"
     >
       <Clock class="h-3.5 w-3.5 shrink-0" />
       <span class="hidden sm:inline">{{ formatCountdown(secondsRemaining ?? 0) }}</span>

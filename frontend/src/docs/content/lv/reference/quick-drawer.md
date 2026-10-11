@@ -1,0 +1,76 @@
+# Ātrā panelis
+
+**Ātrā panelis** ir darbplūsmu ātrās palaišanas panelis labajā pusē. Tas parādās autentificētās lapās, piemēram, informācijas panelī [Workflows cilnē](../tabs/workflows-tab.md), Docs un Evals.
+
+## Piekļuve
+
+- Noklikšķiniet uz fiksētā **Quick / Workflows** trigera ekrāna labās malas vidusdaļā
+- Kad ir pieejams arī [Kontekstuālais skatījums](./contextual-showcase.md), tā **Page Guide** trigeris atrodas virs Quick Workflows
+- Panelis atveras no labās puses un nedaudz pabīda pašreizējo lapu pa kreisi ar smalku mērogošanas maiņu
+- Mobilajās ierīcēs Ātrais panelis ir paslēpts
+- Panelis netiek rādīts darbplūsmu redaktorā, pieteikšanās/reģistrācijas, portāla vai HITL pārskatīšanas lapās
+
+## Darbplūsmu meklēšana
+
+Izmantojiet filtra lauku paneļa augšdaļā, lai meklētu darbplūsmas pēc:
+
+- Darbplūsmas nosaukuma
+- Darbplūsmas apraksta
+
+Meklēšana nav reģistrjutīga un nekavējoties atjaunina sarakstu.
+
+## Piespraustās darbplūsmas
+
+Piespraudiet darbplūsmas, lai tās saglabātu paneļa augšdaļā.
+
+- Piespraustās darbplūsmas parādās atsevišķā sadaļā virs pilnā saraksta
+- Jaunās piespraudes tiek pievienotas augšpusē
+- Piespraušanas secība tiek saglabāta starp pārlādes sesijām pārlūkprogrammas krātuvē
+
+## Darbplūsmu palaišana
+
+Atlasiet darbplūsmu, lai atvērtu tās ievades formu.
+
+- Ievades lauki tiek rādīti vertikāli paneļa secībā
+- Noklikšķiniet uz **Run Workflow**, lai izpildītu atlasīto darbplūsmu
+- Noklikšķiniet uz **Stop Workflow**, lai atceltu notiekošo izpildi no paneļa
+- Darbplūsmas bez Input laukiem joprojām var palaist tieši
+
+Panelis izmanto to pašu darbplūsmu izpildes API kā citas Heym palaišanas virsmas, tāpēc izvades un izpildlaika darbība paliek konsekventa.
+
+Izpildes apturēšana no paneļa arī atceļ aktīvo aizmugursistēmas izpildi, tostarp jebkuru notiekošo Playwright pārlūkprogrammas uzdevumu šai darbplūsmas izpildei.
+
+## Progress un rezultāti
+
+Pēc izpildes sākšanas panelis rāda:
+
+- Straumētu soļu progresu mezgliem, kad tie sāk un pabeidz darbību
+- Galīgo statusu: `success`, `error` vai `pending`
+- Galīgās izvades kompaktā JSON panelī
+- Vēstures ierakstus ar atzīmi `Quick Drawer`
+
+`pending` nozīmē, ka darbplūsma gaida vēlāku darbību, piemēram, cilvēka pārskatīšanu.
+
+## Pārlūkprogrammas krātuve
+
+Ātrais panelis saglabā personīgos iestatījumus `localStorage`:
+
+- Piesprausto darbplūsmu ID
+- Pēdējo atlasīto darbplūsmu
+
+Šajā versijā panelis **neg** saglabā ievades vērtības.
+
+## Tvērums
+
+Ātrais panelis apzināti ir viegla izpildes virsma.
+
+- Iekļauts: meklēšana, piespraušana, atlase, ievade, palaišana, progress, rezultāts
+- Izslēgts: darbplūsmu izveide, rediģēšana, mapju pārvaldība un kanvas darbības
+
+## Saistītie resursi
+
+- [Workflows cilne](../tabs/workflows-tab.md) – Galvenais darbplūsmu saraksts, mapes un pārvaldība
+- [Ātrā sākšana](../getting-started/quick-start.md) – Izveidojiet un palaidiet savu pirmo darbplūsmu
+- [Izpildes vēsture](./execution-history.md) – Pārskatiet iepriekšējās izpildes
+- [Webhooks](./webhooks.md) – Palaidiet darbplūsmas ar HTTP starpniecību
+- [Kontekstuālais skatījums](./contextual-showcase.md) – Lapas līmeņa norāžu josla, kas papildina Ātro paneli

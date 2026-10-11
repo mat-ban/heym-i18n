@@ -27,10 +27,10 @@ const emit = defineEmits<{ "update:alertType": [value: AlertType] }>();
       @click="emit('update:alertType', meta.type)"
     >
       <div class="font-medium">
-        {{ meta.label }}
+        {{ $te('alerts.types.' + meta.type) ? $t('alerts.types.' + meta.type) : meta.label }}
       </div>
       <div class="mt-1 text-xs text-muted-foreground">
-        {{ meta.question }}
+        {{ $te('alerts.types.' + meta.type + '_question') ? $t('alerts.types.' + meta.type + '_question') : meta.question }}
       </div>
     </button>
   </div>

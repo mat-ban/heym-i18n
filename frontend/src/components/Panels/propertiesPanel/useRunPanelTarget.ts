@@ -1,4 +1,5 @@
 import { computed, nextTick, ref, watch, type ComputedRef, type Ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { useWorkflowStore } from "@/stores/workflow";
 
@@ -9,9 +10,11 @@ interface RunPanelTarget {
 
 export function useRunPanelTarget(): RunPanelTarget {
   const workflowStore = useWorkflowStore();
+  const { t } = useI18n();
   const runPanel = ref<HTMLElement | null>(null);
   const runLabel = computed(() => workflowStore.runUntilNode
-    ? `Run to ${workflowStore.runUntilNode.data.label}` : "Run Workflow");
+    ? t("propertiesPanel.runToNode", { node: workflowStore.runUntilNode.data.label })
+    : t("propertiesPanel.runWorkflow"));
   watch(
     () => workflowStore.runInputFocusRequest,
     async (request) => {

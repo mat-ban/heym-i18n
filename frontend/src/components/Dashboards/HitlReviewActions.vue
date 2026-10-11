@@ -28,7 +28,7 @@ const actionClass =
         :disabled="submitting || preview"
         @click="emit('cancel')"
       >
-        Cancel
+        {{ $t("common.cancel") }}
       </button>
       <button
         type="button"
@@ -40,7 +40,7 @@ const actionClass =
           v-if="submitting"
           class="mr-1 h-3 w-3 animate-spin"
         />
-        Save
+        {{ $t("common.save") }}
       </button>
     </template>
     <template v-else>
@@ -54,7 +54,7 @@ const actionClass =
           v-if="submitting"
           class="mr-1 h-3 w-3 animate-spin"
         />
-        Approve
+        {{ $t("dashboards.hitl.approve") }}
       </button>
       <button
         type="button"
@@ -62,7 +62,7 @@ const actionClass =
         :disabled="submitting || preview"
         @click="emit('edit')"
       >
-        Request changes
+        {{ $t("dashboards.hitl.requestChanges") }}
       </button>
       <button
         type="button"
@@ -70,7 +70,7 @@ const actionClass =
         :disabled="submitting || preview"
         @click="emit('refuse')"
       >
-        Reject
+        {{ $t("dashboards.hitl.reject") }}
       </button>
     </template>
   </div>

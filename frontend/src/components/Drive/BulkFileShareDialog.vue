@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { Link, Users } from "lucide-vue-next";
 
 import type { CreateShareRequest } from "@/types/file";
@@ -22,6 +23,7 @@ const emit = defineEmits<{
 }>();
 
 const error = ref("");
+const { t } = useI18n();
 const result = ref<{ succeeded: number; failed: number } | null>(null);
 const expiresHours = ref<string>("");
 const basicAuthPassword = ref("");
@@ -64,7 +66,7 @@ async function setTeamSharing(enabled: boolean): Promise<void> {
     result.value = { succeeded: res.succeeded.length, failed: res.failed.length };
     emit("updated");
   } catch {
-    error.value = "Failed to update team sharing";
+    error.value = t("drive.failedToUpdateTeamSharing");
   } finally {
     busy.value = false;
   }
@@ -87,7 +89,7 @@ async function createShareLinks(): Promise<void> {
     maxDownloads.value = "";
     emit("updated");
   } catch {
-    error.value = "Failed to create share links";
+    error.value = t("drive.failedToCreateShareLinks");
   } finally {
     busy.value = false;
   }
@@ -97,7 +99,7 @@ async function createShareLinks(): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    :title="`Bulk actions · ${targetIds.length} file${targetIds.length === 1 ? '' : 's'}`"
+    :title="$t('drive.bulkActions', { count: targetIds.length })"
     @close="emit('close')"
   >
     <div class="space-y-4">
@@ -105,10 +107,10 @@ async function createShareLinks(): Promise<void> {
       <div class="space-y-2 p-3 rounded-lg border border-border bg-muted/30">
         <p class="text-sm font-medium flex items-center gap-2">
           <Users class="w-3.5 h-3.5" />
-          Team sharing
+          {{ $t("drive.teamSharing") }}
         </p>
         <p class="text-xs text-muted-foreground">
-          Members of your current teams can view and download these files, but cannot manage them.
+          {{ $t("drive.teamSharingHelp") }}
         </p>
         <div class="flex flex-wrap gap-2 pt-1">
           <Button
@@ -116,7 +118,7 @@ async function createShareLinks(): Promise<void> {
             :disabled="busy"
             @click="setTeamSharing(true)"
           >
-            Share all with my teams
+            {{ $t("drive.shareAllWithMyTeams") }}
           </Button>
           <Button
             size="sm"
@@ -124,7 +126,7 @@ async function createShareLinks(): Promise<void> {
             :disabled="busy"
             @click="setTeamSharing(false)"
           >
-            Remove team sharing
+            {{ $t("drive.removeTeamSharing") }}
           </Button>
         </div>
       </div>
@@ -132,33 +134,33 @@ async function createShareLinks(): Promise<void> {
       <!-- Create share links -->
       <div class="space-y-3 p-3 rounded-lg border border-border bg-muted/30">
         <p class="text-sm font-medium">
-          Create share link for each file
+          {{ $t("drive.createShareLinkForEach") }}
         </p>
         <div class="grid grid-cols-3 gap-2">
           <div>
-            <Label class="text-xs">Expires (hours)</Label>
+            <Label class="text-xs">{{ $t("drive.expiresHours") }}</Label>
             <Input
               v-model="expiresHours"
               type="number"
-              placeholder="No expiry"
+              :placeholder="$t('drive.noExpiry')"
               class="text-xs"
             />
           </div>
           <div>
-            <Label class="text-xs">Password</Label>
+            <Label class="text-xs">{{ $t("drive.password") }}</Label>
             <Input
               v-model="basicAuthPassword"
               type="password"
-              placeholder="No password"
+              :placeholder="$t('drive.noPassword')"
               class="text-xs"
             />
           </div>
           <div>
-            <Label class="text-xs">Max downloads</Label>
+            <Label class="text-xs">{{ $t("drive.maxDownloads") }}</Label>
             <Input
               v-model="maxDownloads"
               type="number"
-              placeholder="Unlimited"
+              :placeholder="$t('drive.unlimited')"
               class="text-xs"
             />
           </div>
@@ -169,7 +171,7 @@ async function createShareLinks(): Promise<void> {
           @click="createShareLinks"
         >
           <Link class="w-3.5 h-3.5 mr-1" />
-          {{ busy ? "Applying..." : "Create links" }}
+          {{ busy ? $t("drive.applying") : $t("drive.createLinks") }}
         </Button>
       </div>
 
@@ -179,8 +181,8 @@ async function createShareLinks(): Promise<void> {
         class="text-xs"
         :class="result.failed > 0 ? 'text-amber-500' : 'text-green-500'"
       >
-        Applied to {{ result.succeeded }} of {{ result.succeeded + result.failed }} files.
-        <span v-if="result.failed > 0">{{ result.failed }} skipped (not owned by you).</span>
+        {{ $t("drive.bulkResult", { succeeded: result.succeeded, total: result.succeeded + result.failed }) }}
+        <span v-if="result.failed > 0">{{ $t("drive.bulkSkipped", { failed: result.failed }) }}</span>
       </p>
 
       <p

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { Check, ChevronDown, Filter } from "lucide-vue-next";
 import {
   DropdownMenuContent,
@@ -25,6 +26,8 @@ const emit = defineEmits<{
   "update:modelValue": [value: WorkflowStatusFilterValue];
 }>();
 
+const { t } = useI18n();
+
 const OPTIONS: { value: WorkflowStatusFilterValue; label: string }[] = [
   { value: "all", label: "All" },
   { value: "running", label: "Running" },
@@ -40,7 +43,7 @@ const OPTIONS: { value: WorkflowStatusFilterValue; label: string }[] = [
 ];
 
 const activeLabel = computed((): string => {
-  return OPTIONS.find((option) => option.value === props.modelValue)?.label ?? "All";
+  return t(`statusFilter.${props.modelValue}`);
 });
 </script>
 
@@ -49,10 +52,10 @@ const activeLabel = computed((): string => {
     <DropdownMenuTrigger
       class="inline-flex h-11 min-h-[44px] items-center gap-2 rounded-xl border border-border bg-background px-3 text-sm shadow-sm transition-all duration-200 hover:border-border/80 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/15 md:h-9 md:min-h-0"
       data-testid="workflow-status-filter"
-      :aria-label="`Filter by status: ${activeLabel}`"
+      :aria-label="$t('statusFilter.filterByStatus', { status: activeLabel })"
     >
       <Filter class="h-3.5 w-3.5 text-muted-foreground" />
-      <span class="whitespace-nowrap">Status: {{ activeLabel }}</span>
+      <span class="whitespace-nowrap">{{ $t('statusFilter.status') }}: {{ activeLabel }}</span>
       <ChevronDown class="h-3 w-3 text-muted-foreground" />
     </DropdownMenuTrigger>
 
@@ -74,7 +77,7 @@ const activeLabel = computed((): string => {
             class="h-3.5 w-3.5 shrink-0"
             :class="modelValue === option.value ? 'text-primary' : 'text-transparent'"
           />
-          <span class="flex-1">{{ option.label }}</span>
+          <span class="flex-1">{{ $t(`statusFilter.${option.value}`) }}</span>
           <span
             v-if="counts[option.value] !== undefined"
             class="text-xs tabular-nums text-muted-foreground"

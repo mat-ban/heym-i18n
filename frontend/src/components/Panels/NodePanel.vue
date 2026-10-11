@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, watch, nextTick, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { LayoutTemplate, Puzzle, Search, X } from "lucide-vue-next";
 
 import type { NodeTemplate } from "@/features/templates/types/template.types";
@@ -25,6 +26,7 @@ import { useWorkflowStore } from "@/stores/workflow";
 import { NODE_DEFINITIONS } from "@/types/node";
 import { useRunbookPlayer } from "@/features/runbook/useRunbookPlayer";
 
+const { t, te } = useI18n();
 const workflowStore = useWorkflowStore();
 const authStore = useAuthStore();
 const searchInputRef = ref<HTMLInputElement | null>(null);
@@ -268,11 +270,20 @@ const nodeTypes = computed(() => {
   }
   const query = searchQuery.value.toLowerCase().trim();
   if (!query) return paletteNodeTypes.value;
-  return paletteNodeTypes.value.filter(
-    (node) =>
-      node.label.toLowerCase().includes(query) ||
-      node.description.toLowerCase().includes(query)
-  );
+  return paletteNodeTypes.value.filter((node) => {
+    const origLabel = node.label.toLowerCase();
+    const origDesc = node.description.toLowerCase();
+    const locLabelKey = `nodes.${node.type}.label`;
+    const locDescKey = `nodes.${node.type}.description`;
+    const locLabel = te(locLabelKey) ? t(locLabelKey).toLowerCase() : "";
+    const locDesc = te(locDescKey) ? t(locDescKey).toLowerCase() : "";
+    return (
+      origLabel.includes(query) ||
+      origDesc.includes(query) ||
+      locLabel.includes(query) ||
+      locDesc.includes(query)
+    );
+  });
 });
 
 const filteredNodeTemplates = computed(() => {
@@ -548,16 +559,16 @@ function handleDoubleClick(type: NodeType, extraData?: Record<string, unknown>):
   >
     <div class="flex items-center justify-between mb-4 shrink-0">
       <h2 class="font-semibold text-sm text-foreground flex items-center gap-2">
-        Nodes
+        {{ $t('canvas.nodes') }}
         <span
           v-if="workflowStore.pendingInsertEdge"
           class="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary dark:bg-primary/25 dark:text-violet-200"
         >
-          Insert
+          {{ $t('common.insert') }}
         </span>
       </h2>
       <span class="text-xs text-muted-foreground">
-        <span class="hidden sm:inline">{{ paletteRows.length }} available</span>
+        <span class="hidden sm:inline">{{ $t('canvas.availableNodes', { count: paletteRows.length }) }}</span>
       </span>
     </div>
     <div
@@ -569,7 +580,7 @@ function handleDoubleClick(type: NodeType, extraData?: Record<string, unknown>):
         ref="searchInputRef"
         v-model="searchQuery"
         type="text"
-        :placeholder="workflowStore.pendingInsertEdge ? 'Select node...' : 'Search nodes...'"
+        :placeholder="workflowStore.pendingInsertEdge ? $t('canvas.selectNode') : $t('canvas.searchNodes')"
         :class="cn(
           'w-full h-11 min-h-[44px] pl-10 pr-9 text-sm bg-background border border-border rounded-xl shadow-sm',
           'focus:outline-none focus:ring-2 focus:ring-primary/15 focus:border-primary',
@@ -623,10 +634,10 @@ function handleDoubleClick(type: NodeType, extraData?: Record<string, unknown>):
           </div>
           <div class="min-w-0 flex-1">
             <div class="font-medium text-sm leading-tight">
-              {{ node.label }}
+              {{ $te('nodes.' + node.type + '.label') ? $t('nodes.' + node.type + '.label') : node.label }}
             </div>
             <div class="text-xs text-muted-foreground line-clamp-1 mt-0.5 hidden md:block">
-              {{ node.description }}
+              {{ $te('nodes.' + node.type + '.description') ? $t('nodes.' + node.type + '.description') : node.description }}
             </div>
           </div>
         </div>
@@ -677,14 +688,14 @@ function handleDoubleClick(type: NodeType, extraData?: Record<string, unknown>):
           <div class="pt-4 pb-1">
             <h3 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
               <LayoutTemplate class="w-3.5 h-3.5" />
-              Templates
+              {{ $t('templates.title') }}
             </h3>
           </div>
           <p
             v-if="templatesLoadError"
             class="text-xs text-muted-foreground px-1 pb-2"
           >
-            Could not load templates.
+            {{ $t('nodes.couldNotLoadTemplates') }}
           </p>
           <div
             v-for="(row, tIndex) in filteredNodeTemplates"
@@ -719,7 +730,7 @@ function handleDoubleClick(type: NodeType, extraData?: Record<string, unknown>):
                   v-if="isSharedTemplate(row)"
                   class="text-[10px] font-medium uppercase tracking-wide text-primary px-1.5 py-0.5 rounded bg-primary/10"
                 >
-                  Shared
+                  {{ $t('common.shared') }}
                 </span>
               </div>
               <div class="text-xs text-muted-foreground line-clamp-1 mt-0.5 hidden md:block">
@@ -735,10 +746,10 @@ function handleDoubleClick(type: NodeType, extraData?: Record<string, unknown>):
           <div class="text-center mb-4">
             <Search class="w-8 h-8 text-muted-foreground/40 mx-auto mb-3" />
             <p class="text-sm text-muted-foreground">
-              No nodes found
+              {{ $t('nodes.noNodesFound') }}
             </p>
             <p class="text-xs text-muted-foreground/60 mt-1">
-              Try a different search term
+              {{ $t('nodes.tryDifferentSearch') }}
             </p>
           </div>
           <button
@@ -759,12 +770,12 @@ function handleDoubleClick(type: NodeType, extraData?: Record<string, unknown>):
             </div>
             <div class="min-w-0 flex-1">
               <div class="font-medium text-sm leading-tight">
-                Search Heym templates
+                {{ $t('nodes.searchTemplates') }}
               </div>
               <div class="text-xs text-muted-foreground line-clamp-1 mt-0.5">
                 {{ searchQuery.trim()
-                  ? `Find "${searchQuery.trim()}" in public templates`
-                  : "Browse public templates to bring to canvas" }}
+                  ? $t('nodes.findInTemplates', { query: searchQuery.trim() })
+                  : $t('nodes.browseTemplatesDesc') }}
               </div>
             </div>
           </button>

@@ -28,14 +28,14 @@ const emit = defineEmits<{
         open && 'showcase-trigger--open',
         teaserVisible && 'showcase-trigger--teasing'
       )"
-      aria-label="Toggle page showcase"
+      :aria-label="$t('showcase.togglePageShowcase')"
       :aria-expanded="open"
       @click="emit('toggle')"
     >
       <div class="showcase-trigger__inner">
         <Compass class="h-3.5 w-3.5 shrink-0 text-sky-500" />
         <div class="showcase-trigger__label">
-          Page Guide
+          {{ $t("showcase.pageGuide") }}
         </div>
         <ChevronLeft
           class="showcase-trigger__chevron h-3.5 w-3.5 shrink-0 text-muted-foreground/85 transition-transform duration-300"

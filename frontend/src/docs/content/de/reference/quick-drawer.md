@@ -1,0 +1,76 @@
+# Quick Drawer
+
+Der **Quick Drawer** ist ein rechtsseitiges Schnellausführungs-Panel für Workflows. Es erscheint auf authentifizierten Seiten wie dem Dashboard-[Workflows-Reiter](../tabs/workflows-tab.md), Docs und Evaluierung.
+
+## Zugriff
+
+- Klicke auf den fixierten **Quick / Workflows**-Trigger am rechten mittleren Rand des Bildschirms
+- Wenn das [Kontextueller Showcase](./contextual-showcase.md) ebenfalls verfügbar ist, sitzt dessen **Page Guide**-Trigger oberhalb von Quick Workflows
+- Der Drawer öffnet sich von rechts und verschiebt die aktuelle Seite mit einer dezenten Skalierung nach links
+- Auf Mobilgeräten ist der Quick Drawer ausgeblendet
+- Der Drawer wird nicht im Workflow-Editor, bei Login/Registrierung, im Portal oder auf HITL-Review-Seiten angezeigt
+
+## Workflow-Suche
+
+Verwende das Filterfeld oben im Drawer, um Workflows zu suchen nach:
+
+- Workflow-Name
+- Workflow-Beschreibung
+
+Die Suche ist unabhängig von Groß-/Kleinschreibung und aktualisiert die Liste sofort.
+
+## Angepinnte Workflows
+
+Pinnen Sie Workflows an, um sie oben im Drawer zu halten.
+
+- Angepinnte Workflows erscheinen in einem eigenen Abschnitt oberhalb der vollständigen Liste
+- Neue Pins werden oben hinzugefügt
+- Die Pin-Reihenfolge bleibt über Neuladevorgänge hinweg im Browser-Speicher erhalten
+
+## Workflows ausführen
+
+Wähle einen Workflow aus, um dessen Eingabeformular zu öffnen.
+
+- Eingabefelder werden vertikal in der Reihenfolge des Drawers angezeigt
+- Klicke auf **Run Workflow**, um den ausgewählten Workflow auszuführen
+- Klicke auf **Stop Workflow**, um eine laufende Ausführung aus dem Drawer abzubrechen
+- Workflows ohne Eingabefelder können weiterhin direkt ausgeführt werden
+
+Der Drawer verwendet dieselbe Workflow-Ausführungs-API wie andere Heym-Ausführungsoberflächen, sodass Ausgaben und Laufzeitverhalten konsistent bleiben.
+
+Das Stoppen eines Laufs aus dem Drawer bricht auch die aktive Backend-Ausführung ab, einschließlich eines laufenden Playwright-Browser-Jobs für diesen Workflow-Lauf.
+
+## Fortschritt und Ergebnisse
+
+Nach dem Start eines Laufs zeigt der Drawer:
+
+- Streaming-Schrittfortschritt für Knoten, während sie starten und abgeschlossen werden
+- Endstatus: `success`, `error` oder `pending`
+- Finale Ausgaben in einem kompakten JSON-Panel
+- Verlaufseinträge mit dem Tag `Quick Drawer`
+
+`pending` bedeutet, dass der Workflow auf eine spätere Aktion wie eine menschliche Überprüfung wartet.
+
+## Browser-Speicher
+
+Der Quick Drawer speichert persönliche Einstellungen in `localStorage`:
+
+- Angepinnte Workflow-IDs
+- Zuletzt ausgewählter Workflow
+
+Der Drawer speichert in dieser Version **keine** Eingabewerte.
+
+## Umfang
+
+Der Quick Drawer ist bewusst eine leichtgewichtige Ausführungsoberfläche.
+
+- Enthalten: Suche, Anpinnen, Auswahl, Eingabe, Ausführen, Fortschritt, Ergebnis
+- Ausgeschlossen: Workflow-Erstellung, Bearbeitung, Ordnerverwaltung und Canvas-Aktionen
+
+## Verwandte Themen
+
+- [Workflows-Reiter](../tabs/workflows-tab.md) – Haupt-Workflow-Liste, Ordner und Verwaltung
+- [Schnellstart](../getting-started/quick-start.md) – Erstelle und führe deinen ersten Workflow aus
+- [Ausführungsverlauf](./execution-history.md) – Vergangene Läufe überprüfen
+- [Webhooks](./webhooks.md) – Workflows über HTTP auslösen
+- [Kontextueller Showcase](./contextual-showcase.md) – Seitenbezogene Anleitungsschiene, die den Quick Drawer ergänzt

@@ -1173,7 +1173,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
       >
         <div class="flex flex-col items-center gap-4">
           <div class="loading-spinner w-12 h-12 rounded-full animate-spin" />
-          <span class="text-muted-foreground text-sm">Loading portal...</span>
+          <span class="text-muted-foreground text-sm">{{ $t('portal.loadingPortal') }}</span>
         </div>
       </div>
 
@@ -1252,10 +1252,10 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                 class="w-16 h-16 mx-auto mb-4"
               >
               <h2 class="text-xl font-semibold">
-                Authentication Required
+                {{ $t('portal.authRequired') }}
               </h2>
               <p class="text-sm text-muted-foreground mt-2">
-                Please log in to access this workflow
+                {{ $t('portal.loginToAccess') }}
               </p>
             </div>
 
@@ -1264,22 +1264,22 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
               @submit.prevent="handleLogin"
             >
               <div class="space-y-2">
-                <Label for="username">Username</Label>
+                <Label for="username">{{ $t('common.username') }}</Label>
                 <Input
                   id="username"
                   v-model="username"
-                  placeholder="Enter username"
+                  :placeholder="$t('portal.enterUsername')"
                   autocomplete="username"
                 />
               </div>
               <div class="space-y-2">
-                <Label for="password">Password</Label>
+                <Label for="password">{{ $t('auth.password') }}</Label>
                 <div class="relative">
                   <Input
                     id="password"
                     v-model="password"
                     :type="showPassword ? 'text' : 'password'"
-                    placeholder="Enter password"
+                    :placeholder="$t('portal.enterPassword')"
                     autocomplete="current-password"
                     class="pr-10"
                   />
@@ -1314,7 +1314,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                 :loading="isLoggingIn"
                 :disabled="!username.trim() || !password"
               >
-                Sign In
+                {{ $t('portal.signIn') }}
               </Button>
             </form>
           </div>
@@ -1334,10 +1334,10 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                 <Upload class="w-8 h-8 text-primary" />
               </div>
               <p class="text-lg font-medium">
-                Drop file here
+                {{ $t('portal.dropFileHere') }}
               </p>
               <p class="text-sm text-muted-foreground mt-1">
-                Release to upload
+                {{ $t('portal.releaseToUpload') }}
               </p>
             </div>
           </div>
@@ -1358,7 +1358,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                   <Send class="w-8 h-8 text-muted-foreground" />
                 </div>
                 <p class="text-muted-foreground">
-                  Send a message to get started
+                  {{ $t('portal.sendMessageToStart') }}
                 </p>
               </div>
               <div
@@ -1459,7 +1459,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                         'text-primary': message.type === 'assistant',
                       }"
                     >
-                      Copied
+                      {{ $t('common.copied') }}
                     </span>
                   </button>
                 </div>
@@ -1512,7 +1512,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                     <textarea
                       ref="singleInputTextarea"
                       v-model="inputValues[visibleInputFields[0].key]"
-                      :placeholder="visibleInputFields[0].defaultValue || 'Type a message...'"
+                      :placeholder="visibleInputFields[0].defaultValue || $t('portal.typeAMessage')"
                       rows="1"
                       class="chat-textarea flex-1 resize-none bg-transparent border-0 focus:outline-none focus:ring-0 text-sm py-2.5 px-1 max-h-60 overflow-y-auto"
                       @input="autoResize"
@@ -1570,7 +1570,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                       <textarea
                         :id="`field-${field.key}`"
                         v-model="inputValues[field.key]"
-                        :placeholder="field.defaultValue || `Enter ${field.key}...`"
+                        :placeholder="field.defaultValue || $t('portal.enterField', { field: field.key })"
                         rows="1"
                         class="chat-textarea flex-1 resize-none bg-transparent border-0 focus:outline-none focus:ring-0 text-sm py-2.5 px-1 max-h-60 overflow-y-auto"
                         @input="autoResize"
@@ -1586,7 +1586,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                         class="px-12 py-2.5 min-h-[44px]"
                       >
                         <Send class="w-4 h-4 mr-2" />
-                        Send
+                        {{ $t('portal.send') }}
                       </Button>
                       <Button
                         v-else
@@ -1596,7 +1596,7 @@ function startResize(event: MouseEvent | TouchEvent, messageId: string, directio
                         @click="stopExecution"
                       >
                         <Square class="w-4 h-4 mr-2" />
-                        Stop
+                        {{ $t('portal.stop') }}
                       </Button>
                     </div>
                   </div>

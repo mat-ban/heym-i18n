@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Uzel v rámci Workflow znovu aktivovat",
+    "releaseTour": {
+      "label": "Novinka v Heym",
+      "introTitle": "Novinky v tomto vydání",
+      "introDescription": "Krátký přehled novinek od vaší poslední aktualizace. Zabere přibližně jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable uzel: Znovu aktivovat uzel v rámci Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Nový **Enable uzel** je protějškem k **Disable uzlu**. Vyberte uzel podle názvu, abyste jej znovu aktivovali, a změnu uložte. Deaktivovaný **Cron** Trigger se tak znovu spustí v příštím naplánovaném čase. Pokud se uzel nachází dále v průběhu a ještě nebyl vykonán, spustí se přímo v aktuálním běhu."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deaktivovaný Trigger nikdy sám neinicializuje běh. Umístěte proto Enable uzel za jiný vstupní bod, například za **Input** Trigger. **Wait** uzel nyní podporuje i delší pauzy: až 15 minut místo jedné."
+          }
+        ],
+        "tour": {
+          "description": "Znovu aktivovat deaktivovaný uzel přímo z Workflow, např. pozastavený Cron Trigger.",
+          "useCases": [
+            "Spustit deaktivovaný Cron Trigger podle potřeby prostřednictvím Webhooku",
+            "Kombinovat s Disable uzlem pro zapínání a vypínání uzlů v závislosti na stavu",
+            "Pozastavit Workflow pomocí Wait uzlu až na 15 minut"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Čekající lidská schválení kontrolujte přímo v Dashboardu",
+    "releaseTour": {
+      "label": "Novinky v Heym",
+      "introTitle": "Novinky v tomto vydání",
+      "introDescription": "Krátký přehled novinek od vaší poslední aktualizace. Zabere přibližně jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Vyřizujte čekající Reviews pomocí widgetu v Dashboardu",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Přidejte widget **HITL** a záhlaví zobrazí počet čekajících Reviews jako `1/n ausstehend`. Pomocí kláves se šipkami procházejte jednotlivé položky. Název Workflow otevře daný běh přímo na Canvasu. **Schválit**, **Vyžádat změny** a **Zamítnout** dokončí daný koncept. Ikona historie otevře běh v dialogu historie na stejné stránce. Fronta je osobní: sdílený Dashboard nezobrazuje cizí koncepty."
+          }
+        ],
+        "tour": {
+          "description": "Karousel v Dashboardu pro vaše čekající schválení s počítadlem v záhlaví.",
+          "useCases": [
+            "Zobrazit, kolik Reviews čeká, ještě než otevřete první z nich",
+            "Schválit, vyžádat změny nebo zamítnout, aniž byste opustili Dashboard",
+            "Otevřít tento běh pomocí ikony vedle názvu widgetu v dialogu historie"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "AI asistent testuje své Workflow a zřizuje datové tabulky",
+    "releaseTour": {
+      "label": "Novinky v Heym",
+      "introTitle": "Novinky v tomto vydání",
+      "introDescription": "Krátký přehled novinek od vaší poslední aktualizace. Zabere přibližně jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO režim: AI asistent testuje, co vytváří",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Aktivujete-li **YOLO režim** v Canvasu **AI asistenta**, přestane po použití Workflow zastavovat. Spustí Workflow stejně jako přes **Run**, přečte výsledek a samostatně opraví Workflow až pětkrát na zprávu. Každá odpověď zobrazuje kroky živě."
+          },
+          {
+            "type": "prose",
+            "markdown": "Před prvním spuštěním se zeptá na testovací vstupy s navrženými hodnotami a tyto hodnoty znovu použije. Může také spouštět jiné Workflow, pokud potřebuje jejich výsledky. Potřebuje-li rozhodnutí nebo přihlašovací údaje, zeptá se pomocí obvyklé karty s dotazem. Skutečná spuštění: YOLO režim je standardně vypnutý a **Stop** kdykoli ukončí průběh."
+          }
+        ],
+        "tour": {
+          "description": "AI asistent spouští vytvořené Workflow, kontroluje výsledek a samostatně opravuje chyby, dokud nefungují.",
+          "useCases": [
+            "Popsat Workflow a přímo získat otestovanou verzi",
+            "Nechat asistenta automaticky vyhledat a opravit chybné uzly",
+            "Před propojením zkontrolovat návratové hodnoty jiných Workflow"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "AI asistent vybírá nebo vytváří datové tabulky",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Když Workflow ukládá datové záznamy, **AI asistent** nyní rozpozná vaše **DataTables**. Uvedete-li tabulku, použije ji. V opačném případě se zeptá na vhodnou tabulku nebo navrhne **Vytvořit novou tabulku** s potřebnými sloupci."
+          },
+          {
+            "type": "prose",
+            "markdown": "Funguje v Canvas asistentovi, v YOLO režimu, v **Chatu**, v dokumentaci a přes MCP s `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "AI asistent se zeptá na vhodnou datovou tabulku nebo vytvoří novou s potřebnými sloupci.",
+          "useCases": [
+            "Automaticky zaznamenávat leady do tabulek a generovat Workflow a tabulku společně",
+            "Vybrat existující tabulky podle sloupců a typů",
+            "Vytvářet a propojovat tabulky přímo z Chatu nebo přes MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Vytvářejte více dashboardů a sdílejte je s týmem",
+    "releaseTour": {
+      "label": "Novinka v Heym",
+      "introTitle": "Novinky v tomto vydání",
+      "introDescription": "Krátký přehled novinek od vaší poslední aktualizace. Zabere přibližně jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Vytvářejte více dashboardů a sdílejte je s týmem",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Záložka **Dashboard** nyní podporuje libovolný počet dashboardů. Přepínejte pohodlně pomocí výběru v horní části záložky nebo vytvořte nový pomocí **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Sdílejte dashboardy s osobami nebo týmy prostřednictvím **Nastavení**. **Čtení** umožňuje zobrazení a aktualizaci; **Zápis** umožňuje úpravu widgetů. Widgety vždy používají přihlašovací údaje vlastníka."
+          }
+        ],
+        "tour": {
+          "description": "Spravujte více dashboardů, přepínejte mezi nimi a sdílejte je v režimu pouze pro čtení nebo s možností úprav.",
+          "useCases": [
+            "Uspořádejte samostatné dashboardy podle týmu, produktu nebo klienta",
+            "Poskytněte zainteresovaným stranám zobrazení pouze pro čtení",
+            "Předem otestujte typy grafů s ukázkovými daty"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

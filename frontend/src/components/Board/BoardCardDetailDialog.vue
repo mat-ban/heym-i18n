@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import DOMPurify from "dompurify";
@@ -33,6 +34,7 @@ const emit = defineEmits<{ (e: "close"): void }>();
 const boardStore = useBoardStore();
 const router = useRouter();
 const { showToast } = useToast();
+const { t } = useI18n();
 const detail = ref<CardDetail | null>(null);
 const loading = ref(false);
 const comment = ref("");
@@ -240,10 +242,10 @@ async function runFollowUp(): Promise<void> {
     await reload();
   } catch (runError: unknown) {
     if (axios.isAxiosError(runError) && runError.response?.status === 409) {
-      showToast("This card already has a run in progress.", "error");
+      showToast(t("board.cardRunningMoveBlocked"), "error");
       await reload();
     } else {
-      showToast("Failed to start the follow-up run.", "error");
+      showToast(t("board.saveFailedError"), "error");
     }
   } finally {
     runInFlight.value = false;
@@ -331,7 +333,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
 <template>
   <Dialog
     :open="open"
-    :title="detail?.card.title ?? 'Card'"
+    :title="detail?.card.title ?? $t('board.card')"
     close-on-back
     @close="emit('close')"
   >
@@ -350,13 +352,13 @@ async function openLiveRun(run: CardRun): Promise<void> {
             'bg-muted text-muted-foreground': detail.card.run_status === 'idle',
           }"
         >
-          {{ detail.card.run_status }}
+          {{ $te('board.runStatuses.' + detail.card.run_status) ? $t('board.runStatuses.' + detail.card.run_status) : detail.card.run_status }}
         </span>
         <span
           v-if="currentColumnName"
           class="inline-flex items-center gap-1 rounded-full border border-border/70 bg-muted/60 px-2 py-0.5 text-xs font-medium text-foreground/85"
           data-testid="card-active-column"
-          :title="`Active column: ${currentColumnName}`"
+          :title="$t('board.activeColumn', { name: currentColumnName })"
         >
           <Columns3 class="h-3 w-3 text-muted-foreground" />
           {{ currentColumnName }}
@@ -365,11 +367,11 @@ async function openLiveRun(run: CardRun): Promise<void> {
           v-if="activeLiveRun"
           class="inline-flex items-center gap-1 rounded border border-blue-500/40 bg-blue-500/10 px-1.5 py-0.5 text-xs text-blue-500 hover:bg-blue-500/20"
           :data-testid="`run-open-live-${activeLiveRun.id}`"
-          :aria-label="`Open ${activeLiveRun.workflow_name} live canvas`"
+          :aria-label="$t('board.openLiveCanvasAria', { name: activeLiveRun.workflow_name })"
           @click.stop="openLiveRun(activeLiveRun)"
         >
           <Radio class="h-3 w-3" />
-          Open live
+          {{ $t("board.openLive") }}
         </button>
       </span>
     </template>
@@ -379,8 +381,8 @@ async function openLiveRun(run: CardRun): Promise<void> {
         type="button"
         class="flex h-8 w-8 items-center justify-center rounded-lg bg-muted/50 text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
         data-testid="card-run-followup"
-        title="Run follow-up round"
-        aria-label="Run follow-up round"
+        :title="$t('board.runFollowUp')"
+        :aria-label="$t('board.runFollowUp')"
         :disabled="
           runInFlight ||
             detail.card.run_status === 'running' ||
@@ -410,12 +412,12 @@ async function openLiveRun(run: CardRun): Promise<void> {
     >
       <section>
         <h3 class="mb-1 text-xs font-semibold uppercase text-muted-foreground">
-          Description
+          {{ $t("board.description") }}
         </h3>
         <Textarea
           v-model="editedContent"
           :rows="3"
-          placeholder="Describe the job for this card"
+          :placeholder="$t('board.describeJobPlaceholder')"
         />
         <div class="mt-2 flex items-center justify-end gap-2">
           <span
@@ -423,7 +425,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
             class="inline-flex items-center gap-1 text-xs text-emerald-500"
             data-testid="card-description-saved"
           >
-            <Check class="h-3.5 w-3.5" /> Description saved
+            <Check class="h-3.5 w-3.5" /> {{ $t("board.descriptionSaved") }}
           </span>
           <Button
             v-if="descriptionDirty || savingContent"
@@ -432,14 +434,14 @@ async function openLiveRun(run: CardRun): Promise<void> {
             :disabled="savingContent"
             @click="saveContent"
           >
-            Save description
+            {{ $t("board.saveDescription") }}
           </Button>
         </div>
       </section>
 
       <section>
         <h3 class="mb-1 text-xs font-semibold uppercase text-muted-foreground">
-          Attachments
+          {{ $t("board.attachments") }}
         </h3>
         <div class="flex flex-col gap-1.5">
           <div
@@ -459,7 +461,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
             </a>
             <button
               class="rounded p-1 hover:bg-destructive/10"
-              :aria-label="`Remove ${attachment.name}`"
+              :aria-label="$t('board.removeAttachmentAria', { name: attachment.name })"
               @click="removeAttachment(attachment.file_id)"
             >
               <Trash2 class="h-3.5 w-3.5 text-destructive" />
@@ -503,16 +505,16 @@ async function openLiveRun(run: CardRun): Promise<void> {
                 v-else
                 class="mr-1 h-3.5 w-3.5"
               />
-              Attach file
+              {{ $t("board.attachFile") }}
             </Button>
-            <span>{{ dragActive ? "Drop to attach" : "or drop files here" }}</span>
+            <span>{{ dragActive ? $t("board.dropToAttach") : $t("board.dropFilesHere") }}</span>
           </div>
         </div>
       </section>
 
       <section>
         <h3 class="mb-1 text-xs font-semibold uppercase text-muted-foreground">
-          Activity
+          {{ $t("board.activity") }}
         </h3>
         <div class="relative">
           <div
@@ -538,13 +540,13 @@ async function openLiveRun(run: CardRun): Promise<void> {
                   v-else-if="activity.author_type === 'agent'"
                   class="h-3.5 w-3.5"
                 />
-                <span class="capitalize">{{ activity.kind }}</span>
+                <span class="capitalize">{{ $te('board.activityKinds.' + activity.kind) ? $t('board.activityKinds.' + activity.kind) : activity.kind }}</span>
                 <span>· {{ formatTime(activity.created_at) }}</span>
                 <div class="ml-auto flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                   <button
                     class="rounded p-1 hover:text-foreground"
                     :data-testid="`activity-copy-${activity.id}`"
-                    :aria-label="copiedActivityId === activity.id ? 'Copied' : 'Copy text'"
+                    :aria-label="copiedActivityId === activity.id ? $t('common.copied') : $t('common.copy')"
                     @click="copyActivity(activity)"
                   >
                     <Check
@@ -559,7 +561,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
                   <button
                     class="rounded p-1 hover:bg-destructive/10"
                     :data-testid="`activity-delete-${activity.id}`"
-                    aria-label="Delete activity"
+                    :aria-label="$t('common.delete')"
                     @click="removeActivity(activity.id)"
                   >
                     <Trash2 class="h-3.5 w-3.5 text-destructive" />
@@ -576,7 +578,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
               v-if="!detail.activities.length"
               class="text-xs text-muted-foreground"
             >
-              No activity yet.
+              {{ $t("board.noActivityYet") }}
             </p>
           </div>
           <div
@@ -588,7 +590,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
           <Textarea
             v-model="comment"
             :rows="2"
-            placeholder="Add a comment (included in the next run's context)"
+            :placeholder="$t('board.commentPlaceholder')"
             data-testid="card-comment-input"
             @keydown.meta.enter="submitComment"
           />
@@ -599,7 +601,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
               :disabled="!comment.trim()"
               @click="submitComment"
             >
-              Comment
+              {{ $t("board.comment") }}
             </Button>
           </div>
         </div>
@@ -607,7 +609,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
 
       <section>
         <h3 class="mb-1 text-xs font-semibold uppercase text-muted-foreground">
-          Runs
+          {{ $t("board.runs") }}
         </h3>
         <div class="flex flex-col gap-2">
           <div
@@ -618,7 +620,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
             <div class="flex items-center gap-2 text-xs">
               <span class="font-medium">{{ run.workflow_name }}</span>
               <span class="text-muted-foreground">
-                step {{ run.chain_position + 1 }}/{{ run.chain_length }}
+                {{ $t("board.stepChain", { current: run.chain_position + 1, total: run.chain_length }) }}
               </span>
               <div class="ml-auto flex items-center gap-1.5">
                 <button
@@ -634,7 +636,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
                     v-else
                     class="h-3 w-3"
                   />
-                  {{ copiedRunId === run.id ? "Copied" : "Copy" }}
+                  {{ copiedRunId === run.id ? $t("common.copied") : $t("common.copy") }}
                 </button>
                 <span
                   class="rounded-full px-2 py-0.5 font-medium"
@@ -647,7 +649,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
                       run.status === 'skipped' || run.status === 'cancelled',
                   }"
                 >
-                  {{ run.status }}
+                  {{ $te('board.runStatuses.' + run.status) ? $t('board.runStatuses.' + run.status) : run.status }}
                 </span>
               </div>
             </div>
@@ -672,7 +674,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
             v-if="!detail.runs.length"
             class="text-xs text-muted-foreground"
           >
-            No runs yet. Move the card into a column with workflows to start one.
+            {{ $t("board.noRunsYet") }}
           </p>
         </div>
       </section>

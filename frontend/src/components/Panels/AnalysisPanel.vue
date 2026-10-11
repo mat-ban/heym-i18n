@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import DOMPurify from "dompurify";
 import {
   AlertTriangle,
@@ -45,6 +46,7 @@ const props = defineProps<{
 }>();
 
 const workflowStore = useWorkflowStore();
+const { t } = useI18n();
 
 const loading = ref(false);
 const savedContent = ref("");
@@ -131,7 +133,7 @@ async function loadNote(): Promise<void> {
     updatedAt.value = note.updated_at;
     mode.value = note.content.trim() ? "preview" : "edit";
   } catch {
-    errorMsg.value = "Failed to load the analysis note.";
+    errorMsg.value = t("analytics.analysisPanel.failedToLoadNote");
   } finally {
     loading.value = false;
   }
@@ -231,7 +233,7 @@ async function startAnalyze(): Promise<void> {
       if (err instanceof DOMException && err.name === "AbortError") {
         return;
       }
-      errorMsg.value = err.message || "Analysis failed.";
+      errorMsg.value = err.message || t("analytics.analysisPanel.analysisFailed");
       if (reanalyze && !reanalyzePreview.value) reanalyzePreview.value = null;
     },
     abort.signal,
@@ -270,7 +272,7 @@ async function save(baseRevision?: number): Promise<void> {
     if (isAxiosError(err) && err.response?.status === 409) {
       conflict.value = err.response.data as AnalysisNoteResponse;
     } else {
-      errorMsg.value = "Failed to save.";
+      errorMsg.value = t("analytics.analysisPanel.failedToSave");
     }
   } finally {
     saving.value = false;
@@ -325,11 +327,11 @@ onBeforeUnmount(() => {
     <div class="flex items-center justify-between px-4 py-3 border-b border-border/40 shrink-0">
       <h2 class="font-semibold text-sm text-foreground flex items-center gap-2">
         <Sparkles class="w-4 h-4 text-primary" />
-        Workflow Analysis
+        {{ $t("analytics.workflowAnalysis") }}
       </h2>
       <button
         class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-        title="Close"
+        :title="$t('common.close')"
         @click="close"
       >
         <X class="w-4 h-4" />
@@ -340,7 +342,7 @@ onBeforeUnmount(() => {
       v-if="isUnsavedWorkflow"
       class="p-4 text-sm text-muted-foreground"
     >
-      Save the workflow first to analyze it.
+      {{ $t("analytics.analysisPanel.saveFirstToAnalyze") }}
     </div>
 
     <template v-else>
@@ -354,9 +356,9 @@ onBeforeUnmount(() => {
               id="ai-analyzer-credential-select"
               :model-value="credentialId"
               :options="credentialOptions"
-              :placeholder="credentials.length === 0 ? 'No LLM credential' : 'Select credential...'"
-              search-placeholder="Search credentials..."
-              empty-text="No credentials found."
+              :placeholder="credentials.length === 0 ? $t('analytics.analysisPanel.noLlmCredential') : $t('analytics.analysisPanel.selectCredential')"
+              :search-placeholder="$t('analytics.analysisPanel.searchCredentials')"
+              :empty-text="$t('analytics.analysisPanel.noCredentialsFound')"
               :disabled="analyzing"
               select-class="h-9 min-h-0 rounded-md border-border bg-background shadow-none"
               content-class="z-[70]"
@@ -371,9 +373,9 @@ onBeforeUnmount(() => {
               id="ai-analyzer-model-select"
               :model-value="model"
               :options="modelOptions"
-              placeholder="Select model..."
-              search-placeholder="Search models..."
-              empty-text="No models found."
+              :placeholder="$t('analytics.analysisPanel.selectModel')"
+              :search-placeholder="$t('analytics.analysisPanel.searchModels')"
+              :empty-text="$t('analytics.analysisPanel.noModelsFound')"
               :disabled="analyzing || models.length === 0"
               select-class="h-9 min-h-0 rounded-md border-border bg-background shadow-none"
               content-class="z-[70]"
@@ -385,9 +387,7 @@ onBeforeUnmount(() => {
           <button
             class="inline-flex h-9 items-center gap-1.5 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
             :disabled="!canAnalyze"
-            :title="
-              credentials.length === 0 ? 'Add an LLM credential to analyze' : 'Run AI analysis'
-            "
+            :title="credentials.length === 0 ? $t('analytics.analysisPanel.addLlmToAnalyze') : $t('analytics.analysisPanel.runAiAnalysis')"
             @click="startAnalyze"
           >
             <Loader2
@@ -398,14 +398,14 @@ onBeforeUnmount(() => {
               v-else
               class="h-4 w-4"
             />
-            {{ hasContent ? "Reanalyze" : "Analyze my workflow" }}
+            {{ hasContent ? $t("analytics.analysisPanel.reanalyze") : $t("analytics.analysisPanel.analyzeMyWorkflow") }}
           </button>
           <div class="ml-auto flex items-center gap-1">
             <button
               class="inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-muted disabled:opacity-50"
               :class="mode === 'edit' ? 'bg-muted text-foreground' : 'text-muted-foreground'"
               :disabled="pendingPreview"
-              title="Edit"
+              :title="$t('analytics.analysisPanel.edit')"
               @click="mode = 'edit'"
             >
               <Pencil class="h-4 w-4" />
@@ -414,7 +414,7 @@ onBeforeUnmount(() => {
               class="inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-muted disabled:opacity-50"
               :class="mode === 'preview' ? 'bg-muted text-foreground' : 'text-muted-foreground'"
               :disabled="pendingPreview"
-              title="Preview"
+              :title="$t('analytics.analysisPanel.preview')"
               @click="mode = 'preview'"
             >
               <Eye class="h-4 w-4" />
@@ -422,7 +422,7 @@ onBeforeUnmount(() => {
             <button
               class="inline-flex h-9 items-center gap-1.5 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted disabled:opacity-50"
               :disabled="!dirty || saving || pendingPreview"
-              title="Save"
+              :title="$t('analytics.analysisPanel.save')"
               @click="save()"
             >
               <Loader2
@@ -433,7 +433,7 @@ onBeforeUnmount(() => {
                 v-else
                 class="h-4 w-4"
               />
-              Save
+              {{ $t("analytics.analysisPanel.save") }}
             </button>
           </div>
         </div>
@@ -441,7 +441,7 @@ onBeforeUnmount(() => {
           v-if="updatedBy"
           class="text-[11px] text-muted-foreground"
         >
-          Last edited by {{ updatedBy.name }}
+          {{ $t("analytics.analysisPanel.lastEditedBy", { name: updatedBy.name }) }}
           <span v-if="updatedAt">· {{ formatWhen(updatedAt) }}</span>
         </p>
       </div>
@@ -452,21 +452,20 @@ onBeforeUnmount(() => {
       >
         <p class="flex items-center gap-1.5 font-medium text-amber-700 dark:text-amber-400">
           <AlertTriangle class="w-3.5 h-3.5" />
-          {{ conflict.updated_by ? conflict.updated_by.name : "Someone" }} edited this since you
-          opened it.
+          {{ $t("analytics.analysisPanel.conflictWarning", { name: conflict.updated_by ? conflict.updated_by.name : $t("analytics.analysisPanel.someone") }) }}
         </p>
         <div class="mt-2 flex gap-2">
           <button
             class="rounded-md px-2 py-1 border border-border hover:bg-muted"
             @click="reloadFromServer"
           >
-            Reload (discard mine)
+            {{ $t("analytics.analysisPanel.reloadDiscardMine") }}
           </button>
           <button
             class="rounded-md px-2 py-1 bg-amber-600 text-white hover:opacity-90"
             @click="overwrite"
           >
-            Overwrite
+            {{ $t("analytics.analysisPanel.overwrite") }}
           </button>
         </div>
       </div>
@@ -492,7 +491,7 @@ onBeforeUnmount(() => {
           class="space-y-3"
         >
           <p class="text-xs font-medium text-muted-foreground">
-            New analysis (preview)
+            {{ $t("analytics.analysisPanel.newAnalysisPreview") }}
           </p>
           <div
             class="prose prose-sm dark:prose-invert max-w-none rounded-md border border-border p-3 prose-headings:mt-8 prose-headings:mb-4 prose-p:my-4 prose-ul:my-4 prose-ol:my-4 prose-li:my-2.5 prose-li:leading-relaxed"
@@ -507,13 +506,13 @@ onBeforeUnmount(() => {
               :disabled="analyzing"
               @click="acceptReanalyze"
             >
-              Accept
+              {{ $t("analytics.analysisPanel.accept") }}
             </button>
             <button
               class="text-xs rounded-md px-2.5 py-1.5 border border-border hover:bg-muted"
               @click="discardReanalyze"
             >
-              Discard
+              {{ $t("analytics.analysisPanel.discard") }}
             </button>
           </div>
         </div>
@@ -522,13 +521,13 @@ onBeforeUnmount(() => {
           v-else-if="mode === 'edit'"
           v-model="draft"
           class="w-full h-full min-h-[300px] resize-none rounded-md border border-border bg-background p-3 text-sm font-mono leading-relaxed focus:outline-none focus:ring-1 focus:ring-primary"
-          placeholder="Describe what this workflow does, its purpose, and improvement areas — or click Analyze to generate a draft."
+          :placeholder="$t('analytics.analysisPanel.analysisDraftPlaceholder')"
         />
 
         <div
           v-else
           class="prose prose-sm dark:prose-invert max-w-none prose-headings:mt-8 prose-headings:mb-4 prose-p:my-4 prose-ul:my-4 prose-ol:my-4 prose-li:my-2.5 prose-li:leading-relaxed"
-          v-html="renderedHtml || '<em>No content yet.</em>'"
+          v-html="renderedHtml || `<em>${$t('analytics.analysisPanel.noContentYet')}</em>`"
         />
       </div>
       <!-- eslint-enable vue/no-v-html -->

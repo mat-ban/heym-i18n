@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Ātra būvēšana Workflow",
+    "description": "Izvēlieties Workflow, lai skatītu Trigger, pēdējo izpildi un soļus tieši blakus sarakstam. Filtrējiet pēc statusa, izpildiet uzreiz un saglabājiet pārskatu ar mapēm."
+  },
+  "dashboard:board": {
+    "title": "Pārvaldiet uzdevumus ar aģentu vadītu tāfeli",
+    "description": "Velciet kartītes starp kolonnām, lai aktivizētu Workflow ķēdes ar pilnu kartītes kontekstu. Rezultāti plūst tieši atpakaļ uz kartīti."
+  },
+  "dashboard:templates": {
+    "title": "Sāciet ar pārbaudītām veidnēm",
+    "description": "Izmantojiet gatavas Workflow veidnes, lai ietaupītu iestatīšanas laiku un nodrošinātu konsekvenci."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizējiet koplietotās mainīgās",
+    "description": "Saglabājiet atkārtoti lietojamās vērtības vienreiz un atsaucieties uz tām visos Workflow."
+  },
+  "dashboard:chat": {
+    "title": "Izmantojiet tērzēšanu ātrai iterācijai",
+    "description": "Uzdodiet ātrus jautājumus, pārbaudiet idejas un pārslēdzieties uz redaktoru, tiklīdz Workflow plūsma ir skaidra."
+  },
+  "dashboard:credentials": {
+    "title": "Droši pārvaldiet noslēpumus",
+    "description": "Pārvaldiet pakalpojumu sniedzēju atslēgas un Token centralizēti, lai Workflow varētu izmantot drošus savienojumus, neatklājot noslēpumus."
+  },
+  "dashboard:vectorstores": {
+    "title": "Atbalstiet uz meklēšanu balstītus Workflow",
+    "description": "Sagatavojiet vektoru krātuves pamatotām AI atbildēm, semantiskai meklēšanai un mērogojamām RAG plūsmām."
+  },
+  "dashboard:mcp": {
+    "title": "Pievienojiet ārējās rīku ekosistēmas",
+    "description": "Konfigurējiet MCP savienojumus, lai aģenti varētu izpildīt strukturētus rīkus un darbības ārpus vienkāršiem Prompt."
+  },
+  "dashboard:traces": {
+    "title": "Izprotiet izpildes uzvedību",
+    "description": "Analizējiet Trace detaļas, lai atkļūdotu rezultātus, salīdzinātu izpildes un uzlabotu uzticamību."
+  },
+  "dashboard:alerts": {
+    "title": "Saņemiet paziņojumus pirms problēmu eskalācijas",
+    "description": "Iestatiet sliekšņus kļūdām, ilgumam, izmaksām un izpildes skaitam un saņemiet brīdinājumus, kad tie tiek pārsniegti."
+  },
+  "dashboard:analytics": {
+    "title": "Sekojiet platformas veiktspējai",
+    "description": "Uzraugiet lietošanas un izpildes tendences, lai mērķtiecīgi optimizētu, pamatojoties uz reāliem signāliem."
+  },
+  "dashboard:dashboard": {
+    "title": "Veidojiet savus informācijas paneļus",
+    "description": "Salieciet Workflow atbalstītus diagrammu logrīkus, lai vienā mirklī redzētu svarīgākos rādītājus."
+  },
+  "dashboard:teams": {
+    "title": "Mērogojiet sadarbību kārtīgi",
+    "description": "Sadaliet Workflow un resursus pa komandām, lai piekļuves tiesības un atbildības būtu pārskatāmas."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosticējiet problēmas sistēmas līmenī",
+    "description": "Izmantojiet Logs infrastruktūras vai vides problēmu gadījumos, lai iegūtu dziļāku ieskatu izpildlaikā."
+  },
+  "dashboard:drive": {
+    "title": "Pārvaldiet ģenerētās datnes",
+    "description": "Pārbaudiet, lejupielādējiet un koplietojiet Workflow izvades, izmantojot drošas saites un kontrolētas piekļuves opcijas."
+  },
+  "dashboard:datatable": {
+    "title": "Strādājiet ar strukturētiem datiem native",
+    "description": "Veidojiet tipizētas tabulas un piekļūstiet tām tieši no Workflow atkārtojamām lasīšanas un rakstīšanas darbībām."
+  },
+  "dashboard:schedules": {
+    "title": "Pārskatiet automatizācijas grafikus",
+    "description": "Apskatiet visus aktīvos Cron Workflow kalendāra skatā (diena, nedēļa, mēnesis). Noklikšķinot uz bloka, tiek atvērts Canvas."
+  },
+  "evals": {
+    "title": "Uzticami novērtējiet kvalitāti",
+    "description": "Izpildiet atkārtojamas testu kopas, lai pirms ražošanas izlaišanas pamatoti salīdzinātu Prompt un modeļa izmaiņas."
+  },
+  "docs": {
+    "title": "Ātra orientācija lietotnē",
+    "description": "Pārlūkojiet kompaktas atsauces un padziļiniet zināšanas mērķtiecīgi, nepametot pašreizējo Workflow."
+  },
+  "editor": {
+    "title": "Projektējiet un atkļūdojiet uz Canvas",
+    "description": "Vizuāli savienojiet mezglus, izpildiet uzreiz un uzlabojiet uzvedību ar tiešu atgriezenisko saiti vienā darbvietā."
+  }
+}

@@ -54,9 +54,11 @@ import { useAuthStore } from "@/stores/auth";
 import { useShowcaseStore } from "@/stores/showcase";
 import { useThemeStore } from "@/stores/theme";
 import { useWorkflowStore, type ValidationError } from "@/stores/workflow";
+import { useI18n } from "vue-i18n";
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 const { startRunbookNewWorkflow, playRunbookInPlace } = useRunbookPlayer();
 const authStore = useAuthStore();
 const showcaseStore = useShowcaseStore();
@@ -331,22 +333,22 @@ const { staleSaveDialogOpen, staleSaveBlockedARun, staleSaveMode } =
 // this tab has no edits and is simply showing an outdated workflow ("reload").
 const staleSaveDialogTitle = computed(() =>
   staleSaveMode.value === "reload"
-    ? "Workflow Changed Elsewhere"
-    : "Stale Workflow Detected",
+    ? t("canvas.staleReloadTitle")
+    : t("canvas.staleConflictTitle"),
 );
 
 const staleSaveDialogMessage = computed(() => {
   if (staleSaveMode.value === "reload") {
-    return "This workflow was saved elsewhere, so this tab is showing an older version. Running it now would execute the newer saved version instead of what you see here.";
+    return t("canvas.staleReloadMessage");
   }
   return staleSaveBlockedARun.value
-    ? "A newer version of this workflow has been saved since you opened it. Running will overwrite it with your version. Continue?"
-    : "A newer version of this workflow has been saved since you opened it. Do you want to overwrite it?";
+    ? t("canvas.staleRunMessage")
+    : t("canvas.staleSaveMessage");
 });
 
 const staleSaveConfirmLabel = computed(() => {
-  if (staleSaveMode.value === "reload") return "Reload and Run";
-  return staleSaveBlockedARun.value ? "Override and Run" : "Override";
+  if (staleSaveMode.value === "reload") return t("canvas.reloadAndRun");
+  return staleSaveBlockedARun.value ? t("canvas.overrideAndRun") : t("canvas.override");
 });
 
 async function onConfirmStaleSave(): Promise<void> {
@@ -1356,10 +1358,10 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
               v-if="isReadOnly"
               data-testid="workflow-read-only-badge"
               class="ml-2 inline-flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 align-middle text-[10px] font-medium leading-none text-amber-500"
-              title="Read-only access: you can view and run this workflow, but not edit it."
+              :title="$t('canvas.readOnlyNotice')"
             >
               <Lock class="h-2.5 w-2.5" />
-              Read-only
+              {{ $t('canvas.readOnly') }}
             </span>
           </h1>
           <input
@@ -1368,7 +1370,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             v-model="editingDescriptionValue"
             class="hidden sm:block w-full max-w-full min-w-0 text-xs text-muted-foreground bg-transparent border-b border-primary outline-none"
             maxlength="300"
-            placeholder="Add description..."
+            :placeholder="$t('propertiesPanel.addDescription')"
             @blur="commitDescriptionEdit"
             @keydown.enter.prevent="commitDescriptionEdit"
             @keydown.escape="cancelDescriptionEdit"
@@ -1377,7 +1379,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             v-else-if="hasUnsavedChanges"
             class="hidden sm:block text-xs text-amber-500"
           >
-            Unsaved changes
+            {{ $t('propertiesPanel.unsavedChanges') }}
           </p>
           <p
             v-else-if="workflowDescription"
@@ -1391,7 +1393,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             class="hidden sm:block w-full text-xs text-muted-foreground/40 truncate cursor-text hover:bg-muted/50 rounded px-0.5 -mx-0.5"
             @mousedown.prevent="startDescriptionEdit"
           >
-            Add description...
+            {{ $t('propertiesPanel.addDescription') }}
           </p>
         </div>
       </div>
@@ -1400,7 +1402,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
         v-show="isEditing"
         class="hidden sm:block text-xs text-muted-foreground/85 shrink-0 select-none"
       >
-        ↵ save · Esc cancel
+        {{ $t('canvas.saveCancelHint') }}
       </p>
       <div
         v-show="!isEditing"
@@ -1411,7 +1413,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
           variant="ghost"
           size="icon"
           class="md:hidden text-destructive hover:text-destructive h-11 w-11 min-h-[44px] min-w-[44px]"
-          aria-label="Clear"
+          :aria-label="$t('canvas.clear')"
           :disabled="workflowStore.nodes.length === 0"
           @click="workflowStore.clearCanvas()"
         >
@@ -1419,18 +1421,18 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
         </Button>
         <Tooltip
           v-if="!isDashboardWidget"
-          label="Clear"
+          :label="$t('canvas.clear')"
         >
           <Button
             variant="ghost"
             size="sm"
             class="hidden md:inline-flex gap-2 text-destructive hover:text-destructive"
-            aria-label="Clear"
+            :aria-label="$t('canvas.clear')"
             :disabled="workflowStore.nodes.length === 0"
             @click="workflowStore.clearCanvas()"
           >
             <Trash2 class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Clear</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.clear') }}</span>
           </Button>
         </Tooltip>
         <Button
@@ -1438,196 +1440,196 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
           variant="ghost"
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] md:hidden text-foreground"
-          aria-label="Back to Dashboard"
-          title="Back to Dashboard"
+          :aria-label="$t('canvas.backToDashboard')"
+          :title="$t('canvas.backToDashboard')"
           @click="returnToDashboard"
         >
           <ChevronLeft class="w-4 h-4" />
         </Button>
         <Tooltip
           v-if="isDashboardWidget"
-          label="Back to Dashboard"
+          :label="$t('canvas.backToDashboard')"
         >
           <Button
             variant="ghost"
             size="sm"
             class="hidden md:inline-flex gap-2 text-foreground"
-            aria-label="Back to Dashboard"
+            :aria-label="$t('canvas.backToDashboard')"
             @click="returnToDashboard"
           >
             <ChevronLeft class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Dashboard</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.dashboard') }}</span>
           </Button>
         </Tooltip>
         <Button
           variant="ghost"
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] md:hidden text-foreground"
-          aria-label="History"
+          :aria-label="$t('header.history')"
           @click="historyOpen = true; pushOverlayState()"
         >
           <History class="w-4 h-4" />
         </Button>
-        <Tooltip label="History">
+        <Tooltip :label="$t('header.history')">
           <Button
             variant="ghost"
             size="sm"
             class="hidden md:inline-flex gap-2 text-foreground"
-            aria-label="History"
+            :aria-label="$t('header.history')"
             @click="historyOpen = true; pushOverlayState()"
           >
             <History class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">History</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('header.history') }}</span>
           </Button>
         </Tooltip>
         <Button
           variant="ghost"
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] hidden sm:flex md:hidden text-foreground"
-          aria-label="Edit History"
+          :aria-label="$t('canvas.editHistory')"
           @click="editHistoryOpen = true; pushOverlayState()"
         >
           <GitBranch class="w-4 h-4" />
         </Button>
-        <Tooltip label="Edit History">
+        <Tooltip :label="$t('canvas.editHistory')">
           <Button
             variant="ghost"
             size="sm"
             class="hidden md:inline-flex gap-2 text-foreground"
-            aria-label="Edit History"
+            :aria-label="$t('canvas.editHistory')"
             @click="editHistoryOpen = true; pushOverlayState()"
           >
             <GitBranch class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Edit History</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.editHistory') }}</span>
           </Button>
         </Tooltip>
-        <Tooltip label="Download">
+        <Tooltip :label="$t('canvas.download')">
           <Button
             variant="ghost"
             size="sm"
             class="hidden lg:inline-flex gap-2 text-foreground"
-            aria-label="Download"
+            :aria-label="$t('canvas.download')"
             @click="downloadWorkflow"
           >
             <Download class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Download</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.download') }}</span>
           </Button>
         </Tooltip>
         <Tooltip
           v-if="isStandardWorkflow"
-          label="Portal"
+          :label="$t('canvas.portal')"
         >
           <Button
             variant="ghost"
             size="sm"
             class="hidden lg:inline-flex gap-2 text-foreground"
-            aria-label="Portal"
+            :aria-label="$t('canvas.portal')"
             @click="portalDialogRef?.openDialog(); pushOverlayState()"
           >
             <Globe class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Portal</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.portal') }}</span>
           </Button>
         </Tooltip>
         <Tooltip
           v-if="isStandardWorkflow"
-          label="Share"
+          :label="$t('canvas.share')"
         >
           <Button
             variant="ghost"
             size="sm"
             class="hidden lg:inline-flex gap-2 text-foreground"
-            aria-label="Share"
+            :aria-label="$t('canvas.share')"
             @click="shareOpen = true; pushOverlayState()"
           >
             <Share2 class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Share</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.share') }}</span>
           </Button>
         </Tooltip>
         <Tooltip
           v-if="isStandardWorkflow"
-          label="Save as reusable template"
+          :label="$t('canvas.saveTemplate')"
         >
           <Button
             variant="ghost"
             size="sm"
             class="hidden xl:inline-flex gap-2 text-foreground"
-            aria-label="Template"
+            :aria-label="$t('canvas.template')"
             @click="shareTemplateOpen = true"
           >
             <LayoutTemplate class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Template</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.template') }}</span>
           </Button>
         </Tooltip>
         <Tooltip
           v-if="isStandardWorkflow"
-          label="cURL"
+          :label="$t('canvas.curl')"
         >
           <Button
             variant="ghost"
             size="sm"
             class="hidden xl:inline-flex gap-2 text-foreground"
-            aria-label="cURL"
+            :aria-label="$t('canvas.curl')"
             @click="curlOpen = true; pushOverlayState()"
           >
             <TerminalSquare class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">cURL</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.curl') }}</span>
           </Button>
         </Tooltip>
         <Tooltip
           v-if="isStandardWorkflow"
-          label="Analyze my workflow"
+          :label="$t('canvas.analyzeWorkflow')"
         >
           <Button
             variant="ghost"
             size="sm"
             class="hidden xl:inline-flex gap-2 text-foreground"
             :class="{ 'text-primary': analysisPanelOpen }"
-            aria-label="Analyze"
+            :aria-label="$t('canvas.analyze')"
             @click="toggleAnalysisPanel"
           >
             <Sparkles class="w-4 h-4" />
-            <span class="hidden min-[1600px]:inline">Analyze</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.analyze') }}</span>
           </Button>
         </Tooltip>
         <Button
           variant="ghost"
           size="icon"
           class="h-11 w-11 min-h-[44px] min-w-[44px] hidden sm:flex md:hidden text-foreground"
-          aria-label="Page Guide"
-          title="Page Guide"
+          :aria-label="$t('canvas.pageGuide')"
+          :title="$t('canvas.pageGuide')"
           @click="toggleShowcaseGuide"
         >
           <Compass class="w-4 h-4 text-foreground" />
         </Button>
-        <Tooltip label="Page Guide">
+        <Tooltip :label="$t('canvas.pageGuide')">
           <Button
             variant="ghost"
             size="sm"
             class="hidden xl:inline-flex gap-2 text-foreground"
-            aria-label="Page Guide"
+            :aria-label="$t('canvas.pageGuide')"
             @click="toggleShowcaseGuide"
           >
             <Compass class="w-4 h-4 text-foreground" />
-            <span class="hidden min-[1600px]:inline">Page Guide</span>
+            <span class="hidden min-[1600px]:inline">{{ $t('canvas.pageGuide') }}</span>
           </Button>
         </Tooltip>
-        <Tooltip label="Search (Ctrl+K)">
+        <Tooltip :label="$t('header.search')">
           <Button
             variant="ghost"
             size="icon"
             class="h-11 w-11 min-h-[44px] min-w-[44px] md:h-9 md:w-9 text-foreground"
-            aria-label="Search (Ctrl+K)"
+            :aria-label="$t('header.search')"
             @click="showCommandPalette = true; pushOverlayState()"
           >
             <Search class="w-4 h-4" />
           </Button>
         </Tooltip>
-        <Tooltip :label="themeStore.isDark ? 'Switch to light mode' : 'Switch to dark mode'">
+        <Tooltip :label="themeStore.isDark ? $t('header.lightMode') : $t('header.darkMode')">
           <Button
             variant="ghost"
             size="icon"
             class="h-11 w-11 min-h-[44px] min-w-[44px] md:h-9 md:w-9 text-foreground"
-            :aria-label="themeStore.isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            :aria-label="themeStore.isDark ? $t('header.lightMode') : $t('header.darkMode')"
             @click="themeStore.toggle"
           >
             <Sun
@@ -1647,11 +1649,11 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
           :disabled="!hasUnsavedChanges || isReadOnly"
           :loading="isSaving"
           class="hidden sm:inline-flex"
-          aria-label="Save"
+          :aria-label="$t('common.save')"
           @click="handleSave"
         >
           <Save class="w-4 h-4" />
-          <span class="hidden md:inline">Save</span>
+          <span class="hidden md:inline">{{ $t('common.save') }}</span>
         </Button>
         <Button
           variant="gradient"
@@ -1659,7 +1661,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
           :disabled="!hasUnsavedChanges || isReadOnly"
           :loading="isSaving"
           class="sm:hidden h-11 w-11 min-h-[44px] min-w-[44px]"
-          aria-label="Save"
+          :aria-label="$t('common.save')"
           @click="handleSave"
         >
           <Save class="w-4 h-4" />
@@ -1689,7 +1691,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
 
     <Dialog
       :open="curlOpen"
-      title="Run with cURL"
+      :title="$t('curl.title')"
       size="2xl"
       @close="curlOpen = false"
     >
@@ -1699,32 +1701,32 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
           class="flex w-full items-start gap-2 rounded border border-amber-500/30 bg-amber-500/10 p-2.5 text-xs text-muted-foreground"
         >
           <AlertTriangle class="mt-px h-4 w-4 shrink-0 text-amber-500" />
-          <span>Only the workflow owner can change these settings. You can still copy and run the command below.</span>
+          <span>{{ $t("curl.ownerOnlyNotice") }}</span>
         </div>
         <div class="grid grid-cols-[auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-4 gap-y-3">
-          <Label class="whitespace-nowrap text-sm">Request Body</Label>
+          <Label class="whitespace-nowrap text-sm">{{ $t("curl.requestBody") }}</Label>
           <div class="min-w-0">
             <Select
               v-model="webhookBodyMode"
               :options="[
-                { value: 'legacy', label: 'Defined' },
-                { value: 'generic', label: 'Generic' }
+                { value: 'legacy', label: t('curl.defined') },
+                { value: 'generic', label: t('curl.generic') }
               ]"
               :disabled="!isWorkflowOwner"
               class="min-w-0"
             />
           </div>
-          <Label class="whitespace-nowrap text-sm">Authentication</Label>
+          <Label class="whitespace-nowrap text-sm">{{ $t("curl.authentication") }}</Label>
           <div class="min-w-0">
             <Select
               v-model="authType"
               :options="[
-                { value: 'anonymous', label: 'Anonymous' },
-                { value: 'jwt', label: 'JWT Token' },
-                { value: 'header_auth', label: 'Header Auth' }
+                { value: 'anonymous', label: t('curl.anonymous') },
+                { value: 'jwt', label: t('curl.jwtToken') },
+                { value: 'header_auth', label: t('curl.headerAuth') }
               ]"
               :disabled="!isWorkflowOwner"
-              :title="isWorkflowOwner ? undefined : 'Only the workflow owner can change authentication'"
+              :title="isWorkflowOwner ? undefined : t('curl.ownerOnlyAuthNotice')"
               class="min-w-0"
             />
           </div>
@@ -1733,20 +1735,20 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
           v-if="isGenericWebhookBodyMode"
           class="text-xs text-muted-foreground bg-muted/50 p-2 rounded"
         >
-          Generic mode keeps the request body as raw JSON. Input fields stay available in the canvas, but they do not reshape the webhook payload.
+          {{ $t("curl.genericModeDesc") }}
         </div>
         <div
           v-else
           class="text-xs text-muted-foreground bg-muted/50 p-2 rounded"
         >
-          Defined mode pre-fills the request body from Input fields and keeps empty keys in the JSON payload.
+          {{ $t("curl.definedModeDesc") }}
         </div>
         <div
           v-if="authType === 'header_auth'"
           class="grid grid-cols-2 gap-3"
         >
           <div class="space-y-2">
-            <Label>Header Key</Label>
+            <Label>{{ $t("curl.headerKey") }}</Label>
             <Input
               v-model="authHeaderKey"
               :readonly="!isWorkflowOwner"
@@ -1754,11 +1756,11 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             />
           </div>
           <div class="space-y-2">
-            <Label>Header Value</Label>
+            <Label>{{ $t("curl.headerValue") }}</Label>
             <Input
               v-model="authHeaderValue"
               :readonly="isAuthHeaderValueHidden || !isWorkflowOwner"
-              :placeholder="isAuthHeaderValueHidden ? 'Set by the owner and hidden' : 'your-secret-value'"
+              :placeholder="isAuthHeaderValueHidden ? $t('curl.headerValuePlaceholderOwner') : $t('curl.headerValuePlaceholderSecret')"
             />
           </div>
         </div>
@@ -1777,7 +1779,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                 ]"
                 @click="tokenMode = 'short'"
               >
-                Short-lived
+                {{ $t('curl.shortLived') }}
               </button>
               <button
                 :class="[
@@ -1788,7 +1790,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                 ]"
                 @click="tokenMode = 'long'"
               >
-                Long-lived
+                {{ $t('curl.longLived') }}
               </button>
             </div>
             <div
@@ -1801,7 +1803,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                 min="60"
                 class="h-7 w-24 text-xs"
               />
-              <span class="text-muted-foreground">seconds</span>
+              <span class="text-muted-foreground">{{ $t('curl.seconds') }}</span>
             </div>
             <Button
               size="sm"
@@ -1810,12 +1812,12 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
               :disabled="tokenCreating || tokensLoading"
               @click="createExecutionToken"
             >
-              {{ tokenCreating ? "Creating…" : "+ New Token" }}
+              {{ tokenCreating ? $t("curl.creatingToken") : $t("curl.newToken") }}
             </Button>
           </div>
 
           <p class="text-xs text-muted-foreground">
-            Token values are available only in this page session. Save new tokens before reloading or leaving this page.
+            {{ $t('curl.tokenSessionNotice') }}
           </p>
           <div
             v-if="executionTokens.length > 0"
@@ -1838,7 +1840,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             >
               <div class="flex items-center justify-between gap-2">
                 <span class="text-muted-foreground">
-                  Created: {{ formatTokenDate(token.created_at) }} ·
+                  {{ $t('curl.createdAt', { date: formatTokenDate(token.created_at) }) }} ·
                   <span
                     :class="
                       token.revoked
@@ -1850,10 +1852,10 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                   >
                     {{
                       token.revoked
-                        ? "Revoked"
+                        ? $t("curl.revoked")
                         : isTokenExpired(token.expires_at)
-                          ? "Expired"
-                          : "Expires: " + formatTokenDate(token.expires_at)
+                          ? $t("curl.expired")
+                          : $t("curl.expiresAt", { date: formatTokenDate(token.expires_at) })
                     }}
                   </span>
                 </span>
@@ -1861,7 +1863,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                   <button
                     v-if="canUseToken(token)"
                     class="p-0.5 hover:text-foreground text-muted-foreground"
-                    :title="tokenVisibility[token.id] ? 'Hide token' : 'Show token'"
+                    :title="tokenVisibility[token.id] ? $t('curl.hideToken') : $t('curl.showToken')"
                     @click.stop="
                       tokenVisibility[token.id] = !(tokenVisibility[token.id] ?? false)
                     "
@@ -1907,7 +1909,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                     v-if="!token.revoked"
                     class="p-0.5 hover:text-destructive text-muted-foreground"
                     :disabled="tokenRevoking === token.id"
-                    title="Revoke token"
+                    :title="$t('curl.revokeToken')"
                     @click.stop="revokeExecutionToken(token.id)"
                   >
                     <svg
@@ -1939,19 +1941,19 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             v-else
             class="text-xs text-muted-foreground"
           >
-            No tokens yet. Create one to use in the curl command.
+            {{ $t('curl.noTokensYet') }}
           </p>
         </div>
         <div
           v-if="authType === 'anonymous'"
           class="text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/30 dark:text-amber-400 p-2 rounded"
         >
-          Warning: This workflow can be executed by anyone without authentication.
+          {{ $t('curl.anonymousWarning') }}
         </div>
 
         <div class="border-t pt-4 space-y-3">
           <div class="space-y-2">
-            <Label class="text-sm font-medium">Response Cache</Label>
+            <Label class="text-sm font-medium">{{ $t('curl.responseCache') }}</Label>
             <div class="flex flex-wrap items-center gap-2">
               <Input
                 v-model.number="cacheTtlMinutes"
@@ -1962,7 +1964,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                 placeholder="0"
                 @change="saveCacheSettings"
               />
-              <span class="text-sm text-muted-foreground">minutes (0 = disabled)</span>
+              <span class="text-sm text-muted-foreground">{{ $t('curl.minutesDisabled') }}</span>
               <Button
                 v-if="cacheTtlMinutes > 0"
                 variant="outline"
@@ -1974,22 +1976,22 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                   v-if="!cacheEvicting"
                   class="w-3.5 h-3.5"
                 />
-                Clear cache
+                {{ $t('curl.clearCache') }}
               </Button>
             </div>
             <p class="text-xs text-muted-foreground">
-              Cache response for identical requests (same body + query params).
+              {{ $t('curl.cacheDesc') }}
             </p>
             <p
               v-if="sseEnabled && cacheTtlMinutes > 0"
               class="text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/30 dark:text-amber-400 p-2 rounded"
             >
-              Cache is not available when SSE streaming is enabled.
+              {{ $t('curl.cacheSseWarning') }}
             </p>
           </div>
 
           <div class="space-y-2">
-            <Label class="text-sm font-medium">Rate Limit (429)</Label>
+            <Label class="text-sm font-medium">{{ $t('curl.rateLimit') }}</Label>
             <div class="flex items-center gap-2">
               <Input
                 v-model.number="rateLimitRequests"
@@ -2000,7 +2002,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                 placeholder="0"
                 @change="saveRateLimitSettings"
               />
-              <span class="text-sm text-muted-foreground">requests per</span>
+              <span class="text-sm text-muted-foreground">{{ $t('curl.requestsPer') }}</span>
               <Input
                 v-model.number="rateLimitWindowSeconds"
                 :readonly="!isWorkflowOwner"
@@ -2010,10 +2012,10 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                 placeholder="60"
                 @change="saveRateLimitSettings"
               />
-              <span class="text-sm text-muted-foreground">seconds</span>
+              <span class="text-sm text-muted-foreground">{{ $t('curl.seconds') }}</span>
             </div>
             <p class="text-xs text-muted-foreground">
-              Limit requests per IP address. Set requests to 0 to disable.
+              {{ $t('curl.rateLimitDesc') }}
             </p>
           </div>
         </div>
@@ -2021,10 +2023,9 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
         <div class="border-t pt-4 space-y-3">
           <div class="flex items-center justify-between gap-3 pr-4">
             <div>
-              <Label class="text-sm font-medium">SSE Streaming</Label>
+              <Label class="text-sm font-medium">{{ $t('curl.sseStreaming') }}</Label>
               <p class="mt-0.5 text-xs text-muted-foreground">
-                Stream node events with Server-Sent Events and switch the command to
-                <code class="rounded bg-muted px-1 text-xs">/execute/stream</code>.
+                {{ $t('curl.sseStreamingDesc') }}
               </p>
             </div>
             <input
@@ -2042,7 +2043,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             class="space-y-2"
           >
             <Label class="text-xs uppercase tracking-wide text-muted-foreground">
-              Node Start Messages
+              {{ $t('curl.nodeStartMessages') }}
             </Label>
             <div class="divide-y rounded border">
               <div
@@ -2095,9 +2096,9 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
         <div class="border-t pt-4">
           <div class="flex items-center justify-between gap-3 pr-4">
             <div>
-              <Label class="text-sm font-medium">Request Method</Label>
+              <Label class="text-sm font-medium">{{ $t('curl.requestMethod') }}</Label>
               <p class="mt-0.5 text-xs text-muted-foreground">
-                The verb this workflow accepts. Other methods are rejected with 405.
+                {{ $t('curl.requestMethodDesc') }}
               </p>
             </div>
             <Select
@@ -2114,9 +2115,9 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
         <div class="border-t pt-4">
           <div class="flex items-center justify-between gap-3 pr-4">
             <div>
-              <Label class="text-sm font-medium">Simple Response</Label>
+              <Label class="text-sm font-medium">{{ $t('curl.simpleResponse') }}</Label>
               <p class="mt-0.5 text-xs text-muted-foreground">
-                Return only the final <code class="rounded bg-muted px-1 text-xs">outputs</code> object. Uncheck for the full response with status, node results, and metadata.
+                {{ $t('curl.simpleResponseDesc') }}
               </p>
             </div>
             <input
@@ -2134,14 +2135,14 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
           class="space-y-2"
         >
           <div class="flex items-center justify-between gap-3">
-            <Label>{{ isGenericWebhookBodyMode ? "Raw JSON Body" : "Defined Request Body" }}</Label>
+            <Label>{{ isGenericWebhookBodyMode ? $t('curl.rawJsonBody') : $t('curl.definedRequestBody') }}</Label>
             <Button
               variant="ghost"
               size="sm"
               :disabled="!!curlBodyError"
               @click="formatCurlJson"
             >
-              Format JSON
+              {{ $t('curl.formatJson') }}
             </Button>
           </div>
           <Textarea
@@ -2158,7 +2159,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
         </div>
         <div class="space-y-2">
           <div class="flex items-center justify-between gap-3">
-            <Label>Command</Label>
+            <Label>{{ $t('curl.command') }}</Label>
             <Button
               variant="outline"
               size="sm"
@@ -2167,7 +2168,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
               @click="copyCurlCommand"
             >
               <Copy class="w-4 h-4" />
-              {{ curlCopied ? "Copied!" : "Copy cURL" }}
+              {{ curlCopied ? $t('curl.copied') : $t('curl.copyCurl') }}
             </Button>
           </div>
           <Textarea
@@ -2185,7 +2186,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
       class="flex-1 flex items-center justify-center"
     >
       <div class="animate-pulse text-muted-foreground">
-        Loading workflow...
+        {{ $t('canvas.loadingWorkflow') }}
       </div>
     </div>
 
@@ -2284,7 +2285,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
               <div class="flex items-center gap-2">
                 <AlertTriangle class="w-5 h-5 text-destructive" />
                 <h3 class="font-semibold text-destructive">
-                  Configuration Required
+                  {{ $t('canvas.configurationRequired') }}
                 </h3>
               </div>
               <button
@@ -2296,7 +2297,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
             </div>
             <div class="p-4">
               <p class="text-sm text-muted-foreground mb-4">
-                Please fix the following issues before running the workflow:
+                {{ $t('canvas.fixIssues') }}
               </p>
               <div class="space-y-2 max-h-[300px] overflow-y-auto">
                 <div
@@ -2326,7 +2327,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                 class="w-full"
                 @click="closeValidationDialog"
               >
-                Close
+                {{ $t('common.close') }}
               </Button>
             </div>
           </div>
@@ -2357,7 +2358,7 @@ function onDocSelectFromPalette(categoryId: string, slug: string, event?: MouseE
                   variant="outline"
                   @click="workflowStore.cancelStaleSave()"
                 >
-                  {{ staleSaveBlockedARun ? "Cancel Run" : "Cancel" }}
+                  {{ staleSaveBlockedARun ? $t('canvas.cancelRun') : $t('common.cancel') }}
                 </Button>
                 <Button
                   variant="gradient"

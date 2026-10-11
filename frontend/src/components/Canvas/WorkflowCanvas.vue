@@ -1891,7 +1891,7 @@ watch(
       >
         <div class="flex flex-col items-center gap-3 text-primary">
           <FileJson class="w-16 h-16" />
-          <span class="text-lg font-medium">Drop JSON to import workflow</span>
+          <span class="text-lg font-medium">{{ $t('canvas.dropJsonImport') }}</span>
         </div>
       </div>
     </Transition>
@@ -1955,7 +1955,7 @@ watch(
         position="bottom-left"
       >
         <ControlButton
-          title="Tidy Up - Auto arrange nodes"
+          :title="$t('canvas.tidyUp')"
           @click="tidyUp"
         >
           <LayoutGrid class="w-3.5 h-3.5" />

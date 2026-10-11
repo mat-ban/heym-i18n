@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import {
   AlertTriangle,
@@ -37,6 +38,7 @@ import {
 } from "@/services/api";
 
 const router = useRouter();
+const { t } = useI18n();
 
 const config = ref<MCPConfigResponse | null>(null);
 const loading = ref(true);
@@ -172,29 +174,29 @@ async function createServer(): Promise<void> {
     namedServers.value.push(server);
     newServerName.value = "";
     expandedServer.value = server.id;
-    showToast(`Server "${server.name}" created`);
+    showToast(t("mcp.serverCreated", { name: server.name }));
   } catch {
-    showToast("Failed to create server", "error");
+    showToast(t("mcp.failedToCreateServer"), "error");
   } finally {
     creatingServer.value = false;
   }
 }
 
 async function deleteServer(server: MCPServerItem): Promise<void> {
-  if (!confirm(`Delete server "${server.name}"? This cannot be undone.`)) return;
+  if (!confirm(t("mcp.confirmDeleteServer", { name: server.name }))) return;
   try {
     await mcpServersApi.delete(server.id);
     namedServers.value = namedServers.value.filter((s) => s.id !== server.id);
     if (expandedServer.value === server.id) expandedServer.value = null;
-    showToast(`Server "${server.name}" deleted`);
+    showToast(t("mcp.serverDeleted", { name: server.name }));
   } catch {
-    showToast("Failed to delete server", "error");
+    showToast(t("mcp.failedToDeleteServer"), "error");
   }
 }
 
 async function regenerateServerKey(server: MCPServerItem): Promise<void> {
   if (regeneratingServerKey.value) return;
-  if (!confirm(`Regenerate API key for "${server.name}"? The current key will stop working.`)) return;
+  if (!confirm(t("mcp.confirmRegenerateKeyServer", { name: server.name }))) return;
   regeneratingServerKey.value = server.id;
   try {
     const updated = await mcpServersApi.regenerateKey(server.id);
@@ -202,9 +204,9 @@ async function regenerateServerKey(server: MCPServerItem): Promise<void> {
     const idx = namedServers.value.findIndex((s) => s.id === server.id);
     if (idx !== -1) namedServers.value[idx] = updated;
     showServerApiKey.value[server.id] = true;
-    showToast("API key regenerated");
+    showToast(t("mcp.apiKeyRegenerated"));
   } catch {
-    showToast("Failed to regenerate key", "error");
+    showToast(t("mcp.failedToRegenerateKey"), "error");
   } finally {
     regeneratingServerKey.value = null;
   }
@@ -270,7 +272,7 @@ async function toggleServerWorkflow(server: MCPServerItem, workflowId: string): 
     }
     pinWorkflowToTop(server.id, workflowId);
   } catch {
-    showToast("Failed to update workflow assignment", "error");
+    showToast(t("mcp.failedToUpdateWorkflowAssignment"), "error");
   } finally {
     togglingServerWorkflow.value = null;
   }
@@ -282,11 +284,11 @@ async function updateGlobalChatTool(update: MCPChatToolUpdate): Promise<void> {
   try {
     config.value.chat_tool = await mcpApi.updateChatTool(update);
     if (update.enabled !== undefined) {
-      showToast(update.enabled ? "Heym chat tool enabled" : "Heym chat tool disabled");
+      showToast(update.enabled ? t("mcp.chatToolEnabled") : t("mcp.chatToolDisabled"));
     }
   } catch {
     config.value.chat_tool = previous;
-    showToast("Failed to update the chat tool", "error");
+    showToast(t("mcp.failedToUpdateChatTool"), "error");
   }
 }
 
@@ -302,12 +304,12 @@ async function updateServerChatTool(
     if (update.enabled !== undefined) {
       showToast(
         update.enabled
-          ? `Heym chat tool enabled on "${server.name}"`
-          : `Heym chat tool disabled on "${server.name}"`,
+          ? t("mcp.chatToolEnabledOnServer", { name: server.name })
+          : t("mcp.chatToolDisabledOnServer", { name: server.name }),
       );
     }
   } catch {
-    showToast("Failed to update the chat tool", "error");
+    showToast(t("mcp.failedToUpdateChatTool"), "error");
   }
 }
 
@@ -323,11 +325,11 @@ async function toggleWorkflow(workflow: MCPWorkflowItem): Promise<void> {
     }
     showToast(
       updated.mcp_enabled
-        ? `"${workflow.name}" enabled for MCP`
-        : `"${workflow.name}" disabled for MCP`,
+        ? t("mcp.workflowEnabled", { name: workflow.name })
+        : t("mcp.workflowDisabled", { name: workflow.name }),
     );
   } catch {
-    showToast("Failed to toggle workflow", "error");
+    showToast(t("mcp.failedToToggleWorkflow"), "error");
   } finally {
     togglingWorkflowId.value = null;
   }
@@ -336,7 +338,7 @@ async function toggleWorkflow(workflow: MCPWorkflowItem): Promise<void> {
 async function regenerateKey(): Promise<void> {
   if (regenerating.value) return;
 
-  if (!confirm("Are you sure you want to regenerate your MCP API key? This will invalidate the current key.")) {
+  if (!confirm(t("mcp.confirmRegenerateKey"))) {
     return;
   }
 
@@ -350,9 +352,9 @@ async function regenerateKey(): Promise<void> {
       config.value.mcp_api_key_set = true;
     }
     showApiKey.value = true;
-    showToast("API key regenerated successfully");
+    showToast(t("mcp.apiKeyRegeneratedSuccess"));
   } catch {
-    showToast("Failed to regenerate API key", "error");
+    showToast(t("mcp.failedToRegenerateKey"), "error");
   } finally {
     regenerating.value = false;
   }
@@ -361,9 +363,9 @@ async function regenerateKey(): Promise<void> {
 async function copyToClipboard(text: string, label: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(text);
-    showToast(`${label} copied to clipboard`);
+    showToast(t("mcp.copiedToClipboard", { label }));
   } catch {
-    showToast("Failed to copy to clipboard", "error");
+    showToast(t("mcp.failedToCopy"), "error");
   }
 }
 
@@ -410,10 +412,10 @@ function addToCursor(): void {
     <div class="flex items-center justify-between mb-6">
       <div>
         <h2 class="text-2xl font-bold tracking-tight">
-          MCP Server
+          {{ $t("mcp.title") }}
         </h2>
         <p class="text-muted-foreground mt-1">
-          Expose your workflows as MCP tools for AI assistants
+          {{ $t("mcp.subtitle") }}
         </p>
       </div>
     </div>
@@ -439,10 +441,10 @@ function addToCursor(): void {
           </div>
           <div class="flex-1 min-w-0">
             <h3 class="font-semibold text-lg mb-1">
-              MCP Connection
+              {{ $t("mcp.connection") }}
             </h3>
             <p class="text-sm text-muted-foreground mb-4">
-              Connect your AI assistant to your workflows via MCP protocol.
+              {{ $t("mcp.connectionSubtitle") }}
             </p>
 
             <div class="flex gap-1 p-1 bg-muted rounded-lg mb-4 w-fit">
@@ -453,7 +455,7 @@ function addToCursor(): void {
                 )"
                 @click="connectionTab = 'api-key'"
               >
-                API Key
+                {{ $t("mcp.apiKeyTab") }}
               </button>
               <button
                 :class="cn(
@@ -462,7 +464,7 @@ function addToCursor(): void {
                 )"
                 @click="connectionTab = 'claude'"
               >
-                Claude Connector
+                {{ $t("mcp.claudeTab") }}
               </button>
               <button
                 :class="cn(
@@ -471,7 +473,7 @@ function addToCursor(): void {
                 )"
                 @click="connectionTab = 'openai'"
               >
-                ChatGPT Connector
+                {{ $t("mcp.chatgptTab") }}
               </button>
             </div>
 
@@ -481,7 +483,7 @@ function addToCursor(): void {
             >
               <div>
                 <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  SSE Endpoint URL
+                  {{ $t("mcp.sseEndpointUrl") }}
                 </label>
                 <div class="flex items-center gap-2">
                   <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
@@ -490,7 +492,7 @@ function addToCursor(): void {
                   <Button
                     variant="outline"
                     size="sm"
-                    @click="copyToClipboard(sseEndpointUrl, 'Endpoint URL')"
+                    @click="copyToClipboard(sseEndpointUrl, t('mcp.endpointUrl'))"
                   >
                     <Copy class="w-4 h-4" />
                   </Button>
@@ -499,7 +501,7 @@ function addToCursor(): void {
 
               <div>
                 <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  API Key (X-MCP-Key header)
+                  {{ $t("mcp.apiKeyHeader") }}
                 </label>
                 <div class="flex items-center gap-2 flex-wrap">
                   <div class="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 bg-muted rounded-md">
@@ -513,13 +515,13 @@ function addToCursor(): void {
                       v-else-if="config.mcp_api_key_set"
                       class="text-sm text-muted-foreground italic truncate flex-1 min-w-0"
                     >
-                      Key is set and hidden. Regenerate to get a new one.
+                      {{ $t("mcp.keySetHidden") }}
                     </span>
                     <span
                       v-else
                       class="text-sm text-muted-foreground italic truncate flex-1 min-w-0"
                     >
-                      No API key generated yet
+                      {{ $t("mcp.noKeyGenerated") }}
                     </span>
                     <Button
                       v-if="revealedApiKey"
@@ -543,7 +545,7 @@ function addToCursor(): void {
                     variant="outline"
                     size="sm"
                     class="shrink-0"
-                    @click="copyToClipboard(revealedApiKey, 'API Key')"
+                    @click="copyToClipboard(revealedApiKey, t('mcp.apiKey'))"
                   >
                     <Copy class="w-4 h-4" />
                   </Button>
@@ -558,7 +560,7 @@ function addToCursor(): void {
                       class="w-4 h-4"
                       :class="{ 'animate-spin': regenerating }"
                     />
-                    {{ config.mcp_api_key_set ? 'Regenerate' : 'Generate' }}
+                    {{ config.mcp_api_key_set ? $t('mcp.regenerate') : $t('mcp.generate') }}
                   </Button>
                 </div>
               </div>
@@ -570,7 +572,7 @@ function addToCursor(): void {
             >
               <div>
                 <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  MCP Server URL
+                  {{ $t("mcp.mcpServerUrl") }}
                 </label>
                 <div class="flex items-center gap-2">
                   <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
@@ -579,7 +581,7 @@ function addToCursor(): void {
                   <Button
                     variant="outline"
                     size="sm"
-                    @click="copyToClipboard(sseEndpointUrl, 'MCP Server URL')"
+                    @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
                   >
                     <Copy class="w-4 h-4" />
                   </Button>
@@ -588,21 +590,21 @@ function addToCursor(): void {
 
               <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
                 <h4 class="font-medium text-sm">
-                  Setup Instructions
+                  {{ $t("mcp.setupInstructions") }}
                 </h4>
                 <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
-                  <li>Open <strong class="text-foreground">claude.ai</strong> and go to Settings</li>
-                  <li>Navigate to <strong class="text-foreground">Integrations</strong></li>
-                  <li>Click <strong class="text-foreground">Add custom connector</strong></li>
-                  <li>Enter the name <strong class="text-foreground">Heym</strong> and paste the MCP Server URL above</li>
-                  <li>Leave OAuth Client ID and Secret blank — Claude will register automatically</li>
-                  <li>Click <strong class="text-foreground">Add</strong> and authorize with your Heym credentials</li>
+                  <li>{{ $t("mcp.claudeStep1") }}</li>
+                  <li>{{ $t("mcp.claudeStep2") }}</li>
+                  <li>{{ $t("mcp.claudeStep3") }}</li>
+                  <li>{{ $t("mcp.claudeStep4") }}</li>
+                  <li>{{ $t("mcp.claudeStep5") }}</li>
+                  <li>{{ $t("mcp.claudeStep6") }}</li>
                 </ol>
               </div>
 
               <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
                 <Info class="w-4 h-4 shrink-0 mt-0.5" />
-                <span>Claude uses OAuth 2.1 to securely authenticate. Your Heym credentials are used to authorize access and are never shared with Claude.</span>
+                <span>{{ $t("mcp.claudeInfo") }}</span>
               </div>
             </div>
 
@@ -612,7 +614,7 @@ function addToCursor(): void {
             >
               <div>
                 <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  MCP Server URL
+                  {{ $t("mcp.mcpServerUrl") }}
                 </label>
                 <div class="flex items-center gap-2">
                   <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
@@ -621,7 +623,7 @@ function addToCursor(): void {
                   <Button
                     variant="outline"
                     size="sm"
-                    @click="copyToClipboard(sseEndpointUrl, 'MCP Server URL')"
+                    @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
                   >
                     <Copy class="w-4 h-4" />
                   </Button>
@@ -630,21 +632,21 @@ function addToCursor(): void {
 
               <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
                 <h4 class="font-medium text-sm">
-                  Setup Instructions
+                  {{ $t("mcp.setupInstructions") }}
                 </h4>
                 <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
-                  <li>Open <strong class="text-foreground">chatgpt.com</strong> in your browser and go to Settings</li>
-                  <li>Navigate to <strong class="text-foreground">Apps → Advanced settings</strong> and enable <strong class="text-foreground">Developer mode</strong></li>
-                  <li>Go to <strong class="text-foreground">Settings → Apps → Create app</strong></li>
-                  <li>Enter the name <strong class="text-foreground">Heym</strong> and paste the MCP Server URL above</li>
-                  <li>Choose <strong class="text-foreground">OAuth</strong> for authentication — ChatGPT will register automatically</li>
-                  <li>Click <strong class="text-foreground">Create</strong> and authorize with your Heym credentials</li>
+                  <li>{{ $t("mcp.chatgptStep1") }}</li>
+                  <li>{{ $t("mcp.chatgptStep2") }}</li>
+                  <li>{{ $t("mcp.chatgptStep3") }}</li>
+                  <li>{{ $t("mcp.claudeStep4") }}</li>
+                  <li>{{ $t("mcp.chatgptStep5") }}</li>
+                  <li>{{ $t("mcp.chatgptStep6") }}</li>
                 </ol>
               </div>
 
               <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
                 <Info class="w-4 h-4 shrink-0 mt-0.5" />
-                <span>ChatGPT uses OAuth 2.1 to securely authenticate. Your Heym credentials are used to authorize access and are never shared with ChatGPT. Developer mode is required to add custom MCP connectors.</span>
+                <span>{{ $t("mcp.chatgptInfo") }}</span>
               </div>
             </div>
           </div>
@@ -654,7 +656,7 @@ function addToCursor(): void {
       <div>
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold text-lg">
-            Heym Capabilities
+            {{ $t("mcp.capabilities") }}
           </h3>
         </div>
         <MCPChatToolControls
@@ -667,10 +669,10 @@ function addToCursor(): void {
       <div>
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold text-lg">
-            Available Workflows
+            {{ $t("mcp.availableWorkflows") }}
           </h3>
           <span class="text-sm text-muted-foreground">
-            {{ enabledCount }} of {{ config.workflows.length }} enabled
+            {{ $t("mcp.enabledCount", { enabled: enabledCount, total: config.workflows.length }) }}
           </span>
         </div>
 
@@ -682,10 +684,10 @@ function addToCursor(): void {
             <Workflow class="w-8 h-8 text-muted-foreground" />
           </div>
           <h4 class="text-lg font-medium mb-2">
-            No workflows yet
+            {{ $t("mcp.noWorkflowsYet") }}
           </h4>
           <p class="text-muted-foreground">
-            Create workflows to expose them as MCP tools
+            {{ $t("mcp.createWorkflowsPrompt") }}
           </p>
         </div>
 
@@ -710,7 +712,7 @@ function addToCursor(): void {
                   </h4>
                   <button
                     class="p-1 rounded hover:bg-muted text-muted-foreground hover:text-primary transition-colors"
-                    title="Open workflow"
+                    :title="$t('mcp.openWorkflow')"
                     @click="openWorkflow($event, workflow.id)"
                   >
                     <ExternalLink class="w-4 h-4" />
@@ -726,7 +728,7 @@ function addToCursor(): void {
                   v-else
                   class="text-sm text-muted-foreground italic mb-2"
                 >
-                  No description
+                  {{ $t("mcp.noDescription") }}
                 </p>
                 <div
                   v-if="workflow.input_fields.length > 0"
@@ -743,7 +745,7 @@ function addToCursor(): void {
                     v-if="workflow.input_fields.length > 3"
                     class="text-xs text-muted-foreground"
                   >
-                    +{{ workflow.input_fields.length - 3 }} more
+                    {{ $t("mcp.moreFields", { count: workflow.input_fields.length - 3 }) }}
                   </span>
                 </div>
               </div>
@@ -775,17 +777,17 @@ function addToCursor(): void {
       >
         <div class="flex items-center justify-between mb-2">
           <h4 class="font-medium">
-            How to connect
+            {{ $t("mcp.howToConnect") }}
           </h4>
           <div class="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
               class="gap-2"
-              @click="copyToClipboard(mcpConfigJson, 'MCP Configuration')"
+              @click="copyToClipboard(mcpConfigJson, t('mcp.mcpConfiguration'))"
             >
               <Copy class="w-4 h-4" />
-              Copy JSON
+              {{ $t("mcp.copyJson") }}
             </Button>
             <Button
               variant="default"
@@ -804,14 +806,12 @@ function addToCursor(): void {
                   fill="currentColor"
                 />
               </svg>
-              Add to Cursor
+              {{ $t("mcp.addToCursor") }}
             </Button>
           </div>
         </div>
         <p class="text-sm text-muted-foreground mb-4">
-          Add the following to your MCP client configuration (e.g., <code
-            class="px-1 py-0.5 bg-muted rounded"
-          >~/.cursor/mcp.json</code>):
+          {{ $t("mcp.addToConfigInstruction", { path: "~/.cursor/mcp.json" }) }}
         </p>
         <div class="relative group">
           <pre class="p-4 bg-background rounded-lg text-sm overflow-x-auto"><code>{{ mcpConfigJson }}</code></pre>
@@ -822,10 +822,10 @@ function addToCursor(): void {
         <div class="flex items-center justify-between mb-4">
           <div>
             <h3 class="font-semibold text-lg">
-              Named MCP Servers
+              {{ $t("mcp.namedServers") }}
             </h3>
             <p class="text-sm text-muted-foreground mt-0.5">
-              Create separate MCP endpoints and assign specific workflows to each
+              {{ $t("mcp.namedServersSubtitle") }}
             </p>
           </div>
         </div>
@@ -834,7 +834,7 @@ function addToCursor(): void {
           <input
             v-model="newServerName"
             type="text"
-            placeholder="Server name (e.g. CRM Tools)"
+            :placeholder="$t('mcp.serverNamePlaceholder')"
             maxlength="100"
             class="flex-1 px-3 py-2 text-sm bg-background border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/30"
             @keydown.enter="createServer"
@@ -847,7 +847,7 @@ function addToCursor(): void {
             @click="createServer"
           >
             <Plus class="w-4 h-4" />
-            Create
+            {{ $t("mcp.create") }}
           </Button>
         </div>
 
@@ -857,7 +857,7 @@ function addToCursor(): void {
         >
           <Server class="w-8 h-8 text-muted-foreground mx-auto mb-2" />
           <p class="text-sm text-muted-foreground">
-            No named servers yet. Create one to get a dedicated MCP endpoint.
+            {{ $t("mcp.noNamedServers") }}
           </p>
         </div>
 
@@ -883,8 +883,8 @@ function addToCursor(): void {
                     {{ server.name }}
                   </p>
                   <p class="text-xs text-muted-foreground truncate">
-                    {{ server.workflow_ids.length }} workflow{{ server.workflow_ids.length !== 1 ? 's' : '' }} assigned<template v-if="server.chat_tool.enabled">
-                      · chat tool on
+                    {{ $t("mcp.assignedWorkflowsCount", { count: server.workflow_ids.length }) }}<template v-if="server.chat_tool.enabled">
+                      · {{ $t("mcp.chatToolOn") }}
                     </template>
                   </p>
                 </div>
@@ -892,7 +892,7 @@ function addToCursor(): void {
               <div class="flex items-center gap-2 shrink-0">
                 <button
                   class="p-1.5 rounded hover:bg-destructive/10 hover:text-destructive text-muted-foreground transition-colors"
-                  title="Delete server"
+                  :title="$t('mcp.deleteServer')"
                   @click.stop="deleteServer(server)"
                 >
                   <X class="w-4 h-4" />
@@ -909,7 +909,7 @@ function addToCursor(): void {
               class="border-t px-4 pb-4 pt-3 space-y-4"
             >
               <div>
-                <label class="text-xs font-medium text-muted-foreground block mb-1.5">SSE Endpoint</label>
+                <label class="text-xs font-medium text-muted-foreground block mb-1.5">{{ $t("mcp.sseEndpointUrl") }}</label>
                 <div class="flex items-center gap-2">
                   <code class="flex-1 px-3 py-2 bg-muted rounded-md text-xs font-mono truncate">
                     {{ serverSseUrl(server.id) }}
@@ -917,7 +917,7 @@ function addToCursor(): void {
                   <Button
                     variant="outline"
                     size="sm"
-                    @click="copyToClipboard(serverSseUrl(server.id), 'Endpoint URL')"
+                    @click="copyToClipboard(serverSseUrl(server.id), t('mcp.endpointUrl'))"
                   >
                     <Copy class="w-4 h-4" />
                   </Button>
@@ -926,7 +926,7 @@ function addToCursor(): void {
 
               <div>
                 <label class="text-xs font-medium text-muted-foreground block mb-1.5">
-                  API Key (X-MCP-Key header)
+                  {{ $t("mcp.apiKeyHeader") }}
                 </label>
                 <div class="flex items-center gap-2 flex-wrap">
                   <div class="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 bg-muted rounded-md">
@@ -940,7 +940,7 @@ function addToCursor(): void {
                       v-else
                       class="text-xs text-muted-foreground italic truncate flex-1 min-w-0"
                     >
-                      Key is set and hidden. Regenerate to get a new one.
+                      {{ $t("mcp.keySetHidden") }}
                     </span>
                     <button
                       v-if="serverKey(server)"
@@ -962,7 +962,7 @@ function addToCursor(): void {
                     variant="outline"
                     size="sm"
                     class="shrink-0"
-                    @click="copyToClipboard(serverKey(server)!, 'API Key')"
+                    @click="copyToClipboard(serverKey(server)!, t('mcp.apiKey'))"
                   >
                     <Copy class="w-4 h-4" />
                   </Button>
@@ -982,16 +982,16 @@ function addToCursor(): void {
               </div>
 
               <div class="pt-1 border-t">
-                <label class="text-xs font-medium text-muted-foreground block mb-2">How to connect</label>
+                <label class="text-xs font-medium text-muted-foreground block mb-2">{{ $t("mcp.howToConnect") }}</label>
                 <div class="flex items-center gap-2 flex-wrap">
                   <Button
                     variant="outline"
                     size="sm"
                     class="gap-2"
-                    @click="copyToClipboard(serverMcpConfigJson(server), 'MCP Configuration')"
+                    @click="copyToClipboard(serverMcpConfigJson(server), t('mcp.mcpConfiguration'))"
                   >
                     <Copy class="w-4 h-4" />
-                    Copy JSON
+                    {{ $t("mcp.copyJson") }}
                   </Button>
                   <Button
                     variant="default"
@@ -1010,13 +1010,13 @@ function addToCursor(): void {
                         fill="currentColor"
                       />
                     </svg>
-                    Add to Cursor
+                    {{ $t("mcp.addToCursor") }}
                   </Button>
                 </div>
               </div>
 
               <div>
-                <label class="text-xs font-medium text-muted-foreground block mb-2">Heym Capabilities</label>
+                <label class="text-xs font-medium text-muted-foreground block mb-2">{{ $t("mcp.capabilities") }}</label>
                 <MCPChatToolControls
                   :chat-tool="server.chat_tool"
                   :credentials="llmCredentials"
@@ -1026,12 +1026,12 @@ function addToCursor(): void {
               </div>
 
               <div>
-                <label class="text-xs font-medium text-muted-foreground block mb-2">Assigned Workflows</label>
+                <label class="text-xs font-medium text-muted-foreground block mb-2">{{ $t("mcp.assignedWorkflows") }}</label>
                 <div
                   v-if="allWorkflows.length === 0"
                   class="text-xs text-muted-foreground italic"
                 >
-                  No workflows available. Create workflows to assign them here.
+                  {{ $t("mcp.noWorkflowsAvailable") }}
                 </div>
                 <div
                   v-else

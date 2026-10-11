@@ -203,9 +203,7 @@ async function formatCode(): Promise<void> {
         @update:model-value="updateNodeData('codeSource', $event)"
       />
       <p class="mt-2 text-xs text-muted-foreground">
-        Changes apply as you type. Press
-        <kbd class="rounded border border-input px-1 font-mono">Esc</kbd>
-        to close.
+        {{ $t('common.changesApplyRealtime') }} {{ $t('common.pressEscToClose') }}
       </p>
     </Dialog>
   </template>

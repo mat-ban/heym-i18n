@@ -13,6 +13,7 @@ import Button from "@/components/ui/Button.vue";
 import Select from "@/components/ui/Select.vue";
 import { History, Plus, Trash2, Pencil } from "lucide-vue-next";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { onDismissOverlays, pushOverlayState } from "@/composables/useOverlayBackHandler";
 import { getDocPath } from "@/docs/manifest";
@@ -42,6 +43,7 @@ const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const { addRecent } = useRecentWorkflows();
+const { t } = useI18n();
 
 const workflows = ref<WorkflowListItem[]>([]);
 const showCommandPalette = ref(false);
@@ -184,7 +186,7 @@ watch(selectedSuiteId, loadRuns, { immediate: true });
 async function createSuite(): Promise<void> {
   try {
     const suite = await evalsApi.createSuite({
-      name: "New Eval Suite",
+      name: t("evals.newSuiteDefault"),
       description: "",
       system_prompt: "",
       scoring_method: "exact_match",
@@ -307,7 +309,7 @@ onUnmounted(() => {
             @click="historyOpen = true; pushOverlayState()"
           >
             <History class="w-4 h-4" />
-            <span class="hidden sm:inline">History</span>
+            <span class="hidden sm:inline">{{ $t('header.history') }}</span>
           </Button>
         </template>
       </AppHeader>
@@ -326,7 +328,7 @@ onUnmounted(() => {
               <Select
                 :model-value="selectedSuiteId ?? undefined"
                 :options="suites.map((s) => ({ value: s.id, label: s.name }))"
-                placeholder="Select suite"
+                :placeholder="$t('evals.selectSuite')"
                 class="min-w-[12rem]"
                 @update:model-value="(v) => (selectedSuiteId = v ?? null)"
               />
@@ -335,7 +337,7 @@ onUnmounted(() => {
                 variant="ghost"
                 size="icon"
                 class="min-h-[44px] min-w-[44px] text-muted-foreground hover:text-destructive shrink-0"
-                title="Delete suite"
+                :title="$t('evals.deleteSuite')"
                 @click="deleteSuite"
               >
                 <Trash2 class="w-4 h-4" />
@@ -349,7 +351,7 @@ onUnmounted(() => {
                 @click="switchToEditor"
               >
                 <Pencil class="w-4 h-4" />
-                Edit
+                {{ $t('common.edit') }}
               </Button>
               <Button
                 variant="gradient"
@@ -357,7 +359,7 @@ onUnmounted(() => {
                 @click="createSuite"
               >
                 <Plus class="w-4 h-4" />
-                New Suite
+                {{ $t('evals.newSuite') }}
               </Button>
             </div>
           </div>
@@ -365,7 +367,7 @@ onUnmounted(() => {
             v-if="loading"
             class="flex-1 flex items-center justify-center text-muted-foreground min-h-[200px]"
           >
-            Loading...
+            {{ $t('common.loading') }}
           </div>
           <ResizablePanels
             v-else-if="selectedSuite"
@@ -413,7 +415,7 @@ onUnmounted(() => {
             class="flex-1 flex flex-col items-center justify-center gap-4 text-muted-foreground min-h-[200px]"
           >
             <p class="text-base">
-              Create a suite to get started
+              {{ $t('evals.createSuiteToStart') }}
             </p>
             <Button
               variant="default"
@@ -422,7 +424,7 @@ onUnmounted(() => {
               @click="createSuite"
             >
               <Plus class="w-4 h-4" />
-              Create your first suite
+              {{ $t('evals.createFirstSuite') }}
             </Button>
           </div>
         </div>

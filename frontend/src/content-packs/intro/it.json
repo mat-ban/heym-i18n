@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Costruire più rapidamente nei Workflow",
+    "description": "Selezioni un Workflow per visualizzare Trigger, ultima esecuzione e passaggi direttamente accanto all'elenco. Filtri per stato, esegua direttamente e mantenga la panoramica con le cartelle."
+  },
+  "dashboard:board": {
+    "title": "Gestire le attività tramite una board basata su agenti",
+    "description": "Trascini le card tra le colonne per attivare catene di Workflow con il pieno contesto della card. I risultati confluiscono direttamente nella card."
+  },
+  "dashboard:templates": {
+    "title": "Iniziare con template collaudati",
+    "description": "Utilizzi modelli di Workflow predefiniti per risparmiare tempo di configurazione e garantire coerenza."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralizzare le variabili condivise",
+    "description": "Memorizzi una sola volta i valori riutilizzabili e li referenzi in tutti i Workflow."
+  },
+  "dashboard:chat": {
+    "title": "Utilizzare la chat per iterazioni rapide",
+    "description": "Ponga domande rapide, testi le idee e passi all'editor non appena il flusso del Workflow è chiaro."
+  },
+  "dashboard:credentials": {
+    "title": "Gestire i segreti in modo sicuro",
+    "description": "Gestisca centralmente chiavi dei provider e Token, affinché i Workflow possano utilizzare connessioni sicure senza esporre i segreti."
+  },
+  "dashboard:vectorstores": {
+    "title": "Supportare Workflow basati su retrieval",
+    "description": "Predisponga vector store per risposte IA fondate, ricerca semantica e pipeline RAG scalabili."
+  },
+  "dashboard:mcp": {
+    "title": "Collegare ecosistemi di tool esterni",
+    "description": "Configuri connessioni MCP affinché gli agenti possano eseguire tool e azioni strutturate oltre i semplici Prompt."
+  },
+  "dashboard:traces": {
+    "title": "Comprendere il comportamento di esecuzione",
+    "description": "Analizzi i dettagli delle trace per fare debug dei risultati, confrontare le esecuzioni e aumentare l'affidabilità."
+  },
+  "dashboard:alerts": {
+    "title": "Ricevere notifiche prima che i problemi degenerino",
+    "description": "Definisca soglie per errori, durata, costi e numero di esecuzioni e riceva avvisi al superamento."
+  },
+  "dashboard:analytics": {
+    "title": "Monitorare le prestazioni della piattaforma",
+    "description": "Monitorizzi trend di utilizzo ed esecuzione per ottimizzare in modo mirato sulla base di segnali reali."
+  },
+  "dashboard:dashboard": {
+    "title": "Creare dashboard personalizzate",
+    "description": "Componga widget grafici basati su Workflow per vedere a colpo d'occhio le metriche chiave."
+  },
+  "dashboard:teams": {
+    "title": "Scalare la collaborazione in modo ordinato",
+    "description": "Suddivida Workflow e risorse per team per mantenere trasparenti permessi di accesso e responsabilità."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosticare problemi a livello di sistema",
+    "description": "Utilizzi i log in caso di problemi di infrastruttura o ambiente per ottenere approfondimenti più dettagliati sul runtime."
+  },
+  "dashboard:drive": {
+    "title": "Gestire i file generati",
+    "description": "Esamini, scarichi e condivida gli output dei Workflow tramite link sicuri e opzioni di accesso controllate."
+  },
+  "dashboard:datatable": {
+    "title": "Lavorare nativamente con dati strutturati",
+    "description": "Crei tabelle tipizzate e le utilizzi direttamente dai Workflow per operazioni di lettura e scrittura riproducibili."
+  },
+  "dashboard:schedules": {
+    "title": "Supervisionare le pianificazioni di automazione",
+    "description": "Visualizzi tutti i Cron-Workflow attivi in una vista calendario (giorno, settimana, mese). Un clic su un blocco conduce direttamente al Canvas."
+  },
+  "evals": {
+    "title": "Valutare la qualità in modo affidabile",
+    "description": "Esegua suite di test ripetibili per confrontare in modo fondato le modifiche a Prompt e modelli prima dei rollout in produzione."
+  },
+  "docs": {
+    "title": "Orientamento rapido nell'app",
+    "description": "Consulti riferimenti compatti e approfondisca in modo mirato senza abbandonare il Workflow corrente."
+  },
+  "editor": {
+    "title": "Progettare e fare debug sul Canvas",
+    "description": "Colleghi visivamente i nodi, esegua immediatamente e perfezioni il comportamento con feedback diretto in un unico spazio di lavoro."
+  }
+}

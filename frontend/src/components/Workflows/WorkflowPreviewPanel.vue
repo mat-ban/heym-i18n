@@ -21,6 +21,9 @@ import WorkflowAdminControls from "@/components/Workflows/WorkflowAdminControls.
 import { isTileFillingIcon, nodeIcons } from "@/lib/nodeIcons";
 import { cn, formatDate } from "@/lib/utils";
 import { orderWorkflowSteps, summarizeTrigger } from "@/lib/workflowPreview";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 interface Props {
   /** Listing row for the selection - always available, so the header renders instantly. */
@@ -64,19 +67,20 @@ const EDITED_THRESHOLD_MS = 60_000;
 const metaLine = computed((): string => {
   if (!props.summary) return "";
   const owner = props.detail?.owner_name;
-  return owner ? `Created by ${owner}` : `Created ${formatDate(props.summary.created_at)}`;
+  return owner ? t("workflows.createdBy", { owner }) : t("workflows.createdDate", { date: formatDate(props.summary.created_at) });
 });
 
 const metaTooltip = computed((): string => {
   if (!props.summary) return "";
   const owner = props.detail?.owner_name;
-  const parts = [`Created ${formatDate(props.summary.created_at)}${owner ? ` by ${owner}` : ""}`];
+  const createdStr = t("workflows.createdDate", { date: formatDate(props.summary.created_at) });
+  const parts = [owner ? `${createdStr} ${t("common.by")} ${owner}` : createdStr];
 
   const createdAt = Date.parse(props.summary.created_at);
   const updatedAt = Date.parse(props.summary.updated_at);
   if (Number.isFinite(createdAt) && Number.isFinite(updatedAt)
     && updatedAt - createdAt > EDITED_THRESHOLD_MS) {
-    parts.push(`Edited ${formatDate(props.summary.updated_at)}`);
+    parts.push(t("workflows.editedDate", { date: formatDate(props.summary.updated_at) }));
   }
 
   return parts.join(" · ");
@@ -96,14 +100,16 @@ const steps = computed(() =>
 const lastRunSucceeded = computed((): boolean => props.lastRun?.status === "success");
 
 const lastRunHeadline = computed((): string => {
-  if (!props.lastRun) return "No runs yet";
+  if (!props.lastRun) return t("workflows.noRunsYet");
   const seconds = (props.lastRun.execution_time_ms / 1000).toFixed(1);
-  const verb = lastRunSucceeded.value ? "Completed successfully" : `Finished as ${props.lastRun.status}`;
-  return `${verb} in ${seconds}s`;
+  if (lastRunSucceeded.value) {
+    return t("workflows.completedIn", { seconds });
+  }
+  return t("workflows.finishedAsIn", { status: props.lastRun.status, seconds });
 });
 
 const lastRunDetail = computed((): string => {
-  if (!props.lastRun) return "Run it once to see timing here";
+  if (!props.lastRun) return t("workflows.runOnceTiming");
   const source = props.lastRun.trigger_source ? `${props.lastRun.trigger_source} · ` : "";
   return `${source}${formatDate(props.lastRun.started_at)}`;
 });
@@ -142,10 +148,10 @@ onUnmounted(() => {
     >
       <MousePointerClick class="h-9 w-9 text-muted-foreground/40" />
       <p class="text-sm font-medium text-foreground">
-        Select a workflow
+        {{ $t("workflows.selectWorkflow") }}
       </p>
       <p class="max-w-xs text-xs text-muted-foreground">
-        Pick a workflow on the left to see its trigger, last run and steps here.
+        {{ $t("workflows.selectWorkflowDescription") }}
       </p>
     </div>
 
@@ -185,7 +191,7 @@ onUnmounted(() => {
             @click="emit('goToWorkflow', summary.id, $event)"
           >
             <ExternalLink class="h-3.5 w-3.5" />
-            Open Workflow
+            {{ $t("workflows.openWorkflow") }}
           </Button>
           <Button
             variant="gradient"
@@ -195,7 +201,7 @@ onUnmounted(() => {
             @click="emit('run', summary.id)"
           >
             <Play class="h-3.5 w-3.5" />
-            Run Now
+            {{ $t("workflows.runNow") }}
           </Button>
         </div>
       </div>
@@ -217,10 +223,10 @@ onUnmounted(() => {
 
         <section class="mb-6">
           <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            Description
+            {{ $t("common.description") }}
           </h3>
           <p class="text-sm leading-relaxed text-muted-foreground">
-            {{ summary.description || "No description yet." }}
+            {{ summary.description || $t("workflows.noDescription") }}
           </p>
         </section>
 
@@ -228,7 +234,7 @@ onUnmounted(() => {
           <div class="flex h-full flex-col rounded-xl border border-border/60 bg-muted/25 px-4 pb-2.5 pt-3.5">
             <div class="mb-2.5 flex items-center gap-2 text-xs font-semibold">
               <Zap class="h-3.5 w-3.5 text-amber-500" />
-              Trigger Configuration
+              {{ $t("workflows.triggerConfig") }}
             </div>
             <div class="flex flex-1 flex-col justify-start">
               <p
@@ -262,7 +268,7 @@ onUnmounted(() => {
                       v-else
                       class="h-3 w-3"
                     />
-                    {{ curlCopied ? "Copied" : "Copy cURL" }}
+                    {{ curlCopied ? $t("common.copied") : $t("workflows.copyCurl") }}
                   </button>
                   <span
                     v-else
@@ -281,7 +287,7 @@ onUnmounted(() => {
                     :title="trigger.portalUrl"
                   >
                     <ExternalLink class="h-3 w-3 shrink-0" />
-                    Open
+                    {{ $t("workflows.open") }}
                   </a>
                 </div>
 
@@ -290,7 +296,7 @@ onUnmounted(() => {
                   class="flex flex-col items-start gap-2"
                 >
                   <p class="flex min-h-[30px] items-center break-words text-[13px] font-medium">
-                    {{ trigger?.headline ?? "Unavailable" }}
+                    {{ trigger?.headline ?? $t("workflows.unavailable") }}
                   </p>
                   <button
                     v-if="trigger?.curl"
@@ -307,7 +313,7 @@ onUnmounted(() => {
                       v-else
                       class="h-3 w-3"
                     />
-                    {{ curlCopied ? "Copied" : "Copy cURL" }}
+                    {{ curlCopied ? $t("common.copied") : $t("workflows.copyCurl") }}
                   </button>
                 </div>
                 <p
@@ -327,14 +333,14 @@ onUnmounted(() => {
                   class="h-3.5 w-3.5"
                   :class="lastRunSucceeded ? 'text-emerald-500' : 'text-muted-foreground'"
                 />
-                Last Run Details
+                {{ $t("workflows.lastRunDetails") }}
               </div>
               <!-- Negative margin keeps the 28px control from growing the 16px header row. -->
               <button
                 type="button"
                 class="-my-1.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
-                title="Execution history"
-                aria-label="Execution history"
+                :title="$t('workflows.executionHistory')"
+                :aria-label="$t('workflows.executionHistory')"
                 data-testid="workflow-preview-history"
                 @click="emit('openHistory', summary.id)"
               >
@@ -360,7 +366,7 @@ onUnmounted(() => {
 
         <section>
           <h3 class="mb-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            Workflow Steps &amp; Sub-agents ({{ steps.length }})
+            {{ $t("workflows.stepsAndSubAgents", { count: steps.length }) }}
           </h3>
 
           <div
@@ -378,7 +384,7 @@ onUnmounted(() => {
             v-else-if="steps.length === 0"
             class="rounded-xl border border-dashed border-border/60 px-4 py-6 text-center text-xs text-muted-foreground"
           >
-            This workflow has no nodes yet.
+            {{ $t("workflows.noNodesYet") }}
           </p>
 
           <ul
@@ -416,7 +422,7 @@ onUnmounted(() => {
                     'h-1.5 w-1.5 shrink-0 rounded-full',
                     step.active ? 'bg-emerald-500' : 'bg-muted-foreground/40',
                   )"
-                  :title="step.active ? 'Active' : 'Deactivated'"
+                  :title="step.active ? $t('workflows.active') : $t('workflows.deactivated')"
                 />
                 <Settings class="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
               </button>
@@ -430,7 +436,7 @@ onUnmounted(() => {
         class="flex items-center gap-2 border-t border-border/60 px-4 py-2.5 text-xs text-muted-foreground sm:px-6"
       >
         <LoaderCircle class="h-3.5 w-3.5 animate-spin text-primary" />
-        This workflow is running right now.
+        {{ $t("workflows.workflowRunningNow") }}
       </div>
     </template>
   </div>

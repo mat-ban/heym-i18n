@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   Check,
   ChevronDown,
@@ -33,6 +34,7 @@ const total = ref(0);
 const loading = ref(true);
 const clearing = ref(false);
 const error = ref("");
+const { t } = useI18n();
 const searchQuery = ref("");
 const page = ref(0);
 
@@ -123,25 +125,25 @@ async function loadFiles() {
     total.value = res.total;
     clearSelection();
   } catch {
-    error.value = "Failed to load files";
+    error.value = t("drive.failedToLoadFiles");
   } finally {
     loading.value = false;
   }
 }
 
 async function deleteFile(file: GeneratedFile) {
-  if (!window.confirm(`Delete "${file.filename}"? This cannot be undone.`)) return;
+  if (!window.confirm(t("drive.confirmDeleteFile", { filename: file.filename }))) return;
   try {
     await filesApi.delete(file.id);
     await loadFiles();
   } catch {
-    error.value = "Failed to delete file";
+    error.value = t("drive.failedToDeleteFile");
   }
 }
 
 async function clearAllFiles() {
   if (total.value === 0) return;
-  if (!window.confirm("Delete all files in Drive? This action cannot be undone.")) return;
+  if (!window.confirm(t("drive.confirmClearAll"))) return;
   clearing.value = true;
   error.value = "";
   try {
@@ -149,7 +151,7 @@ async function clearAllFiles() {
     page.value = 0;
     await loadFiles();
   } catch {
-    error.value = "Failed to clear Drive files";
+    error.value = t("drive.failedToClearFiles");
   } finally {
     clearing.value = false;
   }
@@ -203,7 +205,7 @@ async function handleDrop(e: DragEvent): Promise<void> {
     }
     await loadFiles();
   } catch {
-    uploadError.value = "Upload failed";
+    uploadError.value = t("drive.uploadFailed");
   } finally {
     uploading.value = false;
   }
@@ -255,7 +257,7 @@ async function downloadSelected(): Promise<void> {
     link.remove();
     URL.revokeObjectURL(url);
   } catch {
-    error.value = "Failed to download selected files";
+    error.value = t("drive.failedToDownloadSelected");
   } finally {
     downloadingBulk.value = false;
   }
@@ -266,7 +268,7 @@ async function deleteSelected(): Promise<void> {
   if (ids.length === 0 || deletingBulk.value) return;
   if (
     !window.confirm(
-      `Delete ${ids.length} selected file${ids.length === 1 ? "" : "s"}? This cannot be undone.`,
+      t("drive.deleteSelectedConfirm", { count: ids.length }),
     )
   ) {
     return;
@@ -277,7 +279,7 @@ async function deleteSelected(): Promise<void> {
     await filesApi.bulkDelete(ids);
     await loadFiles();
   } catch {
-    error.value = "Failed to delete selected files";
+    error.value = t("drive.failedToDeleteSelected");
   } finally {
     deletingBulk.value = false;
   }
@@ -351,7 +353,7 @@ onBeforeUnmount(() => {
     >
       <Upload class="w-8 h-8 text-primary mb-2" />
       <p class="text-sm font-medium text-primary">
-        Drop to upload
+        {{ $t("drive.dropToUpload") }}
       </p>
     </div>
 
@@ -361,7 +363,7 @@ onBeforeUnmount(() => {
       class="text-sm text-muted-foreground bg-muted/50 p-2 rounded-lg flex items-center gap-2"
     >
       <RefreshCw class="w-3.5 h-3.5 animate-spin" />
-      Uploading...
+      {{ $t("drive.uploading") }}
     </div>
 
     <!-- Upload error -->
@@ -377,16 +379,16 @@ onBeforeUnmount(() => {
       <div class="flex items-center gap-2 shrink-0">
         <HardDrive class="w-5 h-5 text-muted-foreground" />
         <h2 class="text-lg font-semibold">
-          Drive
+          {{ $t("drive.title") }}
         </h2>
-        <span class="text-xs text-muted-foreground whitespace-nowrap">({{ total }} files)</span>
+        <span class="text-xs text-muted-foreground whitespace-nowrap">({{ $t("drive.filesCount", { count: total }) }})</span>
       </div>
       <div class="grid grid-cols-[1fr_auto_auto] items-center gap-2 sm:flex sm:flex-wrap sm:justify-end">
         <div class="relative min-w-0">
           <Search class="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
             v-model="searchQuery"
-            placeholder="Search files..."
+            :placeholder="$t('drive.searchFiles')"
             class="pl-8 h-8 text-xs w-full sm:w-48"
           />
         </div>
@@ -412,7 +414,7 @@ onBeforeUnmount(() => {
           @click="clearAllFiles"
         >
           <Trash2 class="w-3.5 h-3.5" />
-          Clear All
+          {{ $t("drive.clearAll") }}
         </Button>
       </div>
     </div>
@@ -432,7 +434,7 @@ onBeforeUnmount(() => {
     >
       <RefreshCw class="w-6 h-6 mx-auto mb-2 animate-spin" />
       <p class="text-sm">
-        Loading files...
+        {{ $t("drive.loadingFiles") }}
       </p>
     </div>
 
@@ -443,10 +445,10 @@ onBeforeUnmount(() => {
     >
       <HardDrive class="w-10 h-10 mx-auto mb-3 opacity-40" />
       <p class="text-sm font-medium">
-        No files yet
+        {{ $t("drive.noFilesYet") }}
       </p>
       <p class="text-xs mt-1">
-        Files generated by skills will appear here
+        {{ $t("drive.noFilesSubtitle") }}
       </p>
     </div>
 
@@ -455,7 +457,7 @@ onBeforeUnmount(() => {
       v-if="selectedIds.size > 0"
       class="flex flex-wrap items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-sm"
     >
-      <span class="font-medium">{{ selectedIds.size }} selected</span>
+      <span class="font-medium">{{ $t("drive.selectedCount", { count: selectedIds.size }) }}</span>
       <Button
         size="sm"
         :loading="downloadingBulk"
@@ -463,14 +465,14 @@ onBeforeUnmount(() => {
         @click="downloadSelected"
       >
         <Download class="w-3.5 h-3.5 mr-1" />
-        Download ZIP
+        {{ $t("drive.downloadZip") }}
       </Button>
       <Button
         size="sm"
         @click="showBulk = true"
       >
         <Settings class="w-3.5 h-3.5 mr-1" />
-        Actions
+        {{ $t("dashboards.actions.actions") }}
       </Button>
       <Button
         size="sm"
@@ -480,14 +482,14 @@ onBeforeUnmount(() => {
         @click="deleteSelected"
       >
         <Trash2 class="w-3.5 h-3.5 mr-1" />
-        Delete
+        {{ $t("common.delete") }}
       </Button>
       <Button
         size="sm"
         variant="ghost"
         @click="clearSelection"
       >
-        Clear selection
+        {{ $t("drive.clearSelection") }}
       </Button>
     </div>
 
@@ -506,29 +508,29 @@ onBeforeUnmount(() => {
                   v-if="selectableFiles.length > 0"
                   type="checkbox"
                   class="h-4 w-4 rounded border-input bg-background align-middle"
-                  title="Select all"
+                  :title="$t('drive.selectAll')"
                   :checked="allSelectableSelected"
                   :indeterminate="someSelectableSelected"
                   @change="toggleSelectAll"
                 >
               </th>
               <th class="text-left px-3 py-2 font-medium">
-                Name
+                {{ $t("common.name") }}
               </th>
               <th class="text-left px-3 py-2 font-medium hidden sm:table-cell">
-                Type
+                {{ $t("common.type") }}
               </th>
               <th class="text-left px-3 py-2 font-medium hidden md:table-cell">
-                Size
+                {{ $t("drive.tableSize") }}
               </th>
               <th class="text-left px-3 py-2 font-medium hidden lg:table-cell">
-                Source
+                {{ $t("drive.tableSource") }}
               </th>
               <th class="text-left px-3 py-2 font-medium hidden sm:table-cell">
-                Date
+                {{ $t("drive.tableDate") }}
               </th>
               <th class="text-right px-3 py-2 font-medium w-px whitespace-nowrap">
-                Actions
+                {{ $t("dashboards.actions.actions") }}
               </th>
             </tr>
           </thead>
@@ -568,7 +570,7 @@ onBeforeUnmount(() => {
                     class="inline-flex shrink-0 items-center gap-1 rounded bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-medium text-blue-500"
                   >
                     <Users class="w-3 h-3" />
-                    Shared
+                    {{ $t("drive.sharedBadge") }}
                   </span>
                 </div>
                 <p
@@ -597,7 +599,7 @@ onBeforeUnmount(() => {
                 >
                   <button
                     class="p-1 rounded hover:bg-muted"
-                    :title="copiedFileId === file.id ? 'File ID copied' : 'Copy file ID'"
+                    :title="copiedFileId === file.id ? $t('drive.fileIdCopied') : $t('drive.copyFileId')"
                     @click="copyFileId(file)"
                   >
                     <Check
@@ -611,7 +613,7 @@ onBeforeUnmount(() => {
                   </button>
                   <button
                     class="p-1 rounded hover:bg-muted"
-                    title="Download"
+                    :title="$t('common.download')"
                     @click="downloadFile(file)"
                   >
                     <Download class="w-3.5 h-3.5" />
@@ -619,7 +621,7 @@ onBeforeUnmount(() => {
                   <button
                     v-if="!file.is_shared"
                     class="p-1 rounded hover:bg-muted"
-                    title="Share"
+                    :title="$t('board.share')"
                     @click="openShare(file)"
                   >
                     <Share2 class="w-3.5 h-3.5" />
@@ -627,7 +629,7 @@ onBeforeUnmount(() => {
                   <button
                     v-if="!file.is_shared"
                     class="p-1 rounded hover:bg-destructive/10 text-destructive"
-                    title="Delete"
+                    :title="$t('common.delete')"
                     @click="deleteFile(file)"
                   >
                     <Trash2 class="w-3.5 h-3.5" />
@@ -646,7 +648,7 @@ onBeforeUnmount(() => {
       class="flex items-center justify-between gap-2 text-xs"
     >
       <label class="flex items-center gap-1.5 text-muted-foreground">
-        Rows per page
+        {{ $t("drive.rowsPerPage") }}
         <span class="relative inline-flex">
           <select
             v-model="pageSizeChoice"
@@ -673,10 +675,10 @@ onBeforeUnmount(() => {
           :disabled="page === 0"
           @click="page--"
         >
-          Previous
+          {{ $t("tables.previous") }}
         </Button>
         <span class="text-muted-foreground">
-          Page {{ page + 1 }} of {{ totalPages }}
+          {{ $t("drive.pageOf", { current: page + 1, total: totalPages }) }}
         </span>
         <Button
           size="sm"
@@ -684,7 +686,7 @@ onBeforeUnmount(() => {
           :disabled="page >= totalPages - 1"
           @click="page++"
         >
-          Next
+          {{ $t("common.next") }}
         </Button>
       </div>
     </div>

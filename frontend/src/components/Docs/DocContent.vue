@@ -2,6 +2,7 @@
 import { computed, ref, watch } from "vue";
 import DOMPurify from "dompurify";
 import { marked } from "marked";
+import { useI18n } from "vue-i18n";
 
 import { useRouter } from "vue-router";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
@@ -18,8 +19,9 @@ interface Props {
 
 const props = defineProps<Props>();
 const router = useRouter();
+const { locale, t } = useI18n({ useScope: "global" });
 
-const prevNext = computed(() => getPrevNextDoc(props.path));
+const prevNext = computed(() => getPrevNextDoc(props.path, locale.value));
 
 const NODE_TYPES_FOR_PREVIEW: NodeType[] = [
   "textInput",
@@ -54,11 +56,20 @@ const docModules = import.meta.glob<string>("@/docs/content/**/*.md", {
   import: "default",
 });
 
-function findModuleKey(path: string): string | null {
+function findModuleKey(path: string, lang = "en"): string | null {
   const normalized = path.replace(/^\//, "").replace(/\/$/, "");
+  if (lang && lang !== "en") {
+    const localizedTarget = `/${lang}/${normalized}.md`;
+    for (const key of Object.keys(docModules)) {
+      if (key.endsWith(localizedTarget) || key.includes(localizedTarget)) {
+        return key;
+      }
+    }
+  }
   const target = `${normalized}.md`;
   for (const key of Object.keys(docModules)) {
-    if (key.endsWith(target) || key.includes(`/${normalized}.md`)) {
+    // English root files do not have a two-letter language code directly under content/
+    if (!key.match(/\/content\/[a-z]{2}(?:-[A-Za-z]+)?\//) && (key.endsWith(target) || key.includes(`/${normalized}.md`))) {
       return key;
     }
   }
@@ -82,12 +93,12 @@ async function loadContent(): Promise<void> {
       } catch {
         if (requestId !== latestLoadRequestId) return;
         content.value = "";
-        error.value = "Page not found";
+        error.value = t("docs.pageNotFound");
       }
       return;
     }
 
-    const key = findModuleKey(requestedPath);
+    const key = findModuleKey(requestedPath, locale.value);
     const loader = key ? docModules[key] : undefined;
     if (requestId !== latestLoadRequestId) return;
 
@@ -98,11 +109,11 @@ async function loadContent(): Promise<void> {
     } else {
       if (requestId !== latestLoadRequestId) return;
       content.value = "";
-      error.value = "Page not found";
+      error.value = t("docs.pageNotFound");
     }
   } catch (e) {
     if (requestId !== latestLoadRequestId) return;
-    error.value = e instanceof Error ? e.message : "Failed to load content";
+    error.value = e instanceof Error ? e.message : t("docs.pageNotFound");
     content.value = "";
   } finally {
     if (requestId === latestLoadRequestId) {
@@ -154,12 +165,26 @@ function resolveDocLink(href: string, currentPath: string): string {
 
 let _renderPath = "";
 
+function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/<[^>]*>/g, "")
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
 marked.use({
   renderer: {
+    heading({ tokens, depth, text }) {
+      const slug = slugifyHeading(text);
+      const inner = this.parser.parseInline(tokens);
+      return `<h${depth} id="${slug}">${inner}</h${depth}>`;
+    },
     link({ href, title, text }) {
       const resolved = resolveDocLink(href ?? "", _renderPath);
       const titleAttr = title ? ` title="${title}"` : "";
-      if (resolved.startsWith("/docs/")) {
+      if (resolved.startsWith("/docs/") || resolved.startsWith("#")) {
         return `<a href="${resolved}"${titleAttr}>${text}</a>`;
       }
       return `<a href="${resolved}" target="_blank" rel="noopener noreferrer"${titleAttr}>${text}</a>`;
@@ -190,7 +215,10 @@ function renderMarkdown(raw: string, currentPath: string): string {
       "table", "thead", "tbody", "tr", "th", "td", "span", "div",
       "video", "source",
     ],
-    ALLOWED_ATTR: ["href", "target", "rel", "class", "src", "controls", "playsinline", "muted", "loop", "preload", "type", "style"],
+    ALLOWED_ATTR: [
+      "id", "href", "target", "rel", "class", "src", "controls", "playsinline",
+      "muted", "loop", "preload", "type", "style",
+    ],
   });
 }
 
@@ -200,14 +228,22 @@ function handleContentClick(event: MouseEvent): void {
   const target = (event.target as HTMLElement).closest("a");
   if (!target) return;
   const href = target.getAttribute("href");
-  if (href?.startsWith("/docs/")) {
+  if (!href) return;
+  if (href.startsWith("#")) {
+    event.preventDefault();
+    const id = href.slice(1);
+    const el = document.getElementById(id);
+    el?.scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+  if (href.startsWith("/docs/")) {
     event.preventDefault();
     void router.push(href);
   }
 }
 
 watch(
-  () => props.path,
+  [() => props.path, locale],
   () => loadContent(),
   { immediate: true }
 );
@@ -219,7 +255,7 @@ watch(
       v-if="loading"
       class="animate-pulse text-muted-foreground"
     >
-      Loading...
+      {{ $t("docs.loading") }}
     </div>
     <div
       v-else-if="error"
@@ -229,7 +265,7 @@ watch(
         {{ error }}
       </p>
       <p class="text-sm text-muted-foreground">
-        Need help? Contact us at
+        {{ $t("docs.needHelp") }}
         <a
           href="mailto:support@heym.run"
           class="text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity"
@@ -276,7 +312,7 @@ watch(
         class="mt-12"
       >
         <h2 class="text-xl font-semibold text-foreground mb-4">
-          Available Node Types
+          {{ $t("docs.availableNodeTypes") }}
         </h2>
         <div class="flex flex-wrap gap-2">
           <NodePreviewCard

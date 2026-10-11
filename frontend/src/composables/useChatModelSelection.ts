@@ -4,6 +4,7 @@ import type { ComputedRef, Ref } from "vue";
 import type { CredentialListItem, LLMModel } from "@/types/credential";
 
 import { useAiDefaults } from "@/composables/useAiDefaults";
+import { i18n } from "@/i18n";
 import { credentialsApi } from "@/services/api";
 
 export interface ChatSelectOption {
@@ -88,12 +89,12 @@ export function useChatModelSelection(
 
   const modelPlaceholder = computed<string>(() => {
     if (isLoadingModels.value) {
-      return "Loading...";
+      return i18n.global.t("common.loading");
     }
     if (modelsLoadFailed.value) {
-      return "Failed to load";
+      return i18n.global.t("chat.failedToLoad");
     }
-    return "Select...";
+    return i18n.global.t("common.select");
   });
 
   async function loadModels(credentialId: string, preferredModelId?: string): Promise<void> {

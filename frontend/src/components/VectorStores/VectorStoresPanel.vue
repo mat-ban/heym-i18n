@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { AlertTriangle, ChevronDown, ChevronRight, Copy, Database, File, FileUp, Pencil, Plus, Share2, Trash2, Upload, Users, Workflow, X } from "lucide-vue-next";
 
 import type { CredentialListItem } from "@/types/credential";
@@ -25,6 +26,7 @@ import {
   type VectorStoreSourceGroup,
 } from "@/services/api";
 
+const { t } = useI18n();
 const vectorStores = ref<VectorStoreListItem[]>([]);
 const loading = ref(true);
 const showCreateDialog = ref(false);
@@ -100,7 +102,7 @@ const filteredCredentials = computed(() =>
 
 const credentialOptions = computed(() => {
   return [
-    { value: "", label: "Select a credential" },
+    { value: "", label: t("settings.selectCredential") },
     ...filteredCredentials.value.map((c) => ({
       value: c.id,
       label: c.type === "rag" ? `${c.name} (custom embeddings)` : c.name,
@@ -432,7 +434,7 @@ async function removeShare(userId: string): Promise<void> {
 const storeTeamOptions = computed(() => {
   const shared = new Set(storeTeamShares.value.map((s) => s.team_id));
   return [
-    { value: "", label: "Select a team" },
+    { value: "", label: t("tables.selectTeam") },
     ...teams.value
       .filter((t) => !shared.has(t.id))
       .map((t) => ({ value: t.id, label: t.name })),
@@ -556,15 +558,15 @@ async function deleteItem(pointId: string): Promise<void> {
     <div class="flex items-center justify-between mb-6">
       <div>
         <h2 class="text-2xl font-bold tracking-tight">
-          Vector Stores
+          {{ $t('vectorStores.title') }}
         </h2>
         <p class="text-muted-foreground mt-1">
-          Manage vector stores (Qdrant or Postgres) for RAG workflows
+          {{ $t('vectorStores.subtitle') }}
         </p>
       </div>
       <Button @click="openCreateDialog">
         <Plus class="w-4 h-4" />
-        New Vector Store
+        {{ $t('vectorStores.newStore') }}
       </Button>
     </div>
 
@@ -591,14 +593,14 @@ async function deleteItem(pointId: string): Promise<void> {
         <Database class="w-8 h-8 text-muted-foreground" />
       </div>
       <h3 class="text-xl font-semibold mb-2">
-        No vector stores yet
+        {{ $t('vectorStores.noStoresYet') }}
       </h3>
       <p class="text-muted-foreground mb-6">
-        Create a vector store to start using RAG in your workflows
+        {{ $t('vectorStores.noStoresSubtitle') }}
       </p>
       <Button @click="openCreateDialog">
         <Plus class="w-4 h-4" />
-        Create Vector Store
+        {{ $t('vectorStores.addStore') }}
       </Button>
     </div>
 
@@ -627,11 +629,11 @@ async function deleteItem(pointId: string): Promise<void> {
                   class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-blue-500/10 text-blue-500"
                 >
                   <Users class="w-3 h-3" />
-                  Shared
+                  {{ $t('credentials.shared') }}
                 </span>
               </div>
               <p class="text-xs text-muted-foreground">
-                {{ formatVectorCount(store.stats) }} vectors
+                {{ formatVectorCount(store.stats) }} {{ $t('vectorStores.vectorsCount', { count: '' }).trim() }}
               </p>
             </div>
           </div>
@@ -643,7 +645,7 @@ async function deleteItem(pointId: string): Promise<void> {
               variant="ghost"
               size="icon"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary h-8 w-8"
-              title="Upload files"
+              :title="$t('vectorStores.uploadFiles')"
               @click="openUploadDialog(store, $event)"
             >
               <Upload class="w-4 h-4" />
@@ -652,7 +654,7 @@ async function deleteItem(pointId: string): Promise<void> {
               variant="ghost"
               size="icon"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary h-8 w-8"
-              title="Edit"
+              :title="$t('common.edit')"
               @click="openEditDialog(store, $event)"
             >
               <Pencil class="w-4 h-4" />
@@ -661,7 +663,7 @@ async function deleteItem(pointId: string): Promise<void> {
               variant="ghost"
               size="icon"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary h-8 w-8"
-              title="Clone"
+              :title="$t('tables.duplicate')"
               @click="cloneVectorStore(store, $event)"
             >
               <Copy class="w-4 h-4" />
@@ -670,7 +672,7 @@ async function deleteItem(pointId: string): Promise<void> {
               variant="ghost"
               size="icon"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary h-8 w-8"
-              title="Share"
+              :title="$t('canvas.share')"
               @click="openShareDialog(store, $event)"
             >
               <Share2 class="w-4 h-4" />
@@ -679,7 +681,7 @@ async function deleteItem(pointId: string): Promise<void> {
               variant="ghost"
               size="icon"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive h-8 w-8"
-              title="Delete"
+              :title="$t('common.delete')"
               @click="openDeleteDialog(store, $event)"
             >
               <Trash2 class="w-4 h-4" />
@@ -699,10 +701,10 @@ async function deleteItem(pointId: string): Promise<void> {
           </div>
           <div class="flex items-center justify-between gap-2 text-xs text-muted-foreground">
             <span v-if="store.is_shared && store.shared_by">
-              Shared by {{ store.shared_by }}
+              {{ $t('common.sharedBy', { user: store.shared_by }) }}
             </span>
             <span v-else>
-              Created {{ formatDate(store.created_at) }}
+              {{ $t('workflows.created') }} {{ formatDate(store.created_at) }}
             </span>
             <span
               class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-node-rag/10 text-node-rag shrink-0"
@@ -716,7 +718,7 @@ async function deleteItem(pointId: string): Promise<void> {
 
     <Dialog
       :open="showCreateDialog"
-      title="New Vector Store"
+      :title="$t('vectorStores.createDialogTitle')"
       @close="showCreateDialog = false"
     >
       <form
@@ -724,28 +726,28 @@ async function deleteItem(pointId: string): Promise<void> {
         @submit.prevent="createVectorStore"
       >
         <div class="space-y-2">
-          <Label for="store-name">Name <span class="text-destructive">*</span></Label>
+          <Label for="store-name">{{ $t('common.name') }} <span class="text-destructive">*</span></Label>
           <Input
             id="store-name"
             v-model="newStoreName"
-            placeholder="My Vector Store"
+            :placeholder="$t('vectorStores.storeNamePlaceholder')"
             :disabled="saving"
           />
         </div>
 
         <div class="space-y-2">
-          <Label for="store-description">Description</Label>
+          <Label for="store-description">{{ $t('common.description') }}</Label>
           <Textarea
             id="store-description"
             v-model="newStoreDescription"
-            placeholder="Optional description"
+            :placeholder="$t('vectorStores.descriptionPlaceholder')"
             :rows="2"
             :disabled="saving"
           />
         </div>
 
         <div class="space-y-2">
-          <Label for="store-dbtype">Database <span class="text-destructive">*</span></Label>
+          <Label for="store-dbtype">{{ $t('vectorStores.dbType') }} <span class="text-destructive">*</span></Label>
           <Select
             id="store-dbtype"
             :model-value="newStoreDbType"
@@ -754,12 +756,12 @@ async function deleteItem(pointId: string): Promise<void> {
             @update:model-value="onDbTypeChange"
           />
           <p class="text-xs text-muted-foreground">
-            Qdrant uses an external server; Postgres (pgvector) stores vectors in Heym's own database.
+            {{ $t('vectorStores.qdrantExternalHint') }}
           </p>
         </div>
 
         <div class="space-y-2">
-          <Label for="store-credential">Credential <span class="text-destructive">*</span></Label>
+          <Label for="store-credential">{{ $t('vectorStores.credential') }} <span class="text-destructive">*</span></Label>
           <Select
             id="store-credential"
             v-model="newStoreCredentialId"
@@ -770,25 +772,25 @@ async function deleteItem(pointId: string): Promise<void> {
             v-if="filteredCredentials.length === 0"
             class="text-xs text-amber-500"
           >
-            No {{ newStoreDbType === "pgvector" ? "Postgres (pgvector)" : "Qdrant" }} credentials found.
+            {{ newStoreDbType === "pgvector" ? $t('vectorStores.noPgvectorCredentials') : $t('vectorStores.noQdrantCredentials') }}
             <a
               href="/?tab=credentials"
               class="text-primary hover:underline"
               @click.prevent="$router.push('/?tab=credentials')"
-            >Create one</a> first.
+            >{{ $t('vectorStores.createOneFirst') }}</a>
           </p>
         </div>
 
         <div class="space-y-2">
-          <Label for="store-collection">Collection Name (optional)</Label>
+          <Label for="store-collection">{{ $t('vectorStores.collectionName') }}</Label>
           <Input
             id="store-collection"
             v-model="newStoreCollectionName"
-            placeholder="heym_vs_auto_generated"
+            :placeholder="$t('vectorStores.collectionNamePlaceholder')"
             :disabled="saving"
           />
           <p class="text-xs text-muted-foreground">
-            Leave empty for auto-generated name
+            {{ $t('vectorStores.leaveEmptyForAuto') }}
           </p>
         </div>
 
@@ -806,14 +808,14 @@ async function deleteItem(pointId: string): Promise<void> {
             :disabled="saving"
             @click="showCreateDialog = false"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             type="submit"
             :loading="saving"
             :disabled="!newStoreName.trim() || !newStoreCredentialId"
           >
-            Create
+            {{ $t('common.create') }}
           </Button>
         </div>
       </form>
@@ -821,12 +823,19 @@ async function deleteItem(pointId: string): Promise<void> {
 
     <Dialog
       :open="showDeleteDialog"
-      title="Delete Vector Store"
+      :title="$t('vectorStores.deleteDialogTitle')"
       @close="showDeleteDialog = false"
     >
       <div class="space-y-4">
         <p class="text-sm text-muted-foreground">
-          Are you sure you want to delete <strong>{{ deletingStore?.name }}</strong>?
+          <i18n-t
+            keypath="vectorStores.confirmDelete"
+            tag="span"
+          >
+            <template #name>
+              <strong>{{ deletingStore?.name }}</strong>
+            </template>
+          </i18n-t>
         </p>
 
         <label class="flex items-center gap-2 cursor-pointer">
@@ -835,14 +844,14 @@ async function deleteItem(pointId: string): Promise<void> {
             type="checkbox"
             class="rounded border-border"
           >
-          <span class="text-sm">Also delete the stored vectors</span>
+          <span class="text-sm">{{ $t('vectorStores.alsoDeleteStoredVectors') }}</span>
         </label>
 
         <p
           v-if="!deleteCollection"
           class="text-xs text-amber-500"
         >
-          The stored vectors will remain and can be reused later.
+          {{ $t('vectorStores.vectorsRemainNotice') }}
         </p>
 
         <div class="flex justify-end gap-3 pt-4">
@@ -850,13 +859,13 @@ async function deleteItem(pointId: string): Promise<void> {
             variant="outline"
             @click="showDeleteDialog = false"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             variant="destructive"
             @click="confirmDelete"
           >
-            Delete
+            {{ $t('common.delete') }}
           </Button>
         </div>
       </div>
@@ -864,13 +873,12 @@ async function deleteItem(pointId: string): Promise<void> {
 
     <Dialog
       :open="showUploadDialog"
-      title="Upload Files"
+      :title="$t('vectorStores.uploadDialogTitle')"
       @close="showUploadDialog = false"
     >
       <div class="space-y-4">
         <p class="text-sm text-muted-foreground">
-          Upload files to <strong>{{ uploadingStore?.name }}</strong>.
-          Supported formats: PDF, Markdown, Text, CSV, JSON
+          {{ $t('vectorStores.uploadDescription', { name: uploadingStore?.name }) }}
         </p>
 
         <div
@@ -882,10 +890,10 @@ async function deleteItem(pointId: string): Promise<void> {
         >
           <FileUp class="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
           <p class="text-sm text-muted-foreground mb-1">
-            Drag & drop files here, or
+            {{ $t('vectorStores.dragDropFiles') }}
           </p>
           <label class="cursor-pointer">
-            <span class="text-primary hover:underline text-sm">browse</span>
+            <span class="text-primary hover:underline text-sm">{{ $t('vectorStores.browse') }}</span>
             <input
               type="file"
               accept=".pdf,.md,.markdown,.txt,.csv,.json"
@@ -900,7 +908,7 @@ async function deleteItem(pointId: string): Promise<void> {
           v-if="uploadFiles.length > 0"
           class="space-y-2"
         >
-          <Label>Selected files ({{ uploadFiles.length }})</Label>
+          <Label>{{ $t('vectorStores.selectedFiles', { count: uploadFiles.length }) }}</Label>
           <div class="max-h-40 overflow-y-auto space-y-1">
             <div
               v-for="(file, index) in uploadFiles"
@@ -934,7 +942,7 @@ async function deleteItem(pointId: string): Promise<void> {
             class="rounded border-border"
             :disabled="uploading"
           >
-          <span class="text-sm">Override existing files with same name</span>
+          <span class="text-sm">{{ $t('vectorStores.overrideDuplicates') }}</span>
         </label>
 
         <div
@@ -944,10 +952,10 @@ async function deleteItem(pointId: string): Promise<void> {
           <AlertTriangle class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div class="text-sm">
             <p class="font-medium text-amber-600 dark:text-amber-400 mb-1">
-              Duplicate files detected
+              {{ $t('vectorStores.duplicatesDetected') }}
             </p>
             <p class="text-muted-foreground mb-2">
-              The following files already exist in this vector store:
+              {{ $t('vectorStores.filesAlreadyExist') }}
             </p>
             <ul class="list-disc list-inside text-muted-foreground space-y-0.5">
               <li
@@ -958,7 +966,7 @@ async function deleteItem(pointId: string): Promise<void> {
               </li>
             </ul>
             <p class="mt-2 text-amber-600 dark:text-amber-400">
-              Enable "Override existing files" to replace them.
+              {{ $t('vectorStores.enableOverrideHint') }}
             </p>
           </div>
         </div>
@@ -981,7 +989,7 @@ async function deleteItem(pointId: string): Promise<void> {
           v-if="uploading && uploadProgress.total > 0"
           class="text-sm text-muted-foreground"
         >
-          Uploading file {{ uploadProgress.current }} of {{ uploadProgress.total }}...
+          {{ $t('vectorStores.uploadProgress', { current: uploadProgress.current, total: uploadProgress.total }) }}
         </p>
 
         <div class="flex justify-end gap-3 pt-4">
@@ -990,14 +998,14 @@ async function deleteItem(pointId: string): Promise<void> {
             :disabled="uploading"
             @click="showUploadDialog = false"
           >
-            Close
+            {{ $t('common.close') }}
           </Button>
           <Button
             :loading="uploading"
             :disabled="uploadFiles.length === 0"
             @click="submitUpload"
           >
-            Upload {{ uploadFiles.length > 0 ? `(${uploadFiles.length})` : '' }}
+            {{ $t('common.upload') }} {{ uploadFiles.length > 0 ? `(${uploadFiles.length})` : '' }}
           </Button>
         </div>
       </div>
@@ -1005,18 +1013,24 @@ async function deleteItem(pointId: string): Promise<void> {
 
     <Dialog
       :open="showShareDialog"
-      title="Share Vector Store"
+      :title="$t('vectorStores.shareStore')"
       @close="showShareDialog = false"
     >
       <div class="space-y-4">
         <p class="text-sm text-muted-foreground">
-          Share <strong>{{ sharingStore?.name }}</strong> with other users.
-          They will be able to use this vector store in their workflows.
+          <i18n-t
+            keypath="vectorStores.shareDescription"
+            tag="span"
+          >
+            <template #name>
+              <strong>{{ sharingStore?.name }}</strong>
+            </template>
+          </i18n-t>
         </p>
 
         <div class="space-y-3">
           <div>
-            <Label class="text-xs">Share with user</Label>
+            <Label class="text-xs">{{ $t('vectorStores.shareWithUser') }}</Label>
             <div class="flex gap-2 mt-1">
               <Input
                 v-model="shareEmail"
@@ -1029,12 +1043,12 @@ async function deleteItem(pointId: string): Promise<void> {
                 :disabled="!shareEmail.trim() || sharingLoading"
                 @click="addShare"
               >
-                Share
+                {{ $t('canvas.share') }}
               </Button>
             </div>
           </div>
           <div>
-            <Label class="text-xs">Share with team</Label>
+            <Label class="text-xs">{{ $t('vectorStores.shareWithTeam') }}</Label>
             <div class="flex gap-2 mt-1">
               <Select
                 v-model="shareTeamId"
@@ -1046,7 +1060,7 @@ async function deleteItem(pointId: string): Promise<void> {
                 @click="addTeamShare"
               >
                 <Users class="w-4 h-4" />
-                Add
+                {{ $t('common.add') }}
               </Button>
             </div>
           </div>
@@ -1060,7 +1074,7 @@ async function deleteItem(pointId: string): Promise<void> {
         </p>
 
         <div class="space-y-2">
-          <Label>Shared with users:</Label>
+          <Label>{{ $t('vectorStores.sharedWithUsers') }}</Label>
           <div
             v-if="storeShares.length > 0"
             class="space-y-2 max-h-32 overflow-y-auto"
@@ -1100,11 +1114,11 @@ async function deleteItem(pointId: string): Promise<void> {
             v-else-if="!sharingLoading"
             class="text-sm text-muted-foreground"
           >
-            No users
+            {{ $t('vectorStores.noUsers') }}
           </p>
         </div>
         <div class="space-y-2">
-          <Label>Shared with teams:</Label>
+          <Label>{{ $t('vectorStores.sharedWithTeams') }}</Label>
           <div
             v-if="storeTeamShares.length > 0"
             class="space-y-2 max-h-32 overflow-y-auto"
@@ -1131,7 +1145,7 @@ async function deleteItem(pointId: string): Promise<void> {
             v-else-if="!sharingLoading"
             class="text-sm text-muted-foreground"
           >
-            No teams
+            {{ $t('vectorStores.noTeams') }}
           </p>
         </div>
       </div>
@@ -1139,7 +1153,7 @@ async function deleteItem(pointId: string): Promise<void> {
 
     <Dialog
       :open="showEditDialog"
-      title="Edit Vector Store"
+      :title="$t('vectorStores.editDialogTitle')"
       @close="showEditDialog = false"
     >
       <form
@@ -1147,21 +1161,21 @@ async function deleteItem(pointId: string): Promise<void> {
         @submit.prevent="updateVectorStore"
       >
         <div class="space-y-2">
-          <Label for="edit-store-name">Name <span class="text-destructive">*</span></Label>
+          <Label for="edit-store-name">{{ $t('common.name') }} <span class="text-destructive">*</span></Label>
           <Input
             id="edit-store-name"
             v-model="editStoreName"
-            placeholder="My Vector Store"
+            :placeholder="$t('vectorStores.storeNamePlaceholder')"
             :disabled="editSaving"
           />
         </div>
 
         <div class="space-y-2">
-          <Label for="edit-store-description">Description</Label>
+          <Label for="edit-store-description">{{ $t('common.description') }}</Label>
           <Textarea
             id="edit-store-description"
             v-model="editStoreDescription"
-            placeholder="Optional description"
+            :placeholder="$t('vectorStores.descriptionPlaceholder')"
             :rows="2"
             :disabled="editSaving"
           />
@@ -1185,14 +1199,14 @@ async function deleteItem(pointId: string): Promise<void> {
             :disabled="editSaving"
             @click="showEditDialog = false"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             type="submit"
             :loading="editSaving"
             :disabled="!editStoreName.trim()"
           >
-            Save
+            {{ $t('common.save') }}
           </Button>
         </div>
       </form>
@@ -1212,14 +1226,13 @@ async function deleteItem(pointId: string): Promise<void> {
           @click="openUploadDialog(itemsStore)"
         >
           <Upload class="w-4 h-4 mr-2" />
-          Add New
+          {{ $t('common.add') }}
         </Button>
       </template>
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <p class="text-sm text-muted-foreground">
-            {{ itemsTotalCount.toLocaleString() }} items in
-            {{ itemsSourceGroups.length }} source(s)
+            {{ $t('vectorStores.itemsInSources', { count: itemsTotalCount.toLocaleString(), sources: itemsSourceGroups.length }) }}
           </p>
           <Button
             variant="outline"
@@ -1227,7 +1240,7 @@ async function deleteItem(pointId: string): Promise<void> {
             :loading="itemsLoading"
             @click="loadItems"
           >
-            Refresh
+            {{ $t('common.refresh') }}
           </Button>
         </div>
 
@@ -1242,7 +1255,7 @@ async function deleteItem(pointId: string): Promise<void> {
           v-if="itemsLoading && itemsSourceGroups.length === 0"
           class="py-8 text-center text-muted-foreground"
         >
-          Loading items...
+          {{ $t('common.loading') }}
         </div>
 
         <div
@@ -1250,7 +1263,7 @@ async function deleteItem(pointId: string): Promise<void> {
           class="py-8 text-center text-muted-foreground"
         >
           <Database class="w-8 h-8 mx-auto mb-2 opacity-50" />
-          <p>No items in this vector store</p>
+          <p>{{ $t('vectorStores.noItems') }}</p>
         </div>
 
         <div
@@ -1279,7 +1292,7 @@ async function deleteItem(pointId: string): Promise<void> {
                   v-if="workflowSourceName(group.source)"
                   class="line-clamp-2 break-words min-w-0 flex-1"
                 >
-                  <span class="text-muted-foreground">Added workflow: </span>
+                  <span class="text-muted-foreground">{{ $t('vectorStores.addedWorkflow') }} </span>
                   <span class="font-medium">{{ workflowSourceName(group.source) }}</span>
                 </span>
                 <span
@@ -1304,10 +1317,10 @@ async function deleteItem(pointId: string): Promise<void> {
                 class="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0"
                 :loading="deletingSource === group.source"
                 :title="workflowSourceName(group.source)
-                  ? `Delete everything ${workflowSourceName(group.source)} added`
+                  ? $t('vectorStores.deleteEverythingWorkflowAdded', { name: workflowSourceName(group.source) })
                   : group.source
-                    ? 'Delete all chunks from this source'
-                    : 'Delete all chunks that have no source'"
+                    ? $t('vectorStores.deleteAllChunksFromSource')
+                    : $t('vectorStores.deleteAllChunksNoSource')"
                 @click.stop="deleteSource(group.source)"
               >
                 <Trash2 class="w-3.5 h-3.5" />
@@ -1338,7 +1351,7 @@ async function deleteItem(pointId: string): Promise<void> {
                     size="icon"
                     class="h-6 w-6 text-muted-foreground hover:text-destructive flex-shrink-0"
                     :loading="deletingItem === item.id"
-                    title="Delete this chunk"
+                    :title="$t('vectorStores.deleteChunk')"
                     @click="deleteItem(item.id)"
                   >
                     <X class="w-3 h-3" />
@@ -1354,7 +1367,7 @@ async function deleteItem(pointId: string): Promise<void> {
             variant="outline"
             @click="showItemsDialog = false"
           >
-            Close
+            {{ $t('common.close') }}
           </Button>
         </div>
       </div>

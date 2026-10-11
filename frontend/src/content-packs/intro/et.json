@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Kiirem ehitamine Workflow'des",
+    "description": "Valige Workflow, et näha Trigger'it, viimast käivitust ja samme otse nimekirja kõrval. Filtreerige oleku järgi, käivitage otse ja hoidke ülevaadet kaustade abil."
+  },
+  "dashboard:board": {
+    "title": "Ülesannete juhtimine agentidel põhineva tahvli kaudu",
+    "description": "Lohistage kaarte veergude vahel, et käivitada Workflow-kette kaardi täieliku kontekstiga. Tulemused voolavad otse kaardile tagasi."
+  },
+  "dashboard:templates": {
+    "title": "Alustage tõestatud mallidega",
+    "description": "Kasutage eelvalmistatud Workflow-mustreid, et säästa seadistamisaega ja tagada järjepidevus."
+  },
+  "dashboard:globalvariables": {
+    "title": "Jagatud muutujate tsentraliseerimine",
+    "description": "Salvestage korduvkasutatavad väärtused üks kord ja viidake neile kõigis Workflow'des."
+  },
+  "dashboard:chat": {
+    "title": "Kasutage vestlust kiireks iteratsiooniks",
+    "description": "Esitage kiireid küsimusi, testige ideid ja lülituge redaktorile, kui Workflow voog on selge."
+  },
+  "dashboard:credentials": {
+    "title": "Saladuste turvaline haldamine",
+    "description": "Hallake teenusepakkuja võtmeid ja Token'eid tsentraalselt, et Workflow'd saaksid kasutada turvalisi ühendusi ilma saladusi paljastamata."
+  },
+  "dashboard:vectorstores": {
+    "title": "Retrieval-põhiste Workflow'de toetamine",
+    "description": "Valmistage ette vektorsalvestused, et toetada teadmistepõhiseid AI-vastuseid, semantilist otsingut ja skaleeritavaid RAG-torustikke."
+  },
+  "dashboard:mcp": {
+    "title": "Väliste tööriistade ökosüsteemide ühendamine",
+    "description": "Seadistage MCP-ühendused, et agendid saaksid käivitada struktureeritud tööriistu ja toiminguid väljaspool lihtsaid Prompt'e."
+  },
+  "dashboard:traces": {
+    "title": "Käitumise mõistmine käivitamisel",
+    "description": "Analüüsige Trace'i üksikasju, et siluda tulemusi, võrrelda käivitusi ja suurendada usaldusväärsust."
+  },
+  "dashboard:alerts": {
+    "title": "Teavituste saamine enne probleemide eskaleerumist",
+    "description": "Määrake vigade, kestuse, kulude ja käivituste arvu lävendid ning saage hoiatusi, kui need ületatakse."
+  },
+  "dashboard:analytics": {
+    "title": "Platvormi jõudluse jälgimine",
+    "description": "Jälgige kasutus- ja käivitustrende, et optimeerida sihipäraselt reaalsete signaalide põhjal."
+  },
+  "dashboard:dashboard": {
+    "title": "Looge oma armatuurlaudu",
+    "description": "Koostage Workflow-põhiseid diagrammi vidinaid, et näha olulisi mõõdikuid ühe pilguga."
+  },
+  "dashboard:teams": {
+    "title": "Koostöö sujuv skaleerimine",
+    "description": "Jagage Workflow'd ja ressursid meeskondade kaupa, et hoida juurdepääsuõigused ja vastutused läbipaistvad."
+  },
+  "dashboard:logs": {
+    "title": "Süsteemitasandi probleemide diagnoosimine",
+    "description": "Kasutage Logisid infrastruktuuri- või keskkonnaprobleemide korral sügavamaks ülevaateks käitusajast."
+  },
+  "dashboard:drive": {
+    "title": "Loodud failide haldamine",
+    "description": "Vaadake, laadige alla ja jagage Workflow väljundeid turvaliste linkide ja kontrollitud juurdepääsuvalikute kaudu."
+  },
+  "dashboard:datatable": {
+    "title": "Töötage natiivselt struktureeritud andmetega",
+    "description": "Looge tüübistatud tabeleid ja juhtige neid otse Workflow'dest korduvate lugemis- ja kirjutamistoimingute jaoks."
+  },
+  "dashboard:schedules": {
+    "title": "Automatiseerimise ajakavade ülevaade",
+    "description": "Vaadake kõiki aktiivseid Cron-Workflow'sid kalendrivaates (päev, nädal, kuu). Klõpsake plokil, et minna otse Canvas'ele."
+  },
+  "evals": {
+    "title": "Kvaliteedi usaldusväärne hindamine",
+    "description": "Käivitage korratavaid testikomplekte, et põhjendatult võrrelda Prompt'i ja mudeli muudatusi enne tootmisse juurutamist."
+  },
+  "docs": {
+    "title": "Kiire orienteerumine rakenduses",
+    "description": "Sirvige kompaktseid viiteid ja süvenege sihipäraselt, ilma praegusest Workflow'st lahkumata."
+  },
+  "editor": {
+    "title": "Kavandage ja siluge Canvas'el",
+    "description": "Ühendage sõlmi visuaalselt, käivitage kohe ja täiustage käitumist otsese tagasisidega ühes tööruumis."
+  }
+}

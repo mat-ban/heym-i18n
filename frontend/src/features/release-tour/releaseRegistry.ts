@@ -237,3 +237,17 @@ export const RELEASE_REGISTRY: ReleaseEntry[] = [
     ],
   },
 ];
+
+import { getLocalizedRelease } from "@/content-packs";
+
+export function getReleaseRegistry(): ReleaseEntry[] {
+  try {
+    const localized = getLocalizedRelease();
+    if (localized) {
+      return localized;
+    }
+  } catch {
+    // fallback if i18n not initialized
+  }
+  return RELEASE_REGISTRY;
+}

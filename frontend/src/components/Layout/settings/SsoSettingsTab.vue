@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { Check, Copy, X } from "lucide-vue-next";
 
 import Button from "@/components/ui/Button.vue";
@@ -8,6 +9,8 @@ import Label from "@/components/ui/Label.vue";
 import SettingsToggle from "@/components/Layout/settings/SettingsToggle.vue";
 import { getAdminSsoConfig, saveAdminSsoConfig, testSsoConnection } from "@/services/sso";
 import type { SsoSettings, SsoTestResult } from "@/types/sso";
+
+const { t } = useI18n();
 
 const config = ref<SsoSettings | null>(null);
 const clientSecret = ref("");
@@ -24,7 +27,7 @@ async function load(): Promise<void> {
   try {
     config.value = await getAdminSsoConfig();
   } catch {
-    error.value = "Failed to load SSO settings.";
+    error.value = t("settings.ssoSection.loadError");
   } finally {
     loading.value = false;
   }
@@ -49,7 +52,7 @@ async function handleSave(): Promise<void> {
     clientSecret.value = "";
     testResult.value = null;
   } catch {
-    error.value = "Failed to save. Check that password login can be disabled yet.";
+    error.value = t("settings.ssoSection.saveError");
   } finally {
     saving.value = false;
   }
@@ -62,7 +65,7 @@ async function handleTest(): Promise<void> {
     testResult.value = await testSsoConnection(config.value?.issuer);
     if (config.value) config.value.last_test_ok = testResult.value.ok;
   } catch {
-    error.value = "Connection test could not run.";
+    error.value = t("settings.ssoSection.testError");
   } finally {
     testing.value = false;
   }
@@ -93,20 +96,20 @@ onMounted(load);
       v-if="loading"
       class="text-sm text-muted-foreground"
     >
-      Loading...
+      {{ $t('common.loading') }}
     </p>
 
     <template v-if="config">
       <SettingsToggle
         id="sso-enabled"
         v-model="config.enabled"
-        label="Enable single sign-on"
+        :label="$t('settings.ssoSection.enable')"
       />
 
       <div class="space-y-2">
-        <Label for="sso-issuer">Issuer URL</Label>
+        <Label for="sso-issuer">{{ $t('settings.ssoSection.issuerUrl') }}</Label>
         <p class="text-xs text-muted-foreground">
-          The provider's base URL. Every other endpoint is read from its discovery document.
+          {{ $t('settings.ssoSection.issuerDescription') }}
         </p>
         <Input
           id="sso-issuer"
@@ -116,7 +119,7 @@ onMounted(load);
       </div>
 
       <div class="space-y-2">
-        <Label for="sso-client-id">Client ID</Label>
+        <Label for="sso-client-id">{{ $t('settings.ssoSection.clientId') }}</Label>
         <Input
           id="sso-client-id"
           v-model="config.client_id"
@@ -124,22 +127,22 @@ onMounted(load);
       </div>
 
       <div class="space-y-2">
-        <Label for="sso-client-secret">Client secret</Label>
+        <Label for="sso-client-secret">{{ $t('settings.ssoSection.clientSecret') }}</Label>
         <p class="text-xs text-muted-foreground">
-          Leave blank to keep the stored secret.
+          {{ $t('settings.ssoSection.clientSecretDescription') }}
         </p>
         <Input
           id="sso-client-secret"
           v-model="clientSecret"
           type="password"
-          :placeholder="config.client_secret_set ? '••••••••' : 'Not configured'"
+          :placeholder="config.client_secret_set ? '••••••••' : $t('settings.ssoSection.clientSecretNotConfigured')"
         />
       </div>
 
       <div class="space-y-2">
-        <Label for="sso-redirect-uri">Redirect URI</Label>
+        <Label for="sso-redirect-uri">{{ $t('settings.ssoSection.redirectUri') }}</Label>
         <p class="text-xs text-muted-foreground">
-          Add this exact value to the provider's allowed redirect URIs.
+          {{ $t('settings.ssoSection.redirectUriDescription') }}
         </p>
         <div class="flex gap-2">
           <Input
@@ -165,7 +168,7 @@ onMounted(load);
       </div>
 
       <div class="space-y-2">
-        <Label for="sso-scopes">Scopes</Label>
+        <Label for="sso-scopes">{{ $t('settings.ssoSection.scopes') }}</Label>
         <Input
           id="sso-scopes"
           v-model="config.scopes"
@@ -173,7 +176,7 @@ onMounted(load);
       </div>
 
       <div class="space-y-2">
-        <Label for="sso-button-label">Sign-in button label</Label>
+        <Label for="sso-button-label">{{ $t('settings.ssoSection.buttonLabel') }}</Label>
         <Input
           id="sso-button-label"
           v-model="config.button_label"
@@ -183,13 +186,13 @@ onMounted(load);
       <SettingsToggle
         id="sso-auto-provision"
         v-model="config.auto_provision_users"
-        label="Create an account on first sign-in"
+        :label="$t('settings.ssoSection.autoProvision')"
       />
 
       <div class="space-y-2">
-        <Label for="sso-domains">Allowed email domains</Label>
+        <Label for="sso-domains">{{ $t('settings.ssoSection.allowedDomains') }}</Label>
         <p class="text-xs text-muted-foreground">
-          Comma-separated. Leave blank to allow any domain the provider authenticates.
+          {{ $t('settings.ssoSection.allowedDomainsDescription') }}
         </p>
         <Input
           id="sso-domains"
@@ -205,7 +208,7 @@ onMounted(load);
           :loading="testing"
           @click="handleTest"
         >
-          Test connection
+          {{ $t('settings.ssoSection.testConnection') }}
         </Button>
         <div
           v-if="testResult"
@@ -230,20 +233,18 @@ onMounted(load);
         <SettingsToggle
           id="sso-disable-password"
           v-model="config.password_login_disabled"
-          label="Disable password sign-in"
+          :label="$t('settings.ssoSection.disablePassword')"
           :disabled="!config.enabled || !config.last_test_ok || !config.break_glass_ready"
         />
         <p class="text-xs text-muted-foreground">
           <span v-if="!config.enabled || !config.last_test_ok">
-            Available once SSO is enabled and a connection test has passed.
+            {{ $t('settings.ssoSection.disablePasswordNotice') }}
           </span>
           <span v-else-if="!config.break_glass_ready">
-            Unavailable: no account in HEYM_ADMIN_EMAILS has a password, so nobody could get
-            back in if the provider became unreachable. Give one of them a password first.
+            {{ $t('settings.ssoSection.breakGlassNotReady') }}
           </span>
           <span v-else>
-            Accounts listed in HEYM_ADMIN_EMAILS keep password access, so the instance stays
-            recoverable if the provider becomes unreachable.
+            {{ $t('settings.ssoSection.breakGlassReady') }}
           </span>
         </p>
       </div>
@@ -255,7 +256,7 @@ onMounted(load);
           :loading="saving"
           @click="handleSave"
         >
-          Save
+          {{ $t('common.save') }}
         </Button>
       </div>
     </template>

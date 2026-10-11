@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import type { TraceStatsResponse } from "@/types/trace";
 
@@ -26,6 +27,7 @@ const emit = defineEmits<{
   (e: "configure-pricing", model: string): void;
 }>();
 const themeStore = useThemeStore();
+const { t } = useI18n();
 
 function fmtNum(value: number): string {
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
@@ -93,8 +95,8 @@ const tokensByModelOptions = computed(() => ({
   tooltip: {
     fillSeriesColor: false,
     custom: (context: ApexDonutTooltipContext): string =>
-      formatDonutTooltip(context, (val) => `${fmtNum(val)} tokens`),
-    y: { formatter: (val: number) => `${fmtNum(val)} tokens` },
+      formatDonutTooltip(context, (val) => `${fmtNum(val)} ${t('traces.tokensLower')}`),
+    y: { formatter: (val: number) => `${fmtNum(val)} ${t('traces.tokensLower')}` },
   },
 }));
 const tokensByModelSeries = computed(() =>
@@ -180,7 +182,7 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="px-3 py-2.5 md:p-3 min-w-0"
       >
         <div class="text-[10px] md:text-xs text-muted-foreground truncate">
-          Calls
+          {{ $t('traces.calls') }}
         </div>
         <div class="mt-1 text-sm md:text-xl font-semibold truncate">
           {{ loading ? "…" : fmtNum(kpis?.total_calls ?? 0) }}
@@ -192,7 +194,7 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="px-3 py-2.5 md:p-3 min-w-0"
       >
         <div class="text-[10px] md:text-xs text-muted-foreground truncate">
-          Tokens
+          {{ $t('traces.tokens') }}
         </div>
         <div class="mt-1 text-sm md:text-xl font-semibold truncate">
           {{ loading ? "…" : fmtNum(kpis?.total_tokens ?? 0) }}
@@ -204,7 +206,7 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="px-3 py-2.5 md:p-3 min-w-0"
       >
         <div class="text-[10px] md:text-xs text-muted-foreground truncate">
-          Cost
+          {{ $t('traces.cost') }}
         </div>
         <div class="mt-1 text-sm md:text-xl font-semibold truncate">
           {{ loading ? "…" : fmtCost(kpis?.total_cost_usd ?? "0") }}
@@ -216,8 +218,8 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="px-3 py-2.5 md:p-3 min-w-0"
       >
         <div class="text-[10px] md:text-xs text-muted-foreground truncate">
-          <span class="md:hidden">Lat.</span>
-          <span class="hidden md:inline">Avg Latency</span>
+          <span class="md:hidden">{{ $t('traces.latencyShort') }}</span>
+          <span class="hidden md:inline">{{ $t('traces.avgLatency') }}</span>
         </div>
         <div class="mt-1 text-sm md:text-xl font-semibold truncate">
           {{ loading ? "…" : fmtMs(kpis?.avg_latency_ms ?? 0) }}
@@ -229,8 +231,8 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="px-3 py-2.5 md:p-3 min-w-0"
       >
         <div class="text-[10px] md:text-xs text-muted-foreground truncate">
-          <span class="md:hidden">Err%</span>
-          <span class="hidden md:inline">Error %</span>
+          <span class="md:hidden">{{ $t('traces.errorPctShort') }}</span>
+          <span class="hidden md:inline">{{ $t('traces.errorPct') }}</span>
         </div>
         <div class="mt-1 text-sm md:text-xl font-semibold truncate">
           {{ loading ? "…" : `${(kpis?.error_pct ?? 0).toFixed(1)}%` }}
@@ -245,13 +247,13 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="trace-chart-card p-3"
       >
         <div class="text-sm font-medium mb-2">
-          Tokens by Model
+          {{ $t('traces.tokensByModel') }}
         </div>
         <div
           v-if="!hasModelData"
           class="flex items-center justify-center h-[240px] text-xs text-muted-foreground"
         >
-          No data
+          {{ $t('traces.noData') }}
         </div>
         <apexchart
           v-else
@@ -267,13 +269,13 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="trace-chart-card p-3"
       >
         <div class="text-sm font-medium mb-2">
-          Cost by Model
+          {{ $t('traces.costByModel') }}
         </div>
         <div
           v-if="!hasModelData || !hasCostData"
           class="flex items-center justify-center h-[240px] text-xs text-muted-foreground"
         >
-          {{ !hasModelData ? "No data" : "No pricing configured" }}
+          {{ !hasModelData ? $t('traces.noData') : $t('traces.noPricingConfigured') }}
         </div>
         <apexchart
           v-else
@@ -286,7 +288,7 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
           v-if="showUnpriced"
           class="unpriced-models-notice mt-2 max-w-full text-[11px] text-muted-foreground break-words"
         >
-          {{ unpricedModels.length }} model(s) without pricing:
+          {{ $t('traces.unpricedModelsNotice', { count: unpricedModels.length }) }}
           <template
             v-for="(model, index) in unpricedModels"
             :key="model"
@@ -305,13 +307,13 @@ const showUnpriced = computed(() => unpricedModels.value.length > 0);
         class="trace-chart-card p-3"
       >
         <div class="text-sm font-medium mb-2">
-          Calls Over Time
+          {{ $t('traces.callsOverTime') }}
         </div>
         <div
           v-if="!hasTimeData"
           class="flex items-center justify-center h-[240px] text-xs text-muted-foreground"
         >
-          No data
+          {{ $t('traces.noData') }}
         </div>
         <apexchart
           v-else

@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Knooppunten binnen een Workflow opnieuw activeren",
+    "releaseTour": {
+      "label": "Nieuw in Heym",
+      "introTitle": "Nieuw in deze release",
+      "introDescription": "Een kort overzicht van de vernieuwingen sinds uw laatste update. Duurt ongeveer een minuut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Enable-knooppunt: een knooppunt binnen een Workflow opnieuw activeren",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Het nieuwe **Enable-knooppunt** is het tegenstuk van het **Disable-knooppunt**. Selecteer een knooppunt op naam om het opnieuw te activeren en de wijziging op te slaan. Een gedeactiveerde **Cron**-trigger wordt zo op het volgende geplande tijdstip opnieuw uitgevoerd. Bevindt het knooppunt zich verder in het proces en werd het nog niet uitgevoerd, dan loopt het direct mee in de huidige uitvoering."
+          },
+          {
+            "type": "prose",
+            "markdown": "Een gedeactiveerde trigger start nooit zelfstandig een run. Plaats het Enable-knooppunt daarom achter een ander startpunt, zoals een **Input**-trigger. Het **Wait**-knooppunt ondersteunt nu ook langere pauzes: tot 15 minuten in plaats van slechts één."
+          }
+        ],
+        "tour": {
+          "description": "Een gedeactiveerd knooppunt direct vanuit de Workflow opnieuw activeren, bijvoorbeeld een gepauzeerde Cron-trigger.",
+          "useCases": [
+            "Een gedeactiveerde Cron-trigger indien nodig via een Webhook starten",
+            "Combineren met het Disable-knooppunt om knooppunten afhankelijk van de status in en uit te schakelen",
+            "Een Workflow met het Wait-knooppunt tot 15 minuten pauzeren"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Openstaande menselijke goedkeuringen direct in het dashboard controleren",
+    "releaseTour": {
+      "label": "Nieuw in Heym",
+      "introTitle": "Nieuw in deze release",
+      "introDescription": "Een kort overzicht van de wijzigingen sinds uw laatste update. Duurt ongeveer een minuut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Openstaande reviews afhandelen via een dashboard-widget",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Voeg een **HITL**-widget toe en de header toont het aantal wachtende reviews als `1/n openstaand`. Navigeer met de pijltoetsen door de items. De Workflow-naam opent de run direct op het canvas. **Goedkeuren**, **Wijzigingen aanvragen** en **Afwijzen** ronden het concept af. Het geschiedenis-pictogram opent de run in het geschiedenisdialoogvenster op dezelfde pagina. De wachtrij is persoonlijk: een gedeeld dashboard toont geen concepten van anderen."
+          }
+        ],
+        "tour": {
+          "description": "Een dashboard-carrousel voor uw openstaande goedkeuringen met een teller in de header.",
+          "useCases": [
+            "Zien hoeveel reviews wachten voordat de eerste wordt geopend",
+            "Goedkeuren, wijzigingen aanvragen of afwijzen zonder het dashboard te verlaten",
+            "Deze run openen via het pictogram naast de widget-titel in het geschiedenisdialoogvenster"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "De AI-assistent test zijn Workflows en richt datatabellen in",
+    "releaseTour": {
+      "label": "Nieuw in Heym",
+      "introTitle": "Nieuw in deze release",
+      "introDescription": "Een kort overzicht van de vernieuwingen sinds uw laatste update. Duurt ongeveer een minuut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "YOLO-modus: de AI-assistent test wat hij bouwt",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Activeert u de **YOLO-modus** in de **AI-assistent** op het canvas, dan stopt hij niet meer na het toepassen van een Workflow. Hij voert de Workflow uit zoals via **Run**, leest het resultaat en corrigeert de Workflow zelfstandig tot vijf keer per bericht. Elk antwoord somt de stappen live op."
+          },
+          {
+            "type": "prose",
+            "markdown": "Vóór de eerste run vraagt hij naar testinvoer met voorgestelde waarden en gebruikt deze opnieuw. Hij kan ook andere Workflows uitvoeren wanneer hij de resultaten daarvan nodig heeft. Heeft hij een beslissing of inloggegevens nodig, dan vraagt hij dit met de gebruikelijke vraagkaart. Echte runs: YOLO-modus staat standaard uit en **Stop** beëindigt het proces op elk moment."
+          }
+        ],
+        "tour": {
+          "description": "De AI-assistent voert gemaakte Workflows uit, controleert het resultaat en corrigeert fouten zelfstandig tot het werkt.",
+          "useCases": [
+            "Een Workflow beschrijven en direct een geteste versie ontvangen",
+            "De assistent foutieve nodes automatisch laten opsporen en verhelpen",
+            "Retourwaarden van andere Workflows controleren vóór het koppelen"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "De AI-assistent kiest of maakt datatabellen",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Wanneer een Workflow records opslaat, herkent de **AI-assistent** nu uw **DataTables**. Noemt u een tabel, dan gebruikt hij deze. Anders vraagt hij naar de passende tabel of stelt **Nieuwe tabel maken** voor met de vereiste kolommen."
+          },
+          {
+            "type": "prose",
+            "markdown": "Werkt in de canvas-assistent, in de YOLO-modus, in de **Chat**, in de documentatie en via MCP met `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "De AI-assistent vraagt naar de passende datatabel of maakt een nieuwe met de benodigde kolommen.",
+          "useCases": [
+            "Leads automatisch in tabellen vastleggen en Workflow & tabel samen genereren",
+            "Bestaande tabellen selecteren op basis van kolommen en typen",
+            "Tabellen direct vanuit de Chat of via MCP aanmaken en verbinden"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Meerdere dashboards aanmaken en met het team delen",
+    "releaseTour": {
+      "label": "Nieuw in Heym",
+      "introTitle": "Nieuw in deze release",
+      "introDescription": "Een kort overzicht van de vernieuwingen sinds uw laatste update. Duurt ongeveer een minuut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Meerdere dashboards aanmaken en met het team delen",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Het tabblad **Dashboard** ondersteunt nu een willekeurig aantal dashboards. Schakel eenvoudig over via de selectie boven in het tabblad of maak een nieuw dashboard aan met **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Deel dashboards met personen of teams via de **Instellingen**. **Lezen** staat het weergeven en vernieuwen toe; **Schrijven** staat het bewerken van widgets toe. Widgets gebruiken altijd de inloggegevens van de eigenaar."
+          }
+        ],
+        "tour": {
+          "description": "Meerdere dashboards beheren, ertussen wisselen en ze alleen-lezen of bewerkbaar delen.",
+          "useCases": [
+            "Afzonderlijke dashboards structureren per team, product of tenant",
+            "Stakeholders een alleen-lezen weergave bieden",
+            "Diagramtypen vooraf testen met voorbeeldgegevens"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

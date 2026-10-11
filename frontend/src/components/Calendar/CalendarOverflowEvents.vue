@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 import type { ScheduleEvent } from "@/types/schedule";
 
@@ -9,6 +10,7 @@ defineProps<{
   events: ScheduleEvent[];
 }>();
 
+const { t } = useI18n();
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const showTooltip = ref(false);
 const tooltipPosition = ref({ left: 0, top: 0, showAbove: false });
@@ -48,13 +50,13 @@ function hideOverflowTooltip(): void {
     v-bind="$attrs"
     type="button"
     class="w-fit text-[10px] text-muted-foreground hover:text-foreground focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/50"
-    :aria-label="`Show ${events.length} more scheduled workflows`"
+    :aria-label="t('schedules.calendar.showMoreAria', { count: events.length })"
     @mouseenter="showOverflowTooltip"
     @mouseleave="hideOverflowTooltip"
     @focus="showOverflowTooltip"
     @blur="hideOverflowTooltip"
   >
-    +{{ events.length }} more
+    +{{ events.length }} {{ $t('schedules.calendar.more') }}
   </button>
 
   <Teleport to="body">
@@ -66,7 +68,7 @@ function hideOverflowTooltip(): void {
     >
       <div class="w-64 rounded border border-border bg-popover px-2 py-1.5 text-xs shadow-lg">
         <p class="mb-1 font-semibold text-foreground">
-          Additional schedules
+          {{ $t('schedules.calendar.additionalSchedules') }}
         </p>
         <div
           v-for="event in events"

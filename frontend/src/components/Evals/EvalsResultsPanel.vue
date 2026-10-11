@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, nextTick, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 import Button from "@/components/ui/Button.vue";
 import { evalsApi } from "@/services/api";
@@ -26,6 +27,7 @@ const emit = defineEmits<{
 }>();
 
 const themeStore = useThemeStore();
+const { t } = useI18n();
 const showHistory = ref(false);
 const historySectionRef = ref<HTMLElement | null>(null);
 const contentTopRef = ref<HTMLElement | null>(null);
@@ -195,7 +197,7 @@ async function deleteRun(run: EvalRunListItem): Promise<void> {
 }
 
 async function clearAllRuns(): Promise<void> {
-  if (!props.suite.id || !confirm("Clear all run history for this suite?")) return;
+  if (!props.suite.id || !confirm(t("evals.clearAllRunsConfirm"))) return;
   try {
     await evalsApi.clearAllRuns(props.suite.id);
     emit("run-selected", null);
@@ -226,7 +228,7 @@ function formatRunScoring(run: EvalRunListItem): string {
   <div class="h-full flex flex-col overflow-hidden">
     <div class="p-4 border-b border-border/40 shrink-0 flex items-center justify-between">
       <h3 class="text-sm font-semibold">
-        Results
+        {{ $t('evals.results') }}
       </h3>
       <div class="flex gap-2">
         <Button
@@ -235,7 +237,7 @@ function formatRunScoring(run: EvalRunListItem): string {
           @click="toggleHistory"
         >
           <History class="w-4 h-4" />
-          History
+          {{ $t('evals.history') }}
         </Button>
         <Button
           v-if="currentRun"
@@ -244,7 +246,7 @@ function formatRunScoring(run: EvalRunListItem): string {
           @click="exportResults"
         >
           <Download class="w-4 h-4" />
-          Export
+          {{ $t('evals.export') }}
         </Button>
       </div>
     </div>
@@ -256,7 +258,7 @@ function formatRunScoring(run: EvalRunListItem): string {
         v-if="!currentRun"
         class="flex flex-col items-center justify-center py-12 text-muted-foreground text-sm"
       >
-        Run evals to see results here
+        {{ $t('evals.runEvalsToSeeResults') }}
       </div>
       <template v-else>
         <div class="grid gap-3">
@@ -269,9 +271,9 @@ function formatRunScoring(run: EvalRunListItem): string {
               {{ s.model }}
             </div>
             <div class="mt-2 flex gap-4 text-xs text-muted-foreground">
-              <span>Accuracy: {{ Math.round(s.avgAccuracy) }}% ({{ s.passCount }}/{{ s.total }} ≥50%)</span>
-              <span v-if="s.avgLatency != null">Avg latency: {{ Math.round(s.avgLatency) }}ms</span>
-              <span v-if="s.tokens > 0">Tokens: {{ s.tokens }}</span>
+              <span>{{ $t('evals.accuracySummary', { accuracy: Math.round(s.avgAccuracy), pass: s.passCount, total: s.total }) }}</span>
+              <span v-if="s.avgLatency != null">{{ $t('evals.avgLatency', { latency: Math.round(s.avgLatency) }) }}</span>
+              <span v-if="s.tokens > 0">{{ $t('evals.tokensSummary', { tokens: s.tokens }) }}</span>
             </div>
           </div>
         </div>
@@ -311,7 +313,7 @@ function formatRunScoring(run: EvalRunListItem): string {
       >
         <div class="flex items-center justify-between mb-2">
           <h4 class="text-xs font-medium text-muted-foreground">
-            Run History
+            {{ $t('evals.history') }}
           </h4>
           <Button
             v-if="runs.length > 0"
@@ -320,7 +322,7 @@ function formatRunScoring(run: EvalRunListItem): string {
             class="text-xs text-destructive hover:text-destructive"
             @click="clearAllRuns"
           >
-            Clear all
+            {{ $t('common.clear') }}
           </Button>
         </div>
         <ul class="space-y-2">
@@ -347,7 +349,7 @@ function formatRunScoring(run: EvalRunListItem): string {
               <button
                 type="button"
                 class="p-1 rounded hover:bg-muted text-muted-foreground"
-                title="Delete"
+                :title="$t('common.delete')"
                 @click.stop="deleteRun(r)"
               >
                 <Trash2 class="w-4 h-4" />

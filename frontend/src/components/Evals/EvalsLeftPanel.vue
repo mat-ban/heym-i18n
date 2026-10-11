@@ -357,24 +357,24 @@ async function handleRunEvals(): Promise<void> {
   <div class="h-full flex flex-col overflow-hidden border-r border-border/40">
     <div class="p-4 border-b border-border/40 shrink-0">
       <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-        Suite name
+        {{ $t('evals.suiteName') }}
       </Label>
       <Input
         v-model="suiteName"
         data-testid="eval-suite-name"
-        placeholder="Enter suite name..."
+        :placeholder="$t('evals.enterSuiteName')"
         class="font-medium"
       />
     </div>
     <div class="flex-1 min-h-0 overflow-y-auto pb-4">
       <div class="p-4 border-b border-border/40">
         <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-          System Prompt
+          {{ $t('evals.systemPrompt') }}
         </Label>
         <Textarea
           :model-value="displaySystemPrompt"
           class="min-h-[120px] font-mono text-sm"
-          placeholder="Enter your system prompt..."
+          :placeholder="$t('evals.enterSystemPrompt')"
           :rows="6"
           :disabled="isViewingHistory"
           @update:model-value="(v) => { if (!isViewingHistory) systemPrompt = v }"
@@ -386,18 +386,18 @@ async function handleRunEvals(): Promise<void> {
           :disabled="isViewingHistory || !selectedCredentialId"
           @click="openOptimizeDialog"
         >
-          Optimize Prompt
+          {{ $t('evals.optimizePrompt') }}
         </Button>
       </div>
       <div class="p-4 pb-2 space-y-4">
         <div>
           <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-            Credential
+            {{ $t('evals.credential') }}
           </Label>
           <Select
             v-model="selectedCredentialId"
             :options="credentials.map((c) => ({ value: c.id, label: c.name }))"
-            placeholder="Select credential"
+            :placeholder="$t('evals.selectCredential')"
           />
         </div>
         <div
@@ -405,7 +405,7 @@ async function handleRunEvals(): Promise<void> {
           class="relative"
         >
           <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-            Models
+            {{ $t('evals.models') }}
           </Label>
           <button
             type="button"
@@ -414,8 +414,8 @@ async function handleRunEvals(): Promise<void> {
           >
             <span class="truncate text-muted-foreground">
               {{ selectedModelIds.size > 0
-                ? `${selectedModelIds.size} selected`
-                : "Select models" }}
+                ? $t('evals.modelsSelected', { count: selectedModelIds.size })
+                : $t('evals.selectModels') }}
             </span>
             <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none shrink-0" />
           </button>
@@ -439,7 +439,7 @@ async function handleRunEvals(): Promise<void> {
         </div>
         <div>
           <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-            Scoring Method
+            {{ $t('evals.scoringMethod') }}
           </Label>
           <Select
             v-model="scoringMethod"
@@ -454,7 +454,7 @@ async function handleRunEvals(): Promise<void> {
         <template v-else>
           <div>
             <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-              Temperature: {{ displayTemperature.toFixed(1) }}
+              {{ $t('evals.temperature', { temp: displayTemperature.toFixed(1) }) }}
             </Label>
             <input
               :value="displayTemperature"
@@ -467,12 +467,12 @@ async function handleRunEvals(): Promise<void> {
               @input="(e) => { if (!isViewingHistory) temperature = parseFloat((e.target as HTMLInputElement).value) }"
             >
             <p class="text-xs text-muted-foreground mt-1">
-              For non-reasoning models
+              {{ $t('evals.forNonReasoning') }}
             </p>
           </div>
           <div>
             <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-              Reasoning Effort
+              {{ $t('evals.reasoningEffort') }}
             </Label>
             <Select
               :model-value="displayReasoningEffort"
@@ -481,13 +481,13 @@ async function handleRunEvals(): Promise<void> {
               @update:model-value="(v) => { if (!isViewingHistory) reasoningEffort = v as ReasoningEffort }"
             />
             <p class="text-xs text-muted-foreground mt-1">
-              For reasoning models (GPT-5, o1, o3)
+              {{ $t('evals.forReasoning') }}
             </p>
           </div>
         </template>
         <div>
           <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-            Runs per test
+            {{ $t('evals.runsPerTest') }}
           </Label>
           <Input
             :model-value="String(runsPerTest)"
@@ -515,26 +515,26 @@ async function handleRunEvals(): Promise<void> {
         :disabled="props.isRunInProgress || !selectedCredentialId || selectedModelIds.size === 0 || (props.suite.test_cases?.length ?? 0) === 0 || judgeIncomplete"
         @click="handleRunEvals"
       >
-        {{ showEditButton ? "Re-Run Evals" : "Run Evals" }}
+        {{ showEditButton ? $t('evals.reRunEvals') : $t('evals.runEvals') }}
       </Button>
     </div>
   </div>
 
   <Dialog
     :open="optimizeDialogOpen"
-    title="Optimize Prompt"
+    :title="$t('evals.optimizePrompt')"
     size="2xl"
     @close="optimizeDialogOpen = false"
   >
     <div class="space-y-4">
       <div>
         <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-          Model
+          {{ $t('evals.model') }}
         </Label>
         <Select
           v-model="selectedOptimizeModelId"
           :options="models.map((m) => ({ value: m.id, label: m.name }))"
-          placeholder="Select model"
+          :placeholder="$t('evals.selectModel')"
         />
       </div>
       <Button
@@ -544,11 +544,11 @@ async function handleRunEvals(): Promise<void> {
         :disabled="!selectedOptimizeModelId"
         @click="runOptimize"
       >
-        Optimize
+        {{ $t('evals.optimize') }}
       </Button>
       <div v-if="optimizedPrompt">
         <Label class="text-xs font-medium text-muted-foreground mb-2 block">
-          Optimized Prompt
+          {{ $t('evals.optimizedPrompt') }}
         </Label>
         <Textarea
           v-model="optimizedPrompt"
@@ -561,13 +561,13 @@ async function handleRunEvals(): Promise<void> {
           variant="outline"
           @click="optimizeDialogOpen = false"
         >
-          Cancel
+          {{ $t('common.cancel') }}
         </Button>
         <Button
           :disabled="!optimizedPrompt"
           @click="applyOptimizedPrompt"
         >
-          Apply
+          {{ $t('evals.apply') }}
         </Button>
       </div>
     </div>

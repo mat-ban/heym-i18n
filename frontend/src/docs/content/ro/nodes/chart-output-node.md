@@ -1,0 +1,262 @@
+# Ieșire grafic
+
+Nodul **Ieșire grafic** este nodul terminal al unui workflow de [widget de dashboard](../tabs/dashboard-tab.md). Acesta preia rândurile produse de nodurile anterioare și le transformă într-un payload standardizat de grafic pe care dashboard-ul îl afișează.
+
+## Prezentare generală
+
+| Proprietate | Valoare |
+|----------|-------|
+| Intrări | 1 |
+| Ieșiri | 0 (terminal) |
+| Ieșire | Payload standardizat de grafic |
+
+Plasați acest nod **ultimul** într-un workflow de widget de dashboard. Nodul anterior acestuia ar trebui să producă un array de obiecte rând, de exemplu:
+
+```json
+[
+  { "month": "Jan", "revenue": 120 },
+  { "month": "Feb", "revenue": 150 }
+]
+```
+
+Când aveți doar date de exemplu (fără o sursă reală), produceți aceste rânduri cu un nod **Set** folosind `$array(dict(...), dict(...))` — de exemplu `$array(dict(month="Jan", revenue=120), dict(month="Feb", revenue=150))`. **Nu** folosiți `${...}` sau literali de obiect `{...}` simpli; Heym construiește obiecte doar cu `dict(key=value)`.
+
+## Parametri
+
+| Parametru | Tip | Descriere |
+|-----------|------|-------------|
+| `label` | string | Identificatorul nodului (camelCase) |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` sau `hitl` |
+| `orientation` | string | `vertical` sau `horizontal` (doar pentru grafice cu bare) |
+| `dataPath` | string | Cale cu puncte către array-ul de rânduri din ieșirea nodului anterior (de ex. `data` sau `result.items`). Lăsați gol pentru detectare automată. |
+| `labelField` | string | Cheia rândului folosită ca etichetă de categorie (pie/bar/line) |
+| `valueField` | string | Cheia rândului folosită ca valoare numerică (pie/bar/line/numeric/gauge) |
+| `series` | array | Definiție opțională multi-serie `[{ "name": "Sent", "field": "sent" }]` pentru bar/line (suprascrie `valueField`) |
+| `columns` | array | Listă opțională de coloane pentru `table` (implicit cheile primului rând) |
+| `xField` / `yField` | string | Cheile rândului pentru axele numerice X și Y (scatter) |
+| `min` / `max` | number | Interval numeric pentru `gauge` (implicit `0` / `100`) |
+| `unit` | string | Unitate opțională afișată lângă o valoare `numeric` sau `gauge` |
+| `text` | string | Mesaj Markdown pentru tipul de grafic `text`. Lăsați gol și setați `valueField` pentru a afișa un mesaj dinamic preluat din datele anterioare. |
+| `title` | string | Titlu opțional al graficului |
+
+## Tipuri de grafice
+
+- **bar / line / area / pie** — grafice categorice bazate pe `labelField` + `valueField` (sau `series` pentru bar/line/area multi-serie). `area` este un grafic de tendință umplut.
+- **table** — rânduri brute afișate ca tabel derulabil folosind `columns`.
+- **numeric** — o singură valoare KPI din primul rând, cu un `unit` opțional.
+- **gauge** — o singură valoare afișată pe un interval `min`–`max` (de ex. un procent). Folosește `valueField`.
+- **scatter** — puncte X/Y din `xField` și `yField` pentru grafice de corelație.
+- **proportion** — o singură bară orizontală împărțită în proporții cu o legendă procentuală (de ex. o defalcare pe limbi). Folosește `labelField` + `valueField`.
+- **barGauge** — un gauge orizontal per rând cu un gradient roșu→verde și o valoare (de ex. spațiu liber pe disc). Folosește `labelField` + `valueField`, `unit` opțional și `max` (implicit valoarea maximă a rândului).
+- **text** — un mesaj markdown (de ex. o notă de stare precum „Ultima execuție la 19:47"). Puneți markdown-ul în `text` pentru un mesaj static, sau lăsați `text` gol și setați `valueField` pentru a afișa un string produs anterior. Suportă titluri, bold/italic, [liste](../nodes/chart-output-node.md#interactive-task-lists), linkuri și cod inline.
+- **hitl** — un carusel cu recenziile dvs. umane în așteptare. Antetul afișează `1/n pending`; săgeata stângă este dezactivată pe primul card, iar săgeata dreaptă pe ultimul. Numele workflow-ului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă, iar pictograma de istoric de lângă titlul widget-ului deschide acea execuție în dialogul de istoric de pe aceeași pagină. Acest tip de grafic ignoră rândurile anterioare, astfel încât workflow-ul widget-ului este doar nodul Ieșire grafic. Fiecare persoană autentificată vede recenziile pentru workflow-urile pe care le deține.
+
+### Liste de activități interactive
+
+Folosiți sintaxa de listă de activități markdown în stil GitHub în câmpul static `text`:
+
+```markdown
+- [x] Option 1
+- [ ] Option 2
+- [ ] Option 3
+```
+
+Pe [Dashboard](../tabs/dashboard-tab.md), casetele de selectare sunt afișate ca elemente de control clicabile (compatibile cu modul întunecat și luminos). Comutarea unei casete de selectare actualizează câmpul `text` al workflow-ului widget-ului și persistă între reîmprospătări.
+
+**Editare inline:** faceți dublu clic pe eticheta unui element de activitate pentru a-l edita pe loc. Apăsați Enter sau faceți clic în altă parte pentru a salva; apăsați Escape pentru a anula. Goliți complet eticheta pentru a elimina acel element din listă.
+
+**Linkuri în elementele de activitate:** când o etichetă conține un link markdown (`[title](url)`), clic pe link deschide URL-ul fără a comuta caseta de selectare. Faceți clic în altă parte pe rând pentru a comuta.
+
+**Doar text static:** interactivitatea necesită sintaxa de listă de activități GFM (`- [ ]` / `- [x]`). Mesajele de stare dinamice simple, fără elemente de activitate, rămân doar pentru citire. Când markdown-ul provine din `valueField`, prima comutare îl copiază în câmpul static `text` pentru ca modificările să persiste.
+### Liste numerotate
+
+Widgeturile de text afișează markdown cu **numerele de linie explicite păstrate**. Prefixați fiecare linie cu numărul pe care doriți să îl afișați (de ex. `9.`, `8.`, `7.`). Heym nu renumerotează liniile pentru dumneavoastră.
+
+**De ce numere explicite?** Listele ordonate standard markdown (`1.`, `2.`, `3.`) devin liste HTML `<ol>`, care numără doar **crescător** de la primul număr. O listă scrisă ca `9.` / `8.` / `7.` s-ar afișa ca `9`, `10`, `11` într-un renderer markdown normal. Prefixarea fiecărei linii cu numărul dorit evită acest lucru.
+
+**Liste descrescătoare (de ex. cele mai recente primele):** construiți markdown-ul într-o buclă de workflow și calculați numărul afișat pentru fiecare element:
+
+```
+${loop.total - loop.index}. [${item.title}](https://example.com/watch?v=${item.id})
+```
+
+Model tipic:
+
+1. Obțineți sau construiți un array de elemente (de ex. HTTP → `body.videos`).
+2. [Loop](./loop-node.md) peste array; în interiorul corpului, utilizați o [Variable](./variable-node.md) cu `.add()` pentru a adăuga o linie numerotată per iterație.
+3. După ramura **done** a buclei, [Set](./set-node.md) `join("\n")` pe array-ul acumulat (sau echivalent) într-un singur string markdown.
+4. Îndreptați **Chart Output** `valueField` către acel string (sau setați `text` static).
+
+Exemplu de expresie de linie în interiorul buclei (etichetă `processVideos`, elemente cu `title` și `id`):
+
+```
+$processVideos.total - $processVideos.index + ". [" + $processVideos.item.title + "](https://www.youtube.com/watch?v=" + $processVideos.item.id + ")"
+```
+
+Markdown rezultat:
+
+```markdown
+9. [Latest video](https://www.youtube.com/watch?v=abc)
+8. [Previous video](https://www.youtube.com/watch?v=def)
+1. [Oldest video](https://www.youtube.com/watch?v=xyz)
+```
+
+Pentru o listă simplă crescătoare care începe de la 1, fie prefixați fiecare linie (`1.`, `2.`, `3.`), fie utilizați o buclă cu `$loop.index + 1`. Utilizați [liste cu bullet](#interactive-task-lists) (`- item`) atunci când nu aveți nevoie de numere.
+
+## Cum sunt rezolvate datele
+
+1. Dacă `dataPath` este setat, nodul urmărește acea cale cu puncte în output-ul din amonte.
+2. În caz contrar, caută un array: o listă de nivel superior, un array `data` sau primul câmp cu valoare de listă.
+3. Pentru `table`, fiecare rând devine un rând de tabel folosind `columns` (sau cheile primului rând).
+4. Pentru `numeric` și `gauge`, valoarea provine din `valueField` pe primul rând (sau primul câmp numeric).
+5. Pentru `scatter`, fiecare rând devine un punct `[xField, yField]`.
+6. Pentru `text`, mesajul este preluat din `valueField` pe primul rând atunci când este setat, altfel din configurația statică `text` (în caz contrar, primul câmp string al primului rând).
+
+## Exemplu
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "revenueChart",
+    "chartType": "bar",
+    "orientation": "vertical",
+    "dataPath": "data",
+    "labelField": "month",
+    "valueField": "revenue",
+    "title": "Monthly revenue"
+  }
+}
+```
+
+Gauge (valoare unică vs. un interval):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "cpuGauge",
+    "chartType": "gauge",
+    "dataPath": "rows",
+    "valueField": "value",
+    "min": 0,
+    "max": 100,
+    "unit": "%"
+  }
+}
+```
+
+Scatter (puncte X/Y):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "correlation",
+    "chartType": "scatter",
+    "dataPath": "rows",
+    "xField": "x",
+    "yField": "y"
+  }
+}
+```
+
+Proporție (o bară împărțită pe cote + legendă cu procente):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "languages",
+    "chartType": "proportion",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "title": "Most Used Languages"
+  }
+}
+```
+
+Arie (tendință multi-serie umplută):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "memCpu",
+    "chartType": "area",
+    "dataPath": "rows",
+    "labelField": "time",
+    "series": [
+      { "name": "Memory", "field": "memory" },
+      { "name": "CPU", "field": "cpu" }
+    ],
+    "title": "Memory / CPU"
+  }
+}
+```
+
+Bar gauge (gauge cu gradient per rând cu valori):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "freeDisk",
+    "chartType": "barGauge",
+    "dataPath": "rows",
+    "labelField": "name",
+    "valueField": "value",
+    "unit": "GB",
+    "title": "Free disk space"
+  }
+}
+```
+
+Text (un mesaj markdown static — nu sunt necesare rânduri din amonte):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "statusNote",
+    "chartType": "text",
+    "text": "**Last execution** at `19:47` — all checks passed ✅",
+    "title": "Status"
+  }
+}
+```
+
+Text (dinamic — string-ul mesajului este produs în amonte și preluat prin `valueField`):
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "lastRun",
+    "chartType": "text",
+    "dataPath": "rows",
+    "valueField": "message"
+  }
+}
+```
+## Exemple de prompt-uri AI
+
+Când generați un widget cu **AI**, prompt-uri precum acestea se mapează direct la fiecare tip:
+
+- **Bar** — "Afișați venitul lunar pentru ultimele 6 luni ca un grafic cu bare verticale, folosind date de exemplu."
+- **Line** — "Reprezentați utilizatorii activi zilnic din ultimele 14 zile ca un grafic cu linii."
+- **Area** — "Afișați utilizarea memoriei și a CPU-ului din ultimele 24 de ore ca un grafic cu arii cu două serii. Folosiți date de exemplu."
+- **Pie** — "Defalcați starea execuțiilor (succes, eroare, anulat) ca un grafic circular."
+- **Table** — "Afișați primele 10 workflow-uri după numărul de execuții ca un tabel derulabil cu coloanele name și runs. Folosiți date de exemplu."
+- **Numeric** — "Afișați numărul total de execuții de workflow-uri de astăzi ca un singur KPI cu unitatea 'runs'. Folosiți date de exemplu."
+- **Gauge** — "Afișați utilizarea curentă a CPU-ului ca un indicator de tip gauge de la 0 la 100 la sută."
+- **Scatter** — "Reprezentați latența cererilor în raport cu dimensiunea payload-ului ca un grafic de dispersie, folosind date de exemplu."
+- **Proportion** — "Afișați limbajele mele cele mai utilizate ca o bară de proporții: Kotlin 49,64%, JavaScript 23,73%, TypeScript 11,64%, Java 8,92%, Python 6,06%. Folosiți date de exemplu."
+- **Bar gauge** — "Afișați spațiul liber pe disc pentru fiecare volum (sda1 până la sda7) ca un bar gauge în GB. Folosiți date de exemplu."
+- **Text** — "Adăugați un widget de text cu o listă de verificare în format markdown (un element bifat, două nebifate) sau listați cele mai noi 5 videoclipuri tutorial în ordine descrescătoare (de la 5. la 1.) cu linkuri YouTube — prefixați fiecare linie cu un număr explicit (`5. Titlu`, `4. Titlu`, …)."
+
+## Resurse conexe
+
+- [Fila Dashboard](../tabs/dashboard-tab.md) — construiți și aranjați widget-uri
+- [Nod de ieșire](output-node.md) — nod terminal pentru workflow-uri obișnuite

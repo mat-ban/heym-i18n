@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Reativar um nó dentro de um Workflow",
+    "releaseTour": {
+      "label": "Novidade no Heym",
+      "introTitle": "Novidades neste release",
+      "introDescription": "Uma breve visão geral das novidades desde a última atualização. Demora cerca de um minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Nó Enable: reativar um nó dentro de um Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "O novo **nó Enable** é a contrapartida do **nó Disable**. Selecione um nó por designação para o reativar e guardar a alteração. Um **Trigger** **Cron** desativado volta a ser executado no próximo momento agendado. Se o nó se encontrar mais adiante no fluxo e ainda não tiver sido executado, é executado imediatamente na execução atual."
+          },
+          {
+            "type": "prose",
+            "markdown": "Um Trigger desativado nunca inicia autonomamente uma execução. Coloque, por isso, o nó Enable depois de outro ponto de entrada, como um **Trigger** **Input**. O **nó Wait** suporta agora pausas mais longas: até 15 minutos em vez de apenas um."
+          }
+        ],
+        "tour": {
+          "description": "Reativar um nó desativado diretamente a partir do Workflow, por exemplo um Trigger Cron em pausa.",
+          "useCases": [
+            "Iniciar um Trigger Cron desativado, quando necessário, através de um Webhook",
+            "Combinar com o nó Disable para ativar e desativar nós em função do estado",
+            "Pausar um Workflow com o nó Wait até 15 minutos"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Consultar aprovações humanas pendentes diretamente no Dashboard",
+    "releaseTour": {
+      "label": "Novidade no Heym",
+      "introTitle": "Novidades neste release",
+      "introDescription": "Uma breve visão geral das novidades desde a última atualização. Demora cerca de um minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Concluir revisões pendentes através de um widget do Dashboard",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Adicione um widget **HITL** e o cabeçalho apresenta o número de revisões em espera como `1/n pendentes`. Navegue pelos registos com as teclas de seta. O nome do Workflow abre a execução diretamente no Canvas. **Aprovar**, **Solicitar alterações** e **Rejeitar** concluem o rascunho. O ícone de histórico abre a execução na caixa de diálogo de histórico na mesma página. A fila é pessoal: um Dashboard partilhado não apresenta rascunhos de terceiros."
+          }
+        ],
+        "tour": {
+          "description": "Um carrossel de Dashboard para as aprovações pendentes, com contador no cabeçalho.",
+          "useCases": [
+            "Ver quantas revisões estão em espera antes de abrir a primeira",
+            "Aprovar, solicitar alterações ou rejeitar sem sair do Dashboard",
+            "Abrir esta execução na caixa de diálogo de histórico através do ícone junto ao título do widget"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "O assistente de IA testa os seus Workflows e configura tabelas de dados",
+    "releaseTour": {
+      "label": "Novo no Heym",
+      "introTitle": "Novo nesta release",
+      "introDescription": "Uma breve visão geral das novidades desde a última atualização. Demora cerca de um minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "Modo YOLO: o assistente de IA testa o que constrói",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Ao ativar o **modo YOLO** no **assistente de IA** do Canvas, este deixa de parar após aplicar um Workflow. Executa o Workflow como através de **Run**, lê o resultado e corrige o Workflow de forma autónoma até cinco vezes por mensagem. Cada resposta lista os passos em tempo real."
+          },
+          {
+            "type": "prose",
+            "markdown": "Antes da primeira execução, solicita entradas de teste com valores sugeridos e reutiliza-os. Pode também executar outros Workflows quando necessita dos respetivos resultados. Se precisar de uma decisão ou de credenciais, pergunta através do habitual cartão de pergunta. Execuções reais: o modo YOLO está desativado por predefinição e **Stop** termina o processo a qualquer momento."
+          }
+        ],
+        "tour": {
+          "description": "O assistente de IA executa os Workflows criados, verifica o resultado e corrige erros de forma autónoma até funcionar.",
+          "useCases": [
+            "Descrever um Workflow e obter diretamente uma versão testada",
+            "Deixar o assistente detetar e corrigir automaticamente nós com erros",
+            "Verificar valores de retorno de outros Workflows antes de os ligar"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "O assistente de IA seleciona ou cria tabelas de dados",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Quando um Workflow guarda registos, o **assistente de IA** reconhece agora as suas **DataTables**. Indique uma tabela e ele utiliza-a. Caso contrário, pergunta qual é a tabela adequada ou propõe **Criar nova tabela** com as colunas necessárias."
+          },
+          {
+            "type": "prose",
+            "markdown": "Funciona no assistente do Canvas, no modo YOLO, no **Chat**, na documentação e através de MCP com `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "O assistente de IA pergunta qual é a tabela de dados adequada ou cria uma nova com as colunas necessárias.",
+          "useCases": [
+            "Registar leads automaticamente em tabelas e gerar Workflow e tabela em conjunto",
+            "Selecionar tabelas existentes com base em colunas e tipos",
+            "Criar e ligar tabelas diretamente a partir do Chat ou via MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Criar vários dashboards e partilhá-los com a equipa",
+    "releaseTour": {
+      "label": "Novidade no Heym",
+      "introTitle": "Novidades desta versão",
+      "introDescription": "Uma breve visão geral das novidades desde a última atualização. Demora cerca de um minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Criar vários dashboards e partilhá-los com a equipa",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "O separador **Dashboard** suporta agora um número ilimitado de dashboards. Alterne facilmente através do seletor no topo do separador ou crie um novo com **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Partilhe dashboards com pessoas ou equipas através das **Definições**. **Leitura** permite visualizar e atualizar; **Escrita** permite editar widgets. Os widgets utilizam sempre as credenciais do proprietário."
+          }
+        ],
+        "tour": {
+          "description": "Gerir vários dashboards, alternar entre eles e partilhá-los em modo de leitura ou de edição.",
+          "useCases": [
+            "Estruturar dashboards separados por equipa, produto ou cliente",
+            "Disponibilizar uma vista só de leitura às partes interessadas",
+            "Testar previamente tipos de gráficos com dados de exemplo"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

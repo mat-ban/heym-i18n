@@ -18,10 +18,10 @@ const emit = defineEmits<{
     variant="ghost"
     size="sm"
     class="release-tour-launcher relative ml-2 gap-2 min-h-[44px] sm:min-w-auto text-foreground"
-    :aria-label="`${label} — open the release tour`"
+    :aria-label="$t('header.openReleaseTour', { label: label === 'New in Heym' ? $t('header.newInHeym') : label })"
     @click="emit('open')"
   >
-    <span>{{ label }}</span>
+    <span>{{ label === 'New in Heym' ? $t('header.newInHeym') : label }}</span>
     <span
       v-if="hasUnseenRelease"
       class="release-tour-launcher__dot absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-accent-orange ring-2 ring-background"

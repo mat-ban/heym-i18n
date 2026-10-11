@@ -1,0 +1,82 @@
+{
+  "dashboard:workflows": {
+    "title": "Construir més ràpidament amb Workflows",
+    "description": "Seleccioneu un Workflow per visualitzar el Trigger, l'última execució i els passos directament al costat de la llista. Filtreu per estat, executeu immediatament i manteniu l'organització amb carpetes."
+  },
+  "dashboard:board": {
+    "title": "Gestionar tasques mitjançant un tauler basat en agents",
+    "description": "Arrossegueu targetes entre columnes per desencadenar cadenes de Workflow amb el context complet de la targeta. Els resultats flueixen directament de tornada a la targeta."
+  },
+  "dashboard:templates": {
+    "title": "Començar amb plantilles provades",
+    "description": "Utilitzeu patrons de Workflow preconstruïts per estalviar temps de configuració i garantir la consistència."
+  },
+  "dashboard:globalvariables": {
+    "title": "Centralitzar variables compartides",
+    "description": "Emmagatzemeu valors reutilitzables una única vegada i referencieu-los a tots els Workflows."
+  },
+  "dashboard:chat": {
+    "title": "Utilitzar el xat per a una iteració ràpida",
+    "description": "Plantegeu preguntes ràpides, proveu idees i canvieu a l'editor tan bon punt el flux del Workflow estigui clar."
+  },
+  "dashboard:credentials": {
+    "title": "Gestionar secrets amb seguretat",
+    "description": "Gestioneu claus de proveïdors i Tokens de manera centralitzada, perquè els Workflows puguin utilitzar connexions segures sense exposar secrets."
+  },
+  "dashboard:vectorstores": {
+    "title": "Donar suport a Workflows basats en retrieval",
+    "description": "Prepareu magatzems vectorials per a respostes d'IA fonamentades, cerca semàntica i pipelines RAG escalables."
+  },
+  "dashboard:mcp": {
+    "title": "Connectar ecosistemes externs d'eines",
+    "description": "Configureu connexions MCP perquè els agents puguin executar eines i accions estructurades més enllà de simples Prompts."
+  },
+  "dashboard:traces": {
+    "title": "Comprendre el comportament d'execució",
+    "description": "Analitzeu detalls de Trace per depurar resultats, comparar execucions i augmentar la fiabilitat."
+  },
+  "dashboard:alerts": {
+    "title": "Rebre notificacions abans que els problemes escalin",
+    "description": "Definiu llindars per a errors, durada, costos i nombre d'execucions i rebeu alertes quan se superin."
+  },
+  "dashboard:analytics": {
+    "title": "Fer seguiment del rendiment de la plataforma",
+    "description": "Monitoritzeu tendències d'utilització i execució per optimitzar de manera dirigida basant-vos en senyals reals."
+  },
+  "dashboard:dashboard": {
+    "title": "Crear dashboards personalitzats",
+    "description": "Composeu widgets de gràfics alimentats per Workflows per visualitzar mètriques essencials d'un cop d'ull."
+  },
+  "dashboard:teams": {
+    "title": "Escalar la col·laboració de manera organitzada",
+    "description": "Dividiu Workflows i recursos per equips per mantenir permisos d'accés i responsabilitats transparents."
+  },
+  "dashboard:logs": {
+    "title": "Diagnosticar problemes a nivell de sistema",
+    "description": "Utilitzeu els logs en cas de problemes d'infraestructura o entorn per obtenir informació més profunda sobre el runtime."
+  },
+  "dashboard:drive": {
+    "title": "Gestionar fitxers generats",
+    "description": "Consulteu, descarregueu i compartiu resultats de Workflows mitjançant connexions segures i opcions d'accés controlat."
+  },
+  "dashboard:datatable": {
+    "title": "Treballar nativament amb dades estructurades",
+    "description": "Creeu taules tipades i accediu-hi directament des de Workflows per a operacions de lectura i escriptura reproduïbles."
+  },
+  "dashboard:schedules": {
+    "title": "Supervisar agendes d'automatització",
+    "description": "Visualitzeu tots els Workflows Cron actius en una vista de calendari (dia, setmana, mes). Fer clic en un bloc condueix directament al Canvas."
+  },
+  "evals": {
+    "title": "Avaluar la qualitat amb fiabilitat",
+    "description": "Executeu suites de proves repetibles per comparar fonamentadament canvis de Prompt i de model abans de llançaments en producció."
+  },
+  "docs": {
+    "title": "Orientació ràpida a l'aplicació",
+    "description": "Consulteu referències compactes i aprofundiu en temes específics sense sortir del Workflow actual."
+  },
+  "editor": {
+    "title": "Dissenyar i depurar al Canvas",
+    "description": "Connecteu nodes visualment, executeu immediatament i perfeccioneu el comportament amb retroalimentació directa en un únic espai de treball."
+  }
+}

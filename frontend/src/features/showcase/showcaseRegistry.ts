@@ -527,3 +527,15 @@ export const SHOWCASE_DEFINITIONS: Record<ShowcaseContext, ShowcaseDefinition> =
     docsTarget: docsTarget("reference", "canvas-features", "Canvas Features"),
   },
 };
+
+import { getLocalizedShowcase } from "@/content-packs";
+
+export function getShowcaseDefinition(context: ShowcaseContext): ShowcaseDefinition | undefined {
+  try {
+    const localized = getLocalizedShowcase(context);
+    if (localized) return localized;
+  } catch {
+    // fallback if i18n not initialized
+  }
+  return SHOWCASE_DEFINITIONS[context];
+}

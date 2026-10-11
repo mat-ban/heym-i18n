@@ -40,7 +40,7 @@ const emit = defineEmits<{
 <template>
   <section class="rounded-xl border border-border/70 bg-card px-4 pb-1 pt-4">
     <p class="pb-2 text-xs font-semibold">
-      More actions
+      {{ $t("common.moreActions") }}
     </p>
     <button
       v-if="isDashboardWidget"
@@ -48,7 +48,7 @@ const emit = defineEmits<{
       class="mobile-workflow-menu-row"
       @click="emit('back')"
     >
-      <ChevronLeft class="h-4 w-4" />Back to Dashboard
+      <ChevronLeft class="h-4 w-4" />{{ $t("canvas.backToDashboard") }}
     </button>
     <button
       v-else
@@ -56,7 +56,7 @@ const emit = defineEmits<{
       class="mobile-workflow-menu-row text-destructive"
       @click="emit('clear')"
     >
-      <Trash2 class="h-4 w-4" />Clear workflow
+      <Trash2 class="h-4 w-4" />{{ $t("canvas.clearCanvas") }}
     </button>
     <button
       v-if="isStandardWorkflow"
@@ -64,7 +64,7 @@ const emit = defineEmits<{
       class="mobile-workflow-menu-row"
       @click="emit('share')"
     >
-      <Share2 class="h-4 w-4" />Share workflow
+      <Share2 class="h-4 w-4" />{{ $t("workflows.shareWorkflow") }}
     </button>
     <button
       type="button"
@@ -78,14 +78,14 @@ const emit = defineEmits<{
       class="mobile-workflow-menu-row"
       @click="emit('edit-history')"
     >
-      <GitBranch class="h-4 w-4" />Edit history
+      <GitBranch class="h-4 w-4" />{{ $t("canvas.editHistory") }}
     </button>
     <button
       type="button"
       class="mobile-workflow-menu-row"
       @click="emit('download')"
     >
-      <Download class="h-4 w-4" />Download workflow
+      <Download class="h-4 w-4" />{{ $t("canvas.download") }}
     </button>
     <button
       v-if="isStandardWorkflow"
@@ -101,7 +101,7 @@ const emit = defineEmits<{
       class="mobile-workflow-menu-row"
       @click="emit('template')"
     >
-      <LayoutTemplate class="h-4 w-4" />Save as template
+      <LayoutTemplate class="h-4 w-4" />{{ $t("canvas.saveTemplate") }}
     </button>
     <button
       v-if="isStandardWorkflow"
@@ -116,7 +116,7 @@ const emit = defineEmits<{
       class="mobile-workflow-menu-row"
       @click="emit('guide')"
     >
-      <Compass class="h-4 w-4" />Page guide
+      <Compass class="h-4 w-4" />{{ $t("canvas.pageGuide") }}
     </button>
     <button
       type="button"
@@ -131,7 +131,7 @@ const emit = defineEmits<{
         v-else
         class="h-4 w-4"
       />
-      {{ isDark ? "Switch to light mode" : "Switch to dark mode" }}
+      {{ isDark ? $t("header.lightMode") : $t("header.darkMode") }}
     </button>
   </section>
 </template>

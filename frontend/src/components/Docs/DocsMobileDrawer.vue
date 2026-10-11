@@ -35,7 +35,7 @@ function onNavigate(): void {
         class="fixed inset-0 z-50 flex"
         role="dialog"
         aria-modal="true"
-        aria-label="Documentation menu"
+        :aria-label="$t('docs.openMenu')"
       >
         <div
           class="absolute inset-0 bg-background/80 backdrop-blur-sm"
@@ -47,12 +47,12 @@ function onNavigate(): void {
           @click.stop
         >
           <div class="p-3 border-b border-border/40 flex items-center justify-between shrink-0">
-            <span class="font-semibold text-foreground">Documentation</span>
+            <span class="font-semibold text-foreground">{{ $t('docs.title') }}</span>
             <Button
               variant="ghost"
               size="icon"
               class="h-9 w-9"
-              aria-label="Close menu"
+              :aria-label="$t('docs.closeMenu')"
               @click="close"
             >
               <span class="text-lg leading-none">×</span>

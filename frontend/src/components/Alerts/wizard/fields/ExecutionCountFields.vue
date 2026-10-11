@@ -22,7 +22,7 @@ const thresholdCount = computed({
 
 <template>
   <div class="space-y-2">
-    <Label for="alert-execution-count">Execution count</Label>
+    <Label for="alert-execution-count">{{ $t('alerts.wizard.executionCount') }}</Label>
     <Input
       id="alert-execution-count"
       v-model="thresholdCount"
@@ -30,8 +30,7 @@ const thresholdCount = computed({
       min="1"
     />
     <p class="text-xs text-muted-foreground">
-      Fires when this many runs happen inside the window. Useful for catching a trigger that has
-      started firing far more often than it should.
+      {{ $t('alerts.wizard.executionCountDesc') }}
     </p>
   </div>
 </template>

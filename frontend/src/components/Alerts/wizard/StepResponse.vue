@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import Input from "@/components/ui/Input.vue";
 import Label from "@/components/ui/Label.vue";
@@ -29,6 +30,8 @@ const emit = defineEmits<{
   "update:cooldownMinutes": [value: number | null];
 }>();
 
+const { t } = useI18n();
+
 /** The alert's own workflow is excluded: notifying it would feed its own metric. */
 const notifyOptions = computed((): WorkflowOption[] =>
   props.workflows.filter((option) => option.value !== props.ownWorkflowId),
@@ -39,24 +42,26 @@ const selectedNotify = computed({
   set: (value: string | undefined): void => emit("update:notifyWorkflowId", value ?? null),
 });
 
-const NOTIFY_MODES: { value: NotifyWorkflowMode; title: string; description: string }[] = [
+const NOTIFY_MODES = computed((): { value: NotifyWorkflowMode; title: string; description: string }[] => [
   {
     value: "create",
-    title: "Create and assign a new workflow",
-    description:
+    title: t("alerts.wizard.createWorkflowTitle", "Create and assign a new workflow"),
+    description: t(
+      "alerts.wizard.createWorkflowDesc",
       "Makes an empty workflow named after this alert and links it. Open it afterwards to add the Slack, email, or Telegram nodes you want.",
+    ),
   },
   {
     value: "existing",
-    title: "Pick an existing workflow",
-    description: "Run a workflow you have already built.",
+    title: t("alerts.wizard.pickExistingTitle", "Pick an existing workflow"),
+    description: t("alerts.wizard.pickExistingDesc", "Run a workflow you have already built."),
   },
   {
     value: "none",
-    title: "Do nothing",
-    description: "The firing is still recorded here, it just does not run anything.",
+    title: t("alerts.wizard.doNothingTitle", "Do nothing"),
+    description: t("alerts.wizard.doNothingDesc", "The firing is still recorded here, it just does not run anything."),
   },
-];
+]);
 
 function selectNotifyMode(mode: NotifyWorkflowMode): void {
   emit("update:notifyMode", mode);
@@ -79,7 +84,7 @@ function selectMode(mode: RenotifyMode): void {
 <template>
   <div class="space-y-6">
     <div class="space-y-3">
-      <Label>Run a workflow when it fires</Label>
+      <Label>{{ $t('alerts.wizard.runWorkflowOnFire') }}</Label>
 
       <button
         v-for="mode in NOTIFY_MODES"
@@ -107,12 +112,12 @@ function selectMode(mode: RenotifyMode): void {
         v-if="notifyMode === 'existing'"
         class="space-y-2 pl-1"
       >
-        <Label for="alert-notify-workflow">Workflow</Label>
+        <Label for="alert-notify-workflow">{{ $t('common.workflow') }}</Label>
         <SearchableSelect
           id="alert-notify-workflow"
           v-model="selectedNotify"
           :options="notifyOptions"
-          placeholder="Choose a workflow..."
+          :placeholder="$t('alerts.wizard.chooseWorkflow')"
           clearable
         />
       </div>
@@ -124,7 +129,7 @@ function selectMode(mode: RenotifyMode): void {
     </div>
 
     <div class="space-y-3">
-      <Label>While the problem continues</Label>
+      <Label>{{ $t('alerts.wizard.whileProblemContinues') }}</Label>
 
       <button
         type="button"
@@ -139,10 +144,10 @@ function selectMode(mode: RenotifyMode): void {
         @click="selectMode('on_recovery')"
       >
         <div class="font-medium">
-          Notify once, until it recovers
+          {{ $t('alerts.wizard.notifyOnce') }}
         </div>
         <div class="mt-1 text-xs text-muted-foreground">
-          Fires once, then stays quiet until the metric drops back under the threshold. Recommended.
+          {{ $t('alerts.wizard.notifyOnceDesc') }}
         </div>
       </button>
 
@@ -159,10 +164,10 @@ function selectMode(mode: RenotifyMode): void {
         @click="selectMode('cooldown')"
       >
         <div class="font-medium">
-          Keep notifying on an interval
+          {{ $t('alerts.wizard.keepNotifying') }}
         </div>
         <div class="mt-1 text-xs text-muted-foreground">
-          Fires again on a fixed interval for as long as the condition holds.
+          {{ $t('alerts.wizard.keepNotifyingDesc') }}
         </div>
       </button>
 
@@ -170,7 +175,7 @@ function selectMode(mode: RenotifyMode): void {
         v-if="renotifyMode === 'cooldown'"
         class="space-y-2 pl-1"
       >
-        <Label for="alert-cooldown">Repeat every (minutes)</Label>
+        <Label for="alert-cooldown">{{ $t('alerts.wizard.repeatEvery') }}</Label>
         <Input
           id="alert-cooldown"
           v-model="cooldown"

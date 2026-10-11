@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ExternalLink, Pause, Pencil, Play, Share2, Trash2 } from "lucide-vue-next";
 
@@ -23,9 +24,16 @@ const emit = defineEmits<{
 }>();
 
 const router = useRouter();
+const { t, te } = useI18n();
+
+const typeLabel = computed((): string =>
+  te(`alerts.types.${props.alert.alert_type}`)
+    ? t(`alerts.types.${props.alert.alert_type}`)
+    : ALERT_TYPE_LABELS[props.alert.alert_type],
+);
 
 const scopeLabel = computed((): string =>
-  props.alert.scope === "system" ? "All workflows" : (props.alert.workflow_name ?? "Workflow"),
+  props.alert.scope === "system" ? t("alerts.allWorkflows") : (props.alert.workflow_name ?? t("nav.workflows")),
 );
 
 /**
@@ -38,9 +46,9 @@ const isAcknowledged = computed(
 );
 
 const stateLabel = computed((): string => {
-  if (!props.alert.enabled) return "Paused";
+  if (!props.alert.enabled) return t("alerts.paused");
   if (props.alert.state !== "triggered") return "OK";
-  return isAcknowledged.value ? "Acknowledged" : "Firing";
+  return isAcknowledged.value ? t("alerts.acknowledged") : t("alerts.firing");
 });
 
 /**
@@ -109,7 +117,7 @@ function openNotifyWorkflow(event: MouseEvent): void {
         </div>
 
         <p class="mt-1 truncate text-xs text-muted-foreground">
-          {{ ALERT_TYPE_LABELS[alert.alert_type] }} · {{ scopeLabel }}
+          {{ typeLabel }} · {{ scopeLabel }}
         </p>
 
         <p class="mt-2 text-sm font-medium tabular-nums">
@@ -120,7 +128,7 @@ function openNotifyWorkflow(event: MouseEvent): void {
           v-if="alert.last_observed_value !== null"
           class="mt-1 text-xs text-muted-foreground"
         >
-          Currently at <span class="font-medium tabular-nums text-foreground">{{ observedLabel }}</span>
+          {{ $t('alerts.currentlyAt') }} <span class="font-medium tabular-nums text-foreground">{{ observedLabel }}</span>
         </p>
       </div>
 
@@ -134,31 +142,31 @@ function openNotifyWorkflow(event: MouseEvent): void {
           @click="openNotifyWorkflow"
         >
           <ExternalLink class="h-3.5 w-3.5 sm:mr-1.5" />
-          <span class="hidden sm:inline">Go to workflow</span>
-          <span class="sr-only sm:hidden">Go to workflow</span>
+          <span class="hidden sm:inline">{{ $t('alerts.goToWorkflow') }}</span>
+          <span class="sr-only sm:hidden">{{ $t('alerts.goToWorkflow') }}</span>
         </Button>
 
         <template v-if="alert.is_owner">
           <Button
             variant="outline"
             size="sm"
-            :title="alert.enabled ? 'Pause this alert' : 'Resume this alert'"
+            :title="alert.enabled ? $t('alerts.pause') : $t('alerts.resume')"
             @click="emit('toggle', alert)"
           >
             <component
               :is="alert.enabled ? Pause : Play"
               class="h-3.5 w-3.5 sm:mr-1.5"
             />
-            <span class="hidden sm:inline">{{ alert.enabled ? "Pause" : "Resume" }}</span>
-            <span class="sr-only sm:hidden">{{ alert.enabled ? "Pause" : "Resume" }}</span>
+            <span class="hidden sm:inline">{{ alert.enabled ? $t('alerts.pause') : $t('alerts.resume') }}</span>
+            <span class="sr-only sm:hidden">{{ alert.enabled ? $t('alerts.pause') : $t('alerts.resume') }}</span>
           </Button>
 
           <div class="flex items-center gap-0.5">
             <Button
               variant="ghost"
               size="sm"
-              aria-label="Share alert"
-              title="Share alert"
+              :aria-label="$t('alerts.shareAlert')"
+              :title="$t('alerts.shareAlert')"
               @click="emit('share', alert)"
             >
               <Share2 class="h-4 w-4" />
@@ -166,8 +174,8 @@ function openNotifyWorkflow(event: MouseEvent): void {
             <Button
               variant="ghost"
               size="sm"
-              aria-label="Edit alert"
-              title="Edit alert"
+              :aria-label="$t('alerts.editAlert')"
+              :title="$t('alerts.editAlert')"
               @click="emit('edit', alert)"
             >
               <Pencil class="h-4 w-4" />
@@ -175,8 +183,8 @@ function openNotifyWorkflow(event: MouseEvent): void {
             <Button
               variant="ghost"
               size="sm"
-              aria-label="Delete alert"
-              title="Delete alert"
+              :aria-label="$t('alerts.deleteAlert')"
+              :title="$t('alerts.deleteAlert')"
               class="text-muted-foreground hover:text-destructive"
               @click="emit('remove', alert)"
             >

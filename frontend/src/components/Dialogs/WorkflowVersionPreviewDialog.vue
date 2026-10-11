@@ -32,7 +32,7 @@ watch(
 <template>
   <Dialog
     :open="open"
-    :title="version ? `Version ${version.version_number} Preview` : 'Preview'"
+    :title="version ? $t('workflowHistory.versionPreviewTitle', { number: version.version_number }) : $t('workflowHistory.preview')"
     size="4xl"
     :close-on-escape="false"
     @close="emit('close')"
@@ -44,7 +44,7 @@ watch(
         :edges="version?.edges ?? []"
         :selected-node="selectedNode"
         :show-mini-map="false"
-        empty-message="No nodes in this version"
+        :empty-message="$t('workflowHistory.noNodesInVersion')"
         @update:selected-node="emit('update:selectedNode', $event)"
       />
     </div>

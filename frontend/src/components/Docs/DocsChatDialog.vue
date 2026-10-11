@@ -50,7 +50,7 @@ const {
 <template>
   <Dialog
     :open="open"
-    title="Chat with Heym"
+    :title="$t('docs.chatWithHeym')"
     size="4xl"
     @close="handleClose"
   >
@@ -62,7 +62,7 @@ const {
         @click="clearChat"
       >
         <Trash2 class="h-4 w-4" />
-        Clear
+        {{ $t('docs.clear') }}
       </Button>
     </template>
     <div class="flex h-[70vh] min-h-[420px] min-w-0 flex-col">
@@ -76,8 +76,8 @@ const {
             :model-value="selectedCredentialId"
             :options="credentialOptions"
             :placeholder="credentialSelectPlaceholder"
-            search-placeholder="Search credentials..."
-            empty-text="No credentials found."
+            :search-placeholder="$t('docs.searchCredentials')"
+            :empty-text="$t('docs.noCredentials')"
             select-class="h-10 min-h-0 rounded-lg border-input bg-background shadow-none"
             content-class="z-[70]"
             @update:model-value="selectedCredentialId = $event ?? ''"
@@ -92,8 +92,8 @@ const {
             :model-value="selectedModel"
             :options="modelOptions"
             :placeholder="modelSelectPlaceholder"
-            search-placeholder="Search models..."
-            empty-text="No models found."
+            :search-placeholder="$t('docs.searchModels')"
+            :empty-text="$t('docs.noModels')"
             :disabled="!selectedCredentialId || loadingModels || modelsLoadFailed"
             select-class="h-10 min-h-0 rounded-lg border-input bg-background shadow-none"
             content-class="z-[70]"
@@ -112,7 +112,7 @@ const {
         >
           <Wand2 class="h-10 w-10 opacity-50" />
           <p class="text-sm">
-            Ask anything about the docs
+            {{ $t('docs.askAnything') }}
           </p>
         </div>
         <template v-else>
@@ -125,8 +125,8 @@ const {
               <button
                 type="button"
                 class="absolute right-2 top-2 flex min-h-8 min-w-8 items-center justify-center rounded-lg text-current opacity-70 transition-colors hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/10"
-                :title="copiedMessageId === message.id ? 'Copied!' : 'Copy'"
-                :aria-label="copiedMessageId === message.id ? 'Copied' : 'Copy message'"
+                :title="copiedMessageId === message.id ? $t('docs.copied') : $t('docs.copy')"
+                :aria-label="copiedMessageId === message.id ? $t('docs.copied') : $t('docs.copyMessage')"
                 @click.stop="copyMessageContent(message)"
               >
                 <Check
@@ -215,7 +215,7 @@ const {
             v-model="inputText"
             :disabled="streaming || !selectedCredentialId || !selectedModel || modelsLoadFailed"
             rows="1"
-            placeholder="Ask about the docs..."
+            :placeholder="$t('docs.askPlaceholder')"
             class="min-h-[36px] max-h-32 flex-1 resize-none border-0 bg-transparent px-1 py-2 text-sm leading-5 placeholder:text-muted-foreground focus:outline-none disabled:opacity-50"
             @keydown="handleKeydown"
           />

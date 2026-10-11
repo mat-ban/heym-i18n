@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import Input from "@/components/ui/Input.vue";
 import Label from "@/components/ui/Label.vue";
@@ -13,11 +14,13 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits<{ "update:modelValue": [value: WorkflowDurationConfig] }>();
 
-const AGGREGATION_OPTIONS = [
-  { value: "max", label: "Slowest run (max)" },
-  { value: "avg", label: "Average run" },
-  { value: "p95", label: "95th percentile" },
-];
+const { t } = useI18n();
+
+const AGGREGATION_OPTIONS = computed(() => [
+  { value: "max", label: t("alerts.wizard.slowestRun") },
+  { value: "avg", label: t("alerts.wizard.averageRun") },
+  { value: "p95", label: t("alerts.wizard.p95Run") },
+]);
 
 const thresholdSeconds = computed({
   get: (): number => Math.round(props.modelValue.threshold_ms / 1000),
@@ -50,7 +53,7 @@ const minSamples = computed({
 <template>
   <div class="space-y-4">
     <div class="space-y-2">
-      <Label for="alert-duration-aggregation">Measure</Label>
+      <Label for="alert-duration-aggregation">{{ $t('alerts.wizard.measure') }}</Label>
       <Select
         id="alert-duration-aggregation"
         v-model="aggregation"
@@ -59,7 +62,7 @@ const minSamples = computed({
     </div>
 
     <div class="space-y-2">
-      <Label for="alert-duration-threshold">Slower than (seconds)</Label>
+      <Label for="alert-duration-threshold">{{ $t('alerts.wizard.slowerThan') }}</Label>
       <Input
         id="alert-duration-threshold"
         v-model="thresholdSeconds"
@@ -69,7 +72,7 @@ const minSamples = computed({
     </div>
 
     <div class="space-y-2">
-      <Label for="alert-duration-min-samples">Minimum runs in the window</Label>
+      <Label for="alert-duration-min-samples">{{ $t('alerts.wizard.minRuns') }}</Label>
       <Input
         id="alert-duration-min-samples"
         v-model="minSamples"
@@ -77,8 +80,7 @@ const minSamples = computed({
         min="1"
       />
       <p class="text-xs text-muted-foreground">
-        The alert stays quiet below this many runs. Without it, the slowest run in a nearly empty
-        window is just that one run, which fires on noise rather than on a trend.
+        {{ $t('alerts.wizard.minRunsDesc') }}
       </p>
     </div>
   </div>

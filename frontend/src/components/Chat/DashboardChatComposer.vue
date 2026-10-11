@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { Loader2, Paperclip, Send, X } from "lucide-vue-next";
 
 import SearchableSelect from "@/components/ui/SearchableSelect.vue";
@@ -18,31 +19,11 @@ const ATTACHMENT_ACCEPT =
   ".txt,.csv,.json,.md,.py,.ts,.js,.html,.xml,.yaml,.yml,.log,.jpg,.jpeg,.png,.gif,.webp,.pdf";
 const MAX_INPUT_HEIGHT_PX = 180;
 const PLACEHOLDER_ROTATION_MS = 5000;
-const PROMPT_SUGGESTIONS: string[] = [
-  "Ask anything, or describe a workflow to build",
-  "Run my daily report workflow",
-  "Which scheduled workflows run this week?",
-  "Add a task to my Kanban board",
-  "What is stored in my global variables?",
-  "Which workflow templates are available?",
-  // Titles from the beginner templates collection on heym.run.
-  "Daily sales snapshot to Slack",
-  "Save Slack requests to Google Sheets",
-  "New leads sheet to Slack",
-  "Log Slack messages in BigQuery",
-  "BigQuery report to Google Sheets",
-  "Google Sheets to BigQuery sync",
-  "Save Slack feedback and notify product",
-  "Daily low-stock alert to Slack",
-  "Weekly cloud spend to Google Sheets",
-  "Log Slack partner leads in BigQuery",
-  "Daily Google Sheets lead digest by email",
-  "Email new Slack feedback",
-];
 
 const router = useRouter();
 const authStore = useAuthStore();
 const chatStore = useChatStore();
+const { t } = useI18n();
 
 const {
   credentialOptions,
@@ -73,13 +54,22 @@ const isDraggingFile = ref(false);
 let placeholderTimer: ReturnType<typeof setInterval> | null = null;
 let dragCounter = 0;
 
+const promptSuggestions = computed<string[]>(() => [
+  t("chat.suggestion1"),
+  t("chat.suggestion2"),
+  t("chat.suggestion3"),
+  t("chat.suggestion4"),
+  t("chat.suggestion5"),
+  t("chat.suggestion6"),
+]);
+
 const currentPlaceholder = computed<string>(
-  () => PROMPT_SUGGESTIONS[placeholderIndex.value] ?? PROMPT_SUGGESTIONS[0],
+  () => promptSuggestions.value[placeholderIndex.value % promptSuggestions.value.length] ?? promptSuggestions.value[0],
 );
 
 const greeting = computed<string>(() => {
   const name = authStore.user?.name?.trim();
-  return name ? `Welcome ${name},` : "Welcome,";
+  return name ? t("dashboard.greeting", { name }) : t("dashboard.greetingFallback");
 });
 
 const showNoCredentialsHint = computed<boolean>(
@@ -205,7 +195,7 @@ onMounted(() => {
     // Hold still while the box is in use, so the line never moves under the
     // caret and never jumps when a draft is cleared.
     if (input.value.length > 0 || isInputFocused.value) return;
-    placeholderIndex.value = (placeholderIndex.value + 1) % PROMPT_SUGGESTIONS.length;
+    placeholderIndex.value = (placeholderIndex.value + 1) % promptSuggestions.value.length;
   }, PLACEHOLDER_ROTATION_MS);
 });
 
@@ -251,7 +241,7 @@ onUnmounted(() => {
         {{ greeting }}
       </h2>
       <p class="mt-0.5 text-sm text-muted-foreground">
-        What do you want to automate?
+        {{ $t('dashboard.whatToAutomate') }}
       </p>
     </div>
 
@@ -273,7 +263,7 @@ onUnmounted(() => {
           v-model="input"
           rows="1"
           data-testid="dashboard-chat-input"
-          aria-label="Message"
+          :aria-label="$t('chat.message')"
           class="min-h-[24px] w-full resize-none bg-transparent px-2.5 py-0 text-[15px] leading-6 text-foreground outline-none sm:text-base"
           @input="onInput"
           @keydown="onKeydown"
@@ -301,8 +291,8 @@ onUnmounted(() => {
             type="button"
             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground disabled:pointer-events-none disabled:opacity-50 sm:order-1"
             :disabled="attachmentLoading"
-            title="Attach file"
-            aria-label="Attach file"
+            :title="$t('chat.attachFile')"
+            :aria-label="$t('chat.attachFile')"
             @click="openFilePicker"
           >
             <Paperclip class="h-4 w-4" />
@@ -313,8 +303,8 @@ onUnmounted(() => {
             data-testid="dashboard-chat-send"
             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50 sm:order-3 sm:ml-1"
             :disabled="!canSubmit"
-            title="Start chat"
-            aria-label="Start chat"
+            :title="$t('chat.startChat')"
+            :aria-label="$t('chat.startChat')"
           >
             <Loader2
               v-if="isSubmitting"
@@ -336,9 +326,9 @@ onUnmounted(() => {
               id="dashboard-chat-credential-select"
               :model-value="selectedCredentialId"
               :options="credentialOptions"
-              placeholder="Credential"
-              search-placeholder="Search credentials..."
-              empty-text="No credentials found."
+              :placeholder="$t('chat.credential')"
+              :search-placeholder="$t('credentials.searchPlaceholder')"
+              :empty-text="$t('credentials.noCredentialsFound')"
               :disabled="!hasCredentials"
               hide-trigger-icon
               select-class="h-8 min-h-0 rounded-lg border-transparent bg-transparent text-muted-foreground shadow-none hover:border-transparent hover:bg-muted/70 focus-within:border-transparent focus-within:ring-0"
@@ -355,9 +345,9 @@ onUnmounted(() => {
               id="dashboard-chat-model-select"
               :model-value="selectedModel"
               :options="modelOptions"
-              :placeholder="isLoadingModels || modelsLoadFailed ? modelPlaceholder : 'Model'"
-              search-placeholder="Search models..."
-              empty-text="No models found."
+              :placeholder="isLoadingModels || modelsLoadFailed ? modelPlaceholder : $t('common.model')"
+              :search-placeholder="$t('chat.searchModels')"
+              :empty-text="$t('chat.noModelsFound')"
               :disabled="!selectedCredentialId || isLoadingModels || modelsLoadFailed"
               hide-trigger-icon
               select-class="h-8 min-h-0 rounded-lg border-transparent bg-transparent text-muted-foreground shadow-none hover:border-transparent hover:bg-muted/70 focus-within:border-transparent focus-within:ring-0"
@@ -381,7 +371,7 @@ onUnmounted(() => {
           <button
             type="button"
             class="ml-0.5 shrink-0 rounded p-0.5 hover:bg-muted/80"
-            aria-label="Remove attachment"
+            :aria-label="$t('chat.removeAttachment')"
             @click="clearAttachment"
           >
             <X class="h-3 w-3" />
@@ -399,7 +389,7 @@ onUnmounted(() => {
           v-if="modelsLoadFailed"
           class="text-xs text-amber-600 dark:text-amber-400"
         >
-          This credential's model list could not be loaded.
+          {{ $t('chat.modelsLoadFailed') }}
         </p>
 
         <button
@@ -408,7 +398,7 @@ onUnmounted(() => {
           class="text-xs font-medium text-primary underline-offset-2 hover:underline"
           @click="emit('open-credentials')"
         >
-          Add an LLM credential to start chatting
+          {{ $t('chat.addCredentialHint') }}
         </button>
 
         <p

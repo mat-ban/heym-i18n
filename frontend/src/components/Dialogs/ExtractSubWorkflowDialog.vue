@@ -279,10 +279,10 @@ async function handleExtract(): Promise<void> {
           </div>
           <div>
             <h2 class="text-lg font-semibold">
-              Extract to Sub-Workflow
+              {{ $t('canvas.extractSubWorkflow') }}
             </h2>
             <p class="text-sm text-muted-foreground">
-              Create a new workflow from selected nodes
+              {{ $t('canvas.extractSubWorkflowDesc') }}
             </p>
           </div>
         </div>
@@ -290,24 +290,24 @@ async function handleExtract(): Promise<void> {
         <div class="space-y-4">
           <div class="space-y-2">
             <Label for="workflow-name">
-              Workflow Name
+              {{ $t('workflows.workflowName') }}
             </Label>
             <Input
               id="workflow-name"
               v-model="name"
-              placeholder="My Sub-Workflow"
+              :placeholder="$t('canvas.mySubWorkflow')"
               @keydown.enter="handleExtract"
             />
           </div>
 
           <div class="space-y-2">
             <Label for="workflow-description">
-              Description (optional)
+              {{ $t('common.descriptionOptional') }}
             </Label>
             <Textarea
               id="workflow-description"
               v-model="description"
-              placeholder="What does this workflow do?"
+              :placeholder="$t('workflows.descriptionPlaceholder')"
               :rows="2"
             />
           </div>
@@ -315,7 +315,7 @@ async function handleExtract(): Promise<void> {
           <div class="space-y-3 p-3 rounded-lg bg-muted/50">
             <div class="flex items-center gap-2 text-sm font-medium">
               <GitBranch class="w-4 h-4 text-muted-foreground" />
-              <span>{{ selectedNodeLabels.length }} nodes will be extracted</span>
+              <span>{{ $t('canvas.nodesWillBeExtracted', { count: selectedNodeLabels.length }) }}</span>
             </div>
 
             <div
@@ -333,7 +333,7 @@ async function handleExtract(): Promise<void> {
                 v-if="selectedNodeLabels.length > 8"
                 class="px-2 py-0.5 text-xs rounded-full bg-muted text-muted-foreground"
               >
-                +{{ selectedNodeLabels.length - 8 }} more
+                +{{ $t('canvas.moreNodes', { count: selectedNodeLabels.length - 8 }) }}
               </span>
             </div>
 
@@ -343,7 +343,7 @@ async function handleExtract(): Promise<void> {
             >
               <div class="flex items-center gap-2 text-xs text-muted-foreground mb-1.5">
                 <ArrowRight class="w-3 h-3" />
-                <span>Inputs from external nodes:</span>
+                <span>{{ $t('canvas.inputsFromExternalNodes') }}</span>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span
@@ -370,14 +370,14 @@ async function handleExtract(): Promise<void> {
             variant="outline"
             @click="closeDialog"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button
             :loading="isExtracting"
             :disabled="!name.trim() || selectedNodeLabels.length === 0"
             @click="handleExtract"
           >
-            Extract
+            {{ $t('canvas.extract') }}
           </Button>
         </div>
       </div>

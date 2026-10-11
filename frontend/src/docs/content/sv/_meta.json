@@ -1,0 +1,647 @@
+{
+  "getting-started/core-concepts": {
+    "h": "65796a4e",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "getting-started/introduction": {
+    "h": "15a9e428",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "getting-started/migrate-to-heym": {
+    "h": "1af3b2bc",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "getting-started/quick-start": {
+    "h": "0a3d1efe",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "getting-started/running-and-deployment": {
+    "h": "31e169bb",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "getting-started/why-heym": {
+    "h": "fa9d7489",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "nodes/agent-node": {
+    "h": "61e6635d",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/amazon-s3-node": {
+    "h": "776ebfd5",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/bigquery-node": {
+    "h": "0a9e2499",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/chart-output-node": {
+    "h": "2ea0bf3f",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/clickhouse-node": {
+    "h": "d41885fb",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/code-node": {
+    "h": "4eeac04d",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/codex-node": {
+    "h": "442938c3",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/condition-node": {
+    "h": "c42b4b0d",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/console-log-node": {
+    "h": "3fea81fa",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/converter-node": {
+    "h": "711a943a",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/crawler-node": {
+    "h": "0a5eba15",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/cron-node": {
+    "h": "cac7c178",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/datatable-node": {
+    "h": "8ca918bd",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/decision-node": {
+    "h": "8f5cfc33",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/disable-node": {
+    "h": "56dc6eec",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/discord-node": {
+    "h": "2254ddc3",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/discord-trigger-node": {
+    "h": "fc937f3d",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/drive-node": {
+    "h": "14fd20d9",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/enable-node": {
+    "h": "39b2eebf",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/error-handler-node": {
+    "h": "57586274",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/execute-node": {
+    "h": "654e99eb",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/file-upload-trigger-node": {
+    "h": "5ae2b445",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/github-node": {
+    "h": "81ba625b",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/google-drive-node": {
+    "h": "c5d5e837",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/google-sheets-node": {
+    "h": "3589f46a",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/grist-node": {
+    "h": "11453032",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/heym-node": {
+    "h": "94c0bb0b",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/heym-trigger-node": {
+    "h": "2ac3f674",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/html-output-mapper-node": {
+    "h": "59eccb7b",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/http-node": {
+    "h": "2d9379eb",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/imap-trigger-node": {
+    "h": "18b36489",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/input-node": {
+    "h": "d3c37a29",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/jira-node": {
+    "h": "97003e13",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/json-output-mapper-node": {
+    "h": "83935fb4",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/linear-node": {
+    "h": "3840d923",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/llm-node": {
+    "h": "718e23bf",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/loop-node": {
+    "h": "106e07ea",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/mcp-call-node": {
+    "h": "b08ad097",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/merge-node": {
+    "h": "6a59d590",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/notion-node": {
+    "h": "191bc0fc",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/opencode-go-node": {
+    "h": "2e504ded",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/output-node": {
+    "h": "25a3ffc9",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/playwright-node": {
+    "h": "05b79e2f",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/plugin-node": {
+    "h": "dc7a283b",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/plugin-trigger-node": {
+    "h": "23f4e55c",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/rabbitmq-node": {
+    "h": "3d555f42",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/rag-node": {
+    "h": "b0d64bc4",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/redis-node": {
+    "h": "522c2e57",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/send-email-node": {
+    "h": "907a2da9",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/sentry-node": {
+    "h": "9e0f1082",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/set-node": {
+    "h": "b2c98f36",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/slack-node": {
+    "h": "ecbf9580",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/slack-trigger-node": {
+    "h": "14c600fa",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/sticky-note-node": {
+    "h": "229d605d",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/supabase-node": {
+    "h": "bba38832",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/switch-node": {
+    "h": "2a93373b",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/telegram-node": {
+    "h": "260e5516",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/telegram-trigger-node": {
+    "h": "b172e86a",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/throw-error-node": {
+    "h": "03b95bdb",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/variable-node": {
+    "h": "9065559b",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/wait-node": {
+    "h": "37f3e9e3",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/websocket-send-node": {
+    "h": "6c290130",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "nodes/websocket-trigger-node": {
+    "h": "ce68a74b",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/agent-architecture": {
+    "h": "279705eb",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/agent-persistent-memory": {
+    "h": "e67797ef",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/ai-assistant": {
+    "h": "b61cc2f7",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/audit": {
+    "h": "5efc2f64",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/canvas-features": {
+    "h": "79d387db",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/chat-voice": {
+    "h": "1fdbfb31",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/chat-with-heym": {
+    "h": "7a90d44d",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/cluster": {
+    "h": "73e966cb",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/contextual-showcase": {
+    "h": "95fd7e78",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/credentials": {
+    "h": "7d394a1b",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/credentials-sharing": {
+    "h": "ea417052",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/download-import": {
+    "h": "bf19ee14",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/drive": {
+    "h": "8d08c3cf",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/edit-history": {
+    "h": "0b016cb0",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/enterprise": {
+    "h": "6d80f351",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/execution-history": {
+    "h": "5ef7654c",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/execution-tokens": {
+    "h": "caafc4c9",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/expression-dsl": {
+    "h": "8ecd7e3c",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/expression-evaluation-dialog": {
+    "h": "10e54227",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/features": {
+    "h": "5711d609",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/file-generation": {
+    "h": "90504ef3",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/global-variables": {
+    "h": "59672cab",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/guardrails": {
+    "h": "0ea370ab",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/human-in-the-loop": {
+    "h": "b80d3588",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/integrations": {
+    "h": "5d0e01ee",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/keyboard-shortcuts": {
+    "h": "860298ec",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/node-types": {
+    "h": "65823972",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/opentelemetry": {
+    "h": "f68fd7b2",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/parallel-execution": {
+    "h": "d56f6513",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/plugin-authoring": {
+    "h": "120f8fb4",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/portal": {
+    "h": "3511581e",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/quick-drawer": {
+    "h": "ab7d8fa8",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/security": {
+    "h": "53b0bf3c",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/sse-streaming": {
+    "h": "352231fd",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/sso": {
+    "h": "d7201fe8",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/teams": {
+    "h": "ec4fdb2c",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/triggers": {
+    "h": "d594277a",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/user-settings": {
+    "h": "465afb5d",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/webhooks": {
+    "h": "51b7ceb3",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "reference/workflow-analysis": {
+    "h": "47e6b7f7",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/workflow-organization": {
+    "h": "9cd08753",
+    "s": "reviewed",
+    "r": "phase4.1@2026-10-11"
+  },
+  "reference/workflow-structure": {
+    "h": "adaa01aa",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/alerts-tab": {
+    "h": "d77a10dd",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/analytics-tab": {
+    "h": "306ec3e4",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/board-tab": {
+    "h": "37be73d2",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/chat-tab": {
+    "h": "bae1fa2b",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/credentials-tab": {
+    "h": "ce682f2d",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/dashboard-tab": {
+    "h": "528ce8c9",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/datatable-tab": {
+    "h": "d09da2b1",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/drive-tab": {
+    "h": "ff48bf00",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/evals-tab": {
+    "h": "6d462422",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/global-variables-tab": {
+    "h": "bf543b29",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/logs-tab": {
+    "h": "9eac65fb",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/mcp-tab": {
+    "h": "511d334d",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/scheduled-tab": {
+    "h": "b80cb594",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/teams-tab": {
+    "h": "ab1346da",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/templates-tab": {
+    "h": "ec32e34b",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/traces-tab": {
+    "h": "acc198fe",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/vectorstores-tab": {
+    "h": "3bfc6b13",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  },
+  "tabs/workflows-tab": {
+    "h": "651e8e18",
+    "s": "reviewed",
+    "r": "wave2b@2026-10-11"
+  }
+}

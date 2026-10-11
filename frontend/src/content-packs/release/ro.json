@@ -1,0 +1,208 @@
+[
+  {
+    "releaseId": "2026.18",
+    "publishedAt": "2026-10-03T12:00:00.000Z",
+    "headline": "Reactivați un nod în cadrul unui Workflow",
+    "releaseTour": {
+      "label": "Nou în Heym",
+      "introTitle": "Nou în acest release",
+      "introDescription": "O scurtă prezentare generală a noutăților de la ultima dumneavoastră actualizare. Durează aproximativ un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "enable-node"
+      ]
+    },
+    "sections": [
+      {
+        "id": "enable-node",
+        "title": "Nodul Enable: Reactivarea unui nod în cadrul unui Workflow",
+        "publishedAt": "2026-10-03T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Noul **nod Enable** este omologul **nodului Disable**. Selectați un nod după denumire pentru a-l reactiva și pentru a salva modificarea. Un **Trigger** **Cron** dezactivat va fi astfel executat din nou la următorul moment planificat. Dacă nodul se află mai spre finalul fluxului și nu a fost încă executat, acesta rulează direct în execuția curentă."
+          },
+          {
+            "type": "prose",
+            "markdown": "Un Trigger dezactivat nu inițiază niciodată de la sine o execuție. Prin urmare, plasați nodul Enable în spatele unui alt punct de intrare, precum un **Trigger** **Input**. **Nodul** **Wait** acceptă acum și pauze mai lungi: până la 15 minute, în loc de doar un minut."
+          }
+        ],
+        "tour": {
+          "description": "Reactivați un nod dezactivat direct din cadrul Workflow-ului, de exemplu un Trigger Cron suspendat.",
+          "useCases": [
+            "Pornirea unui Trigger Cron dezactivat, la nevoie, printr-un Webhook",
+            "Combinarea cu nodul Disable pentru a activa și dezactiva noduri în funcție de stare",
+            "Suspendarea unui Workflow cu nodul Wait până la 15 minute"
+          ],
+          "tourVisual": "enable-node",
+          "docTarget": {
+            "categoryId": "nodes",
+            "slug": "enable-node",
+            "title": "Enable Node"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.17",
+    "publishedAt": "2026-09-28T18:00:00.000Z",
+    "headline": "Verificați aprobările umane în așteptare direct în Dashboard",
+    "releaseTour": {
+      "label": "Nou în Heym",
+      "introTitle": "Nou în această versiune",
+      "introDescription": "O prezentare succintă a noutăților de la ultima dumneavoastră actualizare. Durează aproximativ un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-hitl"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-hitl",
+        "title": "Finalizați recenziile în așteptare printr-un widget de Dashboard",
+        "publishedAt": "2026-09-28T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Adăugați un widget **HITL**, iar antetul va afișa numărul recenziilor în așteptare sub forma `1/n ausstehend`. Navigați prin intrări cu ajutorul tastelor săgeți. Numele Workflow-ului deschide execuția direct pe Canvas. **Genehmigen**, **Änderungen anfordern** și **Ablehnen** finalizează schița. Pictograma de istoric deschide execuția în dialogul de istoric de pe aceeași pagină. Coada este personală: un Dashboard partajat nu afișează schițele altor utilizatori."
+          }
+        ],
+        "tour": {
+          "description": "Un carusel de Dashboard pentru aprobările dumneavoastră în așteptare, cu contor în antet.",
+          "useCases": [
+            "Vizualizați câte recenzii sunt în așteptare înainte de a deschide prima intrare",
+            "Aprobați, solicitați modificări sau respingeți fără a părăsi Dashboard-ul",
+            "Deschideți această execuție prin pictograma de lângă titlul widget-ului în dialogul de istoric"
+          ],
+          "tourVisual": "dashboard-hitl",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.16",
+    "publishedAt": "2026-09-27T00:00:00.000Z",
+    "headline": "Asistentul AI își testează Workflow-urile și configurează tabele de date",
+    "releaseTour": {
+      "label": "Nou în Heym",
+      "introTitle": "Noutăți în această versiune",
+      "introDescription": "O prezentare succintă a noutăților de la ultima actualizare. Durează aproximativ un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "assistant-yolo-mode",
+        "assistant-data-tables"
+      ]
+    },
+    "sections": [
+      {
+        "id": "assistant-yolo-mode",
+        "title": "Modul YOLO: Asistentul AI testează ceea ce construiește",
+        "publishedAt": "2026-09-27T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Dacă activați **modul YOLO** în **Asistentul AI** din Canvas, acesta nu se mai oprește după aplicarea unui Workflow. Execută Workflow-ul ca prin **Run**, citește rezultatul și corectează Workflow-ul în mod autonom de până la cinci ori per mesaj. Fiecare răspuns listează pașii în timp real."
+          },
+          {
+            "type": "prose",
+            "markdown": "Înainte de prima execuție, solicită date de test cu valori propuse și le reutilizează. De asemenea, poate executa alte Workflow-uri atunci când are nevoie de rezultatele acestora. Dacă necesită o decizie sau date de acces, solicită acestea prin cardul de întrebare obișnuit. Execuții reale: modul YOLO este dezactivat implicit, iar **Stop** încheie procesul în orice moment."
+          }
+        ],
+        "tour": {
+          "description": "Asistentul AI execută Workflow-urile create, verifică rezultatul și corectează erorile în mod autonom până când acesta funcționează.",
+          "useCases": [
+            "Descrieți un Workflow și primiți direct o versiune testată",
+            "Lăsați asistentul să identifice și să remedieze automat nodurile defectuoase",
+            "Verificați valorile returnate ale altor Workflow-uri înainte de a le interconecta"
+          ],
+          "tourVisual": "assistant-yolo-mode",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      },
+      {
+        "id": "assistant-data-tables",
+        "title": "Asistentul AI selectează sau creează tabele de date",
+        "publishedAt": "2026-09-28T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Atunci când un Workflow stochează înregistrări, **Asistentul AI** recunoaște acum **DataTables**-urile dumneavoastră. Indicați un tabel și acesta îl utilizează. În caz contrar, solicită tabelul potrivit sau propune **Creare tabel nou** cu coloanele necesare."
+          },
+          {
+            "type": "prose",
+            "markdown": "Funcționează în asistentul din Canvas, în modul YOLO, în **Chat**, în documentație și prin MCP cu `heym_chat`."
+          }
+        ],
+        "tour": {
+          "description": "Asistentul AI solicită tabelul de date potrivit sau creează unul nou cu coloanele necesare.",
+          "useCases": [
+            "Înregistrarea automată a lead-urilor în tabele și generarea împreună a Workflow-ului și a tabelului",
+            "Selectarea tabelelor existente pe baza coloanelor și tipurilor",
+            "Crearea și conectarea tabelelor direct din Chat sau prin MCP"
+          ],
+          "tourVisual": "assistant-data-tables",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "ai-assistant",
+            "title": "AI Assistant"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "releaseId": "2026.15",
+    "publishedAt": "2026-09-23T00:00:00.000Z",
+    "headline": "Crearea mai multor dashboarduri și partajarea acestora cu echipa",
+    "releaseTour": {
+      "label": "Nou în Heym",
+      "introTitle": "Nou în această versiune",
+      "introDescription": "O scurtă prezentare generală a noutăților de la ultima actualizare. Durează aproximativ un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "dashboard-sharing"
+      ]
+    },
+    "sections": [
+      {
+        "id": "dashboard-sharing",
+        "title": "Crearea mai multor dashboarduri și partajarea acestora cu echipa",
+        "publishedAt": "2026-09-24T10:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Fila **Dashboard** acceptă acum orice număr de dashboarduri. Comutați convenabil prin selectorul din partea de sus a filei sau creați unul nou cu **+**."
+          },
+          {
+            "type": "prose",
+            "markdown": "Partajați dashboarduri cu persoane sau echipe prin **Setări**. **Citirea** permite afișarea și actualizarea; **Scrierea** permite editarea widgeturilor. Widgeturile utilizează întotdeauna credențialele proprietarului."
+          }
+        ],
+        "tour": {
+          "description": "Gestionați mai multe dashboarduri, comutați între ele și partajați-le cu drepturi de citire sau de editare.",
+          "useCases": [
+            "Structurarea dashboardurilor separate pe echipă, produs sau mandant",
+            "Furnizarea unei vizualizări cu drepturi de citire pentru părțile interesate",
+            "Testarea prealabilă a tipurilor de diagrame cu date exemplu"
+          ],
+          "tourVisual": "dashboard-sharing",
+          "docTarget": {
+            "categoryId": "tabs",
+            "slug": "dashboard-tab",
+            "title": "Dashboard"
+          }
+        }
+      }
+    ]
+  }
+]

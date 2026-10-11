@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { Check, ChevronLeft, ChevronRight, Clock, Copy, ExternalLink, RefreshCcw, Search, Trash2, X } from "lucide-vue-next";
 
 import type { CredentialListItem } from "@/types/credential";
@@ -38,6 +39,8 @@ interface PricingPanelExposed {
   clearFocusedSearchOnEscape(): boolean;
 }
 
+const { t, te } = useI18n();
+
 const TRACE_SOURCE_LABELS: Record<string, string> = {
   workflow: "Workflow LLM",
   assistant: "AI Assistant",
@@ -55,14 +58,19 @@ const TRACE_SOURCE_LABELS: Record<string, string> = {
   mcp: "MCP",
 };
 
+function getTraceSourceLabel(key: string): string {
+  const i18nKey = `traces.sources.${key}`;
+  return te(i18nKey) ? t(i18nKey) : (TRACE_SOURCE_LABELS[key] ?? key);
+}
+
 function formatTraceSourceLabel(trace: Pick<LLMTraceListItem, "source" | "node_label">): string {
   if (trace.source === "assistant" && trace.node_label === "AI Ask") {
-    return TRACE_SOURCE_LABELS.ai_ask;
+    return getTraceSourceLabel("ai_ask");
   }
   if (trace.source === "assistant" && trace.node_label === "AI Builder") {
-    return TRACE_SOURCE_LABELS.ai_builder;
+    return getTraceSourceLabel("ai_builder");
   }
-  return TRACE_SOURCE_LABELS[trace.source] ?? trace.source;
+  return getTraceSourceLabel(trace.source);
 }
 
 const traces = ref<LLMTraceListItem[]>([]);
@@ -107,8 +115,11 @@ const hasNextTrace = computed(
 );
 const tracePositionLabel = computed(() =>
   selectedTraceIndex.value >= 0
-    ? `${selectedTraceIndex.value + 1} / ${traces.value.length}`
-    : "Direct trace",
+    ? t("traces.tracePosition", {
+        current: selectedTraceIndex.value + 1,
+        total: traces.value.length,
+      })
+    : t("traces.directTrace"),
 );
 const pricingDialogModels = computed(() =>
   pricingDialogModel.value ? [pricingDialogModel.value] : [],
@@ -236,20 +247,20 @@ function goToWorkflow(): void {
 }
 
 const sourceOptions = computed<SelectOption[]>(() => [
-  { value: "all", label: "All Sources" },
-  { value: "workflow", label: TRACE_SOURCE_LABELS.workflow },
-  { value: "assistant", label: TRACE_SOURCE_LABELS.assistant },
-  { value: "ai_ask", label: TRACE_SOURCE_LABELS.ai_ask },
-  { value: "ai_builder", label: TRACE_SOURCE_LABELS.ai_builder },
-  { value: "workflow_analyze", label: TRACE_SOURCE_LABELS.workflow_analyze },
-  { value: "expression_builder", label: TRACE_SOURCE_LABELS.expression_builder },
-  { value: "dashboard_chat", label: TRACE_SOURCE_LABELS.dashboard_chat },
-  { value: "skill_builder", label: TRACE_SOURCE_LABELS.skill_builder },
-  { value: "data_table_ai", label: TRACE_SOURCE_LABELS.data_table_ai },
-  { value: "decision_ai", label: TRACE_SOURCE_LABELS.decision_ai },
-  { value: "dashboard_widget_ai", label: TRACE_SOURCE_LABELS.dashboard_widget_ai },
-  { value: "alert_builder", label: TRACE_SOURCE_LABELS.alert_builder },
-  { value: "evals", label: TRACE_SOURCE_LABELS.evals },
+  { value: "all", label: t("traces.allSources") },
+  { value: "workflow", label: getTraceSourceLabel("workflow") },
+  { value: "assistant", label: getTraceSourceLabel("assistant") },
+  { value: "ai_ask", label: getTraceSourceLabel("ai_ask") },
+  { value: "ai_builder", label: getTraceSourceLabel("ai_builder") },
+  { value: "workflow_analyze", label: getTraceSourceLabel("workflow_analyze") },
+  { value: "expression_builder", label: getTraceSourceLabel("expression_builder") },
+  { value: "dashboard_chat", label: getTraceSourceLabel("dashboard_chat") },
+  { value: "skill_builder", label: getTraceSourceLabel("skill_builder") },
+  { value: "data_table_ai", label: getTraceSourceLabel("data_table_ai") },
+  { value: "decision_ai", label: getTraceSourceLabel("decision_ai") },
+  { value: "dashboard_widget_ai", label: getTraceSourceLabel("dashboard_widget_ai") },
+  { value: "alert_builder", label: getTraceSourceLabel("alert_builder") },
+  { value: "evals", label: getTraceSourceLabel("evals") },
 ]);
 
 const credentialOptions = computed<SelectOption[]>(() => {
@@ -257,7 +268,7 @@ const credentialOptions = computed<SelectOption[]>(() => {
     value: credential.id,
     label: credential.name,
   }));
-  return [{ value: "all", label: "All Credentials" }, ...options];
+  return [{ value: "all", label: t("traces.allCredentials") }, ...options];
 });
 
 const workflowOptions = computed<SelectOption[]>(() => {
@@ -265,7 +276,7 @@ const workflowOptions = computed<SelectOption[]>(() => {
     value: workflow.id,
     label: workflow.name,
   }));
-  return [{ value: "all", label: "All Workflows" }, ...options];
+  return [{ value: "all", label: t("traces.allWorkflows") }, ...options];
 });
 
 const isWorkflowSource = computed(() => sourceFilter.value === "workflow");
@@ -418,7 +429,7 @@ async function openTrace(
   try {
     selectedTrace.value = await traceApi.get(traceId);
   } catch {
-    detailError.value = "Failed to load trace details";
+    detailError.value = t("traces.failedLoadDetail");
   } finally {
     detailLoading.value = false;
   }
@@ -489,7 +500,7 @@ async function openTraceFromRoute(): Promise<void> {
 }
 
 async function clearTraces(): Promise<void> {
-  if (!confirm("Are you sure you want to delete all traces? This action cannot be undone.")) {
+  if (!confirm(t("traces.confirmClear"))) {
     return;
   }
   clearing.value = true;
@@ -500,7 +511,7 @@ async function clearTraces(): Promise<void> {
     offset.value = 0;
     await loadStats();
   } catch {
-    error.value = "Failed to clear traces";
+    error.value = t("traces.failedClear");
   } finally {
     clearing.value = false;
   }
@@ -582,10 +593,10 @@ onMounted(async () => {
     <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
       <div>
         <h2 class="text-2xl font-bold tracking-tight">
-          Traces
+          {{ $t('traces.title') }}
         </h2>
         <p class="text-muted-foreground mt-1">
-          Inspect AI assistant and workflow LLM calls in one place.
+          {{ $t('traces.subtitle') }}
         </p>
       </div>
       <div class="flex items-center gap-2 w-full md:w-auto">
@@ -604,7 +615,7 @@ onMounted(async () => {
           @click="loadTraces"
         >
           <RefreshCcw class="w-4 h-4 mr-1" />
-          Refresh
+          {{ $t('common.refresh') }}
         </Button>
         <Button
           variant="destructive"
@@ -615,7 +626,7 @@ onMounted(async () => {
           @click="clearTraces"
         >
           <Trash2 class="w-4 h-4 mr-1" />
-          Clear All
+          {{ $t('common.clear') }}
         </Button>
       </div>
     </div>
@@ -630,7 +641,7 @@ onMounted(async () => {
         ref="searchInputRef"
         type="text"
         :value="searchQuery"
-        placeholder="Search traces by model, workflow, credential, node..."
+        :placeholder="$t('traces.searchPlaceholder')"
         class="w-full min-w-0 pl-9 pr-8 py-2 text-sm rounded-lg border border-border/50 bg-muted/30 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary/30 focus:border-primary/50 transition-colors"
         @input="onSearchInput"
         @keydown.enter="onSearchInput"
@@ -657,18 +668,18 @@ onMounted(async () => {
         :class="isWorkflowSource ? 'md:grid-cols-4' : 'md:grid-cols-3'"
       >
         <div class="space-y-2">
-          <Label>Time range</Label>
+          <Label>{{ $t('traces.timeRange') }}</Label>
           <TracesTimeRangeSelect v-model="timeRange" />
         </div>
         <div class="space-y-2">
-          <Label>Source</Label>
+          <Label>{{ $t('traces.source') }}</Label>
           <Select
             v-model="sourceFilter"
             :options="sourceOptions"
           />
         </div>
         <div class="space-y-2">
-          <Label>Credential</Label>
+          <Label>{{ $t('nav.credentials') }}</Label>
           <Select
             v-model="credentialFilter"
             :options="credentialOptions"
@@ -678,7 +689,7 @@ onMounted(async () => {
           v-if="isWorkflowSource"
           class="space-y-2 sm:col-span-2 md:col-span-1"
         >
-          <Label>Workflow</Label>
+          <Label>{{ $t('nav.workflows') }}</Label>
           <Select
             v-model="workflowFilter"
             :options="workflowOptions"
@@ -687,7 +698,7 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
         <div class="text-xs text-muted-foreground sm:mr-auto sm:text-right">
-          {{ rangeStart }}-{{ rangeEnd }} of {{ total }}
+          {{ rangeStart }}-{{ rangeEnd }} {{ $t('tables.of') }} {{ total }}
         </div>
         <div class="flex items-center gap-2">
           <Button
@@ -698,7 +709,7 @@ onMounted(async () => {
             @click="goPrevious"
           >
             <ChevronLeft class="w-3 h-3 md:w-4 md:h-4" />
-            <span class="hidden sm:inline">Prev</span>
+            <span class="hidden sm:inline">{{ $t('tables.previous') }}</span>
           </Button>
           <Button
             variant="outline"
@@ -707,7 +718,7 @@ onMounted(async () => {
             :disabled="loading || !hasNext"
             @click="goNext"
           >
-            <span class="hidden sm:inline">Next</span>
+            <span class="hidden sm:inline">{{ $t('tables.next') }}</span>
             <ChevronRight class="w-3 h-3 md:w-4 md:h-4" />
           </Button>
         </div>
@@ -718,7 +729,7 @@ onMounted(async () => {
       v-if="loading && traces.length === 0"
       class="text-sm text-muted-foreground text-center py-10"
     >
-      Loading traces...
+      {{ $t('traces.loading') }}
     </div>
 
     <div
@@ -732,7 +743,7 @@ onMounted(async () => {
       v-else-if="traces.length === 0"
       class="text-sm text-muted-foreground text-center py-10"
     >
-      No traces yet.
+      {{ $t('traces.noTracesYet') }}
     </div>
 
     <div
@@ -770,7 +781,7 @@ onMounted(async () => {
               class="text-xs font-medium px-2 py-1 rounded-full"
               :class="getStatusClass(trace.status)"
             >
-              {{ trace.status }}
+              {{ trace.status === 'success' ? $t('common.success') : trace.status === 'error' ? $t('common.error') : trace.status }}
             </span>
           </div>
 
@@ -783,11 +794,11 @@ onMounted(async () => {
 
           <div class="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
             <span>{{ trace.request_type }}</span>
-            <span v-if="trace.total_tokens !== null">{{ trace.total_tokens }} tokens</span>
+            <span v-if="trace.total_tokens !== null">{{ trace.total_tokens }} {{ $t('traces.tokens') }}</span>
             <span
               v-if="trace.cost_usd !== null"
             >
-              Cost {{ formatCost(trace.cost_usd) }}
+              {{ $t('traces.cost') }} {{ formatCost(trace.cost_usd) }}
             </span>
             <span>{{ formatMillis(trace.elapsed_ms) }}</span>
           </div>
@@ -797,7 +808,7 @@ onMounted(async () => {
 
     <Dialog
       :open="pricingDialogOpen"
-      title="LLM Cost Table"
+      :title="$t('traces.pricing')"
       size="6xl"
       close-on-back
       @close="closePricingDialog"
@@ -815,7 +826,7 @@ onMounted(async () => {
 
     <Dialog
       :open="detailOpen"
-      title="Trace Details"
+      :title="$t('traces.traceDetail')"
       title-class="text-lg sm:text-lg md:text-xl"
       size="3xl"
       default-fullscreen
@@ -828,7 +839,7 @@ onMounted(async () => {
               type="button"
               class="flex items-center justify-center h-8 w-8 text-foreground hover:bg-accent disabled:pointer-events-none disabled:opacity-35 transition-colors"
               :disabled="!hasPreviousTrace || detailLoading"
-              aria-label="Previous trace"
+              :aria-label="$t('traces.prev')"
               @click="goToPreviousTrace"
             >
               <ChevronLeft class="w-4 h-4" />
@@ -840,7 +851,7 @@ onMounted(async () => {
               type="button"
               class="flex items-center justify-center h-8 w-8 text-foreground hover:bg-accent disabled:pointer-events-none disabled:opacity-35 transition-colors"
               :disabled="!hasNextTrace || detailLoading"
-              aria-label="Next trace"
+              :aria-label="$t('traces.next')"
               @click="goToNextTrace"
             >
               <ChevronRight class="w-4 h-4" />
@@ -854,7 +865,7 @@ onMounted(async () => {
             @click="goToWorkflow"
           >
             <ExternalLink class="w-3 h-3 mr-1" />
-            Go to Workflow
+            Workflow
           </Button>
         </div>
       </template>
@@ -874,7 +885,7 @@ onMounted(async () => {
         v-if="detailLoading"
         class="text-sm text-muted-foreground text-center py-8"
       >
-        Loading trace...
+        {{ $t('traces.loading') }}
       </div>
 
       <div
@@ -888,7 +899,7 @@ onMounted(async () => {
         v-else-if="!selectedTrace"
         class="text-sm text-muted-foreground text-center py-8"
       >
-        No trace selected.
+        {{ $t('traces.noTraces') }}
       </div>
 
       <div
@@ -902,13 +913,13 @@ onMounted(async () => {
             class="p-3"
           >
             <div class="text-xs text-muted-foreground">
-              Status
+              {{ $t('common.status') }}
             </div>
             <div
               class="mt-1 text-sm font-medium"
               :class="cn(selectedTrace.status === 'error' ? 'text-destructive' : 'text-emerald-600')"
             >
-              {{ selectedTrace.status }}
+              {{ selectedTrace.status === 'success' ? $t('common.success') : selectedTrace.status === 'error' ? $t('common.error') : selectedTrace.status }}
             </div>
           </Card>
           <Card
@@ -918,9 +929,11 @@ onMounted(async () => {
             class="p-3"
           >
             <div class="text-xs text-muted-foreground">
-              Model
+              {{ $t('traces.model') }}
             </div>
-            <div class="mt-1 text-sm font-medium">
+            <div
+              class="mt-1 text-sm font-medium"
+            >
               {{ traceModelListLabel(selectedTrace) || "Unknown" }}
             </div>
           </Card>
@@ -930,7 +943,7 @@ onMounted(async () => {
             class="p-3"
           >
             <div class="text-xs text-muted-foreground">
-              Time
+              {{ $t('traces.duration') }}
             </div>
             <div class="mt-1 text-sm font-medium">
               {{ formatMillis(spans.length > 0 ? spans[0].durationMs : selectedTrace.elapsed_ms) }}
@@ -942,7 +955,7 @@ onMounted(async () => {
             class="p-3"
           >
             <div class="text-xs text-muted-foreground">
-              Tokens
+              {{ $t('traces.tokens') }}
             </div>
             <div class="mt-1 text-sm font-medium">
               {{ selectedTrace.total_tokens ?? "-" }}
@@ -999,7 +1012,7 @@ onMounted(async () => {
             class="p-3"
           >
             <div class="text-xs text-muted-foreground">
-              Created At
+              {{ $t('workflows.created') }}
             </div>
             <div class="mt-1 text-sm font-medium">
               {{ formatDate(selectedTrace.created_at) }}
@@ -1012,7 +1025,7 @@ onMounted(async () => {
             class="p-3"
           >
             <div class="text-xs text-muted-foreground">
-              Credential
+              {{ $t('nav.credentials') }}
             </div>
             <div class="mt-1 text-sm font-medium">
               {{ selectedTrace.credential_name || "Unknown" }}
@@ -1151,7 +1164,7 @@ onMounted(async () => {
                 v-else
                 class="h-3 w-3"
               />
-              {{ copiedRequest ? "Copied" : "Copy" }}
+              {{ copiedRequest ? $t('curl.copied') : $t('common.copy') }}
             </Button>
           </template>
         </TraceJsonContent>
@@ -1178,7 +1191,7 @@ onMounted(async () => {
                 v-else
                 class="h-3 w-3"
               />
-              {{ copiedResponse ? "Copied" : "Copy" }}
+              {{ copiedResponse ? $t('curl.copied') : $t('common.copy') }}
             </Button>
           </template>
         </TraceJsonContent>

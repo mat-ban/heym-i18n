@@ -26,7 +26,7 @@ import Input from "@/components/ui/Input.vue";
 import Label from "@/components/ui/Label.vue";
 import SearchableSelect from "@/components/ui/SearchableSelect.vue";
 import Select from "@/components/ui/Select.vue";
-import { credentialsApi } from "@/services/api";
+import { credentialsPortKey, usePort } from "@/ports";
 import { AWS_REGION_OPTIONS } from "@/lib/awsRegions";
 import {
   CREDENTIAL_TYPE_DESCRIPTIONS,
@@ -48,6 +48,8 @@ const emit = defineEmits<{
   close: [];
   saved: [credential: Credential];
 }>();
+
+const credentialsApi = usePort(credentialsPortKey);
 
 const isEditing = computed(() => !!props.credential);
 
@@ -107,6 +109,7 @@ const imapUseSsl = ref(true);
 const smtpServer = ref("");
 const smtpPort = ref("587");
 const smtpEmail = ref("");
+const smtpFrom = ref("");
 const smtpPassword = ref("");
 const redisHost = ref("");
 const redisPort = ref("6379");
@@ -524,6 +527,10 @@ watch(
           props.credential.type === "smtp"
             ? props.credential.public_fields?.smtp_email ?? ""
             : "";
+        smtpFrom.value =
+          props.credential.type === "smtp"
+            ? props.credential.public_fields?.smtp_from ?? ""
+            : "";
         smtpPassword.value = ""; // secret, never pre-filled, same as every other type
         redisHost.value =
           props.credential.type === "redis"
@@ -684,6 +691,7 @@ watch(
         smtpServer.value = "";
         smtpPort.value = "587";
         smtpEmail.value = "";
+        smtpFrom.value = "";
         smtpPassword.value = "";
         redisHost.value = "";
         redisPort.value = "6379";
@@ -1079,6 +1087,7 @@ function buildConfig(): CredentialConfig {
       smtp_port: smtpPort.value,
       smtp_email: smtpEmail.value,
       smtp_password: smtpPassword.value,
+      smtp_from: smtpFrom.value.trim(),
     };
   } else if (type.value === "redis") {
     return {
@@ -1590,6 +1599,9 @@ async function handleSave(): Promise<void> {
       const headerKeyChanged =
         headerKey.value.trim() !==
         (props.credential.public_fields?.header_key ?? props.credential.header_key ?? "");
+      const smtpFromChanged =
+        type.value === "smtp" &&
+        smtpFrom.value.trim() !== (props.credential.public_fields?.smtp_from ?? "");
       // OAuth configs are managed by their callbacks after connection.
       const hasConfigChange =
         type.value !== "google_sheets" &&
@@ -1618,6 +1630,7 @@ async function handleSave(): Promise<void> {
           smtpServer.value.trim() ||
           smtpPort.value.trim() ||
           smtpEmail.value.trim() ||
+          smtpFromChanged ||
           smtpPassword.value.trim() ||
           redisHost.value.trim() ||
           redisPort.value.trim() ||
@@ -2585,7 +2598,20 @@ async function handleSave(): Promise<void> {
             :disabled="saving"
           />
           <p class="text-xs text-muted-foreground">
-            Email address used for authentication and as sender
+            {{ $t('credentials.smtp.usernameHelp') }}
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <Label for="cred-smtp-from">{{ $t('credentials.smtp.from') }}</Label>
+          <Input
+            id="cred-smtp-from"
+            v-model="smtpFrom"
+            :placeholder="$t('credentials.smtp.fromPlaceholder')"
+            :disabled="saving"
+          />
+          <p class="text-xs text-muted-foreground">
+            {{ $t('credentials.smtp.fromHelp') }}
           </p>
         </div>
 

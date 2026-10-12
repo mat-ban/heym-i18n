@@ -1938,13 +1938,13 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                 </div>
                 <div class="flex flex-wrap justify-center gap-2">
                   <button
-                    v-for="t in recentTemplates"
-                    :key="t.id"
+                    v-for="tmpl in recentTemplates"
+                    :key="tmpl.id"
                     class="px-3 py-1.5 text-xs rounded-full border border-border/50 bg-muted/20 hover:bg-muted/50 hover:border-primary/30 text-muted-foreground hover:text-foreground transition-all"
                     type="button"
                     @click="activeTab = 'templates'"
                   >
-                    {{ t.name }}
+                    {{ tmpl.name }}
                   </button>
                   <button
                     class="px-3 py-1.5 text-xs rounded-full border border-border/50 bg-muted/20 hover:bg-muted/50 hover:border-primary/30 text-muted-foreground hover:text-primary transition-all"

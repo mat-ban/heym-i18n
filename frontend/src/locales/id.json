@@ -510,7 +510,11 @@
     "username": "Nama pengguna",
     "value": "Nilai",
     "via": "melalui",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Jalankan",
+    "dropFileOrClick": "Tarik file ke sini atau klik untuk memilih",
+    "removeFile": "Hapus file",
+    "chooseFileFor": "Pilih file untuk {label}"
   },
   "credentials": {
     "accessVia": "Akses melalui",
@@ -657,6 +661,12 @@
       "telegram": {
         "description": "Hubungkan bot Telegram untuk Trigger Webhook masuk dan pesan bot keluar"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nama pengguna yang digunakan server SMTP untuk masuk",
+      "from": "Dari",
+      "fromPlaceholder": "Biarkan kosong untuk mengirim sebagai nama pengguna di atas",
+      "fromHelp": "Pengirim terlihat opsional. Server tetap masuk sebagai nama pengguna di atas, jadi akun tersebut harus diizinkan untuk mengirim sebagai alamat ini (di Gmail: Kirim email sebagai)."
     }
   },
   "curl": {
@@ -828,7 +838,31 @@
     "tidyUpTooltip": "Susun ulang widget ke dalam grid yang rapi secara acak",
     "title": "Judul",
     "untitled": "Tanpa judul",
-    "widgetSettings": "Pengaturan widget"
+    "widgetSettings": "Pengaturan widget",
+    "widgetType": "Tipe widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Pilih workflow",
+    "workflowWidgetHint": "Workflow yang menerima file mendapatkan zona drop, yang memiliki bidang input mendapatkan bidang tersebut, dan yang tanpa input mendapatkan tombol Jalankan. Setiap eksekusi menampilkan hasilnya.",
+    "noWorkflowsYet": "Belum ada workflow.",
+    "clearRecord": "Hapus rekaman",
+    "rowLink": "Tautan baris",
+    "noLink": "Tanpa tautan",
+    "removeRowLink": "Hapus tautan baris",
+    "recordColumn": "Kolom rekaman",
+    "recordColumnPlaceholder": "Kolom yang memuat rekaman, mis. id",
+    "labelColumn": "Kolom label",
+    "labelColumnPlaceholder": "Kolom penamaan (opsional)",
+    "rowLinkHelp": "Mengklik baris akan membuka dasbor tersebut untuk rekaman baris. Widget-nya membaca rekaman sebagai $page.record.",
+    "recordFormats": {
+      "id": "ID: huruf, angka, - _ . (hingga 128)",
+      "number": "Angka",
+      "uuid": "UUID",
+      "email": "Alamat email"
+    },
+    "detailPageRecords": "Rekor halaman detail",
+    "detailPageRecordsHelp": "Nilai ?record= yang diterima dasbor ini saat tautan baris membukanya. Nilai lain ditolak sebelum widget berjalan.",
+    "unreachableDashboard": "Dasbor yang tidak dapat Anda buka",
+    "runWorkflow": "Jalankan Workflow"
   },
   "docs": {
     "askAnything": "Tanyakan apa saja tentang dokumentasi",
@@ -1321,7 +1355,14 @@
     "copiedToClipboard": "{label} disalin ke clipboard",
     "copyJson": "Salin JSON",
     "create": "Buat",
-    "createWorkflowsPrompt": "Buat Workflows untuk menampilkannya sebagai MCP tools"
+    "createWorkflowsPrompt": "Buat Workflows untuk menampilkannya sebagai MCP tools",
+    "geminiTab": "Aplikasi Gemini",
+    "geminiApp": "Aplikasi Gemini",
+    "geminiStep1": "Buka gemini.google.com di komputer dan buka Setelan → Aplikasi Terhubung",
+    "geminiStep2": "Di bawah Aplikasi kustom, klik Tambahkan aplikasi kustom",
+    "geminiStep3": "Tempel URL Server MCP di atas dan biarkan Fitur lanjutan tertutup; Gemini akan mendaftar secara otomatis",
+    "geminiStep4": "Klik Berikutnya dan beri otorisasi dengan kredensial Heym Anda",
+    "geminiInfo": "Gemini menggunakan OAuth untuk mengautentikasi secara aman. Kredensial Heym Anda digunakan untuk mengotorisasi akses dan tidak pernah dibagikan kepada Gemini. Setelah terhubung, Heym juga berfungsi di aplikasi seluler Gemini."
   },
   "nav": {
     "alerts": "Peringatan",
@@ -1666,7 +1707,25 @@
     "configRequired": "Konfigurasi Diperlukan",
     "deleteNode": "Hapus Node",
     "disableNode": "Nonaktifkan Node (D)",
-    "enableNode": "Aktifkan Node (D)"
+    "enableNode": "Aktifkan Node (D)",
+    "chartOutput": {
+      "statusColumnOptional": "Kolom status (opsional)",
+      "statusColumnPlaceholder": "kolom yang ditampilkan sebagai chip berwarna, mis. state",
+      "statusColumnDialogLabel": "Kolom status",
+      "statusColumnHelp": "Kata-kata umum mendapatkan warna secara otomatis: paid, done, dan approved menandakan keberhasilan; overdue dan needs review membutuhkan perhatian; failed dan rejected menandakan kegagalan; pending dan running menandakan menunggu. Tambahkan nuansa untuk nilai lainnya.",
+      "statusTones": "Nuansa status",
+      "statusValuePlaceholder": "nilai, mis. Disputed",
+      "statusValueAriaLabel": "Nilai status",
+      "removeTone": "Hapus nuansa",
+      "addTone": "Tambahkan nuansa",
+      "tones": {
+        "success": "Berhasil",
+        "attention": "Perhatian",
+        "failure": "Gagal",
+        "waiting": "Menunggu",
+        "neutral": "Netral"
+      }
+    }
   },
   "quickDrawer": {
     "allWorkflows": "Semua Workflow",
@@ -1695,7 +1754,9 @@
     "subtitle": "Cari, sematkan, dan jalankan Workflow tanpa meninggalkan halaman.",
     "title": "Quick Drawer",
     "unpin": "Lepas sematan {name}",
-    "workflows": "Workflows"
+    "workflows": "Workflows",
+    "wrapLongLines": "Bungkus baris panjang",
+    "wrap": "Bungkus"
   },
   "portal": {
     "authRequired": "Autentikasi Diperlukan",
@@ -1790,7 +1851,8 @@
       "intro": "Heym Work adalah antarmuka kedua untuk tim bisnis. Pengguna masuk melalui Heym, dan semua pekerjaan berjalan di sini.",
       "keyConfigured": "Kunci terkonfigurasi",
       "lastSeen": "Terakhir terlihat",
-      "license": "Lisensi"
+      "license": "Lisensi",
+      "learnMore": "Pelajari lebih lanjut"
     },
     "languageEn": "Inggris",
     "loadingUsage": "Memuat penggunaan…",

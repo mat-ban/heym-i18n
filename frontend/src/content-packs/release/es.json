@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work para equipos de negocio y zips de habilidades en Chat",
+    "releaseTour": {
+      "label": "Novedades en Heym",
+      "introTitle": "Novedades en esta versión",
+      "introDescription": "Un breve resumen de las novedades desde su última actualización. Dura aproximadamente un minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, la capa de negocio sobre Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** es una segunda interfaz para equipos de negocio. Los usuarios describen una tarea con sus propias palabras, responden unas preguntas y obtienen un Workflow creado y probado por Heym. Trabajan desde páginas diseñadas para ellos, responden revisiones y ven cada ejecución identificada con un nombre, mientras Heym ejecuta cada tarea en segundo plano."
+          },
+          {
+            "type": "prose",
+            "markdown": "Los administradores de Heym lo conectan en **Ajustes, Heym Work**: introduzca la dirección de Heym Work, genere una clave y active la conexión. Los usuarios inician sesión con el Single Sign-On que Heym ya utiliza. Heym Work tiene licencia independiente; consulte heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Los equipos de negocio describen una tarea, responden unas preguntas y obtienen un Workflow probado y ejecutado por Heym.",
+          "useCases": [
+            "Proporcione a los equipos legal, financiero u operativo su propio espacio para automatizar tareas",
+            "Conéctelo desde Ajustes, Heym Work con una dirección y una clave",
+            "Mantenga Single Sign-On, roles y aprobaciones para cada equipo"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Más información en heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Arrastrar un archivo zip de habilidad en Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat acepta archivos **ZIP**. Cuando el archivo comprimido contiene un **SKILL.md** y archivos Python asociados, Chat puede asignar esa habilidad a un Agent. Un archivo zip sin archivo de habilidad permanece en la conversación como contexto."
+          },
+          {
+            "type": "prose",
+            "markdown": "Pida a Chat que modifique una habilidad ya guardada. Actualiza los archivos indicados y deja el resto intacto, incluido el código Python no modificado. Con un Workflow seleccionado, la habilidad se añade allí. De lo contrario, Chat inicia un Workflow con un Agent que lleva la habilidad."
+          }
+        ],
+        "tour": {
+          "description": "Adjunte un zip de habilidad en Chat y Heym lo asigna a un Agent.",
+          "useCases": [
+            "Arrastrar una carpeta de habilidad comprimida con SKILL.md y un archivo Python",
+            "Pedir a Chat que reescriba el texto de la habilidad sin perder el código Python",
+            "Iniciar un nuevo Workflow cuyo Agent disponga de la habilidad"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Reactivar un nodo dentro de un Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "El asistente de IA prueba sus Workflows y configura tablas de datos",
+    "headline": "El asistente de IA configura sus tablas de datos",
     "releaseTour": {
       "label": "Novedades en Heym",
       "introTitle": "Novedades en esta versión",
       "introDescription": "Un breve resumen de las novedades desde su última actualización. Dura aproximadamente un minuto.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "Modo YOLO: el asistente de IA prueba lo que construye",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Active el **Modo YOLO** en el Canvas del **Asistente de IA** y este dejará de detenerse tras aplicar un Workflow. Ejecutará el Workflow como mediante **Run**, leerá el resultado y corregirá el Workflow de forma autónoma hasta cinco veces por mensaje. Cada respuesta enumera los pasos en tiempo real."
-          },
-          {
-            "type": "prose",
-            "markdown": "Antes de la primera ejecución, solicita entradas de prueba con valores sugeridos y los reutiliza. También puede ejecutar otros Workflows cuando necesita sus resultados. Si requiere una decisión o credenciales de acceso, la solicita mediante la tarjeta de pregunta habitual. Ejecuciones reales: el Modo YOLO está desactivado de forma predeterminada y **Stop** finaliza el proceso en cualquier momento."
-          }
-        ],
-        "tour": {
-          "description": "El asistente de IA ejecuta los Workflows creados, verifica el resultado y corrige los errores de forma autónoma hasta que funcionen.",
-          "useCases": [
-            "Describir un Workflow y recibir directamente una versión probada",
-            "Permitir que el asistente detecte y solucione automáticamente nodos defectuosos",
-            "Verificar los valores de retorno de otros Workflows antes de vincularlos"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "El asistente de IA selecciona o crea tablas de datos",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Crear varios Dashboards y compartirlos con el equipo",
-    "releaseTour": {
-      "label": "Novedad en Heym",
-      "introTitle": "Novedades de esta versión",
-      "introDescription": "Un breve resumen de las novedades desde su última actualización. Dura aproximadamente un minuto.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Crear varios Dashboards y compartirlos con el equipo",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "La pestaña **Dashboard** ahora admite cualquier cantidad de Dashboards. Cambie cómodamente mediante el selector situado en la parte superior de la pestaña o cree uno nuevo con **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Comparta Dashboards con personas o equipos a través de la **Configuración**. **Lectura** permite visualizar y actualizar; **Escritura** permite editar los Widgets. Los Widgets utilizan siempre las credenciales del propietario."
-          }
-        ],
-        "tour": {
-          "description": "Gestionar varios Dashboards, alternar entre ellos y compartirlos en modo solo lectura o editable.",
-          "useCases": [
-            "Estructurar Dashboards independientes por equipo, producto o cliente",
-            "Proporcionar a las partes interesadas una vista de solo lectura",
-            "Probar previamente los tipos de gráfico con datos de ejemplo"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

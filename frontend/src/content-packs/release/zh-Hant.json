@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "面向業務團隊的 Heym Work 與 Chat 中的技能 ZIP",
+    "releaseTour": {
+      "label": "Heym 新功能",
+      "introTitle": "本次 Release 的新功能",
+      "introDescription": "簡要介紹自您上次更新以來的新功能。約需一分鐘。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work：建構於 Heym 之上的業務層",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** 是面向業務團隊的第二介面。團隊成員用日常語言描述工作內容，回答幾個問題，即可獲得 Heym 建立並經過測試的 Workflow。他們可以在專屬頁面中操作、處理審核，並檢視標有名稱的每次執行，而 Heym 會在後台執行每項作業。"
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym 管理員可在 **設定，Heym Work** 中建立連線：輸入 Heym Work 位址，產生金鑰並啟用連線。成員可透過 Heym 已配置的 Single Sign-On 登入。Heym Work 需單獨授權；詳情請參閱 heym.run/enterprise。"
+          }
+        ],
+        "tour": {
+          "description": "業務團隊描述工作、回答問題即可獲得經過測試的 Workflow，並由 Heym 負責執行。",
+          "useCases": [
+            "為法務、財務或營運團隊提供專屬的自動化工作空間",
+            "在設定中的 Heym Work 頁面使用位址與金鑰建立連線",
+            "為各團隊保留統一的 Single Sign-On、角色與審批流程"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "前往 heym.run 了解詳情"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "在 Chat 中拖放技能 ZIP 檔案",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat 支援接收 **ZIP** 保存檔。當壓縮包內包含 **SKILL.md** 以及同級的 Python 檔案時，Chat 可將該技能賦予 Agent。不含技能檔案的 ZIP 將作為上下文保留在對話中。"
+          },
+          {
+            "type": "prose",
+            "markdown": "可讓 Chat 修改已儲存的技能。它將更新指定的檔案並保留其餘內容，包括未重寫的 Python 程式碼。若已選定 Workflow，技能將部署至該處；否則 Chat 會啟動包含該技能 Agent 的新 Workflow。"
+          }
+        ],
+        "tour": {
+          "description": "在 Chat 中上傳技能 ZIP，Heym 會將其配置給 Agent。",
+          "useCases": [
+            "上傳包含 SKILL.md 和 Python 檔案的壓縮技能資料夾",
+            "要求 Chat 重寫技能說明文字並保留原有 Python 程式碼",
+            "建立帶有該技能 Agent 的全新 Workflow"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "在 Workflow 內重新啟用節點",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI 助理會測試自己的 Workflow 並建立資料表",
+    "headline": "AI 助手為您設定資料表",
     "releaseTour": {
       "label": "Heym 新功能",
       "introTitle": "本次版本的新功能",
       "introDescription": "快速概覽自上次更新以來的全新功能。大約需要一分鐘。",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO 模式：AI 助理會測試自己建立的內容",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "在 Canvas 的 **AI 助理**中啟用 **YOLO 模式**後，它套用 Workflow 之後不會再停下來。它會像透過 **Run** 一樣執行 Workflow、讀取結果，並在每則訊息中自主修正 Workflow 最多五次。每個回覆都會即時列出各個步驟。"
-          },
-          {
-            "type": "prose",
-            "markdown": "首次執行前，它會詢問測試輸入並附上建議值，之後會重複使用這些值。當它需要其他 Workflow 的結果時，也能執行這些 Workflow。若需要做出決定或提供存取憑證，它會透過熟悉的问题卡片詢問。實際執行：YOLO 模式預設為關閉，**Stop** 可隨時結束流程。"
-          }
-        ],
-        "tour": {
-          "description": "AI 助理會執行建立的 Workflow、檢查結果，並自主修正錯誤直到能正常運作。",
-          "useCases": [
-            "描述一個 Workflow，直接取得已測試過的版本",
-            "讓助理自動找出並修復有問題的節點",
-            "在連結之前先檢查其他 Workflow 的回傳值"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI 助理會選擇或建立資料表",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "建立多個 Dashboard 並與團隊分享",
-    "releaseTour": {
-      "label": "Heym 新功能",
-      "introTitle": "本次發佈的新功能",
-      "introDescription": "簡要介紹自上次更新以來的新功能。大約需要一分鐘。",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "建立多個 Dashboard 並與團隊分享",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "**Dashboard** 分頁現在支援任意數量的 Dashboard。您可以透過分頁上方的選單輕鬆切換，或使用 **+** 建立新的 Dashboard。"
-          },
-          {
-            "type": "prose",
-            "markdown": "透過 **設定** 將 Dashboard 分享給個人或團隊。**讀取** 允許檢視和重新整理；**寫入** 允許編輯 Widget。Widget 一律使用擁有者的存取憑證。"
-          }
-        ],
-        "tour": {
-          "description": "管理多個 Dashboard、在它們之間切換，並以唯讀或可編輯的方式分享。",
-          "useCases": [
-            "依團隊、產品或租戶分別建立獨立的 Dashboard",
-            "為利害關係人提供唯讀檢視",
-            "使用範例資料預先測試圖表類型"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

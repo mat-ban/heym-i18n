@@ -79,7 +79,11 @@
     "apply": "Uveljavi",
     "color": "Barva",
     "unknownError": "Neznana napaka",
-    "custom": "Po meri"
+    "custom": "Po meri",
+    "run": "Zaženi",
+    "dropFileOrClick": "Spustite datoteko sem ali kliknite za izbiro",
+    "removeFile": "Odstrani datoteko",
+    "chooseFileFor": "Izberite datoteko za {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Licenca",
       "unknown": "Neznano",
       "intro": "Heym Work je drugi vmesnik za poslovne ekipe. Uporabniki se prijavijo prek Heym, vse naloge pa se izvajajo tukaj.",
-      "never": "Nikoli"
+      "never": "Nikoli",
+      "learnMore": "Več o tem"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Neshranjene spremembe",
     "runToNode": "Izvedi do {node}",
     "configRequired": "Zahtevana konfiguracija",
-    "fixIssues": "Pred izvajanjem Workflowa odpravite naslednje težave:"
+    "fixIssues": "Pred izvajanjem Workflowa odpravite naslednje težave:",
+    "chartOutput": {
+      "statusColumnOptional": "Stolpec stanja (neobvezno)",
+      "statusColumnPlaceholder": "stolpec, prikazan kot barvne oznake, npr. state",
+      "statusColumnDialogLabel": "Stolpec stanja",
+      "statusColumnHelp": "Pogoste besede samodejno dobijo barvo: paid, done in approved pomenijo uspeh; overdue in needs review zahtevata pozornost; failed in rejected pomenita napako; pending in running pomenita čakanje. Za katero koli drugo vrednost dodajte odtenek.",
+      "statusTones": "Odtenki stanja",
+      "statusValuePlaceholder": "vrednost, npr. Disputed",
+      "statusValueAriaLabel": "Vrednost stanja",
+      "removeTone": "Odstrani odtenek",
+      "addTone": "Dodaj odtenek",
+      "tones": {
+        "success": "Uspeh",
+        "attention": "Pozor",
+        "failure": "Neuspeh",
+        "waiting": "Čakanje",
+        "neutral": "Nevtralno"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorske shrambe",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Pretvorba besedila v govor in govora v besedilo za glasovne funkcije chata"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Uporabniško ime, s katerim se prijavlja strežnik SMTP",
+      "from": "Od",
+      "fromPlaceholder": "Pustite prazno za pošiljanje kot zgornje uporabniško ime",
+      "fromHelp": "Izbirni vidni pošiljatelj. Strežnik se še vedno prijavi kot zgornje uporabniško ime, zato mora ta račun imeti dovoljenje za pošiljanje s tega naslova (v Gmailu: Pošlji pošto kot)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Odpni {name}",
     "historyId": "Zgodovina: {id}",
     "outputLabel": "Izhod: {label}",
-    "closeDrawer": "Zapri predal hitrih workflowov"
+    "closeDrawer": "Zapri predal hitrih workflowov",
+    "wrapLongLines": "Prelomi dolge vrstice",
+    "wrap": "Prelomi"
   },
   "showcase": {
     "guidelines": "Smernice",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP konfiguracija",
-    "addToConfigInstruction": "Dodajte naslednje v konfiguracijo Vašega MCP odjemalca (npr. {path}):"
+    "addToConfigInstruction": "Dodajte naslednje v konfiguracijo Vašega MCP odjemalca (npr. {path}):",
+    "geminiTab": "Aplikacija Gemini",
+    "geminiApp": "Aplikacija Gemini",
+    "geminiStep1": "V računalniku odprite gemini.google.com in pojdite na Nastavitve → Povezane aplikacije",
+    "geminiStep2": "V razdelku Aplikacije po meri kliknite Dodaj aplikacijo po meri",
+    "geminiStep3": "Prilepite zgornji URL strežnika MCP in pustite Napredne funkcije zaprte; Gemini se bo samodejno registriral",
+    "geminiStep4": "Kliknite Naprej in avtorizirajte s svojimi poverilnicami Heym",
+    "geminiInfo": "Gemini uporablja OAuth za varno preverjanje pristnosti. Vaše poverilnice Heym se uporabljajo za odobritev dostopa in se nikoli ne delijo z Geminijem. Po vzpostavitvi povezave Heym deluje tudi v mobilni aplikaciji Gemini."
   },
   "analytics": {
     "dashboardTitle": "Nadzorna plošča za analitiko",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekunde",
       "apply": "Uporabi",
       "nextRefreshIn": "Naslednja osvežitev čez {time}"
-    }
+    },
+    "widgetType": "Vrsta gradnika",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Izberite workflow",
+    "workflowWidgetHint": "Workflow, ki sprejme datoteko, dobi območje za spuščanje, tisti z vnosnimi polji dobi ta polja, tisti brez vnosov pa gumb Zaženi. Vsak zagon prikaže svoj rezultat.",
+    "noWorkflowsYet": "Nimate še nobenega delovnega toka.",
+    "clearRecord": "Počisti zapis",
+    "rowLink": "Povezava vrstice",
+    "noLink": "Brez povezave",
+    "removeRowLink": "Odstrani povezavo vrstice",
+    "recordColumn": "Stolpec zapisa",
+    "recordColumnPlaceholder": "Stolpec, ki vsebuje zapis, npr. id",
+    "labelColumn": "Stolpec oznake",
+    "labelColumnPlaceholder": "Stolpec z imenom (neobvezno)",
+    "rowLinkHelp": "S klikom na vrstico se odpre nadzorna plošča za zapis vrstice. Njeni gradniki preberejo zapis kot $page.record.",
+    "recordFormats": {
+      "id": "ID-ji: črke, števke, - _ . (do 128)",
+      "number": "Števila",
+      "uuid": "UUID-ji",
+      "email": "E-poštni naslovi"
+    },
+    "detailPageRecords": "Zapisi strani s podrobnostmi",
+    "detailPageRecordsHelp": "Vrednosti ?record=, ki jih ta nadzorna plošča sprejme, ko jo odpre povezava vrstice. Vse ostalo je pred zagonom gradnika zavrnjeno.",
+    "unreachableDashboard": "Nadzorna plošča, ki je ne morete odpreti",
+    "runWorkflow": "Zaženi Workflow"
   },
   "drive": {
     "filesCount": "({count} datotek)",

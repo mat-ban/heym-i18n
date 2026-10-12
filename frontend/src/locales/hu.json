@@ -79,7 +79,11 @@
     "apply": "Alkalmazás",
     "color": "Szín",
     "unknownError": "Ismeretlen hiba",
-    "custom": "Egyéni"
+    "custom": "Egyéni",
+    "run": "Futtatás",
+    "dropFileOrClick": "Húzzon ide egy fájlt, vagy kattintson a kiválasztáshoz",
+    "removeFile": "Fájl eltávolítása",
+    "chooseFileFor": "Fájl kiválasztása ehhez: {label}"
   },
   "nav": {
     "workflows": "Workflow-k",
@@ -268,7 +272,8 @@
       "license": "Licenc",
       "unknown": "Ismeretlen",
       "intro": "A Heym Work egy második felület üzleti csapatok számára. A felhasználók a Heymen keresztül jelentkeznek be, és minden feladat itt fut.",
-      "never": "Soha"
+      "never": "Soha",
+      "learnMore": "Tudjon meg többet"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Nem mentett módosítások",
     "runToNode": "Futtatás eddig: {node}",
     "configRequired": "Konfiguráció szükséges",
-    "fixIssues": "Kérjük, javítsa a következő problémákat a Workflow futtatása előtt:"
+    "fixIssues": "Kérjük, javítsa a következő problémákat a Workflow futtatása előtt:",
+    "chartOutput": {
+      "statusColumnOptional": "Állapot oszlop (opcionális)",
+      "statusColumnPlaceholder": "színes címkeként megjelenő oszlop, pl. state",
+      "statusColumnDialogLabel": "Állapot oszlop",
+      "statusColumnHelp": "A gyakori szavak automatikusan színt kapnak: a paid, done és approved a sikert jelzi; az overdue és needs review figyelmet igényel; a failed és rejected hibát jelent; a pending és running a várakozást jelzi. Adjon hozzá árnyalatot bármely más értékhez.",
+      "statusTones": "Állapotárnyalatok",
+      "statusValuePlaceholder": "érték, pl. Disputed",
+      "statusValueAriaLabel": "Állapot értéke",
+      "removeTone": "Árnyalat eltávolítása",
+      "addTone": "Árnyalat hozzáadása",
+      "tones": {
+        "success": "Siker",
+        "attention": "Figyelem",
+        "failure": "Hiba",
+        "waiting": "Várakozás",
+        "neutral": "Semleges"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektortárolók",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-to-speech és speech-to-text a chat hangfunkcióihoz"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Felhasználónév, amellyel az SMTP-kiszolgáló bejelentkezik",
+      "from": "Feladó",
+      "fromPlaceholder": "Hagyja üresen, ha a fenti felhasználónévként kíván küldeni",
+      "fromHelp": "Opcionális látható feladó. A kiszolgáló továbbra is a fenti felhasználónévvel jelentkezik be, így a fióknak jogosultnak kell lennie az erről a címről történő küldésre (a Gmailben: E-mail küldése erről a címről)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "{name} rögzítésének feloldása",
     "historyId": "Előzmények: {id}",
     "outputLabel": "Kimenet: {label}",
-    "closeDrawer": "Gyors Workflow fiók bezárása"
+    "closeDrawer": "Gyors Workflow fiók bezárása",
+    "wrapLongLines": "Hosszú sorok tördelése",
+    "wrap": "Tördelés"
   },
   "showcase": {
     "guidelines": "Irányelvek",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API kulcs",
     "mcpConfiguration": "MCP konfiguráció",
-    "addToConfigInstruction": "Adja hozzá a következőt az MCP kliens konfigurációjához (pl. {path}):"
+    "addToConfigInstruction": "Adja hozzá a következőt az MCP kliens konfigurációjához (pl. {path}):",
+    "geminiTab": "Gemini alkalmazás",
+    "geminiApp": "Gemini alkalmazás",
+    "geminiStep1": "Nyissa meg a gemini.google.com oldalt számítógépen, és lépjen a Beállítások → Csatlakoztatott alkalmazások menüpontra",
+    "geminiStep2": "Az Egyéni alkalmazások alatt kattintson az Egyéni alkalmazás hozzáadása lehetőségre",
+    "geminiStep3": "Illessze be a fenti MCP-kiszolgáló URL-címét, és hagyja bezárva a Speciális funkciók részt; a Gemini automatikusan regisztrál",
+    "geminiStep4": "Kattintson a Tovább gombra, és engedélyezze a Heym-hitelesítő adataival",
+    "geminiInfo": "A Gemini az OAuth protokollt használja a biztonságos hitelesítéshez. Az Ön Heym-hitelesítő adatait a hozzáférés engedélyezésére használja, és soha nem osztja meg a Geminivel. A csatlakozást követően a Heym a Gemini mobilalkalmazásban is működik."
   },
   "analytics": {
     "dashboardTitle": "Elemzési irányítópult",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Másodperc",
       "apply": "Alkalmaz",
       "nextRefreshIn": "Következő frissítés: {time}"
-    }
+    },
+    "widgetType": "Widget típusa",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Workflow kiválasztása",
+    "workflowWidgetHint": "A fájlt fogadó workflow egy ejtési területet kap, a beviteli mezőkkel rendelkező megkapja ezeket a mezőket, a bemenet nélküli pedig egy Futtatás gombot. Minden futtatás megjeleníti az eredményét.",
+    "noWorkflowsYet": "Még nincsenek workflow-k.",
+    "clearRecord": "Rekord törlése",
+    "rowLink": "Sor hivatkozása",
+    "noLink": "Nincs hivatkozás",
+    "removeRowLink": "Sor hivatkozásának eltávolítása",
+    "recordColumn": "Rekord oszlopa",
+    "recordColumnPlaceholder": "A rekordot tartalmazó oszlop, pl. id",
+    "labelColumn": "Címke oszlopa",
+    "labelColumnPlaceholder": "Az elnevezést adó oszlop (opcionális)",
+    "rowLinkHelp": "Egy sorra kattintva megnyílik a sor rekordjához tartozó irányítópult. A widgetjei a rekordot $page.record formában olvassák.",
+    "recordFormats": {
+      "id": "Azonosítók: betűk, számjegyek, - _ . (legfeljebb 128)",
+      "number": "Számok",
+      "uuid": "UUID-k",
+      "email": "E-mail-címek"
+    },
+    "detailPageRecords": "Részletes oldal rekordjai",
+    "detailPageRecordsHelp": "A ?record= értékek, amelyeket ez a vezérlőpult elfogad, amikor egy sorhivatkozás megnyitja. Minden más elutasításra kerül a widget futtatása előtt.",
+    "unreachableDashboard": "Nem megnyitható vezérlőpult",
+    "runWorkflow": "Workflow futtatása"
   },
   "drive": {
     "filesCount": "({count} fájl)",

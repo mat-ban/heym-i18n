@@ -79,7 +79,11 @@
     "apply": "Verkställ",
     "color": "Färg",
     "unknownError": "Okänt fel",
-    "custom": "Anpassad"
+    "custom": "Anpassad",
+    "run": "Kör",
+    "dropFileOrClick": "Släpp en fil här eller klicka för att välja",
+    "removeFile": "Ta bort fil",
+    "chooseFileFor": "Välj en fil för {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Licens",
       "unknown": "Okänd",
       "intro": "Heym Work är ett andra gränssnitt för affärsteam. Användare loggar in via Heym och alla jobb körs här.",
-      "never": "Aldrig"
+      "never": "Aldrig",
+      "learnMore": "Läs mer"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Osparade ändringar",
     "runToNode": "Kör till {node}",
     "configRequired": "Konfiguration krävs",
-    "fixIssues": "Åtgärda följande problem innan Workflowet körs:"
+    "fixIssues": "Åtgärda följande problem innan Workflowet körs:",
+    "chartOutput": {
+      "statusColumnOptional": "Statuskolumn (valfritt)",
+      "statusColumnPlaceholder": "kolumn som visas som färgade brickor, t.ex. state",
+      "statusColumnDialogLabel": "Statuskolumn",
+      "statusColumnHelp": "Vanliga ord får automatiskt en färg: paid, done och approved innebär lyckat; overdue och needs review kräver uppmärksamhet; failed och rejected innebär fel; pending och running innebär väntar. Lägg till en ton för övriga värden.",
+      "statusTones": "Statusnyanser",
+      "statusValuePlaceholder": "värde, t.ex. Disputed",
+      "statusValueAriaLabel": "Statusvärde",
+      "removeTone": "Ta bort nyans",
+      "addTone": "Lägg till nyans",
+      "tones": {
+        "success": "Klart",
+        "attention": "Uppmärksamhet",
+        "failure": "Misslyckades",
+        "waiting": "Väntar",
+        "neutral": "Neutral"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorlager",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-till-tal och tal-till-text för röstfunktioner i chatt"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Användarnamn som SMTP-servern loggar in med",
+      "from": "Från",
+      "fromPlaceholder": "Lämna tomt för att skicka som användarnamnet ovan",
+      "fromHelp": "Valfri synlig avsändare. Servern loggar fortfarande in som användarnamnet ovan, så kontot måste ha behörighet att skicka som denna adress (i Gmail: Skicka e-post som)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Lossa {name}",
     "historyId": "Historik: {id}",
     "outputLabel": "Utdata: {label}",
-    "closeDrawer": "Stäng snabbpanel för Workflows"
+    "closeDrawer": "Stäng snabbpanel för Workflows",
+    "wrapLongLines": "Radbryt långa rader",
+    "wrap": "Radbryt"
   },
   "showcase": {
     "guidelines": "Riktlinjer",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint-URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP-konfiguration",
-    "addToConfigInstruction": "Lägg till följande i MCP-klientkonfigurationen (t.ex. {path}):"
+    "addToConfigInstruction": "Lägg till följande i MCP-klientkonfigurationen (t.ex. {path}):",
+    "geminiTab": "Gemini-app",
+    "geminiApp": "Gemini-app",
+    "geminiStep1": "Öppna gemini.google.com på en dator och gå till Inställningar → Anslutna appar",
+    "geminiStep2": "Under Anpassade appar, klicka på Lägg till en anpassad app",
+    "geminiStep3": "Klistra in MCP-server-URL:en ovan och lämna Avancerade funktioner stängda; Gemini registreras automatiskt",
+    "geminiStep4": "Klicka på Nästa och auktorisera med Heym-inloggningsuppgifter",
+    "geminiInfo": "Gemini använder OAuth för säker autentisering. Heym-uppgifter används för att auktorisera åtkomst och delas aldrig med Gemini. När anslutningen är klar fungerar Heym även i mobilappen Gemini."
   },
   "analytics": {
     "dashboardTitle": "Analyspanel",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekunder",
       "apply": "Använd",
       "nextRefreshIn": "Nästa uppdatering om {time}"
-    }
+    },
+    "widgetType": "Widget-typ",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Välj ett workflow",
+    "workflowWidgetHint": "Ett workflow som tar en fil får en släppyta, ett med inmatningsfält får dessa fält och ett utan indata får en Kör-knapp. Varje körning visar sitt resultat.",
+    "noWorkflowsYet": "Inga tillgängliga workflows ännu.",
+    "clearRecord": "Rensa post",
+    "rowLink": "Radlänk",
+    "noLink": "Ingen länk",
+    "removeRowLink": "Ta bort radlänk",
+    "recordColumn": "Postkolumn",
+    "recordColumnPlaceholder": "Kolumn som innehåller posten, t.ex. id",
+    "labelColumn": "Etikettkolumn",
+    "labelColumnPlaceholder": "Kolumn som namnger den (valfritt)",
+    "rowLinkHelp": "Ett klick på en rad öppnar den instrumentpanelen för radens post. Dess widgets läser posten som $page.record.",
+    "recordFormats": {
+      "id": "ID:n: bokstäver, siffror, - _ . (upp till 128)",
+      "number": "Tal",
+      "uuid": "UUID:n",
+      "email": "E-postadresser"
+    },
+    "detailPageRecords": "Detaljsidans poster",
+    "detailPageRecordsHelp": "De ?record=-värden som instrumentpanelen accepterar när en radlänk öppnar den. Allt annat avvisas innan en widget körs.",
+    "unreachableDashboard": "En instrumentpanel som inte kan öppnas",
+    "runWorkflow": "Kör ett Workflow"
   },
   "drive": {
     "filesCount": "({count} filer)",

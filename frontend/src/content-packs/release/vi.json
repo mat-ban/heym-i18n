@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work cho đội ngũ doanh nghiệp và zip kỹ năng trong Chat",
+    "releaseTour": {
+      "label": "Mới trong Heym",
+      "introTitle": "Có gì mới trong bản phát hành này",
+      "introDescription": "Tổng quan nhanh về những điểm mới kể từ lần cập nhật gần nhất của bạn. Thời gian ước tính: khoảng một phút.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, tầng doanh nghiệp trên nền Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** là giao diện thứ hai dành cho các đội ngũ doanh nghiệp. Người dùng mô tả công việc bằng lời của mình, trả lời một vài câu hỏi và nhận được một Workflow do Heym xây dựng và kiểm thử. Họ làm việc trên các trang được thiết kế riêng, phản hồi đánh giá và theo dõi từng lượt chạy có tên cụ thể, trong khi Heym thực thi công việc ở chế độ nền."
+          },
+          {
+            "type": "prose",
+            "markdown": "Quản trị viên Heym kết nối trong **Cài đặt, Heym Work**: nhập địa chỉ của Heym Work, tạo khóa và kích hoạt kết nối. Đăng nhập qua Single Sign-On mà Heym đang sử dụng. Heym Work được cấp phép riêng; xem heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Đội ngũ doanh nghiệp mô tả công việc, trả lời câu hỏi và nhận Workflow đã kiểm thử do Heym thực thi.",
+          "useCases": [
+            "Cung cấp cho đội ngũ pháp lý, tài chính hoặc vận hành không gian riêng để tự động hóa công việc",
+            "Kết nối từ Cài đặt, Heym Work với địa chỉ và khóa",
+            "Duy trì Single Sign-On, vai trò và phê duyệt cho từng đội ngũ"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Tìm hiểu thêm trên heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Kéo thả zip kỹ năng vào Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat chấp nhận tệp **ZIP**. Khi tệp lưu trữ chứa **SKILL.md** và các tệp Python kèm theo, Chat có thể gán kỹ năng đó cho một Agent. Tệp zip không chứa tệp kỹ năng sẽ được lưu trong cuộc trò chuyện dưới dạng ngữ cảnh."
+          },
+          {
+            "type": "prose",
+            "markdown": "Yêu cầu Chat chỉnh sửa kỹ năng đã lưu. Chat sẽ cập nhật các tệp được chỉ định và giữ nguyên phần còn lại, bao gồm mã Python không cần viết lại. Khi đã chọn một Workflow, kỹ năng sẽ được đưa vào đó. Nếu không, Chat sẽ khởi tạo Workflow với một Agent sở hữu kỹ năng."
+          }
+        ],
+        "tour": {
+          "description": "Đính kèm zip kỹ năng trong Chat và Heym sẽ gán kỹ năng đó cho Agent.",
+          "useCases": [
+            "Kéo thả thư mục kỹ năng nén chứa SKILL.md và tệp Python",
+            "Yêu cầu Chat viết lại nội dung kỹ năng mà không làm mất mã Python",
+            "Bắt đầu một Workflow mới với Agent sở hữu kỹ năng đó"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Kích hoạt lại một nút trong Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "Trợ lý AI tự kiểm thử Workflow và cấu hình DataTable",
+    "headline": "Trợ lý AI thiết lập các bảng dữ liệu của bạn",
     "releaseTour": {
       "label": "Mới trong Heym",
       "introTitle": "Có gì mới trong phiên bản này",
       "introDescription": "Tổng quan nhanh về những điểm mới kể từ lần cập nhật gần nhất của bạn. Thời lượng: khoảng một phút.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "Chế độ YOLO: Trợ lý AI tự kiểm thử những gì mình tạo ra",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Bật **chế độ YOLO** trong **trợ lý AI** của Canvas: trợ lý sẽ không dừng lại sau khi áp dụng một Workflow nữa. Nó thực thi Workflow như khi dùng **Run**, đọc kết quả và tự động sửa Workflow tối đa năm lần cho mỗi tin nhắn. Mỗi phản hồi liệt kê các bước theo thời gian thực."
-          },
-          {
-            "type": "prose",
-            "markdown": "Trước lần thực thi đầu tiên, trợ lý sẽ yêu cầu dữ liệu kiểm thử kèm giá trị gợi ý và tái sử dụng chúng. Trợ lý cũng có thể thực thi các Workflow khác khi cần kết quả của chúng. Nếu cần một quyết định hoặc thông tin đăng nhập, trợ lý sẽ hỏi qua thẻ câu hỏi thông thường. Đây là các lần thực thi thật: chế độ YOLO mặc định bị tắt và **Stop** có thể ngắt quá trình bất cứ lúc nào."
-          }
-        ],
-        "tour": {
-          "description": "Trợ lý AI thực thi các Workflow đã tạo, kiểm tra kết quả và tự động sửa lỗi cho đến khi hoạt động được.",
-          "useCases": [
-            "Mô tả một Workflow và nhận ngay phiên bản đã được kiểm thử",
-            "Để trợ lý tự phát hiện và sửa các nút bị lỗi",
-            "Kiểm tra giá trị trả về của các Workflow khác trước khi kết nối chúng"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "Trợ lý AI chọn hoặc tạo DataTable",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Tạo nhiều dashboard và chia sẻ chúng với nhóm của bạn",
-    "releaseTour": {
-      "label": "Mới trong Heym",
-      "introTitle": "Có gì mới trong phiên bản này",
-      "introDescription": "Tổng quan nhanh về những điểm mới kể từ lần cập nhật trước của bạn. Thời lượng ước tính: khoảng một phút.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Tạo nhiều dashboard và chia sẻ chúng với nhóm của bạn",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Tab **Dashboard** hiện hỗ trợ không giới hạn số lượng dashboard. Bạn có thể dễ dàng chuyển đổi qua lại bằng trình chọn ở đầu tab hoặc tạo dashboard mới bằng nút **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Chia sẻ dashboard với từng cá nhân hoặc nhóm thông qua **Cài đặt**. Chế độ **Chỉ đọc** cho phép xem và làm mới dữ liệu; chế độ **Chỉnh sửa** cho phép thay đổi các widget. Các widget luôn sử dụng thông tin đăng nhập của chủ sở hữu."
-          }
-        ],
-        "tour": {
-          "description": "Quản lý nhiều dashboard, chuyển đổi giữa chúng và chia sẻ ở chế độ chỉ đọc hoặc chỉnh sửa.",
-          "useCases": [
-            "Tổ chức các dashboard riêng biệt theo nhóm, sản phẩm hoặc khách hàng",
-            "Cung cấp chế độ xem chỉ đọc cho các bên liên quan",
-            "Thử nghiệm trước các loại biểu đồ với dữ liệu mẫu"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

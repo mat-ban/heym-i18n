@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work untuk tim bisnis, dan zip keterampilan di Chat",
+    "releaseTour": {
+      "label": "Baru di Heym",
+      "introTitle": "Baru dalam Rilis Ini",
+      "introDescription": "Ringkasan singkat mengenai pembaruan sejak pembaruan terakhir Anda. Hanya memerlukan waktu sekitar satu menit.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, lapisan bisnis di atas Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** adalah antarmuka kedua untuk tim bisnis. Pengguna mendeskripsikan pekerjaan dengan kata-kata mereka sendiri, menjawab beberapa pertanyaan, dan mendapatkan Workflow yang telah dibuat dan diuji oleh Heym. Mereka bekerja dari halaman khusus, menanggapi tinjauan, dan melihat setiap eksekusi dengan nama yang jelas, sementara Heym menjalankan setiap pekerjaan di latar belakang."
+          },
+          {
+            "type": "prose",
+            "markdown": "Admin Heym menghubungkannya di **Pengaturan, Heym Work**: masukkan alamat Heym Work, buat kunci, dan aktifkan koneksi. Pengguna masuk dengan Single Sign-On yang sudah digunakan Heym. Heym Work dilisensikan secara terpisah; lihat heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Tim bisnis mendeskripsikan pekerjaan, menjawab pertanyaan, dan mendapatkan Workflow teruji yang dijalankan oleh Heym.",
+          "useCases": [
+            "Berikan tim hukum, keuangan, atau operasional ruang khusus untuk mengotomatiskan pekerjaan",
+            "Hubungkan dari Pengaturan, Heym Work dengan alamat dan kunci",
+            "Pertahankan Single Sign-On, peran, dan persetujuan untuk setiap tim"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Pelajari lebih lanjut di heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Tarik zip keterampilan ke Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat menerima file **ZIP**. Ketika arsip berisi **SKILL.md** dan file Python terkait, Chat dapat menyematkan keterampilan tersebut pada Agent. File zip tanpa file keterampilan tetap berada dalam percakapan sebagai konteks."
+          },
+          {
+            "type": "prose",
+            "markdown": "Minta Chat untuk mengubah keterampilan yang sudah disimpan. Chat akan memperbarui file yang ditentukan dan membiarkan file lainnya, termasuk kode Python yang tidak ditulis ulang. Saat Workflow dipilih, keterampilan akan diterapkan di sana. Jika tidak, Chat memulai Workflow dengan satu Agent yang membawa keterampilan tersebut."
+          }
+        ],
+        "tour": {
+          "description": "Lampirkan zip keterampilan di Chat dan Heym menyematkannya pada Agent.",
+          "useCases": [
+            "Tarik folder keterampilan terkompresi dengan SKILL.md dan file Python",
+            "Minta Chat menulis ulang teks keterampilan tanpa kehilangan kode Python",
+            "Mulai Workflow baru yang Agent-nya memiliki keterampilan tersebut"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Mengaktifkan Kembali Node di Dalam Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "Asisten AI menguji Workflow-nya dan menyiapkan tabel data",
+    "headline": "Asisten AI mengatur tabel data Anda",
     "releaseTour": {
       "label": "Baru di Heym",
       "introTitle": "Baru dalam rilis ini",
       "introDescription": "Ringkasan singkat tentang pembaruan sejak pembaruan terakhir Anda. Hanya membutuhkan waktu sekitar satu menit.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "Mode YOLO: Asisten AI menguji apa yang ia bangun",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Aktifkan **Mode YOLO** di **Asisten AI** pada Canvas, maka ia tidak lagi berhenti setelah menerapkan sebuah Workflow. Ia menjalankan Workflow seperti melalui **Run**, membaca hasilnya, dan mengoreksi Workflow secara mandiri hingga lima kali per pesan. Setiap respons menampilkan langkah-langkahnya secara langsung."
-          },
-          {
-            "type": "prose",
-            "markdown": "Sebelum menjalankan pertama kali, ia menanyakan input pengujian dengan nilai yang disarankan dan menggunakannya kembali. Ia juga dapat menjalankan Workflow lain jika membutuhkan hasilnya. Jika ia memerlukan keputusan atau kredensial, ia menanyakannya melalui kartu pertanyaan yang biasa. Eksekusi nyata: Mode YOLO dinonaktifkan secara default dan **Stop** menghentikan proses kapan saja."
-          }
-        ],
-        "tour": {
-          "description": "Asisten AI menjalankan Workflow yang dibuat, memeriksa hasilnya, dan mengoreksi kesalahan secara mandiri hingga berfungsi.",
-          "useCases": [
-            "Menjelaskan sebuah Workflow dan langsung mendapatkan versi yang telah teruji",
-            "Membiarkan asisten mendeteksi dan memperbaiki node yang bermasalah secara otomatis",
-            "Memeriksa nilai kembalian Workflow lain sebelum menghubungkannya"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "Asisten AI memilih atau membuat tabel data",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Membuat Beberapa Dashboard dan Membagikannya kepada Tim",
-    "releaseTour": {
-      "label": "Baru di Heym",
-      "introTitle": "Baru dalam rilis ini",
-      "introDescription": "Ringkasan singkat mengenai pembaruan sejak pembaruan terakhir Anda. Memerlukan waktu sekitar satu menit.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Membuat Beberapa Dashboard dan Membagikannya kepada Tim",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Tab **Dashboard** kini mendukung jumlah Dashboard yang tidak terbatas. Beralihlah dengan mudah melalui pemilih di bagian atas tab atau buat Dashboard baru dengan **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Bagikan Dashboard kepada individu atau tim melalui **Pengaturan**. **Baca** memungkinkan untuk menampilkan dan memperbarui; **Tulis** memungkinkan untuk mengedit Widget. Widget selalu menggunakan kredensial milik pemiliknya."
-          }
-        ],
-        "tour": {
-          "description": "Mengelola beberapa Dashboard, beralih di antaranya, dan membagikannya dengan akses hanya-baca atau dapat diedit.",
-          "useCases": [
-            "Menata Dashboard terpisah berdasarkan tim, produk, atau tenant",
-            "Menyediakan tampilan hanya-baca bagi para pemangku kepentingan",
-            "Menguji jenis diagram dengan data contoh terlebih dahulu"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

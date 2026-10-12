@@ -28,12 +28,9 @@ export { ALL_LOCALES, getActiveLocales, getLocaleDefinition, isSupportedLocale, 
 
 const STORAGE_KEY = "heym_locale";
 
-// Lazy-loaded locale loaders via Vite import.meta.glob (guarded for Node/Playwright runtime)
-const globFn = (import.meta as any).glob;
+// Lazy-loaded locale loaders via Vite import.meta.glob
 const localeModules: Record<string, () => Promise<Record<string, unknown>>> =
-  typeof globFn === "function"
-    ? import.meta.glob<Record<string, unknown>>("../locales/*.json")
-    : {};
+  import.meta.glob<Record<string, unknown>>("../locales/*.json");
 const loadedLocales = new Set<string>(["en"]);
 
 export async function loadLocaleMessages(locale: string): Promise<boolean> {
@@ -111,10 +108,18 @@ export const i18n = createI18n({
 export async function initI18n(): Promise<void> {
   const initial = getInitialLocale();
   if (initial !== "en") {
-    await loadLocaleMessages(initial);
+    const ok = await loadLocaleMessages(initial);
+    if (ok) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (i18n.global.locale as any).value = initial;
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (i18n.global.locale as any).value = "en";
+    }
   }
   if (typeof window !== "undefined") {
-    document.documentElement.lang = initial;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    document.documentElement.lang = (i18n.global.locale as any).value || "en";
   }
 }
 

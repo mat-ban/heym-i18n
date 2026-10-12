@@ -2,6 +2,83 @@ import type { ReleaseEntry } from "@/features/release-tour/releaseTour.types";
 
 export const RELEASE_REGISTRY_DE: ReleaseEntry[] = [
   {
+    releaseId: "2026.19",
+    publishedAt: new Date("2026-10-10T18:00:00Z"),
+    headline: "Heym Work für Business-Teams und Skill-ZIPs im Chat",
+    releaseTour: {
+      label: "Neu in Heym",
+      introTitle: "Neu in diesem Release",
+      introDescription:
+        "Ein kurzer Überblick über die Neuerungen seit Ihrem letzten Update. Dauert etwa eine Minute.",
+      tourEnabled: true,
+      sectionOrder: ["heym-work", "skill-zip"],
+    },
+    sections: [
+      {
+        id: "heym-work",
+        title: "Heym Work, die Business-Ebene auf Heym",
+        publishedAt: new Date("2026-10-11T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "**Heym Work** ist eine zweite Oberfläche für Business-Teams. Fachanwender beschreiben eine Aufgabe in eigenen Worten, beantworten einige Fragen und erhalten einen Workflow, den Heym erstellt und getestet hat. Sie arbeiten auf eigens erstellten Seiten, beantworten Freigaben und sehen jeden Lauf namentlich gekennzeichnet, während Heym die Ausführung im Hintergrund übernimmt.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Heym-Administratoren verbinden es unter **Einstellungen, Heym Work**: Adresse von Heym Work eingeben, Schlüssel erzeugen und Verbindung aktivieren. Die Anmeldung erfolgt über dasselbe Single Sign-On, das Heym bereits nutzt. Heym Work wird separat lizenziert; siehe heym.run/enterprise.",
+          },
+        ],
+        tour: {
+          description:
+            "Business-Teams beschreiben eine Aufgabe, beantworten Fragen und erhalten einen getesteten Workflow, ausgeführt von Heym.",
+          useCases: [
+            "Rechts-, Finanz- oder Betriebsteams einen eigenen Bereich für Automatisierungen bereitstellen",
+            "Unter Einstellungen, Heym Work mit Adresse und Schlüssel verbinden",
+            "Single Sign-On, Rollen und Freigaben für jedes Team beibehalten",
+          ],
+          tourVisual: "heym-work",
+          docTarget: {
+            categoryId: "reference",
+            slug: "heym-work",
+            title: "Heym Work",
+          },
+          externalLink: {
+            url: "/enterprise",
+            title: "Mehr erfahren auf heym.run",
+          },
+        },
+      },
+      {
+        id: "skill-zip",
+        title: "Eine Skill-ZIP-Datei im Chat ablegen",
+        publishedAt: new Date("2026-10-10T18:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Der Chat akzeptiert **ZIP-Dateien**. Enthält das Archiv eine **SKILL.md** und begleitende Python-Dateien, kann der Chat diese Fertigkeit einem Agenten zuweisen. Eine ZIP-Datei ohne Skill-Datei verbleibt als Kontext in der Konversation.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Bitten Sie den Chat, einen bereits gespeicherten Skill anzupassen. Er aktualisiert die genannten Dateien und belässt den Rest, einschließlich unverändertem Python-Code. Bei ausgewähltem Workflow wird der Skill dort integriert. Andernfalls startet der Chat einen Workflow mit einem Agenten, der den Skill trägt.",
+          },
+        ],
+        tour: {
+          description: "Fügen Sie eine Skill-ZIP-Datei im Chat an und Heym weist sie einem Agenten zu.",
+          useCases: [
+            "Einen gezippten Skill-Ordner mit SKILL.md und einer Python-Datei ablegen",
+            "Den Chat bitten, den Skill-Text anzupassen, ohne den Python-Code zu verlieren",
+            "Einen neuen Workflow starten, dessen Agent den Skill übernimmt",
+          ],
+          tourVisual: "skill-zip",
+        },
+      },
+    ],
+  },
+  {
     releaseId: "2026.18",
     publishedAt: new Date("2026-10-03T12:00:00Z"),
     headline: "Knoten innerhalb eines Workflows wieder aktivieren",
@@ -93,48 +170,16 @@ export const RELEASE_REGISTRY_DE: ReleaseEntry[] = [
   {
     releaseId: "2026.16",
     publishedAt: new Date("2026-09-27T00:00:00Z"),
-    headline: "Der KI-Assistent testet seine Workflows und richtet Datentabellen ein",
+    headline: "Der KI-Assistent richtet Ihre Datentabellen ein",
     releaseTour: {
       label: "Neu in Heym",
       introTitle: "Neu in diesem Release",
       introDescription:
         "Ein kurzer Überblick über die Neuerungen seit Ihrem letzten Update. Dauert etwa eine Minute.",
       tourEnabled: true,
-      sectionOrder: ["assistant-yolo-mode", "assistant-data-tables"],
+      sectionOrder: ["assistant-data-tables"],
     },
     sections: [
-      {
-        id: "assistant-yolo-mode",
-        title: "YOLO-Modus: Der KI-Assistent testet, was er baut",
-        publishedAt: new Date("2026-09-27T10:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Aktivieren Sie den **YOLO-Modus** im Canvas **KI-Assistenten**, stoppt er nicht mehr nach dem Anwenden eines Workflows. Er führt den Workflow wie über **Run** aus, liest das Ergebnis und korrigiert den Workflow selbstständig bis zu fünfmal pro Nachricht. Jede Antwort listet die Schritte live auf.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Vor dem ersten Lauf fragt er nach Test-Eingaben mit vorgeschlagenen Werten und verwendet diese wieder. Er kann auch andere Workflows ausführen, wenn er deren Ergebnisse benötigt. Benötigt er eine Entscheidung oder Zugangsdaten, fragt er mit der gewohnten Fragekarte nach. Echte Läufe: YOLO-Modus ist standardmäßig aus und **Stop** beendet den Ablauf jederzeit.",
-          },
-        ],
-        tour: {
-          description:
-            "Der KI-Assistent führt erstellte Workflows aus, prüft das Ergebnis und korrigiert Fehler selbstständig bis es funktioniert.",
-          useCases: [
-            "Einen Workflow beschreiben und direkt eine getestete Version erhalten",
-            "Den Assistenten fehlerhafte Knoten automatisch aufspüren und beheben lassen",
-            "Rückgabewerte anderer Workflows vor dem Verknüpfen prüfen",
-          ],
-          tourVisual: "assistant-yolo-mode",
-          docTarget: {
-            categoryId: "reference",
-            slug: "ai-assistant",
-            title: "AI Assistant",
-          },
-        },
-      },
       {
         id: "assistant-data-tables",
         title: "Der KI-Assistent wählt oder erstellt Datentabellen",
@@ -164,53 +209,6 @@ export const RELEASE_REGISTRY_DE: ReleaseEntry[] = [
             categoryId: "reference",
             slug: "ai-assistant",
             title: "AI Assistant",
-          },
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.15",
-    publishedAt: new Date("2026-09-23T00:00:00Z"),
-    headline: "Mehrere Dashboards anlegen und mit dem Team teilen",
-    releaseTour: {
-      label: "Neu in Heym",
-      introTitle: "Neu in diesem Release",
-      introDescription:
-        "Ein kurzer Überblick über die Neuerungen seit Ihrem letzten Update. Dauert etwa eine Minute.",
-      tourEnabled: true,
-      sectionOrder: ["dashboard-sharing"],
-    },
-    sections: [
-      {
-        id: "dashboard-sharing",
-        title: "Mehrere Dashboards anlegen und mit dem Team teilen",
-        publishedAt: new Date("2026-09-24T10:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Der **Dashboard**-Tab unterstützt nun beliebig viele Dashboards. Wechseln Sie bequem über die Auswahl oben im Tab oder erstellen Sie ein neues mit **+**.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Teilen Sie Dashboards mit Personen oder Teams über die **Einstellungen**. **Lesen** erlaubt das Anzeigen und Aktualisieren; **Schreiben** erlaubt das Bearbeiten von Widgets. Widgets nutzen stets die Zugangsdaten des Eigentümers.",
-          },
-        ],
-        tour: {
-          description:
-            "Mehrere Dashboards verwalten, zwischen ihnen wechseln und sie schreibgeschützt oder bearbeitbar teilen.",
-          useCases: [
-            "Separate Dashboards nach Team, Produkt oder Mandant strukturieren",
-            "Stakeholdern eine schreibgeschützte Ansicht bereitstellen",
-            "Diagrammtypen mit Beispieldaten vorab testen",
-          ],
-          tourVisual: "dashboard-sharing",
-          docTarget: {
-            categoryId: "tabs",
-            slug: "dashboard-tab",
-            title: "Dashboard",
           },
         },
       },

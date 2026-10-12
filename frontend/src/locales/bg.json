@@ -79,7 +79,11 @@
     "apply": "Прилагане",
     "color": "Цвят",
     "unknownError": "Неизвестна грешка",
-    "custom": "Персонализирано"
+    "custom": "Персонализирано",
+    "run": "Стартиране",
+    "dropFileOrClick": "Пуснете файл тук или щракнете за избор",
+    "removeFile": "Премахване на файла",
+    "chooseFileFor": "Изберете файл за {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Лиценз",
       "unknown": "Неизвестно",
       "intro": "Heym Work е втори интерфейс за бизнес екипи. Хората влизат чрез Heym и всяка задача се изпълнява тук.",
-      "never": "Никога"
+      "never": "Никога",
+      "learnMore": "Научете повече"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Незапазени промени",
     "runToNode": "Изпълнение до {node}",
     "configRequired": "Изисква се конфигурация",
-    "fixIssues": "Моля, отстранете следните проблеми, преди да стартирате Workflow:"
+    "fixIssues": "Моля, отстранете следните проблеми, преди да стартирате Workflow:",
+    "chartOutput": {
+      "statusColumnOptional": "Колона за статус (по избор)",
+      "statusColumnPlaceholder": "колона, показвана като цветни чипове, напр. state",
+      "statusColumnDialogLabel": "Колона за статус",
+      "statusColumnHelp": "Често срещаните думи автоматично получават цвят: paid, done и approved са успех; overdue и needs review изискват внимание; failed и rejected са неуспех; pending и running са изчакване. Добавете нюанс за всяка друга стойност.",
+      "statusTones": "Нюанси на статуса",
+      "statusValuePlaceholder": "стойност, напр. Disputed",
+      "statusValueAriaLabel": "Стойност на статуса",
+      "removeTone": "Премахване на нюанса",
+      "addTone": "Добавяне на нюанс",
+      "tones": {
+        "success": "Успех",
+        "attention": "Внимание",
+        "failure": "Неуспех",
+        "waiting": "Чакащ",
+        "neutral": "Неутрален"
+      }
+    }
   },
   "vectorStores": {
     "title": "Векторни хранилища",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-to-speech и speech-to-text за гласови функции в Chat"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Потребителско име, с което SMTP сървърът влиза в системата",
+      "from": "От",
+      "fromPlaceholder": "Оставете празно, за да изпращате като горното потребителско име",
+      "fromHelp": "Незадължителен видим подател. Сървърът продължава да влиза с горното потребителско име, така че този акаунт трябва да има разрешение за изпращане от този адрес (в Gmail: Изпращане на поща като)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Откачане на {name}",
     "historyId": "История: {id}",
     "outputLabel": "Резултат: {label}",
-    "closeDrawer": "Затваряне на панела за бързи Workflows"
+    "closeDrawer": "Затваряне на панела за бързи Workflows",
+    "wrapLongLines": "Пренасяне на дълги редове",
+    "wrap": "Пренасяне"
   },
   "showcase": {
     "guidelines": "Насоки",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP конфигурация",
-    "addToConfigInstruction": "Добавете следното към конфигурацията на Вашия MCP клиент (напр. {path}):"
+    "addToConfigInstruction": "Добавете следното към конфигурацията на Вашия MCP клиент (напр. {path}):",
+    "geminiTab": "Приложение Gemini",
+    "geminiApp": "Приложение Gemini",
+    "geminiStep1": "Отворете gemini.google.com на компютър и отидете в Настройки → Свързани приложения",
+    "geminiStep2": "Под Персонализирани приложения щракнете върху Добавяне на персонализирано приложение",
+    "geminiStep3": "Поставете URL адреса на MCP сървъра по-горе и оставете Разширени функции затворени; Gemini ще се регистрира автоматично",
+    "geminiStep4": "Щракнете върху Напред и упълномощете с вашите идентификационни данни за Heym",
+    "geminiInfo": "Gemini използва OAuth за сигурно удостоверяване. Вашите данни за Heym се използват за упълномощаване на достъпа и никога не се споделят с Gemini. След свързване Heym работи и в мобилното приложение Gemini."
   },
   "analytics": {
     "dashboardTitle": "Табло за анализи",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Секунди",
       "apply": "Прилагане",
       "nextRefreshIn": "Следващо опресняване след {time}"
-    }
+    },
+    "widgetType": "Тип уиджет",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Изберете workflow",
+    "workflowWidgetHint": "Workflow, който приема файл, получава зона за пускане, такъв с входни полета получава тези полета, а такъв без входни данни получава бутон Стартиране. Всяко изпълнение показва резултата си.",
+    "noWorkflowsYet": "Все още нямате workflows.",
+    "clearRecord": "Изчистване на записа",
+    "rowLink": "Връзка към ред",
+    "noLink": "Без връзка",
+    "removeRowLink": "Премахване на връзката към реда",
+    "recordColumn": "Колона за запис",
+    "recordColumnPlaceholder": "Колона, съдържаща записа, напр. id",
+    "labelColumn": "Колона за етикет",
+    "labelColumnPlaceholder": "Колона за име (по избор)",
+    "rowLinkHelp": "Щракването върху ред отваря това табло за записа на съответния ред. Неговите уиджети четат записа като $page.record.",
+    "recordFormats": {
+      "id": "Идентификатори: букви, цифри, - _ . (до 128)",
+      "number": "Числа",
+      "uuid": "UUID",
+      "email": "Имейл адреси"
+    },
+    "detailPageRecords": "Записи на страница с детайли",
+    "detailPageRecordsHelp": "Стойностите ?record=, които това табло приема при отваряне от връзка на ред. Всичко друго се отхвърля преди изпълнение на уиджет.",
+    "unreachableDashboard": "Табло, което не можете да отворите",
+    "runWorkflow": "Изпълнение на Workflow"
   },
   "drive": {
     "filesCount": "({count} файла)",

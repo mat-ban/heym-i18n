@@ -510,7 +510,11 @@
     "username": "Nome de usuário",
     "value": "Valor",
     "via": "via",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Executar",
+    "dropFileOrClick": "Arraste um arquivo aqui ou clique para selecionar",
+    "removeFile": "Remover arquivo",
+    "chooseFileFor": "Escolher um arquivo para {label}"
   },
   "credentials": {
     "accessVia": "Acessar via",
@@ -657,6 +661,12 @@
       "telegram": {
         "description": "Conecte um bot do Telegram para Triggers de Webhook de entrada e mensagens de saída do bot"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nome de usuário com o qual o servidor SMTP faz login",
+      "from": "De",
+      "fromPlaceholder": "Deixe em branco para enviar como o nome de usuário acima",
+      "fromHelp": "Remetente visível opcional. O servidor continua fazendo login com o nome de usuário acima, portanto essa conta deve ter permissão para enviar como este endereço (no Gmail: Enviar e-mail como)."
     }
   },
   "curl": {
@@ -828,7 +838,31 @@
     "tidyUpTooltip": "Reorganizar os widgets em uma grade organizada aleatória",
     "title": "Título",
     "untitled": "Sem título",
-    "widgetSettings": "Configurações do widget"
+    "widgetSettings": "Configurações do widget",
+    "widgetType": "Tipo de widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Escolher um workflow",
+    "workflowWidgetHint": "Um workflow que recebe um arquivo ganha uma área de upload, um com campos de entrada recebe esses campos e um sem entradas recebe um botão Executar. Cada execução mostra seu resultado.",
+    "noWorkflowsYet": "Você ainda não tem workflows.",
+    "clearRecord": "Limpar registro",
+    "rowLink": "Link da linha",
+    "noLink": "Sem link",
+    "removeRowLink": "Remover link da linha",
+    "recordColumn": "Coluna de registro",
+    "recordColumnPlaceholder": "Coluna que contém o registro, ex.: id",
+    "labelColumn": "Coluna de rótulo",
+    "labelColumnPlaceholder": "Coluna com o nome (opcional)",
+    "rowLinkHelp": "Clicar em uma linha abre esse painel para o registro da linha. Seus widgets leem o registro como $page.record.",
+    "recordFormats": {
+      "id": "IDs: letras, dígitos, - _ . (até 128)",
+      "number": "Números",
+      "uuid": "UUIDs",
+      "email": "Endereços de e-mail"
+    },
+    "detailPageRecords": "Registros da página de detalhes",
+    "detailPageRecordsHelp": "Os valores ?record= que este painel aceita quando um link de linha o abre. Qualquer outro valor é recusado antes da execução do widget.",
+    "unreachableDashboard": "Um painel que você não pode abrir",
+    "runWorkflow": "Executar um Workflow"
   },
   "docs": {
     "chatWithHeym": "Chat com Heym",
@@ -1321,7 +1355,14 @@
     "noKeyGenerated": "Nenhuma chave de API gerada ainda",
     "noNamedServers": "Nenhum servidor nomeado ainda. Crie um para obter um Endpoint MCP dedicado.",
     "noWorkflowsAvailable": "Nenhum workflow disponível. Crie workflows para atribuí-los aqui.",
-    "noWorkflowsYet": "Nenhum workflow ainda"
+    "noWorkflowsYet": "Nenhum workflow ainda",
+    "geminiTab": "Aplicativo Gemini",
+    "geminiApp": "Aplicativo Gemini",
+    "geminiStep1": "Abra gemini.google.com no computador e acesse Configurações → Apps conectados",
+    "geminiStep2": "Em Apps personalizados, clique em Adicionar um app personalizado",
+    "geminiStep3": "Cole a URL do servidor MCP acima e mantenha Recursos avançados fechados; o Gemini se registrará automaticamente",
+    "geminiStep4": "Clique em Avançar e autorize com suas credenciais Heym",
+    "geminiInfo": "O Gemini usa OAuth para autenticação segura. Suas credenciais Heym são usadas para autorizar o acesso e nunca são compartilhadas com o Gemini. Uma vez conectado, o Heym também funciona no app móvel do Gemini."
   },
   "nav": {
     "alerts": "Alertas",
@@ -1666,7 +1707,25 @@
     "configRequired": "Configuração Necessária",
     "deleteNode": "Excluir nó",
     "disableNode": "Desativar nó (D)",
-    "enableNode": "Ativar nó (D)"
+    "enableNode": "Ativar nó (D)",
+    "chartOutput": {
+      "statusColumnOptional": "Coluna de status (opcional)",
+      "statusColumnPlaceholder": "coluna exibida como etiquetas coloridas, ex.: state",
+      "statusColumnDialogLabel": "Coluna de status",
+      "statusColumnHelp": "Palavras comuns ganham uma cor automaticamente: paid, done e approved indicam sucesso; overdue e needs review exigem atenção; failed e rejected indicam falha; pending e running indicam espera. Adicione um tom para qualquer outro valor.",
+      "statusTones": "Tons de status",
+      "statusValuePlaceholder": "valor, ex.: Disputed",
+      "statusValueAriaLabel": "Valor de status",
+      "removeTone": "Remover tom",
+      "addTone": "Adicionar tom",
+      "tones": {
+        "success": "Sucesso",
+        "attention": "Atenção",
+        "failure": "Falha",
+        "waiting": "Aguardando",
+        "neutral": "Neutro"
+      }
+    }
   },
   "quickDrawer": {
     "allWorkflows": "Todos os workflows",
@@ -1695,7 +1754,9 @@
     "subtitle": "Pesquise, fixe e execute workflows sem sair da página.",
     "title": "Quick Drawer",
     "unpin": "Desafixar {name}",
-    "workflows": "Workflows"
+    "workflows": "Workflows",
+    "wrapLongLines": "Quebrar linhas longas",
+    "wrap": "Quebrar"
   },
   "portal": {
     "authRequired": "Autenticação Necessária",
@@ -1821,7 +1882,8 @@
       "intro": "O Heym Work é uma segunda interface para equipes de negócios. As pessoas fazem login através do Heym, e todos os trabalhos são executados aqui.",
       "keyConfigured": "Chave configurada",
       "lastSeen": "Visto por último",
-      "license": "Licença"
+      "license": "Licença",
+      "learnMore": "Saiba mais"
     },
     "addCredential": "Adicionar credencial",
     "aiDefaults": "Padrões de IA",

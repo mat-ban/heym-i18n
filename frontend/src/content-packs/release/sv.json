@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work för affärsteam och färdighets-zip-filer i Chat",
+    "releaseTour": {
+      "label": "Nytt i Heym",
+      "introTitle": "Nytt i denna release",
+      "introDescription": "En kort översikt över nyheterna sedan senaste uppdateringen. Tar cirka en minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, affärslagret ovanpå Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** är ett andra gränssnitt för affärsteam. Användare beskriver en uppgift med egna ord, svarar på några frågor och får ett Workflow som Heym har byggt och testat. Arbetet sker från anpassade sidor, granskningar hanteras och varje körning visas med ett namn, medan Heym kör uppgifterna i bakgrunden."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym-administratörer ansluter det under **Inställningar, Heym Work**: ange adressen till Heym Work, generera en nyckel och aktivera anslutningen. Inloggning sker via samma Single Sign-On som Heym redan använder. Heym Work licensieras separat; se heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Affärsteam beskriver en uppgift, besvarar några frågor och får ett testat Workflow som körs av Heym.",
+          "useCases": [
+            "Ge ett juridiskt, ekonomiskt eller operativt team en egen plats att automatisera arbete",
+            "Anslut från Inställningar, Heym Work med en adress och en nyckel",
+            "Behåll Single Sign-On, roller och godkännanden för alla team"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Läs mer på heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Släpp en färdighets-zip i Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat tar emot **ZIP-filer**. När arkivet innehåller en **SKILL.md** och eventuella Python-filer kan Chat tilldela färdigheten till en Agent. En zip utan färdighetsfil stannar kvar i konversationen som sammanhang."
+          },
+          {
+            "type": "prose",
+            "markdown": "Be Chat att ändra en sparad färdighet. Den uppdaterar de angivna filerna och lämnar resten orört, inklusive Python-kod som inte skrevs om. Med ett valt Workflow hamnar färdigheten där. Annars startar Chat ett Workflow med en Agent som bär färdigheten."
+          }
+        ],
+        "tour": {
+          "description": "Bifoga en färdighets-zip i Chat så tilldelar Heym den till en Agent.",
+          "useCases": [
+            "Släpp en zippad färdighetsmapp med SKILL.md och en Python-fil",
+            "Be Chat skriva om färdighetstexten utan att förlora Python-koden",
+            "Starta ett nytt Workflow där en Agent bär färdigheten"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Noder i ett Workflow återaktiveras",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI-assistenten testar sina Workflows och skapar datatabeller",
+    "headline": "AI-assistenten konfigurerar datatabeller",
     "releaseTour": {
       "label": "Nytt i Heym",
       "introTitle": "Nytt i denna release",
       "introDescription": "En kort översikt över nyheterna sedan den senaste uppdateringen. Tar cirka en minut.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO-läge: AI-assistenten testar det som byggs",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Aktivera **YOLO-läget** i Canvas **AI-assistenten**; den stoppar inte längre efter att ett Workflow har tillämpats. Den kör Workflowet som via **Run**, läser resultatet och korrigerar Workflowet självständigt upp till fem gånger per meddelande. Varje svar listar stegen live."
-          },
-          {
-            "type": "prose",
-            "markdown": "Före den första körningen frågar den efter testindata med föreslagna värden och återanvänder dessa. Den kan även köra andra Workflows när deras resultat behövs. Om ett beslut eller inloggningsuppgifter krävs, frågar den med det vanliga frågekortet. Riktiga körningar: YOLO-läget är avstängt som standard och **Stop** avslutar flödet när som helst."
-          }
-        ],
-        "tour": {
-          "description": "AI-assistenten kör skapade Workflows, granskar resultatet och korrigerar fel självständigt tills det fungerar.",
-          "useCases": [
-            "Beskriva ett Workflow och direkt få en testad version",
-            "Låta assistenten automatiskt spåra upp och åtgärda felaktiga noder",
-            "Granska returvärden från andra Workflows före sammankoppling"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI-assistenten väljer eller skapar datatabeller",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Flera dashboards skapas och delas med teamet",
-    "releaseTour": {
-      "label": "Nytt i Heym",
-      "introTitle": "Nytt i denna release",
-      "introDescription": "En kort översikt över nyheterna sedan senaste uppdateringen. Tar cirka en minut.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Flera dashboards skapas och delas med teamet",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Fliken **Dashboard** stöder nu valfritt antal dashboards. Växla smidigt via urvalet högst upp i fliken eller skapa en ny med **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Dela dashboards med personer eller team via **Inställningar**. **Läsbehörighet** tillåter visning och uppdatering; **Skrivbehörighet** tillåter redigering av widgets. Widgets använder alltid ägarens autentiseringsuppgifter."
-          }
-        ],
-        "tour": {
-          "description": "Hantera flera dashboards, växla mellan dem och dela dem skrivskyddat eller redigerbart.",
-          "useCases": [
-            "Strukturera separata dashboards efter team, produkt eller klient",
-            "Tillhandahålla en skrivskyddad vy för intressenter",
-            "Testa diagramtyper i förväg med exempeldata"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

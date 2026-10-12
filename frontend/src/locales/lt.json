@@ -79,7 +79,11 @@
     "apply": "Taikyti",
     "color": "Spalva",
     "unknownError": "Nežinoma klaida",
-    "custom": "Pasirinktinis"
+    "custom": "Pasirinktinis",
+    "run": "Vykdyti",
+    "dropFileOrClick": "Nutempkite failą čia arba spustelėkite, kad pasirinktumėte",
+    "removeFile": "Pašalinti failą",
+    "chooseFileFor": "Pasirinkite failą {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Licencija",
       "unknown": "Nežinoma",
       "intro": "Heym Work yra antroji sąsaja verslo komandoms. Žmonės prisijungia per Heym, o visi darbai vykdomi čia.",
-      "never": "Niekada"
+      "never": "Niekada",
+      "learnMore": "Sužinokite daugiau"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Neišsaugoti pakeitimai",
     "runToNode": "Paleisti iki {node}",
     "configRequired": "Reikalinga konfigūracija",
-    "fixIssues": "Prieš paleisdami Workflow, ištaisykite šias problemas:"
+    "fixIssues": "Prieš paleisdami Workflow, ištaisykite šias problemas:",
+    "chartOutput": {
+      "statusColumnOptional": "Būsenos stulpelis (neprivaloma)",
+      "statusColumnPlaceholder": "stulpelis, rodomas kaip spalvotos etiketės, pvz., state",
+      "statusColumnDialogLabel": "Būsenos stulpelis",
+      "statusColumnHelp": "Įprasti žodžiai automatiškai gauna spalvą: paid, done ir approved reiškia sėkmę; overdue ir needs review reikalauja dėmesio; failed ir rejected reiškia nesėkmę; pending ir running reiškia laukimą. Pridėkite atspalvį bet kuriai kitai vertei.",
+      "statusTones": "Būsenos atspalviai",
+      "statusValuePlaceholder": "vertė, pvz., Disputed",
+      "statusValueAriaLabel": "Būsenos vertė",
+      "removeTone": "Pašalinti atspalvį",
+      "addTone": "Pridėti atspalvį",
+      "tones": {
+        "success": "Sėkmė",
+        "attention": "Dėmesio",
+        "failure": "Klaida",
+        "waiting": "Laukiama",
+        "neutral": "Neutralus"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorių saugyklos",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Teksto į kalbą ir kalbos į tekstą konvertavimas Chat balso funkcijoms"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Naudotojo vardas, su kuriuo prisijungia SMTP serveris",
+      "from": "Nuo",
+      "fromPlaceholder": "Palikite tuščią, jei norite siųsti kaip aukščiau nurodytas naudotojo vardas",
+      "fromHelp": "Pasirenkamas matomas siuntėjas. Serveris vis tiek prisijungia kaip aukščiau nurodytas naudotojo vardas, todėl ši paskyra turi turėti leidimą siųsti kaip šis adresas (programoje Gmail: Siųsti laišką kaip)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Atsegti {name}",
     "historyId": "Istorija: {id}",
     "outputLabel": "Rezultatas: {label}",
-    "closeDrawer": "Uždaryti greitųjų workflow skydelį"
+    "closeDrawer": "Uždaryti greitųjų workflow skydelį",
+    "wrapLongLines": "Laužyti ilgas eilutes",
+    "wrap": "Laužyti"
   },
   "showcase": {
     "guidelines": "Gairės",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP konfigūracija",
-    "addToConfigInstruction": "Pridėkite šiuos duomenis į savo MCP kliento konfigūraciją (pvz., {path}):"
+    "addToConfigInstruction": "Pridėkite šiuos duomenis į savo MCP kliento konfigūraciją (pvz., {path}):",
+    "geminiTab": "Programėlė Gemini",
+    "geminiApp": "Programėlė Gemini",
+    "geminiStep1": "Kompiuteryje atidarykite gemini.google.com ir eikite į Nustatymai → Prijungtos programos",
+    "geminiStep2": "Skiltyje Tinkintos programos spustelėkite Pridėti tinkintą programą",
+    "geminiStep3": "Įklijuokite aukščiau nurodytą MCP serverio URL ir palikite Išplėstines funkcijas uždarytas; Gemini užsiregistruos automatiškai",
+    "geminiStep4": "Spustelėkite Pirmyn ir autorizuokite naudodami Heym prisijungimo duomenis",
+    "geminiInfo": "Gemini naudoja OAuth saugiam autentifikavimui. Jūsų Heym prisijungimo duomenys naudojami prieigai autorizuoti ir niekada nebendrinami su Gemini. Prisijungus Heym taip pat veikia Gemini mobiliojoje programėlėje."
   },
   "analytics": {
     "dashboardTitle": "Analitikos suvestinė",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekundės",
       "apply": "Taikyti",
       "nextRefreshIn": "Kitas atnaujinimas po {time}"
-    }
+    },
+    "widgetType": "Valdiklio tipas",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Pasirinkite workflow",
+    "workflowWidgetHint": "Failą priimantis workflow gauna numetimo sritį, su įvesties laukais – šiuos laukus, o be įvesčių – mygtuką Vykdyti. Kiekvienas vykdymas rodo savo rezultatą.",
+    "noWorkflowsYet": "Dar neturite darbo eigų.",
+    "clearRecord": "Išvalyti įrašą",
+    "rowLink": "Eilutės nuoroda",
+    "noLink": "Nėra nuorodos",
+    "removeRowLink": "Pašalinti eilutės nuorodą",
+    "recordColumn": "Įrašo stulpelis",
+    "recordColumnPlaceholder": "Stulpelis, kuriame yra įrašas, pvz., id",
+    "labelColumn": "Etiketės stulpelis",
+    "labelColumnPlaceholder": "Stulpelis, suteikiantis pavadinimą (neprivaloma)",
+    "rowLinkHelp": "Spustelėjus eilutę atidaromas tas prietaisų skydelis eilutės įrašui. Jo valdikliai nuskaito įrašą kaip $page.record.",
+    "recordFormats": {
+      "id": "ID: raidės, skaitmenys, - _ . (iki 128)",
+      "number": "Skaičiai",
+      "uuid": "UUID",
+      "email": "El. pašto adresai"
+    },
+    "detailPageRecords": "Išsamios informacijos puslapio įrašai",
+    "detailPageRecordsHelp": "Reikšmės ?record=, kurias šis valdymo skydelis priima, kai jį atidaro eilutės nuoroda. Viskas kita atmetama prieš paleidžiant valdiklį.",
+    "unreachableDashboard": "Valdymo skydelis, kurio negalite atidaryti",
+    "runWorkflow": "Vykdyti Workflow"
   },
   "drive": {
     "filesCount": "({count} failai)",

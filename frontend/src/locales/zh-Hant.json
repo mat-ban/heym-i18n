@@ -79,7 +79,11 @@
     "apply": "套用",
     "color": "顏色",
     "unknownError": "未知錯誤",
-    "custom": "自訂"
+    "custom": "自訂",
+    "run": "執行",
+    "dropFileOrClick": "將檔案拖放到此處，或點擊選擇",
+    "removeFile": "移除檔案",
+    "chooseFileFor": "為 {label} 選擇檔案"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "授權",
       "unknown": "未知",
       "intro": "Heym Work 是專為業務團隊設計的第二介面。人員透過 Heym 登入，所有作業皆在此執行。",
-      "never": "從未"
+      "never": "從未",
+      "learnMore": "深入了解"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "未儲存的變更",
     "runToNode": "執行至 {node}",
     "configRequired": "需要設定",
-    "fixIssues": "請先修正以下問題再執行 Workflow："
+    "fixIssues": "請先修正以下問題再執行 Workflow：",
+    "chartOutput": {
+      "statusColumnOptional": "狀態欄（選填）",
+      "statusColumnPlaceholder": "顯示為彩色徽章的欄位，例如 state",
+      "statusColumnDialogLabel": "狀態欄",
+      "statusColumnHelp": "常見詞彙會自動獲得對應顏色：paid、done 和 approved 為成功；overdue 和 needs review 為注意；failed 和 rejected 為失敗；pending 和 running 為等待。可為其他任意值新增色調。",
+      "statusTones": "狀態色調",
+      "statusValuePlaceholder": "值，例如 Disputed",
+      "statusValueAriaLabel": "狀態值",
+      "removeTone": "移除色調",
+      "addTone": "新增色調",
+      "tones": {
+        "success": "成功",
+        "attention": "注意",
+        "failure": "失敗",
+        "waiting": "等候中",
+        "neutral": "中性"
+      }
+    }
   },
   "vectorStores": {
     "title": "向量儲存庫",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "文字轉語音及語音轉文字，用於聊天語音功能"
       }
+    },
+    "smtp": {
+      "usernameHelp": "SMTP 伺服器登入所用的使用者名稱",
+      "from": "寄件者",
+      "fromPlaceholder": "留空則使用上方使用者名稱寄送",
+      "fromHelp": "選填的公開寄件者。伺服器仍以上方使用者名稱登入，因此該帳戶必須具有以此地址寄送的權限（在 Gmail 中為「以其他地址寄送郵件」）。"
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "取消釘選 {name}",
     "historyId": "歷史紀錄：{id}",
     "outputLabel": "輸出：{label}",
-    "closeDrawer": "關閉快速 Workflow 抽屜"
+    "closeDrawer": "關閉快速 Workflow 抽屜",
+    "wrapLongLines": "自動換行",
+    "wrap": "換行"
   },
   "showcase": {
     "guidelines": "指南",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP 設定",
-    "addToConfigInstruction": "請將以下內容新增至您的 MCP 用戶端設定（例如：{path}）："
+    "addToConfigInstruction": "請將以下內容新增至您的 MCP 用戶端設定（例如：{path}）：",
+    "geminiTab": "Gemini 應用程式",
+    "geminiApp": "Gemini 應用程式",
+    "geminiStep1": "在電腦上開啟 gemini.google.com 並前往 設定 → 已連結的應用程式",
+    "geminiStep2": "在 自訂應用程式 下，點擊 新增自訂應用程式",
+    "geminiStep3": "貼上上方的 MCP 伺服器 URL 並保持 進階功能 折疊；Gemini 將自動註冊",
+    "geminiStep4": "點擊 下一步 並使用您的 Heym 憑據授權",
+    "geminiInfo": "Gemini 使用 OAuth 進行安全驗證。您的 Heym 憑據僅用於授權存取，絕不會與 Gemini 共用。連線完成後，Heym 亦可在 Gemini 行動應用程式中使用。"
   },
   "analytics": {
     "dashboardTitle": "分析看板",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "秒",
       "apply": "套用",
       "nextRefreshIn": "下次重新整理於 {time}"
-    }
+    },
+    "widgetType": "元件類型",
+    "workflow": "Workflow",
+    "chooseWorkflow": "選擇 Workflow",
+    "workflowWidgetHint": "接收檔案的 Workflow 將獲得檔案置放區，帶有輸入欄位的獲得相應欄位，無輸入的獲得執行按鈕。每次執行均會顯示結果。",
+    "noWorkflowsYet": "尚無 Workflow。",
+    "clearRecord": "清除記錄",
+    "rowLink": "資料列連結",
+    "noLink": "無連結",
+    "removeRowLink": "移除資料列連結",
+    "recordColumn": "記錄欄",
+    "recordColumnPlaceholder": "包含記錄的欄位，例如 id",
+    "labelColumn": "標籤欄",
+    "labelColumnPlaceholder": "為其命名的欄位（選填）",
+    "rowLinkHelp": "點擊某資料列將針對該列的記錄開啟相應的儀表板。其中的元件將該記錄讀取為 $page.record。",
+    "recordFormats": {
+      "id": "ID：字母、數字、- _ .（最多 128 個字元）",
+      "number": "數字",
+      "uuid": "UUID",
+      "email": "電子郵件地址"
+    },
+    "detailPageRecords": "詳細資訊頁面記錄",
+    "detailPageRecordsHelp": "資料列連結開啟此儀表板時接受的 ?record= 參數值。其他任何數值皆會在小工具執行前遭拒絕。",
+    "unreachableDashboard": "無法開啟的儀表板",
+    "runWorkflow": "執行 Workflow"
   },
   "drive": {
     "filesCount": "（{count} 個檔案）",

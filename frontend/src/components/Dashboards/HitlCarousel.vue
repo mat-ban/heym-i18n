@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import axios from "axios";
+import { i18n } from "@/i18n";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-vue-next";
-import { useRouter } from "vue-router";
 
 import type { HitlWidgetItem } from "@/types/dashboard";
 import { setHitlHistoryTargetKey } from "@/components/Dashboards/hitlHistory";
@@ -11,15 +10,25 @@ import HitlReviewActions from "@/components/Dashboards/HitlReviewActions.vue";
 import Button from "@/components/ui/Button.vue";
 import Textarea from "@/components/ui/Textarea.vue";
 import { renderChartMarkdown } from "@/lib/markdown";
-import { hitlApi } from "@/services/api";
+import { responseDetail } from "@/lib/responseDetail";
+import { hitlPortKey, usePort } from "@/ports";
 
 const props = defineProps<{
   seedItems?: HitlWidgetItem[];
   seedTotal?: number;
 }>();
 
-const router = useRouter();
-const { t } = useI18n();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let t: (key: string, values?: any) => string;
+try {
+  const comp = useI18n();
+  t = comp.t;
+} catch {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const g = i18n.global as any;
+  t = g?.t ? g.t.bind(g) : ((key: string) => key);
+}
+const hitl = usePort(hitlPortKey);
 const reportHistoryTarget = inject(setHitlHistoryTargetKey, null);
 const preview = computed(() => props.seedItems !== undefined);
 const items = ref<HitlWidgetItem[]>(props.seedItems ?? []);
@@ -88,10 +97,7 @@ function onPointerUp(event: PointerEvent): void {
 }
 
 function inboxError(error: unknown, fallback: string): string {
-  if (axios.isAxiosError<{ detail?: string }>(error)) {
-    return error.response?.data?.detail || fallback;
-  }
-  return fallback;
+  return responseDetail(error) ?? fallback;
 }
 
 async function loadInbox(): Promise<void> {
@@ -99,7 +105,7 @@ async function loadInbox(): Promise<void> {
   loading.value = true;
   loadError.value = "";
   try {
-    const inbox = await hitlApi.inbox();
+    const inbox = await hitl.inbox();
     items.value = inbox.items;
     pendingTotal.value = inbox.pending_total;
     if (index.value >= items.value.length) index.value = 0;
@@ -131,9 +137,10 @@ function dropCurrent(): void {
 function openRun(): void {
   const item = current.value;
   if (!item?.workflow_id || preview.value) return;
-  const params: { id: string; executionId?: string } = { id: item.workflow_id };
-  if (item.execution_history_id) params.executionId = item.execution_history_id;
-  void router.push({ name: "editor", params });
+  hitl.openRun({
+    workflowId: item.workflow_id,
+    executionId: item.execution_history_id || undefined,
+  });
 }
 function publishHistoryTarget(): void {
   if (!reportHistoryTarget) return;
@@ -156,7 +163,7 @@ async function decide(action: "accept" | "edit" | "refuse"): Promise<void> {
   submitting.value = true;
   actionError.value = "";
   try {
-    await hitlApi.inboxDecide(current.value.id, {
+    await hitl.inboxDecide(current.value.id, {
       action,
       edited_text: action === "edit" ? text : undefined,
     });
@@ -186,7 +193,7 @@ onMounted(() => {
         variant="ghost"
         size="icon"
         class="disabled:!opacity-25"
-        :aria-label="$t('dashboards.hitl.previousReview')"
+        :aria-label="t('dashboards.hitl.previousReview')"
         :disabled="atStart"
         @click="step(-1)"
       >
@@ -199,7 +206,7 @@ onMounted(() => {
         variant="ghost"
         size="icon"
         class="disabled:!opacity-25"
-        :aria-label="$t('dashboards.hitl.nextReview')"
+        :aria-label="t('dashboards.hitl.nextReview')"
         :disabled="atEnd"
         @click="step(1)"
       >
@@ -211,7 +218,7 @@ onMounted(() => {
       v-if="loading"
       class="flex flex-1 items-center justify-center text-sm text-muted-foreground"
     >
-      {{ $t("dashboards.hitl.loadingReviews") }}
+      {{ t("dashboards.hitl.loadingReviews") }}
     </div>
     <div
       v-else-if="loadError"
@@ -223,7 +230,7 @@ onMounted(() => {
         size="sm"
         @click="loadInbox"
       >
-        {{ $t("dashboards.hitl.retry") }}
+        {{ t("dashboards.hitl.retry") }}
       </Button>
     </div>
 
@@ -231,7 +238,7 @@ onMounted(() => {
       v-else-if="!current"
       class="flex flex-1 items-center justify-center text-sm text-muted-foreground"
     >
-      {{ $t("dashboards.hitl.noPendingReviews") }}
+      {{ t("dashboards.hitl.noPendingReviews") }}
     </div>
 
     <div

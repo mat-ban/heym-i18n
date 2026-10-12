@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work pentru echipe de afaceri și arhive zip cu abilități în Chat",
+    "releaseTour": {
+      "label": "Nou în Heym",
+      "introTitle": "Nou în acest release",
+      "introDescription": "O scurtă prezentare generală a noutăților de la ultima dumneavoastră actualizare. Durează aproximativ un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, stratul de afaceri peste Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** este o a doua interfață pentru echipele de afaceri. Utilizatorii descriu o sarcină în propriile cuvinte, răspund la câteva întrebări și obțin un Workflow construit și testat de Heym. Lucrează de pe pagini create pentru ei, gestionează revizuiri și văd fiecare rulare cu un nume asociat, în timp ce Heym rulează fiecare lucrare în fundal."
+          },
+          {
+            "type": "prose",
+            "markdown": "Administratorii Heym îl conectează din **Setări, Heym Work**: introduceți adresa Heym Work, generați o cheie și activați conexiunea. Conectarea se face prin Single Sign-On deja utilizat de Heym. Heym Work este licențiat separat; consultați heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Echipele de afaceri descriu o sarcină, răspund la întrebări și obțin un Workflow testat, rulat de Heym.",
+          "useCases": [
+            "Oferiți echipei juridice, financiare sau operaționale propriul spațiu pentru automatizarea muncii",
+            "Conectați din Setări, Heym Work cu o adresă și o cheie",
+            "Păstrați Single Sign-On, rolurile și aprobările pentru fiecare echipă"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Aflați mai multe pe heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Fixarea unei arhive zip cu abilități în Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat acceptă fișiere **ZIP**. Când arhiva conține un **SKILL.md** și fișiere Python asociate, Chat poate atribui acea abilitate unui Agent. Un fișier zip fără fișier de abilitate rămâne în conversație drept context."
+          },
+          {
+            "type": "prose",
+            "markdown": "Cereți Chat să modifice o abilitate deja salvată. Actualizează fișierele indicate și lasă restul neatins, inclusiv codul Python nerescris. Cu un Workflow selectat, abilitatea ajunge acolo. În caz contrar, Chat pornește un Workflow cu un Agent care deține abilitatea."
+          }
+        ],
+        "tour": {
+          "description": "Atașați o arhivă zip cu abilități în Chat și Heym o atribuie unui Agent.",
+          "useCases": [
+            "Fixați un dosar arhivat cu SKILL.md și un fișier Python",
+            "Cereți Chat să rescrie textul abilității fără a pierde codul Python",
+            "Porniți un Workflow nou al cărui Agent deține abilitatea"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Reactivați un nod în cadrul unui Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "Asistentul AI își testează Workflow-urile și configurează tabele de date",
+    "headline": "Asistentul AI vă configurează tabelele de date",
     "releaseTour": {
       "label": "Nou în Heym",
       "introTitle": "Noutăți în această versiune",
       "introDescription": "O prezentare succintă a noutăților de la ultima actualizare. Durează aproximativ un minut.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "Modul YOLO: Asistentul AI testează ceea ce construiește",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Dacă activați **modul YOLO** în **Asistentul AI** din Canvas, acesta nu se mai oprește după aplicarea unui Workflow. Execută Workflow-ul ca prin **Run**, citește rezultatul și corectează Workflow-ul în mod autonom de până la cinci ori per mesaj. Fiecare răspuns listează pașii în timp real."
-          },
-          {
-            "type": "prose",
-            "markdown": "Înainte de prima execuție, solicită date de test cu valori propuse și le reutilizează. De asemenea, poate executa alte Workflow-uri atunci când are nevoie de rezultatele acestora. Dacă necesită o decizie sau date de acces, solicită acestea prin cardul de întrebare obișnuit. Execuții reale: modul YOLO este dezactivat implicit, iar **Stop** încheie procesul în orice moment."
-          }
-        ],
-        "tour": {
-          "description": "Asistentul AI execută Workflow-urile create, verifică rezultatul și corectează erorile în mod autonom până când acesta funcționează.",
-          "useCases": [
-            "Descrieți un Workflow și primiți direct o versiune testată",
-            "Lăsați asistentul să identifice și să remedieze automat nodurile defectuoase",
-            "Verificați valorile returnate ale altor Workflow-uri înainte de a le interconecta"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "Asistentul AI selectează sau creează tabele de date",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Crearea mai multor dashboarduri și partajarea acestora cu echipa",
-    "releaseTour": {
-      "label": "Nou în Heym",
-      "introTitle": "Nou în această versiune",
-      "introDescription": "O scurtă prezentare generală a noutăților de la ultima actualizare. Durează aproximativ un minut.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Crearea mai multor dashboarduri și partajarea acestora cu echipa",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Fila **Dashboard** acceptă acum orice număr de dashboarduri. Comutați convenabil prin selectorul din partea de sus a filei sau creați unul nou cu **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Partajați dashboarduri cu persoane sau echipe prin **Setări**. **Citirea** permite afișarea și actualizarea; **Scrierea** permite editarea widgeturilor. Widgeturile utilizează întotdeauna credențialele proprietarului."
-          }
-        ],
-        "tour": {
-          "description": "Gestionați mai multe dashboarduri, comutați între ele și partajați-le cu drepturi de citire sau de editare.",
-          "useCases": [
-            "Structurarea dashboardurilor separate pe echipă, produs sau mandant",
-            "Furnizarea unei vizualizări cu drepturi de citire pentru părțile interesate",
-            "Testarea prealabilă a tipurilor de diagrame cu date exemplu"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

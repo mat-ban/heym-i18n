@@ -15,6 +15,9 @@ import {
   rotateWorkIntegrationKey,
   saveWorkIntegrationConfig,
 } from "@/services/workIntegration";
+import { heymWebUrl } from "@/lib/heymWeb";
+
+const enterpriseUrl = heymWebUrl("/enterprise");
 
 const { t } = useI18n();
 
@@ -106,6 +109,12 @@ onMounted(load);
   <div class="space-y-5">
     <p class="text-sm text-muted-foreground">
       {{ $t('settings.workSection.intro') }}
+      <a
+        :href="enterpriseUrl"
+        target="_blank"
+        rel="noopener"
+        class="font-medium text-primary hover:underline dark:text-brand-primary-soft"
+      >{{ $t('settings.workSection.learnMore') }}</a>
     </p>
 
     <p

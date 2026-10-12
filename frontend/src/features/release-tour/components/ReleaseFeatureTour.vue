@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch, type CSSProperties } from "vue";
 import { useWindowSize } from "@vueuse/core";
-import { ArrowLeft, ArrowRight, BookOpen, X } from "lucide-vue-next";
+import { ArrowLeft, ArrowRight, BookOpen, ExternalLink, X } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
 import { getDocPath } from "@/docs/manifest";
 import { resolveTourVisual } from "@/features/release-tour/tourVisuals";
+import { heymWebUrl } from "@/lib/heymWeb";
 import type { ReleaseTour } from "@/features/release-tour/releaseTour.types";
 import { onDismissOverlays, pushOverlayState } from "@/composables/useOverlayBackHandler";
 import { getIntlLocale } from "@/i18n/format";
@@ -286,6 +287,16 @@ onUnmounted(() => {
             <BookOpen class="h-3 w-3" />
             {{ currentSlide.docTarget.title ?? $t('releaseTour.readTheDocs') }}
           </button>
+          <a
+            v-if="currentSlide.externalLink"
+            :href="heymWebUrl(currentSlide.externalLink.url)"
+            target="_blank"
+            rel="noopener"
+            class="mt-2.5 inline-flex items-center gap-1.5 rounded-md text-[11px] font-medium text-primary transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-brand-primary-soft"
+          >
+            <ExternalLink class="h-3 w-3" />
+            {{ currentSlide.externalLink.title }}
+          </a>
 
           <div class="mt-4 flex items-center gap-2">
             <button

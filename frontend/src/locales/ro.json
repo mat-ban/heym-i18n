@@ -79,7 +79,11 @@
     "apply": "Aplicați",
     "color": "Culoare",
     "unknownError": "Eroare necunoscută",
-    "custom": "Personalizat"
+    "custom": "Personalizat",
+    "run": "Execută",
+    "dropFileOrClick": "Plasați un fișier aici sau faceți clic pentru a alege",
+    "removeFile": "Elimină fișierul",
+    "chooseFileFor": "Alegeți un fișier pentru {label}"
   },
   "nav": {
     "workflows": "Workflow-uri",
@@ -268,7 +272,8 @@
       "license": "Licență",
       "unknown": "Necunoscut",
       "intro": "Heym Work este o a doua interfață pentru echipele de business. Persoanele se autentifică prin Heym, iar fiecare job rulează aici.",
-      "never": "Niciodată"
+      "never": "Niciodată",
+      "learnMore": "Aflați mai multe"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Modificări nesalvate",
     "runToNode": "Executare până la {node}",
     "configRequired": "Configurare necesară",
-    "fixIssues": "Vă rugăm să remediați următoarele probleme înainte de a executa Workflow-ul:"
+    "fixIssues": "Vă rugăm să remediați următoarele probleme înainte de a executa Workflow-ul:",
+    "chartOutput": {
+      "statusColumnOptional": "Coloană de stare (opțional)",
+      "statusColumnPlaceholder": "coloană afișată sub formă de etichete colorate, de ex. state",
+      "statusColumnDialogLabel": "Coloană de stare",
+      "statusColumnHelp": "Cuvintele comune primesc o culoare automat: paid, done și approved indică succes; overdue și needs review necesită atenție; failed și rejected reprezintă eșec; pending și running indică așteptare. Adăugați o nuanță pentru orice altă valoare.",
+      "statusTones": "Nuanțe de stare",
+      "statusValuePlaceholder": "valoare, de ex. Disputed",
+      "statusValueAriaLabel": "Valoare de stare",
+      "removeTone": "Elimină nuanța",
+      "addTone": "Adaugă nuanță",
+      "tones": {
+        "success": "Succes",
+        "attention": "Atenție",
+        "failure": "Eșec",
+        "waiting": "În așteptare",
+        "neutral": "Neutru"
+      }
+    }
   },
   "vectorStores": {
     "title": "Depozite vectoriale",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-to-speech și speech-to-text pentru funcțiile vocale din chat"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Numele de utilizator cu care se autentifică serverul SMTP",
+      "from": "De la",
+      "fromPlaceholder": "Lăsați necompletat pentru a trimite ca numele de utilizator de mai sus",
+      "fromHelp": "Expeditor vizibil opțional. Serverul se autentifică în continuare cu numele de utilizator de mai sus, astfel încât contul respectiv trebuie să aibă permisiunea de a trimite de pe această adresă (în Gmail: Trimiteți e-mail ca)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Anulați fixarea {name}",
     "historyId": "Istoric: {id}",
     "outputLabel": "Ieșire: {label}",
-    "closeDrawer": "Închideți drawer-ul de Workflow-uri rapide"
+    "closeDrawer": "Închideți drawer-ul de Workflow-uri rapide",
+    "wrapLongLines": "Încadrează liniile lungi",
+    "wrap": "Încadrează"
   },
   "showcase": {
     "guidelines": "Ghiduri",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "URL Endpoint",
     "apiKey": "Cheie API",
     "mcpConfiguration": "Configurare MCP",
-    "addToConfigInstruction": "Adăugați următoarele în configurația clientului MCP (de exemplu, {path}):"
+    "addToConfigInstruction": "Adăugați următoarele în configurația clientului MCP (de exemplu, {path}):",
+    "geminiTab": "Aplicația Gemini",
+    "geminiApp": "Aplicația Gemini",
+    "geminiStep1": "Deschideți gemini.google.com pe un computer și accesați Setări → Aplicații conectate",
+    "geminiStep2": "Sub Aplicații personalizate, faceți clic pe Adăugați o aplicație personalizată",
+    "geminiStep3": "Lipiți adresa URL a serverului MCP de mai sus și lăsați Funcțiile avansate închise; Gemini se va înregistra automat",
+    "geminiStep4": "Faceți clic pe Înainte și autorizați cu datele dvs. de conectare Heym",
+    "geminiInfo": "Gemini utilizează OAuth pentru autentificare securizată. Datele dvs. Heym sunt utilizate pentru a autoriza accesul și nu sunt partajate niciodată cu Gemini. Odată conectat, Heym funcționează și în aplicația mobilă Gemini."
   },
   "analytics": {
     "dashboardTitle": "Tablou de bord analize",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Secunde",
       "apply": "Aplicați",
       "nextRefreshIn": "Următoarea reîmprospătare în {time}"
-    }
+    },
+    "widgetType": "Tip de widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Alegeți un workflow",
+    "workflowWidgetHint": "Un workflow care acceptă un fișier primește o zonă de plasare, unul cu câmpuri de intrare primește acele câmpuri, iar unul fără intrări primește un buton Execută. Fiecare rulare își afișează rezultatul.",
+    "noWorkflowsYet": "Nu aveți încă niciun workflow.",
+    "clearRecord": "Șterge înregistrarea",
+    "rowLink": "Link rând",
+    "noLink": "Niciun link",
+    "removeRowLink": "Elimină linkul rândului",
+    "recordColumn": "Coloană înregistrare",
+    "recordColumnPlaceholder": "Coloana care conține înregistrarea, de ex. id",
+    "labelColumn": "Coloană etichetă",
+    "labelColumnPlaceholder": "Coloana care o denumește (opțional)",
+    "rowLinkHelp": "Făcând clic pe un rând se deschide tabloul de bord respectiv pentru înregistrarea rândului. Widgeturile sale citesc înregistrarea ca $page.record.",
+    "recordFormats": {
+      "id": "ID-uri: litere, cifre, - _ . (până la 128)",
+      "number": "Numere",
+      "uuid": "UUID-uri",
+      "email": "Adrese de e-mail"
+    },
+    "detailPageRecords": "Înregistrări ale paginii de detalii",
+    "detailPageRecordsHelp": "Valorile ?record= pe care acest tablou de bord le acceptă când este deschis printr-un link de rând. Orice altceva este refuzat înainte de rularea widgetului.",
+    "unreachableDashboard": "Un tablou de bord pe care nu îl puteți deschide",
+    "runWorkflow": "Rulare Workflow"
   },
   "drive": {
     "filesCount": "({count} fișiere)",

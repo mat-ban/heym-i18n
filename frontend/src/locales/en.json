@@ -79,7 +79,11 @@
     "apply": "Apply",
     "color": "Color",
     "unknownError": "Unknown error",
-    "custom": "Custom"
+    "custom": "Custom",
+    "run": "Run",
+    "dropFileOrClick": "Drop a file here or click to choose one",
+    "removeFile": "Remove file",
+    "chooseFileFor": "Choose a file for {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "License",
       "unknown": "Unknown",
       "intro": "Heym Work is a second interface for business teams. People sign in through Heym, and every job runs here.",
-      "never": "Never"
+      "never": "Never",
+      "learnMore": "Learn more"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Unsaved changes",
     "runToNode": "Run to {node}",
     "configRequired": "Configuration Required",
-    "fixIssues": "Please fix the following issues before running the workflow:"
+    "fixIssues": "Please fix the following issues before running the workflow:",
+    "chartOutput": {
+      "statusColumnOptional": "Status column (optional)",
+      "statusColumnPlaceholder": "column shown as colored chips, e.g. state",
+      "statusColumnDialogLabel": "Status column",
+      "statusColumnHelp": "Common words get a color on their own: paid, done and approved are success; overdue and needs review are attention; failed and rejected are failure; pending and running are waiting. Add a tone for any other value.",
+      "statusTones": "Status tones",
+      "statusValuePlaceholder": "value, e.g. Disputed",
+      "statusValueAriaLabel": "Status value",
+      "removeTone": "Remove tone",
+      "addTone": "Add tone",
+      "tones": {
+        "success": "Success",
+        "attention": "Attention",
+        "failure": "Failure",
+        "waiting": "Waiting",
+        "neutral": "Neutral"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vector Stores",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-to-speech and speech-to-text for chat voice features"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Username the SMTP server signs in with",
+      "from": "From",
+      "fromPlaceholder": "Leave blank to send as the username above",
+      "fromHelp": "Optional visible sender. The server still signs in as the username above, so that account has to be allowed to send as this address (in Gmail, Send mail as)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Unpin {name}",
     "historyId": "History: {id}",
     "outputLabel": "Output: {label}",
-    "closeDrawer": "Close quick workflows drawer"
+    "closeDrawer": "Close quick workflows drawer",
+    "wrapLongLines": "Wrap long lines",
+    "wrap": "Wrap"
   },
   "showcase": {
     "guidelines": "Guidelines",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP Configuration",
-    "addToConfigInstruction": "Add the following to your MCP client configuration (e.g., {path}):"
+    "addToConfigInstruction": "Add the following to your MCP client configuration (e.g., {path}):",
+    "geminiTab": "Gemini App",
+    "geminiApp": "Gemini App",
+    "geminiStep1": "Open gemini.google.com on a computer and go to Settings → Connected Apps",
+    "geminiStep2": "Under Custom apps, click Add a custom app",
+    "geminiStep3": "Paste the MCP Server URL above and leave Advanced features closed; Gemini will register automatically",
+    "geminiStep4": "Click Next and authorize with your Heym credentials",
+    "geminiInfo": "Gemini uses OAuth to securely authenticate. Your Heym credentials are used to authorize access and are never shared with Gemini. Once connected, Heym also works in the Gemini mobile app."
   },
   "analytics": {
     "dashboardTitle": "Analytics Dashboard",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Seconds",
       "apply": "Apply",
       "nextRefreshIn": "Next refresh in {time}"
-    }
+    },
+    "widgetType": "Widget type",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Choose a workflow",
+    "workflowWidgetHint": "A workflow that takes a file gets a drop zone, one with input fields gets those fields, and one without inputs gets a Run button. Each run shows its result.",
+    "noWorkflowsYet": "You have no workflows yet.",
+    "clearRecord": "Clear record",
+    "rowLink": "Row link",
+    "noLink": "No link",
+    "removeRowLink": "Remove row link",
+    "recordColumn": "Record column",
+    "recordColumnPlaceholder": "Column that holds the record, e.g. id",
+    "labelColumn": "Label column",
+    "labelColumnPlaceholder": "Column that names it (optional)",
+    "rowLinkHelp": "Clicking a row opens that dashboard for the row's record. Its widgets read the record as $page.record.",
+    "recordFormats": {
+      "id": "IDs: letters, digits, - _ . (up to 128)",
+      "number": "Numbers",
+      "uuid": "UUIDs",
+      "email": "Email addresses"
+    },
+    "detailPageRecords": "Detail page records",
+    "detailPageRecordsHelp": "The ?record= values this dashboard accepts when a row link opens it. Anything else is refused before a widget runs.",
+    "unreachableDashboard": "A dashboard you cannot open",
+    "runWorkflow": "Run a workflow"
   },
   "drive": {
     "filesCount": "({count} files)",

@@ -17,6 +17,83 @@ import type { ReleaseEntry } from "@/features/release-tour/releaseTour.types";
  */
 export const RELEASE_REGISTRY: ReleaseEntry[] = [
   {
+    releaseId: "2026.19",
+    publishedAt: new Date("2026-10-10T18:00:00Z"),
+    headline: "Heym Work for business teams, and skill zips in Chat",
+    releaseTour: {
+      label: "New in Heym",
+      introTitle: "New in this release",
+      introDescription:
+        "A quick look at what changed since your last update. Takes about a minute.",
+      tourEnabled: true,
+      sectionOrder: ["heym-work", "skill-zip"],
+    },
+    sections: [
+      {
+        id: "heym-work",
+        title: "Heym Work, the business layer on top of Heym",
+        publishedAt: new Date("2026-10-11T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "**Heym Work** is a second interface for business teams. People describe a job in their own words, answer a few questions, and get a workflow that Heym has built and tested. They work from pages built for them, answer reviews, and see every run with a name on it, while Heym runs each job in the background.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Heym admins connect it in **Settings, Heym Work**: enter Heym Work's address, generate a key, and enable the connection. People sign in with the single sign-on Heym already uses. Heym Work is licensed separately; see heym.run/enterprise.",
+          },
+        ],
+        tour: {
+          description:
+            "Business teams describe a job, answer a few questions and get a tested workflow, with Heym running it.",
+          useCases: [
+            "Give a legal, finance or operations team its own place to automate work",
+            "Connect it from Settings, Heym Work with an address and a key",
+            "Keep single sign-on, roles and approvals for every team",
+          ],
+          tourVisual: "heym-work",
+          docTarget: {
+            categoryId: "reference",
+            slug: "heym-work",
+            title: "Heym Work",
+          },
+          externalLink: {
+            url: "/enterprise",
+            title: "Learn more on heym.run",
+          },
+        },
+      },
+      {
+        id: "skill-zip",
+        title: "Drop a skill zip in Chat",
+        publishedAt: new Date("2026-10-10T18:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Chat accepts a **zip**. When the archive contains a **SKILL.md**, and any Python files beside it, Chat can put that skill on an agent. A zip without a skill file stays in the conversation as context.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Ask Chat to change a skill it already saved. It updates the named files and leaves the rest, including Python it did not rewrite, where it is. With a workflow selected, the skill lands there. Otherwise Chat starts a workflow with one agent that carries the skill.",
+          },
+        ],
+        tour: {
+          description: "Attach a skill zip in Chat and Heym puts it on an agent.",
+          useCases: [
+            "Drop a skill folder zipped with SKILL.md and a Python file",
+            "Ask Chat to rewrite the skill text without losing the Python",
+            "Start a new workflow whose agent carries the skill",
+          ],
+          tourVisual: "skill-zip",
+        },
+      },
+    ],
+  },
+  {
     releaseId: "2026.18",
     publishedAt: new Date("2026-10-03T12:00:00Z"),
     headline: "Switch a node back on from inside a workflow",
@@ -108,48 +185,16 @@ export const RELEASE_REGISTRY: ReleaseEntry[] = [
   {
     releaseId: "2026.16",
     publishedAt: new Date("2026-09-27T00:00:00Z"),
-    headline: "The AI Assistant tests what it builds and sets up your data tables",
+    headline: "The AI Assistant sets up your data tables",
     releaseTour: {
       label: "New in Heym",
       introTitle: "New in this release",
       introDescription:
         "A quick look at what changed since your last update. Takes about a minute.",
       tourEnabled: true,
-      sectionOrder: ["assistant-yolo-mode", "assistant-data-tables"],
+      sectionOrder: ["assistant-data-tables"],
     },
     sections: [
-      {
-        id: "assistant-yolo-mode",
-        title: "YOLO mode: the AI Assistant tests what it builds",
-        publishedAt: new Date("2026-09-27T10:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Check **YOLO mode** in the canvas **AI Assistant** and it no longer stops after applying a workflow. It runs the workflow on the canvas like **Run**, reads the result, and fixes the workflow until the run does what you asked, for up to five runs per message. Each reply lists its steps as they happen. You see the changes being applied, each attempt with the node it is executing, and a final **Verified** with a short summary.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Before the first run it asks for test inputs, filled with values it suggests, and reuses them until the input fields change. It can also run your other workflows when it needs their result. When it needs a decision or a credential, it asks with the usual question card. Runs are real, so YOLO mode is off by default and **Stop** ends the loop at any time. Every message in the assistant also has a copy icon now, and you can drag the line above the message box to make it taller.",
-          },
-        ],
-        tour: {
-          description:
-            "The AI Assistant runs the workflow it builds, reads the result and fixes it until it works.",
-          useCases: [
-            "Describe a workflow and get one that has already run successfully",
-            "Let the assistant chase down a failing node without pasting errors back",
-            "Check what another workflow returns before wiring it into an Execute node",
-          ],
-          tourVisual: "assistant-yolo-mode",
-          docTarget: {
-            categoryId: "reference",
-            slug: "ai-assistant",
-            title: "AI Assistant",
-          },
-        },
-      },
       {
         id: "assistant-data-tables",
         title: "The AI Assistant picks or creates your data tables",
@@ -179,58 +224,6 @@ export const RELEASE_REGISTRY: ReleaseEntry[] = [
             categoryId: "reference",
             slug: "ai-assistant",
             title: "AI Assistant",
-          },
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.15",
-    publishedAt: new Date("2026-09-23T00:00:00Z"),
-    headline: "Keep several dashboards and share them with your team",
-    releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
-      tourEnabled: true,
-      sectionOrder: ["dashboard-sharing"],
-    },
-    sections: [
-      {
-        id: "dashboard-sharing",
-        title: "Keep several dashboards and share them with your team",
-        publishedAt: new Date("2026-09-24T10:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "The **Dashboard** tab now holds as many dashboards as you need. Switch between them from the selector at the top of the tab, or create one with **+**. The tab reopens the dashboard you used last, and the address bar links to the exact dashboard on screen.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Share a dashboard with people or teams from its **settings**. **Read** lets them view and refresh the charts. **Write** also lets them add, change and delete widgets and open a widget's workflow. Widgets always run with the owner's credentials, so teammates see the same data without needing access to the accounts behind it.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "**Add widget** now draws an example of the chart type you pick, with sample data, so you can see how a proportion or bar gauge chart will look before you build it.",
-          },
-        ],
-        tour: {
-          description:
-            "Keep several dashboards, switch between them, and share each one read-only or editable.",
-          useCases: [
-            "Keep a separate dashboard per team, product or customer",
-            "Give stakeholders a read-only view that runs with your credentials",
-            "Preview how a chart type looks before adding the widget",
-          ],
-          tourVisual: "dashboard-sharing",
-          docTarget: {
-            categoryId: "tabs",
-            slug: "dashboard-tab",
-            title: "Dashboard",
           },
         },
       },

@@ -1,6 +1,6 @@
 {
   "name": "heym-frontend",
-  "version": "0.0.128",
+  "version": "0.0.129",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE AND COMMONS-CLAUSE.md",
   "scripts": {
@@ -17,6 +17,7 @@
     "i18n:check": "node ./scripts/check-i18n.ts",
     "i18n:coverage": "node ./scripts/i18n/coverage.ts",
     "i18n:drift": "node ./scripts/i18n/drift.ts",
+    "i18n:scan": "node ./scripts/i18n/scan-unlocalized.ts",
     "i18n:translate": "node ./scripts/i18n/translate.ts"
   },
   "dependencies": {
@@ -42,7 +43,7 @@
     "vue": "^3.5.33",
     "vue-i18n": "^11.4.14",
     "vue-router": "^5.0.6",
-    "vue3-apexcharts": "^1.5.0"
+    "vue3-apexcharts": "^1.5.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.0",

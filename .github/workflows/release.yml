@@ -4,9 +4,15 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v0.0.129)"
+        required: false
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   create-release:
@@ -17,24 +23,87 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract version
+      - name: Disable upstream Docker publish workflow on forks
+        if: github.repository != 'heymrun/heym'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X PUT "/repos/${{ github.repository }}/actions/workflows/publish-release-image.yml/disable" || true
+          for run_id in $(gh api "/repos/${{ github.repository }}/actions/workflows/publish-release-image.yml/runs" --jq '.workflow_runs[].id' 2>/dev/null); do
+            gh api -X POST "/repos/${{ github.repository }}/actions/runs/${run_id}/cancel" 2>/dev/null || true
+          done
+
+      - name: File line-limit check
+        run: sh ./scripts/check-file-line-limits.sh
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.2"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: bun install --frozen-lockfile
+
+      - name: Verify i18n key parity & compiler safety (32 locales)
+        working-directory: frontend
+        run: bun run i18n:check
+
+      - name: Verify Tier-A documentation coverage gate (32 locales)
+        working-directory: frontend
+        run: |
+          bun run i18n:coverage -- --gate
+          rm -f ../docs/i18n/coverage-report.md
+
+      - name: Verify frontend ESLint & TypeScript
+        working-directory: frontend
+        run: |
+          bun run lint:check
+          bun run typecheck
+
+      - name: Run frontend unit tests & production build
+        working-directory: frontend
+        run: |
+          bun run test
+          bun run build
+
+      - name: Extract version & tags
         id: get_version
         run: |
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            TAG_NAME="${{ github.event.inputs.tag }}"
+          else
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+          fi
           VERSION="${TAG_NAME#v}"
           echo "tag=$TAG_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
+          # Find previous release tag
+          PREV_TAG="$(git describe --tags --abbrev=0 "${TAG_NAME}^" 2>/dev/null || echo "")"
+          echo "prev_tag=$PREV_TAG" >> "$GITHUB_OUTPUT"
+          echo "Current: $TAG_NAME, Previous: $PREV_TAG"
+
       - name: Determine Upstream Base
         id: get_upstream
         run: |
-          UPSTREAM_VER="v0.0.128"
+          TAG="${{ steps.get_version.outputs.tag }}"
+          VERSION="${{ steps.get_version.outputs.version }}"
+          # Upstream releases are tagged as v<VERSION> (or matching VERSION)
+          UPSTREAM_VER="v${VERSION}"
           echo "upstream_version=$UPSTREAM_VER" >> "$GITHUB_OUTPUT"
 
       - name: Generate Release Notes
         run: |
           TAG="${{ steps.get_version.outputs.tag }}"
+          PREV_TAG="${{ steps.get_version.outputs.prev_tag }}"
           UPSTREAM="${{ steps.get_upstream.outputs.upstream_version }}"
+
           cat << EOF > release_body.md
           ## Heym i18n ${TAG}
 
@@ -42,24 +111,68 @@ jobs:
 
           ### 🌍 Key Highlights
           * **Complete 32-Language Internationalization (i18n):**
-            * 100% UI key parity across 32 platform languages (2,011 leaf keys each).
-            * Complete documentation coverage: **4,128 localized documents** (129 documents for each of the 32 languages) with reactive in-app switching and zero DOM key leaks.
+            * 100% UI key parity across 32 platform languages (2,065+ leaf keys each).
+            * Complete documentation coverage: **4,160 localized documents** (130 documents for each of the 32 languages) with reactive in-app switching and zero DOM key leaks.
             * Strict adherence to formal registers, CLDR pluralization rules, and English technical terms (\`Workflow\`, \`Trigger\`, \`Webhook\`, \`API\`, \`Endpoint\`, \`Token\`, \`Docker\`, \`MCP\`).
             * Dynamic locale chunking and automated Tier-A coverage gates.
-          * **Self-Hosting & Authentication Enhancements (Backend):**
+          * **Self-Hosting & Authentication Enhancements (Backend in self-hosted branch):**
             * **Private LAN / RFC-1918 Cookie Support:** Seamless local network hosting on private IPs (\`192.168.x.x\`, \`10.x.x.x\`) without HTTPS redirect loops caused by premature \`Secure\` cookie flags. Includes \`COOKIE_SECURE\` environment variable override.
             * **Case-Insensitive Authentication:** Robust email matching eliminating casing and whitespace login failures.
+
+          ### 📦 Attached Source Code Editions
+          * **Main Branch (Pure i18n):** Available via default GitHub source archives below (designed for Zero-Rebuild Overlay over \`ghcr.io/heymrun/heym:${TAG#v}\`).
+          * **Self-Hosted Branch:** Pre-packaged below as \`heym-self-hosted-${TAG}.tar.gz\` and \`heym-self-hosted-${TAG}.zip\` containing the full backend LAN cookie & auth improvements.
           EOF
 
+          # Append automated change log if previous tag exists
+          if [ -n "${PREV_TAG}" ]; then
+            echo "" >> release_body.md
+            echo "### 📝 Automated Change Summary (since ${PREV_TAG})" >> release_body.md
+            echo "" >> release_body.md
+            echo "#### Fork Release Commit" >> release_body.md
+            git log "${PREV_TAG}..${TAG}" --pretty=format:"* %s ([%h](https://github.com/${{ github.repository }}/commit/%H))" --first-parent >> release_body.md || true
+            echo "" >> release_body.md
+            echo "#### Integrated Upstream Commits" >> release_body.md
+            git log "${PREV_TAG}..${TAG}" --pretty=format:"* %s ([%h](https://github.com/${{ github.repository }}/commit/%H))" --no-merges >> release_body.md || true
+            echo "" >> release_body.md
+          fi
+
+      - name: Package self-hosted source archives
+        run: |
+          TAG="${{ steps.get_version.outputs.tag }}"
+          echo "Packaging self-hosted branch archives for ${TAG}..."
+          git fetch origin self-hosted:self-hosted || true
+          TARGET_REF="origin/self-hosted"
+          if ! git rev-parse --verify "$TARGET_REF" >/dev/null 2>&1; then
+            TARGET_REF="self-hosted"
+          fi
+          echo "Packaging self-hosted branch archives from ref: $TARGET_REF for ${TAG}..."
+          git archive --format=tar.gz --prefix=heym-self-hosted-${TAG}/ -o heym-self-hosted-${TAG}.tar.gz "$TARGET_REF"
+          git archive --format=zip --prefix=heym-self-hosted-${TAG}/ -o heym-self-hosted-${TAG}.zip "$TARGET_REF"
+          ls -lh heym-self-hosted-*
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           name: Heym i18n ${{ steps.get_version.outputs.tag }}
           body_path: release_body.md
+          files: |
+            heym-self-hosted-*.tar.gz
+            heym-self-hosted-*.zip
           draft: false
           prerelease: false
-          generate_release_notes: true
+          generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Clean up upstream Docker publish workflow runs
+        if: always() && github.repository != 'heymrun/heym'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for run_id in $(gh api "/repos/${{ github.repository }}/actions/workflows/publish-release-image.yml/runs" --jq '.workflow_runs[].id' 2>/dev/null); do
+            gh api -X DELETE "/repos/${{ github.repository }}/actions/runs/${run_id}" 2>/dev/null || true
+          done
+          for run_id in $(gh api "/repos/${{ github.repository }}/actions/workflows/release.yml/runs" --jq '.workflow_runs[] | select(.conclusion == "failure") | .id' 2>/dev/null); do
+            gh api -X DELETE "/repos/${{ github.repository }}/actions/runs/${run_id}" 2>/dev/null || true
+          done

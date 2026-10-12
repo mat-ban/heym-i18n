@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work liiketoimintatiimeille ja taito-zipit Chatissa",
+    "releaseTour": {
+      "label": "Uutta Heymissä",
+      "introTitle": "Uutta tässä julkaisussa",
+      "introDescription": "Lyhyt katsaus edellisen päivityksen jälkeisiin uudistuksiin. Kestää noin minuutin.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, liiketoimintakerros Heymin päällä",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** on toinen käyttöliittymä liiketoimintatiimeille. Käyttäjät kuvaavat tehtävän omin sanoin, vastaavat muutamaan kysymykseen ja saavat Heymin rakentaman ja testaaman Workflow'n. He työskentelevät heille luoduilla sivuilla, vastaavat katselmointeihin ja näkevät jokaisen suorituksen nimellä varustettuna Heymin suorittaessa työt taustalla."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym-ylläpitäjät yhdistävät sen kohdassa **Asetukset, Heym Work**: anna Heym Workin osoite, luo avain ja ota yhteys käyttöön. Kirjautuminen tapahtuu samalla Single Sign-Onilla, jota Heym jo käyttää. Heym Work lisensoidaan erikseen; katso heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Liiketoimintatiimit kuvaavat tehtävän, vastaavat kysymyksiin ja saavat testatun Workflow'n Heymin suorittamana.",
+          "useCases": [
+            "Tarjoa lakiasiain-, talous- tai operatiiviselle tiimille oma tila työn automatisointiin",
+            "Yhdistä Asetukset, Heym Work -kohdasta osoitteella ja avaimella",
+            "Säilytä Single Sign-On, roolit ja hyväksynnät jokaiselle tiimille"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Lue lisää osoitteessa heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Pudota taito-zip Chatiin",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat hyväksyy **ZIP-tiedostoja**. Kun arkisto sisältää tiedoston **SKILL.md** ja siihen liittyvät Python-tiedostot, Chat voi liittää taidon Agentille. Zip-tiedosto ilman taitotiedostoa säilyy keskustelussa kontekstina."
+          },
+          {
+            "type": "prose",
+            "markdown": "Pyydä Chatia muuttamaan aiemmin tallennettua taitoa. Se päivittää nimetyt tiedostot ja jättää loput, mukaan lukien muuttamattoman Python-koodin, ennalleen. Valitun Workflow'n tapauksessa taito sijoitetaan sinne. Muussa tapauksessa Chat käynnistää Workflow'n yhdellä Agentilla, jolla on kyseinen taito."
+          }
+        ],
+        "tour": {
+          "description": "Liitä taito-zip Chatiin ja Heym liittää sen Agentille.",
+          "useCases": [
+            "Pudota pakattu taitokansio, jossa on SKILL.md ja Python-tiedosto",
+            "Pyydä Chatia kirjoittamaan taitoteksti uudelleen menettämättä Python-koodia",
+            "Käynnistä uusi Workflow, jonka Agent kantaa taitoa"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Solmun uudelleenaktivoiminen Workflow'n sisällä",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "Tekoälyavustaja testaa Workflowit ja ottaa datataulukot käyttöön",
+    "headline": "Tekoälyavustaja määrittää datataulukkosi",
     "releaseTour": {
       "label": "Uutta Heymissä",
       "introTitle": "Uutta tässä julkaisussa",
       "introDescription": "Lyhyt katsaus edellisen päivityksen jälkeen tulleisiin uudistuksiin. Kestää noin minuutin.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO-tila: tekoälyavustaja testaa sen, mitä rakentaa",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Kun **YOLO-tila** aktivoidaan Canvasin **tekoälyavustajassa**, se ei enää pysähdy Workflowin käyttöönoton jälkeen. Se suorittaa Workflowin kuten **Run**-toiminnolla, lukee tuloksen ja korjaa Workflowia itsenäisesti enintään viisi kertaa viestiä kohden. Jokainen vastaus luettelee vaiheet reaaliajassa."
-          },
-          {
-            "type": "prose",
-            "markdown": "Ennen ensimmäistä suoritusta se kysyy testisyötteitä ehdotetuilla arvoilla ja käyttää niitä uudelleen. Se voi suorittaa myös muita Workfloweja, jos tarvitsee niiden tuloksia. Jos se tarvitsee päätöksen tai käyttöoikeustiedot, se kysyy totutulla kyselykortilla. Oikeat suoritukset: YOLO-tila on oletuksena pois päältä ja **Stop** keskeyttää prosessin milloin tahansa."
-          }
-        ],
-        "tour": {
-          "description": "Tekoälyavustaja suorittaa luodut Workflowit, tarkistaa tuloksen ja korjaa virheet itsenäisesti, kunnes se toimii.",
-          "useCases": [
-            "Kuvaile Workflow ja saa suoraan testattu versio",
-            "Anna avustajan havaita ja korjata virheelliset solmut automaattisesti",
-            "Tarkista muiden Workflowien paluuarvot ennen yhdistämistä"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "Tekoälyavustaja valitsee tai luo datataulukoita",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Useiden Dashboardien luominen ja jakaminen tiimin kanssa",
-    "releaseTour": {
-      "label": "Uutta Heymissä",
-      "introTitle": "Uutta tässä julkaisussa",
-      "introDescription": "Lyhyt katsaus päivityksiin edellisen päivityksen jälkeen. Kestää noin minuutin.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Useiden Dashboardien luominen ja jakaminen tiimin kanssa",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "**Dashboard**-välilehti tukee nyt rajattoman monta Dashboardia. Vaihtaminen onnistuu kätevästi välilehden yläosassa olevasta valinnasta tai uusi Dashboard luodaan **+**-painikkeella."
-          },
-          {
-            "type": "prose",
-            "markdown": "Dashboardit voidaan jakaa henkilöille tai tiimeille **asetuksissa**. **Luku** sallii näyttämisen ja päivittämisen; **Kirjoitus** sallii widgettien muokkaamisen. Widgetit käyttävät aina omistajan kirjautumistietoja."
-          }
-        ],
-        "tour": {
-          "description": "Useiden Dashboardien hallinta, niiden välinen vaihtaminen sekä jakaminen vain luku -oikeudella tai muokkausoikeudella.",
-          "useCases": [
-            "Erillisten Dashboardien jäsentäminen tiimin, tuotteen tai asiakkuuden mukaan",
-            "Vain luku -näkymän tarjoaminen sidosryhmille",
-            "Kaaviotyyppien testaaminen etukäteen esimerkkidatalla"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

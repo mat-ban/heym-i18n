@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { X } from "lucide-vue-next";
 
 import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
-import type { DashboardWidget, WidgetUpdateRequest } from "@/types/dashboard";
+import Select from "@/components/ui/Select.vue";
+import type { DashboardSummary, DashboardWidget, WidgetUpdateRequest } from "@/types/dashboard";
 
 const props = defineProps<{
   widget: DashboardWidget;
+  /** Dashboards a table widget's rows can link to. */
+  dashboards: DashboardSummary[];
 }>();
 
 const emit = defineEmits<{
@@ -27,15 +31,47 @@ function onKeydown(event: KeyboardEvent): void {
 onMounted(() => window.addEventListener("keydown", onKeydown, true));
 onUnmounted(() => window.removeEventListener("keydown", onKeydown, true));
 
+const { t } = useI18n();
 const title = ref(props.widget.title);
 const description = ref(props.widget.description ?? "");
 const cacheTtlSeconds = ref(props.widget.cache_ttl_seconds);
 
+const isTable = computed<boolean>(() => props.widget.chart_type === "table");
+const linkDashboardId = ref<string | undefined>(props.widget.link_dashboard_id ?? undefined);
+const linkRecordField = ref(props.widget.link_record_field ?? "");
+const linkLabelField = ref(props.widget.link_label_field ?? "");
+const linkOptions = computed(() => {
+  const options = props.dashboards.map((dashboard) => ({ value: dashboard.id, label: dashboard.name }));
+  const current = props.widget.link_dashboard_id;
+  // Keep a link to a dashboard the editor can no longer open visible, so it can be removed.
+  if (current && !options.some((option) => option.value === current)) {
+    options.push({ value: current, label: t("dashboards.unreachableDashboard") });
+  }
+  return options;
+});
+const canSave = computed<boolean>(
+  () => !isTable.value || !linkDashboardId.value || Boolean(linkRecordField.value.trim()),
+);
+
+function linkUpdate(): WidgetUpdateRequest {
+  if (!isTable.value) return {};
+  if (!linkDashboardId.value) {
+    return props.widget.link_dashboard_id ? { link_dashboard_id: null } : {};
+  }
+  return {
+    link_dashboard_id: linkDashboardId.value,
+    link_record_field: linkRecordField.value.trim(),
+    link_label_field: linkLabelField.value.trim() || null,
+  };
+}
+
 function save(): void {
+  if (!canSave.value) return;
   emit("save", {
     title: title.value.trim() || "Untitled",
     description: description.value.trim() ? description.value.trim() : null,
     cache_ttl_seconds: Number(cacheTtlSeconds.value) || 0,
+    ...linkUpdate(),
   });
 }
 </script>
@@ -84,6 +120,35 @@ function save(): void {
               {{ $t("dashboards.cacheDurationHelp") }}
             </p>
           </div>
+          <div
+            v-if="isTable"
+            class="space-y-2 border-t pt-3"
+            data-testid="widget-row-link"
+          >
+            <label class="text-sm font-medium">{{ $t("dashboards.rowLink") }}</label>
+            <Select
+              v-model="linkDashboardId"
+              :options="linkOptions"
+              :placeholder="$t('dashboards.noLink')"
+              clearable
+              :clear-aria-label="$t('dashboards.removeRowLink')"
+            />
+            <template v-if="linkDashboardId">
+              <Input
+                v-model="linkRecordField"
+                :aria-label="$t('dashboards.recordColumn')"
+                :placeholder="$t('dashboards.recordColumnPlaceholder')"
+              />
+              <Input
+                v-model="linkLabelField"
+                :aria-label="$t('dashboards.labelColumn')"
+                :placeholder="$t('dashboards.labelColumnPlaceholder')"
+              />
+            </template>
+            <p class="text-xs text-muted-foreground">
+              {{ $t("dashboards.rowLinkHelp") }}
+            </p>
+          </div>
         </div>
 
         <div class="mt-5 flex justify-end gap-2">
@@ -93,7 +158,10 @@ function save(): void {
           >
             {{ $t("common.cancel") }}
           </Button>
-          <Button @click="save">
+          <Button
+            :disabled="!canSave"
+            @click="save"
+          >
             {{ $t("common.save") }}
           </Button>
         </div>

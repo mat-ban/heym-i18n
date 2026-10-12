@@ -510,7 +510,11 @@
     "username": "Nombre de usuario",
     "value": "Valor",
     "via": "vía",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Ejecutar",
+    "dropFileOrClick": "Suelte un archivo aquí o haga clic para elegir uno",
+    "removeFile": "Eliminar archivo",
+    "chooseFileFor": "Elegir un archivo para {label}"
   },
   "credentials": {
     "accessVia": "Acceso vía",
@@ -657,6 +661,12 @@
       "telegram": {
         "description": "Conectar un bot de Telegram para Triggers de webhooks entrantes y mensajes salientes del bot"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nombre de usuario con el que inicia sesión el servidor SMTP",
+      "from": "De",
+      "fromPlaceholder": "Dejar en blanco para enviar como el nombre de usuario anterior",
+      "fromHelp": "Remitente visible opcional. El servidor sigue iniciando sesión con el nombre de usuario anterior, por lo que esa cuenta debe estar autorizada a enviar desde esta dirección (en Gmail: Enviar como)."
     }
   },
   "dashboards": {
@@ -762,7 +772,31 @@
     },
     "addDescriptionPlaceholder": "Opcional. Se muestra en el canvas, no en la cuadrícula.",
     "addWidget": "Añadir widget",
-    "ai": "IA"
+    "ai": "IA",
+    "widgetType": "Tipo de widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Elegir un workflow",
+    "workflowWidgetHint": "Un workflow que recibe un archivo obtiene una zona para soltarlo, uno con campos de entrada obtiene esos campos y uno sin entradas obtiene un botón Ejecutar. Cada ejecución muestra su resultado.",
+    "noWorkflowsYet": "Aún no tiene workflows.",
+    "clearRecord": "Borrar registro",
+    "rowLink": "Enlace de fila",
+    "noLink": "Sin enlace",
+    "removeRowLink": "Eliminar enlace de fila",
+    "recordColumn": "Columna de registro",
+    "recordColumnPlaceholder": "Columna que contiene el registro, p. ej. id",
+    "labelColumn": "Columna de etiqueta",
+    "labelColumnPlaceholder": "Columna que le asigna nombre (opcional)",
+    "rowLinkHelp": "Al hacer clic en una fila, se abre ese panel para el registro de la fila. Sus widgets leen el registro como $page.record.",
+    "recordFormats": {
+      "id": "IDs: letras, dígitos, - _ . (hasta 128)",
+      "number": "Números",
+      "uuid": "UUID",
+      "email": "Direcciones de correo electrónico"
+    },
+    "detailPageRecords": "Registros de página de detalles",
+    "detailPageRecordsHelp": "Los valores ?record= que este panel acepta cuando un enlace de fila lo abre. Cualquier otro valor se rechaza antes de ejecutar un widget.",
+    "unreachableDashboard": "Un panel que no puede abrir",
+    "runWorkflow": "Ejecutar un Workflow"
   },
   "docs": {
     "askAnything": "Consulte cualquier cosa sobre la documentación",
@@ -1321,7 +1355,14 @@
     "copiedToClipboard": "{label} copiado al portapapeles",
     "copyJson": "Copiar JSON",
     "create": "Crear",
-    "createWorkflowsPrompt": "Cree workflows para exponerlos como herramientas MCP"
+    "createWorkflowsPrompt": "Cree workflows para exponerlos como herramientas MCP",
+    "geminiTab": "App de Gemini",
+    "geminiApp": "App de Gemini",
+    "geminiStep1": "Abra gemini.google.com en un ordenador y vaya a Ajustes → Aplicaciones conectadas",
+    "geminiStep2": "En Aplicaciones personalizadas, haga clic en Añadir una aplicación personalizada",
+    "geminiStep3": "Pegue la URL del servidor MCP anterior y mantenga cerradas las Funciones avanzadas; Gemini se registrará automáticamente",
+    "geminiStep4": "Haga clic en Siguiente y autorice con sus credenciales de Heym",
+    "geminiInfo": "Gemini utiliza OAuth para autenticarse de forma segura. Sus credenciales de Heym se utilizan para autorizar el acceso y nunca se comparten con Gemini. Una vez conectado, Heym también funciona en la aplicación móvil de Gemini."
   },
   "nav": {
     "alerts": "Alertas",
@@ -1681,7 +1722,25 @@
     "workflowSettings": "Configuración del workflow",
     "workflowTimeout": "Tiempo de espera del workflow (segundos)",
     "workflowTimeoutDescription": "Cancela la ejecución si supera esta cantidad de segundos. 0 desactiva el tiempo de espera. Se aplica a ejecuciones manuales, por API y activadas por trigger.",
-    "workflowTimeoutPlaceholder": "0 = sin tiempo de espera"
+    "workflowTimeoutPlaceholder": "0 = sin tiempo de espera",
+    "chartOutput": {
+      "statusColumnOptional": "Columna de estado (opcional)",
+      "statusColumnPlaceholder": "columna mostrada como etiquetas de colores, p. ej. state",
+      "statusColumnDialogLabel": "Columna de estado",
+      "statusColumnHelp": "Las palabras habituales adquieren color por sí solas: paid, done y approved indican éxito; overdue y needs review requieren atención; failed y rejected son error; pending y running indican espera. Añada un tono para cualquier otro valor.",
+      "statusTones": "Tonos de estado",
+      "statusValuePlaceholder": "valor, p. ej. Disputed",
+      "statusValueAriaLabel": "Valor de estado",
+      "removeTone": "Eliminar tono",
+      "addTone": "Añadir tono",
+      "tones": {
+        "success": "Éxito",
+        "attention": "Atención",
+        "failure": "Fallo",
+        "waiting": "En espera",
+        "neutral": "Neutro"
+      }
+    }
   },
   "quickDrawer": {
     "allWorkflows": "Todos los workflows",
@@ -1710,7 +1769,9 @@
     "subtitle": "Busque, fije y ejecute Workflows sin salir de la página.",
     "title": "Panel rápido",
     "unpin": "Desfijar {name}",
-    "workflows": "Workflows"
+    "workflows": "Workflows",
+    "wrapLongLines": "Ajustar líneas largas",
+    "wrap": "Ajustar"
   },
   "releaseTour": {
     "close": "Cerrar novedades",
@@ -1762,7 +1823,8 @@
       "intro": "Heym Work es una segunda interfaz para equipos de negocio. Las personas inician sesión a través de Heym y cada tarea se ejecuta aquí.",
       "keyConfigured": "Clave configurada",
       "lastSeen": "Última conexión",
-      "license": "Licencia"
+      "license": "Licencia",
+      "learnMore": "Más información"
     },
     "addCredential": "Añadir credencial",
     "aiDefaults": "Valores predeterminados de IA",

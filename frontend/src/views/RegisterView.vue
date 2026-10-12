@@ -7,8 +7,21 @@ import Button from "@/components/ui/Button.vue";
 import Card from "@/components/ui/Card.vue";
 import Input from "@/components/ui/Input.vue";
 import Label from "@/components/ui/Label.vue";
+import Select from "@/components/ui/Select.vue";
 import WorkflowHeroBackground from "@/components/Layout/WorkflowHeroBackground.vue";
+import { getCurrentLocale, setLocale, SUPPORTED_LOCALES, isSupportedLocale, type SupportedLocale } from "@/i18n";
+import { Globe } from "lucide-vue-next";
 import { useAuthStore } from "@/stores/auth";
+
+const currentLocale = ref<SupportedLocale>(getCurrentLocale());
+const languageOptions = SUPPORTED_LOCALES;
+
+async function handleLocaleChange(val: string | undefined): Promise<void> {
+  if (val && isSupportedLocale(val)) {
+    currentLocale.value = val;
+    await setLocale(val);
+  }
+}
 
 interface FastApiValidationError {
   msg: string;
@@ -133,6 +146,19 @@ const features = [
 
 <template>
   <div class="auth-container min-h-screen flex items-center justify-center bg-background p-4 overflow-x-hidden relative">
+    <!-- Language selector in header corner -->
+    <div class="absolute top-4 right-4 z-20 flex items-center gap-1.5">
+      <Globe class="w-4 h-4 text-muted-foreground" />
+      <Select
+        id="register-language-select"
+        :model-value="currentLocale"
+        :options="languageOptions"
+        select-class="h-8 text-xs py-1 pl-2.5 pr-7 min-h-0 bg-card/80 backdrop-blur border-border/70 rounded-lg shadow-sm"
+        class="w-36"
+        @update:model-value="handleLocaleChange"
+      />
+    </div>
+
     <div class="absolute inset-0 overflow-hidden">
       <div class="auth-blob auth-blob-1" />
       <div class="auth-blob auth-blob-2" />

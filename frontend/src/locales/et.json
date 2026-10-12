@@ -79,7 +79,11 @@
     "apply": "Rakendage",
     "color": "Värv",
     "unknownError": "Tundmatu viga",
-    "custom": "Kohandatud"
+    "custom": "Kohandatud",
+    "run": "Käivita",
+    "dropFileOrClick": "Lohistage fail siia või klõpsake valimiseks",
+    "removeFile": "Eemalda fail",
+    "chooseFileFor": "Valige fail üksusele {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Litsents",
       "unknown": "Teadmata",
       "intro": "Heym Work on teine kasutajaliides äritiimidele. Inimesed logivad sisse Heymi kaudu ja kõik tööd käivitatakse siin.",
-      "never": "Mitte kunagi"
+      "never": "Mitte kunagi",
+      "learnMore": "Lisateave"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Salvestamata muudatused",
     "runToNode": "Käivita kuni {node}",
     "configRequired": "Konfiguratsioon on vajalik",
-    "fixIssues": "Palun lahendage enne workflow'i käivitamist järgmised probleemid:"
+    "fixIssues": "Palun lahendage enne workflow'i käivitamist järgmised probleemid:",
+    "chartOutput": {
+      "statusColumnOptional": "Oleku veerg (valikuline)",
+      "statusColumnPlaceholder": "veerg, mida kuvatakse värviliste siltidena, nt state",
+      "statusColumnDialogLabel": "Oleku veerg",
+      "statusColumnHelp": "Tavalised sõnad saavad värvi automaatselt: paid, done ja approved tähistavad edu; overdue ja needs review nõuavad tähelepanu; failed ja rejected tähendavad ebaõnnestumist; pending ja running tähendavad ootamist. Mis tahes muu väärtuse jaoks lisage toon.",
+      "statusTones": "Oleku toonid",
+      "statusValuePlaceholder": "väärtus, nt Disputed",
+      "statusValueAriaLabel": "Oleku väärtus",
+      "removeTone": "Eemalda toon",
+      "addTone": "Lisa toon",
+      "tones": {
+        "success": "Õnnestus",
+        "attention": "Tähelepanu",
+        "failure": "Ebaõnnestus",
+        "waiting": "Ootel",
+        "neutral": "Neutraalne"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorhoidlad",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Tekst-kõneks ja kõne-tekstiks chati häälfunktsioonide jaoks"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Kasutajanimi, millega SMTP-server sisse logib",
+      "from": "Saatja",
+      "fromPlaceholder": "Jätke tühjaks, et saata ülaltoodud kasutajanimena",
+      "fromHelp": "Valikuline nähtav saatja. Server logib endiselt sisse ülaltoodud kasutajanimena, seega peab sellel kontol olema luba sellelt aadressilt saatmiseks (Gmailis: Saada meil aadressilt)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Vabastage {name}",
     "historyId": "Ajalugu: {id}",
     "outputLabel": "Väljund: {label}",
-    "closeDrawer": "Sulgege kiir-Workflow'de sahtel"
+    "closeDrawer": "Sulgege kiir-Workflow'de sahtel",
+    "wrapLongLines": "Murra pikad read",
+    "wrap": "Murra"
   },
   "showcase": {
     "guidelines": "Juhised",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP konfiguratsioon",
-    "addToConfigInstruction": "Lisage järgmine oma MCP kliendi konfiguratsiooni (nt {path}):"
+    "addToConfigInstruction": "Lisage järgmine oma MCP kliendi konfiguratsiooni (nt {path}):",
+    "geminiTab": "Rakendus Gemini",
+    "geminiApp": "Rakendus Gemini",
+    "geminiStep1": "Avage arvutis gemini.google.com ja valige Seaded → Ühendatud rakendused",
+    "geminiStep2": "Jaotises Kohandatud rakendused klõpsake Lisa kohandatud rakendus",
+    "geminiStep3": "Kleepige ülaltoodud MCP-serveri URL ja jätke Täpsemad funktsioonid suletuks; Gemini registreerub automaatselt",
+    "geminiStep4": "Klõpsake Edasi ja autoriseerige oma Heymi mandaadiga",
+    "geminiInfo": "Gemini kasutab turvaliseks autentimiseks OAuth-protokolli. Teie Heymi mandaati kasutatakse juurdepääsu volitamiseks ja seda ei jagata kunagi Geminiga. Pärast ühenduse loomist töötab Heym ka Gemini mobiilirakenduses."
   },
   "analytics": {
     "dashboardTitle": "Analüütika töölaud",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekundid",
       "apply": "Rakenda",
       "nextRefreshIn": "Järgmine värskendus {time} pärast"
-    }
+    },
+    "widgetType": "Vidina tüüp",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Valige workflow",
+    "workflowWidgetHint": "Faili vastuvõttev workflow saab lohistamisala, sisendväljadega workflow saab need väljad ja ilma sisendita workflow saab nupu Käivita. Iga käivitus kuvab oma tulemuse.",
+    "noWorkflowsYet": "Teil pole veel töövooge.",
+    "clearRecord": "Tühjenda kirje",
+    "rowLink": "Rea link",
+    "noLink": "Link puudub",
+    "removeRowLink": "Eemalda rea link",
+    "recordColumn": "Kirje veerg",
+    "recordColumnPlaceholder": "Kirjet sisaldav veerg, nt id",
+    "labelColumn": "Sildi veerg",
+    "labelColumnPlaceholder": "Nime andev veerg (valikuline)",
+    "rowLinkHelp": "Reale klõpsamine avab selle juhtpaneeli vastava rea kirje jaoks. Selle vidinad loevad kirjet kui $page.record.",
+    "recordFormats": {
+      "id": "ID-d: tähed, numbrid, - _ . (kuni 128)",
+      "number": "Numbrid",
+      "uuid": "UUID-d",
+      "email": "E-posti aadressid"
+    },
+    "detailPageRecords": "Üksikasjade lehe kirjed",
+    "detailPageRecordsHelp": "Väärtused ?record=, mida see töölaud aktsepteerib, kui realink selle avab. Kõik muu lükatakse enne vidina käivitamist tagasi.",
+    "unreachableDashboard": "Töölaud, mida ei saa avada",
+    "runWorkflow": "Käivita Workflow"
   },
   "drive": {
     "filesCount": "({count} faili)",

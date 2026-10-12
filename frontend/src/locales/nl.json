@@ -510,7 +510,11 @@
     "username": "Gebruikersnaam",
     "value": "Waarde",
     "via": "via",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Uitvoeren",
+    "dropFileOrClick": "Sleep hier een bestand naartoe of klik om er een te kiezen",
+    "removeFile": "Bestand verwijderen",
+    "chooseFileFor": "Kies een bestand voor {label}"
   },
   "credentials": {
     "accessVia": "Toegang via",
@@ -657,6 +661,12 @@
       "telegram": {
         "description": "Een Telegram-bot verbinden voor inkomende webhook-triggers en uitgaande botberichten"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Gebruikersnaam waarmee de SMTP-server inlogt",
+      "from": "Van",
+      "fromPlaceholder": "Leeg laten om te verzenden als de bovenstaande gebruikersnaam",
+      "fromHelp": "Optionele zichtbare afzender. De server logt nog steeds in als de bovenstaande gebruikersnaam, dus dat account moet gemachtigd zijn om als dit adres te verzenden (in Gmail: E-mail verzenden als)."
     }
   },
   "docs": {
@@ -1000,7 +1010,31 @@
     },
     "addDescriptionPlaceholder": "Optioneel. Wordt weergegeven op het canvas, niet in het raster.",
     "addWidget": "Widget toevoegen",
-    "ai": "AI"
+    "ai": "AI",
+    "widgetType": "Widgettype",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Kies een workflow",
+    "workflowWidgetHint": "Een workflow die een bestand accepteert krijgt een dropzone, een met invoervelden krijgt die velden en een zonder invoer krijgt een Uitvoeren-knop. Elke uitvoering toont het resultaat.",
+    "noWorkflowsYet": "Er zijn nog geen workflows.",
+    "clearRecord": "Record wissen",
+    "rowLink": "Rijkoppeling",
+    "noLink": "Geen koppeling",
+    "removeRowLink": "Rijkoppeling verwijderen",
+    "recordColumn": "Recordkolom",
+    "recordColumnPlaceholder": "Kolom die het record bevat, bijv. id",
+    "labelColumn": "Labelkolom",
+    "labelColumnPlaceholder": "Kolom die de naam aangeeft (optioneel)",
+    "rowLinkHelp": "Als u op een rij klikt, wordt dat dashboard geopend voor het record van de rij. De widgets lezen het record als $page.record.",
+    "recordFormats": {
+      "id": "ID's: letters, cijfers, - _ . (tot 128)",
+      "number": "Nummers",
+      "uuid": "UUID's",
+      "email": "E-mailadressen"
+    },
+    "detailPageRecords": "Detailpaginagegevens",
+    "detailPageRecordsHelp": "De ?record=-waarden die dit dashboard accepteert wanneer een rijlink het opent. Al het andere wordt geweigerd voordat een widget wordt uitgevoerd.",
+    "unreachableDashboard": "Een dashboard dat u niet kunt openen",
+    "runWorkflow": "Een Workflow uitvoeren"
   },
   "dashboard": {
     "askAi": "AI vragen",
@@ -1321,7 +1355,14 @@
     "subtitle": "Stel uw workflows beschikbaar als MCP-tools voor AI-assistenten",
     "title": "MCP-server",
     "workflowDisabled": "\"{name}\" uitgeschakeld voor MCP",
-    "workflowEnabled": "\"{name}\" ingeschakeld voor MCP"
+    "workflowEnabled": "\"{name}\" ingeschakeld voor MCP",
+    "geminiTab": "Gemini-app",
+    "geminiApp": "Gemini-app",
+    "geminiStep1": "Open gemini.google.com op een computer en ga naar Instellingen → Verbonden apps",
+    "geminiStep2": "Klik onder Aangepaste apps op Een aangepaste app toevoegen",
+    "geminiStep3": "Plak de bovenstaande MCP-server-URL en laat Geavanceerde functies gesloten; Gemini registreert zich automatisch",
+    "geminiStep4": "Klik op Volgende en autoriseer met uw Heym-inloggegevens",
+    "geminiInfo": "Gemini gebruikt OAuth voor veilige authenticatie. Uw Heym-inloggegevens worden gebruikt om toegang te autoriseren en worden nooit gedeeld met Gemini. Eenmaal verbonden werkt Heym ook in de mobiele Gemini-app."
   },
   "nav": {
     "alerts": "Waarschuwingen",
@@ -1649,7 +1690,9 @@
     "allWorkflows": "Alle workflows",
     "backToList": "Terug naar workflowlijst",
     "chooseWorkflowPrompt": "Kies een workflow en voer deze uit om de voortgang hier te zien.",
-    "closeDrawer": "Quick Drawer sluiten"
+    "closeDrawer": "Quick Drawer sluiten",
+    "wrapLongLines": "Lange regels afbreken",
+    "wrap": "Afbreken"
   },
   "releaseTour": {
     "close": "Wat is nieuw sluiten",
@@ -1742,7 +1785,25 @@
     "workflowSettings": "Workflowinstellingen",
     "workflowTimeout": "Workflow-timeout (seconden)",
     "workflowTimeoutDescription": "Laat de uitvoering mislukken als deze het opgegeven aantal seconden overschrijdt. 0 schakelt de timeout uit. Geldt voor handmatige, API- en getriggerde uitvoeringen.",
-    "workflowTimeoutPlaceholder": "0 = geen timeout"
+    "workflowTimeoutPlaceholder": "0 = geen timeout",
+    "chartOutput": {
+      "statusColumnOptional": "Statuskolom (optioneel)",
+      "statusColumnPlaceholder": "kolom weergegeven als gekleurde badges, bijv. state",
+      "statusColumnDialogLabel": "Statuskolom",
+      "statusColumnHelp": "Veelvoorkomende woorden krijgen automatisch een kleur: paid, done en approved zijn geslaagd; overdue en needs review vereisen aandacht; failed en rejected zijn mislukt; pending en running wachten. Voeg een tint toe voor elke andere waarde.",
+      "statusTones": "Statustinten",
+      "statusValuePlaceholder": "waarde, bijv. Disputed",
+      "statusValueAriaLabel": "Statuswaarde",
+      "removeTone": "Tint verwijderen",
+      "addTone": "Tint toevoegen",
+      "tones": {
+        "success": "Succes",
+        "attention": "Aandacht",
+        "failure": "Mislukt",
+        "waiting": "Wachten",
+        "neutral": "Neutraal"
+      }
+    }
   },
   "settings": {
     "addCredential": "Referentie toevoegen",
@@ -1856,7 +1917,8 @@
       "intro": "Heym Work is een tweede interface voor zakelijke teams. Gebruikers melden zich aan via Heym en elke taak wordt hier uitgevoerd.",
       "keyConfigured": "Sleutel geconfigureerd",
       "lastSeen": "Laatst gezien",
-      "license": "Licentie"
+      "license": "Licentie",
+      "learnMore": "Meer informatie"
     },
     "title": "Instellingen",
     "usageUnavailable": "Gebruik niet beschikbaar",

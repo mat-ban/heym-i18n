@@ -510,7 +510,11 @@
     "username": "Nom d'utilisateur",
     "value": "Valeur",
     "via": "via",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Exécuter",
+    "dropFileOrClick": "Déposez un fichier ici ou cliquez pour en choisir un",
+    "removeFile": "Supprimer le fichier",
+    "chooseFileFor": "Choisir un fichier pour {label}"
   },
   "credentials": {
     "accessVia": "Accès via",
@@ -657,6 +661,12 @@
       "telegram": {
         "description": "Connecter un bot Telegram pour les déclencheurs de webhooks entrants et les messages sortants du bot"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nom d'utilisateur avec lequel le serveur SMTP se connecte",
+      "from": "De",
+      "fromPlaceholder": "Laisser vide pour envoyer en tant que le nom d'utilisateur ci-dessus",
+      "fromHelp": "Expéditeur visible facultatif. Le serveur se connecte toujours avec le nom d'utilisateur ci-dessus, ce compte doit donc être autorisé à envoyer depuis cette adresse (dans Gmail : Envoyer des e-mails en tant que)."
     }
   },
   "curl": {
@@ -1000,7 +1010,31 @@
     },
     "addDescriptionPlaceholder": "Facultatif. Affiché sur le Canvas, pas sur la grille.",
     "addWidget": "Ajouter un widget",
-    "ai": "IA"
+    "ai": "IA",
+    "widgetType": "Type de widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Choisir un workflow",
+    "workflowWidgetHint": "Un workflow acceptant un fichier obtient une zone de dépôt, un workflow avec champs de saisie obtient ces champs, et un sans entrée obtient un bouton Exécuter. Chaque exécution affiche son résultat.",
+    "noWorkflowsYet": "Vous n'avez pas encore de workflows.",
+    "clearRecord": "Effacer l'enregistrement",
+    "rowLink": "Lien de ligne",
+    "noLink": "Aucun lien",
+    "removeRowLink": "Supprimer le lien de ligne",
+    "recordColumn": "Colonne d'enregistrement",
+    "recordColumnPlaceholder": "Colonne contenant l'enregistrement, ex. id",
+    "labelColumn": "Colonne de libellé",
+    "labelColumnPlaceholder": "Colonne qui le nomme (facultatif)",
+    "rowLinkHelp": "Cliquer sur une ligne ouvre ce tableau de bord pour l'enregistrement correspondant. Ses widgets lisent l'enregistrement sous $page.record.",
+    "recordFormats": {
+      "id": "Identifiants : lettres, chiffres, - _ . (jusqu'à 128)",
+      "number": "Nombres",
+      "uuid": "UUID",
+      "email": "Adresses e-mail"
+    },
+    "detailPageRecords": "Enregistrements de page de détails",
+    "detailPageRecordsHelp": "Les valeurs ?record= acceptées par ce tableau de bord lorsqu'un lien de ligne l'ouvre. Toute autre valeur est refusée avant l'exécution d'un widget.",
+    "unreachableDashboard": "Un tableau de bord que vous ne pouvez pas ouvrir",
+    "runWorkflow": "Exécuter un Workflow"
   },
   "dashboard": {
     "askAi": "Demander à l'IA",
@@ -1309,7 +1343,14 @@
     "noKeyGenerated": "Aucune clé API générée pour le moment",
     "noNamedServers": "Aucun serveur nommé pour le moment. Créez-en un pour obtenir un Endpoint MCP dédié.",
     "noWorkflowsAvailable": "Aucun Workflow disponible. Créez des Workflows pour les affecter ici.",
-    "noWorkflowsYet": "Aucun Workflow pour le moment"
+    "noWorkflowsYet": "Aucun Workflow pour le moment",
+    "geminiTab": "Application Gemini",
+    "geminiApp": "Application Gemini",
+    "geminiStep1": "Ouvrez gemini.google.com sur un ordinateur et accédez à Paramètres → Applications connectées",
+    "geminiStep2": "Sous Applications personnalisées, cliquez sur Ajouter une application personnalisée",
+    "geminiStep3": "Collez l'URL du serveur MCP ci-dessus et laissez les Fonctionnalités avancées fermées ; Gemini s'enregistrera automatiquement",
+    "geminiStep4": "Cliquez sur Suivant et autorisez avec vos identifiants Heym",
+    "geminiInfo": "Gemini utilise OAuth pour s'authentifier en toute sécurité. Vos identifiants Heym sont utilisés pour autoriser l'accès et ne sont jamais partagés avec Gemini. Une fois connecté, Heym fonctionne également dans l'application mobile Gemini."
   },
   "nav": {
     "alerts": "Alertes",
@@ -1669,7 +1710,25 @@
     "workflowSettings": "Paramètres du workflow",
     "workflowTimeout": "Délai d'expiration du workflow (secondes)",
     "workflowTimeoutDescription": "Fait échouer l'exécution si elle dépasse ce nombre de secondes. 0 désactive le délai d'expiration. S'applique aux exécutions manuelles, API et déclenchées.",
-    "workflowTimeoutPlaceholder": "0 = aucun délai d'expiration"
+    "workflowTimeoutPlaceholder": "0 = aucun délai d'expiration",
+    "chartOutput": {
+      "statusColumnOptional": "Colonne de statut (facultatif)",
+      "statusColumnPlaceholder": "colonne affichée sous forme de pastilles de couleur, ex. state",
+      "statusColumnDialogLabel": "Colonne de statut",
+      "statusColumnHelp": "Les mots courants reçoivent une couleur automatiquement : paid, done et approved indiquent un succès ; overdue et needs review demandent de l'attention ; failed et rejected sont des échecs ; pending et running indiquent une attente. Ajoutez une nuance pour toute autre valeur.",
+      "statusTones": "Nuances de statut",
+      "statusValuePlaceholder": "valeur, ex. Disputed",
+      "statusValueAriaLabel": "Valeur de statut",
+      "removeTone": "Supprimer la nuance",
+      "addTone": "Ajouter une nuance",
+      "tones": {
+        "success": "Succès",
+        "attention": "Attention",
+        "failure": "Échec",
+        "waiting": "En attente",
+        "neutral": "Neutre"
+      }
+    }
   },
   "quickDrawer": {
     "allWorkflows": "Tous les workflows",
@@ -1698,7 +1757,9 @@
     "subtitle": "Recherchez, épinglez et exécutez des workflows sans quitter la page.",
     "title": "Quick Drawer",
     "unpin": "Désépingler {name}",
-    "workflows": "Workflows"
+    "workflows": "Workflows",
+    "wrapLongLines": "Renvoyer les lignes à la ligne",
+    "wrap": "Renvoyer"
   },
   "releaseTour": {
     "close": "Fermer les nouveautés",
@@ -1750,7 +1811,8 @@
       "intro": "Heym Work est une seconde interface destinée aux équipes métier. Les utilisateurs se connectent via Heym, et toutes les tâches s'exécutent ici.",
       "keyConfigured": "Clé configurée",
       "lastSeen": "Dernière activité",
-      "license": "Licence"
+      "license": "Licence",
+      "learnMore": "En savoir plus"
     },
     "ssoSection": {
       "clientSecret": "Client secret",

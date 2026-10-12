@@ -79,7 +79,11 @@
     "apply": "Anvend",
     "color": "Farve",
     "unknownError": "Ukendt fejl",
-    "custom": "Brugerdefineret"
+    "custom": "Brugerdefineret",
+    "run": "Kør",
+    "dropFileOrClick": "Slip en fil her, eller klik for at vælge",
+    "removeFile": "Fjern fil",
+    "chooseFileFor": "Vælg en fil til {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Licens",
       "unknown": "Ukendt",
       "intro": "Heym Work er en anden grænseflade til forretningsteams. Personer logger ind via Heym, og alle job kører her.",
-      "never": "Aldrig"
+      "never": "Aldrig",
+      "learnMore": "Få mere at vide"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Ikke-gemte ændringer",
     "runToNode": "Kør til {node}",
     "configRequired": "Konfiguration påkrævet",
-    "fixIssues": "Ret følgende problemer, før Workflow køres:"
+    "fixIssues": "Ret følgende problemer, før Workflow køres:",
+    "chartOutput": {
+      "statusColumnOptional": "Statuskolonne (valgfrit)",
+      "statusColumnPlaceholder": "kolonne vist som farvede felter, f.eks. state",
+      "statusColumnDialogLabel": "Statuskolonne",
+      "statusColumnHelp": "Almindelige ord får automatisk en farve: paid, done og approved er succes; overdue og needs review kræver handling; failed og rejected er fejl; pending og running er venter. Tilføj en tone til enhver anden værdi.",
+      "statusTones": "Statustoner",
+      "statusValuePlaceholder": "værdi, f.eks. Disputed",
+      "statusValueAriaLabel": "Statusværdi",
+      "removeTone": "Fjern tone",
+      "addTone": "Tilføj tone",
+      "tones": {
+        "success": "Succes",
+        "attention": "Bemærk",
+        "failure": "Fejl",
+        "waiting": "Venter",
+        "neutral": "Neutral"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorlagre",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Tekst-til-tale og tale-til-tekst til chat-stemmefunktioner"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Brugernavn, som SMTP-serveren logger ind med",
+      "from": "Fra",
+      "fromPlaceholder": "Efterlad tomt for at sende som brugernavnet ovenfor",
+      "fromHelp": "Valgfri synlig afsender. Serveren logger stadig ind som brugernavnet ovenfor, så kontoen skal have tilladelse til at sende som denne adresse (i Gmail: Send e-mail som)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Frigør {name}",
     "historyId": "Historik: {id}",
     "outputLabel": "Output: {label}",
-    "closeDrawer": "Luk hurtig-Workflow-panel"
+    "closeDrawer": "Luk hurtig-Workflow-panel",
+    "wrapLongLines": "Ombryd lange linjer",
+    "wrap": "Ombryd"
   },
   "showcase": {
     "guidelines": "Retningslinjer",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint-URL",
     "apiKey": "API-nøgle",
     "mcpConfiguration": "MCP-konfiguration",
-    "addToConfigInstruction": "Føj følgende til MCP-klientkonfigurationen (f.eks. {path}):"
+    "addToConfigInstruction": "Føj følgende til MCP-klientkonfigurationen (f.eks. {path}):",
+    "geminiTab": "Gemini-app",
+    "geminiApp": "Gemini-app",
+    "geminiStep1": "Åbn gemini.google.com på en computer, og gå til Indstillinger → Forbundne apps",
+    "geminiStep2": "Under Tilpassede apps klikkes på Tilføj en tilpasset app",
+    "geminiStep3": "Indsæt MCP-serverens URL ovenfor og lad Avancerede funktioner være lukkede; Gemini registreres automatisk",
+    "geminiStep4": "Klik på Næste og godkend med Heym-legitimationsoplysninger",
+    "geminiInfo": "Gemini bruger OAuth til sikker godkendelse. Heym-legitimationsoplysninger bruges til at godkende adgang og deles aldrig med Gemini. Når forbindelsen er oprettet, fungerer Heym også i Gemini-mobilappen."
   },
   "analytics": {
     "dashboardTitle": "Analyse-dashboard",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekunder",
       "apply": "Anvend",
       "nextRefreshIn": "Næste opdatering om {time}"
-    }
+    },
+    "widgetType": "Widget-type",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Vælg et workflow",
+    "workflowWidgetHint": "Et workflow, der modtager en fil, får et slipområde, et med indtastningsfelter får disse felter, og et uden input får en Kør-knap. Hver kørsel viser sit resultat.",
+    "noWorkflowsYet": "Ingen workflows endnu.",
+    "clearRecord": "Ryd post",
+    "rowLink": "Rækkelink",
+    "noLink": "Intet link",
+    "removeRowLink": "Fjern rækkelink",
+    "recordColumn": "Postkolonne",
+    "recordColumnPlaceholder": "Kolonne, der indeholder posten, f.eks. id",
+    "labelColumn": "Etiketkolonne",
+    "labelColumnPlaceholder": "Kolonne, der navngiver den (valgfrit)",
+    "rowLinkHelp": "Klik på en række åbner det pågældende dashboard for rækkens post. Dets widgets læser posten som $page.record.",
+    "recordFormats": {
+      "id": "Id'er: bogstaver, tal, - _ . (op til 128)",
+      "number": "Tal",
+      "uuid": "UUID'er",
+      "email": "E-mailadresser"
+    },
+    "detailPageRecords": "Detaljesideposter",
+    "detailPageRecordsHelp": "De ?record=-værdier, dette kontrolpanel accepterer, når et rækkelink åbner det. Alt andet afvises, før en widget kører.",
+    "unreachableDashboard": "Et kontrolpanel, der ikke kan åbnes",
+    "runWorkflow": "Kør et Workflow"
   },
   "drive": {
     "filesCount": "({count} filer)",

@@ -79,7 +79,11 @@
     "apply": "Zastosuj",
     "color": "Kolor",
     "unknownError": "Nieznany błąd",
-    "custom": "Niestandardowy"
+    "custom": "Niestandardowy",
+    "run": "Uruchom",
+    "dropFileOrClick": "Upuść plik tutaj lub kliknij, aby wybrać",
+    "removeFile": "Usuń plik",
+    "chooseFileFor": "Wybierz plik dla {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Licencja",
       "unknown": "Nieznane",
       "intro": "Heym Work to drugi interfejs dla zespołów biznesowych. Użytkownicy logują się przez Heym, a wszystkie zadania są realizowane tutaj.",
-      "never": "Nigdy"
+      "never": "Nigdy",
+      "learnMore": "Dowiedz się więcej"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Nie zapisano zmian",
     "runToNode": "Uruchom do {node}",
     "configRequired": "Wymagana konfiguracja",
-    "fixIssues": "Przed uruchomieniem workflow należy rozwiązać następujące problemy:"
+    "fixIssues": "Przed uruchomieniem workflow należy rozwiązać następujące problemy:",
+    "chartOutput": {
+      "statusColumnOptional": "Kolumna statusu (opcjonalnie)",
+      "statusColumnPlaceholder": "kolumna wyświetlana jako kolorowe etykiety, np. state",
+      "statusColumnDialogLabel": "Kolumna statusu",
+      "statusColumnHelp": "Popularne słowa otrzymują kolor automatycznie: paid, done i approved oznaczają sukces; overdue i needs review wymagają uwagi; failed i rejected oznaczają błąd; pending i running oznaczają oczekiwanie. Dodaj ton dla dowolnej innej wartości.",
+      "statusTones": "Tomy statusu",
+      "statusValuePlaceholder": "wartość, np. Disputed",
+      "statusValueAriaLabel": "Wartość statusu",
+      "removeTone": "Usuń ton",
+      "addTone": "Dodaj ton",
+      "tones": {
+        "success": "Sukces",
+        "attention": "Uwaga",
+        "failure": "Niepowodzenie",
+        "waiting": "Oczekiwanie",
+        "neutral": "Neutralny"
+      }
+    }
   },
   "vectorStores": {
     "title": "Magazyny wektorowe",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-to-speech i speech-to-text dla funkcji głosowych w Chat"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nazwa użytkownika używana do logowania na serwerze SMTP",
+      "from": "Od",
+      "fromPlaceholder": "Pozostaw puste, aby wysłać jako powyższa nazwa użytkownika",
+      "fromHelp": "Opcjonalny widoczny nadawca. Serwer nadal loguje się jako powyższa nazwa użytkownika, więc konto musi mieć uprawnienia do wysyłania jako ten adres (w Gmailu: Wyślij jako)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Odepnij {name}",
     "historyId": "Historia: {id}",
     "outputLabel": "Dane wyjściowe: {label}",
-    "closeDrawer": "Zamknij panel szybkich workflows"
+    "closeDrawer": "Zamknij panel szybkich workflows",
+    "wrapLongLines": "Zawijaj długie linie",
+    "wrap": "Zawijaj"
   },
   "showcase": {
     "guidelines": "Wytyczne",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "Klucz API",
     "mcpConfiguration": "Konfiguracja MCP",
-    "addToConfigInstruction": "Dodaj poniższe do konfiguracji klienta MCP (np. {path}):"
+    "addToConfigInstruction": "Dodaj poniższe do konfiguracji klienta MCP (np. {path}):",
+    "geminiTab": "Aplikacja Gemini",
+    "geminiApp": "Aplikacja Gemini",
+    "geminiStep1": "Otwórz gemini.google.com na komputerze i przejdź do Ustawienia → Połączone aplikacje",
+    "geminiStep2": "W sekcji Aplikacje niestandardowe kliknij Dodaj aplikację niestandardową",
+    "geminiStep3": "Wklej powyższy adres URL serwera MCP i pozostaw Funkcje zaawansowane zamknięte; Gemini zarejestruje się automatycznie",
+    "geminiStep4": "Kliknij Dalej i autoryzuj przy użyciu danych logowania Heym",
+    "geminiInfo": "Gemini używa protokołu OAuth do bezpiecznego uwierzytelniania. Dane uwierzytelniające Heym służą do autoryzacji dostępu i nigdy nie są udostępniane Gemini. Po połączeniu Heym działa również w aplikacji mobilnej Gemini."
   },
   "analytics": {
     "dashboardTitle": "Panel analityczny",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekundy",
       "apply": "Zastosuj",
       "nextRefreshIn": "Następne odświeżenie za {time}"
-    }
+    },
+    "widgetType": "Typ widżetu",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Wybierz workflow",
+    "workflowWidgetHint": "Workflow przyjmujący plik otrzymuje strefę upuszczania, workflow z polami wejściowymi otrzymuje te pola, a workflow bez danych wejściowych otrzymuje przycisk Uruchom. Każde wykonanie wyświetla swój wynik.",
+    "noWorkflowsYet": "Brak dostępnych przepływów pracy.",
+    "clearRecord": "Wyczyść rekord",
+    "rowLink": "Link wiersza",
+    "noLink": "Brak linku",
+    "removeRowLink": "Usuń link wiersza",
+    "recordColumn": "Kolumna rekordu",
+    "recordColumnPlaceholder": "Kolumna zawierająca rekord, np. id",
+    "labelColumn": "Kolumna etykiety",
+    "labelColumnPlaceholder": "Kolumna z nazwą (opcjonalnie)",
+    "rowLinkHelp": "Kliknięcie wiersza otwiera ten dashboard dla rekordu wiersza. Jego widżety odczytują rekord jako $page.record.",
+    "recordFormats": {
+      "id": "Identyfikatory: litery, cyfry, - _ . (do 128)",
+      "number": "Liczby",
+      "uuid": "UUID",
+      "email": "Adresy e-mail"
+    },
+    "detailPageRecords": "Rekordy strony szczegółów",
+    "detailPageRecordsHelp": "Wartości ?record= akceptowane przez ten pulpit po otwarciu przez link w wierszu. Inne wartości są odrzucane przed uruchomieniem widżetu.",
+    "unreachableDashboard": "Pulpit, do którego brak dostępu",
+    "runWorkflow": "Uruchom Workflow"
   },
   "drive": {
     "filesCount": "({count} plików)",

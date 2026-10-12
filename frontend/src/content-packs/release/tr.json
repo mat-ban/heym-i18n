@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "İş ekipleri için Heym Work ve Chat'te beceri zip dosyaları",
+    "releaseTour": {
+      "label": "Heym'de yeni",
+      "introTitle": "Bu sürümdeki yenilikler",
+      "introDescription": "Son güncellemenizden bu yana yapılan yeniliklere hızlı bir bakış. Tahmini süre: yaklaşık bir dakika.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, Heym üzerindeki iş katmanı",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work**, iş ekipleri için ikinci bir arayüzdür. Kullanıcılar bir görevi kendi sözcükleriyle açıklar, birkaç soruyu yanıtlar ve Heym tarafından oluşturulup test edilmiş bir Workflow elde eder. Kendileri için oluşturulan sayfalarda çalışır, incelemeleri yanıtlar ve Heym her görevi arka planda yürütürken her çalıştırmayı bir adla görürler."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym yöneticileri bunu **Ayarlar, Heym Work** bölümünden bağlar: Heym Work adresini girin, bir anahtar oluşturun ve bağlantıyı etkinleştirin. Kullanıcılar Heym'in zaten kullandığı Single Sign-On ile oturum açar. Heym Work ayrı olarak lisanslanır; bkz. heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "İş ekipleri bir görevi açıklar, soruları yanıtlar ve Heym tarafından çalıştırılan test edilmiş bir Workflow alır.",
+          "useCases": [
+            "Hukuk, finans veya operasyon ekibine işleri otomatikleştirmek için kendi alanını sağlayın",
+            "Ayarlar, Heym Work bölümünden adres ve anahtarla bağlayın",
+            "Her ekip için Single Sign-On, roller ve onay süreçlerini koruyun"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "heym.run adresinde daha fazla bilgi edinin"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Chat'e beceri zip dosyası bırakma",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat **ZIP** dosyalarını kabul eder. Arşivde bir **SKILL.md** ve yanında Python dosyaları bulunduğunda Chat bu beceriyi bir Agent'a atayabilir. Beceri dosyası içermeyen bir zip, sohbette bağlam olarak kalır."
+          },
+          {
+            "type": "prose",
+            "markdown": "Chat'ten önceden kaydedilmiş bir beceriyi değiştirmesini isteyin. Belirtilen dosyaları günceller ve yeniden yazmadığı Python kodu dahil diğer her şeyi olduğu gibi bırakır. Bir Workflow seçildiğinde beceri oraya eklenir. Aksi takdirde Chat, beceriyi taşıyan bir Agent ile yeni bir Workflow başlatır."
+          }
+        ],
+        "tour": {
+          "description": "Chat'e bir beceri zip dosyası ekleyin ve Heym bunu bir Agent'a atasın.",
+          "useCases": [
+            "SKILL.md ve Python dosyası içeren sıkıştırılmış beceri klasörünü bırakın",
+            "Chat'ten Python kodunu kaybetmeden beceri metnini yeniden yazmasını isteyin",
+            "Agent'ı beceriyi taşıyan yeni bir Workflow başlatın"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Bir Workflow içindeki bir düğümü yeniden etkinleştirin",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "Yapay zeka asistanı Workflow'larını test ediyor ve DataTable'ları yapılandırıyor",
+    "headline": "AI Asistanı veri tablolarınızı kurar",
     "releaseTour": {
       "label": "Heym'de yeni",
       "introTitle": "Bu sürümdeki yenilikler",
       "introDescription": "Son güncellemenizden bu yana yapılan yeniliklere hızlı bir bakış. Süre: yaklaşık bir dakika.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO modu: yapay zeka asistanı oluşturduğunu test ediyor",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Canvas'taki **yapay zeka asistanında** **YOLO modunu** etkinleştirin: bir Workflow uygulandıktan sonra artık durmaz. Workflow'u **Run** üzerinden çalıştırır gibi yürütür, sonucu okur ve Workflow'u her mesajda en fazla beş kez olmak üzere otonom olarak düzeltir. Her yanıt adımları gerçek zamanlı olarak listeler."
-          },
-          {
-            "type": "prose",
-            "markdown": "İlk çalıştırmadan önce önerilen değerlerle test verileri ister ve bunları yeniden kullanır. Sonuçlarına ihtiyaç duyduğunda diğer Workflow'ları da çalıştırabilir. Bir karar veya kimlik bilgisi gerektiğinde, bunları olağan soru kartı aracılığıyla ister. Gerçek çalıştırmalar: YOLO modu varsayılan olarak devre dışıdır ve **Stop** süreci istediğiniz zaman kesintiye uğratır."
-          }
-        ],
-        "tour": {
-          "description": "Yapay zeka asistanı oluşturulan Workflow'ları çalıştırır, sonucu doğrular ve çalışana kadar hataları otonom olarak düzeltir.",
-          "useCases": [
-            "Bir Workflow'u tanımlayın ve doğrudan test edilmiş bir sürüm elde edin",
-            "Asistanın hatalı düğümleri otomatik olarak algılamasını ve düzeltmesini sağlayın",
-            "Bağlamadan önce diğer Workflow'ların dönüş değerlerini doğrulayın"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "Yapay zeka asistanı DataTable'ları seçiyor veya oluşturuyor",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Birden fazla dashboard oluşturun ve ekibinizle paylaşın",
-    "releaseTour": {
-      "label": "Heym'de yeni",
-      "introTitle": "Bu sürümdeki yenilikler",
-      "introDescription": "Son güncellemenizden bu yana yapılan yeniliklere hızlı bir bakış. Tahmini süre: yaklaşık bir dakika.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Birden fazla dashboard oluşturun ve ekibinizle paylaşın",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "**Dashboard** sekmesi artık sınırsız sayıda dashboard desteklemektedir. Sekmenin üst kısmındaki seçici aracılığıyla kolayca geçiş yapın veya **+** ile yeni bir tane oluşturun."
-          },
-          {
-            "type": "prose",
-            "markdown": "Dashboard'ları **Ayarlar** üzerinden kişilerle veya ekiplerle paylaşın. **Okuma** modu görüntülemeye ve yenilemeye olanak tanır; **Yazma** modu widget'ların değiştirilmesine olanak tanır. Widget'lar her zaman sahibinin kimlik bilgilerini kullanır."
-          }
-        ],
-        "tour": {
-          "description": "Birden fazla dashboard yönetin, aralarında geçiş yapın ve bunları salt okunur veya yazma modunda paylaşın.",
-          "useCases": [
-            "Ekip, ürün veya müşteri bazında ayrı dashboard'lar yapılandırın",
-            "Paydaşlara salt okunur bir görünüm sunun",
-            "Grafik türlerini örnek verilerle önceden test edin"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

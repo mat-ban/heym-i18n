@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "비즈니스 팀을 위한 Heym Work 및 Chat의 스킬 zip",
+    "releaseTour": {
+      "label": "Heym의 새로운 기능",
+      "introTitle": "이번 릴리스의 새로운 기능",
+      "introDescription": "마지막 업데이트 이후의 새로운 기능을 간략히 소개합니다. 약 1분 정도 소요됩니다.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, Heym 기반의 비즈니스 레이어",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work**는 비즈니스 팀을 위한 두 번째 인터페이스입니다. 사용자가 자신의 언어로 작업을 설명하고 몇 가지 질문에 답하면 Heym이 구축하고 테스트한 Workflow를 받게 됩니다. 맞춤 제작된 페이지에서 작업하고 검토를 처리하며 이름이 지정된 모든 실행을 확인할 수 있으며, Heym은 백그라운드에서 각 작업을 실행합니다."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym 관리자는 **설정, Heym Work**에서 연결합니다. Heym Work 주소를 입력하고 키를 생성한 후 연결을 활성화합니다. 로그인은 Heym에서 이미 사용하는 Single Sign-On으로 진행됩니다. Heym Work는 별도로 라이선스가 부여됩니다. heym.run/enterprise를 참조하세요."
+          }
+        ],
+        "tour": {
+          "description": "비즈니스 팀이 작업을 설명하고 질문에 답하면 Heym이 실행하는 검증된 Workflow를 제공받습니다.",
+          "useCases": [
+            "법무, 재무 또는 운영 팀에 업무 자동화를 위한 전용 공간 제공",
+            "설정, Heym Work에서 주소와 키로 연결",
+            "모든 팀에 대해 Single Sign-On, 역할 및 승인 프로세스 유지"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "heym.run에서 자세히 알아보기"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Chat에 스킬 zip 파일 끌어다 놓기",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat은 **ZIP** 파일을 지원합니다. 아카이브에 **SKILL.md** 및 관련 Python 파일이 포함되어 있으면 Chat이 해당 스킬을 Agent에 할당할 수 있습니다. 스킬 파일이 없는 zip 파일은 대화의 컨텍스트로 유지됩니다."
+          },
+          {
+            "type": "prose",
+            "markdown": "Chat에 이미 저장된 스킬 수정을 요청할 수 있습니다. 지정된 파일을 업데이트하고 다시 작성하지 않은 Python 코드를 포함한 나머지는 그대로 유지합니다. 선택된 Workflow가 있으면 스킬이 그곳에 배치됩니다. 그렇지 않으면 Chat이 해당 스킬을 보유한 하나의 Agent로 Workflow를 시작합니다."
+          }
+        ],
+        "tour": {
+          "description": "Chat에 스킬 zip을 첨부하면 Heym이 Agent에 스킬을 할당합니다.",
+          "useCases": [
+            "SKILL.md 및 Python 파일이 포함된 압축 스킬 폴더 끌어다 놓기",
+            "Python 코드를 보존하면서 스킬 텍스트를 다시 작성하도록 Chat에 요청",
+            "스킬을 보유한 Agent가 포함된 새 Workflow 시작"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Workflow 내의 노드를 다시 활성화",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI 어시스턴트가 Workflow를 테스트하고 데이터 테이블을 설정합니다",
+    "headline": "AI 어시스턴트가 데이터 테이블을 구성합니다",
     "releaseTour": {
       "label": "Heym의 새로운 기능",
       "introTitle": "이번 릴리스의 새로운 기능",
       "introDescription": "마지막 업데이트 이후의 새로운 기능을 간략히 소개합니다. 약 1분 정도 소요됩니다.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO 모드: AI 어시스턴트가 빌드한 것을 테스트합니다",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Canvas **AI 어시스턴트**에서 **YOLO 모드**를 활성화하시면, Workflow를 적용한 후에도 중단되지 않습니다. **Run**을 통해 Workflow를 실행하고, 결과를 읽고, 메시지당 최대 5회까지 Workflow를 스스로 수정합니다. 각 응답은 단계를 실시간으로 나열합니다."
-          },
-          {
-            "type": "prose",
-            "markdown": "첫 실행 전에 제안된 값과 함께 테스트 입력을 요청하고 이를 재사용합니다. 필요한 경우 다른 Workflow의 결과를 실행할 수도 있습니다. 결정이나 자격 증명이 필요한 경우 익숙한 질문 카드로 요청합니다. 실제 실행: YOLO 모드는 기본적으로 꺼져 있으며 **Stop**은 언제든지 흐름을 종료합니다."
-          }
-        ],
-        "tour": {
-          "description": "AI 어시스턴트가 생성된 Workflow를 실행하고, 결과를 확인하며, 작동할 때까지 오류를 스스로 수정합니다.",
-          "useCases": [
-            "Workflow를 설명하고 바로 테스트된 버전을 받기",
-            "어시스턴트가 오류가 있는 노드를 자동으로 찾아 수정하도록 하기",
-            "연결하기 전에 다른 Workflow의 반환 값을 확인하기"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI 어시스턴트가 데이터 테이블을 선택하거나 생성합니다",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "여러 Dashboard를 생성하고 팀과 공유하십시오",
-    "releaseTour": {
-      "label": "Heym의 새로운 기능",
-      "introTitle": "이번 릴리스의 새로운 기능",
-      "introDescription": "마지막 업데이트 이후의 변경 사항을 간략히 소개합니다. 약 1분 정도 소요됩니다.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "여러 Dashboard를 생성하고 팀과 공유하십시오",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "**Dashboard** 탭에서 이제 원하는 만큼 많은 Dashboard를 지원합니다. 탭 상단의 선택 메뉴를 통해 편리하게 전환하거나 **+**를 눌러 새로 생성하십시오."
-          },
-          {
-            "type": "prose",
-            "markdown": "**설정**을 통해 개인 또는 팀과 Dashboard를 공유하십시오. **읽기**는 보기 및 새로 고침을 허용하며, **쓰기**는 위젯 편집을 허용합니다. 위젯은 항상 소유자의 자격 증명을 사용합니다."
-          }
-        ],
-        "tour": {
-          "description": "여러 Dashboard를 관리하고, 이들 사이를 전환하며, 읽기 전용 또는 편집 가능으로 공유하십시오.",
-          "useCases": [
-            "팀, 제품 또는 테넌트별로 별도의 Dashboard 구성",
-            "이해관계자에게 읽기 전용 보기 제공",
-            "예시 데이터로 차트 유형을 미리 테스트"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

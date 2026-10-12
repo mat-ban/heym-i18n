@@ -24,9 +24,10 @@ export function cldrPluralRule(
   }
 
   const category = pr.select(choice);
-  const supported = pr.resolvedOptions().pluralCategories;
+  const rawSupported = pr.resolvedOptions().pluralCategories;
+  const supported = CLDR_ORDER.filter((c) => rawSupported.includes(c));
 
-  // Exact category count match
+  // Exact category count match (canonically ordered by CLDR_ORDER)
   if (choicesLength === supported.length) {
     const idx = supported.indexOf(category);
     return idx >= 0 ? idx : choicesLength - 1;
@@ -38,8 +39,7 @@ export function cldrPluralRule(
   }
 
   // Match against standard CLDR order subset
-  const filtered = CLDR_ORDER.filter((c) => supported.includes(c));
-  const idx = filtered.indexOf(category);
+  const idx = supported.indexOf(category);
   if (idx >= 0 && idx < choicesLength) {
     return idx;
   }

@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work üzleti csapatoknak és készség-zip fájlok a Chatben",
+    "releaseTour": {
+      "label": "Új a Heym-ben",
+      "introTitle": "Új funkciók ebben a kiadásban",
+      "introDescription": "Rövid áttekintés az Ön legutóbbi frissítése óta bevezetett újdonságokról. Körülbelül egy percet vesz igénybe.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, az üzleti réteg a Heym felett",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "A **Heym Work** egy második felület az üzleti csapatok számára. A felhasználók saját szavaikkal írják le a feladatot, megválaszolnak néhány kérdést, és egy Heym által felépített és tesztelt Workflow-t kapnak. A számukra készített oldalakról dolgoznak, válaszolnak a felülvizsgálatokra, és minden futtatást névvel ellátva látnak, miközben a Heym a háttérben futtatja a feladatokat."
+          },
+          {
+            "type": "prose",
+            "markdown": "A Heym rendszergazdák a **Beállítások, Heym Work** menüpontban csatlakoztatják: adja meg a Heym Work címét, hozzon létre egy kulcsot, és engedélyezze a kapcsolatot. A bejelentkezés a Heym által már használt Single Sign-On segítségével történik. A Heym Work külön licenccel rendelkezik; lásd heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Az üzleti csapatok leírnak egy feladatot, kérdésekre válaszolnak, és egy tesztelt Workflow-t kapnak a Heym futtatásában.",
+          "useCases": [
+            "Adjon jogi, pénzügyi vagy operatív csapatának saját teret a munka automatizálására",
+            "Csatlakoztassa a Beállítások, Heym Work menüpontból címmel és kulccsal",
+            "Tartsa meg a Single Sign-On-t, a szerepköröket és a jóváhagyásokat minden csapat számára"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Tudjon meg többet a heym.run oldalon"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Készség-zip behúzása a Chatbe",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "A Chat támogatja a **ZIP** fájlokat. Ha az archívum tartalmaz egy **SKILL.md** fájlt és mellette lévő Python fájlokat, a Chat képes ezt a készséget egy Agenthez rendelni. A készségfájl nélküli zip kontextusként a beszélgetésben marad."
+          },
+          {
+            "type": "prose",
+            "markdown": "Kérje meg a Chatet egy már elmentett készség módosítására. Frissíti a megnevezett fájlokat, és a többit, beleértve az újra nem írt Python kódot, érintetlenül hagyja. Kijelölt Workflow esetén a készség oda kerül. Ellenkező esetben a Chat elindít egy Workflow-t egyetlen, a készséget hordozó Agenttel."
+          }
+        ],
+        "tour": {
+          "description": "Csatoljon készség-zipet a Chatben, és a Heym hozzárendeli egy Agenthez.",
+          "useCases": [
+            "Húzzon be egy becsomagolt készségmappát SKILL.md és Python fájllal",
+            "Kérje meg a Chatet a készségszöveg átírására a Python kód elvesztése nélkül",
+            "Indítson új Workflow-t, amelynek Agentje hordozza a készséget"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Csomópont újraaktiválása egy Workflow-n belül",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "Az AI-asszisztens teszteli a Workflow-jait és adattáblákat hoz létre",
+    "headline": "Az AI asszisztens beállítja az adattábláit",
     "releaseTour": {
       "label": "Új a Heym-ben",
       "introTitle": "Új ebben a kiadásban",
       "introDescription": "Rövid áttekintés az Ön legutóbbi frissítése óta bevezetett újdonságokról. Körülbelül egy percet vesz igénybe.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO-mód: Az AI-asszisztens teszteli, amit épít",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Aktiválja a **YOLO-módot** a Canvas **AI-asszisztensében**, és az nem áll le többé egy Workflow alkalmazása után. A Workflow-t a **Run** funkcióhoz hasonlóan futtatja, kiolvassa az eredményt, és önállóan korrigálja a Workflow-t üzenetenként legfeljebb ötször. Minden válasz élőben listázza a lépéseket."
-          },
-          {
-            "type": "prose",
-            "markdown": "Az első futtatás előtt teszt-bemeneteket kér javasolt értékekkel, és ezeket újra felhasználja. Más Workflow-kat is futtathat, ha azok eredményeire szüksége van. Ha döntésre vagy hozzáférési adatokra van szüksége, a megszokott kérdéskártyával kérdez rá. Valódi futtatások: A YOLO-mód alapértelmezés szerint ki van kapcsolva, és a **Stop** bármikor leállítja a folyamatot."
-          }
-        ],
-        "tour": {
-          "description": "Az AI-asszisztens futtatja a létrehozott Workflow-kat, ellenőrzi az eredményt, és önállóan javítja a hibákat, amíg az működik.",
-          "useCases": [
-            "Egy Workflow leírása és azonnal egy tesztelt verzió átvétele",
-            "Az asszisztenssel a hibás csomópontokat automatikusan felkutatni és kijavítani",
-            "Más Workflow-k visszatérési értékeinek ellenőrzése az összekapcsolás előtt"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "Az AI-asszisztens adattáblákat választ vagy hoz létre",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Több Dashboard létrehozása és megosztása a csapattal",
-    "releaseTour": {
-      "label": "Új a Heym-ben",
-      "introTitle": "Új ebben a kiadásban",
-      "introDescription": "Rövid áttekintés az Ön legutóbbi frissítése óta történt újdonságokról. Körülbelül egy percet vesz igénybe.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Több Dashboard létrehozása és megosztása a csapattal",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "A **Dashboard** fül mostantól tetszőleges számú Dashboardot támogat. Kényelmesen válthat a fül tetején található választóval, vagy hozzon létre újat a **+** gombbal."
-          },
-          {
-            "type": "prose",
-            "markdown": "Ossza meg a Dashboardokat személyekkel vagy csapatokkal a **Beállítások** segítségével. A **Olvasás** engedélyezi a megjelenítést és a frissítést; az **Írás** engedélyezi a widgetek szerkesztését. A widgetek mindig a tulajdonos hitelesítő adatait használják."
-          }
-        ],
-        "tour": {
-          "description": "Több Dashboard kezelése, a köztük való váltás, valamint megosztásuk írásvédett vagy szerkeszthető módban.",
-          "useCases": [
-            "Külön Dashboardok strukturálása csapat, termék vagy bérlő szerint",
-            "Írásvédett nézet biztosítása az érintettek számára",
-            "Diagramtípusok előzetes tesztelése példaadatokkal"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

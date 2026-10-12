@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { X } from "lucide-vue-next";
 
+import { runWidgetOption } from "@/components/Dashboards/runWidget";
 import ChartRenderer from "@/components/Dashboards/ChartRenderer.vue";
 import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
 import Select from "@/components/ui/Select.vue";
 import { CHART_TYPE_EXAMPLES, chartTypeExample } from "@/lib/chartTypeExamples";
-import type { ChartPayload, WidgetCreateRequest } from "@/types/dashboard";
+import { workflowApi, type WorkflowWithInputs } from "@/services/api";
+import type { ChartPayload, WidgetCreateRequest, WidgetType } from "@/types/dashboard";
 
 const emit = defineEmits<{
   (e: "close"): void;
@@ -26,20 +29,50 @@ function onKeydown(event: KeyboardEvent): void {
 onMounted(() => window.addEventListener("keydown", onKeydown, true));
 onUnmounted(() => window.removeEventListener("keydown", onKeydown, true));
 
+const { t } = useI18n();
+
 const title = ref("New widget");
 const description = ref("");
-const chartType = ref<ChartPayload["type"]>("bar");
+const chartType = ref<WidgetType>("bar");
 
-const chartTypeOptions = CHART_TYPE_EXAMPLES.map(({ value, label }) => ({ value, label }));
-const example = computed(() => chartTypeExample(chartType.value));
+const chartTypeOptions = computed<{ value: WidgetType; label: string }[]>(() => [
+  ...CHART_TYPE_EXAMPLES.map(({ value, label }) => ({ value, label })),
+  { value: "fileRun", label: t("dashboards.runWorkflow") },
+]);
+const isFileRun = computed<boolean>(() => chartType.value === "fileRun");
+const example = computed(() =>
+  isFileRun.value ? null : chartTypeExample(chartType.value as ChartPayload["type"]),
+);
+
+// A run widget runs one of the user's workflows: on a dropped file, with its fields, or as is.
+const fileWorkflows = ref<WorkflowWithInputs[]>([]);
+const workflowsLoaded = ref(false);
+const workflowId = ref<string | undefined>(undefined);
+const workflowOptions = computed(() =>
+  fileWorkflows.value.map(runWidgetOption),
+);
+const canSubmit = computed<boolean>(() => !isFileRun.value || Boolean(workflowId.value));
+
+watch(isFileRun, async (fileRun) => {
+  if (!fileRun || workflowsLoaded.value) return;
+  try {
+    fileWorkflows.value = await workflowApi.listWithInputs();
+  } catch {
+    fileWorkflows.value = [];
+  } finally {
+    workflowsLoaded.value = true;
+  }
+});
 
 function submit(): void {
+  if (!canSubmit.value) return;
   emit("create", {
     title: title.value.trim() || "Untitled",
     description: description.value.trim() ? description.value.trim() : null,
     chart_type: chartType.value,
     layout: { x: 0, y: 0, w: 4, h: 4 },
     cache_ttl_seconds: 300,
+    ...(isFileRun.value ? { workflow_id: workflowId.value } : {}),
   });
 }
 </script>
@@ -48,6 +81,7 @@ function submit(): void {
   <Teleport to="body">
     <div
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      data-testid="add-widget-dialog"
       @click.self="emit('close')"
     >
       <div class="mx-4 max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-lg border bg-card p-5 shadow-lg">
@@ -78,18 +112,40 @@ function submit(): void {
             />
           </div>
           <div class="space-y-1">
-            <label class="text-sm font-medium">{{ $t("dashboards.chartType") }}</label>
+            <label class="text-sm font-medium">{{ $t("dashboards.widgetType") }}</label>
             <Select
-              v-model="chartType"
+              :model-value="chartType"
               :options="chartTypeOptions"
+              data-testid="add-widget-type"
+              @update:model-value="chartType = ($event as WidgetType | undefined) ?? 'bar'"
             />
+            <div
+              v-if="isFileRun"
+              class="space-y-1 pt-2"
+            >
+              <label class="text-sm font-medium">{{ $t("dashboards.workflow") }}</label>
+              <Select
+                v-model="workflowId"
+                :options="workflowOptions"
+                :placeholder="$t('dashboards.chooseWorkflow')"
+                data-testid="add-widget-file-workflow"
+              />
+              <p class="pt-1 text-xs text-muted-foreground">
+                {{ $t("dashboards.workflowWidgetHint") }}
+                <template v-if="workflowsLoaded && fileWorkflows.length === 0">
+                  {{ $t("dashboards.noWorkflowsYet") }}
+                </template>
+              </p>
+            </div>
             <p
+              v-if="example"
               class="pt-1 text-xs text-muted-foreground"
               data-testid="add-widget-chart-hint"
             >
               {{ example.hint }}
             </p>
             <div
+              v-if="example"
               class="relative mt-1 rounded-md border border-dashed bg-background/60 p-2"
               data-testid="add-widget-chart-example"
             >
@@ -116,8 +172,11 @@ function submit(): void {
           >
             {{ $t("common.cancel") }}
           </Button>
-          <Button @click="submit">
-            {{ $t("dashboards.createAndEdit") }}
+          <Button
+            :disabled="!canSubmit"
+            @click="submit"
+          >
+            {{ isFileRun ? $t("dashboards.addWidget") : $t("dashboards.createAndEdit") }}
           </Button>
         </div>
       </div>

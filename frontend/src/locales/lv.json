@@ -79,7 +79,11 @@
     "apply": "Piemērot",
     "color": "Krāsa",
     "unknownError": "Nezināma kļūda",
-    "custom": "Pielāgots"
+    "custom": "Pielāgots",
+    "run": "Palaist",
+    "dropFileOrClick": "Ievelciet failu šeit vai noklikšķiniet, lai izvēlētos",
+    "removeFile": "Noņemt failu",
+    "chooseFileFor": "Izvēlieties failu vienumam {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Licence",
       "unknown": "Nezināms",
       "intro": "Heym Work ir otra saskarne uzņēmuma komandām. Cilvēki pierakstās caur Heym, un visi darbi tiek izpildīti šeit.",
-      "never": "Nekad"
+      "never": "Nekad",
+      "learnMore": "Uzzināt vairāk"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Nesaglabātas izmaiņas",
     "runToNode": "Palaist līdz {node}",
     "configRequired": "Nepieciešama konfigurācija",
-    "fixIssues": "Lūdzu, novērsiet šīs problēmas pirms Workflow palaišanas:"
+    "fixIssues": "Lūdzu, novērsiet šīs problēmas pirms Workflow palaišanas:",
+    "chartOutput": {
+      "statusColumnOptional": "Statusa kolonna (neobligāti)",
+      "statusColumnPlaceholder": "kolonna, kas parādīta kā krāsaini elementi, piem., state",
+      "statusColumnDialogLabel": "Statusa kolonna",
+      "statusColumnHelp": "Biežāk lietotie vārdi automātiski iegūst krāsu: paid, done un approved apzīmē veiksmi; overdue un needs review prasa uzmanību; failed un rejected nozīmē kļūdu; pending un running apzīmē gaidīšanu. Pievienojiet toni jebkurai citai vērtībai.",
+      "statusTones": "Statusa toņi",
+      "statusValuePlaceholder": "vērtība, piem., Disputed",
+      "statusValueAriaLabel": "Statusa vērtība",
+      "removeTone": "Noņemt toni",
+      "addTone": "Pievienot toni",
+      "tones": {
+        "success": "Izdevies",
+        "attention": "Uzmanību",
+        "failure": "Kļūda",
+        "waiting": "Gaida",
+        "neutral": "Neitrāls"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektoru krātuves",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Teksta pārvēršana runā un runas pārvēršana tekstā chat balss funkcijām"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Lietotājvārds, ar kuru piesakās SMTP serveris",
+      "from": "No",
+      "fromPlaceholder": "Atstājiet tukšu, lai sūtītu kā iepriekš norādītais lietotājvārds",
+      "fromHelp": "Neobligāts redzamais sūtītājs. Serveris joprojām piesakās ar iepriekš norādīto lietotājvārdu, tāpēc šim kontam ir jābūt atļaujai sūtīt kā šai adresei (pakalpojumā Gmail: Sūtīt pastu kā)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Atspraust {name}",
     "historyId": "Vēsture: {id}",
     "outputLabel": "Izvade: {label}",
-    "closeDrawer": "Aizvērt ātro Workflow paneli"
+    "closeDrawer": "Aizvērt ātro Workflow paneli",
+    "wrapLongLines": "Pārnest garas rindas",
+    "wrap": "Pārnest"
   },
   "showcase": {
     "guidelines": "Vadlīnijas",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP konfigurācija",
-    "addToConfigInstruction": "Pievienojiet šo savai MCP klienta konfigurācijai (piem., {path}):"
+    "addToConfigInstruction": "Pievienojiet šo savai MCP klienta konfigurācijai (piem., {path}):",
+    "geminiTab": "Lietotne Gemini",
+    "geminiApp": "Lietotne Gemini",
+    "geminiStep1": "Datorā atveriet gemini.google.com un dodieties uz Iestatījumi → Savienotās lietotnes",
+    "geminiStep2": "Sadaļā Pielāgotas lietotnes noklikšķiniet uz Pievienot pielāgotu lietotni",
+    "geminiStep3": "Ielīmējiet augstāk norādīto MCP servera URL un atstājiet Papildu funkcijas aizvērtas; Gemini reģistrēsies automātiski",
+    "geminiStep4": "Noklikšķiniet uz Tālāk un autorizējieties ar saviem Heym akreditācijas datiem",
+    "geminiInfo": "Gemini izmanto OAuth drošai autentifikācijai. Jūsu Heym akreditācijas dati tiek izmantoti piekļuves autorizēšanai un nekad netiek kopīgoti ar Gemini. Pēc savienojuma izveides Heym darbojas arī Gemini mobilajā lietotnē."
   },
   "analytics": {
     "dashboardTitle": "Analītikas panelis",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekundes",
       "apply": "Lietot",
       "nextRefreshIn": "Nākamā atjaunināšana pēc {time}"
-    }
+    },
+    "widgetType": "Logrīka veids",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Izvēlieties workflow",
+    "workflowWidgetHint": "Workflow, kas pieņem failu, iegūst nomešanas zonu, tāds ar ievades laukiem iegūst šos laukus, un tāds bez ievadēm iegūst pogu Palaist. Katrs palaistais process parāda savu rezultātu.",
+    "noWorkflowsYet": "Jums vēl nav nevienas darbplūsmas.",
+    "clearRecord": "Notīrīt ierakstu",
+    "rowLink": "Rindas saite",
+    "noLink": "Nav saites",
+    "removeRowLink": "Noņemt rindas saiti",
+    "recordColumn": "Ieraksta kolonna",
+    "recordColumnPlaceholder": "Kolonna, kurā ir ieraksts, piem., id",
+    "labelColumn": "Etiķetes kolonna",
+    "labelColumnPlaceholder": "Kolonna, kas to nosauc (neobligāti)",
+    "rowLinkHelp": "Noklikšķinot uz rindas, tiek atvērts attiecīgais informācijas panelis rindas ierakstam. Tā logrīki nolasa ierakstu kā $page.record.",
+    "recordFormats": {
+      "id": "ID: burti, cipari, - _ . (līdz 128)",
+      "number": "Skaitļi",
+      "uuid": "UUID",
+      "email": "E-pasta adreses"
+    },
+    "detailPageRecords": "Detalizētās lapas ieraksti",
+    "detailPageRecordsHelp": "Vērtības ?record=, kuras šis informācijas panelis pieņem, kad to atver rindas saite. Viss pārējais tiek noraidīts pirms logrīka izpildes.",
+    "unreachableDashboard": "Informācijas panelis, kuru nevarat atvērt",
+    "runWorkflow": "Palaist Workflow"
   },
   "drive": {
     "filesCount": "({count} faili)",

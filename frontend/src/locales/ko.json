@@ -79,7 +79,11 @@
     "apply": "적용",
     "color": "색상",
     "unknownError": "알 수 없는 오류",
-    "custom": "사용자 지정"
+    "custom": "사용자 지정",
+    "run": "실행",
+    "dropFileOrClick": "여기에 파일을 드롭하거나 클릭하여 선택",
+    "removeFile": "파일 제거",
+    "chooseFileFor": "{label}용 파일 선택"
   },
   "nav": {
     "workflows": "Workflow",
@@ -268,7 +272,8 @@
       "license": "라이선스",
       "unknown": "알 수 없음",
       "intro": "Heym Work는 비즈니스 팀을 위한 두 번째 인터페이스입니다. 사용자는 Heym을 통해 로그인하며, 모든 작업은 여기에서 실행됩니다.",
-      "never": "없음"
+      "never": "없음",
+      "learnMore": "자세히 알아보기"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "저장되지 않은 변경 사항",
     "runToNode": "{node}까지 실행",
     "configRequired": "구성 필요",
-    "fixIssues": "Workflow를 실행하기 전에 다음 문제를 해결하십시오:"
+    "fixIssues": "Workflow를 실행하기 전에 다음 문제를 해결하십시오:",
+    "chartOutput": {
+      "statusColumnOptional": "상태 열 (선택 사항)",
+      "statusColumnPlaceholder": "색상 칩으로 표시되는 열 (예: state)",
+      "statusColumnDialogLabel": "상태 열",
+      "statusColumnHelp": "일반적인 단어에는 자동으로 색상이 지정됩니다. paid, done, approved는 성공, overdue, needs review는 주의, failed, rejected는 실패, pending, running은 대기입니다. 다른 값에는 톤을 추가하세요.",
+      "statusTones": "상태 톤",
+      "statusValuePlaceholder": "값 (예: Disputed)",
+      "statusValueAriaLabel": "상태 값",
+      "removeTone": "톤 제거",
+      "addTone": "톤 추가",
+      "tones": {
+        "success": "성공",
+        "attention": "주의",
+        "failure": "실패",
+        "waiting": "대기 중",
+        "neutral": "중립"
+      }
+    }
   },
   "vectorStores": {
     "title": "벡터 저장소",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "채팅 음성 기능을 위한 텍스트 음성 변환 및 음성 텍스트 변환"
       }
+    },
+    "smtp": {
+      "usernameHelp": "SMTP 서버에 로그인하는 사용자 이름",
+      "from": "보낸 사람",
+      "fromPlaceholder": "위 사용자 이름으로 보내려면 비워 둡니다",
+      "fromHelp": "선택적 가시적 보낸 사람입니다. 서버는 여전히 위의 사용자 이름으로 로그인하므로 해당 계정은 이 주소로 보낼 수 있는 권한이 있어야 합니다(Gmail의 경우 '다른 주소에서 대량 메일 보내기')."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "{name} 고정 해제",
     "historyId": "기록: {id}",
     "outputLabel": "출력: {label}",
-    "closeDrawer": "빠른 Workflow 서랍 닫기"
+    "closeDrawer": "빠른 Workflow 서랍 닫기",
+    "wrapLongLines": "긴 줄 바꿈",
+    "wrap": "줄 바꿈"
   },
   "showcase": {
     "guidelines": "가이드라인",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP 구성",
-    "addToConfigInstruction": "다음을 MCP 클라이언트 구성(예: {path})에 추가하십시오:"
+    "addToConfigInstruction": "다음을 MCP 클라이언트 구성(예: {path})에 추가하십시오:",
+    "geminiTab": "Gemini 앱",
+    "geminiApp": "Gemini 앱",
+    "geminiStep1": "컴퓨터에서 gemini.google.com을 열고 설정 → 연결된 앱으로 이동합니다",
+    "geminiStep2": "맞춤 앱 아래에서 맞춤 앱 추가를 클릭합니다",
+    "geminiStep3": "위의 MCP 서버 URL을 붙여넣고 고급 기능은 닫아 둡니다. Gemini가 자동으로 등록됩니다",
+    "geminiStep4": "다음을 클릭하고 Heym 자격 증명으로 인증합니다",
+    "geminiInfo": "Gemini는 안전한 인증을 위해 OAuth를 사용합니다. Heym 자격 증명은 액세스 권한을 부여하는 데 사용되며 Gemini와 공유되지 않습니다. 연결되면 Heym은 Gemini 모바일 앱에서도 작동합니다."
   },
   "analytics": {
     "dashboardTitle": "분석 대시보드",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "초",
       "apply": "적용",
       "nextRefreshIn": "{time} 후 새로 고침"
-    }
+    },
+    "widgetType": "위젯 유형",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Workflow 선택",
+    "workflowWidgetHint": "파일을 받는 Workflow에는 드롭 영역이 제공되고, 입력 필드가 있는 경우 해당 필드가 제공되며, 입력이 없는 경우 실행 버튼이 제공됩니다. 각 실행마다 결과가 표시됩니다.",
+    "noWorkflowsYet": "아직 Workflow가 없습니다.",
+    "clearRecord": "레코드 지우기",
+    "rowLink": "행 링크",
+    "noLink": "링크 없음",
+    "removeRowLink": "행 링크 제거",
+    "recordColumn": "레코드 열",
+    "recordColumnPlaceholder": "레코드를 보관하는 열 (예: id)",
+    "labelColumn": "레이블 열",
+    "labelColumnPlaceholder": "이름을 지정하는 열 (선택 사항)",
+    "rowLinkHelp": "행을 클릭하면 해당 행의 레코드에 대한 대시보드가 열립니다. 위젯은 레코드를 $page.record로 읽습니다.",
+    "recordFormats": {
+      "id": "ID: 영문자, 숫자, - _ . (최대 128자)",
+      "number": "숫자",
+      "uuid": "UUID",
+      "email": "이메일 주소"
+    },
+    "detailPageRecords": "세부정보 페이지 레코드",
+    "detailPageRecordsHelp": "행 링크로 열릴 때 이 대시보드가 허용하는 ?record= 값입니다. 그 외의 값은 위젯 실행 전에 거부됩니다.",
+    "unreachableDashboard": "열 수 없는 대시보드",
+    "runWorkflow": "Workflow 실행"
   },
   "drive": {
     "filesCount": "(파일 {count}개)",

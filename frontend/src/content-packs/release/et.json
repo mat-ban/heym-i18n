@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work ärimeeskondadele ja oskuste zip-failid Chatis",
+    "releaseTour": {
+      "label": "Uus Heymis",
+      "introTitle": "Selles releases uut",
+      "introDescription": "Lühike ülevaade uuendustest alates teie viimasest uuendusest. Kestab umbes ühe minuti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, äriline kiht Heymi peal",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** on teine liides ärimeeskondadele. Kasutajad kirjeldavad ülesannet oma sõnadega, vastavad mõnele küsimusele ja saavad Heymi loodud ja testitud Workflow'. Nad töötavad spetsiaalselt neile loodud lehtedel, vastavad ülevaatustele ja näevad iga käivitust nimega, samal ajal kui Heym teostab iga töö taustal."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heymi administraatorid ühendavad selle menüüs **Seaded, Heym Work**: sisestage Heym Worki aadress, genereerige võti ja lubage ühendus. Sisselogimine toimub sama Single Sign-Oni kaudu, mida Heym juba kasutab. Heym Work on litsentsitud eraldi; vt heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Ärimeeskonnad kirjeldavad ülesannet, vastavad küsimustele ja saavad testitud Workflow', mida Heym käitab.",
+          "useCases": [
+            "Andke juriidilisele, finants- või operatiivmeeskonnale oma ruum töö automatiseerimiseks",
+            "Ühendage menüüst Seaded, Heym Work aadressi ja võtmega",
+            "Säilitage Single Sign-On, rollid ja kinnitused iga meeskonna jaoks"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Lisateave lehel heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Oskuse zip-faili lohistamine Chati",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat võtab vastu **ZIP-faile**. Kui arhiiv sisaldab faili **SKILL.md** ja selle kõrval olevaid Pythoni faile, saab Chat selle oskuse määrata Agentile. Oskuste failita zip jääb vestlusesse kontekstina."
+          },
+          {
+            "type": "prose",
+            "markdown": "Paluge Chatil muuta juba salvestatud oskust. See värskendab nimetatud faile ja jätab ülejäänud, sealhulgas muutmata Pythoni koodi, puutumata. Valitud Workflow' korral paigutatakse oskus sinna. Vastasel juhul käivitab Chat Workflow' ühe Agentiga, kellel on see oskus."
+          }
+        ],
+        "tour": {
+          "description": "Manustage Chatis oskuse zip ja Heym määrab selle Agentile.",
+          "useCases": [
+            "Lohistage kokkupakitud oskuste kaust koos failidega SKILL.md ja Python",
+            "Paluge Chatil oskuse teksti ümber kirjutada ilma Pythoni koodi kaotamata",
+            "Käivitage uus Workflow, mille Agent omab seda oskust"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Knoteni uuesti aktiveerimine Workflow' sees",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI-assistent testib oma Workflow'sid ja loob andmetabeleid",
+    "headline": "Tehisintellekti assistent seadistab teie andmetabelid",
     "releaseTour": {
       "label": "Uus Hey mis",
       "introTitle": "Selles releases uut",
       "introDescription": "Lühike ülevaade uuendustest alates teie viimasest uuendusest. Kestab umbes minuti.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO-režiim: AI-assistent testib seda, mida ta ehitab",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Kui aktiveerite **YOLO-režiimi** Canvas **AI-assistendis**, ei lõpeta see enam Workflow rakendamise järel. See käivitab Workflow nagu **Run** kaudu, loeb tulemust ja parandab Workflow'd iseseisvalt kuni viis korda sõnumi kohta. Iga vastus loetleb sammud reaalajas."
-          },
-          {
-            "type": "prose",
-            "markdown": "Enne esimest käivitust küsib see test-sisendeid koos pakutud väärtustega ja kasutab neid uuesti. See võib käivitada ka teisi Workflow'sid, kui vajab nende tulemusi. Kui see vajab otsust või volitusi, küsib see tavapärase küsimuskaardi abil. Päris käivitused: YOLO-režiim on vaikimisi väljas ja **Stop** peatab protsessi igal ajal."
-          }
-        ],
-        "tour": {
-          "description": "AI-assistent käivitab loodud Workflow'sid, kontrollib tulemust ja parandab vigu iseseisvalt, kuni see töötab.",
-          "useCases": [
-            "Kirjeldage Workflow'd ja saate kohe testitud versiooni",
-            "Laske assistendil vigased noodid automaatselt üles leida ja parandada",
-            "Kontrollige teiste Workflow'de tagastusväärtusi enne nende ühendamist"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI-assistent valib või loob andmetabeleid",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Mitme Dashboardi loomine ja meeskonnaga jagamine",
-    "releaseTour": {
-      "label": "Uus Heyris",
-      "introTitle": "Selles väljaandes uut",
-      "introDescription": "Lühike ülevaade uuendustest alates teie viimasest uuendusest. Kestab umbes ühe minuti.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Mitme Dashboardi loomine ja meeskonnaga jagamine",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Vahekaart **Dashboard** toetab nüüd suvalist arvu Dashboarde. Vahetage mugavalt vahekaardi ülaosas oleva valiku kaudu või looge uus, kasutades **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Jagage Dashboarde isikute või meeskondadega jaotise **Seaded** kaudu. **Lugemine** lubab vaadata ja värskendada; **Kirjutamine** lubab vidinaid redigeerida. Vidinad kasutavad alati omaniku volitusi."
-          }
-        ],
-        "tour": {
-          "description": "Hallake mitut Dashboardi, vahetage nende vahel ning jagage neid kirjutuskaitstult või redigeeritavalt.",
-          "useCases": [
-            "Eraldage Dashboardid meeskonna, toote või rentniku järgi",
-            "Pakkuge sidusrühmadele kirjutuskaitstud vaadet",
-            "Testige diagrammitüüpe eelnevalt näidisandmetega"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

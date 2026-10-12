@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "ビジネスチーム向け Heym Work と Chat でのスキル ZIP",
+    "releaseTour": {
+      "label": "Heym の新機能",
+      "introTitle": "このリリースの新機能",
+      "introDescription": "前回のアップデート以降の新機能を簡単にご紹介します。所要時間は約1分です。",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work：Heym 上のビジネスレイヤー",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** はビジネスチーム向けの第2のインターフェースです。担当者が自分の言葉で業務内容を説明し、いくつかの質問に答えるだけで、Heym が構築・テスト済みの Workflow を提供します。専用ページから作業を行い、レビューに対応し、実行ごとに名前付きで確認できます。実際の処理は Heym がバックグラウンドで実行します。"
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym 管理者は **設定、Heym Work** から接続します。Heym Work のアドレスを入力し、キーを生成して接続を有効にします。ログインには Heym で利用中の Single Sign-On をそのまま利用できます。Heym Work は別ライセンスです。詳細は heym.run/enterprise をご覧ください。"
+          }
+        ],
+        "tour": {
+          "description": "ビジネスチームが業務を説明して質問に答えるだけで、テスト済み Workflow を Heym が実行します。",
+          "useCases": [
+            "法務、財務、運用チームに業務自動化のための専用スペースを提供",
+            "設定の Heym Work からアドレスとキーで接続",
+            "各チームに Single Sign-On、ロール、承認フローを維持"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "heym.run で詳細を見る"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Chat にスキル ZIP をドロップ",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat は **ZIP** ファイルを受け付けます。アーカイブ内に **SKILL.md** と関連する Python ファイルが含まれている場合、Chat はそのスキルを Agent に割り当てることができます。スキルファイルが含まれない ZIP は、会話のコンテキストとして保持されます。"
+          },
+          {
+            "type": "prose",
+            "markdown": "保存済みのスキルを変更するよう Chat に指示できます。指定されたファイルを更新し、書き換えられなかった Python コードを含むその他のファイルはそのまま保持されます。Workflow を選択している場合はそこにスキルが配置され、それ以外の場合はスキルを持つ Agent を含む新しい Workflow が開始されます。"
+          }
+        ],
+        "tour": {
+          "description": "Chat にスキル ZIP を添付すると、Heym が Agent に割り当てます。",
+          "useCases": [
+            "SKILL.md と Python ファイルを含む圧縮フォルダをドロップ",
+            "Python コードを保持したままスキルのテキスト書き換えを Chat に依頼",
+            "スキルを持つ Agent を含めた新規 Workflow を開始"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Workflow 内のノードを再度有効化",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AIアシスタントが自身のWorkflowをテストし、データテーブルをセットアップ",
+    "headline": "AI アシスタントがデータテーブルをセットアップ",
     "releaseTour": {
       "label": "Heymの新機能",
       "introTitle": "このリリースの新機能",
       "introDescription": "前回のアップデート以降の変更点を簡単にご紹介します。所要時間は約1分です。",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLOモード：AIアシスタントが構築したものをテスト",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Canvasの**AIアシスタント**で**YOLOモード**を有効にすると、Workflowを適用した後も停止しなくなります。**Run**と同様にWorkflowを実行し、結果を読み取り、1メッセージにつき最大5回までWorkflowを自律的に修正します。各応答ではステップがリアルタイムで一覧表示されます。"
-          },
-          {
-            "type": "prose",
-            "markdown": "初回実行の前に、提案された値とともにテスト入力について確認し、それらを再利用します。必要に応じて他のWorkflowの結果を必要とする場合、それらも実行できます。判断や認証情報が必要な場合は、いつもの質問カードで確認します。実際の実行：YOLOモードはデフォルトでオフになっており、**Stop**でいつでもフローを終了できます。"
-          }
-        ],
-        "tour": {
-          "description": "AIアシスタントが作成したWorkflowを実行し、結果を確認し、機能するまでエラーを自律的に修正します。",
-          "useCases": [
-            "Workflowを説明し、テスト済みのバージョンを直接取得する",
-            "アシスタントにエラーのあるノードを自動的に検出・修正させる",
-            "連携前に他のWorkflowの戻り値を確認する"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AIアシスタントがデータテーブルを選択または作成",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "複数のDashboardを作成してチームと共有",
-    "releaseTour": {
-      "label": "Heymの新機能",
-      "introTitle": "今回のリリースの新機能",
-      "introDescription": "前回のアップデート以降の変更点を簡単にご紹介します。所要時間は約1分です。",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "複数のDashboardを作成してチームと共有",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "**Dashboard**タブでは、任意の数のDashboardを管理できるようになりました。タブ上部の選択メニューから簡単に切り替えたり、**+**で新しいDashboardを作成したりできます。"
-          },
-          {
-            "type": "prose",
-            "markdown": "**設定**から、Dashboardを個人またはチームと共有できます。**読み取り**では表示と更新が可能で、**書き込み**ではウィジェットの編集が可能です。ウィジェットは常に所有者の認証情報を使用します。"
-          }
-        ],
-        "tour": {
-          "description": "複数のDashboardを管理し、切り替え、読み取り専用または編集可能な権限で共有できます。",
-          "useCases": [
-            "チーム、製品、テナントごとに個別のDashboardを構成する",
-            "ステークホルダーに読み取り専用のビューを提供する",
-            "サンプルデータでグラフタイプを事前にテストする"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

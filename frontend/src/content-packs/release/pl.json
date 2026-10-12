@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work dla zespołów biznesowych i archiwa ZIP umiejętności na Czacie",
+    "releaseTour": {
+      "label": "Nowość w Heym",
+      "introTitle": "Nowości w tym wydaniu",
+      "introDescription": "Krótki przegląd nowości od czasu ostatniej aktualizacji. Zajmuje około minuty.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, warstwa biznesowa w Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** to drugi interfejs przeznaczony dla zespołów biznesowych. Użytkownicy opisują zadanie własnymi słowami, odpowiadają na kilka pytań i otrzymują Workflow utworzony i przetestowany przez Heym. Pracują na dedykowanych stronach, odpowiadają na przeglądy i widzą każde nazwane uruchomienie, podczas gdy Heym wykonuje zadania w tle."
+          },
+          {
+            "type": "prose",
+            "markdown": "Administratorzy Heym łączą go w **Ustawienia, Heym Work**: należy wprowadzić adres Heym Work, wygenerować klucz i włączyć połączenie. Logowanie odbywa się za pośrednictwem Single Sign-On już używanego przez Heym. Heym Work jest licencjonowany oddzielnie; zobacz heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Zespoły biznesowe opisują zadanie, odpowiadają na kilka pytań i otrzymują przetestowany Workflow realizowany przez Heym.",
+          "useCases": [
+            "Zapewnienie zespołowi prawnemu, finansowemu lub operacyjnemu dedykowanej przestrzeni do automatyzacji pracy",
+            "Połączenie z poziomu Ustawienia, Heym Work za pomocą adresu i klucza",
+            "Zachowanie Single Sign-On, ról i zatwierdzeń dla każdego zespołu"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Dowiedz się więcej na heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Przeciągnięcie archiwum ZIP umiejętności na Czat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Czat akceptuje pliki **ZIP**. Gdy archiwum zawiera plik **SKILL.md** oraz pliki Python, Czat może przypisać tę umiejętność do Agenta. Archiwum ZIP bez pliku umiejętności pozostaje w konwersacji jako kontekst."
+          },
+          {
+            "type": "prose",
+            "markdown": "Można poprosić Czat o modyfikację zapisanej umiejętności. Zaktualizuje on wskazane pliki i pozostawi pozostałe, w tym niezmieniony kod Python. Po wybraniu Workflow umiejętność trafia do niego. W przeciwnym razie Czat uruchamia Workflow z jednym Agentem wyposażonym w tę umiejętność."
+          }
+        ],
+        "tour": {
+          "description": "Załączenie archiwum ZIP umiejętności na Czacie i przypisanie jej przez Heym do Agenta.",
+          "useCases": [
+            "Przeciągnięcie skompresowanego folderu umiejętności z plikiem SKILL.md i plikiem Python",
+            "Polecenie Czatowi modyfikacji opisu umiejętności z zachowaniem kodu Python",
+            "Rozpoczęcie nowego Workflow, którego Agent posiada tę umiejętność"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Ponowna aktywacja węzła w ramach Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "Asystent AI testuje swoje Workflows i tworzy tabele danych",
+    "headline": "Asystent AI konfiguruje tabele danych",
     "releaseTour": {
       "label": "Nowości w Heym",
       "introTitle": "Nowości w tym wydaniu",
       "introDescription": "Krótki przegląd nowości od ostatniej aktualizacji. Zajmuje około minuty.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "Tryb YOLO: Asystent AI testuje to, co buduje",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Po włączeniu **trybu YOLO** w Canvas **Asystenta AI** nie zatrzymuje się on po zastosowaniu Workflow. Uruchamia Workflow jak przez **Run**, odczytuje wynik i samodzielnie koryguje Workflow do pięciu razy na wiadomość. Każda odpowiedź wyświetla kroki na żywo."
-          },
-          {
-            "type": "prose",
-            "markdown": "Przed pierwszym uruchomieniem pyta o dane wejściowe testu z proponowanymi wartościami i używa ich ponownie. Może również uruchamiać inne Workflows, jeśli potrzebuje ich wyników. Jeśli potrzebuje decyzji lub danych dostępowych, pyta za pomocą znanej karty pytań. Rzeczywiste uruchomienia: tryb YOLO jest domyślnie wyłączony, a **Stop** kończy proces w dowolnym momencie."
-          }
-        ],
-        "tour": {
-          "description": "Asystent AI uruchamia utworzone Workflows, sprawdza wynik i samodzielnie koryguje błędy, aż wszystko działa.",
-          "useCases": [
-            "Opisać Workflow i od razu otrzymać przetestowaną wersję",
-            "Pozwolić asystentowi automatycznie wykrywać i naprawiać błędne węzły",
-            "Sprawdzić wartości zwracane innych Workflows przed połączeniem"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "Asystent AI wybiera lub tworzy tabele danych",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Tworzenie wielu Dashboardów i udostępnianie ich zespołowi",
-    "releaseTour": {
-      "label": "Nowość w Heym",
-      "introTitle": "Nowości w tym wydaniu",
-      "introDescription": "Krótki przegląd nowości od ostatniej aktualizacji. Zajmuje około minuty.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Tworzenie wielu Dashboardów i udostępnianie ich zespołowi",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Zakładka **Dashboard** obsługuje teraz dowolną liczbę Dashboardów. Przełączanie odbywa się wygodnie za pomocą selektora u góry zakładki, a nowy Dashboard można utworzyć przyciskiem **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Dashboardy można udostępniać osobom lub zespołom w **Ustawieniach**. **Odczyt** pozwala na wyświetlanie i aktualizowanie; **Zapis** pozwala na edycję widgetów. Widgety zawsze korzystają z danych dostępowych właściciela."
-          }
-        ],
-        "tour": {
-          "description": "Zarządzanie wieloma Dashboardami, przełączanie między nimi oraz udostępnianie ich w trybie tylko do odczytu lub z możliwością edycji.",
-          "useCases": [
-            "Strukturyzacja oddzielnych Dashboardów według zespołu, produktu lub mandanta",
-            "Udostępnienie interesariuszom widoku tylko do odczytu",
-            "Testowanie typów wykresów na danych przykładowych"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

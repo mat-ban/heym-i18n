@@ -510,7 +510,11 @@
     "import": "Importar",
     "value": "Valor",
     "via": "via",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Executar",
+    "dropFileOrClick": "Arraste um ficheiro para aqui ou clique para escolher",
+    "removeFile": "Remover ficheiro",
+    "chooseFileFor": "Escolher um ficheiro para {label}"
   },
   "curl": {
     "command": "Comando",
@@ -895,6 +899,12 @@
       "telegram": {
         "description": "Ligar um bot do Telegram para Triggers de webhook de entrada e mensagens de bot de saída"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nome de utilizador com o qual o servidor SMTP inicia sessão",
+      "from": "De",
+      "fromPlaceholder": "Deixar em branco para enviar como o nome de utilizador acima",
+      "fromHelp": "Remetente visível opcional. O servidor continuará a iniciar sessão como o nome de utilizador acima, pelo que essa conta tem de estar autorizada a enviar como este endereço (no Gmail: Enviar correio como)."
     }
   },
   "dashboards": {
@@ -1000,7 +1010,31 @@
     "tidyUpTooltip": "Reorganizar os widgets numa grelha organizada aleatória",
     "title": "Título",
     "untitled": "Sem título",
-    "widgetSettings": "Definições do widget"
+    "widgetSettings": "Definições do widget",
+    "widgetType": "Tipo de widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Escolher um workflow",
+    "workflowWidgetHint": "Um workflow que aceite um ficheiro obtém uma zona de largada, um com campos de entrada obtém esses campos e um sem entradas obtém um botão Executar. Cada execução mostra o respetivo resultado.",
+    "noWorkflowsYet": "Ainda não tem workflows.",
+    "clearRecord": "Limpar registo",
+    "rowLink": "Ligação de linha",
+    "noLink": "Sem ligação",
+    "removeRowLink": "Remover ligação de linha",
+    "recordColumn": "Coluna de registo",
+    "recordColumnPlaceholder": "Coluna que contém o registo, ex.: id",
+    "labelColumn": "Coluna de etiqueta",
+    "labelColumnPlaceholder": "Coluna que lhe dá nome (opcional)",
+    "rowLinkHelp": "Ao clicar numa linha, abre-se esse painel para o registo da linha. Os seus widgets leem o registo como $page.record.",
+    "recordFormats": {
+      "id": "IDs: letras, dígitos, - _ . (até 128)",
+      "number": "Números",
+      "uuid": "UUIDs",
+      "email": "Endereços de e-mail"
+    },
+    "detailPageRecords": "Registos da página de detalhes",
+    "detailPageRecordsHelp": "Os valores ?record= que este painel aceita quando uma ligação de linha o abre. Qualquer outro valor é recusado antes da execução do widget.",
+    "unreachableDashboard": "Um painel que não pode abrir",
+    "runWorkflow": "Executar um Workflow"
   },
   "dashboard": {
     "askAi": "Perguntar à IA",
@@ -1321,7 +1355,14 @@
     "copiedToClipboard": "{label} copiado para a área de transferência",
     "copyJson": "Copiar JSON",
     "create": "Criar",
-    "createWorkflowsPrompt": "Crie workflows para os expor como ferramentas MCP"
+    "createWorkflowsPrompt": "Crie workflows para os expor como ferramentas MCP",
+    "geminiTab": "Aplicação Gemini",
+    "geminiApp": "Aplicação Gemini",
+    "geminiStep1": "Abra gemini.google.com num computador e aceda a Definições → Aplicações ligadas",
+    "geminiStep2": "Em Aplicações personalizadas, clique em Adicionar uma aplicação personalizada",
+    "geminiStep3": "Cole o URL do servidor MCP acima e deixe as Funcionalidades avançadas fechadas; o Gemini registar-se-á automaticamente",
+    "geminiStep4": "Clique em Seguinte e autorize com as suas credenciais Heym",
+    "geminiInfo": "O Gemini utiliza OAuth para autenticação segura. As suas credenciais Heym são utilizadas para autorizar o acesso e nunca são partilhadas com o Gemini. Uma vez ligado, o Heym também funciona na aplicação móvel do Gemini."
   },
   "nodes": {
     "errorHandler": {
@@ -1649,7 +1690,9 @@
     "allWorkflows": "Todos os workflows",
     "backToList": "Voltar à lista de workflows",
     "chooseWorkflowPrompt": "Escolha um workflow e execute-o para ver o progresso aqui.",
-    "closeDrawer": "Fechar o painel rápido de workflows"
+    "closeDrawer": "Fechar o painel rápido de workflows",
+    "wrapLongLines": "Quebrar linhas compridas",
+    "wrap": "Quebrar"
   },
   "releaseTour": {
     "close": "Fechar novidades",
@@ -1742,7 +1785,25 @@
     "workflowSettings": "Definições do workflow",
     "workflowTimeout": "Tempo limite do workflow (segundos)",
     "workflowTimeoutDescription": "Faz falhar a execução se exceder este número de segundos. 0 desativa o tempo limite. Aplica-se a execuções manuais, via API e acionadas.",
-    "workflowTimeoutPlaceholder": "0 = sem tempo limite"
+    "workflowTimeoutPlaceholder": "0 = sem tempo limite",
+    "chartOutput": {
+      "statusColumnOptional": "Coluna de estado (opcional)",
+      "statusColumnPlaceholder": "coluna apresentada como etiquetas coloridas, ex.: state",
+      "statusColumnDialogLabel": "Coluna de estado",
+      "statusColumnHelp": "Palavras comuns obtêm uma cor automaticamente: paid, done e approved indicam sucesso; overdue e needs review requerem atenção; failed e rejected indicam falha; pending e running indicam espera. Adicione um tom para qualquer outro valor.",
+      "statusTones": "Tons de estado",
+      "statusValuePlaceholder": "valor, ex.: Disputed",
+      "statusValueAriaLabel": "Valor de estado",
+      "removeTone": "Remover tom",
+      "addTone": "Adicionar tom",
+      "tones": {
+        "success": "Sucesso",
+        "attention": "Atenção",
+        "failure": "Falha",
+        "waiting": "A aguardar",
+        "neutral": "Neutro"
+      }
+    }
   },
   "settings": {
     "workSection": {
@@ -1762,7 +1823,8 @@
       "intro": "O Heym Work é uma segunda interface para equipas empresariais. Os utilizadores iniciam sessão através do Heym e todas as tarefas são executadas aqui.",
       "keyConfigured": "Chave configurada",
       "lastSeen": "Visto pela última vez",
-      "license": "Licença"
+      "license": "Licença",
+      "learnMore": "Saber mais"
     },
     "ssoSection": {
       "clientSecret": "Client secret",

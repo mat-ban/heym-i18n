@@ -79,7 +79,11 @@
     "apply": "Anwenden",
     "color": "Farbe",
     "unknownError": "Unbekannter Fehler",
-    "custom": "Benutzerdefiniert"
+    "custom": "Benutzerdefiniert",
+    "run": "Ausführen",
+    "dropFileOrClick": "Datei hier ablegen oder klicken, um eine auszuwählen",
+    "removeFile": "Datei entfernen",
+    "chooseFileFor": "Datei für {label} auswählen"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Lizenz",
       "unknown": "Unbekannt",
       "intro": "Heym Work ist eine zweite Benutzeroberfläche für geschäftliche Teams. Benutzer melden sich über Heym an, und alle Aufträge laufen hier.",
-      "never": "Nie"
+      "never": "Nie",
+      "learnMore": "Mehr erfahren"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Ungespeicherte Änderungen",
     "runToNode": "Ausführen bis {node}",
     "configRequired": "Konfiguration erforderlich",
-    "fixIssues": "Bitte beheben Sie die folgenden Probleme, bevor Sie den Workflow ausführen:"
+    "fixIssues": "Bitte beheben Sie die folgenden Probleme, bevor Sie den Workflow ausführen:",
+    "chartOutput": {
+      "statusColumnOptional": "Statusspalte (optional)",
+      "statusColumnPlaceholder": "Spalte, die als farbige Chips dargestellt wird, z. B. state",
+      "statusColumnDialogLabel": "Statusspalte",
+      "statusColumnHelp": "Häufige Wörter erhalten automatisch eine Farbe: paid, done und approved sind Erfolg; overdue und needs review sind Aufmerksamkeit; failed und rejected sind Fehler; pending und running sind Warten. Fügen Sie für jeden anderen Wert einen Farbton hinzu.",
+      "statusTones": "Statusfarbtöne",
+      "statusValuePlaceholder": "Wert, z. B. Disputed",
+      "statusValueAriaLabel": "Statuswert",
+      "removeTone": "Farbton entfernen",
+      "addTone": "Farbton hinzufügen",
+      "tones": {
+        "success": "Erfolg",
+        "attention": "Achtung",
+        "failure": "Fehlgeschlagen",
+        "waiting": "Wartend",
+        "neutral": "Neutral"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorspeicher",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-to-Speech und Speech-to-Text für Chat-Sprachfunktionen"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Benutzername, mit dem sich der SMTP-Server anmeldet",
+      "from": "Von",
+      "fromPlaceholder": "Leer lassen, um als obiger Benutzername zu senden",
+      "fromHelp": "Optionaler sichtbarer Absender. Der Server meldet sich weiterhin mit dem obigen Benutzernamen an, daher muss dieses Konto berechtigt sein, als diese Adresse zu senden (in Gmail: Senden als)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "{name} lösen",
     "historyId": "Verlauf: {id}",
     "outputLabel": "Ausgabe: {label}",
-    "closeDrawer": "Quick Drawer schließen"
+    "closeDrawer": "Quick Drawer schließen",
+    "wrapLongLines": "Lange Zeilen umbrechen",
+    "wrap": "Umbruch"
   },
   "showcase": {
     "guidelines": "Leitfaden",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint-URL",
     "apiKey": "API-Key",
     "mcpConfiguration": "MCP-Konfiguration",
-    "addToConfigInstruction": "Fügen Sie Folgendes zu Ihrer MCP-Client-Konfiguration hinzu (z. B. {path}):"
+    "addToConfigInstruction": "Fügen Sie Folgendes zu Ihrer MCP-Client-Konfiguration hinzu (z. B. {path}):",
+    "geminiTab": "Gemini-App",
+    "geminiApp": "Gemini-App",
+    "geminiStep1": "Öffnen Sie gemini.google.com auf einem Computer und gehen Sie zu Einstellungen → Verknüpfte Apps",
+    "geminiStep2": "Klicken Sie unter Benutzerdefinierte Apps auf Benutzerdefinierte App hinzufügen",
+    "geminiStep3": "Fügen Sie die obige MCP-Server-URL ein und lassen Sie Erweiterte Funktionen geschlossen; Gemini registriert sich automatisch",
+    "geminiStep4": "Klicken Sie auf Weiter und autorisieren Sie sich mit Ihren Heym-Anmeldedaten",
+    "geminiInfo": "Gemini verwendet OAuth für eine sichere Authentifizierung. Ihre Heym-Anmeldedaten werden zur Autorisierung des Zugriffs verwendet und niemals an Gemini weitergegeben. Nach der Verbindung funktioniert Heym auch in der mobilen Gemini-App."
   },
   "analytics": {
     "dashboardTitle": "Analyse-Dashboard",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekunden",
       "apply": "Anwenden",
       "nextRefreshIn": "Nächste Aktualisierung in {time}"
-    }
+    },
+    "widgetType": "Widget-Typ",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Workflow auswählen",
+    "workflowWidgetHint": "Ein Workflow mit Dateieingabe erhält einen Ablagebereich, einer mit Eingabefeldern erhält diese Felder und einer ohne Eingaben eine Ausführen-Schaltfläche. Jeder Durchlauf zeigt sein Ergebnis.",
+    "noWorkflowsYet": "Es sind noch keine Workflows vorhanden.",
+    "clearRecord": "Datensatz leeren",
+    "rowLink": "Zeilenverknüpfung",
+    "noLink": "Keine Verknüpfung",
+    "removeRowLink": "Zeilenverknüpfung entfernen",
+    "recordColumn": "Datensatzspalte",
+    "recordColumnPlaceholder": "Spalte mit dem Datensatz, z. B. id",
+    "labelColumn": "Beschriftungsspalte",
+    "labelColumnPlaceholder": "Spalte für den Namen (optional)",
+    "rowLinkHelp": "Durch Klicken auf eine Zeile wird dieses Dashboard für den Datensatz der Zeile geöffnet. Die Widgets lesen den Datensatz als $page.record.",
+    "recordFormats": {
+      "id": "IDs: Buchstaben, Ziffern, - _ . (bis zu 128)",
+      "number": "Zahlen",
+      "uuid": "UUIDs",
+      "email": "E-Mail-Adressen"
+    },
+    "detailPageRecords": "Detailseiten-Datensätze",
+    "detailPageRecordsHelp": "Die ?record=-Werte, die dieses Dashboard akzeptiert, wenn ein Zeilenlink es öffnet. Alles andere wird vor der Ausführung eines Widgets abgelehnt.",
+    "unreachableDashboard": "Ein Dashboard, das Sie nicht öffnen können",
+    "runWorkflow": "Einen Workflow ausführen"
   },
   "drive": {
     "filesCount": "({count} Dateien)",

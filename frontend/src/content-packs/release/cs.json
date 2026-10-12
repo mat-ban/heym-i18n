@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work pro obchodní týmy a zipy dovedností v Chatu",
+    "releaseTour": {
+      "label": "Novinka v Heym",
+      "introTitle": "Novinky v tomto vydání",
+      "introDescription": "Krátký přehled novinek od vaší poslední aktualizace. Zabere přibližně jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, obchodní vrstva nad Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** je druhé rozhraní pro obchodní týmy. Uživatelé popíší úkol vlastními slovy, zodpoví několik otázek a získají Workflow vytvořený a otestovaný systémem Heym. Pracují na stránkách vytvořených na míru, řeší revize a vidí každé spuštění s přiřazeným názvem, zatímco Heym spouští jednotlivé úlohy na pozadí."
+          },
+          {
+            "type": "prose",
+            "markdown": "Správci systému Heym jej propojují v **Nastavení, Heym Work**: zadejte adresu Heym Work, vygenerujte klíč a povolte připojení. Přihlášení probíhá pomocí stejného Single Sign-On, které Heym již používá. Heym Work je licencován samostatně; viz heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Obchodní týmy popíší úkol, zodpoví otázky a získají otestovaný Workflow, který Heym spouští.",
+          "useCases": [
+            "Poskytněte právnímu, finančnímu nebo provoznímu týmu vlastní prostor pro automatizaci práce",
+            "Připojte z Nastavení, Heym Work pomocí adresy a klíče",
+            "Zachovejte Single Sign-On, role a schvalování pro každý tým"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Další informace na heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Přetažení zipu dovednosti do Chatu",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat přijímá soubory **ZIP**. Pokud archiv obsahuje soubor **SKILL.md** a doprovodné soubory Pythonu, Chat může tuto dovednost přiřadit Agentovi. Zip bez souboru dovednosti zůstane v konverzaci jako kontext."
+          },
+          {
+            "type": "prose",
+            "markdown": "Požádejte Chat o úpravu již uložené dovednosti. Aktualizuje uvedené soubory a zbytek ponechá beze změny, včetně nepřepsaného kódu Pythonu. Při vybraném Workflow se dovednost integruje do něj. Jinak Chat spustí Workflow s jedním Agentem nesoucím danou dovednost."
+          }
+        ],
+        "tour": {
+          "description": "Připojte zip dovednosti v Chatu a Heym ji přiřadí Agentovi.",
+          "useCases": [
+            "Přetáhněte zabalenou složku dovednosti se SKILL.md a souborem Pythonu",
+            "Požádejte Chat o přepsání textu dovednosti bez ztráty kódu Pythonu",
+            "Spusťte nový Workflow, jehož Agent nese danou dovednost"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Uzel v rámci Workflow znovu aktivovat",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI asistent testuje své Workflow a zřizuje datové tabulky",
+    "headline": "AI Asistent nastaví vaše datové tabulky",
     "releaseTour": {
       "label": "Novinky v Heym",
       "introTitle": "Novinky v tomto vydání",
       "introDescription": "Krátký přehled novinek od vaší poslední aktualizace. Zabere přibližně jednu minutu.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO režim: AI asistent testuje, co vytváří",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Aktivujete-li **YOLO režim** v Canvasu **AI asistenta**, přestane po použití Workflow zastavovat. Spustí Workflow stejně jako přes **Run**, přečte výsledek a samostatně opraví Workflow až pětkrát na zprávu. Každá odpověď zobrazuje kroky živě."
-          },
-          {
-            "type": "prose",
-            "markdown": "Před prvním spuštěním se zeptá na testovací vstupy s navrženými hodnotami a tyto hodnoty znovu použije. Může také spouštět jiné Workflow, pokud potřebuje jejich výsledky. Potřebuje-li rozhodnutí nebo přihlašovací údaje, zeptá se pomocí obvyklé karty s dotazem. Skutečná spuštění: YOLO režim je standardně vypnutý a **Stop** kdykoli ukončí průběh."
-          }
-        ],
-        "tour": {
-          "description": "AI asistent spouští vytvořené Workflow, kontroluje výsledek a samostatně opravuje chyby, dokud nefungují.",
-          "useCases": [
-            "Popsat Workflow a přímo získat otestovanou verzi",
-            "Nechat asistenta automaticky vyhledat a opravit chybné uzly",
-            "Před propojením zkontrolovat návratové hodnoty jiných Workflow"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI asistent vybírá nebo vytváří datové tabulky",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Vytvářejte více dashboardů a sdílejte je s týmem",
-    "releaseTour": {
-      "label": "Novinka v Heym",
-      "introTitle": "Novinky v tomto vydání",
-      "introDescription": "Krátký přehled novinek od vaší poslední aktualizace. Zabere přibližně jednu minutu.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Vytvářejte více dashboardů a sdílejte je s týmem",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Záložka **Dashboard** nyní podporuje libovolný počet dashboardů. Přepínejte pohodlně pomocí výběru v horní části záložky nebo vytvořte nový pomocí **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Sdílejte dashboardy s osobami nebo týmy prostřednictvím **Nastavení**. **Čtení** umožňuje zobrazení a aktualizaci; **Zápis** umožňuje úpravu widgetů. Widgety vždy používají přihlašovací údaje vlastníka."
-          }
-        ],
-        "tour": {
-          "description": "Spravujte více dashboardů, přepínejte mezi nimi a sdílejte je v režimu pouze pro čtení nebo s možností úprav.",
-          "useCases": [
-            "Uspořádejte samostatné dashboardy podle týmu, produktu nebo klienta",
-            "Poskytněte zainteresovaným stranám zobrazení pouze pro čtení",
-            "Předem otestujte typy grafů s ukázkovými daty"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

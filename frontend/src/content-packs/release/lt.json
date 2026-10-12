@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "„Heym Work“ verslo komandoms ir įgūdžių zip failai pokalbyje",
+    "releaseTour": {
+      "label": "Naujiena „Heym“",
+      "introTitle": "Naujiena šiame leidime",
+      "introDescription": "Trumpa apžvalga naujovių nuo paskutinio atnaujinimo. Užtruks apie minutę.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "„Heym Work“ – verslo lygmuo virš „Heym“",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**„Heym Work“** yra antroji sąsaja verslo komandoms. Naudotojai savo žodžiais aprašo užduotį, atsako į kelis klausimus ir gauna „Heym“ sukurtą bei išbandytą Workflow. Jie dirba jiems skirtuose puslapiuose, atsako į peržiūras ir mato kiekvieną paleidimą su pavadinimu, o „Heym“ vykdo užduotis fone."
+          },
+          {
+            "type": "prose",
+            "markdown": "„Heym“ administratoriai jį prijungia skiltyje **Nustatymai, Heym Work**: įveskite „Heym Work“ adresą, sugeneruokite raktą ir įjunkite ryšį. Prisijungiama naudojant tą patį Single Sign-On, kurį jau naudoja „Heym“. „Heym Work“ licencijuojamas atskirai; žr. heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Verslo komandos aprašo užduotį, atsako į klausimus ir gauna išbandytą Workflow, kurį vykdo „Heym“.",
+          "useCases": [
+            "Suteikite teisės, finansų ar operacijų komandai atskirą erdvę darbui automatizuoti",
+            "Prijunkite iš Nustatymai, Heym Work nurodydami adresą ir raktą",
+            "Išlaikykite Single Sign-On, vaidmenis ir patvirtinimus kiekvienai komandai"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Sužinokite daugiau heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Įgūdžių zip failo įkėlimas į Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat priima **ZIP** failus. Kai archyve yra **SKILL.md** ir šalia esantys „Python“ failai, Chat gali priskirti šį įgūdį Agentui. Zip failas be įgūdžio failo pokalbyje lieka kaip kontekstas."
+          },
+          {
+            "type": "prose",
+            "markdown": "Paprašykite Chat pakeisti jau išsaugotą įgūdį. Jis atnaujina nurodytus failus, o likusius, įskaitant neperrašytą „Python“ kodą, palieka nepakeistus. Pasirinkus Workflow, įgūdis pridedamas ten. Kitu atveju Chat pradeda Workflow su vienu Agentu, turinčiu šį įgūdį."
+          }
+        ],
+        "tour": {
+          "description": "Prisekite įgūdžių zip pokalbyje, ir „Heym“ priskirs jį Agentui.",
+          "useCases": [
+            "Įkelkite supakuotą įgūdžių aplanką su SKILL.md ir „Python“ failu",
+            "Paprašykite Chat perrašyti įgūdžio tekstą neprarandant „Python“ kodo",
+            "Pradėkite naują Workflow, kurio Agentas turi šį įgūdį"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Iš naujo aktyvuoti mazgą Workflow viduje",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "DI asistentas testuoja savo Workflow ir kuria duomenų lenteles",
+    "headline": "DI asistentas nustato jūsų duomenų lenteles",
     "releaseTour": {
       "label": "Naujiena „Heym“",
       "introTitle": "Naujiena šiame leidime",
       "introDescription": "Trumpa naujienų nuo paskutinio atnaujinimo apžvalga. Užtruks apie minutę.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO režimas: DI asistentas testuoja tai, ką sukuria",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Įjungus **YOLO režimą** Canvas **DI asistentas** nebesustoja pritaikęs Workflow. Jis vykdo Workflow kaip per **Run**, nuskaito rezultatą ir savarankiškai koreguoja Workflow iki penkių kartų per žinutę. Kiekvienas atsakymas rodo veiksmus tiesiogiai."
-          },
-          {
-            "type": "prose",
-            "markdown": "Prieš pirmą paleidimą jis paprašo testinių įvesties duomenų su pasiūlytomis reikšmėmis ir jas naudoja pakartotinai. Jis taip pat gali vykdyti kitus Workflow, jei reikia jų rezultatų. Jei reikia sprendimo ar prisijungimo duomenų, jis klausia įprastos klausimų kortelės. Tikri paleidimai: YOLO režimas pagal numatytuosius nustatymus išjungtas, o **Stop** bet kada nutraukia eigą."
-          }
-        ],
-        "tour": {
-          "description": "DI asistentas vykdo sukurtus Workflow, tikrina rezultatą ir savarankiškai taiso klaidas, kol jie veikia.",
-          "useCases": [
-            "Aprašyti Workflow ir iš karto gauti ištestuotą versiją",
-            "Leisti asistentui automatiškai aptikti ir ištaisyti klaidingus mazgus",
-            "Patikrinti kitų Workflow grąžinamas reikšmes prieš susiejant"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "DI asistentas pasirenka arba sukuria duomenų lenteles",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Kurti kelis Dashboard ir bendrinti juos su komanda",
-    "releaseTour": {
-      "label": "Naujiena „Heym“",
-      "introTitle": "Naujiena šiame leidime",
-      "introDescription": "Trumpa naujienų nuo paskutinio atnaujinimo apžvalga. Užtruks apie minutę.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Kurti kelis Dashboard ir bendrinti juos su komanda",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Skirtukas **Dashboard** dabar palaiko neribotą skaičių Dashboard. Patogiai perjunkite naudodami pasirinkimą skirtuko viršuje arba sukurkite naują paspaudę **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Bendrinkite Dashboard su asmenimis ar komandomis per **Nustatymus**. **Skaitymas** leidžia peržiūrėti ir atnaujinti; **Rašymas** leidžia redaguoti valdiklius. Valdikliai visada naudoja savininko prisijungimo duomenis."
-          }
-        ],
-        "tour": {
-          "description": "Tvarkykite kelis Dashboard, perjunkite tarp jų ir bendrinkite juos tik skaitymo arba redagavimo teisėmis.",
-          "useCases": [
-            "Atskirus Dashboard struktūrizuokite pagal komandą, produktą ar klientą",
-            "Suinteresuotosioms šalims suteikite tik skaitymo peržiūrą",
-            "Iš anksto išbandykite diagramų tipus su pavyzdiniais duomenimis"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

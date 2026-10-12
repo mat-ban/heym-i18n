@@ -79,7 +79,11 @@
     "apply": "Áp dụng",
     "color": "Màu sắc",
     "unknownError": "Lỗi không xác định",
-    "custom": "Tùy chỉnh"
+    "custom": "Tùy chỉnh",
+    "run": "Chạy",
+    "dropFileOrClick": "Thả tệp vào đây hoặc nhấp để chọn",
+    "removeFile": "Xóa tệp",
+    "chooseFileFor": "Chọn tệp cho {label}"
   },
   "auth": {
     "signInInstead": "Đăng nhập thay thế",
@@ -235,7 +239,8 @@
       "license": "Giấy phép",
       "unknown": "Không xác định",
       "intro": "Heym Work là một giao diện thứ hai dành cho các nhóm nghiệp vụ. Mọi người đăng nhập qua Heym và mọi tác vụ đều chạy tại đây.",
-      "never": "Chưa bao giờ"
+      "never": "Chưa bao giờ",
+      "learnMore": "Tìm hiểu thêm"
     }
   },
   "nav": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Thay đổi chưa lưu",
     "runToNode": "Chạy đến {node}",
     "configRequired": "Cần cấu hình",
-    "fixIssues": "Vui lòng khắc phục các vấn đề sau trước khi chạy workflow:"
+    "fixIssues": "Vui lòng khắc phục các vấn đề sau trước khi chạy workflow:",
+    "chartOutput": {
+      "statusColumnOptional": "Cột trạng thái (tùy chọn)",
+      "statusColumnPlaceholder": "cột hiển thị dưới dạng thẻ màu, ví dụ: state",
+      "statusColumnDialogLabel": "Cột trạng thái",
+      "statusColumnHelp": "Các từ thông dụng sẽ tự động có màu: paid, done và approved là thành công; overdue và needs review cần chú ý; failed và rejected là thất bại; pending và running là đang chờ. Thêm sắc thái cho bất kỳ giá trị nào khác.",
+      "statusTones": "Sắc thái trạng thái",
+      "statusValuePlaceholder": "giá trị, ví dụ: Disputed",
+      "statusValueAriaLabel": "Giá trị trạng thái",
+      "removeTone": "Xóa sắc thái",
+      "addTone": "Thêm sắc thái",
+      "tones": {
+        "success": "Thành công",
+        "attention": "Chú ý",
+        "failure": "Thất bại",
+        "waiting": "Đang chờ",
+        "neutral": "Trung lập"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vector Stores",
@@ -985,7 +1008,13 @@
         "description": "Chuyển văn bản thành giọng nói và giọng nói thành văn bản cho các tính năng thoại trong chat"
       }
     },
-    "title": "Thông tin xác thực"
+    "title": "Thông tin xác thực",
+    "smtp": {
+      "usernameHelp": "Tên người dùng mà máy chủ SMTP dùng để đăng nhập",
+      "from": "Từ",
+      "fromPlaceholder": "Để trống để gửi dưới tên người dùng ở trên",
+      "fromHelp": "Người gửi hiển thị tùy chọn. Máy chủ vẫn đăng nhập bằng tên người dùng ở trên, vì vậy tài khoản đó phải được phép gửi dưới địa chỉ này (trong Gmail: Gửi thư dưới tên)."
+    }
   },
   "traces": {
     "traceDetail": "Chi tiết Trace",
@@ -1235,7 +1264,9 @@
     "unpin": "Bỏ ghim {name}",
     "historyId": "Lịch sử: {id}",
     "outputLabel": "Đầu ra: {label}",
-    "closeDrawer": "Đóng ngăn workflow nhanh"
+    "closeDrawer": "Đóng ngăn workflow nhanh",
+    "wrapLongLines": "Tự động xuống dòng",
+    "wrap": "Xuống dòng"
   },
   "dashboard": {
     "greeting": "Chào mừng {name},",
@@ -1903,7 +1934,14 @@
     "serverDeleted": "Đã xóa server \"{name}\"",
     "failedToDeleteServer": "Xóa server thất bại",
     "keyRegenerated": "Đã tạo lại API key",
-    "failedToRegenerateKey": "Tạo lại API key thất bại"
+    "failedToRegenerateKey": "Tạo lại API key thất bại",
+    "geminiTab": "Ứng dụng Gemini",
+    "geminiApp": "Ứng dụng Gemini",
+    "geminiStep1": "Mở gemini.google.com trên máy tính và đi đến Cài đặt → Ứng dụng đã kết nối",
+    "geminiStep2": "Trong mục Ứng dụng tùy chỉnh, nhấp vào Thêm ứng dụng tùy chỉnh",
+    "geminiStep3": "Dán URL máy chủ MCP ở trên và để mục Tính năng nâng cao đóng; Gemini sẽ tự động đăng ký",
+    "geminiStep4": "Nhấp vào Tiếp theo và cấp quyền bằng thông tin đăng nhập Heym của bạn",
+    "geminiInfo": "Gemini sử dụng OAuth để xác thực an toàn. Thông tin xác thực Heym của bạn được dùng để cấp quyền truy cập và không bao giờ được chia sẻ với Gemini. Sau khi kết nối, Heym cũng hoạt động trong ứng dụng di động Gemini."
   },
   "analytics": {
     "dashboardTitle": "Bảng điều khiển Analytics",
@@ -2100,7 +2138,31 @@
     "ai": "AI",
     "deleteDashboardConfirm": "Xóa dashboard \"{name}\" và tất cả widget của nó?",
     "atLeastOneDashboardRequired": "Bạn cần có ít nhất một dashboard của riêng mình",
-    "shareCredentialsNotice": "Các widget luôn chạy bằng thông tin xác thực của bạn. Quyền đọc cho phép mọi người xem và làm mới; quyền ghi còn cho phép họ thêm, thay đổi và xóa widget."
+    "shareCredentialsNotice": "Các widget luôn chạy bằng thông tin xác thực của bạn. Quyền đọc cho phép mọi người xem và làm mới; quyền ghi còn cho phép họ thêm, thay đổi và xóa widget.",
+    "widgetType": "Loại widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Chọn workflow",
+    "workflowWidgetHint": "Workflow nhận tệp sẽ có khu vực thả tệp, workflow có các trường nhập liệu sẽ có các trường đó và workflow không có đầu vào sẽ có nút Chạy. Mỗi lần chạy sẽ hiển thị kết quả tương ứng.",
+    "noWorkflowsYet": "Chưa có workflow nào.",
+    "clearRecord": "Xóa bản ghi",
+    "rowLink": "Liên kết hàng",
+    "noLink": "Không có liên kết",
+    "removeRowLink": "Xóa liên kết hàng",
+    "recordColumn": "Cột bản ghi",
+    "recordColumnPlaceholder": "Cột chứa bản ghi, ví dụ: id",
+    "labelColumn": "Cột nhãn",
+    "labelColumnPlaceholder": "Cột đặt tên (tùy chọn)",
+    "rowLinkHelp": "Nhấp vào một hàng sẽ mở bảng điều khiển đó cho bản ghi của hàng. Các widget của bảng điều khiển đọc bản ghi dưới dạng $page.record.",
+    "recordFormats": {
+      "id": "ID: chữ cái, chữ số, - _ . (tối đa 128)",
+      "number": "Số",
+      "uuid": "UUID",
+      "email": "Địa chỉ email"
+    },
+    "detailPageRecords": "Bản ghi trang chi tiết",
+    "detailPageRecordsHelp": "Các giá trị ?record= mà bảng thông tin này chấp nhận khi một liên kết hàng mở nó. Bất kỳ giá trị nào khác đều bị từ chối trước khi tiện ích chạy.",
+    "unreachableDashboard": "Bảng thông tin không thể mở",
+    "runWorkflow": "Chạy một Workflow"
   },
   "drive": {
     "filesCount": "({count} tệp)",

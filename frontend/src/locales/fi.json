@@ -79,7 +79,11 @@
     "apply": "Käytä",
     "color": "Väri",
     "unknownError": "Tuntematon virhe",
-    "custom": "Mukautettu"
+    "custom": "Mukautettu",
+    "run": "Suorita",
+    "dropFileOrClick": "Pudota tiedosto tähän tai valitse napsauttamalla",
+    "removeFile": "Poista tiedosto",
+    "chooseFileFor": "Valitse tiedosto kohteelle {label}"
   },
   "nav": {
     "workflows": "Workflowt",
@@ -268,7 +272,8 @@
       "license": "Lisenssi",
       "unknown": "Tuntematon",
       "intro": "Heym Work on toinen käyttöliittymä yritystiimeille. Käyttäjät kirjautuvat sisään Heymin kautta, ja kaikki työt suoritetaan täällä.",
-      "never": "Ei koskaan"
+      "never": "Ei koskaan",
+      "learnMore": "Lue lisää"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Tallentamattomat muutokset",
     "runToNode": "Suorita solmuun {node}",
     "configRequired": "Määritys vaaditaan",
-    "fixIssues": "Korjaa seuraavat ongelmat ennen Workflow'n suorittamista:"
+    "fixIssues": "Korjaa seuraavat ongelmat ennen Workflow'n suorittamista:",
+    "chartOutput": {
+      "statusColumnOptional": "Tilasarakkeen määritys (valinnainen)",
+      "statusColumnPlaceholder": "sarake, joka näytetään värillisinä merkkeinä, esim. state",
+      "statusColumnDialogLabel": "Tilasarakkeen otsikko",
+      "statusColumnHelp": "Yleiset sanat saavat värin automaattisesti: paid, done ja approved merkitsevät onnistumista; overdue ja needs review vaativat huomiota; failed ja rejected tarkoittavat epäonnistumista; pending ja running tarkoittavat odotustilaa. Lisää sävy muille arvoille.",
+      "statusTones": "Tilasävyt",
+      "statusValuePlaceholder": "arvo, esim. Disputed",
+      "statusValueAriaLabel": "Tila-arvo",
+      "removeTone": "Poista sävy",
+      "addTone": "Lisää sävy",
+      "tones": {
+        "success": "Onnistui",
+        "attention": "Huomio",
+        "failure": "Virhe",
+        "waiting": "Odottaa",
+        "neutral": "Neutraali"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorivarastot",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Tekstistä puheeksi ja puheesta tekstiksi chat-äänitoimintoja varten"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Käyttäjätunnus, jolla SMTP-palvelin kirjautuu sisään",
+      "from": "Lähettäjä",
+      "fromPlaceholder": "Jätä tyhjäksi lähettääksesi yllä olevana käyttäjätunnuksena",
+      "fromHelp": "Valinnainen näkyvä lähettäjä. Palvelin kirjautuu edelleen yllä olevalla käyttäjätunnuksella, joten tilillä on oltava lupa lähettää tämän osoitteen nimissä (Gmailissa: Lähetä postia muodossa)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Irrota {name}",
     "historyId": "Historia: {id}",
     "outputLabel": "Tuloste: {label}",
-    "closeDrawer": "Sulje pikatyönkulkupaneeli"
+    "closeDrawer": "Sulje pikatyönkulkupaneeli",
+    "wrapLongLines": "Rivitä pitkät rivit",
+    "wrap": "Rivitä"
   },
   "showcase": {
     "guidelines": "Ohjeet",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint-URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP-kokoonpano",
-    "addToConfigInstruction": "Lisää seuraava MCP-asiakasohjelman kokoonpanoon (esim. {path}):"
+    "addToConfigInstruction": "Lisää seuraava MCP-asiakasohjelman kokoonpanoon (esim. {path}):",
+    "geminiTab": "Gemini-sovellus",
+    "geminiApp": "Gemini-sovellus",
+    "geminiStep1": "Avaa gemini.google.com tietokoneella ja siirry kohtaan Asetukset → Yhdistetyt sovellukset",
+    "geminiStep2": "Napsauta Mukautetut sovellukset -kohdassa Lisää mukautettu sovellus",
+    "geminiStep3": "Liitä yllä oleva MCP-palvelimen URL-osoite ja jätä Lisäominaisuudet suljetuiksi; Gemini rekisteröityy automaattisesti",
+    "geminiStep4": "Napsauta Seuraava ja valtuuta Heym-tunnuksillasi",
+    "geminiInfo": "Gemini käyttää OAuth-todennusta turvalliseen kirjautumiseen. Heym-tunnuksiasi käytetään pääsyn valtuuttamiseen, eikä niitä koskaan jaeta Geminille. Yhdistämisen jälkeen Heym toimii myös Gemini-mobiilisovelluksessa."
   },
   "analytics": {
     "dashboardTitle": "Analytiikan kojelauta",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekuntia",
       "apply": "Käytä",
       "nextRefreshIn": "Seuraava päivitys {time} kuluttua"
-    }
+    },
+    "widgetType": "Widget-tyyppi",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Valitse workflow",
+    "workflowWidgetHint": "Tiedoston vastaanottava workflow saa pudotusalueen, syöttökenttiä sisältävä saa kyseiset kentät ja ilman syötteitä oleva saa Suorita-painikkeen. Jokainen suoritus näyttää tuloksensa.",
+    "noWorkflowsYet": "Sinulla ei ole vielä workflow-prosesseja.",
+    "clearRecord": "Tyhjennä tietue",
+    "rowLink": "Rivipikalinkki",
+    "noLink": "Ei linkkiä",
+    "removeRowLink": "Poista rivilinkki",
+    "recordColumn": "Tietuesarake",
+    "recordColumnPlaceholder": "Tietueen sisältävä sarake, esim. id",
+    "labelColumn": "Nimisarakkeen otsikko",
+    "labelColumnPlaceholder": "Sarake, joka nimeää sen (valinnainen)",
+    "rowLinkHelp": "Rivin napsauttaminen avaa kyseisen koontinäytön rivin tietueelle. Sen widgetit lukevat tietueen muodossa $page.record.",
+    "recordFormats": {
+      "id": "Tunnisteet: kirjaimet, numerot, - _ . (enintään 128)",
+      "number": "Numerot",
+      "uuid": "UUID:t",
+      "email": "Sähköpostiosoitteet"
+    },
+    "detailPageRecords": "Tietosivun tietueet",
+    "detailPageRecordsHelp": "Arvot ?record=, jotka tämä koontinäyttö hyväksyy rivilinkin avatessa sen. Kaikki muu hylätään ennen widgetin suorittamista.",
+    "unreachableDashboard": "Koontinäyttö, jota ei voi avata",
+    "runWorkflow": "Suorita Workflow"
   },
   "drive": {
     "filesCount": "({count} tiedostoa)",

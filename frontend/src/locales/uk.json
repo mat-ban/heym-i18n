@@ -79,7 +79,11 @@
     "apply": "Застосувати",
     "color": "Колір",
     "unknownError": "Невідома помилка",
-    "custom": "Власний"
+    "custom": "Власний",
+    "run": "Запустити",
+    "dropFileOrClick": "Перетягніть файл сюди або натисніть, щоб вибрати",
+    "removeFile": "Видалити файл",
+    "chooseFileFor": "Виберіть файл для {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Ліцензія",
       "unknown": "Невідомо",
       "intro": "Heym Work — це другий інтерфейс для бізнес-команд. Користувачі входять через Heym, і кожне завдання виконується тут.",
-      "never": "Ніколи"
+      "never": "Ніколи",
+      "learnMore": "Дізнатися більше"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Незбережені зміни",
     "runToNode": "Запустити до {node}",
     "configRequired": "Потрібна конфігурація",
-    "fixIssues": "Будь ласка, виправте такі проблеми перед запуском Workflow:"
+    "fixIssues": "Будь ласка, виправте такі проблеми перед запуском Workflow:",
+    "chartOutput": {
+      "statusColumnOptional": "Стовпець статусу (необов’язково)",
+      "statusColumnPlaceholder": "стовпець, що відображається у вигляді кольорових плашок, наприклад state",
+      "statusColumnDialogLabel": "Стовпець статусу",
+      "statusColumnHelp": "Поширені слова автоматично отримують колір: paid, done та approved означають успіх; overdue та needs review вимагають уваги; failed та rejected означають помилку; pending та running означають очікування. Додайте відтінок для будь-якого іншого значення.",
+      "statusTones": "Відтінки статусу",
+      "statusValuePlaceholder": "значення, наприклад Disputed",
+      "statusValueAriaLabel": "Значення статусу",
+      "removeTone": "Видалити відтінок",
+      "addTone": "Додати відтінок",
+      "tones": {
+        "success": "Успішно",
+        "attention": "Увага",
+        "failure": "Помилка",
+        "waiting": "Очікування",
+        "neutral": "Нейтральний"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vector Stores",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Перетворення тексту на мовлення та мовлення на текст для голосових функцій чату"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Ім’я користувача, з яким сервер SMTP входить у систему",
+      "from": "Від",
+      "fromPlaceholder": "Залиште порожнім, щоб надсилати від імені користувача вище",
+      "fromHelp": "Необов’язковий видимий відправник. Сервер усе одно входить з указаним вище ім’ям користувача, тому цей обліковий запис повинен мати дозвіл на надсилання з цієї адреси (у Gmail: Надсилати пошту як)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Відкріпити {name}",
     "historyId": "Історія: {id}",
     "outputLabel": "Результат: {label}",
-    "closeDrawer": "Закрити панель швидких workflow"
+    "closeDrawer": "Закрити панель швидких workflow",
+    "wrapLongLines": "Переносити довгі рядки",
+    "wrap": "Переносити"
   },
   "showcase": {
     "guidelines": "Настанови",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP Configuration",
-    "addToConfigInstruction": "Додайте наведене нижче до конфігурації Вашого MCP-клієнта (наприклад, {path}):"
+    "addToConfigInstruction": "Додайте наведене нижче до конфігурації Вашого MCP-клієнта (наприклад, {path}):",
+    "geminiTab": "Додаток Gemini",
+    "geminiApp": "Додаток Gemini",
+    "geminiStep1": "Відкрийте gemini.google.com на комп’ютері та перейдіть у Налаштування → Підключені додатки",
+    "geminiStep2": "У розділі Власні додатки натисніть Додати власний додаток",
+    "geminiStep3": "Вставте URL-адресу сервера MCP, наведену вище, і залиште Розширені функції закритими; Gemini зареєструється автоматично",
+    "geminiStep4": "Натисніть Далі та авторизуйтесь за допомогою облікових даних Heym",
+    "geminiInfo": "Gemini використовує OAuth для безпечної автентифікації. Ваші облікові дані Heym використовуються для авторизації доступу й ніколи не передаються Gemini. Після підключення Heym також працює в мобільному додатку Gemini."
   },
   "analytics": {
     "dashboardTitle": "Панель аналітики",
@@ -2100,7 +2138,31 @@
       "failedToLoadWidget": "Не вдалося завантажити віджет",
       "failedToUpdateCheckbox": "Не вдалося оновити прапорець",
       "refreshDashboard": "Оновити дашборд"
-    }
+    },
+    "widgetType": "Тип віджета",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Виберіть workflow",
+    "workflowWidgetHint": "Workflow, що приймає файл, отримує зону для скидання файлу, workflow з полями вводу отримує ці поля, а без вхідних даних – кнопку Запустити. Кожен запуск відображає свій результат.",
+    "noWorkflowsYet": "У вас ще немає жодного workflow.",
+    "clearRecord": "Очистити запис",
+    "rowLink": "Посилання рядка",
+    "noLink": "Немає посилання",
+    "removeRowLink": "Видалити посилання рядка",
+    "recordColumn": "Стовпець запису",
+    "recordColumnPlaceholder": "Стовпець, що містить запис, наприклад id",
+    "labelColumn": "Стовпець мітки",
+    "labelColumnPlaceholder": "Стовпець, який дає йому назву (необов’язково)",
+    "rowLinkHelp": "Натискання на рядок відкриває цю інформаційну панель для запису відповідного рядка. Її віджети зчитують запис як $page.record.",
+    "recordFormats": {
+      "id": "Ідентифікатори: букви, цифри, - _ . (до 128)",
+      "number": "Числа",
+      "uuid": "UUID",
+      "email": "Адреси електронної пошти"
+    },
+    "detailPageRecords": "Записи сторінки деталей",
+    "detailPageRecordsHelp": "Значення ?record=, які ця панель приймає під час відкриття за посиланням у рядку. Усе інше відхиляється перед запуском віджета.",
+    "unreachableDashboard": "Панель приладів, яку не вдається відкрити",
+    "runWorkflow": "Запустити Workflow"
   },
   "drive": {
     "filesCount": "({count} файлів)",

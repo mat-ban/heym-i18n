@@ -79,7 +79,11 @@
     "or": "veya",
     "import": "İçe aktar",
     "export": "Dışa aktar",
-    "saveChanges": "Değişiklikleri Kaydet"
+    "saveChanges": "Değişiklikleri Kaydet",
+    "run": "Çalıştır",
+    "dropFileOrClick": "Bir dosyayı buraya bırakın veya seçmek için tıklayın",
+    "removeFile": "Dosyayı kaldır",
+    "chooseFileFor": "{label} için bir dosya seçin"
   },
   "nav": {
     "workflows": "Workflows",
@@ -226,7 +230,8 @@
       "license": "Lisans",
       "unknown": "Bilinmiyor",
       "intro": "Heym Work, iş ekipleri için ikinci bir arayüzdür. Kişiler Heym üzerinden oturum açar ve her iş burada çalışır.",
-      "never": "Asla"
+      "never": "Asla",
+      "learnMore": "Daha fazla bilgi edinin"
     },
     "voiceSelect": "Ses",
     "currentPassword": "Mevcut Şifre",
@@ -772,7 +777,25 @@
     "onErrorRunWorkflow": "Hata durumunda workflow'u çalıştırın",
     "onErrorDescription": "Bu workflow başarısız olursa seçili workflow'u çalıştırır — tuvalde zaten bir Error Handler node'u yoksa. Manuel test çalıştırmalarında tetiklenmez.",
     "timeSavedPerRun": "Run başına tasarruf edilen süre (dk)",
-    "timeSavedDescription": "Bu otomasyonun başarılı her run'da tasarruf ettiği tahmini dakika. Analytics'te toplam Time Saved olarak gösterilir."
+    "timeSavedDescription": "Bu otomasyonun başarılı her run'da tasarruf ettiği tahmini dakika. Analytics'te toplam Time Saved olarak gösterilir.",
+    "chartOutput": {
+      "statusColumnOptional": "Durum sütunu (isteğe bağlı)",
+      "statusColumnPlaceholder": "renkli etiketler olarak gösterilen sütun, örn. state",
+      "statusColumnDialogLabel": "Durum sütunu",
+      "statusColumnHelp": "Yaygın kelimeler otomatik olarak bir renk alır: paid, done ve approved başarı; overdue ve needs review dikkat gerektirir; failed ve rejected başarısızlık; pending ve running beklemedir. Diğer tüm değerler için bir ton ekleyin.",
+      "statusTones": "Durum tonları",
+      "statusValuePlaceholder": "değer, örn. Disputed",
+      "statusValueAriaLabel": "Durum değeri",
+      "removeTone": "Tonu kaldır",
+      "addTone": "Ton ekle",
+      "tones": {
+        "success": "Başarılı",
+        "attention": "Dikkat",
+        "failure": "Başarısız",
+        "waiting": "Bekliyor",
+        "neutral": "Nötr"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vector Store'lar",
@@ -985,7 +1008,13 @@
         "description": "Sohbet ses özellikleri için metinden sese ve sesten metne"
       }
     },
-    "title": "Credentials"
+    "title": "Credentials",
+    "smtp": {
+      "usernameHelp": "SMTP sunucusunun oturum açtığı kullanıcı adı",
+      "from": "Kimden",
+      "fromPlaceholder": "Yukarıdaki kullanıcı adı olarak göndermek için boş bırakın",
+      "fromHelp": "İsteğe bağlı görünen gönderen. Sunucu yukarıdaki kullanıcı adı olarak oturum açmaya devam eder, bu nedenle hesabın bu adres olarak gönderme iznine sahip olması gerekir (Gmail'de: E-postaları şu adresten gönder)."
+    }
   },
   "traces": {
     "traceDetail": "Trace Ayrıntıları",
@@ -1272,7 +1301,9 @@
     "unpin": "{name} sabitlemeyi kaldır",
     "historyId": "Geçmiş: {id}",
     "outputLabel": "Çıktı: {label}",
-    "closeDrawer": "Hızlı workflows çekmecesini kapat"
+    "closeDrawer": "Hızlı workflows çekmecesini kapat",
+    "wrapLongLines": "Uzun satırları kaydır",
+    "wrap": "Kaydır"
   },
   "showcase": {
     "guidelines": "Yönergeler",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP Yapılandırması",
-    "addToConfigInstruction": "Aşağıdakileri MCP istemci yapılandırmanıza ekleyin (örn. {path}):"
+    "addToConfigInstruction": "Aşağıdakileri MCP istemci yapılandırmanıza ekleyin (örn. {path}):",
+    "geminiTab": "Gemini Uygulaması",
+    "geminiApp": "Gemini Uygulaması",
+    "geminiStep1": "Bir bilgisayarda gemini.google.com adresini açın ve Ayarlar → Bağlı Uygulamalar bölümüne gidin",
+    "geminiStep2": "Özel uygulamalar altında Özel bir uygulama ekle seçeneğine tıklayın",
+    "geminiStep3": "Yukarıdaki MCP Sunucu URL'sini yapıştırın ve Gelişmiş özellikler bölümünü kapalı bırakın; Gemini otomatik olarak kaydolacaktır",
+    "geminiStep4": "İleri'ye tıklayın ve Heym kimlik bilgilerinizle yetkilendirin",
+    "geminiInfo": "Gemini, güvenli kimlik doğrulaması için OAuth kullanır. Heym kimlik bilgileriniz erişimi yetkilendirmek için kullanılır ve asla Gemini ile paylaşılmaz. Bağlandıktan sonra Heym, Gemini mobil uygulamasında da çalışır."
   },
   "analytics": {
     "dashboardTitle": "Analitik Panosu",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Saniye",
       "apply": "Uygula",
       "nextRefreshIn": "Sonraki yenileme {time} içinde"
-    }
+    },
+    "widgetType": "Widget türü",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Bir workflow seçin",
+    "workflowWidgetHint": "Dosya alan bir workflow için bırakma alanı, girdi alanları olan için bu alanlar, girdisi olmayan için ise bir Çalıştır düğmesi sağlanır. Her çalıştırma sonucunu gösterir.",
+    "noWorkflowsYet": "Henüz bir workflow bulunmuyor.",
+    "clearRecord": "Kaydı temizle",
+    "rowLink": "Satır bağlantısı",
+    "noLink": "Bağlantı yok",
+    "removeRowLink": "Satır bağlantısını kaldır",
+    "recordColumn": "Kayıt sütunu",
+    "recordColumnPlaceholder": "Kaydı tutan sütun, örn. id",
+    "labelColumn": "Etiket sütunu",
+    "labelColumnPlaceholder": "Adlandıran sütun (isteğe bağlı)",
+    "rowLinkHelp": "Bir satıra tıklamak, o satırın kaydı için ilgili gösterge panelini açar. Widget'ları kaydı $page.record olarak okur.",
+    "recordFormats": {
+      "id": "Kimlikler: harfler, rakamlar, - _ . (en fazla 128)",
+      "number": "Sayılar",
+      "uuid": "UUID'ler",
+      "email": "E-posta adresleri"
+    },
+    "detailPageRecords": "Ayrıntı sayfası kayıtları",
+    "detailPageRecordsHelp": "Bir satır bağlantısı açtığında bu panonun kabul ettiği ?record= değerleri. Diğer her şey araç çalıştırılmadan önce reddedilir.",
+    "unreachableDashboard": "Açamadığınız bir pano",
+    "runWorkflow": "Bir Workflow Çalıştır"
   },
   "drive": {
     "uploadFailed": "Yükleme başarısız oldu",

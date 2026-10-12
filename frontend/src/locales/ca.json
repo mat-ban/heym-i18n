@@ -472,7 +472,11 @@
     "import": "Importar",
     "value": "Valor",
     "via": "via",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Executar",
+    "dropFileOrClick": "Arrossegueu un fitxer aquí o feu clic per triar-ne un",
+    "removeFile": "Eliminar el fitxer",
+    "chooseFileFor": "Trieu un fitxer per a {label}"
   },
   "chat": {
     "suggestion6": "Quines plantilles de Workflow hi ha disponibles?",
@@ -657,6 +661,12 @@
       "telegram": {
         "description": "Connecteu un bot de Telegram per a Triggers de Webhook entrants i missatges sortints del bot"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nom d'usuari amb què inicia sessió el servidor SMTP",
+      "from": "De",
+      "fromPlaceholder": "Deixeu en blanc per enviar com el nom d'usuari anterior",
+      "fromHelp": "Remitent visible opcional. El servidor continua iniciant sessió com el nom d'usuari anterior, de manera que aquest compte ha de tenir permís per enviar com aquesta adreça (a Gmail: Envia correus com a)."
     }
   },
   "curl": {
@@ -828,7 +838,31 @@
     "failedToShareEmail": "No s'ha pogut compartir el tauler — comproveu l'adreça de correu electrònic",
     "failedToShareTeam": "No s'ha pogut compartir el tauler amb l'equip",
     "finishEditing": "Finalitzar l'edició del tauler",
-    "generateWithAi": "Generar amb IA"
+    "generateWithAi": "Generar amb IA",
+    "widgetType": "Tipus de widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Trieu un workflow",
+    "workflowWidgetHint": "Un workflow que admet un fitxer rep una zona per deixar-lo anar, un amb camps d'entrada rep aquests camps i un sense entrades rep un botó Executar. Cada execució mostra el seu resultat.",
+    "noWorkflowsYet": "Encara no teniu cap workflow.",
+    "clearRecord": "Netejar el registre",
+    "rowLink": "Enllaç de fila",
+    "noLink": "Sense enllaç",
+    "removeRowLink": "Eliminar l'enllaç de fila",
+    "recordColumn": "Columna de registre",
+    "recordColumnPlaceholder": "Columna que conté el registre, p. ex. id",
+    "labelColumn": "Columna d'etiqueta",
+    "labelColumnPlaceholder": "Columna que l'anomena (opcional)",
+    "rowLinkHelp": "En fer clic a una fila s'obre aquest quadre de comandament per al registre de la fila. Els seus widgets llegeixen el registre com a $page.record.",
+    "recordFormats": {
+      "id": "Identificadors: lletres, dígits, - _ . (fins a 128)",
+      "number": "Nombres",
+      "uuid": "UUID",
+      "email": "Adreces de correu electrònic"
+    },
+    "detailPageRecords": "Registres de la pàgina de detalls",
+    "detailPageRecordsHelp": "Els valors ?record= que aquest tauler accepta quan un enllaç de fila l'obre. Qualsevol altre valor es rebutja abans d'executar un giny.",
+    "unreachableDashboard": "Un tauler que no podeu obrir",
+    "runWorkflow": "Executar un Workflow"
   },
   "docs": {
     "askAnything": "Pregunteu qualsevol cosa sobre la documentació",
@@ -1321,7 +1355,14 @@
     "copiedToClipboard": "{label} copiat al porta-retalls",
     "copyJson": "Copia el JSON",
     "create": "Crea",
-    "createWorkflowsPrompt": "Creeu workflows per exposar-los com a eines MCP"
+    "createWorkflowsPrompt": "Creeu workflows per exposar-los com a eines MCP",
+    "geminiTab": "Aplicació Gemini",
+    "geminiApp": "Aplicació Gemini",
+    "geminiStep1": "Obriu gemini.google.com en un ordinador i aneu a Configuració → Aplicacions connectades",
+    "geminiStep2": "A Aplicacions personalitzades, feu clic a Afegeix una aplicació personalitzada",
+    "geminiStep3": "Enganxeu l'URL del servidor MCP anterior i deixeu les Funcions avançades tancades; Gemini es registrarà automàticament",
+    "geminiStep4": "Feu clic a Següent i autoritzeu amb les vostres credencials de Heym",
+    "geminiInfo": "Gemini utilitza OAuth per autenticar-se de manera segura. Les vostres credencials de Heym s'utilitzen per autoritzar l'accés i mai no es comparteixen amb Gemini. Un cop connectat, Heym també funciona a l'aplicació mòbil de Gemini."
   },
   "nav": {
     "alerts": "Alertes",
@@ -1649,7 +1690,9 @@
     "allWorkflows": "Tots els workflows",
     "backToList": "Tornar a la llista de Workflows",
     "chooseWorkflowPrompt": "Trieu un Workflow i executeu-lo per veure'n el progrés aquí.",
-    "closeDrawer": "Tancar el calaix de workflows ràpids"
+    "closeDrawer": "Tancar el calaix de workflows ràpids",
+    "wrapLongLines": "Ajustar línies llargues",
+    "wrap": "Ajustar"
   },
   "releaseTour": {
     "close": "Tancar les novetats",
@@ -1742,7 +1785,25 @@
     "workflowSettings": "Configuració del Workflow",
     "workflowTimeout": "Temps d'espera del Workflow (segons)",
     "workflowTimeoutDescription": "Fa fallar l'execució si supera aquest nombre de segons. El valor 0 desactiva el temps d'espera. S'aplica a les execucions manuals, d'API i activades per trigger.",
-    "workflowTimeoutPlaceholder": "0 = sense temps d'espera"
+    "workflowTimeoutPlaceholder": "0 = sense temps d'espera",
+    "chartOutput": {
+      "statusColumnOptional": "Columna d'estat (opcional)",
+      "statusColumnPlaceholder": "columna mostrada com a etiquetes de colors, p. ex. state",
+      "statusColumnDialogLabel": "Columna d'estat",
+      "statusColumnHelp": "Les paraules habituals reben un color automàticament: paid, done i approved indiquen èxit; overdue i needs review requereixen atenció; failed i rejected indiquen fallada; pending i running indiquen espera. Afegiu un to per a qualsevol altre valor.",
+      "statusTones": "Tons d'estat",
+      "statusValuePlaceholder": "valor, p. ex. Disputed",
+      "statusValueAriaLabel": "Valor d'estat",
+      "removeTone": "Eliminar to",
+      "addTone": "Afegir to",
+      "tones": {
+        "success": "Èxit",
+        "attention": "Atenció",
+        "failure": "Error",
+        "waiting": "En espera",
+        "neutral": "Neutral"
+      }
+    }
   },
   "settings": {
     "workSection": {
@@ -1762,7 +1823,8 @@
       "intro": "Heym Work és una segona interfície per a equips empresarials. Els usuaris inicien sessió a través de Heym i totes les tasques s'executen aquí.",
       "keyConfigured": "Clau configurada",
       "lastSeen": "Vist per última vegada",
-      "license": "Llicència"
+      "license": "Llicència",
+      "learnMore": "Més informació"
     },
     "addCredential": "Afegir credencial",
     "aiDefaults": "Valors predeterminats d'IA",

@@ -79,7 +79,11 @@
     "apply": "Primijeni",
     "color": "Boja",
     "unknownError": "Nepoznata pogreška",
-    "custom": "Prilagođeno"
+    "custom": "Prilagođeno",
+    "run": "Pokreni",
+    "dropFileOrClick": "Ispustite datoteku ovdje ili kliknite za odabir",
+    "removeFile": "Ukloni datoteku",
+    "chooseFileFor": "Odaberite datoteku za {label}"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "Licenca",
       "unknown": "Nepoznato",
       "intro": "Heym Work drugo je sučelje za poslovne timove. Korisnici se prijavljuju putem sustava Heym, a svaki se posao izvršava ovdje.",
-      "never": "Nikada"
+      "never": "Nikada",
+      "learnMore": "Saznajte više"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Nespremljene promjene",
     "runToNode": "Pokreni do {node}",
     "configRequired": "Potrebna konfiguracija",
-    "fixIssues": "Ispravite sljedeće probleme prije pokretanja Workflowa:"
+    "fixIssues": "Ispravite sljedeće probleme prije pokretanja Workflowa:",
+    "chartOutput": {
+      "statusColumnOptional": "Stupac statusa (neobavezno)",
+      "statusColumnPlaceholder": "stupac prikazan kao obojeni bedževi, npr. state",
+      "statusColumnDialogLabel": "Stupac statusa",
+      "statusColumnHelp": "Uobičajene riječi automatski dobivaju boju: paid, done i approved označavaju uspjeh; overdue i needs review zahtijevaju pažnju; failed i rejected znače neuspjeh; pending i running znače čekanje. Dodajte ton za bilo koju drugu vrijednost.",
+      "statusTones": "Tonovi statusa",
+      "statusValuePlaceholder": "vrijednost, npr. Disputed",
+      "statusValueAriaLabel": "Vrijednost statusa",
+      "removeTone": "Ukloni ton",
+      "addTone": "Dodaj ton",
+      "tones": {
+        "success": "Uspjeh",
+        "attention": "Pozornost",
+        "failure": "Neuspjeh",
+        "waiting": "Na čekanju",
+        "neutral": "Neutralno"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorska spremišta",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Text-to-speech i speech-to-text za glasovne značajke chata"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Korisničko ime s kojim se SMTP poslužitelj prijavljuje",
+      "from": "Od",
+      "fromPlaceholder": "Ostavite prazno za slanje kao gore navedeno korisničko ime",
+      "fromHelp": "Neobavezni vidljivi pošiljatelj. Poslužitelj se i dalje prijavljuje kao gornje korisničko ime, stoga taj račun mora imati dopuštenje za slanje s ove adrese (u Gmailu: Pošalji poštu kao)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Otprikvači {name}",
     "historyId": "Povijest: {id}",
     "outputLabel": "Izlaz: {label}",
-    "closeDrawer": "Zatvori ladicu brzih Workflowa"
+    "closeDrawer": "Zatvori ladicu brzih Workflowa",
+    "wrapLongLines": "Prelomi duge retke",
+    "wrap": "Prelomi"
   },
   "showcase": {
     "guidelines": "Smjernice",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP konfiguracija",
-    "addToConfigInstruction": "Dodajte sljedeće u konfiguraciju svog MCP klijenta (npr. {path}):"
+    "addToConfigInstruction": "Dodajte sljedeće u konfiguraciju svog MCP klijenta (npr. {path}):",
+    "geminiTab": "Aplikacija Gemini",
+    "geminiApp": "Aplikacija Gemini",
+    "geminiStep1": "Otvorite gemini.google.com na računalu i idite na Postavke → Povezane aplikacije",
+    "geminiStep2": "Pod Prilagođene aplikacije kliknite Dodaj prilagođenu aplikaciju",
+    "geminiStep3": "Zalijepite gornji URL MCP poslužitelja i ostavite Napredne značajke zatvorenima; Gemini će se automatski registrirati",
+    "geminiStep4": "Kliknite Dalje i autorizirajte svojim Heym vjerodajnicama",
+    "geminiInfo": "Gemini koristi OAuth za sigurnu provjeru autentičnosti. Vaše Heym vjerodajnice koriste se za autorizaciju pristupa i nikada se ne dijele s Geminijem. Nakon povezivanja, Heym radi i u mobilnoj aplikaciji Gemini."
   },
   "analytics": {
     "dashboardTitle": "Analitička nadzorna ploča",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekunde",
       "apply": "Primijeni",
       "nextRefreshIn": "Sljedeće osvježavanje za {time}"
-    }
+    },
+    "widgetType": "Vrsta widgeta",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Odaberite workflow",
+    "workflowWidgetHint": "Workflow koji prima datoteku dobiva područje za ispuštanje, onaj s poljima unosa dobiva ta polja, a onaj bez unosa dobiva gumb Pokreni. Svako pokretanje prikazuje svoj rezultat.",
+    "noWorkflowsYet": "Još nemate workflows.",
+    "clearRecord": "Očisti zapis",
+    "rowLink": "Poveznica retka",
+    "noLink": "Nema poveznice",
+    "removeRowLink": "Ukloni poveznicu retka",
+    "recordColumn": "Stupac zapisa",
+    "recordColumnPlaceholder": "Stupac koji sadrži zapis, npr. id",
+    "labelColumn": "Stupac oznake",
+    "labelColumnPlaceholder": "Stupac koji mu daje naziv (neobavezno)",
+    "rowLinkHelp": "Klikom na redak otvara se ta nadzorna ploča za zapis tog retka. Njezini widgeti čitaju zapis kao $page.record.",
+    "recordFormats": {
+      "id": "Identifikatori: slova, znamenke, - _ . (do 128)",
+      "number": "Brojevi",
+      "uuid": "UUID-ovi",
+      "email": "Adrese e-pošte"
+    },
+    "detailPageRecords": "Zapisi stranice s pojedinostima",
+    "detailPageRecordsHelp": "Vrijednosti ?record= koje ova nadzorna ploča prihvaća kada je veza retka otvori. Sve ostalo se odbija prije pokretanja widgeta.",
+    "unreachableDashboard": "Nadzorna ploča koju ne možete otvoriti",
+    "runWorkflow": "Pokreni Workflow"
   },
   "drive": {
     "filesCount": "({count} datoteka)",

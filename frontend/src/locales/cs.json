@@ -79,7 +79,11 @@
     "apply": "Použít",
     "color": "Barva",
     "unknownError": "Neznámá chyba",
-    "custom": "Vlastní"
+    "custom": "Vlastní",
+    "run": "Spustit",
+    "dropFileOrClick": "Přetáhněte soubor sem nebo klikněte pro výběr",
+    "removeFile": "Odebrat soubor",
+    "chooseFileFor": "Vyberte soubor pro {label}"
   },
   "nav": {
     "workflows": "Workflow",
@@ -268,7 +272,8 @@
       "license": "Licence",
       "unknown": "Neznámé",
       "intro": "Heym Work je druhé rozhraní pro obchodní týmy. Lidé se přihlašují přes Heym a všechny úlohy běží zde.",
-      "never": "Nikdy"
+      "never": "Nikdy",
+      "learnMore": "Zjistit více"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "Neuložené změny",
     "runToNode": "Spustit do {node}",
     "configRequired": "Vyžadována konfigurace",
-    "fixIssues": "Před spuštěním Workflow prosím opravte následující problémy:"
+    "fixIssues": "Před spuštěním Workflow prosím opravte následující problémy:",
+    "chartOutput": {
+      "statusColumnOptional": "Sloupec stavu (volitelné)",
+      "statusColumnPlaceholder": "sloupec zobrazený jako barevné štítky, např. state",
+      "statusColumnDialogLabel": "Sloupec stavu",
+      "statusColumnHelp": "Běžná slova automaticky získávají barvu: paid, done a approved znamenají úspěch; overdue a needs review vyžadují pozornost; failed a rejected jsou selhání; pending a running znamenají čekání. Přidejte odstín pro jakoukoli jinou hodnotu.",
+      "statusTones": "Odstíny stavu",
+      "statusValuePlaceholder": "hodnota, např. Disputed",
+      "statusValueAriaLabel": "Hodnota stavu",
+      "removeTone": "Odebrat odstín",
+      "addTone": "Přidat odstín",
+      "tones": {
+        "success": "Úspěch",
+        "attention": "Upozornění",
+        "failure": "Neúspěch",
+        "waiting": "Čeká se",
+        "neutral": "Neutrální"
+      }
+    }
   },
   "vectorStores": {
     "title": "Vektorová úložiště",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "Převod textu na řeč a řeči na text pro hlasové funkce chatu"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Uživatelské jméno, pod kterým se server SMTP přihlašuje",
+      "from": "Od",
+      "fromPlaceholder": "Ponechte prázdné pro odeslání jako výše uvedené uživatelské jméno",
+      "fromHelp": "Volitelný viditelný odesílatel. Server se stále přihlašuje jako výše uvedené uživatelské jméno, takže tento účet musí mít oprávnění odesílat jako tato adresa (v Gmailu: Odesílat poštu jako)."
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "Odepnout {name}",
     "historyId": "Historie: {id}",
     "outputLabel": "Výstup: {label}",
-    "closeDrawer": "Zavřít rychlý panel Workflow"
+    "closeDrawer": "Zavřít rychlý panel Workflow",
+    "wrapLongLines": "Zalamovat dlouhé řádky",
+    "wrap": "Zalamovat"
   },
   "showcase": {
     "guidelines": "Pokyny",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "URL Endpointu",
     "apiKey": "API klíč",
     "mcpConfiguration": "Konfigurace MCP",
-    "addToConfigInstruction": "Přidejte následující do konfigurace Vašeho MCP klienta (např. {path}):"
+    "addToConfigInstruction": "Přidejte následující do konfigurace Vašeho MCP klienta (např. {path}):",
+    "geminiTab": "Aplikace Gemini",
+    "geminiApp": "Aplikace Gemini",
+    "geminiStep1": "Otevřete gemini.google.com na počítači a přejděte do Nastavení → Připojené aplikace",
+    "geminiStep2": "V části Vlastní aplikace klikněte na Přidat vlastní aplikaci",
+    "geminiStep3": "Vložte výše uvedenou adresu URL serveru MCP a ponechte Pokročilé funkce zavřené; Gemini se zaregistruje automaticky",
+    "geminiStep4": "Klikněte na Další a proveďte autorizaci pomocí svých přihlašovacích údajů Heym",
+    "geminiInfo": "Gemini používá pro bezpečné ověření protokol OAuth. Vaše přihlašovací údaje Heym slouží k autorizaci přístupu a nikdy nejsou sdíleny se společností Gemini. Po připojení funguje Heym také v mobilní aplikaci Gemini."
   },
   "analytics": {
     "dashboardTitle": "Dashboard analýzy",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "Sekundy",
       "apply": "Použít",
       "nextRefreshIn": "Další aktualizace za {time}"
-    }
+    },
+    "widgetType": "Typ widgetu",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Vyberte workflow",
+    "workflowWidgetHint": "Workflow přijímající soubor získá oblast pro přetažení, workflow se vstupními poli získá tato pole a workflow bez vstupů získá tlačítko Spustit. Každé spuštění zobrazí svůj výsledek.",
+    "noWorkflowsYet": "Zatím nemáte žádná workflows.",
+    "clearRecord": "Vymazat záznam",
+    "rowLink": "Odkaz řádku",
+    "noLink": "Žádný odkaz",
+    "removeRowLink": "Odebrat odkaz řádku",
+    "recordColumn": "Sloupec záznamu",
+    "recordColumnPlaceholder": "Sloupec obsahující záznam, např. id",
+    "labelColumn": "Sloupec popisku",
+    "labelColumnPlaceholder": "Sloupec, který jej pojmenovává (volitelné)",
+    "rowLinkHelp": "Kliknutím na řádek se otevře příslušný řídicí panel pro daný záznam. Jeho widgety čtou záznam jako $page.record.",
+    "recordFormats": {
+      "id": "Identifikátory: písmena, číslice, - _ . (až 128)",
+      "number": "Čísla",
+      "uuid": "UUID",
+      "email": "E-mailové adresy"
+    },
+    "detailPageRecords": "Záznamy stránky s podrobnostmi",
+    "detailPageRecordsHelp": "Hodnoty ?record=, které tento řídicí panel přijímá při otevření z odkazu na řádku. Jakékoli jiné hodnoty jsou před spuštěním widgetu odmítnuty.",
+    "unreachableDashboard": "Řídicí panel, který nelze otevřít",
+    "runWorkflow": "Spustit Workflow"
   },
   "drive": {
     "filesCount": "({count} souborů)",

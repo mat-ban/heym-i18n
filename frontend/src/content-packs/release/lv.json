@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work biznesa komandām un prasmju zip faili tērzēšanā",
+    "releaseTour": {
+      "label": "Jauns pakalpojumā Heym",
+      "introTitle": "Jaunumi šajā laidienā",
+      "introDescription": "Īss pārskats par jaunumiem kopš Jūsu pēdējā atjauninājuma. Aizņem apmēram vienu minūti.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, biznesa slānis virs Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** ir otrā saskarne biznesa komandām. Lietotāji apraksta uzdevumu saviem vārdiem, atbild uz dažiem jautājumiem un saņem Heym izveidotu un pārbaudītu Workflow. Viņi strādā no pielāgotām lapām, atbild uz pārskatiem un redz katru izpildi ar nosaukumu, kamēr Heym veic uzdevumus fonā."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym administratori to savieno sadaļā **Iestatījumi, Heym Work**: ievadiet Heym Work adresi, ģenerējiet atslēgu un iespējojiet savienojumu. Pierakstīšanās notiek ar to pašu Single Sign-On, ko Heym jau izmanto. Heym Work tiek licencēts atsevišķi; skatiet heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Biznesa komandas apraksta uzdevumu, atbild uz jautājumiem un saņem pārbaudītu Workflow, ko izpilda Heym.",
+          "useCases": [
+            "Piešķiriet juridiskajai, finanšu vai darbības komandai savu vietu darba automatizācijai",
+            "Pievienojiet no Iestatījumi, Heym Work ar adresi un atslēgu",
+            "Saglabājiet Single Sign-On, lomas un apstiprinājumus katrai komandai"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Uzziniet vairāk vietnē heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Prasmju zip faila ievilkšana Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat pieņem **ZIP** failus. Ja arhīvā ir **SKILL.md** un saistītie Python faili, Chat var piešķirt šo prasmi Agentam. Zip fails bez prasmju faila sarunā paliek kā konteksts."
+          },
+          {
+            "type": "prose",
+            "markdown": "Lūdziet Chat mainīt jau saglabātu prasmi. Tas atjaunina norādītos failus un atstāj pārējos, tostarp nepārrakstīto Python kodu, neskartus. Ja ir atlasīts Workflow, prasme tiek ievietota tur. Pretējā gadījumā Chat sāk Workflow ar vienu Agentu, kam ir šī prasme."
+          }
+        ],
+        "tour": {
+          "description": "Pievienojiet prasmju zip tērzēšanā, un Heym to piešķirs Agentam.",
+          "useCases": [
+            "Ievelciet saspiestu prasmju mapi ar SKILL.md un Python failu",
+            "Lūdziet Chat pārrakstīt prasmes tekstu, nezaudējot Python kodu",
+            "Sāciet jaunu Workflow, kura Agents nes šo prasmi"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Atkārtoti aktivizēt mezglu Workflow ietvaros",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI Assistant pārbauda savus Workflow un izveido datu tabulas",
+    "headline": "AI asistents iestata jūsu datu tabulas",
     "releaseTour": {
       "label": "Jauns Heym",
       "introTitle": "Jaunumi šajā laidienā",
       "introDescription": "Īss pārskats par jaunumiem kopš Jūsu pēdējā atjauninājuma. Aizņem apmēram vienu minūti.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO režīms: AI Assistant pārbauda, ko tas izveido",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Aktivizējiet **YOLO režīmu** Canvas **AI Assistant**, un tas vairs neapstāsies pēc Workflow piemērošanas. Tas izpilda Workflow tāpat kā ar **Run**, nolasa rezultātu un patstāvīgi labo Workflow līdz piecām reizēm katrā ziņojumā. Katra atbilde uzskaita soļus tiešraidē."
-          },
-          {
-            "type": "prose",
-            "markdown": "Pirms pirmās palaišanas tas jautā par testa ievadi ar ieteiktajām vērtībām un izmanto tās atkārtoti. Tas var arī izpildīt citus Workflow, ja nepieciešami to rezultāti. Ja nepieciešams lēmums vai piekļuves dati, tas jautā ar ierasto jautājumu karti. Īstas palaišanas: YOLO režīms pēc noklusējuma ir izslēgts, un **Stop** jebkurā brīdī pārtrauc procesu."
-          }
-        ],
-        "tour": {
-          "description": "AI Assistant izpilda izveidotos Workflow, pārbauda rezultātu un patstāvīgi labo kļūdas, līdz tas darbojas.",
-          "useCases": [
-            "Aprakstīt Workflow un uzreiz saņemt pārbaudītu versiju",
-            "Ļaut asistentam automātiski atklāt un novērst kļūdainus mezglus",
-            "Pārbaudīt citu Workflow atgrieztās vērtības pirms savienošanas"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI Assistant izvēlas vai izveido datu tabulas",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Izveidojiet vairākus informācijas paneļus un kopīgojiet tos ar komandu",
-    "releaseTour": {
-      "label": "Jauns Heym",
-      "introTitle": "Jaunumi šajā laidienā",
-      "introDescription": "Īss pārskats par jaunumiem kopš Jūsu pēdējā atjauninājuma. Aizņem apmēram vienu minūti.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Izveidojiet vairākus informācijas paneļus un kopīgojiet tos ar komandu",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Cilne **Dashboard** tagad atbalsta neierobežotu skaitu informācijas paneļu. Ērti pārslēdzieties, izmantojot izvēlni cilnes augšdaļā, vai izveidojiet jaunu ar **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Kopīgojiet informācijas paneļus ar personām vai komandām, izmantojot **Iestatījumus**. **Lasīšana** ļauj skatīt un atjaunināt; **Rakstīšana** ļauj rediģēt logrīkus. Logrīki vienmēr izmanto īpašnieka piekļuves datus."
-          }
-        ],
-        "tour": {
-          "description": "Pārvaldiet vairākus informācijas paneļus, pārslēdzieties starp tiem un kopīgojiet tos tikai lasāmus vai rediģējamus.",
-          "useCases": [
-            "Strukturējiet atsevišķus informācijas paneļus pēc komandas, produkta vai nomnieka",
-            "Nodrošiniet ieinteresētajām personām tikai lasāmu skatu",
-            "Iepriekš pārbaudiet diagrammu veidus ar parauga datiem"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

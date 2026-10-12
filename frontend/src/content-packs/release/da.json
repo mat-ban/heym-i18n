@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work til forretningsteam og færdigheds-zip-filer i Chat",
+    "releaseTour": {
+      "label": "Nyt i Heym",
+      "introTitle": "Nyt i denne release",
+      "introDescription": "En kort oversigt over nyhederne siden seneste opdatering. Varer cirka et minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, forretningslaget oven på Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** er en ekstra brugerflade til forretningsteam. Man beskriver en opgave med egne ord, besvarer nogle spørgsmål og modtager et Workflow bygget og testet af Heym. Der arbejdes fra skræddersyede sider, besvares gennemgange, og hver kørsel vises med et navn, mens Heym afvikler opgaverne i baggrunden."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym-administratorer forbinder det under **Indstillinger, Heym Work**: indtast adressen på Heym Work, generer en nøgle, og aktivér forbindelsen. Login foregår med den Single Sign-On, Heym allerede benytter. Heym Work licenseres separat; se heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Forretningsteam beskriver en opgave, besvarer spørgsmål og modtager et testet Workflow, som afvikles af Heym.",
+          "useCases": [
+            "Giv et juridisk, økonomisk eller driftsteam sit eget område til automatisering af arbejde",
+            "Forbind det fra Indstillinger, Heym Work med en adresse og en nøgle",
+            "Behold Single Sign-On, roller og godkendelser for alle team"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Få mere at vide på heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Træk en færdigheds-zip ind i Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat accepterer **ZIP-filer**. Når arkivet indeholder en **SKILL.md** og tilhørende Python-filer, kan Chat tildele færdigheden til en Agent. En zip-fil uden færdighedsfil forbliver i samtalen som kontekst."
+          },
+          {
+            "type": "prose",
+            "markdown": "Bed Chat om at ændre en gemt færdighed. Den opdaterer de angivne filer og lader resten være, inklusive Python-kode, den ikke omskrev. Med et valgt Workflow placeres færdigheden dér. Ellers starter Chat et Workflow med en enkelt Agent med færdigheden."
+          }
+        ],
+        "tour": {
+          "description": "Vedhæft en færdigheds-zip i Chat, og Heym tildeler den til en Agent.",
+          "useCases": [
+            "Træk en zippet færdighedsmappe med SKILL.md og en Python-fil ind",
+            "Bed Chat om at omskrive færdighedsteksten uden at miste Python-koden",
+            "Start et nyt Workflow, hvor en Agent bærer færdigheden"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Genaktivering af en node i et Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI-assistenten tester sine Workflows og opsætter datatabeller",
+    "headline": "AI-assistenten opsætter datatabeller",
     "releaseTour": {
       "label": "Nyt i Heym",
       "introTitle": "Nyt i denne release",
       "introDescription": "En kort oversigt over nyhederne siden seneste opdatering. Tager cirka et minut.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO-tilstand: AI-assistenten tester det, der bygges",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Aktiveres **YOLO-tilstand** i Canvas **AI-assistenten**, stopper den ikke længere efter anvendelse af en Workflow. Den udfører Workflowen som via **Run**, læser resultatet og korrigerer Workflowen selvstændigt op til fem gange pr. besked. Hvert svar viser trinnene live."
-          },
-          {
-            "type": "prose",
-            "markdown": "Før første kørsel spørges der om test-input med foreslåede værdier, og disse genbruges. Andre Workflows kan også udføres, hvis deres resultater er nødvendige. Kræves en beslutning eller adgangsdata, spørges der via det sædvanlige spørgekort. Reelle kørsler: YOLO-tilstand er som standard deaktiveret, og **Stop** afslutter forløbet til enhver tid."
-          }
-        ],
-        "tour": {
-          "description": "AI-assistenten udfører oprettede Workflows, kontrollerer resultatet og korrigerer fejl selvstændigt, indtil det fungerer.",
-          "useCases": [
-            "Beskrive en Workflow og direkte modtage en testet version",
-            "Lade assistenten automatisk opspore og afhjælpe fejlbehæftede noder",
-            "Kontrollere returværdier fra andre Workflows før sammenkædning"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI-assistenten vælger eller opretter datatabeller",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Oprettelse af flere dashboards og deling med teamet",
-    "releaseTour": {
-      "label": "Nyt i Heym",
-      "introTitle": "Nyt i denne release",
-      "introDescription": "En kort oversigt over nyhederne siden seneste opdatering. Varer cirka et minut.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Oprettelse af flere dashboards og deling med teamet",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Fanen **Dashboard** understøtter nu et vilkårligt antal dashboards. Der kan bekvemt skiftes via valget øverst i fanen, eller et nyt kan oprettes med **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Dashboards kan deles med personer eller teams via **Indstillinger**. **Læsning** tillader visning og opdatering; **skrivning** tillader redigering af widgets. Widgets anvender altid ejerens adgangsoplysninger."
-          }
-        ],
-        "tour": {
-          "description": "Håndtering af flere dashboards, skift mellem dem og deling med skrivebeskyttet eller redigerbar adgang.",
-          "useCases": [
-            "Opdeling i separate dashboards efter team, produkt eller mandant",
-            "Tilvejebringelse af en skrivebeskyttet visning til interessenter",
-            "Forudgående test af diagramtyper med eksempeldata"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

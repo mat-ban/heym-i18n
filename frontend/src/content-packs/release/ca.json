@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work per a equips empresarials i zips d'habilitats a Chat",
+    "releaseTour": {
+      "label": "Novetats a Heym",
+      "introTitle": "Novetats d'aquesta versió",
+      "introDescription": "Un resum breu de les novetats des de la vostra darrera actualització. Dura aproximadament un minut.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, la capa empresarial sobre Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** és una segona interfície per a equips empresarials. Els usuaris descriuen una tasca amb les seves pròpies paraules, responen algunes preguntes i obtenen un Workflow creat i provat per Heym. Treballen des de pàgines dissenyades per a ells, responen a revisions i veuen cada execució identificada amb un nom, mentre Heym executa cada tasca en segon pla."
+          },
+          {
+            "type": "prose",
+            "markdown": "Els administradors de Heym el connecten a **Configuració, Heym Work**: introduïu l'adreça de Heym Work, genereu una clau i activeu la connexió. Els usuaris inicien sessió amb el mateix Single Sign-On que Heym ja utilitza. Heym Work té llicència independent; vegeu heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Els equips empresarials descriuen una tasca, responen preguntes i obtenen un Workflow provat i executat per Heym.",
+          "useCases": [
+            "Proporcioneu a l'equip jurídic, financer o operatiu un espai propi per automatitzar tasques",
+            "Connecteu-lo des de Configuració, Heym Work amb una adreça i una clau",
+            "Mantingueu el Single Sign-On, rols i aprovacions per a cada equip"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Més informació a heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Arrossegar un zip d'habilitat a Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat accepta fitxers **ZIP**. Quan l'arxiu conté un **SKILL.md** i fitxers Python associats, Chat pot assignar aquesta habilitat a un Agent. Un fitxer zip sense fitxer d'habilitat roman a la conversa com a context."
+          },
+          {
+            "type": "prose",
+            "markdown": "Demaneu a Chat que modifiqui una habilitat ja desada. Actualitza els fitxers indicats i manté la resta intacta, inclòs el codi Python no modificat. Amb un Workflow seleccionat, l'habilitat s'hi afegeix. En cas contrari, Chat inicia un Workflow amb un Agent que té l'habilitat."
+          }
+        ],
+        "tour": {
+          "description": "Adjunteu un zip d'habilitat a Chat i Heym l'assigna a un Agent.",
+          "useCases": [
+            "Arrossegar una carpeta d'habilitat comprimida amb SKILL.md i un fitxer Python",
+            "Demanar a Chat que reescrigui el text de l'habilitat sense perdre el codi Python",
+            "Iniciar un nou Workflow amb un Agent que tingui l'habilitat"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Reactivar un node dins d'un Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "L'assistent d'IA prova els seus Workflows i configura taules de dades",
+    "headline": "L'assistent d'IA configura les vostres taules de dades",
     "releaseTour": {
       "label": "Novetats a Heym",
       "introTitle": "Novetats d'aquesta versió",
       "introDescription": "Una visió general breu de les novetats des de la vostra darrera actualització. Dura aproximadament un minut.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "Mode YOLO: l'assistent d'IA prova allò que construeix",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Activeu el **mode YOLO** al **assistent d'IA** del Canvas i ja no s'aturarà després d'aplicar un Workflow. Executa el Workflow com si féssiu servir **Run**, llegeix el resultat i corregeix el Workflow de manera autònoma fins a cinc vegades per missatge. Cada resposta enumera els passos en directe."
-          },
-          {
-            "type": "prose",
-            "markdown": "Abans de la primera execució, demana dades de prova amb valors suggerits i els reutilitza. També pot executar altres Workflows si necessita els seus resultats. Si necessita una decisió o credencials, ho demana amb la targeta de pregunta habitual. Execucions reals: el mode YOLO està desactivat per defecte i **Stop** atura el procés en qualsevol moment."
-          }
-        ],
-        "tour": {
-          "description": "L'assistent d'IA executa els Workflows creats, comprova el resultat i corregeix els errors de manera autònoma fins que funcionen.",
-          "useCases": [
-            "Descriure un Workflow i obtenir directament una versió provada",
-            "Fer que l'assistent detecti i corregeixi automàticament els nodes defectuosos",
-            "Comprovar els valors de retorn d'altres Workflows abans d'enllaçar-los"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "L'assistent d'IA selecciona o crea taules de dades",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Creeu diversos Dashboards i compartiu-los amb l'equip",
-    "releaseTour": {
-      "label": "Novetats a Heym",
-      "introTitle": "Novetats d'aquesta versió",
-      "introDescription": "Una visió general breu de les novetats des del vostre darrer update. Dura aproximadament un minut.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Creeu diversos Dashboards i compartiu-los amb l'equip",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "La pestanya **Dashboard** ara admet tants Dashboards com vulgueu. Canvieu còmodament des del selector de la part superior de la pestanya o creeu-ne un de nou amb **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Compartiu Dashboards amb persones o equips des de la **Configuració**. **Lectura** permet visualitzar i actualitzar; **Escriptura** permet editar widgets. Els widgets sempre utilitzen les credencials del propietari."
-          }
-        ],
-        "tour": {
-          "description": "Gestioneu diversos Dashboards, canvieu entre ells i compartiu-los en mode només lectura o editable.",
-          "useCases": [
-            "Estructurar Dashboards separats per equip, producte o client",
-            "Proporcionar una vista de només lectura als stakeholders",
-            "Provar tipus de gràfics amb dades d'exemple prèviament"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

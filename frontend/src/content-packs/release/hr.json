@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work za poslovne timove i zip datoteke vještina u Chatu",
+    "releaseTour": {
+      "label": "Novo u Heymu",
+      "introTitle": "Novo u ovom izdanju",
+      "introDescription": "Kratak pregled novosti od Vašeg posljednjeg ažuriranja. Traje otprilike jednu minutu.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, poslovni sloj povrh Heyma",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** je drugo sučelje za poslovne timove. Korisnici opisuju zadatak vlastitim riječima, odgovaraju na nekoliko pitanja i dobivaju Workflow koji je Heym izgradio i testirao. Rade sa stranica stvorenih za njih, rješavaju preglede i vide svako pokretanje s nazivom, dok Heym izvršava svaki zadatak u pozadini."
+          },
+          {
+            "type": "prose",
+            "markdown": "Heym administratori ga povezuju u **Postavke, Heym Work**: unesite adresu za Heym Work, generirajte ključ i omogućite vezu. Prijava se vrši putem Single Sign-Ona koji Heym već koristi. Heym Work se licencira zasebno; pogledajte heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "Poslovni timovi opisuju zadatak, odgovaraju na pitanja i dobivaju testirani Workflow koji pokreće Heym.",
+          "useCases": [
+            "Pružite pravnom, financijskom ili operativnom timu vlastiti prostor za automatizaciju rada",
+            "Povežite iz Postavke, Heym Work s adresom i ključem",
+            "Zadržite Single Sign-On, uloge i odobrenja za svaki tim"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Saznajte više na heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Ispuštanje zip datoteke vještine u Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat prihvaća **ZIP** datoteke. Kada arhiva sadrži **SKILL.md** i prateće Python datoteke, Chat može dodijeliti tu vještinu Agentu. Zip datoteka bez datoteke vještine ostaje u razgovoru kao kontekst."
+          },
+          {
+            "type": "prose",
+            "markdown": "Zatražite od Chata promjenu već spremljene vještine. On ažurira navedene datoteke i ostavlja ostatak, uključujući neizmijenjeni Python kod. Uz odabrani Workflow, vještina se dodaje tamo. U suprotnom, Chat pokreće Workflow s jednim Agentom koji posjeduje vještinu."
+          }
+        ],
+        "tour": {
+          "description": "Priložite zip vještine u Chatu i Heym je dodjeljuje Agentu.",
+          "useCases": [
+            "Ispustite sažetu mapu vještine sa SKILL.md i Python datotekom",
+            "Zatražite od Chata prepisivanje teksta vještine bez gubitka Python koda",
+            "Pokrenite novi Workflow čiji Agent nosi vještinu"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Ponovno aktiviranje čvora unutar Workflowa",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "AI Assistant testira svoje Workflowe i postavlja DataTables",
+    "headline": "AI asistent postavlja vaše tablice podataka",
     "releaseTour": {
       "label": "Novo u Heymu",
       "introTitle": "Novo u ovom izdanju",
       "introDescription": "Kratak pregled novosti od Vašeg posljednjeg ažuriranja. Traje oko minute.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "YOLO način rada: AI Assistant testira ono što gradi",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Aktivirajte **YOLO način rada** u Canvas **AI Assistantu** i on više neće stati nakon primjene Workflowa. Pokrenut će Workflow kao putem **Run**, pročitati rezultat i samostalno ispraviti Workflow do pet puta po poruci. Svaki odgovor prikazuje korake uživo."
-          },
-          {
-            "type": "prose",
-            "markdown": "Prije prvog pokretanja pita za testne ulaze s predloženim vrijednostima i ponovno ih koristi. Može pokrenuti i druge Workflowe ako su mu potrebni njihovi rezultati. Ako mu je potrebna odluka ili pristupni podaci, pita putem uobičajene kartice s pitanjem. Stvarna pokretanja: YOLO način rada standardno je isključen, a **Stop** zaustavlja proces u svakom trenutku."
-          }
-        ],
-        "tour": {
-          "description": "AI Assistant izvršava izrađene Workflowe, provjerava rezultat i samostalno ispravlja pogreške dok ne proradi.",
-          "useCases": [
-            "Opišite Workflow i odmah primite testiranu verziju",
-            "Neka Assistant automatski pronađe i ispravi neispravne čvorove",
-            "Provjerite povratne vrijednosti drugih Workflowa prije povezivanja"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "AI Assistant odabire ili stvara DataTables",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Izradite više Dashboarda i podijelite ih s timom",
-    "releaseTour": {
-      "label": "Novo u Heymu",
-      "introTitle": "Novo u ovom izdanju",
-      "introDescription": "Kratak pregled novosti od Vašeg posljednjeg ažuriranja. Traje otprilike jednu minutu.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Izradite više Dashboarda i podijelite ih s timom",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Kartica **Dashboard** sada podržava neograničen broj Dashboarda. Jednostavno se prebacujte putem izbornika pri vrhu kartice ili izradite novi pomoću **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Podijelite Dashboards s osobama ili timovima putem **postavki**. **Čitanje** omogućuje prikaz i ažuriranje; **Pisanje** omogućuje uređivanje widgeta. Widgeti uvijek koriste vjerodajnice vlasnika."
-          }
-        ],
-        "tour": {
-          "description": "Upravljajte s više Dashboarda, prebacujte se između njih i podijelite ih s pravom čitanja ili uređivanja.",
-          "useCases": [
-            "Strukturirajte odvojene Dashboards prema timu, proizvodu ili klijentu",
-            "Omogućite dionicima prikaz samo za čitanje",
-            "Prethodno testirajte vrste dijagrama s primjerima podataka"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

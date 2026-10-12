@@ -6,8 +6,19 @@ import { Trash2 } from "lucide-vue-next";
 import Dialog from "@/components/ui/Dialog.vue";
 import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
+import Select from "@/components/ui/Select.vue";
 import { useDashboardStore } from "@/stores/dashboard";
+import type { RecordFormat } from "@/types/dashboard";
 import DashboardShareSection from "./DashboardShareSection.vue";
+
+const { t } = useI18n();
+
+const recordFormatOptions = computed<{ value: RecordFormat; label: string }[]>(() => [
+  { value: "id", label: t("dashboards.recordFormats.id") },
+  { value: "number", label: t("dashboards.recordFormats.number") },
+  { value: "uuid", label: t("dashboards.recordFormats.uuid") },
+  { value: "email", label: t("dashboards.recordFormats.email") },
+]);
 
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits<{
@@ -16,14 +27,17 @@ const emit = defineEmits<{
 }>();
 
 const dashboardStore = useDashboardStore();
-const { t } = useI18n();
 const name = ref("");
+const recordFormat = ref<RecordFormat>("id");
 const saving = ref(false);
 
 watch(
   () => [props.open, dashboardStore.activeDashboard?.id] as const,
   ([open]) => {
-    if (open && dashboardStore.activeDashboard) name.value = dashboardStore.activeDashboard.name;
+    if (open && dashboardStore.activeDashboard) {
+      name.value = dashboardStore.activeDashboard.name;
+      recordFormat.value = dashboardStore.activeDashboard.record_format;
+    }
   },
   { immediate: true },
 );
@@ -38,6 +52,9 @@ async function submit(): Promise<void> {
   saving.value = true;
   try {
     await dashboardStore.renameDashboard(dashboard.id, name.value.trim());
+    if (recordFormat.value !== dashboard.record_format) {
+      await dashboardStore.setRecordFormat(dashboard.id, recordFormat.value);
+    }
     emit("close");
   } finally {
     saving.value = false;
@@ -67,6 +84,19 @@ async function remove(): Promise<void> {
         data-testid="dashboard-settings-name"
         @keydown.enter="submit"
       />
+
+      <div class="space-y-1">
+        <label class="text-sm font-medium">{{ $t("dashboards.detailPageRecords") }}</label>
+        <Select
+          :model-value="recordFormat"
+          :options="recordFormatOptions"
+          data-testid="dashboard-settings-record-format"
+          @update:model-value="recordFormat = ($event as RecordFormat | undefined) ?? 'id'"
+        />
+        <p class="text-xs text-muted-foreground">
+          {{ $t("dashboards.detailPageRecordsHelp") }}
+        </p>
+      </div>
 
       <DashboardShareSection
         v-if="dashboardStore.activeDashboard"

@@ -79,7 +79,11 @@
     "apply": "应用",
     "color": "颜色",
     "unknownError": "未知错误",
-    "custom": "自定义"
+    "custom": "自定义",
+    "run": "运行",
+    "dropFileOrClick": "将文件拖放到此处，或点击选择",
+    "removeFile": "移除文件",
+    "chooseFileFor": "为 {label} 选择文件"
   },
   "nav": {
     "workflows": "Workflows",
@@ -268,7 +272,8 @@
       "license": "许可证",
       "unknown": "未知",
       "intro": "Heym Work 是面向业务团队的第二界面。成员通过 Heym 登录，所有任务均在此运行。",
-      "never": "从未"
+      "never": "从未",
+      "learnMore": "了解更多"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "未保存的更改",
     "runToNode": "运行至 {node}",
     "configRequired": "需要配置",
-    "fixIssues": "请在运行 Workflow 前修复以下问题："
+    "fixIssues": "请在运行 Workflow 前修复以下问题：",
+    "chartOutput": {
+      "statusColumnOptional": "状态列（可选）",
+      "statusColumnPlaceholder": "显示为彩色徽章的列，例如 state",
+      "statusColumnDialogLabel": "状态列",
+      "statusColumnHelp": "常见词汇会自动获得对应颜色：paid、done 和 approved 为成功；overdue 和 needs review 为注意；failed 和 rejected 为失败；pending 和 running 为等待。可为其他任意值添加色调。",
+      "statusTones": "状态色调",
+      "statusValuePlaceholder": "值，例如 Disputed",
+      "statusValueAriaLabel": "状态值",
+      "removeTone": "移除色调",
+      "addTone": "添加色调",
+      "tones": {
+        "success": "成功",
+        "attention": "注意",
+        "failure": "失败",
+        "waiting": "等待中",
+        "neutral": "中性"
+      }
+    }
   },
   "vectorStores": {
     "title": "向量存储",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "用于聊天语音功能的文本转语音和语音转文本"
       }
+    },
+    "smtp": {
+      "usernameHelp": "SMTP 服务器登录所用的用户名",
+      "from": "发件人",
+      "fromPlaceholder": "留空则使用上方的用户名发送",
+      "fromHelp": "可选的可见发件人。服务器仍以上方用户名登录，因此该账户必须具有以此地址发送的权限（在 Gmail 中为“以其他地址发送邮件”）。"
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "取消固定 {name}",
     "historyId": "历史记录：{id}",
     "outputLabel": "输出：{label}",
-    "closeDrawer": "关闭快捷 Workflow 抽屉"
+    "closeDrawer": "关闭快捷 Workflow 抽屉",
+    "wrapLongLines": "自动折行",
+    "wrap": "折行"
   },
   "showcase": {
     "guidelines": "指南",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP 配置",
-    "addToConfigInstruction": "请将以下内容添加到您的 MCP 客户端配置中（例如 {path}）："
+    "addToConfigInstruction": "请将以下内容添加到您的 MCP 客户端配置中（例如 {path}）：",
+    "geminiTab": "Gemini 应用",
+    "geminiApp": "Gemini 应用",
+    "geminiStep1": "在电脑上打开 gemini.google.com 并前往 设置 → 已关联的应用",
+    "geminiStep2": "在 自定义应用 下，点击 添加自定义应用",
+    "geminiStep3": "粘贴上方的 MCP 服务器 URL 并保持 高级功能 折叠；Gemini 将自动注册",
+    "geminiStep4": "点击 下一步 并使用 Heym 凭据授权",
+    "geminiInfo": "Gemini 使用 OAuth 进行安全认证。Heym 凭据仅用于授权访问，绝不会与 Gemini 共享。连接完成后，Heym 还可在 Gemini 移动应用中使用。"
   },
   "analytics": {
     "dashboardTitle": "分析看板",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "秒",
       "apply": "应用",
       "nextRefreshIn": "下次刷新：{time}"
-    }
+    },
+    "widgetType": "组件类型",
+    "workflow": "Workflow",
+    "chooseWorkflow": "选择 Workflow",
+    "workflowWidgetHint": "接收文件的 Workflow 将获得文件放置区，带有输入字段的获得相应字段，无输入的获得运行按钮。每次运行均会显示结果。",
+    "noWorkflowsYet": "暂无 Workflow。",
+    "clearRecord": "清除记录",
+    "rowLink": "行链接",
+    "noLink": "无链接",
+    "removeRowLink": "移除行链接",
+    "recordColumn": "记录列",
+    "recordColumnPlaceholder": "包含记录的列，例如 id",
+    "labelColumn": "标签列",
+    "labelColumnPlaceholder": "为其命名的列（可选）",
+    "rowLinkHelp": "点击某一行将针对该行的记录打开相应的仪表板。其中的组件将该记录读取为 $page.record。",
+    "recordFormats": {
+      "id": "ID：字母、数字、- _ .（最多 128 个字符）",
+      "number": "数字",
+      "uuid": "UUID",
+      "email": "电子邮件地址"
+    },
+    "detailPageRecords": "详情页记录",
+    "detailPageRecordsHelp": "行链接打开此仪表板时接受的 ?record= 参数值。其他任何值均在小组件运行前被拒绝。",
+    "unreachableDashboard": "无法打开的仪表板",
+    "runWorkflow": "运行 Workflow"
   },
   "drive": {
     "filesCount": "（{count} 个文件）",

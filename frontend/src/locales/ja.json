@@ -79,7 +79,11 @@
     "apply": "適用",
     "color": "カラー",
     "unknownError": "不明なエラー",
-    "custom": "カスタム"
+    "custom": "カスタム",
+    "run": "実行",
+    "dropFileOrClick": "ここにファイルをドロップするか、クリックして選択",
+    "removeFile": "ファイルを削除",
+    "chooseFileFor": "{label} のファイルを選択"
   },
   "nav": {
     "workflows": "Workflow",
@@ -268,7 +272,8 @@
       "license": "ライセンス",
       "unknown": "不明",
       "intro": "Heym Workはビジネスチーム向けのセカンドインターフェースです。ユーザーはHeym経由でサインインし、すべてのジョブはここで実行されます。",
-      "never": "なし"
+      "never": "なし",
+      "learnMore": "詳細を見る"
     }
   },
   "workflows": {
@@ -772,7 +777,25 @@
     "unsavedChanges": "未保存の変更",
     "runToNode": "{node}まで実行",
     "configRequired": "設定が必要です",
-    "fixIssues": "Workflowを実行する前に、以下の問題を修正してください："
+    "fixIssues": "Workflowを実行する前に、以下の問題を修正してください：",
+    "chartOutput": {
+      "statusColumnOptional": "ステータス列（省略可能）",
+      "statusColumnPlaceholder": "色付きチップとして表示される列（例: state）",
+      "statusColumnDialogLabel": "ステータス列",
+      "statusColumnHelp": "一般的な単語には自動的に色が割り当てられます: paid、done、approved は成功、overdue、needs review は注意、failed、rejected は失敗、pending、running は待機です。その他の値にはトーンを追加してください。",
+      "statusTones": "ステータストーン",
+      "statusValuePlaceholder": "値（例: Disputed）",
+      "statusValueAriaLabel": "ステータス値",
+      "removeTone": "トーンを削除",
+      "addTone": "トーンを追加",
+      "tones": {
+        "success": "成功",
+        "attention": "注意",
+        "failure": "失敗",
+        "waiting": "待機中",
+        "neutral": "中立"
+      }
+    }
   },
   "vectorStores": {
     "title": "ベクターストア",
@@ -985,6 +1008,12 @@
       "elevenlabs": {
         "description": "チャット音声機能向けのテキスト読み上げと音声認識を提供します"
       }
+    },
+    "smtp": {
+      "usernameHelp": "SMTP サーバーへのログインに使用するユーザー名",
+      "from": "送信元",
+      "fromPlaceholder": "上記のユーザー名として送信する場合は空白のままにします",
+      "fromHelp": "省略可能な表示送信者。サーバーは上記のユーザー名でログインするため、そのアカウントがこのアドレスとして送信することを許可されている必要があります（Gmail の「送信元アドレス」）。"
     }
   },
   "traces": {
@@ -1272,7 +1301,9 @@
     "unpin": "{name}のピン留めを解除",
     "historyId": "履歴: {id}",
     "outputLabel": "出力: {label}",
-    "closeDrawer": "クイックWorkflowドロワーを閉じる"
+    "closeDrawer": "クイックWorkflowドロワーを閉じる",
+    "wrapLongLines": "長い行を折り返す",
+    "wrap": "折り返し"
   },
   "showcase": {
     "guidelines": "ガイドライン",
@@ -1903,7 +1934,14 @@
     "endpointUrl": "Endpoint URL",
     "apiKey": "API Key",
     "mcpConfiguration": "MCP設定",
-    "addToConfigInstruction": "以下をMCPクライアント設定（例: {path}）に追加してください："
+    "addToConfigInstruction": "以下をMCPクライアント設定（例: {path}）に追加してください：",
+    "geminiTab": "Gemini アプリ",
+    "geminiApp": "Gemini アプリ",
+    "geminiStep1": "パソコンで gemini.google.com を開き、設定 → 接続済みアプリ に移動します",
+    "geminiStep2": "カスタム アプリ の下にある カスタム アプリを追加 をクリックします",
+    "geminiStep3": "上記の MCP サーバー URL を貼り付け、高度な機能 は閉じたままにします。Gemini が自動的に登録されます",
+    "geminiStep4": "次へ をクリックし、Heym の認証情報で認証します",
+    "geminiInfo": "Gemini は安全な認証のために OAuth を使用します。Heym の認証情報はアクセス承認のために使用され、Gemini と共有されることはありません。接続すると、Heym は Gemini モバイルアプリでも動作します。"
   },
   "analytics": {
     "dashboardTitle": "分析ダッシュボード",
@@ -2100,7 +2138,31 @@
       "secondsPlaceholder": "秒",
       "apply": "適用",
       "nextRefreshIn": "次回の更新まで {time}"
-    }
+    },
+    "widgetType": "ウィジェットの種類",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Workflow を選択",
+    "workflowWidgetHint": "ファイルを受け取る Workflow にはドロップゾーンが、入力フィールドのあるものにはそのフィールドが、入力のないものには実行ボタンが提供されます。各実行はその結果を表示します。",
+    "noWorkflowsYet": "Workflow はまだありません。",
+    "clearRecord": "レコードをクリア",
+    "rowLink": "行リンク",
+    "noLink": "リンクなし",
+    "removeRowLink": "行リンクを削除",
+    "recordColumn": "レコード列",
+    "recordColumnPlaceholder": "レコードを保持する列（例: id）",
+    "labelColumn": "ラベル列",
+    "labelColumnPlaceholder": "名前を付ける列（省略可能）",
+    "rowLinkHelp": "行をクリックすると、その行のレコードに対応するダッシュボードが開きます。ウィジェットはそのレコードを $page.record として読み取ります。",
+    "recordFormats": {
+      "id": "ID: 英数字、- _ . (最大128文字)",
+      "number": "数値",
+      "uuid": "UUID",
+      "email": "メールアドレス"
+    },
+    "detailPageRecords": "詳細ページのレコード",
+    "detailPageRecordsHelp": "行リンクから開いた際にこのダッシュボードが受け付ける ?record= の値。それ以外の値はウィジェット実行前に拒否されます。",
+    "unreachableDashboard": "開くことができないダッシュボード",
+    "runWorkflow": "Workflowの実行"
   },
   "drive": {
     "filesCount": "（{count}ファイル）",

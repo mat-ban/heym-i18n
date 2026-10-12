@@ -510,7 +510,11 @@
     "username": "Nome utente",
     "value": "Valore",
     "via": "tramite",
-    "workflow": "Workflow"
+    "workflow": "Workflow",
+    "run": "Esegui",
+    "dropFileOrClick": "Trascina un file qui o fai clic per sceglierne uno",
+    "removeFile": "Rimuovi file",
+    "chooseFileFor": "Scegli un file per {label}"
   },
   "curl": {
     "command": "Comando",
@@ -711,6 +715,12 @@
       "telegram": {
         "description": "Connettersi a un bot Telegram per trigger webhook in entrata e messaggi in uscita del bot"
       }
+    },
+    "smtp": {
+      "usernameHelp": "Nome utente con cui il server SMTP effettua l'accesso",
+      "from": "Da",
+      "fromPlaceholder": "Lascia vuoto per inviare come il nome utente sopra",
+      "fromHelp": "Mittente visibile facoltativo. Il server accede comunque con il nome utente sopra indicato, pertanto tale account deve essere autorizzato a inviare come questo indirizzo (in Gmail: Invia messaggio come)."
     }
   },
   "dashboard": {
@@ -828,7 +838,31 @@
     "tidyUpTooltip": "Riorganizza i widget in una griglia ordinata casuale",
     "title": "Titolo",
     "untitled": "Senza titolo",
-    "widgetSettings": "Impostazioni widget"
+    "widgetSettings": "Impostazioni widget",
+    "widgetType": "Tipo di widget",
+    "workflow": "Workflow",
+    "chooseWorkflow": "Scegli un workflow",
+    "workflowWidgetHint": "Un workflow che accetta un file ottiene un'area di rilascio, uno con campi di input riceve tali campi e uno senza input riceve un pulsante Esegui. Ogni esecuzione mostra il relativo risultato.",
+    "noWorkflowsYet": "Non sono ancora presenti workflow.",
+    "clearRecord": "Cancella record",
+    "rowLink": "Collegamento riga",
+    "noLink": "Nessun collegamento",
+    "removeRowLink": "Rimuovi collegamento riga",
+    "recordColumn": "Colonna record",
+    "recordColumnPlaceholder": "Colonna contenente il record, ad es. id",
+    "labelColumn": "Colonna etichetta",
+    "labelColumnPlaceholder": "Colonna che lo nomina (facoltativo)",
+    "rowLinkHelp": "Facendo clic su una riga si apre tale dashboard per il record della riga. I suoi widget leggono il record come $page.record.",
+    "recordFormats": {
+      "id": "ID: lettere, cifre, - _ . (fino a 128)",
+      "number": "Numeri",
+      "uuid": "UUID",
+      "email": "Indirizzi e-mail"
+    },
+    "detailPageRecords": "Record della pagina di dettaglio",
+    "detailPageRecordsHelp": "I valori ?record= accettati da questo dashboard quando un collegamento di riga lo apre. Qualsiasi altro valore viene rifiutato prima dell'esecuzione del widget.",
+    "unreachableDashboard": "Un dashboard che non è possibile aprire",
+    "runWorkflow": "Esegui un Workflow"
   },
   "docs": {
     "chatWithHeym": "Chat con Heym",
@@ -1321,7 +1355,14 @@
     "copiedToClipboard": "{label} copiato negli appunti",
     "copyJson": "Copia JSON",
     "create": "Crea",
-    "createWorkflowsPrompt": "Creare Workflows per esporli come strumenti MCP"
+    "createWorkflowsPrompt": "Creare Workflows per esporli come strumenti MCP",
+    "geminiTab": "App Gemini",
+    "geminiApp": "App Gemini",
+    "geminiStep1": "Apri gemini.google.com su un computer e vai su Impostazioni → App collegate",
+    "geminiStep2": "In App personalizzate, fai clic su Aggiungi un'app personalizzata",
+    "geminiStep3": "Incolla l'URL del server MCP indicato sopra e lascia chiuse le Funzionalità avanzate; Gemini si registrerà automaticamente",
+    "geminiStep4": "Fai clic su Avanti e autorizza con le tue credenziali Heym",
+    "geminiInfo": "Gemini utilizza OAuth per autenticarsi in modo sicuro. Le tue credenziali Heym sono utilizzate per autorizzare l'accesso e non vengono mai condivise con Gemini. Una volta connesso, Heym funziona anche nell'app mobile Gemini."
   },
   "nav": {
     "alerts": "Avvisi",
@@ -1681,7 +1722,25 @@
     "workflowSettings": "Impostazioni del workflow",
     "workflowTimeout": "Timeout del workflow (secondi)",
     "workflowTimeoutDescription": "Interrompe l'esecuzione se supera questo numero di secondi. 0 disabilita il timeout. Si applica alle esecuzioni manuali, API e attivate.",
-    "workflowTimeoutPlaceholder": "0 = nessun timeout"
+    "workflowTimeoutPlaceholder": "0 = nessun timeout",
+    "chartOutput": {
+      "statusColumnOptional": "Colonna di stato (facoltativo)",
+      "statusColumnPlaceholder": "colonna visualizzata come badge colorati, ad es. state",
+      "statusColumnDialogLabel": "Colonna di stato",
+      "statusColumnHelp": "Le parole comuni assumono un colore automaticamente: paid, done e approved indicano successo; overdue e needs review richiedono attenzione; failed e rejected indicano fallimento; pending e running indicano attesa. Aggiungi una tonalità per qualsiasi altro valore.",
+      "statusTones": "Tonalità di stato",
+      "statusValuePlaceholder": "valore, ad es. Disputed",
+      "statusValueAriaLabel": "Valore di stato",
+      "removeTone": "Rimuovi tonalità",
+      "addTone": "Aggiungi tonalità",
+      "tones": {
+        "success": "Successo",
+        "attention": "Attenzione",
+        "failure": "Errore",
+        "waiting": "In attesa",
+        "neutral": "Neutro"
+      }
+    }
   },
   "quickDrawer": {
     "filterPlaceholder": "Filtra workflows",
@@ -1710,7 +1769,9 @@
     "allWorkflows": "Tutti i workflow",
     "backToList": "Torna all'elenco dei workflow",
     "chooseWorkflowPrompt": "Scegliere un workflow ed eseguirlo per visualizzare l'avanzamento qui.",
-    "closeDrawer": "Chiudi il pannello dei workflow rapidi"
+    "closeDrawer": "Chiudi il pannello dei workflow rapidi",
+    "wrapLongLines": "A capo automatico righe lunghe",
+    "wrap": "A capo"
   },
   "releaseTour": {
     "close": "Chiudi novità",
@@ -1867,7 +1928,8 @@
       "noKeyYet": "Nessuna chiave ancora",
       "rotateKey": "Ruota chiave",
       "unknown": "Sconosciuto",
-      "workVersion": "Versione Work"
+      "workVersion": "Versione Work",
+      "learnMore": "Ulteriori informazioni"
     }
   },
   "showcase": {

@@ -1,5 +1,79 @@
 [
   {
+    "releaseId": "2026.19",
+    "publishedAt": "2026-10-10T18:00:00.000Z",
+    "headline": "Heym Work per team aziendali e zip di competenze in Chat",
+    "releaseTour": {
+      "label": "Novità in Heym",
+      "introTitle": "Novità di questa release",
+      "introDescription": "Una breve panoramica delle novità dall'ultimo aggiornamento. Richiede circa un minuto.",
+      "tourEnabled": true,
+      "sectionOrder": [
+        "heym-work",
+        "skill-zip"
+      ]
+    },
+    "sections": [
+      {
+        "id": "heym-work",
+        "title": "Heym Work, il livello aziendale su Heym",
+        "publishedAt": "2026-10-11T12:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "**Heym Work** è una seconda interfaccia per i team aziendali. Gli utenti descrivono un'attività con le proprie parole, rispondono ad alcune domande e ottengono un Workflow creato e collaudato da Heym. Lavorano da pagine create per loro, gestiscono le revisioni e visualizzano ogni esecuzione con un nome associato, mentre Heym esegue ciascun lavoro in background."
+          },
+          {
+            "type": "prose",
+            "markdown": "Gli amministratori di Heym lo collegano in **Impostazioni, Heym Work**: inserire l'indirizzo di Heym Work, generare una chiave e attivare la connessione. L'accesso avviene tramite il Single Sign-On già utilizzato da Heym. Heym Work è concesso in licenza separatamente; consultare heym.run/enterprise."
+          }
+        ],
+        "tour": {
+          "description": "I team aziendali descrivono un'attività, rispondono a poche domande e ottengono un Workflow collaudato, eseguito da Heym.",
+          "useCases": [
+            "Offrire ai team legali, finanziari o operativi uno spazio dedicato per automatizzare il lavoro",
+            "Connettere da Impostazioni, Heym Work con indirizzo e chiave",
+            "Mantenere Single Sign-On, ruoli e approvazioni per ciascun team"
+          ],
+          "tourVisual": "heym-work",
+          "docTarget": {
+            "categoryId": "reference",
+            "slug": "heym-work",
+            "title": "Heym Work"
+          },
+          "externalLink": {
+            "url": "/enterprise",
+            "title": "Ulteriori informazioni su heym.run"
+          }
+        }
+      },
+      {
+        "id": "skill-zip",
+        "title": "Rilasciare uno zip di competenze in Chat",
+        "publishedAt": "2026-10-10T18:00:00.000Z",
+        "blocks": [
+          {
+            "type": "prose",
+            "markdown": "Chat accetta file **ZIP**. Quando l'archivio contiene un file **SKILL.md** e file Python correlati, Chat può assegnare tale competenza a un Agent. Uno zip privo di file di competenza rimane nella conversazione come contesto."
+          },
+          {
+            "type": "prose",
+            "markdown": "Chiedere a Chat di modificare una competenza già salvata. Aggiorna i file specificati e lascia intatto il resto, compreso il codice Python non modificato. Con un Workflow selezionato, la competenza viene integrata lì. Altrimenti Chat avvia un Workflow con un Agent dotato della competenza."
+          }
+        ],
+        "tour": {
+          "description": "Allegare uno zip di competenze in Chat e Heym lo assegna a un Agent.",
+          "useCases": [
+            "Rilasciare una cartella compressa con SKILL.md e un file Python",
+            "Chiedere a Chat di riscrivere il testo della competenza preservando il codice Python",
+            "Avviare un nuovo Workflow con un Agent dotato della competenza"
+          ],
+          "tourVisual": "skill-zip"
+        }
+      }
+    ]
+  },
+  {
     "releaseId": "2026.18",
     "publishedAt": "2026-10-03T12:00:00.000Z",
     "headline": "Riattivare un nodo all'interno di un Workflow",
@@ -88,47 +162,17 @@
   {
     "releaseId": "2026.16",
     "publishedAt": "2026-09-27T00:00:00.000Z",
-    "headline": "L'assistente AI testa i suoi Workflow e configura le tabelle dati",
+    "headline": "L'assistente IA configura le tabelle di dati",
     "releaseTour": {
       "label": "Novità in Heym",
       "introTitle": "Novità di questo rilascio",
       "introDescription": "Una breve panoramica delle novità dall'ultimo aggiornamento. Richiede circa un minuto.",
       "tourEnabled": true,
       "sectionOrder": [
-        "assistant-yolo-mode",
         "assistant-data-tables"
       ]
     },
     "sections": [
-      {
-        "id": "assistant-yolo-mode",
-        "title": "Modalità YOLO: l'assistente AI testa ciò che costruisce",
-        "publishedAt": "2026-09-27T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "Attivando la **modalità YOLO** nel Canvas dell'**assistente AI**, questo non si arresta più dopo l'applicazione di un Workflow. Esegue il Workflow come tramite **Run**, legge il risultato e corregge il Workflow autonomamente fino a cinque volte per messaggio. Ogni risposta elenca i passaggi in tempo reale."
-          },
-          {
-            "type": "prose",
-            "markdown": "Prima della prima esecuzione, richiede input di test con valori suggeriti e li riutilizza. Può anche eseguire altri Workflow quando necessita dei loro risultati. Se necessita di una decisione o di credenziali, lo richiede con la consueta scheda di domanda. Esecuzioni reali: la modalità YOLO è disattivata per impostazione predefinita e **Stop** interrompe il flusso in qualsiasi momento."
-          }
-        ],
-        "tour": {
-          "description": "L'assistente AI esegue i Workflow creati, verifica il risultato e corregge gli errori autonomamente finché non funziona.",
-          "useCases": [
-            "Descrivere un Workflow e ottenere direttamente una versione testata",
-            "Far individuare e correggere automaticamente i nodi difettosi all'assistente",
-            "Verificare i valori di ritorno di altri Workflow prima del collegamento"
-          ],
-          "tourVisual": "assistant-yolo-mode",
-          "docTarget": {
-            "categoryId": "reference",
-            "slug": "ai-assistant",
-            "title": "AI Assistant"
-          }
-        }
-      },
       {
         "id": "assistant-data-tables",
         "title": "L'assistente AI seleziona o crea tabelle dati",
@@ -155,51 +199,6 @@
             "categoryId": "reference",
             "slug": "ai-assistant",
             "title": "AI Assistant"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "releaseId": "2026.15",
-    "publishedAt": "2026-09-23T00:00:00.000Z",
-    "headline": "Creare più dashboard e condividerle con il team",
-    "releaseTour": {
-      "label": "Novità in Heym",
-      "introTitle": "Novità di questa release",
-      "introDescription": "Una breve panoramica delle novità dall'ultimo aggiornamento. Richiede circa un minuto.",
-      "tourEnabled": true,
-      "sectionOrder": [
-        "dashboard-sharing"
-      ]
-    },
-    "sections": [
-      {
-        "id": "dashboard-sharing",
-        "title": "Creare più dashboard e condividerle con il team",
-        "publishedAt": "2026-09-24T10:00:00.000Z",
-        "blocks": [
-          {
-            "type": "prose",
-            "markdown": "La scheda **Dashboard** ora supporta un numero illimitato di dashboard. Passi comodamente da una all'altra tramite il selettore in alto nella scheda oppure ne crei una nuova con **+**."
-          },
-          {
-            "type": "prose",
-            "markdown": "Condivida le dashboard con persone o team tramite le **Impostazioni**. **Lettura** consente la visualizzazione e l'aggiornamento; **Scrittura** consente la modifica dei widget. I widget utilizzano sempre le credenziali del proprietario."
-          }
-        ],
-        "tour": {
-          "description": "Gestire più dashboard, passare dall'una all'altra e condividerle in sola lettura o con possibilità di modifica.",
-          "useCases": [
-            "Strutturare dashboard separate per team, prodotto o tenant",
-            "Fornire agli stakeholder una vista in sola lettura",
-            "Testare in anticipo i tipi di diagramma con dati di esempio"
-          ],
-          "tourVisual": "dashboard-sharing",
-          "docTarget": {
-            "categoryId": "tabs",
-            "slug": "dashboard-tab",
-            "title": "Dashboard"
           }
         }
       }

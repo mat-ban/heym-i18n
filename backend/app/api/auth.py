@@ -1,6 +1,9 @@
+import ipaddress
+import os
 from urllib.parse import urlparse
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -34,18 +37,41 @@ from app.services.credential_access import get_accessible_credential
 from app.services.sso_settings import get_sso_settings, password_login_blocked
 from app.services.user_lookup import find_user_by_email
 
+
+class LoginRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=255)
+    password: str
+
+
+class RegisterRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=255)
+    password: str = Field(min_length=8)
+    name: str = Field(min_length=1, max_length=100)
+
+
 router = APIRouter()
 
 
 def _is_local_http_origin(origin: str) -> bool:
-    """Return True when an origin is plain HTTP for a local development host."""
+    """Return True when an origin is plain HTTP for a local development host or private network."""
     parsed = urlparse(origin.strip())
     hostname = parsed.hostname or ""
-    return parsed.scheme == "http" and hostname in {"localhost", "127.0.0.1", "::1"}
+    if parsed.scheme != "http":
+        return False
+    if hostname in {"localhost", "127.0.0.1", "::1"}:
+        return True
+    try:
+        return ipaddress.ip_address(hostname).is_private
+    except ValueError:
+        return False
 
 
 def _should_use_secure_auth_cookies(frontend_url: str, cors_origins: list[str]) -> bool:
-    """Use insecure cookies only for explicit local HTTP development origins."""
+    """Use insecure cookies only for explicit local HTTP development or private network origins."""
+    env_override = os.environ.get("COOKIE_SECURE")
+    if env_override is not None:
+        return env_override.strip().lower() in ("true", "1", "yes")
+
     frontend = frontend_url.strip()
     if frontend and not _is_local_http_origin(frontend):
         return True
@@ -96,7 +122,7 @@ def _clear_auth_cookies(response: Response) -> None:
 
 
 async def register_account(
-    db: AsyncSession, user_data: UserCreate, ip: str, *, client: str | None = None
+    db: AsyncSession, user_data: RegisterRequest | UserCreate, ip: str, *, client: str | None = None
 ) -> User:
     """Apply every registration rule and create the user, or raise."""
     allowed, retry_after = register_limiter.is_allowed(ip)
@@ -162,7 +188,7 @@ async def register_account(
 
 
 async def password_sign_in(
-    db: AsyncSession, user_data: UserLogin, ip: str, *, client: str | None = None
+    db: AsyncSession, user_data: LoginRequest | UserLogin, ip: str, *, client: str | None = None
 ) -> User:
     """Apply every password sign-in rule and return the user, or raise."""
     allowed, retry_after = login_limiter.is_allowed(ip)
@@ -205,7 +231,7 @@ async def password_sign_in(
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 async def register(
-    user_data: UserCreate,
+    user_data: RegisterRequest,
     request: Request,
     response: Response,
     db: AsyncSession = Depends(get_db),
@@ -223,7 +249,7 @@ async def register(
 
 @router.post("/login", response_model=TokenResponse)
 async def login(
-    user_data: UserLogin,
+    user_data: LoginRequest,
     request: Request,
     response: Response,
     db: AsyncSession = Depends(get_db),

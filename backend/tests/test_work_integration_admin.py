@@ -107,3 +107,24 @@ class AdminWorkConfigTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.work_url, "https://work.acme.example")
         self.assertTrue(response.enabled)
         clear.assert_called_once()
+
+    async def test_private_lan_and_local_http_urls_are_accepted(self) -> None:
+        row = _row(key_hash=hash_secret("hwi_x"))
+        with (
+            patch(_ADMINS, "admin@heym.example"),
+            patch(_GET_ROW, AsyncMock(return_value=row)),
+            patch(_CLEAR, MagicMock()),
+        ):
+            lan_resp = await update_work_config(
+                WorkIntegrationConfigUpdate(work_url="http://10.0.0.5:5180/", enabled=True),
+                current_user=_admin(),
+                db=AsyncMock(),
+            )
+            local_resp = await update_work_config(
+                WorkIntegrationConfigUpdate(work_url="http://work.local:5180/", enabled=True),
+                current_user=_admin(),
+                db=AsyncMock(),
+            )
+
+        self.assertEqual(lan_resp.work_url, "http://10.0.0.5:5180")
+        self.assertEqual(local_resp.work_url, "http://work.local:5180")

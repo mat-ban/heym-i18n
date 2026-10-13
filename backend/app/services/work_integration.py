@@ -51,8 +51,18 @@ def key_matches(stored_hash: str | None, presented: str | None) -> bool:
     return hmac.compare_digest(stored_hash, hash_secret(presented))
 
 
+def _is_local_or_private_host(hostname: str) -> bool:
+    if hostname in _LOCAL_HOSTS or hostname.endswith(".local"):
+        return True
+    try:
+        addr = ipaddress.ip_address(hostname)
+        return addr.is_private or addr.is_loopback
+    except ValueError:
+        return False
+
+
 def normalize_work_url(raw: str) -> str:
-    """Validate and normalize the Work URL; https only, except local development hosts."""
+    """Validate and normalize the Work URL; https only, except local or private LAN hosts."""
     value = raw.strip().rstrip("/")
     if not value:
         return ""
@@ -61,7 +71,7 @@ def normalize_work_url(raw: str) -> str:
         raise WorkUrlError("Enter the Heym Work address without a query or fragment.")
     if parts.scheme == "https":
         return value
-    if parts.scheme == "http" and parts.hostname in _LOCAL_HOSTS:
+    if parts.scheme == "http" and _is_local_or_private_host(parts.hostname):
         return value
     raise WorkUrlError("The Heym Work address must use https.")
 

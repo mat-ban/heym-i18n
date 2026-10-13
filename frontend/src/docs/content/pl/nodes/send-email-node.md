@@ -32,7 +32,7 @@ zamiast wysłania częściowego e-maila.
 
 ## Konfiguracja
 
-Należy dodać dane logowania SMTP wraz z serwerem, portem, adresem e-mail i hasłem. Popularne serwery SMTP:
+Należy dodać dane logowania SMTP wraz z serwerem, portem, adresem e-mail i hasłem. Widocznym nadawcą jest opcjonalne pole **From** w danych logowania; puste pole From powoduje wysyłkę jako nazwa użytkownika. Popularne serwery SMTP:
 
 - Gmail: `smtp.gmail.com`, port 587 (wymagane hasło aplikacji)
 - Outlook: `smtp.office365.com`, port 587

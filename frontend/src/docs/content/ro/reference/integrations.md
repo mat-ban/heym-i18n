@@ -605,8 +605,14 @@ Acreditarea SMTP stochează detaliile de conectare la serverul de email pentru t
 |-------|-------------|
 | `host` | Numele de host al serverului SMTP (de ex. `smtp.gmail.com`) |
 | `port` | Portul SMTP (de obicei `587` pentru STARTTLS, `465` pentru SSL) |
-| `email` | Adresa de email a expeditorului |
+| `email` | Numele de utilizator cu care se autentifică serverul SMTP; de asemenea, expeditorul vizibil atunci când `from` este necompletat |
 | `password` | Parola SMTP sau App Password |
+
+### Câmpuri opționale
+
+| Câmp | Descriere |
+|-------|-------------|
+| `from` (`smtp_from`) | Adresa From vizibilă. Lăsați necompletat pentru a trimite ca `email`. Serverul se autentifică în continuare ca `email`, deci acel cont trebuie să aibă permisiunea de a trimite de pe această adresă (în Gmail, un alias verificat **Trimiteți e-mailuri ca**). |
 
 ### Furnizori SMTP comuni
 

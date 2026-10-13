@@ -4,7 +4,7 @@ Nustatymų dialogas leidžia valdyti Jūsų profilį, nustatyti nuolatines AI in
 
 ## Dialogo atidarymas
 
-Spustelėkite **Jūsų avatarą ir vardą** viršutiniame dešiniajame kampe. Dialogas atsidaro su šiomis kortelėmis: **Profilis**, **Saugumas**, **Balsas**, **AI numatyti nustatymai** ir **Stebėjimas**. Instancijos administratoriai taip pat mato **SSO** kortelę.
+Spustelėkite **Jūsų avatarą ir vardą** viršutiniame dešiniajame kampe. Dialogas atsidaro su šiomis kortelėmis: **Profilis**, **Saugumas**, **Balsas**, **AI numatyti nustatymai** ir **Stebėjimas**. Instancijos administratoriai taip pat mato **SSO**, **Heym Work** ir **Instancijos** korteles.
 
 ## Profilio kortelė
 
@@ -100,6 +100,10 @@ Stebėjimo skirtukas rodo tik skaitymo statusą [OpenTelemetry Tracing](./opente
 ## SSO skirtukas
 
 Matomas tik instancijos administratoriams — paskyroms, išvardytoms `HEYM_ADMIN_EMAILS`. Šis skirtukas jungia Heym su išoriniu OpenID Connect teikėju, kad žmonės galėtų prisijungti naudodami jau turimas paskyras. Įveskite leidėjo URL ir kliento kredencialus, nukopijuokite tik skaitymo nukreipimo URI į savo teikėją ir atlikite **Testuoti ryšį** prieš įjungdami. Slaptažodžio prisijungimą galima išjungti iš čia, kai testas bus sėkmingas. Daugiau informacijos rasite [Vieningo prisijungimo](./sso.md) nustatymuose.
+
+## Heym Work skirtukas
+
+Instancijos administratoriai čia prijungia verslo komandų sąsają [Heym Work](./heym-work.md): jos adresą, vieną kartą rodomą integracijos raktą ir jungiklį **Enable Heym Work**. Skirtuke taip pat rodoma, kada Heym Work paskutinį kartą susisiekė, jo versija ir licencijos būsena. Žr. [Heym Work prijungimas](./heym-work.md#connecting-heym-work).
 
 ## Instancijų skirtukas
 

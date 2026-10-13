@@ -33,6 +33,8 @@
 | `valueField` | string | 数値として使用する行のキー（pie/bar/line/numeric/gauge） |
 | `series` | array | bar/line 用の任意の複数系列定義 `[{ "name": "Sent", "field": "sent" }]`（`valueField` を上書きします） |
 | `columns` | array | `table` 用の任意の列リスト（デフォルトは最初の行のキー） |
+| `statusColumn` | string | 色付きの[ステータスチップ](#status-chips)としてレンダリングされる任意の `table` カラム。表示されるカラムのいずれかである必要があります。 |
+| `statusTones` | object | デフォルトでカバーされないステータス値をトーン（`success`、`attention`、`failure`、`waiting`、`neutral`）に対応付ける任意のマップ |
 | `xField` / `yField` | string | X 軸および Y 軸の数値に対応する行のキー（scatter） |
 | `min` / `max` | number | `gauge` の数値範囲（デフォルト `0` / `100`） |
 | `unit` | string | `numeric` または `gauge` の値の横に表示される任意の単位 |
@@ -42,7 +44,7 @@
 ## Chart types
 
 - **bar / line / area / pie** — `labelField` + `valueField`（複数系列の bar/line/area の場合は `series`）で駆動されるカテゴリカルチャートです。`area` は塗りつぶしのトレンドチャートです。
-- **table** — `columns` を使用して、生の行をスクロール可能なテーブルとしてレンダリングします。
+- **table** — `columns` を使用して、生の行をスクロール可能なテーブルとしてレンダリングします。1 つのカラムを[ステータスチップ](#status-chips)として表示でき、行から[詳細ページ](../tabs/dashboard-tab.md#detail-pages)を開くことができます。
 - **numeric** — 最初の行から取得した単一の KPI 値で、任意の `unit` を付けられます。
 - **gauge** — `min`〜`max` の範囲に対して表示される単一の値（例：パーセンテージ）。`valueField` を使用します。
 - **scatter** — 相関プロット用に `xField` と `yField` から取得した X/Y の点です。
@@ -103,14 +105,59 @@ $processVideos.total - $processVideos.index + ". [" + $processVideos.item.title 
 
 1 から始まる単純な昇順リストの場合は、各行の先頭に番号を付けるか（`1.`、`2.`、`3.`）、`$loop.index + 1` を使用したループを使います。番号が不要な場合は[箇条書きリスト](#interactive-task-lists)（`- item`）を使用してください。
 
+## ステータスチップ
+
+`table` では、1 つのカラムを色付きのチップとして表示できます。ノードのプロパティの **Status column**（または DSL の `statusColumn`）にカラム名を設定します。各値には 5 種類のトーンのいずれかが割り当てられ、一般的な単語は設定なしで自動的に判定されます：
+
+| トーン | デフォルトの単語 |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | その他すべて |
+
+判定では大文字・小文字、`_`、`-` が無視されるため、`IN_PROGRESS` と `in-progress` はどちらも `waiting` になります。その他の値には **Status tones** を追加してください。エントリを追加すると、その値のデフォルトが上書きされます：
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+サーバーが各値をトーンに解決するため、Heym と Heym Work で同じ色が表示されます。
+
+## 詳細ページ：`$page.record`
+
+`?record=<value>` 付きで開かれたダッシュボードは、その値を `$page.record` としてすべてのウィジェット Workflow を実行します。テーブル行のリンクからこのようなページが開きます（[詳細ページ](../tabs/dashboard-tab.md#detail-pages)を参照）。レコード指定なしで開かれたダッシュボードおよび式ダイアログでは、`$page.record` は `null` です。`page` というラベルのノードがある場合はそちらが優先されます。
+
+たとえば [HTTP](./http-node.md) ノードで、ページの対象となる 1 件のレコードを取得するために使用します：
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` はクリックされた行の値そのもの（`V-1002` など）であり、フィールドを持つオブジェクトではありません。[DataTable](./datatable-node.md) でそのレコードを検索するには、レコードカラムをその値でフィルタリングします（`find` 操作でフィルタ `{"vendor_id": "$page.record"}` を指定）。`$page.record.id` のようなパスは何も解決しないため、AI が作成または微調整したウィジェットではそうしたフィールドは除外され、代わりに `$page.record` が読み取られます。
+
+この値は誰でも編集できる URL から渡されます。ダッシュボードはレコード形式（デフォルトでは英字、数字、`-`、`_`、`.`）に合致する値のみを受け付けますが、それでも信頼できない入力として扱ってください。HTTP クエリパラメータや [DataTable](./datatable-node.md)・ClickHouse のフィルタ値など、ノードが値をエスケープする箇所に渡し、文字列連結によってクエリ文を組み立てることは絶対に避けてください。誰がページを開いても、ウィジェットはダッシュボード所有者の権限で実行されます。
+
 ## データの解決方法
 
 1. `dataPath` が設定されている場合、ノードはそのドットパスに従って上流の出力へ進みます。
 2. それ以外の場合は配列を探します：トップレベルのリスト、`data` 配列、または最初のリスト値フィールドのいずれかです。
-3. `table` の場合、各行は `columns`（または最初の行のキー）を使用してテーブル行になります。
-4. `numeric` および `gauge` の場合、値は最初の行の `valueField`（または最初の数値フィールド）から取得されます。
-5. `scatter` の場合、各行は `[xField, yField]` のポイントになります。
-6. `text` の場合、メッセージは設定されていれば最初の行の `valueField` から取得され、そうでなければ静的な `text` 設定から取得されます（それもなければ最初の行の最初の文字列フィールドから取得されます）。
+3. [Data Table](./datatable-node.md) ノードから直接渡された行（`{id, data, created_at}`）は、各カラムが `id` と並ぶトップレベルとして読み取られるため、`labelField`、`valueField`、`columns` にはテーブル自身のカラム名をそのまま指定できます。
+4. `table` の場合、各行は `columns`（または最初の行のキー）を使用してテーブル行になります。`statusColumn` が設定されている場合、Payload にはそのカラム内の各値のトーンも含まれます。
+5. `numeric` および `gauge` の場合、値は最初の行の `valueField`（または最初の数値フィールド）から取得されます。
+6. `scatter` の場合、各行は `[xField, yField]` のポイントになります。
+7. `text` の場合、メッセージは設定されていれば最初の行の `valueField` から取得され、そうでなければ静的な `text` 設定から取得されます（それもなければ最初の行の最初の文字列フィールドから取得されます）。
 
 ## 例
 

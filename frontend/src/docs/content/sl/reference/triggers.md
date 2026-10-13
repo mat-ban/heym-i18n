@@ -93,11 +93,12 @@ Zgodovina izvajanja beleži `trigger_source` za vsak vhodni točki:
 |----------|------|
 | `"API"` | Webhook / API klic brez izrecne glave (privzeto) |
 | `"Canvas"` | Zagon iz platna urejevalnika workflow |
-| `"Quick Drawer"` | Zagon iz hitrega predala urejevalnika |
+| `"Quick Drawer"` | Zagon iz hitrega predala urejevalnika, vključno z zagoni datotek, naloženih iz njegovega območja za odlaganje |
 | `"cron"` | Cron načrtovalnik |
 | `"imap"` | IMAP upravljalnik sprožilcev |
 | `"websocket"` | Izhodni WebSocket upravljalnik sprožilcev |
-| `"file_upload"` | Vhodna točka za File Upload Trigger |
+| `"file_upload"` | Vhodna točka za File Upload Trigger (povezave, ustvarjene prek HTTP, MCP ali platna) |
+| `"dashboard"` | Zagoni gradnikov nadzorne plošče in nalaganja iz gradnika za odlaganje datotek |
 | `"telegram"` | Webhook za Telegram bota |
 | `"Discord"` | Webhook za interakcije Discord |
 | `"MCP"` | Klic orodja MCP |

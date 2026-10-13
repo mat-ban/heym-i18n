@@ -98,11 +98,12 @@ Consumer RabbitMQ запускається, коли ініціалізуєть�
 |-------|------|
 | `"API"` | Webhook / API виклик без явного header (за замовчуванням) |
 | `"Canvas"` | Запуск з canvas редактора workflow |
-| `"Quick Drawer"` | Запуск з панелі quick-drawer редактора |
+| `"Quick Drawer"` | Запуск із панелі quick-drawer редактора, включно із запусками файлів, завантажених із її зони перетягування |
 | `"cron"` | Планувальник Cron |
 | `"imap"` | Менеджер IMAP trigger |
 | `"websocket"` | Менеджер вихідних WebSocket trigger |
-| `"file_upload"` | Endpoint завантаження File Upload Trigger |
+| `"file_upload"` | Endpoint завантаження File Upload Trigger (посилання, створені через HTTP, MCP або полотно) |
+| `"dashboard"` | Запуски віджетів панелі керування та завантаження з віджета перетягування файлів |
 | `"telegram"` | Webhook бота Telegram |
 | `"Discord"` | Webhook взаємодій Discord |
 | `"MCP"` | Виклик інструменту MCP |

@@ -16,6 +16,10 @@ Heym on vapaasti käytettävissä ja omassa käytössä hallittavissa sen lähde
 | **Priorisoitu tuki & SLA** | Taatut vastausajat ja priorisoitu ongelmien ratkaisu |
 | **Mukautettu kehitys** | Ominaisuuksien kehitys ja muokkaukset organisaatiosi vaatimuksiin räätälöitynä |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) on liiketoimintatiimeille suunnattu käyttöliittymä, joka toimii Heymin päällä. Käyttäjät kuvailevat tehtävän, vastaavat muutamaan kysymykseen ja saavat testatun workflow'n, työskentelevät heille rakennetuilla sivuilla ja vastaavat tarkistuksiin – kertakirjautumisella (SSO), Owner-, Editor- ja Viewer-rooleilla sekä nimellä jokaisessa suorituksessa. Se toimii Heym-instanssisi rinnalla omalla lisenssillään; yhdistä se kohdassa **Settings → Heym Work**. Lue lisää ja pyydä kokeiluversio osoitteessa [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Tuotantoagenttien tuki
 
 Heym-tiimi auttaa suunnittelemaan, rakentamaan ja vahvistamaan agentteja ja workflowja liiketoimintaprosessien tueksi. Tämä sisältää vaatimusten tarkastelun, solmujen konfiguraatioiden suosittelun ja varmistuksen siitä, että workflowt noudattavat parhaita käytäntöjä luotettavuuden, havainnoitavuuden ja hallinnan osalta.
@@ -68,3 +72,4 @@ Ota yhteyttä enterprise-tiimiin sähköpostitse **enterprise@heym.run** lisenss
 - [Parallel Execution](./parallel-execution.md) — Monityöntekijäsuoritusmalli
 - [Teams](./teams.md) — Tiimiyhteistyö ja resurssien jakaminen
 - [Full Feature Set](./features.md) — Kattava yleiskatsaus Heymin ominaisuuksista
+- [Heym Work](./heym-work.md): liiketoimintatiimien käyttöliittymä ja sen yhdistäminen

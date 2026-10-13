@@ -274,7 +274,17 @@
       "intro": "Heym Work je drugi vmesnik za poslovne ekipe. Uporabniki se prijavijo prek Heym, vse naloge pa se izvajajo tukaj.",
       "never": "Nikoli",
       "learnMore": "Več o tem"
-    }
+    },
+    "pluginsIntro": "Vtičniki tej instanci dodajo vozlišča po meri (dejanja in Triggerje). Nameščanje ali odstranjevanje vtičnika izvaja strežniško kodo, zato je omejeno na upravljavce, navedene v",
+    "loadingPlugins": "Nalaganje vtičnikov…",
+    "pluginsDisabledTitle": "Vtičniki so onemogočeni",
+    "pluginsDisabledHint": "Nastavite te okoljske spremenljivke v zaledju in nato znova zaženite:",
+    "installPluginZip": "Namesti vtičnik (.zip)",
+    "noPluginsInstalled": "Nameščen ni še noben vtičnik.",
+    "enablePlugin": "Omogoči",
+    "disablePlugin": "Onemogoči",
+    "uninstallPlugin": "Odstrani",
+    "pluginOperationFailed": "Operacija vtičnika ni uspela"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Začni ogled",
     "readTheDocs": "Preberite dokumentacijo",
     "previousFeature": "Prejšnja funkcija",
-    "goToFeature": "Pojdi na {title}"
+    "goToFeature": "Pojdi na {title}",
+    "heymWork": {
+      "step0": "Ekipa zastavi vprašanje v Heym Work",
+      "step1": "Heym ga zgradi in preizkusi",
+      "step2": "Preverjeno, brez platna",
+      "step3": "Heym ga izvaja v ozadju",
+      "prompt": "Preverite nove pogodbe glede tveganih klavzul.",
+      "testing": "Preizkušanje Workflowa",
+      "verified": "Preverjeno"
+    },
+    "skillZip": {
+      "step0": "Spustite zip z veščino v Chat",
+      "step1": "Chat prebere SKILL.md",
+      "step2": "Agent ohrani veščino",
+      "prompt": "Preberite račun in navedite postavke."
+    }
   },
   "canvas": {
     "nodes": "Vozlišča",
@@ -2400,6 +2425,50 @@
       "nodes": "Vozlišča",
       "reference": "Referenca",
       "tabs": "Zavihki"
-    }
+    },
+    "pluginNoDoc": "Ta vtičnik nima dokumentacije."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Iskanje po Workflowih, zavihkih, dokumentaciji...",
+    "searchAria": "Iskanje v ukazni paleti",
+    "ariaLabel": "Ukazna paleta",
+    "noResults": "Ni najdenih rezultatov",
+    "tryDifferentSearch": "Poskusite z drugim iskalnim izrazom",
+    "recent": "Nedavno",
+    "recentInFolder": "Nedavno · V: {folder}",
+    "inFolder": "V: {folder}",
+    "scheduledDate": "Načrtovano {date}",
+    "scheduledForDeletion": "Načrtovano za izbris",
+    "goToTab": "Pojdi na zavihek",
+    "workflowTemplate": "Predloga Workflowa",
+    "nodeTemplate": "Predloga vozlišča",
+    "nodeType": "Vozlišče · {type}",
+    "documentation": "Dokumentacija",
+    "support": "Podpora",
+    "contactSupport": "Stopite v stik s podporo",
+    "watchRunbook": "Oglejte si, kako Heym zgradi in zažene Workflow",
+    "openDocs": "Odpri dokumentacijo Heym",
+    "getHelp": "Poiščite pomoč ekipe Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work za poslovne ekipe na heym.run",
+    "navigate": "Krmarjenje",
+    "select": "Izberi",
+    "click": "klik",
+    "newTab": "nov zavihek",
+    "oneItem": "{count} element",
+    "manyItems": "{count} elementov"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Vtičniki so v tej instanci onemogočeni.",
+    "loadingDefinition": "Nalaganje definicije vtičnika...",
+    "notBound": "To vozlišče ni povezano s paketom vtičnika.",
+    "noneInstalled": "V tej instanci ni nameščenih vtičnikov.",
+    "notInstalled": "Vtičnik \"{id}\" ni nameščen v tej instanci.",
+    "installedButDisabled": "Vtičnik \"{name}\" je nameščen, vendar onemogočen.",
+    "noKindNodes": "Vtičnik \"{name}\" ne ponuja nobenega vozlišča vrste {kind}.",
+    "loadErrorDetail": "Vtičnikov ni mogoče naložiti: {detail}",
+    "loadErrorHttp": "Vtičnikov ni mogoče naložiti (HTTP {status}).",
+    "loadError": "Vtičnikov ni mogoče naložiti.",
+    "enabled": "Omogočeno"
   }
 }

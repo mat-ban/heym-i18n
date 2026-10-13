@@ -274,7 +274,17 @@
       "intro": "Heym Work 是專為業務團隊設計的第二介面。人員透過 Heym 登入，所有作業皆在此執行。",
       "never": "從未",
       "learnMore": "深入了解"
-    }
+    },
+    "pluginsIntro": "外掛程式可向此執行個體新增自訂節點（動作與 Trigger）。安裝或移除外掛程式會執行伺服器端程式碼，因此僅限列於以下環境變數中的管理員操作：",
+    "loadingPlugins": "正在載入外掛程式…",
+    "pluginsDisabledTitle": "外掛程式已停用",
+    "pluginsDisabledHint": "請在後端設定以下環境變數，然後重新啟動：",
+    "installPluginZip": "安裝外掛程式 (.zip)",
+    "noPluginsInstalled": "尚未安裝任何外掛程式。",
+    "enablePlugin": "啟用",
+    "disablePlugin": "停用",
+    "uninstallPlugin": "解除安裝",
+    "pluginOperationFailed": "外掛程式操作失敗"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "開始導覽",
     "readTheDocs": "閱讀文件",
     "previousFeature": "上一個功能",
-    "goToFeature": "前往 {title}"
+    "goToFeature": "前往 {title}",
+    "heymWork": {
+      "step0": "團隊在 Heym Work 中提出需求",
+      "step1": "Heym 自動建置並測試",
+      "step2": "已驗證，無需畫布",
+      "step3": "Heym 在背景執行",
+      "prompt": "檢查新合約中的風險條款。",
+      "testing": "正在測試 Workflow",
+      "verified": "已驗證"
+    },
+    "skillZip": {
+      "step0": "在聊天中拖入技能 zip 壓縮檔",
+      "step1": "聊天讀取 SKILL.md",
+      "step2": "代理程式保留該技能",
+      "prompt": "讀取發票並列出明細項目。"
+    }
   },
   "canvas": {
     "nodes": "節點",
@@ -2400,6 +2425,50 @@
       "nodes": "節點",
       "reference": "參考",
       "tabs": "分頁"
-    }
+    },
+    "pluginNoDoc": "此外掛程式暫無文件。"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "搜尋 Workflow、分頁、文件...",
+    "searchAria": "命令面板搜尋",
+    "ariaLabel": "命令面板",
+    "noResults": "找不到結果",
+    "tryDifferentSearch": "請嘗試其他搜尋詞",
+    "recent": "最近使用",
+    "recentInFolder": "最近使用 · 位於：{folder}",
+    "inFolder": "位於：{folder}",
+    "scheduledDate": "已排程 {date}",
+    "scheduledForDeletion": "已排程刪除",
+    "goToTab": "前往分頁",
+    "workflowTemplate": "Workflow 範本",
+    "nodeTemplate": "節點範本",
+    "nodeType": "節點 · {type}",
+    "documentation": "文件",
+    "support": "支援",
+    "contactSupport": "聯絡支援團隊",
+    "watchRunbook": "觀看 Heym 建置並執行 Workflow",
+    "openDocs": "開啟 Heym 文件",
+    "getHelp": "取得 Heym 團隊的協助",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "專為商務團隊打造的 Heym Work，位於 heym.run",
+    "navigate": "導覽",
+    "select": "選取",
+    "click": "點擊",
+    "newTab": "新分頁",
+    "oneItem": "{count} 個項目",
+    "manyItems": "{count} 個項目"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "此執行個體已停用外掛程式。",
+    "loadingDefinition": "正在載入外掛程式定義...",
+    "notBound": "此節點未綁定至外掛程式套件。",
+    "noneInstalled": "此執行個體上未安裝任何外掛程式。",
+    "notInstalled": "此執行個體上未安裝外掛程式「{id}」。",
+    "installedButDisabled": "外掛程式「{name}」已安裝但已停用。",
+    "noKindNodes": "外掛程式「{name}」未提供任何 {kind} 節點。",
+    "loadErrorDetail": "無法載入外掛程式：{detail}",
+    "loadErrorHttp": "無法載入外掛程式（HTTP {status}）。",
+    "loadError": "無法載入外掛程式。",
+    "enabled": "已啟用"
   }
 }

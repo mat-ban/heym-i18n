@@ -1,6 +1,6 @@
 # MCP skirtukas
 
-**MCP** skirtukas konfigūruoja Model Context Protocol (MCP) integraciją. MCP leidžia AI klientams (Claude, Cursor ir bet kuriam MCP suderinamam įrankiui) skambinti Jūsų Heym workflows kaip įrankiams.
+**MCP** skirtukas konfigūruoja Model Context Protocol (MCP) integraciją. MCP leidžia AI klientams (Claude, ChatGPT, Gemini, Cursor ir bet kuriam MCP suderinamam įrankiui) skambinti Jūsų Heym workflows kaip įrankiams.
 
 Heym palaiko du režimus: **numatytąjį serverį**, kuris atskleidžia visus MCP įgalintus workflows po vienu endpoint, ir **pavadintus serverius**, kurie suteikia kiekvienai loginei workflows grupei savo dedikuotą URL ir API raktą.
 
@@ -24,6 +24,8 @@ Numatytasis serveris visada prieinamas adresu `{origin}/api/mcp/sse`. Visi workf
 
 - **API raktas** – Naudokite MCP API raktą programinėms jungtims. Skirtukas gali nukopijuoti paruoštą JSON konfigūraciją ir apima **Pridėti prie Cursor** mygtuką vieno paspaudimo Cursor nustatymui.
 - **Claude** – Skirtukas rodo MCP serverio URL ir nustatymo žingsnius Claude. Palikite OAuth Kliento ID ir Slaptažodį tuščius; Claude registruojasi automatiškai ir autentifikuojasi per Heym OAuth.
+- **ChatGPT** – Skirtuke rodomas MCP serverio URL ir „ChatGPT“ programos nustatymo veiksmai. Įjunkite kūrėjo režimą (Developer mode), sukurkite programą su URL ir pasirinkite OAuth; „ChatGPT“ užsiregistruoja automatiškai.
+- **Gemini** – Skirtuke rodomas MCP serverio URL ir „Gemini“ tinkintos programos nustatymo veiksmai: adresu gemini.google.com pasirinkite **Settings → Connected Apps → Add a custom app**, įklijuokite URL ir palikite **Advanced features** uždarytą; „Gemini“ automatiškai užsiregistruoja ir autentifikuojasi per Heym OAuth. Prisijungus, Heym taip pat veikia „Gemini“ mobiliojoje programėlėje.
 
 ### Workflow MCP perjungimas
 
@@ -40,7 +42,8 @@ Workflow kortelės rodo aprašymą ir įvesties laukų pavadinimų peržiūrą, 
 
 Kai jis įjungtas, `heym_chat` pasirodo `tools/list` kartu su Jūsų workflow įrankiais. MCP klientas siunčia vieną natūralios kalbos žinutę, o Heym variklis ją apdoroja, turėdamas tas pačias galimybes, kurias turi Chat skirtukas:
 
-- Kurti, redaguoti, tikrinti ir vykdyti workflows per Workflow AI Builder.
+- Sukurti workflow, išbandyti jį su pavyzdiniais įvesties duomenimis, pataisyti ir užbaigti, kai vykdymas pavyksta (žr. [Kūrimo režimas](#build-mode))
+- Tikrinti ir vykdyti esamus workflows
 - Pranešti apie analitiką, neseniai vykdytus vykdymus ir artėjančius cron tvarkaraščius.
 - Pranešti apie vieno workflow vykdymo istoriją: kiek kartų jis buvo vykdytas, būsenos skaičius, kada jis buvo vykdytas, ir pagal užklausą įvestis, išvestis bei klaidos kiekviename mazge.
 - Pranešti, kas šiuo metu vykdoma: kiek vykdymų yra aktyvių, jų workflow pavadinimai, kiek laiko kiekvienas veikia, kurį mazgą kiekvienas šiuo metu naudoja, ir nuorodą į gyvą vykdymą.
@@ -50,6 +53,15 @@ Kai jis įjungtas, `heym_chat` pasirodo `tools/list` kartu su Jūsų workflow į
 - Patvirtinti, redaguoti arba atmesti laukiančius žmogaus įsikišimo atsiliepimus.
 
 Galimybės, pridėtos prie Chat skirtuko, vėliau automatiškai tampa prieinamos per `heym_chat` — nėra jokio per galimybę perjungimo, kad būtų galima sinchronizuoti.
+
+### Kūrimo režimas
+
+`heym_chat` visada vykdo Chat variklį kūrimo režimu (build mode). Vieno iškvietimo metu asistentas gali išsaugoti naują workflow, paleisti jį su tikroviškais pavyzdiniais įvesties duomenimis, perskaityti vykdymo ataskaitą, ištaisyti tai, kas nepavyko, ir paleisti jį dar kartą – iki penkių bandomųjų paleidimų per vieną iškvietimą. Kai paskutinio išsaugojimo naujausias paleidimas pavyksta, jis baigia vieno sakinio santrauka, o atsakymas baigiasi tekstu `Verified: the latest test run of the saved workflow passed.`
+
+- Bandomieji paleidimai yra tikri paleidimai. Jų šalutiniai poveikiai įvyksta ir jie rodomi workflow vykdymo istorijoje kaip ir bet kuris kitas paleidimas.
+- Išsaugojimai vyksta redaktoriaus keliu: grafo pakeitimas išsaugo ankstesnį grafą workflow redagavimo istorijoje (**Edit History**).
+- Norėdami pakeisti anksčiau sukurtą workflow, tęskite giją su tuo pačiu `conversation_id`. Asistentas atnaujina tą workflow, o ne kuria naują, ir keičia tik tuos workflows, kuriuos galite redaguoti.
+- Kai išnaudojami visi penki bandomieji paleidimai, asistentas sustoja ir paaiškina, kas vis dar nepavyksta.
 
 Kredencialai lieka UI: `heym_chat` niekada nerodo, nepasirenka ar nesukuria jų. Kai jis kuria ar redaguoja workflow, nauji mazgai, kuriems reikia kredencialo, paliekami tušti, o atsakymas juos pavadina, kad galėtumėte nustatyti juos redaktoriuje.
 
@@ -109,7 +121,7 @@ Perjungus workflow, jis perkeltas į pradinę priskirtų sąrašą, todėl eilut
 Pavadinti serveriai palaiko tas pačias autentifikavimo metodikas kaip ir numatytas serveris:
 
 - **X-MCP-Key header** – Tiesiogiai perduokite serverio API raktą (API klientai, Cursor). Tik antraštė: raktai nėra priimami kaip `?key=` užklausos parametras, nes URL patenka į prieigos žurnalus, proxy žurnalus ir naršyklės istoriją.
-- **Claude OAuth** – Pridėkite serverio URL prie Claude integracijų; palikite kredencialus tuščius, o Claude automatiškai registruojasi per OAuth. Nešiklio tokenas turi keliauti `Authorization` antraštėje, o ne kaip `?token=`.
+- **Claude, ChatGPT ir Gemini OAuth** – Pridėkite serverio URL prie kliento jungčių arba tinkintų programų; palikite kredencialus tuščius, o klientas automatiškai registruojasi per OAuth. Nešiklio tokenas turi keliauti `Authorization` antraštėje, o ne kaip `?token=`.
 - **Sesijos tokenas** – Išduodamas SSE rankos paspaudimo metu; apribotas konkrečiam serveriui, todėl vieno pavadinto serverio tokenai negali pasiekti kito. Šis trumpalaikis `?session=` parametras nėra paveiktas.
 
 ### Pavadinto Serverio Ištrynimas
@@ -123,7 +135,7 @@ Paspauskite **X** piktogramą serverio kortelės antraštėje. Ištrynimas paša
 | Numatyta | `{origin}/api/mcp/sse` |
 | Pavadinta | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Abu endpointai palaiko SSE transportą (GET, MCP specifikacija 2024-11-05) ir Streamable HTTP transportą (POST, MCP specifikacija 2025-03-26). Claude naudoja OAuth 2.1 / PKCE saugiam prisijungimui abiem atvejais.
+Abu endpointai palaiko SSE transportą (GET, MCP specifikacija 2024-11-05) ir Streamable HTTP transportą (POST, MCP specifikacija 2025-03-26). Claude, ChatGPT ir Gemini naudoja OAuth 2.1 / PKCE saugiam prisijungimui abiem atvejais.
 
 ## Susiję
 

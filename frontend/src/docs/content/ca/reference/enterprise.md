@@ -16,6 +16,10 @@ Heym és d'ús gratuït i es pot autoallotjar sota la seva llicència de codi di
 | **Suport prioritari i SLA** | Temps de resposta garantits i resolució prioritària d'incidències |
 | **Desenvolupament personalitzat** | Desenvolupament de funcionalitats i modificacions adaptades als requisits de la vostra organització |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) és la interfície per a equips de negoci que s'executa sobre Heym. Les persones descriuen una tasca, responen unes quantes preguntes i obtenen un workflow provat, treballen des de pàgines creades per a elles i responen revisions, amb inici de sessió únic (SSO), rols Owner, Editor i Viewer, i un nom a cada execució. S'executa al costat del vostre Heym amb la seva pròpia llicència; connecteu-lo a **Settings → Heym Work**. Obteniu més informació i sol·liciteu una prova a [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Suport per a agents en producció
 
 L'equip de Heym us ajuda a dissenyar, construir i consolidar agents i workflows per als vostres processos de negoci. Això inclou la revisió dels vostres requisits, la recomanació de configuracions de nodes i assegurar que els vostres workflows segueixin les bones pràctiques de fiabilitat, observabilitat i governança.
@@ -67,3 +71,4 @@ Podeu contactar amb l'equip enterprise a **enterprise@heym.run** per a consultes
 - [Execució en paral·lel](./parallel-execution.md) — Model d'execució multi-worker
 - [Equips](./teams.md) — Col·laboració en equip i compartició de recursos
 - [Conjunt complet de funcionalitats](./features.md) — Visió general completa de les capacitats de Heym
+- [Heym Work](./heym-work.md): la interfície per a equips de negoci i com connectar-la

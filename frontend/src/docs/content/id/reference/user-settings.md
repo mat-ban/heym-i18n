@@ -4,7 +4,7 @@ Dialog Pengaturan memungkinkan Anda mengelola profil, menetapkan instruksi AI ya
 
 ## Membuka Dialog
 
-Klik **avatar dan nama Anda** di sudut kanan atas header. Dialog akan terbuka dengan tab berikut: **Profile**, **Security**, **Voice**, **AI Defaults**, dan **Observability**. Administrator instans juga akan melihat tab **SSO**.
+Klik **avatar dan nama Anda** di sudut kanan atas header. Dialog akan terbuka dengan tab berikut: **Profile**, **Security**, **Voice**, **AI Defaults**, dan **Observability**. Administrator instans juga akan melihat tab **SSO**, **Heym Work**, dan **Instances**.
 
 ## Tab Profile
 
@@ -100,6 +100,10 @@ Tab Observability menampilkan status hanya-baca dari [OpenTelemetry Tracing](./o
 ## Tab SSO
 
 Hanya terlihat oleh administrator instans — akun yang terdaftar dalam `HEYM_ADMIN_EMAILS`. Tab ini menghubungkan Heym ke penyedia OpenID Connect eksternal sehingga pengguna dapat masuk dengan akun yang sudah mereka miliki. Masukkan URL issuer dan kredensial klien, salin redirect URI hanya-baca ke penyedia Anda, dan jalankan **Test connection** sebelum mengaktifkannya. Masuk dengan kata sandi dapat dinonaktifkan dari sini setelah pengujian berhasil. Lihat [Single Sign-On](./sso.md) untuk pengaturan lengkapnya.
+
+## Tab Heym Work
+
+Administrator instans menghubungkan [Heym Work](./heym-work.md), antarmuka untuk tim bisnis, di sini: alamatnya, kunci integrasi yang ditampilkan sekali, serta sakelar **Enable Heym Work**. Tab ini juga menampilkan kapan terakhir kali Heym Work melapor, versinya, dan status lisensinya. Lihat [Menghubungkan Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Tab Instances
 

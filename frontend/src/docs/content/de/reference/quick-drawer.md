@@ -35,6 +35,7 @@ Wähle einen Workflow aus, um dessen Eingabeformular zu öffnen.
 - Klicke auf **Run Workflow**, um den ausgewählten Workflow auszuführen
 - Klicke auf **Stop Workflow**, um eine laufende Ausführung aus dem Drawer abzubrechen
 - Workflows ohne Eingabefelder können weiterhin direkt ausgeführt werden
+- Ein Workflow, der mit einem [File Upload Trigger](../nodes/file-upload-trigger-node.md) beginnt, zeigt stattdessen eine Dropzone an: Ziehe eine Datei hinein oder klicke, um eine auszuwählen. Die Zone listet die vom Trigger akzeptierten Dateitypen und -größen auf und lehnt andere Dateien vor dem Hochladen ab. **Run Workflow** bleibt deaktiviert, bis eine Datei ausgewählt wurde.
 
 Der Drawer verwendet dieselbe Workflow-Ausführungs-API wie andere Heym-Ausführungsoberflächen, sodass Ausgaben und Laufzeitverhalten konsistent bleiben.
 
@@ -51,6 +52,8 @@ Nach dem Start eines Laufs zeigt der Drawer:
 
 `pending` bedeutet, dass der Workflow auf eine spätere Aktion wie eine menschliche Überprüfung wartet.
 
+Ein Dateilauf erfolgt über den einmalig verwendbaren Upload-Link des Triggers: Der Drawer fordert vom Workflow einen Link an, lädt die Datei dorthin hoch und zeigt das Ergebnis an, sobald der Upload abgeschlossen ist. Dateiläufe zeigen den Endstatus und die Ausgaben, jedoch keinen schrittweisen Fortschritt, und werden im Verlauf ebenfalls mit `Quick Drawer` markiert. Die ausgewählte Datei wird nach jedem Lauf zurückgesetzt, da ein Link nur für eine Datei gilt.
+
 ## Browser-Speicher
 
 Der Quick Drawer speichert persönliche Einstellungen in `localStorage`:
@@ -64,7 +67,7 @@ Der Drawer speichert in dieser Version **keine** Eingabewerte.
 
 Der Quick Drawer ist bewusst eine leichtgewichtige Ausführungsoberfläche.
 
-- Enthalten: Suche, Anpinnen, Auswahl, Eingabe, Ausführen, Fortschritt, Ergebnis
+- Enthalten: Suche, Anpinnen, Auswahl, Eingabe (einschließlich einer Datei), Ausführen, Fortschritt, Ergebnis
 - Ausgeschlossen: Workflow-Erstellung, Bearbeitung, Ordnerverwaltung und Canvas-Aktionen
 
 ## Verwandte Themen

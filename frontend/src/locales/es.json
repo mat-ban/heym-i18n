@@ -830,7 +830,8 @@
     "searchPlaceholder": "Buscar en la documentación...",
     "title": "Documentación",
     "welcomeSubtitle": "Bienvenido a Heym.",
-    "welcomeTitle": "Documentación"
+    "welcomeTitle": "Documentación",
+    "pluginNoDoc": "Este plugin no tiene documentación."
   },
   "curl": {
     "command": "Comando",
@@ -1778,7 +1779,22 @@
     "goToFeature": "Ir a {title}",
     "previousFeature": "Función anterior",
     "readTheDocs": "Leer la documentación",
-    "startTour": "Iniciar tour"
+    "startTour": "Iniciar tour",
+    "heymWork": {
+      "step0": "Un equipo solicita en Heym Work",
+      "step1": "Heym lo construye y lo prueba",
+      "step2": "Verificado, sin lienzo",
+      "step3": "Heym lo ejecuta en segundo plano",
+      "prompt": "Revisar cláusulas de riesgo en nuevos contratos.",
+      "testing": "Probando el Workflow",
+      "verified": "Verificado"
+    },
+    "skillZip": {
+      "step0": "Suelte un zip de habilidad en el Chat",
+      "step1": "El Chat lee SKILL.md",
+      "step2": "El agente conserva la habilidad",
+      "prompt": "Leer la factura y enumerar las partidas."
+    }
   },
   "schedules": {
     "calendar": {
@@ -1930,7 +1946,17 @@
     "selectVoice": "Seleccionar una voz",
     "serviceName": "Nombre del servicio",
     "spans": "Spans",
-    "sso": "SSO"
+    "sso": "SSO",
+    "pluginsIntro": "Los plugins añaden nodos personalizados (acciones y Triggers) a esta instancia. Instalar o eliminar un plugin ejecuta código en el servidor, por lo que está restringido a los operadores indicados en",
+    "loadingPlugins": "Cargando plugins…",
+    "pluginsDisabledTitle": "Los plugins están deshabilitados",
+    "pluginsDisabledHint": "Configure estas variables de entorno en el backend y reinicie:",
+    "installPluginZip": "Instalar un plugin (.zip)",
+    "noPluginsInstalled": "Aún no hay plugins instalados.",
+    "enablePlugin": "Habilitar",
+    "disablePlugin": "Deshabilitar",
+    "uninstallPlugin": "Desinstalar",
+    "pluginOperationFailed": "Error en la operación del plugin"
   },
   "showcase": {
     "askAboutDoc": "Consultar sobre esta documentación",
@@ -2401,5 +2427,48 @@
     "versions": "Versiones",
     "versionsCount": "{count} versión(es)",
     "versionsSubtitle": "Las versiones se crearán cuando guarde cambios en su Workflow"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Buscar Workflows, pestañas, documentación...",
+    "searchAria": "Búsqueda en la paleta de comandos",
+    "ariaLabel": "Paleta de comandos",
+    "noResults": "No se encontraron resultados",
+    "tryDifferentSearch": "Pruebe con otro término de búsqueda",
+    "recent": "Recientes",
+    "recentInFolder": "Recientes · En: {folder}",
+    "inFolder": "En: {folder}",
+    "scheduledDate": "Programado {date}",
+    "scheduledForDeletion": "Programado para eliminación",
+    "goToTab": "Ir a la pestaña",
+    "workflowTemplate": "Plantilla de Workflow",
+    "nodeTemplate": "Plantilla de nodo",
+    "nodeType": "Nodo · {type}",
+    "documentation": "Documentación",
+    "support": "Soporte",
+    "contactSupport": "Contactar con soporte",
+    "watchRunbook": "Ver a Heym crear y ejecutar un Workflow",
+    "openDocs": "Abrir la documentación de Heym",
+    "getHelp": "Obtener ayuda del equipo de Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work para equipos empresariales, en heym.run",
+    "navigate": "Navegar",
+    "select": "Seleccionar",
+    "click": "clic",
+    "newTab": "nueva pestaña",
+    "oneItem": "{count} elemento",
+    "manyItems": "{count} elementos"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Los plugins están deshabilitados en esta instancia.",
+    "loadingDefinition": "Cargando definición del plugin...",
+    "notBound": "Este nodo no está vinculado a ningún paquete de plugin.",
+    "noneInstalled": "No hay plugins instalados en esta instancia.",
+    "notInstalled": "El plugin \"{id}\" no está instalado en esta instancia.",
+    "installedButDisabled": "El plugin \"{name}\" está instalado pero deshabilitado.",
+    "noKindNodes": "El plugin \"{name}\" no expone ningún nodo de tipo {kind}.",
+    "loadErrorDetail": "No se pudieron cargar los plugins: {detail}",
+    "loadErrorHttp": "No se pudieron cargar los plugins (HTTP {status}).",
+    "loadError": "No se pudieron cargar los plugins.",
+    "enabled": "Habilitado"
   }
 }

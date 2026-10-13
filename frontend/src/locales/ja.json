@@ -274,7 +274,17 @@
       "intro": "Heym Workはビジネスチーム向けのセカンドインターフェースです。ユーザーはHeym経由でサインインし、すべてのジョブはここで実行されます。",
       "never": "なし",
       "learnMore": "詳細を見る"
-    }
+    },
+    "pluginsIntro": "プラグインはこのインスタンスにカスタムノード（アクションと Trigger）を追加します。プラグインのインストールや削除はサーバー側のコードを実行するため、次に記載されたオペレーターに制限されています：",
+    "loadingPlugins": "プラグインを読み込み中…",
+    "pluginsDisabledTitle": "プラグインは無効です",
+    "pluginsDisabledHint": "バックエンドで次の環境変数を設定し、再起動してください：",
+    "installPluginZip": "プラグインをインストール (.zip)",
+    "noPluginsInstalled": "プラグインはまだインストールされていません。",
+    "enablePlugin": "有効化",
+    "disablePlugin": "無効化",
+    "uninstallPlugin": "アンインストール",
+    "pluginOperationFailed": "プラグイン操作に失敗しました"
   },
   "workflows": {
     "title": "Workflow",
@@ -390,7 +400,22 @@
     "startTour": "ツアーを開始",
     "readTheDocs": "ドキュメントを読む",
     "previousFeature": "前の機能",
-    "goToFeature": "{title}へ移動"
+    "goToFeature": "{title}へ移動",
+    "heymWork": {
+      "step0": "チームが Heym Work で依頼します",
+      "step1": "Heym が構築してテストします",
+      "step2": "検証済み、キャンバス不要",
+      "step3": "Heym がバックグラウンドで実行します",
+      "prompt": "新しい契約書にリスクのある条項がないか確認してください。",
+      "testing": "Workflow をテスト中",
+      "verified": "検証済み"
+    },
+    "skillZip": {
+      "step0": "スキルの zip をチャットにドロップ",
+      "step1": "チャットが SKILL.md を読み込む",
+      "step2": "エージェントがスキルを保持",
+      "prompt": "請求書を読み取り、明細項目を一覧表示してください。"
+    }
   },
   "canvas": {
     "nodes": "ノード",
@@ -2400,6 +2425,50 @@
       "nodes": "ノード",
       "reference": "リファレンス",
       "tabs": "タブ"
-    }
+    },
+    "pluginNoDoc": "このプラグインにはドキュメントがありません。"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Workflow、タブ、ドキュメントを検索...",
+    "searchAria": "コマンドパレット検索",
+    "ariaLabel": "コマンドパレット",
+    "noResults": "結果が見つかりません",
+    "tryDifferentSearch": "別の検索語句をお試しください",
+    "recent": "最近",
+    "recentInFolder": "最近 · 場所: {folder}",
+    "inFolder": "場所: {folder}",
+    "scheduledDate": "{date} に予定",
+    "scheduledForDeletion": "削除予定",
+    "goToTab": "タブへ移動",
+    "workflowTemplate": "Workflow テンプレート",
+    "nodeTemplate": "ノードテンプレート",
+    "nodeType": "ノード · {type}",
+    "documentation": "ドキュメント",
+    "support": "サポート",
+    "contactSupport": "サポートに連絡",
+    "watchRunbook": "Heym が Workflow を構築・実行する様子を見る",
+    "openDocs": "Heym ドキュメントを開く",
+    "getHelp": "Heym チームからサポートを受ける",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "ビジネスチーム向けの Heym Work（heym.run）",
+    "navigate": "移動",
+    "select": "選択",
+    "click": "クリック",
+    "newTab": "新しいタブ",
+    "oneItem": "{count} 件",
+    "manyItems": "{count} 件"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "このインスタンスではプラグインが無効になっています。",
+    "loadingDefinition": "プラグイン定義を読み込み中...",
+    "notBound": "このノードはプラグインパッケージにバインドされていません。",
+    "noneInstalled": "このインスタンスにはプラグインがインストールされていません。",
+    "notInstalled": "プラグイン「{id}」はこのインスタンスにインストールされていません。",
+    "installedButDisabled": "プラグイン「{name}」はインストールされていますが無効です。",
+    "noKindNodes": "プラグイン「{name}」には {kind} ノードがありません。",
+    "loadErrorDetail": "プラグインを読み込めません: {detail}",
+    "loadErrorHttp": "プラグインを読み込めません (HTTP {status})。",
+    "loadError": "プラグインを読み込めません。",
+    "enabled": "有効"
   }
 }

@@ -33,6 +33,8 @@ Når der kun er eksempel-/prøvedata (ingen reel kilde), kan disse rækker produ
 | `valueField` | string | Rækkekey, der bruges som numerisk værdi (pie/bar/line/numeric/gauge) |
 | `series` | array | Valgfri multi-serie-definition `[{ "name": "Sent", "field": "sent" }]` for bar/line (tilsidesætter `valueField`) |
 | `columns` | array | Valgfri kolonneliste til `table` (standard er keys fra den første række) |
+| `statusColumn` | string | Valgfri `table`-kolonne gengivet som farvede [statuschips](#status-chips). Skal være en af de viste kolonner. |
+| `statusTones` | object | Valgfri tilknytning fra en statusværdi til en tone (`success`, `attention`, `failure`, `waiting`, `neutral`) for værdier, som standarderne ikke dækker |
 | `xField` / `yField` | string | Rækkekeys til X- og Y-numeriske akser (scatter) |
 | `min` / `max` | number | Numerisk interval til `gauge` (standard `0` / `100`) |
 | `unit` | string | Valgfri enhed vist ved siden af en `numeric`- eller `gauge`-værdi |
@@ -42,7 +44,7 @@ Når der kun er eksempel-/prøvedata (ingen reel kilde), kan disse rækker produ
 ## Charttyper
 
 - **bar / line / area / pie** — kategoriske charts drevet af `labelField` + `valueField` (eller `series` til multi-serie bar/line/area). `area` er et fyldt trendchart.
-- **table** — rå rækker gengivet som et scrollbart tabel ved hjælp af `columns`.
+- **table** — rå rækker gengivet som et scrollbart tabel ved hjælp af `columns`. Én kolonne kan gengives som [statuschips](#status-chips), og rækker kan åbne en [detaljeside](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — en enkelt KPI-værdi fra den første række, med en valgfri `unit`.
 - **gauge** — en enkelt værdi vist mod et `min`–`max`-interval (f.eks. en procentdel). Bruger `valueField`.
 - **scatter** — X/Y-punkter fra `xField` og `yField` til korrelationsplot.
@@ -103,14 +105,59 @@ Resulterende markdown:
 
 For en simpel stigende liste startende ved 1 kan man enten præfikse hver linje (`1.`, `2.`, `3.`) eller bruge en loop med `$loop.index + 1`. Brug [punktopstillinger](#interactive-task-lists) (`- element`) når numre ikke er nødvendige.
 
+## Statuschips
+
+En `table` kan vise én kolonne som farvede chips. Indstil **Status column** i nodens egenskaber (eller `statusColumn` i DSL) til et kolonnenavn. Hver værdi får en af fem toner, og almindelige ord får en uden konfiguration:
+
+| Tone | Standardord |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | alt andet |
+
+Matchning ignorerer store/små bogstaver, `_` og `-`, så `IN_PROGRESS` og `in-progress` begge bliver `waiting`. Tilføj **Status tones** for andre værdier; en post tilsidesætter standarden for den pågældende værdi:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Serveren omsætter hver værdi til dens tone, så Heym og Heym Work viser de samme farver.
+
+## Detaljesider: `$page.record`
+
+Et dashboard åbnet med `?record=<value>` kører hvert widget-Workflow med denne værdi som `$page.record`. Et rækkelink i en tabel åbner en sådan side; se [Detaljesider](../tabs/dashboard-tab.md#detail-pages). På et dashboard åbnet uden en post samt i udtryksdialogen er `$page.record` `null`. En node med labelen `page` har forrang frem for det.
+
+Brug det til at hente netop den post, siden handler om, for eksempel i en [HTTP](./http-node.md)-node:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` er selve værdien fra den klikkede række, såsom `V-1002`, ikke et objekt med felter. For at finde den post i en [DataTable](./datatable-node.md) skal du filtrere dens postkolonne efter værdien: handlingen `find` med filteret `{"vendor_id": "$page.record"}`. En sti som `$page.record.id` evalueres til ingenting, så en widget, som AI bygger eller finjusterer, udelader disse felter og læser `$page.record` i stedet.
+
+Værdien kommer fra en URL, som enhver kan redigere. Dashboardet accepterer kun værdier i sit postformat (bogstaver, cifre, `-`, `_` og `.` som standard), men behandl den alligevel som upålideligt input: send den derhen, hvor noden escaper værdier, såsom en HTTP-forespørgselsparameter eller en filterværdi i [DataTable](./datatable-node.md) eller ClickHouse, og byg aldrig forespørgselstekst ved at sammensætte strenge med den. Widgets kører fortsat som dashboardets ejer, uanset hvem der åbner siden.
+
 ## Sådan løses data
 
 1. Hvis `dataPath` er angivet, følger noden denne sti i den opstrøms output.
 2. Ellers ledes der efter et array: en topniveau-liste, et `data`-array eller det første felt med listeværdi.
-3. For `table` bliver hver række til en tabelrække ved brug af `columns` (eller første rækkes nøgler).
-4. For `numeric` og `gauge` hentes værdien fra `valueField` på første række (eller det første numeriske felt).
-5. For `scatter` bliver hver række til et `[xField, yField]`-punkt.
-6. For `text` hentes beskeden fra `valueField` på første række hvis angivet, ellers fra den statiske `text`-konfiguration (ellers det første strengfelt i første række).
+3. Rækker direkte fra en [Data Table](./datatable-node.md)-node (`{id, data, created_at}`) læses med deres kolonner på øverste niveau ved siden af `id`, så `labelField`, `valueField` og `columns` navngiver tabellens egne kolonner.
+4. For `table` bliver hver række til en tabelrække ved brug af `columns` (eller første rækkes nøgler). Med `statusColumn` indeholder Payloaden også tonen for hver værdi i den pågældende kolonne.
+5. For `numeric` og `gauge` hentes værdien fra `valueField` på første række (eller det første numeriske felt).
+6. For `scatter` bliver hver række til et `[xField, yField]`-punkt.
+7. For `text` hentes beskeden fra `valueField` på første række hvis angivet, ellers fra den statiske `text`-konfiguration (ellers det første strengfelt i første række).
 
 ## Eksempel
 

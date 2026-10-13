@@ -241,7 +241,17 @@
       "intro": "Heym Work là một giao diện thứ hai dành cho các nhóm nghiệp vụ. Mọi người đăng nhập qua Heym và mọi tác vụ đều chạy tại đây.",
       "never": "Chưa bao giờ",
       "learnMore": "Tìm hiểu thêm"
-    }
+    },
+    "pluginsIntro": "Plugin bổ sung các nút tùy chỉnh (hành động và Trigger) vào phiên bản này. Việc cài đặt hoặc gỡ bỏ plugin sẽ chạy mã phía máy chủ, do đó chỉ giới hạn cho các quản trị viên được liệt kê trong",
+    "loadingPlugins": "Đang tải plugin…",
+    "pluginsDisabledTitle": "Plugin đã bị vô hiệu hóa",
+    "pluginsDisabledHint": "Hãy đặt các biến môi trường này trên backend, sau đó khởi động lại:",
+    "installPluginZip": "Cài đặt plugin (.zip)",
+    "noPluginsInstalled": "Chưa có plugin nào được cài đặt.",
+    "enablePlugin": "Bật",
+    "disablePlugin": "Tắt",
+    "uninstallPlugin": "Gỡ cài đặt",
+    "pluginOperationFailed": "Thao tác plugin thất bại"
   },
   "nav": {
     "workflows": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Bắt đầu tham quan",
     "readTheDocs": "Đọc tài liệu",
     "previousFeature": "Tính năng trước",
-    "goToFeature": "Đi đến {title}"
+    "goToFeature": "Đi đến {title}",
+    "heymWork": {
+      "step0": "Một nhóm đặt yêu cầu trong Heym Work",
+      "step1": "Heym xây dựng và kiểm thử",
+      "step2": "Đã xác minh, không cần canvas",
+      "step3": "Heym chạy ngầm trong nền",
+      "prompt": "Kiểm tra các hợp đồng mới để tìm các điều khoản rủi ro.",
+      "testing": "Đang kiểm thử Workflow",
+      "verified": "Đã xác minh"
+    },
+    "skillZip": {
+      "step0": "Thả tệp zip kỹ năng vào Chat",
+      "step1": "Chat đọc SKILL.md",
+      "step2": "Tác tử lưu giữ kỹ năng",
+      "prompt": "Đọc hóa đơn và liệt kê các khoản mục."
+    }
   },
   "canvas": {
     "nodes": "Nodes",
@@ -2346,7 +2371,8 @@
     "pageNotFound": "Không tìm thấy trang",
     "askAnything": "Hỏi bất cứ điều gì về tài liệu",
     "askPlaceholder": "Hỏi về tài liệu...",
-    "clear": "Xóa"
+    "clear": "Xóa",
+    "pluginNoDoc": "Plugin này không có tài liệu."
   },
   "workflowHistory": {
     "versions": "Phiên bản",
@@ -2401,5 +2427,48 @@
     "streamAllWarning": "Không thể stream logs từ tất cả containers. Vui lòng chọn một container cụ thể.",
     "failedToLoadLogs": "Không thể tải logs",
     "errorLoadingLogs": "Lỗi khi tải logs"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Tìm kiếm Workflow, tab, tài liệu...",
+    "searchAria": "Tìm kiếm trên bảng lệnh",
+    "ariaLabel": "Bảng lệnh",
+    "noResults": "Không tìm thấy kết quả",
+    "tryDifferentSearch": "Hãy thử một từ khóa tìm kiếm khác",
+    "recent": "Gần đây",
+    "recentInFolder": "Gần đây · Trong: {folder}",
+    "inFolder": "Trong: {folder}",
+    "scheduledDate": "Đã lên lịch {date}",
+    "scheduledForDeletion": "Đã lên lịch xóa",
+    "goToTab": "Đi tới tab",
+    "workflowTemplate": "Mẫu Workflow",
+    "nodeTemplate": "Mẫu nút",
+    "nodeType": "Nút · {type}",
+    "documentation": "Tài liệu",
+    "support": "Hỗ trợ",
+    "contactSupport": "Liên hệ bộ phận hỗ trợ",
+    "watchRunbook": "Xem Heym xây dựng và chạy một Workflow",
+    "openDocs": "Mở tài liệu Heym",
+    "getHelp": "Nhận trợ giúp từ đội ngũ Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work dành cho các nhóm doanh nghiệp, trên heym.run",
+    "navigate": "Điều hướng",
+    "select": "Chọn",
+    "click": "nhấp",
+    "newTab": "tab mới",
+    "oneItem": "{count} mục",
+    "manyItems": "{count} mục"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Plugin đã bị vô hiệu hóa trên phiên bản này.",
+    "loadingDefinition": "Đang tải định nghĩa plugin...",
+    "notBound": "Nút này không được gắn với gói plugin nào.",
+    "noneInstalled": "Không có plugin nào được cài đặt trên phiên bản này.",
+    "notInstalled": "Plugin \"{id}\" chưa được cài đặt trên phiên bản này.",
+    "installedButDisabled": "Plugin \"{name}\" đã được cài đặt nhưng đang bị vô hiệu hóa.",
+    "noKindNodes": "Plugin \"{name}\" không cung cấp nút {kind} nào.",
+    "loadErrorDetail": "Không thể tải plugin: {detail}",
+    "loadErrorHttp": "Không thể tải plugin (HTTP {status}).",
+    "loadError": "Không thể tải plugin.",
+    "enabled": "Đã bật"
   }
 }

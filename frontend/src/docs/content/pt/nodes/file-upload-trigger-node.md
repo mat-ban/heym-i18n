@@ -33,6 +33,13 @@ O nó opera em duas fases:
 
 No canvas, **Run Workflow** exibe o `curl` emitido no painel de depuração com um botão de cópia.
 
+## Executar a partir do Heym
+
+Dois locais executam diretamente um Workflow deste tipo num ficheiro, através do mesmo processo de geração e carregamento:
+
+- O [Quick Drawer](../reference/quick-drawer.md) apresenta uma zona de largada para o ficheiro. Essas execuções são identificadas como `Quick Drawer` no histórico.
+- Um [widget de execução](../tabs/dashboard-tab.md#run-widgets) num painel executa o Workflow em cada ficheiro largado. Essas execuções são identificadas como `dashboard`.
+
 ## Parâmetros
 
 | Parâmetro | Tipo | Padrão | Descrição |

@@ -1,3 +1,4 @@
+import { getCurrentLocale } from "@/i18n";
 import api from "@/services/api";
 
 import type { PluginSummary } from "@/types/workflow";
@@ -9,13 +10,28 @@ export interface PluginDoc {
   markdown: string;
 }
 
-export async function listPlugins(): Promise<PluginSummary[]> {
-  const { data } = await api.get<PluginSummary[]>("/plugins");
+function resolvePluginLocale(lang?: string): string {
+  if (lang && lang.trim()) return lang.trim();
+  const current = getCurrentLocale();
+  if (current && current.trim()) return current.trim();
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("heym_locale");
+    if (saved && saved.trim()) return saved.trim();
+  }
+  return "en";
+}
+
+export async function listPlugins(lang?: string): Promise<PluginSummary[]> {
+  const { data } = await api.get<PluginSummary[]>("/plugins", {
+    params: { lang: resolvePluginLocale(lang) },
+  });
   return data;
 }
 
-export async function getPluginDoc(pluginId: string): Promise<PluginDoc> {
-  const { data } = await api.get<PluginDoc>(`/plugins/${pluginId}/doc`);
+export async function getPluginDoc(pluginId: string, lang?: string): Promise<PluginDoc> {
+  const { data } = await api.get<PluginDoc>(`/plugins/${pluginId}/doc`, {
+    params: { lang: resolvePluginLocale(lang) },
+  });
   return data;
 }
 

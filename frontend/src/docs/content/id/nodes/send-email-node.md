@@ -28,7 +28,7 @@ Lampirkan file dari [Drive](./drive-node.md) Anda dengan meneruskan satu atau be
 
 ## Penyiapan
 
-Tambahkan kredensial SMTP dengan server, port, email, dan kata sandi. Server SMTP umum:
+Tambahkan kredensial SMTP dengan server, port, email, dan kata sandi. Pengirim yang terlihat adalah field opsional **From** pada kredensial; jika From kosong, email dikirim menggunakan nama pengguna. Server SMTP umum:
 
 - Gmail: `smtp.gmail.com`, port 587 (memerlukan App Password)
 - Outlook: `smtp.office365.com`, port 587

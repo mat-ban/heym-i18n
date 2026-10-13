@@ -84,3 +84,116 @@ class PluginIconResolverTests(unittest.TestCase):
 
     def test_missing_icon_returns_none(self) -> None:
         self.assertIsNone(plugins._safe_icon_path("ikv", "nope.svg"))
+
+
+class PluginI18nTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self._tmp = TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.root = Path(self._tmp.name)
+        pkg = self.root / "acme-crm"
+        (pkg / "i18n").mkdir(parents=True)
+        (pkg / "docs").mkdir(parents=True)
+        (pkg / "README.md").write_text("# Acme CRM (EN)")
+        (pkg / "README.de.md").write_text("# Acme CRM (DE)")
+        (pkg / "docs" / "README.fr.md").write_text("# Acme CRM (FR)")
+        (pkg / "i18n" / "de.json").write_text(
+            """{
+  "plugin": {
+    "name": "Acme CRM Deutsch",
+    "description": "Deutsche Paketbeschreibung"
+  },
+  "nodes": {
+    "lookup": {
+      "name": "Kunde suchen",
+      "description": "Sucht einen Kunden im CRM",
+      "fields": {
+        "mode": {
+          "label": "Suchmodus",
+          "options": {
+            "exact": "Exakte Übereinstimmung"
+          }
+        }
+      }
+    }
+  }
+}""",
+            encoding="utf-8",
+        )
+        self._patch = patch.object(plugins.plugin_store, "plugins_root", return_value=self.root)
+        self._patch.start()
+        self.addCleanup(self._patch.stop)
+        self.plugin_row = SimpleNamespace(
+            plugin_id="acme-crm",
+            name="Acme CRM",
+            version="1.0.0",
+            kind="action",
+            description="English description",
+            enabled=True,
+            manifest={
+                "id": "acme-crm",
+                "name": "Acme CRM",
+                "version": "1.0.0",
+                "description": "English description",
+                "nodes": [
+                    {
+                        "key": "lookup",
+                        "name": "Lookup Customer",
+                        "kind": "action",
+                        "description": "Looks up a customer",
+                        "fields": [
+                            {
+                                "key": "mode",
+                                "label": "Search Mode",
+                                "type": "select",
+                                "options": [
+                                    {"label": "Exact Match", "value": "exact"},
+                                    {"label": "Fuzzy Match", "value": "fuzzy"},
+                                ],
+                            },
+                            {
+                                "key": "query",
+                                "label": "Query",
+                                "type": "string",
+                            },
+                        ],
+                    }
+                ],
+            },
+        )
+
+    def test_to_summary_localizes_and_falls_back(self) -> None:
+        summary_de = plugins._to_summary(self.plugin_row, lang="de-DE")
+        self.assertEqual(summary_de.name, "Acme CRM Deutsch")
+        self.assertEqual(summary_de.description, "Deutsche Paketbeschreibung")
+        node = summary_de.nodes[0]
+        self.assertEqual(node.name, "Kunde suchen")
+        self.assertEqual(node.description, "Sucht einen Kunden im CRM")
+        self.assertEqual(node.fields[0].label, "Suchmodus")
+        self.assertEqual(node.fields[0].options[0].label, "Exakte Übereinstimmung")
+        self.assertEqual(node.fields[0].options[1].label, "Fuzzy Match")
+        self.assertEqual(node.fields[1].label, "Query")
+
+    def test_to_summary_without_locale_preserves_manifest(self) -> None:
+        summary_en = plugins._to_summary(self.plugin_row, lang="en")
+        self.assertEqual(summary_en.name, "Acme CRM")
+        self.assertEqual(summary_en.nodes[0].name, "Lookup Customer")
+        self.assertEqual(summary_en.nodes[0].fields[0].label, "Search Mode")
+
+    def test_rejects_invalid_lang_traversal(self) -> None:
+        self.assertEqual(plugins._load_plugin_locale("acme-crm", "../secret"), {})
+        self.assertIsNone(plugins._resolve_lang("../../etc/passwd"))
+
+    def test_resolve_plugin_doc_path_priority(self) -> None:
+        self.assertEqual(
+            plugins._resolve_plugin_doc_path("acme-crm", "de"),
+            (self.root / "acme-crm" / "README.de.md").resolve(),
+        )
+        self.assertEqual(
+            plugins._resolve_plugin_doc_path("acme-crm", "fr-FR"),
+            (self.root / "acme-crm" / "docs" / "README.fr.md").resolve(),
+        )
+        self.assertEqual(
+            plugins._resolve_plugin_doc_path("acme-crm", "es"),
+            (self.root / "acme-crm" / "README.md").resolve(),
+        )

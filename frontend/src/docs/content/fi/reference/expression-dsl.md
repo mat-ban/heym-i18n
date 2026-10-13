@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Nykyisen suorituksen tunniste (vastaa [Suoritushistorian](./execution-history.md) merkinnän id:tä, joten `/workflows/<id>/<executionId>` avaa tämän suorituksen canvasilla). **Vain suoritusaikana**: tyhjä expression preview -dialogissa; täytetään vain workflowa suoritettaessa.
 - `$vars` - Workflow-lokaalit muuttujat (käyttö muodossa `$vars.variableName`; päivitetään `variable`-solmulla)
 - `$global` - Pysyvät globaalit muuttujat (käyttö muodossa `$global.variableName`)
+- `$page.record` - Vain kojelaudan widget-workflow'ille: sen tietosivun tietue, jolla widget sijaitsee, kojelaudan `?record=`-parametrista. Arvo on `null` ilman parametria avatussa kojelaudassa sekä lausekkeen esikatseluikkunassa. Solmu, jonka nimi on `page`, on etusijalla. Katso [Tietosivut](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars-käyttö
 - `$vars.counter` - Käytä muuttujaa nimeltä `counter`

@@ -499,7 +499,7 @@ Se også [Quick Drawer](./quick-drawer.md), [Download & Import](./download-impor
 
 ### [Quick Drawer](./quick-drawer.md)
 
-Quick Drawer er et fast højrepanel til hurtig kørsel på interne ikke-canvas-sider. Det giver mulighed for at søge efter [workflows](../tabs/workflows-tab.md), fastgøre favoritter, vælge inputs, køre med det samme samt inspicere fremskridt eller resultater uden at åbne editoren. Fastgørelsesrækkefølge og det sidst valgte workflow gemmes i browseren.
+Quick Drawer er et fast højrepanel til hurtig kørsel på interne ikke-canvas-sider. Det giver mulighed for at søge efter [workflows](../tabs/workflows-tab.md), fastgøre favoritter, vælge inputs, køre med det samme samt inspicere fremskridt eller resultater uden at åbne editoren. Et workflow med en [File Upload Trigger](../nodes/file-upload-trigger-node.md) modtager en sluppet eller valgt fil. Fastgørelsesrækkefølge og det sidst valgte workflow gemmes i browseren.
 
 Se også [Workflow Organization](./workflow-organization.md), [Keyboard Shortcuts](./keyboard-shortcuts.md) og [Execution History](./execution-history.md).
 
@@ -678,6 +678,12 @@ Enterprise dækker kommerciel licensiering, professionel support og implementeri
 
 Se også [Running & Deployment](../getting-started/running-and-deployment.md), [Security](./security.md) og [Teams](./teams.md).
 
+### [Heym Work](./heym-work.md)
+
+Heym Work er en anden brugerflade til forretningsteams oven på Heym. Brugere beskriver en opgave, besvarer et par spørgsmål og får et testet workflow, hvorefter de arbejder fra sider, godkendelser og en aktivitetsliste, hvor hver kørsel har et navn. Instansadministratorer forbinder det under **Indstillinger → Heym Work** med dets adresse og en integrationsnøgle; det har sin egen licens fra Heym-teamet.
+
+Se også [Enterprise](./enterprise.md), [Single Sign-On](./sso.md) og [Human-in-the-Loop](./human-in-the-loop.md).
+
 ---
 
 ## Dashboard-faner
@@ -757,7 +763,7 @@ MCP-fanen konfigurerer integration af Model Context Protocol. Heym understøtter
 
 **Navngivne servere** – Opret flere isolerede MCP-endpoints, hver med sin egen UUID-baserede URL (`/api/mcp/servers/{uuid}/sse`) og uafhængig API-nøgle. Tildel specifikke workflows til hver server, så forskellige AI-klienter eller teams kun ser de værktøjer, de har brug for. Hver navngiven server understøtter de samme godkendelsesmetoder (API-nøgle, Claude OAuth) og har sine egne funktioner til at kopiere JSON og tilføje til Cursor. Begge endpoints understøtter SSE-transport (GET) og Streamable HTTP-transport (POST). Ved at aktivere/deaktivere et workflow i en navngiven server flyttes det til toppen af den tildelte liste, så den ændrede række forbliver synlig.
 
-**Heym chat-værktøj** – Begge tilstande kan også eksponere [Chat](../tabs/chat-tab.md)-motoren som et enkelt `heym_chat`-værktøj, der kan aktiveres/deaktiveres pr. overflade med sine egne LLM-legitimationsoplysninger og model (forududfyldt fra den foretrukne model i [Indstillinger](./user-settings.md)). En MCP-klient sender en naturlig-sproglig `besked`, og motoren håndterer resten: opbygning, redigering og kørsel af workflows, analyser, kørsler, live kørselsstatus, tidsplaner, boards og kort, teams, globale variabler, dokumentationssøgning og menneskelige beslutninger. Egenskaber, der tilføjes til Chat senere, er tilgængelige gennem det samme værktøj uden ekstra registrering. Hvert opkald gemmes i Chat-fanens historik som en stikmærket samtale og returnerer et `conversation_id`, som klienten kan sende tilbage for at fortsætte tråden.
+**Heym chat-værktøj** – Begge tilstande kan også eksponere [Chat](../tabs/chat-tab.md)-motoren som et enkelt `heym_chat`-værktøj, der kan aktiveres/deaktiveres pr. overflade med sine egne LLM-legitimationsoplysninger og model (forududfyldt fra den foretrukne model i [Indstillinger](./user-settings.md)). En MCP-klient sender en naturlig-sproglig `message`, og motoren håndterer resten: opbygning af workflows i build-tilstand (gem, testkør op til fem gange, ret og verificer), kørsel af workflows, analyser, kørsler, live kørselsstatus, tidsplaner, boards og kort, teams, globale variabler, dokumentationssøgning og menneskelige beslutninger. Egenskaber, der tilføjes til Chat senere, er tilgængelige gennem det samme værktøj uden ekstra registrering. Hvert opkald gemmes i Chat-fanens historik som en stikmærket samtale og returnerer et `conversation_id`, som klienten kan sende tilbage for at fortsætte tråden.
 
 Se også [Agentarkitektur](./agent-architecture.md), [Agent-node](../nodes/agent-node.md) og [SSE Streaming](./sse-streaming.md).
 
@@ -793,7 +799,7 @@ Se også [Kørselshistorik](./execution-history.md), [Tidsplaner](../tabs/schedu
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard-fanen er et Grafana-lignende område, hvor der oprettes gitter af diagramwidgets, hver genereret af sit eget skjulte Heym-workflow. Det er muligt at oprette flere dashboards og dele hvert enkelt med brugere eller teams, skrivebeskyttet eller redigerbart; widgets kører altid med ejerens legitimationsoplysninger, så alle ser de samme data. Beskriv en metrik i almindeligt sprog, og AI genererer widgetten, eller tilføj manuelt og vælg en diagramtype med eksempeldata: søjle, linje, område, lagkage, tabel, numerisk, måler, punkt, proportion, søjlemåler, tekst eller HITL. HITL er en karusel af afventende menneskelige gennemgange. Headeren viser `1/n afventende`. Workflow-navnet åbner kørslen på canvas. **Godkend**, **Anmod om ændringer** og **Afvis** afslutter den, og historikikonet ved siden af widget-titlen åbner kørslen i historikdialogen på samme side. Widgets cacher deres resultater, kan finjusteres med AI (hver ændring gemmes i [Redigeringshistorik](./edit-history.md)), klones sammen med deres komplette workflow, omarrangeres med Tidy up og trækkes eller ændres i størrelse i redigeringstilstand. Da hver widget er et workflow, kan enhver datahentning — et [HTTP](../nodes/http-node.md)-kald, en [BigQuery](../nodes/bigquery-node.md)-forespørgsel, et [RAG](../nodes/rag-node.md)-opslag eller [LLM](../nodes/llm-node.md)-output — blive til et diagram.
+Dashboard-fanen er et Grafana-lignende område, hvor der oprettes gitter af diagramwidgets, hver genereret af sit eget skjulte Heym-workflow. Det er muligt at oprette flere dashboards og dele hvert enkelt med brugere eller teams, skrivebeskyttet eller redigerbart; widgets kører altid med ejerens legitimationsoplysninger, så alle ser de samme data. Beskriv en metrik i almindeligt sprog, og AI genererer widgetten, eller tilføj manuelt og vælg en diagramtype med eksempeldata: søjle, linje, område, lagkage, tabel, numerisk, måler, punkt, proportion, søjlemåler, tekst eller HITL. HITL er en karusel af afventende menneskelige gennemgange. Headeren viser `1/n afventende`. Workflow-navnet åbner kørslen på canvas. **Godkend**, **Anmod om ændringer** og **Afvis** afslutter den, og historikikonet ved siden af widget-titlen åbner kørslen i historikdialogen på samme side. Widgets cacher deres resultater, kan finjusteres med AI (hver ændring gemmes i [Redigeringshistorik](./edit-history.md)), klones sammen med deres komplette workflow, omarrangeres med Tidy up og trækkes eller ændres i størrelse i redigeringstilstand. Tabeller kan vise statuschips og linke deres rækker til et detaljedashboard, der læser den klikkede rækkes post som `$page.record`, og en Run-widget kører et workflow fra dashboardet: på en sluppet fil, med sine inputfelter eller med en Kør-knap. Da hver widget er et workflow, kan enhver datahentning — et [HTTP](../nodes/http-node.md)-kald, en [BigQuery](../nodes/bigquery-node.md)-forespørgsel, et [RAG](../nodes/rag-node.md)-opslag eller [LLM](../nodes/llm-node.md)-output — blive til et diagram.
 
 Se også [Diagramoutput-node](../nodes/chart-output-node.md), [Analytics](../tabs/analytics-tab.md) og [Kørselshistorik](./execution-history.md).
 

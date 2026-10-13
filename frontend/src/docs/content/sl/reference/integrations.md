@@ -580,8 +580,14 @@ Poverilnica SMTP shranjuje podrobnosti o povezavi z e-poštnim strežnikom za po
 |-------|-------------|
 | `host` | Ime gostitelja SMTP strežnika (npr. `smtp.gmail.com`) |
 | `port` | SMTP vrata (običajno `587` za STARTTLS, `465` za SSL) |
-| `email` | E-poštni naslov pošiljatelja |
+| `email` | Uporabniško ime, s katerim se strežnik SMTP prijavi; hkrati vidni pošiljatelj, ko je polje `from` prazno |
 | `password` | SMTP geslo ali geslo aplikacije |
+
+### Neobvezna polja
+
+| Polje | Opis |
+|-------|-------------|
+| `from` (`smtp_from`) | Vidni naslov pošiljatelja (From). Pustite prazno za pošiljanje kot `email`. Strežnik se še vedno prijavi kot `email`, zato mora imeti ta račun dovoljenje za pošiljanje s tega naslova (v Gmailu potrjen vzdevek **Pošlji pošto kot**). |
 
 ### Pogosti ponudniki SMTP
 

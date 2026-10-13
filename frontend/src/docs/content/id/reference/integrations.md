@@ -620,8 +620,14 @@ Kredensial SMTP menyimpan detail koneksi server email untuk mengirim email kelua
 |-------|-------------|
 | `host` | Nama host server SMTP (mis. `smtp.gmail.com`) |
 | `port` | Port SMTP (biasanya `587` untuk STARTTLS, `465` untuk SSL) |
-| `email` | Alamat email pengirim |
+| `email` | Nama pengguna yang digunakan server SMTP untuk masuk; juga pengirim yang terlihat saat `from` kosong |
 | `password` | Kata sandi SMTP atau App Password |
+
+### Kolom Opsional
+
+| Kolom | Deskripsi |
+|-------|-------------|
+| `from` (`smtp_from`) | Alamat From (pengirim) yang terlihat. Biarkan kosong untuk mengirim sebagai `email`. Server tetap masuk sebagai `email`, sehingga akun tersebut harus diizinkan mengirim sebagai alamat ini (di Gmail, alias **Kirim email sebagai** yang terverifikasi). |
 
 ### Penyedia SMTP Umum
 

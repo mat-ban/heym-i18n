@@ -4,7 +4,7 @@ Dialogboksen Indstillinger giver mulighed for at administrere profilen, definere
 
 ## Åbning af dialogboksen
 
-Klik på **avatar og navn** i øverste højre hjørne af headeren. Dialogboksen åbnes med følgende faner: **Profil**, **Sikkerhed**, **Stemme**, **AI-standarder** og **Overvågning**. Instansadministratorer ser også en **SSO**-fane.
+Klik på **avatar og navn** i øverste højre hjørne af headeren. Dialogboksen åbnes med følgende faner: **Profil**, **Sikkerhed**, **Stemme**, **AI-standarder** og **Overvågning**. Instansadministratorer ser også fanerne **SSO**, **Heym Work** og **Instanser**.
 
 ## Profil-fanen
 
@@ -100,6 +100,10 @@ Observability-fanen viser den skrivebeskyttede status for [OpenTelemetry Tracing
 ## SSO-fane
 
 Kun synlig for instansadministratorer — de kontorer, der er listet i `HEYM_ADMIN_EMAILS`. Denne fane forbinder Heym med en ekstern OpenID Connect-udbyder, så brugerne logger ind med deres eksisterende konti. Indtast en issuer-URL og klientlegitimationsoplysninger, kopier den skrivebeskyttede omdirigerings-URI ind i udbyderen, og kør **Test forbindelse** før aktivering. Adgangskode-login kan deaktiveres herfra, når testen er bestået. Se [Single Sign-On](./sso.md) for den fulde opsætning.
+
+## Heym Work-fane
+
+Instansadministratorer tilslutter [Heym Work](./heym-work.md), grænsefladen til forretningsteams, her: dens adresse, en integrationsnøgle, der vises én gang, og kontakten **Enable Heym Work**. Fanen viser også, hvornår Heym Work sidst tjekkede ind, dens version og dens licensstatus. Se [Tilslutning af Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Instanser-fane
 

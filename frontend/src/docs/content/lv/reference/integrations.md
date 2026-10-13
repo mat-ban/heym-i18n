@@ -580,8 +580,14 @@ SMTP akreditācijas dati glabā e-pasta servera savienojuma detaļas izejošā p
 |-------|-------------|
 | `host` | SMTP servera hostname (piemēram, `smtp.gmail.com`) |
 | `port` | SMTP ports (parasti `587` STARTTLS, `465` SSL) |
-| `email` | Sūtītāja e-pasta adrese |
+| `email` | Lietotājvārds, ar kuru SMTP serveris pierakstās; arī redzamais sūtītājs, ja `from` ir tukšs |
 | `password` | SMTP parole vai lietotnes parole |
+
+### Papildus lauki
+
+| Lauks | Apraksts |
+|-------|-------------|
+| `from` (`smtp_from`) | Redzamā sūtītāja (From) adrese. Atstājiet tukšu, lai sūtītu kā `email`. Serveris joprojām pierakstās kā `email`, tāpēc šim kontam ir jābūt atļaujai sūtīt no šīs adreses (Gmail — verificēts **Sūtīt pastu kā** aizstājvārds). |
 
 ### Biežākie SMTP pakalpojumu sniedzēji
 

@@ -30,6 +30,9 @@ Zakładka **Magazyny wektorowe** zarządza magazynami wektorowymi używanymi prz
 - **Usuwanie źródeł** – Usuń określone pliki lub grupy źródeł z magazynu, w tym
   wszystko, co dodał dany workflow
 - **Edycja magazynu** – Zmień nazwę, opis lub dane logowania
+- **Wyszukiwanie** – `POST /api/vector-stores/{id}/search` z parametrem `query` (oraz `limit` od 1 do 20,
+  domyślnie 5) zwraca fragmenty, które zwróciłoby wyszukiwanie węzła RAG, od najlepszego dopasowania, każdy z jego
+  wynikiem i źródłem. Ekran RAG w Heym Work używa tego do testowania wyszukiwania
 
 ## Udostępnianie
 

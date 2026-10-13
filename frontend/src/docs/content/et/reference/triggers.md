@@ -97,11 +97,12 @@ Käivituste ajalugu salvestab `trigger_source` iga sisendpunkti kohta:
 |-------|------|
 | `"API"` | Webhook / API-kutse ilma selgesõnalise päiseta (vaikeväärtus) |
 | `"Canvas"` | Käivitatud workflow redaktori lõuendilt |
-| `"Quick Drawer"` | Käivitatud redaktori kiirsahtli paneelilt |
+| `"Quick Drawer"` | Käivitatud redaktori kiirsahtli paneelilt, sealhulgas selle pukseerimisalalt üles laaditud failikäivitused |
 | `"cron"` | Cron-ajastaja |
 | `"imap"` | IMAP triggeri haldur |
 | `"websocket"` | Väljamineva WebSocketi triggeri haldur |
-| `"file_upload"` | Faili üleslaadimise triggeri üleslaadimise endpoint |
+| `"file_upload"` | Faili üleslaadimise triggeri üleslaadimise endpoint (HTTP, MCP või lõuendi kaudu loodud lingid) |
+| `"dashboard"` | Töölaua vidinate käivitused ja üleslaadimised failipukseerimisvidinast |
 | `"telegram"` | Telegrami boti webhook |
 | `"Discord"` | Discordi interaktsioonide webhook |
 | `"MCP"` | MCP tööriista kutse |

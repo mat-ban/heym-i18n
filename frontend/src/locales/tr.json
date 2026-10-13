@@ -274,7 +274,17 @@
       "loadError": "SSO ayarları yüklenemedi.",
       "saveError": "Kaydedilemedi. Şifreyle oturum açmanın devre dışı bırakılıp bırakılamayacağını kontrol edin.",
       "testError": "Bağlantı testi çalıştırılamadı."
-    }
+    },
+    "pluginsIntro": "Eklentiler bu örneğe özel düğümler (eylemler ve Trigger'lar) ekler. Bir eklentiyi yüklemek veya kaldırmak sunucu tarafında kod çalıştırır; bu nedenle yalnızca şurada listelenen operatörlerle sınırlıdır:",
+    "loadingPlugins": "Eklentiler yükleniyor…",
+    "pluginsDisabledTitle": "Eklentiler devre dışı",
+    "pluginsDisabledHint": "Arka uçta bu ortam değişkenlerini ayarlayın ve yeniden başlatın:",
+    "installPluginZip": "Bir eklenti yükleyin (.zip)",
+    "noPluginsInstalled": "Henüz yüklü eklenti yok.",
+    "enablePlugin": "Etkinleştir",
+    "disablePlugin": "Devre Dışı Bırak",
+    "uninstallPlugin": "Kaldır",
+    "pluginOperationFailed": "Eklenti işlemi başarısız oldu"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Turu başlat",
     "readTheDocs": "Dokümanları okuyun",
     "previousFeature": "Önceki özellik",
-    "goToFeature": "{title} bölümüne gidin"
+    "goToFeature": "{title} bölümüne gidin",
+    "heymWork": {
+      "step0": "Bir ekip Heym Work'te talepte bulunur",
+      "step1": "Heym oluşturur ve test eder",
+      "step2": "Doğrulandı, tuval yok",
+      "step3": "Heym arka planda çalıştırır",
+      "prompt": "Yeni sözleşmeleri riskli maddeler açısından kontrol edin.",
+      "testing": "Workflow test ediliyor",
+      "verified": "Doğrulandı"
+    },
+    "skillZip": {
+      "step0": "Chat'e bir beceri zip dosyası bırakın",
+      "step1": "Chat, SKILL.md dosyasını okur",
+      "step2": "Aracı beceriyi korur",
+      "prompt": "Faturayı okuyun ve satır öğelerini listeleyin."
+    }
   },
   "canvas": {
     "nodes": "Nodes",
@@ -2400,6 +2425,50 @@
     "pageNotFound": "Sayfa bulunamadı",
     "askAnything": "Dokümanlar hakkında her şeyi sorun",
     "askPlaceholder": "Dokümanlar hakkında sorun...",
-    "clear": "Temizle"
+    "clear": "Temizle",
+    "pluginNoDoc": "Bu eklentinin belgesi yok."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Workflow'ları, sekmeleri, belgeleri arayın...",
+    "searchAria": "Komut paleti araması",
+    "ariaLabel": "Komut paleti",
+    "noResults": "Sonuç bulunamadı",
+    "tryDifferentSearch": "Farklı bir arama terimi deneyin",
+    "recent": "Son Kullanılanlar",
+    "recentInFolder": "Son Kullanılanlar · Konum: {folder}",
+    "inFolder": "Konum: {folder}",
+    "scheduledDate": "Planlandı: {date}",
+    "scheduledForDeletion": "Silinmek Üzere Planlananlar",
+    "goToTab": "Sekmeye git",
+    "workflowTemplate": "Workflow Şablonu",
+    "nodeTemplate": "Düğüm Şablonu",
+    "nodeType": "Düğüm · {type}",
+    "documentation": "Belgeler",
+    "support": "Destek",
+    "contactSupport": "Destek ile İletişime Geçin",
+    "watchRunbook": "Heym'in bir Workflow oluşturup çalıştırmasını izleyin",
+    "openDocs": "Heym belgelerini açın",
+    "getHelp": "Heym ekibinden yardım alın",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "İş ekipleri için Heym Work, heym.run adresinde",
+    "navigate": "Gezin",
+    "select": "Seç",
+    "click": "tıklama",
+    "newTab": "yeni sekme",
+    "oneItem": "{count} öğe",
+    "manyItems": "{count} öğe"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Bu örnekte eklentiler devre dışı bırakılmış.",
+    "loadingDefinition": "Eklenti tanımı yükleniyor...",
+    "notBound": "Bu düğüm bir eklenti paketine bağlı değil.",
+    "noneInstalled": "Bu örnekte yüklü eklenti yok.",
+    "notInstalled": "\"{id}\" eklentisi bu örnekte yüklü değil.",
+    "installedButDisabled": "\"{name}\" eklentisi yüklü ancak devre dışı.",
+    "noKindNodes": "\"{name}\" eklentisi herhangi bir {kind} düğümü sunmuyor.",
+    "loadErrorDetail": "Eklentiler yüklenemedi: {detail}",
+    "loadErrorHttp": "Eklentiler yüklenemedi (HTTP {status}).",
+    "loadError": "Eklentiler yüklenemedi.",
+    "enabled": "Etkin"
   }
 }

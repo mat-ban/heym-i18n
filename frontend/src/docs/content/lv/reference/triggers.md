@@ -93,11 +93,12 @@ Izpildes vēsture reģistrē `trigger_source` katram ieejas punktam:
 |-------|------|
 | `"API"` | Webhook / API izsaukums bez precīza header (noklusējums) |
 | `"Canvas"` | Palaide no workflow redaktora kanvas |
-| `"Quick Drawer"` | Palaide no redaktora quick-drawer paneļa |
+| `"Quick Drawer"` | Palaide no redaktora quick-drawer paneļa, tostarp failu izpildes, kas augšupielādētas no tā nomešanas zonas |
 | `"cron"` | Cron grafiks |
 | `"imap"` | IMAP trigger pārvaldnieks |
 | `"websocket"` | Izejošais WebSocket trigger pārvaldnieks |
-| `"file_upload"` | Faila augšupielādes trigger augšupielādes endpoint |
+| `"file_upload"` | Faila augšupielādes trigger augšupielādes endpoint (saites, kas izveidotas caur HTTP, MCP vai audeklu) |
+| `"dashboard"` | Informācijas paneļa logrīku izpildes un augšupielādes no failu nomešanas logrīka |
 | `"telegram"` | Telegram bota webhook |
 | `"Discord"` | Discord mijiedarbības webhook |
 | `"MCP"` | MCP rīka izsaukums |

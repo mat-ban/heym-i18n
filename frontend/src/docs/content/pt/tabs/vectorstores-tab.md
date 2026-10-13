@@ -30,6 +30,9 @@ O separador **Armazenamentos vetoriais** gere os armazenamentos vetoriais utiliz
 - **Eliminar origens** – Remova ficheiros específicos ou grupos de origem de um armazenamento, incluindo
   tudo o que um workflow adicionou
 - **Editar armazenamento** – Altere o nome, a descrição ou a credencial
+- **Pesquisar** – `POST /api/vector-stores/{id}/search` com uma `query` (e um `limit` de 1 a 20,
+  predefinição 5) devolve os chunks que a pesquisa de um nó RAG devolveria, melhor correspondência primeiro, cada um com a sua
+  pontuação e origem. O ecrã RAG do Heym Work utiliza-o para testar a recuperação
 
 ## Partilha
 

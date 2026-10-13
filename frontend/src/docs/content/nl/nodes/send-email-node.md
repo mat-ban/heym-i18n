@@ -28,7 +28,7 @@ Voeg bestanden uit uw [Drive](./drive-node.md) bij door een of meer Drive-bestan
 
 ## Configuratie
 
-Voeg een SMTP-referentie toe met server, poort, e-mail en wachtwoord. Veelvoorkomende SMTP-servers:
+Voeg een SMTP-referentie toe met server, poort, e-mail en wachtwoord. De zichtbare afzender is het optionele veld **From** van de referentie; bij een leeg From-veld wordt verzonden met de gebruikersnaam. Veelvoorkomende SMTP-servers:
 
 - Gmail: `smtp.gmail.com`, poort 587 (App-wachtwoord vereist)
 - Outlook: `smtp.office365.com`, poort 587

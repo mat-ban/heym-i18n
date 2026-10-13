@@ -93,11 +93,12 @@ Eksekveringshistorik registrerer `trigger_source` for hver indgangspunkt:
 |-------|------|
 | `"API"` | Webhook/API-kald uden eksplicit header (standard) |
 | `"Canvas"` | Kørsel fra workflow-editor canvas |
-| `"Quick Drawer"` | Kørsel fra editor quick-drawer panel |
+| `"Quick Drawer"` | Kørsel fra editorens quick-drawer-panel, herunder filkørsler uploadet fra dets dropzone |
 | `"cron"` | Cron-scheduler |
 | `"imap"` | IMAP-trigger manager |
 | `"websocket"` | Outbound WebSocket-trigger manager |
-| `"file_upload"` | File Upload Trigger upload-endpoint |
+| `"file_upload"` | File Upload Trigger upload-endpoint (links oprettet via HTTP, MCP eller lærredet) |
+| `"dashboard"` | Kørsler fra dashboard-widgets og uploads fra en fildrop-widget |
 | `"telegram"` | Telegram bot-webhook |
 | `"Discord"` | Discord-interaktions-webhook |
 | `"MCP"` | MCP-værktøjskald |

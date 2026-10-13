@@ -16,6 +16,10 @@ Heym je brezplačen za uporabo in samostojno gostovanje pod licenco, ki omogoča
 | **Prednostna podpora in SLA** | Zagotovljeni časi odziva in prednostna rešitev težav |
 | **Prilagojeni razvoj** | Razvoj funkcij in prilagoditve, prilagojene potrebam vaše organizacije |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) je vmesnik za poslovne ekipe, ki deluje nad platformo Heym. Uporabniki opišejo opravilo, odgovorijo na nekaj vprašanj in dobijo preizkušen workflow, delajo s strani, ustvarjenih zanje, ter odgovarjajo na preglede – z enotno prijavo (SSO), vlogami Owner, Editor in Viewer ter imenom pri vsakem zagonu. Deluje ob vašem Heym z lastno licenco; povežite ga v **Settings → Heym Work**. Izvedite več in zahtevajte preizkusno različico na [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Podpora za produkcijske agente
 
 Ekipa Heym vam pomaga pri oblikovanju, gradnji in utrjevanju agentov in workflow-ov za vaše poslovne procese. To vključuje pregled vaših zahtev, priporočanje konfiguracij vozlišč in zagotavljanje, da vaši workflow-i sledijo najboljšim praksam za zanesljivost, opazovanje in upravljanje.
@@ -68,3 +72,4 @@ Dosežite ekipo za podjetja na **enterprise@heym.run** za povpraševanja o licen
 - [Paralelno izvajanje](./parallel-execution.md) — Model izvajanja z več delavci
 - [Tim](./teams.md) — Sodelovanje in deljenje virov
 - [Celoten nabor funkcij](./features.md) — Popoln pregled zmožnosti Heym
+- [Heym Work](./heym-work.md): vmesnik za poslovne ekipe in kako ga povezati

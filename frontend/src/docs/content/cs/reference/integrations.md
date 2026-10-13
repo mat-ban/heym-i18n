@@ -591,8 +591,14 @@ Přihlašovací údaje SMTP ukládají podrobnosti připojení k e-mailovému se
 |-------|-------------|
 | `host` | Název hostitele serveru SMTP (např. `smtp.gmail.com`) |
 | `port` | Port SMTP (obvykle `587` pro STARTTLS, `465` pro SSL) |
-| `email` | E-mailová adresa odesílatele |
+| `email` | Uživatelské jméno, kterým se server SMTP přihlašuje; zároveň viditelný odesílatel, pokud je pole `from` prázdné |
 | `password` | Heslo SMTP nebo App Password |
+
+### Volitelná pole
+
+| Pole | Popis |
+|-------|-------------|
+| `from` (`smtp_from`) | Viditelná adresa odesílatele (From). Ponechte prázdné pro odesílání jako `email`. Server se nadále přihlašuje jako `email`, takže tento účet musí mít oprávnění odesílat z této adresy (v Gmailu ověřený alias **Odesílat poštu jako**). |
 
 ### Běžní poskytovatelé SMTP
 

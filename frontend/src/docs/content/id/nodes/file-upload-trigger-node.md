@@ -33,6 +33,13 @@ Node ini berjalan dalam dua fase:
 
 Di canvas, **Run Workflow** menampilkan `curl` yang telah dibuat di panel debug dengan tombol salin.
 
+## Menjalankan dari Heym
+
+Dua tempat menjalankan Workflow semacam ini secara langsung pada sebuah file, melalui proses pembuatan tautan dan unggahan yang sama:
+
+- [Quick Drawer](../reference/quick-drawer.md) menampilkan zona lepas (drop zone) untuk file tersebut. Eksekusi ini diberi tag `Quick Drawer` di riwayat.
+- [Widget Run](../tabs/dashboard-tab.md#run-widgets) di dasbor menjalankan Workflow pada setiap file yang dilepaskan. Eksekusi ini diberi tag `dashboard`.
+
 ## Parameter
 
 | Parameter | Tipe | Default | Deskripsi |

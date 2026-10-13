@@ -31,7 +31,7 @@ utilgængeligt ID medfører fejl i noden i stedet for at sende en delvis e-mail.
 
 ## Opsætning
 
-Tilføj SMTP-legitimationsoplysninger med server, port, e-mail og adgangskode. Almindelige SMTP-servere:
+Tilføj SMTP-legitimationsoplysninger med server, port, e-mail og adgangskode. Den synlige afsender er legitimationsoplysningens valgfrie felt **From**; et tomt From-felt sender som brugernavnet. Almindelige SMTP-servere:
 
 - Gmail: `smtp.gmail.com`, port 587 (App-adgangskode påkrævet)
 - Outlook: `smtp.office365.com`, port 587

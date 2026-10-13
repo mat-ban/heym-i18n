@@ -33,6 +33,8 @@ Yalnızca örnek/numune veriniz olduğunda (gerçek bir kaynak olmadan), bu sat�
 | `valueField` | string | Sayısal değer olarak kullanılan satır anahtarı (pie/bar/line/numeric/gauge) |
 | `series` | array | Bar/line için isteğe bağlı çoklu seri tanımı `[{ "name": "Sent", "field": "sent" }]` (`valueField`'i geçersiz kılar) |
 | `columns` | array | `table` için isteğe bağlı sütun listesi (varsayılan olarak ilk satırın anahtarları) |
+| `statusColumn` | string | Renkli [durum çipleri](#status-chips) olarak oluşturulan isteğe bağlı `table` sütunu. Gösterilen sütunlardan biri olmalıdır. |
+| `statusTones` | object | Varsayılanların kapsamadığı değerler için bir durum değerinden bir tona (`success`, `attention`, `failure`, `waiting`, `neutral`) isteğe bağlı eşleme |
 | `xField` / `yField` | string | X ve Y sayısal eksenleri için satır anahtarları (scatter) |
 | `min` / `max` | number | `gauge` için sayısal aralık (varsayılan `0` / `100`) |
 | `unit` | string | Bir `numeric` veya `gauge` değerinin yanında gösterilen isteğe bağlı birim |
@@ -42,7 +44,7 @@ Yalnızca örnek/numune veriniz olduğunda (gerçek bir kaynak olmadan), bu sat�
 ## Chart türleri
 
 - **bar / line / area / pie** — `labelField` + `valueField` (veya çoklu seri bar/line/area için `series`) tarafından yönlendirilen kategorik chart'lar. `area` doldurulmuş bir trend chart'ıdır.
-- **table** — `columns` kullanılarak kaydırılabilir bir tablo olarak oluşturulan ham satırlar.
+- **table** — `columns` kullanılarak kaydırılabilir bir tablo olarak oluşturulan ham satırlar. Bir sütun [durum çipleri](#status-chips) olarak oluşturulabilir ve satırlar bir [ayrıntı sayfası](../tabs/dashboard-tab.md#detail-pages) açabilir.
 - **numeric** — ilk satırdan isteğe bağlı bir `unit` ile tek bir KPI değeri.
 - **gauge** — bir `min`–`max` aralığına karşı gösterilen tek bir değer (örn. bir yüzde). `valueField` kullanır.
 - **scatter** — korelasyon grafikleri için `xField` ve `yField`'den X/Y noktaları.
@@ -103,14 +105,59 @@ Ortaya çıkan markdown:
 
 1'den başlayan basit artan bir liste için, ya her satırın başına numara ekleyin (`1.`, `2.`, `3.`) ya da `$loop.index + 1` ile bir döngü kullanın. Numaralara ihtiyaç duymadığınızda [madde işaretli listeler](#interactive-task-lists) (`- item`) kullanın.
 
+## Durum çipleri
+
+Bir `table`, bir sütunu renkli çipler olarak gösterebilir. Düğümün özelliklerinde **Status column** alanını (veya DSL'de `statusColumn`) bir sütun adına ayarlayın. Her değer beş tondan birini alır ve yaygın kelimeler yapılandırma gerektirmeden otomatik olarak bir ton alır:
+
+| Ton | Varsayılan kelimeler |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | diğer her şey |
+
+Eşleştirme büyük/küçük harf, `_` ve `-` farkını yok sayar; dolayısıyla `IN_PROGRESS` ve `in-progress` değerlerinin ikisi de `waiting` olur. Diğer değerler için **Status tones** ekleyin; bir kayıt o değer için varsayılanı geçersiz kılar:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Sunucu her değeri kendi tonuna çözümler; böylece Heym ve Heym Work aynı renkleri gösterir.
+
+## Ayrıntı sayfaları: `$page.record`
+
+`?record=<value>` ile açılan bir pano, her widget Workflow'unu bu değer `$page.record` olacak şekilde çalıştırır. Bir tablo satırı bağlantısı böyle bir sayfayı açar; bkz. [Ayrıntı sayfaları](../tabs/dashboard-tab.md#detail-pages). Kayıt olmadan açılan panoda ve ifade iletişim kutusunda `$page.record` değeri `null` olur. `page` etiketli bir düğüm bunun önüne geçer.
+
+Sayfanın ilgili olduğu tek kaydı getirmek için bunu kullanın; örneğin bir [HTTP](./http-node.md) düğümünde:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record`, alanları olan bir nesne değil, tıklanan satırın `V-1002` gibi kendi değeridir. Bu kaydı bir [DataTable](./datatable-node.md) içinde bulmak için kayıt sütununu değere göre filtreleyin: `{"vendor_id": "$page.record"}` filtresiyle `find` işlemi. `$page.record.id` gibi bir yol hiçbir şeye çözümlenmez; bu nedenle yapay zekanın oluşturduğu veya ince ayar yaptığı bir widget bu alanları atar ve bunun yerine `$page.record` değerini okur.
+
+Değer, herkesin düzenleyebileceği bir URL'den gelir. Pano yalnızca kendi kayıt biçimindeki değerleri (varsayılan olarak harfler, rakamlar, `-`, `_` ve `.`) kabul eder, ancak yine de bunu güvenilmeyen girdi olarak ele alın: düğümün değerleri escape ettiği HTTP sorgu parametresi veya [DataTable](./datatable-node.md) ya da ClickHouse filtre değeri gibi yerlerde iletin ve asla dizeleri birleştirerek sorgu metni oluşturmayın. Sayfayı kim açarsa açsın widget'lar pano sahibi olarak çalışmaya devam eder.
+
 ## Veriler nasıl çözümlenir
 
 1. `dataPath` ayarlanmışsa, düğüm bu nokta yolunu izleyerek upstream çıktısına girer.
 2. Aksi takdirde bir dizi arar: üst düzey bir liste, bir `data` dizisi veya liste değerli ilk alan.
-3. `table` için, her satır `columns` (veya ilk satırın anahtarları) kullanılarak bir tablo satırına dönüşür.
-4. `numeric` ve `gauge` için değer, ilk satırdaki `valueField` alanından (veya ilk sayısal alandan) gelir.
-5. `scatter` için, her satır bir `[xField, yField]` noktasına dönüşür.
-6. `text` için, mesaj ayarlandığında ilk satırdaki `valueField` alanından, aksi takdirde statik `text` yapılandırmasından (yine değilse ilk satırın ilk dize alanından) alınır.
+3. Doğrudan bir [Data Table](./datatable-node.md) düğümünden (`{id, data, created_at}`) gelen satırlar, sütunları `id` yanında en üst düzeyde olacak şekilde okunur; böylece `labelField`, `valueField` ve `columns` tablonun kendi sütunlarını adlandırır.
+4. `table` için, her satır `columns` (veya ilk satırın anahtarları) kullanılarak bir tablo satırına dönüşür. `statusColumn` kullanıldığında Payload, o sütundaki her değerin tonunu da taşır.
+5. `numeric` ve `gauge` için değer, ilk satırdaki `valueField` alanından (veya ilk sayısal alandan) gelir.
+6. `scatter` için, her satır bir `[xField, yField]` noktasına dönüşür.
+7. `text` için, mesaj ayarlandığında ilk satırdaki `valueField` alanından, aksi takdirde statik `text` yapılandırmasından (yine değilse ilk satırın ilk dize alanından) alınır.
 
 ## Örnek
 

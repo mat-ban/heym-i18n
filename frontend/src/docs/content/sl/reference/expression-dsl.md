@@ -142,6 +142,7 @@ item.value
 - `$executionId` - ID trenutnega izvajanja (enak ID-ju vnosa [Zgodovina izvajanja](./execution-history.md), tako da `/workflows/<id>/<executionId>` odpre to izvajanje na platnu). **Samo v času izvajanja**: prazen v dialogu za predogled izrazov; napolnjen le med izvajanjem delovnega toka.
 - `$vars` - Spremenljivke lokalnega delovnega toka (dostop preko `$vars.variableName`; posodobljene preko vozlišča `variable`)
 - `$global` - Trajna globalna shramba spremenljivk (dostop preko `$global.variableName`)
+- `$page.record` - Samo za workflowe gradnikov nadzorne plošče: zapis podrobne strani, na kateri je gradnik, iz parametra `?record=` nadzorne plošče. Prazno (`null`) na nadzorni plošči, odprti brez tega parametra, in v pogovornem oknu za predogled izrazov. Vozlišče z oznako `page` ima prednost. Glejte [Podrobne strani](../tabs/dashboard-tab.md#detail-pages).
 
 ### Uporaba $vars
 - `$vars.counter` - Dostop do spremenljivke z imenom `counter`

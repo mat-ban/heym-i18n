@@ -274,7 +274,17 @@
       "intro": "Heym Work — це другий інтерфейс для бізнес-команд. Користувачі входять через Heym, і кожне завдання виконується тут.",
       "never": "Ніколи",
       "learnMore": "Дізнатися більше"
-    }
+    },
+    "pluginsIntro": "Плагіни додають власні вузли (дії та Trigger-и) до цього екземпляра. Встановлення або видалення плагіна виконує серверний код, тому це дозволено лише операторам, зазначеним у",
+    "loadingPlugins": "Завантаження плагінів…",
+    "pluginsDisabledTitle": "Плагіни вимкнено",
+    "pluginsDisabledHint": "Встановіть ці змінні середовища на бекенді та перезапустіть:",
+    "installPluginZip": "Встановити плагін (.zip)",
+    "noPluginsInstalled": "Плагінів ще не встановлено.",
+    "enablePlugin": "Увімкнути",
+    "disablePlugin": "Вимкнути",
+    "uninstallPlugin": "Видалити",
+    "pluginOperationFailed": "Не вдалося виконати операцію з плагіном"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Почати тур",
     "readTheDocs": "Читати документацію",
     "previousFeature": "Попередня функція",
-    "goToFeature": "Перейти до {title}"
+    "goToFeature": "Перейти до {title}",
+    "heymWork": {
+      "step0": "Команда надсилає запит у Heym Work",
+      "step1": "Heym створює та тестує його",
+      "step2": "Перевірено, без полотна",
+      "step3": "Heym виконує його у фоновому режимі",
+      "prompt": "Перевірити нові договори на наявність ризикованих пунктів.",
+      "testing": "Тестування Workflow",
+      "verified": "Перевірено"
+    },
+    "skillZip": {
+      "step0": "Перетягніть zip-архів навички в Chat",
+      "step1": "Chat читає SKILL.md",
+      "step2": "Агент зберігає навичку",
+      "prompt": "Прочитайте рахунок-фактуру та перелічіть позиції."
+    }
   },
   "canvas": {
     "nodes": "Nodes",
@@ -2346,7 +2371,8 @@
     "pageNotFound": "Сторінку не знайдено",
     "askAnything": "Запитайте будь-що про документацію",
     "askPlaceholder": "Запитайте про документацію...",
-    "clear": "Очистити"
+    "clear": "Очистити",
+    "pluginNoDoc": "Цей плагін не має документації."
   },
   "logs": {
     "dockerLogs": "Docker Logs",
@@ -2401,5 +2427,48 @@
     "failedToClearVersions": "Не вдалося очистити історію версій",
     "confirmRevert": "Ви впевнені, що хочете відновити версію {number}? Це замінить поточний workflow цією версією.",
     "failedToRevert": "Не вдалося відновити workflow"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Пошук Workflow, вкладок, документації...",
+    "searchAria": "Пошук у палітрі команд",
+    "ariaLabel": "Палітра команд",
+    "noResults": "Результатів не знайдено",
+    "tryDifferentSearch": "Спробуйте інший пошуковий запит",
+    "recent": "Нещодавні",
+    "recentInFolder": "Нещодавні · У: {folder}",
+    "inFolder": "У: {folder}",
+    "scheduledDate": "Заплановано {date}",
+    "scheduledForDeletion": "Заплановані до видалення",
+    "goToTab": "Перейти до вкладки",
+    "workflowTemplate": "Шаблон Workflow",
+    "nodeTemplate": "Шаблон вузла",
+    "nodeType": "Вузол · {type}",
+    "documentation": "Документація",
+    "support": "Підтримка",
+    "contactSupport": "Зв'язатися з підтримкою",
+    "watchRunbook": "Подивіться, як Heym створює та запускає Workflow",
+    "openDocs": "Відкрити документацію Heym",
+    "getHelp": "Отримати допомогу від команди Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work для бізнес-команд на heym.run",
+    "navigate": "Навігація",
+    "select": "Вибрати",
+    "click": "клік",
+    "newTab": "нова вкладка",
+    "oneItem": "{count} елемент",
+    "manyItems": "{count} елементів"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Плагіни вимкнено на цьому екземплярі.",
+    "loadingDefinition": "Завантаження визначення плагіна...",
+    "notBound": "Цей вузол не прив'язаний до пакета плагіна.",
+    "noneInstalled": "На цьому екземплярі не встановлено жодного плагіна.",
+    "notInstalled": "Плагін «{id}» не встановлено на цьому екземплярі.",
+    "installedButDisabled": "Плагін «{name}» встановлено, але вимкнено.",
+    "noKindNodes": "Плагін «{name}» не надає жодних вузлів типу {kind}.",
+    "loadErrorDetail": "Не вдалося завантажити плагіни: {detail}",
+    "loadErrorHttp": "Не вдалося завантажити плагіни (HTTP {status}).",
+    "loadError": "Не вдалося завантажити плагіни.",
+    "enabled": "Увімкнено"
   }
 }

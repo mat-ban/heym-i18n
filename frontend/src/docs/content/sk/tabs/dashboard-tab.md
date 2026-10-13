@@ -8,7 +8,7 @@ Každý začína s jedným dashboardom, ktorý sa vytvorí pri prvom otvorení k
 
 Karta znovu otvorí naposledy použitý dashboard a do adresného riadka sa prenáša otvorený dashboard (`?tab=dashboard&dashboard=<id>`), takže odkaz otvorí presne tento dashboard každému, kto k nemu má prístup.
 
-Tlačidlo nastavení (len pre vlastníkov) premenuje dashboard, spravuje zdieľanie a odstráni ho. Odstránením dashboardu sa odstránia jeho widgety a ich workflowy. Vždy si zachováte aspoň jeden vlastný dashboard, takže posledný nie je možné odstrániť.
+Tlačidlo nastavení (len pre vlastníkov) premenuje dashboard, nastaví, ktoré záznamy prijíma ako [detailná stránka](#detail-pages), spravuje zdieľanie a odstráni ho. Odstránením dashboardu sa odstránia jeho widgety a ich workflowy. Vždy si zachováte aspoň jeden vlastný dashboard, takže posledný nie je možné odstrániť.
 
 ## Widgety
 
@@ -18,7 +18,7 @@ Widget je jeden graf v mriežke. Podporované typy grafov:
 - **Line**
 - **Area** (vyplnený trend, podporuje viacero sérií)
 - **Pie**
-- **Table** (posúvateľná)
+- **Table** (posúvateľná; jeden stĺpec sa môže vykresliť ako [stavové štítky](../nodes/chart-output-node.md#status-chips) a riadky môžu otvárať [detailnú stránku](#detail-pages))
 - **Numeric** (jedna hodnota KPI s voliteľnou jednotkou)
 - **Gauge** (jedna hodnota voči rozsahu min–max, napr. percento)
 - **Scatter** (body X/Y pre korelačné grafy)
@@ -26,6 +26,8 @@ Widget je jeden graf v mriežke. Podporované typy grafov:
 - **Bar gauge** (jeden horizontálny gauge na riadok s prechodom červená→zelená a hodnotou, napr. voľné miesto na disku)
 - **Text** (markdown správa, napr. stavová poznámka ako „Posledné spustenie o 19:47"; podporuje [interaktívne zaškrtávacie políčka](../nodes/chart-output-node.md#interactive-task-lists), keď je markdown statický, a [explicitné číslované zoznamy](../nodes/chart-output-node.md#numbered-lists) pre vlastné alebo zostupné číslovanie)
 - **HITL** (Vaše čakajúce ľudské revízie. Hlavička zobrazuje `1/n pending`. Názov workflowu otvorí toto spustenie na plátne. **Approve**, **Request changes** a **Reject** ho vyriešia. Ikona histórie vedľa názvu widgetu otvorí toto spustenie v dialógu histórie na tejto stránke. Widget nepoužíva riadky z upstreamu a každá osoba vidí svoj vlastný front)
+
+Okrem grafov spúšťa widget **Run a workflow** jeden z vašich workflowov priamo z dashboardu: so súborom presunutým myšou, s jeho vstupnými poľami alebo pomocou tlačidla Run; pozri [Spúšťacie widgety](#run-widgets).
 
 Každý widget načítava svoje údaje asynchrónne pri otvorení karty, takže stránka zostáva responzívna, kým sa grafy napĺňajú.
 
@@ -36,7 +38,39 @@ Každý widget načítava svoje údaje asynchrónne pri otvorení karty, takže 
 3. Zostavte workflow tak, aby uzol napájajúci **Chart Output** vytváral pole riadkov, a potom nakonfigurujte mapovanie polí uzla Chart Output (pole označenia, pole hodnoty atď.).
 4. Uložte, vráťte sa na kartu Dashboard a widget sa vykreslí.
 
+Pre widget **Run a workflow** namiesto toho vyberte workflow, ktorý má spúšťať; výberové okno uvádza, ako widget každý z nich spustí. Widget sa pridá priamo do mriežky; nevytvára sa žiadny nový workflow.
+
 Dvojkliknutím na widget (alebo pomocou jeho tlačidla úprav) kedykoľvek znovu otvoríte jeho workflow. Pomocou **Clone widget** v hlavičke widgetu duplikujte widget aj jeho kompletný workflow. Kópia sa umiestni pod originál a označí sa ako **(Copy)**, takže ju môžete upravovať nezávisle.
+
+## Detailné stránky
+
+Tabuľkový widget môže prepojiť svoje riadky s iným dashboardom, ktorý potom funguje ako detailná stránka: jeden dashboard slúžiaci pre každého zákazníka, faktúru alebo tiket.
+
+1. Otvorte **Settings** tabuľkového widgetu a v časti **Row link** vyberte cieľový dashboard.
+2. Zadajte **Record column**, teda stĺpec, ktorého hodnota identifikuje riadok (napríklad `id`), a voliteľne **Label column**, ktorý ho pomenúva (napríklad `name`).
+3. Uložte. Kliknutím na riadok (alebo jeho zameraním a stlačením klávesu Enter) sa otvorí prepojený dashboard s parametrami `?record=<value>&label=<name>`.
+
+Na detailnom dashboarde číta každý workflow widgetu túto hodnotu ako `$page.record` (pozri [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)) a stránka nad mriežkou zobrazuje `Dashboard / <label>` spolu s tlačidlom na vymazanie záznamu. Tlačidlo Späť vás vráti do tabuľky, z ktorej ste prišli.
+
+- **Kto ju môže otvoriť.** Riadky sú klikateľné len pre používateľov, ktorí môžu otvoriť prepojený dashboard. Ostatní vidia rovnakú tabuľku bez odkazov.
+- **Formát záznamu.** Záznam pochádza z URL, takže detailný dashboard rozhoduje o tom, čo prijme. V jeho nastaveniach je **Detail page records** jednou z možností: ID (písmená, číslice, `-`, `_` a `.`, až do 128 znakov; predvolené), čísla, UUID alebo e-mailové adresy. Akákoľvek iná hodnota je odmietnutá ešte pred spustením widgetu a widgety zobrazia „This page does not accept that record".
+- **Stále beží pod vlastníkom.** Aj na detailnej stránke bežia widgety pod účtom vlastníka dashboardu. Tvorcovia by mali odovzdávať `$page.record` iba tam, kde ho uzol escapuje, nikdy priamo do textu dopytu.
+- **Vyrovnávacia pamäť.** Každý widget ukladá svoj graf do vyrovnávacej pamäte pre každý záznam zvlášť, s rovnakou dobou platnosti (TTL) ako samotný widget, a uchováva 50 naposledy použitých záznamov.
+
+## Spúšťacie widgety
+
+Widget **Run a workflow** spustí jeden z vašich workflowov a zobrazí výsledok: stav, čas behu a výstupy. Čo zobrazí, závisí od toho, aké vstupy workflow prijíma:
+
+- **Súbor.** Pri workflowe, ktorý začína uzlom [File Upload Trigger](../nodes/file-upload-trigger-node.md), naň presuňte súbor (alebo kliknutím vyberte súbor) a widget ho nahrá prostredníctvom jednorazového nahrávacieho odkazu daného triggera. Widget zobrazuje typy a veľkosť súborov, ktoré trigger prijíma, a ostatné pred nahraním odmietne. Keď workflow začína aj uzlom Text Input, zobrazí widget jeho polia vedľa oblasti na presunutie: vyberte súbor, vyplňte polia a tlačidlo **Run** odošle oboje. Hodnoty cestujú spolu s nahrávacím odkazom, ktorý widget vygeneruje, takže zdieľaný nahrávací odkaz ich nemôže nastaviť.
+- **Vstupné polia.** Pri workflowe, ktorý začína uzlom Text Input, zobrazí widget jeho polia s predvolenými hodnotami; tlačidlo **Run** spustí workflow s vašimi hodnotami. Hodnoty pre polia, ktoré workflow nemá, sa zahodia.
+- **Nič.** Workflow bez vstupov dostane tlačidlo **Run**.
+
+Tlačidlo **Wrap** pri výsledku zalamuje dlhé riadky výstupu vo vnútri poľa; vypnite ho, ak chcete čítať rozloženie JSON výstupu.
+
+- Každý, kto môže otvoriť dashboard, môže widget spustiť, rovnako ako každý môže obnoviť graf. Prístup k workflowu sa riadi vlastníkom dashboardu: pridanie widgetu vyžaduje workflow, ktorý môžete spustiť vy aj vlastník, a samotný beh používa prihlasovacie údaje vlastníka workflowu, rovnako ako akýkoľvek nahrávací odkaz.
+- Výsledok zostáva na vašej obrazovke, kým stránku neopustíte; ostatní prehliadajúci nevidia vaše súbory, hodnoty ani výsledky. Beh sa zobrazí v histórii spustení s triggerom `dashboard`.
+- Zdieľanie dashboardu nikdy neudeľuje prístup k samotnému workflowu. **Edit workflow** ho otvorí ľuďom, ktorí už prístup majú, a **Fine-tune with AI** sa neponúka.
+- Súborové behy sa vykonávajú na hlavnej inštancii, kde sú uložené nahrané súbory, rovnako ako každý beh File Upload Triggera.
 
 ## Generovanie widgetu pomocou AI
 
@@ -50,7 +84,7 @@ Prepnite **Edit** na vstup do režimu úprav, kde môžete widgety presúvať a 
 
 ## Ukladanie do vyrovnávacej pamäte a obnovenie
 
-Každý widget ukladá svoje naposledy vypočítané údaje do vyrovnávacej pamäte na serveri na konfigurovateľnú dobu životnosti (TTL). Kým je vyrovnávacia pamäť čerstvá, opätovné otvorenie dashboardu poskytne uložený výsledok namiesto opätovného spustenia workflowu. Vyrovnávacia pamäť sa nahradí na mieste vždy, keď sa údaje prepočítajú (jedna vyrovnávacia pamäť na widget), a automaticky sa zneplatní pri úprave workflowu daného widgetu.
+Každý widget ukladá svoje naposledy vypočítané údaje do vyrovnávacej pamäte na serveri na konfigurovateľnú dobu životnosti (TTL). Kým je vyrovnávacia pamäť čerstvá, opätovné otvorenie dashboardu poskytne uložený výsledok namiesto opätovného spustenia workflowu. Vyrovnávacia pamäť sa nahradí na mieste vždy, keď sa údaje prepočítajú (jedna vyrovnávacia pamäť na widget, plus jedna na záznam na [detailnej stránke](#detail-pages)), a automaticky sa zneplatní pri úprave workflowu daného widgetu.
 
 Pomocou tlačidla **Refresh** daného widgetu (alebo **Refresh** na paneli nástrojov) obídete vyrovnávaciu pamäť a okamžite prepočítate údaje.
 ## Zdieľanie
@@ -60,9 +94,10 @@ Vlastníci zdieľajú dashboard z jeho nastavení, a to s jednotlivými použív
 | Akcia | Vlastník | Write | Read |
 |--------|:-----:|:-----:|:----:|
 | Zobrazenie widgetov, ich obnovenie, použitie automatického obnovovania | ✓ | ✓ | ✓ |
+| Otváranie detailných stránok, spúšťanie spúšťacích widgetov | ✓ | ✓ | ✓ |
 | Pridávanie, klonovanie, odstraňovanie, premenovanie a zmena veľkosti widgetov; generovanie a doladenie pomocou AI; odškrtávanie položiek kontrolného zoznamu | ✓ | ✓ | |
 | Otvorenie workflow widgetu v editore | ✓ | ✓ | |
-| Premenovanie alebo odstránenie dashboardu, správa zdieľania | ✓ | | |
+| Premenovanie alebo odstránenie dashboardu, nastavenie formátu záznamu, správa zdieľania | ✓ | | |
 
 **Widgety sa vždy spúšťajú ako vlastník dashboardu.** Bez ohľadu na to, kto sa na ne pozerá, widget používa prihlasovacie údaje a globálne premenné vlastníka a jeho spustenia sa zobrazujú v histórii spustení a v trasách vlastníka. Členovia tímu tak vidia rovnaké údaje bez prístupu k účtom, ktoré za nimi stoja, a všetci diváci zdieľajú jeden výsledok uložený v cache pre každý widget. Widgety, ktoré pridá alebo naklonuje spolupracovník s právom zápisu, tiež patria vlastníkovi.
 

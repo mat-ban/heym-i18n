@@ -896,7 +896,8 @@
     "searchPlaceholder": "Cari dokumentasi...",
     "title": "Dokumentasi",
     "welcomeSubtitle": "Selamat datang di Heym.",
-    "welcomeTitle": "Dokumentasi"
+    "welcomeTitle": "Dokumentasi",
+    "pluginNoDoc": "Plugin ini tidak memiliki dokumentasi."
   },
   "drive": {
     "googleDrive": {
@@ -1923,7 +1924,17 @@
     "voiceCredentialDescription": "Digunakan untuk membacakan pesan dengan lantang dan mengaktifkan mode suara interaktif di chat.",
     "voiceLoadError": "Tidak dapat memuat suara. Periksa kredensial.",
     "voiceSelect": "Suara",
-    "work": "Heym Work"
+    "work": "Heym Work",
+    "pluginsIntro": "Plugin menambahkan node kustom (aksi dan Trigger) ke instance ini. Menginstal atau menghapus plugin menjalankan kode sisi server, sehingga dibatasi untuk operator yang tercantum dalam",
+    "loadingPlugins": "Memuat plugin…",
+    "pluginsDisabledTitle": "Plugin dinonaktifkan",
+    "pluginsDisabledHint": "Atur variabel lingkungan ini di backend, lalu mulai ulang:",
+    "installPluginZip": "Instal plugin (.zip)",
+    "noPluginsInstalled": "Belum ada plugin yang terinstal.",
+    "enablePlugin": "Aktifkan",
+    "disablePlugin": "Nonaktifkan",
+    "uninstallPlugin": "Copot",
+    "pluginOperationFailed": "Operasi plugin gagal"
   },
   "showcase": {
     "askAboutDoc": "Tanyakan Tentang Dokumen Ini",
@@ -2034,7 +2045,22 @@
     "goToFeature": "Buka {title}",
     "previousFeature": "Fitur sebelumnya",
     "readTheDocs": "Baca dokumentasi",
-    "startTour": "Mulai tur"
+    "startTour": "Mulai tur",
+    "heymWork": {
+      "step0": "Tim mengajukan permintaan di Heym Work",
+      "step1": "Heym membangun dan mengujinya",
+      "step2": "Terverifikasi, tanpa kanvas",
+      "step3": "Heym menjalankannya di latar belakang",
+      "prompt": "Periksa kontrak baru untuk klausul berisiko.",
+      "testing": "Menguji Workflow",
+      "verified": "Terverifikasi"
+    },
+    "skillZip": {
+      "step0": "Lepaskan zip keahlian di Chat",
+      "step1": "Chat membaca SKILL.md",
+      "step2": "Agen menyimpan keahlian tersebut",
+      "prompt": "Baca faktur dan tampilkan daftar item barisnya."
+    }
   },
   "teams": {
     "addMember": "Tambah Anggota",
@@ -2401,5 +2427,48 @@
     "sharedWithUsers": "Dibagikan ke pengguna",
     "stepsAndSubAgents": "Langkah Workflow & Sub-agen ({count})",
     "stop": "Hentikan"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Cari Workflow, tab, dokumentasi...",
+    "searchAria": "Pencarian palet perintah",
+    "ariaLabel": "Palet perintah",
+    "noResults": "Tidak ada hasil yang ditemukan",
+    "tryDifferentSearch": "Coba kata kunci pencarian lain",
+    "recent": "Terbaru",
+    "recentInFolder": "Terbaru · Di: {folder}",
+    "inFolder": "Di: {folder}",
+    "scheduledDate": "Terjadwal {date}",
+    "scheduledForDeletion": "Dijadwalkan untuk Dihapus",
+    "goToTab": "Buka tab",
+    "workflowTemplate": "Templat Workflow",
+    "nodeTemplate": "Templat Node",
+    "nodeType": "Node · {type}",
+    "documentation": "Dokumentasi",
+    "support": "Dukungan",
+    "contactSupport": "Hubungi Dukungan",
+    "watchRunbook": "Lihat Heym membangun & menjalankan Workflow",
+    "openDocs": "Buka dokumentasi Heym",
+    "getHelp": "Dapatkan bantuan dari tim Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work untuk tim bisnis, di heym.run",
+    "navigate": "Navigasi",
+    "select": "Pilih",
+    "click": "klik",
+    "newTab": "tab baru",
+    "oneItem": "{count} item",
+    "manyItems": "{count} item"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Plugin dinonaktifkan pada instance ini.",
+    "loadingDefinition": "Memuat definisi plugin...",
+    "notBound": "Node ini tidak terikat ke paket plugin.",
+    "noneInstalled": "Tidak ada plugin yang terinstal pada instance ini.",
+    "notInstalled": "Plugin \"{id}\" tidak terinstal pada instance ini.",
+    "installedButDisabled": "Plugin \"{name}\" terinstal tetapi dinonaktifkan.",
+    "noKindNodes": "Plugin \"{name}\" tidak menyediakan node {kind} apa pun.",
+    "loadErrorDetail": "Tidak dapat memuat plugin: {detail}",
+    "loadErrorHttp": "Tidak dapat memuat plugin (HTTP {status}).",
+    "loadError": "Tidak dapat memuat plugin.",
+    "enabled": "Diaktifkan"
   }
 }

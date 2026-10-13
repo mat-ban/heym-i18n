@@ -30,6 +30,9 @@ La pestanya **Vectorstores** gestiona els magatzems vectorials utilitzats pels n
 - **Delete sources** – Elimineu fitxers o grups d'origen concrets d'un magatzem, incloent-hi
   tot el que hi hagi afegit un workflow
 - **Edit store** – Modifiqueu el nom, la descripció o la credencial
+- **Cerca** – `POST /api/vector-stores/{id}/search` amb una `query` (i un `limit` d'1 a 20,
+  per defecte 5) retorna els fragments que retornaria la cerca d'un node RAG, amb la millor coincidència primer, cadascun amb la seva
+  puntuació i font. La pantalla RAG de Heym Work l'utilitza per provar la recuperació
 
 ## Compartició
 

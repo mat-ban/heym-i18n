@@ -142,6 +142,7 @@ item.value
 - `$executionId` – Identyfikator bieżącego wykonania (równy identyfikatorowi wpisu w [Historii wykonań](./execution-history.md), więc `/workflows/<id>/<executionId>` otwiera to uruchomienie na canvasie). **Tylko w czasie wykonania**: pusty w oknie podglądu wyrażeń; wypełniany wyłącznie podczas wykonywania workflow.
 - `$vars` – Zmienne lokalne workflow (dostęp przez `$vars.variableName`; aktualizowane przez węzeł `variable`)
 - `$global` – Trwały magazyn zmiennych globalnych (dostęp przez `$global.variableName`)
+- `$page.record` – Tylko dla workflow widżetów panelu: rekord strony szczegółów, na której znajduje się widżet, pobrany z parametru `?record=` panelu. Ma wartość `null` w panelu otwartym bez tego parametru oraz w oknie podglądu wyrażeń. Węzeł o etykiecie `page` ma pierwszeństwo. Zobacz [Strony szczegółów](../tabs/dashboard-tab.md#detail-pages).
 
 ### Zastosowanie $vars
 - `$vars.counter` – Dostęp do zmiennej o nazwie `counter`

@@ -1,6 +1,6 @@
 # MCP-fliken
 
-Fliken **MCP** konfigurerar integrering av Model Context Protocol (MCP). MCP gör att AI-klienter (Claude, Cursor och alla MCP-kompatibla verktyg) kan anropa Heym-workflows som verktyg.
+Fliken **MCP** konfigurerar integrering av Model Context Protocol (MCP). MCP gör att AI-klienter (Claude, ChatGPT, Gemini, Cursor och alla MCP-kompatibla verktyg) kan anropa Heym-workflows som verktyg.
 
 Heym stöder två lägen: en **standardserver** som exponerar alla MCP-aktiverade workflows under en enda endpoint, och **namngivna servrar** som ger varje logisk grupp av workflows sin egen dedikerade URL och API-nyckel.
 
@@ -24,6 +24,8 @@ Standardservern är alltid tillgänglig på `{origin}/api/mcp/sse`. Alla workflo
 
 - **API Key** – Använd MCP API-nyckeln för programmatiska anslutningar. Fliken kan kopiera en färdig JSON-konfiguration och innehåller en **Add to Cursor**-knapp för konfiguration av Cursor med ett klick.
 - **Claude** – Fliken visar MCP-serverns URL och konfigurationssteg för Claude. Lämna OAuth Client ID och Secret tomma; Claude registrerar sig automatiskt och autentiserar via Heym OAuth.
+- **ChatGPT** – Fliken visar MCP-serverns URL och inställningsstegen för en ChatGPT-app. Aktivera utvecklarläget, skapa en app med URL:en och välj OAuth; ChatGPT registrerar sig automatiskt.
+- **Gemini** – Fliken visar MCP-serverns URL och inställningsstegen för en anpassad Gemini-app: på gemini.google.com, gå till **Settings → Connected Apps → Add a custom app**, klistra in URL:en och lämna **Advanced features** stängt; Gemini registrerar sig automatiskt och autentiserar via Heym OAuth. När den är ansluten fungerar Heym även i Geminis mobilapp.
 
 ### MCP-växel per workflow
 
@@ -40,7 +42,8 @@ Avsnittet **Heym Capabilities** gör motorn från Chat-fliken till ett enda MCP-
 
 När det är aktiverat visas `heym_chat` i `tools/list` tillsammans med workflow-verktygen. En MCP-klient skickar ett meddelande i naturligt språk och Heym-motorn tar över därifrån, med samma förmågor som Chat-fliken har:
 
-- Bygga, redigera, inspektera och köra workflows via Workflow AI Builder
+- Bygga ett workflow, testköra det med exempelindata, åtgärda fel och avsluta när en körning lyckas (se [Byggläge](#build-mode))
+- Inspektera och köra dina befintliga workflows
 - Rapportera analys, senaste körningar och kommande cron-scheman
 - Rapportera körhistoriken för en workflow: hur många gånger den har körts, statusantal, när den kördes och på begäran indata, utdata och fel per nod för en enskild körning
 - Rapportera vad som körs just nu: hur många körningar som är aktiva, deras workflow-namn, hur länge var och en har kört, vilken nod var och en för närvarande befinner sig på och en länk till den live-körningen
@@ -50,6 +53,15 @@ När det är aktiverat visas `heym_chat` i `tools/list` tillsammans med workflow
 - Godkänna, redigera eller avvisa väntande human-in-the-loop-granskningar
 
 Förmågor som läggs till i Chat-fliken senare blir automatiskt tillgängliga via `heym_chat` — det finns ingen växel per förmåga att hålla synkroniserad.
+
+### Byggläge
+
+`heym_chat` kör alltid Chat-motorn i byggläge (build mode). I ett enda anrop kan assistenten spara ett nytt workflow, köra det med realistiska exempelindata, läsa körningsrapporten, åtgärda det som misslyckades och köra det igen, upp till fem testkörningar per anrop. När den senaste körningen av den senaste sparningen lyckas avslutar den med en sammanfattning på en mening, och svaret slutar med `Verified: the latest test run of the saved workflow passed.`
+
+- Testkörningar är riktiga körningar. Deras sidoeffekter inträffar och de visas i workflowets körningshistorik precis som alla andra körningar.
+- Sparningar följer redigerarens väg: en ändring i grafen behåller den föregående grafen i workflowets **Edit History**.
+- För att ändra ett workflow som den byggde tidigare fortsätter du tråden med samma `conversation_id`. Assistenten uppdaterar det workflowet istället för att skapa ett nytt, och ändrar bara workflows som du har behörighet att redigera.
+- När de fem testkörningarna är förbrukade stannar assistenten och förklarar vad som fortfarande misslyckas.
 
 Credentials stannar i gränssnittet: `heym_chat` listar, väljer eller skapar aldrig några. När den bygger eller redigerar en workflow lämnas nya noder som behöver en credential tomma och svaret namnger dem, så att de kan anges i editorn.
 
@@ -109,7 +121,7 @@ När en workflow växlas flyttas den till toppen av den tilldelade listan, så r
 Namngivna servrar stöder samma autentiseringsmetoder som standardservern:
 
 - **X-MCP-Key header** – Skicka serverns API-nyckel direkt (API-klienter, Cursor). Endast header: nycklar accepteras inte som en `?key=`-query-parameter, eftersom URL:er hamnar i åtkomstloggar, proxyloggar och webbläsarhistorik.
-- **Claude OAuth** – Lägg till serverns URL i Claude-integrationer; lämna credentials tomma och Claude registrerar via OAuth automatiskt. Bearer-token måste skickas i `Authorization`-headern, inte som `?token=`.
+- **Claude, ChatGPT och Gemini OAuth** – Lägg till serverns URL i klientens anslutningar eller anpassade appar; lämna credentials tomma så registrerar sig klienten automatiskt via OAuth. Bearer-token måste skickas i `Authorization`-headern, inte som `?token=`.
 - **Session token** – Utfärdas under SSE-handskakningen; begränsad till den specifika servern så att tokens från en namngiven server inte kan komma åt en annan. Denna kortlivade `?session=`-parameter påverkas inte.
 
 ### Ta bort en namngiven server
@@ -123,7 +135,7 @@ Klicka på **X**-ikonen i en serverkorts header. Borttagning tar bort servern oc
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Båda endpoints stöder SSE-transporten (GET, MCP spec 2024-11-05) och Streamable HTTP-transporten (POST, MCP spec 2025-03-26). Claude använder OAuth 2.1 / PKCE för säker inloggning på båda.
+Båda endpoints stöder SSE-transporten (GET, MCP spec 2024-11-05) och Streamable HTTP-transporten (POST, MCP spec 2025-03-26). Claude, ChatGPT och Gemini använder OAuth 2.1 / PKCE för säker inloggning på båda.
 
 ## Relaterat
 

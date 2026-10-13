@@ -28,7 +28,7 @@ Allegare file dal proprio [Drive](./drive-node.md) passando uno o più ID file d
 
 ## Configurazione
 
-Aggiungere una credenziale SMTP con server, porta, email e password. Server SMTP comuni:
+Aggiungere una credenziale SMTP con server, porta, email e password. Il mittente visibile è il campo facoltativo **From** della credenziale; se From è vuoto, l'invio avviene con il nome utente. Server SMTP comuni:
 
 - Gmail: `smtp.gmail.com`, porta 587 (richiesta App Password)
 - Outlook: `smtp.office365.com`, porta 587

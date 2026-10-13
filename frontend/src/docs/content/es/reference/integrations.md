@@ -583,8 +583,14 @@ La credencial de SMTP almacena los detalles de conexión al servidor de correo p
 |-------|-------------|
 | `host` | Nombre de host del servidor SMTP (p. ej. `smtp.gmail.com`) |
 | `port` | Puerto SMTP (habitualmente `587` para STARTTLS, `465` para SSL) |
-| `email` | Dirección de correo del remitente |
+| `email` | Nombre de usuario con el que inicia sesión el servidor SMTP; también es el remitente visible cuando `from` está vacío |
 | `password` | Contraseña SMTP o App Password |
+
+### Campos opcionales
+
+| Campo | Descripción |
+|-------|-------------|
+| `from` (`smtp_from`) | Dirección de remitente (From) visible. Déjelo en blanco para enviar como `email`. El servidor sigue iniciando sesión como `email`, por lo que esa cuenta debe tener permiso para enviar como esta dirección (en Gmail, un alias verificado de **Enviar mensaje como**). |
 
 ### Proveedores SMTP habituales
 

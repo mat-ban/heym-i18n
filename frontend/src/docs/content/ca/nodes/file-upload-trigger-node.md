@@ -33,6 +33,13 @@ El node s'executa en dues fases:
 
 Al canvas, **Run Workflow** mostra el `curl` emès al panell de depuració amb un botó de còpia.
 
+## Execució des de Heym
+
+Dos llocs executen aquest Workflow directament sobre un fitxer, mitjançant el mateix procés de generació i pujada:
+
+- El [Quick Drawer](../reference/quick-drawer.md) mostra una zona per deixar-hi anar el fitxer. Aquestes execucions s'etiqueten com a `Quick Drawer` a l'historial.
+- Un [giny d'execució](../tabs/dashboard-tab.md#run-widgets) en un tauler executa el Workflow sobre cada fitxer que s'hi deixi anar. Aquestes execucions s'etiqueten com a `dashboard`.
+
 ## Paràmetres
 
 | Paràmetre | Tipus | Per defecte | Descripció |

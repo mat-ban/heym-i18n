@@ -4,7 +4,7 @@ Okno dialogowe Ustawienia umożliwia zarządzanie profilem, ustawianie trwałych
 
 ## Otwieranie okna dialogowego
 
-Należy kliknąć **awatar i nazwę** w prawym górnym rogu nagłówka. Okno dialogowe otwiera się z następującymi zakładkami: **Profil**, **Bezpieczeństwo**, **Głos**, **Domyślne ustawienia AI** oraz **Obserwowalność**. Administratorzy instancji widzą również zakładkę **SSO**.
+Należy kliknąć **awatar i nazwę** w prawym górnym rogu nagłówka. Okno dialogowe otwiera się z następującymi zakładkami: **Profil**, **Bezpieczeństwo**, **Głos**, **Domyślne ustawienia AI** oraz **Obserwowalność**. Administratorzy instancji widzą również zakładki **SSO**, **Heym Work** oraz **Instances**.
 
 ## Zakładka Profil
 
@@ -100,6 +100,10 @@ Zakładka Observability wyświetla status tylko do odczytu [OpenTelemetry Tracin
 ## Zakładka SSO
 
 Widoczna tylko dla administratorów instancji — kont wymienionych w `HEYM_ADMIN_EMAILS`. Ta zakładka łączy Heym z zewnętrznym dostawcą OpenID Connect, aby użytkownicy logowali się za pomocą kont, które już posiadają. Należy wprowadzić adres URL wystawcy i dane logowania klienta, skopiować adres URI przekierowania (tylko do odczytu) do swojego dostawcy i uruchomić **Test połączenia** przed włączeniem. Po pomyślnym teście można stąd wyłączyć logowanie hasłem. Pełna konfiguracja znajduje się w [Single Sign-On](./sso.md).
+
+## Zakładka Heym Work
+
+Administratorzy instancji łączą tutaj [Heym Work](./heym-work.md), interfejs dla zespołów biznesowych: jego adres, wyświetlany jednorazowo klucz integracji oraz przełącznik **Enable Heym Work**. Zakładka pokazuje również, kiedy Heym Work ostatnio się zameldował, jego wersję oraz status licencji. Zobacz [Łączenie Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Zakładka Instances
 

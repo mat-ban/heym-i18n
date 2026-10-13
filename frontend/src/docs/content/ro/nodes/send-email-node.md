@@ -31,7 +31,7 @@ inaccesibil cauzează eșecul nodului în loc să trimită un email parțial.
 
 ## Configurare
 
-Adăugați o acreditare SMTP cu server, port, email și parolă. Servere SMTP comune:
+Adăugați o acreditare SMTP cu server, port, email și parolă. Expeditorul vizibil este câmpul opțional **From** al acreditării; dacă From este lăsat gol, trimiterea se face cu numele de utilizator. Servere SMTP comune:
 
 - Gmail: `smtp.gmail.com`, port 587 (necesită App Password)
 - Outlook: `smtp.office365.com`, port 587

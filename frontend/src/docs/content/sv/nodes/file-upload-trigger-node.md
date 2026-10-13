@@ -33,6 +33,13 @@ Noden körs i två faser:
 
 På canvas visar **Kör Workflow** den genererade `curl`-kommandot i debugpanelen med en kopieringsknapp.
 
+## Köra från Heym
+
+På två ställen kan ett sådant Workflow köras direkt på en fil, via samma genererings- och uppladdningsflöde:
+
+- [Quick Drawer](../reference/quick-drawer.md) visar en släppzon för filen. Dessa körningar taggas med `Quick Drawer` i historiken.
+- En [körwidget](../tabs/dashboard-tab.md#run-widgets) på en dashboard kör Workflowet för varje släppt fil. Dessa körningar taggas med `dashboard`.
+
 ## Parametrar
 
 | Parameter | Typ | Standard | Beskrivning |

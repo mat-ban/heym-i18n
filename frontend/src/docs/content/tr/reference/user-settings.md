@@ -4,7 +4,7 @@ Ayarlar iletişim penceresi; profilinizi yönetmenize, kalıcı AI talimatları 
 
 ## İletişim Penceresini Açma
 
-Başlığın sağ üst köşesindeki **avatarınıza ve adınıza** tıklayın. İletişim penceresi şu sekmelerle açılır: **Profile**, **Security**, **Voice**, **AI Defaults** ve **Observability**. Instance yöneticileri ayrıca bir **SSO** sekmesi görür.
+Başlığın sağ üst köşesindeki **avatarınıza ve adınıza** tıklayın. İletişim penceresi şu sekmelerle açılır: **Profile**, **Security**, **Voice**, **AI Defaults** ve **Observability**. Instance yöneticileri ayrıca **SSO**, **Heym Work** ve **Instances** sekmelerini görür.
 
 ## Profile Sekmesi
 
@@ -101,6 +101,10 @@ Observability sekmesi, bu instance için [OpenTelemetry Tracing](./opentelemetry
 ## SSO Sekmesi
 
 Yalnızca instance yöneticilerine görünür — `HEYM_ADMIN_EMAILS` içinde listelenen hesaplar. Bu sekme, Heym'i harici bir OpenID Connect sağlayıcısına bağlar; böylece kişiler hâlihazırda sahip oldukları hesaplarla oturum açabilir. Bir issuer URL'si ve client kimlik bilgilerini girin, salt okunur redirect URI'yi sağlayıcınıza kopyalayın ve etkinleştirmeden önce **Test connection** çalıştırın. Test başarılı olduktan sonra parola ile oturum açma buradan kapatılabilir. Tam kurulum için [Single Sign-On](./sso.md) sayfasına bakın.
+
+## Heym Work Sekmesi
+
+Instance yöneticileri iş ekipleri arayüzü olan [Heym Work](./heym-work.md) bağlantısını buradan yapar: adresi, bir kez gösterilen entegrasyon anahtarı ve **Enable Heym Work** anahtarı. Sekme ayrıca Heym Work'ün en son ne zaman bildirimde bulunduğunu, sürümünü ve lisans durumunu gösterir. Bkz. [Heym Work'ü Bağlama](./heym-work.md#connecting-heym-work).
 
 ## Instances Sekmesi
 

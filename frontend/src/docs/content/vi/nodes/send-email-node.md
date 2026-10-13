@@ -28,7 +28,7 @@ Node **Gửi Email** gửi email qua SMTP. Sử dụng node này cho thông báo
 
 ## Thiết lập
 
-Thêm thông tin xác thực SMTP với server, port, email và password. Các SMTP server phổ biến:
+Thêm thông tin xác thực SMTP với server, port, email và password. Người gửi hiển thị là trường tùy chọn **From** của thông tin xác thực; nếu để trống From, email sẽ được gửi dưới tên người dùng. Các SMTP server phổ biến:
 
 - Gmail: `smtp.gmail.com`, port 587 (yêu cầu App Password)
 - Outlook: `smtp.office365.com`, port 587

@@ -4,7 +4,7 @@ El diálogo de Configuración permite gestionar su perfil, establecer instruccio
 
 ## Abrir el diálogo
 
-Haga clic en **su avatar y nombre** en la esquina superior derecha del encabezado. El diálogo se abre con estas pestañas: **Perfil**, **Seguridad**, **Voz**, **Valores predeterminados de IA** y **Observabilidad**. Los administradores de la instancia también ven una pestaña **SSO**.
+Haga clic en **su avatar y nombre** en la esquina superior derecha del encabezado. El diálogo se abre con estas pestañas: **Perfil**, **Seguridad**, **Voz**, **Valores predeterminados de IA** y **Observabilidad**. Los administradores de la instancia también ven las pestañas **SSO**, **Heym Work** e **Instances**.
 
 ## Pestaña Perfil
 
@@ -101,6 +101,10 @@ La pestaña Observability muestra el estado de solo lectura de [OpenTelemetry Tr
 ## Pestaña SSO
 
 Visible solo para los administradores de la instancia — las cuentas listadas en `HEYM_ADMIN_EMAILS`. Esta pestaña conecta Heym con un proveedor externo de OpenID Connect para que las personas inicien sesión con las cuentas que ya tienen. Introduzca una URL de issuer y las credenciales de cliente, copie la URI de redirección de solo lectura en su proveedor y ejecute **Test connection** antes de habilitarlo. El inicio de sesión con contraseña puede desactivarse desde aquí una vez que la prueba sea satisfactoria. Consulte [Single Sign-On](./sso.md) para la configuración completa.
+
+## Pestaña Heym Work
+
+Los administradores de la instancia conectan aquí [Heym Work](./heym-work.md), la interfaz para equipos de negocio: su dirección, una clave de integración que se muestra una sola vez y el interruptor **Enable Heym Work**. La pestaña también muestra cuándo se comunicó Heym Work por última vez, su versión y el estado de su licencia. Consulte [Conectar Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Pestaña Instances
 

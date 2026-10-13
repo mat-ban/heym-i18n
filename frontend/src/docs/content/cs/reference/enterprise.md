@@ -16,6 +16,10 @@ Heym je zdarma k použití a k self-hostingu v rámci své source-available lice
 | **Prioritní podpora a SLA** | Garantované doby odezvy a prioritní řešení problémů |
 | **Vývoj na zakázku** | Vývoj funkcí a úpravy přizpůsobené požadavkům Vaší organizace |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) je rozhraní pro obchodní týmy, které běží nad platformou Heym. Lidé popíší úkol, odpoví na několik otázek a získají otestovaný workflow, pracují ze stránek vytvořených přímo pro ně a reagují na kontroly — s jednotným přihlášením (SSO), rolemi Owner, Editor a Viewer a jménem u každého spuštění. Běží vedle vašeho Heym s vlastní licencí; připojte jej v **Settings → Heym Work**. Zjistěte více a požádejte o zkušební verzi na [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Produkční podpora agentů
 
 Tým Heym Vám pomáhá navrhovat, sestavovat a zpevňovat agenty a workflow pro Vaše obchodní procesy. To zahrnuje revizi Vašich požadavků, doporučení konfigurací uzlů a zajištění toho, aby Vaše workflow dodržovaly best practices pro spolehlivost, observability a governance.
@@ -68,3 +72,4 @@ Kontaktujte enterprise tým na **enterprise@heym.run** pro dotazy k licencován�
 - [Paralelní provádění](./parallel-execution.md) — Model provádění s více workery
 - [Teams](./teams.md) — Týmová spolupráce a sdílení zdrojů
 - [Kompletní sada funkcí](./features.md) — Úplný přehled možností Heym
+- [Heym Work](./heym-work.md): rozhraní pro obchodní týmy a jak jej připojit

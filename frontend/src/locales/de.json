@@ -274,7 +274,17 @@
       "intro": "Heym Work ist eine zweite Benutzeroberfläche für geschäftliche Teams. Benutzer melden sich über Heym an, und alle Aufträge laufen hier.",
       "never": "Nie",
       "learnMore": "Mehr erfahren"
-    }
+    },
+    "pluginsIntro": "Plugins fügen dieser Instanz benutzerdefinierte Knoten (Aktionen und Trigger) hinzu. Das Installieren oder Entfernen eines Plugins führt serverseitigen Code aus und ist daher auf Administratoren beschränkt, die aufgeführt sind in",
+    "loadingPlugins": "Plugins werden geladen…",
+    "pluginsDisabledTitle": "Plugins sind deaktiviert",
+    "pluginsDisabledHint": "Setzen Sie diese Umgebungsvariablen im Backend und starten Sie neu:",
+    "installPluginZip": "Plugin installieren (.zip)",
+    "noPluginsInstalled": "Noch keine Plugins installiert.",
+    "enablePlugin": "Aktivieren",
+    "disablePlugin": "Deaktivieren",
+    "uninstallPlugin": "Deinstallieren",
+    "pluginOperationFailed": "Plugin-Vorgang fehlgeschlagen"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Tour starten",
     "readTheDocs": "Dokumentation lesen",
     "previousFeature": "Vorherige Funktion",
-    "goToFeature": "Zu {title} wechseln"
+    "goToFeature": "Zu {title} wechseln",
+    "heymWork": {
+      "step0": "Ein Team fragt in Heym Work an",
+      "step1": "Heym erstellt und testet den Workflow",
+      "step2": "Verifiziert, ganz ohne Canvas",
+      "step3": "Heym führt ihn im Hintergrund aus",
+      "prompt": "Neue Verträge auf risikoreiche Klauseln prüfen.",
+      "testing": "Workflow wird getestet",
+      "verified": "Verifiziert"
+    },
+    "skillZip": {
+      "step0": "Skill-ZIP im Chat ablegen",
+      "step1": "Chat liest SKILL.md",
+      "step2": "Der Agent behält den Skill",
+      "prompt": "Rechnung auslesen und Positionen auflisten."
+    }
   },
   "canvas": {
     "nodes": "Knoten",
@@ -2400,6 +2425,50 @@
       "nodes": "Knoten",
       "reference": "Referenz",
       "tabs": "Reiter"
-    }
+    },
+    "pluginNoDoc": "Für dieses Plugin ist keine Dokumentation vorhanden."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Workflows, Tabs, Dokumentation durchsuchen...",
+    "searchAria": "Befehlspalette durchsuchen",
+    "ariaLabel": "Befehlspalette",
+    "noResults": "Keine Ergebnisse gefunden",
+    "tryDifferentSearch": "Versuchen Sie einen anderen Suchbegriff",
+    "recent": "Zuletzt verwendet",
+    "recentInFolder": "Zuletzt verwendet · In: {folder}",
+    "inFolder": "In: {folder}",
+    "scheduledDate": "Geplant {date}",
+    "scheduledForDeletion": "Zur Löschung vorgemerkt",
+    "goToTab": "Gehe zu Tab",
+    "workflowTemplate": "Workflow-Vorlage",
+    "nodeTemplate": "Knoten-Vorlage",
+    "nodeType": "Knoten · {type}",
+    "documentation": "Dokumentation",
+    "support": "Support",
+    "contactSupport": "Support kontaktieren",
+    "watchRunbook": "Erleben Sie, wie Heym einen Workflow erstellt & ausführt",
+    "openDocs": "Heym-Dokumentation öffnen",
+    "getHelp": "Hilfe vom Heym-Team erhalten",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work für Unternehmensteams auf heym.run",
+    "navigate": "Navigieren",
+    "select": "Auswählen",
+    "click": "Klick",
+    "newTab": "neuer Tab",
+    "oneItem": "{count} Eintrag",
+    "manyItems": "{count} Einträge"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Plugins sind auf dieser Instanz deaktiviert.",
+    "loadingDefinition": "Plugin-Definition wird geladen...",
+    "notBound": "Dieser Knoten ist keinem Plugin-Paket zugeordnet.",
+    "noneInstalled": "Auf dieser Instanz sind keine Plugins installiert.",
+    "notInstalled": "Plugin „{id}“ ist auf dieser Instanz nicht installiert.",
+    "installedButDisabled": "Plugin „{name}“ ist installiert, aber deaktiviert.",
+    "noKindNodes": "Plugin „{name}“ stellt keine {kind}-Knoten bereit.",
+    "loadErrorDetail": "Plugins konnten nicht geladen werden: {detail}",
+    "loadErrorHttp": "Plugins konnten nicht geladen werden (HTTP {status}).",
+    "loadError": "Plugins konnten nicht geladen werden.",
+    "enabled": "Aktiviert"
   }
 }

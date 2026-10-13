@@ -32,7 +32,7 @@ skicka ett ofullständigt e-postmeddelande.
 
 ## Konfiguration
 
-Lägg till en SMTP-autentiseringsuppgift med server, port, e-post och lösenord. Vanliga SMTP-servrar:
+Lägg till en SMTP-autentiseringsuppgift med server, port, e-post och lösenord. Den synliga avsändaren är autentiseringsuppgiftens valfria fält **From**; om From lämnas tomt skickas mejlet som användarnamnet. Vanliga SMTP-servrar:
 
 - Gmail: `smtp.gmail.com`, port 587 (App Password krävs)
 - Outlook: `smtp.office365.com`, port 587

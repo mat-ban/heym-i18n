@@ -28,7 +28,7 @@
 
 ## Ρύθμιση
 
-Προσθέστε ένα διαπιστευτήριο SMTP με server, port, email και password. Συνήθεις SMTP servers:
+Προσθέστε ένα διαπιστευτήριο SMTP με server, port, email και password. Ο ορατός αποστολέας είναι το προαιρετικό πεδίο **From** του διαπιστευτηρίου· αν το From είναι κενό, η αποστολή γίνεται ως το όνομα χρήστη. Συνήθεις SMTP servers:
 
 - Gmail: `smtp.gmail.com`, port 587 (Απαιτείται App Password)
 - Outlook: `smtp.office365.com`, port 587

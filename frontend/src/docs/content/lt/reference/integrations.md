@@ -583,8 +583,14 @@ SMTP kredencialas saugo el. pašto serverio prisijungimo duomenis, skirtus išsi
 |--------|-----------|
 | `host` | SMTP serverio pavadinimas (pvz., `smtp.gmail.com`) |
 | `port` | SMTP prievadas (paprastai `587` STARTTLS, `465` SSL) |
-| `email` | Siuntėjo el. pašto adresas |
+| `email` | Naudotojo vardas, kuriuo prisijungia SMTP serveris; taip pat matomas siuntėjas, kai `from` yra tuščias |
 | `password` | SMTP slaptažodis arba programos slaptažodis |
+
+### Pasirinktiniai laukai
+
+| Laukas | Aprašymas |
+|--------|-----------|
+| `from` (`smtp_from`) | Matomas siuntėjo (From) adresas. Palikite tuščią, kad būtų siunčiama kaip `email`. Serveris vis tiek prisijungia kaip `email`, todėl šiai paskyrai turi būti leista siųsti iš šio adreso („Gmail“ – patvirtintas **Siųsti laiškus kaip** pseudonimas). |
 
 ### Dažniausiai naudojami SMTP tiekėjai
 

@@ -1,6 +1,6 @@
 # MCP Tab
 
-**MCP** 标签页用于配置 Model Context Protocol (MCP) 集成。MCP 允许 AI 客户端（Claude、Cursor 以及任何兼容 MCP 的工具）将您的 Heym workflow 作为工具进行调用。
+**MCP** 标签页用于配置 Model Context Protocol (MCP) 集成。MCP 允许 AI 客户端（Claude、ChatGPT、Gemini、Cursor 以及任何兼容 MCP 的工具）将您的 Heym workflow 作为工具进行调用。
 
 Heym 支持两种模式：**默认服务器**，在单一 endpoint 下暴露所有启用了 MCP 的 workflow；以及**命名服务器**，为每个逻辑 workflow 分组提供专属 URL 和 API key。
 
@@ -24,6 +24,8 @@ Heym 支持两种模式：**默认服务器**，在单一 endpoint 下暴露所�
 
 - **API Key** – 使用 MCP API key 进行程序化连接。该标签页可复制一份即用型 JSON 配置，并提供 **Add to Cursor** 按钮以实现一键 Cursor 设置。
 - **Claude** – 该标签页显示 MCP 服务器 URL 以及 Claude 的设置步骤。将 OAuth Client ID 和 Secret 留空；Claude 会自动注册并通过 Heym OAuth 进行身份验证。
+- **ChatGPT** – 该标签页会显示适用于 ChatGPT 应用的 MCP 服务器 URL 和设置步骤。开启开发者模式（Developer mode），使用该 URL 创建应用并选择 OAuth；ChatGPT 会自动完成注册。
+- **Gemini** – 该标签页会显示适用于 Gemini 自定义应用的 MCP 服务器 URL 和设置步骤：在 gemini.google.com 中依次打开 **Settings → Connected Apps → Add a custom app**，粘贴 URL 并保持 **Advanced features** 关闭；Gemini 会自动注册并通过 Heym OAuth 进行身份验证。连接后，Heym 也可在 Gemini 移动应用中使用。
 
 ### Workflow MCP 开关
 
@@ -40,7 +42,8 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 
 启用后，`heym_chat` 会与您的 workflow 工具一同出现在 `tools/list` 中。MCP 客户端发送一条自然语言消息，Heym 引擎便会接管后续处理，具备与 Chat 标签页相同的能力：
 
-- 通过 Workflow AI Builder 构建、编辑、检查并运行 workflow
+- 构建 workflow，使用示例输入进行测试运行，修复问题，并在运行通过时完成（参见[构建模式](#build-mode)）
+- 检查并运行您现有的 workflow
 - 报告分析数据、近期执行记录以及即将到来的 cron 计划
 - 报告单个 workflow 的运行历史：运行次数、状态计数、运行时间，并可按需提供单次运行的输入、输出以及各节点错误
 - 报告当前正在运行的内容：活跃执行数量、其 workflow 名称、各自已运行时长、当前所在节点，以及实时运行的链接
@@ -50,6 +53,15 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 - 批准、编辑或拒绝待处理的人工介入审核
 
 后续添加到 Chat 标签页的能力会自动通过 `heym_chat` 可用——无需逐项同步开关。
+
+### 构建模式
+
+`heym_chat` 始终以构建模式（build mode）运行 Chat 引擎。在单次调用中，助手可以保存新 workflow、使用真实的示例输入运行它、读取运行报告、修复失败之处并再次运行，每次调用最多可进行五次测试运行。当最新保存版本的最新一次运行通过时，它会以一句话总结收尾，且回复以 `Verified: the latest test run of the saved workflow passed.` 结束。
+
+- 测试运行是真实的运行。它们的副作用会实际发生，并且会像其他运行一样出现在 workflow 的运行历史记录中。
+- 保存操作遵循编辑器的路径：对图结构的更改会将先前的图保留在 workflow 的编辑历史（**Edit History**）中。
+- 若要修改其先前构建的 workflow，请使用相同的 `conversation_id` 继续该对话线程。助手会更新该 workflow 而不是新建一个，并且仅会修改您有权编辑的 workflow。
+- 当五次测试运行用尽时，助手会停止并说明仍然失败的原因。
 
 凭证保留在 UI 中：`heym_chat` 从不列出、选择或创建凭证。当它构建或编辑 workflow 时，需要凭证的新节点会留空，并在回复中指明这些节点，以便您在编辑器中设置。
 
@@ -110,7 +122,7 @@ Workflow 分配是按服务器进行的，独立于默认服务器的切换。�
 命名服务器支持与默认服务器相同的身份验证方法：
 
 - **X-MCP-Key header** – 直接传递服务器的 API key（API 客户端、Cursor）。仅限 header：密钥不接受作为 `?key=` 查询参数，因为 URL 会出现在访问日志、代理日志和浏览器历史记录中。
-- **Claude OAuth** – 将服务器 URL 添加到 Claude 集成中；将凭据留空，Claude 会通过 OAuth 自动注册。bearer token 必须通过 `Authorization` header 传递，而非 `?token=`。
+- **Claude、ChatGPT 和 Gemini OAuth** – 将服务器 URL 添加到客户端的连接器或自定义应用中；将凭据留空，客户端会通过 OAuth 自动注册。bearer token 必须通过 `Authorization` header 传递，而非 `?token=`。
 - **Session token** – 在 SSE 握手期间签发；作用域限定于特定服务器，因此来自一个命名服务器的 token 无法访问另一个。这个短生命周期的 `?session=` 参数不受影响。
 
 ### 删除命名服务器
@@ -124,7 +136,7 @@ Workflow 分配是按服务器进行的，独立于默认服务器的切换。�
 | 默认 | `{origin}/api/mcp/sse` |
 | 命名 | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-两个 endpoints 均支持 SSE 传输（GET，MCP 规范 2024-11-05）和 Streamable HTTP 传输（POST，MCP 规范 2025-03-26）。Claude 在两者上均使用 OAuth 2.1 / PKCE 进行安全登录。
+两个 endpoints 均支持 SSE 传输（GET，MCP 规范 2024-11-05）和 Streamable HTTP 传输（POST，MCP 规范 2025-03-26）。Claude、ChatGPT 和 Gemini 在两者上均使用 OAuth 2.1 / PKCE 进行安全登录。
 
 ## 相关
 

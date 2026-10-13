@@ -1,6 +1,6 @@
 # MCP vahekaart
 
-**MCP** vahekaart konfigureerib Model Context Protocol (MCP) integratsiooni. MCP võimaldab AI-klienditel (Claude, Cursor ja mis tahes MCP-ühilduv tööriist) kutsuda teie Heymi workflow'sid tööriistadena.
+**MCP** vahekaart konfigureerib Model Context Protocol (MCP) integratsiooni. MCP võimaldab AI-klienditel (Claude, ChatGPT, Gemini, Cursor ja mis tahes MCP-ühilduv tööriist) kutsuda teie Heymi workflow'sid tööriistadena.
 
 Heym toetab kahte režiimi: **vaikeserver**, mis eksponeerib kõik MCP-lubatud workflow'd ühe endpoint'i all, ja **nimega serverid**, mis annavad igale workflow'de loogilisele grupile omaette URL-i ja API võtme.
 
@@ -24,6 +24,8 @@ Vaikeserver on alati saadaval aadressil `{origin}/api/mcp/sse`. Kõik workflow'd
 
 - **API võti** – Kasutage MCP API võtit programmiliste ühenduste jaoks. Vahekaart suudab kopeerida kasutamisvalmis JSON-konfiguratsiooni ja sisaldab nuppu **Lisa Cursorile** ühe klikiga Cursori seadistamiseks.
 - **Claude** – Vahekaart näitab MCP serveri URL-i ja seadistamise samme Claude'i jaoks. Jätke OAuth Client ID ja Secret tühjaks; Claude registreerub automaatselt ja autendib end Heymi OAuthi kaudu.
+- **ChatGPT** – Vahekaart näitab MCP serveri URL-i ja ChatGPT rakenduse seadistamise samme. Lülitage sisse arendajarežiim (Developer mode), looge URL-iga rakendus ja valige OAuth; ChatGPT registreerub automaatselt.
+- **Gemini** – Vahekaart näitab MCP serveri URL-i ja Gemini kohandatud rakenduse seadistamise samme: avage aadressil gemini.google.com **Settings → Connected Apps → Add a custom app**, kleepige URL ja jätke **Advanced features** suletuks; Gemini registreerub automaatselt ja autendib Heym OAuthi kaudu. Pärast ühendamist töötab Heym ka Gemini mobiilirakenduses.
 
 ### Workflow MCP lüliti
 
@@ -40,7 +42,8 @@ Jaotis **Heymi võimekused** muudab Chat vahekaardi mootori üheks MCP tööriis
 
 Kui see on sisse lülitatud, kuvatakse `heym_chat` loendis `tools/list` koos teie workflow tööriistadega. MCP klient saadab ühe loomulikus keeles sõnumi ja Heymi mootor võtab sealt edasi, omades samu võimekusi, mis Chat vahekaardil:
 
-- Workflow'de loomine, muutmine, uurimine ja käivitamine Workflow AI Builderi kaudu
+- Workflow loomine, selle testkäivitamine näidissisenditega, parandamine ja lõpetamine, kui käivitus õnnestub (vt [Ehitusrežiim](#build-mode))
+- Olemasolevate workflow'de uurimine ja käivitamine
 - Analüütika, hiljutiste käivituste ja tulevaste cron ajakavade raporteerimine
 - Ühe workflow käivituste ajaloo raporteerimine: mitu korda see käivitus, olekute loendused, millal see käivitus, ja nõudmisel ühe käivituse sisendid, väljundid ja sõlmede kaupa vead
 - Praegu toimuvate asjade raporteerimine: mitu käivitust on aktiivsed, nende workflow nimed, kui kaua igaüks on töötanud, millisel sõlmel see parasjagu on, ja link reaalajas käivitusele
@@ -50,6 +53,15 @@ Kui see on sisse lülitatud, kuvatakse `heym_chat` loendis `tools/list` koos tei
 - Ootel inimkonna-tsüklis ülevaatuste kinnitamine, muutmine või tagasilükkamine
 
 Hiljem Chat vahekaardile lisatud võimekused muutuvad automaatselt kättesaadavaks ka `heym_chat` kaudu — ühtegi võimekuse kaupa lülitit pole vaja sünkroonida.
+
+### Ehitusrežiim
+
+`heym_chat` käivitab Chat mootori alati ehitusrežiimis (build mode). Ühe väljakutsega saab assistent salvestada uue workflow, käivitada selle realistlike näidissisenditega, lugeda käivitusaruannet, parandada ebaõnnestunud osad ja käivitada selle uuesti – kuni viis testkäivitust väljakutse kohta. Kui viimase salvestuse viimane käivitus õnnestub, lõpetab see ühelauselise kokkuvõttega ning vastus lõpeb tekstiga `Verified: the latest test run of the saved workflow passed.`
+
+- Testkäivitused on päris käivitused. Nende kõrvalmõjud toimuvad päriselt ja need ilmuvad workflow käivitusajaloos nagu iga teine käivitus.
+- Salvestamised järgivad redaktori teekonda: graafi muudatus säilitab eelmise graafi workflow muutmise ajaloos (**Edit History**).
+- Varem loodud workflow muutmiseks jätkake lõime sama `conversation_id`-ga. Assistent uuendab seda workflow'd uue loomise asemel ning muudab ainult neid workflow'sid, mida teil on õigus muuta.
+- Kui viis testkäivitust on ära kasutatud, assistent peatub ja selgitab, mis endiselt ebaõnnestub.
 
 Mandaadid jäävad kasutajaliidesesse: `heym_chat` ei loetle, vali ega loo neid kunagi. Kui see ehitab või muudab workflow'd, jäetakse mandaati vajavad uued sõlmed tühjaks ja vastuses nimetatakse need, et saaksite need redaktoris seada.
 
@@ -109,7 +121,7 @@ Workflow ümberlülitamine viib selle määratud loendi ülaossa, nii et äsja m
 Nimega serverid toetavad samu autentimismeetodeid nagu vaikeserver:
 
 - **X-MCP-Key header** – Edastage serveri API key otse (API kliendid, Cursor). Ainult header: keysid ei aktsepteerita `?key=` päringuparameetrina, sest URL-id satuvad juurdepääsulogidesse, puhverserveri logidesse ja brauseri ajalukku.
-- **Claude OAuth** – Lisage serveri URL Claude'i integratsioonidesse; jätke mandaadid tühjaks ja Claude registreerub automaatselt OAuth kaudu. Bearer token peab liikuma `Authorization` headeris, mitte `?token=` kujul.
+- **Claude, ChatGPT ja Gemini OAuth** – Lisage serveri URL kliendi konnektoritesse või kohandatud rakendustesse; jätke mandaadid tühjaks ja klient registreerub automaatselt OAuth kaudu. Bearer token peab liikuma `Authorization` headeris, mitte `?token=` kujul.
 - **Session token** – Väljastatakse SSE kätlemise ajal; piiratud konkreetse serveriga, nii et ühe nimega serveri tokenid ei pääse teisele juurde. See lühiajaline `?session=` parameeter ei ole mõjutatud.
 
 ### Nimega serveri kustutamine
@@ -123,7 +135,7 @@ Klõpsake serveri kaardi päises **X** ikoonil. Kustutamine eemaldab serveri ja 
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Mõlemad endpointid toetavad SSE transporti (GET, MCP spec 2024-11-05) ja Streamable HTTP transporti (POST, MCP spec 2025-03-26). Claude kasutab mõlemal turvaliseks sisselogimiseks OAuth 2.1 / PKCE.
+Mõlemad endpointid toetavad SSE transporti (GET, MCP spec 2024-11-05) ja Streamable HTTP transporti (POST, MCP spec 2025-03-26). Claude, ChatGPT ja Gemini kasutavad mõlemal turvaliseks sisselogimiseks OAuth 2.1 / PKCE.
 
 ## Seotud
 

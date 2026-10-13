@@ -1,6 +1,6 @@
 # Karta MCP
 
-Karta **MCP** konfiguruje integráciu Model Context Protocol (MCP). MCP umožňuje AI klientom (Claude, Cursor a akýkoľvek nástroj kompatibilný s MCP) volať Vaše workflowy Heym ako nástroje.
+Karta **MCP** konfiguruje integráciu Model Context Protocol (MCP). MCP umožňuje AI klientom (Claude, ChatGPT, Gemini, Cursor a akýkoľvek nástroj kompatibilný s MCP) volať Vaše workflowy Heym ako nástroje.
 
 Heym podporuje dva režimy: **predvolený server**, ktorý sprístupňuje všetky workflowy s povoleným MCP pod jedným endpointom, a **pomenované servery**, ktoré každú logickú skupinu workflowov sprístupňujú pod vlastnou vyhradenou URL a API kľúčom.
 
@@ -24,6 +24,8 @@ Predvolený server je vždy dostupný na adrese `{origin}/api/mcp/sse`. Všetky 
 
 - **API Key** – MCP API kľúč použite na programové pripojenia. Karta dokáže skopírovať pripravenú JSON konfiguráciu a obsahuje tlačidlo **Add to Cursor** na jednoklikové nastavenie Cursor.
 - **Claude** – Karta zobrazuje URL MCP servera a kroky nastavenia pre Claude. Polia OAuth Client ID a Secret nechajte prázdne; Claude sa zaregistruje automaticky a autentifikuje sa cez Heym OAuth.
+- **ChatGPT** – Karta zobrazuje URL servera MCP a kroky nastavenia pre aplikáciu ChatGPT. Zapnite vývojársky režim, vytvorte aplikáciu s danou URL a zvoľte OAuth; ChatGPT sa zaregistruje automaticky.
+- **Gemini** – Karta zobrazuje URL servera MCP a kroky nastavenia pre vlastnú aplikáciu Gemini: na gemini.google.com prejdite na **Settings → Connected Apps → Add a custom app**, vložte URL a sekciu **Advanced features** nechajte zatvorenú; Gemini sa automaticky zaregistruje a overí cez Heym OAuth. Po pripojení funguje Heym aj v mobilnej aplikácii Gemini.
 
 ### Prepínač MCP pre workflow
 
@@ -40,7 +42,8 @@ Sekcia **Heym Capabilities** mení engine karty Chat na jediný nástroj MCP s n
 
 Keď je zapnutý, `heym_chat` sa zobrazuje v `tools/list` spolu s nástrojmi Vašich workflowov. MCP klient pošle jednu správu v prirodzenom jazyku a engine Heym sa postará o zvyšok, s rovnakými schopnosťami, aké má karta Chat:
 
-- Vytvárať, upravovať, skúmať a spúšťať workflowy prostredníctvom Workflow AI Builder
+- Vytvoriť workflow, otestovať ho so vzorovými vstupmi, opraviť ho a dokončiť, keď beh úspešne prejde (pozri [Režim vytvárania](#build-mode))
+- Skúmať a spúšťať Vaše existujúce workflowy
 - Podávať analytiku, nedávne spustenia a nadchádzajúce cron plány
 - Podávať históriu behov jedného workflowu: koľkokrát bežal, počty stavov, kedy bežal, a na požiadanie vstupy, výstupy a chyby jednotlivých uzlov jedného behu
 - Podávať, čo práve beží: koľko spustení je aktívnych, ich názvy workflowov, ako dlho každé beží, na ktorom uzle sa práve nachádza, a odkaz na živý beh
@@ -50,6 +53,15 @@ Keď je zapnutý, `heym_chat` sa zobrazuje v `tools/list` spolu s nástrojmi Va�
 - Schvaľovať, upravovať alebo odmietať čakajúce human-in-the-loop kontroly
 
 Schopnosti pridané do karty Chat neskôr sa prostredníctvom `heym_chat` sprístupnia automaticky — neexistuje žiadny prepínač pre jednotlivé schopnosti, ktorý by bolo potrebné udržiavať v synchronizácii.
+
+### Režim vytvárania
+
+`heym_chat` vždy spúšťa engine Chatu v režime vytvárania (build mode). V jedinom volaní môže asistent uložiť nový workflow, spustiť ho s realistickými vzorovými vstupmi, prečítať správu o behu, opraviť to, čo zlyhalo, a spustiť ho znova – až päť testovacích behov na jedno volanie. Keď posledný beh posledného uloženia prejde, skončí jednovetovým zhrnutím a odpoveď sa končí textom `Verified: the latest test run of the saved workflow passed.`
+
+- Testovacie behy sú skutočné behy. Ich vedľajšie účinky nastanú a zobrazia sa v histórii behov workflowu ako akýkoľvek iný beh.
+- Uloženia prebiehajú cestou editora: zmena grafu zachová predchádzajúci graf v histórii úprav (**Edit History**) workflowu.
+- Ak chcete zmeniť workflow, ktorý vytvoril skôr, pokračujte vo vlákne s rovnakým `conversation_id`. Asistent tento workflow aktualizuje namiesto vytvorenia nového a mení iba workflowy, ktoré môžete upravovať.
+- Keď sa vyčerpá päť testovacích behov, asistent sa zastaví a vysvetlí, čo stále zlyháva.
 
 Prihlasovacie údaje zostávajú v UI: `heym_chat` ich nikdy nezoznamuje, nevyberá ani nevytvára. Keď vytvára alebo upravuje workflow, nové uzly, ktoré potrebujú prihlasovacie údaje, zostávajú prázdne a odpoveď ich pomenuje, takže ich môžete nastaviť v editore.
 
@@ -109,7 +121,7 @@ Prepnutie workflowu ho presunie na začiatok zoznamu priradených, takže riadok
 Pomenované servery podporujú rovnaké metódy autentifikácie ako predvolený server:
 
 - **X-MCP-Key header** – Odovzdajte API kľúč servera priamo (API klienti, Cursor). Iba v headeri: kľúče nie sú akceptované ako query parameter `?key=`, pretože URL sa dostávajú do prístupových logov, logov proxy serverov a histórie prehliadača.
-- **Claude OAuth** – Pridajte URL servera do integrácií Claude; ponechajte prihlasovacie údaje prázdne a Claude sa zaregistruje automaticky cez OAuth. Bearer token musí byť prenášaný v headeri `Authorization`, nie ako `?token=`.
+- **Claude, ChatGPT a Gemini OAuth** – Pridajte URL servera do konektorov alebo vlastných aplikácií klienta; ponechajte prihlasovacie údaje prázdne a klient sa zaregistruje automaticky cez OAuth. Bearer token musí byť prenášaný v headeri `Authorization`, nie ako `?token=`.
 - **Session token** – Vydaný počas SSE handshake; je viazaný na konkrétny server, takže tokeny z jedného pomenovaného servera nemôžu pristupovať k inému. Tento krátkodobý parameter `?session=` nie je ovplyvnený.
 
 ### Odstránenie pomenovaného servera
@@ -123,7 +135,7 @@ Kliknite na ikonu **X** v hlavičke karty servera. Odstránením sa server a vš
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Oba endpointy podporujú SSE transport (GET, MCP spec 2024-11-05) a Streamable HTTP transport (POST, MCP spec 2025-03-26). Claude používa OAuth 2.1 / PKCE na zabezpečené prihlásenie v oboch prípadoch.
+Oba endpointy podporujú SSE transport (GET, MCP spec 2024-11-05) a Streamable HTTP transport (POST, MCP spec 2025-03-26). Claude, ChatGPT a Gemini používajú OAuth 2.1 / PKCE na zabezpečené prihlásenie v oboch prípadoch.
 
 ## Súvisiace
 

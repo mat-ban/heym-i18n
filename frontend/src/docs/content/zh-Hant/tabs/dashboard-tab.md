@@ -8,7 +8,7 @@
 
 此分頁會重新開啟您上次使用的 Dashboard，且網址列會帶有目前開啟的 Dashboard（`?tab=dashboard&dashboard=<id>`），因此連結會為任何有存取權的人開啟該特定 Dashboard。
 
-設定按鈕（僅限擁有者）可重新命名 Dashboard、管理分享，以及刪除 Dashboard。刪除 Dashboard 會移除其小工具及對應的 Workflow。您始終會保留至少一個自己的 Dashboard，因此最後一個無法被刪除。
+設定按鈕（僅限擁有者）可重新命名 Dashboard、設定其作為[詳細資料頁面](#detail-pages)時所接受的記錄格式、管理分享，以及刪除 Dashboard。刪除 Dashboard 會移除其小工具及對應的 Workflow。您始終會保留至少一個自己的 Dashboard，因此最後一個無法被刪除。
 
 ## Widgets
 
@@ -18,7 +18,7 @@
 - **Line**
 - **Area**（填滿的趨勢圖，支援多個數列）
 - **Pie**
-- **Table**（可捲動）
+- **Table**（可捲動；其中一欄可呈現為[狀態標籤](../nodes/chart-output-node.md#status-chips)，且資料列可開啟[詳細資料頁面](#detail-pages)）
 - **Numeric**（單一 KPI 值，可選單位）
 - **Gauge**（單一數值對應最小–最大範圍，例如百分比）
 - **Scatter**（用於相關性繪圖的 X/Y 點）
@@ -26,6 +26,8 @@
 - **Bar gauge**（每列一個水平量測條，搭配紅→綠漸層與數值，例如可用磁碟空間）
 - **Text**（markdown 訊息，例如「Last execution at 19:47」這類狀態備註；當 markdown 為靜態時支援[互動式核取方塊](../nodes/chart-output-node.md#interactive-task-lists)，並支援[明確編號清單](../nodes/chart-output-node.md#numbered-lists)以自訂或遞減編號）
 - **HITL**（您待處理的人工審核。標題會顯示 `1/n pending`。Workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目。小工具標題旁的歷史圖示會於此頁面的歷史對話框中開啟該次執行。此小工具不使用上游資料列，且每個人只會看到自己的佇列）
+
+除了圖表之外，**Run a workflow** 小工具還能直接從 Dashboard 執行您的其中一個 Workflow：透過拖放檔案、填寫其輸入欄位，或點擊 Run 按鈕；請參閱[執行類小工具](#run-widgets)。
 
 每個小工具會在您開啟分頁時非同步載入資料，因此圖表填入資料的同時頁面仍保持回應。
 
@@ -36,7 +38,39 @@
 3. 建置 Workflow，使饋入 **Chart Output** 的節點產生資料列陣列，然後設定 Chart Output 節點的欄位對應（標籤欄位、數值欄位等）。
 4. 儲存、返回 Dashboard 分頁，小工具便會渲染。
 
+若是 **Run a workflow** 小工具，請改為選擇它要執行的 Workflow；選擇器會說明小工具將如何執行各個 Workflow。小工具會直接加入網格中，無須建立新的 Workflow。
+
 隨時雙擊小工具（或使用其編輯按鈕）即可重新開啟其 Workflow。使用小工具標題中的 **Clone widget** 可同時複製小工具及其完整 Workflow。複本會置於原始項目下方，並標示 **(Copy)**，讓您能獨立編輯。
+
+## 詳細資料頁面
+
+表格小工具可將其資料列連結至另一個 Dashboard，使後者作為詳細資料頁面運作：由同一個 Dashboard 服務每一位客戶、每一張發票或每一張工單。
+
+1. 開啟表格小工具的 **Settings**，並在 **Row link** 下方選擇目標 Dashboard。
+2. 輸入 **Record column**（其值可用來識別該列的欄位，例如 `id`），並可選擇性輸入用來命名的 **Label column**（例如 `name`）。
+3. 儲存。點擊某一列（或將焦點移至該列並按 Enter）即可開啟帶有 `?record=<value>&label=<name>` 的連結 Dashboard。
+
+在詳細資料 Dashboard 上，每個小工具的 Workflow 都會將該值讀取為 `$page.record`（請參閱 [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)），且頁面會在網格上方顯示 `Dashboard / <label>` 以及清除記錄的按鈕。點擊返回即可回到原本的表格。
+
+- **誰可以開啟。** 只有有權開啟連結 Dashboard 的檢視者才能點擊資料列。其他人會看到相同的表格，但不含連結。
+- **記錄格式。** 記錄來自 URL，因此由詳細資料 Dashboard 決定接受哪些內容。在其設定中，**Detail page records** 為下列其中一種：ID（字母、數字、`-`、`_` 與 `.`，最多 128 個字元；預設值）、數字、UUID 或電子郵件地址。任何其他值都會在小工具執行前被拒絕，且小工具會顯示「This page does not accept that record」。
+- **仍以擁有者身分執行。** 在詳細資料頁面上，小工具同樣會以 Dashboard 擁有者的身分執行。建立者應僅在節點會將該值進行跳脫（escape）的位置傳入 `$page.record`，切勿直接放入查詢文字中。
+- **快取。** 每個小工具會依記錄快取其圖表，存活時間（TTL）與小工具相同，並保留最近使用過的 50 筆記錄。
+
+## 執行類小工具
+
+**Run a workflow** 小工具會執行您的其中一個 Workflow 並顯示結果：狀態、執行時間與輸出。顯示的內容取決於該 Workflow 所需的輸入：
+
+- **檔案。** 對於以 [File Upload Trigger](../nodes/file-upload-trigger-node.md) 開頭的 Workflow，將檔案拖放到小工具上（或點擊以選取檔案），小工具便會透過該 Trigger 的一次性上傳連結上傳檔案。小工具會顯示 Trigger 接受的檔案類型與大小，並在上傳前拒絕其他檔案。當 Workflow 同時也以 Text Input 節點開頭時，小工具會在拖放區旁顯示其欄位：選擇檔案、填寫欄位後，點擊 **Run** 會一併送出兩者。這些值會隨小工具產生的上傳連結一起傳送，因此共用的上傳連結無法設定它們。
+- **輸入欄位。** 對於以 Text Input 節點開頭的 Workflow，小工具會顯示其欄位與預設值；點擊 **Run** 會以您輸入的值執行 Workflow。Workflow 中不存在的欄位值會被捨棄。
+- **無輸入。** 沒有輸入的 Workflow 會顯示一個 **Run** 按鈕。
+
+結果區域的 **Wrap** 按鈕會在方框內將過長的輸出行自動換行；關閉此功能即可閱讀輸出的 JSON 版面配置。
+
+- 任何能夠開啟該 Dashboard 的人都可以執行此小工具，就像任何人都能重新整理圖表一樣。Workflow 的存取權限屬於 Dashboard 擁有者：新增小工具需要一個您與擁有者都能執行的 Workflow，而執行本身會使用 Workflow 擁有者的憑證，就如同任何上傳連結。
+- 結果會保留在您的畫面上，直到您離開頁面為止；其他檢視者不會看到您的檔案、輸入值或結果。該次執行會在執行歷史記錄中顯示為 `dashboard` Trigger。
+- 共用 Dashboard 絕不會授予對 Workflow 本身的存取權。**Edit workflow** 僅會為原本就具備存取權的人員開啟該 Workflow，且不提供 **Fine-tune with AI**。
+- 檔案執行會與所有 File Upload Trigger 執行一樣，在儲存上傳檔案的主執行個體（main instance）上執行。
 
 ## 使用 AI 產生小工具
 
@@ -50,7 +84,7 @@
 
 ## 快取與重新整理
 
-每個小工具會將其上次計算的資料快取於伺服器上，並具有可設定的存活時間（TTL）。當快取仍新鮮時，重新開啟 Dashboard 會提供已儲存的結果，而不會重新執行 Workflow。每次重新計算資料時，快取會就地取代（每個小工具一個快取），且當您編輯小工具的 Workflow 時會自動失效。
+每個小工具會將其上次計算的資料快取於伺服器上，並具有可設定的存活時間（TTL）。當快取仍新鮮時，重新開啟 Dashboard 會提供已儲存的結果，而不會重新執行 Workflow。每次重新計算資料時，快取會就地取代（每個小工具一個快取，外加[詳細資料頁面](#detail-pages)上每筆記錄一個快取），且當您編輯小工具的 Workflow 時會自動失效。
 
 使用小工具的 **Refresh** 按鈕（或工具列中的 **Refresh**）可略過快取並立即重新計算。
 
@@ -61,9 +95,10 @@
 | 操作 | Owner | Write | Read |
 |--------|:-----:|:-----:|:----:|
 | 檢視 widget、重新整理、使用自動重新整理 | ✓ | ✓ | ✓ |
+| 開啟詳細資料頁面、執行執行類小工具 | ✓ | ✓ | ✓ |
 | 新增、複製、刪除、重新命名及調整 widget 大小；AI 生成與微調；勾選 checklist 項目 | ✓ | ✓ | |
 | 在編輯器中開啟 widget 的 workflow | ✓ | ✓ | |
-| 重新命名或刪除 dashboard、管理共用設定 | ✓ | | |
+| 重新命名或刪除 dashboard、設定其記錄格式、管理共用設定 | ✓ | | |
 
 **Widget 一律以 dashboard 擁有者的身分執行。** 無論檢視者是誰，widget 均使用擁有者的 credentials 與全域變數，其執行紀錄也會出現在擁有者的執行歷史與 traces 中。因此，team 成員無需存取背後的帳號即可看到相同資料，且每位檢視者共用每個 widget 的同一份快取結果。Write 協作者所新增或複製的 widget 同樣歸屬於擁有者。
 

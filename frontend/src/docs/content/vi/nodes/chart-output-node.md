@@ -33,6 +33,8 @@ Khi bạn chỉ có dữ liệu ví dụ/mẫu (không có nguồn thực), hãy
 | `valueField` | string | Khóa hàng được dùng làm giá trị số (pie/bar/line/numeric/gauge) |
 | `series` | array | Định nghĩa đa chuỗi tùy chọn `[{ "name": "Sent", "field": "sent" }]` cho bar/line (ghi đè `valueField`) |
 | `columns` | array | Danh sách cột tùy chọn cho `table` (mặc định là các khóa của hàng đầu tiên) |
+| `statusColumn` | string | Cột `table` tùy chọn được hiển thị dưới dạng [nhãn trạng thái](#status-chips) có màu. Phải là một trong các cột được hiển thị. |
+| `statusTones` | object | Ánh xạ tùy chọn từ giá trị trạng thái sang sắc thái (`success`, `attention`, `failure`, `waiting`, `neutral`) cho các giá trị không nằm trong mặc định |
 | `xField` / `yField` | string | Khóa hàng cho trục X và Y số (scatter) |
 | `min` / `max` | number | Phạm vi số cho `gauge` (mặc định `0` / `100`) |
 | `unit` | string | Đơn vị tùy chọn hiển thị bên cạnh giá trị `numeric` hoặc `gauge` |
@@ -42,7 +44,7 @@ Khi bạn chỉ có dữ liệu ví dụ/mẫu (không có nguồn thực), hãy
 ## Các loại biểu đồ
 
 - **bar / line / area / pie** — biểu đồ phân loại được điều khiển bởi `labelField` + `valueField` (hoặc `series` cho bar/line/area đa chuỗi). `area` là biểu đồ xu hướng có tô nền.
-- **table** — các hàng thô được hiển thị dưới dạng bảng cuộn sử dụng `columns`.
+- **table** — các hàng thô được hiển thị dưới dạng bảng cuộn sử dụng `columns`. Một cột có thể hiển thị dưới dạng [nhãn trạng thái](#status-chips), và các hàng có thể mở một [trang chi tiết](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — một giá trị KPI đơn từ hàng đầu tiên, với `unit` tùy chọn.
 - **gauge** — một giá trị đơn được hiển thị theo phạm vi `min`–`max` (ví dụ phần trăm). Sử dụng `valueField`.
 - **scatter** — các điểm X/Y từ `xField` và `yField` cho biểu đồ tương quan.
@@ -103,14 +105,59 @@ Markdown kết quả:
 
 Đối với danh sách tăng dần đơn giản bắt đầu từ 1, hoặc thêm tiền tố vào mỗi dòng (`1.`, `2.`, `3.`) hoặc sử dụng loop với `$loop.index + 1`. Sử dụng [danh sách bullet](#interactive-task-lists) (`- item`) khi bạn không cần số.
 
+## Nhãn trạng thái
+
+Một `table` có thể hiển thị một cột dưới dạng các nhãn (chips) có màu. Đặt **Status column** trong thuộc tính của node (hoặc `statusColumn` trong DSL) thành tên một cột. Mỗi giá trị sẽ nhận một trong năm sắc thái, và các từ thông dụng sẽ tự động nhận sắc thái mà không cần cấu hình:
+
+| Sắc thái | Các từ mặc định |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | bất kỳ giá trị nào khác |
+
+Việc so khớp không phân biệt chữ hoa/thường, dấu `_` và `-`, vì vậy `IN_PROGRESS` và `in-progress` đều là `waiting`. Thêm **Status tones** cho các giá trị khác; một mục nhập sẽ ghi đè mặc định cho giá trị đó:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Máy chủ phân giải mỗi giá trị thành sắc thái tương ứng, nhờ đó Heym và Heym Work hiển thị cùng màu sắc.
+
+## Trang chi tiết: `$page.record`
+
+Một bảng điều khiển được mở với `?record=<value>` sẽ chạy mọi Workflow của widget với giá trị đó dưới dạng `$page.record`. Liên kết trên hàng của bảng sẽ mở một trang như vậy; xem [Trang chi tiết](../tabs/dashboard-tab.md#detail-pages). Trên bảng điều khiển được mở mà không có bản ghi và trong hộp thoại biểu thức, `$page.record` có giá trị `null`. Một node có nhãn `page` sẽ được ưu tiên hơn.
+
+Sử dụng nó để lấy đúng bản ghi mà trang đang đề cập tới, ví dụ trong một node [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` chính là giá trị của hàng được nhấp vào, chẳng hạn như `V-1002`, chứ không phải một đối tượng có các trường. Để tìm bản ghi đó trong [DataTable](./datatable-node.md), hãy lọc cột bản ghi theo giá trị này: thao tác `find` với bộ lọc `{"vendor_id": "$page.record"}`. Một đường dẫn như `$page.record.id` sẽ không phân giải ra kết quả nào, vì vậy widget do AI tạo hoặc tinh chỉnh sẽ loại bỏ các trường đó và đọc trực tiếp `$page.record`.
+
+Giá trị này đến từ một URL mà bất kỳ ai cũng có thể chỉnh sửa. Bảng điều khiển chỉ chấp nhận các giá trị theo định dạng bản ghi của nó (mặc định là chữ cái, chữ số, `-`, `_` và `.`), nhưng hãy luôn coi đó là đầu vào không đáng tin cậy: truyền nó vào nơi node thực hiện escape giá trị, chẳng hạn như tham số truy vấn HTTP hoặc giá trị bộ lọc [DataTable](./datatable-node.md) hay ClickHouse, và không bao giờ tạo văn bản truy vấn bằng cách nối chuỗi với nó. Các widget vẫn chạy dưới quyền của chủ sở hữu bảng điều khiển, bất kể ai là người mở trang.
+
 ## Cách dữ liệu được xử lý
 
 1. Nếu `dataPath` được đặt, node sẽ đi theo đường dẫn dot đó vào output thượng nguồn.
 2. Ngược lại, nó tìm một mảng: danh sách cấp cao nhất, mảng `data`, hoặc trường có giá trị danh sách đầu tiên.
-3. Đối với `table`, mỗi hàng trở thành một hàng bảng sử dụng `columns` (hoặc các key của hàng đầu tiên).
-4. Đối với `numeric` và `gauge`, giá trị đến từ `valueField` trên hàng đầu tiên (hoặc trường số đầu tiên).
-5. Đối với `scatter`, mỗi hàng trở thành một điểm `[xField, yField]`.
-6. Đối với `text`, thông điệp được lấy từ `valueField` trên hàng đầu tiên khi được đặt, ngược lại từ cấu hình `text` tĩnh (nếu không thì từ trường chuỗi đầu tiên của hàng đầu tiên).
+3. Các hàng lấy trực tiếp từ node [Data Table](./datatable-node.md) (`{id, data, created_at}`) được đọc cùng các cột ở cấp cao nhất bên cạnh `id`, do đó `labelField`, `valueField` và `columns` chỉ định trực tiếp các cột của chính bảng đó.
+4. Đối với `table`, mỗi hàng trở thành một hàng bảng sử dụng `columns` (hoặc các key của hàng đầu tiên). Với `statusColumn`, Payload cũng mang theo sắc thái của từng giá trị trong cột đó.
+5. Đối với `numeric` và `gauge`, giá trị đến từ `valueField` trên hàng đầu tiên (hoặc trường số đầu tiên).
+6. Đối với `scatter`, mỗi hàng trở thành một điểm `[xField, yField]`.
+7. Đối với `text`, thông điệp được lấy từ `valueField` trên hàng đầu tiên khi được đặt, ngược lại từ cấu hình `text` tĩnh (nếu không thì từ trường chuỗi đầu tiên của hàng đầu tiên).
 
 ## Ví dụ
 

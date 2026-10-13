@@ -28,7 +28,7 @@ Anexe arquivos do seu [Drive](./drive-node.md) passando um ou mais IDs de arquiv
 
 ## Configuração
 
-Adicione uma credencial SMTP com servidor, porta, e-mail e senha. Servidores SMTP comuns:
+Adicione uma credencial SMTP com servidor, porta, e-mail e senha. O remetente visível é o campo opcional **From** da credencial; se From estiver em branco, o envio é feito com o nome de utilizador. Servidores SMTP comuns:
 
 - Gmail: `smtp.gmail.com`, porta 587 (Senha de App necessária)
 - Outlook: `smtp.office365.com`, porta 587

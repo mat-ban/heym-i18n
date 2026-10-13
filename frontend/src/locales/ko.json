@@ -274,7 +274,17 @@
       "intro": "Heym Work는 비즈니스 팀을 위한 두 번째 인터페이스입니다. 사용자는 Heym을 통해 로그인하며, 모든 작업은 여기에서 실행됩니다.",
       "never": "없음",
       "learnMore": "자세히 알아보기"
-    }
+    },
+    "pluginsIntro": "플러그인은 이 인스턴스에 사용자 지정 노드(작업 및 Trigger)를 추가합니다. 플러그인을 설치하거나 제거하면 서버 측 코드가 실행되므로 다음에 나열된 운영자로 제한됩니다:",
+    "loadingPlugins": "플러그인 불러오는 중…",
+    "pluginsDisabledTitle": "플러그인이 비활성화됨",
+    "pluginsDisabledHint": "백엔드에서 다음 환경 변수를 설정한 후 재시작하세요:",
+    "installPluginZip": "플러그인 설치 (.zip)",
+    "noPluginsInstalled": "아직 설치된 플러그인이 없습니다.",
+    "enablePlugin": "활성화",
+    "disablePlugin": "비활성화",
+    "uninstallPlugin": "제거",
+    "pluginOperationFailed": "플러그인 작업에 실패했습니다"
   },
   "workflows": {
     "title": "Workflow",
@@ -390,7 +400,22 @@
     "startTour": "투어 시작",
     "readTheDocs": "문서 읽기",
     "previousFeature": "이전 기능",
-    "goToFeature": "{title}(으)로 이동"
+    "goToFeature": "{title}(으)로 이동",
+    "heymWork": {
+      "step0": "팀이 Heym Work에서 요청합니다",
+      "step1": "Heym이 구축하고 테스트합니다",
+      "step2": "검증 완료, 캔버스 불필요",
+      "step3": "Heym이 백그라운드에서 실행합니다",
+      "prompt": "새 계약서에서 위험 조항을 확인하세요.",
+      "testing": "Workflow 테스트 중",
+      "verified": "검증됨"
+    },
+    "skillZip": {
+      "step0": "채팅에 스킬 zip 파일 드롭",
+      "step1": "채팅이 SKILL.md를 읽음",
+      "step2": "에이전트가 스킬을 유지함",
+      "prompt": "청구서를 읽고 세부 항목을 나열하세요."
+    }
   },
   "canvas": {
     "nodes": "노드",
@@ -2400,6 +2425,50 @@
       "nodes": "노드",
       "reference": "레퍼런스",
       "tabs": "탭"
-    }
+    },
+    "pluginNoDoc": "이 플러그인에는 문서가 없습니다."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Workflow, 탭, 문서 검색...",
+    "searchAria": "명령 팔레트 검색",
+    "ariaLabel": "명령 팔레트",
+    "noResults": "결과를 찾을 수 없습니다",
+    "tryDifferentSearch": "다른 검색어를 입력해 보세요",
+    "recent": "최근 항목",
+    "recentInFolder": "최근 항목 · 위치: {folder}",
+    "inFolder": "위치: {folder}",
+    "scheduledDate": "{date} 예정됨",
+    "scheduledForDeletion": "삭제 예정됨",
+    "goToTab": "탭으로 이동",
+    "workflowTemplate": "Workflow 템플릿",
+    "nodeTemplate": "노드 템플릿",
+    "nodeType": "노드 · {type}",
+    "documentation": "문서",
+    "support": "지원",
+    "contactSupport": "지원팀에 문의",
+    "watchRunbook": "Heym이 Workflow를 구축하고 실행하는 과정 보기",
+    "openDocs": "Heym 문서 열기",
+    "getHelp": "Heym 팀의 도움 받기",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "비즈니스 팀을 위한 Heym Work (heym.run)",
+    "navigate": "탐색",
+    "select": "선택",
+    "click": "클릭",
+    "newTab": "새 탭",
+    "oneItem": "{count}개 항목",
+    "manyItems": "{count}개 항목"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "이 인스턴스에서 플러그인이 비활성화되어 있습니다.",
+    "loadingDefinition": "플러그인 정의를 불러오는 중...",
+    "notBound": "이 노드는 플러그인 패키지에 연결되어 있지 않습니다.",
+    "noneInstalled": "이 인스턴스에 설치된 플러그인이 없습니다.",
+    "notInstalled": "플러그인 \"{id}\"이(가) 이 인스턴스에 설치되어 있지 않습니다.",
+    "installedButDisabled": "플러그인 \"{name}\"이(가) 설치되어 있으나 비활성화되어 있습니다.",
+    "noKindNodes": "플러그인 \"{name}\"은(는) {kind} 노드를 제공하지 않습니다.",
+    "loadErrorDetail": "플러그인을 불러올 수 없습니다: {detail}",
+    "loadErrorHttp": "플러그인을 불러올 수 없습니다 (HTTP {status}).",
+    "loadError": "플러그인을 불러올 수 없습니다.",
+    "enabled": "활성화됨"
   }
 }

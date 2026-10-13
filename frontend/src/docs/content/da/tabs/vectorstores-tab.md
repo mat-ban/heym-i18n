@@ -26,6 +26,7 @@
 - **Vis elementer** – Se kildegrupper og dokumenttællinger pr. lager. Uploadede filer grupperes under deres filnavn; dokumenter, som en [RAG-node](../nodes/rag-node.md) har gemt uden egen `source`, grupperes under **Tilføjet workflow: _navn_**, der navngiver workflowet, der skrev dem
 - **Slet kilder** – Fjern specifikke filer eller kildegrupper fra et lager, inklusive alt, hvad et workflow har tilføjet
 - **Rediger lager** – Ændr navn, beskrivelse eller legitimationsoplysninger
+- **Søg** – `POST /api/vector-stores/{id}/search` med en `query` (og en `limit` fra 1 til 20, standard 5) returnerer de chunks, som en RAG-nodes søgning ville returnere, bedste match først, hver med sin score og kilde. Heym Works RAG-skærm bruger det til at teste hentning
 
 ## Deling
 

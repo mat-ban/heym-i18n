@@ -896,7 +896,8 @@
       "nodes": "Nós",
       "reference": "Referência",
       "tabs": "Abas"
-    }
+    },
+    "pluginNoDoc": "Este plugin não possui documentação."
   },
   "drive": {
     "applying": "Aplicando...",
@@ -1778,7 +1779,22 @@
     "goToFeature": "Ir para {title}",
     "previousFeature": "Recurso anterior",
     "readTheDocs": "Ler a documentação",
-    "startTour": "Iniciar tour"
+    "startTour": "Iniciar tour",
+    "heymWork": {
+      "step0": "Uma equipe solicita no Heym Work",
+      "step1": "O Heym cria e testa",
+      "step2": "Verificado, sem canvas",
+      "step3": "O Heym executa em segundo plano",
+      "prompt": "Verificar cláusulas de risco nos novos contratos.",
+      "testing": "Testando o Workflow",
+      "verified": "Verificado"
+    },
+    "skillZip": {
+      "step0": "Solte um zip de habilidade no Chat",
+      "step1": "O Chat lê o SKILL.md",
+      "step2": "O agente mantém a habilidade",
+      "prompt": "Ler a fatura e listar os itens."
+    }
   },
   "schedules": {
     "calendar": {
@@ -1930,7 +1946,17 @@
     "voiceCredentialDescription": "Usada para ler mensagens em voz alta e habilitar o modo de voz interativo no chat.",
     "voiceLoadError": "Não foi possível carregar as vozes. Verifique a credencial.",
     "voiceSelect": "Voz",
-    "work": "Heym Work"
+    "work": "Heym Work",
+    "pluginsIntro": "Os plugins adicionam nós personalizados (ações e Triggers) a esta instância. Instalar ou remover um plugin executa código no servidor, portanto é restrito aos operadores listados em",
+    "loadingPlugins": "Carregando plugins…",
+    "pluginsDisabledTitle": "Os plugins estão desativados",
+    "pluginsDisabledHint": "Defina estas variáveis de ambiente no backend e reinicie:",
+    "installPluginZip": "Instalar um plugin (.zip)",
+    "noPluginsInstalled": "Nenhum plugin instalado ainda.",
+    "enablePlugin": "Ativar",
+    "disablePlugin": "Desativar",
+    "uninstallPlugin": "Desinstalar",
+    "pluginOperationFailed": "Falha na operação do plugin"
   },
   "showcase": {
     "askAboutDoc": "Perguntar sobre esta documentação",
@@ -2401,5 +2427,48 @@
     "versions": "Versões",
     "versionsCount": "{count} versão(ões)",
     "versionsSubtitle": "As versões serão criadas quando você salvar alterações no seu Workflow"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Pesquisar Workflows, abas, documentação...",
+    "searchAria": "Pesquisa na paleta de comandos",
+    "ariaLabel": "Paleta de comandos",
+    "noResults": "Nenhum resultado encontrado",
+    "tryDifferentSearch": "Tente um termo de pesquisa diferente",
+    "recent": "Recentes",
+    "recentInFolder": "Recentes · Em: {folder}",
+    "inFolder": "Em: {folder}",
+    "scheduledDate": "Agendado {date}",
+    "scheduledForDeletion": "Agendado para exclusão",
+    "goToTab": "Ir para a aba",
+    "workflowTemplate": "Modelo de Workflow",
+    "nodeTemplate": "Modelo de nó",
+    "nodeType": "Nó · {type}",
+    "documentation": "Documentação",
+    "support": "Suporte",
+    "contactSupport": "Entrar em contato com o suporte",
+    "watchRunbook": "Veja o Heym criar e executar um Workflow",
+    "openDocs": "Abrir a documentação do Heym",
+    "getHelp": "Obter ajuda da equipe Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work para equipes corporativas, em heym.run",
+    "navigate": "Navegar",
+    "select": "Selecionar",
+    "click": "clique",
+    "newTab": "nova aba",
+    "oneItem": "{count} item",
+    "manyItems": "{count} itens"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Os plugins estão desativados nesta instância.",
+    "loadingDefinition": "Carregando definição do plugin...",
+    "notBound": "Este nó não está vinculado a um pacote de plugin.",
+    "noneInstalled": "Nenhum plugin está instalado nesta instância.",
+    "notInstalled": "O plugin \"{id}\" não está instalado nesta instância.",
+    "installedButDisabled": "O plugin \"{name}\" está instalado, mas desativado.",
+    "noKindNodes": "O plugin \"{name}\" não expõe nenhum nó do tipo {kind}.",
+    "loadErrorDetail": "Não foi possível carregar os plugins: {detail}",
+    "loadErrorHttp": "Não foi possível carregar os plugins (HTTP {status}).",
+    "loadError": "Não foi possível carregar os plugins.",
+    "enabled": "Ativado"
   }
 }

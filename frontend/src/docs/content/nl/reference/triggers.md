@@ -98,11 +98,12 @@ De uitvoeringsgeschiedenis registreert `trigger_source` voor elk toegangspunt:
 |-------|------|
 | `"API"` | Webhook / API-aanroep zonder expliciete header (standaard) |
 | `"Canvas"` | Uitvoering vanuit het canvas van de workflow-editor |
-| `"Quick Drawer"` | Uitvoering vanuit het quick-drawer-paneel van de editor |
+| `"Quick Drawer"` | Uitvoering vanuit het quick-drawer-paneel van de editor, inclusief bestandsuitvoeringen geüpload vanuit de dropzone |
 | `"cron"` | Cron-scheduler |
 | `"imap"` | IMAP-triggerbeheer |
 | `"websocket"` | Uitgaand WebSocket-triggerbeheer |
-| `"file_upload"` | Upload-endpoint van de Bestandsupload-trigger |
+| `"file_upload"` | Upload-endpoint van de Bestandsupload-trigger (links aangemaakt via HTTP, MCP of het canvas) |
+| `"dashboard"` | Uitvoeringen van dashboardwidgets en uploads vanuit een bestandsdrop-widget |
 | `"telegram"` | Telegram-bot webhook |
 | `"Discord"` | Discord-interacties webhook |
 | `"MCP"` | MCP-toolaanroep |

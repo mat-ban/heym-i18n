@@ -499,7 +499,7 @@ Xem thêm [Quick Drawer](./quick-drawer.md), [Download & Import](./download-impo
 
 ### [Quick Drawer](./quick-drawer.md)
 
-Quick Drawer là bảng chạy nhanh cố định bên phải dành cho các trang nội bộ không phải canvas. Nó cho phép bạn tìm kiếm [workflow](../tabs/workflows-tab.md), ghim mục yêu thích, chọn input, chạy ngay lập tức, và kiểm tra tiến trình hoặc kết quả mà không cần mở editor. Thứ tự ghim và workflow được chọn lần cuối được lưu trong trình duyệt.
+Quick Drawer là bảng chạy nhanh cố định bên phải dành cho các trang nội bộ không phải canvas. Nó cho phép bạn tìm kiếm [workflow](../tabs/workflows-tab.md), ghim mục yêu thích, chọn input, chạy ngay lập tức, và kiểm tra tiến trình hoặc kết quả mà không cần mở editor. Một workflow có [File Upload Trigger](../nodes/file-upload-trigger-node.md) sẽ nhận tệp được kéo thả hoặc chọn. Thứ tự ghim và workflow được chọn lần cuối được lưu trong trình duyệt.
 
 Xem thêm [Tổ chức Workflow](./workflow-organization.md), [Keyboard Shortcuts](./keyboard-shortcuts.md), và [Execution History](./execution-history.md).
 
@@ -684,6 +684,12 @@ Enterprise bao gồm cấp phép thương mại, hỗ trợ chuyên nghiệp và
 
 Xem thêm [Running & Deployment](../getting-started/running-and-deployment.md), [Security](./security.md), và [Teams](./teams.md).
 
+### [Heym Work](./heym-work.md)
+
+Heym Work là giao diện thứ hai dành cho các nhóm nghiệp vụ được xây dựng trên nền Heym. Mọi người mô tả công việc, trả lời một vài câu hỏi và nhận được một workflow đã được kiểm thử, sau đó làm việc từ các trang, phê duyệt và danh sách Hoạt động nơi mỗi lần chạy đều có tên. Quản trị viên hệ thống kết nối nó trong **Cài đặt → Heym Work** bằng địa chỉ và khóa tích hợp; sản phẩm có giấy phép riêng từ đội ngũ Heym.
+
+Xem thêm [Enterprise](./enterprise.md), [Single Sign-On](./sso.md), và [Human-in-the-Loop](./human-in-the-loop.md).
+
 ---
 
 ## Các Tab trên Dashboard
@@ -763,7 +769,7 @@ Tab MCP cấu hình tích hợp Model Context Protocol. Heym hỗ trợ hai ch�
 
 **Máy chủ có tên** – Tạo nhiều endpoint MCP riêng biệt, mỗi endpoint có URL dựa trên UUID riêng (`/api/mcp/servers/{uuid}/sse`) và API key độc lập. Gán các workflow cụ thể cho từng máy chủ để các AI client hoặc nhóm khác nhau chỉ thấy những công cụ họ cần. Mỗi máy chủ có tên hỗ trợ cùng các phương thức xác thực (API key, Claude OAuth) và có các phím tắt Copy JSON và Add to Cursor riêng. Cả hai endpoint đều hỗ trợ SSE transport (GET) và Streamable HTTP transport (POST). Bật/tắt một workflow bên trong máy chủ có tên sẽ di chuyển nó lên đầu danh sách được gán để hàng đã thay đổi vẫn hiển thị trong tầm nhìn.
 
-**Công cụ chat Heym** – Cả hai chế độ đều có thể hiển thị engine [Chat](../tabs/chat-tab.md) như một công cụ `heym_chat` duy nhất, được bật/tắt theo từng bề mặt với credential LLM và model riêng (được điền sẵn từ model ưa thích của bạn trong [Settings](./user-settings.md)). Một MCP client gửi một `message` ngôn ngữ tự nhiên và engine sẽ làm phần còn lại: xây dựng, chỉnh sửa và chạy workflow, phân tích, thực thi, trạng thái chạy trực tiếp, lịch trình, bảng và thẻ, nhóm, biến toàn cục, tìm kiếm tài liệu và các quyết định human-in-the-loop. Các khả năng được thêm vào Chat sau này đều có thể truy cập thông qua cùng công cụ đó mà không cần đăng ký thêm. Mỗi lần gọi được lưu trong lịch sử tab Chat dưới dạng cuộc hội thoại được đánh dấu plug và trả về một `conversation_id` mà client có thể truyền lại để tiếp tục luồng hội thoại.
+**Công cụ chat Heym** – Cả hai chế độ đều có thể hiển thị engine [Chat](../tabs/chat-tab.md) như một công cụ `heym_chat` duy nhất, được bật/tắt theo từng bề mặt với credential LLM và model riêng (được điền sẵn từ model ưa thích của bạn trong [Settings](./user-settings.md)). Một MCP client gửi một `message` ngôn ngữ tự nhiên và engine sẽ làm phần còn lại: xây dựng workflow ở chế độ build (lưu, chạy thử tối đa năm lần, sửa lỗi và xác minh), chạy workflow, phân tích, thực thi, trạng thái chạy trực tiếp, lịch trình, bảng và thẻ, nhóm, biến toàn cục, tìm kiếm tài liệu và các quyết định human-in-the-loop. Các khả năng được thêm vào Chat sau này đều có thể truy cập thông qua cùng công cụ đó mà không cần đăng ký thêm. Mỗi lần gọi được lưu trong lịch sử tab Chat dưới dạng cuộc hội thoại được đánh dấu plug và trả về một `conversation_id` mà client có thể truyền lại để tiếp tục luồng hội thoại.
 
 Xem thêm [Agent Architecture](./agent-architecture.md), [Agent Node](../nodes/agent-node.md) và [SSE Streaming](./sse-streaming.md).
 
@@ -799,7 +805,7 @@ Xem thêm [Execution History](./execution-history.md), [Scheduled](../tabs/sched
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Tab Dashboard là một không gian kiểu Grafana nơi bạn xây dựng các lưới widget biểu đồ, mỗi widget được render từ workflow Heym ẩn riêng của nó. Giữ bao nhiêu dashboard tùy nhu cầu và chia sẻ từng cái với người dùng hoặc teams, chỉ đọc hoặc có thể chỉnh sửa; các widget luôn chạy với thông tin xác thực của chủ sở hữu, nên mọi người thấy cùng dữ liệu. Mô tả một chỉ số bằng ngôn ngữ tự nhiên và AI tạo widget, hoặc thêm thủ công và chọn loại biểu đồ, được xem trước với dữ liệu mẫu: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text hoặc HITL. HITL là một carousel các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes** và **Reject** giải quyết nó, và biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên cùng trang. Các widget lưu cache kết quả, có thể được tinh chỉnh bằng AI (mỗi thay đổi được lưu vào [Edit History](./edit-history.md)), được nhân bản cùng với workflow hoàn chỉnh của chúng, được sắp xếp lại bằng Tidy up, và được kéo hoặc thay đổi kích thước trong chế độ chỉnh sửa. Vì mỗi widget là một workflow, bất kỳ dữ liệu nào bạn có thể lấy — một lệnh gọi [HTTP](../nodes/http-node.md), một truy vấn [BigQuery](../nodes/bigquery-node.md), một tra cứu [RAG](../nodes/rag-node.md) hoặc đầu ra [LLM](../nodes/llm-node.md) — đều có thể trở thành biểu đồ.
+Tab Dashboard là một không gian kiểu Grafana nơi bạn xây dựng các lưới widget biểu đồ, mỗi widget được render từ workflow Heym ẩn riêng của nó. Giữ bao nhiêu dashboard tùy nhu cầu và chia sẻ từng cái với người dùng hoặc teams, chỉ đọc hoặc có thể chỉnh sửa; các widget luôn chạy với thông tin xác thực của chủ sở hữu, nên mọi người thấy cùng dữ liệu. Mô tả một chỉ số bằng ngôn ngữ tự nhiên và AI tạo widget, hoặc thêm thủ công và chọn loại biểu đồ, được xem trước với dữ liệu mẫu: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text hoặc HITL. HITL là một carousel các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes** và **Reject** giải quyết nó, và biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên cùng trang. Các widget lưu cache kết quả, có thể được tinh chỉnh bằng AI (mỗi thay đổi được lưu vào [Edit History](./edit-history.md)), được nhân bản cùng với workflow hoàn chỉnh của chúng, được sắp xếp lại bằng Tidy up, và được kéo hoặc thay đổi kích thước trong chế độ chỉnh sửa. Các bảng có thể hiển thị chip trạng thái và liên kết các hàng của chúng với bảng điều khiển chi tiết đọc bản ghi của hàng được nhấp dưới dạng `$page.record`, và một widget Run sẽ chạy workflow từ bảng điều khiển: trên tệp được kéo thả, với các trường input của nó, hoặc bằng nút Run. Vì mỗi widget là một workflow, bất kỳ dữ liệu nào bạn có thể lấy — một lệnh gọi [HTTP](../nodes/http-node.md), một truy vấn [BigQuery](../nodes/bigquery-node.md), một tra cứu [RAG](../nodes/rag-node.md) hoặc đầu ra [LLM](../nodes/llm-node.md) — đều có thể trở thành biểu đồ.
 
 Xem thêm [Chart Output node](../nodes/chart-output-node.md), [Analytics](../tabs/analytics-tab.md) và [Execution History](./execution-history.md).
 

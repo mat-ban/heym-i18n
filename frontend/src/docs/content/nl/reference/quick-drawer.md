@@ -35,6 +35,7 @@ Selecteer een workflow om het invoerformulier te openen.
 - Klik op **Run Workflow** om de geselecteerde workflow uit te voeren
 - Klik op **Stop Workflow** om een lopende uitvoering vanuit de drawer te annuleren
 - Workflows zonder invoervelden kunnen ook direct worden uitgevoerd
+- Een workflow die begint met een [File Upload Trigger](../nodes/file-upload-trigger-node.md) toont in plaats daarvan een dropzone: sleep er een bestand naartoe of klik om er een te kiezen. De zone vermeldt de bestandstypen en -grootte die de trigger accepteert en weigert andere bestanden vóór het uploaden. **Run Workflow** blijft uitgeschakeld totdat er een bestand is gekozen.
 
 De drawer gebruikt dezelfde workflow-uitvoerings-API als andere Heym-uitvoeringsoppervlakken, zodat uitvoer en runtime-gedrag consistent blijven.
 
@@ -51,6 +52,8 @@ Na het starten van een uitvoering toont de drawer:
 
 `pending` betekent dat de workflow wacht op een latere actie, zoals menselijke beoordeling.
 
+Een bestandsuitvoering verloopt via de eenmalige uploadlink van de trigger: de drawer vraagt de workflow om een link, uploadt het bestand daarnaartoe en toont het resultaat zodra de upload klaar is. Bestandsuitvoeringen tonen de eindstatus en uitvoer, maar geen stapsgewijze voortgang, en krijgen in de geschiedenis eveneens het label `Quick Drawer`. Het gekozen bestand wordt na elke uitvoering gewist, omdat een link slechts één bestand accepteert.
+
 ## Browseropslag
 
 De Quick Drawer slaat persoonlijke voorkeuren op in `localStorage`:
@@ -64,7 +67,7 @@ De drawer slaat in deze versie **geen** invoerwaarden op.
 
 De Quick Drawer is bewust een lichtgewicht uitvoeringsoppervlak.
 
-- Inbegrepen: zoeken, vastzetten, selecteren, invoer, uitvoeren, voortgang, resultaat
+- Inbegrepen: zoeken, vastzetten, selecteren, invoer (inclusief een bestand), uitvoeren, voortgang, resultaat
 - Uitgesloten: workflowcreatie, bewerken, mapbeheer en canvas-acties
 
 ## Gerelateerd

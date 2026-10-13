@@ -755,7 +755,8 @@
       "nodes": "Nœuds",
       "reference": "Référence",
       "tabs": "Onglets"
-    }
+    },
+    "pluginNoDoc": "Ce plugin ne dispose d'aucune documentation."
   },
   "drive": {
     "applying": "Application en cours...",
@@ -1766,7 +1767,22 @@
     "goToFeature": "Accéder à {title}",
     "previousFeature": "Fonctionnalité précédente",
     "readTheDocs": "Consulter la documentation",
-    "startTour": "Démarrer la visite"
+    "startTour": "Démarrer la visite",
+    "heymWork": {
+      "step0": "Une équipe demande dans Heym Work",
+      "step1": "Heym le construit et le teste",
+      "step2": "Vérifié, sans canevas",
+      "step3": "Heym l'exécute en arrière-plan",
+      "prompt": "Vérifier les clauses à risque des nouveaux contrats.",
+      "testing": "Test du Workflow en cours",
+      "verified": "Vérifié"
+    },
+    "skillZip": {
+      "step0": "Déposez un zip de compétence dans le Chat",
+      "step1": "Le Chat lit SKILL.md",
+      "step2": "L'agent conserve la compétence",
+      "prompt": "Lire la facture et lister les lignes d'articles."
+    }
   },
   "schedules": {
     "calendar": {
@@ -1918,7 +1934,17 @@
     "selectVoice": "Sélectionner une voix",
     "serviceName": "Nom du service",
     "spans": "Spans",
-    "sso": "SSO"
+    "sso": "SSO",
+    "pluginsIntro": "Les plugins ajoutent des nœuds personnalisés (actions et Triggers) à cette instance. L'installation ou la suppression d'un plugin exécute du code côté serveur et est donc réservée aux opérateurs répertoriés dans",
+    "loadingPlugins": "Chargement des plugins…",
+    "pluginsDisabledTitle": "Les plugins sont désactivés",
+    "pluginsDisabledHint": "Définissez ces variables d'environnement sur le backend, puis redémarrez :",
+    "installPluginZip": "Installer un plugin (.zip)",
+    "noPluginsInstalled": "Aucun plugin installé pour le moment.",
+    "enablePlugin": "Activer",
+    "disablePlugin": "Désactiver",
+    "uninstallPlugin": "Désinstaller",
+    "pluginOperationFailed": "Échec de l'opération sur le plugin"
   },
   "showcase": {
     "askAboutDoc": "Poser une question sur cette documentation",
@@ -2401,5 +2427,48 @@
     "search": "Rechercher (Ctrl+K)",
     "settings": "Paramètres",
     "update": "Mettre à jour"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Rechercher des Workflows, onglets, docs...",
+    "searchAria": "Recherche dans la palette de commandes",
+    "ariaLabel": "Palette de commandes",
+    "noResults": "Aucun résultat trouvé",
+    "tryDifferentSearch": "Essayez un autre terme de recherche",
+    "recent": "Récents",
+    "recentInFolder": "Récents · Dans : {folder}",
+    "inFolder": "Dans : {folder}",
+    "scheduledDate": "Planifié {date}",
+    "scheduledForDeletion": "Suppression planifiée",
+    "goToTab": "Aller à l'onglet",
+    "workflowTemplate": "Modèle de Workflow",
+    "nodeTemplate": "Modèle de nœud",
+    "nodeType": "Nœud · {type}",
+    "documentation": "Documentation",
+    "support": "Support",
+    "contactSupport": "Contacter le support",
+    "watchRunbook": "Voir Heym construire et exécuter un Workflow",
+    "openDocs": "Ouvrir la documentation Heym",
+    "getHelp": "Obtenir de l'aide de l'équipe Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work pour les équipes métier, sur heym.run",
+    "navigate": "Naviguer",
+    "select": "Sélectionner",
+    "click": "clic",
+    "newTab": "nouvel onglet",
+    "oneItem": "{count} élément",
+    "manyItems": "{count} éléments"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Les plugins sont désactivés sur cette instance.",
+    "loadingDefinition": "Chargement de la définition du plugin...",
+    "notBound": "Ce nœud n'est lié à aucun paquet de plugin.",
+    "noneInstalled": "Aucun plugin n'est installé sur cette instance.",
+    "notInstalled": "Le plugin « {id} » n'est pas installé sur cette instance.",
+    "installedButDisabled": "Le plugin « {name} » est installé mais désactivé.",
+    "noKindNodes": "Le plugin « {name} » n'expose aucun nœud de type {kind}.",
+    "loadErrorDetail": "Impossible de charger les plugins : {detail}",
+    "loadErrorHttp": "Impossible de charger les plugins (HTTP {status}).",
+    "loadError": "Impossible de charger les plugins.",
+    "enabled": "Activé"
   }
 }

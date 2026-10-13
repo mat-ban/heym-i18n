@@ -33,6 +33,13 @@ Uzol pracuje v dvoch fázach:
 
 Na plátne tlačidlo **Run Workflow** zobrazí vytvorený `curl` v debug paneli s tlačidlom na kopírovanie.
 
+## Spúšťanie z Heym
+
+Dve miesta umožňujú spustiť takýto Workflow priamo nad súborom cez rovnaké vygenerovanie odkazu a nahranie:
+
+- [Quick Drawer](../reference/quick-drawer.md) zobrazuje zónu na presunutie súboru. Tieto spustenia sú v histórii označené značkou `Quick Drawer`.
+- [Spúšťací widget](../tabs/dashboard-tab.md#run-widgets) na dashboarde spustí Workflow pre každý presunutý súbor. Tieto spustenia sú označené značkou `dashboard`.
+
 ## Parametre
 
 | Parameter | Typ | Predvolená hodnota | Popis |

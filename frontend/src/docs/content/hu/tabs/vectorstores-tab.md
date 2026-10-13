@@ -26,6 +26,7 @@ A **Vektortárolók** lap a [RAG](../nodes/rag-node.md) csomópontok által hasz
 - **Elemek megtekintése** – Tekintse meg a forráscsoportokat és a dokumentumszámokat tárolónként. A feltöltött fájlok a fájlnevük alá csoportosulnak; azok a dokumentumok, amelyeket egy [RAG csomópont](../nodes/rag-node.md) saját `source` nélkül tárolt, az **Added workflow: _name_** alá csoportosulnak, megnevezve az őket író workflow-t
 - **Források törlése** – Távolítson el adott fájlokat vagy forráscsoportokat egy tárolóból, beleértve mindazt, amit egy workflow hozzáadott
 - **Tároló szerkesztése** – Módosítsa a nevet, a leírást vagy a hitelesítési adatot
+- **Keresés** – A `POST /api/vector-stores/{id}/search` egy `query` paraméterrel (és 1-től 20-ig terjedő, alapértelmezetten 5-ös `limit` értékkel) visszaadja azokat a chunkokat, amelyeket egy RAG-csomópont keresése adna vissza, a legjobb találattal kezdve, mindegyiket a pontszámával és forrásával együtt. A Heym Work RAG-képernyője ezt használja a visszakeresés tesztelésére
 
 ## Megosztás
 

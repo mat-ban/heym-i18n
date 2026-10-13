@@ -4,7 +4,7 @@ A caixa de diálogo Definições permite-lhe gerir o seu perfil, definir instru�
 
 ## Abrir a Caixa de Diálogo
 
-Clique em **o seu avatar e nome** no canto superior direito do cabeçalho. A caixa de diálogo abre com os seguintes separadores: **Perfil**, **Segurança**, **Voz**, **Predefinições de IA** e **Observabilidade**. Os administradores de instância também veem um separador **SSO**.
+Clique em **o seu avatar e nome** no canto superior direito do cabeçalho. A caixa de diálogo abre com os seguintes separadores: **Perfil**, **Segurança**, **Voz**, **Predefinições de IA** e **Observabilidade**. Os administradores de instância também veem os separadores **SSO**, **Heym Work** e **Instâncias**.
 
 ## Separador Perfil
 
@@ -101,6 +101,10 @@ O separador Observabilidade mostra o estado apenas de leitura do [OpenTelemetry 
 ## Separador SSO
 
 Visível apenas para administradores da instância — as contas listadas em `HEYM_ADMIN_EMAILS`. Este separador liga o Heym a um fornecedor externo OpenID Connect para que as pessoas iniciem sessão com as contas que já possuem. Introduza um URL de emissor e credenciais de cliente, copie o URI de redirecionamento apenas de leitura para o seu fornecedor e execute **Testar ligação** antes de o ativar. O início de sessão por palavra-passe pode ser desativado a partir daqui assim que o teste for bem-sucedido. Consulte [Início de Sessão Único](./sso.md) para a configuração completa.
+
+## Separador Heym Work
+
+Os administradores de instância ligam aqui o [Heym Work](./heym-work.md), a interface para equipas de negócios: o respetivo endereço, uma chave de integração apresentada uma única vez e o seletor **Enable Heym Work**. O separador mostra também quando o Heym Work comunicou pela última vez, a sua versão e o estado da licença. Consulte [Ligar o Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Separador Instâncias
 

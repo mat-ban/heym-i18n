@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id van de huidige uitvoering (gelijk aan het id van het item in de [Execution History](./execution-history.md), dus `/workflows/<id>/<executionId>` opent deze run op het canvas). **Alleen tijdens uitvoering**: leeg in het dialoogvenster voor expressievoorbeeld; alleen gevuld terwijl een workflow wordt uitgevoerd.
 - `$vars` - Workflow-lokale variabelen (toegang via `$vars.variableName`; bijgewerkt via het `variable`-knooppunt)
 - `$global` - Persistente globale variabeleopslag (toegang via `$global.variableName`)
+- `$page.record` - Alleen voor dashboardwidget-workflows: het record van de detailpagina waarop de widget zich bevindt, uit de parameter `?record=` van het dashboard. Null op een dashboard dat zonder deze parameter is geopend en in het dialoogvenster voor expressievoorbeelden. Een node met het label `page` heeft voorrang. Zie [Detailpagina's](../tabs/dashboard-tab.md#detail-pages).
 
 ### Gebruik van $vars
 - `$vars.counter` - Toegang tot een variabele met de naam `counter`

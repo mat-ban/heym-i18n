@@ -499,7 +499,7 @@ Pozri tiež [Quick Drawer](./quick-drawer.md), [Download & Import](./download-im
 
 ### [Quick Drawer](./quick-drawer.md)
 
-Quick Drawer je pevný panel rýchleho spustenia na pravej strane pre interné stránky mimo plátna. Umožňuje vyhľadávať [workflowy](../tabs/workflows-tab.md), pripnúť obľúbené, vybrať vstupy, okamžite spustiť a skontrolovať priebeh alebo výsledky bez otvorenia editora. Poradie pripnutých položiek a naposledy vybraný workflow sa ukladajú v prehliadači.
+Quick Drawer je pevný panel rýchleho spustenia na pravej strane pre interné stránky mimo plátna. Umožňuje vyhľadávať [workflowy](../tabs/workflows-tab.md), pripnúť obľúbené, vybrať vstupy, okamžite spustiť a skontrolovať priebeh alebo výsledky bez otvorenia editora. Workflow s uzlom [File Upload Trigger](../nodes/file-upload-trigger-node.md) prijme presunutý alebo vybraný súbor. Poradie pripnutých položiek a naposledy vybraný workflow sa ukladajú v prehliadači.
 
 Pozri tiež [Workflow Organization](./workflow-organization.md), [Keyboard Shortcuts](./keyboard-shortcuts.md) a [Execution History](./execution-history.md).
 
@@ -678,6 +678,12 @@ Enterprise zahŕňa komerčné licencovanie, profesionálnu podporu a služby na
 
 Pozrite si tiež [Prevádzka a nasadenie](../getting-started/running-and-deployment.md), [Bezpečnosť](./security.md) a [Tímy](./teams.md).
 
+### [Heym Work](./heym-work.md)
+
+Heym Work je druhé rozhranie pre obchodné tímy postavené nad Heym. Ľudia opíšu úlohu, odpovedia na niekoľko otázok a získajú otestovaný workflow, potom pracujú zo stránok, schválení a zoznamu Aktivita, kde má každé spustenie svoj názov. Správcovia inštancie ho pripoja v **Nastavenia → Heym Work** pomocou jeho adresy a integračného kľúča; má vlastnú licenciu od tímu Heym.
+
+Pozrite si tiež [Enterprise](./enterprise.md), [Single Sign-On](./sso.md) a [Human-in-the-Loop](./human-in-the-loop.md).
+
 ---
 
 ## Karty dashboardu
@@ -757,7 +763,7 @@ Karta MCP konfiguruje integráciu Model Context Protocol. Heym podporuje dva re�
 
 **Pomenované servery** – Vytvorte viacero izolovaných MCP endpointov, každý s vlastnou URL založenou na UUID (`/api/mcp/servers/{uuid}/sse`) a nezávislým API kľúčom. Priraďte konkrétne workflowy ku každému serveru, aby rôzni AI klienti alebo tímy videli iba nástroje, ktoré potrebujú. Každý pomenovaný server podporuje rovnaké metódy autentifikácie (API kľúč, Claude OAuth) a má vlastné skratky Copy JSON a Add to Cursor. Oba endpointy podporujú SSE transport (GET) a Streamable HTTP transport (POST). Prepnutie workflowu v rámci pomenovaného servera ho presunie na začiatok priradeného zoznamu, aby zmenený riadok zostal v zobrazení.
 
-**Nástroj Heym chat** – Každý režim môže tiež sprístupniť engine [Chat](../tabs/chat-tab.md) ako jediný nástroj `heym_chat`, prepínaný pre každé rozhranie s vlastnými prihlasovacími údajmi LLM a modelom (predvyplneným z vášho preferovaného modelu v [Settings](./user-settings.md)). MCP klient pošle jednu správu `message` v prirodzenom jazyku a engine urobí zvyšok: vytváranie, úpravu a spúšťanie workflowov, analytiku, spustenia, živý stav behu, plány, nástenky a karty, tímy, globálne premenné, vyhľadávanie v dokumentácii a rozhodnutia s človekom v procese. Schopnosti pridané do Chat neskôr sú dostupné prostredníctvom rovnakého nástroja bez ďalšej registrácie. Každé volanie je uložené v histórii karty Chat ako konverzácia označená zástrčkou a vracia `conversation_id`, ktoré môže klient poslať späť na pokračovanie vlákna.
+**Nástroj Heym chat** – Každý režim môže tiež sprístupniť engine [Chat](../tabs/chat-tab.md) ako jediný nástroj `heym_chat`, prepínaný pre každé rozhranie s vlastnými prihlasovacími údajmi LLM a modelom (predvyplneným z vášho preferovaného modelu v [Settings](./user-settings.md)). MCP klient pošle jednu správu `message` v prirodzenom jazyku a engine urobí zvyšok: vytváranie workflowov v režime zostavovania (uloženie, až päť testovacích spustení, oprava a overenie), spúšťanie workflowov, analytiku, spustenia, živý stav behu, plány, nástenky a karty, tímy, globálne premenné, vyhľadávanie v dokumentácii a rozhodnutia s človekom v procese. Schopnosti pridané do Chat neskôr sú dostupné prostredníctvom rovnakého nástroja bez ďalšej registrácie. Každé volanie je uložené v histórii karty Chat ako konverzácia označená zástrčkou a vracia `conversation_id`, ktoré môže klient poslať späť na pokračovanie vlákna.
 
 Pozrite tiež [Agent Architecture](./agent-architecture.md), [Agent Node](../nodes/agent-node.md) a [SSE Streaming](./sse-streaming.md).
 
@@ -793,7 +799,7 @@ Pozri tiež [História spustení](./execution-history.md), [Plány](../tabs/sche
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Karta Dashboard je priestor v štýle Grafany, kde vytvárate mriežky widgetov s grafmi, pričom každý je vykreslený z vlastného skrytého workflow Heym. Uchovávajte toľko dashboardov, koľko potrebujete, a každý zdieľajte s používateľmi alebo tímami, iba na čítanie alebo s možnosťou úprav; widgety vždy bežia s prihlasovacími údajmi vlastníka, takže každý vidí rovnaké dáta. Opíšte metriku prirodzeným jazykom a AI vygeneruje widget, alebo pridajte jeden manuálne a vyberte typ grafu s náhľadom na vzorových dátach: stĺpcový, čiarový, plošný, koláčový, tabuľka, číselný, gauge, bodový, proporčný, stĺpcový gauge, text alebo HITL. HITL je karusel Vašich čakajúcich ľudských kontrol. Hlavička zobrazuje `1/n pending`. Názov workflow otvorí toto spustenie na plátne. **Approve**, **Request changes** a **Reject** ho vyriešia a ikona histórie vedľa názvu widgetu otvorí toto spustenie v dialógu histórie na tej istej stránke. Widgety ukladajú svoje výsledky do vyrovnávacej pamäte, dajú sa doladiť pomocou AI (každá zmena sa uloží do [Histórie úprav](./edit-history.md)), klonovať spolu s ich kompletným workflow, preusporiadať pomocou Tidy up a v režime úprav presúvať alebo meniť veľkosť. Keďže každý widget je workflow, akékoľvek dáta, ktoré dokážete získať — volanie [HTTP](../nodes/http-node.md), dotaz [BigQuery](../nodes/bigquery-node.md), vyhľadávanie [RAG](../nodes/rag-node.md) alebo výstup [LLM](../nodes/llm-node.md) — sa môžu stať grafom.
+Karta Dashboard je priestor v štýle Grafany, kde vytvárate mriežky widgetov s grafmi, pričom každý je vykreslený z vlastného skrytého workflow Heym. Uchovávajte toľko dashboardov, koľko potrebujete, a každý zdieľajte s používateľmi alebo tímami, iba na čítanie alebo s možnosťou úprav; widgety vždy bežia s prihlasovacími údajmi vlastníka, takže každý vidí rovnaké dáta. Opíšte metriku prirodzeným jazykom a AI vygeneruje widget, alebo pridajte jeden manuálne a vyberte typ grafu s náhľadom na vzorových dátach: stĺpcový, čiarový, plošný, koláčový, tabuľka, číselný, gauge, bodový, proporčný, stĺpcový gauge, text alebo HITL. HITL je karusel Vašich čakajúcich ľudských kontrol. Hlavička zobrazuje `1/n pending`. Názov workflow otvorí toto spustenie na plátne. **Approve**, **Request changes** a **Reject** ho vyriešia a ikona histórie vedľa názvu widgetu otvorí toto spustenie v dialógu histórie na tej istej stránke. Widgety ukladajú svoje výsledky do vyrovnávacej pamäte, dajú sa doladiť pomocou AI (každá zmena sa uloží do [Histórie úprav](./edit-history.md)), klonovať spolu s ich kompletným workflow, preusporiadať pomocou Tidy up a v režime úprav presúvať alebo meniť veľkosť. Tabuľky môžu zobrazovať štítky stavu a prepájať svoje riadky s detailným panelom, ktorý číta záznam kliknutého riadka ako `$page.record`, a widget Run spúšťa workflow z panela: na presunutom súbore, so vstupnými poľami alebo tlačidlom Spustiť. Keďže každý widget je workflow, akékoľvek dáta, ktoré dokážete získať — volanie [HTTP](../nodes/http-node.md), dotaz [BigQuery](../nodes/bigquery-node.md), vyhľadávanie [RAG](../nodes/rag-node.md) alebo výstup [LLM](../nodes/llm-node.md) — sa môžu stať grafom.
 
 Pozri tiež [Uzol Chart Output](../nodes/chart-output-node.md), [Analytika](../tabs/analytics-tab.md) a [História spustení](./execution-history.md).
 

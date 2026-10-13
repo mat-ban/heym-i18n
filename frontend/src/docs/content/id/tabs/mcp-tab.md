@@ -1,6 +1,6 @@
 # Tab MCP
 
-Tab **MCP** mengonfigurasi integrasi Model Context Protocol (MCP). MCP memungkinkan klien AI (Claude, Cursor, dan alat apa pun yang kompatibel dengan MCP) memanggil Workflow Heym Anda sebagai tools.
+Tab **MCP** mengonfigurasi integrasi Model Context Protocol (MCP). MCP memungkinkan klien AI (Claude, ChatGPT, Gemini, Cursor, dan alat apa pun yang kompatibel dengan MCP) memanggil Workflow Heym Anda sebagai tools.
 
 Heym mendukung dua mode: **server default** yang mengekspos semua Workflow dengan MCP aktif di bawah satu Endpoint, dan **server bernama** yang memberikan setiap grup Workflow logis URL khusus dan API Key tersendiri.
 
@@ -24,6 +24,8 @@ Server default selalu tersedia di `{origin}/api/mcp/sse`. Semua Workflow dengan 
 
 - **API Key** – Gunakan API Key MCP untuk koneksi programatik. Tab ini dapat menyalin konfigurasi JSON yang siap pakai dan menyertakan tombol **Add to Cursor** untuk penyiapan Cursor sekali klik.
 - **Claude** – Tab ini menampilkan URL server MCP dan langkah-langkah penyiapan untuk Claude. Biarkan OAuth Client ID dan Secret kosong; Claude mendaftar secara otomatis dan melakukan autentikasi melalui OAuth Heym.
+- **ChatGPT** – Tab ini menampilkan URL server MCP dan langkah-langkah penyiapan untuk aplikasi ChatGPT. Aktifkan mode Pengembang (Developer mode), buat aplikasi dengan URL tersebut, lalu pilih OAuth; ChatGPT akan mendaftar secara otomatis.
+- **Gemini** – Tab ini menampilkan URL server MCP dan langkah-langkah penyiapan untuk aplikasi kustom Gemini: di gemini.google.com, buka **Settings → Connected Apps → Add a custom app**, tempelkan URL, dan biarkan **Advanced features** tertutup; Gemini akan mendaftar secara otomatis dan melakukan autentikasi melalui Heym OAuth. Setelah terhubung, Heym juga berfungsi di aplikasi seluler Gemini.
 
 ### Toggle MCP Workflow
 
@@ -40,7 +42,8 @@ Bagian **Heym Capabilities** mengubah mesin Tab Chat menjadi satu tool MCP berna
 
 Saat aktif, `heym_chat` muncul di `tools/list` bersama tools Workflow Anda. Klien MCP mengirimkan satu pesan bahasa alami dan mesin Heym menanganinya, dengan kemampuan yang sama seperti Tab Chat:
 
-- Membangun, mengedit, memeriksa, dan menjalankan Workflow melalui Workflow AI Builder
+- Membangun Workflow, melakukan uji jalan dengan input sampel, memperbaikinya, dan menyelesaikan saat eksekusi berhasil (lihat [Mode Build](#build-mode))
+- Memeriksa dan menjalankan Workflow Anda yang sudah ada
 - Melaporkan analitik, eksekusi terbaru, dan jadwal Cron yang akan datang
 - Melaporkan riwayat eksekusi satu Workflow: berapa kali dijalankan, jumlah status, kapan dijalankan, dan atas permintaan input, output, serta error per-Node dari satu eksekusi
 - Melaporkan apa yang sedang berjalan saat ini: berapa banyak eksekusi aktif, nama Workflow-nya, berapa lama masing-masing berjalan, Node yang sedang dijalani, dan tautan ke eksekusi langsung
@@ -50,6 +53,15 @@ Saat aktif, `heym_chat` muncul di `tools/list` bersama tools Workflow Anda. Klie
 - Menyetujui, mengedit, atau menolak review human-in-the-loop yang tertunda
 
 Kemampuan yang ditambahkan ke Tab Chat di kemudian hari otomatis tersedia melalui `heym_chat` — tidak ada toggle per-kemampuan yang perlu disinkronkan.
+
+### Mode Build
+
+`heym_chat` selalu menjalankan mesin Chat dalam mode build. Dalam satu panggilan, asisten dapat menyimpan Workflow baru, menjalankannya dengan input sampel yang realistis, membaca laporan eksekusi, memperbaiki bagian yang gagal, dan menjalankannya kembali, hingga lima kali uji jalan per panggilan. Ketika eksekusi terakhir dari penyimpanan terakhir berhasil, asisten menyelesaikannya dengan ringkasan satu kalimat, dan balasan diakhiri dengan `Verified: the latest test run of the saved workflow passed.`
+
+- Uji jalan adalah eksekusi nyata. Efek sampingnya benar-benar terjadi dan muncul di riwayat eksekusi Workflow seperti eksekusi lainnya.
+- Penyimpanan mengikuti jalur editor: perubahan pada graf menyimpan graf sebelumnya di **Edit History** Workflow.
+- Untuk mengubah Workflow yang dibuat sebelumnya, lanjutkan utas dengan `conversation_id` yang sama. Asisten memperbarui Workflow tersebut alih-alih membuat yang baru, dan hanya mengubah Workflow yang dapat Anda edit.
+- Ketika lima uji jalan telah terpakai, asisten berhenti dan menjelaskan apa yang masih gagal.
 
 Credential tetap berada di UI: `heym_chat` tidak pernah menampilkan, memilih, atau membuatnya. Saat membangun atau mengedit Workflow, Node baru yang memerlukan credential dibiarkan kosong dan balasannya menyebutkannya, sehingga Anda dapat mengaturnya di editor.
 
@@ -109,7 +121,7 @@ Mengaktifkan/nonaktifkan sebuah Workflow akan memindahkannya ke bagian atas daft
 Named server mendukung metode autentikasi yang sama dengan server default:
 
 - **Header X-MCP-Key** – Kirimkan API key server secara langsung (klien API, Cursor). Hanya melalui header: key tidak diterima sebagai parameter kueri `?key=`, karena URL akan tercatat dalam access log, log proxy, dan riwayat browser.
-- **Claude OAuth** – Tambahkan URL server ke integrasi Claude; biarkan credential kosong dan Claude akan mendaftar melalui OAuth secara otomatis. Bearer token harus dikirim melalui header `Authorization`, bukan sebagai `?token=`.
+- **Claude, ChatGPT, dan Gemini OAuth** – Tambahkan URL server ke konektor atau aplikasi kustom klien; biarkan credential kosong dan klien akan mendaftar melalui OAuth secara otomatis. Bearer token harus dikirim melalui header `Authorization`, bukan sebagai `?token=`.
 - **Session token** – Diterbitkan selama handshake SSE; dibatasi pada server tertentu sehingga token dari satu named server tidak dapat mengakses server lainnya. Parameter `?session=` berumur pendek ini tidak terpengaruh.
 
 ### Menghapus Named Server
@@ -123,7 +135,7 @@ Klik ikon **X** pada header kartu server. Penghapusan akan menghapus server bese
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Kedua endpoint mendukung transport SSE (GET, MCP spec 2024-11-05) dan transport Streamable HTTP (POST, MCP spec 2025-03-26). Claude menggunakan OAuth 2.1 / PKCE untuk sign-in yang aman pada keduanya.
+Kedua endpoint mendukung transport SSE (GET, MCP spec 2024-11-05) dan transport Streamable HTTP (POST, MCP spec 2025-03-26). Claude, ChatGPT, dan Gemini menggunakan OAuth 2.1 / PKCE untuk sign-in yang aman pada keduanya.
 
 ## Terkait
 

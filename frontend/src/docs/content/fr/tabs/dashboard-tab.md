@@ -8,7 +8,7 @@ Chaque utilisateur commence avec un tableau de bord, créé lors de sa première
 
 L'onglet rouvre le dernier tableau de bord utilisé, et la barre d'adresse contient le tableau de bord ouvert (`?tab=dashboard&dashboard=<id>`), de sorte qu'un lien ouvre ce tableau de bord précis pour toute personne y ayant accès.
 
-Le bouton de paramètres (réservé aux propriétaires) permet de renommer le tableau de bord, de gérer son partage et de le supprimer. La suppression d'un tableau de bord supprime ses widgets et leurs workflows. Vous conservez toujours au moins un tableau de bord vous appartenant, le dernier ne peut donc pas être supprimé.
+Le bouton de paramètres (réservé aux propriétaires) permet de renommer le tableau de bord, de définir quels enregistrements il accepte en tant que [page de détail](#detail-pages), de gérer son partage et de le supprimer. La suppression d'un tableau de bord supprime ses widgets et leurs workflows. Vous conservez toujours au moins un tableau de bord vous appartenant, le dernier ne peut donc pas être supprimé.
 
 ## Widgets
 
@@ -18,7 +18,7 @@ Un widget est un graphique unique sur la grille. Types de graphiques pris en cha
 - **Lignes**
 - **Aires** (tendance remplie, prend en charge plusieurs séries)
 - **Camembert**
-- **Tableau** (défilable)
+- **Tableau** (défilable ; une colonne peut être affichée sous forme de [pastilles de statut](../nodes/chart-output-node.md#status-chips), et les lignes peuvent ouvrir une [page de détail](#detail-pages))
 - **Numérique** (une valeur KPI unique avec unité facultative)
 - **Jauge** (une valeur unique sur une plage min–max, par exemple un pourcentage)
 - **Nuage de points** (points X/Y pour les graphiques de corrélation)
@@ -26,6 +26,8 @@ Un widget est un graphique unique sur la grille. Types de graphiques pris en cha
 - **Jauge à barres** (une jauge horizontale par ligne avec un dégradé rouge→vert et une valeur, par exemple l'espace disque libre)
 - **Texte** (un message markdown, par exemple une note de statut telle que « Dernière exécution à 19:47 » ; prend en charge les [cases à cocher interactives](../nodes/chart-output-node.md#interactive-task-lists) lorsque le markdown est statique, ainsi que les [listes numérotées explicites](../nodes/chart-output-node.md#numbered-lists) pour une numérotation personnalisée ou décroissante)
 - **HITL** (vos revues humaines en attente. L'en-tête affiche `1/n pending`. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** permettent de la résoudre. L'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique de cette page. Le widget n'utilise pas les lignes en amont, et chaque personne voit sa propre file d'attente)
+
+Outre les graphiques, un widget **Run a workflow** exécute l'un de vos workflows depuis le tableau de bord : sur un fichier déposé, avec ses champs de saisie ou avec un bouton Run ; voir [Widgets d'exécution](#run-widgets).
 
 Chaque widget charge ses données de manière asynchrone à l'ouverture de l'onglet, ce qui maintient la réactivité de la page pendant le remplissage des graphiques.
 
@@ -36,7 +38,39 @@ Chaque widget charge ses données de manière asynchrone à l'ouverture de l'ong
 3. Construisez le workflow de sorte que le nœud alimentant **Chart Output** produise un tableau de lignes, puis configurez le mappage des champs du nœud Chart Output (champ de libellé, champ de valeur, etc.).
 4. Enregistrez, revenez à l'onglet Tableau de bord, et le widget s'affiche.
 
+Pour un widget **Run a workflow**, choisissez plutôt le workflow qu'il exécute ; le sélecteur indique comment le widget exécutera chacun d'eux. Le widget est ajouté directement à la grille ; il n'y a pas de nouveau workflow à construire.
+
 Double-cliquez sur un widget (ou utilisez son bouton d'édition) pour rouvrir son workflow à tout moment. Utilisez **Clone widget** dans l'en-tête du widget pour dupliquer à la fois le widget et l'intégralité de son workflow. La copie est placée sous l'original et étiquetée **(Copy)** afin que vous puissiez la modifier indépendamment.
+
+## Pages de détail
+
+Un widget de tableau peut lier ses lignes à un autre tableau de bord, qui fonctionne alors comme une page de détail : un seul tableau de bord qui sert chaque client, facture ou ticket.
+
+1. Ouvrez les **Settings** du widget de tableau et choisissez le tableau de bord sous **Row link**.
+2. Saisissez la **Record column**, la colonne dont la valeur identifie la ligne (par exemple `id`), et éventuellement une **Label column** qui la nomme (par exemple `name`).
+3. Enregistrez. Cliquer sur une ligne (ou la cibler et appuyer sur Entrée) ouvre le tableau de bord lié avec `?record=<value>&label=<name>`.
+
+Sur le tableau de bord de détail, chaque workflow de widget lit la valeur sous la forme `$page.record` (voir [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)), et la page affiche `Dashboard / <label>` au-dessus de la grille avec un bouton pour effacer l'enregistrement. Le bouton Retour ramène au tableau d'origine.
+
+- **Qui peut l'ouvrir.** Les lignes ne sont cliquables que pour les spectateurs pouvant ouvrir le tableau de bord lié. Les autres voient le même tableau sans liens.
+- **Format de l'enregistrement.** L'enregistrement provient de l'URL ; le tableau de bord de détail décide donc de ce qu'il accepte. Dans ses paramètres, **Detail page records** correspond à l'un des formats suivants : ID (lettres, chiffres, `-`, `_` et `.`, jusqu'à 128 caractères ; valeur par défaut), nombres, UUID ou adresses e-mail. Toute autre valeur est refusée avant l'exécution d'un widget, et les widgets affichent « This page does not accept that record ».
+- **Toujours exécuté en tant que propriétaire.** Les widgets s'exécutent également en tant que propriétaire du tableau de bord sur une page de détail. Les concepteurs ne doivent transmettre `$page.record` que là où un nœud l'échappe, jamais directement dans le texte d'une requête.
+- **Mise en cache.** Chaque widget met en cache son graphique par enregistrement, pour la même durée de vie (TTL) que le widget, et conserve les 50 enregistrements les plus récemment utilisés.
+
+## Widgets d'exécution
+
+Un widget **Run a workflow** exécute l'un de vos workflows et affiche le résultat : statut, durée d'exécution et sorties. Ce qu'il affiche dépend de ce que le workflow accepte :
+
+- **Un fichier.** Pour un workflow qui commence par un [File Upload Trigger](../nodes/file-upload-trigger-node.md), déposez un fichier dessus (ou cliquez pour en choisir un) et le widget le téléverse via le lien de téléversement à usage unique du trigger. Le widget indique les types et la taille de fichier acceptés par le trigger et refuse les autres avant le téléversement. Lorsque le workflow commence également par un nœud Text Input, le widget affiche ses champs à côté de la zone de dépôt : choisissez un fichier, remplissez les champs, et **Run** envoie les deux. Les valeurs voyagent avec le lien de téléversement généré par le widget, de sorte qu'un lien de téléversement partagé ne peut pas les définir.
+- **Champs de saisie.** Pour un workflow qui commence par un nœud Text Input, le widget affiche ses champs avec leurs valeurs par défaut ; **Run** exécute le workflow avec vos valeurs. Les valeurs correspondant à des champs absents du workflow sont ignorées.
+- **Rien.** Un workflow sans entrées obtient un bouton **Run**.
+
+Le bouton **Wrap** du résultat renvoie à la ligne les longues lignes de sortie à l'intérieur du cadre ; désactivez-le pour lire la mise en page JSON de la sortie.
+
+- Toute personne pouvant ouvrir le tableau de bord peut exécuter le widget, tout comme n'importe qui peut actualiser un graphique. L'accès au workflow est celui du propriétaire du tableau de bord : l'ajout du widget nécessite un workflow que vous et le propriétaire pouvez tous deux exécuter, et l'exécution elle-même utilise les identifiants du propriétaire du workflow, comme tout lien de téléversement.
+- Le résultat reste affiché sur votre écran jusqu'à ce que vous quittiez la page ; les autres spectateurs ne voient ni vos fichiers, ni vos valeurs, ni vos résultats. L'exécution apparaît dans l'historique des exécutions avec le trigger `dashboard`.
+- Un partage de tableau de bord n'accorde jamais l'accès au workflow lui-même. **Edit workflow** l'ouvre pour les personnes qui y ont déjà accès, et **Fine-tune with AI** n'est pas proposé.
+- Les exécutions avec fichier s'exécutent sur l'instance principale, où les fichiers téléversés sont stockés, comme toute exécution de File Upload Trigger.
 
 ## Génération d'un widget avec l'IA
 
@@ -50,7 +84,7 @@ Activez **Edit** pour passer en mode édition, dans lequel vous pouvez faire gli
 
 ## Mise en cache et actualisation
 
-Chaque widget met en cache ses dernières données calculées sur le serveur pendant une durée de vie (TTL) configurable. Tant que le cache est frais, la réouverture du tableau de bord sert le résultat stocké au lieu de réexécuter le workflow. Le cache est remplacé sur place à chaque recalcul des données (un cache par widget), et il est automatiquement invalidé lorsque vous modifiez le workflow du widget.
+Chaque widget met en cache ses dernières données calculées sur le serveur pendant une durée de vie (TTL) configurable. Tant que le cache est frais, la réouverture du tableau de bord sert le résultat stocké au lieu de réexécuter le workflow. Le cache est remplacé sur place à chaque recalcul des données (un cache par widget, plus un par enregistrement sur une [page de détail](#detail-pages)), et il est automatiquement invalidé lorsque vous modifiez le workflow du widget.
 
 Utilisez le bouton **Refresh** d'un widget (ou **Refresh** dans la barre d'outils) pour contourner le cache et recalculer immédiatement.
 
@@ -61,9 +95,10 @@ Les propriétaires partagent un tableau de bord depuis ses paramètres, avec des
 | Action | Propriétaire | Écriture | Lecture |
 |--------|:-----:|:-----:|:----:|
 | Consulter les widgets, les actualiser, utiliser l'actualisation automatique | ✓ | ✓ | ✓ |
+| Ouvrir les pages de détail, exécuter les widgets d'exécution | ✓ | ✓ | ✓ |
 | Ajouter, cloner, supprimer, renommer et redimensionner des widgets ; générer et affiner par IA ; cocher les éléments de la liste de contrôle | ✓ | ✓ | |
 | Ouvrir le workflow d'un widget dans l'éditeur | ✓ | ✓ | |
-| Renommer ou supprimer le tableau de bord, gérer le partage | ✓ | | |
+| Renommer ou supprimer le tableau de bord, définir son format d'enregistrement, gérer le partage | ✓ | | |
 
 **Les widgets s'exécutent toujours en tant que propriétaire du tableau de bord.** Quel que soit le spectateur, un widget utilise les identifiants et les variables globales du propriétaire, et ses exécutions apparaissent dans l'historique des exécutions et les traces du propriétaire. Les membres de l'équipe voient donc les mêmes données sans accéder aux comptes qui les sous-tendent, et chaque spectateur partage le même résultat mis en cache par widget. Les widgets qu'un collaborateur en écriture ajoute ou clone appartiennent également au propriétaire.
 

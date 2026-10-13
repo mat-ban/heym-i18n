@@ -31,7 +31,7 @@ nepieejams ID izraisa mezgla kļūmi, nevis daļēja e-pasta nosūtīšanu.
 
 ## Iestatīšana
 
-Pievienojiet SMTP akreditācijas datus ar serveri, portu, e-pastu un paroli. Biežāk izmantotie SMTP serveri:
+Pievienojiet SMTP akreditācijas datus ar serveri, portu, e-pastu un paroli. Redzamais sūtītājs ir akreditācijas datu neobligātais lauks **From**; ja From ir tukšs, sūtīšana notiek ar lietotājvārdu. Biežāk izmantotie SMTP serveri:
 
 - Gmail: `smtp.gmail.com`, ports 587 (nepieciešama App Password)
 - Outlook: `smtp.office365.com`, ports 587

@@ -93,11 +93,12 @@ Riwayat eksekusi mencatat `trigger_source` untuk setiap titik masuk:
 |-------|------|
 | `"API"` | Panggilan Webhook / API tanpa header eksplisit (default) |
 | `"Canvas"` | Dijalankan dari kanvas editor Workflow |
-| `"Quick Drawer"` | Dijalankan dari panel quick-drawer editor |
+| `"Quick Drawer"` | Dijalankan dari panel quick-drawer editor, termasuk eksekusi file yang diunggah dari zona lepasnya |
 | `"cron"` | Penjadwal Cron |
 | `"imap"` | Manajer Trigger IMAP |
 | `"websocket"` | Manajer Trigger WebSocket keluar |
-| `"file_upload"` | Endpoint unggahan File Upload Trigger |
+| `"file_upload"` | Endpoint unggahan File Upload Trigger (tautan yang dibuat melalui HTTP, MCP, atau kanvas) |
+| `"dashboard"` | Eksekusi widget dasbor dan unggahan dari widget lepas file |
 | `"telegram"` | Webhook bot Telegram |
 | `"Discord"` | Webhook interaksi Discord |
 | `"MCP"` | Pemanggilan tool MCP |

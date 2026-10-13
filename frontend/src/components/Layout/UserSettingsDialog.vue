@@ -19,22 +19,14 @@ import {
   type ObservabilityStatus,
   type VoiceInfo,
 } from "@/services/api";
-import {
-  installPlugin,
-  listPlugins,
-  setPluginEnabled,
-  uninstallPlugin,
-} from "@/services/plugins";
 import ClusterSettingsTab from "@/components/Layout/settings/ClusterSettingsTab.vue";
+import SettingsPluginsSection from "@/components/Layout/settings/SettingsPluginsSection.vue";
 import SsoSettingsTab from "@/components/Layout/settings/SsoSettingsTab.vue";
 import WorkIntegrationSettingsTab from "@/components/Layout/settings/WorkIntegrationSettingsTab.vue";
 import { useAuthStore } from "@/stores/auth";
 
 import AiDefaultsTab from "@/components/Layout/aiDefaults/AiDefaultsTab.vue";
-import { clearPluginIconCache } from "@/components/Panels/PluginIcon.vue";
 import { getCurrentLocale, setLocale, isSupportedLocale, SUPPORTED_LOCALES, type SupportedLocale } from "@/i18n";
-
-import type { PluginSummary } from "@/types/workflow";
 
 type SettingsTab =
   | "profile"
@@ -83,79 +75,6 @@ async function loadObservabilityStatus(): Promise<void> {
     observabilityStatus.value = null;
   } finally {
     loadingObservability.value = false;
-  }
-}
-
-const pluginsEnabled = ref(false);
-const installedPlugins = ref<PluginSummary[]>([]);
-const loadingPlugins = ref(false);
-const pluginError = ref<string | null>(null);
-const pluginBusy = ref(false);
-
-async function loadPlugins(): Promise<void> {
-  loadingPlugins.value = true;
-  pluginError.value = null;
-  clearPluginIconCache();
-  try {
-    installedPlugins.value = await listPlugins();
-    pluginsEnabled.value = true;
-  } catch {
-    // 404 => plugins disabled on this instance.
-    pluginsEnabled.value = false;
-    installedPlugins.value = [];
-  } finally {
-    loadingPlugins.value = false;
-  }
-}
-
-function pluginErrorMessage(err: unknown): string {
-  if (typeof err === "object" && err !== null && "response" in err) {
-    const response = (err as { response?: { data?: { detail?: string } } }).response;
-    if (response?.data?.detail) return response.data.detail;
-  }
-  return err instanceof Error ? err.message : "Plugin operation failed";
-}
-
-async function handleInstallFile(event: Event): Promise<void> {
-  const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
-  if (!file) return;
-  pluginBusy.value = true;
-  pluginError.value = null;
-  try {
-    await installPlugin(file);
-    await loadPlugins();
-  } catch (err) {
-    pluginError.value = pluginErrorMessage(err);
-  } finally {
-    pluginBusy.value = false;
-    input.value = "";
-  }
-}
-
-async function handleTogglePlugin(plugin: PluginSummary): Promise<void> {
-  pluginBusy.value = true;
-  pluginError.value = null;
-  try {
-    await setPluginEnabled(plugin.id, !plugin.enabled);
-    await loadPlugins();
-  } catch (err) {
-    pluginError.value = pluginErrorMessage(err);
-  } finally {
-    pluginBusy.value = false;
-  }
-}
-
-async function handleUninstallPlugin(plugin: PluginSummary): Promise<void> {
-  pluginBusy.value = true;
-  pluginError.value = null;
-  try {
-    await uninstallPlugin(plugin.id);
-    await loadPlugins();
-  } catch (err) {
-    pluginError.value = pluginErrorMessage(err);
-  } finally {
-    pluginBusy.value = false;
   }
 }
 
@@ -278,9 +197,6 @@ watch(
       if (activeTab.value === "observability") {
         void loadObservabilityStatus();
       }
-      if (activeTab.value === "plugins") {
-        void loadPlugins();
-      }
       setupTabbarObservers();
     } else {
       teardownTabbarObservers();
@@ -294,9 +210,6 @@ watch(
 watch(activeTab, (tab) => {
   if (tab === "observability" && observabilityStatus.value === null) {
     void loadObservabilityStatus();
-  }
-  if (tab === "plugins") {
-    void loadPlugins();
   }
 });
 
@@ -810,122 +723,8 @@ HEYM_OTEL_EXPORTER_OTLP_HEADERS=authorization=Bearer &lt;token&gt;</pre>
         </div>
       </div>
 
-      <div
-        v-else-if="activeTab === 'plugins'"
-        class="space-y-5"
-      >
-        <p class="text-xs text-muted-foreground">
-          Plugins add custom nodes (actions and triggers) to this instance. Installing or
-          removing a plugin runs server-side code, so it is restricted to operators listed in
-          <code>HEYM_PLUGIN_ADMIN_EMAILS</code>.
-        </p>
-
-        <div
-          v-if="loadingPlugins"
-          class="text-xs text-muted-foreground"
-        >
-          Loading plugins…
-        </div>
-
-        <div
-          v-else-if="!pluginsEnabled"
-          class="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground space-y-1"
-        >
-          <p class="font-medium text-foreground">
-            Plugins are disabled
-          </p>
-          <p>Set these environment variables on the backend, then restart:</p>
-          <pre class="mt-1 whitespace-pre-wrap font-mono leading-relaxed">HEYM_PLUGINS_ENABLED=true
-HEYM_PLUGIN_ADMIN_EMAILS=you@example.com</pre>
-        </div>
-
-        <template v-else>
-          <div class="space-y-2">
-            <Label for="plugin-zip">Install a plugin (.zip)</Label>
-            <input
-              id="plugin-zip"
-              type="file"
-              accept=".zip"
-              :disabled="pluginBusy"
-              class="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90"
-              @change="handleInstallFile"
-            >
-          </div>
-
-          <p
-            v-if="pluginError"
-            class="text-xs text-destructive"
-          >
-            {{ pluginError }}
-          </p>
-
-          <div
-            v-if="installedPlugins.length === 0"
-            class="text-xs text-muted-foreground"
-          >
-            No plugins installed yet.
-          </div>
-
-          <ul
-            v-else
-            class="space-y-2"
-          >
-            <li
-              v-for="plugin in installedPlugins"
-              :key="plugin.id"
-              class="flex items-center justify-between gap-3 rounded-lg border border-border bg-card/60 p-3"
-            >
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="text-sm font-medium truncate">{{ plugin.name }}</span>
-                  <span class="text-xs text-muted-foreground">v{{ plugin.version }}</span>
-                </div>
-                <p class="text-xs text-muted-foreground line-clamp-1">
-                  {{ plugin.description }}
-                </p>
-                <div class="mt-1 flex flex-wrap gap-1">
-                  <span
-                    v-for="node in plugin.nodes"
-                    :key="node.key"
-                    class="text-[10px] rounded px-1.5 py-0.5 bg-muted text-muted-foreground"
-                  >
-                    {{ node.name }} · {{ node.kind }}
-                  </span>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  :disabled="pluginBusy"
-                  @click="handleTogglePlugin(plugin)"
-                >
-                  {{ plugin.enabled ? "Disable" : "Enable" }}
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  type="button"
-                  :disabled="pluginBusy"
-                  @click="handleUninstallPlugin(plugin)"
-                >
-                  Uninstall
-                </Button>
-              </div>
-            </li>
-          </ul>
-        </template>
-
-        <div class="flex justify-end gap-3 pt-2">
-          <Button
-            variant="outline"
-            type="button"
-            @click="emit('close')"
-          >
-            {{ $t('common.close') }}
-          </Button>
-        </div>
+      <div v-else-if="activeTab === 'plugins'">
+        <SettingsPluginsSection @close="emit('close')" />
       </div>
 
       <div v-else-if="activeTab === 'instances' && authStore.user?.is_admin">

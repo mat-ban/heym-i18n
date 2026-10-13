@@ -35,6 +35,7 @@ Valige workflow, et avada selle sisestusvorm.
 - Klõpsake **Run Workflow**, et käivitada valitud workflow
 - Klõpsake **Stop Workflow**, et tühistada sahtlist käimasolev käivitus
 - Workflow'sid ilma sisestusväljadeta saab siiski otse käivitada
+- Workflow, mis algab sõlmega [File Upload Trigger](../nodes/file-upload-trigger-node.md), kuvab selle asemel pukseerimisala: lohistage fail sinna või klõpsake faili valimiseks. Ala loetleb triggeri lubatud failitüübid ja -suuruse ning keeldub teistest failidest enne üleslaadimist. **Run Workflow** jääb keelatuks, kuni fail on valitud.
 
 Sahtel kasutab sama workflow käivitamise API-t nagu teised Heymi käivituspinnad, seega väljundid ja käitusaegne käitumine püsivad järjepidevad.
 
@@ -51,6 +52,8 @@ Pärast käivituse alustamist kuvab sahtel:
 
 `pending` tähendab, et workflow ootab hilisemat toimingut, näiteks inimülevaatamist.
 
+Failikäivitus toimub triggeri ühekordse üleslaadimislingi kaudu: sahtel küsib workflow'lt lingi, laadib faili sinna üles ja kuvab tulemuse, kui üleslaadimine lõpeb. Failikäivitused näitavad lõppolekut ja väljundeid, kuid mitte samm-sammulist edenemist, ning need märgitakse ajaloos samuti sildiga `Quick Drawer`. Valitud fail tühjendatakse pärast iga käivitust, sest üks link võtab vastu ühe faili.
+
 ## Brauseri salvestusruum
 
 Kiirsahtel salvestab isiklikud eelistused `localStorage`-sse:
@@ -64,7 +67,7 @@ Sahtel **ei** säilita selles versioonis sisestusväärtusi.
 
 Kiirsahtel on tahtlikult kergekaaluline käivituspind.
 
-- Kaasatud: otsing, kinnitamine, valimine, sisestamine, käivitamine, edenemine, tulemus
+- Kaasatud: otsing, kinnitamine, valimine, sisestamine (sh fail), käivitamine, edenemine, tulemus
 - Välistatud: workflow'de loomine, redigeerimine, kaustahaldus ja lõuendi toimingud
 
 ## Seotud

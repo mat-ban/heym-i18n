@@ -274,7 +274,17 @@
       "intro": "A Heym Work egy második felület üzleti csapatok számára. A felhasználók a Heymen keresztül jelentkeznek be, és minden feladat itt fut.",
       "never": "Soha",
       "learnMore": "Tudjon meg többet"
-    }
+    },
+    "pluginsIntro": "A bővítmények egyéni csomópontokat (műveleteket és Triggereket) adnak ehhez a példányhoz. Egy bővítmény telepítése vagy eltávolítása szerveroldali kódot futtat, ezért a következőben felsorolt üzemeltetőkre korlátozódik:",
+    "loadingPlugins": "Bővítmények betöltése…",
+    "pluginsDisabledTitle": "A bővítmények le vannak tiltva",
+    "pluginsDisabledHint": "Állítsa be ezeket a környezeti változókat a backenden, majd indítsa újra:",
+    "installPluginZip": "Bővítmény telepítése (.zip)",
+    "noPluginsInstalled": "Még nincsenek telepített bővítmények.",
+    "enablePlugin": "Engedélyezés",
+    "disablePlugin": "Letiltás",
+    "uninstallPlugin": "Eltávolítás",
+    "pluginOperationFailed": "A bővítményművelet sikertelen"
   },
   "workflows": {
     "title": "Workflow-k",
@@ -390,7 +400,22 @@
     "startTour": "Túra indítása",
     "readTheDocs": "Dokumentáció megnyitása",
     "previousFeature": "Előző funkció",
-    "goToFeature": "Ugrás a következőhöz: {title}"
+    "goToFeature": "Ugrás a következőhöz: {title}",
+    "heymWork": {
+      "step0": "Egy csapat kérést indít a Heym Workben",
+      "step1": "A Heym felépíti és leteszteli",
+      "step2": "Ellenőrizve, vászon nélkül",
+      "step3": "A Heym a háttérben futtatja",
+      "prompt": "Ellenőrizze az új szerződéseket kockázatos záradékok szempontjából.",
+      "testing": "A Workflow tesztelése",
+      "verified": "Ellenőrizve"
+    },
+    "skillZip": {
+      "step0": "Húzzon egy skill zip fájlt a Chatbe",
+      "step1": "A Chat beolvassa a SKILL.md fájlt",
+      "step2": "Az ügynök megtartja a képességet",
+      "prompt": "Olvassa be a számlát, és listázza a tételeket."
+    }
   },
   "canvas": {
     "nodes": "Csomópontok",
@@ -2400,6 +2425,50 @@
       "nodes": "Csomópontok",
       "reference": "Referencia",
       "tabs": "Fülek"
-    }
+    },
+    "pluginNoDoc": "Ehhez a bővítményhez nincs dokumentáció."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Workflow-k, lapok, dokumentáció keresése...",
+    "searchAria": "Keresés a parancspalettán",
+    "ariaLabel": "Parancspaletta",
+    "noResults": "Nincs találat",
+    "tryDifferentSearch": "Próbáljon meg más keresőkifejezést",
+    "recent": "Legutóbbi",
+    "recentInFolder": "Legutóbbi · Itt: {folder}",
+    "inFolder": "Itt: {folder}",
+    "scheduledDate": "Ütemezve: {date}",
+    "scheduledForDeletion": "Törlésre ütemezve",
+    "goToTab": "Ugrás a lapra",
+    "workflowTemplate": "Workflow sablon",
+    "nodeTemplate": "Csomópontsablon",
+    "nodeType": "Csomópont · {type}",
+    "documentation": "Dokumentáció",
+    "support": "Támogatás",
+    "contactSupport": "Kapcsolatfelvétel a támogatással",
+    "watchRunbook": "Nézze meg, hogyan épít és futtat a Heym egy Workflow-t",
+    "openDocs": "A Heym dokumentáció megnyitása",
+    "getHelp": "Segítség kérése a Heym csapatától",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work üzleti csapatoknak a heym.run oldalon",
+    "navigate": "Navigálás",
+    "select": "Kiválasztás",
+    "click": "kattintás",
+    "newTab": "új lap",
+    "oneItem": "{count} elem",
+    "manyItems": "{count} elem"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "A bővítmények le vannak tiltva ezen a példányon.",
+    "loadingDefinition": "Bővítménydefiníció betöltése...",
+    "notBound": "Ez a csomópont nincs bővítménycsomaghoz rendelve.",
+    "noneInstalled": "Nincsenek telepített bővítmények ezen a példányon.",
+    "notInstalled": "A(z) „{id}” bővítmény nincs telepítve ezen a példányon.",
+    "installedButDisabled": "A(z) „{name}” bővítmény telepítve van, de le van tiltva.",
+    "noKindNodes": "A(z) „{name}” bővítmény nem biztosít {kind} típusú csomópontokat.",
+    "loadErrorDetail": "Nem sikerült betölteni a bővítményeket: {detail}",
+    "loadErrorHttp": "Nem sikerült betölteni a bővítményeket (HTTP {status}).",
+    "loadError": "Nem sikerült betölteni a bővítményeket.",
+    "enabled": "Engedélyezve"
   }
 }

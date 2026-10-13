@@ -33,6 +33,13 @@ Düğüm iki aşamada çalışır:
 
 Canvas üzerinde, **Run Workflow** oluşturulan `curl` komutunu kopyalama düğmesiyle birlikte hata ayıklama panelinde gösterir.
 
+## Heym üzerinden çalıştırma
+
+İki yer, aynı bağlantı üretme ve yükleme akışı üzerinden böyle bir Workflow'u doğrudan bir dosya üzerinde çalıştırır:
+
+- [Quick Drawer](../reference/quick-drawer.md) dosya için bir bırakma alanı gösterir. Bu çalıştırmalar geçmişte `Quick Drawer` olarak etiketlenir.
+- Bir panodaki [çalıştırma widget'ı](../tabs/dashboard-tab.md#run-widgets), bırakılan her dosya için Workflow'u çalıştırır. Bu çalıştırmalar `dashboard` olarak etiketlenir.
+
 ## Parametreler
 
 | Parametre | Tür | Varsayılan | Açıklama |

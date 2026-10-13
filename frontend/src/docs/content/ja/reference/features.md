@@ -499,7 +499,7 @@ Workflow はフォルダとサブフォルダのツリー構造で整理でき�
 
 ### [Quick Drawer](./quick-drawer.md)
 
-Quick Drawer は、キャンバス以外の内部ページ向けの、右側に固定された高速実行パネルです。エディタを開くことなく、[workflows](../tabs/workflows-tab.md) の検索、お気に入りのピン留め、入力の選択、即時実行、進捗や結果の確認ができます。ピンの順序と最後に選択した Workflow はブラウザに保存されます。
+Quick Drawer は、キャンバス以外の内部ページ向けの、右側に固定された高速実行パネルです。エディタを開くことなく、[workflows](../tabs/workflows-tab.md) の検索、お気に入りのピン留め、入力の選択、即時実行、進捗や結果の確認ができます。[File Upload Trigger](../nodes/file-upload-trigger-node.md) を持つ Workflow は、ドロップまたは選択されたファイルを受け取ります。ピンの順序と最後に選択した Workflow はブラウザに保存されます。
 
 [Workflow Organization](./workflow-organization.md)、[Keyboard Shortcuts](./keyboard-shortcuts.md)、[Execution History](./execution-history.md) もあわせてご参照ください。
 
@@ -683,6 +683,12 @@ Enterprise は、Heym を本番環境で運用するチーム向けの商用ラ�
 
 [Running & Deployment](../getting-started/running-and-deployment.md)、[Security](./security.md)、[Teams](./teams.md) もあわせてご参照ください。
 
+### [Heym Work](./heym-work.md)
+
+Heym Work は、Heym の上に構築されたビジネスチーム向けの第 2 のインターフェースです。担当者が業務内容を説明していくつかの質問に答えると、テスト済みの Workflow が作成され、ページ、承認、およびすべての実行に名前が付いたアクティビティリストから作業を進められます。インスタンス管理者は **設定 → Heym Work** でアドレスと統合キーを使って接続します（Heym チームからの独自ライセンスが必要です）。
+
+[Enterprise](./enterprise.md)、[Single Sign-On](./sso.md)、[Human-in-the-Loop](./human-in-the-loop.md) もあわせてご参照ください。
+
 ---
 
 ## Dashboard Tabs
@@ -762,7 +768,7 @@ MCP タブでは、Model Context Protocol 統合を設定します。Heym は次
 
 **名前付きサーバー** – 複数の分離された MCP Endpoint を作成でき、それぞれが独自の UUID ベースの URL（`/api/mcp/servers/{uuid}/sse`）と独立した API key を持ちます。特定の Workflow を各サーバーに割り当てることで、異なる AI クライアントやチームが必要なツールだけを参照できるようになります。各名前付きサーバーは同じ認証方式（API key、Claude OAuth）をサポートし、独自の Copy JSON および Add to Cursor ショートカットを備えています。どちらの Endpoint も SSE transport（GET）と Streamable HTTP transport（POST）をサポートします。名前付きサーバー内で Workflow を切り替えると、その Workflow は割り当てリストの先頭に移動するため、変更された行が表示されたままになります。
 
-**Heym chat tool** – どちらのモードでも、[Chat](../tabs/chat-tab.md) エンジンを単一の `heym_chat` ツールとして公開できます。サーフェスごとに切り替え可能で、独自の LLM credential とモデル（[Settings](./user-settings.md) で設定した優先モデルから事前入力されます）を使用します。MCP クライアントが自然言語の `message` を 1 つ送信すると、あとはエンジンが処理します。Workflow の構築・編集・実行、analytics、executions、live run status、schedules、boards と cards、teams、global variables、documentation search、human-in-the-loop の意思決定などが含まれます。後から Chat に追加された機能も、追加登録なしで同じツールを通じて利用できます。各呼び出しは Chat タブの履歴にプラグマーク付きの会話として保存され、クライアントがスレッドを継続するために返送できる `conversation_id` を返します。
+**Heym chat tool** – どちらのモードでも、[Chat](../tabs/chat-tab.md) エンジンを単一の `heym_chat` ツールとして公開できます。サーフェスごとに切り替え可能で、独自の LLM credential とモデル（[Settings](./user-settings.md) で設定した優先モデルから事前入力されます）を使用します。MCP クライアントが自然言語の `message` を 1 つ送信すると、あとはエンジンが処理します。ビルドモードでの Workflow の構築（保存、最大 5 回のテスト実行、修正、検証）、Workflow の実行、analytics、executions、live run status、schedules、boards と cards、teams、global variables、documentation search、human-in-the-loop の意思決定などが含まれます。後から Chat に追加された機能も、追加登録なしで同じツールを通じて利用できます。各呼び出しは Chat タブの履歴にプラグマーク付きの会話として保存され、クライアントがスレッドを継続するために返送できる `conversation_id` を返します。
 
 [Agent Architecture](./agent-architecture.md)、[Agent Node](../nodes/agent-node.md)、[SSE Streaming](./sse-streaming.md) も参照してください。
 
@@ -798,7 +804,7 @@ Analytics タブでは、実行メトリクスとトレンドを表示します�
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard タブは Grafana スタイルのスペースで、それぞれが独自の非表示の Heym ワークフローからレンダリングされるチャートウィジェットのグリッドを構築できます。必要なだけダッシュボードを保持し、それぞれをユーザーまたはチームと、読み取り専用または編集可能として共有できます。ウィジェットは常に所有者の認証情報で実行されるため、全員が同じデータを参照します。メトリクスを平易な言葉で記述すると AI がウィジェットを生成します。または手動で追加してチャートタイプを選択し、サンプルデータでプレビューできます。棒、折れ線、面、円、テーブル、数値、ゲージ、散布図、割合、棒ゲージ、テキスト、または HITL です。HITL は、保留中のヒューマンレビューのカルーセルです。ヘッダーには `1/n pending` と表示されます。ワークフロー名をクリックすると、キャンバス上でその実行が開きます。**Approve**、**Request changes**、**Reject** で解決でき、ウィジェットタイトル横の履歴アイコンをクリックすると、同じページの履歴ダイアログでその実行が開きます。ウィジェットは結果をキャッシュし、AI で微調整でき（各変更は[編集履歴](./edit-history.md)に保存されます）、完全なワークフローとともに複製でき、Tidy up で再配置でき、編集モードでドラッグまたはサイズ変更できます。各ウィジェットはワークフローであるため、取得できるあらゆるデータ — [HTTP](../nodes/http-node.md) 呼び出し、[BigQuery](../nodes/bigquery-node.md) クエリ、[RAG](../nodes/rag-node.md) ルックアップ、または [LLM](../nodes/llm-node.md) 出力 — をチャートにできます。
+Dashboard タブは Grafana スタイルのスペースで、それぞれが独自の非表示の Heym ワークフローからレンダリングされるチャートウィジェットのグリッドを構築できます。必要なだけダッシュボードを保持し、それぞれをユーザーまたはチームと、読み取り専用または編集可能として共有できます。ウィジェットは常に所有者の認証情報で実行されるため、全員が同じデータを参照します。メトリクスを平易な言葉で記述すると AI がウィジェットを生成します。または手動で追加してチャートタイプを選択し、サンプルデータでプレビューできます。棒、折れ線、面、円、テーブル、数値、ゲージ、散布図、割合、棒ゲージ、テキスト、または HITL です。HITL は、保留中のヒューマンレビューのカルーセルです。ヘッダーには `1/n pending` と表示されます。ワークフロー名をクリックすると、キャンバス上でその実行が開きます。**Approve**、**Request changes**、**Reject** で解決でき、ウィジェットタイトル横の履歴アイコンをクリックすると、同じページの履歴ダイアログでその実行が開きます。ウィジェットは結果をキャッシュし、AI で微調整でき（各変更は[編集履歴](./edit-history.md)に保存されます）、完全なワークフローとともに複製でき、Tidy up で再配置でき、編集モードでドラッグまたはサイズ変更できます。テーブルにはステータスチップを表示して、クリックした行のレコードを `$page.record` として読み取る詳細ダッシュボードへ行をリンクできます。また、Run ウィジェットを使うと、ドロップされたファイル、入力フィールド、または実行ボタンからダッシュボード上でワークフローを実行できます。各ウィジェットはワークフローであるため、取得できるあらゆるデータ — [HTTP](../nodes/http-node.md) 呼び出し、[BigQuery](../nodes/bigquery-node.md) クエリ、[RAG](../nodes/rag-node.md) ルックアップ、または [LLM](../nodes/llm-node.md) 出力 — をチャートにできます。
 
 [Chart Output ノード](../nodes/chart-output-node.md)、[Analytics](../tabs/analytics-tab.md)、[実行履歴](./execution-history.md)もあわせてご覧ください。
 

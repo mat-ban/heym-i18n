@@ -33,6 +33,8 @@ Kui teil on ainult näidis/example-andmed (päris allikat pole), tootke need rea
 | `valueField` | string | Rea võti, mida kasutatakse numbrilise väärtusena (pie/bar/line/numeric/gauge) |
 | `series` | array | Valikuline mitme seeria definitsioon `[{ "name": "Sent", "field": "sent" }]` bar/line jaoks (alistab `valueField`) |
 | `columns` | array | Valikuline veergude loend `table` jaoks (vaikimisi esimese rea võtmed) |
+| `statusColumn` | string | Valikuline `table` veerg, mis renderdatakse värviliste [olekukiipidena](#status-chips). Peab olema üks kuvatavatest veergudest. |
+| `statusTones` | object | Valikuline vastendus olekuväärtusest toonile (`success`, `attention`, `failure`, `waiting`, `neutral`) väärtuste jaoks, mida vaikimisi seaded ei kata |
 | `xField` / `yField` | string | Rea võtmed X- ja Y-numbriliste telgede jaoks (scatter) |
 | `min` / `max` | number | Numbriline vahemik `gauge` jaoks (vaikimisi `0` / `100`) |
 | `unit` | string | Valikuline ühik, mis kuvatakse `numeric` või `gauge` väärtuse kõrval |
@@ -42,7 +44,7 @@ Kui teil on ainult näidis/example-andmed (päris allikat pole), tootke need rea
 ## Diagrammi tüübid
 
 - **bar / line / area / pie** — kategoorilised diagrammid, mida juhivad `labelField` + `valueField` (või `series` mitme seeria bar/line/area jaoks). `area` on täidetud trendidiagramm.
-- **table** — töötlemata read, mis on renderdatud keritava tabelina, kasutades `columns`.
+- **table** — töötlemata read, mis on renderdatud keritava tabelina, kasutades `columns`. Ühte veergu saab renderdada [olekukiipidena](#status-chips) ja read võivad avada [detailvaate lehe](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — üksik KPI väärtus esimesest reast, valikulise `unit`-iga.
 - **gauge** — üksik väärtus, mis on kuvatud `min`–`max` vahemiku suhtes (nt protsent). Kasutab `valueField`.
 - **scatter** — X/Y punktid `xField`-ist ja `yField`-ist korrelatsiooni graafikute jaoks.
@@ -103,14 +105,59 @@ Tulemuseks olev markdown:
 
 Lihtsa kasvava loendi jaoks, mis algab 1-st, lisage kas iga rea ette number (`1.`, `2.`, `3.`) või kasutage silmust `$loop.index + 1`-ga. Kasutage [täpploendeid](#interactive-task-lists) (`- item`), kui numbreid pole vaja.
 
+## Olekukiibid
+
+`table` võib kuvada ühe veeru värviliste kiipidena (chips). Määrake sõlme atribuutides **Status column** (või DSL-is `statusColumn`) veeru nimele. Iga väärtus saab ühe viiest toonist ja levinud sõnad saavad selle ilma seadistamiseta:
+
+| Toon | Vaikimisi sõnad |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | kõik muu |
+
+Sobitamine eirab tõstutundlikkust ning märke `_` ja `-`, seega on `IN_PROGRESS` ja `in-progress` mõlemad `waiting`. Teiste väärtuste jaoks lisage **Status tones**; kirje alistab selle väärtuse vaikeseade:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Server lahendab iga väärtuse selle tooniks, nii et Heym ja Heym Work kuvavad samu värve.
+
+## Detailvaate lehed: `$page.record`
+
+Parameetriga `?record=<value>` avatud töölaud käivitab iga vidina Workflow selle väärtusega muutujas `$page.record`. Tabelirea link avab sellise lehe; vt [Detailvaate lehed](../tabs/dashboard-tab.md#detail-pages). Ilma kirjeta avatud töölaual ja avaldise dialoogis on `$page.record` väärtuseks `null`. Sildiga `page` sõlm on selle suhtes ülimuslik.
+
+Kasutage seda lehega seotud konkreetse kirje toomiseks, näiteks sõlmes [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` on klõpsatud rea väärtus ise, näiteks `V-1002`, mitte väljadega objekt. Selle kirje leidmiseks sõlmes [DataTable](./datatable-node.md) filtreerige selle kirjeveergu väärtuse järgi: toiming `find` filtriga `{"vendor_id": "$page.record"}`. Tee nagu `$page.record.id` ei lahendu millekski, mistõttu AI loodud või täiendatud vidin jätab need väljad kõrvale ja loeb selle asemel otse `$page.record` väärtust.
+
+Väärtus pärineb URL-ist, mida igaüks saab muuta. Töölaud aktsepteerib ainult oma kirjevormingule vastavaid väärtusi (vaikimisi tähed, numbrid, `-`, `_` ja `.`), kuid kohelge seda sellegipoolest ebausaldusväärse sisendina: edastage see sinna, kus sõlm väärtusi varjestab (escape'ib), näiteks HTTP-päringu parameetrisse või [DataTable](./datatable-node.md) või ClickHouse'i filtriväärtusesse, ning ärge kunagi koostage päringuteksti stringide liitmise teel. Vidinad käivitatakse endiselt töölaua omaniku õigustes, olenemata sellest, kes lehe avab.
+
 ## Kuidas andmeid lahendatakse
 
 1. Kui `dataPath` on määratud, järgib sõlm seda punktteed ülesvoolu väljundisse.
 2. Vastasel juhul otsitakse massiivi: ülatasemel loend, `data` massiiv või esimene loendi väärtusega väli.
-3. `table` puhul saab igast reast tabelirida, kasutades `columns` (või esimese rea võtmeid).
-4. `numeric` ja `gauge` puhul tuleb väärtus `valueField`-ist esimesel real (või esimesest numbrilisest väljast).
-5. `scatter` puhul saab igast reast `[xField, yField]` punkt.
-6. `text` puhul võetakse sõnum `valueField`-ist esimesel real, kui see on määratud, vastasel juhul staatilisest `text` konfiguratsioonist (muidu esimese rea esimesest stringiväljast).
+3. Otse [Data Table](./datatable-node.md) sõlmest (`{id, data, created_at}`) pärinevad read loetakse koos nende veergudega kõrgeimal tasemel `id` kõrval, nii et `labelField`, `valueField` ja `columns` viitavad tabeli enda veergudele.
+4. `table` puhul saab igast reast tabelirida, kasutades `columns` (või esimese rea võtmeid). Koos parameetriga `statusColumn` kannab Payload ka selle veeru iga väärtuse tooni.
+5. `numeric` ja `gauge` puhul tuleb väärtus `valueField`-ist esimesel real (või esimesest numbrilisest väljast).
+6. `scatter` puhul saab igast reast `[xField, yField]` punkt.
+7. `text` puhul võetakse sõnum `valueField`-ist esimesel real, kui see on määratud, vastasel juhul staatilisest `text` konfiguratsioonist (muidu esimese rea esimesest stringiväljast).
 
 ## Näide
 

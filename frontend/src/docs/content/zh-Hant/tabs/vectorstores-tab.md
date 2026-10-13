@@ -28,6 +28,7 @@
   **Added workflow: _name_** 之下，並標示寫入這些文件的 workflow 名稱
 - **Delete sources** – 從儲存庫中移除特定檔案或來源群組，包括某個 workflow 新增的所有內容
 - **Edit store** – 變更名稱、描述或 credential
+- **Search** – 以 `query`（以及 1 到 20 之間的 `limit`，預設為 5）呼叫 `POST /api/vector-stores/{id}/search`，會回傳 RAG 節點搜尋所會回傳的區塊（chunks），最佳比對排在最前面，每個區塊皆附帶其分數與來源。Heym Work 的 RAG 畫面會使用此功能來測試檢索
 
 ## 共享
 

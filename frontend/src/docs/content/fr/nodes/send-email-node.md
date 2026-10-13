@@ -28,7 +28,7 @@ Joignez des fichiers depuis votre [Drive](./drive-node.md) en transmettant un ou
 
 ## Configuration
 
-Ajoutez un identifiant SMTP avec le serveur, le port, l'email et le mot de passe. Serveurs SMTP courants :
+Ajoutez un identifiant SMTP avec le serveur, le port, l'email et le mot de passe. L'expéditeur visible correspond au champ facultatif **From** de l'identifiant ; si From est vide, l'envoi se fait avec le nom d'utilisateur. Serveurs SMTP courants :
 
 - Gmail : `smtp.gmail.com`, port 587 (mot de passe d'application requis)
 - Outlook : `smtp.office365.com`, port 587

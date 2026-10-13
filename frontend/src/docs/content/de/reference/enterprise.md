@@ -16,6 +16,10 @@ Heym ist kostenlos nutzbar und kann unter seiner quelloffenen Lizenz selbst geho
 | **Priority Support & SLA** | Garantierte Antwortzeiten und vorrangige Problembehebung |
 | **Custom Development** | Feature-Entwicklung und Anpassungen, zugeschnitten auf die Anforderungen Ihrer Organisation |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) ist die Oberfläche für Fachteams, die auf Heym aufsetzt. Mitarbeitende beschreiben eine Aufgabe, beantworten einige Fragen und erhalten einen getesteten Workflow, arbeiten auf speziell für sie erstellten Seiten und beantworten Prüfungen – inklusive Single Sign-On (SSO), den Rollen Owner, Editor und Viewer sowie einem Namen bei jedem Lauf. Es wird mit einer eigenen Lizenz neben deiner Heym-Instanz betrieben; verbinde es unter **Settings → Heym Work**. Weitere Informationen und eine Testversion erhältst du unter [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Production Agent Support
 
 Das Heym-Team hilft Ihnen, Agenten und Workflows für Ihre Geschäftsprozesse zu entwerfen, zu erstellen und zu härten. Dies umfasst die Überprüfung Ihrer Anforderungen, die Empfehlung von Knoten-Konfigurationen und die Sicherstellung, dass Ihre Workflows Best Practices für Zuverlässigkeit, Observability und Governance befolgen.
@@ -68,3 +72,4 @@ Erreichen Sie das Enterprise-Team unter **enterprise@heym.run** für Lizenzanfra
 - [Parallele Ausführung](./parallel-execution.md) — Multi-Worker-Ausführungsmodell
 - [Teams](./teams.md) — Team-Zusammenarbeit und Ressourcen-Sharing
 - [Vollständiger Funktionsumfang](./features.md) — Vollständige Übersicht der Heym-Funktionen
+- [Heym Work](./heym-work.md): Die Oberfläche für Fachteams und wie du sie verbindest

@@ -94,11 +94,12 @@ La cronologia delle esecuzioni registra `trigger_source` per ogni punto di ingre
 |-------|------|
 | `"API"` | Chiamata Webhook / API senza header esplicito (predefinito) |
 | `"Canvas"` | Esecuzione dal canvas dell'editor del workflow |
-| `"Quick Drawer"` | Esecuzione dal pannello quick-drawer dell'editor |
+| `"Quick Drawer"` | Esecuzione dal pannello quick-drawer dell'editor, incluse le esecuzioni di file caricati dalla relativa area di rilascio |
 | `"cron"` | Pianificatore Cron |
 | `"imap"` | Gestore del Trigger IMAP |
 | `"websocket"` | Gestore del Trigger WebSocket in uscita |
-| `"file_upload"` | Endpoint di caricamento del Trigger Caricamento file |
+| `"file_upload"` | Endpoint di caricamento del Trigger Caricamento file (link generati tramite HTTP, MCP o il canvas) |
+| `"dashboard"` | Esecuzioni di widget della dashboard e caricamenti da un widget di rilascio file |
 | `"telegram"` | Webhook del bot Telegram |
 | `"Discord"` | Webhook delle interazioni Discord |
 | `"MCP"` | Chiamata di uno strumento MCP |

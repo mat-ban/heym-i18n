@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id на текущото изпълнение (съвпада с id на записа в [Execution History](./execution-history.md), така че `/workflows/<id>/<executionId>` отваря това изпълнение на canvas-а). **Само по време на изпълнение**: празно в expression preview dialog-а; попълва се само докато workflow-ът се изпълнява.
 - `$vars` - Локални за workflow-а променливи (достъп чрез `$vars.variableName`; обновяват се чрез `variable` node)
 - `$global` - Постоянно глобално хранилище за променливи (достъп чрез `$global.variableName`)
+- `$page.record` - Само за workflow на уиджети от таблото: записът на детайлната страница, на която се намира уиджетът, от параметъра `?record=` на таблото. Има стойност `null` в табло, отворено без такъв параметър, както и в диалога за преглед на изрази. Възел с етикет `page` има предимство. Вижте [Детайлни страници](../tabs/dashboard-tab.md#detail-pages).
 
 ### Използване на $vars
 - `$vars.counter` - Достъп до променлива с име `counter`

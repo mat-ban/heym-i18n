@@ -16,6 +16,10 @@ Heym được sử dụng miễn phí và tự lưu trữ (self-host) theo giấ
 | **Hỗ trợ ưu tiên & SLA** | Thời gian phản hồi được đảm bảo và giải quyết vấn đề ưu tiên |
 | **Phát triển tùy chỉnh** | Phát triển tính năng và sửa đổi phù hợp với yêu cầu của tổ chức bạn |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) là giao diện dành cho các nhóm nghiệp vụ chạy trên nền Heym. Mọi người mô tả công việc, trả lời một vài câu hỏi và nhận được một workflow đã kiểm thử, làm việc trên các trang được xây dựng riêng cho họ và phản hồi phê duyệt, với đăng nhập một lần (SSO), các vai trò Owner, Editor và Viewer cùng tên người dùng trên mỗi lần chạy. Hệ thống chạy song song với Heym của bạn bằng giấy phép riêng; hãy kết nối trong **Settings → Heym Work**. Tìm hiểu thêm và yêu cầu dùng thử tại [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Hỗ trợ Agent cho Production
 
 Đội ngũ Heym giúp bạn thiết kế, xây dựng và gia cố (harden) agent và workflow cho các quy trình nghiệp vụ của bạn. Điều này bao gồm việc xem xét yêu cầu, đề xuất cấu hình node, và đảm bảo workflow của bạn tuân theo best practices về độ tin cậy, khả năng quan sát (observability) và quản trị (governance).
@@ -68,3 +72,4 @@ Liên hệ đội ngũ enterprise tại **enterprise@heym.run** để được g
 - [Thực thi song song](./parallel-execution.md) — Mô hình thực thi đa worker
 - [Teams](./teams.md) — Cộng tác nhóm và chia sẻ tài nguyên
 - [Bộ tính năng đầy đủ](./features.md) — Tổng quan đầy đủ về các khả năng của Heym
+- [Heym Work](./heym-work.md): giao diện dành cho các nhóm nghiệp vụ và cách kết nối

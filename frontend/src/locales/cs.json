@@ -274,7 +274,17 @@
       "intro": "Heym Work je druhé rozhraní pro obchodní týmy. Lidé se přihlašují přes Heym a všechny úlohy běží zde.",
       "never": "Nikdy",
       "learnMore": "Zjistit více"
-    }
+    },
+    "pluginsIntro": "Pluginy přidávají do této instance vlastní uzly (akce a Triggery). Instalace nebo odebrání pluginu spouští kód na straně serveru, proto je omezena na operátory uvedené v",
+    "loadingPlugins": "Načítání pluginů…",
+    "pluginsDisabledTitle": "Pluginy jsou zakázány",
+    "pluginsDisabledHint": "Nastavte tyto proměnné prostředí na backendu a poté jej restartujte:",
+    "installPluginZip": "Nainstalovat plugin (.zip)",
+    "noPluginsInstalled": "Zatím nejsou nainstalovány žádné pluginy.",
+    "enablePlugin": "Povolit",
+    "disablePlugin": "Zakázat",
+    "uninstallPlugin": "Odinstalovat",
+    "pluginOperationFailed": "Operace s pluginem selhala"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Spustit prohlídku",
     "readTheDocs": "Přečíst dokumentaci",
     "previousFeature": "Předchozí funkce",
-    "goToFeature": "Přejít na {title}"
+    "goToFeature": "Přejít na {title}",
+    "heymWork": {
+      "step0": "Tým zadá požadavek v Heym Work",
+      "step1": "Heym jej sestaví a otestuje",
+      "step2": "Ověřeno, bez plátna",
+      "step3": "Heym jej spouští na pozadí",
+      "prompt": "Zkontrolujte nové smlouvy kvůli rizikovým doložkám.",
+      "testing": "Testování Workflow",
+      "verified": "Ověřeno"
+    },
+    "skillZip": {
+      "step0": "Přetáhněte zip s dovedností do Chatu",
+      "step1": "Chat přečte SKILL.md",
+      "step2": "Agent si dovednost ponechá",
+      "prompt": "Přečtěte fakturu a vypište jednotlivé položky."
+    }
   },
   "canvas": {
     "nodes": "Uzly",
@@ -2400,6 +2425,50 @@
       "nodes": "Uzly",
       "reference": "Reference",
       "tabs": "Karty"
-    }
+    },
+    "pluginNoDoc": "Tento plugin nemá žádnou dokumentaci."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Hledat Workflow, karty, dokumentaci...",
+    "searchAria": "Vyhledávání v paletě příkazů",
+    "ariaLabel": "Paleta příkazů",
+    "noResults": "Žádné výsledky",
+    "tryDifferentSearch": "Zkuste jiný vyhledávací výraz",
+    "recent": "Nedávné",
+    "recentInFolder": "Nedávné · V: {folder}",
+    "inFolder": "V: {folder}",
+    "scheduledDate": "Naplánováno {date}",
+    "scheduledForDeletion": "Naplánováno ke smazání",
+    "goToTab": "Přejít na kartu",
+    "workflowTemplate": "Šablona Workflow",
+    "nodeTemplate": "Šablona uzlu",
+    "nodeType": "Uzel · {type}",
+    "documentation": "Dokumentace",
+    "support": "Podpora",
+    "contactSupport": "Kontaktovat podporu",
+    "watchRunbook": "Podívejte se, jak Heym sestaví a spustí Workflow",
+    "openDocs": "Otevřít dokumentaci Heym",
+    "getHelp": "Získat pomoc od týmu Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work pro firemní týmy na heym.run",
+    "navigate": "Navigovat",
+    "select": "Vybrat",
+    "click": "kliknutí",
+    "newTab": "nová karta",
+    "oneItem": "{count} položka",
+    "manyItems": "{count} položek"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Pluginy jsou v této instanci zakázány.",
+    "loadingDefinition": "Načítání definice pluginu...",
+    "notBound": "Tento uzel není navázán na balíček pluginu.",
+    "noneInstalled": "V této instanci nejsou nainstalovány žádné pluginy.",
+    "notInstalled": "Plugin „{id}“ není v této instanci nainstalován.",
+    "installedButDisabled": "Plugin „{name}“ je nainstalován, ale zakázán.",
+    "noKindNodes": "Plugin „{name}“ neposkytuje žádné uzly typu {kind}.",
+    "loadErrorDetail": "Nelze načíst pluginy: {detail}",
+    "loadErrorHttp": "Nelze načíst pluginy (HTTP {status}).",
+    "loadError": "Nelze načíst pluginy.",
+    "enabled": "Povoleno"
   }
 }

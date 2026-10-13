@@ -28,7 +28,7 @@
 
 ## Kurulum
 
-Sunucu, port, e-posta ve parola içeren bir SMTP kimlik bilgisi ekleyin. Yaygın SMTP sunucuları:
+Sunucu, port, e-posta ve parola içeren bir SMTP kimlik bilgisi ekleyin. Görünen gönderici, kimlik bilgisinin isteğe bağlı **From** alanıdır; From boş bırakılırsa kullanıcı adı olarak gönderilir. Yaygın SMTP sunucuları:
 
 - Gmail: `smtp.gmail.com`, port 587 (Uygulama Parolası gerekir)
 - Outlook: `smtp.office365.com`, port 587

@@ -35,6 +35,7 @@ Odaberite workflow kako biste otvorili njegov obrazac za unos.
 - Kliknite **Pokreni Workflow** za izvršavanje odabranog workflowa
 - Kliknite **Stop Workflow** za otkazivanje aktivnog izvršavanja iz izbornika
 - Workflows bez polja za unos mogu se i dalje izravno pokrenuti
+- Workflow koji započinje čvorom [File Upload Trigger](../nodes/file-upload-trigger-node.md) umjesto toga prikazuje zonu za ispuštanje: ispustite datoteku na nju ili kliknite za odabir. Zona navodi vrste i veličinu datoteka koje trigger prihvaća te odbija ostale datoteke prije prijenosa. **Run Workflow** ostaje onemogućen dok se datoteka ne odabere.
 
 Izbornik koristi istu API za izvršavanje workflowa kao i druge Heym površine za pokretanje, tako da izlazi i ponašanje tijekom izvođenja ostaju dosljedni.
 
@@ -51,6 +52,8 @@ Nakon pokretanja izvršavanja, izbornik prikazuje:
 
 `pending` znači da workflow čeka na kasniju akciju kao što je ljudski pregled.
 
+Pokretanje s datotekom odvija se putem jednokratne poveznice za prijenos triggera: ladica zatraži poveznicu od workflowa, prenese datoteku na nju i prikaže rezultat kada prijenos završi. Pokretanja s datotekom prikazuju konačni status i izlaze, ali ne i napredak korak po korak, te su u povijesti također označena s `Quick Drawer`. Odabrana datoteka briše se nakon svakog pokretanja jer jedna poveznica prima samo jednu datoteku.
+
 ## Pohrana u Pregledniku
 
 Brzi Izbornik pohranjuje osobne postavke u `localStorage`:
@@ -64,7 +67,7 @@ Izbornik **ne** pohranjuje vrijednosti unosa u ovoj verziji.
 
 Brzi Izbornik je namjerno lagana površina za izvršavanje.
 
-- Uključeno: pretraživanje, prikvačenje, odabir, unos, pokretanje, napredak, rezultat
+- Uključeno: pretraživanje, prikvačenje, odabir, unos (uključujući datoteku), pokretanje, napredak, rezultat
 - Isključeno: kreiranje workflowa, uređivanje, upravljanje mapama i akcije na platnu
 
 ## Povezano

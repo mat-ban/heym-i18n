@@ -35,6 +35,7 @@ Välj en workflow för att öppna dess inmatningsformulär.
 - Klicka på **Run Workflow** för att köra den valda workflowen
 - Klicka på **Stop Workflow** för att avbryta en pågående körning från panelen
 - Workflows utan inmatningsfält kan fortfarande köras direkt
+- Ett workflow som startar med en [File Upload Trigger](../nodes/file-upload-trigger-node.md) visar i stället en släppzon: släpp en fil där eller klicka för att välja en. Zonen anger vilka filtyper och vilken filstorlek som triggern accepterar och avvisar andra filer före uppladdning. **Run Workflow** förblir inaktiverad tills en fil har valts.
 
 Panelen använder samma workflow-körnings-API som andra Heym-körytor, så utdata och körtidsbeteende förblir konsekventa.
 
@@ -51,6 +52,8 @@ Efter att en körning har startats visar panelen:
 
 `pending` innebär att workflowen väntar på en senare åtgärd, såsom mänsklig granskning.
 
+En filkörning går via triggerns engångslänk för uppladdning: panelen ber workflowet om en länk, laddar upp filen dit och visar resultatet när uppladdningen är klar. Filkörningar visar slutstatus och utdata men inget steg-för-steg-förlopp, och taggas också med `Quick Drawer` i historiken. Den valda filen rensas efter varje körning eftersom en länk endast tar emot en fil.
+
 ## Webbläsarlagring
 
 Snabbpanelen lagrar personliga inställningar i `localStorage`:
@@ -64,7 +67,7 @@ Panelen bevarar **inte** inmatningsvärden i denna version.
 
 Snabbpanelen är avsiktligt en lättviktig köryta.
 
-- Inkluderat: sökning, fästning, val, inmatning, körning, förlopp, resultat
+- Inkluderat: sökning, fästning, val, inmatning (inklusive en fil), körning, förlopp, resultat
 - Exkluderat: skapande och redigering av workflows, mapphantering och canvas-åtgärder
 
 ## Relaterat

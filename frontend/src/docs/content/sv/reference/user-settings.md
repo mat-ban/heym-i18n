@@ -4,7 +4,7 @@ Dialogrutan Inställningar gör det möjligt att hantera profilen, ange beständ
 
 ## Öppna dialogrutan
 
-Klicka på **avataren och namnet** i det övre högra hörnet av sidhuvudet. Dialogrutan öppnas med flikarna: **Profil**, **Säkerhet**, **Röst**, **AI-standardvärden** och **Observerbarhet**. Instansadministratörer ser även en flik för **SSO**.
+Klicka på **avataren och namnet** i det övre högra hörnet av sidhuvudet. Dialogrutan öppnas med flikarna: **Profil**, **Säkerhet**, **Röst**, **AI-standardvärden** och **Observerbarhet**. Instansadministratörer ser även flikarna **SSO**, **Heym Work** och **Instances**.
 
 ## Fliken Profil
 
@@ -100,6 +100,10 @@ Observability-fliken visar den skrivskyddade statusen för [OpenTelemetry Tracin
 ## SSO-fliken
 
 Endast synlig för instansadministratörer — kontona som listas i `HEYM_ADMIN_EMAILS`. Denna flik ansluter Heym till en extern OpenID Connect-leverantör så att personer loggar in med de konton de redan har. Ange en issuer-URL och klientautentiseringsuppgifter, kopiera den skrivskyddade omdirigerings-URI:n till leverantören och kör **Testa anslutning** innan den aktiveras. Lösenordsinloggning kan stängas av härifrån när testet har godkänts. Se [Single Sign-On](./sso.md) för den fullständiga installationen.
+
+## Heym Work-fliken
+
+Instansadministratörer ansluter [Heym Work](./heym-work.md), gränssnittet för affärsteam, här: dess adress, en integrationsnyckel som visas en gång och reglaget **Enable Heym Work**. Fliken visar också när Heym Work senast rapporterade in, dess version och dess licensstatus. Se [Ansluta Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Instances-fliken
 

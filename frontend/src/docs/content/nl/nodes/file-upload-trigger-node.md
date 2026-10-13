@@ -33,6 +33,13 @@ De node werkt in twee fasen:
 
 Op de canvas toont **Run Workflow** de aangemaakte `curl` in het debug-paneel met een kopieerknop.
 
+## Uitvoeren vanuit Heym
+
+Op twee plekken kun je zo'n Workflow rechtstreeks op een bestand uitvoeren, via hetzelfde aanmaak- en uploadproces:
+
+- De [Quick Drawer](../reference/quick-drawer.md) toont een dropzone voor het bestand. Deze uitvoeringen krijgen in de geschiedenis het label `Quick Drawer`.
+- Een [Run-widget](../tabs/dashboard-tab.md#run-widgets) op een dashboard voert de Workflow uit voor elk gesleept bestand. Deze uitvoeringen krijgen het label `dashboard`.
+
 ## Parameters
 
 | Parameter | Type | Standaard | Beschrijving |

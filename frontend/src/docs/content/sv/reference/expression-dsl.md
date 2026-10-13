@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Den aktuella körningens id (motsvarar postens id i [Execution History](./execution-history.md), så `/workflows/<id>/<executionId>` öppnar denna körning på canvas). **Endast vid körning**: tom i dialogrutan för uttrycksförhandsvisning; fylls endast i medan ett workflow körs.
 - `$vars` - Workflow-lokala variabler (nås via `$vars.variableName`; uppdateras via `variable`-noden)
 - `$global` - Persistent global variabellagring (nås via `$global.variableName`)
+- `$page.record` - Endast för workflows i instrumentpanelswidgetar: posten för detaljsidan som widgeten ligger på, från instrumentpanelens parameter `?record=`. Är `null` på en instrumentpanel som öppnats utan parametern samt i förhandsgranskningsdialogen för uttryck. En nod med etiketten `page` har företräde. Se [Detaljsidor](../tabs/dashboard-tab.md#detail-pages).
 
 ### Användning av $vars
 - `$vars.counter` - Nå en variabel med namnet `counter`

@@ -35,6 +35,7 @@ Seleccioneu un workflow per obrir el seu formulari d'entrada.
 - Feu clic a **Run Workflow** per executar el workflow seleccionat
 - Feu clic a **Stop Workflow** per cancel·lar una execució en curs des del calaix
 - Els workflows sense camps d'entrada també es poden executar directament
+- Un workflow que comença amb un [File Upload Trigger](../nodes/file-upload-trigger-node.md) mostra en canvi una zona d'arrossegament: deixeu-hi anar un fitxer o feu clic per triar-ne un. La zona indica els tipus i la mida de fitxer que el trigger accepta i rebutja altres fitxers abans de pujar-los. **Run Workflow** roman desactivat fins que es tria un fitxer.
 
 El calaix utilitza la mateixa API d'execució de workflows que altres superfícies d'execució de Heym, de manera que les sortides i el comportament en temps d'execució es mantenen consistents.
 
@@ -51,6 +52,8 @@ Després d'iniciar una execució, el calaix mostra:
 
 `pending` significa que el workflow està esperant una acció posterior, com ara una revisió humana.
 
+Una execució amb fitxer passa per l'enllaç de pujada d'un sol ús del trigger: el calaix demana un enllaç al workflow, hi puja el fitxer i mostra el resultat quan la pujada finalitza. Les execucions amb fitxer mostren l'estat final i les sortides però no el progrés pas a pas, i també s'etiqueten amb `Quick Drawer` a l'historial. El fitxer triat s'esborra després de cada execució, perquè un enllaç només admet un fitxer.
+
 ## Emmagatzematge del navegador
 
 El Quick Drawer emmagatzema les preferències personals a `localStorage`:
@@ -64,7 +67,7 @@ El calaix **no** conserva els valors d'entrada en aquesta versió.
 
 El Quick Drawer és intencionadament una superfície d'execució lleugera.
 
-- Inclou: cerca, fixació, selecció, entrada, execució, progrés, resultat
+- Inclou: cerca, fixació, selecció, entrada (incloent-hi un fitxer), execució, progrés, resultat
 - Exclou: creació de workflows, edició, gestió de carpetes i accions del canvas
 
 ## Relacionat

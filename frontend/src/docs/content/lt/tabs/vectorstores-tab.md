@@ -26,6 +26,7 @@
 - **Peržiūrėti elementus** – Matykite šaltinio grupes ir dokumentų skaičių kiekvienoje saugykloje. Įkelti failai grupuojami pagal jų failo pavadinimą; dokumentai, kuriuos [RAG mazgas](../nodes/rag-node.md) saugojo be savo `source`, grupuojami po **Pridėtas workflow: _pavadinimas_**, nurodant workflow, kuris juos sukūrė
 - **Ištrinti šaltinius** – Pašalinkite konkrečius failus arba šaltinio grupes iš saugyklos, įskaitant viską, ką pridėjo viena workflow
 - **Redaguoti saugyklą** – Keiskite pavadinimą, aprašymą arba kredencialą
+- **Paieška** – `POST /api/vector-stores/{id}/search` su `query` (ir `limit` nuo 1 iki 20, numatytasis 5) grąžina fragmentus (chunks), kuriuos grąžintų RAG mazgo paieška, pirmiausia geriausią atitikmenį, kiekvieną su jo balu ir šaltiniu. „Heym Work" RAG ekranas jį naudoja išgavimui testuoti
 
 ## Dalinimasis
 

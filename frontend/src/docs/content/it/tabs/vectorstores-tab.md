@@ -30,6 +30,9 @@ La scheda **Archivi vettoriali** gestisce gli archivi vettoriali utilizzati dai 
 - **Eliminazione delle origini** – Consente di rimuovere file specifici o gruppi di origine da un archivio, inclusi
   tutti gli elementi aggiunti da un singolo workflow
 - **Modifica dell'archivio** – Consente di modificare nome, descrizione o credenziale
+- **Ricerca** – `POST /api/vector-stores/{id}/search` con una `query` (e un `limit` da 1 a 20,
+  predefinito 5) restituisce i chunk che restituirebbe la ricerca di un nodo RAG, a partire dalla migliore corrispondenza, ciascuno con il proprio
+  punteggio e la propria fonte. La schermata RAG di Heym Work lo utilizza per testare il recupero
 
 ## Condivisione
 

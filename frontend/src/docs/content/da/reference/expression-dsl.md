@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Aktuel eksekverings id (svarer til [Execution History](./execution-history.md)-postens id, så `/workflows/<id>/<executionId>` åbner denne kørsel på canvas). **Kun under kørsel**: tom i expression preview dialog; udfyldes kun mens et workflow eksekveres.
 - `$vars` - Workflow-lokale variabler (adgang via `$vars.variabelNavn`; opdateres via `variable`-node)
 - `$global` - Persistente globale variabler (adgang via `$global.variabelNavn`)
+- `$page.record` - Kun for workflows i dashboard-widgets: posten for den detaljeside, som widgetten befinder sig på, fra dashboardets `?record=`-parameter. Er `null` på et dashboard åbnet uden en sådan parameter samt i dialogboksen til forhåndsvisning af udtryk. En node med etiketten `page` har forrang. Se [Detaljesider](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars brug
 - `$vars.counter` - Adgang til en variabel ved navn `counter`

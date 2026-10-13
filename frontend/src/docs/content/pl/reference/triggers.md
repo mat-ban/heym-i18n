@@ -93,11 +93,12 @@ Historia wykonań rejestruje `trigger_source` dla każdego punktu wejścia:
 |-------|------|
 | `"API"` | Wywołanie Webhook / API bez jawnego nagłówka (domyślnie) |
 | `"Canvas"` | Uruchomienie z canvas edytora workflow |
-| `"Quick Drawer"` | Uruchomienie z panelu quick-drawer edytora |
+| `"Quick Drawer"` | Uruchomienie z panelu quick-drawer edytora, w tym uruchomienia z plikami przesłanymi z jego strefy upuszczania |
 | `"cron"` | Harmonogram Cron |
 | `"imap"` | Menedżer triggerów IMAP |
 | `"websocket"` | Menedżer wychodzących triggerów WebSocket |
-| `"file_upload"` | Endpoint przesyłania Triggera przesyłania plików |
+| `"file_upload"` | Endpoint przesyłania Triggera przesyłania plików (linki wygenerowane przez HTTP, MCP lub kanwę) |
+| `"dashboard"` | Uruchomienia widżetów panelu oraz przesyłanie plików z widżetu upuszczania plików |
 | `"telegram"` | Webhook bota Telegram |
 | `"Discord"` | Webhook interakcji Discord |
 | `"MCP"` | Wywołanie narzędzia MCP |

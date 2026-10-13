@@ -33,6 +33,8 @@ Kun käytössä on vain esimerkkidataa (ei todellista lähdettä), nämä rivit 
 | `valueField` | merkkijono | Rivin avain, jota käytetään numeerisena arvona (pie/bar/line/numeric/gauge) |
 | `series` | taulukko | Valinnainen monisarjainen määrittely `[{ "name": "Sent", "field": "sent" }]` pylväs-/viivakaavioille (korvaa `valueField`) |
 | `columns` | taulukko | Valinnainen sarakeluettelo `table`-tyypille (oletusarvoisesti käytetään ensimmäisen rivin avaimia) |
+| `statusColumn` | string | Valinnainen `table`-sarake, joka esitetään värillisinä [tilamerkkeinä](#status-chips). Sen on oltava yksi näytettävistä sarakkeista. |
+| `statusTones` | object | Valinnainen kuvaus tila-arvosta sävyyn (`success`, `attention`, `failure`, `waiting`, `neutral`) arvoille, joita oletukset eivät kata |
 | `xField` / `yField` | merkkijono | Rivin avaimet X- ja Y-numeerisille akseleille (scatter) |
 | `min` / `max` | numero | Numeerinen alue `gauge`-tyypille (oletus `0` / `100`) |
 | `unit` | merkkijono | Valinnainen yksikkö, joka näytetään `numeric`- tai `gauge`-arvon vieressä |
@@ -42,7 +44,7 @@ Kun käytössä on vain esimerkkidataa (ei todellista lähdettä), nämä rivit 
 ## Kaaviotyypit
 
 - **bar / line / area / pie** — kategoriset kaaviot, joita ohjaavat `labelField` + `valueField` (tai `series` monisarjaisille pylväs-/viivakaavioille). `area` on täytetty trendikaavio.
-- **table** — raakaa dataa esitetään skrollattavana taulukkona käyttäen `columns`-parametria.
+- **table** — raakaa dataa esitetään skrollattavana taulukkona käyttäen `columns`-parametria. Yksi sarake voidaan esittää [tilamerkkeinä](#status-chips), ja rivit voivat avata [tietosivun](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — yksi KPI-arvo ensimmäiseltä riviltä, valinnaisella `unit`-yksiköllä.
 - **gauge** — yksi arvo esitettynä `min`–`max` -alueella (esim. prosentti). Käyttää `valueField`-parametria.
 - **scatter** — X/Y-pisteet `xField`- ja `yField`-kentistä korrelaatioiden visualisointiin.
@@ -103,14 +105,59 @@ Tuloksena syntyvä Markdown:
 
 Yksinkertaiselle nousevalle listalle, joka alkaa numerosta 1, joko aloita jokainen rivi numerolla (`1.`, `2.`, `3.`) tai käytä loopia lausekkeella `$loop.index + 1`. Käytä [pistelistoja](#interactive-task-lists) (`- kohde`), jos numerointeja ei tarvita.
 
+## Tilamerkit
+
+`table` voi näyttää yhden sarakkeen värillisinä merkkeinä (chips). Aseta solmun ominaisuuksissa **Status column** (tai DSL:ssä `statusColumn`) sarakkeen nimeksi. Jokainen arvo saa yhden viidestä sävystä, ja yleiset sanat saavat sävyn automaattisesti ilman määritystä:
+
+| Sävy | Oletussanat |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | mikä tahansa muu |
+
+Täsmäytys ohittaa kirjainkoon sekä merkit `_` ja `-`, joten `IN_PROGRESS` ja `in-progress` ovat molemmat `waiting`. Lisää **Status tones** muille arvoille; määritys ohittaa kyseisen arvon oletuksen:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Palvelin ratkaisee jokaisen arvon sävyn, joten Heym ja Heym Work näyttävät samat värit.
+
+## Tietosivut: `$page.record`
+
+Kojelauta, joka avataan parametrilla `?record=<value>`, suorittaa jokaisen widgetin Workflow'n kyseisellä arvolla muuttujassa `$page.record`. Taulukon rivilinkki avaa tällaisen sivun; katso [Tietosivut](../tabs/dashboard-tab.md#detail-pages). Ilman tietuetta avatussa kojelaudassa ja lausekeikkunassa `$page.record` on `null`. Solmu, jonka tunniste on `page`, menee sen edelle.
+
+Käytä sitä hakeaksesi juuri sen tietueen, jota sivu koskee, esimerkiksi [HTTP](./http-node.md)-solmussa:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` on napsautetun rivin arvo sellaisenaan, kuten `V-1002`, ei kenttiä sisältävä objekti. Löytääksesi kyseisen tietueen [DataTable](./datatable-node.md)-solmusta suodata sen tietuesarake arvolla: toiminto `find` suodattimella `{"vendor_id": "$page.record"}`. Polku kuten `$page.record.id` ei ratkea mihinkään, joten tekoälyn rakentama tai hienosäätämä widget jättää tällaiset kentät pois ja lukee sen sijaan arvon `$page.record`.
+
+Arvo tulee URL-osoitteesta, jota kuka tahansa voi muokata. Kojelauta hyväksyy vain tietuemuotonsa mukaiset arvot (oletuksena kirjaimet, numerot, `-`, `_` ja `.`), mutta käsittele sitä silti epäluotettavana syötteenä: välitä se paikkoihin, joissa solmu suojaa arvot, kuten HTTP-kyselyparametriin tai [DataTable](./datatable-node.md)- tai ClickHouse-suodatinarvoon, äläkä koskaan rakenna kyselytekstiä yhdistämällä merkkijonoja sen kanssa. Widgetit suoritetaan silti kojelaudan omistajana riippumatta siitä, kuka sivun avaa.
+
 ## Tietojen käsittely
 
 1. Jos `dataPath` on määritetty, solmu seuraa kyseistä polkua ylävirran tulostuksessa.
 2. Muussa tapauksessa se etsii taulukon: ylimmän tason listan, `data`-taulukon tai ensimmäisen listamuotoisen kentän.
-3. `table`-tyypissä jokainen rivi muuttuu taulukkoriviksi käyttäen `columns`-kenttää (tai ensimmäisen rivin avaimia).
-4. `numeric`- ja `gauge`-tyypeissä arvo haetaan `valueField`-kentästä ensimmäiseltä riviltä (tai ensimmäisestä numeerisesta kentästä).
-5. `scatter`-tyypissä jokainen rivi muuttuu `[xField, yField]`-pisteeksi.
-6. `text`-tyypissä viesti haetaan `valueField`-kentästä ensimmäiseltä riviltä, jos se on määritetty, muuten staattisesta `text`-asetuksesta (tai ensimmäisen rivin ensimmäisestä merkkijonokentästä).
+3. Suoraan [Data Table](./datatable-node.md)-solmusta (`{id, data, created_at}`) tulevat rivit luetaan siten, että niiden sarakkeet ovat ylimmällä tasolla `id`-kentän rinnalla, jolloin `labelField`, `valueField` ja `columns` viittaavat suoraan taulun omiin sarakkeisiin.
+4. `table`-tyypissä jokainen rivi muuttuu taulukkoriviksi käyttäen `columns`-kenttää (tai ensimmäisen rivin avaimia). `statusColumn`-asetuksen kanssa Payload sisältää myös kyseisen sarakkeen jokaisen arvon sävyn.
+5. `numeric`- ja `gauge`-tyypeissä arvo haetaan `valueField`-kentästä ensimmäiseltä riviltä (tai ensimmäisestä numeerisesta kentästä).
+6. `scatter`-tyypissä jokainen rivi muuttuu `[xField, yField]`-pisteeksi.
+7. `text`-tyypissä viesti haetaan `valueField`-kentästä ensimmäiseltä riviltä, jos se on määritetty, muuten staattisesta `text`-asetuksesta (tai ensimmäisen rivin ensimmäisestä merkkijonokentästä).
 
 ## Esimerkkejä
 

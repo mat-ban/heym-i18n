@@ -30,6 +30,9 @@
 - **Kaynakları silme** – Belirli dosyaları veya kaynak gruplarını bir store'dan kaldırın; bir workflow'un
   eklediği her şey dahil
 - **Store'u düzenleme** – Adı, açıklamayı veya credential'ı değiştirin
+- **Arama** – Bir `query` (ve 1 ile 20 arasında bir `limit`, varsayılan 5) ile `POST /api/vector-stores/{id}/search`,
+  bir RAG düğümünün aramasının döndüreceği parçaları (chunk) en iyi eşleşme ilk sırada olacak şekilde, her birinin
+  puanı ve kaynağıyla birlikte döndürür. Heym Work'ün RAG ekranı, geri getirmeyi test etmek için bunu kullanır
 
 ## Paylaşım
 

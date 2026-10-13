@@ -16,6 +16,10 @@ Heym, kaynak kodu açık lisansı kapsamında ücretsiz olarak kullanılabilir v
 | **Öncelikli Destek & SLA** | Garantili yanıt süreleri ve öncelikli sorun çözümü |
 | **Özel Geliştirme** | Kuruluşunuzun gereksinimlerine göre uyarlanmış özellik geliştirme ve değişiklikler |
 
+## Heym Work
+
+[Heym Work](./heym-work.md), Heym üzerinde çalışan iş ekipleri arayüzüdür. Kullanıcılar bir işi tanımlar, birkaç soruyu yanıtlar ve test edilmiş bir workflow elde eder; kendileri için oluşturulmuş sayfalardan çalışır ve tek oturum açma (SSO), Owner, Editor ve Viewer rolleri ve her çalıştırmada bir ad ile incelemeleri yanıtlar. Kendi lisansıyla Heym örneğinizin yanında çalışır; **Settings → Heym Work** içinden bağlayın. Daha fazla bilgi edinin ve [heym.run/enterprise](https://heym.run/enterprise) adresinden deneme talep edin.
+
 ## Üretim Agent Desteği
 
 Heym ekibi, iş süreçleriniz için agent'ları ve workflow'ları tasarlamanıza, oluşturmanıza ve sağlamlaştırmanıza yardımcı olur. Bu, gereksinimlerinizin gözden geçirilmesini, düğüm yapılandırmalarının önerilmesini ve workflow'larınızın güvenilirlik, gözlemlenebilirlik ve yönetişim açısından en iyi uygulamaları izlemesini sağlamayı içerir.
@@ -68,3 +72,4 @@ Lisanslama soruları, fiyatlandırma veya tanışma görüşmesi planlamak için
 - [Paralel Yürütme](./parallel-execution.md) — Çoklu worker yürütme modeli
 - [Teams](./teams.md) — Ekip iş birliği ve kaynak paylaşımı
 - [Tam Özellik Seti](./features.md) — Heym yeteneklerine ilişkin kapsamlı genel bakış
+- [Heym Work](./heym-work.md): iş ekipleri için arayüz ve nasıl bağlanacağı

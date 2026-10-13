@@ -4,7 +4,7 @@ Settings 대화상자에서는 프로필을 관리하고, 지속적인 AI 지침
 
 ## 대화상자 열기
 
-헤더 오른쪽 상단의 **아바타와 이름**을 클릭하십시오. 대화상자가 열리며 **Profile**, **Security**, **Voice**, **AI Defaults**, **Observability** 탭이 표시됩니다. 인스턴스 관리자는 **SSO** 탭도 볼 수 있습니다.
+헤더 오른쪽 상단의 **아바타와 이름**을 클릭하십시오. 대화상자가 열리며 **Profile**, **Security**, **Voice**, **AI Defaults**, **Observability** 탭이 표시됩니다. 인스턴스 관리자는 **SSO**, **Heym Work**, **Instances** 탭도 볼 수 있습니다.
 
 ## Profile 탭
 
@@ -101,6 +101,10 @@ Observability 탭은 이 인스턴스의 [OpenTelemetry Tracing](./opentelemetry
 ## SSO 탭
 
 인스턴스 관리자, 즉 `HEYM_ADMIN_EMAILS`에 나열된 계정에만 표시됩니다. 이 탭은 Heym을 외부 OpenID Connect provider에 연결하여 사용자가 이미 보유한 계정으로 로그인할 수 있게 합니다. issuer URL과 client 자격 증명을 입력하고, 읽기 전용 redirect URI를 provider에 복사한 뒤, 활성화하기 전에 **Test connection**을 실행하십시오. 테스트가 통과하면 여기에서 password 로그인을 끌 수 있습니다. 전체 설정은 [Single Sign-On](./sso.md)을 참조하십시오.
+
+## Heym Work 탭
+
+인스턴스 관리자는 여기에서 비즈니스 팀용 인터페이스인 [Heym Work](./heym-work.md)를 연결합니다. 주소, 한 번만 표시되는 통합 키, **Enable Heym Work** 스위치를 설정할 수 있습니다. 또한 이 탭에는 Heym Work의 마지막 체크인 시간, 버전 및 라이선스 상태도 표시됩니다. [Heym Work 연결하기](./heym-work.md#connecting-heym-work)를 참조하십시오.
 
 ## Instances 탭
 

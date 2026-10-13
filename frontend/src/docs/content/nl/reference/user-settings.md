@@ -4,7 +4,7 @@ Het dialoogvenster Instellingen biedt de mogelijkheid om uw profiel te beheren, 
 
 ## Het dialoogvenster openen
 
-Klik op **uw avatar en naam** in de rechterbovenhoek van de header. Het dialoogvenster wordt geopend met de volgende tabbladen: **Profiel**, **Beveiliging**, **Stem**, **AI-standaarden** en **Observability**. Beheerders van de instantie zien ook een tabblad **SSO**.
+Klik op **uw avatar en naam** in de rechterbovenhoek van de header. Het dialoogvenster wordt geopend met de volgende tabbladen: **Profiel**, **Beveiliging**, **Stem**, **AI-standaarden** en **Observability**. Beheerders van de instantie zien ook de tabbladen **SSO**, **Heym Work** en **Instances**.
 
 ## Tabblad Profiel
 
@@ -101,6 +101,10 @@ Het tabblad Observability toont de alleen-lezen status van [OpenTelemetry Tracin
 ## Tabblad SSO
 
 Alleen zichtbaar voor instantiebeheerders — de accounts die in `HEYM_ADMIN_EMAILS` zijn vermeld. Dit tabblad verbindt Heym met een externe OpenID Connect-provider, zodat gebruikers zich aanmelden met de accounts die zij al hebben. Voer een issuer-URL en client-referenties in, kopieer de alleen-lezen redirect-URI naar uw provider en voer **Verbinding testen** uit voordat u het inschakelt. Aanmelden met wachtwoord kan hier worden uitgeschakeld zodra de test slaagt. Zie [Single Sign-On](./sso.md) voor de volledige installatie.
+
+## Tabblad Heym Work
+
+Instantiebeheerders koppelen hier [Heym Work](./heym-work.md), de interface voor zakelijke teams: het adres, een eenmalig getoonde integratiesleutel en de schakelaar **Enable Heym Work**. Het tabblad toont ook wanneer Heym Work zich voor het laatst heeft gemeld, de versie en de licentiestatus. Zie [Heym Work koppelen](./heym-work.md#connecting-heym-work).
 
 ## Tabblad Instances
 

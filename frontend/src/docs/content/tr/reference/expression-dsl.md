@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Geçerli execution'ın id'si ([Execution History](./execution-history.md) girdi id'sine eşittir, böylece `/workflows/<id>/<executionId>` bu çalıştırmayı canvas'ta açar). **Yalnızca runtime**: expression önizleme dialog'unda boştur; yalnızca bir workflow çalışırken doldurulur.
 - `$vars` - Workflow'a özel değişkenler (`$vars.variableName` ile erişin; `variable` node ile güncellenir)
 - `$global` - Kalıcı global değişken deposu (`$global.variableName` ile erişin)
+- `$page.record` - Yalnızca pano widget workflow'ları için: panonun `?record=` parametresinden alınan, widget'ın bulunduğu ayrıntı sayfasının kaydı. Parametre olmadan açılan bir panoda ve ifade önizleme iletişim kutusunda `null` değerindedir. `page` etiketli bir düğüm önceliklidir. Bkz. [Ayrıntı sayfaları](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars Kullanımı
 - `$vars.counter` - `counter` adlı bir değişkene erişin

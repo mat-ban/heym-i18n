@@ -30,6 +30,9 @@ L'onglet **Bases vectorielles** gère les bases vectorielles utilisées par les 
 - **Supprimer des sources** – Retirez des fichiers ou des groupes sources spécifiques d'une base, y compris
   tout ce qu'un workflow a ajouté
 - **Modifier la base** – Changez le nom, la description ou l'identifiant
+- **Rechercher** – `POST /api/vector-stores/{id}/search` avec une `query` (et une `limit` de 1 à 20,
+  5 par défaut) renvoie les chunks qu'une recherche de nœud RAG renverrait, meilleure correspondance en premier, chacun avec son
+  score et sa source. L'écran RAG de Heym Work l'utilise pour tester la récupération
 
 ## Partage
 

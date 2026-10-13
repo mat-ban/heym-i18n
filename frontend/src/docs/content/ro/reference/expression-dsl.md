@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id-ul execuției curente (egal cu id-ul intrării din [Execution History](./execution-history.md), astfel încât `/workflows/<id>/<executionId>` deschide această rulare pe canvas). **Doar la runtime**: gol în dialogul de previzualizare a expresiilor; populat doar în timpul executării unui workflow.
 - `$vars` - Variabile locale workflow-ului (accesați prin `$vars.variableName`; actualizate prin nodul `variable`)
 - `$global` - Depozitul persistent de variabile globale (accesați prin `$global.variableName`)
+- `$page.record` - Doar pentru workflow-urile widgeturilor din tabloul de bord: înregistrarea paginii de detaliu pe care se află widgetul, din parametrul `?record=` al tabloului de bord. Este `null` într-un tablou de bord deschis fără acest parametru și în dialogul de previzualizare a expresiilor. Un nod etichetat `page` are prioritate. Consultați [Pagini de detaliu](../tabs/dashboard-tab.md#detail-pages).
 
 ### Utilizarea $vars
 - `$vars.counter` - Accesarea unei variabile numite `counter`

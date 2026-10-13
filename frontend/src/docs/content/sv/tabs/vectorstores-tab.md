@@ -30,6 +30,9 @@ Fliken **Vectorstores** hanterar vector stores som används av [RAG](../nodes/ra
 - **Delete sources** – Ta bort specifika filer eller källgrupper från en store, inklusive
   allt som ett workflow lade till
 - **Edit store** – Ändra namn, beskrivning eller credential
+- **Sök** – `POST /api/vector-stores/{id}/search` med en `query` (och en `limit` från 1 till 20,
+  standard 5) returnerar de chunks som en RAG-nods sökning skulle returnera, bästa träff först, var och en med sin
+  poäng och källa. Heym Works RAG-skärm använder det för att testa hämtning
 
 ## Delning
 

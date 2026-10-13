@@ -93,11 +93,12 @@ A futtatások előzményei minden belépési pontnál rögzítik a `trigger_sour
 |-------|------|
 | `"API"` | Webhook / API hívás explicit fejléc nélkül (alapértelmezett) |
 | `"Canvas"` | Futtatás a workflow szerkesztő vásznáról |
-| `"Quick Drawer"` | Futtatás a szerkesztő quick-drawer paneljéről |
+| `"Quick Drawer"` | Futtatás a szerkesztő quick-drawer paneljéről, beleértve a feltöltési zónájából feltöltött fájlos futtatásokat is |
 | `"cron"` | Cron ütemező |
 | `"imap"` | IMAP trigger kezelő |
 | `"websocket"` | Kimenő WebSocket trigger kezelő |
-| `"file_upload"` | Fájlfeltöltés Trigger feltöltési végpont |
+| `"file_upload"` | Fájlfeltöltés Trigger feltöltési végpont (HTTP-n, MCP-n vagy a vásznon keresztül létrehozott hivatkozások) |
+| `"dashboard"` | Irányítópult-widgetek futtatásai és fájlfeltöltő widgetből indított feltöltések |
 | `"telegram"` | Telegram bot webhook |
 | `"Discord"` | Discord interakciós webhook |
 | `"MCP"` | MCP eszköz hívás |

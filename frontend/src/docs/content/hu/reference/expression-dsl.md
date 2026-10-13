@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Az aktuális futtatás azonosítója (megegyezik az [Execution History](./execution-history.md) bejegyzés azonosítójával, így a `/workflows/<id>/<executionId>` megnyitja ezt a futtatást a vásznon). **Csak futásidőben elérhető**: üres a kifejezés-előnézet ablakban; csak akkor töltődik fel, amikor egy workflow éppen fut.
 - `$vars` - Workflow-lokális változók (elérés: `$vars.variableName`; frissítés: `variable` csomóponton keresztül)
 - `$global` - Tartós globális változótár (elérés: `$global.variableName`)
+- `$page.record` - Csak irányítópult-widget workflow-k esetén: annak a részletező oldalnak a rekordja, amelyen a widget található, az irányítópult `?record=` paraméteréből. Értéke `null` az e paraméter nélkül megnyitott irányítópulton, valamint a kifejezés-előnézeti párbeszédablakban. A `page` címkéjű csomópont elsőbbséget élvez. Lásd: [Részletező oldalak](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars használat
 - `$vars.counter` - A `counter` nevű változó elérése

@@ -35,6 +35,7 @@ Selecione um workflow para abrir seu formulário de entrada.
 - Clique em **Run Workflow** para executar o workflow selecionado
 - Clique em **Stop Workflow** para cancelar uma execução em andamento a partir do drawer
 - Workflows sem campos de entrada ainda podem ser executados diretamente
+- Um workflow que começa com um [File Upload Trigger](../nodes/file-upload-trigger-node.md) exibe uma área de soltura em vez disso: arraste um arquivo até ela ou clique para escolher um. A área lista os tipos e o tamanho de arquivo aceitos pelo trigger e recusa outros arquivos antes do envio. **Run Workflow** permanece desabilitado até que um arquivo seja escolhido.
 
 O drawer usa a mesma API de execução de workflow que outras superfícies de execução do Heym, portanto as saídas e o comportamento em tempo de execução permanecem consistentes.
 
@@ -51,6 +52,8 @@ Após iniciar uma execução, o drawer exibe:
 
 `pending` significa que o workflow está aguardando uma ação posterior, como revisão humana.
 
+Uma execução com arquivo passa pelo link de upload de uso único do trigger: o painel solicita um link ao workflow, envia o arquivo para ele e mostra o resultado quando o upload retorna. Execuções com arquivo mostram o status final e as saídas, mas não o progresso passo a passo, e também são marcadas como `Quick Drawer` no histórico. O arquivo escolhido é limpo após cada execução, pois cada link aceita apenas um arquivo.
+
 ## Armazenamento do Navegador
 
 O Quick Drawer armazena preferências pessoais em `localStorage`:
@@ -64,7 +67,7 @@ O drawer **não** persiste valores de entrada nesta versão.
 
 O Quick Drawer é intencionalmente uma superfície de execução leve.
 
-- Incluído: busca, fixação, seleção, entrada, execução, progresso, resultado
+- Incluído: busca, fixação, seleção, entrada (incluindo um arquivo), execução, progresso, resultado
 - Excluído: criação de workflow, edição, gerenciamento de pastas e ações de canvas
 
 ## Relacionados

@@ -620,8 +620,14 @@ Credential SMTP lưu trữ thông tin kết nối máy chủ email để gửi t
 |-------|-------------|
 | `host` | Hostname máy chủ SMTP (ví dụ: `smtp.gmail.com`) |
 | `port` | Cổng SMTP (thường là `587` cho STARTTLS, `465` cho SSL) |
-| `email` | Địa chỉ email người gửi |
+| `email` | Tên người dùng mà máy chủ SMTP dùng để đăng nhập; đồng thời là người gửi hiển thị khi `from` để trống |
 | `password` | Mật khẩu SMTP hoặc App Password |
+
+### Trường tùy chọn
+
+| Trường | Mô tả |
+|-------|-------------|
+| `from` (`smtp_from`) | Địa chỉ người gửi (From) hiển thị. Để trống nếu muốn gửi dưới tên `email`. Máy chủ vẫn đăng nhập bằng `email`, vì vậy tài khoản đó phải được phép gửi dưới địa chỉ này (trong Gmail, đây là một bí danh **Gửi thư bằng địa chỉ** đã xác minh). |
 
 ### Các nhà cung cấp SMTP phổ biến
 

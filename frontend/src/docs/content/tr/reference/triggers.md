@@ -94,11 +94,12 @@ Execution history, her giriş noktası için `trigger_source` kaydeder:
 |-------|------|
 | `"API"` | Açık bir header olmadan Webhook / API çağrısı (varsayılan) |
 | `"Canvas"` | Workflow editörü canvas'ından çalıştırma |
-| `"Quick Drawer"` | Editör quick-drawer panelinden çalıştırma |
+| `"Quick Drawer"` | Editör quick-drawer panelinden çalıştırma (bırakma alanından yüklenen dosya çalıştırmaları dahil) |
 | `"cron"` | Cron scheduler |
 | `"imap"` | IMAP trigger manager |
 | `"websocket"` | Giden WebSocket trigger manager |
-| `"file_upload"` | File Upload Trigger yükleme endpoint'i |
+| `"file_upload"` | File Upload Trigger yükleme endpoint'i (HTTP, MCP veya tuval üzerinden oluşturulan bağlantılar) |
+| `"dashboard"` | Pano widget çalıştırmaları ve dosya bırakma widget'ından yapılan yüklemeler |
 | `"telegram"` | Telegram bot webhook |
 | `"Discord"` | Discord interactions webhook |
 | `"MCP"` | MCP tool çağrısı |

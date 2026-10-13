@@ -93,11 +93,12 @@ Historie spuštění zaznamenává `trigger_source` pro každý vstupní bod:
 |-------|------|
 | `"API"` | Webhook / volání API bez explicitní hlavičky (výchozí) |
 | `"Canvas"` | Spuštění z plátna editoru workflow |
-| `"Quick Drawer"` | Spuštění z panelu rychlého přihrádku editoru |
+| `"Quick Drawer"` | Spuštění z panelu rychlé přihrádky editoru, včetně spuštění se soubory nahranými z jeho zóny pro přetažení |
 | `"cron"` | Plánovač Cron |
 | `"imap"` | Správce triggeru IMAP |
 | `"websocket"` | Správce odchozího triggeru WebSocket |
-| `"file_upload"` | Endpoint pro nahrání triggeru nahrání souboru |
+| `"file_upload"` | Endpoint pro nahrání triggeru nahrání souboru (odkazy vytvořené přes HTTP, MCP nebo plátno) |
+| `"dashboard"` | Spuštění widgetů nástěnky a nahrání z widgetu pro přetažení souboru |
 | `"telegram"` | Webhook bota Telegram |
 | `"Discord"` | Webhook interakcí Discord |
 | `"MCP"` | Volání nástroje MCP |

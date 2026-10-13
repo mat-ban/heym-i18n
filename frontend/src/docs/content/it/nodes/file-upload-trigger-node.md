@@ -33,6 +33,13 @@ Il nodo opera in due fasi:
 
 Sul canvas, **Esegui workflow** mostra il `curl` generato nel pannello di debug con un pulsante di copia.
 
+## Esecuzione da Heym
+
+Due posizioni eseguono direttamente un Workflow di questo tipo su un file, tramite la stessa generazione e lo stesso caricamento:
+
+- Il [Quick Drawer](../reference/quick-drawer.md) mostra un'area di rilascio per il file. Queste esecuzioni sono contrassegnate con `Quick Drawer` nella cronologia.
+- Un [widget di esecuzione](../tabs/dashboard-tab.md#run-widgets) su una dashboard esegue il Workflow su ogni file rilasciato. Queste esecuzioni sono contrassegnate con `dashboard`.
+
 ## Parametri
 
 | Parametro | Tipo | Predefinito | Descrizione |

@@ -33,6 +33,13 @@ O nó opera em duas fases:
 
 No canvas, o botão **Run Workflow** exibe o `curl` emitido no painel de depuração com um botão de cópia.
 
+## Executando pelo Heym
+
+Dois lugares executam esse tipo de Workflow diretamente em um arquivo, usando o mesmo processo de geração e upload:
+
+- O [Quick Drawer](../reference/quick-drawer.md) exibe uma área para soltar o arquivo. Essas execuções recebem a tag `Quick Drawer` no histórico.
+- Um [widget de execução](../tabs/dashboard-tab.md#run-widgets) em um dashboard executa o Workflow para cada arquivo solto. Essas execuções recebem a tag `dashboard`.
+
 ## Parâmetros
 
 | Parâmetro | Tipo | Padrão | Descrição |

@@ -1,8 +1,9 @@
-import { ref, type Ref } from "vue";
+import { ref, watch, type Ref } from "vue";
 
 import type { DocCategory } from "@/docs/manifest";
 import type { PluginSummary } from "@/types/workflow";
 
+import { i18n } from "@/i18n";
 import { listPlugins } from "@/services/plugins";
 
 export interface PluginDocCategoriesState {
@@ -12,6 +13,7 @@ export interface PluginDocCategoriesState {
 
 const pluginDocCategories = ref<Record<string, DocCategory>>({});
 let pendingLoad: Promise<void> | null = null;
+let hasLoadedOnce = false;
 
 export function buildPluginDocCategories(
   plugins: PluginSummary[],
@@ -39,6 +41,7 @@ async function fetchPluginDocCategories(): Promise<void> {
 }
 
 function loadPluginDocCategories(): Promise<void> {
+  hasLoadedOnce = true;
   if (!pendingLoad) {
     pendingLoad = fetchPluginDocCategories().finally(() => {
       pendingLoad = null;
@@ -46,6 +49,17 @@ function loadPluginDocCategories(): Promise<void> {
   }
   return pendingLoad;
 }
+
+watch(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  () => (i18n.global.locale as any).value,
+  () => {
+    if (hasLoadedOnce) {
+      pendingLoad = null;
+      void loadPluginDocCategories();
+    }
+  },
+);
 
 export function usePluginDocCategories(): PluginDocCategoriesState {
   return {

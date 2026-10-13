@@ -93,11 +93,12 @@ Suoritushistoria tallentaa `trigger_source` -arvon jokaiselle käynnistyspisteel
 |-------|------|
 | `"API"` | Webhook / API-kutsu ilman eksplisiittistä otsikkoa (oletus) |
 | `"Canvas"` | Suoritus workflow-editorin canvasista |
-| `"Quick Drawer"` | Suoritus editorin pikavalikkopaneelista |
+| `"Quick Drawer"` | Suoritus editorin pikavalikkopaneelista, mukaan lukien sen pudotusalueelta ladatut tiedostosuoritukset |
 | `"cron"` | Cron-aikatauluttaja |
 | `"imap"` | IMAP-triggerin hallinta |
 | `"websocket"` | Lähtevä WebSocket-triggerin hallinta |
-| `"file_upload"` | Tiedoston lataus -triggerin latauspäätepiste |
+| `"file_upload"` | Tiedoston lataus -triggerin latauspäätepiste (HTTP:n, MCP:n tai työpöydän kautta luodut linkit) |
+| `"dashboard"` | Kojelaudan widget-suoritukset ja lataukset tiedostonpudotuswidgetistä |
 | `"telegram"` | Telegram-botin webhook |
 | `"Discord"` | Discord-interaktioiden webhook |
 | `"MCP"` | MCP-työkalun kutsu |

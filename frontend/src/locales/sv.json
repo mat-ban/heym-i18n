@@ -274,7 +274,17 @@
       "intro": "Heym Work är ett andra gränssnitt för affärsteam. Användare loggar in via Heym och alla jobb körs här.",
       "never": "Aldrig",
       "learnMore": "Läs mer"
-    }
+    },
+    "pluginsIntro": "Plugins lägger till anpassade noder (åtgärder och Triggers) i den här instansen. Att installera eller ta bort en plugin kör kod på serversidan och är därför begränsat till operatörer som anges i",
+    "loadingPlugins": "Läser in plugins…",
+    "pluginsDisabledTitle": "Plugins är inaktiverade",
+    "pluginsDisabledHint": "Ange dessa miljövariabler i backend och starta sedan om:",
+    "installPluginZip": "Installera en plugin (.zip)",
+    "noPluginsInstalled": "Inga plugins installerade ännu.",
+    "enablePlugin": "Aktivera",
+    "disablePlugin": "Inaktivera",
+    "uninstallPlugin": "Avinstallera",
+    "pluginOperationFailed": "Pluginåtgärden misslyckades"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Starta rundtur",
     "readTheDocs": "Läs dokumentationen",
     "previousFeature": "Föregående funktion",
-    "goToFeature": "Gå till {title}"
+    "goToFeature": "Gå till {title}",
+    "heymWork": {
+      "step0": "Ett team frågar i Heym Work",
+      "step1": "Heym bygger och testar det",
+      "step2": "Verifierat, ingen arbetsyta",
+      "step3": "Heym kör det i bakgrunden",
+      "prompt": "Kontrollera nya avtal efter riskfyllda klausuler.",
+      "testing": "Testar Workflow",
+      "verified": "Verifierat"
+    },
+    "skillZip": {
+      "step0": "Släpp en kompetens-zip i Chat",
+      "step1": "Chat läser SKILL.md",
+      "step2": "Agenten behåller kompetensen",
+      "prompt": "Läs fakturan och lista radposterna."
+    }
   },
   "canvas": {
     "nodes": "Noder",
@@ -2400,6 +2425,50 @@
       "nodes": "Noder",
       "reference": "Referens",
       "tabs": "Flikar"
-    }
+    },
+    "pluginNoDoc": "Den här pluginen har ingen dokumentation."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Sök Workflows, flikar, dokumentation...",
+    "searchAria": "Sök i kommandopaletten",
+    "ariaLabel": "Kommandopalett",
+    "noResults": "Inga resultat hittades",
+    "tryDifferentSearch": "Prova ett annat sökord",
+    "recent": "Senaste",
+    "recentInFolder": "Senaste · I: {folder}",
+    "inFolder": "I: {folder}",
+    "scheduledDate": "Schemalagd {date}",
+    "scheduledForDeletion": "Schemalagd för borttagning",
+    "goToTab": "Gå till flik",
+    "workflowTemplate": "Workflow-mall",
+    "nodeTemplate": "Nodmall",
+    "nodeType": "Nod · {type}",
+    "documentation": "Dokumentation",
+    "support": "Support",
+    "contactSupport": "Kontakta support",
+    "watchRunbook": "Se Heym bygga och köra ett Workflow",
+    "openDocs": "Öppna Heym-dokumentationen",
+    "getHelp": "Få hjälp från Heym-teamet",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work för affärsteam, på heym.run",
+    "navigate": "Navigera",
+    "select": "Välj",
+    "click": "klick",
+    "newTab": "ny flik",
+    "oneItem": "{count} objekt",
+    "manyItems": "{count} objekt"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Plugins är inaktiverade på den här instansen.",
+    "loadingDefinition": "Läser in plugindefinition...",
+    "notBound": "Den här noden är inte kopplad till ett pluginpaket.",
+    "noneInstalled": "Inga plugins är installerade på den här instansen.",
+    "notInstalled": "Plugin \"{id}\" är inte installerat på den här instansen.",
+    "installedButDisabled": "Plugin \"{name}\" är installerat men inaktiverat.",
+    "noKindNodes": "Plugin \"{name}\" exponerar inga {kind}-noder.",
+    "loadErrorDetail": "Kunde inte läsa in plugins: {detail}",
+    "loadErrorHttp": "Kunde inte läsa in plugins (HTTP {status}).",
+    "loadError": "Kunde inte läsa in plugins.",
+    "enabled": "Aktiverad"
   }
 }

@@ -16,6 +16,10 @@ Heym dapat digunakan dan di-self-host secara gratis di bawah lisensinya yang ter
 | **Priority Support & SLA** | Waktu respons yang terjamin dan penyelesaian masalah secara prioritas |
 | **Custom Development** | Pengembangan fitur dan modifikasi yang disesuaikan dengan kebutuhan organisasi Anda |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) adalah antarmuka untuk tim bisnis yang berjalan di atas Heym. Pengguna mendeskripsikan pekerjaan, menjawab beberapa pertanyaan, dan mendapatkan workflow yang telah diuji, bekerja dari halaman yang dibuat khusus untuk mereka, serta merespons tinjauan, lengkap dengan single sign-on (SSO), peran Owner, Editor, dan Viewer, serta nama pada setiap eksekusi. Heym Work berjalan berdampingan dengan Heym Anda menggunakan lisensinya sendiri; hubungkan melalui **Settings → Heym Work**. Pelajari lebih lanjut dan ajukan uji coba di [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Production Agent Support
 
 Tim Heym membantu Anda merancang, membangun, dan memperkuat agent serta workflow untuk proses bisnis Anda. Ini mencakup peninjauan kebutuhan Anda, rekomendasi konfigurasi node, dan memastikan workflow Anda mengikuti praktik terbaik untuk keandalan, observabilitas, dan tata kelola.
@@ -68,3 +72,4 @@ Hubungi tim enterprise di **enterprise@heym.run** untuk pertanyaan lisensi, harg
 - [Parallel Execution](./parallel-execution.md) — Model eksekusi multi-worker
 - [Teams](./teams.md) — Kolaborasi tim dan berbagi sumber daya
 - [Full Feature Set](./features.md) — Ikhtisar lengkap kemampuan Heym
+- [Heym Work](./heym-work.md): antarmuka untuk tim bisnis, dan cara menghubungkannya

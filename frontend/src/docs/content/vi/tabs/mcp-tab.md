@@ -1,6 +1,6 @@
 # Tab MCP
 
-Tab **MCP** cấu hình tích hợp Model Context Protocol (MCP). MCP cho phép các ứng dụng AI (Claude, Cursor và bất kỳ công cụ tương thích MCP nào) gọi các workflow của Heym như các công cụ.
+Tab **MCP** cấu hình tích hợp Model Context Protocol (MCP). MCP cho phép các ứng dụng AI (Claude, ChatGPT, Gemini, Cursor và bất kỳ công cụ tương thích MCP nào) gọi các workflow của Heym như các công cụ.
 
 Heym hỗ trợ hai chế độ: một **máy chủ mặc định** hiển thị tất cả các workflow được bật MCP dưới một endpoint duy nhất, và các **máy chủ có tên** cấp cho mỗi nhóm workflow logic một URL và API key riêng.
 
@@ -24,6 +24,8 @@ Máy chủ mặc định luôn khả dụng tại `{origin}/api/mcp/sse`. Tất 
 
 - **API Key** – Sử dụng API key MCP cho các kết nối lập trình. Tab có thể sao chép cấu hình JSON sẵn sàng sử dụng và bao gồm nút **Thêm vào Cursor** để thiết lập Cursor chỉ với một cú nhấp.
 - **Claude** – Tab hiển thị URL máy chủ MCP và các bước thiết lập cho Claude. Để trống OAuth Client ID và Secret; Claude tự động đăng ký và xác thực qua Heym OAuth.
+- **ChatGPT** – Tab hiển thị URL của MCP server và các bước thiết lập cho ứng dụng ChatGPT. Bật chế độ Nhà phát triển (Developer mode), tạo ứng dụng với URL đó và chọn OAuth; ChatGPT sẽ tự động đăng ký.
+- **Gemini** – Tab hiển thị URL của MCP server và các bước thiết lập cho ứng dụng tùy chỉnh Gemini: tại gemini.google.com, vào **Settings → Connected Apps → Add a custom app**, dán URL và để **Advanced features** đóng; Gemini sẽ tự động đăng ký và xác thực qua Heym OAuth. Sau khi kết nối, Heym cũng hoạt động trong ứng dụng Gemini trên di động.
 
 ### Bật/tắt MCP cho Workflow
 
@@ -40,7 +42,8 @@ Phần **Khả năng của Heym** biến engine của Tab Chat thành một côn
 
 Khi được bật, `heym_chat` xuất hiện trong `tools/list` cùng với các công cụ workflow của bạn. Ứng dụng MCP gửi một tin nhắn ngôn ngữ tự nhiên và engine Heym sẽ xử lý từ đó, với các khả năng tương tự như Tab Chat:
 
-- Xây dựng, chỉnh sửa, kiểm tra và chạy workflow thông qua Workflow AI Builder
+- Xây dựng workflow, chạy thử với dữ liệu đầu vào mẫu, sửa lỗi và hoàn tất khi lần chạy thành công (xem [Chế độ Build](#build-mode))
+- Kiểm tra và chạy các workflow hiện có của bạn
 - Báo cáo phân tích, các lần thực thi gần đây và các lịch cron sắp tới
 - Báo cáo lịch sử chạy của một workflow: số lần chạy, số lượng theo trạng thái, thời điểm chạy, và khi được yêu cầu thì cả đầu vào, đầu ra và lỗi theo từng node của một lần chạy
 - Báo cáo những gì đang chạy ngay lúc này: có bao nhiêu thực thi đang hoạt động, tên workflow của chúng, mỗi cái đã chạy bao lâu, node hiện tại của mỗi cái, và liên kết đến lần chạy trực tiếp
@@ -50,6 +53,15 @@ Khi được bật, `heym_chat` xuất hiện trong `tools/list` cùng với cá
 - Phê duyệt, chỉnh sửa hoặc từ chối các đánh giá human-in-the-loop đang chờ xử lý
 
 Các khả năng được thêm vào Tab Chat sau này sẽ tự động khả dụng qua `heym_chat` — không có công tắc riêng cho từng khả năng cần đồng bộ.
+
+### Chế độ Build
+
+`heym_chat` luôn chạy công cụ Chat ở chế độ build. Trong một lần gọi, trợ lý có thể lưu một workflow mới, chạy nó với các đầu vào mẫu thực tế, đọc báo cáo chạy, sửa những gì bị lỗi và chạy lại, tối đa năm lần chạy thử mỗi lần gọi. Khi lần chạy mới nhất của bản lưu mới nhất thành công, nó kết thúc bằng một câu tóm tắt và phản hồi kết thúc bằng `Verified: the latest test run of the saved workflow passed.`
+
+- Các lần chạy thử là lần chạy thật. Các tác dụng phụ của chúng thực sự xảy ra và chúng xuất hiện trong lịch sử chạy của workflow giống như bất kỳ lần chạy nào khác.
+- Việc lưu đi theo luồng của trình chỉnh sửa: một thay đổi đối với đồ thị sẽ giữ lại đồ thị trước đó trong **Edit History** của workflow.
+- Để thay đổi một workflow đã xây dựng trước đó, hãy tiếp tục chuỗi hội thoại với cùng `conversation_id`. Trợ lý sẽ cập nhật workflow đó thay vì tạo mới, và chỉ thay đổi những workflow mà bạn có quyền chỉnh sửa.
+- Khi đã dùng hết năm lần chạy thử, trợ lý sẽ dừng lại và giải thích những gì vẫn còn lỗi.
 
 Thông tin xác thực vẫn nằm trong giao diện: `heym_chat` không bao giờ liệt kê, chọn hoặc tạo chúng. Khi nó xây dựng hoặc chỉnh sửa workflow, các node mới cần thông tin xác thực sẽ được để trống và phản hồi sẽ nêu tên chúng, để bạn có thể thiết lập trong trình chỉnh sửa.
 
@@ -110,7 +122,7 @@ Khi bật/tắt một workflow, nó sẽ được chuyển lên đầu danh sác
 Named server hỗ trợ các phương thức xác thực giống như default server:
 
 - **X-MCP-Key header** – Truyền API key của server trực tiếp (API client, Cursor). Chỉ dùng header: key không được chấp nhận dưới dạng tham số truy vấn `?key=`, vì URL sẽ xuất hiện trong access log, proxy log và lịch sử trình duyệt.
-- **Claude OAuth** – Thêm URL của server vào tích hợp Claude; để trống thông tin xác thực và Claude sẽ tự động đăng ký qua OAuth. Bearer token phải được truyền trong header `Authorization`, không phải dưới dạng `?token=`.
+- **Claude, ChatGPT và Gemini OAuth** – Thêm URL của server vào trình kết nối hoặc ứng dụng tùy chỉnh của client; để trống thông tin xác thực và client sẽ tự động đăng ký qua OAuth. Bearer token phải được truyền trong header `Authorization`, không phải dưới dạng `?token=`.
 - **Session token** – Được cấp trong quá trình bắt tay SSE; được giới hạn cho server cụ thể nên token từ một named server này không thể truy cập server khác. Tham số `?session=` ngắn hạn này không bị ảnh hưởng.
 
 ### Xóa một Named Server
@@ -124,7 +136,7 @@ Nhấp vào biểu tượng **X** trên tiêu đề thẻ server. Việc xóa s�
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Cả hai endpoint đều hỗ trợ SSE transport (GET, MCP spec 2024-11-05) và Streamable HTTP transport (POST, MCP spec 2025-03-26). Claude sử dụng OAuth 2.1 / PKCE để đăng nhập an toàn trên cả hai.
+Cả hai endpoint đều hỗ trợ SSE transport (GET, MCP spec 2024-11-05) và Streamable HTTP transport (POST, MCP spec 2025-03-26). Claude, ChatGPT và Gemini sử dụng OAuth 2.1 / PKCE để đăng nhập an toàn trên cả hai.
 
 ## Related
 

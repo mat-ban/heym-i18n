@@ -35,6 +35,7 @@ Válasszon ki egy workflow-t a bemeneti űrlapjának megnyitásához.
 - Kattintson a **Run Workflow** gombra a kiválasztott workflow végrehajtásához
 - Kattintson a **Stop Workflow** gombra a futó futtatás megszakításához a fiókból
 - A bemeneti mezők nélküli workflow-k közvetlenül is futtathatók
+- A [File Upload Trigger](../nodes/file-upload-trigger-node.md) csomóponttal induló workflow ehelyett egy feltöltési zónát jelenít meg: húzzon bele egy fájlt, vagy kattintson a kiválasztáshoz. A zóna felsorolja a trigger által elfogadott fájltípusokat és -méretet, és feltöltés előtt elutasítja a többi fájlt. A **Run Workflow** gomb a fájl kiválasztásáig inaktív marad.
 
 A fiók ugyanazt a workflow végrehajtási API-t használja, mint a Heym többi futtatási felülete, így a kimenetek és a futásidejű viselkedés konzisztens marad.
 
@@ -51,6 +52,8 @@ A futtatás elindítása után a fiók az alábbiakat mutatja:
 
 A `pending` azt jelenti, hogy a workflow egy későbbi műveletre vár, például emberi felülvizsgálatra.
 
+A fájlos futtatás a trigger egyszer használatos feltöltési hivatkozásán keresztül történik: a fiók kér egy hivatkozást a workflow-tól, feltölti rá a fájlt, majd a feltöltés befejezésekor megjeleníti az eredményt. A fájlos futtatások a végső állapotot és a kimeneteket mutatják, lépésenkénti előrehaladást nem, és az előzményekben szintén `Quick Drawer` címkét kapnak. A kiválasztott fájl minden futtatás után törlődik, mivel egy hivatkozás egyetlen fájlt fogad.
+
 ## Böngésző tároló
 
 A Gyors fiók a személyes beállításokat a `localStorage`-ban tárolja:
@@ -64,7 +67,7 @@ A fiók ebben a verzióban **nem** tárolja a bemeneti értékeket.
 
 A Gyors fiók szándékosan egy könnyűsúlyú végrehajtási felület.
 
-- Tartalmazza: keresés, rögzítés, kiválasztás, bemenet, futtatás, folyamat, eredmény
+- Tartalmazza: keresés, rögzítés, kiválasztás, bemenet (beleértve a fájlt is), futtatás, folyamat, eredmény
 - Nem tartalmazza: workflow létrehozása, szerkesztése, mappakezelés és vászon műveletek
 
 ## Kapcsolódó

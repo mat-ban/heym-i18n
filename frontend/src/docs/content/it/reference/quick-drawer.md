@@ -35,6 +35,7 @@ Selezionare un workflow per aprire il relativo modulo di input.
 - Fare clic su **Run Workflow** per eseguire il workflow selezionato
 - Fare clic su **Stop Workflow** per annullare un'esecuzione in corso dal drawer
 - I workflow privi di campi di Input possono comunque essere eseguiti direttamente
+- Un workflow che inizia con un [File Upload Trigger](../nodes/file-upload-trigger-node.md) mostra invece un'area di rilascio: trascina un file al suo interno o fai clic per sceglierne uno. L'area elenca i tipi e le dimensioni dei file accettati dal trigger e rifiuta gli altri file prima del caricamento. **Run Workflow** rimane disabilitato finché non viene scelto un file.
 
 Il drawer utilizza la stessa API di esecuzione dei workflow delle altre superfici di esecuzione di Heym, pertanto gli output e il comportamento di runtime rimangono coerenti.
 
@@ -51,6 +52,8 @@ Dopo aver avviato un'esecuzione, il drawer mostra:
 
 `pending` indica che il workflow è in attesa di un'azione successiva, come una revisione umana.
 
+Un'esecuzione con file passa attraverso il link di caricamento monouso del trigger: il pannello richiede un link al workflow, vi carica il file e mostra il risultato al termine del caricamento. Le esecuzioni con file mostrano lo stato finale e gli output ma non l'avanzamento passo-passo, e sono anch'esse contrassegnate con `Quick Drawer` nella cronologia. Il file scelto viene rimosso dopo ogni esecuzione, poiché un link accetta un solo file.
+
 ## Memoria del Browser
 
 Il Quick Drawer memorizza le preferenze personali in `localStorage`:
@@ -64,7 +67,7 @@ In questa versione, il drawer **non** persiste i valori di input.
 
 Il Quick Drawer è intenzionalmente una superficie di esecuzione leggera.
 
-- Incluso: ricerca, aggiunta ai preferiti, selezione, input, esecuzione, avanzamento, risultato
+- Incluso: ricerca, aggiunta ai preferiti, selezione, input (incluso un file), esecuzione, avanzamento, risultato
 - Escluso: creazione di workflow, modifica, gestione delle cartelle e azioni sul canvas
 
 ## Correlati

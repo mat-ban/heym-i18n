@@ -701,7 +701,8 @@
       "nodes": "Knooppunten",
       "reference": "Referentie",
       "tabs": "Tabbladen"
-    }
+    },
+    "pluginNoDoc": "Deze plug-in heeft geen documentatie."
   },
   "drive": {
     "applying": "Toepassen...",
@@ -1699,7 +1700,22 @@
     "goToFeature": "Naar {title} gaan",
     "previousFeature": "Vorige functie",
     "readTheDocs": "Documentatie lezen",
-    "startTour": "Tour starten"
+    "startTour": "Tour starten",
+    "heymWork": {
+      "step0": "Een team vraagt in Heym Work",
+      "step1": "Heym bouwt en test het",
+      "step2": "Geverifieerd, zonder canvas",
+      "step3": "Heym voert het op de achtergrond uit",
+      "prompt": "Controleer nieuwe contracten op risicovolle clausules.",
+      "testing": "De Workflow wordt getest",
+      "verified": "Geverifieerd"
+    },
+    "skillZip": {
+      "step0": "Sleep een skill-zip naar de Chat",
+      "step1": "Chat leest SKILL.md",
+      "step2": "De agent behoudt de skill",
+      "prompt": "Lees de factuur en maak een lijst van de regelitems."
+    }
   },
   "schedules": {
     "calendar": {
@@ -1930,7 +1946,17 @@
     "voiceCredentialDescription": "Wordt gebruikt om berichten voor te lezen en de interactieve spraakmodus in chat mogelijk te maken.",
     "voiceLoadError": "Stemmen konden niet worden geladen. Controleer de referentie.",
     "voiceSelect": "Stem",
-    "work": "Heym Work"
+    "work": "Heym Work",
+    "pluginsIntro": "Plug-ins voegen aangepaste knooppunten (acties en Triggers) toe aan deze instantie. Het installeren of verwijderen van een plug-in voert servercode uit en is daarom beperkt tot beheerders vermeld in",
+    "loadingPlugins": "Plug-ins laden…",
+    "pluginsDisabledTitle": "Plug-ins zijn uitgeschakeld",
+    "pluginsDisabledHint": "Stel deze omgevingsvariabelen in op de backend en herstart vervolgens:",
+    "installPluginZip": "Een plug-in installeren (.zip)",
+    "noPluginsInstalled": "Nog geen plug-ins geïnstalleerd.",
+    "enablePlugin": "Inschakelen",
+    "disablePlugin": "Uitschakelen",
+    "uninstallPlugin": "Verwijderen",
+    "pluginOperationFailed": "Plug-inbewerking mislukt"
   },
   "showcase": {
     "askAboutDoc": "Vraag over deze documentatie",
@@ -2401,5 +2427,48 @@
     "versions": "Versies",
     "versionsCount": "{count} versie(s)",
     "versionsSubtitle": "Versies worden aangemaakt wanneer u wijzigingen in uw workflow opslaat"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Workflows, tabbladen, documentatie zoeken...",
+    "searchAria": "Zoeken in opdrachtpalet",
+    "ariaLabel": "Opdrachtpalet",
+    "noResults": "Geen resultaten gevonden",
+    "tryDifferentSearch": "Probeer een andere zoekterm",
+    "recent": "Recent",
+    "recentInFolder": "Recent · In: {folder}",
+    "inFolder": "In: {folder}",
+    "scheduledDate": "Gepland {date}",
+    "scheduledForDeletion": "Gepland voor verwijdering",
+    "goToTab": "Ga naar tabblad",
+    "workflowTemplate": "Workflow-sjabloon",
+    "nodeTemplate": "Knooppuntsjabloon",
+    "nodeType": "Knooppunt · {type}",
+    "documentation": "Documentatie",
+    "support": "Ondersteuning",
+    "contactSupport": "Contact opnemen met ondersteuning",
+    "watchRunbook": "Bekijk hoe Heym een Workflow bouwt en uitvoert",
+    "openDocs": "Open de Heym-documentatie",
+    "getHelp": "Krijg hulp van het Heym-team",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work voor zakelijke teams, op heym.run",
+    "navigate": "Navigeren",
+    "select": "Selecteren",
+    "click": "klik",
+    "newTab": "nieuw tabblad",
+    "oneItem": "{count} item",
+    "manyItems": "{count} items"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Plug-ins zijn uitgeschakeld op deze instantie.",
+    "loadingDefinition": "Plug-indefinitie laden...",
+    "notBound": "Dit knooppunt is niet gekoppeld aan een plug-inpakket.",
+    "noneInstalled": "Er zijn geen plug-ins geïnstalleerd op deze instantie.",
+    "notInstalled": "Plug-in \"{id}\" is niet geïnstalleerd op deze instantie.",
+    "installedButDisabled": "Plug-in \"{name}\" is geïnstalleerd maar uitgeschakeld.",
+    "noKindNodes": "Plug-in \"{name}\" biedt geen {kind}-knooppunten.",
+    "loadErrorDetail": "Kan plug-ins niet laden: {detail}",
+    "loadErrorHttp": "Kan plug-ins niet laden (HTTP {status}).",
+    "loadError": "Kan plug-ins niet laden.",
+    "enabled": "Ingeschakeld"
   }
 }

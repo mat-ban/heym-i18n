@@ -93,11 +93,12 @@ Der Ausführungsverlauf zeichnet `trigger_source` für jeden Einstiegspunkt auf:
 |-------|------|
 | `"API"` | Webhook / API-Aufruf ohne expliziten Header (Standard) |
 | `"Canvas"` | Ausführung vom Canvas des Workflow-Editors |
-| `"Quick Drawer"` | Ausführung vom Quick-Drawer-Panel des Editors |
+| `"Quick Drawer"` | Ausführung über das Quick-Drawer-Panel des Editors, einschließlich Dateiläufen aus dessen Dropzone |
 | `"cron"` | Cron-Scheduler |
 | `"imap"` | IMAP-Trigger-Manager |
 | `"websocket"` | Ausgehender WebSocket-Trigger-Manager |
-| `"file_upload"` | Upload-Endpoint des File-Upload-Triggers |
+| `"file_upload"` | Upload-Endpoint des File-Upload-Triggers (über HTTP, MCP oder den Canvas erstellte Links) |
+| `"dashboard"` | Ausführungen von Dashboard-Widgets sowie Uploads über ein Datei-Drop-Widget |
 | `"telegram"` | Telegram-Bot-Webhook |
 | `"Discord"` | Discord-Interaktions-Webhook |
 | `"MCP"` | MCP-Tool-Aufruf |

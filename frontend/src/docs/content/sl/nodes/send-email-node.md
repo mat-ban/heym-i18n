@@ -28,7 +28,7 @@ Pripnite datoteke iz vašega [Drive](./drive-node.md) tako, da v polje `attachme
 
 ## Nastavitev
 
-Dodajte SMTP poverilnico z naslovom strežnika, pristaniščem, e-poštnim naslovom in geslom. Pogosti SMTP strežniki:
+Dodajte SMTP poverilnico z naslovom strežnika, pristaniščem, e-poštnim naslovom in geslom. Vidni pošiljatelj je izbirno polje **From** v poverilnici; če je From prazno, se pošlje kot uporabniško ime. Pogosti SMTP strežniki:
 
 - Gmail: `smtp.gmail.com`, pristanišče 587 (zahteva se aplikacijsko geslo)
 - Outlook: `smtp.office365.com`, pristanišče 587

@@ -33,6 +33,8 @@ Quan només disposeu de dades d'exemple (sense cap font real), produïu aquestes
 | `valueField` | string | Clau de fila utilitzada com a valor numèric (pie/bar/line/numeric/gauge) |
 | `series` | array | Definició opcional de múltiples sèries `[{ "name": "Sent", "field": "sent" }]` per a bar/line (substitueix `valueField`) |
 | `columns` | array | Llista opcional de columnes per a `table` (per defecte, les claus de la primera fila) |
+| `statusColumn` | string | Columna opcional de `table` renderitzada com a [xips d'estat](#status-chips) de colors. Ha de ser una de les columnes mostrades. |
+| `statusTones` | object | Mapa opcional d'un valor d'estat a un to (`success`, `attention`, `failure`, `waiting`, `neutral`) per als valors que els predeterminats no cobreixen |
 | `xField` / `yField` | string | Claus de fila per als eixos numèrics X i Y (scatter) |
 | `min` / `max` | number | Rang numèric per a `gauge` (per defecte `0` / `100`) |
 | `unit` | string | Unitat opcional mostrada al costat d'un valor `numeric` o `gauge` |
@@ -42,7 +44,7 @@ Quan només disposeu de dades d'exemple (sense cap font real), produïu aquestes
 ## Tipus de gràfic
 
 - **bar / line / area / pie** — gràfics categòrics controlats per `labelField` + `valueField` (o `series` per a bar/line/area de múltiples sèries). `area` és un gràfic de tendència amb farciment.
-- **table** — files en brut renderitzades com una taula desplaçable utilitzant `columns`.
+- **table** — files en brut renderitzades com una taula desplaçable utilitzant `columns`. Una columna es pot renderitzar com a [xips d'estat](#status-chips) i les files poden obrir una [pàgina de detall](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — un únic valor KPI de la primera fila, amb una `unit` opcional.
 - **gauge** — un únic valor mostrat dins d'un rang `min`–`max` (per exemple, un percentatge). Utilitza `valueField`.
 - **scatter** — punts X/Y a partir de `xField` i `yField` per a gràfics de correlació.
@@ -103,14 +105,59 @@ Markdown resultant:
 
 Per a una llista ascendent simple que comenci per 1, prefixeu cada línia (`1.`, `2.`, `3.`) o utilitzeu un bucle amb `$loop.index + 1`. Utilitzeu [llistes de pics](#interactive-task-lists) (`- item`) quan no necessiteu números.
 
+## Xips d'estat
+
+Una `table` pot mostrar una columna com a xips de colors. Establiu **Status column** a les propietats del node (o `statusColumn` al DSL) amb el nom d'una columna. Cada valor rep un dels cinc tons, i les paraules habituals en reben un sense configuració:
+
+| To | Paraules predeterminades |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | qualsevol altre valor |
+
+La coincidència ignora majúscules/minúscules, `_` i `-`, de manera que `IN_PROGRESS` i `in-progress` són tots dos `waiting`. Afegiu **Status tones** per a altres valors; una entrada substitueix el valor predeterminat per a aquest valor:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+El servidor resol cada valor al seu to, de manera que Heym i Heym Work mostren els mateixos colors.
+
+## Pàgines de detall: `$page.record`
+
+Un tauler obert amb `?record=<value>` executa cada Workflow de giny amb aquest valor com a `$page.record`. Un enllaç de fila de taula obre una pàgina d'aquest tipus; vegeu [Pàgines de detall](../tabs/dashboard-tab.md#detail-pages). Al tauler obert sense cap registre i al diàleg d'expressions, `$page.record` és `null`. Un node etiquetat com a `page` té prioritat sobre ell.
+
+Utilitzeu-lo per obtenir l'únic registre sobre el qual tracta la pàgina, per exemple en un node [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` és el propi valor de la fila clicada, com ara `V-1002`, no un objecte amb camps. Per trobar aquest registre en una [DataTable](./datatable-node.md), filtreu la seva columna de registre pel valor: operació `find` amb el filtre `{"vendor_id": "$page.record"}`. Un camí com ara `$page.record.id` no es resol en res, de manera que un giny que la IA construeixi o afini descarta aquests camps i llegeix `$page.record` en lloc seu.
+
+El valor prové d'un URL que qualsevol pot editar. El tauler només accepta valors en el seu format de registre (lletres, dígits, `-`, `_` i `.` per defecte), però tracteu-lo igualment com una entrada no fiable: passeu-lo on el node escapi valors, com ara un paràmetre de consulta HTTP o un valor de filtre de [DataTable](./datatable-node.md) o ClickHouse, i no construïu mai text de consulta concatenant-hi cadenes. Els ginys continuen executant-se com a propietari del tauler, sigui qui sigui qui obri la pàgina.
+
 ## Com es resolen les dades
 
 1. Si `dataPath` està definit, el node segueix aquest camí de punts dins la sortida ascendent.
 2. En cas contrari, busca una matriu: una llista de nivell superior, una matriu `data`, o el primer camp amb valor de llista.
-3. Per a `table`, cada fila es converteix en una fila de taula utilitzant `columns` (o les claus de la primera fila).
-4. Per a `numeric` i `gauge`, el valor prové de `valueField` a la primera fila (o del primer camp numèric).
-5. Per a `scatter`, cada fila es converteix en un punt `[xField, yField]`.
-6. Per a `text`, el missatge s'obté de `valueField` a la primera fila quan està definit; en cas contrari, de la configuració estàtica `text` (o, si no, del primer camp de cadena de la primera fila).
+3. Les files que provenen directament d'un node [Data Table](./datatable-node.md) (`{id, data, created_at}`) es llegeixen amb les seves columnes al nivell superior al costat d'`id`, de manera que `labelField`, `valueField` i `columns` anomenen les pròpies columnes de la taula.
+4. Per a `table`, cada fila es converteix en una fila de taula utilitzant `columns` (o les claus de la primera fila). Amb `statusColumn`, el Payload també inclou el to de cada valor d'aquesta columna.
+5. Per a `numeric` i `gauge`, el valor prové de `valueField` a la primera fila (o del primer camp numèric).
+6. Per a `scatter`, cada fila es converteix en un punt `[xField, yField]`.
+7. Per a `text`, el missatge s'obté de `valueField` a la primera fila quan està definit; en cas contrari, de la configuració estàtica `text` (o, si no, del primer camp de cadena de la primera fila).
 ## Exemple
 
 ```json

@@ -896,7 +896,8 @@
       "nodes": "Nodi",
       "reference": "Riferimento",
       "tabs": "Schede"
-    }
+    },
+    "pluginNoDoc": "Questo plugin non dispone di documentazione."
   },
   "drive": {
     "applying": "Applicazione in corso...",
@@ -1778,7 +1779,22 @@
     "goToFeature": "Vai a {title}",
     "previousFeature": "Funzionalità precedente",
     "readTheDocs": "Leggere la documentazione",
-    "startTour": "Avvia tour"
+    "startTour": "Avvia tour",
+    "heymWork": {
+      "step0": "Un team chiede in Heym Work",
+      "step1": "Heym lo costruisce e lo testa",
+      "step2": "Verificato, senza canvas",
+      "step3": "Heym lo esegue in background",
+      "prompt": "Controllare i nuovi contratti per clausole rischiose.",
+      "testing": "Test del Workflow in corso",
+      "verified": "Verificato"
+    },
+    "skillZip": {
+      "step0": "Rilascia uno zip di skill nella Chat",
+      "step1": "La Chat legge SKILL.md",
+      "step2": "L'agente mantiene la skill",
+      "prompt": "Leggere la fattura ed elencare le voci."
+    }
   },
   "schedules": {
     "calendar": {
@@ -1930,7 +1946,17 @@
       "unknown": "Sconosciuto",
       "workVersion": "Versione Work",
       "learnMore": "Ulteriori informazioni"
-    }
+    },
+    "pluginsIntro": "I plugin aggiungono nodi personalizzati (azioni e Trigger) a questa istanza. L'installazione o la rimozione di un plugin esegue codice lato server ed è pertanto riservata agli operatori elencati in",
+    "loadingPlugins": "Caricamento dei plugin…",
+    "pluginsDisabledTitle": "I plugin sono disabilitati",
+    "pluginsDisabledHint": "Impostare queste variabili d'ambiente sul backend, quindi riavviare:",
+    "installPluginZip": "Installa un plugin (.zip)",
+    "noPluginsInstalled": "Nessun plugin ancora installato.",
+    "enablePlugin": "Abilita",
+    "disablePlugin": "Disabilita",
+    "uninstallPlugin": "Disinstalla",
+    "pluginOperationFailed": "Operazione sul plugin non riuscita"
   },
   "showcase": {
     "askAboutDoc": "Chiedi informazioni su questo documento",
@@ -2401,5 +2427,48 @@
     "vectorsCount": "{count} vettori",
     "vectorsRemainNotice": "I vettori archiviati rimarranno e potranno essere riutilizzati in seguito.",
     "viewItems": "Visualizza elementi"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Cerca Workflow, schede, documentazione...",
+    "searchAria": "Ricerca nella tavolozza dei comandi",
+    "ariaLabel": "Tavolozza dei comandi",
+    "noResults": "Nessun risultato trovato",
+    "tryDifferentSearch": "Provare con un termine di ricerca diverso",
+    "recent": "Recenti",
+    "recentInFolder": "Recenti · In: {folder}",
+    "inFolder": "In: {folder}",
+    "scheduledDate": "Pianificato {date}",
+    "scheduledForDeletion": "Pianificato per l'eliminazione",
+    "goToTab": "Vai alla scheda",
+    "workflowTemplate": "Modello di Workflow",
+    "nodeTemplate": "Modello di nodo",
+    "nodeType": "Nodo · {type}",
+    "documentation": "Documentazione",
+    "support": "Supporto",
+    "contactSupport": "Contatta il supporto",
+    "watchRunbook": "Guarda Heym creare ed eseguire un Workflow",
+    "openDocs": "Apri la documentazione di Heym",
+    "getHelp": "Ottieni assistenza dal team Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work per i team aziendali, su heym.run",
+    "navigate": "Naviga",
+    "select": "Seleziona",
+    "click": "clic",
+    "newTab": "nuova scheda",
+    "oneItem": "{count} elemento",
+    "manyItems": "{count} elementi"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "I plugin sono disabilitati su questa istanza.",
+    "loadingDefinition": "Caricamento della definizione del plugin...",
+    "notBound": "Questo nodo non è associato a un pacchetto plugin.",
+    "noneInstalled": "Nessun plugin installato su questa istanza.",
+    "notInstalled": "Il plugin \"{id}\" non è installato su questa istanza.",
+    "installedButDisabled": "Il plugin \"{name}\" è installato ma disabilitato.",
+    "noKindNodes": "Il plugin \"{name}\" non espone alcun nodo {kind}.",
+    "loadErrorDetail": "Impossibile caricare i plugin: {detail}",
+    "loadErrorHttp": "Impossibile caricare i plugin (HTTP {status}).",
+    "loadError": "Impossibile caricare i plugin.",
+    "enabled": "Abilitato"
   }
 }

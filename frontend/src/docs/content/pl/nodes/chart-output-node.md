@@ -33,6 +33,8 @@ Gdy dostępne są wyłącznie dane przykładowe (bez rzeczywistego źródła), n
 | `valueField` | string | Klucz wiersza używany jako wartość liczbowa (pie/bar/line/numeric/gauge) |
 | `series` | array | Opcjonalna definicja wielu serii `[{ "name": "Sent", "field": "sent" }]` dla bar/line (zastępuje `valueField`) |
 | `columns` | array | Opcjonalna lista kolumn dla `table` (domyślnie klucze pierwszego wiersza) |
+| `statusColumn` | string | Opcjonalna kolumna `table` renderowana jako kolorowe [znaczniki statusu](#status-chips). Musi być jedną z wyświetlanych kolumn. |
+| `statusTones` | object | Opcjonalne mapowanie wartości statusu na odcień (`success`, `attention`, `failure`, `waiting`, `neutral`) dla wartości nieobjętych ustawieniami domyślnymi |
 | `xField` / `yField` | string | Klucze wiersza dla osi numerycznych X i Y (scatter) |
 | `min` / `max` | number | Zakres numeryczny dla `gauge` (domyślnie `0` / `100`) |
 | `unit` | string | Opcjonalna jednostka wyświetlana obok wartości `numeric` lub `gauge` |
@@ -42,7 +44,7 @@ Gdy dostępne są wyłącznie dane przykładowe (bez rzeczywistego źródła), n
 ## Typy wykresów
 
 - **bar / line / area / pie** — wykresy kategoryczne oparte na `labelField` + `valueField` (lub `series` dla wieloseryjnych bar/line/area). `area` to wypełniony wykres trendu.
-- **table** — surowe wiersze renderowane jako przewijalna tabela z użyciem `columns`.
+- **table** — surowe wiersze renderowane jako przewijalna tabela z użyciem `columns`. Jedna kolumna może być renderowana jako [znaczniki statusu](#status-chips), a wiersze mogą otwierać [stronę szczegółów](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — pojedyncza wartość KPI z pierwszego wiersza, z opcjonalną `unit`.
 - **gauge** — pojedyncza wartość prezentowana w zakresie `min`–`max` (np. wartość procentowa). Używa `valueField`.
 - **scatter** — punkty X/Y z `xField` i `yField` dla wykresów korelacji.
@@ -103,14 +105,59 @@ Wynikowy markdown:
 
 Dla prostej listy rosnącej zaczynającej się od 1 należy poprzedzić każdy wiersz (`1.`, `2.`, `3.`) lub użyć pętli z `$loop.index + 1`. Gdy numery nie są potrzebne, należy użyć [list punktowanych](#interactive-task-lists) (`- item`).
 
+## Znaczniki statusu
+
+Tabela (`table`) może wyświetlać jedną kolumnę jako kolorowe znaczniki (chips). Ustaw **Status column** we właściwościach węzła (lub `statusColumn` w DSL) na nazwę kolumny. Każda wartość otrzymuje jeden z pięciu odcieni, a popularne słowa otrzymują go bez dodatkowej konfiguracji:
+
+| Odcień | Słowa domyślne |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | wszystko inne |
+
+Dopasowywanie ignoruje wielkość liter, `_` oraz `-`, więc `IN_PROGRESS` i `in-progress` dają `waiting`. Dodaj **Status tones** dla innych wartości; wpis nadpisuje domyślne ustawienie dla danej wartości:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Serwer przypisuje każdej wartości odpowiedni odcień, dzięki czemu Heym i Heym Work wyświetlają te same kolory.
+
+## Strony szczegółów: `$page.record`
+
+Dashboard otwarty z parametrem `?record=<value>` uruchamia każdy Workflow widżetu z tą wartością jako `$page.record`. Link w wierszu tabeli otwiera taką stronę; zobacz [Strony szczegółów](../tabs/dashboard-tab.md#detail-pages). Na dashboardzie otwartym bez rekordu oraz w oknie wyrażeń `$page.record` ma wartość `null`. Węzeł o etykiecie `page` ma nad nim pierwszeństwo.
+
+Użyj tej wartości, aby pobrać konkretny rekord, którego dotyczy strona, na przykład w węźle [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` jest samą wartością klikniętego wiersza, np. `V-1002`, a nie obiektem z polami. Aby znaleźć ten rekord w [DataTable](./datatable-node.md), przefiltruj kolumnę rekordu według tej wartości: operacja `find` z filtrem `{"vendor_id": "$page.record"}`. Ścieżka taka jak `$page.record.id` zwraca pustą wartość, dlatego widżet tworzony lub dostrajany przez AI pomija te pola i odczytuje bezpośrednio `$page.record`.
+
+Wartość pochodzi z adresu URL, który każdy może zmienić. Dashboard akceptuje wyłącznie wartości w swoim formacie rekordu (domyślnie litery, cyfry, `-`, `_` oraz `.`), ale mimo to należy traktować ją jako niezaufane dane wejściowe: przekazuj ją tam, gdzie węzeł escapuje wartości, np. jako parametr zapytania HTTP lub wartość filtru [DataTable](./datatable-node.md) albo ClickHouse, i nigdy nie buduj treści zapytania poprzez łączenie łańcuchów znaków. Widżety nadal wykonują się z uprawnieniami właściciela dashboardu, niezależnie od tego, kto otworzy stronę.
+
 ## Jak rozwiązywane są dane
 
 1. Jeśli ustawiono `dataPath`, węzeł podąża tą ścieżką kropkową do danych wyjściowych poprzedzającego węzła.
 2. W przeciwnym razie szuka tablicy: listy najwyższego poziomu, tablicy `data` lub pierwszego pola o wartości będącej listą.
-3. Dla `table` każdy wiersz staje się wierszem tabeli przy użyciu `columns` (lub kluczy pierwszego wiersza).
-4. Dla `numeric` i `gauge` wartość pochodzi z `valueField` w pierwszym wierszu (lub z pierwszego pola liczbowego).
-5. Dla `scatter` każdy wiersz staje się punktem `[xField, yField]`.
-6. Dla `text` komunikat jest pobierany z `valueField` w pierwszym wierszu, gdy jest ustawiony, w przeciwnym razie ze statycznej konfiguracji `text` (w ostateczności z pierwszego pola tekstowego pierwszego wiersza).
+3. Wiersze pochodzące bezpośrednio z węzła [Data Table](./datatable-node.md) (`{id, data, created_at}`) są odczytywane z ich kolumnami na najwyższym poziomie obok `id`, dzięki czemu `labelField`, `valueField` oraz `columns` wskazują bezpośrednio kolumny tabeli.
+4. Dla `table` każdy wiersz staje się wierszem tabeli przy użyciu `columns` (lub kluczy pierwszego wiersza). Przy ustawionym `statusColumn` Payload zawiera również odcień każdej wartości w tej kolumnie.
+5. Dla `numeric` i `gauge` wartość pochodzi z `valueField` w pierwszym wierszu (lub z pierwszego pola liczbowego).
+6. Dla `scatter` każdy wiersz staje się punktem `[xField, yField]`.
+7. Dla `text` komunikat jest pobierany z `valueField` w pierwszym wierszu, gdy jest ustawiony, w przeciwnym razie ze statycznej konfiguracji `text` (w ostateczności z pierwszego pola tekstowego pierwszego wiersza).
 
 ## Przykład
 

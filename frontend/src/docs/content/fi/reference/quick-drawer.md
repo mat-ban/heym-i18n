@@ -35,6 +35,7 @@ Valitse workflow avataksesi sen syöttölomakkeen.
 - Klikkaa **Suorita workflow** aloittaaksesi valitun workflown suorituksen
 - Klikkaa **Pysäytä workflow** keskeyttääksesi käynnissä olevan suorituksen valikosta
 - Workflowt ilman syötekenttiä voidaan silti suorittaa suoraan
+- Workflow, joka alkaa [File Upload Trigger](../nodes/file-upload-trigger-node.md) -solmulla, näyttää lomakkeen sijaan pudotusalueen: pudota tiedosto siihen tai valitse tiedosto napsauttamalla. Alue näyttää triggerin hyväksymät tiedostotyypit ja enimmäiskoon sekä hylkää muut tiedostot ennen lähetystä. **Run Workflow** pysyy poissa käytöstä, kunnes tiedosto on valittu.
 
 Valikko käyttää samaa workflow-suoritusrajapintaa kuin muut Heymin suorituspinnat, joten tulokset ja suorituskäyttäytyminen pysyvät yhtenäisinä.
 
@@ -51,6 +52,8 @@ Suorituksen aloittamisen jälkeen valikko näyttää:
 
 `pending` tarkoittaa, että workflow odottaa myöhempää toimintoa, kuten ihmisen arviointia.
 
+Tiedostosuoritus kulkee triggerin kertakäyttöisen latauslinkin kautta: paneeli pyytää workflow'lta linkin, lataa tiedoston siihen ja näyttää tuloksen latauksen valmistuttua. Tiedostosuorituksissa näytetään lopullinen tila ja tulosteet mutta ei vaiheittaista edistymistä, ja ne merkitään historiassa myös `Quick Drawer` -tunnisteella. Valittu tiedosto tyhjennetään jokaisen suorituksen jälkeen, koska yksi linkki vastaanottaa vain yhden tiedoston.
+
 ## Selaintallennus
 
 Pikavalikko tallentaa henkilökohtaiset asetukset `localStorageen`:
@@ -64,7 +67,7 @@ Tässä versiossa valikko **ei** tallenna syötearvoja.
 
 Pikavalikko on tarkoituksella kevyt suorituspinta.
 
-- Sisältyy: haku, kiinnitys, valinta, syöttö, suoritus, edistyminen, tulos
+- Sisältyy: haku, kiinnitys, valinta, syöttö (mukaan lukien tiedosto), suoritus, edistyminen, tulos
 - Ei sisälly: workflowjen luominen, muokkaaminen, kansioiden hallinta ja canvas-toiminnot
 
 ## Liittyvät

@@ -33,6 +33,8 @@ Ketika Anda hanya memiliki data contoh/sampel (tanpa sumber nyata), hasilkan bar
 | `valueField` | string | Kunci baris yang digunakan sebagai nilai numerik (pie/bar/line/numeric/gauge) |
 | `series` | array | Definisi multi-series opsional `[{ "name": "Sent", "field": "sent" }]` untuk bar/line (menimpa `valueField`) |
 | `columns` | array | Daftar kolom opsional untuk `table` (default-nya adalah kunci dari baris pertama) |
+| `statusColumn` | string | Kolom `table` opsional yang dirender sebagai [chip status](#status-chips) berwarna. Harus merupakan salah satu kolom yang ditampilkan. |
+| `statusTones` | object | Pemetaan opsional dari nilai status ke nada warna (`success`, `attention`, `failure`, `waiting`, `neutral`) untuk nilai yang tidak tercakup oleh default |
 | `xField` / `yField` | string | Kunci baris untuk sumbu X dan Y numerik (scatter) |
 | `min` / `max` | number | Rentang numerik untuk `gauge` (default `0` / `100`) |
 | `unit` | string | Unit opsional yang ditampilkan di samping nilai `numeric` atau `gauge` |
@@ -42,7 +44,7 @@ Ketika Anda hanya memiliki data contoh/sampel (tanpa sumber nyata), hasilkan bar
 ## Tipe chart
 
 - **bar / line / area / pie** — chart kategorikal yang digerakkan oleh `labelField` + `valueField` (atau `series` untuk bar/line/area multi-series). `area` adalah chart tren terisi.
-- **table** — baris mentah yang dirender sebagai tabel yang dapat digulir menggunakan `columns`.
+- **table** — baris mentah yang dirender sebagai tabel yang dapat digulir menggunakan `columns`. Satu kolom dapat dirender sebagai [chip status](#status-chips), dan baris dapat membuka [halaman detail](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — satu nilai KPI dari baris pertama, dengan `unit` opsional.
 - **gauge** — satu nilai yang ditampilkan terhadap rentang `min`–`max` (misalnya persentase). Menggunakan `valueField`.
 - **scatter** — titik X/Y dari `xField` dan `yField` untuk plot korelasi.
@@ -103,14 +105,59 @@ Markdown yang dihasilkan:
 
 Untuk daftar menaik sederhana yang dimulai dari 1, awali setiap baris (`1.`, `2.`, `3.`) atau gunakan loop dengan `$loop.index + 1`. Gunakan [daftar bullet](#interactive-task-lists) (`- item`) ketika Anda tidak memerlukan nomor.
 
+## Chip status
+
+Sebuah `table` dapat menampilkan satu kolom sebagai chip berwarna. Atur **Status column** di properti node (atau `statusColumn` di DSL) ke nama kolom. Setiap nilai mendapatkan salah satu dari lima nada warna, dan kata-kata umum mendapatkannya secara otomatis tanpa konfigurasi:
+
+| Nada | Kata default |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | apa pun lainnya |
+
+Pencocokan mengabaikan huruf besar/kecil, `_`, dan `-`, sehingga `IN_PROGRESS` dan `in-progress` keduanya menjadi `waiting`. Tambahkan **Status tones** untuk nilai lainnya; entri akan menimpa default untuk nilai tersebut:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Server menerjemahkan setiap nilai ke nada warnanya, sehingga Heym dan Heym Work menampilkan warna yang sama.
+
+## Halaman detail: `$page.record`
+
+Dasbor yang dibuka dengan `?record=<value>` menjalankan setiap Workflow widget dengan nilai tersebut sebagai `$page.record`. Tautan baris tabel membuka halaman semacam itu; lihat [Halaman detail](../tabs/dashboard-tab.md#detail-pages). Pada dasbor yang dibuka tanpa record, dan di dialog ekspresi, `$page.record` bernilai `null`. Node berlabel `page` lebih diprioritaskan daripada nilai ini.
+
+Gunakan nilai ini untuk mengambil satu record yang menjadi topik halaman tersebut, misalnya di dalam node [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` adalah nilai dari baris yang diklik itu sendiri, seperti `V-1002`, bukan objek dengan field. Untuk menemukan record tersebut di [DataTable](./datatable-node.md), filter kolom record-nya berdasarkan nilai tersebut: operasi `find` dengan filter `{"vendor_id": "$page.record"}`. Path seperti `$page.record.id` tidak menghasilkan apa pun, sehingga widget yang dibuat atau disempurnakan oleh AI akan membuang field tersebut dan membaca `$page.record` sebagai gantinya.
+
+Nilai ini berasal dari URL yang dapat diedit oleh siapa saja. Dasbor hanya menerima nilai dalam format record-nya (huruf, angka, `-`, `_`, dan `.` secara default), tetapi tetap perlakukan sebagai input yang tidak tepercaya: teruskan di tempat node melakukan escape pada nilai, seperti parameter kueri HTTP atau nilai filter [DataTable](./datatable-node.md) atau ClickHouse, dan jangan pernah membuat teks kueri dengan menggabungkan string dengannya. Widget tetap berjalan sebagai pemilik dasbor, siapa pun yang membuka halaman.
+
 ## Bagaimana data diselesaikan
 
 1. Jika `dataPath` diatur, node mengikuti dot path tersebut ke output upstream.
 2. Jika tidak, node mencari array: daftar tingkat atas, array `data`, atau field bernilai daftar pertama.
-3. Untuk `table`, setiap baris menjadi baris tabel menggunakan `columns` (atau key dari baris pertama).
-4. Untuk `numeric` dan `gauge`, nilai berasal dari `valueField` pada baris pertama (atau field numerik pertama).
-5. Untuk `scatter`, setiap baris menjadi titik `[xField, yField]`.
-6. Untuk `text`, pesan diambil dari `valueField` pada baris pertama jika diatur, jika tidak dari konfigurasi `text` statis (jika tidak, dari field string pertama pada baris pertama).
+3. Baris yang berasal langsung dari node [Data Table](./datatable-node.md) (`{id, data, created_at}`) dibaca dengan kolom-kolomnya di tingkat teratas di samping `id`, sehingga `labelField`, `valueField`, dan `columns` menyebutkan kolom milik tabel itu sendiri.
+4. Untuk `table`, setiap baris menjadi baris tabel menggunakan `columns` (atau key dari baris pertama). Dengan `statusColumn`, Payload juga membawa nada warna dari setiap nilai di kolom tersebut.
+5. Untuk `numeric` dan `gauge`, nilai berasal dari `valueField` pada baris pertama (atau field numerik pertama).
+6. Untuk `scatter`, setiap baris menjadi titik `[xField, yField]`.
+7. Untuk `text`, pesan diambil dari `valueField` pada baris pertama jika diatur, jika tidak dari konfigurasi `text` statis (jika tidak, dari field string pertama pada baris pertama).
 
 ## Contoh
 

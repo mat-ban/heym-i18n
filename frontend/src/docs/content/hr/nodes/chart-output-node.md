@@ -33,6 +33,8 @@ Kada imate samo primjerene/testne podatke (bez stvarnog izvora), proizvedite te 
 | `valueField` | string | Ključ retka koji se koristi kao numerička vrijednost (pie/bar/line/numeric/gauge) |
 | `series` | array | Neobavezna definicija više serija `[{ "name": "Sent", "field": "sent" }]` za bar/line (nadjačava `valueField`) |
 | `columns` | array | Neobavezan popis stupaca za `table` (zadano su ključevi prvog retka) |
+| `statusColumn` | string | Neobavezni stupac `table` prikazan kao obojene [statusne oznake](#status-chips). Mora biti jedan od prikazanih stupaca. |
+| `statusTones` | object | Neobavezno mapiranje vrijednosti statusa u ton (`success`, `attention`, `failure`, `waiting`, `neutral`) za vrijednosti koje zadane postavke ne pokrivaju |
 | `xField` / `yField` | string | Ključevi redaka za X i Y numeričke osi (scatter) |
 | `min` / `max` | number | Numerički raspon za `gauge` (zadano `0` / `100`) |
 | `unit` | string | Neobavezna jedinica prikazana uz `numeric` ili `gauge` vrijednost |
@@ -42,7 +44,7 @@ Kada imate samo primjerene/testne podatke (bez stvarnog izvora), proizvedite te 
 ## Chart types
 
 - **bar / line / area / pie** — kategorijski chartovi vođeni poljima `labelField` + `valueField` (ili `series` za višeserijske bar/line/area). `area` je ispunjeni trend chart.
-- **table** — sirovi retci renderirani kao tablica s pomicanjem pomoću `columns`.
+- **table** — sirovi retci renderirani kao tablica s pomicanjem pomoću `columns`. Jedan se stupac može prikazati kao [statusne oznake](#status-chips), a retci mogu otvoriti [stranicu s pojedinostima](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — jedna KPI vrijednost iz prvog retka, s neobaveznom `unit`.
 - **gauge** — jedna vrijednost prikazana u rasponu `min`–`max` (npr. postotak). Koristi `valueField`.
 - **scatter** — X/Y točke iz `xField` i `yField` za prikaze korelacije.
@@ -103,14 +105,59 @@ Rezultirajući markdown:
 
 Za jednostavan uzlazni popis koji započinje od 1, ili započnite svaki redak brojem (`1.`, `2.`, `3.`) ili upotrijebite petlju s `$loop.index + 1`. Upotrijebite [bullet lists](#interactive-task-lists) (`- item`) kada Vam brojevi nisu potrebni.
 
+## Statusne oznake
+
+Tablica (`table`) može prikazati jedan stupac kao obojene oznake (chips). Postavite **Status column** u svojstvima čvora (ili `statusColumn` u DSL-u) na naziv stupca. Svaka vrijednost dobiva jedan od pet tonova, a uobičajene riječi dobivaju ga automatski bez konfiguracije:
+
+| Ton | Zadane riječi |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | sve ostalo |
+
+Podudaranje zanemaruje velika i mala slova, `_` i `-`, pa su `IN_PROGRESS` i `in-progress` oboje `waiting`. Dodajte **Status tones** za ostale vrijednosti; unos nadjačava zadanu vrijednost za taj status:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Poslužitelj pretvara svaku vrijednost u njezin ton, tako da Heym i Heym Work prikazuju iste boje.
+
+## Stranice s pojedinostima: `$page.record`
+
+Nadzorna ploča otvorena s `?record=<value>` pokreće svaki Workflow widgeta s tom vrijednošću kao `$page.record`. Poveznica retka tablice otvara takvu stranicu; pogledajte [Stranice s pojedinostima](../tabs/dashboard-tab.md#detail-pages). Na nadzornoj ploči otvorenoj bez zapisa i u dijaloškom okviru izraza, `$page.record` je `null`. Čvor s oznakom `page` ima prednost nad njim.
+
+Upotrijebite ga za dohvaćanje točno onog zapisa na koji se stranica odnosi, primjerice u čvoru [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` je sama vrijednost kliknutog retka, primjerice `V-1002`, a ne objekt s poljima. Da biste pronašli taj zapis u čvoru [DataTable](./datatable-node.md), filtrirajte njegov stupac zapisa prema vrijednosti: operacija `find` s filtrom `{"vendor_id": "$page.record"}`. Putanja poput `$page.record.id` ne rješava se ni u što, pa widget koji AI izgradi ili prilagodi odbacuje ta polja i umjesto toga čita `$page.record`.
+
+Vrijednost dolazi iz URL-a koji svatko može urediti. Nadzorna ploča prihvaća samo vrijednosti u svom formatu zapisa (prema zadanim postavkama slova, znamenke, `-`, `_` i `.`), ali je svejedno tretirajte kao nepouzdan unos: proslijedite je ondje gdje čvor escapira vrijednosti, kao što je HTTP query parametar ili vrijednost filtra u [DataTable](./datatable-node.md) ili ClickHouseu, i nikada nemojte graditi tekst upita spajanjem stringova s njom. Widgeti se i dalje izvršavaju kao vlasnik nadzorne ploče, bez obzira na to tko otvori stranicu.
+
 ## Kako se podaci razrješavaju
 
 1. Ako je `dataPath` postavljen, čvor slijedi tu točkastu putanju u izlaz uzvodnog čvora.
 2. U suprotnom traži polje: popis na najvišoj razini, polje `data` ili prvo polje s vrijednošću popisa.
-3. Za `table`, svaki redak postaje redak tablice koristeći `columns` (ili ključeve prvog retka).
-4. Za `numeric` i `gauge`, vrijednost dolazi iz `valueField` na prvom retku (ili prvog numeričkog polja).
-5. Za `scatter`, svaki redak postaje točka `[xField, yField]`.
-6. Za `text`, poruka se preuzima iz `valueField` na prvom retku kada je postavljen, inače iz statične konfiguracije `text` (u suprotnom iz prvog string polja prvog retka).
+3. Retci izravno iz čvora [Data Table](./datatable-node.md) (`{id, data, created_at}`) čitaju se sa svojim stupcima na najvišoj razini pokraj `id`, tako da `labelField`, `valueField` i `columns` imenuju vlastite stupce tablice.
+4. Za `table`, svaki redak postaje redak tablice koristeći `columns` (ili ključeve prvog retka). Uz `statusColumn`, Payload također nosi ton svake vrijednosti u tom stupcu.
+5. Za `numeric` i `gauge`, vrijednost dolazi iz `valueField` na prvom retku (ili prvog numeričkog polja).
+6. Za `scatter`, svaki redak postaje točka `[xField, yField]`.
+7. Za `text`, poruka se preuzima iz `valueField` na prvom retku kada je postavljen, inače iz statične konfiguracije `text` (u suprotnom iz prvog string polja prvog retka).
 
 ## Primjer
 

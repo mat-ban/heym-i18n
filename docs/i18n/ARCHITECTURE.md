@@ -1,8 +1,8 @@
 # Internationalization (i18n) Architecture
 
-> **Branch:** `feature/i18n` · **Base:** `heymrun/heym` `main` @ `v0.0.128`
+> **Branch:** `feature/i18n` · **Base:** `heymrun/heym` `main` @ `v0.0.129`
 > **Languages:** 32 enterprise platform languages (English `en` as canonical source + 31 target languages)
-> **Status:** UI 100 % (2,011 leaf keys, full parity across all 32 locales) · In-app docs 100 % (4,128 markdown files, 129 / 129 pages per language, 100 % Tier-A coverage)
+> **Status:** UI 100 % (2,126 leaf keys, full parity across all 32 locales) · In-app docs 100 % (4,160 markdown files, 130 / 130 pages per language, 100 % Tier-A coverage) · Native Plugin i18n 100 % (`i18n/<locale>.json` & `README.<locale>.md`)
 
 This document explains how the multi-language support on this branch is built, how much of the upstream code it touches, how to keep it in sync with upstream, and how languages are managed and scaled.
 
@@ -29,15 +29,15 @@ This document explains how the multi-language support on this branch is built, h
 |------|:---------:|-------|
 | App shell, navigation, header, login / register | ✅ | `nav`, `header`, `auth` namespaces |
 | All dashboard tabs (Workflows, Board, MCP, Analytics, Dashboards, Drive, Logs, …) | ✅ | One namespace per tab |
-| Workflow editor: canvas, node library, properties panels, dialogs | ✅ | `canvas`, `nodes`, `propertiesPanel` |
+| Workflow editor: canvas, node library, properties panels, dialogs | ✅ | `canvas`, `nodes`, `propertiesPanel`, `commandPalette` |
 | Execution history, traces, evals, credentials, vector stores, schedules | ✅ | Fully localized across all 32 languages |
 | Showcase / feature tour / release notes | ✅ | Dynamic content packs (`src/content-packs/{intro,showcase,release}/`) and localized registries |
-| In-app documentation (`/docs/...`) | ✅ | 129 Markdown pages per language across all 32 locales, lazy-loaded raw chunks |
+| In-app documentation (`/docs/...`) | ✅ | 130 Markdown pages per language across all 32 locales (4,160 files), lazy-loaded raw chunks |
+| Installed plugins & plugin documentation (served by backend) | ✅ | `plugins/<id>/i18n/<locale>.json` & `README.<locale>.md` via `GET /api/plugins?lang=<locale>` and `GET /api/plugins/{id}/doc?lang=<locale>` |
 | Backend API error messages (`detail` strings) | ❌ | Rendered as delivered by the backend (English) |
-| Plugin documentation (served by backend) | ❌ | Rendered as delivered by the plugin |
 | Workflow content created by users | ❌ | User data is never translated |
 
-The backend is **not modified** by this branch. All changes live in `frontend/`.
+All UI translations live in `frontend/`, and `backend/app/api/plugins.py` provides native multi-language resolution for installed plugins.
 
 ---
 
@@ -81,10 +81,10 @@ flowchart TD
 
 | Path | Content |
 |------|---------|
-| [`frontend/src/locales/en.json`](../../frontend/src/locales/en.json) | Source catalog (canonical reference, 2,011 leaf keys in 37 namespaces) |
+| [`frontend/src/locales/en.json`](../../frontend/src/locales/en.json) | Source catalog (canonical reference, 2,126 leaf keys in 39 namespaces) |
 | `frontend/src/locales/<locale>.json` | 31 target locale catalogs (`de`, `pl`, `fr`, `es`, `zh-Hans`, `zh-Hant`, `ja`, etc.) with 100% key parity |
 | `frontend/src/locales/_meta/<locale>.json` | Freshness hashes (`h`) of English sources and translation state (`s`) for drift monitoring |
-| `frontend/src/docs/content/<locale>/**/*.md` | 129 translated documentation pages per language across all 32 locales, mirroring the English hierarchy |
+| `frontend/src/docs/content/<locale>/**/*.md` | 130 translated documentation pages per language across all 32 locales (4,160 files), mirroring the English hierarchy |
 | `frontend/src/features/showcase/showcaseRegistry<Locale>.ts` | Localized showcase definitions with fallback to English |
 | `frontend/src/features/release-tour/releaseRegistry<Locale>.ts` | Localized release-tour entries with fallback to English |
 
@@ -161,13 +161,25 @@ The feature showcase and the release tour use rich TypeScript objects instead of
 
 Date, time, and number formatting is standardized via `formatDate()` and `formatNumber()` in [`frontend/src/i18n/format.ts`](../../frontend/src/i18n/format.ts), mapping each locale to its standard BCP 47 tag (e.g. `de-DE`, `fr-FR`, `pl-PL`, `en-US`) from `locales.ts`.
 
+### 3.6 Installed Plugin Internationalization (32 Languages)
+
+Installed Heym plugins (`<plugins_root>/<plugin_id>/`) can ship optional multi-language catalogs (`i18n/<locale>.json`) and localized documentation (`README.<locale>.md` / `docs/README.<locale>.md` / `docs/setup-guide.<locale>.md`) for all 32 supported languages:
+
+- **Backend resolution ([`backend/app/api/plugins.py`](../../backend/app/api/plugins.py)):**
+  - `GET /api/plugins?lang=<locale>` and `GET /api/plugins/{plugin_id}/doc?lang=<locale>` accept the `lang` query parameter (with fallback to `Accept-Language` and regional fallback such as `de-DE` $\rightarrow$ `de`).
+  - `_load_plugin_locale` validates the language code against `^[a-zA-Z0-9_-]{2,10}$` (preventing path traversal) and overrides `plugin.name`, `plugin.description`, `nodes.<nodeKey>.name`, `nodes.<nodeKey>.description`, `nodes.<nodeKey>.fields.<fieldKey>.label`, and `nodes.<nodeKey>.fields.<fieldKey>.options.<optionValue>`, falling back cleanly to `plugin.json` defaults for any missing keys.
+  - `_resolve_plugin_doc_path` checks `README.<lang>.md` $\rightarrow$ `docs/README.<lang>.md` $\rightarrow$ `docs/setup-guide.<lang>.md` $\rightarrow$ `README.md`.
+- **Reactive frontend reload:**
+  - [`frontend/src/services/plugins.ts`](../../frontend/src/services/plugins.ts) passes `?lang=<locale>` automatically.
+  - `NodePanel.vue`, `PluginNodeProperties.vue`, `SettingsPluginsSection.vue`, `usePluginDocCategories.ts`, and `DocContent.vue` watch `locale.value` and reload plugin definitions and documentation immediately on language switch without a page reload.
+
 ---
 
 ## 4. Translation Catalog Conventions
 
 **Namespaces** (top-level keys, identical in every locale):
 
-`common` · `nav` · `header` · `auth` · `settings` · `workflows` · `releaseTour` · `canvas` · `nodes` · `propertiesPanel` · `vectorStores` · `credentials` · `traces` · `tables` · `dashboard` · `schedules` · `evals` · `statusFilter` · `activeWorkflows` · `quickDrawer` · `showcase` · `curl` · `chat` · `teams` · `alerts` · `history` · `portal` · `templates` · `variables` · `board` · `mcp` · `analytics` · `dashboards` · `drive` · `logs` · `workflowHistory` · `docs`
+`common` · `nav` · `header` · `auth` · `settings` · `workflows` · `releaseTour` · `canvas` · `nodes` · `propertiesPanel` · `vectorStores` · `credentials` · `traces` · `tables` · `dashboard` · `schedules` · `evals` · `statusFilter` · `activeWorkflows` · `quickDrawer` · `showcase` · `curl` · `chat` · `teams` · `alerts` · `history` · `portal` · `templates` · `variables` · `board` · `mcp` · `analytics` · `dashboards` · `drive` · `logs` · `workflowHistory` · `docs` · `commandPalette` · `pluginNode`
 
 **Rules**
 
@@ -211,7 +223,7 @@ npm run build           # Production build verification
 | 3a | Heuristic detection of hard-coded text in templates | Whole frontend | Warning |
 | 3b | **Display text must not become data**: `:value="$t(…)"`, `value: t(…)` and comparisons against a translated string (`=== t(…)`) are rejected. Option values, IDs and filter states stay language-neutral; only the `label` is translated | Whole frontend | Error |
 
-Current baseline result: `2,011 keys across all 32 locales · 100% key parity · 0 missing · 0 empty · 0 invalid keys · 0 translated-text-as-value`.
+Current baseline result: `2,126 keys across all 32 locales · 100% key parity · 0 missing · 0 empty · 0 invalid keys · 0 translated-text-as-value`.
 
 ### E2E specs (Playwright)
 
@@ -292,10 +304,10 @@ npm run i18n:drift && npm run i18n:check && npm run typecheck && npm run test &&
 The internationalization platform supports **32 enterprise languages** managed through a unified architecture:
 
 1. **Central Locale Registry** ([`frontend/src/i18n/locales.ts`](../../frontend/src/i18n/locales.ts)):
-   - Defines all 32 locales (`en`, `de`, `pl`, `fr`, `es`, `it`, `nl`, `pt`, `pt-BR`, `cs`, `sk`, `hu`, `ro`, `bg`, `el`, `da`, `sv`, `fi`, `et`, `lv`, `lt`, `sl`, `hr`, `tr`, `uk`, `ru`, `ja`, `ko`, `zh-Hans`, `zh-Hant`, `id`, `vi`).
+   - Defines all 32 locales (`en`, `de`, `pl`, `fr`, `es`, `it`, `nl`, `pt`, `pt-BR`, `ca`, `cs`, `sk`, `hu`, `ro`, `bg`, `el`, `da`, `sv`, `fi`, `et`, `lv`, `lt`, `sl`, `hr`, `tr`, `uk`, `ja`, `ko`, `zh-Hans`, `zh-Hant`, `id`, `vi`).
    - Maps language codes, native endonyms, BCP 47 `intl` formatting tags, scripts (Latin, Cyrillic, Greek, CJK, Hangul), and locale aliases for automatic browser detection.
 2. **CLDR Plural Rules** ([`frontend/src/i18n/plural.ts`](../../frontend/src/i18n/plural.ts)):
-   - Implements `cldrPluralRule()` to handle complex cardinal forms across diverse language groups (e.g. standard 2-form for Germanic/Romance, 3-form for Latvian, 4-form for Slavic languages like Polish/Russian/Ukrainian/Slovenian).
+   - Implements `cldrPluralRule()` to handle complex cardinal forms across diverse language groups (e.g. standard 2-form for Germanic/Romance, 3-form for Latvian, 4-form for Slavic languages like Polish/Ukrainian/Slovenian).
 3. **Freshness Tracking & Metadata** (`frontend/src/locales/_meta/`):
    - Stores sha256 source hashes (`h`) and review status (`s`) for every translation key, enabling automated drift detection when upstream English strings change.
 4. **Coverage & Quality Gates** ([`frontend/scripts/i18n/coverage.ts`](../../frontend/scripts/i18n/coverage.ts)):
@@ -314,7 +326,7 @@ The official image is used unchanged. Only the compiled frontend is replaced via
 ```yaml
 services:
   heym:
-    image: ghcr.io/heymrun/heym:0.0.128   # pin to the version the branch is based on
+    image: ghcr.io/heymrun/heym:0.0.129   # pin to the version the branch is based on
     volumes:
       - ./frontend/dist:/app/frontend/dist:ro
 ```
@@ -334,8 +346,9 @@ ssh <host> "cd <stack> && sudo docker compose restart heym"
 
 | Item | Status |
 |------|--------|
-| Support for 32 enterprise languages | ✅ Done (Full 100% key parity across all 32 locales) |
-| In-app documentation for all 32 languages | ✅ Done (129 pages per language, 4,128 markdown files) |
+| Support for 32 enterprise languages | ✅ Done (Full 100% key parity across all 32 locales, 2,126 keys) |
+| In-app documentation for all 32 languages | ✅ Done (130 pages per language, 4,160 markdown files) |
+| Native plugin internationalization (32 languages) | ✅ Done (`i18n/<locale>.json` & `README.<locale>.md` via `backend/app/api/plugins.py`) |
 | Central locale registry & dynamic switcher | ✅ Done ([`locales.ts`](../../frontend/src/i18n/locales.ts)) |
 | CLDR Pluralization engine | ✅ Done ([`plural.ts`](../../frontend/src/i18n/plural.ts)) |
 | Source hash freshness tracking & coverage report | ✅ Done ([`coverage.ts`](../../frontend/scripts/i18n/coverage.ts)) |

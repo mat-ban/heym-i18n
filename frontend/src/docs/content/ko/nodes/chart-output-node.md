@@ -33,6 +33,8 @@
 | `valueField` | string | 숫자 값으로 사용되는 행 키 (pie/bar/line/numeric/gauge) |
 | `series` | array | bar/line용 선택적 다중 시리즈 정의 `[{ "name": "Sent", "field": "sent" }]` (`valueField`를 재정의함) |
 | `columns` | array | `table`용 선택적 열 목록 (기본값은 첫 번째 행의 키) |
+| `statusColumn` | string | 색상이 지정된 [상태 칩](#status-chips)으로 렌더링되는 선택적 `table` 열입니다. 표시된 열 중 하나여야 합니다. |
+| `statusTones` | object | 기본값으로 처리되지 않는 값에 대해 상태 값을 톤(`success`, `attention`, `failure`, `waiting`, `neutral`)에 매핑하는 선택적 객체 |
 | `xField` / `yField` | string | X 및 Y 숫자 축에 대한 행 키 (scatter) |
 | `min` / `max` | number | `gauge`의 숫자 범위 (기본값 `0` / `100`) |
 | `unit` | string | `numeric` 또는 `gauge` 값 옆에 표시되는 선택적 단위 |
@@ -42,7 +44,7 @@
 ## 차트 타입
 
 - **bar / line / area / pie** — `labelField` + `valueField` (또는 다중 시리즈 bar/line/area의 경우 `series`)로 구동되는 카테고리형 차트입니다. `area`는 채워진 추세 차트입니다.
-- **table** — `columns`를 사용하여 스크롤 가능한 테이블로 렌더링되는 원시 행입니다.
+- **table** — `columns`를 사용하여 스크롤 가능한 테이블로 렌더링되는 원시 행입니다. 하나의 열을 [상태 칩](#status-chips)으로 렌더링할 수 있으며, 행을 클릭해 [상세 페이지](../tabs/dashboard-tab.md#detail-pages)를 열 수 있습니다.
 - **numeric** — 첫 번째 행에서 가져온 단일 KPI 값이며, 선택적 `unit`을 포함합니다.
 - **gauge** — `min`–`max` 범위에 대해 표시되는 단일 값입니다 (예: 백분율). `valueField`를 사용합니다.
 - **scatter** — 상관관계 플롯을 위한 `xField` 및 `yField`의 X/Y 포인트입니다.
@@ -103,14 +105,59 @@ $processVideos.total - $processVideos.index + ". [" + $processVideos.item.title 
 
 1부터 시작하는 단순 오름차순 목록의 경우, 각 줄 앞에 번호를 붙이거나(`1.`, `2.`, `3.`) `$loop.index + 1`을 사용하는 Loop를 사용하십시오. 번호가 필요하지 않은 경우 [글머리 기호 목록](#interactive-task-lists)(`- item`)을 사용하십시오.
 
+## 상태 칩
+
+`table`은 한 열을 색상이 있는 칩으로 표시할 수 있습니다. 노드 속성의 **Status column**(또는 DSL의 `statusColumn`)을 열 이름으로 설정하십시오. 각 값은 다섯 가지 톤 중 하나를 받으며, 자주 쓰이는 단어는 별도 설정 없이 자동으로 매핑됩니다:
+
+| 톤 | 기본 단어 |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | 그 외 모든 값 |
+
+일치 여부는 대소문자, `_`, `-`를 구분하지 않으므로 `IN_PROGRESS`와 `in-progress`는 모두 `waiting`이 됩니다. 다른 값에 대해서는 **Status tones**를 추가하십시오. 추가된 항목은 해당 값의 기본값을 재정의합니다:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+서버가 각 값을 해당 톤으로 해석하므로 Heym과 Heym Work에서 동일한 색상이 표시됩니다.
+
+## 상세 페이지: `$page.record`
+
+`?record=<value>`로 열린 대시보드는 해당 값을 `$page.record`로 하여 모든 위젯 Workflow를 실행합니다. 테이블 행 링크는 이러한 페이지를 엽니다([상세 페이지](../tabs/dashboard-tab.md#detail-pages) 참조). 레코드 없이 열린 대시보드와 표현식 대화상자에서 `$page.record`는 `null`입니다. `page`라는 레이블이 지정된 노드가 이보다 우선합니다.
+
+예를 들어 [HTTP](./http-node.md) 노드에서 페이지가 다루는 단일 레코드를 가져오는 데 사용합니다:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record`는 필드를 가진 객체가 아니라 클릭된 행의 값 자체(예: `V-1002`)입니다. [DataTable](./datatable-node.md)에서 해당 레코드를 찾으려면 레코드 열을 해당 값으로 필터링하십시오(`{"vendor_id": "$page.record"}` 필터를 사용한 `find` 작업). `$page.record.id`와 같은 경로는 아무 값으로도 해석되지 않으므로, AI가 생성하거나 미세 조정한 위젯은 그러한 하위 필드를 제거하고 대신 `$page.record`를 읽습니다.
+
+이 값은 누구나 수정할 수 있는 URL에서 전달됩니다. 대시보드는 지정된 레코드 형식(기본적으로 문자, 숫자, `-`, `_`, `.`)에 맞는 값만 허용하지만, 그럼에도 신뢰할 수 없는 입력으로 취급해야 합니다. HTTP 쿼리 매개변수나 [DataTable](./datatable-node.md) 또는 ClickHouse 필터 값처럼 노드가 값을 이스케이프 처리하는 위치에 전달하고, 문자열 연결로 쿼리 텍스트를 직접 조합하지 마십시오. 누가 페이지를 열든 위젯은 항상 대시보드 소유자 권한으로 실행됩니다.
+
 ## 데이터가 해석되는 방식
 
 1. `dataPath`가 설정된 경우, 노드는 해당 점 경로를 따라 상위 출력으로 진입합니다.
 2. 그렇지 않으면 배열을 찾습니다: 최상위 목록, `data` 배열, 또는 첫 번째 목록 값 필드입니다.
-3. `table`의 경우, 각 행은 `columns`(또는 첫 번째 행의 키)를 사용하여 테이블 행이 됩니다.
-4. `numeric`과 `gauge`의 경우, 값은 첫 번째 행의 `valueField`에서 가져옵니다(또는 첫 번째 숫자 필드).
-5. `scatter`의 경우, 각 행은 `[xField, yField]` 포인트가 됩니다.
-6. `text`의 경우, 메시지는 설정된 경우 첫 번째 행의 `valueField`에서 가져오고, 그렇지 않으면 정적 `text` config에서 가져옵니다(그것도 없으면 첫 번째 행의 첫 번째 문자열 필드).
+3. [Data Table](./datatable-node.md) 노드에서 직접 전달된 행(`{id, data, created_at}`)은 해당 열들이 `id` 옆의 최상위 수준에서 읽히므로, `labelField`, `valueField`, `columns`는 테이블 자체의 열 이름을 그대로 가리킵니다.
+4. `table`의 경우, 각 행은 `columns`(또는 첫 번째 행의 키)를 사용하여 테이블 행이 됩니다. `statusColumn`이 설정된 경우, Payload는 해당 열에 있는 각 값의 톤도 함께 전달합니다.
+5. `numeric`과 `gauge`의 경우, 값은 첫 번째 행의 `valueField`에서 가져옵니다(또는 첫 번째 숫자 필드).
+6. `scatter`의 경우, 각 행은 `[xField, yField]` 포인트가 됩니다.
+7. `text`의 경우, 메시지는 설정된 경우 첫 번째 행의 `valueField`에서 가져오고, 그렇지 않으면 정적 `text` config에서 가져옵니다(그것도 없으면 첫 번째 행의 첫 번째 문자열 필드).
 
 ## 예시
 

@@ -1,6 +1,6 @@
 # MCP Sekmesi
 
-**MCP** sekmesi, Model Context Protocol (MCP) entegrasyonunu yapılandırır. MCP, AI istemcilerinin (Claude, Cursor ve MCP uyumlu herhangi bir araç) Heym workflow'larınızı araç olarak çağırmasına olanak tanır.
+**MCP** sekmesi, Model Context Protocol (MCP) entegrasyonunu yapılandırır. MCP, AI istemcilerinin (Claude, ChatGPT, Gemini, Cursor ve MCP uyumlu herhangi bir araç) Heym workflow'larınızı araç olarak çağırmasına olanak tanır.
 
 Heym iki modu destekler: tüm MCP etkin workflow'ları tek bir endpoint altında sunan bir **varsayılan sunucu** ve her mantıksal workflow grubuna kendi özel URL'sini ve API anahtarını veren **adlandırılmış sunucular**.
 
@@ -24,6 +24,8 @@ Varsayılan sunucu her zaman `{origin}/api/mcp/sse` adresinde kullanılabilir. M
 
 - **API Key** – Programatik bağlantılar için MCP API anahtarını kullanın. Sekme, kullanıma hazır bir JSON yapılandırmasını kopyalayabilir ve tek tıkla Cursor kurulumu için bir **Add to Cursor** düğmesi içerir.
 - **Claude** – Sekme, MCP sunucu URL'sini ve Claude için kurulum adımlarını gösterir. OAuth Client ID ve Secret alanlarını boş bırakın; Claude otomatik olarak kaydolur ve Heym OAuth üzerinden kimlik doğrular.
+- **ChatGPT** – Sekme, bir ChatGPT uygulaması için MCP sunucu URL'sini ve kurulum adımlarını gösterir. Geliştirici modunu açın, URL ile bir uygulama oluşturun ve OAuth'u seçin; ChatGPT otomatik olarak kaydolur.
+- **Gemini** – Sekme, özel bir Gemini uygulaması için MCP sunucu URL'sini ve kurulum adımlarını gösterir: gemini.google.com adresinde **Settings → Connected Apps → Add a custom app** yolunu izleyin, URL'yi yapıştırın ve **Advanced features** bölümünü kapalı bırakın; Gemini otomatik olarak kaydolur ve Heym OAuth üzerinden kimlik doğrulaması yapar. Bağlandıktan sonra Heym, Gemini mobil uygulamasında da çalışır.
 
 ### Workflow MCP Açma/Kapama
 
@@ -40,7 +42,8 @@ Workflow kartları, açıklamayı ve giriş alanı adlarının bir önizlemesini
 
 Etkinleştirildiğinde, `heym_chat` workflow araçlarınızın yanında `tools/list` içinde görünür. Bir MCP istemcisi tek bir doğal dil mesajı gönderir ve Heym motoru oradan devralır; Chat sekmesinin sahip olduğu aynı yeteneklerle:
 
-- Workflow AI Builder aracılığıyla workflow'lar oluşturun, düzenleyin, inceleyin ve çalıştırın
+- Bir workflow oluşturma, örnek girdilerle test çalıştırması yapma, hataları düzeltme ve bir çalıştırma başarılı olduğunda tamamlama (bkz. [Oluşturma modu](#build-mode))
+- Mevcut workflow'larınızı inceleme ve çalıştırma
 - Analitikleri, son çalıştırmaları ve yaklaşan cron zamanlamalarını bildirin
 - Tek bir workflow'un çalıştırma geçmişini bildirin: kaç kez çalıştığı, durum sayıları, ne zaman çalıştığı ve istendiğinde tek bir çalıştırmanın girişleri, çıktıları ve düğüm başına hataları
 - Şu anda nelerin çalıştığını bildirin: kaç yürütmenin etkin olduğu, workflow adları, her birinin ne kadar süredir çalıştığı, her birinin şu anda hangi düğümde olduğu ve canlı çalıştırmaya bir bağlantı
@@ -50,6 +53,15 @@ Etkinleştirildiğinde, `heym_chat` workflow araçlarınızın yanında `tools/l
 - Bekleyen human-in-the-loop incelemelerini onaylayın, düzenleyin veya reddedin
 
 Chat sekmesine sonradan eklenen yetenekler otomatik olarak `heym_chat` üzerinden kullanılabilir hale gelir — senkronize tutulacak yetenek başına bir açma/kapama anahtarı yoktur.
+
+### Oluşturma modu
+
+`heym_chat`, Chat motorunu her zaman oluşturma modunda (build mode) çalıştırır. Tek bir çağrıda asistan yeni bir workflow kaydedebilir, gerçekçi örnek girdilerle çalıştırabilir, çalıştırma raporunu okuyabilir, başarısız olan kısımları düzeltebilir ve çağrı başına en fazla beş test çalıştırmasına kadar yeniden çalıştırabilir. Son kaydın son çalıştırması başarılı olduğunda, tek cümlelik bir özetle tamamlanır ve yanıt `Verified: the latest test run of the saved workflow passed.` ifadesiyle biter.
+
+- Test çalıştırmaları gerçek çalıştırmalardır. Yan etkileri gerçekleşir ve diğer tüm çalıştırmalar gibi workflow'un çalıştırma geçmişinde görünürler.
+- Kayıtlar düzenleyicinin yolunu izler: grafikte yapılan bir değişiklik, önceki grafiği workflow'un **Edit History** geçmişinde tutar.
+- Daha önce oluşturduğu bir workflow'u değiştirmek için aynı `conversation_id` ile ileti dizisine devam edin. Asistan yeni bir tane oluşturmak yerine o workflow'u günceller ve yalnızca düzenleyebileceğiniz workflow'ları değiştirir.
+- Beş test çalıştırması tükendiğinde asistan durur ve neyin hâlâ başarısız olduğunu açıklar.
 
 Kimlik bilgileri arayüzde kalır: `heym_chat` bunları asla listelemez, seçmez veya oluşturmaz. Bir workflow oluşturduğunda veya düzenlediğinde, kimlik bilgisi gerektiren yeni düğümler boş bırakılır ve yanıt bunları adlandırır, böylece bunları düzenleyicide ayarlayabilirsiniz.
 
@@ -110,7 +122,7 @@ Bir workflow'u açıp kapatmak, onu atananlar listesinin en üstüne taşır; b�
 Adlandırılmış sunucular, varsayılan sunucuyla aynı kimlik doğrulama yöntemlerini destekler:
 
 - **X-MCP-Key header** – Sunucunun API key'ini doğrudan iletin (API istemcileri, Cursor). Yalnızca header: key'ler `?key=` query parametresi olarak kabul edilmez, çünkü URL'ler erişim log'larına, proxy log'larına ve tarayıcı geçmişine düşer.
-- **Claude OAuth** – Sunucu URL'sini Claude entegrasyonlarına ekleyin; credential alanlarını boş bırakın ve Claude otomatik olarak OAuth üzerinden kaydolur. Bearer token `?token=` olarak değil, `Authorization` header'ında iletilmelidir.
+- **Claude, ChatGPT ve Gemini OAuth** – Sunucu URL'sini istemcinin bağlayıcılarına veya özel uygulamalarına ekleyin; credential alanlarını boş bırakın ve istemci otomatik olarak OAuth üzerinden kaydolur. Bearer token `?token=` olarak değil, `Authorization` header'ında iletilmelidir.
 - **Session token** – SSE handshake sırasında verilir; belirli sunucuya kapsamlandırılmıştır, böylece bir adlandırılmış sunucudan gelen token'lar başka bir sunucuya erişemez. Bu kısa ömürlü `?session=` parametresi etkilenmez.
 
 ### Adlandırılmış Sunucu Silme
@@ -124,7 +136,7 @@ Bir sunucu kartı başlığındaki **X** simgesine tıklayın. Silme işlemi sun
 | Varsayılan | `{origin}/api/mcp/sse` |
 | Adlandırılmış | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Her iki endpoint de SSE transport (GET, MCP spec 2024-11-05) ve Streamable HTTP transport (POST, MCP spec 2025-03-26) destekler. Claude, her ikisinde de güvenli oturum açma için OAuth 2.1 / PKCE kullanır.
+Her iki endpoint de SSE transport (GET, MCP spec 2024-11-05) ve Streamable HTTP transport (POST, MCP spec 2025-03-26) destekler. Claude, ChatGPT ve Gemini, her ikisinde de güvenli oturum açma için OAuth 2.1 / PKCE kullanır.
 
 ## İlgili
 

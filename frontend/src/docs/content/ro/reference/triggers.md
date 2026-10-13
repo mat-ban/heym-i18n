@@ -93,11 +93,12 @@ Istoricul execuțiilor înregistrează `trigger_source` pentru fiecare punct de 
 |-------|------|
 | `"API"` | Apel Webhook / API fără header explicit (implicit) |
 | `"Canvas"` | Rulare din canvas-ul editorului de workflow |
-| `"Quick Drawer"` | Rulare din panoul quick-drawer al editorului |
+| `"Quick Drawer"` | Rulare din panoul quick-drawer al editorului, inclusiv rulările cu fișiere încărcate din zona sa de plasare |
 | `"cron"` | Planificator Cron |
 | `"imap"` | Manager de trigger IMAP |
 | `"websocket"` | Manager de trigger WebSocket de ieșire |
-| `"file_upload"` | Endpoint de încărcare al Triggerului de încărcare fișier |
+| `"file_upload"` | Endpoint de încărcare al Triggerului de încărcare fișier (linkuri generate prin HTTP, MCP sau canvas) |
+| `"dashboard"` | Rulări ale widgeturilor din tabloul de bord și încărcări dintr-un widget de plasare a fișierelor |
 | `"telegram"` | Webhook de bot Telegram |
 | `"Discord"` | Webhook de interacțiuni Discord |
 | `"MCP"` | Apel de tool MCP |

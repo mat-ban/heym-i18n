@@ -4,7 +4,7 @@ Dialog **Nastavení** vám umožňuje spravovat váš profil, nastavit trvalé p
 
 ## Otevření dialogu
 
-Klikněte na **váš avatar a jméno** v pravém horním rohu záhlaví. Dialog se otevře s těmito kartami: **Profil**, **Zabezpečení**, **Hlas**, **Výchozí nastavení AI** a **Observability**. Správci instance vidí navíc kartu **SSO**.
+Klikněte na **váš avatar a jméno** v pravém horním rohu záhlaví. Dialog se otevře s těmito kartami: **Profil**, **Zabezpečení**, **Hlas**, **Výchozí nastavení AI** a **Observability**. Správci instance vidí navíc karty **SSO**, **Heym Work** a **Instance**.
 
 ## Karta Profil
 
@@ -100,6 +100,10 @@ Karta Observability zobrazuje stav [OpenTelemetry Tracing](./opentelemetry.md) p
 ## Karta SSO
 
 Viditelná pouze pro administrátory instance – účty uvedené v `HEYM_ADMIN_EMAILS`. Tato karta propojuje Heym s externím poskytovatelem OpenID Connect, aby se uživatelé přihlašovali účty, které již mají. Zadejte URL vydavatele a přihlašovací údaje klienta, zkopírujte adresu URI pro přesměrování pouze pro čtení do svého poskytovatele a před povolením spusťte **Test připojení**. Po úspěšném testu lze odtud vypnout přihlašování heslem. Úplné nastavení naleznete v části [Single Sign-On](./sso.md).
+
+## Karta Heym Work
+
+Správci instance zde připojují [Heym Work](./heym-work.md), rozhraní pro obchodní týmy: jeho adresu, jednorázově zobrazený integrační klíč a přepínač **Enable Heym Work**. Karta také ukazuje, kdy se Heym Work naposledy ohlásil, jeho verzi a stav licence. Viz [Připojení Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Karta Instance
 

@@ -93,11 +93,12 @@
 |-------|------|
 | `"API"` | Κλήση Webhook / API χωρίς ρητή κεφαλίδα (προεπιλογή) |
 | `"Canvas"` | Εκτέλεση από τον καμβά του επεξεργαστή workflow |
-| `"Quick Drawer"` | Εκτέλεση από τον πίνακα quick-drawer του επεξεργαστή |
+| `"Quick Drawer"` | Εκτέλεση από τον πίνακα quick-drawer του επεξεργαστή, συμπεριλαμβανομένων εκτελέσεων αρχείων από τη ζώνη απόθεσής του |
 | `"cron"` | Χρονοπρογραμματιστής Cron |
 | `"imap"` | Διαχειριστής Trigger IMAP |
 | `"websocket"` | Διαχειριστής Trigger εξερχόμενου WebSocket |
-| `"file_upload"` | Endpoint μεταφόρτωσης του Trigger Μεταφόρτωσης Αρχείου |
+| `"file_upload"` | Endpoint μεταφόρτωσης του Trigger Μεταφόρτωσης Αρχείου (σύνδεσμοι που δημιουργήθηκαν μέσω HTTP, MCP ή του καμβά) |
+| `"dashboard"` | Εκτελέσεις widgets πίνακα ελέγχου και μεταφορτώσεις από widget απόθεσης αρχείων |
 | `"telegram"` | Webhook bot Telegram |
 | `"Discord"` | Webhook αλληλεπιδράσεων Discord |
 | `"MCP"` | Κλήση εργαλείου MCP |

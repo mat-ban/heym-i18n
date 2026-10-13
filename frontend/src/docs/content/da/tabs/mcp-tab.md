@@ -1,6 +1,6 @@
 # MCP-fanen
 
-**MCP**-fanen konfigurerer integration af Model Context Protocol (MCP). MCP gør det muligt for AI-klienter (Claude, Cursor og andre MCP-kompatible værktøjer) at kalde Heym-workflows som værktøjer.
+**MCP**-fanen konfigurerer integration af Model Context Protocol (MCP). MCP gør det muligt for AI-klienter (Claude, ChatGPT, Gemini, Cursor og andre MCP-kompatible værktøjer) at kalde Heym-workflows som værktøjer.
 
 Heym understøtter to tilstande: en **standardserver**, der eksponerer alle MCP-aktiverede workflows under et enkelt endpoint, og **navngivne servere**, der giver hver logisk gruppe af workflows sin egen dedikerede URL og API-nøgle.
 
@@ -24,6 +24,8 @@ Standardserveren er altid tilgængelig på `{origin}/api/mcp/sse`. Alle workflow
 
 - **API-nøgle** – Brug MCP API-nøglen til programmatiske forbindelser. Fanen kan kopiere en klar-til-brug JSON-konfiguration og inkluderer en **Tilføj til Cursor**-knap til opsætning med ét klik i Cursor.
 - **Claude** – Fanen viser MCP-serverens URL og opsætningsinstruktioner til Claude. Efterlad OAuth Client ID og Secret tomme; Claude registrerer automatisk og autentificerer via Heym OAuth.
+- **ChatGPT** – Fanen viser MCP-serverens URL og opsætningstrin for en ChatGPT-app. Slå udviklertilstand til, opret en app med URL'en, og vælg OAuth; ChatGPT registrerer sig automatisk.
+- **Gemini** – Fanen viser MCP-serverens URL og opsætningstrin for en brugerdefineret Gemini-app: i gemini.google.com skal du vælge **Settings → Connected Apps → Add a custom app**, indsætte URL'en og lade **Advanced features** være lukket; Gemini registrerer sig automatisk og godkender via Heym OAuth. Når forbindelsen er oprettet, fungerer Heym også i Gemini-mobilappen.
 
 ### MCP-toggle for workflow
 
@@ -40,7 +42,8 @@ Sektionen **Heym-funktioner** omdanner Chat-fanens motor til ét MCP-værktøj v
 
 Når det er aktiveret, vises `heym_chat` i `tools/list` sammen med workflow-værktøjerne. En MCP-klient sender én besked på naturligt sprog, og Heym-motoren tager det derfra med samme evner som Chat-fanen har:
 
-- Opret, rediger, inspicer og kør workflows via Workflow AI Builder
+- Opret et workflow, testkør det med eksempelinput, ret det til, og afslut når en kørsel gennemføres (se [Build-tilstand](#build-mode))
+- Inspicer og kør dine eksisterende workflows
 - Rapporter analytics, seneste kørsler og kommende cron-planer
 - Rapporter kørehistorikken for ét workflow: hvor mange gange det er kørt, statusfordeling, hvornår det kørte, og på anmodning input, output og fejl pr. node for en enkelt kørsel
 - Rapporter, hvad der kører lige nu: hvor mange eksekveringer der er aktive, deres workflownavne, hvor længe hver har kørt, hvilken node hver er på, og et link til den aktive kørsel
@@ -50,6 +53,15 @@ Når det er aktiveret, vises `heym_chat` i `tools/list` sammen med workflow-vær
 - Godkend, rediger eller afvis afventende human-in-the-loop-godkendelser
 
 Funktioner tilføjet til Chat-fanen senere bliver automatisk tilgængelige via `heym_chat` – der er ingen per-funktions-toggle at holde synkroniseret.
+
+### Build-tilstand
+
+`heym_chat` kører altid Chat-motoren i build-tilstand. I ét kald kan assistenten gemme et nyt workflow, køre det med realistiske eksempelinput, læse kørselsrapporten, rette det der fejlede og køre det igen – op til fem testkørsler pr. kald. Når den seneste kørsel af den seneste gemte version gennemføres, afslutter den med et resumé på én sætning, og svaret slutter med `Verified: the latest test run of the saved workflow passed.`
+
+- Testkørsler er rigtige kørsler. Deres sideeffekter udføres, og de fremgår af workflowets kørselshistorik som enhver anden kørsel.
+- Gem handlinger følger editorens sti: en ændring af grafen bevarer den tidligere graf i workflowets **Edit History**.
+- For at ændre et workflow, den tidligere har oprettet, skal du fortsætte tråden med samme `conversation_id`. Assistenten opdaterer det pågældende workflow i stedet for at oprette et nyt, og den ændrer kun workflows, du har rettigheder til at redigere.
+- Når de fem testkørsler er brugt op, stopper assistenten og forklarer, hvad der stadig fejler.
 
 Legitimationsoplysninger forbliver i brugergrænsefladen: `heym_chat` lister dem aldrig op, vælger eller opretter dem. Når den bygger eller redigerer et workflow, efterlades nye noder, der kræver legitimationsoplysninger, tomme, og svaret navngiver dem, så det er muligt at angive dem i editoren.
 
@@ -109,7 +121,7 @@ Ved at slå et workflow til eller fra flyttes det til toppen af den tildelte lis
 Navngivne servere understøtter de samme autentificeringsmetoder som standardserveren:
 
 - **X-MCP-Key-header** – Send serverens API-nøgle direkte (API-klienter, Cursor). Kun header: nøgler accepteres ikke som en `?key=`-forespørgselsparameter, da URL'er ender i adgangslogs, proxy-logs og browserhistorik.
-- **Claude OAuth** – Tilføj serverens URL til Claude-integrationer; lad legitimationsoplysninger være tomme, og Claude registrerer sig automatisk via OAuth. Bearer-tokenet skal sendes i `Authorization`-headeren, ikke som `?token=`.
+- **Claude, ChatGPT og Gemini OAuth** – Tilføj serverens URL til klientens connectors eller brugerdefinerede apps; lad legitimationsoplysninger være tomme, og klienten registrerer sig automatisk via OAuth. Bearer-tokenet skal sendes i `Authorization`-headeren, ikke som `?token=`.
 - **Session-token** – Udstedt under SSE-håndtrykket; begrænset til den specifikke server, så tokens fra én navngiven server ikke kan få adgang til en anden. Denne kortlivede `?session=`-parameter påvirkes ikke.
 
 ### Sletning af navngiven server
@@ -123,7 +135,7 @@ Klik på **X**-ikonet på en serverkorts header. Sletning fjerner serveren og al
 | Standard | `{origin}/api/mcp/sse` |
 | Navngiven | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Begge endpoints understøtter SSE-transport (GET, MCP-specifikation 2024-11-05) og Streamable HTTP-transport (POST, MCP-specifikation 2025-03-26). Claude bruger OAuth 2.1 / PKCE til sikker login på begge.
+Begge endpoints understøtter SSE-transport (GET, MCP-specifikation 2024-11-05) og Streamable HTTP-transport (POST, MCP-specifikation 2025-03-26). Claude, ChatGPT og Gemini bruger OAuth 2.1 / PKCE til sikker login på begge.
 
 ## Relateret
 

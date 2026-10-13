@@ -33,6 +33,13 @@ Mazgas veikia dviem etapais:
 
 Drobėje **Vykdyti Workflow** rodo sukurtą `curl` derinimo skydelyje su kopijavimo mygtuku.
 
+## Paleidimas iš Heym
+
+Dvi vietos paleidžia tokį Workflow tiesiogiai su failu per tą patį nuorodos sukūrimo ir įkėlimo procesą:
+
+- [Quick Drawer](../reference/quick-drawer.md) rodo failo numetimo zoną. Šie paleidimai istorijoje pažymimi `Quick Drawer`.
+- [Paleidimo valdiklis](../tabs/dashboard-tab.md#run-widgets) prietaisų skydelyje paleidžia Workflow kiekvienam numestam failui. Šie paleidimai pažymimi `dashboard`.
+
 ## Parametrai
 
 | Parametras | Tipas | Numatytoji reikšmė | Aprašymas |

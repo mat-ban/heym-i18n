@@ -28,7 +28,7 @@ Hänge Dateien aus deinem [Drive](./drive-node.md) an, indem du eine oder mehrer
 
 ## Einrichtung
 
-Füge Anmeldedaten für SMTP mit Server, Port, E-Mail und Passwort hinzu. Gängige SMTP-Server:
+Füge Anmeldedaten für SMTP mit Server, Port, E-Mail und Passwort hinzu. Der sichtbare Absender ist das optionale Feld **From** der Anmeldedaten; bleibt From leer, wird der Benutzername als Absender verwendet. Gängige SMTP-Server:
 
 - Gmail: `smtp.gmail.com`, Port 587 (App-Passwort erforderlich)
 - Outlook: `smtp.office365.com`, Port 587

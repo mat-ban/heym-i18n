@@ -93,11 +93,12 @@ O histórico de execução registra `trigger_source` para cada ponto de entrada:
 |-------|------|
 | `"API"` | Chamada de Webhook / API sem header explícito (padrão) |
 | `"Canvas"` | Execução a partir do canvas do editor de Workflow |
-| `"Quick Drawer"` | Execução a partir do painel quick-drawer do editor |
+| `"Quick Drawer"` | Execução a partir do painel quick-drawer do editor, incluindo execuções de arquivos enviados pela área de soltura |
 | `"cron"` | Agendador Cron |
 | `"imap"` | Gerenciador de Trigger IMAP |
 | `"websocket"` | Gerenciador de Trigger WebSocket de saída |
-| `"file_upload"` | Endpoint de upload do Trigger de Upload de Arquivo |
+| `"file_upload"` | Endpoint de upload do Trigger de Upload de Arquivo (links gerados via HTTP, MCP ou canvas) |
+| `"dashboard"` | Execuções de widgets do painel e uploads a partir de um widget de soltura de arquivo |
 | `"telegram"` | Webhook do bot do Telegram |
 | `"Discord"` | Webhook de interações do Discord |
 | `"MCP"` | Chamada de ferramenta MCP |

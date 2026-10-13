@@ -33,6 +33,13 @@
 
 在畫布上，**Run Workflow** 會在除錯面板中顯示簽發的 `curl`，並附有複製按鈕。
 
+## 從 Heym 執行
+
+有兩個位置可以透過相同的產生連結與上傳流程，直接針對檔案執行此類 Workflow：
+
+- [Quick Drawer](../reference/quick-drawer.md) 會顯示檔案拖放區。這些執行在歷史記錄中會標記為 `Quick Drawer`。
+- 儀表板上的[執行小工具](../tabs/dashboard-tab.md#run-widgets)會對每個拖入的檔案執行該 Workflow。這些執行會標記為 `dashboard`。
+
 ## 參數
 
 | 參數 | 類型 | 預設值 | 說明 |

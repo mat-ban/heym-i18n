@@ -591,8 +591,14 @@ Az SMTP hitelesítési adatok az e-mail-kiszolgáló kapcsolati adatait tárolj�
 |-------|-------------|
 | `host` | SMTP-kiszolgáló hosztneve (pl. `smtp.gmail.com`) |
 | `port` | SMTP-port (jellemzően `587` STARTTLS-hez, `465` SSL-hez) |
-| `email` | Feladó e-mail-címe |
+| `email` | Felhasználónév, amellyel az SMTP-kiszolgáló bejelentkezik; egyben a látható feladó is, ha a `from` üres |
 | `password` | SMTP-jelszó vagy alkalmazásjelszó |
+
+### Opcionális mezők
+
+| Mező | Leírás |
+|-------|-------------|
+| `from` (`smtp_from`) | Látható feladói (From) cím. Hagyja üresen, ha `email`-ként szeretne küldeni. A kiszolgáló továbbra is `email`-ként jelentkezik be, ezért a fióknak jogosultnak kell lennie erről a címről küldeni (a Gmailben egy ellenőrzött **Levélküldés másként** alias). |
 
 ### Gyakori SMTP-szolgáltatók
 

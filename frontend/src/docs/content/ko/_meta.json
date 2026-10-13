@@ -29,6 +29,96 @@
     "s": "reviewed",
     "r": "wave3a"
   },
+  "tabs/alerts-tab": {
+    "h": "d77a10dd",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/analytics-tab": {
+    "h": "306ec3e4",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/board-tab": {
+    "h": "37be73d2",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/chat-tab": {
+    "h": "bae1fa2b",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/credentials-tab": {
+    "h": "ce682f2d",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/dashboard-tab": {
+    "h": "98df6e46",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/datatable-tab": {
+    "h": "d09da2b1",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/drive-tab": {
+    "h": "ff48bf00",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/evals-tab": {
+    "h": "6d462422",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/global-variables-tab": {
+    "h": "bf543b29",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/logs-tab": {
+    "h": "9eac65fb",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/mcp-tab": {
+    "h": "9c2d194f",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/scheduled-tab": {
+    "h": "b80cb594",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/teams-tab": {
+    "h": "ab1346da",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/templates-tab": {
+    "h": "ec32e34b",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/traces-tab": {
+    "h": "acc198fe",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/vectorstores-tab": {
+    "h": "088616a9",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
+  "tabs/workflows-tab": {
+    "h": "651e8e18",
+    "s": "reviewed",
+    "r": "wave3a"
+  },
   "nodes/agent-node": {
     "h": "61e6635d",
     "s": "reviewed",
@@ -45,7 +135,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/chart-output-node": {
-    "h": "2ea0bf3f",
+    "h": "4f8e2209",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -135,7 +225,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/file-upload-trigger-node": {
-    "h": "5ae2b445",
+    "h": "24380a6d",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -270,7 +360,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/send-email-node": {
-    "h": "907a2da9",
+    "h": "d2fd059d",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -415,7 +505,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/enterprise": {
-    "h": "6d80f351",
+    "h": "8319c52c",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -430,7 +520,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/expression-dsl": {
-    "h": "8ecd7e3c",
+    "h": "2e395b9d",
     "s": "reviewed",
     "r": "wave3a"
   },
@@ -440,7 +530,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/features": {
-    "h": "5711d609",
+    "h": "566ac9ca",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -459,13 +549,17 @@
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
+  "reference/heym-work": {
+    "h": "0a4cc092",
+    "s": "reviewed"
+  },
   "reference/human-in-the-loop": {
     "h": "b80d3588",
     "s": "reviewed",
     "r": "wave3a"
   },
   "reference/integrations": {
-    "h": "5d0e01ee",
+    "h": "2c58b910",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -500,7 +594,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/quick-drawer": {
-    "h": "ab7d8fa8",
+    "h": "8ae91a52",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -525,12 +619,12 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/triggers": {
-    "h": "d594277a",
+    "h": "ca784955",
     "s": "reviewed",
     "r": "wave3a"
   },
   "reference/user-settings": {
-    "h": "465afb5d",
+    "h": "d240310d",
     "s": "reviewed",
     "r": "wave3a"
   },
@@ -551,96 +645,6 @@
   },
   "reference/workflow-structure": {
     "h": "adaa01aa",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/alerts-tab": {
-    "h": "d77a10dd",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/analytics-tab": {
-    "h": "306ec3e4",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/board-tab": {
-    "h": "37be73d2",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/chat-tab": {
-    "h": "bae1fa2b",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/credentials-tab": {
-    "h": "ce682f2d",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/dashboard-tab": {
-    "h": "528ce8c9",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/datatable-tab": {
-    "h": "d09da2b1",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/drive-tab": {
-    "h": "ff48bf00",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/evals-tab": {
-    "h": "6d462422",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/global-variables-tab": {
-    "h": "bf543b29",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/logs-tab": {
-    "h": "9eac65fb",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/mcp-tab": {
-    "h": "511d334d",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/scheduled-tab": {
-    "h": "b80cb594",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/teams-tab": {
-    "h": "ab1346da",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/templates-tab": {
-    "h": "ec32e34b",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/traces-tab": {
-    "h": "acc198fe",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/vectorstores-tab": {
-    "h": "3bfc6b13",
-    "s": "reviewed",
-    "r": "wave3a"
-  },
-  "tabs/workflows-tab": {
-    "h": "651e8e18",
     "s": "reviewed",
     "r": "wave3a"
   }

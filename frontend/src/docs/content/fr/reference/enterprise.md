@@ -16,6 +16,10 @@ Heym est gratuit à utiliser et à auto-héberger sous sa licence source-availab
 | **Support prioritaire et SLA** | Temps de réponse garantis et résolution prioritaire des incidents |
 | **Développement personnalisé** | Développement de fonctionnalités et modifications adaptées aux exigences de votre organisation |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) est l'interface destinée aux équipes métier qui s'exécute au-dessus de Heym. Les utilisateurs décrivent une tâche, répondent à quelques questions et obtiennent un workflow testé, travaillent à partir de pages conçues pour eux et répondent aux révisions, avec authentification unique (SSO), rôles Owner, Editor et Viewer, et un nom associé à chaque exécution. Il fonctionne aux côtés de votre instance Heym avec sa propre licence ; connectez-le dans **Settings → Heym Work**. En savoir plus et demander un essai sur [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Support des agents en production
 
 L'équipe Heym vous aide à concevoir, construire et renforcer vos agents et workflows pour vos processus métier. Cela inclut l'analyse de vos besoins, la recommandation de configurations de nœuds et la vérification que vos workflows respectent les bonnes pratiques en matière de fiabilité, d'observabilité et de gouvernance.
@@ -67,3 +71,4 @@ Contactez l'équipe enterprise à l'adresse **enterprise@heym.run** pour les dem
 - [Exécution parallèle](./parallel-execution.md) — Modèle d'exécution multi-worker
 - [Équipes](./teams.md) — Collaboration en équipe et partage des ressources
 - [Ensemble des fonctionnalités](./features.md) — Aperçu complet des capacités de Heym
+- [Heym Work](./heym-work.md) : l'interface pour les équipes métier et comment la connecter

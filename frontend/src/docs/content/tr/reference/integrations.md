@@ -579,8 +579,14 @@ SMTP credential'ı, giden posta göndermek için e-posta sunucusu bağlantı bil
 |-------|-------------|
 | `host` | SMTP sunucu hostname'i (örn. `smtp.gmail.com`) |
 | `port` | SMTP portu (STARTTLS için genellikle `587`, SSL için `465`) |
-| `email` | Gönderen e-posta adresi |
+| `email` | SMTP sunucusunun oturum açtığı kullanıcı adı; ayrıca `from` boş olduğunda görünen gönderen |
 | `password` | SMTP parolası veya Uygulama Parolası |
+
+### İsteğe Bağlı Alanlar
+
+| Alan | Açıklama |
+|-------|-------------|
+| `from` (`smtp_from`) | Görünen Gönderen (From) adresi. `email` olarak göndermek için boş bırakın. Sunucu yine `email` olarak oturum açar, bu nedenle ilgili hesabın bu adres adına gönderim yapmasına izin verilmelidir (Gmail'de doğrulanmış bir **Postaları şu adresten gönder** takma adı). |
 
 ### Yaygın SMTP Sağlayıcıları
 

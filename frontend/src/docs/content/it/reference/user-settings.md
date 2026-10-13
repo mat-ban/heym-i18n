@@ -4,7 +4,7 @@ La finestra di dialogo Impostazioni consente di gestire il profilo, impostare is
 
 ## Apertura della finestra di dialogo
 
-Fare clic su **avatar e nome** in alto a destra nell'intestazione. La finestra di dialogo si apre con le seguenti schede: **Profilo**, **Sicurezza**, **Voce**, **Impostazioni predefinite IA** e **Osservabilità**. Gli amministratori dell'istanza visualizzano anche una scheda **SSO**.
+Fare clic su **avatar e nome** in alto a destra nell'intestazione. La finestra di dialogo si apre con le seguenti schede: **Profilo**, **Sicurezza**, **Voce**, **Impostazioni predefinite IA** e **Osservabilità**. Gli amministratori dell'istanza visualizzano anche le schede **SSO**, **Heym Work** e **Instances**.
 
 ## Scheda Profilo
 
@@ -101,6 +101,10 @@ La scheda Observability mostra lo stato di sola lettura di [OpenTelemetry Tracin
 ## Scheda SSO
 
 Visibile solo agli amministratori dell'istanza — gli account elencati in `HEYM_ADMIN_EMAILS`. Questa scheda connette Heym a un provider OpenID Connect esterno, in modo che gli utenti accedano con gli account di cui già dispongono. Inserire un URL dell'issuer e le credenziali del client, copiare l'URI di reindirizzamento di sola lettura nel provider ed eseguire **Verifica connessione** prima di abilitarla. Una volta superato il test, da qui è possibile disattivare l'accesso tramite password. Consultare [Single Sign-On](./sso.md) per la configurazione completa.
+
+## Scheda Heym Work
+
+Gli amministratori dell'istanza collegano qui [Heym Work](./heym-work.md), l'interfaccia per i team aziendali: il suo indirizzo, una chiave di integrazione mostrata una sola volta e l'interruttore **Enable Heym Work**. La scheda mostra anche l'ultimo contatto di Heym Work, la sua versione e lo stato della licenza. Vedi [Collegare Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Scheda Instances
 

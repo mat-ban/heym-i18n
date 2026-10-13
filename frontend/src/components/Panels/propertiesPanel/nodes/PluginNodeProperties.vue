@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { isAxiosError } from "axios";
 
 import type { PluginFieldDef, PluginNodeSummary, PluginSummary } from "@/types/workflow";
@@ -9,6 +10,8 @@ import Input from "@/components/ui/Input.vue";
 import Label from "@/components/ui/Label.vue";
 import { listPlugins } from "@/services/plugins";
 import { usePropertiesPanelContext } from "../usePropertiesPanelController";
+
+const { t, locale } = useI18n();
 
 const {
   workflowStore,
@@ -22,25 +25,36 @@ const loadingPlugins = ref(true);
 const pluginsDisabled = ref(false);
 const pluginLoadError = ref<string | null>(null);
 
-onMounted(async () => {
+async function loadPlugins(): Promise<void> {
   loadingPlugins.value = true;
   pluginsDisabled.value = false;
   pluginLoadError.value = null;
   try {
-    plugins.value = await listPlugins();
+    plugins.value = await listPlugins(locale.value);
   } catch (err) {
     plugins.value = [];
     if (isAxiosError<{ detail?: string }>(err) && err.response?.status === 404) {
       pluginsDisabled.value = true;
       pluginLoadError.value =
-        err.response.data?.detail ?? "Plugins are disabled on this instance.";
+        err.response.data?.detail ?? t("pluginNode.disabledOnInstance");
     } else {
       pluginLoadError.value = pluginErrorMessage(err);
     }
   } finally {
     loadingPlugins.value = false;
   }
+}
+
+onMounted(() => {
+  void loadPlugins();
 });
+
+watch(
+  () => locale.value,
+  () => {
+    void loadPlugins();
+  },
+);
 
 const pluginId = computed<string>(() => selectedNode.value?.data.pluginId ?? "");
 const pluginNodeKey = computed<string>(() => selectedNode.value?.data.pluginNodeKey ?? "");
@@ -64,15 +78,15 @@ const nodeDef = computed<PluginNodeSummary | undefined>(() => {
 
 const statusMessage = computed<string | null>(() => {
   if (!selectedNode.value) return null;
-  if (loadingPlugins.value) return "Loading plugin definition...";
+  if (loadingPlugins.value) return t("pluginNode.loadingDefinition");
   if (pluginsDisabled.value) return pluginLoadError.value;
   if (pluginLoadError.value) return pluginLoadError.value;
-  if (!pluginId.value) return "This node is not bound to a plugin package.";
-  if (plugins.value.length === 0) return "No plugins are installed on this instance.";
-  if (!pkg.value) return `Plugin "${pluginId.value}" is not installed on this instance.`;
-  if (!pkg.value.enabled) return `Plugin "${pkg.value.name}" is installed but disabled.`;
+  if (!pluginId.value) return t("pluginNode.notBound");
+  if (plugins.value.length === 0) return t("pluginNode.noneInstalled");
+  if (!pkg.value) return t("pluginNode.notInstalled", { id: pluginId.value });
+  if (!pkg.value.enabled) return t("pluginNode.installedButDisabled", { name: pkg.value.name });
   if (!nodeDef.value) {
-    return `Plugin "${pkg.value.name}" does not expose any ${fallbackNodeKind.value} nodes.`;
+    return t("pluginNode.noKindNodes", { name: pkg.value.name, kind: fallbackNodeKind.value });
   }
   return null;
 });
@@ -82,10 +96,12 @@ const fields = computed<PluginFieldDef[]>(() => (statusMessage.value ? [] : node
 function pluginErrorMessage(err: unknown): string {
   if (isAxiosError<{ detail?: string }>(err)) {
     const detail = err.response?.data?.detail;
-    if (detail) return `Unable to load plugins: ${detail}`;
-    if (err.response?.status) return `Unable to load plugins (HTTP ${err.response.status}).`;
+    if (detail) return t("pluginNode.loadErrorDetail", { detail });
+    if (err.response?.status) return t("pluginNode.loadErrorHttp", { status: err.response.status });
   }
-  return err instanceof Error ? `Unable to load plugins: ${err.message}` : "Unable to load plugins.";
+  return err instanceof Error
+    ? t("pluginNode.loadErrorDetail", { detail: err.message })
+    : t("pluginNode.loadError");
 }
 
 function configValue(key: string): unknown {
@@ -149,7 +165,7 @@ function setConfigValue(key: string, value: unknown): void {
           :checked="Boolean(configValue(field.key))"
           @change="setConfigValue(field.key, ($event.target as HTMLInputElement).checked)"
         >
-        Enabled
+        {{ $t('pluginNode.enabled') }}
       </label>
 
       <select

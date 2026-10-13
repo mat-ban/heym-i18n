@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, UploadFile, status
 from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,6 +17,7 @@ from app.db.models import Plugin, User
 from app.db.session import get_db
 from app.models.plugin_schemas import (
     PluginDoc,
+    PluginField,
     PluginManifest,
     PluginNodeSummary,
     PluginSummary,
@@ -23,6 +26,8 @@ from app.services import plugin_loader, plugin_store
 from app.services.plugin_store import PluginInstallError
 
 router = APIRouter()
+
+_LANG_RE = re.compile(r"^[a-zA-Z0-9_-]{2,10}$")
 
 
 def require_plugins_enabled() -> None:
@@ -45,6 +50,81 @@ def require_plugin_admin(current_user: User) -> None:
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not allowed to manage plugins.",
         )
+
+
+def _resolve_lang(lang: str | None, accept_language: str | None = None) -> str | None:
+    """Resolve and sanitize a language tag from ?lang= or Accept-Language."""
+    raw = (lang or "").strip()
+    if not raw and accept_language:
+        first = accept_language.split(",")[0].split(";")[0].strip()
+        raw = first
+    if not raw or not _LANG_RE.match(raw):
+        return None
+    return raw
+
+
+def _lang_candidates(lang: str | None) -> list[str]:
+    """Return candidate language codes in priority order (e.g. ['de-DE', 'de'])."""
+    if not lang or not _LANG_RE.match(lang):
+        return []
+    candidates = [lang]
+    sep = "-" if "-" in lang else ("_" if "_" in lang else None)
+    if sep:
+        base = lang.split(sep, 1)[0]
+        if base and _LANG_RE.match(base) and base not in candidates:
+            candidates.append(base)
+    return candidates
+
+
+def _load_plugin_locale(plugin_id: str, lang: str | None) -> dict:
+    """Load <plugins_root>/<plugin_id>/i18n/<lang>.json if available, else {}."""
+    candidates = _lang_candidates(lang)
+    if not candidates:
+        return {}
+    package_root = (plugin_store.plugins_root() / plugin_id).resolve()
+    i18n_dir = (package_root / "i18n").resolve()
+    try:
+        i18n_dir.relative_to(package_root)
+    except ValueError:
+        return {}
+    for code in candidates:
+        candidate = (i18n_dir / f"{code}.json").resolve()
+        try:
+            candidate.relative_to(i18n_dir)
+        except ValueError:
+            continue
+        if candidate.is_file():
+            try:
+                data = json.loads(candidate.read_text(encoding="utf-8"))
+                if isinstance(data, dict):
+                    return data
+            except (OSError, ValueError):
+                continue
+    return {}
+
+
+def _resolve_plugin_doc_path(plugin_id: str, lang: str | None) -> Path | None:
+    """Resolve localized plugin documentation markdown file with fallback to README.md."""
+    package_root = (plugin_store.plugins_root() / plugin_id).resolve()
+    rel_candidates: list[str] = []
+    for code in _lang_candidates(lang):
+        rel_candidates.extend(
+            [
+                f"README.{code}.md",
+                f"docs/README.{code}.md",
+                f"docs/setup-guide.{code}.md",
+            ]
+        )
+    rel_candidates.append("README.md")
+    for rel in rel_candidates:
+        candidate = (package_root / rel).resolve()
+        try:
+            candidate.relative_to(package_root)
+        except ValueError:
+            continue
+        if candidate.is_file():
+            return candidate
+    return None
 
 
 def _safe_icon_path(plugin_id: str, filename: str) -> Path | None:
@@ -71,27 +151,70 @@ def _resolve_icon(plugin_id: str, manifest: PluginManifest, node_key: str | None
     return _safe_icon_path(plugin_id, "icon.svg")
 
 
-def _to_summary(plugin: Plugin) -> PluginSummary:
+def _localize_field(field: PluginField, field_i18n: dict) -> PluginField:
+    if not field_i18n:
+        return field
+    label = field_i18n.get("label")
+    options_i18n = field_i18n.get("options")
+    new_label = str(label) if isinstance(label, str) and label else field.label
+    if isinstance(options_i18n, dict) and field.options:
+        new_options = [
+            opt.model_copy(
+                update={
+                    "label": str(options_i18n[opt.value])
+                    if isinstance(options_i18n.get(opt.value), str) and options_i18n.get(opt.value)
+                    else opt.label
+                }
+            )
+            for opt in field.options
+        ]
+    else:
+        new_options = field.options
+    return field.model_copy(update={"label": new_label, "options": new_options})
+
+
+def _to_summary(plugin: Plugin, lang: str | None = None) -> PluginSummary:
     manifest = PluginManifest.model_validate(plugin.manifest)
-    nodes = [
-        PluginNodeSummary(
-            key=node.key,
-            name=node.name,
-            kind=node.kind,
-            description=node.description,
-            fields=node.fields,
-            dsl_hint=node.dsl_hint,
-            doc_slug=node.doc_slug,
-            has_icon=_resolve_icon(plugin.plugin_id, manifest, node.key) is not None,
+    i18n = _load_plugin_locale(plugin.plugin_id, lang)
+    plugin_i18n = i18n.get("plugin") if isinstance(i18n.get("plugin"), dict) else {}
+    nodes_i18n = i18n.get("nodes") if isinstance(i18n.get("nodes"), dict) else {}
+
+    nodes: list[PluginNodeSummary] = []
+    for node in manifest.resolved_nodes():
+        node_i18n = nodes_i18n.get(node.key) if isinstance(nodes_i18n.get(node.key), dict) else {}
+        fields_i18n = node_i18n.get("fields") if isinstance(node_i18n.get("fields"), dict) else {}
+        localized_fields = [
+            _localize_field(
+                f,
+                fields_i18n.get(f.key) if isinstance(fields_i18n.get(f.key), dict) else {},
+            )
+            for f in node.fields
+        ]
+        node_name = node_i18n.get("name")
+        node_desc = node_i18n.get("description")
+        nodes.append(
+            PluginNodeSummary(
+                key=node.key,
+                name=str(node_name) if isinstance(node_name, str) and node_name else node.name,
+                kind=node.kind,
+                description=str(node_desc)
+                if isinstance(node_desc, str) and node_desc
+                else node.description,
+                fields=localized_fields,
+                dsl_hint=node.dsl_hint,
+                doc_slug=node.doc_slug,
+                has_icon=_resolve_icon(plugin.plugin_id, manifest, node.key) is not None,
+            )
         )
-        for node in manifest.resolved_nodes()
-    ]
+
+    pkg_name = plugin_i18n.get("name")
+    pkg_desc = plugin_i18n.get("description")
     return PluginSummary(
         id=plugin.plugin_id,
-        name=plugin.name,
+        name=str(pkg_name) if isinstance(pkg_name, str) and pkg_name else plugin.name,
         version=plugin.version,
         kind=plugin.kind,
-        description=plugin.description,
+        description=str(pkg_desc) if isinstance(pkg_desc, str) and pkg_desc else plugin.description,
         enabled=plugin.enabled,
         nodes=nodes,
         has_icon=_safe_icon_path(plugin.plugin_id, "icon.svg") is not None,
@@ -100,17 +223,25 @@ def _to_summary(plugin: Plugin) -> PluginSummary:
 
 @router.get("", response_model=list[PluginSummary])
 async def list_plugins(
+    lang: str | None = Query(None, description="Optional UI locale code (e.g. de, fr, zh-Hans)"),
+    accept_language: str | None = Header(None, alias="Accept-Language"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> list[PluginSummary]:
     require_plugins_enabled()
+    resolved_lang = _resolve_lang(
+        lang if isinstance(lang, str) else None,
+        accept_language if isinstance(accept_language, str) else None,
+    )
     rows = (await db.execute(select(Plugin))).scalars().all()
-    return [_to_summary(p) for p in rows]
+    return [_to_summary(p, lang=resolved_lang) for p in rows]
 
 
 @router.get("/{plugin_id}/doc", response_model=PluginDoc)
 async def get_plugin_doc(
     plugin_id: str,
+    lang: str | None = Query(None, description="Optional UI locale code (e.g. de, fr, zh-Hans)"),
+    accept_language: str | None = Header(None, alias="Accept-Language"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> PluginDoc:
@@ -120,12 +251,19 @@ async def get_plugin_doc(
     ).scalar_one_or_none()
     if plugin is None:
         raise HTTPException(status_code=404, detail="Plugin not found")
-    readme = plugin_store.plugins_root() / plugin_id / "README.md"
-    markdown = readme.read_text() if readme.exists() else ""
+    resolved_lang = _resolve_lang(
+        lang if isinstance(lang, str) else None,
+        accept_language if isinstance(accept_language, str) else None,
+    )
+    doc_path = _resolve_plugin_doc_path(plugin_id, resolved_lang)
+    markdown = doc_path.read_text(encoding="utf-8") if doc_path is not None else ""
+    i18n = _load_plugin_locale(plugin_id, resolved_lang)
+    plugin_i18n = i18n.get("plugin") if isinstance(i18n.get("plugin"), dict) else {}
+    pkg_name = plugin_i18n.get("name")
     manifest = PluginManifest.model_validate(plugin.manifest)
     return PluginDoc(
         id=plugin_id,
-        name=plugin.name,
+        name=str(pkg_name) if isinstance(pkg_name, str) and pkg_name else plugin.name,
         doc_slug=manifest.resolved_doc_slug(),
         markdown=markdown,
     )

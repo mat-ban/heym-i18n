@@ -598,8 +598,14 @@ SMTP-tunnistetieto tallentaa sähköpostipalvelimen yhteystiedot lähtevän post
 |-------|-------------|
 | `host` | SMTP-palvelimen isäntänimi (esim. `smtp.gmail.com`) |
 | `port` | SMTP-portti (tyypillisesti `587` STARTTLS:lle, `465` SSL:lle) |
-| `email` | Lähettäjän sähköpostiosoite |
+| `email` | Käyttäjänimi, jolla SMTP-palvelin kirjautuu sisään; myös näkyvä lähettäjä, kun `from` on tyhjä |
 | `password` | SMTP-salasana tai sovellussalasana |
+
+### Valinnaiset kentät
+
+| Kenttä | Kuvaus |
+|-------|-------------|
+| `from` (`smtp_from`) | Näkyvä lähettäjän osoite (From). Jätä tyhjäksi lähettääksesi osoitteena `email`. Palvelin kirjautuu silti sisään tunnuksella `email`, joten tällä tilillä on oltava oikeus lähettää tästä osoitteesta (Gmailissa vahvistettu **Lähetä viestejä nimellä** -alias). |
 
 ### Yleisimmät SMTP-palveluntarjoajat
 

@@ -33,6 +33,13 @@ Węzeł działa w dwóch fazach:
 
 Na canvasie przycisk **Run Workflow** wyświetla wygenerowany `curl` w panelu debugowania z przyciskiem kopiowania.
 
+## Uruchamianie z poziomu Heym
+
+Dwa miejsca pozwalają uruchomić taki Workflow bezpośrednio na pliku, z wykorzystaniem tego samego mechanizmu generowania linku i przesyłania:
+
+- [Quick Drawer](../reference/quick-drawer.md) wyświetla strefę upuszczania pliku. Takie wykonania są oznaczane w historii tagiem `Quick Drawer`.
+- [Widżet uruchamiania](../tabs/dashboard-tab.md#run-widgets) na dashboardzie uruchamia Workflow dla każdego upuszczonego pliku. Takie wykonania są oznaczane tagiem `dashboard`.
+
 ## Parametry
 
 | Parametr | Typ | Domyślna | Opis |

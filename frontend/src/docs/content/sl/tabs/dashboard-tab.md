@@ -8,7 +8,7 @@ Vsakdo začne z eno nadzorno ploščo, ki je ustvarjena ob prvem odprtju zavihka
 
 Zavihek ponovno odpre nadzorno ploščo, ki ste jo nazadnje uporabili, in naslovna vrstica nosi odprto nadzorno ploščo (`?tab=dashboard&dashboard=<id>`), tako da povezava odpre točno to nadzorno ploščo za vsakogar, ki ima dostop do nje.
 
-Gumb za nastavitve (samo za lastnike) preimenuje nadzorno ploščo, upravlja deljenje in jo izbriše. Izbris nadzorne plošče odstrani njene pripomočke in njihove workflow-e. Vedno obdržite vsaj eno svojo nadzorno ploščo, zato zadnje ni mogoče izbrisati.
+Gumb za nastavitve (samo za lastnike) preimenuje nadzorno ploščo, določi, katere zapise sprejema kot [stran s podrobnostmi](#detail-pages), upravlja deljenje in jo izbriše. Izbris nadzorne plošče odstrani njene pripomočke in njihove workflow-e. Vedno obdržite vsaj eno svojo nadzorno ploščo, zato zadnje ni mogoče izbrisati.
 
 ## Pripomočki
 
@@ -18,7 +18,7 @@ Pripomoček je en sam graf na mreži. Podprti tipi grafov:
 - **Črta**
 - **Območje** (izpolnjen trend, podpira več serij)
 - **Pita**
-- **Tabela** (pomična)
+- **Tabela** (pomična; en stolpec se lahko izriše kot [statusne značke](../nodes/chart-output-node.md#status-chips), vrstice pa lahko odprejo [stran s podrobnostmi](#detail-pages))
 - **Številčni** (en sam KPI vrednost z neobvezno enoto)
 - **Merilnik** (ena vrednost v razponu min–max, npr. odstotek)
 - **Razpršeni** (X/Y točke za korelacijske grafe)
@@ -26,6 +26,8 @@ Pripomoček je en sam graf na mreži. Podprti tipi grafov:
 - **Stolpčni merilnik** (ena vodoravna merilna enota na vrstico z rdeče→zelena gradientom in vrednostjo, npr. prosti prostor na disku)
 - **Besedilo** (sporočilo v markdown formatu, npr. statusna opomba kot "Zadnje izvajanje ob 19:47"; podpira [interaktivne potrditvene okvirčke](../nodes/chart-output-node.md#interactive-task-lists), ko je markdown statičen, in [izrecne številčne sezname](../nodes/chart-output-node.md#numbered-lists) za prilagojeno ali padajoče številčenje)
 - **HITL** (vaši čakajoči človeški pregledi. Glava prikazuje `1/n čakajočih`. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo. Ikona zgodovine poleg naslova pripomočka odpre to izvajanje v pogovornem oknu zgodovine na tej strani. Pripomoček ne uporablja zgornjih vrstic, in vsakdo vidi svojo lastno vrsto)
+
+Poleg grafikonov pripomoček **Run a workflow** zažene enega od vaših workflowov z nadzorne plošče: na odloženi datoteki, s svojimi vnosnimi polji ali z gumbom Run; glejte [Pripomočki za zagon](#run-widgets).
 
 Vsak pripomoček naloži svoje podatke asinhrono, ko odprete zavihek, tako da stran ostane odzivna, medtem ko se grafi napolnijo.
 
@@ -36,7 +38,39 @@ Vsak pripomoček naloži svoje podatke asinhrono, ko odprete zavihek, tako da st
 3. Zgradite workflow, tako da vozlišče, ki napaja **Chart Output**, proizvaja tabelo vrstic, nato konfigurirajte preslikavo polj vozlišča Chart Output (polje oznake, polje vrednosti itd.).
 4. Shranite, vrnite se na zavihek Nadzorna plošča in pripomoček se prikaže.
 
+Za pripomoček **Run a workflow** namesto tega izberite workflow, ki ga izvaja; izbirnik pove, kako bo pripomoček zagnal vsakega izmed njih. Pripomoček se doda neposredno v mrežo; novega workflowa ni treba graditi.
+
 Dvakrat kliknite na pripomoček (ali uporabite njegov gumb za urejanje), da kadar koli ponovno odprete njegov workflow. Uporabite **Kopiraj pripomoček** v naslovu pripomočka za podvojitev tako pripomočka kot njegovega celotnega workflow-a. Kopija je postavljena pod izvirnik in označena z **(Kopija)**, tako da jo lahko neodvisno uredite.
+
+## Strani s podrobnostmi
+
+Tabelarični pripomoček lahko poveže svoje vrstice z drugo nadzorno ploščo, ki nato deluje kot stran s podrobnostmi: ena nadzorna plošča, ki služi vsaki stranki, računu ali zahtevku (ticketu).
+
+1. Odprite **Settings** tabelaričnega pripomočka in pod **Row link** izberite nadzorno ploščo.
+2. Vnesite **Record column**, stolpec, katerega vrednost identificira vrstico (na primer `id`), in po želji **Label column**, ki jo poimenuje (na primer `name`).
+3. Shranite. Klik na vrstico (ali fokusiranje nanjo in pritisk tipke Enter) odpre povezano nadzorno ploščo z `?record=<value>&label=<name>`.
+
+Na nadzorni plošči s podrobnostmi vsak workflow pripomočka prebere vrednost kot `$page.record` (glejte [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)), stran pa nad mrežo prikaže `Dashboard / <label>` z gumbom za počistitev zapisa. Gumb Nazaj vrne v tabelo, iz katere ste prišli.
+
+- **Kdo jo lahko odpre.** Vrstice so klikljive samo za gledalce, ki lahko odprejo povezano nadzorno ploščo. Ostali vidijo isto tabelo brez povezav.
+- **Format zapisa.** Zapis izvira iz URL-ja, zato nadzorna plošča s podrobnostmi odloča, kaj sprejme. V njenih nastavitvah je **Detail page records** eno od naslednjega: ID-ji (črke, števke, `-`, `_` in `.`, do 128 znakov; privzeto), številke, UUID-ji ali e-poštni naslovi. Vsaka druga vrednost je zavrnjena, preden se pripomoček zažene, in pripomočki prikažejo "This page does not accept that record".
+- **Še vedno se izvaja kot lastnik.** Pripomočki se tudi na strani s podrobnostmi izvajajo kot lastnik nadzorne plošče. Ustvarjalci naj posredujejo `$page.record` samo tam, kjer ga vozlišče ustrezno ubeži (escape), nikoli neposredno v besedilo poizvedbe.
+- **Predpomnjenje.** Vsak pripomoček predpomni svoj grafikon glede na zapis, za enako časovno obdobje (TTL) kot pripomoček, in hrani 50 nazadnje uporabljenih zapisov.
+
+## Pripomočki za zagon
+
+Pripomoček **Run a workflow** zažene enega od vaših workflowov in prikaže rezultat: stanje, čas izvajanja in izhode. Kaj prikaže, je odvisno od tega, kaj workflow sprejme:
+
+- **Datoteko.** Za workflow, ki se začne z vozliščem [File Upload Trigger](../nodes/file-upload-trigger-node.md), povlecite datoteko nanj (ali kliknite za izbiro) in pripomoček jo naloži prek enkratne povezave za nalaganje tega triggerja. Pripomoček prikaže vrste in velikost datotek, ki jih trigger sprejema, ter zavrne druge pred nalaganjem. Ko se workflow začne tudi z vozliščem Text Input, pripomoček prikaže njegova polja poleg območja za odlaganje: izberite datoteko, izpolnite polja in **Run** pošlje oboje. Vrednosti potujejo s povezavo za nalaganje, ki jo ustvari pripomoček, tako da jih deljena povezava za nalaganje ne more nastaviti.
+- **Vnosna polja.** Za workflow, ki se začne z vozliščem Text Input, pripomoček prikaže njegova polja s privzetimi vrednostmi; **Run** zažene workflow z vašimi vrednostmi. Vrednosti za polja, ki jih workflow nima, se zavržejo.
+- **Nič.** Workflow brez vhodov dobi gumb **Run**.
+
+Gumb **Wrap** pri rezultatu prelomi dolge vrstice izhoda znotraj okvira; izklopite ga za branje postavitve JSON izhoda.
+
+- Vsakdo, ki lahko odpre nadzorno ploščo, lahko zažene pripomoček, prav tako kot lahko vsakdo osveži grafikon. Dostop do workflowa pripada lastniku nadzorne plošče: dodajanje pripomočka zahteva workflow, ki ga lahko zaženete tako vi kot lastnik, sam zagon pa uporablja poverilnice lastnika workflowa, kot vsaka povezava za nalaganje.
+- Rezultat ostane na vašem zaslonu, dokler ne zapustite strani; drugi gledalci ne vidijo vaših datotek, vrednosti ali rezultatov. Zagon se pojavi v zgodovini izvajanja s triggerjem `dashboard`.
+- Deljenje nadzorne plošče nikoli ne podeli dostopa do samega workflowa. **Edit workflow** ga odpre za osebe, ki že imajo dostop, **Fine-tune with AI** pa ni na voljo.
+- Zagoni z datotekami se izvajajo na glavni instanci, kjer so shranjene naložene datoteke, kot vsak zagon File Upload Triggerja.
 
 ## Generiranje pripomočka z AI
 
@@ -50,7 +84,7 @@ Preklopite na **Uredi**, da vstopite v način urejanja, kjer lahko povlečete pr
 
 ## Predpomnjenje in osvežitev
 
-Vsak pripomoček predpomni svoje zadnje izračunane podatke na strežniku za nastavljivo časovno obdobje (TTL). Medtem ko je predpomnilnik svež, ponovni odpiranje nadzorne plošče služi shranjenemu rezultatu namesto ponovnega izvajanja workflow-a. Predpomnilnik se nadomesti na mestu vsakič, ko se podatki ponovno izračunajo (en predpomnilnik na pripomoček), in se samodejno invalidira, ko uredite workflow pripomočka.
+Vsak pripomoček predpomni svoje zadnje izračunane podatke na strežniku za nastavljivo časovno obdobje (TTL). Medtem ko je predpomnilnik svež, ponovni odpiranje nadzorne plošče služi shranjenemu rezultatu namesto ponovnega izvajanja workflow-a. Predpomnilnik se nadomesti na mestu vsakič, ko se podatki ponovno izračunajo (en predpomnilnik na pripomoček, plus eden na zapis na [strani s podrobnostmi](#detail-pages)), in se samodejno invalidira, ko uredite workflow pripomočka.
 
 Uporabite gumb **Osveži** pripomočka (ali **Osveži** v orodni vrstici), da obidete predpomnilnik in takoj ponovno izračunate.
 ## Deljenje
@@ -60,9 +94,10 @@ Lastniki delijo nadzorno ploščo iz svojih nastavitev, z individualnimi uporabn
 | Dejanje | Lastnik | Pisanje | Branje |
 |---------|:------:|:-------:|:------:|
 | Ogled pripomočkov, osveževanje, uporaba samodejnega osveževanja | ✓ | ✓ | ✓ |
+| Odpiranje strani s podrobnostmi, zaganjanje pripomočkov za zagon | ✓ | ✓ | ✓ |
 | Dodajanje, kloniranje, brisanje, preimenovanje in spreminjanje velikosti pripomočkov; AI generiranje in fino nastavljanje; označevanje postavk na kontrolnem seznamu | ✓ | ✓ | |
 | Odprtje delovnega toka pripomočka v urejevalniku | ✓ | ✓ | |
-| Preimenovanje ali brisanje nadzorne plošče, upravljanje deljenja | ✓ | | |
+| Preimenovanje ali brisanje nadzorne plošče, nastavitev formata zapisa, upravljanje deljenja | ✓ | | |
 
 **Pripomočki vedno delujejo kot lastnik nadzorne plošče.** Kdor koli gleda, pripomoček uporablja lastnikove poverilnice in globalne spremenljivke, njegovi izvajanja pa se pojavijo v zgodovini izvajanja in sledi lastnika. Tako sodelavci vidijo iste podatke brez dostopa do računov, ki so za njimi, in vsak gledalec deli enega shranjenega rezultata na pripomočku. Pripomočki, ki jih doda ali klonira sodelavec s pravicami pisanja, prav tako pripadajo lastniku.
 

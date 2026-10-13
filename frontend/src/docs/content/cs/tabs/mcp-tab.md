@@ -1,6 +1,6 @@
 # Karta MCP
 
-Karta **MCP** konfiguruje integraci Model Context Protocol (MCP). MCP umožňuje AI klientům (Claude, Cursor a jakémukoli nástroji kompatibilnímu s MCP) volat vaše Heym workflows jako nástroje.
+Karta **MCP** konfiguruje integraci Model Context Protocol (MCP). MCP umožňuje AI klientům (Claude, ChatGPT, Gemini, Cursor a jakémukoli nástroji kompatibilnímu s MCP) volat vaše Heym workflows jako nástroje.
 
 Heym podporuje dva režimy: **výchozí server**, který zpřístupňuje všechny workflows s povoleným MCP pod jedním endpointem, a **pojmenované servery**, které každé logické skupině workflows přidělují vlastní vyhrazenou URL a API klíč.
 
@@ -24,6 +24,8 @@ Výchozí server je vždy dostupný na `{origin}/api/mcp/sse`. Všechny workflow
 
 - **API Key** – Pro programová připojení použijte MCP API klíč. Karta umí zkopírovat připravenou JSON konfiguraci a obsahuje tlačítko **Add to Cursor** pro nastavení Cursoru jedním kliknutím.
 - **Claude** – Karta zobrazuje URL MCP serveru a kroky nastavení pro Claude. Pole OAuth Client ID a Secret ponechte prázdná; Claude se zaregistruje automaticky a autentizuje se přes Heym OAuth.
+- **ChatGPT** – Karta zobrazuje URL serveru MCP a kroky nastavení pro aplikaci ChatGPT. Zapněte vývojářský režim, vytvořte aplikaci s danou URL a zvolte OAuth; ChatGPT se zaregistruje automaticky.
+- **Gemini** – Karta zobrazuje URL serveru MCP a kroky nastavení pro vlastní aplikaci Gemini: na gemini.google.com přejděte do **Settings → Connected Apps → Add a custom app**, vložte URL a sekci **Advanced features** ponechte zavřenou; Gemini se automaticky zaregistruje a ověří přes Heym OAuth. Po připojení funguje Heym také v mobilní aplikaci Gemini.
 
 ### Přepínač MCP u workflow
 
@@ -40,7 +42,8 @@ Sekce **Heym Capabilities** mění engine karty Chat na jediný nástroj MCP s n
 
 Když je povolen, `heym_chat` se objevuje v `tools/list` vedle nástrojů vašich workflows. MCP klient odešle jednu zprávu v přirozeném jazyce a Heym engine se postará o zbytek se stejnými schopnostmi, jaké má karta Chat:
 
-- Sestavovat, upravovat, prohlížet a spouštět workflows prostřednictvím Workflow AI Builderu
+- Sestavit workflow, otestovat jej se vzorovými vstupy, opravit jej a dokončit, jakmile běh proběhne úspěšně (viz [Režim sestavení](#build-mode))
+- Prohlížet a spouštět vaše stávající workflows
 - Podávat přehledy o analytice, nedávných spuštěních a nadcházejících cron plánech
 - Podávat historii běhů jednoho workflow: kolikrát proběhl, počty stavů, kdy proběhl, a na vyžádání vstupy, výstupy a chyby jednotlivých uzlů jednoho běhu
 - Podávat přehled o tom, co právě běží: kolik spuštění je aktivních, jejich názvy workflows, jak dlouho každé běží, na kterém uzlu se právě nachází, a odkaz na živý běh
@@ -50,6 +53,15 @@ Když je povolen, `heym_chat` se objevuje v `tools/list` vedle nástrojů vašic
 - Schvalovat, upravovat nebo odmítat čekající human-in-the-loop recenze
 
 Schopnosti přidané na kartu Chat později se automaticky zpřístupní přes `heym_chat` — neexistuje žádný přepínač pro jednotlivé schopnosti, který by bylo třeba udržovat v synchronizaci.
+
+### Režim sestavení
+
+`heym_chat` vždy spouští engine Chatu v režimu sestavení (build mode). V jediném volání může asistent uložit nový workflow, spustit jej s realistickými vzorovými vstupy, přečíst zprávu o běhu, opravit to, co selhalo, a spustit jej znovu – až pět testovacích běhů na jedno volání. Když poslední běh posledního uložení projde, skončí jednovětým shrnutím a odpověď končí textem `Verified: the latest test run of the saved workflow passed.`
+
+- Testovací běhy jsou skutečné běhy. Jejich vedlejší účinky se provedou a zobrazí se v historii běhů daného workflow jako každý jiný běh.
+- Uložení probíhají cestou editoru: změna grafu zachová předchozí graf v historii úprav (**Edit History**) daného workflow.
+- Chcete-li změnit workflow, který asistent vytvořil dříve, pokračujte ve vlákně se stejným `conversation_id`. Asistent tento workflow aktualizuje, místo aby vytvářel nový, a mění pouze workflows, které můžete upravovat.
+- Když je vyčerpáno všech pět testovacích běhů, asistent se zastaví a vysvětlí, co stále selhává.
 
 Přihlašovací údaje zůstávají v UI: `heym_chat` je nikdy nevypisuje, nevybírá ani nevytváří. Když sestavuje nebo upravuje workflow, nové uzly vyžadující přihlašovací údaj zůstanou prázdné a odpověď je pojmenuje, abyste je mohli nastavit v editoru.
 
@@ -109,7 +121,7 @@ Přepnutí workflow jej přesune na začátek seznamu přiřazených, takže pr�
 Pojmenované servery podporují stejné metody autentizace jako výchozí server:
 
 - **X-MCP-Key header** – Předávejte API klíč serveru přímo (API klienti, Cursor). Pouze header: klíče nejsou přijímány jako query parametr `?key=`, protože URL se dostávají do access logů, proxy logů a historie prohlížeče.
-- **Claude OAuth** – Přidejte URL serveru do integrací Claude; ponechte přihlašovací údaje prázdné a Claude se zaregistruje automaticky přes OAuth. Bearer token musí být přenášen v `Authorization` headeru, nikoli jako `?token=`.
+- **Claude, ChatGPT a Gemini OAuth** – Přidejte URL serveru do konektorů nebo vlastních aplikací klienta; ponechte přihlašovací údaje prázdné a klient se zaregistruje automaticky přes OAuth. Bearer token musí být přenášen v `Authorization` headeru, nikoli jako `?token=`.
 - **Session token** – Vydán během SSE handshake; vázán na konkrétní server, takže tokeny z jednoho pojmenovaného serveru nemohou přistupovat k jinému. Tento krátkodobý parametr `?session=` není ovlivněn.
 
 ### Smazání pojmenovaného serveru
@@ -123,7 +135,7 @@ Klikněte na ikonu **X** v záhlaví karty serveru. Smazáním se odstraní serv
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Oba endpointy podporují SSE transport (GET, MCP spec 2024-11-05) a Streamable HTTP transport (POST, MCP spec 2025-03-26). Claude používá OAuth 2.1 / PKCE pro bezpečné přihlášení u obou.
+Oba endpointy podporují SSE transport (GET, MCP spec 2024-11-05) a Streamable HTTP transport (POST, MCP spec 2025-03-26). Claude, ChatGPT a Gemini používají OAuth 2.1 / PKCE pro bezpečné přihlášení u obou.
 
 ## Související
 

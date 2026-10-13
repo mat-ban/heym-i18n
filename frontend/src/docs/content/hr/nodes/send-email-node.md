@@ -28,7 +28,7 @@ Priložite datoteke iz svog [Drive](./drive-node.md) prosljeđivanjem jednog ili
 
 ## Postavljanje
 
-Dodajte SMTP vjerodajnicu s poslužiteljem, portom, e-poštom i lozinkom. Uobičajeni SMTP poslužitelji:
+Dodajte SMTP vjerodajnicu s poslužiteljem, portom, e-poštom i lozinkom. Vidljivi pošiljatelj je neobavezno polje **From** u vjerodajnici; ako je From prazno, šalje se kao korisničko ime. Uobičajeni SMTP poslužitelji:
 
 - Gmail: `smtp.gmail.com`, port 587 (potrebna App Password)
 - Outlook: `smtp.office365.com`, port 587

@@ -1,6 +1,6 @@
 # MCP lap
 
-Az **MCP** lap a Model Context Protocol (MCP) integrációt konfigurálja. Az MCP lehetővé teszi, hogy az AI-kliensek (Claude, Cursor és bármely MCP-kompatibilis eszköz) az Ön Heym workflow-jait eszközként hívják meg.
+Az **MCP** lap a Model Context Protocol (MCP) integrációt konfigurálja. Az MCP lehetővé teszi, hogy az AI-kliensek (Claude, ChatGPT, Gemini, Cursor és bármely MCP-kompatibilis eszköz) az Ön Heym workflow-jait eszközként hívják meg.
 
 A Heym két módot támogat: egy **alapértelmezett szervert**, amely az összes MCP-vel engedélyezett workflow-t egyetlen endpoint alatt teszi elérhetővé, valamint **elnevezett szervereket**, amelyek minden logikai workflow-csoport számára saját dedikált URL-t és API-kulcsot biztosítanak.
 
@@ -24,6 +24,8 @@ Az alapértelmezett szerver mindig elérhető a `{origin}/api/mcp/sse` címen. M
 
 - **API Key** – Az MCP API-kulcsot programozott csatlakozásokhoz használja. A lap képes egy használatra kész JSON konfigurációt másolni, és tartalmaz egy **Add to Cursor** gombot a Cursor egykattintásos beállításához.
 - **Claude** – A lap megjeleníti az MCP szerver URL-jét és a Claude beállítási lépéseit. Az OAuth Client ID és Secret mezőket hagyja üresen; a Claude automatikusan regisztrál és a Heym OAuth-on keresztül hitelesít.
+- **ChatGPT** – A lap megjeleníti az MCP-szerver URL-jét és a ChatGPT-alkalmazás beállítási lépéseit. Kapcsolja be a fejlesztői módot, hozzon létre egy alkalmazást az URL-lel, és válassza az OAuth lehetőséget; a ChatGPT automatikusan regisztrál.
+- **Gemini** – A lap megjeleníti az MCP-szerver URL-jét és a Gemini egyéni alkalmazás beállítási lépéseit: a gemini.google.com oldalon válassza a **Settings → Connected Apps → Add a custom app** menüpontot, illessze be az URL-t, és hagyja zárva az **Advanced features** részt; a Gemini automatikusan regisztrál és hitelesít a Heym OAuth-on keresztül. A csatlakoztatás után a Heym a Gemini mobilalkalmazásban is működik.
 
 ### Workflow MCP kapcsoló
 
@@ -40,7 +42,8 @@ A **Heym Capabilities** szakasz a Chat lap motorját egyetlen `heym_chat` nevű 
 
 Amikor be van kapcsolva, a `heym_chat` megjelenik a `tools/list` listában a workflow-eszközök mellett. Az MCP-kliens egyetlen természetes nyelvű üzenetet küld, és a Heym motor onnantól átveszi a feladatot, ugyanazokkal a képességekkel, amelyekkel a Chat lap rendelkezik:
 
-- Workflow-k létrehozása, szerkesztése, vizsgálata és futtatása a Workflow AI Builder segítségével
+- Workflow építése, tesztfuttatása mintabemenetekkel, javítása és befejezése, amikor egy futtatás sikeres (lásd: [Építési mód](#build-mode))
+- Meglévő workflow-k vizsgálata és futtatása
 - Analitikák, legutóbbi futtatások és közelgő cron ütemezések jelentése
 - Egy workflow futási előzményeinek jelentése: hányszor futott, állapotszámok, mikor futott, valamint kérésre egyetlen futtatás bemenetei, kimenetei és csomópontonkénti hibái
 - Annak jelentése, hogy mi fut éppen most: hány futtatás aktív, azok workflow-nevei, mennyi ideje futnak, melyik csomóponton vannak éppen, és egy hivatkozás az élő futtatásra
@@ -50,6 +53,15 @@ Amikor be van kapcsolva, a `heym_chat` megjelenik a `tools/list` listában a wor
 - Függőben lévő human-in-the-loop felülvizsgálatok jóváhagyása, szerkesztése vagy elutasítása
 
 A Chat laphoz később hozzáadott képességek automatikusan elérhetővé válnak a `heym_chat`-en keresztül — nincs szükség képességenkénti kapcsolóra, amelyet szinkronban kellene tartani.
+
+### Építési mód
+
+A `heym_chat` mindig építési módban (build mode) futtatja a Chat motort. Egyetlen hívásban az asszisztens képes elmenteni egy új workflow-t, valósághű mintabemenetekkel lefuttatni, elolvasni a futási jelentést, kijavítani a hibát, majd újra lefuttatni — hívásonként legfeljebb öt tesztfuttatásig. Amikor a legutóbbi mentés legutóbbi futtatása sikeres, egy egymondatos összefoglalóval zár, és a válasz a következővel végződik: `Verified: the latest test run of the saved workflow passed.`
+
+- A tesztfuttatások valódi futtatások. Mellékhatásaik megtörténnek, és bármely más futtatáshoz hasonlóan megjelennek a workflow futási előzményeiben.
+- A mentések a szerkesztő útvonalát követik: a gráf módosítása megőrzi az előző gráfot a workflow szerkesztési előzményeiben (**Edit History**).
+- Egy korábban épített workflow módosításához folytassa a szálat ugyanazzal a `conversation_id` értékkel. Az asszisztens új létrehozása helyett azt a workflow-t frissíti, és csak olyan workflow-kat módosít, amelyeket Ön szerkeszthet.
+- Ha az öt tesztfuttatás elfogy, az asszisztens megáll, és elmagyarázza, mi hibázik még mindig.
 
 A hitelesítési adatok a felületen maradnak: a `heym_chat` soha nem listázza, választja ki vagy hozza létre azokat. Amikor workflow-t épít vagy szerkeszt, a hitelesítési adatot igénylő új csomópontok üresen maradnak, és a válasz megnevezi azokat, így Ön beállíthatja őket a szerkesztőben.
 
@@ -109,7 +121,7 @@ A workflow átkapcsolása a hozzárendelt lista tetejére mozgatja azt, így az 
 Az elnevezett szerverek ugyanazokat a hitelesítési módszereket támogatják, mint az alapértelmezett szerver:
 
 - **X-MCP-Key header** – Adja át közvetlenül a szerver API-kulcsát (API-kliensek, Cursor). Csak header: a kulcsok `?key=` query paraméterként nem elfogadottak, mert az URL-ek bekerülnek a hozzáférési naplókba, proxy naplókba és a böngésző előzményeibe.
-- **Claude OAuth** – Adja hozzá a szerver URL-jét a Claude integrációkhoz; hagyja üresen a hitelesítési adatokat, és a Claude automatikusan regisztrál OAuth-on keresztül. A bearer tokennek az `Authorization` headerben kell utaznia, nem `?token=` formában.
+- **Claude, ChatGPT és Gemini OAuth** – Adja hozzá a szerver URL-jét a kliens csatlakozóihoz vagy egyéni alkalmazásaihoz; hagyja üresen a hitelesítési adatokat, és a kliens automatikusan regisztrál OAuth-on keresztül. A bearer tokennek az `Authorization` headerben kell utaznia, nem `?token=` formában.
 - **Session token** – Az SSE handshake során kerül kiadásra; az adott szerverre van hatókörözve, így az egyik elnevezett szerverről származó tokenek nem férhetnek hozzá egy másikhoz. Ez a rövid élettartamú `?session=` paraméter nem érintett.
 
 ### Elnevezett szerver törlése
@@ -123,7 +135,7 @@ Kattintson az **X** ikonra a szerverkártya fejlécén. A törlés eltávolítja
 | Alapértelmezett | `{origin}/api/mcp/sse` |
 | Elnevezett | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Mindkét endpoint támogatja az SSE transportot (GET, MCP spec 2024-11-05) és a Streamable HTTP transportot (POST, MCP spec 2025-03-26). A Claude mindkettőn OAuth 2.1 / PKCE-t használ a biztonságos bejelentkezéshez.
+Mindkét endpoint támogatja az SSE transportot (GET, MCP spec 2024-11-05) és a Streamable HTTP transportot (POST, MCP spec 2025-03-26). A Claude, a ChatGPT és a Gemini mindkettőn OAuth 2.1 / PKCE-t használ a biztonságos bejelentkezéshez.
 
 ## Kapcsolódó
 

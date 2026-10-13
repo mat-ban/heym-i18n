@@ -4,7 +4,7 @@ A Beállítások párbeszédablak segítségével kezelheti a profilját, állan
 
 ## A párbeszédablak megnyitása
 
-Kattintson **avatárjára és nevére** a fejléc jobb felső sarkában. A párbeszédablak a következő fülekkel nyílik meg: **Profil**, **Biztonság**, **Hang**, **AI-alapértelmezések** és **Megfigyelhetőség**. Az instance-adminisztrátorok egy **SSO** fület is látnak.
+Kattintson **avatárjára és nevére** a fejléc jobb felső sarkában. A párbeszédablak a következő fülekkel nyílik meg: **Profil**, **Biztonság**, **Hang**, **AI-alapértelmezések** és **Megfigyelhetőség**. Az instance-adminisztrátorok az **SSO**, a **Heym Work** és az **Instances** füleket is látják.
 
 ## Profil fül
 
@@ -100,6 +100,10 @@ Az Observability lap az [OpenTelemetry Tracing](./opentelemetry.md) írásvédet
 ## SSO lap
 
 Csak az instance adminisztrátorai számára látható — azoknak a fiókoknak, amelyek a `HEYM_ADMIN_EMAILS` listában szerepelnek. Ez a lap összekapcsolja a Heymet egy külső OpenID Connect szolgáltatóval, hogy a felhasználók a már meglévő fiókjaikkal jelentkezhessenek be. Adjon meg egy issuer URL-t és client hitelesítési adatokat, másolja be az írásvédett redirect URI-t a szolgáltatójába, és az engedélyezés előtt futtassa a **Kapcsolat tesztelése** műveletet. A jelszavas bejelentkezés innen kikapcsolható, miután a teszt sikeres. A teljes beállításért lásd az [Egyszeri bejelentkezés](./sso.md) oldalt.
+
+## Heym Work lap
+
+Az instance-adminisztrátorok itt csatlakoztatják a [Heym Work](./heym-work.md) üzleti csapatoknak szóló felületet: annak címét, az egyszer megjelenő integrációs kulcsot és az **Enable Heym Work** kapcsolót. A lap azt is megmutatja, mikor jelentkezett be utoljára a Heym Work, mi a verziószáma és milyen a licencállapota. Lásd: [A Heym Work csatlakoztatása](./heym-work.md#connecting-heym-work).
 
 ## Instances lap
 

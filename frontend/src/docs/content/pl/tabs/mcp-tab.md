@@ -1,6 +1,6 @@
 # Zakładka MCP
 
-Zakładka **MCP** służy do konfiguracji integracji z Model Context Protocol (MCP). MCP pozwala klientom AI (Claude, Cursor oraz dowolnym narzędziom zgodnym z MCP) wywoływać workflow Heym jako narzędzia.
+Zakładka **MCP** służy do konfiguracji integracji z Model Context Protocol (MCP). MCP pozwala klientom AI (Claude, ChatGPT, Gemini, Cursor oraz dowolnym narzędziom zgodnym z MCP) wywoływać workflow Heym jako narzędzia.
 
 Heym obsługuje dwa tryby: **serwer domyślny**, który udostępnia wszystkie workflow z włączonym MCP pod jednym endpointem, oraz **serwery nazwane**, które nadają każdej logicznej grupie workflow własny dedykowany URL i klucz API.
 
@@ -24,6 +24,8 @@ Serwer domyślny jest zawsze dostępny pod adresem `{origin}/api/mcp/sse`. Wszys
 
 - **API Key** – Klucz API MCP służy do połączeń programistycznych. Zakładka umożliwia skopiowanie gotowej konfiguracji JSON i zawiera przycisk **Add to Cursor** do konfiguracji Cursor jednym kliknięciem.
 - **Claude** – Zakładka wyświetla URL serwera MCP oraz kroki konfiguracji dla Claude. Pola OAuth Client ID i Secret należy pozostawić puste; Claude rejestruje się automatycznie i uwierzytelnia przez Heym OAuth.
+- **ChatGPT** – Zakładka wyświetla adres URL serwera MCP oraz kroki konfiguracji aplikacji ChatGPT. Włącz tryb deweloperski, utwórz aplikację z tym adresem URL i wybierz OAuth; ChatGPT zarejestruje się automatycznie.
+- **Gemini** – Zakładka wyświetla adres URL serwera MCP oraz kroki konfiguracji niestandardowej aplikacji Gemini: w gemini.google.com przejdź do **Settings → Connected Apps → Add a custom app**, wklej adres URL i pozostaw sekcję **Advanced features** zamkniętą; Gemini zarejestruje się automatycznie i uwierzytelni przez Heym OAuth. Po połączeniu Heym działa również w aplikacji mobilnej Gemini.
 
 ### Przełącznik MCP dla workflow
 
@@ -40,7 +42,8 @@ Sekcja **Heym Capabilities** zamienia mechanizm zakładki Chat w jedno narzędzi
 
 Gdy narzędzie jest włączone, `heym_chat` pojawia się w `tools/list` obok narzędzi workflow. Klient MCP wysyła jedną wiadomość w języku naturalnym, a mechanizm Heym przejmuje zadanie, dysponując tymi samymi możliwościami co zakładka Chat:
 
-- Tworzenie, edycja, inspekcja i uruchamianie workflow przez Workflow AI Builder
+- Tworzenie workflow, testowe uruchamianie go z przykładowymi danymi wejściowymi, naprawianie błędów i kończenie po pomyślnym przebiegu (zobacz [Tryb budowania](#build-mode))
+- Inspekcja i uruchamianie istniejących workflow
 - Raportowanie analityki, ostatnich wykonań oraz nadchodzących harmonogramów cron
 - Raportowanie historii uruchomień jednego workflow: ile razy został uruchomiony, liczby statusów, kiedy był uruchamiany, a na żądanie — dane wejściowe, wyjściowe oraz błędy poszczególnych węzłów pojedynczego uruchomienia
 - Raportowanie, co dzieje się w danej chwili: ile wykonań jest aktywnych, ich nazwy workflow, jak długo każde trwa, na którym węźle się obecnie znajduje oraz link do uruchomienia na żywo
@@ -50,6 +53,15 @@ Gdy narzędzie jest włączone, `heym_chat` pojawia się w `tools/list` obok nar
 - Zatwierdzanie, edycja lub odrzucanie oczekujących przeglądów human-in-the-loop
 
 Możliwości dodane później do zakładki Chat stają się automatycznie dostępne przez `heym_chat` — nie ma osobnego przełącznika dla każdej możliwości, który trzeba synchronizować.
+
+### Tryb budowania
+
+`heym_chat` zawsze uruchamia silnik czatu w trybie budowania (build mode). W jednym wywołaniu asystent może zapisać nowy workflow, uruchomić go z realistycznymi przykładowymi danymi wejściowymi, odczytać raport z wykonania, naprawić to, co się nie powiodło, i uruchomić go ponownie — maksymalnie do pięciu uruchomień testowych na wywołanie. Gdy ostatnie uruchomienie ostatnio zapisanej wersji zakończy się powodzeniem, asystent kończy pracę jednozdaniowym podsumowaniem, a odpowiedź kończy się komunikatem `Verified: the latest test run of the saved workflow passed.`
+
+- Uruchomienia testowe to prawdziwe uruchomienia. Ich efekty uboczne faktycznie występują i pojawiają się w historii wykonań workflow tak samo jak każde inne uruchomienie.
+- Zapisy korzystają ze ścieżki edytora: zmiana grafu zachowuje poprzednią wersję grafu w historii edycji (**Edit History**) danego workflow.
+- Aby zmodyfikować wcześniej zbudowany workflow, kontynuuj wątek z tym samym `conversation_id`. Asystent zaktualizuje ten workflow zamiast tworzyć nowy i zmodyfikuje wyłącznie te workflow, które masz uprawnienia edytować.
+- Gdy limit pięciu uruchomień testowych zostanie wyczerpany, asystent zatrzymuje się i wyjaśnia, co nadal powoduje błąd.
 
 Dane logowania pozostają w interfejsie: `heym_chat` nigdy ich nie wyświetla, nie wybiera ani nie tworzy. Gdy buduje lub edytuje workflow, nowe węzły wymagające danych logowania pozostają puste, a odpowiedź je wymienia, aby można było ustawić je w edytorze.
 
@@ -109,7 +121,7 @@ Przełączenie workflow przenosi go na górę listy przypisanych, dzięki czemu 
 Serwery o nazwach własnych obsługują te same metody uwierzytelniania co serwer domyślny:
 
 - **Nagłówek X-MCP-Key** – Przekazuje klucz API serwera bezpośrednio (klienci API, Cursor). Wyłącznie jako nagłówek: klucze nie są akceptowane jako parametr zapytania `?key=`, ponieważ URL-e trafiają do logów dostępu, logów proxy i historii przeglądarki.
-- **Claude OAuth** – Dodaj URL serwera do integracji Claude; pozostaw dane logowania puste, a Claude zarejestruje się automatycznie przez OAuth. Token bearer musi być przekazywany w nagłówku `Authorization`, a nie jako `?token=`.
+- **Claude, ChatGPT i Gemini OAuth** – Dodaj URL serwera do konektorów lub niestandardowych aplikacji klienta; pozostaw dane logowania puste, a klient zarejestruje się automatycznie przez OAuth. Token bearer musi być przekazywany w nagłówku `Authorization`, a nie jako `?token=`.
 - **Token sesji** – Wydawany podczas handshake SSE; ograniczony do konkretnego serwera, więc tokeny z jednego serwera o nazwie własnej nie mogą uzyskać dostępu do innego. Ten krótkotrwały parametr `?session=` nie podlega tym ograniczeniom.
 
 ### Usuwanie serwera o nazwie własnej
@@ -123,7 +135,7 @@ Kliknij ikonę **X** w nagłówku karty serwera. Usunięcie powoduje skasowanie 
 | Domyślny | `{origin}/api/mcp/sse` |
 | o nazwie własnej | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Oba endpointy obsługują transport SSE (GET, specyfikacja MCP 2024-11-05) oraz transport Streamable HTTP (POST, specyfikacja MCP 2025-03-26). Claude używa OAuth 2.1 / PKCE do bezpiecznego logowania w obu przypadkach.
+Oba endpointy obsługują transport SSE (GET, specyfikacja MCP 2024-11-05) oraz transport Streamable HTTP (POST, specyfikacja MCP 2025-03-26). Claude, ChatGPT i Gemini używają OAuth 2.1 / PKCE do bezpiecznego logowania w obu przypadkach.
 
 ## Powiązane
 

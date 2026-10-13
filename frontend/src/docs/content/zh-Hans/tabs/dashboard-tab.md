@@ -8,7 +8,7 @@
 
 该标签页会重新打开您上次使用的 dashboard，地址栏会携带当前打开的 dashboard（`?tab=dashboard&dashboard=<id>`），因此链接会为任何有权限的人打开该 dashboard。
 
-设置按钮（仅限所有者）可重命名 dashboard、管理分享以及删除 dashboard。删除 dashboard 会移除其 widget 及其 workflow。您始终至少保留一个自己的 dashboard，因此最后一个无法删除。
+设置按钮（仅限所有者）可重命名 dashboard、设置将其作为[详情页](#detail-pages)时接受的记录格式、管理分享以及删除 dashboard。删除 dashboard 会移除其 widget 及其 workflow。您始终至少保留一个自己的 dashboard，因此最后一个无法删除。
 
 ## Widgets
 
@@ -18,7 +18,7 @@ widget 是网格上的单个图表。支持的图表类型：
 - **Line**
 - **Area**（填充趋势图，支持多系列）
 - **Pie**
-- **Table**（可滚动）
+- **Table**（可滚动；其中一列可渲染为[状态标签](../nodes/chart-output-node.md#status-chips)，且点击行可打开[详情页](#detail-pages)）
 - **Numeric**（单个 KPI 值，可带单位）
 - **Gauge**（针对最小–最大范围的单个值，例如百分比）
 - **Scatter**（用于相关性图的 X/Y 点）
@@ -26,6 +26,8 @@ widget 是网格上的单个图表。支持的图表类型：
 - **Bar gauge**（每行一个水平仪表，带红→绿渐变和数值，例如可用磁盘空间）
 - **Text**（markdown 消息，例如“Last execution at 19:47”这样的状态说明；当 markdown 为静态时支持[交互式复选框](../nodes/chart-output-node.md#interactive-task-lists)，并支持[显式编号列表](../nodes/chart-output-node.md#numbered-lists)以实现自定义或降序编号）
 - **HITL**（您待处理的人工审核。标题显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核。widget 标题旁的历史图标会在本页的历史对话框中打开该次运行。该 widget 不使用上游行，每个人看到自己的队列）
+
+除图表外，**Run a workflow** widget 还可以直接从 dashboard 运行您的某个 workflow：通过拖放文件、填写输入字段或点击 Run 按钮；参见[运行类 widget](#run-widgets)。
 
 每个 widget 在您打开标签页时异步加载数据，因此页面在图表填充时保持响应。
 
@@ -36,7 +38,39 @@ widget 是网格上的单个图表。支持的图表类型：
 3. 构建 workflow，使馈入 **Chart Output** 的节点产生行数组，然后配置 Chart Output 节点的字段映射（标签字段、值字段等）。
 4. 保存，返回 Dashboard 标签页，widget 即会渲染。
 
+对于 **Run a workflow** widget，改为选择它要运行的 workflow；选择器会说明 widget 将如何运行每个 workflow。该 widget 会直接添加到网格中，无需构建新的 workflow。
+
 双击 widget（或使用其编辑按钮）可随时重新打开其 workflow。使用 widget 标题中的 **Clone widget** 可复制 widget 及其完整 workflow。副本放置在原始 widget 下方，并标注 **(Copy)**，以便您独立编辑。
+
+## 详情页
+
+表格 widget 可以将其行链接到另一个 dashboard，后者即可作为详情页使用：由同一个 dashboard 服务于每一位客户、每一张发票或每一个工单。
+
+1. 打开表格 widget 的 **Settings**，在 **Row link** 下选择目标 dashboard。
+2. 输入 **Record column**（其值用于标识该行的列，例如 `id`），以及可选的 **Label column**（用于命名该行的列，例如 `name`）。
+3. 保存。点击某一行（或聚焦该行后按 Enter）即可打开带有 `?record=<value>&label=<name>` 的关联 dashboard。
+
+在详情 dashboard 上，每个 widget 的 workflow 都会将该值读取为 `$page.record`（参见 [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)），并且页面会在网格上方显示 `Dashboard / <label>` 以及用于清除记录的按钮。点击返回即可回到来源表格。
+
+- **谁可以打开。** 只有有权打开关联 dashboard 的查看者才能点击行。其他人会看到相同的表格，但不带链接。
+- **记录格式。** 记录来自 URL，因此由详情 dashboard 决定接受哪些内容。在其设置中，**Detail page records** 可选：ID（字母、数字、`-`、`_` 和 `.`，最多 128 个字符；默认）、数字、UUID 或电子邮件地址。任何其他值都会在 widget 运行前被拒绝，且 widget 会显示“This page does not accept that record”。
+- **仍以所有者身份运行。** 在详情页上，widget 同样以 dashboard 所有者的身份运行。构建者应仅在节点会对该值进行转义（escape）的位置传入 `$page.record`，切勿直接拼入查询文本。
+- **缓存。** 每个 widget 按记录缓存其图表，缓存有效期（TTL）与该 widget 相同，并保留最近使用的 50 条记录。
+
+## 运行类 widget
+
+**Run a workflow** widget 会运行您的某个 workflow 并显示结果：状态、运行耗时和输出。具体显示内容取决于该 workflow 所需的输入：
+
+- **文件。** 对于以 [File Upload Trigger](../nodes/file-upload-trigger-node.md) 开头的 workflow，将文件拖放到该 widget 上（或点击选择文件），widget 会通过该 trigger 的一次性上传链接上传文件。widget 会显示 trigger 接受的文件类型和大小，并在上传前拒绝不符合要求的文件。如果 workflow 同时还以 Text Input 节点开头，widget 会在拖放区旁显示其输入字段：选择文件、填写字段后，点击 **Run** 会同时发送这两者。字段值会随 widget 生成的上传链接一起传递，因此共享的上传链接无法篡改它们。
+- **输入字段。** 对于以 Text Input 节点开头的 workflow，widget 会显示其字段及默认值；点击 **Run** 会使用您填写的值运行 workflow。workflow 中不存在的字段值会被丢弃。
+- **无输入。** 不需要输入的 workflow 会显示一个 **Run** 按钮。
+
+结果区域的 **Wrap** 按钮可在框内对超长输出行进行自动换行；关闭它则可按原始 JSON 布局阅读输出。
+
+- 任何能打开该 dashboard 的人都可以运行该 widget，就像任何人都可以刷新图表一样。对 workflow 的访问权限归属于 dashboard 所有者：添加该 widget 需要一个您和所有者都能运行的 workflow，而运行本身使用 workflow 所有者的凭据，与任何上传链接一致。
+- 运行结果会保留在您的屏幕上，直到您离开页面；其他查看者看不到您的文件、输入值或结果。该次运行会带有 `dashboard` trigger 出现在执行历史记录中。
+- 共享 dashboard 绝不会授予对 workflow 本身的访问权限。**Edit workflow** 仅为本就拥有访问权限的人员打开该 workflow，且不提供 **Fine-tune with AI**。
+- 文件运行与所有 File Upload Trigger 运行一样，会在存储上传文件的主实例（main instance）上执行。
 
 ## 使用 AI 生成 widget
 
@@ -50,7 +84,7 @@ widget 是网格上的单个图表。支持的图表类型：
 
 ## 缓存与刷新
 
-每个 widget 会在服务器上缓存其上次计算的数据，缓存时间可配置（TTL）。当缓存新鲜时，重新打开 dashboard 会提供存储的结果，而不是重新运行 workflow。每次重新计算数据时，缓存会就地替换（每个 widget 一个缓存），并且当您编辑 widget 的 workflow 时会自动失效。
+每个 widget 会在服务器上缓存其上次计算的数据，缓存时间可配置（TTL）。当缓存新鲜时，重新打开 dashboard 会提供存储的结果，而不是重新运行 workflow。每次重新计算数据时，缓存会就地替换（每个 widget 一个缓存，外加[详情页](#detail-pages)上每条记录一个缓存），并且当您编辑 widget 的 workflow 时会自动失效。
 
 使用 widget 的 **Refresh** 按钮（或工具栏中的 **Refresh**）可绕过缓存并立即重新计算。
 
@@ -61,9 +95,10 @@ widget 是网格上的单个图表。支持的图表类型：
 | 操作 | 所有者 | Write | Read |
 |--------|:-----:|:-----:|:----:|
 | 查看组件、刷新组件、使用自动刷新 | ✓ | ✓ | ✓ |
+| 打开详情页、运行运行类 widget | ✓ | ✓ | ✓ |
 | 添加、克隆、删除、重命名和调整组件大小；AI 生成和微调；勾选清单项 | ✓ | ✓ | |
 | 在编辑器中打开组件的 workflow | ✓ | ✓ | |
-| 重命名或删除仪表盘、管理共享 | ✓ | | |
+| 重命名或删除仪表盘、设置其记录格式、管理共享 | ✓ | | |
 
 **组件始终以仪表盘所有者的身份运行。** 无论谁在查看，组件都使用所有者的凭据和全局变量，其运行记录出现在所有者的执行历史和追踪中。因此，团队成员无需访问背后的账户即可看到相同的数据，且每位查看者共享每个组件的同一份缓存结果。Write 协作者添加或克隆的组件同样归所有者所有。
 

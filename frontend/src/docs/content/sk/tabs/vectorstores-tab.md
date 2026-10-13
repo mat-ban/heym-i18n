@@ -30,6 +30,9 @@ Karta **Vektorové úložiská** spravuje vektorové úložiská používané uz
 - **Odstránenie zdrojov** – Odstráňte konkrétne súbory alebo skupiny zdrojov z úložiska vrátane
   všetkého, čo pridal jeden workflow
 - **Úprava úložiska** – Zmeňte názov, popis alebo prihlasovacie údaje
+- **Vyhľadávanie** – `POST /api/vector-stores/{id}/search` s parametrom `query` (a `limit` od 1 do 20,
+  predvolene 5) vráti časti (chunks), ktoré by vrátilo vyhľadávanie uzla RAG, od najlepšej zhody, každú s jej
+  skóre a zdrojom. Obrazovka RAG v Heym Work to používa na testovanie získavania dát
 
 ## Zdieľanie
 

@@ -16,6 +16,10 @@ Heym poate fi utilizat gratuit și găzduit pe cont propriu sub licența sa cu c
 | **Suport prioritar și SLA** | Timpi de răspuns garantați și rezolvarea prioritară a problemelor |
 | **Dezvoltare personalizată** | Dezvoltarea de funcționalități și modificări adaptate cerințelor organizației dvs. |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) este interfața pentru echipele de business care rulează peste Heym. Oamenii descriu o sarcină, răspund la câteva întrebări și obțin un workflow testat, lucrează din pagini create pentru ei și răspund la revizuiri, cu autentificare unică (SSO), roluri Owner, Editor și Viewer și un nume pe fiecare rulare. Rulează alături de instanța dvs. Heym cu propria licență; conectați-l în **Settings → Heym Work**. Aflați mai multe și solicitați o perioadă de probă la [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Suport pentru agenți în producție
 
 Echipa Heym vă ajută să proiectați, să construiți și să consolidați agenți și workflow-uri pentru procesele dvs. de business. Aceasta include revizuirea cerințelor dvs., recomandarea configurațiilor de noduri și asigurarea faptului că workflow-urile dvs. respectă bunele practici pentru fiabilitate, observabilitate și guvernanță.
@@ -68,3 +72,4 @@ Contactați echipa enterprise la **enterprise@heym.run** pentru întrebări priv
 - [Execuție paralelă](./parallel-execution.md) — Model de execuție cu mai mulți workeri
 - [Echipe](./teams.md) — Colaborare în echipă și partajarea resurselor
 - [Set complet de funcționalități](./features.md) — Prezentare completă a capabilităților Heym
+- [Heym Work](./heym-work.md): interfața pentru echipele de business și cum să o conectați

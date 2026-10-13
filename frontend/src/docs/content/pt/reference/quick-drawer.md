@@ -35,6 +35,7 @@ Selecione um Workflow para abrir o respectivo formulário de entrada.
 - Clique em **Run Workflow** para executar o Workflow selecionado
 - Clique em **Stop Workflow** para cancelar uma execução em andamento a partir do drawer
 - Workflows sem campos de entrada também podem ser executados diretamente
+- Um workflow que começa com um [File Upload Trigger](../nodes/file-upload-trigger-node.md) apresenta em vez disso uma zona de largar: largue lá um ficheiro ou clique para escolher um. A zona indica os tipos e o tamanho de ficheiro que o trigger aceita e recusa outros ficheiros antes do carregamento. **Run Workflow** permanece desativado até que um ficheiro seja escolhido.
 
 O drawer utiliza a mesma API de execução de Workflow que as demais superfícies de execução do Heym, portanto as saídas e o comportamento em tempo de execução permanecem consistentes.
 
@@ -51,6 +52,8 @@ Após iniciar uma execução, o drawer exibe:
 
 `pending` significa que o Workflow está aguardando uma ação posterior, como revisão humana.
 
+Uma execução com ficheiro passa pela hiperligação de carregamento de utilização única do trigger: a gaveta pede uma hiperligação ao workflow, carrega o ficheiro para ela e mostra o resultado quando o carregamento termina. As execuções com ficheiro mostram o estado final e as saídas, mas não o progresso passo a passo, e também são identificadas com `Quick Drawer` no histórico. O ficheiro escolhido é limpo após cada execução, porque uma hiperligação aceita apenas um ficheiro.
+
 ## Armazenamento do Navegador
 
 O Quick Drawer armazena preferências pessoais em `localStorage`:
@@ -64,7 +67,7 @@ O drawer **não** persiste valores de entrada nesta versão.
 
 O Quick Drawer é intencionalmente uma superfície de execução leve.
 
-- Incluído: busca, fixação, seleção, entrada, execução, progresso, resultado
+- Incluído: busca, fixação, seleção, entrada (incluindo um ficheiro), execução, progresso, resultado
 - Excluído: criação de Workflow, edição, gerenciamento de pastas e ações no canvas
 
 ## Relacionados

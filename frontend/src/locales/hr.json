@@ -274,7 +274,17 @@
       "intro": "Heym Work drugo je sučelje za poslovne timove. Korisnici se prijavljuju putem sustava Heym, a svaki se posao izvršava ovdje.",
       "never": "Nikada",
       "learnMore": "Saznajte više"
-    }
+    },
+    "pluginsIntro": "Dodaci dodaju prilagođene čvorove (akcije i Triggere) na ovu instancu. Instaliranje ili uklanjanje dodatka izvršava poslužiteljski kod, stoga je ograničeno na operatere navedene u",
+    "loadingPlugins": "Učitavanje dodataka…",
+    "pluginsDisabledTitle": "Dodaci su onemogućeni",
+    "pluginsDisabledHint": "Postavite ove varijable okruženja na backendu, a zatim ponovno pokrenite:",
+    "installPluginZip": "Instaliraj dodatak (.zip)",
+    "noPluginsInstalled": "Još nema instaliranih dodataka.",
+    "enablePlugin": "Omogući",
+    "disablePlugin": "Onemogući",
+    "uninstallPlugin": "Deinstaliraj",
+    "pluginOperationFailed": "Operacija dodatka nije uspjela"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Pokreni obilazak",
     "readTheDocs": "Pročitajte dokumentaciju",
     "previousFeature": "Prethodna značajka",
-    "goToFeature": "Idi na {title}"
+    "goToFeature": "Idi na {title}",
+    "heymWork": {
+      "step0": "Tim postavlja upit u Heym Worku",
+      "step1": "Heym ga gradi i testira",
+      "step2": "Potvrđeno, bez platna",
+      "step3": "Heym ga izvršava u pozadini",
+      "prompt": "Provjerite nove ugovore radi rizičnih klauzula.",
+      "testing": "Testiranje Workflowa",
+      "verified": "Potvrđeno"
+    },
+    "skillZip": {
+      "step0": "Ispustite zip vještine u Chat",
+      "step1": "Chat čita SKILL.md",
+      "step2": "Agent zadržava vještinu",
+      "prompt": "Pročitajte račun i navedite stavke."
+    }
   },
   "canvas": {
     "nodes": "Čvorovi",
@@ -2400,6 +2425,50 @@
       "nodes": "Čvorovi",
       "reference": "Referenca",
       "tabs": "Kartice"
-    }
+    },
+    "pluginNoDoc": "Ovaj dodatak nema dokumentaciju."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Pretražite Workflowe, kartice, dokumentaciju...",
+    "searchAria": "Pretraživanje palete naredbi",
+    "ariaLabel": "Paleta naredbi",
+    "noResults": "Nema pronađenih rezultata",
+    "tryDifferentSearch": "Pokušajte s drugim pojmom za pretraživanje",
+    "recent": "Nedavno",
+    "recentInFolder": "Nedavno · U: {folder}",
+    "inFolder": "U: {folder}",
+    "scheduledDate": "Zakazano {date}",
+    "scheduledForDeletion": "Zakazano za brisanje",
+    "goToTab": "Idi na karticu",
+    "workflowTemplate": "Predložak Workflowa",
+    "nodeTemplate": "Predložak čvora",
+    "nodeType": "Čvor · {type}",
+    "documentation": "Dokumentacija",
+    "support": "Podrška",
+    "contactSupport": "Kontaktirajte podršku",
+    "watchRunbook": "Pogledajte kako Heym gradi i pokreće Workflow",
+    "openDocs": "Otvori Heym dokumentaciju",
+    "getHelp": "Zatražite pomoć od Heym tima",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work za poslovne timove, na heym.run",
+    "navigate": "Navigiraj",
+    "select": "Odaberi",
+    "click": "klik",
+    "newTab": "nova kartica",
+    "oneItem": "{count} stavka",
+    "manyItems": "{count} stavki"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Dodaci su onemogućeni na ovoj instanci.",
+    "loadingDefinition": "Učitavanje definicije dodatka...",
+    "notBound": "Ovaj čvor nije povezan s paketom dodatka.",
+    "noneInstalled": "Na ovoj instanci nema instaliranih dodataka.",
+    "notInstalled": "Dodatak \"{id}\" nije instaliran na ovoj instanci.",
+    "installedButDisabled": "Dodatak \"{name}\" je instaliran, ali onemogućen.",
+    "noKindNodes": "Dodatak \"{name}\" ne izlaže nijedan {kind} čvor.",
+    "loadErrorDetail": "Nije moguće učitati dodatke: {detail}",
+    "loadErrorHttp": "Nije moguće učitati dodatke (HTTP {status}).",
+    "loadError": "Nije moguće učitati dodatke.",
+    "enabled": "Omogućeno"
   }
 }

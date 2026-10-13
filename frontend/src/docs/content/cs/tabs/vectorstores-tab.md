@@ -30,6 +30,9 @@ Karta **Vectorstores** spravuje vektorové úložiště používaná uzly [RAG](
 - **Delete sources** – Odstraňte konkrétní soubory nebo skupiny zdrojů z úložiště, včetně
   všeho, co přidal jeden workflow
 - **Edit store** – Změňte název, popis nebo credential
+- **Vyhledávání** – `POST /api/vector-stores/{id}/search` s parametrem `query` (a `limit` od 1 do 20,
+  výchozí 5) vrací úseky (chunks), které by vrátilo vyhledávání uzlu RAG, od nejlepší shody, každý s jeho
+  skóre a zdrojem. Obrazovka RAG v Heym Work to používá k testování vyhledávání
 
 ## Sdílení
 

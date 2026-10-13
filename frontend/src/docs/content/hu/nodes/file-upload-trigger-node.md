@@ -33,6 +33,13 @@ A csomópont két fázisban fut:
 
 A vásznon a **Run Workflow** a létrehozott `curl` parancsot a debug panelen jeleníti meg egy másolás gombbal.
 
+## Futtatás a Heymből
+
+Két helyről is közvetlenül futtatható egy ilyen Workflow egy fájlon, ugyanazon generálási és feltöltési folyamaton keresztül:
+
+- A [Quick Drawer](../reference/quick-drawer.md) egy ejtési zónát jelenít meg a fájl számára. Ezek a futtatások `Quick Drawer` címkét kapnak az előzményekben.
+- Egy irányítópulton lévő [Futtatás widget](../tabs/dashboard-tab.md#run-widgets) minden egyes behúzott fájlra lefuttatja a Workflow-t. Ezek a futtatások `dashboard` címkét kapnak.
+
 ## Paraméterek
 
 | Paraméter | Típus | Alapértelmezett | Leírás |

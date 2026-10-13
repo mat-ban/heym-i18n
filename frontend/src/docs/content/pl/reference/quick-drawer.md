@@ -35,6 +35,7 @@ Wybierz workflow, aby otworzyć jego formularz wejściowy.
 - Kliknij **Run Workflow**, aby uruchomić wybrany workflow
 - Kliknij **Stop Workflow**, aby anulować trwające wykonanie z panelu
 - Workflow bez pól wejściowych można nadal uruchomić bezpośrednio
+- Workflow rozpoczynający się od węzła [File Upload Trigger](../nodes/file-upload-trigger-node.md) wyświetla zamiast tego strefę upuszczania: upuść na nią plik lub kliknij, aby go wybrać. Strefa wyświetla akceptowane przez trigger typy i rozmiar plików oraz odrzuca inne pliki przed przesłaniem. Przycisk **Run Workflow** pozostaje nieaktywny do momentu wybrania pliku.
 
 Panel korzysta z tego samego API wykonywania workflow co inne powierzchnie uruchamiania w Heym, dzięki czemu wyniki i zachowanie w czasie działania pozostają spójne.
 
@@ -51,6 +52,8 @@ Po rozpoczęciu uruchomienia panel wyświetla:
 
 `pending` oznacza, że workflow oczekuje na późniejsze działanie, takie jak przegląd przez człowieka.
 
+Uruchomienie z plikiem odbywa się za pośrednictwem jednorazowego linku przesyłania z triggera: panel prosi workflow o link, przesyła pod niego plik i wyświetla wynik po zakończeniu przesyłania. Uruchomienia z plikiem pokazują status końcowy i dane wyjściowe, ale bez postępu krok po kroku, a w historii są również oznaczane tagiem `Quick Drawer`. Wybrany plik jest czyszczony po każdym uruchomieniu, ponieważ jeden link przyjmuje jeden plik.
+
 ## Pamięć Przeglądarki
 
 Szybki Panel przechowuje preferencje osobiste w `localStorage`:
@@ -64,7 +67,7 @@ Panel **nie** zachowuje wartości wejściowych w tej wersji.
 
 Szybki Panel jest celowo lekką powierzchnią wykonywania.
 
-- Zawiera: wyszukiwanie, przypinanie, wybór, dane wejściowe, uruchamianie, postęp, wynik
+- Zawiera: wyszukiwanie, przypinanie, wybór, dane wejściowe (w tym plik), uruchamianie, postęp, wynik
 - Nie zawiera: tworzenia workflow, edycji, zarządzania folderami ani działań na canvasie
 
 ## Powiązane

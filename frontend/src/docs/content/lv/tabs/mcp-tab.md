@@ -1,6 +1,6 @@
 # MCP cilne
 
-**MCP** cilne konfigurē Model Context Protocol (MCP) integrāciju. MCP ļauj AI klientiem (Claude, Cursor un jebkuram MCP saderīgam rīkam) izsaukt Jūsu Heym workflows kā rīkus.
+**MCP** cilne konfigurē Model Context Protocol (MCP) integrāciju. MCP ļauj AI klientiem (Claude, ChatGPT, Gemini, Cursor un jebkuram MCP saderīgam rīkam) izsaukt Jūsu Heym workflows kā rīkus.
 
 Heym atbalsta divus režīmus: **noklusējuma serveri**, kas izsaka visus MCP iespējotos workflows zem viena endpoint, un **nosauktus serverus**, kas katrai loģiskajai grupai no workflows piešķir savu veltītu URL un API atslēgu.
 
@@ -24,6 +24,8 @@ Noklusējuma serveris vienmēr ir pieejams adresē `{origin}/api/mcp/sse`. Visi 
 
 - **API atslēga** – Izmantojiet MCP API atslēgu programmatiskām savienojumiem. Ciltne var nokopēt gatavu JSON konfigurāciju un iekļauj **Pievienot Cursor** pogu vienas klikšķa Cursor iestatīšanai.
 - **Claude** – Ciltne parāda MCP servera URL un iestatīšanas soļus Claude. Atstājiet OAuth klienta ID un slepeno lauku tukšus; Claude reģistrējas automātiski un autentificējas, izmantojot Heym OAuth.
+- **ChatGPT** – Cilnē tiek rādīts MCP servera URL un iestatīšanas darbības ChatGPT lietotnei. Ieslēdziet izstrādātāja režīmu (Developer mode), izveidojiet lietotni ar šo URL un izvēlieties OAuth; ChatGPT reģistrējas automātiski.
+- **Gemini** – Cilnē tiek rādīts MCP servera URL un iestatīšanas darbības pielāgotai Gemini lietotnei: vietnē gemini.google.com atveriet **Settings → Connected Apps → Add a custom app**, ielīmējiet URL un atstājiet **Advanced features** aizvērtu; Gemini reģistrējas automātiski un autentificējas, izmantojot Heym OAuth. Pēc savienošanas Heym darbojas arī Gemini mobilajā lietotnē.
 
 ### Workflow MCP slēdzis
 
@@ -40,7 +42,8 @@ Workflow kartes rāda aprakstu un ievades lauku nosaukumu priekšskatījumu, lai
 
 Kad tas ir ieslēgts, `heym_chat` parādās `tools/list` kopā ar Jūsu workflow rīkiem. MCP klients nosūta vienu dabiskās valodas ziņu, un Heym dzinējs to pārņem, ar tām pašām spējām, kādas ir Chat cilnei:
 
-- Izveidot, rediģēt, pārbaudīt un izpildīt workflows, izmantojot Workflow AI Builder.
+- Izveidot workflow, veikt tā testa izpildi ar parauga ievaddatiem, izlabot to un pabeigt, kad izpilde ir veiksmīga (skatiet [Izveides režīms](#build-mode))
+- Pārbaudīt un izpildīt Jūsu esošos workflows
 - Ziņot par analītiku, nesenajām izpildēm un gaidāmajām cron grafikām.
 - Ziņot par viena workflow izpildes vēsturi: cik reizes tas ir izpildīts, statusa skaitļi, kad tas tika izpildīts, un pēc pieprasījuma ievades, izejas un katra mezgla kļūdas vienas izpildes laikā.
 - Ziņot par to, kas šobrīd tiek izpildīts: cik izpildes ir aktīvas, to workflow nosaukumi, cik ilgi katra ir darbojusi, uz kura mezgla katra pašlaik atrodas, un saite uz tiešo izpildi.
@@ -50,6 +53,15 @@ Kad tas ir ieslēgts, `heym_chat` parādās `tools/list` kopā ar Jūsu workflow
 - Apstiprināt, rediģēt vai atteikt gaidošās cilvēku atsauksmes.
 
 Spējas, kas vēlāk pievienotas Chat cilnei, automātiski kļūst pieejamas caur `heym_chat` — nav nepieciešama atsevišķa slēdzis katrai spējai, lai saglabātu sinhronizāciju.
+
+### Izveides režīms
+
+`heym_chat` vienmēr darbina Chat dzinēju izveides režīmā (build mode). Vienā izsaukumā asistents var saglabāt jaunu workflow, palaist to ar reālistiskiem parauga ievaddatiem, izlasīt izpildes pārskatu, izlabot radušās kļūdas un palaist to vēlreiz — līdz piecām testa izpildēm vienā izsaukumā. Kad pēdējās saglabātās versijas jaunākā izpilde ir veiksmīga, tas noslēdz darbu ar viena teikuma kopsavilkumu, un atbilde beidzas ar `Verified: the latest test run of the saved workflow passed.`
+
+- Testa izpildes ir reālas izpildes. To blakusefekti patiešām notiek, un tās parādās workflow izpildes vēsturē tāpat kā jebkura cita izpilde.
+- Saglabāšana notiek pa redaktora ceļu: grafa izmaiņas saglabā iepriekšējo grafu workflow rediģēšanas vēsturē (**Edit History**).
+- Lai mainītu iepriekš izveidotu workflow, turpiniet pavedienu ar to pašu `conversation_id`. Asistents atjaunina šo workflow, nevis izveido jaunu, un maina tikai tos workflows, kurus Jums ir tiesības rediģēt.
+- Kad piecas testa izpildes ir izsmeltas, asistents apstājas un paskaidro, kas joprojām neizdodas.
 
 Akreditācijas dati paliek UI: `heym_chat` nekad neuzskaita, neizvēlas vai neizveido tos. Kad tas veido vai rediģē workflow, jauni mezgli, kuriem nepieciešama akreditācija, paliek tukši, un atbildes nosauc tos, lai Jūs varētu iestatīt tos redaktorā.
 
@@ -109,7 +121,7 @@ Pārslēdzot workflow, tas tiek pārvietots uz piešķirto saraksta augšu, tād
 Nosaukti serveri atbalsta tās pašas autentifikācijas metodes kā noklusējuma serveris:
 
 - **X-MCP-Key header** – Tieši nododiet servera API atslēgu (API klienti, Kursors). Tikai galvene: atslēgas netiek pieņemtas kā `?key=` vaicājuma parametrs, jo URL nonāk piekļuves žurnālos, starpniekservera žurnālos un pārlūkprogrammas vēsturē.
-- **Claude OAuth** – Pievienojiet servera URL Claude integrācijām; atstājiet akreditācijas datus tukšus, un Claude reģistrējas automātiski, izmantojot OAuth. Bearer token jānosūta `Authorization` galvenē, nevis kā `?token=`.
+- **Claude, ChatGPT un Gemini OAuth** – Pievienojiet servera URL klienta savienotājiem vai pielāgotajām lietotnēm; atstājiet akreditācijas datus tukšus, un klients reģistrējas automātiski, izmantojot OAuth. Bearer token jānosūta `Authorization` galvenē, nevis kā `?token=`.
 - **Sesijas token** – Izsniegts SSE handshake laikā; ierobežots uz konkrēto serveri, tādējādi token no viena nosaukta servera nevar piekļūt citam. Šis īslaicīgais `?session=` parametrs netiek ietekmēts.
 
 ### Nosauktā Servera Dzēšana
@@ -123,7 +135,7 @@ Noklikšķiniet uz **X** ikonas servera kartes galvenē. Dzēšana noņem server
 | Noklusējuma | `{origin}/api/mcp/sse` |
 | Nosaukts | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Abi endpointi atbalsta SSE transportu (GET, MCP specifikācija 2024-11-05) un Streamable HTTP transportu (POST, MCP specifikācija 2025-03-26). Claude izmanto OAuth 2.1 / PKCE drošai pieteikšanās procedūrai abos.
+Abi endpointi atbalsta SSE transportu (GET, MCP specifikācija 2024-11-05) un Streamable HTTP transportu (POST, MCP specifikācija 2025-03-26). Claude, ChatGPT un Gemini izmanto OAuth 2.1 / PKCE drošai pieteikšanās procedūrai abos.
 
 ## Saistītie
 

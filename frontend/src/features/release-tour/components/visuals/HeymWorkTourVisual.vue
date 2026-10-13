@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { BadgeCheck, Check, Loader2 } from "lucide-vue-next";
 
 import { useCycleStep } from "@/features/release-tour/useCycleStep";
 
+const { t } = useI18n();
 // Mock UI only. 0: a request in Heym Work · 1: Heym builds and tests it · 2: Verified · 3: Heym runs it.
 const step = useCycleStep(4, 1500);
 
 const caption = computed<string>(() => {
-  if (step.value === 0) return "A team asks in Heym Work";
-  if (step.value === 1) return "Heym builds and tests it";
-  if (step.value === 2) return "Verified, no canvas";
-  return "Heym runs it in the background";
+  if (step.value === 0) return t("releaseTour.heymWork.step0");
+  if (step.value === 1) return t("releaseTour.heymWork.step1");
+  if (step.value === 2) return t("releaseTour.heymWork.step2");
+  return t("releaseTour.heymWork.step3");
 });
 </script>
 
@@ -25,7 +27,7 @@ const caption = computed<string>(() => {
       </span>
     </div>
     <p class="ml-auto max-w-[85%] rounded-md bg-primary/10 px-2 py-1 text-[10px] leading-snug">
-      Check new contracts for risky clauses.
+      {{ $t('releaseTour.heymWork.prompt') }}
     </p>
     <div
       class="flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-[10px] text-muted-foreground transition-opacity duration-500"
@@ -39,7 +41,7 @@ const caption = computed<string>(() => {
         v-else
         class="h-3 w-3 text-primary"
       />
-      Testing the workflow
+      {{ $t('releaseTour.heymWork.testing') }}
     </div>
     <div
       class="rounded-md border px-2 py-1 text-[10px] transition-colors duration-500"
@@ -47,7 +49,7 @@ const caption = computed<string>(() => {
     >
       <span class="flex items-center gap-1 font-semibold uppercase tracking-wider text-primary">
         <BadgeCheck class="h-3 w-3" />
-        Verified
+        {{ $t('releaseTour.heymWork.verified') }}
       </span>
     </div>
     <div class="flex items-center justify-between text-[10px]">

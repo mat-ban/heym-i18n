@@ -94,11 +94,12 @@ RabbitMQ consumer는 리더 워커가 초기화될 때 시작됩니다. `rabbitm
 |-------|------|
 | `"API"` | 명시적 헤더가 없는 Webhook / API 호출 (기본값) |
 | `"Canvas"` | Workflow 편집기 캔버스에서 실행 |
-| `"Quick Drawer"` | 편집기 quick-drawer 패널에서 실행 |
+| `"Quick Drawer"` | 편집기 quick-drawer 패널에서 실행(드롭존에서 업로드된 파일 실행 포함) |
 | `"cron"` | Cron 스케줄러 |
 | `"imap"` | IMAP Trigger 관리자 |
 | `"websocket"` | 아웃바운드 WebSocket Trigger 관리자 |
-| `"file_upload"` | File Upload Trigger 업로드 Endpoint |
+| `"file_upload"` | File Upload Trigger 업로드 Endpoint(HTTP, MCP 또는 캔버스를 통해 발급된 링크) |
+| `"dashboard"` | 대시보드 위젯 실행 및 파일 드롭 위젯에서 업로드된 실행 |
 | `"telegram"` | Telegram 봇 Webhook |
 | `"Discord"` | Discord 상호작용 Webhook |
 | `"MCP"` | MCP 도구 호출 |

@@ -499,7 +499,7 @@ Workflow는 트리 구조의 폴더와 하위 폴더로 구성할 수 있습니�
 
 ### [Quick Drawer](./quick-drawer.md)
 
-Quick Drawer는 내부 비캔버스 페이지를 위한 고정된 오른쪽 빠른 실행 패널입니다. 편집기를 열지 않고도 [workflows](../tabs/workflows-tab.md)를 검색하고, 즐겨찾기를 고정하고, 입력을 선택하고, 즉시 실행하며, 진행 상황이나 결과를 검사할 수 있습니다. 고정 순서와 마지막으로 선택한 workflow는 브라우저에 저장됩니다.
+Quick Drawer는 내부 비캔버스 페이지를 위한 고정된 오른쪽 빠른 실행 패널입니다. 편집기를 열지 않고도 [workflows](../tabs/workflows-tab.md)를 검색하고, 즐겨찾기를 고정하고, 입력을 선택하고, 즉시 실행하며, 진행 상황이나 결과를 검사할 수 있습니다. [File Upload Trigger](../nodes/file-upload-trigger-node.md)가 있는 workflow는 드롭하거나 선택한 파일을 받습니다. 고정 순서와 마지막으로 선택한 workflow는 브라우저에 저장됩니다.
 
 [Workflow Organization](./workflow-organization.md), [Keyboard Shortcuts](./keyboard-shortcuts.md), [Execution History](./execution-history.md)도 참조하십시오.
 
@@ -684,6 +684,12 @@ Enterprise는 프로덕션 환경에서 Heym을 운영하는 팀을 위한 상�
 
 [Running & Deployment](../getting-started/running-and-deployment.md), [Security](./security.md), [Teams](./teams.md) 문서도 참고하십시오.
 
+### [Heym Work](./heym-work.md)
+
+Heym Work는 Heym 위에 구축된 비즈니스 팀용 두 번째 인터페이스입니다. 사용자가 업무를 설명하고 몇 가지 질문에 답하면 테스트를 거친 workflow를 받게 되며, 이후 모든 실행에 이름이 부여되는 페이지, 승인 및 활동 목록에서 작업할 수 있습니다. 인스턴스 관리자는 **설정 → Heym Work**에서 주소와 통합 키로 연결하며, Heym 팀에서 발급하는 별도의 라이선스를 사용합니다.
+
+[Enterprise](./enterprise.md), [Single Sign-On](./sso.md), [Human-in-the-Loop](./human-in-the-loop.md) 문서도 참고하십시오.
+
 ---
 
 ## Dashboard Tabs
@@ -763,7 +769,7 @@ MCP 탭은 Model Context Protocol 통합을 구성합니다. Heym은 두 가지 
 
 **명명된 서버** – 각각 고유한 UUID 기반 URL(`/api/mcp/servers/{uuid}/sse`)과 독립적인 API key를 가진 여러 개의 격리된 MCP Endpoint를 생성합니다. 각 서버에 특정 Workflow를 할당하여 서로 다른 AI 클라이언트나 팀이 필요한 도구만 볼 수 있도록 합니다. 각 명명된 서버는 동일한 인증 방식(API key, Claude OAuth)을 지원하며 자체적인 Copy JSON 및 Add to Cursor 단축 기능을 갖습니다. 두 Endpoint 모두 SSE transport(GET)와 Streamable HTTP transport(POST)를 지원합니다. 명명된 서버 내에서 Workflow를 토글하면 변경된 행이 계속 보이도록 할당된 목록의 맨 위로 이동합니다.
 
-**Heym chat 도구** – 두 모드 모두 [Chat](../tabs/chat-tab.md) 엔진을 단일 `heym_chat` 도구로 노출할 수 있으며, 각 화면별로 자체 LLM credential과 모델([Settings](./user-settings.md)의 선호 모델에서 미리 채워짐)로 토글됩니다. MCP 클라이언트가 자연어 `message` 하나를 보내면 엔진이 나머지를 처리합니다: Workflow 빌드, 편집 및 실행, analytics, executions, 실시간 실행 상태, schedules, boards 및 cards, teams, 전역 변수, 문서 검색, 그리고 human-in-the-loop 결정. 나중에 Chat에 추가되는 기능도 추가 등록 없이 동일한 도구를 통해 접근할 수 있습니다. 각 호출은 Chat 탭 기록에 plug 표시가 된 대화로 저장되며, 클라이언트가 스레드를 계속하기 위해 다시 전달할 수 있는 `conversation_id`를 반환합니다.
+**Heym chat 도구** – 두 모드 모두 [Chat](../tabs/chat-tab.md) 엔진을 단일 `heym_chat` 도구로 노출할 수 있으며, 각 화면별로 자체 LLM credential과 모델([Settings](./user-settings.md)의 선호 모델에서 미리 채워짐)로 토글됩니다. MCP 클라이언트가 자연어 `message` 하나를 보내면 엔진이 나머지를 처리합니다: 빌드 모드에서 Workflow 빌드(저장, 최대 5회 테스트 실행, 수정 및 검증), Workflow 실행, analytics, executions, 실시간 실행 상태, schedules, boards 및 cards, teams, 전역 변수, 문서 검색, 그리고 human-in-the-loop 결정. 나중에 Chat에 추가되는 기능도 추가 등록 없이 동일한 도구를 통해 접근할 수 있습니다. 각 호출은 Chat 탭 기록에 plug 표시가 된 대화로 저장되며, 클라이언트가 스레드를 계속하기 위해 다시 전달할 수 있는 `conversation_id`를 반환합니다.
 
 [Agent Architecture](./agent-architecture.md), [Agent Node](../nodes/agent-node.md), [SSE Streaming](./sse-streaming.md)도 참조하십시오.
 
@@ -799,7 +805,7 @@ Analytics 탭은 실행 메트릭과 추세를 보여줍니다. 요약 통계에
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 탭은 Grafana 스타일의 공간으로, 각각 자체적인 숨겨진 Heym workflow에서 렌더링되는 차트 위젯 그리드를 구성할 수 있습니다. 필요한 만큼 대시보드를 만들고 각각을 사용자 또는 팀과 읽기 전용 또는 편집 가능으로 공유할 수 있습니다. 위젯은 항상 소유자의 자격 증명으로 실행되므로 모든 사람이 동일한 데이터를 봅니다. 자연어로 메트릭을 설명하면 AI가 위젯을 생성하거나, 수동으로 추가하여 차트 유형을 선택할 수 있으며 샘플 데이터로 미리 볼 수 있습니다: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text, HITL. HITL은 대기 중인 사람 검토의 캐러셀입니다. 헤더에는 `1/n pending`이 표시됩니다. workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 처리하며, 위젯 제목 옆의 이력 아이콘을 클릭하면 같은 페이지의 이력 대화 상자에서 해당 실행이 열립니다. 위젯은 결과를 캐시하고, AI로 세부 조정할 수 있으며(각 변경 사항은 [Edit History](./edit-history.md)에 저장됨), 완전한 workflow와 함께 복제되고, Tidy up으로 재배치되며, 편집 모드에서 드래그하거나 크기를 조정할 수 있습니다. 각 위젯이 workflow이므로, 가져올 수 있는 모든 데이터 — [HTTP](../nodes/http-node.md) 호출, [BigQuery](../nodes/bigquery-node.md) 쿼리, [RAG](../nodes/rag-node.md) 조회, 또는 [LLM](../nodes/llm-node.md) 출력 — 이 차트가 될 수 있습니다.
+Dashboard 탭은 Grafana 스타일의 공간으로, 각각 자체적인 숨겨진 Heym workflow에서 렌더링되는 차트 위젯 그리드를 구성할 수 있습니다. 필요한 만큼 대시보드를 만들고 각각을 사용자 또는 팀과 읽기 전용 또는 편집 가능으로 공유할 수 있습니다. 위젯은 항상 소유자의 자격 증명으로 실행되므로 모든 사람이 동일한 데이터를 봅니다. 자연어로 메트릭을 설명하면 AI가 위젯을 생성하거나, 수동으로 추가하여 차트 유형을 선택할 수 있으며 샘플 데이터로 미리 볼 수 있습니다: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text, HITL. HITL은 대기 중인 사람 검토의 캐러셀입니다. 헤더에는 `1/n pending`이 표시됩니다. workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 처리하며, 위젯 제목 옆의 이력 아이콘을 클릭하면 같은 페이지의 이력 대화 상자에서 해당 실행이 열립니다. 위젯은 결과를 캐시하고, AI로 세부 조정할 수 있으며(각 변경 사항은 [Edit History](./edit-history.md)에 저장됨), 완전한 workflow와 함께 복제되고, Tidy up으로 재배치되며, 편집 모드에서 드래그하거나 크기를 조정할 수 있습니다. 테이블은 상태 칩을 표시하고 클릭한 행의 레코드를 `$page.record`로 읽어오는 상세 대시보드에 행을 연결할 수 있으며, Run 위젯은 드롭된 파일, 입력 필드 또는 실행 버튼을 사용해 대시보드에서 바로 workflow를 실행합니다. 각 위젯이 workflow이므로, 가져올 수 있는 모든 데이터 — [HTTP](../nodes/http-node.md) 호출, [BigQuery](../nodes/bigquery-node.md) 쿼리, [RAG](../nodes/rag-node.md) 조회, 또는 [LLM](../nodes/llm-node.md) 출력 — 이 차트가 될 수 있습니다.
 
 [Chart Output node](../nodes/chart-output-node.md), [Analytics](../tabs/analytics-tab.md), [Execution History](./execution-history.md)도 참조하십시오.
 

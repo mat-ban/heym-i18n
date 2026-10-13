@@ -87,9 +87,9 @@ async function loadContent(): Promise<void> {
     if (normalized.startsWith("plugins/")) {
       const pluginId = normalized.slice("plugins/".length);
       try {
-        const doc = await getPluginDoc(pluginId);
+        const doc = await getPluginDoc(pluginId, locale.value);
         if (requestId !== latestLoadRequestId) return;
-        content.value = doc.markdown || `# ${doc.name}\n\nThis plugin has no documentation.`;
+        content.value = doc.markdown || `# ${doc.name}\n\n${t("docs.pluginNoDoc")}`;
       } catch {
         if (requestId !== latestLoadRequestId) return;
         content.value = "";

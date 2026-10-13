@@ -33,6 +33,13 @@ El nodo se ejecuta en dos fases:
 
 En el canvas, **Run Workflow** muestra el `curl` emitido en el panel de depuración con un botón de copia.
 
+## Ejecución desde Heym
+
+Dos lugares ejecutan dicho Workflow directamente sobre un archivo, mediante la misma generación y subida:
+
+- El [Quick Drawer](../reference/quick-drawer.md) muestra una zona para soltar el archivo. Esas ejecuciones se etiquetan como `Quick Drawer` en el historial.
+- Un [widget de ejecución](../tabs/dashboard-tab.md#run-widgets) en un panel ejecuta el Workflow para cada archivo soltado. Esas ejecuciones se etiquetan como `dashboard`.
+
 ## Parámetros
 
 | Parámetro | Tipo | Predeterminado | Descripción |

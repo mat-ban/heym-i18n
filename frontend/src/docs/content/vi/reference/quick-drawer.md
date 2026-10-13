@@ -35,6 +35,7 @@ Chọn một workflow để mở biểu mẫu nhập liệu của nó.
 - Nhấp **Run Workflow** để thực thi workflow đã chọn
 - Nhấp **Stop Workflow** để hủy một lượt thực thi đang chạy từ bảng
 - Workflow không có trường Input vẫn có thể chạy trực tiếp
+- Một workflow bắt đầu bằng [File Upload Trigger](../nodes/file-upload-trigger-node.md) sẽ hiển thị vùng thả tệp thay thế: kéo thả tệp vào đó hoặc nhấp để chọn tệp. Vùng này liệt kê các loại tệp và dung lượng mà trigger chấp nhận, đồng thời từ chối các tệp khác trước khi tải lên. Nút **Run Workflow** sẽ bị vô hiệu hóa cho đến khi bạn chọn một tệp.
 
 Bảng sử dụng cùng API thực thi workflow như các bề mặt chạy khác của Heym, do đó kết quả đầu ra và hành vi runtime luôn nhất quán.
 
@@ -51,6 +52,8 @@ Sau khi bắt đầu một lượt chạy, bảng hiển thị:
 
 `pending` nghĩa là workflow đang chờ một hành động tiếp theo như đánh giá của con người.
 
+Lần chạy bằng tệp sẽ đi qua liên kết tải lên dùng một lần của trigger: ngăn kéo yêu cầu workflow cấp một liên kết, tải tệp lên liên kết đó và hiển thị kết quả khi quá trình tải lên hoàn tất. Các lần chạy bằng tệp hiển thị trạng thái cuối cùng và đầu ra nhưng không có tiến trình từng bước, đồng thời cũng được gắn thẻ `Quick Drawer` trong lịch sử. Tệp đã chọn sẽ được xóa sau mỗi lần chạy vì mỗi liên kết chỉ nhận một tệp.
+
 ## Bộ nhớ trình duyệt
 
 Quick Drawer lưu các tùy chọn cá nhân trong `localStorage`:
@@ -64,7 +67,7 @@ Trong phiên bản này, bảng **không** lưu trữ giá trị nhập liệu.
 
 Quick Drawer được thiết kế có chủ đích như một bề mặt thực thi gọn nhẹ.
 
-- Bao gồm: tìm kiếm, ghim, chọn, nhập liệu, chạy, tiến trình, kết quả
+- Bao gồm: tìm kiếm, ghim, chọn, nhập liệu (bao gồm cả tệp), chạy, tiến trình, kết quả
 - Loại trừ: tạo workflow, chỉnh sửa, quản lý thư mục và các hành động trên canvas
 
 ## Liên quan

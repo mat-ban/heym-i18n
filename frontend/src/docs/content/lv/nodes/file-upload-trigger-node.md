@@ -33,6 +33,13 @@ Mezgls darbojas divās fāzēs:
 
 Kanvā **Run Workflow** parāda izveidoto `curl` atkļūdošanas panelī ar kopēšanas pogu.
 
+## Palaišana no Heym
+
+Divās vietās šādu Workflow var palaist tieši failam, izmantojot to pašu izveides un augšupielādes procesu:
+
+- [Quick Drawer](../reference/quick-drawer.md) parāda faila nomešanas zonu. Šie izpildes gadījumi vēsturē tiek atzīmēti ar `Quick Drawer`.
+- [Izpildes logrīks](../tabs/dashboard-tab.md#run-widgets) informācijas panelī palaiž Workflow katram nomestajam failam. Šie izpildes gadījumi tiek atzīmēti ar `dashboard`.
+
 ## Parametri
 
 | Parametrs | Tips | Noklusējums | Apraksts |

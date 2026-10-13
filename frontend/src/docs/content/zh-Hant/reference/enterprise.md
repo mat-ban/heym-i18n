@@ -16,6 +16,10 @@ Heym 可依其 source-available 授權免費使用與自行託管。對於需要
 | **Priority Support & SLA** | 保證回應時間與優先問題處理 |
 | **Custom Development** | 依據您組織需求所量身打造的功能開發與修改 |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) 是執行於 Heym 之上的業務團隊介面。使用者只需描述工作內容、回答幾個問題，即可取得經過測試的 Workflow，在專為他們打造的頁面中工作並回覆審核，同時具備單一登入（SSO）、Owner、Editor 與 Viewer 角色，以及每次執行上的名稱記錄。它以獨立授權與您的 Heym 並行運作；可在 **Settings → Heym Work** 中連線。造訪 [heym.run/enterprise](https://heym.run/enterprise) 瞭解詳情並申請試用。
+
 ## Production Agent Support
 
 Heym 團隊協助您為業務流程設計、建置及強化 Agent 與 Workflow。這包括審查您的需求、建議節點配置，並確保您的 Workflow 遵循可靠性、可觀測性及治理的最佳實務。
@@ -68,3 +72,4 @@ Heym 團隊協助您為業務流程設計、建置及強化 Agent 與 Workflow�
 - [平行執行](./parallel-execution.md) — 多 worker 執行模型
 - [Teams](./teams.md) — 團隊協作與資源共享
 - [完整功能集](./features.md) — Heym 功能完整概觀
+- [Heym Work](./heym-work.md)：業務團隊專用介面與連線方式

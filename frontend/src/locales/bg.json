@@ -274,7 +274,17 @@
       "intro": "Heym Work е втори интерфейс за бизнес екипи. Хората влизат чрез Heym и всяка задача се изпълнява тук.",
       "never": "Никога",
       "learnMore": "Научете повече"
-    }
+    },
+    "pluginsIntro": "Добавките добавят персонализирани възли (действия и Trigger-и) към тази инстанция. Инсталирането или премахването на добавка изпълнява сървърен код и е ограничено до операторите, посочени в",
+    "loadingPlugins": "Зареждане на добавки…",
+    "pluginsDisabledTitle": "Добавките са деактивирани",
+    "pluginsDisabledHint": "Задайте тези променливи на средата в бекенда и рестартирайте:",
+    "installPluginZip": "Инсталиране на добавка (.zip)",
+    "noPluginsInstalled": "Все още няма инсталирани добавки.",
+    "enablePlugin": "Активирай",
+    "disablePlugin": "Деактивирай",
+    "uninstallPlugin": "Деинсталирай",
+    "pluginOperationFailed": "Операцията с добавката е неуспешна"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Стартиране на обиколката",
     "readTheDocs": "Прочетете документацията",
     "previousFeature": "Предишна функция",
-    "goToFeature": "Към {title}"
+    "goToFeature": "Към {title}",
+    "heymWork": {
+      "step0": "Екип отправя заявка в Heym Work",
+      "step1": "Heym го изгражда и тества",
+      "step2": "Потвърдено, без платно",
+      "step3": "Heym го изпълнява във фонов режим",
+      "prompt": "Проверете новите договори за рискови клаузи.",
+      "testing": "Тестване на Workflow",
+      "verified": "Потвърдено"
+    },
+    "skillZip": {
+      "step0": "Пуснете zip с умение в чата",
+      "step1": "Чатът чете SKILL.md",
+      "step2": "Агентът запазва умението",
+      "prompt": "Прочетете фактурата и избройте позициите."
+    }
   },
   "canvas": {
     "nodes": "Възли",
@@ -2400,6 +2425,50 @@
       "nodes": "Възли",
       "reference": "Справочник",
       "tabs": "Раздели"
-    }
+    },
+    "pluginNoDoc": "Тази добавка няма документация."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Търсене на Workflow, раздели, документация...",
+    "searchAria": "Търсене в палитрата с команди",
+    "ariaLabel": "Палитра с команди",
+    "noResults": "Няма намерени резултати",
+    "tryDifferentSearch": "Опитайте с друга дума за търсене",
+    "recent": "Скорошни",
+    "recentInFolder": "Скорошни · В: {folder}",
+    "inFolder": "В: {folder}",
+    "scheduledDate": "Планирано {date}",
+    "scheduledForDeletion": "Планирани за изтриване",
+    "goToTab": "Към раздел",
+    "workflowTemplate": "Шаблон за Workflow",
+    "nodeTemplate": "Шаблон за възел",
+    "nodeType": "Възел · {type}",
+    "documentation": "Документация",
+    "support": "Поддръжка",
+    "contactSupport": "Свържете се с поддръжката",
+    "watchRunbook": "Вижте как Heym изгражда и изпълнява Workflow",
+    "openDocs": "Отваряне на документацията на Heym",
+    "getHelp": "Получете помощ от екипа на Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work за бизнес екипи на heym.run",
+    "navigate": "Навигация",
+    "select": "Избор",
+    "click": "клик",
+    "newTab": "нов раздел",
+    "oneItem": "{count} елемент",
+    "manyItems": "{count} елемента"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Добавките са деактивирани в тази инстанция.",
+    "loadingDefinition": "Зареждане на дефиницията на добавката...",
+    "notBound": "Този възел не е обвързан с пакет на добавка.",
+    "noneInstalled": "Няма инсталирани добавки в тази инстанция.",
+    "notInstalled": "Добавката „{id}“ не е инсталирана в тази инстанция.",
+    "installedButDisabled": "Добавката „{name}“ е инсталирана, но е деактивирана.",
+    "noKindNodes": "Добавката „{name}“ не предоставя възли от тип {kind}.",
+    "loadErrorDetail": "Неуспешно зареждане на добавките: {detail}",
+    "loadErrorHttp": "Неуспешно зареждане на добавките (HTTP {status}).",
+    "loadError": "Неуспешно зареждане на добавките.",
+    "enabled": "Активирано"
   }
 }

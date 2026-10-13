@@ -16,6 +16,10 @@ Heym 基于其源码可用许可证可免费使用并自行托管。对于需要
 | **优先支持与 SLA** | 保证响应时间与优先问题解决 |
 | **定制开发** | 根据您组织的需求进行功能开发与修改 |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) 是运行在 Heym 之上的业务团队界面。用户只需描述任务、回答几个问题，即可获得经过测试的 Workflow，在专为他们构建的页面中开展工作并回复审核，同时具备单点登录（SSO）、Owner、Editor 和 Viewer 角色，以及每次运行上的实名记录。它使用独立许可证与您的 Heym 并行运行；可在 **Settings → Heym Work** 中进行连接。访问 [heym.run/enterprise](https://heym.run/enterprise) 了解更多信息并申请试用。
+
 ## 生产级 Agent 支持
 
 Heym 团队帮助您为业务流程设计、构建并加固 Agent 与 Workflow。这包括评审您的需求、推荐节点配置，并确保您的 Workflow 遵循可靠性、可观测性与治理方面的最佳实践。
@@ -68,3 +72,4 @@ Heym 团队帮助您为业务流程设计、构建并加固 Agent 与 Workflow�
 - [并行执行](./parallel-execution.md) — 多 worker 执行模型
 - [Teams](./teams.md) — 团队协作与资源共享
 - [完整功能集](./features.md) — Heym 能力全面概览
+- [Heym Work](./heym-work.md)：面向业务团队的界面及其连接方式

@@ -142,6 +142,7 @@ item.value
 - `$executionId` - ID der aktuellen Ausführung (entspricht der ID des [Ausführungsverlauf](./execution-history.md)-Eintrags, sodass `/workflows/<id>/<executionId>` diesen Lauf auf dem Canvas öffnet). **Nur zur Laufzeit**: leer im Ausdrucksvorschau-Dialog; wird nur während der Ausführung eines Workflows befüllt.
 - `$vars` - Workflow-lokale Variablen (Zugriff über `$vars.variableName`; aktualisiert über `variable`-Knoten)
 - `$global` - Persistenter globaler Variablenspeicher (Zugriff über `$global.variableName`)
+- `$page.record` - Nur für Dashboard-Widget-Workflows: der Datensatz der Detailseite, auf der sich das Widget befindet, aus dem Parameter `?record=` des Dashboards. Ist `null` auf einem Dashboard, das ohne diesen Parameter geöffnet wurde, sowie im Ausdrucksvorschau-Dialog. Ein Knoten mit der Bezeichnung `page` hat Vorrang. Siehe [Detailseiten](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars-Verwendung
 - `$vars.counter` - Zugriff auf eine Variable namens `counter`

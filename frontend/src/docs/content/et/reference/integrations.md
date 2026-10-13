@@ -608,8 +608,14 @@ SMTP-mandaat salvestab e-posti serveri ühenduse üksikasjad väljuvate kirjade 
 |-------|-------------|
 | `host` | SMTP serveri hostinimi (nt `smtp.gmail.com`) |
 | `port` | SMTP port (tavaliselt `587` STARTTLS jaoks, `465` SSL jaoks) |
-| `email` | Saatja e-posti aadress |
+| `email` | Kasutajanimi, millega SMTP-server sisse logib; ühtlasi nähtav saatja, kui `from` on tühi |
 | `password` | SMTP parool või rakenduse parool |
+
+### Valikulised väljad
+
+| Väli | Kirjeldus |
+|-------|-------------|
+| `from` (`smtp_from`) | Nähtav saatja (From) aadress. Jätke tühjaks, et saata kui `email`. Server logib endiselt sisse kui `email`, seega peab sellel kontol olema luba sellelt aadressilt saata (Gmailis kinnitatud **Saada kiri nimega** alias). |
 
 ### Levinumad SMTP-teenusepakkujad
 

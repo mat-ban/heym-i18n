@@ -26,6 +26,7 @@
 - **Skatīt vienumus** – Redziet avota grupas un dokumentu skaitu katrā krātuvē. Augšupielādētie faili tiek grupēti pēc to nosaukuma; dokumenti, ko [RAG mezgls](../nodes/rag-node.md) ir saglabājis bez sava `source`, tiek grupēti zem **Pievienotā darba plūsma: _nosaukums_**, nosaucot darba plūsmu, kas tos rakstījusi
 - **Dzēst avotus** – Noņemiet konkrētus failus vai avota grupas no krātuves, tostarp visu, ko pievienojusi viena darba plūsma
 - **Rediģēt krātuvi** – Mainiet nosaukumu, aprakstu vai akreditācijas datus
+- **Meklēšana** – `POST /api/vector-stores/{id}/search` ar `query` (un `limit` no 1 līdz 20, noklusējums 5) atgriež fragmentus (chunks), ko atgrieztu RAG mezgla meklēšana, vispirms labāko atbilstību, katru ar tā rezultātu un avotu. Heym Work RAG ekrāns to izmanto izgūšanas testēšanai
 
 ## Dalīšanās
 

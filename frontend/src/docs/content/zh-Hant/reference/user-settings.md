@@ -4,7 +4,7 @@ Settings 對話框可讓您管理個人資料、設定持續生效的 AI 指示�
 
 ## 開啟對話框
 
-點擊頁首右上角的**您的頭像與名稱**。對話框會開啟並顯示以下分頁：**Profile**、**Security**、**Voice**、**AI Defaults** 與 **Observability**。Instance 管理員還會看到 **SSO** 分頁。
+點擊頁首右上角的**您的頭像與名稱**。對話框會開啟並顯示以下分頁：**Profile**、**Security**、**Voice**、**AI Defaults** 與 **Observability**。Instance 管理員還會看到 **SSO**、**Heym Work** 與 **Instances** 分頁。
 
 ## Profile 分頁
 
@@ -101,6 +101,10 @@ Observability 頁籤會顯示此執行個體的 [OpenTelemetry Tracing](./opente
 ## SSO Tab
 
 僅對執行個體管理員可見——即列於 `HEYM_ADMIN_EMAILS` 中的帳號。此頁籤會將 Heym 連接至外部 OpenID Connect 提供者，讓人們使用既有帳號登入。輸入 issuer URL 與 client 認證、將唯讀的 redirect URI 複製到您的提供者，並在啟用前執行 **Test connection**。測試通過後，即可由此處關閉密碼登入。完整設定請參閱 [Single Sign-On](./sso.md)。
+
+## Heym Work Tab
+
+Instance 管理員可在此處連線業務團隊介面 [Heym Work](./heym-work.md)：設定其位址、僅顯示一次的整合密鑰，以及 **Enable Heym Work** 開關。此分頁也會顯示 Heym Work 上次報到的時間、版本與授權狀態。請參閱[連線 Heym Work](./heym-work.md#connecting-heym-work)。
 
 ## Instances Tab
 

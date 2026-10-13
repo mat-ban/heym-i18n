@@ -601,8 +601,14 @@ SMTP vjerodajnica pohranjuje detalje veze s email poslužiteljem za slanje odlaz
 |-------|-------------|
 | `host` | SMTP poslužiteljski naziv (npr. `smtp.gmail.com`) |
 | `port` | SMTP port (obično `587` za STARTTLS, `465` za SSL) |
-| `email` | Adresa e-pošte pošiljatelja |
+| `email` | Korisničko ime kojim se SMTP poslužitelj prijavljuje; također vidljivi pošiljatelj kada je `from` prazno |
 | `password` | SMTP lozinka ili App Password |
+
+### Opcionalna Polja
+
+| Polje | Opis |
+|-------|-------------|
+| `from` (`smtp_from`) | Vidljiva adresa pošiljatelja (From). Ostavite prazno za slanje kao `email`. Poslužitelj se i dalje prijavljuje kao `email`, pa taj račun mora imati dopuštenje za slanje s ove adrese (u Gmailu, potvrđeni alias **Šalji poštu kao**). |
 
 ### Uobičajeni SMTP Pružatelji
 

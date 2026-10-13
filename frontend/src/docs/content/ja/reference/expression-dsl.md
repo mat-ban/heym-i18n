@@ -142,6 +142,7 @@ item.value
 - `$executionId` - 現在の実行の id（[Execution History](./execution-history.md) のエントリ id と等しく、`/workflows/<id>/<executionId>` でこの実行をキャンバス上に開けます）。**ランタイム専用**: 式プレビューダイアログでは空になり、Workflow の実行中にのみ値が入ります。
 - `$vars` - Workflow ローカルの変数（`$vars.variableName` でアクセス、`variable` ノードで更新）
 - `$global` - 永続的なグローバル変数ストア（`$global.variableName` でアクセス）
+- `$page.record` - ダッシュボードウィジェットの Workflow 専用：ダッシュボードの `?record=` パラメータから取得される、ウィジェットが配置された詳細ページのレコード。パラメータなしで開かれたダッシュボードおよび式プレビューダイアログでは `null` になります。`page` というラベルのノードが優先されます。[詳細ページ](../tabs/dashboard-tab.md#detail-pages)を参照してください。
 
 ### $vars の使用法
 - `$vars.counter` - `counter` という名前の変数にアクセス

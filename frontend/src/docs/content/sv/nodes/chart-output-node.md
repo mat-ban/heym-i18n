@@ -33,6 +33,8 @@ När endast exempel-/provdata finns tillgänglig (ingen verklig källa) producer
 | `valueField` | string | Radnyckel som används som numeriskt värde (pie/bar/line/numeric/gauge) |
 | `series` | array | Valfri definition för flera serier `[{ "name": "Sent", "field": "sent" }]` för bar/line (åsidosätter `valueField`) |
 | `columns` | array | Valfri kolumnlista för `table` (standardvärdet är nycklarna i den första raden) |
+| `statusColumn` | string | Valfri `table`-kolumn som renderas som färgade [statusbrickor](#status-chips). Måste vara en av de visade kolumnerna. |
+| `statusTones` | object | Valfri mappning från ett statusvärde till en ton (`success`, `attention`, `failure`, `waiting`, `neutral`) för värden som inte täcks av standardvärdena |
 | `xField` / `yField` | string | Radnycklar för de numeriska X- och Y-axlarna (scatter) |
 | `min` / `max` | number | Numeriskt intervall för `gauge` (standard `0` / `100`) |
 | `unit` | string | Valfri enhet som visas bredvid ett `numeric`- eller `gauge`-värde |
@@ -42,7 +44,7 @@ När endast exempel-/provdata finns tillgänglig (ingen verklig källa) producer
 ## Diagramtyper
 
 - **bar / line / area / pie** — kategoriska diagram som styrs av `labelField` + `valueField` (eller `series` för flera serier i bar/line/area). `area` är ett fyllt trenddiagram.
-- **table** — råa rader renderade som en rullningsbar tabell med `columns`.
+- **table** — råa rader renderade som en rullningsbar tabell med `columns`. En kolumn kan renderas som [statusbrickor](#status-chips) och rader kan öppna en [detaljsida](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — ett enskilt KPI-värde från den första raden, med valfri `unit`.
 - **gauge** — ett enskilt värde som visas mot ett `min`–`max`-intervall (t.ex. en procentandel). Använder `valueField`.
 - **scatter** — X/Y-punkter från `xField` och `yField` för korrelationsdiagram.
@@ -103,14 +105,59 @@ Resulterande markdown:
 
 För en enkel stigande lista som börjar på 1, antingen prefixa varje rad (`1.`, `2.`, `3.`) eller använd en loop med `$loop.index + 1`. Använd [punktlistor](#interactive-task-lists) (`- item`) när nummer inte behövs.
 
+## Statusbrickor
+
+En `table` kan visa en kolumn som färgade brickor (chips). Ställ in **Status column** i nodens egenskaper (eller `statusColumn` i DSL) på ett kolumnnamn. Varje värde får en av fem toner, och vanliga ord får en automatiskt utan konfiguration:
+
+| Ton | Standardord |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | allt annat |
+
+Matchningen ignorerar skiftläge, `_` och `-`, så `IN_PROGRESS` och `in-progress` blir båda `waiting`. Lägg till **Status tones** för andra värden; en post åsidosätter standardvärdet för det värdet:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Servern omvandlar varje värde till dess ton, så att Heym och Heym Work visar samma färger.
+
+## Detaljsidor: `$page.record`
+
+En dashboard som öppnas med `?record=<value>` kör varje widget-Workflow med det värdet som `$page.record`. En radlänk i en tabell öppnar en sådan sida; se [Detaljsidor](../tabs/dashboard-tab.md#detail-pages). På en dashboard som öppnas utan post och i uttrycksdialogen är `$page.record` `null`. En nod med etiketten `page` har företräde framför det.
+
+Använd det för att hämta den specifika post som sidan handlar om, till exempel i en [HTTP](./http-node.md)-nod:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` är själva värdet från den klickade raden, såsom `V-1002`, inte ett objekt med fält. För att hitta den posten i en [DataTable](./datatable-node.md), filtrera dess postkolumn efter värdet: operationen `find` med filtret `{"vendor_id": "$page.record"}`. En sökväg som `$page.record.id` ger ingenting, så en widget som AI bygger eller finjusterar tar bort sådana fält och läser `$page.record` i stället.
+
+Värdet kommer från en URL som vem som helst kan redigera. Dashboarden accepterar endast värden i sitt postformat (bokstäver, siffror, `-`, `_` och `.` som standard), men behandla det ändå som opålitlig indata: skicka det där noden escapear värden, såsom en HTTP-frågeparameter eller ett filtervärde i [DataTable](./datatable-node.md) eller ClickHouse, och bygg aldrig frågetext genom att slå ihop strängar med det. Widgetar körs fortfarande som dashboardens ägare, oavsett vem som öppnar sidan.
+
 ## Hur data löses upp
 
 1. Om `dataPath` är angivet följer noden den punktsökvägen in i uppströmsutdata.
 2. Annars letas efter en array: en lista på toppnivå, en `data`-array eller det första listvärderade fältet.
-3. För `table` blir varje rad en tabellrad med hjälp av `columns` (eller den första radens nycklar).
-4. För `numeric` och `gauge` hämtas värdet från `valueField` på den första raden (eller det första numeriska fältet).
-5. För `scatter` blir varje rad en `[xField, yField]`-punkt.
-6. För `text` hämtas meddelandet från `valueField` på den första raden när det är angivet, annars från den statiska `text`-konfigurationen (annars det första strängfältet på den första raden).
+3. Rader direkt från en [Data Table](./datatable-node.md)-nod (`{id, data, created_at}`) läses med sina kolumner på toppnivån bredvid `id`, så `labelField`, `valueField` och `columns` namnger tabellens egna kolumner.
+4. För `table` blir varje rad en tabellrad med hjälp av `columns` (eller den första radens nycklar). Med `statusColumn` bär Payloaden även tonen för varje värde i den kolumnen.
+5. För `numeric` och `gauge` hämtas värdet från `valueField` på den första raden (eller det första numeriska fältet).
+6. För `scatter` blir varje rad en `[xField, yField]`-punkt.
+7. För `text` hämtas meddelandet från `valueField` på den första raden när det är angivet, annars från den statiska `text`-konfigurationen (annars det första strängfältet på den första raden).
 
 ## Exempel
 

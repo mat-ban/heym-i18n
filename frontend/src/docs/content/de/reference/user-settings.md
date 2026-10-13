@@ -4,7 +4,7 @@ Der Dialog **Einstellungen** ermöglicht es dir, dein Profil zu verwalten, persi
 
 ## Den Dialog öffnen
 
-Klicke oben rechts in der Kopfzeile auf **deinen Avatar und Namen**. Der Dialog öffnet sich mit folgenden Reitern: **Profil**, **Sicherheit**, **Stimme**, **KI-Standardeinstellungen** und **Observability**. Instanz-Administratoren sehen zusätzlich einen **SSO**-Reiter.
+Klicke oben rechts in der Kopfzeile auf **deinen Avatar und Namen**. Der Dialog öffnet sich mit folgenden Reitern: **Profil**, **Sicherheit**, **Stimme**, **KI-Standardeinstellungen** und **Observability**. Instanz-Administratoren sehen zusätzlich die Reiter **SSO**, **Heym Work** und **Instances**.
 
 ## Reiter „Profil"
 
@@ -100,6 +100,10 @@ Der Reiter „Observability" zeigt den schreibgeschützten Status von [OpenTelem
 ## Reiter „SSO"
 
 Nur für Instanz-Administratoren sichtbar — die in `HEYM_ADMIN_EMAILS` aufgeführten Konten. Dieser Reiter verbindet Heym mit einem externen OpenID Connect-Provider, sodass sich Personen mit den Konten anmelden können, die sie bereits haben. Geben Sie eine Issuer-URL und Client-Anmeldedaten ein, kopieren Sie die schreibgeschützte Redirect-URI in Ihren Provider und führen Sie **Test connection** aus, bevor Sie es aktivieren. Die Passwort-Anmeldung kann von hier aus deaktiviert werden, sobald der Test erfolgreich ist. Siehe [Single Sign-On](./sso.md) für die vollständige Einrichtung.
+
+## Reiter „Heym Work"
+
+Instanz-Administratoren verbinden hier [Heym Work](./heym-work.md), die Oberfläche für Fachteams: deren Adresse, einen einmalig angezeigten Integrationsschlüssel sowie den Schalter **Enable Heym Work**. Der Reiter zeigt außerdem an, wann sich Heym Work zuletzt gemeldet hat, welche Version ausgeführt wird und wie der Lizenzstatus lautet. Siehe [Heym Work verbinden](./heym-work.md#connecting-heym-work).
 
 ## Reiter „Instances"
 

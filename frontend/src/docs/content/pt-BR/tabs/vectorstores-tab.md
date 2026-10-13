@@ -30,6 +30,9 @@ A aba **Vectorstores** gerencia os vector stores utilizados por nós [RAG](../no
 - **Excluir origens** – Remova arquivos específicos ou grupos de origem de um store, incluindo
   tudo o que um workflow adicionou
 - **Editar store** – Altere nome, descrição ou credential
+- **Buscar** – `POST /api/vector-stores/{id}/search` com uma `query` (e um `limit` de 1 a 20,
+  padrão 5) retorna os chunks que a busca de um nó RAG retornaria, melhor correspondência primeiro, cada um com sua
+  pontuação e origem. A tela RAG do Heym Work usa isso para testar a recuperação
 
 ## Compartilhamento
 

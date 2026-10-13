@@ -93,11 +93,12 @@ L'historial d'execucions registra `trigger_source` per a cada punt d'entrada:
 |-------|------|
 | `"API"` | Crida de Webhook / API sense capçalera explícita (per defecte) |
 | `"Canvas"` | Execució des del canvas de l'editor de workflows |
-| `"Quick Drawer"` | Execució des del panell de calaix ràpid de l'editor |
+| `"Quick Drawer"` | Execució des del panell de calaix ràpid de l'editor, incloses les execucions de fitxers pujats des de la seva zona d'arrossegament |
 | `"cron"` | Planificador Cron |
 | `"imap"` | Gestor de triggers IMAP |
 | `"websocket"` | Gestor de triggers de WebSocket de sortida |
-| `"file_upload"` | Endpoint de càrrega del Trigger de càrrega de fitxers |
+| `"file_upload"` | Endpoint de càrrega del Trigger de càrrega de fitxers (enllaços generats per HTTP, MCP o el llenç) |
+| `"dashboard"` | Execucions de ginys del tauler i pujades des d'un giny d'arrossegament de fitxers |
 | `"telegram"` | Webhook del bot de Telegram |
 | `"Discord"` | Webhook d'interaccions de Discord |
 | `"MCP"` | Crida d'eina MCP |

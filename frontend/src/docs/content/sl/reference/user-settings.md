@@ -4,7 +4,7 @@ Pogovor o nastavitvah vam omogoča upravljanje vašega profila, nastavitev trajn
 
 ## Odprtje pogovora
 
-Kliknite **vašo avatar in ime** v zgornjem desnem kotu glave. Pogovor se odpre s temi zavihki: **Profil**, **Varnost**, **Glas**, **Privzeti AI** in **Opazovanje**. Administratorji instanc vidijo tudi zavihek **SSO**.
+Kliknite **vašo avatar in ime** v zgornjem desnem kotu glave. Pogovor se odpre s temi zavihki: **Profil**, **Varnost**, **Glas**, **Privzeti AI** in **Opazovanje**. Administratorji instanc vidijo tudi zavihke **SSO**, **Heym Work** in **Instance**.
 
 ## Zavihek Profil
 
@@ -100,6 +100,10 @@ Zavihek Opazovanje prikazuje status samo za branje [OpenTelemetry Tracing](./ope
 ## Zavihek SSO
 
 Vidno samo administratorjem instance — računi, navedeni v `HEYM_ADMIN_EMAILS`. Ta zavihek povezuje Heym z zunanjim ponudnikom OpenID Connect, tako da se ljudje prijavljajo z računi, ki jih že imajo. Vnesite URL izdajatelja in poverilnice stranke, kopirajte URI za preusmeritev samo za branje v vašega ponudnika in zaženite **Preizkusi povezavo** pred omogočanjem. Prijava s geslom se lahko izklopi od tukaj, ko test uspe. Oglejte si [Enotna prijava](./sso.md) za celotno nastavitev.
+
+## Zavihek Heym Work
+
+Administratorji instance tukaj povežejo [Heym Work](./heym-work.md), vmesnik za poslovne ekipe: njegov naslov, integracijski ključ, ki se prikaže enkrat, in stikalo **Enable Heym Work**. Zavihek prikazuje tudi, kdaj se je Heym Work nazadnje javil, njegovo različico in stanje licence. Glejte [Povezovanje Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Zavihek Instance
 

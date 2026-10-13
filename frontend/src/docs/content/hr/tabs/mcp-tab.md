@@ -1,6 +1,6 @@
 # MCP Kartica
 
-Kartica **MCP** konfigurira integraciju Model Context Protocol (MCP). MCP omogućuje AI klijentima (Claude, Cursor i bilo kojem alatu kompatibilnom s MCP-om) da pozivaju Vaše Heym workflows kao alate.
+Kartica **MCP** konfigurira integraciju Model Context Protocol (MCP). MCP omogućuje AI klijentima (Claude, ChatGPT, Gemini, Cursor i bilo kojem alatu kompatibilnom s MCP-om) da pozivaju Vaše Heym workflows kao alate.
 
 Heym podržava dva načina: **zadani poslužitelj** koji izlaže sve workflows omogućene za MCP pod jednim endpointom, i **imenovane poslužitelje** koji daju svakoj logičkoj grupi workflows vlastitu posvećenu URL adresu i API ključ.
 
@@ -24,6 +24,8 @@ Zadani poslužitelj uvijek je dostupan na `{origin}/api/mcp/sse`. Svi workflows 
 
 - **API Ključ** – Koristite MCP API ključ za programske veze. Kartica može kopirati spremnu JSON konfiguraciju i uključuje gumb **Dodaj u Cursor** za jednostavno postavljanje Cursor-a jednim klikom.
 - **Claude** – Kartica prikazuje MCP URL poslužitelja i korake postavljanja za Claude. Ostavite OAuth Client ID i Secret praznima; Claude se automatski registrira i autentificira putem Heym OAuth-a.
+- **ChatGPT** – Kartica prikazuje URL MCP poslužitelja i korake postavljanja za ChatGPT aplikaciju. Uključite Developer mode, izradite aplikaciju s URL-om i odaberite OAuth; ChatGPT se automatski registrira.
+- **Gemini** – Kartica prikazuje URL MCP poslužitelja i korake postavljanja za prilagođenu Gemini aplikaciju: na gemini.google.com odaberite **Settings → Connected Apps → Add a custom app**, zalijepite URL i ostavite **Advanced features** zatvorenim; Gemini se automatski registrira i autentificira putem Heym OAuth-a. Nakon povezivanja, Heym radi i u mobilnoj aplikaciji Gemini.
 
 ### Workflow MCP Preklopnik
 
@@ -40,7 +42,8 @@ Odjeljak **Heym Mogućnosti** pretvara Chat tab motor u jedan MCP alat nazvan `h
 
 Kada je uključen, `heym_chat` se pojavljuje u `tools/list` uz Vaše workflow alate. MCP klijent šalje jednu poruku na prirodnom jeziku, a Heym motor preuzima odatle, s istim mogućnostima koje ima Chat tab:
 
-- Izgradnja, uređivanje, inspekcija i pokretanje workflows putem Workflow AI Builder-a.
+- Izgradnja workflowa, testno pokretanje s oglednim ulazima, popravljanje i završetak kada pokretanje uspije (pogledajte [Način izgradnje](#build-mode))
+- Inspekcija i pokretanje Vaših postojećih workflowa
 - Izvještavanje o analitici, nedavnim izvršavanjima i nadolazećim cron rasporedima.
 - Izvještavanje o povijesti izvršavanja jednog workflow-a: koliko je puta pokrenut, brojevi statusa, kada je pokrenut, i na zahtjev ulazi, izlazi i greške po čvoru jednog izvršavanja.
 - Izvještavanje o tome što se trenutno izvršava: koliko je izvršavanja aktivno, njihova imena workflow-a, koliko dugo svako traje, na kojem se čvoru trenutno nalazi, i poveznica na aktivno izvršavanje.
@@ -50,6 +53,15 @@ Kada je uključen, `heym_chat` se pojavljuje u `tools/list` uz Vaše workflow al
 - Odobravanje, uređivanje ili odbijanje čekajućih recenzija ljudi u petlji.
 
 Mogućnosti dodane u Chat tab kasnije postaju dostupne putem `heym_chat` automatski — ne postoji preklopnik po mogućnosti za održavanje sinkronizacije.
+
+### Način izgradnje
+
+`heym_chat` uvijek pokreće Chat pogon u načinu izgradnje (build mode). U jednom pozivu asistent može spremiti novi workflow, pokrenuti ga s realističnim oglednim ulazima, pročitati izvješće o pokretanju, popraviti ono što nije uspjelo i ponovno ga pokrenuti, do pet testnih pokretanja po pozivu. Kada posljednje pokretanje posljednjeg spremanja uspije, završava sažetkom u jednoj rečenici, a odgovor završava s `Verified: the latest test run of the saved workflow passed.`
+
+- Testna pokretanja su stvarna pokretanja. Njihovi popratni učinci se događaju i pojavljuju se u povijesti pokretanja workflowa kao i svako drugo pokretanje.
+- Spremanja slijede put uređivača: promjena grafa zadržava prethodni graf u **Edit History** workflowa.
+- Da biste promijenili workflow koji je ranije izgradio, nastavite nit s istim `conversation_id`. Asistent ažurira taj workflow umjesto stvaranja novog i mijenja samo workflowe koje možete uređivati.
+- Kada se iskoristi pet testnih pokretanja, asistent staje i objašnjava što i dalje ne uspijeva.
 
 Vjerodajnice ostaju u UI-u: `heym_chat` nikada ne navodi, ne bira niti ne stvara ih. Kada gradi ili uređuje workflow, novi čvorovi koji trebaju vjerodajnicu ostaju prazni, a odgovor ih imenuje, tako da ih možete postaviti u uređivaču.
 
@@ -109,7 +121,7 @@ Prebacivanje workflows-a pomiče ga na vrh dodijeljene liste, tako da redak koji
 Imenovani poslužitelji podržavaju iste metode autentifikacije kao i zadani poslužitelj:
 
 - **X-MCP-Key header** – Proslijedite API ključ poslužitelja izravno (API klijenti, Cursor). Samo header: ključevi se ne prihvaćaju kao `?key=` upitni parametar, jer URL-ovi završavaju u zapisnicima pristupa, zapisnicima proxy-a i povijesti preglednika.
-- **Claude OAuth** – Dodajte URL poslužitelja u Claude integracije; ostavite vjerodajnice prazne i Claude se automatski registrira putem OAuth-a. Bearer token mora putovati u `Authorization` header-u, a ne kao `?token=`.
+- **Claude, ChatGPT i Gemini OAuth** – Dodajte URL poslužitelja u konektore ili prilagođene aplikacije klijenta; ostavite vjerodajnice prazne i klijent se automatski registrira putem OAuth-a. Bearer token mora putovati u `Authorization` header-u, a ne kao `?token=`.
 - **Session token** – Izdaje se tijekom SSE handshake-a; ograničen na specifični poslužitelj tako da tokeni s jednog imenovanog poslužitelja ne mogu pristupiti drugom. Ovaj kratkotrajni `?session=` parametar nije pogođen.
 
 ### Brisanje Imenovanog Poslužitelja
@@ -123,7 +135,7 @@ Kliknite na ikonu **X** na zaglavlju kartice poslužitelja. Brisanje uklanja pos
 | Zadani | `{origin}/api/mcp/sse` |
 | Imenovani | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Oba endpoint-a podržavaju SSE transport (GET, MCP specifikacija 2024-11-05) i Streamable HTTP transport (POST, MCP specifikacija 2025-03-26). Claude koristi OAuth 2.1 / PKCE za sigurnu prijavu na oba.
+Oba endpoint-a podržavaju SSE transport (GET, MCP specifikacija 2024-11-05) i Streamable HTTP transport (POST, MCP specifikacija 2025-03-26). Claude, ChatGPT i Gemini koriste OAuth 2.1 / PKCE za sigurnu prijavu na oba.
 
 ## Povezano
 

@@ -35,6 +35,7 @@ Selectați un workflow pentru a deschide formularul său de intrare.
 - Faceți clic pe **Run Workflow** pentru a executa workflow-ul selectat
 - Faceți clic pe **Stop Workflow** pentru a anula o execuție în curs din panou
 - Workflow-urile fără câmpuri de intrare pot fi rulate direct
+- Un workflow care începe cu un [File Upload Trigger](../nodes/file-upload-trigger-node.md) afișează în schimb o zonă de plasare: trageți un fișier în ea sau faceți clic pentru a alege unul. Zona indică tipurile și dimensiunea fișierelor acceptate de trigger și refuză alte fișiere înainte de încărcare. **Run Workflow** rămâne dezactivat până când este ales un fișier.
 
 Panoul utilizează același API de execuție a workflow-urilor ca alte suprafețe de rulare Heym, astfel încât rezultatele și comportamentul la runtime rămân consecvente.
 
@@ -51,6 +52,8 @@ După pornirea unei rulări, panoul afișează:
 
 `pending` înseamnă că workflow-ul așteaptă o acțiune ulterioară, precum o revizuire umană.
 
+O rulare cu fișier trece prin linkul de încărcare de unică folosință al triggerului: sertarul solicită un link de la workflow, încarcă fișierul la acea adresă și afișează rezultatul când încărcarea se încheie. Rulările cu fișier afișează starea finală și ieșirile, dar fără progres pas cu pas, și sunt etichetate tot cu `Quick Drawer` în istoric. Fișierul ales este golit după fiecare rulare, deoarece un link acceptă un singur fișier.
+
 ## Stocarea în Browser
 
 Quick Drawer stochează preferințele personale în `localStorage`:
@@ -64,7 +67,7 @@ Panoul **nu** persistă valorile de intrare în această versiune.
 
 Quick Drawer este în mod intenționat o suprafață de execuție ușoară.
 
-- Inclus: căutare, fixare, selectare, intrare, rulare, progres, rezultat
+- Inclus: căutare, fixare, selectare, intrare (inclusiv un fișier), rulare, progres, rezultat
 - Exclus: crearea de workflow-uri, editare, gestionarea folderelor și acțiuni pe canvas
 
 ## Resurse Asociate

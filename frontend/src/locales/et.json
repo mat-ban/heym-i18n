@@ -274,7 +274,17 @@
       "intro": "Heym Work on teine kasutajaliides äritiimidele. Inimesed logivad sisse Heymi kaudu ja kõik tööd käivitatakse siin.",
       "never": "Mitte kunagi",
       "learnMore": "Lisateave"
-    }
+    },
+    "pluginsIntro": "Pluginad lisavad sellesse instantsi kohandatud sõlmi (toiminguid ja Triggereid). Plugina installimine või eemaldamine käivitab serveripoolse koodi, mistõttu on see piiratud operaatoritega, kes on loetletud muutujas",
+    "loadingPlugins": "Pluginate laadimine…",
+    "pluginsDisabledTitle": "Pluginad on keelatud",
+    "pluginsDisabledHint": "Määrake taustasüsteemis need keskkonnamuutujad ja taaskäivitage:",
+    "installPluginZip": "Installi plugin (.zip)",
+    "noPluginsInstalled": "Ühtegi pluginat pole veel installitud.",
+    "enablePlugin": "Luba",
+    "disablePlugin": "Keela",
+    "uninstallPlugin": "Desinstalli",
+    "pluginOperationFailed": "Plugina toiming ebaõnnestus"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Alusta tutvustust",
     "readTheDocs": "Lugege dokumentatsiooni",
     "previousFeature": "Eelmine funktsioon",
-    "goToFeature": "Mine {title} juurde"
+    "goToFeature": "Mine {title} juurde",
+    "heymWork": {
+      "step0": "Meeskond esitab päringu Heym Workis",
+      "step1": "Heym ehitab ja testib seda",
+      "step2": "Kinnitatud, ilma lõuendita",
+      "step3": "Heym käivitab selle taustal",
+      "prompt": "Kontrollige uusi lepinguid riskantsete tingimuste suhtes.",
+      "testing": "Workflow testimine",
+      "verified": "Kinnitatud"
+    },
+    "skillZip": {
+      "step0": "Lohistage oskuste zip-fail Chati",
+      "step1": "Chat loeb faili SKILL.md",
+      "step2": "Agent säilitab oskuse",
+      "prompt": "Lugege arvet ja loetlege reaüksused."
+    }
   },
   "canvas": {
     "nodes": "Sõlmed",
@@ -2400,6 +2425,50 @@
       "nodes": "Sõlmed",
       "reference": "Viited",
       "tabs": "Vahelehed"
-    }
+    },
+    "pluginNoDoc": "Sellel pluginal puudub dokumentatsioon."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Otsi Workflow'sid, vahekaarte, dokumentatsiooni...",
+    "searchAria": "Käsupaleti otsing",
+    "ariaLabel": "Käsupalett",
+    "noResults": "Tulemusi ei leitud",
+    "tryDifferentSearch": "Proovige teist otsingusõna",
+    "recent": "Hiljutised",
+    "recentInFolder": "Hiljutised · Kaustas: {folder}",
+    "inFolder": "Kaustas: {folder}",
+    "scheduledDate": "Ajastatud {date}",
+    "scheduledForDeletion": "Kustutamiseks ajastatud",
+    "goToTab": "Ava vahekaart",
+    "workflowTemplate": "Workflow mall",
+    "nodeTemplate": "Sõlme mall",
+    "nodeType": "Sõlm · {type}",
+    "documentation": "Dokumentatsioon",
+    "support": "Tugi",
+    "contactSupport": "Võta ühendust toega",
+    "watchRunbook": "Vaadake, kuidas Heym loob ja käivitab Workflow",
+    "openDocs": "Ava Heymi dokumentatsioon",
+    "getHelp": "Abi saamine Heymi meeskonnalt",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work ärimeeskondadele aadressil heym.run",
+    "navigate": "Liigu",
+    "select": "Vali",
+    "click": "klõps",
+    "newTab": "uus vahekaart",
+    "oneItem": "{count} üksus",
+    "manyItems": "{count} üksust"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Pluginad on selles instantsis keelatud.",
+    "loadingDefinition": "Plugina definitsiooni laadimine...",
+    "notBound": "See sõlm ei ole seotud ühegi pluginapaketiga.",
+    "noneInstalled": "Selles instantsis pole ühtegi pluginat installitud.",
+    "notInstalled": "Plugin \"{id}\" ei ole selles instantsis installitud.",
+    "installedButDisabled": "Plugin \"{name}\" on installitud, kuid keelatud.",
+    "noKindNodes": "Plugin \"{name}\" ei paku ühtegi {kind}-sõlme.",
+    "loadErrorDetail": "Pluginaid ei õnnestunud laadida: {detail}",
+    "loadErrorHttp": "Pluginaid ei õnnestunud laadida (HTTP {status}).",
+    "loadError": "Pluginaid ei õnnestunud laadida.",
+    "enabled": "Lubatud"
   }
 }

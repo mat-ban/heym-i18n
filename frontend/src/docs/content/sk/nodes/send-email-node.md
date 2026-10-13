@@ -31,7 +31,7 @@ neprístupné ID spôsobí zlyhanie uzla namiesto odoslania čiastočného e-mai
 
 ## Nastavenie
 
-Pridajte SMTP prihlasovacie údaje so serverom, portom, e-mailom a heslom. Bežné SMTP servery:
+Pridajte SMTP prihlasovacie údaje so serverom, portom, e-mailom a heslom. Viditeľným odosielateľom je voliteľné pole **From** v prihlasovacích údajoch; prázdne pole From odošle správu pod používateľským menom. Bežné SMTP servery:
 
 - Gmail: `smtp.gmail.com`, port 587 (vyžaduje sa App Password)
 - Outlook: `smtp.office365.com`, port 587

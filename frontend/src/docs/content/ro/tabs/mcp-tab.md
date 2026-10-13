@@ -1,6 +1,6 @@
 # Filă MCP
 
-Fila **MCP** configurează integrarea Model Context Protocol (MCP). MCP permite clienților AI (Claude, Cursor și orice instrument compatibil MCP) să apeleze workflow-urile Heym ca instrumente.
+Fila **MCP** configurează integrarea Model Context Protocol (MCP). MCP permite clienților AI (Claude, ChatGPT, Gemini, Cursor și orice instrument compatibil MCP) să apeleze workflow-urile Heym ca instrumente.
 
 Heym acceptă două moduri: un **server implicit** care expune toate workflow-urile cu MCP activat sub un singur endpoint și **servere denumite** care oferă fiecărui grup logic de workflow-uri propriul URL dedicat și propria cheie API.
 
@@ -24,6 +24,8 @@ Serverul implicit este întotdeauna disponibil la `{origin}/api/mcp/sse`. Toate 
 
 - **API Key** – Utilizați cheia API MCP pentru conexiuni programatice. Fila poate copia o configurație JSON gata de utilizare și include un buton **Add to Cursor** pentru configurarea Cursor cu un singur clic.
 - **Claude** – Fila afișează URL-ul serverului MCP și pașii de configurare pentru Claude. Lăsați OAuth Client ID și Secret necompletate; Claude se înregistrează automat și se autentifică prin Heym OAuth.
+- **ChatGPT** – Fila afișează URL-ul serverului MCP și pașii de configurare pentru o aplicație ChatGPT. Activați modul dezvoltator, creați o aplicație cu URL-ul respectiv și alegeți OAuth; ChatGPT se înregistrează automat.
+- **Gemini** – Fila afișează URL-ul serverului MCP și pașii de configurare pentru o aplicație personalizată Gemini: în gemini.google.com, accesați **Settings → Connected Apps → Add a custom app**, inserați URL-ul și lăsați **Advanced features** închis; Gemini se înregistrează automat și se autentifică prin Heym OAuth. Odată conectat, Heym funcționează și în aplicația mobilă Gemini.
 
 ### Comutator MCP pentru workflow
 
@@ -40,7 +42,8 @@ Secțiunea **Heym Capabilities** transformă motorul filei Chat într-un singur 
 
 Când este activ, `heym_chat` apare în `tools/list` alături de instrumentele workflow-urilor dumneavoastră. Un client MCP trimite un singur mesaj în limbaj natural, iar motorul Heym preia controlul de acolo, cu aceleași capacități pe care le are fila Chat:
 
-- Construiește, editează, inspectează și rulează workflow-uri prin Workflow AI Builder
+- Construiește un workflow, îl rulează de test cu intrări eșantion, îl corectează și finalizează când o rulare reușește (vezi [Modul Build](#build-mode))
+- Inspectează și rulează workflow-urile existente
 - Raportează analize, execuții recente și programări cron viitoare
 - Raportează istoricul de rulare al unui workflow: de câte ori a rulat, numărul de stări, când a rulat și, la cerere, intrările, ieșirile și erorile per nod ale unei singure rulări
 - Raportează ce rulează în acest moment: câte execuții sunt active, numele workflow-urilor lor, de cât timp rulează fiecare, nodul pe care se află în prezent fiecare și un link către rularea live
@@ -50,6 +53,15 @@ Când este activ, `heym_chat` apare în `tools/list` alături de instrumentele w
 - Aprobă, editează sau refuză recenziile în așteptare human-in-the-loop
 
 Capacitățile adăugate ulterior filei Chat devin disponibile automat prin `heym_chat` — nu există un comutator per capacitate de menținut sincronizat.
+
+### Modul Build
+
+`heym_chat` rulează întotdeauna motorul Chat în modul build. Într-un singur apel, asistentul poate salva un workflow nou, îl poate rula cu intrări eșantion realiste, poate citi raportul rulării, poate repara ceea ce a eșuat și îl poate rula din nou, până la cinci rulări de test per apel. Când ultima rulare a ultimei salvări reușește, acesta încheie cu un rezumat de o propoziție, iar răspunsul se termină cu `Verified: the latest test run of the saved workflow passed.`
+
+- Rulările de test sunt rulări reale. Efectele lor secundare au loc și apar în istoricul rulărilor workflow-ului ca orice altă rulare.
+- Salvările urmează calea editorului: o modificare a grafului păstrează graful anterior în **Edit History** al workflow-ului.
+- Pentru a modifica un workflow construit anterior, continuați firul cu același `conversation_id`. Asistentul actualizează acel workflow în loc să creeze unul nou și modifică doar workflow-urile pe care le puteți edita.
+- Când cele cinci rulări de test sunt epuizate, asistentul se oprește și explică ce anume eșuează în continuare.
 
 Credențialele rămân în interfață: `heym_chat` nu le listează, nu le alege și nu le creează niciodată. Când construiește sau editează un workflow, nodurile noi care necesită o credențială sunt lăsate goale, iar răspunsul le numește, astfel încât să le puteți seta în editor.
 
@@ -109,7 +121,7 @@ Comutarea unui workflow îl mută în partea de sus a listei atribuite, astfel �
 Serverele cu nume acceptă aceleași metode de autentificare ca serverul implicit:
 
 - **Header X-MCP-Key** – Transmiteți direct cheia API a serverului (clienți API, Cursor). Doar prin header: cheile nu sunt acceptate ca parametru de interogare `?key=`, deoarece URL-urile ajung în jurnalele de acces, jurnalele proxy și istoricul browserului.
-- **Claude OAuth** – Adăugați URL-ul serverului în integrările Claude; lăsați credențialele necompletate și Claude se înregistrează automat prin OAuth. Token-ul bearer trebuie transmis în header-ul `Authorization`, nu ca `?token=`.
+- **Claude, ChatGPT și Gemini OAuth** – Adăugați URL-ul serverului în conectorii sau aplicațiile personalizate ale clientului; lăsați credențialele necompletate și clientul se înregistrează automat prin OAuth. Token-ul bearer trebuie transmis în header-ul `Authorization`, nu ca `?token=`.
 - **Session token** – Emis în timpul handshake-ului SSE; limitat la serverul specific, astfel încât token-urile de la un server cu nume nu pot accesa altul. Acest parametru `?session=` de scurtă durată nu este afectat.
 
 ### Ștergerea unui server cu nume
@@ -123,7 +135,7 @@ Faceți clic pe pictograma **X** din antetul cardului serverului. Ștergerea eli
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Ambele endpoint-uri acceptă transportul SSE (GET, MCP spec 2024-11-05) și transportul Streamable HTTP (POST, MCP spec 2025-03-26). Claude utilizează OAuth 2.1 / PKCE pentru autentificare securizată pe ambele.
+Ambele endpoint-uri acceptă transportul SSE (GET, MCP spec 2024-11-05) și transportul Streamable HTTP (POST, MCP spec 2025-03-26). Claude, ChatGPT și Gemini utilizează OAuth 2.1 / PKCE pentru autentificare securizată pe ambele.
 
 ## Resurse conexe
 

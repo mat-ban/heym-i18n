@@ -4,7 +4,7 @@ La boîte de dialogue Paramètres vous permet de gérer votre profil, de défini
 
 ## Ouverture de la boîte de dialogue
 
-Cliquez sur **votre avatar et votre nom** dans le coin supérieur droit de l'en-tête. La boîte de dialogue s'ouvre avec les onglets suivants : **Profil**, **Sécurité**, **Voix**, **IA par défaut** et **Observabilité**. Les administrateurs d'instance voient également un onglet **SSO**.
+Cliquez sur **votre avatar et votre nom** dans le coin supérieur droit de l'en-tête. La boîte de dialogue s'ouvre avec les onglets suivants : **Profil**, **Sécurité**, **Voix**, **IA par défaut** et **Observabilité**. Les administrateurs d'instance voient également les onglets **SSO**, **Heym Work** et **Instances**.
 
 ## Onglet Profil
 
@@ -101,6 +101,10 @@ L'onglet Observabilité affiche l'état en lecture seule du [traçage OpenTeleme
 ## Onglet SSO
 
 Visible uniquement par les administrateurs de l'instance — les comptes listés dans `HEYM_ADMIN_EMAILS`. Cet onglet connecte Heym à un fournisseur OpenID Connect externe afin que les utilisateurs se connectent avec les comptes qu'ils possèdent déjà. Saisissez une URL d'émetteur et les identifiants client, copiez l'URI de redirection en lecture seule dans votre fournisseur, puis exécutez **Tester la connexion** avant de l'activer. La connexion par mot de passe peut être désactivée depuis cet onglet une fois le test réussi. Consultez [Single Sign-On](./sso.md) pour la configuration complète.
+
+## Onglet Heym Work
+
+Les administrateurs d'instance connectent ici [Heym Work](./heym-work.md), l'interface destinée aux équipes métier : son adresse, une clé d'intégration affichée une seule fois et le commutateur **Enable Heym Work**. L'onglet indique également la date du dernier signalement de Heym Work, sa version et l'état de sa licence. Voir [Connecter Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Onglet Instances
 

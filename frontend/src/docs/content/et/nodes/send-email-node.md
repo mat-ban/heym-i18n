@@ -31,7 +31,7 @@ kättesaamatu ID põhjustab sõlme nurjumise, mitte osalise e-kirja saatmise.
 
 ## Seadistamine
 
-Lisage SMTP mandaat koos serveri, pordi, e-posti ja parooliga. Levinumad SMTP serverid:
+Lisage SMTP mandaat koos serveri, pordi, e-posti ja parooliga. Nähtav saatja on mandaadi valikuline väli **From**; tühja From korral saadetakse kiri kasutajanime alt. Levinumad SMTP serverid:
 
 - Gmail: `smtp.gmail.com`, port 587 (nõuab rakenduse parooli)
 - Outlook: `smtp.office365.com`, port 587

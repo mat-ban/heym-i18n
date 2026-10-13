@@ -142,6 +142,7 @@ item.value
 - `$executionId` – ID aktuálneho spustenia (rovná sa ID záznamu v [Histórii spustení](./execution-history.md), takže `/workflows/<id>/<executionId>` otvorí toto spustenie na plátne). **Iba za behu**: prázdne v dialógu náhľadu výrazu; naplnené iba počas spúšťania workflowu.
 - `$vars` – Lokálne premenné workflowu (prístup cez `$vars.variableName`; aktualizované cez uzol `variable`)
 - `$global` – Perzistentné úložisko globálnych premenných (prístup cez `$global.variableName`)
+- `$page.record` – Iba pre workflow widgetov nástenky: záznam detailnej stránky, na ktorej sa widget nachádza, z parametra `?record=` nástenky. Má hodnotu `null` na nástenke otvorenej bez tohto parametra a v dialógu náhľadu výrazu. Uzol označený `page` má prednosť. Pozri [Detailné stránky](../tabs/dashboard-tab.md#detail-pages).
 
 ### Použitie $vars
 - `$vars.counter` – Prístup k premennej s názvom `counter`

@@ -33,6 +33,8 @@ Kai turite tik pavyzdinius/samples duomenis (be tikro šaltinio), sukurkite šia
 | `valueField` | string | Eilutės raktas, naudojamas kaip skaitinė vertė (pyrago/juostinės/linijinės/skaitinės/indikatoriaus) |
 | `series` | array | Pasirinktinė daugiasekvenčių apibrėžtis `[{ "name": "Sent", "field": "sent" }]` juostinėms/linijinėms (perrašoma `valueField`) |
 | `columns` | array | Pasirinktinė stulpelių sąrašas `table` (numatyta pagal pirmos eilutės raktus) |
+| `statusColumn` | string | Pasirenkamas `table` stulpelis, atvaizduojamas kaip spalvoti [būsenos žetonai](#status-chips). Turi būti vienas iš rodomų stulpelių. |
+| `statusTones` | object | Pasirenkamas būsenos reikšmės susiejimas su atspalviu (`success`, `attention`, `failure`, `waiting`, `neutral`) reikšmėms, kurių numatytieji nustatymai neapima |
 | `xField` / `yField` | string | Eilutės raktai X ir Y skaitmeniniams ašims (sklaidos) |
 | `min` / `max` | number | Skaitmeninis diapazonas `gauge` (numatyta `0` / `100`) |
 | `unit` | string | Pasirinktinė vienetų reikšmė, rodoma šalia `numeric` arba `gauge` vertės |
@@ -42,7 +44,7 @@ Kai turite tik pavyzdinius/samples duomenis (be tikro šaltinio), sukurkite šia
 ## Diagramos tipai
 
 - **juostinė / linijinė / plotinė / pyrago** — kategorinės diagramos, valdomos `labelField` + `valueField` (arba `series` daugiasekvenčių juostinėms/linijinėms/plotinėms). `area` yra užpildyta tendencijų diagrama.
-- **lentelė** — žali eilučių duomenys, atvaizduojami kaip slenkama lentelė naudojant `columns`.
+- **lentelė** — žali eilučių duomenys, atvaizduojami kaip slenkama lentelė naudojant `columns`. Vienas stulpelis gali būti atvaizduojamas kaip [būsenos žetonai](#status-chips), o eilutės gali atverti [išsamios informacijos puslapį](../tabs/dashboard-tab.md#detail-pages).
 - **skaitinė** — vienas KPI vertė iš pirmos eilutės, su pasirinktiniais `unit`.
 - **indikatorius** — viena vertė, rodoma prieš `min`–`max` diapazoną (pvz., procentas). Naudoja `valueField`.
 - **sklaida** — X/Y taškai iš `xField` ir `yField` koreliacijos diagramoms.
@@ -103,14 +105,59 @@ Gautas markdown:
 
 Norint sukurti paprastą didėjantį sąrašą, pradedant nuo 1, arba pridėkite prie kiekvienos eilutės (`1.`, `2.`, `3.`), arba naudokite ciklą su `$loop.index + 1`. Naudokite [bulinius sąrašus](#interactive-task-lists) (`- item`), kai nereikia numerių.
 
+## Būsenos žetonai
+
+`table` gali rodyti vieną stulpelį kaip spalvotus žetonus (chips). Mazgo savybėse nustatykite **Status column** (arba `statusColumn` DSL) į stulpelio pavadinimą. Kiekviena reikšmė gauna vieną iš penkių atspalvių, o įprasti žodžiai jį gauna automatiškai be konfigūravimo:
+
+| Atspalvis | Numatytieji žodžiai |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | visa kita |
+
+Atitikimas ignoruoja raidžių dydį, `_` ir `-`, todėl `IN_PROGRESS` ir `in-progress` abu tampa `waiting`. Kitoms reikšmėms pridėkite **Status tones**; įrašas pakeičia numatytąjį tos reikšmės atspalvį:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Serveris kiekvieną reikšmę susieja su jos atspalviu, todėl Heym ir Heym Work rodo tas pačias spalvas.
+
+## Išsamios informacijos puslapiai: `$page.record`
+
+Prietaisų skydelis, atidarytas su `?record=<value>`, paleidžia kiekvieno valdiklio Workflow su ta reikšme kaip `$page.record`. Lentelės eilutės nuoroda atveria tokį puslapį; žr. [Išsamios informacijos puslapiai](../tabs/dashboard-tab.md#detail-pages). Prietaisų skydelyje, atidarytame be įrašo, ir išraiškų dialoge `$page.record` yra `null`. Mazgas su žyma `page` turi pirmenybę prieš jį.
+
+Naudokite jį norėdami gauti konkretų įrašą, apie kurį yra puslapis, pavyzdžiui, [HTTP](./http-node.md) mazge:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` yra paties spustelėto eilutės elemento reikšmė, pvz., `V-1002`, o ne objektas su laukais. Norėdami rasti tą įrašą [DataTable](./datatable-node.md) mazge, filtruokite jo įrašo stulpelį pagal reikšmę: operacija `find` su filtru `{"vendor_id": "$page.record"}`. Toks kelias kaip `$page.record.id` nieko negrąžina, todėl AI sukurtas ar patobulintas valdiklis tuos laukus pašalina ir vietoj jų skaito `$page.record`.
+
+Reikšmė gaunama iš URL, kurį bet kas gali redaguoti. Prietaisų skydelis priima tik jo įrašo formatą atitinkančias reikšmes (pagal numatytuosius nustatymus raides, skaitmenis, `-`, `_` ir `.`), tačiau vis tiek vertinkite ją kaip nepatikimą įvestį: perduokite ją ten, kur mazgas ekranuoja reikšmes, pavyzdžiui, kaip HTTP užklausos parametrą arba [DataTable](./datatable-node.md) ar ClickHouse filtro reikšmę, ir niekada nekonstravokite užklausos teksto jungdami eilutes su ja. Valdikliai vis tiek vykdomi prietaisų skydelio savininko vardu, kad ir kas atidarytų puslapį.
+
 ## Kaip duomenys yra sprendžiami
 
 1. Jei nustatytas `dataPath`, mazgas seka tą taško kelią į aukščiau esančią išvestį.
 2. Priešingu atveju jis ieško masyvo: viršutinio lygio sąrašo, `data` masyvo arba pirmo sąrašo lauko.
-3. `table` atveju kiekviena eilutė tampa lentelės eile naudojant `columns` (arba pirmos eilutės raktus).
-4. `numeric` ir `gauge` atveju vertė gaunama iš `valueField` pirmoje eilutėje (arba pirmo numerinio lauko).
-5. `scatter` atveju kiekviena eilutė tampa `[xField, yField]` tašku.
-6. `text` atveju žinutė imama iš `valueField` pirmoje eilutėje, kai nustatyta, priešingu atveju iš statinio `text` konfigūracijos (arba pirmo lauko pirmoje eilutėje).
+3. Eilutės tiesiai iš [Data Table](./datatable-node.md) mazgo (`{id, data, created_at}`) skaitomos su jų stulpeliais aukščiausiame lygyje šalia `id`, todėl `labelField`, `valueField` ir `columns` įvardija pačios lentelės stulpelius.
+4. `table` atveju kiekviena eilutė tampa lentelės eile naudojant `columns` (arba pirmos eilutės raktus). Naudojant `statusColumn`, Payload taip pat perduoda kiekvienos to stulpelio reikšmės atspalvį.
+5. `numeric` ir `gauge` atveju vertė gaunama iš `valueField` pirmoje eilutėje (arba pirmo numerinio lauko).
+6. `scatter` atveju kiekviena eilutė tampa `[xField, yField]` tašku.
+7. `text` atveju žinutė imama iš `valueField` pirmoje eilutėje, kai nustatyta, priešingu atveju iš statinio `text` konfigūracijos (arba pirmo lauko pirmoje eilutėje).
 
 ## Pavyzdys
 

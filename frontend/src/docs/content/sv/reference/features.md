@@ -499,7 +499,7 @@ Se även [Snabbpanelen](./quick-drawer.md), [Nedladdning och import](./download-
 
 ### [Snabbpanelen](./quick-drawer.md)
 
-Snabbpanelen är en fast panel på höger sida för snabb körning på interna sidor utanför canvas. Den gör det möjligt att söka bland [workflows](../tabs/workflows-tab.md), fästa favoriter, välja indata, köra omedelbart och granska förlopp eller resultat utan att öppna redigeraren. Fästordning och den senast valda workflowen lagras i webbläsaren.
+Snabbpanelen är en fast panel på höger sida för snabb körning på interna sidor utanför canvas. Den gör det möjligt att söka bland [workflows](../tabs/workflows-tab.md), fästa favoriter, välja indata, köra omedelbart och granska förlopp eller resultat utan att öppna redigeraren. En workflow med en [File Upload Trigger](../nodes/file-upload-trigger-node.md) tar emot en släppt eller vald fil. Fästordning och den senast valda workflowen lagras i webbläsaren.
 
 Se även [Workflow-organisering](./workflow-organization.md), [Tangentbordsgenvägar](./keyboard-shortcuts.md) och [Körningshistorik](./execution-history.md).
 
@@ -684,6 +684,12 @@ Enterprise omfattar kommersiell licensiering, professionell support och driftsä
 
 Se även [Körning och driftsättning](../getting-started/running-and-deployment.md), [Säkerhet](./security.md) och [Team](./teams.md).
 
+### [Heym Work](./heym-work.md)
+
+Heym Work är ett andra gränssnitt för affärsteam ovanpå Heym. Användare beskriver ett jobb, svarar på några frågor och får en testad workflow, och arbetar sedan från sidor, godkännanden och en aktivitetslista där varje körning har ett namn. Instansadministratörer ansluter det under **Inställningar → Heym Work** med dess adress och en integrationsnyckel; det har en egen licens från Heym-teamet.
+
+Se även [Enterprise](./enterprise.md), [Single Sign-On](./sso.md) och [Human-in-the-Loop](./human-in-the-loop.md).
+
 ---
 
 ## Flikar i instrumentpanelen
@@ -763,7 +769,7 @@ Fliken MCP konfigurerar integreringen av Model Context Protocol. Heym stöder tv
 
 **Namngivna servrar** – Skapa flera isolerade MCP-endpoints, var och en med sin egen UUID-baserade URL (`/api/mcp/servers/{uuid}/sse`) och oberoende API-nyckel. Tilldela specifika workflows till varje server så att olika AI-klienter eller team endast ser de verktyg de behöver. Varje namngiven server stöder samma autentiseringsmetoder (API-nyckel, Claude OAuth) och har egna genvägar för Copy JSON och Add to Cursor. Båda typerna av endpoint stöder SSE-transport (GET) och Streamable HTTP-transport (POST). När en workflow slås av eller på inuti en namngiven server flyttas den högst upp i den tilldelade listan så att den ändrade raden förblir synlig.
 
-**Heym chat-verktyg** – Båda lägena kan även exponera [Chat](../tabs/chat-tab.md)-motorn som ett enda `heym_chat`-verktyg, vilket slås av eller på per yta med egna LLM-autentiseringsuppgifter och egen modell (förifylld från den föredragna modellen i [Settings](./user-settings.md)). En MCP-klient skickar ett enda `message` i naturligt språk och motorn gör resten: bygger, redigerar och kör workflows, analys, körningar, status för pågående körningar, scheman, boards och kort, team, globala variabler, dokumentsökning och beslut med människa i loopen. Funktioner som senare läggs till i Chat nås via samma verktyg utan ytterligare registrering. Varje anrop lagras i Chat-flikens historik som en konversation markerad med en kontakt och returnerar ett `conversation_id` som klienten kan skicka tillbaka för att fortsätta tråden.
+**Heym chat-verktyg** – Båda lägena kan även exponera [Chat](../tabs/chat-tab.md)-motorn som ett enda `heym_chat`-verktyg, vilket slås av eller på per yta med egna LLM-autentiseringsuppgifter och egen modell (förifylld från den föredragna modellen i [Settings](./user-settings.md)). En MCP-klient skickar ett enda `message` i naturligt språk och motorn gör resten: bygger workflows i byggläge (spara, testkör upp till fem gånger, åtgärda och verifiera), kör workflows, analys, körningar, status för pågående körningar, scheman, boards och kort, team, globala variabler, dokumentsökning och beslut med människa i loopen. Funktioner som senare läggs till i Chat nås via samma verktyg utan ytterligare registrering. Varje anrop lagras i Chat-flikens historik som en konversation markerad med en kontakt och returnerar ett `conversation_id` som klienten kan skicka tillbaka för att fortsätta tråden.
 
 Se även [Agent Architecture](./agent-architecture.md), [Agent Node](../nodes/agent-node.md) och [SSE Streaming](./sse-streaming.md).
 
@@ -799,7 +805,7 @@ Se även [Körningshistorik](./execution-history.md), [Scheman](../tabs/schedule
 
 ### [Instrumentpanel](../tabs/dashboard-tab.md)
 
-Fliken Instrumentpanel är ett Grafana-liknande utrymme där rutnät av diagramwidgetar byggs, var och en renderad från sin egen dolda Heym-workflow. Så många instrumentpaneler som behövs kan hållas och var och en delas med användare eller team, skrivskyddat eller redigerbart; widgetar körs alltid med ägarens autentiseringsuppgifter, så alla ser samma data. Beskriv ett mätvärde i klartext och AI genererar widgeten, eller lägg till en manuellt och välj en diagramtyp, förhandsgranskad med exempeldata: stapel, linje, area, cirkel, tabell, numerisk, mätare, punktdiagram, proportion, stapelmätare, text eller HITL. HITL är en karusell över väntande mänskliga granskningar. Rubriken visar `1/n pending`. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den, och historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på samma sida. Widgetar cachar sina resultat, kan finjusteras med AI (varje ändring sparas i [Redigeringshistorik](./edit-history.md)), klonas tillsammans med sin kompletta workflow, ordnas om med Tidy up och dras eller ändras storlek på i redigeringsläge. Eftersom varje widget är en workflow kan vilken data som helst som går att hämta — ett [HTTP](../nodes/http-node.md)-anrop, en [BigQuery](../nodes/bigquery-node.md)-fråga, en [RAG](../nodes/rag-node.md)-uppslagning eller [LLM](../nodes/llm-node.md)-utdata — bli ett diagram.
+Fliken Instrumentpanel är ett Grafana-liknande utrymme där rutnät av diagramwidgetar byggs, var och en renderad från sin egen dolda Heym-workflow. Så många instrumentpaneler som behövs kan hållas och var och en delas med användare eller team, skrivskyddat eller redigerbart; widgetar körs alltid med ägarens autentiseringsuppgifter, så alla ser samma data. Beskriv ett mätvärde i klartext och AI genererar widgeten, eller lägg till en manuellt och välj en diagramtyp, förhandsgranskad med exempeldata: stapel, linje, area, cirkel, tabell, numerisk, mätare, punktdiagram, proportion, stapelmätare, text eller HITL. HITL är en karusell över väntande mänskliga granskningar. Rubriken visar `1/n pending`. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den, och historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på samma sida. Widgetar cachar sina resultat, kan finjusteras med AI (varje ändring sparas i [Redigeringshistorik](./edit-history.md)), klonas tillsammans med sin kompletta workflow, ordnas om med Tidy up och dras eller ändras storlek på i redigeringsläge. Tabeller kan visa statusbrickor och länka sina rader till en detaljpanel som läser den klickade radens post som `$page.record`, och en Run-widget kör en workflow från panelen: på en släppt fil, med sina inmatningsfält eller med en Kör-knapp. Eftersom varje widget är en workflow kan vilken data som helst som går att hämta — ett [HTTP](../nodes/http-node.md)-anrop, en [BigQuery](../nodes/bigquery-node.md)-fråga, en [RAG](../nodes/rag-node.md)-uppslagning eller [LLM](../nodes/llm-node.md)-utdata — bli ett diagram.
 
 Se även [Noden Chart Output](../nodes/chart-output-node.md), [Analys](../tabs/analytics-tab.md) och [Körningshistorik](./execution-history.md).
 

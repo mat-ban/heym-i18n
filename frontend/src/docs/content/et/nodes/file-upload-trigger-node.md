@@ -33,6 +33,13 @@ Node töötab kahes faasis:
 
 Lõuendil näitab **Run Workflow** vermitud `curl`-i silumispaneelis koos kopeerimisnupuga.
 
+## Käivitamine Heymist
+
+Kahes kohas saab sellise Workflow otse failil käivitada sama genereerimis- ja üleslaadimisvoo kaudu:
+
+- [Quick Drawer](../reference/quick-drawer.md) kuvab faili jaoks lohistamisala. Need käivitused märgendatakse ajaloos sildiga `Quick Drawer`.
+- Töölaual olev [käivitusvidin](../tabs/dashboard-tab.md#run-widgets) käivitab Workflow iga kukutatud faili jaoks. Need käivitused märgendatakse sildiga `dashboard`.
+
 ## Parameetrid
 
 | Parameeter | Tüüp | Vaikeväärtus | Kirjeldus |

@@ -33,6 +33,8 @@ Ja ir pieejami tikai piemēra/parauga dati (bez reāla avota), ģenerējiet šī
 | `valueField` | string | Rindas atslēga, ko izmanto kā skaitlisko vērtību (pie/bar/line/numeric/gauge) |
 | `series` | array | Neobligāta vairāku sēriju definīcija `[{ "name": "Sent", "field": "sent" }]` joslu/līniju diagrammām (aizstāj `valueField`) |
 | `columns` | array | Neobligāts kolonnu saraksts `table` tipam (pēc noklusējuma pirmās rindas atslēgas) |
+| `statusColumn` | string | Neobligāta `table` kolonna, kas tiek attēlota kā krāsaini [statusa žetoni](#status-chips). Tai jābūt vienai no rādītajām kolonnām. |
+| `statusTones` | object | Neobligāts kartējums no statusa vērtības uz toni (`success`, `attention`, `failure`, `waiting`, `neutral`) vērtībām, kuras noklusējuma iestatījumi neaptver |
 | `xField` / `yField` | string | Rindas atslēgas X un Y skaitliskajām asīm (scatter) |
 | `min` / `max` | number | Skaitliskais diapazons `gauge` tipam (pēc noklusējuma `0` / `100`) |
 | `unit` | string | Neobligāta mērvienība, kas parādīta blakus `numeric` vai `gauge` vērtībai |
@@ -42,7 +44,7 @@ Ja ir pieejami tikai piemēra/parauga dati (bez reāla avota), ģenerējiet šī
 ## Diagrammu tipi
 
 - **bar / line / area / pie** — kategoriju diagrammas, ko nosaka `labelField` + `valueField` (vai `series` vairāku sēriju joslu/līniju/area diagrammām). `area` ir aizpildīta tendenču diagramma.
-- **table** — neapstrādātas rindas, kas attēlotas ritināmā tabulā, izmantojot `columns`.
+- **table** — neapstrādātas rindas, kas attēlotas ritināmā tabulā, izmantojot `columns`. Vienu kolonnu var attēlot kā [statusa žetonus](#status-chips), un rindas var atvērt [detalizētās informācijas lapu](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — viena KPI vērtība no pirmās rindas ar neobligāmu `unit`.
 - **gauge** — viena vērtība, kas parādīta pret `min`–`max` diapazonu (piem., procentuālā daļa). Izmanto `valueField`.
 - **scatter** — X/Y punkti no `xField` un `yField` korelācijas grafikiem.
@@ -103,14 +105,59 @@ Rezultējošais markdown:
 
 Vienkāršam augošam sarakstam, kas sākas ar 1, vai nu pievienojiet katras rindas sākumā numuru (`1.`, `2.`, `3.`), vai izmantojiet cilpu ar `$loop.index + 1`. Izmantojiet [aizzīmju sarakstus](#interactive-task-lists) (`- item`), ja numuri nav nepieciešami.
 
+## Statusa žetoni
+
+`table` var parādīt vienu kolonnu kā krāsainus žetonus (chips). Mezglā iestatiet īpašību **Status column** (vai `statusColumn` DSL) uz kolonnas nosaukumu. Katra vērtība saņem vienu no pieciem toņiem, un izplatītākie vārdi to saņem automātiski bez konfigurēšanas:
+
+| Tonis | Noklusējuma vārdi |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | jebkas cits |
+
+Atbilstības pārbaude ignorē reģistru, `_` un `-`, tāpēc `IN_PROGRESS` un `in-progress` abi ir `waiting`. Pievienojiet **Status tones** citām vērtībām; ieraksts pārraksta noklusējuma toni attiecīgajai vērtībai:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Serveris katru vērtību pārvērš tās tonī, tāpēc Heym un Heym Work rāda vienādas krāsas.
+
+## Detalizētās informācijas lapas: `$page.record`
+
+Informācijas panelis, kas atvērts ar `?record=<value>`, palaiž katru logrīka Workflow ar šo vērtību kā `$page.record`. Tabulas rindas saite atver šādu lapu; skatiet [Detalizētās informācijas lapas](../tabs/dashboard-tab.md#detail-pages). Informācijas panelī, kas atvērts bez ieraksta, kā arī izteiksmju dialoglodziņā `$page.record` ir `null`. Mezglam ar iezīmi `page` ir prioritāte pār to.
+
+Izmantojiet to, lai izgūtu konkrēto ierakstu, par kuru ir šī lapa, piemēram, [HTTP](./http-node.md) mezglā:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` ir pašas noklikšķinātās rindas vērtība, piemēram, `V-1002`, nevis objekts ar laukiem. Lai atrastu šo ierakstu [DataTable](./datatable-node.md), filtrējiet tās ieraksta kolonnu pēc vērtības: darbība `find` ar filtru `{"vendor_id": "$page.record"}`. Ceļš, piemēram, `$page.record.id`, neatgriež neko, tāpēc AI izveidots vai pielāgots logrīks šos laukus atmet un tā vietā nolasa `$page.record`.
+
+Vērtība nāk no URL, kuru ikviens var rediģēt. Informācijas panelis pieņem tikai vērtības savā ieraksta formātā (pēc noklusējuma burti, cipari, `-`, `_` un `.`), taču tik un tā izturieties pret to kā pret neuzticamu ievadi: padodiet to vietās, kur mezgls ekranē vērtības, piemēram, kā HTTP vaicājuma parametru vai [DataTable](./datatable-node.md) vai ClickHouse filtra vērtību, un nekad neveidojiet vaicājuma tekstu, savienojot virknes ar to. Logrīki joprojām darbojas informācijas paneļa īpašnieka vārdā neatkarīgi no tā, kurš atver lapu.
+
 ## Kā dati tiek atrisināti
 
 1. Ja `dataPath` ir iestatīts, mezgls seko šim punktu ceļam augšupējā izvadē.
 2. Pretējā gadījumā tas meklē masīvu: augstākā līmeņa sarakstu, `data` masīvu vai pirmo lauku ar saraksta vērtību.
-3. `table` gadījumā katra rinda kļūst par tabulas rindu, izmantojot `columns` (vai pirmās rindas atslēgas).
-4. `numeric` un `gauge` gadījumā vērtība tiek iegūta no `valueField` pirmajā rindā (vai pirmā skaitliskā lauka).
-5. `scatter` gadījumā katra rinda kļūst par `[xField, yField]` punktu.
-6. `text` gadījumā ziņojums tiek ņemts no `valueField` pirmajā rindā, ja tas ir iestatīts, pretējā gadījumā no statiskās `text` konfigurācijas (citādi no pirmās rindas pirmā virknes lauka).
+3. Rindas tieši no [Data Table](./datatable-node.md) mezgla (`{id, data, created_at}`) tiek nolasītas ar to kolonnām augšējā līmenī blakus `id`, tādējādi `labelField`, `valueField` un `columns` norāda pašas tabulas kolonnas.
+4. `table` gadījumā katra rinda kļūst par tabulas rindu, izmantojot `columns` (vai pirmās rindas atslēgas). Izmantojot `statusColumn`, Payload satur arī katras šīs kolonnas vērtības toni.
+5. `numeric` un `gauge` gadījumā vērtība tiek iegūta no `valueField` pirmajā rindā (vai pirmā skaitliskā lauka).
+6. `scatter` gadījumā katra rinda kļūst par `[xField, yField]` punktu.
+7. `text` gadījumā ziņojums tiek ņemts no `valueField` pirmajā rindā, ja tas ir iestatīts, pretējā gadījumā no statiskās `text` konfigurācijas (citādi no pirmās rindas pirmā virknes lauka).
 
 ## Piemērs
 

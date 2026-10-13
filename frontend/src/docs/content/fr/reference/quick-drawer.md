@@ -35,6 +35,7 @@ Sélectionnez un workflow pour ouvrir son formulaire de saisie.
 - Cliquez sur **Run Workflow** pour exécuter le workflow sélectionné
 - Cliquez sur **Stop Workflow** pour annuler une exécution en cours depuis le tiroir
 - Les workflows sans champs de saisie peuvent toujours être exécutés directement
+- Un workflow qui commence par un [File Upload Trigger](../nodes/file-upload-trigger-node.md) affiche une zone de dépôt à la place : déposez-y un fichier ou cliquez pour en choisir un. La zone indique les types et la taille de fichiers acceptés par le trigger et refuse les autres fichiers avant l'envoi. **Run Workflow** reste désactivé jusqu'à ce qu'un fichier soit sélectionné.
 
 Le tiroir utilise la même API d'exécution de workflow que les autres surfaces d'exécution Heym, de sorte que les sorties et le comportement d'exécution restent cohérents.
 
@@ -51,6 +52,8 @@ Après le démarrage d'une exécution, le tiroir affiche :
 
 `pending` signifie que le workflow attend une action ultérieure telle qu'une revue humaine.
 
+Une exécution avec fichier passe par le lien d'envoi à usage unique du trigger : le tiroir demande un lien au workflow, y téléverse le fichier et affiche le résultat au retour de l'envoi. Les exécutions avec fichier affichent le statut final et les sorties mais pas la progression étape par étape, et portent également l'étiquette `Quick Drawer` dans l'historique. Le fichier choisi est effacé après chaque exécution, car un lien n'accepte qu'un seul fichier.
+
 ## Stockage du navigateur
 
 Le Tiroir rapide stocke les préférences personnelles dans `localStorage` :
@@ -64,7 +67,7 @@ Le tiroir ne conserve **pas** les valeurs de saisie dans cette version.
 
 Le Tiroir rapide est intentionnellement une surface d'exécution légère.
 
-- Inclus : recherche, épinglage, sélection, saisie, exécution, progression, résultat
+- Inclus : recherche, épinglage, sélection, saisie (y compris d'un fichier), exécution, progression, résultat
 - Exclus : création de workflow, édition, gestion des dossiers et actions sur le canvas
 
 ## Voir aussi

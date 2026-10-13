@@ -33,6 +33,8 @@ Wenn du nur über Beispiel-/Musterdaten verfügst (keine echte Quelle), erzeuge 
 | `valueField` | string | Zeilenschlüssel, der als numerischer Wert verwendet wird (pie/bar/line/numeric/gauge) |
 | `series` | array | Optionale Multi-Serien-Definition `[{ "name": "Sent", "field": "sent" }]` für bar/line (überschreibt `valueField`) |
 | `columns` | array | Optionale Spaltenliste für `table` (standardmäßig die Schlüssel der ersten Zeile) |
+| `statusColumn` | string | Optionale `table`-Spalte, die als farbige [Status-Chips](#status-chips) dargestellt wird. Muss eine der angezeigten Spalten sein. |
+| `statusTones` | object | Optionale Zuordnung eines Statuswerts zu einem Farbton (`success`, `attention`, `failure`, `waiting`, `neutral`) für Werte, die nicht durch die Standardwerte abgedeckt sind |
 | `xField` / `yField` | string | Zeilenschlüssel für die numerischen X- und Y-Achsen (scatter) |
 | `min` / `max` | number | Numerischer Bereich für `gauge` (Standard `0` / `100`) |
 | `unit` | string | Optionale Einheit, die neben einem `numeric`- oder `gauge`-Wert angezeigt wird |
@@ -42,7 +44,7 @@ Wenn du nur über Beispiel-/Musterdaten verfügst (keine echte Quelle), erzeuge 
 ## Chart-Typen
 
 - **bar / line / area / pie** — kategorische Charts, gesteuert durch `labelField` + `valueField` (oder `series` für Multi-Serien-bar/line/area). `area` ist ein gefülltes Trend-Chart.
-- **table** — Rohzeilen, die unter Verwendung von `columns` als scrollbare Tabelle gerendert werden.
+- **table** — Rohzeilen, die unter Verwendung von `columns` als scrollbare Tabelle gerendert werden. Eine Spalte kann als [Status-Chips](#status-chips) gerendert werden, und Zeilen können eine [Detailseite](../tabs/dashboard-tab.md#detail-pages) öffnen.
 - **numeric** — ein einzelner KPI-Wert aus der ersten Zeile, mit optionaler `unit`.
 - **gauge** — ein einzelner Wert, der gegen einen `min`–`max`-Bereich dargestellt wird (z. B. ein Prozentsatz). Verwendet `valueField`.
 - **scatter** — X/Y-Punkte aus `xField` und `yField` für Korrelationsdiagramme.
@@ -103,14 +105,59 @@ Resultierendes Markdown:
 
 Für eine einfache aufsteigende Liste, die bei 1 beginnt, stelle entweder jeder Zeile eine Nummer voran (`1.`, `2.`, `3.`) oder verwende eine Schleife mit `$loop.index + 1`. Verwende [Aufzählungslisten](#interactive-task-lists) (`- item`), wenn du keine Nummern benötigst.
 
+## Status-Chips
+
+Eine `table` kann eine Spalte als farbige Chips darstellen. Setze **Status column** in den Knoteneigenschaften (oder `statusColumn` in der DSL) auf einen Spaltennamen. Jeder Wert erhält einen von fünf Farbtönen, und gängige Begriffe erhalten automatisch einen ohne weitere Konfiguration:
+
+| Farbton | Standardwörter |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | alles andere |
+
+Der Abgleich ignoriert Groß-/Kleinschreibung, `_` und `-`, sodass `IN_PROGRESS` und `in-progress` beide als `waiting` eingestuft werden. Füge **Status tones** für weitere Werte hinzu; ein Eintrag überschreibt den Standard für diesen Wert:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Der Server löst jeden Wert in seinen Farbton auf, sodass Heym und Heym Work dieselben Farben anzeigen.
+
+## Detailseiten: `$page.record`
+
+Ein mit `?record=<value>` geöffnetes Dashboard führt jeden Widget-Workflow mit diesem Wert als `$page.record` aus. Ein Link in einer Tabellenzeile öffnet eine solche Seite; siehe [Detailseiten](../tabs/dashboard-tab.md#detail-pages). Wird das Dashboard ohne Datensatz geöffnet sowie im Ausdrucksdialog, ist `$page.record` gleich `null`. Ein Knoten mit dem Label `page` hat Vorrang davor.
+
+Verwende diesen Wert, um genau den Datensatz abzurufen, um den es auf der Seite geht, zum Beispiel in einem [HTTP](./http-node.md)-Knoten:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` ist direkt der Wert der angeklickten Zeile, wie etwa `V-1002`, und kein Objekt mit Feldern. Um diesen Datensatz in einer [DataTable](./datatable-node.md) zu finden, filtere deren Datensatzspalte nach dem Wert: Operation `find` mit dem Filter `{"vendor_id": "$page.record"}`. Ein Pfad wie `$page.record.id` wird ins Leere aufgelöst, sodass ein von der KI erstelltes oder verfeinertes Widget solche Felder verwirft und stattdessen `$page.record` liest.
+
+Der Wert stammt aus einer URL, die jeder bearbeiten kann. Das Dashboard akzeptiert zwar nur Werte im jeweiligen Datensatzformat (standardmäßig Buchstaben, Ziffern, `-`, `_` und `.`), behandle ihn jedoch trotzdem als nicht vertrauenswürdige Eingabe: Übergib ihn dort, wo der Knoten Werte maskiert, etwa als HTTP-Query-Parameter oder als Filterwert in [DataTable](./datatable-node.md) oder ClickHouse, und baue niemals Abfragetext durch String-Verkettung damit zusammen. Widgets werden unabhängig davon, wer die Seite öffnet, weiterhin im Kontext des Dashboard-Eigentümers ausgeführt.
+
 ## Wie Daten aufgelöst werden
 
 1. Wenn `dataPath` gesetzt ist, folgt der Knoten diesem Punktpfad in die Ausgabe des vorgelagerten Knotens.
 2. Andernfalls sucht er nach einem Array: eine Liste auf oberster Ebene, ein `data`-Array oder das erste listenwertige Feld.
-3. Für `table` wird jede Zeile zu einer Tabellenzeile unter Verwendung von `columns` (oder den Schlüsseln der ersten Zeile).
-4. Für `numeric` und `gauge` stammt der Wert aus `valueField` in der ersten Zeile (oder dem ersten numerischen Feld).
-5. Für `scatter` wird jede Zeile zu einem `[xField, yField]`-Punkt.
-6. Für `text` wird die Nachricht aus `valueField` in der ersten Zeile entnommen, wenn gesetzt, andernfalls aus der statischen `text`-Konfiguration (andernfalls das erste String-Feld der ersten Zeile).
+3. Zeilen, die direkt aus einem [Data Table](./datatable-node.md)-Knoten stammen (`{id, data, created_at}`), werden mit ihren Spalten auf oberster Ebene neben `id` gelesen, sodass `labelField`, `valueField` und `columns` direkt die eigenen Spalten der Tabelle benennen.
+4. Für `table` wird jede Zeile zu einer Tabellenzeile unter Verwendung von `columns` (oder den Schlüsseln der ersten Zeile). Mit `statusColumn` enthält die Payload außerdem den Farbton jedes Werts in dieser Spalte.
+5. Für `numeric` und `gauge` stammt der Wert aus `valueField` in der ersten Zeile (oder dem ersten numerischen Feld).
+6. Für `scatter` wird jede Zeile zu einem `[xField, yField]`-Punkt.
+7. Für `text` wird die Nachricht aus `valueField` in der ersten Zeile entnommen, wenn gesetzt, andernfalls aus der statischen `text`-Konfiguration (andernfalls das erste String-Feld der ersten Zeile).
 
 ## Beispiel
 

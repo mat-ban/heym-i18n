@@ -274,7 +274,17 @@
       "intro": "Heym Work este o a doua interfață pentru echipele de business. Persoanele se autentifică prin Heym, iar fiecare job rulează aici.",
       "never": "Niciodată",
       "learnMore": "Aflați mai multe"
-    }
+    },
+    "pluginsIntro": "Pluginurile adaugă noduri personalizate (acțiuni și Triggere) în această instanță. Instalarea sau eliminarea unui plugin rulează cod pe server, fiind restricționată la operatorii listați în",
+    "loadingPlugins": "Se încarcă pluginurile…",
+    "pluginsDisabledTitle": "Pluginurile sunt dezactivate",
+    "pluginsDisabledHint": "Setați aceste variabile de mediu pe backend, apoi reporniți:",
+    "installPluginZip": "Instalați un plugin (.zip)",
+    "noPluginsInstalled": "Niciun plugin instalat încă.",
+    "enablePlugin": "Activează",
+    "disablePlugin": "Dezactivează",
+    "uninstallPlugin": "Dezinstalează",
+    "pluginOperationFailed": "Operațiunea asupra pluginului a eșuat"
   },
   "workflows": {
     "title": "Workflow-uri",
@@ -390,7 +400,22 @@
     "startTour": "Începeți turul",
     "readTheDocs": "Citiți documentația",
     "previousFeature": "Funcția anterioară",
-    "goToFeature": "Accesați {title}"
+    "goToFeature": "Accesați {title}",
+    "heymWork": {
+      "step0": "O echipă solicită în Heym Work",
+      "step1": "Heym îl construiește și îl testează",
+      "step2": "Verificat, fără pânză",
+      "step3": "Heym îl rulează în fundal",
+      "prompt": "Verificați contractele noi pentru clauze riscante.",
+      "testing": "Se testează Workflow-ul",
+      "verified": "Verificat"
+    },
+    "skillZip": {
+      "step0": "Plasați o arhivă zip de competență în Chat",
+      "step1": "Chat citește SKILL.md",
+      "step2": "Agentul păstrează competența",
+      "prompt": "Citiți factura și listați articolele."
+    }
   },
   "canvas": {
     "nodes": "Noduri",
@@ -2400,6 +2425,50 @@
       "nodes": "Noduri",
       "reference": "Referință",
       "tabs": "File"
-    }
+    },
+    "pluginNoDoc": "Acest plugin nu are documentație."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Căutați Workflow-uri, file, documentație...",
+    "searchAria": "Căutare în paleta de comenzi",
+    "ariaLabel": "Paletă de comenzi",
+    "noResults": "Nu s-au găsit rezultate",
+    "tryDifferentSearch": "Încercați un alt termen de căutare",
+    "recent": "Recente",
+    "recentInFolder": "Recente · În: {folder}",
+    "inFolder": "În: {folder}",
+    "scheduledDate": "Programat {date}",
+    "scheduledForDeletion": "Programat pentru ștergere",
+    "goToTab": "Accesați fila",
+    "workflowTemplate": "Șablon de Workflow",
+    "nodeTemplate": "Șablon de nod",
+    "nodeType": "Nod · {type}",
+    "documentation": "Documentație",
+    "support": "Asistență",
+    "contactSupport": "Contactați asistența",
+    "watchRunbook": "Urmăriți cum Heym construiește și rulează un Workflow",
+    "openDocs": "Deschideți documentația Heym",
+    "getHelp": "Obțineți ajutor de la echipa Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work pentru echipe de afaceri, pe heym.run",
+    "navigate": "Navigare",
+    "select": "Selectare",
+    "click": "clic",
+    "newTab": "filă nouă",
+    "oneItem": "{count} element",
+    "manyItems": "{count} elemente"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Pluginurile sunt dezactivate pe această instanță.",
+    "loadingDefinition": "Se încarcă definiția pluginului...",
+    "notBound": "Acest nod nu este asociat unui pachet de plugin.",
+    "noneInstalled": "Nu există pluginuri instalate pe această instanță.",
+    "notInstalled": "Pluginul „{id}” nu este instalat pe această instanță.",
+    "installedButDisabled": "Pluginul „{name}” este instalat, dar dezactivat.",
+    "noKindNodes": "Pluginul „{name}” nu expune noduri de tip {kind}.",
+    "loadErrorDetail": "Nu s-au putut încărca pluginurile: {detail}",
+    "loadErrorHttp": "Nu s-au putut încărca pluginurile (HTTP {status}).",
+    "loadError": "Nu s-au putut încărca pluginurile.",
+    "enabled": "Activat"
   }
 }

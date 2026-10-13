@@ -35,6 +35,7 @@ Pilih workflow untuk membuka formulir input-nya.
 - Klik **Run Workflow** untuk mengeksekusi workflow yang dipilih
 - Klik **Stop Workflow** untuk membatalkan eksekusi yang sedang berjalan dari drawer
 - Workflow tanpa kolom Input tetap dapat dijalankan secara langsung
+- Workflow yang dimulai dengan [File Upload Trigger](../nodes/file-upload-trigger-node.md) akan menampilkan zona lepas (drop zone): lepaskan file ke dalamnya atau klik untuk memilih file. Zona ini mencantumkan jenis dan ukuran file yang diterima trigger serta menolak file lain sebelum diunggah. **Run Workflow** tetap nonaktif hingga file dipilih.
 
 Drawer menggunakan API eksekusi workflow yang sama dengan permukaan eksekusi Heym lainnya, sehingga output dan perilaku runtime tetap konsisten.
 
@@ -51,6 +52,8 @@ Setelah memulai eksekusi, drawer menampilkan:
 
 `pending` berarti workflow sedang menunggu tindakan selanjutnya seperti tinjauan manusia.
 
+Eksekusi file dilakukan melalui tautan unggah sekali pakai milik trigger: drawer meminta tautan ke workflow, mengunggah file ke tautan tersebut, lalu menampilkan hasilnya setelah unggahan selesai. Eksekusi file menampilkan status akhir dan output tanpa progres langkah demi langkah, serta tetap ditandai `Quick Drawer` di riwayat. File yang dipilih akan dikosongkan setelah setiap eksekusi karena satu tautan hanya menerima satu file.
+
 ## Penyimpanan Browser
 
 Quick Drawer menyimpan preferensi pribadi di `localStorage`:
@@ -64,7 +67,7 @@ Drawer **tidak** menyimpan nilai input pada versi ini.
 
 Quick Drawer sengaja dirancang sebagai permukaan eksekusi yang ringan.
 
-- Termasuk: pencarian, penyematan, pemilihan, input, eksekusi, progres, hasil
+- Termasuk: pencarian, penyematan, pemilihan, input (termasuk file), eksekusi, progres, hasil
 - Tidak termasuk: pembuatan workflow, pengeditan, pengelolaan folder, dan tindakan canvas
 
 ## Terkait

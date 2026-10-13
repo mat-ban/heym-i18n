@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id của execution hiện tại (bằng với id mục [Execution History](./execution-history.md), vì vậy `/workflows/<id>/<executionId>` sẽ mở lần chạy này trên canvas). **Chỉ có khi chạy**: trống trong hộp thoại xem trước biểu thức; chỉ được điền khi workflow đang thực thi.
 - `$vars` - Biến cục bộ của workflow (truy cập qua `$vars.variableName`; cập nhật qua node `variable`)
 - `$global` - Kho biến toàn cục liên tục (truy cập qua `$global.variableName`)
+- `$page.record` - Chỉ dành cho workflow của tiện ích bảng điều khiển: bản ghi của trang chi tiết nơi đặt tiện ích, lấy từ tham số `?record=` của bảng điều khiển. Có giá trị `null` trên bảng điều khiển được mở mà không có tham số này và trong hộp thoại xem trước biểu thức. Nút có nhãn `page` sẽ được ưu tiên. Xem [Trang chi tiết](../tabs/dashboard-tab.md#detail-pages).
 
 ### Cách dùng $vars
 - `$vars.counter` - Truy cập biến có tên `counter`

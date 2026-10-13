@@ -33,6 +33,13 @@ Ta vozlišče deluje v dveh fazah:
 
 Na platnu, **Zaženi workflow** prikazuje ustvarjen `curl` v debug panelu z gumbom za kopiranje.
 
+## Zagon iz Heyma
+
+Dve mesti zaženeta tak Workflow neposredno na datoteki prek istega postopka ustvarjanja povezave in nalaganja:
+
+- [Quick Drawer](../reference/quick-drawer.md) prikaže območje za spuščanje datoteke. Ti zagoni so v zgodovini označeni z oznako `Quick Drawer`.
+- [Gradnik za zagon](../tabs/dashboard-tab.md#run-widgets) na nadzorni plošči zažene Workflow za vsako spuščeno datoteko. Ti zagoni so označeni z oznako `dashboard`.
+
 ## Parametri
 
 | Parameter | Tip | Privzeto | Opis |

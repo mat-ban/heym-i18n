@@ -94,11 +94,12 @@ Lịch sử thực thi ghi lại `trigger_source` cho mọi điểm vào:
 |-------|------|
 | `"API"` | Lệnh gọi Webhook / API không có header rõ ràng (mặc định) |
 | `"Canvas"` | Chạy từ canvas của trình chỉnh sửa workflow |
-| `"Quick Drawer"` | Chạy từ bảng quick-drawer của trình chỉnh sửa |
+| `"Quick Drawer"` | Chạy từ bảng quick-drawer của trình chỉnh sửa, bao gồm cả các lần chạy tệp được tải lên từ vùng thả của bảng |
 | `"cron"` | Bộ lập lịch Cron |
 | `"imap"` | Trình quản lý trigger IMAP |
 | `"websocket"` | Trình quản lý trigger WebSocket gửi ra |
-| `"file_upload"` | Endpoint tải lên của Trigger Tải tệp lên |
+| `"file_upload"` | Endpoint tải lên của Trigger Tải tệp lên (liên kết được tạo qua HTTP, MCP hoặc canvas) |
+| `"dashboard"` | Các lần chạy tiện ích bảng điều khiển và lượt tải lên từ tiện ích thả tệp |
 | `"telegram"` | Webhook bot Telegram |
 | `"Discord"` | Webhook tương tác Discord |
 | `"MCP"` | Lệnh gọi công cụ MCP |

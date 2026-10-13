@@ -1,6 +1,6 @@
 # MCP-välilehti
 
-**MCP**-välilehdellä määritetään Model Context Protocol (MCP) -integraatio. MCP mahdollistaa tekoälyasiakkaiden (kuten Clauden, Cursorin ja muiden MCP-yhteensopivien työkalujen) käyttää Heymin workflowteja työkaluina.
+**MCP**-välilehdellä määritetään Model Context Protocol (MCP) -integraatio. MCP mahdollistaa tekoälyasiakkaiden (kuten Clauden, ChatGPT:n, Geminin, Cursorin ja muiden MCP-yhteensopivien työkalujen) käyttää Heymin workflowteja työkaluina.
 
 Heym tukee kahta toimintatapaa: **oletuspalvelinta**, joka tarjoaa kaikki MCP-käyttöön otetut workflowt yhden päätepisteen kautta, ja **nimettyjä palvelimia**, joissa jokaisella workflow-ryhmällä on oma dedikoitu URL-osoite ja API-avain.
 
@@ -24,6 +24,8 @@ Oletuspalvelin on aina käytettävissä osoitteessa `{origin}/api/mcp/sse`. Kaik
 
 - **API-avain** – Käytä MCP API -avainta ohjelmallisiin yhteyksiin. Välilehti voi kopioida valmiin JSON-konfiguraation ja sisältää **Add to Cursor** -painikkeen yksinkertaista Cursor-asetusta varten.
 - **Claude** – Välilehti näyttää MCP-palvelimen URL-osoitteen ja asennusohjeet Claudelle. Jätä OAuth Client ID ja Secret kentät tyhjiksi; Claude rekisteröityy automaattisesti ja todentaa Heym OAuthin kautta.
+- **ChatGPT** – Välilehti näyttää MCP-palvelimen URL-osoitteen ja ChatGPT-sovelluksen määritysohjeet. Ota kehittäjätila käyttöön, luo sovellus URL-osoitteella ja valitse OAuth; ChatGPT rekisteröityy automaattisesti.
+- **Gemini** – Välilehti näyttää MCP-palvelimen URL-osoitteen ja mukautetun Gemini-sovelluksen määritysohjeet: valitse osoitteessa gemini.google.com **Settings → Connected Apps → Add a custom app**, liitä URL-osoite ja jätä **Advanced features** suljetuksi; Gemini rekisteröityy automaattisesti ja todentaa Heym OAuthin kautta. Yhdistämisen jälkeen Heym toimii myös Geminin mobiilisovelluksessa.
 
 ### Workflown MCP-kytkin
 
@@ -40,7 +42,8 @@ Workflow-kortit näyttävät kuvauksen ja syötekenttien nimien esikatselun, jot
 
 Kun se on käytössä, `heym_chat` näkyy `tools/list` -listauksessa workflow-työkalujesi rinnalla. MCP-asiakas lähettää yhden luonnollisen kielen viestin, ja Heym-moottori hoitaa loput samoin kuin Chat-välilehdessä:
 
-- Luo, muokkaa, tarkastele ja suorita workflowja Workflow AI Builderin avulla.
+- Luo workflow, koeaja se esimerkkisyötteillä, korjaa virheet ja lopeta, kun suoritus menee läpi (katso [Rakennustila](#build-mode))
+- Tarkastele ja suorita olemassa olevia workflowtejasi
 - Raportoi analytiikkaa, viimeisimpiä suorituksia ja tulevia cron-aikatauluja.
 - Raportoi yhden workflown suoritushistorian: kuinka monta kertaa se on suoritettu, tilastot, milloin se on suoritettu, ja pyynnöstä yhden suorituksen syötteet, tulosteet ja solmukohtaiset virheet.
 - Raportoi, mitä parhaillaan suoritetaan: kuinka monta suoritusta on käynnissä, niiden workflownimet, kauanko kukin on ollut käynnissä, nykyinen solmu ja linkki live-suoritukseen.
@@ -50,6 +53,15 @@ Kun se on käytössä, `heym_chat` näkyy `tools/list` -listauksessa workflow-ty
 - Hyväksy, muokkaa tai hylkää odottavia ihmisen vahvistusta vaativia tarkistuksia.
 
 Chat-välilehdelle myöhemmin lisätyt ominaisuudet tulevat automaattisesti käyttöön myös `heym_chat` -työkalussa – ei tarvitse synkronoida erillisiä kytkimiä.
+
+### Rakennustila
+
+`heym_chat` suorittaa Chat-moottorin aina rakennustilassa (build mode). Yhdellä kutsulla avustaja voi tallentaa uuden workflown, suorittaa sen realistisilla esimerkkisyötteillä, lukea suoritusraportin, korjata epäonnistuneet kohdat ja suorittaa sen uudelleen, enintään viisi koeajoa kutsua kohden. Kun viimeisimmän tallennuksen viimeisin suoritus onnistuu, se päättää yhden virkkeen yhteenvetoon ja vastaus päättyy tekstiin `Verified: the latest test run of the saved workflow passed.`
+
+- Koeajot ovat oikeita suorituksia. Niiden sivuvaikutukset toteutuvat, ja ne näkyvät workflown suoritushistoriassa kuten mikä tahansa muukin suoritus.
+- Tallennukset kulkevat editorin polkua: muutos graafiin säilyttää edellisen graafin workflown muokkaushistoriassa (**Edit History**).
+- Jos haluat muuttaa aiemmin rakennettua workflowta, jatka ketjua samalla `conversation_id`-tunnisteella. Avustaja päivittää kyseisen workflown uuden luomisen sijaan ja muuttaa vain workflowteja, joita sinulla on oikeus muokata.
+- Kun viisi koeajoa on käytetty, avustaja pysähtyy ja selittää, mikä edelleen epäonnistuu.
 
 Tunnistetiedot pysyvät käyttöliittymässä: `heym_chat` ei koskaan listaa, valitse tai luo niitä. Kun se rakentaa tai muokkaa workflowta, uudet tunnistetietoja vaativat solmut jätetään tyhjiksi, ja vastaus nimeää ne, jotta voit asettaa ne editorissa.
 
@@ -109,7 +121,7 @@ Workflown kytkeminen siirtää sen määritettyjen listan yläosaan, joten juuri
 Nimetyt palvelimet tukevat samoja tunnistautumismenetelmiä kuin oletuspalvelin:
 
 - **X-MCP-Key-otsake** – Lähetä palvelimen API-avain suoraan (API-asiakkaat, Cursor). Vain otsakkeena: avaimia ei hyväksytä `?key=` -kyselyparametrina, koska URL-osoitteet päätyvät lokitietoihin, välityspalvelinlokeihin ja selainhistoriaan.
-- **Claude OAuth** – Lisää palvelimen URL-osoite Claude-integraatioihin; jätä tunnistetiedot tyhjäksi ja Claude rekisteröityy automaattisesti OAuthin kautta. Kantajatokenin on kuljettava `Authorization`-otsakkeessa, ei `?token=` -parametrina.
+- **Claude, ChatGPT ja Gemini OAuth** – Lisää palvelimen URL-osoite asiakkaan liittimiin tai mukautettuihin sovelluksiin; jätä tunnistetiedot tyhjäksi ja asiakas rekisteröityy automaattisesti OAuthin kautta. Kantajatokenin on kuljettava `Authorization`-otsakkeessa, ei `?token=` -parametrina.
 - **Istuntotoken** – Luodaan SSE-kättelyn aikana; rajoitettu tiettyyn palvelimeen, joten yhden nimetyllä palvelimella luodut tokenit eivät päde toisille. Tätä lyhytikäistä `?session=` -parametria ei vaikuta.
 
 ### Nimetyt palvelimen poistaminen
@@ -123,7 +135,7 @@ Klikkaa **X**-kuvaketta palvelinkortin otsikossa. Poistaminen poistaa palvelimen
 | Oletus | `{origin}/api/mcp/sse` |
 | Nimetty | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Molemmat endpointit tukevat SSE-kuljetusta (GET, MCP-spesifikaatio 2024-11-05) ja Streamable HTTP -kuljetusta (POST, MCP-spesifikaatio 2025-03-26). Claude käyttää OAuth 2.1 / PKCE -turvallista kirjautumista molemmissa.
+Molemmat endpointit tukevat SSE-kuljetusta (GET, MCP-spesifikaatio 2024-11-05) ja Streamable HTTP -kuljetusta (POST, MCP-spesifikaatio 2025-03-26). Claude, ChatGPT ja Gemini käyttävät OAuth 2.1 / PKCE -turvallista kirjautumista molemmissa.
 
 ## Aiheeseen liittyvät
 

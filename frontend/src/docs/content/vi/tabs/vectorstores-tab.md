@@ -30,6 +30,9 @@ Tab **Vectorstores** quản lý các vector store được sử dụng bởi cá
 - **Xóa nguồn** – Xóa các tệp cụ thể hoặc nhóm nguồn khỏi một store, bao gồm
   mọi thứ mà một workflow đã thêm
 - **Chỉnh sửa store** – Thay đổi tên, mô tả hoặc credential
+- **Tìm kiếm** – `POST /api/vector-stores/{id}/search` với một `query` (và `limit` từ 1 đến 20,
+  mặc định là 5) trả về các đoạn (chunk) mà tìm kiếm của nút RAG sẽ trả về, kết quả khớp nhất đầu tiên, mỗi đoạn kèm theo
+  điểm số và nguồn của nó. Màn hình RAG của Heym Work sử dụng tính năng này để kiểm tra truy xuất
 
 ## Chia sẻ
 

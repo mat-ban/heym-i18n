@@ -8,7 +8,7 @@ Toată lumea începe cu un dashboard, creat prima dată când deschide fila. Uti
 
 Fila redeschide dashboardul pe care l-ați utilizat ultima dată, iar bara de adrese conține dashboardul deschis (`?tab=dashboard&dashboard=<id>`), astfel încât un link deschide exact acel dashboard pentru oricine are acces la el.
 
-Butonul de setări (doar pentru proprietari) redenumește dashboardul, gestionează partajarea și îl șterge. Ștergerea unui dashboard elimină widgeturile sale și workflowurile acestora. Păstrați întotdeauna cel puțin un dashboard propriu, astfel încât ultimul nu poate fi șters.
+Butonul de setări (doar pentru proprietari) redenumește dashboardul, stabilește ce înregistrări acceptă ca [pagină de detalii](#detail-pages), gestionează partajarea și îl șterge. Ștergerea unui dashboard elimină widgeturile sale și workflowurile acestora. Păstrați întotdeauna cel puțin un dashboard propriu, astfel încât ultimul nu poate fi șters.
 
 ## Widgeturi
 
@@ -18,7 +18,7 @@ Un widget este un singur grafic pe grilă. Tipuri de grafice acceptate:
 - **Line**
 - **Area** (tendință umplută, acceptă mai multe serii)
 - **Pie**
-- **Table** (cu derulare)
+- **Table** (cu derulare; o coloană poate fi afișată ca [cipuri de stare](../nodes/chart-output-node.md#status-chips), iar rândurile pot deschide o [pagină de detalii](#detail-pages))
 - **Numeric** (o singură valoare KPI cu unitate opțională)
 - **Gauge** (o singură valoare raportată la un interval min–max, de ex. un procent)
 - **Scatter** (puncte X/Y pentru grafice de corelație)
@@ -26,6 +26,8 @@ Un widget este un singur grafic pe grilă. Tipuri de grafice acceptate:
 - **Bar gauge** (un gauge orizontal pe rând cu un gradient roșu→verde și o valoare, de ex. spațiu liber pe disc)
 - **Text** (un mesaj markdown, de ex. o notă de stare precum „Ultima execuție la 19:47"; acceptă [casete de selectare interactive](../nodes/chart-output-node.md#interactive-task-lists) când markdownul este static și [liste numerotate explicite](../nodes/chart-output-node.md#numbered-lists) pentru numerotare personalizată sau descendentă)
 - **HITL** (recenziile dumneavoastră umane în așteptare. Antetul afișează `1/n pending`. Numele workflowului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă. Pictograma de istoric de lângă titlul widgetului deschide acea execuție în dialogul de istoric de pe această pagină. Widgetul nu utilizează rânduri din amonte, iar fiecare persoană își vede propria coadă)
+
+Pe lângă grafice, un widget **Run a workflow** rulează unul dintre workflowurile dvs. direct din dashboard: pe un fișier plasat, cu câmpurile sale de intrare sau cu un buton Run; consultați [Widgeturi de rulare](#run-widgets).
 
 Fiecare widget își încarcă datele asincron când deschideți fila, astfel încât pagina rămâne receptivă în timp ce graficele se populează.
 
@@ -36,7 +38,39 @@ Fiecare widget își încarcă datele asincron când deschideți fila, astfel î
 3. Construiți workflowul astfel încât nodul care alimentează **Chart Output** să producă un array de rânduri, apoi configurați maparea câmpurilor nodului Chart Output (câmpul etichetă, câmpul valoare etc.).
 4. Salvați, reveniți la fila Dashboard, iar widgetul se randează.
 
+Pentru un widget **Run a workflow**, alegeți în schimb workflowul pe care îl rulează; selectorul indică modul în care widgetul îl va rula pe fiecare. Widgetul este adăugat direct în grilă; nu există niciun workflow nou de construit.
+
 Faceți dublu clic pe un widget (sau utilizați butonul său de editare) pentru a-i redeschide workflowul oricând. Utilizați **Clone widget** în antetul widgetului pentru a duplica atât widgetul, cât și workflowul său complet. Copia este plasată sub original și etichetată cu **(Copy)**, astfel încât să o puteți edita independent.
+
+## Pagini de detalii
+
+Un widget de tip tabel își poate lega rândurile de un alt dashboard, care funcționează apoi ca o pagină de detalii: un singur dashboard care deservește fiecare client, factură sau tichet.
+
+1. Deschideți **Settings** pentru widgetul tabel și alegeți dashboardul sub **Row link**.
+2. Introduceți **Record column**, coloana a cărei valoare identifică rândul (de exemplu `id`), și opțional o **Label column** care îl denumește (de exemplu `name`).
+3. Salvați. Făcând clic pe un rând (sau focalizându-l și apăsând Enter) se deschide dashboardul asociat cu `?record=<value>&label=<name>`.
+
+Pe dashboardul de detalii, fiecare workflow al unui widget citește valoarea ca `$page.record` (consultați [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)), iar pagina afișează `Dashboard / <label>` deasupra grilei, împreună cu un buton pentru ștergerea înregistrării. Butonul Înapoi revine la tabelul din care ați plecat.
+
+- **Cine o poate deschide.** Rândurile pot fi accesate prin clic doar de către vizualizatorii care pot deschide dashboardul asociat. Ceilalți văd același tabel fără linkuri.
+- **Formatul înregistrării.** Înregistrarea provine din URL, astfel încât dashboardul de detalii decide ce acceptă. În setările sale, **Detail page records** este una dintre opțiunile: ID-uri (litere, cifre, `-`, `_` și `.`, până la 128 de caractere; valoarea implicită), numere, UUID-uri sau adrese de e-mail. Orice altă valoare este refuzată înainte ca un widget să ruleze, iar widgeturile afișează „This page does not accept that record".
+- **Tot rularea proprietarului.** Widgeturile rulează ca proprietar al dashboardului și pe o pagină de detalii. Creatorii ar trebui să transmită `$page.record` doar acolo unde un nod face escape valorii, niciodată direct în textul unei interogări.
+- **Memorarea în cache.** Fiecare widget își memorează în cache graficul per înregistrare, pentru aceeași durată de viață (TTL) ca și widgetul, și păstrează cele mai recente 50 de înregistrări utilizate.
+
+## Widgeturi de rulare
+
+Un widget **Run a workflow** rulează unul dintre workflowurile dvs. și afișează rezultatul: starea, durata de rulare și ieșirile. Ceea ce afișează depinde de datele de intrare pe care le primește workflowul:
+
+- **Un fișier.** Pentru un workflow care începe cu un [File Upload Trigger](../nodes/file-upload-trigger-node.md), plasați un fișier pe acesta (sau faceți clic pentru a alege unul), iar widgetul îl încarcă prin linkul de încărcare de unică folosință al triggerului. Widgetul afișează tipurile și dimensiunea fișierelor pe care le acceptă triggerul și le refuză pe celelalte înainte de încărcare. Când workflowul începe și cu un nod Text Input, widgetul afișează câmpurile acestuia lângă zona de plasare: alegeți un fișier, completați câmpurile, iar **Run** le trimite pe amândouă. Valorile călătoresc împreună cu linkul de încărcare generat de widget, astfel încât un link de încărcare partajat nu le poate seta.
+- **Câmpuri de intrare.** Pentru un workflow care începe cu un nod Text Input, widgetul își afișează câmpurile cu valorile lor implicite; **Run** rulează workflowul cu valorile dvs. Valorile pentru câmpurile pe care workflowul nu le are sunt ignorate.
+- **Nimic.** Un workflow fără intrări primește un buton **Run**.
+
+Butonul **Wrap** al rezultatului încadrează liniile lungi de ieșire în interiorul casetei; dezactivați-l pentru a citi aspectul JSON al ieșirii.
+
+- Oricine poate deschide dashboardul poate rula widgetul, la fel cum oricine poate reîmprospăta un grafic. Accesul la workflow aparține proprietarului dashboardului: adăugarea widgetului necesită un workflow pe care atât dvs., cât și proprietarul îl puteți rula, iar rularea în sine folosește credențialele proprietarului workflowului, ca orice link de încărcare.
+- Rezultatul rămâne pe ecranul dvs. până când părăsiți pagina; ceilalți vizualizatori nu văd fișierele, valorile sau rezultatele dvs. Rularea apare în istoricul execuțiilor cu triggerul `dashboard`.
+- Partajarea unui dashboard nu acordă niciodată acces la workflowul în sine. **Edit workflow** îl deschide pentru persoanele care au deja acces, iar **Fine-tune with AI** nu este oferit.
+- Rulările cu fișiere se execută pe instanța principală, unde sunt stocate fișierele încărcate, la fel ca orice rulare File Upload Trigger.
 
 ## Generarea unui widget cu AI
 
@@ -50,7 +84,7 @@ Comutați **Edit** pentru a intra în modul de editare, unde puteți trage widge
 
 ## Memorare în cache și reîmprospătare
 
-Fiecare widget își memorează în cache pe server ultimele date calculate pentru o durată de viață (TTL) configurabilă. Cât timp cache-ul este proaspăt, redeschiderea dashboardului servește rezultatul stocat în loc să reexecute workflowul. Cache-ul este înlocuit pe loc de fiecare dată când datele sunt recalculate (un cache per widget) și este invalidat automat când editați workflowul widgetului.
+Fiecare widget își memorează în cache pe server ultimele date calculate pentru o durată de viață (TTL) configurabilă. Cât timp cache-ul este proaspăt, redeschiderea dashboardului servește rezultatul stocat în loc să reexecute workflowul. Cache-ul este înlocuit pe loc de fiecare dată când datele sunt recalculate (un cache per widget, plus unul per înregistrare pe o [pagină de detalii](#detail-pages)) și este invalidat automat când editați workflowul widgetului.
 
 Utilizați butonul **Refresh** al unui widget (sau **Refresh** din bara de instrumente) pentru a ocoli cache-ul și a recalcula imediat.
 ## Partajare
@@ -60,9 +94,10 @@ Proprietarii partajează un dashboard din setările acestuia, cu utilizatori ind
 | Acțiune | Proprietar | Write | Read |
 |--------|:-----:|:-----:|:----:|
 | Vizualizarea widgeturilor, reîmprospătarea acestora, utilizarea reîmprospătării automate | ✓ | ✓ | ✓ |
+| Deschiderea paginilor de detalii, rularea widgeturilor de rulare | ✓ | ✓ | ✓ |
 | Adăugarea, clonarea, ștergerea, redenumirea și redimensionarea widgeturilor; generarea și ajustarea fină cu AI; bifarea elementelor din checklist | ✓ | ✓ | |
 | Deschiderea workflow-ului unui widget în editor | ✓ | ✓ | |
-| Redenumirea sau ștergerea dashboard-ului, gestionarea partajării | ✓ | | |
+| Redenumirea sau ștergerea dashboard-ului, setarea formatului înregistrării, gestionarea partajării | ✓ | | |
 
 **Widgeturile rulează întotdeauna ca proprietar al dashboard-ului.** Indiferent cine vizualizează, un widget utilizează credențialele și variabilele globale ale proprietarului, iar execuțiile sale apar în istoricul de execuție și în traces-urile proprietarului. Astfel, colegii de echipă văd aceleași date fără a avea acces la conturile din spatele acestora, iar fiecare vizualizator partajează același rezultat cache-uit per widget. Widgeturile pe care le adaugă sau le clonează un colaborator cu drept de scriere aparțin de asemenea proprietarului.
 

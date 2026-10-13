@@ -33,6 +33,13 @@ Le nœud fonctionne en deux phases :
 
 Sur le canvas, **Run Workflow** affiche le `curl` émis dans le panneau de débogage avec un bouton de copie.
 
+## Exécution depuis Heym
+
+Deux emplacements permettent d'exécuter directement un tel Workflow sur un fichier, via le même mécanisme de génération et de téléversement :
+
+- Le [Quick Drawer](../reference/quick-drawer.md) affiche une zone de dépôt pour le fichier. Ces exécutions sont étiquetées `Quick Drawer` dans l'historique.
+- Un [widget d'exécution](../tabs/dashboard-tab.md#run-widgets) sur un tableau de bord exécute le Workflow sur chaque fichier déposé. Ces exécutions sont étiquetées `dashboard`.
+
 ## Paramètres
 
 | Paramètre | Type | Valeur par défaut | Description |

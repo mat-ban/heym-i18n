@@ -33,6 +33,13 @@ Uzel pracuje ve dvou fázích:
 
 Na canvasu tlačítko **Spustit workflow** zobrazí vytvořený `curl` v panelu ladění s tlačítkem pro kopírování.
 
+## Spouštění z Heym
+
+Dvě místa umožňují spustit takový Workflow přímo nad souborem pomocí stejného vygenerování odkazu a nahrání:
+
+- [Quick Drawer](../reference/quick-drawer.md) zobrazuje zónu pro přetažení souboru. Tato spuštění jsou v historii označena štítkem `Quick Drawer`.
+- [Spouštěcí widget](../tabs/dashboard-tab.md#run-widgets) na dashboardu spustí Workflow pro každý přetažený soubor. Tato spuštění jsou označena štítkem `dashboard`.
+
 ## Parametry
 
 | Parametr | Typ | Výchozí | Popis |

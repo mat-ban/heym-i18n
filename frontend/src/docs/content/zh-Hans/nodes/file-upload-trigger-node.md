@@ -33,6 +33,13 @@
 
 在画布上，**Run Workflow** 会在调试面板中显示生成的 `curl`，并附带一个复制按钮。
 
+## 从 Heym 运行
+
+有两个位置可以通过相同的生成链接与上传流程，直接针对文件运行此类 Workflow：
+
+- [Quick Drawer](../reference/quick-drawer.md) 会显示文件拖放区。这些运行在历史记录中会标记为 `Quick Drawer`。
+- 仪表盘上的[运行组件](../tabs/dashboard-tab.md#run-widgets)会对每个拖入的文件运行该 Workflow。这些运行会标记为 `dashboard`。
+
 ## 参数
 
 | 参数 | 类型 | 默认值 | 描述 |

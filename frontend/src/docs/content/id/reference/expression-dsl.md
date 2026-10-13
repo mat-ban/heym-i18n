@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id eksekusi saat ini (sama dengan id entri [Execution History](./execution-history.md), sehingga `/workflows/<id>/<executionId>` membuka eksekusi ini di kanvas). **Hanya saat runtime**: kosong pada dialog pratinjau ekspresi; terisi hanya ketika workflow sedang dieksekusi.
 - `$vars` - Variabel lokal workflow (akses melalui `$vars.variableName`; diperbarui melalui Node `variable`)
 - `$global` - Penyimpanan variabel global persisten (akses melalui `$global.variableName`)
+- `$page.record` - Khusus workflow widget dasbor: rekaman halaman detail tempat widget berada, dari parameter `?record=` dasbor. Bernilai `null` pada dasbor yang dibuka tanpa parameter tersebut dan di dialog pratinjau ekspresi. Node berlabel `page` memiliki prioritas lebih tinggi. Lihat [Halaman detail](../tabs/dashboard-tab.md#detail-pages).
 
 ### Penggunaan $vars
 - `$vars.counter` - Mengakses variabel bernama `counter`

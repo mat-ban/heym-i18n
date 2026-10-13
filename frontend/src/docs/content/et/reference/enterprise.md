@@ -16,6 +16,10 @@ Heym on tasuta kasutada ja ise majutada oma lähtekoodi-availku litsentsi alusel
 | **Prioriteetne tugi ja SLA** | Garanteeritud reageerimisajad ja prioriteetne probleemide lahendamine |
 | **Kohandatud arendus** | Funktsioonide arendus ja muudatused, mis on kohandatud teie organisatsiooni nõuetele |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) on ärimeeskondadele mõeldud liides, mis töötab Heymi peal. Inimesed kirjeldavad ülesannet, vastavad mõnele küsimusele ja saavad testitud workflow, töötavad nende jaoks loodud lehtedel ning vastavad ülevaatustele – ühekordse sisselogimise (SSO), Owner, Editor ja Viewer rollide ning nimega igal käivitusel. See töötab teie Heymi kõrval oma litsentsiga; ühendage see jaotises **Settings → Heym Work**. Lisateavet ja prooviversiooni taotlemist leiate aadressilt [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Tootmisagentide tugi
 
 Heymi meeskond aitab teil kavandada, ehitada ja tugevdada agente ja workflow'sid teie äriprotsesside jaoks. See hõlmab teie nõuete ülevaatamist, sõlmede konfiguratsioonide soovitamist ja veendumist, et teie workflow'd järgivad parimaid tavasid usaldusväärsuse, jälgitavuse ja halduse osas.
@@ -68,3 +72,4 @@ Võtke ühendust enterprise meeskonnaga aadressil **enterprise@heym.run** litsen
 - [Paralleelne täitmine](./parallel-execution.md) — Mitme worker'i täitmismudel
 - [Meeskonnad](./teams.md) — Meeskonna koostöö ja ressursside jagamine
 - [Täielik funktsioonide komplekt](./features.md) — Heymi võimaluste täielik ülevaade
+- [Heym Work](./heym-work.md): ärimeeskondade liides ja selle ühendamine

@@ -30,6 +30,9 @@ Het tabblad **Vectoropslag** beheert vectoropslag die wordt gebruikt door [RAG](
 - **Bronnen verwijderen** – Verwijder specifieke bestanden of bron-groepen uit een opslag, inclusief
   alles wat één workflow heeft toegevoegd
 - **Opslag bewerken** – Wijzig naam, beschrijving of referentie
+- **Zoeken** – `POST /api/vector-stores/{id}/search` met een `query` (en een `limit` van 1 tot 20,
+  standaard 5) retourneert de chunks die een zoekopdracht van een RAG-node zou retourneren, beste overeenkomst eerst, elk met zijn
+  score en bron. Het RAG-scherm van Heym Work gebruikt dit om het ophalen te testen
 
 ## Delen
 

@@ -8,7 +8,7 @@ Svi započinju s jednom nadzornom pločom, koja se stvara prvi put kada otvorite
 
 Kartica ponovno otvara nadzornu ploču koju ste posljednji put koristili, a adresa u adresnoj traci nosi otvorenu nadzornu ploču (`?tab=dashboard&dashboard=<id>`), tako da poveznica otvara tu točnu nadzornu ploču za svakoga tko ima pristup.
 
-Gumb za postavke (samo za vlasnike) preimenuje nadzornu ploču, upravlja dijeljenjem i briše je. Brisanje nadzorne ploče uklanja njezine widgete i njihove workflow-e. Uvijek zadržavate barem jednu vlastitu nadzornu ploču, tako da se posljednja ne može izbrisati.
+Gumb za postavke (samo za vlasnike) preimenuje nadzornu ploču, postavlja koje zapise prihvaća kao [stranica s pojedinostima](#detail-pages), upravlja dijeljenjem i briše je. Brisanje nadzorne ploče uklanja njezine widgete i njihove workflow-e. Uvijek zadržavate barem jednu vlastitu nadzornu ploču, tako da se posljednja ne može izbrisati.
 
 ## Widgeti
 
@@ -18,7 +18,7 @@ Widget je jedan grafikon na mreži. Podržani tipovi grafikona:
 - **Line**
 - **Area** (ispunjeni trend, podržava više serija)
 - **Pie**
-- **Table** (pomicanje)
+- **Table** (pomicanje; jedan stupac može se prikazati kao [oznake statusa](../nodes/chart-output-node.md#status-chips), a redci mogu otvoriti [stranicu s pojedinostima](#detail-pages))
 - **Numeric** (jedna KPI vrijednost s opcionalnom jedinicom)
 - **Gauge** (jedna vrijednost u odnosu na min–max raspon, npr. postotak)
 - **Scatter** (X/Y točke za korelacijske grafikone)
@@ -26,6 +26,8 @@ Widget je jedan grafikon na mreži. Podržani tipovi grafikona:
 - **Bar gauge** (jedan horizontalni mjerač po redu s crvenom→zelenom gradijentom i vrijednošću, npr. slobodni prostor na disku)
 - **Text** (markdown poruka, npr. statusna napomena poput "Posljednje izvršavanje u 19:47"; podržava [interaktivne potvrdne okvire](../nodes/chart-output-node.md#interactive-task-lists) kada je markdown statičan, i [izričite numerirane popise](../nodes/chart-output-node.md#numbered-lists) za prilagođeno ili silazno numeriranje)
 - **HITL** (vaši neodgovoreni ljudski pregledi. Naslov prikazuje `1/n pending`. Ime workflow-a otvara tu izvedbu na platnu. **Odobri**, **Zatraži promjene** i **Odbij** rješavaju to. Ikona povijesti pored naslova widgeta otvara tu izvedbu u dijalogu povijesti na ovoj stranici. Widget ne koristi uzvodne redove, a svaka osoba vidi svoju vlastitu čekajuću listu)
+
+Osim grafikona, widget **Run a workflow** pokreće jedan od vaših workflowa s nadzorne ploče: na ispuštenoj datoteci, sa svojim poljima za unos ili pomoću gumba Run; pogledajte [Widgeti za pokretanje](#run-widgets).
 
 Svaki widget učitava svoje podatke asinkrono kada otvorite karticu, tako da stranica ostaje responzivna dok se grafikoni popunjavaju.
 
@@ -36,7 +38,39 @@ Svaki widget učitava svoje podatke asinkrono kada otvorite karticu, tako da str
 3. Izradite workflow tako da čvor koji napaja **Chart Output** proizvodi niz redova, a zatim konfigurirajte mapiranje polja Chart Output čvora (polje oznake, polje vrijednosti itd.).
 4. Spremite, vratite se na karticu Nadzorna ploča, i widget se prikazuje.
 
+Za widget **Run a workflow** umjesto toga odaberite workflow koji on pokreće; izbornik navodi kako će widget pokrenuti svaki od njih. Widget se dodaje izravno u mrežu; nema novog workflowa za izgradnju.
+
 Dvaput kliknite na widget (ili koristite njegov gumb za uređivanje) kako biste ponovno otvorili njegov workflow u bilo kojem trenutku. Koristite **Kloniraj widget** u zaglavlju widgeta za dupliciranje i widgeta i njegovog kompletnog workflow-a. Kopija se postavlja ispod originala i označena je s **(Kopija)** kako biste je mogli neovisno uređivati.
+
+## Stranice s pojedinostima
+
+Tablični widget može povezati svoje retke s drugom nadzornom pločom, koja tada radi kao stranica s pojedinostima: jedna nadzorna ploča koja služi svakom kupcu, računu ili zahtjevu (ticketu).
+
+1. Otvorite **Settings** tabličnog widgeta i odaberite nadzornu ploču pod **Row link**.
+2. Unesite **Record column**, stupac čija vrijednost identificira redak (na primjer `id`), i opcionalno **Label column** koji ga imenuje (na primjer `name`).
+3. Spremite. Klikom na redak (ili fokusiranjem i pritiskom na Enter) otvara se povezana nadzorna ploča s `?record=<value>&label=<name>`.
+
+Na nadzornoj ploči s pojedinostima svaki workflow widgeta čita vrijednost kao `$page.record` (pogledajte [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)), a stranica prikazuje `Dashboard / <label>` iznad mreže s gumbom za brisanje zapisa. Natrag vraća na tablicu s koje ste došli.
+
+- **Tko je može otvoriti.** Redci su klikabilni samo za gledatelje koji mogu otvoriti povezanu nadzornu ploču. Ostali vide istu tablicu bez poveznica.
+- **Format zapisa.** Zapis dolazi iz URL-a, pa nadzorna ploča s pojedinostima odlučuje što prihvaća. U njezinim postavkama **Detail page records** je jedno od sljedećeg: ID-ovi (slova, znamenke, `-`, `_` i `.`, do 128 znakova; zadano), brojevi, UUID-ovi ili adrese e-pošte. Svaka druga vrijednost odbija se prije pokretanja widgeta, a widgeti prikazuju "This page does not accept that record".
+- **I dalje se izvršava kao vlasnik.** Widgeti se i na stranici s pojedinostima izvršavaju kao vlasnik nadzorne ploče. Graditelji bi trebali prosljeđivati `$page.record` samo tamo gdje ga čvor escapa, nikada izravno u tekst upita.
+- **Keširanje.** Svaki widget kešira svoj grafikon po zapisu, za isto vrijeme trajanja (TTL) kao i sam widget, te čuva 50 najčešće korištenih zapisa.
+
+## Widgeti za pokretanje
+
+Widget **Run a workflow** pokreće jedan od vaših workflowa i prikazuje rezultat: status, vrijeme izvođenja i izlaze. Što prikazuje ovisi o tome što workflow prima:
+
+- **Datoteka.** Za workflow koji počinje čvorom [File Upload Trigger](../nodes/file-upload-trigger-node.md), ispustite datoteku na njega (ili kliknite za odabir) i widget je prenosi putem jednokratne poveznice za prijenos tog triggera. Widget prikazuje vrste i veličinu datoteka koje trigger prihvaća te odbija ostale prije prijenosa. Kada workflow također počinje čvorom Text Input, widget prikazuje njegova polja pokraj zone za ispuštanje: odaberite datoteku, ispunite polja i **Run** šalje oboje. Vrijednosti putuju s poveznicom za prijenos koju widget generira, tako da ih dijeljena poveznica za prijenos ne može postaviti.
+- **Polja za unos.** Za workflow koji počinje čvorom Text Input, widget prikazuje njegova polja sa zadanim vrijednostima; **Run** pokreće workflow s vašim vrijednostima. Vrijednosti za polja koja workflow nema se odbacuju.
+- **Ništa.** Workflow bez ulaza dobiva gumb **Run**.
+
+Gumb **Wrap** u rezultatu prelama duge retke izlaza unutar okvira; isključite ga za čitanje JSON rasporeda izlaza.
+
+- Svatko tko može otvoriti nadzornu ploču može pokrenuti widget, baš kao što svatko može osvježiti grafikon. Pristup workflowu pripada vlasniku nadzorne ploče: dodavanje widgeta zahtijeva workflow koji i vi i vlasnik možete pokrenuti, a samo izvođenje koristi vjerodajnice vlasnika workflowa, kao i svaka poveznica za prijenos.
+- Rezultat ostaje na vašem zaslonu dok ne napustite stranicu; drugi gledatelji ne vide vaše datoteke, vrijednosti ni rezultate. Izvođenje se pojavljuje u povijesti izvršavanja s triggerom `dashboard`.
+- Dijeljenje nadzorne ploče nikada ne daje pristup samom workflowu. **Edit workflow** ga otvara osobama koje već imaju pristup, a **Fine-tune with AI** se ne nudi.
+- Izvođenja s datotekama izvršavaju se na glavnoj instanci, gdje se pohranjuju prenesene datoteke, kao i svako izvođenje File Upload Triggera.
 
 ## Generiranje widgeta s AI
 
@@ -50,7 +84,7 @@ Prebacite se na **Uredi** kako biste ušli u način uređivanja, gdje možete po
 
 ## Keširanje i osvježavanje
 
-Svaki widget kešira svoje posljednje izračunate podatke na poslužitelju za konfigurabilno vrijeme trajanja (TTL). Dok je keš svjež, ponovno otvaranje nadzorne ploče poslužuje pohranjeni rezultat umjesto ponovnog pokretanja workflow-a. Keš se zamjenjuje na mjestu svaki put kada se podaci ponovno izračunavaju (jedan keš po widgetu), a automatski se poništava kada uređujete workflow widgeta.
+Svaki widget kešira svoje posljednje izračunate podatke na poslužitelju za konfigurabilno vrijeme trajanja (TTL). Dok je keš svjež, ponovno otvaranje nadzorne ploče poslužuje pohranjeni rezultat umjesto ponovnog pokretanja workflow-a. Keš se zamjenjuje na mjestu svaki put kada se podaci ponovno izračunavaju (jedan keš po widgetu, plus jedan po zapisu na [stranici s pojedinostima](#detail-pages)), a automatski se poništava kada uređujete workflow widgeta.
 
 Koristite gumb **Osvježi** widgeta (ili **Osvježi** u alatnoj traci) kako biste zaobišli keš i odmah ponovno izračunali.
 ## Dijeljenje
@@ -60,9 +94,10 @@ Vlasnici dijele nadzornu ploču iz svojih postavki, s pojedinačnim korisnicima 
 | Akcija | Vlasnik | Pisanje | Čitanje |
 |--------|:-------:|:-------:|:-------:|
 | Pregledavanje widgeta, osvježavanje, korištenje automatskog osvježavanja | ✓ | ✓ | ✓ |
+| Otvaranje stranica s pojedinostima, pokretanje widgeta za pokretanje | ✓ | ✓ | ✓ |
 | Dodavanje, kloniranje, brisanje, preimenovanje i promjena veličine widgeta; AI generiranje i fino podešavanje; označavanje stavki na popisu | ✓ | ✓ | |
 | Otvaranje workflowa widgeta u uređivaču | ✓ | ✓ | |
-| Preimenovanje ili brisanje nadzorne ploče, upravljanje dijeljenjem | ✓ | | |
+| Preimenovanje ili brisanje nadzorne ploče, postavljanje formata zapisa, upravljanje dijeljenjem | ✓ | | |
 
 **Widgeti uvijek rade kao vlasnik nadzorne ploče.** Tko god da gleda, widget koristi vjerodajnice vlasnika i globalne varijable, a njegovi radovi pojavljuju se u povijesti izvršavanja i tragovima vlasnika. Članovi tima stoga vide iste podatke bez pristupa računima iza njih, a svaki gledatelj dijeli jedan predmemorirani rezultat po widgetu. Widgeti koje dodaje ili klonira suradnik s pravima pisanja također pripadaju vlasniku.
 

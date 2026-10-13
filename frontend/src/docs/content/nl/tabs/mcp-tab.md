@@ -1,6 +1,6 @@
 # MCP-tabblad
 
-Het tabblad **MCP** configureert de integratie van het Model Context Protocol (MCP). Met MCP kunnen AI-clients (Claude, Cursor en elk MCP-compatibel hulpmiddel) uw Heym-workflows als tools aanroepen.
+Het tabblad **MCP** configureert de integratie van het Model Context Protocol (MCP). Met MCP kunnen AI-clients (Claude, ChatGPT, Gemini, Cursor en elk MCP-compatibel hulpmiddel) uw Heym-workflows als tools aanroepen.
 
 Heym ondersteunt twee modi: een **standaardserver** die alle MCP-ingeschakelde workflows onder één endpoint beschikbaar stelt, en **benoemde servers** die elke logische groep workflows een eigen URL en API-key geven.
 
@@ -24,6 +24,8 @@ De standaardserver is altijd beschikbaar op `{origin}/api/mcp/sse`. Alle workflo
 
 - **API-key** – Gebruik de MCP API-key voor programmatische verbindingen. Het tabblad kan een kant-en-klare JSON-configuratie kopiëren en bevat een knop **Toevoegen aan Cursor** voor eenmalige Cursor-installatie.
 - **Claude** – Het tabblad toont de MCP-server-URL en de installatiestappen voor Claude. Laat OAuth Client ID en Secret leeg; Claude registreert zich automatisch en authenticeert via Heym OAuth.
+- **ChatGPT** – Het tabblad toont de MCP-server-URL en de instellingsstappen voor een ChatGPT-app. Schakel de ontwikkelaarsmodus in, maak een app aan met de URL en kies OAuth; ChatGPT registreert zich automatisch.
+- **Gemini** – Het tabblad toont de MCP-server-URL en de instellingsstappen voor een aangepaste Gemini-app: ga in gemini.google.com naar **Settings → Connected Apps → Add a custom app**, plak de URL en laat **Advanced features** gesloten; Gemini registreert zich automatisch en authenticeert via Heym OAuth. Eenmaal verbonden werkt Heym ook in de mobiele Gemini-app.
 
 ### MCP-schakelaar per workflow
 
@@ -40,7 +42,8 @@ De sectie **Heym Capabilities** verandert de engine van het Chat-tabblad in éé
 
 Wanneer deze is ingeschakeld, verschijnt `heym_chat` in `tools/list` naast uw workflow-tools. Een MCP-client stuurt één bericht in natuurlijke taal en de Heym-engine neemt het vanaf daar over, met dezelfde mogelijkheden als het Chat-tabblad:
 
-- Workflows bouwen, bewerken, inspecteren en uitvoeren via de Workflow AI Builder
+- Een workflow bouwen, testen met voorbeeldinvoer, corrigeren en voltooien zodra een uitvoering slaagt (zie [Build-modus](#build-mode))
+- Uw bestaande workflows inspecteren en uitvoeren
 - Analytics, recente uitvoeringen en aankomende cron-schema's rapporteren
 - De uitvoeringsgeschiedenis van één workflow rapporteren: hoe vaak deze is uitgevoerd, statusaantallen, wanneer deze is uitgevoerd, en op verzoek de inputs, outputs en fouten per knooppunt van één uitvoering
 - Rapporteren wat er nu actief is: hoeveel uitvoeringen actief zijn, hun workflownamen, hoe lang elk al draait, op welk knooppunt elk zich momenteel bevindt, en een link naar de live uitvoering
@@ -50,6 +53,15 @@ Wanneer deze is ingeschakeld, verschijnt `heym_chat` in `tools/list` naast uw wo
 - Openstaande human-in-the-loop-reviews goedkeuren, bewerken of weigeren
 
 Mogelijkheden die later aan het Chat-tabblad worden toegevoegd, worden automatisch beschikbaar via `heym_chat` — er is geen schakelaar per mogelijkheid die gesynchroniseerd moet blijven.
+
+### Build-modus
+
+`heym_chat` voert de Chat-engine altijd uit in de build-modus. In één aanroep kan de assistent een nieuwe workflow opslaan, deze uitvoeren met realistische voorbeeldinvoer, het uitvoeringsrapport lezen, herstellen wat mislukte en de workflow opnieuw uitvoeren, tot maximaal vijf testruns per aanroep. Wanneer de laatste uitvoering van de laatste opslag slaagt, rondt hij af met een samenvatting van één zin en eindigt het antwoord met `Verified: the latest test run of the saved workflow passed.`
+
+- Testruns zijn echte uitvoeringen. De neveneffecten vinden daadwerkelijk plaats en ze verschijnen net als elke andere uitvoering in de uitvoeringsgeschiedenis van de workflow.
+- Opslagacties volgen het pad van de editor: een wijziging in de grafiek behoudt de vorige grafiek in de **Edit History** van de workflow.
+- Om een eerder gebouwde workflow te wijzigen, zet u de thread voort met dezelfde `conversation_id`. De assistent werkt die workflow bij in plaats van een nieuwe aan te maken, en wijzigt alleen workflows die u mag bewerken.
+- Wanneer de vijf testruns zijn verbruikt, stopt de assistent en legt hij uit wat er nog steeds mislukt.
 
 Referenties blijven in de UI: `heym_chat` vermeldt, kiest of maakt deze nooit. Wanneer het een workflow bouwt of bewerkt, blijven nieuwe knooppunten die een referentie nodig hebben leeg en noemt het antwoord deze, zodat u ze in de editor kunt instellen.
 
@@ -110,7 +122,7 @@ Bij het in- of uitschakelen van een workflow verplaatst deze naar de bovenkant v
 Benoemde servers ondersteunen dezelfde authenticatiemethoden als de standaardserver:
 
 - **X-MCP-Key header** – Geef de API-key van de server direct door (API-clients, Cursor). Alleen als header: keys worden niet geaccepteerd als `?key=`-queryparameter, omdat URL's terechtkomen in access logs, proxy logs en browsergeschiedenis.
-- **Claude OAuth** – Voeg de server-URL toe aan Claude-integraties; laat de referenties leeg en Claude registreert automatisch via OAuth. Het bearer token moet worden meegestuurd in de `Authorization`-header, niet als `?token=`.
+- **Claude, ChatGPT en Gemini OAuth** – Voeg de server-URL toe aan de connectoren of aangepaste apps van de client; laat de referenties leeg en de client registreert zich automatisch via OAuth. Het bearer token moet worden meegestuurd in de `Authorization`-header, niet als `?token=`.
 - **Session token** – Uitgegeven tijdens de SSE-handshake; gebonden aan de specifieke server, zodat tokens van de ene benoemde server geen toegang krijgen tot een andere. Deze kortlevende `?session=`-parameter wordt niet beïnvloed.
 
 ### Een benoemde server verwijderen
@@ -124,7 +136,7 @@ Klik op het **X**-pictogram in de koptekst van een serverkaart. Verwijdering ver
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Beide endpoints ondersteunen het SSE-transport (GET, MCP-specificatie 2024-11-05) en het Streamable HTTP-transport (POST, MCP-specificatie 2025-03-26). Claude gebruikt OAuth 2.1 / PKCE voor veilige aanmelding op beide.
+Beide endpoints ondersteunen het SSE-transport (GET, MCP-specificatie 2024-11-05) en het Streamable HTTP-transport (POST, MCP-specificatie 2025-03-26). Claude, ChatGPT en Gemini gebruiken OAuth 2.1 / PKCE voor veilige aanmelding op beide.
 
 ## Gerelateerd
 

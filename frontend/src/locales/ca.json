@@ -896,7 +896,8 @@
     "searchPlaceholder": "Cercar a la documentació...",
     "title": "Documentació",
     "welcomeSubtitle": "Us donem la benvinguda a Heym.",
-    "welcomeTitle": "Documentació"
+    "welcomeTitle": "Documentació",
+    "pluginNoDoc": "Aquest connector no té documentació."
   },
   "drive": {
     "applying": "S'està aplicant...",
@@ -1699,7 +1700,22 @@
     "goToFeature": "Anar a {title}",
     "previousFeature": "Funció anterior",
     "readTheDocs": "Llegir la documentació",
-    "startTour": "Iniciar el tour"
+    "startTour": "Iniciar el tour",
+    "heymWork": {
+      "step0": "Un equip pregunta a Heym Work",
+      "step1": "Heym el construeix i el prova",
+      "step2": "Verificat, sense llenç",
+      "step3": "Heym l'executa en segon pla",
+      "prompt": "Comproveu els nous contractes per detectar clàusules de risc.",
+      "testing": "Provant el Workflow",
+      "verified": "Verificat"
+    },
+    "skillZip": {
+      "step0": "Deixeu anar un zip d'habilitat al Chat",
+      "step1": "El Chat llegeix SKILL.md",
+      "step2": "L'agent conserva l'habilitat",
+      "prompt": "Llegiu la factura i llisteu les línies de detall."
+    }
   },
   "schedules": {
     "calendar": {
@@ -1930,7 +1946,17 @@
     "voiceCredentialDescription": "S'utilitza per llegir missatges en veu alta i per al mode de veu interactiu al chat.",
     "voiceLoadError": "No s'han pogut carregar les veus. Comproveu la credencial.",
     "voiceSelect": "Veu",
-    "work": "Heym Work"
+    "work": "Heym Work",
+    "pluginsIntro": "Els connectors afegeixen nodes personalitzats (accions i Triggers) a aquesta instància. Instal·lar o eliminar un connector executa codi al servidor, de manera que està restringit als operadors llistats a",
+    "loadingPlugins": "S'estan carregant els connectors…",
+    "pluginsDisabledTitle": "Els connectors estan desactivats",
+    "pluginsDisabledHint": "Definiu aquestes variables d'entorn al backend i reinicieu:",
+    "installPluginZip": "Instal·la un connector (.zip)",
+    "noPluginsInstalled": "Encara no s'ha instal·lat cap connector.",
+    "enablePlugin": "Activa",
+    "disablePlugin": "Desactiva",
+    "uninstallPlugin": "Desinstal·la",
+    "pluginOperationFailed": "L'operació del connector ha fallat"
   },
   "showcase": {
     "askAboutDoc": "Preguntar sobre aquesta documentació",
@@ -2401,5 +2427,48 @@
     "versions": "Versions",
     "versionsCount": "{count} versió(ns)",
     "versionsSubtitle": "Les versions es crearan quan deseu els canvis al vostre Workflow"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Cerca Workflows, pestanyes, documentació...",
+    "searchAria": "Cerca a la paleta d'ordres",
+    "ariaLabel": "Paleta d'ordres",
+    "noResults": "No s'han trobat resultats",
+    "tryDifferentSearch": "Proveu amb un altre terme de cerca",
+    "recent": "Recents",
+    "recentInFolder": "Recents · A: {folder}",
+    "inFolder": "A: {folder}",
+    "scheduledDate": "Programat {date}",
+    "scheduledForDeletion": "Programat per a l'eliminació",
+    "goToTab": "Vés a la pestanya",
+    "workflowTemplate": "Plantilla de Workflow",
+    "nodeTemplate": "Plantilla de node",
+    "nodeType": "Node · {type}",
+    "documentation": "Documentació",
+    "support": "Suport",
+    "contactSupport": "Contacta amb el suport",
+    "watchRunbook": "Mireu com Heym construeix i executa un Workflow",
+    "openDocs": "Obre la documentació de Heym",
+    "getHelp": "Obtingueu ajuda de l'equip de Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work per a equips empresarials, a heym.run",
+    "navigate": "Navega",
+    "select": "Selecciona",
+    "click": "clic",
+    "newTab": "pestanya nova",
+    "oneItem": "{count} element",
+    "manyItems": "{count} elements"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Els connectors estan desactivats en aquesta instància.",
+    "loadingDefinition": "S'està carregant la definició del connector...",
+    "notBound": "Aquest node no està vinculat a cap paquet de connector.",
+    "noneInstalled": "No hi ha cap connector instal·lat en aquesta instància.",
+    "notInstalled": "El connector \"{id}\" no està instal·lat en aquesta instància.",
+    "installedButDisabled": "El connector \"{name}\" està instal·lat però desactivat.",
+    "noKindNodes": "El connector \"{name}\" no exposa cap node de tipus {kind}.",
+    "loadErrorDetail": "No s'han pogut carregar els connectors: {detail}",
+    "loadErrorHttp": "No s'han pogut carregar els connectors (HTTP {status}).",
+    "loadError": "No s'han pogut carregar els connectors.",
+    "enabled": "Activat"
   }
 }

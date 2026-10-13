@@ -35,6 +35,7 @@ Workflow를 선택하면 입력 폼이 열립니다.
 - **Run Workflow**를 클릭하여 선택한 Workflow를 실행하십시오
 - **Stop Workflow**를 클릭하여 Drawer에서 실행 중인 실행을 취소하십시오
 - Input 필드가 없는 Workflow도 바로 실행할 수 있습니다
+- [File Upload Trigger](../nodes/file-upload-trigger-node.md)로 시작하는 Workflow는 입력 폼 대신 드롭존을 표시합니다. 파일을 끌어다 놓거나 클릭하여 파일을 선택하십시오. 드롭존에는 Trigger가 허용하는 파일 형식과 크기가 표시되며, 다른 파일은 업로드 전에 거부됩니다. 파일이 선택될 때까지 **Run Workflow** 버튼은 비활성화 상태로 유지됩니다.
 
 Drawer는 다른 Heym 실행 화면과 동일한 Workflow 실행 API를 사용하므로, 출력과 런타임 동작이 일관되게 유지됩니다.
 
@@ -51,6 +52,8 @@ Drawer에서 실행을 중지하면 해당 Workflow 실행의 진행 중인 Play
 
 `pending`은 Workflow가 사람의 리뷰와 같은 후속 작업을 기다리고 있음을 의미합니다.
 
+파일 실행은 Trigger의 일회용 업로드 링크를 통해 진행됩니다. 드로어가 Workflow에 링크를 요청하고 해당 링크로 파일을 업로드한 뒤, 업로드가 완료되면 결과를 표시합니다. 파일 실행은 단계별 진행 상황 없이 최종 상태와 출력만 표시하며, 실행 기록에도 동일하게 `Quick Drawer` 태그가 지정됩니다. 하나의 링크는 하나의 파일만 처리하므로 선택한 파일은 매 실행 후 초기화됩니다.
+
 ## 브라우저 저장소
 
 Quick Drawer는 개인 설정을 `localStorage`에 저장합니다:
@@ -64,7 +67,7 @@ Quick Drawer는 개인 설정을 `localStorage`에 저장합니다:
 
 Quick Drawer는 의도적으로 가벼운 실행 화면입니다.
 
-- 포함: 검색, 고정, 선택, 입력, 실행, 진행, 결과
+- 포함: 검색, 고정, 선택, 입력(파일 포함), 실행, 진행, 결과
 - 제외: Workflow 생성, 편집, 폴더 관리, 캔버스 작업
 
 ## 관련 문서

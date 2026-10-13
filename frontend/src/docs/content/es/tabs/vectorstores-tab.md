@@ -30,6 +30,9 @@ La pestaña **Vectorstores** gestiona los almacenes vectoriales utilizados por l
 - **Delete sources** – Elimine archivos concretos o grupos de origen de un almacén, incluido
   todo lo que haya añadido un workflow
 - **Edit store** – Modifique el nombre, la descripción o la credencial
+- **Buscar** – `POST /api/vector-stores/{id}/search` con una `query` (y un `limit` de 1 a 20,
+  por defecto 5) devuelve los fragmentos que devolvería la búsqueda de un nodo RAG, empezando por la mejor coincidencia, cada uno con su
+  puntuación y origen. La pantalla RAG de Heym Work lo utiliza para probar la recuperación
 
 ## Compartir
 

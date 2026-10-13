@@ -33,6 +33,13 @@ Node hoạt động theo hai giai đoạn:
 
 Trên canvas, **Run Workflow** hiển thị lệnh `curl` đã khởi tạo trong bảng debug kèm nút sao chép.
 
+## Chạy từ Heym
+
+Có hai nơi chạy trực tiếp một Workflow như vậy trên tệp, thông qua cùng quy trình khởi tạo liên kết và tải lên:
+
+- [Quick Drawer](../reference/quick-drawer.md) hiển thị vùng thả cho tệp. Các lần chạy đó được gắn thẻ `Quick Drawer` trong lịch sử.
+- Một [Run widget](../tabs/dashboard-tab.md#run-widgets) trên bảng điều khiển sẽ chạy Workflow trên mỗi tệp được thả vào. Các lần chạy đó được gắn thẻ `dashboard`.
+
 ## Tham số
 
 | Tham số | Kiểu | Mặc định | Mô tả |

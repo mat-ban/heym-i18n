@@ -35,6 +35,7 @@ Izberite workflow, da odprete njegov obrazec za vnos.
 - Kliknite **Izvedi Workflow**, da izvedete izbrani workflow.
 - Kliknite **Ustavi Workflow**, da prekličete trenutno izvajanje iz predala.
 - Workflows brez vhodnih polj se lahko še vedno izvajajo neposredno.
+- Workflow, ki se začne z vozliščem [File Upload Trigger](../nodes/file-upload-trigger-node.md), namesto tega prikaže območje za odlaganje: vanj povlecite datoteko ali kliknite za izbiro. Območje navaja vrste in velikost datotek, ki jih trigger sprejema, ter druge datoteke zavrne pred nalaganjem. Gumb **Izvedi Workflow** (**Run Workflow**) ostane onemogočen, dokler ni izbrana datoteka.
 
 Predal uporablja isto API za izvajanje workflows kot druge površine za izvajanje v Heym, zato ostajajo izhodi in obnašanje med izvajanjem dosledni.
 
@@ -51,6 +52,8 @@ Po začetku izvajanja predal prikazuje:
 
 `v čakanju` pomeni, da workflow čaka na kasnejšo akcijo, kot je človeški pregled.
 
+Zagon z datoteko poteka prek enkratne povezave za nalaganje triggerja: predal od workflowa zahteva povezavo, nanjo naloži datoteko in prikaže rezultat, ko se nalaganje zaključi. Zagoni z datoteko prikažejo končni status in izhode, ne pa tudi napredka po korakih, v zgodovini pa so prav tako označeni s `Quick Drawer`. Izbrana datoteka se po vsakem zagonu počisti, saj ena povezava sprejme le eno datoteko.
+
 ## Shramba Brskalnika
 
 Hiter predal shranjuje osebne nastavitve v `localStorage`:
@@ -64,7 +67,7 @@ Predal **ne** ohranja vrednosti vnosa v tej različici.
 
 Hiter predal je namenoma lahka površina za izvajanje.
 
-- Vključuje: iskanje, pripenjanje, izbiro, vnos, izvajanje, napredek, rezultat.
+- Vključuje: iskanje, pripenjanje, izbiro, vnos (vključno z datoteko), izvajanje, napredek, rezultat.
 - Izključuje: ustvarjanje workflow, urejanje, upravljanje map in akcije na platnu.
 
 ## Sorodno

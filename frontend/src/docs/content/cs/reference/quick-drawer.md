@@ -35,6 +35,7 @@ Vyberte workflow pro otevření jeho vstupního formuláře.
 - Kliknutím na **Run Workflow** spustíte vybrané workflow
 - Kliknutím na **Stop Workflow** zrušíte běžící spuštění z panelu
 - Workflow bez vstupních polí lze spustit přímo
+- Workflow, který začíná uzlem [File Upload Trigger](../nodes/file-upload-trigger-node.md), místo toho zobrazí zónu pro přetažení: přetáhněte do ní soubor nebo kliknutím soubor vyberte. Zóna uvádí typy a velikost souborů, které trigger přijímá, a ostatní soubory před nahráním odmítne. Tlačítko **Run Workflow** zůstává neaktivní, dokud není vybrán soubor.
 
 Panel používá stejné API pro spouštění workflow jako ostatní běhová rozhraní Heym, takže výstupy a chování za běhu zůstávají konzistentní.
 
@@ -51,6 +52,8 @@ Po spuštění běhu panel zobrazuje:
 
 `pending` znamená, že workflow čeká na pozdější akci, například na lidskou kontrolu.
 
+Spuštění se souborem probíhá přes jednorázový nahrávací odkaz triggeru: panel požádá workflow o odkaz, nahraje na něj soubor a po dokončení nahrávání zobrazí výsledek. Spuštění se souborem zobrazují konečný stav a výstupy, ale nikoli průběh krok za krokem, a v historii jsou rovněž označena štítkem `Quick Drawer`. Vybraný soubor se po každém spuštění vymaže, protože jeden odkaz přijímá pouze jeden soubor.
+
 ## Úložiště prohlížeče
 
 Rychlý panel ukládá osobní předvolby do `localStorage`:
@@ -64,7 +67,7 @@ Panel v této verzi **neukládá** vstupní hodnoty.
 
 Rychlý panel je záměrně odlehčeným rozhraním pro spouštění.
 
-- Zahrnuto: vyhledávání, připínání, výběr, vstup, spuštění, průběh, výsledek
+- Zahrnuto: vyhledávání, připínání, výběr, vstup (včetně souboru), spuštění, průběh, výsledek
 - Vyloučeno: vytváření a úpravy workflow, správa složek a akce na canvasu
 
 ## Související

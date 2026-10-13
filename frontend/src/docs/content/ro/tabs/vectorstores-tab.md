@@ -30,6 +30,9 @@ Fila **Vectorstores** gestionează vector store-urile utilizate de nodurile [RAG
 - **Delete sources** – Eliminați fișiere specifice sau grupuri sursă dintr-un store, inclusiv
   tot ce a adăugat un workflow
 - **Edit store** – Modificați numele, descrierea sau credential-ul
+- **Căutare** – `POST /api/vector-stores/{id}/search` cu un `query` (și o `limit` de la 1 la 20,
+  implicit 5) returnează fragmentele pe care le-ar returna căutarea unui nod RAG, începând cu cea mai bună potrivire, fiecare cu
+  scorul și sursa sa. Ecranul RAG din Heym Work îl folosește pentru a testa regăsirea
 
 ## Partajarea
 

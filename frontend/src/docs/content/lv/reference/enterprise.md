@@ -16,6 +16,10 @@ Heym ir bezmaksas lietošanai un pašizvietošanai saskaņā ar tā source-avail
 | **Priority Support & SLA** | Garantēti atbildes laiki un prioritāra problēmu risināšana |
 | **Custom Development** | Funkciju izstrāde un modifikācijas, kas pielāgotas Jūsu organizācijas prasībām |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) ir biznesa komandām paredzēta saskarne, kas darbojas virs Heym. Lietotāji apraksta uzdevumu, atbild uz dažiem jautājumiem un iegūst pārbaudītu workflow, strādā no viņiem izveidotām lapām un atbild uz pārskatiem — ar vienoto pierakstīšanos (SSO), Owner, Editor un Viewer lomām un vārdu katrā izpildē. Tas darbojas blakus jūsu Heym ar savu licenci; savienojiet to sadaļā **Settings → Heym Work**. Uzziniet vairāk un pieprasiet izmēģinājumu vietnē [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Production Agent Support
 
 Heym komanda palīdz Jums izstrādāt, veidot un nostiprināt aģentus un workflow Jūsu biznesa procesiem. Tas ietver Jūsu prasību pārskatīšanu, mezglu konfigurāciju ieteikšanu un pārliecināšanos, ka Jūsu workflow atbilst labākajām praksēm uzticamības, novērojamības un pārvaldības jomā.
@@ -68,3 +72,4 @@ Sazinieties ar enterprise komandu **enterprise@heym.run**, lai uzzinātu par lic
 - [Parallel Execution](./parallel-execution.md) — Multi-worker izpildes modelis
 - [Teams](./teams.md) — Komandas sadarbība un resursu koplietošana
 - [Full Feature Set](./features.md) — Pilnīgs Heym iespēju pārskats
+- [Heym Work](./heym-work.md): saskarne biznesa komandām un kā to savienot

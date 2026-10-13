@@ -35,6 +35,7 @@ Pasirinkite workflow, kad atidarytumėte jo įvesties formą.
 - Spustelėkite **Run Workflow**, kad vykdytumėte pasirinktą workflow
 - Spustelėkite **Stop Workflow**, kad nutrauktumėte vykdomą vykdymą iš dėklo
 - Workflows be įvesties laukų vis tiek gali būti vykdomi tiesiogiai
+- Workflow, kuris prasideda [File Upload Trigger](../nodes/file-upload-trigger-node.md) mazgu, vietoj formos rodo numetimo zoną: nuvilkite į ją failą arba spustelėkite, kad pasirinktumėte. Zonoje nurodomi trigger priimami failų tipai bei dydis, o kiti failai atmetami dar prieš įkėlimą. **Run Workflow** lieka neaktyvus, kol nepasirenkamas failas.
 
 Dėklas naudoja tą pačią workflow vykdymo API kaip ir kitos Heym vykdymo paviršiai, todėl išvestys ir vykdymo elgesys išlieka nuoseklūs.
 
@@ -51,6 +52,8 @@ Pradėjus vykdymą, dėklas rodo:
 
 `pending` reiškia, kad workflow laukia vėlesnio veiksmo, pavyzdžiui, žmogaus peržiūros.
 
+Vykdymas su failu vyksta per vienkartinę trigger įkėlimo nuorodą: stalčius paprašo workflow nuorodos, įkelia į ją failą ir parodo rezultatą, kai įkėlimas baigiasi. Vykdymai su failu rodo galutinę būseną ir išvestis, bet nerodo pažangos žingsnis po žingsnio, o istorijoje taip pat pažymimi `Quick Drawer` žyma. Pasirinktas failas išvalomas po kiekvieno vykdymo, nes viena nuoroda priima tik vieną failą.
+
 ## Naršyklės Saugykla
 
 Greitasis Dėklas saugo asmeninius nustatymus `localStorage`:
@@ -64,7 +67,7 @@ Dėklas **ne** išlaiko įvesties reikšmes šioje versijoje.
 
 Greitasis Dėklas yra sąmoningai lengvas vykdymo paviršius.
 
-- Įtraukti: paieška, prisegimas, pasirinkimas, įvestis, vykdymas, progresas, rezultatas
+- Įtraukti: paieška, prisegimas, pasirinkimas, įvestis (įskaitant failą), vykdymas, progresas, rezultatas
 - Neįtraukti: workflow kūrimas, redagavimas, aplankų valdymas ir drobės veiksmai
 
 ## Susiję

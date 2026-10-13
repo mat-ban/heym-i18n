@@ -499,7 +499,7 @@ Vt ka [Quick Drawer](./quick-drawer.md), [Download & Import](./download-import.m
 
 ### [Quick Drawer](./quick-drawer.md)
 
-Quick Drawer on fikseeritud parempoolne kiirkäivituse paneel sisemiste mitte-lõuendi lehtede jaoks. See võimaldab otsida [workflow'sid](../tabs/workflows-tab.md), kinnitada lemmikuid, valida sisendeid, käivitada kohe ning uurida edenemist või tulemusi ilma redaktorit avamata. Kinnituste järjekord ja viimati valitud workflow salvestatakse brauseris.
+Quick Drawer on fikseeritud parempoolne kiirkäivituse paneel sisemiste mitte-lõuendi lehtede jaoks. See võimaldab otsida [workflow'sid](../tabs/workflows-tab.md), kinnitada lemmikuid, valida sisendeid, käivitada kohe ning uurida edenemist või tulemusi ilma redaktorit avamata. [File Upload Trigger](../nodes/file-upload-trigger-node.md) sõlmega workflow võtab vastu lohistatud või valitud faili. Kinnituste järjekord ja viimati valitud workflow salvestatakse brauseris.
 
 Vt ka [Workflow'de korraldamine](./workflow-organization.md), [Keyboard Shortcuts](./keyboard-shortcuts.md) ja [Execution History](./execution-history.md).
 
@@ -684,6 +684,12 @@ Enterprise hõlmab kommertsiaalset litsentsimist, professionaalset tuge ja juuru
 
 Vt ka [Running & Deployment](../getting-started/running-and-deployment.md), [Security](./security.md) ja [Teams](./teams.md).
 
+### [Heym Work](./heym-work.md)
+
+Heym Work on Heymi peale ehitatud teine liides ärimeeskondadele. Inimesed kirjeldavad tööd, vastavad mõnele küsimusele ja saavad testitud workflow, seejärel töötavad lehtede, kinnituste ja tegevuste loendi kaudu, kus igal käivitusel on nimi. Eksemplari administraatorid ühendavad selle jaotises **Seaded → Heym Work** selle aadressi ja integratsioonivõtmega; sellel on Heymi meeskonnalt oma litsents.
+
+Vt ka [Enterprise](./enterprise.md), [Single Sign-On](./sso.md) ja [Human-in-the-Loop](./human-in-the-loop.md).
+
 ---
 
 ## Töölaua vahelehed
@@ -763,7 +769,7 @@ MCP vahekaart konfigureerib Model Context Protocoli integratsiooni. Heym toetab 
 
 **Nimega serverid** – Looge mitu isoleeritud MCP endpointi, millest igaühel on oma UUID-põhine URL (`/api/mcp/servers/{uuid}/sse`) ja sõltumatu API võti. Määrake igale serverile kindlad workflow'd, et erinevad AI kliendid või meeskonnad näeksid ainult neile vajalikke tööriistu. Iga nimega server toetab samu autentimismeetodeid (API võti, Claude OAuth) ning sellel on oma Copy JSON ja Add to Cursor otseteed. Mõlemad endpointid toetavad SSE transporti (GET) ja Streamable HTTP transporti (POST). Workflow'de lülitamine nimega serveri sees viib selle määratud loendi algusesse, et muudetud rida jääks vaatevälja.
 
-**Heym chat tööriist** – Kumbki režiim võib samuti eksponeerida [Chat](../tabs/chat-tab.md) mootorit ühe `heym_chat` tööriistana, mida lülitatakse iga pinna jaoks eraldi koos oma LLM mandaadi ja mudeliga (eeltäidetud teie eelistatud mudeliga jaotises [Settings](./user-settings.md)). MCP klient saadab ühe loomulikus keeles `message` ja mootor teeb ülejäänu: ehitab, muudab ja käivitab workflow'sid, teostab analüütikat, käivitusi, reaalajas käivituse olekut, ajakavasid, tahvleid ja kaarte, meeskondi, globaalseid muutujaid, dokumentatsiooni otsingut ja inimest kaasavaid otsuseid. Hiljem Chatile lisatud võimalused on kättesaadavad sama tööriista kaudu ilma täiendava registreerimiseta. Iga kutse salvestatakse Chat vahekaardi ajalukku pistikuga märgitud vestlusena ja tagastab `conversation_id`, mille klient saab edasi anda lõime jätkamiseks.
+**Heym chat tööriist** – Kumbki režiim võib samuti eksponeerida [Chat](../tabs/chat-tab.md) mootorit ühe `heym_chat` tööriistana, mida lülitatakse iga pinna jaoks eraldi koos oma LLM mandaadi ja mudeliga (eeltäidetud teie eelistatud mudeliga jaotises [Settings](./user-settings.md)). MCP klient saadab ühe loomulikus keeles `message` ja mootor teeb ülejäänu: ehitab workflow'sid ehitusrežiimis (salvestamine, kuni viis testkäivitust, parandamine ja kontrollimine), käivitab workflow'sid, teostab analüütikat, käivitusi, reaalajas käivituse olekut, ajakavasid, tahvleid ja kaarte, meeskondi, globaalseid muutujaid, dokumentatsiooni otsingut ja inimest kaasavaid otsuseid. Hiljem Chatile lisatud võimalused on kättesaadavad sama tööriista kaudu ilma täiendava registreerimiseta. Iga kutse salvestatakse Chat vahekaardi ajalukku pistikuga märgitud vestlusena ja tagastab `conversation_id`, mille klient saab edasi anda lõime jätkamiseks.
 
 Vt ka [Agent Architecture](./agent-architecture.md), [Agent Node](../nodes/agent-node.md) ja [SSE Streaming](./sse-streaming.md).
 
@@ -799,7 +805,7 @@ Vt ka [Käivituste ajalugu](./execution-history.md), [Ajakavad](../tabs/schedule
 
 ### [Tahvel](../tabs/dashboard-tab.md)
 
-Tahvli vahekaart on Grafana-stiilis ruum, kus ehitate diagrammi vidinate ruudustikke, millest igaüks on renderdatud oma peidetud Heym workflow'st. Hoidke nii palju tahvleid kui vajate ja jagage igaüht kasutajate või tiimidega, kirjutuskaitstuna või muudetavana; vidinad töötavad alati omaniku mandaatidega, nii et kõik näevad samu andmeid. Kirjeldage mõõdikut lihtsas keeles ja AI genereerib vidina, või lisage üks käsitsi ja valige diagrammi tüüp, eelvaadatuna näidisandmetega: tulp, joon, ala, sektor, tabel, numbriline, näidik, hajuvus, proportsioon, tulbanäidik, tekst või HITL. HITL on karussell teie ootel inimülevaatustest. Päis näitab `1/n ootel`. Workflow nimi avab selle käivituse lõuendil. **Kinnita**, **Taotle muudatusi** ja **Lükka tagasi** lahendavad selle ning vidina pealkirja kõrval olev ajaloo ikoon avab selle käivituse ajaloo dialoogis samal lehel. Vidinad vahemällu salvestavad oma tulemused, neid saab AI-ga peenhäälestada (iga muudatus salvestatakse [Muudatuste ajalukku](./edit-history.md)), kloonida koos nende täieliku workflow'ga, ümber korraldada käsuga Korrasta ning lohistada või suurust muuta redigeerimisrežiimis. Kuna iga vidin on workflow, saab mis tahes andmeid, mida suudate hankida — [HTTP](../nodes/http-node.md) päring, [BigQuery](../nodes/bigquery-node.md) päring, [RAG](../nodes/rag-node.md) otsing või [LLM](../nodes/llm-node.md) väljund — muuta diagrammiks.
+Tahvli vahekaart on Grafana-stiilis ruum, kus ehitate diagrammi vidinate ruudustikke, millest igaüks on renderdatud oma peidetud Heym workflow'st. Hoidke nii palju tahvleid kui vajate ja jagage igaüht kasutajate või tiimidega, kirjutuskaitstuna või muudetavana; vidinad töötavad alati omaniku mandaatidega, nii et kõik näevad samu andmeid. Kirjeldage mõõdikut lihtsas keeles ja AI genereerib vidina, või lisage üks käsitsi ja valige diagrammi tüüp, eelvaadatuna näidisandmetega: tulp, joon, ala, sektor, tabel, numbriline, näidik, hajuvus, proportsioon, tulbanäidik, tekst või HITL. HITL on karussell teie ootel inimülevaatustest. Päis näitab `1/n ootel`. Workflow nimi avab selle käivituse lõuendil. **Kinnita**, **Taotle muudatusi** ja **Lükka tagasi** lahendavad selle ning vidina pealkirja kõrval olev ajaloo ikoon avab selle käivituse ajaloo dialoogis samal lehel. Vidinad vahemällu salvestavad oma tulemused, neid saab AI-ga peenhäälestada (iga muudatus salvestatakse [Muudatuste ajalukku](./edit-history.md)), kloonida koos nende täieliku workflow'ga, ümber korraldada käsuga Korrasta ning lohistada või suurust muuta redigeerimisrežiimis. Tabelid võivad kuvada olekusilte ja siduda oma read üksikasjaliku töölaudaga, mis loeb klõpsatud rea kirjet kui `$page.record`, ning Run-vidin käivitab workflow otse töölaualt: lohistatud failil, oma sisendväljadega või nupuga Käivita. Kuna iga vidin on workflow, saab mis tahes andmeid, mida suudate hankida — [HTTP](../nodes/http-node.md) päring, [BigQuery](../nodes/bigquery-node.md) päring, [RAG](../nodes/rag-node.md) otsing või [LLM](../nodes/llm-node.md) väljund — muuta diagrammiks.
 
 Vt ka [Diagrammi väljundi node](../nodes/chart-output-node.md), [Analüütika](../tabs/analytics-tab.md) ja [Käivituste ajalugu](./execution-history.md).
 

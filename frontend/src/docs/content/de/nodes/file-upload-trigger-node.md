@@ -33,6 +33,13 @@ Der Knoten läuft in zwei Phasen:
 
 Auf dem Canvas zeigt **Run Workflow** den erzeugten `curl` im Debug-Panel mit einer Kopierschaltfläche an.
 
+## Ausführung aus Heym heraus
+
+Zwei Stellen führen einen solchen Workflow direkt für eine Datei aus – über denselben Erzeugungs- und Upload-Ablauf:
+
+- Der [Quick Drawer](../reference/quick-drawer.md) zeigt eine Ablagezone für die Datei an. Diese Ausführungen werden im Verlauf mit `Quick Drawer` markiert.
+- Ein [Run-Widget](../tabs/dashboard-tab.md#run-widgets) auf einem Dashboard führt den Workflow für jede abgelegte Datei aus. Diese Ausführungen werden mit `dashboard` markiert.
+
 ## Parameter
 
 | Parameter | Typ | Standard | Beschreibung |

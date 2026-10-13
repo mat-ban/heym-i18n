@@ -4,7 +4,7 @@
 
 ## ダイアログを開く
 
-ヘッダー右上の**あなたのアバターと名前**をクリックします。ダイアログが開き、**Profile**、**Security**、**Voice**、**AI Defaults**、**Observability** のタブが表示されます。インスタンス管理者には **SSO** タブも表示されます。
+ヘッダー右上の**あなたのアバターと名前**をクリックします。ダイアログが開き、**Profile**、**Security**、**Voice**、**AI Defaults**、**Observability** のタブが表示されます。インスタンス管理者には **SSO**、**Heym Work**、および **Instances** タブも表示されます。
 
 ## Profile タブ
 
@@ -101,6 +101,10 @@ Observability タブには、このインスタンスの [OpenTelemetry Tracing]
 ## SSO タブ
 
 インスタンス管理者（`HEYM_ADMIN_EMAILS` に記載されたアカウント）のみに表示されます。このタブでは、Heym を外部の OpenID Connect プロバイダーに接続し、ユーザーが既に持っているアカウントでサインインできるようにします。issuer URL とクライアント認証情報を入力し、読み取り専用の redirect URI をプロバイダーにコピーして、有効化する前に **Test connection** を実行してください。テストに合格したら、ここからパスワードサインインを無効にできます。完全なセットアップについては [Single Sign-On](./sso.md) を参照してください。
+
+## Heym Work タブ
+
+インスタンス管理者はここでビジネスチーム向けインターフェースの [Heym Work](./heym-work.md) を接続します。アドレス、一度だけ表示される統合キー、および **Enable Heym Work** スイッチを設定できます。このタブには、Heym Work の最終チェックイン日時、バージョン、ライセンスステータスも表示されます。[Heym Work の接続](./heym-work.md#connecting-heym-work)を参照してください。
 
 ## Instances タブ
 

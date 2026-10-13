@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id da execução atual (igual ao id da entrada em [Execution History](./execution-history.md), então `/workflows/<id>/<executionId>` abre esta execução no canvas). **Somente em runtime**: vazio no diálogo de preview de expressões; preenchido apenas enquanto um workflow está em execução.
 - `$vars` - Variáveis locais do workflow (acesse via `$vars.variableName`; atualizadas via Nó `variable`)
 - `$global` - Armazenamento persistente de variáveis globais (acesse via `$global.variableName`)
+- `$page.record` - Apenas para workflows de widgets do painel: o registro da página de detalhes em que o widget está, vindo do parâmetro `?record=` do painel. É nulo em um painel aberto sem esse parâmetro e no diálogo de pré-visualização de expressões. Um nó rotulado como `page` tem precedência. Veja [Páginas de detalhes](../tabs/dashboard-tab.md#detail-pages).
 
 ### Uso de $vars
 - `$vars.counter` - Acessa uma variável chamada `counter`

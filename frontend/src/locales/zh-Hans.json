@@ -274,7 +274,17 @@
       "intro": "Heym Work 是面向业务团队的第二界面。成员通过 Heym 登录，所有任务均在此运行。",
       "never": "从未",
       "learnMore": "了解更多"
-    }
+    },
+    "pluginsIntro": "插件可向此实例添加自定义节点（操作和 Trigger）。安装或移除插件会运行服务端代码，因此仅限列于以下环境变量中的管理员操作：",
+    "loadingPlugins": "正在加载插件…",
+    "pluginsDisabledTitle": "插件已禁用",
+    "pluginsDisabledHint": "请在后端设置以下环境变量，然后重启：",
+    "installPluginZip": "安装插件 (.zip)",
+    "noPluginsInstalled": "尚未安装任何插件。",
+    "enablePlugin": "启用",
+    "disablePlugin": "禁用",
+    "uninstallPlugin": "卸载",
+    "pluginOperationFailed": "插件操作失败"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "开始导览",
     "readTheDocs": "阅读文档",
     "previousFeature": "上一个功能",
-    "goToFeature": "前往 {title}"
+    "goToFeature": "前往 {title}",
+    "heymWork": {
+      "step0": "团队在 Heym Work 中提出需求",
+      "step1": "Heym 自动构建并测试",
+      "step2": "已验证，无需画布",
+      "step3": "Heym 在后台运行",
+      "prompt": "检查新合同中的风险条款。",
+      "testing": "正在测试 Workflow",
+      "verified": "已验证"
+    },
+    "skillZip": {
+      "step0": "在聊天中拖入技能 zip 包",
+      "step1": "聊天读取 SKILL.md",
+      "step2": "智能体保留该技能",
+      "prompt": "读取发票并列出明细项。"
+    }
   },
   "canvas": {
     "nodes": "节点",
@@ -2400,6 +2425,50 @@
       "nodes": "节点",
       "reference": "参考",
       "tabs": "标签页"
-    }
+    },
+    "pluginNoDoc": "此插件暂无文档。"
+  },
+  "commandPalette": {
+    "searchPlaceholder": "搜索 Workflow、标签页、文档...",
+    "searchAria": "命令面板搜索",
+    "ariaLabel": "命令面板",
+    "noResults": "未找到结果",
+    "tryDifferentSearch": "请尝试其他搜索词",
+    "recent": "最近使用",
+    "recentInFolder": "最近使用 · 位于：{folder}",
+    "inFolder": "位于：{folder}",
+    "scheduledDate": "计划于 {date}",
+    "scheduledForDeletion": "计划删除",
+    "goToTab": "前往标签页",
+    "workflowTemplate": "Workflow 模板",
+    "nodeTemplate": "节点模板",
+    "nodeType": "节点 · {type}",
+    "documentation": "文档",
+    "support": "支持",
+    "contactSupport": "联系支持团队",
+    "watchRunbook": "观看 Heym 构建并运行 Workflow",
+    "openDocs": "打开 Heym 文档",
+    "getHelp": "获取 Heym 团队的帮助",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "面向业务团队的 Heym Work，尽在 heym.run",
+    "navigate": "导航",
+    "select": "选择",
+    "click": "点击",
+    "newTab": "新标签页",
+    "oneItem": "{count} 项",
+    "manyItems": "{count} 项"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "此实例已禁用插件。",
+    "loadingDefinition": "正在加载插件定义...",
+    "notBound": "此节点未绑定到插件包。",
+    "noneInstalled": "此实例上未安装任何插件。",
+    "notInstalled": "此实例上未安装插件“{id}”。",
+    "installedButDisabled": "插件“{name}”已安装但已禁用。",
+    "noKindNodes": "插件“{name}”未提供任何 {kind} 节点。",
+    "loadErrorDetail": "无法加载插件：{detail}",
+    "loadErrorHttp": "无法加载插件（HTTP {status}）。",
+    "loadError": "无法加载插件。",
+    "enabled": "已启用"
   }
 }

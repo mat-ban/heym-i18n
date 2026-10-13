@@ -587,8 +587,14 @@ L'identifiant SMTP stocke les détails de connexion au serveur de messagerie pou
 |-------|-------------|
 | `host` | Nom d'hôte du serveur SMTP (ex. `smtp.gmail.com`) |
 | `port` | Port SMTP (généralement `587` pour STARTTLS, `465` pour SSL) |
-| `email` | Adresse email de l'expéditeur |
+| `email` | Nom d'utilisateur avec lequel le serveur SMTP se connecte ; également l'expéditeur visible lorsque `from` est vide |
 | `password` | Mot de passe SMTP ou mot de passe d'application |
+
+### Champs facultatifs
+
+| Champ | Description |
+|-------|-------------|
+| `from` (`smtp_from`) | Adresse d'expéditeur (From) visible. Laissez vide pour envoyer en tant que `email`. Le serveur se connecte toujours en tant que `email`, ce compte doit donc être autorisé à envoyer avec cette adresse (dans Gmail, un alias **Envoyer des e-mails en tant que** vérifié). |
 
 ### Fournisseurs SMTP courants
 

@@ -127,7 +127,7 @@ const emit = defineEmits<{
 
 const { getRecent } = useRecentWorkflows();
 const { pluginDocCategories, loadPluginDocCategories } = usePluginDocCategories();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const folderStore = useFolderStore();
 const workflowTemplates = ref<WorkflowTemplate[]>([]);
 const nodeTemplates = ref<NodeTemplate[]>([]);
@@ -165,7 +165,11 @@ const recentWorkflows = computed(() => getRecent());
 const filteredTabs = computed(() => {
   const query = searchQuery.value.toLowerCase().trim();
   if (!query) return TABS;
-  return TABS.filter((t) => t.label.toLowerCase().includes(query));
+  return TABS.filter(
+    (tab) =>
+      tab.label.toLowerCase().includes(query) ||
+      t(`nav.${tab.id}`).toLowerCase().includes(query)
+  );
 });
 
 const filteredWorkflows = computed(() => {
@@ -257,7 +261,7 @@ const categoryGroups = computed((): CategoryGroup[] => {
     }
   });
   if (recentItems.length > 0) {
-    groups.push({ id: "recent", label: "Recent", items: recentItems });
+    groups.push({ id: "recent", label: t("commandPalette.recent"), items: recentItems });
   }
 
   // 2. Workflows
@@ -279,7 +283,7 @@ const categoryGroups = computed((): CategoryGroup[] => {
     }
   });
   if (workflowItems.length > 0) {
-    groups.push({ id: "workflows", label: "Workflows", items: workflowItems });
+    groups.push({ id: "workflows", label: t("nav.workflows"), items: workflowItems });
   }
 
   // 3. Scheduled for Deletion
@@ -294,44 +298,44 @@ const categoryGroups = computed((): CategoryGroup[] => {
   if (scheduledItems.length > 0) {
     groups.push({
       id: "scheduled",
-      label: "Scheduled for Deletion",
+      label: t("commandPalette.scheduledForDeletion"),
       items: scheduledItems,
     });
   }
 
   // 4. Go to tab
-  const tabItems: PaletteItem[] = filteredTabs.value.map((t) => ({
+  const tabItems: PaletteItem[] = filteredTabs.value.map((tab) => ({
     type: "tab" as const,
-    id: t.id,
-    label: t.label,
-    icon: t.icon,
+    id: tab.id,
+    label: locale.value === "en" ? tab.label : t(`nav.${tab.id}`),
+    icon: tab.icon,
   }));
   if (tabItems.length > 0) {
-    groups.push({ id: "tabs", label: "Go to tab", items: tabItems });
+    groups.push({ id: "tabs", label: t("commandPalette.goToTab"), items: tabItems });
   }
 
   // 5. Templates (workflow + node)
   if (!props.hideTemplates) {
     const templateItems: PaletteItem[] = [
-      ...filteredTemplates.value.map((t) => ({
+      ...filteredTemplates.value.map((tpl) => ({
         type: "template" as const,
-        id: t.id,
-        label: t.name,
+        id: tpl.id,
+        label: tpl.name,
         icon: LayoutTemplate,
-        template: t,
-        categoryLabel: "Workflow Template",
+        template: tpl,
+        categoryLabel: t("commandPalette.workflowTemplate"),
       })),
-      ...filteredNodeTemplates.value.map((t) => ({
+      ...filteredNodeTemplates.value.map((tpl) => ({
         type: "node-template" as const,
-        id: t.id,
-        label: t.name,
+        id: tpl.id,
+        label: tpl.name,
         icon: LayoutTemplate,
-        nodeTemplate: t,
-        categoryLabel: "Node Template",
+        nodeTemplate: tpl,
+        categoryLabel: t("commandPalette.nodeTemplate"),
       })),
     ];
     if (templateItems.length > 0) {
-      groups.push({ id: "templates", label: "Templates", items: templateItems });
+      groups.push({ id: "templates", label: t("nav.templates"), items: templateItems });
     }
   }
 
@@ -346,7 +350,7 @@ const categoryGroups = computed((): CategoryGroup[] => {
     categoryLabel: item.categoryLabel,
   }));
   if (docItems.length > 0) {
-    groups.push({ id: "docs", label: "Documentation", items: docItems });
+    groups.push({ id: "docs", label: t("commandPalette.documentation"), items: docItems });
   }
 
   const q = searchQuery.value.toLowerCase().trim();
@@ -359,13 +363,16 @@ const categoryGroups = computed((): CategoryGroup[] => {
     "help".includes(q) ||
     "runbook".includes(q) ||
     "demo".includes(q) ||
-    "tour".includes(q)
+    "tour".includes(q) ||
+    t("commandPalette.documentation").toLowerCase().includes(q) ||
+    t("commandPalette.contactSupport").toLowerCase().includes(q) ||
+    t("showcase.runTheRunbook").toLowerCase().includes(q)
   ) {
     const supportItems: PaletteItem[] = [
       {
         type: "documentation" as const,
         id: "documentation",
-        label: "Documentation",
+        label: t("commandPalette.documentation"),
         icon: BookOpen,
         categoryId: "getting-started",
         slug: "introduction",
@@ -373,7 +380,7 @@ const categoryGroups = computed((): CategoryGroup[] => {
       {
         type: "support" as const,
         id: "support",
-        label: "Contact Support",
+        label: t("commandPalette.contactSupport"),
         icon: LifeBuoy,
       },
     ];
@@ -381,18 +388,22 @@ const categoryGroups = computed((): CategoryGroup[] => {
       supportItems.unshift({
         type: "runbook" as const,
         id: "runbook",
-        label: "Run the Runbook",
+        label: t("showcase.runTheRunbook"),
         icon: Play,
       });
     }
     groups.push({
       id: "support",
-      label: "Support",
+      label: t("commandPalette.support"),
       items: supportItems,
     });
   }
 
-  if (!q || ENTERPRISE_KEYWORDS.some((keyword) => keyword.includes(q))) {
+  if (
+    !q ||
+    ENTERPRISE_KEYWORDS.some((keyword) => keyword.includes(q)) ||
+    t("commandPalette.heymWorkEnterprise").toLowerCase().includes(q)
+  ) {
     groups.push({
       id: "enterprise",
       label: "Heym Work",
@@ -400,7 +411,7 @@ const categoryGroups = computed((): CategoryGroup[] => {
         {
           type: "enterprise" as const,
           id: "enterprise",
-          label: "Heym Work (Enterprise)",
+          label: t("commandPalette.heymWorkEnterprise"),
           icon: Briefcase,
         },
       ],
@@ -586,8 +597,8 @@ onUnmounted(() => {
                 v-model="searchQuery"
                 type="text"
                 class="flex-1 bg-transparent border-0 outline-none text-sm placeholder:text-muted-foreground/60 focus:outline-none"
-                placeholder="Search workflows, tabs, docs..."
-                aria-label="Command palette search"
+                :placeholder="$t('commandPalette.searchPlaceholder')"
+                :aria-label="$t('commandPalette.searchAria')"
                 autocomplete="off"
               >
             </div>
@@ -596,18 +607,18 @@ onUnmounted(() => {
               ref="listRef"
               class="command-palette-list flex-none min-h-0 max-h-[calc(100dvh-8rem)] sm:max-h-[60vh] overflow-y-auto scrollbar-thin"
               role="listbox"
-              aria-label="Command palette"
+              :aria-label="$t('commandPalette.ariaLabel')"
             >
               <div
                 v-if="allItems.length === 0"
                 class="px-4 py-12 text-center text-sm text-muted-foreground"
               >
-                <p>No results found</p>
+                <p>{{ $t('commandPalette.noResults') }}</p>
                 <p
                   v-if="searchQuery.trim()"
                   class="mt-1 text-xs"
                 >
-                  Try a different search term
+                  {{ $t('commandPalette.tryDifferentSearch') }}
                 </p>
               </div>
 
@@ -680,7 +691,7 @@ onUnmounted(() => {
                       v-if="item.type === 'workflow' && item.workflow?.scheduled_for_deletion"
                       class="text-xs text-muted-foreground truncate mt-0.5"
                     >
-                      Scheduled {{ formatDate(item.workflow.scheduled_for_deletion) }}
+                      {{ $t('commandPalette.scheduledDate', { date: formatDate(item.workflow.scheduled_for_deletion) }) }}
                     </div>
                     <div
                       v-else-if="item.type === 'workflow' && item.workflow?.description"
@@ -692,31 +703,31 @@ onUnmounted(() => {
                       v-else-if="item.type === 'workflow' && item.folderPath"
                       class="text-xs text-muted-foreground truncate mt-0.5"
                     >
-                      In: {{ item.folderPath }}
+                      {{ $t('commandPalette.inFolder', { folder: item.folderPath }) }}
                     </div>
                     <div
                       v-else-if="item.type === 'history'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      {{ item.folderPath ? `Recent · In: ${item.folderPath}` : "Recent" }}
+                      {{ item.folderPath ? $t('commandPalette.recentInFolder', { folder: item.folderPath }) : $t('commandPalette.recent') }}
                     </div>
                     <div
                       v-else-if="item.type === 'tab'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      Go to tab
+                      {{ $t('commandPalette.goToTab') }}
                     </div>
                     <div
                       v-else-if="item.type === 'template'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      {{ item.template?.description ?? "Workflow Template" }}
+                      {{ item.template?.description ?? $t('commandPalette.workflowTemplate') }}
                     </div>
                     <div
                       v-else-if="item.type === 'node-template'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      {{ item.nodeTemplate?.description ?? `Node · ${item.nodeTemplate?.node_type ?? ""}` }}
+                      {{ item.nodeTemplate?.description ?? $t('commandPalette.nodeType', { type: item.nodeTemplate?.node_type ?? "" }) }}
                     </div>
                     <div
                       v-else-if="item.type === 'doc' && item.categoryLabel"
@@ -728,25 +739,25 @@ onUnmounted(() => {
                       v-else-if="item.type === 'runbook'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      Watch Heym build &amp; run a workflow
+                      {{ $t('commandPalette.watchRunbook') }}
                     </div>
                     <div
                       v-else-if="item.type === 'documentation'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      Open the Heym docs
+                      {{ $t('commandPalette.openDocs') }}
                     </div>
                     <div
                       v-else-if="item.type === 'support'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      Get help from the Heym team
+                      {{ $t('commandPalette.getHelp') }}
                     </div>
                     <div
                       v-else-if="item.type === 'enterprise'"
                       class="text-xs text-muted-foreground mt-0.5"
                     >
-                      Heym Work for business teams, on heym.run
+                      {{ $t('commandPalette.heymWorkSubtitle') }}
                     </div>
                   </div>
                 </div>
@@ -760,24 +771,24 @@ onUnmounted(() => {
               <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1.5">
                   <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">↑↓</kbd>
-                  <span>Navigate</span>
+                  <span>{{ $t('commandPalette.navigate') }}</span>
                 </span>
                 <span class="flex items-center gap-1.5">
                   <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">Enter</kbd>
-                  <span>Select</span>
+                  <span>{{ $t('commandPalette.select') }}</span>
                 </span>
                 <span class="hidden sm:flex flex-wrap items-center gap-x-1 gap-y-0.5">
                   <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">Ctrl</kbd>
                   <span>+</span>
-                  <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">click</kbd>
+                  <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">{{ $t('commandPalette.click') }}</kbd>
                   <span class="text-muted-foreground/80">/</span>
                   <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">Ctrl</kbd>
                   <span>+</span>
                   <kbd class="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">Enter</kbd>
-                  <span class="ml-0.5">new tab</span>
+                  <span class="ml-0.5">{{ $t('commandPalette.newTab') }}</span>
                 </span>
               </div>
-              <span>{{ allItems.length }} item{{ allItems.length !== 1 ? 's' : '' }}</span>
+              <span>{{ allItems.length === 1 ? $t('commandPalette.oneItem', { count: allItems.length }) : $t('commandPalette.manyItems', { count: allItems.length }) }}</span>
             </div>
           </div>
         </div>

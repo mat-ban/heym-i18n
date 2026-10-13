@@ -4,7 +4,7 @@ Hộp thoại Cài đặt cho phép bạn quản lý hồ sơ cá nhân, thiết
 
 ## Mở hộp thoại
 
-Nhấp vào **ảnh đại diện và tên của bạn** ở góc trên bên phải thanh tiêu đề. Hộp thoại mở ra với các tab: **Profile**, **Security**, **Voice**, **AI Defaults** và **Observability**. Quản trị viên instance cũng thấy thêm tab **SSO**.
+Nhấp vào **ảnh đại diện và tên của bạn** ở góc trên bên phải thanh tiêu đề. Hộp thoại mở ra với các tab: **Profile**, **Security**, **Voice**, **AI Defaults** và **Observability**. Quản trị viên instance cũng thấy thêm các tab **SSO**, **Heym Work** và **Instances**.
 
 ## Tab Profile
 
@@ -101,6 +101,10 @@ Tab Observability hiển thị trạng thái chỉ đọc của [OpenTelemetry T
 ## Tab SSO
 
 Chỉ hiển thị với quản trị viên instance — các tài khoản được liệt kê trong `HEYM_ADMIN_EMAILS`. Tab này kết nối Heym với một nhà cung cấp OpenID Connect bên ngoài để mọi người đăng nhập bằng tài khoản họ đã có. Nhập issuer URL và client credentials, sao chép redirect URI chỉ đọc vào nhà cung cấp của bạn, và chạy **Test connection** trước khi bật. Đăng nhập bằng mật khẩu có thể được tắt từ đây sau khi bài test thành công. Xem [Single Sign-On](./sso.md) để biết hướng dẫn thiết lập đầy đủ.
+
+## Tab Heym Work
+
+Quản trị viên instance kết nối [Heym Work](./heym-work.md) — giao diện dành cho các nhóm nghiệp vụ — tại đây: địa chỉ, khóa tích hợp chỉ hiển thị một lần và công tắc **Enable Heym Work**. Tab này cũng cho biết lần gần nhất Heym Work kết nối, phiên bản và trạng thái giấy phép. Xem [Kết nối Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Tab Instances
 

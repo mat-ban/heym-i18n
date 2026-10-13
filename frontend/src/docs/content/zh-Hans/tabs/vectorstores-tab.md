@@ -26,6 +26,7 @@
 - **查看条目** —— 查看每个存储的源分组和文档数量。上传的文件按其文件名分组；[RAG 节点](../nodes/rag-node.md)存储的、自身没有 `source` 的文档则归入 **Added workflow: _name_** 分组，其中 _name_ 为写入这些文档的 Workflow 名称
 - **删除源** —— 从存储中移除特定文件或源分组，包括某个 Workflow 添加的全部内容
 - **编辑存储** —— 修改名称、描述或 credential
+- **搜索** —— 使用 `query`（以及 1 到 20 之间的 `limit`，默认为 5）调用 `POST /api/vector-stores/{id}/search`，会返回 RAG 节点搜索将返回的文本块（chunks），最佳匹配排在最前，每个文本块均附带其得分和来源。Heym Work 的 RAG 界面使用它来测试检索效果
 
 ## 共享
 

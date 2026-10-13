@@ -16,6 +16,10 @@ Heym jest dostępny bezpłatnie i można go hostować samodzielnie na podstawie 
 | **Wsparcie priorytetowe i SLA** | Gwarantowane czasy reakcji i priorytetowe rozwiązywanie problemów |
 | **Dedykowany rozwój** | Rozwój funkcji i modyfikacje dostosowane do wymagań organizacji |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) to interfejs dla zespołów biznesowych działający na bazie Heym. Użytkownicy opisują zadanie, odpowiadają na kilka pytań i otrzymują przetestowany workflow, pracują na stronach stworzonych specjalnie dla nich oraz odpowiadają na przeglądy — z logowaniem jednokrotnym (SSO), rolami Owner, Editor i Viewer oraz imieniem przypisanym do każdego uruchomienia. Działa obok Twojej instancji Heym na własnej licencji; połącz go w **Settings → Heym Work**. Dowiedz się więcej i poproś o wersję próbną na [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Wsparcie produkcyjne agentów
 
 Zespół Heym pomaga projektować, budować i wzmacniać agentów oraz workflow dla procesów biznesowych. Obejmuje to analizę wymagań, rekomendacje konfiguracji węzłów oraz zapewnienie, że workflow są zgodne z najlepszymi praktykami w zakresie niezawodności, obserwowalności i zarządzania.
@@ -68,3 +72,4 @@ Z zespołem enterprise można skontaktować się pod adresem **enterprise@heym.r
 - [Wykonanie równoległe](./parallel-execution.md) — Model wykonania z wieloma workerami
 - [Zespoły](./teams.md) — Współpraca zespołowa i udostępnianie zasobów
 - [Pełny zestaw funkcji](./features.md) — Kompletny przegląd możliwości Heym
+- [Heym Work](./heym-work.md): interfejs dla zespołów biznesowych i sposób jego połączenia

@@ -26,6 +26,7 @@
 - **Näytä kohteet** – Näe lähderyhmät ja dokumenttien määrät varastokohtaisesti. Ladatut tiedostot ryhmittyvät tiedostonimen alle; [RAG-solmun](../nodes/rag-node.md) tallentamat dokumentit, joilla ei ole omaa `source`-arvoa, ryhmittyvät **Lisätty workflow: _nimi_** -otsikon alle, nimettynä niitä kirjoittaneen workflown mukaan
 - **Poista lähteet** – Poista tiettyjä tiedostoja tai lähderyhmiä varastosta, mukaan lukien kaikki yhden workflown lisäämät dokumentit
 - **Muokkaa varastoa** – Muuta nimeä, kuvausta tai tunnistetietoja
+- **Haku** – `POST /api/vector-stores/{id}/search` `query`-parametrilla (ja `limit`-arvolla 1–20, oletus 5) palauttaa samat tietopalat (chunks), jotka RAG-solmun haku palauttaisi, paras osuma ensin, kukin pisteineen ja lähteineen. Heym Workin RAG-näkymä käyttää sitä haun testaamiseen
 
 ## Jakaminen
 

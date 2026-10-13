@@ -33,6 +33,8 @@ Ha csak példa/mintaadatokkal rendelkezik (valós forrás nélkül), állítsa e
 | `valueField` | string | A numerikus értékként használt sorkulcs (pie/bar/line/numeric/gauge) |
 | `series` | array | Opcionális többsoros definíció `[{ "name": "Sent", "field": "sent" }]` bar/line esetén (felülírja a `valueField` értékét) |
 | `columns` | array | Opcionális oszloplista `table` esetén (alapértelmezésben az első sor kulcsai) |
+| `statusColumn` | string | Opcionális `table`-oszlop, amely színes [állapotjelző chipekként](#status-chips) jelenik meg. A megjelenített oszlopok egyikének kell lennie. |
+| `statusTones` | object | Opcionális leképezés egy állapotértékről egy színárnyalatra (`success`, `attention`, `failure`, `waiting`, `neutral`) az alapértelmezések által le nem fedett értékekhez |
 | `xField` / `yField` | string | Az X és Y numerikus tengelyekhez tartozó sorkulcsok (scatter) |
 | `min` / `max` | number | Numerikus tartomány `gauge` esetén (alapértelmezés: `0` / `100`) |
 | `unit` | string | Opcionális mértékegység, amely egy `numeric` vagy `gauge` érték mellett jelenik meg |
@@ -42,7 +44,7 @@ Ha csak példa/mintaadatokkal rendelkezik (valós forrás nélkül), állítsa e
 ## Chart típusok
 
 - **bar / line / area / pie** — kategorikus chartok, amelyeket a `labelField` + `valueField` vezérel (vagy `series` többsoros bar/line/area esetén). Az `area` egy kitöltött trendchart.
-- **table** — nyers sorok görgethető táblázatként megjelenítve a `columns` használatával.
+- **table** — nyers sorok görgethető táblázatként megjelenítve a `columns` használatával. Egy oszlop megjeleníthető [állapotjelző chipekként](#status-chips), a sorok pedig megnyithatnak egy [részletező oldalt](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — egyetlen KPI-érték az első sorból, opcionális `unit` értékkel.
 - **gauge** — egyetlen érték egy `min`–`max` tartományhoz viszonyítva megjelenítve (pl. egy százalék). A `valueField` értékét használja.
 - **scatter** — X/Y pontok az `xField` és `yField` alapján korrelációs ábrákhoz.
@@ -103,14 +105,59 @@ Az eredményül kapott markdown:
 
 Egy egyszerű, 1-től induló növekvő lista esetén vagy írja minden sor elé a számot (`1.`, `2.`, `3.`), vagy használjon ciklust a `$loop.index + 1` kifejezéssel. Használjon [felsoroláslistákat](#interactive-task-lists) (`- item`), amikor nincs szükség számokra.
 
+## Állapotjelző chipek
+
+Egy `table` képes egy oszlopot színes chipekként megjeleníteni. Állítsa a csomópont tulajdonságaiban a **Status column** mezőt (vagy a DSL-ben a `statusColumn` paramétert) egy oszlopnévre. Minden érték öt árnyalat egyikét kapja, a gyakori szavak pedig külön beállítás nélkül is automatikusan besorolódnak:
+
+| Árnyalat | Alapértelmezett szavak |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | bármi más |
+
+Az egyeztetés figyelmen kívül hagyja a kis- és nagybetűket, a `_` és a `-` karaktereket, így az `IN_PROGRESS` és az `in-progress` egyaránt `waiting` lesz. Egyéb értékekhez adjon meg **Status tones** beállítást; egy bejegyzés felülbírálja az adott érték alapértelmezését:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+A szerver minden értéket felold a megfelelő árnyalatra, így a Heym és a Heym Work ugyanazokat a színeket jeleníti meg.
+
+## Részletező oldalak: `$page.record`
+
+A `?record=<value>` paraméterrel megnyitott irányítópult minden widget-Workflow-t ezzel az értékkel futtat `$page.record` néven. Egy táblázatsor hivatkozása ilyen oldalt nyit meg; lásd: [Részletező oldalak](../tabs/dashboard-tab.md#detail-pages). A rekord nélkül megnyitott irányítópulton és a kifejezés-párbeszédpanelen a `$page.record` értéke `null`. A `page` címkéjű csomópont elsőbbséget élvez vele szemben.
+
+Használja arra, hogy lekérje azt az egyetlen rekordot, amelyről az oldal szól, például egy [HTTP](./http-node.md) csomópontban:
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+A `$page.record` maga a kattintott sor értéke, például `V-1002`, nem pedig egy mezőkkel rendelkező objektum. Ha meg szeretné találni ezt a rekordot egy [DataTable](./datatable-node.md)-ben, szűrje a rekordoszlopot az értékre: `find` művelet `{"vendor_id": "$page.record"}` szűrővel. Egy olyan útvonal, mint a `$page.record.id`, nem oldódik fel semmire, ezért az AI által épített vagy finomhangolt widget eldobja ezeket a mezőket, és helyettük a `$page.record` értéket olvassa.
+
+Az érték egy olyan URL-ből származik, amelyet bárki szerkeszthet. Az irányítópult csak a rekordformátumnak megfelelő értékeket fogadja el (alapértelmezés szerint betűk, számjegyek, `-`, `_` és `.`), de ettől függetlenül kezelje nem megbízható bemenetként: ott adja át, ahol a csomópont escape-eli az értékeket, például HTTP lekérdezési paraméterként vagy [DataTable](./datatable-node.md) illetve ClickHouse szűrőértékként, és soha ne építsen lekérdezési szöveget karakterláncok összefűzésével. A widgetek továbbra is az irányítópult tulajdonosaként futnak, bárki nyitja is meg az oldalt.
+
 ## Az adatok feloldásának menete
 
 1. Ha a `dataPath` be van állítva, a csomópont követi azt a pontozott útvonalat a felsőbb szintű kimenetbe.
 2. Ellenkező esetben egy tömböt keres: egy legfelső szintű listát, egy `data` tömböt, vagy az első listaértékű mezőt.
-3. `table` esetén minden sor egy táblázatsorrá válik a `columns` (vagy az első sor kulcsai) alapján.
-4. `numeric` és `gauge` esetén az érték az első sor `valueField` mezőjéből származik (vagy az első numerikus mezőből).
-5. `scatter` esetén minden sor egy `[xField, yField]` ponttá válik.
-6. `text` esetén az üzenet az első sor `valueField` mezőjéből származik, ha az be van állítva, ellenkező esetben a statikus `text` konfigurációból (máskülönben az első sor első szöveges mezőjéből).
+3. A közvetlenül egy [Data Table](./datatable-node.md) csomópontból (`{id, data, created_at}`) érkező sorok oszlopai a legfelső szinten, az `id` mellett kerülnek beolvasásra, így a `labelField`, a `valueField` és a `columns` közvetlenül a tábla saját oszlopait nevezi meg.
+4. `table` esetén minden sor egy táblázatsorrá válik a `columns` (vagy az első sor kulcsai) alapján. A `statusColumn` használatakor a Payload az adott oszlopban szereplő egyes értékek árnyalatát is tartalmazza.
+5. `numeric` és `gauge` esetén az érték az első sor `valueField` mezőjéből származik (vagy az első numerikus mezőből).
+6. `scatter` esetén minden sor egy `[xField, yField]` ponttá válik.
+7. `text` esetén az üzenet az első sor `valueField` mezőjéből származik, ha az be van állítva, ellenkező esetben a statikus `text` konfigurációból (máskülönben az első sor első szöveges mezőjéből).
 
 ## Példa
 

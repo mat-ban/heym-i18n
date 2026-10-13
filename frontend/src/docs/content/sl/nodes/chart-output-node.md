@@ -33,6 +33,8 @@ Ko imate samo primer/sample podatke (brez pravega vira), proizvedite te vrstice 
 | `valueField` | niz | Ključ vrstice, ki se uporablja kot numerična vrednost (pie/bar/line/numeric/gauge) |
 | `series` | tabela | Neobvezna definicija več serij `[{ "name": "Sent", "field": "sent" }]` za bar/line (prepisuje `valueField`) |
 | `columns` | tabela | Neobvezna seznam stolpcev za `table` (privzeto na ključe prve vrstice) |
+| `statusColumn` | string | Izbirni stolpec `table`, prikazan kot barvne [oznake stanja](#status-chips). Biti mora eden izmed prikazanih stolpcev. |
+| `statusTones` | object | Izbirna preslikava vrednosti stanja v odtenek (`success`, `attention`, `failure`, `waiting`, `neutral`) za vrednosti, ki jih privzete nastavitve ne pokrivajo |
 | `xField` / `yField` | niz | Ključi vrstice za X in Y numerične osi (scatter) |
 | `min` / `max` | število | Numerični razpon za `gauge` (privzeto `0` / `100`) |
 | `unit` | niz | Neobvezna enota, prikazana poleg `numeric` ali `gauge` vrednosti |
@@ -42,7 +44,7 @@ Ko imate samo primer/sample podatke (brez pravega vira), proizvedite te vrstice 
 ## Tipi grafikona
 
 - **bar / line / area / pie** — kategorni grafikoni, ki jih poganjata `labelField` + `valueField` (ali `series` za več serij bar/line/area). `area` je zapolnjen trendni grafikon.
-- **table** — surove vrstice, prikazane kot pomična tabela z uporabo `columns`.
+- **table** — surove vrstice, prikazane kot pomična tabela z uporabo `columns`. En stolpec se lahko prikaže kot [oznake stanja](#status-chips), vrstice pa lahko odprejo [stran s podrobnostmi](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — ena KPI vrednost iz prve vrstice, z neobvezno `unit`.
 - **gauge** — ena vrednost, prikazana v razponu `min`–`max` (npr. odstotek). Uporablja `valueField`.
 - **scatter** — X/Y točke iz `xField` in `yField` za korelacijske diagrame.
@@ -103,14 +105,59 @@ Rezultantni markdown:
 
 Za preprost naraščajoči seznam, ki se začne pri 1, bodisi predhodno označite vsako vrstico (`1.`, `2.`, `3.`) ali uporabite zanko z `$loop.index + 1`. Uporabite [bullet seznami](#interactive-task-lists) (`- element`), kadar ne potrebujete številk.
 
+## Oznake stanja
+
+Tabela (`table`) lahko prikaže en stolpec kot barvne oznake (chips). Nastavite **Status column** v lastnostih vozlišča (ali `statusColumn` v DSL) na ime stolpca. Vsaka vrednost dobi enega od petih odtenkov, pogoste besede pa ga dobijo samodejno brez nastavitve:
+
+| Odtenek | Privzete besede |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | karkoli drugega |
+
+Ujemanje ne upošteva velikosti črk, `_` in `-`, zato sta `IN_PROGRESS` in `in-progress` oba `waiting`. Dodajte **Status tones** za druge vrednosti; vnos prepiše privzeto nastavitev za to vrednost:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Strežnik razreši vsako vrednost v njen odtenek, tako da Heym in Heym Work prikazujeta enake barve.
+
+## Strani s podrobnostmi: `$page.record`
+
+Nadzorna plošča, odprta z `?record=<value>`, zažene vsak Workflow gradnika s to vrednostjo kot `$page.record`. Povezava v vrstici tabele odpre takšno stran; glejte [Strani s podrobnostmi](../tabs/dashboard-tab.md#detail-pages). Na nadzorni plošči, odprti brez zapisa, in v pogovornem oknu izrazov je `$page.record` enako `null`. Vozlišče z oznako `page` ima prednost pred njim.
+
+Uporabite ga za pridobitev tistega zapisa, na katerega se stran nanaša, na primer v vozlišču [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` je sama vrednost kliknjene vrstice, na primer `V-1002`, in ne objekt s polji. Če želite najti ta zapis v [DataTable](./datatable-node.md), filtrirajte njen stolpec zapisa po vrednosti: operacija `find` s filtrom `{"vendor_id": "$page.record"}`. Pot, kot je `$page.record.id`, se ne razreši v nič, zato gradnik, ki ga zgradi ali prilagodi AI, ta polja opusti in namesto tega prebere `$page.record`.
+
+Vrednost prihaja iz URL-ja, ki ga lahko uredi vsakdo. Nadzorna plošča sprejema samo vrednosti v svojem zapisnem formatu (privzeto črke, števke, `-`, `_` in `.`), vendar jo kljub temu obravnavajte kot nezaupanja vreden vnos: posredujte jo tja, kjer vozlišče ubežno kodira vrednosti, kot je parameter poizvedbe HTTP ali vrednost filtra v [DataTable](./datatable-node.md) ali ClickHouse, in nikoli ne sestavljajte besedila poizvedbe z združevanjem nizov z njo. Gradniki se še vedno izvajajo kot lastnik nadzorne plošče, ne glede na to, kdo odpre stran.
+
 ## Kako se podatki rešujejo
 
 1. Če je `dataPath` nastavljen, vozlišče sledi tej piko poti v zgornji izhod.
 2. V nasprotnem primeru išče tabelo: seznam na vrhnji ravni, `data` tabela ali prvo polje z vrednostmi seznama.
-3. Za `table` vsaka vrstica postane vrstica tabele z uporabo `columns` (ali ključev prve vrstice).
-4. Za `numeric` in `gauge` vrednost prihaja iz `valueField` na prvi vrstici (ali prvega numeričnega polja).
-5. Za `scatter` vsaka vrstica postane točka `[xField, yField]`.
-6. Za `text` se sporočilo vzame iz `valueField` na prvi vrstici, ko je nastavljeno, sicer iz statične konfiguracije `text` (drugače iz prvega niza prve vrstice).
+3. Vrstice neposredno iz vozlišča [Data Table](./datatable-node.md) (`{id, data, created_at}`) se berejo s svojimi stolpci na najvišji ravni poleg `id`, tako da `labelField`, `valueField` in `columns` poimenujejo lastne stolpce tabele.
+4. Za `table` vsaka vrstica postane vrstica tabele z uporabo `columns` (ali ključev prve vrstice). S `statusColumn` Payload nosi tudi odtenek vsake vrednosti v tem stolpcu.
+5. Za `numeric` in `gauge` vrednost prihaja iz `valueField` na prvi vrstici (ali prvega numeričnega polja).
+6. Za `scatter` vsaka vrstica postane točka `[xField, yField]`.
+7. Za `text` se sporočilo vzame iz `valueField` na prvi vrstici, ko je nastavljeno, sicer iz statične konfiguracije `text` (drugače iz prvega niza prve vrstice).
 
 ## Primer
 

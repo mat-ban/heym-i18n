@@ -33,6 +33,8 @@
 | `valueField` | string | 用作數值的資料列鍵（pie/bar/line/numeric/gauge） |
 | `series` | array | 選用的多系列定義 `[{ "name": "Sent", "field": "sent" }]`，用於 bar/line（會覆寫 `valueField`） |
 | `columns` | array | 選用的欄位清單，用於 `table`（預設為第一列的鍵） |
+| `statusColumn` | string | 選填的 `table` 欄位，渲染為彩色[狀態標籤](#status-chips)。必須是顯示的欄位之一。 |
+| `statusTones` | object | 選填對應表，將預設未涵蓋的狀態值對應至色調（`success`、`attention`、`failure`、`waiting`、`neutral`） |
 | `xField` / `yField` | string | X 與 Y 數值軸的資料列鍵（scatter） |
 | `min` / `max` | number | `gauge` 的數值範圍（預設 `0` / `100`） |
 | `unit` | string | 選用的單位，顯示於 `numeric` 或 `gauge` 值旁 |
@@ -42,7 +44,7 @@
 ## Chart types
 
 - **bar / line / area / pie** — 由 `labelField` + `valueField` 驅動的分類圖表（或多系列 bar/line/area 使用 `series`）。`area` 是填滿的趨勢圖。
-- **table** — 使用 `columns` 將原始資料列渲染為可捲動的表格。
+- **table** — 使用 `columns` 將原始資料列渲染為可捲動的表格。其中一欄可渲染為[狀態標籤](#status-chips)，且資料列可開啟[詳細資訊頁面](../tabs/dashboard-tab.md#detail-pages)。
 - **numeric** — 來自第一列的單一 KPI 值，可搭配選用的 `unit`。
 - **gauge** — 對照 `min`–`max` 範圍顯示的單一值（例如百分比）。使用 `valueField`。
 - **scatter** — 由 `xField` 與 `yField` 取得的 X/Y 點，用於相關性圖。 
@@ -103,14 +105,59 @@ $processVideos.total - $processVideos.index + ". [" + $processVideos.item.title 
 
 若只需要從 1 開始的簡單遞增清單，可以在每一行前面加上編號（`1.`、`2.`、`3.`），或使用迴圈搭配 `$loop.index + 1`。當你不需要編號時，請使用[項目符號清單](#interactive-task-lists)（`- item`）。
 
+## 狀態標籤
+
+`table` 可以將其中一欄顯示為彩色標籤（chips）。在節點屬性中將 **Status column**（或 DSL 中的 `statusColumn`）設為欄位名稱。每個值都會獲得五種色調之一，常見字詞無需設定即可自動套用：
+
+| 色調 | 預設字詞 |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | 其他所有值 |
+
+比對時會忽略大小寫、`_` 與 `-`，因此 `IN_PROGRESS` 與 `in-progress` 都會歸類為 `waiting`。可針對其他值新增 **Status tones**；新增的項目會覆寫該值的預設色調：
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+伺服器會將每個值解析為其對應色調，因此 Heym 與 Heym Work 會顯示相同的顏色。
+
+## 詳細資訊頁面：`$page.record`
+
+以 `?record=<value>` 開啟的儀表板會將該值作為 `$page.record` 來執行每個小工具的 Workflow。表格資料列連結可開啟此類頁面；請參閱[詳細資訊頁面](../tabs/dashboard-tab.md#detail-pages)。在未帶記錄開啟的儀表板以及運算式對話方塊中，`$page.record` 為 `null`。標籤為 `page` 的節點優先順序高於它。
+
+可用它來擷取該頁面所對應的那筆記錄，例如在 [HTTP](./http-node.md) 節點中：
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` 是所點擊資料列本身的值（例如 `V-1002`），而非包含欄位的物件。若要在 [DataTable](./datatable-node.md) 中尋找該筆記錄，請依該值篩選其記錄欄位：使用 `find` 操作並搭配篩選條件 `{"vendor_id": "$page.record"}`。像 `$page.record.id` 這類路徑不會解析出任何結果，因此由 AI 建立或微調的小工具會捨棄這些欄位，改為直接讀取 `$page.record`。
+
+此值來自任何人都能修改的 URL。儀表板僅接受符合其記錄格式的值（預設為字母、數字、`-`、`_` 與 `.`），但仍請將其視為不可信的輸入：請將它傳遞至節點會自動跳脫值的欄位，例如 HTTP 查詢參數、[DataTable](./datatable-node.md) 或 ClickHouse 篩選值，切勿透過字串串接的方式與它組合出查詢文字。無論是誰開啟頁面，小工具依然會以儀表板擁有者的身分執行。
+
 ## 資料如何解析
 
 1. 若有設定 `dataPath`，節點會沿著該 dot path 進入上游輸出。
 2. 否則它會尋找陣列：頂層清單、`data` 陣列，或第一個值為清單的欄位。
-3. 對於 `table`，每一列會使用 `columns`（或第一列的鍵）成為一個表格列。
-4. 對於 `numeric` 與 `gauge`，數值來自第一列的 `valueField`（或第一個數值欄位）。
-5. 對於 `scatter`，每一列會成為一個 `[xField, yField]` 點。
-6. 對於 `text`，當有設定時，訊息會取自第一列的 `valueField`，否則取自靜態 `text` 設定（若皆無，則取自第一列的第一個字串欄位）。
+3. 直接來自 [Data Table](./datatable-node.md) 節點的資料列（`{id, data, created_at}`）在讀取時會將各欄位展開於最上層並與 `id` 並列，因此 `labelField`、`valueField` 與 `columns` 可直接指定資料表本身的欄位名稱。
+4. 對於 `table`，每一列會使用 `columns`（或第一列的鍵）成為一個表格列。設定 `statusColumn` 時，Payload 也會攜帶該欄位中每個值的色調。
+5. 對於 `numeric` 與 `gauge`，數值來自第一列的 `valueField`（或第一個數值欄位）。
+6. 對於 `scatter`，每一列會成為一個 `[xField, yField]` 點。
+7. 對於 `text`，當有設定時，訊息會取自第一列的 `valueField`，否則取自靜態 `text` 設定（若皆無，則取自第一列的第一個字串欄位）。
 
 ## 範例
 

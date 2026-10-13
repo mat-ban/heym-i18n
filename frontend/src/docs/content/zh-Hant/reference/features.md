@@ -499,7 +499,7 @@ Workflow 可以資料夾與子資料夾的樹狀結構進行組織。資料夾�
 
 ### [Quick Drawer](./quick-drawer.md)
 
-Quick Drawer 是固定於右側的快速執行面板，適用於內部的非畫布頁面。它讓您搜尋 [Workflow](../tabs/workflows-tab.md)、釘選我的最愛、選擇輸入、立即執行，並在不開啟編輯器的情況下檢視進度或結果。釘選順序與最後選取的 Workflow 會儲存於瀏覽器中。
+Quick Drawer 是固定於右側的快速執行面板，適用於內部的非畫布頁面。它讓您搜尋 [Workflow](../tabs/workflows-tab.md)、釘選我的最愛、選擇輸入、立即執行，並在不開啟編輯器的情況下檢視進度或結果。具有 [File Upload Trigger](../nodes/file-upload-trigger-node.md) 的 Workflow 可接收拖放或選取的檔案。釘選順序與最後選取的 Workflow 會儲存於瀏覽器中。
 
 另請參閱 [Workflow 組織](./workflow-organization.md)、[Keyboard Shortcuts](./keyboard-shortcuts.md) 及 [Execution History](./execution-history.md)。
 
@@ -684,6 +684,12 @@ Enterprise 涵蓋商業授權、專業支援，以及為在生產環境中運行
 
 另請參閱 [Running & Deployment](../getting-started/running-and-deployment.md)、[Security](./security.md) 與 [Teams](./teams.md)。
 
+### [Heym Work](./heym-work.md)
+
+Heym Work 是建構於 Heym 之上、專為業務團隊打造的第二介面。使用者只需描述工作內容、回答幾個問題，就能獲得經過測試的 Workflow，接著透過頁面、核准以及每次執行皆有名稱的活動清單進行作業。實例管理員可在**設定 → Heym Work** 中透過其位址與整合金鑰進行連線；它擁有來自 Heym 團隊的獨立授權。
+
+另請參閱 [Enterprise](./enterprise.md)、[Single Sign-On](./sso.md) 與 [Human-in-the-Loop](./human-in-the-loop.md)。
+
 ---
 
 ## Dashboard Tabs
@@ -763,7 +769,7 @@ MCP 分頁用於設定 Model Context Protocol 整合。Heym 支援兩種模式�
 
 **具名伺服器** – 建立多個隔離的 MCP Endpoint，每個都有自己的 UUID 型 URL（`/api/mcp/servers/{uuid}/sse`）與獨立的 API key。將特定 Workflow 指派給各伺服器，讓不同的 AI client 或團隊只看到他們所需的工具。每個具名伺服器支援相同的驗證方式（API key、Claude OAuth），並各自擁有 Copy JSON 與 Add to Cursor 捷徑。兩種 Endpoint 皆支援 SSE transport（GET）與 Streamable HTTP transport（POST）。在具名伺服器內切換 Workflow 時，該項目會移至指派清單頂端，讓變更的列保持在檢視範圍內。
 
-**Heym chat 工具** – 兩種模式皆可將 [Chat](../tabs/chat-tab.md) 引擎公開為單一的 `heym_chat` 工具，並依各介面分別切換，各自擁有自己的 LLM credential 與 model（預先填入您在 [Settings](./user-settings.md) 中偏好的 model）。MCP client 傳送一則自然語言的 `message`，引擎便會完成其餘工作：建立、編輯與執行 Workflow、analytics、executions、即時執行狀態、schedules、boards 與 cards、teams、global variables、文件搜尋，以及 human-in-the-loop 決策。日後新增至 Chat 的功能皆可透過同一個工具存取，無需額外註冊。每次呼叫都會以插頭標記的對話形式儲存於 Chat 分頁歷史記錄中，並回傳一個 `conversation_id`，client 可將其傳回以延續該對話串。
+**Heym chat 工具** – 兩種模式皆可將 [Chat](../tabs/chat-tab.md) 引擎公開為單一的 `heym_chat` 工具，並依各介面分別切換，各自擁有自己的 LLM credential 與 model（預先填入您在 [Settings](./user-settings.md) 中偏好的 model）。MCP client 傳送一則自然語言的 `message`，引擎便會完成其餘工作：在建置模式下建立 Workflow（儲存、最多五次測試執行、修正並驗證）、執行 Workflow、analytics、executions、即時執行狀態、schedules、boards 與 cards、teams、global variables、文件搜尋，以及 human-in-the-loop 決策。日後新增至 Chat 的功能皆可透過同一個工具存取，無需額外註冊。每次呼叫都會以插頭標記的對話形式儲存於 Chat 分頁歷史記錄中，並回傳一個 `conversation_id`，client 可將其傳回以延續該對話串。
 
 另請參閱 [Agent Architecture](./agent-architecture.md)、[Agent Node](../nodes/agent-node.md) 與 [SSE Streaming](./sse-streaming.md)。
 
@@ -799,7 +805,7 @@ Analytics 分頁顯示執行指標與趨勢。摘要統計包含總執行次數�
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 分頁是一個 Grafana 風格的空間，您可以在其中建立圖表小工具的網格，每個小工具都由其各自隱藏的 Heym workflow 算繪而成。您可以建立所需數量的 dashboard，並將每個 dashboard 以唯讀或可編輯的方式與使用者或 teams 分享；小工具一律以擁有者的 credentials 執行，因此每個人看到的資料都相同。用自然語言描述一個指標，AI 便會產生該小工具，或手動新增一個並挑選圖表類型，以範例資料預覽：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是您待處理的人工審查的輪播。標頭會顯示 `1/n pending`。workflow 名稱會在畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目，而小工具標題旁的歷史圖示會在同一頁面的歷史對話框中開啟該次執行。小工具會快取其結果，可用 AI 微調（每次變更都會儲存至 [Edit History](./edit-history.md)），可連同其完整 workflow 一併複製，可用 Tidy up 重新排列，並可在編輯模式中拖曳或調整大小。由於每個小工具都是一個 workflow，任何您能取得的資料——[HTTP](../nodes/http-node.md) 呼叫、[BigQuery](../nodes/bigquery-node.md) 查詢、[RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 輸出——都能成為圖表。
+Dashboard 分頁是一個 Grafana 風格的空間，您可以在其中建立圖表小工具的網格，每個小工具都由其各自隱藏的 Heym workflow 算繪而成。您可以建立所需數量的 dashboard，並將每個 dashboard 以唯讀或可編輯的方式與使用者或 teams 分享；小工具一律以擁有者的 credentials 執行，因此每個人看到的資料都相同。用自然語言描述一個指標，AI 便會產生該小工具，或手動新增一個並挑選圖表類型，以範例資料預覽：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是您待處理的人工審查的輪播。標頭會顯示 `1/n pending`。workflow 名稱會在畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目，而小工具標題旁的歷史圖示會在同一頁面的歷史對話框中開啟該次執行。小工具會快取其結果，可用 AI 微調（每次變更都會儲存至 [Edit History](./edit-history.md)），可連同其完整 workflow 一併複製，可用 Tidy up 重新排列，並可在編輯模式中拖曳或調整大小。表格可顯示狀態標籤，並將其資料列連結至會將所點擊資料列記錄讀取為 `$page.record` 的詳細資訊儀表板；而執行（Run）小工具可從儀表板執行 workflow：針對拖放的檔案、搭配其輸入欄位，或透過執行按鈕。由於每個小工具都是一個 workflow，任何您能取得的資料——[HTTP](../nodes/http-node.md) 呼叫、[BigQuery](../nodes/bigquery-node.md) 查詢、[RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 輸出——都能成為圖表。
 
 另請參閱 [Chart Output node](../nodes/chart-output-node.md)、[Analytics](../tabs/analytics-tab.md) 與 [Execution History](./execution-history.md)。
 

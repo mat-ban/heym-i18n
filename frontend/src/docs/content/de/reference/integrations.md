@@ -619,8 +619,14 @@ Die SMTP-Anmeldedaten speichern Verbindungsdetails zum E-Mail-Server für das Se
 |-------|-------------|
 | `host` | SMTP-Server-Hostname (z. B. `smtp.gmail.com`) |
 | `port` | SMTP-Port (typischerweise `587` für STARTTLS, `465` für SSL) |
-| `email` | E-Mail-Adresse des Absenders |
+| `email` | Benutzername, mit dem sich der SMTP-Server anmeldet; zugleich der sichtbare Absender, wenn `from` leer ist |
 | `password` | SMTP-Passwort oder App-Passwort |
+
+### Optionale Felder
+
+| Feld | Beschreibung |
+|-------|-------------|
+| `from` (`smtp_from`) | Sichtbare Absenderadresse (From). Leer lassen, um als `email` zu senden. Der Server meldet sich weiterhin als `email` an, sodass dieses Konto berechtigt sein muss, unter dieser Adresse zu senden (in Gmail ein bestätigter **Senden als**-Alias). |
 
 ### Häufige SMTP-Anbieter
 

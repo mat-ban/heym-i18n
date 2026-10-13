@@ -35,6 +35,7 @@ Giriş formunu açmak için bir workflow seçin.
 - Seçili workflow'u çalıştırmak için **Run Workflow**'a tıklayın
 - Çekmeceden çalışan bir yürütmeyi iptal etmek için **Stop Workflow**'a tıklayın
 - Input alanı olmayan workflow'lar yine de doğrudan çalıştırılabilir
+- Bir [File Upload Trigger](../nodes/file-upload-trigger-node.md) ile başlayan workflow, bunun yerine bir bırakma alanı gösterir: üzerine bir dosya bırakın veya seçmek için tıklayın. Alan, trigger'ın kabul ettiği dosya türlerini ve boyutunu listeler ve diğer dosyaları yüklemeden önce reddeder. Bir dosya seçilene kadar **Run Workflow** devre dışı kalır.
 
 Çekmece, diğer Heym çalıştırma yüzeyleriyle aynı workflow yürütme API'sini kullanır; böylece çıktılar ve çalışma zamanı davranışı tutarlı kalır.
 
@@ -51,6 +52,8 @@ Bir çalıştırma başlattıktan sonra çekmece şunları gösterir:
 
 `pending`, workflow'un insan incelemesi gibi sonraki bir eylemi beklediği anlamına gelir.
 
+Dosyalı çalıştırma, trigger'ın tek kullanımlık yükleme bağlantısı üzerinden gerçekleşir: çekmece workflow'dan bir bağlantı ister, dosyayı bu bağlantıya yükler ve yükleme tamamlandığında sonucu gösterir. Dosyalı çalıştırmalar adım adım ilerlemeyi değil, yalnızca nihai durumu ve çıktıları gösterir ve geçmişte yine `Quick Drawer` olarak etiketlenir. Bir bağlantı yalnızca tek bir dosya kabul ettiğinden, seçilen dosya her çalıştırmadan sonra temizlenir.
+
 ## Tarayıcı Depolaması
 
 Hızlı Çekmece, kişisel tercihleri `localStorage` içinde saklar:
@@ -64,7 +67,7 @@ Hızlı Çekmece, kişisel tercihleri `localStorage` içinde saklar:
 
 Hızlı Çekmece kasıtlı olarak hafif bir yürütme yüzeyidir.
 
-- Dahil: arama, sabitleme, seçme, giriş, çalıştırma, ilerleme, sonuç
+- Dahil: arama, sabitleme, seçme, giriş (dosya dahil), çalıştırma, ilerleme, sonuç
 - Hariç: workflow oluşturma, düzenleme, klasör yönetimi ve canvas eylemleri
 
 ## İlgili

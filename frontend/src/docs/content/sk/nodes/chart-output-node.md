@@ -33,6 +33,8 @@ Ak máte k dispozícii iba ukážkové/vzorové údaje (žiadny skutočný zdroj
 | `valueField` | string | Kľúč riadka použitý ako číselná hodnota (pie/bar/line/numeric/gauge) |
 | `series` | array | Voliteľná definícia viacerých sérií `[{ "name": "Sent", "field": "sent" }]` pre bar/line (nahrádza `valueField`) |
 | `columns` | array | Voliteľný zoznam stĺpcov pre `table` (predvolene kľúče prvého riadka) |
+| `statusColumn` | string | Voliteľný stĺpec `table` vykreslený ako farebné [stavové štítky](#status-chips). Musí ísť o jeden zo zobrazených stĺpcov. |
+| `statusTones` | object | Voliteľné mapovanie stavovej hodnoty na odtieň (`success`, `attention`, `failure`, `waiting`, `neutral`) pre hodnoty, ktoré predvolené nastavenia nepokrývajú |
 | `xField` / `yField` | string | Kľúče riadkov pre číselné osi X a Y (scatter) |
 | `min` / `max` | number | Číselný rozsah pre `gauge` (predvolene `0` / `100`) |
 | `unit` | string | Voliteľná jednotka zobrazená vedľa hodnoty `numeric` alebo `gauge` |
@@ -42,7 +44,7 @@ Ak máte k dispozícii iba ukážkové/vzorové údaje (žiadny skutočný zdroj
 ## Typy grafov
 
 - **bar / line / area / pie** — kategorické grafy riadené pomocou `labelField` + `valueField` (alebo `series` pre viacsériové bar/line/area). `area` je vyplnený trendový graf.
-- **table** — surové riadky vykreslené ako posúvateľná tabuľka pomocou `columns`.
+- **table** — surové riadky vykreslené ako posúvateľná tabuľka pomocou `columns`. Jeden stĺpec sa môže vykresliť ako [stavové štítky](#status-chips) a riadky môžu otvoriť [stránku detailu](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — jedna hodnota KPI z prvého riadka s voliteľnou `unit`.
 - **gauge** — jedna hodnota zobrazená v rozsahu `min`–`max` (napr. percento). Používa `valueField`.
 - **scatter** — body X/Y z `xField` a `yField` pre korelačné grafy.
@@ -103,14 +105,59 @@ Výsledný markdown:
 
 Pre jednoduchý vzostupný zoznam začínajúci od 1 buď uveďte číslo na začiatku každého riadku (`1.`, `2.`, `3.`), alebo použite slučku s `$loop.index + 1`. Použite [zoznamy s odrážkami](#interactive-task-lists) (`- item`), keď čísla nepotrebujete.
 
+## Stavové štítky
+
+Tabuľka (`table`) môže zobraziť jeden stĺpec ako farebné štítky (chips). Nastavte **Status column** vo vlastnostiach uzla (alebo `statusColumn` v DSL) na názov stĺpca. Každá hodnota dostane jeden z piatich odtieňov a bežné slová ho získajú automaticky bez konfigurácie:
+
+| Odtieň | Predvolené slová |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | čokoľvek iné |
+
+Porovnávanie ignoruje veľkosť písmen, `_` a `-`, takže `IN_PROGRESS` aj `in-progress` zodpovedajú `waiting`. Pre ďalšie hodnoty pridajte **Status tones**; položka prepíše predvolené nastavenie pre danú hodnotu:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Server vyhodnotí každú hodnotu na jej odtieň, takže Heym a Heym Work zobrazujú rovnaké farby.
+
+## Stránky detailu: `$page.record`
+
+Dashboard otvorený s parametrom `?record=<value>` spustí každý Workflow widgetu s touto hodnotou ako `$page.record`. Odkaz v riadku tabuľky takúto stránku otvorí; pozri [Stránky detailu](../tabs/dashboard-tab.md#detail-pages). Na dashboarde otvorenom bez záznamu a v dialógu výrazov je `$page.record` rovné `null`. Uzol označený `page` má pred ním prednosť.
+
+Použite ho na načítanie konkrétneho záznamu, ktorého sa stránka týka, napríklad v uzle [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` je samotná hodnota kliknutého riadka, napríklad `V-1002`, nie objekt s poľami. Ak chcete tento záznam nájsť v uzle [DataTable](./datatable-node.md), vyfiltrujte stĺpec záznamu podľa tejto hodnoty: operácia `find` s filtrom `{"vendor_id": "$page.record"}`. Cesta ako `$page.record.id` sa nevyhodnotí na nič, takže widget vytvorený alebo upravený pomocou AI tieto polia zahodí a číta namiesto nich `$page.record`.
+
+Hodnota pochádza z URL, ktorú môže ktokoľvek upraviť. Dashboard síce prijíma iba hodnoty vo formáte záznamu (predvolene písmená, číslice, `-`, `_` a `.`), napriek tomu s ňou zaobchádzajte ako s nedôveryhodným vstupom: odovzdávajte ju tam, kde uzol hodnoty escapuje, napríklad ako parameter HTTP dopytu alebo hodnotu filtra v [DataTable](./datatable-node.md) či ClickHouse, a nikdy nevytvárajte text dopytu spájaním reťazcov. Widgety sa stále spúšťajú pod vlastníkom dashboardu bez ohľadu na to, kto stránku otvorí.
+
 ## Ako sa údaje spracúvajú
 
 1. Ak je nastavené `dataPath`, uzol nasleduje túto bodkovú cestu do výstupu predchádzajúceho uzla.
 2. V opačnom prípade hľadá pole: zoznam na najvyššej úrovni, pole `data` alebo prvé pole s hodnotou typu zoznam.
-3. Pre `table` sa každý riadok stane riadkom tabuľky pomocou `columns` (alebo kľúčov prvého riadku).
-4. Pre `numeric` a `gauge` hodnota pochádza z `valueField` v prvom riadku (alebo z prvého číselného poľa).
-5. Pre `scatter` sa každý riadok stane bodom `[xField, yField]`.
-6. Pre `text` sa správa prevezme z `valueField` v prvom riadku, ak je nastavené, inak zo statickej konfigurácie `text` (v opačnom prípade z prvého reťazcového poľa prvého riadku).
+3. Riadky priamo z uzla [Data Table](./datatable-node.md) (`{id, data, created_at}`) sa čítajú so svojimi stĺpcami na najvyššej úrovni vedľa `id`, takže `labelField`, `valueField` a `columns` pomenúvajú vlastné stĺpce tabuľky.
+4. Pre `table` sa každý riadok stane riadkom tabuľky pomocou `columns` (alebo kľúčov prvého riadku). Pri použití `statusColumn` nesie Payload aj odtieň každej hodnoty v tomto stĺpci.
+5. Pre `numeric` a `gauge` hodnota pochádza z `valueField` v prvom riadku (alebo z prvého číselného poľa).
+6. Pre `scatter` sa každý riadok stane bodom `[xField, yField]`.
+7. Pre `text` sa správa prevezme z `valueField` v prvom riadku, ak je nastavené, inak zo statickej konfigurácie `text` (v opačnom prípade z prvého reťazcového poľa prvého riadku).
 
 ## Príklad
 

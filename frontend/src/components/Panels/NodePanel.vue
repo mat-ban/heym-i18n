@@ -26,7 +26,7 @@ import { useWorkflowStore } from "@/stores/workflow";
 import { NODE_DEFINITIONS } from "@/types/node";
 import { useRunbookPlayer } from "@/features/runbook/useRunbookPlayer";
 
-const { t, te } = useI18n();
+const { t, te, locale } = useI18n();
 const workflowStore = useWorkflowStore();
 const authStore = useAuthStore();
 const searchInputRef = ref<HTMLInputElement | null>(null);
@@ -64,12 +64,19 @@ const installedPlugins = ref<PluginSummary[]>([]);
 
 async function loadPlugins(): Promise<void> {
   try {
-    installedPlugins.value = (await listPlugins()).filter((plugin) => plugin.enabled);
+    installedPlugins.value = (await listPlugins(locale.value)).filter((plugin) => plugin.enabled);
   } catch {
     // Plugins disabled (404) or unavailable; show nothing.
     installedPlugins.value = [];
   }
 }
+
+watch(
+  () => locale.value,
+  () => {
+    void loadPlugins();
+  },
+);
 
 const pluginNodes = computed<PalettedPluginNode[]>(() =>
   installedPlugins.value.flatMap((plugin) =>

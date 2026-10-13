@@ -4,7 +4,7 @@ El diàleg de Configuració us permet gestionar el vostre perfil, establir instr
 
 ## Obrir el diàleg
 
-Feu clic a **la vostra imatge d'avatar i el vostre nom** a la part superior dreta de la capçalera. El diàleg s'obre amb aquestes pestanyes: **Profile**, **Security**, **Voice**, **AI Defaults** i **Observability**. Els administradors d'instància també veuen una pestanya **SSO**.
+Feu clic a **la vostra imatge d'avatar i el vostre nom** a la part superior dreta de la capçalera. El diàleg s'obre amb aquestes pestanyes: **Profile**, **Security**, **Voice**, **AI Defaults** i **Observability**. Els administradors d'instància també veuen les pestanyes **SSO**, **Heym Work** i **Instances**.
 
 ## Pestanya Profile
 
@@ -100,6 +100,10 @@ La pestanya Observability mostra l'estat de només lectura de [OpenTelemetry Tra
 ## Pestanya SSO
 
 Visible només per als administradors de la instància — els comptes llistats a `HEYM_ADMIN_EMAILS`. Aquesta pestanya connecta Heym a un proveïdor OpenID Connect extern perquè les persones iniciïn sessió amb els comptes que ja tenen. Introduïu una URL d'emissor i les credencials del client, copieu l'URI de redirecció de només lectura al vostre proveïdor i executeu **Test connection** abans d'habilitar-lo. L'inici de sessió amb contrasenya es pot desactivar des d'aquí un cop superada la prova. Consulteu [Single Sign-On](./sso.md) per a la configuració completa.
+
+## Pestanya Heym Work
+
+Els administradors d'instància connecten aquí [Heym Work](./heym-work.md), la interfície per a equips de negoci: la seva adreça, una clau d'integració que es mostra una sola vegada i el commutador **Enable Heym Work**. La pestanya també mostra quan Heym Work s'ha comunicat per última vegada, la seva versió i l'estat de la llicència. Vegeu [Connectar Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Pestanya Instances
 

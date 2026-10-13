@@ -93,11 +93,12 @@ Vykdymo istorija registruoja `trigger_source` kiekvienam įėjimo taškui:
 |-------|------|
 | `"API"` | Webhook / API skambutis be aiškiai nurodyto antraštės (numatytasis) |
 | `"Canvas"` | Vykdoma iš workflow redaktoriaus drobės |
-| `"Quick Drawer"` | Vykdoma iš redaktoriaus greitojo įrankių skydelio |
+| `"Quick Drawer"` | Vykdoma iš redaktoriaus greitojo įrankių skydelio, įskaitant failų vykdymus, įkeltus iš jo numetimo zonos |
 | `"cron"` | Cron tvarkyklė |
 | `"imap"` | IMAP trigger valdymo įrankis |
 | `"websocket"` | Išorinio WebSocket trigger valdymo įrankis |
-| `"file_upload"` | Failo Įkėlimo Trigger įkėlimo galas |
+| `"file_upload"` | Failo įkėlimo Trigger įkėlimo Endpoint (nuorodos, sukurtos per HTTP, MCP arba drobę) |
+| `"dashboard"` | Prietaisų skydelio valdiklių vykdymai ir įkėlimai iš failų numetimo valdiklio |
 | `"telegram"` | Telegram bot webhook |
 | `"Discord"` | Discord sąveikų webhook |
 | `"MCP"` | MCP įrankio skambutis |

@@ -1,6 +1,6 @@
 # Onglet MCP
 
-L'onglet **MCP** configure l'intégration du Model Context Protocol (MCP). MCP permet aux clients IA (Claude, Cursor et tout outil compatible MCP) d'appeler vos workflows Heym en tant qu'outils.
+L'onglet **MCP** configure l'intégration du Model Context Protocol (MCP). MCP permet aux clients IA (Claude, ChatGPT, Gemini, Cursor et tout outil compatible MCP) d'appeler vos workflows Heym en tant qu'outils.
 
 Heym prend en charge deux modes : un **serveur par défaut** qui expose tous les workflows compatibles MCP sous un endpoint unique, et des **serveurs nommés** qui attribuent à chaque groupe logique de workflows sa propre URL dédiée et sa propre clé API.
 
@@ -24,6 +24,8 @@ Le serveur par défaut est toujours disponible à l'adresse `{origin}/api/mcp/ss
 
 - **Clé API** – Utilisez la clé API MCP pour les connexions programmatiques. L'onglet peut copier une configuration JSON prête à l'emploi et inclut un bouton **Add to Cursor** pour une configuration Cursor en un clic.
 - **Claude** – L'onglet affiche l'URL du serveur MCP et les étapes de configuration pour Claude. Laissez les champs OAuth Client ID et Secret vides ; Claude s'enregistre automatiquement et s'authentifie via OAuth Heym.
+- **ChatGPT** – L'onglet affiche l'URL du serveur MCP et les étapes de configuration pour une application ChatGPT. Activez le mode développeur, créez une application avec l'URL et choisissez OAuth ; ChatGPT s'enregistre automatiquement.
+- **Gemini** – L'onglet affiche l'URL du serveur MCP et les étapes de configuration pour une application personnalisée Gemini : dans gemini.google.com, **Settings → Connected Apps → Add a custom app**, collez l'URL et laissez **Advanced features** fermé ; Gemini s'enregistre automatiquement et s'authentifie via OAuth Heym. Une fois connecté, Heym fonctionne également dans l'application mobile Gemini.
 
 ### Activation MCP par workflow
 
@@ -40,7 +42,8 @@ La section **Heym Capabilities** transforme le moteur de l'onglet Chat en un uni
 
 Lorsqu'il est activé, `heym_chat` apparaît dans `tools/list` aux côtés de vos outils de workflow. Un client MCP envoie un seul message en langage naturel et le moteur Heym prend le relais, avec les mêmes capacités que l'onglet Chat :
 
-- Construire, modifier, inspecter et exécuter des workflows via le Workflow AI Builder
+- Construire un workflow, l'exécuter en test avec des exemples d'entrées, le corriger et terminer lorsqu'une exécution réussit (voir [Mode Build](#build-mode))
+- Inspecter et exécuter vos workflows existants
 - Rapporter les analyses, les exécutions récentes et les planifications cron à venir
 - Rapporter l'historique d'exécution d'un workflow : nombre d'exécutions, décompte par statut, dates d'exécution, et sur demande les entrées, sorties et erreurs par nœud d'une exécution donnée
 - Rapporter ce qui s'exécute en ce moment : nombre d'exécutions actives, leurs noms de workflow, leur durée d'exécution, le nœud sur lequel chacune se trouve actuellement, et un lien vers l'exécution en direct
@@ -50,6 +53,15 @@ Lorsqu'il est activé, `heym_chat` apparaît dans `tools/list` aux côtés de vo
 - Approuver, modifier ou refuser les revues human-in-the-loop en attente
 
 Les capacités ajoutées ultérieurement à l'onglet Chat deviennent automatiquement disponibles via `heym_chat` — aucun interrupteur par capacité à maintenir en synchronisation.
+
+### Mode Build
+
+`heym_chat` exécute toujours le moteur Chat en mode build. En un seul appel, l'assistant peut enregistrer un nouveau workflow, l'exécuter avec des entrées d'exemple réalistes, lire le rapport d'exécution, corriger ce qui a échoué et le relancer, jusqu'à cinq exécutions de test par appel. Lorsque la dernière exécution du dernier enregistrement réussit, il termine par un résumé d'une phrase, et la réponse se conclut par `Verified: the latest test run of the saved workflow passed.`
+
+- Les exécutions de test sont de vraies exécutions. Leurs effets de bord se produisent et elles apparaissent dans l'historique d'exécution du workflow comme n'importe quelle autre exécution.
+- Les enregistrements empruntent le chemin de l'éditeur : une modification du graphe conserve le graphe précédent dans l'historique des modifications (**Edit History**) du workflow.
+- Pour modifier un workflow qu'il a construit précédemment, poursuivez le fil avec le même `conversation_id`. L'assistant met à jour ce workflow au lieu d'en créer un nouveau, et il ne modifie que les workflows que vous pouvez éditer.
+- Lorsque les cinq exécutions de test sont épuisées, l'assistant s'arrête et explique ce qui échoue encore.
 
 Les identifiants restent dans l'interface : `heym_chat` ne les liste, ne les choisit et n'en crée jamais. Lorsqu'il construit ou modifie un workflow, les nouveaux nœuds nécessitant un identifiant sont laissés vides et la réponse les nomme, afin que vous puissiez les définir dans l'éditeur.
 
@@ -110,7 +122,7 @@ L'activation ou la désactivation d'un workflow le déplace en haut de la liste 
 Les serveurs nommés prennent en charge les mêmes méthodes d'authentification que le serveur par défaut :
 
 - **En-tête X-MCP-Key** – Transmettez directement la clé API du serveur (clients API, Cursor). En-tête uniquement : les clés ne sont pas acceptées en tant que paramètre de requête `?key=`, car les URL finissent dans les journaux d'accès, les journaux de proxy et l'historique du navigateur.
-- **Claude OAuth** – Ajoutez l'URL du serveur aux intégrations Claude ; laissez les identifiants vides et Claude s'enregistre automatiquement via OAuth. Le bearer token doit circuler dans l'en-tête `Authorization`, et non en tant que `?token=`.
+- **Claude, ChatGPT et Gemini OAuth** – Ajoutez l'URL du serveur aux connecteurs ou aux applications personnalisées du client ; laissez les identifiants vides et le client s'enregistre automatiquement via OAuth. Le bearer token doit circuler dans l'en-tête `Authorization`, et non en tant que `?token=`.
 - **Session token** – Émis lors de la poignée de main SSE ; limité au serveur concerné, de sorte que les tokens d'un serveur nommé ne peuvent pas accéder à un autre. Ce paramètre `?session=` de courte durée n'est pas affecté.
 
 ### Suppression d'un serveur nommé
@@ -124,7 +136,7 @@ Cliquez sur l'icône **X** dans l'en-tête d'une carte de serveur. La suppressio
 | Default | `{origin}/api/mcp/sse` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Les deux endpoints prennent en charge le transport SSE (GET, spécification MCP 2024-11-05) et le transport Streamable HTTP (POST, spécification MCP 2025-03-26). Claude utilise OAuth 2.1 / PKCE pour une connexion sécurisée sur les deux.
+Les deux endpoints prennent en charge le transport SSE (GET, spécification MCP 2024-11-05) et le transport Streamable HTTP (POST, spécification MCP 2025-03-26). Claude, ChatGPT et Gemini utilisent OAuth 2.1 / PKCE pour une connexion sécurisée sur les deux.
 
 ## Voir aussi
 

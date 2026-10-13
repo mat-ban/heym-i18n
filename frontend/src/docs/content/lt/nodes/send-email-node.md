@@ -28,7 +28,7 @@ Pridėkite failus iš savo [Drive](./drive-node.md) perduodami vieną ar daugiau
 
 ## Nustatymas
 
-Pridėkite SMTP kredencialą su serveriu, prievadu, el. pašto adresu ir slaptažodžiu. Dažniausiai naudojami SMTP serveriai:
+Pridėkite SMTP kredencialą su serveriu, prievadu, el. pašto adresu ir slaptažodžiu. Matomas siuntėjas yra pasirenkamas kredencialo laukas **From**; jei From paliekamas tuščias, siunčiama naudojant naudotojo vardą. Dažniausiai naudojami SMTP serveriai:
 
 - Gmail: `smtp.gmail.com`, prievadas 587 (reikalingas programos slaptažodis)
 - Outlook: `smtp.office365.com`, prievadas 587

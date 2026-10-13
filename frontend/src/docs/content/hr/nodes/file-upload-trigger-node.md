@@ -33,6 +33,13 @@ Koristite ga kada pozivatelj — uključujući AI agenta poput Claudea ili ChatG
 
 Na platnu, **Pokreni Workflow** prikazuje mintani `curl` u debug panelu s gumbom za kopiranje.
 
+## Pokretanje iz Heyma
+
+Dva mjesta izvršavaju takav Workflow izravno nad datotekom, putem istog postupka generiranja poveznice i prijenosa:
+
+- [Quick Drawer](../reference/quick-drawer.md) prikazuje zonu za ispuštanje datoteke. Ta se izvršavanja u povijesti označavaju oznakom `Quick Drawer`.
+- [Widget za pokretanje](../tabs/dashboard-tab.md#run-widgets) na nadzornoj ploči pokreće Workflow za svaku ispuštenu datoteku. Ta se izvršavanja označavaju oznakom `dashboard`.
+
 ## Parametri
 
 | Parametar | Tip | Zadano | Opis |

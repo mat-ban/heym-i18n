@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id de l'execució actual (coincideix amb l'id de l'entrada de [Historial d'execucions](./execution-history.md), de manera que `/workflows/<id>/<executionId>` obre aquesta execució al canvas). **Només en temps d'execució**: buit al diàleg de previsualització d'expressions; es completa només mentre s'executa un workflow.
 - `$vars` - Variables locals del workflow (accediu-hi via `$vars.variableName`; s'actualitzen mitjançant el node `variable`)
 - `$global` - Magatzem persistent de variables globals (accediu-hi via `$global.variableName`)
+- `$page.record` - Només per a workflows de ginys del tauler: el registre de la pàgina de detall on es troba el giny, obtingut del paràmetre `?record=` del tauler. És nul en un tauler obert sense aquest paràmetre i al diàleg de previsualització d'expressions. Un node etiquetat com a `page` té prioritat. Vegeu [Pàgines de detall](../tabs/dashboard-tab.md#detail-pages).
 
 ### Ús de $vars
 - `$vars.counter` - Accedeix a una variable anomenada `counter`

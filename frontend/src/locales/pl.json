@@ -274,7 +274,17 @@
       "intro": "Heym Work to drugi interfejs dla zespołów biznesowych. Użytkownicy logują się przez Heym, a wszystkie zadania są realizowane tutaj.",
       "never": "Nigdy",
       "learnMore": "Dowiedz się więcej"
-    }
+    },
+    "pluginsIntro": "Wtyczki dodają niestandardowe węzły (akcje i Triggery) do tej instancji. Instalowanie lub usuwanie wtyczki uruchamia kod po stronie serwera, dlatego jest ograniczone do operatorów wymienionych w",
+    "loadingPlugins": "Ładowanie wtyczek…",
+    "pluginsDisabledTitle": "Wtyczki są wyłączone",
+    "pluginsDisabledHint": "Ustaw te zmienne środowiskowe w backendzie, a następnie uruchom ponownie:",
+    "installPluginZip": "Zainstaluj wtyczkę (.zip)",
+    "noPluginsInstalled": "Nie zainstalowano jeszcze żadnych wtyczek.",
+    "enablePlugin": "Włącz",
+    "disablePlugin": "Wyłącz",
+    "uninstallPlugin": "Odinstaluj",
+    "pluginOperationFailed": "Operacja na wtyczce nie powiodła się"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Rozpocznij tour",
     "readTheDocs": "Przeczytaj dokumentację",
     "previousFeature": "Poprzednia funkcja",
-    "goToFeature": "Przejdź do {title}"
+    "goToFeature": "Przejdź do {title}",
+    "heymWork": {
+      "step0": "Zespół zadaje pytanie w Heym Work",
+      "step1": "Heym buduje i testuje rozwiązanie",
+      "step2": "Zweryfikowano, bez kanwy",
+      "step3": "Heym uruchamia je w tle",
+      "prompt": "Sprawdź nowe umowy pod kątem ryzykownych klauzul.",
+      "testing": "Testowanie Workflow",
+      "verified": "Zweryfikowano"
+    },
+    "skillZip": {
+      "step0": "Upuść plik zip z umiejętnością na czacie",
+      "step1": "Chat odczytuje plik SKILL.md",
+      "step2": "Agent zachowuje umiejętność",
+      "prompt": "Odczytaj fakturę i wypisz pozycje."
+    }
   },
   "canvas": {
     "nodes": "Węzły",
@@ -2400,6 +2425,50 @@
       "nodes": "Węzły",
       "reference": "Dokumentacja referencyjna",
       "tabs": "Karty"
-    }
+    },
+    "pluginNoDoc": "Ta wtyczka nie posiada dokumentacji."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Szukaj Workflow, kart, dokumentacji...",
+    "searchAria": "Wyszukiwanie w palecie poleceń",
+    "ariaLabel": "Paleta poleceń",
+    "noResults": "Brak wyników",
+    "tryDifferentSearch": "Wypróbuj inne hasło wyszukiwania",
+    "recent": "Ostatnie",
+    "recentInFolder": "Ostatnie · W: {folder}",
+    "inFolder": "W: {folder}",
+    "scheduledDate": "Zaplanowano {date}",
+    "scheduledForDeletion": "Zaplanowane do usunięcia",
+    "goToTab": "Przejdź do karty",
+    "workflowTemplate": "Szablon Workflow",
+    "nodeTemplate": "Szablon węzła",
+    "nodeType": "Węzeł · {type}",
+    "documentation": "Dokumentacja",
+    "support": "Wsparcie",
+    "contactSupport": "Skontaktuj się ze wsparciem",
+    "watchRunbook": "Zobacz, jak Heym buduje i uruchamia Workflow",
+    "openDocs": "Otwórz dokumentację Heym",
+    "getHelp": "Uzyskaj pomoc od zespołu Heym",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work dla zespołów biznesowych na heym.run",
+    "navigate": "Nawiguj",
+    "select": "Wybierz",
+    "click": "kliknij",
+    "newTab": "nowa karta",
+    "oneItem": "{count} element",
+    "manyItems": "{count} elementów"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Wtyczki są wyłączone w tej instancji.",
+    "loadingDefinition": "Ładowanie definicji wtyczki...",
+    "notBound": "Ten węzeł nie jest powiązany z pakietem wtyczki.",
+    "noneInstalled": "W tej instancji nie zainstalowano żadnych wtyczek.",
+    "notInstalled": "Wtyczka „{id}” nie jest zainstalowana w tej instancji.",
+    "installedButDisabled": "Wtyczka „{name}” jest zainstalowana, ale wyłączona.",
+    "noKindNodes": "Wtyczka „{name}” nie udostępnia żadnych węzłów typu {kind}.",
+    "loadErrorDetail": "Nie można załadować wtyczek: {detail}",
+    "loadErrorHttp": "Nie można załadować wtyczek (HTTP {status}).",
+    "loadError": "Nie można załadować wtyczek.",
+    "enabled": "Włączone"
   }
 }

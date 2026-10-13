@@ -591,8 +591,14 @@ SMTP-autentiseringsuppgiften lagrar anslutningsinformation för e-postservern f�
 |-------|-------------|
 | `host` | SMTP-serverns värdnamn (t.ex. `smtp.gmail.com`) |
 | `port` | SMTP-port (vanligtvis `587` för STARTTLS, `465` för SSL) |
-| `email` | Avsändarens e-postadress |
+| `email` | Användarnamn som SMTP-servern loggar in med; även den synliga avsändaren när `from` är tomt |
 | `password` | SMTP-lösenord eller App Password |
+
+### Valfria fält
+
+| Fält | Beskrivning |
+|-------|-------------|
+| `from` (`smtp_from`) | Synlig Från-adress (From). Lämna tomt för att skicka som `email`. Servern loggar fortfarande in som `email`, så det kontot måste ha tillåtelse att skicka som denna adress (i Gmail, ett verifierat **Skicka e-post som**-alias). |
 
 ### Vanliga SMTP-leverantörer
 

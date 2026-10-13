@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Pašreizējās izpildes id (vienāds ar [Execution History](./execution-history.md) ieraksta id, tāpēc `/workflows/<id>/<executionId>` atver šo palaišanu kanvā). **Tikai izpildlaikā**: tukšs izteiksmes priekšskatījuma dialogā; aizpildīts tikai tad, kamēr workflow tiek izpildīts.
 - `$vars` - Workflow-lokālie mainīgie (piekļuve caur `$vars.variableName`; atjaunināti caur `variable` mezglu)
 - `$global` - Noturīgā globālo mainīgo krātuve (piekļuve caur `$global.variableName`)
+- `$page.record` - Tikai informācijas paneļa logrīku workflow: tās detalizētās lapas ieraksts, kurā atrodas logrīks, no informācijas paneļa parametra `?record=`. Ir `null` informācijas panelī, kas atvērts bez šī parametra, kā arī izteiksmju priekšskatījuma dialoglodziņā. Mezglam ar etiķeti `page` ir prioritāte. Skatiet [Detalizētās lapas](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars lietojums
 - `$vars.counter` - Piekļūt mainīgajam ar nosaukumu `counter`

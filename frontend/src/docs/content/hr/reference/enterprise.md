@@ -16,6 +16,10 @@ Heym je besplatan za korištenje i samostalno hostanje pod svojom licencom dostu
 | **Prioritetna podrška i SLA** | Jamčeni vremenski okviri odgovora i prioritetno rješavanje problema |
 | **Prilagođeni razvoj** | Razvoj značajki i modifikacije prilagođene zahtjevima Vaše organizacije |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) je sučelje za poslovne timove koje radi povrh platforme Heym. Korisnici opišu zadatak, odgovore na nekoliko pitanja i dobiju testirani workflow, rade sa stranica izrađenih za njih i odgovaraju na preglede, uz jedinstvenu prijavu (SSO), uloge Owner, Editor i Viewer te ime uz svako pokretanje. Radi uz vaš Heym s vlastitom licencom; povežite ga u **Settings → Heym Work**. Saznajte više i zatražite probnu verziju na [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Podrška za produkcijske agente
 
 Tim Heym pomaže Vam u dizajniranju, izgradnji i osnaživanju agenata i workflow-a za Vaše poslovne procese. To uključuje pregled Vaših zahtjeva, preporučivanje konfiguracija čvorova i osiguranje da Vaši workflows slijede najbolje prakse za pouzdanost, promatranje i upravljanje.
@@ -68,3 +72,4 @@ Obratite se timu za enterprise na **enterprise@heym.run** za upite o licencama, 
 - [Paralelno izvršavanje](./parallel-execution.md) — Model izvršavanja s više radnika
 - [Timovi](./teams.md) — Suradnja tima i dijeljenje resursa
 - [Cjeloviti skup značajki](./features.md) — Potpuni pregled mogućnosti Heym-a
+- [Heym Work](./heym-work.md): sučelje za poslovne timove i kako ga povezati

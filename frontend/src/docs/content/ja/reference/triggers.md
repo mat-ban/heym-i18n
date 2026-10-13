@@ -94,11 +94,12 @@ RabbitMQ コンシューマーは、リーダーワーカーが初期化され�
 |-------|------|
 | `"API"` | 明示的なヘッダーのない Webhook / API 呼び出し（デフォルト） |
 | `"Canvas"` | Workflow エディターのキャンバスからの実行 |
-| `"Quick Drawer"` | エディターのクイックドロワーパネルからの実行 |
+| `"Quick Drawer"` | エディターのクイックドロワーパネルからの実行（ドロップゾーンからアップロードされたファイル実行を含む） |
 | `"cron"` | Cron スケジューラー |
 | `"imap"` | IMAP Trigger マネージャー |
 | `"websocket"` | アウトバウンド WebSocket Trigger マネージャー |
-| `"file_upload"` | File Upload Trigger のアップロード Endpoint |
+| `"file_upload"` | File Upload Trigger のアップロード Endpoint（HTTP、MCP、またはキャンバスで発行されたリンク） |
+| `"dashboard"` | ダッシュボードウィジェットの実行およびファイルドロップウィジェットからのアップロード |
 | `"telegram"` | Telegram ボット Webhook |
 | `"Discord"` | Discord インタラクション Webhook |
 | `"MCP"` | MCP ツール呼び出し |

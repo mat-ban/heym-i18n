@@ -33,6 +33,13 @@ Claude나 ChatGPT와 같이 샌드박스에서 실행되는 AI 에이전트를 �
 
 캔버스에서 **Run Workflow**는 발급된 `curl`을 복사 버튼과 함께 디버그 패널에 표시합니다.
 
+## Heym에서 실행하기
+
+두 곳에서 동일한 링크 발급 및 업로드 방식을 통해 파일에 대해 직접 이러한 Workflow를 실행할 수 있습니다:
+
+- [Quick Drawer](../reference/quick-drawer.md)는 파일을 놓을 수 있는 드롭존을 표시합니다. 이러한 실행은 기록에서 `Quick Drawer`로 태그됩니다.
+- 대시보드의 [실행 위젯](../tabs/dashboard-tab.md#run-widgets)은 드롭된 각 파일에 대해 Workflow를 실행합니다. 이러한 실행은 `dashboard`로 태그됩니다.
+
 ## 파라미터
 
 | 파라미터 | 타입 | 기본값 | 설명 |

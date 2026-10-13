@@ -578,8 +578,14 @@ SMTP-legitimationsoplysningerne gemmer forbindelsesdetaljer til e-mailserveren f
 |-------|-------------|
 | `host` | SMTP-serverens hostname (f.eks. `smtp.gmail.com`) |
 | `port` | SMTP-port (typisk `587` for STARTTLS, `465` for SSL) |
-| `email` | Afsenderens e-mailadresse |
+| `email` | Brugernavn, som SMTP-serveren logger ind med; også den synlige afsender, når `from` er tom |
 | `password` | SMTP-adgangskode eller App Password |
+
+### Valgfrie felter
+
+| Felt | Beskrivelse |
+|-------|-------------|
+| `from` (`smtp_from`) | Synlig Fra-adresse (From). Lad feltet stå tomt for at sende som `email`. Serveren logger stadig ind som `email`, så denne konto skal have tilladelse til at sende som denne adresse (i Gmail et verificeret **Send mail som**-alias). |
 
 ### Almindelige SMTP-udbydere
 

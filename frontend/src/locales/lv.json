@@ -274,7 +274,17 @@
       "intro": "Heym Work ir otra saskarne uzņēmuma komandām. Cilvēki pierakstās caur Heym, un visi darbi tiek izpildīti šeit.",
       "never": "Nekad",
       "learnMore": "Uzzināt vairāk"
-    }
+    },
+    "pluginsIntro": "Spraudņi šai instancei pievieno pielāgotus mezglus (darbības un Trigger). Spraudņa instalēšana vai noņemšana izpilda servera puses kodu, tāpēc tā ir pieejama tikai operatoriem, kas norādīti",
+    "loadingPlugins": "Ielādē spraudņus…",
+    "pluginsDisabledTitle": "Spraudņi ir atspējoti",
+    "pluginsDisabledHint": "Iestatiet šos vides mainīgos aizmugursistēmā un pēc tam restartējiet:",
+    "installPluginZip": "Instalēt spraudni (.zip)",
+    "noPluginsInstalled": "Vēl nav instalēts neviens spraudnis.",
+    "enablePlugin": "Iespējot",
+    "disablePlugin": "Atspējot",
+    "uninstallPlugin": "Atinstalēt",
+    "pluginOperationFailed": "Spraudņa darbība neizdevās"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Sākt apskati",
     "readTheDocs": "Lasīt dokumentāciju",
     "previousFeature": "Iepriekšējā funkcija",
-    "goToFeature": "Doties uz {title}"
+    "goToFeature": "Doties uz {title}",
+    "heymWork": {
+      "step0": "Komanda uzdod jautājumu Heym Work",
+      "step1": "Heym to izveido un pārbauda",
+      "step2": "Verificēts, bez audekla",
+      "step3": "Heym to izpilda fonā",
+      "prompt": "Pārbaudiet jaunos līgumus attiecībā uz riskantiem punktiem.",
+      "testing": "Workflow testēšana",
+      "verified": "Verificēts"
+    },
+    "skillZip": {
+      "step0": "Iemetiet prasmes zip failu Chat",
+      "step1": "Chat nolasa SKILL.md",
+      "step2": "Aģents saglabā prasmi",
+      "prompt": "Nolasiet rēķinu un uzskaitiet rindas vienumus."
+    }
   },
   "canvas": {
     "nodes": "Mezgli",
@@ -2400,6 +2425,50 @@
       "nodes": "Mezgli",
       "reference": "Atsauce",
       "tabs": "Cilnes"
-    }
+    },
+    "pluginNoDoc": "Šim spraudnim nav dokumentācijas."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Meklēt Workflow, cilnes, dokumentāciju...",
+    "searchAria": "Komandu paletes meklēšana",
+    "ariaLabel": "Komandu palete",
+    "noResults": "Rezultāti nav atrasti",
+    "tryDifferentSearch": "Mēģiniet citu meklēšanas vaicājumu",
+    "recent": "Nesenie",
+    "recentInFolder": "Nesenie · Mapē: {folder}",
+    "inFolder": "Mapē: {folder}",
+    "scheduledDate": "ieplānots {date}",
+    "scheduledForDeletion": "Ieplānots dzēšanai",
+    "goToTab": "Doties uz cilni",
+    "workflowTemplate": "Workflow veidne",
+    "nodeTemplate": "Mezgla veidne",
+    "nodeType": "Mezgls · {type}",
+    "documentation": "Dokumentācija",
+    "support": "Atbalsts",
+    "contactSupport": "Sazināties ar atbalstu",
+    "watchRunbook": "Skatieties, kā Heym izveido un palaiž Workflow",
+    "openDocs": "Atvērt Heym dokumentāciju",
+    "getHelp": "Saņemt palīdzību no Heym komandas",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work biznesa komandām vietnē heym.run",
+    "navigate": "Pārvietoties",
+    "select": "Izvēlēties",
+    "click": "klikšķis",
+    "newTab": "jauna cilne",
+    "oneItem": "{count} vienums",
+    "manyItems": "{count} vienumi"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Spraudņi šajā instancē ir atspējoti.",
+    "loadingDefinition": "Ielādē spraudņa definīciju...",
+    "notBound": "Šis mezgls nav piesaistīts spraudņa pakotnei.",
+    "noneInstalled": "Šajā instancē nav instalēts neviens spraudnis.",
+    "notInstalled": "Spraudnis \"{id}\" šajā instancē nav instalēts.",
+    "installedButDisabled": "Spraudnis \"{name}\" ir instalēts, bet atspējots.",
+    "noKindNodes": "Spraudnis \"{name}\" nepiedāvā nevienu {kind} mezglu.",
+    "loadErrorDetail": "Nevarēja ielādēt spraudņus: {detail}",
+    "loadErrorHttp": "Nevarēja ielādēt spraudņus (HTTP {status}).",
+    "loadError": "Nevarēja ielādēt spraudņus.",
+    "enabled": "Iespējots"
   }
 }

@@ -1,4 +1,34 @@
 {
+  "getting-started/core-concepts": {
+    "h": "65796a4e",
+    "s": "reviewed",
+    "r": "feature/i18n-german@2026-10-11"
+  },
+  "getting-started/introduction": {
+    "h": "15a9e428",
+    "s": "reviewed",
+    "r": "feature/i18n-german@2026-10-11"
+  },
+  "getting-started/migrate-to-heym": {
+    "h": "1af3b2bc",
+    "s": "reviewed",
+    "r": "feature/i18n-german@2026-10-11"
+  },
+  "getting-started/quick-start": {
+    "h": "0a3d1efe",
+    "s": "reviewed",
+    "r": "feature/i18n-german@2026-10-11"
+  },
+  "getting-started/running-and-deployment": {
+    "h": "31e169bb",
+    "s": "reviewed",
+    "r": "feature/i18n-german@2026-10-11"
+  },
+  "getting-started/why-heym": {
+    "h": "fa9d7489",
+    "s": "reviewed",
+    "r": "feature/i18n-german@2026-10-11"
+  },
   "tabs/alerts-tab": {
     "h": "d77a10dd",
     "s": "reviewed",
@@ -25,7 +55,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "tabs/dashboard-tab": {
-    "h": "528ce8c9",
+    "h": "98df6e46",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -55,7 +85,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "tabs/mcp-tab": {
-    "h": "511d334d",
+    "h": "9c2d194f",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -80,7 +110,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "tabs/vectorstores-tab": {
-    "h": "3bfc6b13",
+    "h": "088616a9",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -105,7 +135,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "nodes/chart-output-node": {
-    "h": "2ea0bf3f",
+    "h": "4f8e2209",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -195,7 +225,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "nodes/file-upload-trigger-node": {
-    "h": "5ae2b445",
+    "h": "24380a6d",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -330,7 +360,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "nodes/send-email-node": {
-    "h": "907a2da9",
+    "h": "d2fd059d",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -401,36 +431,6 @@
   },
   "nodes/websocket-trigger-node": {
     "h": "ce68a74b",
-    "s": "reviewed",
-    "r": "feature/i18n-german@2026-10-11"
-  },
-  "getting-started/core-concepts": {
-    "h": "65796a4e",
-    "s": "reviewed",
-    "r": "feature/i18n-german@2026-10-11"
-  },
-  "getting-started/introduction": {
-    "h": "15a9e428",
-    "s": "reviewed",
-    "r": "feature/i18n-german@2026-10-11"
-  },
-  "getting-started/migrate-to-heym": {
-    "h": "1af3b2bc",
-    "s": "reviewed",
-    "r": "feature/i18n-german@2026-10-11"
-  },
-  "getting-started/quick-start": {
-    "h": "0a3d1efe",
-    "s": "reviewed",
-    "r": "feature/i18n-german@2026-10-11"
-  },
-  "getting-started/running-and-deployment": {
-    "h": "31e169bb",
-    "s": "reviewed",
-    "r": "feature/i18n-german@2026-10-11"
-  },
-  "getting-started/why-heym": {
-    "h": "fa9d7489",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -505,7 +505,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "reference/enterprise": {
-    "h": "6d80f351",
+    "h": "8319c52c",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -520,7 +520,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "reference/expression-dsl": {
-    "h": "8ecd7e3c",
+    "h": "2e395b9d",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -530,7 +530,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "reference/features": {
-    "h": "5711d609",
+    "h": "566ac9ca",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -549,13 +549,17 @@
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
+  "reference/heym-work": {
+    "h": "0a4cc092",
+    "s": "reviewed"
+  },
   "reference/human-in-the-loop": {
     "h": "b80d3588",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
   "reference/integrations": {
-    "h": "5d0e01ee",
+    "h": "2c58b910",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -590,7 +594,7 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "reference/quick-drawer": {
-    "h": "ab7d8fa8",
+    "h": "8ae91a52",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
@@ -615,12 +619,12 @@
     "r": "feature/i18n-german@2026-10-11"
   },
   "reference/triggers": {
-    "h": "d594277a",
+    "h": "ca784955",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },
   "reference/user-settings": {
-    "h": "465afb5d",
+    "h": "d240310d",
     "s": "reviewed",
     "r": "feature/i18n-german@2026-10-11"
   },

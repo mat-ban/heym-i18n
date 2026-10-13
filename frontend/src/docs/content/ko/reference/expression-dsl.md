@@ -142,6 +142,7 @@ item.value
 - `$executionId` - 현재 실행의 id ([Execution History](./execution-history.md) 항목 id와 동일하므로 `/workflows/<id>/<executionId>`는 캔버스에서 이 실행을 엽니다). **런타임 전용**: 표현식 미리보기 다이얼로그에서는 비어 있으며, Workflow가 실행 중일 때만 채워집니다.
 - `$vars` - Workflow 로컬 변수 (`$vars.variableName`으로 접근; `variable` 노드로 업데이트)
 - `$global` - 영구 전역 변수 저장소 (`$global.variableName`으로 접근)
+- `$page.record` - 대시보드 위젯 Workflow 전용: 대시보드의 `?record=` 매개변수에서 가져온, 위젯이 위치한 상세 페이지의 레코드입니다. 해당 매개변수 없이 열린 대시보드와 표현식 미리보기 대화상자에서는 `null`입니다. `page`라는 레이블이 지정된 노드가 우선합니다. [상세 페이지](../tabs/dashboard-tab.md#detail-pages)를 참조하십시오.
 
 ### $vars 사용법
 - `$vars.counter` - `counter`라는 변수에 접근

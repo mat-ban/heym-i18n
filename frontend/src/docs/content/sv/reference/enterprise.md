@@ -16,6 +16,10 @@ Heym är fritt att använda och self-hosta under sin source-available-licens. F�
 | **Prioriterad support & SLA** | Garanterade svarstider och prioriterad ärendehantering |
 | **Kundanpassad utveckling** | Funktionsutveckling och modifieringar anpassade efter organisationens krav |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) är gränssnittet för affärsteam som körs ovanpå Heym. Användare beskriver en uppgift, svarar på några frågor och får ett testat workflow, arbetar från sidor byggda för dem och besvarar granskningar – med enkel inloggning (SSO), rollerna Owner, Editor och Viewer samt ett namn på varje körning. Det körs bredvid din Heym-instans med en egen licens; anslut det under **Settings → Heym Work**. Läs mer och begär en testversion på [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Produktionssupport för agenter
 
 Heym-teamet hjälper till att designa, bygga och härda agenter och workflows för affärsprocesser. Detta inkluderar granskning av krav, rekommendationer för nodkonfigurationer och säkerställande av att workflows följer bästa praxis för tillförlitlighet, observerbarhet och styrning.
@@ -68,3 +72,4 @@ Nå enterprise-teamet på **enterprise@heym.run** för licensfrågor, prissättn
 - [Parallell exekvering](./parallel-execution.md) — Exekveringsmodell med flera workers
 - [Teams](./teams.md) — Teamsamarbete och resursdelning
 - [Fullständig funktionsuppsättning](./features.md) — Komplett översikt över Heyms funktioner
+- [Heym Work](./heym-work.md): gränssnittet för affärsteam och hur du ansluter det

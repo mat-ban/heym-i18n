@@ -274,7 +274,17 @@
       "intro": "Heym Work er en anden grænseflade til forretningsteams. Personer logger ind via Heym, og alle job kører her.",
       "never": "Aldrig",
       "learnMore": "Få mere at vide"
-    }
+    },
+    "pluginsIntro": "Plugins tilføjer brugerdefinerede noder (handlinger og Triggers) til denne instans. Installation eller fjernelse af et plugin kører kode på serversiden og er derfor begrænset til operatører angivet i",
+    "loadingPlugins": "Indlæser plugins…",
+    "pluginsDisabledTitle": "Plugins er deaktiveret",
+    "pluginsDisabledHint": "Indstil disse miljøvariabler på backend, og genstart derefter:",
+    "installPluginZip": "Installer et plugin (.zip)",
+    "noPluginsInstalled": "Ingen plugins installeret endnu.",
+    "enablePlugin": "Aktivér",
+    "disablePlugin": "Deaktivér",
+    "uninstallPlugin": "Afinstaller",
+    "pluginOperationFailed": "Pluginhandling mislykkedes"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Start rundvisning",
     "readTheDocs": "Læs dokumentationen",
     "previousFeature": "Forrige funktion",
-    "goToFeature": "Gå til {title}"
+    "goToFeature": "Gå til {title}",
+    "heymWork": {
+      "step0": "Et team spørger i Heym Work",
+      "step1": "Heym bygger og tester det",
+      "step2": "Verificeret, intet lærred",
+      "step3": "Heym kører det i baggrunden",
+      "prompt": "Kontrollér nye kontrakter for risikable klausuler.",
+      "testing": "Tester Workflow",
+      "verified": "Verificeret"
+    },
+    "skillZip": {
+      "step0": "Slip en færdigheds-zip i Chat",
+      "step1": "Chat læser SKILL.md",
+      "step2": "Agenten beholder færdigheden",
+      "prompt": "Læs fakturaen og oplist linjeposterne."
+    }
   },
   "canvas": {
     "nodes": "Noder",
@@ -2400,6 +2425,50 @@
       "nodes": "Noder",
       "reference": "Reference",
       "tabs": "Faner"
-    }
+    },
+    "pluginNoDoc": "Dette plugin har ingen dokumentation."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Søg i Workflows, faner, dokumentation...",
+    "searchAria": "Søg i kommandopaletten",
+    "ariaLabel": "Kommandopalet",
+    "noResults": "Ingen resultater fundet",
+    "tryDifferentSearch": "Prøv et andet søgeord",
+    "recent": "Seneste",
+    "recentInFolder": "Seneste · I: {folder}",
+    "inFolder": "I: {folder}",
+    "scheduledDate": "Planlagt {date}",
+    "scheduledForDeletion": "Planlagt til sletning",
+    "goToTab": "Gå til fane",
+    "workflowTemplate": "Workflow-skabelon",
+    "nodeTemplate": "Nodeskabelon",
+    "nodeType": "Node · {type}",
+    "documentation": "Dokumentation",
+    "support": "Support",
+    "contactSupport": "Kontakt support",
+    "watchRunbook": "Se Heym opbygge og køre et Workflow",
+    "openDocs": "Åbn Heym-dokumentationen",
+    "getHelp": "Få hjælp fra Heym-teamet",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work til virksomhedsteams på heym.run",
+    "navigate": "Naviger",
+    "select": "Vælg",
+    "click": "klik",
+    "newTab": "ny fane",
+    "oneItem": "{count} element",
+    "manyItems": "{count} elementer"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Plugins er deaktiveret på denne instans.",
+    "loadingDefinition": "Indlæser plugindefinition...",
+    "notBound": "Denne node er ikke knyttet til en pluginpakke.",
+    "noneInstalled": "Der er ikke installeret nogen plugins på denne instans.",
+    "notInstalled": "Plugin \"{id}\" er ikke installeret på denne instans.",
+    "installedButDisabled": "Plugin \"{name}\" er installeret, men deaktiveret.",
+    "noKindNodes": "Plugin \"{name}\" udstiller ingen {kind}-noder.",
+    "loadErrorDetail": "Kunne ikke indlæse plugins: {detail}",
+    "loadErrorHttp": "Kunne ikke indlæse plugins (HTTP {status}).",
+    "loadError": "Kunne ikke indlæse plugins.",
+    "enabled": "Aktiveret"
   }
 }

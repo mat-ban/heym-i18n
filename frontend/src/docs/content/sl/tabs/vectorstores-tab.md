@@ -26,6 +26,7 @@ Zavihek **Vektorske Shrambe** upravlja vektorske shrambe, ki jih uporabljajo [RA
 - **Ogled predmetov** – Oglejte si skupine virov in število dokumentov na shrambo. Naložene datoteke se skupijo pod svojim imenom; dokumenti, ki jih je [RAG vozlišče](../nodes/rag-node.md) shranilo brez lastnega `source`, se skupijo pod **Dodano delovno pot: _ime_**, pri čemer se imenuje delovni postopek, ki jih je zapisal
 - **Izbriši vire** – Odstranite specifične datoteke ali skupine virov iz shrambe, vključno z vsemi, ki jih je dodal en delovni postopek
 - **Uredi shrambo** – Spremenite ime, opis ali poverilnico
+- **Iskanje** – `POST /api/vector-stores/{id}/search` s parametrom `query` (in `limit` od 1 do 20, privzeto 5) vrne koščke (chunks), ki bi jih vrnilo iskanje vozlišča RAG, najprej najboljše ujemanje, vsakega z njegovo oceno in virom. Zaslon RAG v Heym Work to uporablja za preizkušanje pridobivanja
 
 ## Deljenje
 

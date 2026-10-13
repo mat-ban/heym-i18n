@@ -97,11 +97,12 @@ RabbitMQ consumer стартира, когато leader worker се инициа
 |-------|------|
 | `"API"` | Webhook / API заявка без изричен header (по подразбиране) |
 | `"Canvas"` | Стартиране от canvas на редактора на workflow |
-| `"Quick Drawer"` | Стартиране от панела quick-drawer на редактора |
+| `"Quick Drawer"` | Стартиране от панела quick-drawer на редактора, включително изпълнения с файлове, качени от неговата зона за пускане |
 | `"cron"` | Cron scheduler |
 | `"imap"` | IMAP trigger manager |
 | `"websocket"` | Outbound WebSocket trigger manager |
-| `"file_upload"` | Endpoint за качване на File Upload Trigger |
+| `"file_upload"` | Endpoint за качване на File Upload Trigger (връзки, генерирани през HTTP, MCP или платното) |
+| `"dashboard"` | Изпълнения от уиджети на таблото и качвания от уиджет за пускане на файлове |
 | `"telegram"` | Telegram bot webhook |
 | `"Discord"` | Discord interactions webhook |
 | `"MCP"` | MCP tool call |

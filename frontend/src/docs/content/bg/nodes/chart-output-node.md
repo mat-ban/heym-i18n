@@ -33,6 +33,8 @@
 | `valueField` | string | Ключ на ред, използван като числова стойност (pie/bar/line/numeric/gauge) |
 | `series` | array | Опционална дефиниция за multi-series `[{ "name": "Sent", "field": "sent" }]` за bar/line (замества `valueField`) |
 | `columns` | array | Опционален списък с колони за `table` (по подразбиране — ключовете на първия ред) |
+| `statusColumn` | string | Незадължителна колона за `table`, рендирана като цветни [чипове за статус](#status-chips). Трябва да е една от показаните колони. |
+| `statusTones` | object | Незадължително съпоставяне от стойност на статус към тон (`success`, `attention`, `failure`, `waiting`, `neutral`) за стойности, които не са обхванати по подразбиране |
 | `xField` / `yField` | string | Ключове на ред за X и Y числовите оси (scatter) |
 | `min` / `max` | number | Числов диапазон за `gauge` (по подразбиране `0` / `100`) |
 | `unit` | string | Опционална единица, показвана до стойност на `numeric` или `gauge` |
@@ -42,7 +44,7 @@
 ## Chart types
 
 - **bar / line / area / pie** — категорийни charts, управлявани от `labelField` + `valueField` (или `series` за multi-series bar/line/area). `area` е запълнен trend chart.
-- **table** — сурови редове, рендирани като scrollable таблица чрез `columns`.
+- **table** — сурови редове, рендирани като scrollable таблица чрез `columns`. Една колона може да се рендира като [чипове за статус](#status-chips), а редовете могат да отварят [страница с детайли](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — единична KPI стойност от първия ред, с опционална `unit`.
 - **gauge** — единична стойност, показана спрямо диапазон `min`–`max` (напр. процент). Използва `valueField`.
 - **scatter** — X/Y точки от `xField` и `yField` за correlation plots.
@@ -103,14 +105,59 @@ $processVideos.total - $processVideos.index + ". [" + $processVideos.item.title 
 
 За прост възходящ списък, започващ от 1, или поставете префикс на всеки ред (`1.`, `2.`, `3.`), или използвайте цикъл с `$loop.index + 1`. Използвайте [bullet lists](#interactive-task-lists) (`- item`), когато не се нуждаете от номера.
 
+## Чипове за статус
+
+Една `table` може да показва една колона като цветни чипове. Задайте **Status column** в свойствата на възела (или `statusColumn` в DSL) на име на колона. Всяка стойност получава един от пет тона, а често срещаните думи получават тон без допълнителна конфигурация:
+
+| Тон | Думи по подразбиране |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | всичко останало |
+
+Сравняването игнорира главни/малки букви, `_` и `-`, така че `IN_PROGRESS` и `in-progress` са `waiting`. Добавете **Status tones** за други стойности; записът презаписва стойността по подразбиране за тази стойност:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Сървърът преобразува всяка стойност до нейния тон, така че Heym и Heym Work показват едни и същи цветове.
+
+## Страници с детайли: `$page.record`
+
+Табло, отворено с `?record=<value>`, изпълнява всеки Workflow на уиджет с тази стойност като `$page.record`. Връзка в ред от таблица отваря такава страница; вижте [Страници с детайли](../tabs/dashboard-tab.md#detail-pages). В табло, отворено без запис, както и в диалога за изрази, `$page.record` е `null`. Възел с етикет `page` има предимство пред него.
+
+Използвайте го, за да извлечете конкретния запис, за който се отнася страницата, например във възел [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` е самата стойност на щракнатия ред, като `V-1002`, а не обект с полета. За да намерите този запис в [DataTable](./datatable-node.md), филтрирайте колоната за запис по стойността: операция `find` с филтър `{"vendor_id": "$page.record"}`. Път като `$page.record.id` не връща нищо, така че уиджет, създаден или настроен от AI, премахва тези полета и вместо това чете `$page.record`.
+
+Стойността идва от URL адрес, който всеки може да редактира. Таблото приема само стойности във формата за запис (букви, цифри, `-`, `_` и `.` по подразбиране), но въпреки това я третирайте като ненадежден вход: подавайте я там, където възелът ескейпва стойностите, като HTTP query параметър или стойност на филтър в [DataTable](./datatable-node.md) или ClickHouse, и никога не сглобявайте текст на заявка чрез конкатенация на низове с нея. Уиджетите все така се изпълняват от името на собственика на таблото, независимо кой отваря страницата.
+
 ## Как се разрешават данните
 
 1. Ако `dataPath` е зададен, node следва този dot path в upstream изхода.
 2. В противен случай търси масив: списък на най-горно ниво, масив `data` или първото поле със стойност списък.
-3. За `table`, всеки ред става ред в таблицата, използвайки `columns` (или ключовете на първия ред).
-4. За `numeric` и `gauge`, стойността идва от `valueField` на първия ред (или първото числово поле).
-5. За `scatter`, всеки ред става точка `[xField, yField]`.
-6. За `text`, съобщението се взема от `valueField` на първия ред, когато е зададено, в противен случай от статичната конфигурация `text` (в противен случай първото поле от тип низ на първия ред).
+3. Редове директно от възел [Data Table](./datatable-node.md) (`{id, data, created_at}`) се четат с техните колони на най-горно ниво до `id`, така че `labelField`, `valueField` и `columns` назовават собствените колони на таблицата.
+4. За `table`, всеки ред става ред в таблицата, използвайки `columns` (или ключовете на първия ред). Със `statusColumn` Payload-ът пренася и тона на всяка стойност в тази колона.
+5. За `numeric` и `gauge`, стойността идва от `valueField` на първия ред (или първото числово поле).
+6. За `scatter`, всеки ред става точка `[xField, yField]`.
+7. За `text`, съобщението се взема от `valueField` на първия ред, когато е зададено, в противен случай от статичната конфигурация `text` (в противен случай първото поле от тип низ на първия ред).
 
 ## Пример
 

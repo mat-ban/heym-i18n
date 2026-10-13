@@ -30,6 +30,9 @@
 - **Allikate kustutamine** – Eemaldage hoidlast konkreetseid faile või allikarühmi, sealhulgas
   kõik, mille üks workflow lisas
 - **Hoidla muutmine** – Muutke nime, kirjeldust või mandaati
+- **Otsing** – `POST /api/vector-stores/{id}/search` koos parameetriga `query` (ja `limit` vahemikus 1 kuni 20,
+  vaikimisi 5) tagastab tükid (chunks), mille tagastaks RAG-sõlme otsing, parim vaste esimesena, igaüks koos oma
+  skoori ja allikaga. Heym Worki RAG-ekraan kasutab seda päringute testimiseks
 
 ## Jagamine
 

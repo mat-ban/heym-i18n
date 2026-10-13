@@ -33,6 +33,8 @@ Quando você tiver apenas dados de exemplo/amostra (sem fonte real), produza ess
 | `valueField` | string | Chave da linha usada como valor numérico (pie/bar/line/numeric/gauge) |
 | `series` | array | Definição opcional de múltiplas séries `[{ "name": "Sent", "field": "sent" }]` para bar/line (substitui `valueField`) |
 | `columns` | array | Lista opcional de colunas para `table` (o padrão são as chaves da primeira linha) |
+| `statusColumn` | string | Coluna opcional de `table` renderizada como [chips de status](#status-chips) coloridos. Deve ser uma das colunas exibidas. |
+| `statusTones` | object | Mapa opcional de um valor de status para um tom (`success`, `attention`, `failure`, `waiting`, `neutral`) para valores que os padrões não cobrem |
 | `xField` / `yField` | string | Chaves da linha para os eixos numéricos X e Y (scatter) |
 | `min` / `max` | number | Intervalo numérico para `gauge` (padrão `0` / `100`) |
 | `unit` | string | Unidade opcional exibida ao lado de um valor `numeric` ou `gauge` |
@@ -42,7 +44,7 @@ Quando você tiver apenas dados de exemplo/amostra (sem fonte real), produza ess
 ## Tipos de gráfico
 
 - **bar / line / area / pie** — gráficos categóricos controlados por `labelField` + `valueField` (ou `series` para bar/line/area com múltiplas séries). `area` é um gráfico de tendência preenchido.
-- **table** — linhas brutas renderizadas como uma tabela rolável usando `columns`.
+- **table** — linhas brutas renderizadas como uma tabela rolável usando `columns`. Uma coluna pode ser renderizada como [chips de status](#status-chips) e as linhas podem abrir uma [página de detalhes](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — um único valor de KPI da primeira linha, com uma `unit` opcional.
 - **gauge** — um único valor exibido em um intervalo `min`–`max` (por exemplo, uma porcentagem). Usa `valueField`.
 - **scatter** — pontos X/Y de `xField` e `yField` para gráficos de correlação.
@@ -103,14 +105,59 @@ Markdown resultante:
 
 Para uma lista crescente simples começando em 1, prefixe cada linha (`1.`, `2.`, `3.`) ou use um loop com `$loop.index + 1`. Use [listas com marcadores](#interactive-task-lists) (`- item`) quando não precisar de números.
 
+## Chips de status
+
+Uma `table` pode exibir uma coluna como chips coloridos. Defina **Status column** nas propriedades do nó (ou `statusColumn` na DSL) com o nome de uma coluna. Cada valor recebe um de cinco tons, e palavras comuns recebem um automaticamente sem configuração:
+
+| Tom | Palavras padrão |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | qualquer outro valor |
+
+A correspondência ignora maiúsculas/minúsculas, `_` e `-`, portanto `IN_PROGRESS` e `in-progress` resultam ambos em `waiting`. Adicione **Status tones** para outros valores; uma entrada substitui o padrão para aquele valor:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+O servidor resolve cada valor para o seu tom, de modo que o Heym e o Heym Work exibem as mesmas cores.
+
+## Páginas de detalhes: `$page.record`
+
+Um dashboard aberto com `?record=<value>` executa cada Workflow de widget com esse valor como `$page.record`. Um link de linha da tabela abre uma página desse tipo; consulte [Páginas de detalhes](../tabs/dashboard-tab.md#detail-pages). No dashboard aberto sem um registro e no diálogo de expressão, `$page.record` é `null`. Um nó rotulado como `page` tem precedência sobre ele.
+
+Use-o para buscar o registro específico sobre o qual a página trata, por exemplo em um nó [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` é o próprio valor da linha clicada, como `V-1002`, e não um objeto com campos. Para encontrar esse registro em uma [DataTable](./datatable-node.md), filtre a coluna de registro pelo valor: operação `find` com o filtro `{"vendor_id": "$page.record"}`. Um caminho como `$page.record.id` não resolve nada; por isso, um widget criado ou ajustado pela IA descarta esses campos e lê `$page.record` diretamente.
+
+O valor vem de uma URL que qualquer pessoa pode editar. O dashboard aceita apenas valores no formato de registro configurado (letras, dígitos, `-`, `_` e `.` por padrão), mas ainda assim trate-o como entrada não confiável: passe-o onde o nó faz escape de valores, como um parâmetro de consulta HTTP ou um valor de filtro do [DataTable](./datatable-node.md) ou ClickHouse, e nunca monte texto de consulta concatenando strings com ele. Os widgets continuam sendo executados como o proprietário do dashboard, independentemente de quem abrir a página.
+
 ## Como os dados são resolvidos
 
 1. Se `dataPath` estiver definido, o nó segue esse caminho com pontos até a saída upstream.
 2. Caso contrário, ele procura por um array: uma lista de nível superior, um array `data` ou o primeiro campo com valor de lista.
-3. Para `table`, cada linha torna-se uma linha da tabela usando `columns` (ou as chaves da primeira linha).
-4. Para `numeric` e `gauge`, o valor vem de `valueField` na primeira linha (ou do primeiro campo numérico).
-5. Para `scatter`, cada linha torna-se um ponto `[xField, yField]`.
-6. Para `text`, a mensagem é obtida de `valueField` na primeira linha quando definido; caso contrário, da configuração estática `text` (ou, ainda, do primeiro campo string da primeira linha).
+3. As linhas vindas diretamente de um nó [Data Table](./datatable-node.md) (`{id, data, created_at}`) são lidas com suas colunas no nível superior ao lado de `id`, de modo que `labelField`, `valueField` e `columns` nomeiam as próprias colunas da tabela.
+4. Para `table`, cada linha torna-se uma linha da tabela usando `columns` (ou as chaves da primeira linha). Com `statusColumn`, o Payload também carrega o tom de cada valor nessa coluna.
+5. Para `numeric` e `gauge`, o valor vem de `valueField` na primeira linha (ou do primeiro campo numérico).
+6. Para `scatter`, cada linha torna-se um ponto `[xField, yField]`.
+7. Para `text`, a mensagem é obtida de `valueField` na primeira linha quando definido; caso contrário, da configuração estática `text` (ou, ainda, do primeiro campo string da primeira linha).
 
 ## Exemplo
 

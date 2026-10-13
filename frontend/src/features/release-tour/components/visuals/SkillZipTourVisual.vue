@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { FileArchive, Sparkles } from "lucide-vue-next";
 
 import { useCycleStep } from "@/features/release-tour/useCycleStep";
 
+const { t } = useI18n();
 // Mock UI only. 0: a zip is attached · 1: Chat reads SKILL.md · 2: the agent has the skill.
 const step = useCycleStep(3, 1600);
 
 const caption = computed<string>(() => {
-  if (step.value === 0) return "Drop a skill zip in Chat";
-  if (step.value === 1) return "Chat reads SKILL.md";
-  return "The agent keeps the skill";
+  if (step.value === 0) return t("releaseTour.skillZip.step0");
+  if (step.value === 1) return t("releaseTour.skillZip.step1");
+  return t("releaseTour.skillZip.step2");
 });
 </script>
 
@@ -28,7 +30,7 @@ const caption = computed<string>(() => {
         SKILL.md
       </p>
       <p class="mt-1">
-        Read the invoice and list the line items.
+        {{ $t('releaseTour.skillZip.prompt') }}
       </p>
     </div>
     <div class="flex items-center justify-between text-[10px]">

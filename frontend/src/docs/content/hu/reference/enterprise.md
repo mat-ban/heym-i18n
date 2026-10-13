@@ -16,6 +16,10 @@ A Heym szabadon használható és saját maga telepíthető a source-available l
 | **Priority Support & SLA** | Garantált válaszidők és prioritásos hibamegoldás |
 | **Custom Development** | Az Ön szervezetének igényeihez szabott funkciófejlesztés és módosítások |
 
+## Heym Work
+
+A [Heym Work](./heym-work.md) a Heym felett futó, üzleti csapatoknak készült felület. A felhasználók leírnak egy feladatot, válaszolnak néhány kérdésre, és kapnak egy tesztelt workflow-t, a számukra készített oldalakon dolgoznak, és válaszolnak a jóváhagyásokra — egyszeri bejelentkezéssel (SSO), Owner, Editor és Viewer szerepkörökkel, valamint minden futtatásnál névvel ellátva. Saját licenccel a Heym mellett fut; csatlakoztassa a **Settings → Heym Work** menüpontban. Tudjon meg többet és kérjen próbaverziót a [heym.run/enterprise](https://heym.run/enterprise) oldalon.
+
 ## Production Agent Support
 
 A Heym csapata segít Önnek ügynökök és workflow-k tervezésében, felépítésében és megerősítésében az Ön üzleti folyamataihoz. Ez magában foglalja az Ön követelményeinek áttekintését, a csomópont-konfigurációk javaslását, valamint annak biztosítását, hogy workflow-jai kövessék a megbízhatóság, a megfigyelhetőség és az irányítás bevált gyakorlatait.
@@ -68,3 +72,4 @@ Az enterprise csapatot a **enterprise@heym.run** címen érheti el licencelési 
 - [Parallel Execution](./parallel-execution.md) — Több workeres végrehajtási modell
 - [Teams](./teams.md) — Csapatmunka és erőforrás-megosztás
 - [Full Feature Set](./features.md) — A Heym képességeinek teljes áttekintése
+- [Heym Work](./heym-work.md): az üzleti csapatoknak készült felület és csatlakoztatásának módja

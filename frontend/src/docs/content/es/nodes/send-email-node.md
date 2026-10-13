@@ -28,7 +28,7 @@ Adjunte archivos desde su [Drive](./drive-node.md) pasando uno o varios IDs de a
 
 ## Configuración
 
-Añada una credencial SMTP con servidor, puerto, correo electrónico y contraseña. Servidores SMTP comunes:
+Añada una credencial SMTP con servidor, puerto, correo electrónico y contraseña. El remitente visible es el campo opcional **From** de la credencial; si From está en blanco, se envía con el nombre de usuario. Servidores SMTP comunes:
 
 - Gmail: `smtp.gmail.com`, puerto 587 (se requiere contraseña de aplicación)
 - Outlook: `smtp.office365.com`, puerto 587

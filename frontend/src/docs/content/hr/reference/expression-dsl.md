@@ -142,6 +142,7 @@ item.value
 - `$executionId` - ID trenutnog izvršenja (jednak ID-u unosa [Povijesti izvršenja](./execution-history.md), tako da `/workflows/<id>/<executionId>` otvara ovo izvođenje na platnu). **Samo u vrijeme izvođenja**: prazan u dijalogu za pregled izraza; popunjen samo dok se workflow izvršava.
 - `$vars` - Varijable lokalne za workflow (pristupite putem `$vars.variableName`; ažurira se putem čvora varijable)
 - `$global` - Trajna globalna pohrana varijabli (pristupite putem `$global.variableName`)
+- `$page.record` - Samo za workflowe widgeta nadzorne ploče: zapis stranice s pojedinostima na kojoj se widget nalazi, iz parametra `?record=` nadzorne ploče. Ima vrijednost `null` na nadzornoj ploči otvorenoj bez tog parametra i u dijalogu pregleda izraza. Čvor označen s `page` ima prednost. Pogledajte [Stranice s pojedinostima](../tabs/dashboard-tab.md#detail-pages).
 
 ### Korištenje $vars
 - `$vars.counter` - Pristup varijabli nazvanoj `counter`

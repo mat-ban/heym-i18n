@@ -274,7 +274,17 @@
       "intro": "Heym Work yra antroji sąsaja verslo komandoms. Žmonės prisijungia per Heym, o visi darbai vykdomi čia.",
       "never": "Niekada",
       "learnMore": "Sužinokite daugiau"
-    }
+    },
+    "pluginsIntro": "Įskiepiai prideda pasirinktinius mazgus (veiksmus ir Trigger) prie šio egzemplioriaus. Įdiegiant arba pašalinant įskiepį vykdomas serverio pusės kodas, todėl tai leidžiama tik operatoriams, nurodytiems",
+    "loadingPlugins": "Įkeliami įskiepiai…",
+    "pluginsDisabledTitle": "Įskiepiai išjungti",
+    "pluginsDisabledHint": "Nustatykite šiuos aplinkos kintamuosius serverio pusėje ir paleiskite iš naujo:",
+    "installPluginZip": "Įdiegti įskiepį (.zip)",
+    "noPluginsInstalled": "Dar nėra įdiegtų įskiepių.",
+    "enablePlugin": "Įjungti",
+    "disablePlugin": "Išjungti",
+    "uninstallPlugin": "Pašalinti",
+    "pluginOperationFailed": "Įskiepio operacija nepavyko"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Pradėti apžvalgą",
     "readTheDocs": "Skaityti dokumentaciją",
     "previousFeature": "Ankstesnė funkcija",
-    "goToFeature": "Pereiti į {title}"
+    "goToFeature": "Pereiti į {title}",
+    "heymWork": {
+      "step0": "Komanda pateikia užklausą Heym Work",
+      "step1": "Heym jį sukuria ir išbando",
+      "step2": "Patvirtinta, be drobės",
+      "step3": "Heym vykdo jį fone",
+      "prompt": "Patikrinkite naujas sutartis dėl rizikingų sąlygų.",
+      "testing": "Testuojamas Workflow",
+      "verified": "Patvirtinta"
+    },
+    "skillZip": {
+      "step0": "Įkelkite įgūdžio zip failą į Chat",
+      "step1": "Chat nuskaito SKILL.md",
+      "step2": "Agentas išsaugo įgūdį",
+      "prompt": "Nuskaitykite sąskaitą faktūrą ir išvardykite eilutės elementus."
+    }
   },
   "canvas": {
     "nodes": "Mazgai",
@@ -2400,6 +2425,50 @@
       "nodes": "Mazgai",
       "reference": "Nuoroda",
       "tabs": "Skirtukai"
-    }
+    },
+    "pluginNoDoc": "Šis įskiepis neturi dokumentacijos."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Ieškoti Workflow, kortelių, dokumentacijos...",
+    "searchAria": "Komandų paletės paieška",
+    "ariaLabel": "Komandų paletė",
+    "noResults": "Rezultatų nerasta",
+    "tryDifferentSearch": "Išbandykite kitą paieškos terminą",
+    "recent": "Naujausi",
+    "recentInFolder": "Naujausi · Aplanke: {folder}",
+    "inFolder": "Aplanke: {folder}",
+    "scheduledDate": "Suplanuota {date}",
+    "scheduledForDeletion": "Suplanuota ištrinti",
+    "goToTab": "Eiti į kortelę",
+    "workflowTemplate": "Workflow šablonas",
+    "nodeTemplate": "Mazgo šablonas",
+    "nodeType": "Mazgas · {type}",
+    "documentation": "Dokumentacija",
+    "support": "Pagalba",
+    "contactSupport": "Susisiekti su pagalba",
+    "watchRunbook": "Žiūrėkite, kaip Heym sukuria ir paleidžia Workflow",
+    "openDocs": "Atidaryti Heym dokumentaciją",
+    "getHelp": "Gauti pagalbos iš Heym komandos",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work verslo komandoms adresu heym.run",
+    "navigate": "Naršyti",
+    "select": "Pasirinkti",
+    "click": "spustelėjimas",
+    "newTab": "nauja kortelė",
+    "oneItem": "{count} elementas",
+    "manyItems": "{count} elementai"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Įskiepiai šiame egzemplioriuje yra išjungti.",
+    "loadingDefinition": "Įkeliamas įskiepio apibrėžimas...",
+    "notBound": "Šis mazgas nėra susietas su įskiepio paketu.",
+    "noneInstalled": "Šiame egzemplioriuje nėra įdiegtų įskiepių.",
+    "notInstalled": "Įskiepis „{id}“ nėra įdiegtas šiame egzemplioriuje.",
+    "installedButDisabled": "Įskiepis „{name}“ yra įdiegtas, bet išjungtas.",
+    "noKindNodes": "Įskiepis „{name}“ nepateikia jokių {kind} mazgų.",
+    "loadErrorDetail": "Nepavyko įkelti įskiepių: {detail}",
+    "loadErrorHttp": "Nepavyko įkelti įskiepių (HTTP {status}).",
+    "loadError": "Nepavyko įkelti įskiepių.",
+    "enabled": "Įjungta"
   }
 }

@@ -35,6 +35,7 @@ Vælg et workflow for at åbne dets inputformular.
 - Klik på **Kør Workflow** for at eksekvere det valgte workflow
 - Klik på **Stop Workflow** for at annullere en igangværende kørsel fra panelet
 - Workflows uden inputfelter kan stadig køres direkte
+- Et workflow, der starter med en [File Upload Trigger](../nodes/file-upload-trigger-node.md), viser i stedet en dropzone: træk en fil derind, eller klik for at vælge en. Zonen viser de filtyper og den størrelse, som triggeren accepterer, og afviser andre filer før upload. **Run Workflow** forbliver deaktiveret, indtil der er valgt en fil.
 
 Panelet bruger den samme workflow-eksekverings-API som andre Heym-kørselsflader, så output og kørselsadfærd forbliver konsistente.
 
@@ -51,6 +52,8 @@ Efter start af en kørsel viser panelet:
 
 `pending` betyder, at workflowet venter på en senere handling såsom menneskelig gennemsyn.
 
+En filkørsel går gennem triggerens engangs-uploadlink: skuffen beder workflowet om et link, uploader filen til det og viser resultatet, når uploaden vender tilbage. Filkørsler viser den endelige status og output, men ingen trinvis fremdrift, og bliver også tagget med `Quick Drawer` i historikken. Den valgte fil ryddes efter hver kørsel, da et link kun tager imod én fil.
+
 ## Browserlager
 
 Hurtigpanelet gemmer personlige præferencer i `localStorage`:
@@ -64,7 +67,7 @@ Panelet gemmer **ikke** inputværdier i denne version.
 
 Hurtigpanelet er bevidst en letvægts eksekveringsflade.
 
-- Inkluderet: søgning, fastgørelse, valg, input, kørsel, fremskridt, resultat
+- Inkluderet: søgning, fastgørelse, valg, input (herunder en fil), kørsel, fremskridt, resultat
 - Ekskluderet: workflow-oprettelse, redigering, mappestyring og canvas-handlinger
 
 ## Relateret

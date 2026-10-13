@@ -16,6 +16,10 @@ Heym은 소스 공개(source-available) 라이선스에 따라 무료로 사용 
 | **우선 지원 및 SLA** | 보장된 응답 시간 및 우선적 이슈 해결 |
 | **커스텀 개발** | 조직의 요구 사항에 맞춘 기능 개발 및 수정 |
 
+## Heym Work
+
+[Heym Work](./heym-work.md)는 Heym 위에서 실행되는 비즈니스 팀용 인터페이스입니다. 사용자가 업무를 설명하고 몇 가지 질문에 답하면 테스트된 Workflow를 받고, 맞춤 제작된 페이지에서 작업하며, 싱글 사인온(SSO), Owner·Editor·Viewer 역할, 그리고 모든 실행에 기록되는 이름과 함께 검토에 응답할 수 있습니다. 자체 라이선스로 Heym 옆에서 함께 실행되며 **Settings → Heym Work**에서 연결할 수 있습니다. 자세한 내용 확인 및 체험판 신청은 [heym.run/enterprise](https://heym.run/enterprise)에서 가능합니다.
+
 ## 프로덕션 에이전트 지원
 
 Heym 팀은 비즈니스 프로세스를 위한 에이전트와 Workflow를 설계, 구축 및 강화하는 데 도움을 드립니다. 여기에는 요구 사항 검토, 노드 구성 권장, 그리고 Workflow가 안정성, 관찰 가능성 및 거버넌스 모범 사례를 따르도록 보장하는 작업이 포함됩니다.
@@ -68,3 +72,4 @@ Heym 팀은 비즈니스 프로세스를 위한 에이전트와 Workflow를 설�
 - [병렬 실행](./parallel-execution.md) — 다중 워커 실행 모델
 - [Teams](./teams.md) — 팀 협업 및 리소스 공유
 - [전체 기능 세트](./features.md) — Heym 기능의 전체 개요
+- [Heym Work](./heym-work.md) — 비즈니스 팀을 위한 인터페이스 및 연결 방법

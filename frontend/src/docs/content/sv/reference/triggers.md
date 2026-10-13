@@ -93,11 +93,12 @@ Körningshistorik registrerar `trigger_source` för varje startpunkt:
 |-------|------|
 | `"API"` | Webhook / API-anrop utan explicit header (standard) |
 | `"Canvas"` | Körning från workfloweditorns canvas |
-| `"Quick Drawer"` | Körning från editorns quick-drawer-panel |
+| `"Quick Drawer"` | Körning från editorns quick-drawer-panel, inklusive filkörningar som laddats upp från dess släppzon |
 | `"cron"` | Cron-schemaläggare |
 | `"imap"` | IMAP trigger manager |
 | `"websocket"` | Outbound WebSocket trigger manager |
-| `"file_upload"` | File Upload Trigger-uppladdningsendpoint |
+| `"file_upload"` | File Upload Trigger-uppladdningsendpoint (länkar skapade via HTTP, MCP eller canvasen) |
+| `"dashboard"` | Körningar från instrumentpanelswidgetar och uppladdningar från en filsläppswidget |
 | `"telegram"` | Telegram bot-webhook |
 | `"Discord"` | Discord interactions-webhook |
 | `"MCP"` | MCP-verktygsanrop |

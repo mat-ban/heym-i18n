@@ -33,6 +33,8 @@ Când aveți doar date de exemplu (fără o sursă reală), produceți aceste r�
 | `valueField` | string | Cheia rândului folosită ca valoare numerică (pie/bar/line/numeric/gauge) |
 | `series` | array | Definiție opțională multi-serie `[{ "name": "Sent", "field": "sent" }]` pentru bar/line (suprascrie `valueField`) |
 | `columns` | array | Listă opțională de coloane pentru `table` (implicit cheile primului rând) |
+| `statusColumn` | string | Coloană opțională din `table` afișată ca [etichete de stare](#status-chips) colorate. Trebuie să fie una dintre coloanele afișate. |
+| `statusTones` | object | Mapare opțională de la o valoare de stare la o nuanță (`success`, `attention`, `failure`, `waiting`, `neutral`) pentru valorile neacoperite implicit |
 | `xField` / `yField` | string | Cheile rândului pentru axele numerice X și Y (scatter) |
 | `min` / `max` | number | Interval numeric pentru `gauge` (implicit `0` / `100`) |
 | `unit` | string | Unitate opțională afișată lângă o valoare `numeric` sau `gauge` |
@@ -42,7 +44,7 @@ Când aveți doar date de exemplu (fără o sursă reală), produceți aceste r�
 ## Tipuri de grafice
 
 - **bar / line / area / pie** — grafice categorice bazate pe `labelField` + `valueField` (sau `series` pentru bar/line/area multi-serie). `area` este un grafic de tendință umplut.
-- **table** — rânduri brute afișate ca tabel derulabil folosind `columns`.
+- **table** — rânduri brute afișate ca tabel derulabil folosind `columns`. O coloană poate fi afișată ca [etichete de stare](#status-chips), iar rândurile pot deschide o [pagină de detalii](../tabs/dashboard-tab.md#detail-pages).
 - **numeric** — o singură valoare KPI din primul rând, cu un `unit` opțional.
 - **gauge** — o singură valoare afișată pe un interval `min`–`max` (de ex. un procent). Folosește `valueField`.
 - **scatter** — puncte X/Y din `xField` și `yField` pentru grafice de corelație.
@@ -103,14 +105,59 @@ Markdown rezultat:
 
 Pentru o listă simplă crescătoare care începe de la 1, fie prefixați fiecare linie (`1.`, `2.`, `3.`), fie utilizați o buclă cu `$loop.index + 1`. Utilizați [liste cu bullet](#interactive-task-lists) (`- item`) atunci când nu aveți nevoie de numere.
 
+## Etichete de stare
+
+Un `table` poate afișa o coloană sub formă de etichete colorate (chips). Setați **Status column** în proprietățile nodului (sau `statusColumn` în DSL) la numele unei coloane. Fiecare valoare primește una dintre cele cinci nuanțe, iar cuvintele uzuale primesc una fără configurare:
+
+| Nuanță | Cuvinte implicite |
+|------|---------------|
+| `success` | success, successful, succeeded, done, complete, completed, approved, active, ok, paid, passed, healthy, resolved, won, delivered, published |
+| `attention` | warning, attention, review, needs review, at risk, partial, degraded, overdue, unpaid, expiring |
+| `failure` | failed, failure, error, errored, rejected, declined, blocked, lost, expired |
+| `waiting` | pending, waiting, queued, running, in progress, processing, scheduled, draft, new, open |
+| `neutral` | orice altceva |
+
+Potrivirea ignoră diferențele dintre majuscule și minuscule, `_` și `-`, astfel încât `IN_PROGRESS` și `in-progress` sunt ambele `waiting`. Adăugați **Status tones** pentru alte valori; o intrare suprascrie valoarea implicită pentru acel statut:
+
+```json
+{
+  "type": "chartOutput",
+  "data": {
+    "label": "invoices",
+    "chartType": "table",
+    "dataPath": "rows",
+    "columns": ["invoice", "customer", "state"],
+    "statusColumn": "state",
+    "statusTones": { "Disputed": "failure" }
+  }
+}
+```
+
+Serverul rezolvă fiecare valoare la nuanța sa, astfel încât Heym și Heym Work afișează aceleași culori.
+
+## Pagini de detalii: `$page.record`
+
+Un tablou de bord deschis cu `?record=<value>` rulează fiecare Workflow de widget cu acea valoare ca `$page.record`. Un link dintr-un rând de tabel deschide o astfel de pagină; consultați [Pagini de detalii](../tabs/dashboard-tab.md#detail-pages). Pe tabloul de bord deschis fără o înregistrare și în dialogul de expresii, `$page.record` este `null`. Un nod cu eticheta `page` are prioritate față de acesta.
+
+Folosiți-l pentru a prelua înregistrarea exactă despre care este pagina, de exemplu într-un nod [HTTP](./http-node.md):
+
+```
+https://crm.example.com/api/customers?id=$page.record
+```
+
+`$page.record` este chiar valoarea rândului pe care s-a făcut clic, cum ar fi `V-1002`, nu un obiect cu câmpuri. Pentru a găsi acea înregistrare într-un [DataTable](./datatable-node.md), filtrați coloana de înregistrare după valoare: operația `find` cu filtrul `{"vendor_id": "$page.record"}`. O cale precum `$page.record.id` nu rezolvă nimic, astfel încât un widget construit sau ajustat de AI elimină acele câmpuri și citește direct `$page.record`.
+
+Valoarea provine dintr-un URL pe care oricine îl poate edita. Tabloul de bord acceptă doar valori în formatul său de înregistrare (litere, cifre, `-`, `_` și `.` în mod implicit), dar tratați-o totuși ca pe o intrare nesigură: transmiteți-o acolo unde nodul face escape valorilor, cum ar fi un parametru de interogare HTTP sau o valoare de filtru [DataTable](./datatable-node.md) ori ClickHouse, și nu construiți niciodată textul interogării prin concatenarea șirurilor. Widgeturile rulează în continuare în numele proprietarului tabloului de bord, indiferent cine deschide pagina.
+
 ## Cum sunt rezolvate datele
 
 1. Dacă `dataPath` este setat, nodul urmărește acea cale cu puncte în output-ul din amonte.
 2. În caz contrar, caută un array: o listă de nivel superior, un array `data` sau primul câmp cu valoare de listă.
-3. Pentru `table`, fiecare rând devine un rând de tabel folosind `columns` (sau cheile primului rând).
-4. Pentru `numeric` și `gauge`, valoarea provine din `valueField` pe primul rând (sau primul câmp numeric).
-5. Pentru `scatter`, fiecare rând devine un punct `[xField, yField]`.
-6. Pentru `text`, mesajul este preluat din `valueField` pe primul rând atunci când este setat, altfel din configurația statică `text` (în caz contrar, primul câmp string al primului rând).
+3. Rândurile provenite direct dintr-un nod [Data Table](./datatable-node.md) (`{id, data, created_at}`) sunt citite cu coloanele lor la nivelul superior lângă `id`, astfel încât `labelField`, `valueField` și `columns` denumesc propriile coloane ale tabelului.
+4. Pentru `table`, fiecare rând devine un rând de tabel folosind `columns` (sau cheile primului rând). Cu `statusColumn`, Payload-ul poartă și nuanța fiecărei valori din acea coloană.
+5. Pentru `numeric` și `gauge`, valoarea provine din `valueField` pe primul rând (sau primul câmp numeric).
+6. Pentru `scatter`, fiecare rând devine un punct `[xField, yField]`.
+7. Pentru `text`, mesajul este preluat din `valueField` pe primul rând atunci când este setat, altfel din configurația statică `text` (în caz contrar, primul câmp string al primului rând).
 
 ## Exemplu
 

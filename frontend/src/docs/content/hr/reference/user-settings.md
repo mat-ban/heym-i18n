@@ -4,7 +4,7 @@ Dijalog Postavke omogućuje Vam upravljanje Vašim profilom, postavljanje trajni
 
 ## Otvaranje Dijaloškog Okvira
 
-Kliknite **Vašu avatar sliku i ime** u gornjem desnom kutu zaglavlja. Dijalog se otvara s ovim karticama: **Profil**, **Sigurnost**, **Glas**, **AI Zadaci** i **Promatranje**. Administratori instanci također vide karticu **SSO**.
+Kliknite **Vašu avatar sliku i ime** u gornjem desnom kutu zaglavlja. Dijalog se otvara s ovim karticama: **Profil**, **Sigurnost**, **Glas**, **AI Zadaci** i **Promatranje**. Administratori instanci također vide kartice **SSO**, **Heym Work** i **Instances**.
 
 ## Kartica Profil
 
@@ -100,6 +100,10 @@ Kartica za promatranje prikazuje status samo za čitanje [OpenTelemetry Tracing]
 ## SSO Kartica
 
 Vidljivo samo administratorima instance — računi navedeni u `HEYM_ADMIN_EMAILS`. Ova kartica povezuje Heym s vanjskim OpenID Connect pružateljem kako bi se korisnici prijavili s računima koje već imaju. Unesite URL izdavatelja i vjerodajnice klijenta, kopirajte URI za preusmjeravanje samo za čitanje u Vaš pružatelj, i pokrenite **Testiraj vezu** prije nego što ga omogućite. Prijava putem lozinke može se isključiti odavde nakon što test prođe. Pogledajte [Jedinstvena prijava](./sso.md) za punu postavku.
+
+## Kartica Heym Work
+
+Administratori instance ovdje povezuju [Heym Work](./heym-work.md), sučelje za poslovne timove: njegovu adresu, integracijski ključ koji se prikazuje samo jednom i prekidač **Enable Heym Work**. Kartica također prikazuje kada se Heym Work zadnji put javio, njegovu verziju i status licence. Pogledajte [Povezivanje sustava Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Kartica Instanci
 

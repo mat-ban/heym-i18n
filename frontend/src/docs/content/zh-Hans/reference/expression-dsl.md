@@ -142,6 +142,7 @@ item.value
 - `$executionId` - 当前执行的 id（等同于[执行历史](./execution-history.md)条目 id，因此 `/workflows/<id>/<executionId>` 可在画布上打开本次运行）。**仅限运行时**：在表达式预览对话框中为空；仅在 workflow 执行期间填充。
 - `$vars` - Workflow 局部变量（通过 `$vars.variableName` 访问；通过 `variable` 节点更新）
 - `$global` - 持久化全局变量存储（通过 `$global.variableName` 访问）
+- `$page.record` - 仅适用于仪表盘组件 Workflow：组件所在详情页的记录，来自仪表盘的 `?record=` 参数。在未带该参数打开的仪表盘上以及表达式预览对话框中为 `null`。名为 `page` 的节点具有更高优先级。请参阅[详情页](../tabs/dashboard-tab.md#detail-pages)。
 
 ### $vars 用法
 - `$vars.counter` - 访问名为 `counter` 的变量

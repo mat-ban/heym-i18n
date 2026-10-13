@@ -8,7 +8,7 @@ Todos comienzan con un dashboard, creado la primera vez que se abre la pestaña.
 
 La pestaña reabre el último dashboard utilizado, y la barra de direcciones incluye el dashboard abierto (`?tab=dashboard&dashboard=<id>`), de modo que un enlace abre ese dashboard exacto para cualquiera que tenga acceso a él.
 
-El botón de configuración (solo para propietarios) permite renombrar el dashboard, gestionar su uso compartido y eliminarlo. Eliminar un dashboard elimina sus widgets y sus workflows. Siempre se conserva al menos un dashboard propio, por lo que el último no puede eliminarse.
+El botón de configuración (solo para propietarios) permite renombrar el dashboard, definir qué registros acepta como [página de detalle](#detail-pages), gestionar su uso compartido y eliminarlo. Eliminar un dashboard elimina sus widgets y sus workflows. Siempre se conserva al menos un dashboard propio, por lo que el último no puede eliminarse.
 
 ## Widgets
 
@@ -18,7 +18,7 @@ Un widget es un único gráfico sobre la cuadrícula. Tipos de gráfico admitido
 - **Line**
 - **Area** (tendencia rellena, admite múltiples series)
 - **Pie**
-- **Table** (con desplazamiento)
+- **Table** (con desplazamiento; una columna puede representarse como [chips de estado](../nodes/chart-output-node.md#status-chips) y las filas pueden abrir una [página de detalle](#detail-pages))
 - **Numeric** (un único valor KPI con una unidad opcional)
 - **Gauge** (un único valor frente a un rango mín–máx, por ejemplo un porcentaje)
 - **Scatter** (puntos X/Y para gráficos de correlación)
@@ -26,6 +26,8 @@ Un widget es un único gráfico sobre la cuadrícula. Tipos de gráfico admitido
 - **Bar gauge** (un medidor horizontal por fila con un degradado de rojo a verde y un valor, por ejemplo el espacio libre en disco)
 - **Text** (un mensaje markdown, por ejemplo una nota de estado como "Última ejecución a las 19:47"; admite [casillas interactivas](../nodes/chart-output-node.md#interactive-task-lists) cuando el markdown es estático, y [listas numeradas explícitas](../nodes/chart-output-node.md#numbered-lists) para numeración personalizada o descendente)
 - **HITL** (sus revisiones humanas pendientes. El encabezado muestra `1/n pendientes`. El nombre del workflow abre esa ejecución en el canvas. **Approve**, **Request changes** y **Reject** la resuelven. El icono de historial junto al título del widget abre esa ejecución en el diálogo de historial de esta página. El widget no utiliza filas de entrada, y cada persona ve su propia cola)
+
+Además de los gráficos, un widget **Run a workflow** ejecuta uno de sus workflows desde el dashboard: al soltar un archivo, con sus campos de entrada o mediante un botón Run; consulte [Widgets de ejecución](#run-widgets).
 
 Cada widget carga sus datos de forma asíncrona al abrir la pestaña, de modo que la página permanece ágil mientras los gráficos se completan.
 
@@ -36,7 +38,39 @@ Cada widget carga sus datos de forma asíncrona al abrir la pestaña, de modo qu
 3. Construya el workflow de modo que el nodo que alimenta a **Chart Output** produzca un array de filas y, a continuación, configure el mapeo de campos del nodo Chart Output (campo de etiqueta, campo de valor, etc.).
 4. Guarde, vuelva a la pestaña Dashboard y el widget se renderizará.
 
+Para un widget **Run a workflow**, elija en su lugar el workflow que ejecuta; el selector indica cómo ejecutará el widget cada uno. El widget se añade directamente a la cuadrícula; no hay ningún workflow nuevo que construir.
+
 Haga doble clic en un widget (o utilice su botón de edición) para reabrir su workflow en cualquier momento. Utilice **Clone widget** en el encabezado del widget para duplicar tanto el widget como su workflow completo. La copia se coloca debajo del original y se etiqueta con **(Copy)** para poder editarla de forma independiente.
+
+## Páginas de detalle
+
+Un widget de tabla puede enlazar sus filas a otro dashboard, que entonces funciona como página de detalle: un único dashboard que sirve para cada cliente, factura o ticket.
+
+1. Abra **Settings** del widget de tabla y elija el dashboard en **Row link**.
+2. Introduzca **Record column**, la columna cuyo valor identifica la fila (por ejemplo `id`), y opcionalmente una **Label column** que le dé nombre (por ejemplo `name`).
+3. Guarde. Al hacer clic en una fila (o enfocarla y pulsar Intro) se abre el dashboard enlazado con `?record=<value>&label=<name>`.
+
+En el dashboard de detalle, cada workflow de widget lee el valor como `$page.record` (consulte [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)), y la página muestra `Dashboard / <label>` encima de la cuadrícula con un botón para borrar el registro. Atrás vuelve a la tabla de origen.
+
+- **Quién puede abrirlo.** Las filas solo son clicables para los espectadores que pueden abrir el dashboard enlazado. Los demás ven la misma tabla sin enlaces.
+- **Formato del registro.** El registro proviene de la URL, por lo que el dashboard de detalle decide qué acepta. En su configuración, **Detail page records** es uno de los siguientes: IDs (letras, dígitos, `-`, `_` y `.`, hasta 128 caracteres; el valor predeterminado), números, UUIDs o direcciones de correo electrónico. Cualquier otro valor se rechaza antes de que se ejecute un widget, y los widgets muestran "This page does not accept that record".
+- **Sigue siendo la ejecución del propietario.** Los widgets también se ejecutan como el propietario del dashboard en una página de detalle. Los creadores deben pasar `$page.record` solo donde un nodo lo escape, nunca dentro del texto de una consulta.
+- **Almacenamiento en caché.** Cada widget almacena en caché su gráfico por registro, durante el mismo tiempo de vida (TTL) que el widget, y conserva los 50 registros utilizados más recientemente.
+
+## Widgets de ejecución
+
+Un widget **Run a workflow** ejecuta uno de sus workflows y muestra el resultado: estado, tiempo de ejecución y salidas. Lo que muestra depende de lo que reciba el workflow:
+
+- **Un archivo.** Para un workflow que comienza con un [File Upload Trigger](../nodes/file-upload-trigger-node.md), suelte un archivo sobre él (o haga clic para elegir uno) y el widget lo subirá mediante el enlace de subida de un solo uso del trigger. El widget muestra los tipos de archivo y el tamaño que acepta el trigger y rechaza otros antes de subirlos. Cuando el workflow también comienza con un nodo Text Input, el widget muestra sus campos junto a la zona para soltar archivos: elija un archivo, rellene los campos y **Run** enviará ambos. Los valores viajan con el enlace de subida que genera el widget, por lo que un enlace de subida compartido no puede establecerlos.
+- **Campos de entrada.** Para un workflow que comienza con un nodo Text Input, el widget muestra sus campos con sus valores predeterminados; **Run** ejecuta el workflow con sus valores. Los valores de campos que el workflow no tiene se descartan.
+- **Nada.** Un workflow sin entradas obtiene un botón **Run**.
+
+El botón **Wrap** del resultado ajusta las líneas largas de salida dentro del cuadro; desactívelo para leer el diseño JSON de la salida.
+
+- Cualquiera que pueda abrir el dashboard puede ejecutar el widget, del mismo modo que cualquiera puede actualizar un gráfico. El acceso al workflow corresponde al propietario del dashboard: añadir el widget requiere un workflow que tanto usted como el propietario puedan ejecutar, y la ejecución en sí utiliza las credenciales del propietario del workflow, como cualquier enlace de subida.
+- El resultado permanece en su pantalla hasta que abandona la página; los demás espectadores no ven sus archivos, valores ni resultados. La ejecución aparece en el historial de ejecuciones con el trigger `dashboard`.
+- Compartir un dashboard nunca concede acceso al workflow en sí. **Edit workflow** lo abre para las personas que ya tienen acceso, y **Fine-tune with AI** no se ofrece.
+- Las ejecuciones con archivos se procesan en la instancia principal, donde se almacenan los archivos subidos, al igual que cualquier ejecución de File Upload Trigger.
 
 ## Generar un widget con IA
 
@@ -50,7 +84,7 @@ Active **Edit** para entrar en el modo de edición, donde es posible arrastrar w
 
 ## Caché y actualización
 
-Cada widget almacena en caché en el servidor sus últimos datos calculados durante un tiempo de vida (TTL) configurable. Mientras la caché esté vigente, reabrir el dashboard sirve el resultado almacenado en lugar de volver a ejecutar el workflow. La caché se reemplaza en el mismo lugar cada vez que se recalculan los datos (una caché por widget) y se invalida automáticamente al editar el workflow del widget.
+Cada widget almacena en caché en el servidor sus últimos datos calculados durante un tiempo de vida (TTL) configurable. Mientras la caché esté vigente, reabrir el dashboard sirve el resultado almacenado en lugar de volver a ejecutar el workflow. La caché se reemplaza en el mismo lugar cada vez que se recalculan los datos (una caché por widget, más una por registro en una [página de detalle](#detail-pages)) y se invalida automáticamente al editar el workflow del widget.
 
 Utilice el botón **Refresh** de un widget (o **Refresh** en la barra de herramientas) para omitir la caché y recalcular de inmediato.
 
@@ -61,9 +95,10 @@ Los propietarios comparten un dashboard desde su configuración, con usuarios in
 | Acción | Propietario | Escritura | Lectura |
 |--------|:-----:|:-----:|:----:|
 | Ver widgets, actualizarlos, usar la actualización automática | ✓ | ✓ | ✓ |
+| Abrir páginas de detalle, ejecutar widgets de ejecución | ✓ | ✓ | ✓ |
 | Añadir, clonar, eliminar, renombrar y redimensionar widgets; generar y ajustar con IA; marcar elementos de la lista de verificación | ✓ | ✓ | |
 | Abrir el workflow de un widget en el editor | ✓ | ✓ | |
-| Renombrar o eliminar el dashboard, gestionar la compartición | ✓ | | |
+| Renombrar o eliminar el dashboard, definir su formato de registro, gestionar la compartición | ✓ | | |
 
 **Los widgets siempre se ejecutan como el propietario del dashboard.** Independientemente de quién esté visualizando, un widget utiliza las credenciales y las variables globales del propietario, y sus ejecuciones aparecen en el historial de ejecuciones y las trazas del propietario. Por lo tanto, los miembros del equipo ven los mismos datos sin acceso a las cuentas subyacentes, y todos los espectadores comparten el único resultado en caché por widget. Los widgets que añade o clona un colaborador con permiso de escritura también pertenecen al propietario.
 

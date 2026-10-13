@@ -33,6 +33,13 @@ Noden fungerer i to faser:
 
 På canvas viser **Kør Workflow** det genererede `curl`-kommando i debug-panelet med en kopieringsknap.
 
+## Kørsel fra Heym
+
+To steder kører et sådant Workflow direkte på en fil via den samme oprettelses- og uploadproces:
+
+- [Quick Drawer](../reference/quick-drawer.md) viser en slipzone til filen. Disse kørsler markeres med `Quick Drawer` i historikken.
+- En [kørselswidget](../tabs/dashboard-tab.md#run-widgets) på et dashboard kører Workflowet på hver fil, der slippes. Disse kørsler markeres med `dashboard`.
+
 ## Parametre
 
 | Parameter | Type | Standard | Beskrivelse |

@@ -30,6 +30,9 @@ Tab **Vectorstores** mengelola vector store yang digunakan oleh Node [RAG](../no
 - **Delete sources** – Hapus file tertentu atau grup sumber dari store, termasuk
   semua yang ditambahkan oleh satu workflow
 - **Edit store** – Ubah nama, deskripsi, atau credential
+- **Search** – `POST /api/vector-stores/{id}/search` dengan `query` (dan `limit` dari 1 hingga 20,
+  default 5) mengembalikan chunk yang akan dikembalikan oleh pencarian node RAG, kecocokan terbaik lebih dulu, masing-masing dengan
+  skor dan sumbernya. Layar RAG di Heym Work menggunakannya untuk menguji pengambilan data
 
 ## Berbagi
 

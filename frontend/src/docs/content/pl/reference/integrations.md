@@ -603,8 +603,14 @@ Dane logowania SMTP przechowują szczegóły połączenia z serwerem poczty e-ma
 |-------|-------------|
 | `host` | Nazwa hosta serwera SMTP (np. `smtp.gmail.com`) |
 | `port` | Port SMTP (zazwyczaj `587` dla STARTTLS, `465` dla SSL) |
-| `email` | Adres e-mail nadawcy |
+| `email` | Nazwa użytkownika, której serwer SMTP używa do logowania; również widoczny nadawca, gdy pole `from` jest puste |
 | `password` | Hasło SMTP lub hasło aplikacji |
+
+### Pola opcjonalne
+
+| Pole | Opis |
+|-------|-------------|
+| `from` (`smtp_from`) | Widoczny adres nadawcy (From). Pozostaw puste, aby wysyłać jako `email`. Serwer nadal loguje się jako `email`, więc to konto musi mieć uprawnienia do wysyłania z tego adresu (w Gmailu zweryfikowany alias **Wyślij pocztę jako**). |
 
 ### Popularni dostawcy SMTP
 

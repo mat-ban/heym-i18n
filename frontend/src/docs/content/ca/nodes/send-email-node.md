@@ -28,7 +28,7 @@ Adjunteu fitxers del vostre [Drive](./drive-node.md) passant un o més IDs de fi
 
 ## Configuració
 
-Afegiu una credencial SMTP amb servidor, port, correu electrònic i contrasenya. Servidors SMTP comuns:
+Afegiu una credencial SMTP amb servidor, port, correu electrònic i contrasenya. El remitent visible és el camp opcional **From** de la credencial; si From està en blanc, s'envia amb el nom d'usuari. Servidors SMTP comuns:
 
 - Gmail: `smtp.gmail.com`, port 587 (cal contrasenya d'aplicació)
 - Outlook: `smtp.office365.com`, port 587

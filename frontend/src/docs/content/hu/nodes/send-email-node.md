@@ -28,7 +28,7 @@ Csatoljon fájlokat a [Drive](./drive-node.md) tárhelyéről úgy, hogy egy vag
 
 ## Beállítás
 
-Adjon hozzá egy SMTP hitelesítési adatot a szerverrel, porttal, e-mail-címmel és jelszóval. Gyakori SMTP szerverek:
+Adjon hozzá egy SMTP hitelesítési adatot a szerverrel, porttal, e-mail-címmel és jelszóval. A látható feladó a hitelesítési adat opcionális **From** mezője; üres From esetén a rendszer a felhasználónévvel küldi el az üzenetet. Gyakori SMTP szerverek:
 
 - Gmail: `smtp.gmail.com`, 587-es port (alkalmazásjelszó szükséges)
 - Outlook: `smtp.office365.com`, 587-es port

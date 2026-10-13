@@ -16,6 +16,10 @@ Heym yra nemokama naudoti ir gali būti savarankiškai talpinama pagal savo šal
 | **Prioritetinė parama ir SLA** | Garantijos dėl atsakymo laikų ir prioritetinio problemų sprendimo |
 | **Individualus vystymas** | Funkcijų kūrimas ir modifikacijos, pritaikytos Jūsų organizacijos reikalavimams |
 
+## Heym Work
+
+[Heym Work](./heym-work.md) yra verslo komandoms skirta sąsaja, veikianti ant Heym platformos. Žmonės apibūdina užduotį, atsako į kelis klausimus ir gauna išbandytą workflow, dirba jiems sukurtuose puslapiuose ir atsako į peržiūras – su vienkartiniu prisijungimu (SSO), Owner, Editor ir Viewer vaidmenimis bei vardu prie kiekvieno vykdymo. Ji veikia šalia jūsų Heym su atskira licencija; prijunkite ją **Settings → Heym Work**. Sužinokite daugiau ir užsisakykite bandomąją versiją adresu [heym.run/enterprise](https://heym.run/enterprise).
+
 ## Gamybos agentų parama
 
 Heym komanda padeda Jums kurti, statyti ir stiprinti agentus bei workflows Jūsų verslo procesams. Tai apima Jūsų reikalavimų peržiūrą, mazgų konfigūracijų rekomendacijas ir užtikrinimą, kad Jūsų workflows atitiktų geriausias praktikas patikimumui, stebimumui ir valdymui.
@@ -68,3 +72,4 @@ Susisiekite su įmonių komanda adresu **enterprise@heym.run** dėl licencijų u
 - [Paralelinis vykdymas](./parallel-execution.md) — Multi-worker vykdymo modelis
 - [Komandos](./teams.md) — Komandų bendradarbiavimas ir išteklių dalijimasis
 - [Visas funkcijų rinkinys](./features.md) — Išsami Heym galimybių apžvalga
+- [Heym Work](./heym-work.md): sąsaja verslo komandoms ir kaip ją prijungti

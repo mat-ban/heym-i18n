@@ -4,7 +4,7 @@ Seadete dialoog võimaldab hallata profiili, määrata püsivaid AI-juhiseid, uu
 
 ## Dialoogi avamine
 
-Klõpsake päises paremas ülanurgas **oma avatari ja nime**. Dialoog avaneb järgmiste vahekaartidega: **Profiil**, **Turvalisus**, **Hääl**, **AI vaikeväärtused** ja **Jälgitavus**. Instantsi administraatorid näevad ka vahekaarti **SSO**.
+Klõpsake päises paremas ülanurgas **oma avatari ja nime**. Dialoog avaneb järgmiste vahekaartidega: **Profiil**, **Turvalisus**, **Hääl**, **AI vaikeväärtused** ja **Jälgitavus**. Instantsi administraatorid näevad ka vahekaarte **SSO**, **Heym Work** ja **Instances**.
 
 ## Vahekaart Profiil
 
@@ -100,6 +100,10 @@ Vaadeldavuse vahekaart näitab selle instantsi jaoks [OpenTelemetry Tracing](./o
 ## SSO vahekaart
 
 Nähtav ainult instantsi administraatoritele — kontod, mis on loetletud jaotises `HEYM_ADMIN_EMAILS`. See vahekaart ühendab Heymi välise OpenID Connect pakkujaga, et inimesed saaksid sisse logida kontodega, mis neil juba on. Sisestage issuer URL ja kliendi mandaadid, kopeerige kirjutuskaitstud redirect URI oma pakkujasse ja käivitage **Testi ühendust** enne selle lubamist. Parooliga sisselogimise saab siit välja lülitada, kui test on läbitud. Täieliku seadistuse leiate jaotisest [Ühekordne sisselogimine](./sso.md).
+
+## Heym Worki vahekaart
+
+Instantsi administraatorid ühendavad siin ärimeeskondade liidese [Heym Work](./heym-work.md): selle aadressi, ühekordselt kuvatava integratsioonivõtme ja lüliti **Enable Heym Work**. Vahekaart näitab ka seda, millal Heym Work viimati ühendust võttis, selle versiooni ja litsentsi olekut. Vaata [Heym Worki ühendamine](./heym-work.md#connecting-heym-work).
 
 ## Instantside vahekaart
 

@@ -588,8 +588,14 @@ De SMTP-referentie slaat verbindingsgegevens van de e-mailserver op voor het ver
 |-------|-------------|
 | `host` | Hostnaam van de SMTP-server (bijv. `smtp.gmail.com`) |
 | `port` | SMTP-poort (doorgaans `587` voor STARTTLS, `465` voor SSL) |
-| `email` | E-mailadres van de afzender |
+| `email` | Gebruikersnaam waarmee de SMTP-server inlogt; tevens de zichtbare afzender wanneer `from` leeg is |
 | `password` | SMTP-wachtwoord of App Password |
+
+### Optionele velden
+
+| Veld | Beschrijving |
+|-------|-------------|
+| `from` (`smtp_from`) | Zichtbaar From-adres. Laat leeg om te verzenden als `email`. De server logt nog steeds in als `email`, dus dat account moet gemachtigd zijn om namens dit adres te verzenden (in Gmail een geverifieerde **E-mail verzenden als**-alias). |
 
 ### Veelvoorkomende SMTP-providers
 

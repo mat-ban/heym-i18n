@@ -4,7 +4,7 @@ Dialogul Setări vă permite să vă gestionați profilul, să setați instrucț
 
 ## Deschiderea dialogului
 
-Faceți clic pe **avatarul și numele dumneavoastră** din colțul din dreapta sus al antetului. Dialogul se deschide cu următoarele file: **Profile**, **Security**, **Voice**, **AI Defaults** și **Observability**. Administratorii de instanță văd de asemenea o filă **SSO**.
+Faceți clic pe **avatarul și numele dumneavoastră** din colțul din dreapta sus al antetului. Dialogul se deschide cu următoarele file: **Profile**, **Security**, **Voice**, **AI Defaults** și **Observability**. Administratorii de instanță văd de asemenea filele **SSO**, **Heym Work** și **Instances**.
 
 ## Fila Profile
 
@@ -100,6 +100,10 @@ Fila Observability afișează starea read-only a [OpenTelemetry Tracing](./opent
 ## Fila SSO
 
 Vizibilă doar administratorilor instanței — conturile listate în `HEYM_ADMIN_EMAILS`. Această filă conectează Heym la un furnizor extern OpenID Connect, astfel încât utilizatorii să se autentifice cu conturile pe care le dețin deja. Introduceți un URL de issuer și acreditările de client, copiați URI-ul de redirecționare read-only în furnizorul dumneavoastră și rulați **Test connection** înainte de a-l activa. Autentificarea prin parolă poate fi dezactivată de aici după ce testul trece. Consultați [Single Sign-On](./sso.md) pentru configurarea completă.
+
+## Fila Heym Work
+
+Administratorii de instanță conectează aici [Heym Work](./heym-work.md), interfața pentru echipele de business: adresa acesteia, o cheie de integrare afișată o singură dată și comutatorul **Enable Heym Work**. Fila arată, de asemenea, când a raportat ultima dată Heym Work, versiunea sa și starea licenței. Consultați [Conectarea Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Fila Instances
 

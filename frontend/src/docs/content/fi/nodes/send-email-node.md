@@ -28,7 +28,7 @@ Liitä tiedostoja [Drive](./drive-node.md) -palvelusta antamalla yksi tai useamp
 
 ## Asennus
 
-Lisää SMTP-tunnistetiedot palvelimen, portin, sähköpostiosoitteen ja salasanan kanssa. Yleisiä SMTP-palvelimia:
+Lisää SMTP-tunnistetiedot palvelimen, portin, sähköpostiosoitteen ja salasanan kanssa. Näkyvä lähettäjä on tunnistetietojen valinnainen **From**-kenttä; tyhjä From lähettää viestin käyttäjätunnuksella. Yleisiä SMTP-palvelimia:
 
 - Gmail: `smtp.gmail.com`, portti 587 (sovellussalasana vaaditaan)
 - Outlook: `smtp.office365.com`, portti 587

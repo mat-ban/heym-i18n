@@ -4,7 +4,7 @@ Iestatījumu dialogs ļauj Jums pārvaldīt savu profilu, iestatīt pastāvīgas
 
 ## Dialoga atvēršana
 
-Noklikšķiniet uz **Jūsu avatāra un vārda** augšējā labajā stūrī.Dialogs atveras ar šīm cilnēm: **Profils**, **Drošība**, **Balsis**, **AI Noklusējumi** un **Novērošana**. Instance administratoriem ir pieejama arī **SSO** cilne.
+Noklikšķiniet uz **Jūsu avatāra un vārda** augšējā labajā stūrī.Dialogs atveras ar šīm cilnēm: **Profils**, **Drošība**, **Balsis**, **AI Noklusējumi** un **Novērošana**. Instance administratoriem ir pieejamas arī cilnes **SSO**, **Heym Work** un **Instance**.
 
 ## Profila cilne
 
@@ -100,6 +100,10 @@ Novērojamības cilne rāda tikai lasāmo statusu par [OpenTelemetry Tracing](./
 ## SSO cilne
 
 Redzama tikai instance administratoriem — konti, kas norādīti `HEYM_ADMIN_EMAILS`. Šī cilne savieno Heym ar ārēju OpenID Connect pakalpojumu, lai cilvēki varētu pieteikties ar jau esošajiem kontiem. Ievadiet izsniedzēja URL un klienta akreditācijas datus, kopējiet tikai lasāmā pāradresācijas URI savā pakalpojumā un palaidiet **Pārbaudīt savienojumu** pirms tā iespējot. Parole pieteikšanās var tikt izslēgta no šejienes, kad tests ir izturēts. Skatiet [Single Sign-On](./sso.md) pilnai iestatīšanai.
+
+## Heym Work cilne
+
+Instances administratori šeit savieno biznesa komandu saskarni [Heym Work](./heym-work.md): tās adresi, vienreiz parādāmu integrācijas atslēgu un slēdzi **Enable Heym Work**. Cilnē ir redzams arī tas, kad Heym Work pēdējoreiz reģistrējās, tā versija un licences statuss. Skatiet [Heym Work savienošana](./heym-work.md#connecting-heym-work).
 
 ## Instance cilne
 

@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Dabartinio vykdymo id (atitinka [Vykdymo istoriją](./execution-history.md) įrašo id, todėl `/workflows/<id>/<executionId>` atidaro šį vykdymą drobėje). **Tik vykdymo metu**: tuščias išraiškų peržiūros dialoge; užpildomas tik vykdant workflow.
 - `$vars` - Workflow vietiniai kintamieji (prieiga per `$vars.variableName`; atnaujinama per `variable` mazgą)
 - `$global` - Nuolatinė globalių kintamųjų saugykla (prieiga per `$global.variableName`)
+- `$page.record` - Tik prietaisų skydelio valdiklių workflow: išsamios informacijos puslapio, kuriame yra valdiklis, įrašas iš prietaisų skydelio parametro `?record=`. Reikšmė yra `null` prietaisų skydelyje, atidarytame be šio parametro, ir išraiškos peržiūros lange. Mazgas su etikete `page` turi pirmenybę. Žr. [Išsamios informacijos puslapiai](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars naudojimas
 - `$vars.counter` - Prieiga prie kintamojo, pavadinto `counter`

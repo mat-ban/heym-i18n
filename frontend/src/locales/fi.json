@@ -274,7 +274,17 @@
       "intro": "Heym Work on toinen käyttöliittymä yritystiimeille. Käyttäjät kirjautuvat sisään Heymin kautta, ja kaikki työt suoritetaan täällä.",
       "never": "Ei koskaan",
       "learnMore": "Lue lisää"
-    }
+    },
+    "pluginsIntro": "Lisäosat tuovat mukautettuja solmuja (toimintoja ja Triggereitä) tähän instanssiin. Lisäosan asentaminen tai poistaminen suorittaa palvelinpuolen koodia, joten se on rajoitettu ylläpitäjille, jotka on lueteltu muuttujassa",
+    "loadingPlugins": "Ladataan lisäosia…",
+    "pluginsDisabledTitle": "Lisäosat ovat poissa käytöstä",
+    "pluginsDisabledHint": "Aseta nämä ympäristömuuttujat taustajärjestelmään ja käynnistä uudelleen:",
+    "installPluginZip": "Asenna lisäosa (.zip)",
+    "noPluginsInstalled": "Lisäosia ei ole vielä asennettu.",
+    "enablePlugin": "Ota käyttöön",
+    "disablePlugin": "Poista käytöstä",
+    "uninstallPlugin": "Poista asennus",
+    "pluginOperationFailed": "Lisäosan toiminto epäonnistui"
   },
   "workflows": {
     "title": "Workflow't",
@@ -390,7 +400,22 @@
     "startTour": "Aloita kierros",
     "readTheDocs": "Lue dokumentaatio",
     "previousFeature": "Edellinen ominaisuus",
-    "goToFeature": "Siirry kohteeseen {title}"
+    "goToFeature": "Siirry kohteeseen {title}",
+    "heymWork": {
+      "step0": "Tiimi esittää pyynnön Heym Workissa",
+      "step1": "Heym rakentaa ja testaa sen",
+      "step2": "Vahvistettu, ilman työtilaa",
+      "step3": "Heym suorittaa sen taustalla",
+      "prompt": "Tarkista uudet sopimukset riskialttiiden ehtojen varalta.",
+      "testing": "Testataan Workflow'ta",
+      "verified": "Vahvistettu"
+    },
+    "skillZip": {
+      "step0": "Pudota taito-zip Chatiin",
+      "step1": "Chat lukee SKILL.md-tiedoston",
+      "step2": "Agentti säilyttää taidon",
+      "prompt": "Lue lasku ja luettele rivikohteet."
+    }
   },
   "canvas": {
     "nodes": "Solmut",
@@ -2400,6 +2425,50 @@
       "nodes": "Solmut",
       "reference": "Viite",
       "tabs": "Välilehdet"
-    }
+    },
+    "pluginNoDoc": "Tällä lisäosalla ei ole dokumentaatiota."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Hae Workflow-työnkulkuja, välilehtiä, ohjeita...",
+    "searchAria": "Komentovalikon haku",
+    "ariaLabel": "Komentovalikko",
+    "noResults": "Tuloksia ei löytynyt",
+    "tryDifferentSearch": "Kokeile toista hakusanaa",
+    "recent": "Viimeisimmät",
+    "recentInFolder": "Viimeisimmät · Kansiossa: {folder}",
+    "inFolder": "Kansiossa: {folder}",
+    "scheduledDate": "Ajastettu {date}",
+    "scheduledForDeletion": "Ajastettu poistettavaksi",
+    "goToTab": "Siirry välilehteen",
+    "workflowTemplate": "Workflow-malli",
+    "nodeTemplate": "Solmumalli",
+    "nodeType": "Solmu · {type}",
+    "documentation": "Dokumentaatio",
+    "support": "Tuki",
+    "contactSupport": "Ota yhteyttä tukeen",
+    "watchRunbook": "Katso, kuinka Heym rakentaa ja suorittaa Workflow'n",
+    "openDocs": "Avaa Heym-dokumentaatio",
+    "getHelp": "Pyydä apua Heym-tiimiltä",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work liiketoimintatiimeille osoitteessa heym.run",
+    "navigate": "Siirry",
+    "select": "Valitse",
+    "click": "klikkaus",
+    "newTab": "uusi välilehti",
+    "oneItem": "{count} kohde",
+    "manyItems": "{count} kohdetta"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Lisäosat ovat poissa käytöstä tässä instanssissa.",
+    "loadingDefinition": "Ladataan lisäosan määritystä...",
+    "notBound": "Tätä solmua ei ole sidottu lisäosapakettiin.",
+    "noneInstalled": "Tähän instanssiin ei ole asennettu lisäosia.",
+    "notInstalled": "Lisäosaa \"{id}\" ei ole asennettu tähän instanssiin.",
+    "installedButDisabled": "Lisäosa \"{name}\" on asennettu, mutta poissa käytöstä.",
+    "noKindNodes": "Lisäosa \"{name}\" ei tarjoa {kind}-solmuja.",
+    "loadErrorDetail": "Lisäosia ei voitu ladata: {detail}",
+    "loadErrorHttp": "Lisäosia ei voitu ladata (HTTP {status}).",
+    "loadError": "Lisäosia ei voitu ladata.",
+    "enabled": "Käytössä"
   }
 }

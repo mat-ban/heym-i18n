@@ -94,11 +94,12 @@ RabbitMQ 消費者會在 leader worker 初始化時啟動。具有 `rabbitmq` �
 |-------|------|
 | `"API"` | 未帶明確 header 的 Webhook / API 呼叫（預設） |
 | `"Canvas"` | 從 Workflow 編輯器畫布執行 |
-| `"Quick Drawer"` | 從編輯器 quick-drawer 面板執行 |
+| `"Quick Drawer"` | 從編輯器 quick-drawer 面板執行，包含從其拖放區上傳的檔案執行 |
 | `"cron"` | Cron 排程器 |
 | `"imap"` | IMAP trigger 管理器 |
 | `"websocket"` | 對外 WebSocket trigger 管理器 |
-| `"file_upload"` | File Upload Trigger 上傳 Endpoint |
+| `"file_upload"` | File Upload Trigger 上傳 Endpoint（透過 HTTP、MCP 或畫布產生的連結） |
+| `"dashboard"` | 儀表板小工具執行，以及從檔案拖放小工具發起的上傳 |
 | `"telegram"` | Telegram bot webhook |
 | `"Discord"` | Discord 互動 webhook |
 | `"MCP"` | MCP 工具呼叫 |

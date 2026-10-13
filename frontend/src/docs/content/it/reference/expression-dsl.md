@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Id dell'esecuzione corrente (coincide con l'id della voce in [Cronologia esecuzioni](./execution-history.md), quindi `/workflows/<id>/<executionId>` apre questa esecuzione sul canvas). **Solo a runtime**: vuoto nella finestra di anteprima delle espressioni; popolato solo durante l'esecuzione di un workflow.
 - `$vars` - Variabili locali del workflow (accessibili tramite `$vars.variableName`; aggiornate tramite il nodo `variable`)
 - `$global` - Archivio persistente delle variabili globali (accessibile tramite `$global.variableName`)
+- `$page.record` - Solo per i workflow dei widget della dashboard: il record della pagina di dettaglio in cui si trova il widget, ottenuto dal parametro `?record=` della dashboard. È nullo in una dashboard aperta senza tale parametro e nella finestra di anteprima delle espressioni. Un nodo etichettato `page` ha la precedenza. Vedi [Pagine di dettaglio](../tabs/dashboard-tab.md#detail-pages).
 
 ### Utilizzo di $vars
 - `$vars.counter` - Accede a una variabile denominata `counter`

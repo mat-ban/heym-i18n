@@ -142,6 +142,7 @@ item.value
 - `$executionId` - Praeguse käivituse id (võrdub [Käivituste ajaloo](./execution-history.md) kirje id-ga, seega `/workflows/<id>/<executionId>` avab selle käivituse lõuendil). **Ainult käitusajal**: tühi avaldise eelvaate dialoogis; täidetakse ainult workflow täitmise ajal.
 - `$vars` - Workflow-lokaalsed muutujad (juurdepääs `$vars.variableName` kaudu; uuendatakse `variable` sõlme kaudu)
 - `$global` - Püsiv globaalne muutujate hoidla (juurdepääs `$global.variableName` kaudu)
+- `$page.record` - Ainult töölaua vidinate workflow'de jaoks: selle üksikasjade lehe kirje, millel vidin asub, saaduna töölaua parameetrist `?record=`. Ilma parameetrita avatud töölaual ja avaldise eelvaate dialoogis on väärtus `null`. Sildiga `page` sõlm on ülimuslik. Vaata [Üksikasjade lehed](../tabs/dashboard-tab.md#detail-pages).
 
 ### $vars kasutamine
 - `$vars.counter` - Juurdepääs muutujale nimega `counter`

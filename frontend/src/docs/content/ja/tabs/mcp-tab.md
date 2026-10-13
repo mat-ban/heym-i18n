@@ -1,6 +1,6 @@
 # MCPタブ
 
-**MCP**タブでは、Model Context Protocol（MCP）連携を設定します。MCPを利用すると、AIクライアント（Claude、Cursor、その他MCP互換ツール）からHeymのWorkflowをツールとして呼び出せるようになります。
+**MCP**タブでは、Model Context Protocol（MCP）連携を設定します。MCPを利用すると、AIクライアント（Claude、ChatGPT、Gemini、Cursor、その他MCP互換ツール）からHeymのWorkflowをツールとして呼び出せるようになります。
 
 Heymは2つのモードをサポートしています。すべてのMCP対応Workflowを単一のEndpointで公開する**デフォルトサーバー**と、Workflowの論理的なグループごとに専用のURLとAPIキーを割り当てる**名前付きサーバー**です。
 
@@ -24,6 +24,8 @@ Heymは2つのモードをサポートしています。すべてのMCP対応Wor
 
 - **API Key** – プログラムによる接続にはMCP APIキーを使用します。タブではすぐに使えるJSON設定をコピーでき、Cursorをワンクリックでセットアップする**Add to Cursor**ボタンも用意されています。
 - **Claude** – タブにはMCPサーバーのURLとClaude向けのセットアップ手順が表示されます。OAuth Client IDとSecretは空欄のままにしてください。Claudeは自動的に登録され、Heym OAuth経由で認証されます。
+- **ChatGPT** – タブには ChatGPT アプリ用の MCP サーバー URL とセットアップ手順が表示されます。開発者モード（Developer mode）をオンにし、URL を指定してアプリを作成し、OAuth を選択すると、ChatGPT が自動的に登録されます。
+- **Gemini** – タブには Gemini カスタムアプリ用の MCP サーバー URL とセットアップ手順が表示されます。gemini.google.com で **Settings → Connected Apps → Add a custom app** を開き、URL を貼り付けて **Advanced features** は閉じたままにします。Gemini が自動的に登録され、Heym OAuth 経由で認証されます。一度接続すると、Gemini モバイルアプリでも Heym が機能します。
 
 ### WorkflowのMCPトグル
 
@@ -40,7 +42,8 @@ Workflowカードには説明と入力フィールド名のプレビューが表
 
 有効にすると、`heym_chat`はWorkflowツールと並んで`tools/list`に表示されます。MCPクライアントが自然言語のメッセージを1つ送信すると、Heymエンジンが以降を処理します。Chatタブと同じ機能を備えています。
 
-- Workflow AI Builderを通じてWorkflowの構築、編集、検査、実行
+- Workflow を構築し、サンプル入力でテスト実行し、修正して、実行が成功したら完了する（[ビルドモード](#build-mode)を参照）
+- 既存の Workflow を検査・実行する
 - 分析情報、最近の実行、今後のCronスケジュールのレポート
 - 1つのWorkflowの実行履歴のレポート：実行回数、ステータス別の件数、実行日時、およびリクエストに応じて単一実行の入力・出力・ノードごとのエラー
 - 現在実行中の内容のレポート：アクティブな実行数、Workflow名、各実行の経過時間、現在処理中のノード、ライブ実行へのリンク
@@ -50,6 +53,15 @@ Workflowカードには説明と入力フィールド名のプレビューが表
 - 保留中のhuman-in-the-loopレビューの承認、編集、拒否
 
 Chatタブに後から追加された機能は、自動的に`heym_chat`から利用可能になります。機能ごとに同期が必要なトグルはありません。
+
+### ビルドモード
+
+`heym_chat` は常にビルドモード（build mode）で Chat エンジンを実行します。1 回の呼び出しで、アシスタントは新しい Workflow を保存し、現実的なサンプル入力で実行し、実行レポートを読み取り、失敗した箇所を修正して再実行するプロセスを、1 回の呼び出しにつき最大 5 回のテスト実行まで行えます。最新の保存に対する最新の実行が成功すると、1 文の要約で締めくくり、返信の末尾は `Verified: the latest test run of the saved workflow passed.` となります。
+
+- テスト実行は実際の実行です。副作用も実際に発生し、他の実行と同様に Workflow の実行履歴に表示されます。
+- 保存はエディターの経路を通ります。グラフを変更すると、以前のグラフは Workflow の **Edit History** に保持されます。
+- 以前に構築した Workflow を変更するには、同じ `conversation_id` でスレッドを続行してください。アシスタントは新しい Workflow を作成する代わりにその Workflow を更新し、あなたが編集可能な Workflow のみを変更します。
+- 5 回のテスト実行を使い切ると、アシスタントは停止し、何がまだ失敗しているかを説明します。
 
 CredentialはUIに留まります。`heym_chat`がCredentialを一覧表示、選択、作成することはありません。Workflowを構築または編集する際、Credentialを必要とする新しいノードは空のままにされ、返信でその名前が示されるため、エディタで設定できます。
 
@@ -110,7 +122,7 @@ Workflow を切り替えると、その Workflow は割り当てリストの先�
 名前付きサーバーは、デフォルトサーバーと同じ認証方式をサポートしています：
 
 - **X-MCP-Key header** – サーバーの API Key を直接渡します（API クライアント、Cursor）。Header のみ：キーは `?key=` クエリパラメータとして受け付けられません。URL はアクセスログ、プロキシログ、ブラウザ履歴に残るためです。
-- **Claude OAuth** – サーバー URL を Claude 連携に追加します。credential は空のままにすると、Claude が OAuth 経由で自動的に登録します。bearer token は `?token=` ではなく、`Authorization` header で送信する必要があります。
+- **Claude、ChatGPT、Gemini の OAuth** – クライアントのコネクタまたはカスタムアプリにサーバー URL を追加します。credential を空のままにすると、クライアントが OAuth 経由で自動的に登録します。bearer token は `?token=` ではなく、`Authorization` header で送信する必要があります。
 - **Session token** – SSE ハンドシェイク中に発行されます。特定のサーバーにスコープされるため、ある名前付きサーバーの token が別のサーバーにアクセスすることはできません。この短命な `?session=` パラメータは影響を受けません。
 
 ### 名前付きサーバーの削除
@@ -124,7 +136,7 @@ Workflow を切り替えると、その Workflow は割り当てリストの先�
 | デフォルト | `{origin}/api/mcp/sse` |
 | 名前付き | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-どちらの Endpoint も SSE トランスポート（GET、MCP 仕様 2024-11-05）と Streamable HTTP トランスポート（POST、MCP 仕様 2025-03-26）をサポートしています。Claude はどちらでも安全なサインインのために OAuth 2.1 / PKCE を使用します。
+どちらの Endpoint も SSE トランスポート（GET、MCP 仕様 2024-11-05）と Streamable HTTP トランスポート（POST、MCP 仕様 2025-03-26）をサポートしています。Claude、ChatGPT、Gemini はどちらでも安全なサインインのために OAuth 2.1 / PKCE を使用します。
 
 ## 関連項目
 

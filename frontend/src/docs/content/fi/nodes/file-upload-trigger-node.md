@@ -33,6 +33,13 @@ Solmu toimii kahdessa vaiheessa:
 
 Canvasissa **Run Workflow** näyttää luodun `curl`-komennon debug-paneelissa kopiointipainikkeella varustettuna.
 
+## Suorittaminen Heymistä
+
+Kahdessa paikassa tällainen Workflow voidaan suorittaa suoraan tiedostolle saman luonti- ja lähetysprosessin kautta:
+
+- [Quick Drawer](../reference/quick-drawer.md) näyttää pudotusalueen tiedostolle. Nämä suoritukset merkitään historiassa tunnisteella `Quick Drawer`.
+- Kojelaudan [suorituswidget](../tabs/dashboard-tab.md#run-widgets) suorittaa Workflow'n jokaiselle pudotetulle tiedostolle. Nämä suoritukset merkitään tunnisteella `dashboard`.
+
 ## Parametrit
 
 | Parametri | Tyyppi | Oletus | Kuvaus |

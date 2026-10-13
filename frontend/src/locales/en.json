@@ -274,7 +274,17 @@
       "intro": "Heym Work is a second interface for business teams. People sign in through Heym, and every job runs here.",
       "never": "Never",
       "learnMore": "Learn more"
-    }
+    },
+    "pluginsIntro": "Plugins add custom nodes (actions and triggers) to this instance. Installing or removing a plugin runs server-side code, so it is restricted to operators listed in",
+    "loadingPlugins": "Loading plugins…",
+    "pluginsDisabledTitle": "Plugins are disabled",
+    "pluginsDisabledHint": "Set these environment variables on the backend, then restart:",
+    "installPluginZip": "Install a plugin (.zip)",
+    "noPluginsInstalled": "No plugins installed yet.",
+    "enablePlugin": "Enable",
+    "disablePlugin": "Disable",
+    "uninstallPlugin": "Uninstall",
+    "pluginOperationFailed": "Plugin operation failed"
   },
   "workflows": {
     "title": "Workflows",
@@ -390,7 +400,22 @@
     "startTour": "Start tour",
     "readTheDocs": "Read the docs",
     "previousFeature": "Previous feature",
-    "goToFeature": "Go to {title}"
+    "goToFeature": "Go to {title}",
+    "heymWork": {
+      "step0": "A team asks in Heym Work",
+      "step1": "Heym builds and tests it",
+      "step2": "Verified, no canvas",
+      "step3": "Heym runs it in the background",
+      "prompt": "Check new contracts for risky clauses.",
+      "testing": "Testing the workflow",
+      "verified": "Verified"
+    },
+    "skillZip": {
+      "step0": "Drop a skill zip in Chat",
+      "step1": "Chat reads SKILL.md",
+      "step2": "The agent keeps the skill",
+      "prompt": "Read the invoice and list the line items."
+    }
   },
   "canvas": {
     "nodes": "Nodes",
@@ -2400,6 +2425,50 @@
       "nodes": "Nodes",
       "reference": "Reference",
       "tabs": "Tabs"
-    }
+    },
+    "pluginNoDoc": "This plugin has no documentation."
+  },
+  "commandPalette": {
+    "searchPlaceholder": "Search workflows, tabs, docs...",
+    "searchAria": "Command palette search",
+    "ariaLabel": "Command palette",
+    "noResults": "No results found",
+    "tryDifferentSearch": "Try a different search term",
+    "recent": "Recent",
+    "recentInFolder": "Recent · In: {folder}",
+    "inFolder": "In: {folder}",
+    "scheduledDate": "Scheduled {date}",
+    "scheduledForDeletion": "Scheduled for Deletion",
+    "goToTab": "Go to tab",
+    "workflowTemplate": "Workflow Template",
+    "nodeTemplate": "Node Template",
+    "nodeType": "Node · {type}",
+    "documentation": "Documentation",
+    "support": "Support",
+    "contactSupport": "Contact Support",
+    "watchRunbook": "Watch Heym build & run a workflow",
+    "openDocs": "Open the Heym docs",
+    "getHelp": "Get help from the Heym team",
+    "heymWorkEnterprise": "Heym Work (Enterprise)",
+    "heymWorkSubtitle": "Heym Work for business teams, on heym.run",
+    "navigate": "Navigate",
+    "select": "Select",
+    "click": "click",
+    "newTab": "new tab",
+    "oneItem": "{count} item",
+    "manyItems": "{count} items"
+  },
+  "pluginNode": {
+    "disabledOnInstance": "Plugins are disabled on this instance.",
+    "loadingDefinition": "Loading plugin definition...",
+    "notBound": "This node is not bound to a plugin package.",
+    "noneInstalled": "No plugins are installed on this instance.",
+    "notInstalled": "Plugin \"{id}\" is not installed on this instance.",
+    "installedButDisabled": "Plugin \"{name}\" is installed but disabled.",
+    "noKindNodes": "Plugin \"{name}\" does not expose any {kind} nodes.",
+    "loadErrorDetail": "Unable to load plugins: {detail}",
+    "loadErrorHttp": "Unable to load plugins (HTTP {status}).",
+    "loadError": "Unable to load plugins.",
+    "enabled": "Enabled"
   }
 }

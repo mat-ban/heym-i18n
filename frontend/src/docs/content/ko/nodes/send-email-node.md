@@ -28,7 +28,7 @@
 
 ## Setup
 
-서버, 포트, 이메일 및 비밀번호를 포함한 SMTP credential을 추가하십시오. 일반적인 SMTP 서버:
+서버, 포트, 이메일 및 비밀번호를 포함한 SMTP credential을 추가하십시오. 표시되는 발신자는 credential의 선택적 **From** 필드이며, From이 비어 있으면 사용자 이름으로 발송됩니다. 일반적인 SMTP 서버:
 
 - Gmail: `smtp.gmail.com`, 포트 587 (App Password 필요)
 - Outlook: `smtp.office365.com`, 포트 587

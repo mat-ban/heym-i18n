@@ -26,6 +26,7 @@ Tablica **Zavičajna spremišta** upravlja vektorskim spremištima koja koriste 
 - **Pogledajte stavke** – Vidite izvorne grupe i broj dokumenata po spremištu. Učitane datoteke grupiraju se prema svom nazivu; dokumenti koje je [RAG čvor](../nodes/rag-node.md) pohranio bez vlastitog `source` grupiraju se pod **Dodani workflow: _naziv_**, nazivajući workflow koji ih je napisao
 - **Izbrišite izvore** – Uklonite specifične datoteke ili izvorne grupe iz spremišta, uključujući sve što je jedan workflow dodao
 - **Uredite spremište** – Promijenite naziv, opis ili vjerodajnicu
+- **Pretraživanje** – `POST /api/vector-stores/{id}/search` s parametrom `query` (i `limit` od 1 do 20, zadano 5) vraća dijelove (chunks) koje bi vratilo pretraživanje RAG čvora, počevši od najboljeg podudaranja, svaki sa svojim rezultatom i izvorom. RAG zaslon u Heym Worku koristi ga za testiranje dohvaćanja
 
 ## Dijeljenje
 

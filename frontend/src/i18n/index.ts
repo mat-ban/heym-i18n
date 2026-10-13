@@ -132,13 +132,13 @@ export async function setLocale(locale: SupportedLocale): Promise<void> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (i18n.global.locale as any).value = locale;
-
   if (typeof window !== "undefined") {
     localStorage.setItem(STORAGE_KEY, locale);
     document.documentElement.lang = locale;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (i18n.global.locale as any).value = locale;
 }
 
 export function getCurrentLocale(): SupportedLocale {

@@ -54,11 +54,12 @@
 ---
 
 > [!NOTE]
-> **🌐 Multi-language branch (`feature/i18n`)**
+> **🌐 Multi-language branch (`main` & `self-hosted`)**
 >
-> This branch adds a fully localized enterprise interface across **32 languages** to Heym, covering the complete UI (2,011 keys, 100 % key parity across all locales) and all 129 in-app documentation pages (4,128 localized markdown documents, 100 % Tier-A coverage). Users switch languages seamlessly in **User Settings → Language**. Browser language is auto-detected on first visit.
+> This repository adds a fully localized enterprise interface across **32 languages** to Heym, covering the complete UI (2,126 keys, 100 % key parity across all locales), all 130 in-app documentation pages (4,160 localized markdown documents, 100 % Tier-A coverage), and **native multi-language support for installed Heym plugins** (`plugins/<plugin_id>/i18n/<locale>.json` and `README.<locale>.md`). Users switch languages seamlessly in **User Settings → Language** or directly on the sign-in screen. Browser language is auto-detected on first visit.
 >
-> - **Self-Hosting & LAN Ready:** Includes targeted backend authentication improvements supporting plain HTTP in private RFC-1918 networks (`192.168.x.x`, `10.x.x.x`, `COOKIE_SECURE`) and robust case-insensitive email sign-in.
+> - **Native Plugin i18n (32 Languages):** Installed plugins can ship localized package names, descriptions, node names, field labels, select options, and documentation (`README.<lang>.md` / `docs/README.<lang>.md`), rendered reactively without page reloads and 100 % backward-compatible with unlocalized plugins.
+> - **Self-Hosting & LAN Ready (`self-hosted` branch):** Includes targeted backend authentication improvements supporting plain HTTP in private RFC-1918 networks (`192.168.x.x`, `10.x.x.x`, `COOKIE_SECURE`) and local intranet email domains (e.g. `.local`).
 > - **Isolated Architecture:** Translations and documentation live in structured files (`frontend/src/i18n/`, `frontend/src/locales/`, `frontend/src/docs/content/<code>/`). UI components are instrumented with reactive `$t()` bindings without altering core runtime logic.
 > - **Strict Technical Terminology:** Technical terms such as *Workflow, Trigger, Webhook, API, Token, Prompt, Cron, MCP, SSE, cURL, JSON* intentionally remain in English.
 >
@@ -715,8 +716,9 @@ Heym on this branch ships with complete enterprise multi-language support across
 |---|---|
 | **Supported languages (32)** | English (`en`), German (`de`), French (`fr`), Spanish (`es`), Italian (`it`), Dutch (`nl`), Portuguese (`pt`), Polish (`pl`), Czech (`cs`), Romanian (`ro`), Swedish (`sv`), Slovak (`sk`), Hungarian (`hu`), Danish (`da`), Finnish (`fi`), Bulgarian (`bg`), Greek (`el`), Croatian (`hr`), Slovenian (`sl`), Estonian (`et`), Latvian (`lv`), Lithuanian (`lt`), Catalan (`ca`), Simplified Chinese (`zh-Hans`), Traditional Chinese (`zh-Hant`), Japanese (`ja`), Korean (`ko`), Brazilian Portuguese (`pt-BR`), Indonesian (`id`), Vietnamese (`vi`), Turkish (`tr`), Ukrainian (`uk`) |
 | **Switch language** | **User Settings → Language** (dropdown with native names). Preferences persist in `localStorage` and auto-detect browser locale on first visit |
-| **UI catalogs** | `frontend/src/locales/<code>.json` — 2,011 leaf keys per language, **100 % key parity** across all 32 locales, verified via SHA-256 sidecars |
-| **In-app documentation** | `frontend/src/docs/content/<code>/` — full **Tier-A coverage** (129 documents per language, 4,128 markdown files total), lazy-loaded on demand |
+| **UI catalogs** | `frontend/src/locales/<code>.json` — 2,126 leaf keys per language, **100 % key parity** across all 32 locales, verified via SHA-256 sidecars |
+| **In-app documentation** | `frontend/src/docs/content/<code>/` — full **Tier-A coverage** (130 documents per language, 4,160 markdown files total), lazy-loaded on demand |
+| **Installed plugin i18n** | `plugins/<plugin_id>/i18n/<locale>.json` & `README.<locale>.md` — native localization of plugin names, descriptions, node labels, field labels, select options, and plugin docs via `GET /api/plugins?lang=<locale>` and `GET /api/plugins/{id}/doc?lang=<locale>` |
 | **Linguistic standards** | CLDR pluralization rules (`plural.ts`), strict formal registers (*vous, usted, Lei, Sie, etc.*), strictly impersonal style for Scandinavian locales |
 | **Quality gates** | `npm run i18n:check` (key parity, empty strings, `@` compiler escaping, code scan), `npm run i18n:coverage -- --gate` (100% Tier-A gate check), Playwright E2E suites |
 
@@ -726,18 +728,18 @@ Architecture, rebase procedures, and terminology guidelines: **[docs/i18n/ARCHIT
 
 ---
 
-## 🔐 Self-Hosting & Authentication Enhancements
+## 🔐 Self-Hosting & Authentication Enhancements (`self-hosted` branch)
 
-To ensure smooth operation in self-hosted home labs, container environments, and local networks without requiring immediate TLS/HTTPS certificates, this release includes targeted authentication improvements in the backend ([`backend/app/api/auth.py`](backend/app/api/auth.py)):
+To ensure smooth operation in self-hosted home labs, container environments, and local networks without requiring immediate TLS/HTTPS certificates, the `self-hosted` branch includes targeted authentication improvements in the backend ([`backend/app/api/auth.py`](backend/app/api/auth.py)):
 
 * **Private LAN & RFC-1918 Cookie Support (`COOKIE_SECURE`):**
   * **The Problem:** Upstream Heym only permits plain HTTP session cookies on `localhost` and `127.0.0.1`, forcing `Secure=True` on any other hostname. On private IP addresses (e.g., `http://192.168.x.x` or `http://10.x.x.x`), modern browsers reject secure cookies over unencrypted HTTP, causing users to get stuck in an endless login redirect loop.
   * **The Fix:** The authentication service automatically detects private IPv4 networks (RFC 1918 via `ipaddress.is_private`) as local development environments, permitting secure session creation on LAN hosts.
   * **Configurable Override:** An explicit `COOKIE_SECURE=true|false` environment variable allows administrators to manually enforce or relax cookie security flags (e.g., when operating behind a TLS-terminating reverse proxy).
 
-* **Case-Insensitive Email Matching:**
-  * **The Problem:** Upstream Heym matches user emails using exact case sensitivity (`User.email == user_data.email`), causing login failures if users or OIDC identity providers format email casing differently (e.g., `User@example.com` vs. `user@example.com`).
-  * **The Fix:** Account lookups use normalized, case-insensitive comparison (`func.lower(func.trim(User.email)) == normalized_email`), ensuring reliable authentication and SSO identity mapping.
+* **Local Intranet Domain Support (`.local`):**
+  * Supports sign-in and account registration with internal/intranet email domains (such as `.local`) commonly used in self-hosted OIDC/Keycloak lab environments.
+  * *(Note: Case-insensitive email lookup, previously maintained in `self-hosted`, is now natively provided by upstream Heym via `find_user_by_email` in `backend/app/services/user_lookup.py`.)*
 
 ---
 

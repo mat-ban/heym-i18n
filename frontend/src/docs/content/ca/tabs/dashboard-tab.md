@@ -8,7 +8,7 @@ Tothom comença amb un tauler de control, creat la primera vegada que obre la pe
 
 La pestanya reobre el tauler de control que es va utilitzar per darrera vegada, i la barra d'adreces porta el tauler de control obert (`?tab=dashboard&dashboard=<id>`), de manera que un enllaç obre exactament aquest tauler de control per a qualsevol que hi tingui accés.
 
-El botó de configuració (només per als propietaris) canvia el nom del tauler de control, gestiona la compartició i l'elimina. Eliminar un tauler de control suprimeix els seus ginys i els seus Workflows. Sempre es conserva almenys un tauler de control propi, de manera que l'últim no es pot eliminar.
+El botó de configuració (només per als propietaris) canvia el nom del tauler de control, estableix quins registres accepta com a [pàgina de detall](#detail-pages), gestiona la compartició i l'elimina. Eliminar un tauler de control suprimeix els seus ginys i els seus Workflows. Sempre es conserva almenys un tauler de control propi, de manera que l'últim no es pot eliminar.
 
 ## Ginys
 
@@ -18,7 +18,7 @@ Un giny és un sol gràfic a la graella. Tipus de gràfic compatibles:
 - **Línies**
 - **Àrea** (tendència farcida, admet diverses sèries)
 - **Circular**
-- **Taula** (amb desplaçament)
+- **Taula** (amb desplaçament; una columna es pot representar com a [xips d'estat](../nodes/chart-output-node.md#status-chips), i les files poden obrir una [pàgina de detall](#detail-pages))
 - **Numèric** (un sol valor KPI amb una unitat opcional)
 - **Indicador** (un sol valor en un interval mínim–màxim, per exemple un percentatge)
 - **Dispersió** (punts X/Y per a gràfics de correlació)
@@ -26,6 +26,8 @@ Un giny és un sol gràfic a la graella. Tipus de gràfic compatibles:
 - **Indicador de barres** (un indicador horitzontal per fila amb un gradient de vermell→verd i un valor, per exemple espai de disc lliure)
 - **Text** (un missatge en markdown, per exemple una nota d'estat com "Última execució a les 19:47"; admet [caselles de selecció interactives](../nodes/chart-output-node.md#interactive-task-lists) quan el markdown és estàtic, i [llistes numerades explícites](../nodes/chart-output-node.md#numbered-lists) per a numeració personalitzada o descendent)
 - **HITL** (les vostres revisions humanes pendents. La capçalera mostra `1/n pending`. El nom del Workflow obre aquesta execució al canvas. **Aprova**, **Sol·licita canvis** i **Rebutja** la resolen. La icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial d'aquesta pàgina. El giny no utilitza files d'origen, i cada persona veu la seva pròpia cua)
+
+A més dels gràfics, un giny **Run a workflow** executa un dels vostres Workflows des del tauler de control: sobre un fitxer deixat anar, amb els seus camps d'entrada o amb un botó Run; vegeu [Ginys d'execució](#run-widgets).
 
 Cada giny carrega les seves dades de manera asíncrona quan s'obre la pestanya, de manera que la pàgina es manté àgil mentre els gràfics es van omplint.
 
@@ -36,7 +38,39 @@ Cada giny carrega les seves dades de manera asíncrona quan s'obre la pestanya, 
 3. Construïu el Workflow de manera que el Node que alimenta **Chart Output** produeixi una matriu de files, i després configureu el mapatge de camps del Node Chart Output (camp d'etiqueta, camp de valor, etc.).
 4. Deseu, torneu a la pestanya Tauler de control i el giny es renderitzarà.
 
+Per a un giny **Run a workflow**, trieu en canvi el Workflow que executa; el selector indica com executarà el giny cadascun. El giny s'afegeix directament a la quadrícula; no cal construir cap Workflow nou.
+
 Feu doble clic en un giny (o utilitzeu el seu botó d'edició) per reobrir el seu Workflow en qualsevol moment. Utilitzeu **Clonar giny** a la capçalera del giny per duplicar tant el giny com el seu Workflow complet. La còpia es col·loca a sota de l'original i s'etiqueta amb **(Còpia)** perquè la pugueu editar de manera independent.
+
+## Pàgines de detall
+
+Un giny de taula pot enllaçar les seves files a un altre tauler de control, que llavors funciona com a pàgina de detall: un únic tauler de control que serveix per a cada client, factura o tiquet.
+
+1. Obriu **Settings** del giny de taula i trieu el tauler de control a **Row link**.
+2. Introduïu **Record column**, la columna el valor de la qual identifica la fila (per exemple `id`), i opcionalment una **Label column** que li dóna nom (per exemple `name`).
+3. Deseu. En fer clic en una fila (o enfocar-la i prémer Retorn) s'obre el tauler de control enllaçat amb `?record=<value>&label=<name>`.
+
+Al tauler de control de detall, cada Workflow de giny llegeix el valor com a `$page.record` (vegeu [Chart Output](../nodes/chart-output-node.md#detail-pages-pagerecord)), i la pàgina mostra `Dashboard / <label>` a sobre de la quadrícula amb un botó per esborrar el registre. Enrere torna a la taula d'on veníeu.
+
+- **Qui la pot obrir.** Les files només es poden clicar per als espectadors que poden obrir el tauler de control enllaçat. Els altres veuen la mateixa taula sense enllaços.
+- **Format del registre.** El registre prové de la URL, de manera que el tauler de control de detall decideix què accepta. A la seva configuració, **Detail page records** és un dels següents: IDs (lletres, dígits, `-`, `_` i `.`, fins a 128 caràcters; el valor per defecte), nombres, UUIDs o adreces de correu electrònic. Qualsevol altre valor es rebutja abans que s'executi cap giny, i els ginys mostren "This page does not accept that record".
+- **Continua sent l'execució del propietari.** Els ginys també s'executen com a propietari del tauler de control en una pàgina de detall. Els creadors només haurien de passar `$page.record` on un node l'escapi, mai directament al text d'una consulta.
+- **Memòria cau.** Cada giny emmagatzema a la memòria cau el seu gràfic per registre, durant el mateix temps de vida (TTL) que el giny, i conserva els 50 registres utilitzats més recentment.
+
+## Ginys d'execució
+
+Un giny **Run a workflow** executa un dels vostres Workflows i en mostra el resultat: estat, temps d'execució i sortides. El que mostra depèn del que rebi el Workflow:
+
+- **Un fitxer.** Per a un Workflow que comença amb un [File Upload Trigger](../nodes/file-upload-trigger-node.md), deixeu-hi anar un fitxer (o feu clic per triar-ne un) i el giny el pujarà mitjançant l'enllaç de pujada d'un sol ús del trigger. El giny mostra els tipus de fitxer i la mida que el trigger accepta i rebutja els altres abans de pujar-los. Quan el Workflow també comença amb un node Text Input, el giny mostra els seus camps al costat de la zona per deixar anar: trieu un fitxer, empleneu els camps i **Run** enviarà tots dos. Els valors viatgen amb l'enllaç de pujada que genera el giny, de manera que un enllaç de pujada compartit no els pot definir.
+- **Camps d'entrada.** Per a un Workflow que comença amb un node Text Input, el giny mostra els seus camps amb els valors per defecte; **Run** executa el Workflow amb els vostres valors. Els valors dels camps que el Workflow no té es descarten.
+- **Res.** Un Workflow sense entrades obté un botó **Run**.
+
+El botó **Wrap** del resultat ajusta les línies llargues de sortida dins del quadre; desactiveu-lo per llegir el disseny JSON de la sortida.
+
+- Qualsevol persona que pugui obrir el tauler de control pot executar el giny, igual que qualsevol pot actualitzar un gràfic. L'accés al Workflow és el del propietari del tauler de control: afegir el giny requereix un Workflow que tant vós com el propietari pugueu executar, i l'execució mateixa utilitza les credencials del propietari del Workflow, com qualsevol enllaç de pujada.
+- El resultat roman a la pantalla fins que sortiu de la pàgina; els altres espectadors no veuen els vostres fitxers, valors ni resultats. L'execució apareix a l'historial d'execucions amb el trigger `dashboard`.
+- Compartir un tauler de control mai no concedeix accés al Workflow mateix. **Edit workflow** l'obre per a les persones que ja hi tenen accés, i **Fine-tune with AI** no s'ofereix.
+- Les execucions amb fitxers s'executen a la instància principal, on s'emmagatzemen els fitxers pujats, com qualsevol execució de File Upload Trigger.
 
 ## Generar un giny amb IA
 
@@ -50,7 +84,7 @@ Activeu **Edita** per entrar al mode d'edició, on podeu arrossegar ginys i redi
 
 ## Memòria cau i actualització
 
-Cada giny emmagatzema a la memòria cau del servidor les seves últimes dades calculades durant un temps de vida (TTL) configurable. Mentre la memòria cau és fresca, reobrir el tauler de control serveix el resultat emmagatzemat en lloc de tornar a executar el Workflow. La memòria cau es reemplaça in situ cada vegada que es recalculen les dades (una memòria cau per giny), i s'invalida automàticament quan editeu el Workflow del giny.
+Cada giny emmagatzema a la memòria cau del servidor les seves últimes dades calculades durant un temps de vida (TTL) configurable. Mentre la memòria cau és fresca, reobrir el tauler de control serveix el resultat emmagatzemat en lloc de tornar a executar el Workflow. La memòria cau es reemplaça in situ cada vegada que es recalculen les dades (una memòria cau per giny, més una per registre en una [pàgina de detall](#detail-pages)), i s'invalida automàticament quan editeu el Workflow del giny.
 
 Utilitzeu el botó **Actualitza** d'un giny (o **Actualitza** a la barra d'eines) per evitar la memòria cau i recalcular immediatament.
 ## Compartició
@@ -60,9 +94,10 @@ Els propietaris comparteixen un tauler des de la seva configuració, amb usuaris
 | Acció | Propietari | Escriptura | Lectura |
 |--------|:-----:|:-----:|:----:|
 | Veure widgets, actualitzar-los, utilitzar l'actualització automàtica | ✓ | ✓ | ✓ |
+| Obrir pàgines de detall, executar ginys d'execució | ✓ | ✓ | ✓ |
 | Afegir, clonar, eliminar, canviar el nom i redimensionar widgets; generar i ajustar amb IA; marcar elements de la llista de verificació | ✓ | ✓ | |
 | Obrir el workflow d'un widget a l'editor | ✓ | ✓ | |
-| Canviar el nom o eliminar el tauler, gestionar la compartició | ✓ | | |
+| Canviar el nom o eliminar el tauler, definir-ne el format de registre, gestionar la compartició | ✓ | | |
 
 **Els widgets sempre s'executen com el propietari del tauler.** Independentment de qui estigui mirant, un widget utilitza les credencials i les variables globals del propietari, i les seves execucions apareixen a l'historial d'execucions i als traços del propietari. Per tant, els companys d'equip veuen les mateixes dades sense accés als comptes que hi ha al darrere, i tots els espectadors comparteixen el mateix resultat en memòria cau per widget. Els widgets que afegeix o clona un col·laborador amb escriptura també pertanyen al propietari.
 

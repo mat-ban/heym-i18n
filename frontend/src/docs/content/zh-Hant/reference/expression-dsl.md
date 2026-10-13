@@ -142,6 +142,7 @@ item.value
 - `$executionId` - 目前執行的 id（等同於 [Execution History](./execution-history.md) 項目 id，因此 `/workflows/<id>/<executionId>` 會在畫布上開啟此次執行）。**僅限執行階段**：在表達式預覽對話框中為空；僅在 workflow 執行期間填入。
 - `$vars` - Workflow 區域變數（透過 `$vars.variableName` 存取；透過 `variable` 節點更新）
 - `$global` - 持久性全域變數儲存區（透過 `$global.variableName` 存取）
+- `$page.record` - 僅適用於儀表板小工具 Workflow：小工具所在詳細資料頁面的記錄，取自儀表板的 `?record=` 參數。在未帶此參數開啟的儀表板上以及表達式預覽對話框中為 `null`。標記為 `page` 的節點具有優先權。請參閱[詳細資料頁面](../tabs/dashboard-tab.md#detail-pages)。
 
 ### $vars 用法
 - `$vars.counter` - 存取名為 `counter` 的變數

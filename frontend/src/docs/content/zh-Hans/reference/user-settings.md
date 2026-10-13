@@ -4,7 +4,7 @@
 
 ## 打开对话框
 
-点击页眉右上角的**您的头像和姓名**。对话框打开后包含以下标签页：**Profile**、**Security**、**Voice**、**AI Defaults** 和 **Observability**。实例管理员还会看到 **SSO** 标签页。
+点击页眉右上角的**您的头像和姓名**。对话框打开后包含以下标签页：**Profile**、**Security**、**Voice**、**AI Defaults** 和 **Observability**。实例管理员还会看到 **SSO**、**Heym Work** 和 **Instances** 标签页。
 
 ## Profile 标签页
 
@@ -101,6 +101,10 @@ Observability 标签页显示此实例的 [OpenTelemetry Tracing](./opentelemetr
 ## SSO 标签页
 
 仅对实例管理员可见——即 `HEYM_ADMIN_EMAILS` 中列出的账户。此标签页将 Heym 连接到外部 OpenID Connect 提供商，以便人们使用已有账户登录。输入 issuer URL 和 client credentials，将只读 redirect URI 复制到您的提供商，并在启用前运行 **Test connection**。测试通过后，可从此处关闭密码登录。完整设置请参见 [Single Sign-On](./sso.md)。
+
+## Heym Work 标签页
+
+实例管理员可在此连接面向业务团队的界面 [Heym Work](./heym-work.md)：配置其地址、仅显示一次的集成密钥以及 **Enable Heym Work** 开关。该标签页还会显示 Heym Work 最近一次签到时间、版本号和许可证状态。请参阅[连接 Heym Work](./heym-work.md#connecting-heym-work)。
 
 ## Instances 标签页
 

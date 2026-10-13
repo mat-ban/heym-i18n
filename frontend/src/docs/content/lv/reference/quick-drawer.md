@@ -35,6 +35,7 @@ Atlasiet darbplūsmu, lai atvērtu tās ievades formu.
 - Noklikšķiniet uz **Run Workflow**, lai izpildītu atlasīto darbplūsmu
 - Noklikšķiniet uz **Stop Workflow**, lai atceltu notiekošo izpildi no paneļa
 - Darbplūsmas bez Input laukiem joprojām var palaist tieši
+- Workflow, kas sākas ar [File Upload Trigger](../nodes/file-upload-trigger-node.md), tā vietā parāda nomešanas zonu: ievelciet tajā failu vai noklikšķiniet, lai to izvēlētos. Zonā ir norādīti trigger atbalstītie failu tipi un izmērs, un citi faili tiek noraidīti pirms augšupielādes. Poga **Run Workflow** paliek atspējota, līdz tiek izvēlēts fails.
 
 Panelis izmanto to pašu darbplūsmu izpildes API kā citas Heym palaišanas virsmas, tāpēc izvades un izpildlaika darbība paliek konsekventa.
 
@@ -51,6 +52,8 @@ Pēc izpildes sākšanas panelis rāda:
 
 `pending` nozīmē, ka darbplūsma gaida vēlāku darbību, piemēram, cilvēka pārskatīšanu.
 
+Faila izpilde notiek caur trigger vienreizlietojamo augšupielādes saiti: atvilktne pieprasa no workflow saiti, augšupielādē tajā failu un parāda rezultātu, kad augšupielāde ir pabeigta. Faila izpildes parāda gala statusu un izvades, bet ne soli pa solim progresu, un vēsturē tās arī tiek atzīmētas ar `Quick Drawer`. Izvēlētais fails tiek notīrīts pēc katras izpildes, jo viena saite pieņem vienu failu.
+
 ## Pārlūkprogrammas krātuve
 
 Ātrais panelis saglabā personīgos iestatījumus `localStorage`:
@@ -64,7 +67,7 @@ Pēc izpildes sākšanas panelis rāda:
 
 Ātrais panelis apzināti ir viegla izpildes virsma.
 
-- Iekļauts: meklēšana, piespraušana, atlase, ievade, palaišana, progress, rezultāts
+- Iekļauts: meklēšana, piespraušana, atlase, ievade (tostarp fails), palaišana, progress, rezultāts
 - Izslēgts: darbplūsmu izveide, rediģēšana, mapju pārvaldība un kanvas darbības
 
 ## Saistītie resursi

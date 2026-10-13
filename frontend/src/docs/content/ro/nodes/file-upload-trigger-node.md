@@ -33,6 +33,13 @@ Nodul rulează în două faze:
 
 Pe canvas, **Run Workflow** afișează `curl`-ul generat în panoul de depanare, cu un buton de copiere.
 
+## Rularea din Heym
+
+Două locuri rulează direct un astfel de Workflow pe un fișier, prin același mecanism de generare și încărcare:
+
+- [Quick Drawer](../reference/quick-drawer.md) afișează o zonă de plasare pentru fișier. Aceste rulări sunt etichetate cu `Quick Drawer` în istoric.
+- Un [widget de rulare](../tabs/dashboard-tab.md#run-widgets) de pe un tablou de bord rulează Workflow-ul pentru fiecare fișier plasat. Aceste rulări sunt etichetate cu `dashboard`.
+
 ## Parametri
 
 | Parametru | Tip | Implicit | Descriere |

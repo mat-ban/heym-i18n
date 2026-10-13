@@ -499,7 +499,7 @@ Workflow 可以按树形结构组织在文件夹和子文件夹中。文件夹�
 
 ### [快速抽屉](./quick-drawer.md)
 
-快速抽屉是一个固定的右侧快速运行面板，适用于内部非画布页面。它让你可以搜索 [workflow](../tabs/workflows-tab.md)、固定收藏、选择输入、立即运行，并在不打开编辑器的情况下检查进度或结果。固定顺序和最后选择的 workflow 存储在浏览器中。
+快速抽屉是一个固定的右侧快速运行面板，适用于内部非画布页面。它让你可以搜索 [workflow](../tabs/workflows-tab.md)、固定收藏、选择输入、立即运行，并在不打开编辑器的情况下检查进度或结果。带有 [File Upload Trigger](../nodes/file-upload-trigger-node.md) 的 workflow 可接收拖放或选择的文件。固定顺序和最后选择的 workflow 存储在浏览器中。
 
 另请参阅 [Workflow 组织](./workflow-organization.md)、[键盘快捷键](./keyboard-shortcuts.md) 和 [执行历史](./execution-history.md)。
 
@@ -678,6 +678,12 @@ Enterprise 涵盖面向在生产环境中运行 Heym 的团队提供的商业许
 
 另请参阅 [Running & Deployment](../getting-started/running-and-deployment.md)、[Security](./security.md) 和 [Teams](./teams.md)。
 
+### [Heym Work](./heym-work.md)
+
+Heym Work 是构建在 Heym 之上的面向业务团队的第二界面。用户只需描述工作内容、回答几个问题即可获得经过测试的 workflow，随后通过页面、审批以及每次运行都带有名称的活动列表开展工作。实例管理员可在**设置 → Heym Work** 中使用其地址和集成密钥进行连接；它拥有来自 Heym 团队的独立许可证。
+
+另请参阅 [Enterprise](./enterprise.md)、[Single Sign-On](./sso.md) 和 [Human-in-the-Loop](./human-in-the-loop.md)。
+
 ---
 
 ## Dashboard Tabs
@@ -757,7 +763,7 @@ MCP 标签页用于配置 Model Context Protocol 集成。Heym 支持两种模�
 
 **命名服务器** – 创建多个隔离的 MCP Endpoint，每个 Endpoint 拥有基于 UUID 的独立 URL（`/api/mcp/servers/{uuid}/sse`）和独立的 API key。将特定 Workflow 分配给每个服务器，使不同的 AI 客户端或团队只能看到它们所需的工具。每个命名服务器支持相同的认证方式（API key、Claude OAuth），并拥有各自的 Copy JSON 和 Add to Cursor 快捷操作。两种 Endpoint 均支持 SSE 传输（GET）和 Streamable HTTP 传输（POST）。在命名服务器中切换某个 Workflow 时，该 Workflow 会移动到已分配列表的顶部，以便更改的行保持在视野中。
 
-**Heym chat 工具** – 两种模式均可将 [Chat](../tabs/chat-tab.md) 引擎暴露为单个 `heym_chat` 工具，按界面独立切换，并拥有各自的 LLM credential 和模型（从 [Settings](./user-settings.md) 中的首选模型预填）。MCP 客户端发送一条自然语言 `message`，引擎完成其余工作：构建、编辑和运行 Workflow、分析、执行记录、实时运行状态、调度、看板和卡片、团队、全局变量、文档搜索以及人工介入决策。后续添加到 Chat 的功能可通过同一工具访问，无需额外注册。每次调用都会作为带有 plug 标记的对话存储在 Chat 标签页历史记录中，并返回一个 `conversation_id`，客户端可将其传回以继续该对话线程。
+**Heym chat 工具** – 两种模式均可将 [Chat](../tabs/chat-tab.md) 引擎暴露为单个 `heym_chat` 工具，按界面独立切换，并拥有各自的 LLM credential 和模型（从 [Settings](./user-settings.md) 中的首选模型预填）。MCP 客户端发送一条自然语言 `message`，引擎完成其余工作：在构建模式下构建 Workflow（保存、最多五次测试运行、修复并验证）、运行 Workflow、分析、执行记录、实时运行状态、调度、看板和卡片、团队、全局变量、文档搜索以及人工介入决策。后续添加到 Chat 的功能可通过同一工具访问，无需额外注册。每次调用都会作为带有 plug 标记的对话存储在 Chat 标签页历史记录中，并返回一个 `conversation_id`，客户端可将其传回以继续该对话线程。
 
 另请参阅 [Agent Architecture](./agent-architecture.md)、[Agent Node](../nodes/agent-node.md) 和 [SSE Streaming](./sse-streaming.md)。
 
@@ -793,7 +799,7 @@ Analytics 标签页显示执行指标和趋势。汇总统计包括总执行次�
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 标签页是一个 Grafana 风格的空间，你可以在其中构建图表 widget 网格，每个 widget 都由其各自隐藏的 Heym workflow 渲染。按需保留任意数量的 dashboard，并将每个 dashboard 与用户或团队共享，可设为只读或可编辑；widget 始终以所有者的凭证运行，因此每个人看到的数据都相同。用自然语言描述一个指标，AI 会生成该 widget，或者手动添加一个并选择图表类型，用示例数据预览：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是你待处理的人工审核的轮播。标题栏显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核，widget 标题旁的历史图标会在同一页面的历史对话框中打开该次运行。Widget 会缓存其结果，可以用 AI 微调（每次更改都会保存到 [Edit History](./edit-history.md)），连同其完整 workflow 一起克隆，通过 Tidy up 重新排列，并在编辑模式下拖动或调整大小。因为每个 widget 都是一个 workflow，任何你能获取的数据——一次 [HTTP](../nodes/http-node.md) 调用、一次 [BigQuery](../nodes/bigquery-node.md) 查询、一次 [RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 输出——都可以变成一个图表。
+Dashboard 标签页是一个 Grafana 风格的空间，你可以在其中构建图表 widget 网格，每个 widget 都由其各自隐藏的 Heym workflow 渲染。按需保留任意数量的 dashboard，并将每个 dashboard 与用户或团队共享，可设为只读或可编辑；widget 始终以所有者的凭证运行，因此每个人看到的数据都相同。用自然语言描述一个指标，AI 会生成该 widget，或者手动添加一个并选择图表类型，用示例数据预览：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是你待处理的人工审核的轮播。标题栏显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核，widget 标题旁的历史图标会在同一页面的历史对话框中打开该次运行。Widget 会缓存其结果，可以用 AI 微调（每次更改都会保存到 [Edit History](./edit-history.md)），连同其完整 workflow 一起克隆，通过 Tidy up 重新排列，并在编辑模式下拖动或调整大小。表格可以显示状态标签并将其行链接到将所点击行的记录读取为 `$page.record` 的详情仪表板，而运行（Run）小部件可从仪表板运行 workflow：基于拖放的文件、使用其输入字段或通过“运行”按钮。因为每个 widget 都是一个 workflow，任何你能获取的数据——一次 [HTTP](../nodes/http-node.md) 调用、一次 [BigQuery](../nodes/bigquery-node.md) 查询、一次 [RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 输出——都可以变成一个图表。
 
 另请参阅 [Chart Output 节点](../nodes/chart-output-node.md)、[Analytics](../tabs/analytics-tab.md) 和 [Execution History](./execution-history.md)。
 

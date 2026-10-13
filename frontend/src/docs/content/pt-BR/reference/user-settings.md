@@ -4,7 +4,7 @@ A caixa de diálogo Configurações permite gerenciar seu perfil, definir instru
 
 ## Abrindo a Caixa de Diálogo
 
-Clique em **seu avatar e nome** no canto superior direito do cabeçalho. A caixa de diálogo abre com estas abas: **Perfil**, **Segurança**, **Voz**, **Padrões de IA** e **Observabilidade**. Administradores de instância também veem uma aba **SSO**.
+Clique em **seu avatar e nome** no canto superior direito do cabeçalho. A caixa de diálogo abre com estas abas: **Perfil**, **Segurança**, **Voz**, **Padrões de IA** e **Observabilidade**. Administradores de instância também veem as abas **SSO**, **Heym Work** e **Instances**.
 
 ## Aba Perfil
 
@@ -100,6 +100,10 @@ A aba Observability exibe o status somente leitura do [OpenTelemetry Tracing](./
 ## Aba SSO
 
 Visível apenas para administradores da instância — as contas listadas em `HEYM_ADMIN_EMAILS`. Esta aba conecta o Heym a um provedor OpenID Connect externo para que as pessoas façam login com as contas que já possuem. Insira uma URL de issuer e as credenciais do client, copie a redirect URI somente leitura para o seu provedor e execute **Test connection** antes de habilitá-lo. O login por senha pode ser desativado aqui depois que o teste passar. Consulte [Single Sign-On](./sso.md) para a configuração completa.
+
+## Aba Heym Work
+
+Os administradores de instância conectam aqui o [Heym Work](./heym-work.md), a interface para equipes de negócios: seu endereço, uma chave de integração exibida uma única vez e a chave **Enable Heym Work**. A aba também mostra quando o Heym Work fez check-in pela última vez, sua versão e o status da licença. Veja [Conectando o Heym Work](./heym-work.md#connecting-heym-work).
 
 ## Aba Instances
 

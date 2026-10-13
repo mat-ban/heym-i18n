@@ -4,7 +4,7 @@ Asetusvalintaikkunan avulla voit hallita profiiliasi, määrittää pysyviä tek
 
 ## Valintaikkunan avaaminen
 
-Napsauta **avatariasi ja nimeäsi** otsikon oikeassa yläkulmassa. Valintaikkuna avautuu seuraavilla välilehdillä: **Profiili**, **Turvallisuus**, **Ääni**, **Tekoälyn oletukset** ja **Seuranta**. Instanssin ylläpitäjät näkevät myös **SSO**-välilehden.
+Napsauta **avatariasi ja nimeäsi** otsikon oikeassa yläkulmassa. Valintaikkuna avautuu seuraavilla välilehdillä: **Profiili**, **Turvallisuus**, **Ääni**, **Tekoälyn oletukset** ja **Seuranta**. Instanssin ylläpitäjät näkevät myös **SSO**-, **Heym Work**- ja **Instanssit**-välilehdet.
 
 ## Profiili-välilehti
 
@@ -100,6 +100,10 @@ Observability-välilehti näyttää tämän instanssin [OpenTelemetry Tracing](.
 ## SSO-välilehti
 
 Näkyy vain instanssin ylläpitäjille — `HEYM_ADMIN_EMAILS` -listalla mainituille tileille. Tämä välilehti yhdistää Heymin ulkoiseen OpenID Connect -palveluntarjoajaan, jolloin käyttäjät kirjautuvat sisään jo olemassa olevilla tileillään. Syötä myöntäjän URL ja asiakastunnistetiedot, kopioi vain luku -muotoinen uudelleenohjausosoite palveluntarjoajaasi ja suorita **Testaa yhteys** ennen sen käyttöönottoa. Salasanalla kirjautuminen voidaan sammuttaa täältä, kun testi onnistuu. Katso [Kertakirjautuminen](./sso.md) täydellisestä asennusoppaasta.
+
+## Heym Work -välilehti
+
+Instanssin ylläpitäjät yhdistävät täällä [Heym Workin](./heym-work.md), liiketoimintatiimien käyttöliittymän: sen osoitteen, kerran näytettävän integraatioavaimen sekä **Enable Heym Work** -kytkimen. Välilehti näyttää myös, milloin Heym Work on viimeksi ilmoittautunut, sen version ja lisenssin tilan. Katso [Heym Workin yhdistäminen](./heym-work.md#connecting-heym-work).
 
 ## Instanssien välilehti
 

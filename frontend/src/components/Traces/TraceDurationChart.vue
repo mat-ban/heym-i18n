@@ -3,6 +3,9 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { ArrowRight, MessageSquare, Split, User, Wrench } from "lucide-vue-next";
 
+import TraceSpanTooltip from "@/components/Traces/TraceSpanTooltip.vue";
+import { hasTokenTooltip } from "@/lib/traceSpans";
+
 import type { TraceSpan } from "@/types/trace";
 
 const props = defineProps<{
@@ -55,6 +58,10 @@ function activateSpan(span: TraceSpan, event: MouseEvent): void {
   if (span.stepId) emit("focusStep", span.stepId);
 }
 
+function linkHint(span: TraceSpan): string {
+  return span.traceId ? "Open this trace in a new tab" : "Jump to this step";
+}
+
 function formatDuration(ms: number): string {
   return `${ms.toFixed(2)}ms`;
 }
@@ -92,32 +99,41 @@ const iconComponent = (icon: TraceSpan["icon"]) => {
       >
         <!-- No nesting indent: every row's icon starts at the same edge, which is
              what makes the column scannable top to bottom. -->
-        <div class="flex min-w-0 max-w-[14rem] items-center gap-2 md:max-w-[24rem]">
-          <component
-            :is="iconComponent(span.icon)"
-            class="w-4 h-4 shrink-0 text-muted-foreground"
-          />
-          <button
-            v-if="isLinked(span)"
-            type="button"
-            class="min-w-0 truncate text-left text-muted-foreground hover:text-foreground hover:underline"
-            :title="span.traceId ? 'Open this trace in a new tab' : 'Jump to this step'"
-            :data-testid="`duration-span-link-${span.id}`"
-            @click="activateSpan(span, $event)"
+        <!-- A row with tokens to show opens its card from the label and from the line. -->
+        <TraceSpanTooltip
+          :span="span"
+          :hint="isLinked(span) ? linkHint(span) : null"
+        >
+          <div
+            class="flex min-w-0 max-w-[14rem] items-center gap-2 md:max-w-[24rem]"
+            :data-testid="`duration-span-row-${span.id}`"
           >
-            {{ span.label }}
-          </button><span
-            v-else
-            class="min-w-0 truncate text-muted-foreground"
-            :title="span.label"
-          >
-            {{ span.label }}
-          </span>
-        </div>
+            <component
+              :is="iconComponent(span.icon)"
+              class="w-4 h-4 shrink-0 text-muted-foreground"
+            />
+            <button
+              v-if="isLinked(span)"
+              type="button"
+              class="min-w-0 truncate text-left text-muted-foreground hover:text-foreground hover:underline"
+              :title="hasTokenTooltip(span) ? undefined : linkHint(span)"
+              :data-testid="`duration-span-link-${span.id}`"
+              @click="activateSpan(span, $event)"
+            >
+              {{ span.label }}
+            </button><span
+              v-else
+              class="min-w-0 truncate text-muted-foreground"
+              :title="hasTokenTooltip(span) ? undefined : span.label"
+            >
+              {{ span.label }}
+            </span>
+          </div>
+        </TraceSpanTooltip>
         <span class="text-right text-muted-foreground tabular-nums">
           {{ formatDuration(span.durationMs) }}
         </span>
-        <div class="min-w-0">
+        <div class="relative min-w-0">
           <div
             class="h-2 rounded bg-primary/20 overflow-hidden"
             role="presentation"
@@ -130,6 +146,24 @@ const iconComponent = (icon: TraceSpan["icon"]) => {
               }"
             />
           </div>
+          <!-- Laid over the line, taller and never narrower than a fingertip of it, so a
+               12 ms sliver is as easy to hover as a bar that spans the track. The line
+               itself does nothing on click, so its card carries no click hint. -->
+          <TraceSpanTooltip
+            v-if="hasTokenTooltip(span)"
+            :span="span"
+            :hint="null"
+            follow-pointer
+          >
+            <div
+              class="absolute -top-1.5 -bottom-1.5 min-w-[14px]"
+              :style="{
+                left: `${barOffsetPercent(span)}%`,
+                width: `${barWidthPercent(span)}%`,
+              }"
+              :data-testid="`duration-span-bar-${span.id}`"
+            />
+          </TraceSpanTooltip>
         </div>
       </template>
     </div>

@@ -29,6 +29,10 @@ import {
   type ChartOutputExpressionField,
   type ChartOutputExpressionFieldKey,
 } from "@/lib/chartOutputExpressionFields";
+import {
+  getDecisionExpressionFields,
+  type DecisionExpressionField,
+} from "@/lib/decisionExpressionFields";
 import { getGitHubExpressionFields, type GitHubExpressionFieldKey } from "@/lib/githubExpressionFields";
 import { getJiraExpressionFields, type JiraExpressionFieldKey } from "@/lib/jiraExpressionFields";
 import { getLinearExpressionFields, type LinearExpressionFieldKey } from "@/lib/linearExpressionFields";
@@ -130,6 +134,8 @@ export function usePropertiesPanelController() {
     discord: "node-discord",
     discordTrigger: "node-discord",
     imapTrigger: "node-email",
+    googleDriveTrigger: "node-google-drive",
+    googleSheetsTrigger: "node-google-sheets",
     heym: "node-heym",
     heymTrigger: "node-heym",
     sendEmail: "node-email",
@@ -196,6 +202,8 @@ export function usePropertiesPanelController() {
     discord: "discord-node",
     discordTrigger: "discord-trigger-node",
     imapTrigger: "imap-trigger-node",
+    googleDriveTrigger: "google-drive-trigger-node",
+    googleSheetsTrigger: "google-sheets-trigger-node",
     heym: "heym-node",
     heymTrigger: "heym-trigger-node",
     sendEmail: "send-email-node",
@@ -624,15 +632,6 @@ export function usePropertiesPanelController() {
 
   const ragExpressionInputRefs = ref<Map<RagExpressionFieldKey, ExpandableFieldRef>>(new Map());
   const currentRagExpressionFieldIndex = ref(0);
-  /**
-   * Decision question fields are created and removed by the user, so their keys are
-   * built from row positions rather than a fixed union: "state", "customBody",
-   * "q:0:instructions", "q:0:option:1", "q:2:level:0".
-   */
-  interface DecisionExpressionField {
-    key: string;
-    label: string;
-  }
 
   const decisionExpressionInputRefs = ref<Map<string, ExpandableFieldRef>>(new Map());
   const currentDecisionExpressionFieldIndex = ref(0);
@@ -708,6 +707,7 @@ export function usePropertiesPanelController() {
   const githubMentionedExpressionInputRef = ref<ExpandableFieldRef | null>(null);
   const githubLabelsFilterExpressionInputRef = ref<ExpandableFieldRef | null>(null);
   const githubSinceExpressionInputRef = ref<ExpandableFieldRef | null>(null);
+  const githubCursorExpressionInputRef = ref<ExpandableFieldRef | null>(null);
   const githubTitleExpressionInputRef = ref<ExpandableFieldRef | null>(null);
   const githubBodyExpressionInputRef = ref<ExpandableFieldRef | null>(null);
   const githubCommentBodyExpressionInputRef = ref<ExpandableFieldRef | null>(null);
@@ -1027,7 +1027,11 @@ export function usePropertiesPanelController() {
 
       if (type === "slack") {
         try {
-          slackCredentials.value = await credentialsApi.listByType("slack");
+          const [webhooks, bots] = await Promise.all([
+            credentialsApi.listByType("slack"),
+            credentialsApi.listByType("slack_bot"),
+          ]);
+          slackCredentials.value = [...bots, ...webhooks];
         } catch {
           slackCredentials.value = [];
         }
@@ -1153,7 +1157,7 @@ export function usePropertiesPanelController() {
         }
       }
 
-      if (type === "googleSheets") {
+      if (type === "googleSheets" || type === "googleSheetsTrigger") {
         try {
           googleSheetsCredentials.value = await credentialsApi.listByType("google_sheets");
         } catch {
@@ -1161,7 +1165,7 @@ export function usePropertiesPanelController() {
         }
       }
 
-      if (type === "googleDrive") {
+      if (type === "googleDrive" || type === "googleDriveTrigger") {
         try {
           googleDriveCredentials.value = await credentialsApi.listByType("google_drive");
         } catch {
@@ -1227,7 +1231,11 @@ export function usePropertiesPanelController() {
 
       if (type === "slackTrigger") {
         try {
-          slackTriggerCredentials.value = await credentialsApi.listByType("slack_trigger");
+          const [secrets, bots] = await Promise.all([
+            credentialsApi.listByType("slack_trigger"),
+            credentialsApi.listByType("slack_bot"),
+          ]);
+          slackTriggerCredentials.value = [...secrets, ...bots];
         } catch {
           slackTriggerCredentials.value = [];
         }
@@ -4986,6 +4994,8 @@ export function usePropertiesPanelController() {
         return githubLabelsFilterExpressionInputRef.value;
       case "githubSince":
         return githubSinceExpressionInputRef.value;
+      case "githubCursor":
+        return githubCursorExpressionInputRef.value;
       case "githubTitle":
         return githubTitleExpressionInputRef.value;
       case "githubBody":
@@ -5069,6 +5079,7 @@ export function usePropertiesPanelController() {
     githubMentionedExpressionInputRef.value?.closeExpandDialog();
     githubLabelsFilterExpressionInputRef.value?.closeExpandDialog();
     githubSinceExpressionInputRef.value?.closeExpandDialog();
+    githubCursorExpressionInputRef.value?.closeExpandDialog();
     githubTitleExpressionInputRef.value?.closeExpandDialog();
     githubBodyExpressionInputRef.value?.closeExpandDialog();
     githubCommentBodyExpressionInputRef.value?.closeExpandDialog();
@@ -5956,34 +5967,7 @@ export function usePropertiesPanelController() {
     if (!n || n.type !== "decision") {
       return [];
     }
-    if (n.data.customBodyEnabled) {
-      return [{ key: "customBody", label: "Request Body" }];
-    }
-    const fields: DecisionExpressionField[] = [{ key: "state", label: "State" }];
-    (n.data.questions ?? []).forEach((question, index) => {
-      const name = (question.id || "").trim() || `question ${index + 1}`;
-      fields.push({ key: `q:${index}:instructions`, label: `${name} - instructions` });
-      if (question.type === "noul") {
-        fields.push({ key: `q:${index}:criteriaTrue`, label: `${name} - yes means` });
-        fields.push({ key: `q:${index}:criteriaFalse`, label: `${name} - no means` });
-      } else if (question.type === "choice") {
-        (question.options ?? []).forEach((option, optionIndex) => {
-          const optionName = (option.key || "").trim() || `option ${optionIndex + 1}`;
-          fields.push({
-            key: `q:${index}:option:${optionIndex}`,
-            label: `${name} - ${optionName}`,
-          });
-        });
-      } else {
-        (question.levels ?? []).forEach((_level, levelIndex) => {
-          fields.push({
-            key: `q:${index}:level:${levelIndex}`,
-            label: `${name} - level ${levelIndex}`,
-          });
-        });
-      }
-    });
-    return fields;
+    return getDecisionExpressionFields(n.data);
   });
 
   const decisionExpressionFieldCount = computed(
@@ -6605,10 +6589,15 @@ export function usePropertiesPanelController() {
     return githubPerPageOperations.has(operation || "");
   }
 
+  /** Every paged list operation takes a continuation cursor next to Per Page. */
+  function usesGitHubCursor(operation: string | undefined): boolean {
+    return githubPerPageOperations.has(operation || "");
+  }
+
   const googleDriveCredentialOptions = computed(() => {
     const node = selectedNode.value;
     const selectedCredentialId =
-      node && node.type === "googleDrive"
+      node && (node.type === "googleDrive" || node.type === "googleDriveTrigger")
         ? (node.data.credentialId as string | undefined)
         : undefined;
 
@@ -6623,7 +6612,7 @@ export function usePropertiesPanelController() {
   const googleSheetsCredentialOptions = computed(() => {
     const node = selectedNode.value;
     const selectedCredentialId =
-      node && node.type === "googleSheets"
+      node && (node.type === "googleSheets" || node.type === "googleSheetsTrigger")
         ? (node.data.credentialId as string | undefined)
         : undefined;
 
@@ -7447,6 +7436,8 @@ export function usePropertiesPanelController() {
     { value: "low", label: "Low" },
     { value: "medium", label: "Medium" },
     { value: "high", label: "High" },
+    { value: "xhigh", label: "Extra high" },
+    { value: "max", label: "Max" },
   ];
 
   const outputTypeOptions = [
@@ -9325,6 +9316,7 @@ export function usePropertiesPanelController() {
     jsonFormatError,
     extraBodyFormatError,
     slackTriggerCredentials,
+    slackCredentials,
     discordTriggerCredentials,
     loadingNotionDataSources,
     notionDataSourcesError,
@@ -9396,6 +9388,7 @@ export function usePropertiesPanelController() {
     githubMentionedExpressionInputRef,
     githubLabelsFilterExpressionInputRef,
     githubSinceExpressionInputRef,
+    githubCursorExpressionInputRef,
     githubTitleExpressionInputRef,
     githubBodyExpressionInputRef,
     githubCommentBodyExpressionInputRef,
@@ -9717,6 +9710,7 @@ export function usePropertiesPanelController() {
     isGitHubRepoRequired,
     isGitHubOwnerRequired,
     usesGitHubPerPage,
+    usesGitHubCursor,
     googleDriveCredentialOptions,
     googleDriveOperationOptions,
     googleDriveExportFormatOptions,

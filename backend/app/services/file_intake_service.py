@@ -1,7 +1,6 @@
 """Mint, validate, and audit single-use file-upload capability slots."""
 
 import fnmatch
-import hashlib
 import secrets
 import uuid
 from dataclasses import dataclass
@@ -11,6 +10,7 @@ from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import FileUploadAudit, FileUploadSlot
+from app.services.secret_tokens import hash_secret
 
 DEFAULT_TTL_MINUTES = 60
 MIN_TTL_MINUTES = 1
@@ -34,10 +34,6 @@ class SlotConfig:
 def generate_token() -> str:
     """Return a high-entropy URL-safe capability token (the secret IS the URL)."""
     return secrets.token_urlsafe(48)
-
-
-def hash_token(token: str) -> str:
-    return hashlib.sha256(token.encode()).hexdigest()
 
 
 def find_file_upload_trigger(nodes: list[dict]) -> dict | None:
@@ -115,7 +111,7 @@ async def mint_slot(
     token = generate_token()
     slot = FileUploadSlot(
         workflow_id=workflow_id,
-        token_hash=hash_token(token),
+        token_hash=hash_secret(token),
         status="pending",
         max_size_bytes=cfg.max_size_bytes,
         allowed_mime=cfg.allowed_mime,

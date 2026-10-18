@@ -4,12 +4,13 @@ import uuid
 from unittest.mock import AsyncMock
 
 from app.services import file_intake_service as svc
+from app.services.secret_tokens import hash_secret
 
 
 class TokenHashingTests(unittest.TestCase):
-    def test_hash_token_is_sha256_hex(self) -> None:
+    def test_hash_secret_matches_legacy_sha256_hex(self) -> None:
         token = "abc123"
-        self.assertEqual(svc.hash_token(token), hashlib.sha256(token.encode()).hexdigest())
+        self.assertEqual(hash_secret(token), hashlib.sha256(token.encode()).hexdigest())
 
     def test_generate_token_is_high_entropy(self) -> None:
         token = svc.generate_token()

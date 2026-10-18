@@ -1,4 +1,3 @@
-import hashlib
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
@@ -10,6 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.services.secret_tokens import hash_secret
 
 
 def hash_password(password: str) -> str:
@@ -137,18 +137,13 @@ def read_refresh_claims(token: str) -> TokenClaims | None:
     return _read_claims(token, "refresh")
 
 
-def _hash_token(token: str) -> str:
-    """Return the SHA-256 hex digest of a token string."""
-    return hashlib.sha256(token.encode()).hexdigest()
-
-
 async def store_refresh_token(db: AsyncSession, token: str, user_id: uuid.UUID) -> None:
     """Persist a hashed refresh token so it can be revoked on rotation."""
     from app.db.models import RefreshToken  # local import to avoid circular deps
 
     expires_at = datetime.now(timezone.utc) + timedelta(days=settings.jwt_refresh_token_expire_days)
     record = RefreshToken(
-        token_hash=_hash_token(token),
+        token_hash=hash_secret(token),
         user_id=user_id,
         expires_at=expires_at,
         revoked=False,
@@ -161,7 +156,7 @@ async def revoke_refresh_token(db: AsyncSession, token: str) -> None:
     """Mark a single refresh token as revoked (best-effort, ignores missing tokens)."""
     from app.db.models import RefreshToken  # local import to avoid circular deps
 
-    token_hash = _hash_token(token)
+    token_hash = hash_secret(token)
     result = await db.execute(
         select(RefreshToken).where(
             RefreshToken.token_hash == token_hash,
@@ -188,7 +183,7 @@ async def rotate_refresh_token(
     """
     from app.db.models import RefreshToken  # local import to avoid circular deps
 
-    old_hash = _hash_token(old_token)
+    old_hash = hash_secret(old_token)
     result = await db.execute(
         select(RefreshToken)
         .where(

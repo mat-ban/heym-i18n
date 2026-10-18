@@ -9,6 +9,7 @@ export type GitHubExpressionFieldKey =
   | "githubMentioned"
   | "githubLabelsFilter"
   | "githubSince"
+  | "githubCursor"
   | "githubTitle"
   | "githubBody"
   | "githubCommentBody"
@@ -43,6 +44,21 @@ const githubRepoOptionalOperations = new Set([
 ]);
 
 const githubOwnerOptionalOperations = new Set(["getUserIssues", "inviteUser"]);
+
+/** List operations that return one page and accept a continuation cursor. */
+const githubCursorOperations = new Set([
+  "listIssues",
+  "getRepositoryIssues",
+  "getUserIssues",
+  "listPullRequests",
+  "getRepositoryPullRequests",
+  "listReviews",
+  "listReleases",
+  "listWorkflows",
+  "listOrganizationRepositories",
+  "listUserRepositories",
+  "getUserRepositories",
+]);
 
 function isGitHubRepoRequired(operation: string): boolean {
   return !githubRepoOptionalOperations.has(operation);
@@ -87,6 +103,14 @@ function appendIssueListFilters(
 /** Returns ordered expression-evaluate dialog slots for the given GitHub operation. */
 export function getGitHubExpressionFields(operation: string): GitHubExpressionField[] {
   const op = operation || "getRepository";
+  const fields = getOperationExpressionFields(op);
+  if (githubCursorOperations.has(op)) {
+    fields.push({ key: "githubCursor", label: "Cursor" });
+  }
+  return fields;
+}
+
+function getOperationExpressionFields(op: string): GitHubExpressionField[] {
   const fields: GitHubExpressionField[] = [];
 
   if (op === "inviteUser") {

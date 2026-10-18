@@ -116,6 +116,7 @@ from app.services.hitl_service import (
     refresh_hitl_request_after_lost_claim,
     resume_hitl_request_in_background,
 )
+from app.services.llm_chat_bridge import completion_caller, gateway_protocol, skip_compression
 from app.services.llm_provider import is_reasoning_model
 from app.services.llm_trace import LLMTraceContext, record_llm_trace
 from app.services.model_router import (
@@ -160,7 +161,7 @@ async def _await_chat_completions(
     """Run a blocking OpenAI chat completion off the event loop; honour cancel_event."""
     if cancel_event is not None and cancel_event.is_set():
         return None
-    response = await asyncio.to_thread(client.chat.completions.create, **kwargs)
+    response = await asyncio.to_thread(completion_caller(client, kwargs.get("model", "")), **kwargs)
     if cancel_event is not None and cancel_event.is_set():
         return None
     return response
@@ -1677,6 +1678,7 @@ def resolve_model_binding(
                         "decisionMs": decision.decision_ms,
                         "decisionTraceId": decision.trace_id,
                         "reused": decision.reused,
+                        **decision.token_fields(),
                     }
                 ],
             },
@@ -2771,6 +2773,10 @@ async def resolve_hitl_review_tool(
     await db.commit()
 
     asyncio.create_task(resume_hitl_request_in_background(hitl_request.id))
+    if isinstance((hitl_request.original_agent_output or {}).get("_slack"), dict):
+        from app.services.slack_interactions import sync_message_after_heym_decision
+
+        asyncio.create_task(sync_message_after_heym_decision(hitl_request.id))
     return json.dumps(
         {
             "status": "resolved",
@@ -3642,6 +3648,8 @@ async def stream_dashboard_chat(
 
     _context_limit = get_context_limit(model, client)
     _hard_compression_target = hard_compression_target_tokens(_context_limit)
+    # Compression summarises over Chat Completions, which these models refuse.
+    _compression_unavailable = gateway_protocol(client, model) is not None
 
     def _emit_context(used_tokens: int) -> str:
         if system_prompt_parts is None:
@@ -3816,6 +3824,9 @@ async def stream_dashboard_chat(
                 hard_compress_messages,
                 maybe_compress_messages,
             )
+
+            if _compression_unavailable:
+                hard_compress_messages = maybe_compress_messages = skip_compression
 
             messages_for_call = [{"role": "system", "content": system_prompt}] + messages_to_use
             compressed, comp_info = await maybe_compress_messages(
@@ -5318,6 +5329,7 @@ async def stream_dashboard_chat(
                         status=_chat_tool_lifecycle_status(name, result),
                     )
                 tool_steps = run_steps[steps_before_tool:]
+                content_for_llm = _sanitize_tool_result_for_llm(result, name)
                 trace_tools.append(
                     {
                         "tool_call_id": tc.id,
@@ -5328,9 +5340,11 @@ async def stream_dashboard_chat(
                         "elapsed_ms": float(tool_steps[-1]["execution_time_ms"])
                         if tool_steps
                         else round((time.time() - tool_started) * 1000, 2),
+                        # Size only: the Traces view splits the next prompt's growth between
+                        # tools by how much each returned, without keeping the result itself.
+                        "result_chars": len(content_for_llm),
                     }
                 )
-                content_for_llm = _sanitize_tool_result_for_llm(result, name)
                 messages_to_use.append(
                     {"role": "tool", "content": content_for_llm, "tool_call_id": tc.id}
                 )
@@ -5393,7 +5407,7 @@ async def stream_llm_response(
     start_time = time.time()
 
     try:
-        stream = client.chat.completions.create(**kwargs)
+        stream = completion_caller(client, model)(**kwargs)
 
         for chunk in stream:
             if chunk.choices and chunk.choices[0].delta.content:
@@ -6035,7 +6049,7 @@ async def fix_transcription(
     if not is_reasoning:
         kwargs["temperature"] = 0.3
 
-    response = client.chat.completions.create(**kwargs)
+    response = completion_caller(client, model)(**kwargs)
     fixed_text = response.choices[0].message.content or request.text
 
     return FixTranscriptionResponse(fixed_text=fixed_text.strip())

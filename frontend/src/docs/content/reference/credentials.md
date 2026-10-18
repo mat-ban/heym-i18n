@@ -25,13 +25,15 @@ Credentials store API keys and secrets used by workflow nodes. You add them in t
 | [Discord](../nodes/discord-node.md) | Discord | Incoming webhook URL |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Discord Trigger (Public Key) | Application public key for signature verification |
 | [RAG](../nodes/rag-node.md) | RAG: Qdrant + OpenAI, RAG: Psql + OpenAI, RAG: Custom Embeddings | Vector store connection (external Qdrant, or Heym's own Postgres via pgvector), with OpenAI or any OpenAI-compatible embedding endpoint |
-| [Slack](../nodes/slack-node.md) | Slack | Webhook or API token |
+| [Slack](../nodes/slack-node.md) | Slack Webhook, Slack Bot (Token) | Incoming webhook URL, or a bot token and signing secret for every operation |
 | [IMAP Trigger](../nodes/imap-trigger-node.md) | IMAP | Inbound mailbox connection |
 | [Send Email](../nodes/send-email-node.md) | SMTP | Mail server |
 | [Redis](../nodes/redis-node.md) | Redis | Connection |
 | [Grist](../nodes/grist-node.md) | Grist | API key + server URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 consent |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 consent |
+| [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md) | Google Sheets (OAuth2) | Same credential as the Google Sheets node |
+| [Google Drive Trigger](../nodes/google-drive-trigger-node.md) | Google Drive (OAuth2) | Same credential as the Google Drive node |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 consent |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Project URL + API key (+ optional default schema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + username/password + database (+ secure) |
@@ -64,7 +66,7 @@ OpenCode Go credentials are listed there too, but marked **"usage unavailable"**
 
 Some nodes allow expressions for auth. Use [Expression DSL](./expression-dsl.md) with `$credentials.CredentialName` to reference a credential's resolved secret inside an expression. For the header line each credential type needs in an HTTP request, see [HTTP › Authenticating with Credentials](../nodes/http-node.md#authenticating-with-credentials).
 
-Codex credentials are intentionally excluded from `$credentials`. Whether you sign in with ChatGPT (subscription, no per-token API cost) or paste a Codex `access_token`, the tokens are only passed to the local Codex runner process. ChatGPT sign-in tokens are refreshed automatically as they expire.
+Codex credentials are intentionally excluded from `$credentials`. Whether you sign in with ChatGPT (subscription, no per-token API cost) or paste a Codex `access_token`, the tokens are only passed to the local Codex runner process. ChatGPT sign-in tokens are refreshed automatically as they expire. ChatGPT sign-in uses a short code you enter on OpenAI's page, and Heym finishes on its own once you approve. See [Signing in with ChatGPT](../nodes/codex-node.md#signing-in-with-chatgpt).
 
 Jira credentials are also excluded from `$credentials`. The [Jira node](../nodes/jira-node.md) loads the credential by `credentialId` at run time. For custom Jira REST calls not covered by the Jira node, use the [HTTP node](../nodes/http-node.md) with Jira Basic Auth (`email:api_token` for Jira Cloud or `username:password` for Data Center / Server), for example `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. You can also use a [Header](../nodes/http-node.md) credential with `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server personal access tokens and Bearer auth are not supported by the Jira credential yet.
 
@@ -76,6 +78,7 @@ Jira credentials are also excluded from `$credentials`. The [Jira node](../nodes
 | Notion | Internal `api_token` or OAuth `access_token` (Bearer token for Notion API calls) |
 | Sentry | Sentry auth token |
 | Discord / Slack | Webhook URL |
+| Slack Bot | Bot token (`xoxb-…`) |
 
 Example:
 
@@ -88,7 +91,7 @@ Use the Notion **node** for native database, page, and block operations. Use `$c
 
 ## Creating Credentials from Chat
 
-The [AI Assistant](./ai-assistant.md#credentials), the [Chat tab](../tabs/chat-tab.md) and [Chat with Heym](./chat-with-heym.md) can create a credential when a workflow needs one, or whenever you ask for one. The assistant suggests the type and a name, and the regular credential form opens in the conversation. Ask to update a credential you own and the same form opens on it, with its secrets masked. The assistant only sees the name and type. `heym_chat` over [MCP](../tabs/mcp-tab.md) cannot create, update or choose credentials.
+The [AI Assistant](./ai-assistant.md#credentials), the [Chat tab](../tabs/chat-tab.md) and [Chat with Heym](./chat-with-heym.md) can create a credential when a workflow needs one, or whenever you ask for one. The assistant suggests the type and a name, and the regular credential form opens in the conversation. Ask to update a credential you own and the same form opens on it, with its secrets masked. The assistant only sees the name and type. `heym_chat` over [MCP](../tabs/mcp-tab.md#credentials) asks the same questions as text and opens the form on a Heym page in your browser instead, so the value never passes through the MCP client.
 
 ## Related
 

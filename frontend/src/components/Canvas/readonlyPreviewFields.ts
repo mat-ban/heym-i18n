@@ -12,12 +12,10 @@ const SKIP_FIELDS = new Set([
   "label",
   "active",
   "status",
-  "tools",
-  "mcpConnections",
-  "skills",
-  "subAgentLabels",
   "isOrchestrator",
   "isSubAgent",
+  "previewAttachments",
+  "subWorkflowNames",
   "playwrightSteps",
   "playwrightAuthFallbackSteps",
   "cases",
@@ -127,7 +125,20 @@ const FIELD_LABELS: Record<string, string> = {
   gsOperation: "Google Sheets Operation",
   mappings: "Mappings",
   inputFields: "Input Fields",
+  skills: "Skills",
+  tools: "Tools",
+  mcpConnections: "MCP Connections",
+  subAgentLabels: "Sub-Agents",
+  subWorkflowIds: "Sub-Workflows",
 };
+
+const AGENT_ATTACHMENT_FIELDS = [
+  "skills",
+  "tools",
+  "subAgentLabels",
+  "mcpConnections",
+  "subWorkflowIds",
+] as const;
 
 interface MappingPreviewRow {
   key?: unknown;
@@ -137,6 +148,42 @@ interface MappingPreviewRow {
 interface InputFieldPreviewRow {
   key?: unknown;
   defaultValue?: unknown;
+}
+
+function isAgentAttachmentField(key: string): boolean {
+  return (AGENT_ATTACHMENT_FIELDS as readonly string[]).includes(key);
+}
+
+function attachmentNames(
+  key: string,
+  value: unknown,
+  data: Record<string, unknown>,
+): string[] {
+  if (!Array.isArray(value)) return [];
+  if (key === "subWorkflowIds") {
+    const names = data.subWorkflowNames;
+    const lookup = names && typeof names === "object" && !Array.isArray(names)
+      ? names as Record<string, unknown>
+      : {};
+    return value.flatMap((id) => {
+      const raw = lookup[String(id)];
+      const name = typeof raw === "string" && raw.trim() ? raw.trim() : String(id).trim();
+      return name ? [name] : [];
+    });
+  }
+  return value.flatMap((item) => {
+    if (typeof item === "string") {
+      const name = item.trim();
+      return name ? [name] : [];
+    }
+    if (!item || typeof item !== "object") return [];
+    const record = item as Record<string, unknown>;
+    for (const nameKey of ["name", "label", "url", "command"]) {
+      const name = record[nameKey];
+      if (typeof name === "string" && name.trim()) return [name.trim()];
+    }
+    return [];
+  });
 }
 
 export function getReadonlyPreviewFields(
@@ -150,20 +197,45 @@ export function getReadonlyPreviewFields(
       if (typeof value === "object" && !Array.isArray(value)) return false;
       return true;
     })
-    .map(([key, value]) => {
+    .flatMap(([key, value]): ReadonlyPreviewDisplayField[] => {
+      if (isAgentAttachmentField(key)) {
+        const names = attachmentNames(key, value, data);
+        if (names.length === 0) return [];
+        const textValue = names.join("\n");
+        return [{
+          key,
+          label: FIELD_LABELS[key] ?? formatKey(key),
+          value: textValue,
+          kind: names.length > 1 || textValue.length > 80 ? "textarea" : "input",
+        }];
+      }
       const textValue = formatPreviewValue(key, value);
       const label = FIELD_LABELS[key] ?? formatKey(key);
       if (typeof value === "boolean") {
-        return { key, label, value: textValue, kind: "boolean", isTrue: value };
+        return [{ key, label, value: textValue, kind: "boolean", isTrue: value }];
       }
       if (TEXTAREA_FIELDS.has(key) || textValue.length > 80) {
-        return { key, label, value: textValue, kind: "textarea" };
+        return [{ key, label, value: textValue, kind: "textarea" }];
       }
       if (SELECT_FIELDS.has(key)) {
-        return { key, label, value: textValue, kind: "select" };
+        return [{ key, label, value: textValue, kind: "select" }];
       }
-      return { key, label, value: textValue, kind: "input" };
+      return [{ key, label, value: textValue, kind: "input" }];
     });
+}
+
+/** Names of an agent's skills, tools, sub-agents, MCP servers, and sub-workflows. */
+export function summarizeReadonlyAgentAttachments(data: object): string {
+  const byKey = new Map(
+    getReadonlyPreviewFields(data as Record<string, unknown>).map((field) => [
+      field.key,
+      field.value.replace(/\n/g, ", "),
+    ]),
+  );
+  return AGENT_ATTACHMENT_FIELDS
+    .map((key) => byKey.get(key))
+    .filter((value): value is string => !!value)
+    .join(" · ");
 }
 
 function formatPreviewValue(key: string, value: unknown): string {

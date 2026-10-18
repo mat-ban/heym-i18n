@@ -10,6 +10,7 @@ from fastapi import HTTPException
 
 from app.api.file_intake import upload_to_slot
 from app.services import file_intake_service
+from app.services.secret_tokens import hash_secret
 
 
 def _make_request(headers: dict[str, str] | None = None) -> MagicMock:
@@ -368,5 +369,5 @@ class SlotStatusTests(unittest.IsolatedAsyncioTestCase):
 class TokenNeverStoredPlaintextTest(unittest.TestCase):
     def test_slot_stores_only_hash(self) -> None:
         token = file_intake_service.generate_token()
-        self.assertNotEqual(file_intake_service.hash_token(token), token)
-        self.assertEqual(len(file_intake_service.hash_token(token)), 64)
+        self.assertNotEqual(hash_secret(token), token)
+        self.assertEqual(len(hash_secret(token)), 64)

@@ -14,6 +14,7 @@ export type CredentialType =
   | "telegram"
   | "slack"
   | "slack_trigger"
+  | "slack_bot"
   | "imap"
   | "smtp"
   | "redis"
@@ -230,6 +231,11 @@ export interface CredentialConfigSlackTrigger {
   signing_secret: string;
 }
 
+export interface CredentialConfigSlackBot {
+  bot_token: string;
+  signing_secret?: string;
+}
+
 export interface CredentialConfigImap {
   imap_host: string;
   imap_port: string;
@@ -367,6 +373,7 @@ export type CredentialConfig =
   | CredentialConfigDiscord
   | CredentialConfigDiscordTrigger
   | CredentialConfigSlackTrigger
+  | CredentialConfigSlackBot
   | CredentialConfigImap
   | CredentialConfigSmtp
   | CredentialConfigRedis
@@ -414,6 +421,23 @@ export interface CredentialTestRequest {
 export interface CredentialTestResponse {
   success: boolean;
   message: string;
+}
+
+/** A ChatGPT device code sign-in for a Codex credential: the user enters `user_code` at OpenAI. */
+export interface CodexDeviceSignInStart {
+  user_code: string;
+  verification_url: string;
+  /** Seconds between polls, as OpenAI asks. */
+  interval: number;
+  expires_at: string;
+  /** Sealed by the server; only `codexDevicePoll` can read it. */
+  state: string;
+}
+
+export interface CodexDeviceSignInPoll {
+  status: "pending" | "complete";
+  config: Record<string, unknown> | null;
+  account_id: string;
 }
 
 export interface SupabaseTablesResponse {
@@ -478,6 +502,7 @@ export const CREDENTIAL_TYPE_LABELS: Record<CredentialType, string> = {
   discord_trigger: "Discord Trigger (Public Key)",
   slack: "Slack Webhook",
   slack_trigger: "Slack Trigger (Signing Secret)",
+  slack_bot: "Slack Bot (Token)",
   imap: "IMAP Email Inbox",
   smtp: "SMTP Email",
   redis: "Redis",
@@ -521,6 +546,8 @@ export const CREDENTIAL_TYPE_DESCRIPTIONS: Record<CredentialType, string> = {
   discord_trigger: "Verify incoming Discord interaction webhooks using an application public key",
   slack: "Send messages via Slack incoming webhooks",
   slack_trigger: "Verify incoming Slack event webhooks using a signing secret",
+  slack_bot:
+    "Use a Slack app bot token for DMs, threads, approvals, buttons, forms and Slack Trigger",
   imap: "Poll an IMAP inbox for new emails and trigger workflows when mail arrives",
   smtp: "Send emails via SMTP server",
   redis: "Connect to Redis for caching and data storage",

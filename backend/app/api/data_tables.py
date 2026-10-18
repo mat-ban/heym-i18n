@@ -317,6 +317,25 @@ def _prepare_unique_checks(
     return unique_checks, col_type_map
 
 
+def _unique_lock_statement(table_id: str | uuid.UUID) -> tuple[str, dict]:
+    """Build the statement that serialises unique-constraint checks for one table.
+
+    Unique columns live in JSONB, so no database index can enforce them. A plain
+    check-then-insert lets two concurrent writers both see "no conflict" and both
+    insert. ``SELECT ... FOR UPDATE`` cannot help because a brand-new value has no
+    row to lock yet. A transaction-scoped advisory lock, taken before the check, makes
+    the second writer wait until the first commits, so its check then sees the row.
+
+    One lock per table (not per value) keeps bulk and CSV imports from exhausting
+    PostgreSQL's lock slots. ``pg_advisory_xact_lock`` is re-entrant within a session
+    and released automatically on commit or rollback.
+    """
+    return (
+        "SELECT pg_advisory_xact_lock(hashtextextended(:lock_key, 0))",
+        {"lock_key": f"data_table_unique:{table_id}"},
+    )
+
+
 def _build_unique_query(
     table_id: str | uuid.UUID,
     unique_checks: list[tuple[str, str]],
@@ -372,6 +391,11 @@ async def _check_unique_constraints(
     if not unique_checks:
         return []
 
+    # Must stay held until the caller's transaction commits (get_db does that after the
+    # handler returns), so the lock covers the INSERT/UPDATE that follows this check.
+    lock_sql, lock_params = _unique_lock_statement(table_id)
+    await db.execute(text(lock_sql), lock_params)
+
     sql, params = _build_unique_query(table_id, unique_checks, exclude_row_id)
     result = await db.execute(text(sql), params)
     existing_rows = result.fetchall()
@@ -392,6 +416,10 @@ def _check_unique_constraints_sync(
     unique_checks, col_type_map = _prepare_unique_checks(data, columns)
     if not unique_checks:
         return []
+
+    # Held until the node's db.commit(), so it covers the write that follows this check.
+    lock_sql, lock_params = _unique_lock_statement(table_id)
+    db.execute(text(lock_sql), lock_params)
 
     sql, params = _build_unique_query(table_id, unique_checks, exclude_row_id)
     result = db.execute(text(sql), params)

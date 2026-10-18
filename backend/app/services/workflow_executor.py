@@ -54,6 +54,7 @@ from app.services.execution_cancellation import (
     register_execution as _register_sub_execution,
 )
 from app.services.expression_evaluator import (
+    _fallback_find_expressions,
     _is_single_dollar_expression,
     should_resolve_embedded_dollar_refs_arithmetically,
 )
@@ -3463,8 +3464,9 @@ class WorkflowExecutor:
             return str(result) if result is not None else ""
 
         def replace_expr(expr: str) -> str:
-            result = self.resolve_expression(expr, inputs, node_id)
-            return str(result) if result is not None else expr
+            core = expr.rstrip(".")
+            result = self.resolve_expression(core, inputs, node_id)
+            return (str(result) if result is not None else core) + expr[len(core) :]
 
         return self._replace_expressions(template, replace_expr)
 
@@ -3780,6 +3782,7 @@ class WorkflowExecutor:
                             extra_body=extra_body,
                             use_responses_api=use_responses_api,
                             router=router,
+                            repair_json_output=json_output_enabled,
                         )
                     )
                 out = dict(result)
@@ -5792,6 +5795,7 @@ class WorkflowExecutor:
                             extra_body=agent_extra_body,
                             use_responses_api=agent_use_responses_api,
                             router=router,
+                            repair_json_output=json_output_enabled,
                         )
                     )
                 else:
@@ -5815,6 +5819,7 @@ class WorkflowExecutor:
                             extra_body=agent_extra_body,
                             use_responses_api=agent_use_responses_api,
                             router=router,
+                            repair_json_output=json_output_enabled,
                         )
                     )
             except Exception as e:
@@ -6992,43 +6997,7 @@ class WorkflowExecutor:
 
     def _find_expressions(self, text: str) -> list[tuple[int, int, str]]:
         """Find all $ expressions with proper nested parentheses handling."""
-        expressions = []
-        i = 0
-        while i < len(text):
-            if text[i] == "$" and (i + 1 < len(text)) and text[i + 1].isalpha():
-                start = i
-                i += 1
-                while i < len(text) and (text[i].isalnum() or text[i] in "_."):
-                    i += 1
-                while i < len(text):
-                    while i < len(text) and text[i] in "([":
-                        bracket = text[i]
-                        close_bracket = ")" if bracket == "(" else "]"
-                        depth = 1
-                        i += 1
-                        while i < len(text) and depth > 0:
-                            if text[i] == bracket:
-                                depth += 1
-                            elif text[i] == close_bracket:
-                                depth -= 1
-                            elif text[i] == '"' or text[i] == "'":
-                                quote = text[i]
-                                i += 1
-                                while i < len(text) and text[i] != quote:
-                                    if text[i] == "\\":
-                                        i += 1
-                                    i += 1
-                            i += 1
-                    if i < len(text) and text[i] == ".":
-                        i += 1
-                        while i < len(text) and (text[i].isalnum() or text[i] == "_"):
-                            i += 1
-                        continue
-                    break
-                expressions.append((start, i, text[start:i]))
-            else:
-                i += 1
-        return expressions
+        return _fallback_find_expressions(text)
 
     def _is_single_dollar_expression(self, template: str) -> bool:
         """True when the whole trimmed string is a single expression, not a text template."""
@@ -7259,12 +7228,14 @@ class WorkflowExecutor:
             return str(ternary_result) if ternary_result is not None else template
 
         def replace_expr(expr: str) -> str:
+            core = expr.rstrip(".")
             result = self.resolve_expression(
-                expr, inputs, current_node_id, preserve_type=preserve_type
+                core, inputs, current_node_id, preserve_type=preserve_type
             )
+            tail = expr[len(core) :]
             if preserve_type and isinstance(result, str):
-                return result
-            return str(result) if result is not None else expr
+                return result + tail
+            return (str(result) if result is not None else core) + tail
 
         return self._replace_expressions(template, replace_expr)
 
@@ -7544,6 +7515,12 @@ class WorkflowExecutor:
             usage = output.pop("_usage", None)
             if isinstance(usage, dict):
                 metadata["usage"] = usage
+            tool_calls = output.pop("_tool_calls", None)
+            if isinstance(tool_calls, list) and tool_calls:
+                metadata["tool_calls"] = tool_calls
+            json_repairs = output.pop("_json_repairs", None)
+            if isinstance(json_repairs, list) and json_repairs:
+                metadata["json_repairs"] = [str(item) for item in json_repairs]
 
             return NodeResult(
                 node_id=node_id,
@@ -8184,14 +8161,23 @@ def _collect_downstream_global_node_ids(
     return frozenset(downstream & all_globals)
 
 
+# Metadata that can quote model replies or tool arguments, which may carry a credential.
+_MASKED_METADATA_KEYS = ("tool_calls", "json_repairs")
+
+
 def _mask_node_result_row(
     row: dict, credentials_context: dict[str, str], *, keep_output: bool = False
 ) -> None:
-    """Mask a serialized node result's output and error in place."""
+    """Mask a serialized node result's output, error and quoting metadata in place."""
     if "output" in row and not keep_output:
         row["output"] = mask_sensitive_output(row["output"], credentials_context)
     if isinstance(row.get("error"), str):
         row["error"] = mask_sensitive_text(row["error"], credentials_context)
+    metadata = row.get("metadata")
+    if isinstance(metadata, dict):
+        quoted = {key: metadata[key] for key in _MASKED_METADATA_KEYS if key in metadata}
+        if quoted:
+            row["metadata"] = {**metadata, **mask_sensitive_output(quoted, credentials_context)}
 
 
 def mask_sub_workflow_result(

@@ -10,6 +10,7 @@ import BaseNode from "@/components/Nodes/BaseNode.vue";
 import InsertableEdge from "@/components/Canvas/InsertableEdge.vue";
 import ReadonlyCanvasViewportFitter from "@/components/Canvas/ReadonlyCanvasViewportFitter.vue";
 import StickyNoteNode from "@/components/Nodes/StickyNoteNode.vue";
+import { summarizeReadonlyAgentAttachments } from "@/components/Canvas/readonlyPreviewFields";
 import { buildSubAgentEdges, getSubAgentLabels } from "@/lib/agentCanvasLinks";
 import { resolveRenderedSourceHandle } from "@/lib/workflowEdges";
 
@@ -80,6 +81,9 @@ const vueFlowNodes = computed(() =>
         isSubAgent: !!isSubAgent,
         nodeId: node.id,
         nodeType: node.type,
+        ...(node.type === "agent"
+          ? { previewAttachments: summarizeReadonlyAgentAttachments(node.data) }
+          : {}),
       },
     };
   }),

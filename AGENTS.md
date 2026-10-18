@@ -101,13 +101,20 @@ Every model request to OpenCode must include a nonempty `x-opencode-session` hea
 - When adding a new LLM call path or changing a coding-agent SDK/CLI integration, verify that the outgoing OpenCode model requests carry this header with the correct session scope. Add regression coverage for stable follow-ups, distinct new conversations, and the nonempty fallback. Preserve the shared client's Heym User-Agent and SSRF protection.
 
 ### Chat build mode
-A dashboard chat turn that carries `allow_build` (Heym Work's Chat, MCP `heym_chat`) may save, test-run and finish workflows. Heym's own Chat tab does not set it. Heym's own Chat does set `allow_skill_write`, which offers only `apply_skill`: a skill zip or a file edit can create or update an agent skill, and the other build tools stay off.
+A dashboard chat turn that carries `allow_build` (Heym's Chat tab, Heym Work's Chat, MCP `heym_chat`) may save, test-run and finish workflows, and create or update agent skills with `apply_skill`. Build mode replaces the AI Builder tools (`create_workflow`, `edit_workflow`): the model writes the DSL itself. `allow_skill_write` alone offers only `apply_skill`, and the other build tools stay off.
 
 - `backend/app/services/chat_build_mode.py` holds the rules (test budget, finish, run report, instructions); `backend/app/api/chat_build.py` runs `save_workflow`, `run_workflow_test` and `finish` for one turn.
 - `MAX_BUILD_TEST_RUNS` equals the editor's `MAX_YOLO_ATTEMPTS` (`yoloProtocol.ts`); change both together.
 - Saves go through `backend/app/services/workflow_save.py`, like the editor's update endpoint, so Edit History, trigger resync and platform events stay identical. Do not write workflow versions anywhere else.
 - `finish` is refused until a test run of the latest save has passed. The Verified card depends on that; keep it.
 - Every model request and test run in a build turn carries the conversation id as its OpenCode session (`ChatBuildSession.llm_session_id`); see the OpenCode section above.
+
+### Credentials over MCP (URL elicitation)
+MCP `heym_chat` turns run with `CredentialPromptMode.ASK_AND_LINK`: credential questions travel as text, and credentials are created or updated only through `request_credential_form` (`backend/app/services/credential_setup.py`), which opens Heym's form at `/credentials/setup/<id>`. Chat tab, Chat with Heym and Heym Work turns keep `ASK_AND_CREATE` and the in-chat dialog.
+
+- Never collect a secret through form-mode elicitation or chat text; the MCP spec forbids form mode for secrets. URL mode only, and the URL carries no secret.
+- The setup page and its API (`backend/app/api/credential_setup.py`) answer only the user the request was opened for. Keep every lookup scoped to the signed-in user; `tests/test_advisory_credential_setup_owner_only.py` guards it.
+- What a client declared in `initialize` comes back in the signed `Mcp-Session-Id` (Streamable HTTP) or on the SSE channel (legacy), see `backend/app/services/mcp_elicitation.py`. Send `elicitation/create` only to clients that declared `url`; everything else gets the link in the result.
 
 ### Node and operation integration
 When adding a new node type, operation, or operation-specific field, keep the canvas affordances in sync with the schema:

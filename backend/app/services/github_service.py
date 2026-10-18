@@ -1,8 +1,9 @@
 import base64
+import re
 import time
 from datetime import datetime
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import parse_qsl, quote, urlencode, urlparse
 
 import httpx
 
@@ -11,6 +12,10 @@ from app.services.http_paths import encode_path_segment
 from app.services.ssrf_guard import build_guarded_http_client, guard_http_url
 
 GITHUB_API_BASE_URL = "https://api.github.com"
+
+_LINK_ENTRY_PATTERN = re.compile(r"<([^>]*)>([^<]*)")
+_LINK_REL_NEXT_PATTERN = re.compile(r"""rel\s*=\s*(?:"([^"]*)"|([^\s;,]+))""", re.IGNORECASE)
+_CURSOR_MAX_LENGTH = 1024
 
 
 class GitHubService:
@@ -36,6 +41,9 @@ class GitHubService:
                 follow_redirects=True,
             )
         self._client = client
+        #: Cursor for the page after the one the last paged list call returned, or ``None``
+        #: when that call reached the end. Reset at the start of every paged call.
+        self.last_next_cursor: str | None = None
 
     def close(self) -> None:
         """Close the internally owned HTTP client, if any."""
@@ -123,8 +131,13 @@ class GitHubService:
         since: str | None = None,
         sort: str | None = None,
         direction: str | None = None,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
-        """List repository issues."""
+        """List repository issues.
+
+        Pull requests are filtered out after the request, so a full page can come back shorter
+        than ``per_page``. Use ``last_next_cursor`` to tell whether more pages exist.
+        """
         params: dict[str, Any] = {
             "state": state or "open",
             "per_page": max(1, min(per_page, 100)),
@@ -140,10 +153,10 @@ class GitHubService:
         }.items():
             if value:
                 params[key] = value
-        response = self._request_json(
-            "GET",
+        response = self._request_page(
             f"/repos/{encode_path_segment(owner)}/{encode_path_segment(repo)}/issues",
-            params=params,
+            params,
+            cursor,
         )
         if not isinstance(response, list):
             return []
@@ -249,6 +262,7 @@ class GitHubService:
         per_page: int = 30,
         sort: str | None = None,
         direction: str | None = None,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """List repository pull requests."""
         params: dict[str, Any] = {
@@ -259,10 +273,10 @@ class GitHubService:
             params["sort"] = sort
         if direction:
             params["direction"] = direction
-        response = self._request_json(
-            "GET",
+        response = self._request_page(
             f"/repos/{encode_path_segment(owner)}/{encode_path_segment(repo)}/pulls",
-            params=params,
+            params,
+            cursor,
         )
         return response if isinstance(response, list) else []
 
@@ -328,12 +342,13 @@ class GitHubService:
         repo: str,
         pull_request_number: int,
         per_page: int = 30,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """List reviews for a pull request."""
-        response = self._request_json(
-            "GET",
+        response = self._request_page(
             f"/repos/{encode_path_segment(owner)}/{encode_path_segment(repo)}/pulls/{pull_request_number}/reviews",
-            params={"per_page": max(1, min(per_page, 100))},
+            {"per_page": max(1, min(per_page, 100))},
+            cursor,
         )
         return response if isinstance(response, list) else []
 
@@ -378,12 +393,13 @@ class GitHubService:
         owner: str,
         repo: str,
         per_page: int = 30,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """List repository releases."""
-        response = self._request_json(
-            "GET",
+        response = self._request_page(
             f"/repos/{encode_path_segment(owner)}/{encode_path_segment(repo)}/releases",
-            params={"per_page": max(1, min(per_page, 100))},
+            {"per_page": max(1, min(per_page, 100))},
+            cursor,
         )
         return response if isinstance(response, list) else []
 
@@ -538,12 +554,13 @@ class GitHubService:
         owner: str,
         repo: str,
         per_page: int = 30,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """List GitHub Actions workflows for a repository."""
-        response = self._request_json(
-            "GET",
+        response = self._request_page(
             f"/repos/{encode_path_segment(owner)}/{encode_path_segment(repo)}/actions/workflows",
-            params={"per_page": max(1, min(per_page, 100))},
+            {"per_page": max(1, min(per_page, 100))},
+            cursor,
         )
         if isinstance(response, dict):
             workflows = response.get("workflows")
@@ -925,12 +942,13 @@ class GitHubService:
         self,
         organization: str,
         per_page: int = 30,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """List repositories for an organization."""
-        response = self._request_json(
-            "GET",
+        response = self._request_page(
             f"/orgs/{encode_path_segment(organization)}/repos",
-            params={"per_page": max(1, min(per_page, 100))},
+            {"per_page": max(1, min(per_page, 100))},
+            cursor,
         )
         return response if isinstance(response, list) else []
 
@@ -938,12 +956,13 @@ class GitHubService:
         self,
         username: str,
         per_page: int = 30,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """List repositories for a user."""
-        response = self._request_json(
-            "GET",
+        response = self._request_page(
             f"/users/{encode_path_segment(username)}/repos",
-            params={"per_page": max(1, min(per_page, 100))},
+            {"per_page": max(1, min(per_page, 100))},
+            cursor,
         )
         return response if isinstance(response, list) else []
 
@@ -951,9 +970,10 @@ class GitHubService:
         self,
         username: str,
         per_page: int = 30,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """Get repositories owned by a user."""
-        return self.list_user_repositories(username, per_page=per_page)
+        return self.list_user_repositories(username, per_page=per_page, cursor=cursor)
 
     def get_user_issues(
         self,
@@ -964,6 +984,7 @@ class GitHubService:
         since: str | None = None,
         sort: str | None = None,
         direction: str | None = None,
+        cursor: str | None = None,
     ) -> list[dict[str, Any]]:
         """Get issues assigned to or mentioning the authenticated user."""
         params: dict[str, Any] = {
@@ -979,7 +1000,7 @@ class GitHubService:
         }.items():
             if value:
                 params[key] = value
-        response = self._request_json("GET", "/issues", params=params)
+        response = self._request_page("/issues", params, cursor)
         return response if isinstance(response, list) else []
 
     def get_authenticated_user(self) -> dict[str, Any]:
@@ -1024,6 +1045,94 @@ class GitHubService:
             return response.json()
         except ValueError as exc:
             raise ValueError("GitHub API returned non-JSON response") from exc
+
+    def _request_json_with_headers(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: dict[str, Any] | None = None,
+        json: dict[str, Any] | None = None,
+    ) -> tuple[dict[str, Any] | list[Any], httpx.Headers]:
+        """Like ``_request_json`` but also returns the response headers (for ``Link``)."""
+        url = f"{self._base_url()}{path}"
+        response = self._client.request(
+            method,
+            url,
+            params=params,
+            json=json,
+            headers=self._auth_headers(),
+        )
+        if response.status_code >= 400:
+            raise ValueError(self._build_error_message(response))
+        try:
+            return response.json(), response.headers
+        except ValueError as exc:
+            raise ValueError("GitHub API returned non-JSON response") from exc
+
+    def _request_page(
+        self,
+        path: str,
+        params: dict[str, Any],
+        cursor: str | None,
+    ) -> dict[str, Any] | list[Any]:
+        """GET one page of a list endpoint and record the cursor for the next one."""
+        self.last_next_cursor = None
+        page_params = {**params, **self._cursor_to_params(cursor)}
+        data, headers = self._request_json_with_headers("GET", path, params=page_params)
+        self.last_next_cursor = self._next_cursor_from_link(headers.get("link"))
+        return data
+
+    @staticmethod
+    def _cursor_to_params(cursor: str | None) -> dict[str, str]:
+        """Turn a ``next_cursor`` value back into query parameters.
+
+        Only ``after`` and ``page`` are accepted, so a cursor can never carry another
+        parameter or a URL into the request.
+        """
+        raw = (cursor or "").strip()
+        if not raw:
+            return {}
+        if len(raw) > _CURSOR_MAX_LENGTH:
+            raise ValueError("GitHub cursor is invalid")
+        try:
+            pairs = parse_qsl(raw, keep_blank_values=True, strict_parsing=True)
+        except ValueError as exc:
+            raise ValueError("GitHub cursor is invalid") from exc
+        if len(pairs) != 1:
+            raise ValueError("GitHub cursor is invalid")
+        key, value = pairs[0]
+        if key == "page" and value.isascii() and value.isdigit() and int(value) >= 1:
+            return {"page": str(int(value))}
+        if key == "after" and value:
+            return {"after": value}
+        raise ValueError("GitHub cursor is invalid")
+
+    @staticmethod
+    def _next_cursor_from_link(link_header: str | None) -> str | None:
+        """Read ``rel="next"`` from a ``Link`` header and keep only its page/cursor value.
+
+        ``after`` wins over ``page`` because GitHub switches to cursor pagination on some
+        endpoints once page-based paging runs out. The URL itself is never reused.
+        """
+        if not link_header:
+            return None
+        for url, attributes in _LINK_ENTRY_PATTERN.findall(link_header):
+            rel_match = _LINK_REL_NEXT_PATTERN.search(attributes)
+            if not rel_match:
+                continue
+            rel_values = (rel_match.group(1) or rel_match.group(2) or "").lower().split()
+            if "next" not in rel_values:
+                continue
+            query = dict(parse_qsl(urlparse(url).query, keep_blank_values=True))
+            after = query.get("after")
+            if after:
+                return urlencode({"after": after})
+            page = query.get("page")
+            if page and page.isascii() and page.isdigit() and int(page) >= 1:
+                return urlencode({"page": int(page)})
+            return None
+        return None
 
     def _request_no_content(
         self,

@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import secrets
 import uuid
 from collections.abc import AsyncGenerator
@@ -8,7 +9,7 @@ from datetime import datetime, timezone
 from typing import Any, Awaitable, Callable, TypeVar
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
-from fastapi.responses import Response, StreamingResponse
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -53,6 +54,7 @@ from app.services import file_intake_service, mcp_chat_service
 from app.services.cluster.dispatch import dispatch_workflow
 from app.services.credential_access import get_accessible_credential
 from app.services.credential_context import credential_context_value
+from app.services.credential_setup import record_elicitation_reply
 from app.services.encryption import decrypt_config
 from app.services.execution_cancellation import (
     clear_execution as clear_active_execution,
@@ -65,6 +67,16 @@ from app.services.hitl_service import (
     build_default_public_base_url,
     build_public_base_url,
 )
+from app.services.mcp_elicitation import (
+    MCP_SESSION_HEADER,
+    MCPClientChannel,
+    decode_client_session,
+    elicitation_modes,
+    encode_client_session,
+    is_client_response,
+    negotiate_protocol_version,
+    parse_elicitation_reply,
+)
 from app.services.mcp_session import mcp_session_store, mcp_sse_channels
 from app.services.oauth_tokens import hash_oauth_token
 from app.services.pending_execution import (
@@ -75,6 +87,7 @@ from app.services.secret_tokens import hash_secret
 from app.services.workflow_access import workflow_access_clause
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 T = TypeVar("T")
 _MCP_PROTOCOL_SEMAPHORE = asyncio.Semaphore(max(1, settings.mcp_protocol_max_concurrency))
 _MCP_PROGRESS_INTERVAL_SECONDS = 30.0
@@ -226,15 +239,16 @@ async def _send_legacy_sse_jsonrpc_response(
     *,
     session_token: str,
     msg: MCPJSONRPCRequest,
-    operation_factory: Callable[[AsyncSession], Awaitable[dict[str, Any]]],
+    operation_factory: Callable[[AsyncSession, MCPClientChannel], Awaitable[dict[str, Any]]],
 ) -> None:
     async def send_progress(payload: dict[str, Any]) -> None:
         await mcp_sse_channels.send(session_token, json.dumps(payload, ensure_ascii=False))
 
+    client = MCPClientChannel(mcp_sse_channels.elicitation_modes(session_token), send_progress)
     async with async_session_maker() as bg_db:
         try:
             response = await _run_mcp_operation_with_progress(
-                lambda: operation_factory(bg_db),
+                lambda: operation_factory(bg_db, client),
                 progress_token=_mcp_progress_token(msg),
                 send_progress=send_progress,
             )
@@ -252,7 +266,7 @@ def _schedule_legacy_sse_jsonrpc_response(
     *,
     session_token: str,
     msg: MCPJSONRPCRequest,
-    operation_factory: Callable[[AsyncSession], Awaitable[dict[str, Any]]],
+    operation_factory: Callable[[AsyncSession, MCPClientChannel], Awaitable[dict[str, Any]]],
 ) -> None:
     asyncio.create_task(
         _send_legacy_sse_jsonrpc_response(
@@ -266,7 +280,8 @@ def _schedule_legacy_sse_jsonrpc_response(
 def _stream_mcp_jsonrpc_response(
     *,
     msg: MCPJSONRPCRequest,
-    operation: Callable[[], Awaitable[dict[str, Any]]],
+    operation: Callable[[MCPClientChannel], Awaitable[dict[str, Any]]],
+    client_elicitation_modes: frozenset[str] = frozenset(),
 ) -> StreamingResponse:
     async def event_generator() -> AsyncGenerator[str, None]:
         queue: asyncio.Queue[str | None] = asyncio.Queue()
@@ -277,10 +292,13 @@ def _stream_mcp_jsonrpc_response(
         async def send_heartbeat() -> None:
             await queue.put(_mcp_keepalive_comment())
 
+        # Requests to the client, such as an elicitation, travel on this call's stream.
+        client = MCPClientChannel(client_elicitation_modes, send_progress)
+
         async def worker() -> None:
             try:
                 response = await _run_mcp_operation_with_progress(
-                    operation,
+                    lambda: operation(client),
                     progress_token=_mcp_progress_token(msg),
                     send_progress=send_progress,
                     send_heartbeat=send_heartbeat,
@@ -344,6 +362,66 @@ def _reject_if_sse_channel_missing(request: Request) -> None:
             "for MCP SSE traffic or use Streamable HTTP."
         ),
     )
+
+
+def _initialize_response(request: Request, msg: MCPJSONRPCRequest) -> dict[str, Any]:
+    """Answer `initialize`, and keep what a legacy SSE client declared on its channel."""
+    session_token = request.query_params.get("session")
+    modes = elicitation_modes(msg.params.get("capabilities"))
+    if session_token:
+        mcp_sse_channels.set_elicitation_modes(session_token, modes)
+    requested = msg.params.get("protocolVersion")
+    result = MCPInitializeResult(protocolVersion=negotiate_protocol_version(requested))
+    client_info = msg.params.get("clientInfo")
+    client = client_info if isinstance(client_info, dict) else {}
+    # Says whether a client can open credential forms itself (URL elicitation).
+    logger.info(
+        "MCP initialize: client=%s/%s protocol=%s->%s elicitation=%s",
+        client.get("name"),
+        client.get("version"),
+        requested,
+        result.protocolVersion,
+        ",".join(sorted(modes)) or "none",
+    )
+    return {"jsonrpc": "2.0", "id": msg.id, "result": result.model_dump()}
+
+
+def _with_client_session(
+    response: dict[str, Any],
+    msg: MCPJSONRPCRequest,
+    *,
+    user_id: uuid.UUID,
+    server_id: uuid.UUID | None,
+) -> dict[str, Any] | Response:
+    """Streamable HTTP: answer `initialize` with a session id that carries what it declared."""
+    if msg.method != "initialize" or "result" not in response:
+        return response
+    token = encode_client_session(
+        user_id=user_id,
+        server_id=server_id,
+        modes=elicitation_modes(msg.params.get("capabilities")),
+    )
+    return JSONResponse(response, headers={MCP_SESSION_HEADER: token})
+
+
+def _streamable_elicitation_modes(
+    request: Request, *, user_id: uuid.UUID, server_id: uuid.UUID | None
+) -> frozenset[str]:
+    return decode_client_session(
+        request.headers.get(MCP_SESSION_HEADER), user_id=user_id, server_id=server_id
+    )
+
+
+async def _accept_client_response(body: object, user_id: uuid.UUID) -> Response | None:
+    """Store a client's reply to a request Heym sent it, such as an elicitation answer."""
+    if not is_client_response(body):
+        return None
+    reply = parse_elicitation_reply(body)
+    if reply is not None:
+        async with async_session_maker() as db:
+            await record_elicitation_reply(db, user_id, reply)
+            await db.commit()
+    return Response(status_code=status.HTTP_202_ACCEPTED)
 
 
 async def get_mcp_user(
@@ -544,8 +622,15 @@ async def dispatch_chat_tool_call(
     user_id: uuid.UUID,
     chat_settings: mcp_chat_service.MCPChatSettings,
     arguments: dict[str, Any],
+    client: MCPClientChannel | None = None,
 ) -> dict[str, Any]:
     """Run `heym_chat` and package the reply as a JSON-RPC tool result."""
+    logger.info(
+        "heym_chat call: elicitation=%s",
+        ",".join(sorted(client.elicitation_modes))
+        if client and client.elicitation_modes
+        else "none",
+    )
     try:
         result = await mcp_chat_service.run_chat_tool(
             db,
@@ -553,6 +638,7 @@ async def dispatch_chat_tool_call(
             settings=chat_settings,
             arguments=arguments,
             public_base_url=build_public_base_url(request),
+            client=client,
         )
     except mcp_chat_service.MCPChatError as exc:
         return _mcp_tool_result_jsonrpc_response(msg_id, str(exc), is_error=True)
@@ -1200,6 +1286,7 @@ async def _dispatch_mcp_jsonrpc(
     request: Request,
     mcp_user: User,
     db: AsyncSession,
+    client: MCPClientChannel | None = None,
 ) -> dict:
     body = await request.json()
     msg = MCPJSONRPCRequest(**body)
@@ -1210,12 +1297,7 @@ async def _dispatch_mcp_jsonrpc(
         return {"jsonrpc": "2.0"}
 
     if msg.method == "initialize":
-        result = MCPInitializeResult()
-        return {
-            "jsonrpc": "2.0",
-            "id": msg.id,
-            "result": result.model_dump(),
-        }
+        return _initialize_response(request, msg)
 
     if msg.method == "tools/list":
         workflows = await get_user_mcp_workflows(db, mcp_user.id)
@@ -1246,6 +1328,7 @@ async def _dispatch_mcp_jsonrpc(
                 user_id=mcp_user.id,
                 chat_settings=chat_settings,
                 arguments=arguments,
+                client=client,
             )
 
         workflows = await get_user_mcp_workflows(db, mcp_user.id)
@@ -1445,14 +1528,19 @@ async def handle_mcp_message(
 ) -> dict | Response:
     _reject_if_sse_channel_missing(request)
     body = await request.json()
+    accepted = await _accept_client_response(body, mcp_user.id)
+    if accepted is not None:
+        return accepted
     msg = MCPJSONRPCRequest(**body)
     session_token = request.query_params.get("session")
     if session_token and _is_mcp_tool_call_with_response(msg):
         _schedule_legacy_sse_jsonrpc_response(
             session_token=session_token,
             msg=msg,
-            operation_factory=lambda bg_db: _run_mcp_protocol_limited(
-                lambda: _dispatch_mcp_jsonrpc(request=request, mcp_user=mcp_user, db=bg_db)
+            operation_factory=lambda bg_db, client: _run_mcp_protocol_limited(
+                lambda: _dispatch_mcp_jsonrpc(
+                    request=request, mcp_user=mcp_user, db=bg_db, client=client
+                )
             ),
         )
         return Response("Accepted", status_code=status.HTTP_202_ACCEPTED)
@@ -1468,24 +1556,32 @@ async def handle_mcp_message(
 async def mcp_sse_post_endpoint(
     request: Request,
     mcp_user: User = Depends(get_mcp_user_for_sse),
-) -> dict[str, Any] | StreamingResponse:
+) -> dict[str, Any] | Response:
     body = await request.json()
+    accepted = await _accept_client_response(body, mcp_user.id)
+    if accepted is not None:
+        return accepted
     msg = MCPJSONRPCRequest(**body)
     if _is_mcp_tool_call_with_response(msg):
         return _stream_mcp_jsonrpc_response(
             msg=msg,
-            operation=lambda: _run_mcp_protocol_limited_with_session(
+            operation=lambda client: _run_mcp_protocol_limited_with_session(
                 lambda bg_db: _dispatch_mcp_jsonrpc(
                     request=request,
                     mcp_user=mcp_user,
                     db=bg_db,
+                    client=client,
                 )
+            ),
+            client_elicitation_modes=_streamable_elicitation_modes(
+                request, user_id=mcp_user.id, server_id=None
             ),
         )
 
-    return await _run_mcp_protocol_limited_with_session(
+    response = await _run_mcp_protocol_limited_with_session(
         lambda bg_db: _dispatch_mcp_jsonrpc(request=request, mcp_user=mcp_user, db=bg_db)
     )
+    return _with_client_session(response, msg, user_id=mcp_user.id, server_id=None)
 
 
 @router.get("/sse")

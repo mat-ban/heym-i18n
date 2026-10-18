@@ -588,6 +588,7 @@ class CredentialType(str, Enum):
     telegram = "telegram"
     slack = "slack"
     slack_trigger = "slack_trigger"
+    slack_bot = "slack_bot"
     imap = "imap"
     smtp = "smtp"
     redis = "redis"
@@ -1775,6 +1776,7 @@ class DecisionQuestionsGenerateRequest(BaseModel):
     prompt: str = Field(min_length=1, max_length=10000)
     existing_question_ids: list[str] = Field(default_factory=list)
     state_sample: str | None = None
+    image_names: list[str] = Field(default_factory=list)
 
 
 class DecisionQuestionsSuggestionResponse(BaseModel):
@@ -1940,6 +1942,7 @@ class TraceStatsByModel(BaseModel):
     cost_usd: Decimal
     is_priced: bool
     is_other: bool = False
+    output_tokens_per_second: float | None = None
 
 
 class TraceStatsByTime(BaseModel):

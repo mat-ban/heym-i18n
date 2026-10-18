@@ -647,5 +647,15 @@
     "h": "adaa01aa",
     "s": "reviewed",
     "r": "wave3b"
+  },
+  "nodes/google-drive-trigger-node": {
+    "h": "f8e52584",
+    "s": "reviewed",
+    "r": "upstream@0.0.132"
+  },
+  "nodes/google-sheets-trigger-node": {
+    "h": "405b7eb7",
+    "s": "reviewed",
+    "r": "upstream@0.0.132"
   }
 }

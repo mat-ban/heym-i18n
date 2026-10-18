@@ -8,8 +8,10 @@ import type {
   CredentialType,
   VectorStoreBackend,
 } from "@/types/credential";
+import type { CodexSignInResult } from "@/components/Credentials/codexDeviceSignIn";
 import type { OAuthPopup } from "@/components/Credentials/useOAuthPopup";
 
+import CodexChatGptSignIn from "@/components/Credentials/CodexChatGptSignIn.vue";
 import ModelRouterFields from "@/components/Credentials/modelRouter/ModelRouterFields.vue";
 import {
   buildModelRouterConfig,
@@ -19,6 +21,7 @@ import {
   type ModelRouterForm,
 } from "@/components/Credentials/modelRouter/modelRouterConfig";
 import OAuthAuthorizeLink from "@/components/Credentials/OAuthAuthorizeLink.vue";
+import SlackBotCredentialFields from "@/components/Credentials/SlackBotCredentialFields.vue";
 import { useOAuthPopup } from "@/components/Credentials/useOAuthPopup";
 import Button from "@/components/ui/Button.vue";
 import Dialog from "@/components/ui/Dialog.vue";
@@ -59,12 +62,7 @@ const apiKey = ref("");
 const codexAccessToken = ref("");
 const codexAuthMode = ref<"chatgpt" | "access_token">("chatgpt");
 const codexOAuthConfig = ref<Record<string, unknown> | null>(null);
-const codexOAuthState = ref("");
-const codexRedirectUrl = ref("");
-const codexSigningIn = ref(false);
-const codexSignInError = ref("");
 const codexSignedInAccount = ref("");
-const codexAuthorizeUrl = ref("");
 const baseUrl = ref("");
 const jiraEmail = ref("");
 const jiraDeployment = ref<"cloud" | "data_center">("cloud");
@@ -99,6 +97,7 @@ const telegramBotToken = ref("");
 const telegramSecretToken = ref("");
 const webhookUrl = ref("");
 const signingSecret = ref("");
+const slackBotToken = ref("");
 const discordPublicKey = ref("");
 const imapHost = ref("");
 const imapPort = ref("993");
@@ -367,6 +366,7 @@ const typeOptions = [
   { value: "discord_trigger", label: CREDENTIAL_TYPE_LABELS.discord_trigger },
   { value: "slack", label: CREDENTIAL_TYPE_LABELS.slack },
   { value: "slack_trigger", label: CREDENTIAL_TYPE_LABELS.slack_trigger },
+  { value: "slack_bot", label: CREDENTIAL_TYPE_LABELS.slack_bot },
   { value: "imap", label: CREDENTIAL_TYPE_LABELS.imap },
   { value: "smtp", label: CREDENTIAL_TYPE_LABELS.smtp },
   { value: "redis", label: CREDENTIAL_TYPE_LABELS.redis },
@@ -493,6 +493,7 @@ watch(
         telegramSecretToken.value = "";
         webhookUrl.value = "";
         signingSecret.value = "";
+        slackBotToken.value = "";
         discordPublicKey.value = "";
         imapHost.value =
           props.credential.type === "imap"
@@ -681,6 +682,7 @@ watch(
         telegramSecretToken.value = "";
         webhookUrl.value = "";
         signingSecret.value = "";
+        slackBotToken.value = "";
         discordPublicKey.value = "";
         imapHost.value = "";
         imapPort.value = "993";
@@ -826,6 +828,8 @@ const isValid = computed(() => {
     return !!webhookUrl.value.trim() || isEditing.value;
   } else if (type.value === "slack_trigger") {
     return !!signingSecret.value.trim() || isEditing.value;
+  } else if (type.value === "slack_bot") {
+    return !!slackBotToken.value.trim() || isEditing.value;
   } else if (type.value === "discord_trigger") {
     return !!discordPublicKey.value.trim() || isEditing.value;
   } else if (type.value === "imap") {
@@ -962,53 +966,12 @@ const canTestJiraConnection = computed((): boolean => {
 });
 
 function resetCodexOAuthState(): void {
-  codexAuthorizeUrl.value = "";
   codexOAuthConfig.value = null;
-  codexOAuthState.value = "";
-  codexRedirectUrl.value = "";
-  codexSignInError.value = "";
-  codexSigningIn.value = false;
 }
 
-async function startCodexSignIn(): Promise<void> {
-  codexSignInError.value = "";
-  codexOAuthConfig.value = null;
-  try {
-    const { authorize_url, state } = await credentialsApi.codexOAuthStart();
-    codexOAuthState.value = state;
-    codexAuthorizeUrl.value = authorize_url;
-    window.open(authorize_url, "_blank", "noopener,noreferrer");
-  } catch {
-    codexSignInError.value = "Could not start ChatGPT sign-in. Try again.";
-  }
-}
-
-async function completeCodexSignIn(): Promise<void> {
-  if (!codexOAuthState.value) {
-    codexSignInError.value = "Start the sign-in first.";
-    return;
-  }
-  if (!codexRedirectUrl.value.trim()) {
-    codexSignInError.value = "Paste the redirect URL from your browser.";
-    return;
-  }
-  codexSigningIn.value = true;
-  codexSignInError.value = "";
-  try {
-    const { config, account_id } = await credentialsApi.codexOAuthComplete(
-      codexOAuthState.value,
-      codexRedirectUrl.value.trim(),
-    );
-    codexOAuthConfig.value = config;
-    codexSignedInAccount.value = account_id || "ChatGPT account";
-    codexRedirectUrl.value = "";
-  } catch (error) {
-    codexSignInError.value =
-      (error as { response?: { data?: { detail?: string } } })?.response?.data?.detail ||
-      "ChatGPT sign-in failed. Restart and try again.";
-  } finally {
-    codexSigningIn.value = false;
-  }
+function onCodexSignedIn(result: CodexSignInResult): void {
+  codexOAuthConfig.value = result.config;
+  codexSignedInAccount.value = result.accountId || "ChatGPT account";
 }
 
 function buildConfig(): CredentialConfig {
@@ -1152,6 +1115,8 @@ function buildConfig(): CredentialConfig {
     return { api_key: cohereApiKey.value };
   } else if (type.value === "slack_trigger") {
     return { signing_secret: signingSecret.value };
+  } else if (type.value === "slack_bot") {
+    return { bot_token: slackBotToken.value.trim(), signing_secret: signingSecret.value.trim() };
   } else if (type.value === "discord_trigger") {
     return { public_key: discordPublicKey.value.trim() };
   } else if (type.value === "flaresolverr") {
@@ -1620,6 +1585,7 @@ async function handleSave(): Promise<void> {
           telegramSecretToken.value.trim() ||
           webhookUrl.value.trim() ||
           signingSecret.value.trim() ||
+          slackBotToken.value.trim() ||
           discordPublicKey.value.trim() ||
           imapHost.value.trim() ||
           imapPort.value.trim() ||
@@ -1852,53 +1818,11 @@ async function handleSave(): Promise<void> {
             </template>
           </div>
 
-          <div class="space-y-2">
-            <Button
-              type="button"
-              variant="outline"
-              :disabled="saving || codexSigningIn"
-              class="w-full"
-              @click="startCodexSignIn"
-            >
-              {{ codexOAuthConfig || codexSignedInAccount ? "Re-sign in with ChatGPT" : "Sign in with ChatGPT" }}
-            </Button>
-            <p class="text-xs text-muted-foreground">
-              A new tab opens the OpenAI sign-in. After you authorize, your browser lands on a
-              <code class="bg-muted px-1 rounded">localhost:1455</code> page (it may fail to load —
-              that is expected). Copy that full URL from the address bar and paste it below.
-            </p>
-            <p
-              v-if="codexAuthorizeUrl"
-              class="text-xs text-muted-foreground"
-            >
-              Sign-in tab didn't open?
-              <a
-                :href="codexAuthorizeUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-primary underline"
-              >Open the OpenAI sign-in page</a>
-            </p>
-            <Input
-              v-model="codexRedirectUrl"
-              placeholder="http://localhost:1455/auth/callback?code=..."
-              :disabled="saving || codexSigningIn || !codexOAuthState"
-            />
-            <Button
-              type="button"
-              :disabled="saving || codexSigningIn || !codexOAuthState || !codexRedirectUrl.trim()"
-              class="w-full"
-              @click="completeCodexSignIn"
-            >
-              {{ codexSigningIn ? "Finishing sign-in..." : "Finish sign-in" }}
-            </Button>
-            <p
-              v-if="codexSignInError"
-              class="text-xs text-destructive"
-            >
-              {{ codexSignInError }}
-            </p>
-          </div>
+          <CodexChatGptSignIn
+            :saving="saving"
+            :connected="!!codexOAuthConfig || !!codexSignedInAccount"
+            @signed-in="onCodexSignedIn"
+          />
         </div>
 
         <div
@@ -2440,6 +2364,15 @@ async function handleSave(): Promise<void> {
           </p>
         </div>
       </template>
+
+      <SlackBotCredentialFields
+        v-if="type === 'slack_bot'"
+        v-model:bot-token="slackBotToken"
+        v-model:signing-secret="signingSecret"
+        :credential-id="props.credential?.id ?? ''"
+        :public-base-url="props.credential?.public_fields?.public_base_url ?? ''"
+        :disabled="saving"
+      />
 
       <template v-if="type === 'discord_trigger'">
         <div class="space-y-2">

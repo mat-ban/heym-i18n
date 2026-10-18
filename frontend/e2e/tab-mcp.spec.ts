@@ -1,6 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-import { acceptNextDialog, deleteMcpServer, prepareAuthenticatedPage } from "./support";
+import {
+  acceptNextDialog,
+  deleteMcpServer,
+  expectInsideViewport,
+  prepareAuthenticatedPage,
+} from "./support";
 
 test.beforeEach(async ({ page }) => {
   await prepareAuthenticatedPage(page);
@@ -15,6 +20,17 @@ test("shows the MCP connection config and named servers section", async ({ page 
   await expect(
     page.getByPlaceholder("Server name (e.g. CRM Tools)"),
   ).toBeVisible();
+});
+
+test("sends ChatGPT users to Plugins to add Heym as a custom MCP server", async ({ page }) => {
+  await page.goto("/?tab=mcp");
+  const main = page.getByRole("main");
+  await main.getByRole("button", { name: "ChatGPT Connector", exact: true }).click();
+
+  await expect(main.getByText("chatgpt.com/plugins", { exact: true })).toBeVisible();
+  await expect(main.getByText("Create as a plugin", { exact: true })).toBeVisible();
+  await expect(main.getByText("Settings → Security and login", { exact: true })).toBeVisible();
+  await expect(main.getByText("Apps → Advanced settings")).toHaveCount(0);
 });
 
 test("creates a named MCP server, reveals its endpoint, and deletes it", async ({ page }) => {
@@ -53,5 +69,27 @@ test("creates a named MCP server, reveals its endpoint, and deletes it", async (
     await expect(page.getByText(serverName, { exact: true })).toBeHidden();
   } finally {
     await deleteMcpServer(page, server.id);
+  }
+});
+
+test("lays out the MCP connection card for a phone screen", async ({ page }) => {
+  const viewportWidth = 390;
+  await page.setViewportSize({ width: viewportWidth, height: 844 });
+  await page.goto("/?tab=mcp");
+
+  const main = page.getByRole("main");
+  const heading = await expectInsideViewport(
+    main.getByRole("heading", { name: "MCP Connection" }),
+    viewportWidth,
+  );
+  const apiKeyTab = await expectInsideViewport(
+    main.getByRole("button", { name: "API Key", exact: true }),
+    viewportWidth,
+  );
+  // The icon sits beside the heading, so the tabs below start left of it rather than under it.
+  expect(apiKeyTab.x).toBeLessThan(heading.x);
+
+  for (const tabName of ["Claude Connector", "ChatGPT Connector", "Gemini App"]) {
+    await expectInsideViewport(main.getByRole("button", { name: tabName, exact: true }), viewportWidth);
   }
 });

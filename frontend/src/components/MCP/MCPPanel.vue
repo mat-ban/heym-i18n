@@ -435,269 +435,272 @@ function addToCursor(): void {
       v-else-if="config"
       class="space-y-6"
     >
-      <Card class="p-6">
-        <div class="flex items-start gap-4">
-          <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary shrink-0">
-            <Server class="w-6 h-6" />
+      <Card class="p-4 sm:p-6">
+        <!-- On mobile the icon sits beside the heading and the body below spans the card. -->
+        <div class="flex items-center gap-3 sm:items-start sm:gap-4">
+          <div class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 text-primary shrink-0">
+            <Server class="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div class="flex-1 min-w-0">
-            <h3 class="font-semibold text-lg mb-1">
+            <h3 class="font-semibold text-lg mb-0.5 sm:mb-1">
               {{ $t("mcp.connection") }}
             </h3>
-            <p class="text-sm text-muted-foreground mb-4">
+            <p class="text-sm text-muted-foreground">
               {{ $t("mcp.connectionSubtitle") }}
             </p>
+          </div>
+        </div>
 
-            <div class="flex gap-1 p-1 bg-muted rounded-lg mb-4 w-fit">
-              <button
-                :class="cn(
-                  'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
-                  connectionTab === 'api-key' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-                )"
-                @click="connectionTab = 'api-key'"
-              >
-                {{ $t("mcp.apiKeyTab") }}
-              </button>
-              <button
-                :class="cn(
-                  'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
-                  connectionTab === 'claude' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-                )"
-                @click="connectionTab = 'claude'"
-              >
-                {{ $t("mcp.claudeTab") }}
-              </button>
-              <button
-                :class="cn(
-                  'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
-                  connectionTab === 'openai' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-                )"
-                @click="connectionTab = 'openai'"
-              >
-                {{ $t("mcp.chatgptTab") }}
-              </button>
-              <button
-                :class="cn(
-                  'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
-                  connectionTab === 'gemini' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-                )"
-                @click="connectionTab = 'gemini'"
-              >
-                {{ $t("mcp.geminiTab") }}
-              </button>
+        <div class="mt-4 min-w-0 sm:pl-16">
+          <div class="grid grid-cols-2 gap-1 p-1 bg-muted rounded-lg mb-4 sm:flex sm:w-fit">
+            <button
+              :class="cn(
+                'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
+                connectionTab === 'api-key' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              )"
+              @click="connectionTab = 'api-key'"
+            >
+              {{ $t("mcp.apiKeyTab") }}
+            </button>
+            <button
+              :class="cn(
+                'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
+                connectionTab === 'claude' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              )"
+              @click="connectionTab = 'claude'"
+            >
+              {{ $t("mcp.claudeTab") }}
+            </button>
+            <button
+              :class="cn(
+                'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
+                connectionTab === 'openai' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              )"
+              @click="connectionTab = 'openai'"
+            >
+              {{ $t("mcp.chatgptTab") }}
+            </button>
+            <button
+              :class="cn(
+                'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
+                connectionTab === 'gemini' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              )"
+              @click="connectionTab = 'gemini'"
+            >
+              {{ $t("mcp.geminiTab") }}
+            </button>
+          </div>
+
+          <div
+            v-if="connectionTab === 'api-key'"
+            class="space-y-4"
+          >
+            <div>
+              <label class="text-sm font-medium text-muted-foreground block mb-1.5">
+                {{ $t("mcp.sseEndpointUrl") }}
+              </label>
+              <div class="flex items-center gap-2">
+                <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
+                  {{ sseEndpointUrl }}
+                </code>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  @click="copyToClipboard(sseEndpointUrl, t('mcp.endpointUrl'))"
+                >
+                  <Copy class="w-4 h-4" />
+                </Button>
+              </div>
             </div>
 
-            <div
-              v-if="connectionTab === 'api-key'"
-              class="space-y-4"
-            >
-              <div>
-                <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  {{ $t("mcp.sseEndpointUrl") }}
-                </label>
-                <div class="flex items-center gap-2">
-                  <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
-                    {{ sseEndpointUrl }}
-                  </code>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    @click="copyToClipboard(sseEndpointUrl, t('mcp.endpointUrl'))"
+            <div>
+              <label class="text-sm font-medium text-muted-foreground block mb-1.5">
+                {{ $t("mcp.apiKeyHeader") }}
+              </label>
+              <div class="flex items-center gap-2 flex-wrap">
+                <div class="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 bg-muted rounded-md">
+                  <code
+                    v-if="revealedApiKey"
+                    class="text-sm font-mono truncate flex-1 min-w-0"
                   >
-                    <Copy class="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <div>
-                <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  {{ $t("mcp.apiKeyHeader") }}
-                </label>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <div class="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 bg-muted rounded-md">
-                    <code
-                      v-if="revealedApiKey"
-                      class="text-sm font-mono truncate flex-1 min-w-0"
-                    >
-                      {{ showApiKey ? revealedApiKey : maskedApiKey }}
-                    </code>
-                    <span
-                      v-else-if="config.mcp_api_key_set"
-                      class="text-sm text-muted-foreground italic truncate flex-1 min-w-0"
-                    >
-                      {{ $t("mcp.keySetHidden") }}
-                    </span>
-                    <span
-                      v-else
-                      class="text-sm text-muted-foreground italic truncate flex-1 min-w-0"
-                    >
-                      {{ $t("mcp.noKeyGenerated") }}
-                    </span>
-                    <Button
-                      v-if="revealedApiKey"
-                      variant="ghost"
-                      size="sm"
-                      class="h-6 w-6 p-0 shrink-0"
-                      @click="showApiKey = !showApiKey"
-                    >
-                      <Eye
-                        v-if="!showApiKey"
-                        class="w-4 h-4"
-                      />
-                      <EyeOff
-                        v-else
-                        class="w-4 h-4"
-                      />
-                    </Button>
-                  </div>
+                    {{ showApiKey ? revealedApiKey : maskedApiKey }}
+                  </code>
+                  <span
+                    v-else-if="config.mcp_api_key_set"
+                    class="text-sm text-muted-foreground italic truncate flex-1 min-w-0"
+                  >
+                    {{ $t("mcp.keySetHidden") }}
+                  </span>
+                  <span
+                    v-else
+                    class="text-sm text-muted-foreground italic truncate flex-1 min-w-0"
+                  >
+                    {{ $t("mcp.noKeyGenerated") }}
+                  </span>
                   <Button
                     v-if="revealedApiKey"
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    class="shrink-0"
-                    @click="copyToClipboard(revealedApiKey, t('mcp.apiKey'))"
+                    class="h-6 w-6 p-0 shrink-0"
+                    @click="showApiKey = !showApiKey"
                   >
-                    <Copy class="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    class="shrink-0"
-                    :disabled="regenerating"
-                    @click="regenerateKey"
-                  >
-                    <RefreshCw
+                    <Eye
+                      v-if="!showApiKey"
                       class="w-4 h-4"
-                      :class="{ 'animate-spin': regenerating }"
                     />
-                    {{ config.mcp_api_key_set ? $t('mcp.regenerate') : $t('mcp.generate') }}
+                    <EyeOff
+                      v-else
+                      class="w-4 h-4"
+                    />
                   </Button>
                 </div>
+                <Button
+                  v-if="revealedApiKey"
+                  variant="outline"
+                  size="sm"
+                  class="shrink-0"
+                  @click="copyToClipboard(revealedApiKey, t('mcp.apiKey'))"
+                >
+                  <Copy class="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  class="shrink-0"
+                  :disabled="regenerating"
+                  @click="regenerateKey"
+                >
+                  <RefreshCw
+                    class="w-4 h-4"
+                    :class="{ 'animate-spin': regenerating }"
+                  />
+                  {{ config.mcp_api_key_set ? $t('mcp.regenerate') : $t('mcp.generate') }}
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-else-if="connectionTab === 'claude'"
+            class="space-y-4"
+          >
+            <div>
+              <label class="text-sm font-medium text-muted-foreground block mb-1.5">
+                {{ $t("mcp.mcpServerUrl") }}
+              </label>
+              <div class="flex items-center gap-2">
+                <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
+                  {{ sseEndpointUrl }}
+                </code>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
+                >
+                  <Copy class="w-4 h-4" />
+                </Button>
               </div>
             </div>
 
-            <div
-              v-else-if="connectionTab === 'claude'"
-              class="space-y-4"
-            >
-              <div>
-                <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  {{ $t("mcp.mcpServerUrl") }}
-                </label>
-                <div class="flex items-center gap-2">
-                  <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
-                    {{ sseEndpointUrl }}
-                  </code>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
-                  >
-                    <Copy class="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
+            <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
+              <h4 class="font-medium text-sm">
+                {{ $t("mcp.setupInstructions") }}
+              </h4>
+              <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
+                <li>{{ $t("mcp.claudeStep1") }}</li>
+                <li>{{ $t("mcp.claudeStep2") }}</li>
+                <li>{{ $t("mcp.claudeStep3") }}</li>
+                <li>{{ $t("mcp.claudeStep4") }}</li>
+                <li>{{ $t("mcp.claudeStep5") }}</li>
+                <li>{{ $t("mcp.claudeStep6") }}</li>
+              </ol>
+            </div>
 
-              <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
-                <h4 class="font-medium text-sm">
-                  {{ $t("mcp.setupInstructions") }}
-                </h4>
-                <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
-                  <li>{{ $t("mcp.claudeStep1") }}</li>
-                  <li>{{ $t("mcp.claudeStep2") }}</li>
-                  <li>{{ $t("mcp.claudeStep3") }}</li>
-                  <li>{{ $t("mcp.claudeStep4") }}</li>
-                  <li>{{ $t("mcp.claudeStep5") }}</li>
-                  <li>{{ $t("mcp.claudeStep6") }}</li>
-                </ol>
-              </div>
+            <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
+              <Info class="w-4 h-4 shrink-0 mt-0.5" />
+              <span>{{ $t("mcp.claudeInfo") }}</span>
+            </div>
+          </div>
 
-              <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
-                <Info class="w-4 h-4 shrink-0 mt-0.5" />
-                <span>{{ $t("mcp.claudeInfo") }}</span>
+          <div
+            v-else-if="connectionTab === 'openai'"
+            class="space-y-4"
+          >
+            <div>
+              <label class="text-sm font-medium text-muted-foreground block mb-1.5">
+                {{ $t("mcp.mcpServerUrl") }}
+              </label>
+              <div class="flex items-center gap-2">
+                <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
+                  {{ sseEndpointUrl }}
+                </code>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
+                >
+                  <Copy class="w-4 h-4" />
+                </Button>
               </div>
             </div>
 
-            <div
-              v-else-if="connectionTab === 'openai'"
-              class="space-y-4"
-            >
-              <div>
-                <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  {{ $t("mcp.mcpServerUrl") }}
-                </label>
-                <div class="flex items-center gap-2">
-                  <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
-                    {{ sseEndpointUrl }}
-                  </code>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
-                  >
-                    <Copy class="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
+            <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
+              <h4 class="font-medium text-sm">
+                {{ $t("mcp.setupInstructions") }}
+              </h4>
+              <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
+                <li>{{ $t("mcp.chatgptStep1") }}</li>
+                <li>{{ $t("mcp.chatgptStep2") }}</li>
+                <li>{{ $t("mcp.chatgptStep3") }}</li>
+                <li>{{ $t("mcp.claudeStep4") }}</li>
+                <li>{{ $t("mcp.chatgptStep5") }}</li>
+                <li>{{ $t("mcp.chatgptStep6") }}</li>
+              </ol>
+            </div>
 
-              <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
-                <h4 class="font-medium text-sm">
-                  {{ $t("mcp.setupInstructions") }}
-                </h4>
-                <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
-                  <li>{{ $t("mcp.chatgptStep1") }}</li>
-                  <li>{{ $t("mcp.chatgptStep2") }}</li>
-                  <li>{{ $t("mcp.chatgptStep3") }}</li>
-                  <li>{{ $t("mcp.claudeStep4") }}</li>
-                  <li>{{ $t("mcp.chatgptStep5") }}</li>
-                  <li>{{ $t("mcp.chatgptStep6") }}</li>
-                </ol>
-              </div>
+            <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
+              <Info class="w-4 h-4 shrink-0 mt-0.5" />
+              <span>{{ $t("mcp.chatgptInfo") }}</span>
+            </div>
+          </div>
 
-              <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
-                <Info class="w-4 h-4 shrink-0 mt-0.5" />
-                <span>{{ $t("mcp.chatgptInfo") }}</span>
+          <div
+            v-else-if="connectionTab === 'gemini'"
+            class="space-y-4"
+          >
+            <div>
+              <label class="text-sm font-medium text-muted-foreground block mb-1.5">
+                {{ $t("mcp.mcpServerUrl") }}
+              </label>
+              <div class="flex items-center gap-2">
+                <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
+                  {{ sseEndpointUrl }}
+                </code>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
+                >
+                  <Copy class="w-4 h-4" />
+                </Button>
               </div>
             </div>
 
-            <div
-              v-else-if="connectionTab === 'gemini'"
-              class="space-y-4"
-            >
-              <div>
-                <label class="text-sm font-medium text-muted-foreground block mb-1.5">
-                  {{ $t("mcp.mcpServerUrl") }}
-                </label>
-                <div class="flex items-center gap-2">
-                  <code class="flex-1 px-3 py-2 bg-muted rounded-md text-sm font-mono truncate">
-                    {{ sseEndpointUrl }}
-                  </code>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    @click="copyToClipboard(sseEndpointUrl, t('mcp.mcpServerUrl'))"
-                  >
-                    <Copy class="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
+            <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
+              <h4 class="font-medium text-sm">
+                {{ $t("mcp.setupInstructions") }}
+              </h4>
+              <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
+                <li>{{ $t("mcp.geminiStep1") }}</li>
+                <li>{{ $t("mcp.geminiStep2") }}</li>
+                <li>{{ $t("mcp.geminiStep3") }}</li>
+                <li>{{ $t("mcp.geminiStep4") }}</li>
+              </ol>
+            </div>
 
-              <div class="rounded-lg bg-muted/50 border p-4 space-y-3">
-                <h4 class="font-medium text-sm">
-                  {{ $t("mcp.setupInstructions") }}
-                </h4>
-                <ol class="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
-                  <li>{{ $t("mcp.geminiStep1") }}</li>
-                  <li>{{ $t("mcp.geminiStep2") }}</li>
-                  <li>{{ $t("mcp.geminiStep3") }}</li>
-                  <li>{{ $t("mcp.geminiStep4") }}</li>
-                </ol>
-              </div>
-
-              <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
-                <Info class="w-4 h-4 shrink-0 mt-0.5" />
-                <span>{{ $t("mcp.geminiInfo") }}</span>
-              </div>
+            <div class="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 text-sm">
+              <Info class="w-4 h-4 shrink-0 mt-0.5" />
+              <span>{{ $t("mcp.geminiInfo") }}</span>
             </div>
           </div>
         </div>

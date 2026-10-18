@@ -4,6 +4,7 @@ from decimal import Decimal
 from enum import Enum as PyEnum
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     DateTime,
     Enum,
@@ -41,6 +42,7 @@ class CredentialType(str, PyEnum):
     telegram = "telegram"
     slack = "slack"
     slack_trigger = "slack_trigger"
+    slack_bot = "slack_bot"
     imap = "imap"
     smtp = "smtp"
     redis = "redis"
@@ -2595,6 +2597,9 @@ class WorkflowRunQueue(Base):
     target_instance_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
     status: Mapped[str] = mapped_column(String(24), nullable=False, index=True)
     inputs: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    trace_context: Mapped[dict[str, str] | None] = mapped_column(
+        JSON(none_as_null=True), nullable=True
+    )
     trigger_source: Mapped[str | None] = mapped_column(String(50), nullable=True)
     actor_user_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     credentials_owner_id: Mapped[uuid.UUID | None] = mapped_column(
@@ -2623,3 +2628,94 @@ class ClusterDispatchState(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
+
+
+class TriggerPollState(Base):
+    """Snapshot header of a polling trigger node (Google Drive / Google Sheets Trigger).
+
+    ``next_poll_at`` is the claim that keeps two workers from polling one node together.
+    ``version`` is the compare-and-swap counter that lets exactly one worker consume each
+    change. See ``app/services/google_triggers/state_store.py``.
+    """
+
+    __tablename__ = "trigger_poll_states"
+    __table_args__ = (
+        UniqueConstraint("workflow_id", "node_id", name="uq_trigger_poll_state_node"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    workflow_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("workflows.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    node_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    node_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    scope_fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
+    key_id: Mapped[str] = mapped_column(String(32), nullable=False)
+    version: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0, server_default="0")
+    next_poll_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class TriggerPollItem(Base):
+    """One watched item: Drive file metadata, or a sheet row's keyed fingerprints.
+
+    Never a cell value.
+    """
+
+    __tablename__ = "trigger_poll_items"
+    __table_args__ = (UniqueConstraint("state_id", "item_key", name="uq_trigger_poll_item_key"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    state_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("trigger_poll_states.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    item_key: Mapped[str] = mapped_column(String(255), nullable=False)
+    payload: Mapped[dict] = mapped_column(JSONB, nullable=False)
+
+
+class CredentialSetupRequest(Base):
+    """A credential form an assistant turn asked the user to fill in on Heym's own page.
+
+    MCP clients cannot show the credential dialog, and a secret must never pass through them,
+    so the `heym_chat` assistant opens one of these and the user completes it at
+    `/credentials/setup/<id>`, signed in as the same user. The id doubles as the MCP
+    `elicitationId`. It grants nothing alone: the page and its API need the owner's session.
+    """
+
+    __tablename__ = "credential_setup_requests"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    conversation_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("dashboard_conversations.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    # "create" or "update".
+    action: Mapped[str] = mapped_column(String(16), nullable=False)
+    credential_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    suggested_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # The credential to update, or the one the form created.
+    credential_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("credentials.id", ondelete="SET NULL"), nullable=True
+    )
+    reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # "pending", "completed" or "declined"; a pending request past `expires_at` is expired.
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="pending")
+    # The MCP client's answer to the elicitation: "accept", "decline", "cancel" or "error".
+    client_action: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -20,6 +20,7 @@ from app.db.models import ExecutionHistory, FileUploadSlot, User, Workflow
 from app.db.session import get_db
 from app.services import file_intake_service, file_storage
 from app.services.hitl_service import build_public_base_url
+from app.services.secret_tokens import hash_secret
 from app.services.upload_limits import read_upload_file_limited
 from app.services.workflow_executor import execute_workflow
 
@@ -82,7 +83,7 @@ async def upload_to_slot(
 ) -> dict:
     ip = _client_ip(request)
     ua = request.headers.get("user-agent")
-    token_hash = file_intake_service.hash_token(token)
+    token_hash = hash_secret(token)
 
     slot = (
         await db.execute(select(FileUploadSlot).where(FileUploadSlot.token_hash == token_hash))

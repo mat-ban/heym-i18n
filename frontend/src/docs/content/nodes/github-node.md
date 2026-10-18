@@ -211,8 +211,26 @@ If the file already exists, Heym fetches the current SHA automatically before up
 `List Issues`, `Get Repository Issues`, `Get User Issues`, `List Pull Requests`,
 `Get Repository Pull Requests`, `List Reviews`, `List Releases`, `List Workflows`,
 `List Organization Repositories`, `List User Repositories`, and `Get User Repositories` support
-**Per Page** (1–100). Heym requests one page of results; there is no `page` field for fetching
-additional pages in the same operation.
+**Per Page** (1–100). Each run returns one page of results. To read further pages, use the
+**Cursor** field.
+
+Every list operation adds two fields to its output:
+
+- `has_more`: `true` when GitHub reports another page after this one.
+- `next_cursor`: an opaque value to pass back as **Cursor**, or `null` on the last page.
+
+Leave **Cursor** empty for the first page. To continue, set it to the `next_cursor` of the
+previous run (for example a value your workflow received as input or kept in a
+[Variable](./variable-node.md)) and stop when `has_more` is `false`. **Cursor** accepts
+expressions, and a value that did not come from `next_cursor` is rejected with an error before
+any request is sent.
+
+Use `has_more` rather than comparing `count` with **Per Page** to detect the last page. `List
+Issues` removes pull requests from each page after GitHub returns it, so a full page can come back
+with fewer items than **Per Page** (16 of 100 on a repository with many pull requests) and still
+have more pages after it. GitHub also limits page-based paging on some issue lists to the first
+1,000 items; `next_cursor` switches to GitHub's cursor pagination there, so it keeps working past
+that point.
 
 ## Output
 
@@ -251,6 +269,8 @@ The exact shape depends on the selected operation. Common fields include:
 - `$github.created`
 - `$github.ref`
 - `$github.inputs`
+- `$github.has_more` (list operations)
+- `$github.next_cursor` (list operations)
 
 Replace `github` with your node label.
 

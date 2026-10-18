@@ -24,7 +24,7 @@ The default server is always available at `{origin}/api/mcp/sse`. All workflows 
 
 - **API Key** – Use the MCP API key for programmatic connections. The tab can copy a ready-to-use JSON config and includes an **Add to Cursor** button for one-click Cursor setup.
 - **Claude** – The tab shows the MCP server URL and setup steps for Claude. Leave OAuth Client ID and Secret blank; Claude registers automatically and authenticates via Heym OAuth.
-- **ChatGPT** – The tab shows the MCP server URL and setup steps for a ChatGPT app. Turn on Developer mode, create an app with the URL and choose OAuth; ChatGPT registers automatically.
+- **ChatGPT** – The tab shows the MCP server URL and setup steps. In ChatGPT, open **Plugins** (`chatgpt.com/plugins`), select **+** and **Add custom MCP server**, paste the URL under **Connection**, choose **OAuth**, and select **Create as a plugin**; ChatGPT registers automatically. If **Add custom MCP server** is missing, turn on **Developer mode** under **Settings → Security and login** (a workspace admin may need to allow it).
 - **Gemini** – The tab shows the MCP server URL and setup steps for a Gemini custom app: in gemini.google.com, **Settings → Connected Apps → Add a custom app**, paste the URL and leave **Advanced features** closed; Gemini registers automatically and authenticates via Heym OAuth. Once connected, Heym also works in the Gemini mobile app.
 
 ### Workflow MCP Toggle
@@ -49,6 +49,7 @@ When it is on, `heym_chat` appears in `tools/list` alongside your workflow tools
 - Report what is running right now: how many executions are active, their workflow names, how long each has been running, the node each is currently on, and a link to the live run
 - List boards, create cards, and read card detail on the [Board tab](./board-tab.md)
 - List your data tables with their columns, create new ones, and wire them into the workflows it builds
+- Create or update your credentials on Heym's own page (see [Credentials](#credentials))
 - Read teams and global variables, and search the documentation
 - Approve, edit, or refuse pending human-in-the-loop reviews
 
@@ -56,16 +57,29 @@ Capabilities added to the Chat tab later become available through `heym_chat` au
 
 ### Build mode
 
-`heym_chat` always runs the Chat engine in build mode. In one call the assistant can save a new workflow, run it with realistic sample inputs, read the run report, fix what failed, and run it again, up to five test runs per call. When the latest run of the latest save passes, it finishes with a one-sentence summary, and the reply ends with `Verified: the latest test run of the saved workflow passed.`
+`heym_chat` always runs the Chat engine in build mode, the same mode the [Chat tab](./chat-tab.md#creating-workflows) uses. In one call the assistant can save a new workflow, run it with realistic sample inputs, read the run report, fix what failed, and run it again, up to five test runs per call. When the latest run of the latest save passes, it finishes with a one-sentence summary, and the reply ends with `Verified: the latest test run of the saved workflow passed.`
 
 - Test runs are real runs. Their side effects happen, and they appear in the workflow's run history like any other run.
 - Saves take the editor's path: a change to the graph keeps the previous graph in the workflow's Edit History.
 - To change a workflow it built earlier, continue the thread with the same `conversation_id`. The assistant updates that workflow instead of creating a new one, and it only changes workflows you can edit.
 - When the five test runs are used up, the assistant stops and explains what still fails.
 
-Credentials stay in the UI: `heym_chat` never lists, chooses or creates them. When it builds or edits a workflow, new nodes that need a credential are left empty and the reply names them, so you can set them in the editor.
+A table holds no secret, so `heym_chat` can list your tables, ask which one a workflow should use, and create a new one with its columns. It never reads or writes rows.
 
-Data tables are different. A table holds no secret, so `heym_chat` can list your tables, ask which one a workflow should use, and create a new one with its columns. It never reads or writes rows.
+### Credentials
+
+`heym_chat` sees your credentials by name and type, the same way the Chat tab does. When a workflow it builds needs a credential, it asks which one to use, as a question in the result. Answer it with the same `conversation_id`.
+
+To add a credential, or to update one you own, the assistant opens Heym's credential form on a Heym page, `/credentials/setup/<id>`. You sign in to Heym there, enter the key or connect the account, and press save. The value goes straight to Heym: the MCP client and its model only learn the credential's name and type. Do not paste keys into the MCP client; ask for the form instead.
+
+How the page reaches you depends on the client:
+
+| Client | What happens |
+|--------|--------------|
+| Supports MCP URL elicitation | The client asks you to open the Heym page. The call waits while you fill in the form, up to ten minutes, then continues with the new credential. |
+| Anything else | The result carries the link and asks the client to call `heym_chat` again with `wait_for_credential_form`. That call waits up to five minutes while you fill in the form, then continues the conversation. If the client does not wait, save the form and reply with the same `conversation_id`; the next call knows the form was saved and which credential it created. |
+
+The page only opens for the Heym account that started the request, so a forwarded link is useless to anyone else. A form stays open for 24 hours, and you can decline it from the page. Once you save or decline it, the step in the Chat tab conversation shows the result.
 
 ### Credential and model
 
@@ -84,6 +98,7 @@ If either is missing, the tool still appears in `tools/list` but each call retur
 |----------|----------|-------------|
 | `message` | Yes | The instruction or question, in natural language. |
 | `conversation_id` | No | A `conversation_id` from a previous `heym_chat` result, to continue that thread. |
+| `wait_for_credential_form` | No | With `conversation_id`: wait until the user saves or declines the credential form the thread opened, then send `message`. |
 
 Every call is written to your [Chat tab](./chat-tab.md) history as a normal conversation, marked with a plug icon in the conversation list. Messages, tool cards, and clarification pauses look exactly like a conversation you started yourself, and you can open the thread and keep talking in the browser. Each result returns its `conversation_id` so the MCP client can continue the same thread instead of opening a new one on every call.
 
@@ -122,7 +137,7 @@ Toggling a workflow moves it to the top of the assigned list, so the row you jus
 Named servers support the same authentication methods as the default server:
 
 - **X-MCP-Key header** – Pass the server's API key directly (API clients, Cursor). Header only: keys are not accepted as a `?key=` query parameter, because URLs end up in access logs, proxy logs and browser history.
-- **Claude, ChatGPT and Gemini OAuth** – Add the server URL to the client's connectors or custom apps; leave credentials blank and the client registers via OAuth automatically. The bearer token must travel in the `Authorization` header, not as `?token=`.
+- **Claude, ChatGPT and Gemini OAuth** – Add the server URL to the client's connectors, plugins or custom apps; leave credentials blank and the client registers via OAuth automatically. The bearer token must travel in the `Authorization` header, not as `?token=`.
 - **Session token** – Issued during the SSE handshake; scoped to the specific server so tokens from one named server cannot access another. This short-lived `?session=` parameter is unaffected.
 
 ### Deleting a Named Server

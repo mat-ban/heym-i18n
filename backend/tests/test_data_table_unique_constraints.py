@@ -55,6 +55,64 @@ def _wire_db(db: MagicMock) -> None:
     db.refresh = AsyncMock(side_effect=fake_refresh)
 
 
+class TestUniqueConstraintLock(unittest.IsolatedAsyncioTestCase):
+    """Issue #725: the check must run under a per-table advisory lock."""
+
+    async def test_lock_is_taken_before_the_duplicate_check(self) -> None:
+        table_id = uuid.uuid4()
+        columns = [{"name": "email", "type": "string", "unique": True}]
+        statements: list[tuple[str, dict]] = []
+
+        async def fake_execute(stmt: object, params: dict | None = None) -> SimpleNamespace:
+            statements.append((str(stmt), params or {}))
+            return SimpleNamespace(fetchall=lambda: [])
+
+        db = MagicMock()
+        db.execute = AsyncMock(side_effect=fake_execute)
+
+        await dt_api._check_unique_constraints(table_id, {"email": "a@example.com"}, columns, db)
+
+        self.assertEqual(len(statements), 2)
+        self.assertIn("pg_advisory_xact_lock", statements[0][0])
+        self.assertIn("SELECT data FROM data_table_rows", statements[1][0])
+
+    async def test_lock_key_is_per_table_not_per_value(self) -> None:
+        columns = [{"name": "email", "type": "string", "unique": True}]
+        table_a, table_b = uuid.uuid4(), uuid.uuid4()
+        keys: list[str] = []
+
+        async def fake_execute(stmt: object, params: dict | None = None) -> SimpleNamespace:
+            if "pg_advisory_xact_lock" in str(stmt):
+                keys.append((params or {})["lock_key"])
+            return SimpleNamespace(fetchall=lambda: [])
+
+        db = MagicMock()
+        db.execute = AsyncMock(side_effect=fake_execute)
+
+        for table_id, value in ((table_a, "x"), (table_a, "y"), (table_b, "x")):
+            await dt_api._check_unique_constraints(table_id, {"email": value}, columns, db)
+
+        self.assertEqual(keys[0], keys[1])
+        self.assertNotEqual(keys[0], keys[2])
+
+    def test_sync_checker_takes_the_same_lock_first(self) -> None:
+        table_id = uuid.uuid4()
+        columns = [{"name": "email", "type": "string", "unique": True}]
+        statements: list[str] = []
+
+        def fake_execute(stmt: object, params: dict | None = None) -> SimpleNamespace:
+            statements.append(str(stmt))
+            return SimpleNamespace(fetchall=lambda: [])
+
+        db = MagicMock()
+        db.execute.side_effect = fake_execute
+
+        dt_api._check_unique_constraints_sync(table_id, {"email": "a@example.com"}, columns, db)
+
+        self.assertIn("pg_advisory_xact_lock", statements[0])
+        self.assertIn("SELECT data FROM data_table_rows", statements[1])
+
+
 class TestCheckUniqueConstraints(unittest.IsolatedAsyncioTestCase):
     async def test_boolean_column_skipped_in_unique_constraints(self) -> None:
         table_id = uuid.uuid4()
@@ -96,7 +154,7 @@ class TestCheckUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 table_id, {"flag": truthy_val}, columns, db
             )
             self.assertEqual(len(errors), 1)
-            self.assertEqual(captured_params[0]["cv0"], "true")
+            self.assertEqual(captured_params[-1]["cv0"], "true")
             self.assertIn("Duplicate value for unique column 'flag': true", errors[0])
 
     async def test_boolean_false_values_normalized_for_non_boolean_unique_column(self) -> None:
@@ -117,7 +175,7 @@ class TestCheckUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 table_id, {"flag": falsy_val}, columns, db
             )
             self.assertEqual(len(errors), 1)
-            self.assertEqual(captured_params[0]["cv0"], "false")
+            self.assertEqual(captured_params[-1]["cv0"], "false")
             self.assertIn("Duplicate value for unique column 'flag': false", errors[0])
 
     async def test_string_column_duplicate_detected(self) -> None:
@@ -167,6 +225,8 @@ class TestUpdateRowUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 return SimpleNamespace(scalar_one_or_none=lambda: target_row)
             if "SELECT data FROM data_table_rows" in sql:
                 return SimpleNamespace(fetchall=lambda: [({"code": 100, "name": "Row 1"},)])
+            if "pg_advisory_xact_lock" in sql:
+                return SimpleNamespace()
             raise AssertionError(f"Unexpected query: {sql}")
 
         db.execute = AsyncMock(side_effect=fake_execute)
@@ -210,6 +270,8 @@ class TestUpdateRowUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 return SimpleNamespace(scalar_one_or_none=lambda: target_row)
             if "SELECT data FROM data_table_rows" in sql:
                 raise AssertionError("Unique query should not be run for boolean columns")
+            if "pg_advisory_xact_lock" in sql:
+                return SimpleNamespace()
             raise AssertionError(f"Unexpected query: {sql}")
 
         db.execute = AsyncMock(side_effect=fake_execute)
@@ -255,6 +317,8 @@ class TestUpdateRowUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 return SimpleNamespace(
                     fetchall=lambda: [({"email": "alice@example.com", "name": "Existing Row"},)]
                 )
+            if "pg_advisory_xact_lock" in sql:
+                return SimpleNamespace()
             raise AssertionError(f"Unexpected query: {sql}")
 
         db.execute = AsyncMock(side_effect=fake_execute)
@@ -302,6 +366,8 @@ class TestUpdateRowUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 return SimpleNamespace(scalar_one_or_none=lambda: target_row)
             if "SELECT data FROM data_table_rows" in sql:
                 return SimpleNamespace(fetchall=lambda: [])
+            if "pg_advisory_xact_lock" in sql:
+                return SimpleNamespace()
             raise AssertionError(f"Unexpected query: {sql}")
 
         db.execute = AsyncMock(side_effect=fake_execute)
@@ -333,6 +399,8 @@ class TestCreateRowUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 return SimpleNamespace(scalar_one_or_none=lambda: table)
             if "SELECT data FROM data_table_rows" in sql:
                 raise AssertionError("Unique query should not be run for boolean columns")
+            if "pg_advisory_xact_lock" in sql:
+                return SimpleNamespace()
             raise AssertionError(f"Unexpected query: {sql}")
 
         db.execute = AsyncMock(side_effect=fake_execute)
@@ -360,6 +428,8 @@ class TestCreateRowUniqueConstraints(unittest.IsolatedAsyncioTestCase):
                 return SimpleNamespace(scalar_one_or_none=lambda: table)
             if "SELECT data FROM data_table_rows" in sql:
                 return SimpleNamespace(fetchall=lambda: [({"code": "alpha"},)])
+            if "pg_advisory_xact_lock" in sql:
+                return SimpleNamespace()
             raise AssertionError(f"Unexpected query: {sql}")
 
         db.execute = AsyncMock(side_effect=fake_execute)
@@ -412,7 +482,7 @@ class TestDataTableNodeUniqueConstraints(unittest.TestCase):
             _check_unique_sync(table_id, {"flag": True}, columns, db)
 
         self.assertIn("Duplicate value for unique column 'flag': true", str(ctx.exception))
-        self.assertEqual(captured_params[0]["cv0"], "true")
+        self.assertEqual(captured_params[-1]["cv0"], "true")
 
     def test_node_update_with_omitted_unique_column_colliding_with_another_row_raises_value_error(
         self,

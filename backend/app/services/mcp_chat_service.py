@@ -21,6 +21,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.models import LLM_CREDENTIAL_TYPES, Credential, MCPServer, User
 from app.models.schemas import MCPTool, MCPToolInputProperty, MCPToolInputSchema
 from app.services.credential_access import get_accessible_credential
+from app.services.credential_setup import wait_for_conversation_forms
+from app.services.mcp_elicitation import MCPClientChannel
 
 MCP_CHAT_TOOL_NAME = "heym_chat"
 
@@ -36,8 +38,10 @@ MCP_CHAT_TOOL_DESCRIPTION = (
     "running right now (with elapsed time, current node, and a link to each live run); "
     "read and resolve "
     "human-in-the-loop reviews; list and act on agentic kanban boards, cards and "
-    "comments; read schedules, teams and global variables; and search the Heym "
-    "documentation. New Heym capabilities become available here automatically. "
+    "comments; read schedules, teams and global variables; search the Heym documentation; "
+    "and create or update the user's credentials on a secure Heym page the user opens in "
+    "their browser, so keys and tokens never pass through this client. Never put a secret "
+    "in `message`. New Heym capabilities become available here automatically. "
     "Send one natural-language instruction or question as `message` and read the reply. "
     "Every call is recorded in the user's Chat tab history. To continue an earlier "
     "exchange instead of starting a new thread, pass the `conversation_id` returned by a "
@@ -74,6 +78,8 @@ class MCPChatResult:
     awaiting_clarification: bool
     # True when the turn ended with build mode's finish: the latest test run passed.
     verified: bool = False
+    # Credential form links the user still has to open in a browser.
+    credential_form_urls: tuple[str, ...] = ()
 
 
 def build_chat_mcp_tool() -> MCPTool:
@@ -96,6 +102,15 @@ def build_chat_mcp_tool() -> MCPTool:
                     description=(
                         "Optional. The conversation_id from a previous heym_chat result, to "
                         "continue that thread instead of starting a new one."
+                    ),
+                ),
+                "wait_for_credential_form": MCPToolInputProperty(
+                    type="boolean",
+                    description=(
+                        "Optional. Set true, with the same conversation_id, right after you "
+                        "showed the user a Heym credential form link. The call waits until "
+                        "the user saves or declines the form, then sends `message` and "
+                        "returns the reply, so the conversation continues on its own."
                     ),
                 ),
             },
@@ -206,6 +221,11 @@ def normalize_chat_arguments(arguments: dict) -> tuple[str, uuid.UUID | None]:
         raise MCPChatError("`conversation_id` must be a UUID.") from exc
 
 
+def wants_form_wait(arguments: dict) -> bool:
+    """Whether a `heym_chat` call asked to wait for the conversation's credential forms."""
+    return arguments.get("wait_for_credential_form") is True
+
+
 async def run_chat_tool(
     db: AsyncSession,
     *,
@@ -213,6 +233,7 @@ async def run_chat_tool(
     settings: MCPChatSettings,
     arguments: dict,
     public_base_url: str,
+    client: MCPClientChannel | None = None,
 ) -> MCPChatResult:
     """Run one dashboard-chat turn on behalf of an MCP client.
 
@@ -223,6 +244,18 @@ async def run_chat_tool(
 
     message, conversation_id = normalize_chat_arguments(arguments)
     resolved = await resolve_chat_llm(db, user_id, settings)
+    if conversation_id is not None and wants_form_wait(arguments):
+        still_open = await wait_for_conversation_forms(
+            user_id=user_id, conversation_id=conversation_id, public_base_url=public_base_url
+        )
+        if still_open:
+            return MCPChatResult(
+                conversation_id=conversation_id,
+                text="The user has not saved the credential form yet.",
+                tool_names=[],
+                awaiting_clarification=False,
+                credential_form_urls=tuple(still_open),
+            )
     return await run_mcp_chat_turn(
         user_id=user_id,
         message=message,
@@ -230,12 +263,29 @@ async def run_chat_tool(
         credential_id=resolved.credential.id,
         model=resolved.model,
         public_base_url=public_base_url,
+        client=client,
     )
 
 
 def format_chat_tool_text(result: MCPChatResult) -> str:
     """Render a chat result as the text block an MCP client reads."""
-    lines = [result.text.strip() or "(The assistant returned no text.)"]
+    text = result.text.strip()
+    lines = [text or "(The assistant returned no text.)"]
+    for url in result.credential_form_urls:
+        if url not in text:
+            lines.append("")
+            lines.append(
+                "Open this Heym page in a browser signed in to Heym to enter the credential; "
+                f"its values never pass through this client: {url}"
+            )
+    if result.credential_form_urls:
+        lines.append("")
+        lines.append(
+            "Show the user the link above now. Then call heym_chat again with the same "
+            "conversation_id, wait_for_credential_form set to true and the message "
+            '"I saved the credential form." That call waits until the user saves the form and '
+            "continues the conversation on its own."
+        )
     lines.append("")
     lines.append(f"conversation_id: {result.conversation_id}")
     if result.tool_names:

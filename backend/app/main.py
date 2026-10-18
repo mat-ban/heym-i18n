@@ -27,6 +27,7 @@ from app.api import (
     codex_followups,
     codex_oauth,
     config,
+    credential_setup,
     credentials,
     dashboards,
     data_tables,
@@ -39,6 +40,7 @@ from app.api import (
     folders,
     global_variables,
     google_drive_oauth,
+    google_sheets,
     google_sheets_oauth,
     hitl,
     linear_oauth,
@@ -55,6 +57,7 @@ from app.api import (
     schedules,
     skill_builder,
     slack,
+    slack_bot,
     sso_admin,
     sso_auth,
     teams,
@@ -88,6 +91,7 @@ from app.services.execution_cancellation import (
     mark_own_executions_orphaned,
 )
 from app.services.execution_recovery import execution_recovery_service
+from app.services.google_triggers.poller import google_trigger_poller
 from app.services.grist_pool import close_all_clients as close_grist_clients
 from app.services.grist_pool import warm_up_pools as warm_up_grist_pools
 from app.services.heym_event_dispatcher import heym_event_dispatcher
@@ -230,6 +234,7 @@ async def lifespan(app: FastAPI):
 
     await reconcile_orphaned_board_runs()
     await imap_trigger_manager.start()
+    await google_trigger_poller.start()
     await rabbitmq_consumer_manager.start()
     await websocket_trigger_manager.start()
     await heym_event_dispatcher.start()
@@ -238,6 +243,7 @@ async def lifespan(app: FastAPI):
     await heym_event_dispatcher.stop()
     await websocket_trigger_manager.stop()
     await rabbitmq_consumer_manager.stop()
+    await google_trigger_poller.stop()
     await imap_trigger_manager.stop()
     await RabbitMQPool.close_all()
     await cron_scheduler.stop()
@@ -341,6 +347,9 @@ app.include_router(playwright.router, prefix="/api/playwright", tags=["Playwrigh
 app.include_router(folders.router, prefix="/api", tags=["Folders"])
 app.include_router(credentials.router, prefix="/api/credentials", tags=["Credentials"])
 app.include_router(
+    credential_setup.router, prefix="/api/credential-setup", tags=["Credential Setup"]
+)
+app.include_router(
     google_sheets_oauth.router,
     prefix="/api/credentials/google-sheets/oauth",
     tags=["Google Sheets OAuth"],
@@ -404,6 +413,8 @@ app.include_router(teams.router, prefix="/api/teams", tags=["Teams"])
 app.include_router(data_tables.router, prefix="/api/data-tables", tags=["Data Tables"])
 app.include_router(decisions.router, prefix="/api/decisions", tags=["Decisions"])
 app.include_router(slack.router, prefix="/api/slack", tags=["Slack"])
+app.include_router(slack_bot.router, prefix="/api/slack", tags=["Slack"])
+app.include_router(google_sheets.router, prefix="/api/google-sheets", tags=["Google Sheets"])
 app.include_router(discord.router, prefix="/api/discord", tags=["Discord"])
 app.include_router(telegram.router, prefix="/api/telegram", tags=["Telegram"])
 app.include_router(schedules.router, prefix="/api/schedules", tags=["Schedules"])

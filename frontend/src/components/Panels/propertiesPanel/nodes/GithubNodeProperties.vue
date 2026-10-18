@@ -20,6 +20,7 @@ const {
   githubMentionedExpressionInputRef,
   githubLabelsFilterExpressionInputRef,
   githubSinceExpressionInputRef,
+  githubCursorExpressionInputRef,
   githubTitleExpressionInputRef,
   githubBodyExpressionInputRef,
   githubCommentBodyExpressionInputRef,
@@ -56,6 +57,7 @@ const {
   isGitHubRepoRequired,
   isGitHubOwnerRequired,
   usesGitHubPerPage,
+  usesGitHubCursor,
   updateNodeData,
 } = usePropertiesPanelContext();
 </script>
@@ -423,6 +425,37 @@ const {
           placeholder="30"
           @update:model-value="updateNodeData('githubPerPage', $event)"
         />
+      </div>
+    </template>
+
+    <template v-if="usesGitHubCursor(selectedNode.data.githubOperation)">
+      <div class="space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <Label>Cursor</Label>
+          <AgentFieldToggle
+            :node-id="selectedNode.id"
+            field-key="githubCursor"
+          />
+        </div>
+        <ExpressionInput
+          ref="githubCursorExpressionInputRef"
+          :model-value="selectedNode.data.githubCursor || ''"
+          placeholder="$github.next_cursor"
+          single-line
+          :nodes="workflowStore.nodes"
+          :node-results="workflowStore.nodeResults"
+          :edges="workflowStore.edges"
+          :current-node-id="selectedNode.id"
+          field-key="githubCursor"
+          v-bind="githubExpressionNavBindings('githubCursor')"
+          @navigate="handleGitHubExpressionFieldNavigate"
+          @register-field-index="onGitHubRegisterExpressionFieldIndex"
+          @update:model-value="updateNodeData('githubCursor', $event)"
+        />
+        <p class="text-xs text-muted-foreground">
+          Leave empty for the first page. To continue, pass the previous run's
+          <code>next_cursor</code> while <code>has_more</code> is true.
+        </p>
       </div>
     </template>
 

@@ -108,6 +108,8 @@ export interface FolderTree {
   icon?: string | null;
   children: FolderTree[];
   workflows: WorkflowListItem[];
+  /** Client-only grouping. These folders are not stored and accept no folder actions. */
+  virtual?: boolean;
 }
 
 export interface WorkflowNode {
@@ -165,6 +167,9 @@ export interface AgentSkill {
   driveFilesEnabled?: boolean;
 }
 
+/** Changes a Google Drive or Google Sheets trigger can start a run for. */
+export type GoogleTriggerEvent = "created" | "updated" | "deleted";
+
 export type NodeType =
   | "textInput"
   | "cron"
@@ -207,6 +212,8 @@ export type NodeType =
   | "linear"
   | "googleSheets"
   | "googleDrive"
+  | "googleDriveTrigger"
+  | "googleSheetsTrigger"
   | "bigquery"
   | "supabase"
   | "clickhouse"
@@ -292,7 +299,7 @@ export interface ExecuteInputMapping {
   value: string;
 }
 
-export type ReasoningEffort = "none" | "low" | "medium" | "high";
+export type ReasoningEffort = "none" | "low" | "medium" | "high" | "xhigh" | "max";
 
 export type CodexReasoningEffort = "low" | "medium" | "high" | "xhigh" | "max" | "ultra";
 
@@ -424,10 +431,11 @@ export interface DecisionQuestionOption {
 /**
  * One question sent to a decision model. Kept as a flat record rather than a
  * discriminated union so switching `type` preserves what the user already typed.
+ * A box locates something in an image and uses `instructions` only.
  */
 export interface DecisionQuestion {
   id: string;
-  type: "noul" | "choice" | "score";
+  type: "noul" | "choice" | "score" | "box";
   instructions: string;
   /** noul: what a yes means */
   criteriaTrue?: string;
@@ -439,9 +447,33 @@ export interface DecisionQuestion {
   levels?: string[];
 }
 
+/** One image a decision node sends, placed in the state under `name`. */
+export interface DecisionImage {
+  /** State key; questions refer to the image by this name in backticks. */
+  name: string;
+  /** Expression resolving to an http(s) URL, a data:image/... URL or plain base64. */
+  source: string;
+}
+
 export interface DecisionQuestionsSuggestion {
   state: string | null;
   questions: DecisionQuestion[];
+}
+
+/** A Slack button a person can press; its value is what the step outputs. */
+export interface SlackButton {
+  label: string;
+  value: string;
+  style: "" | "primary" | "danger";
+}
+
+/** One field of a Slack form. Options are comma separated for select fields. */
+export interface SlackFormField {
+  label: string;
+  name: string;
+  type: "text" | "multiline" | "number" | "email" | "date" | "select";
+  required: boolean;
+  options: string;
 }
 
 export interface NodeData {
@@ -471,6 +503,25 @@ export interface NodeData {
   chatId?: string;
   username?: string;
   avatarUrl?: string;
+  /** slack with a Slack Bot credential: the operation and its fields. */
+  slackOperation?: string;
+  slackChannel?: string;
+  slackUser?: string;
+  slackThreadTs?: string;
+  slackMessageTs?: string;
+  slackBroadcast?: boolean;
+  slackButtons?: SlackButton[];
+  slackFormTitle?: string;
+  slackSubmitLabel?: string;
+  slackFormFields?: SlackFormField[];
+  slackAllowedUsers?: string;
+  slackOutcomeStatus?: string;
+  slackOutcomeTitle?: string;
+  slackEmoji?: string;
+  slackLimit?: string;
+  /** slackTrigger: which events start a run (default all) and the channel for `channel`. */
+  slackEventScope?: string;
+  slackEventChannel?: string;
   duration?: number;
   cronExpression?: string;
   pollIntervalMinutes?: number;
@@ -586,6 +637,10 @@ export interface NodeData {
   state?: string;
   /** Decision node: ordered question rows, serialised to a map at execution time. */
   questions?: DecisionQuestion[];
+  /** Decision node: send the image rows with the request. */
+  imagesEnabled?: boolean;
+  /** Decision node: ordered image rows, each placed in the state under its name. */
+  images?: DecisionImage[];
   customBodyEnabled?: boolean;
   customBody?: string;
   toolTimeoutSeconds?: number;
@@ -709,6 +764,7 @@ export interface NodeData {
   githubCommitMessage?: string;
   githubBranch?: string;
   githubPerPage?: string;
+  githubCursor?: string;
   githubTagName?: string;
   githubReleaseId?: string;
   githubWorkflowId?: string;
@@ -1027,6 +1083,21 @@ export interface NodeData {
   gdNewParentId?: string;
   /** When false (default) the item is trashed and recoverable; true deletes permanently. */
   gdPermanentDelete?: boolean;
+  /** googleDriveTrigger: "folder" (default) watches direct children; "file" watches one file. */
+  gdtScope?: "folder" | "file";
+  gdtFolderId?: string;
+  gdtFileId?: string;
+  /** googleDriveTrigger: changes that start a run. */
+  gdtEvents?: GoogleTriggerEvent[];
+  /** googleDriveTrigger: subfolders themselves also start runs. */
+  gdtIncludeFolders?: boolean;
+  gstSpreadsheetId?: string;
+  gstSheetName?: string;
+  gstHasHeader?: boolean;
+  /** googleSheetsTrigger: header name (or column letter without a header) that identifies a row. */
+  gstKeyColumn?: string;
+  /** googleSheetsTrigger: changes that start a run. */
+  gstEvents?: GoogleTriggerEvent[];
   connection?: AgentMCPConnection;
   selectedTool?: string;
   toolArguments?: Record<string, string>;

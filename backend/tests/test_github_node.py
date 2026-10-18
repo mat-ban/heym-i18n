@@ -1702,3 +1702,306 @@ class GitHubExecutorBranchTests(unittest.TestCase):
             prerelease=False,
         )
         self.assertEqual(result.status, "success")
+
+
+def _make_paged_response(
+    payload: object,
+    link: str | None = None,
+    status_code: int = 200,
+) -> httpx.Response:
+    request = httpx.Request("GET", "https://api.github.com/test")
+    headers = {"Link": link} if link else {}
+    return httpx.Response(status_code=status_code, json=payload, headers=headers, request=request)
+
+
+_NEXT_WITH_AFTER = (
+    "<https://api.github.com/repositories/1/issues?per_page=100&page=11&after=Y3Vyc29yOjE>; "
+    'rel="next", <https://api.github.com/repositories/1/issues?per_page=100&page=40>; rel="last"'
+)
+_NEXT_PAGE_ONLY = (
+    '<https://api.github.com/repositories/1/releases?per_page=30&page=3>; rel="next", '
+    '<https://api.github.com/repositories/1/releases?per_page=30&page=9>; rel="last"'
+)
+
+
+class GitHubPaginationServiceTests(unittest.TestCase):
+    def test_next_link_without_after_yields_page_cursor(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([{"id": 1}], _NEXT_PAGE_ONLY)
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_releases("octo", "repo", per_page=30)
+
+        self.assertEqual(service.last_next_cursor, "page=3")
+
+    def test_next_link_with_after_prefers_the_cursor(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([], _NEXT_WITH_AFTER)
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_issues("octo", "repo", per_page=100)
+
+        self.assertEqual(service.last_next_cursor, "after=Y3Vyc29yOjE")
+
+    def test_cursor_is_never_a_url(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response(
+            [], '<https://evil.example/steal?page=2>; rel="next"'
+        )
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_releases("octo", "repo")
+
+        self.assertEqual(service.last_next_cursor, "page=2")
+        self.assertNotIn("evil", service.last_next_cursor or "")
+
+    def test_last_page_has_no_cursor_and_resets_previous_one(self) -> None:
+        client = MagicMock()
+        client.request.side_effect = [
+            _make_paged_response([{"id": 1}], _NEXT_PAGE_ONLY),
+            _make_paged_response(
+                [{"id": 2}],
+                '<https://api.github.com/x?page=1>; rel="prev", '
+                '<https://api.github.com/x?page=1>; rel="first"',
+            ),
+        ]
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_releases("octo", "repo")
+        self.assertEqual(service.last_next_cursor, "page=3")
+        service.list_releases("octo", "repo", cursor="page=3")
+
+        self.assertIsNone(service.last_next_cursor)
+
+    def test_missing_link_header_means_no_more_pages(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([{"id": 1}])
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_workflows("octo", "repo")
+
+        self.assertIsNone(service.last_next_cursor)
+
+    def test_page_cursor_is_sent_as_page_parameter(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([])
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_pull_requests("octo", "repo", per_page=50, cursor="page=4")
+
+        _, kwargs = client.request.call_args
+        self.assertEqual(kwargs["params"], {"state": "open", "per_page": 50, "page": "4"})
+
+    def test_after_cursor_is_sent_without_page_parameter(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([])
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_issues("octo", "repo", per_page=100, cursor="after=Y3Vyc29yOjE")
+
+        _, kwargs = client.request.call_args
+        self.assertEqual(kwargs["params"]["after"], "Y3Vyc29yOjE")
+        self.assertNotIn("page", kwargs["params"])
+
+    def test_every_paged_list_method_accepts_a_cursor(self) -> None:
+        calls = [
+            lambda s: s.list_issues("o", "r", cursor="page=2"),
+            lambda s: s.get_repository_issues("o", "r", cursor="page=2"),
+            lambda s: s.list_pull_requests("o", "r", cursor="page=2"),
+            lambda s: s.get_repository_pull_requests("o", "r", cursor="page=2"),
+            lambda s: s.list_reviews("o", "r", 1, cursor="page=2"),
+            lambda s: s.list_releases("o", "r", cursor="page=2"),
+            lambda s: s.list_workflows("o", "r", cursor="page=2"),
+            lambda s: s.list_organization_repositories("o", cursor="page=2"),
+            lambda s: s.list_user_repositories("o", cursor="page=2"),
+            lambda s: s.get_user_repositories("o", cursor="page=2"),
+            lambda s: s.get_user_issues(cursor="page=2"),
+        ]
+        for index, call in enumerate(calls):
+            with self.subTest(index=index):
+                client = MagicMock()
+                client.request.return_value = _make_paged_response([], _NEXT_PAGE_ONLY)
+                service = GitHubService(_make_config(), client=client)
+
+                call(service)
+
+                _, kwargs = client.request.call_args
+                self.assertEqual(kwargs["params"]["page"], "2")
+                self.assertEqual(service.last_next_cursor, "page=3")
+
+    def test_invalid_cursors_are_rejected_before_any_request(self) -> None:
+        bad_cursors = [
+            "page=0",
+            "page=-1",
+            "page=abc",
+            "page=",
+            "after=",
+            "per_page=100",
+            "state=all",
+            "page=2&after=abc",
+            "page=2&per_page=100",
+            "https://evil.example/?page=2",
+            "3",
+            "x" * 2000,
+        ]
+        for cursor in bad_cursors:
+            with self.subTest(cursor=cursor[:40]):
+                client = MagicMock()
+                service = GitHubService(_make_config(), client=client)
+
+                with self.assertRaisesRegex(ValueError, "cursor is invalid"):
+                    service.list_releases("octo", "repo", cursor=cursor)
+
+                client.request.assert_not_called()
+
+    def test_empty_cursor_requests_the_first_page(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([])
+        service = GitHubService(_make_config(), client=client)
+
+        service.list_releases("octo", "repo", cursor="  ")
+
+        _, kwargs = client.request.call_args
+        self.assertNotIn("page", kwargs["params"])
+        self.assertNotIn("after", kwargs["params"])
+
+    def test_short_issue_page_still_reports_more_when_pull_requests_were_filtered(self) -> None:
+        raw_page = [{"number": n, "pull_request": {"url": "u"}} for n in range(1, 85)]
+        raw_page += [{"number": n} for n in range(85, 101)]
+        client = MagicMock()
+        client.request.return_value = _make_paged_response(raw_page, _NEXT_WITH_AFTER)
+        service = GitHubService(_make_config(), client=client)
+
+        issues = service.list_issues("octo", "repo", per_page=100)
+
+        self.assertEqual(len(issues), 16)
+        self.assertEqual(service.last_next_cursor, "after=Y3Vyc29yOjE")
+
+    def test_request_json_still_returns_body_only(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response({"full_name": "octo/repo"}, "<x>")
+        service = GitHubService(_make_config(), client=client)
+
+        self.assertEqual(service.get_repository("octo", "repo"), {"full_name": "octo/repo"})
+
+
+class GitHubPaginationExecutorTests(unittest.TestCase):
+    def _run(self, github_data: dict, client: MagicMock, text: str = "hello") -> object:
+        from app.services.workflow_executor import WorkflowExecutor
+
+        nodes, edges, inputs = _make_github_workflow(
+            {"credentialId": "cred-1", "githubOwner": "octo", "githubRepo": "repo", **github_data}
+        )
+        inputs["text"] = text
+        with patch("app.db.session.SessionLocal") as mock_session:
+            mock_db = MagicMock()
+            mock_db.__enter__ = MagicMock(return_value=mock_db)
+            mock_db.__exit__ = MagicMock(return_value=False)
+            mock_db.query.return_value.filter.return_value.first.return_value = MagicMock(
+                encrypted_config="{}",
+                type=CredentialType.github,
+            )
+            mock_session.return_value = mock_db
+            with patch("app.services.encryption.decrypt_config", return_value=_make_config()):
+                with patch(
+                    "app.services.github_service.build_guarded_http_client",
+                    return_value=client,
+                ):
+                    with patch("app.services.github_service.guard_http_url"):
+                        executor = WorkflowExecutor(
+                            nodes=nodes, edges=edges, actor_user_id=uuid.uuid4()
+                        )
+                        return executor.execute(workflow_id=uuid.uuid4(), initial_inputs=inputs)
+
+    @staticmethod
+    def _github_output(result: object) -> dict:
+        node = next(
+            item
+            for item in result.node_results  # type: ignore[attr-defined]
+            if item["node_label"] == "githubNode"
+        )
+        return node["output"]
+
+    def test_list_issues_output_reports_has_more_and_next_cursor(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([{"number": 1}], _NEXT_WITH_AFTER)
+
+        result = self._run({"githubOperation": "listIssues", "githubPerPage": "100"}, client)
+
+        self.assertEqual(result.status, "success")  # type: ignore[attr-defined]
+        output = self._github_output(result)
+        self.assertEqual(output["count"], 1)
+        self.assertTrue(output["has_more"])
+        self.assertEqual(output["next_cursor"], "after=Y3Vyc29yOjE")
+
+    def test_last_page_output_has_no_more(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([{"id": 1}])
+
+        result = self._run({"githubOperation": "listReleases"}, client)
+
+        output = self._github_output(result)
+        self.assertFalse(output["has_more"])
+        self.assertIsNone(output["next_cursor"])
+
+    def test_cursor_input_continues_from_the_previous_page(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([{"id": 1}], _NEXT_PAGE_ONLY)
+
+        result = self._run(
+            {"githubOperation": "listReleases", "githubCursor": "page=2"},
+            client,
+        )
+
+        self.assertEqual(result.status, "success")  # type: ignore[attr-defined]
+        _, kwargs = client.request.call_args
+        self.assertEqual(kwargs["params"]["page"], "2")
+        self.assertEqual(self._github_output(result)["next_cursor"], "page=3")
+
+    def test_cursor_input_accepts_an_expression(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([])
+
+        result = self._run(
+            {"githubOperation": "listReleases", "githubCursor": "$input.text"},
+            client,
+            text="page=4",
+        )
+
+        self.assertEqual(result.status, "success")  # type: ignore[attr-defined]
+        _, kwargs = client.request.call_args
+        self.assertEqual(kwargs["params"]["page"], "4")
+
+    def test_invalid_cursor_fails_the_node_without_calling_github(self) -> None:
+        client = MagicMock()
+
+        result = self._run(
+            {"githubOperation": "listReleases", "githubCursor": "$input.text"},
+            client,
+            text="https://evil.example/?page=2",
+        )
+
+        self.assertEqual(result.status, "error")  # type: ignore[attr-defined]
+        client.request.assert_not_called()
+
+    def test_stale_cursor_on_a_non_list_operation_is_ignored(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response({"full_name": "octo/repo"})
+
+        result = self._run(
+            {"githubOperation": "getRepository", "githubCursor": "not-a-cursor"},
+            client,
+        )
+
+        self.assertEqual(result.status, "success")  # type: ignore[attr-defined]
+        self.assertNotIn("has_more", self._github_output(result))
+
+    def test_existing_output_keys_are_unchanged(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response([{"number": 1}])
+
+        result = self._run({"githubOperation": "listIssues"}, client)
+
+        output = self._github_output(result)
+        for key in ("success", "operation", "issues", "count"):
+            self.assertIn(key, output)

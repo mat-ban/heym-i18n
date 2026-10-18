@@ -26,8 +26,8 @@ Some integration nodes do **not** require credentials. [WebSocket Trigger](../no
 | **RAG: Psql + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `openai_api_key` (vectors stored in Heym's own Postgres via pgvector) |
 | **RAG: Custom Embeddings** | [RAG](../nodes/rag-node.md), Vectorstores | `embedding_base_url`, `embedding_model`, `embedding_dimensions`, `db_type`, optional `embedding_api_key`, plus `qdrant_host` when `db_type` is `qdrant` |
 | **Grist** | [Grist node](../nodes/grist-node.md) | `api_key`, `server_url` |
-| **Google Sheets** | [Google Sheets node](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 consent |
-| **Google Drive** | [Google Drive node](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 consent (full Drive scope) |
+| **Google Sheets** | [Google Sheets node](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md) | `client_id`, `client_secret` + OAuth2 consent |
+| **Google Drive** | [Google Drive node](../nodes/google-drive-node.md), [Google Drive Trigger](../nodes/google-drive-trigger-node.md) | `client_id`, `client_secret` + OAuth2 consent (full Drive scope) |
 | **BigQuery** | [BigQuery node](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **Supabase** | [Supabase node](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, optional `supabase_schema` |
 | **ClickHouse** | [ClickHouse node](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -42,6 +42,7 @@ Some integration nodes do **not** require credentials. [WebSocket Trigger](../no
 | **Redis** | [Redis node](../nodes/redis-node.md) | `host`, `port`, `password` |
 | **Slack** | [Slack node](../nodes/slack-node.md) | `webhook_url` |
 | **Slack Trigger** | [Slack Trigger node](../nodes/slack-trigger-node.md) | `signing_secret` |
+| **Slack Bot** | [Slack node](../nodes/slack-node.md) operations, [Slack Trigger node](../nodes/slack-trigger-node.md), [HTTP node](../nodes/http-node.md) | `bot_token`, `signing_secret` |
 | **Bearer** | [HTTP node](../nodes/http-node.md) | `token` |
 | **Header** | [HTTP node](../nodes/http-node.md) | `header_key`, `header_value` |
 | **FlareSolverr** | [Crawler node](../nodes/crawler-node.md) | `flaresolverr_url` |
@@ -431,6 +432,7 @@ Tokens (`access_token`, `refresh_token`, `token_expiry`) are stored and refreshe
 ### Used By
 
 - [Google Sheets node](../nodes/google-sheets-node.md)
+- [Google Sheets Trigger node](../nodes/google-sheets-trigger-node.md)
 
 ---
 
@@ -475,6 +477,7 @@ Because you supply your own Client ID and Secret from your own Google Cloud proj
 ### Used By
 
 - [Google Drive node](../nodes/google-drive-node.md)
+- [Google Drive Trigger node](../nodes/google-drive-trigger-node.md)
 
 ---
 
@@ -797,6 +800,32 @@ The Slack credential stores an **Incoming Webhook URL** for posting messages to 
 ### Used By
 
 - [Slack node](../nodes/slack-node.md)
+
+---
+
+## Slack Bot
+
+The Slack Bot credential stores a Slack app's **Bot User OAuth Token** (`xoxb-…`) and its **Signing Secret**. It unlocks every [Slack node](../nodes/slack-node.md) operation: direct messages, thread replies, message updates, outcome cards, reactions, reading messages, and approvals, buttons and forms that wait for an answer.
+
+### Fields
+
+| Field | Description |
+|-------|-------------|
+| `bot_token` | Bot User OAuth Token from **OAuth & Permissions** |
+| `signing_secret` | Signing Secret from **Basic Information**. Needed for approvals, buttons, forms and Slack Trigger events. |
+
+### Notes
+
+- **Copy app manifest** in the credential dialog creates the Slack app with every scope at once: `chat:write`, `chat:write.public`, `im:write`, `users:read`, `users:read.email`, `channels:read`, `groups:read`, `channels:history`, `groups:history`, `reactions:write`.
+- After saving, the dialog shows the credential's **Interactivity Request URL** (`<Heym URL>/api/slack/interactions/<credential id>`). Paste it under **Interactivity & Shortcuts** in the Slack app.
+- The same credential verifies [Slack Trigger](../nodes/slack-trigger-node.md) events, so one Slack app covers listening and replying.
+- `$credentials.<name>` resolves to the bot token, so the [HTTP node](../nodes/http-node.md) can call any Slack Web API method with `Authorization: Bearer $credentials.<name>`.
+
+### Used By
+
+- [Slack node](../nodes/slack-node.md)
+- [Slack Trigger node](../nodes/slack-trigger-node.md)
+- [HTTP node](../nodes/http-node.md)
 
 ---
 

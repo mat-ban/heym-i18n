@@ -25,6 +25,8 @@ import type {
   WorkflowTemplate,
 } from "@/features/templates/types/template.types";
 import type {
+  CodexDeviceSignInPoll,
+  CodexDeviceSignInStart,
   CodexUsage,
   Credential,
   CredentialForIntellisense,
@@ -1615,6 +1617,22 @@ export const credentialsApi = {
     );
     return response.data;
   },
+
+  codexDeviceStart: async (): Promise<CodexDeviceSignInStart> => {
+    const response = await api.post<CodexDeviceSignInStart>(
+      "/credentials/codex/oauth/device/start",
+      {},
+    );
+    return response.data;
+  },
+
+  codexDevicePoll: async (state: string): Promise<CodexDeviceSignInPoll> => {
+    const response = await api.post<CodexDeviceSignInPoll>(
+      "/credentials/codex/oauth/device/poll",
+      { state },
+    );
+    return response.data;
+  },
 };
 
 export interface VoiceInfo {
@@ -2644,6 +2662,7 @@ export const traceApi = {
     source?: string;
     status?: string;
     search?: string;
+    model?: string;
     order?: "asc" | "desc";
     range?: TraceTimeRange;
   }): Promise<LLMTraceListResponse> => {
@@ -2656,6 +2675,7 @@ export const traceApi = {
         source: params.source,
         status: params.status,
         search: params.search,
+        model: params.model,
         order: params.order,
         range: params.range,
       },
@@ -2679,6 +2699,7 @@ export const traceApi = {
     workflowId?: string;
     status?: string;
     search?: string;
+    model?: string;
   }): Promise<TraceStatsResponse> => {
     const response = await api.get<TraceStatsResponse>("/traces/stats", {
       params: {
@@ -2688,6 +2709,7 @@ export const traceApi = {
         workflow_id: params.workflowId,
         status: params.status,
         search: params.search,
+        model: params.model,
       },
     });
     return response.data;
@@ -3742,7 +3764,7 @@ export const chatApi = {
       content,
       credential_id: credentialId,
       model,
-      allow_skill_write: true,
+      allow_build: true,
       ...(attachment ? { attachment } : {}),
     });
     return response.data;
@@ -4010,6 +4032,7 @@ export interface DecisionQuestionsGenerateRequest {
   model: string;
   existing_question_ids?: string[];
   state_sample?: string;
+  image_names?: string[];
 }
 
 export const decisionsApi = {
@@ -4123,5 +4146,31 @@ export const alertsApi = {
 
   removeTeamShare: async (alertId: string, teamId: string): Promise<void> => {
     await api.delete(`/alerts/${alertId}/team-shares/${teamId}`);
+  },
+};
+
+// ---------- Credential setup (MCP credential forms) ----------
+
+import type { CredentialSetupRequest } from "@/types/credentialSetup";
+
+export const credentialSetupApi = {
+  get: async (requestId: string): Promise<CredentialSetupRequest> => {
+    const response = await api.get<CredentialSetupRequest>(`/credential-setup/${requestId}`);
+    return response.data;
+  },
+
+  complete: async (requestId: string, credentialId: string): Promise<CredentialSetupRequest> => {
+    const response = await api.post<CredentialSetupRequest>(
+      `/credential-setup/${requestId}/complete`,
+      { credential_id: credentialId },
+    );
+    return response.data;
+  },
+
+  decline: async (requestId: string): Promise<CredentialSetupRequest> => {
+    const response = await api.post<CredentialSetupRequest>(
+      `/credential-setup/${requestId}/decline`,
+    );
+    return response.data;
   },
 };

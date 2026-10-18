@@ -115,7 +115,33 @@ def execute(ctx: NodeExecutionContext) -> object:
         "githubAssignees",
         "assignees",
     )
+    paged_operations = {
+        "listIssues",
+        "getRepositoryIssues",
+        "getUserIssues",
+        "listPullRequests",
+        "getRepositoryPullRequests",
+        "listReviews",
+        "listReleases",
+        "listWorkflows",
+        "listOrganizationRepositories",
+        "listUserRepositories",
+        "getUserRepositories",
+    }
+    cursor_kwargs: dict[str, str] = {}
+    if operation in paged_operations:
+        cursor = self.evaluate_nonempty_message_template(
+            str(node_data.get("githubCursor", "") or ""), inputs, node_id
+        ).strip()
+        if cursor:
+            cursor_kwargs["cursor"] = cursor
+
     service = GitHubService(github_config)
+
+    def _page_info() -> dict[str, object]:
+        next_cursor = service.last_next_cursor
+        return {"has_more": next_cursor is not None, "next_cursor": next_cursor}
+
     try:
         if operation == "getRepository":
             repo_data = service.get_repository(owner, repo)
@@ -225,12 +251,14 @@ def execute(ctx: NodeExecutionContext) -> object:
                 since=since or None,
                 sort=sort or None,
                 direction=direction or None,
+                **cursor_kwargs,
             )
             output = {
                 "success": True,
                 "operation": operation,
                 "issues": issues,
                 "count": len(issues),
+                **_page_info(),
             }
         elif operation == "createComment":
             issue_number_value = self.evaluate_message_template(
@@ -363,12 +391,14 @@ def execute(ctx: NodeExecutionContext) -> object:
                 per_page=per_page,
                 sort=str(node_data.get("githubSort", "") or "").strip() or None,
                 direction=(str(node_data.get("githubDirection", "") or "").strip() or None),
+                **cursor_kwargs,
             )
             output = {
                 "success": True,
                 "operation": operation,
                 "pull_requests": pull_requests,
                 "count": len(pull_requests),
+                **_page_info(),
             }
         elif operation == "createPullRequest":
             title = self.evaluate_message_template(
@@ -473,12 +503,14 @@ def execute(ctx: NodeExecutionContext) -> object:
                     repo,
                     pull_request_number,
                     per_page=per_page,
+                    **cursor_kwargs,
                 )
                 output = {
                     "success": True,
                     "operation": operation,
                     "reviews": reviews,
                     "count": len(reviews),
+                    **_page_info(),
                 }
             else:
                 review_id_value = self.evaluate_nonempty_message_template(
@@ -524,12 +556,13 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            releases = service.list_releases(owner, repo, per_page=per_page)
+            releases = service.list_releases(owner, repo, per_page=per_page, **cursor_kwargs)
             output = {
                 "success": True,
                 "operation": operation,
                 "releases": releases,
                 "count": len(releases),
+                **_page_info(),
             }
         elif operation == "getRelease":
             release_id_value = self.evaluate_message_template(
@@ -638,12 +671,13 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            workflows = service.list_workflows(owner, repo, per_page=per_page)
+            workflows = service.list_workflows(owner, repo, per_page=per_page, **cursor_kwargs)
             output = {
                 "success": True,
                 "operation": operation,
                 "workflows": workflows,
                 "count": len(workflows),
+                **_page_info(),
             }
         elif operation == "getWorkflow":
             workflow_id = self.evaluate_message_template(
@@ -832,36 +866,41 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            repositories = service.list_organization_repositories(owner, per_page=per_page)
+            repositories = service.list_organization_repositories(
+                owner, per_page=per_page, **cursor_kwargs
+            )
             output = {
                 "success": True,
                 "operation": operation,
                 "repositories": repositories,
                 "count": len(repositories),
+                **_page_info(),
             }
         elif operation == "listUserRepositories":
             per_page_value = self.evaluate_message_template(
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            repositories = service.list_user_repositories(owner, per_page=per_page)
+            repositories = service.list_user_repositories(owner, per_page=per_page, **cursor_kwargs)
             output = {
                 "success": True,
                 "operation": operation,
                 "repositories": repositories,
                 "count": len(repositories),
+                **_page_info(),
             }
         elif operation == "getUserRepositories":
             per_page_value = self.evaluate_message_template(
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            repositories = service.get_user_repositories(owner, per_page=per_page)
+            repositories = service.get_user_repositories(owner, per_page=per_page, **cursor_kwargs)
             output = {
                 "success": True,
                 "operation": operation,
                 "repositories": repositories,
                 "count": len(repositories),
+                **_page_info(),
             }
         elif operation == "getUserIssues":
             state = str(node_data.get("githubState", "open") or "open").strip() or "open"
@@ -885,12 +924,14 @@ def execute(ctx: NodeExecutionContext) -> object:
                 or None,
                 sort=str(node_data.get("githubSort", "") or "").strip() or None,
                 direction=(str(node_data.get("githubDirection", "") or "").strip() or None),
+                **cursor_kwargs,
             )
             output = {
                 "success": True,
                 "operation": operation,
                 "issues": issues,
                 "count": len(issues),
+                **_page_info(),
             }
         elif operation == "inviteUser":
             organization = self.evaluate_nonempty_message_template(

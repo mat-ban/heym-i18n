@@ -224,9 +224,13 @@ In workflow expressions:
 - **DO NOT use** `textInput` as the entry point for Slack-triggered workflows
 - **Data fields**:
   - `label`: Node identifier (e.g., "slackEvent")
-  - `credentialId`: UUID of a `slack_trigger` credential containing the signing secret
+  - `credentialId`: UUID of a `slack_trigger` credential, or a `slack_bot` credential that has a signing secret
+  - `slackEventScope` (optional, default `"all"`): `"all"` (every event) | `"messages"` (a person's message in a channel or DM; no duplicate for mentions) | `"directMessages"` (DMs to the bot, `channel_type` `im`) | `"mentions"` (`app_mention`) | `"channel"` (messages in `slackEventChannel`)
+  - `slackEventChannel`: channel id (`C…`) for `slackEventScope: "channel"`
+- **Request URL**: `<Heym URL>/api/slack/events/<credentialId>` is one URL per Slack app that starts every Slack Trigger on that credential, each filtered by its own scope; `/api/slack/webhook/<node id>` starts only that node. With a `slack_bot` credential the bot's own posts and edits never start a run.
 - **Output fields available downstream**:
   - `$<label>.event` — full Slack event object
+  - `$<label>.event.channel_type` — `"im"` for a DM, `"channel"` or `"group"` otherwise
   - `$<label>.event.type` — event type (e.g., `"message"`, `"reaction_added"`)
   - `$<label>.event.text` — message text (when applicable)
   - `$<label>.event.user` — Slack user ID who triggered the event
@@ -448,6 +452,64 @@ In workflow expressions:
 {"id": "n1", "type": "heymTrigger", "position": {"x": 100, "y": 100}, "data": {"label": "platformEvents", "eventNames": ["workflow.created", "workflow.deleted"]}}
 ```
 
+### 3g. googleDriveTrigger (Google Drive Change Trigger)
+- **Purpose**: Poll a Google Drive folder, or one file, and start the workflow once for each file that is created, updated, or deleted
+- **Inputs**: 0 | **Outputs**: 1
+- **WHEN TO USE**: When the workflow should react to files landing in, changing in, or leaving a Drive folder (intake folders, shared contract folders, report drops)
+- **DO NOT use** `cron` plus a `googleDrive` `listFolderFiles` step to detect new files; this trigger keeps the snapshot and fires once per change
+- **Data fields** (plain values, not `$` expressions):
+  - `label`: Node identifier (e.g., "contractsFolder")
+  - `credentialId`: UUID of a `google_drive` credential
+  - `gdtScope`: `"folder"` (default) or `"file"`
+  - `gdtFolderId`: Folder ID or URL when scope is `folder`; empty means My Drive root. Only direct children are watched
+  - `gdtFileId`: File ID or URL when scope is `file`
+  - `gdtEvents`: Array of `"created"`, `"updated"`, `"deleted"` (default all three; `created` does not apply to `file` scope)
+  - `gdtIncludeFolders`: Boolean, default `false`; when `true`, subfolders themselves also start runs
+  - `pollIntervalMinutes`: Integer, minimum `1`, default `1`
+- **Behavior**: The first poll records the folder as it is and starts nothing. `deleted` means the item left the folder: trashed, deleted, or moved out. Moving a file in counts as `created`. Each change starts at most one run, also on multi-worker and multi-instance installs. Heym stores file metadata only, never file contents.
+- **Output fields available downstream**:
+  - `$<label>.event`: `"created"`, `"updated"`, or `"deleted"`
+  - `$<label>.file.id`, `$<label>.file.name`, `$<label>.file.mime_type`, `$<label>.file.size_bytes`, `$<label>.file.created_time`, `$<label>.file.modified_time`, `$<label>.file.web_view_link`, `$<label>.file.is_folder`
+  - `$<label>.changed_fields`: Metadata fields that changed (`updated` only)
+  - `$<label>.folder_id`: Watched folder (`"root"` for My Drive), `null` in file scope
+  - `$<label>.triggered_at`: ISO timestamp
+- To read the file, follow with `googleDrive` (`downloadFile` or `syncToHeymDrive`) and `gdFileId: "$<label>.file.id"`.
+
+**Example node JSON:**
+```json
+{"id": "n1", "type": "googleDriveTrigger", "position": {"x": 100, "y": 100}, "data": {"label": "contractsFolder", "credentialId": "google-drive-credential-uuid", "gdtScope": "folder", "gdtFolderId": "https://drive.google.com/drive/folders/FOLDER_ID", "gdtEvents": ["created"], "gdtIncludeFolders": false, "pollIntervalMinutes": 1}}
+```
+
+### 3h. googleSheetsTrigger (Google Sheets Row Trigger)
+- **Purpose**: Poll one sheet tab and start the workflow once for each row that is added, updated, or deleted
+- **Inputs**: 0 | **Outputs**: 1
+- **WHEN TO USE**: When the workflow should react to rows in a spreadsheet: form responses, a lead list, a status column someone edits
+- **DO NOT use** `cron` plus `googleSheets` `readRange` to find new rows; this trigger tracks rows and fires once per change
+- **Data fields** (plain values, not `$` expressions):
+  - `label`: Node identifier (e.g., "newLead")
+  - `credentialId`: UUID of a `google_sheets` credential
+  - `gstSpreadsheetId`: Spreadsheet ID or URL (required)
+  - `gstSheetName`: Tab title (default `"Sheet1"`)
+  - `gstHasHeader`: Boolean, default `true`; row 1 holds column names
+  - `gstKeyColumn`: Optional, recommended. Header name (or column letter without a header) whose value identifies a row, so inserting, deleting, or sorting rows is detected correctly. Without it rows are matched by row number, and deleting a row in the middle reads as updates for the rows below it plus one delete at the end
+  - `gstEvents`: Array of `"created"`, `"updated"`, `"deleted"` (default all three)
+  - `pollIntervalMinutes`: Integer, minimum `1`, default `1`
+- **Behavior**: The first poll records the tab as it is and starts nothing. Blank rows are ignored; rows with an empty key are ignored until the key is filled. Editing the header row records the tab again without starting runs. Heym stores only keyed fingerprints of cells, never cell values, so a run gets the row's current values and which columns changed, not the old values.
+- **⚠️ Write-back loop**: A workflow that writes to the sheet it watches causes its own `updated` events. In that case set `gstEvents` to `["created"]`.
+- **Output fields available downstream**:
+  - `$<label>.event`: `"created"`, `"updated"`, or `"deleted"`
+  - `$<label>.row`: Current cells keyed by header (or column letter) plus `rowIndex`; for `deleted` only `rowIndex`
+  - `$<label>.row.rowIndex`: 1-based sheet row number
+  - `$<label>.changed_columns`: Columns that changed (`created` lists every non-empty column)
+  - `$<label>.key`: Key column value (`null` for `deleted` or without a key column)
+  - `$<label>.spreadsheet_id`, `$<label>.sheet_name`, `$<label>.triggered_at`
+- To write back to the same row, use `googleSheets` `updateRange` with `gsUpdateRow: "$<label>.row.rowIndex"`.
+
+**Example node JSON:**
+```json
+{"id": "n1", "type": "googleSheetsTrigger", "position": {"x": 100, "y": 100}, "data": {"label": "newLead", "credentialId": "google-sheets-credential-uuid", "gstSpreadsheetId": "https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit", "gstSheetName": "Leads", "gstHasHeader": true, "gstKeyColumn": "Email", "gstEvents": ["created"], "pollIntervalMinutes": 1}}
+```
+
 ### 4. llm (Language Model)
 - **Purpose**: Process text with AI language model or generate images
 - **Inputs**: 1 | **Outputs**: 1
@@ -467,7 +529,7 @@ In workflow expressions:
   - `batchModeEnabled`: Boolean to use provider-native Batch API execution for supported text models (default: false)
   - `responsesApiEnabled`: Boolean to route the model call through the Responses API instead of Chat Completions (default: false). Works with OpenAI and custom credentials; Google credentials do not support it. Cannot be combined with `batchModeEnabled`.
   - `isReasoningModel`: Boolean for reasoning models (o1, o3)
-  - `reasoningEffort`: "low" | "medium" | "high" (for reasoning models)
+  - `reasoningEffort`: "low" | "medium" | "high" | "xhigh" | "max" (for reasoning models; "xhigh" and "max" only work on models that accept them, such as gpt-5.6 and gpt-6, and others answer 400)
   - `jsonOutputEnabled`: Boolean to enable structured JSON output (default: false) - for text mode only
   - `jsonOutputSchema`: JSON Schema string for structured output (optional, use with jsonOutputEnabled)
   - `extraBodyEnabled`: Boolean to send provider-specific extra request parameters (default: false). NEVER set this unless the user explicitly asks for custom/raw API request parameters.
@@ -1077,25 +1139,41 @@ Properties:
 - `questions`: ordered array, at least one entry. Each entry:
   - `id`: snake_case key. The answer comes back under the same key. It is NEVER sent
     to the model, so the full meaning must live in `instructions`.
-  - `type`: "noul" | "choice" | "score"
+  - `type`: "noul" | "choice" | "score" | "box"
   - `instructions`: the judgment to make. Expression-capable.
   - noul only: `criteriaTrue`, `criteriaFalse` - what a yes and a no mean (optional)
   - choice only: `options`: [{ "key": "...", "description": "..." }] - at least one
   - score only: `levels`: ordered array of strings, lowest first - at least two
+  - box: instructions only, no criteria. Needs at least one image.
+- `imagesEnabled`: Boolean to send images with the request (default: false)
+- `images`: ordered array of `{ "name": "photo", "source": "$input.body.imageUrl" }`.
+  `name` is a letters/digits/underscore identifier; `source` is an expression that
+  resolves to an http(s) image URL, a `data:image/...` URL or plain base64. Each image
+  is placed in the state under its name, so questions refer to it in backticks:
+  "Is there a dog in `photo`?". A text state is kept under `context` next to the
+  images; an object state gains the image fields. Heym rotates, resizes and re-encodes
+  each image to the provider's limits and adds the provider's image opt-in header.
+  Images are experimental at TypeSafe: fine for prototypes, not for production gates.
 - `customBodyEnabled` / `customBody`: send a hand-written JSON body instead of the
   form, for an endpoint whose contract differs. Expression-capable. When enabled,
-  `state` and `questions` are ignored.
+  `state`, `questions` and `images` are ignored.
 - `requestTimeoutSeconds`: default 60
 
 Which question type to use:
 - "noul" - whether a condition holds. Returns the probability of yes (0 to 1).
 - "choice" - pick one of a set you define. Returns the option plus a distribution.
 - "score" - rate along an ordered rubric. Returns a value that can land between levels.
+- "box" - where something is in an image. Returns the four edges of a bounding box as
+  fractions of the image size. Needs model "jev-1.14.0" or "jev-preview". There is no
+  "not found" answer, so ask a "noul" alongside it ("Is there a dog in `photo`?") and
+  ignore the box when that answer is low.
 
 Output is the provider response verbatim, so downstream nodes read:
 - `$decisionLabel.answers.<id>.noul` (0 to 1)
 - `$decisionLabel.answers.<id>.choice` and `.confidence`
 - `$decisionLabel.answers.<id>.score` and `.confidence`
+- `$decisionLabel.answers.<id>.box.top` / `.bottom` / `.left` / `.right` (0 to 1) and
+  `.confidence`
 
 Example - triage a support ticket and route on the answer:
 ```json
@@ -1132,6 +1210,26 @@ Example - triage a support ticket and route on the answer:
 Then a `switch` node branches on `$triage.answers.department.choice`, and a `condition`
 node can gate on `$triage.answers.department.confidence` to send low-confidence cases
 to a human instead.
+
+Example - judge and locate a dog in an uploaded photo:
+```json
+{
+  "id": "dogCheck",
+  "type": "decision",
+  "data": {
+    "label": "dogCheck",
+    "credentialId": "<decision credential id>",
+    "model": "jev-1.14.0",
+    "state": "",
+    "imagesEnabled": true,
+    "images": [{ "name": "photo", "source": "$userInput.body.imageUrl" }],
+    "questions": [
+      { "id": "is_dog", "type": "noul", "instructions": "Is there a dog in `photo`?" },
+      { "id": "dog", "type": "box", "instructions": "the dog in `photo`" }
+    ]
+  }
+}
+```
 
 ### 6. condition (If/Else Branch)
 - **Purpose**: Branch workflow based on condition
@@ -1680,15 +1778,42 @@ Notes:
 }
 ```
 
-### 16. slack (Send Slack Message)
-- **Purpose**: Send a message to Slack channel via webhook
+### 16. slack (Slack Message, Approval, Buttons, Form and more)
+- **Purpose**: Post to Slack, or wait for a person's answer in Slack
 - **Inputs**: 1 | **Outputs**: 1
+- **Credential types**: `slack` (incoming webhook URL: sends `message` to the webhook's channel, no other field) or `slack_bot` (bot token `xoxb-…` + signing secret: every operation below)
 - **Data fields**:
   - `label`: Node identifier
-  - `credentialId`: UUID of the Slack credential (webhook URL stored in credential)
-  - `message`: Message text to send, supports expressions (e.g., `$previousNodeLabel.text`)
+  - `credentialId`: UUID of a `slack` or `slack_bot` credential
+  - `slackOperation` (slack_bot only, default `sendMessage`): `sendMessage` | `sendDirectMessage` | `sendForm` | `sendButtons` | `requestApproval` | `replyInThread` | `updateMessage` | `postOutcome` | `addReaction` | `deleteMessage` | `getMessages` | `findUser`
+  - `slackChannel`: `#name`, channel id (`C…`), or a person (user id `U…` or email) to post in their DM; supports expressions such as `$slackEvent.event.channel`
+  - `slackUser`: person for `sendDirectMessage` / `findUser`: user id or email
+  - `message`: message text in Slack mrkdwn (`*bold*`, `_italic_`, `<url|text>`), supports expressions. Markdown from a model (`**bold**`, `## Title`, `[text](url)`, `- item`) is converted to mrkdwn before posting, so `$draft.text` can go in as it is.
+  - `slackThreadTs`: thread to post in (`replyInThread` requires it; optional for `sendMessage`, `sendForm`, `sendButtons`, `requestApproval`, `postOutcome`, `getMessages`), e.g. `$announce.threadTs`
+  - `slackMessageTs`: message to change for `updateMessage`, `addReaction`, `deleteMessage`, e.g. `$announce.ts`
+  - `slackBroadcast` (bool, `replyInThread`): also show the reply in the channel
+  - `slackButtons` (`sendButtons`): up to 5 `{"label": "Retry", "value": "retry", "style": "primary"|"danger"|""}`
+  - `slackFormTitle`, `slackSubmitLabel`, `slackFormFields` (`sendForm`): up to 10 `{"label": "Amount", "name": "amount", "type": "text"|"multiline"|"number"|"email"|"date"|"select", "required": true, "options": ["a", "b"]}`
+  - `slackAllowedUsers` (`requestApproval`, `sendButtons`, `sendForm`): optional comma-separated user ids or emails; empty lets anyone in the channel answer
+  - `slackOutcomeStatus` (`postOutcome`): `success` | `failure` | `warning` | `info`, or an expression such as `$approval.approval` (approved → success, rejected → failure, changes_requested → warning); `slackOutcomeTitle`: headline of the outcome card
+  - `slackEmoji` (`addReaction`): emoji name such as `white_check_mark`
+  - `slackLimit` (`getMessages`): number of messages, default 20
+- **Outputs**:
+  - Posting operations: `$label.channel`, `$label.ts`, `$label.threadTs`, `$label.text`
+  - `requestApproval`, `sendButtons`, `sendForm` PAUSE the run until someone answers in Slack (or decides the review in Heym), then output the posting fields plus `$label.answeredBy.id`, `$label.answeredBy.name`, `$label.answeredIn` (`slack` | `heym`) and:
+    - approval: `$label.approval` (`approved` | `changes_requested` | `rejected`), `$label.comment`
+    - buttons: `$label.choice.label`, `$label.choice.value`
+    - form: `$label.values.<field name>`
+  - `getMessages`: `$label.transcript` (the messages oldest first, one `[time] name: text` per line: give this to an LLM to summarize), `$label.messages` (list of `{ts, threadTs, user, text, replyCount}`), `$label.count`
+  - `findUser`: `$label.id`, `$label.realName`, `$label.email`, `$label.title`, `$label.timezone`
+- **Branch after an answer** with a condition or switch on `$label.approval` or `$label.choice.value`.
+- **Interactivity**: approvals, buttons and forms need the Slack app's Interactivity Request URL set to `<Heym URL>/api/slack/interactions/<credentialId>` and the signing secret on the `slack_bot` credential. Bot scopes: `chat:write`, `chat:write.public`, `im:write`, `users:read`, `users:read.email`, `channels:read`, `groups:read`, `channels:history`, `groups:history`, `reactions:write`.
 
-**SETUP**: Requires a Slack credential with webhook URL. Create the credential first with the Slack Incoming Webhook URL from your Slack workspace.
+**Example: request approval, then close the loop in the same thread**
+```json
+{"id": "n2", "type": "slack", "data": {"label": "approval", "credentialId": "slack-credential-uuid", "slackOperation": "requestApproval", "slackChannel": "#finance-approvals", "message": "Refund of $userInput.body.amount for $userInput.body.customer"}},
+{"id": "n3", "type": "slack", "data": {"label": "outcome", "credentialId": "slack-credential-uuid", "slackOperation": "postOutcome", "slackChannel": "$approval.channel", "slackThreadTs": "$approval.threadTs", "slackOutcomeStatus": "success", "slackOutcomeTitle": "Refund $approval.approval", "message": "Decided by $approval.answeredBy.name"}}
+```
 
 **Example Message Formats**:
 - Simple: `"Workflow completed successfully!"`
@@ -2549,7 +2674,7 @@ When creating or updating records in Grist, you MUST use **column IDs** (interna
   - `gsUpdateRow`: for `updateRange` — 1-based sheet row where values are written (columns A–Z); if omitted, `gsStartRow` is used. Single values API PUT, not spreadsheets.batchUpdate. Supports expressions.
   - `gsRange`: A1 notation range, e.g., "A1:D10" (legacy examples; read uses start/max/header fields in the product)
   - `gsKeepHeader`: boolean, optional for `clearRange` — when true, row 1 is preserved and rows below are cleared (columns A–Z)
-  - `gsValues`: JSON 2D array of values, e.g., `[["Name","Age"],["Alice",30]]` (required for appendRows, updateRange)
+  - `gsValues`: JSON 2D array of values, e.g., `[["Name","Age"],["Alice",30]]` (required for appendRows, updateRange). Put one expression per cell, e.g. `[["$mail.email.subject", "$mail.email.text"]]`: each cell is resolved on its own, so quotes and line breaks in values cannot break the JSON
   - `gsAppendPlacement`: optional `"append"` | `"prepend"` for appendRows — prepend inserts under row 1 via the Sheets API (batch insert rows + write)
   - `gsValuesInputMode`: optional `"raw"` | `"selective"` for appendRows/updateRange — selective is one row, per-column fields; stored `gsValues` is a JSON 2D array (usually one inner row)
 
@@ -4558,6 +4683,9 @@ Use ONLY: `str()`, `int()`, `float()`, `bool()`, `list()`, `dict(key=value)`, `l
   - `githubOwner`: Repository owner, organization, or username when required
   - `githubRepo`: Repository name when required
   - `githubPerPage`: Optional page size from 1 to 100 for list operations
+  - `githubCursor`: Optional expression-capable continuation cursor for list operations. Leave
+    empty for the first page; pass the previous run's `next_cursor` to fetch the next one.
+    List operations also return `has_more` and `next_cursor`
 - **Operation-specific fields**:
   - Issues: `githubIssueNumber`, `githubTitle`, `githubBody`, `githubState`,
     `githubStateReason`, `githubLabels`, `githubAssignees`, `githubAssignee`,
@@ -5078,14 +5206,14 @@ Always include:
 14. **BOOLEAN CONDITIONS** - For booleans, write `$node.isValid` not `$node.isValid == true`. Use `not $node.isValid` for negation.
 15. **ERROR HANDLER** - ONLY add errorHandler when user explicitly requests error handling. It auto-triggers on any error without incoming connections. Do NOT auto-add to workflows.
 16. **ASYNC AFTER OUTPUT** - Set `"allowDownstream": true` in output node data to enable async processing. Connected nodes run asynchronously after response is sent.
-17. **SLACK NOTIFICATIONS** - Use slack node with a Slack credential (webhook URL) to send messages. Perfect for alerts, error notifications, or completion messages.
+17. **SLACK** - Use the slack node: a `slack` webhook credential only sends a message; a `slack_bot` credential adds DMs, thread replies, message updates, outcome cards, reactions, reading messages, and approvals, buttons and forms that pause the run until someone answers in Slack.
 18. **IMAGE GENERATION WITH INPUT** - When workflow has a textInput node and uses LLM for image generation, the userMessage MUST reference the input node via body (e.g., `$userPrompt.body.text`). NEVER hardcode the image prompt when textInput exists! Use `nanobanana` model for best results.
 19. **SET NODE VALUES** - When using functions like `randomInt()` in set node, DO NOT wrap in `str()`. Write `$randomInt(1, 10)` not `$str(randomInt(1, 10))`. Functions return native types.
 20. **HTTP NODE OUTPUT** - HTTP node returns structured response with `status`, `headers`, `body`, and `request` fields. Access response body via `$httpNode.body` or `$httpNode.body.fieldName` for JSON.
 21. **MULTIPLE INPUT FIELDS** - textInput nodes support multiple input fields via `inputFields` array. Define fields like `[{"key": "text"}, {"key": "base64"}]`. Access via `$nodeLabel.body.fieldKey`. Input values are sent in the `body` object.
 22. **⚠️ NO UNNECESSARY textInput!** - NEVER add textInput unless user explicitly needs to provide input data. For static URLs, scheduled tasks, or fixed operations, START DIRECTLY with http, cron, or other nodes. textInput is ONLY for workflows that receive dynamic data from users/API callers.
 23. **⚠️ PRESERVE CREDENTIALS & MODEL** - When modifying an existing workflow, ALWAYS preserve existing `credentialId` and `model` values in nodes. NEVER replace, remove, or change credential IDs or model names unless the user explicitly asks to use a different credential or model. If a node already has a `credentialId` or `model`, keep them exactly as is.
-23a. **⚠️ CREDENTIALS & INTEGRATIONS - OWNED ONLY (NO SHARED)** - For **every** node field that references a credential or secret (`credentialId`, `githubCredentialId`, `fallbackCredentialId`, `guardrailCredentialId`, Playwright `aiStep` credential, etc.), use ONLY credentials **owned** by the workflow owner. **NEVER** put shared credentials (shared with you by another user or via team share) in generated JSON—the UI labels these as shared; they must not appear in AI output. Use placeholders such as `YOUR_CREDENTIAL_ID`, `codex-credential-uuid`, `opencode-credential-uuid`, `github-credential-uuid`, `jira-credential-uuid`, `google-drive-credential-uuid`, `slack-credential-uuid`, `telegram-credential-uuid`, or `imap-credential-uuid` and let the user pick an owned credential in the editor. Applies to: `llm`, `agent`, `codex`, `opencodeGo`, `slack`, `telegram`, `slackTrigger`, `telegramTrigger`, `imapTrigger`, `sendEmail`, `redis`, `grist`, `github`, `jira`, `linear`, `googleSheets`, `googleDrive`, `bigquery`, `supabase`, `notion`, `rabbitmq`, `crawler`, `playwright` (including `aiStep`), and any other integration that stores a credential id. When modifying an existing workflow (rule 23), still preserve existing ids if they are already non-shared; when **adding** new nodes, never insert shared credential UUIDs.
+23a. **⚠️ CREDENTIALS & INTEGRATIONS - OWNED ONLY (NO SHARED)** - For **every** node field that references a credential or secret (`credentialId`, `githubCredentialId`, `fallbackCredentialId`, `guardrailCredentialId`, Playwright `aiStep` credential, etc.), use ONLY credentials **owned** by the workflow owner. **NEVER** put shared credentials (shared with you by another user or via team share) in generated JSON—the UI labels these as shared; they must not appear in AI output. Use placeholders such as `YOUR_CREDENTIAL_ID`, `codex-credential-uuid`, `opencode-credential-uuid`, `github-credential-uuid`, `jira-credential-uuid`, `google-drive-credential-uuid`, `google-sheets-credential-uuid`, `slack-credential-uuid`, `telegram-credential-uuid`, or `imap-credential-uuid` and let the user pick an owned credential in the editor. Applies to: `llm`, `agent`, `codex`, `opencodeGo`, `slack`, `telegram`, `slackTrigger`, `telegramTrigger`, `imapTrigger`, `sendEmail`, `redis`, `grist`, `github`, `jira`, `linear`, `googleSheets`, `googleDrive`, `googleSheetsTrigger`, `googleDriveTrigger`, `bigquery`, `supabase`, `notion`, `rabbitmq`, `crawler`, `playwright` (including `aiStep`), and any other integration that stores a credential id. When modifying an existing workflow (rule 23), still preserve existing ids if they are already non-shared; when **adding** new nodes, never insert shared credential UUIDs.
 24. **EXECUTE NODE OUTPUT** - Execute node returns `{status, outputs, workflow_id, execution_time_ms}`. Access the called workflow's result via `$executeNodeLabel.outputs.output.result`. The `outputs.output` object contains the result from the executed workflow's output node.
 25. **EXECUTE NODE MULTIPLE INPUTS** - When calling a workflow that expects multiple input fields: (1) Add matching `inputFields` to your textInput node to collect all required data, (2) Use `executeInputMappings` array to map each field. Example: If target needs `text` and `imageUrl`, your textInput should have `inputFields: [{"key": "prompt"}, {"key": "image"}]`, then execute node uses `"executeInputMappings": [{"key": "text", "value": "$userInput.body.prompt"}, {"key": "imageUrl", "value": "$userInput.body.image"}]`
 26. **REQUEST BODY, HEADERS & QUERY** - When workflow is executed via API, textInput nodes receive `body`, `headers` and `query` objects. Access via `$textInputLabel.body.fieldName`, `$textInputLabel.headers.headerName` and `$textInputLabel.query.paramName`. Useful for accessing raw request data, authentication, and dynamic behavior.

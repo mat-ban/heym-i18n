@@ -945,6 +945,47 @@ class TestExpressionEvaluatorServiceEvaluate(unittest.TestCase):
         self.assertEqual(response.result_type, "string")
         self.assertFalse(response.preserved_type)
 
+    def test_trailing_punctuation_after_reference_is_kept(self) -> None:
+        context = {"Order": {"name": "Bob", "total": 42, "items": ["x"]}}
+        cases = [
+            ("Your total is $Order.total.", "Your total is 42."),
+            ("Hello $Order.name, ok. Bye $Order.name.", "Hello Bob, ok. Bye Bob."),
+            ("Total ($Order.total).", "Total (42)."),
+            ("Total $Order.total, thanks", "Total 42, thanks"),
+            ("Got $Order.items[0].", "Got x."),
+            ("Done $Order.name.upper().", "Done BOB."),
+            ("Wait $Order.name...", "Wait Bob..."),
+            ("Bare $Order.", 'Bare {"name": "Bob", "total": 42, "items": ["x"]}.'),
+        ]
+        executor = WorkflowExecutor(nodes=[], edges=[])
+        for template, expected in cases:
+            with self.subTest(template=template):
+                self.assertEqual(self._service().evaluate(template, context).result, expected)
+                self.assertEqual(
+                    executor.evaluate_message_template(template, context, "n"), expected
+                )
+
+    def test_whole_field_reference_with_trailing_dots_keeps_type(self) -> None:
+        context = {"Order": {"name": "Bob", "total": 42}}
+        executor = WorkflowExecutor(nodes=[], edges=[])
+        for template, expected in [("$Order.total.", 42), ("$Order.", context["Order"])]:
+            with self.subTest(template=template):
+                self.assertEqual(self._service().evaluate(template, context).result, expected)
+                self.assertEqual(
+                    executor.resolve_expression(template, context, "n", preserve_type=True),
+                    expected,
+                )
+
+    def test_trailing_dot_after_last_reference_keeps_condition_and_arithmetic(self) -> None:
+        ctx = {
+            "Order": {"status": "ok", "total": 50, "fee": 10, "name": "Bob", "tag": "VIP"},
+            "Expected": {"status": "ok"},
+        }
+        ex = WorkflowExecutor(nodes=[], edges=[])
+        self.assertIs(ex.evaluate_condition("$Order.status == $Expected.status.", ctx, "n"), True)
+        self.assertEqual(ex.resolve_expression("$Order.total - $Order.fee.", ctx, "n"), 40)
+        self.assertEqual(ex.resolve_expression("$Order.name + $Order.tag.", ctx, "n"), "BobVIP")
+
     def test_single_expr_array_preserved(self) -> None:
         response = self._service().evaluate("$data.items", {"data": {"items": [1, 2, 3]}})
         self.assertEqual(response.result, [1, 2, 3])

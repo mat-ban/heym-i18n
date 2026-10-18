@@ -17,6 +17,137 @@ import type { ReleaseEntry } from "@/features/release-tour/releaseTour.types";
  */
 export const RELEASE_REGISTRY: ReleaseEntry[] = [
   {
+    releaseId: "2026.21",
+    publishedAt: new Date("2026-10-18T12:00:00Z"),
+    headline: "Sign in to ChatGPT for Codex with a short code",
+    releaseTour: {
+      label: "New in Heym",
+      introTitle: "New in this release",
+      introDescription:
+        "A quick look at what changed since your last update. Takes about a minute.",
+      tourEnabled: false,
+      sectionOrder: ["codex-device-sign-in"],
+    },
+    sections: [
+      {
+        id: "codex-device-sign-in",
+        title: "Sign in to ChatGPT for Codex with a short code",
+        publishedAt: new Date("2026-10-18T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "The **OpenAI Codex** credential now signs in to ChatGPT with a short code. Click **Sign in with ChatGPT**, enter the code Heym shows (it is already copied) on OpenAI's page, and approve. Heym finishes on its own and closes the OpenAI window. There is no `localhost:1455` address to copy back anymore.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Device code sign-in has to be allowed in ChatGPT under **Settings → Security**, and a workspace admin has to allow it for workspace accounts. Where it is off, **paste a redirect URL instead** keeps the previous flow.",
+          },
+        ],
+        tour: {
+          description:
+            "Connect a ChatGPT subscription to the Codex node with a short code. Nothing to paste back.",
+          useCases: [
+            "Run Codex on a ChatGPT Plus or Pro plan instead of API credits",
+            "Reconnect a Codex credential without leaving the dialog",
+            "Sign in from a phone or another computer by entering the code there",
+          ],
+          tourVisual: "codex-device-sign-in",
+          docTarget: {
+            categoryId: "nodes",
+            slug: "codex-node",
+            title: "Codex",
+          },
+        },
+      },
+    ],
+  },
+  {
+    releaseId: "2026.20",
+    publishedAt: new Date("2026-10-17T12:00:00Z"),
+    headline: "Slack approvals, buttons and forms that pause a run",
+    releaseTour: {
+      label: "New in Heym",
+      introTitle: "New in this release",
+      introDescription:
+        "A quick look at what changed since your last update. Takes about a minute.",
+      tourEnabled: true,
+      sectionOrder: ["slack-bot", "google-triggers"],
+    },
+    sections: [
+      {
+        id: "slack-bot",
+        title: "Slack with a bot token: approvals, buttons, forms and threads",
+        publishedAt: new Date("2026-10-17T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "A new **Slack Bot (Token)** credential turns the **Slack** node into a full Slack step: channel messages and DMs, thread replies, message updates, colored outcome cards, reactions, reading messages and looking people up. Each post returns its `channel`, `ts` and `threadTs`, so later steps stay in one thread.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "**Request approval**, **Send message with buttons** and **Send form** pause the run until someone answers in Slack. The same request waits in the inbox, so it can be decided in Heym too, and the step continues with `approval`, `choice` or the form's `values`. **Copy app manifest** in the credential dialog sets up the Slack app with every scope.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "One Slack app now serves every **Slack Trigger** on its credential: point Event Subscriptions at the credential's events URL, and each workflow starts only on what it listens to, such as direct messages to the bot, mentions, or one channel.",
+          },
+        ],
+        tour: {
+          description:
+            "Post to Slack with a bot token, and let a click on Approve or a submitted form continue the run.",
+          useCases: [
+            "Ask a finance channel to approve a refund before it is paid",
+            "Collect incident details through a Slack form, then file them",
+            "Close the loop with an outcome card in the same thread",
+          ],
+          tourVisual: "slack-bot",
+          docTarget: {
+            categoryId: "nodes",
+            slug: "slack-node",
+            title: "Slack",
+          },
+        },
+      },
+      {
+        id: "google-triggers",
+        title: "Start a run when a Drive file or a sheet row changes",
+        publishedAt: new Date("2026-10-17T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Two new trigger nodes. **Google Drive Trigger** starts a run when a file is created, updated, or deleted in a folder you choose. **Google Sheets Trigger** starts a run when a row is added, updated, or deleted, and tells the run which columns changed.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Each change starts exactly one run, even on a multi-instance install. Heym keeps file metadata and keyed fingerprints of cells, never cell values. Set a key column such as `Email` so inserted or sorted rows are matched correctly.",
+          },
+        ],
+        tour: {
+          description:
+            "Start a run when a file lands in a Drive folder or a row changes in a sheet, once per change.",
+          useCases: [
+            "Summarize every contract dropped into a shared folder",
+            "Score each new lead as soon as its row appears",
+            "Notify an owner when a status column changes",
+          ],
+          tourVisual: "google-triggers",
+          docTarget: {
+            categoryId: "nodes",
+            slug: "google-sheets-trigger-node",
+            title: "Google Sheets Trigger",
+          },
+        },
+      },
+    ],
+  },
+  {
     releaseId: "2026.19",
     publishedAt: new Date("2026-10-10T18:00:00Z"),
     headline: "Heym Work for business teams, and skill zips in Chat",
@@ -89,142 +220,6 @@ export const RELEASE_REGISTRY: ReleaseEntry[] = [
             "Start a new workflow whose agent carries the skill",
           ],
           tourVisual: "skill-zip",
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.18",
-    publishedAt: new Date("2026-10-03T12:00:00Z"),
-    headline: "Switch a node back on from inside a workflow",
-    releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
-      tourEnabled: true,
-      sectionOrder: ["enable-node"],
-    },
-    sections: [
-      {
-        id: "enable-node",
-        title: "Enable Node: switch a node back on from inside a workflow",
-        publishedAt: new Date("2026-10-03T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "The new **Enable Node** is the counterpart of **Disable Node**. Pick a node by label and it turns that node back on and saves the change, so a **Cron** trigger you switched off fires again at its next scheduled time. If the node sits downstream and has not run yet, it also runs in the current execution.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "A switched-off trigger never starts a run by itself, so put the Enable Node behind another entry point, such as an **Input** trigger. The **Wait** node also takes longer pauses now: up to 15 minutes instead of one.",
-          },
-        ],
-        tour: {
-          description:
-            "Turn a disabled node back on from inside a workflow, for example a Cron trigger that was switched off.",
-          useCases: [
-            "Start a disabled Cron trigger on demand from a webhook",
-            "Pair it with Disable Node to switch a node off and on as conditions change",
-            "Pause a workflow for up to 15 minutes with the Wait node",
-          ],
-          tourVisual: "enable-node",
-          docTarget: {
-            categoryId: "nodes",
-            slug: "enable-node",
-            title: "Enable Node",
-          },
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.17",
-    publishedAt: new Date("2026-09-28T18:00:00Z"),
-    headline: "Review pending human approvals from the dashboard",
-    releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
-      tourEnabled: true,
-      sectionOrder: ["dashboard-hitl"],
-    },
-    sections: [
-      {
-        id: "dashboard-hitl",
-        title: "Clear pending reviews from a dashboard widget",
-        publishedAt: new Date("2026-09-28T18:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Add a **HITL** widget and the header shows how many reviews are waiting, as `1/n pending`. Move left and right through each one; the arrows stop at the ends. The workflow name opens that run on the canvas. **Approve**, **Request changes**, and **Reject** resolve the draft. The history icon beside the widget title opens that run in the history dialog on the same page. The queue is yours: a shared dashboard does not reveal someone else's drafts.",
-          },
-        ],
-        tour: {
-          description:
-            "A dashboard carousel of your pending human reviews, with the count in the header.",
-          useCases: [
-            "See how many reviews are waiting before you open the first one",
-            "Approve, request changes, or reject a draft without leaving the dashboard",
-            "Open that run in the history dialog from the icon beside the widget title",
-          ],
-          tourVisual: "dashboard-hitl",
-          docTarget: {
-            categoryId: "tabs",
-            slug: "dashboard-tab",
-            title: "Dashboard",
-          },
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.16",
-    publishedAt: new Date("2026-09-27T00:00:00Z"),
-    headline: "The AI Assistant sets up your data tables",
-    releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
-      tourEnabled: true,
-      sectionOrder: ["assistant-data-tables"],
-    },
-    sections: [
-      {
-        id: "assistant-data-tables",
-        title: "The AI Assistant picks or creates your data tables",
-        publishedAt: new Date("2026-09-28T10:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "When a workflow stores records, the **AI Assistant** now knows your **DataTables**. Name one and it uses it. Otherwise it asks which table to use: the question card lists the tables that fit, each with its description and column types, plus **Create a new table** with the columns the workflow needs. Press **Submit answers** and the card creates the table, then the assistant wires it into the **DataTable** node with its exact column names.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "It works in the canvas assistant, YOLO mode included, in **Chat**, in **Chat with Heym** on the docs, and over MCP through `heym_chat`. The assistant sees table names and columns, never rows, and never changes an existing table's columns: that stays in the **DataTable** tab.",
-          },
-        ],
-        tour: {
-          description:
-            "The AI Assistant asks which data table a workflow should use, or creates one with the right columns.",
-          useCases: [
-            "Ask to save every lead in a table and get the table and the workflow together",
-            "Pick one of your tables from a card that shows its columns and types",
-            "Create and wire tables from Chat or an MCP client, not just the canvas",
-          ],
-          tourVisual: "assistant-data-tables",
-          docTarget: {
-            categoryId: "reference",
-            slug: "ai-assistant",
-            title: "AI Assistant",
-          },
         },
       },
     ],

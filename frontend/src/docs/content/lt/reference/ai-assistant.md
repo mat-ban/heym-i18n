@@ -13,6 +13,8 @@ Dėl dokumentacijos klausimų už redaktoriaus ribų naudokite [Chat with Heym](
 
 Paspauskite `Ctrl + I` / `Cmd + I` bet kur redaktoriuje, kad atidarytumėte arba uždarytumėte panelę – klaviatūros kombinacija veikia net kai fokusas yra teksto įvedimo lauke. Žr. [Klaviatūros kombinacijos](./keyboard-shortcuts.md).
 
+Norėdami dirbti su vienu mazgu, užveskite pelės žymeklį ant jo drobėje ir viršuje spustelėkite **AI**. Skydelis atsidaro sufokusuotas į tą mazgą. Žr. [Vieno mazgo keitimas](#changing-one-node).
+
 ## Panelės Uždarymas
 
 Paspauskite **X** mygtuką, paspauskite `Ctrl + I` / `Cmd + I`, arba perjunkite **AI** mygtuką Debug panelės įrankių juostoje. Antraštė vilks panelę; ji neužsidaro.
@@ -60,6 +62,33 @@ Kai AI atsakymas apima galiojantį workflow JSON bloką (su `nodes` ir pasirenka
 4. Žymi workflow kaip neišsaugotą
 
 Jei analizė nepavyksta, pasirodo **Pakartoti** mygtukas, kad būtų sugeneruotas atsakymas iš naujo.
+
+## Vieno mazgo keitimas
+
+Užveskite žymeklį ant mazgo drobėje ir spustelėkite **AI** virš jo. Skydelis atsidaro Agent režimu, sufokusuotas į tą mazgą, ir rodo, kurį mazgą keičia:
+
+| Mazgas turi... | Skydelis rodo |
+|---|---|
+| Nėra rezultato dabartiniame vykdyme | **Modifying Node:** kompaktiškoje eilutėje su mazgo piktograma ir pavadinimu. Asistentas redaguoja tik iš paties mazgo konfigūracijos; pirmiausia paleiskite mazgą, jei jis turi matyti išvestį |
+| Rezultatas dabartiniame vykdyme | **Modifying Node: (Has Node Output)** virš paties mazgo: piktograma, pavadinimas ir tipas, paskutinė būsena bei trukmė, ir klaida, jei nepavyko. Asistentas mato šią išvestį ir klaidą redaguodamas mazgą |
+
+Užveskite žymeklį ant etiketės, kad pamatytumėte, kokios būsenos yra skydelis.
+
+Kad ir kokia būtų skydelio būsena, asistentas taip pat skaito mazgo dokumentacijos puslapį, esantį už knygos piktogramos mazgo antraštėje. Jis naudoja puslapį mazgo parinktims suprasti ir atsakyti į klausimus apie jas.
+
+Po pranešimais trys parinktys pradeda užklausą:
+
+| Parinktis | Ką ji daro |
+|---|---|
+| **Change this node as ...** | Užpildo pranešimo laukelį tekstu *Pakeisk šį mazgą į*, kad užbaigtumėte sakinį |
+| **Fix error in this node ...** | Užpildo *Ištaisyk klaidą šiame mazge.* Asistentas perskaitys šio mazgo klaidą iš paskutinio vykdymo |
+| **Other** | Sufokusuoja tuščią pranešimo laukelį |
+
+Pataisykite tekstą ir paspauskite **Send**. Asistentas grąžina tik šį mazgą ir Heym atnaujina jį vietoje: mazgas išlaiko savo id, tipą ir pavadinimą, todėl reiškiniai, pvz., `$checkLinkedIn.result` kituose mazguose, veikia toliau. Kiti mazgai, ryšiai ir išdėstymas nesikeičia, o **Undo** atkuria ankstesnę konfigūraciją.
+
+Jei užklausa netelpa mazge, pavyzdžiui, reikalingas kitas mazgo tipas ar naujas mazgas, asistentas nurodo, ką reikėtų pakeisti vietoj redagavimo. Uždarykite mazgo fokusavimą naudodami **X** ant mazgo kortelės, kad vėl redaguotumėte visą workflow. Skydelio uždarymas taip pat išvalo fokusavimą.
+
+[YOLO režimas](#yolo-mode) veikia su sufokusuotu mazgu: asistentas pakeičia mazgą, paleidžia workflow ir taiso mazgą, kol vykdymas bus sėkmingas. Režimu **Ask** fokusavimas nurodo asistentui, apie kurį mazgą yra jūsų klausimas, o drobė nekeičiama.
 
 ## YOLO Režimas
 

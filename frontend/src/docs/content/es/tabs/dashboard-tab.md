@@ -18,14 +18,14 @@ Un widget es un único gráfico sobre la cuadrícula. Tipos de gráfico admitido
 - **Line**
 - **Area** (tendencia rellena, admite múltiples series)
 - **Pie**
-- **Table** (con desplazamiento; una columna puede representarse como [chips de estado](../nodes/chart-output-node.md#status-chips) y las filas pueden abrir una [página de detalle](#detail-pages))
+- **Table** (con desplazamiento; haga clic en el encabezado de una columna para ordenar de forma ascendente y vuelva a hacer clic para ordenar de forma descendente. Una columna puede mostrarse como [chips de estado](../nodes/chart-output-node.md#status-chips), una columna puede contener [botones de enlace](../nodes/chart-output-node.md#link-buttons) que abren una URL en una pestaña nueva, y las filas pueden abrir una [página de detalle](#paginas-de-detalle))
 - **Numeric** (un único valor KPI con una unidad opcional)
 - **Gauge** (un único valor frente a un rango mín–máx, por ejemplo un porcentaje)
 - **Scatter** (puntos X/Y para gráficos de correlación)
 - **Proportion** (una barra dividida en porciones con una leyenda de porcentajes, por ejemplo un desglose por idioma)
 - **Bar gauge** (un medidor horizontal por fila con un degradado de rojo a verde y un valor, por ejemplo el espacio libre en disco)
 - **Text** (un mensaje markdown, por ejemplo una nota de estado como "Última ejecución a las 19:47"; admite [casillas interactivas](../nodes/chart-output-node.md#interactive-task-lists) cuando el markdown es estático, y [listas numeradas explícitas](../nodes/chart-output-node.md#numbered-lists) para numeración personalizada o descendente)
-- **HITL** (sus revisiones humanas pendientes. El encabezado muestra `1/n pendientes`. El nombre del workflow abre esa ejecución en el canvas. **Approve**, **Request changes** y **Reject** la resuelven. El icono de historial junto al título del widget abre esa ejecución en el diálogo de historial de esta página. El widget no utiliza filas de entrada, y cada persona ve su propia cola)
+- **HITL** (sus revisiones humanas pendientes. El encabezado muestra `1/n pendientes`. El nombre del workflow abre esa ejecución en el canvas. **Approve**, **Request changes** y **Reject** la resuelven. El icono de historial junto al título del widget abre esa ejecución en el diálogo de historial de esta página. El widget no utiliza filas de entrada, y cada persona ve su propia cola. Puede mostrar en su lugar las revisiones de un solo Workflow, para todas las personas que puedan abrir ese Workflow; consulte [Widgets HITL](#widgets-hitl))
 
 Además de los gráficos, un widget **Run a workflow** ejecuta uno de sus workflows desde el dashboard: al soltar un archivo, con sus campos de entrada o mediante un botón Run; consulte [Widgets de ejecución](#run-widgets).
 
@@ -41,6 +41,20 @@ Cada widget carga sus datos de forma asíncrona al abrir la pestaña, de modo qu
 Para un widget **Run a workflow**, elija en su lugar el workflow que ejecuta; el selector indica cómo ejecutará el widget cada uno. El widget se añade directamente a la cuadrícula; no hay ningún workflow nuevo que construir.
 
 Haga doble clic en un widget (o utilice su botón de edición) para reabrir su workflow en cualquier momento. Utilice **Clone widget** en el encabezado del widget para duplicar tanto el widget como su workflow completo. La copia se coloca debajo del original y se etiqueta con **(Copy)** para poder editarla de forma independiente.
+
+## Widgets HITL
+
+Un nuevo widget HITL muestra todas las revisiones que esperan en su propia cola. Para mostrar solo las de un Workflow, abra la **Configuración** del widget:
+
+1. En **Workflow**, elija el Workflow. La lista contiene los Workflows que puede abrir, suyos o compartidos con usted o con su equipo, que tienen un paso a la espera de una persona: un Agent con revisión humana, o un paso de Slack de aprobación, botones o formulario. El icono junto a él abre ese Workflow en una pestaña nueva.
+2. Si el Workflow tiene un solo paso de este tipo, se selecciona automáticamente. Si tiene varios, **Select agent** los lista por nombre de nodo, con **All agents** primero; los pasos de Slack se marcan con **(Slack)**.
+3. Guarde. El `1/n pending` del encabezado cuenta solo esas revisiones. Elija **Todos los workflows** para volver a mostrar su propia cola.
+
+La misma opción está en el lienzo, en las propiedades del nodo Chart Output. **Ajustar con IA** puede hacerlo («mostrar solo las aprobaciones de facturas»), igual que describir un widget nuevo que nombre el Workflow. Cada cambio es una edición del Workflow, por lo que aparece en el Edit History.
+
+- **Quién ve las revisiones.** Un widget filtrado por un Workflow muestra las revisiones de ese Workflow a todas las personas que puedan abrirlo, y estas pueden aprobar, solicitar cambios o rechazar desde él, igual que podrían ejecutar el Workflow. Un widget sin filtrar muestra a cada persona su propia cola.
+- **Quién ve el widget.** Quien no pueda abrir el Workflow elegido no ve el widget en absoluto, ni siquiera en un dashboard compartido con esa persona. Cuando el propietario del dashboard pierde el acceso al Workflow, o este se elimina, el propietario ve «You no longer have access to the workflow this widget shows» y puede elegir otro en la **Configuración**.
+- **Solo opciones accesibles.** Un Workflow que no puede abrir se rechaza al guardar el widget, ya sea desde la configuración, el lienzo o la IA.
 
 ## Páginas de detalle
 
@@ -75,6 +89,10 @@ El botón **Wrap** del resultado ajusta las líneas largas de salida dentro del 
 ## Generar un widget con IA
 
 Haga clic en **AI**, describa la métrica deseada (por ejemplo, "tasa de éxito de workflows durante los últimos 30 días como gráfico de barras") y elija una credencial de LLM y un modelo. Heym genera un workflow de widget completo que termina en un nodo Chart Output y lo añade a la cuadrícula. Consulte [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) para ver prompts de ejemplo por tipo de gráfico.
+
+El widget recibe un título corto de una o dos palabras en el idioma de su petición, como «Casos abiertos». Un título nunca incluye el id de una tabla de datos; cuando el modelo nombra el widget con una frase, Heym conserva sus primeras palabras.
+
+La API de widgets también puede crear una **tarjeta de recuento** sin IA: un widget `text` sobre una tabla de datos (`data_table_id`) con `count_column` y `count_value` muestra cuántas filas tienen ese valor; el título del widget nombra el valor. Heym Work encabeza las páginas creadas a partir de una tabla de datos con una tarjeta de recuento por estado.
 
 Utilice el botón **Fine-tune with AI** de un widget para revisar un widget existente con una nueva instrucción. Cada ajuste con IA guarda una instantánea del workflow anterior en el **Edit History** del widget, de modo que es posible revisar o revertir cambios desde el editor de workflows.
 

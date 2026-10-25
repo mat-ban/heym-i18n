@@ -83,6 +83,17 @@ menunggu Anda, bukan sebagai running. Ini adalah data yang sama dengan badge act
 sehingga Chat dan badge tersebut tidak pernah berbeda. Untuk run yang sudah selesai, tanyakan recent executions
 saja — itu akan membaca [Execution History](../reference/execution-history.md).
 
+## Menanyakan Tentang Eksekusi
+
+Pilih eksekusi Workflow di [Execution History](../reference/execution-history.md#ask-ai), dari editor atau dari All History, lalu klik **Tanya AI** di sebelah judul dialog. Chat membuka percakapan baru dengan dua chip di atas kotak pesan:
+
+- **Workflow:** nama Workflow
+- **Execution:** karakter pertama dari id eksekusi yang dipilih
+
+Hapus chip dengan tanda **×** untuk mengecualikannya. Kemudian ajukan pertanyaan Anda, misalnya “mengapa eksekusi ini memakan waktu begitu lama?”, “apa yang gagal di sini?” atau “dapatkah Anda memperbaikinya?”. Chip yang tersisa dilampirkan ke pesan tersebut dengan id lengkap, sehingga Chat langsung membaca input, output, dan trace per node eksekusi alih-alih mencari Workflow. Untuk memperbaiki Workflow, Chat menyimpan, menguji, dan memverifikasi perubahan seperti yang dijelaskan dalam [Membuat Workflow](#membuat-workflow).
+
+Pesan yang dikirim menampilkan chip di bawah pertanyaan Anda. Chip hanya milik pesan tersebut; pertanyaan lanjutan dalam percakapan yang sama mempertahankan konteks dari riwayat.
+
 ## Menanyakan Tentang Alert
 
 Chat dapat menjawab pertanyaan tentang [alert](./alerts-tab.md) yang telah Anda definisikan:

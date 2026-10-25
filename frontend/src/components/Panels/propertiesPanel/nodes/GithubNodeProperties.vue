@@ -6,6 +6,7 @@ import Input from "@/components/ui/Input.vue";
 import Label from "@/components/ui/Label.vue";
 import SearchableSelect from "@/components/ui/SearchableSelect.vue";
 import Select from "@/components/ui/Select.vue";
+import { isFlagOn } from "@/lib/booleanFlag";
 import { usePropertiesPanelContext } from "../usePropertiesPanelController";
 
 const {
@@ -455,6 +456,29 @@ const {
         <p class="text-xs text-muted-foreground">
           Leave empty for the first page. To continue, pass the previous run's
           <code>next_cursor</code> while <code>has_more</code> is true.
+        </p>
+      </div>
+      <div class="space-y-1">
+        <div class="flex items-center justify-between gap-2">
+          <label class="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <input
+              id="github-return-all"
+              type="checkbox"
+              :checked="isFlagOn(selectedNode.data.githubReturnAll)"
+              class="rounded border-border"
+              @change="updateNodeData('githubReturnAll', ($event.target as HTMLInputElement).checked)"
+            >
+            <span>Return all pages</span>
+          </label>
+          <AgentFieldToggle
+            :node-id="selectedNode.id"
+            field-key="githubReturnAll"
+          />
+        </div>
+        <p class="text-xs text-muted-foreground">
+          Follows every page, starting at Cursor, with 100 items per request, and stops at about
+          1,000 items. If more
+          remain, <code>has_more</code> is true and <code>next_cursor</code> picks up from there.
         </p>
       </div>
     </template>

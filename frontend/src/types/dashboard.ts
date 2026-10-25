@@ -18,6 +18,26 @@ export interface HitlWidgetItem {
   created_at?: string;
 }
 
+/** Which reviews a HITL widget shows: one workflow's, or one step's of it. */
+export interface HitlFilter {
+  workflow_id: string;
+  node_id: string | null;
+}
+
+/** A step that can leave a review waiting: an agent with human review, or a Slack approval. */
+export interface HitlSourceStep {
+  node_id: string;
+  label: string;
+  kind: "agent" | "slack";
+}
+
+/** A workflow a HITL widget can show reviews from. */
+export interface HitlSource {
+  workflow_id: string;
+  workflow_name: string;
+  steps: HitlSourceStep[];
+}
+
 /** Tone of a status chip in a table widget's status column. */
 export type StatusTone = "success" | "attention" | "failure" | "waiting" | "neutral";
 
@@ -43,6 +63,9 @@ export interface ChartPayload {
   // Table column rendered as status chips, and the tone of each value in it.
   statusColumn?: string;
   statusTones?: Record<string, StatusTone>;
+  // Table column whose cells are URLs shown as a button that opens them in a new tab.
+  linkColumn?: string;
+  linkLabel?: string;
   value?: number | string | null;
   // Markdown content for the `text` chart type.
   text?: string;
@@ -59,6 +82,8 @@ export interface ChartPayload {
   // The add-widget preview passes sample items so the carousel renders offline.
   pending_total?: number;
   items?: HitlWidgetItem[];
+  // HITL carousel: only reviews from this workflow (and step). Absent shows every review.
+  filter?: HitlFilter | null;
 }
 
 /** A file-run widget before any drop: the file its workflow's File Upload trigger takes. */
@@ -122,6 +147,8 @@ export interface DashboardWidget {
   link_label_field: string | null;
   /** Whether the viewer can open the linked dashboard; rows are clickable only then. */
   link_accessible: boolean;
+  /** HITL widgets: the workflow (and step) whose reviews it shows; null shows every review. */
+  hitl_filter?: HitlFilter | null;
   updated_at: string;
 }
 
@@ -198,4 +225,6 @@ export interface WidgetUpdateRequest {
   link_dashboard_id?: string | null;
   link_record_field?: string | null;
   link_label_field?: string | null;
+  /** HITL widgets: send null to show every review; leave out to keep the current choice. */
+  hitl_filter?: HitlFilter | null;
 }

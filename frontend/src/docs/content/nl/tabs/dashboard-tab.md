@@ -18,14 +18,14 @@ Een widget is een enkele grafiek op het raster. Ondersteunde grafiektypen:
 - **Line**
 - **Area** (gevulde trend, ondersteunt meerdere reeksen)
 - **Pie**
-- **Table** (scrollbaar; één kolom kan worden weergegeven als [statuschips](../nodes/chart-output-node.md#status-chips), en rijen kunnen een [detailpagina](#detail-pages) openen)
+- **Table** (scrollbaar; klik op een kolomkop om oplopend te sorteren en klik er nogmaals op om aflopend te sorteren. Eén kolom kan worden weergegeven als [statuschips](../nodes/chart-output-node.md#status-chips), één kolom kan [linkknoppen](../nodes/chart-output-node.md#link-buttons) bevatten die een URL in een nieuw tabblad openen, en rijen kunnen een [detailpagina](#detailpaginas) openen)
 - **Numeric** (één KPI-waarde met een optionele eenheid)
 - **Gauge** (één waarde tegen een min–max-bereik, bijvoorbeeld een percentage)
 - **Scatter** (X/Y-punten voor correlatiegrafieken)
 - **Proportion** (één balk opgesplitst in aandelen met een percentagelegenda, bijvoorbeeld een taalverdeling)
 - **Bar gauge** (één horizontale gauge per rij met een rood→groen verloop en een waarde, bijvoorbeeld vrije schijfruimte)
 - **Text** (een markdown-bericht, bijvoorbeeld een statusnotitie zoals "Laatste uitvoering om 19:47"; ondersteunt [interactieve selectievakjes](../nodes/chart-output-node.md#interactive-task-lists) wanneer de markdown statisch is, en [expliciete genummerde lijsten](../nodes/chart-output-node.md#numbered-lists) voor aangepaste of aflopende nummering)
-- **HITL** (uw openstaande menselijke beoordelingen. De kop toont `1/n pending`. De workflownaam opent die uitvoering op het canvas. **Approve**, **Request changes** en **Reject** lossen deze op. Het geschiedenis-pictogram naast de widgettitel opent die uitvoering in het geschiedenisdialoogvenster op deze pagina. De widget gebruikt geen bovenliggende rijen en elke persoon ziet zijn eigen wachtrij)
+- **HITL** (uw openstaande menselijke beoordelingen. De kop toont `1/n pending`. De workflownaam opent die uitvoering op het canvas. **Approve**, **Request changes** en **Reject** lossen deze op. Het geschiedenis-pictogram naast de widgettitel opent die uitvoering in het geschiedenisdialoogvenster op deze pagina. De widget gebruikt geen bovenliggende rijen en elke persoon ziet zijn eigen wachtrij. Het kan in plaats daarvan de beoordelingen van één Workflow tonen, voor iedereen die die Workflow kan openen; zie [HITL-widgets](#hitl-widgets))
 
 Naast grafieken voert een **Run a workflow**-widget een van uw workflows rechtstreeks vanaf het dashboard uit: op een gesleept bestand, met de invoervelden ervan, of met een knop Run; zie [Run-widgets](#run-widgets).
 
@@ -41,6 +41,20 @@ Elke widget laadt zijn gegevens asynchroon wanneer u het tabblad opent, zodat de
 Voor een **Run a workflow**-widget kiest u in plaats daarvan de workflow die moet worden uitgevoerd; de kiezer vermeldt hoe de widget elke workflow zal uitvoeren. De widget wordt rechtstreeks aan het raster toegevoegd; er hoeft geen nieuwe workflow te worden gebouwd.
 
 Dubbelklik op een widget (of gebruik de bewerkknop) om de bijbehorende workflow op elk moment opnieuw te openen. Gebruik **Clone widget** in de widgetkop om zowel de widget als de volledige workflow te dupliceren. De kopie wordt onder het origineel geplaatst en voorzien van het label **(Copy)**, zodat u deze onafhankelijk kunt bewerken.
+
+## HITL-widgets
+
+Een nieuwe HITL-widget toont elke beoordeling die in uw eigen wachtrij staat te wachten. Om alleen die van één Workflow te tonen, opent u de **Instellingen** van de widget:
+
+1. Kies onder **Workflow** de Workflow. De lijst bevat de Workflows die u kunt openen, van uzelf of gedeeld met u of uw team, met een stap die op een persoon wacht: een Agent met menselijke beoordeling, of een Slack-goedkeurings-, knoppen- of formulierstap. Het pictogram ernaast opent die Workflow in een nieuw tabblad.
+2. Heeft de Workflow één zo'n stap, dan wordt die automatisch gekozen. Heeft hij er meerdere, dan toont **Select agent** ze op node-naam, met **All agents** bovenaan; Slack-stappen zijn gemarkeerd met **(Slack)**.
+3. Sla op. De `1/n pending` in de kop telt alleen die beoordelingen. Kies **Alle workflows** om weer uw eigen wachtrij te tonen.
+
+Dezelfde keuze staat op het canvas, in de eigenschappen van de Chart Output-node. **Verfijnen met AI** kan haar maken (“toon alleen de factuurgoedkeuringen”), en dat kan ook door een nieuwe widget te beschrijven waarin de Workflow wordt genoemd. Elke wijziging is een Workflow-bewerking en verschijnt dus in de Edit History.
+
+- **Wie de beoordelingen ziet.** Een widget die op een Workflow is gefilterd, toont de beoordelingen van die Workflow aan iedereen die de Workflow kan openen, en zij kunnen vanuit de widget goedkeuren, wijzigingen aanvragen of afwijzen, net zoals zij de Workflow zouden kunnen uitvoeren. Een niet-gefilterde widget toont iedereen de eigen wachtrij.
+- **Wie de widget ziet.** Wie de gekozen Workflow niet kan openen, ziet de widget helemaal niet, ook niet op een dashboard dat met hem is gedeeld. Als de eigenaar van het dashboard de toegang tot de Workflow verliest of de Workflow wordt verwijderd, ziet de eigenaar “You no longer have access to the workflow this widget shows” en kan hij in de **Instellingen** een andere kiezen.
+- **Alleen bereikbare keuzes.** Een Workflow die u niet kunt openen, wordt geweigerd wanneer de widget wordt opgeslagen, of dat nu via de instellingen, het canvas of de AI gebeurt.
 
 ## Detailpagina's
 
@@ -75,6 +89,10 @@ De knop **Wrap** bij het resultaat breekt lange uitvoerregels binnen het vak af;
 ## Een widget genereren met AI
 
 Klik op **AI**, beschrijf de gewenste metriek (bijvoorbeeld "workflow success rate over the last 30 days as a bar chart") en kies een LLM-referentie en -model. Heym genereert een volledige widgetworkflow die eindigt in een Chart Output-knooppunt en voegt deze toe aan het raster. Zie [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) voor voorbeeldprompts per grafiektype.
+
+De widget krijgt een korte titel van een of twee woorden in de taal van uw verzoek, zoals “Open dossiers”. Een titel bevat nooit de id van een datatabel; als het model de widget met een zin benoemt, houdt Heym de eerste paar woorden over.
+
+De widget-API kan ook zonder AI een **telkaart** maken: een `text`-widget op een datatabel (`data_table_id`) met `count_column` en `count_value` toont hoeveel rijen die waarde hebben; de titel van de widget noemt de waarde. Heym Work laat pagina's die uit een datatabel zijn gemaakt beginnen met één telkaart per status.
 
 Gebruik de knop **Fine-tune with AI** van een widget om een bestaande widget met een nieuwe instructie te herzien. Elke AI-finetuning maakt een momentopname van de vorige workflow in de **Edit History** van de widget, zodat u wijzigingen kunt bekijken of terugdraaien vanuit de workflow-editor.
 

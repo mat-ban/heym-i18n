@@ -16,12 +16,12 @@ Der **Heym**-Knoten liest Heyms eigene Daten: die Workflows, auf die Sie zugreif
 | Parameter | Typ | Beschreibung |
 |-----------|------|-------------|
 | `heymOperation` | Select | Welche Leseoperation ausgeführt werden soll |
-| `heymWorkflowId` | UUID | Ziel-Workflow. Erforderlich für `getWorkflow` und `getExecutionHistory`. Ausdrucksfähig. |
+| `heymWorkflowId` | UUID | Setzen Sie ihn bei `getExecutionHistory` auf `all`, um jeden erreichbaren Workflow zu lesen. |
 | `heymLimit` | String | Maximale Anzahl zurückzugebender Zeilen. **Leer lassen oder `0` eingeben, um alles zurückzugeben** — das ist der Standard. Ausdrucksfähig. |
 | `heymStatus` | String | Optionaler Statusfilter für `getExecutionHistory`. Ausdrucksfähig. |
 | `heymSinceDays` | String | Optionaler Rückblick in Tagen für `getExecutionHistory`. Ausdrucksfähig. |
 
-Die Workflow-Auswahl ist ein durchsuchbares Dropdown, das jeden Workflow auflistet, auf den Sie zugreifen können.
+Die Workflow-Auswahl ist ein durchsuchbares Dropdown, das jeden Workflow auflistet, auf den Sie zugreifen können. Bei {GEH} ist der erste Eintrag **{AW}**. Bei {GEH} ist der erste Eintrag **{AW}**.
 
 ## Zugriffsbereich
 
@@ -93,9 +93,11 @@ Gibt Verlaufs-Einträge für einen Workflow zurück, neueste zuerst.
 | `$nodeLabel.executions[0].recovered` | Ob der Lauf nach einem Absturz wiederhergestellt wurde |
 | `$nodeLabel.executions[0].inputs` | Was der Lauf empfangen hat – die Trigger-Payload oder die Eingabe des Aufrufers |
 | `$nodeLabel.executions[0].outputs` | Die Ausgabe des Workflows für diesen Lauf |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Der Workflow, zu dem der Verlauf gehört |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Der Workflow, zu dem der Verlauf gehört, oder `null` bei **{AW}** |
+der `null` bei **{AW}** |
 | `$nodeLabel.total` | Gesamtzahl der passenden Ausführungen **vor** dem Limit |
-| `$nodeLabel.by_status` | Zählungen nach Status, zum Beispiel `{ "success": 41, "error": 3 }` |
+| `$no| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Bei **{AW}** der Workflow, zu dem jeder Lauf gehört |
+deLabel.by_status` | Zählungen nach Status, zum Beispiel `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Beginn des Zeitfensters oder `null` für den vollständigen Verlauf |
 
 Einträge enthalten sowohl `inputs` als auch `outputs` – was der Lauf empfangen und was er geantwortet hat –, aber niemals `node_results`: Der Trace pro Knoten ist die größte Spalte in der Tabelle und würde alles Nachgelagerte in den Schatten stellen. Rufe eine einzelne Ausführung über die API ab, wenn du den vollständigen Trace benötigst.

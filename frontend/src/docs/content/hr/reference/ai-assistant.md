@@ -13,6 +13,8 @@ Za pitanja o dokumentaciji izvan uređivača, koristite [Chat with Heym](./chat-
 
 Pritisnite `Ctrl + I` / `Cmd + I` bilo gdje u uređivaču kako biste otvorili ili zatvorili panel — prečac radi čak i dok je fokus na unosu teksta. Pogledajte [Prečaci na tipkovnici](./keyboard-shortcuts.md).
 
+Da biste radili na pojedinačnom čvoru, prijeđite mišem preko njega na canvasu i kliknite **AI** iznad njega. Ploča se otvara fokusirana na taj čvor. Pogledajte [Izmjena jednog čvora](#changing-one-node).
+
 ## Zatvaranje Panela
 
 Kliknite na **X** gumb, pritisnite `Ctrl + I` / `Cmd + I`, ili prebacite **AI** gumb u alatnoj traci Debug panela. Zaglavlje povlači panel; ne zatvara ga.
@@ -60,6 +62,33 @@ Kada AI odgovor sadrži valjan workflow JSON blok (s `nodes` i opcionalno `edges
 4. Označava workflow kao nespremljen
 
 Ako analiza ne uspije, pojavljuje se **Retry** gumb za regeneriranje odgovora.
+
+## Izmjena jednog čvora
+
+Prijeđite mišem preko čvora na canvasu i kliknite **AI** iznad njega. Ploča se otvara u načinu Agent, fokusirana na taj čvor, i prikazuje koji čvor mijenja:
+
+| Čvor ima... | Ploča prikazuje |
+|---|---|
+| Nema rezultata u trenutnom izvođenju | **Modifying Node:** u kompaktnom retku s ikonom i nazivom čvora. Pomoćnik uređuje isključivo iz konfiguracije čvora; pokrenite čvor prvo ako bi trebao vidjeti izlaz |
+| Rezultat u trenutnom izvođenju | **Modifying Node: (Has Node Output)** iznad samog čvora: ikona, naziv i vrsta, zadnji status i trajanje te pogreška ako nije uspio. Pomoćnik vidi taj izlaz i pogrešku kada uređuje čvor |
+
+Prijeđite mišem preko oznake da biste vidjeli u kojem se stanju nalazi ploča.
+
+U kojem god stanju ploča bila, pomoćnik također čita stranicu s dokumentacijom čvora koja se nalazi iza ikone knjige u zaglavlju čvora. Koristi je za razumijevanje opcija čvora i odgovaranje na pitanja o njima.
+
+Ispod poruka tri opcije pokreću zahtjev:
+
+| Opcija | Što radi |
+|---|---|
+| **Change this node as ...** | Ispunjava okvir za poruku s *Promijeni ovaj čvor u* kako biste dovršili rečenicu |
+| **Fix error in this node ...** | Ispunjava *Ispravi pogrešku u ovom čvoru.* Pomoćnik čita pogrešku ovog čvora iz zadnjeg izvođenja |
+| **Other** | Fokusira prazan okvir za poruku |
+
+Uredite tekst i pritisnite **Send**. Pomoćnik vraća samo ovaj čvor i Heym ga ažurira na mjestu: čvor zadržava svoj id, vrstu i naziv, tako da izrazi poput `$checkLinkedIn.result` u drugim čvorovima nastavljaju raditi. Drugi čvorovi, veze i izgled se ne mijenjaju, a **Undo** vraća prethodnu konfiguraciju.
+
+Ako zahtjev ne stane u čvor, na primjer zahtijeva drugu vrstu čvora ili novi čvor, pomoćnik navodi što bi se trebalo promijeniti umjesto uređivanja. Zatvorite fokus čvora s **X** na kartici čvora kako biste ponovno uredili cijeli workflow. Zatvaranje ploče također briše fokus.
+
+[Način YOLO](#yolo-mode) radi s fokusiranim čvorom: pomoćnik mijenja čvor, pokreće workflow i ispravlja čvor dok izvođenje ne uspije. U načinu **Ask** fokus govori pomoćniku o kojem je čvoru vaše pitanje, a canvas se ne mijenja.
 
 ## YOLO Mod
 

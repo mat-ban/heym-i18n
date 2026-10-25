@@ -214,6 +214,11 @@ Om filen redan finns hämtar Heym automatiskt aktuell SHA innan den uppdateras.
 **Per Page** (1–100). Heym begär en sida med resultat; det finns inget `page`-fält för att hämta
 ytterligare sidor i samma åtgärd.
 
+
+### Return all pages
+
+Aktivera **Return all pages** så att en körning följer varje sida, med start vid **Cursor** när en sådan är angiven. Varje begäran ber om 100 poster, oavsett värdet på **Per Page**. Noden stannar efter ungefär 1 000 poster (eller 100 begäranden): issue-objekt är ungefär 6 KB vardera, så en högre gräns skulle ge mycket stora nodutdata. Stannar den i förtid returneras det som hämtats med `has_more: true` och en `next_cursor` i stället för att ett fel uppstår, och hämtningen kan fortsätta genom att kursorn skickas till nästa körning. Om Workflow stoppas eller når sin tidsgräns avslutas hämtningen mellan sidorna.
+
 ## Utdata
 
 Den exakta formen beror på den valda åtgärden. Vanliga fält inkluderar:

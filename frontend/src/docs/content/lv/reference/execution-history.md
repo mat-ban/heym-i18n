@@ -55,6 +55,18 @@ Atverot workflow vietnē `/workflows/{workflowId}/{executionId}`, šī izpilde t
 - Atkļūdot neveiksmīgu izpildi, pārbaudot ievades un mezglu izvades
 - Salīdzināt izvades starp izpildēm
 
+## Jautāt AI
+
+Abos vēstures dialoglodziņos blakus nosaukumam ir poga **Jautāt AI** (dzirksteles ikona). Tā atver [cilni Chat](../tabs/chat-tab.md#asking-about-a-run) jaunā sarunā ar pievienotu workflow un atlasīto izpildi kā noņemamiem čipiem. Pajautājiet, kāpēc izpilde bija lēna, kas neizdevās, vai lūdziet Chat salabot workflow. Chat nolasa tieši šo izpildi, ieskaitot tās izsekošanu un kļūdas pa mezgliem.
+
+Dialoglodziņā All History **Jautāt AI** parādās tikai tad, kad ir atlasīta workflow izpilde; tērzēšanas un asistenta izpildes to nerāda.
+
+## Izpildes laika skala
+
+Izpildes detaļās poga **Laika skala** (hronometra ikona) blakus **Izvērst visu** aizstāj sarakstu **Soļi** ar laidumu laika skalu. Kamēr laika skala ir redzama, tā pati poga rāda **Žurnāli**; noklikšķiniet uz tās, lai atgrieztos sarakstā. All History poga parādās tikai workflow izpildēm. Laika skala zīmē joslu katram mezglam brīdī, kad tas sākās, lai jūs redzētu, kurš mezgls cik ilgi darbojās un kuri izpildījās paralēli. Virziet kursoru virs joslas, lai redzētu ilgumu; noklikšķiniet, lai atvērtu to pašu detaļu inspektoru kā redaktora [izpildes laika skalā](#execution-timeline-details). Izvēlētais skats paliek aktīvs, kamēr dialoglodziņš ir atvērts.
+
+Izpildes, kas reģistrētas pirms mezglu sākuma laiku saglabāšanas, tiek izkārtotas viena pēc otras pēc ilguma.
+
 ## Execution Highlights
 
 Pēc tiešsaistes izpildes — vai pēc **Bring to Canvas** — **Canvas augšējā labajā stūrī** parādās aizverams **Execution Highlights** uznirstošais logs. Tas ir ātrs veids, kā redzēt, *ko katrs mezgls producēja*, uzskaitīts no augšas uz leju izpildes secībā. Aizveriet to ar **✕**; tas atkārtoti parādīsies nākamajā izpildē.
@@ -144,7 +156,7 @@ Izmantojiet **Copy** blakus Inputs vai Outputs, lai nokopētu JSON starpliktuvē
 
 ## Izpildes laika skalas detaļas
 
-Kad redaktora **Execution Log** ir atvērts, noklikšķiniet uz taimera pogas, lai parādītu izpildes laika skalu. Atlasiet posmu, lai atvērtu iekļauto detaļu inspektoru, kas pārņem rindu apgabalu. Tas rāda atlasītā soļa statusu, ilgumu, mēģinājumu skaitu, atkārtotu mēģinājumu informāciju, kļūdas, trace ID un kompaktu izvades priekšskatījumu. Objektu un masīvu izvades izmanto to pašu `JsonTree` skatītāju kā pārējais Debug panelis; skalārās vērtības izmanto teksta priekšskatījumu. Kad solis izvada attēlus (Playwright ekrānuzņēmumi, ģenerēti attēli, attēlu faili), tie parādās kā sīktēli virs izvades, un JSON rāda īsu aizvietotāju neapstrādātā base64 vietā. Noklikšķiniet uz sīktēla, lai to atvērtu lightbox; bultiņu pogas vai ←/→ taustiņi pārvieto pa katru attēlu izpildē, ar skaitītāju, piemēram, `2 / 5`. Izmantojiet **Open trace** LLM un Agent posmiem, kad ir pieejams trace ID.
+Kad redaktora **Execution Log** ir atvērts, noklikšķiniet uz taimera pogas, lai parādītu izpildes laika skalu. Atlasiet posmu, lai atvērtu iekļauto detaļu inspektoru, kas pārņem rindu apgabalu. Tas rāda atlasītā soļa statusu, ilgumu, mēģinājumu skaitu, atkārtotu mēģinājumu informāciju, kļūdas, trace ID un kompaktu izvades priekšskatījumu. Objektu un masīvu izvades izmanto to pašu `JsonTree` skatītāju kā pārējais Debug panelis; skalārās vērtības izmanto teksta priekšskatījumu. Kad solis izvada attēlus (Playwright ekrānuzņēmumi, ģenerētie attēli, attēlu faili vai base64 attēli pieprasījuma pamattekstā, kas atrasti jebkur izvadē), tie parādās kā sīktēli virs izvades, un JSON rāda īsu aizvietotāju neapstrādātā base64 vietā. Noklikšķiniet uz sīktēla, lai to atvērtu lightbox; bultiņu pogas vai ←/→ taustiņi pārvieto pa katru attēlu izpildē, ar skaitītāju, piemēram, `2 / 5`. Izmantojiet **Open trace** LLM un Agent posmiem, kad ir pieejams trace ID.
 ## Mobilā mezgla informācija
 
 Tālrunī redaktors pilnekrāna režīmā parāda workflow koku, nevis brīvās formas kanvu. Pieskarieties koka mezglam ar ierakstītu rezultātu, lai tā izpildi atvērtu kā pilnekrāna informāciju. Skatā ir pieejamas atsevišķas cilnes **Input Data**, **Output Data** un **Errors**. Izvades cilne parāda ierakstīto rezultātu un piedāvā **Copy Output**; ievades cilne parāda atlasītā mezgla konfigurāciju, bet kļūdu cilne parāda ierakstīto kļūdu, ja mezgls neizdevās. Izmantojiet **Back to workflow** vai aizvēršanas pogu, lai atgrieztos pie koka.

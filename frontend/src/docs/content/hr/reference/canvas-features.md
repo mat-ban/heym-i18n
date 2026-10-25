@@ -1,6 +1,6 @@
 # Značajke Platna
 
-Uređivač workflow-a pruža nekoliko značajki za otklanjanje pogrešaka, testiranje i organiziranje čvorova: **Pokreni do čvora**, **Podaci Pin**, **Izvršni dnevnici**, **Omogući/Onemogući** i **Izvuci u pod-workflow**.
+Uređivač workflow-a pruža nekoliko značajki za otklanjanje pogrešaka, testiranje i organiziranje čvorova: **Pokreni do čvora**, **AI na čvoru**, **Podaci Pin**, **Izvršni dnevnici**, **Omogući/Onemogući** i **Izvuci u pod-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Pogledajte demo uređivača</a></p>
@@ -12,6 +12,12 @@ Pređite mišem preko bilo kojeg čvora osim ljepljive bilješke i kliknite **Po
 Ako odabrani put ima ulazna polja, desna **Pokreni** ploča se otvara i fokusira prvo polje. Unesite vrijednosti, a zatim kliknite **Pokreni do _naziv čvora_** ili pritisnite **Ctrl+Enter** (Cmd+Enter na macOS-u). Opći način rada tijela fokusira uređivač JSON tijela. Putovi bez ulaznih polja izvršavaju se odmah bez otvaranja ploče. Pinovani Input čvorovi ponovo koriste svoj pinovani izlaz bez traženja ulaza.
 
 Ploča zadržava odabrani cilj za sljedeća izvršavanja. Odaberite **Pokreni cijeli workflow** kako biste očistili cilj. Gumbi za pokretanje su onemogućeni dok je izvršavanje aktivno. Cilj unutar petlje zaustavlja izvršavanje kada se taj čvor prvi put dosegne; odabir čvora nakon petlje izvršava cijelu uzvodnu petlju.
+
+## AI na čvoru
+
+Prijeđite mišem preko bilo kojeg čvora osim ljepljive bilješke i kliknite **AI** iznad njega. [AI Assistant](./ai-assistant.md) otvara se na tom čvoru i nudi **Change this node as ...**, **Fix error in this node ...** i **Other**. U načinu Agent pomoćnik mijenja samo taj čvor; drugi čvorovi, veze i izgled ostaju nepromijenjeni. Pogledajte [AI Assistant › Izmjena jednog čvora](./ai-assistant.md#changing-one-node).
+
+Gumb je skriven na workflowima koje možete samo pregledavati.
 
 ## Podaci Pin
 

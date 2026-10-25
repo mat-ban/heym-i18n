@@ -51,6 +51,7 @@ Portal の Workflow が、[Human-in-the-Loop](./human-in-the-loop.md) を有効�
 ## 認証とセッション
 
 - **WorkflowPortalUser**: Workflow ごとのユーザー名／パスワード（認証が有効な場合）
+- **最後のユーザーの削除**: ポータルが有効な場合、最後のポータルユーザーを削除するとポータルが再び公開状態になります。設定ダイアログで最初に確認が求められます
 - **PortalSession**: TTL 168 時間のセッション Token
 - **レート制限**: ログイン失敗 3 回 → Workflow + IP ごとに 24 時間の BAN
 - 期限切れのセッションは Cron ジョブによってクリーンアップされます

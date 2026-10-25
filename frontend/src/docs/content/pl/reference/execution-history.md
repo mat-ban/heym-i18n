@@ -55,6 +55,18 @@ Otwarcie workflow pod adresem `/workflows/{workflowId}/{executionId}` automatycz
 - Debugowanie nieudanego uruchomienia poprzez analizę danych wejściowych i wyników węzłów
 - Porównywanie danych wyjściowych między uruchomieniami
 
+## Zapytaj AI
+
+Oba okna dialogowe historii mają przycisk **Zapytaj AI** (ikona iskry) obok tytułu. Otwiera on [zakładkę Chat](../tabs/chat-tab.md#asking-about-a-run) w nowej konwersacji z workflowem i wybranym uruchomieniem dołączonymi jako usuwalne chipy. Zapytaj, dlaczego uruchomienie było powolne, co się nie powiodło, lub poproś Chat o naprawienie workflowu. Chat odczytuje dokładnie to uruchomienie, w tym ślad poszczególnych węzłów i błędy.
+
+W oknie dialogowym All History opcja **Zapytaj AI** pojawia się tylko wtedy, gdy wybrane jest uruchomienie workflowu; uruchomienia chatu i asystenta jej nie wyświetlają.
+
+## Oś czasu uruchomienia
+
+W szczegółach uruchomienia przycisk **Oś czasu** (ikona stopera) obok **Rozwiń wszystko** zamienia listę **Kroki** na oś czasu spanów. Gdy oś czasu jest widoczna, ten sam przycisk ma etykietę **Dzienniki**; kliknij go, aby powrócić do listy. W All History przycisk pojawia się tylko dla uruchomień workflow. Oś czasu rysuje pasek dla każdego węzła w momencie jego rozpoczęcia, dzięki czemu widać, ile trwał dany węzeł i które działały równolegle. Najedź na pasek, aby zobaczyć czas trwania; kliknij go, aby otworzyć ten sam inspektor szczegółów, co w [osi czasu wykonania](#execution-timeline-details) edytora. Wybrany widok pozostaje aktywny tak długo, jak długo otwarte jest okno dialogowe.
+
+Uruchomienia zarejestrowane przed zapisywaniem czasów rozpoczęcia węzłów są rozmieszczane kolejno według czasu trwania.
+
 ## Execution Highlights
 
 Po uruchomieniu na żywo — lub po **Bring to Canvas** — w **prawym górnym rogu Canvas** pojawia się możliwe do zamknięcia okno **Execution Highlights**. To szybki sposób na sprawdzenie, *co wygenerował każdy węzeł*, wymienione od góry do dołu w kolejności wykonania. Zamknij je przyciskiem **✕**; otworzy się ponownie przy następnym uruchomieniu.
@@ -144,7 +156,7 @@ Użyj przycisku **Copy** obok sekcji Inputs lub Outputs, aby skopiować JSON do 
 
 ## Szczegóły osi czasu wykonania
 
-Gdy w edytorze otwarty jest **Execution Log**, kliknij przycisk timera, aby wyświetlić oś czasu wykonania. Wybierz przedział, aby otworzyć wbudowany inspektor szczegółów, który przejmuje obszar wierszy. Pokazuje on status wybranego kroku, czas trwania, liczbę prób, informacje o ponowieniach, błędy, identyfikator trace oraz zwięzły podgląd danych wyjściowych. Dane wyjściowe typu obiekt i tablica korzystają z tego samego podglądu `JsonTree` co reszta panelu Debug; wartości skalarne używają podglądu tekstowego. Gdy krok zwraca obrazy (zrzuty ekranu Playwright, wygenerowane obrazy, pliki graficzne), pojawiają się one jako miniatury nad danymi wyjściowymi, a JSON zawiera krótki placeholder w miejscu surowego base64. Kliknij miniaturę, aby otworzyć ją w lightboxie; przyciski strzałek lub klawisze ←/→ przechodzą przez każdy obraz w uruchomieniu, ze licznikiem takim jak `2 / 5`. Użyj **Open trace** dla spanów LLM i Agent, gdy dostępny jest identyfikator trace.
+Gdy w edytorze otwarty jest **Execution Log**, kliknij przycisk timera, aby wyświetlić oś czasu wykonania. Wybierz przedział, aby otworzyć wbudowany inspektor szczegółów, który przejmuje obszar wierszy. Pokazuje on status wybranego kroku, czas trwania, liczbę prób, informacje o ponowieniach, błędy, identyfikator trace oraz zwięzły podgląd danych wyjściowych. Dane wyjściowe typu obiekt i tablica korzystają z tego samego podglądu `JsonTree` co reszta panelu Debug; wartości skalarne używają podglądu tekstowego. Gdy krok zwraca obrazy (zrzuty ekranu Playwright, wygenerowane obrazy, pliki graficzne lub obrazy base64 w treści żądania, znalezione w dowolnym miejscu danych wyjściowych), pojawiają się one jako miniatury nad danymi wyjściowymi, a JSON zawiera krótki placeholder w miejscu surowego base64. Kliknij miniaturę, aby otworzyć ją w lightboxie; przyciski strzałek lub klawisze ←/→ przechodzą przez każdy obraz w uruchomieniu, ze licznikiem takim jak `2 / 5`. Użyj **Open trace** dla spanów LLM i Agent, gdy dostępny jest identyfikator trace.
 ## Szczegóły węzła na urządzeniu mobilnym
 
 Na telefonie edytor wyświetla drzewo workflow na pełnym ekranie zamiast swobodnego canvasu. Należy dotknąć węzła drzewa z zarejestrowanym wynikiem, aby otworzyć jego wykonanie jako szczegóły na pełnym ekranie. Widok udostępnia oddzielne zakładki **Dane wejściowe**, **Dane wyjściowe** oraz **Błędy**. Zakładka danych wyjściowych prezentuje zarejestrowany wynik i oferuje opcję **Kopiuj dane wyjściowe**; zakładka danych wejściowych pokazuje konfigurację wybranego węzła, a zakładka błędów wyświetla zarejestrowany błąd, gdy węzeł zakończył się niepowodzeniem. Aby powrócić do drzewa, należy użyć opcji **Powrót do workflow** lub przycisku zamknięcia.

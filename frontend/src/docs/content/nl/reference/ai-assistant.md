@@ -13,6 +13,8 @@ Voor documentatievragen buiten de editor gebruikt u [Chat with Heym](./chat-with
 
 Druk overal in de editor op `Ctrl + I` / `Cmd + I` om het paneel te openen of te sluiten — de sneltoets werkt zelfs wanneer een tekstinvoerveld focus heeft. Zie [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Om aan een enkele node te werken, beweegt u de cursor erover op het canvas en klikt u op **AI** erboven. Het paneel opent gefocust op die node. Zie [Eén enkele node wijzigen](#changing-one-node).
+
 ## Het paneel sluiten
 
 Klik op de knop **X**, druk op `Ctrl + I` / `Cmd + I`, of schakel de knop **AI** in de werkbalk van het Debug-paneel in of uit. Met de koptekst versleept u het paneel; hiermee sluit u het niet.
@@ -60,6 +62,33 @@ Wanneer het AI-antwoord een geldig workflow-JSON-blok bevat (met `nodes` en opti
 4. De workflow wordt gemarkeerd als niet opgeslagen
 
 Als het parseren mislukt, verschijnt een knop **Retry** om het antwoord opnieuw te genereren.
+
+## Eén enkele node wijzigen
+
+Beweeg over een node op het canvas en klik op **AI** erboven. Het paneel opent in Agent-modus, gefocust op die node, en toont welke node wordt gewijzigd:
+
+| De node heeft... | Het paneel toont |
+|---|---|
+| Geen resultaat in de huidige run | **Modifying Node:** in een compacte rij met het pictogram en de naam van de node. De assistent bewerkt alleen op basis van de configuratie van de node; voer de node eerst uit als deze de uitvoer moet zien |
+| Een resultaat in de huidige run | **Modifying Node: (Has Node Output)** boven de node zelf: pictogram, naam en type, de laatste status en duur, en de fout indien mislukt. De assistent ziet die uitvoer en fout bij het bewerken van de node |
+
+Beweeg over het label om te zien in welke staat het paneel zich bevindt.
+
+In welke staat het paneel zich ook bevindt, de assistent leest ook de documentatiepagina van de node achter het boekpictogram in de header van de node. Hij gebruikt de pagina om de opties van de node te begrijpen en vragen erover te beantwoorden.
+
+Onder de berichten starten drie opties het verzoek:
+
+| Optie | Wat het doet |
+|---|---|
+| **Change this node as ...** | Vult het berichtvak met *Wijzig deze node in* zodat u de zin kunt afmaken |
+| **Fix error in this node ...** | Vult *Herstel de fout in deze node.* De assistent leest de fout van deze node uit de laatste run |
+| **Other** | Focust een leeg berichtvak |
+
+Bewerk de tekst en druk op **Send**. De assistent retourneert alleen deze node en Heym werkt deze ter plekke bij: de node behoudt zijn id, type en naam, zodat expressies zoals `$checkLinkedIn.result` in andere nodes blijven werken. Andere nodes, verbindingen en de lay-out veranderen niet, en **Undo** herstelt de vorige configuratie.
+
+Als het verzoek niet binnen de node past, bijvoorbeeld omdat er een ander nodetype of een nieuwe node nodig is, geeft de assistent aan wat er moet veranderen in plaats van te bewerken. Sluit de nodefocus met de **X** op de nodekaart om weer de hele workflow te bewerken. Het sluiten van het paneel wist ook de focus.
+
+[YOLO-modus](#yolo-mode) werkt met een gefocuste node: de assistent wijzigt de node, voert de workflow uit en repareert de node totdat de run slaagt. In **Ask**-modus vertelt de focus de assistent over welke node uw vraag gaat, en het canvas wordt niet gewijzigd.
 
 ## YOLO Mode
 

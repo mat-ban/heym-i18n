@@ -13,6 +13,8 @@ Pour les questions de documentation en dehors de l'éditeur, utilisez [Chat with
 
 Appuyez sur `Ctrl + I` / `Cmd + I` n'importe où dans l'éditeur pour ouvrir ou fermer le panneau — le raccourci fonctionne même lorsqu'un champ de saisie de texte est actif. Consultez [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Pour travailler sur un seul nœud, survolez-le sur le canevas et cliquez sur **AI** au-dessus. Le panneau s'ouvre focalisé sur ce nœud. Voir [Modifier un seul nœud](#changing-one-node).
+
 ## Fermer le panneau
 
 Cliquez sur le bouton **X**, appuyez sur `Ctrl + I` / `Cmd + I`, ou basculez le bouton **AI** dans la barre d'outils du panneau Debug. L'en-tête sert à déplacer le panneau ; il ne le ferme pas.
@@ -60,6 +62,33 @@ Lorsque la réponse de l'IA contient un bloc JSON de workflow valide (avec `node
 4. Marque le workflow comme non enregistré
 
 Si l'analyse échoue, un bouton **Retry** apparaît pour régénérer la réponse.
+## Modifier un seul nœud
+
+Survolez un nœud sur le canevas et cliquez sur **AI** au-dessus. Le panneau s'ouvre en mode Agent, focalisé sur ce nœud, et indique le nœud en cours de modification :
+
+| Le nœud a... | Le panneau affiche |
+|---|---|
+| Aucun résultat dans l'exécution actuelle | **Modifying Node:** sur une ligne compacte avec l'icône et le nom du nœud. L'assistant modifie à partir de la configuration seule du nœud ; exécutez d'abord le nœud s'il doit voir la sortie |
+| Un résultat dans l'exécution actuelle | **Modifying Node: (Has Node Output)** au-dessus du nœud lui-même : icône, nom et type, dernier statut et durée, ainsi que l'erreur en cas d'échec. L'assistant voit cette sortie et cette erreur lorsqu'il modifie le nœud |
+
+Survolez le libellé pour voir dans quel état se trouve le panneau.
+
+Quel que soit l'état du panneau, l'assistant lit également la page de documentation du nœud, située derrière l'icône de livre dans l'en-tête du nœud. Il utilise la page pour comprendre les options du nœud et répondre aux questions à leur sujet.
+
+Sous les messages, trois options démarrent la requête :
+
+| Option | Ce qu'elle fait |
+|---|---|
+| **Change this node as ...** | Remplit la zone de message avec *Modifier ce nœud en* pour que vous finissiez la phrase |
+| **Fix error in this node ...** | Remplit *Corriger l'erreur dans ce nœud.* L'assistant lit l'erreur de ce nœud issue de la dernière exécution |
+| **Other** | Focalise une zone de message vide |
+
+Modifiez le texte et appuyez sur **Send**. L'assistant ne renvoie que ce nœud et Heym le met à jour sur place : le nœud conserve son id, son type et son nom, de sorte que les expressions telles que `$checkLinkedIn.result` dans d'autres nœuds continuent de fonctionner. Les autres nœuds, connexions et la disposition ne changent pas, et **Undo** restaure la configuration précédente.
+
+Si la requête ne peut pas tenir dans le nœud, par exemple si elle nécessite un autre type de nœud ou un nouveau nœud, l'assistant indique ce qui devrait changer au lieu de modifier. Fermez le focus du nœud avec le **X** sur la carte du nœud pour modifier à nouveau l'ensemble du workflow. La fermeture du panneau efface également le focus.
+
+Le [mode YOLO](#yolo-mode) fonctionne avec un nœud focalisé : l'assistant modifie le nœud, exécute le workflow et corrige le nœud jusqu'à ce que l'exécution réussisse. En mode **Ask**, le focus indique à l'assistant sur quel nœud porte votre question, et le canevas n'est pas modifié.
+
 ## Mode YOLO
 
 Le **mode YOLO** permet à l'assistant de tester ce qu'il construit. Cochez la case **Mode YOLO** sous le champ de message, puis envoyez votre requête. La case n'apparaît qu'en mode Agent. Elle est désactivée par défaut et se réinitialise à l'état désactivé lors du rechargement de la page. Survolez l'icône d'information adjacente pour afficher un bref résumé.

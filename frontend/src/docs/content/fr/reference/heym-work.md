@@ -9,11 +9,30 @@ Heym Work fonctionne dans son propre conteneur aux côtés de Heym, avec une lic
 | Domaine | Fonctionnalité |
 |---------|----------------|
 | **Chat** | Décrivez une tâche par saisie de texte ou à la voix. Heym demande les éléments nécessaires, construit le workflow, le teste et le marque comme Vérifié. |
+| **Flows** | Les éditeurs créent un flow à partir de choix plutôt que sur un canevas : ce qui le démarre, un brouillon d'IA facultatif et des actions dans Slack, Google Sheets et e-mail. Les réponses de Slack poursuivent l'exécution, et les approbations attendent également dans Activité. Voir [Flows](#flows). |
 | **Pages** | Des pages épinglées composées de widgets : indicateurs chiffrés, graphiques, tableaux avec puces d'état, zones de dépôt de fichiers et approbations. Une ligne de tableau peut ouvrir sa propre page de détail. |
 | **Approbations** | Les révisions issues des étapes [Human-in-the-Loop](./human-in-the-loop.md) s'affichent dans Activité et sur les pages, avec les actions Approuver, Demander des modifications et Rejeter. |
 | **Activité** | Chaque exécution, avec la personne qui l'a lancée et l'instance d'exécution. |
 | **Rôles** | Propriétaire, Éditeur et Observateur. Les utilisateurs se connectent via le mécanisme [Single Sign-On](./sso.md) déjà configuré dans Heym. |
 | **Éditions sectorielles** | Les éditions juridique, éducation, finance, logistique, énergie et commerce électronique s'ouvrent avec des pages, des données d'exemple et des workflows adaptés au secteur. |
+
+## Flows
+
+**Flows** se trouve dans le menu de Heym Work pour les éditeurs et les propriétaires. Un flow est composé de choix plutôt que de nœuds, et Heym Work l'enregistre comme un workflow Heym ordinaire via l'API Heym, sous l'identité de la personne qui l'a créé. Les règles d'accès, l'historique des modifications et la synchronisation des triggers s'appliquent comme dans l'éditeur, et chaque exécution apparaît dans Activité comme toute autre.
+
+| Partie | Choix |
+|---|---|
+| **Ce qui le démarre** | À la demande, selon un calendrier, sur un message Slack, lorsqu'un onglet Google Sheets change (lignes ajoutées, modifiées ou supprimées), ou lorsqu'un e-mail arrive dans une boîte de réception. Les triggers de feuille et d'e-mail vérifient toutes les 1, 5, 15 ou 60 minutes. |
+| **Brouillon d'IA** (facultatif) | Un modèle et des instructions transforment ce qui a démarré le flow en texte pour les étapes suivantes. Un flow qui ne démarre pas à partir d'une feuille ou d'un e-mail peut d'abord lire les messages récents d'un canal ou d'un fil Slack. |
+| **Ce qui se passe ensuite** | Des actions dans l'ordre, dans l'un des trois outils, quel que soit le déclencheur du flow. **Slack :** message de canal, message direct, formulaire, message avec boutons, approbation, réponse en fil, mise à jour de message et résultat final. **Google Sheets :** ajouter une ligne, ou mettre à jour la ligne modifiée. **E-mail :** envoyer un e-mail. |
+
+- **Les réponses poursuivent l'exécution.** Une approbation, des boutons ou un formulaire suspendent l'exécution jusqu'à ce que quelqu'un réponde dans Slack. Une approbation attend également dans Activité, et une décision prise à l'un ou l'autre endroit retire les boutons du message Slack. Les étapes Slack ultérieures restent dans le fil du premier message.
+- **Une seule carte Connexions.** Chaque flow affiche l'espace de travail Slack, le compte Google Sheets et les boîtes de réception dans lesquelles il lit et avec lesquelles il envoie. Ce sont des identifiants Heym : **Slack Bot** (un token de bot, `xoxb-…`), **Google Sheets**, **IMAP** et **SMTP** ; un identifiant manquant peut être ajouté depuis le flow lui-même.
+- **Une seule application Slack pour chaque flow.** Dans l'application Slack, définissez l'URL de requête d'interactivité sur `https://<votre Heym>/api/slack/interactions/<id identifiant>` et l'URL des requêtes d'abonnements aux événements sur `https://<votre Heym>/api/slack/events/<id identifiant>`. Heym Work affiche les deux pour la connexion choisie. Tous les flows associés à cet identifiant les partagent.
+- **Les triggers Slack choisissent ce qu'ils écoutent :** messages dans les canaux et DM, messages directs au bot, mentions du bot, ou messages dans un canal précis. Les propres publications du bot ne démarrent jamais un flow.
+- **Exigences.** Les flows nécessitent Heym 0.0.131 ou ultérieur.
+
+Les étapes construites par un flow sont les mêmes nœuds que vous pouvez utiliser sur le canevas : [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) et [Cron](../nodes/cron-node.md).
 
 ## Connecter Heym Work
 
@@ -26,7 +45,7 @@ La connexion est configurée dans **Paramètres → Heym Work**. Cet onglet n'ap
 | **Adresse Heym Work** | Emplacement d'exécution de Heym Work, par exemple `https://work.example.com`. La connexion y redirige l'utilisateur. Cliquez sur **Enregistrer**. |
 | **Clé d'intégration** | **Générer une clé** crée la clé utilisée par Heym Work pour chaque requête transmise à Heym. Elle est affichée une seule fois, accompagnée d'un bouton de copie. Heym n'enregistre que son hachage. |
 | **Activer Heym Work** | Active la connexion. L'adresse et une clé doivent d'abord être définies. |
-| État | **Dernière activité**, **Version de Work** et **Licence**, selon le dernier rapport envoyé par Heym Work. |
+| **Éditions pour industries et équipes** | Les éditions juridique, éducation, finance, logistique, énergie et e-commerce, ainsi que les éditions IT, ventes, marketing et RH pour les équipes d'entreprise, s'ouvrent avec des pages, des exemples de données et des workflows dédiés. |
 
 Ouvrez ensuite l'adresse de Heym Work pour terminer la configuration :
 

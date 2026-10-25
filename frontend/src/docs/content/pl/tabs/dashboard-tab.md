@@ -18,14 +18,14 @@ Widget to pojedynczy wykres na siatce. Obsługiwane typy wykresów:
 - **Line**
 - **Area** (wypełniony trend, obsługuje wiele serii)
 - **Pie**
-- **Table** (przewijana; jedna kolumna może być wyświetlana jako [znaczniki statusu](../nodes/chart-output-node.md#status-chips), a wiersze mogą otwierać [stronę szczegółów](#detail-pages))
+- **Table** (przewijalna; kliknij nagłówek kolumny, aby posortować rosnąco, i kliknij ponownie, aby posortować malejąco. Jedna kolumna może być wyświetlana jako [chipy statusu](../nodes/chart-output-node.md#status-chips), jedna kolumna może zawierać [przyciski linków](../nodes/chart-output-node.md#link-buttons), które otwierają adres URL w nowej karcie, a wiersze mogą otwierać [stronę szczegółów](#strony-szczegolow))
 - **Numeric** (pojedyncza wartość KPI z opcjonalną jednostką)
 - **Gauge** (pojedyncza wartość w zakresie min–max, np. wartość procentowa)
 - **Scatter** (punkty X/Y do wykresów korelacji)
 - **Proportion** (jeden słupek podzielony na udziały z legendą procentową, np. podział według języka)
 - **Bar gauge** (jeden poziomy wskaźnik w każdym wierszu z gradientem od czerwonego do zielonego i wartością, np. wolne miejsce na dysku)
 - **Text** (komunikat w formacie markdown, np. notatka o statusie w rodzaju „Ostatnie wykonanie o 19:47"; obsługuje [interaktywne pola wyboru](../nodes/chart-output-node.md#interactive-task-lists), gdy markdown jest statyczny, oraz [jawne listy numerowane](../nodes/chart-output-node.md#numbered-lists) dla niestandardowej lub malejącej numeracji)
-- **HITL** (oczekujące przeglądy wykonywane przez człowieka. Nagłówek wyświetla `1/n pending`. Nazwa workflow otwiera dane wykonanie na canvasie. Przyciski **Approve**, **Request changes** i **Reject** rozstrzygają przegląd. Ikona historii obok tytułu widgetu otwiera to wykonanie w oknie historii na tej stronie. Widget nie korzysta z wierszy źródłowych, a każda osoba widzi własną kolejkę)
+- **HITL** (oczekujące przeglądy wykonywane przez człowieka. Nagłówek wyświetla `1/n pending`. Nazwa workflow otwiera dane wykonanie na canvasie. Przyciski **Approve**, **Request changes** i **Reject** rozstrzygają przegląd. Ikona historii obok tytułu widgetu otwiera to wykonanie w oknie historii na tej stronie. Widget nie korzysta z wierszy źródłowych, a każda osoba widzi własną kolejkę. Może zamiast tego pokazywać weryfikacje pojedynczego Workflow dla każdego, kto ma do niego dostęp; zobacz [Widgety HITL](#widgety-hitl))
 
 Oprócz wykresów widget **Run a workflow** uruchamia jeden z Twoich workflow bezpośrednio z dashboardu: dla upuszczonego pliku, z polami wejściowymi lub za pomocą przycisku Run; zobacz [Widgety uruchamiania](#run-widgets).
 
@@ -41,6 +41,20 @@ Każdy widget ładuje swoje dane asynchronicznie przy otwarciu zakładki, dzięk
 W przypadku widgetu **Run a workflow** wybierz zamiast tego workflow, który ma być uruchamiany; selektor informuje, w jaki sposób widget uruchomi każdy z nich. Widget jest dodawany bezpośrednio do siatki — nie trzeba budować nowego workflow.
 
 Dwukrotne kliknięcie widgetu (lub użycie jego przycisku edycji) otwiera ponownie jego workflow w dowolnym momencie. Opcja **Clone widget** w nagłówku widgetu duplikuje zarówno widget, jak i jego kompletny workflow. Kopia jest umieszczana poniżej oryginału i oznaczana dopiskiem **(Copy)**, aby można było edytować ją niezależnie.
+
+## Widgety HITL
+
+Nowy widget HITL wyświetla każdą weryfikację oczekującą w Twojej kolejce. Aby wyświetlić tylko weryfikacje jednego Workflow, otwórz **Ustawienia** widgetu:
+
+1. W polu **Workflow** wybierz Workflow. Lista zawiera Workflow, które możesz otworzyć (własne lub udostępnione Tobie lub Twojemu zespołowi), posiadające krok oczekujący na człowieka: Agent z weryfikacją przez człowieka lub krok Slack z zatwierdzeniem, przyciskami lub formularzem. Ikona obok otwiera ten Workflow w nowej karcie.
+2. Jeśli Workflow ma dokładnie jeden taki krok, zostanie on wybrany automatycznie. Jeśli ma ich kilka, **Select agent** wyświetli je według nazwy węzła, z **All agents** na początku; kroki Slack są oznaczone jako **(Slack)**.
+3. Zapisz. Wskaźnik `1/n pending` w nagłówku zlicza tylko te weryfikacje. Wybierz **Wszystkie workflows**, aby ponownie wyświetlić własną kolejkę.
+
+Ten sam wybór jest dostępny na kanwie, we właściwościach węzła Chart Output. Może go dokonać **Dopracuj za pomocą AI** („pokaż tylko zatwierdzenia faktur”), jak również opis nowego widgetu podający nazwę Workflow. Każda zmiana jest edycją Workflow, więc pojawia się w Edit History.
+
+- **Kto widzi weryfikacje.** Widget przefiltrowany pod kątem danego Workflow wyświetla jego weryfikacje każdemu, kto może otworzyć ten Workflow, i te osoby mogą z poziomu widgetu zatwierdzać, prosić o zmiany lub odrzucać, tak jak mogłyby uruchomić Workflow. Widget niefiltrowany pokazuje każdemu jego własną kolejkę.
+- **Kto widzi widget.** Osoba, która nie może otworzyć wybranego Workflow, w ogóle nie widzi tego widgetu, nawet na dashboardzie, który został jej udostępniony. Gdy właściciel dashboardu straci dostęp do Workflow lub Workflow zostanie usunięty, właściciel widzi komunikat „You no longer have access to the workflow this widget shows” i może wybrać inny w **Ustawieniach**.
+- **Tylko dostępne opcje.** Workflow, do którego nie masz uprawnień, zostanie odrzucony podczas zapisywania widgetu, niezależnie od tego, czy zapis następuje z ustawień, z kanwy czy przez AI.
 
 ## Strony szczegółów
 
@@ -75,6 +89,10 @@ Przycisk **Wrap** przy wyniku zawija długie wiersze danych wyjściowych wewnąt
 ## Generowanie widgetu za pomocą AI
 
 Należy kliknąć **AI**, opisać żądaną metrykę (na przykład „wskaźnik sukcesu workflow z ostatnich 30 dni jako wykres słupkowy") i wybrać dane logowania LLM oraz model. Heym generuje kompletny workflow widgetu zakończony węzłem Chart Output i dodaje go do siatki. Przykładowe prompty dla poszczególnych typów wykresów znajdują się w sekcji [Chart Output](../nodes/chart-output-node.md#example-ai-prompts).
+
+Widget otrzymuje krótki tytuł składający się z jednego lub dwóch słów w języku Twojego zapytania, np. „Otwarte sprawy”. Tytuł nigdy nie zawiera identyfikatora tabeli danych; jeśli model nazwie widget całym zdaniem, Heym zachowa tylko pierwsze słowa.
+
+API widgetów może również utworzyć **kartę licznika** bez użycia AI: widget `text` na tabeli danych (`data_table_id`) z parametrami `count_column` i `count_value` pokazuje, ile wierszy ma daną wartość; tytuł widgetu wskazuje tę wartość. Heym Work poprzedza strony utworzone z tabeli danych jedną kartą licznika dla każdego statusu.
 
 Przycisk **Fine-tune with AI** w widgecie służy do zmodyfikowania istniejącego widgetu nową instrukcją. Każde dostrojenie AI zapisuje poprzedni workflow jako snapshot w **Edit History** widgetu, dzięki czemu zmiany można przejrzeć lub wycofać z edytora workflow.
 

@@ -13,6 +13,8 @@ Per a consultes de documentació fora de l'editor, utilitzeu [Chat with Heym](./
 
 Premeu `Ctrl + I` / `Cmd + I` en qualsevol lloc de l'editor per obrir o tancar el panell — la drecera funciona fins i tot mentre un camp de text té el focus. Vegeu [Dreceres de teclat](./keyboard-shortcuts.md).
 
+Per treballar en un sol node, passeu el cursor per sobre seu al canvas i feu clic a **AI** a sobre. El tauler s'obre enfocat en aquest node. Vegeu [Modificar un sol node](#changing-one-node).
+
 ## Tancar el panell
 
 Feu clic al botó **X**, premeu `Ctrl + I` / `Cmd + I`, o activeu/desactiveu el botó **IA** a la barra d'eines del panell de Debug. La capçalera arrossega el panell; no el tanca.
@@ -60,6 +62,33 @@ Quan la resposta de la IA conté un bloc JSON de Workflow vàlid (amb `nodes` i 
 4. Marca el Workflow com a no desat
 
 Si l'anàlisi falla, apareix un botó **Torna-ho a provar** per regenerar la resposta.
+## Modificar un sol node
+
+Passeu el cursor per sobre d'un node al canvas i feu clic a **AI** a sobre. El tauler s'obre en mode Agent, enfocat en aquest node, i mostra quin node s'està modificant:
+
+| El node té... | El tauler mostra |
+|---|---|
+| Cap resultat en l'execució actual | **Modifying Node:** en una fila compacta amb la icona i el nom del node. L'assistent edita només a partir de la configuració del node; executeu primer el node si ha de veure la sortida |
+| Un resultat en l'execució actual | **Modifying Node: (Has Node Output)** a sobre del mateix node: icona, nom i tipus, darrer estat i durada, i l'error si ha fallat. L'assistent veu aquesta sortida i l'error quan edita el node |
+
+Passeu el cursor per sobre de l'etiqueta per veure en quin estat es troba el tauler.
+
+En qualsevol estat del tauler, l'assistent també llegeix la pàgina de documentació del node, situada rere la icona de llibre a la capçalera del node. Utilitza la pàgina per comprendre les opcions del node i respondre preguntes sobre elles.
+
+Sota els missatges, tres opcions inicien la sol·licitud:
+
+| Opció | Què fa |
+|---|---|
+| **Change this node as ...** | Emplena el quadre de missatge amb *Canvia aquest node a* perquè acabeu la frase |
+| **Fix error in this node ...** | Emplena *Corregeix l'error en aquest node.* L'assistent llegeix l'error d'aquest node de la darrera execució |
+| **Other** | Enfoca un quadre de missatge buit |
+
+Editeu el text i premeu **Send**. L'assistent retorna només aquest node i Heym l'actualitza al mateix lloc: el node manté el seu id, tipus i nom, de manera que expressions com `$checkLinkedIn.result` en altres nodes continuen funcionant. Altres nodes, connexions i la disposició no canvien, i **Undo** restaura la configuració anterior.
+
+Si la sol·licitud no cap dins del node, per exemple si requereix un altre tipus de node o un node nou, l'assistent indica què hauria de canviar en lloc d'editar. Tanqueu el focus del node amb la **X** a la targeta del node per editar de nou tot el workflow. Tancar el tauler també esborra el focus.
+
+El [mode YOLO](#yolo-mode) funciona amb un node enfocat: l'assistent canvia el node, executa el workflow i corregeix el node fins que l'execució és correcta. En mode **Ask**, el focus indica a l'assistent sobre quin node tracta la vostra pregunta i el canvas no es modifica.
+
 ## Mode YOLO
 
 El **mode YOLO** permet a l'assistent provar allò que construeix. Marqueu la casella **Mode YOLO** sota el camp de missatge i, a continuació, envieu la vostra sol·licitud. La casella apareix només en el mode Agent. Està desactivada per defecte i es restableix a desactivada quan es recarrega la pàgina. Passeu el cursor per sobre la icona d'informació adjacent per veure'n un resum breu.

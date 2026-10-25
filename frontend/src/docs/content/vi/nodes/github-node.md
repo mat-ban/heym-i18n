@@ -213,6 +213,11 @@ Nếu tệp đã tồn tại, Heym tự động lấy SHA hiện tại trước 
 **Per Page** (1–100). Heym yêu cầu một trang kết quả; không có trường `page` để lấy
 thêm các trang trong cùng một thao tác.
 
+
+### Return all pages
+
+Hãy bật **Return all pages** để một lần chạy đi qua mọi trang, bắt đầu tại **Cursor** nếu đã đặt. Mỗi yêu cầu lấy 100 mục, bất kể giá trị của **Per Page**. Node dừng sau khoảng 1.000 mục (hoặc 100 yêu cầu): mỗi đối tượng issue nặng khoảng 6 KB, nên giới hạn lớn hơn sẽ tạo ra đầu ra node rất lớn. Khi dừng sớm, node trả về những gì đã có cùng `has_more: true` và `next_cursor` thay vì báo lỗi, và bạn có thể tiếp tục bằng cách truyền cursor đó cho lần chạy tiếp theo. Việc dừng Workflow hoặc chạm đến thời gian chờ của Workflow sẽ kết thúc việc tải giữa các trang.
+
 ## Output
 
 Hình dạng chính xác phụ thuộc vào thao tác được chọn. Các trường phổ biến bao gồm:

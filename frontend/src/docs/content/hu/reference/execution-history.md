@@ -55,6 +55,18 @@ Egy workflow megnyitása a `/workflows/{workflowId}/{executionId}` címen automa
 - Sikertelen futtatás hibakeresése a bemenetek és csomópont-kimenetek vizsgálatával
 - Kimenetek összehasonlítása a futtatások között
 
+## Kérdezze az AI-t
+
+Mindkét előzmény párbeszédpanelen található egy **Kérdezze az AI-t** gomb (szikra ikon) a cím mellett. Ez megnyitja a [Chat lapot](../tabs/chat-tab.md#asking-about-a-run) egy új beszélgetésben, a workflow-val és a kiválasztott futással eltávolítható chipekként csatolva. Kérdezze meg, miért volt lassú a futás, mi hibásodott meg, vagy kérje meg a Chatet a workflow javítására. A Chat pontosan azt a futást olvassa be, beleértve a csomópontonkénti nyomkövetést és a hibákat.
+
+Az All History párbeszédpanelen a **Kérdezze az AI-t** csak akkor jelenik meg, ha egy workflow-futás van kiválasztva; a chat- és asszisztensfutások nem jelenítik meg.
+
+## Futtatási idővonal
+
+A futás részleteiben az **Idővonal** gomb (stopperóra ikon) az **Összes kibontása** mellett a **Lépések** listát span idővonalra cseréli. Amíg az idővonal látható, ugyanaz a gomb **Naplók** feliratot visel; kattintson rá a listához való visszatéréshez. Az All History ablakban a gomb csak workflow-futások esetén jelenik meg. Az idővonal egy sávot rajzol minden csomóponthoz a kezdésének időpontjában, így láthatja, melyik csomópont mennyi ideig tartott, és melyek futottak párhuzamosan. Vigye az egeret egy sáv fölé az időtartamért; kattintson rá ugyanazon részletvizsgáló megnyitásához, mint a szerkesztő [futtatási idővonala](#execution-timeline-details). A kiválasztott nézet mindaddig megmarad, amíg a párbeszédpanel nyitva van.
+
+A csomópontok kezdési időpontjának tárolása előtt rögzített futások időtartam szerint egymás után kerülnek elrendezésre.
+
 ## Végrehajtási kiemelések
 
 Élő futtatás után – vagy a **Bring to Canvas** használata után – egy elutasítható **Execution Highlights** felugró ablak jelenik meg a **vászon jobb felső sarkában**. Ez gyors módja annak, hogy lássa, *mit állított elő az egyes csomópontok*, felülről lefelé, végrehajtási sorrendben. Zárja be a **✕** gombbal; a következő futtatáskor újra megnyílik.
@@ -144,7 +156,7 @@ A **Másolás** gombot használja a Bemenetek vagy Kimenetek mellett a JSON vág
 
 ## A futtatás idővonalának részletei
 
-Amikor a szerkesztő **Execution Log** panelje nyitva van, kattintson az időzítő gombra a futtatás idővonalának megjelenítéséhez. Válasszon ki egy szakaszt egy beágyazott részletek ellenőrző megnyitásához, amely átveszi a sorok területét. Megjeleníti a kiválasztott lépés állapotát, időtartamát, kísérleteinek számát, újrapróbálkozási információit, hibáit, trace ID-ját és egy tömör kimeneti előnézetet. Az objektum- és tömbkimenetek ugyanazt a `JsonTree` megjelenítőt használják, mint a Debug panel többi része; a skaláris értékek szöveges előnézetet használnak. Amikor egy lépés képeket ad ki (Playwright képernyőképek, generált képek, képfájlok), azok bélyegképként jelennek meg a kimenet felett, és a JSON egy rövid helyőrzőt mutat a nyers base64 helyett. Kattintson egy bélyegképre a lightboxban való megnyitásához; a nyílgombok vagy a ←/→ billentyűk végiglépkednek a futtatás minden képén, egy `2 / 5` típusú számlálóval. Használja az **Open trace** lehetőséget LLM és Agent szakaszokhoz, amikor egy trace ID elérhető.
+Amikor a szerkesztő **Execution Log** panelje nyitva van, kattintson az időzítő gombra a futtatás idővonalának megjelenítéséhez. Válasszon ki egy szakaszt egy beágyazott részletek ellenőrző megnyitásához, amely átveszi a sorok területét. Megjeleníti a kiválasztott lépés állapotát, időtartamát, kísérleteinek számát, újrapróbálkozási információit, hibáit, trace ID-ját és egy tömör kimeneti előnézetet. Az objektum- és tömbkimenetek ugyanazt a `JsonTree` megjelenítőt használják, mint a Debug panel többi része; a skaláris értékek szöveges előnézetet használnak. Amikor egy lépés képeket ad ki (Playwright képernyőképek, generált képek, képfájlok vagy base64 képek a kérés törzsében, bárhol a kimenetben), azok bélyegképként jelennek meg a kimenet felett, és a JSON egy rövid helyőrzőt mutat a nyers base64 helyett. Kattintson egy bélyegképre a lightboxban való megnyitásához; a nyílgombok vagy a ←/→ billentyűk végiglépkednek a futtatás minden képén, egy `2 / 5` típusú számlálóval. Használja az **Open trace** lehetőséget LLM és Agent szakaszokhoz, amikor egy trace ID elérhető.
 ## Mobile csomópont részletei
 
 Telefonon a szerkesztő a szabadformájú vászon helyett egy teljes képernyős workflow-fát jelenít meg. Koppintson egy rögzített eredménnyel rendelkező fa csomópontra, hogy annak futtatását teljes képernyős részletként megnyissa. A nézet külön **Input Data**, **Output Data** és **Errors** füleket kínál. Az output fül megjeleníti a rögzített eredményt és felkínálja a **Copy Output** lehetőséget; az input fül a kiválasztott csomópont konfigurációját mutatja, az errors fül pedig a rögzített hibát jeleníti meg, amikor a csomópont meghiúsult. A **Back to workflow** gombbal vagy a bezárás gombbal térhet vissza a fához.

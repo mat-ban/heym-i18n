@@ -9,11 +9,30 @@ Heym Work berjalan sebagai kontainer mandiri berdampingan dengan Heym, dengan li
 | Area | Fungsi |
 |------|--------|
 | **Chat** | Deskripsikan pekerjaan melalui teks atau suara. Heym menanyakan data yang dibutuhkan, menyusun workflow, mengujinya, dan menandainya sebagai Terverifikasi. |
+| **Flows** | Editor membangun flow dari pilihan daripada canvas: apa yang memulainya, draf AI opsional, dan tindakan di Slack, Google Sheets, dan email. Jawaban dari Slack melanjutkan eksekusi, dan persetujuan juga menunggu di Aktivitas. Lihat [Flows](#flows). |
 | **Halaman** | Halaman widget yang disematkan: angka ringkasan, grafik, tabel dengan label status, area unggah berkas, dan persetujuan. Baris tabel dapat membuka halaman rincian tersendiri. |
 | **Persetujuan** | Tinjauan dari langkah [Human-in-the-Loop](./human-in-the-loop.md) menunggu di Aktivitas dan pada halaman, dengan opsi Setujui, Minta Perubahan, dan Tolak. |
 | **Aktivitas** | Setiap eksekusi, disertai nama orang yang memulainya dan instans yang menjalankannya. |
 | **Peran** | Pemilik, Editor, dan Pelihat. Masuk dilakukan melalui [Single Sign-On](./sso.md) yang sudah digunakan oleh Heym. |
 | **Edisi Industri** | Edisi hukum, pendidikan, keuangan, logistik, energi, dan niaga elektronik hadir dengan halaman siap pakai, data sampel, serta workflow khusus industri. |
+
+## Flows
+
+**Flows** ada di menu Heym Work untuk Editor dan Pemilik. Flow dibuat dari pilihan alih-alih node, dan Heym Work menyimpannya sebagai workflow Heym biasa melalui Heym API, atas nama orang yang membuatnya. Aturan akses, riwayat edit, dan sinkronisasi trigger Heym berlaku seperti di editor, dan setiap eksekusi muncul di Aktivitas seperti yang lainnya.
+
+| Bagian | Pilihan |
+|---|---|
+| **Apa yang memulainya** | Sesuai permintaan, berdasarkan jadwal, pada pesan Slack, saat tab Google Sheets berubah (baris ditambahkan, diubah, atau dihapus), atau saat email mencapai kotak masuk. Trigger spreadsheet dan email memeriksa setiap 1, 5, 15, atau 60 menit. |
+| **Draf AI** (opsional) | Model dan instruksi mengubah apa yang memulai flow menjadi teks untuk langkah-langkah setelahnya. Flow yang tidak dimulai dari spreadsheet atau email dapat membaca pesan Slack terbaru dari saluran atau utas terlebih dahulu. |
+| **Apa yang terjadi selanjutnya** | Tindakan secara berurutan, di salah satu dari tiga alat, apa pun yang memulai flow. **Slack:** pesan saluran, pesan langsung, formulir, pesan dengan tombol, persetujuan, balasan utas, pembaruan pesan, dan hasil akhir. **Google Sheets:** tambahkan baris, atau perbarui baris yang berubah. **Email:** kirim email. |
+
+- **Jawaban melanjutkan eksekusi.** Persetujuan, tombol, atau formulir menjeda eksekusi hingga seseorang menjawab di Slack. Persetujuan juga menunggu di Aktivitas, dan keputusan di salah satu tempat menghapus tombol dari pesan Slack. Langkah Slack selanjutnya tetap berada di utas pesan pertama.
+- **Satu kartu Koneksi.** Setiap flow menunjukkan ruang kerja Slack, akun Google Sheets, dan kotak masuk tempat ia membaca dan mengirim. Itu adalah kredensial Heym: **Slack Bot** (token bot, `xoxb-…`), **Google Sheets**, **IMAP**, dan **SMTP**; kredensial yang hilang dapat ditambahkan langsung dari flow itu sendiri.
+- **Satu aplikasi Slack untuk setiap flow.** Di aplikasi Slack, setel URL Permintaan Interaktivitas ke `https://<Heym Anda>/api/slack/interactions/<id kredensial>` dan URL Permintaan Langganan Peristiwa ke `https://<Heym Anda>/api/slack/events/<id kredensial>`. Heym Work menampilkan keduanya untuk koneksi yang dipilih. Semua flow pada kredensial tersebut membagikannya.
+- **Trigger Slack memilih apa yang mereka dengar:** pesan di saluran dan DM, pesan langsung ke bot, sebutan bot, atau pesan di satu saluran. Postingan bot itu sendiri tidak pernah memulai flow.
+- **Persyaratan.** Flows memerlukan Heym 0.0.131 atau yang lebih baru.
+
+Langkah-langkah yang dibangun flow adalah node yang sama yang dapat Anda gunakan di canvas: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md), dan [Cron](../nodes/cron-node.md).
 
 ## Menghubungkan Heym Work
 
@@ -26,7 +45,7 @@ Koneksi dikonfigurasi pada menu **Pengaturan → Heym Work**. Tab ini hanya munc
 | **Alamat Heym Work** | Lokasi Heym Work berjalan, misalnya `https://work.example.com`. Pengguna akan diarahkan kembali ke alamat ini setelah masuk. Klik **Simpan**. |
 | **Kunci integrasi** | Tombol **Buat kunci** menghasilkan kunci yang digunakan Heym Work untuk setiap permintaan ke Heym. Kunci ditampilkan satu kali saja dengan tombol salin. Heym hanya menyimpan nilai hash-nya. |
 | **Aktifkan Heym Work** | Mengaktifkan koneksi. Memerlukan alamat dan kunci terlebih dahulu. |
-| Status | **Terakhir dilihat**, **Versi Work**, dan **Lisensi**, sesuai laporan terbaru dari Heym Work. |
+| **Edisi industri dan tim** | Edisi hukum, pendidikan, keuangan, logistik, energi, dan e-commerce, ditambah edisi TI, penjualan, pemasaran, dan SDM untuk tim perusahaan, terbuka dengan halaman, data sampel, dan workflow untuk pekerjaan tersebut. |
 
 Selanjutnya buka alamat Heym Work dan selesaikan konfigurasinya:
 

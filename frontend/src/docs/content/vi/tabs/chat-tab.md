@@ -35,6 +35,8 @@ Bạn cũng có thể bắt đầu cuộc trò chuyện từ ô chat trên [tab 
 - **Lịch sử chạy workflow** – Hỏi về một workflow ("báo cáo hàng ngày đã chạy bao nhiêu lần?", "nó có thất bại không?", "lần chạy cuối là khi nào?"). Chat tra cứu workflow theo ID và trả lời dựa trên số lần chạy, phân loại trạng thái, thời gian chạy đầu và cuối, và thời lượng trung bình. Hỏi tại sao một lần chạy thất bại hoặc nó trả về gì, Chat sẽ mở lần chạy đó để đọc input, output và lỗi theo từng node
 - **Trạng thái chạy trực tiếp** – Hỏi hiện tại đang có gì chạy và Chat trả lời với số lượng, tên các workflow, mỗi lần chạy đã diễn ra bao lâu, đang ở node nào, và liên kết trực tiếp đến lần chạy trực tiếp
 
+- **Chip ngữ cảnh chạy** – **Hỏi AI** trong [Execution History](../reference/execution-history.md#ask-ai) sẽ mở một cuộc trò chuyện mới với lần chạy Workflow đã chọn được đính kèm dưới dạng chip. Xem [Hỏi về một lần chạy](#hoi-ve-mot-lan-chay)
+
 ## Sử dụng Chat từ một MCP Client
 
 Engine Chat cũng có thể được truy cập từ bên ngoài trình duyệt. Bật **Heym Chat Tool** trong [tab MCP](./mcp-tab.md) và các MCP client — Claude, Cursor, và bất kỳ công cụ nào khác hỗ trợ MCP — sẽ nhận được một tool `heym_chat` duy nhất, chạy chính engine này với đầy đủ các khả năng của nó.
@@ -82,6 +84,17 @@ Các lượt chạy bị tạm dừng để [Human-in-the-Loop](../reference/hum
 đang chờ bạn, chứ không phải đang chạy. Đây là cùng dữ liệu với badge active-runs ở phần header,
 nên Chat và badge không bao giờ mâu thuẫn. Với những lượt chạy đã hoàn thành, hãy hỏi về các execution gần đây
 thay vào đó — nội dung đó đọc từ [Execution History](../reference/execution-history.md).
+
+## Hỏi về một lần chạy
+
+Chọn một lần chạy Workflow trong [Execution History](../reference/execution-history.md#ask-ai), từ trình chỉnh sửa hoặc từ All History, và nhấp vào **Hỏi AI** bên cạnh tiêu đề hộp thoại. Chat mở một cuộc trò chuyện mới với hai chip phía trên hộp tin nhắn:
+
+- **Workflow:** tên của Workflow
+- **Execution:** các ký tự đầu tiên của id lần chạy đã chọn
+
+Xóa một chip bằng dấu **×** của nó để loại bỏ. Sau đó đặt câu hỏi của bạn, ví dụ: “tại sao lần chạy này lại mất nhiều thời gian như vậy?”, “điều gì đã thất bại ở đây?” hoặc “bạn có thể khắc phục nó không?”. Các chip còn lại được đính kèm vào tin nhắn đó với đầy đủ id, vì vậy Chat sẽ đọc trực tiếp dữ liệu đầu vào, đầu ra và dấu vết trên từng nút của lần chạy thay vì tìm kiếm Workflow. Để khắc phục Workflow, Chat sẽ lưu, chạy thử và xác minh thay đổi như được mô tả trong [Tạo Workflow](#tao-workflow).
+
+Tin nhắn đã gửi hiển thị các chip bên dưới câu hỏi của bạn. Chúng chỉ thuộc về tin nhắn đó; các câu hỏi tiếp theo trong cùng một cuộc trò chuyện sẽ giữ lại ngữ cảnh từ lịch sử.
 
 ## Hỏi về Alert
 

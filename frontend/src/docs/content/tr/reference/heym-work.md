@@ -9,11 +9,30 @@ Heym Work, Heym ekibinden alınan ayrı bir lisansla, Heym kurulumunun yanında 
 | Alan | İşlev |
 |------|-------|
 | **Chat** | Görevi metinle veya sesle açıklayın. Heym gerekli ayrıntıları sorar, workflow yapısını oluşturur, test eder ve Doğrulandı olarak işaretler. |
+| **Flows** | Düzenleyiciler bir flow'u tuval yerine seçeneklerden oluşturur: onu neyin başlattığı, isteğe bağlı bir AI taslağı ve Slack, Google Sheets ve e-postadaki eylemler. Slack'ten gelen yanıtlar çalıştırmaya devam eder ve onaylar Etkinlik'te de bekler. Bkz. [Flows](#flows). |
 | **Sayfalar** | Sabitlenmiş widget sayfaları: sayısal göstergeler, grafikler, durum etiketli tablolar, dosya bırakma alanları ve onaylar. Bir tablo satırı kendi ayrıntı sayfasını açabilir. |
 | **Onaylar** | [Human-in-the-Loop](./human-in-the-loop.md) adımlarından gelen incelemeler Etkinlik bölümünde ve sayfalarda Onayla, Değişiklik İste ve Reddet seçenekleriyle bekler. |
 | **Etkinlik** | Başlatan kişi ve çalıştıran örnek bilgisiyle birlikte her çalıştırma kaydı. |
 | **Roller** | Sahip, Düzenleyici ve Görüntüleyici. Giriş işlemi Heym'in halihazırda kullandığı [Single Sign-On](./sso.md) üzerinden gerçekleşir. |
 | **Sektörel Sürümler** | Hukuk, eğitim, finans, lojistik, enerji ve e-ticaret sürümleri sektöre özel sayfalar, örnek veriler ve hazır iş akışlarıyla açılır. |
+
+## Flows
+
+**Flows**, Düzenleyiciler ve Sahipler için Heym Work menüsündedir. Bir flow, düğümler yerine seçeneklerden oluşturulur ve Heym Work, onu oluşturan kişi adına Heym API'si aracılığıyla sıradan bir Heym iş akışı olarak kaydeder. Heym'in erişim kuralları, Düzenleme Geçmişi ve tetikleyici eşitlemesi düzenleyicide olduğu gibi geçerlidir ve her çalıştırma Etkinlik'te diğerleri gibi görünür.
+
+| Bölüm | Seçenekler |
+|---|---|
+| **Neyin başlattığı** | İsteğe bağlı olarak, bir programa göre, bir Slack mesajında, bir Google Sheets sekmesi değiştiğinde (satırlar eklendiğinde, değiştirildiğinde veya silindiğinde) ya da bir e-posta gelen kutusuna ulaştığında. E-tablo ve e-posta tetikleyicileri her 1, 5, 15 veya 60 dakikada bir kontrol eder. |
+| **AI taslağı** (isteğe bağlı) | Bir model ve talimatlar, flow'u başlatan şeyi sonraki adımlar için metne dönüştürür. Bir e-tablodan veya e-postadan başlamayan bir flow, önce bir kanaldan veya ileti dizisinden son Slack mesajlarını okuyabilir. |
+| **Daha sonra ne olur** | Flow'u ne başlatmış olursa olsun, üç araçtan herhangi birinde sırayla eylemler. **Slack:** kanal mesajı, doğrudan mesaj, form, düğmeli mesaj, onay, ileti dizisi yanıtı, mesaj güncellemesi ve nihai sonuç. **Google Sheets:** satır ekleme veya değişen satırı güncelleme. **E-posta:** e-posta gönderme. |
+
+- **Yanıtlar çalıştırmaya devam eder.** Bir onay, düğmeler veya form, Slack'te biri yanıt verene kadar çalıştırmayı duraklatır. Bir onay Etkinlik'te de bekler ve her iki yerdeki bir karar düğmeleri Slack mesajından kaldırır. Sonraki Slack adımları ilk mesajın ileti dizisinde kalır.
+- **Tek bir Bağlantılar kartı.** Her flow Slack çalışma alanını, Google Sheets hesabını ve okuduğu ve gönderdiği gelen kutularını gösterir. Bunlar Heym kimlik bilgileridir: **Slack Bot** (bot belirteci, `xoxb-…`), **Google Sheets**, **IMAP** ve **SMTP**; eksik bir kimlik bilgisi doğrudan flow'un içinden eklenebilir.
+- **Her flow için bir Slack uygulaması.** Slack uygulamasında Etkileşim İstek URL'sini `https://<Heym adresiniz>/api/slack/interactions/<kimlik bilgisi kimliği>` ve Olay Abonelikleri İstek URL'sini `https://<Heym adresiniz>/api/slack/events/<kimlik bilgisi kimliği>` olarak ayarlayın. Heym Work, seçilen bağlantı için her ikisini de gösterir. Bu kimlik bilgisindeki tüm flow'lar bunları paylaşır.
+- **Slack tetikleyicileri neyi dinleyeceklerini seçer:** kanallardaki ve doğrudan mesajlardaki mesajlar, bota doğrudan mesajlar, bottan bahsetmeler veya tek bir kanaldaki mesajlar. Botun kendi gönderileri asla bir flow başlatmaz.
+- **Gereksinimler.** Flows için Heym 0.0.131 veya üzeri gereklidir.
+
+Bir flow'un oluşturduğu adımlar, tuvalde kullanabileceğiniz aynı düğümlerdir: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) ve [Cron](../nodes/cron-node.md).
 
 ## Heym Work'ü Bağlama
 
@@ -26,7 +45,7 @@ Bağlantı **Ayarlar → Heym Work** sekmesinden yapılandırılır. Bu sekme ya
 | **Heym Work adresi** | Heym Work'ün çalıştığı adres, örneğin `https://work.example.com`. Giriş işlemi buraya yönlendirilir. **Kaydet**'e basın. |
 | **Entegrasyon anahtarı** | **Anahtar oluştur** butonu, Heym Work'ün Heym'e yönelik her istekte kullandığı anahtarı üretir. Bir kopyalama butonuyla birlikte yalnızca bir kez gösterilir. Heym yalnızca özetini (hash) saklar. |
 | **Heym Work'ü Etkinleştir** | Bağlantıyı açar. Öncesinde adres ve anahtar girişini gerektirir. |
-| Durum | Heym Work'ün en son bildirdiği **Son görülme**, **Work sürümü** ve **Lisans** bilgileri. |
+| **Sektör ve ekip sürümleri** | Hukuk, eğitim, finans, lojistik, enerji ve e-ticaret sürümleri ile şirket ekipleri için BT, satış, pazarlama ve İK sürümleri bu çalışmaya yönelik sayfalar, örnek veriler ve iş akışlarıyla açılır. |
 
 Ardından Heym Work adresini açın ve kurulumu tamamlayın:
 

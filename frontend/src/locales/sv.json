@@ -478,7 +478,14 @@
     "extract": "Extrahera",
     "mySubWorkflow": "Mitt Sub-Workflow",
     "moreNodes": "+{count} till",
-    "runToNode": "Kör till {label}"
+    "runToNode": "Kör till {label}",
+    "aiButtonTitle": "Ändra eller åtgärda den här noden med AI-assistenten",
+    "editNodeWithAi": "Redigera {label} med AI",
+    "modifyingNode": "Ändrar nod:",
+    "hasNodeOutput": "(Har nodutdata)",
+    "closeNodeFocus": "Stäng nodfokus och redigera hela Workflow",
+    "nodeFocusRan": "Den här noden kördes. AI ser dess senaste utdata och fel och läser nodens dokumentation.",
+    "nodeFocusNoOutput": "Den här noden har inga utdata i den aktuella körningen. Kör den först om AI ska se dess utdata. AI läser nodens dokumentation i båda fallen."
   },
   "nodes": {
     "title": "Noder",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Redigera köat meddelande",
     "deleteQueuedMessage": "Ta bort köat meddelande",
     "startedByMcp": "Startad av en MCP-klient",
-    "newChatTitle": "Ny chatt"
+    "newChatTitle": "Ny chatt",
+    "subtitle": "Kör Workflows och ställ frågor",
+    "modelsLoadFailedDisabled": "Modelllistan för de här inloggningsuppgifterna kunde inte läsas in. Chatten förblir inaktiverad tills en modell kan hämtas."
   },
   "teams": {
     "title": "Team",
@@ -1672,7 +1681,10 @@
       "error": "Fel",
       "cached": "Cachad",
       "cancelled": "Avbruten"
-    }
+    },
+    "askAi": "Fråga AI",
+    "askAiTitle": "Fråga Chat-assistenten om den här körningen",
+    "noNodeSpans": "Inga nod-spans registrerades för den här körningen."
   },
   "portal": {
     "loadingPortal": "Portalen laddas...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Detaljsidans poster",
     "detailPageRecordsHelp": "De ?record=-värden som instrumentpanelen accepterar när en radlänk öppnar den. Allt annat avvisas innan en widget körs.",
     "unreachableDashboard": "En instrumentpanel som inte kan öppnas",
-    "runWorkflow": "Kör ett Workflow"
+    "runWorkflow": "Kör ett Workflow",
+    "openWorkflowNewTab": "Öppna Workflow i en ny flik",
+    "hitlFilterHelp": "Visa granskningar från alla Workflows eller bara en. Listar de Workflows som kan öppnas, egna eller delade, och som har ett steg som väntar på en person.",
+    "hitlSourcesLoadFailed": "Workflows kunde inte läsas in."
   },
   "drive": {
     "filesCount": "({count} filer)",

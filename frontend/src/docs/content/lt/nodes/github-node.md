@@ -212,6 +212,11 @@ Jei failas jau egzistuoja, Heym automatiškai gauna dabartinį SHA prieš jį at
 `List Organization Repositories`, `List User Repositories` ir `Get User Repositories` palaiko
 **Per Page** (1–100). Heym prašo vieno puslapio rezultatų; nėra `page` lauko, skirto papildomiems puslapiams gauti toje pačioje operacijoje.
 
+
+### Return all pages
+
+Įjunkite **Return all pages**, kad vienas vykdymas sektų visus puslapius, pradedant nuo **Cursor**, jei jis nustatytas. Kiekviena užklausa prašo 100 elementų, nepriklausomai nuo **Per Page** reikšmės. Mazgas sustoja po maždaug 1 000 elementų (arba 100 užklausų): issue objektai yra maždaug po 6 KB, todėl didesnė riba sukurtų labai dideles mazgo išvestis. Jei sustoja anksčiau, vietoj klaidos grąžina tai, ką turi, su `has_more: true` ir `next_cursor`, o tęsti galite perduodami šį žymeklį kitam vykdymui. Sustabdžius Workflow arba pasiekus jo skirtąjį laiką, gavimas nutraukiamas tarp puslapių.
+
 ## Išvestis
 
 Tiksli forma priklauso nuo pasirinktos operacijos. Dažni laukai apima:

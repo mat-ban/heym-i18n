@@ -212,6 +212,11 @@ Hvis filen allerede eksisterer, henter Heym den aktuelle SHA automatisk før opd
 **Per Side** (1–100). Heym anmoder om én side af resultater; der er intet `page`-felt til hentning af
 yderligere sider i samme operation.
 
+
+### Return all pages
+
+Aktivér **Return all pages**, så én kørsel følger hver side, startende ved **Cursor**, når den er angivet. Hver anmodning beder om 100 elementer, uanset værdien af **Per Page**. Noden stopper efter cirka 1.000 elementer (eller 100 anmodninger): issue-objekter fylder cirka 6 KB hver, så en højere grænse ville give meget store node-output. Stopper den tidligt, returnerer den det, den har, med `has_more: true` og en `next_cursor` i stedet for at udløse en fejl, og hentningen kan fortsættes ved at give denne cursor videre til næste kørsel. Hvis Workflow stoppes, eller dets timeout nås, afsluttes hentningen mellem siderne.
+
 ## Output
 
 Den præcise struktur afhænger af den valgte operation. Almindelige felter inkluderer:

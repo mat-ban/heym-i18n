@@ -55,6 +55,18 @@ Odprtje workflow-a na `/workflows/{workflowId}/{executionId}` samodejno prinese 
 - Odpravljanje napak pri neuspelem izvajanju z pregledom vhodnih podatkov in izhodov vozlišč
 - Primerjava izhodov med izvajanjami
 
+## Vprašaj AI
+
+Oba pogovorna okna zgodovine imata poleg naslova gumb **Vprašaj AI** (ikona iskre). Odpre [zavihek Chat](../tabs/chat-tab.md#asking-about-a-run) v novem pogovoru s priloženim workflowom in izbranim zagonom kot odstranljivima žetonoma. Vprašajte, zakaj je bil zagon počasen, kaj je spodletelo, ali prosite Chat, naj popravi workflow. Chat prebere natančno ta zagon, vključno z njegovo sledjo po vozliščih in napakami.
+
+V pogovornem oknu All History se **Vprašaj AI** prikaže le, ko je izbran zagon workflowa; zagoni chata in pomočnika ga ne prikazujejo.
+
+## Časovnica izvajanja
+
+V podrobnostih zagona gumb **Časovnica** (ikona štoparice) poleg **Razširi vse** zamenja seznam **Koraki** s časovnico razponov. Ko je časovnica prikazana, isti gumb nosi oznako **Dnevniki**; kliknite ga za vrnitev na seznam. V All History se gumb prikaže samo za zagone workflowa. Časovnica izriše vrstico za vsako vozlišče v času njegovega začetka, da vidite, katero vozlišče je trajalo koliko časa in katera so tekla vzporedno. Postavite se z miško nad vrstico za prikaz trajanja; kliknite jo, da odprete isti inšpektor podrobnosti kot [časovnica izvajanja](#execution-timeline-details) v urejevalniku. Izbrani pogled ostane aktiven, dokler je pogovorno okno odprto.
+
+Zagoni, zabeleženi preden so bili shranjeni začetni časi vozlišč, so razvrščeni drug za drugim po trajanju.
+
 ## Poudarki izvajanja
 
 Po aktivnem izvajanju — ali po **Prinesi na Platno** — se v **zgornjem desnem kotu Platna** prikaže zapiralni **Poudarki izvajanja** pojavna okna. To je hiter način za ogled *kaj je vsako vozlišče proizvedlo*, navedeno od zgoraj navzdol v vrstnem redu izvajanja. Zaprite ga z **✕**; ponovno se odpre ob naslednjem izvajanju.
@@ -139,7 +151,7 @@ Uporabite **Kopiraj** poleg Vnosov ali Izhodov, da kopirate JSON v odložišče.
 
 ## Podrobnosti časovnice izvajanja
 
-Ko je odprt **Zapis izvajanja** v urejevalniku, kliknite gumb s časovnikom, da prikažete časovnico izvajanja. Izberite razpon, da odprete vgrajen inšpektor podrobnosti, ki prevzame območje vrstic. Prikazuje status izbrane faze, trajanje, število poskusov, informacije o ponovnem poskusu, napake, ID sledi in kompakten predogled izhoda. Izhodi objektov in tabel se uporabljajo z istim `JsonTree` pregledovalnikom kot preostali panel za odpravljanje napak; skalarne vrednosti uporabljajo predogled besedila. Ko faza izhodov slike (screenshot-i Playwright, generirane slike, datoteke slik), se prikažejo kot sličice nad izhodom, JSON pa prikazuje kratek nadomestni znak namesto surovega base64. Kliknite sličico, da jo odprete v svetlobni škatli; pušči ali tipki ←/→ preklapljata med vsako sliko v zagonu, s števcem, kot je `2 / 5`. Uporabite **Odpri sled** za LLM in Agent faze, ko je ID sledi na voljo.
+Ko je odprt **Zapis izvajanja** v urejevalniku, kliknite gumb s časovnikom, da prikažete časovnico izvajanja. Izberite razpon, da odprete vgrajen inšpektor podrobnosti, ki prevzame območje vrstic. Prikazuje status izbrane faze, trajanje, število poskusov, informacije o ponovnem poskusu, napake, ID sledi in kompakten predogled izhoda. Izhodi objektov in tabel se uporabljajo z istim `JsonTree` pregledovalnikom kot preostali panel za odpravljanje napak; skalarne vrednosti uporabljajo predogled besedila. Ko faza izhodov slike (posnetki zaslona Playwright, ustvarjene slike, slikovne datoteke ali slike base64 v telesu zahteve, najdene kjer koli v izhodu), se prikažejo kot sličice nad izhodom, JSON pa prikazuje kratek nadomestni znak namesto surovega base64. Kliknite sličico, da jo odprete v svetlobni škatli; pušči ali tipki ←/→ preklapljata med vsako sliko v zagonu, s števcem, kot je `2 / 5`. Uporabite **Odpri sled** za LLM in Agent faze, ko je ID sledi na voljo.
 ## Podrobnosti o mobilnem vozlišču
 
 Na telefonu urejevalnik prikaže drevo workflow v celozaslonskem načinu namesto prostornega platna. Tapnite vozlišče drevesa z zabeleženim rezultatom, da odprete njegovo izvajanje kot podrobnosti v celozaslonskem načinu. Pogled ponuja ločene zavihke **Vhodni podatki**, **Izhodni podatki** in **Napake**. Zavihek izhoda prikazuje zabeležen rezultat in ponuja možnost **Kopiraj izhod**; zavihek vhodnih podatkov prikazuje konfiguracijo izbranega vozlišča, zavihek napak pa prikazuje zabeleženo napako, ko je vozlišče spodletelo. Uporabite **Nazaj na workflow** ali gumb za zapiranje, da se vrnete na drevo.

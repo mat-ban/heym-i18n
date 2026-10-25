@@ -16,7 +16,7 @@ Uzol **Heym** číta vlastné dáta Heymu: workflowy, ku ktorým máte prístup,
 | Parameter | Typ | Popis |
 |-----------|------|-------------|
 | `heymOperation` | Select | Ktoré čítanie sa má vykonať |
-| `heymWorkflowId` | UUID | Cieľový workflow. Vyžaduje sa pre `getWorkflow` a `getExecutionHistory`. Podporuje výrazy. |
+| `heymWorkflowId` | UUID | Pri `getExecutionHistory` ho nastavte na `all`, ak chcete načítať každý dostupný Workflow. |
 | `heymLimit` | String | Maximálny počet riadkov, ktoré sa majú vrátiť. **Nechajte prázdne alebo zadajte `0` pre vrátenie všetkého** — to je predvolená hodnota. Podporuje výrazy. |
 | `heymStatus` | String | Voliteľný filter stavu pre `getExecutionHistory`. Podporuje výrazy. |
 | `heymSinceDays` | String | Voliteľné obdobie spätného pohľadu v dňoch pre `getExecutionHistory`. Podporuje výrazy. |
@@ -93,9 +93,11 @@ Vráti záznamy histórie spustení pre jeden workflow, od najnovšieho po najst
 | `$nodeLabel.executions[0].recovered` | Či bol beh obnovený po páde |
 | `$nodeLabel.executions[0].inputs` | Čo beh prijal – payload triggera alebo vstup volajúceho |
 | `$nodeLabel.executions[0].outputs` | Výstup workflow pre daný beh |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, ktorému história patrí |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, ku ktorému história patrí, alebo `null` pri **{AW}** |
+, alebo `null` pri **{AW}** |
 | `$nodeLabel.total` | Celkový počet zodpovedajúcich spustení **pred** limitom |
-| `$nodeLabel.by_status` | Počty podľa statusu, napríklad `{ "success": 41, "error": 3 }` |
+| | `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Pri **{AW}** Workflow, ku ktorému každé spustenie patrí |
+`$nodeLabel.by_status` | Počty podľa statusu, napríklad `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Začiatok okna alebo `null` pre celú históriu |
 
 Záznamy obsahujú `inputs` aj `outputs` – čo beh prijal a čo vrátil – ale nikdy `node_results`: sledovanie po jednotlivých uzloch je najväčší stĺpec v tabuľke a zatienilo by všetko nasledujúce. Ak potrebujete úplné sledovanie, získajte jedno spustenie prostredníctvom API.

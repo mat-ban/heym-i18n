@@ -18,14 +18,14 @@ Vidin on üksik diagramm ruudustikul. Toetatud diagrammitüübid:
 - **Joon**
 - **Ala** (täidetud trend, toetab mitut seeriat)
 - **Ring**
-- **Tabel** (keritav; ühte veergu saab kuvada [olekukiipidena](../nodes/chart-output-node.md#status-chips) ja read võivad avada [üksikasjade lehe](#detail-pages))
+- **Tabel** (keritav; klõpsake veeru päisel kasvavaks sortimiseks ja klõpsake uuesti kahanevaks sortimiseks. Veeru saab kuvada [olekukiipidena](../nodes/chart-output-node.md#status-chips), veerg võib sisaldada [linginuppe](../nodes/chart-output-node.md#link-buttons), mis avavad URL-i uuel vahekaardil, ja read võivad avada [üksikasjade lehe](#uksikasjade-lehed))
 - **Numbriline** (üks KPI väärtus valikulise ühikuga)
 - **Mõõdik** (üks väärtus min–max vahemiku suhtes, nt protsent)
 - **Hajuvus** (X/Y punktid korrelatsiooni graafikute jaoks)
 - **Proportsioon** (üks tulp jagatud osadeks protsendilise legendiga, nt keelte jaotus)
 - **Tulpmõõdik** (üks horisontaalne mõõdik rea kohta punasest roheliseks gradiendiga ja väärtusega, nt vaba kettaruum)
 - **Tekst** (markdown-sõnum, nt olekumärkus nagu "Viimane käivitus 19:47"; toetab [interaktiivseid märkeruute](../nodes/chart-output-node.md#interactive-task-lists), kui markdown on staatiline, ja [selgesõnalisi nummerdatud loendeid](../nodes/chart-output-node.md#numbered-lists) kohandatud või kahaneva nummerduse jaoks)
-- **HITL** (teie ootel inimülevaatused. Päis näitab `1/n pending`. Workflow nimi avab selle käivituse lõuendil. **Kinnita**, **Taotle muudatusi** ja **Lükka tagasi** lahendavad selle. Vidinа pealkirja kõrval olev ajaloo ikoon avab selle käivituse selle lehe ajaloo dialoogis. Vidin ei kasuta ülemvoo ridu ja iga inimene näeb oma järjekorda)
+- **HITL** (teie ootel inimülevaatused. Päis näitab `1/n pending`. Workflow nimi avab selle käivituse lõuendil. **Kinnita**, **Taotle muudatusi** ja **Lükka tagasi** lahendavad selle. Vidinа pealkirja kõrval olev ajaloo ikoon avab selle käivituse selle lehe ajaloo dialoogis. Vidin ei kasuta ülemvoo ridu ja iga inimene näeb oma järjekorda. See võib selle asemel kuvada ühe Workflow ülevaatusi kõigile, kes saavad seda Workflow'd avada; vaadake [HITL-vidinad](#hitl-vidinad))
 
 Lisaks diagrammidele käivitab vidin **Run a workflow** ühe teie workflow'dest otse töölaualt: lohistatud failiga, sisestusväljadega või nupuga Run; vt [Käivitusvidinad](#run-widgets).
 
@@ -41,6 +41,20 @@ Iga vidin laadib oma andmed asünkroonselt vahekaardi avamisel, seega leht püsi
 Vidina **Run a workflow** puhul valige hoopis käivitatav workflow; valija näitab, kuidas vidin igaüht neist käivitab. Vidin lisatakse otse ruudustikule; uut workflow'd pole vaja ehitada.
 
 Topeltklõpsake vidinat (või kasutage selle muutmise nuppu), et selle workflow igal ajal uuesti avada. Kasutage vidinа päises **Klooni vidin**, et dubleerida nii vidin kui ka selle täielik workflow. Koopia paigutatakse originaali alla ja märgistatakse **(Copy)**, et saaksite seda iseseisvalt muuta.
+
+## HITL-vidinad
+
+Uus HITL-vidin kuvab iga ülevaatuse, mis ootab teie enda järjekorras. Ainult ühe Workflow ülevaatuste kuvamiseks avage vidina **Seaded**:
+
+1. Valige väljal **Workflow** soovitud Workflow. Loendis on Workflow'd, mida saate avada – teie enda või teie või teie meeskonnaga jagatud –, millel on inimest ootav samm: inimülevaatusega Agent või Slacki kinnitus-, nuppude või vormisamm. Selle kõrval olev ikoon avab selle Workflow uuel vahekaardil.
+2. Kui Workflow'l on täpselt üks selline samm, valitakse see automaatselt. Kui neid on mitu, loetleb **Select agent** need sõlme nime järgi, kus **All agents** on esimene; Slacki sammud on tähistatud märkega **(Slack)**.
+3. Salvestage. Päises olev `1/n pending` loendab ainult neid ülevaatusi. Oma järjekorra uuesti kuvamiseks valige **Kõik workflow'd**.
+
+Sama valik on lõuendil Chart Output sõlme omadustes. Seda saab teha **Täiustage AI-ga** („näita ainult arvete kinnitusi“), samuti uue vidina kirjeldus, mis nimetab Workflow. Iga muudatus on Workflow muutmine, seega ilmub see Edit Historysse.
+
+- **Kes näeb ülevaatusi.** Workflow järgi filtreeritud vidin kuvab selle Workflow ülevaatusi kõigile, kes saavad seda Workflow'd avada, ja nad saavad selle kaudu heaks kiita, muudatusi taotleda või tagasi lükata täpselt nii, nagu nad saaksid Workflow'd käitada. Filtreerimata vidin kuvab igale inimesele tema enda järjekorra.
+- **Kes näeb vidinat.** Isik, kes ei saa valitud Workflow'd avada, ei näe vidinat üldse, isegi mitte temaga jagatud juhtpaneelil. Kui juhtpaneeli omanik kaotab juurdepääsu Workflow'le või see kustutatakse, näeb omanik teadet „You no longer have access to the workflow this widget shows“ ja saab **Seadetes** valida teise.
+- **Ainult kättesaadavad valikud.** Workflow, mida te ei saa avada, lükatakse vidina salvestamisel tagasi, olgu seadetest, lõuendilt või AI kaudu.
 
 ## Üksikasjade lehed
 
@@ -75,6 +89,10 @@ Tulemuse nupp **Wrap** murrab pikad väljundread kasti sees; lülitage see välj
 ## Vidinа genereerimine AI-ga
 
 Klõpsake **AI**, kirjeldage soovitud mõõdikut (näiteks "workflow õnnestumise määr viimase 30 päeva jooksul tulpdiagrammina") ja valige LLM-i mandaat ja mudel. Heym genereerib täieliku vidinа workflow, mis lõpeb Chart Output sõlmega, ja lisab selle ruudustikku. Vaadake [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) näidispromptide kohta iga diagrammitüübi jaoks.
+
+Vidin saab lühikese ühe- või kahesõnalise pealkirja teie päringu keeles, näiteks „Avatud juhtumid“. Pealkiri ei sisalda kunagi andmetabeli ID-d; kui mudel nimetab vidina terve lausega, säilitab Heym selle esimesed sõnad.
+
+Vidina API saab luua ka **loendurikaardi** ilma AI-ta: `text` vidin andmetabelil (`data_table_id`) parameetritega `count_column` ja `count_value` näitab, mitmel real on see väärtus; vidina pealkiri nimetab väärtuse. Heym Work alustab andmetabelist loodud lehti ühe loendurikaardiga oleku kohta.
 
 Kasutage vidinа nuppu **Peenhäälesta AI-ga**, et olemasolevat vidinat uue juhisega muuta. Iga AI peenhäälestus salvestab eelmise workflow vidinа **Muudatuste ajalukku**, seega saate workflow redaktorist muudatusi üle vaadata või tagasi pöörata.
 

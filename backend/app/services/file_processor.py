@@ -35,6 +35,10 @@ class FileProcessor:
         if not text:
             return text
 
+        # Keep words hyphenated across a line break ("self-\nservice") intact;
+        # split() below would otherwise leave "self- service".
+        text = re.sub(r"(\w)-[ \t]*\r?\n[ \t]*(\w)", r"\1-\2", text)
+
         parts = text.split()
         if not parts:
             return text
@@ -81,7 +85,7 @@ class FileProcessor:
                 break
             cleaned = new_cleaned
 
-        cleaned = re.sub(r"([a-zA-Z]{2})\s+\1(\s|$)", r"\1\2", cleaned)
+        cleaned = re.sub(r"(?<!\S)([a-zA-Z]{2})\s+\1(\s|$)", r"\1\2", cleaned)
 
         cleaned_parts = cleaned.split()
         final_parts = []
@@ -159,30 +163,6 @@ class FileProcessor:
 
         cleaned = " ".join(final_parts)
 
-        cleaned = re.sub(r"([a-z])([A-Z])", r"\1 \2", cleaned)
-
-        cleaned = re.sub(r"([A-Z]{2,})([a-z])", r"\1 \2", cleaned)
-
-        cleaned = re.sub(r"([A-Z]{2})([A-Z])([a-z])", r"\1 \2\3", cleaned)
-
-        cleaned = re.sub(r"([A-Z]{3})\s+([a-z])", r"\1 \2", cleaned)
-
-        cleaned = re.sub(r"([a-zA-Z]+)(and)([a-zA-Z]+)", r"\1 \2 \3", cleaned, flags=re.IGNORECASE)
-
-        cleaned = re.sub(
-            r"([a-zA-Z]+)(of|the|to)([A-Z])", r"\1 \2 \3", cleaned, flags=re.IGNORECASE
-        )
-
-        cleaned = re.sub(
-            r"([a-zA-Z]+)(of|the|to)([a-z])", r"\1 \2 \3", cleaned, flags=re.IGNORECASE
-        )
-
-        cleaned = re.sub(r"([a-zA-Z]+)(of|the|to)(\s)", r"\1 \2\3", cleaned, flags=re.IGNORECASE)
-
-        cleaned = re.sub(r"([a-zA-Z]+)(to)(the)", r"\1 \2 \3", cleaned, flags=re.IGNORECASE)
-
-        cleaned = re.sub(r"([a-zA-Z]+)(To)(the)", r"\1 \2 \3", cleaned, flags=re.IGNORECASE)
-
         cleaned = re.sub(r"\(\s*/\s*([a-z]+)\s*/\s*", r"(/\1/", cleaned)
 
         cleaned = re.sub(r"([a-z]+)\s*/\s*(\d+)\s*/\s*", r"\1/\2/", cleaned)
@@ -190,27 +170,6 @@ class FileProcessor:
         cleaned = re.sub(r"([a-z]+)\s+([a-z]+)\s*/\s*", r"\1\2/", cleaned)
 
         cleaned = re.sub(r"/\s+([a-z]+)\s+/", r"/\1/", cleaned)
-
-        cleaned = re.sub(
-            r"\b([a-zA-Z]{4,})\b\s+and\s+\b([a-zA-Z]{1})\b(\s|$|,|\.)",
-            r"\1and\2\3",
-            cleaned,
-            flags=re.IGNORECASE,
-        )
-
-        cleaned = re.sub(
-            r"\b([a-zA-Z]{4,})\b\s+and\s+\b(um|ed|er|al|ic|ly|en|in|on|at|it|is|as|an|or|ar|ur|ir|el|le|ne|te|re|se|de|ce|ge|me|pe|ve|we|ye|ze)\b(\s|$|,|\.)",
-            r"\1and\2\3",
-            cleaned,
-            flags=re.IGNORECASE,
-        )
-
-        cleaned = re.sub(
-            r"\b([a-zA-Z]{1,2})\b\s+and\s+\b([a-zA-Z]{4,})\b(\s|$|,|\.)",
-            r"\1and\2\3",
-            cleaned,
-            flags=re.IGNORECASE,
-        )
 
         cleaned = re.sub(r"\?\s*nid\s*=\s*", r"?nid=", cleaned)
 
@@ -273,12 +232,6 @@ class FileProcessor:
         cleaned = re.sub(r"von\s+(\d)(\d{2})\.", r"von \1 \2.", cleaned)
 
         cleaned = re.sub(r"von\s+(\d{3})\.", r"von \1.", cleaned)
-
-        while True:
-            new_cleaned = re.sub(r"(\d)\s+(\d)", r"\1\2", cleaned)
-            if new_cleaned == cleaned:
-                break
-            cleaned = new_cleaned
 
         cleaned = re.sub(r"\s+", " ", cleaned)
 

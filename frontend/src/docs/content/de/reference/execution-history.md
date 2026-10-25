@@ -55,6 +55,18 @@ Das Öffnen eines Workflows unter `/workflows/{workflowId}/{executionId}` bringt
 - Einen fehlgeschlagenen Lauf debuggen, indem Eingaben und Knotenausgaben inspiziert werden
 - Ausgaben über Läufe hinweg vergleichen
 
+## KI fragen
+
+Beide Verlaufsdialoge verfügen über eine Schaltfläche **KI fragen** (Glitzersymbol) neben ihrem Titel. Sie öffnet den [Reiter Chat](../tabs/chat-tab.md#asking-about-a-run) in einer neuen Unterhaltung, an die der Workflow und der ausgewählte Lauf als entfernbare Chips angehängt sind. Fragen Sie, warum der Lauf langsam war, was fehlgeschlagen ist, oder lassen Sie Chat den Workflow reparieren. Chat liest genau diesen Lauf, einschließlich des Traces und der Fehler pro Knoten.
+
+Im Dialog „Gesamter Verlauf“ erscheint **KI fragen** nur, wenn ein Workflow-Lauf ausgewählt ist; Chat- und Assistentenläufe zeigen ihn nicht an.
+
+## Lauf-Zeitleiste
+
+In den Laufdetails tauscht die Schaltfläche **Zeitleiste** (Timer-Symbol) neben **Alle aufklappen** die Liste **Schritte** gegen eine Span-Zeitleiste aus. Während die Zeitleiste angezeigt wird, lautet dieselbe Schaltfläche **Protokolle**; klicken Sie darauf, um zur Liste zurückzukehren. Im gesamten Verlauf erscheint die Schaltfläche nur für Workflow-Läufe. Die Zeitleiste zeichnet einen Balken pro Knoten zu dem Zeitpunkt, an dem er gestartet wurde, sodass Sie sehen können, welcher Knoten wie lange gedauert hat und welche parallel liefen. Bewegen Sie den Mauszeiger über einen Balken für seine Dauer; klicken Sie darauf, um denselben Detail-Inspektor wie in der [Ausführungs-Zeitleiste](#execution-timeline-details) des Editors zu öffnen. Die gewählte Ansicht bleibt erhalten, solange der Dialog geöffnet ist.
+
+Läufe, die aufgezeichnet wurden, bevor Knotenstartzeiten gespeichert wurden, werden nach Dauer hintereinander angeordnet.
+
 ## Ausführungs-Highlights
 
 Nach einem Live-Lauf – oder nach **Auf Canvas übertragen** – erscheint ein ausblendbares **Ausführungs-Highlights**-Popup in der **oberen rechten Ecke des Canvas**. Es ist eine schnelle Möglichkeit zu sehen, *was jeder Knoten produziert hat*, aufgelistet von oben nach unten in Ausführungsreihenfolge. Schließe es mit dem **✕**; es öffnet sich beim nächsten Lauf erneut.
@@ -144,7 +156,7 @@ Verwende **Copy** neben Inputs oder Outputs, um das JSON in die Zwischenablage z
 
 ## Details zur Ausführungs-Timeline
 
-Wenn das **Execution Log** des Editors geöffnet ist, klicke auf die Timer-Schaltfläche, um die Ausführungs-Timeline anzuzeigen. Wähle eine Spanne aus, um einen Inline-Detail-Inspektor zu öffnen, der den Zeilenbereich übernimmt. Er zeigt den Status des ausgewählten Schritts, die Dauer, die Anzahl der Versuche, Retry-Informationen, Fehler, die Trace-ID und eine kompakte Ausgabevorschau. Objekt- und Array-Ausgaben verwenden denselben `JsonTree`-Viewer wie der Rest des Debug-Panels; skalare Werte verwenden eine Textvorschau. Wenn ein Schritt Bilder ausgibt (Playwright-Screenshots, generierte Bilder, Bilddateien), erscheinen sie als Thumbnails über der Ausgabe, und das JSON zeigt einen kurzen Platzhalter anstelle des rohen base64. Klicke auf ein Thumbnail, um es in einer Lightbox zu öffnen; die Pfeiltasten-Schaltflächen oder ←/→-Tasten wechseln durch jedes Bild im Lauf, mit einem Zähler wie `2 / 5`. Verwende **Open trace** für LLM- und Agent-Spannen, wenn eine Trace-ID verfügbar ist.
+Wenn das **Execution Log** des Editors geöffnet ist, klicke auf die Timer-Schaltfläche, um die Ausführungs-Timeline anzuzeigen. Wähle eine Spanne aus, um einen Inline-Detail-Inspektor zu öffnen, der den Zeilenbereich übernimmt. Er zeigt den Status des ausgewählten Schritts, die Dauer, die Anzahl der Versuche, Retry-Informationen, Fehler, die Trace-ID und eine kompakte Ausgabevorschau. Objekt- und Array-Ausgaben verwenden denselben `JsonTree`-Viewer wie der Rest des Debug-Panels; skalare Werte verwenden eine Textvorschau. Wenn ein Schritt Bilder ausgibt (Playwright-Screenshots, generierte Bilder, Bilddateien oder Base64-Bilder in einem Request-Body, die irgendwo in der Ausgabe gefunden werden), erscheinen sie als Thumbnails über der Ausgabe, und das JSON zeigt einen kurzen Platzhalter anstelle des rohen base64. Klicke auf ein Thumbnail, um es in einer Lightbox zu öffnen; die Pfeiltasten-Schaltflächen oder ←/→-Tasten wechseln durch jedes Bild im Lauf, mit einem Zähler wie `2 / 5`. Verwende **Open trace** für LLM- und Agent-Spannen, wenn eine Trace-ID verfügbar ist.
 
 ## Mobile Knotendetail
 

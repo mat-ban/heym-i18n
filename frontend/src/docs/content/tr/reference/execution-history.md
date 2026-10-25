@@ -55,6 +55,18 @@ Bir workflow'u `/workflows/{workflowId}/{executionId}` adresinde açmak, o execu
 - Girdileri ve node çıktılarını inceleyerek başarısız bir çalışmayı debug etme
 - Çalışmalar arasında çıktıları karşılaştırma
 
+## AI'ya Sor
+
+Her iki geçmiş iletişim kutusunun başlığının yanında bir **AI'ya Sor** düğmesi (parıltı simgesi) bulunur. Bu düğme, iş akışı ve seçilen çalıştırma kaldırılabilir çipler olarak eklenmiş şekilde yeni bir konuşmada [Chat sekmesini](../tabs/chat-tab.md#asking-about-a-run) açar. Çalıştırmanın neden yavaş olduğunu, neyin başarısız olduğunu sorun veya Chat'in iş akışını düzeltmesini sağlayın. Chat, düğüm başına izleme ve hatalar dahil olmak üzere tam olarak o çalıştırmayı okur.
+
+All History iletişim kutusunda **AI'ya Sor** yalnızca bir iş akışı çalıştırması seçildiğinde görünür; sohbet ve asistan çalıştırmalarında gösterilmez.
+
+## Çalıştırma zaman çizelgesi
+
+Çalıştırma ayrıntısında **Tümünü Genişlet**'in yanındaki **Zaman Çizelgesi** düğmesi (kronometre simgesi), **Adımlar** listesini bir span zaman çizelgesiyle değiştirir. Zaman çizelgesi gösterilirken aynı düğmede **Günlükler** yazar; listeye dönmek için tıklayın. All History'de düğme yalnızca iş akışı çalıştırmalarında görünür. Zaman çizelgesi, başladığı anda her düğüm için bir çubuk çizer, böylece hangi düğümün ne kadar sürdüğünü ve hangilerinin paralel çalıştığını görebilirsiniz. Süresi için bir çubuğun üzerine gelin; düzenleyicinin [yürütme zaman çizelgesi](#execution-timeline-details) ile aynı ayrıntı denetçisini açmak için tıklayın. Seçtiğiniz görünüm iletişim kutusu açık olduğu sürece kalır.
+
+Düğüm başlangıç zamanları kaydedilmeden önce kaydedilen çalıştırmalar süreye göre birbiri ardına sıralanır.
+
 ## Execution Highlights
 
 Canlı bir çalışmadan sonra — veya **Bring to Canvas** sonrasında — **Canvas'ın sağ üst köşesinde** kapatılabilir bir **Execution Highlights** popup'ı görünür. Bu, *her node'un ne ürettiğini* execution sırasına göre yukarıdan aşağıya listelenmiş olarak görmenin hızlı bir yoludur. **✕** ile kapatın; bir sonraki çalışmada yeniden açılır.
@@ -144,7 +156,7 @@ JSON'u panoya kopyalamak için Inputs veya Outputs yanındaki **Copy** seçeneğ
 
 ## Execution timeline details
 
-Editörün **Execution Log**'u açıkken, execution timeline'ı göstermek için zamanlayıcı düğmesine tıklayın. Satırlar alanını devralan satır içi bir ayrıntı denetçisini açmak için bir span seçin. Seçilen adımın durumunu, süresini, deneme sayısını, yeniden deneme bilgilerini, hatalarını, trace ID'sini ve kompakt bir çıktı önizlemesini gösterir. Nesne ve dizi çıktıları, Debug panelinin geri kalanıyla aynı `JsonTree` görüntüleyicisini kullanır; skaler değerler bir metin önizlemesi kullanır. Bir adım görüntü çıktıladığında (Playwright ekran görüntüleri, oluşturulan görüntüler, görüntü dosyaları), çıktının üzerinde küçük resimler olarak görünürler ve JSON, ham base64 yerine kısa bir yer tutucu gösterir. Bir küçük resme tıklayarak onu bir lightbox'ta açın; ok düğmeleri veya ←/→ tuşları, `2 / 5` gibi bir sayaçla çalıştırmadaki her görüntüde adım adım ilerler. Bir trace ID mevcut olduğunda LLM ve Agent span'ları için **Open trace** seçeneğini kullanın.
+Editörün **Execution Log**'u açıkken, execution timeline'ı göstermek için zamanlayıcı düğmesine tıklayın. Satırlar alanını devralan satır içi bir ayrıntı denetçisini açmak için bir span seçin. Seçilen adımın durumunu, süresini, deneme sayısını, yeniden deneme bilgilerini, hatalarını, trace ID'sini ve kompakt bir çıktı önizlemesini gösterir. Nesne ve dizi çıktıları, Debug panelinin geri kalanıyla aynı `JsonTree` görüntüleyicisini kullanır; skaler değerler bir metin önizlemesi kullanır. Bir adım görüntü çıktıladığında (Playwright ekran görüntüleri, oluşturulan görüntüler, görüntü dosyaları veya bir istek gövdesinde çıktının herhangi bir yerinde bulunan base64 görüntüler), çıktının üzerinde küçük resimler olarak görünürler ve JSON, ham base64 yerine kısa bir yer tutucu gösterir. Bir küçük resme tıklayarak onu bir lightbox'ta açın; ok düğmeleri veya ←/→ tuşları, `2 / 5` gibi bir sayaçla çalıştırmadaki her görüntüde adım adım ilerler. Bir trace ID mevcut olduğunda LLM ve Agent span'ları için **Open trace** seçeneğini kullanın.
 
 ## Mobil node detayı
 

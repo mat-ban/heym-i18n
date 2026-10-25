@@ -381,7 +381,7 @@ HTML output mapper 노드는 단일 HTML 템플릿을 렌더링하며, `$nodeLab
 
 #### [Chart Output](../nodes/chart-output-node.md)
 
-Chart Output 노드는 [Dashboard](../tabs/dashboard-tab.md) 위젯 워크플로우의 종료 노드입니다. 상위 노드에서 생성된 행을 대시보드가 렌더링하는 표준화된 차트 payload로 변환합니다. `chartType`(bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text 또는 HITL)을 선택하고, `labelField`/`valueField`(또는 다중 시리즈의 경우 `series`, markdown 메시지의 경우 `text`)를 매핑한 후 마지막에 배치하십시오. 출력 엣지가 없습니다. HITL은 상위 행을 무시하고 대기 중인 사람 검토 목록을 표시합니다.
+Chart Output 노드는 [Dashboard](../tabs/dashboard-tab.md) 위젯 워크플로우의 종료 노드입니다. 상위 노드에서 생성된 행을 대시보드가 렌더링하는 표준화된 차트 payload로 변환합니다. `chartType`(bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text 또는 HITL)을 선택하고, `labelField`/`valueField`(또는 다중 시리즈의 경우 `series`, markdown 메시지의 경우 `text`)를 매핑한 후 마지막에 배치하십시오. 출력 엣지가 없습니다. HITL은 상위 행을 무시하고 대기 중인 사람 검토 목록을 표시합니다. 다른 하나는 새 탭에서 URL을 여는 링크 버튼으로 렌더링할 수 있습니다(`linkColumn`, 버튼 텍스트의 경우 `linkLabel` 사용)
 
 [Dashboard](../tabs/dashboard-tab.md), [Set](../nodes/set-node.md), [Output](../nodes/output-node.md)도 참조하십시오.
 
@@ -477,6 +477,8 @@ Heym은 편집기 전반에 걸쳐 단축키를 제공합니다: Command Palette
 AI Assistant는 Debug 패널에서 열리는 채팅 패널로, 자연어로 Workflow를 생성하거나 수정할 수 있습니다. [credential](./credentials.md)과 모델을 선택한 뒤 원하는 내용을 설명하십시오. AI가 응답을 스트리밍하고, 코드 블록에 포함된 유효한 [workflow JSON](./workflow-structure.md)은 자동으로 파싱되어 캔버스에 적용됩니다. 호환 브라우저에서는 음성 입력이 지원됩니다.
 
 **YOLO mode**(Agent mode, 기본값 꺼짐)를 켜면 어시스턴트가 빌드한 내용을 테스트합니다. 각 변경 후 캔버스에서 Workflow를 실행하고, 결과를 읽고, 요청한 대로 동작할 때까지 Workflow를 수정하며, 메시지당 최대 5회 실행합니다. 첫 실행 전에 테스트 입력을 요청하고, 다른 Workflow의 결과가 필요할 때 해당 Workflow를 실행할 수 있으며, 작업하는 각 단계를 표시합니다. [AI Assistant › YOLO Mode](./ai-assistant.md#yolo-mode)를 참조하십시오.
+
+캔버스의 노드 위에 있는 **AI**를 클릭하여 해당 노드만 변경하거나 수정할 수 있습니다. 패널에는 수정 중인 노드가 표시되며(실행 후 최신 결과 포함) **Change this node as ...**, **Fix error in this node ...**, **Other**를 제공합니다. 해당 노드만 업데이트되며 나머지 워크플로우와 레이아웃은 그대로 유지됩니다. [AI Assistant › 단일 노드 변경](./ai-assistant.md#changing-one-node)을 참조하세요.
 
 Workflow가 레코드를 저장할 때 어시스턴트는 사용할 [data table](../tabs/datatable-tab.md)을 묻거나, Workflow에 필요한 컬럼으로 새로 생성합니다. [AI Assistant › Data tables](./ai-assistant.md#data-tables)를 참조하십시오.
 
@@ -805,7 +807,7 @@ Analytics 탭은 실행 메트릭과 추세를 보여줍니다. 요약 통계에
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 탭은 Grafana 스타일의 공간으로, 각각 자체적인 숨겨진 Heym workflow에서 렌더링되는 차트 위젯 그리드를 구성할 수 있습니다. 필요한 만큼 대시보드를 만들고 각각을 사용자 또는 팀과 읽기 전용 또는 편집 가능으로 공유할 수 있습니다. 위젯은 항상 소유자의 자격 증명으로 실행되므로 모든 사람이 동일한 데이터를 봅니다. 자연어로 메트릭을 설명하면 AI가 위젯을 생성하거나, 수동으로 추가하여 차트 유형을 선택할 수 있으며 샘플 데이터로 미리 볼 수 있습니다: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text, HITL. HITL은 대기 중인 사람 검토의 캐러셀입니다. 헤더에는 `1/n pending`이 표시됩니다. workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 처리하며, 위젯 제목 옆의 이력 아이콘을 클릭하면 같은 페이지의 이력 대화 상자에서 해당 실행이 열립니다. 위젯은 결과를 캐시하고, AI로 세부 조정할 수 있으며(각 변경 사항은 [Edit History](./edit-history.md)에 저장됨), 완전한 workflow와 함께 복제되고, Tidy up으로 재배치되며, 편집 모드에서 드래그하거나 크기를 조정할 수 있습니다. 테이블은 상태 칩을 표시하고 클릭한 행의 레코드를 `$page.record`로 읽어오는 상세 대시보드에 행을 연결할 수 있으며, Run 위젯은 드롭된 파일, 입력 필드 또는 실행 버튼을 사용해 대시보드에서 바로 workflow를 실행합니다. 각 위젯이 workflow이므로, 가져올 수 있는 모든 데이터 — [HTTP](../nodes/http-node.md) 호출, [BigQuery](../nodes/bigquery-node.md) 쿼리, [RAG](../nodes/rag-node.md) 조회, 또는 [LLM](../nodes/llm-node.md) 출력 — 이 차트가 될 수 있습니다.
+Dashboard 탭은 Grafana 스타일의 공간으로, 각각 자체적인 숨겨진 Heym workflow에서 렌더링되는 차트 위젯 그리드를 구성할 수 있습니다. 필요한 만큼 대시보드를 만들고 각각을 사용자 또는 팀과 읽기 전용 또는 편집 가능으로 공유할 수 있습니다. 위젯은 항상 소유자의 자격 증명으로 실행되므로 모든 사람이 동일한 데이터를 봅니다. 자연어로 메트릭을 설명하면 AI가 위젯을 생성하거나, 수동으로 추가하여 차트 유형을 선택할 수 있으며 샘플 데이터로 미리 볼 수 있습니다: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text, HITL. HITL은 대기 중인 사람 검토의 캐러셀입니다. 헤더에는 `1/n pending`이 표시됩니다. workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 처리하며, 위젯 제목 옆의 이력 아이콘을 클릭하면 같은 페이지의 이력 대화 상자에서 해당 실행이 열립니다. 위젯은 결과를 캐시하고, AI로 세부 조정할 수 있으며(각 변경 사항은 [Edit History](./edit-history.md)에 저장됨), 완전한 workflow와 함께 복제되고, Tidy up으로 재배치되며, 편집 모드에서 드래그하거나 크기를 조정할 수 있습니다. 테이블은 상태 칩을 표시하고 클릭한 행의 레코드를 `$page.record`로 읽어오는 상세 대시보드에 행을 연결할 수 있으며, Run 위젯은 드롭된 파일, 입력 필드 또는 실행 버튼을 사용해 대시보드에서 바로 workflow를 실행합니다. 각 위젯이 workflow이므로, 가져올 수 있는 모든 데이터 — [HTTP](../nodes/http-node.md) 호출, [BigQuery](../nodes/bigquery-node.md) 쿼리, [RAG](../nodes/rag-node.md) 조회, 또는 [LLM](../nodes/llm-node.md) 출력 — 이 차트가 될 수 있습니다. HITL 위젯의 설정은 이를 단일 워크플로우의 검토 또는 그 안의 에이전트나 Slack 승인 단계로 좁힐 수 있습니다. 이러한 위젯은 해당 워크플로우를 열 수 있는 모든 사람에게 이를 표시하고 열 수 없는 사람에게는 숨깁니다.
 
 [Chart Output node](../nodes/chart-output-node.md), [Analytics](../tabs/analytics-tab.md), [Execution History](./execution-history.md)도 참조하십시오.
 

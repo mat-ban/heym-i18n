@@ -32,6 +32,7 @@ from app.db.models import (
     TeamMember,
     User,
     Workflow,
+    WorkflowVersion,
 )
 from app.db.session import get_db
 from app.models.dashboard_schemas import (
@@ -51,18 +52,21 @@ from app.models.dashboard_schemas import (
     DetailPageProposalResponse,
     FileRunSlotRequest,
     FileRunSlotResponse,
+    HitlWidgetFilterModel,
     MarkdownTaskToggleRequest,
     MarkdownTaskUpdateRequest,
     WidgetCreateRequest,
     WidgetDataResponse,
     WidgetExampleResponse,
     WidgetProposalResponse,
+    WidgetRevertRequest,
     WidgetRunRequest,
     WidgetRunResponse,
     WidgetUpdateRequest,
 )
 from app.services import file_intake_service
 from app.services.audit_log import audit
+from app.services.count_card_widget import count_card_nodes, countable_value
 from app.services.dashboard_access import (
     PERMISSION_OWNER,
     PERMISSION_READ,
@@ -83,7 +87,18 @@ from app.services.dashboard_widget_policy import dashboard_widget_blocked_nodes_
 from app.services.data_table_access import get_data_table_with_permission
 from app.services.encryption import decrypt_config
 from app.services.file_run_widget import FILE_RUN_WIDGET_TYPE, run_widget_payload
-from app.services.hitl_service import build_public_base_url
+from app.services.hitl_service import build_public_base_url, list_review_sources
+from app.services.hitl_widget_service import (
+    AI_FILTER_ERROR,
+    HITL_WIDGET_TYPE,
+    apply_hitl_filter,
+    check_hitl_filter_access,
+    ensure_saved_filter_allowed,
+    hidden_hitl_widgets,
+    hitl_filter_model,
+    hitl_filters_for_widgets,
+    hitl_sources_context,
+)
 from app.services.llm_provider import is_reasoning_model
 from app.services.llm_service import execute_llm
 from app.services.llm_trace import LLMTraceContext
@@ -101,11 +116,15 @@ from app.services.page_params import (
 from app.services.widget_page_record import (
     detail_page_context,
     example_record,
+    listing_page_context,
+    open_detail_page_context,
     repair_page_record_paths,
 )
+from app.services.widget_title import widget_title
 from app.services.workflow_access import revoke_execution_tokens_without_access
 from app.services.workflow_dsl_prompt import build_assistant_prompt
 from app.services.workflow_inputs import start_input_fields
+from app.services.workflow_save import WorkflowSnapshot, add_workflow_version
 
 router = APIRouter()
 
@@ -137,6 +156,9 @@ _AI_WIDGET_SUFFIX = (
     "A chartOutput reading those rows directly sees each row's columns at the top level next "
     "to its id: for a table of the rows, connect the dataTable node to a table chartOutput "
     "with dataPath rows and columns set to the table's column names. "
+    "Set the workflow's name to the widget's title: one or two words in the language of the "
+    "request that say what it shows (for example Open cases), never a sentence, a table or "
+    "column name with underscores, or an id. "
     "Answer with the workflow JSON object only, from its opening { to its closing }: no "
     "explanation, no plan, no questions and no markdown fences before or after it."
 )
@@ -231,6 +253,29 @@ async def _detail_page_context(db: AsyncSession, dashboard: Dashboard, user: Use
         None,
     )
     return detail_page_context(list(dict.fromkeys(row.link_record_field for row in links)), example)
+
+
+async def _refine_page_context(
+    db: AsyncSession,
+    dashboard: Dashboard,
+    user: User,
+    page_kind: str | None,
+    prompt: str,
+) -> str:
+    """What a fine-tune is told about the page: a detail page has a record, a listing has none.
+
+    A page some table's rows open is a detail page. Without a table link and without the
+    caller saying so, the page is a listing page, unless the request itself names
+    ``$page.record``.
+    """
+    if page_kind == "listing":
+        return listing_page_context()
+    detail = await _detail_page_context(db, dashboard, user)
+    if detail:
+        return detail
+    if page_kind == "detail":
+        return open_detail_page_context()
+    return "" if "$page.record" in prompt else listing_page_context()
 
 
 async def _ensure_own_dashboard(db: AsyncSession, user: User) -> None:
@@ -395,6 +440,29 @@ def _data_table_widget_nodes(
     return nodes, edges
 
 
+def _count_card_graph(
+    table_id: uuid.UUID, body: WidgetCreateRequest, known: set[str]
+) -> tuple[list, list]:
+    """A count card's graph, once its column and value check out."""
+    column, value = body.count_column or "", body.count_value or ""
+    if not column or not value:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="A count card needs a column and a value",
+        )
+    if column not in known:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"The data table has no column named {column}",
+        )
+    if not countable_value(value):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="A value with $ before a name cannot be counted",
+        )
+    return count_card_nodes(table_id, column, value)
+
+
 async def _table_widget_graph(
     db: AsyncSession,
     table_id: uuid.UUID,
@@ -402,11 +470,15 @@ async def _table_widget_graph(
     dashboard: Dashboard,
     user: User,
 ) -> tuple[list, list]:
-    """The graph of a table on a data table's rows, once the table and its columns check out."""
-    if body.chart_type != "table":
+    """The graph of a table on a data table's rows, or of a count card, once the table and its
+    columns check out."""
+    counting = body.count_column is not None or body.count_value is not None
+    if body.chart_type != ("text" if counting else "table"):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-            detail="Only a table widget can show a data table's rows directly",
+            detail="A count card is a text widget"
+            if counting
+            else "Only a table widget can show a data table's rows directly",
         )
     found = await get_data_table_with_permission(db, table_id, user.id)
     if found is None:
@@ -423,6 +495,8 @@ async def _table_widget_graph(
     known = {"id"} | {
         str(column.get("name")) for column in table.columns or [] if isinstance(column, dict)
     }
+    if counting:
+        return _count_card_graph(table.id, body, known)
     columns = list(dict.fromkeys(name for name in body.columns if name))
     if not columns:
         raise HTTPException(
@@ -472,7 +546,9 @@ def _clone_workflow_graph(
 
 
 def _widget_to_response(
-    widget: DashboardWidget, reachable_links: set[uuid.UUID] | None = None
+    widget: DashboardWidget,
+    reachable_links: set[uuid.UUID] | None = None,
+    hitl_filter: HitlWidgetFilterModel | None = None,
 ) -> DashboardWidgetResponse:
     return DashboardWidgetResponse(
         id=widget.id,
@@ -488,6 +564,7 @@ def _widget_to_response(
         link_label_field=widget.link_label_field,
         link_accessible=widget.link_dashboard_id is not None
         and widget.link_dashboard_id in (reachable_links or set()),
+        hitl_filter=hitl_filter,
         updated_at=widget.updated_at,
     )
 
@@ -743,10 +820,13 @@ async def get_dashboard(
     )
     widgets = list(result.scalars().all())
     summary = _dashboard_summary(dashboard, owner, permission)
+    hitl_filters = await hitl_filters_for_widgets(db, widgets)
+    hidden = await hidden_hitl_widgets(db, hitl_filters, current_user.id, dashboard.owner_id)
+    widgets = [w for w in widgets if w.id not in hidden]
     reachable = await _reachable_links(db, widgets, current_user)
     return DashboardResponse(
         **summary.model_dump(),
-        widgets=[_widget_to_response(w, reachable) for w in widgets],
+        widgets=[_widget_to_response(w, reachable, hitl_filters.get(w.id)) for w in widgets],
     )
 
 
@@ -962,6 +1042,8 @@ async def update_widget(
     if body.cache_ttl_seconds is not None:
         widget.cache_ttl_seconds = body.cache_ttl_seconds
     await _apply_row_link(db, widget, body, current_user)
+    if "hitl_filter" in body.model_fields_set:
+        await apply_hitl_filter(db, widget, body.hitl_filter, current_user.id)
 
     # Propagate title/description onto the widget's hidden workflow so the canvas reflects them.
     if sync_title or sync_description:
@@ -975,7 +1057,10 @@ async def update_widget(
 
     await db.commit()
     await db.refresh(widget)
-    return _widget_to_response(widget, await _reachable_links(db, [widget], current_user))
+    hitl_filters = await hitl_filters_for_widgets(db, [widget])
+    return _widget_to_response(
+        widget, await _reachable_links(db, [widget], current_user), hitl_filters.get(widget.id)
+    )
 
 
 @router.delete("/widgets/{widget_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -1024,6 +1109,10 @@ async def get_widget_data(
             detail="This page does not accept that record",
         )
     response = await compute_widget_data(db, widget, dashboard.owner_id, force=force, record=record)
+    # The chart is computed as the owner; whose reviews a HITL widget may show is the viewer's.
+    response = await check_hitl_filter_access(
+        db, response, current_user.id, dashboard_owner=dashboard.owner_id == current_user.id
+    )
     return _widget_data_for(response, permission)
 
 
@@ -1286,8 +1375,11 @@ async def ai_generate_widget(
         await _table_contexts(db, body.data_table_ids, dashboard.owner_id, for_owner=True)
     context = describe_tables(tables, with_data=False)
     detail = await _detail_page_context(db, dashboard, current_user)
+    # A HITL widget shows every review unless the request names a workflow it can show.
+    review_sources = await list_review_sources(db, current_user.id)
+    sources = hitl_sources_context(review_sources) if review_sources else ""
     dsl = await generate_widget_dsl(
-        "\n\n".join(part for part in (body.prompt, detail, context) if part),
+        "\n\n".join(part for part in (body.prompt, detail, context, sources) if part),
         credential=credential,
         model=body.model,
         user=current_user,
@@ -1308,8 +1400,9 @@ async def ai_generate_widget(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="AI did not produce a chartOutput node",
         )
+    await ensure_saved_filter_allowed(db, current_user.id, [], nodes, detail=AI_FILTER_ERROR)
     chart_type = chart_nodes[-1].get("data", {}).get("chartType", "bar")
-    title = (dsl.get("name") or body.prompt[:60]).strip()[:255]
+    title = widget_title(dsl.get("name"), body.prompt)
     description = dsl.get("description") or None
     workflow = Workflow(
         name=title,
@@ -1384,9 +1477,14 @@ async def ai_refine_widget(
     if dashboard.owner_id != current_user.id:
         await _table_contexts(db, body.data_table_ids, dashboard.owner_id, for_owner=True)
     context = describe_tables(tables, with_data=True)
-    detail = await _detail_page_context(db, dashboard, current_user)
+    detail = await _refine_page_context(db, dashboard, current_user, body.page_kind, body.prompt)
+    sources = (
+        hitl_sources_context(await list_review_sources(db, current_user.id))
+        if widget.chart_type == HITL_WIDGET_TYPE
+        else ""
+    )
     dsl = await generate_widget_dsl(
-        "\n\n".join(part for part in (body.prompt, detail, context) if part),
+        "\n\n".join(part for part in (body.prompt, detail, context, sources) if part),
         credential=credential,
         model=body.model,
         user=current_user,
@@ -1408,9 +1506,12 @@ async def ai_refine_widget(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="AI did not produce a chartOutput node",
         )
+    await ensure_saved_filter_allowed(
+        db, current_user.id, workflow.nodes, nodes, detail=AI_FILTER_ERROR
+    )
 
     # Snapshot the pre-edit workflow so the AI fine-tune shows up in Edit History.
-    await _record_chat_workflow_edit_version(
+    previous_version = await _record_chat_workflow_edit_version(
         db=db,
         workflow=workflow,
         user_id=current_user.id,
@@ -1427,7 +1528,82 @@ async def ai_refine_widget(
     widget.cached_workflow_version = None
     await db.commit()
     await db.refresh(widget)
-    return _widget_to_response(widget)
+    response = _widget_to_response(widget, hitl_filter=hitl_filter_model(widget, nodes))
+    if isinstance(previous_version, int):
+        response.previous_version_number = previous_version
+    return response
+
+
+@router.post("/widgets/{widget_id}/revert", response_model=DashboardWidgetResponse)
+async def revert_widget(
+    widget_id: uuid.UUID,
+    body: WidgetRevertRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> DashboardWidgetResponse:
+    """Undo an AI fine-tune: restore the workflow snapshot it stored before it ran.
+
+    Only the newest snapshot can be restored, so a revert never overwrites a change made
+    after the fine-tune. What it replaces is stored as the next snapshot, so Edit History
+    keeps it.
+    """
+    widget, dashboard, _ = await _load_widget_for_user(db, widget_id, current_user, write=True)
+    if widget.chart_type == FILE_RUN_WIDGET_TYPE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A file-run widget runs an existing workflow; change it in the editor",
+        )
+    workflow = await _load_widget_workflow(db, widget)
+    version = (
+        await db.execute(
+            select(WorkflowVersion).where(
+                WorkflowVersion.workflow_id == workflow.id,
+                WorkflowVersion.version_number == body.version_number,
+            )
+        )
+    ).scalar_one_or_none()
+    if version is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Version not found")
+    newest = (
+        await db.execute(
+            select(func.max(WorkflowVersion.version_number)).where(
+                WorkflowVersion.workflow_id == workflow.id
+            )
+        )
+    ).scalar()
+    if newest != version.version_number:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="This widget changed after that edit, so it can no longer be reverted",
+        )
+    nodes = copy.deepcopy(version.nodes or [])
+    edges = copy.deepcopy(version.edges or [])
+    blocked_error = dashboard_widget_blocked_nodes_error(nodes)
+    if blocked_error is not None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=blocked_error)
+    chart_nodes = [n for n in nodes if isinstance(n, dict) and n.get("type") == "chartOutput"]
+
+    await add_workflow_version(db, workflow, WorkflowSnapshot.capture(workflow), current_user.id)
+    workflow.nodes = nodes
+    workflow.edges = edges
+    if chart_nodes:
+        widget.chart_type = (chart_nodes[-1].get("data") or {}).get("chartType", widget.chart_type)
+    widget.cached_payload = None
+    widget.cached_at = None
+    widget.cached_workflow_version = None
+    await db.commit()
+    await db.refresh(widget)
+    audit(
+        action="dashboard.widget_revert",
+        actor=current_user,
+        target_type="dashboard",
+        target_id=dashboard.id,
+        target_name=dashboard.name,
+        widget_id=widget.id,
+        widget_title=widget.title,
+        version_number=version.version_number,
+    )
+    return _widget_to_response(widget, hitl_filter=hitl_filter_model(widget, nodes))
 
 
 # ─── Sharing ────────────────────────────────────────────────────────────────────────

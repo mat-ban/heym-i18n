@@ -2,10 +2,12 @@ import unittest
 import uuid
 from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
+from zoneinfo import ZoneInfo
 
 from app.api.schedules import _get_schedule_events, fetch_schedule_events_for_user
 from app.models.schemas import ScheduleEvent
+from app.services.schedule_events import cron_occurrences
 
 
 class _WorkflowQueryResult:
@@ -41,6 +43,14 @@ class TestGetScheduleEvents(unittest.IsolatedAsyncioTestCase):
         events = await _get_schedule_events(workflows, start, end)
         self.assertEqual(len(events), 24)  # hours 00:00..23:00 inclusive (start boundary included)
         self.assertIsInstance(events[0], ScheduleEvent)
+
+    async def test_naive_range_uses_configured_timezone(self) -> None:
+        tz = ZoneInfo("Asia/Tokyo")
+        workflows = [_make_workflow([_cron_node("0 3 * * *")])]
+        events = cron_occurrences(
+            workflows, datetime(2026, 10, 20, 0, 0), datetime(2026, 10, 21, 0, 0), tz
+        )
+        self.assertEqual(events[0].scheduled_at, datetime(2026, 10, 19, 18, 0, tzinfo=timezone.utc))
 
     async def test_inactive_cron_filtered_out(self) -> None:
         start = datetime(2026, 4, 17, 0, 0, 0, tzinfo=timezone.utc)
@@ -103,6 +113,38 @@ class TestFetchScheduleEventsForUser(unittest.IsolatedAsyncioTestCase):
         db = AsyncMock()
         start = datetime(2026, 1, 1, tzinfo=timezone.utc)
         end = datetime(2026, 4, 1, tzinfo=timezone.utc)
+        with self.assertRaises(ValueError):
+            await fetch_schedule_events_for_user(db, user, start, end, True)
+
+    async def test_mixed_naive_and_aware_bounds(self) -> None:
+        db = AsyncMock()
+        db.execute = AsyncMock(return_value=_WorkflowQueryResult(rows=[]))
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        start = datetime(2026, 4, 17, 0, 0, 0)
+        end = datetime(2026, 4, 18, 0, 0, 0, tzinfo=timezone.utc)
+        resp = await fetch_schedule_events_for_user(db, user, start, end, include_shared=False)
+        self.assertEqual(resp.total, 0)
+
+    async def test_exact_62_days_across_dst_in_configured_timezone(self) -> None:
+        db = AsyncMock()
+        db.execute = AsyncMock(return_value=_WorkflowQueryResult(rows=[]))
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        start = datetime(2026, 3, 1, tzinfo=timezone.utc)
+        end = datetime(2026, 5, 2, tzinfo=timezone.utc)
+        with patch(
+            "app.api.schedules.get_configured_timezone", return_value=ZoneInfo("Europe/Berlin")
+        ):
+            resp = await fetch_schedule_events_for_user(db, user, start, end, include_shared=False)
+        self.assertEqual(resp.total, 0)
+
+    async def test_rejects_partial_day_over_62_days(self) -> None:
+        user = MagicMock()
+        user.id = uuid.uuid4()
+        db = AsyncMock()
+        start = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        end = start + timedelta(days=62, hours=1)
         with self.assertRaises(ValueError):
             await fetch_schedule_events_for_user(db, user, start, end, True)
 

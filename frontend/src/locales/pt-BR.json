@@ -166,7 +166,14 @@
     "staleConflictTitle": "Workflow desatualizado detectado",
     "staleReloadMessage": "Este Workflow foi salvo em outro local, portanto esta aba está exibindo uma versão mais antiga. Executá-lo agora executaria a versão mais recente salva em vez do que você vê aqui.",
     "staleReloadTitle": "Workflow alterado em outro local",
-    "staleRunMessage": "Uma versão mais recente deste Workflow foi salva desde que você o abriu. A execução irá substituí-la pela sua versão. Deseja continuar?"
+    "staleRunMessage": "Uma versão mais recente deste Workflow foi salva desde que você o abriu. A execução irá substituí-la pela sua versão. Deseja continuar?",
+    "aiButtonTitle": "Alterar ou corrigir este nó com o assistente de IA",
+    "editNodeWithAi": "Editar {label} com IA",
+    "modifyingNode": "Modificando o nó:",
+    "hasNodeOutput": "(Tem saída do nó)",
+    "closeNodeFocus": "Fechar o foco do nó e editar todo o Workflow",
+    "nodeFocusRan": "Este nó foi executado. A IA vê a última saída e o erro dele e lê a documentação do nó.",
+    "nodeFocusNoOutput": "Este nó não tem saída na execução atual. Execute-o primeiro se a IA deve ver a saída. A IA lê a documentação do nó de qualquer forma."
   },
   "analytics": {
     "analysisPanel": {
@@ -428,7 +435,9 @@
     "suggestion2": "Executar meu Workflow de relatório diário",
     "suggestion3": "Quais workflows agendados serão executados esta semana?",
     "suggestion4": "Adicionar uma tarefa ao meu quadro Kanban",
-    "suggestion5": "O que está armazenado nas minhas variáveis globais?"
+    "suggestion5": "O que está armazenado nas minhas variáveis globais?",
+    "subtitle": "Executar Workflows e fazer perguntas",
+    "modelsLoadFailedDisabled": "Não foi possível carregar a lista de modelos desta credencial. O chat permanece desativado até que um modelo possa ser obtido."
   },
   "common": {
     "actions": "Ações",
@@ -862,7 +871,10 @@
     "detailPageRecords": "Registros da página de detalhes",
     "detailPageRecordsHelp": "Os valores ?record= que este painel aceita quando um link de linha o abre. Qualquer outro valor é recusado antes da execução do widget.",
     "unreachableDashboard": "Um painel que você não pode abrir",
-    "runWorkflow": "Executar um Workflow"
+    "runWorkflow": "Executar um Workflow",
+    "openWorkflowNewTab": "Abrir o Workflow em uma nova aba",
+    "hitlFilterHelp": "Mostrar as revisões de todos os Workflows ou de apenas um. Lista os Workflows que você pode abrir, próprios ou compartilhados com você, que têm uma etapa aguardando uma pessoa.",
+    "hitlSourcesLoadFailed": "Não foi possível carregar seus Workflows."
   },
   "docs": {
     "chatWithHeym": "Chat com Heym",
@@ -1213,7 +1225,10 @@
       "showNode": "Mostrar {label}",
       "spansCount": "{count} span | {count} spans"
     },
-    "toolCalls": "Chamadas de ferramentas"
+    "toolCalls": "Chamadas de ferramentas",
+    "askAi": "Perguntar à IA",
+    "askAiTitle": "Perguntar ao assistente de Chat sobre esta execução",
+    "noNodeSpans": "Nenhum span de nó foi registrado para esta execução."
   },
   "logs": {
     "all": "Todos",

@@ -218,6 +218,11 @@ Dosya zaten mevcutsa, Heym güncellemeden önce geçerli SHA'yı otomatik olarak
 **Per Page** (1–100) destekler. Heym tek bir sonuç sayfası ister; aynı işlemde ek sayfalar
 almak için bir `page` alanı yoktur.
 
+
+### Return all pages
+
+Bir çalıştırmanın, ayarlanmışsa **Cursor** konumundan başlayarak her sayfayı izlemesi için **Return all pages** seçeneğini açın. Her istek, **Per Page** değeri ne olursa olsun 100 öğe ister. Düğüm yaklaşık 1.000 öğeden (veya 100 istekten) sonra durur: issue nesneleri yaklaşık 6 KB boyutundadır, bu nedenle daha yüksek bir sınır çok büyük düğüm çıktıları üretirdi. Erken durduğunda hata vermek yerine elindekileri `has_more: true` ve bir `next_cursor` ile döndürür; bu imleci sonraki çalıştırmaya ileterek devam edebilirsiniz. Workflow'u durdurmak veya Workflow zaman aşımına ulaşmak, getirme işlemini sayfalar arasında sonlandırır.
+
 ## Output
 
 Tam şekil, seçilen işleme bağlıdır. Yaygın alanlar şunları içerir:

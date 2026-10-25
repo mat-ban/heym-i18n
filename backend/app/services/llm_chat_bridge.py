@@ -5,6 +5,9 @@ transports ``LLMService`` picks per model never see them. ``completion_caller`` 
 ``client.chat.completions.create`` untouched for every credential and model that works there. Only
 an OpenCode model served on Responses, Messages or generateContent goes through the matching
 transport, and its answer is reshaped into the Chat Completions objects the callers already read.
+OpenAI itself refuses some models, or their function tools, on Chat Completions; such a request is
+retried on Responses, and later requests of the same shape go there directly. Agents get the same
+through ``OpenAIChatTransport``.
 
 Thinking blocks (Claude), thought signatures (Gemini) and reasoning items (GPT, Grok) must come back
 verbatim on the next tool round, but the callers keep a plain OpenAI message list. Each answer's raw
@@ -15,13 +18,16 @@ from __future__ import annotations
 
 import functools
 import json
+import logging
 import threading
 from collections import OrderedDict
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from typing import Any
+from urllib.parse import urlsplit
 
 from app.services.llm_transport import (
+    ChatCompletionsTransport,
     LLMTransport,
     ModelProtocolError,
     RequestOpts,
@@ -46,6 +52,10 @@ _TRANSPORTS: dict[str, Callable[[], LLMTransport]] = {
 GEMINI_SKIP_SIGNATURE = "skip_thought_signature_validator"
 
 _RAW_TURN_LIMIT = 512
+
+OPENAI_HOSTNAME = "api.openai.com"
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -115,6 +125,9 @@ class _RawTurn:
 _raw_turns: OrderedDict[str, _RawTurn] = OrderedDict()
 _raw_lock = threading.Lock()
 
+# (model, tools sent, reasoning_effort sent) requests OpenAI refused on Chat Completions here.
+_openai_responses_routes: set[tuple[str, bool, bool]] = set()
+
 
 def gateway_protocol(client: Any, model: str) -> str | None:
     """The non-Chat-Completions API OpenCode serves ``model`` on, else None."""
@@ -127,12 +140,33 @@ def gateway_protocol(client: Any, model: str) -> str | None:
     return protocol if protocol in _TRANSPORTS else None
 
 
+def is_native_openai(client: Any) -> bool:
+    """True when the client talks to OpenAI's own API host (not a lookalike or a gateway)."""
+    try:
+        hostname = urlsplit(str(getattr(client, "base_url", "") or "")).hostname or ""
+    except ValueError:
+        return False
+    return hostname.rstrip(".") == OPENAI_HOSTNAME
+
+
+def needs_responses_api(exc: Exception) -> bool:
+    """OpenAI's refusal that points a model, or its function tools, at /v1/responses."""
+    return getattr(exc, "status_code", None) in (400, 404) and "v1/responses" in str(exc)
+
+
 def completion_caller(client: Any, model: str) -> Callable[..., Any]:
     """``client.chat.completions.create``, or its stand-in for a model on another protocol."""
     protocol = gateway_protocol(client, model)
-    if protocol is None:
-        return client.chat.completions.create
-    return functools.partial(_complete, client, protocol)
+    if protocol is not None:
+        return functools.partial(_complete, client, protocol)
+    if is_native_openai(client):
+        return functools.partial(_complete_on_openai, client)
+    return client.chat.completions.create
+
+
+def forget_openai_responses_routes() -> None:
+    """Drop every learned Responses route; tests start from a clean slate."""
+    _openai_responses_routes.clear()
 
 
 async def skip_compression(
@@ -355,29 +389,181 @@ def _single_chunk_stream(completion: _Completion) -> Iterator[_Chunk]:
     yield _Chunk(choices=[], usage=completion.usage)
 
 
-def _complete(client: Any, protocol: str, **kwargs: Any) -> Any:
-    """Run one Chat Completions style request on ``protocol``'s transport.
-
-    Request fields with no equivalent there (``stream_options``, ``extra_body``) are dropped.
-    """
-    model = str(kwargs["model"])
+def _create_turn(
+    protocol: str,
+    *,
+    client: Any,
+    model: str,
+    messages: list[dict[str, Any]],
+    tools: list[dict[str, Any]] | None,
+    opts: RequestOpts,
+) -> TurnResult:
+    """Send an OpenAI message list to ``model`` on ``protocol``'s own API."""
     transport = _TRANSPORTS[protocol]()
-    history = build_history(transport, protocol, kwargs.get("messages") or [])
+    history = build_history(transport, protocol, messages)
     try:
-        turn = transport.create(
-            client=client,
-            model=model,
-            history=history,
-            tools=kwargs.get("tools") or None,
-            opts=_request_opts(kwargs),
-        )
+        turn = transport.create(client=client, model=model, history=history, tools=tools, opts=opts)
     except ResponsesTransportError as exc:
         raise ModelProtocolError(
             f"The gateway did not accept {model} on the Responses API: "
             f"{provider_detail(exc.__cause__ or exc)}"
         ) from exc
     _remember(protocol, turn)
+    return turn
+
+
+def _complete(client: Any, protocol: str, **kwargs: Any) -> Any:
+    """Run one Chat Completions style request on ``protocol``'s transport.
+
+    Request fields with no equivalent there (``stream_options``, ``extra_body``) are dropped.
+    """
+    model = str(kwargs["model"])
+    turn = _create_turn(
+        protocol,
+        client=client,
+        model=model,
+        messages=kwargs.get("messages") or [],
+        tools=kwargs.get("tools") or None,
+        opts=_request_opts(kwargs),
+    )
     completion = _to_completion(model, turn)
     if kwargs.get("stream"):
         return _single_chunk_stream(completion)
     return completion
+
+
+def _complete_on_openai(client: Any, **kwargs: Any) -> Any:
+    """Chat Completions on OpenAI, moved to Responses only for requests OpenAI refuses there.
+
+    gpt-5.6 and gpt-6 refuse function tools on Chat Completions even without
+    ``reasoning_effort`` and gpt-5.5 refuses them with one, while all of them still answer
+    there without tools, so the route is learned per model and per request shape.
+    """
+    route = (
+        str(kwargs.get("model") or ""),
+        bool(kwargs.get("tools")),
+        bool(kwargs.get("reasoning_effort")),
+    )
+    if route not in _openai_responses_routes:
+        try:
+            return client.chat.completions.create(**kwargs)
+        except Exception as exc:
+            if not _learn_responses_route(route, exc):
+                raise
+    return _complete(client, "responses", **kwargs)
+
+
+def _learn_responses_route(route: tuple[str, bool, bool], exc: Exception) -> bool:
+    """Remember a route OpenAI refused on Chat Completions; False for any other error."""
+    if not needs_responses_api(exc):
+        return False
+    _openai_responses_routes.add(route)
+    logger.info(
+        "OpenAI refused %s on Chat Completions (tools=%s, reasoning_effort=%s); "
+        "using the Responses API",
+        *route,
+    )
+    return True
+
+
+class BridgedChatTransport(ChatCompletionsTransport):
+    """A Chat shaped history sent to a model on another API, for Model Router turns.
+
+    A routed run can change model every turn, so its history stays a plain message list and
+    each request is translated onto the chosen model's API. The trace stays Chat shaped for the
+    Steps view; `gateway_protocol` names the API that answered.
+    """
+
+    def __init__(self, protocol: str) -> None:
+        super().__init__()
+        self.protocol = protocol
+        # Whether the JSON contract rides in a request field is the native API's property.
+        self.carries_response_format = _TRANSPORTS[protocol]().carries_response_format
+
+    def create(
+        self,
+        *,
+        client: Any,
+        model: str,
+        history: list[dict[str, Any]],
+        tools: list[dict[str, Any]] | None,
+        opts: RequestOpts,
+    ) -> TurnResult:
+        return _create_turn(
+            self.protocol,
+            client=client,
+            model=model,
+            messages=history,
+            tools=tools,
+            opts=opts,
+        )
+
+    def final_text(self, turn: TurnResult) -> str:
+        return turn.text
+
+    async def compress(
+        self,
+        history: list[dict[str, Any]],
+        *,
+        model: str,
+        client: Any,
+        context_limit_tokens: int,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
+        """The shared compressor summarises over Chat Completions, which these models refuse."""
+        return history, None
+
+    def trace_request(
+        self, history: list[dict[str, Any]], tools: list[dict[str, Any]] | None
+    ) -> dict[str, Any]:
+        return {**super().trace_request(history, tools), "gateway_protocol": self.protocol}
+
+
+class OpenAIChatTransport(ChatCompletionsTransport):
+    """Chat Completions, moved to Responses for the requests OpenAI's own API refuses there.
+
+    Any other host gets the parent's behaviour untouched. The history stays a plain message
+    list either way, so a paused agent resumes the same way wherever it runs.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.bridged = False
+
+    def create(
+        self,
+        *,
+        client: Any,
+        model: str,
+        history: list[dict[str, Any]],
+        tools: list[dict[str, Any]] | None,
+        opts: RequestOpts,
+    ) -> TurnResult:
+        if not is_native_openai(client):
+            return super().create(
+                client=client, model=model, history=history, tools=tools, opts=opts
+            )
+        route = (model, bool(tools), bool(opts.reasoning_effort))
+        if route not in _openai_responses_routes:
+            try:
+                return super().create(
+                    client=client, model=model, history=history, tools=tools, opts=opts
+                )
+            except Exception as exc:
+                if not _learn_responses_route(route, exc):
+                    raise
+        self.bridged = True
+        return _create_turn(
+            "responses", client=client, model=model, messages=history, tools=tools, opts=opts
+        )
+
+    def final_text(self, turn: TurnResult) -> str:
+        # A turn answered on Responses carries Responses items, not a chat completion.
+        if turn.raw_items and not hasattr(turn.raw_items[0], "choices"):
+            return turn.text
+        return super().final_text(turn)
+
+    def trace_request(
+        self, history: list[dict[str, Any]], tools: list[dict[str, Any]] | None
+    ) -> dict[str, Any]:
+        request = super().trace_request(history, tools)
+        return {**request, "gateway_protocol": "responses"} if self.bridged else request

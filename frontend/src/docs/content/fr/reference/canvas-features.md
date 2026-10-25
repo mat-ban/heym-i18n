@@ -1,6 +1,6 @@
 # Fonctionnalités du Canvas
 
-L'éditeur de workflow offre plusieurs fonctionnalités pour déboguer, tester et organiser les nœuds : **Exécuter jusqu'au nœud**, **Épinglage de données**, **Journaux d'exécution**, **Activer/Désactiver** et **Extraire vers un sous-workflow**.
+L'éditeur de workflow offre plusieurs fonctionnalités pour déboguer, tester et organiser les nœuds : **Exécuter jusqu'au nœud**, **AI sur un nœud**, **Épinglage de données**, **Journaux d'exécution**, **Activer/Désactiver** et **Extraire vers un sous-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Regarder la démo de l'éditeur</a></p>
@@ -12,6 +12,12 @@ Survolez n'importe quel nœud, à l'exception d'une note autocollante, puis cliq
 Si le chemin sélectionné comporte des champs de saisie, le panneau **Run** à droite s'ouvre et place le focus sur le premier champ. Saisissez les valeurs, puis cliquez sur **Run to _libellé du nœud_** ou appuyez sur **Ctrl+Entrée** (Cmd+Entrée sur macOS). Le mode corps générique place le focus sur l'éditeur de corps JSON. Les chemins sans champs de saisie s'exécutent immédiatement sans ouvrir le panneau. Les nœuds Input épinglés réutilisent leur sortie épinglée sans demander de saisie.
 
 Le panneau conserve la cible sélectionnée pour les exécutions suivantes. Choisissez **Run full workflow** pour effacer la cible. Les boutons Run sont désactivés tant qu'une exécution est en cours. Une cible située à l'intérieur d'une boucle arrête l'exécution lorsque ce nœud est atteint pour la première fois ; sélectionner un nœud après la boucle exécute la boucle complète en amont.
+
+## AI sur un nœud
+
+Survolez n'importe quel nœud sauf un pense-bête et cliquez sur **AI** au-dessus. L'[Assistant IA](./ai-assistant.md) s'ouvre sur ce nœud et propose **Change this node as ...**, **Fix error in this node ...** et **Other**. En mode Agent, l'assistant modifie uniquement ce nœud ; les autres nœuds, les connexions et la disposition restent inchangés. Voir [Assistant IA › Modifier un seul nœud](./ai-assistant.md#changing-one-node).
+
+Le bouton est masqué sur les workflows que vous pouvez uniquement consulter.
 
 ## Épinglage de données
 

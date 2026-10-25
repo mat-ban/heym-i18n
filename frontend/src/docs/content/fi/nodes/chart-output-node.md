@@ -33,13 +33,17 @@ Kun käytössä on vain esimerkkidataa (ei todellista lähdettä), nämä rivit 
 | `valueField` | merkkijono | Rivin avain, jota käytetään numeerisena arvona (pie/bar/line/numeric/gauge) |
 | `series` | taulukko | Valinnainen monisarjainen määrittely `[{ "name": "Sent", "field": "sent" }]` pylväs-/viivakaavioille (korvaa `valueField`) |
 | `columns` | taulukko | Valinnainen sarakeluettelo `table`-tyypille (oletusarvoisesti käytetään ensimmäisen rivin avaimia) |
-| `statusColumn` | string | Valinnainen `table`-sarake, joka esitetään värillisinä [tilamerkkeinä](#status-chips). Sen on oltava yksi näytettävistä sarakkeista. |
+| `statusColumn` | string | Valinnainen `table`-sarake, joka esitetään värillisinä [tilamerkkeinä](#status-chips). Sen on oltava yksi näytettävistä sarakkeista. |, ja `linkColumn`-asetuksella se sisältää myös linkkisarakkeen ja painikkeen tekstin.
 | `statusTones` | object | Valinnainen kuvaus tila-arvosta sävyyn (`success`, `attention`, `failure`, `waiting`, `neutral`) arvoille, joita oletukset eivät kata |
+| `linkColumn` | string | Valinnainen `table`-sarake, jonka solut sisältävät URL-osoitteen ja näytetään [linkkipainikkeena](#link-buttons), joka avaa sen uuteen välilehteen. Sen on oltava yksi näytetyistä sarakkeista. |
+| `linkLabel` | string | Linkkipainikkeen valinnainen teksti. Jos kenttä jätetään tyhjäksi, painike näyttää vain linkkikuvakkeen. |
 | `xField` / `yField` | merkkijono | Rivin avaimet X- ja Y-numeerisille akseleille (scatter) |
 | `min` / `max` | numero | Numeerinen alue `gauge`-tyypille (oletus `0` / `100`) |
 | `unit` | merkkijono | Valinnainen yksikkö, joka näytetään `numeric`- tai `gauge`-arvon vieressä |
 | `text` | merkkijono | Markdown-viesti `text`-kaaviotyypille. Jätä tyhjäksi ja aseta `valueField` renderöitäväksi dynaamiseksi viestiksi, joka haetaan ylävirran datasta. |
 | `title` | merkkijono | Valinnainen kaavion otsikko |
+| `hitlWorkflowId` | string | Vain `hitl`. Näyttää vain tämän workflow'n tarkistukset. Jos kenttä jätetään tyhjäksi, widget näyttää kaikki tarkistukset. |
+| `hitlNodeId` | string | Vain `hitl`. Rajaa `hitlWorkflowId`-arvon yhteen vaiheeseen: Agent, jolla on ihmistarkistus, tai Slack-hyväksyntä-, painike- tai lomakevaihe. |
 
 ## Kaaviotyypit
 
@@ -51,7 +55,7 @@ Kun käytössä on vain esimerkkidataa (ei todellista lähdettä), nämä rivit 
 - **proportion** — yksi vaakasuora palkki, joka on jaettu osuuksiin prosenttilegendin kanssa (esim. kielijakauma). Käyttää `labelField` + `valueField` -parametreja.
 - **barGauge** — yksi vaakasuora mittari per rivi punaisesta→vihreään gradientilla ja arvolla (esim. vapaana oleva levytila). Käyttää `labelField` + `valueField` -parametreja, valinnaisesti `unit` ja `max` (oletusarvoisesti suurin riviarvo).
 - **text** — Markdown-viesti (esim. tilanneilmoitus kuten "Viimeisin suoritus klo 19:47"). Aseta markdown `text`-kenttään staattista viestiä varten tai jätä `text` tyhjäksi ja aseta `valueField` renderöitäväksi ylävirran tuottamaksi merkkijonoksi. Tukee otsikoita, lihavoitua/kursivoitua, [listoja](../nodes/chart-output-node.md#interactive-task-lists), linkkejä ja inline-koodia.
-- **hitl** — katseltavien odottavien ihmisten arvioiden karuselli. Otsikko näyttää `1/n odottaa`; vasen nuoli on pois käytöstä ensimmäisellä kortilla ja oikea nuoli viimeisellä. Workflown nimi avaa kyseisen suorituksen canvasilla. **Hyväksy**, **Pyydä muutoksia** ja **Hylkää** ratkaisevat arvioinnin, ja widgetin otsikon vieressä oleva historia-ikoni avaa kyseisen suorituksen historian dialogissa samalla sivulla. Tämä kaaviotyyppi ohittaa ylävirran rivit, joten widgetin workflow koostuu vain Chart Output -solmusta. Jokainen kirjautunut käyttäjä näkee omistamiensa workflowjen arvioinnit.
+- **hitl** — katseltavien odottavien ihmisten arvioiden karuselli. Otsikko näyttää `1/n odottaa`; vasen nuoli on pois käytöstä ensimmäisellä kortilla ja oikea nuoli viimeisellä. Workflown nimi avaa kyseisen suorituksen canvasilla. **Hyväksy**, **Pyydä muutoksia** ja **Hylkää** ratkaisevat arvioinnin, ja widgetin otsikon vieressä oleva historia-ikoni avaa kyseisen suorituksen historian dialogissa samalla sivulla. Tämä kaaviotyyppi ohittaa ylävirran rivit, joten widgetin workflow koostuu vain Chart Output -solmusta. Jokainen kirjautunut käyttäjä näkee omistamiensa workflowjen arvioinnit. Valitse **Workflow** (ja **Select agent**, kun siinä on useita tarkistusvaiheita) solmun ominaisuuksissa tai widgetin asetuksissa, jolloin sen workflow'n tarkistukset näytetään sen sijaan kaikille, jotka voivat avata sen; katso [HITL-widgetit](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktiiviset tehtävälistat
 
@@ -307,3 +311,17 @@ Kun luot widgetin **tekoälyllä**, seuraavat kehotukset vastaavat siististi jok
 
 - [Dashboard-välilehti](../tabs/dashboard-tab.md) — widgettien rakentaminen ja järjestely
 - [Output-solmu](output-node.md) — workflown päätesolmu
+
+
+## Linkkipainikkeet
+
+`table` voi muuttaa yhden sarakkeen painikkeiksi, jotka avaavat linkin. Aseta **Link column** solmun ominaisuuksissa (tai `linkColumn` DSL:ssä) sarakkeeksi, jonka solut sisältävät URL-osoitteen, ja halutessasi **Link button text** (`linkLabel`). Jokaisesta solusta tulee painike, joka avaa sen URL-osoitteen uuteen välilehteen. Ilman painikkeen tekstiä painike näyttää vain linkkikuvakkeen:
+
+| Solun arvo | Avaa |
+| ---------- | ---- |
+| `https://jira.example.com/browse/T-1` | Toisen sivuston uuteen välilehteen |
+| `/dashboards` | Heymin sisäisen sivun uuteen välilehteen |
+
+Vain `http://`- ja `https://`-osoitteista sekä yhdellä `/`-merkillä alkavista poluista tulee painikkeita. Mikä tahansa muu arvo, kuten `javascript:` tai `//host`, pysyy tavallisena tekstinä, ja tyhjä solu ei näytä mitään.
+
+Painike toimii [rivilinkin](../tabs/dashboard-tab.md#detail-pages) rinnalla: painikkeen napsauttaminen avaa sen linkin uuteen välilehteen, ja napsautus muualle riville avaa edelleen tietosivun.

@@ -13,6 +13,8 @@ A szerkesztőn kívüli dokumentációs kérdésekhez használja a [Chat with He
 
 Nyomja meg a `Ctrl + I` / `Cmd + I` billentyűkombinációt a szerkesztő bármely pontján a panel megnyitásához vagy bezárásához — a gyorsbillentyű akkor is működik, ha egy szövegbeviteli mező van fókuszban. Lásd: [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Ha egyetlen csomóponton szeretne dolgozni, vigye fölé az egeret a vásznon, és kattintson a felette lévő **AI** gombra. A panel erre a csomópontra fókuszálva nyílik meg. Lásd: [Egyetlen csomópont módosítása](#changing-one-node).
+
 ## A panel bezárása
 
 Kattintson az **X** gombra, nyomja meg a `Ctrl + I` / `Cmd + I` billentyűkombinációt, vagy kapcsolja ki az **AI** gombot a Debug panel eszköztárában. A fejléc a panelt húzza; nem zárja be azt.
@@ -60,6 +62,33 @@ Amikor az AI válasza tartalmaz egy érvényes workflow JSON blokkot (`nodes` é
 4. Nem mentettként jelöli meg a workflow-t
 
 Ha a feldolgozás sikertelen, megjelenik egy **Retry** gomb a válasz újragenerálásához.
+
+## Egyetlen csomópont módosítása
+
+Vigye a kurzort a vásznon lévő csomópont fölé, és kattintson a felette lévő **AI** gombra. A panel Agent módban nyílik meg, erre a csomópontra fókuszálva, és mutatja, melyik csomópontot módosítja:
+
+| A csomópont... | A panel ezt mutatja |
+|---|---|
+| Nincs eredmény a jelenlegi futásban | **Modifying Node:** kompakt sorban a csomópont ikonjával és nevével. Az asszisztens kizárólag a csomópont konfigurációjából szerkeszt; először futtassa a csomópontot, ha látnia kell a kimenetet |
+| Eredmény a jelenlegi futásban | **Modifying Node: (Has Node Output)** maga a csomópont felett: ikon, név és típus, a legutóbbi állapot és időtartam, valamint a hiba, ha sikertelen volt. Az asszisztens látja ezt a kimenetet és hibát a csomópont szerkesztésekor |
+
+Vigye a kurzort a címke fölé, hogy lássa, milyen állapotban van a panel.
+
+Bármelyik állapotban van is a panel, az asszisztens a csomópont fejlécében lévő könyv ikon mögötti dokumentációs oldalt is elolvassa. Ezt használja a csomópont beállításainak megértéséhez és az azokkal kapcsolatos kérdések megválaszolásához.
+
+Az üzenetek alatt három opció indítja a kérést:
+
+| Opció | Mit csinál |
+|---|---|
+| **Change this node as ...** | Kitölti az üzenetmezőt a *Módosítsd ezt a csomópontot a következőre:* szöveggel, hogy befejezhesse a mondatot |
+| **Fix error in this node ...** | Kitölti a *Javítsd ki a hibát ebben a csomópontban.* szöveggel. Az asszisztens beolvassa a csomópont hibáját a legutóbbi futásból |
+| **Other** | Fókuszba helyez egy üres üzenetmezőt |
+
+Módosítsa a szöveget, és nyomja meg a **Send** gombot. Az asszisztens csak ezt a csomópontot adja vissza, és a Heym helyben frissíti azt: a csomópont megőrzi azonosítóját, típusát és nevét, így a más csomópontokban lévő kifejezések, mint például a `$checkLinkedIn.result`, továbbra is működnek. Más csomópontok, kapcsolatok és az elrendezés nem változnak, és az **Undo** visszaállítja az előző konfigurációt.
+
+Ha a kérés nem fér el a csomóponton belül, például más csomóponttípust vagy új csomópontot igényel, az asszisztens a szerkesztés helyett megmondja, mit kellene módosítani. Zárja be a csomópont fókuszát a csomópont kártyáján lévő **X** gombbal a teljes workflow újbóli szerkesztéséhez. A panel bezárása szintén törli a fókuszt.
+
+A [YOLO mód](#yolo-mode) fókuszált csomóponttal működik: az asszisztens módosítja a csomópontot, futtatja a workflow-t, és javítja a csomópontot, amíg a futás sikeres nem lesz. **Ask** módban a fókusz jelzi az asszisztensnek, hogy melyik csomópontra vonatkozik a kérdése, és a vászon nem módosul.
 
 ## YOLO mód
 

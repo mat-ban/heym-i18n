@@ -33,13 +33,17 @@ Khi bạn chỉ có dữ liệu ví dụ/mẫu (không có nguồn thực), hãy
 | `valueField` | string | Khóa hàng được dùng làm giá trị số (pie/bar/line/numeric/gauge) |
 | `series` | array | Định nghĩa đa chuỗi tùy chọn `[{ "name": "Sent", "field": "sent" }]` cho bar/line (ghi đè `valueField`) |
 | `columns` | array | Danh sách cột tùy chọn cho `table` (mặc định là các khóa của hàng đầu tiên) |
-| `statusColumn` | string | Cột `table` tùy chọn được hiển thị dưới dạng [nhãn trạng thái](#status-chips) có màu. Phải là một trong các cột được hiển thị. |
+| `statusColumn` | string | Cột `table` tùy chọn được hiển thị dưới dạng [nhãn trạng thái](#status-chips) có màu. Phải là một trong các cột được hiển thị. |, và với `linkColumn` thì còn mang theo cột liên kết và văn bản nút.
 | `statusTones` | object | Ánh xạ tùy chọn từ giá trị trạng thái sang sắc thái (`success`, `attention`, `failure`, `waiting`, `neutral`) cho các giá trị không nằm trong mặc định |
+| `linkColumn` | string | Cột `table` tùy chọn có các ô chứa URL, được hiển thị dưới dạng [nút liên kết](#link-buttons) mở URL đó trong tab mới. Phải là một trong các cột được hiển thị. |
+| `linkLabel` | string | Văn bản tùy chọn của nút liên kết. Nếu để trống, nút chỉ hiển thị biểu tượng liên kết. |
 | `xField` / `yField` | string | Khóa hàng cho trục X và Y số (scatter) |
 | `min` / `max` | number | Phạm vi số cho `gauge` (mặc định `0` / `100`) |
 | `unit` | string | Đơn vị tùy chọn hiển thị bên cạnh giá trị `numeric` hoặc `gauge` |
 | `text` | string | Thông điệp Markdown cho loại biểu đồ `text`. Để trống và đặt `valueField` để hiển thị thông điệp động lấy từ dữ liệu thượng nguồn. |
 | `title` | string | Tiêu đề biểu đồ tùy chọn |
+| `hitlWorkflowId` | string | Chỉ dành cho `hitl`. Chỉ hiển thị các bản review của Workflow này. Nếu để trống, widget hiển thị mọi bản review. |
+| `hitlNodeId` | string | Chỉ dành cho `hitl`. Thu hẹp `hitlWorkflowId` về một bước: Agent có review của con người, hoặc bước phê duyệt, nút bấm hay biểu mẫu trên Slack. |
 
 ## Các loại biểu đồ
 
@@ -51,7 +55,7 @@ Khi bạn chỉ có dữ liệu ví dụ/mẫu (không có nguồn thực), hãy
 - **proportion** — một thanh ngang đơn được chia thành các phần với chú thích phần trăm (ví dụ phân bố ngôn ngữ). Sử dụng `labelField` + `valueField`.
 - **barGauge** — một gauge ngang cho mỗi hàng với gradient đỏ→xanh và một giá trị (ví dụ dung lượng đĩa trống). Sử dụng `labelField` + `valueField`, `unit` và `max` tùy chọn (mặc định là giá trị hàng lớn nhất).
 - **text** — một thông điệp markdown (ví dụ ghi chú trạng thái như "Lần thực thi cuối lúc 19:47"). Đặt markdown trong `text` cho thông điệp tĩnh, hoặc để trống `text` và đặt `valueField` để hiển thị chuỗi được tạo từ thượng nguồn. Hỗ trợ tiêu đề, in đậm/in nghiêng, [danh sách](../nodes/chart-output-node.md#interactive-task-lists), liên kết và inline code.
-- **hitl** — băng chuyền các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`; mũi tên trái bị vô hiệu hóa ở thẻ đầu tiên và mũi tên phải ở thẻ cuối cùng. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes**, và **Reject** giải quyết nó, và biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên cùng trang. Loại biểu đồ này bỏ qua các hàng thượng nguồn, vì vậy workflow widget chỉ là node Chart Output. Mỗi người đã đăng nhập sẽ thấy các đánh giá trên các workflow mà họ sở hữu.
+- **hitl** — băng chuyền các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`; mũi tên trái bị vô hiệu hóa ở thẻ đầu tiên và mũi tên phải ở thẻ cuối cùng. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes**, và **Reject** giải quyết nó, và biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên cùng trang. Loại biểu đồ này bỏ qua các hàng thượng nguồn, vì vậy workflow widget chỉ là node Chart Output. Mỗi người đã đăng nhập sẽ thấy các đánh giá trên các workflow mà họ sở hữu. Hãy chọn một **Workflow** (và **Select agent** khi nó có nhiều bước review) trong thuộc tính của node hoặc trong phần cài đặt của widget để hiển thị các bản review của Workflow đó, cho mọi người có thể mở nó; xem [widget HITL](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Danh sách tác vụ tương tác
 
@@ -307,3 +311,17 @@ Khi tạo một widget bằng **AI**, những prompt như sau sẽ ánh xạ rõ
 
 - [Tab Dashboard](../tabs/dashboard-tab.md) — xây dựng và sắp xếp widget
 - [Node đầu ra](output-node.md) — node kết thúc cho các workflow thông thường
+
+
+## Nút liên kết
+
+Một `table` có thể biến một cột thành các nút mở liên kết. Hãy đặt **Link column** trong thuộc tính của node (hoặc `linkColumn` trong DSL) thành một cột có các ô chứa URL, và tùy chọn đặt **Link button text** (`linkLabel`). Mỗi ô trở thành một nút mở URL của nó trong tab mới. Nếu không có văn bản nút, nút chỉ hiển thị biểu tượng liên kết:
+
+| Giá trị ô | Mở |
+| --------- | --- |
+| `https://jira.example.com/browse/T-1` | Một trang web khác, trong tab mới |
+| `/dashboards` | Một trang bên trong Heym, trong tab mới |
+
+Chỉ các địa chỉ `http://` và `https://` cùng các đường dẫn bắt đầu bằng một dấu `/` duy nhất mới trở thành nút. Mọi giá trị khác, chẳng hạn `javascript:` hoặc `//host`, vẫn là văn bản thuần, và ô trống không hiển thị gì.
+
+Nút hoạt động cùng với [liên kết hàng](../tabs/dashboard-tab.md#detail-pages): nhấp vào nút sẽ mở liên kết của nó trong tab mới, còn nhấp vào bất kỳ vị trí nào khác trên hàng vẫn mở trang chi tiết.

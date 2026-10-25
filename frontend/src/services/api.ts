@@ -146,6 +146,8 @@ import type {
   DashboardTeamShare,
   DashboardWidget,
   FileRunSlot,
+  HitlFilter,
+  HitlSource,
   RecordFormat,
   WidgetRunResult,
   WidgetCreateRequest,
@@ -2233,6 +2235,10 @@ export interface AIAssistantRequest {
   }>;
   askMode?: boolean;
   yoloMode?: boolean;
+  /** Canvas node the turn is focused on; in Agent mode only this node changes. */
+  targetNodeId?: string;
+  /** Docs page slug of the focused node; the backend adds that page to the prompt. */
+  targetNodeDoc?: string;
   executionLog?: {
     execution_status: string;
     execution_time_ms: number | null;
@@ -2859,6 +2865,10 @@ export const aiApi = {
         ask_mode: request.askMode ?? false,
         execution_log: request.executionLog ?? null,
         ...(request.yoloMode ? { yolo_mode: true } : {}),
+        ...(request.targetNodeId ? { target_node_id: request.targetNodeId } : {}),
+        ...(request.targetNodeId && request.targetNodeDoc
+          ? { target_node_doc: request.targetNodeDoc }
+          : {}),
       }),
       signal,
     })
@@ -3110,9 +3120,16 @@ export const hitlApi = {
     return response.data;
   },
 
-  inbox: async (): Promise<HITLInbox> => {
-    const response = await api.get<HITLInbox>("/hitl/inbox");
+  inbox: async (filter?: HitlFilter | null): Promise<HITLInbox> => {
+    // axios leaves out undefined params, so an unfiltered inbox sends none.
+    const params = { workflow_id: filter?.workflow_id, node_id: filter?.node_id ?? undefined };
+    const response = await api.get<HITLInbox>("/hitl/inbox", { params });
     return response.data;
+  },
+
+  sources: async (): Promise<HitlSource[]> => {
+    const response = await api.get<{ sources: HitlSource[] }>("/hitl/sources");
+    return response.data.sources;
   },
 
   inboxLink: async (requestId: string): Promise<{ url: string }> => {

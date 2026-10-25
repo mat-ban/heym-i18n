@@ -29,8 +29,12 @@ import type {
   AllExecutionHistoryEntry,
   AllExecutionHistoryEntryLight,
   NodeResult,
+  Workflow,
 } from "@/types/workflow";
 
+import ExecutionHistoryAskAiButton from "@/components/Panels/ExecutionHistoryAskAiButton.vue";
+import ExecutionHistoryTimeline from "@/components/Panels/ExecutionHistoryTimeline.vue";
+import ExecutionHistoryViewToggle from "@/components/Panels/ExecutionHistoryViewToggle.vue";
 import Button from "@/components/ui/Button.vue";
 import Dialog from "@/components/ui/Dialog.vue";
 import ImageLightbox from "@/components/ui/ImageLightbox.vue";
@@ -100,6 +104,10 @@ const activeExecutions = ref<ActiveExecutionItem[]>([]);
 const isCancellingId = ref<string | null>(null);
 const loadingMore = ref(false);
 const listRef = ref<HTMLDivElement | null>(null);
+/** Steps of a workflow run: the step list or the span timeline. Kept while the dialog is open. */
+const nodeView = ref<"logs" | "timeline">("logs");
+/** Graphs of workflows whose run timeline was opened, by workflow id (span inputs need the edges). */
+const workflowGraphs = ref<Map<string, Pick<Workflow, "nodes" | "edges">>>(new Map());
 
 const scopedActiveExecutions = computed<ActiveExecutionItem[]>(() => {
   if (!props.workflowId) return activeExecutions.value;
@@ -121,6 +129,18 @@ const nodeResults = computed<NodeResult[]>(() => {
 const isChatRun = computed<boolean>(() => {
   const runType = selectedEntry.value?.run_type;
   return runType === "dashboard_chat" || runType === "workflow_assistant";
+});
+
+/** Ask AI and the timeline apply to workflow runs only, not to chat or assistant runs. */
+const isWorkflowRun = computed<boolean>(
+  () =>
+    Boolean(selectedEntry.value?.workflow_id) &&
+    (selectedEntry.value?.run_type ?? "workflow") === "workflow",
+);
+const showTimeline = computed<boolean>(() => isWorkflowRun.value && nodeView.value === "timeline");
+const selectedWorkflowGraph = computed<Pick<Workflow, "nodes" | "edges"> | null>(() => {
+  const workflowId = selectedEntry.value?.workflow_id;
+  return workflowId ? workflowGraphs.value.get(workflowId) ?? null : null;
 });
 
 /** Steps to show: node_results for workflow, or one synthetic step for chat. */
@@ -369,6 +389,7 @@ watch(
       selectedTriggerSource.value = undefined;
       selectedInstanceId.value = undefined;
       selectedStatus.value = undefined;
+      nodeView.value = "logs";
       cancelScheduledSearchReload();
       delete document.body.dataset.heymOverlayEscapeTrap;
       return;
@@ -403,6 +424,19 @@ watch(
   },
   { immediate: true },
 );
+
+watch([showTimeline, () => selectedEntry.value?.workflow_id], async ([show, workflowId]) => {
+  if (!show || !workflowId || workflowGraphs.value.has(workflowId)) return;
+  try {
+    const workflow = await workflowApi.get(workflowId);
+    workflowGraphs.value = new Map(workflowGraphs.value).set(workflowId, {
+      nodes: workflow.nodes,
+      edges: workflow.edges,
+    });
+  } catch {
+    // The timeline still draws without the graph; only span inputs and sub-agent nesting are missing.
+  }
+});
 
 watch(selectedTriggerSource, async () => {
   if (!props.open) return;
@@ -924,11 +958,24 @@ function bringToCanvas(): void {
     :open="open"
     :title="$t('history.executionHistory')"
     size="5xl"
+    inline-header-actions
     content-class="!h-[min(90vh,calc(100dvh-2rem))] sm:!h-[min(85vh,calc(100dvh-3rem))]"
     :close-on-escape="!searchActive || !searchQuery"
     @close="emit('close')"
     @escape="handleDialogEscape"
   >
+    <template
+      v-if="isWorkflowRun && selectedEntry"
+      #header-actions
+    >
+      <ExecutionHistoryAskAiButton
+        :workflow-id="selectedEntry.workflow_id"
+        :workflow-name="selectedEntry.workflow_name"
+        :execution-id="selectedEntry.id"
+        @navigate="emit('close')"
+      />
+    </template>
+
     <div class="space-y-3 sm:space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-3 sm:grid sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-3">
         <p class="order-1 self-center shrink-0 text-base leading-none text-muted-foreground">
@@ -1315,27 +1362,44 @@ function bringToCanvas(): void {
                 <div class="text-sm font-semibold">
                   {{ $t('history.steps') }}
                 </div>
-                <div class="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    class="text-xs h-6 px-2"
-                    @click="expandAll"
-                  >
-                    {{ $t('history.expandAll') }}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    class="text-xs h-6 px-2"
-                    @click="collapseAll"
-                  >
-                    {{ $t('history.collapseAll') }}
-                  </Button>
+                <div class="flex items-center gap-1">
+                  <ExecutionHistoryViewToggle
+                    v-if="isWorkflowRun"
+                    v-model="nodeView"
+                  />
+                  <template v-if="!showTimeline">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      class="text-xs h-6 px-2"
+                      @click="expandAll"
+                    >
+                      {{ $t('history.expandAll') }}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      class="text-xs h-6 px-2"
+                      @click="collapseAll"
+                    >
+                      {{ $t('history.collapseAll') }}
+                    </Button>
+                  </template>
                 </div>
               </div>
 
-              <div class="space-y-1 max-h-64 overflow-auto pr-1">
+              <ExecutionHistoryTimeline
+                v-if="showTimeline"
+                :node-results="selectedEntry?.node_results ?? []"
+                :total-time-ms="selectedEntry?.execution_time_ms ?? 0"
+                :nodes="selectedWorkflowGraph?.nodes ?? []"
+                :edges="selectedWorkflowGraph?.edges ?? []"
+              />
+
+              <div
+                v-else
+                class="space-y-1 max-h-64 overflow-auto pr-1"
+              >
                 <div
                   v-for="node in displaySteps"
                   :key="node.displayKey"

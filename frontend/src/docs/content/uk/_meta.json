@@ -45,7 +45,7 @@
     "r": "wave3c@2026-10-11"
   },
   "tabs/chat-tab": {
-    "h": "bae1fa2b",
+    "h": "9a2a389c",
     "s": "reviewed",
     "r": "wave3c@2026-10-11"
   },
@@ -55,7 +55,7 @@
     "r": "wave3c@2026-10-11"
   },
   "tabs/dashboard-tab": {
-    "h": "98df6e46",
+    "h": "b5781af4",
     "s": "reviewed",
     "r": "wave3c@2026-10-11"
   },
@@ -135,7 +135,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/chart-output-node": {
-    "h": "4f8e2209",
+    "h": "ca76388d",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -230,7 +230,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/github-node": {
-    "h": "81ba625b",
+    "h": "205589df",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -250,7 +250,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/heym-node": {
-    "h": "94c0bb0b",
+    "h": "d284811e",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -445,7 +445,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/ai-assistant": {
-    "h": "b61cc2f7",
+    "h": "615665d3",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -455,7 +455,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/canvas-features": {
-    "h": "79d387db",
+    "h": "64ab13b6",
     "s": "reviewed",
     "r": "wave3c@2026-10-11"
   },
@@ -510,7 +510,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/execution-history": {
-    "h": "5ef7654c",
+    "h": "bf42d516",
     "s": "reviewed",
     "r": "wave3c@2026-10-11"
   },
@@ -530,7 +530,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/features": {
-    "h": "566ac9ca",
+    "h": "9dfd0210",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -550,7 +550,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/heym-work": {
-    "h": "0a4cc092",
+    "h": "8602912a",
     "s": "reviewed"
   },
   "reference/human-in-the-loop": {
@@ -589,7 +589,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/portal": {
-    "h": "3511581e",
+    "h": "82571d80",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },

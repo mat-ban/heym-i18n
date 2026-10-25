@@ -55,6 +55,18 @@ Otvaranje workflow-a na `/workflows/{workflowId}/{executionId}` automatski donos
 - Otklanjanje grešaka u neuspješnom pokretanju inspekcijom ulaza i izlaza čvorova
 - Usporedba izlaza između pokretanja
 
+## Pitaj AI
+
+Oba dijaloška okvira povijesti imaju gumb **Pitaj AI** (ikona iskre) pored naslova. Otvara [karticu Chat](../tabs/chat-tab.md#asking-about-a-run) u novom razgovoru s priloženim workflowom i odabranim izvođenjem kao uklonjivim čipovima. Pitajte zašto je izvođenje bilo sporo, što nije uspjelo ili zatražite od Chata da popravi workflow. Chat čita točno to izvođenje, uključujući trag po čvorovima i pogreške.
+
+U dijaloškom okviru All History **Pitaj AI** se prikazuje samo kada je odabrano izvođenje workflowa; izvođenja chata i pomoćnika ga ne prikazuju.
+
+## Vremenska traka izvođenja
+
+U pojedinostima izvođenja gumb **Vremenska traka** (ikona štoperice) pored **Proširi sve** zamjenjuje popis **Koraci** vremenskom trakom raspona. Dok je vremenska traka prikazana, isti gumb nosi naziv **Zapisnici**; kliknite ga za povratak na popis. U All History gumb se prikazuje samo za izvođenja workflowa. Vremenska traka crta traku po čvoru u trenutku kada je započeo, tako da vidite koji je čvor koliko trajao i koji su se izvodili paralelno. Prijeđite mišem preko trake za trajanje; kliknite je da biste otvorili isti inspektor pojedinosti kao [vremenska traka izvođenja](#execution-timeline-details) u uređivaču. Odabrani prikaz ostaje aktivan dok je dijalog otvoren.
+
+Izvođenja zabilježena prije pohranjivanja početnih vremena čvorova raspoređena su jedno za drugim prema trajanju.
+
 ## Istaknuti Izvršavanje
 
 Nakon aktivnog pokretanja — ili nakon **Donesi na Platno** — pojavljuje se odjavna **Istaknuta izvršavanja** skočna obavijest u **gornjem desnom kutu Platna**. To je brz način da se vidi *što je svaki čvor proizveo*, navedeno od vrha prema dnu u redoslijedu izvršavanja. Zatvorite ga s **✕**; ponovno se otvara pri sljedećem pokretanju.
@@ -143,7 +155,7 @@ Koristite **Kopiraj** pored Ulaza ili Izlaza kako biste kopirali JSON u međuspr
 
 ## Detalji vremenske linije izvršavanja
 
-Kada je **Izvršni dnevnik** uređivača otvoren, kliknite gumb tajmera kako biste prikazali vremensku liniju izvršavanja. Odaberite raspon kako biste otvorili inspektor detalja koji preuzima područje redaka. Prikazuje status odabranog koraka, trajanje, broj pokušaja, informacije o ponovnom pokušaju, pogreške, ID traganja i sažeti pregled izlaza. Objektni i nizni izlazi koriste isti `JsonTree` preglednik kao i ostatak Debug panela; skalarne vrijednosti koriste tekstualni pregled. Kada korak generira slike (Playwright snimke zaslona, generirane slike, datoteke slika), one se pojavljuju kao sličice iznad izlaza, a JSON prikazuje kratki zamjenski tekst umjesto sirovog base64. Kliknite sličicu kako biste je otvorili u lightboxu; tipke sa strelicama ili tipke ←/→ prelaze kroz svaku sliku u izvršavanju, s brojačem poput `2 / 5`. Koristite **Otvorite trag** za LLM i Agent raspona kada je ID traga dostupan.
+Kada je **Izvršni dnevnik** uređivača otvoren, kliknite gumb tajmera kako biste prikazali vremensku liniju izvršavanja. Odaberite raspon kako biste otvorili inspektor detalja koji preuzima područje redaka. Prikazuje status odabranog koraka, trajanje, broj pokušaja, informacije o ponovnom pokušaju, pogreške, ID traganja i sažeti pregled izlaza. Objektni i nizni izlazi koriste isti `JsonTree` preglednik kao i ostatak Debug panela; skalarne vrijednosti koriste tekstualni pregled. Kada korak generira slike (snimke zaslona Playwrighta, generirane slike, slikovne datoteke ili base64 slike u tijelu zahtjeva, pronađene bilo gdje u izlazu), one se pojavljuju kao sličice iznad izlaza, a JSON prikazuje kratki zamjenski tekst umjesto sirovog base64. Kliknite sličicu kako biste je otvorili u lightboxu; tipke sa strelicama ili tipke ←/→ prelaze kroz svaku sliku u izvršavanju, s brojačem poput `2 / 5`. Koristite **Otvorite trag** za LLM i Agent raspona kada je ID traga dostupan.
 ## Detalji mobilnog čvora
 
 Na telefonu, uređivač prikazuje drvo workflow-a na cijelom ekranu umjesto slobodnog platna. Dodirnite čvor u drvetu s zabilježenim rezultatom kako biste otvorili njegovo izvršavanje kao detalj na cijelom ekranu. Prikaz nudi odvojene kartice **Ulazni podaci**, **Izlazni podaci** i **Pogreške**. Kartica izlaza prikazuje zabilježeni rezultat i nudi opciju **Kopiraj izlaz**; kartica ulaza prikazuje konfiguraciju odabranog čvora, a kartica pogrešaka prikazuje zabilježenu pogrešku kada je čvor zakazao. Koristite **Natrag na workflow** ili gumb za zatvaranje kako biste se vratili na drvo.

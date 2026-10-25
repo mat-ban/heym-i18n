@@ -213,6 +213,11 @@ Ak súbor už existuje, Heym pred jeho aktualizáciou automaticky načíta aktu�
 **Na stránku** (1–100). Heym vyžiada jednu stránku výsledkov; neexistuje pole `page` na načítanie
 ďalších stránok v rámci tej istej operácie.
 
+
+### Return all pages
+
+Zapnite **Return all pages**, aby jedno spustenie prešlo všetky stránky, počnúc **Cursor**, ak je nastavený. Každá požiadavka žiada o 100 položiek bez ohľadu na hodnotu **Per Page**. Uzol sa zastaví po približne 1 000 položkách (alebo 100 požiadavkách): objekty issue majú každý okolo 6 KB, takže vyšší limit by vytváral veľmi veľké výstupy uzla. Ak sa zastaví skôr, vráti, čo má, s `has_more: true` a `next_cursor` namiesto vyvolania chyby a môžete pokračovať odovzdaním tohto kurzora ďalšiemu spusteniu. Zastavenie Workflow alebo dosiahnutie jeho časového limitu ukončí načítanie medzi stránkami.
+
 ## Výstup
 
 Presný tvar závisí od vybranej operácie. Medzi bežné polia patria:

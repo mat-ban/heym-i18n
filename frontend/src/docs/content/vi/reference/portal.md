@@ -51,6 +51,7 @@ Các trường đầu vào đến từ các node [Input](../nodes/input-node.md)
 ## Xác thực và Phiên
 
 - **WorkflowPortalUser**: Tên người dùng/mật khẩu cho mỗi workflow (khi xác thực được bật)
+- **Xóa người dùng cuối cùng**: Khi cổng thông tin được bật, việc xóa người dùng cổng thông tin cuối cùng sẽ khiến cổng thông tin trở lại công khai; hộp thoại cài đặt sẽ yêu cầu xác nhận trước
 - **PortalSession**: Token phiên với TTL 168 giờ
 - **Giới hạn tần suất**: 3 lần đăng nhập thất bại → cấm 24 giờ cho mỗi workflow+IP
 - Các phiên hết hạn được dọn dẹp bởi một cron job

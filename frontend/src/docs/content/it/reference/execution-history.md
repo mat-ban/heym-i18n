@@ -55,6 +55,18 @@ Aprendo un workflow all'indirizzo `/workflows/{workflowId}/{executionId}` si por
 - Effettuare il debug di un'esecuzione fallita ispezionando input e output dei nodi
 - Confrontare gli output tra diverse esecuzioni
 
+## Chiedi all'IA
+
+Entrambe le finestre di dialogo della cronologia dispongono di un pulsante **Chiedi all'IA** (icona scintillio) accanto al titolo. Apre la [scheda Chat](../tabs/chat-tab.md#asking-about-a-run) in una nuova conversazione con il workflow e l'esecuzione selezionata allegata come chip rimovibili. Chiedi perché l'esecuzione è stata lenta, cosa è fallito o chiedi a Chat di correggere il workflow. Chat legge quell'esatta esecuzione, inclusa la traccia per nodo e gli errori.
+
+Nella finestra All History, **Chiedi all'IA** appare solo quando è selezionata un'esecuzione di workflow; le esecuzioni di chat e assistente non lo mostrano.
+
+## Cronologia di esecuzione
+
+Nel dettaglio dell'esecuzione, il pulsante **Cronologia** (icona timer) accanto a **Espandi tutto** sostituisce l'elenco **Passaggi** con una timeline degli span. Mentre la timeline è visibile, lo stesso pulsante indica **Registri**; fai clic su di esso per tornare all'elenco. In All History il pulsante appare solo per le esecuzioni di workflow. La timeline disegna una barra per nodo nel momento in cui è stato avviato, per vedere quale nodo ha richiesto quanto tempo e quali sono stati eseguiti in parallelo. Passa il mouse su una barra per vederne la durata; fai clic su di essa per aprire lo stesso ispettore dettagli della [cronologia di esecuzione](#execution-timeline-details) dell'editor. La vista scelta rimane attiva finché il dialogo è aperto.
+
+Le esecuzioni registrate prima del salvataggio degli orari di inizio dei nodi vengono disposte una dopo l'altra in base alla durata.
+
 ## Execution Highlights
 
 Dopo un'esecuzione live — o dopo **Bring to Canvas** — appare un popup **Execution Highlights** chiudibile nella **parte superiore destra del Canvas**. È un modo rapido per vedere *cosa ha prodotto ciascun nodo*, elencato dall'alto verso il basso nell'ordine di esecuzione. Chiuderlo con la **✕**; si riaprirà all'esecuzione successiva.
@@ -145,7 +157,7 @@ Usare **Copy** accanto a Inputs o Outputs per copiare il JSON negli appunti.
 
 ## Dettagli della timeline di esecuzione
 
-Quando l'**Execution Log** dell'editor è aperto, fare clic sul pulsante del timer per mostrare la timeline di esecuzione. Selezionare uno span per aprire un inspector dei dettagli inline che occupa l'area delle righe. Mostra lo stato del passaggio selezionato, la durata, il numero di tentativi, le informazioni sui retry, gli errori, il trace ID e un'anteprima compatta dell'output. Gli output di tipo oggetto e array utilizzano lo stesso visualizzatore `JsonTree` del resto del pannello Debug; i valori scalari utilizzano un'anteprima testuale. Quando un passaggio produce immagini (screenshot di Playwright, immagini generate, file immagine), queste appaiono come miniature sopra l'output, e il JSON mostra un breve segnaposto al posto del base64 grezzo. Fare clic su una miniatura per aprirla in un lightbox; i pulsanti freccia o i tasti ←/→ scorrono tutte le immagini dell'esecuzione, con un contatore come `2 / 5`. Usare **Open trace** per gli span LLM e Agent quando è disponibile un trace ID.
+Quando l'**Execution Log** dell'editor è aperto, fare clic sul pulsante del timer per mostrare la timeline di esecuzione. Selezionare uno span per aprire un inspector dei dettagli inline che occupa l'area delle righe. Mostra lo stato del passaggio selezionato, la durata, il numero di tentativi, le informazioni sui retry, gli errori, il trace ID e un'anteprima compatta dell'output. Gli output di tipo oggetto e array utilizzano lo stesso visualizzatore `JsonTree` del resto del pannello Debug; i valori scalari utilizzano un'anteprima testuale. Quando un passaggio produce immagini (screenshot di Playwright, immagini generate, file di immagine o immagini base64 nel corpo di una richiesta, trovati ovunque nell'output), queste appaiono come miniature sopra l'output, e il JSON mostra un breve segnaposto al posto del base64 grezzo. Fare clic su una miniatura per aprirla in un lightbox; i pulsanti freccia o i tasti ←/→ scorrono tutte le immagini dell'esecuzione, con un contatore come `2 / 5`. Usare **Open trace** per gli span LLM e Agent quando è disponibile un trace ID.
 
 ## Dettaglio del nodo su mobile
 

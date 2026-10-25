@@ -33,13 +33,17 @@ Kai turite tik pavyzdinius/samples duomenis (be tikro šaltinio), sukurkite šia
 | `valueField` | string | Eilutės raktas, naudojamas kaip skaitinė vertė (pyrago/juostinės/linijinės/skaitinės/indikatoriaus) |
 | `series` | array | Pasirinktinė daugiasekvenčių apibrėžtis `[{ "name": "Sent", "field": "sent" }]` juostinėms/linijinėms (perrašoma `valueField`) |
 | `columns` | array | Pasirinktinė stulpelių sąrašas `table` (numatyta pagal pirmos eilutės raktus) |
-| `statusColumn` | string | Pasirenkamas `table` stulpelis, atvaizduojamas kaip spalvoti [būsenos žetonai](#status-chips). Turi būti vienas iš rodomų stulpelių. |
+| `statusColumn` | string | Pasirenkamas `table` stulpelis, atvaizduojamas kaip spalvoti [būsenos žetonai](#status-chips). Turi būti vienas iš rodomų stulpelių. |, o su `linkColumn` joje yra ir nuorodos stulpelis, ir mygtuko tekstas.
 | `statusTones` | object | Pasirenkamas būsenos reikšmės susiejimas su atspalviu (`success`, `attention`, `failure`, `waiting`, `neutral`) reikšmėms, kurių numatytieji nustatymai neapima |
+| `linkColumn` | string | Pasirenkamas `table` stulpelis, kurio langeliuose yra URL ir kuris rodomas kaip [nuorodos mygtukas](#link-buttons), atidarantis jį naujame skirtuke. Tai turi būti vienas iš rodomų stulpelių. |
+| `linkLabel` | string | Pasirenkamas nuorodos mygtuko tekstas. Palikus tuščią, mygtukas rodo tik nuorodos piktogramą. |
 | `xField` / `yField` | string | Eilutės raktai X ir Y skaitmeniniams ašims (sklaidos) |
 | `min` / `max` | number | Skaitmeninis diapazonas `gauge` (numatyta `0` / `100`) |
 | `unit` | string | Pasirinktinė vienetų reikšmė, rodoma šalia `numeric` arba `gauge` vertės |
 | `text` | string | Markdown žinutė `text` diagramos tipui. Palikite tuščią ir nustatykite `valueField`, kad atvaizduotumėte dinaminę žinutę, gautą iš aukščiau esančių duomenų. |
 | `title` | string | Pasirinktinis diagramos pavadinimas |
+| `hitlWorkflowId` | string | Tik `hitl`. Rodo tik šio Workflow peržiūras. Palikus tuščią, valdiklis rodo visas peržiūras. |
+| `hitlNodeId` | string | Tik `hitl`. Susiaurina `hitlWorkflowId` iki vieno žingsnio: Agent su žmogaus peržiūra arba Slack patvirtinimo, mygtukų ar formos žingsnis. |
 
 ## Diagramos tipai
 
@@ -51,7 +55,7 @@ Kai turite tik pavyzdinius/samples duomenis (be tikro šaltinio), sukurkite šia
 - **proporcija** — viena horizontalioji juosta, padalinta į dalis su procentų legenda (pvz., kalbos pasiskirstymas). Naudoja `labelField` + `valueField`.
 - **juostos indikatorius** — viena horizontalioji juosta kiekvienai eilutei su raudona→žalia gradientu ir verte (pvz., laisvos disko vietos). Naudoja `labelField` + `valueField`, pasirinktinį `unit` ir `max` (numatyta pagal didžiausią eilutės vertę).
 - **tekstas** — markdown žinutė (pvz., statuso užrašas, pvz., "Paskutinis vykdymas 19:47"). Įdėkite markdown į `text` statinei žinutei, arba palikite `text` tuščią ir nustatykite `valueField`, kad atvaizduotumėte iš aukščiau gautą eilutę. Palaiko antraštes, paryškintą/italiką, [sąrašus](../nodes/chart-output-node.md#interactive-task-lists), nuorodas ir įterptą kodą.
-- **hitl** — karuselė laukiančių žmogaus atsiliepimų. Antraštėje rodomas `1/n laukia`; kairysis rodyklė yra neaktyvi pirmame kortelėje, o dešinysis rodyklė paskutinėje. Workflow pavadinimas atidaro tą vykdymą drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** išsprendžia tai, o istorijos piktograma šalia valdiklio pavadinimo atidaro tą vykdymą istorijos dialoge toje pačioje pusėje. Šis diagramos tipas ignoruoja aukščiau esančias eiles, todėl valdiklio workflow yra tik Diagramos Išvestis mazgas. Kiekvienas prisijungęs asmuo mato atsiliepimus apie workflows, kuriuos jie valdo.
+- **hitl** — karuselė laukiančių žmogaus atsiliepimų. Antraštėje rodomas `1/n laukia`; kairysis rodyklė yra neaktyvi pirmame kortelėje, o dešinysis rodyklė paskutinėje. Workflow pavadinimas atidaro tą vykdymą drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** išsprendžia tai, o istorijos piktograma šalia valdiklio pavadinimo atidaro tą vykdymą istorijos dialoge toje pačioje pusėje. Šis diagramos tipas ignoruoja aukščiau esančias eiles, todėl valdiklio workflow yra tik Diagramos Išvestis mazgas. Kiekvienas prisijungęs asmuo mato atsiliepimus apie workflows, kuriuos jie valdo. Mazgo savybėse arba valdiklio nustatymuose pasirinkite **Workflow** (ir **Select agent**, kai jis turi kelis peržiūros žingsnius), kad vietoj to būtų rodomos to Workflow peržiūros visiems, kurie gali jį atidaryti; žr. [HITL valdikliai](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktyvūs užduočių sąrašai
 
@@ -307,3 +311,17 @@ Kuriant valdiklį su **AI**, tokie promptai aiškiai atitinka kiekvieną tipą:
 
 - [Dashboard tab](../tabs/dashboard-tab.md) — kurti ir išdėstyti valdiklius
 - [Output node](output-node.md) — terminalo mazgas įprastiems workflows
+
+
+## Nuorodų mygtukai
+
+`table` gali paversti vieną stulpelį mygtukais, atidarančiais nuorodą. Mazgo savybėse nustatykite **Link column** (arba `linkColumn` DSL) į stulpelį, kurio langeliuose yra URL, ir, jei norite, **Link button text** (`linkLabel`). Kiekvienas langelis tampa mygtuku, atidarančiu savo URL naujame skirtuke. Be mygtuko teksto mygtukas rodo tik nuorodos piktogramą:
+
+| Langelio reikšmė | Atidaro |
+| ---------------- | ------- |
+| `https://jira.example.com/browse/T-1` | Kitą svetainę naujame skirtuke |
+| `/dashboards` | Puslapį Heym viduje naujame skirtuke |
+
+Mygtukais tampa tik `http://` ir `https://` adresai bei keliai, prasidedantys vienu `/`. Bet kuri kita reikšmė, pavyzdžiui, `javascript:` ar `//host`, lieka paprastu tekstu, o tuščias langelis nieko nerodo.
+
+Mygtukas veikia šalia [eilutės nuorodos](../tabs/dashboard-tab.md#detail-pages): spustelėjus mygtuką jo nuoroda atidaroma naujame skirtuke, o spustelėjus bet kur kitur eilutėje vis tiek atidaromas išsamios informacijos puslapis.

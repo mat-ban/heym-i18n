@@ -212,6 +212,11 @@ Dacă fișierul există deja, Heym preia automat SHA-ul curent înainte de a-l a
 **Pe pagină** (1–100). Heym solicită o singură pagină de rezultate; nu există un câmp `page` pentru a prelua
 pagini suplimentare în aceeași operațiune.
 
+
+### Return all pages
+
+Activați **Return all pages** pentru ca o rulare să parcurgă toate paginile, începând de la **Cursor** dacă este setat. Fiecare cerere solicită 100 de elemente, indiferent de valoarea **Per Page**. Nodul se oprește după aproximativ 1.000 de elemente (sau 100 de cereri): obiectele issue au fiecare circa 6 KB, deci o limită mai mare ar produce ieșiri de nod foarte mari. Dacă se oprește mai devreme, returnează ce a obținut cu `has_more: true` și un `next_cursor` în loc să genereze o eroare, iar puteți continua transmițând acel cursor rulării următoare. Oprirea workflow-ului sau atingerea timeoutului acestuia încheie preluarea între pagini.
+
 ## Ieșire
 
 Forma exactă depinde de operațiunea selectată. Câmpurile comune includ:

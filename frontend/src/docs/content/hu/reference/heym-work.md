@@ -9,11 +9,30 @@ A Heym Work külön tárolóként fut a Heym mellett, a Heym csapatától szárm
 | Terület | Funkció |
 |---------|---------|
 | **Chat** | Írja le a feladatot szövegesen vagy hanggal. A Heym megkérdezi a szükséges adatokat, felépíti a workflow-t, teszteli, és Ellenőrzött jelöléssel látja el. |
+| **Flows** | A szerkesztők vászon helyett választási lehetőségekből építenek fel egy flow-t: mi indítja el, egy opcionális AI-vázlat és műveletek a Slackben, a Google Sheetsben és az e-mailben. A Slackből érkező válaszok folytatják a futást, és a jóváhagyások a Tevékenységben is várakoznak. Lásd: [Flows](#flows). |
 | **Oldalak** | Rögzített widget-oldalak: számadatok, diagramok, állapotjelző címkékkel ellátott táblázatok, fájlfeltöltési mezők és jóváhagyások. Egy táblázat sora saját részletező oldalt nyithat meg. |
 | **Jóváhagyások** | A [Human-in-the-Loop](./human-in-the-loop.md) lépésekből érkező felülvizsgálatok a Tevékenység lapon és az oldalakon várnak, Jóváhagyás, Módosítás kérése és Elutasítás lehetőségekkel. |
 | **Tevékenység** | Minden futtatás, feltüntetve az indító személyt és a végrehajtó példányt. |
 | **Szerepkörök** | Tulajdonos, Szerkesztő és Megtekintő. A bejelentkezés a Heym által már használt [Single Sign-On](./sso.md) rendszeren keresztül történik. |
 | **Iparági kiadások** | A jogi, oktatási, pénzügyi, logisztikai, energetikai és e-kereskedelmi kiadások az adott ágazatra szabott oldalakkal, mintákkal és workflow-kkal nyílnak meg. |
+
+## Flows
+
+A **Flows** a Heym Work menüjében található a Szerkesztők és Tulajdonosok számára. A flow csomópontok helyett választási lehetőségekből áll, és a Heym Work a Heym API-n keresztül szokásos Heym workflow-ként menti el a létrehozó személy nevében. A Heym hozzáférési szabályai, a szerkesztési előzmények és a trigger-szinkronizálás ugyanúgy érvényesek, mint a szerkesztőben, és minden futás úgy jelenik meg a Tevékenységben, mint bármelyik másik.
+
+| Rész | Választási lehetőségek |
+|---|---|
+| **Mi indítja el** | Igény szerint, ütemezés szerint, Slack üzenetre, Google Sheets lap változásakor (sorok hozzáadva, módosítva vagy törölve), vagy amikor e-mail érkezik egy beérkező levelek mappába. A táblázat- és e-mail triggerek 1, 5, 15 vagy 60 percenként ellenőriznek. |
+| **AI-vázlat** (opcionális) | Egy modell és az utasítások szöveggé alakítják a flow-t elindító eseményt a későbbi lépésekhez. Egy olyan flow, amely nem táblázatból vagy e-mailből indul, először beolvashatja a legutóbbi Slack üzeneteket egy csatornából vagy szálból. |
+| **Mi történik ezután** | Műveletek sorrendben a három eszköz bármelyikében, függetlenül attól, hogy mi indította el a flow-t. **Slack:** csatornaüzenet, közvetlen üzenet, űrlap, üzenet gombokkal, jóváhagyás, válasz a szálban, üzenetfrissítés és végeredmény. **Google Sheets:** sor hozzáadása vagy a megváltozott sor frissítése. **E-mail:** e-mail küldése. |
+
+- **A válaszok folytatják a futást.** Egy jóváhagyás, gombok vagy egy űrlap szünetelteti a futást, amíg valaki nem válaszol a Slackben. A jóváhagyás a Tevékenységben is várakozik, és a döntés bármelyik helyen eltávolítja a gombokat a Slack üzenetből. A későbbi Slack lépések az első üzenet szálában maradnak.
+- **Egyetlen Kapcsolatok kártya.** Minden flow megjeleníti a Slack munkaterületet, a Google Sheets fiókot és a postaládákat, amelyekből olvas és amelyekkel küld. Ezek Heym hitelesítő adatok: **Slack Bot** (bot token, `xoxb-…`), **Google Sheets**, **IMAP** és **SMTP**; a hiányzó hitelesítő adat közvetlenül magából a flow-ból adható hozzá.
+- **Egyetlen Slack alkalmazás minden flow-hoz.** A Slack alkalmazásban állítsa az Interaktivitási kérelem URL-jét a következőre: `https://<az Ön Heymje>/api/slack/interactions/<hitelesítő azonosító>`, az Esemény-előfizetések kérelem URL-jét pedig a következőre: `https://<az Ön Heymje>/api/slack/events/<hitelesítő azonosító>`. A Heym Work mindkettőt megjeleníti a kiválasztott kapcsolathoz. Az adott hitelesítő adathoz tartozó összes flow megosztja ezeket.
+- **A Slack triggerek kiválasztják, mit figyelnek:** üzeneteket a csatornákon és a közvetlen üzenetekben, közvetlen üzeneteket a botnak, a bot említéseit vagy üzeneteket egyetlen csatornán. A bot saját bejegyzései soha nem indítanak el flow-t.
+- **Követelmények.** A Flows a Heym 0.0.131 vagy újabb verzióját igényli.
+
+A flow által felépített lépések ugyanazok a csomópontok, amelyeket a vásznon használhat: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) és [Cron](../nodes/cron-node.md).
 
 ## A Heym Work csatlakoztatása
 
@@ -26,7 +45,7 @@ A kapcsolat a **Beállítások → Heym Work** menüpontban konfigurálható. A 
 | **Heym Work címe** | Ahol a Heym Work fut, például `https://work.example.com`. A bejelentkezés ide irányít vissza. Kattintson a **Mentés** gombra. |
 | **Integrációs kulcs** | A **Kulcs generálása** gomb létrehozza azt a kulcsot, amelyet a Heym Work használ minden Heym felé küldött kéréshez. Csak egyszer jelenik meg egy másolás gomb kíséretében. A Heym kizárólag a kulcs hash értékét tárolja. |
 | **Heym Work engedélyezése** | Bekapcsolja a kapcsolatot. Előzetesen megköveteli a cím és a kulcs megadását. |
-| Állapot | **Utoljára látva**, **Work verzió** és **Licenc**, a Heym Work legutóbbi jelentése alapján. |
+| **Iparági és csapatkiadások** | A jogi, oktatási, pénzügyi, logisztikai, energetikai és e-kereskedelmi kiadások, valamint a vállalati csapatok számára készült IT, értékesítési, marketing és HR kiadások az adott munkához kapcsolódó oldalakkal, mintákkal és workflow-kkal nyílnak meg. |
 
 Ezután nyissa meg a Heym Work címét, és fejezze be a beállítást:
 

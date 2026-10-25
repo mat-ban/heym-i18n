@@ -18,14 +18,14 @@ Ein Widget ist ein einzelnes Diagramm im Raster. Unterstützte Diagrammtypen:
 - **Line** (Liniendiagramm)
 - **Area** (Flächendiagramm mit gefülltem Trend, unterstützt mehrere Datenreihen)
 - **Pie** (Kreisdiagramm)
-- **Table** (scrollbare Tabelle; eine Spalte kann als [Status-Chips](../nodes/chart-output-node.md#status-chips) dargestellt werden, und Zeilen können eine [Detailseite](#detail-pages) öffnen)
+- **Table** (scrollbar; klicken Sie auf eine Spaltenüberschrift, um aufsteigend zu sortieren, und erneut, um absteigend zu sortieren. Eine Spalte kann als [Status-Chips](../nodes/chart-output-node.md#status-chips) dargestellt werden, eine Spalte kann [Link-Schaltflächen](../nodes/chart-output-node.md#link-buttons) enthalten, die eine URL in einem neuen Tab öffnen, und Zeilen können eine [Detailseite](#detailseiten) öffnen)
 - **Numeric** (ein einzelner KPI-Wert mit optionaler Einheit)
 - **Gauge** (ein einzelner Wert innerhalb eines Min–Max-Bereichs, z. B. ein Prozentsatz)
 - **Scatter** (X/Y-Punkte für Korrelationsdiagramme)
 - **Proportion** (ein in Anteile unterteilter Balken mit Prozent-Legende, z. B. eine Sprachverteilung)
 - **Bar gauge** (eine horizontale Anzeige pro Zeile mit Rot→Grün-Verlauf und Wert, z. B. freier Speicherplatz)
 - **Text** (eine Markdown-Nachricht, z. B. eine Statusnotiz wie „Letzte Ausführung um 19:47"; unterstützt [interaktive Kontrollkästchen](../nodes/chart-output-node.md#interactive-task-lists) bei statischem Markdown sowie [explizite nummerierte Listen](../nodes/chart-output-node.md#numbered-lists) für benutzerdefinierte oder absteigende Nummerierung)
-- **HITL** (Ihre ausstehenden menschlichen Prüfungen. Die Kopfzeile zeigt `1/n pending`. Der Workflow-Name öffnet diesen Lauf auf der Arbeitsfläche. **Approve**, **Request changes** und **Reject** schließen ihn ab. Das Verlaufssymbol neben dem Widget-Titel öffnet diesen Lauf im Verlaufsdialog auf dieser Seite. Das Widget verwendet keine vorgelagerten Zeilen, und jede Person sieht ihre eigene Warteschlange)
+- **HITL** (Ihre ausstehenden menschlichen Prüfungen. Die Kopfzeile zeigt `1/n pending`. Der Workflow-Name öffnet diesen Lauf auf der Arbeitsfläche. **Approve**, **Request changes** und **Reject** schließen ihn ab. Das Verlaufssymbol neben dem Widget-Titel öffnet diesen Lauf im Verlaufsdialog auf dieser Seite. Das Widget verwendet keine vorgelagerten Zeilen, und jede Person sieht ihre eigene Warteschlange. Es kann stattdessen die Prüfungen eines Workflows anzeigen, für alle, die diesen Workflow öffnen können; siehe [HITL-Widgets](#hitl-widgets))
 
 Neben Diagrammen führt ein **Run a workflow**-Widget einen Ihrer Workflows direkt über das Dashboard aus: über eine abgelegte Datei, über seine Eingabefelder oder über eine Schaltfläche **Run**; siehe [Ausführungs-Widgets](#run-widgets).
 
@@ -43,6 +43,20 @@ Für ein **Run a workflow**-Widget wählen Sie stattdessen den auszuführenden W
 Doppelklicken Sie jederzeit auf ein Widget (oder nutzen Sie dessen Bearbeiten-Schaltfläche), um seinen Workflow erneut zu öffnen. Verwenden Sie **Clone
 widget** in der Kopfzeile des Widgets, um sowohl das Widget als auch seinen gesamten Workflow zu duplizieren. Die Kopie wird
 unter dem Original platziert und mit **(Copy)** gekennzeichnet, sodass Sie sie unabhängig bearbeiten können.
+
+## HITL-Widgets
+
+Ein neues HITL-Widget zeigt jede Prüfung, die in Ihrer eigenen Warteschlange wartet. Um nur die eines Workflows anzuzeigen, öffnen Sie die **Einstellungen** des Widgets:
+
+1. Wählen Sie unter **Workflow** den Workflow aus. Die Liste enthält die Workflows, die Sie öffnen können – Ihre eigenen oder mit Ihnen oder Ihrem Team geteilte –, die einen Schritt haben, der auf eine Person wartet: einen Agent mit menschlicher Prüfung oder einen Slack-Freigabe-, Schaltflächen- oder Formularschritt. Das Symbol daneben öffnet diesen Workflow in einem neuen Tab.
+2. Hat der Workflow genau einen solchen Schritt, wird er automatisch mit ausgewählt. Hat er mehrere, listet **Select agent** sie nach Knotenname auf, mit **All agents** an erster Stelle; Slack-Schritte sind mit **(Slack)** markiert.
+3. Speichern Sie. Die `1/n pending`-Anzeige in der Kopfzeile zählt nur diese Prüfungen. Wählen Sie **Alle Workflows**, um wieder Ihre eigene Warteschlange anzuzeigen.
+
+Dieselbe Auswahl gibt es auf der Arbeitsfläche in den Eigenschaften des Chart-Output-Knotens. **Mit KI verfeinern** kann sie vornehmen („nur die Rechnungsfreigaben anzeigen“), ebenso die Beschreibung eines neuen Widgets, die den Workflow nennt. Jede Änderung ist eine Workflow-Bearbeitung und erscheint daher im Edit History.
+
+- **Wer die Prüfungen sieht.** Ein auf einen Workflow gefiltertes Widget zeigt die Prüfungen dieses Workflows allen, die den Workflow öffnen können; sie können darüber genehmigen, Änderungen anfordern oder ablehnen, so wie sie den Workflow ausführen könnten. Ein ungefiltertes Widget zeigt jeder Person ihre eigene Warteschlange.
+- **Wer das Widget sieht.** Wer den gewählten Workflow nicht öffnen kann, sieht das Widget gar nicht, auch nicht auf einem mit ihm geteilten Dashboard. Verliert der Eigentümer des Dashboards den Zugriff darauf oder wird es gelöscht, sieht der Eigentümer „You no longer have access to the workflow this widget shows“ und kann in den **Einstellungen** einen anderen auswählen.
+- **Nur erreichbare Auswahl.** Ein Workflow, den Sie nicht öffnen können, wird beim Speichern des Widgets abgelehnt, ob über die Einstellungen, die Arbeitsfläche oder die KI.
 
 ## Detailseiten
 
@@ -77,6 +91,10 @@ Die Schaltfläche **Wrap** im Ergebnisbereich bricht lange Ausgabezeilen innerha
 ## Ein Widget mit KI generieren
 
 Klicken Sie auf **AI**, beschreiben Sie die gewünschte Kennzahl (beispielsweise „Workflow-Erfolgsrate der letzten 30 Tage als Balkendiagramm") und wählen Sie LLM-Anmeldedaten sowie ein Modell aus. Heym generiert einen vollständigen Widget-Workflow, der in einem Chart-Output-Knoten endet, und fügt ihn dem Raster hinzu. Beispiele für Prompts je Diagrammtyp finden Sie unter [Chart Output](../nodes/chart-output-node.md#example-ai-prompts).
+
+Das Widget erhält einen kurzen Titel aus ein oder zwei Wörtern in der Sprache Ihrer Anfrage, etwa „Offene Fälle“. Ein Titel enthält nie die ID einer Datentabelle; benennt das Modell das Widget mit einem Satz, behält Heym dessen erste Wörter.
+
+Die Widget-API kann auch ohne KI eine **Zähler-Karte** erstellen: Ein `text`-Widget auf einer Datentabelle (`data_table_id`) mit `count_column` und `count_value` zeigt an, wie viele Zeilen diesen Wert haben; der Titel des Widgets nennt den Wert. Heym Work stellt Seiten, die aus einer Datentabelle erstellt wurden, eine Zähler-Karte pro Status voran.
 
 Mit der Schaltfläche **Fine-tune with AI** eines Widgets passen Sie ein bestehendes Widget per neuer Anweisung an. Jede KI-Verfeinerung speichert vorab einen Snapshot des bisherigen Workflows im **Edit History**-Verlauf des Widgets, sodass Sie Änderungen im Workflow-Editor überprüfen oder zurücksetzen können.
 

@@ -16,7 +16,7 @@
 | 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
 | `heymOperation` | Select | 수행할 읽기 작업 |
-| `heymWorkflowId` | UUID | 대상 Workflow. `getWorkflow`와 `getExecutionHistory`에서 필수입니다. 표현식 사용 가능. |
+| `heymWorkflowId` | UUID | `getExecutionHistory`에서 `all`로 설정하면 접근할 수 있는 모든 Workflow를 읽습니다. |
 | `heymLimit` | String | 반환할 최대 행 수. **비워 두거나 `0`을 입력하면 전부 반환합니다** — 이것이 기본값입니다. 표현식 사용 가능. |
 | `heymStatus` | String | `getExecutionHistory`에 대한 선택적 상태 필터. 표현식 사용 가능. |
 | `heymSinceDays` | String | `getExecutionHistory`에 대한 선택적 조회 기간(일 단위). 표현식 사용 가능. |
@@ -93,9 +93,11 @@ cron → heym (listWorkflows) → loop → heym (getWorkflow) → agent → slac
 | `$nodeLabel.executions[0].recovered` | 크래시 이후 실행이 복구되었는지 여부 |
 | `$nodeLabel.executions[0].inputs` | 실행이 받은 것 - Trigger Payload 또는 호출자의 입력 |
 | `$nodeLabel.executions[0].outputs` | 해당 실행에 대한 Workflow의 출력 |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | 기록이 속한 Workflow |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | 기록이 속한 Workflow, **{AW}**인 경우 `null` |
+*{AW}**인 경우 `null` |
 | `$nodeLabel.total` | Limit **이전**의 일치하는 총 실행 수 |
-| `$nodeLabel.by_status` | 상태별로 집계된 개수, 예를 들어 `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_status` | `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | **{AW}**인 경우 각 실행이 속한 Workflow |
+| 상태별로 집계된 개수, 예를 들어 `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | 조회 기간의 시작, 전체 기록인 경우 `null` |
 
 항목에는 실행이 받은 것과 응답한 것, 즉 `inputs`와 `outputs`가 모두 포함되지만 `node_results`는 절대 포함되지 않습니다. 노드별 추적은 테이블에서 가장 큰 컬럼이며 다운스트림의 모든 것을 압도할 수 있기 때문입니다. 전체 추적이 필요할 때는 API를 통해 단일 실행을 가져오십시오.

@@ -18,14 +18,14 @@ En widget är ett enskilt diagram i rutnätet. Diagramtyper som stöds:
 - **Line**
 - **Area** (fylld trend, stöder flera serier)
 - **Pie**
-- **Table** (rullningsbar; en kolumn kan renderas som [statusbrickor](../nodes/chart-output-node.md#status-chips), och rader kan öppna en [detaljsida](#detail-pages))
+- **Table** (rullningsbar; klicka på en kolumnrubrik för stigande sortering och klicka igen för fallande sortering. En kolumn kan återges som [statuschips](../nodes/chart-output-node.md#status-chips), en kolumn kan innehålla [länkknappar](../nodes/chart-output-node.md#link-buttons) som öppnar en URL i en ny flik, och rader kan öppna en [detaljsida](#detaljsidor))
 - **Numeric** (ett enskilt KPI-värde med valfri enhet)
 - **Gauge** (ett enskilt värde mot ett min–max-intervall, t.ex. en procentandel)
 - **Scatter** (X/Y-punkter för korrelationsdiagram)
 - **Proportion** (en stapel uppdelad i andelar med en procentteckenförklaring, t.ex. en språkfördelning)
 - **Bar gauge** (en horisontell gauge per rad med en röd→grön gradient och ett värde, t.ex. ledigt diskutrymme)
 - **Text** (ett markdown-meddelande, t.ex. en statusnotis som "Senaste körning 19:47"; stöder [interaktiva kryssrutor](../nodes/chart-output-node.md#interactive-task-lists) när markdown är statisk, och [explicita numrerade listor](../nodes/chart-output-node.md#numbered-lists) för anpassad eller fallande numrering)
-- **HITL** (egna väntande mänskliga granskningar. Rubriken visar `1/n pending`. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den. Historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på denna sida. Widgeten använder inte uppströms rader, och varje person ser sin egen kö)
+- **HITL** (egna väntande mänskliga granskningar. Rubriken visar `1/n pending`. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den. Historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på denna sida. Widgeten använder inte uppströms rader, och varje person ser sin egen kö. Den kan istället visa granskningarna för ett enskilt Workflow, för alla som har behörighet att öppna det; se [HITL-widgets](#hitl-widgets))
 
 Förutom diagram kan en **Run a workflow**-widget köra ett av dina workflows direkt från dashboarden: på en släppt fil, med dess inmatningsfält eller med en Run-knapp; se [Kör-widgetar](#run-widgets).
 
@@ -43,6 +43,20 @@ För en **Run a workflow**-widget väljer du istället vilket workflow den ska k
 Dubbelklicka på en widget (eller använd dess redigeringsknapp) för att öppna dess workflow igen när som helst. Använd **Clone
 widget** i widgetrubriken för att duplicera både widgeten och dess kompletta workflow. Kopian
 placeras under originalet och märks med **(Copy)** så att den kan redigeras oberoende.
+
+## HITL-widgets
+
+En ny HITL-widget visar varje granskning som väntar i den egna kön. För att endast visa granskningar för ett visst Workflow öppnas widgetens **Inställningar**:
+
+1. Välj önskat Workflow under **Workflow**. Listan innehåller de Workflows som kan öppnas – egna eller delade med användaren eller teamet – som har ett steg som väntar på en person: en Agent med mänsklig granskning eller ett Slack-godkännande-, knapp- eller formulärsteg. Ikonen bredvid öppnar detta Workflow i en ny flik.
+2. Om ett Workflow har exakt ett sådant steg väljs det automatiskt. Om det finns flera listar **Select agent** dem efter nodnamn, med **All agents** först; Slack-steg markeras med **(Slack)**.
+3. Spara. Rubrikens `1/n pending` räknar endast dessa granskningar. Välj **Alla Workflows** för att visa den egna kön igen.
+
+Samma val finns på canvasen i egenskaperna för Chart Output-noden. **Finjustera med AI** kan utföra valet (”visa endast fakturagodkännanden”), och det kan även beskrivningen av en ny widget som anger Workflow. Varje ändring är en Workflow-redigering och visas därför i Edit History.
+
+- **Vem som ser granskningarna.** En widget filtrerad på ett Workflow visar dess granskningar för alla som kan öppna detta Workflow, och dessa personer kan godkänna, begära ändringar eller avvisa från widgeten, precis som de kan köra detta Workflow. En ofiltrerad widget visar varje persons egen kö.
+- **Vem som ser widgeten.** Den som inte kan öppna det valda Workflowet ser inte widgeten alls, inte ens på en delad instrumentpanel. Om panelens ägare förlorar åtkomsten eller om Workflowet raderas, visas ”You no longer have access to the workflow this widget shows” och en annan kan väljas i **Inställningar**.
+- **Endast tillgängliga val.** Ett Workflow som inte kan öppnas avvisas när widgeten sparas, oavsett om det sker från inställningar, canvas eller AI.
 
 ## Detaljsidor
 
@@ -77,6 +91,10 @@ Resultatets **Wrap**-knapp radbryter långa utdatarader inuti rutan; stäng av d
 ## Generera en widget med AI
 
 Klicka på **AI**, beskriv önskad metrik (till exempel "workflow success rate over the last 30 days as a bar chart") och välj en LLM-credential och modell. Heym genererar ett komplett widget-workflow som slutar i en Chart Output-nod och lägger till det i rutnätet. Se [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) för exempel på prompts per diagramtyp.
+
+Widgeten får en kort titel på ett eller två ord på förfrågans språk, såsom ”Öppna ärenden”. En titel innehåller aldrig id:t för en datatabell; om modellen ger widgeten ett namn i form av en hel mening behåller Heym de första orden.
+
+Widget-API:et kan också skapa ett **räknarkort** utan AI: en `text`-widget på en datatabell (`data_table_id`) med `count_column` och `count_value` visar hur många rader som har det värdet; widgetens titel anger värdet. Heym Work inleder sidor skapade från en datatabell med ett räknarkort per status.
 
 Använd en widgets **Fine-tune with AI**-knapp för att revidera en befintlig widget med en ny instruktion. Varje AI-fintuning tar en ögonblicksbild av det föregående workflowet i widgetens **Edit History**, så ändringar kan granskas eller rullas tillbaka från workflow-editorn.
 

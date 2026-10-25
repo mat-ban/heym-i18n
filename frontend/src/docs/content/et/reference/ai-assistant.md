@@ -13,6 +13,8 @@ Väljaspool redaktorit puudutavate dokumentatsiooniküsimuste jaoks kasutage [Ch
 
 Vajutage redaktoris ükskõik kus `Ctrl + I` / `Cmd + I`, et paneel avada või sulgeda — kiirklahv töötab ka siis, kui tekstisisestus on fookuses. Vt [Kiirklahvid](./keyboard-shortcuts.md).
 
+Ühe sõlmega töötamiseks viige kursor selle kohale lõuendil ja klõpsake selle kohal **AI**. Paneel avaneb sellele sõlmele keskendunult. Vaadake [Ühe sõlme muutmine](#changing-one-node).
+
 ## Paneeli sulgemine
 
 Klõpsake nuppu **X**, vajutage `Ctrl + I` / `Cmd + I` või lülitage Debug-paneeli tööriistaribal nuppu **AI**. Päis lohistab paneeli; see ei sulge seda.
@@ -60,6 +62,33 @@ Kui AI vastus sisaldab kehtivat workflow JSON-plokki (koos `nodes` ja valikulise
 4. Märgib workflow salvestamata
 
 Kui parsimine ebaõnnestub, kuvatakse nupp **Retry** vastuse uuesti genereerimiseks.
+
+## Ühe sõlme muutmine
+
+Viige kursor sõlme kohale lõuendil ja klõpsake selle kohal **AI**. Paneel avaneb režiimis Agent, keskendudes sellele sõlmele, ja näitab, millist sõlme muudetakse:
+
+| Sõlmel on... | Paneel näitab |
+|---|---|
+| Praeguses käituses tulemust pole | **Modifying Node:** kompaktses reas koos sõlme ikooni ja nimega. Assistent redigeerib ainult sõlme enda konfiguratsioonist; käivitage sõlm esmalt, kui see peaks väljundit nägema |
+| Tulemus praeguses käituses | **Modifying Node: (Has Node Output)** sõlme enda kohal: ikoon, nimi ja tüüp, viimane olek ja kestus ning tõrge ebaõnnestumise korral. Assistent näeb seda väljundit ja tõrget sõlme redigeerimisel |
+
+Viige kursor sildi kohale, et näha, millises olekus paneel on.
+
+Olenemata paneeli olekust loeb assistent ka sõlme dokumentatsioonilehte sõlme päises oleva raamatuikooni taga. Ta kasutab lehte sõlme valikute mõistmiseks ja neile vastamiseks.
+
+Sõnumite all alustavad päringut kolm valikut:
+
+| Valik | Mida see teeb |
+|---|---|
+| **Change this node as ...** | Täidab sõnumikasti tekstiga *Muuda see sõlm järgmiseks:*, et saaksite lause lõpetada |
+| **Fix error in this node ...** | Täidab *Paranda viga selles sõlmes.* Assistent loeb selle sõlme vea viimasest käitusest |
+| **Other** | Fokuseerib tühja sõnumikasti |
+
+Muutke teksti ja vajutage **Send**. Assistent tagastab ainult selle sõlme ja Heym uuendab seda kohapeal: sõlm säilitab oma id, tüübi ja nime, nii et avaldised nagu `$checkLinkedIn.result` teistes sõlmedes töötavad edasi. Teised sõlmed, ühendused ja paigutus ei muutu ning **Undo** taastab eelmise konfiguratsiooni.
+
+Kui päring ei mahu sõlme sisse, näiteks vajab teist sõlmetüüpi või uut sõlme, teatab assistent redigeerimise asemel sellest, mida tuleks muuta. Sulgege sõlme fookus sõlmekaardil oleva **X**-iga, et uuesti redigeerida kogu workflowd. Paneeli sulgemine tühistab samuti fookuse.
+
+[YOLO-režiim](#yolo-mode) töötab fokuseeritud sõlmega: assistent muudab sõlme, käivitab workflow ja parandab sõlme, kuni käitus õnnestub. Režiimis **Ask** ütleb fookus assistendile, millise sõlme kohta teie küsimus käib, ja lõuendit ei muudeta.
 
 ## YOLO-režiim
 

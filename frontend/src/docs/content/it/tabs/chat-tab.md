@@ -35,6 +35,8 @@ La scheda **Chat** fornisce un'interfaccia di chat diretta con l'LLM. Utilizzarl
 - **Cronologia delle esecuzioni dei workflow** – Chiedere informazioni su un workflow ("quante volte è stato eseguito il report giornaliero?", "ha avuto errori?", "quando è stato eseguito l'ultima volta?"). La Chat individua il workflow tramite il suo ID e risponde in base al numero di esecuzioni, alla ripartizione degli stati, all'orario della prima e dell'ultima esecuzione e alla durata media. Chiedendo perché un'esecuzione è fallita o cosa ha restituito, la Chat apre quella singola esecuzione per leggerne input, output ed errori per nodo
 - **Stato delle esecuzioni in tempo reale** – Chiedere cosa è in esecuzione in questo momento: la Chat risponde con il conteggio, i nomi dei workflow, la durata di ciascuna esecuzione, il nodo su cui si trova e un link diretto all'esecuzione in tempo reale
 
+- **Chip di contesto dell'esecuzione** – **Chiedi all'IA** nel [Execution History](../reference/execution-history.md#ask-ai) apre una nuova conversazione con l'esecuzione di Workflow selezionata allegata come chip. Vedere [Fare domande su un'esecuzione](#fare-domande-su-unesecuzione)
+
 ## Utilizzo della Chat da un Client MCP
 
 Il motore della Chat può essere raggiunto anche dall'esterno del browser. Abilitare lo **Heym Chat Tool** nella [scheda MCP](./mcp-tab.md) e i client MCP — Claude, Cursor e qualsiasi altro che supporti MCP — ottengono un singolo tool `heym_chat` che esegue questo stesso motore con tutte le sue funzionalità.
@@ -83,6 +85,17 @@ Le esecuzioni in pausa per una revisione [Human-in-the-Loop](../reference/human-
 in attesa dell'utente, non come in esecuzione. Si tratta degli stessi dati del badge delle esecuzioni attive nell'header,
 quindi la Chat e il badge non sono mai in disaccordo. Per le esecuzioni già completate, chiedere invece le esecuzioni recenti
 — che legge la [Cronologia delle Esecuzioni](../reference/execution-history.md).
+
+## Fare domande su un'esecuzione
+
+Selezioni un'esecuzione di Workflow nel [Execution History](../reference/execution-history.md#ask-ai), dall'editor o da All History, e faccia clic su **Chiedi all'IA** accanto al titolo della finestra di dialogo. Chat apre una nuova conversazione con due chip sopra la casella del messaggio:
+
+- **Workflow:** il nome del Workflow
+- **Execution:** i primi caratteri dell'id dell'esecuzione selezionata
+
+Rimuova un chip con la sua **×** per escluderlo. Poi ponga la sua domanda, ad esempio «perché questa esecuzione ha richiesto così tanto tempo?», «cosa è fallito qui?» oppure «può correggerlo?». I chip rimanenti vengono allegati a quel messaggio con gli id completi, così Chat legge direttamente input, output e traccia per nodo dell'esecuzione invece di cercare il Workflow. Per correggere il Workflow, Chat salva, esegue un test e verifica la modifica come descritto in [Creazione di Workflow](#creazione-di-workflow).
+
+Il messaggio inviato mostra i chip sotto la sua domanda. Appartengono solo a quel messaggio; le domande successive nella stessa conversazione mantengono il contesto dalla cronologia.
 
 ## Chiedere Informazioni sugli Avvisi
 

@@ -16,7 +16,7 @@ Węzeł **Heym** odczytuje dane samego Heym: workflows, do których istnieje dos
 | Parametr | Typ | Opis |
 |-----------|------|-------------|
 | `heymOperation` | Select | Który odczyt ma zostać wykonany |
-| `heymWorkflowId` | UUID | Docelowy workflow. Wymagany dla `getWorkflow` oraz `getExecutionHistory`. Obsługuje wyrażenia. |
+| `heymWorkflowId` | UUID | W `getExecutionHistory` proszę ustawić `all`, aby odczytać każdy dostępny Workflow. |
 | `heymLimit` | String | Maksymalna liczba zwracanych wierszy. **Pozostaw puste lub wpisz `0`, aby zwrócić wszystko** — to jest wartość domyślna. Obsługuje wyrażenia. |
 | `heymStatus` | String | Opcjonalny filtr statusu dla `getExecutionHistory`. Obsługuje wyrażenia. |
 | `heymSinceDays` | String | Opcjonalny zakres wsteczny w dniach dla `getExecutionHistory`. Obsługuje wyrażenia. |
@@ -93,9 +93,11 @@ Zwraca wpisy historii wykonań dla jednego workflow, od najnowszych.
 | `$nodeLabel.executions[0].recovered` | Czy wykonanie zostało odzyskane po awarii |
 | `$nodeLabel.executions[0].inputs` | Co otrzymało wykonanie — payload triggera lub dane wejściowe wywołującego |
 | `$nodeLabel.executions[0].outputs` | Dane wyjściowe workflow dla tego wykonania |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, do którego należy historia |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, do którego należy historia, lub `null` przy **{AW}** |
+ub `null` przy **{AW}** |
 | `$nodeLabel.total` | Łączna liczba pasujących wykonań **przed** zastosowaniem limitu |
-| `$nodeLabel.by_status` | Liczby kluczowane według statusu, na przykład `{ "success": 41, "error": 3 }` |
+| `$nod| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Przy **{AW}** Workflow, do którego należy każde uruchomienie |
+eLabel.by_status` | Liczby kluczowane według statusu, na przykład `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Początek okna czasowego lub `null` dla pełnej historii |
 
 Wpisy zawierają zarówno `inputs`, jak i `outputs` — co wykonanie otrzymało i co zwróciło — ale nigdy `node_results`: ślad poszczególnych węzłów to największa kolumna w tabeli i przyćmiłaby wszystko poniżej. Aby uzyskać pełny ślad, należy pobrać pojedyncze wykonanie przez API.

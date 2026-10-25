@@ -18,14 +18,14 @@ Widget je jedan grafikon na mreži. Podržani tipovi grafikona:
 - **Line**
 - **Area** (ispunjeni trend, podržava više serija)
 - **Pie**
-- **Table** (pomicanje; jedan stupac može se prikazati kao [oznake statusa](../nodes/chart-output-node.md#status-chips), a redci mogu otvoriti [stranicu s pojedinostima](#detail-pages))
+- **Table** (s mogućnošću pomicanja; kliknite na zaglavlje stupca za uzlazno sortiranje i ponovno kliknite za silazno. Jedan stupac može se prikazati kao [čipovi statusa](../nodes/chart-output-node.md#status-chips), jedan stupac može sadržavati [gumbe veze](../nodes/chart-output-node.md#link-buttons) koji otvaraju URL u novoj kartici, a redovi mogu otvoriti [stranicu s pojedinostima](#stranice-s-pojedinostima))
 - **Numeric** (jedna KPI vrijednost s opcionalnom jedinicom)
 - **Gauge** (jedna vrijednost u odnosu na min–max raspon, npr. postotak)
 - **Scatter** (X/Y točke za korelacijske grafikone)
 - **Proportion** (jedna traka podijeljena na dijelove s postotnom legendom, npr. raspodjela jezika)
 - **Bar gauge** (jedan horizontalni mjerač po redu s crvenom→zelenom gradijentom i vrijednošću, npr. slobodni prostor na disku)
 - **Text** (markdown poruka, npr. statusna napomena poput "Posljednje izvršavanje u 19:47"; podržava [interaktivne potvrdne okvire](../nodes/chart-output-node.md#interactive-task-lists) kada je markdown statičan, i [izričite numerirane popise](../nodes/chart-output-node.md#numbered-lists) za prilagođeno ili silazno numeriranje)
-- **HITL** (vaši neodgovoreni ljudski pregledi. Naslov prikazuje `1/n pending`. Ime workflow-a otvara tu izvedbu na platnu. **Odobri**, **Zatraži promjene** i **Odbij** rješavaju to. Ikona povijesti pored naslova widgeta otvara tu izvedbu u dijalogu povijesti na ovoj stranici. Widget ne koristi uzvodne redove, a svaka osoba vidi svoju vlastitu čekajuću listu)
+- **HITL** (vaši neodgovoreni ljudski pregledi. Naslov prikazuje `1/n pending`. Ime workflow-a otvara tu izvedbu na platnu. **Odobri**, **Zatraži promjene** i **Odbij** rješavaju to. Ikona povijesti pored naslova widgeta otvara tu izvedbu u dijalogu povijesti na ovoj stranici. Widget ne koristi uzvodne redove, a svaka osoba vidi svoju vlastitu čekajuću listu. Umjesto toga može prikazati provjere jednog Workflowa, za svakoga tko može otvoriti taj Workflow; pogledajte [HITL widgeti](#hitl-widgeti))
 
 Osim grafikona, widget **Run a workflow** pokreće jedan od vaših workflowa s nadzorne ploče: na ispuštenoj datoteci, sa svojim poljima za unos ili pomoću gumba Run; pogledajte [Widgeti za pokretanje](#run-widgets).
 
@@ -41,6 +41,20 @@ Svaki widget učitava svoje podatke asinkrono kada otvorite karticu, tako da str
 Za widget **Run a workflow** umjesto toga odaberite workflow koji on pokreće; izbornik navodi kako će widget pokrenuti svaki od njih. Widget se dodaje izravno u mrežu; nema novog workflowa za izgradnju.
 
 Dvaput kliknite na widget (ili koristite njegov gumb za uređivanje) kako biste ponovno otvorili njegov workflow u bilo kojem trenutku. Koristite **Kloniraj widget** u zaglavlju widgeta za dupliciranje i widgeta i njegovog kompletnog workflow-a. Kopija se postavlja ispod originala i označena je s **(Kopija)** kako biste je mogli neovisno uređivati.
+
+## HITL widgeti
+
+Novi HITL widget prikazuje svaku provjeru koja čeka u vašem vlastitom redu čekanja. Da biste prikazali samo provjere jednog Workflowa, otvorite **Postavke** widgeta:
+
+1. Pod **Workflow** odaberite Workflow. Popis sadrži Workflowe koje možete otvoriti – vaše ili podijeljene s vama ili vašim timom –, koji imaju korak koji čeka osobu: Agent s ljudskom provjerom ili Slack korak odobrenja, gumba ili obrasca. Ikona pored otvara taj Workflow u novoj kartici.
+2. Ako Workflow ima samo jedan takav korak, automatski se odabire. Ako ih ima više, **Select agent** ih navodi prema nazivu čvora, s **All agents** na prvom mjestu; Slack koraci označeni su s **(Slack)**.
+3. Spremite. Oznaka `1/n pending` u zaglavlju broji samo te provjere. Odaberite **Svi Workflows** da biste ponovno prikazali vlastiti red čekanja.
+
+Isti izbor postoji na platnu, u svojstvima čvora Chart Output. **Fino podesi s AI** može to napraviti („prikaži samo odobrenja računa“), kao i opis novog widgeta koji imenuje Workflow. Svaka promjena je uređivanje Workflowa, pa se pojavljuje u Edit History.
+
+- **Tko vidi provjere.** Widget filtriran po Workflowu prikazuje provjere tog Workflowa svima koji mogu otvoriti taj Workflow, i oni mogu odobriti, zatražiti promjene ili odbiti iz njega, kao što bi mogli pokrenuti Workflow. Nefiltrirani widget svakoj osobi prikazuje njezin vlastiti red čekanja.
+- **Tko vidi widget.** Tko ne može otvoriti odabrani Workflow uopće ne vidi widget, čak ni na nadzornoj ploči podijeljenoj s njim. Kada vlasnik nadzorne ploče izgubi pristup Workflowu ili se on izbriše, vlasnik vidi „You no longer have access to the workflow this widget shows“ i može odabrati drugi u **Postavkama**.
+- **Samo dostupni izbori.** Workflow koji ne možete otvoriti odbija se prilikom spremanja widgeta, bilo iz postavki, s platna ili putem AI-ja.
 
 ## Stranice s pojedinostima
 
@@ -75,6 +89,10 @@ Gumb **Wrap** u rezultatu prelama duge retke izlaza unutar okvira; isključite g
 ## Generiranje widgeta s AI
 
 Kliknite **AI**, opišite metrik koji želite (na primjer, "stopa uspješnosti workflow-a u posljednjih 30 dana kao bar grafikon"), i odaberite LLM vjerodajnicu i model. Heym generira potpuni workflow widgeta koji završava u Chart Output čvoru i dodaje ga u mrežu. Pogledajte [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) za primjere upita po tipu grafikona.
+
+Widget dobiva kratki naslov od jedne ili dvije riječi na jeziku vašeg zahtjeva, poput „Otvoreni slučajevi“. Naslov nikada ne sadrži identifikator tablice podataka; kada model imenuje widget rečenicom, Heym zadržava njezine prve riječi.
+
+API widgeta također može stvoriti **karticu brojača** bez AI-ja: widget `text` na tablici podataka (`data_table_id`) s `count_column` i `count_value` prikazuje koliko redaka ima tu vrijednost; naslov widgeta navodi vrijednost. Heym Work stranice stvorene iz tablice podataka započinje jednom karticom brojača po statusu.
 
 Koristite gumb **Fino podešavanje s AI** widgeta za reviziju postojećeg widgeta s novom instrukcijom. Svako AI fino podešavanje snima prethodni workflow u **Povijesti uređivanja** widgeta, tako da možete pregledati ili vratiti promjene iz uređivača workflow-a.
 

@@ -478,7 +478,14 @@
     "extract": "Udtræk",
     "mySubWorkflow": "Min Sub-Workflow",
     "moreNodes": "+{count} mere",
-    "runToNode": "Kør til {label}"
+    "runToNode": "Kør til {label}",
+    "aiButtonTitle": "Ændr eller ret denne node med AI-assistenten",
+    "editNodeWithAi": "Rediger {label} med AI",
+    "modifyingNode": "Ændrer node:",
+    "hasNodeOutput": "(Har node-output)",
+    "closeNodeFocus": "Luk nodefokus og rediger hele Workflow",
+    "nodeFocusRan": "Denne node blev kørt. AI'en ser dens seneste output og fejl og læser nodens dokumentation.",
+    "nodeFocusNoOutput": "Denne node har intet output i den aktuelle kørsel. Kør den først, hvis AI'en skal se dens output. AI'en læser nodens dokumentation i begge tilfælde."
   },
   "nodes": {
     "title": "Noder",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Rediger meddelelse i kø",
     "deleteQueuedMessage": "Slet meddelelse i kø",
     "startedByMcp": "Startet af en MCP-klient",
-    "newChatTitle": "Ny chat"
+    "newChatTitle": "Ny chat",
+    "subtitle": "Kør Workflows og stil spørgsmål",
+    "modelsLoadFailedDisabled": "Modellisten for disse legitimationsoplysninger kunne ikke indlæses. Chatten forbliver deaktiveret, indtil en model kan hentes."
   },
   "teams": {
     "title": "Teams",
@@ -1672,7 +1681,10 @@
       "error": "Fejl",
       "cached": "Cachet",
       "cancelled": "Annulleret"
-    }
+    },
+    "askAi": "Spørg AI",
+    "askAiTitle": "Spørg Chat-assistenten om denne kørsel",
+    "noNodeSpans": "Der blev ikke registreret nogen node-spans for denne kørsel."
   },
   "portal": {
     "loadingPortal": "Indlæser portal...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Detaljesideposter",
     "detailPageRecordsHelp": "De ?record=-værdier, dette kontrolpanel accepterer, når et rækkelink åbner det. Alt andet afvises, før en widget kører.",
     "unreachableDashboard": "Et kontrolpanel, der ikke kan åbnes",
-    "runWorkflow": "Kør et Workflow"
+    "runWorkflow": "Kør et Workflow",
+    "openWorkflowNewTab": "Åbn Workflow i en ny fane",
+    "hitlFilterHelp": "Vis gennemgange fra alle Workflows eller kun én. Viser de Workflows, der kan åbnes, egne eller delte, og som har et trin, der venter på en person.",
+    "hitlSourcesLoadFailed": "Workflows kunne ikke indlæses."
   },
   "drive": {
     "filesCount": "({count} filer)",

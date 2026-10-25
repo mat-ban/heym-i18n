@@ -478,7 +478,14 @@
     "extract": "Poimi",
     "mySubWorkflow": "Oma ala-Workflow",
     "moreNodes": "+{count} lisää",
-    "runToNode": "Suorita kohtaan {label}"
+    "runToNode": "Suorita kohtaan {label}",
+    "aiButtonTitle": "Muuta tai korjaa tämä solmu tekoälyavustajalla",
+    "editNodeWithAi": "Muokkaa kohdetta {label} tekoälyn avulla",
+    "modifyingNode": "Solmua muokataan:",
+    "hasNodeOutput": "(Solmulla on tuloste)",
+    "closeNodeFocus": "Sulje solmun fokus ja muokkaa koko Workflowta",
+    "nodeFocusRan": "Tämä solmu ajettiin. Tekoäly näkee sen viimeisimmän tulosteen ja virheen sekä lukee solmun dokumentaation.",
+    "nodeFocusNoOutput": "Tällä solmulla ei ole tulostetta nykyisessä ajossa. Aja se ensin, jos tekoälyn pitää nähdä sen tuloste. Tekoäly lukee solmun dokumentaation molemmissa tapauksissa."
   },
   "nodes": {
     "title": "Solmut",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Muokkaa jonossa olevaa viestiä",
     "deleteQueuedMessage": "Poista jonossa oleva viesti",
     "startedByMcp": "MCP-asiakasohjelman aloittama",
-    "newChatTitle": "Uusi keskustelu"
+    "newChatTitle": "Uusi keskustelu",
+    "subtitle": "Aja Workflowja ja esitä kysymyksiä",
+    "modelsLoadFailedDisabled": "Näiden tunnistetietojen mallilistaa ei voitu ladata. Chat pysyy pois käytöstä, kunnes malli voidaan hakea."
   },
   "teams": {
     "title": "Tiimit",
@@ -1672,7 +1681,10 @@
       "error": "Virhe",
       "cached": "Välimuistista",
       "cancelled": "Peruutettu"
-    }
+    },
+    "askAi": "Kysy tekoälyltä",
+    "askAiTitle": "Kysy Chat-avustajalta tästä ajosta",
+    "noNodeSpans": "Tälle ajolle ei tallennettu solmu-spaneja."
   },
   "portal": {
     "loadingPortal": "Ladataan portaalia...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Tietosivun tietueet",
     "detailPageRecordsHelp": "Arvot ?record=, jotka tämä koontinäyttö hyväksyy rivilinkin avatessa sen. Kaikki muu hylätään ennen widgetin suorittamista.",
     "unreachableDashboard": "Koontinäyttö, jota ei voi avata",
-    "runWorkflow": "Suorita Workflow"
+    "runWorkflow": "Suorita Workflow",
+    "openWorkflowNewTab": "Avaa Workflow uudessa välilehdessä",
+    "hitlFilterHelp": "Näytä tarkistukset kaikista Workflowista tai vain yhdestä. Luettelee Workflowt, jotka voit avata – omat tai kanssasi jaetut – ja joissa on henkilöä odottava vaihe.",
+    "hitlSourcesLoadFailed": "Workflowjasi ei voitu ladata."
   },
   "drive": {
     "filesCount": "({count} tiedostoa)",

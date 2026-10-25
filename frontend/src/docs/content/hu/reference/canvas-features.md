@@ -1,6 +1,6 @@
 # Vászon funkciók
 
-A workflow-szerkesztő számos funkciót kínál a csomópontok hibakereséséhez, teszteléséhez és rendszerezéséhez: **Futtatás csomópontig**, **Adatrögzítés**, **Végrehajtási naplók**, **Engedélyezés/Letiltás** és **Kinyerés al-workflow-ba**.
+A workflow-szerkesztő számos funkciót kínál a csomópontok hibakereséséhez, teszteléséhez és rendszerezéséhez: **Futtatás csomópontig**, **AI egy csomóponton**, **Adatrögzítés**, **Végrehajtási naplók**, **Engedélyezés/Letiltás** és **Kinyerés al-workflow-ba**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Szerkesztő demó megtekintése</a></p>
@@ -12,6 +12,12 @@ Vigye az egérmutatót bármely csomópont fölé egy ragadós jegyzet kivétel�
 Ha a kiválasztott útvonal bemeneti mezőkkel rendelkezik, a jobb oldali **Futtatás** panel megnyílik, és az első mezőre fókuszál. Adja meg az értékeket, majd kattintson a **Futtatás a(z) _csomópont címkéig_** gombra, vagy nyomja meg a **Ctrl+Enter** (macOS esetén Cmd+Enter) billentyűkombinációt. Az általános body mód a JSON body szerkesztőre fókuszál. A bemeneti mezők nélküli útvonalak azonnal futnak, a panel megnyitása nélkül. A rögzített Bemeneti csomópontok a rögzített kimenetüket használják újra, bemenet kérése nélkül.
 
 A panel a kiválasztott célpontot a további futtatásokhoz is megtartja. Válassza a **Teljes workflow futtatása** lehetőséget a célpont törléséhez. A Futtatás gombok letiltottak, amíg egy végrehajtás aktív. Egy cikluson belüli célpont leállítja a futtatást, amikor az adott csomópont először elérésre kerül; a ciklus utáni csomópont kiválasztása a teljes felsőbb ciklust lefuttatja.
+
+## AI egy csomóponton
+
+Vigye a kurzort bármely csomópont fölé egy öntapadós jegyzet kivételével, és kattintson a felette lévő **AI** gombra. Az [AI Assistant](./ai-assistant.md) megnyílik az adott csomóponton, és felajánlja a **Change this node as ...**, **Fix error in this node ...** és **Other** lehetőségeket. Agent módban az asszisztens csak ezt a csomópontot módosítja; a többi csomópont, kapcsolat és az elrendezés változatlan marad. Lásd: [AI Assistant › Egyetlen csomópont módosítása](./ai-assistant.md#changing-one-node).
+
+A gomb rejtve van az olyan workflow-kban, amelyeket csak megtekinteni jogosult.
 
 ## Adatrögzítés
 

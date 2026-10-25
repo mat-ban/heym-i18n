@@ -1,32 +1,50 @@
 import uuid
 from datetime import datetime, timezone
+from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
-from app.db.models import HITLRequest, User
+from app.db.models import DashboardWidget, HITLRequest, User, Workflow
 from app.db.session import get_db
 from app.models.schemas import (
+    HITLDashboardCountsResponse,
     HITLDecisionRequest,
     HITLDecisionResponse,
     HITLInboxItem,
     HITLInboxLinkResponse,
     HITLInboxResponse,
     HITLPublicResponse,
+    HITLReviewSource,
+    HITLReviewSourcesResponse,
+    HITLReviewSourceStep,
 )
+from app.services.dashboard_access import reachable_dashboard_ids
 from app.services.hitl_service import (
     build_default_public_base_url,
     build_hitl_resolved_output,
     build_review_url,
     claim_hitl_request_for_decision,
+    count_pending_by_step,
+    count_pending_in_workflows,
     ensure_hitl_request_is_actionable,
     ensure_hitl_request_is_viewable,
+    filter_reachable,
+    get_decidable_hitl_request,
     get_hitl_request_by_token,
     get_owned_hitl_request,
     list_pending_hitl_for_owner,
+    list_review_sources,
     refresh_hitl_request_after_lost_claim,
     resume_hitl_request_in_background,
+)
+from app.services.hitl_widget_filter import (
+    HITL_FILTER_ACCESS_ERROR,
+    HitlWidgetFilter,
+    hitl_widget_filter,
+    pending_for_widgets,
 )
 from app.services.slack_interactions import sync_message_after_heym_decision
 
@@ -76,16 +94,40 @@ async def _complete_hitl_decision(
     return HITLDecisionResponse(request_id=hitl_request.id, status=hitl_request.status)
 
 
+MAX_COUNTED_DASHBOARDS = 100
+
+
 @router.get("/inbox", response_model=HITLInboxResponse)
 async def list_hitl_inbox(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    workflow_id: Annotated[
+        uuid.UUID | None, Query(description="Only reviews from this workflow.")
+    ] = None,
+    node_id: Annotated[
+        str | None, Query(max_length=64, description="Only reviews from this step of it.")
+    ] = None,
 ) -> HITLInboxResponse:
-    """Pending human reviews for workflows the caller owns.
+    """Pending human reviews: the caller's own queue, or one workflow's.
 
-    The review token stays out of this payload. Open a review through the link route.
+    Without ``workflow_id`` the queue is the workflows the caller owns. With it, it is that
+    workflow's reviews, for anyone who can open the workflow. A workflow they cannot open is a
+    403, not an empty list, so a HITL widget pointed at it says so. The review token stays out
+    of this payload; the owner opens a review through the link route.
     """
-    total, rows = await list_pending_hitl_for_owner(db, current_user.id)
+    node_id = (node_id or "").strip() or None
+    if node_id is not None and workflow_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="node_id needs workflow_id",
+        )
+    if workflow_id is not None and not await filter_reachable(
+        db, current_user.id, HitlWidgetFilter(workflow_id=workflow_id, node_id=node_id)
+    ):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=HITL_FILTER_ACCESS_ERROR)
+    total, rows = await list_pending_hitl_for_owner(
+        db, current_user.id, workflow_id=workflow_id, node_id=node_id
+    )
     return HITLInboxResponse(
         pending_total=total,
         items=[
@@ -101,6 +143,79 @@ async def list_hitl_inbox(
             )
             for row in rows
         ],
+    )
+
+
+@router.get("/sources", response_model=HITLReviewSourcesResponse)
+async def list_hitl_review_sources(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> HITLReviewSourcesResponse:
+    """Workflows the caller can open with a step that waits for a person, for a HITL widget.
+
+    Agents with human review and Slack approvals, buttons and forms, in workflows the caller
+    owns or that are shared with them or their team.
+    """
+    sources = await list_review_sources(db, current_user.id)
+    return HITLReviewSourcesResponse(
+        sources=[
+            HITLReviewSource(
+                workflow_id=source.workflow_id,
+                workflow_name=source.workflow_name,
+                steps=[
+                    HITLReviewSourceStep(node_id=step.node_id, label=step.label, kind=step.kind)
+                    for step in source.steps
+                ],
+            )
+            for source in sources
+        ]
+    )
+
+
+@router.get("/inbox/dashboard-counts", response_model=HITLDashboardCountsResponse)
+async def count_hitl_dashboard_reviews(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    dashboard_id: Annotated[list[uuid.UUID] | None, Query()] = None,
+) -> HITLDashboardCountsResponse:
+    """The caller's pending reviews each dashboard's HITL widgets show, for page badges.
+
+    Dashboards the caller cannot open, or without a HITL widget, are left out. An unfiltered
+    widget counts the caller's own queue; a filtered one counts its workflow's reviews when
+    the caller can open that workflow, and nothing otherwise.
+    """
+    wanted = set(dashboard_id or [])
+    if len(wanted) > MAX_COUNTED_DASHBOARDS:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"At most {MAX_COUNTED_DASHBOARDS} dashboards per request",
+        )
+    reachable = await reachable_dashboard_ids(db, wanted, current_user.id)
+    if not reachable:
+        return HITLDashboardCountsResponse(counts={})
+    rows = await db.execute(
+        select(DashboardWidget.dashboard_id, Workflow.nodes)
+        .join(Workflow, Workflow.id == DashboardWidget.workflow_id)
+        .where(DashboardWidget.dashboard_id.in_(reachable), DashboardWidget.chart_type == "hitl")
+    )
+    filters_by_dashboard: dict[uuid.UUID, list[HitlWidgetFilter | None]] = {}
+    for row in rows.all():
+        filters_by_dashboard.setdefault(row.dashboard_id, []).append(hitl_widget_filter(row.nodes))
+    if not filters_by_dashboard:
+        return HITLDashboardCountsResponse(counts={})
+    chosen_ids = {
+        value.workflow_id
+        for filters in filters_by_dashboard.values()
+        for value in filters
+        if value is not None
+    }
+    own = await count_pending_by_step(db, current_user.id)
+    chosen = await count_pending_in_workflows(db, current_user.id, chosen_ids)
+    return HITLDashboardCountsResponse(
+        counts={
+            str(dashboard): pending_for_widgets(own, chosen, filters)
+            for dashboard, filters in filters_by_dashboard.items()
+        }
     )
 
 
@@ -129,8 +244,11 @@ async def submit_owned_hitl_decision(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> HITLDecisionResponse:
-    """Accept, edit, or refuse a pending review owned by the caller."""
-    hitl_request = await get_owned_hitl_request(db, request_id, current_user.id)
+    """Accept, edit, or refuse a pending review of a workflow the caller can open.
+
+    Deciding resumes the run, which anyone who can open the workflow may run.
+    """
+    hitl_request = await get_decidable_hitl_request(db, request_id, current_user.id)
     return await _complete_hitl_decision(hitl_request, payload, background_tasks, db)
 
 

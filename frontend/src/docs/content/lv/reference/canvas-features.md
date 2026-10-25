@@ -1,6 +1,6 @@
 # Kanvas funkcijas
 
-Workflow redaktors nodrošina vairākas funkcijas atkļūdošanai, testēšanai un mezglu organizēšanai: **Palaist līdz mezglam**, **Datu piespraušana**, **Izpildes žurnāli**, **Iespējot/Atspējot** un **Izvilkt apakš-workflow**.
+Workflow redaktors nodrošina vairākas funkcijas atkļūdošanai, testēšanai un mezglu organizēšanai: **Palaist līdz mezglam**, **AI mezglā**, **Datu piespraušana**, **Izpildes žurnāli**, **Iespējot/Atspējot** un **Izvilkt apakš-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Skatīties redaktora demonstrāciju</a></p>
@@ -12,6 +12,12 @@ Novietojiet kursoru uz jebkura mezgla, izņemot piezīmju lapiņu, un noklikšķ
 Ja atlasītajā ceļā ir ievades lauki, labajā pusē atveras **Run** panelis un fokuss tiek novirzīts uz pirmo lauku. Ievadiet vērtības, pēc tam noklikšķiniet uz **Run to _mezgla nosaukums_** vai nospiediet **Ctrl+Enter** (macOS — Cmd+Enter). Vispārīgā body režīmā fokuss tiek novirzīts uz JSON body redaktoru. Ceļi bez ievades laukiem tiek palaisti nekavējoties, neatverot paneli. Piespraustie Input mezgli atkārtoti izmanto savu piesprausto izvadi, neprasot ievadi.
 
 Panelis saglabā atlasīto mērķi nākamajām palaišanas reizēm. Izvēlieties **Run full workflow**, lai notīrītu mērķi. Palaišanas pogas ir atspējotas, kamēr notiek izpilde. Mērķis cilpas iekšienē pārtrauc palaišanu, tiklīdz šis mezgls tiek sasniegts pirmo reizi; atlasot mezglu aiz cilpas, tiek palaista visa augšupējā cilpa.
+
+## AI mezglā
+
+Virziet kursoru virs jebkura mezgla, izņemot piezīmju lapiņu, un noklikšķiniet uz **AI** virs tā. [AI Assistant](./ai-assistant.md) atveras uz šī mezgla un piedāvā **Change this node as ...**, **Fix error in this node ...** un **Other**. Agent režīmā asistents maina tikai šo mezglu; citi mezgli, savienojumi un izkārtojums paliek nemainīgi. Skatiet [AI Assistant › Viena mezgla modificēšana](./ai-assistant.md#changing-one-node).
+
+Poga ir paslēpta workflowos, kuriem jums ir tikai skatīšanas tiesības.
 
 ## Datu piespraušana
 

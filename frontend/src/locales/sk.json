@@ -478,7 +478,14 @@
     "extract": "Extrahovať",
     "mySubWorkflow": "Môj Sub-Workflow",
     "moreNodes": "+{count} ďalších",
-    "runToNode": "Spustiť po {label}"
+    "runToNode": "Spustiť po {label}",
+    "aiButtonTitle": "Zmeniť alebo opraviť tento uzol pomocou asistenta AI",
+    "editNodeWithAi": "Upraviť {label} pomocou AI",
+    "modifyingNode": "Úprava uzla:",
+    "hasNodeOutput": "(Má výstup uzla)",
+    "closeNodeFocus": "Zavrieť zameranie na uzol a upraviť celý Workflow",
+    "nodeFocusRan": "Tento uzol bol spustený. AI vidí jeho posledný výstup a chybu a číta dokumentáciu uzla.",
+    "nodeFocusNoOutput": "Tento uzol nemá v aktuálnom spustení žiadny výstup. Spustite ho najprv, ak má AI vidieť jeho výstup. AI číta dokumentáciu uzla v oboch prípadoch."
   },
   "nodes": {
     "title": "Uzly",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Upraviť správu vo fronte",
     "deleteQueuedMessage": "Vymazať správu vo fronte",
     "startedByMcp": "Spustené MCP klientom",
-    "newChatTitle": "Nový chat"
+    "newChatTitle": "Nový chat",
+    "subtitle": "Spúšťajte Workflows a kladte otázky",
+    "modelsLoadFailedDisabled": "Zoznam modelov pre tieto prihlasovacie údaje sa nepodarilo načítať. Chat zostane vypnutý, kým sa nepodarí získať model."
   },
   "teams": {
     "title": "Tímy",
@@ -1672,7 +1681,10 @@
       "error": "Chyba",
       "cached": "Z vyrovnávacej pamäte",
       "cancelled": "Zrušené"
-    }
+    },
+    "askAi": "Opýtať sa AI",
+    "askAiTitle": "Opýtať sa asistenta Chat na toto spustenie",
+    "noNodeSpans": "Pre toto spustenie sa nezaznamenali žiadne spany uzlov."
   },
   "portal": {
     "loadingPortal": "Načítava sa portál...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Záznamy stránky s podrobnosťami",
     "detailPageRecordsHelp": "Hodnoty ?record=, ktoré tento riadiaci panel akceptuje pri otvorení z odkazu na riadku. Čokoľvek iné je pred spustením widgetu odmietnuté.",
     "unreachableDashboard": "Riadiaci panel, ktorý nemožno otvoriť",
-    "runWorkflow": "Spustiť Workflow"
+    "runWorkflow": "Spustiť Workflow",
+    "openWorkflowNewTab": "Otvoriť Workflow na novej karte",
+    "hitlFilterHelp": "Zobraziť kontroly zo všetkých Workflows alebo len z jedného. Zobrazí Workflows, ktoré môžete otvoriť – vaše vlastné alebo zdieľané s vami –, s krokom čakajúcim na osobu.",
+    "hitlSourcesLoadFailed": "Vaše Workflows sa nepodarilo načítať."
   },
   "drive": {
     "filesCount": "({count} súborov)",

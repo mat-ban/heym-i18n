@@ -70,6 +70,34 @@ class CleanPdfTextTests(unittest.TestCase):
     def test_spaced_out_word_is_rejoined(self) -> None:
         self.assertEqual(FileProcessor()._clean_pdf_text("J o i n t"), "Joint")
 
+    def test_words_containing_and_of_the_to_are_not_split(self) -> None:
+        text = "The standard history of photography together with another method."
+        self.assertEqual(FileProcessor()._clean_pdf_text(text), text)
+
+    def test_numbers_keep_their_separators(self) -> None:
+        text = "Revenue 2020 2021 2022 totals 10 20"
+        self.assertEqual(FileProcessor()._clean_pdf_text(text), text)
+
+    def test_repeated_letter_pair_inside_words_is_not_deleted(self) -> None:
+        text = "This is the same button on the page."
+        self.assertEqual(FileProcessor()._clean_pdf_text(text), text)
+
+    def test_garbled_heading_on_a_normal_page_is_repaired(self) -> None:
+        text = "m mo ov ve em me en nt t\nThe standard history of photography."
+        self.assertEqual(
+            FileProcessor()._clean_pdf_text(text),
+            "movement The standard history of photography.",
+        )
+
+    def test_single_digit_table_cells_stay_separate(self) -> None:
+        text = "Qty 1 2 3\nTotal 4 5 6"
+        self.assertEqual(FileProcessor()._clean_pdf_text(text), "Qty 1 2 3 Total 4 5 6")
+
+    def test_hyphen_at_a_line_break_is_kept(self) -> None:
+        self.assertEqual(
+            FileProcessor()._clean_pdf_text("A self-\nservice portal"), "A self-service portal"
+        )
+
 
 class ChunkTextTests(unittest.TestCase):
     def test_empty_text_returns_no_chunks(self) -> None:
@@ -245,6 +273,12 @@ class ProcessFileTests(unittest.TestCase):
 
 
 class ProcessPdfTests(unittest.TestCase):
+    def test_ordinary_english_text_survives_a_real_pdf(self) -> None:
+        text = "The standard history of photography together with another method. 2020 2021"
+        chunks = FileProcessor().process_pdf(_build_pdf(text), "history.pdf")
+
+        self.assertEqual([chunk.text for chunk in chunks], [text])
+
     def test_extracts_text_from_a_real_pdf(self) -> None:
         pdf_bytes = _build_pdf("Hello World")
         chunks = FileProcessor().process_pdf(pdf_bytes, "test.pdf")

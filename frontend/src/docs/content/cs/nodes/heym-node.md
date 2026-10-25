@@ -16,7 +16,7 @@ Uzel **Heym** čte data samotného HeyMu: workflows, ke kterým máte přístup,
 | Parametr | Typ | Popis |
 |-----------|------|-------------|
 | `heymOperation` | Select | Které čtení se má provést |
-| `heymWorkflowId` | UUID | Cílový workflow. Vyžadováno pro `getWorkflow` a `getExecutionHistory`. Podporuje výrazy. |
+| `heymWorkflowId` | UUID | U `getExecutionHistory` jej nastavte na `all`, chcete-li načíst každý dostupný Workflow. |
 | `heymLimit` | String | Maximální počet vrácených řádků. **Ponechte prázdné nebo zadejte `0` pro vrácení všeho** — to je výchozí hodnota. Podporuje výrazy. |
 | `heymStatus` | String | Volitelný filtr stavu pro `getExecutionHistory`. Podporuje výrazy. |
 | `heymSinceDays` | String | Volitelné zpětné období ve dnech pro `getExecutionHistory`. Podporuje výrazy. |
@@ -93,9 +93,11 @@ Vrací záznamy historie spuštění pro jeden workflow, od nejnovějšího.
 | `$nodeLabel.executions[0].recovered` | Zda bylo spuštění obnoveno po pádu |
 | `$nodeLabel.executions[0].inputs` | Co spuštění přijalo – trigger payload nebo vstup volajícího |
 | `$nodeLabel.executions[0].outputs` | Výstup workflow pro dané spuštění |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, ke kterému historie patří |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, ke kterému historie patří, nebo `null` u **{AW}** |
+ebo `null` u **{AW}** |
 | `$nodeLabel.total` | Celkový počet odpovídajících spuštění **před** aplikací limitu |
-| `$nodeLabel.by_status` | Počty podle statusu, například `{ "success": 41, "error": 3 }` |
+| `$| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | U **{AW}** Workflow, ke kterému každé spuštění patří |
+nodeLabel.by_status` | Počty podle statusu, například `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Začátek okna, nebo `null` pro celou historii |
 
 Záznamy obsahují jak `inputs`, tak `outputs` – co spuštění přijalo a co odpovědělo – ale nikdy `node_results`: trace po jednotlivých uzlech je největší sloupec v tabulce a zastínil by vše navazující. Potřebujete-li úplný trace, načtěte jedno spuštění přes API.

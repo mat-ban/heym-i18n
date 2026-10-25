@@ -33,13 +33,17 @@ Når der kun er eksempel-/prøvedata (ingen reel kilde), kan disse rækker produ
 | `valueField` | string | Rækkekey, der bruges som numerisk værdi (pie/bar/line/numeric/gauge) |
 | `series` | array | Valgfri multi-serie-definition `[{ "name": "Sent", "field": "sent" }]` for bar/line (tilsidesætter `valueField`) |
 | `columns` | array | Valgfri kolonneliste til `table` (standard er keys fra den første række) |
-| `statusColumn` | string | Valgfri `table`-kolonne gengivet som farvede [statuschips](#status-chips). Skal være en af de viste kolonner. |
+| `statusColumn` | string | Valgfri `table`-kolonne gengivet som farvede [statuschips](#status-chips). Skal være en af de viste kolonner. |, og med `linkColumn` indeholder den linkkolonnen og knapteksten.
 | `statusTones` | object | Valgfri tilknytning fra en statusværdi til en tone (`success`, `attention`, `failure`, `waiting`, `neutral`) for værdier, som standarderne ikke dækker |
+| `linkColumn` | string | Valgfri `table`-kolonne, hvis celler indeholder en URL, vist som en [linkknap](#link-buttons), der åbner den i en ny fane. Den skal være en af de viste kolonner. |
+| `linkLabel` | string | Valgfri tekst til linkknappen. Hvis feltet er tomt, viser knappen kun et linkikon. |
 | `xField` / `yField` | string | Rækkekeys til X- og Y-numeriske akser (scatter) |
 | `min` / `max` | number | Numerisk interval til `gauge` (standard `0` / `100`) |
 | `unit` | string | Valgfri enhed vist ved siden af en `numeric`- eller `gauge`-værdi |
 | `text` | string | Markdown-besked til `text`-charttypen. Lad være tom og indstil `valueField` for at gengive en dynamisk besked hentet fra opstrøms data. |
 | `title` | string | Valgfri charttitel |
+| `hitlWorkflowId` | string | Kun `hitl`. Viser kun gennemgangene for dette Workflow. Hvis feltet er tomt, viser widgetten alle gennemgange. |
+| `hitlNodeId` | string | Kun `hitl`. Begrænser `hitlWorkflowId` til ét trin: en Agent med menneskelig gennemgang eller et Slack-trin med godkendelse, knapper eller formular. |
 
 ## Charttyper
 
@@ -51,7 +55,7 @@ Når der kun er eksempel-/prøvedata (ingen reel kilde), kan disse rækker produ
 - **proportion** — en enkelt vandret bar opdelt i andele med en procentdel-legende (f.eks. et sprogfordeling). Bruger `labelField` + `valueField`.
 - **barGauge** — en vandret gauge pr. række med en rød→grøn gradient og en værdi (f.eks. ledig diskplads). Bruger `labelField` + `valueField`, valgfri `unit` og `max` (standard er den største rækkeværdi).
 - **text** — en markdown-besked (f.eks. en statusnote som "Sidste kørsel kl. 19:47"). Indsæt markdown i `text` til en statisk besked, eller lad `text` være tom og indstil `valueField` for at gengive en streng produceret opstrøms. Understøtter overskrifter, fed/kursiv, [lister](../nodes/chart-output-node.md#interactive-task-lists), links og inline-kode.
-- **hitl** — et karussel af afventende menneskelige gennemgange. Overskriften viser `1/n pending`; venstre pil er deaktiveret på det første kort og højre pil på det sidste. Workflow-navnet åbner den pågældende kørsel på canvas. **Approve**, **Request changes**, og **Reject** afslutter den, og historikikonet ved siden af widgettitlen åbner den pågældende kørsel i historikdialogen på samme side. Denne charttype ignorerer opstrøms rækker, så widget-workflowet kun består af Chart Output-noden. Hver logget ind person ser gennemgange på workflows, de ejer.
+- **hitl** — et karussel af afventende menneskelige gennemgange. Overskriften viser `1/n pending`; venstre pil er deaktiveret på det første kort og højre pil på det sidste. Workflow-navnet åbner den pågældende kørsel på canvas. **Approve**, **Request changes**, og **Reject** afslutter den, og historikikonet ved siden af widgettitlen åbner den pågældende kørsel i historikdialogen på samme side. Denne charttype ignorerer opstrøms rækker, så widget-workflowet kun består af Chart Output-noden. Hver logget ind person ser gennemgange på workflows, de ejer. Vælg et **Workflow** (og **Select agent**, når det har flere gennemgangstrin) i nodens egenskaber eller widgettens indstillinger for i stedet at vise det Workflows gennemgange for alle, der kan åbne det; se [HITL-widgets](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktive opgavelister
 
@@ -307,3 +311,17 @@ Når der genereres en widget med **AI**, kan prompts som disse bruges til hver t
 
 - [Dashboard-fane](../tabs/dashboard-tab.md) — byg og arranger widgets
 - [Output-node](output-node.md) — terminalnode for almindelige workflows
+
+
+## Linkknapper
+
+En `table` kan gøre én kolonne til knapper, der åbner et link. Angiv **Link column** i nodens egenskaber (eller `linkColumn` i DSL'en) til en kolonne, hvis celler indeholder en URL, og eventuelt **Link button text** (`linkLabel`). Hver celle bliver til en knap, der åbner sin URL i en ny fane. Uden knaptekst viser knappen kun et linkikon:
+
+| Celleværdi | Åbner |
+| ---------- | ----- |
+| `https://jira.example.com/browse/T-1` | Et andet websted, i en ny fane |
+| `/dashboards` | En side i Heym, i en ny fane |
+
+Kun `http://`- og `https://`-adresser samt stier, der starter med ét enkelt `/`, bliver til knapper. Enhver anden værdi, f.eks. `javascript:` eller `//host`, forbliver almindelig tekst, og en tom celle viser intet.
+
+Knappen fungerer ved siden af et [rælink](../tabs/dashboard-tab.md#detail-pages): et klik på knappen åbner dens link i en ny fane, og et klik et hvilket som helst andet sted på rækken åbner stadig detaljesiden.

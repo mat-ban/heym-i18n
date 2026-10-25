@@ -18,14 +18,14 @@ Một widget là một biểu đồ đơn lẻ trên lưới. Các loại biểu
 - **Line**
 - **Area** (xu hướng được tô đầy, hỗ trợ nhiều chuỗi)
 - **Pie**
-- **Table** (có thể cuộn; một cột có thể hiển thị dưới dạng [nhãn trạng thái](../nodes/chart-output-node.md#status-chips), và các hàng có thể mở một [trang chi tiết](#detail-pages))
+- **Table** (có thể cuộn; nhấp vào tiêu đề cột để sắp xếp tăng dần và nhấp lại để sắp xếp giảm dần. Một cột có thể hiển thị dưới dạng [chip trạng thái](../nodes/chart-output-node.md#status-chips), một cột có thể chứa [nút liên kết](../nodes/chart-output-node.md#link-buttons) mở URL trong tab mới và các hàng có thể mở một [trang chi tiết](#trang-chi-tiet))
 - **Numeric** (một giá trị KPI đơn lẻ với đơn vị tùy chọn)
 - **Gauge** (một giá trị đơn lẻ so với khoảng min–max, ví dụ: phần trăm)
 - **Scatter** (các điểm X/Y cho biểu đồ tương quan)
 - **Proportion** (một thanh được chia thành các phần với chú giải phần trăm, ví dụ: phân bổ ngôn ngữ)
 - **Bar gauge** (một gauge ngang cho mỗi hàng với gradient đỏ→xanh và một giá trị, ví dụ: dung lượng đĩa trống)
 - **Text** (một thông điệp markdown, ví dụ: ghi chú trạng thái như "Lần thực thi cuối lúc 19:47"; hỗ trợ [hộp kiểm tương tác](../nodes/chart-output-node.md#interactive-task-lists) khi markdown là tĩnh, và [danh sách đánh số rõ ràng](../nodes/chart-output-node.md#numbered-lists) cho đánh số tùy chỉnh hoặc giảm dần)
-- **HITL** (các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes**, và **Reject** giải quyết nó. Biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên trang này. Widget không sử dụng các hàng upstream, và mỗi người thấy hàng đợi của riêng họ)
+- **HITL** (các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes**, và **Reject** giải quyết nó. Biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên trang này. Widget không sử dụng các hàng upstream, và mỗi người thấy hàng đợi của riêng họ. Nó có thể hiển thị các đánh giá của một Workflow duy nhất cho bất kỳ ai có thể mở Workflow đó; xem [Widget HITL](#widget-hitl))
 
 Bên cạnh biểu đồ, widget **Run a workflow** chạy một trong các workflow của bạn ngay từ dashboard: trên tệp được thả vào, với các trường đầu vào của nó hoặc bằng nút Run; xem [Widget chạy workflow](#run-widgets).
 
@@ -41,6 +41,20 @@ Mỗi widget tải dữ liệu của nó một cách bất đồng bộ khi bạ
 Đối với widget **Run a workflow**, hãy chọn workflow mà nó sẽ chạy; bộ chọn sẽ cho biết cách widget chạy từng workflow. Widget được thêm trực tiếp vào lưới mà không cần xây dựng workflow mới.
 
 Nhấp đúp vào một widget (hoặc sử dụng nút chỉnh sửa của nó) để mở lại workflow của nó bất cứ lúc nào. Sử dụng **Clone widget** trong tiêu đề widget để nhân bản cả widget và workflow hoàn chỉnh của nó. Bản sao được đặt bên dưới bản gốc và được gắn nhãn **(Copy)** để bạn có thể chỉnh sửa nó một cách độc lập.
+
+## Widget HITL
+
+Một widget HITL mới sẽ hiển thị mọi đánh giá đang chờ trong hàng đợi của chính bạn. Để chỉ hiển thị đánh giá của một Workflow, hãy mở **Cài đặt** của widget:
+
+1. Trong mục **Workflow**, hãy chọn Workflow. Danh sách chứa các Workflow bạn có thể mở – của bạn hoặc được chia sẻ với bạn hay nhóm của bạn – có một bước đang chờ một người: một Agent có sự xem xét của con người hoặc một bước phê duyệt, nút bấm hoặc biểu mẫu của Slack. Biểu tượng bên cạnh sẽ mở Workflow đó trong tab mới.
+2. Nếu Workflow chỉ có đúng một bước như vậy, bước đó sẽ được chọn tự động. Nếu có nhiều bước, **Select agent** sẽ liệt kê chúng theo tên nút, với **All agents** ở đầu; các bước Slack được đánh dấu bằng **(Slack)**.
+3. Lưu lại. Chỉ số `1/n pending` ở tiêu đề chỉ đếm các đánh giá này. Chọn **Tất cả workflow** để hiển thị lại hàng đợi của chính bạn.
+
+Lựa chọn tương tự cũng có trên canvas, trong thuộc tính của nút Chart Output. **Tinh chỉnh với AI** có thể thực hiện lựa chọn này (“chỉ hiển thị các phê duyệt hóa đơn”), cũng như phần mô tả widget mới có nêu tên Workflow. Mỗi thay đổi là một lần chỉnh sửa Workflow, vì vậy nó xuất hiện trong Edit History.
+
+- **Ai nhìn thấy các đánh giá.** Một widget được lọc theo Workflow sẽ hiển thị các đánh giá của Workflow đó cho tất cả những ai có thể mở Workflow, và họ có thể phê duyệt, yêu cầu thay đổi hoặc từ chối từ widget, giống như họ có thể chạy Workflow. Một widget không được lọc sẽ hiển thị cho mỗi người hàng đợi riêng của họ.
+- **Ai nhìn thấy widget.** Bất kỳ ai không thể mở Workflow đã chọn sẽ không nhìn thấy widget, ngay cả trên dashboard được chia sẻ với họ. Khi chủ sở hữu dashboard mất quyền truy cập vào Workflow hoặc Workflow bị xóa, chủ sở hữu sẽ thấy “You no longer have access to the workflow this widget shows” và có thể chọn một Workflow khác trong **Cài đặt**.
+- **Chỉ các lựa chọn có thể truy cập.** Một Workflow mà bạn không thể mở sẽ bị từ chối khi lưu widget, cho dù từ cài đặt, canvas hay qua AI.
 
 ## Trang chi tiết
 
@@ -75,6 +89,10 @@ Nút **Wrap** ở phần kết quả giúp ngắt dòng các dòng đầu ra dà
 ## Tạo một widget bằng AI
 
 Nhấp vào **AI**, mô tả chỉ số bạn muốn (ví dụ: "tỷ lệ thành công của workflow trong 30 ngày qua dưới dạng biểu đồ bar"), và chọn một credential LLM và model. Heym tạo ra một workflow widget hoàn chỉnh kết thúc bằng một node Chart Output và thêm nó vào lưới. Xem [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) để biết các prompt ví dụ cho từng loại biểu đồ.
+
+Widget nhận được một tiêu đề ngắn gồm một hoặc hai từ bằng ngôn ngữ theo yêu cầu của bạn, chẳng hạn như “Các trường hợp mở”. Tiêu đề không bao giờ mang id của bảng dữ liệu; khi mô hình đặt tên cho widget bằng một câu, Heym sẽ giữ lại những từ đầu tiên của câu đó.
+
+API widget cũng có thể tạo **thẻ đếm** mà không cần AI: widget `text` trên bảng dữ liệu (`data_table_id`) với `count_column` và `count_value` cho biết có bao nhiêu hàng có giá trị đó; tiêu đề của widget nêu giá trị. Heym Work mở đầu các trang được tạo từ bảng dữ liệu bằng một thẻ đếm cho mỗi trạng thái.
 
 Sử dụng nút **Fine-tune with AI** của một widget để chỉnh sửa một widget hiện có với một hướng dẫn mới. Mỗi lần tinh chỉnh bằng AI sẽ chụp nhanh workflow trước đó vào **Edit History** của widget, để bạn có thể xem lại hoặc khôi phục các thay đổi từ trình chỉnh sửa workflow.
 

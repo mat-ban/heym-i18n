@@ -16,7 +16,7 @@
 | Parametrs | Tips | Apraksts |
 |-----------|------|-------------|
 | `heymOperation` | Select | Kuru lasīšanas darbību veikt |
-| `heymWorkflowId` | UUID | Mērķa workflow. Nepieciešams `getWorkflow` un `getExecutionHistory`. Atbalsta izteiksmes. |
+| `heymWorkflowId` | UUID | Iestatiet to uz `all` pie `getExecutionHistory`, lai nolasītu katru pieejamo Workflow. |
 | `heymLimit` | String | Maksimālais atgriežamo rindu skaits. **Atstājiet tukšu vai ievadiet `0`, lai atgrieztu visu** — tā ir noklusējuma vērtība. Atbalsta izteiksmes. |
 | `heymStatus` | String | Neobligāts statusa filtrs `getExecutionHistory`. Atbalsta izteiksmes. |
 | `heymSinceDays` | String | Neobligāts atskatīšanās periods dienās `getExecutionHistory`. Atbalsta izteiksmes. |
@@ -93,9 +93,11 @@ Atgriež vienam workflow piederošos izpildes vēstures ierakstus, jaunākie vis
 | `$nodeLabel.executions[0].recovered` | Vai izpilde tika atjaunota pēc avārijas |
 | `$nodeLabel.executions[0].inputs` | Ko izpilde saņēma — trigger payload vai izsaucēja ievade |
 | `$nodeLabel.executions[0].outputs` | Workflow izvade šai izpildei |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, kuram vēsture pieder |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, kuram vēsture pieder, vai `null` ar **{AW}** |
+ai `null` ar **{AW}** |
 | `$nodeLabel.total` | Kopējais atbilstošo izpildes gadījumu skaits **pirms** limita |
-| `$nodeLabel.by_status` | Skaiti pēc statusa, piemēram, `{ "success": 41, "error": 3 }` |
+|| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Ar **{AW}** Workflow, kuram pieder katra izpilde |
+ `$nodeLabel.by_status` | Skaiti pēc statusa, piemēram, `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Loga sākums vai `null` visai vēsturei |
 
 Ieraksti satur gan `inputs`, gan `outputs` — ko izpilde saņēma un ko tā atbildēja —, bet nekad `node_results`: katra mezgla trace ir lielākā kolonna tabulā un aizēnotu visu pārējo. Kad nepieciešams pilns trace, iegūstiet vienu izpildi, izmantojot API.

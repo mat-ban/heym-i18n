@@ -18,14 +18,14 @@ En widget er et enkelt diagram på gitteret. Understøttede diagramtyper:
 - **Linje**
 - **Areal** (udfyldt trend, understøtter flere serier)
 - **Cirkel**
-- **Tabel** (scrollbar; én kolonne kan vises som [status-chips](../nodes/chart-output-node.md#status-chips), og rækker kan åbne en [detaljeside](#detail-pages))
+- **Tabel** (rullende; klik på en kolonneoverskrift for stigende sortering og klik igen for faldende. En kolonne kan gengives som [statuschips](../nodes/chart-output-node.md#status-chips), en kolonne kan indeholde [linkknapper](../nodes/chart-output-node.md#link-buttons), der åbner en URL i en ny fane, og rækker kan åbne en [detaljeside](#detaljesider))
 - **Numerisk** (en enkelt KPI-værdi med valgfri enhed)
 - **Måler** (en enkelt værdi i forhold til et min-maks interval, f.eks. en procentdel)
 - **Punkt** (X/Y-punkter til korrelationsplot)
 - **Proportion** (en søjle opdelt i andele med procentvis fordeling, f.eks. en sprogfordeling)
 - **Søjlemåler** (en vandret måler pr. række med rød→grøn gradient og en værdi, f.eks. ledig diskplads)
 - **Tekst** (en markdown-besked, f.eks. en statusnote som "Sidste kørsel kl. 19:47"; understøtter [interaktive afkrydsningsfelter](../nodes/chart-output-node.md#interactive-task-lists) ved statisk markdown, og [eksplicitte nummererede lister](../nodes/chart-output-node.md#numbered-lists) til brugerdefineret eller faldende nummerering)
-- **HITL** (ventende menneskelige gennemgange. Overskriften viser `1/n ventende`. Workflow-navnet åbner kørslen på canvas. **Godkend**, **Anmod om ændringer** og **Afvis** afslutter processen. Historik-ikonet ved siden af widget-titlen åbner kørslen i historikdialogen på denne side. Widgeten bruger ikke opstrømsrækker, og hver person ser sin egen kø)
+- **HITL** (ventende menneskelige gennemgange. Overskriften viser `1/n ventende`. Workflow-navnet åbner kørslen på canvas. **Godkend**, **Anmod om ændringer** og **Afvis** afslutter processen. Historik-ikonet ved siden af widget-titlen åbner kørslen i historikdialogen på denne side. Widgeten bruger ikke opstrømsrækker, og hver person ser sin egen kø. Den kan i stedet vise gennemgangene for et enkelt Workflow for alle, der kan åbne dette Workflow; se [HITL-widgets](#hitl-widgets))
 
 Udover diagrammer kører en **Run a workflow**-widget et af dine workflows direkte fra dashboardet: på en sluppet fil, med dens inputfelter eller med en Run-knap; se [Kør-widgets](#run-widgets).
 
@@ -41,6 +41,20 @@ Hver widget indlæser sine data asynkront når fanen åbnes, hvilket sikrer en r
 For en **Run a workflow**-widget skal du i stedet vælge det workflow, den skal køre; vælgeren viser, hvordan widgeten vil køre hvert enkelt. Widgeten føjes direkte til gitteret; der skal ikke oprettes et nyt workflow.
 
 Dobbeltklik på en widget (eller brug dens redigeringsknap) for at genåbne dens workflow når som helst. Brug **Klon widget** i widget-hovedet til at duplikere både widget og dens komplette workflow. Kopien placeres under originalen og mærkes med **(Kopi)** så den kan redigeres uafhængigt.
+
+## HITL-widgets
+
+En ny HITL-widget viser enhver gennemgang, der venter i egen kø. For kun at vise gennemgange for ét Workflow åbnes widgettens **Indstillinger**:
+
+1. Vælg det ønskede Workflow under **Workflow**. Listen indeholder de Workflows, der kan åbnes – egne eller delte med brugeren eller teamet –, som har et trin, der venter på en person: en Agent med menneskelig gennemgang eller et Slack-godkendelses-, knap- eller formulartrin. Ikonet ved siden af åbner dette Workflow i en ny fane.
+2. Hvis et Workflow har præcis ét sådant trin, vælges det automatisk. Hvis der er flere, viser **Select agent** dem efter nodenavn med **All agents** først; Slack-trin er markeret med **(Slack)**.
+3. Gem. Overskriftens `1/n pending` tæller kun disse gennemgange. Vælg **Alle Workflows** for at vise egen kø igen.
+
+Samme valg findes på lærredet i egenskaberne for Chart Output-noden. **Finjuster med AI** kan foretage det (”vis kun fakturagodkendelser”), og det samme gælder beskrivelsen af en ny widget, der navngiver dette Workflow. Enhver ændring er en Workflow-redigering og vises derfor i Edit History.
+
+- **Hvem der ser gennemgangene.** En widget filtreret på et Workflow viser dets gennemgange for alle, der kan åbne dette Workflow, og disse personer kan godkende, anmode om ændringer eller afvise fra den, ligesom de kan køre dette Workflow. En ufiltreret widget viser hver persons egen kø.
+- **Hvem der ser widgetten.** Enhver, der ikke kan åbne det valgte Workflow, ser slet ikke widgetten, heller ikke på et delt dashboard. Når dashboardets ejer mister adgangen eller det slettes, ser ejeren ”You no longer have access to the workflow this widget shows” og kan vælge et andet i **Indstillinger**.
+- **Kun tilgængelige valg.** Et Workflow, der ikke kan åbnes, afvises, når widgetten gemmes, uanset om det sker via indstillinger, lærredet eller AI.
 
 ## Detaljesider
 
@@ -75,6 +89,10 @@ Resultatets **Wrap**-knap ombryder lange outputlinjer inde i boksen; slå den fr
 ## Generering af widget med AI
 
 Klik på **AI**, beskriv den ønskede metrik (f.eks. "workflow-succesrate over de sidste 30 dage som søjlediagram"), og vælg en LLM-legitimationsoplysning og model. Heym genererer et komplet widget-workflow der slutter med en Chart Output-node og tilføjer det til gitteret. Se [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) for eksempel-prompts pr. diagramtype.
+
+Widgetten tildeles en kort titel på et eller to ord på forespørgslens sprog, f.eks. ”Åbne sager”. En titel indeholder aldrig id'et for en datatabel; hvis modellen navngiver widgetten med en hel sætning, bevarer Heym de første ord.
+
+Widget-API'et kan også oprette et **tællerkort** uden AI: en `text`-widget på en datatabel (`data_table_id`) med `count_column` og `count_value` viser, hvor mange rækker der har denne værdi; widgettens titel angiver værdien. Heym Work indleder sider oprettet ud fra en datatabel med et tællerkort pr. status.
 
 Brug en widgets **Finjuster med AI**-knap til at revidere en eksisterende widget med en ny instruktion. Hver AI-finjustering gemmer det foregående workflow i widgetens **Redigeringshistorik**, så der kan gennemses eller rulles tilbage fra workflow-editoren.
 

@@ -18,14 +18,14 @@ Valdiklis yra viena diagrama tinkle. Palaikomi diagramų tipai:
 - **Linijinė**
 - **Plotinė** (užpildyta tendencija, palaiko kelias serijas)
 - **Pyrago**
-- **Lentelė** (sukama; vienas stulpelis gali būti atvaizduojamas kaip [būsenos žymos](../nodes/chart-output-node.md#status-chips), o eilutės gali atidaryti [išsamios informacijos puslapį](#detail-pages))
+- **Lentelė** (slinktina; spustelėkite stulpelio antraštę, kad rūšiuotumėte didėjančia tvarka, ir spustelėkite dar kartą, kad rūšiuotumėte mažėjančia tvarka. Stulpelis gali būti atvaizduojamas kaip [būsenos lustai](../nodes/chart-output-node.md#status-chips), stulpelyje gali būti [nuorodų mygtukai](../nodes/chart-output-node.md#link-buttons), kurie atveria URL naujoje kortelėje, o eilutės gali atverti [išsamios informacijos puslapį](#issamios-informacijos-puslapiai))
 - **Skaitinė** (vienas KPI vertė su neprivalomu vienetu)
 - **Matuoklis** (viena vertė pagal min–max intervalą, pvz., procentas)
 - **Taškų** (X/Y taškai koreliacijos diagramoms)
 - **Proporcija** (vienas stulpelis padalintas į dalis su procentų legenda, pvz., kalbos pasiskirstymas)
 - **Stulpelinio matuoklio** (vienas horizontalus matuoklis kiekviename eilutėje su raudona→žalia gradientu ir verte, pvz., laisvos disko vietos)
 - **Tekstas** (markdown žinutė, pvz., statuso pastaba kaip "Paskutinis vykdymas 19:47"; palaiko [interaktyvius žymeklius](../nodes/chart-output-node.md#interactive-task-lists), kai markdown yra statinis, ir [aiškius numeruotus sąrašus](../nodes/chart-output-node.md#numbered-lists) pagal užsakymą arba mažėjimo tvarka)
-- **HITL** (jūsų laukiančios žmogaus apžvalgos. Antraštėje rodomas `1/n laukia`. Workflow pavadinimas atidaro tą vykdymą drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** išsprendžia tai. Istorijos piktograma šalia valdiklio pavadinimo atidaro tą vykdymą istorijos dialoge šioje pusėje. Valdiklis nenaudoja aukštesnių eilučių, ir kiekvienas asmuo mato savo eilę)
+- **HITL** (jūsų laukiančios žmogaus apžvalgos. Antraštėje rodomas `1/n laukia`. Workflow pavadinimas atidaro tą vykdymą drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** išsprendžia tai. Istorijos piktograma šalia valdiklio pavadinimo atidaro tą vykdymą istorijos dialoge šioje pusėje. Valdiklis nenaudoja aukštesnių eilučių, ir kiekvienas asmuo mato savo eilę. Vietoj to jis gali rodyti vieno Workflow peržiūras visiems, kurie gali atverti tą Workflow; žr. [HITL valdikliai](#hitl-valdikliai))
 
 Be diagramų, **Run a workflow** valdiklis paleidžia vieną iš jūsų workflow tiesiai iš valdymo pulto: su numestu failu, su įvesties laukais arba mygtuku Run; žr. [Vykdymo valdikliai](#run-widgets).
 
@@ -41,6 +41,20 @@ Kiekvienas valdiklis asinkroniškai įkelia savo duomenis, kai atidarote skirtuk
 **Run a workflow** valdikliui vietoj to pasirinkite workflow, kurį jis turi vykdyti; parinkiklis nurodo, kaip valdiklis vykdys kiekvieną iš jų. Valdiklis pridedamas tiesiai į tinklelį; naujo workflow kurti nereikia.
 
 Dvigubai spustelėkite valdiklį (arba naudokite jo redagavimo mygtuką), kad bet kada atidarytumėte jo workflow. Naudokite **Kopijuoti valdiklį** valdiklio antraštėje, kad padvigubintumėte tiek valdiklį, tiek jo visą workflow. Kopija bus įdėta po originalu ir pažymėta **(Kopija)**, kad galėtumėte ją redaguoti nepriklausomai.
+
+## HITL valdikliai
+
+Naujas HITL valdiklis rodo kiekvieną peržiūrą, laukiančią jūsų asmeninėje eilėje. Norėdami rodyti tik vieno Workflow peržiūras, atverkite valdiklio **Nustatymai**:
+
+1. Lauke **Workflow** pasirinkite Workflow. Sąraše pateikiami Workflow, kuriuos galite atverti – jūsų pačių arba bendrinami su jumis ar jūsų komanda –, turintys žingsnį, laukiantį asmens: Agent su žmogaus peržiūra arba Slack patvirtinimo, mygtukų ar formos žingsnį. Šalia esanti piktograma atveria šį Workflow naujoje kortelėje.
+2. Jei Workflow turi lygiai vieną tokį žingsnį, jis pasirenkamas automatiškai. Jei jų yra keli, **Select agent** išvardija juos pagal mazgo pavadinimą, pirmiausia nurodant **All agents**; Slack žingsniai pažymėti kaip **(Slack)**.
+3. Išsaugokite. Antraštės `1/n pending` skaičiuoja tik šias peržiūras. Pasirinkite **Visi Workflow**, kad vėl matytumėte savo asmeninę eilę.
+
+Tas pats pasirinkimas yra drobėje Chart Output mazgo ypatybėse. Jį gali atlikti **Patobulinti su AI** („rodyti tik sąskaitų faktūrų patvirtinimus“), taip pat naujo valdiklio aprašymas, kuriame nurodomas Workflow. Kiekvienas pakeitimas yra Workflow redagavimas, todėl jis rodomas Edit History.
+
+- **Kas mato peržiūras.** Pagal Workflow filtruotas valdiklis rodo to Workflow peržiūras visiems, kurie gali atverti Workflow, ir jie gali patvirtinti, prašyti pakeitimų arba atmesti tiesiai iš jo, lygiai taip pat, kaip galėtų vykdyti Workflow. Nefiltruotas valdiklis kiekvienam rodo jo asmeninę eilę.
+- **Kas mato valdiklį.** Kiekvienas, kuris negali atverti pasirinkto Workflow, valdiklio išvis nemato, net ir su juo bendrinamame prietaisų skydelyje. Kai prietaisų skydelio savininkas praranda prieigą prie Workflow arba jis ištrinamas, savininkas mato pranešimą „You no longer have access to the workflow this widget shows“ ir gali pasirinkti kitą **Nustatymuose**.
+- **Tik pasiekiamos parinktys.** Workflow, kurio negalite atverti, atmetamas išsaugant valdiklį, nesvarbu, ar tai daroma iš nustatymų, drobės, ar per AI.
 
 ## Išsamios informacijos puslapiai
 
@@ -75,6 +89,10 @@ Rezultato mygtukas **Wrap** laužo ilgas išvesties eilutes dėžutės viduje; i
 ## Valdiklio generavimas naudojant AI
 
 Paspauskite **AI**, apibūdinkite norimą metriką (pavyzdžiui, "workflow sėkmės rodiklis per pastarąsias 30 dienų kaip stulpelinė diagrama"), ir pasirinkite LLM kredencialą ir modelį. Heym generuoja pilną valdiklio workflow, baigiančią Chart Output mazgu, ir prideda jį prie tinklo. Žr. [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) pavyzdinius užklausimus pagal diagramų tipus.
+
+Valdiklis gauna trumpą vieno ar dviejų žodžių pavadinimą jūsų užklausos kalba, pavyzdžiui, „Atviros bylos“. Pavadinime niekada nebūna duomenų lentelės ID; kai modelis pavadina valdiklį sakiniu, Heym išsaugo pirmuosius jo žodžius.
+
+Valdiklių API taip pat gali sukurti **skaitiklio kortelę** be AI: `text` valdiklis duomenų lentelėje (`data_table_id`) su `count_column` ir `count_value` rodo, kiek eilučių turi šią reikšmę; valdiklio pavadinimas nurodo reikšmę. Heym Work iš duomenų lentelės sukurtus puslapius pradeda viena skaitiklio kortele kiekvienai būsenai.
 
 Naudokite valdiklio **Tobulinti su AI** mygtuką, kad peržiūrėtumėte esamą valdiklį su nauja instrukcija. Kiekvienas AI tobulinimas užfiksuoja ankstesnį workflow valdiklio **Redagavimo istorijoje**, todėl galite peržiūrėti arba grąžinti pakeitimus iš workflow redaktoriaus.
 

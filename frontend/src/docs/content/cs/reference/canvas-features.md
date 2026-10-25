@@ -1,6 +1,6 @@
 # Funkce plátna
 
-Editor workflow nabízí několik funkcí pro ladění, testování a organizaci uzlů: **Spustit do uzlu**, **Připnutí dat**, **Protokoly spuštění**, **Povolit/Zakázat** a **Extrahovat do pod-workflow**.
+Editor workflow nabízí několik funkcí pro ladění, testování a organizaci uzlů: **Spustit do uzlu**, **AI na uzlu**, **Připnutí dat**, **Protokoly spuštění**, **Povolit/Zakázat** a **Extrahovat do pod-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Watch Editor demo</a></p>
@@ -12,6 +12,12 @@ Najeďte myší na libovolný uzel kromě sticky note a klikněte na **Run** pod
 Pokud má vybraná cesta vstupní pole, otevře se pravý panel **Run** a zaměří první pole. Zadejte hodnoty a klikněte na **Run to _označení uzlu_** nebo stiskněte **Ctrl+Enter** (Cmd+Enter na macOS). Režim obecného těla zaměří editor JSON těla. Cesty bez vstupních polí se spustí okamžitě bez otevření panelu. Připnuté vstupní uzly znovu použijí svůj připnutý výstup, aniž by vyžadovaly vstup.
 
 Panel si zachová vybraný cíl pro následná spuštění. Zvolte **Run full workflow** pro vymazání cíle. Tlačítka spuštění jsou během aktivního spuštění zakázána. Cíl uvnitř smyčky zastaví běh při prvním dosažení tohoto uzlu; výběr uzlu za smyčkou spustí kompletní nadřazenou smyčku.
+
+## AI na uzlu
+
+Najeďte na libovolný uzel kromě lístku s poznámkou a klikněte na **AI** nad ním. [AI Assistant](./ai-assistant.md) se otevře na daném uzlu a nabídne **Change this node as ...**, **Fix error in this node ...** a **Other**. V režimu Agent asistent mění pouze tento uzel; ostatní uzly, propojení a rozložení zůstávají beze změny. Viz [AI Assistant › Změna jednoho uzlu](./ai-assistant.md#changing-one-node).
+
+Tlačítko je skryté u workflow, které můžete pouze prohlížet.
 
 ## Připnutí dat
 

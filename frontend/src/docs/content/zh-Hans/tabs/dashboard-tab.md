@@ -18,14 +18,14 @@ widget 是网格上的单个图表。支持的图表类型：
 - **Line**
 - **Area**（填充趋势图，支持多系列）
 - **Pie**
-- **Table**（可滚动；其中一列可渲染为[状态标签](../nodes/chart-output-node.md#status-chips)，且点击行可打开[详情页](#detail-pages)）
+- **Table**（可滚动；点击列标题可升序排序，再次点击可降序排序。一列可以渲染为 [状态标签](../nodes/chart-output-node.md#status-chips)，一列可以包含在网页新标签页中打开 URL 的 [链接按钮](../nodes/chart-output-node.md#link-buttons)，行可以打开 [详情页](#xiang-qing-ye)）
 - **Numeric**（单个 KPI 值，可带单位）
 - **Gauge**（针对最小–最大范围的单个值，例如百分比）
 - **Scatter**（用于相关性图的 X/Y 点）
 - **Proportion**（一个条形拆分为多个份额，带百分比图例，例如语言分布）
 - **Bar gauge**（每行一个水平仪表，带红→绿渐变和数值，例如可用磁盘空间）
 - **Text**（markdown 消息，例如“Last execution at 19:47”这样的状态说明；当 markdown 为静态时支持[交互式复选框](../nodes/chart-output-node.md#interactive-task-lists)，并支持[显式编号列表](../nodes/chart-output-node.md#numbered-lists)以实现自定义或降序编号）
-- **HITL**（您待处理的人工审核。标题显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核。widget 标题旁的历史图标会在本页的历史对话框中打开该次运行。该 widget 不使用上游行，每个人看到自己的队列）
+- **HITL**（您待处理的人工审核。标题显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核。widget 标题旁的历史图标会在本页的历史对话框中打开该次运行。该 widget 不使用上游行，每个人看到自己的队列。 也可以转为显示单个 Workflow 的审查，面向所有能够打开该 Workflow 的人员；请参阅 [HITL 部件](#hitl-bu-jian)）
 
 除图表外，**Run a workflow** widget 还可以直接从 dashboard 运行您的某个 workflow：通过拖放文件、填写输入字段或点击 Run 按钮；参见[运行类 widget](#run-widgets)。
 
@@ -41,6 +41,20 @@ widget 是网格上的单个图表。支持的图表类型：
 对于 **Run a workflow** widget，改为选择它要运行的 workflow；选择器会说明 widget 将如何运行每个 workflow。该 widget 会直接添加到网格中，无需构建新的 workflow。
 
 双击 widget（或使用其编辑按钮）可随时重新打开其 workflow。使用 widget 标题中的 **Clone widget** 可复制 widget 及其完整 workflow。副本放置在原始 widget 下方，并标注 **(Copy)**，以便您独立编辑。
+
+## HITL 部件
+
+新的 HITL 部件会显示您自己队列中等待的每项审查。若要仅显示某个 Workflow 的审查，请打开该部件的 **设置**：
+
+1. 在 **Workflow** 下选择对应的 Workflow。列表中包含您可以打开的 Workflow（您拥有的，或与您或您的团队共享的），且该 Workflow 具有等待人员处理的步骤：带有工单审核的 Agent，或 Slack 审批、按钮或表单步骤。旁边的图标将在新标签页中打开该 Workflow。
+2. 如果该 Workflow 恰好只有一个此类步骤，系统会自动选中该步骤。如果包含多个，**Select agent** 会按节点名称列出它们，并将 **All agents** 置于首位；Slack 步骤带有 **(Slack)** 标记。
+3. 保存。标题中的 `1/n pending` 仅统计这些审查。选择 **所有 Workflow** 可重新显示您自己的队列。
+
+画布上 Chart Output 节点的属性中也提供相同的选项。**使用 AI 微调** 也可以完成设置（「仅显示发票审批」），在描述新部件时指明 Workflow 同样可以生效。每次更改都属于 Workflow 编辑，因此会记录在 Edit History 中。
+
+- **谁可以看到审查。** 按 Workflow 筛选的部件会向所有能够打开该 Workflow 的人员显示其审查，他们可以在部件中执行审批、请求更改或拒绝操作，就像他们可以运行该 Workflow 一样。未筛选的部件则向每位用户显示其自己的队列。
+- **谁可以看到部件。** 无法打开所选 Workflow 的人员根本看不到该部件，即使在与其共享的仪表板上也同样不可见。当仪表板的所有者失去对该 Workflow 的访问权限或该 Workflow 被删除时，所有者会看到「You no longer have access to the workflow this widget shows」，并可以在 **设置** 中另选一个。
+- **仅可选择具备权限的项目。** 保存部件时，无法打开的 Workflow 将被拒绝，无论该操作来自设置、画布还是 AI。
 
 ## 详情页
 
@@ -75,6 +89,10 @@ widget 是网格上的单个图表。支持的图表类型：
 ## 使用 AI 生成 widget
 
 点击 **AI**，描述您想要的指标（例如“过去 30 天的 workflow 成功率，以条形图展示”），并选择 LLM credential 和模型。Heym 会生成一个以 Chart Output 节点结尾的完整 widget workflow，并将其添加到网格中。有关每种图表类型的示例 prompt，请参阅 [Chart Output](../nodes/chart-output-node.md#example-ai-prompts)。
+
+部件会以您请求的语言获得一个包含一两个词的简短标题，例如「未结案件」。标题绝不包含数据表的 ID；如果模型用完整句子为部件命名，Heym 会保留其前几个词。
+
+部件 API 也可以在不使用 AI 的情况下创建 **计数卡片**：数据表 (`data_table_id`) 上带有 `count_column` 和 `count_value` 的 `text` 部件可以显示具有该值的行数；部件标题指明该值。Heym Work 会在基于数据表创建的页面顶部为每个状态放置一张计数卡片。
 
 使用 widget 的 **Fine-tune with AI** 按钮，通过新指令修改现有 widget。每次 AI 微调都会将之前的 workflow 快照保存到 widget 的 **Edit History** 中，因此您可以从 workflow 编辑器查看或回滚更改。
 

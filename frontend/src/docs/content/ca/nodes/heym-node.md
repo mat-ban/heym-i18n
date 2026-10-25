@@ -16,12 +16,12 @@ El node **Heym** llegeix les dades del propi Heym: els workflows als quals podeu
 | Paràmetre | Tipus | Descripció |
 |-----------|------|-------------|
 | `heymOperation` | Select | Quina lectura cal dur a terme |
-| `heymWorkflowId` | UUID | Workflow objectiu. Obligatori per a `getWorkflow` i `getExecutionHistory`. Admet expressions. |
+| `heymWorkflowId` | UUID | Definiu-lo a `all` a `getExecutionHistory` per llegir tots els workflows accessibles. |
 | `heymLimit` | String | Nombre màxim de files a retornar. **Deixeu-lo buit o introduïu `0` per retornar-ho tot** — aquest és el valor per defecte. Admet expressions. |
 | `heymStatus` | String | Filtre d'estat opcional per a `getExecutionHistory`. Admet expressions. |
 | `heymSinceDays` | String | Retrospectiva opcional en dies per a `getExecutionHistory`. Admet expressions. |
 
-El selector de workflows és un desplegable cercable que llista tots els workflows als quals podeu accedir.
+El selector de workflows és un desplegable cercable que llista tots els workflows als quals podeu accedir. A {GEH}, el primer element és **{AW}**. A {GEH}, el primer element és **{AW}**.
 
 ## Abast d'accés
 
@@ -93,9 +93,11 @@ Retorna les entrades de l'historial d'execucions d'un workflow, de la més recen
 | `$nodeLabel.executions[0].recovered` | Si l'execució es va recuperar després d'una caiguda |
 | `$nodeLabel.executions[0].inputs` | Què va rebre l'execució: el payload del trigger o l'entrada del cridador |
 | `$nodeLabel.executions[0].outputs` | La sortida del workflow per a aquella execució |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | El workflow al qual pertany l'historial |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | El workflow al qual pertany l'historial, o `null` amb **{AW}** |
+ `null` amb **{AW}** |
 | `$nodeLabel.total` | Total d'execucions coincidents **abans** del límit |
-| `$nodeLabel.by_status` | Recomptes indexats per estat, per exemple `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_stat| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Amb **{AW}**, el workflow al qual pertany cada execució |
+us` | Recomptes indexats per estat, per exemple `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Inici de la finestra, o `null` per a l'historial complet |
 
 Les entrades inclouen tant `inputs` com `outputs` —què va rebre l'execució i què va respondre—, però mai `node_results`: la traça per node és la columna més gran de la taula i faria ombra a tota la resta. Obteniu una única execució mitjançant l'API quan necessiteu la traça completa.

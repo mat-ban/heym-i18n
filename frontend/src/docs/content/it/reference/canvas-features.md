@@ -1,6 +1,6 @@
 # Funzionalità del Canvas
 
-L'editor dei workflow fornisce diverse funzionalità per il debug, il test e l'organizzazione dei nodi: **Esegui fino al Nodo**, **Data Pin**, **Log di Esecuzione**, **Abilita/Disabilita** ed **Estrai in Sotto-Workflow**.
+L'editor dei workflow fornisce diverse funzionalità per il debug, il test e l'organizzazione dei nodi: **Esegui fino al Nodo**, **AI su un nodo**, **Data Pin**, **Log di Esecuzione**, **Abilita/Disabilita** ed **Estrai in Sotto-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Guarda la demo dell'Editor</a></p>
@@ -12,6 +12,12 @@ Posizionare il cursore su un nodo qualsiasi, eccetto una nota adesiva, e fare cl
 Se il percorso selezionato presenta campi di input, si apre il pannello **Esegui** a destra e viene messo a fuoco il primo campo. Inserire i valori, quindi fare clic su **Esegui fino a _etichetta nodo_** o premere **Ctrl+Invio** (Cmd+Invio su macOS). La modalità corpo generico mette a fuoco l'editor del corpo JSON. I percorsi privi di campi di input vengono eseguiti immediatamente senza aprire il pannello. I nodi Input bloccati riutilizzano il loro output bloccato senza richiedere input.
 
 Il pannello mantiene la destinazione selezionata per le esecuzioni successive. Scegliere **Esegui workflow completo** per cancellare la destinazione. I pulsanti di esecuzione sono disabilitati mentre un'esecuzione è attiva. Una destinazione all'interno di un ciclo interrompe l'esecuzione quando quel nodo viene raggiunto per la prima volta; selezionando un nodo dopo il ciclo viene eseguito il ciclo completo a monte.
+
+## AI su un nodo
+
+Passa il mouse su qualsiasi nodo tranne un promemoria e fai clic su **AI** sopra di esso. L'[AI Assistant](./ai-assistant.md) si apre su quel nodo e offre **Change this node as ...**, **Fix error in this node ...** e **Other**. In modalità Agent l'assistente modifica solo quel nodo; altri nodi, connessioni e layout rimangono invariati. Vedi [AI Assistant › Modifica di un singolo nodo](./ai-assistant.md#changing-one-node).
+
+Il pulsante è nascosto nei workflow che puoi solo visualizzare.
 
 ## Data Pin
 

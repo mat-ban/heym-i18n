@@ -1885,7 +1885,7 @@ class GitHubPaginationServiceTests(unittest.TestCase):
         self.assertEqual(service.get_repository("octo", "repo"), {"full_name": "octo/repo"})
 
 
-class GitHubPaginationExecutorTests(unittest.TestCase):
+class _GitHubExecutorHarness:
     def _run(self, github_data: dict, client: MagicMock, text: str = "hello") -> object:
         from app.services.workflow_executor import WorkflowExecutor
 
@@ -1922,6 +1922,8 @@ class GitHubPaginationExecutorTests(unittest.TestCase):
         )
         return node["output"]
 
+
+class GitHubPaginationExecutorTests(_GitHubExecutorHarness, unittest.TestCase):
     def test_list_issues_output_reports_has_more_and_next_cursor(self) -> None:
         client = MagicMock()
         client.request.return_value = _make_paged_response([{"number": 1}], _NEXT_WITH_AFTER)
@@ -2005,3 +2007,187 @@ class GitHubPaginationExecutorTests(unittest.TestCase):
         output = self._github_output(result)
         for key in ("success", "operation", "issues", "count"):
             self.assertIn(key, output)
+
+
+def _page_link(page: int | None) -> str | None:
+    if page is None:
+        return None
+    return f'<https://api.github.com/repositories/1/releases?page={page}>; rel="next"'
+
+
+class GitHubReturnAllTests(_GitHubExecutorHarness, unittest.TestCase):
+    def _paged_client(self, pages: list[list[dict]]) -> MagicMock:
+        client = MagicMock()
+        responses = []
+        for index, items in enumerate(pages):
+            has_next = index + 1 < len(pages)
+            responses.append(
+                _make_paged_response(items, _page_link(index + 2 if has_next else None))
+            )
+        client.request.side_effect = responses
+        return client
+
+    def test_return_all_follows_next_until_the_last_page(self) -> None:
+        client = self._paged_client([[{"id": 1}, {"id": 2}], [{"id": 3}], [{"id": 4}]])
+
+        result = self._run({"githubOperation": "listReleases", "githubReturnAll": True}, client)
+
+        self.assertEqual(result.status, "success")  # type: ignore[attr-defined]
+        output = self._github_output(result)
+        self.assertEqual([item["id"] for item in output["releases"]], [1, 2, 3, 4])
+        self.assertEqual(output["count"], 4)
+        self.assertFalse(output["has_more"])
+        self.assertIsNone(output["next_cursor"])
+        pages = [call.kwargs["params"].get("page") for call in client.request.call_args_list]
+        self.assertEqual(pages, [None, "2", "3"])
+
+    def test_return_all_accepts_the_string_form_of_the_toggle(self) -> None:
+        client = self._paged_client([[{"id": 1}], [{"id": 2}]])
+
+        result = self._run({"githubOperation": "listReleases", "githubReturnAll": "true"}, client)
+
+        self.assertEqual(self._github_output(result)["count"], 2)
+
+    def test_return_all_starts_from_the_cursor_when_one_is_given(self) -> None:
+        client = self._paged_client([[{"id": 5}], [{"id": 6}]])
+
+        result = self._run(
+            {
+                "githubOperation": "listReleases",
+                "githubReturnAll": True,
+                "githubCursor": "page=5",
+            },
+            client,
+        )
+
+        self.assertEqual(self._github_output(result)["count"], 2)
+        first = client.request.call_args_list[0].kwargs["params"]
+        self.assertEqual(first["page"], "5")
+
+    def test_return_all_off_requests_a_single_page(self) -> None:
+        client = self._paged_client([[{"id": 1}], [{"id": 2}]])
+
+        result = self._run({"githubOperation": "listReleases", "githubReturnAll": False}, client)
+
+        output = self._github_output(result)
+        self.assertEqual(output["count"], 1)
+        self.assertTrue(output["has_more"])
+        self.assertEqual(output["next_cursor"], "page=2")
+        self.assertEqual(client.request.call_count, 1)
+
+    def test_return_all_requests_100_per_page_whatever_per_page_says(self) -> None:
+        client = self._paged_client([[{"id": 1}], [{"id": 2}]])
+
+        self._run(
+            {"githubOperation": "listReleases", "githubReturnAll": True, "githubPerPage": "30"},
+            client,
+        )
+
+        per_page = [call.kwargs["params"]["per_page"] for call in client.request.call_args_list]
+        self.assertEqual(per_page, [100, 100])
+
+    def test_per_page_is_kept_when_return_all_is_off(self) -> None:
+        client = self._paged_client([[{"id": 1}], [{"id": 2}]])
+
+        self._run({"githubOperation": "listReleases", "githubPerPage": "30"}, client)
+
+        self.assertEqual(client.request.call_args.kwargs["params"]["per_page"], 30)
+
+    def test_return_all_stops_at_the_cap_and_reports_the_rest(self) -> None:
+        client = self._paged_client([[{"id": n}] * 2 for n in range(10)])
+
+        with patch(
+            "app.services.node_execution.nodes.github_node.RETURN_ALL_MAX_ITEMS",
+            5,
+        ):
+            result = self._run({"githubOperation": "listReleases", "githubReturnAll": True}, client)
+
+        self.assertEqual(result.status, "success")  # type: ignore[attr-defined]
+        output = self._github_output(result)
+        self.assertEqual(output["count"], 6)
+        self.assertTrue(output["has_more"])
+        self.assertEqual(output["next_cursor"], "page=4")
+        self.assertEqual(client.request.call_count, 3)
+
+    def test_return_all_stops_at_the_page_limit_even_when_pages_are_empty(self) -> None:
+        client = MagicMock()
+        client.request.side_effect = lambda *a, **k: _make_paged_response([], _page_link(2))
+
+        with patch(
+            "app.services.node_execution.nodes.github_node.RETURN_ALL_MAX_PAGES",
+            4,
+        ):
+            result = self._run({"githubOperation": "listReleases", "githubReturnAll": True}, client)
+
+        output = self._github_output(result)
+        self.assertEqual(client.request.call_count, 4)
+        self.assertTrue(output["has_more"])
+
+    def test_return_all_keeps_following_when_a_page_is_only_pull_requests(self) -> None:
+        client = MagicMock()
+        only_prs = [{"number": n, "pull_request": {"url": "u"}} for n in range(3)]
+        client.request.side_effect = [
+            _make_paged_response(only_prs, _page_link(2)),
+            _make_paged_response([{"number": 10}]),
+        ]
+
+        result = self._run({"githubOperation": "listIssues", "githubReturnAll": True}, client)
+
+        output = self._github_output(result)
+        self.assertEqual([item["number"] for item in output["issues"]], [10])
+        self.assertFalse(output["has_more"])
+
+    def test_return_all_checks_for_cancellation_between_pages(self) -> None:
+        import threading
+
+        from app.services.workflow_executor import WorkflowCancelledError, WorkflowExecutor
+
+        cancel_event = threading.Event()
+        client = MagicMock()
+
+        def respond(*args: object, **kwargs: object) -> httpx.Response:
+            cancel_event.set()
+            return _make_paged_response([{"id": 1}], _page_link(2))
+
+        client.request.side_effect = respond
+        nodes, edges, inputs = _make_github_workflow(
+            {
+                "credentialId": "cred-1",
+                "githubOwner": "octo",
+                "githubRepo": "repo",
+                "githubOperation": "listReleases",
+                "githubReturnAll": True,
+            }
+        )
+        with patch("app.db.session.SessionLocal") as mock_session:
+            mock_db = MagicMock()
+            mock_db.__enter__ = MagicMock(return_value=mock_db)
+            mock_db.__exit__ = MagicMock(return_value=False)
+            mock_db.query.return_value.filter.return_value.first.return_value = MagicMock(
+                encrypted_config="{}", type=CredentialType.github
+            )
+            mock_session.return_value = mock_db
+            with patch("app.services.encryption.decrypt_config", return_value=_make_config()):
+                with patch(
+                    "app.services.github_service.build_guarded_http_client", return_value=client
+                ):
+                    with patch("app.services.github_service.guard_http_url"):
+                        executor = WorkflowExecutor(
+                            nodes=nodes,
+                            edges=edges,
+                            actor_user_id=uuid.uuid4(),
+                            cancel_event=cancel_event,
+                        )
+                        with self.assertRaises(WorkflowCancelledError):
+                            executor.execute(workflow_id=uuid.uuid4(), initial_inputs=inputs)
+
+        self.assertEqual(client.request.call_count, 1)
+
+    def test_return_all_is_ignored_for_non_list_operations(self) -> None:
+        client = MagicMock()
+        client.request.return_value = _make_paged_response({"full_name": "octo/repo"})
+
+        result = self._run({"githubOperation": "getRepository", "githubReturnAll": True}, client)
+
+        self.assertEqual(result.status, "success")  # type: ignore[attr-defined]
+        self.assertEqual(client.request.call_count, 1)

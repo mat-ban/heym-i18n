@@ -212,6 +212,11 @@ Pokud soubor již existuje, Heym před aktualizací automaticky načte aktuáln�
 `List Organization Repositories`, `List User Repositories` a `Get User Repositories` podporují
 **Na stránku** (1–100). Heym požaduje jednu stránku výsledků; ve stejné operaci neexistuje pole `page` pro načtení dalších stránek.
 
+
+### Return all pages
+
+Zapněte **Return all pages**, aby jedno spuštění prošlo všechny stránky, počínaje **Cursor**, pokud je nastaven. Každý požadavek žádá o 100 položek bez ohledu na hodnotu **Per Page**. Uzel se zastaví po zhruba 1 000 položkách (nebo 100 požadavcích): objekty issue mají každý kolem 6 KB, takže vyšší limit by vytvářel velmi velké výstupy uzlu. Pokud se zastaví dříve, vrátí, co má, s `has_more: true` a `next_cursor` místo vyvolání chyby a můžete pokračovat předáním tohoto kurzoru dalšímu spuštění. Zastavení Workflow nebo dosažení jeho časového limitu ukončí načítání mezi stránkami.
+
 ## Výstup
 
 Přesný tvar závisí na zvolené operaci. Mezi běžná pole patří:

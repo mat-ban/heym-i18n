@@ -74,6 +74,17 @@ Vprašajte v običajnem jeziku — "kaj se izvaja?", "kolikšno število workflo
 
 Izvajanja, ki so ustavljena za [Človeka v zanki](../reference/human-in-the-loop.md) ali pregled Codex, se poročajo kot čakajoča na vas, ne kot izvajajoča. To so isti podatki kot oznaka aktivnih izvajanj v glavi, tako da Chat in oznaka nikoli ne nasprotujeta. Za izvajanja, ki so se že končala, vprašajte za nedavna izvajanja — to prebere [Zgodovina izvajanj](../reference/execution-history.md).
 
+## Vprašanja o izvajanju
+
+Izberite izvajanje Workflowa v [Execution History](../reference/execution-history.md#ask-ai), v urejevalniku ali v All History, in kliknite **Vprašaj AI** poleg naslova pogovornega okna. Chat odpre nov pogovor z dvema čipoma nad vnosnim poljem:
+
+- **Workflow:** ime Workflowa
+- **Execution:** prve znake identifikatorja izbranega izvajanja
+
+Odstranite čip z njegovim **×**, da ga izpustite. Nato postavite vprašanje, na primer „zakaj je to izvajanje trajalo tako dolgo?“, „kaj je tukaj spodletelo?“ ali „ali lahko to popravite?“. Preostali čipi so priloženi temu sporočilu s polnimi identifikatorji, tako da Chat neposredno prebere vhode, izhode in sled po vozliščih izvajanja, namesto da bi iskal Workflow. Za popravek Workflowa Chat shrani, preizkusi in preveri spremembo, kot je opisano v [Ustvarjanje workflowov](#ustvarjanje-workflowov).
+
+Poslano sporočilo prikazuje čipe pod vašim vprašanjem. Pripadajo samo temu sporočilu; nadaljnja vprašanja v istem pogovoru ohranijo kontekst iz zgodovine.
+
 ## Vprašanje o Opozorilih
 
 Chat lahko odgovori na vprašanja o [opozorilih](./alerts-tab.md), ki ste jih definirali:

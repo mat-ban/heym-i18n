@@ -55,6 +55,18 @@ Workflown avaaminen osoitteessa `/workflows/{workflowId}/{executionId}` lataa au
 - Debuggaa epäonnistunutta suoritusta tarkastelemalla syötteitä ja solmujen tuloksia
 - Vertaa tulosteita eri suoritusten välillä
 
+## Kysy AI:lta
+
+Molemmissa historiadialogeissa on nimen vieressä **Kysy AI:lta** -painike (kipinäkuvake). Se avaa [Chat-välilehden](../tabs/chat-tab.md#asking-about-a-run) uudessa keskustelussa, johon workflow ja valittu suoritus on liitetty poistettavina siruina. Kysy, miksi suoritus oli hidas, mikä epäonnistui, tai pyydä Chatia korjaamaan workflow. Chat lukee tarkalleen kyseisen suorituksen, mukaan lukien sen solmukohtaisen jäljityksen ja virheet.
+
+All History -dialogissa **Kysy AI:lta** näkyy vain, kun workflow-suoritus on valittuna; chatin ja avustajan suoritukset eivät näytä sitä.
+
+## Suorituksen aikajana
+
+Suorituksen tiedoissa **Aikajana**-painike (sekuntikellokuvake) **Laajenna kaikki** -painikkeen vieressä vaihtaa **Vaiheet**-luettelon span-aikajanaksi. Kun aikajana on näkyvissä, sama painike on nimeltään **Lokit**; napsauta sitä palataksesi luetteloon. All History -dialogissa painike näkyy vain workflow-suorituksille. Aikajana piirtää palkin kullekin solmulle sen alkamishetkellä, jotta näet, mikä solmu kesti kuinka kauan ja mitkä suoritettiin rinnakkain. Vie kohdistin palkin päälle nähdäksesi keston; napsauta sitä avataksesi saman yksityiskohtien tarkastajan kuin editorin [suorituksen aikajanalla](#execution-timeline-details). Valittu näkymä säilyy niin kauan kuin dialogi on auki.
+
+Suoritukset, jotka on tallennettu ennen solmujen aloitusaikojen tallentamista, asetetaan peräkkäin keston mukaan.
+
 ## Suorituskorostukset
 
 Live-suorituksen jälkeen – tai **Bring to Canvas** -toiminnon jälkeen – **Canvasin oikeassa yläkulmassa** ilmestyy suljettava **Execution Highlights** -ponnahdusikkuna. Se on nopea tapa nähdä *mitä kukin solmu tuotti*, listattuna ylhäältä alas suoritusjärjestyksessä. Sulje se painikkeella **✕**; se avautuu uudelleen seuraavalla suorituksella.
@@ -141,7 +153,7 @@ Käytä **Copy** -painiketta Inputs- tai Outputs-kohdien vieressä kopioidaksesi
 
 ## Suoritusaikajanan yksityiskohdat
 
-Kun editorin **Execution Log** on auki, klikkaa kellopainiketta nähdäksesi suoritusaikajanan. Valitse aikaväli avataksesi inline-tarkastusikkunan, joka vie rivialueen haltuunsa. Se näyttää valitun vaiheen tilan, keston, yritysmäärän, uudelleenyritystiedot, virheet, jälkitunnuksen ja tiiviin tulosteen esikatselun. Objekti- ja taulukkotulostukset käyttävät samaa `JsonTree` -katselinta kuin Debug-paneelin muu osa; skalaariarvot käyttävät tekstiesikatselua. Kun vaihe tuottaa kuvia (Playwright-näyttökuvat, generoidut kuvat, kuvatiedostot), ne näkyvät pikkukuvina tulosteen yläpuolella, ja JSON näyttää lyhyen paikkamerkin raakabase64:n sijasta. Klikkaa pikkukuvaa avataksesi sen valokehykseen; nuolipainikkeet tai ←/→ -näppäimet selaa läpi kaikki suorituksen kuvat, laskurin kanssa, kuten `2 / 5`. Käytä **Open trace** -painiketta LLM- ja Agent-spanien yhteydessä, kun jälkitunnus on saatavilla.
+Kun editorin **Execution Log** on auki, klikkaa kellopainiketta nähdäksesi suoritusaikajanan. Valitse aikaväli avataksesi inline-tarkastusikkunan, joka vie rivialueen haltuunsa. Se näyttää valitun vaiheen tilan, keston, yritysmäärän, uudelleenyritystiedot, virheet, jälkitunnuksen ja tiiviin tulosteen esikatselun. Objekti- ja taulukkotulostukset käyttävät samaa `JsonTree` -katselinta kuin Debug-paneelin muu osa; skalaariarvot käyttävät tekstiesikatselua. Kun vaihe tuottaa kuvia (Playwright-kuvakaappaukset, luodut kuvat, kuvatiedostot tai base64-kuvat pyynnön rungossa, jotka löytyvät mistä tahansa tulosteesta), ne näkyvät pikkukuvina tulosteen yläpuolella, ja JSON näyttää lyhyen paikkamerkin raakabase64:n sijasta. Klikkaa pikkukuvaa avataksesi sen valokehykseen; nuolipainikkeet tai ←/→ -näppäimet selaa läpi kaikki suorituksen kuvat, laskurin kanssa, kuten `2 / 5`. Käytä **Open trace** -painiketta LLM- ja Agent-spanien yhteydessä, kun jälkitunnus on saatavilla.
 ## Mobiilisolmun tiedot
 
 Puhelimella editori näyttää täysikokoista workflow-puuta vapaamuotoisen canvaksen sijaan. Napauta puun solmua, jolla on tallennettu tulos, avataksesi sen suorituksen täysinäytön tiedoissa. Näkymä tarjoaa erilliset **Syötetiedot**, **Tulostiedot** ja **Virheet** -välilehdet. Tuloste-välilehdellä näkyy tallennettu tulos ja **Kopioi tuloste** -toiminto; syöte-välilehdellä näkyy valitun solmun asetukset, ja virheet-välilehdellä näkyy tallennettu virhe, kun solmu epäonnistui. Palaa workflow-puuhun käyttämällä **Takaisin workflowyn** -painiketta tai sulje-nappia.

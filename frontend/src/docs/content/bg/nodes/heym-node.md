@@ -16,7 +16,7 @@
 | Параметър | Тип | Описание |
 |-----------|------|-------------|
 | `heymOperation` | Select | Кое четене да се извърши |
-| `heymWorkflowId` | UUID | Целеви workflow. Задължителен за `getWorkflow` и `getExecutionHistory`. Поддържа изрази. |
+| `heymWorkflowId` | UUID | Задайте го на `all` при `getExecutionHistory`, за да се прочетат всички достъпни Workflows. |
 | `heymLimit` | String | Максимален брой върнати редове. **Оставете го празно или въведете `0`, за да върнете всичко** — това е стойността по подразбиране. Поддържа изрази. |
 | `heymStatus` | String | Незадължителен филтър по статус за `getExecutionHistory`. Поддържа изрази. |
 | `heymSinceDays` | String | Незадължителен период на връщане назад в дни за `getExecutionHistory`. Поддържа изрази. |
@@ -93,9 +93,11 @@ cron → heym (listWorkflows) → loop → heym (getWorkflow) → agent → slac
 | `$nodeLabel.executions[0].recovered` | Дали изпълнението е било възстановено след срив |
 | `$nodeLabel.executions[0].inputs` | Какво е получило изпълнението – trigger payload-ът или входните данни от извикващия |
 | `$nodeLabel.executions[0].outputs` | Резултатът от workflow-а за това изпълнение |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow-ът, към който принадлежи историята |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, към който принадлежи историята, или `null` при **{AW}** |
+`null` при **{AW}** |
 | `$nodeLabel.total` | Общ брой съвпадащи изпълнения **преди** ограничението |
-| `$nodeLabel.by_status` | Брояч по статус, например `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_status` | `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | При **{AW}** Workflow, към който принадлежи всяко изпълнение |
+| Брояч по статус, например `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Начало на периода или `null` за цялата история |
 
 Записите съдържат както `inputs`, така и `outputs` – какво е получило изпълнението и какво е върнало – но никога `node_results`: трасировката по възли е най-голямата колона в таблицата и би засенчила всичко след себе си. Извлечете отделно изпълнение чрез API, когато Ви е необходима пълната трасировка.

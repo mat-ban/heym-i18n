@@ -51,6 +51,7 @@ Field input berasal dari node [Input](../nodes/input-node.md). API mengekstrak n
 ## Auth dan Sesi
 
 - **WorkflowPortalUser**: Nama pengguna/kata sandi per Workflow (ketika auth diaktifkan)
+- **Menghapus pengguna terakhir**: Dengan portal diaktifkan, menghapus pengguna portal terakhir membuat portal kembali publik; dialog pengaturan meminta konfirmasi terlebih dahulu
 - **PortalSession**: Token sesi dengan TTL 168 jam
 - **Pembatasan laju**: 3 percobaan login gagal → larangan 24 jam per Workflow+IP
 - Sesi yang kedaluwarsa dibersihkan oleh cron job

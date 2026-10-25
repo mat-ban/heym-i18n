@@ -1,6 +1,6 @@
 # Funcions del Canvas
 
-L'editor de Workflows ofereix diverses funcions per depurar, provar i organitzar Nodes: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** i **Extract to Sub-Workflow**.
+L'editor de Workflows ofereix diverses funcions per depurar, provar i organitzar Nodes: **Run to Node**, **AI en un node**, **Data Pin**, **Execution Logs**, **Enable/Disable** i **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Watch Editor demo</a></p>
@@ -12,6 +12,12 @@ Passeu el cursor per sobre de qualsevol Node excepte una nota adhesiva i feu cli
 Si el camí seleccionat té camps d'entrada, el panell **Run** de la dreta s'obre i enfoca el primer camp. Introduïu els valors i feu clic a **Run to _node label_** o premeu **Ctrl+Enter** (Cmd+Enter a macOS). El mode de cos genèric enfoca l'editor de cos JSON. Els camins sense camps d'entrada s'executen immediatament sense obrir el panell. Els Nodes d'entrada fixats reutilitzen la seva sortida fixada sense demanar entrada.
 
 El panell conserva l'objectiu seleccionat per a execucions posteriors. Trieu **Run full workflow** per esborrar l'objectiu. Els botons Run estan desactivats mentre hi ha una execució activa. Un objectiu dins d'un bucle atura l'execució quan s'assoleix aquest Node per primera vegada; seleccionar un Node després del bucle executa el bucle upstream complet.
+
+## AI en un node
+
+Passeu el cursor per sobre de qualsevol node excepte una nota adhesiva i feu clic a **AI** a sobre. L'[AI Assistant](./ai-assistant.md) s'obre en aquest node i ofereix **Change this node as ...**, **Fix error in this node ...** i **Other**. En mode Agent, l'assistent modifica només aquest node; altres nodes, connexions i la disposició romanen inalterats. Vegeu [AI Assistant › Modificar un sol node](./ai-assistant.md#changing-one-node).
+
+El botó queda ocult en workflows que només podeu visualitzar.
 
 ## Data Pin
 

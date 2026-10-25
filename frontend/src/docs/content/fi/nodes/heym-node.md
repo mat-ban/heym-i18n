@@ -16,7 +16,7 @@
 | Parametri | Tyyppi | Kuvaus |
 |-----------|------|-------------|
 | `heymOperation` | Valinta | Suoritettava lukuoperaatio |
-| `heymWorkflowId` | UUID | Kohdeworkflow. Vaaditaan operaatioille `getWorkflow` ja `getExecutionHistory`. Lausekekelpoinen. |
+| `heymWorkflowId` | UUID | Aseta se arvoon `all` kohdassa `getExecutionHistory`, jos haluat lukea kaikki tavoitettavissa olevat workflow't. |
 | `heymLimit` | Merkkijono | Palautettavien rivien enimmäismäärä. **Jätä tyhjäksi tai syötä `0` palauttaaksesi kaiken** – tämä on oletusarvo. Lausekekelpoinen. |
 | `heymStatus` | Merkkijono | Valinnainen statussuodatin `getExecutionHistory`-operaatiota varten. Lausekekelpoinen. |
 | `heymSinceDays` | Merkkijono | Valinnainen päivien takaisin katselu `getExecutionHistory`-operaatiota varten. Lausekekelpoinen. |
@@ -93,8 +93,10 @@ Palauttaa workflowin suoritushistoriaan kuuluvat merkinnät uusimmasta vanhimpaa
 | `$nodeLabel.executions[0].recovered` | Onko suoritus palautettu kaatumisen jälkeen |
 | `$nodeLabel.executions[0].inputs` | Suorituksen saamat syötteet - käynnistyspayload tai kutsujan syötteet |
 | `$nodeLabel.executions[0].outputs` | Workflowin tuottamat tulosteet kyseiselle suoritukselle |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Historiaan liittyvä workflow |
-| `$nodeLabel.total` | Vastaavien suoritusten kokonaismäärä **ennen** rajoitusta |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, johon historia kuuluu, tai `null` valinnalla **{AW}** |
+, tai `null` valinnalla **{AW}** |
+| `$nodeLabel.total` | Vastaavien suoritusten kokonaismäärä **ennen** rajoi| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Valinnalla **{AW}** workflow, johon kukin suoritus kuuluu |
+tusta |
 | `$nodeLabel.by_status` | Tilakohtaiset lukumäärät, esim. `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Historian alkupiste tai `null` koko historiassa |
 

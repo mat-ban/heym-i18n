@@ -33,13 +33,17 @@
 | `valueField` | string | 用作数值的行键（pie/bar/line/numeric/gauge） |
 | `series` | array | 可选的多系列定义 `[{ "name": "Sent", "field": "sent" }]`，用于 bar/line（覆盖 `valueField`） |
 | `columns` | array | 可选的 `table` 列列表（默认为第一行的键） |
-| `statusColumn` | string | 可选的 `table` 列，渲染为彩色[状态标签](#status-chips)。必须是所显示列之一。 |
+| `statusColumn` | string | 可选的 `table` 列，渲染为彩色[状态标签](#status-chips)。必须是所显示列之一。 |，使用 `linkColumn` 时还会携带链接列和按钮文本。
 | `statusTones` | object | 可选映射，将默认未涵盖的状态值映射为色调（`success`、`attention`、`failure`、`waiting`、`neutral`） |
+| `linkColumn` | string | 可选的 `table` 列，其单元格包含 URL，显示为在新标签页中打开该 URL 的[链接按钮](#link-buttons)。必须是所显示列之一。 |
+| `linkLabel` | string | 链接按钮的可选文本。留空时，按钮只显示链接图标。 |
 | `xField` / `yField` | string | 用于 X 和 Y 数值轴的行键（scatter） |
 | `min` / `max` | number | `gauge` 的数值范围（默认 `0` / `100`） |
 | `unit` | string | 可选单位，显示在 `numeric` 或 `gauge` 值旁边 |
 | `text` | string | `text` chart 类型的 Markdown 消息。留空并设置 `valueField` 以渲染从上游数据拉取的动态消息。 |
 | `title` | string | 可选的图表标题 |
+| `hitlWorkflowId` | string | 仅适用于 `hitl`。仅显示此 Workflow 的评审。留空时，小组件显示所有评审。 |
+| `hitlNodeId` | string | 仅适用于 `hitl`。将 `hitlWorkflowId` 缩小到某一步骤：带人工评审的 Agent，或 Slack 审批、按钮或表单步骤。 |
 
 ## Chart 类型
 
@@ -51,7 +55,7 @@
 - **proportion** — 单个水平条，按份额分割并带百分比图例（例如语言分布）。使用 `labelField` + `valueField`。
 - **barGauge** — 每行一个水平 gauge，带红→绿渐变和一个值（例如可用磁盘空间）。使用 `labelField` + `valueField`，可选 `unit` 和 `max`（默认为最大行值）。
 - **text** — 一条 markdown 消息（例如状态备注，如 "Last execution at 19:47"）。将 markdown 放入 `text` 以显示静态消息，或留空 `text` 并设置 `valueField` 以渲染上游生成的字符串。支持标题、粗体/斜体、[列表](../nodes/chart-output-node.md#interactive-task-lists)、链接和行内代码。
-- **hitl** — 你待处理的人工审核的轮播。标题显示 `1/n pending`；左箭头在第一张卡片上禁用，右箭头在最后一张卡片上禁用。workflow 名称会在画布上打开该运行。**Approve**、**Request changes** 和 **Reject** 会解决它，widget 标题旁的历史图标会在同一页面的历史对话框中打开该运行。此 chart 类型忽略上游行，因此 widget workflow 仅为 Chart Output 节点。每个已登录用户会看到其拥有的 workflow 上的审核。
+- **hitl** — 你待处理的人工审核的轮播。标题显示 `1/n pending`；左箭头在第一张卡片上禁用，右箭头在最后一张卡片上禁用。workflow 名称会在画布上打开该运行。**Approve**、**Request changes** 和 **Reject** 会解决它，widget 标题旁的历史图标会在同一页面的历史对话框中打开该运行。此 chart 类型忽略上游行，因此 widget workflow 仅为 Chart Output 节点。每个已登录用户会看到其拥有的 workflow 上的审核。 在节点属性或小组件设置中选择一个 **Workflow**（当它有多个评审步骤时，还需选择 **Select agent**），即可改为向所有能打开该 Workflow 的人显示其评审；参见 [HITL 小组件](../tabs/dashboard-tab.md#hitl-widgets)。
 
 ### 交互式任务列表
 
@@ -148,6 +152,20 @@ https://crm.example.com/api/customers?id=$page.record
 `$page.record` 是所点击行的原始值本身（如 `V-1002`），而不是包含字段的对象。若要在 [DataTable](./datatable-node.md) 中查找该记录，请按该值筛选其记录列：使用 `find` 操作并设置筛选条件 `{"vendor_id": "$page.record"}`。像 `$page.record.id` 这样的路径不会解析出任何内容，因此由 AI 构建或微调的组件会去掉这些字段，直接读取 `$page.record`。
 
 该值来自任何人都可以修改的 URL。仪表盘仅接受符合其记录格式的值（默认为字母、数字、`-`、`_` 和 `.`），但仍应将其视为不可信输入：请将其传递到节点会对值进行转义的位置，例如 HTTP 查询参数、[DataTable](./datatable-node.md) 或 ClickHouse 筛选值，切勿通过字符串拼接与它构造查询文本。无论谁打开页面，组件始终以仪表盘所有者的身份运行。
+
+
+## 链接按钮
+
+`table` 可以把一列变成打开链接的按钮。请在节点属性中将 **Link column**（或 DSL 中的 `linkColumn`）设置为单元格包含 URL 的列，并可选设置 **Link button text**（`linkLabel`）。每个单元格都会变成一个在新标签页中打开其 URL 的按钮。没有按钮文本时，按钮只显示链接图标：
+
+| 单元格值 | 打开 |
+| ---- | --- |
+| `https://jira.example.com/browse/T-1` | 另一个网站（在新标签页中） |
+| `/dashboards` | Heym 内部页面（在新标签页中） |
+
+只有 `http://` 和 `https://` 地址以及以单个 `/` 开头的路径才会变成按钮。其他任何值，例如 `javascript:` 或 `//host`，仍显示为纯文本，空单元格不显示任何内容。
+
+该按钮可与[行链接](../tabs/dashboard-tab.md#detail-pages)并存：点击按钮会在新标签页中打开其链接，点击行内其他任何位置仍会打开详情页。
 
 ## 数据如何解析
 

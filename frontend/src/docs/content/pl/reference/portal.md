@@ -51,6 +51,7 @@ Pola wejściowe pochodzą z węzłów [Input](../nodes/input-node.md). API wyodr
 ## Uwierzytelnianie i sesje
 
 - **WorkflowPortalUser**: Nazwa użytkownika/hasło dla każdego workflow (gdy uwierzytelnianie jest włączone)
+- **Usuwanie ostatniego użytkownika**: Przy włączonym portalu usunięcie ostatniego użytkownika portalu sprawia, że portal staje się ponownie publiczny; okno ustawień wymaga uprzedniego potwierdzenia
 - **PortalSession**: Tokeny sesji z TTL 168 godzin
 - **Ograniczanie szybkości**: 3 nieudane próby logowania → 24-godzinna blokada dla pary workflow+IP
 - Wygasłe sesje są czyszczone przez zadanie cron

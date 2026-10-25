@@ -166,7 +166,14 @@
     "unsavedChanges": "Modifiche non salvate",
     "unsavedChangesLeaveConfirm": "Sono presenti modifiche non salvate. Uscire comunque?",
     "zoomIn": "Ingrandisci",
-    "zoomOut": "Riduci"
+    "zoomOut": "Riduci",
+    "aiButtonTitle": "Modificare o correggere questo nodo con l'assistente IA",
+    "editNodeWithAi": "Modifica {label} con l'IA",
+    "modifyingNode": "Modifica del nodo:",
+    "hasNodeOutput": "(Con output del nodo)",
+    "closeNodeFocus": "Chiudere il focus sul nodo e modificare l'intero Workflow",
+    "nodeFocusRan": "Questo nodo è stato eseguito. L'IA vede il suo ultimo output e l'errore e legge la documentazione del nodo.",
+    "nodeFocusNoOutput": "Questo nodo non ha output nell'esecuzione corrente. Lo esegua prima se l'IA deve vedere il suo output. L'IA legge comunque la documentazione del nodo."
   },
   "analytics": {
     "analysisPanel": {
@@ -428,7 +435,9 @@
     "suggestion5": "Cosa è memorizzato nelle mie variabili globali?",
     "suggestion6": "Quali modelli di Workflow sono disponibili?",
     "unpin": "Rimuovi fissaggio",
-    "unreadMessage": "Messaggio non letto"
+    "unreadMessage": "Messaggio non letto",
+    "subtitle": "Eseguire Workflow e porre domande",
+    "modelsLoadFailedDisabled": "Impossibile caricare l'elenco dei modelli di questa credenziale. La chat resta disattivata finché non è possibile recuperare un modello."
   },
   "common": {
     "actions": "Azioni",
@@ -862,7 +871,10 @@
     "detailPageRecords": "Record della pagina di dettaglio",
     "detailPageRecordsHelp": "I valori ?record= accettati da questo dashboard quando un collegamento di riga lo apre. Qualsiasi altro valore viene rifiutato prima dell'esecuzione del widget.",
     "unreachableDashboard": "Un dashboard che non è possibile aprire",
-    "runWorkflow": "Esegui un Workflow"
+    "runWorkflow": "Esegui un Workflow",
+    "openWorkflowNewTab": "Apri il Workflow in una nuova scheda",
+    "hitlFilterHelp": "Mostra le revisioni di tutti i Workflow o di uno solo. Elenca i Workflow che può aprire, propri o condivisi con Lei, con un passaggio in attesa di una persona.",
+    "hitlSourcesLoadFailed": "Impossibile caricare i Suoi Workflow."
   },
   "docs": {
     "chatWithHeym": "Chat con Heym",
@@ -1213,7 +1225,10 @@
     "pendingReview": "Revisione in sospeso",
     "previousAttemptError": "Errore del tentativo precedente:",
     "recoveredFailed": "Ripristino non riuscito dopo un riavvio del server.",
-    "toolCalls": "Chiamate agli strumenti"
+    "toolCalls": "Chiamate agli strumenti",
+    "askAi": "Chiedi all'IA",
+    "askAiTitle": "Interrogare l'assistente Chat su questa esecuzione",
+    "noNodeSpans": "Nessuno span di nodo registrato per questa esecuzione."
   },
   "logs": {
     "all": "Tutti",

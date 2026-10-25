@@ -35,6 +35,8 @@ Vous pouvez également démarrer une conversation depuis la zone de chat de l'[o
 - **Historique d'exécution des workflows** – Posez des questions sur un workflow (« combien de fois le rapport quotidien s'est-il exécuté ? », « a-t-il échoué ? », « quand a-t-il été exécuté pour la dernière fois ? »). Le Chat recherche le workflow par son ID et répond à partir de son nombre d'exécutions, de la répartition des statuts, des heures de première et dernière exécution et de la durée moyenne. Demandez pourquoi une exécution a échoué ou ce qu'elle a renvoyé, et le Chat ouvre alors cette exécution unique pour lire ses entrées, ses sorties et les erreurs par nœud
 - **Statut des exécutions en direct** – Demandez ce qui s'exécute en ce moment et le Chat répond avec le nombre, les noms des workflows, la durée de chaque exécution, le nœud en cours et un lien direct vers l'exécution en direct
 
+- **Puces de contexte d'exécution** – **Demander à l'IA** dans l'[Execution History](../reference/execution-history.md#ask-ai) ouvre une nouvelle conversation avec l'exécution de Workflow sélectionnée jointe sous forme de puces. Voir [Poser des questions sur une exécution](#poser-des-questions-sur-une-execution)
+
 ## Utiliser le Chat depuis un client MCP
 
 Le moteur de Chat est également accessible depuis l'extérieur du navigateur. Activez l'outil **Heym Chat Tool** dans l'[onglet MCP](./mcp-tab.md) et les clients MCP — Claude, Cursor, et tout autre client compatible MCP — obtiennent un unique outil `heym_chat` qui exécute ce même moteur avec l'ensemble de ses capacités.
@@ -83,6 +85,17 @@ Les exécutions en pause pour une revue [Human-in-the-Loop](../reference/human-i
 en attente de votre intervention, et non comme en cours d'exécution. Il s'agit des mêmes données que le badge d'exécutions actives dans l'en-tête,
 de sorte que le Chat et le badge ne divergent jamais. Pour les exécutions déjà terminées, demandez plutôt les exécutions récentes
 — cela consulte l'[Historique des exécutions](../reference/execution-history.md).
+
+## Poser des questions sur une exécution
+
+Sélectionnez une exécution de Workflow dans l'[Execution History](../reference/execution-history.md#ask-ai), depuis l'éditeur ou depuis All History, puis cliquez sur **Demander à l'IA** à côté du titre de la boîte de dialogue. Chat ouvre une nouvelle conversation avec deux puces au-dessus de la zone de message :
+
+- **Workflow:** le nom du Workflow
+- **Execution:** les premiers caractères de l'identifiant de l'exécution sélectionnée
+
+Retirez une puce avec son **×** pour l'exclure. Posez ensuite votre question, par exemple « pourquoi cette exécution a-t-elle pris autant de temps ? », « qu'est-ce qui a échoué ici ? » ou « pouvez-vous le corriger ? ». Les puces restantes sont jointes à ce message avec les identifiants complets ; Chat lit donc directement les entrées, les sorties et la trace par nœud de l'exécution au lieu de rechercher le Workflow. Pour corriger le Workflow, Chat enregistre, teste et vérifie la modification comme décrit dans [Création de Workflows](#creation-de-workflows).
+
+Le message envoyé affiche les puces sous votre question. Elles appartiennent uniquement à ce message ; les questions suivantes de la même conversation conservent le contexte issu de l'historique.
 
 ## Poser des questions sur les alertes
 

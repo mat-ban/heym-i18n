@@ -16,7 +16,7 @@ A **Heym** csomópont a Heym saját adatait olvassa: az elérhető workflow-kat,
 | Paraméter | Típus | Leírás |
 |-----------|------|-------------|
 | `heymOperation` | Select | Melyik olvasási műveletet hajtsa végre |
-| `heymWorkflowId` | UUID | Cél workflow. A `getWorkflow` és a `getExecutionHistory` művelethez kötelező. Kifejezést támogat. |
+| `heymWorkflowId` | UUID | A `getExecutionHistory` műveletnél állítsa `all` értékre, hogy minden elérhető Workflow-t beolvasson. |
 | `heymLimit` | String | A visszaadandó sorok maximális száma. **Hagyja üresen, vagy adjon meg `0` értéket az összes visszaadásához** — ez az alapértelmezett. Kifejezést támogat. |
 | `heymStatus` | String | Opcionális állapotszűrő a `getExecutionHistory` művelethez. Kifejezést támogat. |
 | `heymSinceDays` | String | Opcionális visszatekintés napokban a `getExecutionHistory` művelethez. Kifejezést támogat. |
@@ -93,9 +93,11 @@ Egy workflow futtatási előzményeit adja vissza, a legújabbal kezdve.
 | `$nodeLabel.executions[0].recovered` | Hogy a futtatás helyreállt-e egy összeomlás után |
 | `$nodeLabel.executions[0].inputs` | Amit a futtatás kapott – a trigger payload vagy a hívó bemenete |
 | `$nodeLabel.executions[0].outputs` | A workflow kimenete az adott futtatáshoz |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | A workflow, amelyhez az előzmény tartozik |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | A Workflow, amelyhez az előzmény tartozik, vagy `null` a **{AW}** esetén |
+agy `null` a **{AW}** esetén |
 | `$nodeLabel.total` | A limit **előtti** összes egyező futtatás |
-| `$nodeLabel.by_status` | Státusz szerinti darabszámok, például `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_status` | Stá| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | A **{AW}** esetén az a Workflow, amelyhez az egyes futtatások tartoznak |
+tusz szerinti darabszámok, például `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Az időablak kezdete, vagy `null` a teljes előzmény esetén |
 
 A bejegyzések egyszerre tartalmazzák az `inputs` és `outputs` mezőket – vagyis hogy mit kapott és mit adott vissza a futtatás –, de soha nem tartalmaznak `node_results` mezőt: a csomópontonkénti nyomkövetés a táblázat legnagyobb oszlopa, és minden mást elnyomna. Ha a teljes nyomkövetésre van szüksége, egyetlen futtatást kérjen le az API-n keresztül.

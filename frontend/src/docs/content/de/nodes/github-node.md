@@ -213,6 +213,11 @@ Wenn die Datei bereits existiert, ruft Heym den aktuellen SHA automatisch ab, be
 **Per Page** (1–100). Heym fordert eine Ergebnisseite an; es gibt kein `page`-Feld, um
 zusätzliche Seiten in derselben Operation abzurufen.
 
+
+### Return all pages
+
+Aktivieren Sie **Return all pages**, damit ein Lauf jeder Seite folgt, beginnend bei **Cursor**, sofern gesetzt. Jede Anfrage fordert 100 Einträge an, unabhängig vom Wert von **Per Page**. Der Knoten stoppt nach etwa 1.000 Einträgen (oder 100 Anfragen): Issue-Objekte sind jeweils etwa 6 KB groß, eine höhere Grenze würde sehr große Knotenausgaben erzeugen. Stoppt er vorzeitig, gibt er das bisher Gesammelte mit `has_more: true` und einem `next_cursor` zurück, statt einen Fehler auszulösen, und Sie können mit diesem Cursor im nächsten Lauf fortfahren. Das Stoppen des Workflows oder das Erreichen des Workflow-Timeouts beendet den Abruf zwischen den Seiten.
+
 ## Output
 
 Die genaue Form hängt von der ausgewählten Operation ab. Häufige Felder sind:

@@ -33,13 +33,17 @@ Ja ir pieejami tikai piemēra/parauga dati (bez reāla avota), ģenerējiet šī
 | `valueField` | string | Rindas atslēga, ko izmanto kā skaitlisko vērtību (pie/bar/line/numeric/gauge) |
 | `series` | array | Neobligāta vairāku sēriju definīcija `[{ "name": "Sent", "field": "sent" }]` joslu/līniju diagrammām (aizstāj `valueField`) |
 | `columns` | array | Neobligāts kolonnu saraksts `table` tipam (pēc noklusējuma pirmās rindas atslēgas) |
-| `statusColumn` | string | Neobligāta `table` kolonna, kas tiek attēlota kā krāsaini [statusa žetoni](#status-chips). Tai jābūt vienai no rādītajām kolonnām. |
+| `statusColumn` | string | Neobligāta `table` kolonna, kas tiek attēlota kā krāsaini [statusa žetoni](#status-chips). Tai jābūt vienai no rādītajām kolonnām. |, un ar `linkColumn` tajā ir arī saites kolonna un pogas teksts.
 | `statusTones` | object | Neobligāts kartējums no statusa vērtības uz toni (`success`, `attention`, `failure`, `waiting`, `neutral`) vērtībām, kuras noklusējuma iestatījumi neaptver |
+| `linkColumn` | string | Neobligāta `table` kolonna, kuras šūnās ir URL un kas tiek rādīta kā [saites poga](#link-buttons), kura to atver jaunā cilnē. Tai jābūt vienai no rādītajām kolonnām. |
+| `linkLabel` | string | Saites pogas neobligāts teksts. Ja lauks ir tukšs, poga rāda tikai saites ikonu. |
 | `xField` / `yField` | string | Rindas atslēgas X un Y skaitliskajām asīm (scatter) |
 | `min` / `max` | number | Skaitliskais diapazons `gauge` tipam (pēc noklusējuma `0` / `100`) |
 | `unit` | string | Neobligāta mērvienība, kas parādīta blakus `numeric` vai `gauge` vērtībai |
 | `text` | string | Markdown ziņojums `text` diagrammas tipam. Atstājiet tukšu un iestatiet `valueField`, lai attēlotu dinamisku ziņojumu, kas iegūts no iepriekšējiem datiem. |
 | `title` | string | Neobligāts diagrammas virsraksts |
+| `hitlWorkflowId` | string | Tikai `hitl`. Rāda tikai šī Workflow pārskatīšanas. Ja lauks ir tukšs, logrīks rāda visas pārskatīšanas. |
+| `hitlNodeId` | string | Tikai `hitl`. Sašaurina `hitlWorkflowId` līdz vienam solim: Agent ar cilvēka pārskatīšanu vai Slack apstiprināšanas, pogu vai veidlapas solis. |
 
 ## Diagrammu tipi
 
@@ -51,7 +55,7 @@ Ja ir pieejami tikai piemēra/parauga dati (bez reāla avota), ģenerējiet šī
 - **proportion** — viena horizontāla josla, kas sadalīta daļās ar procentuālo leģendu (piem., valodu sadalījums). Izmanto `labelField` + `valueField`.
 - **barGauge** — viens horizontāls mērītājs katrai rindai ar sarkanu→zaļu gradientu un vērtību (piem., brīvā diska vieta). Izmanto `labelField` + `valueField`, neobligāmu `unit` un `max` (pēc noklusējuma lielākā rindas vērtība).
 - **text** — markdown ziņojums (piem., statusa piezīme, piemēram, "Last execution at 19:47"). Ievietojiet markdown `text` laukā statiskam ziņojumam vai atstājiet `text` tukšu un iestatiet `valueField`, lai attēlotu virkni, kas ģenerēta iepriekšējos mezglos. Atbalsta virsrakstus, treknrakstu/slīprakstu, [sarakstus](../nodes/chart-output-node.md#interactive-task-lists), saites un iekļauto kodu.
-- **hitl** — karuselis ar Jūsu gaidošajām cilvēku pārbaudēm. Galvene rāda `1/n pending`; kreisā bultiņa ir atspējota pirmajā kartītē, bet labā bultiņa — pēdējā. Workflow nosaukums atver šo izpildi kanvā. **Approve**, **Request changes** un **Reject** to atrisina, un vēstures ikona blakus logrīka virsrakstam atver šo izpildi vēstures dialogā tajā pašā lapā. Šis diagrammas tips ignorē iepriekšējās rindas, tāpēc logrīka workflow sastāv tikai no Diagrammas izvades mezgla. Katra pierakstījusies persona redz pārbaudes workflow, kas pieder viņai.
+- **hitl** — karuselis ar Jūsu gaidošajām cilvēku pārbaudēm. Galvene rāda `1/n pending`; kreisā bultiņa ir atspējota pirmajā kartītē, bet labā bultiņa — pēdējā. Workflow nosaukums atver šo izpildi kanvā. **Approve**, **Request changes** un **Reject** to atrisina, un vēstures ikona blakus logrīka virsrakstam atver šo izpildi vēstures dialogā tajā pašā lapā. Šis diagrammas tips ignorē iepriekšējās rindas, tāpēc logrīka workflow sastāv tikai no Diagrammas izvades mezgla. Katra pierakstījusies persona redz pārbaudes workflow, kas pieder viņai. Mezgla rekvizītos vai logrīka iestatījumos izvēlieties **Workflow** (un **Select agent**, ja tam ir vairāki pārskatīšanas soļi), lai tā vietā tiktu rādītas šī Workflow pārskatīšanas visiem, kas to var atvērt; skatiet [HITL logrīki](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktīvie uzdevumu saraksti
 
@@ -307,3 +311,17 @@ Text (dinamisks — ziņojuma virkne tiek izveidota augšupēji un iegūta ar `v
 
 - [Dashboard tab](../tabs/dashboard-tab.md) — veidojiet un kārtojiet widgetus
 - [Output node](output-node.md) — termināļa mezgls parastiem workflow
+
+
+## Saišu pogas
+
+`table` var pārvērst vienu kolonnu pogās, kas atver saiti. Mezgla rekvizītos iestatiet **Link column** (vai `linkColumn` DSL) uz kolonnu, kuras šūnās ir URL, un pēc izvēles **Link button text** (`linkLabel`). Katra šūna kļūst par pogu, kas savu URL atver jaunā cilnē. Bez pogas teksta poga rāda tikai saites ikonu:
+
+| Šūnas vērtība | Atver |
+| ------------- | ----- |
+| `https://jira.example.com/browse/T-1` | Citu vietni jaunā cilnē |
+| `/dashboards` | Lapu Heym iekšienē jaunā cilnē |
+
+Par pogām kļūst tikai `http://` un `https://` adreses un ceļi, kas sākas ar vienu `/`. Jebkura cita vērtība, piemēram, `javascript:` vai `//host`, paliek vienkāršs teksts, un tukša šūna neko nerāda.
+
+Poga darbojas līdzās [rindas saitei](../tabs/dashboard-tab.md#detail-pages): noklikšķinot uz pogas, tās saite tiek atvērta jaunā cilnē, bet noklikšķinot jebkur citur rindā, joprojām tiek atvērta detalizētās informācijas lapa.

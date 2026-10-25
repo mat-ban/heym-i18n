@@ -33,13 +33,17 @@ Când aveți doar date de exemplu (fără o sursă reală), produceți aceste r�
 | `valueField` | string | Cheia rândului folosită ca valoare numerică (pie/bar/line/numeric/gauge) |
 | `series` | array | Definiție opțională multi-serie `[{ "name": "Sent", "field": "sent" }]` pentru bar/line (suprascrie `valueField`) |
 | `columns` | array | Listă opțională de coloane pentru `table` (implicit cheile primului rând) |
-| `statusColumn` | string | Coloană opțională din `table` afișată ca [etichete de stare](#status-chips) colorate. Trebuie să fie una dintre coloanele afișate. |
+| `statusColumn` | string | Coloană opțională din `table` afișată ca [etichete de stare](#status-chips) colorate. Trebuie să fie una dintre coloanele afișate. |, iar cu `linkColumn` conține coloana de link și textul butonului.
 | `statusTones` | object | Mapare opțională de la o valoare de stare la o nuanță (`success`, `attention`, `failure`, `waiting`, `neutral`) pentru valorile neacoperite implicit |
+| `linkColumn` | string | Coloană `table` opțională ale cărei celule conțin un URL, afișat ca [buton de link](#link-buttons) care îl deschide într-o filă nouă. Trebuie să fie una dintre coloanele afișate. |
+| `linkLabel` | string | Text opțional al butonului de link. Dacă este lăsat gol, butonul afișează doar o pictogramă de link. |
 | `xField` / `yField` | string | Cheile rândului pentru axele numerice X și Y (scatter) |
 | `min` / `max` | number | Interval numeric pentru `gauge` (implicit `0` / `100`) |
 | `unit` | string | Unitate opțională afișată lângă o valoare `numeric` sau `gauge` |
 | `text` | string | Mesaj Markdown pentru tipul de grafic `text`. Lăsați gol și setați `valueField` pentru a afișa un mesaj dinamic preluat din datele anterioare. |
 | `title` | string | Titlu opțional al graficului |
+| `hitlWorkflowId` | string | Doar `hitl`. Afișează numai recenziile acestui workflow. Dacă este lăsat gol, widgetul afișează toate recenziile. |
+| `hitlNodeId` | string | Doar `hitl`. Restrânge `hitlWorkflowId` la un pas: un Agent cu revizuire umană sau un pas Slack de aprobare, butoane ori formular. |
 
 ## Tipuri de grafice
 
@@ -51,7 +55,7 @@ Când aveți doar date de exemplu (fără o sursă reală), produceți aceste r�
 - **proportion** — o singură bară orizontală împărțită în proporții cu o legendă procentuală (de ex. o defalcare pe limbi). Folosește `labelField` + `valueField`.
 - **barGauge** — un gauge orizontal per rând cu un gradient roșu→verde și o valoare (de ex. spațiu liber pe disc). Folosește `labelField` + `valueField`, `unit` opțional și `max` (implicit valoarea maximă a rândului).
 - **text** — un mesaj markdown (de ex. o notă de stare precum „Ultima execuție la 19:47"). Puneți markdown-ul în `text` pentru un mesaj static, sau lăsați `text` gol și setați `valueField` pentru a afișa un string produs anterior. Suportă titluri, bold/italic, [liste](../nodes/chart-output-node.md#interactive-task-lists), linkuri și cod inline.
-- **hitl** — un carusel cu recenziile dvs. umane în așteptare. Antetul afișează `1/n pending`; săgeata stângă este dezactivată pe primul card, iar săgeata dreaptă pe ultimul. Numele workflow-ului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă, iar pictograma de istoric de lângă titlul widget-ului deschide acea execuție în dialogul de istoric de pe aceeași pagină. Acest tip de grafic ignoră rândurile anterioare, astfel încât workflow-ul widget-ului este doar nodul Ieșire grafic. Fiecare persoană autentificată vede recenziile pentru workflow-urile pe care le deține.
+- **hitl** — un carusel cu recenziile dvs. umane în așteptare. Antetul afișează `1/n pending`; săgeata stângă este dezactivată pe primul card, iar săgeata dreaptă pe ultimul. Numele workflow-ului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă, iar pictograma de istoric de lângă titlul widget-ului deschide acea execuție în dialogul de istoric de pe aceeași pagină. Acest tip de grafic ignoră rândurile anterioare, astfel încât workflow-ul widget-ului este doar nodul Ieșire grafic. Fiecare persoană autentificată vede recenziile pentru workflow-urile pe care le deține. Alegeți un **Workflow** (și **Select agent** când are mai mulți pași de revizuire) în proprietățile nodului sau în setările widgetului pentru a afișa în schimb recenziile acelui workflow, tuturor celor care îl pot deschide; vedeți [widgeturi HITL](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Liste de activități interactive
 
@@ -307,3 +311,17 @@ Când generați un widget cu **AI**, prompt-uri precum acestea se mapează direc
 
 - [Fila Dashboard](../tabs/dashboard-tab.md) — construiți și aranjați widget-uri
 - [Nod de ieșire](output-node.md) — nod terminal pentru workflow-uri obișnuite
+
+
+## Butoane de link
+
+Un `table` poate transforma o coloană în butoane care deschid un link. Setați **Link column** în proprietățile nodului (sau `linkColumn` în DSL) la o coloană ale cărei celule conțin un URL și, opțional, **Link button text** (`linkLabel`). Fiecare celulă devine un buton care își deschide URL-ul într-o filă nouă. Fără text pentru buton, acesta afișează doar o pictogramă de link:
+
+| Valoarea celulei | Deschide |
+| ---------------- | -------- |
+| `https://jira.example.com/browse/T-1` | Alt site, într-o filă nouă |
+| `/dashboards` | O pagină din Heym, într-o filă nouă |
+
+Doar adresele `http://` și `https://` și căile care încep cu un singur `/` devin butoane. Orice altă valoare, cum ar fi `javascript:` sau `//host`, rămâne text simplu, iar o celulă goală nu afișează nimic.
+
+Butonul funcționează alături de un [link de rând](../tabs/dashboard-tab.md#detail-pages): un clic pe buton deschide linkul său într-o filă nouă, iar un clic în orice altă parte a rândului deschide în continuare pagina de detalii.

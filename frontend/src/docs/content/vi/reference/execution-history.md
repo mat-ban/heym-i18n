@@ -55,6 +55,18 @@ Mở một workflow tại `/workflows/{workflowId}/{executionId}` sẽ tự đ�
 - Debug một lần chạy thất bại bằng cách kiểm tra inputs và node outputs
 - So sánh outputs giữa các lần chạy
 
+## Hỏi AI
+
+Cả hai hộp thoại lịch sử đều có nút **Hỏi AI** (biểu tượng lấp lánh) bên cạnh tiêu đề. Nút này mở [tab Chat](../tabs/chat-tab.md#asking-about-a-run) trong một cuộc trò chuyện mới có đính kèm workflow và lần chạy đã chọn dưới dạng các chip có thể tháo rời. Hãy hỏi lý do lần chạy bị chậm, điều gì đã thất bại hoặc yêu cầu Chat sửa workflow. Chat đọc chính xác lần chạy đó, bao gồm cả dấu vết và lỗi trên từng node.
+
+Trong hộp thoại All History, **Hỏi AI** chỉ xuất hiện khi một lần chạy workflow được chọn; các lần chạy chat và trợ lý không hiển thị nút này.
+
+## Dòng thời gian chạy
+
+Trong chi tiết lần chạy, nút **Dòng thời gian** (biểu tượng đồng hồ bấm giờ) bên cạnh **Mở rộng tất cả** sẽ hoán đổi danh sách **Các bước** thành dòng thời gian span. Trong khi dòng thời gian hiển thị, nút này sẽ ghi là **Nhật ký**; nhấp vào đó để quay lại danh sách. Trong All History, nút này chỉ xuất hiện cho các lần chạy workflow. Dòng thời gian vẽ một thanh cho mỗi node tại thời điểm nó bắt đầu, để bạn có thể thấy node nào mất bao lâu và node nào chạy song song. Di chuột qua thanh để xem thời lượng; nhấp vào đó để mở cùng một thanh kiểm tra chi tiết như [dòng thời gian thực thi](#execution-timeline-details) của trình chỉnh sửa. Chế độ xem bạn chọn vẫn được duy trì trong suốt thời gian hộp thoại mở.
+
+Các lần chạy được ghi lại trước khi lưu thời gian bắt đầu của node được sắp xếp nối tiếp nhau theo thời lượng.
+
 ## Execution Highlights
 
 Sau một lần chạy trực tiếp — hoặc sau **Bring to Canvas** — một popup **Execution Highlights** có thể đóng sẽ xuất hiện ở **góc trên bên phải của Canvas**. Đây là cách nhanh để xem *mỗi node đã tạo ra gì*, được liệt kê từ trên xuống dưới theo thứ tự thực thi. Đóng nó bằng **✕**; nó sẽ mở lại ở lần chạy tiếp theo.
@@ -145,7 +157,7 @@ Dùng **Copy** bên cạnh Inputs hoặc Outputs để sao chép JSON vào clipb
 
 ## Chi tiết dòng thời gian execution
 
-Khi **Execution Log** của editor đang mở, nhấp vào nút đồng hồ để hiển thị dòng thời gian execution. Chọn một span để mở trình kiểm tra chi tiết nội tuyến chiếm vùng các hàng. Nó hiển thị trạng thái, thời lượng, số lần thử, thông tin thử lại, lỗi, trace ID và bản xem trước output ngắn gọn của bước đã chọn. Output dạng object và array dùng cùng trình xem `JsonTree` như phần còn lại của bảng Debug; các giá trị vô hướng dùng bản xem trước văn bản. Khi một bước xuất ra hình ảnh (ảnh chụp Playwright, hình ảnh được tạo, tệp hình ảnh), chúng xuất hiện dưới dạng hình thu nhỏ phía trên output, và JSON hiển thị một placeholder ngắn thay cho base64 thô. Nhấp vào hình thu nhỏ để mở trong lightbox; các nút mũi tên hoặc phím ←/→ để chuyển qua từng hình ảnh trong lần chạy, với bộ đếm như `2 / 5`. Dùng **Open trace** cho các span LLM và Agent khi có trace ID.
+Khi **Execution Log** của editor đang mở, nhấp vào nút đồng hồ để hiển thị dòng thời gian execution. Chọn một span để mở trình kiểm tra chi tiết nội tuyến chiếm vùng các hàng. Nó hiển thị trạng thái, thời lượng, số lần thử, thông tin thử lại, lỗi, trace ID và bản xem trước output ngắn gọn của bước đã chọn. Output dạng object và array dùng cùng trình xem `JsonTree` như phần còn lại của bảng Debug; các giá trị vô hướng dùng bản xem trước văn bản. Khi một bước xuất ra hình ảnh (ảnh chụp màn hình Playwright, hình ảnh được tạo, tệp hình ảnh hoặc hình ảnh base64 trong nội dung yêu cầu, được tìm thấy ở bất kỳ đâu trong đầu ra), chúng xuất hiện dưới dạng hình thu nhỏ phía trên output, và JSON hiển thị một placeholder ngắn thay cho base64 thô. Nhấp vào hình thu nhỏ để mở trong lightbox; các nút mũi tên hoặc phím ←/→ để chuyển qua từng hình ảnh trong lần chạy, với bộ đếm như `2 / 5`. Dùng **Open trace** cho các span LLM và Agent khi có trace ID.
 
 ## Chi tiết node trên thiết bị di động
 

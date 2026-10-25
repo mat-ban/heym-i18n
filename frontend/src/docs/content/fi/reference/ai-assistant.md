@@ -13,6 +13,8 @@ Dokumentaatiokysymyksiin editorin ulkopuolella käytä [Keskustele Heymin kanssa
 
 Paina `Ctrl + I` / `Cmd + I` missä tahansa editorissa avataksesi tai sulkeaksesi paneelin – pikanäppäin toimii myös, kun tekstikenttä on aktiivisena. Katso [Pikanäppäimet](./keyboard-shortcuts.md).
 
+Jos haluat käsitellä yhtä solmua, vie kohdistin sen päälle kankaalla ja napsauta sen yläpuolella olevaa **AI**-painiketta. Paneeli avautuu kyseiseen solmuun kohdistettuna. Katso [Yhden solmun muuttaminen](#changing-one-node).
+
 ## Paneelin sulkeminen
 
 Klikkaa **X**-painiketta, paina `Ctrl + I` / `Cmd + I` tai vaihda **AI**-painikkeen tilaa Debug-paneelin työkalurivillä. Otsikkoa vetämällä siirrät paneelia; se ei sulje sitä.
@@ -60,6 +62,33 @@ Kun tekoälyn vastaus sisältää kelvollisen workflow-JSON-lohkon (jossa on `no
 4. Merkkaa workflown tallentamattomaksi
 
 Jos jäsennys epäonnistuu, näkyviin tulee **Yritä uudelleen** -painike vastauksen uudelleenluomista varten.
+
+## Yhden solmun muuttaminen
+
+Vie kohdistin kankaalla olevan solmun päälle ja napsauta sen yläpuolella olevaa **AI**-painiketta. Paneeli avautuu Agent-tilassa kyseiseen solmuun kohdistettuna ja näyttää, mitä solmua se muuttaa:
+
+| Solmulla on... | Paneeli näyttää |
+|---|---|
+| Ei tulosta nykyisessä suorituksessa | **Modifying Node:** kompaktilla rivillä solmun kuvakkeen ja nimen kanssa. Avustaja muokkaa vain solmun omasta konfiguraatiosta; suorita solmu ensin, jos sen pitäisi nähdä tuloste |
+| Tulos nykyisessä suorituksessa | **Modifying Node: (Has Node Output)** itse solmun yläpuolella: kuvake, nimi ja tyyppi, viimeisin tila ja kesto sekä virhe, jos suoritus epäonnistui. Avustaja näkee tämän tulosteen ja virheen muokatessaan solmua |
+
+Vie kohdistin tunnisteen päälle nähdäksesi, missä tilassa paneeli on.
+
+Riippumatta paneelin tilasta avustaja lukee myös solmun dokumentaatiosivun, joka löytyy solmun otsikon kirjakuvakkeen takaa. Se käyttää sivua solmun asetusten ymmärtämiseen ja niitä koskeviin kysymyksiin vastaamiseen.
+
+Viestien alla kolme vaihtoehtoa aloittaa pyynnön:
+
+| Vaihtoehto | Mitä se tekee |
+|---|---|
+| **Change this node as ...** | Täyttää viestikenttään tekstin *Muuta tämä solmu muotoon*, jotta voit viimeistellä lauseen |
+| **Fix error in this node ...** | Täyttää *Korjaa tämän solmun virhe.* Avustaja lukee tämän solmun virheen viimeisimmästä suorituksesta |
+| **Other** | Kohdistaa tyhjään viestikenttään |
+
+Muokkaa tekstiä ja paina **Send**. Avustaja palauttaa vain tämän solmun ja Heym päivittää sen paikalleen: solmu säilyttää id:nsä, tyyppinsä ja nimensä, joten lausekkeet kuten `$checkLinkedIn.result` muissa solmuissa toimivat edelleen. Muut solmut, yhteydet ja asettelu eivät muutu, ja **Undo** palauttaa aiemman konfiguraation.
+
+Jos pyyntö ei mahdu solmuun, esimerkiksi vaatii toisen solmutyypin tai uuden solmun, avustaja ilmoittaa muokkauksen sijaan, mitä pitäisi muuttaa. Sulje solmun kohdistus solmukortin **X**-painikkeella muokataksesi koko workflowta uudelleen. Paneelin sulkeminen poistaa myös kohdistuksen.
+
+[YOLO-tila](#yolo-mode) toimii kohdistetun solmun kanssa: avustaja muuttaa solmua, suorittaa workflown ja korjaa solmua, kunnes suoritus onnistuu. **Ask**-tilassa kohdistus kertoo avustajalle, mitä solmua kysymyksesi koskee, eikä kangasta muuteta.
 
 ## YOLO-tila
 

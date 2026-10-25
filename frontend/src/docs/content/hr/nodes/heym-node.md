@@ -16,7 +16,7 @@
 | Parametar | Tip | Opis |
 |-----------|------|-------------|
 | `heymOperation` | Select | Koje čitanje izvršiti |
-| `heymWorkflowId` | UUID | Ciljni workflow. Obavezno za `getWorkflow` i `getExecutionHistory`. Podržava izraze. |
+| `heymWorkflowId` | UUID | Postavite ga na `all` kod `getExecutionHistory` kako biste pročitali svaki dostupni Workflow. |
 | `heymLimit` | String | Maksimalan broj redaka za vraćanje. **Ostavite prazno ili unesite `0` za vraćanje svega** — to je zadano. Podržava izraze. |
 | `heymStatus` | String | Neobavezni filtar statusa za `getExecutionHistory`. Podržava izraze. |
 | `heymSinceDays` | String | Neobavezni period pregleda u danima za `getExecutionHistory`. Podržava izraze. |
@@ -93,9 +93,11 @@ Vraća zapise povijesti izvršavanja za jedan workflow, najnovije prvo.
 | `$nodeLabel.executions[0].recovered` | Je li izvršavanje oporavljeno nakon pada |
 | `$nodeLabel.executions[0].inputs` | Što je izvršavanje primilo – trigger payload ili ulaz pozivatelja |
 | `$nodeLabel.executions[0].outputs` | Izlaz workflowa za to izvršavanje |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow kojem povijest pripada |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow kojem povijest pripada ili `null` uz **{AW}** |
+i `null` uz **{AW}** |
 | `$nodeLabel.total` | Ukupan broj odgovarajućih izvršavanja **prije** ograničenja |
-| `$nodeLabel.by_status` | Brojanja po statusu, na primjer `{ "success": 41, "error": 3 }` |
+| `$nodeLa| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Uz **{AW}**, Workflow kojem pripada svako izvršavanje |
+bel.by_status` | Brojanja po statusu, na primjer `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Početak razdoblja ili `null` za cijelu povijest |
 
 Zapisi sadrže i `inputs` i `outputs` – što je izvršavanje primilo i što je vratilo – ali nikada `node_results`: trag po pojedinim čvorovima najveći je stupac u tablici i zasjenio bi sve nizvodno. Dohvatite pojedinačno izvršavanje putem API-ja kada vam je potreban cijeli trag.

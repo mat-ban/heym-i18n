@@ -33,13 +33,17 @@ Quando você tiver apenas dados de exemplo/amostra (sem fonte real), produza ess
 | `valueField` | string | Chave da linha usada como valor numérico (pie/bar/line/numeric/gauge) |
 | `series` | array | Definição opcional de múltiplas séries `[{ "name": "Sent", "field": "sent" }]` para bar/line (substitui `valueField`) |
 | `columns` | array | Lista opcional de colunas para `table` (o padrão são as chaves da primeira linha) |
-| `statusColumn` | string | Coluna opcional de `table` apresentada como [etiquetas de estado](#status-chips) coloridas. Tem de ser uma das colunas apresentadas. |
+| `statusColumn` | string | Coluna opcional de `table` apresentada como [etiquetas de estado](#status-chips) coloridas. Tem de ser uma das colunas apresentadas. |, e com `linkColumn` inclui a coluna de ligação e o texto do botão.
 | `statusTones` | object | Mapeamento opcional de um valor de estado para um tom (`success`, `attention`, `failure`, `waiting`, `neutral`) para valores não abrangidos pelas predefinições |
+| `linkColumn` | string | Coluna `table` opcional cujas células contêm um URL, apresentada como [botão de ligação](#link-buttons) que o abre num novo separador. Tem de ser uma das colunas apresentadas. |
+| `linkLabel` | string | Texto opcional do botão de ligação. Se ficar vazio, o botão mostra apenas um ícone de ligação. |
 | `xField` / `yField` | string | Chaves das linhas para os eixos numéricos X e Y (scatter) |
 | `min` / `max` | number | Intervalo numérico para `gauge` (padrão `0` / `100`) |
 | `unit` | string | Unidade opcional exibida ao lado de um valor `numeric` ou `gauge` |
 | `text` | string | Mensagem em Markdown para o tipo de gráfico `text`. Deixe vazio e defina `valueField` para renderizar uma mensagem dinâmica obtida dos dados anteriores. |
 | `title` | string | Título opcional do gráfico |
+| `hitlWorkflowId` | string | Apenas `hitl`. Mostra só as revisões deste workflow. Se ficar vazio, o widget mostra todas as revisões. |
+| `hitlNodeId` | string | Apenas `hitl`. Restringe `hitlWorkflowId` a um passo: um Agent com revisão humana, ou um passo Slack de aprovação, botões ou formulário. |
 
 ## Tipos de gráfico
 
@@ -51,7 +55,7 @@ Quando você tiver apenas dados de exemplo/amostra (sem fonte real), produza ess
 - **proportion** — uma única barra horizontal dividida em frações com uma legenda percentual (por exemplo, uma distribuição de idiomas). Usa `labelField` + `valueField`.
 - **barGauge** — um medidor horizontal por linha com um gradiente de vermelho→verde e um valor (por exemplo, espaço livre em disco). Usa `labelField` + `valueField`, com `unit` e `max` opcionais (o padrão é o maior valor de linha).
 - **text** — uma mensagem em markdown (por exemplo, uma nota de status como "Última execução às 19:47"). Coloque o markdown em `text` para uma mensagem estática, ou deixe `text` vazio e defina `valueField` para renderizar uma string produzida anteriormente. Suporta títulos, negrito/itálico, [listas](../nodes/chart-output-node.md#interactive-task-lists), links e código embutido.
-- **hitl** — um carrossel das suas revisões humanas pendentes. O cabeçalho exibe `1/n pending`; a seta esquerda fica desabilitada no primeiro cartão e a seta direita no último. O nome do workflow abre essa execução no canvas. **Approve**, **Request changes** e **Reject** a resolvem, e o ícone de histórico ao lado do título do widget abre essa execução no diálogo de histórico na mesma página. Este tipo de gráfico ignora as linhas anteriores, portanto o workflow do widget é apenas o nó Saída de Gráfico. Cada pessoa autenticada vê as revisões nos workflows que possui.
+- **hitl** — um carrossel das suas revisões humanas pendentes. O cabeçalho exibe `1/n pending`; a seta esquerda fica desabilitada no primeiro cartão e a seta direita no último. O nome do workflow abre essa execução no canvas. **Approve**, **Request changes** e **Reject** a resolvem, e o ícone de histórico ao lado do título do widget abre essa execução no diálogo de histórico na mesma página. Este tipo de gráfico ignora as linhas anteriores, portanto o workflow do widget é apenas o nó Saída de Gráfico. Cada pessoa autenticada vê as revisões nos workflows que possui. Escolha um **Workflow** (e **Select agent** quando tiver vários passos de revisão) nas propriedades do nó ou nas definições do widget para mostrar em vez disso as revisões desse workflow, a todos os que o possam abrir; consulte [widgets HITL](../tabs/dashboard-tab.md#hitl-widgets).
 ### Listas de tarefas interativas
 
 Utilize a sintaxe de lista de tarefas do markdown compatível com GitHub no campo estático `text`:
@@ -307,3 +311,17 @@ Ao gerar um widget com **IA**, prompts como estes mapeiam diretamente para cada 
 
 - [Guia Dashboard](../tabs/dashboard-tab.md) — crie e organize widgets
 - [Nó Output](output-node.md) — nó terminal para Workflows regulares
+
+
+## Botões de ligação
+
+Uma `table` pode transformar uma coluna em botões que abrem uma ligação. Defina **Link column** nas propriedades do nó (ou `linkColumn` no DSL) para uma coluna cujas células contenham um URL e, opcionalmente, **Link button text** (`linkLabel`). Cada célula torna-se um botão que abre o respetivo URL num novo separador. Sem texto do botão, este mostra apenas um ícone de ligação:
+
+| Valor da célula | Abre |
+| --------------- | ---- |
+| `https://jira.example.com/browse/T-1` | Outro site, num novo separador |
+| `/dashboards` | Uma página dentro do Heym, num novo separador |
+
+Apenas os endereços `http://` e `https://` e os caminhos que começam por uma única `/` se tornam botões. Qualquer outro valor, como `javascript:` ou `//host`, permanece texto simples, e uma célula vazia não mostra nada.
+
+O botão funciona junto de uma [ligação de linha](../tabs/dashboard-tab.md#detail-pages): clicar no botão abre a respetiva ligação num novo separador, e clicar em qualquer outro ponto da linha continua a abrir a página de detalhe.

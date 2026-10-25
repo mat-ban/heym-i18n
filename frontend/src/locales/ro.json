@@ -478,7 +478,14 @@
     "extract": "Extragere",
     "mySubWorkflow": "Sub-Workflow-ul meu",
     "moreNodes": "+{count} suplimentare",
-    "runToNode": "Rulare până la {label}"
+    "runToNode": "Rulare până la {label}",
+    "aiButtonTitle": "Modificați sau corectați acest nod cu asistentul AI",
+    "editNodeWithAi": "Editați {label} cu AI",
+    "modifyingNode": "Modificare nod:",
+    "hasNodeOutput": "(Are ieșire de nod)",
+    "closeNodeFocus": "Închideți focalizarea pe nod și editați întregul Workflow",
+    "nodeFocusRan": "Acest nod a rulat. AI vede ultima sa ieșire și eroarea și citește documentația nodului.",
+    "nodeFocusNoOutput": "Acest nod nu are ieșire în rularea curentă. Rulați-l mai întâi dacă AI trebuie să-i vadă ieșirea. AI citește documentația nodului în ambele cazuri."
   },
   "nodes": {
     "title": "Noduri",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Editați mesajul din coadă",
     "deleteQueuedMessage": "Ștergeți mesajul din coadă",
     "startedByMcp": "Inițiat de un client MCP",
-    "newChatTitle": "Chat nou"
+    "newChatTitle": "Chat nou",
+    "subtitle": "Rulați Workflows și puneți întrebări",
+    "modelsLoadFailedDisabled": "Lista de modele a acestor credențiale nu a putut fi încărcată. Chat-ul rămâne dezactivat până când poate fi preluat un model."
   },
   "teams": {
     "title": "Echipe",
@@ -1672,7 +1681,10 @@
       "error": "Eroare",
       "cached": "Din cache",
       "cancelled": "Anulat"
-    }
+    },
+    "askAi": "Întreabă AI",
+    "askAiTitle": "Întrebați asistentul Chat despre această rulare",
+    "noNodeSpans": "Pentru această rulare nu au fost înregistrate span-uri de nod."
   },
   "portal": {
     "loadingPortal": "Se încarcă portalul...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Înregistrări ale paginii de detalii",
     "detailPageRecordsHelp": "Valorile ?record= pe care acest tablou de bord le acceptă când este deschis printr-un link de rând. Orice altceva este refuzat înainte de rularea widgetului.",
     "unreachableDashboard": "Un tablou de bord pe care nu îl puteți deschide",
-    "runWorkflow": "Rulare Workflow"
+    "runWorkflow": "Rulare Workflow",
+    "openWorkflowNewTab": "Deschideți Workflow într-o filă nouă",
+    "hitlFilterHelp": "Afișați verificările din toate Workflows sau doar dintr-unul. Listează Workflows pe care le puteți deschide, ale dvs. sau partajate cu dvs., care au un pas ce așteaptă o persoană.",
+    "hitlSourcesLoadFailed": "Workflows dvs. nu au putut fi încărcate."
   },
   "drive": {
     "filesCount": "({count} fișiere)",

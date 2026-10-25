@@ -478,7 +478,14 @@
     "extract": "추출",
     "mySubWorkflow": "내 Sub-Workflow",
     "moreNodes": "+{count}개 더보기",
-    "runToNode": "{label}까지 실행"
+    "runToNode": "{label}까지 실행",
+    "aiButtonTitle": "AI 어시스턴트로 이 노드를 변경하거나 수정",
+    "editNodeWithAi": "AI로 {label} 편집",
+    "modifyingNode": "노드 수정 중:",
+    "hasNodeOutput": "(노드 출력 있음)",
+    "closeNodeFocus": "노드 포커스를 닫고 전체 Workflow 편집",
+    "nodeFocusRan": "이 노드가 실행되었습니다. AI는 마지막 출력과 오류를 확인하고 노드 문서를 읽습니다.",
+    "nodeFocusNoOutput": "이 노드는 현재 실행에서 출력이 없습니다. AI가 출력을 확인해야 한다면 먼저 노드를 실행하십시오. 어느 경우든 AI는 노드 문서를 읽습니다."
   },
   "nodes": {
     "title": "노드",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "대기 중인 메시지 편집",
     "deleteQueuedMessage": "대기 중인 메시지 삭제",
     "startedByMcp": "MCP 클라이언트에 의해 시작됨",
-    "newChatTitle": "새 채팅"
+    "newChatTitle": "새 채팅",
+    "subtitle": "Workflow를 실행하고 질문하기",
+    "modelsLoadFailedDisabled": "이 자격 증명의 모델 목록을 불러오지 못했습니다. 모델을 가져올 수 있을 때까지 Chat은 비활성 상태로 유지됩니다."
   },
   "teams": {
     "title": "팀",
@@ -1672,7 +1681,10 @@
       "error": "오류",
       "cached": "캐시됨",
       "cancelled": "취소됨"
-    }
+    },
+    "askAi": "AI에게 질문",
+    "askAiTitle": "이 실행에 대해 Chat 어시스턴트에게 질문",
+    "noNodeSpans": "이 실행에 대해 기록된 노드 span이 없습니다."
   },
   "portal": {
     "loadingPortal": "포털 로드 중...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "세부정보 페이지 레코드",
     "detailPageRecordsHelp": "행 링크로 열릴 때 이 대시보드가 허용하는 ?record= 값입니다. 그 외의 값은 위젯 실행 전에 거부됩니다.",
     "unreachableDashboard": "열 수 없는 대시보드",
-    "runWorkflow": "Workflow 실행"
+    "runWorkflow": "Workflow 실행",
+    "openWorkflowNewTab": "Workflow를 새 탭에서 열기",
+    "hitlFilterHelp": "모든 Workflow 또는 하나의 Workflow에 대한 검토를 표시합니다. 열 수 있는 Workflow(내 것 또는 공유받은 것) 중 사람의 처리를 기다리는 단계가 있는 것을 나열합니다.",
+    "hitlSourcesLoadFailed": "Workflow를 불러오지 못했습니다."
   },
   "drive": {
     "filesCount": "(파일 {count}개)",

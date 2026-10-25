@@ -51,6 +51,7 @@
 ## 驗證與 Session
 
 - **WorkflowPortalUser**：每個 Workflow 的使用者名稱／密碼（啟用驗證時）
+- **刪除最後一個用戶**：在啟用門戶的情況下，刪除最後一個門戶用戶將使門戶重新變為公開狀態；設置對話框會首先請求確認
 - **PortalSession**：Session Token，TTL 為 168 小時
 - **速率限制**：3 次登入失敗 → 依 Workflow 與 IP 封鎖 24 小時
 - 過期的 Session 會由 Cron 作業清理

@@ -51,6 +51,7 @@ A bemeneti mezők az [Input](../nodes/input-node.md) csomópontokból származna
 ## Hitelesítés és munkamenetek
 
 - **WorkflowPortalUser**: Felhasználónév/jelszó workflow-nként (ha a hitelesítés engedélyezett)
+- **Utolsó felhasználó eltávolítása**: Bekapcsolt portál esetén az utolsó portálfelhasználó törlése ismét nyilvánossá teszi a portált; a beállítások párbeszédpanel először megerősítést kér
 - **PortalSession**: Munkamenet tokenek 168 órás TTL-lel
 - **Sebességkorlátozás**: 3 sikertelen bejelentkezési kísérlet → 24 órás tiltás workflow+IP kombinációnként
 - A lejárt munkameneteket egy cron job tisztítja

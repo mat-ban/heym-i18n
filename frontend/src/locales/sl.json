@@ -478,7 +478,14 @@
     "extract": "Izlušči",
     "mySubWorkflow": "Moj pod-workflow",
     "moreNodes": "+{count} več",
-    "runToNode": "Zaženi do {label}"
+    "runToNode": "Zaženi do {label}",
+    "aiButtonTitle": "Spremenite ali popravite to vozlišče s pomočnikom AI",
+    "editNodeWithAi": "Uredi {label} z AI",
+    "modifyingNode": "Spreminjanje vozlišča:",
+    "hasNodeOutput": "(Ima izhod vozlišča)",
+    "closeNodeFocus": "Zaprite fokus na vozlišče in uredite celoten Workflow",
+    "nodeFocusRan": "To vozlišče je bilo zagnano. AI vidi njegov zadnji izhod in napako ter prebere dokumentacijo vozlišča.",
+    "nodeFocusNoOutput": "To vozlišče nima izhoda v trenutnem zagonu. Najprej ga zaženite, če naj AI vidi njegov izhod. AI v obeh primerih prebere dokumentacijo vozlišča."
   },
   "nodes": {
     "title": "Vozlišča",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Uredi sporočilo v čakalni vrsti",
     "deleteQueuedMessage": "Izbriši sporočilo v čakalni vrsti",
     "startedByMcp": "Začel MCP odjemalec",
-    "newChatTitle": "Nov chat"
+    "newChatTitle": "Nov chat",
+    "subtitle": "Zaganjajte Workflows in postavljajte vprašanja",
+    "modelsLoadFailedDisabled": "Seznama modelov za ta poverilnica ni bilo mogoče naložiti. Chat ostane onemogočen, dokler ni mogoče pridobiti modela."
   },
   "teams": {
     "title": "Ekipe",
@@ -1672,7 +1681,10 @@
       "error": "Napaka",
       "cached": "Iz predpomnilnika",
       "cancelled": "Preklicano"
-    }
+    },
+    "askAi": "Vprašaj AI",
+    "askAiTitle": "Vprašajte pomočnika Chat o tem zagonu",
+    "noNodeSpans": "Za ta zagon niso bili zabeleženi spani vozlišč."
   },
   "portal": {
     "loadingPortal": "Nalaganje portala ...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Zapisi strani s podrobnostmi",
     "detailPageRecordsHelp": "Vrednosti ?record=, ki jih ta nadzorna plošča sprejme, ko jo odpre povezava vrstice. Vse ostalo je pred zagonom gradnika zavrnjeno.",
     "unreachableDashboard": "Nadzorna plošča, ki je ne morete odpreti",
-    "runWorkflow": "Zaženi Workflow"
+    "runWorkflow": "Zaženi Workflow",
+    "openWorkflowNewTab": "Odpri Workflow v novem zavihku",
+    "hitlFilterHelp": "Pokaži preglede iz vseh Workflows ali samo iz enega. Navaja Workflows, ki jih lahko odprete – vaše ali z vami deljene – s korakom, ki čaka na osebo.",
+    "hitlSourcesLoadFailed": "Vaših Workflows ni bilo mogoče naložiti."
   },
   "drive": {
     "filesCount": "({count} datotek)",

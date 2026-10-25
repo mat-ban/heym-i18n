@@ -478,7 +478,14 @@
     "extract": "Trích xuất",
     "mySubWorkflow": "Sub-Workflow của tôi",
     "moreNodes": "+{count} nữa",
-    "runToNode": "Chạy đến {label}"
+    "runToNode": "Chạy đến {label}",
+    "aiButtonTitle": "Thay đổi hoặc sửa nút này bằng trợ lý AI",
+    "editNodeWithAi": "Chỉnh sửa {label} bằng AI",
+    "modifyingNode": "Đang sửa đổi nút:",
+    "hasNodeOutput": "(Có đầu ra của nút)",
+    "closeNodeFocus": "Đóng tiêu điểm nút và chỉnh sửa toàn bộ Workflow",
+    "nodeFocusRan": "Nút này đã chạy. AI thấy đầu ra và lỗi gần nhất của nút và đọc tài liệu của nút.",
+    "nodeFocusNoOutput": "Nút này không có đầu ra trong lần chạy hiện tại. Hãy chạy nút trước nếu AI cần thấy đầu ra. AI đọc tài liệu của nút trong cả hai trường hợp."
   },
   "nodes": {
     "telegramTrigger": {
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Chỉnh sửa tin nhắn trong hàng đợi",
     "deleteQueuedMessage": "Xóa tin nhắn trong hàng đợi",
     "startedByMcp": "Được khởi tạo bởi một MCP client",
-    "newChatTitle": "Cuộc trò chuyện mới"
+    "newChatTitle": "Cuộc trò chuyện mới",
+    "subtitle": "Chạy Workflow và đặt câu hỏi",
+    "modelsLoadFailedDisabled": "Không thể tải danh sách mô hình của thông tin xác thực này. Chat vẫn bị tắt cho đến khi có thể lấy được mô hình."
   },
   "teams": {
     "title": "Teams",
@@ -1672,7 +1681,10 @@
     "humanReviewHistory": "Lịch sử xem xét của con người",
     "allTags": "Tất cả thẻ",
     "allInstances": "Tất cả instance",
-    "allStatuses": "Tất cả trạng thái"
+    "allStatuses": "Tất cả trạng thái",
+    "askAi": "Hỏi AI",
+    "askAiTitle": "Hỏi trợ lý Chat về lần chạy này",
+    "noNodeSpans": "Không có span nút nào được ghi lại cho lần chạy này."
   },
   "portal": {
     "loadingPortal": "Đang tải portal...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Bản ghi trang chi tiết",
     "detailPageRecordsHelp": "Các giá trị ?record= mà bảng thông tin này chấp nhận khi một liên kết hàng mở nó. Bất kỳ giá trị nào khác đều bị từ chối trước khi tiện ích chạy.",
     "unreachableDashboard": "Bảng thông tin không thể mở",
-    "runWorkflow": "Chạy một Workflow"
+    "runWorkflow": "Chạy một Workflow",
+    "openWorkflowNewTab": "Mở Workflow trong tab mới",
+    "hitlFilterHelp": "Hiển thị các đánh giá từ mọi Workflow hoặc chỉ một Workflow. Liệt kê các Workflow mà bạn có thể mở, của bạn hoặc được chia sẻ với bạn, có bước đang chờ một người.",
+    "hitlSourcesLoadFailed": "Không thể tải các Workflow của bạn."
   },
   "drive": {
     "filesCount": "({count} tệp)",

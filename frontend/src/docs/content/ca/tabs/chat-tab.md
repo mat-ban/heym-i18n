@@ -74,6 +74,17 @@ Pregunteu-ho en llenguatge natural — "what is running?", "how many workflows a
 
 Les execucions en pausa per a una revisió [Human-in-the-Loop](../reference/human-in-the-loop.md) o de Codex es reporten com a pendents de la vostra intervenció, no com a en execució. Són les mateixes dades que la insígnia d'execucions actives de la capçalera, de manera que el Chat i la insígnia mai no es contradiuen. Per a execucions que ja han acabat, demaneu les execucions recents — això llegeix l'[Execution History](../reference/execution-history.md).
 
+## Preguntar sobre una execució
+
+Seleccioneu una execució de Workflow a l'[Execution History](../reference/execution-history.md#ask-ai), des de l'editor o des d'All History, i feu clic a **Preguntar a la IA** al costat del títol del diàleg. Chat obre una nova conversa amb dos xips sobre el quadre de missatge:
+
+- **Workflow:** el nom del Workflow
+- **Execution:** els primers caràcters de l'id de l'execució seleccionada
+
+Elimineu un xip amb el seu **×** per excloure'l. Després feu la vostra pregunta, per exemple «per què ha trigat tant aquesta execució?», «què ha fallat aquí?» o «ho podeu solucionar?». Els xips restants s'adjunten a aquest missatge amb els identificadors complets, de manera que Chat llegeix directament les entrades, les sortides i la traça per node de l'execució en lloc de cercar el Workflow. Per corregir el Workflow, Chat desa, prova i verifica el canvi com es descriu a [Creació de Workflows](#creacio-de-workflows).
+
+El missatge enviat mostra els xips sota la vostra pregunta. Pertanyen només a aquest missatge; les preguntes de seguiment a la mateixa conversa mantenen el context de l'historial.
+
 ## Consulta sobre alertes
 
 El Chat pot respondre preguntes sobre les [alertes](./alerts-tab.md) que heu definit:

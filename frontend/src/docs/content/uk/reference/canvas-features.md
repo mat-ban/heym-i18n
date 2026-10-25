@@ -1,6 +1,6 @@
 # Можливості Canvas
 
-Редактор Workflow надає кілька функцій для налагодження, тестування та впорядкування вузлів: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** та **Extract to Sub-Workflow**.
+Редактор Workflow надає кілька функцій для налагодження, тестування та впорядкування вузлів: **Run to Node**, **AI на вузлі**, **Data Pin**, **Execution Logs**, **Enable/Disable** та **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Переглянути демонстрацію редактора</a></p>
@@ -12,6 +12,12 @@
 Якщо вибраний шлях має поля введення, права панель **Run** відкривається та фокусується на першому полі. Введіть значення, потім натисніть **Run to _node label_** або натисніть **Ctrl+Enter** (Cmd+Enter на macOS). Режим загального body фокусується на редакторі JSON body. Шляхи без полів введення виконуються негайно без відкриття панелі. Закріплені вузли Input повторно використовують свій закріплений вихід без запиту введення.
 
 Панель зберігає вибрану ціль для наступних запусків. Виберіть **Run full workflow**, щоб очистити ціль. Кнопки Run вимкнені, поки виконання активне. Ціль всередині циклу зупиняє запуск, коли цей вузол досягається вперше; вибір вузла після циклу запускає повний вихідний цикл.
+
+## AI на вузлі
+
+Наведіть курсор на будь-який вузол, крім наліпки, і натисніть **AI** над ним. [AI Assistant](./ai-assistant.md) відкривається на цьому вузлі та пропонує **Change this node as ...**, **Fix error in this node ...** і **Other**. У режимі Agent асистент змінює лише цей вузол; інші вузли, з’єднання та макет залишаються без змін. Див. [AI Assistant › Зміна окремого вузла](./ai-assistant.md#changing-one-node).
+
+Кнопка прихована у workflow, які доступні лише для перегляду.
 
 ## Data Pin
 

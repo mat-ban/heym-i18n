@@ -478,7 +478,14 @@
     "extract": "Kinyerés",
     "mySubWorkflow": "Saját Sub-Workflow",
     "moreNodes": "+{count} további",
-    "runToNode": "Futtatás eddig: {label}"
+    "runToNode": "Futtatás eddig: {label}",
+    "aiButtonTitle": "A csomópont módosítása vagy javítása az AI asszisztenssel",
+    "editNodeWithAi": "{label} szerkesztése AI-val",
+    "modifyingNode": "Csomópont módosítása:",
+    "hasNodeOutput": "(Van csomópont-kimenete)",
+    "closeNodeFocus": "A csomópont-fókusz bezárása és a teljes Workflow szerkesztése",
+    "nodeFocusRan": "Ez a csomópont lefutott. Az AI látja az utolsó kimenetét és hibáját, és olvassa a csomópont dokumentációját.",
+    "nodeFocusNoOutput": "Ennek a csomópontnak nincs kimenete az aktuális futtatásban. Futtassa először, ha az AI-nak látnia kell a kimenetét. Az AI mindkét esetben olvassa a csomópont dokumentációját."
   },
   "nodes": {
     "title": "Csomópontok",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Sorban álló üzenet szerkesztése",
     "deleteQueuedMessage": "Sorban álló üzenet törlése",
     "startedByMcp": "MCP kliens indította",
-    "newChatTitle": "Új chat"
+    "newChatTitle": "Új chat",
+    "subtitle": "Workflow-k futtatása és kérdések feltevése",
+    "modelsLoadFailedDisabled": "A hitelesítő adatok modelllistáját nem sikerült betölteni. A Chat letiltva marad, amíg nem lehet modellt lekérni."
   },
   "teams": {
     "title": "Csapatok",
@@ -1672,7 +1681,10 @@
       "error": "Hiba",
       "cached": "Gyorsítótárból",
       "cancelled": "Megszakítva"
-    }
+    },
+    "askAi": "Kérdezze az AI-t",
+    "askAiTitle": "A Chat asszisztens megkérdezése erről a futtatásról",
+    "noNodeSpans": "Ehhez a futtatáshoz nem rögzítettek csomópont-spaneket."
   },
   "portal": {
     "loadingPortal": "Portál betöltése...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Részletes oldal rekordjai",
     "detailPageRecordsHelp": "A ?record= értékek, amelyeket ez a vezérlőpult elfogad, amikor egy sorhivatkozás megnyitja. Minden más elutasításra kerül a widget futtatása előtt.",
     "unreachableDashboard": "Nem megnyitható vezérlőpult",
-    "runWorkflow": "Workflow futtatása"
+    "runWorkflow": "Workflow futtatása",
+    "openWorkflowNewTab": "Workflow megnyitása új lapon",
+    "hitlFilterHelp": "Áttekintések megjelenítése minden Workflow-ból vagy csak egyből. Felsorolja azokat a Workflow-kat, amelyeket megnyithat – saját vagy Önnel megosztott –, és amelyekben egy lépés személyre vár.",
+    "hitlSourcesLoadFailed": "A Workflow-kat nem sikerült betölteni."
   },
   "drive": {
     "filesCount": "({count} fájl)",

@@ -83,6 +83,17 @@ aguardando você, não como em execução. Esses são os mesmos dados do badge d
 então o Chat e o badge nunca divergem. Para execuções que já terminaram, peça as execuções recentes
 em vez disso — isso lê o [Execution History](../reference/execution-history.md).
 
+## Perguntando sobre uma execução
+
+Selecione uma execução de Workflow no [Execution History](../reference/execution-history.md#ask-ai), pelo editor ou por All History, e clique em **Perguntar à IA** ao lado do título da caixa de diálogo. O Chat abre uma nova conversa com dois chips acima da caixa de mensagem:
+
+- **Workflow:** o nome do Workflow
+- **Execution:** os primeiros caracteres do id da execução selecionada
+
+Remova um chip com seu **×** para excluí-lo. Em seguida, faça sua pergunta, por exemplo «por que esta execução demorou tanto?», «o que falhou aqui?» ou «você pode corrigir isso?». Os chips restantes são anexados a essa mensagem com os ids completos, portanto, o Chat lê diretamente as entradas, saídas e o rastreamento por nó da execução em vez de procurar o Workflow. Para corrigir o Workflow, o Chat salva, testa e verifica a alteração conforme descrito em [Criando Workflows](#criando-workflows).
+
+A mensagem enviada mostra os chips sob sua pergunta. Eles pertencem apenas a essa mensagem; perguntas seguintes na mesma conversa mantêm o contexto do histórico.
+
 ## Perguntando Sobre Alertas
 
 O Chat pode responder perguntas sobre os [alertas](./alerts-tab.md) que você definiu:

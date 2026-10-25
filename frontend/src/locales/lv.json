@@ -478,7 +478,14 @@
     "extract": "Izvilkt",
     "mySubWorkflow": "Mans apakš-workflow",
     "moreNodes": "+{count} vēl",
-    "runToNode": "Palaist līdz {label}"
+    "runToNode": "Palaist līdz {label}",
+    "aiButtonTitle": "Mainiet vai labojiet šo mezglu ar AI asistentu",
+    "editNodeWithAi": "Rediģēt {label} ar AI",
+    "modifyingNode": "Mezgla maiņa:",
+    "hasNodeOutput": "(Ir mezgla izvade)",
+    "closeNodeFocus": "Aizveriet mezgla fokusu un rediģējiet visu Workflow",
+    "nodeFocusRan": "Šis mezgls tika izpildīts. AI redz tā pēdējo izvadi un kļūdu un lasa mezgla dokumentāciju.",
+    "nodeFocusNoOutput": "Šim mezglam pašreizējā izpildē nav izvades. Izpildiet to vispirms, ja AI jāredz tā izvade. AI abos gadījumos lasa mezgla dokumentāciju."
   },
   "nodes": {
     "title": "Mezgli",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Rediģēt rindā ievietoto ziņojumu",
     "deleteQueuedMessage": "Dzēst rindā ievietoto ziņojumu",
     "startedByMcp": "Palaists ar MCP klientu",
-    "newChatTitle": "Jauns chat"
+    "newChatTitle": "Jauns chat",
+    "subtitle": "Palaidiet Workflows un uzdodiet jautājumus",
+    "modelsLoadFailedDisabled": "Šo akreditācijas datu modeļu sarakstu neizdevās ielādēt. Chat paliek atspējots, līdz var iegūt modeli."
   },
   "teams": {
     "title": "Teams",
@@ -1672,7 +1681,10 @@
       "error": "Kļūda",
       "cached": "Kešatmiņā",
       "cancelled": "Atcelts"
-    }
+    },
+    "askAi": "Vaicāt AI",
+    "askAiTitle": "Pajautājiet Chat asistentam par šo izpildi",
+    "noNodeSpans": "Šai izpildei netika reģistrēti mezglu span."
   },
   "portal": {
     "loadingPortal": "Notiek portāla ielāde...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Detalizētās lapas ieraksti",
     "detailPageRecordsHelp": "Vērtības ?record=, kuras šis informācijas panelis pieņem, kad to atver rindas saite. Viss pārējais tiek noraidīts pirms logrīka izpildes.",
     "unreachableDashboard": "Informācijas panelis, kuru nevarat atvērt",
-    "runWorkflow": "Palaist Workflow"
+    "runWorkflow": "Palaist Workflow",
+    "openWorkflowNewTab": "Atvērt Workflow jaunā cilnē",
+    "hitlFilterHelp": "Rādīt pārskatīšanas no visiem Workflows vai tikai no viena. Uzskaita Workflows, ko varat atvērt – jūsu pašu vai ar jums kopīgotos –, kuriem ir solis, kas gaida personu.",
+    "hitlSourcesLoadFailed": "Jūsu Workflows neizdevās ielādēt."
   },
   "drive": {
     "filesCount": "({count} faili)",

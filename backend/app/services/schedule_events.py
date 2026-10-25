@@ -61,8 +61,8 @@ def cron_occurrences(
     tz: tzinfo,
 ) -> list[ScheduleOccurrence]:
     """Every run of every active cron node in ``[start, end]``, earliest first."""
-    start_tz = start.astimezone(tz)
-    end_tz = end.astimezone(tz)
+    start_tz = start.replace(tzinfo=tz) if start.tzinfo is None else start.astimezone(tz)
+    end_tz = end.replace(tzinfo=tz) if end.tzinfo is None else end.astimezone(tz)
     events: list[ScheduleOccurrence] = []
 
     for workflow in workflows:

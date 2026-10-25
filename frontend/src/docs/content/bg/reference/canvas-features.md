@@ -1,6 +1,6 @@
 # Функции на Canvas
 
-Редакторът на workflow предоставя няколко функции за отстраняване на грешки, тестване и организиране на nodes: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** и **Extract to Sub-Workflow**.
+Редакторът на workflow предоставя няколко функции за отстраняване на грешки, тестване и организиране на nodes: **Run to Node**, **AI на възел**, **Data Pin**, **Execution Logs**, **Enable/Disable** и **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Гледайте демото на редактора</a></p>
@@ -12,6 +12,12 @@
 Ако избраният път има входни полета, панелът **Run** отдясно се отваря и фокусира първото поле. Въведете стойностите и след това кликнете върху **Run to _node label_** или натиснете **Ctrl+Enter** (Cmd+Enter на macOS). Режимът Generic body фокусира редактора на JSON body. Пътищата без входни полета се изпълняват незабавно, без да се отваря панелът. Pinned Input nodes използват повторно своя pinned output, без да искат входни данни.
 
 Панелът запазва избраната цел за следващите изпълнения. Изберете **Run full workflow**, за да изчистите целта. Бутоните за изпълнение са деактивирани, докато има активно изпълнение. Цел вътре в loop спира изпълнението, когато този node бъде достигнат за първи път; избирането на node след loop изпълнява целия upstream loop.
+
+## AI на възел
+
+Посочете всеки възел с изключение на бележка и щракнете върху **AI** над него. [AI Assistant](./ai-assistant.md) се отваря върху този възел и предлага **Change this node as ...**, **Fix error in this node ...** и **Other**. В режим Agent асистентът променя само този възел; други възли, връзки и оформлението остават непроменени. Вижте [AI Assistant › Промяна на единичен възел](./ai-assistant.md#changing-one-node).
+
+Бутонът е скрит при workflow-и, които можете само да преглеждате.
 
 ## Data Pin
 

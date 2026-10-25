@@ -74,6 +74,17 @@ Jautājiet parastā valodā — "kas notiek?", "cik workflows šobrīd ir aktīv
 
 Izpildes, kas ir apturētas [Human-in-the-Loop](../reference/human-in-the-loop.md) vai Codex pārskatīšanai, tiek ziņotas kā gaidošas, nevis kā notiekošas. Tas ir tas pats dati kā aktīvo izpildes insignija galvenē, tādēļ Chat un insignija nekad nesakrīt. Par izpildēm, kas jau ir pabeigtas, jautājiet par nesenajām izpildēm — tas attiecas uz [Izpildes vēsturi](../reference/execution-history.md).
 
+## Jautājumi par izpildi
+
+Atlasiet Workflow izpildi [Execution History](../reference/execution-history.md#ask-ai) logā redaktorā vai All History skatā un noklikšķiniet uz **Jautāt AI** blakus dialoga nosaukumam. Chat atver jaunu sarunu ar divām mikroshēmām virs ziņojuma lodziņa:
+
+- **Workflow:** Workflow nosaukums
+- **Execution:** atlasītās izpildes ID pirmās rakstzīmes
+
+Noņemiet mikroshēmu ar tās **×**, lai to izlaistu. Pēc tam uzdodiet jautājumu, piemēram, „kāpēc šī izpilde aizņēma tik ilgu laiku?“, „kas šeit neizdevās?“ vai „vai varat to labot?“. Atlikušās mikroshēmas tiek pievienotas šim ziņojumam ar pilniem ID, tāpēc Chat tieši nolasa izpildes ievades, izvades un mezglu trasējumu, nevis meklē Workflow. Lai labotu Workflow, Chat saglabā, pārbauda un verificē izmaiņas, kā aprakstīts sadaļā [Workflow izveide](#workflow-izveide).
+
+Nosūtītajā ziņojumā mikroshēmas tiek rādītas zem jūsu jautājuma. Tās pieder tikai šim ziņojumam; nākamie jautājumi tajā pašā sarunā saglabā kontekstu no vēstures.
+
 ## Jautājot par brīdinājumiem
 
 Chat var atbildēt uz jautājumiem par [brīdinājumiem](./alerts-tab.md), kurus Jūs esat definējis:

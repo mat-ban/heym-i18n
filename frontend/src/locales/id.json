@@ -382,7 +382,14 @@
     "staleConflictTitle": "Workflow Usang Terdeteksi",
     "staleReloadMessage": "Workflow ini disimpan di tempat lain, sehingga tab ini menampilkan versi yang lebih lama. Menjalankannya sekarang akan mengeksekusi versi tersimpan yang lebih baru alih-alih yang Anda lihat di sini.",
     "staleReloadTitle": "Workflow Diubah di Tempat Lain",
-    "staleRunMessage": "Versi yang lebih baru dari Workflow ini telah disimpan sejak Anda membukanya. Menjalankannya akan menimpa versi tersebut dengan versi Anda. Lanjutkan?"
+    "staleRunMessage": "Versi yang lebih baru dari Workflow ini telah disimpan sejak Anda membukanya. Menjalankannya akan menimpa versi tersebut dengan versi Anda. Lanjutkan?",
+    "aiButtonTitle": "Ubah atau perbaiki node ini dengan Asisten AI",
+    "editNodeWithAi": "Edit {label} dengan AI",
+    "modifyingNode": "Mengubah node:",
+    "hasNodeOutput": "(Memiliki output node)",
+    "closeNodeFocus": "Tutup fokus node dan edit seluruh Workflow",
+    "nodeFocusRan": "Node ini telah dijalankan. AI melihat output terakhir dan error-nya serta membaca dokumentasi node.",
+    "nodeFocusNoOutput": "Node ini tidak memiliki output pada eksekusi saat ini. Jalankan terlebih dahulu jika AI perlu melihat outputnya. AI membaca dokumentasi node dalam kedua kasus."
   },
   "activeWorkflows": {
     "activeRefreshFailed": "{count} aktif · Refresh terakhir gagal",
@@ -428,7 +435,9 @@
     "suggestion2": "Jalankan Workflow laporan harian saya",
     "suggestion3": "Workflow terjadwal mana yang berjalan minggu ini?",
     "suggestion4": "Tambahkan tugas ke papan Kanban saya",
-    "suggestion5": "Apa yang tersimpan dalam variabel global saya?"
+    "suggestion5": "Apa yang tersimpan dalam variabel global saya?",
+    "subtitle": "Jalankan Workflow dan ajukan pertanyaan",
+    "modelsLoadFailedDisabled": "Daftar model untuk kredensial ini tidak dapat dimuat. Chat tetap dinonaktifkan hingga model dapat diambil."
   },
   "common": {
     "actions": "Tindakan",
@@ -862,7 +871,10 @@
     "detailPageRecords": "Rekor halaman detail",
     "detailPageRecordsHelp": "Nilai ?record= yang diterima dasbor ini saat tautan baris membukanya. Nilai lain ditolak sebelum widget berjalan.",
     "unreachableDashboard": "Dasbor yang tidak dapat Anda buka",
-    "runWorkflow": "Jalankan Workflow"
+    "runWorkflow": "Jalankan Workflow",
+    "openWorkflowNewTab": "Buka Workflow di tab baru",
+    "hitlFilterHelp": "Tampilkan peninjauan dari semua Workflow atau hanya satu. Menampilkan Workflow yang dapat Anda buka, milik Anda atau dibagikan kepada Anda, yang memiliki langkah yang menunggu seseorang.",
+    "hitlSourcesLoadFailed": "Workflow Anda tidak dapat dimuat."
   },
   "docs": {
     "askAnything": "Tanyakan apa saja tentang dokumentasi",
@@ -1201,7 +1213,10 @@
       "showNode": "Tampilkan {label}",
       "spansCount": "{count} span | {count} span"
     },
-    "toolCalls": "Panggilan Tool"
+    "toolCalls": "Panggilan Tool",
+    "askAi": "Tanya AI",
+    "askAiTitle": "Tanyakan kepada asisten Chat tentang eksekusi ini",
+    "noNodeSpans": "Tidak ada span node yang dicatat untuk eksekusi ini."
   },
   "header": {
     "darkMode": "Beralih ke mode gelap",

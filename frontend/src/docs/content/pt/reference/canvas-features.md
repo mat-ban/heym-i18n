@@ -1,6 +1,6 @@
 # Funcionalidades do Canvas
 
-O editor de workflows disponibiliza várias funcionalidades para depurar, testar e organizar nós: **Executar até ao Nó**, **Data Pin**, **Registos de Execução**, **Ativar/Desativar** e **Extrair para Sub-Workflow**.
+O editor de workflows disponibiliza várias funcionalidades para depurar, testar e organizar nós: **Executar até ao Nó**, **AI num nó**, **Data Pin**, **Registos de Execução**, **Ativar/Desativar** e **Extrair para Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Ver demonstração do Editor</a></p>
@@ -12,6 +12,12 @@ Passe o cursor sobre qualquer nó, exceto uma nota adesiva, e clique em **Run** 
 Se o caminho selecionado tiver campos de entrada, o painel **Run** à direita abre-se e foca o primeiro campo. Introduza os valores e, em seguida, clique em **Run to _etiqueta do nó_** ou prima **Ctrl+Enter** (Cmd+Enter no macOS). O modo de corpo genérico foca o editor de corpo JSON. Os caminhos sem campos de entrada são executados imediatamente sem abrir o painel. Os nós Input fixados reutilizam a sua saída fixada sem solicitar entrada.
 
 O painel mantém o alvo selecionado para execuções subsequentes. Escolha **Run full workflow** para limpar o alvo. Os botões de execução ficam desativados enquanto uma execução estiver ativa. Um alvo dentro de um ciclo interrompe a execução quando esse nó é alcançado pela primeira vez; selecionar um nó após o ciclo executa o ciclo completo a montante.
+
+## AI num nó
+
+Passe o cursor sobre qualquer nó exceto uma nota adesiva e clique em **AI** acima dele. O [AI Assistant](./ai-assistant.md) abre nesse nó e oferece **Change this node as ...**, **Fix error in this node ...** e **Other**. No modo Agent, o assistente altera apenas esse nó; outros nós, ligações e o layout permanecem inalterados. Consulte [AI Assistant › Modificar um único nó](./ai-assistant.md#changing-one-node).
+
+O botão fica oculto em workflows que você só pode visualizar.
 
 ## Data Pin
 

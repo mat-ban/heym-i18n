@@ -51,6 +51,7 @@ Tai leidžia derinti viešus pokalbių srautus su privatiais žmogiškojo patvir
 ## Autentifikacija ir Sesijos
 
 - **WorkflowPortalUser**: Vartotojo vardas/slaptazodis kiekvienam workflow (kai autentifikacija įjungta)
+- **Paskutinio vartotojo pašalinimas**: Kai portalas įjungtas, ištrynus paskutinį portalo vartotoją portalas vėl tampa viešas; nustatymų dialogo langas pirmiausia prašo patvirtinimo
 - **PortalSession**: Sesijos tokenai su 168 valandų galiojimo laiku
 - **Greitojo ribojimo**: 3 nesėkmingi prisijungimo bandymai → 24 valandų uždraudimas kiekvienam workflow+IP
 - Pasibaigusios sesijos valomos cron užduoties

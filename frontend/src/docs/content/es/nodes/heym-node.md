@@ -16,12 +16,12 @@ El nodo **Heym** lee los datos propios de Heym: los workflows a los que puede ac
 | Parámetro | Tipo | Descripción |
 |-----------|------|-------------|
 | `heymOperation` | Select | Qué lectura realizar |
-| `heymWorkflowId` | UUID | Workflow de destino. Requerido para `getWorkflow` y `getExecutionHistory`. Admite expresiones. |
+| `heymWorkflowId` | UUID | Establézcalo en `all` en `getExecutionHistory` para leer todos los workflows accesibles. |
 | `heymLimit` | String | Número máximo de filas a devolver. **Déjelo vacío o introduzca `0` para devolver todo** — ese es el valor predeterminado. Admite expresiones. |
 | `heymStatus` | String | Filtro de estado opcional para `getExecutionHistory`. Admite expresiones. |
 | `heymSinceDays` | String | Retrospectiva opcional en días para `getExecutionHistory`. Admite expresiones. |
 
-El selector de workflows es un menú desplegable con búsqueda que lista todos los workflows a los que puede acceder.
+El selector de workflows es un menú desplegable con búsqueda que lista todos los workflows a los que puede acceder. En {GEH}, su primer elemento es **{AW}**. En {GEH}, su primer elemento es **{AW}**.
 
 ## Ámbito de acceso
 
@@ -80,7 +80,7 @@ cron → heym (listWorkflows) → loop → heym (getWorkflow) → agent → slac
 Proporcione al agent `$detail.nodes` y pídale que señale cualquier valor de `data` que parezca una clave o un token activos. Los campos que conviene vigilar son los de texto libre — `curl` en los nodos HTTP, `userMessage` y `systemInstruction` en los nodos LLM y Agent, y los cuerpos de las herramientas Python — porque un id de credencial es un UUID inofensivo, pero un `sk-…` pegado no lo es.
 ### Obtener el historial de ejecuciones
 
-Devuelve las entradas del historial de ejecuciones de un workflow, de la más reciente a la más antigua.
+Devuelve las entradas del historial de ejecuciones de un workflow, o de todos los workflows accesibles cuando elige **{AW}**, las más recientes primero.
 
 | Expresión | Descripción |
 |------------|-------------|
@@ -93,9 +93,11 @@ Devuelve las entradas del historial de ejecuciones de un workflow, de la más re
 | `$nodeLabel.executions[0].recovered` | Indica si la ejecución se recuperó tras un fallo |
 | `$nodeLabel.executions[0].inputs` | Lo que recibió la ejecución: el payload del trigger o la entrada del invocador |
 | `$nodeLabel.executions[0].outputs` | La salida del workflow para esa ejecución |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | El workflow al que pertenece el historial |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | El workflow al que pertenece el historial, o `null` con **{AW}** |
+ `null` con **{AW}** |
 | `$nodeLabel.total` | Total de ejecuciones coincidentes **antes** del límite |
-| `$nodeLabel.by_status` | Recuentos indexados por estado, por ejemplo `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_st| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Con **{AW}**, el workflow al que pertenece cada ejecución |
+atus` | Recuentos indexados por estado, por ejemplo `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Inicio de la ventana, o `null` para el historial completo |
 
 Las entradas incluyen tanto `inputs` como `outputs` —lo que recibió la ejecución y lo que respondió—, pero nunca `node_results`: la traza por nodo es la columna más grande de la tabla y eclipsaría todo lo demás. Obtenga una única ejecución a través de la API cuando necesite la traza completa.

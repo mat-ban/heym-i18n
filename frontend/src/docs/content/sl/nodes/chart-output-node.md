@@ -33,13 +33,17 @@ Ko imate samo primer/sample podatke (brez pravega vira), proizvedite te vrstice 
 | `valueField` | niz | Ključ vrstice, ki se uporablja kot numerična vrednost (pie/bar/line/numeric/gauge) |
 | `series` | tabela | Neobvezna definicija več serij `[{ "name": "Sent", "field": "sent" }]` za bar/line (prepisuje `valueField`) |
 | `columns` | tabela | Neobvezna seznam stolpcev za `table` (privzeto na ključe prve vrstice) |
-| `statusColumn` | string | Izbirni stolpec `table`, prikazan kot barvne [oznake stanja](#status-chips). Biti mora eden izmed prikazanih stolpcev. |
+| `statusColumn` | string | Izbirni stolpec `table`, prikazan kot barvne [oznake stanja](#status-chips). Biti mora eden izmed prikazanih stolpcev. |, z `linkColumn` pa vsebuje tudi stolpec povezave in besedilo gumba.
 | `statusTones` | object | Izbirna preslikava vrednosti stanja v odtenek (`success`, `attention`, `failure`, `waiting`, `neutral`) za vrednosti, ki jih privzete nastavitve ne pokrivajo |
+| `linkColumn` | string | Neobvezni stolpec `table`, katerega celice vsebujejo URL, prikazan kot [gumb povezave](#link-buttons), ki ga odpre v novem zavihku. Biti mora eden od prikazanih stolpcev. |
+| `linkLabel` | string | Neobvezno besedilo gumba povezave. Če ostane prazno, gumb prikaže samo ikono povezave. |
 | `xField` / `yField` | niz | Ključi vrstice za X in Y numerične osi (scatter) |
 | `min` / `max` | število | Numerični razpon za `gauge` (privzeto `0` / `100`) |
 | `unit` | niz | Neobvezna enota, prikazana poleg `numeric` ali `gauge` vrednosti |
 | `text` | niz | Markdown sporočilo za tip grafikona `text`. Pustite prazno in nastavite `valueField`, da prikažete dinamično sporočilo, pridobljeno iz zgornjih podatkov. |
 | `title` | niz | Neobvezni naslov grafikona |
+| `hitlWorkflowId` | string | Samo `hitl`. Prikaže samo pregleda tega Workflowa. Če ostane prazno, pripomoček prikaže vse preglede. |
+| `hitlNodeId` | string | Samo `hitl`. Zoži `hitlWorkflowId` na en korak: Agent s človeškim pregledom ali Slack korak odobritve, gumbov ali obrazca. |
 
 ## Tipi grafikona
 
@@ -51,7 +55,7 @@ Ko imate samo primer/sample podatke (brez pravega vira), proizvedite te vrstice 
 - **proportion** — ena horizontalna vrstica razdeljena na dele z legendami odstotkov (npr. razčlenitev po jeziku). Uporablja `labelField` + `valueField`.
 - **barGauge** — ena horizontalna merilna naprava na vrstico z rdeče→zelena gradientom in vrednostjo (npr. prosti prostor na disku). Uporablja `labelField` + `valueField`, neobvezno `unit` in `max` (privzeto na največjo vrednost vrstice).
 - **text** — markdown sporočilo (npr. statusna opomba, kot je "Zadnje izvajanje ob 19:47"). Vstavite markdown v `text` za statično sporočilo ali pustite `text` prazno in nastavite `valueField`, da prikažete niz, ki ga proizvedejo zgornji podatki. Podpira naslove, krepko/poševno, [seznami](../nodes/chart-output-node.md#interactive-task-lists), povezave in vgrajeno kodo.
-- **hitl** — karusel vaših čakajočih človeških pregledov. Glava prikazuje `1/n pending`; leva puščica je onemogočena na prvi kartici in desna puščica na zadnji. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo, ikona zgodovine poleg naslova widgeta pa odpre to izvajanje v pogovornem oknu zgodovine na isti strani. Ta tip grafikona ignorira zgornje vrstice, zato je workflow widgeta samo vozlišče Izhod Grafikon. Vsaka prijavljena oseba vidi preglede na workflow-ih, ki jih ima v lasti.
+- **hitl** — karusel vaših čakajočih človeških pregledov. Glava prikazuje `1/n pending`; leva puščica je onemogočena na prvi kartici in desna puščica na zadnji. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo, ikona zgodovine poleg naslova widgeta pa odpre to izvajanje v pogovornem oknu zgodovine na isti strani. Ta tip grafikona ignorira zgornje vrstice, zato je workflow widgeta samo vozlišče Izhod Grafikon. Vsaka prijavljena oseba vidi preglede na workflow-ih, ki jih ima v lasti. V lastnostih vozlišča ali nastavitvah pripomočka izberite **Workflow** (in **Select agent**, če ima več korakov pregleda), da se namesto tega prikažejo pregledi tega Workflowa vsem, ki ga lahko odprejo; glejte [pripomočki HITL](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktivni seznami nalog
 
@@ -307,3 +311,17 @@ Pri generiranju pripomočka z **AI** se pozivi, kot so ti, jasno preslikajo na v
 
 - [Zavihek nadzorne plošče](../tabs/dashboard-tab.md) — ustvarjanje in razporejanje pripomočkov
 - [Izhodni vozlišče](output-node.md) — terminalno vozlišče za redne workflows
+
+
+## Gumbi povezav
+
+`table` lahko en stolpec spremeni v gumbe, ki odprejo povezavo. Nastavite **Link column** v lastnostih vozlišča (ali `linkColumn` v DSL) na stolpec, katerega celice vsebujejo URL, in po želji **Link button text** (`linkLabel`). Vsaka celica postane gumb, ki odpre svoj URL v novem zavihku. Brez besedila gumba ta prikaže samo ikono povezave:
+
+| Vrednost celice | Odpre |
+| --------------- | ----- |
+| `https://jira.example.com/browse/T-1` | Drugo spletno mesto v novem zavihku |
+| `/dashboards` | Stran znotraj Heyma v novem zavihku |
+
+Gumbi postanejo samo naslovi `http://` in `https://` ter poti, ki se začnejo z enim samim `/`. Vsaka druga vrednost, na primer `javascript:` ali `//host`, ostane navadno besedilo, prazna celica pa ne prikaže ničesar.
+
+Gumb deluje ob [povezavi vrstice](../tabs/dashboard-tab.md#detail-pages): klik na gumb odpre njegovo povezavo v novem zavihku, klik kjer koli drugje v vrstici pa še vedno odpre stran s podrobnostmi.

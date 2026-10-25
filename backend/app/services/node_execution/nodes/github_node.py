@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from importlib import import_module
 
 from app.services.node_execution.base import NodeExecutionContext
+
+# Issue objects are about 6 KB each, so ~1,000 items keeps one node output near 6 MB.
+RETURN_ALL_MAX_ITEMS = 1000
+RETURN_ALL_MAX_PAGES = 100
+RETURN_ALL_PER_PAGE = 100
 
 
 def execute(ctx: NodeExecutionContext) -> object:
@@ -138,6 +144,34 @@ def execute(ctx: NodeExecutionContext) -> object:
 
     service = GitHubService(github_config)
 
+    return_all = operation in paged_operations and _coerce_boolean(
+        node_data.get("githubReturnAll"), default=False
+    )
+
+    def _list_pages(method: Callable[..., list], *args: object, **kwargs: object) -> list:
+        """Call a paged list method once, or keep following ``next`` when Return All is on.
+
+        Return All asks for ``RETURN_ALL_PER_PAGE`` items per request whatever Per Page says.
+        Stops at ``RETURN_ALL_MAX_ITEMS`` items or ``RETURN_ALL_MAX_PAGES`` requests and leaves
+        ``service.last_next_cursor`` set, so the caller reports ``has_more`` / ``next_cursor``
+        instead of failing and the rest can be fetched with the Cursor field.
+        """
+        if return_all:
+            kwargs = {**kwargs, "per_page": RETURN_ALL_PER_PAGE}
+        items = list(method(*args, **kwargs))
+        if not return_all:
+            return items
+        pages = 1
+        while (
+            service.last_next_cursor is not None
+            and len(items) < RETURN_ALL_MAX_ITEMS
+            and pages < RETURN_ALL_MAX_PAGES
+        ):
+            self.check_cancelled()
+            items.extend(method(*args, **{**kwargs, "cursor": service.last_next_cursor}))
+            pages += 1
+        return items
+
     def _page_info() -> dict[str, object]:
         next_cursor = service.last_next_cursor
         return {"has_more": next_cursor is not None, "next_cursor": next_cursor}
@@ -239,7 +273,8 @@ def execute(ctx: NodeExecutionContext) -> object:
                 if operation == "getRepositoryIssues"
                 else service.list_issues
             )
-            issues = list_issues_method(
+            issues = _list_pages(
+                list_issues_method,
                 owner,
                 repo,
                 state=state,
@@ -384,7 +419,8 @@ def execute(ctx: NodeExecutionContext) -> object:
                 if operation == "getRepositoryPullRequests"
                 else service.list_pull_requests
             )
-            pull_requests = list_pull_requests_method(
+            pull_requests = _list_pages(
+                list_pull_requests_method,
                 owner,
                 repo,
                 state=state,
@@ -498,7 +534,8 @@ def execute(ctx: NodeExecutionContext) -> object:
                     node_id,
                 ).strip()
                 per_page = int(float(per_page_value or "30"))
-                reviews = service.list_reviews(
+                reviews = _list_pages(
+                    service.list_reviews,
                     owner,
                     repo,
                     pull_request_number,
@@ -556,7 +593,9 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            releases = service.list_releases(owner, repo, per_page=per_page, **cursor_kwargs)
+            releases = _list_pages(
+                service.list_releases, owner, repo, per_page=per_page, **cursor_kwargs
+            )
             output = {
                 "success": True,
                 "operation": operation,
@@ -671,7 +710,9 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            workflows = service.list_workflows(owner, repo, per_page=per_page, **cursor_kwargs)
+            workflows = _list_pages(
+                service.list_workflows, owner, repo, per_page=per_page, **cursor_kwargs
+            )
             output = {
                 "success": True,
                 "operation": operation,
@@ -866,8 +907,8 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            repositories = service.list_organization_repositories(
-                owner, per_page=per_page, **cursor_kwargs
+            repositories = _list_pages(
+                service.list_organization_repositories, owner, per_page=per_page, **cursor_kwargs
             )
             output = {
                 "success": True,
@@ -881,7 +922,9 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            repositories = service.list_user_repositories(owner, per_page=per_page, **cursor_kwargs)
+            repositories = _list_pages(
+                service.list_user_repositories, owner, per_page=per_page, **cursor_kwargs
+            )
             output = {
                 "success": True,
                 "operation": operation,
@@ -894,7 +937,9 @@ def execute(ctx: NodeExecutionContext) -> object:
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
             per_page = int(float(per_page_value or "30"))
-            repositories = service.get_user_repositories(owner, per_page=per_page, **cursor_kwargs)
+            repositories = _list_pages(
+                service.get_user_repositories, owner, per_page=per_page, **cursor_kwargs
+            )
             output = {
                 "success": True,
                 "operation": operation,
@@ -907,7 +952,8 @@ def execute(ctx: NodeExecutionContext) -> object:
             per_page_value = self.evaluate_message_template(
                 str(node_data.get("githubPerPage", "30") or "30"), inputs, node_id
             ).strip()
-            issues = service.get_user_issues(
+            issues = _list_pages(
+                service.get_user_issues,
                 state=state,
                 per_page=int(float(per_page_value or "30")),
                 mentioned=self.evaluate_nonempty_message_template(

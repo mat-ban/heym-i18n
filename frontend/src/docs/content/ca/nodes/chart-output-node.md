@@ -33,13 +33,17 @@ Quan només disposeu de dades d'exemple (sense cap font real), produïu aquestes
 | `valueField` | string | Clau de fila utilitzada com a valor numèric (pie/bar/line/numeric/gauge) |
 | `series` | array | Definició opcional de múltiples sèries `[{ "name": "Sent", "field": "sent" }]` per a bar/line (substitueix `valueField`) |
 | `columns` | array | Llista opcional de columnes per a `table` (per defecte, les claus de la primera fila) |
-| `statusColumn` | string | Columna opcional de `table` renderitzada com a [xips d'estat](#status-chips) de colors. Ha de ser una de les columnes mostrades. |
+| `statusColumn` | string | Columna opcional de `table` renderitzada com a [xips d'estat](#status-chips) de colors. Ha de ser una de les columnes mostrades. |, i amb `linkColumn` inclou la columna d'enllaç i el text del botó.
 | `statusTones` | object | Mapa opcional d'un valor d'estat a un to (`success`, `attention`, `failure`, `waiting`, `neutral`) per als valors que els predeterminats no cobreixen |
+| `linkColumn` | string | Columna `table` opcional les cel·les de la qual contenen un URL, mostrat com a [botó d'enllaç](#link-buttons) que l'obre en una pestanya nova. Ha de ser una de les columnes mostrades. |
+| `linkLabel` | string | Text opcional del botó d'enllaç. Si es deixa buit, el botó només mostra una icona d'enllaç. |
 | `xField` / `yField` | string | Claus de fila per als eixos numèrics X i Y (scatter) |
 | `min` / `max` | number | Rang numèric per a `gauge` (per defecte `0` / `100`) |
 | `unit` | string | Unitat opcional mostrada al costat d'un valor `numeric` o `gauge` |
 | `text` | string | Missatge Markdown per al tipus de gràfic `text`. Deixeu-lo buit i establiu `valueField` per renderitzar un missatge dinàmic extret de les dades upstream. |
 | `title` | string | Títol opcional del gràfic |
+| `hitlWorkflowId` | string | Només `hitl`. Mostra només les revisions d'aquest workflow. Si es deixa buit, el widget mostra totes les revisions. |
+| `hitlNodeId` | string | Només `hitl`. Limita `hitlWorkflowId` a un pas: un Agent amb revisió humana, o un pas de Slack d'aprovació, botons o formulari. |
 
 ## Tipus de gràfic
 
@@ -51,7 +55,7 @@ Quan només disposeu de dades d'exemple (sense cap font real), produïu aquestes
 - **proportion** — una única barra horitzontal dividida en porcions amb una llegenda de percentatges (per exemple, un desglossament per idioma). Utilitza `labelField` + `valueField`.
 - **barGauge** — un gauge horitzontal per fila amb un gradient de vermell a verd i un valor (per exemple, espai lliure de disc). Utilitza `labelField` + `valueField`, `unit` i `max` opcionals (per defecte, el valor de fila més gran).
 - **text** — un missatge markdown (per exemple, una nota d'estat com "Last execution at 19:47"). Poseu el markdown a `text` per a un missatge estàtic, o deixeu `text` buit i establiu `valueField` per renderitzar una cadena produïda upstream. Admet encapçalaments, negreta/cursiva, [llistes](../nodes/chart-output-node.md#interactive-task-lists), enllaços i codi en línia.
-- **hitl** — un carrusel de les vostres revisions humanes pendents. L'encapçalament mostra `1/n pending`; la fletxa esquerra està desactivada a la primera targeta i la fletxa dreta a l'última. El nom del workflow obre aquesta execució al canvas. **Approve**, **Request changes** i **Reject** la resolen, i la icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial de la mateixa pàgina. Aquest tipus de gràfic ignora les files upstream, de manera que el workflow del giny és només el node Sortida de gràfic. Cada persona autenticada veu les revisions dels workflows que posseeix.
+- **hitl** — un carrusel de les vostres revisions humanes pendents. L'encapçalament mostra `1/n pending`; la fletxa esquerra està desactivada a la primera targeta i la fletxa dreta a l'última. El nom del workflow obre aquesta execució al canvas. **Approve**, **Request changes** i **Reject** la resolen, i la icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial de la mateixa pàgina. Aquest tipus de gràfic ignora les files upstream, de manera que el workflow del giny és només el node Sortida de gràfic. Cada persona autenticada veu les revisions dels workflows que posseeix. Trieu un **Workflow** (i **Select agent** quan tingui diversos passos de revisió) a les propietats del node o a la configuració del widget per mostrar-hi, en lloc d'això, les revisions d'aquest workflow, a tothom qui el pugui obrir; vegeu [widgets HITL](../tabs/dashboard-tab.md#hitl-widgets).
 ### Llistes de tasques interactives
 
 Utilitzeu la sintaxi de llistes de tasques Markdown de GitHub al camp estàtic `text`:
@@ -307,3 +311,17 @@ En generar un widget amb **IA**, prompts com aquests es corresponen clarament am
 
 - [Dashboard tab](../tabs/dashboard-tab.md) — creeu i organitzeu widgets
 - [Output node](output-node.md) — node terminal per a workflows habituals
+
+
+## Botons d'enllaç
+
+Una `table` pot convertir una columna en botons que obren un enllaç. Definiu **Link column** a les propietats del node (o `linkColumn` al DSL) amb una columna les cel·les de la qual continguin un URL i, opcionalment, **Link button text** (`linkLabel`). Cada cel·la es converteix en un botó que obre el seu URL en una pestanya nova. Sense text de botó, aquest només mostra una icona d'enllaç:
+
+| Valor de la cel·la | Obre |
+| ------------------ | ---- |
+| `https://jira.example.com/browse/T-1` | Un altre lloc, en una pestanya nova |
+| `/dashboards` | Una pàgina dins de Heym, en una pestanya nova |
+
+Només les adreces `http://` i `https://` i els camins que comencen amb una sola `/` es converteixen en botons. Qualsevol altre valor, com `javascript:` o `//host`, es manté com a text pla, i una cel·la buida no mostra res.
+
+El botó funciona al costat d'un [enllaç de fila](../tabs/dashboard-tab.md#detail-pages): en fer clic al botó s'obre el seu enllaç en una pestanya nova, i en fer clic en qualsevol altre punt de la fila continua obrint-se la pàgina de detall.

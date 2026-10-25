@@ -18,14 +18,14 @@ Bir widget, ızgara üzerindeki tek bir grafikdir. Desteklenen grafik türleri:
 - **Line**
 - **Area** (dolgulu trend, birden fazla seriyi destekler)
 - **Pie**
-- **Table** (kaydırılabilir; bir sütun [durum çipleri](../nodes/chart-output-node.md#status-chips) olarak işlenebilir ve satırlar bir [ayrıntı sayfası](#detail-pages) açabilir)
+- **Table** (kaydırılabilir; artan sıralama için bir sütun başlığına tıklayın ve azalan sıralama için tekrar tıklayın. Bir sütun [durum çipleri](../nodes/chart-output-node.md#status-chips) olarak işlenebilir, bir sütun URL'yi yeni bir sekmede açan [bağlantı düğmeleri](../nodes/chart-output-node.md#link-buttons) içerebilir ve satırlar bir [ayrıntı sayfasını](#ayrinti-sayfalari) açabilir)
 - **Numeric** (isteğe bağlı birimli tek bir KPI değeri)
 - **Gauge** (min–max aralığına karşı tek bir değer, örn. bir yüzde)
 - **Scatter** (korelasyon grafikleri için X/Y noktaları)
 - **Proportion** (yüzde göstergeli paylara bölünmüş tek bir bar, örn. bir dil dağılımı)
 - **Bar gauge** (kırmızıdan yeşile gradyanlı ve değerli, her satır için bir yatay gösterge, örn. boş disk alanı)
 - **Text** (bir markdown mesajı, örn. "Son çalıştırma 19:47'de" gibi bir durum notu; markdown statik olduğunda [etkileşimli onay kutularını](../nodes/chart-output-node.md#interactive-task-lists) ve özel veya azalan numaralandırma için [açık numaralı listeleri](../nodes/chart-output-node.md#numbered-lists) destekler)
-- **HITL** (bekleyen insan incelemeleriniz. Başlık `1/n pending` gösterir. Workflow adı, o çalıştırmayı canvas üzerinde açar. **Approve**, **Request changes** ve **Reject** bunu çözer. Widget başlığının yanındaki geçmiş simgesi, o çalıştırmayı bu sayfadaki geçmiş iletişim kutusunda açar. Widget, üst kaynak satırlarını kullanmaz ve her kişi kendi kuyruğunu görür)
+- **HITL** (bekleyen insan incelemeleriniz. Başlık `1/n pending` gösterir. Workflow adı, o çalıştırmayı canvas üzerinde açar. **Approve**, **Request changes** ve **Reject** bunu çözer. Widget başlığının yanındaki geçmiş simgesi, o çalıştırmayı bu sayfadaki geçmiş iletişim kutusunda açar. Widget, üst kaynak satırlarını kullanmaz ve her kişi kendi kuyruğunu görür. Bunun yerine, bu Workflow'u açabilen herkes için tek bir Workflow'un incelemelerini gösterebilir; bkz. [HITL widget'ları](#hitl-widgetlari))
 
 Grafiklerin yanı sıra, bir **Run a workflow** widget'ı workflow'larınızdan birini doğrudan dashboard üzerinden çalıştırır: bırakılan bir dosya üzerinde, giriş alanlarıyla veya bir Run düğmesiyle; bkz. [Çalıştırma widget'ları](#run-widgets).
 
@@ -41,6 +41,20 @@ Her widget, sekmeyi açtığınızda verilerini eşzamansız olarak yükler; bö
 Bir **Run a workflow** widget'ı için bunun yerine çalıştıracağı workflow'u seçin; seçici, widget'ın her birini nasıl çalıştıracağını belirtir. Widget doğrudan ızgaraya eklenir; oluşturulacak yeni bir workflow yoktur.
 
 Bir widget'ı istediğiniz zaman yeniden açmak için çift tıklayın (veya düzenleme düğmesini kullanın). Hem widget'ı hem de eksiksiz workflow'unu çoğaltmak için widget başlığındaki **Clone widget**'ı kullanın. Kopya, orijinalin altına yerleştirilir ve bağımsız olarak düzenleyebilmeniz için **(Copy)** ile etiketlenir.
+
+## HITL widget'ları
+
+Yeni bir HITL widget'ı, kendi kuyruğunuzda bekleyen her incelemeyi gösterir. Yalnızca bir Workflow'unkileri göstermek için widget'ın **Ayarlar** bölümünü açın:
+
+1. **Workflow** altında Workflow'u seçin. Liste, açabileceğiniz – size ait veya sizinle ya da ekibinizle paylaşılan – ve bir kişiyi bekleyen bir adımı olan Workflow'ları içerir: insan incelemesi olan bir Agent veya bir Slack onay, düğme ya da form adımı. Yanındaki simge bu Workflow'u yeni bir sekmede açar.
+2. Workflow'un tam olarak böyle bir adımı varsa otomatik olarak seçilir. Birden fazlaysa, **Select agent** bunları düğüm adına göre listeler ve **All agents** ilk sırada yer alır; Slack adımları **(Slack)** olarak işaretlenir.
+3. Kaydedin. Başlıktaki `1/n pending`, yalnızca bu incelemeleri sayar. Kendi kuyruğunuzu tekrar göstermek için **Tüm workflow'lar** seçeneğini belirleyin.
+
+Aynı seçim tuvalde, Chart Output düğümünün özelliklerinde de mevcuttur. **AI ile ince ayar yapın** bunu yapabilir (“yalnızca fatura onaylarını göster”), aynı şekilde Workflow adını belirten yeni bir widget açıklaması da yapabilir. Her değişiklik bir Workflow düzenlemesidir, bu nedenle Edit History içinde görünür.
+
+- **İncelemeleri kimler görür.** Bir Workflow üzerinde filtrelenmiş bir widget, o Workflow'un incelemelerini bu Workflow'u açabilen herkese gösterir ve onlar da Workflow'u çalıştırabildikleri gibi widget üzerinden onaylayabilir, değişiklik talep edebilir veya reddedebilir. Filtrelenmemiş bir widget herkese kendi kuyruğunu gösterir.
+- **Widget'ı kimler görür.** Seçilen Workflow'u açamayan biri, kendisiyle paylaşılan bir gösterge panosunda bile widget'ı hiç görmez. Gösterge panosunun sahibi erişimi kaybettiğinde veya silindiğinde, sahip “You no longer have access to the workflow this widget shows” uyarısını görür ve **Ayarlar** içinden başka bir tane seçebilir.
+- **Yalnızca erişilebilir seçenekler.** Açamadığınız bir Workflow, ayarlardan, tuvalden veya AI aracılığıyla kaydedildiğinde reddedilir.
 
 ## Ayrıntı sayfaları
 
@@ -75,6 +89,10 @@ Sonucun **Wrap** düğmesi kutu içindeki uzun çıktı satırlarını kaydırı
 ## AI ile widget oluşturma
 
 **AI**'a tıklayın, istediğiniz metriği tanımlayın (örneğin, "son 30 gündeki workflow başarı oranı bar grafik olarak") ve bir LLM credential'ı ile model seçin. Heym, Chart Output node'uyla biten eksiksiz bir widget workflow'u oluşturur ve bunu ızgaraya ekler. Grafik türü başına örnek prompt'lar için [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) bölümüne bakın.
+
+Widget, isteğinizin dilinde bir veya iki kelimelik kısa bir başlık alır, örneğin “Açık vakalar”. Başlık hiçbir zaman bir veri tablosunun kimliğini taşımaz; model widget'ı bir cümleyle adlandırdığında, Heym bunun ilk kelimelerini saklar.
+
+Widget API'si AI olmadan da bir **sayaç kartı** oluşturabilir: `count_column` ve `count_value` içeren bir veri tablosundaki (`data_table_id`) `text` widget'ı, kaç satırın bu değere sahip olduğunu gösterir; widget'ın başlığı değeri belirtir. Heym Work, bir veri tablosundan oluşturulan sayfaları durum başına bir sayaç kartı ile başlatır.
 
 Mevcut bir widget'ı yeni bir talimatla revize etmek için bir widget'ın **Fine-tune with AI** düğmesini kullanın. Her AI fine-tune işlemi, önceki workflow'u widget'ın **Edit History**'sine anlık görüntü olarak kaydeder; böylece workflow editöründen değişiklikleri inceleyebilir veya geri alabilirsiniz.
 

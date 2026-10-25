@@ -16,7 +16,7 @@
 | Parametre | Tür | Açıklama |
 |-----------|------|-------------|
 | `heymOperation` | Select | Hangi okumanın gerçekleştirileceği |
-| `heymWorkflowId` | UUID | Hedef workflow. `getWorkflow` ve `getExecutionHistory` için gereklidir. Expression destekler. |
+| `heymWorkflowId` | UUID | `getExecutionHistory` için `all` olarak ayarlarsanız erişebildiğiniz her Workflow okunur. |
 | `heymLimit` | String | Döndürülecek maksimum satır sayısı. **Her şeyi döndürmek için boş bırakın veya `0` girin** — varsayılan budur. Expression destekler. |
 | `heymStatus` | String | `getExecutionHistory` için isteğe bağlı durum filtresi. Expression destekler. |
 | `heymSinceDays` | String | `getExecutionHistory` için isteğe bağlı gün cinsinden geriye bakış. Expression destekler. |
@@ -93,9 +93,11 @@ Bir workflow için yürütme geçmişi girdilerini en yeniden en eskiye doğru d
 | `$nodeLabel.executions[0].recovered` | Çalıştırmanın bir çökmeden sonra kurtarılıp kurtarılmadığı |
 | `$nodeLabel.executions[0].inputs` | Çalıştırmanın aldığı şey - trigger payload'ı veya çağıranın girdisi |
 | `$nodeLabel.executions[0].outputs` | O çalıştırma için workflow'un çıktısı |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Geçmişin ait olduğu workflow |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Geçmişin ait olduğu Workflow veya **{AW}** ile `null` |
+ya **{AW}** ile `null` |
 | `$nodeLabel.total` | Limit **öncesindeki** eşleşen toplam yürütme sayısı |
-| `$nodeLabel.by_status` | Duruma göre anahtarlanmış sayımlar, örneğin `{ "success": 41, "error": 3 }` |
+| `$nodeLab| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | **{AW}** ile her çalıştırmanın ait olduğu Workflow |
+el.by_status` | Duruma göre anahtarlanmış sayımlar, örneğin `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Pencerenin başlangıcı veya tam geçmiş için `null` |
 
 Girdiler hem `inputs` hem de `outputs` taşır - çalıştırmanın ne aldığı ve ne yanıtladığı - ancak asla `node_results` taşımaz: düğüm başına iz, tablodaki en büyük sütundur ve aşağı yöndeki her şeyi gölgede bırakır. Tam iz gerektiğinde API üzerinden tek bir yürütme alın.

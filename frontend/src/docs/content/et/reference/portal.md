@@ -51,6 +51,7 @@ Sisendväljad pärinevad [Input](../nodes/input-node.md) sõlmedest. API eraldab
 ## Autentimine ja sessioonid
 
 - **WorkflowPortalUser**: Kasutajanimi/parool workflow kohta (kui autentimine on lubatud)
+- **Viimase kasutaja eemaldamine**: Kui portaal on lubatud, muudab viimase portaalikasutaja kustutamine portaali taas avalikuks; seadete dialoog küsib esmalt kinnitust
 - **PortalSession**: Sessiooni tokenid 168-tunnise TTL-iga
 - **Kiirusepiirang**: 3 ebaõnnestunud sisselogimiskatset → 24h keeld workflow+IP kohta
 - Aegunud sessioonid puhastatakse cron-tööga

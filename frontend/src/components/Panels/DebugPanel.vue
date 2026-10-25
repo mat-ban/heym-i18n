@@ -29,6 +29,8 @@ import ImageLightbox from "@/components/ui/ImageLightbox.vue";
 import JsonTree from "@/components/ui/JsonTree.vue";
 import SearchableSelect from "@/components/ui/SearchableSelect.vue";
 import Textarea from "@/components/ui/Textarea.vue";
+import UserAvatar from "@/components/ui/UserAvatar.vue";
+import HeymIcon from "@/components/Nodes/HeymIcon.vue";
 import type { ClarifyAnswer, ClarifyQuestion } from "@/types/clarify";
 import {
   extractClarifyBlock,
@@ -36,6 +38,14 @@ import {
   stripClarifyBlock,
 } from "@/utils/parseClarify";
 import ExecutionTimeline from "@/components/Panels/ExecutionTimeline.vue";
+import NodeEditFocusCard from "@/features/assistant-node-edit/components/NodeEditFocusCard.vue";
+import NodeEditQuickActions from "@/features/assistant-node-edit/components/NodeEditQuickActions.vue";
+import {
+  mergeEditedNodeData,
+  pickEditedNode,
+  type NodeEditActionId,
+  type NodeEditQuickAction,
+} from "@/features/assistant-node-edit/nodeEdit";
 import YoloModeToggle from "@/features/assistant-yolo/components/YoloModeToggle.vue";
 import YoloStepList from "@/features/assistant-yolo/components/YoloStepList.vue";
 import YoloTestInputsCard from "@/features/assistant-yolo/components/YoloTestInputsCard.vue";
@@ -52,14 +62,23 @@ import {
   type YoloInputState,
 } from "@/features/assistant-yolo/yoloProtocol";
 import type { TimelineEntry, TimelineSelectPayload } from "@/components/Panels/executionTimeline";
-import { buildExecutionLogForAssistant, formatExecutionLogToolCallTitle, isHitlWaitNodeResult, isRetryAttemptNodeResult } from "@/lib/executionLog";
-import { formatModelRoutingLabel, readSpanModelRouting } from "@/components/Panels/executionTimeline";
+import { buildExecutionLogForAssistant, formatExecutionLogToolCallTitle, getLatestNodeResultForNode, isHitlWaitNodeResult } from "@/lib/executionLog";
+import {
+  buildDelegatedSubAgentLabelSet,
+  buildSubAgentLabelToParentId,
+  buildTimelineEntries,
+  formatModelRoutingLabel,
+  isDelegatedSubAgentRow,
+  readSpanModelRouting,
+} from "@/components/Panels/executionTimeline";
 import {
   collectRunImageSrcs,
   getOutputImageSrcs,
   maskImageDataForDisplay,
 } from "@/lib/executionImages";
 import { looksLikeMarkdown } from "@/lib/markdown";
+import { convertMarkdownTables } from "@/lib/markdownTables";
+import { NODE_DOC_SLUGS } from "@/lib/nodeDocSlugs";
 import { cn, formatFileSize } from "@/lib/utils";
 import { buildMeasuredNodeSizeMap, getWorkflowNodeLayoutSize } from "@/lib/workflowLayout";
 import { normalizeWorkflowEdges } from "@/lib/workflowEdges";
@@ -68,6 +87,8 @@ import { onDismissOverlays } from "@/composables/useOverlayBackHandler";
 import { useAiAssistantPanelFrame } from "@/composables/useAiAssistantPanelFrame";
 import { useAssistantInputResize } from "@/composables/useAssistantInputResize";
 import { useAiDefaults } from "@/composables/useAiDefaults";
+import { useThinkingWord } from "@/composables/useThinkingWord";
+import { useAuthStore } from "@/stores/auth";
 import { useWorkflowStore } from "@/stores/workflow";
 import { playSuccessSound } from "@/utils/audio";
 import { sanitizeGeneratedCredentialFields } from "@/utils/generatedCredentialFields";
@@ -80,6 +101,7 @@ import {
 const { fitView, getNodes, updateNodeInternals } = useVueFlow();
 
 const workflowStore = useWorkflowStore();
+const authStore = useAuthStore();
 const aiDefaults = useAiDefaults();
 const isMobile = useMediaQuery("(max-width: 767px)");
 
@@ -318,28 +340,12 @@ watch(
   },
 );
 
-const delegatedSubAgentLabelSet = computed(() => {
-  const s = new Set<string>();
-  for (const n of workflowStore.nodes) {
-    if (n.type !== "agent") continue;
-    const labels = n.data?.subAgentLabels;
-    if (!Array.isArray(labels)) continue;
-    for (const l of labels) {
-      if (typeof l === "string") s.add(l);
-    }
-  }
-  return s;
-});
+const delegatedSubAgentLabelSet = computed(() =>
+  buildDelegatedSubAgentLabelSet(workflowStore.nodes),
+);
 
 function isHiddenFromDefaultExecutionLog(r: NodeResult): boolean {
-  if (r.metadata?.invocation === "sub_agent_tool") return true;
-  if (r.node_type !== "agent" || !delegatedSubAgentLabelSet.value.has(r.node_label)) {
-    return false;
-  }
-  if (r.status === "skipped") return true;
-  // Older history without metadata: any row for an orchestrator-listed sub-agent label
-  // is a delegated run (graph-scheduled sub-agents are skipped, not success).
-  return r.status === "success" || r.status === "error" || r.status === "pending";
+  return isDelegatedSubAgentRow(r, delegatedSubAgentLabelSet.value);
 }
 
 const extendedExecutionRows = computed((): NodeResult[] => {
@@ -406,76 +412,12 @@ const displayResults = computed(() => {
 });
 
 // Sub-agent label → parent orchestrator node_id (for timeline hierarchy)
-const subAgentLabelToParentId = computed((): Map<string, string> => {
-  const map = new Map<string, string>();
-  for (const n of workflowStore.nodes) {
-    if (n.type !== "agent") continue;
-    const labels = n.data?.subAgentLabels;
-    if (!Array.isArray(labels)) continue;
-    for (const l of labels) {
-      if (typeof l === "string") map.set(l, n.id);
-    }
-  }
-  return map;
-});
+const subAgentLabelToParentId = computed((): Map<string, string> =>
+  buildSubAgentLabelToParentId(workflowStore.nodes),
+);
 
 const timelineResults = computed((): TimelineEntry[] =>
-  extendedExecutionRows.value
-    .map((r, rowIndex, allRows) => ({ r, rowIndex, allRows }))
-    .filter(
-      ({ r }) =>
-        r.node_type !== "condition" &&
-        r.node_type !== "sticky" &&
-        !isRetryAttemptNodeResult(r) &&
-        r.status !== "skipped",
-    )
-    .map(({ r, rowIndex, allRows }) => {
-      let retryFailedAttempts = 0;
-      let retryFinalAttempt: number | null = null;
-      let retryMaxAttempts: number | null = null;
-      let retryLastError: string | null = null;
-      let highestRetryAttempt = 0;
-
-      for (let previousIndex = rowIndex - 1; previousIndex >= 0; previousIndex -= 1) {
-        const previousRow = allRows[previousIndex];
-        if (previousRow.node_id !== r.node_id) {
-          continue;
-        }
-        if (!isRetryAttemptNodeResult(previousRow)) {
-          break;
-        }
-
-        retryFailedAttempts += 1;
-        if (retryLastError === null && typeof previousRow.error === "string") {
-          retryLastError = previousRow.error;
-        }
-        const attempt = previousRow.metadata?.retry_attempt;
-        if (typeof attempt === "number" && Number.isInteger(attempt)) {
-          highestRetryAttempt = Math.max(highestRetryAttempt, attempt);
-        }
-        const maxAttempts = previousRow.metadata?.retry_max_attempts;
-        if (typeof maxAttempts === "number" && Number.isInteger(maxAttempts)) {
-          retryMaxAttempts = maxAttempts;
-        }
-      }
-
-      if (retryFailedAttempts > 0) {
-        retryFinalAttempt = highestRetryAttempt > 0 ? highestRetryAttempt + 1 : retryFailedAttempts + 1;
-        if (retryMaxAttempts === null) {
-          retryMaxAttempts = retryFinalAttempt;
-        }
-      }
-
-      return {
-        ...r,
-        isSubAgent: isHiddenFromDefaultExecutionLog(r),
-        sourceNodeResultsIndex: rowIndex,
-        retryFailedAttempts,
-        retryFinalAttempt,
-        retryMaxAttempts,
-        retryLastError,
-      };
-    }),
+  buildTimelineEntries(extendedExecutionRows.value, isHiddenFromDefaultExecutionLog),
 );
 
 function toggleTimeline(): void {
@@ -1502,6 +1444,8 @@ interface ChatMessage extends YoloMessageFields {
   hasParseError?: boolean;
   clarify?: ClarifyQuestion[];
   clarifyAnswered?: boolean;
+  /** Set on replies to a node-focused Agent turn: only this node is updated. */
+  nodeEditTargetId?: string;
 }
 
 interface SelectOption {
@@ -1568,6 +1512,7 @@ const aiPanelFrameStyle = computed(() => {
   };
 });
 const aiLoading = ref(false);
+const thinkingWord = useThinkingWord(aiLoading);
 const aiStreaming = ref(false);
 const aiAbortController = ref<AbortController | null>(null);
 const canvasMode = ref<"agent" | "ask">("agent");
@@ -1673,6 +1618,17 @@ const currentWorkflowContext = computed(() => {
     edges: workflowStore.edges,
   };
 });
+
+/** Messages to draw; a reply that has nothing to show yet stays hidden behind the thinking indicator. */
+const renderedAiMessages = computed<ChatMessage[]>(() =>
+  aiMessages.value.filter((msg) =>
+    msg.role !== "assistant"
+    || msg.content.length > 0
+    || Boolean(msg.yoloSteps?.length)
+    || Boolean(msg.yoloInputs)
+    || Boolean(msg.clarify),
+  ),
+);
 
 const conversationHistory = computed(() => {
   return aiMessages.value
@@ -1890,8 +1846,55 @@ watch(
 );
 
 watch(aiPanelOpen, (open) => {
+  if (!open) workflowStore.focusAssistantOnNode(null);
   if (!open && props.aiOnly) emit("ai-close");
 });
+
+const aiFocusNodeResult = computed<NodeResult | null>(() => {
+  const node = workflowStore.aiFocusNode;
+  if (!node) return null;
+  return getLatestNodeResultForNode(
+    executionResult.value ? executionResult.value.node_results : nodeResults.value,
+    node.id,
+  );
+});
+
+watch(
+  () => workflowStore.aiFocusRequest,
+  () => {
+    if (!workflowStore.aiFocusNodeId) return;
+    nodeFocusMessageCount.value = aiMessages.value.length;
+    selectedNodeQuickAction.value = null;
+    if (!yoloLoopActive.value) canvasMode.value = "agent";
+    openAiPanel();
+  },
+);
+
+/** Message count when the node was focused; the quick actions go away once a message is sent. */
+const nodeFocusMessageCount = ref(0);
+const showNodeQuickActions = computed<boolean>(() =>
+  Boolean(workflowStore.aiFocusNode)
+    && aiMessages.value.length <= nodeFocusMessageCount.value
+    && !aiInputMessage.value.trim() && !aiStreaming.value && !yoloLoopActive.value,
+);
+
+watch(showNodeQuickActions, (show) => {
+  if (show) scrollAiToBottom();
+});
+
+const selectedNodeQuickAction = ref<NodeEditActionId | null>(null);
+
+function applyNodeEditQuickAction(action: NodeEditQuickAction): void {
+  selectedNodeQuickAction.value = action.id;
+  if (action.id !== "other" && !yoloLoopActive.value) canvasMode.value = "agent";
+  aiInputMessage.value = action.prefill;
+  nextTick(() => {
+    const textarea = aiTextareaRef.value;
+    if (!textarea) return;
+    textarea.focus();
+    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+  });
+}
 
 function askAiAboutError(result: {
   node_label: string;
@@ -2085,10 +2088,13 @@ function retryMessage(failedMessageId: string): void {
 }
 
 function streamAssistantReply(requestText: string, options: StreamAssistantReplyOptions): void {
+  const isAskMode = canvasMode.value === "ask";
+  const focusNodeId = workflowStore.aiFocusNodeId ?? undefined;
   aiMessages.value.push({
     id: `msg_${Date.now()}_assistant${options.idSuffix ?? ""}`,
     role: "assistant",
     content: "",
+    nodeEditTargetId: isAskMode ? undefined : focusNodeId,
   });
 
   aiStreaming.value = true;
@@ -2096,7 +2102,6 @@ function streamAssistantReply(requestText: string, options: StreamAssistantReply
   aiAbortController.value = new AbortController();
 
   const historyForRequest = conversationHistory.value.slice(0, -2);
-  const isAskMode = canvasMode.value === "ask";
 
   aiApi.assistantStream(
     {
@@ -2116,6 +2121,8 @@ function streamAssistantReply(requestText: string, options: StreamAssistantReply
       askMode: isAskMode,
       executionLog: getExecutionLogForAssistantRequest(),
       yoloMode: options.useYolo,
+      targetNodeId: focusNodeId,
+      targetNodeDoc: workflowStore.aiFocusNode ? NODE_DOC_SLUGS[workflowStore.aiFocusNode.type] : undefined,
     },
     (text) => {
       aiLoading.value = false;
@@ -2160,7 +2167,7 @@ function handleBuilderResponse(msg: ChatMessage, isAskMode: boolean): void {
   }
   if (isAskMode) return;
 
-  const workflowJson = extractWorkflowJson(msg.content);
+  const workflowJson = extractReplyWorkflowJson(msg);
   if (workflowJson) {
     msg.workflowJson = workflowJson;
     msg.hasParseError = false;
@@ -2168,19 +2175,33 @@ function handleBuilderResponse(msg: ChatMessage, isAskMode: boolean): void {
     setTimeout(() => {
       applyWorkflowChanges(true);
     }, 300);
-  } else if (msg.content.trim().length > 0) {
+  } else if (msg.content.trim().length > 0 && !isNodeEditExplanation(msg)) {
     msg.hasParseError = true;
   }
+}
+
+/** A reply's workflow JSON, or null when a node-edit reply does not edit its node. */
+function extractReplyWorkflowJson(msg: ChatMessage): { nodes: WorkflowNode[]; edges: WorkflowEdge[] } | null {
+  const workflowJson = extractWorkflowJson(msg.content);
+  if (!workflowJson || !msg.nodeEditTargetId) return workflowJson;
+  const target = workflowStore.nodes.find((node) => node.id === msg.nodeEditTargetId);
+  return target && pickEditedNode(workflowJson.nodes, target) ? workflowJson : null;
+}
+
+/** A node-edit reply without JSON explains why the change does not fit in the node. */
+function isNodeEditExplanation(msg: ChatMessage): boolean {
+  return Boolean(msg.nodeEditTargetId) && !msg.content.includes("```json");
 }
 
 function handleYoloResponse(msg: ChatMessage): void {
   const clarify = extractClarifyBlock(msg.content);
   if (clarify) msg.clarify = clarify;
-  const workflowJson = clarify ? null : extractWorkflowJson(msg.content);
+  const workflowJson = clarify ? null : extractReplyWorkflowJson(msg);
   if (workflowJson) msg.workflowJson = workflowJson;
   const directive = extractYoloDirective(msg.content);
   msg.hasParseError =
-    !clarify && !workflowJson && !directive && msg.content.trim().length > 0;
+    !clarify && !workflowJson && !directive && msg.content.trim().length > 0
+    && !isNodeEditExplanation(msg);
   void yoloLoop.handleAssistantResponse(msg, {
     hasClarify: clarify !== null,
     hasWorkflowJson: workflowJson !== null,
@@ -2716,6 +2737,18 @@ function preserveAgentSkillFiles(node: WorkflowNode): WorkflowNode {
 
 function applyWorkflowChanges(showMessage = true): void {
   if (!lastWorkflowJson.value) return;
+  const nodeEditTargetId = aiMessages.value[aiMessages.value.length - 1]?.nodeEditTargetId;
+  if (nodeEditTargetId) {
+    const label = applyNodeEdit(nodeEditTargetId, lastWorkflowJson.value);
+    if (showMessage && label) {
+      aiMessages.value.push({
+        id: `msg_${Date.now()}_system`,
+        role: "assistant",
+        content: `Node "${label}" updated. The rest of the workflow is unchanged.`,
+      });
+    }
+    return;
+  }
   applyWorkflowJson(lastWorkflowJson.value);
 
   if (showMessage) {
@@ -2731,47 +2764,63 @@ function applyWorkflowChanges(showMessage = true): void {
   }, 100);
 }
 
+/** An AI-generated node limited to credentials, models and tables the user can use. */
+function sanitizeGeneratedNode(node: WorkflowNode): WorkflowNode {
+  const mergedNode = preserveAgentSkillFiles(node);
+  if (mergedNode.type !== "llm" && mergedNode.type !== "agent") {
+    return sanitizeGeneratedNodeIds(mergedNode);
+  }
+
+  const effectiveCredentialId = selectedCredentialId.value;
+  const effectiveModel = selectedModel.value;
+  const existingNode = findMatchingExistingNode(mergedNode);
+  const data = { ...mergedNode.data };
+  const credId = data.credentialId as string | undefined;
+  const model = data.model as string | undefined;
+
+  if (isPlaceholderOrInvalidCredential(credId)) {
+    data.credentialId = effectiveCredentialId || "";
+    if (!effectiveCredentialId) {
+      data.model = "";
+    }
+  }
+  if (isPlaceholderOrInvalidModel(model)) {
+    data.model = existingNode?.data?.model || effectiveModel || "";
+  }
+
+  const fb = data.fallbackCredentialId as string | undefined;
+  if (fb && fb !== existingNode?.data?.fallbackCredentialId && shouldClearIntegrationCredentialId(fb)) {
+    data.fallbackCredentialId = "";
+    data.fallbackModel = "";
+  }
+  const gr = data.guardrailCredentialId as string | undefined;
+  if (gr && gr !== existingNode?.data?.guardrailCredentialId && shouldClearIntegrationCredentialId(gr)) {
+    data.guardrailCredentialId = "";
+    data.guardrailModel = "";
+  }
+
+  return sanitizeGeneratedNodeIds({ ...mergedNode, data });
+}
+
+/** Writes a node-edit reply onto its node only and returns the node's label, or null when nothing applied. */
+function applyNodeEdit(
+  targetId: string,
+  workflowJson: { nodes: WorkflowNode[]; edges: WorkflowEdge[] },
+): string | null {
+  const target = workflowStore.nodes.find((node) => node.id === targetId);
+  const edited = target ? pickEditedNode(workflowJson.nodes, target) : null;
+  if (!target || !edited) return null;
+  const sanitized = sanitizeGeneratedNode({ ...target, data: mergeEditedNodeData(target, edited) });
+  workflowStore.updateNode(target.id, sanitized.data);
+  nextTick(() => updateNodeInternals([target.id]));
+  return target.data.label;
+}
+
 function applyWorkflowJson(workflowJson: { nodes: WorkflowNode[]; edges: WorkflowEdge[] }): void {
   const { nodes: newNodes, edges: newEdges } = workflowJson;
   const newNodeIds = new Set(newNodes.map((n) => n.id));
 
-  const effectiveCredentialId = selectedCredentialId.value;
-  const effectiveModel = selectedModel.value;
-
-  const sanitizedNodes = newNodes.map((node): WorkflowNode => {
-    const mergedNode = preserveAgentSkillFiles(node);
-    if (mergedNode.type !== "llm" && mergedNode.type !== "agent") {
-      return sanitizeGeneratedNodeIds(mergedNode);
-    }
-
-    const data = { ...mergedNode.data };
-    const credId = data.credentialId as string | undefined;
-    const model = data.model as string | undefined;
-
-    if (isPlaceholderOrInvalidCredential(credId)) {
-      data.credentialId = effectiveCredentialId || "";
-      if (!effectiveCredentialId) {
-        data.model = "";
-      }
-    }
-    if (isPlaceholderOrInvalidModel(model)) {
-      const existingNode = findMatchingExistingNode(mergedNode);
-      data.model = existingNode?.data?.model || effectiveModel || "";
-    }
-
-    const fb = data.fallbackCredentialId as string | undefined;
-    if (fb && shouldClearIntegrationCredentialId(fb)) {
-      data.fallbackCredentialId = "";
-      data.fallbackModel = "";
-    }
-    const gr = data.guardrailCredentialId as string | undefined;
-    if (gr && shouldClearIntegrationCredentialId(gr)) {
-      data.guardrailCredentialId = "";
-      data.guardrailModel = "";
-    }
-
-    return sanitizeGeneratedNodeIds({ ...mergedNode, data });
-  });
+  const sanitizedNodes = newNodes.map(sanitizeGeneratedNode);
 
   let edgesToApply = newEdges;
   if (newEdges.length === 0 && workflowStore.edges.length > 0) {
@@ -2793,6 +2842,10 @@ function applyWorkflowJson(workflowJson: { nodes: WorkflowNode[]; edges: Workflo
 /** Apply a YOLO response's workflow and wait for the layout, like the timer path does. */
 async function applyYoloWorkflow(message: ChatMessage): Promise<void> {
   if (!message.workflowJson) return;
+  if (message.nodeEditTargetId) {
+    applyNodeEdit(message.nodeEditTargetId, message.workflowJson);
+    return;
+  }
   applyWorkflowJson(message.workflowJson);
   await new Promise<void>((resolve) => {
     window.setTimeout(resolve, 100);
@@ -2802,6 +2855,7 @@ async function applyYoloWorkflow(message: ChatMessage): Promise<void> {
 
 function clearAiChat(): void {
   yoloLoop.reset();
+  selectedNodeQuickAction.value = null;
   aiMessages.value = [];
   aiConversationId.value = crypto.randomUUID();
 }
@@ -2825,7 +2879,8 @@ function visibleMessageText(msg: ChatMessage): string {
 
 function renderContent(content: string): string {
   const codeBlocks: string[] = [];
-  let result = content.replace(/```(\w+)?\n?([\s\S]*?)```/g, (_match, lang, code) => {
+  // The newlines around a fence would become <br>s on top of the block's own margin.
+  let result = content.replace(/\n*```(\w+)?\n?([\s\S]*?)```\n*/g, (_match, lang, code) => {
     const language = lang || "json";
     const escapedCode = code.trim()
       .replace(/&/g, "&amp;")
@@ -2833,7 +2888,7 @@ function renderContent(content: string): string {
       .replace(/>/g, "&gt;");
     const placeholder = `\x00CODEBLOCK${codeBlocks.length}\x00`;
     codeBlocks.push(`<div class="code-block"><div class="code-header">${language}</div><pre><code>${escapedCode}</code></pre></div>`);
-    return placeholder;
+    return `\n${placeholder}\n`;
   });
 
   result = result
@@ -2848,7 +2903,10 @@ function renderContent(content: string): string {
   result = result.replace(/^## (.+)$/gm, '<h3 class="md-h3">$1</h3>');
   result = result.replace(/^# (.+)$/gm, '<h2 class="md-h2">$1</h2>');
   result = result.replace(/^- (.+)$/gm, '<li class="md-li">$1</li>');
+  result = convertMarkdownTables(result);
 
+  // Kept on their own line so list and heading rules stop before them; the block's margin is the gap.
+  result = result.replace(/\n?(\x00CODEBLOCK\d+\x00)\n?/g, "$1");
   codeBlocks.forEach((block, i) => {
     result = result.replace(`\x00CODEBLOCK${i}\x00`, block);
   });
@@ -3980,85 +4038,113 @@ function renderContent(content: string): string {
 
         <div
           ref="aiMessagesContainer"
-          class="ai-messages"
+          :class="['ai-messages', workflowStore.aiFocusNode && 'ai-messages-node']"
         >
+          <NodeEditFocusCard
+            v-if="workflowStore.aiFocusNode"
+            :node="workflowStore.aiFocusNode"
+            :result="aiFocusNodeResult"
+            @clear="workflowStore.focusAssistantOnNode(null)"
+          />
+
           <div
             v-if="aiMessages.length === 0"
-            class="empty-state"
+            :class="['empty-state', workflowStore.aiFocusNode && 'empty-state-node']"
           >
-            <Bot class="w-12 h-12 text-muted-foreground/50 mb-3" />
+            <Bot
+              v-if="!workflowStore.aiFocusNode"
+              class="w-12 h-12 text-muted-foreground/50 mb-3"
+            />
             <p class="text-sm text-muted-foreground text-center">
-              {{ canvasMode === 'ask' ? 'Ask me anything about your workflow or Heym' : 'Ask me to create or modify your workflow or credentials' }}
+              <template v-if="workflowStore.aiFocusNode">
+                {{ canvasMode === 'ask' ? `Ask anything about ${workflowStore.aiFocusNode.data.label}` : `Only ${workflowStore.aiFocusNode.data.label} changes. Pick an option below or describe the change.` }}
+              </template>
+              <template v-else>
+                {{ canvasMode === 'ask' ? 'Ask me anything about your workflow or Heym' : 'Ask me to create or modify your workflow or credentials' }}
+              </template>
             </p>
           </div>
 
           <div
-            v-for="msg in aiMessages"
+            v-for="msg in renderedAiMessages"
             :key="msg.id"
-            :class="['ai-message', msg.role, msg.kind === 'yolo-report' ? 'yolo-report' : 'group/message']"
+            :class="['ai-message-row', msg.role, msg.kind === 'yolo-report' && 'yolo-report']"
           >
-            <p
-              v-if="msg.kind === 'yolo-report'"
-              class="yolo-report-line"
-              data-testid="ai-assistant-yolo-report"
-            >
-              {{ msg.yoloReportLabel }}
-            </p>
-            <template v-else>
-              <CopyMessageButton
-                v-if="visibleMessageText(msg)"
-                :text="visibleMessageText(msg)"
-                data-testid="ai-assistant-copy-message"
-              />
-              <!-- eslint-disable vue/no-v-html -->
-              <div
-                class="message-content"
-                v-html="renderContent(visibleMessageText(msg))"
-              />
-              <!-- eslint-enable vue/no-v-html -->
-              <ClarifyCard
-                v-if="msg.clarify"
-                :questions="msg.clarify"
-                :disabled="msg.clarifyAnswered || aiStreaming"
-                @submit="(answers: ClarifyAnswer[]) => handleClarifySubmit(msg, answers)"
-                @credential-saved="() => void loadAllCredentialsForSanitize()"
-                @data-table-created="rememberCreatedDataTable"
-              />
-              <YoloTestInputsCard
-                v-if="msg.yoloInputs"
-                :request="msg.yoloInputs"
-                @confirm="yoloLoop.confirmInputs"
-                @stop="stopYoloFromCard(msg)"
-              />
-              <YoloStepList
-                v-if="msg.yoloSteps?.length"
-                :steps="msg.yoloSteps"
-              />
-              <div
-                v-if="msg.workflowJson && !msg.yoloSteps"
-                class="workflow-detected"
+            <HeymIcon
+              v-if="msg.role === 'assistant'"
+              class="ai-message-avatar"
+            />
+            <div :class="['ai-message', msg.role, msg.kind === 'yolo-report' ? 'yolo-report' : 'group/message']">
+              <p
+                v-if="msg.kind === 'yolo-report'"
+                class="yolo-report-line"
+                data-testid="ai-assistant-yolo-report"
               >
-                <LayoutGrid class="w-3 h-3" />
-                <span>Auto-applying workflow...</span>
-              </div>
-              <div
-                v-if="msg.hasParseError && !aiStreaming && canvasMode === 'agent'"
-                class="parse-error-action"
-              >
-                <div class="parse-error-message">
-                  <AlertCircle class="w-3 h-3" />
-                  <span>Could not extract workflow from response</span>
-                </div>
-                <button
-                  class="retry-btn"
-                  :disabled="aiStreaming"
-                  @click="retryMessage(msg.id)"
+                {{ msg.yoloReportLabel }}
+              </p>
+              <template v-else>
+                <CopyMessageButton
+                  v-if="visibleMessageText(msg)"
+                  :text="visibleMessageText(msg)"
+                  data-testid="ai-assistant-copy-message"
+                />
+                <!-- eslint-disable vue/no-v-html -->
+                <div
+                  class="message-content"
+                  v-html="renderContent(visibleMessageText(msg))"
+                />
+                <!-- eslint-enable vue/no-v-html -->
+                <ClarifyCard
+                  v-if="msg.clarify"
+                  :questions="msg.clarify"
+                  :disabled="msg.clarifyAnswered || aiStreaming"
+                  @submit="(answers: ClarifyAnswer[]) => handleClarifySubmit(msg, answers)"
+                  @credential-saved="() => void loadAllCredentialsForSanitize()"
+                  @data-table-created="rememberCreatedDataTable"
+                />
+                <YoloTestInputsCard
+                  v-if="msg.yoloInputs"
+                  :request="msg.yoloInputs"
+                  @confirm="yoloLoop.confirmInputs"
+                  @stop="stopYoloFromCard(msg)"
+                />
+                <YoloStepList
+                  v-if="msg.yoloSteps?.length"
+                  :steps="msg.yoloSteps"
+                />
+                <div
+                  v-if="msg.workflowJson && !msg.yoloSteps"
+                  class="workflow-detected"
                 >
-                  <RefreshCcw class="w-3 h-3" />
-                  Retry
-                </button>
-              </div>
-            </template>
+                  <LayoutGrid class="w-3 h-3" />
+                  <span>{{ msg.nodeEditTargetId ? "Applying changes to this node..." : "Auto-applying workflow..." }}</span>
+                </div>
+                <div
+                  v-if="msg.hasParseError && !aiStreaming && canvasMode === 'agent'"
+                  class="parse-error-action"
+                >
+                  <div class="parse-error-message">
+                    <AlertCircle class="w-3 h-3" />
+                    <span>Could not extract workflow from response</span>
+                  </div>
+                  <button
+                    class="retry-btn"
+                    :disabled="aiStreaming"
+                    @click="retryMessage(msg.id)"
+                  >
+                    <RefreshCcw class="w-3 h-3" />
+                    Retry
+                  </button>
+                </div>
+              </template>
+            </div>
+            <UserAvatar
+              v-if="msg.role === 'user' && msg.kind !== 'yolo-report'"
+              :user-id="authStore.user?.id"
+              :name="authStore.user?.name"
+              :email="authStore.user?.email"
+              class="ai-message-avatar bg-muted text-xs font-semibold text-muted-foreground"
+            />
           </div>
 
           <div
@@ -4066,8 +4152,25 @@ function renderContent(content: string): string {
             class="loading-indicator"
           >
             <Loader2 class="w-3 h-3 animate-spin" />
-            <span>Thinking...</span>
+            <Transition
+              name="thinking-word"
+              mode="out-in"
+            >
+              <span
+                :key="thinkingWord"
+                class="inline-block"
+                data-testid="ai-assistant-thinking-word"
+              >{{ thinkingWord }}...</span>
+            </Transition>
           </div>
+
+          <NodeEditQuickActions
+            v-if="showNodeQuickActions"
+            class="mt-auto"
+            :selected="selectedNodeQuickAction"
+            :disabled="!selectedCredentialId || !selectedModel"
+            @select="applyNodeEditQuickAction"
+          />
         </div>
 
 
@@ -4109,7 +4212,9 @@ function renderContent(content: string): string {
             ref="aiTextareaRef"
             v-model="aiInputMessage"
             :disabled="aiStreaming || yoloLoopActive || !selectedCredentialId || !selectedModel"
-            :placeholder="canvasMode === 'ask' ? 'Ask a question...' : 'What do you want to automate...'"
+            :placeholder="workflowStore.aiFocusNode
+              ? (canvasMode === 'ask' ? 'Ask about this node...' : 'Describe what to change...')
+              : (canvasMode === 'ask' ? 'Ask a question...' : 'What do you want to automate...')"
             class="ai-textarea"
             rows="2"
             :style="aiInputHeight !== null ? { height: `${aiInputHeight}px` } : undefined"
@@ -4548,12 +4653,62 @@ function renderContent(content: string): string {
   padding: 16px;
 }
 
+/* Node focus: a column so the quick actions sit at the bottom. */
+.ai-messages.ai-messages-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-messages.ai-messages-node > * {
+  flex-shrink: 0;
+}
+
+
+.thinking-word-enter-active,
+.thinking-word-leave-active {
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.thinking-word-enter-from {
+  opacity: 0;
+  transform: translateY(3px);
+}
+
+.thinking-word-leave-to {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
+.empty-state.empty-state-node {
+  height: auto;
+  padding: 8px 16px 12px;
+}
+
+.ai-message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ai-message-row.user {
+  justify-content: flex-end;
+}
+
+.ai-message-avatar {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .ai-message {
   position: relative;
-  margin-bottom: 10px;
   /* The right padding keeps text clear of the copy button in the corner. */
   padding: 10px 38px 10px 14px;
   border-radius: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 90%;
   font-size: 14px;
 }
@@ -4561,17 +4716,14 @@ function renderContent(content: string): string {
 .ai-message.user {
   background: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
-  margin-left: auto;
 }
 
 .ai-message.assistant {
   background: hsl(var(--muted));
   color: hsl(var(--foreground));
-  margin-right: auto;
 }
 
 .ai-message.user.yolo-report {
-  margin: 0 0 10px;
   padding: 0 2px;
   max-width: 100%;
   background: transparent;
@@ -4590,7 +4742,7 @@ function renderContent(content: string): string {
 }
 
 .message-content :deep(.code-block) {
-  margin: 8px 0;
+  margin: 12px 0;
   border-radius: 8px;
   overflow: hidden;
   background: hsl(var(--background));
@@ -4640,6 +4792,42 @@ function renderContent(content: string): string {
   font-size: 16px;
   font-weight: 600;
   margin: 12px 0 8px 0;
+}
+
+.message-content :deep(.md-table-wrap) {
+  margin: 12px 0;
+  overflow-x: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--background));
+}
+
+.message-content :deep(.md-table) {
+  width: 100%;
+  border-collapse: collapse;
+  /* The bubble breaks words anywhere; in a table that would cut every narrow column mid-word. */
+  word-break: normal;
+  overflow-wrap: normal;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.message-content :deep(.md-table th),
+.message-content :deep(.md-table td) {
+  padding: 6px 10px;
+  border-bottom: 1px solid hsl(var(--border));
+  text-align: left;
+  vertical-align: top;
+}
+
+.message-content :deep(.md-table th) {
+  background: hsl(var(--muted) / 0.6);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.message-content :deep(.md-table tbody tr:last-child td) {
+  border-bottom: none;
 }
 
 .message-content :deep(.md-h3) {

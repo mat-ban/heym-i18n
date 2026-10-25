@@ -33,13 +33,17 @@
 | `valueField` | string | 숫자 값으로 사용되는 행 키 (pie/bar/line/numeric/gauge) |
 | `series` | array | bar/line용 선택적 다중 시리즈 정의 `[{ "name": "Sent", "field": "sent" }]` (`valueField`를 재정의함) |
 | `columns` | array | `table`용 선택적 열 목록 (기본값은 첫 번째 행의 키) |
-| `statusColumn` | string | 색상이 지정된 [상태 칩](#status-chips)으로 렌더링되는 선택적 `table` 열입니다. 표시된 열 중 하나여야 합니다. |
+| `statusColumn` | string | 색상이 지정된 [상태 칩](#status-chips)으로 렌더링되는 선택적 `table` 열입니다. 표시된 열 중 하나여야 합니다. |. `linkColumn`을 사용하면 링크 열과 버튼 텍스트도 함께 포함됩니다.
 | `statusTones` | object | 기본값으로 처리되지 않는 값에 대해 상태 값을 톤(`success`, `attention`, `failure`, `waiting`, `neutral`)에 매핑하는 선택적 객체 |
+| `linkColumn` | string | 셀에 URL이 들어 있는 선택적 `table` 열로, 새 탭에서 여는 [링크 버튼](#link-buttons)으로 표시됩니다. 표시되는 열 중 하나여야 합니다. |
+| `linkLabel` | string | 링크 버튼의 선택적 텍스트입니다. 비워 두면 버튼에 링크 아이콘만 표시됩니다. |
 | `xField` / `yField` | string | X 및 Y 숫자 축에 대한 행 키 (scatter) |
 | `min` / `max` | number | `gauge`의 숫자 범위 (기본값 `0` / `100`) |
 | `unit` | string | `numeric` 또는 `gauge` 값 옆에 표시되는 선택적 단위 |
 | `text` | string | `text` 차트 타입용 Markdown 메시지. 비워 두고 `valueField`를 설정하면 상위 데이터에서 가져온 동적 메시지를 렌더링합니다. |
 | `title` | string | 선택적 차트 제목 |
+| `hitlWorkflowId` | string | `hitl` 전용입니다. 이 Workflow의 리뷰만 표시합니다. 비워 두면 위젯이 모든 리뷰를 표시합니다. |
+| `hitlNodeId` | string | `hitl` 전용입니다. `hitlWorkflowId`를 하나의 단계로 좁힙니다. 사람 리뷰가 있는 Agent 또는 Slack 승인, 버튼, 양식 단계입니다. |
 
 ## 차트 타입
 
@@ -51,7 +55,7 @@
 - **proportion** — 백분율 범례와 함께 지분으로 분할된 단일 수평 막대입니다 (예: 언어별 분포). `labelField` + `valueField`를 사용합니다.
 - **barGauge** — 빨강→초록 그라디언트와 값을 가진 행당 하나의 수평 게이지입니다 (예: 여유 디스크 공간). `labelField` + `valueField`를 사용하며, 선택적 `unit` 및 `max` (기본값은 가장 큰 행 값)를 지원합니다.
 - **text** — Markdown 메시지입니다 (예: "Last execution at 19:47"과 같은 상태 메모). 정적 메시지의 경우 `text`에 Markdown을 넣거나, `text`를 비워 두고 `valueField`를 설정하여 상위에서 생성된 문자열을 렌더링합니다. 제목, 굵게/기울임, [목록](../nodes/chart-output-node.md#interactive-task-lists), 링크, 인라인 코드를 지원합니다.
-- **hitl** — 대기 중인 사람의 리뷰를 보여주는 캐러셀입니다. 헤더에는 `1/n pending`이 표시되며, 첫 번째 카드에서는 왼쪽 화살표가, 마지막 카드에서는 오른쪽 화살표가 비활성화됩니다. Workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 리뷰를 처리할 수 있으며, 위젯 제목 옆의 기록 아이콘을 클릭하면 같은 페이지의 기록 대화상자에서 해당 실행이 열립니다. 이 차트 타입은 상위 행을 무시하므로, 위젯 Workflow는 Chart Output 노드만으로 구성됩니다. 로그인한 각 사용자는 자신이 소유한 Workflow의 리뷰를 봅니다.
+- **hitl** — 대기 중인 사람의 리뷰를 보여주는 캐러셀입니다. 헤더에는 `1/n pending`이 표시되며, 첫 번째 카드에서는 왼쪽 화살표가, 마지막 카드에서는 오른쪽 화살표가 비활성화됩니다. Workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 리뷰를 처리할 수 있으며, 위젯 제목 옆의 기록 아이콘을 클릭하면 같은 페이지의 기록 대화상자에서 해당 실행이 열립니다. 이 차트 타입은 상위 행을 무시하므로, 위젯 Workflow는 Chart Output 노드만으로 구성됩니다. 로그인한 각 사용자는 자신이 소유한 Workflow의 리뷰를 봅니다. 노드 속성 또는 위젯 설정에서 **Workflow**(리뷰 단계가 여러 개이면 **Select agent**도)를 선택하면, 대신 해당 Workflow의 리뷰가 그 Workflow를 열 수 있는 모든 사용자에게 표시됩니다. [HITL 위젯](../tabs/dashboard-tab.md#hitl-widgets)을 참조하세요.
 
 ### 대화형 작업 목록
 
@@ -307,3 +311,17 @@ Text(동적 — 메시지 문자열이 상위에서 생성되어 `valueField`를
 
 - [Dashboard 탭](../tabs/dashboard-tab.md) — 위젯 구성 및 배치
 - [Output 노드](output-node.md) — 일반 Workflow용 터미널 노드
+
+
+## 링크 버튼
+
+`table`은 한 열을 링크를 여는 버튼으로 바꿀 수 있습니다. 노드 속성에서 **Link column**(DSL에서는 `linkColumn`)을 셀에 URL이 들어 있는 열로 설정하고, 필요하면 **Link button text**(`linkLabel`)도 설정하세요. 각 셀은 해당 URL을 새 탭에서 여는 버튼이 됩니다. 버튼 텍스트가 없으면 버튼에는 링크 아이콘만 표시됩니다.
+
+| 셀 값 | 여는 대상 |
+| --- | ----- |
+| `https://jira.example.com/browse/T-1` | 다른 사이트(새 탭) |
+| `/dashboards` | Heym 내부 페이지(새 탭) |
+
+`http://` 및 `https://` 주소와 단일 `/`로 시작하는 경로만 버튼이 됩니다. `javascript:`나 `//host` 같은 다른 값은 일반 텍스트로 유지되며, 빈 셀에는 아무것도 표시되지 않습니다.
+
+이 버튼은 [행 링크](../tabs/dashboard-tab.md#detail-pages)와 함께 사용할 수 있습니다. 버튼을 클릭하면 해당 링크가 새 탭에서 열리고, 행의 다른 곳을 클릭하면 기존처럼 상세 페이지가 열립니다.

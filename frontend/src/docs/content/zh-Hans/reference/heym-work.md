@@ -9,11 +9,30 @@ Heym Work 作为独立容器与 Heym 并行运行，需要获得 Heym 团队提�
 | 模块 | 功能说明 |
 |------|----------|
 | **Chat** | 通过文字或语音描述任务。Heym 收集必要信息，构建 workflow，进行测试并将其标记为已验证。 |
+| **Flows** | 编辑者可以通过选项而不是画布构建 flow：触发条件、可选的 AI 草稿以及在 Slack、Google Sheets 和电子邮件中的操作。来自 Slack 的回复将继续运行，批准操作也会在“活动”中等待。请参阅 [Flows](#flows)。 |
 | **页面** | 固定组件页面：指标数值、图表、带状态标签的表格、文件上传区及审批卡片。表格中的单行可打开独立的详情页。 |
 | **审批** | 来自 [Human-in-the-Loop](./human-in-the-loop.md) 步骤的审核任务会在“活动”与页面中等待处理，支持批准、请求修改和拒绝。 |
 | **活动** | 记录每一次运行，并标注启动者与执行该任务的实例。 |
 | **角色** | 所有者、编辑者与查看者。用户通过 Heym 已配置的 [单点登录 (SSO)](./sso.md) 完成身份验证。 |
 | **行业定制版** | 法律、教育、金融、物流、能源与电商行业版本开箱即用，内置专属页面、样例数据及行业 workflow。 |
+
+## Flows
+
+**Flows** 位于 Heym Work 面向编辑者和所有者的菜单中。Flow 是由选项而非节点构成的，Heym Work 通过 Heym API 代表创建它的人将其另存为常规 Heym 工作流。Heym 的访问规则、编辑历史和触发器同步均按编辑器中的方式适用，每次运行都会像其他运行一样出现在“活动”中。
+
+| 部分 | 选项 |
+|---|---|
+| **触发条件** | 按需、按计划、在收到 Slack 消息时、当 Google Sheets 标签页更改时（添加、更改或删除行），或当电子邮件到达收件箱时。电子表格和电子邮件触发器每 1、5、15 或 60 分钟检查一次。 |
+| **AI 草稿**（可选） | 模型和说明会将启动 flow 的内容转换为后续步骤所需的文本。未从表格或电子邮件启动的 flow 可以首先从频道或会话中读取最近的 Slack 消息。 |
+| **接下来发生什么** | 无论由什么启动 flow，都按顺序在三种工具中的任一种中执行操作。**Slack：** 频道消息、私信、表单、带按钮的消息、批准、会话回复、消息更新和最终结果。**Google Sheets：** 添加行，或更新已更改的行。**电子邮件：** 发送电子邮件。 |
+
+- **回复将继续运行。** 批准、按钮或表单会暂停运行，直到有人在 Slack 中回复。批准操作也会在“活动”中等待，在任一位置做出的决定都会从 Slack 消息中删除按钮。后续的 Slack 步骤将保留在第一条消息的会话中。
+- **单个“连接”卡片。** 每个 flow 都会显示其读取和发送所用的 Slack 工作区、Google Sheets 账户和收件箱。它们是 Heym 凭据：**Slack Bot**（bot 令牌，`xoxb-…`）、**Google Sheets**、**IMAP** 和 **SMTP**；缺失的凭据可以直接从 flow 本身添加。
+- **每个 flow 拥有一个 Slack 应用。** 在 Slack 应用中，将交互请求 URL 设置为 `https://<您的 Heym>/api/slack/interactions/<凭据 id>`，并将事件订阅请求 URL 设置为 `https://<您的 Heym>/api/slack/events/<凭据 id>`。Heym Work 会为所选连接显示两者。该凭据上的所有 flow 共享它们。
+- **Slack 触发器选择其监听的内容：** 频道和私信中的消息、发给 bot 的私信、@提及 bot 或单个频道中的消息。Bot 自己的发布绝不会触发 flow。
+- **要求。** Flows 需要 Heym 0.0.131 或更高版本。
+
+Flow 构建的步骤与您在画布上可以使用的节点相同：[Slack](../nodes/slack-node.md)、[Slack Trigger](../nodes/slack-trigger-node.md)、[Google Sheets](../nodes/google-sheets-node.md)、[Google Sheets Trigger](../nodes/google-sheets-trigger-node.md)、[IMAP Trigger](../nodes/imap-trigger-node.md)、[Send Email](../nodes/send-email-node.md) 和 [Cron](../nodes/cron-node.md)。
 
 ## 连接 Heym Work
 
@@ -26,7 +45,7 @@ Heym Work 作为独立容器与 Heym 并行运行，需要获得 Heym 团队提�
 | **Heym Work 地址** | Heym Work 的运行地址，例如 `https://work.example.com`。登录后将跳转返回此处。点击 **保存**。 |
 | **集成密钥** | 点击 **生成密钥** 创建 Heym Work 用于向 Heym 发送每个请求的密钥。密钥仅显示一次并附带复制按钮。Heym 仅存储其哈希值。 |
 | **启用 Heym Work** | 开启连接。需要预先填写地址与密钥。 |
-| 状态 | 根据 Heym Work 最新上报显示 **最近在线**、**Work 版本** 与 **许可证**。 |
+| **行业和团队版本** | 面向法律、教育、金融、物流、能源和电子商务的版本，以及面向企业团队的 IT、销售、营销和人力资源版本，均随附专门针对该工作的页面、示例数据和工作流。 |
 
 随后打开 Heym Work 地址并完成后续设置：
 

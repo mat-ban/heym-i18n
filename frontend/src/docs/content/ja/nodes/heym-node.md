@@ -16,7 +16,7 @@
 | パラメータ | 型 | 説明 |
 |-----------|------|-------------|
 | `heymOperation` | Select | 実行する読み取り操作 |
-| `heymWorkflowId` | UUID | 対象の Workflow。`getWorkflow` および `getExecutionHistory` で必須です。式を使用できます。 |
+| `heymWorkflowId` | UUID | `getExecutionHistory` でこれを `all` に設定すると、アクセスできるすべての Workflow を読み取ります。 |
 | `heymLimit` | String | 返す最大行数。**空のままにするか `0` を入力すると、すべてを返します**——これがデフォルトです。式を使用できます。 |
 | `heymStatus` | String | `getExecutionHistory` の任意のステータスフィルター。式を使用できます。 |
 | `heymSinceDays` | String | `getExecutionHistory` の任意の遡及日数。式を使用できます。 |

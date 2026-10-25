@@ -13,6 +13,8 @@
 
 Nhấn `Ctrl + I` / `Cmd + I` ở bất kỳ đâu trong trình soạn thảo để mở hoặc đóng bảng — phím tắt hoạt động ngay cả khi con trỏ đang ở trong ô nhập văn bản. Xem [Phím tắt](./keyboard-shortcuts.md).
 
+Để làm việc trên một node duy nhất, hãy di chuột qua node đó trên canvas và nhấp vào **AI** phía trên. Bảng điều khiển sẽ mở ra và tập trung vào node đó. Xem [Thay đổi một Node](#changing-one-node).
+
 ## Đóng bảng
 
 Nhấp vào nút **X**, nhấn `Ctrl + I` / `Cmd + I`, hoặc bật/tắt nút **AI** trên thanh công cụ của bảng Debug. Phần tiêu đề dùng để kéo bảng; nó không đóng bảng.
@@ -60,6 +62,33 @@ Khi phản hồi của AI chứa một khối JSON workflow hợp lệ (với `n
 4. Đánh dấu workflow là chưa lưu
 
 Nếu phân tích thất bại, nút **Retry** xuất hiện để tạo lại phản hồi.
+
+## Thay đổi một Node
+
+Di chuột qua một node trên canvas và nhấp vào **AI** phía trên node đó. Bảng điều khiển sẽ mở ở chế độ Agent, tập trung vào node đó và hiển thị node mà nó đang thay đổi:
+
+| Node có... | Bảng điều khiển hiển thị |
+|---|---|
+| Không có kết quả trong lần chạy hiện tại | **Modifying Node:** trong một hàng thu gọn có biểu tượng và tên node. Trợ lý chỉ chỉnh sửa từ cấu hình của node; hãy chạy node trước nếu cần xem đầu ra |
+| Có kết quả trong lần chạy hiện tại | **Modifying Node: (Has Node Output)** ngay phía trên chính node đó: biểu tượng, tên và loại, trạng thái và thời lượng gần nhất, cùng lỗi nếu thất bại. Trợ lý sẽ nhìn thấy đầu ra và lỗi đó khi chỉnh sửa node |
+
+Di chuột qua nhãn để xem bảng điều khiển đang ở trạng thái nào.
+
+Dù bảng điều khiển ở trạng thái nào, trợ lý cũng đọc trang tài liệu của node phía sau biểu tượng cuốn sách ở phần đầu của node. Trang này được dùng để hiểu các tùy chọn của node và trả lời các câu hỏi về chúng.
+
+Bên dưới tin nhắn, ba tùy chọn sẽ bắt đầu yêu cầu:
+
+| Tùy chọn | Chức năng |
+|---|---|
+| **Change this node as ...** | Điền vào hộp tin nhắn nội dung *Thay đổi node này thành* để bạn hoàn thành câu |
+| **Fix error in this node ...** | Điền nội dung *Sửa lỗi trong node này.* Trợ lý sẽ đọc lỗi của node này từ lần chạy gần nhất |
+| **Other** | Tập trung vào một hộp tin nhắn trống |
+
+Chỉnh sửa văn bản và nhấn **Send**. Trợ lý chỉ trả về node này và Heym sẽ cập nhật nó tại chỗ: node vẫn giữ nguyên id, loại và tên, nhờ đó các biểu thức như `$checkLinkedIn.result` ở các node khác tiếp tục hoạt động. Các node, kết nối và bố cục khác không thay đổi và **Undo** sẽ khôi phục cấu hình trước đó.
+
+Nếu yêu cầu không phù hợp bên trong node, ví dụ như cần loại node khác hoặc node mới, trợ lý sẽ cho biết những gì cần phải thay đổi thay vì chỉnh sửa. Đóng tiêu điểm của node bằng dấu **X** trên thẻ node để chỉnh sửa lại toàn bộ workflow. Đóng bảng điều khiển cũng sẽ xóa tiêu điểm.
+
+[Chế độ YOLO](#yolo-mode) hoạt động với một node được lấy tiêu điểm: trợ lý thay đổi node, chạy workflow và sửa node cho đến khi lần chạy thành công. Trong chế độ **Ask**, tiêu điểm cho trợ lý biết câu hỏi của bạn nói về node nào và canvas không bị thay đổi.
 
 ## Chế độ YOLO
 

@@ -9,11 +9,30 @@ Heym Work rulează ca un container separat alături de Heym, cu o licență dist
 | Domeniu | Ce face |
 |---------|---------|
 | **Chat** | Descrieți o sarcină prin text sau voce. Heym solicită detaliile necesare, construiește workflow-ul, îl testează și îl marchează ca Verificat. |
+| **Flows** | Editorii construiesc un flow din opțiuni în loc de un canvas: ce îl pornește, o schiță AI opțională și acțiuni în Slack, Google Sheets și e-mail. Răspunsurile din Slack continuă rularea, iar aprobările așteaptă de asemenea în Activitate. Consultați [Flows](#flows). |
 | **Pagini** | Pagini fixate cu widgeturi: valori numerice, grafice, tabele cu etichete de stare, zone de încărcare a fișierelor și aprobări. Un rând din tabel poate deschide propria pagină de detalii. |
 | **Aprobări** | Revizuirile din pașii [Human-in-the-Loop](./human-in-the-loop.md) așteaptă în Activitate și pe pagini, cu opțiuni de Aprobare, Solicitare modificări și Respingere. |
 | **Activitate** | Fiecare rulare, indicând persoana care a inițiat-o și instanța care a executat-o. |
 | **Roluri** | Proprietar, Editor și Vizualizator. Conectarea se face prin mecanismul [Single Sign-On](./sso.md) deja utilizat de Heym. |
 | **Ediții pentru industrii** | Edițiile pentru domeniile juridic, educație, finanțe, logistică, energie și comerț electronic se deschid cu pagini, date demonstrative și workflow-uri adaptate fiecărui domeniu. |
+
+## Flows
+
+**Flows** se află în meniul Heym Work pentru Editori și Proprietari. Un flow este compus din opțiuni în loc de noduri, iar Heym Work îl salvează ca un workflow Heym obișnuit prin API-ul Heym, în numele persoanei care l-a creat. Se aplică regulile de acces, istoricul modificărilor și sincronizarea triggerelor din Heym la fel ca în editor, iar fiecare rulare apare în Activitate ca oricare alta.
+
+| Parte | Opțiuni |
+|---|---|
+| **Ce îl pornește** | La cerere, conform unui program, la un mesaj Slack, când se modifică o filă Google Sheets (rânduri adăugate, modificate sau șterse) sau când un e-mail ajunge într-o căsuță poștală. Triggerele de foi și e-mail verifică la fiecare 1, 5, 15 sau 60 de minute. |
+| **Schiță AI** (opțională) | Un model și instrucțiuni transformă ceea ce a pornit flow-ul în text pentru pașii următori. Un flow care nu pornește de la o foaie sau e-mail poate citi mai întâi mesaje recente de Slack dintr-un canal sau fir. |
+| **Ce se întâmplă în continuare** | Acțiuni în ordine în oricare dintre cele trei instrumente, indiferent de ce a pornit flow-ul. **Slack:** mesaj pe canal, mesaj direct, formular, mesaj cu butoane, aprobare, răspuns la fir, actualizare mesaj și rezultat final. **Google Sheets:** adăugați un rând sau actualizați rândul modificat. **E-mail:** trimiteți un e-mail. |
+
+- **Răspunsurile continuă rularea.** O aprobare, butoanele sau un formular suspendă rularea până când cineva răspunde în Slack. O aprobare așteaptă de asemenea în Activitate, iar o decizie luată în oricare dintre locuri elimină butoanele din mesajul Slack. Pașii Slack ulteriori rămân în firul primului mesaj.
+- **Un singur card Conexiuni.** Fiecare flow arată spațiul de lucru Slack, contul Google Sheets și căsuțele de e-mail din care citește și trimite. Sunt acreditări Heym: **Slack Bot** (token de bot, `xoxb-…`), **Google Sheets**, **IMAP** și **SMTP**; o acreditare lipsă poate fi adăugată direct din flow.
+- **O singură aplicație Slack pentru fiecare flow.** În aplicația Slack, setați URL-ul cererii de interactivitate la `https://<Heym-ul dvs.>/api/slack/interactions/<id acreditare>` și URL-ul cererii de abonamente la evenimente la `https://<Heym-ul dvs.>/api/slack/events/<id acreditare>`. Heym Work le afișează pe ambele pentru conexiunea aleasă. Toate flow-urile de pe acea acreditare le împart.
+- **Triggerele Slack aleg ce ascultă:** mesaje pe canale și mesaje directe, mesaje directe către bot, mențiuni ale botului sau mesaje pe un singur canal. Postările proprii ale botului nu pornesc niciodată un flow.
+- **Cerințe.** Flows necesită Heym 0.0.131 sau o versiune ulterioară.
+
+Pașii construiți de un flow sunt aceleași noduri pe care le puteți utiliza pe canvas: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) și [Cron](../nodes/cron-node.md).
 
 ## Conectarea Heym Work
 
@@ -26,7 +45,7 @@ Conexiunea se configurează în **Setări → Heym Work**. Această filă este v
 | **Adresă Heym Work** | Locul unde rulează Heym Work, de exemplu `https://work.example.com`. Autentificarea redirecționează acolo. Apăsați **Salvare**. |
 | **Cheie de integrare** | Butonul **Generare cheie** creează cheia utilizată de Heym Work pentru fiecare solicitare trimisă către Heym. Este afișată o singură dată, alături de un buton de copiere. Heym stochează exclusiv hash-ul acesteia. |
 | **Activare Heym Work** | Pornește conexiunea. Necesită introducerea prealabilă a adresei și a unei chei. |
-| Stare | **Văzut ultima dată**, **Versiune Work** și **Licență**, conform ultimului raport transmis de Heym Work. |
+| **Ediții pentru industrii și echipe** | Edițiile juridic, educație, finanțe, logistică, energie și e-commerce, plus edițiile IT, vânzări, marketing și HR pentru echipe de companie, se deschid cu pagini, date de probă și workflow-uri dedicate acelei activități. |
 
 Apoi deschideți adresa Heym Work și finalizați configurarea:
 

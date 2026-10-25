@@ -1,6 +1,6 @@
 # Canvas 기능
 
-Workflow 편집기는 노드를 디버깅, 테스트 및 정리하기 위한 여러 기능을 제공합니다: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable**, **Extract to Sub-Workflow**입니다.
+Workflow 편집기는 노드를 디버깅, 테스트 및 정리하기 위한 여러 기능을 제공합니다: **Run to Node**, **노드의 AI**, **Data Pin**, **Execution Logs**, **Enable/Disable**, **Extract to Sub-Workflow**입니다.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ 편집기 데모 시청</a></p>
@@ -12,6 +12,12 @@ Sticky note를 제외한 모든 노드 위에 마우스를 올리고 해당 노�
 선택한 경로에 입력 필드가 있는 경우, 오른쪽 **Run** 패널이 열리고 첫 번째 필드에 포커스가 맞춰집니다. 값을 입력한 후 **Run to _node label_**을 클릭하거나 **Ctrl+Enter**(macOS에서는 Cmd+Enter)를 누르십시오. Generic body 모드는 JSON body 편집기에 포커스를 맞춥니다. 입력 필드가 없는 경로는 패널을 열지 않고 즉시 실행됩니다. Pinned Input 노드는 입력을 요청하지 않고 고정된 출력을 재사용합니다.
 
 패널은 후속 실행을 위해 선택한 대상을 유지합니다. 대상을 지우려면 **Run full workflow**를 선택하십시오. 실행이 진행 중인 동안에는 Run 버튼이 비활성화됩니다. loop 내부의 대상은 해당 노드에 처음 도달했을 때 실행을 중지합니다. loop 이후의 노드를 선택하면 전체 상위 loop가 실행됩니다.
+
+## 노드의 AI
+
+스티커 메모를 제외한 모든 노드 위로 마우스를 가져간 다음 노드 위의 **AI**를 클릭합니다. [AI Assistant](./ai-assistant.md)가 해당 노드에서 열리고 **Change this node as ...**, **Fix error in this node ...**, **Other**를 제공합니다. Agent 모드에서 어시스턴트는 해당 노드만 변경하며, 다른 노드, 연결 및 레이아웃은 그대로 유지됩니다. [AI Assistant › 단일 노드 변경](./ai-assistant.md#changing-one-node)을 참조하세요.
+
+보기 권한만 있는 워크플로우에서는 이 버튼이 숨겨집니다.
 
 ## Data Pin
 

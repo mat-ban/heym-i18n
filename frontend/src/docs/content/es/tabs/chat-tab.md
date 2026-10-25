@@ -35,6 +35,8 @@ También puede iniciar una conversación desde el cuadro de chat de la [pestaña
 - **Historial de ejecuciones de workflows** – Pregunte sobre un workflow ("¿cuántas veces se ejecutó el informe diario?", "¿falló?", "¿cuándo se ejecutó por última vez?"). Chat busca el workflow por su ID y responde a partir de su recuento de ejecuciones, desglose de estados, hora de la primera y última ejecución y duración media. Pregunte por qué falló una ejecución o qué devolvió, y Chat abre esa única ejecución para leer sus entradas, salidas y errores por nodo
 - **Estado de ejecución en vivo** – Pregunte qué se está ejecutando en este momento y Chat responde con el recuento, los nombres de los workflows, cuánto tiempo lleva en marcha cada ejecución, en qué nodo se encuentra y un enlace directo a la ejecución en vivo
 
+- **Chips de contexto de ejecución** – **Preguntar a la IA** en el [Execution History](../reference/execution-history.md#ask-ai) abre una nueva conversación con la ejecución de Workflow seleccionada adjunta como chips. Consulte [Preguntar sobre una ejecución](#preguntar-sobre-una-ejecucion)
+
 ## Uso de Chat desde un cliente MCP
 
 El motor de Chat también puede ser accedido desde fuera del navegador. Active la **Heym Chat Tool** en la [pestaña MCP](./mcp-tab.md) y los clientes MCP — Claude, Cursor y cualquier otro que hable MCP — obtienen una única herramienta `heym_chat` que ejecuta este mismo motor con todas sus capacidades.
@@ -83,6 +85,17 @@ Las ejecuciones pausadas para una [Human-in-the-Loop](../reference/human-in-the-
 en espera de usted, no como en ejecución. Estos son los mismos datos que la insignia de ejecuciones activas en el encabezado,
 por lo que Chat y la insignia nunca discrepan. Para ejecuciones que ya finalizaron, consulte las ejecuciones recientes
 en su lugar — eso lee el [Execution History](../reference/execution-history.md).
+
+## Preguntar sobre una ejecución
+
+Seleccione una ejecución de Workflow en el [Execution History](../reference/execution-history.md#ask-ai), desde el editor o desde All History, y haga clic en **Preguntar a la IA** junto al título del cuadro de diálogo. Chat abre una nueva conversación con dos chips sobre el cuadro de mensaje:
+
+- **Workflow:** el nombre del Workflow
+- **Execution:** los primeros caracteres del id de la ejecución seleccionada
+
+Elimine un chip con su **×** para excluirlo. Después haga su pregunta, por ejemplo «¿por qué tardó tanto esta ejecución?», «¿qué falló aquí?» o «¿puede corregirlo?». Los chips restantes se adjuntan a ese mensaje con los ids completos, de modo que Chat lee directamente las entradas, las salidas y la traza por nodo de la ejecución en lugar de buscar el Workflow. Para corregir el Workflow, Chat guarda, prueba y verifica el cambio como se describe en [Creación de Workflows](#creacion-de-workflows).
+
+El mensaje enviado muestra los chips bajo su pregunta. Pertenecen solo a ese mensaje; las preguntas de seguimiento de la misma conversación conservan el contexto del historial.
 
 ## Consulta sobre Alertas
 

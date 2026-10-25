@@ -1,6 +1,6 @@
 # Fitur Canvas
 
-Editor Workflow menyediakan beberapa fitur untuk debugging, pengujian, dan pengorganisasian Node: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable**, dan **Extract to Sub-Workflow**.
+Editor Workflow menyediakan beberapa fitur untuk debugging, pengujian, dan pengorganisasian Node: **Run to Node**, **AI pada sebuah Node**, **Data Pin**, **Execution Logs**, **Enable/Disable**, dan **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Tonton demo Editor</a></p>
@@ -12,6 +12,12 @@ Arahkan kursor ke Node mana pun kecuali sticky note, lalu klik **Run** di bawahn
 Jika jalur yang dipilih memiliki kolom input, panel **Run** di sisi kanan akan terbuka dan memfokuskan kolom pertama. Masukkan nilai, lalu klik **Run to _node label_** atau tekan **Ctrl+Enter** (Cmd+Enter pada macOS). Mode body generik akan memfokuskan editor body JSON. Jalur tanpa kolom input akan langsung dijalankan tanpa membuka panel. Node Input yang di-pin akan menggunakan kembali output yang di-pin tanpa meminta input.
 
 Panel akan mempertahankan target yang dipilih untuk eksekusi berikutnya. Pilih **Run full workflow** untuk menghapus target. Tombol Run dinonaktifkan saat eksekusi sedang berlangsung. Target di dalam loop akan menghentikan eksekusi saat Node tersebut pertama kali tercapai; memilih Node setelah loop akan menjalankan loop hulu secara lengkap.
+
+## AI pada sebuah Node
+
+Arahkan kursor ke node mana pun kecuali catatan tempel dan klik **AI** di atasnya. [AI Assistant](./ai-assistant.md) terbuka pada node tersebut dan menawarkan **Change this node as ...**, **Fix error in this node ...**, dan **Other**. Dalam mode Agent asisten hanya mengubah node tersebut; node, koneksi, dan tata letak lainnya tetap seperti semula. Lihat [AI Assistant › Mengubah Satu Node](./ai-assistant.md#changing-one-node).
+
+Tombol disembunyikan pada workflow yang hanya dapat Anda lihat.
 
 ## Data Pin
 

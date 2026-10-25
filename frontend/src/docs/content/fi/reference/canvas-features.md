@@ -1,6 +1,6 @@
 # Canvas-ominaisuudet
 
-Workflow-editori tarjoaa useita ominaisuuksia virheenkorjaukseen, testaamiseen ja solmujen organisointiin: **Suorita solmuun**, **Datapinni**, **Suorituslokit**, **Ota käyttöön/Poista käytöstä** ja **Pura alityönkulkuksi**.
+Workflow-editori tarjoaa useita ominaisuuksia virheenkorjaukseen, testaamiseen ja solmujen organisointiin: **Suorita solmuun**, **AI solmussa**, **Datapinni**, **Suorituslokit**, **Ota käyttöön/Poista käytöstä** ja **Pura alityönkulkuksi**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Katso Editor-demo</a></p>
@@ -12,6 +12,12 @@ Vie hiiri minkä tahansa solmun (muistilappua lukuun ottamatta) päälle ja naps
 Jos valittu polku sisältää syötekenttiä, oikealla oleva **Suorita**-paneeli avautuu ja keskittyy ensimmäiseen kenttään. Syötä arvot ja napsauta **Suorita kohteeseen _solmun nimi_** tai paina **Ctrl+Enter** (macOS: Cmd+Enter). Geneerinen body-tila keskittyy JSON-body-editoriin. Polut ilman syötekenttiä suoritetaan välittömästi ilman paneelin avaamista. Kiinnitetyt syötesolmut käyttävät kiinnitettyä tulostetta uudelleen ilman syötteen pyytämistä.
 
 Paneeli säilyttää valitun kohteen seuraavia suorituksia varten. Valitse **Suorita koko workflow** tyhjentääksesi kohteen. Suorita-painikkeet ovat pois käytöstä, kun suoritus on käynnissä. Silmukan sisällä oleva kohde pysäyttää suorituksen, kun solmu saavutetaan ensimmäisen kerran; silmukan jälkeisen solmun valitseminen suorittaa koko ylöspäin olevan silmukan.
+
+## AI solmussa
+
+Vie kohdistin minkä tahansa solmun päälle muistilappua lukuun ottamatta ja napsauta sen yläpuolella olevaa **AI**-painiketta. [AI Assistant](./ai-assistant.md) avautuu kyseiseen solmuun ja tarjoaa vaihtoehdot **Change this node as ...**, **Fix error in this node ...** ja **Other**. Agent-tilassa avustaja muuttaa vain kyseistä solmua; muut solmut, yhteydet ja asettelu pysyvät ennallaan. Katso [AI Assistant › Yhden solmun muuttaminen](./ai-assistant.md#changing-one-node).
+
+Painike on piilotettu workfloweissa, joihin sinulla on vain katseluoikeus.
 
 ## Datapinni
 

@@ -33,13 +33,17 @@ Ha csak példa/mintaadatokkal rendelkezik (valós forrás nélkül), állítsa e
 | `valueField` | string | A numerikus értékként használt sorkulcs (pie/bar/line/numeric/gauge) |
 | `series` | array | Opcionális többsoros definíció `[{ "name": "Sent", "field": "sent" }]` bar/line esetén (felülírja a `valueField` értékét) |
 | `columns` | array | Opcionális oszloplista `table` esetén (alapértelmezésben az első sor kulcsai) |
-| `statusColumn` | string | Opcionális `table`-oszlop, amely színes [állapotjelző chipekként](#status-chips) jelenik meg. A megjelenített oszlopok egyikének kell lennie. |
+| `statusColumn` | string | Opcionális `table`-oszlop, amely színes [állapotjelző chipekként](#status-chips) jelenik meg. A megjelenített oszlopok egyikének kell lennie. |, a `linkColumn` esetén pedig a link oszlopot és a gombszöveget is tartalmazza.
 | `statusTones` | object | Opcionális leképezés egy állapotértékről egy színárnyalatra (`success`, `attention`, `failure`, `waiting`, `neutral`) az alapértelmezések által le nem fedett értékekhez |
+| `linkColumn` | string | Opcionális `table` oszlop, amelynek cellái URL-t tartalmaznak, és [link gombként](#link-buttons) jelenik meg, amely új lapon nyitja meg azt. A megjelenített oszlopok egyikének kell lennie. |
+| `linkLabel` | string | A link gomb opcionális szövege. Ha üresen hagyja, a gomb csak egy link ikont mutat. |
 | `xField` / `yField` | string | Az X és Y numerikus tengelyekhez tartozó sorkulcsok (scatter) |
 | `min` / `max` | number | Numerikus tartomány `gauge` esetén (alapértelmezés: `0` / `100`) |
 | `unit` | string | Opcionális mértékegység, amely egy `numeric` vagy `gauge` érték mellett jelenik meg |
 | `text` | string | Markdown üzenet a `text` chart típushoz. Hagyja üresen, és állítsa be a `valueField` értékét egy felfelé kapcsolódó adatokból származó dinamikus üzenet megjelenítéséhez. |
 | `title` | string | Opcionális chart cím |
+| `hitlWorkflowId` | string | Csak `hitl`. Csak ennek a Workflow-nak az értékeléseit mutatja. Ha üresen hagyja, a widget minden értékelést megjelenít. |
+| `hitlNodeId` | string | Csak `hitl`. A `hitlWorkflowId` értékét egy lépésre szűkíti: emberi felülvizsgálattal rendelkező Agent, vagy Slack jóváhagyási, gombos vagy űrlap lépés. |
 
 ## Chart típusok
 
@@ -51,7 +55,7 @@ Ha csak példa/mintaadatokkal rendelkezik (valós forrás nélkül), állítsa e
 - **proportion** — egyetlen vízszintes sáv részekre osztva, százalékos jelmagyarázattal (pl. nyelvi megoszlás). A `labelField` + `valueField` értékét használja.
 - **barGauge** — soronként egy vízszintes gauge piros→zöld színátmenettel és egy értékkel (pl. szabad lemezterület). A `labelField` + `valueField` értékét használja, opcionális `unit` és `max` paraméterrel (alapértelmezésben a legnagyobb sorérték).
 - **text** — egy markdown üzenet (pl. egy állapotjelzés, mint „Last execution at 19:47”). Helyezze a markdown szöveget a `text` mezőbe statikus üzenethez, vagy hagyja üresen a `text` mezőt, és állítsa be a `valueField` értékét egy felfelé kapcsolódó adatokból származó string megjelenítéséhez. Támogatja a címsorokat, a félkövér/dőlt szöveget, a [listákat](../nodes/chart-output-node.md#interactive-task-lists), a linkeket és az inline kódot.
-- **hitl** — a függőben lévő emberi felülvizsgálatok körhintája. A fejléc `1/n pending` értéket mutat; a bal nyíl az első kártyán, a jobb nyíl az utolsón van letiltva. A workflow neve megnyitja az adott futtatást a vásznon. Az **Approve**, a **Request changes** és a **Reject** gombok lezárják azt, a widget címe melletti előzmények ikon pedig ugyanazon az oldalon nyitja meg az adott futtatást az előzmények párbeszédablakban. Ez a chart típus figyelmen kívül hagyja a felfelé kapcsolódó sorokat, így a widget workflow csak a Chart Output csomópontból áll. Minden bejelentkezett személy az általa birtokolt workflow-khoz tartozó felülvizsgálatokat látja.
+- **hitl** — a függőben lévő emberi felülvizsgálatok körhintája. A fejléc `1/n pending` értéket mutat; a bal nyíl az első kártyán, a jobb nyíl az utolsón van letiltva. A workflow neve megnyitja az adott futtatást a vásznon. Az **Approve**, a **Request changes** és a **Reject** gombok lezárják azt, a widget címe melletti előzmények ikon pedig ugyanazon az oldalon nyitja meg az adott futtatást az előzmények párbeszédablakban. Ez a chart típus figyelmen kívül hagyja a felfelé kapcsolódó sorokat, így a widget workflow csak a Chart Output csomópontból áll. Minden bejelentkezett személy az általa birtokolt workflow-khoz tartozó felülvizsgálatokat látja. Válasszon egy **Workflow**-t (és **Select agent**-et, ha több felülvizsgálati lépése van) a csomópont tulajdonságaiban vagy a widget beállításaiban, hogy helyette annak a Workflow-nak az értékelései jelenjenek meg mindenki számára, aki megnyithatja; lásd: [HITL widgetek](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktív feladatlisták
 
@@ -307,3 +311,17 @@ Amikor **AI** segítségével hoz létre widgetet, az alábbihoz hasonló prompt
 
 - [Irányítópult lap](../tabs/dashboard-tab.md) — widgetek létrehozása és elrendezése
 - [Kimeneti csomópont](output-node.md) — terminál csomópont a normál workflow-khoz
+
+
+## Link gombok
+
+Egy `table` egyik oszlopa gombokká alakítható, amelyek egy linket nyitnak meg. Állítsa be a **Link column** értéket a csomópont tulajdonságaiban (vagy a `linkColumn` értéket a DSL-ben) egy olyan oszlopra, amelynek cellái URL-t tartalmaznak, és opcionálisan a **Link button text** értéket (`linkLabel`). Minden cella gombbá válik, amely az URL-jét új lapon nyitja meg. Gombszöveg nélkül a gomb csak egy link ikont mutat:
+
+| Cella értéke | Megnyitja |
+| ------------ | --------- |
+| `https://jira.example.com/browse/T-1` | Másik webhelyet, új lapon |
+| `/dashboards` | Egy oldalt a Heymen belül, új lapon |
+
+Csak a `http://` és `https://` címek, valamint az egyetlen `/` jellel kezdődő útvonalak válnak gombbá. Bármely más érték, például `javascript:` vagy `//host`, egyszerű szöveg marad, az üres cella pedig nem jelenít meg semmit.
+
+A gomb a [sorlink](../tabs/dashboard-tab.md#detail-pages) mellett is működik: a gombra kattintva a link új lapon nyílik meg, a sor bármely más pontjára kattintva pedig továbbra is a részletes oldal nyílik meg.

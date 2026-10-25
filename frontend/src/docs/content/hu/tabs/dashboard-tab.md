@@ -18,14 +18,14 @@ A widget egyetlen diagram a rácson. Támogatott diagramtípusok:
 - **Line**
 - **Area** (kitöltött trend, több sorozatot támogat)
 - **Pie**
-- **Table** (görgethető; egy oszlop megjeleníthető [állapotcímkékként](../nodes/chart-output-node.md#status-chips), a sorok pedig megnyithatnak egy [részletező oldalt](#detail-pages))
+- **Table** (görgethető; kattintson egy oszlopfejlécre a növekvő sorrendhez, és kattintson újra a csökkenőhöz. Egy oszlop megjelenhet [állapotchipekként](../nodes/chart-output-node.md#status-chips), egy oszlop tartalmazhat [hivatkozásgombokat](../nodes/chart-output-node.md#link-buttons), amelyek új lapon nyitnak meg egy URL-t, a sorok pedig megnyithatnak egy [részletező oldalt](#reszletezo-oldalak))
 - **Numeric** (egyetlen KPI-érték opcionális mértékegységgel)
 - **Gauge** (egyetlen érték egy min–max tartományhoz viszonyítva, pl. egy százalék)
 - **Scatter** (X/Y pontok korrelációs ábrázoláshoz)
 - **Proportion** (egy sáv részekre osztva százalékos jelmagyarázattal, pl. nyelvi megoszlás)
 - **Bar gauge** (egy vízszintes gauge soronként piros→zöld színátmenettel és egy értékkel, pl. szabad lemezterület)
 - **Text** (markdown üzenet, pl. egy állapotjelző megjegyzés, mint „Utolsó futtatás 19:47-kor"; támogatja az [interaktív jelölőnégyzeteket](../nodes/chart-output-node.md#interactive-task-lists), ha a markdown statikus, valamint a [kifejezett számozott listákat](../nodes/chart-output-node.md#numbered-lists) egyéni vagy csökkenő számozáshoz)
-- **HITL** (az Ön függőben lévő emberi felülvizsgálatai. A fejléc `1/n pending` értéket mutat. A workflow neve megnyitja azt a futtatást a vásznon. Az **Approve**, a **Request changes** és a **Reject** gombok lezárják. A widget címe melletti előzmények ikon megnyitja azt a futtatást az előzmények párbeszédablakban ezen az oldalon. A widget nem használ upstream sorokat, és mindenki a saját sorát látja)
+- **HITL** (az Ön függőben lévő emberi felülvizsgálatai. A fejléc `1/n pending` értéket mutat. A workflow neve megnyitja azt a futtatást a vásznon. Az **Approve**, a **Request changes** és a **Reject** gombok lezárják. A widget címe melletti előzmények ikon megnyitja azt a futtatást az előzmények párbeszédablakban ezen az oldalon. A widget nem használ upstream sorokat, és mindenki a saját sorát látja. Ehelyett megjelenítheti egyetlen Workflow ellenőrzéseit is mindazok számára, akik megnyithatják azt a Workflow-t; lásd: [HITL widgetek](#hitl-widgetek))
 
 A diagramok mellett a **Run a workflow** widget közvetlenül az irányítópultról futtatja az egyik workflow-ját: egy ráhúzott fájlon, a bemeneti mezőivel vagy egy Run gombbal; lásd: [Futtató widgetek](#run-widgets).
 
@@ -41,6 +41,20 @@ Minden widget aszinkron módon tölti be az adatait a fül megnyitásakor, így 
 Egy **Run a workflow** widget esetében válassza ki inkább a futtatandó workflow-t; a választó megmutatja, hogyan fogja a widget futtatni az egyes workflow-kat. A widget közvetlenül aul a rácsra kerül; nincs szükség új workflow építésére.
 
 Kattintson duplán egy widgetre (vagy használja a szerkesztés gombját) a workflow újbóli megnyitásához bármikor. Használja a **Clone widget** lehetőséget a widget fejlécében a widget és a teljes workflow-jának duplikálásához. A másolat az eredeti alá kerül, és a **(Copy)** címkével van ellátva, így önállóan szerkesztheti.
+
+## HITL widgetek
+
+Egy új HITL widget minden olyan ellenőrzést megjelenít, amely a saját várólistájában várakozik. Ha csak egyetlen Workflow ellenőrzéseit szeretné megjeleníteni, nyissa meg a widget **Beállítások** paneljét:
+
+1. A **Workflow** mezőben válassza ki a kívánt Workflow-t. A lista azokat a Workflow-kat tartalmazza, amelyeket Ön megnyithat – a sajátjait vagy az Önnel vagy csapatával megosztottakat –, és amelyek rendelkeznek egy személyre váró lépéssel: egy emberi ellenőrzést igénylő Agenttel, vagy egy Slack jóváhagyási, gomb- vagy űrlaplépéssel. A mellette lévő ikon megnyitja a Workflow-t egy új lapon.
+2. Ha a Workflow pontosan egy ilyen lépéssel rendelkezik, az automatikusan kiválasztásra kerül. Ha több lépése is van, a **Select agent** listázza őket csomópontnév szerint, az **All agents** lehetőséggel az élen; a Slack-lépések **(Slack)** jelöléssel jelennek meg.
+3. Mentse el. A fejlécben lévő `1/n pending` számláló csak ezeket az ellenőrzéseket számolja. Válassza a **Minden Workflow** lehetőséget, ha ismét a saját várólistáját szeretné látni.
+
+Ugyanez a választási lehetőség elérhető a vásznon a Chart Output csomópont tulajdonságainál. A **Finomhangolás AI-val** is elvégezheti ezt („csak a számlajóváhagyásokat mutasd”), ahogyan egy új widget leírása is, amely megnevezi a Workflow-t. Minden módosítás egy Workflow-szerkesztés, így megjelenik az Edit History listában.
+
+- **Ki látja az ellenőrzéseket.** Egy Workflow-ra szűrt widget megjeleníti annak ellenőrzéseit mindenkinek, aki megnyithatja a Workflow-t, és ők a widgetből jóváhagyhatják, módosítást kérhetnek vagy elutasíthatják, ahogyan a Workflow-t is futtathatnák. Egy szűretlen widget mindenkinek a saját várólistáját mutatja.
+- **Ki látja a widgetet.** Aki nem nyithatja meg a kiválasztott Workflow-t, az egyáltalán nem látja a widgetet, még a vele megosztott dashboardon sem. Ha a dashboard tulajdonosa elveszíti a hozzáférést a Workflow-hoz, vagy azt törlik, a tulajdonos a „You no longer have access to the workflow this widget shows” üzenetet látja, és a **Beállítások** panelen választhat másikat.
+- **Csak elérhető választások.** Az olyan Workflow-t, amelyet nem nyithat meg, a rendszer elutasítja a widget mentésekor, akár a beállításokból, a vászonról vagy az AI által kísérli meg a mentést.
 
 ## Részletező oldalak
 
@@ -75,6 +89,10 @@ Az eredmény **Wrap** gombja a dobozon belül tördeli a hosszú kimeneti soroka
 ## Widget létrehozása AI-val
 
 Kattintson az **AI** gombra, írja le a kívánt metrikát (például „workflow sikerességi arány az elmúlt 30 napban sávdiagramként"), és válasszon egy LLM hitelesítési adatot és modellt. A Heym létrehoz egy teljes widget-workflow-t, amely egy Chart Output csomópontban végződik, és hozzáadja a rácshoz. A diagramtípusonkénti példa promptokért lásd a [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) részt.
+
+A widget rövid, egy vagy két szóból álló címet kap az Ön kérésének nyelvén, például „Nyitott ügyek”. A cím soha nem tartalmazza egy adattábla azonosítóját; ha a modell egy egész mondattal nevezi el a widgetet, a Heym annak első szavait tartja meg.
+
+A widget-API AI nélkül is képes létrehozni egy **számlálókártyát**: egy `text` widget egy adattáblán (`data_table_id`), a `count_column` és `count_value` paraméterekkel megjeleníti, hány sor rendelkezik az adott értékkel; a widget címe az értéket nevezi meg. A Heym Work az adattáblából létrehozott oldalakat állapotonként egy-egy számlálókártyával vezeti be.
 
 Használja egy widget **Fine-tune with AI** gombját egy meglévő widget új utasítással történő módosításához. Minden AI finomhangolás pillanatképet készít az előző workflow-ról a widget **Edit History** részébe, így a workflow-szerkesztőből áttekintheti vagy visszaállíthatja a változtatásokat.
 

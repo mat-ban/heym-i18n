@@ -213,6 +213,11 @@ A `List Issues`, `Get Repository Issues`, `Get User Issues`, `List Pull Requests
 az **Oldalanként** (1–100) paramétert. A Heym egy oldalnyi eredményt kér le; nincs `page` mező további
 oldalak lekéréséhez ugyanabban a műveletben.
 
+
+### Return all pages
+
+Kapcsolja be a **Return all pages** opciót, hogy egy futtatás minden oldalt végigkövessen, a **Cursor** értékétől kezdve, ha az be van állítva. Minden kérés 100 elemet kér, a **Per Page** értékétől függetlenül. A csomópont körülbelül 1000 elem (vagy 100 kérés) után leáll: az issue objektumok egyenként nagyjából 6 KB méretűek, ezért egy magasabb korlát nagyon nagy csomópont-kimenetet eredményezne. Ha korábban leáll, hiba helyett visszaadja a addig begyűjtött adatokat `has_more: true` értékkel és egy `next_cursor` értékkel, és a folytatáshoz ezt a kurzort kell átadni a következő futtatásnak. A Workflow leállítása vagy a Workflow időkorlátjának elérése az oldalak között megszakítja a lekérést.
+
 ## Kimenet
 
 A pontos szerkezet a kiválasztott művelettől függ. A gyakori mezők a következők:

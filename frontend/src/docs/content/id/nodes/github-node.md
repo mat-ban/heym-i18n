@@ -212,6 +212,11 @@ Jika file sudah ada, Heym mengambil SHA saat ini secara otomatis sebelum memperb
 **Per Page** (1–100). Heym meminta satu halaman hasil; tidak ada field `page` untuk mengambil
 halaman tambahan dalam operasi yang sama.
 
+
+### Return all pages
+
+Aktifkan **Return all pages** agar satu run mengikuti setiap halaman, dimulai dari **Cursor** jika diatur. Setiap permintaan meminta 100 item, berapa pun nilai **Per Page**. Node berhenti setelah sekitar 1.000 item (atau 100 permintaan): objek issue berukuran sekitar 6 KB masing-masing, sehingga batas yang lebih besar akan menghasilkan output node yang sangat besar. Jika berhenti lebih awal, node mengembalikan data yang sudah didapat dengan `has_more: true` dan `next_cursor` alih-alih menimbulkan error, dan Anda dapat melanjutkan dengan meneruskan cursor tersebut ke run berikutnya. Menghentikan Workflow, atau mencapai timeout Workflow, mengakhiri pengambilan di antara halaman.
+
 ## Output
 
 Bentuk persisnya bergantung pada operasi yang dipilih. Field umum meliputi:

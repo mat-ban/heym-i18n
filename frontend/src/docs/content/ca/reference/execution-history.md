@@ -55,6 +55,18 @@ Obrir un Workflow a `/workflows/{workflowId}/{executionId}` porta automàticamen
 - Depurar una execució fallida inspeccionant les entrades i les sortides dels Nodes
 - Comparar sortides entre execucions
 
+## Preguntar a la IA
+
+Tots dos quadres de diàleg d'historial tenen un botó **Preguntar a la IA** (icona d'espurna) al costat del títol. Obre la [pestanya Chat](../tabs/chat-tab.md#asking-about-a-run) en una nova conversa amb el workflow i l'execució seleccionada adjunta com a xips amovibles. Pregunteu per què l'execució ha estat lenta, què ha fallat o demaneu a Chat que corregeixi el workflow. Chat llegeix exactament aquesta execució, incloent la traça i errors per node.
+
+Al quadre de diàleg All History, **Preguntar a la IA** només apareix mentre hi ha seleccionada una execució de workflow; les execucions de chat i assistent no ho mostren.
+
+## Cronologia d'execució
+
+Al detall de l'execució, el botó **Cronologia** (icona de temporitzador) al costat d'**Expandir-ho tot** canvia la llista de **Passos** per una línia de temps de spans. Mentre es mostra la cronologia, el mateix botó indica **Registres**; feu-hi clic per tornar a la llista. A All History el botó només apareix per a execucions de workflow. La cronologia dibuixa una barra per node en el moment en què va començar, per veure quin node va trigar quant de temps i quins es van executar en paral·lel. Passeu el cursor per sobre d'una barra per veure'n la durada; feu-hi clic per obrir el mateix inspector de detalls que la [cronologia d'execució](#execution-timeline-details) de l'editor. La visualització triada es manté mentre el diàleg és obert.
+
+Les execucions registrades abans que s'emmagatzemessin les hores d'inici dels nodes es mostren successivament per durada.
+
 ## Execution Highlights
 
 Després d'una execució en directe —o després de **Bring to Canvas**— apareix un popup descartable d'**Execution Highlights** a la **part superior dreta del Canvas**. És una manera ràpida de veure *què ha produït cada Node*, llistat de dalt a baix en ordre d'execució. Tanqueu-lo amb la **✕**; es torna a obrir a la propera execució.
@@ -144,7 +156,7 @@ Utilitzeu **Copy** al costat d'Inputs o Outputs per copiar el JSON al porta-reta
 
 ## Detalls de la línia temporal d'execució
 
-Quan l'**Execution Log** de l'editor està obert, feu clic al botó del temporitzador per mostrar la línia temporal d'execució. Seleccioneu un interval per obrir un inspector de detalls en línia que ocupa l'àrea de files. Mostra l'estat del pas seleccionat, la durada, el recompte d'intents, la informació de reintent, els errors, l'ID de traça i una previsualització compacta de la sortida. Les sortides d'objectes i matrius utilitzen el mateix visor `JsonTree` que la resta del panell de Debug; els valors escalars utilitzen una previsualització de text. Quan un pas genera imatges (captures de pantalla de Playwright, imatges generades, fitxers d'imatge), apareixen com a miniatures a sobre de la sortida, i el JSON mostra un marcador de posició curt en lloc del base64 en cru. Feu clic a una miniatura per obrir-la en un lightbox; els botons de fletxa o les tecles ←/→ naveguen per totes les imatges de l'execució, amb un comptador com ara `2 / 5`. Utilitzeu **Open trace** per a intervals d'LLM i Agent quan hi hagi un ID de traça disponible.
+Quan l'**Execution Log** de l'editor està obert, feu clic al botó del temporitzador per mostrar la línia temporal d'execució. Seleccioneu un interval per obrir un inspector de detalls en línia que ocupa l'àrea de files. Mostra l'estat del pas seleccionat, la durada, el recompte d'intents, la informació de reintent, els errors, l'ID de traça i una previsualització compacta de la sortida. Les sortides d'objectes i matrius utilitzen el mateix visor `JsonTree` que la resta del panell de Debug; els valors escalars utilitzen una previsualització de text. Quan un pas genera imatges (captures de pantalla de Playwright, imatges generades, fitxers d'imatge o imatges en base64 al cos d'una sol·licitud, trobades a qualsevol lloc de la sortida), apareixen com a miniatures a sobre de la sortida, i el JSON mostra un marcador de posició curt en lloc del base64 en cru. Feu clic a una miniatura per obrir-la en un lightbox; els botons de fletxa o les tecles ←/→ naveguen per totes les imatges de l'execució, amb un comptador com ara `2 / 5`. Utilitzeu **Open trace** per a intervals d'LLM i Agent quan hi hagi un ID de traça disponible.
 ## Detall del node al mòbil
 
 En un telèfon, l'editor mostra un arbre de Workflow a pantalla completa en lloc del llenç de forma lliure. Toqueu un node de l'arbre amb un resultat enregistrat per obrir-ne l'execució com a detall a pantalla completa. La vista ofereix pestanyes separades de **Dades d'entrada**, **Dades de sortida** i **Errors**. La pestanya de sortida mostra el resultat enregistrat i ofereix **Copia la sortida**; la pestanya d'entrada mostra la configuració del node seleccionat, i la pestanya d'errors mostra l'error enregistrat quan el node ha fallat. Utilitzeu **Torna al Workflow** o el botó de tancament per tornar a l'arbre.

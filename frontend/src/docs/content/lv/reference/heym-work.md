@@ -9,11 +9,30 @@ Heym Work darbojas kā atsevišķs konteiners līdzās Heym ar atsevišķu Heym 
 | Joma | Funkcionalitāte |
 |------|-----------------|
 | **Chat** | Aprakstiet uzdevumu teksta vai balss veidā. Heym jautā nepieciešamo informāciju, izveido workflow, to pārbauda un atzīmē kā Pārbaudīts. |
+| **Flows** | Redaktori veido flow no izvēlēm, nevis uz audekla: kas to sāk, neobligāts AI melnraksts un darbības programmās Slack, Google Sheets un e-pastā. Slack atbildes turpina izpildi, un apstiprinājumi gaida arī sadaļā Aktivitāte. Skatiet [Flows](#flows). |
 | **Lapas** | Piespraustas logrīku lapas: skaitļi, diagrammas, tabulas ar statusa iezīmēm, failu ievilkšanas zonas un apstiprinājumi. Tabulas rinda var atvērt savu detalizētās informācijas lapu. |
 | **Apstiprinājumi** | Pārbaudes no [Human-in-the-Loop](./human-in-the-loop.md) posmiem gaida sadaļā Aktivitāte un lapās ar iespējām Apstiprināt, Pieprasīt izmaiņas un Noraidīt. |
 | **Aktivitāte** | Katra izpilde kopā ar personu, kas to palaida, un instanci, kas to veica. |
 | **Lomas** | Īpašnieks, Redaktors un Skatītājs. Pierakstīšanās notiek ar [Single Sign-On](./sso.md), ko Heym jau izmanto. |
 | **Nozaru izdevumi** | Juridisko pakalpojumu, izglītības, finanšu, loģistikas, enerģētikas un e-komercijas izdevumos ir iekļautas gatavas lapas, paraugdati un nozarei pielāgoti darbplūsmu risinājumi. |
+
+## Flows
+
+**Flows** atrodas Heym Work izvēlnē Redaktoriem un Īpašniekiem. Flow tiek veidots no izvēlēm, nevis mezgliem, un Heym Work to saglabā kā parastu Heym darbplūsmu, izmantojot Heym API, tās personas vārdā, kura to izveidoja. Heym piekļuves noteikumi, rediģēšanas vēsture un trigeru sinhronizācija attiecas tāpat kā redaktorā, un katra izpilde parādās Aktivitātē kā jebkura cita.
+
+| Daļa | Izvēles |
+|---|---|
+| **Kas to sāk** | Pēc pieprasījuma, saskaņā ar grafiku, saņemot Slack ziņojumu, mainoties Google Sheets cilnei (pievienotas, mainītas vai dzēstas rindas) vai e-pastam sasniedzot iesūtni. Izklājlapu un e-pasta trigeri pārbauda ik pēc 1, 5, 15 vai 60 minūtēm. |
+| **AI melnraksts** (neobligāti) | Modelis un instrukcijas pārvērš to, kas sāka flow, tekstā nākamajiem soļiem. Flow, kas nesākas no izklājlapas vai e-pasta, vispirms var nolasīt jaunākos Slack ziņojumus no kanāla vai pavediena. |
+| **Kas notiek tālāk** | Darbības pēc kārtas jebkurā no trim rīkiem neatkarīgi no tā, kas sāka flow. **Slack:** kanāla ziņojums, tiešais ziņojums, veidlapa, ziņojums ar pogām, apstiprinājums, pavediena atbilde, ziņojuma atjaunināšana un gala rezultāts. **Google Sheets:** pievienot rindu vai atjaunināt mainīto rindu. **E-pasts:** nosūtīt e-pastu. |
+
+- **Atbildes turpina izpildi.** Apstiprinājums, pogas vai veidlapa aptur izpildi, līdz kāds atbild programmā Slack. Apstiprinājums gaida arī Aktivitātē, un lēmums jebkurā vietā noņem pogas no Slack ziņojuma. Vēlākie Slack soļi paliek pirmā ziņojuma pavedienā.
+- **Viena Savienojumu kartīte.** Katrs flow parāda Slack darbvietu, Google Sheets kontu un iesūtnes, no kurām tas lasa un sūta. Tie ir Heym akreditācijas dati: **Slack Bot** (bota marķieris, `xoxb-…`), **Google Sheets**, **IMAP** un **SMTP**; trūkstošos datus var pievienot tieši no paša flow.
+- **Viena Slack lietotne katram flow.** Slack lietotnē iestatiet Interaktivitātes pieprasījuma URL uz `https://<jūsu Heym>/api/slack/interactions/<akreditācijas id>` un Notikumu abonēšanas pieprasījuma URL uz `https://<jūsu Heym>/api/slack/events/<akreditācijas id>`. Heym Work parāda abus izvēlētajam savienojumam. Visi flow ar šo akreditācijas datu kopu tos koplieto.
+- **Slack trigeri izvēlas, ko klausīties:** ziņojumus kanālos un tiešajos ziņojumos, tiešos ziņojumus botam, bota pieminējumus vai ziņojumus vienā kanālā. Paša bota ieraksti nekad nesāk flow.
+- **Prasības.** Flows prasa Heym 0.0.131 vai jaunāku versiju.
+
+Soļi, ko veido flow, ir tie paši mezgli, kurus varat izmantot uz audekla: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) un [Cron](../nodes/cron-node.md).
 
 ## Heym Work savienošana
 
@@ -26,7 +45,7 @@ Savienojumu konfigurē sadaļā **Iestatījumi → Heym Work**. Cilne ir redzama
 | **Heym Work adrese** | Vieta, kur darbojas Heym Work, piemēram, `https://work.example.com`. Pēc pieteikšanās notiek atgriešanās šeit. Nospiediet **Saglabāt**. |
 | **Integrācijas atslēga** | Poga **Ģenerēt atslēgu** izveido atslēgu, ko Heym Work izmanto katram pieprasījumam uz Heym. Tā tiek parādīta tikai vienu reizi kopā ar kopēšanas pogu. Heym saglabā tikai tās jaucējkodu (hash). |
 | **Iespējot Heym Work** | Ieslēdz savienojumu. Vispirms nepieciešams ievadīt adresi un atslēgu. |
-| Statuss | **Pēdējo reizi redzēts**, **Work versija** un **Licence**, kā pēdējo reizi ziņojis Heym Work. |
+| **Nozaru un komandu izdevumi** | Izdevumi juridiskajai nozarei, izglītībai, finansēm, loģistikai, enerģētikai un e-komercijai, kā arī IT, pārdošanas, mārketinga un personāla atlases izdevumi uzņēmumu komandām tiek atvērti ar lapām, parauga datiem un workflowiem šim darbam. |
 
 Pēc tam atveriet Heym Work adresi un pabeidziet iestatīšanu:
 

@@ -381,7 +381,7 @@ HTML 输出映射器节点渲染单个 HTML 模板，将 `$nodeLabel.field` 表�
 
 #### [Chart Output](../nodes/chart-output-node.md)
 
-Chart Output 节点是 [Dashboard](../tabs/dashboard-tab.md) 小组件工作流的终端节点。它将上游节点产生的行转换为仪表板渲染所用的标准化图表 payload。选择一个 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（多系列时为 `series`，markdown 消息时为 `text`），并将其放在最后；它没有输出边。HITL 会忽略上游行，并列出你待处理的人工审核。
+Chart Output 节点是 [Dashboard](../tabs/dashboard-tab.md) 小组件工作流的终端节点。它将上游节点产生的行转换为仪表板渲染所用的标准化图表 payload。选择一个 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（多系列时为 `series`，markdown 消息时为 `text`），并将其放在最后；它没有输出边。HITL 会忽略上游行，并列出你待处理的人工审核。另一列作为可在新标签页中打开 URL 的链接按钮（`linkColumn`，使用 `linkLabel` 指定按钮文本）
 
 另请参阅 [Dashboard](../tabs/dashboard-tab.md)、[Set](../nodes/set-node.md) 和 [Output](../nodes/output-node.md)。
 
@@ -477,6 +477,8 @@ Heym 在编辑器中提供多种快捷键：命令面板（Ctrl+K）、运行（
 AI 助手是一个从 Debug 面板打开的聊天面板，允许你使用自然语言创建或修改 Workflow。选择一个[凭证](./credentials.md)和模型，然后描述你的需求；AI 会流式输出响应，代码块中任何有效的 [workflow JSON](./workflow-structure.md) 都会被自动解析并应用到画布上。兼容的浏览器支持语音输入。
 
 开启 **YOLO 模式**（Agent 模式，默认关闭）后，助手会测试其构建的内容。每次更改后，它会在画布上运行 Workflow，读取结果并修复 Workflow，直到实现你的要求，每条消息最多运行 5 次。它会在首次运行前请求测试输入，在需要其他 Workflow 的结果时可以运行它们，并展示每一步的工作过程。请参阅 [AI 助手 › YOLO 模式](./ai-assistant.md#yolo-mode)。
+
+点击画布上任何节点上方的 **AI** 即可仅更改或修复该节点。面板会显示其正在修改的节点（运行后带有其最新结果），并提供 **Change this node as ...**、**Fix error in this node ...** 和 **Other**。仅该节点会被更新；工作流的其余部分和布局保持原样。请参阅 [AI Assistant › 修改单个节点](./ai-assistant.md#changing-one-node)。
 
 当 Workflow 需要存储记录时，助手会询问使用哪个[数据表](../tabs/datatable-tab.md)，或者创建一个包含 Workflow 所需列的数据表。请参阅 [AI 助手 › 数据表](./ai-assistant.md#data-tables)。
 
@@ -799,7 +801,7 @@ Analytics 标签页显示执行指标和趋势。汇总统计包括总执行次�
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 标签页是一个 Grafana 风格的空间，你可以在其中构建图表 widget 网格，每个 widget 都由其各自隐藏的 Heym workflow 渲染。按需保留任意数量的 dashboard，并将每个 dashboard 与用户或团队共享，可设为只读或可编辑；widget 始终以所有者的凭证运行，因此每个人看到的数据都相同。用自然语言描述一个指标，AI 会生成该 widget，或者手动添加一个并选择图表类型，用示例数据预览：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是你待处理的人工审核的轮播。标题栏显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核，widget 标题旁的历史图标会在同一页面的历史对话框中打开该次运行。Widget 会缓存其结果，可以用 AI 微调（每次更改都会保存到 [Edit History](./edit-history.md)），连同其完整 workflow 一起克隆，通过 Tidy up 重新排列，并在编辑模式下拖动或调整大小。表格可以显示状态标签并将其行链接到将所点击行的记录读取为 `$page.record` 的详情仪表板，而运行（Run）小部件可从仪表板运行 workflow：基于拖放的文件、使用其输入字段或通过“运行”按钮。因为每个 widget 都是一个 workflow，任何你能获取的数据——一次 [HTTP](../nodes/http-node.md) 调用、一次 [BigQuery](../nodes/bigquery-node.md) 查询、一次 [RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 输出——都可以变成一个图表。
+Dashboard 标签页是一个 Grafana 风格的空间，你可以在其中构建图表 widget 网格，每个 widget 都由其各自隐藏的 Heym workflow 渲染。按需保留任意数量的 dashboard，并将每个 dashboard 与用户或团队共享，可设为只读或可编辑；widget 始终以所有者的凭证运行，因此每个人看到的数据都相同。用自然语言描述一个指标，AI 会生成该 widget，或者手动添加一个并选择图表类型，用示例数据预览：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是你待处理的人工审核的轮播。标题栏显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核，widget 标题旁的历史图标会在同一页面的历史对话框中打开该次运行。Widget 会缓存其结果，可以用 AI 微调（每次更改都会保存到 [Edit History](./edit-history.md)），连同其完整 workflow 一起克隆，通过 Tidy up 重新排列，并在编辑模式下拖动或调整大小。表格可以显示状态标签并将其行链接到将所点击行的记录读取为 `$page.record` 的详情仪表板，而运行（Run）小部件可从仪表板运行 workflow：基于拖放的文件、使用其输入字段或通过“运行”按钮。因为每个 widget 都是一个 workflow，任何你能获取的数据——一次 [HTTP](../nodes/http-node.md) 调用、一次 [BigQuery](../nodes/bigquery-node.md) 查询、一次 [RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 输出——都可以变成一个图表。HITL 小部件的设置可以将其缩小到单个工作流的审核，或其中的代理或 Slack 批准步骤；这样的小部件会向所有可以打开该工作流的人显示它们，并对无法打开的人隐藏。
 
 另请参阅 [Chart Output 节点](../nodes/chart-output-node.md)、[Analytics](../tabs/analytics-tab.md) 和 [Execution History](./execution-history.md)。
 

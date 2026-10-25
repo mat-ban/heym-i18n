@@ -74,6 +74,17 @@ Pitajte na običnom jeziku — "što se izvodi?", "koliko je workflows aktivno u
 
 Izvedbe koje su pauzirane za [Human-in-the-Loop](../reference/human-in-the-loop.md) ili Codex reviziju izvještavaju se kao čekanje na Vas, a ne kao aktivne. Ovo su isti podaci kao oznaka aktivnih izvršavanja u zaglavlju, tako da Chat i oznaka nikada ne proturječe. Za izvedbe koje su već završile, pitajte za nedavna izvršavanja umjesto toga — to se odnosi na [Povijest Izvršavanja](../reference/execution-history.md).
 
+## Pitanja o izvođenju
+
+Odaberite izvođenje Workflowa u [Execution History](../reference/execution-history.md#ask-ai), iz uređivača ili iz All History, i kliknite na **Pitaj AI** pored naslova dijaloga. Chat otvara novi razgovor s dva čipa iznad okvira za poruku:
+
+- **Workflow:** naziv Workflowa
+- **Execution:** prve znakove identifikatora odabranog izvođenja
+
+Uklonite čip pomoću njegovog **×** kako biste ga izostavili. Zatim postavite svoje pitanje, na primjer „zašto je ovo izvođenje trajalo toliko dugo?“, „što je ovdje pošlo po zlu?“ ili „možete li to popraviti?“. Preostali čipovi prilažu se toj poruci s punim identifikatorima, tako da Chat izravno čita ulaze, izlaze i trag po čvoru izvođenja umjesto traženja Workflowa. Da bi popravio Workflow, Chat sprema, testira i provjerava promjenu kako je opisano u [Stvaranje workflowa](#stvaranje-workflowa).
+
+Poslana poruka prikazuje čipove ispod vašeg pitanja. Oni pripadaju samo toj poruci; daljnja pitanja u istom razgovoru zadržavaju kontekst iz povijesti.
+
 ## Pitanje O Upozorenjima
 
 Chat može odgovoriti na pitanja o [upozorenjima](./alerts-tab.md) koje ste definirali:

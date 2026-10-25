@@ -13,6 +13,8 @@ Lai uzdotu jautājumus par dokumentāciju ārpus redaktora, izmantojiet [Chat wi
 
 Nospiediet `Ctrl + I` / `Cmd + I` jebkur redaktorā, lai atvērtu vai aizvērtu paneli — saīsne darbojas arī tad, ja fokuss ir uz teksta ievades lauka. Skatiet [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Lai strādātu ar vienu mezglu, virziet kursoru virs tā uz audekla un noklikšķiniet uz **AI** virs tā. Panelis atveras fokusēts uz šo mezglu. Skatiet [Viena mezgla modificēšana](#changing-one-node).
+
 ## Paneļa aizvēršana
 
 Noklikšķiniet uz pogas **X**, nospiediet `Ctrl + I` / `Cmd + I` vai pārslēdziet pogu **AI** Debug paneļa rīkjoslā. Virsraksts pārvieto paneli; tas to neaizver.
@@ -60,6 +62,33 @@ Kad AI atbilde satur derīgu workflow JSON bloku (ar `nodes` un pēc izvēles `e
 4. Atzīmē workflow kā nesaglabātu
 
 Ja parsēšana neizdodas, parādās poga **Retry**, lai atkārtoti ģenerētu atbildi.
+
+## Viena mezgla modificēšana
+
+Virziet kursoru virs mezgla uz audekla un noklikšķiniet uz **AI** virs tā. Panelis atveras Agent režīmā, fokusēts uz šo mezglu, un parāda, kuru mezglu tas maina:
+
+| Mezglam ir... | Panelis rāda |
+|---|---|
+| Pašreizējā izpildē nav rezultāta | **Modifying Node:** kompaktā rindā ar mezgla ikonu un nosaukumu. Asistents rediģē tikai no paša mezgla konfigurācijas; palaidiet mezglu vispirms, ja tam jāredz izvade |
+| Rezultāts pašreizējā izpildē | **Modifying Node: (Has Node Output)** virs paša mezgla: ikona, nosaukums un tips, pēdējais statuss un ilgums, kā arī kļūda, ja izpilde neizdevās. Asistents redz šo izvadi un kļūdu, rediģējot mezglu |
+
+Virziet kursoru virs etiķetes, lai redzētu, kādā stāvoklī atrodas panelis.
+
+Lai kādā stāvoklī panelis atrastos, asistents nolasa arī mezgla dokumentācijas lapu aiz grāmatas ikonas mezgla galvenē. Tas izmanto šo lapu, lai izprastu mezgla opcijas un atbildētu uz jautājumiem par tām.
+
+Zem ziņojumiem trīs opcijas sāk pieprasījumu:
+
+| Opcija | Ko tā dara |
+|---|---|
+| **Change this node as ...** | Aizpilda ziņojuma lodziņu ar *Mainīt šo mezglu uz*, lai jūs pabeigtu teikumu |
+| **Fix error in this node ...** | Aizpilda *Novērst kļūdu šajā mezglā.* Asistents nolasa šī mezgla kļūdu no pēdējās izpildes |
+| **Other** | Fokusē tukšu ziņojuma lodziņu |
+
+Rediģējiet tekstu un nospiediet **Send**. Asistents atgriež tikai šo mezglu, un Heym to atjaunina uz vietas: mezgls saglabā savu id, tipu un nosaukumu, tādējādi izteiksmes, piemēram, `$checkLinkedIn.result` citos mezglos, turpina darboties. Citi mezgli, savienojumi un izkārtojums nemainās, un **Undo** atjauno iepriekšējo konfigurāciju.
+
+Ja pieprasījums neietilpst mezglā, piemēram, nepieciešams cits mezgla tips vai jauns mezgls, asistents rediģēšanas vietā norāda, kas būtu jāmaina. Aizveriet mezgla fokusu ar **X** uz mezgla kartītes, lai atkal rediģētu visu darbplūsmu. Paneļa aizvēršana arī notīra fokusu.
+
+[YOLO režīms](#yolo-mode) darbojas ar fokusētu mezglu: asistents maina mezglu, palaiž workflow un labo mezglu, līdz izpilde izdodas. Režīmā **Ask** fokuss norāda asistentam, par kuru mezglu ir jūsu jautājums, un audekls netiek mainīts.
 
 ## YOLO Mode
 

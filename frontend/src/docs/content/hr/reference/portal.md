@@ -51,6 +51,7 @@ Polja unosa dolaze iz [Input](../nodes/input-node.md) čvorova. API izvlači po�
 ## Autentifikacija i Sesije
 
 - **WorkflowPortalUser**: Korisničko ime/lozinka po workflow-u (kada je autentifikacija omogućena)
+- **Uklanjanje zadnjeg korisnika**: Kada je portal omogućen, brisanje zadnjeg korisnika portala čini portal ponovno javnim; dijaloški okvir postavki prvo traži potvrdu
 - **PortalSession**: Sesijski tokeni s TTL-om od 168 sati
 - **Ograničenje brzine**: 3 neuspjele prijave → 24h zabrana po workflow-u+IP
 - Istečene sesije se čiste cron poslom

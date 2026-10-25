@@ -478,7 +478,14 @@
     "extract": "Извличане",
     "mySubWorkflow": "Моят Sub-Workflow",
     "moreNodes": "+{count} още",
-    "runToNode": "Изпълнение до {label}"
+    "runToNode": "Изпълнение до {label}",
+    "aiButtonTitle": "Променете или поправете този възел с AI асистента",
+    "editNodeWithAi": "Редактиране на {label} с AI",
+    "modifyingNode": "Промяна на възел:",
+    "hasNodeOutput": "(Има изход на възела)",
+    "closeNodeFocus": "Затворете фокуса върху възела и редактирайте целия Workflow",
+    "nodeFocusRan": "Този възел е изпълнен. AI вижда последния му изход и грешка и чете документацията на възела.",
+    "nodeFocusNoOutput": "Този възел няма изход в текущото изпълнение. Изпълнете го първо, ако AI трябва да види изхода му. AI чете документацията на възела и в двата случая."
   },
   "nodes": {
     "title": "Възли",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Редактиране на съобщение в опашката",
     "deleteQueuedMessage": "Изтриване на съобщение в опашката",
     "startedByMcp": "Стартирано от MCP клиент",
-    "newChatTitle": "Нов Chat"
+    "newChatTitle": "Нов Chat",
+    "subtitle": "Изпълнявайте Workflows и задавайте въпроси",
+    "modelsLoadFailedDisabled": "Списъкът с модели на тези идентификационни данни не можа да бъде зареден. Chat остава изключен, докато не може да бъде получен модел."
   },
   "teams": {
     "title": "Екипи",
@@ -1672,7 +1681,10 @@
       "error": "Грешка",
       "cached": "От кеш",
       "cancelled": "Отменено"
-    }
+    },
+    "askAi": "Попитай AI",
+    "askAiTitle": "Попитайте Chat асистента за това изпълнение",
+    "noNodeSpans": "За това изпълнение не са записани span-ове на възли."
   },
   "portal": {
     "loadingPortal": "Порталът се зарежда...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Записи на страница с детайли",
     "detailPageRecordsHelp": "Стойностите ?record=, които това табло приема при отваряне от връзка на ред. Всичко друго се отхвърля преди изпълнение на уиджет.",
     "unreachableDashboard": "Табло, което не можете да отворите",
-    "runWorkflow": "Изпълнение на Workflow"
+    "runWorkflow": "Изпълнение на Workflow",
+    "openWorkflowNewTab": "Отваряне на Workflow в нов раздел",
+    "hitlFilterHelp": "Показване на ревюта от всички Workflows или само от един. Изброява Workflows, които можете да отворите – ваши или споделени с вас, – със стъпка, чакаща човек.",
+    "hitlSourcesLoadFailed": "Вашите Workflows не можаха да бъдат заредени."
   },
   "drive": {
     "filesCount": "({count} файла)",

@@ -35,6 +35,8 @@ Er kan ook een gesprek worden gestart vanuit het chatvak op het tabblad [Workflo
 - **Uitvoeringsgeschiedenis van workflows** – Vraag naar één specifieke workflow ("hoe vaak is het dagelijkse rapport uitgevoerd?", "is het mislukt?", "wanneer is het voor het laatst uitgevoerd?"). Chat zoekt de workflow op via het ID en antwoordt op basis van het aantal uitvoeringen, de statusverdeling, de eerste en laatste uitvoeringstijd en de gemiddelde duur. Vraag waarom een uitvoering is mislukt of wat deze heeft geretourneerd, en Chat opent die specifieke uitvoering om de invoer, uitvoer en fouten per knooppunt te lezen
 - **Live uitvoeringsstatus** – Vraag wat er nu wordt uitgevoerd en Chat antwoordt met het aantal, de workflownamen, hoe lang elke uitvoering al bezig is, op welk knooppunt deze zich bevindt en een directe link naar de live uitvoering
 
+- **Run-contextchips** – **AI vragen** in de [Execution History](../reference/execution-history.md#ask-ai) opent een nieuw gesprek met de geselecteerde Workflow-run als chips bijgevoegd. Zie [Vragen over een run](#vragen-over-een-run)
+
 ## Chat gebruiken vanuit een MCP-client
 
 De Chat-engine kan ook buiten de browser worden bereikt. Schakel de **Heym Chat Tool** in op het tabblad [MCP](./mcp-tab.md) in en MCP-clients — Claude, Cursor en al het andere dat MCP ondersteunt — krijgen één `heym_chat`-tool die deze zelfde engine met al zijn mogelijkheden uitvoert.
@@ -79,6 +81,17 @@ Vraag het in gewone taal — "wat is er actief?", "hoeveel workflows zijn er nu 
 - **Een link** naar elke actieve uitvoering, die het canvas opent met die uitvoering die opnieuw wordt afgespeeld
 
 Uitvoeringen die zijn gepauzeerd voor een [Human-in-the-Loop](../reference/human-in-the-loop.md)- of Codex-beoordeling worden gerapporteerd als wachtend op u, niet als actief. Dit zijn dezelfde gegevens als de badge voor actieve uitvoeringen in de koptekst, dus Chat en de badge zijn nooit met elkaar in tegenspraak. Vraag voor uitvoeringen die al zijn voltooid om recente uitvoeringen — dat leest de [Execution History](../reference/execution-history.md).
+
+## Vragen over een run
+
+Selecteer een Workflow-run in de [Execution History](../reference/execution-history.md#ask-ai), vanuit de editor of vanuit All History, en klik op **AI vragen** naast de titel van het dialoogvenster. Chat opent een nieuw gesprek met twee chips boven het berichtvak:
+
+- **Workflow:** de naam van de Workflow
+- **Execution:** de eerste tekens van de id van de geselecteerde run
+
+Verwijder een chip met de bijbehorende **×** om hem weg te laten. Stel daarna uw vraag, bijvoorbeeld “waarom duurde deze run zo lang?”, “wat is hier mislukt?” of “kunt u dit oplossen?”. De resterende chips worden met de volledige id's aan dat bericht gekoppeld, zodat Chat de invoer, uitvoer en trace per node van de run rechtstreeks leest in plaats van naar de Workflow te zoeken. Om de Workflow te herstellen slaat Chat de wijziging op, test hij deze en controleert hij deze zoals beschreven in [Workflows maken](#workflows-maken).
+
+Het verzonden bericht toont de chips onder uw vraag. Ze horen alleen bij dat bericht; vervolgvragen in hetzelfde gesprek behouden de context uit de geschiedenis.
 
 ## Vragen over waarschuwingen
 

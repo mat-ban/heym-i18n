@@ -18,14 +18,14 @@ Pripomoček je en sam graf na mreži. Podprti tipi grafov:
 - **Črta**
 - **Območje** (izpolnjen trend, podpira več serij)
 - **Pita**
-- **Tabela** (pomična; en stolpec se lahko izriše kot [statusne značke](../nodes/chart-output-node.md#status-chips), vrstice pa lahko odprejo [stran s podrobnostmi](#detail-pages))
+- **Tabela** (z možnostjo drsenja; kliknite na glavo stolpca za naraščajoče razvrščanje in znova kliknite za padajoče. En stolpec se lahko prikaže kot [čipi stanja](../nodes/chart-output-node.md#status-chips), en stolpec lahko vsebuje [gumbe povezave](../nodes/chart-output-node.md#link-buttons), ki odprejo URL v novem zavihku, vrstice pa lahko odprejo [stran s podrobnostmi](#strani-s-podrobnostmi))
 - **Številčni** (en sam KPI vrednost z neobvezno enoto)
 - **Merilnik** (ena vrednost v razponu min–max, npr. odstotek)
 - **Razpršeni** (X/Y točke za korelacijske grafe)
 - **Delež** (en stolpec razdeljen na dele z odstotkovno legendo, npr. razčlenitev po jeziku)
 - **Stolpčni merilnik** (ena vodoravna merilna enota na vrstico z rdeče→zelena gradientom in vrednostjo, npr. prosti prostor na disku)
 - **Besedilo** (sporočilo v markdown formatu, npr. statusna opomba kot "Zadnje izvajanje ob 19:47"; podpira [interaktivne potrditvene okvirčke](../nodes/chart-output-node.md#interactive-task-lists), ko je markdown statičen, in [izrecne številčne sezname](../nodes/chart-output-node.md#numbered-lists) za prilagojeno ali padajoče številčenje)
-- **HITL** (vaši čakajoči človeški pregledi. Glava prikazuje `1/n čakajočih`. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo. Ikona zgodovine poleg naslova pripomočka odpre to izvajanje v pogovornem oknu zgodovine na tej strani. Pripomoček ne uporablja zgornjih vrstic, in vsakdo vidi svojo lastno vrsto)
+- **HITL** (vaši čakajoči človeški pregledi. Glava prikazuje `1/n čakajočih`. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo. Ikona zgodovine poleg naslova pripomočka odpre to izvajanje v pogovornem oknu zgodovine na tej strani. Pripomoček ne uporablja zgornjih vrstic, in vsakdo vidi svojo lastno vrsto. Namesto tega lahko prikazuje preglede enega samega Workflowa za vsakogar, ki lahko ta Workflow odpre; glejte [Gradniki HITL](#gradniki-hitl))
 
 Poleg grafikonov pripomoček **Run a workflow** zažene enega od vaših workflowov z nadzorne plošče: na odloženi datoteki, s svojimi vnosnimi polji ali z gumbom Run; glejte [Pripomočki za zagon](#run-widgets).
 
@@ -41,6 +41,20 @@ Vsak pripomoček naloži svoje podatke asinhrono, ko odprete zavihek, tako da st
 Za pripomoček **Run a workflow** namesto tega izberite workflow, ki ga izvaja; izbirnik pove, kako bo pripomoček zagnal vsakega izmed njih. Pripomoček se doda neposredno v mrežo; novega workflowa ni treba graditi.
 
 Dvakrat kliknite na pripomoček (ali uporabite njegov gumb za urejanje), da kadar koli ponovno odprete njegov workflow. Uporabite **Kopiraj pripomoček** v naslovu pripomočka za podvojitev tako pripomočka kot njegovega celotnega workflow-a. Kopija je postavljena pod izvirnik in označena z **(Kopija)**, tako da jo lahko neodvisno uredite.
+
+## Gradniki HITL
+
+Nov gradnik HITL prikazuje vsak pregled, ki čaka v vaši lastni čakalni vrsti. Če želite prikazati le preglede enega Workflowa, odprite **Nastavitve** gradnika:
+
+1. Pri **Workflow** izberite Workflow. Seznam vsebuje Workflowe, ki jih lahko odprete – vaše lastne ali deljene z vami ali vašo ekipo –, ki imajo korak, ki čaka na osebo: Agent s človeškim pregledom ali Slack korak odobritve, gumbov ali obrazca. Ikona poleg odpre ta Workflow v novem zavihku.
+2. Če ima Workflow natanko en tak korak, je samodejno izbran. Če jih ima več, jih **Select agent** navede po imenu vozlišča, pri čemer je **All agents** na prvem mestu; koraki Slack so označeni z **(Slack)**.
+3. Shranite. Števec `1/n pending` v glavi šteje le te preglede. Izberite **Vsi workflowi**, da znova prikažete svojo lastno čakalno vrsto.
+
+Enaka izbira je na voljo na platnu v lastnostih vozlišča Chart Output. **Izboljšaj z AI** jo lahko nastavi („prikaži le odobritve računov“), prav tako pa opis novega gradnika, ki imenuje Workflow. Vsaka sprememba je urejanje Workflowa, zato se pojavi v Edit History.
+
+- **Kdo vidi preglede.** Gradnik, filtriran po Workflowu, prikazuje preglede tega Workflowa vsem, ki lahko odprejo ta Workflow, in ti uporabniki lahko prek gradnika odobrijo, zahtevajo spremembe ali zavrnejo, enako kot bi lahko izvedli Workflow. Nefiltriran gradnik vsakomur prikazuje njegovo lastno čakalno vrsto.
+- **Kdo vidi gradnik.** Kdor ne more odpreti izbranega Workflowa, gradnika sploh ne vidi, niti na nadzorni plošči, ki je deljena z njim. Ko lastnik nadzorne plošče izgubi dostop do Workflowa ali je ta izbrisan, lastnik vidi „You no longer have access to the workflow this widget shows“ in lahko v **Nastavitvah** izbere drugega.
+- **Samo dostopne izbire.** Workflow, ki ga ne morete odpreti, je zavrnjen ob shranjevanju gradnika, bodisi prek nastavitev, platna ali AI.
 
 ## Strani s podrobnostmi
 
@@ -75,6 +89,10 @@ Gumb **Wrap** pri rezultatu prelomi dolge vrstice izhoda znotraj okvira; izklopi
 ## Generiranje pripomočka z AI
 
 Kliknite **AI**, opišite metriko, ki jo želite (na primer, "stopnja uspešnosti workflow-a v zadnjih 30 dneh kot stolpični graf"), in izberite poverilnico LLM in model. Heym ustvari popoln workflow pripomočka, ki se konča z vozliščem Chart Output in ga doda v mrežo. Oglejte si [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) za primerne pozive za vsak tip grafa.
+
+Gradnik dobi kratek naslov iz ene ali dveh besed v jeziku vaše zahteve, na primer „Odprti primeri“. Naslov nikoli ne vsebuje identifikatorja podatkovne tabele; če model poimenuje gradnik s celim stavkom, Heym obdrži njegove prve besede.
+
+API za gradnike lahko ustvari tudi **kartico števca** brez AI: gradnik `text` nad podatkovno tabelo (`data_table_id`) s `count_column` in `count_value` prikazuje, koliko vrstic ima to vrednost; naslov gradnika navede vrednost. Heym Work strani, ustvarjene iz podatkovne tabele, uvede z eno kartico števca na posamezno stanje.
 
 Uporabite gumb **Natančno prilagodi z AI** pripomočka za revizijo obstoječega pripomočka z novim navodilom. Vsaka natančna prilagoditev AI posname prejšnji workflow v **Zgodovini urejanja** pripomočka, tako da lahko pregledate ali vrnete spremembe iz urejevalnika workflow-ov.
 

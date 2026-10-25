@@ -478,7 +478,14 @@
     "extract": "Extrahieren",
     "mySubWorkflow": "Mein Sub-Workflow",
     "moreNodes": "+{count} weitere",
-    "runToNode": "Bis {label} ausführen"
+    "runToNode": "Bis {label} ausführen",
+    "aiButtonTitle": "Diesen Knoten mit dem KI-Assistenten ändern oder korrigieren",
+    "editNodeWithAi": "{label} mit KI bearbeiten",
+    "modifyingNode": "Knoten wird geändert:",
+    "hasNodeOutput": "(Hat Knotenausgabe)",
+    "closeNodeFocus": "Knotenfokus schließen und den gesamten Workflow bearbeiten",
+    "nodeFocusRan": "Dieser Knoten wurde ausgeführt. Die KI sieht seine letzte Ausgabe und seinen Fehler und liest die Dokumentation des Knotens.",
+    "nodeFocusNoOutput": "Dieser Knoten hat im aktuellen Lauf keine Ausgabe. Führen Sie ihn zuerst aus, wenn die KI seine Ausgabe sehen soll. Die KI liest in beiden Fällen die Dokumentation des Knotens."
   },
   "nodes": {
     "title": "Knoten",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Warteschlangen-Nachricht bearbeiten",
     "deleteQueuedMessage": "Warteschlangen-Nachricht löschen",
     "startedByMcp": "Von einem MCP-Client gestartet",
-    "newChatTitle": "Neuer Chat"
+    "newChatTitle": "Neuer Chat",
+    "subtitle": "Workflows ausführen und Fragen stellen",
+    "modelsLoadFailedDisabled": "Die Modellliste dieser Anmeldedaten konnte nicht geladen werden. Der Chat bleibt deaktiviert, bis ein Modell abgerufen werden kann."
   },
   "teams": {
     "title": "Teams",
@@ -1672,7 +1681,10 @@
       "error": "Fehler",
       "cached": "Aus Cache",
       "cancelled": "Abgebrochen"
-    }
+    },
+    "askAi": "KI fragen",
+    "askAiTitle": "Den Chat-Assistenten zu diesem Lauf befragen",
+    "noNodeSpans": "Für diesen Lauf wurden keine Knoten-Spans aufgezeichnet."
   },
   "portal": {
     "loadingPortal": "Portal wird geladen...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Detailseiten-Datensätze",
     "detailPageRecordsHelp": "Die ?record=-Werte, die dieses Dashboard akzeptiert, wenn ein Zeilenlink es öffnet. Alles andere wird vor der Ausführung eines Widgets abgelehnt.",
     "unreachableDashboard": "Ein Dashboard, das Sie nicht öffnen können",
-    "runWorkflow": "Einen Workflow ausführen"
+    "runWorkflow": "Einen Workflow ausführen",
+    "openWorkflowNewTab": "Workflow in neuem Tab öffnen",
+    "hitlFilterHelp": "Überprüfungen aus allen Workflows oder nur aus einem anzeigen. Listet die Workflows auf, die Sie öffnen können – eigene oder mit Ihnen geteilte –, die einen Schritt enthalten, der auf eine Person wartet.",
+    "hitlSourcesLoadFailed": "Ihre Workflows konnten nicht geladen werden."
   },
   "drive": {
     "filesCount": "({count} Dateien)",

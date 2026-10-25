@@ -9,11 +9,30 @@ Heym Work töötab eraldi konteinerina Heymi kõrval ning vajab eraldi litsentsi
 | Valdkond | Funktsioon |
 |----------|------------|
 | **Chat** | Kirjeldage ülesannet teksti või hääle abil. Heym küsib vajalikud andmed, koostab töövoo, testib seda ning märgib selle Kinnitatuks. |
+| **Flows** | Toimetajad loovad flow valikute põhjal, mitte lõuendil: mis seda alustab, valikuline AI-mustand ja toimingud Slackis, Google Sheetsis ja e-postis. Slacki vastused jätkavad käitust ning kinnitused ootavad samuti Tegevuses. Vaadake [Flows](#flows). |
 | **Lehed** | Kinnitatud vidinate lehed: numbrid, diagrammid, olekumärkidega tabelid, failide lohistamisalad ja heakskiidud. Tabeli rida võib avada omaette üksikasjade lehe. |
 | **Heakskiidud** | [Human-in-the-Loop](./human-in-the-loop.md) etappidest tulenevad ülevaatused ootavad vaates Tegevus ja lehtedel valikutega Kiida heaks, Taotle muudatusi ja Lükka tagasi. |
 | **Tegevus** | Iga käivitus koos selle algatanud isiku ja seda käitanud eksemplariga. |
 | **Rollid** | Omanik, Toimetaja ja Vaataja. Sisselogimine toimub Heymi poolt juba kasutatava [Single Sign-On](./sso.md) lahenduse kaudu. |
 | **Valdkondlikud väljaanded** | Õiguse, hariduse, rahanduse, logistika, energeetika ja e-kaubanduse eriväljaanded avanevad valmis lehtede, näidisandmete ja valdkonnale kohandatud töövoogudega. |
+
+## Flows
+
+**Flows** asub Heym Worki menüüs Toimetajatele ja Omanikele. Flow koostatakse valikutest, mitte sõlmedest, ja Heym Work salvestab selle tavalise Heym workflow'na Heymi API kaudu selle loonud isiku nimel. Heymi juurdepääsureeglid, redigeerimisajalugu ja trigerite sünkroonimine kehtivad nagu redaktoris, ning iga käitus kuvatakse Tegevuses nagu mis tahes muu.
+
+| Osa | Valikud |
+|---|---|
+| **Mis seda käivitab** | Nõudmisel, ajakava järgi, Slacki sõnumi peale, Google Sheetsi vahekaardi muutumisel (read lisatud, muudetud või kustutatud) või e-kirja saabumisel postkasti. Tabeli- ja e-posti trigerid kontrollivad iga 1, 5, 15 või 60 minuti järel. |
+| **AI-mustand** (valikuline) | Mudel ja juhised muudavad flow käivitanud sündmuse tekstiks järgmiste sammude jaoks. Flow, mis ei alga tabelist ega e-kirjast, saab esmalt lugeda hiljutisi Slacki sõnumeid kanalist või teemast. |
+| **Mis juhtub järgmiseks** | Toimingud järjekorras mis tahes kolmest tööriistast, olenemata sellest, mis flow käivitas. **Slack:** kanalisõnum, otsesõnum, vorm, nuppudega sõnum, kinnitus, teemalõime vastus, sõnumi värskendus ja lõpptulemus. **Google Sheets:** lisa rida või värskenda muudetud rida. **E-post:** saada e-kiri. |
+
+- **Vastused jätkavad käitust.** Kinnitus, nupud või vorm peatavad käituse, kuni keegi Slackis vastab. Kinnitus ootab ka Tegevuses ja otsus mis tahes kohas eemaldab nupud Slacki sõnumilt. Hilisemad Slacki sammud jäävad esimese sõnumi lõime.
+- **Üks Ühenduste kaart.** Iga flow näitab Slacki tööruumi, Google Sheetsi kontot ja postkaste, millest see loeb ja millega saadab. Need on Heymi volitused: **Slack Bot** (boti luba, `xoxb-…`), **Google Sheets**, **IMAP** ja **SMTP**; puuduva volituse saab lisada otse flow seest.
+- **Üks Slacki rakendus iga flow jaoks.** Slacki rakenduses määrake Interaktiivsuse päringu URL-iks `https://<teie Heym>/api/slack/interactions/<volituse id>` ja Sündmuste tellimuste päringu URL-iks `https://<teie Heym>/api/slack/events/<volituse id>`. Heym Work näitab mõlemat valitud ühenduse jaoks. Kõik selle volitusega flow'd jagavad neid.
+- **Slacki trigerid valivad, mida nad kuulavad:** sõnumeid kanalites ja otsesõnumites, otsesõnumeid botile, boti mainimisi või sõnumeid ühes kanalis. Boti enda postitused ei käivita kunagi flowd.
+- **Nõuded.** Flows vajab Heym 0.0.131 või uuemat versiooni.
+
+Sammud, mida flow ehitab, on samad sõlmed, mida saate lõuendil kasutada: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) ja [Cron](../nodes/cron-node.md).
 
 ## Heym Worki ühendamine
 
@@ -26,7 +45,7 @@ Kogu seadistusprotsessi nägemiseks alates esimesest käsust kuni avaleheni vaad
 | **Heym Worki aadress** | Asukoht, kus Heym Work töötab, näiteks `https://work.example.com`. Sisselogimine suunab siia tagasi. Vajutage **Salvesta**. |
 | **Integratsioonivõti** | Nupp **Genereeri võti** loob võtme, mida Heym Work kasutab iga Heymile suunatud päringu jaoks. Seda kuvatakse ainult üks kord koos kopeerimisnupuga. Heym salvestab üksnes selle räsi. |
 | **Luba Heym Work** | Lülitab ühenduse sisse. Nõuab eelnevalt aadressi ja võtme sisestamist. |
-| Olek | **Viimati nähtud**, **Worki versioon** ja **Litsents** vastavalt Heym Worki viimasele raportile. |
+| **Valdkonna- ja meeskonnaväljaanded** | Õigus-, haridus-, finants-, logistika-, energia- ja e-kaubanduse väljaanded ning ettevõtte meeskondadele mõeldud IT-, müügi-, turundus- ja personali väljaanded avanevad selle töö jaoks mõeldud lehtede, näidisandmete ja workflow'dega. |
 
 Seejärel avage Heym Worki aadress ja viige seadistamine lõpule:
 

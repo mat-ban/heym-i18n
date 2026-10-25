@@ -1,6 +1,6 @@
 # Canvas-funktioner
 
-Workflow-editoren tilbyder flere funktioner til fejlfinding, test og organisering af noder: **Kør til Node**, **Data Pin**, **Eksekveringslogs**, **Aktivér/Deaktivér** og **Ekstraher til Sub-Workflow**.
+Workflow-editoren tilbyder flere funktioner til fejlfinding, test og organisering af noder: **Kør til Node**, **AI på en node**, **Data Pin**, **Eksekveringslogs**, **Aktivér/Deaktivér** og **Ekstraher til Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Se Editor-demo</a></p>
@@ -12,6 +12,12 @@ Ved at holde markøren over en node (undtagen en sticky note) og klikke på **K�
 Hvis den valgte sti har inputfelter, åbnes panelet **Kør** til højre med fokus på det første felt. Indtast værdierne, og klik derefter på **Kør til _node-label_** eller tryk på **Ctrl+Enter** (Cmd+Enter på macOS). Generisk body-tilstand fokuserer på JSON-body-editoren. Stier uden inputfelter køres umiddelbart uden at åbne panelet. Fastgjorte Input-noder genbruger deres fastgjorte output uden at spørge om input.
 
 Panelet bevarer det valgte mål for efterfølgende kørsler. Vælg **Kør fuldt workflow** for at rydde målet. Kør-knapper deaktiveres under en aktiv eksekvering. Et mål inde i en løkke stopper kørslen, når noden første gang nås; ved valg af en node efter løkken køres den komplette opstrømsløkke.
+
+## AI på en node
+
+Før markøren over en vilkårlig node undtagen en huskeseddel, og klik på **AI** over den. [AI Assistant](./ai-assistant.md) åbnes på den pågældende node og tilbyder **Change this node as ...**, **Fix error in this node ...** og **Other**. I Agent-tilstand ændrer assistenten kun denne node; andre noder, forbindelser og layoutet forbliver uændrede. Se [AI Assistant › Ændring af en enkelt node](./ai-assistant.md#changing-one-node).
+
+Knappen er skjult på workflows, som der kun er læseadgang til.
 
 ## Data Pin
 

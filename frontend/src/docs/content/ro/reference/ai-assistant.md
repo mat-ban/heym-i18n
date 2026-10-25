@@ -13,6 +13,8 @@ Pentru întrebări legate de documentație în afara editorului, folosiți [Chat
 
 Apăsați `Ctrl + I` / `Cmd + I` oriunde în editor pentru a deschide sau închide panoul — comanda rapidă funcționează chiar și atunci când un câmp de text este focalizat. Consultați [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Pentru a lucra pe un singur nod, treceți cu cursorul peste el pe canvas și faceți clic pe **AI** deasupra lui. Panoul se deschide focalizat pe acel nod. Consultați [Modificarea unui singur nod](#changing-one-node).
+
 ## Închiderea panoului
 
 Faceți clic pe butonul **X**, apăsați `Ctrl + I` / `Cmd + I` sau comutați butonul **AI** din bara de instrumente a panoului Debug. Antetul mută panoul; nu îl închide.
@@ -60,6 +62,33 @@ Când răspunsul AI conține un bloc JSON de workflow valid (cu `nodes` și, op�
 4. Marchează workflow-ul ca nesalvat
 
 Dacă analizarea eșuează, apare un buton **Retry** pentru a regenera răspunsul.
+
+## Modificarea unui singur nod
+
+Treceți cu cursorul peste un nod pe canvas și faceți clic pe **AI** deasupra lui. Panoul se deschide în modul Agent, focalizat pe acel nod, și arată ce nod modifică:
+
+| Nodul are... | Panoul arată |
+|---|---|
+| Niciun rezultat în rularea curentă | **Modifying Node:** pe un rând compact cu pictograma și numele nodului. Asistentul editează exclusiv din configurația nodului; rulați nodul mai întâi dacă trebuie să vadă ieșirea |
+| Un rezultat în rularea curentă | **Modifying Node: (Has Node Output)** deasupra nodului însuși: pictogramă, nume și tip, ultimul status și durata, și eroarea dacă a eșuat. Asistentul vede acea ieșire și eroarea atunci când editează nodul |
+
+Treceți cu cursorul peste etichetă pentru a vedea în ce stare se află panoul.
+
+În oricare stare a panoului, asistentul citește și pagina de documentație a nodului, din spatele pictogramei de carte din antetul nodului. O utilizează pentru a înțelege opțiunile nodului și a răspunde la întrebări despre acestea.
+
+Sub mesaje, trei opțiuni pornesc solicitarea:
+
+| Opțiune | Ce face |
+|---|---|
+| **Change this node as ...** | Completează caseta de mesaj cu *Modifică acest nod în* pentru a termina propoziția |
+| **Fix error in this node ...** | Completează *Remediază eroarea din acest nod.* Asistentul citește eroarea acestui nod din ultima rulare |
+| **Other** | Focalizează o casetă de mesaj goală |
+
+Editați textul și apăsați **Send**. Asistentul returnează doar acest nod și Heym îl actualizează pe loc: nodul își păstrează id-ul, tipul și numele, astfel încât expresii precum `$checkLinkedIn.result` din alte noduri continuă să funcționeze. Alte noduri, conexiuni și aspectul nu se modifică, iar **Undo** restabilește configurația anterioară.
+
+Dacă solicitarea nu se potrivește în nod, de exemplu necesită un alt tip de nod sau un nod nou, asistentul precizează ce ar trebui modificat în loc să editeze. Închideți focalizarea nodului cu **X** de pe cardul nodului pentru a edita din nou întregul workflow. Închiderea panoului șterge de asemenea focalizarea.
+
+[Modul YOLO](#yolo-mode) funcționează cu un nod focalizat: asistentul modifică nodul, rulează workflow-ul și remediază nodul până când rularea reușește. În modul **Ask**, focalizarea îi indică asistentului despre ce nod este întrebarea dvs., iar canvasul nu este modificat.
 
 ## Modul YOLO
 

@@ -16,12 +16,12 @@ De **Heym**-node leest Heym's eigen gegevens: de workflows die u kunt bereiken, 
 | Parameter | Type | Beschrijving |
 |-----------|------|-------------|
 | `heymOperation` | Select | Welke leesbewerking moet worden uitgevoerd |
-| `heymWorkflowId` | UUID | Doelworkflow. Vereist voor `getWorkflow` en `getExecutionHistory`. Ondersteunt expressies. |
+| `heymWorkflowId` | UUID | Stel dit bij `getExecutionHistory` in op `all` om elke bereikbare Workflow te lezen. |
 | `heymLimit` | String | Maximaal aantal terug te geven rijen. **Laat dit leeg of voer `0` in om alles terug te geven** — dat is de standaardwaarde. Ondersteunt expressies. |
 | `heymStatus` | String | Optionele statusfilter voor `getExecutionHistory`. Ondersteunt expressies. |
 | `heymSinceDays` | String | Optionele terugkijkperiode in dagen voor `getExecutionHistory`. Ondersteunt expressies. |
 
-De workflow-kiezer is een doorzoekbare dropdown met elke workflow die u kunt bereiken.
+De workflow-kiezer is een doorzoekbare dropdown met elke workflow die u kunt bereiken. Bij {GEH} is het eerste item **{AW}**. Bij {GEH} is het eerste item **{AW}**.
 
 ## Toegangsbereik
 
@@ -93,9 +93,11 @@ Retourneert geschiedenisvermeldingen van uitvoeringen voor één workflow, nieuw
 | `$nodeLabel.executions[0].recovered` | Of de uitvoering is hersteld na een crash |
 | `$nodeLabel.executions[0].inputs` | Wat de uitvoering heeft ontvangen - de trigger-payload of de invoer van de aanroeper |
 | `$nodeLabel.executions[0].outputs` | De uitvoer van de workflow voor die uitvoering |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | De workflow waartoe de geschiedenis behoort |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | De Workflow waartoe de geschiedenis behoort, of `null` met **{AW}** |
+f `null` met **{AW}** |
 | `$nodeLabel.total` | Totaal aantal overeenkomende uitvoeringen **vóór** de limiet |
-| `$nodeLabel.by_status` | Aantallen per status, bijvoorbeeld `{ "success": 41, "error": 3 }` |
+| `$| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Met **{AW}**, de Workflow waartoe elke run behoort |
+nodeLabel.by_status` | Aantallen per status, bijvoorbeeld `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Begin van het venster, of `null` voor de volledige geschiedenis |
 
 Vermeldingen bevatten zowel `inputs` als `outputs` - wat de uitvoering heeft ontvangen en wat deze heeft geretourneerd - maar nooit `node_results`: de trace per node is de grootste kolom in de tabel en zou alles stroomafwaarts overschaduwen. Haal een enkele uitvoering op via de API wanneer de volledige trace nodig is.

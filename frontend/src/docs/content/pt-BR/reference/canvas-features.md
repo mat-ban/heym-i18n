@@ -1,6 +1,6 @@
 # Recursos do Canvas
 
-O editor de Workflow oferece diversos recursos para depuração, teste e organização de Nós: **Executar até o Nó**, **Data Pin**, **Logs de Execução**, **Ativar/Desativar** e **Extrair para Sub-Workflow**.
+O editor de Workflow oferece diversos recursos para depuração, teste e organização de Nós: **Executar até o Nó**, **AI em um nó**, **Data Pin**, **Logs de Execução**, **Ativar/Desativar** e **Extrair para Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Assistir à demonstração do Editor</a></p>
@@ -12,6 +12,12 @@ Passe o mouse sobre qualquer Nó, exceto uma nota adesiva, e clique em **Run** a
 Se o caminho selecionado tiver campos de entrada, o painel **Run** à direita será aberto e focará o primeiro campo. Insira os valores e clique em **Run to _rótulo do Nó_** ou pressione **Ctrl+Enter** (Cmd+Enter no macOS). O modo de corpo genérico foca o editor de corpo JSON. Caminhos sem campos de entrada são executados imediatamente, sem abrir o painel. Nós de Entrada fixados reutilizam sua saída fixada sem solicitar entrada.
 
 O painel mantém o alvo selecionado para execuções subsequentes. Escolha **Run full workflow** para limpar o alvo. Os botões de execução ficam desabilitados enquanto uma execução estiver ativa. Um alvo dentro de um loop interrompe a execução quando esse Nó é alcançado pela primeira vez; selecionar um Nó após o loop executa o loop upstream completo.
+
+## AI em um nó
+
+Passe o cursor sobre qualquer nó exceto uma nota adesiva e clique em **AI** acima dele. O [AI Assistant](./ai-assistant.md) abre nesse nó e oferece **Change this node as ...**, **Fix error in this node ...** e **Other**. No modo Agent, o assistente altera apenas esse nó; outros nós, conexões e o layout permanecem inalterados. Veja [AI Assistant › Modificar um único nó](./ai-assistant.md#changing-one-node).
+
+O botão fica oculto em workflows que você só pode visualizar.
 
 ## Data Pin
 

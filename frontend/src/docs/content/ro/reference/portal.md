@@ -51,6 +51,7 @@ Câmpurile de intrare provin de la nodurile [Input](../nodes/input-node.md). API
 ## Autentificare și sesiuni
 
 - **WorkflowPortalUser**: Nume de utilizator/parolă per workflow (când autentificarea este activată)
+- **Eliminarea ultimului utilizator**: Cu portalul activat, ștergerea ultimului utilizator al portalului face ca portalul să redevină public; caseta de dialog a setărilor solicită mai întâi confirmarea
 - **PortalSession**: Token-uri de sesiune cu TTL de 168 de ore
 - **Limitarea ratei**: 3 încercări de autentificare eșuate → interdicție de 24h per workflow+IP
 - Sesiunile expirate sunt curățate de un job cron

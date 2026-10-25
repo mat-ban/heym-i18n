@@ -16,7 +16,7 @@ Node **Heym** đọc dữ liệu của chính Heym: các workflow bạn có th�
 | Tham số | Kiểu | Mô tả |
 |-----------|------|-------------|
 | `heymOperation` | Select | Thao tác đọc cần thực hiện |
-| `heymWorkflowId` | UUID | Workflow mục tiêu. Bắt buộc đối với `getWorkflow` và `getExecutionHistory`. Hỗ trợ biểu thức. |
+| `heymWorkflowId` | UUID | Hãy đặt thành `all` cho `getExecutionHistory` để đọc mọi Workflow mà bạn có thể truy cập. |
 | `heymLimit` | String | Số hàng tối đa trả về. **Để trống hoặc nhập `0` để trả về tất cả** — đó là giá trị mặc định. Hỗ trợ biểu thức. |
 | `heymStatus` | String | Bộ lọc trạng thái tùy chọn cho `getExecutionHistory`. Hỗ trợ biểu thức. |
 | `heymSinceDays` | String | Khoảng thời gian tra cứu ngược tùy chọn tính theo ngày cho `getExecutionHistory`. Hỗ trợ biểu thức. |
@@ -93,9 +93,11 @@ Trả về các mục lịch sử thực thi cho một workflow, mới nhất tr
 | `$nodeLabel.executions[0].recovered` | Liệu lần chạy có được khôi phục sau sự cố hay không |
 | `$nodeLabel.executions[0].inputs` | Những gì lần chạy nhận được - payload trigger hoặc đầu vào của bên gọi |
 | `$nodeLabel.executions[0].outputs` | Đầu ra của workflow cho lần chạy đó |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow mà lịch sử thuộc về |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow mà lịch sử thuộc về, hoặc `null` với **{AW}** |
+oặc `null` với **{AW}** |
 | `$nodeLabel.total` | Tổng số thực thi khớp **trước** giới hạn |
-| `$nodeLabel.by_status` | Số lượng theo trạng thái, ví dụ `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Với **{AW}**, Workflow mà mỗi lần chạy thuộc về |
+status` | Số lượng theo trạng thái, ví dụ `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Bắt đầu cửa sổ, hoặc `null` cho toàn bộ lịch sử |
 
 Các mục mang cả `inputs` và `outputs` - những gì lần chạy nhận được và những gì nó trả lời - nhưng không bao giờ có `node_results`: dấu vết từng node là cột lớn nhất trong bảng và sẽ lấn át mọi thứ phía sau. Truy xuất một thực thi đơn lẻ qua API khi bạn cần dấu vết đầy đủ.

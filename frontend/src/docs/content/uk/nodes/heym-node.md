@@ -16,7 +16,7 @@
 | Параметр | Тип | Опис |
 |-----------|------|-------------|
 | `heymOperation` | Select | Яке читання виконати |
-| `heymWorkflowId` | UUID | Цільовий workflow. Обов'язковий для `getWorkflow` та `getExecutionHistory`. Підтримує вирази. |
+| `heymWorkflowId` | UUID | Вкажіть `all` для `getExecutionHistory`, щоб прочитати кожен доступний Workflow. |
 | `heymLimit` | String | Максимальна кількість рядків для повернення. **Залиште порожнім або введіть `0`, щоб повернути все** — це значення за замовчуванням. Підтримує вирази. |
 | `heymStatus` | String | Необов'язковий фільтр статусу для `getExecutionHistory`. Підтримує вирази. |
 | `heymSinceDays` | String | Необов'язковий період ретроспективи в днях для `getExecutionHistory`. Підтримує вирази. |
@@ -93,8 +93,10 @@ cron → heym (listWorkflows) → loop → heym (getWorkflow) → agent → slac
 | `$nodeLabel.executions[0].recovered` | Чи було виконання відновлено після збою |
 | `$nodeLabel.executions[0].inputs` | Що отримало виконання — payload trigger або вхідні дані виклику |
 | `$nodeLabel.executions[0].outputs` | Вихідні дані workflow для цього виконання |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, якому належить історія |
-| `$nodeLabel.total` | Загальна кількість відповідних виконань **до** застосування обмеження |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, якому належить історія, або `null` з **{AW}** |
+бо `null` з **{AW}** |
+| `$nodeLabel.total` | Загальна кількість відповідних виконань **до** застосування обмеження| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | З **{AW}** — Workflow, якому належить кожен запуск |
+ |
 | `$nodeLabel.by_status` | Кількість за статусами, наприклад `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Початок вікна або `null` для всієї історії |
 

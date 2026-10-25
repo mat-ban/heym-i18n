@@ -35,6 +35,8 @@
 - **Workflow 运行历史** – 询问某个 Workflow 的情况（“日报运行了多少次？”、“它失败了吗？”、“它上次运行是什么时候？”）。Chat 通过其 ID 查找该 Workflow，并根据其运行次数、状态分布、首次和最后运行时间以及平均时长来回答。询问某次运行为何失败或返回了什么，Chat 会打开该次运行以读取其输入、输出和每个节点的错误
 - **实时运行状态** – 询问当前正在运行的内容，Chat 会回答数量、Workflow 名称、每次运行已持续的时间、当前所在节点，以及直接指向实时运行的链接
 
+- **运行上下文标签** – [Execution History](../reference/execution-history.md#ask-ai) 中的 **询问 AI** 会打开一个新对话，并将选定的 Workflow 运行作为标签附加。请参阅 [询问关于运行的信息](#xun-wen-guan-yu-yun-xing-de-xin-xi)
+
 ## 从 MCP 客户端使用 Chat
 
 Chat 引擎也可以从浏览器外部访问。在 [MCP 标签页](./mcp-tab.md)中启用 **Heym Chat Tool** 后，MCP 客户端——Claude、Cursor 以及其他任何支持 MCP 的工具——将获得一个 `heym_chat` 工具，它运行同一个引擎并具备其全部能力。
@@ -77,6 +79,17 @@ Chat 在上下文中保留最多 25 条最近消息。较早的消息会被裁�
 - **每个实时运行的链接**，可打开画布并回放该执行
 
 因 [Human-in-the-Loop](../reference/human-in-the-loop.md) 或 Codex 审核而暂停的运行会报告为等待您处理，而不是运行中。这与页眉中的活跃运行徽章数据相同，因此 Chat 和徽章永远不会不一致。对于已经完成的运行，请改为查询最近的执行——即读取 [Execution History](../reference/execution-history.md)。
+
+## 询问关于运行的信息
+
+在 [Execution History](../reference/execution-history.md#ask-ai) 中选择一次 Workflow 运行（可从编辑器或 All History 中选择），然后点击对话框标题旁的 **询问 AI**。Chat 会打开一个新对话，并在消息输入框上方显示两个标签：
+
+- **Workflow:** Workflow 的名称
+- **Execution:** 所选运行 ID 的前几个字符
+
+点击标签的 **×** 即可将其移除。然后输入您的问题，例如「为什么这次运行耗时这么长？」、「这里失败的原因是什么？」或「你能修复它吗？」。剩余的标签将附带完整 ID 附加到该消息中，以便 Chat 直接读取运行的输入、输出以及各节点的跟踪记录，而无需搜索该 Workflow。如需修复 Workflow，Chat 会保存、测试运行并验证更改，如 [创建 Workflow](#chuang-jian-workflow) 中所述。
+
+发送的消息会在您的问题下方显示这些标签。它们仅属于该消息；同一对话中的后续问题会保留历史记录中的上下文。
 
 ## 查询告警
 

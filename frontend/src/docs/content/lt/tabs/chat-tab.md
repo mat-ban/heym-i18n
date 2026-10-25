@@ -74,6 +74,17 @@ Klausykite įprasta kalba — "kas vyksta?", "kiek workflow šiuo metu yra aktyv
 
 Vykdymai, sustabdyti dėl [Human-in-the-Loop](../reference/human-in-the-loop.md) arba Codex peržiūros, yra pranešami kaip laukiančių, o ne kaip vykdomų. Tai yra tie patys duomenys, kaip aktyvių vykdymų ženklelis antraštėje, todėl Chat ir ženklelis niekada nesutampa. Užbaigtiems vykdymams klauskite apie nesenus vykdymus — tai skaito [Vykdymo istorija](../reference/execution-history.md).
 
+## Klausimai apie vykdymą
+
+Pasirinkite Workflow vykdymą [Execution History](../reference/execution-history.md#ask-ai) lange redaktoriuje arba All History rodinyje ir spustelėkite **Klausti AI** šalia dialogo lango pavadinimo. Chat atveria naują pokalbį su dviem lustais virš pranešimo laukelio:
+
+- **Workflow:** Workflow pavadinimas
+- **Execution:** pasirinkto vykdymo ID pirmieji simboliai
+
+Pašalinkite lustą naudodami jo **×**, kad jo neįtrauktumėte. Tada užduokite klausimą, pavyzdžiui, „kodėl šis vykdymas truko taip ilgai?“, „kas čia nepavyko?“ arba „ar galite tai ištaisyti?“. Likę lustai pridedami prie šio pranešimo su visais ID, todėl Chat tiesiogiai nuskaito vykdymo įvestis, išvestis ir mazgų pėdsakus, o ne ieško Workflow. Norėdami ištaisyti Workflow, Chat išsaugo, išbando ir patikrina pakeitimą, kaip aprašyta skyriuje [Workflow kūrimas](#workflow-kurimas).
+
+Išsiųstame pranešime lustai rodomi po jūsų klausimu. Jie priklauso tik tam pranešimui; tolesni klausimai tame pačiame pokalbyje išlaiko kontekstą iš istorijos.
+
 ## Klausimas apie įspėjimus
 
 Chat gali atsakyti į klausimus apie [įspėjimus](./alerts-tab.md), kuriuos esate nustatę:

@@ -57,6 +57,18 @@ Opening a workflow at `/workflows/{workflowId}/{executionId}` automatically brin
 - Debug a failed run by inspecting inputs and node outputs
 - Compare outputs across runs
 
+## Ask AI
+
+Both history dialogs have an **Ask AI** button (sparkle icon) next to their title. It opens the [Chat tab](../tabs/chat-tab.md#asking-about-a-run) in a new conversation with the workflow and the selected run attached as removable chips. Ask why the run was slow, what failed, or have Chat fix the workflow. Chat reads that exact run, including its per-node trace and errors.
+
+In the All History dialog, **Ask AI** appears only while a workflow run is selected; chat and assistant runs do not show it.
+
+## Run timeline
+
+In the run detail, the **Timeline** button (timer icon) next to **Expand All** swaps the **Steps** list for a span timeline. While the timeline shows, the same button reads **Logs**; click it to return to the list. In All History the button appears for workflow runs only. The timeline draws one bar per node at the time it started, so you can see which node took how long and which ones ran in parallel. Hover a bar for its duration; click it to open the same details inspector as the editor's [execution timeline](#execution-timeline-details). The view you pick stays while the dialog is open.
+
+Runs recorded before node start times were stored are laid out one after another by duration.
+
 ## Execution Highlights
 
 After a live run — or after **Bring to Canvas** — a dismissible **Execution Highlights** popup appears in the **top-right of the Canvas**. It's a quick way to see *what each node produced*, listed top-to-bottom in execution order. Close it with the **✕**; it reopens on the next run.
@@ -147,7 +159,7 @@ Use **Copy** next to Inputs or Outputs to copy the JSON to the clipboard.
 
 ## Execution timeline details
 
-When the editor's **Execution Log** is open, click the timer button to show the execution timeline. Select a span to open an inline details inspector that takes over the rows area. It shows the selected step's status, duration, attempt count, retry information, errors, trace ID, and a compact output preview. Object and array outputs use the same `JsonTree` viewer as the rest of the Debug panel; scalar values use a text preview. When a step outputs images (Playwright screenshots, generated images, image files), they appear as thumbnails above the output, and the JSON shows a short placeholder in place of the raw base64. Click a thumbnail to open it in a lightbox; the arrow buttons or ←/→ keys step through every image in the run, with a counter such as `2 / 5`. Use **Open trace** for LLM and Agent spans when a trace ID is available.
+When the editor's **Execution Log** is open, click the timer button to show the execution timeline. Select a span to open an inline details inspector that takes over the rows area. It shows the selected step's status, duration, attempt count, retry information, errors, trace ID, and a compact output preview. Object and array outputs use the same `JsonTree` viewer as the rest of the Debug panel; scalar values use a text preview. When a step's output holds images anywhere in it (Playwright screenshots, generated images, image files, or base64 images in a request body), they appear as thumbnails above the output, and the JSON shows a short placeholder in place of the raw base64. Click a thumbnail to open it in a lightbox; the arrow buttons or ←/→ keys step through every image in the run, with a counter such as `2 / 5`. Use **Open trace** for LLM and Agent spans when a trace ID is available.
 
 ## Mobile node detail
 

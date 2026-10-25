@@ -82,6 +82,17 @@ oczekujące na użytkownika, a nie jako uruchomione. Są to te same dane co plak
 dzięki czemu Chat i plakietka nigdy nie są ze sobą sprzeczne. W przypadku uruchomień, które już się zakończyły, należy zapytać
 o ostatnie wykonania — są one odczytywane z [Execution History](../reference/execution-history.md).
 
+## Pytania o wykonanie
+
+Wybierz wykonanie Workflow w [Execution History](../reference/execution-history.md#ask-ai), w edytorze lub w All History, i kliknij **Zapytaj AI** obok tytułu okna dialogowego. Chat otwiera nową konwersację z dwoma chipami nad polem wiadomości:
+
+- **Workflow:** nazwę Workflow
+- **Execution:** początkowe znaki identyfikatora wybranego wykonania
+
+Usuń chip za pomocą jego **×**, aby go pominąć. Następnie zadaj pytanie, na przykład „dlaczego to wykonanie trwało tak długo?”, „co tutaj zawiodło?” lub „czy możesz to naprawić?”. Pozostałe chipy zostaną dołączone do tej wiadomości z pełnymi identyfikatorami, dzięki czemu Chat bezpośrednio odczyta wejścia, wyjścia i ślad węzłów wykonania zamiast szukać Workflow. Aby naprawić Workflow, Chat zapisuje, testuje i weryfikuje zmianę, jak opisano w [Tworzenie workflow](#tworzenie-workflow).
+
+Wysłana wiadomość wyświetla chipy pod Twoim pytaniem. Należą one wyłącznie do tej wiadomości; kolejne pytania w tej samej konwersacji zachowują kontekst z historii.
+
 ## Pytania o alerty
 
 Chat potrafi odpowiadać na pytania dotyczące zdefiniowanych [alertów](./alerts-tab.md):

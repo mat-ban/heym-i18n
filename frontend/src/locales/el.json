@@ -478,7 +478,14 @@
     "extract": "Εξαγωγή",
     "mySubWorkflow": "Το Sub-Workflow μου",
     "moreNodes": "+{count} ακόμη",
-    "runToNode": "Εκτέλεση έως {label}"
+    "runToNode": "Εκτέλεση έως {label}",
+    "aiButtonTitle": "Αλλάξτε ή διορθώστε αυτόν τον κόμβο με τον βοηθό AI",
+    "editNodeWithAi": "Επεξεργασία του {label} με AI",
+    "modifyingNode": "Τροποποίηση κόμβου:",
+    "hasNodeOutput": "(Έχει έξοδο κόμβου)",
+    "closeNodeFocus": "Κλείστε την εστίαση στον κόμβο και επεξεργαστείτε ολόκληρο το Workflow",
+    "nodeFocusRan": "Αυτός ο κόμβος εκτελέστηκε. Το AI βλέπει την τελευταία έξοδο και το σφάλμα του και διαβάζει την τεκμηρίωση του κόμβου.",
+    "nodeFocusNoOutput": "Αυτός ο κόμβος δεν έχει έξοδο στην τρέχουσα εκτέλεση. Εκτελέστε τον πρώτα αν το AI πρέπει να δει την έξοδό του. Το AI διαβάζει την τεκμηρίωση του κόμβου και στις δύο περιπτώσεις."
   },
   "nodes": {
     "title": "Κόμβοι",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Επεξεργασία μηνύματος σε ουρά",
     "deleteQueuedMessage": "Διαγραφή μηνύματος σε αναμονή",
     "startedByMcp": "Ξεκίνησε από MCP client",
-    "newChatTitle": "Νέο chat"
+    "newChatTitle": "Νέο chat",
+    "subtitle": "Εκτελέστε Workflows και κάντε ερωτήσεις",
+    "modelsLoadFailedDisabled": "Η λίστα μοντέλων αυτών των διαπιστευτηρίων δεν μπόρεσε να φορτωθεί. Το Chat παραμένει απενεργοποιημένο μέχρι να μπορέσει να ληφθεί ένα μοντέλο."
   },
   "teams": {
     "title": "Teams",
@@ -1672,7 +1681,10 @@
       "error": "Σφάλμα",
       "cached": "Από cache",
       "cancelled": "Ακυρώθηκε"
-    }
+    },
+    "askAi": "Ρωτήστε το AI",
+    "askAiTitle": "Ρωτήστε τον βοηθό Chat για αυτήν την εκτέλεση",
+    "noNodeSpans": "Δεν καταγράφηκαν spans κόμβων για αυτήν την εκτέλεση."
   },
   "portal": {
     "loadingPortal": "Φόρτωση portal...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Εγγραφές σελίδας λεπτομερειών",
     "detailPageRecordsHelp": "Οι τιμές ?record= που δέχεται αυτός ο πίνακας εργαλείων όταν ανοίγει από σύνδεσμο γραμμής. Οτιδήποτε άλλο απορρίπτεται πριν εκτελεστεί ένα widget.",
     "unreachableDashboard": "Ένας πίνακας εργαλείων που δεν μπορείτε να ανοίξετε",
-    "runWorkflow": "Εκτέλεση ενός Workflow"
+    "runWorkflow": "Εκτέλεση ενός Workflow",
+    "openWorkflowNewTab": "Άνοιγμα του Workflow σε νέα καρτέλα",
+    "hitlFilterHelp": "Εμφάνιση αξιολογήσεων από όλα τα Workflows ή μόνο από ένα. Παραθέτει τα Workflows που μπορείτε να ανοίξετε, δικά σας ή κοινόχρηστα με εσάς, με ένα βήμα που περιμένει άνθρωπο.",
+    "hitlSourcesLoadFailed": "Τα Workflows σας δεν μπόρεσαν να φορτωθούν."
   },
   "drive": {
     "filesCount": "({count} αρχεία)",

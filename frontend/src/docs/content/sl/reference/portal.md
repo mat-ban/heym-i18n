@@ -51,6 +51,7 @@ Vhodna polja izhajajo iz [Input](../nodes/input-node.md) vozlišč. API izloči 
 ## Avtentikacija in seje
 
 - **WorkflowPortalUser**: Ime uporabnika/geslo za vsak workflow (ko je avtentikacija omogočena)
+- **Odstranitev zadnjega uporabnika**: Pri omogočenem portalu brisanje zadnjega uporabnika portala naredi portal znova javen; nastavitveno pogovorno okno najprej zahteva potrditev
 - **PortalSession**: Sejni tokeni z 168-urno veljavnostjo
 - **Omejevanje hitrosti**: 3 neuspešni poskusi prijave → 24-urna prepoved za vsak workflow+IP
 - Potekle seje se očistijo s cron nalogo

@@ -258,7 +258,14 @@
     "unsavedChanges": "Canvis no desats",
     "unsavedChangesLeaveConfirm": "Teniu canvis no desats. Segur que voleu sortir?",
     "zoomIn": "Ampliar",
-    "zoomOut": "Reduir"
+    "zoomOut": "Reduir",
+    "aiButtonTitle": "Canviar o corregir aquest node amb l'assistent d'IA",
+    "editNodeWithAi": "Edita {label} amb IA",
+    "modifyingNode": "Modificant el node:",
+    "hasNodeOutput": "(Té sortida del node)",
+    "closeNodeFocus": "Tancar el focus del node i editar tot el Workflow",
+    "nodeFocusRan": "Aquest node s'ha executat. La IA en veu l'última sortida i l'error, i llegeix la documentació del node.",
+    "nodeFocusNoOutput": "Aquest node no té sortida a l'execució actual. Executeu-lo primer si la IA ha de veure'n la sortida. La IA llegeix la documentació del node en tots dos casos."
   },
   "activeWorkflows": {
     "activeRefreshFailed": "{count} actius · L'última actualització ha fallat",
@@ -514,7 +521,9 @@
     "suggestion2": "Executar el meu Workflow d'informe diari",
     "suggestion3": "Quins workflows programats s'executen aquesta setmana?",
     "suggestion4": "Afegir una tasca al meu tauler Kanban",
-    "suggestion5": "Què hi ha emmagatzemat a les meves variables globals?"
+    "suggestion5": "Què hi ha emmagatzemat a les meves variables globals?",
+    "subtitle": "Executar Workflows i fer preguntes",
+    "modelsLoadFailedDisabled": "No s'ha pogut carregar la llista de models d'aquesta credencial. El xat continua desactivat fins que es pugui obtenir un model."
   },
   "credentials": {
     "accessVia": "Accés via",
@@ -862,7 +871,10 @@
     "detailPageRecords": "Registres de la pàgina de detalls",
     "detailPageRecordsHelp": "Els valors ?record= que aquest tauler accepta quan un enllaç de fila l'obre. Qualsevol altre valor es rebutja abans d'executar un giny.",
     "unreachableDashboard": "Un tauler que no podeu obrir",
-    "runWorkflow": "Executar un Workflow"
+    "runWorkflow": "Executar un Workflow",
+    "openWorkflowNewTab": "Obre el Workflow en una pestanya nova",
+    "hitlFilterHelp": "Mostra les revisions de tots els Workflows o d'un de sol. Llista els Workflows que podeu obrir, propis o compartits amb vós, amb un pas a l'espera d'una persona.",
+    "hitlSourcesLoadFailed": "No s'han pogut carregar els vostres Workflows."
   },
   "docs": {
     "askAnything": "Pregunteu qualsevol cosa sobre la documentació",
@@ -1213,7 +1225,10 @@
     "pendingHumanReview": "Revisió humana pendent",
     "pendingReview": "Revisió pendent",
     "previousAttemptError": "Error de l'intent anterior:",
-    "recoveredFailed": "La recuperació ha fallat després d'un reinici del servidor."
+    "recoveredFailed": "La recuperació ha fallat després d'un reinici del servidor.",
+    "askAi": "Pregunta a la IA",
+    "askAiTitle": "Preguntar a l'assistent de Chat sobre aquesta execució",
+    "noNodeSpans": "No s'ha registrat cap span de node per a aquesta execució."
   },
   "logs": {
     "all": "Tots",

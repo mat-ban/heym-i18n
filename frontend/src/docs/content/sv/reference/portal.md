@@ -51,6 +51,7 @@ Inmatningsfält kommer från [Input](../nodes/input-node.md)-noder. API:et extra
 ## Autentisering och sessioner
 
 - **WorkflowPortalUser**: Användarnamn/lösenord per workflow (när autentisering är aktiverad)
+- **Ta bort den sista användaren**: När portalen är aktiverad gör borttagning av den sista portalanvändaren portalen offentlig igen; inställningsdialogen ber om bekräftelse först
 - **PortalSession**: Sessionstoken med 168 timmars TTL
 - **Hastighetsbegränsning**: 3 misslyckade inloggningsförsök → 24 timmars ban per workflow+IP
 - Utgångna sessioner rensas av ett cron-jobb

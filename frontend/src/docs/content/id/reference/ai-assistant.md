@@ -13,6 +13,8 @@ Untuk pertanyaan dokumentasi di luar editor, gunakan [Chat with Heym](./chat-wit
 
 Tekan `Ctrl + I` / `Cmd + I` di mana saja di editor untuk membuka atau menutup panel — pintasan ini berfungsi bahkan saat input teks sedang difokuskan. Lihat [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Untuk bekerja pada satu node, arahkan kursor ke atasnya di canvas dan klik **AI** di atasnya. Panel terbuka berfokus pada node tersebut. Lihat [Mengubah Satu Node](#changing-one-node).
+
 ## Menutup Panel
 
 Klik tombol **X**, tekan `Ctrl + I` / `Cmd + I`, atau alihkan tombol **AI** di toolbar panel Debug. Header berfungsi untuk menyeret panel; bukan untuk menutupnya.
@@ -60,6 +62,33 @@ Saat respons AI berisi blok JSON workflow yang valid (dengan `nodes` dan opsiona
 4. Menandai workflow sebagai belum disimpan
 
 Jika penguraian gagal, tombol **Retry** muncul untuk menghasilkan ulang respons.
+
+## Mengubah Satu Node
+
+Arahkan kursor ke node di canvas dan klik **AI** di atasnya. Panel terbuka dalam mode Agent, berfokus pada node tersebut, dan menunjukkan node mana yang sedang diubahnya:
+
+| Node memiliki... | Panel menunjukkan |
+|---|---|
+| Tidak ada hasil dalam eksekusi saat ini | **Modifying Node:** dalam baris ringkas dengan ikon dan nama node. Asisten mengedit hanya dari konfigurasi node; jalankan node terlebih dahulu jika harus melihat output |
+| Ada hasil dalam eksekusi saat ini | **Modifying Node: (Has Node Output)** di atas node itu sendiri: ikon, nama dan tipe, status dan durasi terakhir, serta kesalahan jika gagal. Asisten melihat output dan kesalahan tersebut saat mengedit node |
+
+Arahkan kursor ke label untuk melihat status panel saat ini.
+
+Dalam status apa pun, asisten juga membaca halaman dokumentasi node, yang ada di balik ikon buku di header node. Halaman ini digunakan untuk memahami opsi node dan menjawab pertanyaan tentangnya.
+
+Di bawah pesan, tiga opsi memulai permintaan:
+
+| Opsi | Fungsinya |
+|---|---|
+| **Change this node as ...** | Mengisi kotak pesan dengan *Ubah node ini menjadi* agar Anda dapat menyelesaikan kalimatnya |
+| **Fix error in this node ...** | Mengisi *Perbaiki kesalahan pada node ini.* Asisten membaca kesalahan node ini dari eksekusi terakhir |
+| **Other** | Memfokuskan kotak pesan kosong |
+
+Edit teks dan tekan **Send**. Asisten hanya mengembalikan node ini dan Heym memperbaruinya di tempat: node mempertahankan id, tipe, dan namanya, sehingga ekspresi seperti `$checkLinkedIn.result` di node lain tetap berfungsi. Node, koneksi, dan tata letak lain tidak berubah, dan **Undo** memulihkan konfigurasi sebelumnya.
+
+Jika permintaan tidak muat di dalam node, misalnya memerlukan tipe node lain atau node baru, asisten menyatakan apa yang harus diubah alih-alih mengedit. Tutup fokus node dengan **X** pada kartu node untuk mengedit seluruh workflow lagi. Menutup panel juga menghapus fokus.
+
+[Mode YOLO](#yolo-mode) berfungsi dengan node yang difokuskan: asisten mengubah node, menjalankan workflow, dan memperbaiki node hingga eksekusi berhasil. Dalam mode **Ask**, fokus memberi tahu asisten node mana yang menjadi pertanyaan Anda, dan canvas tidak diubah.
 
 ## YOLO Mode
 

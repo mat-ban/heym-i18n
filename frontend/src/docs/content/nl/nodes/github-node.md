@@ -213,6 +213,11 @@ Als het bestand al bestaat, haalt Heym automatisch de huidige SHA op voordat het
 **Per Page** (1–100). Heym vraagt één pagina met resultaten op; er is geen `page`-veld voor het ophalen
 van aanvullende pagina's binnen dezelfde operatie.
 
+
+### Return all pages
+
+Schakel **Return all pages** in zodat één run elke pagina volgt, te beginnen bij **Cursor** als die is ingesteld. Elke aanvraag vraagt 100 items, ongeacht de waarde van **Per Page**. Het knooppunt stopt na ongeveer 1.000 items (of 100 aanvragen): issue-objecten zijn elk ongeveer 6 KB groot, dus een hogere limiet zou zeer grote knooppuntuitvoer opleveren. Stopt het eerder, dan geeft het terug wat het heeft met `has_more: true` en een `next_cursor` in plaats van een fout te veroorzaken, en u kunt doorgaan door die cursor aan de volgende run door te geven. Het stoppen van de Workflow of het bereiken van de Workflow-timeout beëindigt het ophalen tussen pagina's.
+
 ## Output
 
 De exacte vorm is afhankelijk van de geselecteerde operatie. Gangbare velden zijn:

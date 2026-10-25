@@ -51,6 +51,7 @@ Portal Workflow가 [Human-in-the-Loop](./human-in-the-loop.md)가 활성화된 [
 ## 인증 및 세션
 
 - **WorkflowPortalUser**: Workflow별 사용자 이름/비밀번호(인증이 활성화된 경우)
+- **마지막 사용자 제거**: 포털이 활성화된 상태에서 마지막 포털 사용자를 삭제하면 포털이 다시 공개 상태로 전환됩니다. 설정 대화상자에서 먼저 확인을 요청합니다
 - **PortalSession**: TTL 168시간의 세션 Token
 - **속도 제한**: 로그인 3회 실패 → Workflow+IP별 24시간 차단
 - 만료된 세션은 Cron 작업으로 정리됩니다

@@ -478,7 +478,14 @@
     "extract": "Izdvoji",
     "mySubWorkflow": "Moj pod-workflow",
     "moreNodes": "+{count} više",
-    "runToNode": "Pokreni do {label}"
+    "runToNode": "Pokreni do {label}",
+    "aiButtonTitle": "Promijenite ili popravite ovaj čvor pomoću AI asistenta",
+    "editNodeWithAi": "Uredi {label} pomoću AI-ja",
+    "modifyingNode": "Izmjena čvora:",
+    "hasNodeOutput": "(Ima izlaz čvora)",
+    "closeNodeFocus": "Zatvorite fokus na čvor i uredite cijeli Workflow",
+    "nodeFocusRan": "Ovaj je čvor pokrenut. AI vidi njegov zadnji izlaz i pogrešku te čita dokumentaciju čvora.",
+    "nodeFocusNoOutput": "Ovaj čvor nema izlaz u trenutačnom pokretanju. Prvo ga pokrenite ako AI treba vidjeti njegov izlaz. AI u oba slučaja čita dokumentaciju čvora."
   },
   "nodes": {
     "title": "Čvorovi",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Uredi poruku u redu čekanja",
     "deleteQueuedMessage": "Izbriši poruku u redu čekanja",
     "startedByMcp": "Pokrenuo MCP klijent",
-    "newChatTitle": "Novi Chat"
+    "newChatTitle": "Novi Chat",
+    "subtitle": "Pokrećite Workflows i postavljajte pitanja",
+    "modelsLoadFailedDisabled": "Popis modela za ove vjerodajnice nije moguće učitati. Chat ostaje onemogućen dok se model ne može dohvatiti."
   },
   "teams": {
     "title": "Timovi",
@@ -1672,7 +1681,10 @@
       "error": "Greška",
       "cached": "Iz predmemorije",
       "cancelled": "Otkazano"
-    }
+    },
+    "askAi": "Pitaj AI",
+    "askAiTitle": "Pitajte Chat asistenta o ovom pokretanju",
+    "noNodeSpans": "Za ovo pokretanje nisu zabilježeni spanovi čvorova."
   },
   "portal": {
     "loadingPortal": "Učitavanje portala...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Zapisi stranice s pojedinostima",
     "detailPageRecordsHelp": "Vrijednosti ?record= koje ova nadzorna ploča prihvaća kada je veza retka otvori. Sve ostalo se odbija prije pokretanja widgeta.",
     "unreachableDashboard": "Nadzorna ploča koju ne možete otvoriti",
-    "runWorkflow": "Pokreni Workflow"
+    "runWorkflow": "Pokreni Workflow",
+    "openWorkflowNewTab": "Otvori Workflow u novoj kartici",
+    "hitlFilterHelp": "Prikaži preglede iz svih Workflows ili samo iz jednog. Navodi Workflows koje možete otvoriti – vaše ili podijeljene s vama – s korakom koji čeka osobu.",
+    "hitlSourcesLoadFailed": "Vaše Workflows nije moguće učitati."
   },
   "drive": {
     "filesCount": "({count} datoteka)",

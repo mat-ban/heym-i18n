@@ -79,6 +79,17 @@ Zeptejte se běžným jazykem — „co běží?", „kolik workflow je právě 
 
 Spuštění pozastavená pro [Human-in-the-Loop](../reference/human-in-the-loop.md) nebo kontrolu Codex jsou hlášena jako čekající na vás, ne jako běžící. Jsou to stejná data jako odznak aktivních spuštění v záhlaví, takže Chat a odznak se nikdy nerozcházejí. U spuštění, která již skončila, se místo toho zeptejte na nedávná spuštění — to čte [Execution History](../reference/execution-history.md).
 
+## Dotazy ke spuštění
+
+Vyberte spuštění Workflow v [Execution History](../reference/execution-history.md#ask-ai), v editoru nebo v All History, a klikněte na **Zeptat se AI** vedle názvu dialogu. Chat otevře novou konverzaci se dvěma čipy nad polem zprávy:
+
+- **Workflow:** název Workflow
+- **Execution:** prvních několik znaků ID vybraného spuštění
+
+Čip odeberete jeho **×**, pokud jej chcete vynechat. Poté položte otázku, například „proč toto spuštění trvalo tak dlouho?“, „co zde selhalo?“ nebo „můžete to opravit?“. Zbývající čipy se k této zprávě připojí s úplnými ID, takže Chat přímo čte vstupy, výstupy a trace jednotlivých uzlů spuštění namísto hledání Workflow. K opravě Workflow Chat změnu uloží, otestuje a ověří, jak je popsáno v [Vytváření workflow](#vytvareni-workflow).
+
+Odeslaná zpráva zobrazuje čipy pod vaší otázkou. Patří pouze k této zprávě; navazující otázky ve stejné konverzaci si zachovají kontext z historie.
+
 ## Dotaz na alerty
 
 Chat umí odpovídat na otázky o [alerech](./alerts-tab.md), která jste definovali:

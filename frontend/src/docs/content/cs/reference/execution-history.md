@@ -57,6 +57,18 @@ Otevření workflow na adrese `/workflows/{workflowId}/{executionId}` automatick
 - Ladění neúspěšného běhu kontrolou vstupů a výstupů uzlů
 - Porovnání výstupů napříč běhy
 
+## Zeptat se AI
+
+Oba dialogy historie mají vedle názvu tlačítko **Zeptat se AI** (ikona jiskry). Otevře [kartu Chat](../tabs/chat-tab.md#asking-about-a-run) v nové konverzaci s přiloženým workflow a vybraným spuštěním jako odnímatelnými čipy. Zeptejte se, proč byl běh pomalý, co selhalo, nebo nechte Chat workflow opravit. Chat čte přesně toto spuštění, včetně jeho trasování a chyb po uzlech.
+
+V dialogu All History se **Zeptat se AI** zobrazuje pouze při vybraném spuštění workflow; běhy chatu a asistenta jej nezobrazují.
+
+## Časová osa běhu
+
+V detailu spuštění tlačítko **Časová osa** (ikona stopek) vedle **Rozbalit vše** vymění seznam **Kroky** za časovou osu spanů. Když se časová osa zobrazuje, stejné tlačítko nese nápis **Protokoly**; kliknutím se vrátíte k seznamu. V All History se tlačítko zobrazuje pouze pro běhy workflow. Časová osa vykresluje jeden pruh pro každý uzel v čase jeho spuštění, takže vidíte, který uzel trval jak dlouho a které běžely paralelně. Přejetím přes pruh zobrazíte dobu trvání; kliknutím otevřete stejný inspektor podrobností jako [časová osa spuštění](#execution-timeline-details) v editoru. Zvolené zobrazení zůstává aktivní, dokud je dialog otevřený.
+
+Spuštění zaznamenaná dříve, než byly ukládány časy spuštění uzlů, jsou řazena za sebou podle doby trvání.
+
 ## Přehledy spuštění
 
 Po živém běhu – nebo po **Bring to Canvas** – se v **pravém horním rohu plátna** zobrazí zavíratelné okno **Execution Highlights**. Je to rychlý způsob, jak zjistit, *co který uzel vytvořil*, seřazené shora dolů v pořadí provádění. Zavřete jej pomocí **✕**; při dalším běhu se znovu otevře.
@@ -146,7 +158,7 @@ Pomocí **Copy** vedle Inputs nebo Outputs zkopírujete JSON do schránky.
 
 ## Podrobnosti časové osy execution
 
-Když je v editoru otevřen **Execution Log**, kliknutím na tlačítko časovače zobrazíte časovou osu execution. Vyberte úsek pro otevření inline inspektoru podrobností, který převezme oblast řádků. Zobrazuje stav vybraného kroku, trvání, počet pokusů, informace o opakování, chyby, trace ID a kompaktní náhled výstupu. Výstupy objektů a polí používají stejný prohlížeč `JsonTree` jako zbytek panelu Debug; skalární hodnoty používají textový náhled. Když krok vydává obrázky (screenshoty Playwright, generované obrázky, obrazové soubory), zobrazí se jako náhledy nad výstupem a JSON zobrazuje krátký zástupný symbol místo surového base64. Kliknutím na náhled jej otevřete v lightboxu; tlačítka se šipkami nebo klávesy ←/→ procházejí všechny obrázky v běhu s počítadlem, jako je `2 / 5`. Použijte **Open trace** pro LLM a Agent spany, když je k dispozici trace ID.
+Když je v editoru otevřen **Execution Log**, kliknutím na tlačítko časovače zobrazíte časovou osu execution. Vyberte úsek pro otevření inline inspektoru podrobností, který převezme oblast řádků. Zobrazuje stav vybraného kroku, trvání, počet pokusů, informace o opakování, chyby, trace ID a kompaktní náhled výstupu. Výstupy objektů a polí používají stejný prohlížeč `JsonTree` jako zbytek panelu Debug; skalární hodnoty používají textový náhled. Když krok vydává obrázky (snímky obrazovky Playwright, generované obrázky, soubory obrázků nebo obrázky base64 v těle požadavku nalezené kdekoli ve výstupu), zobrazí se jako náhledy nad výstupem a JSON zobrazuje krátký zástupný symbol místo surového base64. Kliknutím na náhled jej otevřete v lightboxu; tlačítka se šipkami nebo klávesy ←/→ procházejí všechny obrázky v běhu s počítadlem, jako je `2 / 5`. Použijte **Open trace** pro LLM a Agent spany, když je k dispozici trace ID.
 ## Detail uzlu na mobilním zařízení
 
 V telefonu editor místo volného plátna zobrazuje přes celou obrazovku strom workflow. Klepnutím na uzel stromu se zaznamenaným výsledkem otevřete jeho spuštění jako detail přes celou obrazovku. Zobrazení nabízí samostatné karty **Input Data**, **Output Data** a **Errors**. Karta výstupu zobrazuje zaznamenaný výsledek a nabízí **Copy Output**; karta vstupu zobrazuje konfiguraci vybraného uzlu a karta chyb zobrazuje zaznamenanou chybu, pokud uzel selhal. Pomocí **Back to workflow** nebo tlačítka zavření se vrátíte do stromu.

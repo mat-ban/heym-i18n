@@ -166,7 +166,14 @@
     "unsavedChanges": "Cambios sin guardar",
     "unsavedChangesLeaveConfirm": "Tiene cambios sin guardar. ¿Está seguro de que desea salir?",
     "zoomIn": "Acercar",
-    "zoomOut": "Alejar"
+    "zoomOut": "Alejar",
+    "aiButtonTitle": "Cambiar o corregir este nodo con el asistente de IA",
+    "editNodeWithAi": "Editar {label} con IA",
+    "modifyingNode": "Modificando nodo:",
+    "hasNodeOutput": "(Con salida de nodo)",
+    "closeNodeFocus": "Cerrar el foco del nodo y editar todo el Workflow",
+    "nodeFocusRan": "Este nodo se ejecutó. La IA ve su última salida y su error, y lee la documentación del nodo.",
+    "nodeFocusNoOutput": "Este nodo no tiene salida en la ejecución actual. Ejecútelo primero si la IA debe ver su salida. La IA lee la documentación del nodo en ambos casos."
   },
   "analytics": {
     "p50Median": "P50 (Mediana)",
@@ -327,7 +334,9 @@
     "suggestion5": "¿Qué se almacena en mis variables globales?",
     "suggestion6": "¿Qué plantillas de workflow están disponibles?",
     "unpin": "Desanclar",
-    "unreadMessage": "Mensaje no leído"
+    "unreadMessage": "Mensaje no leído",
+    "subtitle": "Ejecutar Workflows y hacer preguntas",
+    "modelsLoadFailedDisabled": "No se pudo cargar la lista de modelos de esta credencial. El chat permanece desactivado hasta que se pueda obtener un modelo."
   },
   "alerts": {
     "wizard": {
@@ -796,7 +805,10 @@
     "detailPageRecords": "Registros de página de detalles",
     "detailPageRecordsHelp": "Los valores ?record= que este panel acepta cuando un enlace de fila lo abre. Cualquier otro valor se rechaza antes de ejecutar un widget.",
     "unreachableDashboard": "Un panel que no puede abrir",
-    "runWorkflow": "Ejecutar un Workflow"
+    "runWorkflow": "Ejecutar un Workflow",
+    "openWorkflowNewTab": "Abrir el Workflow en una pestaña nueva",
+    "hitlFilterHelp": "Mostrar las revisiones de todos los Workflows o de uno solo. Muestra los Workflows que puede abrir, propios o compartidos con usted, que tienen un paso a la espera de una persona.",
+    "hitlSourcesLoadFailed": "No se pudieron cargar sus Workflows."
   },
   "docs": {
     "askAnything": "Consulte cualquier cosa sobre la documentación",
@@ -1213,7 +1225,10 @@
       "showAllRows": "Mostrar todas las filas",
       "showNode": "Mostrar {label}",
       "spansCount": "{count} span | {count} spans"
-    }
+    },
+    "askAi": "Preguntar a la IA",
+    "askAiTitle": "Consultar al asistente de Chat sobre esta ejecución",
+    "noNodeSpans": "No se registraron spans de nodo para esta ejecución."
   },
   "logs": {
     "all": "Todos",

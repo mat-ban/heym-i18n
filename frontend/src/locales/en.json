@@ -478,7 +478,14 @@
     "extract": "Extract",
     "mySubWorkflow": "My Sub-Workflow",
     "moreNodes": "+{count} more",
-    "runToNode": "Run to {label}"
+    "runToNode": "Run to {label}",
+    "aiButtonTitle": "Change or fix this node with the AI Assistant",
+    "editNodeWithAi": "Edit {label} with AI",
+    "modifyingNode": "Modifying Node:",
+    "hasNodeOutput": "(Has Node Output)",
+    "closeNodeFocus": "Close node focus and edit the whole workflow",
+    "nodeFocusRan": "This node ran. The AI sees its last output and error, and reads the node's documentation.",
+    "nodeFocusNoOutput": "This node has no output in the current run. Run it first if the AI should see its output. The AI reads the node's documentation either way."
   },
   "nodes": {
     "title": "Nodes",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Edit queued message",
     "deleteQueuedMessage": "Delete queued message",
     "startedByMcp": "Started by an MCP client",
-    "newChatTitle": "New chat"
+    "newChatTitle": "New chat",
+    "subtitle": "Run workflows and ask questions",
+    "modelsLoadFailedDisabled": "This credential's model list could not be loaded. Chat stays disabled until a model can be fetched."
   },
   "teams": {
     "title": "Teams",
@@ -1672,7 +1681,10 @@
       "error": "Error",
       "cached": "Cached",
       "cancelled": "Cancelled"
-    }
+    },
+    "askAi": "Ask AI",
+    "askAiTitle": "Ask the Chat assistant about this run",
+    "noNodeSpans": "No node spans recorded for this run."
   },
   "portal": {
     "loadingPortal": "Loading portal...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Detail page records",
     "detailPageRecordsHelp": "The ?record= values this dashboard accepts when a row link opens it. Anything else is refused before a widget runs.",
     "unreachableDashboard": "A dashboard you cannot open",
-    "runWorkflow": "Run a workflow"
+    "runWorkflow": "Run a workflow",
+    "openWorkflowNewTab": "Open workflow in a new tab",
+    "hitlFilterHelp": "Show reviews from every workflow, or only one. Lists the workflows you can open, yours or shared with you, that have a step waiting for a person.",
+    "hitlSourcesLoadFailed": "Your workflows could not be loaded."
   },
   "drive": {
     "filesCount": "({count} files)",

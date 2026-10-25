@@ -212,6 +212,11 @@ workflow in ref, nato čaka na to izvajanje.
 **Na stran** (1–100). Heym zahteva eno stran rezultatov; ni polja `page` za pridobivanje
 dodatnih strani v isti operaciji.
 
+
+### Return all pages
+
+Vklopite **Return all pages**, da eno izvajanje sledi vsem straneh, začenši pri **Cursor**, če je nastavljen. Vsaka zahteva zahteva 100 elementov, ne glede na vrednost **Per Page**. Vozlišče se ustavi po približno 1.000 elementih (ali 100 zahtevah): objekti issue merijo vsak okoli 6 KB, zato bi višja omejitev ustvarila zelo velike izhode vozlišča. Če se ustavi prej, namesto napake vrne, kar ima, z `has_more: true` in `next_cursor`, nadaljujete pa lahko tako, da ta kazalec posredujete naslednjemu izvajanju. Ustavitev Workflowa ali dosežena časovna omejitev Workflowa prekine pridobivanje med stranmi.
+
 ## Izhod
 
 Natančna oblika je odvisna od izbrane operacije. Pogosta polja vključujejo:

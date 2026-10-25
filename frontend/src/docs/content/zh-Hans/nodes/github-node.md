@@ -211,6 +211,11 @@ workflow 和 ref 新建的 `workflow_dispatch` 运行，然后等待该次运行
 `List Organization Repositories`、`List User Repositories` 和 `Get User Repositories` 支持
 **Per Page**（1–100）。Heym 仅请求一页结果；同一操作中没有用于获取更多页面的 `page` 字段。
 
+
+### Return all pages
+
+开启 **Return all pages** 后，一次运行会遍历每一页；如果设置了 **Cursor**，则从该位置开始。无论 **Per Page** 为何值，每个请求都会获取 100 项。节点在约 1,000 项（或 100 个请求）后停止：issue 对象每个约 6 KB，更高的上限会产生非常大的节点输出。提前停止时，它不会报错，而是返回已获取的内容，并附带 `has_more: true` 和 `next_cursor`，您可以将该 Cursor 传给下一次运行以继续。停止 Workflow 或达到 Workflow 超时会在页与页之间结束获取。
+
 ## Output
 
 具体结构取决于所选操作。常见字段包括：

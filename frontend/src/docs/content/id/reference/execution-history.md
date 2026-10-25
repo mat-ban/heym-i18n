@@ -55,6 +55,18 @@ Membuka Workflow pada `/workflows/{workflowId}/{executionId}` secara otomatis me
 - Men-debug eksekusi yang gagal dengan memeriksa input dan output Node
 - Membandingkan output antar eksekusi
 
+## Tanya AI
+
+Kedua dialog riwayat memiliki tombol **Tanya AI** (ikon kilau) di samping judulnya. Tombol ini membuka [tab Chat](../tabs/chat-tab.md#asking-about-a-run) dalam percakapan baru dengan workflow dan eksekusi yang dipilih terlampir sebagai chip yang dapat dilepas. Tanyakan mengapa eksekusi lambat, apa yang gagal, atau minta Chat memperbaiki workflow. Chat membaca eksekusi yang tepat itu, termasuk jejak dan kesalahan per node.
+
+Dalam dialog All History, **Tanya AI** hanya muncul saat eksekusi workflow dipilih; eksekusi chat dan asisten tidak menampilkannya.
+
+## Linimasa eksekusi
+
+Dalam detail eksekusi, tombol **Linimasa** (ikon stopwatch) di samping **Perluas Semua** menukar daftar **Langkah** dengan linimasa span. Saat linimasa ditampilkan, tombol yang sama bertuliskan **Log**; klik untuk kembali ke daftar. Di All History tombol ini hanya muncul untuk eksekusi workflow. Linimasa menggambar bilah per node pada saat dimulai, sehingga Anda dapat melihat node mana yang memakan waktu berapa lama dan mana yang berjalan secara paralel. Arahkan kursor ke bilah untuk melihat durasinya; klik untuk membuka inspektur detail yang sama dengan [linimasa eksekusi](#execution-timeline-details) editor. Tampilan yang Anda pilih tetap aktif selama dialog terbuka.
+
+Eksekusi yang direkam sebelum waktu mulai node disimpan disusun satu demi satu berdasarkan durasi.
+
 ## Execution Highlights
 
 Setelah eksekusi langsung — atau setelah **Bring to Canvas** — popup **Execution Highlights** yang dapat ditutup akan muncul di **pojok kanan atas Canvas**. Ini adalah cara cepat untuk melihat *apa yang dihasilkan setiap Node*, ditampilkan dari atas ke bawah sesuai urutan eksekusi. Tutup dengan **✕**; popup akan muncul kembali pada eksekusi berikutnya.
@@ -144,7 +156,7 @@ Gunakan **Copy** di samping Inputs atau Outputs untuk menyalin JSON ke clipboard
 
 ## Detail timeline execution
 
-Ketika **Execution Log** editor terbuka, klik tombol timer untuk menampilkan timeline execution. Pilih sebuah span untuk membuka inspector detail inline yang mengambil alih area baris. Inspector menampilkan status langkah yang dipilih, durasi, jumlah percobaan, informasi retry, error, trace ID, dan pratinjau output yang ringkas. Output objek dan array menggunakan viewer `JsonTree` yang sama seperti bagian lain dari panel Debug; nilai skalar menggunakan pratinjau teks. Ketika sebuah langkah menghasilkan gambar (screenshot Playwright, gambar yang dihasilkan, file gambar), gambar tersebut muncul sebagai thumbnail di atas output, dan JSON menampilkan placeholder singkat sebagai pengganti base64 mentah. Klik thumbnail untuk membukanya di lightbox; tombol panah atau tombol ←/→ menelusuri setiap gambar dalam run, dengan penghitung seperti `2 / 5`. Gunakan **Open trace** untuk span LLM dan Agent ketika trace ID tersedia.
+Ketika **Execution Log** editor terbuka, klik tombol timer untuk menampilkan timeline execution. Pilih sebuah span untuk membuka inspector detail inline yang mengambil alih area baris. Inspector menampilkan status langkah yang dipilih, durasi, jumlah percobaan, informasi retry, error, trace ID, dan pratinjau output yang ringkas. Output objek dan array menggunakan viewer `JsonTree` yang sama seperti bagian lain dari panel Debug; nilai skalar menggunakan pratinjau teks. Ketika sebuah langkah menghasilkan gambar (tangkapan layar Playwright, gambar yang dihasilkan, file gambar, atau gambar base64 dalam isi permintaan, yang ditemukan di mana saja dalam output), gambar tersebut muncul sebagai thumbnail di atas output, dan JSON menampilkan placeholder singkat sebagai pengganti base64 mentah. Klik thumbnail untuk membukanya di lightbox; tombol panah atau tombol ←/→ menelusuri setiap gambar dalam run, dengan penghitung seperti `2 / 5`. Gunakan **Open trace** untuk span LLM dan Agent ketika trace ID tersedia.
 ## Detail node seluler
 
 Pada ponsel, editor menampilkan pohon Workflow layar penuh alih-alih kanvas bebas. Ketuk Node pohon yang memiliki hasil terekam untuk membuka eksekusinya sebagai detail layar penuh. Tampilan ini menyediakan tab **Input Data**, **Output Data**, dan **Errors** yang terpisah. Tab output menampilkan hasil yang terekam dan menyediakan **Copy Output**; tab input menampilkan konfigurasi Node yang dipilih, dan tab errors menampilkan error yang terekam saat Node gagal. Gunakan **Back to workflow** atau tombol tutup untuk kembali ke pohon.

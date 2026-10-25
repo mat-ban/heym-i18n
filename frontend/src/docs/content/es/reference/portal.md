@@ -51,6 +51,7 @@ Los campos de entrada provienen de los nodos [Input](../nodes/input-node.md). La
 ## Autenticación y sesiones
 
 - **WorkflowPortalUser**: Nombre de usuario/contraseña por workflow (cuando la autenticación está habilitada)
+- **Eliminar el último usuario**: Con el portal habilitado, eliminar el último usuario del portal hace que el portal vuelva a ser público; el cuadro de diálogo de configuración solicita confirmación primero
 - **PortalSession**: Tokens de sesión con TTL de 168 horas
 - **Limitación de tasa**: 3 intentos de inicio de sesión fallidos → prohibición de 24 h por workflow+IP
 - Las sesiones expiradas se limpian mediante un cron job

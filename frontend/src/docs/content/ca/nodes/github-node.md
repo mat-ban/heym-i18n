@@ -211,6 +211,11 @@ Si el fitxer ja existeix, Heym obté el SHA actual automàticament abans d'actua
 `List Organization Repositories`, `List User Repositories` i `Get User Repositories` admeten
 **Per Page** (1–100). Heym sol·licita una pàgina de resultats; no hi ha cap camp `page` per obtenir
 pàgines addicionals en la mateixa operació.
+
+### Return all pages
+
+Activeu **Return all pages** perquè una execució segueixi totes les pàgines, començant a **Cursor** si està definit. Cada sol·licitud demana 100 elements, independentment del valor de **Per Page**. El node s'atura després d'uns 1.000 elements (o 100 sol·licituds): els objectes issue pesen uns 6 KB cadascun, de manera que un límit més alt produiria sortides de node molt grans. Si s'atura abans, retorna el que ha obtingut amb `has_more: true` i un `next_cursor` en lloc de generar un error, i podeu continuar passant aquest cursor a l'execució següent. Aturar el workflow o assolir-ne el temps d'espera acaba l'obtenció entre pàgines.
+
 ## Sortida
 
 La forma exacta depèn de l'operació seleccionada. Els camps habituals inclouen:

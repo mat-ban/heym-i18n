@@ -51,6 +51,7 @@ Ievades lauki nāk no [Input](../nodes/input-node.md) node. API izgūst sākuma 
 ## Autentifikācija un sesijas
 
 - **WorkflowPortalUser**: Lietotājvārds/parole katram workflow (kad autentifikācija ir iespējota)
+- **Pēdējā lietotāja noņemšana**: Kad portāls ir iespējots, pēdējā portāla lietotāja dzēšana padara portālu atkal publisku; iestatījumu dialoglodziņš vispirms lūdz apstiprinājumu
 - **PortalSession**: Sesijas token ar 168 stundu TTL
 - **Ātruma ierobežošana**: 3 neveiksmīgi pieteikšanās mēģinājumi → 24h aizliegums katram workflow+IP
 - Beigušās sesijas tiek notīrītas ar cron job

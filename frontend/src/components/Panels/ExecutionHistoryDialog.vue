@@ -24,6 +24,9 @@ import {
   X,
 } from "lucide-vue-next";
 
+import ExecutionHistoryAskAiButton from "@/components/Panels/ExecutionHistoryAskAiButton.vue";
+import ExecutionHistoryTimeline from "@/components/Panels/ExecutionHistoryTimeline.vue";
+import ExecutionHistoryViewToggle from "@/components/Panels/ExecutionHistoryViewToggle.vue";
 import Button from "@/components/ui/Button.vue";
 import Dialog from "@/components/ui/Dialog.vue";
 import ImageLightbox from "@/components/ui/ImageLightbox.vue";
@@ -80,6 +83,8 @@ const searchActive = ref(false);
 const searchQuery = ref("");
 const searchInputRef = ref<HTMLInputElement | null>(null);
 const listRef = ref<HTMLDivElement | null>(null);
+/** Node section of the run detail: the log list or the span timeline. Kept while the dialog is open. */
+const nodeView = ref<"logs" | "timeline">("logs");
 let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 const SEARCH_DEBOUNCE_MS = 500;
 
@@ -284,6 +289,7 @@ watch(
       selectedStatus.value = undefined;
       searchActive.value = false;
       searchQuery.value = "";
+      nodeView.value = "logs";
       cancelScheduledSearchReload();
       delete document.body.dataset.heymOverlayEscapeTrap;
     }
@@ -724,10 +730,20 @@ function bringToCanvas(): void {
     :open="open"
     :title="$t('workflows.executionHistory')"
     size="5xl"
+    inline-header-actions
     :close-on-escape="!searchActive || !searchQuery"
     @close="emit('close')"
     @escape="handleDialogEscape"
   >
+    <template #header-actions>
+      <ExecutionHistoryAskAiButton
+        :workflow-id="workflowStore.currentWorkflow?.id"
+        :workflow-name="workflowStore.currentWorkflow?.name ?? ''"
+        :execution-id="selectedId"
+        @navigate="emit('close')"
+      />
+    </template>
+
     <!-- Top bar: count, filter, actions -->
     <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-3 sm:grid sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-3 mb-3 sm:mb-4 shrink-0">
       <p class="order-1 self-center flex shrink-0 items-center gap-2 text-base leading-none text-muted-foreground">
@@ -1098,36 +1114,50 @@ function bringToCanvas(): void {
             </div>
           </div>
 
-          <!-- Node Execution Logs -->
+          <!-- Steps -->
           <div
             v-if="nodeResults.length > 0"
             class="space-y-2"
           >
             <div class="flex items-center justify-between gap-2">
               <div class="text-sm font-semibold">
-                {{ $t('history.nodeExecutionLogs') }}
+                {{ $t('history.steps') }}
               </div>
-              <div class="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  class="text-xs h-6 px-2"
-                  @click="expandAll"
-                >
-                  {{ $t('history.expandAll') }}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  class="text-xs h-6 px-2"
-                  @click="collapseAll"
-                >
-                  {{ $t('history.collapseAll') }}
-                </Button>
+              <div class="flex items-center gap-1">
+                <ExecutionHistoryViewToggle v-model="nodeView" />
+                <template v-if="nodeView === 'logs'">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    class="text-xs h-6 px-2"
+                    @click="expandAll"
+                  >
+                    {{ $t('history.expandAll') }}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    class="text-xs h-6 px-2"
+                    @click="collapseAll"
+                  >
+                    {{ $t('history.collapseAll') }}
+                  </Button>
+                </template>
               </div>
             </div>
 
-            <div class="space-y-1">
+            <ExecutionHistoryTimeline
+              v-if="nodeView === 'timeline'"
+              :node-results="selectedEntry?.result?.node_results ?? []"
+              :total-time-ms="selectedEntry?.result?.execution_time_ms ?? 0"
+              :nodes="workflowStore.nodes"
+              :edges="workflowStore.edges"
+            />
+
+            <div
+              v-else
+              class="space-y-1"
+            >
               <div
                 v-for="node in displayNodeResults"
                 :key="node.displayKey"

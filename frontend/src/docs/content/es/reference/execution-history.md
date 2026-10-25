@@ -55,6 +55,18 @@ Abrir un workflow en `/workflows/{workflowId}/{executionId}` trae automáticamen
 - Depurar una ejecución fallida inspeccionando las entradas y las salidas de los nodos
 - Comparar salidas entre ejecuciones
 
+## Preguntar a la IA
+
+Ambos cuadros de diálogo de historial tienen un botón **Preguntar a la IA** (icono de destello) junto a su título. Abre la [pestaña Chat](../tabs/chat-tab.md#asking-about-a-run) en una nueva conversación con el workflow y la ejecución seleccionada adjunta como chips extraíbles. Pregunte por qué la ejecución fue lenta, qué falló o pida a Chat que corrija el workflow. Chat lee esa ejecución exacta, incluida su traza y errores por nodo.
+
+En el cuadro de diálogo All History, **Preguntar a la IA** aparece solo mientras se selecciona una ejecución de workflow; las ejecuciones de chat y asistente no lo muestran.
+
+## Línea de tiempo de ejecución
+
+En el detalle de la ejecución, el botón **Línea de tiempo** (icono de temporizador) junto a **Expandir todo** cambia la lista **Pasos** por una línea de tiempo de spans. Mientras se muestra la línea de tiempo, el mismo botón indica **Registros**; haga clic en él para volver a la lista. En All History el botón aparece solo para ejecuciones de workflow. La línea de tiempo dibuja una barra por nodo en el momento en que se inició, para ver qué nodo tardó cuánto tiempo y cuáles se ejecutaron en paralelo. Pase el cursor sobre una barra para ver su duración; haga clic en ella para abrir el mismo inspector de detalles que la [línea de tiempo de ejecución](#execution-timeline-details) del editor. La vista elegida se mantiene mientras el diálogo está abierto.
+
+Las ejecuciones registradas antes de que se almacenaran los tiempos de inicio de los nodos se disponen una tras otra por duración.
+
 ## Execution Highlights
 
 Tras una ejecución en vivo —o tras **Bring to Canvas**— aparece un popup descartable de **Execution Highlights** en la **esquina superior derecha del Canvas**. Es una forma rápida de ver *qué produjo cada nodo*, listado de arriba a abajo en orden de ejecución. Ciérrelo con la **✕**; se reabrirá en la siguiente ejecución.
@@ -140,7 +152,7 @@ Use **Copy** junto a Inputs u Outputs para copiar el JSON al portapapeles.
 
 ## Detalles de la línea temporal de ejecución
 
-Cuando el **Execution Log** del editor esté abierto, haga clic en el botón del temporizador para mostrar la línea temporal de ejecución. Seleccione un intervalo para abrir un inspector de detalles en línea que ocupa el área de las filas. Muestra el estado del paso seleccionado, la duración, el número de intentos, la información de reintento, los errores, el trace ID y una vista previa compacta de la salida. Las salidas de tipo objeto y array utilizan el mismo visor `JsonTree` que el resto del panel Debug; los valores escalares usan una vista previa de texto. Cuando un paso genera imágenes (capturas de Playwright, imágenes generadas, archivos de imagen), aparecen como miniaturas sobre la salida, y el JSON muestra un marcador de posición breve en lugar del base64 sin procesar. Haga clic en una miniatura para abrirla en un lightbox; los botones de flecha o las teclas ←/→ recorren todas las imágenes de la ejecución, con un contador como `2 / 5`. Use **Open trace** para los spans de LLM y Agent cuando haya un trace ID disponible.
+Cuando el **Execution Log** del editor esté abierto, haga clic en el botón del temporizador para mostrar la línea temporal de ejecución. Seleccione un intervalo para abrir un inspector de detalles en línea que ocupa el área de las filas. Muestra el estado del paso seleccionado, la duración, el número de intentos, la información de reintento, los errores, el trace ID y una vista previa compacta de la salida. Las salidas de tipo objeto y array utilizan el mismo visor `JsonTree` que el resto del panel Debug; los valores escalares usan una vista previa de texto. Cuando un paso genera imágenes (capturas de pantalla de Playwright, imágenes generadas, archivos de imagen o imágenes en base64 en el cuerpo de una solicitud, encontradas en cualquier parte de la salida), aparecen como miniaturas sobre la salida, y el JSON muestra un marcador de posición breve en lugar del base64 sin procesar. Haga clic en una miniatura para abrirla en un lightbox; los botones de flecha o las teclas ←/→ recorren todas las imágenes de la ejecución, con un contador como `2 / 5`. Use **Open trace** para los spans de LLM y Agent cuando haya un trace ID disponible.
 
 ## Detalle del nodo en móvil
 

@@ -13,6 +13,8 @@ Za vprašanja o dokumentaciji izven urejevalnika uporabite [Klepetajte z Heym](.
 
 Pritisnite `Ctrl + I` / `Cmd + I` kjerkoli v urejevalniku, da odprete ali zaprete ploščo — bližnjica deluje tudi, ko je fokus na besedilnem vnosu. Oglejte si [Bližnjice na tipkovnici](./keyboard-shortcuts.md).
 
+Za delo na posameznem vozlišču se z miško postavite nanj na canvasu in kliknite **AI** nad njim. Plošča se odpre osredotočena na to vozlišče. Glejte [Spreminjanje posameznega vozlišča](#changing-one-node).
+
 ## Zapiranje Plošče
 
 Kliknite gumb **X**, pritisnite `Ctrl + I` / `Cmd + I`, ali preklopite gumb **AI** v orodni vrstici Debug plošče. Glava premika ploščo; je ne zapre.
@@ -60,6 +62,33 @@ Ko odgovor AI vsebuje veljaven workflow JSON blok (z `nodes` in po potrebi `edge
 4. Označi workflow kot neshranjen
 
 Če analiza ne uspe, se prikaže gumb **Poskusi znova**, da se ponovno generira odgovor.
+
+## Spreminjanje posameznega vozlišča
+
+Postavite se z miško nad vozlišče na canvasu in kliknite **AI** nad njim. Plošča se odpre v načinu Agent, osredotočena na to vozlišče, in prikaže, katero vozlišče spreminja:
+
+| Vozlišče ima... | Plošča prikazuje |
+|---|---|
+| Brez rezultata v trenutnem zagonu | **Modifying Node:** v strnjeni vrstici z ikono in imenom vozlišča. Pomočnik ureja samo iz konfiguracije vozlišča; najprej zaženite vozlišče, če mora videti izhod |
+| Rezultat v trenutnem zagonu | **Modifying Node: (Has Node Output)** nad samim vozliščem: ikona, ime in vrsta, zadnji status in trajanje ter napaka, če je spodletelo. Pomočnik vidi ta izhod in napako pri urejanju vozlišča |
+
+Postavite se z miško nad oznako, da vidite, v katerem stanju je plošča.
+
+Ne glede na stanje plošče pomočnik prebere tudi stran z dokumentacijo vozlišča pod ikono knjige v glavi vozlišča. Uporablja jo za razumevanje možnosti vozlišča in odgovarjanje na vprašanja o njih.
+
+Pod sporočili tri možnosti začnejo zahtevo:
+
+| Možnost | Kaj počne |
+|---|---|
+| **Change this node as ...** | Izpolni polje za sporočilo s *Spremeni to vozlišče v*, da dokončate stavek |
+| **Fix error in this node ...** | Izpolni *Odpravi napako v tem vozlišču.* Pomočnik prebere napako tega vozlišča iz zadnjega zagona |
+| **Other** | Osredotoči prazno polje za sporočilo |
+
+Uredite besedilo in pritisnite **Send**. Pomočnik vrne samo to vozlišče in Heym ga posodobi na mestu: vozlišče ohrani svoj id, vrsto in ime, tako da izrazi, kot je `$checkLinkedIn.result` v drugih vozliščih, delujejo naprej. Druga vozlišča, povezave in postavitev se ne spremenijo, **Undo** pa obnovi prejšnjo konfiguracijo.
+
+Če zahteva ne ustreza vozlišču, na primer zahteva drugo vrsto vozlišča ali novo vozlišče, pomočnik namesto urejanja pove, kaj bi bilo treba spremeniti. Zaprite fokus vozlišča z **X** na kartici vozlišča, da znova uredite celoten workflow. Zaprtje plošče prav tako počisti fokus.
+
+[Način YOLO](#yolo-mode) deluje z osredotočenim vozliščem: pomočnik spremeni vozlišče, zažene workflow in popravlja vozlišče, dokler zagon ne uspe. V načinu **Ask** fokus pomočniku sporoča, o katerem vozlišču sprašujete, canvas pa ostane nespremenjen.
 
 ## YOLO Način
 

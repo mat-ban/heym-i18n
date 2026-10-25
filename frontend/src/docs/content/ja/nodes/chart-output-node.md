@@ -33,13 +33,17 @@
 | `valueField` | string | 数値として使用する行のキー（pie/bar/line/numeric/gauge） |
 | `series` | array | bar/line 用の任意の複数系列定義 `[{ "name": "Sent", "field": "sent" }]`（`valueField` を上書きします） |
 | `columns` | array | `table` 用の任意の列リスト（デフォルトは最初の行のキー） |
-| `statusColumn` | string | 色付きの[ステータスチップ](#status-chips)としてレンダリングされる任意の `table` カラム。表示されるカラムのいずれかである必要があります。 |
+| `statusColumn` | string | 色付きの[ステータスチップ](#status-chips)としてレンダリングされる任意の `table` カラム。表示されるカラムのいずれかである必要があります。 |。`linkColumn` を指定した場合は、リンクカラムとボタンのテキストも含まれます。
 | `statusTones` | object | デフォルトでカバーされないステータス値をトーン（`success`、`attention`、`failure`、`waiting`、`neutral`）に対応付ける任意のマップ |
+| `linkColumn` | string | セルに URL を含む任意の `table` カラムで、新しいタブで開く[リンクボタン](#link-buttons)として表示されます。表示されるカラムのいずれかである必要があります。 |
+| `linkLabel` | string | リンクボタンの任意のテキストです。空のままにすると、ボタンにはリンクアイコンのみが表示されます。 |
 | `xField` / `yField` | string | X 軸および Y 軸の数値に対応する行のキー（scatter） |
 | `min` / `max` | number | `gauge` の数値範囲（デフォルト `0` / `100`） |
 | `unit` | string | `numeric` または `gauge` の値の横に表示される任意の単位 |
 | `text` | string | `text` chart type 用の Markdown メッセージ。空欄にして `valueField` を設定すると、上流データから取得した動的メッセージをレンダリングします。 |
 | `title` | string | 任意のチャートタイトル |
+| `hitlWorkflowId` | string | `hitl` のみ。この Workflow のレビューだけを表示します。空のままにすると、ウィジェットはすべてのレビューを表示します。 |
+| `hitlNodeId` | string | `hitl` のみ。`hitlWorkflowId` を 1 つのステップに絞り込みます。人によるレビュー付きの Agent、または Slack の承認・ボタン・フォームのステップです。 |
 
 ## Chart types
 
@@ -51,7 +55,7 @@
 - **proportion** — パーセンテージ凡例付きで、割合ごとに分割された単一の水平バー（例：言語の内訳）。`labelField` + `valueField` を使用します。
 - **barGauge** — 赤→緑のグラデーションと値を持つ、行ごとの水平ゲージ（例：空きディスク容量）。`labelField` + `valueField` を使用し、任意で `unit` と `max`（デフォルトは最大の行値）を指定できます。
 - **text** — markdown メッセージ（例：「Last execution at 19:47」のようなステータスノート）。静的なメッセージの場合は `text` に markdown を記述するか、`text` を空欄にして `valueField` を設定すると、上流で生成された文字列をレンダリングします。見出し、太字/斜体、[リスト](../nodes/chart-output-node.md#interactive-task-lists)、リンク、インラインコードをサポートします。
-- **hitl** — 保留中のヒューマンレビューのカルーセルです。ヘッダーには `1/n pending` が表示され、左矢印は最初のカードで、右矢印は最後のカードで無効になります。Workflow 名をクリックすると、その実行がキャンバス上で開きます。**Approve**、**Request changes**、**Reject** で解決でき、ウィジェットタイトルの横にある履歴アイコンをクリックすると、同じページの履歴ダイアログでその実行が開きます。この chart type は上流の行を無視するため、ウィジェット Workflow は Chart Output ノードのみとなります。サインインしている各ユーザーには、自身が所有する Workflow のレビューが表示されます。
+- **hitl** — 保留中のヒューマンレビューのカルーセルです。ヘッダーには `1/n pending` が表示され、左矢印は最初のカードで、右矢印は最後のカードで無効になります。Workflow 名をクリックすると、その実行がキャンバス上で開きます。**Approve**、**Request changes**、**Reject** で解決でき、ウィジェットタイトルの横にある履歴アイコンをクリックすると、同じページの履歴ダイアログでその実行が開きます。この chart type は上流の行を無視するため、ウィジェット Workflow は Chart Output ノードのみとなります。サインインしている各ユーザーには、自身が所有する Workflow のレビューが表示されます。 ノードのプロパティまたはウィジェットの設定で **Workflow**（複数のレビューステップがある場合は **Select agent** も）を選択すると、代わりにその Workflow のレビューが、それを開けるすべてのユーザーに表示されます。[HITL ウィジェット](../tabs/dashboard-tab.md#hitl-widgets)を参照してください。
 
 ### Interactive task lists
 
@@ -307,3 +311,17 @@ Text（動的 — メッセージ文字列は上流で生成され、`valueField
 
 - [Dashboard tab](../tabs/dashboard-tab.md) — ウィジェットの構築と配置
 - [Output node](output-node.md) — 通常の Workflow 用の終端ノード
+
+
+## リンクボタン
+
+`table` では、1 つのカラムをリンクを開くボタンに変換できます。ノードのプロパティで **Link column**（DSL では `linkColumn`）に、セルに URL を含むカラムを設定し、必要に応じて **Link button text**（`linkLabel`）も設定します。各セルは、その URL を新しいタブで開くボタンになります。ボタンのテキストがない場合、ボタンにはリンクアイコンのみが表示されます。
+
+| セルの値 | 開く先 |
+| ---- | --- |
+| `https://jira.example.com/browse/T-1` | 別のサイト（新しいタブ） |
+| `/dashboards` | Heym 内のページ（新しいタブ） |
+
+ボタンになるのは、`http://` と `https://` のアドレス、および単一の `/` で始まるパスのみです。`javascript:` や `//host` などそれ以外の値はプレーンテキストのままで、空のセルには何も表示されません。
+
+このボタンは[行リンク](../tabs/dashboard-tab.md#detail-pages)と併用できます。ボタンをクリックするとそのリンクが新しいタブで開き、行のそれ以外の場所をクリックすると従来どおり詳細ページが開きます。

@@ -166,7 +166,14 @@
     "unsavedChanges": "Niet-opgeslagen wijzigingen",
     "unsavedChangesLeaveConfirm": "Er zijn niet-opgeslagen wijzigingen. Weet u zeker dat u wilt vertrekken?",
     "zoomIn": "Inzoomen",
-    "zoomOut": "Uitzoomen"
+    "zoomOut": "Uitzoomen",
+    "aiButtonTitle": "Deze node wijzigen of repareren met de AI-assistent",
+    "editNodeWithAi": "{label} bewerken met AI",
+    "modifyingNode": "Node wordt gewijzigd:",
+    "hasNodeOutput": "(Heeft node-uitvoer)",
+    "closeNodeFocus": "Node-focus sluiten en de hele Workflow bewerken",
+    "nodeFocusRan": "Deze node is uitgevoerd. De AI ziet de laatste uitvoer en fout en leest de documentatie van de node.",
+    "nodeFocusNoOutput": "Deze node heeft geen uitvoer in de huidige run. Voer hem eerst uit als de AI de uitvoer moet zien. De AI leest hoe dan ook de documentatie van de node."
   },
   "analytics": {
     "p50Median": "P50 (Mediaan)",
@@ -420,7 +427,9 @@
     "suggestion5": "Wat is opgeslagen in mijn globale variabelen?",
     "suggestion6": "Welke workflow-sjablonen zijn beschikbaar?",
     "unpin": "Losmaken",
-    "unreadMessage": "Ongelezen bericht"
+    "unreadMessage": "Ongelezen bericht",
+    "subtitle": "Workflows uitvoeren en vragen stellen",
+    "modelsLoadFailedDisabled": "De modellijst van deze inloggegevens kon niet worden geladen. De chat blijft uitgeschakeld totdat een model kan worden opgehaald."
   },
   "activeWorkflows": {
     "activeRefreshFailed": "{count} actief · Laatste vernieuwing mislukt",
@@ -1035,7 +1044,10 @@
     "detailPageRecords": "Detailpaginagegevens",
     "detailPageRecordsHelp": "De ?record=-waarden die dit dashboard accepteert wanneer een rijlink het opent. Al het andere wordt geweigerd voordat een widget wordt uitgevoerd.",
     "unreachableDashboard": "Een dashboard dat u niet kunt openen",
-    "runWorkflow": "Een Workflow uitvoeren"
+    "runWorkflow": "Een Workflow uitvoeren",
+    "openWorkflowNewTab": "Workflow openen in een nieuw tabblad",
+    "hitlFilterHelp": "Toon beoordelingen van alle Workflows of van slechts één. Toont de Workflows die u kunt openen, uw eigen of met u gedeelde, met een stap die op een persoon wacht.",
+    "hitlSourcesLoadFailed": "Uw Workflows konden niet worden geladen."
   },
   "dashboard": {
     "askAi": "AI vragen",
@@ -1213,7 +1225,10 @@
     "pendingReview": "Beoordeling in behandeling",
     "previousAttemptError": "Fout bij vorige poging:",
     "recoveredFailed": "Herstel mislukt na een serverherstart.",
-    "toolCalls": "Tool-aanroepen"
+    "toolCalls": "Tool-aanroepen",
+    "askAi": "AI vragen",
+    "askAiTitle": "De Chat-assistent vragen naar deze run",
+    "noNodeSpans": "Voor deze run zijn geen node-spans vastgelegd."
   },
   "logs": {
     "all": "Alle",

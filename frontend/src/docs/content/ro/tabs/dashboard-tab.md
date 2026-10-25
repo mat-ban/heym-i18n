@@ -18,14 +18,14 @@ Un widget este un singur grafic pe grilă. Tipuri de grafice acceptate:
 - **Line**
 - **Area** (tendință umplută, acceptă mai multe serii)
 - **Pie**
-- **Table** (cu derulare; o coloană poate fi afișată ca [cipuri de stare](../nodes/chart-output-node.md#status-chips), iar rândurile pot deschide o [pagină de detalii](#detail-pages))
+- **Table** (derulabil; faceți clic pe antetul unei coloane pentru a sorta crescător și faceți clic din nou pentru a sorta descrescător. O coloană poate fi afișată ca [cipuri de stare](../nodes/chart-output-node.md#status-chips), o coloană poate conține [butoane de link](../nodes/chart-output-node.md#link-buttons) care deschid un URL într-o filă nouă, iar rândurile pot deschide o [pagină de detalii](#pagini-de-detalii))
 - **Numeric** (o singură valoare KPI cu unitate opțională)
 - **Gauge** (o singură valoare raportată la un interval min–max, de ex. un procent)
 - **Scatter** (puncte X/Y pentru grafice de corelație)
 - **Proportion** (o bară împărțită în cote cu o legendă procentuală, de ex. o defalcare pe limbi)
 - **Bar gauge** (un gauge orizontal pe rând cu un gradient roșu→verde și o valoare, de ex. spațiu liber pe disc)
 - **Text** (un mesaj markdown, de ex. o notă de stare precum „Ultima execuție la 19:47"; acceptă [casete de selectare interactive](../nodes/chart-output-node.md#interactive-task-lists) când markdownul este static și [liste numerotate explicite](../nodes/chart-output-node.md#numbered-lists) pentru numerotare personalizată sau descendentă)
-- **HITL** (recenziile dumneavoastră umane în așteptare. Antetul afișează `1/n pending`. Numele workflowului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă. Pictograma de istoric de lângă titlul widgetului deschide acea execuție în dialogul de istoric de pe această pagină. Widgetul nu utilizează rânduri din amonte, iar fiecare persoană își vede propria coadă)
+- **HITL** (recenziile dumneavoastră umane în așteptare. Antetul afișează `1/n pending`. Numele workflowului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă. Pictograma de istoric de lângă titlul widgetului deschide acea execuție în dialogul de istoric de pe această pagină. Widgetul nu utilizează rânduri din amonte, iar fiecare persoană își vede propria coadă. În schimb, poate afișa verificările unui singur Workflow, pentru toți cei care pot deschide acel Workflow; vedeți [Widget-uri HITL](#widget-uri-hitl))
 
 Pe lângă grafice, un widget **Run a workflow** rulează unul dintre workflowurile dvs. direct din dashboard: pe un fișier plasat, cu câmpurile sale de intrare sau cu un buton Run; consultați [Widgeturi de rulare](#run-widgets).
 
@@ -41,6 +41,20 @@ Fiecare widget își încarcă datele asincron când deschideți fila, astfel î
 Pentru un widget **Run a workflow**, alegeți în schimb workflowul pe care îl rulează; selectorul indică modul în care widgetul îl va rula pe fiecare. Widgetul este adăugat direct în grilă; nu există niciun workflow nou de construit.
 
 Faceți dublu clic pe un widget (sau utilizați butonul său de editare) pentru a-i redeschide workflowul oricând. Utilizați **Clone widget** în antetul widgetului pentru a duplica atât widgetul, cât și workflowul său complet. Copia este plasată sub original și etichetată cu **(Copy)**, astfel încât să o puteți edita independent.
+
+## Widget-uri HITL
+
+Un widget HITL nou afișează fiecare verificare care așteaptă în coada dvs. proprie. Pentru a afișa doar verificările unui Workflow, deschideți **Setări** ale widget-ului:
+
+1. La **Workflow**, alegeți Workflow-ul. Lista conține Workflow-urile pe care le puteți deschide, ale dvs. sau partajate cu dvs. ori cu echipa dvs., care au un pas ce așteaptă o persoană: un Agent cu verificare umană sau un pas Slack de aprobare, butoane ori formular. Pictograma de lângă el deschide acel Workflow într-o filă nouă.
+2. Dacă Workflow-ul are un singur astfel de pas, acesta este ales automat. Dacă are mai multe, **Select agent** le listează după numele nodului, cu **All agents** primul; pașii Slack sunt marcați cu **(Slack)**.
+3. Salvați. `1/n pending` din antet numără doar aceste verificări. Alegeți **Toate Workflow-urile** pentru a afișa din nou coada dvs. proprie.
+
+Aceeași alegere există pe canvas, în proprietățile nodului Chart Output. **Rafinați cu AI** o poate face („afișează doar aprobările de facturi”), la fel ca descrierea unui widget nou care numește Workflow-ul. Fiecare modificare este o editare a Workflow-ului, deci apare în Edit History.
+
+- **Cine vede verificările.** Un widget filtrat pe un Workflow afișează verificările acelui Workflow tuturor celor care pot deschide Workflow-ul, iar aceștia pot aproba, solicita modificări sau respinge din el, la fel cum ar putea rula Workflow-ul. Un widget nefiltrat afișează fiecărei persoane propria coadă.
+- **Cine vede widget-ul.** Cine nu poate deschide Workflow-ul ales nu vede deloc widget-ul, nici măcar pe un dashboard partajat cu persoana respectivă. Când proprietarul dashboard-ului pierde accesul la Workflow sau acesta este șters, proprietarul vede „You no longer have access to the workflow this widget shows” și poate alege altul în **Setări**.
+- **Doar alegeri accesibile.** Un Workflow pe care nu îl puteți deschide este refuzat la salvarea widget-ului, fie din setări, de pe canvas sau prin AI.
 
 ## Pagini de detalii
 
@@ -75,6 +89,10 @@ Butonul **Wrap** al rezultatului încadrează liniile lungi de ieșire în inter
 ## Generarea unui widget cu AI
 
 Faceți clic pe **AI**, descrieți metrica dorită (de exemplu, „rata de succes a workflowurilor din ultimele 30 de zile ca grafic cu bare") și alegeți o credențială LLM și un model. Heym generează un workflow complet de widget care se încheie cu un nod Chart Output și îl adaugă pe grilă. Consultați [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) pentru exemple de prompturi pe tip de grafic.
+
+Widget-ul primește un titlu scurt de unul sau două cuvinte în limba cererii dvs., de exemplu „Cazuri deschise”. Un titlu nu conține niciodată id-ul unui tabel de date; când modelul numește widget-ul printr-o propoziție, Heym păstrează primele cuvinte ale acesteia.
+
+API-ul de widget-uri poate crea și un **card de numărare** fără AI: un widget `text` pe un tabel de date (`data_table_id`) cu `count_column` și `count_value` afișează câte rânduri au acea valoare; titlul widget-ului numește valoarea. Heym Work deschide paginile create dintr-un tabel de date cu un card de numărare pentru fiecare status.
 
 Utilizați butonul **Fine-tune with AI** al unui widget pentru a revizui un widget existent cu o nouă instrucțiune. Fiecare ajustare AI salvează instantaneu workflowul anterior în **Edit History** al widgetului, astfel încât să puteți examina sau reveni asupra modificărilor din editorul de workflowuri.
 

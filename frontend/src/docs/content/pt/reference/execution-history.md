@@ -55,6 +55,18 @@ Abrir um workflow em `/workflows/{workflowId}/{executionId}` traz automaticament
 - Depurar uma execução falhada inspecionando as entradas e as saídas dos nós
 - Comparar saídas entre execuções
 
+## Perguntar à IA
+
+Ambas as caixas de diálogo de histórico têm um botão **Perguntar à IA** (ícone de brilho) junto ao título. Abre o [separador Chat](../tabs/chat-tab.md#asking-about-a-run) numa nova conversa com o workflow e a execução selecionada anexada como chips removíveis. Pergunte por que a execução foi lenta, o que falhou ou peça ao Chat para corrigir o workflow. O Chat lê exatamente essa execução, incluindo o rastreio e erros por nó.
+
+Na caixa de diálogo All History, **Perguntar à IA** só aparece enquanto uma execução de workflow estiver selecionada; as execuções de chat e assistente não o mostram.
+
+## Linha do tempo de execução
+
+No detalhe da execução, o botão **Linha do tempo** (ícone de temporizador) ao lado de **Expandir tudo** troca a lista de **Passos** por uma linha do tempo de spans. Enquanto a linha do tempo é exibida, o mesmo botão indica **Registos**; clique nele para voltar à lista. No All History, o botão aparece apenas para execuções de workflow. A linha do tempo desenha uma barra por nó no momento em que foi iniciado, para que veja quanto tempo demorou cada nó e quais foram executados em paralelo. Passe o cursor sobre uma barra para ver a sua duração; clique nela para abrir o mesmo inspetor de detalhes da [linha do tempo de execução](#execution-timeline-details) do editor. A vista escolhida mantém-se enquanto a caixa de diálogo estiver aberta.
+
+As execuções registadas antes de os tempos de início dos nós serem armazenados são organizadas sucessivamente por duração.
+
 ## Destaques de Execução
 
 Após uma execução em tempo real — ou após **Bring to Canvas** — aparece um popup dispensável de **Execution Highlights** no **canto superior direito do Canvas**. É uma forma rápida de ver *o que cada nó produziu*, listado de cima para baixo pela ordem de execução. Feche-o com o **✕**; reabre na execução seguinte.
@@ -145,7 +157,7 @@ Utilize **Copiar** junto a Inputs ou Outputs para copiar o JSON para a área de 
 
 ## Detalhes da linha temporal de execução
 
-Quando o **Registo de execução** do editor está aberto, clique no botão do temporizador para apresentar a linha temporal de execução. Selecione um intervalo para abrir um inspetor de detalhes em linha que assume a área das linhas. Apresenta o estado do passo selecionado, a duração, o número de tentativas, informações de repetição, erros, o ID de rastreio e uma pré-visualização compacta do output. Os outputs de objetos e arrays utilizam o mesmo visualizador `JsonTree` que o resto do painel de Depuração; os valores escalares utilizam uma pré-visualização de texto. Quando um passo produz imagens (capturas de ecrã do Playwright, imagens geradas, ficheiros de imagem), estas aparecem como miniaturas acima do output, e o JSON apresenta um marcador de posição curto em vez do base64 em bruto. Clique numa miniatura para a abrir numa lightbox; os botões de seta ou as teclas ←/→ percorrem todas as imagens da execução, com um contador como `2 / 5`. Utilize **Abrir rastreio** para spans de LLM e Agente quando estiver disponível um ID de rastreio.
+Quando o **Registo de execução** do editor está aberto, clique no botão do temporizador para apresentar a linha temporal de execução. Selecione um intervalo para abrir um inspetor de detalhes em linha que assume a área das linhas. Apresenta o estado do passo selecionado, a duração, o número de tentativas, informações de repetição, erros, o ID de rastreio e uma pré-visualização compacta do output. Os outputs de objetos e arrays utilizam o mesmo visualizador `JsonTree` que o resto do painel de Depuração; os valores escalares utilizam uma pré-visualização de texto. Quando um passo produz imagens (capturas de ecrã do Playwright, imagens geradas, ficheiros de imagem ou imagens em base64 no corpo do pedido, encontradas em qualquer lugar na saída), estas aparecem como miniaturas acima do output, e o JSON apresenta um marcador de posição curto em vez do base64 em bruto. Clique numa miniatura para a abrir numa lightbox; os botões de seta ou as teclas ←/→ percorrem todas as imagens da execução, com um contador como `2 / 5`. Utilize **Abrir rastreio** para spans de LLM e Agente quando estiver disponível um ID de rastreio.
 
 ## Detalhe do nó em dispositivos móveis
 

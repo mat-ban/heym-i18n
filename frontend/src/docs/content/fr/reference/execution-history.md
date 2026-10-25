@@ -55,6 +55,18 @@ Ouvrir un workflow à l'adresse `/workflows/{workflowId}/{executionId}` amène a
 - Déboguer une exécution échouée en inspectant les entrées et les sorties des nœuds
 - Comparer les sorties entre plusieurs exécutions
 
+## Demander à l'IA
+
+Les deux boîtes de dialogue d'historique comportent un bouton **Demander à l'IA** (icône d'étincelle) à côté de leur titre. Il ouvre l'[onglet Chat](../tabs/chat-tab.md#asking-about-a-run) dans une nouvelle conversation avec le workflow et l'exécution sélectionnée joints sous forme de puces amovibles. Demandez pourquoi l'exécution a été lente, ce qui a échoué ou demandez au Chat de corriger le workflow. Le Chat lit cette exécution exacte, y compris sa trace et ses erreurs par nœud.
+
+Dans la boîte de dialogue All History, **Demander à l'IA** n'apparaît que lorsqu'une exécution de workflow est sélectionnée ; les exécutions de chat et d'assistant ne l'affichent pas.
+
+## Chronologie d'exécution
+
+Dans le détail de l'exécution, le bouton **Chronologie** (icône de chronomètre) à côté de **Tout développer** remplace la liste **Étapes** par une chronologie des spans. Tant que la chronologie est affichée, le même bouton indique **Journaux** ; cliquez dessus pour revenir à la liste. Dans All History, le bouton n'apparaît que pour les exécutions de workflow. La chronologie trace une barre par nœud à l'heure où il a démarré, afin de voir quel nœud a pris combien de temps et lesquels se sont exécutés en parallèle. Survolez une barre pour afficher sa durée ; cliquez dessus pour ouvrir le même inspecteur de détails que la [chronologie d'exécution](#execution-timeline-details) de l'éditeur. La vue choisie reste active tant que le dialogue est ouvert.
+
+Les exécutions enregistrées avant le stockage des heures de début des nœuds sont disposées les unes après les autres par durée.
+
 ## Execution Highlights
 
 Après une exécution en direct — ou après **Bring to Canvas** — une popup **Execution Highlights** (fermable) apparaît dans le **coin supérieur droit du Canvas**. C'est un moyen rapide de voir *ce que chaque nœud a produit*, listé de haut en bas dans l'ordre d'exécution. Fermez-la avec le **✕** ; elle se rouvre à l'exécution suivante.
@@ -145,7 +157,7 @@ Utilisez **Copy** à côté de Inputs ou Outputs pour copier le JSON dans le pre
 
 ## Détails de la chronologie d'exécution
 
-Lorsque le panneau **Execution Log** de l'éditeur est ouvert, cliquez sur le bouton de minuterie pour afficher la chronologie d'exécution. Sélectionnez un intervalle pour ouvrir un inspecteur de détails intégré qui remplace la zone des lignes. Il affiche le statut de l'étape sélectionnée, sa durée, le nombre de tentatives, les informations de retry, les erreurs, le trace ID et un aperçu compact de la sortie. Les sorties de type objet et tableau utilisent le même visualiseur `JsonTree` que le reste du panneau Debug ; les valeurs scalaires utilisent un aperçu textuel. Lorsqu'une étape produit des images (captures d'écran Playwright, images générées, fichiers image), celles-ci apparaissent sous forme de vignettes au-dessus de la sortie, et le JSON affiche un court placeholder à la place du base64 brut. Cliquez sur une vignette pour l'ouvrir dans une lightbox ; les boutons fléchés ou les touches ←/→ parcourent toutes les images de l'exécution, avec un compteur tel que `2 / 5`. Utilisez **Open trace** pour les spans LLM et Agent lorsqu'un trace ID est disponible.
+Lorsque le panneau **Execution Log** de l'éditeur est ouvert, cliquez sur le bouton de minuterie pour afficher la chronologie d'exécution. Sélectionnez un intervalle pour ouvrir un inspecteur de détails intégré qui remplace la zone des lignes. Il affiche le statut de l'étape sélectionnée, sa durée, le nombre de tentatives, les informations de retry, les erreurs, le trace ID et un aperçu compact de la sortie. Les sorties de type objet et tableau utilisent le même visualiseur `JsonTree` que le reste du panneau Debug ; les valeurs scalaires utilisent un aperçu textuel. Lorsqu'une étape produit des images (captures d'écran Playwright, images générées, fichiers image ou images en base64 dans le corps d'une requête, trouvés n'importe où dans la sortie), celles-ci apparaissent sous forme de vignettes au-dessus de la sortie, et le JSON affiche un court placeholder à la place du base64 brut. Cliquez sur une vignette pour l'ouvrir dans une lightbox ; les boutons fléchés ou les touches ←/→ parcourent toutes les images de l'exécution, avec un compteur tel que `2 / 5`. Utilisez **Open trace** pour les spans LLM et Agent lorsqu'un trace ID est disponible.
 
 ## Détail d'un nœud sur mobile
 

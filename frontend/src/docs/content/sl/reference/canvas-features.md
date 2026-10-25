@@ -1,6 +1,6 @@
 # Funkcije Platna
 
-Urejevalnik workflow-ov ponuja več funkcij za odpravljanje napak, testiranje in organizacijo vozlišč: **Zagon do vozlišča**, **Pripeta podatka**, **Zapisniki izvajanja**, **Omogoči/Onemogoči** in **Izvleči v pod-workflow**.
+Urejevalnik workflow-ov ponuja več funkcij za odpravljanje napak, testiranje in organizacijo vozlišč: **Zagon do vozlišča**, **AI na vozlišču**, **Pripeta podatka**, **Zapisniki izvajanja**, **Omogoči/Onemogoči** in **Izvleči v pod-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Oglejte si predstavitev urejevalnika</a></p>
@@ -12,6 +12,12 @@ Premaknite kazalec nad katero koli vozlišče, razen lepljivega zapiska, in klik
 Če izbrana pot vsebuje vhodna polja, se odpre desni **Zagon** panel in se osredotoči na prvo polje. Vnesite vrednosti, nato kliknite **Zagon do _oznake vozlišča_** ali pritisnite **Ctrl+Enter** (Cmd+Enter na macOS). Splošni način telesa se osredotoči na urejevalnik JSON telesa. Poti brez vhodnih polj se izvedejo takoj, ne da bi odprli panel. Pripeta vhodna vozlišča ponovno uporabijo svoj pripeti izhod, ne da bi zahtevala vhod.
 
 Panel ohranja izbrani cilj za naslednje zagone. Izberite **Zagon celotnega workflow-a**, da izbrišete cilj. Gumbi za zagon so onemogočeni, medtem ko je izvajanje aktivno. Cilj znotraj zanke ustavi zagon, ko je to vozlišče prvič doseženo; izbira vozlišča po zanki izvede celotno zgornjo zanko.
+
+## AI na vozlišču
+
+Postavite se z miško nad katero koli vozlišče razen lepljivega listka in kliknite **AI** nad njim. [AI Assistant](./ai-assistant.md) se odpre na tem vozlišču in ponudi **Change this node as ...**, **Fix error in this node ...** in **Other**. V načinu Agent pomočnik spremeni samo to vozlišče; druga vozlišča, povezave in postavitev ostanejo nespremenjeni. Glejte [AI Assistant › Spreminjanje posameznega vozlišča](./ai-assistant.md#changing-one-node).
+
+Gumb je skrit pri workflowih, ki jih lahko samo pregledujete.
 
 ## Pripeta podatka
 

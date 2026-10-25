@@ -1,6 +1,6 @@
 # Lõuendi funktsioonid
 
-Workflow' redaktor pakub mitmeid funktsioone sõlmede silumiseks, testimiseks ja korrastamiseks: **Käivita sõlmeni**, **Andmete kinnitamine**, **Käivituse logid**, **Luba/Keela** ja **Eralda alam-workflow'ks**.
+Workflow' redaktor pakub mitmeid funktsioone sõlmede silumiseks, testimiseks ja korrastamiseks: **Käivita sõlmeni**, **AI sõlmes**, **Andmete kinnitamine**, **Käivituse logid**, **Luba/Keela** ja **Eralda alam-workflow'ks**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Vaadake redaktori demot</a></p>
@@ -12,6 +12,12 @@ Hõljutage kursorit mis tahes sõlme kohal, välja arvatud kleepuv märkus, ja k
 Kui valitud teel on sisendväljad, avaneb parempoolne **Käivitamise** paneel ja fookus läheb esimesele väljale. Sisestage väärtused, seejärel klõpsake nupul **Käivita sõlmeni _sõlme silt_** või vajutage **Ctrl+Enter** (macOS-is Cmd+Enter). Üldine body-režiim seab fookuse JSON body redaktorile. Teed ilma sisendväljadeta käivituvad kohe ilma paneeli avamata. Kinnitatud sisendsõlmed kasutavad uuesti oma kinnitatud väljundit ilma sisendit küsimata.
 
 Paneel säilitab valitud sihtmärgi järgnevateks käivitusteks. Sihtmärgi tühistamiseks valige **Käivita kogu workflow**. Käivitamise nupud on keelatud, kui käivitus on aktiivne. Sihtmärk tsükli sees peatab käivituse, kui see sõlm esimest korda saavutatakse; tsükli järel oleva sõlme valimine käivitab tervikliku ülesvoolu tsükli.
+
+## AI sõlmes
+
+Viige kursor mis tahes sõlme kohale, välja arvatud märkmeleht, ja klõpsake selle kohal **AI**. [AI Assistant](./ai-assistant.md) avaneb sellel sõlmel ja pakub valikuid **Change this node as ...**, **Fix error in this node ...** ja **Other**. Agent-režiimis muudab assistent ainult seda sõlme; teised sõlmed, ühendused ja paigutus jäävad muutmata. Vaadake [AI Assistant › Ühe sõlme muutmine](./ai-assistant.md#changing-one-node).
+
+Nupp on peidetud workflow'des, mida saate ainult vaadata.
 
 ## Andmete kinnitamine
 

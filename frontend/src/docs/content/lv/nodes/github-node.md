@@ -213,6 +213,11 @@ Ja fails jau pastāv, Heym automātiski iegūst pašreizējo SHA pirms tā atjau
 **Per Page** (1–100). Heym pieprasa vienu rezultātu lapu; nav `page` lauka, lai iegūtu
 papildu lapas tajā pašā darbībā.
 
+
+### Return all pages
+
+Ieslēdziet **Return all pages**, lai viena izpilde sekotu visām lapām, sākot no **Cursor**, ja tas ir iestatīts. Katrs pieprasījums prasa 100 vienumus neatkarīgi no **Per Page** vērtības. Mezgls apstājas pēc aptuveni 1000 vienumiem (vai 100 pieprasījumiem): issue objekti ir aptuveni 6 KB katrs, tāpēc lielāks ierobežojums radītu ļoti lielas mezgla izvades. Ja tas apstājas agrāk, tas kļūdas vietā atgriež sasniegto ar `has_more: true` un `next_cursor`, un varat turpināt, nododot šo kursoru nākamajai izpildei. Workflow apturēšana vai tā taimauta sasniegšana pārtrauc ielādi starp lapām.
+
 ## Output
 
 Precīzā forma ir atkarīga no atlasītās darbības. Biežāk izmantotie lauki ietver:

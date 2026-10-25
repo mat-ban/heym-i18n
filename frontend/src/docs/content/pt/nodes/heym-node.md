@@ -16,7 +16,7 @@ O nó **Heym** lê os próprios dados do Heym: os workflows que você pode acess
 | Parâmetro | Tipo | Descrição |
 |-----------|------|-------------|
 | `heymOperation` | Select | Qual leitura executar |
-| `heymWorkflowId` | UUID | Workflow de destino. Obrigatório para `getWorkflow` e `getExecutionHistory`. Aceita expressões. |
+| `heymWorkflowId` | UUID | Defina-o como `all` em `getExecutionHistory` para ler todos os workflows acessíveis. |
 | `heymLimit` | String | Número máximo de linhas a retornar. **Deixe vazio ou insira `0` para retornar tudo** — esse é o padrão. Aceita expressões. |
 | `heymStatus` | String | Filtro de status opcional para `getExecutionHistory`. Aceita expressões. |
 | `heymSinceDays` | String | Período de retrospectiva opcional em dias para `getExecutionHistory`. Aceita expressões. |
@@ -93,9 +93,11 @@ Retorna entradas do histórico de execuções de um workflow, da mais recente pa
 | `$nodeLabel.executions[0].recovered` | Indica se a execução foi recuperada após uma falha |
 | `$nodeLabel.executions[0].inputs` | O que a execução recebeu — o payload do trigger ou a entrada do chamador |
 | `$nodeLabel.executions[0].outputs` | A saída do workflow para essa execução |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | O workflow ao qual o histórico pertence |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | O workflow a que o histórico pertence, ou `null` com **{AW}** |
+`null` com **{AW}** |
 | `$nodeLabel.total` | Total de execuções correspondentes **antes** do limite |
-| `$nodeLabel.by_status` | Contagens indexadas por status, por exemplo `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Com **{AW}**, o workflow a que cada execução pertence |
+status` | Contagens indexadas por status, por exemplo `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Início da janela, ou `null` para o histórico completo |
 
 As entradas carregam tanto `inputs` quanto `outputs` — o que a execução recebeu e o que ela respondeu — mas nunca `node_results`: o trace por nó é a maior coluna da tabela e ofuscaria todo o restante. Consulte uma única execução através da API quando precisar do trace completo.

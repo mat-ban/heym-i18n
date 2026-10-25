@@ -16,7 +16,7 @@
 | Parameeter | Tüüp | Kirjeldus |
 |-----------|------|-------------|
 | `heymOperation` | Valik | Millist lugemist teostada |
-| `heymWorkflowId` | UUID | Sihtworkflow. Nõutav `getWorkflow` ja `getExecutionHistory` puhul. Toetab avaldisi. |
+| `heymWorkflowId` | UUID | Määrake see `getExecutionHistory` puhul väärtusele `all`, et lugeda iga ligipääsetavat Workflow'd. |
 | `heymLimit` | String | Maksimaalne tagastatavate ridade arv. **Jätke tühjaks või sisestage `0`, et tagastada kõik** — see on vaikeväärtus. Toetab avaldisi. |
 | `heymStatus` | String | Valikuline olekufilter `getExecutionHistory` jaoks. Toetab avaldisi. |
 | `heymSinceDays` | String | Valikuline tagasivaade päevades `getExecutionHistory` jaoks. Toetab avaldisi. |
@@ -93,9 +93,11 @@ Tagastab ühe workflow käivituste ajaloo kirjed, uusimad esimesena.
 | `$nodeLabel.executions[0].recovered` | Kas käivitus taastati pärast kokkujooksmist |
 | `$nodeLabel.executions[0].inputs` | Mida käivitus vastu võttis – triggeri payload või kutsuja sisend |
 | `$nodeLabel.executions[0].outputs` | Workflow väljund selle käivituse kohta |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, millele ajalugu kuulub |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, kuhu ajalugu kuulub, või `null` valikuga **{AW}** |
+`null` valikuga **{AW}** |
 | `$nodeLabel.total` | Sobivate käivituste koguarv **enne** limiiti |
-| `$nodeLabel.by_status` | Loendid staatuse kaupa, näiteks `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Valikuga **{AW}** Workflow, kuhu iga käivitus kuulub |
+_status` | Loendid staatuse kaupa, näiteks `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Akna algus või `null` kogu ajaloo korral |
 
 Kirjed sisaldavad nii `inputs` kui ka `outputs` – mida käivitus vastu võttis ja mida tagastas –, kuid mitte kunagi `node_results`: iga sõlme jälg on tabeli suurim veerg ja varjutaks kõik allavoolu jääva. Kui vajate täielikku jälge, hankige üksik käivitus API kaudu.

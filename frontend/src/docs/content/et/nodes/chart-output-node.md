@@ -33,13 +33,17 @@ Kui teil on ainult näidis/example-andmed (päris allikat pole), tootke need rea
 | `valueField` | string | Rea võti, mida kasutatakse numbrilise väärtusena (pie/bar/line/numeric/gauge) |
 | `series` | array | Valikuline mitme seeria definitsioon `[{ "name": "Sent", "field": "sent" }]` bar/line jaoks (alistab `valueField`) |
 | `columns` | array | Valikuline veergude loend `table` jaoks (vaikimisi esimese rea võtmed) |
-| `statusColumn` | string | Valikuline `table` veerg, mis renderdatakse värviliste [olekukiipidena](#status-chips). Peab olema üks kuvatavatest veergudest. |
+| `statusColumn` | string | Valikuline `table` veerg, mis renderdatakse värviliste [olekukiipidena](#status-chips). Peab olema üks kuvatavatest veergudest. |, ja `linkColumn` korral sisaldab see lingiveergu ja nupu teksti.
 | `statusTones` | object | Valikuline vastendus olekuväärtusest toonile (`success`, `attention`, `failure`, `waiting`, `neutral`) väärtuste jaoks, mida vaikimisi seaded ei kata |
+| `linkColumn` | string | Valikuline `table`-veerg, mille lahtrid sisaldavad URL-i ja mida kuvatakse [linginupuna](#link-buttons), mis avab selle uuel vahelehel. See peab olema üks kuvatud veergudest. |
+| `linkLabel` | string | Lingi nupu valikuline tekst. Tühjaks jättes näitab nupp ainult lingiikooni. |
 | `xField` / `yField` | string | Rea võtmed X- ja Y-numbriliste telgede jaoks (scatter) |
 | `min` / `max` | number | Numbriline vahemik `gauge` jaoks (vaikimisi `0` / `100`) |
 | `unit` | string | Valikuline ühik, mis kuvatakse `numeric` või `gauge` väärtuse kõrval |
 | `text` | string | Markdown-sõnum `text` diagrammi tüübi jaoks. Jätke tühjaks ja määrake `valueField`, et renderdada dünaamilist sõnumit, mis on tõmmatud ülesvoolu andmetest. |
 | `title` | string | Valikuline diagrammi pealkiri |
+| `hitlWorkflowId` | string | Ainult `hitl`. Näitab ainult selle Workflow ülevaatusi. Tühjaks jättes näitab vidin kõiki ülevaatusi. |
+| `hitlNodeId` | string | Ainult `hitl`. Kitsendab `hitlWorkflowId` ühele sammule: inimülevaatusega Agent või Slacki kinnitus-, nupu- või vormisamm. |
 
 ## Diagrammi tüübid
 
@@ -51,7 +55,7 @@ Kui teil on ainult näidis/example-andmed (päris allikat pole), tootke need rea
 - **proportion** — üksik horisontaalne tulp, mis on jaotatud osadeks protsentuaalse legendiga (nt keelte jaotus). Kasutab `labelField` + `valueField`.
 - **barGauge** — üks horisontaalne gauge iga rea kohta punasest roheliseks gradiendiga ja väärtusega (nt vaba kettaruum). Kasutab `labelField` + `valueField`, valikuline `unit` ja `max` (vaikimisi suurim rea väärtus).
 - **text** — markdown-sõnum (nt oleku märkus nagu "Viimane käivitus kell 19:47"). Pange markdown `text`-i staatilise sõnumi jaoks või jätke `text` tühjaks ja määrake `valueField`, et renderdada ülesvoolu toodetud stringi. Toetab pealkirju, paksu/kaldkirja, [loendeid](../nodes/chart-output-node.md#interactive-task-lists), linke ja reasisest koodi.
-- **hitl** — karussell teie ootel inimülevaatustest. Päis näitab `1/n pending`; vasak nool on esimesel kaardil keelatud ja parem nool viimasel. Workflow nimi avab selle käivituse lõuendil. **Approve**, **Request changes** ja **Reject** lahendavad selle ning vidina pealkirja kõrval olev ajaloo ikoon avab selle käivituse ajaloo dialoogis samal lehel. See diagrammi tüüp eirab ülesvoolu ridu, seega vidina workflow on ainult Chart Output node. Iga sisselogitud isik näeb ülevaatusi workflow'del, mille omanik ta on.
+- **hitl** — karussell teie ootel inimülevaatustest. Päis näitab `1/n pending`; vasak nool on esimesel kaardil keelatud ja parem nool viimasel. Workflow nimi avab selle käivituse lõuendil. **Approve**, **Request changes** ja **Reject** lahendavad selle ning vidina pealkirja kõrval olev ajaloo ikoon avab selle käivituse ajaloo dialoogis samal lehel. See diagrammi tüüp eirab ülesvoolu ridu, seega vidina workflow on ainult Chart Output node. Iga sisselogitud isik näeb ülevaatusi workflow'del, mille omanik ta on. Valige sõlme atribuutides või vidina seadetes **Workflow** (ja **Select agent**, kui sellel on mitu ülevaatussammu), et selle asemel kuvada selle Workflow ülevaatusi kõigile, kes seda avada saavad; vt [HITL-vidinad](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktiivsed ülesannete loendid
 
@@ -307,3 +311,17 @@ Kui genereerite vidinat **AI** abil, vastavad sellised promptid selgelt igale t�
 
 - [Töölaua vahekaart](../tabs/dashboard-tab.md) — vidinate loomine ja korraldamine
 - [Väljundsõlm](output-node.md) — tavaliste workflow'de lõppsõlm
+
+
+## Lingi nupud
+
+`table` saab muuta ühe veeru nuppudeks, mis avavad lingi. Määrake **Link column** sõlme atribuutides (või `linkColumn` DSL-is) veeruks, mille lahtrid sisaldavad URL-i, ja soovi korral **Link button text** (`linkLabel`). Iga lahter muutub nupuks, mis avab oma URL-i uuel vahelehel. Ilma nuputekstita näitab nupp ainult lingiikooni:
+
+| Lahtri väärtus | Avab |
+| -------------- | ---- |
+| `https://jira.example.com/browse/T-1` | Teise saidi uuel vahelehel |
+| `/dashboards` | Heymi-sisese lehe uuel vahelehel |
+
+Nupuks muutuvad ainult `http://` ja `https://` aadressid ning teed, mis algavad ühe `/`-ga. Mis tahes muu väärtus, näiteks `javascript:` või `//host`, jääb lihtteksti ja tühi lahter ei näita midagi.
+
+Nupp töötab [reaalingi](../tabs/dashboard-tab.md#detail-pages) kõrval: nupul klõpsamine avab selle lingi uuel vahelehel ja klõps mujal real avab endiselt üksikasjade lehe.

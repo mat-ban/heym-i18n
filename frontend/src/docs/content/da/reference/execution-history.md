@@ -55,6 +55,18 @@ Ved åbning af et workflow på `/workflows/{workflowId}/{executionId}` bringes d
 - Fejlfinding af en mislykket kørsel ved inspektion af inputs og node-outputs
 - Sammenligning af outputs på tværs af kørsler
 
+## Spørg AI
+
+Begge historikdialoger har en **Spørg AI**-knap (stjerneikon) ved siden af titlen. Den åbner [fanen Chat](../tabs/chat-tab.md#asking-about-a-run) i en ny samtale med workflowet og den valgte kørsel vedhæftet som fjernbare brikker. Spørg om, hvorfor kørslen var langsom, hvad der fejlede, eller få Chat til at rette workflowet. Chat læser præcis denne kørsel, herunder dens sporing og fejl pr. node.
+
+I dialogen All History vises **Spørg AI** kun, når en workflow-kørsel er valgt; chat- og assistentkørsler viser den ikke.
+
+## Tidslinje for kørsel
+
+I kørselsdetaljerne bytter knappen **Tidslinje** (stopursikon) ved siden af **Udvid alle** listen **Trin** ud med en span-tidslinje. Mens tidslinjen vises, hedder den samme knap **Logfiler**; klik på den for at vende tilbage til listen. I All History vises knappen kun for workflow-kørsler. Tidslinjen tegner en bjælke pr. node på det tidspunkt, den startede, så det er tydeligt, hvilken node der tog hvor lang tid, og hvilke der kørte parallelt. Før markøren over en bjælke for at se dens varighed; klik på den for at åbne det samme detaljeinspektionspanel som editorens [kørselstidslinje](#execution-timeline-details). Den valgte visning bevares, så længe dialogen er åben.
+
+Kørsler, der er registreret før noders starttidspunkter blev gemt, vises efter hinanden i rækkefølge efter varighed.
+
 ## Kørselshøjdepunkter
 
 Efter en live-kørsel - eller efter **Bring to Canvas** - vises en afviselig **Execution Highlights**-popup i **øverste højre hjørne af Canvas**. Det er en hurtig måde at se *hvad hver node producerede*, listet fra top til bund i kørselsrækkefølge. Luk den med **✕**; den genåbnes ved næste kørsel.
@@ -144,7 +156,7 @@ Brug **Kopier** ved siden af Inputs eller Outputs for at kopiere JSON'en til udk
 
 ## Detaljer for kørsels-tidslinje
 
-Når editor-panelet **Kørselslog** er åbent, klikkes på timer-knappen for at vise kørsels-tidslinjen. Vælg et interval for at åbne en inline-detaljeinspector, der overtager rækkeområdet. Den viser det valgte trins status, varighed, antal forsøg, genforsøgsinformation, fejl, trace-ID og en kompakt output-eksempel. Objekt- og array-output bruger den samme `JsonTree`-fremviser som resten af Debug-panelet; skalarværdier bruger en tekst-eksempel. Når et trin outputter billeder (Playwright-skærmbilleder, genererede billeder, billedfiler), vises de som miniaturebilleder over outputtet, og JSON'en viser en kort pladsholder i stedet for den rå base64. Klik på et miniaturebillede for at åbne det i en lightbox; pileknapperne eller ←/→-tasterne gennemgår alle billeder i kørslen med en tæller som f.eks. `2 / 5`. Brug **Åben trace** til LLM- og Agent-intervaller, når en trace-ID er tilgængelig.
+Når editor-panelet **Kørselslog** er åbent, klikkes på timer-knappen for at vise kørsels-tidslinjen. Vælg et interval for at åbne en inline-detaljeinspector, der overtager rækkeområdet. Den viser det valgte trins status, varighed, antal forsøg, genforsøgsinformation, fejl, trace-ID og en kompakt output-eksempel. Objekt- og array-output bruger den samme `JsonTree`-fremviser som resten af Debug-panelet; skalarværdier bruger en tekst-eksempel. Når et trin outputter billeder (Playwright-skærmbilleder, genererede billeder, billedfiler eller base64-billeder i en anmodningskrop, fundet hvor som helst i outputtet), vises de som miniaturebilleder over outputtet, og JSON'en viser en kort pladsholder i stedet for den rå base64. Klik på et miniaturebillede for at åbne det i en lightbox; pileknapperne eller ←/→-tasterne gennemgår alle billeder i kørslen med en tæller som f.eks. `2 / 5`. Brug **Åben trace** til LLM- og Agent-intervaller, når en trace-ID er tilgængelig.
 ## Node-detaljer på mobil
 
 På en telefon viser editoren et workflow-træ i fuld skærm i stedet for det fritformede canvas. Ved at trykke på en tree-node med et registreret resultat åbnes kørslen som en fuldskærmsdetalje. Visningen giver adgang til separate faner for **Input Data**, **Output Data** og **Errors**. Output-fanen viser det registrerede resultat og tilbyder **Copy Output**; input-fanen viser nodens konfiguration, og errors-fanen viser den registrerede fejl, hvis noden fejlede. Brug **Back to workflow** eller luk-knappen for at vende tilbage til træet.

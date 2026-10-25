@@ -33,13 +33,17 @@ Lorsque vous ne disposez que de données d'exemple (sans source réelle), produi
 | `valueField` | string | Clé de ligne utilisée comme valeur numérique (pie/bar/line/numeric/gauge) |
 | `series` | array | Définition optionnelle multi-séries `[{ "name": "Sent", "field": "sent" }]` pour bar/line (remplace `valueField`) |
 | `columns` | array | Liste optionnelle de colonnes pour `table` (par défaut, les clés de la première ligne) |
-| `statusColumn` | string | Colonne facultative de `table` affichée sous forme de [puces de statut](#status-chips) colorées. Elle doit faire partie des colonnes affichées. |
+| `statusColumn` | string | Colonne facultative de `table` affichée sous forme de [puces de statut](#status-chips) colorées. Elle doit faire partie des colonnes affichées. |, et avec `linkColumn` elle contient la colonne de lien et le texte du bouton.
 | `statusTones` | object | Correspondance facultative entre une valeur de statut et une teinte (`success`, `attention`, `failure`, `waiting`, `neutral`) pour les valeurs non couvertes par défaut |
+| `linkColumn` | string | Colonne `table` facultative dont les cellules contiennent une URL, affichée sous forme de [bouton de lien](#link-buttons) qui l'ouvre dans un nouvel onglet. Elle doit faire partie des colonnes affichées. |
+| `linkLabel` | string | Texte facultatif du bouton de lien. S'il est vide, le bouton n'affiche qu'une icône de lien. |
 | `xField` / `yField` | string | Clés de ligne pour les axes numériques X et Y (scatter) |
 | `min` / `max` | number | Plage numérique pour `gauge` (par défaut `0` / `100`) |
 | `unit` | string | Unité optionnelle affichée à côté d'une valeur `numeric` ou `gauge` |
 | `text` | string | Message Markdown pour le type de graphique `text`. Laissez vide et définissez `valueField` pour afficher un message dynamique issu des données en amont. |
 | `title` | string | Titre de graphique optionnel |
+| `hitlWorkflowId` | string | `hitl` uniquement. Affiche uniquement les revues de ce workflow. Si le champ est vide, le widget affiche toutes les revues. |
+| `hitlNodeId` | string | `hitl` uniquement. Restreint `hitlWorkflowId` à une étape : un Agent avec revue humaine, ou une étape Slack d'approbation, de boutons ou de formulaire. |
 
 ## Types de graphiques
 
@@ -51,7 +55,7 @@ Lorsque vous ne disposez que de données d'exemple (sans source réelle), produi
 - **proportion** — une barre horizontale unique divisée en parts avec une légende en pourcentage (par ex. une répartition linguistique). Utilise `labelField` + `valueField`.
 - **barGauge** — une jauge horizontale par ligne avec un dégradé rouge→vert et une valeur (par ex. l'espace disque libre). Utilise `labelField` + `valueField`, avec `unit` et `max` optionnels (par défaut, la valeur de ligne la plus élevée).
 - **text** — un message markdown (par ex. une note de statut comme « Dernière exécution à 19:47 »). Placez le markdown dans `text` pour un message statique, ou laissez `text` vide et définissez `valueField` pour afficher une chaîne produite en amont. Prend en charge les titres, le gras/l'italique, les [listes](../nodes/chart-output-node.md#interactive-task-lists), les liens et le code en ligne.
-- **hitl** — un carrousel de vos revues humaines en attente. L'en-tête affiche `1/n pending` ; la flèche gauche est désactivée sur la première carte et la flèche droite sur la dernière. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** la résolvent, et l'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique sur la même page. Ce type de graphique ignore les lignes en amont, de sorte que le workflow du widget se compose uniquement du nœud Sortie de graphique. Chaque personne connectée voit les revues des workflows dont elle est propriétaire.
+- **hitl** — un carrousel de vos revues humaines en attente. L'en-tête affiche `1/n pending` ; la flèche gauche est désactivée sur la première carte et la flèche droite sur la dernière. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** la résolvent, et l'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique sur la même page. Ce type de graphique ignore les lignes en amont, de sorte que le workflow du widget se compose uniquement du nœud Sortie de graphique. Chaque personne connectée voit les revues des workflows dont elle est propriétaire. Choisissez un **Workflow** (et **Select agent** lorsqu'il comporte plusieurs étapes de revue) dans les propriétés du nœud ou dans les paramètres du widget pour afficher à la place les revues de ce workflow, pour toutes les personnes qui peuvent l'ouvrir ; voir [widgets HITL](../tabs/dashboard-tab.md#hitl-widgets).
 ### Listes de tâches interactives
 
 Utilisez la syntaxe de liste de tâches Markdown de type GitHub dans le champ statique `text` :
@@ -307,3 +311,17 @@ Lors de la génération d'un widget avec l'**IA**, des prompts comme ceux-ci cor
 
 - [Onglet Dashboard](../tabs/dashboard-tab.md) — construire et organiser les widgets
 - [Nœud Output](output-node.md) — nœud terminal pour les workflows classiques
+
+
+## Boutons de lien
+
+Une `table` peut transformer une colonne en boutons qui ouvrent un lien. Définissez **Link column** dans les propriétés du nœud (ou `linkColumn` dans le DSL) sur une colonne dont les cellules contiennent une URL, et éventuellement **Link button text** (`linkLabel`). Chaque cellule devient un bouton qui ouvre son URL dans un nouvel onglet. Sans texte de bouton, celui-ci n'affiche qu'une icône de lien :
+
+| Valeur de la cellule | Ouvre |
+| -------------------- | ----- |
+| `https://jira.example.com/browse/T-1` | Un autre site, dans un nouvel onglet |
+| `/dashboards` | Une page de Heym, dans un nouvel onglet |
+
+Seules les adresses `http://` et `https://` ainsi que les chemins commençant par un seul `/` deviennent des boutons. Toute autre valeur, comme `javascript:` ou `//host`, reste du texte brut, et une cellule vide n'affiche rien.
+
+Le bouton fonctionne à côté d'un [lien de ligne](../tabs/dashboard-tab.md#detail-pages) : un clic sur le bouton ouvre son lien dans un nouvel onglet, et un clic ailleurs sur la ligne ouvre toujours la page de détail.

@@ -33,13 +33,17 @@
 | `valueField` | string | 用作數值的資料列鍵（pie/bar/line/numeric/gauge） |
 | `series` | array | 選用的多系列定義 `[{ "name": "Sent", "field": "sent" }]`，用於 bar/line（會覆寫 `valueField`） |
 | `columns` | array | 選用的欄位清單，用於 `table`（預設為第一列的鍵） |
-| `statusColumn` | string | 選填的 `table` 欄位，渲染為彩色[狀態標籤](#status-chips)。必須是顯示的欄位之一。 |
+| `statusColumn` | string | 選填的 `table` 欄位，渲染為彩色[狀態標籤](#status-chips)。必須是顯示的欄位之一。 |，使用 `linkColumn` 時還會帶有連結欄位和按鈕文字。
 | `statusTones` | object | 選填對應表，將預設未涵蓋的狀態值對應至色調（`success`、`attention`、`failure`、`waiting`、`neutral`） |
+| `linkColumn` | string | 選用的 `table` 欄位，其儲存格包含 URL，並顯示為在新分頁中開啟該 URL 的[連結按鈕](#link-buttons)。必須是所顯示欄位之一。 |
+| `linkLabel` | string | 連結按鈕的選用文字。留空時，按鈕只顯示連結圖示。 |
 | `xField` / `yField` | string | X 與 Y 數值軸的資料列鍵（scatter） |
 | `min` / `max` | number | `gauge` 的數值範圍（預設 `0` / `100`） |
 | `unit` | string | 選用的單位，顯示於 `numeric` 或 `gauge` 值旁 |
 | `text` | string | `text` chart type 的 Markdown 訊息。留空並設定 `valueField`，以渲染從上游資料取得的動態訊息。 |
 | `title` | string | 選用的 chart 標題 |
+| `hitlWorkflowId` | string | 僅適用於 `hitl`。僅顯示此 Workflow 的審核。留空時，小工具會顯示所有審核。 |
+| `hitlNodeId` | string | 僅適用於 `hitl`。將 `hitlWorkflowId` 縮小至單一步驟：具人工審核的 Agent，或 Slack 核准、按鈕或表單步驟。 |
 
 ## Chart types
 
@@ -51,7 +55,7 @@
 - **proportion** — 單一水平長條，分割為各佔比並附百分比圖例（例如語言分佈）。使用 `labelField` + `valueField`。
 - **barGauge** — 每一列一個水平 gauge，具有紅→綠漸層與數值（例如可用磁碟空間）。使用 `labelField` + `valueField`，可搭配選用的 `unit` 與 `max`（預設為最大的資料列值）。
 - **text** — 一段 markdown 訊息（例如狀態備註，如「Last execution at 19:47」）。將 markdown 放入 `text` 以顯示靜態訊息，或將 `text` 留空並設定 `valueField`，以渲染上游產生的字串。支援標題、粗體／斜體、[清單](../nodes/chart-output-node.md#interactive-task-lists)、連結與行內程式碼。
-- **hitl** — 你待處理的人工審查的輪播。標頭顯示 `1/n pending`；左箭頭在第一張卡片時停用，右箭頭在最後一張時停用。workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 會解決該項目，而 widget 標題旁的歷史圖示會於同一頁面的歷史對話框中開啟該次執行。此 chart type 會忽略上游資料列，因此 widget workflow 僅有 Chart Output 節點。每位已登入的使用者會看到其所擁有 workflow 的審查項目。
+- **hitl** — 你待處理的人工審查的輪播。標頭顯示 `1/n pending`；左箭頭在第一張卡片時停用，右箭頭在最後一張時停用。workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 會解決該項目，而 widget 標題旁的歷史圖示會於同一頁面的歷史對話框中開啟該次執行。此 chart type 會忽略上游資料列，因此 widget workflow 僅有 Chart Output 節點。每位已登入的使用者會看到其所擁有 workflow 的審查項目。 在節點屬性或小工具設定中選擇一個 **Workflow**（若有多個審核步驟，則還需選擇 **Select agent**），即可改為向所有能開啟該 Workflow 的人顯示其審核；請參閱 [HITL 小工具](../tabs/dashboard-tab.md#hitl-widgets)。
 
 ### 互動式任務清單
 
@@ -148,6 +152,20 @@ https://crm.example.com/api/customers?id=$page.record
 `$page.record` 是所點擊資料列本身的值（例如 `V-1002`），而非包含欄位的物件。若要在 [DataTable](./datatable-node.md) 中尋找該筆記錄，請依該值篩選其記錄欄位：使用 `find` 操作並搭配篩選條件 `{"vendor_id": "$page.record"}`。像 `$page.record.id` 這類路徑不會解析出任何結果，因此由 AI 建立或微調的小工具會捨棄這些欄位，改為直接讀取 `$page.record`。
 
 此值來自任何人都能修改的 URL。儀表板僅接受符合其記錄格式的值（預設為字母、數字、`-`、`_` 與 `.`），但仍請將其視為不可信的輸入：請將它傳遞至節點會自動跳脫值的欄位，例如 HTTP 查詢參數、[DataTable](./datatable-node.md) 或 ClickHouse 篩選值，切勿透過字串串接的方式與它組合出查詢文字。無論是誰開啟頁面，小工具依然會以儀表板擁有者的身分執行。
+
+
+## 連結按鈕
+
+`table` 可以把一個欄位變成開啟連結的按鈕。請在節點屬性中將 **Link column**（或 DSL 中的 `linkColumn`）設定為儲存格包含 URL 的欄位，並可選擇設定 **Link button text**（`linkLabel`）。每個儲存格都會變成一個在新分頁中開啟其 URL 的按鈕。沒有按鈕文字時，按鈕只顯示連結圖示：
+
+| 儲存格值 | 開啟 |
+| ---- | --- |
+| `https://jira.example.com/browse/T-1` | 另一個網站（在新分頁中） |
+| `/dashboards` | Heym 內部頁面（在新分頁中） |
+
+只有 `http://` 和 `https://` 位址，以及以單一 `/` 開頭的路徑才會變成按鈕。其他任何值，例如 `javascript:` 或 `//host`，仍顯示為純文字，空白儲存格則不顯示任何內容。
+
+此按鈕可與[列連結](../tabs/dashboard-tab.md#detail-pages)並存：點擊按鈕會在新分頁中開啟其連結，點擊該列的其他任何位置仍會開啟詳細資料頁面。
 
 ## 資料如何解析
 

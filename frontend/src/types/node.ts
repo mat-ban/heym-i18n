@@ -792,6 +792,7 @@ export const NODE_DEFINITIONS: Record<NodeType, NodeDefinition> = {
       githubBranch: "",
       githubPerPage: "30",
       githubCursor: "",
+      githubReturnAll: undefined,
       githubTagName: "",
       githubReleaseId: "",
       githubWorkflowId: "",

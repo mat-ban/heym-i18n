@@ -33,13 +33,17 @@ Quando si dispone unicamente di dati di esempio (senza una sorgente reale), prod
 | `valueField` | string | Chiave di riga utilizzata come valore numerico (pie/bar/line/numeric/gauge) |
 | `series` | array | Definizione opzionale multi-serie `[{ "name": "Sent", "field": "sent" }]` per bar/line (sostituisce `valueField`) |
 | `columns` | array | Elenco opzionale di colonne per `table` (per impostazione predefinita le chiavi della prima riga) |
-| `statusColumn` | string | Colonna facoltativa di `table` visualizzata come [chip di stato](#status-chips) colorati. Deve essere una delle colonne mostrate. |
+| `statusColumn` | string | Colonna facoltativa di `table` visualizzata come [chip di stato](#status-chips) colorati. Deve essere una delle colonne mostrate. |, e con `linkColumn` contiene la colonna di collegamento e il testo del pulsante.
 | `statusTones` | object | Mappa facoltativa da un valore di stato a una tonalità (`success`, `attention`, `failure`, `waiting`, `neutral`) per i valori non coperti dalle impostazioni predefinite |
+| `linkColumn` | string | Colonna `table` facoltativa le cui celle contengono un URL, mostrato come [pulsante di collegamento](#link-buttons) che lo apre in una nuova scheda. Deve essere una delle colonne visualizzate. |
+| `linkLabel` | string | Testo facoltativo del pulsante di collegamento. Se lasciato vuoto, il pulsante mostra solo un'icona di collegamento. |
 | `xField` / `yField` | string | Chiavi di riga per gli assi numerici X e Y (scatter) |
 | `min` / `max` | number | Intervallo numerico per `gauge` (predefinito `0` / `100`) |
 | `unit` | string | Unità opzionale mostrata accanto a un valore `numeric` o `gauge` |
 | `text` | string | Messaggio Markdown per il tipo di grafico `text`. Lasciare vuoto e impostare `valueField` per visualizzare un messaggio dinamico ricavato dai dati a monte. |
 | `title` | string | Titolo opzionale del grafico |
+| `hitlWorkflowId` | string | Solo `hitl`. Mostra solo le revisioni di questo Workflow. Se lasciato vuoto, il widget mostra tutte le revisioni. |
+| `hitlNodeId` | string | Solo `hitl`. Restringe `hitlWorkflowId` a un singolo passaggio: un Agent con revisione umana oppure un passaggio Slack di approvazione, pulsanti o modulo. |
 
 ## Tipi di grafico
 
@@ -51,7 +55,7 @@ Quando si dispone unicamente di dati di esempio (senza una sorgente reale), prod
 - **proportion** — una singola barra orizzontale suddivisa in quote con legenda percentuale (ad es. una ripartizione per lingua). Utilizza `labelField` + `valueField`.
 - **barGauge** — un indicatore orizzontale per riga con gradiente dal rosso al verde e un valore (ad es. spazio su disco libero). Utilizza `labelField` + `valueField`, con `unit` e `max` opzionali (per impostazione predefinita il valore di riga più elevato).
 - **text** — un messaggio markdown (ad es. una nota di stato come "Ultima esecuzione alle 19:47"). Inserire il markdown in `text` per un messaggio statico, oppure lasciare `text` vuoto e impostare `valueField` per visualizzare una stringa prodotta a monte. Supporta intestazioni, grassetto/corsivo, [elenchi](../nodes/chart-output-node.md#interactive-task-lists), link e codice inline.
-- **hitl** — un carosello delle revisioni umane in sospeso. L'intestazione mostra `1/n pending`; la freccia sinistra è disabilitata sulla prima scheda e la freccia destra sull'ultima. Il nome del workflow apre tale esecuzione sul canvas. **Approve**, **Request changes** e **Reject** la risolvono, e l'icona della cronologia accanto al titolo del widget apre tale esecuzione nella finestra di dialogo della cronologia sulla stessa pagina. Questo tipo di grafico ignora le righe a monte, pertanto il workflow del widget è costituito unicamente dal nodo Output Grafico. Ogni persona autenticata visualizza le revisioni relative ai workflow di cui è proprietaria.
+- **hitl** — un carosello delle revisioni umane in sospeso. L'intestazione mostra `1/n pending`; la freccia sinistra è disabilitata sulla prima scheda e la freccia destra sull'ultima. Il nome del workflow apre tale esecuzione sul canvas. **Approve**, **Request changes** e **Reject** la risolvono, e l'icona della cronologia accanto al titolo del widget apre tale esecuzione nella finestra di dialogo della cronologia sulla stessa pagina. Questo tipo di grafico ignora le righe a monte, pertanto il workflow del widget è costituito unicamente dal nodo Output Grafico. Ogni persona autenticata visualizza le revisioni relative ai workflow di cui è proprietaria. Selezioni un **Workflow** (e **Select agent** quando ha più passaggi di revisione) nelle proprietà del nodo o nelle impostazioni del widget per mostrare invece le revisioni di quel Workflow, a chiunque possa aprirlo; vedere [widget HITL](../tabs/dashboard-tab.md#hitl-widgets).
 ### Liste di attività interattive
 
 Utilizzare la sintassi delle liste di attività Markdown in stile GitHub nel campo statico `text`:
@@ -307,3 +311,17 @@ Quando si genera un widget con l'**AI**, prompt come questi si mappano in modo d
 
 - [Scheda Dashboard](../tabs/dashboard-tab.md) — creare e organizzare i widget
 - [Nodo Output](output-node.md) — nodo terminale per i workflow standard
+
+
+## Pulsanti di collegamento
+
+Una `table` può trasformare una colonna in pulsanti che aprono un collegamento. Imposti **Link column** nelle proprietà del nodo (o `linkColumn` nel DSL) su una colonna le cui celle contengono un URL e, facoltativamente, **Link button text** (`linkLabel`). Ogni cella diventa un pulsante che apre il proprio URL in una nuova scheda. Senza testo del pulsante, questo mostra solo un'icona di collegamento:
+
+| Valore della cella | Apre |
+| ------------------ | ---- |
+| `https://jira.example.com/browse/T-1` | Un altro sito, in una nuova scheda |
+| `/dashboards` | Una pagina all'interno di Heym, in una nuova scheda |
+
+Solo gli indirizzi `http://` e `https://` e i percorsi che iniziano con una sola `/` diventano pulsanti. Qualsiasi altro valore, come `javascript:` o `//host`, rimane testo semplice e una cella vuota non mostra nulla.
+
+Il pulsante funziona accanto a un [collegamento di riga](../tabs/dashboard-tab.md#detail-pages): facendo clic sul pulsante si apre il suo collegamento in una nuova scheda, mentre facendo clic in qualsiasi altro punto della riga si apre ancora la pagina di dettaglio.

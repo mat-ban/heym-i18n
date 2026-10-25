@@ -18,14 +18,14 @@ Widget adalah satu chart pada kisi. Jenis chart yang didukung:
 - **Line**
 - **Area** (tren terisi, mendukung beberapa seri)
 - **Pie**
-- **Table** (dapat digulir; satu kolom dapat dirender sebagai [chip status](../nodes/chart-output-node.md#status-chips), dan baris dapat membuka [halaman detail](#detail-pages))
+- **Table** (dapat digulir; klik judul kolom untuk mengurutkan secara naik dan klik lagi untuk menurun. Satu kolom dapat dirender sebagai [chip status](../nodes/chart-output-node.md#status-chips), satu kolom dapat berisi [tombol tautan](../nodes/chart-output-node.md#link-buttons) yang membuka URL di tab baru, dan baris dapat membuka [halaman detail](#halaman-detail))
 - **Numeric** (satu nilai KPI dengan unit opsional)
 - **Gauge** (satu nilai terhadap rentang min–maks, misalnya persentase)
 - **Scatter** (titik X/Y untuk plot korelasi)
 - **Proportion** (satu bar yang dibagi menjadi beberapa bagian dengan legenda persentase, misalnya rincian bahasa)
 - **Bar gauge** (satu gauge horizontal per baris dengan gradien merah→hijau dan sebuah nilai, misalnya ruang disk kosong)
 - **Text** (pesan markdown, misalnya catatan status seperti "Last execution at 19:47"; mendukung [interactive checkboxes](../nodes/chart-output-node.md#interactive-task-lists) ketika markdown bersifat statis, dan [explicit numbered lists](../nodes/chart-output-node.md#numbered-lists) untuk penomoran kustom atau menurun)
-- **HITL** (tinjauan human review Anda yang tertunda. Header menampilkan `1/n pending`. Nama Workflow membuka run tersebut di canvas. **Approve**, **Request changes**, dan **Reject** menyelesaikannya. Ikon riwayat di samping judul widget membuka run tersebut dalam dialog riwayat di halaman ini. Widget ini tidak menggunakan baris upstream, dan setiap orang melihat antreannya sendiri)
+- **HITL** (tinjauan human review Anda yang tertunda. Header menampilkan `1/n pending`. Nama Workflow membuka run tersebut di canvas. **Approve**, **Request changes**, dan **Reject** menyelesaikannya. Ikon riwayat di samping judul widget membuka run tersebut dalam dialog riwayat di halaman ini. Widget ini tidak menggunakan baris upstream, dan setiap orang melihat antreannya sendiri. Widget ini juga dapat menampilkan tinjauan dari satu Workflow untuk semua orang yang dapat membuka Workflow tersebut; lihat [Widget HITL](#widget-hitl))
 
 Selain grafik, widget **Run a workflow** menjalankan salah satu Workflow Anda dari dashboard: pada file yang dijatuhkan, dengan kolom inputnya, atau dengan tombol Run; lihat [Widget Run](#run-widgets).
 
@@ -41,6 +41,20 @@ Setiap widget memuat datanya secara asinkron saat Anda membuka tab, sehingga hal
 Untuk widget **Run a workflow**, pilih Workflow yang akan dijalankan sebagai gantinya; pemilih menyebutkan bagaimana widget akan menjalankan masing-masing Workflow. Widget ditambahkan langsung ke grid; tidak ada Workflow baru yang perlu dibuat.
 
 Klik dua kali pada widget (atau gunakan tombol edit-nya) untuk membuka kembali Workflow-nya kapan saja. Gunakan **Clone widget** di header widget untuk menduplikasi widget beserta Workflow lengkapnya. Salinan ditempatkan di bawah aslinya dan diberi label **(Copy)** sehingga Anda dapat mengeditnya secara independen.
+
+## Widget HITL
+
+Widget HITL baru menampilkan setiap tinjauan yang menunggu dalam antrean Anda sendiri. Untuk hanya menampilkan tinjauan satu Workflow, buka **Pengaturan** widget:
+
+1. Di bawah **Workflow**, pilih Workflow. Daftar ini berisi Workflow yang dapat Anda buka – milik Anda atau dibagikan dengan Anda atau tim Anda – yang memiliki langkah menunggu seseorang: Agent dengan tinjauan manusia, atau langkah persetujuan, tombol, atau formulir Slack. Ikon di sebelahnya membuka Workflow tersebut di tab baru.
+2. Jika Workflow memiliki tepat satu langkah seperti itu, langkah tersebut akan dipilih secara otomatis. Jika memiliki beberapa langkah, **Select agent** mencantumkannya berdasarkan nama node, dengan **All agents** di urutan pertama; langkah Slack ditandai dengan **(Slack)**.
+3. Simpan. Indikator `1/n pending` di header hanya menghitung tinjauan tersebut. Pilih **Semua workflow** untuk menampilkan antrean Anda sendiri lagi.
+
+Pilihan yang sama ada di kanvas, pada properti node Chart Output. **Sempurnakan dengan AI** dapat melakukannya (“hanya tampilkan persetujuan faktur”), begitu pula mendeskripsikan widget baru yang menyebutkan Workflow. Setiap perubahan adalah pengeditan Workflow, sehingga muncul di Edit History.
+
+- **Siapa yang melihat tinjauan.** Widget yang difilter pada suatu Workflow menampilkan tinjauan Workflow tersebut kepada semua orang yang dapat membuka Workflow, dan mereka dapat menyetujui, meminta perubahan, atau menolak dari widget tersebut, sebagaimana mereka dapat menjalankan Workflow. Widget yang tidak difilter menampilkan antrean masing-masing kepada setiap orang.
+- **Siapa yang melihat widget.** Seseorang yang tidak dapat membuka Workflow yang dipilih tidak akan melihat widget sama sekali, bahkan di dasbor yang dibagikan dengannya. Ketika pemilik dasbor kehilangan akses ke Workflow atau Workflow dihapus, pemilik melihat “You no longer have access to the workflow this widget shows” dan dapat memilih yang lain di **Pengaturan**.
+- **Hanya pilihan yang dapat diakses.** Workflow yang tidak dapat Anda buka akan ditolak saat widget disimpan, baik dari pengaturan, kanvas, atau melalui AI.
 
 ## Halaman detail
 
@@ -75,6 +89,10 @@ Tombol **Wrap** pada hasil akan melipat baris output yang panjang di dalam kotak
 ## Menghasilkan widget dengan AI
 
 Klik **AI**, deskripsikan metrik yang Anda inginkan (misalnya, "workflow success rate over the last 30 days as a bar chart"), lalu pilih kredensial LLM dan model. Heym menghasilkan Workflow widget lengkap yang diakhiri dengan Node Chart Output dan menambahkannya ke kisi. Lihat [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) untuk contoh Prompt per jenis chart.
+
+Widget mendapatkan judul pendek dari satu atau dua kata dalam bahasa permintaan Anda, seperti “Kasus terbuka”. Judul tidak pernah menyertakan id tabel data; ketika model menamai widget dengan kalimat lengkap, Heym menyimpan kata-kata pertamanya.
+
+API widget juga dapat membuat **kartu hitungan** tanpa AI: widget `text` pada tabel data (`data_table_id`) dengan `count_column` dan `count_value` menunjukkan berapa banyak baris yang memiliki nilai tersebut; judul widget menyebutkan nilainya. Heym Work mengawali halaman yang dibuat dari tabel data dengan satu kartu hitungan per status.
 
 Gunakan tombol **Fine-tune with AI** pada widget untuk merevisi widget yang sudah ada dengan instruksi baru. Setiap fine-tune AI mengambil snapshot Workflow sebelumnya ke dalam **Edit History** widget, sehingga Anda dapat meninjau atau mengembalikan perubahan dari editor Workflow.
 

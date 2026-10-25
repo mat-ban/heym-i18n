@@ -9,11 +9,30 @@ Heym Work s'executa com a contenidor independent al costat de Heym, amb una llic
 | Àrea | Què fa |
 |------|--------|
 | **Chat** | Descriviu una tasca escrivint o per veu. Heym demana les dades necessàries, construeix el workflow, el prova i el marca com a Verificat. |
+| **Flows** | Els editors creen un flow a partir d'opcions en lloc d'un canvas: què l'inicia, un esborrany d'IA opcional i accions a Slack, Google Sheets i correu electrònic. Les respostes de Slack continuen l'execució, i les aprovacions també esperen a Activitat. Vegeu [Flows](#flows). |
 | **Pàgines** | Pàgines fixades amb ginys: indicadors numèrics, gràfics, taules amb etiquetes d'estat, zones per deixar anar fitxers i aprovacions. Una fila de taula pot obrir la seva pròpia pàgina de detall. |
 | **Aprovacions** | Les revisions dels passos de [Human-in-the-Loop](./human-in-the-loop.md) esperen a Activitat i a les pàgines, amb les opcions Aprova, Demana canvis i Rebutja. |
 | **Activitat** | Cada execució, amb la persona que la va iniciar i la instància que la va dur a terme. |
 | **Rols** | Propietari, Editor i Visor. L'inici de sessió es fa mitjançant el [Single Sign-On](./sso.md) que Heym ja utilitza. |
 | **Edicions sectorials** | Les edicions per a serveis jurídics, educació, finances, logística, energia i comerç electrònic s'inicien amb pàgines, dades d'exemple i workflows adaptats a cada sector. |
+
+## Flows
+
+**Flows** es troba al menú de Heym Work per a Editors i Propietaris. Un flow es compon d'opcions en lloc de nodes, i Heym Work el desa com un workflow normal de Heym mitjançant l'API de Heym, en nom de la persona que el va crear. S'apliquen les regles d'accés, l'historial d'edicions i la sincronització de triggers de Heym com a l'editor, i cada execució apareix a Activitat com qualsevol altra.
+
+| Part | Opcions |
+|---|---|
+| **Què l'inicia** | A petició, segons un calendari, amb un missatge de Slack, quan canvia una pestanya de Google Sheets (files afegides, modificades o eliminades) o quan un correu arriba a la bústia. Els triggers de full i correu comproven cada 1, 5, 15 o 60 minuts. |
+| **Esborrany d'IA** (opcional) | Un model i instruccions converteixen allò que ha iniciat el flow en text per als passos posteriors. Un flow que no comenci des d'un full o correu pot llegir primer missatges recents de Slack des d'un canal o fil. |
+| **Què passa després** | Accions en ordre, en qualsevol de les tres eines, independentment d'allò que hagi iniciat el flow. **Slack:** missatge de canal, missatge directe, formulari, missatge amb botons, aprovació, resposta a fil, actualització de missatge i resultat final. **Google Sheets:** afegir una fila o actualitzar la fila modificada. **Correu:** enviar un correu electrònic. |
+
+- **Les respostes continuen l'execució.** Una aprovació, botons o formulari posen en pausa l'execució fins que algú respon a Slack. Una aprovació també espera a Activitat, i una decisió a qualsevol dels llocs retira els botons del missatge de Slack. Els passos posteriors de Slack romanen al fil del primer missatge.
+- **Una sola targeta de Connexions.** Cada flow mostra l'espai de treball de Slack, el compte de Google Sheets i les bústies des d'on llegeix i envia. Són credencials de Heym: **Slack Bot** (token de bot, `xoxb-…`), **Google Sheets**, **IMAP** i **SMTP**; una credencial mancant es pot afegir des del mateix flow.
+- **Una app Slack per a cada flow.** A l'aplicació Slack, establiu l'URL de Sol·licitud d'Interactivitat a `https://<el vostre Heym>/api/slack/interactions/<id credencial>` i l'URL de Sol·licitud de Subscripcions d'Esdeveniments a `https://<el vostre Heym>/api/slack/events/<id credencial>`. Heym Work mostra ambdues per a la connexió triada. Tots els flows en aquesta credencial les comparteixen.
+- **Els triggers de Slack trien què escolten:** missatges en canals i missatges directes, missatges directes al bot, mencions del bot o missatges en un sol canal. Les publicacions del mateix bot mai no inicien un flow.
+- **Requisits.** Els flows requereixen Heym 0.0.131 o posterior.
+
+Els passos que construeix un flow són els mateixos nodes que podeu utilitzar al canvas: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) i [Cron](../nodes/cron-node.md).
 
 ## Connectar Heym Work
 
@@ -26,7 +45,7 @@ La connexió es configura a **Configuració → Heym Work**. La pestanya només 
 | **Adreça de Heym Work** | On s'executa Heym Work, per exemple `https://work.example.com`. L'inici de sessió redirigeix aquí. Premeu **Desa**. |
 | **Clau d'integració** | **Genera clau** crea la clau que Heym Work utilitza per a cada sol·licitud a Heym. Es mostra una única vegada, amb un botó per copiar-la. Heym només n'emmagatzema el resum criptogràfic (hash). |
 | **Activa Heym Work** | Habilita la connexió. Requereix haver indicat prèviament l'adreça i una clau. |
-| Estat | **Vist per última vegada**, **Versió de Work** i **Llicència**, segons l'últim informe de Heym Work. |
+| **Edicions de sector i equip** | Edicions jurídica, educació, finances, logística, energia i comerç electrònic, a més d'edicions de TI, vendes, màrqueting i RRHH per a equips d'empresa, s'obren amb pàgines, dades de mostra i workflows dedicats. |
 
 A continuació, obriu l'adreça de Heym Work i completeu la configuració:
 

@@ -1,6 +1,6 @@
 # Drobės funkcijos
 
-Workflow redaktorius siūlo kelias funkcijas, skirtas klaidų taisymui, testavimui ir mazgų organizavimui: **Vykdyti iki mazgo**, **Duomenų pin**, **Vykdymo žurnalai**, **Įjungti/Išjungti** ir **Išskirti į Sub-Workflow**.
+Workflow redaktorius siūlo kelias funkcijas, skirtas klaidų taisymui, testavimui ir mazgų organizavimui: **Vykdyti iki mazgo**, **AI mazge**, **Duomenų pin**, **Vykdymo žurnalai**, **Įjungti/Išjungti** ir **Išskirti į Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Žiūrėti redaktoriaus demonstraciją</a></p>
@@ -12,6 +12,12 @@ Pelaikykite bet kurį mazgą, išskyrus lipnųjį lapą, ir spustelėkite **Vykd
 Jei pasirinktoje kelio dalyje yra įvesties laukai, dešinėje **Vykdyti** panelėje atsidaro ir fokusuojamas pirmasis laukas. Įveskite reikšmes, tada spustelėkite **Vykdyti iki _mazgo žymės_** arba paspauskite **Ctrl+Enter** (Cmd+Enter macOS). Bendro kūno režimas fokusuojasi į JSON kūno redaktorių. Keliai be įvesties laukų vykdomi iš karto, neatidarant panelės. Pritvirtinti Įvesties mazgai naudoja savo pritvirtintą išėjimą, nesiklausdami įvesties.
 
 Panelė išlaiko pasirinktą tikslą vėlesniems vykdymams. Pasirinkite **Vykdyti visą workflow**, kad išvalytumėte tikslą. Vykdymo mygtukai yra neaktyvūs, kol vykdymas yra aktyvus. Tikslas cikle sustabdo vykdymą, kai tas mazgas pirmą kartą pasiekiamas; pasirinkus mazgą po ciklo, vykdomas visas aukštyn srautas.
+
+## AI mazge
+
+Užveskite žymeklį ant bet kurio mazgo, išskyrus lipnų lapelį, ir spustelėkite **AI** virš jo. [AI Assistant](./ai-assistant.md) atsidaro ant to mazgo ir siūlo **Change this node as ...**, **Fix error in this node ...** bei **Other**. Agent režimu asistentas keičia tik tą mazgą; kiti mazgai, ryšiai ir išdėstymas lieka nepakitę. Žr. [AI Assistant › Vieno mazgo keitimas](./ai-assistant.md#changing-one-node).
+
+Mygtukas yra paslėptas workflowuose, kuriuos galite tik peržiūrėti.
 
 ## Duomenų pin
 

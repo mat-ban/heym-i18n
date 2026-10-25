@@ -211,6 +211,11 @@ Se il file esiste già, Heym recupera automaticamente lo SHA corrente prima di a
 `List Organization Repositories`, `List User Repositories` e `Get User Repositories` supportano
 **Per Page** (1–100). Heym richiede una pagina di risultati; non esiste un campo `page` per recuperare
 pagine aggiuntive nella stessa operazione.
+
+### Return all pages
+
+Attivi **Return all pages** affinché un'esecuzione segua tutte le pagine, partendo da **Cursor** se impostato. Ogni richiesta chiede 100 elementi, indipendentemente dal valore di **Per Page**. Il nodo si ferma dopo circa 1.000 elementi (o 100 richieste): gli oggetti issue pesano circa 6 KB ciascuno, quindi un limite maggiore produrrebbe output del nodo molto grandi. Se si ferma prima, restituisce quanto ottenuto con `has_more: true` e un `next_cursor` invece di generare un errore, e si può proseguire passando quel cursore all'esecuzione successiva. L'arresto del Workflow o il raggiungimento del suo timeout interrompe il recupero tra una pagina e l'altra.
+
 ## Output
 
 La forma esatta dipende dall'operazione selezionata. I campi comuni includono:

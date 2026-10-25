@@ -478,7 +478,14 @@
     "extract": "Extrahovat",
     "mySubWorkflow": "Můj Sub-Workflow",
     "moreNodes": "+{count} dalších",
-    "runToNode": "Spustit do {label}"
+    "runToNode": "Spustit do {label}",
+    "aiButtonTitle": "Změnit nebo opravit tento uzel pomocí asistenta AI",
+    "editNodeWithAi": "Upravit {label} pomocí AI",
+    "modifyingNode": "Úprava uzlu:",
+    "hasNodeOutput": "(Má výstup uzlu)",
+    "closeNodeFocus": "Zavřít zaměření na uzel a upravit celý Workflow",
+    "nodeFocusRan": "Tento uzel byl spuštěn. AI vidí jeho poslední výstup a chybu a čte dokumentaci uzlu.",
+    "nodeFocusNoOutput": "Tento uzel nemá v aktuálním spuštění žádný výstup. Spusťte jej nejprve, pokud má AI vidět jeho výstup. AI čte dokumentaci uzlu v obou případech."
   },
   "nodes": {
     "title": "Uzly",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Upravit zprávu ve frontě",
     "deleteQueuedMessage": "Smazat zprávu ve frontě",
     "startedByMcp": "Spuštěno klientem MCP",
-    "newChatTitle": "Nový chat"
+    "newChatTitle": "Nový chat",
+    "subtitle": "Spouštějte Workflows a pokládejte otázky",
+    "modelsLoadFailedDisabled": "Seznam modelů pro tyto přihlašovací údaje se nepodařilo načíst. Chat zůstane vypnutý, dokud nebude možné model získat."
   },
   "teams": {
     "title": "Týmy",
@@ -1672,7 +1681,10 @@
       "error": "Chyba",
       "cached": "Z cache",
       "cancelled": "Zrušeno"
-    }
+    },
+    "askAi": "Zeptat se AI",
+    "askAiTitle": "Zeptat se asistenta Chat na toto spuštění",
+    "noNodeSpans": "Pro toto spuštění nebyly zaznamenány žádné spany uzlů."
   },
   "portal": {
     "loadingPortal": "Načítání portálu...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Záznamy stránky s podrobnostmi",
     "detailPageRecordsHelp": "Hodnoty ?record=, které tento řídicí panel přijímá při otevření z odkazu na řádku. Jakékoli jiné hodnoty jsou před spuštěním widgetu odmítnuty.",
     "unreachableDashboard": "Řídicí panel, který nelze otevřít",
-    "runWorkflow": "Spustit Workflow"
+    "runWorkflow": "Spustit Workflow",
+    "openWorkflowNewTab": "Otevřít Workflow na nové kartě",
+    "hitlFilterHelp": "Zobrazit kontroly ze všech Workflows nebo jen z jednoho. Vypíše Workflows, které můžete otevřít – vaše vlastní nebo sdílené s vámi –, s krokem čekajícím na osobu.",
+    "hitlSourcesLoadFailed": "Vaše Workflows se nepodařilo načíst."
   },
   "drive": {
     "filesCount": "({count} souborů)",

@@ -82,6 +82,17 @@ A [Human-in-the-Loop](../reference/human-in-the-loop.md) vagy Codex-felülvizsg�
 így a Chat és a jelvény soha nem mond ellent egymásnak. A már befejezett futtatásokhoz kérdezzen rá a legutóbbi végrehajtásokra
 — az az [Execution History](../reference/execution-history.md) adatait olvassa.
 
+## Kérdések egy futásról
+
+Válasszon ki egy Workflow-futást az [Execution History](../reference/execution-history.md#ask-ai) párbeszédpanelen, a szerkesztőben vagy az All History felületén, és kattintson a **Kérdezze az AI-t** gombra a párbeszédpanel címe mellett. A Chat egy új beszélgetést nyit meg, két chippel az üzenetmező felett:
+
+- **Workflow:** a Workflow neve
+- **Execution:** a kiválasztott futás azonosítójának első karakterei
+
+Távolítson el egy chipet a **×** gombbal a kihagyásához. Ezután tegye fel a kérdését, például „miért tartott ilyen sokáig ez a futás?”, „mi hibásodott meg itt?” vagy „tudja javítani?”. A megmaradt chipek a teljes azonosítókkal lesznek csatolva az üzenethez, így a Chat közvetlenül a futás bemeneteit, kimeneteit és csomópontonkénti nyomkövetését olvassa a Workflow keresése helyett. A Workflow javításához a Chat elmenti, teszteli és ellenőrzi a módosítást a [Workflows létrehozása](#workflows-letrehozasa) részben leírtak szerint.
+
+Az elküldött üzenet a chipeket a kérdése alatt jeleníti meg. Ezek csak az adott üzenethez tartoznak; az ugyanabban a beszélgetésben feltett további kérdések megőrzik az előzményekből származó környezetet.
+
 ## Riasztásokra vonatkozó kérdések
 
 A Chat válaszolni tud az Ön által meghatározott [riasztásokkal](./alerts-tab.md) kapcsolatos kérdésekre:

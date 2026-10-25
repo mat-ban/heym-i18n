@@ -79,6 +79,17 @@ Spørg i almindeligt sprog — "hvad kører?", "hvor mange workflows er aktive l
 
 Kørsler, der er sat på pause til en [Human-in-the-Loop](../reference/human-in-the-loop.md) eller Codex-gennemgang, rapporteres som afventende, ikke som kørende. Dette er de samme data som aktiv-kørsler-badgen i headeren, så Chat og badgen er aldrig uenige. For kørsler, der allerede er afsluttet, spørges der i stedet til seneste kørsler — dette læser [Kørselshistorik](../reference/execution-history.md).
 
+## Forespørgsel om en kørsel
+
+Vælg en Workflow-kørsel i [Execution History](../reference/execution-history.md#ask-ai), fra editoren eller fra All History, og klik på **Spørg AI** ved siden af dialogens titel. Chat åbner en ny samtale med to chips over meddelelsesfeltet:
+
+- **Workflow:** navnet på Workflow
+- **Execution:** de første tegn i det valgte kørsels-id
+
+Fjern et chip med dets **×** for at udelade det. Stil derefter spørgsmålet, for eksempel ”hvorfor tog denne kørsel så lang tid?”, ”hvad fejlede her?” eller ”kan du rette det?”. De resterende chips vedhæftes denne meddelelse med fulde id'er, så Chat læser kørslens input, output og nodetrace direkte i stedet for at søge efter Workflow. For at rette Workflow gemmer, testkører og verificerer Chat ændringen som beskrevet i [Oprettelse af workflows](#oprettelse-af-workflows).
+
+Den sendte meddelelse viser chipsene under spørgsmålet. De tilhører kun denne meddelelse; opfølgende spørgsmål i samme samtale bevarer konteksten fra historikken.
+
 ## Forespørgsel om advarsler
 
 Chat kan besvare spørgsmål om de [advarsler](./alerts-tab.md), der er defineret:

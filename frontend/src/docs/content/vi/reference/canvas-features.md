@@ -1,6 +1,6 @@
 # Các tính năng của Canvas
 
-Trình chỉnh sửa workflow cung cấp một số tính năng để gỡ lỗi, kiểm thử và sắp xếp các node: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** và **Extract to Sub-Workflow**.
+Trình chỉnh sửa workflow cung cấp một số tính năng để gỡ lỗi, kiểm thử và sắp xếp các node: **Run to Node**, **AI trên một Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** và **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Xem bản demo Editor</a></p>
@@ -12,6 +12,12 @@ Di chuột qua bất kỳ node nào (trừ sticky note) và nhấp vào **Run** 
 Nếu đường dẫn được chọn có các trường nhập liệu, bảng **Run** bên phải sẽ mở ra và focus vào trường đầu tiên. Nhập các giá trị, sau đó nhấp vào **Run to _node label_** hoặc nhấn **Ctrl+Enter** (Cmd+Enter trên macOS). Chế độ generic body sẽ focus vào trình chỉnh sửa JSON body. Các đường dẫn không có trường nhập liệu sẽ chạy ngay lập tức mà không mở bảng. Các Input node đã pin sẽ tái sử dụng output đã pin mà không yêu cầu nhập liệu.
 
 Bảng này giữ lại target đã chọn cho các lần chạy tiếp theo. Chọn **Run full workflow** để xóa target. Các nút Run bị vô hiệu hóa khi có một execution đang chạy. Nếu target nằm trong một loop, quá trình chạy sẽ dừng lại khi node đó được tiếp cận lần đầu; chọn một node sau loop sẽ chạy toàn bộ loop phía trước (upstream).
+
+## AI trên một Node
+
+Di chuột qua bất kỳ node nào ngoại trừ ghi chú dán và nhấp vào **AI** phía trên node đó. [AI Assistant](./ai-assistant.md) sẽ mở trên node đó và cung cấp **Change this node as ...**, **Fix error in this node ...** và **Other**. Ở chế độ Agent, trợ lý chỉ thay đổi node đó; các node khác, kết nối và bố cục vẫn giữ nguyên. Xem [AI Assistant › Thay đổi một Node](./ai-assistant.md#changing-one-node).
+
+Nút này bị ẩn trên các workflow mà bạn chỉ có quyền xem.
 
 ## Data Pin
 

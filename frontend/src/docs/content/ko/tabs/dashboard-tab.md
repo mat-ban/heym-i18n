@@ -18,14 +18,14 @@
 - **Line**
 - **Area** (채워진 추세, 다중 시리즈 지원)
 - **Pie**
-- **Table** (스크롤 가능; 한 열을 [상태 칩](../nodes/chart-output-node.md#status-chips)으로 렌더링할 수 있으며, 행을 클릭해 [상세 페이지](#detail-pages)를 열 수 있음)
+- **Table** (스크롤 가능; 열 머리글을 클릭하면 오름차순으로 정렬되고 다시 클릭하면 내림차순으로 정렬됩니다. 한 열을 [상태 칩](../nodes/chart-output-node.md#status-chips)으로 렌더링할 수 있고, 한 열에는 새 탭에서 URL을 여는 [링크 버튼](../nodes/chart-output-node.md#link-buttons)을 포함할 수 있으며, 행을 클릭하여 [상세 페이지](#sang-se-pei-ji)를 열 수 있습니다)
 - **Numeric** (선택적 단위가 있는 단일 KPI 값)
 - **Gauge** (최소–최대 범위에 대한 단일 값, 예: 백분율)
 - **Scatter** (상관관계 도표를 위한 X/Y 포인트)
 - **Proportion** (백분율 범례와 함께 비율로 분할된 하나의 막대, 예: 언어별 분석)
 - **Bar gauge** (빨강→초록 그라디언트와 값이 있는 행당 하나의 가로 게이지, 예: 여유 디스크 공간)
 - **Text** (markdown 메시지, 예: "Last execution at 19:47"과 같은 상태 메모. markdown이 정적인 경우 [interactive checkboxes](../nodes/chart-output-node.md#interactive-task-lists)를 지원하며, 사용자 지정 또는 내림차순 번호 매기기를 위한 [explicit numbered lists](../nodes/chart-output-node.md#numbered-lists)도 지원합니다)
-- **HITL** (대기 중인 human review. 헤더에 `1/n pending`이 표시됩니다. Workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject** 로 처리합니다. 위젯 제목 옆의 기록 아이콘은 이 페이지의 기록 대화상자에서 해당 실행을 엽니다. 이 위젯은 업스트림 행을 사용하지 않으며, 각 사용자는 자신의 큐를 봅니다)
+- **HITL** (대기 중인 human review. 헤더에 `1/n pending`이 표시됩니다. Workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject** 로 처리합니다. 위젯 제목 옆의 기록 아이콘은 이 페이지의 기록 대화상자에서 해당 실행을 엽니다. 이 위젯은 업스트림 행을 사용하지 않으며, 각 사용자는 자신의 큐를 봅니다. 대신 해당 Workflow를 열 수 있는 모든 사람을 위해 단일 Workflow의 검토를 표시할 수도 있습니다. [HITL 위젯](#hitl-wi-jes)을 참조하세요)
 
 차트 외에도 **Run a workflow** 위젯은 대시보드에서 바로 사용자의 Workflow 중 하나를 실행합니다. 드롭된 파일, 입력 필드 또는 Run 버튼으로 실행할 수 있습니다([실행 위젯](#run-widgets) 참조).
 
@@ -41,6 +41,20 @@
 **Run a workflow** 위젯의 경우, 대신 실행할 Workflow를 선택하세요. 선택기에 위젯이 각 Workflow를 어떻게 실행할지 표시됩니다. 위젯이 그리드에 바로 추가되며 새로 만들 Workflow는 없습니다.
 
 위젯을 더블 클릭하거나 편집 버튼을 사용하여 언제든지 해당 Workflow를 다시 열 수 있습니다. 위젯 헤더의 **Clone widget** 을 사용하면 위젯과 그 전체 Workflow를 모두 복제할 수 있습니다. 복사본은 원본 아래에 배치되고 **(Copy)** 로 레이블이 지정되므로 독립적으로 편집할 수 있습니다.
+
+## HITL 위젯
+
+새로운 HITL 위젯은 자신의 큐에서 대기 중인 모든 검토를 표시합니다. 하나의 Workflow 검토만 표시하려면 위젯의 **설정**을 엽니다:
+
+1. **Workflow**에서 해당 Workflow를 선택합니다. 목록에는 열 수 있는 Workflow(자신이 소유하거나 자신 또는 팀과 공유된 Workflow) 중 사람을 기다리는 단계가 있는 Workflow(사람 검토가 포함된 Agent 또는 Slack 승인, 버튼, 양식 단계)가 포함됩니다. 옆에 있는 아이콘을 클릭하면 해당 Workflow가 새 탭에서 열립니다.
+2. Workflow에 이러한 단계가 하나만 있는 경우 자동으로 선택됩니다. 여러 개가 있는 경우 **Select agent**는 노드 이름별로 목록을 표시하며 **All agents**가 맨 위에 표시됩니다. Slack 단계에는 **(Slack)** 표시가 붙습니다.
+3. 저장합니다. 헤더의 `1/n pending`은 해당 검토만 계산합니다. 자신의 큐를 다시 표시하려면 **모든 Workflow**를 선택합니다.
+
+캔버스의 Chart Output 노드 속성에서도 동일한 선택을 할 수 있습니다. **AI로 세부 조정**을 사용하여 지정할 수도 있고(”송장 승인만 표시”), Workflow 이름을 지정하는 새 위젯 설명에서도 설정할 수 있습니다. 모든 변경 사항은 Workflow 편집이므로 Edit History에 표시됩니다.
+
+- **검토를 볼 수 있는 사람.** Workflow로 필터링된 위젯은 해당 Workflow를 열 수 있는 모든 사람에게 해당 Workflow의 검토를 표시하며, Workflow를 실행할 수 있는 것과 마찬가지로 위젯에서 승인, 변경 요청 또는 거부를 수행할 수 있습니다. 필터링되지 않은 위젯은 각 사용자에게 자신의 큐를 표시합니다.
+- **위젯을 볼 수 있는 사람.** 선택한 Workflow를 열 수 없는 사용자는 공유된 대시보드에서도 위젯을 전혀 볼 수 없습니다. 대시보드 소유자가 액세스 권한을 잃거나 Workflow가 삭제되면 소유자에게 ”You no longer have access to the workflow this widget shows”라는 메시지가 표시되며 **설정**에서 다른 항목을 선택할 수 있습니다.
+- **액세스 가능한 항목만 선택 가능.** 열 수 없는 Workflow는 설정에서든 캔버스에서든 AI를 통해서든 위젯을 저장할 때 거부됩니다.
 
 ## 상세 페이지
 
@@ -75,6 +89,10 @@
 ## Generating a widget with AI
 
 **AI** 를 클릭하고 원하는 지표를 설명한 후(예: "workflow success rate over the last 30 days as a bar chart"), LLM credential과 모델을 선택하십시오. Heym은 Chart Output 노드로 끝나는 완전한 위젯 Workflow를 생성하여 그리드에 추가합니다. 차트 유형별 예시 Prompt는 [Chart Output](../nodes/chart-output-node.md#example-ai-prompts)을 참조하십시오.
+
+위젯에는 요청 언어로 ”미해결 사건”과 같은 한두 단어의 짧은 제목이 지정됩니다. 제목에는 데이터 테이블의 ID가 포함되지 않습니다. 모델이 문장으로 위젯 이름을 지정하면 Heym은 첫 몇 단어를 유지합니다.
+
+위젯 API는 AI 없이도 **카운트 카드**를 만들 수 있습니다. `count_column` 및 `count_value`가 지정된 데이터 테이블(`data_table_id`)의 `text` 위젯은 해당 값을 가진 행 수를 표시하며, 위젯 제목에 해당 값이 표시됩니다. Heym Work는 데이터 테이블로 생성된 페이지를 상태당 하나의 카운트 카드로 시작합니다.
 
 위젯의 **Fine-tune with AI** 버튼을 사용하여 새로운 지시로 기존 위젯을 수정하십시오. 각 AI fine-tune은 이전 Workflow를 위젯의 **Edit History** 에 스냅샷으로 저장하므로, Workflow 편집기에서 변경 사항을 검토하거나 롤백할 수 있습니다.
 

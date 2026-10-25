@@ -1,6 +1,6 @@
 # Canvasの機能
 
-Workflowエディタには、ノードのデバッグ、テスト、整理のための機能がいくつか用意されています：**Run to Node**、**Data Pin**、**Execution Logs**、**Enable/Disable**、**Extract to Sub-Workflow**です。
+Workflowエディタには、ノードのデバッグ、テスト、整理のための機能がいくつか用意されています：**Run to Node**、**ノードの AI**、**Data Pin**、**Execution Logs**、**Enable/Disable**、**Extract to Sub-Workflow**です。
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ エディタのデモを見る</a></p>
@@ -12,6 +12,12 @@ Workflowエディタには、ノードのデバッグ、テスト、整理のた
 選択したパスに入力フィールドがある場合、右側の**Run**パネルが開き、最初のフィールドにフォーカスします。値を入力し、**Run to _ノードラベル_**をクリックするか、**Ctrl+Enter**（macOSではCmd+Enter）を押します。汎用bodyモードではJSON bodyエディタにフォーカスします。入力フィールドのないパスは、パネルを開かずにすぐに実行されます。ピン留めされたInputノードは、入力を求めることなくピン留めされた出力を再利用します。
 
 パネルは後続の実行のために選択したターゲットを保持します。ターゲットをクリアするには**Run full workflow**を選択します。実行中はRunボタンが無効になります。ループ内のターゲットは、そのノードに最初に到達したときに実行を停止します。ループ後のノードを選択すると、上流のループ全体が実行されます。
+
+## ノードの AI
+
+付箋以外の任意のノードにカーソルを合わせ、その上にある **AI** をクリックします。[AI Assistant](./ai-assistant.md) がそのノードで開き、**Change this node as ...**、**Fix error in this node ...**、**Other** を提供します。Agent モードでは、アシスタントはそのノードのみを変更します。他のノード、接続、レイアウトはそのまま残ります。[AI Assistant › 単一ノードの変更](./ai-assistant.md#changing-one-node) を参照してください。
+
+このボタンは、表示専用の権限を持つワークフローでは非表示になります。
 
 ## Data Pin
 

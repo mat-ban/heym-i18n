@@ -55,6 +55,18 @@ Atidarius workflow adresu `/workflows/{workflowId}/{executionId}`, automatiškai
 - Taisyti nesėkmingą vykdymą tikrinant įvestis ir mazgų išvestis
 - Palyginti išvestis tarp vykdymų
 
+## Klausti AI
+
+Abiejuose istorijos dialogo languose šalia pavadinimo yra mygtukas **Klausti AI** (kibirkšties piktograma). Jis atidaro [skirtuką Chat](../tabs/chat-tab.md#asking-about-a-run) naujame pokalbyje su pridėtu workflow ir pasirinktu vykdymu kaip pašalinamais žetonais. Paklauskite, kodėl vykdymas buvo lėtas, kas nepavyko, arba leiskite Chat pataisyti workflow. Chat skaito būtent tą vykdymą, įskaitant sekimą pagal mazgus ir klaidas.
+
+Dialogo lange All History **Klausti AI** rodomas tik pasirinkus workflow vykdymą; pokalbių ir asistento vykdymuose jis nerodomas.
+
+## Vykdymo laiko juosta
+
+Vykdymo detalėse mygtukas **Laiko juosta** (laikmačio piktograma) šalia **Išskleisti viską** pakeičia sąrašą **Žingsniai** į aprėpčių laiko juostą. Kol rodoma laiko juosta, tas pats mygtukas vadinasi **Žurnalai**; spustelėkite jį, kad grįžtumėte į sąrašą. All History mygtukas rodomas tik workflow vykdymams. Laiko juosta nubrėžia juostą kiekvienam mazgui jo paleidimo metu, kad matytumėte, kiek truko kiekvienas mazgas ir kurie veikė lygiagrečiai. Užveskite žymeklį ant juostos, kad pamatytumėte trukmę; spustelėkite, kad atidarytumėte tą patį detalių inspektorių kaip redaktoriaus [vykdymo laiko juostoje](#execution-timeline-details). Pasirinktas rodinys išlieka tol, kol atidarytas dialogas.
+
+Vykdymai, įrašyti prieš išsaugant mazgų pradžios laikus, išdėstomi vienas po kito pagal trukmę.
+
 ## Vykdymo Akcentai
 
 Po gyvo vykdymo — arba po **Bring to Canvas** — atsiranda uždarinėjamas **Vykdymo Akcentai** iššokantis langas **drobės viršuje dešinėje**. Tai greitas būdas pamatyti *ką kiekvienas mazgas pagamino*, išvardytą nuo viršaus iki apačios vykdymo tvarka. Uždarykite jį su **✕**; jis vėl atsiranda kitame vykdyme.
@@ -139,7 +151,7 @@ Naudokite **Kopijuoti** šalia Įvesties arba Išvesties, kad nukopijuotumėte J
 
 ## Vykdymo laiko juostos detalės
 
-Kai redaktoriaus **Vykdymo žurnalas** yra atidarytas, spustelėkite laikmačio mygtuką, kad parodytumėte vykdymo laiko juostą. Pasirinkite intervalą, kad atidarytumėte įterptą detalių inspektorių, kuris užima eilučių sritį. Jis rodo pasirinkto žingsnio būseną, trukmę, bandymų skaičių, pakartojimo informaciją, klaidas, sekimo ID ir kompaktišką išvesties peržiūrą. Objektų ir masyvų išvestys naudoja tą patį `JsonTree` peržiūros įrankį kaip ir likusi Debug panelė; skalarinės vertės naudoja teksto peržiūrą. Kai žingsnis išveda vaizdus (Playwright ekrano nuotraukas, sugeneruotus vaizdus, vaizdo failus), jie pasirodo kaip miniatiūros virš išvesties, o JSON rodo trumpą vietą, kurioje yra žali base64. Spustelėkite miniatiūrą, kad atidarytumėte ją šviesos dėžėje; rodyklės mygtukai arba ←/→ klavišai pereina per kiekvieną vaizdą vykdyme, su skaitikliu, tokiu kaip `2 / 5`. Naudokite **Atidaryti sekimą** LLM ir Agent span'ams, kai sekimo ID yra prieinamas.
+Kai redaktoriaus **Vykdymo žurnalas** yra atidarytas, spustelėkite laikmačio mygtuką, kad parodytumėte vykdymo laiko juostą. Pasirinkite intervalą, kad atidarytumėte įterptą detalių inspektorių, kuris užima eilučių sritį. Jis rodo pasirinkto žingsnio būseną, trukmę, bandymų skaičių, pakartojimo informaciją, klaidas, sekimo ID ir kompaktišką išvesties peržiūrą. Objektų ir masyvų išvestys naudoja tą patį `JsonTree` peržiūros įrankį kaip ir likusi Debug panelė; skalarinės vertės naudoja teksto peržiūrą. Kai žingsnis išveda vaizdus (Playwright ekrano kopijos, sugeneruoti vaizdai, vaizdo failai arba base64 vaizdai užklausos tekste, rasti bet kur išvestyje), jie pasirodo kaip miniatiūros virš išvesties, o JSON rodo trumpą vietą, kurioje yra žali base64. Spustelėkite miniatiūrą, kad atidarytumėte ją šviesos dėžėje; rodyklės mygtukai arba ←/→ klavišai pereina per kiekvieną vaizdą vykdyme, su skaitikliu, tokiu kaip `2 / 5`. Naudokite **Atidaryti sekimą** LLM ir Agent span'ams, kai sekimo ID yra prieinamas.
 ## Mobilus mazgo detalė
 
 Telefono ekrane redaktorius rodo viso ekrano workflow medį vietoj laisvos formos drobės. Paspauskite medžio mazgą su užfiksuotu rezultatu, kad atidarytumėte jo vykdymą kaip viso ekrano detalę. Peržiūra pateikia atskiras **Įvesties duomenų**, **Išvesties duomenų** ir **Klaidų** korteles. Išvesties kortelėje rodomas užfiksuotas rezultatas ir siūloma **Kopijuoti išvestį**; įvesties kortelėje matoma pasirinkto mazgo konfigūracija, o klaidų kortelėje rodomos užfiksuotos klaidos, kai mazgas nepavyko. Naudokite **Grįžti į workflow** arba uždarymo mygtuką, kad grįžtumėte į medį.

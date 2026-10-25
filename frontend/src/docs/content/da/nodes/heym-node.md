@@ -16,7 +16,7 @@
 | Parameter | Type | Beskrivelse |
 |-----------|------|-------------|
 | `heymOperation` | Vælg | Hvilken læseoperation der skal udføres |
-| `heymWorkflowId` | UUID | Målworkflow. Påkrævet for `getWorkflow` og `getExecutionHistory`. Kan indeholde udtryk. |
+| `heymWorkflowId` | UUID | Angiv `all` for `getExecutionHistory` for at læse ethvert tilgængeligt Workflow. |
 | `heymLimit` | String | Maksimalt antal rækker der returneres. **Lad feltet være tomt eller indtast `0` for at returnere alt** - dette er standardværdien. Kan indeholde udtryk. |
 | `heymStatus` | String | Valgfri statusfilter for `getExecutionHistory`. Kan indeholde udtryk. |
 | `heymSinceDays` | String | Valgfri tilbagebliksperiode i dage for `getExecutionHistory`. Kan indeholde udtryk. |
@@ -93,9 +93,11 @@ Returnerer kørselshistorikposter for et workflow, nyeste først.
 | `$nodeLabel.executions[0].recovered` | Om kørslen blev gendannet efter en nedbrud |
 | `$nodeLabel.executions[0].inputs` | Hvad kørslen modtog - trigger-payload eller kalders input |
 | `$nodeLabel.executions[0].outputs` | Workflowets output for den pågældende kørsel |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflowet som historikken tilhører |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Det Workflow, som historikken tilhører, eller `null` med **{AW}** |
+, eller `null` med **{AW}** |
 | `$nodeLabel.total` | Samlet antal matchende kørsler **før** grænsen |
-| `$nodeLabel.by_status` | Tæller nøgler efter status, f.eks. `{ "success": 41, "error": 3 }` |
+| `$nod| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Med **{AW}** det Workflow, som hver kørsel tilhører |
+eLabel.by_status` | Tæller nøgler efter status, f.eks. `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Starten af vinduet, eller `null` for fuld historik |
 
 Poster indeholder både `inputs` og `outputs` - hvad kørslen modtog og hvad den svarede - men aldrig `node_results`: per-node-sporet er den største kolonne i tabellen og ville overdøve alt nedstrøms. Hent en enkelt kørsel via API'en, når det fulde spor er nødvendigt.

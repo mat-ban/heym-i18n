@@ -1,6 +1,6 @@
 # Canvas-functies
 
-De workflow-editor biedt verschillende functies voor het debuggen, testen en organiseren van knooppunten: **Uitvoeren tot knooppunt**, **Data Pin**, **Uitvoeringslogboeken**, **In-/Uitschakelen** en **Extraheren naar sub-workflow**.
+De workflow-editor biedt verschillende functies voor het debuggen, testen en organiseren van knooppunten: **Uitvoeren tot knooppunt**, **AI op een node**, **Data Pin**, **Uitvoeringslogboeken**, **In-/Uitschakelen** en **Extraheren naar sub-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Editor-demo bekijken</a></p>
@@ -12,6 +12,12 @@ Beweeg de muisaanwijzer over een knooppunt (behalve een sticky note) en klik op 
 Als het geselecteerde pad invoervelden bevat, wordt het rechterpaneel **Uitvoeren** geopend en wordt het eerste veld gefocust. Voer de waarden in en klik op **Uitvoeren tot _knooppuntlabel_** of druk op **Ctrl+Enter** (Cmd+Enter op macOS). De generieke body-modus focust op de JSON-body-editor. Paden zonder invoervelden worden onmiddellijk uitgevoerd zonder het paneel te openen. Vastgezette Input-knooppunten hergebruiken hun vastgezette uitvoer zonder om invoer te vragen.
 
 Het paneel behoudt het geselecteerde doel voor volgende uitvoeringen. Kies **Volledige workflow uitvoeren** om het doel te wissen. Uitvoerknoppen zijn uitgeschakeld terwijl een uitvoering actief is. Een doel binnen een lus stopt de uitvoering wanneer dat knooppunt voor het eerst wordt bereikt; het selecteren van een knooppunt na de lus voert de volledige stroomopwaartse lus uit.
+
+## AI op een node
+
+Beweeg over een willekeurige node behalve een notitie en klik op **AI** erboven. De [AI Assistant](./ai-assistant.md) opent op die node en biedt **Change this node as ...**, **Fix error in this node ...** en **Other**. In Agent-modus wijzigt de assistent alleen die node; andere nodes, verbindingen en lay-out blijven ongewijzigd. Zie [AI Assistant › Eén enkele node wijzigen](./ai-assistant.md#changing-one-node).
+
+De knop is verborgen op workflows die u alleen kunt bekijken.
 
 ## Data Pin
 

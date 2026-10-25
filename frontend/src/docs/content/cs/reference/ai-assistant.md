@@ -13,6 +13,8 @@ Pro dotazy k dokumentaci mimo editor použijte [Chat with Heym](./chat-with-heym
 
 Stisknutím `Ctrl + I` / `Cmd + I` kdekoli v editoru panel otevřete nebo zavřete – zkratka funguje i tehdy, když je aktivní textové pole. Viz [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Chcete-li pracovat na jednom uzlu, najeďte na něj na plátně myší a klikněte na **AI** nad ním. Panel se otevře se zaměřením na tento uzel. Viz [Změna jednoho uzlu](#changing-one-node).
+
 ## Zavření panelu
 
 Klikněte na tlačítko **X**, stiskněte `Ctrl + I` / `Cmd + I` nebo přepněte tlačítko **AI** na panelu nástrojů Debug panelu. Přetažením záhlaví panel přesunete, nikoli zavřete.
@@ -60,6 +62,33 @@ Pokud odpověď AI obsahuje platný blok JSON s workflow (s `nodes` a volitelně
 4. Označí workflow jako neuložené
 
 Pokud zpracování selže, zobrazí se tlačítko **Retry** pro opětovné vygenerování odpovědi.
+
+## Změna jednoho uzlu
+
+Najeďte na uzel na plátně myší a klikněte na **AI** nad ním. Panel se otevře v režimu Agent se zaměřením na tento uzel a ukáže, který uzel mění:
+
+| Uzel má... | Panel zobrazuje |
+|---|---|
+| Žádný výsledek v aktuálním běhu | **Modifying Node:** v kompaktním řádku s ikonou a názvem uzlu. Asistent upravuje pouze z konfigurace uzlu; pokud má vidět výstup, spusťte uzel nejprve |
+| Výsledek v aktuálním běhu | **Modifying Node: (Has Node Output)** nad samotným uzlem: ikona, název a typ, poslední stav a doba trvání a chyba, pokud selhal. Asistent vidí tento výstup a chybu při úpravě uzlu |
+
+Najeďte na štítek, abyste viděli, v jakém stavu se panel nachází.
+
+Ať je panel v jakémkoli stavu, asistent čte také dokumentační stránku uzlu pod ikonou knihy v záhlaví uzlu. Využívá ji k pochopení možností uzlu a k zodpovězení dotazů k nim.
+
+Pod zprávami zahajují požadavek tři možnosti:
+
+| Možnost | Co dělá |
+|---|---|
+| **Change this node as ...** | Vyplní pole zprávy textem *Změň tento uzel na*, abyste větu dokončili |
+| **Fix error in this node ...** | Vyplní *Oprav chybu v tomto uzlu.* Asistent přečte chybu tohoto uzlu z posledního běhu |
+| **Other** | Zaměří prázdné pole zprávy |
+
+Upravte text a stiskněte **Send**. Asistent vrátí pouze tento uzel a Heym jej aktualizuje na místě: uzel si zachová své id, typ a název, takže výrazy jako `$checkLinkedIn.result` v jiných uzlech fungují dál. Ostatní uzly, propojení a rozložení se nemění a **Undo** obnoví předchozí konfiguraci.
+
+Pokud se požadavek do uzlu nevejde, například vyžaduje jiný typ uzlu nebo nový uzel, asistent uvede, co by se mělo změnit, namísto úpravy. Zavřením zaměření uzlu pomocí **X** na kartě uzlu můžete znovu upravit celý workflow. Zavřením panelu se zaměření také vymaže.
+
+[Režim YOLO](#yolo-mode) funguje se zaměřeným uzlem: asistent mění uzel, spouští workflow a opravuje uzel, dokud běh neuspěje. V režimu **Ask** zaměření sděluje asistentovi, o jaký uzel se váš dotaz opírá, a plátno se nemění.
 
 ## YOLO Mode
 

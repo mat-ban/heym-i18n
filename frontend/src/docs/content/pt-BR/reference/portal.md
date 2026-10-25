@@ -51,6 +51,7 @@ Os campos de entrada vêm dos nós [Input](../nodes/input-node.md). A API extrai
 ## Autenticação e sessões
 
 - **WorkflowPortalUser**: Nome de usuário/senha por workflow (quando a autenticação está habilitada)
+- **Remover o último usuário**: Com o portal ativado, excluir o último usuário do portal torna o portal público novamente; a caixa de diálogo de configurações solicita confirmação primeiro
 - **PortalSession**: Tokens de sessão com TTL de 168 horas
 - **Limitação de taxa**: 3 tentativas de login malsucedidas → banimento de 24h por workflow+IP
 - As sessões expiradas são limpas por um cron job

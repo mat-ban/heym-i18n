@@ -18,14 +18,14 @@ Impala on yksittäinen kaavio ruudukossa. Tuetut kaaviotyypit:
 - **Viiva**
 - **Alue** (täytetty trendi, tukee useita sarjoja)
 - **Ympyrä**
-- **Taulukko** (vieritettävä; yksi sarake voidaan esittää [tilasiruina](../nodes/chart-output-node.md#status-chips), ja rivit voivat avata [tietosivun](#detail-pages))
+- **Taulukko** (vieritettävä; napsauta sarakeotsikkoa lajitellaksesi nousevasti ja napsauta uudelleen lajitellaksesi laskevasti. Sarake voidaan esittää [tilaruutuina](../nodes/chart-output-node.md#status-chips), sarake voi sisältää [linkkipainikkeita](../nodes/chart-output-node.md#link-buttons), jotka avaavat URL-osoitteen uudessa välilehdessä, ja rivit voivat avata [tietosivun](#tietosivut))
 - **Numeerinen** (yksi KPI-arvo valinnaisella yksiköllä)
 - **Mittari** (yksi arvo min–max-välillä, esim. prosentti)
 - **Hajontakuva** (X/Y-pisteet korrelaatioiden visualisointiin)
 - **Osuus** (yksi pylväs jaettuna osuuksiin prosenttilegendin kanssa, esim. kielijakauma)
 - **Pylväsmittari** (vaakasuora mittari per rivi punaisesta vihreään gradientilla ja arvolla, esim. levytilaa)
 - **Teksti** (Markdown-viesti, esim. tilatieto kuten "Viimeisin suoritus klo 19:47"; tukee [interaktiivisia valintalistoja](../nodes/chart-output-node.md#interactive-task-lists) staattisessa Markdownissa ja [numeroituja listoja](../nodes/chart-output-node.md#numbered-lists) mukautettua tai laskevaa numerointia varten)
-- **HITL** (odottavat ihmisten tekemät tarkistukset. Otsikko näyttää `1/n odottaa`. Workflown nimi avaa kyseisen suorituksen canvasilla. **Hyväksy**, **Pyydä muutoksia** ja **Hylkää** ratkaisevat tarkistuksen. Historia-kuvake impalan otsikon vieressä avaa kyseisen suorituksen historianäkymään tällä sivulla. Impala ei käytä yläpuolisia rivejä, ja jokainen näkee oman jononsa)
+- **HITL** (odottavat ihmisten tekemät tarkistukset. Otsikko näyttää `1/n odottaa`. Workflown nimi avaa kyseisen suorituksen canvasilla. **Hyväksy**, **Pyydä muutoksia** ja **Hylkää** ratkaisevat tarkistuksen. Historia-kuvake impalan otsikon vieressä avaa kyseisen suorituksen historianäkymään tällä sivulla. Impala ei käytä yläpuolisia rivejä, ja jokainen näkee oman jononsa. Se voi sen sijaan näyttää yhden Workflowin tarkistukset kaikille, joilla on oikeus avata kyseinen Workflow; katso [HITL-widgetit](#hitl-widgetit))
 
 Kaavioiden lisäksi **Run a workflow** -impala suorittaa yhden workflowstasi suoraan dashboardilta: pudotetulla tiedostolla, syötekentillään tai Run-painikkeella; katso [Suoritusimpalat](#run-widgets).
 
@@ -41,6 +41,20 @@ Jokainen impala lataa datansa asynkronisesti välilehteä avattaessa, joten sivu
 Valitse **Run a workflow** -impalalle sen sijaan suoritettava workflow; valitsin kertoo, miten impala suorittaa kunkin. Impala lisätään suoraan ruudukkoon, eikä uutta workflowta tarvitse rakentaa.
 
 Kaksoisklikkaa impalaa (tai käytä sen muokkauspainiketta) avataksesi sen workflown milloin tahansa. Käytä **Kloonaa impala** -toimintoa impalan otsikkopalkissa kopioidaksesi sekä impalan että sen koko workflown. Kopio sijoitetaan alkuperäisen alle ja merkitään **(Kopio)**-tekstillä, jotta sitä voidaan muokata itsenäisesti.
+
+## HITL-widgetit
+
+Uusi HITL-widget näyttää jokaisen omassa jonossa odottavan tarkistuksen. Jos halutaan näyttää vain tietyn Workflowin tarkistukset, avataan widgetin **Asetukset**:
+
+1. Valitse Workflow kohdasta **Workflow**. Luettelossa ovat ne Workflowt, jotka voidaan avata – omat tai käyttäjän taikka tiimin kanssa jaetut –, joissa on henkilöä odottava vaihe: ihmistarkistuksen sisältävä Agent tai Slack-hyväksyntä-, painike- tai lomakevaihe. Sen vieressä oleva kuvake avaa kyseisen Workflowin uudessa välilehdessä.
+2. Jos Workflowissa on vain yksi tällainen vaihe, se valitaan automaattisesti. Jos niitä on useita, **Select agent** luetteloi ne solmun nimen mukaan siten, että **All agents** on ensimmäisenä; Slack-vaiheet on merkitty tunnisteella **(Slack)**.
+3. Tallenna. Otsikon `1/n pending` laskee vain nämä tarkistukset. Valitse **Kaikki Workflow't** näyttääksesi jälleen oman jonosi.
+
+Sama valinta löytyy kankaalta Chart Output -solmun ominaisuuksista. **Hienosäädä AI:n avulla** voi tehdä sen (”näytä vain laskujen hyväksynnät”), samoin uuden widgetin kuvaus, joka nimeää kyseisen Workflowin. Jokainen muutos on Workflow-muokkaus, joten se näkyy Edit Historyssa.
+
+- **Kuka näkee tarkistukset.** Workflowin mukaan suodatettu widget näyttää kyseisen Workflowin tarkistukset kaikille, jotka voivat avata kyseisen Workflowin, ja he voivat hyväksyä, pyytää muutoksia tai hylätä widgetistä käsin aivan kuten he voisivat suorittaa kyseisen Workflowin. Suodattamaton widget näyttää jokaiselle oman jononsa.
+- **Kuka näkee widgetin.** Henkilö, joka ei voi avata valittua Workflowia, ei näe widgetiä lainkaan edes jaetussa koontinäytössä. Kun koontinäytön omistaja menettää käyttöoikeuden tai Workflow poistetaan, omistaja näkee ilmoituksen ”You no longer have access to the workflow this widget shows” ja voi valita toisen **Asetuksista**.
+- **Vain käytettävissä olevat valinnat.** Workflow, jota ei voida avata, hylätään widgetiä tallennettaessa riippumatta siitä, tehdäänkö tallennus asetuksista, kankaalta vai AI:n kautta.
 
 ## Tietosivut
 
@@ -75,6 +89,10 @@ Tuloksen **Wrap**-painike rivittää pitkät tulosterivit laatikon sisällä; ot
 ## Impalan luominen tekoälyllä
 
 Klikkaa **AI**, kuvaile haluttu mittari (esim. "workflowien onnistumisprosentti viimeisen 30 päivän aikana pylväskaaviona") ja valitse LLM-tunnistetiedot ja malli. Heym luo täydellisen impala-workflown, joka päättyy Chart Output -solmuun, ja lisää sen ruudukkoon. Katso [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) esimerkkikäskyistä kaaviotyypeittäin.
+
+Widget saa lyhyen yhden tai kahden sanan otsikon pyynnön kielellä, kuten ”Avoimet tapaukset”. Otsikko ei koskaan sisällä datataulukon tunnistetta; jos malli nimeää widgetin kokonaisella lauseella, Heym säilyttää sen ensimmäiset sanat.
+
+Widget-ohjelmointirajapinta voi luoda myös **laskurikortin** ilman AI:ta: `text`-widget datataulukossa (`data_table_id`), jossa on `count_column` ja `count_value`, näyttää, kuinka monella rivillä on kyseinen arvo; widgetin otsikko ilmoittaa arvon. Heym Work avaa datataulukosta luodut sivut yhdellä laskurikortilla tilaa kohden.
 
 Käytä impalan **Hienosäädä tekoälyllä** -painiketta muokataksesi olemassa olevaa impalaa uudella ohjeella. Jokainen tekoälyhienosääntö tallentaa edellisen workflown version impalan **Muokkaushistoriaan**, josta voit tarkastella tai palata muutoksiin workflow-editorissa.
 

@@ -51,6 +51,7 @@ Invoervelden zijn afkomstig van [Invoer](../nodes/input-node.md)-nodes. De API e
 ## Authenticatie en sessies
 
 - **WorkflowPortalUser**: Gebruikersnaam/wachtwoord per workflow (wanneer authenticatie is ingeschakeld)
+- **De laatste gebruiker verwijderen**: Als het portaal is ingeschakeld, maakt het verwijderen van de laatste portaalgebruiker het portaal weer openbaar; het instellingenvenster vraagt eerst om bevestiging
 - **PortalSession**: Sessietokens met een TTL van 168 uur
 - **Rate limiting**: 3 mislukte inlogpogingen → 24 uur ban per workflow+IP
 - Verlopen sessies worden opgeruimd door een cron-job

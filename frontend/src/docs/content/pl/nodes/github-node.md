@@ -212,6 +212,11 @@ Jeśli plik już istnieje, Heym automatycznie pobiera bieżący SHA przed jego a
 **Per Page** (1–100). Heym żąda jednej strony wyników; nie ma pola `page` do pobierania
 kolejnych stron w ramach tej samej operacji.
 
+
+### Return all pages
+
+Proszę włączyć **Return all pages**, aby jedno uruchomienie pobierało wszystkie strony, zaczynając od **Cursor**, jeśli jest ustawiony. Każde żądanie prosi o 100 elementów, niezależnie od wartości **Per Page**. Węzeł zatrzymuje się po około 1000 elementach (lub 100 żądaniach): obiekty issue mają po około 6 KB, więc wyższy limit dałby bardzo duże dane wyjściowe węzła. Jeśli zatrzyma się wcześniej, zwraca zebrane dane z `has_more: true` i `next_cursor` zamiast zgłaszać błąd, a można kontynuować, przekazując ten kursor do następnego uruchomienia. Zatrzymanie Workflow lub osiągnięcie limitu czasu Workflow kończy pobieranie między stronami.
+
 ## Output
 
 Dokładny kształt zależy od wybranej operacji. Typowe pola obejmują:

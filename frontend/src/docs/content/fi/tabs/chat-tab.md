@@ -76,6 +76,17 @@ Kysy arkikielellä – "mitä on käynnissä?", "kuinka monta workflowta on akti
 
 [Human-in-the-Loop](../reference/human-in-the-loop.md) - tai Codex-arviointia odottavat suoritukset merkitään odottaviksi, ei käynnissä oleviksi. Tämä on sama tieto kuin otsikon aktiivisten suoritusten merkinnässä, joten Chat ja merkintä eivät koskaan eroa toisistaan. Valmiista suorituksista voi kysyä viimeaikaisia suorituksia – tämä lukee [Suoritushistoriaa](../reference/execution-history.md).
 
+## Kysely suorituksesta
+
+Valitse Workflow-suoritus [Execution History](../reference/execution-history.md#ask-ai) -ikkunassa editorista tai All History -näkymästä ja napsauta **Kysy AI:lta** -painiketta valintaikkunan otsikon vieressä. Chat avaa uuden keskustelun kahdella sirulla viestikentän yläpuolella:
+
+- **Workflow:** Workflowin nimi
+- **Execution:** valitun suoritustunnisteen ensimmäiset merkit
+
+Poista siru sen **×**-painikkeella, jos haluat jättää sen pois. Esitä sitten kysymys, esimerkiksi ”miksi tämä suoritus kesti niin kauan?”, ”mikä tässä epäonnistui?” tai ”voitko korjata tämän?”. Jäljelle jäävät sirut liitetään tähän viestiin täydellisillä tunnisteilla, jolloin Chat lukee suorituksen syötteet, tulosteet ja solmukohtaisen jäljityksen suoraan Workflowin etsimisen sijaan. Workflowin korjaamiseksi Chat tallentaa, testaa ja vahvistaa muutoksen kohdassa [Workflow-luominen](#workflow-luominen) kuvatulla tavalla.
+
+Lähetetty viesti näyttää sirut kysymyksen alla. Ne kuuluvat vain kyseiseen viestiin; saman keskustelun jatkokysymykset säilyttävät historian kontekstin.
+
 ## Kysely hälytyksistä
 
 Chat voi vastata määriteltyihin [hälytyksiin](./alerts-tab.md) liittyviin kysymyksiin:

@@ -13,6 +13,8 @@ Für Dokumentationsfragen außerhalb des Editors verwende [Chat mit Heym](./chat
 
 Drücke `Ctrl + I` / `Cmd + I` an einer beliebigen Stelle im Editor, um das Panel zu öffnen oder zu schließen – die Tastenkombination funktioniert auch, während ein Texteingabefeld fokussiert ist. Siehe [Tastenkombinationen](./keyboard-shortcuts.md).
 
+Um an einem einzelnen Knoten zu arbeiten, bewegen Sie den Mauszeiger auf der Arbeitsfläche darüber und klicken Sie auf **AI**. Das Panel öffnet sich fokussiert auf diesen Knoten. Siehe [Einen einzelnen Knoten anpassen](#changing-one-node).
+
 ## Schließen des Panels
 
 Klicke auf die **X**-Schaltfläche, drücke `Ctrl + I` / `Cmd + I` oder schalte die **AI**-Schaltfläche in der Symbolleiste des Debug-Panels um. Der Header verschiebt das Panel; er schließt es nicht.
@@ -60,6 +62,33 @@ Wenn die AI-Antwort einen gültigen Workflow-JSON-Block (mit `nodes` und optiona
 4. Den Workflow als ungespeichert markieren
 
 Wenn das Parsen fehlschlägt, erscheint eine **Retry**-Schaltfläche, um die Antwort neu zu generieren.
+
+## Einen einzelnen Knoten anpassen
+
+Bewegen Sie den Mauszeiger auf der Arbeitsfläche über einen Knoten und klicken Sie darüber auf **AI**. Das Panel öffnet sich im Agent-Modus, fokussiert auf diesen Knoten, und zeigt an, welcher Knoten bearbeitet wird:
+
+| Der Knoten hat... | Das Panel zeigt |
+|---|---|
+| Kein Ergebnis im aktuellen Lauf | **Modifying Node:** in einer kompakten Zeile mit Symbol und Name des Knotens. Der Assistent bearbeitet allein anhand der Konfiguration des Knotens; führen Sie den Knoten zuerst aus, wenn er die Ausgabe sehen soll |
+| Ein Ergebnis im aktuellen Lauf | **Modifying Node: (Has Node Output)** über dem Knoten selbst: Symbol, Name und Typ, letzter Status und Dauer sowie der Fehler, falls er fehlgeschlagen ist. Der Assistent sieht diese Ausgabe und den Fehler, wenn er den Knoten bearbeitet |
+
+Bewegen Sie den Mauszeiger über das Label, um zu sehen, in welchem Zustand sich das Panel befindet.
+
+In jedem Zustand liest der Assistent auch die Dokumentationsseite des Knotens, die sich hinter dem Buchsymbol in der Kopfzeile des Knotens befindet. Er nutzt die Seite, um die Optionen des Knotens zu verstehen und Fragen dazu zu beantworten.
+
+Unter den Nachrichten starten drei Optionen die Anfrage:
+
+| Option | Was sie tut |
+|---|---|
+| **Change this node as ...** | Füllt das Nachrichtenfeld mit *Diesen Knoten ändern zu*, sodass Sie den Satz beenden |
+| **Fix error in this node ...** | Füllt *Fehler in diesem Knoten beheben.* Der Assistent liest den Fehler dieses Knotens aus dem letzten Lauf |
+| **Other** | Fokussiert ein leeres Nachrichtenfeld |
+
+Bearbeiten Sie den Text und drücken Sie **Send**. Der Assistent gibt nur diesen Knoten zurück und Heym aktualisiert ihn an Ort und Stelle: Der Knoten behält ID, Typ und Name, sodass Ausdrücke wie `$checkLinkedIn.result` in anderen Knoten weiter funktionieren. Andere Knoten, Verbindungen und das Layout ändern sich nicht, und **Undo** stellt die vorherige Konfiguration wieder her.
+
+Passt die Anfrage nicht in den Knoten, erfordert sie beispielsweise einen anderen Knotentyp oder einen neuen Knoten, sagt der Assistent, was sich stattdessen ändern müsste, anstatt zu bearbeiten. Schließen Sie den Knotenfokus mit dem **X** auf der Knotenkarte, um wieder den gesamten Workflow zu bearbeiten. Das Schließen des Panels hebt den Fokus ebenfalls auf.
+
+[YOLO-Modus](#yolo-mode) funktioniert mit einem fokussierten Knoten: Der Assistent ändert den Knoten, führt den Workflow aus und behebt Fehler im Knoten, bis der Lauf erfolgreich ist. Im Modus **Ask** sagt der Fokus dem Assistenten, um welchen Knoten es bei Ihrer Frage geht, und die Arbeitsfläche wird nicht geändert.
 
 ## YOLO Mode
 

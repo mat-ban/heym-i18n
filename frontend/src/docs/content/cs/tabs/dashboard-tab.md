@@ -18,14 +18,14 @@ Widget je jediný graf v mřížce. Podporované typy grafů:
 - **Line**
 - **Area** (vyplněný trend, podporuje více sérií)
 - **Pie**
-- **Table** (posuvná; jeden sloupec se může vykreslit jako [stavové štítky](../nodes/chart-output-node.md#status-chips) a řádky mohou otevírat [detailní stránku](#detail-pages))
+- **Table** (posuvná; kliknutím na záhlaví sloupce seřadíte vzestupně a dalším kliknutím sestupně. Jeden sloupec lze vykreslit jako [stavové čipy](../nodes/chart-output-node.md#status-chips), jeden sloupec může obsahovat [tlačítka s odkazem](../nodes/chart-output-node.md#link-buttons), která otevřou URL na nové kartě, a řádky mohou otevřít [detailní stránku](#detailni-stranky))
 - **Numeric** (jediná hodnota KPI s volitelnou jednotkou)
 - **Gauge** (jediná hodnota vůči rozsahu min–max, např. procento)
 - **Scatter** (body X/Y pro korelační grafy)
 - **Proportion** (jeden pruh rozdělený na podíly s procentuální legendou, např. rozložení jazyků)
 - **Bar gauge** (jeden vodorovný gauge na řádek s přechodem červená→zelená a hodnotou, např. volné místo na disku)
 - **Text** (markdown zpráva, např. stavová poznámka jako „Poslední spuštění v 19:47"; podporuje [interaktivní zaškrtávací políčka](../nodes/chart-output-node.md#interactive-task-lists), když je markdown statický, a [explicitní číslované seznamy](../nodes/chart-output-node.md#numbered-lists) pro vlastní nebo sestupné číslování)
-- **HITL** (vaše čekající lidské revize. Záhlaví zobrazuje `1/n pending`. Název workflow otevře daný běh na plátně. **Approve**, **Request changes** a **Reject** jej vyřeší. Ikona historie vedle názvu widgetu otevře daný běh v dialogu historie na této stránce. Widget nepoužívá řádky z upstreamu a každý vidí svou vlastní frontu)
+- **HITL** (vaše čekající lidské revize. Záhlaví zobrazuje `1/n pending`. Název workflow otevře daný běh na plátně. **Approve**, **Request changes** a **Reject** jej vyřeší. Ikona historie vedle názvu widgetu otevře daný běh v dialogu historie na této stránce. Widget nepoužívá řádky z upstreamu a každý vidí svou vlastní frontu. Může místo toho zobrazovat kontroly jediného Workflow pro každého, kdo může daný Workflow otevřít; viz [Widgety HITL](#widgety-hitl))
 
 Kromě grafů spouští widget **Run a workflow** jeden z vašich workflow přímo z dashboardu: nad přetaženým souborem, s jeho vstupními poli nebo pomocí tlačítka Run; viz [Spouštěcí widgety](#run-widgets).
 
@@ -41,6 +41,20 @@ Každý widget načítá svá data asynchronně při otevření záložky, takž
 Pro widget **Run a workflow** místo toho vyberte workflow, který má spouštět; výběrové okno uvádí, jakým způsobem widget jednotlivé workflow spustí. Widget se přidá přímo do mřížky; nevytváří se žádný nový workflow.
 
 Dvojklikem na widget (nebo pomocí jeho tlačítka úprav) kdykoli znovu otevřete jeho workflow. Pomocí **Clone widget** v záhlaví widgetu zduplikujete jak widget, tak jeho kompletní workflow. Kopie se umístí pod originál a označí se **(Copy)**, takže ji můžete upravovat nezávisle.
+
+## Widgety HITL
+
+Nový HITL widget zobrazuje všechny kontroly čekající ve vaší vlastní frontě. Chcete-li zobrazit pouze kontroly jednoho Workflow, otevřete **Nastavení** widgetu:
+
+1. V poli **Workflow** vyberte Workflow. Seznam obsahuje Workflow, které můžete otevřít, vaše nebo sdílené s vámi či vaším týmem, jež mají krok čekající na osobu: Agent s lidskou kontrolou nebo krok Slack se schválením, tlačítky či formulářem. Ikona vedle otevře tento Workflow na nové kartě.
+2. Pokud má Workflow jediný takový krok, vybere se automaticky. Pokud jich má více, **Select agent** je vypíše podle názvu uzlu, přičemž **All agents** je první; kroky Slack jsou označeny **(Slack)**.
+3. Uložte. Údaj `1/n pending` v záhlaví počítá pouze tyto kontroly. Vyberte **Všechny Workflowy**, chcete-li znovu zobrazit vlastní frontu.
+
+Stejná volba je na plátně ve vlastnostech uzlu Chart Output. Může ji provést i **Vyladit pomocí AI** („zobraz pouze schvalování faktur“), stejně jako popis nového widgetu, který Workflow pojmenuje. Každá změna je úprava Workflow, takže se zobrazí v Edit History.
+
+- **Kdo vidí kontroly.** Widget filtrovaný na Workflow zobrazuje kontroly tohoto Workflow každému, kdo může Workflow otevřít, a tito lidé mohou přes něj schvalovat, žádat o změny nebo zamítat, stejně jako by mohli Workflow spustit. Nefiltrovaný widget zobrazuje každému jeho vlastní frontu.
+- **Kdo vidí widget.** Kdo vybraný Workflow otevřít nemůže, widget vůbec nevidí, ani na dashboardu, který je s ním sdílen. Pokud vlastník dashboardu ztratí k Workflow přístup nebo je Workflow smazán, vlastník vidí „You no longer have access to the workflow this widget shows“ a může v **Nastavení** vybrat jiný.
+- **Pouze dostupné volby.** Workflow, který nemůžete otevřít, je při ukládání widgetu odmítnut, ať už z nastavení, z plátna, nebo přes AI.
 
 ## Detailní stránky
 
@@ -75,6 +89,10 @@ Tlačítko **Wrap** u výsledku zalamuje dlouhé řádky výstupu uvnitř pole; 
 ## Generování widgetu pomocí AI
 
 Klikněte na **AI**, popište metriku, kterou chcete (například „míra úspěšnosti workflow za posledních 30 dní jako sloupcový graf"), a vyberte přihlašovací údaje LLM a model. Heym vygeneruje kompletní workflow widgetu zakončené uzlem Chart Output a přidá jej do mřížky. Příklady promptů pro jednotlivé typy grafů najdete v části [Chart Output](../nodes/chart-output-node.md#example-ai-prompts).
+
+Widget dostane krátký název o jednom nebo dvou slovech v jazyce vašeho zadání, například „Otevřené případy“. Název nikdy neobsahuje ID datové tabulky; pokud model pojmenuje widget celou větou, Heym ponechá její první slova.
+
+API widgetů dokáže vytvořit **kartu s počtem** i bez AI: widget `text` nad datovou tabulkou (`data_table_id`) s `count_column` a `count_value` zobrazí, kolik řádků má danou hodnotu; název widgetu uvádí hodnotu. Heym Work uvádí stránky vytvořené z datové tabulky jednou kartou s počtem pro každý stav.
 
 Pomocí tlačítka **Fine-tune with AI** u widgetu upravte existující widget novým pokynem. Každé doladění pomocí AI uloží snímek předchozího workflow do **Edit History** widgetu, takže můžete změny zkontrolovat nebo vrátit zpět z editoru workflow.
 

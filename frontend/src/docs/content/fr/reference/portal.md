@@ -51,6 +51,7 @@ Les champs de saisie proviennent des nœuds [Input](../nodes/input-node.md). L'A
 ## Authentification et sessions
 
 - **WorkflowPortalUser** : nom d'utilisateur/mot de passe par workflow (lorsque l'authentification est activée)
+- **Suppression du dernier utilisateur** : Lorsque le portail est activé, la suppression du dernier utilisateur du portail rend le portail à nouveau public ; la boîte de dialogue des paramètres demande d'abord confirmation
 - **PortalSession** : tokens de session avec un TTL de 168 heures
 - **Limitation de débit** : 3 tentatives de connexion échouées → bannissement de 24 h par workflow+IP
 - Les sessions expirées sont nettoyées par une tâche cron

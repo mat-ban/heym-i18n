@@ -478,7 +478,14 @@
     "extract": "Çıkar",
     "mySubWorkflow": "Sub-Workflow'um",
     "moreNodes": "+{count} daha",
-    "runToNode": "{label} konumuna kadar çalıştır"
+    "runToNode": "{label} konumuna kadar çalıştır",
+    "aiButtonTitle": "Bu düğümü AI Assistant ile değiştirin veya düzeltin",
+    "editNodeWithAi": "{label} öğesini AI ile düzenle",
+    "modifyingNode": "Düğüm değiştiriliyor:",
+    "hasNodeOutput": "(Düğüm çıktısı var)",
+    "closeNodeFocus": "Düğüm odağını kapatın ve tüm Workflow'u düzenleyin",
+    "nodeFocusRan": "Bu düğüm çalıştırıldı. AI, son çıktısını ve hatasını görür ve düğümün belgelerini okur.",
+    "nodeFocusNoOutput": "Bu düğümün mevcut çalıştırmada çıktısı yok. AI'nın çıktısını görmesi gerekiyorsa önce düğümü çalıştırın. AI her iki durumda da düğümün belgelerini okur."
   },
   "nodes": {
     "telegramTrigger": {
@@ -1442,7 +1449,9 @@
     "editPrompt": "Prompt'u düzenle",
     "cancelEdit": "Düzenlemeyi iptal et",
     "saveQueuedMessage": "Kuyruktaki mesajı kaydet",
-    "editQueuedMessage": "Kuyruktaki mesajı düzenle"
+    "editQueuedMessage": "Kuyruktaki mesajı düzenle",
+    "subtitle": "Workflow'ları çalıştırın ve soru sorun",
+    "modelsLoadFailedDisabled": "Bu kimlik bilgisinin model listesi yüklenemedi. Bir model alınabilene kadar Chat devre dışı kalır."
   },
   "teams": {
     "title": "Teams",
@@ -1672,7 +1681,10 @@
       "error": "Hata",
       "cached": "Önbelleğe alındı",
       "cancelled": "İptal edildi"
-    }
+    },
+    "askAi": "AI'ya sor",
+    "askAiTitle": "Bu çalıştırma hakkında Chat asistanına sorun",
+    "noNodeSpans": "Bu çalıştırma için düğüm span'i kaydedilmedi."
   },
   "templates": {
     "useThisTemplate": "Bu Template'i Kullan",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Ayrıntı sayfası kayıtları",
     "detailPageRecordsHelp": "Bir satır bağlantısı açtığında bu panonun kabul ettiği ?record= değerleri. Diğer her şey araç çalıştırılmadan önce reddedilir.",
     "unreachableDashboard": "Açamadığınız bir pano",
-    "runWorkflow": "Bir Workflow Çalıştır"
+    "runWorkflow": "Bir Workflow Çalıştır",
+    "openWorkflowNewTab": "Workflow'u yeni sekmede aç",
+    "hitlFilterHelp": "Tüm Workflow'lardan veya yalnızca bir tanesinden incelemeleri gösterin. Açabileceğiniz, size ait veya sizinle paylaşılan ve bir kişiyi bekleyen adımı olan Workflow'ları listeler.",
+    "hitlSourcesLoadFailed": "Workflow'larınız yüklenemedi."
   },
   "drive": {
     "uploadFailed": "Yükleme başarısız oldu",

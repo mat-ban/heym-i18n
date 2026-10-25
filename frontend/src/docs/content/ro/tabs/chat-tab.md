@@ -83,6 +83,17 @@ Rulările întrerupte pentru o revizuire [Human-in-the-Loop](../reference/human-
 astfel încât Chat și insigna nu sunt niciodată în dezacord. Pentru rulările care s-au încheiat deja, întrebați despre execuții recente
 în schimb — aceasta citește [Execution History](../reference/execution-history.md).
 
+## Întrebări despre o rulare
+
+Selectați o rulare de Workflow în [Execution History](../reference/execution-history.md#ask-ai), din editor sau din All History, și faceți clic pe **Întrebați AI** de lângă titlul dialogului. Chat deschide o conversație nouă cu două chip-uri deasupra casetei de mesaj:
+
+- **Workflow:** numele Workflow-ului
+- **Execution:** primele caractere ale id-ului rulării selectate
+
+Eliminați un chip cu **×** pentru a-l exclude. Apoi puneți întrebarea, de exemplu „de ce a durat atât de mult această rulare?”, „ce a eșuat aici?” sau „puteți remedia?”. Chip-urile rămase se atașează la acel mesaj cu id-urile complete, astfel încât Chat citește direct intrările, ieșirile și trasa pe noduri a rulării, în loc să caute Workflow-ul. Pentru a remedia Workflow-ul, Chat salvează, testează și verifică modificarea, așa cum este descris în [Crearea de workflow-uri](#crearea-de-workflow-uri).
+
+Mesajul trimis afișează chip-urile sub întrebarea dvs. Ele aparțin doar acelui mesaj; întrebările următoare din aceeași conversație păstrează contextul din istoric.
+
 ## Întrebări despre alerte
 
 Chat poate răspunde la întrebări despre [alertele](./alerts-tab.md) pe care le-ați definit:

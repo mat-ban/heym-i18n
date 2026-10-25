@@ -1,6 +1,6 @@
 # Canvas 功能
 
-Workflow 編輯器提供多項用於除錯、測試與整理節點的功能：**Run to Node**、**Data Pin**、**Execution Logs**、**Enable/Disable** 以及 **Extract to Sub-Workflow**。
+Workflow 編輯器提供多項用於除錯、測試與整理節點的功能：**Run to Node**、**節點上的 AI**、**Data Pin**、**Execution Logs**、**Enable/Disable** 以及 **Extract to Sub-Workflow**。
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ 觀看編輯器示範</a></p>
@@ -12,6 +12,12 @@ Workflow 編輯器提供多項用於除錯、測試與整理節點的功能：**
 若選取的路徑包含輸入欄位，右側的 **Run** 面板會開啟並聚焦於第一個欄位。輸入數值後，點擊 **Run to _節點標籤_** 或按下 **Ctrl+Enter**（macOS 為 Cmd+Enter）。一般 body 模式會聚焦於 JSON body 編輯器。不含輸入欄位的路徑會立即執行，不會開啟面板。已釘選的 Input 節點會重複使用其釘選輸出，不會要求輸入。
 
 面板會保留選取的目標以供後續執行使用。選擇 **Run full workflow** 可清除目標。執行進行中時，Run 按鈕會停用。若目標位於迴圈內，執行會在该節點首次被觸及時停止；選取迴圈之後的節點則會執行完整的上游迴圈。
+
+## 節點上的 AI
+
+在除便簽外的任何節點上懸停，然後點擊其上方的 **AI**。[AI Assistant](./ai-assistant.md) 會在該節點上打開並提供 **Change this node as ...**、**Fix error in this node ...** 和 **Other**。在 Agent 模式下，助手僅更改該節點；其他節點、連接和佈局保持原樣。請參閱 [AI Assistant › 修改單個節點](./ai-assistant.md#changing-one-node)。
+
+在您僅具有查看權限的工作流上，該按鈕會被隱藏。
 
 ## Data Pin
 

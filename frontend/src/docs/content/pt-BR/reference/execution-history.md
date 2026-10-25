@@ -55,6 +55,18 @@ Abrir um Workflow em `/workflows/{workflowId}/{executionId}` traz automaticament
 - Depurar uma execução com falha inspecionando entradas e saídas dos Nós
 - Comparar saídas entre execuções
 
+## Perguntar à IA
+
+Ambas as caixas de diálogo de histórico têm um botão **Perguntar à IA** (ícone de brilho) ao lado do título. Abre a [aba Chat](../tabs/chat-tab.md#asking-about-a-run) em uma nova conversa com o workflow e a execução selecionada anexada como chips removíveis. Pergunte por que a execução foi lenta, o que falhou ou peça ao Chat para corrigir o workflow. O Chat lê exatamente essa execução, incluindo o rastreamento e erros por nó.
+
+Na caixa de diálogo All History, **Perguntar à IA** só aparece enquanto uma execução de workflow estiver selecionada; as execuções de chat e assistente não o mostram.
+
+## Linha do tempo de execução
+
+No detalhe da execução, o botão **Linha do tempo** (ícone de temporizador) ao lado de **Expandir tudo** substitui a lista de **Etapas** por uma linha do tempo de spans. Enquanto a linha do tempo é exibida, o mesmo botão indica **Logs**; clique nele para voltar à lista. No All History, o botão aparece apenas para execuções de workflow. A linha do tempo desenha uma barra por nó no momento em que foi iniciado, para que veja quanto tempo durou cada nó e quais foram executados em paralelo. Passe o cursor sobre uma barra para ver sua duração; clique nela para abrir o mesmo inspetor de detalhes da [linha do tempo de execução](#execution-timeline-details) do editor. A visualização escolhida se mantém enquanto a caixa de diálogo estiver aberta.
+
+As execuções registradas antes de os horários de início dos nós serem armazenados são organizadas sucessivamente por duração.
+
 ## Execution Highlights
 
 Após uma execução ao vivo — ou após **Bring to Canvas** — um popup dispensável de **Execution Highlights** aparece no **canto superior direito do Canvas**. É uma forma rápida de ver *o que cada Nó produziu*, listado de cima para baixo na ordem de execução. Feche-o com o **✕**; ele reabre na próxima execução.
@@ -143,7 +155,7 @@ Use **Copy** ao lado de Inputs ou Outputs para copiar o JSON para a área de tra
 
 ## Detalhes da linha do tempo de execução
 
-Quando o **Execution Log** do editor estiver aberto, clique no botão de cronômetro para exibir a linha do tempo da execução. Selecione um intervalo para abrir um inspetor de detalhes em linha que assume a área das linhas. Ele mostra o status da etapa selecionada, duração, contagem de tentativas, informações de retry, erros, trace ID e uma prévia compacta da saída. Saídas de objeto e array usam o mesmo visualizador `JsonTree` do restante do painel Debug; valores escalares usam uma prévia de texto. Quando uma etapa produz imagens (capturas de tela do Playwright, imagens geradas, arquivos de imagem), elas aparecem como miniaturas acima da saída, e o JSON mostra um pequeno placeholder no lugar do base64 bruto. Clique em uma miniatura para abri-la em um lightbox; os botões de seta ou as teclas ←/→ percorrem todas as imagens da execução, com um contador como `2 / 5`. Use **Open trace** para spans de LLM e Agent quando um trace ID estiver disponível.
+Quando o **Execution Log** do editor estiver aberto, clique no botão de cronômetro para exibir a linha do tempo da execução. Selecione um intervalo para abrir um inspetor de detalhes em linha que assume a área das linhas. Ele mostra o status da etapa selecionada, duração, contagem de tentativas, informações de retry, erros, trace ID e uma prévia compacta da saída. Saídas de objeto e array usam o mesmo visualizador `JsonTree` do restante do painel Debug; valores escalares usam uma prévia de texto. Quando uma etapa produz imagens (capturas de tela do Playwright, imagens geradas, arquivos de imagem ou imagens em base64 no corpo da requisição, encontradas em qualquer lugar na saída), elas aparecem como miniaturas acima da saída, e o JSON mostra um pequeno placeholder no lugar do base64 bruto. Clique em uma miniatura para abri-la em um lightbox; os botões de seta ou as teclas ←/→ percorrem todas as imagens da execução, com um contador como `2 / 5`. Use **Open trace** para spans de LLM e Agent quando um trace ID estiver disponível.
 ## Detalhes do nó no celular
 
 Em um celular, o editor exibe uma árvore de Workflow em tela cheia em vez do canvas de formato livre. Toque em um nó da árvore com um resultado registrado para abrir sua execução como um detalhe em tela cheia. A visualização oferece abas separadas de **Input Data**, **Output Data** e **Errors**. A aba de output exibe o resultado registrado e oferece **Copy Output**; a aba de input mostra a configuração do nó selecionado, e a aba de errors mostra o erro registrado quando o nó falhou. Use **Back to workflow** ou o botão de fechar para retornar à árvore.

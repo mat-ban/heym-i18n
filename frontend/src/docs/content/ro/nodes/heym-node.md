@@ -16,7 +16,7 @@ Nodul **Heym** citește datele proprii ale Heym: workflow-urile la care aveți a
 | Parametru | Tip | Descriere |
 |-----------|------|-------------|
 | `heymOperation` | Select | Ce citire se efectuează |
-| `heymWorkflowId` | UUID | Workflow-ul țintă. Necesar pentru `getWorkflow` și `getExecutionHistory`. Suportă expresii. |
+| `heymWorkflowId` | UUID | Setați-l la `all` la `getExecutionHistory` pentru a citi toate workflow-urile accesibile. |
 | `heymLimit` | String | Numărul maxim de rânduri returnate. **Lăsați gol sau introduceți `0` pentru a returna tot** — aceasta este valoarea implicită. Suportă expresii. |
 | `heymStatus` | String | Filtru opțional de status pentru `getExecutionHistory`. Suportă expresii. |
 | `heymSinceDays` | String | Interval opțional de căutare în urmă, în zile, pentru `getExecutionHistory`. Suportă expresii. |
@@ -93,9 +93,11 @@ Returnează intrările din istoricul execuțiilor pentru un workflow, cele mai r
 | `$nodeLabel.executions[0].recovered` | Dacă rularea a fost recuperată după o cădere |
 | `$nodeLabel.executions[0].inputs` | Ce a primit rularea - payload-ul trigger-ului sau input-ul apelantului |
 | `$nodeLabel.executions[0].outputs` | Output-ul workflow-ului pentru acea rulare |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow-ul căruia îi aparține istoricul |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow-ul căruia îi aparține istoricul sau `null` cu **{AW}** |
+u `null` cu **{AW}** |
 | `$nodeLabel.total` | Totalul execuțiilor care corespund **înainte** de limită |
-| `$nodeLabel.by_status` | Numărători indexate după status, de exemplu `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_s| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Cu **{AW}**, workflow-ul căruia îi aparține fiecare rulare |
+tatus` | Numărători indexate după status, de exemplu `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Începutul ferestrei sau `null` pentru istoricul complet |
 
 Intrările conțin atât `inputs`, cât și `outputs` - ce a primit rularea și ce a răspuns - dar niciodată `node_results`: urma per nod este cea mai mare coloană din tabel și ar eclipsa tot ce urmează. Obțineți o singură execuție prin API atunci când aveți nevoie de urma completă.

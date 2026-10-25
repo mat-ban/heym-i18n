@@ -9,11 +9,30 @@ Heym Work radi kao zaseban kontejner uz Heym, s odvojenom licencom od tima Heym.
 | Područje | Što radi |
 |----------|----------|
 | **Chat** | Opišite zadatak tekstom ili glasom. Heym traži potrebne podatke, gradi workflow, testira ga i označava kao Provjereno. |
+| **Flows** | Urednici grade flow iz izbora umjesto na canvasu: što ga pokreće, neobavezni AI nacrt i radnje u Slacku, Google Sheets i e-pošti. Odgovori iz Slacka nastavljaju izvođenje, a odobrenja također čekaju u Aktivnosti. Pogledajte [Flows](#flows). |
 | **Stranice** | Prikvačene stranice s widgetima: brojevi, grafikoni, tablice sa statusnim oznakama, područja za prijenos datoteka i odobrenja. Redak tablice može otvoriti vlastitu stranicu s pojedinostima. |
 | **Odobrenja** | Revizije iz koraka [Human-in-the-Loop](./human-in-the-loop.md) čekaju u odjeljku Aktivnost i na stranicama, uz opcije Odobri, Zatraži izmjene i Odbij. |
 | **Aktivnost** | Svako pokretanje, s osobom koja ga je pokrenula i instancom koja ga je izvršila. |
 | **Uloge** | Vlasnik, Urednik i Pregledavatelj. Prijava se odvija putem [Single Sign-On](./sso.md) mehanizma koji Heym već koristi. |
 | **Industrijska izdanja** | Izdanja za pravni sektor, obrazovanje, financije, logistiku, energetiku i e-trgovinu otvaraju se s gotovim stranicama, oglednim podacima i prilagođenim radnim tokovima. |
+
+## Flows
+
+**Flows** se nalazi u izborniku Heym Worka za Urednike i Vlasnike. Flow je sastavljen od izbora umjesto čvorova, a Heym Work ga sprema kao običan Heym workflow putem Heym API-ja u ime osobe koja ga je stvorila. Pravila pristupa, povijest uređivanja i sinkronizacija triggera primjenjuju se kao u uređivaču, a svako izvođenje prikazuje se u Aktivnosti kao i svako drugo.
+
+| Dio | Izbori |
+|---|---|
+| **Što ga pokreće** | Na zahtjev, prema rasporedu, na Slack poruku, kada se promijeni kartica Google Sheets (dodani, promijenjeni ili izbrisani redovi) ili kada e-pošta stigne u pristiglu poštu. Triggeri tablica i e-pošte provjeravaju svakih 1, 5, 15 ili 60 minuta. |
+| **AI nacrt** (neobavezno) | Model i upute pretvaraju ono što je pokrenulo flow u tekst za sljedeće korake. Flow koji ne počinje iz tablice ili e-pošte može prvo pročitati nedavne poruke Slacka s kanala ili teme. |
+| **Što se događa sljedeće** | Radnje po redu u bilo kojem od tri alata, bez obzira na to što je pokrenulo flow. **Slack:** poruka kanala, izravna poruka, obrazac, poruka s gumbima, odobrenje, odgovor na temu, ažuriranje poruke i konačni ishod. **Google Sheets:** dodajte redak ili ažurirajte redak koji se promijenio. **E-pošta:** pošaljite e-poštu. |
+
+- **Odgovori nastavljaju izvođenje.** Odobrenje, gumbi ili obrazac pauziraju izvođenje dok netko ne odgovori u Slacku. Odobrenje također čeka u Aktivnosti, a odluka na bilo kojem mjestu uklanja gumbe iz poruke Slacka. Kasniji koraci Slacka ostaju u temi prve poruke.
+- **Jedna kartica Veze.** Svaki flow prikazuje radni prostor Slacka, račun Google Sheets i pretince e-pošte iz kojih čita i preko kojih šalje. To su vjerodajnice Heyma: **Slack Bot** (token bota, `xoxb-…`), **Google Sheets**, **IMAP** i **SMTP**; vjerodajnica koja nedostaje može se dodati izravno iz samog flowa.
+- **Jedna Slack aplikacija za svaki flow.** U aplikaciji Slack postavite URL zahtjeva za interaktivnost na `https://<vaš Heym>/api/slack/interactions/<id vjerodajnice>` i URL zahtjeva za pretplate na događaje na `https://<vaš Heym>/api/slack/events/<id vjerodajnice>`. Heym Work prikazuje oba za odabranu vezu. Svi flowi na toj vjerodajnici dijele ih.
+- **Triggeri Slacka biraju što slušaju:** poruke u kanalima i izravnim porukama, izravne poruke botu, spominjanja bota ili poruke u jednom kanalu. Vlastite objave bota nikada ne pokreću flow.
+- **Zahtjevi.** Flows zahtijevaju Heym 0.0.131 ili noviji.
+
+Koraci koje flow gradi isti su čvorovi koje možete koristiti na canvasu: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) i [Cron](../nodes/cron-node.md).
 
 ## Povezivanje Heym Worka
 
@@ -26,7 +45,7 @@ Veza se konfigurira u **Postavke → Heym Work**. Kartica se prikazuje samo admi
 | **Adresa Heym Worka** | Adresa na kojoj Heym Work radi, primjerice `https://work.example.com`. Prijava preusmjerava ovamo. Pritisnite **Spremi**. |
 | **Integracijski ključ** | Gumb **Generiraj ključ** stvara ključ koji Heym Work koristi za svaki zahtjev prema Heymu. Prikazuje se samo jednom, uz gumb za kopiranje. Heym sprema isključivo njegov sažetak (hash). |
 | **Omogući Heym Work** | Uključuje vezu. Zahtijeva prethodni unos adrese i ključa. |
-| Status | **Zadnji put viđeno**, **Verzija Worka** i **Licenca**, prema posljednjem izvješću Heym Worka. |
+| **Izdanja za industrije i timove** | Izdanja za pravo, obrazovanje, financije, logistiku, energetiku i e-trgovinu, uz izdanja za IT, prodaju, marketing i HR za timove tvrtki, otvaraju se sa stranicama, oglednim podacima i workflowima za taj rad. |
 
 Zatim otvorite adresu Heym Worka i dovršite konfiguraciju:
 

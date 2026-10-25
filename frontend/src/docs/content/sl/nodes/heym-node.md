@@ -16,7 +16,7 @@ Vozlišče **Heym** bere lastne podatke Heym: workflows, do katerih lahko dostop
 | Parameter | Tip | Opis |
 |-----------|-----|------|
 | `heymOperation` | Izbira | Katero branje izvesti |
-| `heymWorkflowId` | UUID | Ciljni workflow. Obvezno za `getWorkflow` in `getExecutionHistory`. Zmožnost izražanja. |
+| `heymWorkflowId` | UUID | Pri `getExecutionHistory` ga nastavite na `all`, da preberete vsak dosegljiv Workflow. |
 | `heymLimit` | Niz | Maksimalno število vrstic za vrnitev. **Pustite prazno ali vnesite `0`, da vrnete vse** — to je privzeto. Zmožnost izražanja. |
 | `heymStatus` | Niz | Neobvezni filter statusa za `getExecutionHistory`. Zmožnost izražanja. |
 | `heymSinceDays` | Niz | Neobvezno iskanje nazaj v dneh za `getExecutionHistory`. Zmožnost izražanja. |
@@ -93,9 +93,11 @@ Vrne vnose zgodovine izvajanj za en workflow, najnovejše najprej.
 | `$nodeLabel.executions[0].recovered` | Ali je bilo izvajanje obnovljeno po zrušitvi |
 | `$nodeLabel.executions[0].inputs` | Kaj je izvajanje prejelo - payload sprožilca ali vhod uporabnika |
 | `$nodeLabel.executions[0].outputs` | Izhod workflowa za to izvajanje |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, kateremu pripada zgodovina |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, ki mu zgodovina pripada, ali `null` pri **{AW}** |
+`null` pri **{AW}** |
 | `$nodeLabel.total` | Skupno število ujemajočih se izvajanj **pred** omejitvijo |
-| `$nodeLabel.by_status` | Števila razvrščena po statusu, na primer `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Pri **{AW}** Workflow, ki mu pripada posamezno izvajanje |
+status` | Števila razvrščena po statusu, na primer `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Začetek okna ali `null` za celotno zgodovino |
 
 Vnosi vsebujejo tako `inputs` kot `outputs` - kaj je izvajanje prejelo in kaj je odgovorilo - vendar nikoli `node_results`: sled za vsak node je največja kolona v tabeli in bi zasenčila vse spodnje. Pridobite eno izvajanje preko API, ko potrebujete celotno sled.

@@ -55,6 +55,18 @@ Het openen van een workflow op `/workflows/{workflowId}/{executionId}` brengt di
 - Een mislukte run debuggen door inputs en knooppuntoutputs te inspecteren
 - Outputs tussen runs vergelijken
 
+## AI vragen
+
+Beide geschiedenisvensters hebben een **AI vragen**-knop (sterretje) naast hun titel. Dit opent het [tabblad Chat](../tabs/chat-tab.md#asking-about-a-run) in een nieuw gesprek met de workflow en de geselecteerde run als verwijderbare chips bijgevoegd. Vraag waarom de run traag was, wat er mislukte, of laat Chat de workflow repareren. Chat leest exact die run, inclusief de trace per node en eventuele fouten.
+
+In het venster All History verschijnt **AI vragen** alleen wanneer een workflow-run is geselecteerd; chat- en assistent-runs tonen dit niet.
+
+## Tijdlijn van uitvoeringen
+
+In het detail van de run wisselt de knop **Tijdlijn** (klokje) naast **Alles uitvouwen** de lijst met **Stappen** om voor een span-tijdlijn. Terwijl de tijdlijn wordt weergegeven, toont dezelfde knop **Logboeken**; klik erop om terug te keren naar de lijst. In All History verschijnt de knop alleen voor workflow-runs. De tijdlijn tekent een balk per node op het tijdstip dat deze startte, zodat u ziet welke node hoe lang duurde en welke parallel liepen. Beweeg over een balk voor de duur; klik erop om dezelfde details-inspector te openen als de [uitvoeringstijdlijn](#execution-timeline-details) van de editor. De gekozen weergave blijft behouden zolang het dialoogvenster open is.
+
+Runs die zijn geregistreerd voordat de starttijden van nodes werden opgeslagen, worden achter elkaar op volgorde van duur weergegeven.
+
 ## Execution Highlights
 
 Na een live run — of na **Bring to Canvas** — verschijnt een sluitbare popup **Execution Highlights** in de **rechterbovenhoek van het Canvas**. Dit is een snelle manier om te zien *wat elk knooppunt heeft geproduceerd*, van boven naar beneden weergegeven in uitvoeringsvolgorde. Sluit deze met de **✕**; bij de volgende run wordt deze opnieuw geopend.
@@ -145,7 +157,7 @@ Gebruik **Copy** naast Inputs of Outputs om de JSON naar het klembord te kopiër
 
 ## Details van de uitvoeringstijdlijn
 
-Wanneer het **Execution Log** van de editor is geopend, klikt u op de timerknop om de uitvoeringstijdlijn te tonen. Selecteer een span om een inline detailsinspecteur te openen die het rijengebied overneemt. Deze toont de status, duur, het aantal pogingen, retry-informatie, fouten, trace-ID en een compacte uitvoervoorbeeld van de geselecteerde stap. Object- en array-uitvoer gebruiken dezelfde `JsonTree`-viewer als de rest van het Debug-paneel; scalaire waarden gebruiken een tekstvoorbeeld. Wanneer een stap afbeeldingen uitvoert (Playwright-screenshots, gegenereerde afbeeldingen, afbeeldingsbestanden), verschijnen deze als thumbnails boven de uitvoer, en de JSON toont een korte plaatsaanduiding in plaats van de ruwe base64. Klik op een thumbnail om deze in een lightbox te openen; de pijlknoppen of ←/→-toetsen stappen door elke afbeelding in de run, met een teller zoals `2 / 5`. Gebruik **Open trace** voor LLM- en Agent-spans wanneer een trace-ID beschikbaar is.
+Wanneer het **Execution Log** van de editor is geopend, klikt u op de timerknop om de uitvoeringstijdlijn te tonen. Selecteer een span om een inline detailsinspecteur te openen die het rijengebied overneemt. Deze toont de status, duur, het aantal pogingen, retry-informatie, fouten, trace-ID en een compacte uitvoervoorbeeld van de geselecteerde stap. Object- en array-uitvoer gebruiken dezelfde `JsonTree`-viewer als de rest van het Debug-paneel; scalaire waarden gebruiken een tekstvoorbeeld. Wanneer een stap afbeeldingen uitvoert (Playwright-screenshots, gegenereerde afbeeldingen, afbeeldingsbestanden of base64-afbeeldingen in een verzoektekst, overal in de uitvoer gevonden), verschijnen deze als thumbnails boven de uitvoer, en de JSON toont een korte plaatsaanduiding in plaats van de ruwe base64. Klik op een thumbnail om deze in een lightbox te openen; de pijlknoppen of ←/→-toetsen stappen door elke afbeelding in de run, met een teller zoals `2 / 5`. Gebruik **Open trace** voor LLM- en Agent-spans wanneer een trace-ID beschikbaar is.
 
 ## Mobiel knooppuntdetail
 

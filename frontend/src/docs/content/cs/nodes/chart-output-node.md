@@ -33,13 +33,17 @@ Pokud máte k dispozici pouze ukázková data (bez skutečného zdroje), vytvoř
 | `valueField` | string | Klíč řádku použitý jako číselná hodnota (pie/bar/line/numeric/gauge) |
 | `series` | array | Volitelná definice více sérií `[{ "name": "Sent", "field": "sent" }]` pro bar/line (přebíjí `valueField`) |
 | `columns` | array | Volitelný seznam sloupců pro `table` (výchozí jsou klíče prvního řádku) |
-| `statusColumn` | string | Volitelný sloupec `table` vykreslený jako barevné [stavové štítky](#status-chips). Musí jít o jeden ze zobrazených sloupců. |
+| `statusColumn` | string | Volitelný sloupec `table` vykreslený jako barevné [stavové štítky](#status-chips). Musí jít o jeden ze zobrazených sloupců. |, a s `linkColumn` obsahuje také sloupec odkazu a text tlačítka.
 | `statusTones` | object | Volitelné mapování stavové hodnoty na odstín (`success`, `attention`, `failure`, `waiting`, `neutral`) pro hodnoty, které výchozí nastavení nepokrývá |
+| `linkColumn` | string | Volitelný sloupec `table`, jehož buňky obsahují URL, zobrazený jako [tlačítko odkazu](#link-buttons), které jej otevře v nové kartě. Musí to být jeden ze zobrazených sloupců. |
+| `linkLabel` | string | Volitelný text tlačítka odkazu. Pokud zůstane prázdný, tlačítko zobrazí pouze ikonu odkazu. |
 | `xField` / `yField` | string | Klíče řádků pro číselné osy X a Y (scatter) |
 | `min` / `max` | number | Číselný rozsah pro `gauge` (výchozí `0` / `100`) |
 | `unit` | string | Volitelná jednotka zobrazená vedle hodnoty `numeric` nebo `gauge` |
 | `text` | string | Zpráva ve formátu Markdown pro typ grafu `text`. Ponechte prázdné a nastavte `valueField` pro vykreslení dynamické zprávy převzaté z dat předchozího uzlu. |
 | `title` | string | Volitelný název grafu |
+| `hitlWorkflowId` | string | Pouze `hitl`. Zobrazí jen recenze tohoto Workflow. Pokud zůstane prázdné, widget zobrazí všechny recenze. |
+| `hitlNodeId` | string | Pouze `hitl`. Zúží `hitlWorkflowId` na jeden krok: Agent s lidskou recenzí nebo krok Slack se schválením, tlačítky či formulářem. |
 
 ## Typy grafů
 
@@ -51,7 +55,7 @@ Pokud máte k dispozici pouze ukázková data (bez skutečného zdroje), vytvoř
 - **proportion** — jediný horizontální pruh rozdělený na podíly s procentuální legendou (např. rozložení jazyků). Používá `labelField` + `valueField`.
 - **barGauge** — jeden horizontální gauge na řádek s přechodem červená→zelená a hodnotou (např. volné místo na disku). Používá `labelField` + `valueField`, volitelnou `unit` a `max` (výchozí je největší hodnota řádku).
 - **text** — zpráva ve formátu markdown (např. stavová poznámka jako „Poslední spuštění v 19:47"). Pro statickou zprávu vložte markdown do `text`, nebo ponechte `text` prázdné a nastavte `valueField` pro vykreslení řetězce vytvořeného předchozím uzlem. Podporuje nadpisy, tučné/kurzíva, [seznamy](../nodes/chart-output-node.md#interactive-task-lists), odkazy a inline kód.
-- **hitl** — karusel vašich čekajících lidských revizí. Hlavička zobrazuje `1/n pending`; levá šipka je zakázána na první kartě a pravá na poslední. Název workflow otevře dané spuštění na canvasu. Tlačítka **Approve**, **Request changes** a **Reject** jej vyřeší a ikona historie vedle názvu widgetu otevře dané spuštění v dialogu historie na stejné stránce. Tento typ grafu ignoruje řádky z předchozích uzlů, takže workflow widgetu tvoří pouze uzel Výstup grafu. Každá přihlášená osoba vidí revize u workflow, která vlastní.
+- **hitl** — karusel vašich čekajících lidských revizí. Hlavička zobrazuje `1/n pending`; levá šipka je zakázána na první kartě a pravá na poslední. Název workflow otevře dané spuštění na canvasu. Tlačítka **Approve**, **Request changes** a **Reject** jej vyřeší a ikona historie vedle názvu widgetu otevře dané spuštění v dialogu historie na stejné stránce. Tento typ grafu ignoruje řádky z předchozích uzlů, takže workflow widgetu tvoří pouze uzel Výstup grafu. Každá přihlášená osoba vidí revize u workflow, která vlastní. Vyberte **Workflow** (a **Select agent**, pokud má více kroků recenze) ve vlastnostech uzlu nebo v nastavení widgetu, aby se místo toho zobrazily recenze tohoto Workflow všem, kdo jej mohou otevřít; viz [widgety HITL](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktivní seznamy úkolů
 
@@ -307,3 +311,17 @@ Při generování widgetu pomocí **AI** se prompty, jako jsou tyto, čistě map
 
 - [Karta Dashboard](../tabs/dashboard-tab.md) — sestavujte a uspořádejte widgety
 - [Výstupní uzel](output-node.md) — koncový uzel pro běžné workflow
+
+
+## Tlačítka odkazů
+
+Sloupec v `table` lze změnit na tlačítka, která otevírají odkaz. Nastavte **Link column** ve vlastnostech uzlu (nebo `linkColumn` v DSL) na sloupec, jehož buňky obsahují URL, a volitelně **Link button text** (`linkLabel`). Každá buňka se stane tlačítkem, které otevře svou URL v nové kartě. Bez textu tlačítka zobrazí tlačítko pouze ikonu odkazu:
+
+| Hodnota buňky | Otevře |
+| ------------- | ------ |
+| `https://jira.example.com/browse/T-1` | Jiný web v nové kartě |
+| `/dashboards` | Stránku uvnitř Heym v nové kartě |
+
+Tlačítky se stanou pouze adresy `http://` a `https://` a cesty začínající jedním `/`. Jakákoli jiná hodnota, například `javascript:` nebo `//host`, zůstane prostým textem a prázdná buňka nezobrazí nic.
+
+Tlačítko funguje vedle [odkazu řádku](../tabs/dashboard-tab.md#detail-pages): kliknutí na tlačítko otevře jeho odkaz v nové kartě a kliknutí kamkoli jinam na řádku stále otevře stránku s detaily.

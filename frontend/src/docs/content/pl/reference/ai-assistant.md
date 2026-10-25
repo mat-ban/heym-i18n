@@ -13,6 +13,8 @@ W przypadku pytań dotyczących dokumentacji poza edytorem należy korzystać z 
 
 Naciśnij `Ctrl + I` / `Cmd + I` w dowolnym miejscu edytora, aby otworzyć lub zamknąć panel — skrót działa nawet wtedy, gdy fokus znajduje się w polu tekstowym. Zobacz [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Aby pracować nad pojedynczym węzłem, najedź na niego kursorem na canvasie i kliknij **AI** powyżej. Panel otworzy się skoncentrowany na tym węźle. Zobacz [Modyfikowanie pojedynczego węzła](#changing-one-node).
+
 ## Zamykanie panelu
 
 Kliknij przycisk **X**, naciśnij `Ctrl + I` / `Cmd + I` lub przełącz przycisk **AI** na pasku narzędzi panelu Debug. Przeciągnięcie nagłówka przesuwa panel, ale go nie zamyka.
@@ -60,6 +62,33 @@ Gdy odpowiedź AI zawiera prawidłowy blok JSON workflow (z `nodes` i opcjonalni
 4. Oznacza workflow jako niezapisany
 
 Jeśli parsowanie się nie powiedzie, pojawia się przycisk **Retry** umożliwiający ponowne wygenerowanie odpowiedzi.
+
+## Modyfikowanie pojedynczego węzła
+
+Najedź kursorem na węzeł na canvasie i kliknij **AI** powyżej. Panel otworzy się w trybie Agent, skoncentrowany na tym węźle, i pokaże, który węzeł jest modyfikowany:
+
+| Węzeł ma... | Panel pokazuje |
+|---|---|
+| Brak wyniku w bieżącym uruchomieniu | **Modifying Node:** w kompaktowym wierszu z ikoną i nazwą węzła. Asystent edytuje wyłącznie na podstawie konfiguracji węzła; uruchom najpierw węzeł, jeśli powinien widzieć dane wyjściowe |
+| Wynik w bieżącym uruchomieniu | **Modifying Node: (Has Node Output)** nad samym węzłem: ikona, nazwa i typ, ostatni status i czas trwania oraz błąd w przypadku niepowodzenia. Asystent widzi te dane wyjściowe i błąd podczas edycji węzła |
+
+Najedź na etykietę, aby sprawdzić stan panelu.
+
+Niezależnie od stanu panelu asystent odczytuje również stronę dokumentacji węzła pod ikoną książki w nagłówku węzła. Wykorzystuje ją do zrozumienia opcji węzła i odpowiadania na pytania z nimi związane.
+
+Poniżej wiadomości trzy opcje umożliwiają rozpoczęcie żądania:
+
+| Opcja | Co robi |
+|---|---|
+| **Change this node as ...** | Wypełnia pole wiadomości tekstem *Zmień ten węzeł na*, aby można było dokończyć zdanie |
+| **Fix error in this node ...** | Wypełnia *Napraw błąd w tym węźle.* Asystent odczytuje błąd tego węzła z ostatniego uruchomienia |
+| **Other** | Ustawia fokus na pustym polu wiadomości |
+
+Edytuj tekst i naciśnij **Send**. Asystent zwraca tylko ten węzeł, a Heym aktualizuje go w miejscu: węzeł zachowuje swój identyfikator, typ i nazwę, dzięki czemu wyrażenia takie jak `$checkLinkedIn.result` w innych węzłach nadal działają. Inne węzły, połączenia i układ nie ulegają zmianie, a **Undo** przywraca poprzednią konfigurację.
+
+Jeśli żądanie nie mieści się w węźle, np. wymaga innego typu węzła lub nowego węzła, asystent wskazuje, co należałoby zmienić zamiast edycji. Zamknij fokus węzła za pomocą ikony **X** na karcie węzła, aby ponownie edytować cały workflow. Zamknięcie panelu również czyści fokus.
+
+[Tryb YOLO](#yolo-mode) działa z ustawionym fokusem: asystent modyfikuje węzeł, uruchamia workflow i naprawia węzeł, aż uruchomienie zakończy się powodzeniem. W trybie **Ask** fokus wskazuje asystentowi, którego węzła dotyczy pytanie, a canvas nie ulega zmianie.
 
 ## Tryb YOLO
 

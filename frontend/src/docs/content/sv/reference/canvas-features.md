@@ -1,6 +1,6 @@
 # Canvas-funktioner
 
-Workflow-editorn tillhandahåller flera funktioner för felsökning, testning och organisering av noder: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** och **Extract to Sub-Workflow**.
+Workflow-editorn tillhandahåller flera funktioner för felsökning, testning och organisering av noder: **Run to Node**, **AI på en nod**, **Data Pin**, **Execution Logs**, **Enable/Disable** och **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Watch Editor demo</a></p>
@@ -12,6 +12,12 @@ Håll muspekaren över valfri nod utom en sticky note och klicka på **Run** ned
 Om den valda sökvägen har inmatningsfält öppnas panelen **Run** till höger och fokuserar det första fältet. Ange värdena och klicka sedan på **Run to _node label_** eller tryck på **Ctrl+Enter** (Cmd+Enter på macOS). Generiskt body-läge fokuserar JSON-body-editorn. Sökvägar utan inmatningsfält körs omedelbart utan att panelen öppnas. Pinnade Input-noder återanvänder sin pinnade utdata utan att begära indata.
 
 Panelen behåller det valda målet för efterföljande körningar. Välj **Run full workflow** för att rensa målet. Run-knappar är inaktiverade medan en körning är aktiv. Ett mål inuti en loop stoppar körningen när den noden först nås; att välja en nod efter loopen kör den fullständiga uppströms loopen.
+
+## AI på en nod
+
+För markören över en valfri nod utom en fästis och klicka på **AI** ovanför den. [AI Assistant](./ai-assistant.md) öppnas på den noden och erbjuder **Change this node as ...**, **Fix error in this node ...** och **Other**. I Agent-läge ändrar assistenten endast den noden; andra noder, anslutningar och layouten förblir oförändrade. Se [AI Assistant › Ändra en enskild nod](./ai-assistant.md#changing-one-node).
+
+Knappen är dold i arbetsflöden som endast kan visas.
 
 ## Data Pin
 

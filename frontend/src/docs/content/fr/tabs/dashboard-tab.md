@@ -18,14 +18,14 @@ Un widget est un graphique unique sur la grille. Types de graphiques pris en cha
 - **Lignes**
 - **Aires** (tendance remplie, prend en charge plusieurs séries)
 - **Camembert**
-- **Tableau** (défilable ; une colonne peut être affichée sous forme de [pastilles de statut](../nodes/chart-output-node.md#status-chips), et les lignes peuvent ouvrir une [page de détail](#detail-pages))
+- **Tableau** (défilable ; cliquez sur un en-tête de colonne pour trier par ordre croissant, puis cliquez de nouveau pour trier par ordre décroissant. Une colonne peut s'afficher sous forme de [puces d'état](../nodes/chart-output-node.md#status-chips), une colonne peut contenir des [boutons de lien](../nodes/chart-output-node.md#link-buttons) qui ouvrent une URL dans un nouvel onglet, et les lignes peuvent ouvrir une [page de détail](#pages-de-detail))
 - **Numérique** (une valeur KPI unique avec unité facultative)
 - **Jauge** (une valeur unique sur une plage min–max, par exemple un pourcentage)
 - **Nuage de points** (points X/Y pour les graphiques de corrélation)
 - **Proportion** (une barre divisée en parts avec une légende en pourcentage, par exemple une répartition par langue)
 - **Jauge à barres** (une jauge horizontale par ligne avec un dégradé rouge→vert et une valeur, par exemple l'espace disque libre)
 - **Texte** (un message markdown, par exemple une note de statut telle que « Dernière exécution à 19:47 » ; prend en charge les [cases à cocher interactives](../nodes/chart-output-node.md#interactive-task-lists) lorsque le markdown est statique, ainsi que les [listes numérotées explicites](../nodes/chart-output-node.md#numbered-lists) pour une numérotation personnalisée ou décroissante)
-- **HITL** (vos revues humaines en attente. L'en-tête affiche `1/n pending`. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** permettent de la résoudre. L'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique de cette page. Le widget n'utilise pas les lignes en amont, et chaque personne voit sa propre file d'attente)
+- **HITL** (vos revues humaines en attente. L'en-tête affiche `1/n pending`. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** permettent de la résoudre. L'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique de cette page. Le widget n'utilise pas les lignes en amont, et chaque personne voit sa propre file d'attente. Il peut afficher à la place les validations d'un seul Workflow, pour toutes les personnes pouvant ouvrir ce Workflow ; voir [Widgets HITL](#widgets-hitl))
 
 Outre les graphiques, un widget **Run a workflow** exécute l'un de vos workflows depuis le tableau de bord : sur un fichier déposé, avec ses champs de saisie ou avec un bouton Run ; voir [Widgets d'exécution](#run-widgets).
 
@@ -41,6 +41,20 @@ Chaque widget charge ses données de manière asynchrone à l'ouverture de l'ong
 Pour un widget **Run a workflow**, choisissez plutôt le workflow qu'il exécute ; le sélecteur indique comment le widget exécutera chacun d'eux. Le widget est ajouté directement à la grille ; il n'y a pas de nouveau workflow à construire.
 
 Double-cliquez sur un widget (ou utilisez son bouton d'édition) pour rouvrir son workflow à tout moment. Utilisez **Clone widget** dans l'en-tête du widget pour dupliquer à la fois le widget et l'intégralité de son workflow. La copie est placée sous l'original et étiquetée **(Copy)** afin que vous puissiez la modifier indépendamment.
+
+## Widgets HITL
+
+Un nouveau widget HITL affiche toutes les validations en attente dans votre propre file. Pour n'afficher que celles d'un Workflow, ouvrez les **Paramètres** du widget :
+
+1. Sous **Workflow**, choisissez le Workflow. La liste contient les Workflows que vous pouvez ouvrir, les vôtres ou ceux partagés avec vous ou votre équipe, qui comportent une étape en attente d'une personne : un Agent avec validation humaine, ou une étape Slack d'approbation, de boutons ou de formulaire. L'icône à côté ouvre ce Workflow dans un nouvel onglet.
+2. Si le Workflow comporte une seule étape de ce type, elle est sélectionnée automatiquement. S'il en comporte plusieurs, **Select agent** les liste par nom de nœud, avec **All agents** en premier ; les étapes Slack sont signalées par **(Slack)**.
+3. Enregistrez. Le `1/n pending` de l'en-tête ne compte que ces validations. Choisissez **Tous les workflows** pour afficher de nouveau votre propre file.
+
+Le même choix existe sur le canevas, dans les propriétés du nœud Chart Output. **Affiner avec l'IA** peut le faire (« afficher uniquement les approbations de factures »), tout comme la description d'un nouveau widget qui nomme le Workflow. Chaque modification est une modification du Workflow ; elle apparaît donc dans l'Edit History.
+
+- **Qui voit les validations.** Un widget filtré sur un Workflow affiche les validations de ce Workflow à toutes les personnes pouvant ouvrir le Workflow, qui peuvent approuver, demander des modifications ou rejeter depuis le widget, comme elles pourraient exécuter le Workflow. Un widget non filtré affiche à chacun sa propre file.
+- **Qui voit le widget.** Une personne qui ne peut pas ouvrir le Workflow choisi ne voit pas du tout le widget, même sur un tableau de bord partagé avec elle. Lorsque le propriétaire du tableau de bord perd l'accès au Workflow, ou que celui-ci est supprimé, le propriétaire voit « You no longer have access to the workflow this widget shows » et peut en choisir un autre dans les **Paramètres**.
+- **Uniquement des choix accessibles.** Un Workflow que vous ne pouvez pas ouvrir est refusé lors de l'enregistrement du widget, que ce soit depuis les paramètres, le canevas ou l'IA.
 
 ## Pages de détail
 
@@ -75,6 +89,10 @@ Le bouton **Wrap** du résultat renvoie à la ligne les longues lignes de sortie
 ## Génération d'un widget avec l'IA
 
 Cliquez sur **AI**, décrivez la métrique souhaitée (par exemple, « taux de réussite des workflows sur les 30 derniers jours sous forme de graphique à barres »), puis choisissez un identifiant LLM et un modèle. Heym génère un workflow de widget complet se terminant par un nœud Chart Output et l'ajoute à la grille. Consultez [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) pour des exemples de prompts par type de graphique.
+
+Le widget reçoit un titre court d'un ou deux mots dans la langue de votre demande, par exemple « Dossiers ouverts ». Un titre ne contient jamais l'identifiant d'une table de données ; lorsque le modèle nomme le widget par une phrase, Heym en conserve les premiers mots.
+
+L'API des widgets peut aussi créer une **carte de comptage** sans IA : un widget `text` sur une table de données (`data_table_id`) avec `count_column` et `count_value` affiche le nombre de lignes ayant cette valeur ; le titre du widget indique la valeur. Heym Work place en tête des pages créées à partir d'une table de données une carte de comptage par statut.
 
 Utilisez le bouton **Fine-tune with AI** d'un widget pour réviser un widget existant avec une nouvelle instruction. Chaque ajustement par IA enregistre un instantané du workflow précédent dans l'**Edit History** du widget, ce qui vous permet de consulter ou d'annuler les modifications depuis l'éditeur de workflow.
 

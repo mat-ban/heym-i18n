@@ -213,6 +213,11 @@ Kui fail on juba olemas, hangib Heym enne uuendamist automaatselt praeguse SHA.
 **Per Page** (1–100). Heym pärib ühe lehe tulemusi; sama operatsiooni raames täiendavate lehtede
 toomiseks puudub `page` väli.
 
+
+### Return all pages
+
+Lülitage sisse **Return all pages**, et üks käivitus järgiks kõiki lehti, alustades **Cursor** kohast, kui see on määratud. Iga päring küsib 100 kirjet olenemata **Per Page** väärtusest. Sõlm peatub umbes 1000 kirje (või 100 päringu) järel: issue-objektid on igaüks umbes 6 KB, seega suurem piir tekitaks väga suuri sõlme väljundeid. Kui see peatub varem, tagastab see veateate asemel kogutu koos `has_more: true` ja `next_cursor` väärtusega ning saate jätkata, andes selle kursori järgmisele käivitusele. Workflow peatamine või selle ajalõpu saavutamine lõpetab toomise lehtede vahel.
+
 ## Output
 
 Täpne kuju sõltub valitud operatsioonist. Tavalised väljad hõlmavad:

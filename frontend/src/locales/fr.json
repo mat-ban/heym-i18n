@@ -166,7 +166,14 @@
     "staleConflictTitle": "Workflow obsolète détecté",
     "staleReloadMessage": "Ce workflow a été enregistré ailleurs, cet onglet affiche donc une version plus ancienne. Son exécution maintenant exécuterait la version enregistrée plus récente au lieu de ce que vous voyez ici.",
     "staleReloadTitle": "Workflow modifié ailleurs",
-    "staleRunMessage": "Une version plus récente de ce workflow a été enregistrée depuis que vous l'avez ouvert. L'exécution écrasera cette version avec la vôtre. Continuer ?"
+    "staleRunMessage": "Une version plus récente de ce workflow a été enregistrée depuis que vous l'avez ouvert. L'exécution écrasera cette version avec la vôtre. Continuer ?",
+    "aiButtonTitle": "Modifier ou corriger ce nœud avec l'assistant IA",
+    "editNodeWithAi": "Modifier {label} avec l'IA",
+    "modifyingNode": "Modification du nœud :",
+    "hasNodeOutput": "(Avec sortie du nœud)",
+    "closeNodeFocus": "Fermer le focus du nœud et modifier tout le Workflow",
+    "nodeFocusRan": "Ce nœud a été exécuté. L'IA voit sa dernière sortie et son erreur, et lit la documentation du nœud.",
+    "nodeFocusNoOutput": "Ce nœud n'a aucune sortie dans l'exécution en cours. Exécutez-le d'abord si l'IA doit voir sa sortie. L'IA lit dans tous les cas la documentation du nœud."
   },
   "analytics": {
     "p50Median": "P50 (Médiane)",
@@ -327,7 +334,9 @@
     "suggestion5": "Qu'est-ce qui est stocké dans mes variables globales ?",
     "suggestion6": "Quels modèles de workflow sont disponibles ?",
     "unpin": "Désépingler",
-    "unreadMessage": "Message non lu"
+    "unreadMessage": "Message non lu",
+    "subtitle": "Exécuter des Workflows et poser des questions",
+    "modelsLoadFailedDisabled": "La liste des modèles de ces identifiants n'a pas pu être chargée. Le chat reste désactivé tant qu'un modèle ne peut pas être récupéré."
   },
   "alerts": {
     "wizard": {
@@ -1035,7 +1044,10 @@
     "detailPageRecords": "Enregistrements de page de détails",
     "detailPageRecordsHelp": "Les valeurs ?record= acceptées par ce tableau de bord lorsqu'un lien de ligne l'ouvre. Toute autre valeur est refusée avant l'exécution d'un widget.",
     "unreachableDashboard": "Un tableau de bord que vous ne pouvez pas ouvrir",
-    "runWorkflow": "Exécuter un Workflow"
+    "runWorkflow": "Exécuter un Workflow",
+    "openWorkflowNewTab": "Ouvrir le Workflow dans un nouvel onglet",
+    "hitlFilterHelp": "Afficher les revues de tous les Workflows ou d'un seul. Liste les Workflows que vous pouvez ouvrir, les vôtres ou ceux partagés avec vous, qui comportent une étape en attente d'une personne.",
+    "hitlSourcesLoadFailed": "Vos Workflows n'ont pas pu être chargés."
   },
   "dashboard": {
     "askAi": "Demander à l'IA",
@@ -1201,7 +1213,10 @@
     "attemptFailed": "tentative {attempt}/{max} échouée",
     "attempts": "Tentatives",
     "blockedBy": "Bloqué par : {categories}",
-    "bringToCanvas": "Ouvrir dans le Canvas"
+    "bringToCanvas": "Ouvrir dans le Canvas",
+    "askAi": "Demander à l'IA",
+    "askAiTitle": "Interroger l'assistant Chat sur cette exécution",
+    "noNodeSpans": "Aucun span de nœud n'a été enregistré pour cette exécution."
   },
   "logs": {
     "all": "Tous",

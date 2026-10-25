@@ -80,6 +80,17 @@ Küsige tavalises keeles — "what is running?", "how many workflows are active 
 
 Käivitused, mis on peatatud [Human-in-the-Loop](../reference/human-in-the-loop.md) või Codex ülevaatuse jaoks, esitatakse teid ootavatena, mitte töötavatena. Need on samad andmed kui päises olev aktiivsete käivituste märk, seega Chat ja märk ei ole kunagi vastuolus. Juba lõpetatud käivituste kohta küsige hoopis viimaseid käivitusi — see loeb [Execution History](../reference/execution-history.md).
 
+## Küsimused käituse kohta
+
+Valige Workflow käitus [Execution History](../reference/execution-history.md#ask-ai) aknas toimetist või All History vaatest ja klõpsake dialoogi pealkirja kõrval **Küsi AI-lt**. Chat avab uue vestluse kahe kiibiga sõnumikasti kohal:
+
+- **Workflow:** Workflow nimi
+- **Execution:** valitud käituse ID esimesed märgid
+
+Eemaldage kiip selle **×** nupuga selle väljajätmiseks. Seejärel esitage küsimus, näiteks „miks see käitus nii kaua aega võttis?“, „mis siin ebaõnnestus?“ või „kas saate selle parandada?“. Ülejäänud kiibid lisatakse sellele sõnumile täielike ID-dega, nii et Chat loeb otse käituse sisendeid, väljundeid ja sõlmede jälitust Workflow otsimise asemel. Workflow parandamiseks salvestab, testib ja kinnitab Chat muudatuse jaotises [Workflow'de loomine](#workflowde-loomine) kirjeldatud viisil.
+
+Saadetud sõnum kuvab kiibid teie küsimuse all. Need kuuluvad ainult selle sõnumi juurde; sama vestluse järgmised küsimused säilitavad konteksti ajaloost.
+
 ## Küsimine teavituste kohta
 
 Chat oskab vastata küsimustele teie määratud [teavituste](./alerts-tab.md) kohta:

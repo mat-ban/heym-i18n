@@ -15,6 +15,7 @@ import { useRunbookPlayer } from "@/features/runbook/useRunbookPlayer";
 
 import type { NodeType, WorkflowEdge, WorkflowNode } from "@/types/workflow";
 
+import CanvasNodeAiButton from "./CanvasNodeAiButton.vue";
 import CanvasNodeRunButton from "./CanvasNodeRunButton.vue";
 import BaseNode from "@/components/Nodes/BaseNode.vue";
 import InsertableEdge from "@/components/Canvas/InsertableEdge.vue";
@@ -1140,7 +1141,7 @@ function getDefaultNodeData(type: NodeType): WorkflowNode["data"] {
     },
     rag: { label: "rag", vectorStoreId: "", ragOperation: undefined, documentContent: "$input.text", documentMetadata: "{}", documentIdField: "doc_id", documentId: "", queryText: "$input.text", searchLimit: 5, metadataFilters: "{}" },
     grist: { label: "grist", credentialId: "", gristOperation: undefined, gristDocId: "", gristTableId: "", gristRecordId: "", gristRecordData: "{}", gristRecordsData: "[]", gristFilter: "{}", gristSort: "", gristLimit: 100, gristRecordIds: "[]" },
-    github: { label: "github", credentialId: "", githubOperation: "getRepository", githubOwner: "", githubRepo: "", githubOrganization: "", githubInviteEmail: "", githubIssueNumber: "", githubTitle: undefined, githubBody: undefined, githubCommentBody: "$input.text", githubState: undefined, githubStateReason: undefined, githubAssignee: "", githubCreator: "", githubMentioned: "", githubLabelsFilter: "", githubSince: "", githubSort: "", githubDirection: "", githubLabels: undefined, githubAssignees: undefined, githubLockReason: "", githubHead: "", githubBase: "main", githubPullRequestNumber: "", githubReviewId: "", githubReviewEvent: "APPROVE", githubReviewBody: "", githubCommitId: "", githubDraft: undefined, githubPrerelease: undefined, githubFilePath: "", githubFileContent: "$input.text", githubCommitMessage: "", githubBranch: "", githubPerPage: "30", githubCursor: "", githubTagName: "", githubReleaseId: "", githubWorkflowId: "", githubWorkflowInputs: undefined, githubWaitTimeoutSeconds: "600", githubPollIntervalSeconds: "5" },
+    github: { label: "github", credentialId: "", githubOperation: "getRepository", githubOwner: "", githubRepo: "", githubOrganization: "", githubInviteEmail: "", githubIssueNumber: "", githubTitle: undefined, githubBody: undefined, githubCommentBody: "$input.text", githubState: undefined, githubStateReason: undefined, githubAssignee: "", githubCreator: "", githubMentioned: "", githubLabelsFilter: "", githubSince: "", githubSort: "", githubDirection: "", githubLabels: undefined, githubAssignees: undefined, githubLockReason: "", githubHead: "", githubBase: "main", githubPullRequestNumber: "", githubReviewId: "", githubReviewEvent: "APPROVE", githubReviewBody: "", githubCommitId: "", githubDraft: undefined, githubPrerelease: undefined, githubFilePath: "", githubFileContent: "$input.text", githubCommitMessage: "", githubBranch: "", githubPerPage: "30", githubCursor: "", githubReturnAll: undefined, githubTagName: "", githubReleaseId: "", githubWorkflowId: "", githubWorkflowInputs: undefined, githubWaitTimeoutSeconds: "600", githubPollIntervalSeconds: "5" },
     jira: { label: "jira", credentialId: "", jiraOperation: "searchIssues", jiraProjectKey: "", jiraIssueKey: "", jiraIssueType: "Task", jiraIssueTypeId: "", jiraSummary: "", jiraDescription: "$input.text", jiraJql: "updated >= -30d ORDER BY updated DESC", jiraFields: "", jiraAssigneeAccountId: "", jiraLabels: "", jiraCommentBody: "$input.text", jiraCommentId: "", jiraTransitionId: "", jiraAttachmentId: "", jiraAttachmentFilename: "", jiraAttachmentBase64: "", jiraAttachmentMimeType: "", jiraIncludeBinary: false, jiraNotifySubject: "", jiraNotifyTextBody: "$input.text", jiraNotifyHtmlBody: "", jiraNotifyTo: "{\"assignee\":true}", jiraAccountId: "", jiraUsername: "", jiraUserEmail: "", jiraUserDisplayName: "", jiraUserProducts: "", jiraLimit: "50", jiraStartAt: "0", jiraNextPageToken: "" },
     linear: { label: "linear", credentialId: "", linearOperation: "listIssues", linearTeamId: "", linearProjectId: "", linearIssueId: "", linearIssueLinkUrl: "", linearTitle: "", linearDescription: "$input.text", linearStateId: "", linearAssigneeId: "", linearPriority: "", linearCommentId: "", linearCommentBody: "$input.text", linearParentCommentId: "", linearLimit: "50", linearReturnAll: false },
     googleSheets: { label: "googleSheets", credentialId: "", gsOperation: undefined, gsSpreadsheetId: "", gsSheetName: "Sheet1", gsStartRow: "1", gsUpdateRow: "1", gsMaxRows: "0", gsHasHeader: true, gsRowCount: "1", gsKeepHeader: false, gsAppendPlacement: "append", gsValuesInputMode: "raw", gsValuesSelectiveRows: "1", gsValuesSelectiveCols: "3", gsValues: "[]" },
@@ -1937,6 +1938,11 @@ watch(
         />
         <CanvasNodeRunButton
           v-if="data.nodeType !== 'sticky' && !isRunbookPlaying"
+          :node-id="id"
+          :label="data.label"
+        />
+        <CanvasNodeAiButton
+          v-if="data.nodeType !== 'sticky' && !isRunbookPlaying && !workflowStore.isReadOnly"
           :node-id="id"
           :label="data.label"
         />

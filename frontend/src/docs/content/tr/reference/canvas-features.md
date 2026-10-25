@@ -1,6 +1,6 @@
 # Canvas Özellikleri
 
-Workflow editörü, node'ları hata ayıklama, test etme ve düzenleme için çeşitli özellikler sunar: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** ve **Extract to Sub-Workflow**.
+Workflow editörü, node'ları hata ayıklama, test etme ve düzenleme için çeşitli özellikler sunar: **Run to Node**, **Bir Düğümde AI**, **Data Pin**, **Execution Logs**, **Enable/Disable** ve **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Editör demosunu izleyin</a></p>
@@ -12,6 +12,12 @@ Bir sticky note dışındaki herhangi bir node'un üzerine gelin ve altındaki *
 Seçilen yolun giriş alanları varsa, sağdaki **Run** paneli açılır ve ilk alana odaklanır. Değerleri girin, ardından **Run to _node label_** düğmesine tıklayın veya **Ctrl+Enter** (macOS'ta Cmd+Enter) tuşlarına basın. Generic body modu, JSON body editörüne odaklanır. Giriş alanı olmayan yollar, panel açılmadan hemen çalışır. Sabitlenmiş Input node'ları, giriş istemeden sabitlenmiş çıktılarını yeniden kullanır.
 
 Panel, sonraki çalıştırmalar için seçili hedefi korur. Hedefi temizlemek için **Run full workflow** seçeneğini seçin. Bir execution etkinken Run düğmeleri devre dışı bırakılır. Bir loop içindeki hedef, o node'a ilk ulaşıldığında çalıştırmayı durdurur; loop'tan sonraki bir node'u seçmek, yukarı akış loop'unun tamamını çalıştırır.
+
+## Bir Düğümde AI
+
+Yapışkan not dışındaki herhangi bir düğümün üzerine gelin ve üzerindeki **AI** düğmesine tıklayın. [AI Assistant](./ai-assistant.md) bu düğüm üzerinde açılır ve **Change this node as ...**, **Fix error in this node ...** ve **Other** seçeneklerini sunar. Agent modunda asistan yalnızca o düğümü değiştirir; diğer düğümler, bağlantılar ve düzen olduğu gibi kalır. Bkz. [AI Assistant › Tek Bir Düğümü Değiştirme](./ai-assistant.md#changing-one-node).
+
+Düğme, yalnızca görüntüleme izniniz olan iş akışlarında gizlidir.
 
 ## Data Pin
 

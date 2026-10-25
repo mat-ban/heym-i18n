@@ -13,6 +13,8 @@ Para questões de documentação fora do editor, utilize [Chat com o Heym](./cha
 
 Prima `Ctrl + I` / `Cmd + I` em qualquer parte do editor para abrir ou fechar o painel — o atalho funciona mesmo quando um campo de texto está em foco. Consulte [Atalhos de Teclado](./keyboard-shortcuts.md).
 
+Para trabalhar num único nó, passe o cursor sobre ele na tela e clique em **AI** acima dele. O painel abre focado nesse nó. Consulte [Modificar um único nó](#changing-one-node).
+
 ## Fechar o Painel
 
 Clique no botão **X**, prima `Ctrl + I` / `Cmd + I`, ou alterne o botão **IA** na barra de ferramentas do painel de Depuração. O cabeçalho arrasta o painel; não o fecha.
@@ -60,6 +62,33 @@ Quando a resposta da IA contém um bloco JSON de workflow válido (com `nodes` e
 4. Marca o workflow como não guardado
 
 Se a análise falhar, aparece um botão **Tentar novamente** para regenerar a resposta.
+## Modificar um único nó
+
+Passe o cursor sobre um nó na tela e clique em **AI** acima dele. O painel abre no modo Agent, focado nesse nó, e mostra qual nó está modificando:
+
+| O nó tem... | O painel mostra |
+|---|---|
+| Nenhum resultado na execução atual | **Modifying Node:** numa linha compacta com o ícone e o nome do nó. O assistente edita apenas a partir da configuração do nó; execute o nó primeiro se ele precisar ver a saída |
+| Um resultado na execução atual | **Modifying Node: (Has Node Output)** acima do próprio nó: ícone, nome e tipo, último estado e duração, e o erro caso tenha falhado. O assistente vê essa saída e o erro quando edita o nó |
+
+Passe o cursor sobre o rótulo para ver em que estado o painel se encontra.
+
+Qualquer que seja o estado do painel, o assistente também lê a página de documentação do nó, atrás do ícone de livro no cabeçalho do nó. Ele usa a página para entender as opções do nó e responder a perguntas sobre elas.
+
+Abaixo das mensagens, três opções iniciam o pedido:
+
+| Opção | O que faz |
+|---|---|
+| **Change this node as ...** | Preenche a caixa de mensagem com *Modificar este nó para* para você concluir a frase |
+| **Fix error in this node ...** | Preenche *Corrigir o erro neste nó.* O assistente lê o erro deste nó da última execução |
+| **Other** | Foca uma caixa de mensagem vazia |
+
+Edite o texto e prima **Send**. O assistente devolve apenas este nó e o Heym atualiza-o no local: o nó mantém o seu id, tipo e nome, para que expressões como `$checkLinkedIn.result` noutros nós continuem a funcionar. Outros nós, ligações e o layout não mudam, e **Undo** restaura a configuração anterior.
+
+Se o pedido não couber no nó, por exemplo se necessitar de outro tipo de nó ou de um novo nó, o assistente indica o que teria de mudar em vez de editar. Feche o foco do nó com o **X** no cartão do nó para editar todo o workflow novamente. Fechar o painel também limpa o foco.
+
+O [modo YOLO](#yolo-mode) funciona com um nó focado: o assistente altera o nó, executa o workflow e corrige o nó até a execução ser bem-sucedida. No modo **Ask**, o foco indica ao assistente sobre qual nó é a sua pergunta e a tela não é alterada.
+
 ## Modo YOLO
 
 O **Modo YOLO** permite que o assistente teste aquilo que constrói. Marque a caixa **Modo YOLO** abaixo do campo de mensagem e, em seguida, envie o seu pedido. A caixa aparece apenas no modo Agent. Está desativada por predefinição e volta a ficar desativada quando a página é recarregada. Passe o cursor sobre o ícone de informação ao lado para ver um breve resumo.

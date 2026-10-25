@@ -6,6 +6,7 @@ Keep this side-effect free so it stays trivially unit-testable.
 
 from typing import Any
 
+from app.services.hitl_widget_filter import filter_from_chart_data, filter_payload
 from app.services.markdown_task_list import has_task_items
 from app.services.status_tones import resolve_status_tones
 
@@ -117,6 +118,9 @@ def build_chart_payload(config: dict, data: Any) -> dict:
         payload: dict = {"type": "hitl"}
         if title:
             payload["title"] = title
+        review_filter = filter_from_chart_data(config)
+        if review_filter is not None:
+            payload["filter"] = filter_payload(review_filter)
         return payload
 
     rows = _resolve_rows(data, config.get("dataPath"))
@@ -150,6 +154,12 @@ def build_chart_payload(config: dict, data: Any) -> dict:
             payload["statusTones"] = resolve_status_tones(
                 (row[index] for row in payload["rows"]), config.get("statusTones")
             )
+        link_column = config.get("linkColumn")
+        if isinstance(link_column, str) and link_column.strip() in columns:
+            payload["linkColumn"] = link_column.strip()
+            link_label = config.get("linkLabel")
+            if isinstance(link_label, str) and link_label.strip():
+                payload["linkLabel"] = link_label.strip()
         return payload
 
     if chart_type in ("numeric", "gauge"):

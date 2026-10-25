@@ -16,7 +16,7 @@ Il nodo **Heym** legge i dati di Heym stesso: i workflow a cui è possibile acce
 | Parametro | Tipo | Descrizione |
 |-----------|------|-------------|
 | `heymOperation` | Select | Quale lettura eseguire |
-| `heymWorkflowId` | UUID | Workflow di destinazione. Richiesto per `getWorkflow` e `getExecutionHistory`. Supporta le espressioni. |
+| `heymWorkflowId` | UUID | Lo imposti su `all` in `getExecutionHistory` per leggere ogni Workflow raggiungibile. |
 | `heymLimit` | String | Numero massimo di righe da restituire. **Lasciare vuoto o inserire `0` per restituire tutto** — è il valore predefinito. Supporta le espressioni. |
 | `heymStatus` | String | Filtro di stato opzionale per `getExecutionHistory`. Supporta le espressioni. |
 | `heymSinceDays` | String | Intervallo di ricerca opzionale in giorni per `getExecutionHistory`. Supporta le espressioni. |
@@ -93,9 +93,11 @@ Restituisce le voci della cronologia delle esecuzioni per un Workflow, dalla pi�
 | `$nodeLabel.executions[0].recovered` | Indica se l'esecuzione è stata recuperata dopo un crash |
 | `$nodeLabel.executions[0].inputs` | Ciò che l'esecuzione ha ricevuto - il payload del trigger o l'input del chiamante |
 | `$nodeLabel.executions[0].outputs` | L'output del Workflow per quell'esecuzione |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Il Workflow a cui appartiene la cronologia |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Il Workflow a cui appartiene la cronologia, oppure `null` con **{AW}** |
+ppure `null` con **{AW}** |
 | `$nodeLabel.total` | Totale delle esecuzioni corrispondenti **prima** del limite |
-| `$nodeLabel.by_status` | Conteggi indicizzati per stato, ad esempio `{ "success": 41, "error": 3 }` |
+| `$nodeL| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Con **{AW}**, il Workflow a cui appartiene ciascuna esecuzione |
+abel.by_status` | Conteggi indicizzati per stato, ad esempio `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Inizio dell'intervallo, oppure `null` per la cronologia completa |
 
 Le voci contengono sia `inputs` che `outputs` - ciò che l'esecuzione ha ricevuto e ciò che ha restituito - ma mai `node_results`: la traccia per singolo nodo è la colonna più grande della tabella e sovrasterebbe tutto ciò che segue. Recuperare una singola esecuzione tramite l'API quando è necessaria la traccia completa.

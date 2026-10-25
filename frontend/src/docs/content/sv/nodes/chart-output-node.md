@@ -33,13 +33,17 @@ När endast exempel-/provdata finns tillgänglig (ingen verklig källa) producer
 | `valueField` | string | Radnyckel som används som numeriskt värde (pie/bar/line/numeric/gauge) |
 | `series` | array | Valfri definition för flera serier `[{ "name": "Sent", "field": "sent" }]` för bar/line (åsidosätter `valueField`) |
 | `columns` | array | Valfri kolumnlista för `table` (standardvärdet är nycklarna i den första raden) |
-| `statusColumn` | string | Valfri `table`-kolumn som renderas som färgade [statusbrickor](#status-chips). Måste vara en av de visade kolumnerna. |
+| `statusColumn` | string | Valfri `table`-kolumn som renderas som färgade [statusbrickor](#status-chips). Måste vara en av de visade kolumnerna. |, och med `linkColumn` innehåller den länkkolumnen och knapptexten.
 | `statusTones` | object | Valfri mappning från ett statusvärde till en ton (`success`, `attention`, `failure`, `waiting`, `neutral`) för värden som inte täcks av standardvärdena |
+| `linkColumn` | string | Valfri `table`-kolumn vars celler innehåller en URL och visas som en [länkknapp](#link-buttons) som öppnar den i en ny flik. Den måste vara en av de visade kolumnerna. |
+| `linkLabel` | string | Valfri text för länkknappen. Lämnas den tom visar knappen bara en länkikon. |
 | `xField` / `yField` | string | Radnycklar för de numeriska X- och Y-axlarna (scatter) |
 | `min` / `max` | number | Numeriskt intervall för `gauge` (standard `0` / `100`) |
 | `unit` | string | Valfri enhet som visas bredvid ett `numeric`- eller `gauge`-värde |
 | `text` | string | Markdown-meddelande för diagramtypen `text`. Lämna tomt och ange `valueField` för att rendera ett dynamiskt meddelande hämtat från uppströms data. |
 | `title` | string | Valfri diagramtitel |
+| `hitlWorkflowId` | string | Endast `hitl`. Visar bara granskningarna för detta Workflow. Lämnas fältet tomt visar widgeten alla granskningar. |
+| `hitlNodeId` | string | Endast `hitl`. Begränsar `hitlWorkflowId` till ett steg: en Agent med mänsklig granskning eller ett Slack-steg för godkännande, knappar eller formulär. |
 
 ## Diagramtyper
 
@@ -51,7 +55,7 @@ När endast exempel-/provdata finns tillgänglig (ingen verklig källa) producer
 - **proportion** — en enskild horisontell stapel uppdelad i andelar med en procentteckenförklaring (t.ex. en språkfördelning). Använder `labelField` + `valueField`.
 - **barGauge** — en horisontell gauge per rad med en röd→grön gradient och ett värde (t.ex. ledigt diskutrymme). Använder `labelField` + `valueField`, valfri `unit` och `max` (standardvärdet är det största radvärdet).
 - **text** — ett markdown-meddelande (t.ex. en statusnotis som "Senaste körning kl. 19:47"). Placera markdown-texten i `text` för ett statiskt meddelande, eller lämna `text` tomt och ange `valueField` för att rendera en sträng som producerats uppströms. Stöder rubriker, fetstil/kursiv stil, [listor](../nodes/chart-output-node.md#interactive-task-lists), länkar och inline-kod.
-- **hitl** — en karusell med väntande mänskliga granskningar. Rubriken visar `1/n pending`; vänsterpilen är inaktiverad på det första kortet och högerpilen på det sista. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den, och historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på samma sida. Denna diagramtyp ignorerar uppströms rader, så widgetens workflow består endast av noden Diagramutdata. Varje inloggad person ser granskningarna för de workflows som personen äger.
+- **hitl** — en karusell med väntande mänskliga granskningar. Rubriken visar `1/n pending`; vänsterpilen är inaktiverad på det första kortet och högerpilen på det sista. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den, och historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på samma sida. Denna diagramtyp ignorerar uppströms rader, så widgetens workflow består endast av noden Diagramutdata. Varje inloggad person ser granskningarna för de workflows som personen äger. Välj ett **Workflow** (och **Select agent** när det har flera granskningssteg) i nodens egenskaper eller widgetens inställningar för att i stället visa det Workflowets granskningar för alla som kan öppna det; se [HITL-widgetar](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktiva uppgiftslistor
 
@@ -307,3 +311,17 @@ Vid generering av en widget med **AI** mappas prompts som dessa direkt till resp
 
 - [Fliken Dashboard](../tabs/dashboard-tab.md) — bygg och arrangera widgetar
 - [Utmatningsnod](output-node.md) — terminalnod för vanliga workflow
+
+
+## Länkknappar
+
+En `table` kan göra om en kolumn till knappar som öppnar en länk. Ange **Link column** i nodens egenskaper (eller `linkColumn` i DSL:en) till en kolumn vars celler innehåller en URL, och eventuellt **Link button text** (`linkLabel`). Varje cell blir en knapp som öppnar sin URL i en ny flik. Utan knapptext visar knappen bara en länkikon:
+
+| Cellvärde | Öppnar |
+| --------- | ------ |
+| `https://jira.example.com/browse/T-1` | En annan webbplats, i en ny flik |
+| `/dashboards` | En sida i Heym, i en ny flik |
+
+Endast `http://`- och `https://`-adresser samt sökvägar som börjar med ett enda `/` blir knappar. Alla andra värden, till exempel `javascript:` eller `//host`, förblir vanlig text, och en tom cell visar ingenting.
+
+Knappen fungerar tillsammans med en [radlänk](../tabs/dashboard-tab.md#detail-pages): ett klick på knappen öppnar dess länk i en ny flik, och ett klick var som helst annars på raden öppnar fortfarande detaljsidan.

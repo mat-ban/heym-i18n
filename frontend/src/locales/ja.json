@@ -478,7 +478,14 @@
     "extract": "抽出",
     "mySubWorkflow": "マイSub-Workflow",
     "moreNodes": "他{count}件",
-    "runToNode": "{label}まで実行"
+    "runToNode": "{label}まで実行",
+    "aiButtonTitle": "AI アシスタントでこのノードを変更または修正",
+    "editNodeWithAi": "AI で {label} を編集",
+    "modifyingNode": "ノードを変更中：",
+    "hasNodeOutput": "（ノード出力あり）",
+    "closeNodeFocus": "ノードのフォーカスを閉じて Workflow 全体を編集",
+    "nodeFocusRan": "このノードは実行されました。AI は最後の出力とエラーを確認し、ノードのドキュメントを読み取ります。",
+    "nodeFocusNoOutput": "このノードには現在の実行での出力がありません。AI に出力を確認させたい場合は、先にノードを実行してください。いずれの場合も AI はノードのドキュメントを読み取ります。"
   },
   "nodes": {
     "title": "ノード",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "キュー済みメッセージを編集",
     "deleteQueuedMessage": "キュー済みメッセージを削除",
     "startedByMcp": "MCPクライアントによって開始されました",
-    "newChatTitle": "新しいチャット"
+    "newChatTitle": "新しいチャット",
+    "subtitle": "Workflow の実行と質問",
+    "modelsLoadFailedDisabled": "この認証情報のモデル一覧を読み込めませんでした。モデルを取得できるまで Chat は無効のままです。"
   },
   "teams": {
     "title": "チーム",
@@ -1672,7 +1681,10 @@
       "error": "エラー",
       "cached": "キャッシュ済み",
       "cancelled": "キャンセル済み"
-    }
+    },
+    "askAi": "AI に質問",
+    "askAiTitle": "この実行について Chat アシスタントに質問",
+    "noNodeSpans": "この実行にはノードの span が記録されていません。"
   },
   "portal": {
     "loadingPortal": "ポータルを読み込み中...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "詳細ページのレコード",
     "detailPageRecordsHelp": "行リンクから開いた際にこのダッシュボードが受け付ける ?record= の値。それ以外の値はウィジェット実行前に拒否されます。",
     "unreachableDashboard": "開くことができないダッシュボード",
-    "runWorkflow": "Workflowの実行"
+    "runWorkflow": "Workflowの実行",
+    "openWorkflowNewTab": "Workflow を新しいタブで開く",
+    "hitlFilterHelp": "すべての Workflow、または 1 つの Workflow のレビューを表示します。開くことができる Workflow（自分のもの、または共有されたもの）のうち、担当者の対応を待つステップがあるものを一覧表示します。",
+    "hitlSourcesLoadFailed": "Workflow を読み込めませんでした。"
   },
   "drive": {
     "filesCount": "（{count}ファイル）",

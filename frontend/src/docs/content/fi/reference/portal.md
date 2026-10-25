@@ -51,6 +51,7 @@ Syötekentät tulevat [Syöte](../nodes/input-node.md)-solmuista. API poimii alo
 ## Autentikointi ja istunnot
 
 - **WorkflowPortalUser**: Käyttäjätunnus/salasana per workflow (kun autentikointi on käytössä)
+- **Viimeisen käyttäjän poistaminen**: Kun portaali on käytössä, viimeisen portaalikäyttäjän poistaminen tekee portaalista jälleen julkisen; asetusikkuna pyytää ensin vahvistusta
 - **PortalSession**: Istunnon tokenit, joilla on 168 tunnin TTL
 - **Nopeusrajoitus**: 3 epäonnistunutta kirjautumisyritystä → 24 tunnin esto per workflow+IP
 - Vanhentuneet istunnot siivotaan cron-ajon avulla

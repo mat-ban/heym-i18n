@@ -16,7 +16,7 @@ Node **Heym** membaca data milik Heym sendiri: workflow yang dapat Anda jangkau,
 | Parameter | Tipe | Deskripsi |
 |-----------|------|-------------|
 | `heymOperation` | Select | Pembacaan mana yang akan dilakukan |
-| `heymWorkflowId` | UUID | Workflow target. Wajib untuk `getWorkflow` dan `getExecutionHistory`. Mendukung ekspresi. |
+| `heymWorkflowId` | UUID | Atur ke `all` pada `getExecutionHistory` untuk membaca setiap Workflow yang dapat Anda jangkau. |
 | `heymLimit` | String | Jumlah maksimum baris yang dikembalikan. **Biarkan kosong atau masukkan `0` untuk mengembalikan semuanya** — itulah nilai defaultnya. Mendukung ekspresi. |
 | `heymStatus` | String | Filter status opsional untuk `getExecutionHistory`. Mendukung ekspresi. |
 | `heymSinceDays` | String | Rentang lihat ke belakang opsional dalam satuan hari untuk `getExecutionHistory`. Mendukung ekspresi. |
@@ -93,9 +93,11 @@ Mengembalikan entri riwayat eksekusi untuk satu workflow, yang terbaru lebih dah
 | `$nodeLabel.executions[0].recovered` | Apakah eksekusi dipulihkan setelah crash |
 | `$nodeLabel.executions[0].inputs` | Apa yang diterima eksekusi - payload trigger atau input dari pemanggil |
 | `$nodeLabel.executions[0].outputs` | Output workflow untuk eksekusi tersebut |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow yang memiliki riwayat tersebut |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow tempat riwayat ini berada, atau `null` dengan **{AW}** |
+null` dengan **{AW}** |
 | `$nodeLabel.total` | Total eksekusi yang cocok **sebelum** limit |
-| `$nodeLabel.by_status` | Jumlah yang dikelompokkan berdasarkan status, misalnya `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_stat| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Dengan **{AW}**, Workflow tempat setiap run berada |
+us` | Jumlah yang dikelompokkan berdasarkan status, misalnya `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Awal jendela waktu, atau `null` untuk seluruh riwayat |
 
 Entri membawa `inputs` dan `outputs` - apa yang diterima eksekusi dan apa yang dijawabnya - tetapi tidak pernah `node_results`: jejak per-node adalah kolom terbesar dalam tabel dan akan membuat semua data di hilirnya tampak kecil. Ambil satu eksekusi melalui API ketika Anda memerlukan jejak lengkap.

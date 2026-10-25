@@ -51,6 +51,7 @@ Els camps d'entrada provenen dels nodes [Input](../nodes/input-node.md). L'API e
 ## Autenticació i sessions
 
 - **WorkflowPortalUser**: Nom d'usuari/contrasenya per workflow (quan l'autenticació està habilitada)
+- **Eliminar el darrer usuari**: Amb el portal habilitat, eliminar el darrer usuari del portal fa que el portal torni a ser públic; el quadre de diàleg de configuració demana confirmació prèvia
 - **PortalSession**: Tokens de sessió amb un TTL de 168 hores
 - **Limitació de taxa**: 3 intents d'inici de sessió fallits → bloqueig de 24 h per workflow+IP
 - Les sessions expirades es netegen mitjançant una tasca cron

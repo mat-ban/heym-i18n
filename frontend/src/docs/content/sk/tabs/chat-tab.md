@@ -81,6 +81,17 @@ Spustenia pozastavené na [Human-in-the-Loop](../reference/human-in-the-loop.md)
 takže Chat a odznak sa nikdy nezhodujú v neprospech. Pre spustenia, ktoré už skončili, si namiesto toho vyžiadajte nedávne spustenia
 — to číta [Históriu spustení](../reference/execution-history.md).
 
+## Otázky k spusteniu
+
+Vyberte spustenie Workflow v [Execution History](../reference/execution-history.md#ask-ai), z editora alebo z All History, a kliknite na **Opýtať sa AI** vedľa názvu dialógu. Chat otvorí novú konverzáciu s dvoma čipmi nad poľom správy:
+
+- **Workflow:** názov Workflow
+- **Execution:** prvých niekoľko znakov ID vybraného spustenia
+
+Čip odstránite jeho **×**, ak ho nechcete použiť. Potom položte otázku, napríklad „prečo toto spustenie trvalo tak dlho?“, „čo tu zlyhalo?“ alebo „môžete to opraviť?“. Zostávajúce čipy sa k tejto správe pripoja s úplnými ID, takže Chat priamo číta vstupy, výstupy a trace jednotlivých uzlov spustenia namiesto hľadania Workflow. Na opravu Workflow Chat zmenu uloží, otestuje a overí, ako je opísané v [Vytváranie workflowov](#vytvaranie-workflowov).
+
+Odoslaná správa zobrazuje čipy pod vašou otázkou. Patria iba k tejto správe; nadväzujúce otázky v tej istej konverzácii si zachovajú kontext z histórie.
+
 ## Pýtanie sa na upozornenia
 
 Chat dokáže odpovedať na otázky o [upozorneniach](./alerts-tab.md), ktoré ste definovali:

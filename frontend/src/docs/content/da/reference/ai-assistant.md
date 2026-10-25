@@ -13,6 +13,8 @@ Til dokumentationsspørgsmål uden for editoren kan [Chat med Heym](./chat-with-
 
 Tryk `Ctrl + I` / `Cmd + I` hvor som helst i editoren for at åbne eller lukke panelet - genvejen virker selv når et tekstinput har fokus. Se [Tastaturgenveje](./keyboard-shortcuts.md).
 
+Hvis der skal arbejdes på en enkelt node, føres markøren hen over den på lærredet, og der klikkes på **AI** over den. Panelet åbnes fokuseret på denne node. Se [Ændring af en enkelt node](#changing-one-node).
+
 ## Lukning af panelet
 
 Klik på **X**-knappen, tryk `Ctrl + I` / `Cmd + I`, eller skift **AI**-knappen i Debug-panelets værktøjslinje. Headeren flytter panelet; den lukker det ikke.
@@ -60,6 +62,33 @@ Når AI-svaret indeholder et gyldigt workflow-JSON-block (med `nodes` og eventue
 4. Marker workflowet som ikke-gemt
 
 Hvis parsing fejler, vises en **Prøv igen**-knap til at regenerere svaret.
+
+## Ændring af en enkelt node
+
+Før markøren over en node på lærredet, og klik på **AI** over den. Panelet åbnes i Agent-tilstand med fokus på denne node og viser, hvilken node der ændres:
+
+| Noden har... | Panelet viser |
+|---|---|
+| Intet resultat i den aktuelle kørsel | **Modifying Node:** i en kompakt række med nodens ikon og navn. Assistenten redigerer udelukkende ud fra nodens konfiguration; kør noden først, hvis den skal se outputtet |
+| Et resultat i den aktuelle kørsel | **Modifying Node: (Has Node Output)** over selve noden: ikon, navn og type, seneste status og varighed samt fejlen, hvis den mislykkedes. Assistenten ser dette output og fejlen, når noden redigeres |
+
+Før markøren over etiketten for at se, hvilken tilstand panelet befinder sig i.
+
+Uanset panelets tilstand læser assistenten også nodens dokumentationsside, der findes bag bogikonet i nodens overskrift. Den bruger siden til at forstå nodens indstillinger og besvare spørgsmål om dem.
+
+Under meddelelserne findes tre muligheder for at starte anmodningen:
+
+| Mulighed | Hvad den gør |
+|---|---|
+| **Change this node as ...** | Udfylder meddelelsesfeltet med *Skift denne node til*, så sætningen kan fuldføres |
+| **Fix error in this node ...** | Udfylder *Ret fejlen i denne node.* Assistenten læser denne nodes fejl fra seneste kørsel |
+| **Other** | Fokuserer et tomt meddelelsesfelt |
+
+Rediger teksten, og tryk på **Send**. Assistenten returnerer kun denne node, og Heym opdaterer den direkte: noden bevarer sit id, sin type og sit navn, så udtryk som `$checkLinkedIn.result` i andre noder fortsat fungerer. Andre noder, forbindelser og layoutet ændres ikke, og **Undo** gendanner den tidligere konfiguration.
+
+Hvis anmodningen ikke kan rummes i noden – f.eks. hvis der kræves en anden nodetype eller en ny node – oplyser assistenten, hvad der skal ændres, i stedet for at foretage redigeringen. Luk nodefokusset med **X** på nodekortet for at redigere hele workflowet igen. Lukning af panelet fjerner også fokusset.
+
+[YOLO-tilstand](#yolo-mode) fungerer med en fokuseret node: assistenten ændrer noden, kører workflowet og retter noden, indtil kørslen lykkes. I **Ask**-tilstand fortæller fokusset assistenten, hvilken node spørgsmålet drejer sig om, og lærredet ændres ikke.
 
 ## YOLO-tilstand
 

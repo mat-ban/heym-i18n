@@ -33,13 +33,17 @@ Ketika Anda hanya memiliki data contoh/sampel (tanpa sumber nyata), hasilkan bar
 | `valueField` | string | Kunci baris yang digunakan sebagai nilai numerik (pie/bar/line/numeric/gauge) |
 | `series` | array | Definisi multi-series opsional `[{ "name": "Sent", "field": "sent" }]` untuk bar/line (menimpa `valueField`) |
 | `columns` | array | Daftar kolom opsional untuk `table` (default-nya adalah kunci dari baris pertama) |
-| `statusColumn` | string | Kolom `table` opsional yang dirender sebagai [chip status](#status-chips) berwarna. Harus merupakan salah satu kolom yang ditampilkan. |
+| `statusColumn` | string | Kolom `table` opsional yang dirender sebagai [chip status](#status-chips) berwarna. Harus merupakan salah satu kolom yang ditampilkan. |, dan dengan `linkColumn` juga membawa kolom tautan serta teks tombol.
 | `statusTones` | object | Pemetaan opsional dari nilai status ke nada warna (`success`, `attention`, `failure`, `waiting`, `neutral`) untuk nilai yang tidak tercakup oleh default |
+| `linkColumn` | string | Kolom `table` opsional yang selnya berisi URL, ditampilkan sebagai [tombol tautan](#link-buttons) yang membukanya di tab baru. Harus salah satu kolom yang ditampilkan. |
+| `linkLabel` | string | Teks opsional untuk tombol tautan. Jika dikosongkan, tombol hanya menampilkan ikon tautan. |
 | `xField` / `yField` | string | Kunci baris untuk sumbu X dan Y numerik (scatter) |
 | `min` / `max` | number | Rentang numerik untuk `gauge` (default `0` / `100`) |
 | `unit` | string | Unit opsional yang ditampilkan di samping nilai `numeric` atau `gauge` |
 | `text` | string | Pesan Markdown untuk tipe chart `text`. Biarkan kosong dan setel `valueField` untuk merender pesan dinamis yang diambil dari data upstream. |
 | `title` | string | Judul chart opsional |
+| `hitlWorkflowId` | string | Hanya `hitl`. Hanya menampilkan review dari Workflow ini. Jika dikosongkan, widget menampilkan semua review. |
+| `hitlNodeId` | string | Hanya `hitl`. Mempersempit `hitlWorkflowId` ke satu langkah: Agent dengan review manusia, atau langkah persetujuan, tombol, atau formulir Slack. |
 
 ## Tipe chart
 
@@ -51,7 +55,7 @@ Ketika Anda hanya memiliki data contoh/sampel (tanpa sumber nyata), hasilkan bar
 - **proportion** — satu bar horizontal yang dibagi menjadi beberapa bagian dengan legenda persentase (misalnya rincian bahasa). Menggunakan `labelField` + `valueField`.
 - **barGauge** — satu gauge horizontal per baris dengan gradien merah→hijau dan sebuah nilai (misalnya ruang disk kosong). Menggunakan `labelField` + `valueField`, `unit` opsional dan `max` (default-nya adalah nilai baris terbesar).
 - **text** — pesan markdown (misalnya catatan status seperti "Last execution at 19:47"). Letakkan markdown di `text` untuk pesan statis, atau biarkan `text` kosong dan setel `valueField` untuk merender string yang dihasilkan upstream. Mendukung heading, bold/italic, [daftar](../nodes/chart-output-node.md#interactive-task-lists), tautan, dan inline code.
-- **hitl** — carousel tinjauan manusia (human review) Anda yang tertunda. Header menampilkan `1/n pending`; panah kiri dinonaktifkan pada kartu pertama dan panah kanan pada kartu terakhir. Nama workflow membuka run tersebut di canvas. **Approve**, **Request changes**, dan **Reject** menyelesaikannya, dan ikon riwayat di samping judul widget membuka run tersebut di dialog riwayat pada halaman yang sama. Tipe chart ini mengabaikan baris upstream, sehingga workflow widget hanya berupa node Chart Output. Setiap orang yang masuk akan melihat tinjauan pada workflow yang mereka miliki.
+- **hitl** — carousel tinjauan manusia (human review) Anda yang tertunda. Header menampilkan `1/n pending`; panah kiri dinonaktifkan pada kartu pertama dan panah kanan pada kartu terakhir. Nama workflow membuka run tersebut di canvas. **Approve**, **Request changes**, dan **Reject** menyelesaikannya, dan ikon riwayat di samping judul widget membuka run tersebut di dialog riwayat pada halaman yang sama. Tipe chart ini mengabaikan baris upstream, sehingga workflow widget hanya berupa node Chart Output. Setiap orang yang masuk akan melihat tinjauan pada workflow yang mereka miliki. Pilih **Workflow** (dan **Select agent** jika memiliki beberapa langkah review) di properti node atau pengaturan widget untuk menampilkan review Workflow tersebut, kepada semua orang yang dapat membukanya; lihat [widget HITL](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Daftar tugas interaktif
 
@@ -307,3 +311,17 @@ Saat membuat widget dengan **AI**, prompt seperti berikut dapat dipetakan secara
 
 - [Tab Dashboard](../tabs/dashboard-tab.md) — buat dan atur widget
 - [Node output](output-node.md) — node terminal untuk Workflow reguler
+
+
+## Tombol tautan
+
+Sebuah `table` dapat mengubah satu kolom menjadi tombol yang membuka tautan. Atur **Link column** di properti node (atau `linkColumn` di DSL) ke kolom yang selnya berisi URL, dan secara opsional **Link button text** (`linkLabel`). Setiap sel menjadi tombol yang membuka URL-nya di tab baru. Tanpa teks tombol, tombol hanya menampilkan ikon tautan:
+
+| Nilai sel | Membuka |
+| --------- | ------- |
+| `https://jira.example.com/browse/T-1` | Situs lain, di tab baru |
+| `/dashboards` | Halaman di dalam Heym, di tab baru |
+
+Hanya alamat `http://` dan `https://` serta path yang diawali satu `/` yang menjadi tombol. Nilai lain apa pun, seperti `javascript:` atau `//host`, tetap berupa teks biasa, dan sel kosong tidak menampilkan apa pun.
+
+Tombol ini bekerja berdampingan dengan [tautan baris](../tabs/dashboard-tab.md#detail-pages): mengeklik tombol membuka tautannya di tab baru, dan mengeklik bagian lain pada baris tetap membuka halaman detail.

@@ -33,13 +33,17 @@ Gdy dostępne są wyłącznie dane przykładowe (bez rzeczywistego źródła), n
 | `valueField` | string | Klucz wiersza używany jako wartość liczbowa (pie/bar/line/numeric/gauge) |
 | `series` | array | Opcjonalna definicja wielu serii `[{ "name": "Sent", "field": "sent" }]` dla bar/line (zastępuje `valueField`) |
 | `columns` | array | Opcjonalna lista kolumn dla `table` (domyślnie klucze pierwszego wiersza) |
-| `statusColumn` | string | Opcjonalna kolumna `table` renderowana jako kolorowe [znaczniki statusu](#status-chips). Musi być jedną z wyświetlanych kolumn. |
+| `statusColumn` | string | Opcjonalna kolumna `table` renderowana jako kolorowe [znaczniki statusu](#status-chips). Musi być jedną z wyświetlanych kolumn. |, a z `linkColumn` zawiera także kolumnę linku i tekst przycisku.
 | `statusTones` | object | Opcjonalne mapowanie wartości statusu na odcień (`success`, `attention`, `failure`, `waiting`, `neutral`) dla wartości nieobjętych ustawieniami domyślnymi |
+| `linkColumn` | string | Opcjonalna kolumna `table`, której komórki zawierają adres URL, wyświetlany jako [przycisk linku](#link-buttons) otwierający go w nowej karcie. Musi być jedną z wyświetlanych kolumn. |
+| `linkLabel` | string | Opcjonalny tekst przycisku linku. Jeśli pole jest puste, przycisk pokazuje tylko ikonę linku. |
 | `xField` / `yField` | string | Klucze wiersza dla osi numerycznych X i Y (scatter) |
 | `min` / `max` | number | Zakres numeryczny dla `gauge` (domyślnie `0` / `100`) |
 | `unit` | string | Opcjonalna jednostka wyświetlana obok wartości `numeric` lub `gauge` |
 | `text` | string | Wiadomość w formacie Markdown dla typu wykresu `text`. Pozostawić puste i ustawić `valueField`, aby renderować dynamiczną wiadomość pobraną z danych węzła poprzedzającego. |
 | `title` | string | Opcjonalny tytuł wykresu |
+| `hitlWorkflowId` | string | Tylko `hitl`. Pokazuje wyłącznie recenzje tego Workflow. Jeśli pole jest puste, widżet pokazuje wszystkie recenzje. |
+| `hitlNodeId` | string | Tylko `hitl`. Zawęża `hitlWorkflowId` do jednego kroku: Agent z weryfikacją przez człowieka albo krok Slack z zatwierdzeniem, przyciskami lub formularzem. |
 
 ## Typy wykresów
 
@@ -51,7 +55,7 @@ Gdy dostępne są wyłącznie dane przykładowe (bez rzeczywistego źródła), n
 - **proportion** — pojedynczy poziomy pasek podzielony na udziały z legendą procentową (np. podział według języka). Używa `labelField` + `valueField`.
 - **barGauge** — jeden poziomy wskaźnik na wiersz z gradientem od czerwonego do zielonego oraz wartością (np. wolne miejsce na dysku). Używa `labelField` + `valueField`, opcjonalnie `unit` i `max` (domyślnie największa wartość wiersza).
 - **text** — wiadomość w formacie markdown (np. notatka statusu typu „Ostatnie wykonanie o 19:47”). Umieścić markdown w `text` dla wiadomości statycznej lub pozostawić `text` puste i ustawić `valueField`, aby renderować ciąg znaków generowany przez węzeł poprzedzający. Obsługuje nagłówki, pogrubienie/kursywę, [listy](../nodes/chart-output-node.md#interactive-task-lists), linki oraz kod w linii.
-- **hitl** — karuzela oczekujących recenzji użytkownika. Nagłówek wyświetla `1/n pending`; strzałka w lewo jest nieaktywna na pierwszej karcie, a strzałka w prawo na ostatniej. Nazwa workflow otwiera to wykonanie na canvasie. Przyciski **Approve**, **Request changes** i **Reject** rozstrzygają recenzję, a ikona historii obok tytułu widgetu otwiera to wykonanie w oknie historii na tej samej stronie. Ten typ wykresu ignoruje wiersze z węzłów poprzedzających, więc workflow widgetu składa się wyłącznie z węzła Wyjście wykresu. Każda zalogowana osoba widzi recenzje workflow, których jest właścicielem.
+- **hitl** — karuzela oczekujących recenzji użytkownika. Nagłówek wyświetla `1/n pending`; strzałka w lewo jest nieaktywna na pierwszej karcie, a strzałka w prawo na ostatniej. Nazwa workflow otwiera to wykonanie na canvasie. Przyciski **Approve**, **Request changes** i **Reject** rozstrzygają recenzję, a ikona historii obok tytułu widgetu otwiera to wykonanie w oknie historii na tej samej stronie. Ten typ wykresu ignoruje wiersze z węzłów poprzedzających, więc workflow widgetu składa się wyłącznie z węzła Wyjście wykresu. Każda zalogowana osoba widzi recenzje workflow, których jest właścicielem. Proszę wybrać **Workflow** (oraz **Select agent**, jeśli ma kilka kroków recenzji) we właściwościach węzła lub w ustawieniach widżetu, aby zamiast tego pokazać recenzje tego Workflow wszystkim, którzy mogą go otworzyć; zob. [widżety HITL](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktywne listy zadań
 
@@ -307,3 +311,17 @@ Podczas generowania widżetu za pomocą **AI** poniższe prompty w czytelny spos
 
 - [Karta Dashboard](../tabs/dashboard-tab.md) — budowanie i rozmieszczanie widżetów
 - [Węzeł wyjściowy](output-node.md) — węzeł końcowy dla zwykłych workflow
+
+
+## Przyciski linków
+
+Kolumnę `table` można zamienić w przyciski otwierające link. Proszę ustawić **Link column** we właściwościach węzła (lub `linkColumn` w DSL) na kolumnę, której komórki zawierają adres URL, oraz opcjonalnie **Link button text** (`linkLabel`). Każda komórka staje się przyciskiem otwierającym swój adres URL w nowej karcie. Bez tekstu przycisku pokazuje on tylko ikonę linku:
+
+| Wartość komórki | Otwiera |
+| --------------- | ------- |
+| `https://jira.example.com/browse/T-1` | Inną witrynę w nowej karcie |
+| `/dashboards` | Stronę wewnątrz Heym w nowej karcie |
+
+Przyciskami stają się tylko adresy `http://` i `https://` oraz ścieżki zaczynające się od pojedynczego `/`. Każda inna wartość, na przykład `javascript:` lub `//host`, pozostaje zwykłym tekstem, a pusta komórka nic nie pokazuje.
+
+Przycisk działa obok [linku wiersza](../tabs/dashboard-tab.md#detail-pages): kliknięcie przycisku otwiera jego link w nowej karcie, a kliknięcie w dowolnym innym miejscu wiersza nadal otwiera stronę szczegółów.

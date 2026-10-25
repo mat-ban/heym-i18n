@@ -55,6 +55,18 @@ Att öppna en workflow på `/workflows/{workflowId}/{executionId}` hämtar autom
 - Felsöka en misslyckad körning genom att granska indata och nodutdata
 - Jämföra utdata mellan körningar
 
+## Fråga AI
+
+Båda historikdialogerna har en **Fråga AI**-knapp (stjärnikon) bredvid titeln. Den öppnar [fliken Chat](../tabs/chat-tab.md#asking-about-a-run) i en ny konversation med arbetsflödet och den valda körningen bifogad som borttagbara brickor. Fråga varför körningen var långsam, vad som misslyckades eller låt Chat åtgärda arbetsflödet. Chat läser exakt den körningen, inklusive dess spårning och fel per nod.
+
+I dialogen All History visas **Fråga AI** endast när en arbetsflödeskörning har valts; chatt- och assistentkörningar visar den inte.
+
+## Körningstidslinje
+
+I körningsdetaljerna byter knappen **Tidslinje** (tidtagningsikon) bredvid **Expandera alla** ut listan **Steg** mot en tidslinje med spans. Medan tidslinjen visas heter samma knapp **Loggar**; klicka på den för att återgå till listan. I All History visas knappen endast för arbetsflödeskörningar. Tidslinjen ritar en stapel per nod vid den tidpunkt då den startade, så att det syns vilken nod som tog hur lång tid och vilka som kördes parallellt. För markören över en stapel för dess varaktighet; klicka på den för att öppna samma detaljinspektör som editorns [körningstidslinje](#execution-timeline-details). Den valda vyn behålls så länge dialogen är öppen.
+
+Körningar som registrerats innan nodernas starttider lagrades visas efter varandra i ordning efter varaktighet.
+
 ## Execution Highlights
 
 Efter en live-körning — eller efter **Bring to Canvas** — visas en avvisningsbar **Execution Highlights**-popup i **övre högra hörnet av Canvas**. Det är ett snabbt sätt att se *vad varje nod producerade*, listat uppifrån och ned i exekveringsordning. Stäng den med **✕**; den öppnas igen vid nästa körning.
@@ -144,7 +156,7 @@ Använd **Copy** bredvid Inputs eller Outputs för att kopiera JSON till urklipp
 
 ## Information om exekveringens tidslinje
 
-När editorns **Execution Log** är öppen, klicka på timer-knappen för att visa exekveringens tidslinje. Välj ett spann för att öppna en infogad detaljgranskare som tar över radernas område. Den visar det valda stegets status, varaktighet, antal försök, återförsöksinformation, fel, trace-ID och en kompakt förhandsvisning av utdata. Utdata av typen objekt och array använder samma `JsonTree`-visare som resten av Debug-panelen; skalära värden använder en textförhandsvisning. När ett steg matar ut bilder (Playwright-skärmbilder, genererade bilder, bildfiler) visas de som miniatyrbilder ovanför utdata, och JSON visar en kort platshållare i stället för den råa base64-koden. Klicka på en miniatyrbild för att öppna den i en lightbox; pilknapparna eller ←/→-tangenterna stegar genom varje bild i körningen, med en räknare som `2 / 5`. Använd **Open trace** för LLM- och Agent-spann när ett trace-ID är tillgängligt.
+När editorns **Execution Log** är öppen, klicka på timer-knappen för att visa exekveringens tidslinje. Välj ett spann för att öppna en infogad detaljgranskare som tar över radernas område. Den visar det valda stegets status, varaktighet, antal försök, återförsöksinformation, fel, trace-ID och en kompakt förhandsvisning av utdata. Utdata av typen objekt och array använder samma `JsonTree`-visare som resten av Debug-panelen; skalära värden använder en textförhandsvisning. När ett steg matar ut bilder (Playwright-skärmdumpar, genererade bilder, bildfiler eller base64-bilder i en förfrågningstext som hittas var som helst i utdata) visas de som miniatyrbilder ovanför utdata, och JSON visar en kort platshållare i stället för den råa base64-koden. Klicka på en miniatyrbild för att öppna den i en lightbox; pilknapparna eller ←/→-tangenterna stegar genom varje bild i körningen, med en räknare som `2 / 5`. Använd **Open trace** för LLM- och Agent-spann när ett trace-ID är tillgängligt.
 ## Information om mobil nod
 
 På en telefon visar redigeraren ett helskärmsläge för workflow-trädet i stället för den fria canvasen. Tryck på en trädnod med ett registrerat resultat för att öppna dess körning som en helskärmsdetalj. Vyn tillhandahåller separata flikar för **Input Data**, **Output Data** och **Errors**. Fliken för utdata visar det registrerade resultatet och erbjuder **Copy Output**; fliken för indata visar den valda nodens konfiguration, och fliken för fel visar det registrerade felet när noden misslyckades. Använd **Back to workflow** eller stängningsknappen för att återgå till trädet.

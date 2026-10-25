@@ -57,6 +57,18 @@ Workflow' avamine aadressil `/workflows/{workflowId}/{executionId}` toob selle k
 - Siluge ebaõnnestunud käivitust, uurides sisendeid ja sõlmede väljundeid
 - Võrrelge väljundeid käivituste lõikes
 
+## Küsi AI-lt
+
+Mõlemal ajaloo dialoogiboksil on pealkirja kõrval nupp **Küsi AI-lt** (sädeikoon). See avab [vahekaardi Chat](../tabs/chat-tab.md#asking-about-a-run) uues vestluses, kuhu on lisatud workflow ja valitud käitus eemaldatavate kiipidena. Küsige, miks käitus oli aeglane, mis ebaõnnestus, või laske Chatil workflow parandada. Chat loeb täpselt seda käitust, sealhulgas selle jälge ja vigu sõlmede kaupa.
+
+All History dialoogis kuvatakse **Küsi AI-lt** ainult siis, kui valitud on workflow käitus; chati ja assistendi käitused seda ei näita.
+
+## Käituse ajaskaala
+
+Käituse üksikasjades vahetab nupp **Ajaskaala** (stopperi ikoon) nupu **Laienda kõik** kõrval nimekirja **Sammud** vahemike ajaskaala vastu. Kui ajaskaala on kuvatud, kannab sama nupp nime **Logid**; klõpsake sellel, et naasta nimekirja juurde. All History dialoogis ilmub nupp ainult workflow käituste jaoks. Ajaskaala joonistab riba iga sõlme kohta selle käivitumise hetkel, et näeksite, milline sõlm kui kaua aega võttis ja millised jooksid paralleelselt. Viige kursor riba kohale kestuse nägemiseks; klõpsake sellel, et avada sama üksikasjade inspektor nagu redaktori [käituse ajaskaalas](#execution-timeline-details). Valitud vaade jääb püsima seni, kuni dialoog on avatud.
+
+Käitused, mis on salvestatud enne sõlmede algusaegade talletamist, paigutatakse üksteise järel kestuse järgi.
+
 ## Execution Highlights
 
 Pärast reaalajas käivitust — või pärast **Bring to Canvas** — kuvatakse **Lõuendi ülaosas paremal** suletav **Execution Highlights** hüpikaken. See on kiire viis näha, *mida iga sõlm tootis*, loetletuna ülalt alla täitmise järjekorras. Sulgege see **✕**-iga; see avaneb uuesti järgmisel käivitusel.
@@ -146,7 +158,7 @@ Kasutage **Copy** Inputs või Outputs kõrval, et kopeerida JSON lõikelauale.
 
 ## Täitmise ajatelje üksikasjad
 
-Kui redaktori **Execution Log** on avatud, klõpsake taimeri nuppu, et kuvada täitmise ajatelg. Valige vahemik, et avada reasisene üksikasjade inspektor, mis võtab üle ridade ala. See näitab valitud sammu olekut, kestust, katsete arvu, uuesti proovimise teavet, vigu, trace ID-d ja kompaktset väljundi eelvaadet. Objekti- ja massiivi väljundid kasutavad sama `JsonTree` vaaturit nagu ülejäänud Debug paneel; skalaarväärtused kasutavad tekstieelvaadet. Kui samm väljastab pilte (Playwright ekraanipildid, genereeritud pildid, pildifailid), kuvatakse need pisipiltidena väljundi kohal ja JSON näitab lühikest kohatäitjat töötlemata base64 asemel. Klõpsake pisipildil, et avada see lightbox'is; noolenupud või ←/→ klahvid liiguvad läbi iga pildi käivituses, loenduriga nagu `2 / 5`. Kasutage **Open trace** LLM ja Agent vahemike jaoks, kui trace ID on saadaval.
+Kui redaktori **Execution Log** on avatud, klõpsake taimeri nuppu, et kuvada täitmise ajatelg. Valige vahemik, et avada reasisene üksikasjade inspektor, mis võtab üle ridade ala. See näitab valitud sammu olekut, kestust, katsete arvu, uuesti proovimise teavet, vigu, trace ID-d ja kompaktset väljundi eelvaadet. Objekti- ja massiivi väljundid kasutavad sama `JsonTree` vaaturit nagu ülejäänud Debug paneel; skalaarväärtused kasutavad tekstieelvaadet. Kui samm väljastab pilte (Playwrighti ekraanipildid, genereeritud pildid, pildifailid või base64-pildid päringu kehas, mis leitakse väljundist), kuvatakse need pisipiltidena väljundi kohal ja JSON näitab lühikest kohatäitjat töötlemata base64 asemel. Klõpsake pisipildil, et avada see lightbox'is; noolenupud või ←/→ klahvid liiguvad läbi iga pildi käivituses, loenduriga nagu `2 / 5`. Kasutage **Open trace** LLM ja Agent vahemike jaoks, kui trace ID on saadaval.
 ## Mobiilse sõlme detailvaade
 
 Telefonis kuvab redaktor täisekraanil workflow-puu, mitte vaba vormiga lõuendit. Puudutage puu sõlme, millel on salvestatud tulemus, et avada selle käivitus täisekraanil detailvaates. Vaade pakub eraldi vahekaarte **Sisendandmed**, **Väljundandmed** ja **Vead**. Väljundi vahekaart kuvab salvestatud tulemuse ja pakub **Kopeeri väljund**; sisendi vahekaart näitab valitud sõlme konfiguratsiooni ning vigade vahekaart kuvab salvestatud vea, kui sõlm ebaõnnestus. Kasutage **Tagasi workflow'sse** või sulgemisnuppu, et naasta puu juurde.

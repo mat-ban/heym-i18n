@@ -18,14 +18,14 @@
 - **Line**
 - **Area**（填滿的趨勢圖，支援多個數列）
 - **Pie**
-- **Table**（可捲動；其中一欄可呈現為[狀態標籤](../nodes/chart-output-node.md#status-chips)，且資料列可開啟[詳細資料頁面](#detail-pages)）
+- **Table**（可滾動；點擊欄標題可遞增排序，再次點擊可遞減排序。一欄可以渲染為 [狀態標籤](../nodes/chart-output-node.md#status-chips)，一欄可以包含在網頁新分頁中開啟 URL 的 [連結按鈕](../nodes/chart-output-node.md#link-buttons)，資料列可以開啟 [詳細資料頁面](#xiang-xi-zi-liao-ye-mian)）
 - **Numeric**（單一 KPI 值，可選單位）
 - **Gauge**（單一數值對應最小–最大範圍，例如百分比）
 - **Scatter**（用於相關性繪圖的 X/Y 點）
 - **Proportion**（單一長條分割為多個佔比，並附百分比圖例，例如語言分佈）
 - **Bar gauge**（每列一個水平量測條，搭配紅→綠漸層與數值，例如可用磁碟空間）
 - **Text**（markdown 訊息，例如「Last execution at 19:47」這類狀態備註；當 markdown 為靜態時支援[互動式核取方塊](../nodes/chart-output-node.md#interactive-task-lists)，並支援[明確編號清單](../nodes/chart-output-node.md#numbered-lists)以自訂或遞減編號）
-- **HITL**（您待處理的人工審核。標題會顯示 `1/n pending`。Workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目。小工具標題旁的歷史圖示會於此頁面的歷史對話框中開啟該次執行。此小工具不使用上游資料列，且每個人只會看到自己的佇列）
+- **HITL**（您待處理的人工審核。標題會顯示 `1/n pending`。Workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目。小工具標題旁的歷史圖示會於此頁面的歷史對話框中開啟該次執行。此小工具不使用上游資料列，且每個人只會看到自己的佇列。 也可以改為顯示單一 Workflow 的審查，面向所有能夠開啟該 Workflow 的人員；請參閱 [HITL 元件](#hitl-yuan-jian)）
 
 除了圖表之外，**Run a workflow** 小工具還能直接從 Dashboard 執行您的其中一個 Workflow：透過拖放檔案、填寫其輸入欄位，或點擊 Run 按鈕；請參閱[執行類小工具](#run-widgets)。
 
@@ -41,6 +41,20 @@
 若是 **Run a workflow** 小工具，請改為選擇它要執行的 Workflow；選擇器會說明小工具將如何執行各個 Workflow。小工具會直接加入網格中，無須建立新的 Workflow。
 
 隨時雙擊小工具（或使用其編輯按鈕）即可重新開啟其 Workflow。使用小工具標題中的 **Clone widget** 可同時複製小工具及其完整 Workflow。複本會置於原始項目下方，並標示 **(Copy)**，讓您能獨立編輯。
+
+## HITL 元件
+
+新的 HITL 元件會顯示您自己佇列中等待的每項審查。若要僅顯示特定 Workflow 的審查，請開啟該元件的 **設定**：
+
+1. 在 **Workflow** 下選取對應的 Workflow。清單中包含您可以開啟的 Workflow（您擁有的，或與您或您的團隊共享的），且該 Workflow 具有等待人員處理的步驟：帶有人工審查的 Agent，或 Slack 審批、按鈕或表單步驟。旁邊的圖示將在新分頁中開啟該 Workflow。
+2. 如果該 Workflow 剛好只有一個此類步驟，系統會自動選取該步驟。如果包含多個，**Select agent** 會按節點名稱列出它們，並將 **All agents** 置於首位；Slack 步驟帶有 **(Slack)** 標記。
+3. 儲存。標題中的 `1/n pending` 僅統計這些審查。選取 **所有 Workflow** 可重新顯示您自己的佇列。
+
+畫布上 Chart Output 節點的屬性中也提供相同的選項。**使用 AI 微調** 也可以完成設定（「僅顯示發票審批」），在描述新元件時指明 Workflow 同樣可以生效。每次變更都屬於 Workflow 編輯，因此會記錄在 Edit History 中。
+
+- **誰可以看到審查。** 按 Workflow 篩選的元件會向所有能夠開啟該 Workflow 的人員顯示其審查，他們可以在元件中執行審批、要求變更或拒絕操作，就像他們可以執行該 Workflow 一樣。未篩選的元件則向每位使用者顯示其自己的佇列。
+- **誰可以看到元件。** 無法開啟所選 Workflow 的人員根本看不到該元件，即使在與其共享的儀表板上也同樣不可見。當儀表板的擁有者失去對該 Workflow 的存取權限或該 Workflow 被刪除時，擁有者會看到「You no longer have access to the workflow this widget shows」，並可以在 **設定** 中另選一個。
+- **僅可選取具備權限的項目。** 儲存元件時，無法開啟的 Workflow 將被拒絕，無論該操作來自設定、畫布還是 AI。
 
 ## 詳細資料頁面
 
@@ -75,6 +89,10 @@
 ## 使用 AI 產生小工具
 
 點擊 **AI**，描述您想要的指標（例如「workflow success rate over the last 30 days as a bar chart」），然後選擇 LLM 認證與模型。Heym 會產生一個以 Chart Output 節點結尾的完整小工具 Workflow，並將其加入網格。各圖表類型的範例 Prompt 請參閱 [Chart Output](../nodes/chart-output-node.md#example-ai-prompts)。
+
+元件會以您請求的語言獲得一個包含一兩個詞的簡短標題，例如「未結案件」。標題絕不包含資料表的 ID；如果模型用完整句子為元件命名，Heym 會保留其前幾個詞。
+
+元件 API 也可以在不使用 AI 的情況下建立 **計數卡片**：資料表 (`data_table_id`) 上帶有 `count_column` 和 `count_value` 的 `text` 元件可以顯示具有該值的列數；元件標題指明該值。Heym Work 會在基於資料表建立的頁面頂端為每個狀態放置一張計數卡片。
 
 使用小工具的 **Fine-tune with AI** 按鈕，即可透過新指令修訂現有小工具。每次 AI 微調都會將先前的 Workflow 快照至小工具的 **Edit History**，因此您可以在 Workflow 編輯器中檢閱或還原變更。
 

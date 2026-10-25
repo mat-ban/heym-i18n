@@ -35,6 +35,8 @@
 - **Workflow çalıştırma geçmişi** – Tek bir workflow hakkında sorun ("günlük rapor kaç kez çalıştı?", "başarısız oldu mu?", "en son ne zaman çalıştı?"). Chat, workflow'u ID'siyle bulur ve çalıştırma sayısı, durum dağılımı, ilk ve son çalıştırma zamanı ve ortalama süresinden yanıt verir. Bir çalıştırmanın neden başarısız olduğunu veya ne döndürdüğünü sorun; Chat ardından girdilerini, çıktılarını ve node başına hatalarını okumak için o tek çalıştırmayı açar
 - **Canlı çalıştırma durumu** – Şu anda neyin çalıştığını sorun; Chat sayı, workflow adları, her çalıştırmanın ne kadar süredir devam ettiği, hangi node'da olduğu ve doğrudan canlı çalıştırmaya bir bağlantı ile yanıt verir
 
+- **Çalıştırma bağlam çipleri** – [Execution History](../reference/execution-history.md#ask-ai) içindeki **AI'ya Sor**, seçilen Workflow çalıştırmasının çip olarak eklendiği yeni bir konuşma açar. Bkz. [Bir Çalıştırma Hakkında Sorma](#bir-calistirma-hakkinda-sorma)
+
 ## Bir MCP İstemcisinden Chat Kullanma
 
 Chat motoruna tarayıcı dışından da erişilebilir. [MCP sekmesinde](./mcp-tab.md) **Heym Chat Tool**'u etkinleştirin; Claude, Cursor ve MCP konuşan diğer tüm MCP istemcileri, bu aynı motoru tüm yetenekleriyle çalıştıran tek bir `heym_chat` aracına kavuşur.
@@ -80,6 +82,17 @@ Sıradan bir dille sorun — "what is running?", "how many workflows are active 
 - **Her canlı çalışmaya** bir bağlantıyı; bu bağlantı, o yürütmeyi yeniden oynatarak canvas'ı açar
 
 Bir [Human-in-the-Loop](../reference/human-in-the-loop.md) veya Codex incelemesi için duraklatılan çalışmalar, çalışıyor olarak değil, sizi bekliyor olarak bildirilir. Bu, başlıktaki aktif çalışmalar rozetiyle aynı veridir; dolayısıyla Chat ile rozet asla çelişmez. Zaten tamamlanmış çalışmalar için bunun yerine son yürütmeleri isteyin — bu, [Execution History](../reference/execution-history.md) okur.
+
+## Bir Çalıştırma Hakkında Sorma
+
+[Execution History](../reference/execution-history.md#ask-ai) iletişim kutusunda, düzenleyiciden veya All History görünümünden bir Workflow çalıştırması seçin ve iletişim kutusu başlığının yanındaki **AI'ya Sor** seçeneğine tıklayın. Chat, mesaj kutusunun üzerinde iki çip bulunan yeni bir konuşma açar:
+
+- **Workflow:** Workflow adı
+- **Execution:** seçilen çalıştırmanın kimliğinin ilk karakterleri
+
+Hariç tutmak için bir çipi **×** simgesiyle kaldırın. Ardından sorunuzu sorun, örneğin “bu çalıştırma neden bu kadar uzun sürdü?”, “burada ne başarısız oldu?” veya “bunu düzeltebilir misiniz?”. Kalan çipler tam kimlikleriyle bu mesaja eklenir, böylece Chat, Workflow aramak yerine çalıştırmanın girdilerini, çıktılarını ve düğüm başına izini doğrudan okur. Workflow'u düzeltmek için Chat, [Workflow Oluşturma](#workflow-olusturma) bölümünde açıklandığı gibi değişikliği kaydeder, test eder ve doğrular.
+
+Gönderilen mesaj, çipleri sorunuzun altında görüntüler. Bunlar yalnızca o mesaja aittir; aynı konuşmadaki takip eden sorular geçmişteki bağlamı korur.
 
 ## Uyarıları Sorma
 

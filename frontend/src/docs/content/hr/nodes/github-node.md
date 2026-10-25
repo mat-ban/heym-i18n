@@ -212,6 +212,11 @@ Ako datoteka već postoji, Heym automatski dohvaća trenutni SHA prije nego što
 **Per Page** (1–100). Heym traži jednu stranicu rezultata; ne postoji `page` polje za dohvaćanje
 dodatnih stranica u istoj operaciji.
 
+
+### Return all pages
+
+Uključite **Return all pages** kako bi jedno izvršavanje slijedilo svaku stranicu, počevši od **Cursor** ako je postavljen. Svaki zahtjev traži 100 stavki, bez obzira na vrijednost **Per Page**. Čvor staje nakon otprilike 1.000 stavki (ili 100 zahtjeva): issue objekti imaju oko 6 KB svaki, pa bi veće ograničenje stvaralo vrlo velike izlaze čvora. Ako stane ranije, vraća ono što ima uz `has_more: true` i `next_cursor` umjesto da izazove pogrešku, a nastaviti možete prosljeđivanjem tog kursora sljedećem izvršavanju. Zaustavljanje Workflowa ili dosezanje njegova vremenskog ograničenja prekida dohvaćanje između stranica.
+
 ## Izlaz
 
 Točan oblik ovisi o odabranoj operaciji. Uobičajena polja uključuju:

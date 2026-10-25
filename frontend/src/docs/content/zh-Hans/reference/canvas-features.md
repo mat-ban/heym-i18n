@@ -1,6 +1,6 @@
 # 画布功能
 
-Workflow 编辑器提供了多项用于调试、测试和组织节点的功能：**运行至节点**、**数据固定**、**执行日志**、**启用/禁用**以及**提取为子 Workflow**。
+Workflow 编辑器提供了多项用于调试、测试和组织节点的功能：**运行至节点**、**节点上的 AI**、**数据固定**、**执行日志**、**启用/禁用**以及**提取为子 Workflow**。
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ 观看编辑器演示</a></p>
@@ -12,6 +12,12 @@ Workflow 编辑器提供了多项用于调试、测试和组织节点的功能�
 如果所选路径包含输入字段，右侧 **Run** 面板将打开并聚焦第一个字段。输入值后，点击 **Run to _节点标签_** 或按 **Ctrl+Enter**（macOS 上为 Cmd+Enter）。通用 body 模式将聚焦 JSON body 编辑器。不含输入字段的路径将立即运行，不会打开面板。已固定输入的 Input 节点将复用其固定输出，不会请求输入。
 
 面板会保留所选目标以供后续运行使用。选择 **Run full workflow** 可清除目标。执行进行中时，运行按钮将被禁用。位于循环内部的目标在该节点首次被到达时停止运行；选择循环之后的节点将运行完整的上游循环。
+
+## 节点上的 AI
+
+在除便签外的任何节点上悬停，然后点击其上方的 **AI**。[AI Assistant](./ai-assistant.md) 会在该节点上打开并提供 **Change this node as ...**、**Fix error in this node ...** 和 **Other**。在 Agent 模式下，助手仅更改该节点；其他节点、连接和布局保持原样。请参阅 [AI Assistant › 修改单个节点](./ai-assistant.md#changing-one-node)。
+
+在您仅具有查看权限的工作流上，该按钮会被隐藏。
 
 ## 数据固定
 

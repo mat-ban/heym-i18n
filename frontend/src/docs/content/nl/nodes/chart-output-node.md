@@ -33,13 +33,17 @@ Wanneer uitsluitend voorbeeld-/samplegegevens beschikbaar zijn (geen echte bron)
 | `valueField` | string | Rijsleutel die als numerieke waarde wordt gebruikt (pie/bar/line/numeric/gauge) |
 | `series` | array | Optionele multi-series-definitie `[{ "name": "Sent", "field": "sent" }]` voor bar/line (overschrijft `valueField`) |
 | `columns` | array | Optionele kolomlijst voor `table` (standaard de sleutels van de eerste rij) |
-| `statusColumn` | string | Optionele `table`-kolom die wordt weergegeven als gekleurde [statuschips](#status-chips). Dit moet een van de getoonde kolommen zijn. |
+| `statusColumn` | string | Optionele `table`-kolom die wordt weergegeven als gekleurde [statuschips](#status-chips). Dit moet een van de getoonde kolommen zijn. |, en met `linkColumn` bevat deze de linkkolom en de knoptekst.
 | `statusTones` | object | Optionele koppeling van een statuswaarde aan een tint (`success`, `attention`, `failure`, `waiting`, `neutral`) voor waarden die niet onder de standaardwaarden vallen |
+| `linkColumn` | string | Optionele `table`-kolom waarvan de cellen een URL bevatten, weergegeven als [linkknop](#link-buttons) die de URL in een nieuw tabblad opent. Moet een van de getoonde kolommen zijn. |
+| `linkLabel` | string | Optionele tekst van de linkknop. Als u dit leeg laat, toont de knop alleen een linkpictogram. |
 | `xField` / `yField` | string | Rijsleutels voor de X- en Y-numerieke assen (scatter) |
 | `min` / `max` | number | Numeriek bereik voor `gauge` (standaard `0` / `100`) |
 | `unit` | string | Optionele eenheid die naast een `numeric`- of `gauge`-waarde wordt weergegeven |
 | `text` | string | Markdown-bericht voor het `text`-charttype. Laat leeg en stel `valueField` in om een dynamisch bericht te renderen dat uit upstream-gegevens wordt gehaald. |
 | `title` | string | Optionele charttitel |
+| `hitlWorkflowId` | string | Alleen `hitl`. Toont alleen de reviews van deze Workflow. Als u dit leeg laat, toont de widget alle reviews. |
+| `hitlNodeId` | string | Alleen `hitl`. Beperkt `hitlWorkflowId` tot één stap: een Agent met menselijke review, of een Slack-goedkeurings-, knoppen- of formulierstap. |
 
 ## Charttypen
 
@@ -51,7 +55,7 @@ Wanneer uitsluitend voorbeeld-/samplegegevens beschikbaar zijn (geen echte bron)
 - **proportion** — een enkele horizontale balk opgesplitst in aandelen met een percentagelegenda (bijv. een taalverdeling). Gebruikt `labelField` + `valueField`.
 - **barGauge** — één horizontale gauge per rij met een rood→groen verloop en een waarde (bijv. vrije schijfruimte). Gebruikt `labelField` + `valueField`, optionele `unit` en `max` (standaard de grootste rijwaarde).
 - **text** — een markdown-bericht (bijv. een statusnotitie zoals "Last execution at 19:47"). Plaats de markdown in `text` voor een statisch bericht, of laat `text` leeg en stel `valueField` in om een string te renderen die upstream wordt geproduceerd. Ondersteunt koppen, vet/cursief, [lijsten](../nodes/chart-output-node.md#interactive-task-lists), links en inline code.
-- **hitl** — een carrousel van uw openstaande human reviews. De kop toont `1/n pending`; de linkpijl is uitgeschakeld op de eerste kaart en de rechterpijl op de laatste. De workflownaam opent die uitvoering op het canvas. **Approve**, **Request changes** en **Reject** lossen deze op, en het geschiedenis-pictogram naast de widgettitel opent die uitvoering in het geschiedenis-dialoogvenster op dezelfde pagina. Dit charttype negeert upstream-rijen, dus de widget-workflow bestaat alleen uit de Chart Output-node. Elke aangemelde persoon ziet de reviews van workflows die hij of zij bezit.
+- **hitl** — een carrousel van uw openstaande human reviews. De kop toont `1/n pending`; de linkpijl is uitgeschakeld op de eerste kaart en de rechterpijl op de laatste. De workflownaam opent die uitvoering op het canvas. **Approve**, **Request changes** en **Reject** lossen deze op, en het geschiedenis-pictogram naast de widgettitel opent die uitvoering in het geschiedenis-dialoogvenster op dezelfde pagina. Dit charttype negeert upstream-rijen, dus de widget-workflow bestaat alleen uit de Chart Output-node. Elke aangemelde persoon ziet de reviews van workflows die hij of zij bezit. Kies een **Workflow** (en **Select agent** als die meerdere reviewstappen heeft) in de eigenschappen van het knooppunt of de instellingen van de widget om in plaats daarvan de reviews van die Workflow te tonen, aan iedereen die de Workflow kan openen; zie [HITL-widgets](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interactieve takenlijsten
 
@@ -307,3 +311,17 @@ Bij het genereren van een widget met **AI** sluiten prompts zoals deze naadloos 
 
 - [Dashboard-tab](../tabs/dashboard-tab.md) — bouw en rangschik widgets
 - [Uitvoer-node](output-node.md) — eind-node voor reguliere workflows
+
+
+## Linkknoppen
+
+Een `table` kan één kolom omzetten in knoppen die een link openen. Stel **Link column** in de eigenschappen van het knooppunt (of `linkColumn` in de DSL) in op een kolom waarvan de cellen een URL bevatten, en eventueel **Link button text** (`linkLabel`). Elke cel wordt een knop die de URL in een nieuw tabblad opent. Zonder knoptekst toont de knop alleen een linkpictogram:
+
+| Celwaarde | Opent |
+| --------- | ----- |
+| `https://jira.example.com/browse/T-1` | Een andere site, in een nieuw tabblad |
+| `/dashboards` | Een pagina binnen Heym, in een nieuw tabblad |
+
+Alleen `http://`- en `https://`-adressen en paden die met één enkele `/` beginnen, worden knoppen. Elke andere waarde, zoals `javascript:` of `//host`, blijft gewone tekst, en een lege cel toont niets.
+
+De knop werkt naast een [rijlink](../tabs/dashboard-tab.md#detail-pages): klikken op de knop opent de link in een nieuw tabblad, en klikken ergens anders op de rij opent nog steeds de detailpagina.

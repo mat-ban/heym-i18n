@@ -195,6 +195,11 @@ Jos tiedosto on jo olemassa, Heym hakee nykyisen SHA:n automaattisesti ennen sen
 `List Organization Repositories`, `List User Repositories` ja `Get User Repositories` tukevat
 **Per Page** (1–100). Heym pyytää yhden sivun tuloksia; samassa operaatiossa ei ole `page` -kenttää lisäsivujen hakemiseen.
 
+
+### Return all pages
+
+Ota **Return all pages** käyttöön, jotta yksi suoritus seuraa kaikkia sivuja alkaen kohdasta **Cursor**, jos se on asetettu. Jokainen pyyntö pyytää 100 kohdetta riippumatta **Per Page** -arvosta. Solmu pysähtyy noin 1 000 kohteen (tai 100 pyynnön) jälkeen: issue-objektit ovat noin 6 KB kukin, joten suurempi raja tuottaisi hyvin suuria solmun tulosteita. Jos se pysähtyy aiemmin, se palauttaa keräämänsä tiedot arvoilla `has_more: true` ja `next_cursor` virheen sijaan, ja voit jatkaa antamalla tämän kursorin seuraavalle suoritukselle. Workflow'n pysäyttäminen tai sen aikakatkaisun saavuttaminen päättää noudon sivujen välillä.
+
 ## Tuloste
 
 Tarkka muoto riippuu valitusta operaatiosta. Yleisiä kenttiä ovat:

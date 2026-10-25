@@ -16,12 +16,12 @@ Le nœud **Heym** lit les données propres à Heym : les workflows auxquels vous
 | Paramètre | Type | Description |
 |-----------|------|-------------|
 | `heymOperation` | Select | Lecture à effectuer |
-| `heymWorkflowId` | UUID | Workflow cible. Requis pour `getWorkflow` et `getExecutionHistory`. Compatible avec les expressions. |
+| `heymWorkflowId` | UUID | Définissez-le sur `all` pour `getExecutionHistory` afin de lire tous les workflows accessibles. |
 | `heymLimit` | String | Nombre maximal de lignes à renvoyer. **Laissez vide ou saisissez `0` pour tout renvoyer** — c'est la valeur par défaut. Compatible avec les expressions. |
 | `heymStatus` | String | Filtre de statut facultatif pour `getExecutionHistory`. Compatible avec les expressions. |
 | `heymSinceDays` | String | Fenêtre de recherche facultative en jours pour `getExecutionHistory`. Compatible avec les expressions. |
 
-Le sélecteur de workflow est une liste déroulante avec recherche qui répertorie tous les workflows auxquels vous avez accès.
+Le sélecteur de workflow est une liste déroulante avec recherche qui répertorie tous les workflows auxquels vous avez accès. Pour {GEH}, son premier élément est **{AW}**. Pour {GEH}, son premier élément est **{AW}**.
 
 ## Périmètre d'accès
 
@@ -93,9 +93,11 @@ Renvoie les entrées de l'historique des exécutions pour un workflow, de la plu
 | `$nodeLabel.executions[0].recovered` | Indique si l'exécution a été récupérée après un crash |
 | `$nodeLabel.executions[0].inputs` | Ce que l'exécution a reçu - le payload du trigger ou l'entrée de l'appelant |
 | `$nodeLabel.executions[0].outputs` | La sortie du workflow pour cette exécution |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Le workflow auquel appartient l'historique |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Le workflow auquel appartient l'historique, ou `null` avec **{AW}** |
+u `null` avec **{AW}** |
 | `$nodeLabel.total` | Nombre total d'exécutions correspondantes **avant** la limite |
-| `$nodeLabel.by_status` | Comptages indexés par statut, par exemple `{ "success": 41, "error": 3 }` |
+| `$nodeLabe| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Avec **{AW}**, le workflow auquel appartient chaque exécution |
+l.by_status` | Comptages indexés par statut, par exemple `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Début de la fenêtre, ou `null` pour l'historique complet |
 
 Les entrées contiennent à la fois `inputs` et `outputs` - ce que l'exécution a reçu et ce qu'elle a renvoyé - mais jamais `node_results` : la trace par nœud est la colonne la plus volumineuse de la table et écraserait tout ce qui se trouve en aval. Récupérez une exécution unique via l'API lorsque vous avez besoin de la trace complète.

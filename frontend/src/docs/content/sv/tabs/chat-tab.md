@@ -82,6 +82,17 @@ väntande på godkännande, inte som körande. Detta är samma data som aktiv-k�
 så Chat och brickan är aldrig oense. För körningar som redan har slutförts, fråga efter senaste körningarna
 istället — det läser [Execution History](../reference/execution-history.md).
 
+## Fråga om en körning
+
+Välj en Workflow-körning i [Execution History](../reference/execution-history.md#ask-ai), från redigeraren eller från All History, och klicka på **Fråga AI** bredvid dialogrutans titel. Chat öppnar en ny konversation med två chips ovanför meddelanderutan:
+
+- **Workflow:** namnet på Workflow
+- **Execution:** de första tecknen i den valda körningens id
+
+Ta bort ett chip med dess **×** för att utesluta det. Ställ sedan en fråga, till exempel ”varför tog den här körningen så lång tid?”, ”vad misslyckades här?” eller ”kan du åtgärda det?”. De återstående chipsen bifogas meddelandet med fullständiga id:n, så att Chat läser indata, utdata och nodspårning direkt istället för att söka efter Workflow. För att åtgärda Workflow sparar, testkör och verifierar Chat ändringen enligt beskrivningen i [Skapa Workflows](#skapa-workflows).
+
+Det skickade meddelandet visar chipsen under frågan. De tillhör endast det meddelandet; uppföljningsfrågor i samma konversation behåller sammanhanget från historiken.
+
 ## Fråga om aviseringar
 
 Chat kan besvara frågor om de [aviseringar](./alerts-tab.md) som har definierats:

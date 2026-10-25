@@ -51,6 +51,7 @@ Girdi alanları [Input](../nodes/input-node.md) düğümlerinden gelir. API, `te
 ## Kimlik Doğrulama ve Oturumlar
 
 - **WorkflowPortalUser**: Workflow başına kullanıcı adı/parola (kimlik doğrulama etkinleştirildiğinde)
+- **Son kullanıcıyı kaldırma**: Portal etkinken son portal kullanıcısını silmek portalı tekrar herkese açık hale getirir; ayarlar iletişim kutusu önce onay ister
 - **PortalSession**: 168 saatlik TTL'ye sahip oturum token'ları
 - **Hız sınırlama**: 3 başarısız giriş denemesi → workflow+IP başına 24 saatlik yasak
 - Süresi dolmuş oturumlar bir cron job tarafından temizlenir

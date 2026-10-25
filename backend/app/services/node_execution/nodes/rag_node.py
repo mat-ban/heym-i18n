@@ -233,6 +233,9 @@ def execute(ctx: NodeExecutionContext) -> object:
                 results = reranked_results
                 reranked = True
 
+        if not reranked:
+            results = results[: max(search_limit, 0)]
+
         if reranked:
             output = {
                 "success": True,

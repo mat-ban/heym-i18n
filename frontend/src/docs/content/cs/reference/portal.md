@@ -51,6 +51,7 @@ Vstupní pole pocházejí z uzlů [Input](../nodes/input-node.md). API extrahuje
 ## Ověření a relace
 
 - **WorkflowPortalUser**: Uživatelské jméno/heslo pro jednotlivá workflow (je-li ověření povoleno)
+- **Odebrání posledního uživatele**: Při povoleném portálu způsobuje smazání posledního uživatele portálu, že je portál opět veřejný; dialog nastavení nejprve vyžaduje potvrzení
 - **PortalSession**: Tokeny relace s TTL 168 hodin
 - **Omezení rychlosti**: 3 neúspěšné pokusy o přihlášení → 24hodinový zákaz pro kombinaci workflow+IP
 - Expirované relace jsou čištěny úlohou cron

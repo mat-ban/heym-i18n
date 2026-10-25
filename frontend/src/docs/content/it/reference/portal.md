@@ -51,6 +51,7 @@ I campi di input provengono dai nodi [Input](../nodes/input-node.md). L'API estr
 ## Autenticazione e Sessioni
 
 - **WorkflowPortalUser**: nome utente/password per workflow (quando l'autenticazione è abilitata)
+- **Rimozione dell'ultimo utente**: Con il portale abilitato, l'eliminazione dell'ultimo utente del portale rende il portale nuovamente pubblico; la finestra di dialogo delle impostazioni richiede prima conferma
 - **PortalSession**: token di sessione con TTL di 168 ore
 - **Rate limiting**: 3 tentativi di login falliti → ban di 24 ore per workflow+IP
 - Le sessioni scadute vengono rimosse da un cron job

@@ -1,6 +1,6 @@
 # Funkcje Canvas
 
-Edytor workflow oferuje szereg funkcji służących do debugowania, testowania i organizowania węzłów: **Uruchom do węzła**, **Przypięcie danych**, **Dzienniki wykonań**, **Włącz/Wyłącz** oraz **Wyodrębnij do pod-workflow**.
+Edytor workflow oferuje szereg funkcji służących do debugowania, testowania i organizowania węzłów: **Uruchom do węzła**, **AI w węźle**, **Przypięcie danych**, **Dzienniki wykonań**, **Włącz/Wyłącz** oraz **Wyodrębnij do pod-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Obejrzyj demonstrację edytora</a></p>
@@ -12,6 +12,12 @@ Należy najechać kursorem na dowolny węzeł inny niż notatka sticky i klikną
 Jeśli wybrana ścieżka zawiera pola wejściowe, otwiera się panel **Uruchom** po prawej stronie i ustawia fokus na pierwszym polu. Należy wprowadzić wartości, a następnie kliknąć **Uruchom do _etykieta węzła_** lub nacisnąć **Ctrl+Enter** (Cmd+Enter w systemie macOS). Tryb ogólnego ciała żądania ustawia fokus na edytorze JSON. Ścieżki bez pól wejściowych uruchamiają się natychmiast bez otwierania panelu. Przypięte węzły wejściowe wykorzystują swoje przypięte dane wyjściowe bez pytania o dane wejściowe.
 
 Panel zachowuje wybrany cel dla kolejnych uruchomień. Aby wyczyścić cel, należy wybrać **Uruchom pełny workflow**. Przyciski uruchamiania są nieaktywne, gdy wykonanie jest w toku. Cel znajdujący się wewnątrz pętli zatrzymuje uruchomienie przy pierwszym osiągnięciu tego węzła; wybranie węzła znajdującego się za pętlą uruchamia pełną pętlę nadrzędną.
+
+## AI w węźle
+
+Najedź kursorem na dowolny węzeł z wyjątkiem notatki i kliknij **AI** powyżej. [AI Assistant](./ai-assistant.md) otworzy się na tym węźle i zaoferuje **Change this node as ...**, **Fix error in this node ...** oraz **Other**. W trybie Agent asystent zmienia tylko ten węzeł; inne węzły, połączenia i układ pozostają bez zmian. Zobacz [AI Assistant › Modyfikowanie pojedynczego węzła](./ai-assistant.md#changing-one-node).
+
+Przycisk jest ukryty w workflowach, do których masz uprawnienia tylko do wyświetlania.
 
 ## Przypięcie danych
 

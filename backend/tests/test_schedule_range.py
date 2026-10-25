@@ -1,5 +1,5 @@
 import unittest
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from app.services.schedule_range import (
@@ -28,6 +28,29 @@ class TestScheduleRange(unittest.TestCase):
                 "2026-01-01T00:00:00Z",
                 "2026-06-01T00:00:00Z",
             )
+
+    def test_parse_iso_range_rejects_span_with_partial_day(self) -> None:
+        with self.assertRaises(ValueError):
+            parse_iso_range("2026-10-01T00:00:00Z", "2026-12-02T23:00:00Z")
+
+    def test_parse_iso_range_naive_uses_configured_timezone(self) -> None:
+        tz = ZoneInfo("Asia/Tokyo")
+        a, b = parse_iso_range("2026-10-20T00:00:00", "2026-10-21T00:00:00", tz=tz)
+        self.assertEqual(a, datetime(2026, 10, 19, 15, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(b, datetime(2026, 10, 20, 15, 0, 0, tzinfo=timezone.utc))
+
+    def test_parse_iso_range_mixed_naive_and_aware(self) -> None:
+        tz = ZoneInfo("Asia/Tokyo")
+        a, b = parse_iso_range("2026-10-20T00:00:00", "2026-10-21T00:00:00Z", tz=tz)
+        self.assertEqual(a, datetime(2026, 10, 19, 15, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(b, datetime(2026, 10, 21, 0, 0, 0, tzinfo=timezone.utc))
+
+    def test_parse_iso_range_exact_62_days_across_dst_in_configured_timezone(self) -> None:
+        tz = ZoneInfo("Europe/Berlin")
+        a, b = parse_iso_range("2026-03-01T00:00:00Z", "2026-05-02T00:00:00Z", tz=tz)
+        self.assertEqual(
+            b.astimezone(timezone.utc) - a.astimezone(timezone.utc), timedelta(days=62)
+        )
 
     def test_week_bounds_monday_sunday(self) -> None:
         tz = ZoneInfo("UTC")

@@ -1,6 +1,6 @@
 # Canvas-Funktionen
 
-Der Workflow-Editor bietet mehrere Funktionen zum Debuggen, Testen und Organisieren von Knoten: **Bis zum Knoten ausführen**, **Data Pin**, **Ausführungsprotokolle**, **Aktivieren/Deaktivieren** und **In Sub-Workflow extrahieren**.
+Der Workflow-Editor bietet mehrere Funktionen zum Debuggen, Testen und Organisieren von Knoten: **Bis zum Knoten ausführen**, **KI an einem Knoten**, **Data Pin**, **Ausführungsprotokolle**, **Aktivieren/Deaktivieren** und **In Sub-Workflow extrahieren**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Editor-Demo ansehen</a></p>
@@ -12,6 +12,12 @@ Fahre mit der Maus über einen beliebigen Knoten (außer einer Haftnotiz) und kl
 Wenn der ausgewählte Pfad Eingabefelder enthält, öffnet sich das rechte **Ausführen**-Panel und fokussiert das erste Feld. Gib die Werte ein und klicke dann auf **Bis zu _Knotenbezeichnung_ ausführen** oder drücke **Strg+Enter** (Cmd+Enter unter macOS). Der generische Body-Modus fokussiert den JSON-Body-Editor. Pfade ohne Eingabefelder werden sofort ausgeführt, ohne dass das Panel geöffnet wird. Gepinnte Eingabe-Knoten verwenden ihre gepinnte Ausgabe erneut, ohne nach einer Eingabe zu fragen.
 
 Das Panel behält das ausgewählte Ziel für nachfolgende Ausführungen bei. Wähle **Vollständigen Workflow ausführen**, um das Ziel zu löschen. Die Ausführen-Schaltflächen sind deaktiviert, während eine Ausführung aktiv ist. Ein Ziel innerhalb einer Schleife stoppt die Ausführung, sobald dieser Knoten zum ersten Mal erreicht wird; wenn du einen Knoten nach der Schleife auswählst, wird die vollständige vorgelagerte Schleife ausgeführt.
+
+## KI an einem Knoten
+
+Bewegen Sie den Mauszeiger über einen beliebigen Knoten außer einer Notiz und klicken Sie darüber auf **AI**. Der [KI-Assistent](./ai-assistant.md) öffnet sich für diesen Knoten und bietet **Change this node as ...**, **Fix error in this node ...** und **Other**. Im Agent-Modus ändert der Assistent nur diesen Knoten; andere Knoten, Verbindungen und das Layout bleiben unverändert. Siehe [KI-Assistent › Einen einzelnen Knoten anpassen](./ai-assistant.md#changing-one-node).
+
+Die Schaltfläche ist bei Workflows ausgeblendet, die Sie nur anzeigen können.
 
 ## Data Pin
 

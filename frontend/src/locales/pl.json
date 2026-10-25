@@ -478,7 +478,14 @@
     "extract": "Wyodrębnij",
     "mySubWorkflow": "Mój Sub-Workflow",
     "moreNodes": "+{count} więcej",
-    "runToNode": "Uruchom do {label}"
+    "runToNode": "Uruchom do {label}",
+    "aiButtonTitle": "Zmień lub napraw ten węzeł za pomocą asystenta AI",
+    "editNodeWithAi": "Edytuj {label} z AI",
+    "modifyingNode": "Modyfikowanie węzła:",
+    "hasNodeOutput": "(Ma dane wyjściowe węzła)",
+    "closeNodeFocus": "Zamknij fokus węzła i edytuj cały Workflow",
+    "nodeFocusRan": "Ten węzeł został uruchomiony. AI widzi jego ostatnie dane wyjściowe i błąd oraz czyta dokumentację węzła.",
+    "nodeFocusNoOutput": "Ten węzeł nie ma danych wyjściowych w bieżącym uruchomieniu. Uruchom go najpierw, jeśli AI ma zobaczyć jego dane wyjściowe. AI czyta dokumentację węzła w obu przypadkach."
   },
   "nodes": {
     "title": "Węzły",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Edytuj wiadomość w kolejce",
     "deleteQueuedMessage": "Usuń wiadomość w kolejce",
     "startedByMcp": "Uruchomione przez klienta MCP",
-    "newChatTitle": "Nowy chat"
+    "newChatTitle": "Nowy chat",
+    "subtitle": "Uruchamiaj Workflows i zadawaj pytania",
+    "modelsLoadFailedDisabled": "Nie udało się załadować listy modeli dla tych danych uwierzytelniających. Czat pozostaje wyłączony, dopóki nie będzie można pobrać modelu."
   },
   "teams": {
     "title": "Zespoły",
@@ -1672,7 +1681,10 @@
       "error": "Błąd",
       "cached": "Z pamięci podręcznej",
       "cancelled": "Anulowano"
-    }
+    },
+    "askAi": "Zapytaj AI",
+    "askAiTitle": "Zapytaj asystenta Chat o to uruchomienie",
+    "noNodeSpans": "Dla tego uruchomienia nie zapisano żadnych spanów węzłów."
   },
   "portal": {
     "loadingPortal": "Ładowanie portalu...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Rekordy strony szczegółów",
     "detailPageRecordsHelp": "Wartości ?record= akceptowane przez ten pulpit po otwarciu przez link w wierszu. Inne wartości są odrzucane przed uruchomieniem widżetu.",
     "unreachableDashboard": "Pulpit, do którego brak dostępu",
-    "runWorkflow": "Uruchom Workflow"
+    "runWorkflow": "Uruchom Workflow",
+    "openWorkflowNewTab": "Otwórz Workflow w nowej karcie",
+    "hitlFilterHelp": "Pokaż recenzje ze wszystkich Workflows lub tylko z jednego. Lista Workflows, które można otworzyć – własnych lub udostępnionych – z krokiem oczekującym na osobę.",
+    "hitlSourcesLoadFailed": "Nie udało się załadować Workflows."
   },
   "drive": {
     "filesCount": "({count} plików)",

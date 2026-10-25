@@ -33,13 +33,17 @@ Kada imate samo primjerene/testne podatke (bez stvarnog izvora), proizvedite te 
 | `valueField` | string | Ključ retka koji se koristi kao numerička vrijednost (pie/bar/line/numeric/gauge) |
 | `series` | array | Neobavezna definicija više serija `[{ "name": "Sent", "field": "sent" }]` za bar/line (nadjačava `valueField`) |
 | `columns` | array | Neobavezan popis stupaca za `table` (zadano su ključevi prvog retka) |
-| `statusColumn` | string | Neobavezni stupac `table` prikazan kao obojene [statusne oznake](#status-chips). Mora biti jedan od prikazanih stupaca. |
+| `statusColumn` | string | Neobavezni stupac `table` prikazan kao obojene [statusne oznake](#status-chips). Mora biti jedan od prikazanih stupaca. |, a s `linkColumn` sadrži i stupac poveznice i tekst gumba.
 | `statusTones` | object | Neobavezno mapiranje vrijednosti statusa u ton (`success`, `attention`, `failure`, `waiting`, `neutral`) za vrijednosti koje zadane postavke ne pokrivaju |
+| `linkColumn` | string | Neobavezni stupac `table` čije ćelije sadrže URL, prikazan kao [gumb poveznice](#link-buttons) koji ga otvara u novoj kartici. Mora biti jedan od prikazanih stupaca. |
+| `linkLabel` | string | Neobavezni tekst gumba poveznice. Ako ostane prazno, gumb prikazuje samo ikonu poveznice. |
 | `xField` / `yField` | string | Ključevi redaka za X i Y numeričke osi (scatter) |
 | `min` / `max` | number | Numerički raspon za `gauge` (zadano `0` / `100`) |
 | `unit` | string | Neobavezna jedinica prikazana uz `numeric` ili `gauge` vrijednost |
 | `text` | string | Markdown poruka za `text` chart type. Ostavite prazno i postavite `valueField` za renderiranje dinamičke poruke preuzete iz podataka prethodnog čvora. |
 | `title` | string | Neobavezan naslov charta |
+| `hitlWorkflowId` | string | Samo `hitl`. Prikazuje samo recenzije ovog Workflowa. Ako ostane prazno, widget prikazuje sve recenzije. |
+| `hitlNodeId` | string | Samo `hitl`. Sužava `hitlWorkflowId` na jedan korak: Agent s ljudskom recenzijom ili Slack korak odobrenja, gumba ili obrasca. |
 
 ## Chart types
 
@@ -51,7 +55,7 @@ Kada imate samo primjerene/testne podatke (bez stvarnog izvora), proizvedite te 
 - **proportion** — jedna horizontalna traka podijeljena na udjele s postotnom legendom (npr. raspodjela jezika). Koristi `labelField` + `valueField`.
 - **barGauge** — jedan horizontalni gauge po retku s gradijentom crveno→zeleno i vrijednošću (npr. slobodan prostor na disku). Koristi `labelField` + `valueField`, neobavezne `unit` i `max` (zadano je najveća vrijednost retka).
 - **text** — markdown poruka (npr. statusna napomena poput "Last execution at 19:47"). Stavite markdown u `text` za statičnu poruku ili ostavite `text` prazno i postavite `valueField` za renderiranje stringa proizvedenog na prethodnom čvoru. Podržava naslove, podebljano/kurziv, [popise](../nodes/chart-output-node.md#interactive-task-lists), poveznice i inline kod.
-- **hitl** — carousel vaših recenzija koje čekaju ljudsku obradu. Zaglavlje prikazuje `1/n pending`; lijeva strelica onemogućena je na prvoj kartici, a desna na posljednjoj. Naziv workflowa otvara to izvršavanje na canvasu. **Approve**, **Request changes** i **Reject** rješavaju recenziju, a ikona povijesti pokraj naslova widgeta otvara to izvršavanje u dijalogu povijesti na istoj stranici. Ovaj chart type zanemaruje retke prethodnog čvora, pa je workflow widgeta samo Chart Output čvor. Svaka prijavljena osoba vidi recenzije na workflowima koje posjeduje.
+- **hitl** — carousel vaših recenzija koje čekaju ljudsku obradu. Zaglavlje prikazuje `1/n pending`; lijeva strelica onemogućena je na prvoj kartici, a desna na posljednjoj. Naziv workflowa otvara to izvršavanje na canvasu. **Approve**, **Request changes** i **Reject** rješavaju recenziju, a ikona povijesti pokraj naslova widgeta otvara to izvršavanje u dijalogu povijesti na istoj stranici. Ovaj chart type zanemaruje retke prethodnog čvora, pa je workflow widgeta samo Chart Output čvor. Svaka prijavljena osoba vidi recenzije na workflowima koje posjeduje. Odaberite **Workflow** (i **Select agent** kada ima više koraka recenzije) u svojstvima čvora ili postavkama widgeta kako bi se umjesto toga prikazale recenzije tog Workflowa svima koji ga mogu otvoriti; pogledajte [HITL widgete](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktivni popisi zadataka
 
@@ -307,3 +311,17 @@ Prilikom generiranja widgeta pomoću **AI**, promptovi poput ovih jasno se mapir
 
 - [Kartica nadzorne ploče](../tabs/dashboard-tab.md) — izradite i rasporedite widgete
 - [Izlazni čvor](output-node.md) — završni čvor za redovne workflowe
+
+
+## Gumbi poveznica
+
+`table` može pretvoriti jedan stupac u gumbe koji otvaraju poveznicu. Postavite **Link column** u svojstvima čvora (ili `linkColumn` u DSL-u) na stupac čije ćelije sadrže URL te po želji **Link button text** (`linkLabel`). Svaka ćelija postaje gumb koji svoj URL otvara u novoj kartici. Bez teksta gumba, gumb prikazuje samo ikonu poveznice:
+
+| Vrijednost ćelije | Otvara |
+| ----------------- | ------ |
+| `https://jira.example.com/browse/T-1` | Drugo web-mjesto, u novoj kartici |
+| `/dashboards` | Stranicu unutar Heyma, u novoj kartici |
+
+Gumbima postaju samo adrese `http://` i `https://` te putanje koje počinju jednom kosom crtom `/`. Svaka druga vrijednost, poput `javascript:` ili `//host`, ostaje običan tekst, a prazna ćelija ne prikazuje ništa.
+
+Gumb radi uz [poveznicu retka](../tabs/dashboard-tab.md#detail-pages): klik na gumb otvara njegovu poveznicu u novoj kartici, a klik bilo gdje drugdje u retku i dalje otvara stranicu s detaljima.

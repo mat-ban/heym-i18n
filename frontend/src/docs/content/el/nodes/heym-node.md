@@ -16,7 +16,7 @@
 | Παράμετρος | Τύπος | Περιγραφή |
 |-----------|------|-------------|
 | `heymOperation` | Select | Ποια ανάγνωση θα εκτελεστεί |
-| `heymWorkflowId` | UUID | Το workflow-στόχος. Απαιτείται για τα `getWorkflow` και `getExecutionHistory`. Υποστηρίζει εκφράσεις. |
+| `heymWorkflowId` | UUID | Ορίστε το σε `all` στο `getExecutionHistory` για να διαβαστούν όλα τα προσβάσιμα Workflows. |
 | `heymLimit` | String | Μέγιστος αριθμός γραμμών που θα επιστραφούν. **Αφήστε το κενό ή εισαγάγετε `0` για να επιστραφούν τα πάντα** — αυτή είναι η προεπιλογή. Υποστηρίζει εκφράσεις. |
 | `heymStatus` | String | Προαιρετικό φίλτρο κατάστασης για το `getExecutionHistory`. Υποστηρίζει εκφράσεις. |
 | `heymSinceDays` | String | Προαιρετικό διάστημα αναδρομής σε ημέρες για το `getExecutionHistory`. Υποστηρίζει εκφράσεις. |
@@ -93,9 +93,11 @@ cron → heym (listWorkflows) → loop → heym (getWorkflow) → agent → slac
 | `$nodeLabel.executions[0].recovered` | Εάν η εκτέλεση ανακτήθηκε μετά από κατάρρευση |
 | `$nodeLabel.executions[0].inputs` | Τι έλαβε η εκτέλεση - το trigger payload ή την είσοδο του καλούντος |
 | `$nodeLabel.executions[0].outputs` | Η έξοδος του workflow για αυτήν την εκτέλεση |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Το workflow στο οποίο ανήκει το ιστορικό |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Το Workflow στο οποίο ανήκει το ιστορικό ή `null` με **{AW}** |
+`null` με **{AW}** |
 | `$nodeLabel.total` | Σύνολο εκτελέσεων που ταιριάζουν **πριν** από το όριο |
-| `$nodeLabel.by_status` | Μετρήσεις με κλειδί το status, για παράδειγμα `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_statu| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Με **{AW}**, το Workflow στο οποίο ανήκει κάθε εκτέλεση |
+s` | Μετρήσεις με κλειδί το status, για παράδειγμα `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Έναρξη του παραθύρου, ή `null` για το πλήρες ιστορικό |
 
 Οι εγγραφές φέρουν και `inputs` και `outputs` - τι έλαβε η εκτέλεση και τι απάντησε - αλλά ποτέ `node_results`: το per-node trace είναι η μεγαλύτερη στήλη του πίνακα και θα επισκίαζε όλα τα υπόλοιπα. Ανακτήστε μία μεμονωμένη εκτέλεση μέσω του API όταν χρειάζεστε το πλήρες trace.

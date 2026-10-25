@@ -1,6 +1,6 @@
 # Funcționalități Canvas
 
-Editorul de workflow-uri oferă mai multe funcționalități pentru depanare, testare și organizarea nodurilor: **Run to Node**, **Data Pin**, **Execution Logs**, **Enable/Disable** și **Extract to Sub-Workflow**.
+Editorul de workflow-uri oferă mai multe funcționalități pentru depanare, testare și organizarea nodurilor: **Run to Node**, **AI pe un nod**, **Data Pin**, **Execution Logs**, **Enable/Disable** și **Extract to Sub-Workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Urmăriți demonstrația Editorului</a></p>
@@ -12,6 +12,12 @@ Poziționați cursorul deasupra oricărui nod, cu excepția unei note lipicioase
 Dacă calea selectată are câmpuri de intrare, panoul **Run** din dreapta se deschide și focalizează primul câmp. Introduceți valorile, apoi faceți clic pe **Run to _node label_** sau apăsați **Ctrl+Enter** (Cmd+Enter pe macOS). Modul generic body focalizează editorul JSON body. Căile fără câmpuri de intrare rulează imediat fără a deschide panoul. Nodurile Pinned Input reutilizează ieșirea fixată fără a solicita intrare.
 
 Panoul păstrează ținta selectată pentru rulările ulterioare. Alegeți **Run full workflow** pentru a șterge ținta. Butoanele Run sunt dezactivate în timp ce o execuție este activă. O țintă dintr-o buclă oprește rularea când acel nod este atins pentru prima dată; selectarea unui nod după buclă rulează întreaga buclă anterioară.
+
+## AI pe un nod
+
+Treceți cu cursorul peste orice nod cu excepția unei note adezive și faceți clic pe **AI** deasupra lui. [AI Assistant](./ai-assistant.md) se deschide pe acel nod și oferă **Change this node as ...**, **Fix error in this node ...** și **Other**. În modul Agent, asistentul modifică doar acel nod; alte noduri, conexiuni și aspectul rămân neschimbate. Consultați [AI Assistant › Modificarea unui singur nod](./ai-assistant.md#changing-one-node).
+
+Butonul este ascuns la workflow-urile pe care aveți drept doar de vizualizare.
 
 ## Data Pin
 

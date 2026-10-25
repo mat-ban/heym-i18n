@@ -57,6 +57,18 @@ Deschiderea unui workflow la `/workflows/{workflowId}/{executionId}` aduce autom
 - Depanarea unei rulări eșuate prin inspectarea intrărilor și ieșirilor nodurilor
 - Compararea ieșirilor între rulări
 
+## Întrebați AI
+
+Ambele casete de dialog de istoric au un buton **Întrebați AI** (pictogramă de scânteie) lângă titlu. Acesta deschide [fila Chat](../tabs/chat-tab.md#asking-about-a-run) într-o conversație nouă cu workflow-ul și rularea selectată atașate ca chip-uri amovibile. Întrebați de ce rularea a fost lentă, ce a eșuat sau cereți Chat-ului să repare workflow-ul. Chat citește exact acea rulare, inclusiv trasa și erorile pe noduri.
+
+În dialogul All History, **Întrebați AI** apare doar când este selectată o rulare de workflow; rulările de chat și asistent nu îl afișează.
+
+## Cronologia rulării
+
+În detaliul rulării, butonul **Cronologie** (pictogramă de cronometru) de lângă **Extinde tot** schimbă lista **Pași** cu o cronologie de spanuri. Cât timp cronologia este afișată, același buton indică **Jurnale**; faceți clic pe el pentru a reveni la listă. În All History, butonul apare doar pentru rulările de workflow. Cronologia desenează o bară per nod în momentul în care a început, pentru a vedea ce nod a durat cât timp și care au rulat în paralel. Treceți cu cursorul peste o bară pentru a vedea durata; faceți clic pentru a deschide același inspector de detalii ca și [cronologia execuției](#execution-timeline-details) a editorului. Vizualizarea aleasă se păstrează pe durata dialogului deschis.
+
+Rulările înregistrate înainte de stocarea orelor de pornire ale nodurilor sunt așezate una după alta în funcție de durată.
+
 ## Execution Highlights
 
 După o rulare live — sau după **Bring to Canvas** — apare un popup **Execution Highlights** care poate fi închis, în **colțul din dreapta sus al Canvas-ului**. Este o modalitate rapidă de a vedea *ce a produs fiecare nod*, listat de sus în jos în ordinea execuției. Închideți-l cu **✕**; se redeschide la următoarea rulare.
@@ -146,7 +158,7 @@ Folosiți **Copy** lângă Inputs sau Outputs pentru a copia JSON-ul în clipboa
 
 ## Detalii despre cronologia execuției
 
-Când **Execution Log** al editorului este deschis, faceți clic pe butonul de cronometru pentru a afișa cronologia execuției. Selectați un interval pentru a deschide un inspector de detalii inline care preia zona rândurilor. Acesta afișează statusul pasului selectat, durata, numărul de încercări, informațiile despre reîncercare, erorile, trace ID-ul și o previzualizare compactă a rezultatului. Rezultatele de tip obiect și array folosesc același vizualizator `JsonTree` ca restul panoului Debug; valorile scalare folosesc o previzualizare text. Când un pas produce imagini (capturi de ecran Playwright, imagini generate, fișiere imagine), acestea apar ca miniaturi deasupra rezultatului, iar JSON-ul afișează un scurt substituent în locul base64 brut. Faceți clic pe o miniatură pentru a o deschide într-o casetă lightbox; butoanele cu săgeți sau tastele ←/→ parcurg fiecare imagine din rulare, cu un contor precum `2 / 5`. Folosiți **Open trace** pentru span-urile LLM și Agent atunci când un trace ID este disponibil.
+Când **Execution Log** al editorului este deschis, faceți clic pe butonul de cronometru pentru a afișa cronologia execuției. Selectați un interval pentru a deschide un inspector de detalii inline care preia zona rândurilor. Acesta afișează statusul pasului selectat, durata, numărul de încercări, informațiile despre reîncercare, erorile, trace ID-ul și o previzualizare compactă a rezultatului. Rezultatele de tip obiect și array folosesc același vizualizator `JsonTree` ca restul panoului Debug; valorile scalare folosesc o previzualizare text. Când un pas produce imagini (capturi de ecran Playwright, imagini generate, fișiere imagine sau imagini base64 în corpul unei solicitări, găsite oriunde în ieșire), acestea apar ca miniaturi deasupra rezultatului, iar JSON-ul afișează un scurt substituent în locul base64 brut. Faceți clic pe o miniatură pentru a o deschide într-o casetă lightbox; butoanele cu săgeți sau tastele ←/→ parcurg fiecare imagine din rulare, cu un contor precum `2 / 5`. Folosiți **Open trace** pentru span-urile LLM și Agent atunci când un trace ID este disponibil.
 ## Detalii nod pe mobil
 
 Pe un telefon, editorul afișează un arbore de workflow pe ecran complet în locul canvasului liber. Atingeți un nod din arbore care are un rezultat înregistrat pentru a-i deschide execuția ca detaliu pe ecran complet. Vizualizarea oferă file separate **Input Data**, **Output Data** și **Errors**. Fila de output afișează rezultatul înregistrat și oferă **Copy Output**; fila de input afișează configurația nodului selectat, iar fila de erori afișează eroarea înregistrată atunci când nodul a eșuat. Utilizați **Back to workflow** sau butonul de închidere pentru a reveni la arbore.

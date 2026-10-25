@@ -13,6 +13,8 @@ Düzenleyici dışındaki dokümantasyon soruları için [Chat with Heym](./chat
 
 Paneli açmak veya kapatmak için düzenleyicinin herhangi bir yerinde `Ctrl + I` / `Cmd + I` tuşlarına basın — kısayol, bir metin girişi odaklanmışken bile çalışır. Bkz. [Keyboard Shortcuts](./keyboard-shortcuts.md).
 
+Tek bir düğüm üzerinde çalışmak için tuval üzerinde üzerine gelin ve üzerindeki **AI** düğmesine tıklayın. Panel o düğüme odaklanmış olarak açılır. Bkz. [Tek Bir Düğümü Değiştirme](#changing-one-node).
+
 ## Paneli Kapatma
 
 **X** düğmesine tıklayın, `Ctrl + I` / `Cmd + I` tuşlarına basın veya Debug panel araç çubuğundaki **AI** düğmesini değiştirin. Başlık paneli sürükler; kapatmaz.
@@ -60,6 +62,33 @@ AI yanıtı \`\`\`json kod bloğu içinde geçerli bir workflow JSON bloğu (`no
 4. Workflow'u kaydedilmemiş olarak işaretler
 
 Ayrıştırma başarısız olursa, yanıtı yeniden oluşturmak için bir **Retry** düğmesi görünür.
+
+## Tek Bir Düğümü Değiştirme
+
+Tuval üzerindeki bir düğümün üzerine gelin ve üzerindeki **AI** düğmesine tıklayın. Panel, bu düğüme odaklanmış olarak Agent modunda açılır ve hangi düğümü değiştirdiğini gösterir:
+
+| Düğümün durumu... | Panel şunu gösterir |
+|---|---|
+| Mevcut çalıştırmada sonuç yok | **Modifying Node:** düğümün simgesi ve adıyla kompakt bir satırda. Asistan yalnızca düğümün yapılandırmasından düzenleme yapar; çıktıyı görmesi gerekiyorsa önce düğümü çalıştırın |
+| Mevcut çalıştırmada bir sonuç var | **Modifying Node: (Has Node Output)** düğümün hemen üzerinde: simge, ad ve tür, son durum ve süre ile başarısız olduysa hata. Asistan düğümü düzenlerken bu çıktıyı ve hatayı görür |
+
+Panelin hangi durumda olduğunu görmek için etiketin üzerine gelin.
+
+Panel hangi durumda olursa olsun asistan, düğüm başlığındaki kitap simgesinin arkasındaki düğüm belgelendirme sayfasını da okur. Bu sayfayı düğümün seçeneklerini anlamak ve bunlarla ilgili soruları yanıtlamak için kullanır.
+
+Mesajların altında üç seçenek isteği başlatır:
+
+| Seçenek | Ne yapar |
+|---|---|
+| **Change this node as ...** | Cümleyi tamamlayabilmeniz için mesaj kutusunu *Bu düğümü şuna dönüştür:* ile doldurur |
+| **Fix error in this node ...** | *Bu düğümdeki hatayı düzelt.* ile doldurur. Asistan bu düğümün son çalıştırmadaki hatasını okur |
+| **Other** | Boş bir mesaj kutusuna odaklanır |
+
+Metni düzenleyin ve **Send** düğmesine basın. Asistan yalnızca bu düğümü döndürür ve Heym bunu yerinde günceller: düğüm kimliğini, türünü ve adını korur, böylece diğer düğümlerdeki `$checkLinkedIn.result` gibi ifadeler çalışmaya devam eder. Diğer düğümler, bağlantılar ve düzen değişmez ve **Undo** önceki yapılandırmayı geri yükler.
+
+İstek düğümün içine sığmıyorsa, örneğin başka bir düğüm türü veya yeni bir düğüm gerektiriyorsa asistan düzenleme yapmak yerine neyin değişmesi gerektiğini belirtir. İş akışının tamamını yeniden düzenlemek için düğüm kartındaki **X** ile düğüm odağını kapatın. Paneli kapatmak da odağı temizler.
+
+[YOLO modu](#yolo-mode) odaklanmış bir düğümle çalışır: asistan düğümü değiştirir, iş akışını çalıştırır ve çalıştırma başarılı olana kadar düğümü düzeltir. **Ask** modunda odak, asistana sorunuzun hangi düğümle ilgili olduğunu bildirir ve tuval değiştirilmez.
 
 ## YOLO Mode
 

@@ -166,7 +166,14 @@
     "staleConflictTitle": "Workflow desatualizado detetado",
     "staleReloadMessage": "Este workflow foi guardado noutro local, pelo que este separador está a mostrar uma versão mais antiga. Executá-lo agora iria executar a versão guardada mais recente em vez da que aqui é apresentada.",
     "staleReloadTitle": "Workflow alterado noutro local",
-    "staleRunMessage": "Foi guardada uma versão mais recente deste workflow desde que o abriu. A execução irá substituí-la pela sua versão. Continuar?"
+    "staleRunMessage": "Foi guardada uma versão mais recente deste workflow desde que o abriu. A execução irá substituí-la pela sua versão. Continuar?",
+    "aiButtonTitle": "Alterar ou corrigir este nó com o assistente de IA",
+    "editNodeWithAi": "Editar {label} com IA",
+    "modifyingNode": "A modificar o nó:",
+    "hasNodeOutput": "(Tem saída do nó)",
+    "closeNodeFocus": "Fechar o foco do nó e editar todo o Workflow",
+    "nodeFocusRan": "Este nó foi executado. A IA vê a sua última saída e o erro e lê a documentação do nó.",
+    "nodeFocusNoOutput": "Este nó não tem saída na execução atual. Execute-o primeiro se a IA deve ver a sua saída. A IA lê a documentação do nó em qualquer caso."
   },
   "analytics": {
     "analysisPanel": {
@@ -327,7 +334,9 @@
     "suggestion5": "O que está armazenado nas minhas variáveis globais?",
     "suggestion6": "Que modelos de workflow estão disponíveis?",
     "unpin": "Desafixar",
-    "unreadMessage": "Mensagem não lida"
+    "unreadMessage": "Mensagem não lida",
+    "subtitle": "Executar Workflows e fazer perguntas",
+    "modelsLoadFailedDisabled": "Não foi possível carregar a lista de modelos desta credencial. O chat permanece desativado até ser possível obter um modelo."
   },
   "activeWorkflows": {
     "activeRefreshFailed": "{count} ativos · Última atualização falhou",
@@ -1035,7 +1044,10 @@
     "detailPageRecords": "Registos da página de detalhes",
     "detailPageRecordsHelp": "Os valores ?record= que este painel aceita quando uma ligação de linha o abre. Qualquer outro valor é recusado antes da execução do widget.",
     "unreachableDashboard": "Um painel que não pode abrir",
-    "runWorkflow": "Executar um Workflow"
+    "runWorkflow": "Executar um Workflow",
+    "openWorkflowNewTab": "Abrir o Workflow num novo separador",
+    "hitlFilterHelp": "Mostrar as revisões de todos os Workflows ou de apenas um. Lista os Workflows que pode abrir, próprios ou partilhados consigo, com um passo à espera de uma pessoa.",
+    "hitlSourcesLoadFailed": "Não foi possível carregar os seus Workflows."
   },
   "dashboard": {
     "askAi": "Perguntar à IA",
@@ -1213,7 +1225,10 @@
       "showNode": "Mostrar {label}",
       "spansCount": "{count} span | {count} spans"
     },
-    "toolCalls": "Chamadas de ferramentas"
+    "toolCalls": "Chamadas de ferramentas",
+    "askAi": "Perguntar à IA",
+    "askAiTitle": "Perguntar ao assistente de Chat sobre esta execução",
+    "noNodeSpans": "Não foram registados spans de nó para esta execução."
   },
   "logs": {
     "all": "Todos",

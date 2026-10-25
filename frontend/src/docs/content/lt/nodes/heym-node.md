@@ -16,7 +16,7 @@
 | Parametras | Tipas | Aprašymas |
 |------------|-------|-----------|
 | `heymOperation` | Pasirinkti | Kurią operaciją atlikti |
-| `heymWorkflowId` | UUID | Tikslo workflow. Reikalingas `getWorkflow` ir `getExecutionHistory`. Galima naudoti išraiškas. |
+| `heymWorkflowId` | UUID | Ties `getExecutionHistory` nustatykite `all`, kad būtų nuskaitytas kiekvienas pasiekiamas Workflow. |
 | `heymLimit` | String | Maksimalus grąžinamų eilučių skaičius. **Palikite tuščią arba įveskite `0`, kad grąžintumėte viską** — tai yra numatytoji reikšmė. Galima naudoti išraiškas. |
 | `heymStatus` | String | Pasirinktinė statuso filtravimo reikšmė `getExecutionHistory`. Galima naudoti išraiškas. |
 | `heymSinceDays` | String | Pasirinktinė atgalinės peržiūros dienomis reikšmė `getExecutionHistory`. Galima naudoti išraiškas. |
@@ -93,9 +93,11 @@ Grąžina vykdymo istorijos įrašus vienam workflow, naujausius pirmiausia.
 | `$nodeLabel.executions[0].recovered` | Ar vykdymas buvo atkurtas po gedimo |
 | `$nodeLabel.executions[0].inputs` | Ką vykdymas gavo - trigger payload arba skambinančiojo įvestis |
 | `$nodeLabel.executions[0].outputs` | Workflow išvestis tam vykdymui |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, kuriam priklauso istorija |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflow, kuriam priklauso istorija, arba `null` su **{AW}** |
+rba `null` su **{AW}** |
 | `$nodeLabel.total` | Iš viso atitinkančių vykdymų **prieš** limitą |
-| `$nodeLabel.by_status` | Skaičiai pagal statusą, pavyzdžiui, `{ "success": 41, "error": 3 }` |
+| `$nodeLabel.by_status` | `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Su **{AW}** Workflow, kuriam priklauso kiekvienas vykdymas |
+| Skaičiai pagal statusą, pavyzdžiui, `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Langas, arba `null` visai istorijai |
 
 Įrašai turi tiek `inputs`, tiek `outputs` - ką vykdymas gavo ir ką jis atsakė - tačiau niekada `node_results`: per mazgą sekimo informacija yra didžiausia stulpelyje ir užgožtų viską žemiau. Gaukite vieną vykdymą per API, kai reikia viso sekimo.

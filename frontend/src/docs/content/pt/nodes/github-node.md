@@ -211,6 +211,11 @@ Se o arquivo já existir, o Heym busca o SHA atual automaticamente antes de atua
 `List Organization Repositories`, `List User Repositories` e `Get User Repositories` suportam
 **Per Page** (1–100). O Heym solicita uma página de resultados; não há campo `page` para buscar
 páginas adicionais na mesma operação.
+
+### Return all pages
+
+Ative **Return all pages** para que uma execução percorra todas as páginas, começando em **Cursor** quando definido. Cada pedido solicita 100 itens, independentemente do valor de **Per Page**. O nó para após cerca de 1.000 itens (ou 100 pedidos): os objetos issue têm cerca de 6 KB cada, pelo que um limite maior produziria saídas de nó muito grandes. Se parar antes, devolve o que obteve com `has_more: true` e um `next_cursor` em vez de gerar um erro, e pode continuar passando esse cursor à execução seguinte. Parar o workflow ou atingir o seu tempo limite termina a obtenção entre páginas.
+
 ## Saída
 
 O formato exato depende da operação selecionada. Os campos comuns incluem:

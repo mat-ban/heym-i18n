@@ -1,6 +1,6 @@
 # Funkcie plátna
 
-Editor workflowov poskytuje niekoľko funkcií na ladenie, testovanie a organizáciu uzlov: **Spustenie po uzol**, **Pripnutie dát**, **Záznamy spustení**, **Povoliť/Zakázať** a **Extrahovať do pod-workflow**.
+Editor workflowov poskytuje niekoľko funkcií na ladenie, testovanie a organizáciu uzlov: **Spustenie po uzol**, **AI na uzle**, **Pripnutie dát**, **Záznamy spustení**, **Povoliť/Zakázať** a **Extrahovať do pod-workflow**.
 
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Pozrieť demo editora</a></p>
@@ -12,6 +12,12 @@ Prejdite kurzorom na ľubovoľný uzol okrem sticky note a kliknite na **Run** p
 Ak má zvolená cesta vstupné polia, otvorí sa panel **Run** na pravej strane a zameria sa na prvé pole. Zadajte hodnoty a kliknite na **Run to _označenie uzla_** alebo stlačte **Ctrl+Enter** (Cmd+Enter na macOS). Režim generického tela zameria editor JSON tela. Cesty bez vstupných polí sa spustia okamžite bez otvorenia panela. Pripnuté vstupné uzly znovu použijú svoj pripnutý výstup bez vyžiadania vstupu.
 
 Panel si zachová zvolený cieľ pre nasledujúce spustenia. Ak chcete cieľ vymazať, zvoľte **Run full workflow**. Tlačidlá spustenia sú počas aktívneho spustenia zakázané. Cieľ vo vnútri slučky zastaví spustenie pri prvom dosiahnutí tohto uzla; výber uzla za slučkou spustí kompletnú nadradenú slučku.
+
+## AI na uzle
+
+Prejdite myšou na ľubovoľný uzel okrem poznámky a kliknite na **AI** nad ním. [AI Assistant](./ai-assistant.md) sa otvorí na danom uzle a ponúkne **Change this node as ...**, **Fix error in this node ...** a **Other**. V režime Agent asistent mení iba tento uzel; ostatné uzly, prepojenia a rozloženie zostávajú nezmenené. Pozrite [AI Assistant › Zmena jedného uzla](./ai-assistant.md#changing-one-node).
+
+Tlačidlo je skryté pri workflowoch, ktoré si môžete iba prezerať.
 
 ## Pripnutie dát
 

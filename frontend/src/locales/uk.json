@@ -478,7 +478,14 @@
     "extract": "Виділити",
     "mySubWorkflow": "Мій Sub-Workflow",
     "moreNodes": "+{count} ще",
-    "runToNode": "Запустити до {label}"
+    "runToNode": "Запустити до {label}",
+    "aiButtonTitle": "Змінити або виправити цей вузол за допомогою AI Assistant",
+    "editNodeWithAi": "Редагувати {label} за допомогою AI",
+    "modifyingNode": "Змінення вузла:",
+    "hasNodeOutput": "(Має вихідні дані вузла)",
+    "closeNodeFocus": "Закрити фокус на вузлі та редагувати весь Workflow",
+    "nodeFocusRan": "Цей вузол виконано. AI бачить його останні вихідні дані та помилку й читає документацію вузла.",
+    "nodeFocusNoOutput": "Цей вузол не має вихідних даних у поточному запуску. Спочатку виконайте його, якщо AI має бачити його вихідні дані. AI в обох випадках читає документацію вузла."
   },
   "nodes": {
     "title": "Вузли",
@@ -1442,7 +1449,9 @@
     "editPrompt": "Редагувати prompt",
     "cancelEdit": "Скасувати редагування",
     "saveQueuedMessage": "Зберегти повідомлення в черзі",
-    "editQueuedMessage": "Редагувати повідомлення в черзі"
+    "editQueuedMessage": "Редагувати повідомлення в черзі",
+    "subtitle": "Запускайте Workflows і ставте запитання",
+    "modelsLoadFailedDisabled": "Не вдалося завантажити список моделей цих облікових даних. Chat залишається вимкненим, доки не вдасться отримати модель."
   },
   "teams": {
     "title": "Команди",
@@ -1672,7 +1681,10 @@
       "error": "Помилка",
       "cached": "З кешу",
       "cancelled": "Скасовано"
-    }
+    },
+    "askAi": "Запитати AI",
+    "askAiTitle": "Запитайте Chat-асистента про цей запуск",
+    "noNodeSpans": "Для цього запуску не записано жодних span вузлів."
   },
   "portal": {
     "loadingPortal": "Завантаження порталу...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Записи сторінки деталей",
     "detailPageRecordsHelp": "Значення ?record=, які ця панель приймає під час відкриття за посиланням у рядку. Усе інше відхиляється перед запуском віджета.",
     "unreachableDashboard": "Панель приладів, яку не вдається відкрити",
-    "runWorkflow": "Запустити Workflow"
+    "runWorkflow": "Запустити Workflow",
+    "openWorkflowNewTab": "Відкрити Workflow у новій вкладці",
+    "hitlFilterHelp": "Показувати відгуки з усіх Workflows або лише з одного. Перелічує Workflows, які ви можете відкрити, ваші або надані вам у спільний доступ, із кроком, що очікує на людину.",
+    "hitlSourcesLoadFailed": "Не вдалося завантажити ваші Workflows."
   },
   "drive": {
     "filesCount": "({count} файлів)",

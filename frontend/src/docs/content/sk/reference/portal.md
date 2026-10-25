@@ -51,6 +51,7 @@ Vstupné polia pochádzajú z uzlov [Input](../nodes/input-node.md). API extrahu
 ## Autentifikácia a sessions
 
 - **WorkflowPortalUser**: Používateľské meno/heslo pre jednotlivé workflowy (ak je povolená autentifikácia)
+- **Odstránenie posledného používateľa**: Pri povolenom portáli spôsobuje vymazanie posledného používateľa portálu, že je portál opäť verejný; dialóg nastavení najprv žiada potvrdenie
 - **PortalSession**: Session tokeny s TTL 168 hodín
 - **Obmedzenie rýchlosti**: 3 neúspešné pokusy o prihlásenie → 24-hodinový zákaz pre daný workflow+IP
 - Expirované sessions sa čistia pomocou cron jobu

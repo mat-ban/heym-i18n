@@ -381,7 +381,7 @@ HTML 輸出映射器節點會渲染單一 HTML 範本，並將 `$nodeLabel.field
 
 #### [Chart Output](../nodes/chart-output-node.md)
 
-Chart Output 節點是 [Dashboard](../tabs/dashboard-tab.md) 小工具 Workflow 的終端節點。它會將上游節點所產生的資料列轉換為標準化的圖表 Payload，供 Dashboard 渲染。選擇 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（或多系列時使用 `series`，或使用 `text` 作為 markdown 訊息），並將其置於最後；它沒有輸出邊。HITL 會忽略上游資料列，並列出您待處理的人工審核項目。
+Chart Output 節點是 [Dashboard](../tabs/dashboard-tab.md) 小工具 Workflow 的終端節點。它會將上游節點所產生的資料列轉換為標準化的圖表 Payload，供 Dashboard 渲染。選擇 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（或多系列時使用 `series`，或使用 `text` 作為 markdown 訊息），並將其置於最後；它沒有輸出邊。HITL 會忽略上游資料列，並列出您待處理的人工審核項目。另一列作為可在新標籤頁中打開 URL 的鏈接按鈕（`linkColumn`，使用 `linkLabel` 指定按鈕文本）
 
 另請參閱 [Dashboard](../tabs/dashboard-tab.md)、[Set](../nodes/set-node.md) 及 [Output](../nodes/output-node.md)。
 
@@ -477,6 +477,8 @@ Heym 在編輯器中提供多種快速鍵：Command Palette（Ctrl+K）、Run（
 AI Assistant 是一個從 Debug 面板開啟的聊天面板，讓你以自然語言建立或修改 workflow。選擇一個 [credential](./credentials.md) 與 model，然後描述你的需求；AI 會串流回應，且程式碼區塊中任何有效的 [workflow JSON](./workflow-structure.md) 都會自動解析並套用至 canvas。相容的瀏覽器支援語音輸入。
 
 開啟 **YOLO mode**（Agent mode，預設為關閉）後，assistant 會測試它所建立的內容。每次變更後，它會在 canvas 上執行 workflow、讀取結果並修正 workflow，直到符合你的要求為止，每則訊息最多執行 5 次。它會在第一次執行前要求測試輸入，可在需要其他 workflow 的結果時執行它們，並在運作過程中顯示每個步驟。請參閱 [AI Assistant › YOLO Mode](./ai-assistant.md#yolo-mode)。
+
+點擊畫布上任何節點上方的 **AI** 即可僅更改或修復該節點。面板會顯示其正在修改的節點（運行後帶有其最新結果），並提供 **Change this node as ...**、**Fix error in this node ...** 和 **Other**。僅該節點會被更新；工作流的其餘部分和佈局保持原樣。請參閱 [AI Assistant › 修改單個節點](./ai-assistant.md#changing-one-node)。
 
 當 workflow 儲存記錄時，assistant 會詢問要使用哪個 [data table](../tabs/datatable-tab.md)，或建立一個包含 workflow 所需欄位的 data table。請參閱 [AI Assistant › Data tables](./ai-assistant.md#data-tables)。
 
@@ -805,7 +807,7 @@ Analytics 分頁顯示執行指標與趨勢。摘要統計包含總執行次數�
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 分頁是一個 Grafana 風格的空間，您可以在其中建立圖表小工具的網格，每個小工具都由其各自隱藏的 Heym workflow 算繪而成。您可以建立所需數量的 dashboard，並將每個 dashboard 以唯讀或可編輯的方式與使用者或 teams 分享；小工具一律以擁有者的 credentials 執行，因此每個人看到的資料都相同。用自然語言描述一個指標，AI 便會產生該小工具，或手動新增一個並挑選圖表類型，以範例資料預覽：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是您待處理的人工審查的輪播。標頭會顯示 `1/n pending`。workflow 名稱會在畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目，而小工具標題旁的歷史圖示會在同一頁面的歷史對話框中開啟該次執行。小工具會快取其結果，可用 AI 微調（每次變更都會儲存至 [Edit History](./edit-history.md)），可連同其完整 workflow 一併複製，可用 Tidy up 重新排列，並可在編輯模式中拖曳或調整大小。表格可顯示狀態標籤，並將其資料列連結至會將所點擊資料列記錄讀取為 `$page.record` 的詳細資訊儀表板；而執行（Run）小工具可從儀表板執行 workflow：針對拖放的檔案、搭配其輸入欄位，或透過執行按鈕。由於每個小工具都是一個 workflow，任何您能取得的資料——[HTTP](../nodes/http-node.md) 呼叫、[BigQuery](../nodes/bigquery-node.md) 查詢、[RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 輸出——都能成為圖表。
+Dashboard 分頁是一個 Grafana 風格的空間，您可以在其中建立圖表小工具的網格，每個小工具都由其各自隱藏的 Heym workflow 算繪而成。您可以建立所需數量的 dashboard，並將每個 dashboard 以唯讀或可編輯的方式與使用者或 teams 分享；小工具一律以擁有者的 credentials 執行，因此每個人看到的資料都相同。用自然語言描述一個指標，AI 便會產生該小工具，或手動新增一個並挑選圖表類型，以範例資料預覽：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是您待處理的人工審查的輪播。標頭會顯示 `1/n pending`。workflow 名稱會在畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目，而小工具標題旁的歷史圖示會在同一頁面的歷史對話框中開啟該次執行。小工具會快取其結果，可用 AI 微調（每次變更都會儲存至 [Edit History](./edit-history.md)），可連同其完整 workflow 一併複製，可用 Tidy up 重新排列，並可在編輯模式中拖曳或調整大小。表格可顯示狀態標籤，並將其資料列連結至會將所點擊資料列記錄讀取為 `$page.record` 的詳細資訊儀表板；而執行（Run）小工具可從儀表板執行 workflow：針對拖放的檔案、搭配其輸入欄位，或透過執行按鈕。由於每個小工具都是一個 workflow，任何您能取得的資料——[HTTP](../nodes/http-node.md) 呼叫、[BigQuery](../nodes/bigquery-node.md) 查詢、[RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 輸出——都能成為圖表。HITL 小部件的設置可以將其縮小到單個工作流的審核，或其中的代理或 Slack 批准步驟；這樣的小部件會向所有可以打開該工作流的人顯示它們，並對無法打開的人隱藏。
 
 另請參閱 [Chart Output node](../nodes/chart-output-node.md)、[Analytics](../tabs/analytics-tab.md) 與 [Execution History](./execution-history.md)。
 

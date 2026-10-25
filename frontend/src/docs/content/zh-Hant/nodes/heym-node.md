@@ -16,7 +16,7 @@
 | 參數 | 類型 | 說明 |
 |-----------|------|-------------|
 | `heymOperation` | Select | 要執行哪一項讀取 |
-| `heymWorkflowId` | UUID | 目標 Workflow。`getWorkflow` 與 `getExecutionHistory` 必填。支援 Expression。 |
+| `heymWorkflowId` | UUID | 在 `getExecutionHistory` 中將其設定為 `all`，即可讀取您能存取的所有 Workflow。 |
 | `heymLimit` | String | 要回傳的最大列數。**留空或輸入 `0` 即回傳全部**——這是預設值。支援 Expression。 |
 | `heymStatus` | String | `getExecutionHistory` 的選用狀態篩選條件。支援 Expression。 |
 | `heymSinceDays` | String | `getExecutionHistory` 的選用回溯天數。支援 Expression。 |

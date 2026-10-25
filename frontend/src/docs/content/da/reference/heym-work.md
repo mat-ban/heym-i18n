@@ -9,11 +9,30 @@ Heym Work kører som en selvstændig container ved siden af Heym med en separat 
 | Område | Funktion |
 |--------|----------|
 | **Chat** | Beskrivelse af en opgave sker via tekst eller stemme. Heym efterspørger de nødvendige oplysninger, opbygger et workflow, tester det og markerer det som Verificeret. |
+| **Flows** | Redaktører opbygger et flow ud fra valg frem for på et lærred: hvad der starter det, et valgfrit AI-udkast samt handlinger i Slack, Google Sheets og e-mail. Svar fra Slack fortsætter kørslen, og godkendelser afventer også i Aktivitet. Se [Flows](#flows). |
 | **Sider** | Fastgjorte sider med widgets: tal, grafer, tabeller med statuschips, filoverførselsfelter og godkendelser. En tabelrække kan åbne sin egen detaljeside. |
 | **Godkendelser** | Gennemgange fra [Human-in-the-Loop](./human-in-the-loop.md)-trin afventer i Aktivitet og på sider med valgmulighederne Godkend, Anmod om ændringer og Afvis. |
 | **Aktivitet** | Hver kørsel med angivelse af den person, der startede den, og instansen, der udførte den. |
 | **Roller** | Ejer, Redaktør og Læser. Log ind foregår via det [Single Sign-On](./sso.md), som Heym allerede benytter. |
 | **Brancheudgaver** | Udgaver til jura, uddannelse, finans, logistik, energi og e-handel åbnes med færdige sider, eksempeldata og tilpassede workflows til branchen. |
+
+## Flows
+
+**Flows** findes i menuen i Heym Work for Redaktører og Ejere. Et flow er sammensat af valg i stedet for noder, og Heym Work gemmer det som et almindeligt Heym-workflow via Heym-API'et på vegne af den person, der oprettede det. Heyms adgangsregler, redigeringshistorik og triggersynkronisering gælder som i editoren, og hver kørsel vises i Aktivitet som enhver anden.
+
+| Del | Valgmuligheder |
+|---|---|
+| **Hvad der starter det** | Efter behov, ifølge en tidsplan, ved en Slack-meddelelse, når en Google Sheets-fane ændres (rækker tilføjet, ændret eller slettet), eller når en e-mail modtages i en indbakke. Regnearks- og e-mailtriggere kontrollerer hvert 1., 5., 15. eller 60. minut. |
+| **AI-udkast** (valgfrit) | En model og instruktioner omdanner det, der startede flowet, til tekst for de efterfølgende trin. Et flow, der ikke starter fra et regneark eller en e-mail, kan først læse seneste Slack-meddelelser fra en kanal eller tråd. |
+| **Hvad der sker derefter** | Handlinger i rækkefølge i et af de tre værktøjer, uanset hvad der startede flowet. **Slack:** kanalmeddelelse, direkte besked, formular, meddelelse med knapper, godkendelse, trådsvar, meddelelsesopdatering og endeligt resultat. **Google Sheets:** tilføj en række eller opdater den række, der blev ændret. **E-mail:** send en e-mail. |
+
+- **Svar fortsætter kørslen.** En godkendelse, knapper eller en formular sætter kørslen på pause, indtil nogen svarer i Slack. En godkendelse afventer også i Aktivitet, og en beslutning truffet et af stederne fjerner knapperne fra Slack-meddelelsen. Senere Slack-trin forbliver i den første meddelelses tråd.
+- **Ét enkelt Forbindelseskort.** Hvert flow viser Slack-arbejdsområdet, Google Sheets-kontoen og de indbakker, det læser fra og sender med. Det er Heym-legitimationsoplysninger: **Slack Bot** (et bot-token, `xoxb-…`), **Google Sheets**, **IMAP** og **SMTP**; manglende legitimationsoplysninger kan tilføjes direkte fra flowet.
+- **Én Slack-app til hvert flow.** I Slack-appen indstilles URL'en for interaktivitetsanmodninger til `https://<dit Heym>/api/slack/interactions/<legitimations-id>` og URL'en for hændelsesabonnementer til `https://<dit Heym>/api/slack/events/<legitimations-id>`. Heym Work viser begge for den valgte forbindelse. Alle flows på disse legitimationsoplysninger deler dem.
+- **Slack-triggere vælger, hvad de lytter til:** meddelelser i kanaler og direkte beskeder, direkte beskeder til botten, omtaler af botten eller meddelelser i en enkelt kanal. Bottens egne indlæg starter aldrig et flow.
+- **Krav.** Flows kræver Heym 0.0.131 eller nyere.
+
+De trin, et flow opbygger, er de samme noder, som kan bruges på lærredet: [Slack](../nodes/slack-node.md), [Slack Trigger](../nodes/slack-trigger-node.md), [Google Sheets](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md), [IMAP Trigger](../nodes/imap-trigger-node.md), [Send Email](../nodes/send-email-node.md) og [Cron](../nodes/cron-node.md).
 
 ## Tilslutning af Heym Work
 
@@ -26,7 +45,7 @@ Forbindelsen konfigureres under **Indstillinger → Heym Work**. Fanen vises ude
 | **Heym Work-adresse** | Placeringen, hvor Heym Work kører, for eksempel `https://work.example.com`. Login returnerer hertil. Tryk på **Gem**. |
 | **Integrationsnøgle** | **Generer nøgle** opretter den nøgle, Heym Work anvender til hver anmodning til Heym. Den vises en enkelt gang med en kopieringsknap. Heym gemmer udelukkende dens hash. |
 | **Aktivér Heym Work** | Tænder for forbindelsen. Kræver, at adresse og nøgle er angivet forinden. |
-| Status | **Sidst set**, **Work-version** og **Licens**, som Heym Work senest har rapporteret dem. |
+| **Branche- og teamudgaver** | Udgave til jura, uddannelse, finans, logistik, energi og e-handel samt udgaver til IT, salg, marketing og HR for virksomhedsteams åbner med sider, eksempeldata og workflows til dette arbejde. |
 
 Åbn derefter Heym Work-adressen og afslut konfigurationen:
 

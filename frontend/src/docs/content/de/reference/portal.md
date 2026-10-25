@@ -51,6 +51,7 @@ Eingabefelder stammen aus [Input](../nodes/input-node.md)-Knoten. Die API extrah
 ## Authentifizierung und Sessions
 
 - **WorkflowPortalUser**: Benutzername/Passwort pro Workflow (wenn Authentifizierung aktiviert ist)
+- **Letzten Benutzer entfernen**: Wenn das Portal aktiviert ist, macht das Löschen des letzten Portalbenutzers das Portal wieder öffentlich; der Einstellungsdialog bittet zuvor um Bestätigung
 - **PortalSession**: Session-Token mit 168 Stunden TTL
 - **Rate Limiting**: 3 fehlgeschlagene Anmeldeversuche → 24h Sperre pro Workflow+IP
 - Abgelaufene Sessions werden durch einen Cron-Job bereinigt

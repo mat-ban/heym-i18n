@@ -16,7 +16,7 @@
 | 参数 | 类型 | 描述 |
 |-----------|------|-------------|
 | `heymOperation` | Select | 执行哪种读取操作 |
-| `heymWorkflowId` | UUID | 目标 Workflow。`getWorkflow` 和 `getExecutionHistory` 必填。支持表达式。 |
+| `heymWorkflowId` | UUID | 在 `getExecutionHistory` 中将其设置为 `all`，即可读取您能访问的所有 Workflow。 |
 | `heymLimit` | String | 返回的最大行数。**留空或输入 `0` 将返回全部内容**——这是默认行为。支持表达式。 |
 | `heymStatus` | String | `getExecutionHistory` 的可选状态过滤条件。支持表达式。 |
 | `heymSinceDays` | String | `getExecutionHistory` 的可选回溯天数。支持表达式。 |

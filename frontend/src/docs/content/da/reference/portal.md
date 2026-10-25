@@ -51,6 +51,7 @@ Inputfelter kommer fra [Input](../nodes/input-node.md)-noder. API'en udtrækker 
 ## Godkendelse og sessioner
 
 - **WorkflowPortalUser**: Brugernavn/adgangskode pr. workflow (når godkendelse er aktiveret)
+- **Fjernelse af den sidste bruger**: Når portalen er aktiveret, gør sletning af den sidste portalbruger portalen offentlig igen; indstillingsdialogen beder om bekræftelse først
 - **PortalSession**: Sessionstokens med 168-timers levetid
 - **Rate limiting**: 3 mislykkede login-forsøg → 24-timers blokering pr. workflow+IP
 - Udløbne sessioner ryddes af et cron-job

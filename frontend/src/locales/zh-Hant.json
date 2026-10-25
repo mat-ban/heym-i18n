@@ -478,7 +478,14 @@
     "extract": "擷取",
     "mySubWorkflow": "我的 Sub-Workflow",
     "moreNodes": "+{count} 個更多",
-    "runToNode": "執行至 {label}"
+    "runToNode": "執行至 {label}",
+    "aiButtonTitle": "使用 AI 助理變更或修復此節點",
+    "editNodeWithAi": "使用 AI 編輯 {label}",
+    "modifyingNode": "正在修改節點：",
+    "hasNodeOutput": "（有節點輸出）",
+    "closeNodeFocus": "關閉節點聚焦並編輯整個 Workflow",
+    "nodeFocusRan": "此節點已執行。AI 可以看到其最近的輸出與錯誤，並會閱讀該節點的文件。",
+    "nodeFocusNoOutput": "此節點在目前的執行中沒有輸出。若希望 AI 看到其輸出，請先執行該節點。無論哪種情況，AI 都會閱讀該節點的文件。"
   },
   "nodes": {
     "title": "節點",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "編輯佇列訊息",
     "deleteQueuedMessage": "刪除佇列中的訊息",
     "startedByMcp": "由 MCP 用戶端發起",
-    "newChatTitle": "新增對話"
+    "newChatTitle": "新增對話",
+    "subtitle": "執行 Workflow 並提問",
+    "modelsLoadFailedDisabled": "無法載入此憑證的模型清單。在能夠取得模型之前，Chat 將保持停用。"
   },
   "teams": {
     "title": "團隊",
@@ -1672,7 +1681,10 @@
       "error": "錯誤",
       "cached": "已快取",
       "cancelled": "已取消"
-    }
+    },
+    "askAi": "詢問 AI",
+    "askAiTitle": "就此次執行詢問 Chat 助理",
+    "noNodeSpans": "此次執行未記錄任何節點 span。"
   },
   "portal": {
     "loadingPortal": "正在載入入口網站...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "詳細資訊頁面記錄",
     "detailPageRecordsHelp": "資料列連結開啟此儀表板時接受的 ?record= 參數值。其他任何數值皆會在小工具執行前遭拒絕。",
     "unreachableDashboard": "無法開啟的儀表板",
-    "runWorkflow": "執行 Workflow"
+    "runWorkflow": "執行 Workflow",
+    "openWorkflowNewTab": "在新分頁中開啟 Workflow",
+    "hitlFilterHelp": "顯示所有 Workflow 或僅單一 Workflow 的審核。列出您可以開啟的 Workflow（您自己的或與您共享的），其中包含等待人員處理的步驟。",
+    "hitlSourcesLoadFailed": "無法載入您的 Workflow。"
   },
   "drive": {
     "filesCount": "（{count} 個檔案）",

@@ -18,14 +18,14 @@ Logrīks ir viena diagramma uz režģa. Atbalstītie diagrammu tipi:
 - **Līnija**
 - **Laukums** (aizpildīta tendence, atbalsta vairākas sērijas)
 - **Pīrāgs**
-- **Tabula** (ritināma; vienu kolonnu var attēlot kā [statusa žetonus](../nodes/chart-output-node.md#status-chips), un rindas var atvērt [detalizētās informācijas lapu](#detail-pages))
+- **Tabula** (ritināma; noklikšķiniet uz kolonnas galvenes, lai kārtotu augošā secībā, un noklikšķiniet vēlreiz, lai kārtotu dilstošā secībā. Kolonnu var attēlot kā [statusa mikroshēmas](../nodes/chart-output-node.md#status-chips), kolonna var saturēt [saišu pogas](../nodes/chart-output-node.md#link-buttons), kas atver URL jaunā cilnē, un rindas var atvērt [detalizētās informācijas lapu](#detalizetas-informacijas-lapas))
 - **Skaitlis** (viens KPI vērtība ar opciju vienību)
 - **Mērītājs** (viena vērtība pret min–max diapazonu, piemēram, procents)
 - **Izkliedēšana** (X/Y punkti korelācijas diagrammām)
 - **Proporcija** (viens stabiņš sadalīts daļās ar procentu leģendu, piemēram, valodas sadalījums)
 - **Stabiņa mērītājs** (viens horizontāls mērītājs katrā rindā ar sarkano→zaļo gradientu un vērtību, piemēram, brīva diska vieta)
 - **Teksts** (markdown ziņojums, piemēram, statusa piezīme "Pēdējā izpilde plkst. 19:47"; atbalsta [interaktīvos izvēles rūtiņas](../nodes/chart-output-node.md#interactive-task-lists), kad markdown ir statisks, un [skaitliskās sarakstus](../nodes/chart-output-node.md#numbered-lists) pielāgotai vai dilstošai numurēšanai)
-- **HITL** (jūsu gaidošās cilvēku atsauksmes. Galvene rāda `1/n gaidošs`. Workflow nosaukums atver šo izpildi kanvā. **Apstiprināt**, **Pieprasīt izmaiņas** un **Noraidīt** to atrisina. Vēstures ikona blakus logrīka nosaukumam atver šo izpildi vēstures dialogā šajā lapā. Logrīks neizmanto augšupējo rindas, un katra persona redz savu rindu)
+- **HITL** (jūsu gaidošās cilvēku atsauksmes. Galvene rāda `1/n gaidošs`. Workflow nosaukums atver šo izpildi kanvā. **Apstiprināt**, **Pieprasīt izmaiņas** un **Noraidīt** to atrisina. Vēstures ikona blakus logrīka nosaukumam atver šo izpildi vēstures dialogā šajā lapā. Logrīks neizmanto augšupējo rindas, un katra persona redz savu rindu. Tā vietā tā var rādīt viena Workflow pārskatīšanas ikvienam, kurš var atvērt šo Workflow; skatiet [HITL logrīki](#hitl-logriki))
 
 Papildus diagrammām logrīks **Run a workflow** palaiž vienu no jūsu workflow tieši no vadības paneļa: ar nomestu failu, ar tā ievades laukiem vai ar pogu Run; skatiet [Izpildes logrīki](#run-widgets).
 
@@ -41,6 +41,20 @@ Katrs logrīks ielādē savus datus asinkroni, kad Jūs atverat cilni, tāpēc l
 Logrīkam **Run a workflow** tā vietā izvēlieties workflow, kuru tas palaiž; atlasītājs norāda, kā logrīks palaidīs katru no tiem. Logrīks tiek pievienots tieši režģim; nav jāveido jauns workflow.
 
 Divreiz noklikšķiniet uz logrīka (vai izmantojiet tā rediģēšanas pogu), lai jebkurā laikā atkārtoti atvērtu tā workflow. Izmantojiet **Klonēt logrīku** logrīka galvenē, lai dublētu gan logrīku, gan tā pilnu workflow. Kopija tiek novietota zem oriģināla un apzīmēta ar **(Kopija)**, lai Jūs varētu to rediģēt neatkarīgi.
+
+## HITL logrīki
+
+Jauns HITL logrīks parāda katru pārskatīšanu, kas gaida jūsu rindā. Lai parādītu tikai viena Workflow pārskatīšanas, atveriet logrīka **Iestatījumi**:
+
+1. Sadaļā **Workflow** izvēlieties Workflow. Sarakstā ir Workflow, kurus varat atvērt – jūsu pašu vai koplietoti ar jums vai jūsu komandu –, kuriem ir darbība, kas gaida personu: Agent ar cilvēka pārskatīšanu vai Slack apstiprināšanas, pogu vai veidlapas darbība. Blakus esošā ikona atver šo Workflow jaunā cilnē.
+2. Ja Workflow ir tieši viena šāda darbība, tā tiek atlasīta automātiski. Ja to ir vairākas, **Select agent** tās uzskaita pēc mezgla nosaukuma, vispirms norādot **All agents**; Slack darbības ir atzīmētas ar **(Slack)**.
+3. Saglabājiet. Galvenes `1/n pending` skaita tikai šīs pārskatīšanas. Izvēlieties **Visi Workflows**, lai atkal parādītu savu rindu.
+
+Tāda pati izvēle ir pieejama audeklā Chart Output mezgla rekvizītos. To var veikt **Precizēt ar AI** („rādīt tikai rēķinu apstiprinājumus“), kā arī jauna logrīka apraksts, kurā nosaukts Workflow. Katra izmaiņa ir Workflow rediģēšana, tāpēc tā parādās Edit History.
+
+- **Kas redz pārskatīšanas.** Logrīks, kas filtrēts pēc Workflow, parāda šī Workflow pārskatīšanas ikvienam, kurš var atvērt šo Workflow, un šie lietotāji var apstiprināt, pieprasīt izmaiņas vai noraidīt no tā, tāpat kā viņi varētu palaist Workflow. Nefiltrēts logrīks katrai personai parāda viņas rindu.
+- **Kas redz logrīku.** Persona, kura nevar atvērt izvēlēto Workflow, logrīku neredz vispār, pat vadības panelī, kas tiek koplietots ar viņu. Kad vadības paneļa īpašnieks zaudē piekļuvi Workflow vai tas tiek dzēsts, īpašnieks redz „You no longer have access to the workflow this widget shows“ un var izvēlēties citu **Iestatījumos**.
+- **Tikai pieejamas izvēles.** Workflow, kuru nevarat atvērt, tiek noraidīts, saglabājot logrīku, neatkarīgi no tā, vai tas tiek darīts no iestatījumiem, audekla vai AI.
 
 ## Detalizētās informācijas lapas
 
@@ -75,6 +89,10 @@ Rezultāta poga **Wrap** aplauž garas izvades rindas lodziņa iekšpusē; izsl�
 ## Logrīka ģenerēšana ar AI
 
 Noklikšķiniet uz **AI**, aprakstiet metrikas, ko vēlaties (piemēram, "workflow panākumu līmenis pēdējās 30 dienās kā stabiņa diagramma"), un izvēlieties LLM akreditācijas datus un modeli. Heym ģenerē pilnu logrīka workflow, kas beidzas ar Chart Output mezglu, un pievieno to režģim. Skatiet [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) piemēru uzvednēm katram diagrammas tipam.
+
+Logrīks saņem īsu viena vai divu vārdu nosaukumu jūsu pieprasījuma valodā, piemēram, „Atvērtās lietas“. Nosaukumā nekad nav datu tabulas ID; kad modelis nosauc logrīku ar teikumu, Heym saglabā tā pirmos vārdus.
+
+Logrīku API var arī izveidot **skaitītāja karti** bez AI: `text` logrīks datu tabulā (`data_table_id`) ar `count_column` un `count_value` parāda, cik rindās ir šī vērtība; logrīka nosaukums norāda vērtību. Heym Work lapas, kas izveidotas no datu tabulas, ievada ar vienu skaitītāja karti katram statusam.
 
 Izmantojiet logrīka pogu **Pielāgot ar AI**, lai pārskatītu esošu logrīku ar jaunu instrukciju. Katrs AI pielāgojums saglabā iepriekšējo workflow logrīka **Vēstures rediģēšana**, tāpēc Jūs varat pārskatīt vai atgriezt izmaiņas no workflow redaktora.
 

@@ -212,6 +212,11 @@ Se o arquivo já existir, o Heym busca o SHA atual automaticamente antes de atua
 **Per Page** (1–100). O Heym solicita uma página de resultados; não há campo `page` para buscar
 páginas adicionais na mesma operação.
 
+
+### Return all pages
+
+Ative **Return all pages** para que uma execução percorra todas as páginas, começando em **Cursor** quando definido. Cada requisição pede 100 itens, independentemente do valor de **Per Page**. O nó para após cerca de 1.000 itens (ou 100 requisições): os objetos issue têm cerca de 6 KB cada, então um limite maior produziria saídas de nó muito grandes. Se parar antes, ele retorna o que obteve com `has_more: true` e um `next_cursor` em vez de gerar um erro, e você pode continuar passando esse cursor para a próxima execução. Parar o workflow ou atingir o seu tempo limite encerra a busca entre páginas.
+
 ## Output
 
 O formato exato depende da operação selecionada. Campos comuns incluem:

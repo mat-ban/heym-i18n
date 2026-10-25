@@ -2124,5 +2124,20 @@
   "pluginNode.loadErrorDetail": {"h": "437d91f3", "s": "reviewed"},
   "pluginNode.loadErrorHttp": {"h": "894936c0", "s": "reviewed"},
   "pluginNode.loadError": {"h": "d1f54865", "s": "reviewed"},
-  "pluginNode.enabled": {"h": "92c1cdfd", "s": "reviewed"}
+  "pluginNode.enabled": {"h": "92c1cdfd", "s": "reviewed"},
+  "history.askAi": {"h": "ea9e45ac", "s": "reviewed"},
+  "history.askAiTitle": {"h": "3038eb68", "s": "reviewed"},
+  "history.noNodeSpans": {"h": "40240c3f", "s": "reviewed"},
+  "canvas.aiButtonTitle": {"h": "60d9f839", "s": "reviewed"},
+  "canvas.editNodeWithAi": {"h": "f4b85ebc", "s": "reviewed"},
+  "canvas.modifyingNode": {"h": "6268a4ae", "s": "reviewed"},
+  "canvas.hasNodeOutput": {"h": "c3aa6600", "s": "reviewed"},
+  "canvas.closeNodeFocus": {"h": "937f9b4e", "s": "reviewed"},
+  "canvas.nodeFocusRan": {"h": "91611d98", "s": "reviewed"},
+  "canvas.nodeFocusNoOutput": {"h": "744e6873", "s": "reviewed"},
+  "chat.subtitle": {"h": "ec96b48b", "s": "reviewed"},
+  "chat.modelsLoadFailedDisabled": {"h": "3793ae4f", "s": "reviewed"},
+  "dashboards.openWorkflowNewTab": {"h": "0ba00c23", "s": "reviewed"},
+  "dashboards.hitlFilterHelp": {"h": "361b506f", "s": "reviewed"},
+  "dashboards.hitlSourcesLoadFailed": {"h": "2e7cc913", "s": "reviewed"}
 }

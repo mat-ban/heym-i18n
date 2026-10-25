@@ -765,6 +765,7 @@ export interface NodeData {
   githubBranch?: string;
   githubPerPage?: string;
   githubCursor?: string;
+  githubReturnAll?: boolean;
   githubTagName?: string;
   githubReleaseId?: string;
   githubWorkflowId?: string;
@@ -1129,6 +1130,9 @@ export interface NodeData {
   // Table column shown as status chips, and tones for values the defaults do not cover.
   statusColumn?: string;
   statusTones?: Record<string, StatusTone>;
+  // Table column whose cells are URLs, shown as a button, and the button's text.
+  linkColumn?: string;
+  linkLabel?: string;
   unit?: string;
   // Static markdown body for the `text` chart type.
   text?: string;

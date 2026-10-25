@@ -478,7 +478,14 @@
     "extract": "Eralda",
     "mySubWorkflow": "Minu alam-workflow",
     "moreNodes": "+{count} veel",
-    "runToNode": "Käivita kuni {label}"
+    "runToNode": "Käivita kuni {label}",
+    "aiButtonTitle": "Muutke või parandage seda sõlme tehisintellekti assistendiga",
+    "editNodeWithAi": "Muuda {label} tehisintellektiga",
+    "modifyingNode": "Sõlme muutmine:",
+    "hasNodeOutput": "(Sõlmel on väljund)",
+    "closeNodeFocus": "Sulgege sõlme fookus ja muutke kogu Workflow'd",
+    "nodeFocusRan": "See sõlm käivitati. Tehisintellekt näeb selle viimast väljundit ja viga ning loeb sõlme dokumentatsiooni.",
+    "nodeFocusNoOutput": "Sellel sõlmel puudub praeguses käivituses väljund. Käivitage see esmalt, kui tehisintellekt peab selle väljundit nägema. Tehisintellekt loeb sõlme dokumentatsiooni mõlemal juhul."
   },
   "nodes": {
     "title": "Sõlmed",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Muuda järjekorras olevat sõnumit",
     "deleteQueuedMessage": "Kustuta järjekorras olev sõnum",
     "startedByMcp": "Käivitatud MCP kliendi poolt",
-    "newChatTitle": "Uus chat"
+    "newChatTitle": "Uus chat",
+    "subtitle": "Käivitage Workflow'sid ja esitage küsimusi",
+    "modelsLoadFailedDisabled": "Nende volituste mudelinimekirja ei õnnestunud laadida. Chat jääb keelatuks, kuni mudelit on võimalik hankida."
   },
   "teams": {
     "title": "Tiimid",
@@ -1672,7 +1681,10 @@
       "error": "Viga",
       "cached": "Vahemällu salvestatud",
       "cancelled": "Tühistatud"
-    }
+    },
+    "askAi": "Küsi tehisintellektilt",
+    "askAiTitle": "Küsige Chat-assistendilt selle käivituse kohta",
+    "noNodeSpans": "Selle käivituse kohta ei salvestatud sõlme spane."
   },
   "portal": {
     "loadingPortal": "Portaali laadimine...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Üksikasjade lehe kirjed",
     "detailPageRecordsHelp": "Väärtused ?record=, mida see töölaud aktsepteerib, kui realink selle avab. Kõik muu lükatakse enne vidina käivitamist tagasi.",
     "unreachableDashboard": "Töölaud, mida ei saa avada",
-    "runWorkflow": "Käivita Workflow"
+    "runWorkflow": "Käivita Workflow",
+    "openWorkflowNewTab": "Ava Workflow uuel vahekaardil",
+    "hitlFilterHelp": "Kuva ülevaatused kõigist Workflow'dest või ainult ühest. Loetleb Workflow'd, mida saate avada – teie omad või teiega jagatud –, milles on inimest ootav samm.",
+    "hitlSourcesLoadFailed": "Teie Workflow'sid ei õnnestunud laadida."
   },
   "drive": {
     "filesCount": "({count} faili)",

@@ -478,7 +478,14 @@
     "extract": "Išskirti",
     "mySubWorkflow": "Mano Sub-Workflow",
     "moreNodes": "+{count} daugiau",
-    "runToNode": "Vykdyti iki {label}"
+    "runToNode": "Vykdyti iki {label}",
+    "aiButtonTitle": "Pakeiskite arba ištaisykite šį mazgą su DI asistentu",
+    "editNodeWithAi": "Redaguoti {label} su DI",
+    "modifyingNode": "Keičiamas mazgas:",
+    "hasNodeOutput": "(Turi mazgo išvestį)",
+    "closeNodeFocus": "Uždarykite mazgo fokusą ir redaguokite visą Workflow",
+    "nodeFocusRan": "Šis mazgas buvo įvykdytas. DI mato paskutinę jo išvestį ir klaidą bei skaito mazgo dokumentaciją.",
+    "nodeFocusNoOutput": "Šis mazgas dabartiniame vykdyme neturi išvesties. Pirmiausia įvykdykite jį, jei DI turi matyti jo išvestį. DI abiem atvejais skaito mazgo dokumentaciją."
   },
   "nodes": {
     "title": "Mazgai",
@@ -1442,7 +1449,9 @@
     "editQueuedMessage": "Redaguoti eilėje esančią žinutę",
     "deleteQueuedMessage": "Ištrinti eilėje esantį pranešimą",
     "startedByMcp": "Paleista MCP kliento",
-    "newChatTitle": "Naujas chat"
+    "newChatTitle": "Naujas chat",
+    "subtitle": "Vykdykite Workflows ir užduokite klausimų",
+    "modelsLoadFailedDisabled": "Šių prisijungimo duomenų modelių sąrašo nepavyko įkelti. Chat lieka išjungtas, kol bus galima gauti modelį."
   },
   "teams": {
     "title": "Komandos",
@@ -1672,7 +1681,10 @@
       "error": "Klaida",
       "cached": "Talpykloje",
       "cancelled": "Atšaukta"
-    }
+    },
+    "askAi": "Klausti DI",
+    "askAiTitle": "Paklauskite Chat asistento apie šį vykdymą",
+    "noNodeSpans": "Šiam vykdymui nebuvo užfiksuota mazgų span."
   },
   "portal": {
     "loadingPortal": "Įkeliamas portalas...",
@@ -2187,7 +2199,10 @@
     "detailPageRecords": "Išsamios informacijos puslapio įrašai",
     "detailPageRecordsHelp": "Reikšmės ?record=, kurias šis valdymo skydelis priima, kai jį atidaro eilutės nuoroda. Viskas kita atmetama prieš paleidžiant valdiklį.",
     "unreachableDashboard": "Valdymo skydelis, kurio negalite atidaryti",
-    "runWorkflow": "Vykdyti Workflow"
+    "runWorkflow": "Vykdyti Workflow",
+    "openWorkflowNewTab": "Atidaryti Workflow naujame skirtuke",
+    "hitlFilterHelp": "Rodyti peržiūras iš visų Workflows arba tik iš vieno. Pateikia Workflows, kuriuos galite atidaryti – jūsų arba su jumis bendrinamus –, turinčius žingsnį, laukiantį asmens.",
+    "hitlSourcesLoadFailed": "Jūsų Workflows nepavyko įkelti."
   },
   "drive": {
     "filesCount": "({count} failai)",

@@ -27,6 +27,13 @@ class WidgetLayout(BaseModel):
     h: int = 4
 
 
+class HitlWidgetFilterModel(BaseModel):
+    """Which reviews a HITL widget shows: one workflow's, or one step's of it."""
+
+    workflow_id: uuid.UUID
+    node_id: str | None = Field(default=None, max_length=64)
+
+
 class DashboardWidgetResponse(BaseModel):
     id: uuid.UUID
     workflow_id: uuid.UUID
@@ -42,6 +49,11 @@ class DashboardWidgetResponse(BaseModel):
     link_label_field: str | None = None
     # Whether the caller can open the linked dashboard; rows are clickable only then.
     link_accessible: bool = False
+    # HITL widgets: the workflow (and step) whose reviews it shows; null shows every review.
+    hitl_filter: HitlWidgetFilterModel | None = None
+    # Set only on the answer to an AI fine-tune: the Edit History snapshot of the workflow as it
+    # was before, which the revert endpoint takes.
+    previous_version_number: int | None = None
     updated_at: datetime
 
 
@@ -126,6 +138,18 @@ class WidgetCreateRequest(BaseModel):
             "$page.record."
         ),
     )
+    count_column: (
+        Annotated[str, StringConstraints(strip_whitespace=True, max_length=255)] | None
+    ) = Field(
+        default=None,
+        description=(
+            "With data_table_id and chart_type text: a count card, the number of rows whose "
+            "column equals count_value, under the value's name."
+        ),
+    )
+    count_value: Annotated[str, StringConstraints(strip_whitespace=True, max_length=255)] | None = (
+        Field(default=None, description="With count_column: the value whose rows are counted.")
+    )
 
 
 class WidgetUpdateRequest(BaseModel):
@@ -143,6 +167,13 @@ class WidgetUpdateRequest(BaseModel):
     )
     link_record_field: str | None = Field(default=None, max_length=255)
     link_label_field: str | None = Field(default=None, max_length=255)
+    hitl_filter: HitlWidgetFilterModel | None = Field(
+        default=None,
+        description=(
+            "HITL widgets only: the workflow, and optionally the step, whose reviews it shows. "
+            "Send null to show every review; leave it out to keep the current choice."
+        ),
+    )
 
 
 class FileRunSlotResponse(BaseModel):
@@ -255,3 +286,12 @@ class AiRefineRequest(BaseModel):
     model: str = Field(min_length=1, max_length=200)
     # Data tables the widget reads, so a fix sees their real columns and values.
     data_table_ids: list[uuid.UUID] = Field(default_factory=list, max_length=8)
+    # What the caller knows about the page: "detail" (opened with a record) or "listing".
+    # Left out, a page that no table's rows open counts as a listing page.
+    page_kind: Literal["listing", "detail"] | None = None
+
+
+class WidgetRevertRequest(BaseModel):
+    """Put a widget's workflow back to the snapshot an AI fine-tune stored before it ran."""
+
+    version_number: int = Field(ge=1)

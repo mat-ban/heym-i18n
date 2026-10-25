@@ -33,13 +33,17 @@ Yalnızca örnek/numune veriniz olduğunda (gerçek bir kaynak olmadan), bu sat�
 | `valueField` | string | Sayısal değer olarak kullanılan satır anahtarı (pie/bar/line/numeric/gauge) |
 | `series` | array | Bar/line için isteğe bağlı çoklu seri tanımı `[{ "name": "Sent", "field": "sent" }]` (`valueField`'i geçersiz kılar) |
 | `columns` | array | `table` için isteğe bağlı sütun listesi (varsayılan olarak ilk satırın anahtarları) |
-| `statusColumn` | string | Renkli [durum çipleri](#status-chips) olarak oluşturulan isteğe bağlı `table` sütunu. Gösterilen sütunlardan biri olmalıdır. |
+| `statusColumn` | string | Renkli [durum çipleri](#status-chips) olarak oluşturulan isteğe bağlı `table` sütunu. Gösterilen sütunlardan biri olmalıdır. |, `linkColumn` ile birlikte bağlantı sütununu ve düğme metnini de taşır.
 | `statusTones` | object | Varsayılanların kapsamadığı değerler için bir durum değerinden bir tona (`success`, `attention`, `failure`, `waiting`, `neutral`) isteğe bağlı eşleme |
+| `linkColumn` | string | Hücreleri bir URL içeren ve yeni sekmede açan bir [bağlantı düğmesi](#link-buttons) olarak gösterilen isteğe bağlı `table` sütunu. Gösterilen sütunlardan biri olmalıdır. |
+| `linkLabel` | string | Bağlantı düğmesinin isteğe bağlı metni. Boş bırakılırsa düğme yalnızca bir bağlantı simgesi gösterir. |
 | `xField` / `yField` | string | X ve Y sayısal eksenleri için satır anahtarları (scatter) |
 | `min` / `max` | number | `gauge` için sayısal aralık (varsayılan `0` / `100`) |
 | `unit` | string | Bir `numeric` veya `gauge` değerinin yanında gösterilen isteğe bağlı birim |
 | `text` | string | `text` chart türü için Markdown mesajı. Statik bir mesaj için boş bırakın ve yukarı akış verisinden çekilen dinamik bir mesaj oluşturmak için `valueField` ayarlayın. |
 | `title` | string | İsteğe bağlı chart başlığı |
+| `hitlWorkflowId` | string | Yalnızca `hitl`. Yalnızca bu Workflow'un incelemelerini gösterir. Boş bırakılırsa widget tüm incelemeleri gösterir. |
+| `hitlNodeId` | string | Yalnızca `hitl`. `hitlWorkflowId` değerini tek bir adıma daraltır: insan incelemeli bir Agent veya bir Slack onay, düğme ya da form adımı. |
 
 ## Chart türleri
 
@@ -51,7 +55,7 @@ Yalnızca örnek/numune veriniz olduğunda (gerçek bir kaynak olmadan), bu sat�
 - **proportion** — yüzde açıklamalı paylara bölünmüş tek bir yatay bar (örn. bir dil dağılımı). `labelField` + `valueField` kullanır.
 - **barGauge** — kırmızıdan yeşile gradyanlı ve bir değerli, her satır için bir yatay gauge (örn. boş disk alanı). `labelField` + `valueField`, isteğe bağlı `unit` ve `max` kullanır (varsayılan olarak en büyük satır değeri).
 - **text** — bir markdown mesajı (örn. "Last execution at 19:47" gibi bir durum notu). Statik bir mesaj için markdown'ı `text` içine koyun veya `text`'i boş bırakın ve yukarı akışta üretilen bir string oluşturmak için `valueField` ayarlayın. Başlıkları, kalın/italik yazıyı, [listeleri](../nodes/chart-output-node.md#interactive-task-lists), bağlantıları ve satır içi kodu destekler.
-- **hitl** — bekleyen insan incelemelerinizin bir carousel'i. Başlık `1/n pending` gösterir; sol ok ilk kartta, sağ ok ise son kartta devre dışıdır. Workflow adı, o çalıştırmayı canvas üzerinde açar. **Approve**, **Request changes** ve **Reject** bunu çözer ve widget başlığının yanındaki geçmiş simgesi, o çalıştırmayı aynı sayfadaki geçmiş iletişim kutusunda açar. Bu chart türü yukarı akış satırlarını yok sayar, bu nedenle widget workflow'u yalnızca Chart Output düğümüdür. Oturum açmış her kişi, sahip olduğu workflow'lardaki incelemeleri görür.
+- **hitl** — bekleyen insan incelemelerinizin bir carousel'i. Başlık `1/n pending` gösterir; sol ok ilk kartta, sağ ok ise son kartta devre dışıdır. Workflow adı, o çalıştırmayı canvas üzerinde açar. **Approve**, **Request changes** ve **Reject** bunu çözer ve widget başlığının yanındaki geçmiş simgesi, o çalıştırmayı aynı sayfadaki geçmiş iletişim kutusunda açar. Bu chart türü yukarı akış satırlarını yok sayar, bu nedenle widget workflow'u yalnızca Chart Output düğümüdür. Oturum açmış her kişi, sahip olduğu workflow'lardaki incelemeleri görür. Düğümün özelliklerinde veya widget'ın ayarlarında bir **Workflow** (birden fazla inceleme adımı varsa **Select agent**) seçerek, bunun yerine o Workflow'un incelemelerini onu açabilen herkese gösterebilirsiniz; bkz. [HITL widget'ları](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Etkileşimli görev listeleri
 
@@ -307,3 +311,17 @@ Text (dinamik — mesaj dizesi upstream tarafından üretilir ve `valueField` ar
 
 - [Dashboard sekmesi](../tabs/dashboard-tab.md) — widget'ları oluşturun ve düzenleyin
 - [Output düğümü](output-node.md) — normal workflow'lar için terminal düğümü
+
+
+## Bağlantı düğmeleri
+
+Bir `table`, bir sütunu bağlantı açan düğmelere dönüştürebilir. Düğümün özelliklerinde **Link column** değerini (veya DSL'de `linkColumn` değerini) hücreleri bir URL içeren bir sütuna ayarlayın ve isteğe bağlı olarak **Link button text** (`linkLabel`) belirleyin. Her hücre, URL'sini yeni sekmede açan bir düğme olur. Düğme metni yoksa düğme yalnızca bir bağlantı simgesi gösterir:
+
+| Hücre değeri | Açtığı yer |
+| ------------ | ---------- |
+| `https://jira.example.com/browse/T-1` | Başka bir site, yeni sekmede |
+| `/dashboards` | Heym içindeki bir sayfa, yeni sekmede |
+
+Yalnızca `http://` ve `https://` adresleri ile tek bir `/` ile başlayan yollar düğme olur. `javascript:` veya `//host` gibi diğer tüm değerler düz metin olarak kalır ve boş bir hücre hiçbir şey göstermez.
+
+Düğme, bir [satır bağlantısı](../tabs/dashboard-tab.md#detail-pages) ile birlikte çalışır: düğmeye tıklamak bağlantısını yeni sekmede açar, satırın başka herhangi bir yerine tıklamak ise yine ayrıntı sayfasını açar.

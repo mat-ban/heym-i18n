@@ -16,7 +16,7 @@ Noden **Heym** läser Heyms egna data: de workflows som nås, en enskild workflo
 | Parameter | Typ | Beskrivning |
 |-----------|-----|-------------|
 | `heymOperation` | Select | Vilken läsning som ska utföras |
-| `heymWorkflowId` | UUID | Målworkflow. Krävs för `getWorkflow` och `getExecutionHistory`. Stöder uttryck. |
+| `heymWorkflowId` | UUID | Ange `all` för `getExecutionHistory` för att läsa varje åtkomligt Workflow. |
 | `heymLimit` | String | Maximalt antal rader som returneras. **Lämna tomt eller ange `0` för att returnera allt** — det är standardvärdet. Stöder uttryck. |
 | `heymStatus` | String | Valfritt statusfilter för `getExecutionHistory`. Stöder uttryck. |
 | `heymSinceDays` | String | Valfri återblick i dagar för `getExecutionHistory`. Stöder uttryck. |
@@ -93,9 +93,11 @@ Returnerar körningshistorik-poster för ett workflow, nyaste först.
 | `$nodeLabel.executions[0].recovered` | Huruvida körningen återställdes efter en krasch |
 | `$nodeLabel.executions[0].inputs` | Vad körningen tog emot – trigger-payloaden eller anroparens indata |
 | `$nodeLabel.executions[0].outputs` | Workflowets utdata för den körningen |
-| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Workflowet som historiken tillhör |
+| `$nodeLabel.workflow_id`, `$nodeLabel.workflow_name` | Det Workflow som historiken tillhör, eller `null` med **{AW}** |
+ eller `null` med **{AW}** |
 | `$nodeLabel.total` | Totalt antal matchande körningar **före** gränsen |
-| `$nodeLabel.by_status` | Antal grupperade efter status, till exempel `{ "success": 41, "error": 3 }` |
+| `$no| `$nodeLabel.executions[0].workflow_id`, `$nodeLabel.executions[0].workflow_name` | Med **{AW}** det Workflow som varje körning tillhör |
+deLabel.by_status` | Antal grupperade efter status, till exempel `{ "success": 41, "error": 3 }` |
 | `$nodeLabel.since` | Fönstrets start, eller `null` för hela historiken |
 
 Poster innehåller både `inputs` och `outputs` – vad körningen tog emot och vad den svarade – men aldrig `node_results`: spårningen per nod är tabellens största kolumn och skulle överskugga allt nedströms. Hämta en enskild körning via API:et när hela spårningen behövs.

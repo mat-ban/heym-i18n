@@ -18,14 +18,14 @@ Un giny és un sol gràfic a la graella. Tipus de gràfic compatibles:
 - **Línies**
 - **Àrea** (tendència farcida, admet diverses sèries)
 - **Circular**
-- **Taula** (amb desplaçament; una columna es pot representar com a [xips d'estat](../nodes/chart-output-node.md#status-chips), i les files poden obrir una [pàgina de detall](#detail-pages))
+- **Taula** (amb desplaçament; feu clic a la capçalera d'una columna per ordenar ascendentment i torneu-hi a fer clic per ordenar descendentment. Una columna es pot mostrar com a [xips d'estat](../nodes/chart-output-node.md#status-chips), una columna pot contenir [botons d'enllaç](../nodes/chart-output-node.md#link-buttons) que obren un URL en una pestanya nova, i les files poden obrir una [pàgina de detall](#pagines-de-detall))
 - **Numèric** (un sol valor KPI amb una unitat opcional)
 - **Indicador** (un sol valor en un interval mínim–màxim, per exemple un percentatge)
 - **Dispersió** (punts X/Y per a gràfics de correlació)
 - **Proporció** (una barra dividida en porcions amb una llegenda de percentatges, per exemple un desglossament per idioma)
 - **Indicador de barres** (un indicador horitzontal per fila amb un gradient de vermell→verd i un valor, per exemple espai de disc lliure)
 - **Text** (un missatge en markdown, per exemple una nota d'estat com "Última execució a les 19:47"; admet [caselles de selecció interactives](../nodes/chart-output-node.md#interactive-task-lists) quan el markdown és estàtic, i [llistes numerades explícites](../nodes/chart-output-node.md#numbered-lists) per a numeració personalitzada o descendent)
-- **HITL** (les vostres revisions humanes pendents. La capçalera mostra `1/n pending`. El nom del Workflow obre aquesta execució al canvas. **Aprova**, **Sol·licita canvis** i **Rebutja** la resolen. La icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial d'aquesta pàgina. El giny no utilitza files d'origen, i cada persona veu la seva pròpia cua)
+- **HITL** (les vostres revisions humanes pendents. La capçalera mostra `1/n pending`. El nom del Workflow obre aquesta execució al canvas. **Aprova**, **Sol·licita canvis** i **Rebutja** la resolen. La icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial d'aquesta pàgina. El giny no utilitza files d'origen, i cada persona veu la seva pròpia cua. Pot mostrar en el seu lloc les revisions d'un sol Workflow, per a tothom que pugui obrir aquest Workflow; vegeu [Widgets HITL](#widgets-hitl))
 
 A més dels gràfics, un giny **Run a workflow** executa un dels vostres Workflows des del tauler de control: sobre un fitxer deixat anar, amb els seus camps d'entrada o amb un botó Run; vegeu [Ginys d'execució](#run-widgets).
 
@@ -41,6 +41,20 @@ Cada giny carrega les seves dades de manera asíncrona quan s'obre la pestanya, 
 Per a un giny **Run a workflow**, trieu en canvi el Workflow que executa; el selector indica com executarà el giny cadascun. El giny s'afegeix directament a la quadrícula; no cal construir cap Workflow nou.
 
 Feu doble clic en un giny (o utilitzeu el seu botó d'edició) per reobrir el seu Workflow en qualsevol moment. Utilitzeu **Clonar giny** a la capçalera del giny per duplicar tant el giny com el seu Workflow complet. La còpia es col·loca a sota de l'original i s'etiqueta amb **(Còpia)** perquè la pugueu editar de manera independent.
+
+## Widgets HITL
+
+Un nou widget HITL mostra totes les revisions que esperen a la vostra pròpia cua. Per mostrar només les d'un Workflow, obriu la **Configuració** del widget:
+
+1. A **Workflow**, trieu el Workflow. La llista conté els Workflows que podeu obrir, vostres o compartits amb vós o amb el vostre equip, que tenen un pas esperant una persona: un Agent amb revisió humana, o un pas de Slack d'aprovació, botons o formulari. La icona al costat obre aquest Workflow en una pestanya nova.
+2. Si el Workflow té un sol pas d'aquest tipus, se selecciona automàticament. Si en té diversos, **Select agent** els llista per nom de node, amb **All agents** primer; els passos de Slack estan marcats amb **(Slack)**.
+3. Deseu. El `1/n pending` de la capçalera compta només aquestes revisions. Trieu **Tots els Workflows** per tornar a mostrar la vostra pròpia cua.
+
+La mateixa opció es troba al llenç, a les propietats del node Chart Output. **Ajustar amb IA** pot fer-ho («mostrar només les aprovacions de factures»), igual que descriure un nou widget que anomeni el Workflow. Cada canvi és una edició del Workflow, per la qual cosa apareix a l'Edit History.
+
+- **Qui veu les revisions.** Un widget filtrat en un Workflow mostra les revisions d'aquest Workflow a tothom que pugui obrir el Workflow, i aquests poden aprovar, demanar canvis o rebutjar des d'ell, igual que podrien executar el Workflow. Un widget sense filtrar mostra a cadascú la seva pròpia cua.
+- **Qui veu el widget.** Qui no pot obrir el Workflow triat no veu el widget en absolut, ni tan sols en un dashboard compartit amb ell. Quan el propietari del dashboard perd l'accés al Workflow, o aquest s'elimina, el propietari veu «You no longer have access to the workflow this widget shows» i pot triar-ne un altre a la **Configuració**.
+- **Només opcions accessibles.** Un Workflow que no podeu obrir es rebutja en desar el widget, ja sigui des de la configuració, el llenç o la IA.
 
 ## Pàgines de detall
 
@@ -75,6 +89,10 @@ El botó **Wrap** del resultat ajusta les línies llargues de sortida dins del q
 ## Generar un giny amb IA
 
 Feu clic a **IA**, descriviu la mètrica que voleu (per exemple, "taxa d'èxit dels Workflows durant els últims 30 dies com a gràfic de barres") i trieu una credencial d'LLM i un model. Heym genera un Workflow de giny complet que acaba en un Node Chart Output i l'afegeix a la graella. Consulteu [Chart Output](../nodes/chart-output-node.md#example-ai-prompts) per veure exemples de Prompts per tipus de gràfic.
+
+El widget rep un títol curt d'una o dues paraules en l'idioma de la vostra sol·licitud, com ara «Casos oberts». Un títol mai porta l'identificador d'una taula de dades; quan el model anomena el widget amb una frase, Heym en conserva les primeres paraules.
+
+L'API de widgets també pot crear una **targeta de recompte** sense IA: un widget `text` en una taula de dades (`data_table_id`) amb `count_column` i `count_value` mostra quantes files tenen aquest valor; el títol del widget anomena el valor. Heym Work encapçala les pàgines creades a partir d'una taula de dades amb una targeta de recompte per estat.
 
 Utilitzeu el botó **Ajustar amb IA** d'un giny per revisar un giny existent amb una instrucció nova. Cada ajust amb IA fa una instantània del Workflow anterior a l'**Historial d'edicions** del giny, de manera que podeu revisar o revertir els canvis des de l'editor de Workflows.
 

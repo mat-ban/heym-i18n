@@ -13,6 +13,8 @@ Per domande sulla documentazione al di fuori dell'editor, utilizzare [Chat with 
 
 Premere `Ctrl + I` / `Cmd + I` in qualsiasi punto dell'editor per aprire o chiudere il pannello: la scorciatoia funziona anche quando un campo di testo è attivo. Consultare [Scorciatoie da tastiera](./keyboard-shortcuts.md).
 
+Per lavorare su un singolo nodo, passaci sopra con il mouse sul canvas e fai clic su **AI** sopra di esso. Il pannello si apre focalizzato su quel nodo. Vedi [Modifica di un singolo nodo](#changing-one-node).
+
 ## Chiusura del pannello
 
 Fare clic sul pulsante **X**, premere `Ctrl + I` / `Cmd + I`, oppure attivare/disattivare il pulsante **AI** nella barra degli strumenti del pannello Debug. L'intestazione serve a trascinare il pannello, non a chiuderlo.
@@ -60,6 +62,33 @@ Quando la risposta dell'IA contiene un blocco JSON valido di un workflow (con `n
 4. Contrassegna il workflow come non salvato
 
 Se l'analisi non riesce, viene visualizzato un pulsante **Retry** per rigenerare la risposta.
+## Modifica di un singolo nodo
+
+Passa con il mouse su un nodo sul canvas e fai clic su **AI** sopra di esso. Il pannello si apre in modalità Agent, focalizzato su quel nodo, e mostra quale nodo sta modificando:
+
+| Il nodo ha... | Il pannello mostra |
+|---|---|
+| Nessun risultato nell'esecuzione corrente | **Modifying Node:** in una riga compatta con l'icona e il nome del nodo. L'assistente modifica solo dalla configurazione del nodo; esegui prima il nodo se deve vedere l'output |
+| Un risultato nell'esecuzione corrente | **Modifying Node: (Has Node Output)** sopra il nodo stesso: icona, nome e tipo, ultimo stato e durata, e l'errore se fallito. L'assistente vede quell'output e l'errore quando modifica il nodo |
+
+Passa il mouse sull'etichetta per vedere in quale stato si trova il pannello.
+
+In qualunque stato si trovi il pannello, l'assistente legge anche la pagina di documentazione del nodo, quella dietro l'icona del libro nell'intestazione del nodo. La usa per comprendere le opzioni del nodo e per rispondere a domande su di esse.
+
+Sotto i messaggi, tre opzioni avviano la richiesta:
+
+| Opzione | Cosa fa |
+|---|---|
+| **Change this node as ...** | Riempie la casella di messaggio con *Cambia questo nodo in* per completare la frase |
+| **Fix error in this node ...** | Riempie *Correggi l'errore in questo nodo.* L'assistente legge l'errore di questo nodo dall'ultima esecuzione |
+| **Other** | Focalizza una casella di messaggio vuota |
+
+Modifica il testo e premi **Send**. L'assistente restituisce solo questo nodo e Heym lo aggiorna sul posto: il nodo mantiene id, tipo e nome, in modo che espressioni come `$checkLinkedIn.result` in altri nodi continuino a funzionare. Altri nodi, connessioni e layout non cambiano, e **Undo** ripristina la configurazione precedente.
+
+Se la richiesta non rientra nel nodo, ad esempio se richiede un altro tipo di nodo o un nuovo nodo, l'assistente indica cosa dovrebbe cambiare invece di modificare. Chiudi il focus del nodo con la **X** sulla scheda del nodo per modificare nuovamente l'intero workflow. Anche la chiusura del pannello cancella il focus.
+
+La [modalità YOLO](#yolo-mode) funziona con un nodo focalizzato: l'assistente modifica il nodo, esegue il workflow e corregge il nodo finché l'esecuzione non ha esito positivo. In modalità **Ask** il focus indica all'assistente su quale nodo verte la domanda e il canvas non viene modificato.
+
 ## Modalità YOLO
 
 La **modalità YOLO** consente all'assistente di testare ciò che costruisce. Selezionare la casella **Modalità YOLO** sotto il campo del messaggio, quindi inviare la richiesta. La casella compare esclusivamente in modalità Agent. È disattivata per impostazione predefinita e viene reimpostata su disattivata al ricaricamento della pagina. Passare il cursore sull'icona informativa accanto per visualizzare un breve riepilogo.

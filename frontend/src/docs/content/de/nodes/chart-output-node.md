@@ -33,13 +33,17 @@ Wenn du nur über Beispiel-/Musterdaten verfügst (keine echte Quelle), erzeuge 
 | `valueField` | string | Zeilenschlüssel, der als numerischer Wert verwendet wird (pie/bar/line/numeric/gauge) |
 | `series` | array | Optionale Multi-Serien-Definition `[{ "name": "Sent", "field": "sent" }]` für bar/line (überschreibt `valueField`) |
 | `columns` | array | Optionale Spaltenliste für `table` (standardmäßig die Schlüssel der ersten Zeile) |
-| `statusColumn` | string | Optionale `table`-Spalte, die als farbige [Status-Chips](#status-chips) dargestellt wird. Muss eine der angezeigten Spalten sein. |
+| `statusColumn` | string | Optionale `table`-Spalte, die als farbige [Status-Chips](#status-chips) dargestellt wird. Muss eine der angezeigten Spalten sein. |, und mit `linkColumn` enthält sie die Link-Spalte und den Button-Text.
 | `statusTones` | object | Optionale Zuordnung eines Statuswerts zu einem Farbton (`success`, `attention`, `failure`, `waiting`, `neutral`) für Werte, die nicht durch die Standardwerte abgedeckt sind |
+| `linkColumn` | string | Optionale `table`-Spalte, deren Zellen eine URL enthalten und als [Link-Button](#link-buttons) angezeigt werden, der sie in einem neuen Tab öffnet. Muss eine der angezeigten Spalten sein. |
+| `linkLabel` | string | Optionaler Text des Link-Buttons. Bleibt er leer, zeigt der Button nur ein Link-Symbol. |
 | `xField` / `yField` | string | Zeilenschlüssel für die numerischen X- und Y-Achsen (scatter) |
 | `min` / `max` | number | Numerischer Bereich für `gauge` (Standard `0` / `100`) |
 | `unit` | string | Optionale Einheit, die neben einem `numeric`- oder `gauge`-Wert angezeigt wird |
 | `text` | string | Markdown-Nachricht für den `text`-Chart-Typ. Leer lassen und `valueField` setzen, um eine dynamische Nachricht aus vorgelagerten Daten zu rendern. |
 | `title` | string | Optionaler Chart-Titel |
+| `hitlWorkflowId` | string | Nur `hitl`. Zeigt nur die Reviews dieses Workflows. Bleibt das Feld leer, zeigt das Widget alle Reviews. |
+| `hitlNodeId` | string | Nur `hitl`. Grenzt `hitlWorkflowId` auf einen Schritt ein: einen Agent mit menschlichem Review oder einen Slack-Freigabe-, Button- oder Formularschritt. |
 
 ## Chart-Typen
 
@@ -51,7 +55,7 @@ Wenn du nur über Beispiel-/Musterdaten verfügst (keine echte Quelle), erzeuge 
 - **proportion** — ein einzelner horizontaler Balken, der in Anteile mit einer prozentualen Legende aufgeteilt ist (z. B. eine Sprachaufschlüsselung). Verwendet `labelField` + `valueField`.
 - **barGauge** — ein horizontaler Gauge pro Zeile mit einem Rot→Grün-Verlauf und einem Wert (z. B. freier Speicherplatz). Verwendet `labelField` + `valueField`, optional `unit` und `max` (standardmäßig der größte Zeilenwert).
 - **text** — eine Markdown-Nachricht (z. B. eine Statusnotiz wie „Letzte Ausführung um 19:47"). Setze das Markdown in `text` für eine statische Nachricht, oder lasse `text` leer und setze `valueField`, um einen vorgelagert erzeugten String zu rendern. Unterstützt Überschriften, Fett/Kursiv, [Listen](../nodes/chart-output-node.md#interactive-task-lists), Links und Inline-Code.
-- **hitl** — ein Karussell deiner ausstehenden menschlichen Reviews. Die Kopfzeile zeigt `1/n pending`; der linke Pfeil ist auf der ersten Karte deaktiviert und der rechte Pfeil auf der letzten. Der Workflow-Name öffnet diesen Lauf auf dem Canvas. **Approve**, **Request changes** und **Reject** lösen ihn auf, und das Verlaufssymbol neben dem Widget-Titel öffnet diesen Lauf im Verlaufsdialog auf derselben Seite. Dieser Chart-Typ ignoriert vorgelagerte Zeilen, sodass der Widget-Workflow nur aus dem Chart Output-Knoten besteht. Jede angemeldete Person sieht die Reviews zu Workflows, die sie besitzt.
+- **hitl** — ein Karussell deiner ausstehenden menschlichen Reviews. Die Kopfzeile zeigt `1/n pending`; der linke Pfeil ist auf der ersten Karte deaktiviert und der rechte Pfeil auf der letzten. Der Workflow-Name öffnet diesen Lauf auf dem Canvas. **Approve**, **Request changes** und **Reject** lösen ihn auf, und das Verlaufssymbol neben dem Widget-Titel öffnet diesen Lauf im Verlaufsdialog auf derselben Seite. Dieser Chart-Typ ignoriert vorgelagerte Zeilen, sodass der Widget-Workflow nur aus dem Chart Output-Knoten besteht. Jede angemeldete Person sieht die Reviews zu Workflows, die sie besitzt. Wählen Sie in den Eigenschaften des Knotens oder in den Einstellungen des Widgets einen **Workflow** (und **Select agent**, wenn er mehrere Review-Schritte hat), um stattdessen die Reviews dieses Workflows anzuzeigen, und zwar für alle, die ihn öffnen können; siehe [HITL-Widgets](../tabs/dashboard-tab.md#hitl-widgets).
 
 ### Interaktive Aufgabenlisten
 
@@ -148,6 +152,20 @@ https://crm.example.com/api/customers?id=$page.record
 `$page.record` ist direkt der Wert der angeklickten Zeile, wie etwa `V-1002`, und kein Objekt mit Feldern. Um diesen Datensatz in einer [DataTable](./datatable-node.md) zu finden, filtere deren Datensatzspalte nach dem Wert: Operation `find` mit dem Filter `{"vendor_id": "$page.record"}`. Ein Pfad wie `$page.record.id` wird ins Leere aufgelöst, sodass ein von der KI erstelltes oder verfeinertes Widget solche Felder verwirft und stattdessen `$page.record` liest.
 
 Der Wert stammt aus einer URL, die jeder bearbeiten kann. Das Dashboard akzeptiert zwar nur Werte im jeweiligen Datensatzformat (standardmäßig Buchstaben, Ziffern, `-`, `_` und `.`), behandle ihn jedoch trotzdem als nicht vertrauenswürdige Eingabe: Übergib ihn dort, wo der Knoten Werte maskiert, etwa als HTTP-Query-Parameter oder als Filterwert in [DataTable](./datatable-node.md) oder ClickHouse, und baue niemals Abfragetext durch String-Verkettung damit zusammen. Widgets werden unabhängig davon, wer die Seite öffnet, weiterhin im Kontext des Dashboard-Eigentümers ausgeführt.
+
+
+## Link-Buttons
+
+Eine `table` kann eine Spalte in Buttons umwandeln, die einen Link öffnen. Setzen Sie **Link column** in den Eigenschaften des Knotens (oder `linkColumn` in der DSL) auf eine Spalte, deren Zellen eine URL enthalten, und optional **Link button text** (`linkLabel`). Jede Zelle wird zu einem Button, der ihre URL in einem neuen Tab öffnet. Ohne Button-Text zeigt der Button nur ein Link-Symbol:
+
+| Zellwert | Öffnet |
+| -------- | ------ |
+| `https://jira.example.com/browse/T-1` | Eine andere Website in einem neuen Tab |
+| `/dashboards` | Eine Seite innerhalb von Heym in einem neuen Tab |
+
+Nur `http://`- und `https://`-Adressen sowie Pfade, die mit einem einzelnen `/` beginnen, werden zu Buttons. Jeder andere Wert, etwa `javascript:` oder `//host`, bleibt einfacher Text, und eine leere Zelle zeigt nichts an.
+
+Der Button funktioniert neben einem [Zeilenlink](../tabs/dashboard-tab.md#detail-pages): Ein Klick auf den Button öffnet seinen Link in einem neuen Tab, und ein Klick an einer beliebigen anderen Stelle der Zeile öffnet weiterhin die Detailseite.
 
 ## Wie Daten aufgelöst werden
 

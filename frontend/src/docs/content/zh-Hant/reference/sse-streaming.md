@@ -25,12 +25,17 @@ Workflow 可透過 Server-Sent Events（SSE）即時串流執行事件。
 
 | 事件類型 | 發出時機 | 關鍵欄位 |
 |------------|--------------------|------------|
-| `execution_started` | 請求被接受後立即發出 | `execution_id`、`server_now_ms` |
+| `queued` | Workflow 已達到其[並行限制](./webhooks.md#concurrency-limit-and-queued-runs)；每當執行的排位發生變化時會再次發送 | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | 請求被接受後立即發出，或當排隊的執行啟動時發出 | `execution_id`, `server_now_ms` |
 | `node_start` | 節點開始執行前 | `node_id`、`node_label`、`started_at_ms`、選用的 `message` |
 | `node_retry` | 節點重試時 | `node_id`、`attempt`、`max_attempts` |
 | `node_complete` | 節點完成後 | `node_id`、`node_label`、`status`、`output`、`execution_time_ms` |
 | `final_output` | Output 節點提前回傳時 | `node_label`、`output` |
 | `execution_complete` | Workflow 結束後 | `status`、`outputs`、`execution_time_ms` |
+
+### 排隊的執行
+
+當 Workflow 達到並行限制時，串流會保持開啟狀態，並在執行等待期間發送 `queued` 事件。排隊的執行會在背景 worker 中執行（可能位於另一個處理程序中），因此其串流在執行開始時包含 `execution_started`，在結束時包含 `execution_complete`，但中間不包含 `node_start`、`node_complete` 或 Token 事件。其 `execution_complete` 具有空的 `node_results`；若要查看節點詳細資料，請在[執行歷史記錄](./execution-history.md)中開啟該次執行。關閉連線不會取消排隊的執行。當佇列已滿時，請求將在串流開啟前直接回應 `429`。
 
 ## 各節點啟動訊息
 

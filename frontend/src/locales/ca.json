@@ -1228,7 +1228,8 @@
     "recoveredFailed": "La recuperació ha fallat després d'un reinici del servidor.",
     "askAi": "Pregunta a la IA",
     "askAiTitle": "Preguntar a l'assistent de Chat sobre aquesta execució",
-    "noNodeSpans": "No s'ha registrat cap span de node per a aquesta execució."
+    "noNodeSpans": "No s'ha registrat cap span de node per a aquesta execució.",
+    "queuedProgress": "A la cua {position}/{size}"
   },
   "logs": {
     "all": "Tots",
@@ -1834,6 +1835,22 @@
         "waiting": "En espera",
         "neutral": "Neutral"
       }
+    },
+    "concurrencyLimit": "Límit de concurrència",
+    "concurrencyLimitHelp": "Les execucions de producció (Webhooks, Cron, MCP, Portal, Triggers) per sobre del límit esperen en una cua FIFO. Les proves de l'editor sempre s'inicien immediatament.",
+    "maxConcurrentRuns": "Màx. execucions concurrents",
+    "maxQueueSizeOptional": "Mida màxima de la cua (opcional)",
+    "emptyNoLimit": "Buit = sense límit",
+    "maxWaitOptional": "Espera màxima (segons, opcional)",
+    "emptyWaitAsLong": "Buit = esperar tant com calgui",
+    "concurrencyQueueHelp": "Una cua plena respon 429. Una execució que esperi més que el temps màxim es registra com a caducada.",
+    "rag": {
+      "hybridSearch": "Cerca híbrida",
+      "hybridSearchHelp": "Combineu la similitud vectorial amb la coincidència de paraules clau BM25, per trobar també termes exactes com ara identificadors, noms i codis d'error.",
+      "hybridScore": "Puntuació híbrida (0-1)",
+      "similarityScore": "Puntuació de similitud",
+      "vectorSimilarity": "Similitud vectorial",
+      "bm25Score": "Puntuació BM25"
     }
   },
   "settings": {

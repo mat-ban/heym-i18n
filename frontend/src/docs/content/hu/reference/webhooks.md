@@ -108,6 +108,73 @@ Workflow-nként konfigurálható: `rate_limit_requests` és `rate_limit_window_s
 | `rate_limit_window_seconds` | Az ablak hossza másodpercben |
 
 A `test_run` kérések megkerülik a rate limitinget.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Konkurencialimit és sorba állított futások
+
+A workflow korlátozhatja az egyszerre végrehajtható éles futások számát. Kapcsolja be a **Konkurencialimit** opciót a workflow szintű **Properties** panelen, és állítsa be a **Max. egyidejű futások** értékét. A tulajdonosok és szerkesztési jogosultsággal rendelkező közreműködők módosíthatják. A limit alapértelmezés szerint ki van kapcsolva.
+
+Amikor a limit elérésre kerül, az új futások egy FIFO (first-in, first-out) sorban várakoznak. Ez minden éles belépési pontra érvényes: erre az endpointra, a [streaming endpointra](./sse-streaming.md), a [Portalra](./portal.md), a [Quick Drawerre](./quick-drawer.md), az [MCP-re](../tabs/mcp-tab.md) és minden [triggerre](./triggers.md). A szerkesztő saját tesztfutásai mindig azonnal elindulnak, és nem foglalnak slotot. A `test_run=true` küldése olyan bejelentkezett munkamenet nélkül, amely megnyithatja a workflow-t, nem kerüli meg a sort.
+
+| Beállítás | Leírás |
+|---|---|
+| `concurrency_limit` | Egyszerre engedélyezett éles futások száma. `0` kikapcsolja a korlátot |
+| `concurrency_max_queue` | Opcionális. Egyszerre várakozni engedélyezett futások. Üresen hagyva korlátlan |
+| `concurrency_max_wait_seconds` | Opcionális. A megadott időnél tovább várakozó futás `expired` státuszt kap. Üresen hagyva addig vár, ameddig szükséges |
+
+### 202 Accepted
+
+Az azonnal elinduló hívás pontosan úgy viselkedik, ahogy a Válaszformátum szakaszban le van írva. A várakozásra kényszerülő hívás azonnal `202 Accepted` választ kap, függetlenül az `X-Simple-Response` értékétől, a státusz URL-jére mutató `Location` fejléccel:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Mező | Leírás |
+|---|---|
+| `queue.position` | A futás sorszáma a sorban, 1-től kezdve |
+| `queue.size` | Jelenleg várakozó futások |
+| `queue.running` | Jelenleg slotot foglaló futások |
+| `queue.limit` | A workflow konkurencialimitje |
+| `status_token` | Csak névtelen workflow-k esetén. Egyszer kerül visszaadásra ebben a válaszban |
+
+### Status URL
+
+A `GET /api/workflows/{workflow_id}/executions/{execution_id}/status` végpont a futás állapotával válaszol. Hívja meg ugyanazokkal a hitelesítő adatokkal, amelyekkel a futást elindította: munkamenettel vagy JWT-vel, egy [futtatási tokennel](./execution-tokens.md) vagy a workflow egyéni fejlécével. A névtelen workflow-k nem rendelkeznek ellenőrizendő hitelesítő adatokkal, ezért a 202-es válaszból származó `status_token` értéket küldje az `X-Heym-Run-Token` fejlécben. A tokent a rendszer soha nem olvassa be a lekérdezési karakterláncból. A hibás vagy hiányzó token `404` hibát eredményez, akárcsak egy ismeretlen futás.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Jelentés (a konkurenciaslotra várni kényszerülő futás helyette a [202-es választ](#202-accepted) kapja) |
+|---|---|
+| `queued` | Helyre vár; a `queue` mutatja a pozíciót |
+| `running` | Slotot kapott és éppen fut |
+| `success` / `error` | Befejeződött; az `outputs` és az `error` ki van töltve |
+| `pending` | Szüneteltetve [emberi felülvizsgálathoz](./human-in-the-loop.md) |
+| `cancelled` | Megszakítva a [Futtatási előzményekből](./execution-history.md) |
+| `expired` | Tovább várt, mint a `concurrency_max_wait_seconds`, és soha nem futott le |
+
+Néhány másodpercenként kérdezze le az állapotot, amíg az nem `queued` vagy `running`. A sorba állított futás akkor is végrehajtásra kerül, ha senki sem kérdezi le az állapotát.
+
+### Megtelt a sor
+
+Ha a `concurrency_max_queue` be van állítva, és már annyi futás várakozik, a hívás `429 Concurrency queue is full` hibával elutasításra kerül, és egy `queue_full` bejegyzés jön létre a futtatási előzményekben. Semmi sem kerül a sorba.
+
 ## Válaszformátum
 
 Az endpoint JSON-t ad vissza:

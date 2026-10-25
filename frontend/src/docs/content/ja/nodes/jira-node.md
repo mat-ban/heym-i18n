@@ -8,22 +8,23 @@
 |----------|-------|
 | 入力 | 1 |
 | 出力 | 1 |
-| Credential | Jira（Cloud のメールアドレス/API Token、または Data Center のユーザー名/パスワード、ベース URL、デプロイモード、任意の REST API バージョン） |
+| Credential | Jira（Cloud のメールアドレス/API Token、Data Center のユーザー名/パスワードまたはパーソナルアクセストークン、ベース URL、デプロイモード、任意の REST API バージョン） |
 | 出力 | `$nodeLabel.*` |
 
 ## Credential
 
-[Credentials Tab](../tabs/credentials-tab.md) で **Jira** Credential を作成します。保存される設定キーは `email`、`api_token`、`base_url`、`deployment`、および任意の `api_version` です。Jira Cloud の場合、`email` には Atlassian アカウントのメールアドレスを、`api_token` には Atlassian API Token を保存します。Jira Data Center / Server の場合、同じキーに Basic 認証のユーザー名とパスワードを保存します。セットアップ手順については [Third-Party Integrations](../reference/integrations.md#jira) を参照してください。
+[Credentials Tab](../tabs/credentials-tab.md) で **Jira** Credential を作成します。保存される設定キーは `email`、`api_token`、`base_url`、`deployment`、`auth_mode`、および任意の `api_version` です。Jira Cloud の場合、`email` には Atlassian アカウントのメールアドレスを、`api_token` には Atlassian API Token を保存します。Jira Data Center / Server の場合、同じキーに Basic 認証のユーザー名とパスワードを保存します、または `auth_mode: pat` の場合、`api_token` には Bearer トークンとして送信されるパーソナルアクセストークンが保存され、`email` は使用されません。セットアップ手順については [Third-Party Integrations](../reference/integrations.md#jira) を参照してください。
 
 | フィールド | 設定キー | 説明 |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Jira Cloud の Atlassian アカウントのメールアドレス、または Jira Data Center / Server のユーザー名 |
-| API Token / Password | `api_token` | Jira Cloud の Atlassian API Token、または Jira Data Center / Server の Basic 認証用パスワード |
+| 認証 | `auth_mode` | `basic`（デフォルト）または `pat`（Data Center / Server のみ） |
+| API Token / Password / パーソナルアクセストークン | `api_token` | Jira Cloud の Atlassian API Token、Jira Data Center / Server の Basic 認証用パスワード、または `pat` モードの Data Center パーソナルアクセストークン |
 | Base URL | `base_url` | Jira サイトの URL（例：`https://your-domain.atlassian.net`） |
 | Deployment | `deployment` | Jira Cloud の場合は `cloud`、Jira Data Center / Server の場合は `data_center` |
 | REST API Version | `api_version` | Jira Cloud ではデフォルトで `3`。Data Center / Server では REST API v2 を使用します |
 
-Jira Credential は、Data Center / Server のパーソナルアクセストークンおよび Bearer 認証にはまだ対応していません。
+パーソナルアクセストークンには Jira Data Center / Server 8.14 以降が必要です。認証方法を切り替えると保存されているシークレットが消去されるため、切り替え時に新しいパスワードまたはトークンを入力してください。
 
 **Test Connection** を使用して、現在の Jira ユーザーに対して Credential を検証してください。
 

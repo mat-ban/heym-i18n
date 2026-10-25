@@ -8,22 +8,23 @@ Nodul **Jira** conectează workflow-urile la API-ul REST Jira pentru automatizar
 |----------|-------|
 | Intrări | 1 |
 | Ieșiri | 1 |
-| Acreditare | Jira (Cloud email/API token sau Data Center utilizator/parolă, URL de bază, mod de implementare, versiune API REST opțională) |
+| Acreditare | Jira (Cloud email/API token, Data Center utilizator/parolă sau token de acces personal, URL de bază, mod de implementare, versiune API REST opțională) |
 | Ieșire | `$nodeLabel.*` |
 
 ## Acreditare
 
-Creați o acreditare **Jira** în [Fila Acreditări](../tabs/credentials-tab.md). Cheile de configurare stocate sunt `email`, `api_token`, `base_url`, `deployment` și `api_version` opțional. Pentru Jira Cloud, `email` stochează adresa de email a contului Atlassian, iar `api_token` stochează token-ul API Atlassian. Pentru Jira Data Center / Server, aceleași chei stochează numele de utilizator și parola pentru autentificarea Basic. Consultați [Integrări terțe](../reference/integrations.md#jira) pentru pașii de configurare.
+Creați o acreditare **Jira** în [Fila Acreditări](../tabs/credentials-tab.md). Cheile de configurare stocate sunt `email`, `api_token`, `base_url`, `deployment`, `auth_mode` și `api_version` opțională opțional. Pentru Jira Cloud, `email` stochează adresa de email a contului Atlassian, iar `api_token` stochează token-ul API Atlassian. Pentru Jira Data Center / Server, aceleași chei stochează numele de utilizator și parola pentru autentificarea Basic sau, cu `auth_mode: pat`, `api_token` stochează un token de acces personal trimis ca Bearer token, iar `email` nu este utilizat. Consultați [Integrări terțe](../reference/integrations.md#jira) pentru pașii de configurare.
 
 | Câmp | Cheie de configurare | Descriere |
 | --- | --- | --- |
 | Jira Email / Utilizator | `email` | Adresa de email a contului Atlassian pentru Jira Cloud, sau numele de utilizator pentru Jira Data Center / Server |
-| API Token / Parolă | `api_token` | Token-ul API Atlassian pentru Jira Cloud, sau parola pentru autentificarea Basic în Jira Data Center / Server |
+| Autentificare | `auth_mode` | `basic` (implicit) sau `pat` (doar Data Center / Server) |
+| API Token / Parolă / Token de acces personal | `api_token` | Token-ul API Atlassian pentru Jira Cloud, parola pentru autentificarea Basic în Jira Data Center / Server sau un token de acces personal Data Center în modul `pat` |
 | URL de bază | `base_url` | URL-ul site-ului Jira, de exemplu `https://your-domain.atlassian.net` |
 | Implementare | `deployment` | `cloud` pentru Jira Cloud sau `data_center` pentru Jira Data Center / Server |
 | Versiune API REST | `api_version` | Valoarea implicită este `3` pentru Jira Cloud. Data Center / Server utilizează API REST v2 |
 
-Token-urile de acces personal și autentificarea Bearer pentru Data Center / Server nu sunt încă acceptate de acreditarea Jira.
+Token-urile de acces personal necesită Jira Data Center / Server 8.14 sau o versiune ulterioară. Comutarea metodei de autentificare șterge secretul stocat, deci introduceți noua parolă sau noul token la comutare.
 
 Utilizați **Testare conexiune** pentru a verifica acreditarea față de utilizatorul Jira curent.
 

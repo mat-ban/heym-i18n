@@ -156,7 +156,7 @@ Decision 節點會向決策模型提出關於執行狀態的具型別問題，�
 需要 Decision Model 認證；與 [Switch](../nodes/switch-node.md)、[Condition](../nodes/condition-node.md) 以及 [Agent Node](../nodes/agent-node.md) 自然搭配使用。
 #### [RAG / Vector Store](../nodes/rag-node.md)
 
-RAG / Vector Store 節點會在向量儲存中插入、upsert、刪除及搜尋文件，以實現檢索增強生成。Database 下拉式選單可選取後端 — **Qdrant**（外部伺服器）或 **Postgres (pgvector)**（Heym 自有資料庫，無需外部服務），預設為 Qdrant。從 [Vectorstores](../tabs/vectorstores-tab.md) 分頁中選擇向量儲存，並將操作設為 insert、upsert、delete 或 search。Upsert 與 delete 會透過儲存於 payload 中的唯一 id 來定位文件 — **Document ID Field** 指定該欄位名稱（預設為 `doc_id`），而 **Document ID** 則帶入其值 — 因此文件會保留您自身系統已使用的 id：upsert 會先取代所有符合的 point，再儲存新版本；delete 則會回報是否有任何項目符合。文件中介資料（metadata）的值可接受表達式，因此 `{"url": "$start.url"}` 會儲存該次執行所產生的內容。Search 支援中介資料篩選與選用的 Cohere 重排序，並回傳一組結果陣列，包含 text、score、metadata、reranked 旗標及 count，以供 [LLM](../nodes/llm-node.md) 或 [Agent Node](../nodes/agent-node.md) 流程使用。
+RAG / Vector Store 節點會在向量儲存中插入、upsert、刪除及搜尋文件，以實現檢索增強生成。Database 下拉式選單可選取後端 — **Qdrant**（外部伺服器）或 **Postgres (pgvector)**（Heym 自有資料庫，無需外部服務），預設為 Qdrant。從 [Vectorstores](../tabs/vectorstores-tab.md) 分頁中選擇向量儲存，並將操作設為 insert、upsert、delete 或 search。Upsert 與 delete 會透過儲存於 payload 中的唯一 id 來定位文件 — **Document ID Field** 指定該欄位名稱（預設為 `doc_id`），而 **Document ID** 則帶入其值 — 因此文件會保留您自身系統已使用的 id：upsert 會先取代所有符合的 point，再儲存新版本；delete 則會回報是否有任何項目符合。文件中介資料（metadata）的值可接受表達式，因此 `{"url": "$start.url"}` 會儲存該次執行所產生的內容。Search 支援中介資料篩選、選用的 **Hybrid Search**（混合搜尋：向量相似度結合 BM25 關鍵字比對，讓 ID 和錯誤碼等精確術語能與語意相符項目一併被檢索）以及選用的 Cohere 重排序（reranking），並回傳一組結果陣列，包含 text、score、metadata、reranked 與 hybrid 旗標及 count，以供 [LLM](../nodes/llm-node.md) 或 [Agent Node](../nodes/agent-node.md) 流程使用。
 
 常見的下游節點為 [LLM](../nodes/llm-node.md) 與 [Agent Node](../nodes/agent-node.md)；向量儲存設定請參閱 [Vectorstores](../tabs/vectorstores-tab.md)。
 
@@ -554,7 +554,7 @@ Human-in-the-Loop 讓 [Agent 節點](../nodes/agent-node.md) 在特定檢查點�
 
 ### [Webhook](./webhooks.md)
 
-Workflow 可透過 [HTTP](../nodes/http-node.md) 於 `POST /api/workflows/{workflow_id}/execute` 觸發，或從 `POST /api/workflows/{workflow_id}/execute/stream` 增量串流。請求主體會作為 body 傳遞至 [Input](../nodes/input-node.md) 節點；headers 與 query params 可於 [Expression DSL](./expression-dsl.md) 表達式中使用。可設定個別 Workflow 的驗證方式：匿名、JWT 或自訂 header。選用的回應快取、速率限制，以及編輯器的 Run with cURL 對話框皆位於 Workflow 上，並同時適用於兩種模式。
+Workflow 可透過 [HTTP](../nodes/http-node.md) 於 `POST /api/workflows/{workflow_id}/execute` 觸發，或從 `POST /api/workflows/{workflow_id}/execute/stream` 增量串流。請求主體會作為 body 傳遞至 [Input](../nodes/input-node.md) 節點；headers 與 query params 可於 [Expression DSL](./expression-dsl.md) 表達式中使用。可設定個別 Workflow 的驗證方式：匿名、JWT 或自訂 header。選用的回應快取、速率限制，以及編輯器的 Run with cURL 對話框皆位於 Workflow 上，並同時適用於兩種模式。 設定了[並行限制](./webhooks.md#concurrency-limit-and-queued-runs)後，必須等待的呼叫會改為收到 `202 Accepted` 以及執行 ID 與狀態 URL。
 
 另請參閱 [Input](../nodes/input-node.md)、[執行 Token](./execution-tokens.md)、[SSE 串流](./sse-streaming.md)、[HTTP](../nodes/http-node.md) 及 [Workflow 結構](./workflow-structure.md)。
 
@@ -599,6 +599,10 @@ Workflow 可以指定另一個 workflow，在其失敗時執行。請在 workflo
 ### Workflow 逾時
 
 每個 Workflow 都可以在 Workflow 層級的 **Properties** 面板中，以秒為單位設定 **workflow timeout**。`0`（預設值）表示停用此功能。設定後，超過限制的執行會在下一个節點邊界被停止，並記錄為失敗的執行，附帶「timed out」錯誤。此逾時適用於手動、API 及 Trigger 觸發的執行。長時間的 [Wait](../nodes/wait-node.md) 節點會被即時中斷，而不會在其完整持續時間內持續阻塞。
+
+### 並行限制
+
+每個 workflow 都可以透過 workflow 層級 **Properties** 面板中的 **並行限制** 來限制同時執行的正式環境執行數；擁有者與具有編輯權限的協作者可以進行修改，預設為關閉。達到限制時，來自 [webhook](./webhooks.md#concurrency-limit-and-queued-runs) 與[串流](./sse-streaming.md) endpoint、[Portal](./portal.md)、[Quick Drawer](./quick-drawer.md)、[MCP](../tabs/mcp-tab.md) 以及每個 [trigger](./triggers.md) 的新執行會在先進先出 (FIFO) 佇列中等待，此數量會在 [cluster](./cluster.md) 的所有執行個體間合併計算。編輯器的測試執行、子 workflow 呼叫、[Evals](../tabs/evals-tab.md) 與審核恢復作業絕不會進入佇列，且 [Board](../tabs/board-tab.md) 卡片執行、檔案上傳執行、由 AI 助手的 run-workflow 工具啟動的執行以及警報通知 workflow 均無需等待插槽即可啟動。必須等待的 webhook 呼叫會立即收到 `202 Accepted` 以及 `execution_id`、使用相同憑證回應的狀態 URL、其排隊位置、佇列大小與目前執行數；MCP 用戶端也會收到相同資訊並輪詢 `heym_execution_status` 工具。選用的 **最大佇列大小** 會以 `429` 拒絕額外的呼叫，選用的 **最大等待時間** 會將等待過久的執行記錄為 `expired`。等待中的執行在[執行歷史記錄](./execution-history.md)中會顯示為 **排隊中 n/m**，並可在該處取消。
 
 ### 節省時間
 
@@ -865,3 +869,9 @@ Drive 分頁顯示由你各 Workflow 中 skill 所產生的所有檔案。它會
 
 <video src="/features/showcase/drive.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/drive.webm">▶ 觀看 Drive 示範</a></p>
+
+### [Canvas 協作](./canvas-collaboration.md)
+
+Everyone with a workflow open shares one live draft. Edits appear instantly, each person's pointer moves in their color, following mirrors everything they see and do, and you can talk over direct peer-to-peer audio.
+
+See also [Canvas Features](./canvas-features.md), [Edit History](./edit-history.md), and [Keyboard Shortcuts](./keyboard-shortcuts.md).

@@ -18,7 +18,7 @@ Vjerodajnice pohranjuju API ključeve i tajne koje koriste čvorovi u workflow-i
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Prijava za ChatGPT pretplatu (OAuth) ili pristupni token za Codex za izvršitelja, plus GitHub PAT za operacije s repozitorijem |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API ključ za OpenCode Go gateway (opcionalni osnovni URL) za izvršitelja, plus GitHub PAT za operacije s repozitorijem |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | Osobni pristupni token (PAT) za GitHub API pozive, operacije s GitHub čvorovima i MCP integracije |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token ili Data Center korisničko ime/lozinka, osnovni URL Jira stranice, način implementacije i opcionalna verzija REST API-a |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token, Data Center korisničko ime/lozinka ili osobni pristupni token, osnovni URL Jira stranice, način implementacije i opcionalna verzija REST API-a |
 | [Linear](../nodes/linear-node.md) | Linear | Osobni API ključ ili OAuth2 za timove, projekte, probleme i komentare |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autentifikacija za zahtjeve |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token i opcionalna tajna webhooka |
@@ -57,7 +57,7 @@ Neki čvorovi omogućuju izraze za autentifikaciju. Koristite [Expression DSL](.
 
 Codex vjerodajnice su namjerno isključene iz `$credentials`. Bez obzira na to prijavite li se s ChatGPT (pretplata, bez troška po tokenu API) ili zalijepite Codex `access_token`, tokeni se samo prosljeđuju lokalnom procesu Codex izvršitelja. Tokeni za prijavu ChatGPT automatski se obnavljaju kada isteknu.
 
-Jira vjerodajnice također su isključene iz `$credentials`. [Jira čvor](../nodes/jira-node.md) učitava vjerodajnicu prema `credentialId` u vrijeme izvođenja. Za prilagođene Jira REST pozive koji nisu pokriveni Jira čvorom, koristite [HTTP čvor](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` za Jira Cloud ili `username:password` za Data Center / Server), na primjer `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Također možete koristiti [Zaglavlje](../nodes/http-node.md) vjerodajnicu s `Authorization: Basic <base64(user:secret)>`. Osobni pristupni tokeni za Jira Data Center / Server i Bearer autentifikacija još nisu podržani od strane Jira vjerodajnice.
+Jira vjerodajnice također su isključene iz `$credentials`. [Jira čvor](../nodes/jira-node.md) učitava vjerodajnicu prema `credentialId` u vrijeme izvođenja. Za prilagođene Jira REST pozive koji nisu pokriveni Jira čvorom, koristite [HTTP čvor](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` za Jira Cloud ili `username:password` za Data Center / Server), na primjer `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Također možete koristiti [Zaglavlje](../nodes/http-node.md) vjerodajnicu s `Authorization: Basic <base64(user:secret)>`. Za osobne pristupne tokene za Jira Data Center / Server umjesto toga pošaljite `Authorization: Bearer <token>`; sama Jira vjerodajnica to podržava putem svog načina provjere autentičnosti **Personal Access Token**.
 
 | Tip vjerodajnice | Vrijednost izložena `$credentials.Name` |
 |------------------|-----------------------------------------|

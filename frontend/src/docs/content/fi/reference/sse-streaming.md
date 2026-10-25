@@ -25,12 +25,17 @@ Jokainen SSE-kehyksessä oleva tapahtuma on rivinvaihdolla erotettua JSONia, jos
 
 | Tapahtumatyyppi | Milloin lähetetään | Avainkentät |
 |------------|--------------------|------------|
-| `execution_started` | Heti pyynnön vastaanottamisen jälkeen | `execution_id`, `server_now_ms` |
+| `queued` | Workflow on saavuttanut [samanaikaisuusrajansa](./webhooks.md#concurrency-limit-and-queued-runs); lähetetään uudelleen aina kun suorituksen sijoitus muuttuu | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Heti pyynnön vastaanottamisen jälkeen tai kun jonossa oleva suoritus alkaa | `execution_id`, `server_now_ms` |
 | `node_start` | Juuri ennen solmun suorituksen alkamista | `node_id`, `node_label`, `started_at_ms`, valinnainen `message` |
 | `node_retry` | Kun solmu yrittää uudelleen | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Solmun suorituksen päätyttyä | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Kun Output-solmu palauttaa tuloksen ennenaikaisesti | `node_label`, `output` |
 | `execution_complete` | Workflown päättymisen jälkeen | `status`, `outputs`, `execution_time_ms` |
+
+### Jonossa olevat suoritukset
+
+Kun workflow on saavuttanut samanaikaisuusrajansa, tietovirta pysyy auki ja lähettää `queued`-tapahtumia suorituksen odottaessa. Jonossa oleva suoritus ajetaan taustatyöntekijässä (background worker), mahdollisesti toisessa prosessissa, joten sen virta kuljettaa tapahtuman `execution_started` suorituksen alkaessa ja `execution_complete` sen päättyessä, mutta ei lainkaan `node_start`-, `node_complete`- tai token-tapahtumia välissä. Sen `execution_complete` sisältää tyhjän `node_results`-kentän; avaa suoritus [Suoritushistoriassa](./execution-history.md) nähdäksesi solmujen tiedot. Yhteyden sulkeminen ei peruuta jonossa olevaa suoritusta. Kun jono on täynnä, pyyntöön vastataan koodilla `429` ennen kuin tietovirta avataan.
 
 ## Solmukohtaiset aloitusviestit
 

@@ -1216,7 +1216,8 @@
     "toolCalls": "Panggilan Tool",
     "askAi": "Tanya AI",
     "askAiTitle": "Tanyakan kepada asisten Chat tentang eksekusi ini",
-    "noNodeSpans": "Tidak ada span node yang dicatat untuk eksekusi ini."
+    "noNodeSpans": "Tidak ada span node yang dicatat untuk eksekusi ini.",
+    "queuedProgress": "Dalam antrean {position}/{size}"
   },
   "header": {
     "darkMode": "Beralih ke mode gelap",
@@ -1741,6 +1742,22 @@
         "waiting": "Menunggu",
         "neutral": "Netral"
       }
+    },
+    "concurrencyLimit": "Batas konkurensi",
+    "concurrencyLimitHelp": "Jalankan produksi (Webhook, Cron, MCP, Portal, Trigger) di atas batas menunggu dalam antrean FIFO. Uji coba editor selalu dimulai segera.",
+    "maxConcurrentRuns": "Maks. eksekusi bersamaan",
+    "maxQueueSizeOptional": "Ukuran antrean maks. (opsional)",
+    "emptyNoLimit": "Kosong = tanpa batas",
+    "maxWaitOptional": "Maks. tunggu (detik, opsional)",
+    "emptyWaitAsLong": "Kosong = tunggu selama diperlukan",
+    "concurrencyQueueHelp": "Antrean penuh merespons 429. Eksekusi yang menunggu lebih lama dari waktu tunggu maksimum dicatat sebagai kedaluwarsa.",
+    "rag": {
+      "hybridSearch": "Pencarian Hibrida",
+      "hybridSearchHelp": "Gabungkan kemiripan vektor dengan pencocokan kata kunci BM25, sehingga istilah persis seperti ID, nama, dan kode kesalahan juga ditemukan.",
+      "hybridScore": "Skor hibrida (0-1)",
+      "similarityScore": "Skor kemiripan",
+      "vectorSimilarity": "Kemiripan vektor",
+      "bm25Score": "Skor BM25"
     }
   },
   "quickDrawer": {

@@ -111,6 +111,10 @@ Oznaka slike mora biti različica, ki jo izvaja glavno vozlišče, in oba ključ
 | Na | Odstranite delavca iz rotacije, ne da bi ga ustavili — končana izvajanja, nobena nova niso dodeljena. Zaklenjeno za glavno vozlišče: delo z datotekami, vtičniki in kodirnimi agenti se izvaja tam, ne glede na to, kaj pravi stikalo |
 | Utež | Njegov delež razpoložljivih izvajanj |
 
+## Omejitve sočasnosti v klastru
+
+[Omejitev sočasnosti](./webhooks.md#concurrency-limit-and-queued-runs) workflowa se šteje v PostgreSQL, zato velja za vsako instanco in vsak proces: dve instanci nikoli ne izvajata več izvajanj enega workflowa, kot dovoljuje omejitev. Izvajanje, ki je čakalo na režo, se ob zagonu razporedi po enakih pravilih kot katero koli drugo izvajanje, zato izvajanje, ki mora ostati na main instanci, tam tudi ostane. Delavec čakalne vrste, ki izvaja ta izvajanja, se zdaj zažene pri vsaki namestitvi, vključno s posamezno instanco, kjer prevzame le izvajanja, ki jih je v vrsto postavila lastna instanca. To pomeni, da posamezna instanca prav tako ohranja povezavo `LISTEN` za prebujanje čakalne vrste v vsakem procesu; načrtujte njene povezave enako kot za instanco klastra.
+
 ## Zgodovina izvajanja
 
 Vsako izvajanje v zgodovini izvajanja imenuje vozlišče, ki ga je izvedlo, in oba pogovorna okna zgodovine lahko filtrirata do enega vozlišča. Filter se ujema z ID-jem vozlišča, medtem ko prikazuje njegovo ime, tako da preimenovanje vozlišča ne prepiše, kaj pravijo stara izvajanja.

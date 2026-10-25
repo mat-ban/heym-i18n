@@ -109,6 +109,73 @@ Headers 與 query params 可在運算式中以 `$input.headers` 與 `$input.quer
 
 `test_run` 請求會略過速率限制。
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## 並行限制與排隊執行
+
+Workflow 可以限制同時執行的正式環境執行數量。在 workflow 層級的 **Properties** 面板中開啟 **並行限制**，並設定 **最大並行執行數**。擁有者與具有編輯權限的協作者可以進行修改。此限制預設為關閉。
+
+達到限制時，新的執行會在先進先出 (FIFO) 佇列中等待。這涵蓋所有正式環境進入點：此 endpoint、[串流 endpoint](./sse-streaming.md)、[Portal](./portal.md)、[Quick Drawer](./quick-drawer.md)、[MCP](../tabs/mcp-tab.md) 以及每個 [trigger](./triggers.md)。編輯器本身的測試執行一律會立即啟動，不會佔用額度插槽。若未登入具有開啟 workflow 權限的作業階段而傳送 `test_run=true`，並不會略過佇列。
+
+| 設定 | 說明 |
+|---|---|
+| `concurrency_limit` | 同時允許的正式環境執行數。`0` 代表關閉限制 |
+| `concurrency_max_queue` | 選用。允許同時等待的執行數。留空代表無限制 |
+| `concurrency_max_wait_seconds` | 選用。等待時間超過此設定的執行會被記錄為 `expired`。留空代表無限制等待 |
+
+### 202 Accepted
+
+立即啟動的呼叫行為與回應格式中所述完全相同。必須等待的呼叫會立即收到 `202 Accepted`（無論 `X-Simple-Response` 內容為何），並帶有指向其狀態 URL 的 `Location` 標頭：
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| 欄位 | 說明 |
+|---|---|
+| `queue.position` | 此執行在佇列中的排隊位置，從 1 開始 |
+| `queue.size` | 目前正在等待的執行數 |
+| `queue.running` | 目前佔用插槽的執行數 |
+| `queue.limit` | 該 workflow 的並行限制 |
+| `status_token` | 僅限匿名 workflow。在此回應中僅返回一次 |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` 會回應執行的狀態。請使用啟動執行的相同憑證來呼叫：工作階段或 JWT、[執行 token](./execution-tokens.md) 或 workflow 的自訂標頭。匿名 workflow 沒有需要驗證的憑證，因此請在 `X-Heym-Run-Token` 標頭中傳送來自 202 的 `status_token`。token 絕對不會從查詢字串讀取。錯誤或遺失的 token 會收到 `404`，與未知執行的結果相同。
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | 含義（必須等待並行插槽的執行會改為收到 [202 回應](#202-accepted)） |
+|---|---|
+| `queued` | 正在等待插槽；`queue` 顯示其目前位置 |
+| `running` | 已取得插槽且正在執行 |
+| `success` / `error` | 已完成；`outputs` 與 `error` 已填入 |
+| `pending` | 因[人工審核](./human-in-the-loop.md)而暫停 |
+| `cancelled` | 已從[執行歷史記錄](./execution-history.md)中取消 |
+| `expired` | 等待時間超過 `concurrency_max_wait_seconds` 且未曾執行 |
+
+每隔幾秒輪詢一次，直到狀態不再是 `queued` 或 `running`。即使沒有人輪詢，排隊的執行也會照常完成執行。
+
+### 佇列已滿
+
+當設定了 `concurrency_max_queue` 且已有相應數量的執行正在等待時，呼叫將會被拒絕並傳回 `429 Concurrency queue is full`，同時在執行歷史記錄中留下 `queue_full` 項目。沒有任何項目會進入佇列。
+
 ## 回應格式
 
 Endpoint 會回傳 JSON：

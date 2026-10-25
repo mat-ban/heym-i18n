@@ -111,6 +111,10 @@ Image-taggen måste vara den version main kör, och båda nycklarna måste kopie
 | On | Ta en worker ur rotation utan att stoppa den — pågående körningar slutförs, inga nya tilldelas. Låst till på för main-instansen: arbete med filer, plugin och kodningsagent körs där oavsett vad växeln säger |
 | Weight | Dess andel av distribuerbara körningar |
 
+## Concurrency-gränser i ett kluster
+
+Ett workflows [concurrency-gräns](./webhooks.md#concurrency-limit-and-queued-runs) räknas i PostgreSQL och gäller därmed över varje instans och varje process: två instanser kör aldrig fler körningar av ett workflow än gränsen tillåter. En körning som väntat på en plats fördelas enligt samma regler som alla andra körningar när den startar, så en körning som måste stanna på main gör det fortfarande. Den kö-worker som hanterar dessa körningar startar nu vid varje installation, inklusive en enskild instans, där den endast tar de körningar som dess egen instans köade. Det innebär att en enskild instans också håller köns väckningsanslutning via `LISTEN` i varje process; budgetera därför dess anslutningar på samma sätt som för en klusterinstans.
+
 ## Körningshistorik
 
 Varje körning i körningshistoriken namnger den instans som utförde den, och båda historikdialogerna kan filtreras ner till en instans. Filtret matchar på instansens id medan det visar dess namn, så att byta namn på en instans skriver inte om vad gamla körningar säger.

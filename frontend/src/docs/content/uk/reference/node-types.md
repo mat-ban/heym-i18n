@@ -30,7 +30,7 @@ Heym надає різноманітні типи вузлів для побуд
 | [Codex](../nodes/codex-node.md) | Запускає локальний Codex CLI проти репозиторію GitHub, використовуючи токен доступу ChatGPT/Codex | 1 | 1, плюс вихід `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Запускає OpenCode CLI проти репозиторію GitHub у захищеному контейнері, використовуючи API-ключ шлюзу OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Викликає конкретний інструмент MCP безпосередньо, без вибору його через LLM | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Вставляє, оновлює (upsert), видаляє або шукає у [vector store](../tabs/vectorstores-tab.md) Qdrant або Postgres (pgvector) для RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Вставляє, оновлює (upsert), видаляє або шукає (векторний або гібридний векторний + BM25) у [vector store](../tabs/vectorstores-tab.md) Qdrant або Postgres (pgvector) для RAG | 1 | 1 |
 
 ## Logic Nodes
 

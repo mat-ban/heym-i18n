@@ -105,3 +105,5 @@ Heym は、Workflow エディターとキャンバス全体でキーボードシ
 - [Workflow Structure](./workflow-structure.md) – ノードとエッジの形式
 - [Execute Node](../nodes/execute-node.md) – サブ Workflow を呼び出す（`Ctrl + Shift + O`）
 - [Quick Start](../getting-started/quick-start.md) – 最初の Workflow を構築する
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

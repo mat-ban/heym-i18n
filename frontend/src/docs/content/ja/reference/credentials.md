@@ -18,7 +18,7 @@ Credentialsは、Workflowノードで使用されるAPIキーとシークレッ�
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPTサブスクリプションのサインイン（OAuth）またはランナー用のCodexアクセスToken、およびリポジトリ操作用のGitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | ランナー用のOpenCode GoゲートウェイAPIキー（オプションのベースURL）、およびリポジトリ操作用のGitHub PAT |
 | [Agent](../nodes/agent-node.md)、[HTTP](../nodes/http-node.md)、[GitHub](../nodes/github-node.md) | GitHub | GitHub API呼び出し、GitHubノード操作、MCP統合用のGitHub personal access token（PAT） |
-| [Jira](../nodes/jira-node.md) | Jira | Cloudのメール/API TokenまたはData Centerのユーザー名/パスワード、JiraサイトのベースURL、デプロイモード、オプションのREST APIバージョン |
+| [Jira](../nodes/jira-node.md) | Jira | Cloudのメール/API Token、Data Centerのユーザー名/パスワード、または個人アクセストークン、JiraサイトのベースURL、デプロイモード、オプションのREST APIバージョン |
 | [Linear](../nodes/linear-node.md) | Linear | チーム、プロジェクト、Issue、コメント用のPersonal APIキーまたはOAuth2 |
 | [HTTP](../nodes/http-node.md) | Bearer、Header | リクエストの認証 |
 | [Telegram](../nodes/telegram-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot TokenおよびオプションのWebhookシークレット |
@@ -58,7 +58,7 @@ OpenCode Go の認証情報もそこに表示されますが、**「usage unavai
 
 Codex 認証情報は意図的に `$credentials` から除外されています。ChatGPT（サブスクリプション、トークンごとの API コストなし）でサインインする場合でも、Codex の `access_token` を貼り付ける場合でも、トークンはローカルの Codex ランナープロセスにのみ渡されます。ChatGPT サインインのトークンは、有効期限が切れると自動的に更新されます。
 
-Jira 認証情報も `$credentials` から除外されています。[Jira ノード](../nodes/jira-node.md) は実行時に `credentialId` で認証情報を読み込みます。Jira ノードでカバーされていないカスタム Jira REST 呼び出しには、[HTTP ノード](../nodes/http-node.md) と Jira Basic Auth（Jira Cloud の場合は `email:api_token`、Data Center / Server の場合は `username:password`）を使用します。例えば `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself` のように指定します。[Header](../nodes/http-node.md) 認証情報と `Authorization: Basic <base64(user:secret)>` を組み合わせて使用することもできます。Jira Data Center / Server の個人アクセストークンおよび Bearer 認証は、Jira 認証情報ではまだサポートされていません。
+Jira 認証情報も `$credentials` から除外されています。[Jira ノード](../nodes/jira-node.md) は実行時に `credentialId` で認証情報を読み込みます。Jira ノードでカバーされていないカスタム Jira REST 呼び出しには、[HTTP ノード](../nodes/http-node.md) と Jira Basic Auth（Jira Cloud の場合は `email:api_token`、Data Center / Server の場合は `username:password`）を使用します。例えば `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself` のように指定します。[Header](../nodes/http-node.md) 認証情報と `Authorization: Basic <base64(user:secret)>` を組み合わせて使用することもできます。Jira Data Center / Server の個人アクセストークンの場合は、代わりに `Authorization: Bearer <token>` を送信します。Jira 認証情報自体が **Personal Access Token** 認証モードを通じてこれをサポートしています。
 
 | 認証情報タイプ | `$credentials.Name` に公開される値 |
 |-----------------|--------------------------------------|

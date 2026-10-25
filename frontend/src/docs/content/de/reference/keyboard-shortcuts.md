@@ -105,3 +105,5 @@ Diese Kürzel sind im Dialog für den Ausführungsverlauf und im Traces-Panel ve
 - [Workflow-Struktur](./workflow-structure.md) – Knoten- und Kantenformat
 - [Execute-Knoten](../nodes/execute-node.md) – Ruft Sub-Workflows auf (`Ctrl + Shift + O`)
 - [Schnellstart](../getting-started/quick-start.md) – Erstelle deinen ersten Workflow
+
+- **Esc**: Beendet das Folgen eines Mitarbeiters in der [Canvas-Zusammenarbeit](./canvas-collaboration.md).

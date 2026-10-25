@@ -109,6 +109,8 @@ Tots dos diàlegs d'historial mostren les **execucions en curs** a la part super
 - Després de la cancel·lació, l'entrada en curs desapareix a la propera actualització; premeu **Refresh** per actualitzar la llista manualment
 - Si cancel·leu una execució que ja ha finalitzat, la sol·licitud no té cap efecte
 
+Les execucions que esperen un [slot de concurrència](./webhooks.md#concurrency-limit-and-queued-runs) apareixen a la mateixa secció amb l'etiqueta **Queued 2/5**, la seva posició a la cua i la mida de la cua. No tenen el botó **Open live** perquè encara no hi ha res en execució; **Cancel** treu una execució en espera de la cua i la registra com a `cancelled`. Una execució que ha esperat més del temps màxim del workflow es registra com a `expired`, i una rebutjada per cua plena com a `queue_full`; ambdues tenen la seva pròpia insígnia a la llista d'execucions.
+
 L'URL en directe és `/workflows/{workflowId}/{executionId}`. L'observador és de només lectura: sortir
 de l'editor només desconnecta aquesta pestanya del navegador i mai atura el Workflow. Les instantànies actives
 es comparteixen a través de PostgreSQL, de manera que obrir una execució encara funciona quan el Trigger i la sol·licitud de l'editor

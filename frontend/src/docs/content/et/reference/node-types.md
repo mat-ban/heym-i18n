@@ -30,7 +30,7 @@ Kõigi sisestuspunktide kohta vt [Triggerid](./triggers.md).
 | [Codex](../nodes/codex-node.md) | Kohaliku Codex CLI käivitamine GitHubi hoidla vastu, kasutades ChatGPT/Codex juurdepääsu tokenit | 1 | 1, pluss `question` väljund |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode CLI käivitamine GitHubi hoidla vastu karastatud konteineris, kasutades OpenCode Go gateway API võtit | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Konkreetse MCP-tööriista otsene kutsumine ilma LLM-i valikuta | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | RAG-i jaoks Qdranti või Postgres (pgvector) [vektorhoidlasse](../tabs/vectorstores-tab.md) sisestamine, upsert, kustutamine või otsimine | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | RAG-i jaoks Qdranti või Postgres (pgvector) [vektorhoidlasse](../tabs/vectorstores-tab.md) sisestamine, upsert, kustutamine või otsimine (vektor- või hübriidvektor + BM25) | 1 | 1 |
 
 ## Loogikasõlmed
 

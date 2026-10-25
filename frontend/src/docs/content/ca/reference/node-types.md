@@ -30,7 +30,7 @@ Consulteu [Triggers](./triggers.md) per a tots els punts d'entrada.
 | [Codex](../nodes/codex-node.md) | Executeu la CLI local de Codex contra un repositori de GitHub utilitzant un token d'accés de ChatGPT/Codex | 1 | 1, més una sortida `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Executeu la CLI d'OpenCode contra un repositori de GitHub en un contenidor endurit utilitzant una clau API de la passarel·la OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Crideu una eina MCP específica directament sense que un LLM la seleccioni | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Inseriu, actualitzeu, suprimiu o cerqueu en un [vector store](../tabs/vectorstores-tab.md) de Qdrant o Postgres (pgvector) per a RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Inseriu, actualitzeu, suprimiu o cerqueu (vectorial o híbrida vectorial + BM25) en un [vector store](../tabs/vectorstores-tab.md) de Qdrant o Postgres (pgvector) per a RAG | 1 | 1 |
 
 ## Nodes de lògica
 

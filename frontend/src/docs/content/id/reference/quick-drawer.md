@@ -52,6 +52,8 @@ Setelah memulai eksekusi, drawer menampilkan:
 
 `pending` berarti workflow sedang menunggu tindakan selanjutnya seperti tinjauan manusia.
 
+Run Quick Drawer adalah run produksi, jadi workflow dengan [batas konkurensi](./webhooks.md#concurrency-limit-and-queued-runs) dapat membuatnya menunggu. Saat run berada dalam antrean, status terbaca **Waiting in queue (2/5)**; status berubah menjadi "running" saat run dimulai dan menampilkan hasilnya saat selesai, tanpa progres langkah demi langkah. Run yang kedaluwarsa di antrean, atau dibatalkan saat menunggu, berakhir sebagai `error`.
+
 Eksekusi file dilakukan melalui tautan unggah sekali pakai milik trigger: drawer meminta tautan ke workflow, mengunggah file ke tautan tersebut, lalu menampilkan hasilnya setelah unggahan selesai. Eksekusi file menampilkan status akhir dan output tanpa progres langkah demi langkah, serta tetap ditandai `Quick Drawer` di riwayat. File yang dipilih akan dikosongkan setelah setiap eksekusi karena satu tautan hanya menerima satu file.
 
 ## Penyimpanan Browser

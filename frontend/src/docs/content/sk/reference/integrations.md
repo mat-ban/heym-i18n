@@ -15,7 +15,7 @@ Niektoré integračné uzly **nevyžadujú** prihlasovacie údaje. [WebSocket Tr
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, voliteľné `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, voliteľné `base_url` |
-| **Jira** | [Uzol Jira](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, voliteľné `api_version` |
+| **Jira** | [Uzol Jira](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (iba Basic auth), voliteľné `api_version` |
 | **Linear** | [Uzol Linear](../nodes/linear-node.md) | `api_key`, alebo `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Uzol Sentry](../nodes/sentry-node.md) | `api_token`, voliteľné `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -201,7 +201,7 @@ OAuth tokeny (`access_token`, `refresh_token`, `token_expiry`) sa ukladajú a ob
 
 ## Jira
 
-Prihlasovacie údaje Jira ukladajú Basic auth údaje Jira, základnú URL adresu Jira lokality, režim nasadenia a voliteľnú verziu REST API pre [uzol Jira](../nodes/jira-node.md). Použite `cloud` pre Jira Cloud alebo `data_center` pre Jira Data Center / Server.
+Prihlasovacie údaje Jira ukladajú Basic auth údaje Jira alebo osobný prístupový token Data Center, základnú URL adresu Jira lokality, režim nasadenia a voliteľnú verziu REST API pre [uzol Jira](../nodes/jira-node.md). Použite `cloud` pre Jira Cloud alebo `data_center` pre Jira Data Center / Server.
 
 ### Nastavenie
 
@@ -214,17 +214,19 @@ Prihlasovacie údaje Jira ukladajú Basic auth údaje Jira, základnú URL adres
 
 **Jira Data Center / Server**
 
-1. Ako režim nasadenia vyberte **Jira Data Center / Server**.
-2. Zadajte používateľské meno a heslo Jira používané na Basic auth.
-3. Zadajte URL adresu lokality Jira, napríklad `https://jira.example.com`.
-4. Pomocou **Test Connection** overte prihlasovacie údaje.
+1. Ako nasadenie vyberte **Jira Data Center / Server**.
+2. Vyberte metódu autentifikácie. **Používateľské meno a heslo** využíva Basic auth. **Personal Access Token** využíva `Authorization: Bearer <token>` a vyžaduje Jira Data Center / Server 8.14 alebo novší. Vytvorte token v ponuke **Profil → Personal Access Tokens** v Jira.
+3. Zadajte používateľské meno a heslo Jira alebo vložte osobný prístupový token (používateľské meno nie je potrebné).
+4. Zadajte URL adresu lokality Jira, napríklad `https://jira.example.com`.
+5. Na overenie poverenia použite **Test Connection**.
 
 ### Polia
 
 | Pole | Popis |
 | --- | --- |
-| `email` | E-mail účtu Atlassian pre Jira Cloud alebo používateľské meno pre Jira Data Center / Server |
-| `api_token` | API token Atlassian pre Jira Cloud alebo heslo pre Basic auth pre Jira Data Center / Server |
+| `auth_mode` | `basic` (predvolené pri neuvedení) alebo `pat`. `pat` je platné iba s `data_center` |
+| `email` | E-mail účtu Atlassian Jira Cloud alebo používateľské meno Jira Data Center / Server. V režime `pat` sa nepoužíva |
+| `api_token` | API token Atlassian Jira Cloud, heslo Jira Data Center / Server pre Basic auth alebo osobný prístupový token Data Center v režime `pat` |
 | `base_url` | Základná URL adresa lokality Jira |
 | `deployment` | `cloud` pre Jira Cloud alebo `data_center` pre Jira Data Center / Server |
 | `api_version` | Verzia REST API; predvolene `3` pre Jira Cloud. Data Center / Server používa v2 |
@@ -233,14 +235,11 @@ Prihlasovacie údaje Jira ukladajú Basic auth údaje Jira, základnú URL adres
 
 - Uzol Jira odosiela popisy issues a komentáre ako textové dokumenty Atlassian Document Format
   pre Jira Cloud REST API v3. Prihlasovacie údaje Data Center / Server odosielajú čistý text.
-- Data Center / Server momentálne podporuje iba Basic auth s používateľským menom a heslom. Osobné prístupové
-  tokeny a Bearer auth zatiaľ nie sú podporované.
+- Data Center / Server podporuje Basic auth pomocou používateľského mena/hesla a autentifikáciu pomocou osobného prístupového tokenu (PAT) so schémou Bearer. Autentifikácia PAT vyžaduje Jira Data Center / Server 8.14 alebo novší.
 - Nahrávanie príloh akceptuje obsah vo formáte base64 alebo data URL a podlieha limitu veľkosti súboru platformy (predvolene 99 MB). Sťahovanie príloh môže vrátiť obsah base64, ak je povolené.
 - Vytváranie a mazanie používateľov a upozornenia na issues vyžadujú, aby autentifikovaný účet Jira mal príslušné povolenia lokality alebo organizácie Jira.
 - Pomocou List Projects, Search Issues a List Transitions zistite kľúče projektov, kľúče issues a ID prechodov.
-- Pre vlastné endpointy, ktoré uzol Jira nepokrýva, použite [uzol HTTP](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pre Cloud alebo `username:password` pre Data Center / Server) v príkaze cURL, alebo prihlasovacie údaje typu Header s príslušnou hodnotou `Authorization: Basic <base64(user:secret)>`.
-
-Pozri tiež:
+- Pre vlastné endpointy nepokryté uzlom Jira použite [uzol HTTP](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pre Cloud alebo `username:password` pre Data Center / Server) alebo PAT Bearer auth (`Authorization: Bearer <token>` pre Data Center / Server). Prípadne použite poverenie Header so zodpovedajúcou hlavičkou `Authorization`.
 
 - [Uzol Jira](../nodes/jira-node.md)
 - [Prihlasovacie údaje](./credentials.md)

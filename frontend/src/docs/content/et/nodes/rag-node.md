@@ -7,7 +7,7 @@ Sõlmel on **Database** rippmenüü, mis valib taustsüsteemi:
 - **Qdrant** – salvestab vektorid välisesse Qdrant serverisse (nõuab *RAG: Qdrant + OpenAI* mandaati).
 - **Postgres (pgvector)** – salvestab vektorid Heymi enda Postgres andmebaasi, ilma välise teenuseta (nõuab *RAG: Psql + OpenAI* mandaati).
 
-Vaikeväärtus on **Qdrant** tagasiühilduvuse huvides. Database'i muutmine filtreerib **Vector Store** loendi selle andmebaasiga seotud hoidlatele. Mõlemad taustsüsteemid toetavad samu toiminguid, metaandmete filtreerimist ja Cohere ümberjärjestamist (reranking).
+Vaikeväärtus on **Qdrant** tagasiühilduvuse huvides. Database'i muutmine filtreerib **Vector Store** loendi selle andmebaasiga seotud hoidlatele. Mõlemad taustsüsteemid toetavad samu toiminguid, metaandmete filtreerimist, hübriidotsingut (vektor + BM25) ja Cohere ümberjärjestamist (reranking).
 
 Mõlemale taustsüsteemile saab juurde pääseda ka *RAG: Custom Embeddings* mandaadi kaudu, mis
 asendab OpenAI mis tahes OpenAI-ga ühilduva embedding-endpointiga ja määrab oma vektorhoidla
@@ -20,7 +20,7 @@ suunatud. Vt [Custom Embeddings](../reference/integrations.md#custom-embeddings-
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parameetrid
 
@@ -36,6 +36,7 @@ suunatud. Vt [Custom Embeddings](../reference/integrations.md#custom-embeddings-
 | `queryText` | expression | Search query (search only) |
 | `searchLimit` | number | Max results (default: 5) |
 | `metadataFilters` | JSON string | Metadata filters for search (values support expressions) |
+| `hybridSearch` | boolean | Vektorotsingu kombineerimine BM25 märksõnaotsinguga (ainult search; vaikimisi: väljas) |
 | `enableReranker` | boolean | Use Cohere to rerank search results |
 | `rerankerCredentialId` | UUID | Cohere credential for reranking |
 | `rerankerTopN` | number | Number of top results to keep after reranking |
@@ -125,6 +126,7 @@ Semantiline otsing sarnaste dokumentide leidmiseks.
 | `queryText` | jah | Otsingupäring |
 | `searchLimit` | ei | Maksimaalne tulemuste arv (vaikimisi: 5) |
 | `metadataFilters` | ei | Filtreeri metaandmete järgi (täpne vastavus JSON-objektina, väärtused toetavad avaldisi) |
+| `hybridSearch` | ei | Vektorsarnasuse sulandamine BM25 märksõnasobitusega (vaata [Hübriidotsing](#hubriidotsing)) |
 | `enableReranker` | ei | Luba Cohere ümberjärjestamine parema asjakohasuse saavutamiseks |
 | `rerankerCredentialId` | ümberjärjestamise korral | Cohere mandaat |
 | `rerankerTopN` | ei | Lõplik tulemuste arv pärast ümberjärjestamist |
@@ -138,13 +140,44 @@ Kui ümberjärjestamine on lubatud:
 - `score` jääb algseks vektorsarnasuse skooriks
 - `relevance_score` on Cohere ümberjärjestaja skoor
 
+
+#### Hübriidotsing
+
+Vektorotsing leiab teksti, millel on päringuga sama tähendus. Tekst, mis sisaldab ainult täpseid sõnu, võib jääda madalamale kohale: tootekood, piletinumber, isiku nimi, viga nagu `ERR-4021`. Lülitage sisse **Hübriidotsing** ja sõlm käivitab vektorotsingu kõrval märksõnaotsingu ning liidab mõlemad loendid, nii et üks päring leiab mõlemat tüüpi vasteid.
+
+1. Vektorotsing tagastab oma parimad vasted täpselt nagu ilma hübriidotsinguta.
+2. Märksõnaotsing hindab salvestatud teksti päringu sõnade suhtes **BM25** abil, mis premeerib haruldasi sõnu, korduvaid sõnu ja lühemaid dokumente.
+3. Kaks järjestatud loendit liidetakse **reciprocal rank fusion** abil. Mõlema loendi tipu lähedal asuv dokument seatakse esikohale ja dokument, mille leidis ainult üks loend, ilmub samuti.
+
+Metaandmete filtrid kehtivad mõlemale otsingule ning Cohere ümberjärjestaja, kui see on lubatud, töötab liidetud loendil.
+
+Iga tulemus kannab mõlema otsingu skoori:
+
+| Väli | Tähendus |
+|------|----------|
+| `score` | Liidetud skoor vahemikus 0 kuni 1. `1` tähendab, et dokument oli mõlemas otsingus esikohal. |
+| `vector_score` | Vektorsarnasus (0 kuni 1). `null`, kui dokument leiti ainult märksõnaotsinguga. |
+| `keyword_score` | BM25 skoor. `null`, kui ükski päringu sõnadest ei esine dokumendis. |
+
+`$nodeLabel.hybrid` on `true`, kui hübriidotsing teostati.
+
+Hea teada:
+
+- Liidetud `score` seab tulemused üksteise suhtes pingeritta. See ei ole vektorsarnasus, seega lihtotsingu jaoks kohandatud lävend ei kandu otse üle.
+- Päringu sõnad teisendatakse väiketähtedeks ning jagatakse tühikute ja kirjavahemärkide järgi, nii et `ERR-4021` otsitakse kui `err` ja `4021`. Märksõnaotsing kasutab kuni esimesed 16 päringu erinevat sõna.
+- Qdrant: esimene hübriidotsing kollektsioonis ehitab täistekstiindeksi payload-väljale `text`, mis nõuab kirjutamisõigusega Qdrant-võtit. Suurte kollektsioonide puhul võtab see aega vaid ühe korra; hilisemad otsingud taaskasutavad indeksit.
+- Postgres (pgvector): andmebaasi migratsioon `142_vsi_text_search_index` lisab täistekstiindeksi. Käivitage pärast värskendamist `alembic upgrade head`. Hübriidotsing töötab ka ilma indeksita, kuid suurte hoidlate puhul aeglasemalt.
+- Iga päringu puhul loeb märksõnaotsing kuni 200 vastavat dokumenti, alustades kõige haruldasematest päringusõnadest, kuna neil on suurim kaal.
 ## Tulemustele juurdepääs
 
 - `$ragNode.results.first().text` – parima tulemuse sisu
-- `$ragNode.results.first().score` – sarnasuse skoor (0–1)
+- `$ragNode.results.first().score` – sarnasuse skoor (0–1), või liidetud skoor hübriidotsinguga
+- `$ragNode.results.first().keyword_score` – BM25 skoor (hübriidotsing)
+- `$ragNode.results.first().vector_score` – vektorsarnasus (hübriidotsing)
 - `$ragNode.results.first().metadata.source` – parima tulemuse metaandmed
 - `$ragNode.results.map("item.text").join("\n\n")` – ühenda LLM-i konteksti jaoks
 - `$ragNode.reranked` – kas ümberjärjestamist rakendati
+- `$ragNode.hybrid` – kas rakendati hübriidotsingut
 - `$ragNode.count` – tagastatud tulemuste arv
 - `$ragNode.replaced` – kas upsert asendas olemasoleva dokumendi
 - `$ragNode.deleted` – kas kustutamine eemaldas midagi
@@ -164,6 +197,22 @@ Kui ümberjärjestamine on lubatud:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Näide – Hübriidotsing
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

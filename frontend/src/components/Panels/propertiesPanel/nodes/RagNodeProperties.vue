@@ -269,6 +269,26 @@ const {
 
       <div class="space-y-3 pt-3 border-t">
         <div class="flex items-center justify-between">
+          <Label>{{ $t('propertiesPanel.rag.hybridSearch') }}</Label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              :checked="selectedNode.data.hybridSearch || false"
+              class="sr-only peer"
+              @change="updateNodeData('hybridSearch', ($event.target as HTMLInputElement).checked)"
+            >
+            <div
+              class="w-9 h-5 bg-muted rounded-full peer peer-checked:bg-primary transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"
+            />
+          </label>
+        </div>
+        <p class="text-xs text-muted-foreground">
+          {{ $t('propertiesPanel.rag.hybridSearchHelp') }}
+        </p>
+      </div>
+
+      <div class="space-y-3 pt-3 border-t">
+        <div class="flex items-center justify-between">
           <Label>Enable Reranker</Label>
           <label class="relative inline-flex items-center cursor-pointer">
             <input
@@ -354,9 +374,17 @@ const {
           <div>${{ selectedNode.data.label }}.success - Boolean</div>
           <div>${{ selectedNode.data.label }}.operation - "search"</div>
           <div>${{ selectedNode.data.label }}.reranked - Boolean</div>
+          <div>${{ selectedNode.data.label }}.hybrid - Boolean</div>
           <div>${{ selectedNode.data.label }}.results - Array of results</div>
           <div>${{ selectedNode.data.label }}.results[0].text - Document text</div>
-          <div>${{ selectedNode.data.label }}.results[0].score - Similarity score</div>
+          <div>
+            ${{ selectedNode.data.label }}.results[0].score -
+            {{ selectedNode.data.hybridSearch ? $t('propertiesPanel.rag.hybridScore') : $t('propertiesPanel.rag.similarityScore') }}
+          </div>
+          <template v-if="selectedNode.data.hybridSearch">
+            <div>${{ selectedNode.data.label }}.results[0].vector_score - {{ $t('propertiesPanel.rag.vectorSimilarity') }}</div>
+            <div>${{ selectedNode.data.label }}.results[0].keyword_score - {{ $t('propertiesPanel.rag.bm25Score') }}</div>
+          </template>
           <div v-if="selectedNode.data.enableReranker">
             ${{ selectedNode.data.label }}.results[0].relevance_score - Reranker score
           </div>

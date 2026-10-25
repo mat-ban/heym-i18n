@@ -52,6 +52,8 @@ A futtatás elindítása után a fiók az alábbiakat mutatja:
 
 A `pending` azt jelenti, hogy a workflow egy későbbi műveletre vár, például emberi felülvizsgálatra.
 
+A Gyors fiók (Quick Drawer) futtatásai éles futtatások, így egy [párhuzamossági korláttal](./webhooks.md#concurrency-limit-and-queued-runs) rendelkező workflow várakozásra kényszerítheti őket. Amíg a futtatás sorban áll, az állapota **Waiting in queue (2/5)**; ez a futtatás indulásakor "running"-ra vált, és a befejezéskor megjeleníti az eredményt, lépésről lépésre történő folyamatkijelzés nélkül. A sorban lejárt vagy várakozás közben megszakított futtatás `error` állapotban fejeződik be.
+
 A fájlos futtatás a trigger egyszer használatos feltöltési hivatkozásán keresztül történik: a fiók kér egy hivatkozást a workflow-tól, feltölti rá a fájlt, majd a feltöltés befejezésekor megjeleníti az eredményt. A fájlos futtatások a végső állapotot és a kimeneteket mutatják, lépésenkénti előrehaladást nem, és az előzményekben szintén `Quick Drawer` címkét kapnak. A kiválasztott fájl minden futtatás után törlődik, mivel egy hivatkozás egyetlen fájlt fogad.
 
 ## Böngésző tároló

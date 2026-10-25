@@ -15,7 +15,7 @@ Neki čvorovi integracije **ne** zahtijevaju vjerodajnice. [WebSocket Trigger](.
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, opcionalno `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, opcionalno `base_url` |
-| **Jira** | [Jira čvor](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, opcionalno `api_version` |
+| **Jira** | [Jira čvor](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (samo Basic auth), opcionalno `api_version` |
 | **Linear** | [Linear čvor](../nodes/linear-node.md) | `api_key`, ili `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry čvor](../nodes/sentry-node.md) | `api_token`, opcionalno `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -198,7 +198,7 @@ OAuth tokeni (`access_token`, `refresh_token`, `token_expiry`) se pohranjuju i a
 
 ## Jira
 
-Jira vjerodajnica pohranjuje Jira Basic auth vjerodajnice, osnovnu URL adresu Jira stranice, način implementacije i opcionalnu verziju REST API-ja za [Jira čvor](../nodes/jira-node.md). Koristite `cloud` za Jira Cloud ili `data_center` za Jira Data Center / Server.
+Jira vjerodajnica pohranjuje Jira Basic auth vjerodajnice ili osobni token za pristup Data Center, osnovnu URL adresu Jira stranice, način implementacije i opcionalnu verziju REST API-ja za [Jira čvor](../nodes/jira-node.md). Koristite `cloud` za Jira Cloud ili `data_center` za Jira Data Center / Server.
 
 ### Postavke
 
@@ -211,17 +211,19 @@ Jira vjerodajnica pohranjuje Jira Basic auth vjerodajnice, osnovnu URL adresu Ji
 
 **Jira Data Center / Server**
 
-1. Odaberite **Jira Data Center / Server** kao način implementacije.
-2. Unesite Jira korisničko ime i lozinku korištene za Basic auth.
-3. Unesite URL adresu Jira stranice, na primjer `https://jira.example.com`.
-4. Koristite **Testiraj vezu** za provjeru vjerodajnice.
+1. Odaberite **Jira Data Center / Server** kao implementaciju.
+2. Odaberite metodu provjere autentičnosti. **Korisničko ime i lozinka** koristi Basic auth. **Personal Access Token** koristi `Authorization: Bearer <token>` i zahtijeva Jira Data Center / Server 8.14 ili noviji. Stvorite token pod **Profil → Personal Access Tokens** u Jiri.
+3. Unesite korisničko ime i lozinku za Jiru ili zalijepite osobni token za pristup (korisničko ime nije potrebno).
+4. Unesite URL web-mjesta Jira, na primjer `https://jira.example.com`.
+5. Koristite **Test Connection** za provjeru vjerodajnice.
 
 ### Polja
 
 | Polje | Opis |
 | --- | --- |
-| `email` | Jira Cloud Atlassian račun email, ili Jira Data Center / Server korisničko ime |
-| `api_token` | Jira Cloud Atlassian API token, ili Jira Data Center / Server lozinka za Basic auth |
+| `auth_mode` | `basic` (zadano ako nedostaje) ili `pat`. `pat` vrijedi samo uz `data_center` |
+| `email` | E-pošta Atlassian računa Jira Cloud ili korisničko ime za Jira Data Center / Server. Ne koristi se u načinu `pat` |
+| `api_token` | API token Atlassian Jira Cloud, lozinka za Jira Data Center / Server za Basic auth ili osobni token za pristup Data Center u načinu `pat` |
 | `base_url` | Osnovna URL adresa Jira stranice |
 | `deployment` | `cloud` za Jira Cloud ili `data_center` za Jira Data Center / Server |
 | `api_version` | Verzija REST API-ja; prema zadanim postavkama `3` za Jira Cloud. Data Center / Server koristi v2 |
@@ -229,13 +231,11 @@ Jira vjerodajnica pohranjuje Jira Basic auth vjerodajnice, osnovnu URL adresu Ji
 ### Napomene
 
 - Jira čvor šalje opise problema i komentare kao Atlassian Document Format tekstualne dokumente za Jira Cloud REST API v3. Vjerodajnice Data Center / Server šalju običan tekst.
-- Data Center / Server trenutno podržava samo Basic auth s korisničkim imenom/lozinkom. Osobni pristupni tokeni i Bearer auth još nisu podržani.
+- Data Center / Server podržava Basic auth putem korisničkog imena/lozinke i provjeru autentičnosti osobnim pristupnim tokenom (PAT) pomoću sheme Bearer. Provjera autentičnosti PAT zahtijeva Jira Data Center / Server 8.14 ili noviji.
 - Učitavanje privitaka prihvaća base64 ili sadržaj URL-a podataka i podložno je ograničenju veličine datoteke platforme (zadano 99 MB). Preuzimanje privitaka može vratiti base64 sadržaj kada je omogućeno.
 - Stvaranje, brisanje korisnika i obavijesti o problemima zahtijevaju da ovlašteni Jira račun ima relevantne dozvole za Jira stranicu ili organizaciju.
 - Koristite List Projects, Search Issues i List Transitions za otkrivanje ključeva projekata, ključeva problema i ID-eva prijelaza.
-- Za prilagođene krajnje točke koje nisu pokrivene Jira čvorom, koristite [HTTP čvor](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` za Cloud ili `username:password` za Data Center / Server) u cURL naredbi, ili Header vjerodajnicu s odgovarajućom vrijednošću `Authorization: Basic <base64(user:secret)>`.
-
-Pogledajte također:
+- Za prilagođene endpointe koje ne pokriva čvor Jira, koristite [čvor HTTP](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` za Cloud ili `username:password` za Data Center / Server) ili PAT Bearer auth (`Authorization: Bearer <token>` za Data Center / Server). Alternativno, upotrijebite vjerodajnicu Header s odgovarajućim zaglavljem `Authorization`.
 
 - [Jira čvor](../nodes/jira-node.md)
 - [Vjerodajnice](./credentials.md)

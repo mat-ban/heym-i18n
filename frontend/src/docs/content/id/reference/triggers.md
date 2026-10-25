@@ -85,6 +85,20 @@ Discord mengirim webhook interaksi ke `POST /api/discord/webhook/{node_id}`. Pay
 
 Konsumer RabbitMQ dimulai ketika leader worker melakukan inisialisasi. Workflow dengan Node `rabbitmq` di mana `rabbitmqOperation === "receive"` akan mendapatkan konsumer. Input mencakup `message_data` (body, headers, routing_key, dll.) dan `triggered_by: "rabbitmq"`.
 
+## Batas konkurensi
+
+Workflow dengan [batas konkurensi](./webhooks.md#concurrency-limit-and-queued-runs) mengantrekan run produksi dari setiap titik masuk di atas ketika slotnya penuh, pertama masuk, pertama keluar, di semua instans. Cara pemanggil mengetahui hasilnya bergantung pada titik masuk:
+
+| Titik masuk | Saat run menunggu |
+|---|---|
+| Webhook / API | `202 Accepted` dengan `execution_id` dan URL status |
+| SSE streaming, Quick Drawer, Portal chat | Stream tetap terbuka dan mengirim event `queued` |
+| Portal without streaming | Permintaan menunggu hasilnya |
+| MCP | Hasil `queued` untuk di-poll dengan `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger menunggu hasilnya selama run di [instans](./cluster.md) lain akan menunggu. Run tetap dieksekusi dan dicatat ke riwayat |
+
+Ketika antrean penuh, run tidak dimulai dan riwayat mencatatnya sebagai `queue_full`. Run pengujian editor, panggilan sub-workflow (node [Execute](../nodes/execute-node.md) dan alat workflow agen), [Evals](../tabs/evals-tab.md), run uji mode build obrolan, dan pelanjutan peninjauan tidak pernah dimasukkan ke antrean. Run kartu [Board](../tabs/board-tab.md), run [File Upload](../nodes/file-upload-trigger-node.md), run yang dimulai oleh alat run-workflow asisten AI, dan workflow notifikasi peringatan juga dimulai tanpa menunggu slot.
+
 ## trigger_source
 
 Riwayat eksekusi mencatat `trigger_source` untuk setiap titik masuk:

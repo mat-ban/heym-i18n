@@ -32,6 +32,10 @@ Konfigūruokite redaktoriuje: **Portalas** mygtukas workflow antraštėje atidar
 3. **Vykdyti**: `POST /api/portal/{slug}/execute` – Portalų pokalbių UI tai kviečia (arba jo srautinę versiją viduje, kai įjungta); galutiniai vartotojai bendrauja per pokalbių sąsają, o ne tiesiogiai kviesdami API.
 4. **Sustabdyti**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Prašoma, kai vartotojas paspaudžia **Sustabdyti** aktyvaus portalo vykdymo metu
 
+## Lygiagretumo apribojimas
+
+Kai workflow turi [lygiagretumo apribojimą](./webhooks.md#concurrency-limit-and-queued-runs) ir visi lizdai yra užimti, portalo pranešimas laukia savo eilės, užuot paleistas iš karto. Pokalbio eigos eilutėje rodoma **Waiting in queue (2/5)**, kol vykdymas prasideda, o po to – atsakymas kaip įprasta. Vykdymas vis tiek įvyksta, jei vartotojas uždaro puslapį. **Stop** pašalina laukiantį vykdymą iš eilės. Kai eilė pilna, pranešimas nepavyksta su klaida "Concurrency queue is full". Eilėje laukęs vykdymas netransliuoja savo atsakymo po vieną tokeną; visas atsakymas pasirodo jam pasibaigus.
+
 ## HITL Portalų Vykdymuose
 
 Jei portalų workflow pasiekia [Agent Node](../nodes/agent-node.md) su įjungtu [Human-in-the-Loop](./human-in-the-loop.md), portalų atsakymas rodo peržiūros nuorodą, o ne atrodo tuščias.

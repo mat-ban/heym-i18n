@@ -36,6 +36,21 @@ Heym 支援兩種模式：**預設伺服器**，在單一 Endpoint 下公開所�
 
 Workflow 卡片會顯示描述與輸入欄位名稱預覽，讓您在啟用前先了解每個工具預期的內容。
 
+
+### 排隊執行與 heym_execution_status
+
+具有[並行限制](../reference/webhooks.md#concurrency-limit-and-queued-runs)的 workflow 在客戶端呼叫時可能處於忙碌狀態。此時呼叫會立即回傳非錯誤的結果：
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+客戶端使用該 `execution_id` 輪詢 `heym_execution_status` 工具。它會回傳與[狀態 URL](../reference/webhooks.md#status-url)相同的回應主體：帶有目前排隊順位的 `queued`、`running`，隨後是帶有輸出的 `success` 或 `error`。它只能找到由同一個伺服器公開的 workflow 執行紀錄。該工具僅在預設伺服器與各具名伺服器上至少有一個 workflow 設定並行限制時才會列出。當排隊佇列已滿時，呼叫將回傳錯誤 "Concurrency queue is full"。
 ## Heym 聊天工具
 
 **Heym Capabilities** 區段會將 Chat 頁籤引擎轉換為單一 MCP 工具，名為 `heym_chat`。您可以在預設伺服器、任何具名伺服器，或兩者上啟用它——每個介面各自保有獨立的開關與模型選擇。
@@ -49,6 +64,7 @@ Workflow 卡片會顯示描述與輸入欄位名稱預覽，讓您在啟用前�
 - 回報目前正在執行的內容：進行中的執行數量、其 Workflow 名稱、各自已執行多久、目前所在的節點，以及即時執行的連結
 - 在 [Board 頁籤](./board-tab.md)上列出看板、建立卡片，以及讀取卡片詳細資料
 - 列出您的資料表及其欄位、建立新資料表，並將其串接至它所建立的 Workflow 中
+- 在 Heym 專屬頁面上建立或更新您的 credential（請參閱 [Credentials](#credentials)）
 - 讀取團隊與全域變數，並搜尋文件
 - 核准、編輯或拒絕待處理的人為介入審查
 
@@ -58,14 +74,28 @@ Workflow 卡片會顯示描述與輸入欄位名稱預覽，讓您在啟用前�
 
 `heym_chat` 一律以建置模式（build mode）執行 Chat 引擎。在單次呼叫中，助理可以儲存新的 Workflow、使用真實的範例輸入加以執行、讀取執行報告、修正失敗的部分並再次執行，每次呼叫最多可進行五次測試執行。當最新儲存版本的最新一次執行通過時，助理會以一句話摘要作結，且回覆最後會附帶 `Verified: the latest test run of the saved workflow passed.`
 
+當呼叫建立或編輯 workflow 時，回覆中會列出每個 workflow 及其完整的編輯器連結（例如 `https://heym.example.com/workflows/<id>`），助手回覆中的連結也是完整連結。它們使用您設定的 Heym 位址（`FRONTEND_URL`），已登入 Heym 且擁有存取該 workflow 權限的人員均可開啟。
+
 - 測試執行是真實的執行。其副作用會實際發生，並會像任何其他執行一樣出現在 Workflow 的執行歷史記錄中。
 - 儲存操作會遵循編輯器的路徑：對圖形的變更會將先前的圖形保留在 Workflow 的 **Edit History** 中。
 - 若要修改先前建立的 Workflow，請使用相同的 `conversation_id` 延續該對話串。助理會更新該 Workflow 而非建立新的 Workflow，且僅會修改您有權編輯的 Workflow。
 - 當五次測試執行用盡時，助理會停止並說明仍然失敗的原因。
 
-Credential 一律保留於 UI 中：`heym_chat` 絕不會列出、選擇或建立 Credential。當它建立或編輯 Workflow 時，需要 Credential 的新節點會保持空白，並於回覆中列出這些節點，讓您能在編輯器中設定。
-
 資料表則不同。資料表不包含機密資訊，因此 `heym_chat` 可以列出您的資料表、詢問 Workflow 應使用哪一個，並建立含欄位的新資料表。它絕不會讀取或寫入資料列。
+
+### Credentials
+
+`heym_chat` 與 Chat 標籤頁一樣，依名稱與類型查看您擁有的 credential 以及與您共用的 credential。當它建構的 workflow 需要 credential 時，會在結果中以提問方式詢問要使用哪一組。請使用相同的 `conversation_id` 回覆。
+
+若要新增 credential 或更新您擁有的 credential，助手會在 Heym 頁面 `/credentials/setup/<id>` 上開啟 credential 表單。您在該處登入 Heym，輸入金鑰或連線帳號後點擊儲存。該數值會直接送往 Heym：MCP 客戶端及其模型只會得知 credential 的名稱與類型。請勿將金鑰貼到 MCP 客戶端中；請改為主動索取表單。
+
+| 客戶端 | 運作行為 |
+|--------|----------|
+| 支援 MCP URL 引導彈出 | 客戶端會提示您開啟 Heym 頁面。呼叫會在您填寫表單時等待（最多十分鐘），接著使用新的 credential 繼續執行。 |
+| 其他所有客戶端 | 結果中帶有連結並提示客戶端帶有 `wait_for_credential_form` 再次呼叫 `heym_chat`。該呼叫在您填寫表單時最多等待五分鐘，隨後繼續對話。若客戶端未等待，請儲存表單並使用相同的 `conversation_id` 回覆；下一次呼叫就會得知表單已儲存並使用了哪組 credential。 |
+
+該頁面僅針對發起請求的 Heym 帳號開啟，因此轉傳的連結對其他人無效。表單會保持開啟 24 小時，您也可以在頁面上予以拒絕。儲存或拒絕後，Chat 標籤頁對話中的步驟便會顯示結果。
+
 
 ### Credential 與模型
 
@@ -78,12 +108,15 @@ Credential 一律保留於 UI 中：`heym_chat` 絕不會列出、選擇或建�
 
 若任一項缺少，該工具仍會出現在 `tools/list` 中，但每次呼叫都會回傳錯誤，提示您在此頁籤完成設定。
 
+
+`heym_chat` 建構的 workflow 中的 LLM 與 Agent 節點在此 credential 與模型上執行（包含與您共用的 credential），因此無需額外設定步驟即可進行測試執行。當 `heym_chat` 編輯 workflow 時，既有 credential 的 LLM 與 Agent 節點會保留原有的 credential 與其模型。
 ### 參數與歷史紀錄
 
 | 參數 | 必填 | 說明 |
 |----------|----------|-------------|
 | `message` | 是 | 以自然語言表達的指令或問題。 |
 | `conversation_id` | 否 | 來自先前 `heym_chat` 結果的 `conversation_id`，用於延續該對話串。 |
+| `wait_for_credential_form` | 否 | 搭配 `conversation_id`：等待使用者儲存或拒絕該對話串開啟的 credential 表單，隨後傳送 `message`。 |
 
 每次呼叫都會以一般對話的形式寫入您的 [Chat 頁籤](./chat-tab.md)歷史紀錄，並在對話清單中以插頭圖示標示。訊息、工具卡片與釐清暫停的呈現方式，與您自行發起的對話完全相同，您可以開啟該對話串並在瀏覽器中繼續對話。每次結果都會回傳其 `conversation_id`，讓 MCP 用戶端能延續同一對話串，而不必在每次呼叫時開啟新的對話。
 

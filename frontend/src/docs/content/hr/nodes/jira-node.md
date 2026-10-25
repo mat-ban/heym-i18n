@@ -8,22 +8,23 @@
 |----------|------------|
 | Ulazi | 1 |
 | Izlazi | 1 |
-| Vjerodajnice | Jira (Cloud email/API token ili Data Center korisničko ime/lozinka, osnovna URL adresa, način implementacije, opcionalna verzija REST API-ja) |
+| Vjerodajnice | Jira (Cloud email/API token, Data Center korisničko ime/lozinka ili osobni pristupni token, osnovna URL adresa, način implementacije, opcionalna verzija REST API-ja) |
 | Izlaz | `$nodeLabel.*` |
 
 ## Vjerodajnice
 
-Kreirajte **Jira** vjerodajnicu u [Kartici Vjerodajnice](../tabs/credentials-tab.md). Pohranjene konfiguracijske ključeve čine `email`, `api_token`, `base_url`, `deployment` i opcionalni `api_version`. Za Jira Cloud, `email` pohranjuje email adresu Atlassian računa, a `api_token` pohranjuje Atlassian API token. Za Jira Data Center / Server, ti isti ključevi pohranjuju korisničko ime i lozinku za osnovnu autentifikaciju. Pogledajte [Integracije trećih strana](../reference/integrations.md#jira) za korake postavljanja.
+Kreirajte **Jira** vjerodajnicu u [Kartici Vjerodajnice](../tabs/credentials-tab.md). Pohranjene konfiguracijske ključeve čine `email`, `api_token`, `base_url`, `deployment`, `auth_mode` i opcionalni `api_version`. Za Jira Cloud, `email` pohranjuje email adresu Atlassian računa, a `api_token` pohranjuje Atlassian API token. Za Jira Data Center / Server, ti isti ključevi pohranjuju korisničko ime i lozinku za osnovnu autentifikaciju, ili uz `auth_mode: pat`, `api_token` pohranjuje osobni pristupni token poslan kao Bearer token, a `email` se ne koristi. Pogledajte [Integracije trećih strana](../reference/integrations.md#jira) za korake postavljanja.
 
 | Polje | Konfiguracijski ključ | Opis |
 | --- | --- | --- |
 | Jira Email / Korisničko ime | `email` | Email adresa Atlassian računa za Jira Cloud ili korisničko ime za Jira Data Center / Server |
-| API Token / Lozinka | `api_token` | Atlassian API token za Jira Cloud ili lozinka za Jira Data Center / Server za osnovnu autentifikaciju |
+| Autentifikacija | `auth_mode` | `basic` (zadano) ili `pat` (samo Data Center / Server) |
+| API Token / Lozinka / Osobni pristupni token | `api_token` | Atlassian API token za Jira Cloud, lozinka za Jira Data Center / Server za osnovnu autentifikaciju ili osobni pristupni token za Data Center u načinu `pat` |
 | Osnovna URL adresa | `base_url` | URL adresa Jira stranice, na primjer `https://your-domain.atlassian.net` |
 | Način implementacije | `deployment` | `cloud` za Jira Cloud ili `data_center` za Jira Data Center / Server |
 | Verzija REST API-ja | `api_version` | Zadano je `3` za Jira Cloud. Data Center / Server koristi REST API v2 |
 
-Osobni pristupni tokeni i Bearer autentifikacija za Data Center / Server još nisu podržani od strane Jira vjerodajnice.
+Osobni pristupni tokeni zahtijevaju Jira Data Center / Server 8.14 ili noviji. Prebacivanje načina autentifikacije briše pohranjenu tajnu, stoga unesite novu lozinku ili token prilikom prebacivanja.
 
 Koristite **Testiraj vezu** za provjeru vjerodajnice prema trenutnom Jira korisniku.
 

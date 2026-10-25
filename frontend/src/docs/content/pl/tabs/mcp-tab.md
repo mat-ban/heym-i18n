@@ -36,6 +36,21 @@ Każdy workflow może być udostępniony jako narzędzie MCP:
 
 Karty workflow pokazują opis oraz podgląd nazw pól wejściowych, dzięki czemu można sprawdzić, czego oczekuje każde narzędzie, przed jego włączeniem.
 
+
+### Uruchomienia w kolejce i heym_execution_status
+
+Workflow z [limitem współbieżności](../reference/webhooks.md#concurrency-limit-and-queued-runs) może być zajęty, gdy klient go wywołuje. Wywołanie natychmiast zwraca wynik, który nie jest błędem:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klient odpytuje narzędzie `heym_execution_status` za pomocą tego identyfikatora `execution_id`. Zwraca ono ten sam format co [URL statusu](../reference/webhooks.md#status-url): `queued` z aktualną pozycją, `running`, a następnie `success` lub `error` wraz z wynikami. Znajduje ono wyłącznie uruchomienia tych workflows, które udostępnia ten sam serwer. Narzędzie jest wymienione na domyślnym serwerze oraz na każdym serwerze o nazwie własnej tylko wtedy, gdy przynajmniej jeden z jego workflows ma ustawiony limit współbieżności. Gdy kolejka jest pełna, wywołanie zwraca błąd „Concurrency queue is full”.
 ## Narzędzie czatu Heym
 
 Sekcja **Heym Capabilities** zamienia mechanizm zakładki Chat w jedno narzędzie MCP o nazwie `heym_chat`. Można je włączyć na serwerze domyślnym, na dowolnym serwerze nazwanym lub na obu — każda powierzchnia ma własny przełącznik i wybór modelu.
@@ -49,6 +64,7 @@ Gdy narzędzie jest włączone, `heym_chat` pojawia się w `tools/list` obok nar
 - Raportowanie, co dzieje się w danej chwili: ile wykonań jest aktywnych, ich nazwy workflow, jak długo każde trwa, na którym węźle się obecnie znajduje oraz link do uruchomienia na żywo
 - Wyświetlanie tablic, tworzenie kart i odczytywanie szczegółów kart w [zakładce Board](./board-tab.md)
 - Wyświetlanie tabel danych wraz z ich kolumnami, tworzenie nowych oraz podłączanie ich do budowanych workflow
+- Tworzenie lub aktualizowanie danych logowania na dedykowanej stronie Heym (zobacz [Dane logowania](#dane-logowania))
 - Odczyt zespołów i zmiennych globalnych oraz przeszukiwanie dokumentacji
 - Zatwierdzanie, edycja lub odrzucanie oczekujących przeglądów human-in-the-loop
 
@@ -58,14 +74,28 @@ Możliwości dodane później do zakładki Chat stają się automatycznie dostę
 
 `heym_chat` zawsze uruchamia silnik czatu w trybie budowania (build mode). W jednym wywołaniu asystent może zapisać nowy workflow, uruchomić go z realistycznymi przykładowymi danymi wejściowymi, odczytać raport z wykonania, naprawić to, co się nie powiodło, i uruchomić go ponownie — maksymalnie do pięciu uruchomień testowych na wywołanie. Gdy ostatnie uruchomienie ostatnio zapisanej wersji zakończy się powodzeniem, asystent kończy pracę jednozdaniowym podsumowaniem, a odpowiedź kończy się komunikatem `Verified: the latest test run of the saved workflow passed.`
 
+Gdy wywołanie tworzy lub edytuje workflow, odpowiedź zawiera pełny link do edytora dla każdego z nich, na przykład `https://heym.example.com/workflows/<id>`, a linki w odpowiedzi asystenta są również pełnymi odnośnikami. Używają one skonfigurowanego adresu Heym (`FRONTEND_URL`) i otwierają się dla użytkowników zalogowanych w Heym, którzy mają uprawnienia do tego workflow.
+
 - Uruchomienia testowe to prawdziwe uruchomienia. Ich efekty uboczne faktycznie występują i pojawiają się w historii wykonań workflow tak samo jak każde inne uruchomienie.
 - Zapisy korzystają ze ścieżki edytora: zmiana grafu zachowuje poprzednią wersję grafu w historii edycji (**Edit History**) danego workflow.
 - Aby zmodyfikować wcześniej zbudowany workflow, kontynuuj wątek z tym samym `conversation_id`. Asystent zaktualizuje ten workflow zamiast tworzyć nowy i zmodyfikuje wyłącznie te workflow, które masz uprawnienia edytować.
 - Gdy limit pięciu uruchomień testowych zostanie wyczerpany, asystent zatrzymuje się i wyjaśnia, co nadal powoduje błąd.
 
-Dane logowania pozostają w interfejsie: `heym_chat` nigdy ich nie wyświetla, nie wybiera ani nie tworzy. Gdy buduje lub edytuje workflow, nowe węzły wymagające danych logowania pozostają puste, a odpowiedź je wymienia, aby można było ustawić je w edytorze.
-
 Tabele danych działają inaczej. Tabela nie zawiera żadnych sekretów, dlatego `heym_chat` może wyświetlać tabele, pytać, której z nich powinien użyć workflow, oraz tworzyć nową tabelę wraz z jej kolumnami. Nigdy nie odczytuje ani nie zapisuje wierszy.
+
+### Dane logowania
+
+`heym_chat` widzi dane logowania należące do użytkownika oraz te mu udostępnione, według nazwy i typu, w taki sam sposób jak zakładka Chat. Gdy tworzony workflow wymaga danych logowania, pyta w wyniku, których z nich użyć. Odpowiedz, podając ten sam `conversation_id`.
+
+Aby dodać dane logowania lub zaktualizować własne, asystent otwiera formularz danych logowania Heym na stronie `/credentials/setup/<id>`. Logujesz się tam do Heym, wprowadzasz klucz lub łączysz konto i zapisujesz. Wartość trafia bezpośrednio do Heym: klient MCP i jego model poznają tylko nazwę i typ danych logowania. Nie wklejaj kluczy do klienta MCP; poproś o formularz.
+
+| Klient | Zachowanie |
+|--------|------------|
+| Obsługuje elicitację URL MCP | Klient prosi o otwarcie strony Heym. Wywołanie czeka na wypełnienie formularza (do 10 minut), a następnie kontynuuje z nowymi danymi logowania. |
+| Dowolny inny | Wynik zawiera link i prosi klienta o ponowne wywołanie `heym_chat` z `wait_for_credential_form`. To wywołanie czeka do 5 minut na wypełnienie formularza, po czym wznawia rozmowę. Jeśli klient nie czeka, zapisz formularz i odpowiedz z tym samym `conversation_id`; kolejne wywołanie rozpozna zapisany formularz i utworzone dane logowania. |
+
+Strona otwiera się tylko dla konta Heym, które zapoczątkowało żądanie, więc przekazany link jest bezużyteczny dla innych. Formularz pozostaje aktywny przez 24 godziny i można go odrzucić ze strony. Po zapisaniu lub odrzuceniu krok w konwersacji w zakładce Chat wyświetla wynik.
+
 
 ### Dane logowania i model
 
@@ -78,12 +108,15 @@ Tabele danych działają inaczej. Tabela nie zawiera żadnych sekretów, dlatego
 
 Jeśli któregokolwiek brakuje, narzędzie nadal pojawia się w `tools/list`, ale każde wywołanie zwraca błąd z informacją, że konfigurację należy dokończyć w tej zakładce.
 
+
+Węzły LLM i Agent w workflow tworzonym przez `heym_chat` działają na tych danych logowania i modelu, w tym na danych udostępnionych użytkownikowi, więc przebiegi testowe działają bez dodatkowych kroków konfiguracyjnych. Gdy `heym_chat` edytuje workflow, węzły LLM i Agent, które mają już dane logowania, zachowują je wraz ze swoim modelem.
 ### Argumenty i historia
 
 | Argument | Wymagany | Opis |
 |----------|----------|-------------|
 | `message` | Tak | Instrukcja lub pytanie w języku naturalnym. |
 | `conversation_id` | Nie | Identyfikator `conversation_id` z poprzedniego wyniku `heym_chat`, służący do kontynuowania tego wątku. |
+| `wait_for_credential_form` | Nie | Z `conversation_id`: poczekaj, aż użytkownik zapisze lub odrzuci formularz danych logowania otwarty przez wątek, a następnie wyślij `message`. |
 
 Każde wywołanie jest zapisywane w historii [zakładki Chat](./chat-tab.md) jako zwykła rozmowa, oznaczona ikoną wtyczki na liście rozmów. Wiadomości, karty narzędzi i pauzy na doprecyzowanie wyglądają dokładnie tak samo jak rozmowa rozpoczęta samodzielnie, a wątek można otworzyć i kontynuować rozmowę w przeglądarce. Każdy wynik zwraca swój `conversation_id`, dzięki czemu klient MCP może kontynuować ten sam wątek, zamiast otwierać nowy przy każdym wywołaniu.
 

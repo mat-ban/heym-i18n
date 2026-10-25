@@ -108,6 +108,8 @@ Ambos diálogos de historial muestran las **ejecuciones en curso** en la parte s
 - Tras la cancelación, la entrada en ejecución desaparece en el siguiente refresco; pulse **Refresh** para actualizar la lista manualmente
 - Si cancela una ejecución que ya ha finalizado, la solicitud no tiene efecto
 
+Las ejecuciones que esperan un [slot de concurrencia](./webhooks.md#concurrency-limit-and-queued-runs) se muestran en la misma sección con la etiqueta **Queued 2/5**, su lugar en la cola y el tamaño de la misma. No tienen botón **Open live** porque todavía no hay nada en ejecución; **Cancel** elimina una ejecución en espera de la cola y la registra como `cancelled`. Una ejecución que esperó más tiempo del máximo configurado en el workflow se registra como `expired`, y una rechazada por cola llena como `queue_full`; ambas tienen su propia insignia en la lista de ejecuciones.
+
 La URL en vivo es `/workflows/{workflowId}/{executionId}`. El observador es de solo lectura: salir del editor únicamente desconecta esa pestaña del navegador y nunca detiene el workflow. Las instantáneas activas se comparten a través de PostgreSQL, por lo que abrir una ejecución sigue funcionando cuando el trigger y la solicitud del editor llegan a workers de backend distintos.
 
 ## Recuperación ante fallos

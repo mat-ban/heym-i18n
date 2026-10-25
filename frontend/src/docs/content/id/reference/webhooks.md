@@ -108,6 +108,73 @@ Konfigurasikan per workflow: `rate_limit_requests` dan `rate_limit_window_second
 | `rate_limit_window_seconds` | Durasi window dalam detik |
 
 Permintaan `test_run` melewati rate limiting.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Batas Konkurensi dan Eksekusi Terantre
+
+Sebuah workflow dapat membatasi berapa banyak eksekusi produksi yang berjalan sekaligus. Aktifkan **Batas konkurensi** di panel **Properties** tingkat workflow dan atur **Maks. eksekusi bersamaan**. Pemilik dan kolaborator dengan akses edit dapat mengubahnya. Batas ini nonaktif secara default.
+
+Saat batas tercapai, eksekusi baru menunggu dalam antrean FIFO (masuk pertama, keluar pertama). Ini mencakup setiap titik masuk produksi: endpoint ini, [endpoint streaming](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md), dan setiap [trigger](./triggers.md). Uji coba editor sendiri selalu dimulai segera dan tidak menggunakan slot. Mengirim `test_run=true` tanpa sesi masuk yang dapat membuka workflow tidak akan melewati antrean.
+
+| Pengaturan | Deskripsi |
+|---|---|
+| `concurrency_limit` | Eksekusi produksi yang diizinkan sekaligus. `0` mematikan batas |
+| `concurrency_max_queue` | Opsional. Eksekusi yang diizinkan mengantre sekaligus. Kosong berarti tanpa batas |
+| `concurrency_max_wait_seconds` | Opsional. Eksekusi yang menunggu lebih lama dicatat sebagai `expired`. Kosong berarti menunggu selama yang dibutuhkan |
+
+### 202 Accepted
+
+Panggilan yang langsung dimulai berperilaku persis seperti yang dijelaskan pada Format Respons. Panggilan yang harus menunggu akan segera menerima `202 Accepted`, apa pun isi `X-Simple-Response`, dengan header `Location` yang mengarah ke URL statusnya:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Bidang | Deskripsi |
+|---|---|
+| `queue.position` | Urutan eksekusi ini dalam antrean, dimulai dari 1 |
+| `queue.size` | Eksekusi yang sedang menunggu saat ini |
+| `queue.running` | Eksekusi yang sedang memegang slot saat ini |
+| `queue.limit` | Batas konkurensi workflow |
+| `status_token` | Khusus workflow anonim. Dikembalikan sekali dalam respons ini |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` merespons dengan status eksekusi. Panggil endpoint ini dengan kredensial yang sama yang memulai eksekusi: sesi atau JWT, [token eksekusi](./execution-tokens.md), atau header kustom workflow. Workflow anonim tidak memiliki kredensial untuk diverifikasi, jadi kirim `status_token` dari respons 202 di header `X-Heym-Run-Token`. Token tidak pernah dibaca dari query string. Token yang salah atau hilang akan menerima `404`, sama seperti eksekusi yang tidak dikenal.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Arti (eksekusi yang harus menunggu slot konkurensi akan menerima [respons 202](#202-accepted) sebagai gantinya) |
+|---|---|
+| `queued` | Menunggu slot; `queue` menunjukkan posisinya |
+| `running` | Memiliki slot dan sedang dieksekusi |
+| `success` / `error` | Selesai; `outputs` dan `error` terisi |
+| `pending` | Dijeda untuk [tinjauan manusia](./human-in-the-loop.md) |
+| `cancelled` | Dibatalkan dari [Riwayat eksekusi](./execution-history.md) |
+| `expired` | Menunggu lebih lama dari `concurrency_max_wait_seconds` dan tidak pernah berjalan |
+
+Lakukan polling setiap beberapa detik hingga status bukan lagi `queued` atau `running`. Eksekusi yang diantrekan tetap berjalan meskipun tidak ada yang melakukan polling.
+
+### Antrean Penuh
+
+Saat `concurrency_max_queue` disetel dan sudah ada begitu banyak eksekusi yang menunggu, panggilan akan ditolak dengan `429 Concurrency queue is full` dan entri `queue_full` di riwayat eksekusi. Tidak ada yang dimasukkan ke antrean.
+
 ## Format Respons
 
 Endpoint mengembalikan JSON:

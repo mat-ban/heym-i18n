@@ -827,6 +827,22 @@
         "waiting": "Đang chờ",
         "neutral": "Trung lập"
       }
+    },
+    "concurrencyLimit": "Giới hạn đồng thời",
+    "concurrencyLimitHelp": "Các lần chạy sản xuất (Webhook, Cron, MCP, Portal, Trigger) vượt quá giới hạn sẽ chờ trong hàng đợi FIFO. Các lần chạy thử nghiệm của trình chỉnh sửa luôn bắt đầu ngay lập tức.",
+    "maxConcurrentRuns": "Số lần chạy đồng thời tối đa",
+    "maxQueueSizeOptional": "Kích thước hàng đợi tối đa (tùy chọn)",
+    "emptyNoLimit": "Trống = không giới hạn",
+    "maxWaitOptional": "Chờ tối đa (giây, tùy chọn)",
+    "emptyWaitAsLong": "Trống = chờ bao lâu tùy ý",
+    "concurrencyQueueHelp": "Hàng đợi đầy sẽ trả về mã 429. Một lần chạy chờ lâu hơn thời gian tối đa sẽ được ghi nhận là đã hết hạn.",
+    "rag": {
+      "hybridSearch": "Tìm kiếm kết hợp",
+      "hybridSearchHelp": "Kết hợp độ tương đồng vector với khớp từ khóa BM25 để tìm thấy các thuật ngữ chính xác như ID, tên và mã lỗi.",
+      "hybridScore": "Điểm kết hợp (0-1)",
+      "similarityScore": "Điểm tương đồng",
+      "vectorSimilarity": "Độ tương đồng vector",
+      "bm25Score": "Điểm BM25"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     "allStatuses": "Tất cả trạng thái",
     "askAi": "Hỏi AI",
     "askAiTitle": "Hỏi trợ lý Chat về lần chạy này",
-    "noNodeSpans": "Không có span nút nào được ghi lại cho lần chạy này."
+    "noNodeSpans": "Không có span nút nào được ghi lại cho lần chạy này.",
+    "queuedProgress": "Trong hàng đợi {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Đang tải portal...",

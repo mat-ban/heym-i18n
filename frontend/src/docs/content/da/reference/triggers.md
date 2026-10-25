@@ -85,6 +85,20 @@ Discord sender interaktions-webhooks til `POST /api/discord/webhook/{node_id}`. 
 
 RabbitMQ-forbrugeren startes, når leder-workeren initialiseres. Workflows med `rabbitmq`-noder, hvor `rabbitmqOperation === "receive"`, får en forbruger. Input inkluderer `message_data` (body, headers, routing_key osv.) og `triggered_by: "rabbitmq"`.
 
+## Samtidighedsgrænse
+
+Et workflow med en [samtidighedsgrænse](./webhooks.md#concurrency-limit-and-queued-runs) sætter produktionskørsler fra ethvert indgangspunkt ovenfor i kø, når dets slots er fulde, først-ind, først-ud, på tværs af alle instanser. Hvordan en kalder modtager resultatet afhænger af indgangspunktet:
+
+| Entry point | Mens kørslen venter |
+|---|---|
+| Webhook / API | `202 Accepted` med et `execution_id` og en status-URL |
+| SSE streaming, Quick Drawer, Portal chat | Streamen forbliver åben og sender `queued`-hændelser |
+| Portal without streaming | Anmodningen venter på resultatet |
+| MCP | Et `queued`-resultat der polles med `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Triggeren venter på resultatet, så længe som en kørsel på en anden [instans](./cluster.md) ville. Kørslen udføres under alle omstændigheder og skrives til historikken |
+
+Når køen er fuld, starter kørslen ikke, og historikken registrerer den som `queue_full`. Editorens testkørsler, sub-workflow-kald ([Execute](../nodes/execute-node.md)-node og agent-workflowværktøjer), [Evals](../tabs/evals-tab.md), testkørsler i chat build-tilstand og genoptagelser efter gennemgang sættes aldrig i kø. Kortkørsler fra [Board](../tabs/board-tab.md), [File Upload](../nodes/file-upload-trigger-node.md)-kørsler, kørsler startet af AI-assistentens run-workflow-værktøj og notifikationsworkflows for advarsler starter også uden at vente på en slot.
+
 ## trigger_source
 
 Eksekveringshistorik registrerer `trigger_source` for hver indgangspunkt:

@@ -108,6 +108,73 @@ Konfigureres per workflow: `rate_limit_requests` og `rate_limit_window_seconds`.
 | `rate_limit_window_seconds` | Vindueslængde i sekunder |
 
 `test_run`-requests springer rate limiting over.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Concurrency-grænse og køede kørsler
+
+Et workflow kan begrænse, hvor mange produktionskørsler der udføres samtidigt. Slå **Concurrency-grænse** til i panelet **Properties** på workflow-niveau og indstil **Maks. samtidige kørsler**. Ejere og bidragydere med redigeringsadgang kan ændre det. Grænsen er slået fra som standard.
+
+Når grænsen nås, venter nye kørsler i en FIFO-kø (først ind, først ud). Dette dækker ethvert produktionsindgangspunkt: dette endpoint, [streaming-endpointet](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) og hver [trigger](./triggers.md). Editorens egne testkørsler starter altid med det samme og optager ikke en plads. Afsendelse af `test_run=true` uden en logget ind session, der kan åbne workflowet, omgår ikke køen.
+
+| Indstilling | Beskrivelse |
+|---|---|
+| `concurrency_limit` | Tilladte produktionskørsler samtidigt. `0` deaktiverer grænsen |
+| `concurrency_max_queue` | Valgfrit. Tilladt antal kørsler, der venter samtidigt. Tomt betyder ingen grænse |
+| `concurrency_max_wait_seconds` | Valgfrit. En kørsel, der venter længere, registreres som `expired`. Tomt betyder ubegrænset ventetid |
+
+### 202 Accepted
+
+Et kald, der starter med det samme, opfører sig nøjagtigt som beskrevet under Svarformat. Et kald, der skal vente, modtager straks `202 Accepted`, uanset hvad `X-Simple-Response` angiver, med en `Location`-header, der peger på dens status-URL:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Felt | Beskrivelse |
+|---|---|
+| `queue.position` | Denne kørsels placering i køen, startende ved 1 |
+| `queue.size` | Kørsler, der venter i øjeblikket |
+| `queue.running` | Kørsler, der optager en plads i øjeblikket |
+| `queue.limit` | Workflowets concurrency-grænse |
+| `status_token` | Kun anonyme workflows. Returneres kun én gang i dette svar |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` svarer med kørslens tilstand. Kald det med de samme legitimationsoplysninger, der startede kørslen: en session eller JWT, et [kørselstoken](./execution-tokens.md) eller workflowets brugerdefinerede header. Et anonymt workflow har ingen legitimationsoplysninger at kontrollere; send derfor `status_token` fra 202-svaret i `X-Heym-Run-Token`-headeren. Tokenet læses aldrig fra forespørgselsstrengen. Et forkert eller manglende token modtager `404`, ligesom en ukendt eksekvering.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Betydning (en kørsel, der skal vente på en concurrency-plads, modtager i stedet [202-svaret](#202-accepted)) |
+|---|---|
+| `queued` | Venter på en plads; `queue` viser positionen |
+| `running` | Har en plads og afvikles i øjeblikket |
+| `success` / `error` | Fuldført; `outputs` og `error` er udfyldt |
+| `pending` | Sat på pause til [menneskelig gennemgang](./human-in-the-loop.md) |
+| `cancelled` | Annulleret fra [Kørselshistorik](./execution-history.md) |
+| `expired` | Ventede længere end `concurrency_max_wait_seconds` og kørte aldrig |
+
+Foretag forespørgsler med få sekunders mellemrum, indtil statussen hverken er `queued` eller `running`. En kørsel i kø udføres, selvom ingen spørger efter status.
+
+### Køen er fuld
+
+Når `concurrency_max_queue` er indstillet, og der allerede venter så mange kørsler, afvises kaldet med `429 Concurrency queue is full` og en `queue_full`-post i kørselshistorikken. Intet sættes i kø.
+
 ## Svarformat
 
 Endpointen returnerer JSON:

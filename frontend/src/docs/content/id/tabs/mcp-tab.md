@@ -36,6 +36,21 @@ Setiap Workflow dapat diekspos sebagai tool MCP:
 
 Kartu Workflow menampilkan deskripsi dan pratinjau nama field input sehingga Anda dapat melihat apa yang diharapkan oleh setiap tool sebelum mengaktifkannya.
 
+
+### Eksekusi dalam antrean dan heym_execution_status
+
+Workflow dengan [batas konkurensi](../reference/webhooks.md#concurrency-limit-and-queued-runs) mungkin sedang sibuk saat klien memanggilnya. Panggilan kemudian segera mengembalikan hasil yang bukan merupakan kesalahan:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klien melakukan polling pada alat `heym_execution_status` dengan `execution_id` tersebut. Ini mengembalikan isi yang sama dengan [URL status](../reference/webhooks.md#status-url): `queued` dengan posisi saat ini, `running`, lalu `success` atau `error` beserta keluarannya. Ini hanya menemukan eksekusi workflow yang diekspos oleh server yang sama. Alat ini terdaftar di server default dan di setiap server bernama hanya selama setidaknya satu workflow memiliki batas konkurensi. Saat antrean penuh, panggilan mengembalikan kesalahan "Concurrency queue is full".
 ## Heym Chat Tool
 
 Bagian **Heym Capabilities** mengubah mesin Tab Chat menjadi satu tool MCP bernama `heym_chat`. Aktifkan pada server default, pada server bernama mana pun, atau pada keduanya — setiap permukaan menyimpan toggle dan pemilihan modelnya sendiri.
@@ -49,6 +64,7 @@ Saat aktif, `heym_chat` muncul di `tools/list` bersama tools Workflow Anda. Klie
 - Melaporkan apa yang sedang berjalan saat ini: berapa banyak eksekusi aktif, nama Workflow-nya, berapa lama masing-masing berjalan, Node yang sedang dijalani, dan tautan ke eksekusi langsung
 - Menampilkan daftar board, membuat card, dan membaca detail card pada [Tab Board](./board-tab.md)
 - Menampilkan daftar data table Anda beserta kolomnya, membuat yang baru, dan menghubungkannya ke Workflow yang dibangunnya
+- Buat atau perbarui credential Anda di halaman khusus Heym (lihat [Credentials](#credentials))
 - Membaca team dan global variable, serta mencari dokumentasi
 - Menyetujui, mengedit, atau menolak review human-in-the-loop yang tertunda
 
@@ -58,14 +74,28 @@ Kemampuan yang ditambahkan ke Tab Chat di kemudian hari otomatis tersedia melalu
 
 `heym_chat` selalu menjalankan mesin Chat dalam mode build. Dalam satu panggilan, asisten dapat menyimpan Workflow baru, menjalankannya dengan input sampel yang realistis, membaca laporan eksekusi, memperbaiki bagian yang gagal, dan menjalankannya kembali, hingga lima kali uji jalan per panggilan. Ketika eksekusi terakhir dari penyimpanan terakhir berhasil, asisten menyelesaikannya dengan ringkasan satu kalimat, dan balasan diakhiri dengan `Verified: the latest test run of the saved workflow passed.`
 
+Saat panggilan membuat atau mengedit workflow, jawabannya mencantumkan masing-masing dengan tautan editor lengkapnya, seperti `https://heym.example.com/workflows/<id>`, dan tautan di dalam jawaban asisten juga merupakan tautan lengkap. Tautan tersebut menggunakan alamat Heym yang Anda konfigurasi (`FRONTEND_URL`) dan terbuka untuk orang yang masuk ke Heym yang dapat mengakses workflow tersebut.
+
 - Uji jalan adalah eksekusi nyata. Efek sampingnya benar-benar terjadi dan muncul di riwayat eksekusi Workflow seperti eksekusi lainnya.
 - Penyimpanan mengikuti jalur editor: perubahan pada graf menyimpan graf sebelumnya di **Edit History** Workflow.
 - Untuk mengubah Workflow yang dibuat sebelumnya, lanjutkan utas dengan `conversation_id` yang sama. Asisten memperbarui Workflow tersebut alih-alih membuat yang baru, dan hanya mengubah Workflow yang dapat Anda edit.
 - Ketika lima uji jalan telah terpakai, asisten berhenti dan menjelaskan apa yang masih gagal.
 
-Credential tetap berada di UI: `heym_chat` tidak pernah menampilkan, memilih, atau membuatnya. Saat membangun atau mengedit Workflow, Node baru yang memerlukan credential dibiarkan kosong dan balasannya menyebutkannya, sehingga Anda dapat mengaturnya di editor.
-
 Data table berbeda. Table tidak menyimpan rahasia, sehingga `heym_chat` dapat menampilkan daftar table Anda, menanyakan table mana yang harus digunakan Workflow, dan membuat table baru beserta kolomnya. Ia tidak pernah membaca atau menulis baris.
+
+### Credentials
+
+`heym_chat` melihat credential yang Anda miliki dan yang dibagikan kepada Anda, berdasarkan nama dan jenis, sama seperti tab Chat. Saat workflow yang dibangun memerlukan credential, ia menanyakan mana yang akan digunakan sebagai pertanyaan dalam hasil. Jawab dengan `conversation_id` yang sama.
+
+Untuk menambahkan credential, atau memperbarui yang Anda miliki, asisten membuka formulir credential Heym di halaman Heym, `/credentials/setup/<id>`. Anda masuk ke Heym di sana, memasukkan kunci atau menghubungkan akun, lalu menekan simpan. Nilai langsung masuk ke Heym: klien MCP dan modelnya hanya mempelajari nama dan jenis credential. Jangan menempelkan kunci ke klien MCP; mintalah formulirnya.
+
+| Klien | Apa yang terjadi |
+|-------|------------------|
+| Mendukung elisitasi URL MCP | Klien meminta Anda untuk membuka halaman Heym. Panggilan menunggu saat Anda mengisi formulir, hingga sepuluh menit, lalu dilanjutkan dengan credential baru. |
+| Lainnya | Hasil membawa tautan dan meminta klien untuk memanggil `heym_chat` lagi dengan `wait_for_credential_form`. Panggilan tersebut menunggu hingga lima menit saat Anda mengisi formulir, lalu melanjutkan percakapan. Jika klien tidak menunggu, simpan formulir dan balas dengan `conversation_id` yang sama; panggilan berikutnya tahu bahwa formulir telah disimpan dan credential apa yang dibuatnya. |
+
+Halaman hanya terbuka untuk akun Heym yang memulai permintaan, jadi tautan yang diteruskan tidak berguna bagi orang lain. Formulir tetap terbuka selama 24 jam, dan Anda dapat menolaknya dari halaman. Setelah Anda menyimpan atau menolaknya, langkah dalam percakapan tab Chat menampilkan hasilnya.
+
 
 ### Credential dan model
 
@@ -78,12 +108,15 @@ Data table berbeda. Table tidak menyimpan rahasia, sehingga `heym_chat` dapat me
 
 Jika salah satunya tidak ada, tool tetap muncul di `tools/list` tetapi setiap panggilan mengembalikan error yang meminta Anda menyelesaikan penyiapan di tab ini.
 
+
+Node LLM dan Agent dalam workflow yang dibangun `heym_chat` berjalan pada credential dan model ini, termasuk credential yang dibagikan seseorang dengan Anda, sehingga uji coba berfungsi tanpa langkah penyiapan lain. Saat `heym_chat` mengedit workflow, node LLM dan Agent yang sudah memiliki credential akan menyimpannya, beserta modelnya.
 ### Argumen dan riwayat
 
 | Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
 | `message` | Ya | Instruksi atau pertanyaan, dalam bahasa alami. |
 | `conversation_id` | Tidak | `conversation_id` dari hasil `heym_chat` sebelumnya, untuk melanjutkan thread tersebut. |
+| `wait_for_credential_form` | Tidak | Dengan `conversation_id`: tunggu hingga pengguna menyimpan atau menolak formulir credential yang dibuka oleh utas, lalu kirim `message`. |
 
 Setiap panggilan ditulis ke riwayat [Tab Chat](./chat-tab.md) Anda sebagai percakapan normal, ditandai dengan ikon plug di daftar percakapan. Pesan, tool card, dan jeda klarifikasi terlihat persis seperti percakapan yang Anda mulai sendiri, dan Anda dapat membuka thread tersebut serta terus berbicara di browser. Setiap hasil mengembalikan `conversation_id`-nya sehingga klien MCP dapat melanjutkan thread yang sama alih-alih membuka thread baru pada setiap panggilan.
 

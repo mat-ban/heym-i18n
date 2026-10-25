@@ -85,6 +85,20 @@
 
 Ο καταναλωτής RabbitMQ εκκινείται όταν αρχικοποιείται ο leader worker. Τα workflows με nodes `rabbitmq` όπου `rabbitmqOperation === "receive"` αποκτούν καταναλωτή. Η είσοδος περιλαμβάνει `message_data` (body, headers, routing_key κ.λπ.) και `triggered_by: "rabbitmq"`.
 
+## Όριο ταυτοχρονισμού
+
+Ένα workflow με [όριο ταυτοχρονισμού](./webhooks.md#concurrency-limit-and-queued-runs) βάζει σε ουρά τις παραγωγικές εκτελέσεις από κάθε σημείο εισόδου παραπάνω όταν τα slots του είναι πλήρη, με σειρά προτεραιότητας (FIFO), σε όλες τις εγκαταστάσεις. Ο τρόπος με τον οποίο ο καλών μαθαίνει το αποτέλεσμα εξαρτάται από το σημείο εισόδου:
+
+| Entry point | Ενώ η εκτέλεση περιμένει |
+|---|---|
+| Webhook / API | `202 Accepted` με ένα `execution_id` και ένα status URL |
+| SSE streaming, Quick Drawer, Portal chat | Το stream παραμένει ανοιχτό και στέλνει συμβάντα `queued` |
+| Portal without streaming | Το αίτημα περιμένει το αποτέλεσμα |
+| MCP | Ένα αποτέλεσμα `queued` για ανάκτηση μέσω `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Το trigger περιμένει το αποτέλεσμα, για όσο διάστημα θα περίμενε μια εκτέλεση σε άλλη [εγκατάσταση](./cluster.md). Η εκτέλεση πραγματοποιείται σε κάθε περίπτωση και καταγράφεται στο ιστορικό |
+
+Όταν η ουρά είναι γεμάτη, η εκτέλεση δεν ξεκινά και το ιστορικό την καταγράφει ως `queue_full`. Οι δοκιμαστικές εκτελέσεις του editor, οι κλήσεις δευτερευόντων workflow (κόμβος [Execute](../nodes/execute-node.md) και εργαλεία workflow του πράκτορα), τα [Evals](../tabs/evals-tab.md), οι δοκιμές σε λειτουργία chat build και οι επαναλήψεις μετά από έλεγχο δεν μπαίνουν ποτέ σε ουρά. Οι εκτελέσεις καρτών στο [Board](../tabs/board-tab.md), οι εκτελέσεις [File Upload](../nodes/file-upload-trigger-node.md), οι εκτελέσεις που ξεκινούν από το εργαλείο run-workflow του βοηθού AI και τα workflow ειδοποίησης συμβάντων ξεκινούν επίσης χωρίς αναμονή για slot.
+
 ## trigger_source
 
 Το ιστορικό εκτελέσεων καταγράφει το `trigger_source` για κάθε σημείο εισόδου:

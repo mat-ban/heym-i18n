@@ -32,6 +32,10 @@ Konfigurácia v editore: Tlačidlo **Portal** v hlavičke workflowu otvorí dial
 3. **Spustenie**: `POST /api/portal/{slug}/execute` – Toto volá chatové UI portálu (alebo interne jeho streamovanú variantu, ak je povolená); koncoví používatelia komunikujú prostredníctvom chatového rozhrania, nie priamym volaním API.
 4. **Zastavenie**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Vyžiadané, keď používateľ počas aktívneho spustenia portálu stlačí **Stop**
 
+## Limit súbehu
+
+Keď má workflow [limit súbehu](./webhooks.md#concurrency-limit-and-queued-runs) a všetky sloty sú obsadené, správa na portáli čaká, kým na ňu príde rad, namiesto toho, aby sa spustila okamžite. Chat zobrazuje v riadku priebehu **Waiting in queue (2/5)**, kým sa spustenie nezačne, a potom odpoveď ako zvyčajne. Spustenie prebehne aj vtedy, ak používateľ stránku zatvorí. **Stop** odstráni čakajúce spustenie z radu. Keď je rad plný, správa zlyhá s chybou "Concurrency queue is full". Spustenie, ktoré čakalo v rade, nestreamuje svoju odpoveď token po tokene; celá odpoveď sa zobrazí po jeho dokončení.
+
 ## HITL v spusteniach portálu
 
 Ak workflow portálu dosiahne [uzol Agent](../nodes/agent-node.md) s povoleným [Human-in-the-Loop](./human-in-the-loop.md), odpoveď portálu zobrazí odkaz na kontrolu namiesto prázdneho zobrazenia.

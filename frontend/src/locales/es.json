@@ -1228,7 +1228,8 @@
     },
     "askAi": "Preguntar a la IA",
     "askAiTitle": "Consultar al asistente de Chat sobre esta ejecución",
-    "noNodeSpans": "No se registraron spans de nodo para esta ejecución."
+    "noNodeSpans": "No se registraron spans de nodo para esta ejecución.",
+    "queuedProgress": "En cola {position}/{size}"
   },
   "logs": {
     "all": "Todos",
@@ -1756,6 +1757,22 @@
         "waiting": "En espera",
         "neutral": "Neutro"
       }
+    },
+    "concurrencyLimit": "Límite de concurrencia",
+    "concurrencyLimitHelp": "Las ejecuciones de producción (Webhooks, Cron, MCP, Portal, Triggers) por encima del límite esperan en una cola FIFO. Las ejecuciones de prueba del editor siempre se inician de inmediato.",
+    "maxConcurrentRuns": "Máx. ejecuciones concurrentes",
+    "maxQueueSizeOptional": "Tamaño máximo de cola (opcional)",
+    "emptyNoLimit": "Vacío = sin límite",
+    "maxWaitOptional": "Espera máxima (segundos, opcional)",
+    "emptyWaitAsLong": "Vacío = esperar todo el tiempo necesario",
+    "concurrencyQueueHelp": "Una cola llena responde 429. Una ejecución que espere más que el tiempo máximo se registra como caducada.",
+    "rag": {
+      "hybridSearch": "Búsqueda híbrida",
+      "hybridSearchHelp": "Combine la similitud vectorial con la coincidencia de palabras clave BM25, de modo que también se encuentren términos exactos como identificadores, nombres y códigos de error.",
+      "hybridScore": "Puntuación híbrida (0-1)",
+      "similarityScore": "Puntuación de similitud",
+      "vectorSimilarity": "Similitud vectorial",
+      "bm25Score": "Puntuación BM25"
     }
   },
   "quickDrawer": {

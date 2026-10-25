@@ -111,6 +111,10 @@ Thẻ image phải là phiên bản mà main đang chạy, và cả hai khóa ph
 | On | Đưa một worker ra khỏi vòng luân chuyển mà không dừng nó — các lượt thực thi đang chạy sẽ hoàn tất, không có lượt mới nào được gán. Luôn bật đối với instance main: công việc về tệp, plugin và coding-agent chạy ở đó bất kể công tắc nói gì |
 | Weight | Phần chia của nó trong các lượt chạy có thể phân phối |
 
+## Giới hạn đồng thời trong một cluster
+
+[Giới hạn đồng thời](./webhooks.md#concurrency-limit-and-queued-runs) của một workflow được đếm trong PostgreSQL, do đó nó có hiệu lực trên mọi instance và mọi tiến trình: hai instance không bao giờ chạy nhiều lượt chạy của một workflow hơn mức giới hạn cho phép. Một lượt chạy đã chờ một vị trí sẽ được chỉ định theo cùng các quy tắc như bất kỳ lượt chạy nào khác khi bắt đầu, vì vậy một lượt chạy cần ở lại main vẫn sẽ ở đó. Queue worker thực thi các lượt chạy này hiện khởi động trên mọi bản cài đặt, bao gồm cả một instance đơn lẻ, nơi nó chỉ nhận các lượt chạy mà chính instance của nó đã xếp hàng. Điều đó có nghĩa là một instance đơn lẻ cũng giữ kết nối `LISTEN` đánh thức hàng đợi trong mỗi tiến trình; hãy dự trù kết nối của nó tương tự như một instance trong cluster.
+
 ## Lịch sử lượt chạy
 
 Mọi lượt chạy trong lịch sử thực thi đều nêu tên instance đã thực thi nó, và cả hai hộp thoại lịch sử đều có thể lọc xuống một instance. Bộ lọc khớp theo id của instance trong khi hiển thị tên của nó, nên việc đổi tên một instance không viết lại những gì các lượt chạy cũ ghi lại.

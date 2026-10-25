@@ -827,6 +827,22 @@
         "waiting": "Odottaa",
         "neutral": "Neutraali"
       }
+    },
+    "concurrencyLimit": "Samanaikaisuusraja",
+    "concurrencyLimitHelp": "Rajan ylittävät tuotantoajot (Webhookit, Cron, MCP, Portal, Triggerit) odottavat FIFO-jonossa. Editorin testiajot alkavat aina heti.",
+    "maxConcurrentRuns": "Samanaikaisten ajojen enimmäismäärä",
+    "maxQueueSizeOptional": "Jonon enimmäiskoko (valinnainen)",
+    "emptyNoLimit": "Tyhjä = ei rajaa",
+    "maxWaitOptional": "Enimmäisodotusaika (sekuntia, valinnainen)",
+    "emptyWaitAsLong": "Tyhjä = odota niin kauan kuin tarpeen",
+    "concurrencyQueueHelp": "Täysi jono vastaa tilakoodilla 429. Ajo, joka odottaa enimmäisaikaa pidempään, merkitään vanhentuneeksi.",
+    "rag": {
+      "hybridSearch": "Hybridihaku",
+      "hybridSearchHelp": "Yhdistä vektorien samankaltaisuus BM25-avainsanojen täsmäykseen, jotta myös tarkat termit, kuten tunnisteet, nimet ja virhekoodit, löytyvät.",
+      "hybridScore": "Hybridipistemäärä (0-1)",
+      "similarityScore": "Samankaltaisuuspisteet",
+      "vectorSimilarity": "Vektorien samankaltaisuus",
+      "bm25Score": "BM25-pistemäärä"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Kysy tekoälyltä",
     "askAiTitle": "Kysy Chat-avustajalta tästä ajosta",
-    "noNodeSpans": "Tälle ajolle ei tallennettu solmu-spaneja."
+    "noNodeSpans": "Tälle ajolle ei tallennettu solmu-spaneja.",
+    "queuedProgress": "Jonossa {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Ladataan portaalia...",

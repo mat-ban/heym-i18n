@@ -8,22 +8,23 @@ Node **Jira** menghubungkan workflow ke Jira REST API untuk otomatisasi proyek, 
 |----------|-------|
 | Input | 1 |
 | Output | 1 |
-| Credential | Jira (Cloud email/API token atau Data Center username/password, base URL, mode deployment, versi REST API opsional) |
+| Credential | Jira (Cloud email/API token, Data Center username/password atau personal access token, base URL, mode deployment, versi REST API opsional) |
 | Output | `$nodeLabel.*` |
 
 ## Credential
 
-Buat credential **Jira** di [Credentials Tab](../tabs/credentials-tab.md). Kunci konfigurasi yang disimpan adalah `email`, `api_token`, `base_url`, `deployment`, dan `api_version` opsional. Untuk Jira Cloud, `email` menyimpan email akun Atlassian dan `api_token` menyimpan token API Atlassian. Untuk Jira Data Center / Server, kunci yang sama menyimpan username dan password Basic auth. Lihat [Third-Party Integrations](../reference/integrations.md#jira) untuk langkah-langkah penyiapan.
+Buat credential **Jira** di [Credentials Tab](../tabs/credentials-tab.md). Kunci konfigurasi yang disimpan adalah `email`, `api_token`, `base_url`, `deployment`, `auth_mode`, dan `api_version` opsional. Untuk Jira Cloud, `email` menyimpan email akun Atlassian dan `api_token` menyimpan token API Atlassian. Untuk Jira Data Center / Server, kunci yang sama menyimpan username dan password Basic auth, atau dengan `auth_mode: pat`, `api_token` menyimpan personal access token yang dikirimkan sebagai Bearer token dan `email` tidak digunakan. Lihat [Third-Party Integrations](../reference/integrations.md#jira) untuk langkah-langkah penyiapan.
 
 | Field | Config key | Deskripsi |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Email akun Atlassian Jira Cloud, atau username Jira Data Center / Server |
-| API Token / Password | `api_token` | Token API Atlassian Jira Cloud, atau password Jira Data Center / Server untuk Basic auth |
+| Autentikasi | `auth_mode` | `basic` (default) atau `pat` (hanya Data Center / Server) |
+| API Token / Password / Personal Access Token | `api_token` | Token API Atlassian Jira Cloud, password Jira Data Center / Server untuk Basic auth, atau personal access token Data Center dalam mode `pat` |
 | Base URL | `base_url` | URL situs Jira, misalnya `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` untuk Jira Cloud atau `data_center` untuk Jira Data Center / Server |
 | REST API Version | `api_version` | Default `3` untuk Jira Cloud. Data Center / Server menggunakan REST API v2 |
 
-Personal access token dan Bearer auth untuk Data Center / Server belum didukung oleh credential Jira.
+Personal access token memerlukan Jira Data Center / Server 8.14 atau yang lebih baru. Mengganti metode autentikasi akan menghapus rahasia yang disimpan, jadi masukkan kata sandi atau token baru saat Anda beralih.
 
 Gunakan **Test Connection** untuk memverifikasi credential terhadap pengguna Jira saat ini.
 

@@ -7,7 +7,7 @@
 - **Qdrant** – 外部の Qdrant サーバーにベクトルを保存します（*RAG: Qdrant + OpenAI* 認証情報が必要です）。
 - **Postgres (pgvector)** – Heym 自身の Postgres データベース内にベクトルを保存します。外部サービスは不要です（*RAG: Psql + OpenAI* 認証情報が必要です）。
 
-後方互換性のため、デフォルトは **Qdrant** です。Database を変更すると、**Vector Store** リストがそのデータベースでバックアップされたストアに絞り込まれます。どちらのバックエンドも、同じ操作、メタデータフィルタリング、および Cohere による reranking をサポートしています。
+後方互換性のため、デフォルトは **Qdrant** です。Database を変更すると、**Vector Store** リストがそのデータベースでバックアップされたストアに絞り込まれます。どちらのバックエンドも、同じ操作、メタデータフィルタリング、ハイブリッド（ベクトル + BM25）検索、および Cohere による reranking をサポートしています。
 
 どちらのバックエンドも、*RAG: Custom Embeddings* 認証情報を通じてアクセスすることもできます。これは OpenAI を任意の OpenAI 互換 embedding エンドポイントに置き換え、独自の Vector Store を指定します。このような認証情報から作成されたストアは、それが対象とする Database の下に表示されます。詳細は [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag) を参照してください。
 
@@ -17,7 +17,7 @@
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count`（search）、`$nodeLabel.point_id`（insert、upsert）、`$nodeLabel.deleted`（delete） |
+| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count`（search）、`$nodeLabel.point_id`（insert、upsert）、`$nodeLabel.deleted`（delete） |
 
 ## Parameters
 
@@ -33,6 +33,7 @@
 | `queryText` | expression | 検索クエリ（search のみ） |
 | `searchLimit` | number | 最大結果数（デフォルト：5） |
 | `metadataFilters` | JSON string | 検索用のメタデータフィルター（値は式をサポートします） |
+| `hybridSearch` | boolean | ベクトル検索と BM25 キーワード検索を組み合わせる（search のみ；デフォルト：オフ） |
 | `enableReranker` | boolean | Cohere を使用して検索結果を rerank します |
 | `rerankerCredentialId` | UUID | reranking 用の Cohere 認証情報 |
 | `rerankerTopN` | number | reranking 後に保持する上位結果の数 |
@@ -104,6 +105,7 @@ id フィールドが一致するすべての point が最初に削除される�
 | `queryText` | はい | 検索クエリ |
 | `searchLimit` | いいえ | 最大結果数（デフォルト: 5） |
 | `metadataFilters` | いいえ | metadata によるフィルタリング（完全一致の JSON オブジェクト、値は式をサポート） |
+| `hybridSearch` | いいえ | ベクトル類似度と BM25 キーワード一致を融合する（[ハイブリッド検索](#ハイブリッド検索)を参照） |
 | `enableReranker` | いいえ | 関連性向上のための Cohere リランキングを有効化 |
 | `rerankerCredentialId` | リランキング時 | Cohere の credential |
 | `rerankerTopN` | いいえ | リランキング後の最終的な結果数 |
@@ -117,13 +119,44 @@ id フィールドが一致するすべての point が最初に削除される�
 - `score` は元のベクトル類似度スコアのままです
 - `relevance_score` は Cohere リランカーのスコアです
 
+
+#### ハイブリッド検索
+
+ベクトル検索は、クエリと同じ意味を持つテキストを検出します。正確な単語のみを含むテキストは下位にランクされる可能性があります：製品コード、チケット番号、人物の名前、`ERR-4021` のようなエラーなどです。**ハイブリッド検索**をオンにすると、ノードはベクトル検索と並行してキーワード検索を実行し、両方のリストをマージするため、1 つのクエリで両方のタイプの一致を検出できます。
+
+1. ベクトル検索は、ハイブリッド検索なしの場合と同様に最良の一致を返します。
+2. キーワード検索は、クエリの単語に対して **BM25** を使用して保存されたテキストをスコアリングします。これにより、希少な単語、繰り返される単語、および短いドキュメントが評価されます。
+3. ランク付けされた 2 つのリストは **reciprocal rank fusion** でマージされます。両方のリストの上位に近いドキュメントが第 1 位にランクされ、一方のリストでのみ見つかったドキュメントも表示されます。
+
+メタデータフィルターは両方の検索に適用され、Cohere リランカーが有効な場合はマージされたリストに対して実行されます。
+
+各結果には両方の検索のスコアが含まれます：
+
+| フィールド | 意味 |
+|---|---|
+| `score` | 0 から 1 までの融合スコア。`1` はドキュメントが両方の検索で 1 位にランクされたことを意味します。 |
+| `vector_score` | ベクトル類似度（0 から 1）。キーワード検索のみでドキュメントが見つかった場合は `null`。 |
+| `keyword_score` | BM25 スコア。クエリの単語がドキュメントに 1 つも含まれていない場合は `null`。 |
+
+ハイブリッド検索が実行された場合、`$nodeLabel.hybrid` は `true` になります。
+
+知っておくべきこと：
+
+- 融合された `score` は、結果を相対的にランク付けします。ベクトル類似度ではないため、単純な検索用に調整されたしきい値は直接引き継がれません。
+- クエリの単語は小文字に変換され、スペースや句読点で分割されるため、`ERR-4021` は `err` および `4021` として検索されます。キーワード検索では、クエリの先頭から最大 16 個の一意の単語が使用されます。
+- Qdrant：コレクションに対する最初のハイブリッド検索では、`text` ペイロードフィールドにフルテキストインデックスが構築されます。これには書き込み権限のある Qdrant キーが必要です。大規模なコレクションでは一度だけ少し時間がかかりますが、以降の検索ではインデックスが再利用されます。
+- Postgres (pgvector)：データベースマイグレーション `142_vsi_text_search_index` によりフルテキストインデックスが追加されます。更新後に `alembic upgrade head` を実行してください。ハイブリッド検索はインデックスなしでも動作しますが、大規模なストアでは速度が低下します。
+- 各クエリについて、キーワード検索は最も重みのある最も希少なクエリ単語から順に、最大 200 件の一致するドキュメントを読み取ります。
 ## 結果へのアクセス
 
 - `$ragNode.results.first().text` – 最上位の結果の内容
-- `$ragNode.results.first().score` – 類似度スコア（0～1）
+- `$ragNode.results.first().score` – 類似度スコア（0～1）、またはハイブリッド検索による融合スコア
+- `$ragNode.results.first().keyword_score` – BM25 スコア（ハイブリッド検索）
+- `$ragNode.results.first().vector_score` – ベクトル類似度（ハイブリッド検索）
 - `$ragNode.results.first().metadata.source` – 最上位の結果の metadata
 - `$ragNode.results.map("item.text").join("\n\n")` – LLM コンテキスト用に連結
 - `$ragNode.reranked` – リランキングが適用されたかどうか
+- `$ragNode.hybrid` – ハイブリッド検索が適用されたかどうか
 - `$ragNode.count` – 返された結果の数
 - `$ragNode.replaced` – upsert によって既存のドキュメントが置き換えられたかどうか
 - `$ragNode.deleted` – delete によって何かが削除されたかどうか
@@ -143,6 +176,22 @@ id フィールドが一致するすべての point が最初に削除される�
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## 例 – ハイブリッド検索
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

@@ -7,7 +7,7 @@ Uzel obsahuje dropdown **Database**, který vybírá backend:
 - **Qdrant** – ukládá vektory na externím serveru Qdrant (vyžaduje přihlašovací údaje *RAG: Qdrant + OpenAI*).
 - **Postgres (pgvector)** – ukládá vektory přímo v databázi Postgres platformy Heym, bez externí služby (vyžaduje přihlašovací údaje *RAG: Psql + OpenAI*).
 
-Výchozí hodnotou je **Qdrant** z důvodu zpětné kompatibility. Změna Database filtruje seznam **Vector Store** na úložiště podporovaná danou databází. Oba backendy podporují stejné operace, filtrování metadat a reranking pomocí Cohere.
+Výchozí hodnotou je **Qdrant** z důvodu zpětné kompatibility. Změna Database filtruje seznam **Vector Store** na úložiště podporovaná danou databází. Oba backendy podporují stejné operace, filtrování metadat, hybridní vyhledávání (vektor + BM25) a reranking pomocí Cohere.
 
 K oběma backendům lze rovněž přistupovat prostřednictvím přihlašovacích údajů *RAG: Custom Embeddings*, které
 nahrazují OpenAI libovolným embedding endpointem kompatibilním s OpenAI a definují vlastní vektorové
@@ -20,7 +20,7 @@ cílí. Viz [Custom Embeddings](../reference/integrations.md#custom-embeddings-r
 |----------|-------|
 | Vstupy | 1 |
 | Výstupy | 1 |
-| Výstup | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Výstup | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parametry
 
@@ -36,6 +36,7 @@ cílí. Viz [Custom Embeddings](../reference/integrations.md#custom-embeddings-r
 | `queryText` | expression | Vyhledávací dotaz (pouze search) |
 | `searchLimit` | number | Maximální počet výsledků (výchozí: 5) |
 | `metadataFilters` | JSON string | Filtry metadat pro vyhledávání (hodnoty podporují výrazy) |
+| `hybridSearch` | boolean | Kombinovat vektorové vyhledávání s klíčovými slovy BM25 (pouze search; výchozí: vypnuto) |
 | `enableReranker` | boolean | Použít Cohere pro reranking výsledků vyhledávání |
 | `rerankerCredentialId` | UUID | Přihlašovací údaje Cohere pro reranking |
 | `rerankerTopN` | number | Počet nejlepších výsledků, které se mají zachovat po rerankingu |
@@ -125,6 +126,7 @@ Sémantické vyhledávání podobných dokumentů.
 | `queryText` | ano | Vyhledávací dotaz |
 | `searchLimit` | ne | Maximální počet výsledků (výchozí: 5) |
 | `metadataFilters` | ne | Filtrování podle metadat (JSON objekt s přesnou shodou, hodnoty podporují výrazy) |
+| `hybridSearch` | ne | Sloučit vektorovou podobnost se shodou klíčových slov BM25 (viz [Hybridní vyhledávání](#hybridni-vyhledavani)) |
 | `enableReranker` | ne | Zapne Cohere reranking pro lepší relevanci |
 | `rerankerCredentialId` | při rerankingu | Přihlašovací údaje Cohere |
 | `rerankerTopN` | ne | Konečný počet výsledků po rerankingu |
@@ -138,13 +140,44 @@ Pokud je reranking zapnutý:
 - `score` zůstává původní skóre vektorové podobnosti
 - `relevance_score` je skóre Cohere rerankeru
 
+
+#### Hybridní vyhledávání
+
+Vektorové vyhledávání nachází text se stejným významem jako dotaz. Text, který obsahuje pouze přesná slova, se může umístit níže: kód produktu, číslo požadavku, jméno osoby, chyba jako `ERR-4021`. Zapněte **Hybridní vyhledávání** a uzel spustí vyhledávání podle klíčových slov vedle vektorového vyhledávání a sloučí oba seznamy, takže jeden dotaz najde oba typy shod.
+
+1. Vektorové vyhledávání vrací své nejlepší shody stejně jako bez hybridního vyhledávání.
+2. Vyhledávání podle klíčových slov hodnotí uložený text vůči slovům dotazu pomocí **BM25**, což odměňuje vzácná slova, opakovaná slova a kratší dokumenty.
+3. Dva seřazené seznamy se sloučí pomocí **reciprocal rank fusion**. Dokument blízko začátku obou seznamů se umístí na prvním místě a dokument nalezený pouze jedním seznamem se přesto objeví.
+
+Filtry metadat platí pro obě vyhledávání a Cohere reranker, pokud je povolen, běží na sloučeném seznamu.
+
+Každý výsledek nese skóre obou vyhledávání:
+
+| Pole | Význam |
+|------|--------|
+| `score` | Sloučené skóre od 0 do 1. `1` znamená, že dokument byl první v obou vyhledáváních. |
+| `vector_score` | Vektorová podobnost (0 až 1). `null`, pokud dokument nalezlo pouze vyhledávání podle klíčových slov. |
+| `keyword_score` | Skóre BM25. `null`, pokud se žádné ze slov dotazu v dokumentu nevyskytuje. |
+
+`$nodeLabel.hybrid` má hodnotu `true`, pokud proběhlo hybridní vyhledávání.
+
+Dobré vědět:
+
+- Sloučené `score` řadí výsledky vůči sobě. Nejedná se o vektorovou podobnost, takže prahová hodnota nastavená pro jednoduché vyhledávání se nepřenáší přímo.
+- Slova dotazu se převádějí na malá písmena a dělí mezerami a interpunkcí, takže `ERR-4021` se vyhledává jako `err` a `4021`. Vyhledávání podle klíčových slov používá až prvních 16 odlišných slov dotazu.
+- Qdrant: první hybridní vyhledávání v kolekci vytvoří fulltextový index v poli payload `text`, což vyžaduje klíč Qdrant s právem zápisu. U velkých kolekcí to trvá chvíli pouze jednou; pozdější vyhledávání index znovu využívají.
+- Postgres (pgvector): migrace databáze `142_vsi_text_search_index` přidává fulltextový index. Po aktualizaci spusťte `alembic upgrade head`. Hybridní vyhledávání funguje i bez indexu, pouze pomaleji u velkých úložišť.
+- Pro každý dotaz přečte vyhledávání podle klíčových slov až 200 odpovídajících dokumentů, počínaje nejvzácnějšími slovy dotazu, protože ta mají největší váhu.
 ## Přístup k výsledkům
 
 - `$ragNode.results.first().text` – obsah nejlepšího výsledku
-- `$ragNode.results.first().score` – skóre podobnosti (0–1)
+- `$ragNode.results.first().score` – skóre podobnosti (0–1), nebo sloučené skóre při hybridním vyhledávání
+- `$ragNode.results.first().keyword_score` – skóre BM25 (hybridní vyhledávání)
+- `$ragNode.results.first().vector_score` – vektorová podobnost (hybridní vyhledávání)
 - `$ragNode.results.first().metadata.source` – metadata nejlepšího výsledku
 - `$ragNode.results.map("item.text").join("\n\n")` – spojení pro kontext LLM
 - `$ragNode.reranked` – zda byl aplikován reranking
+- `$ragNode.hybrid` – zda bylo aplikováno hybridní vyhledávání
 - `$ragNode.count` – počet vrácených výsledků
 - `$ragNode.replaced` – zda upsert nahradil existující dokument
 - `$ragNode.deleted` – zda smazání něco odstranilo
@@ -164,6 +197,22 @@ Pokud je reranking zapnutý:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Příklad – Hybridní vyhledávání
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

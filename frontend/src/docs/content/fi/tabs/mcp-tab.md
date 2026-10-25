@@ -36,6 +36,21 @@ Jokainen workflow voidaan tarjota MCP-työkaluna:
 
 Workflow-kortit näyttävät kuvauksen ja syötekenttien nimien esikatselun, jotta näet, mitä kukin työkalu odottaa ennen käyttöönottoa.
 
+
+### Jonotetut ajot ja heym_execution_status
+
+Workflow, jolla on [samanaikaisuusrajoitus](../reference/webhooks.md#concurrency-limit-and-queued-runs), voi olla varattu, kun asiakas kutsuu sitä. Kutsu palauttaa heti tuloksen, joka ei ole virhe:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Asiakas kysyy `heym_execution_status` -työkalulta tällä `execution_id`-tunnuksella. Se palauttaa saman rungon kuin [tila-URL](../reference/webhooks.md#status-url): `queued` nykyisellä sijainnilla, `running`, sitten `success` tai `error` tulosten kera. Se löytää vain saman palvelimen tarjoamien workflow-prosessien suoritukset. Työkalu on lueteltu oletuspalvelimella ja jokaisella nimetyllä palvelimella vain niin kauan kuin vähintään yhdellä sen workflow-prosesseista on samanaikaisuusrajoitus. Kun jono on täynnä, kutsu palauttaa virheen "Concurrency queue is full".
 ## Heym-keskustelutyökalu
 
 **Heym Capabilities** -osassa Chat-välilehden moottori muunnetaan yhdeksi MCP-työkaluksi nimeltä `heym_chat`. Ota se käyttöön oletuspalvelimessa, missä tahansa nimetyssä palvelimessa tai molemmissa – jokaisella pinnalla on oma kytkentänsä ja mallivalinta.
@@ -49,6 +64,7 @@ Kun se on käytössä, `heym_chat` näkyy `tools/list` -listauksessa workflow-ty
 - Raportoi, mitä parhaillaan suoritetaan: kuinka monta suoritusta on käynnissä, niiden workflownimet, kauanko kukin on ollut käynnissä, nykyinen solmu ja linkki live-suoritukseen.
 - Listaa taulut, luo kortteja ja lue korttien tietoja [Board-välilehdellä](./board-tab.md).
 - Listaa datataulukot niiden sarakkeineen, luo uusia ja liitä niitä workflowihin, joita se rakentaa.
+- Luo tai päivitä tunnistetietosi Heymin omalla sivulla (katso [Tunnistetiedot](#tunnistetiedot))
 - Lue tiimien ja globaalien muuttujien arvoja ja etsi dokumentaatiosta.
 - Hyväksy, muokkaa tai hylkää odottavia ihmisen vahvistusta vaativia tarkistuksia.
 
@@ -58,14 +74,28 @@ Chat-välilehdelle myöhemmin lisätyt ominaisuudet tulevat automaattisesti käy
 
 `heym_chat` suorittaa Chat-moottorin aina rakennustilassa (build mode). Yhdellä kutsulla avustaja voi tallentaa uuden workflown, suorittaa sen realistisilla esimerkkisyötteillä, lukea suoritusraportin, korjata epäonnistuneet kohdat ja suorittaa sen uudelleen, enintään viisi koeajoa kutsua kohden. Kun viimeisimmän tallennuksen viimeisin suoritus onnistuu, se päättää yhden virkkeen yhteenvetoon ja vastaus päättyy tekstiin `Verified: the latest test run of the saved workflow passed.`
 
+Kun kutsu luo tai muokkaa workflow'ta, vastaus luettelee jokaisen täydellisen muokkauslinkin kera, kuten `https://heym.example.com/workflows/<id>`, ja avustajan vastauksen sisällä olevat linkit ovat myös täysiä linkkejä. Ne käyttävät määritettyä Heym-osoitettasi (`FRONTEND_URL`) ja avautuvat Heymiin kirjautuneille henkilöille, joilla on pääsy kyseiseen workflow'hun.
+
 - Koeajot ovat oikeita suorituksia. Niiden sivuvaikutukset toteutuvat, ja ne näkyvät workflown suoritushistoriassa kuten mikä tahansa muukin suoritus.
 - Tallennukset kulkevat editorin polkua: muutos graafiin säilyttää edellisen graafin workflown muokkaushistoriassa (**Edit History**).
 - Jos haluat muuttaa aiemmin rakennettua workflowta, jatka ketjua samalla `conversation_id`-tunnisteella. Avustaja päivittää kyseisen workflown uuden luomisen sijaan ja muuttaa vain workflowteja, joita sinulla on oikeus muokata.
 - Kun viisi koeajoa on käytetty, avustaja pysähtyy ja selittää, mikä edelleen epäonnistuu.
 
-Tunnistetiedot pysyvät käyttöliittymässä: `heym_chat` ei koskaan listaa, valitse tai luo niitä. Kun se rakentaa tai muokkaa workflowta, uudet tunnistetietoja vaativat solmut jätetään tyhjiksi, ja vastaus nimeää ne, jotta voit asettaa ne editorissa.
-
 Datataulukot toimivat eri tavalla. Taulukko ei sisällä salaisuuksia, joten `heym_chat` voi listata taulukot, kysyä, mitä taulukkoa workflowssa tulisi käyttää, ja luoda uuden taulukon sarakkeineen. Se ei koskaan lue tai kirjoita rivejä.
+
+### Tunnistetiedot
+
+`heym_chat` näkee omistamasi ja kanssasi jaetut tunnistetiedot nimen ja tyypin mukaan samalla tavalla kuin Keskustelu-välilehti. Kun sen rakentama workflow tarvitsee tunnistetiedot, se kysyy tuloksessa esitettynä kysymyksenä, mitä käytetään. Vastaa samalla `conversation_id`-tunnuksella.
+
+Voit lisätä tunnistetiedot tai päivittää omasi avaamalla Heymin lomakkeen Heym-sivulla, `/credentials/setup/<id>`. Kirjaudut Heymiin siellä, syötät avaimen tai yhdistät tilin ja tallennat. Arvo menee suoraan Heymille: MCP-asiakas ja sen malli saavat tietää vain tunnistetietojen nimen ja tyypin. Älä liitä avaimia MCP-asiakkaaseen; pyydä sen sijaan lomaketta.
+
+| Asiakas | Mitä tapahtuu |
+|---------|---------------|
+| Tukee MCP URL -kyselyä | Asiakas pyytää sinua avaamaan Heym-sivun. Kutsu odottaa lomakkeen täyttämistä (enintään kymmenen minuuttia) ja jatkaa sitten uusilla tunnistetiedoilla. |
+| Kaikki muut | Tulos sisältää linkin ja pyytää asiakasta kutsumaan `heym_chat`-toimintoa uudelleen parametrilla `wait_for_credential_form`. Tämä kutsu odottaa enintään viisi minuuttia lomakkeen täyttämisen aikana ja jatkaa sitten keskustelua. Jos asiakas ei odota, tallenna lomake ja vastaa samalla `conversation_id`-tunnuksella; seuraava kutsu tietää, että lomake tallennettiin ja mitkä tunnistetiedot se loi. |
+
+Sivu avautuu vain pyynnön aloittaneelle Heym-tilille, joten edelleenlähetetty linkki on hyödytön kenellekään muulle. Lomake pysyy auki 24 tuntia, ja sen voi hylätä sivulta. Kun tallennat tai hylkäät sen, Keskustelu-välilehden vaihe näyttää tuloksen.
+
 
 ### Tunnistetiedot ja malli
 
@@ -78,12 +108,15 @@ Datataulukot toimivat eri tavalla. Taulukko ei sisällä salaisuuksia, joten `he
 
 Jos jompikumpi puuttuu, työkalu näkyy edelleen `tools/list` -listauksessa, mutta kutsu palauttaa virheen, joka kehottaa viimeistelemään asetuksen tällä välilehdellä.
 
+
+`heym_chat`-työkalun rakentaman workflow'n LLM- ja Agent-solmut suoritetaan tällä tunnistetiedolla ja mallilla, mukaan lukien kanssasi jaetut tunnistetiedot, joten testiajot toimivat ilman erillistä asetusvaihetta. Kun `heym_chat` muokkaa workflow'ta, LLM- ja Agent-solmut, joilla on jo tunnistetiedot, säilyttävät ne yhdessä mallinsa kanssa.
 ### Argumentit ja historia
 
 | Argumentti | Pakollinen | Kuvaus |
 |----------|----------|-------------|
 | `message` | Kyllä | Ohje tai kysymys luonnollisella kielellä. |
 | `conversation_id` | Ei | Edellisen `heym_chat` -tuloksen `conversation_id`, jatkaakseen kyseistä keskustelua. |
+| `wait_for_credential_form` | Ei | `conversation_id`-parametrilla: odota, kunnes käyttäjä tallentaa tai hylkää viestiketjun avaaman tunnistetietolomakkeen, ja lähetä sitten `message`. |
 
 Jokainen kutsu kirjataan [Chat-välilehden](./chat-tab.md) historiaan tavallisena keskusteluna, merkittynä pistorasia-kuvakkeella keskustelulistassa. Viestit, työkalukortit ja selvennysten tauot näyttävät täsmälleen samoilta kuin itse aloittamasi keskustelut, ja voit avata ketjun ja jatkaa keskustelua selaimessa. Jokainen tulos palauttaa `conversation_id` -tunnisteen, jotta MCP-asiakas voi jatkaa samaa keskustelua uuden avaamisen sijaan jokaisella kutsulla.
 

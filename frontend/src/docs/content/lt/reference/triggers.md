@@ -85,6 +85,20 @@ Discord siunčia sąveikos webhook'us į `POST /api/discord/webhook/{node_id}`. 
 
 RabbitMQ vartotojas pradeda veikti, kai lyderio darbininkas inicijuojamas. Workflow su `rabbitmq` mazgais, kur `rabbitmqOperation === "receive"`, gauna vartotoją. Įvestis apima `message_data` (kūnas, antraštės, routing_key ir kt.) ir `triggered_by: "rabbitmq"`.
 
+## Lygiagretumo apribojimas
+
+Workflow su [lygiagretumo apribojimu](./webhooks.md#concurrency-limit-and-queued-runs) išrikiuoja į eilę produkcinius vykdymus iš kiekvieno aukščiau nurodyto įėjimo taško, kai jo lizdai yra pilni, eilės tvarka (FIFO), visose instancijose. Kaip iškvietėjas sužino rezultatą, priklauso nuo įėjimo taško:
+
+| Įėjimo taškas | Kol vykdymas laukia |
+|---|---|
+| Webhook / API | `202 Accepted` su `execution_id` ir būsenos URL |
+| SSE streaming, Quick Drawer, Portal chat | Srautas lieka atidarytas ir siunčia `queued` įvykius |
+| Portal without streaming | Užklausa laukia rezultato |
+| MCP | `queued` rezultatas užklausai per `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger laukia rezultato tiek pat laiko, kiek lauktų vykdymas kitoje [instancijoje](./cluster.md). Vykdymas vis tiek įvyksta ir įrašomas į istoriją |
+
+Kai eilė pilna, vykdymas neprasideda ir istorija jį užregistruoja kaip `queue_full`. Redaktoriaus bandomieji vykdymai, sub-workflow iškvietimai ([Execute](../nodes/execute-node.md) mazgas ir agento workflow įrankiai), [Evals](../tabs/evals-tab.md), pokalbių kūrimo režimo testai ir peržiūros atnaujinimai niekada nėra dedami į eilę. [Board](../tabs/board-tab.md) kortelių vykdymai, [File Upload](../nodes/file-upload-trigger-node.md) vykdymai, AI asistento run-workflow įrankio paleisti vykdymai ir įspėjimų pranešimų workflow taip pat pradedami nelaukiant laisvos vietos.
+
 ## trigger_source
 
 Vykdymo istorija registruoja `trigger_source` kiekvienam įėjimo taškui:

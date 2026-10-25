@@ -827,6 +827,22 @@
         "waiting": "等待中",
         "neutral": "中性"
       }
+    },
+    "concurrencyLimit": "并发限制",
+    "concurrencyLimitHelp": "超出限制的生产运行（Webhook、Cron、MCP、Portal、Trigger）将在 FIFO 队列中等待。编辑器测试运行始终立即启动。",
+    "maxConcurrentRuns": "最大并发运行数",
+    "maxQueueSizeOptional": "最大队列大小（可选）",
+    "emptyNoLimit": "留空 = 无限制",
+    "maxWaitOptional": "最长等待时间（秒，可选）",
+    "emptyWaitAsLong": "留空 = 一直等待",
+    "concurrencyQueueHelp": "队列已满将返回 429。等待时间超过最长限制的运行将被记录为已过期。",
+    "rag": {
+      "hybridSearch": "混合搜索",
+      "hybridSearchHelp": "将向量相似度与 BM25 关键词匹配相结合，以便同时找到 ID、名称和错误代码等精确术语。",
+      "hybridScore": "混合得分 (0-1)",
+      "similarityScore": "相似度得分",
+      "vectorSimilarity": "向量相似度",
+      "bm25Score": "BM25 得分"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "询问 AI",
     "askAiTitle": "就此次运行询问 Chat 助手",
-    "noNodeSpans": "此次运行未记录任何节点 span。"
+    "noNodeSpans": "此次运行未记录任何节点 span。",
+    "queuedProgress": "排队中 {position}/{size}"
   },
   "portal": {
     "loadingPortal": "正在加载门户...",

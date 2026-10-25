@@ -105,3 +105,5 @@ Dessa genvägar är tillgängliga i dialogrutan för körningshistorik och i pan
 - [Workflow-struktur](./workflow-structure.md) – Format för noder och kanter
 - [Execute-nod](../nodes/execute-node.md) – Anropar under-workflows (`Ctrl + Shift + O`)
 - [Snabbstart](../getting-started/quick-start.md) – Bygg det första workflowet
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

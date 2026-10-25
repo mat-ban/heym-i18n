@@ -147,3 +147,5 @@ A párbeszédpanel teljes részleteiért lásd a [Webhookok](./webhooks.md#run-w
 - [Futtatási előzmények](./execution-history.md) – Korábbi futtatások
 - [Sablonok](../tabs/templates-tab.md) – Workflow-k és csomópontok mentése és újrafelhasználása
 - [Kontextuális bemutató](./contextual-showcase.md) – Kompakt oldalútmutató, amely a szerkesztőben érhető el
+
+- [Együttműködés a vásznon](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

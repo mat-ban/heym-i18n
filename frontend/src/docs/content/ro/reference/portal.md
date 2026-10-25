@@ -32,6 +32,10 @@ Configurați în editor: butonul **Portal** din antetul workflow-ului deschide d
 3. **Execuție**: `POST /api/portal/{slug}/execute` – Interfața de chat a portalului apelează acest endpoint (sau varianta sa cu streaming, intern, când este activată); utilizatorii finali interacționează prin interfața de chat, nu apelând direct API-ul.
 4. **Oprire**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Solicitat când utilizatorul apasă **Stop** în timpul unei rulări active de portal
 
+## Limită de concurență
+
+Când workflow-ul are o [limită de concurență](./webhooks.md#concurrency-limit-and-queued-runs) și toate sloturile sunt ocupate, un mesaj din portal își așteaptă rândul în loc să ruleze imediat. Chatul afișează **Waiting in queue (2/5)** în linia de progres până când începe rularea, apoi răspunsul ca de obicei. Rularea continuă chiar dacă utilizatorul închide pagina. **Stop** elimină o rulare în așteptare din coadă. Când coada este plină, mesajul eșuează cu "Concurrency queue is full". O rulare care a așteptat în coadă nu transmite răspunsul token cu token; întregul răspuns apare atunci când se finalizează.
+
 ## HITL în rulările de portal
 
 Dacă un workflow de portal ajunge la un [Nod Agent](../nodes/agent-node.md) cu [Human-in-the-Loop](./human-in-the-loop.md) activat, răspunsul portalului afișează un link de revizuire în loc să apară gol.

@@ -109,6 +109,8 @@ Kedua dialog riwayat menampilkan **execution yang sedang berjalan** di bagian at
 - Setelah pembatalan, entri yang berjalan menghilang pada refresh berikutnya; tekan **Refresh** untuk memperbarui daftar secara manual
 - Jika Anda membatalkan run yang telah selesai, permintaan tersebut tidak melakukan apa pun (no-op)
 
+Run yang menunggu [slot konkurensi](./webhooks.md#concurrency-limit-and-queued-runs) dicantumkan di bagian yang sama dengan label **Queued 2/5**, posisinya dalam antrean, dan ukuran antrean. Run ini tidak memiliki tombol **Open live** karena belum ada yang berjalan; **Cancel** mengeluarkan run yang sedang menunggu dari antrean dan mencatatnya sebagai `cancelled`. Run yang menunggu lebih lama dari batas tunggu maksimum workflow dicatat sebagai `expired`, dan run yang ditolak oleh antrean penuh dicatat sebagai `queue_full`; keduanya memiliki lencana tersendiri dalam daftar run.
+
 URL live adalah `/workflows/{workflowId}/{executionId}`. Observer bersifat read-only: meninggalkan
 editor hanya memutuskan tab browser tersebut dan tidak pernah menghentikan Workflow. Snapshot aktif
 dibagikan melalui PostgreSQL, sehingga membuka run tetap berfungsi ketika Trigger dan permintaan editor

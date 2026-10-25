@@ -1228,7 +1228,8 @@
     "toolCalls": "Chiamate agli strumenti",
     "askAi": "Chiedi all'IA",
     "askAiTitle": "Interrogare l'assistente Chat su questa esecuzione",
-    "noNodeSpans": "Nessuno span di nodo registrato per questa esecuzione."
+    "noNodeSpans": "Nessuno span di nodo registrato per questa esecuzione.",
+    "queuedProgress": "In coda {position}/{size}"
   },
   "logs": {
     "all": "Tutti",
@@ -1756,6 +1757,22 @@
         "waiting": "In attesa",
         "neutral": "Neutro"
       }
+    },
+    "concurrencyLimit": "Limite di concorrenza",
+    "concurrencyLimitHelp": "Le esecuzioni di produzione (Webhook, Cron, MCP, Portal, Trigger) oltre il limite attendono in una coda FIFO. I test dell'editor si avviano sempre immediatamente.",
+    "maxConcurrentRuns": "Esecuzioni simultanee massime",
+    "maxQueueSizeOptional": "Dimensione massima della coda (opzionale)",
+    "emptyNoLimit": "Vuoto = nessun limite",
+    "maxWaitOptional": "Attesa massima (secondi, opzionale)",
+    "emptyWaitAsLong": "Vuoto = attendi per tutto il tempo necessario",
+    "concurrencyQueueHelp": "Una coda piena risponde 429. Un'esecuzione che attende più del tempo massimo viene registrata come scaduta.",
+    "rag": {
+      "hybridSearch": "Ricerca ibrida",
+      "hybridSearchHelp": "Combina la somiglianza vettoriale con la corrispondenza delle parole chiave BM25 per trovare anche termini esatti come ID, nomi e codici di errore.",
+      "hybridScore": "Punteggio ibrido (0-1)",
+      "similarityScore": "Punteggio di somiglianza",
+      "vectorSimilarity": "Somiglianza vettoriale",
+      "bm25Score": "Punteggio BM25"
     }
   },
   "quickDrawer": {

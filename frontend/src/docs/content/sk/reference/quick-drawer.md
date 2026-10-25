@@ -52,6 +52,8 @@ Po spustení behu panel zobrazuje:
 
 `pending` znamená, že workflow čaká na neskoršiu akciu, ako je napríklad ľudská kontrola.
 
+Spustenia z Quick Draweru sú produkčné spustenia, takže workflow s [limitom súbehu](./webhooks.md#concurrency-limit-and-queued-runs) ich môže nechať čakať. Kým spustenie čaká v rade, stav hlási **Waiting in queue (2/5)**; keď sa spustenie začne, zmení sa na "running" a po skončení zobrazí výsledok bez postupného krokového priebehu. Spustenie, ktoré v rade expirovalo alebo bolo počas čakania zrušené, končí ako `error`.
+
 Spustenie so súborom prebieha cez jednorazový nahrávací odkaz triggera: panel požiada workflow o odkaz, nahrá naň súbor a po dokončení nahrávania zobrazí výsledok. Spustenia so súborom zobrazujú konečný stav a výstupy, ale nie priebeh krok za krokom, a v histórii sú takisto označené značkou `Quick Drawer`. Vybraný súbor sa po každom spustení vymaže, pretože jeden odkaz prijíma iba jeden súbor.
 
 ## Úložisko prehliadača

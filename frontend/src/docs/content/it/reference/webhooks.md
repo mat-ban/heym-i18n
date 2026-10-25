@@ -109,6 +109,73 @@ Configurabile per ciascun workflow: `rate_limit_requests` e `rate_limit_window_s
 
 Le richieste `test_run` aggirano il rate limiting.
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Limite di concorrenza ed esecuzioni in coda
+
+Un workflow può limitare il numero di esecuzioni di produzione eseguite contemporaneamente. Attivi **Limite di concorrenza** nel pannello **Properties** a livello di workflow e imposti **Esecuzioni simultanee massime**. I proprietari e i collaboratori con accesso di modifica possono modificarlo. Il limite è disattivato per impostazione predefinita.
+
+Quando il limite viene raggiunto, le nuove esecuzioni attendono in una coda FIFO (first-in, first-out). Ciò copre ogni punto di ingresso in produzione: questo endpoint, l'[endpoint di streaming](./sse-streaming.md), il [Portal](./portal.md), il [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) e ogni [trigger](./triggers.md). Le esecuzioni di test dell'editor si avviano sempre immediatamente e non occupano uno slot. L'invio di `test_run=true` senza una sessione autenticata autorizzata ad aprire il workflow non salta la coda.
+
+| Impostazione | Descrizione |
+|---|---|
+| `concurrency_limit` | Esecuzioni di produzione consentite contemporaneamente. `0` disattiva il limite |
+| `concurrency_max_queue` | Opzionale. Esecuzioni a cui è consentito attendere contemporaneamente. Vuoto indica nessun limite |
+| `concurrency_max_wait_seconds` | Opzionale. Un'esecuzione che attende più a lungo viene registrata come `expired`. Vuoto indica che attende per tutto il tempo necessario |
+
+### 202 Accepted
+
+Una chiamata che si avvia immediatamente si comporta esattamente come descritto in Formato della Risposta. Una chiamata che deve attendere riceve immediatamente `202 Accepted`, indipendentemente da quanto indicato da `X-Simple-Response`, con un'intestazione `Location` che punta al suo URL di stato:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Campo | Descrizione |
+|---|---|
+| `queue.position` | Posizione di questa esecuzione nella fila, a partire da 1 |
+| `queue.size` | Esecuzioni attualmente in attesa |
+| `queue.running` | Esecuzioni che occupano attualmente uno slot |
+| `queue.limit` | Limite di concorrenza del workflow |
+| `status_token` | Solo per workflow anonimi. Restituito una sola volta, in questa risposta |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` risponde con lo stato dell'esecuzione. Lo chiami con le stesse credenziali che hanno avviato l'esecuzione: una sessione o un JWT, un [token di esecuzione](./execution-tokens.md) o l'intestazione personalizzata del workflow. Un workflow anonimo non ha credenziali da verificare, pertanto invii il `status_token` fornito dal 202 nell'intestazione `X-Heym-Run-Token`. Il token non viene mai letto dalla query string. Un token errato o mancante riceve `404`, esattamente come un'esecuzione sconosciuta.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Significato (un'esecuzione che deve attendere uno slot di concorrenza riceve invece la [risposta 202](#202-accepted)) |
+|---|---|
+| `queued` | In attesa di uno slot; `queue` ne mostra la posizione |
+| `running` | Dispone di uno slot ed è in esecuzione |
+| `success` / `error` | Completato; `outputs` ed `error` sono valorizzati |
+| `pending` | Sospeso per [revisione umana](./human-in-the-loop.md) |
+| `cancelled` | Annullato dalla [Cronologia delle esecuzioni](./execution-history.md) |
+| `expired` | Ha atteso più a lungo di `concurrency_max_wait_seconds` e non è mai stato eseguito |
+
+Effettui un sondaggio ogni pochi secondi fino a quando lo stato non è più `queued` né `running`. Un'esecuzione in coda viene eseguita anche se nessuno effettua richieste di stato.
+
+### Coda piena
+
+Quando `concurrency_max_queue` è impostato e vi sono già così tante esecuzioni in attesa, la chiamata viene respinta con `429 Concurrency queue is full` e una voce `queue_full` nella cronologia di esecuzione. Nessuna operazione viene accodata.
+
 ## Formato della Risposta
 
 L'endpoint restituisce JSON:

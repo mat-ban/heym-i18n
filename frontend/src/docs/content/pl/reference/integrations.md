@@ -15,7 +15,7 @@ Niektóre węzły integracyjne **nie** wymagają danych logowania. [WebSocket Tr
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, opcjonalnie `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, opcjonalnie `base_url` |
-| **Jira** | [Węzeł Jira](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, opcjonalnie `api_version` |
+| **Jira** | [Węzeł Jira](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (tylko Basic auth), opcjonalnie `api_version` |
 | **Linear** | [Węzeł Linear](../nodes/linear-node.md) | `api_key` lub `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Węzeł Sentry](../nodes/sentry-node.md) | `api_token`, opcjonalnie `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -197,7 +197,7 @@ Tokeny OAuth (`access_token`, `refresh_token`, `token_expiry`) są przechowywane
 
 ## Jira
 
-Dane logowania Jira przechowują poświadczenia Jira Basic auth, bazowy adres URL witryny Jira, tryb wdrożenia oraz opcjonalną wersję REST API dla [węzła Jira](../nodes/jira-node.md). Należy użyć `cloud` dla Jira Cloud lub `data_center` dla Jira Data Center / Server.
+Dane logowania Jira przechowują poświadczenia Jira Basic auth lub osobisty token dostępu Data Center (PAT), bazowy adres URL witryny Jira, tryb wdrożenia oraz opcjonalną wersję REST API dla [węzła Jira](../nodes/jira-node.md). Należy użyć `cloud` dla Jira Cloud lub `data_center` dla Jira Data Center / Server.
 
 ### Konfiguracja
 
@@ -210,17 +210,19 @@ Dane logowania Jira przechowują poświadczenia Jira Basic auth, bazowy adres UR
 
 **Jira Data Center / Server**
 
-1. Wybrać **Jira Data Center / Server** jako tryb wdrożenia.
-2. Wprowadzić nazwę użytkownika i hasło Jira używane do Basic auth.
-3. Wprowadzić adres URL witryny Jira, na przykład `https://jira.example.com`.
-4. Użyć **Test Connection**, aby zweryfikować dane logowania.
+1. Wybierz **Jira Data Center / Server** jako wdrożenie.
+2. Wybierz metodę uwierzytelniania. **Nazwa użytkownika i hasło** korzysta z Basic auth. **Personal Access Token** używa `Authorization: Bearer <token>` i wymaga Jira Data Center / Server w wersji 8.14 lub nowszej. Utwórz token w **Profil → Personal Access Tokens** w Jira.
+3. Wprowadź nazwę użytkownika i hasło Jira lub wklej osobisty token dostępu (nazwa użytkownika nie jest wymagana).
+4. Wprowadź adres URL witryny Jira, na przykład `https://jira.example.com`.
+5. Użyj **Test Connection**, aby zweryfikować poświadczenie.
 
 ### Pola
 
 | Pole | Opis |
 | --- | --- |
-| `email` | Adres e-mail konta Atlassian Jira Cloud lub nazwa użytkownika Jira Data Center / Server |
-| `api_token` | Token API Atlassian Jira Cloud lub hasło Jira Data Center / Server do Basic auth |
+| `auth_mode` | `basic` (domyślnie w przypadku braku) lub `pat`. Wartość `pat` jest prawidłowa tylko z `data_center` |
+| `email` | Adres e-mail konta Atlassian Jira Cloud lub nazwa użytkownika Jira Data Center / Server. Nieużywane w trybie `pat` |
+| `api_token` | Token API Atlassian Jira Cloud, hasło Jira Data Center / Server dla Basic auth lub osobisty token dostępu Data Center w trybie `pat` |
 | `base_url` | Bazowy adres URL witryny Jira |
 | `deployment` | `cloud` dla Jira Cloud lub `data_center` dla Jira Data Center / Server |
 | `api_version` | Wersja REST API; domyślnie `3` dla Jira Cloud. Data Center / Server używa v2 |
@@ -228,13 +230,11 @@ Dane logowania Jira przechowują poświadczenia Jira Basic auth, bazowy adres UR
 ### Uwagi
 
 - Węzeł Jira wysyła opisy zgłoszeń i komentarze jako dokumenty tekstowe w formacie Atlassian Document Format dla Jira Cloud REST API v3. Dane logowania Data Center / Server wysyłają zwykły tekst.
-- Data Center / Server obsługuje obecnie wyłącznie Basic auth z nazwą użytkownika i hasłem. Osobiste tokeny dostępu i uwierzytelnianie Bearer nie są jeszcze obsługiwane.
+- Data Center / Server obsługuje uwierzytelnianie Basic auth (nazwa użytkownika/hasło) oraz uwierzytelnianie za pomocą osobistego tokena dostępu (PAT) ze schematem Bearer. Uwierzytelnianie PAT wymaga Jira Data Center / Server w wersji 8.14 lub nowszej.
 - Przesyłanie załączników akceptuje zawartość base64 lub data URL i podlega limitowi rozmiaru pliku platformy (domyślnie 99 MB). Pobieranie załączników może zwracać zawartość base64, gdy jest włączone.
 - Tworzenie i usuwanie użytkowników oraz powiadomienia o zgłoszeniach wymagają, aby uwierzytelnione konto Jira miało odpowiednie uprawnienia w witrynie lub organizacji Jira.
 - Aby odkryć klucze projektów, klucze zgłoszeń i identyfikatory przejść, należy użyć List Projects, Search Issues i List Transitions.
-- W przypadku niestandardowych endpointów nieobsługiwanych przez węzeł Jira należy użyć [węzła HTTP](../nodes/http-node.md) z Jira Basic Auth (`email:api_token` dla Cloud lub `username:password` dla Data Center / Server) w poleceniu cURL albo danych logowania Header z pasującą wartością `Authorization: Basic <base64(user:secret)>`.
-
-Zobacz także:
+- W przypadku niestandardowych endpointów nieobsługiwanych przez węzeł Jira użyj [węzła HTTP](../nodes/http-node.md) z Jira Basic Auth (`email:api_token` dla Cloud lub `username:password` dla Data Center / Server) lub PAT Bearer auth (`Authorization: Bearer <token>` dla Data Center / Server). Alternatywnie użyj poświadczenia Header z odpowiednim nagłówkiem `Authorization`.
 
 - [Węzeł Jira](../nodes/jira-node.md)
 - [Dane logowania](./credentials.md)

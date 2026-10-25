@@ -8,22 +8,23 @@
 |----------|-------|
 | Girişler | 1 |
 | Çıkışlar | 1 |
-| Kimlik Bilgisi | Jira (Cloud e-posta/API token veya Data Center kullanıcı adı/parola, temel URL, dağıtım modu, isteğe bağlı REST API sürümü) |
+| Kimlik Bilgisi | Jira (Cloud e-posta/API token, Data Center kullanıcı adı/parola veya kişisel erişim token'ı, temel URL, dağıtım modu, isteğe bağlı REST API sürümü) |
 | Çıkış | `$nodeLabel.*` |
 
 ## Kimlik Bilgisi
 
-[Credentials Sekmesi](../tabs/credentials-tab.md) içinde bir **Jira** kimlik bilgisi oluşturun. Saklanan yapılandırma anahtarları `email`, `api_token`, `base_url`, `deployment` ve isteğe bağlı `api_version`'dır. Jira Cloud için `email` Atlassian hesap e-postasını, `api_token` ise Atlassian API token'ını saklar. Jira Data Center / Server için aynı anahtarlar Basic auth kullanıcı adını ve parolasını saklar. Kurulum adımları için [Üçüncü Taraf Entegrasyonları](../reference/integrations.md#jira) bölümüne bakın.
+[Credentials Sekmesi](../tabs/credentials-tab.md) içinde bir **Jira** kimlik bilgisi oluşturun. Saklanan yapılandırma anahtarları `email`, `api_token`, `base_url`, `deployment`, `auth_mode` ve isteğe bağlı `api_version`'dır. Jira Cloud için `email` Atlassian hesap e-postasını, `api_token` ise Atlassian API token'ını saklar. Jira Data Center / Server için aynı anahtarlar Basic auth kullanıcı adını ve parolasını saklar; ya da `auth_mode: pat` ile `api_token`, Bearer token olarak gönderilen kişisel bir erişim token'ını saklar ve `email` kullanılmaz. Kurulum adımları için [Üçüncü Taraf Entegrasyonları](../reference/integrations.md#jira) bölümüne bakın.
 
 | Alan | Yapılandırma anahtarı | Açıklama |
 | --- | --- | --- |
 | Jira E-postası / Kullanıcı Adı | `email` | Jira Cloud Atlassian hesap e-postası veya Jira Data Center / Server kullanıcı adı |
-| API Token / Parola | `api_token` | Jira Cloud Atlassian API token'ı veya Basic auth için Jira Data Center / Server parolası |
+| Kimlik Doğrulama | `auth_mode` | `basic` (varsayılan) veya `pat` (yalnızca Data Center / Server) |
+| API Token / Parola / Kişisel Erişim Token'ı | `api_token` | Jira Cloud Atlassian API token'ı, Basic auth için Jira Data Center / Server parolası veya `pat` modunda bir Data Center kişisel erişim token'ı |
 | Temel URL | `base_url` | Jira site URL'si, örneğin `https://your-domain.atlassian.net` |
 | Dağıtım | `deployment` | Jira Cloud için `cloud` veya Jira Data Center / Server için `data_center` |
 | REST API Sürümü | `api_version` | Jira Cloud için varsayılan olarak `3`'tür. Data Center / Server REST API v2 kullanır |
 
-Data Center / Server kişisel erişim token'ları ve Bearer auth henüz Jira kimlik bilgisi tarafından desteklenmemektedir.
+Kişisel erişim token'ları Jira Data Center / Server 8.14 veya üzerini gerektirir. Kimlik doğrulama yönteminin değiştirilmesi saklanan parolayı temizler, bu nedenle geçiş yaptığınızda yeni şifreyi veya token'ı girin.
 
 Kimlik bilgisini mevcut Jira kullanıcısına karşı doğrulamak için **Test Connection**'ı kullanın.
 

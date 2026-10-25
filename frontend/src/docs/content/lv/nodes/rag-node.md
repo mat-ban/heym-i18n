@@ -7,7 +7,7 @@ Mezglam ir nolaižamā izvēlne **Database**, kas izvēlas aizmugursistēmu:
 - **Qdrant** – glabā vektorus ārējā Qdrant serverī (nepieciešami *RAG: Qdrant + OpenAI* akreditācijas dati).
 - **Postgres (pgvector)** – glabā vektorus Heym paša Postgres datubāzē, bez ārēja servisa (nepieciešami *RAG: Psql + OpenAI* akreditācijas dati).
 
-Noklusējuma vērtība ir **Qdrant** saderības ar iepriekšējām versijām nodrošināšanai. Database maiņa filtrē **Vector Store** sarakstu uz krātuvēm, kuru pamatā ir attiecīgā datubāze. Abas aizmugursistēmas atbalsta vienas un tās pašas operācijas, metadatu filtrēšanu un Cohere pārkārtošanu.
+Noklusējuma vērtība ir **Qdrant** saderības ar iepriekšējām versijām nodrošināšanai. Database maiņa filtrē **Vector Store** sarakstu uz krātuvēm, kuru pamatā ir attiecīgā datubāze. Abas aizmugursistēmas atbalsta vienas un tās pašas operācijas, metadatu filtrēšanu, hibrīdo meklēšanu (vektors + BM25) un Cohere pārkārtošanu.
 
 Abas aizmugursistēmas var sasniegt arī, izmantojot *RAG: Custom Embeddings* akreditācijas datus, kas aizstāj OpenAI ar jebkuru OpenAI saderīgu embedding endpoint un norāda savu vektoru krātuvi. Krātuve, kas izveidota no šādiem akreditācijas datiem, parādās zem tās Database, uz kuru tā ir vērsta. Skatiet [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag).
 
@@ -17,7 +17,7 @@ Abas aizmugursistēmas var sasniegt arī, izmantojot *RAG: Custom Embeddings* ak
 |----------|-------|
 | Ievades | 1 |
 | Izvades | 1 |
-| Izvade | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Izvade | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parametri
 
@@ -33,6 +33,7 @@ Abas aizmugursistēmas var sasniegt arī, izmantojot *RAG: Custom Embeddings* ak
 | `queryText` | expression | Meklēšanas vaicājums (tikai search) |
 | `searchLimit` | number | Maksimālais rezultātu skaits (noklusējums: 5) |
 | `metadataFilters` | JSON string | Metadatu filtri meklēšanai (vērtības atbalsta izteiksmes) |
+| `hybridSearch` | boolean | Kombinēt vektoru meklēšanu ar BM25 atslēgvārdu meklēšanu (tikai search; noklusējums: izslēgts) |
 | `enableReranker` | boolean | Izmantot Cohere meklēšanas rezultātu pārkārtošanai |
 | `rerankerCredentialId` | UUID | Cohere akreditācijas dati pārkārtošanai |
 | `rerankerTopN` | number | Saglabājamo labāko rezultātu skaits pēc pārkārtošanas |
@@ -107,6 +108,7 @@ Semantiskā meklēšana līdzīgiem dokumentiem.
 | `queryText` | jā | Meklēšanas vaicājums |
 | `searchLimit` | nē | Maksimālais rezultātu skaits (pēc noklusējuma: 5) |
 | `metadataFilters` | nē | Filtrēt pēc metadata (precīzas atbilstības JSON objekts, vērtības atbalsta izteiksmes) |
+| `hybridSearch` | nē | Sapludināt vektoru līdzību ar BM25 atslēgvārdu atbilstību (skatīt [Hibrīdā meklēšana](#hibrida-meklesana)) |
 | `enableReranker` | nē | Iespējot Cohere pārkārtošanu labākai atbilstībai |
 | `rerankerCredentialId` | ja tiek veikta pārkārtošana | Cohere akreditācijas dati |
 | `rerankerTopN` | nē | Galīgais rezultātu skaits pēc pārkārtošanas |
@@ -120,13 +122,44 @@ Kad pārkārtošana ir iespējota:
 - `score` paliek sākotnējais vektoru līdzības rādītājs
 - `relevance_score` ir Cohere pārkārtotāja rādītājs
 
+
+#### Hibrīdā meklēšana
+
+Vektoru meklēšana atrod tekstu, kuram ir tāda pati nozīme kā vaicājumam. Teksts, kas satur tikai precīzus vārdus, var ierindoties zemāk: produkta kods, pieteikuma numurs, personas vārds, kļūda, piemēram, `ERR-4021`. Ieslēdziet **Hibrīdā meklēšana**, un mezgls veiks atslēgvārdu meklēšanu līdzās vektoru meklēšanai un apvienos abus sarakstus, lai viens vaicājums atrastu abu veidu atbilstības.
+
+1. Vektoru meklēšana atgriež labākās atbilstības, tāpat kā bez hibrīdās meklēšanas.
+2. Atslēgvārdu meklēšana novērtē saglabāto tekstu attiecībā pret vaicājuma vārdiem ar **BM25**, kas atalgo retus vārdus, atkārtotus vārdus un īsākus dokumentus.
+3. Abi sarindotie saraksti tiek sapludināti, izmantojot **reciprocal rank fusion**. Dokuments abu sarakstu augšgalā ierindojas pirmajā vietā, un dokuments, ko atrada tikai viens saraksts, joprojām parādās.
+
+Metadatu filtri attiecas uz abām meklēšanām, un Cohere pārkārtotājs, ja tas ir iespējots, darbojas ar sapludināto sarakstu.
+
+Katrs rezultāts satur abu meklēšanu rādītājus:
+
+| Lauks | Nozīme |
+|-------|--------|
+| `score` | Sapludinātais rādītājs no 0 līdz 1. `1` nozīmē, ka dokuments bija pirmajā vietā abās meklēšanās. |
+| `vector_score` | Vektoru līdzība (0 līdz 1). `null`, ja dokumentu atrada tikai atslēgvārdu meklēšana. |
+| `keyword_score` | BM25 rādītājs. `null`, ja neviens no vaicājuma vārdiem neparādās dokumentā. |
+
+`$nodeLabel.hybrid` ir `true`, ja tika veikta hibrīdā meklēšana.
+
+Labi zināt:
+
+- Sapludinātais `score` sarindo rezultātus savā starpā. Tā nav vektoru līdzība, tāpēc vienkāršai meklēšanai pielāgots slieksnis netiek tieši pārnests.
+- Vaicājuma vārdi tiek pārveidoti mazajos burtos un sadalīti pēc atstarpēm un pieturzīmēm, tāpēc `ERR-4021` tiek meklēts kā `err` un `4021`. Atslēgvārdu meklēšanā tiek izmantoti līdz pat pirmajiem 16 atšķirīgajiem vaicājuma vārdiem.
+- Qdrant: pirmā hibrīdā meklēšana kolekcijā izveido pilnteksta indeksu payload laukā `text`, kam nepieciešama Qdrant atslēga ar rakstīšanas piekļuvi. Lielās kolekcijās tas aizņem brīdi vienu reizi; vēlākas meklēšanas indeksu izmanto atkārtoti.
+- Postgres (pgvector): datubāzes migrācija `142_vsi_text_search_index` pievieno pilnteksta indeksu. Pēc atjaunināšanas palaidiet `alembic upgrade head`. Hibrīdā meklēšana darbojas arī bez indeksa, tikai lēnāk lielās krātuvēs.
+- Katram vaicājumam atslēgvārdu meklēšana nolasa līdz 200 atbilstošiem dokumentiem, sākot ar retākajiem vaicājuma vārdiem, jo tiem ir vislielākais svars.
 ## Rezultātu piekļuve
 
 - `$ragNode.results.first().text` – augšējā rezultāta saturs
-- `$ragNode.results.first().score` – līdzības rādītājs (0–1)
+- `$ragNode.results.first().score` – līdzības rādītājs (0–1), vai sapludinātais rādītājs ar hibrīdo meklēšanu
+- `$ragNode.results.first().keyword_score` – BM25 rādītājs (hibrīdā meklēšana)
+- `$ragNode.results.first().vector_score` – vektoru līdzība (hibrīdā meklēšana)
 - `$ragNode.results.first().metadata.source` – augšējā rezultāta metadata
 - `$ragNode.results.map("item.text").join("\n\n")` – apvienot LLM kontekstam
 - `$ragNode.reranked` – vai tika piemērota pārkārtošana
+- `$ragNode.hybrid` – vai tika piemērota hibrīdā meklēšana
 - `$ragNode.count` – atgriezto rezultātu skaits
 - `$ragNode.replaced` – vai upsert aizstāja esošu dokumentu
 - `$ragNode.deleted` – vai dzēšana kaut ko noņēma
@@ -146,6 +179,22 @@ Kad pārkārtošana ir iespējota:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Piemērs – Hibrīdā meklēšana
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

@@ -32,6 +32,10 @@ Konfigurálás a szerkesztőben: A **Portal** gomb a workflow fejlécében megny
 3. **Futtatás**: `POST /api/portal/{slug}/execute` – A portal chat felület hívja ezt (vagy belsőleg a streaming változatát, ha engedélyezett); a végfelhasználók a chat felületen keresztül lépnek kapcsolatba, nem közvetlenül az API hívásával.
 4. **Leállítás**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Akkor kérhető, amikor a felhasználó megnyomja a **Stop** gombot egy aktív portal futtatás során
 
+## Párhuzamossági korlát
+
+Ha a workflow [párhuzamossági korláttal](./webhooks.md#concurrency-limit-and-queued-runs) rendelkezik, és minden hely foglalt, a portal-üzenet megvárja a sorát ahelyett, hogy azonnal lefutna. A chat a folyamatjelző sorban **Waiting in queue (2/5)** állapotot mutat, amíg a futtatás el nem indul, majd a szokásos módon megjelenik a válasz. A futtatás akkor is lezajlik, ha a felhasználó bezárja az oldalt. A **Stop** eltávolítja a várakozó futtatást a sorból. Ha a sor megtelt, az üzenet a "Concurrency queue is full" hibával meghiúsul. A sorban várakozó futtatás nem streameli a válaszát tokenről tokenre; a teljes válasz akkor jelenik meg, amikor befejeződik.
+
 ## HITL a Portal futtatásokban
 
 Ha egy portal workflow elér egy [Agent csomópontot](../nodes/agent-node.md), amelynél a [Human-in-the-Loop](./human-in-the-loop.md) engedélyezett, a portal válasz egy felülvizsgálati linket jelenít meg ahelyett, hogy üresnek tűnne.

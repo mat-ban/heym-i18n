@@ -25,12 +25,17 @@ Katrs SSE kadrs ir ar jaunu rindu atdalīts JSON ar prefiksu `data: `.
 
 | Notikuma tips | Kad tas tiek emitēts | Galvenie lauki |
 |------------|--------------------|------------|
-| `execution_started` | Nekavējoties pēc pieprasījuma pieņemšanas | `execution_id`, `server_now_ms` |
+| `queued` | Darbplūsma ir sasniegusi savu [vienlaicības ierobežojumu](./webhooks.md#concurrency-limit-and-queued-runs); tiek nosūtīts atkārtoti ikreiz, kad mainās izpildes vieta | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Nekavējoties pēc pieprasījuma pieņemšanas vai tad, kad sākas rindā esoša izpilde | `execution_id`, `server_now_ms` |
 | `node_start` | Tieši pirms node sāk izpildi | `node_id`, `node_label`, `started_at_ms`, neobligāts `message` |
 | `node_retry` | Kad node veic atkārtotu mēģinājumu | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Pēc tam, kad node ir pabeigts | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Kad Output node atgriežas pirms laika | `node_label`, `output` |
 | `execution_complete` | Pēc workflow beigām | `status`, `outputs`, `execution_time_ms` |
+
+### Rindā ievietotās izpildes
+
+Kad darbplūsma ir sasniegusi savu vienlaicības ierobežojumu, straumēšana paliek atvērta un izpildes gaidīšanas laikā sūta `queued` notikumus. Rindā ievietotā izpilde tiek veikta fona procesā (background worker), iespējams, citā procesā, tāpēc tās straume nes `execution_started`, kad izpilde sākas, un `execution_complete`, kad tā beidzas, bet pa vidu nav nekādu `node_start`, `node_complete` vai token notikumu. Tās `execution_complete` ietver tukšu `node_results`; atveriet izpildi [Izpildes vēsturē](./execution-history.md), lai skatītu node detaļas. Savienojuma aizvēršana neatceļ rindā esošo izpildi. Kad rinda ir pilna, uz pieprasījumu tiek atbildēts ar `429`, pirms straume tiek atvērta.
 
 ## Katra node sākuma ziņojumi
 

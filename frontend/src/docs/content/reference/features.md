@@ -168,7 +168,7 @@ Needs a Decision Model credential; pairs naturally with [Switch](../nodes/switch
 
 #### [RAG / Vector Store](../nodes/rag-node.md)
 
-The RAG / Vector Store node inserts, upserts, deletes, and searches documents in a vector store for retrieval-augmented generation. A Database dropdown selects the backend — **Qdrant** (external server) or **Postgres (pgvector)** (Heym's own database, no external service), defaulting to Qdrant. Choose a vector store from the [Vectorstores](../tabs/vectorstores-tab.md) tab and set the operation to insert, upsert, delete, or search. Upsert and delete address a document by a unique id stored inside the payload — a **Document ID Field** names that field (default `doc_id`) and **Document ID** carries its value — so a document keeps the id your own system already uses: upsert replaces every matching point before storing the new version, and delete reports whether anything matched. Document metadata accepts expressions in its values, so `{"url": "$start.url"}` stores what the run produced. Search supports metadata filters and optional Cohere reranking, and returns an array of results with text, score, metadata, reranked flag, and count for use in [LLM](../nodes/llm-node.md) or [Agent Node](../nodes/agent-node.md) flows.
+The RAG / Vector Store node inserts, upserts, deletes, and searches documents in a vector store for retrieval-augmented generation. A Database dropdown selects the backend — **Qdrant** (external server) or **Postgres (pgvector)** (Heym's own database, no external service), defaulting to Qdrant. Choose a vector store from the [Vectorstores](../tabs/vectorstores-tab.md) tab and set the operation to insert, upsert, delete, or search. Upsert and delete address a document by a unique id stored inside the payload — a **Document ID Field** names that field (default `doc_id`) and **Document ID** carries its value — so a document keeps the id your own system already uses: upsert replaces every matching point before storing the new version, and delete reports whether anything matched. Document metadata accepts expressions in its values, so `{"url": "$start.url"}` stores what the run produced. Search supports metadata filters, optional **Hybrid Search** (vector similarity fused with BM25 keyword matching, so exact terms such as IDs and error codes are found next to semantic matches) and optional Cohere reranking, and returns an array of results with text, score, metadata, reranked and hybrid flags, and count for use in [LLM](../nodes/llm-node.md) or [Agent Node](../nodes/agent-node.md) flows.
 
 Common downstream nodes are [LLM](../nodes/llm-node.md) and [Agent Node](../nodes/agent-node.md); vector store setup lives in [Vectorstores](../tabs/vectorstores-tab.md).
 
@@ -485,6 +485,12 @@ See also [Keyboard Shortcuts](./keyboard-shortcuts.md), [Edit History](./edit-hi
 <video src="/features/showcase/editor.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/editor.webm">▶ Watch Editor demo</a></p>
 
+### [Canvas Collaboration](./canvas-collaboration.md)
+
+Everyone who opens a workflow appears as an avatar at the top left of the canvas. Edits reach every open canvas live, each person's pointer shows in their color, clicking an avatar follows that person's view, dialogs and runs, and the microphone toggle lets people talk to each other directly from the browser.
+
+See also [Canvas Features](./canvas-features.md) and [Edit History](./edit-history.md).
+
 ### [Keyboard Shortcuts](./keyboard-shortcuts.md)
 
 Heym provides shortcuts across the editor: Command Palette (Ctrl+K), Run (Ctrl+Enter), Save (Ctrl+S), Undo/Redo, and Escape to dismiss. On the canvas: select all, multi-select, copy/cut/paste, delete, toggle node enabled (D), toggle pinned data (P), and inline node search by typing. Shortcuts are documented in the in-app reference and work closely with [Canvas Features](./canvas-features.md) such as Data Pin and node enable/disable.
@@ -575,7 +581,7 @@ See also [Agent Node](../nodes/agent-node.md), [Portal](./portal.md), [Execution
 
 ### [Webhooks](./webhooks.md)
 
-Workflows can be triggered via [HTTP](../nodes/http-node.md) at `POST /api/workflows/{workflow_id}/execute`, or streamed incrementally from `POST /api/workflows/{workflow_id}/execute/stream`. The request body is passed as body to [Input](../nodes/input-node.md) nodes; headers and query params are available in [Expression DSL](./expression-dsl.md) expressions. Configure per-workflow auth: anonymous, JWT, or custom header. Optional response caching, rate limiting, and the editor's Run with cURL dialog all live on the workflow and apply to both modes.
+Workflows can be triggered via [HTTP](../nodes/http-node.md) at `POST /api/workflows/{workflow_id}/execute`, or streamed incrementally from `POST /api/workflows/{workflow_id}/execute/stream`. The request body is passed as body to [Input](../nodes/input-node.md) nodes; headers and query params are available in [Expression DSL](./expression-dsl.md) expressions. Configure per-workflow auth: anonymous, JWT, or custom header. Optional response caching, rate limiting, and the editor's Run with cURL dialog all live on the workflow and apply to both modes. With a [concurrency limit](./webhooks.md#concurrency-limit-and-queued-runs), a call that has to wait gets `202 Accepted` with an execution id and a status URL instead.
 
 See also [Input](../nodes/input-node.md), [Execution Tokens](./execution-tokens.md), [SSE Streaming](./sse-streaming.md), [HTTP](../nodes/http-node.md), and [Workflow Structure](./workflow-structure.md).
 
@@ -622,6 +628,10 @@ It covers every non-test top-level run: both execute endpoints, the [Portal](./p
 ### Workflow Timeout
 
 Each workflow can set a **workflow timeout** in seconds in the workflow-level **Properties** panel. `0` (the default) disables it. When set, a run that exceeds the limit is stopped at the next node boundary and recorded as a failed run with a "timed out" error. The timeout applies to manual, API, and triggered runs. Long [Wait](../nodes/wait-node.md) nodes are interrupted promptly rather than blocking for their full duration.
+
+### Concurrency Limit
+
+Each workflow can cap how many production runs execute at once with **Concurrency limit** in the workflow-level **Properties** panel; the owner and collaborators with edit access can change it, and it is off by default. When the limit is reached, new runs from the [webhook](./webhooks.md#concurrency-limit-and-queued-runs) and [streaming](./sse-streaming.md) endpoints, the [Portal](./portal.md), the [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) and every [trigger](./triggers.md) wait in a first-in, first-out queue, counted across all instances of a [cluster](./cluster.md). Editor test runs, sub-workflow calls, [Evals](../tabs/evals-tab.md) and review resumes are never queued, and [Board](../tabs/board-tab.md) card runs, File Upload runs, runs started by the AI assistant's run-workflow tool and alert notify workflows start without waiting for a slot. A webhook call that has to wait gets `202 Accepted` at once with an `execution_id`, a status URL that answers with the same credentials, and its position, the queue size and the running count; an MCP client gets the same and polls the `heym_execution_status` tool. Optional **Max queue size** turns extra calls away with `429`, and optional **Max wait** records a run that waited too long as `expired`. Waiting runs appear in [Execution History](./execution-history.md) as **Queued n/m** and can be cancelled there.
 
 ### Time Saved
 

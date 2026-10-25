@@ -105,3 +105,5 @@ Ovi prečaci su dostupni u dijalogu Povijest Izvršenja i panelu Tragovi.
 - [Struktura Workflowa](./workflow-structure.md) – Format čvora i rubova
 - [Execute Čvor](../nodes/execute-node.md) – Poziva pod-workflowe (`Ctrl + Shift + O`)
 - [Brzi Početak](../getting-started/quick-start.md) – Izradite svoj prvi workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

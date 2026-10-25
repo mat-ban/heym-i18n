@@ -32,6 +32,10 @@ Konfigurasikan di editor: Tombol **Portal** di header Workflow membuka dialog pe
 3. **Eksekusi**: `POST /api/portal/{slug}/execute` – UI chat portal memanggil ini (atau varian streaming-nya secara internal jika diaktifkan); pengguna akhir berinteraksi melalui antarmuka chat, bukan dengan memanggil API secara langsung.
 4. **Hentikan**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Diminta ketika pengguna menekan **Stop** selama eksekusi portal yang aktif
 
+## Batas konkurensi
+
+Ketika workflow memiliki [batas konkurensi](./webhooks.md#concurrency-limit-and-queued-runs) dan semua slot sedang digunakan, pesan portal akan menunggu gilirannya alih-alih berjalan seketika. Obrolan menampilkan **Waiting in queue (2/5)** pada baris progresnya hingga run dimulai, kemudian jawaban ditampilkan seperti biasa. Run tetap berlangsung jika pengguna menutup halaman. **Stop** menghapus run yang sedang menunggu dari antrean. Ketika antrean penuh, pesan gagal dengan "Concurrency queue is full". Run yang menunggu dalam antrean tidak melakukan streaming jawabannya token demi token; seluruh jawaban muncul saat proses selesai.
+
 ## HITL dalam Eksekusi Portal
 
 Jika Workflow portal mencapai [Node Agen](../nodes/agent-node.md) dengan [Human-in-the-Loop](./human-in-the-loop.md) yang diaktifkan, respons portal menampilkan tautan tinjauan alih-alih tampak kosong.

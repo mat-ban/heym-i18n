@@ -15,7 +15,7 @@ Egyes integrációs csomópontok **nem** igényelnek hitelesítési adatokat. A 
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, opcionális `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, opcionális `base_url` |
-| **Jira** | [Jira csomópont](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, opcionális `api_version` |
+| **Jira** | [Jira csomópont](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (csak Basic auth), opcionális `api_version` |
 | **Linear** | [Linear csomópont](../nodes/linear-node.md) | `api_key`, vagy `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry csomópont](../nodes/sentry-node.md) | `api_token`, opcionális `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ Az OAuth tokenek (`access_token`, `refresh_token`, `token_expiry`) automatikusan
 
 ## Jira
 
-A Jira hitelesítési adat a Jira Basic auth hitelesítési adatait, a Jira webhely alap URL-címét, a telepítési módot és az opcionális REST API verziót tárolja a [Jira csomópont](../nodes/jira-node.md) számára. Jira Cloud esetén a `cloud`, Jira Data Center / Server esetén a `data_center` értéket használja.
+A Jira hitelesítési adat a Jira Basic auth hitelesítési adatait vagy egy Data Center személyes hozzáférési tokent, a Jira webhely alap URL-címét, a telepítési módot és az opcionális REST API verziót tárolja a [Jira csomópont](../nodes/jira-node.md) számára. Jira Cloud esetén a `cloud`, Jira Data Center / Server esetén a `data_center` értéket használja.
 
 ### Beállítás
 
@@ -215,17 +215,19 @@ A Jira hitelesítési adat a Jira Basic auth hitelesítési adatait, a Jira webh
 
 **Jira Data Center / Server**
 
-1. Válassza a **Jira Data Center / Server** telepítési módot.
-2. Adja meg a Basic auth-hoz használt Jira felhasználónevet és jelszót.
-3. Adja meg a Jira webhely URL-címét, például `https://jira.example.com`.
-4. A **Test Connection** funkcióval ellenőrizze a hitelesítési adatot.
+1. Válassza a **Jira Data Center / Server** lehetőséget telepítésként.
+2. Válasszon hitelesítési módszert. A **Felhasználónév és jelszó** a Basic auth-ot használja. A **Personal Access Token** az `Authorization: Bearer <token>` formátumot használja, és a Jira Data Center / Server 8.14 vagy újabb verzióját igényli. Hozza létre a tokent a **Profil → Personal Access Tokens** menüpontban a Jira-ban.
+3. Adja meg a Jira felhasználónevet és jelszót, vagy illessze be a személyes hozzáférési tokent (felhasználónév nem szükséges).
+4. Adja meg a Jira webhely URL-jét, például `https://jira.example.com`.
+5. A hitelesítő adat ellenőrzéséhez használja a **Test Connection** gombot.
 
 ### Mezők
 
 | Mező | Leírás |
 | --- | --- |
-| `email` | Jira Cloud Atlassian fiók e-mail-címe, vagy Jira Data Center / Server felhasználónév |
-| `api_token` | Jira Cloud Atlassian API token, vagy Jira Data Center / Server jelszó a Basic auth-hoz |
+| `auth_mode` | `basic` (alapértelmezett, ha hiányzik) vagy `pat`. A `pat` csak `data_center` esetén érvényes |
+| `email` | Jira Cloud Atlassian fiók e-mail címe, vagy Jira Data Center / Server felhasználónév. `pat` módban nem használt |
+| `api_token` | Jira Cloud Atlassian API token, Jira Data Center / Server jelszó a Basic auth-hoz, vagy a Data Center személyes hozzáférési token `pat` módban |
 | `base_url` | Jira webhely alap URL-címe |
 | `deployment` | `cloud` a Jira Cloud vagy `data_center` a Jira Data Center / Server esetén |
 | `api_version` | REST API verzió; Jira Cloud esetén alapértelmezés szerint `3`. A Data Center / Server a v2-t használja |
@@ -234,12 +236,11 @@ A Jira hitelesítési adat a Jira Basic auth hitelesítési adatait, a Jira webh
 
 - A Jira csomópont az issue-leírásokat és hozzászólásokat Atlassian Document Format szöveges
   dokumentumként küldi a Jira Cloud REST API v3 esetén. A Data Center / Server hitelesítési adatok egyszerű szöveget küldenek.
-- A Data Center / Server jelenleg csak felhasználónév/jelszó alapú Basic auth-ot támogat. A személyes hozzáférési
-  tokenek és a Bearer auth még nem támogatottak.
+- A Data Center / Server támogatja a felhasználónév/jelszó alapú Basic auth-ot és a Bearer sémát használó személyes hozzáférési tokenes (PAT) hitelesítést. A PAT-hitelesítéshez a Jira Data Center / Server 8.14 vagy újabb verziója szükséges.
 - A mellékletfeltöltés base64 vagy data URL tartalmat fogad el, és a platform fájlméret-korlátja vonatkozik rá (alapértelmezés szerint 99 MB). A mellékletletöltés engedélyezés esetén base64 tartalmat adhat vissza.
 - A felhasználó létrehozásához, törléséhez és az issue-értesítéshez a hitelesített Jira fióknak rendelkeznie kell a megfelelő Jira webhely- vagy szervezeti jogosultságokkal.
 - A List Projects, Search Issues és List Transitions funkciókkal fedezheti fel a projektkulcsokat, issue-kulcsokat és átmenet-azonosítókat.
-- A Jira csomópont által nem lefedett egyedi endpointok esetén használja a [HTTP csomópontot](../nodes/http-node.md) Jira Basic Auth-tal (`email:api_token` Cloud esetén vagy `username:password` Data Center / Server esetén) a cURL parancsban, vagy egy Header hitelesítési adatot a megfelelő `Authorization: Basic <base64(user:secret)>` értékkel.
+- A Jira csomópont által nem kezelt egyéni endpointok esetén használja a [HTTP csomópontot](../nodes/http-node.md) Jira Basic Auth-tal (`email:api_token` Cloud esetén vagy `username:password` Data Center / Server esetén), vagy PAT Bearer auth-tal (`Authorization: Bearer <token>` Data Center / Server esetén). Alternatív megoldásként használjon Header hitelesítő adatot a megfelelő `Authorization` fejléccel.
 
 Lásd még:
 

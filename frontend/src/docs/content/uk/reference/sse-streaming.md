@@ -25,12 +25,17 @@ Workflow можуть передавати події виконання в ре
 
 | Тип події | Коли надсилається | Ключові поля |
 |------------|--------------------|------------|
-| `execution_started` | Одразу після прийняття запиту | `execution_id`, `server_now_ms` |
+| `queued` | Workflow досяг свого [ліміту одночасності](./webhooks.md#concurrency-limit-and-queued-runs); надсилається знову, щойно змінюється місце запуску | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Одразу після прийняття запиту або коли починається запуск із черги | `execution_id`, `server_now_ms` |
 | `node_start` | Безпосередньо перед початком виконання вузла | `node_id`, `node_label`, `started_at_ms`, необов'язкове `message` |
 | `node_retry` | Коли вузол виконує повторну спробу | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Після завершення вузла | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Коли вузол Output повертає результат достроково | `node_label`, `output` |
 | `execution_complete` | Після завершення workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Запуски в черзі
+
+Коли workflow досягає ліміту одночасності, потік залишається відкритим і надсилає події `queued`, поки запуск очікує. Запуск, поставлений у чергу, виконується у фоновому worker-і, можливо, в іншому процесі, тому його потік містить `execution_started`, коли запуск починається, та `execution_complete`, коли він завершується, але без проміжних подій `node_start`, `node_complete` або подій токенів. Його `execution_complete` містить порожній `node_results`; відкрийте запуск в [Історії виконання](./execution-history.md), щоб переглянути відомості про вузли. Закриття з'єднання не скасовує запуск у черзі. Якщо черга заповнена, на запит повертається `429` до відкриття потоку.
 
 ## Повідомлення про початок для кожного вузла
 

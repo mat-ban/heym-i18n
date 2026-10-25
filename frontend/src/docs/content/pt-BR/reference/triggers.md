@@ -85,6 +85,20 @@ O Discord envia webhooks de interação para `POST /api/discord/webhook/{node_id
 
 O consumidor RabbitMQ é iniciado quando o worker líder é inicializado. Workflows com Nós `rabbitmq` onde `rabbitmqOperation === "receive"` recebem um consumidor. A entrada inclui `message_data` (body, headers, routing_key, etc.) e `triggered_by: "rabbitmq"`.
 
+## Limite de simultaneidade
+
+Um workflow com um [limite de simultaneidade](./webhooks.md#concurrency-limit-and-queued-runs) enfileira execuções de produção de cada ponto de entrada acima quando seus slots estão cheios, por ordem de chegada (FIFO), em todas as instâncias. O modo como o chamador descobre o resultado depende do ponto de entrada:
+
+| Ponto de entrada | Enquanto a execução aguarda |
+|---|---|
+| Webhook / API | `202 Accepted` com um `execution_id` e uma URL de status |
+| SSE streaming, Quick Drawer, Portal chat | O stream permanece aberto e envia eventos `queued` |
+| Portal without streaming | A requisição aguarda o resultado |
+| MCP | Um resultado `queued` para consultar com `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | O trigger aguarda o resultado, durante o tempo que uma execução em outra [instância](./cluster.md) aguardaria. A execução ocorre de qualquer forma e é gravada no histórico |
+
+Quando a fila está cheia, a execução não é iniciada e o histórico a registra como `queue_full`. Execuções de teste do editor, chamadas de sub-workflow (nó [Execute](../nodes/execute-node.md) e ferramentas de workflow do agente), [Evals](../tabs/evals-tab.md), execuções de teste em modo build do chat e retomadas de revisão nunca entram na fila. Execuções de cartões do [Board](../tabs/board-tab.md), execuções de [File Upload](../nodes/file-upload-trigger-node.md), execuções iniciadas pela ferramenta run-workflow do assistente de IA e workflows de notificação de alerta também iniciam sem esperar por um slot.
+
 ## trigger_source
 
 O histórico de execução registra `trigger_source` para cada ponto de entrada:

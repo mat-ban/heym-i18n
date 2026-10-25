@@ -85,6 +85,20 @@ Discord lähettää interaktio-webhookit osoitteeseen `POST /api/discord/webhook
 
 RabbitMQ-kuluttaja käynnistyy, kun päätyöntekijä alustetaan. Workflowt, joissa on `rabbitmq`-solmut, joissa `rabbitmqOperation === "receive"`, saavat kuluttajan. Syötteisiin kuuluvat `message_data` (body, headers, routing_key jne.) ja `triggered_by: "rabbitmq"`.
 
+## Samanaikaisuusraja
+
+Workflow, jolla on [samanaikaisuusraja](./webhooks.md#concurrency-limit-and-queued-runs), asettaa tuotantosuoritukset jonoon jokaisesta yllä olevasta sisäänkäyntipisteestä, kun sen paikat ovat täynnä, saapumisjärjestyksessä (FIFO), kaikissa instansseissa. Se, miten kutsuja saa tuloksen, riippuu sisäänkäyntipisteestä:
+
+| Sisäänkäyntipiste | Suorituksen odottaessa |
+|---|---|
+| Webhook / API | `202 Accepted` `execution_id`:llä ja tilan URL-osoitteella |
+| SSE streaming, Quick Drawer, Portal chat | Tietovirta pysyy avoinna ja lähettää `queued`-tapahtumia |
+| Portal without streaming | Pyyntö odottaa tulosta |
+| MCP | `queued`-tulos, jota kysellään `heym_execution_status`-työkalulla |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger odottaa tulosta yhtä kauan kuin suoritus toisella [instanssilla](./cluster.md) odottaisi. Suoritus ajetaan joka tapauksessa ja kirjataan historiaan |
+
+Kun jono on täynnä, suoritus ei käynnisty ja historia kirjaa sen tilaksi `queue_full`. Editorin testisuoritukset, alityönkulkujen kutsut ([Execute](../nodes/execute-node.md) -solmu ja agentin workflow-työkalut), [Evals](../tabs/evals-tab.md), chat-rakennustilan testisuoritukset ja katselmoinnin jatkamiset eivät koskaan joudu jonoon. [Board](../tabs/board-tab.md)-korttien suoritukset, [File Upload](../nodes/file-upload-trigger-node.md) -suoritukset, tekoälyavustajan run-workflow-työkalulla käynnistetyt suoritukset ja hälytysten ilmoitus-workflowt käynnistyvät myös odottamatta paikkaa.
+
 ## trigger_source
 
 Suoritushistoria tallentaa `trigger_source` -arvon jokaiselle käynnistyspisteelle:

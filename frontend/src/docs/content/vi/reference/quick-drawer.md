@@ -52,6 +52,8 @@ Sau khi bắt đầu một lượt chạy, bảng hiển thị:
 
 `pending` nghĩa là workflow đang chờ một hành động tiếp theo như đánh giá của con người.
 
+Các lượt chạy Quick Drawer là các lượt chạy sản xuất, vì vậy workflow có [giới hạn đồng thời](./webhooks.md#concurrency-limit-and-queued-runs) có thể khiến chúng phải chờ. Trong khi lượt chạy đang xếp hàng, trạng thái hiển thị **Waiting in queue (2/5)**; trạng thái sẽ chuyển sang "running" khi lượt chạy bắt đầu và hiển thị kết quả khi kết thúc mà không có tiến trình từng bước. Lượt chạy đã hết hạn trong hàng đợi hoặc bị hủy khi đang chờ sẽ kết thúc dưới dạng `error`.
+
 Lần chạy bằng tệp sẽ đi qua liên kết tải lên dùng một lần của trigger: ngăn kéo yêu cầu workflow cấp một liên kết, tải tệp lên liên kết đó và hiển thị kết quả khi quá trình tải lên hoàn tất. Các lần chạy bằng tệp hiển thị trạng thái cuối cùng và đầu ra nhưng không có tiến trình từng bước, đồng thời cũng được gắn thẻ `Quick Drawer` trong lịch sử. Tệp đã chọn sẽ được xóa sau mỗi lần chạy vì mỗi liên kết chỉ nhận một tệp.
 
 ## Bộ nhớ trình duyệt

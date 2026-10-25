@@ -25,12 +25,17 @@ Kiekvienas SSE rėmas yra JSON, atskirtas nauja eilute, su prefiksu `data: `.
 
 | Įvykio tipas | Kada jis išmetamas | Pagrindiniai laukai |
 |--------------|--------------------|---------------------|
-| `execution_started` | Iškart po to, kai užklausa priimama | `execution_id`, `server_now_ms` |
+| `queued` | Workflow pasiekė savo [lygiagretumo apribojimą](./webhooks.md#concurrency-limit-and-queued-runs); siunčiamas vėl, kai pasikeičia vykdymo vieta | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Iškart po to, kai užklausa priimama, arba kai prasideda eilėje esantis vykdymas | `execution_id`, `server_now_ms` |
 | `node_start` | Tiesiai prieš mazgo vykdymą | `node_id`, `node_label`, `started_at_ms`, neprivalomas `message` |
 | `node_retry` | Kai mazgas bando dar kartą | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Po to, kai mazgas baigia | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Kai Output mazgas grąžina anksti | `node_label`, `output` |
 | `execution_complete` | Po to, kai workflow baigiasi | `status`, `outputs`, `execution_time_ms` |
+
+### Į eilę įtraukti vykdymai
+
+Kai workflow pasiekia savo lygiagretumo apribojimą, srautas lieka atidarytas ir siunčia `queued` įvykius, kol vykdymas laukia. Į eilę įtrauktas vykdymas atliekamas fono procese (background worker), galbūt kitame procese, todėl jo srautas perneša `execution_started`, kai vykdymas prasideda, ir `execution_complete`, kai jis baigiasi, bet jokių tarpinių `node_start`, `node_complete` ar tokenų įvykių. Jo `execution_complete` turi tuščią `node_results`; atidarykite vykdymą [Vykdymo istorijoje](./execution-history.md), kad pamatytumėte išsamią mazgo informaciją. Ryšio uždarymas neatšaukia į eilę įtraukto vykdymo. Kai eilė pilna, į užklausą atsakoma kodu `429` prieš atidarant srautą.
 
 ## Pranešimai apie mazgo pradžią
 

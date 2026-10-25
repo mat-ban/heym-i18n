@@ -15,7 +15,7 @@ Mõned integratsioonisõlmed **ei** vaja mandaate. [WebSocket Trigger](../nodes/
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, valikuline `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, valikuline `base_url` |
-| **Jira** | [Jira node](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, valikuline `api_version` |
+| **Jira** | [Jira node](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (ainult Basic auth), valikuline `api_version` |
 | **Linear** | [Linear node](../nodes/linear-node.md) | `api_key` või `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry node](../nodes/sentry-node.md) | `api_token`, valikuline `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ OAuth tokenid (`access_token`, `refresh_token`, `token_expiry`) salvestatakse ja
 
 ## Jira
 
-Jira mandaat salvestab Jira Basic auth mandaadid, Jira saidi baas-URL-i, juurutusviisi ja valikulise REST API versiooni [Jira node](../nodes/jira-node.md) jaoks. Kasutage `cloud` Jira Cloudi jaoks või `data_center` Jira Data Center / Serveri jaoks.
+Jira mandaat salvestab Jira Basic auth mandaadid või Data Centeri isikliku juurdepääsutokeni, Jira saidi baas-URL-i, juurutusviisi ja valikulise REST API versiooni [Jira node](../nodes/jira-node.md) jaoks. Kasutage `cloud` Jira Cloudi jaoks või `data_center` Jira Data Center / Serveri jaoks.
 
 ### Seadistamine
 
@@ -215,17 +215,19 @@ Jira mandaat salvestab Jira Basic auth mandaadid, Jira saidi baas-URL-i, juurutu
 
 **Jira Data Center / Server**
 
-1. Valige juurutusviisiks **Jira Data Center / Server**.
-2. Sisestage Basic auth jaoks kasutatav Jira kasutajanimi ja parool.
-3. Sisestage Jira saidi URL, näiteks `https://jira.example.com`.
-4. Kasutage mandaadi kinnitamiseks **Test Connection**.
+1. Valige juurutuseks **Jira Data Center / Server**.
+2. Valige autentimismeetod. **Kasutajanimi ja parool** kasutab Basic authi. **Personal Access Token** kasutab vormingut `Authorization: Bearer <token>` ja nõuab versiooni Jira Data Center / Server 8.14 või uuemat. Looge token Jiras jaotises **Profiil → Personal Access Tokens**.
+3. Sisestage Jira kasutajanimi ja parool või kleepige isiklik juurdepääsutoken (kasutajanime pole vaja).
+4. Sisestage Jira saidi URL, näiteks `https://jira.example.com`.
+5. Kasutage mandaadi kinnitamiseks nuppu **Test Connection**.
 
 ### Väljad
 
 | Väli | Kirjeldus |
 | --- | --- |
-| `email` | Jira Cloud Atlassiani konto e-posti aadress või Jira Data Center / Serveri kasutajanimi |
-| `api_token` | Jira Cloud Atlassiani API token või Jira Data Center / Serveri parool Basic auth jaoks |
+| `auth_mode` | `basic` (vaikimisi puudumisel) või `pat`. `pat` on kehtiv ainult koos `data_center` |
+| `email` | Jira Cloud Atlassiani konto e-posti aadress või Jira Data Center / Server kasutajanimi. Režiimis `pat` ei kasutata |
+| `api_token` | Jira Cloud Atlassiani API token, Jira Data Center / Server parool Basic authi jaoks või Data Centeri isiklik juurdepääsutoken režiimis `pat` |
 | `base_url` | Jira saidi baas-URL |
 | `deployment` | `cloud` Jira Cloudi jaoks või `data_center` Jira Data Center / Serveri jaoks |
 | `api_version` | REST API versioon; vaikimisi `3` Jira Cloudi jaoks. Data Center / Server kasutab v2 |
@@ -234,11 +236,11 @@ Jira mandaat salvestab Jira Basic auth mandaadid, Jira saidi baas-URL-i, juurutu
 ### Märkused
 
 - Jira node saadab issue kirjeldused ja kommentaarid Atlassian Document Format tekstidokumentidena Jira Cloud REST API v3 jaoks. Data Center / Serveri mandaadid saadavad lihtteksti.
-- Data Center / Server toetab praegu ainult kasutajanime/parooli Basic auth'i. Isiklikud juurdepääsu tokenid ja Bearer auth ei ole veel toetatud.
+- Data Center / Server toetab kasutajanime/parooliga Basic authi ja isikliku juurdepääsutokeniga (PAT) autentimist skeemiga Bearer. PAT-autentimine nõuab versiooni Jira Data Center / Server 8.14 või uuemat.
 - Manuse üleslaadimine aktsepteerib base64 või data URL sisu ja selle suhtes kehtib platvormi failisuuruse piirang (vaikimisi 99 MB). Manuse allalaadimine võib tagastada base64 sisu, kui see on lubatud.
 - Kasutaja loomine, kustutamine ja issue teavitused nõuavad, et autenditud Jira kontol oleksid asjakohased Jira saidi või organisatsiooni õigused.
 - Kasutage List Projects, Search Issues ja List Transitions, et avastada projekti võtmeid, issue võtmeid ja ülemineku ID-sid.
-- Kohandatud endpoint'ide jaoks, mida Jira node ei kata, kasutage [HTTP node](../nodes/http-node.md) koos Jira Basic Auth'iga (`email:api_token` Cloudi jaoks või `username:password` Data Center / Serveri jaoks) cURL käsus, või Header mandaati vastava `Authorization: Basic <base64(user:secret)>` väärtusega.
+- Kohandatud endpointide puhul, mida Jira node ei kata, kasutage [HTTP node'i](../nodes/http-node.md) koos Jira Basic Authiga (`email:api_token` Cloudi jaoks või `username:password` Data Center / Serveri jaoks) või PAT Bearer authiga (`Authorization: Bearer <token>` Data Center / Serveri jaoks). Teise võimalusena kasutage Header mandaati koos sobiva `Authorization` päisega.
 
 Vaata ka:
 

@@ -22,7 +22,7 @@
 - **Kanbanタスク作成** – 自然言語でタスクの追加やカードの作成を依頼できます。Chatは指定されたボードの最初の列に追加します。複数のボードがあり、名前を指定しない場合、Chatはカードを作成する前にボード選択画面を表示します
 - **キューされたフォローアップ** – 回答のストリーミング中にも追加のメッセージを送信できます。キューされたメッセージは永続化され、開始前に編集または削除でき、アクティブな応答の後に順番に実行されます
 - **プランニングの一時停止** – Chatがプランニングの詳細を必要とする場合、明確化の質問を行い、回答するまでキューされたフォローアップを一時停止します。プランニングの回答が完了すると、キューされたメッセージが再開されます
-- **Credentials** – Chatが作成または編集するWorkflowがcredentialを必要とする場合、Chatはどれを使用するかを尋ね、会話内で新しいものを作成することを提案するか、使用せずに続行できるようにします。また、Chatにcredentialの作成や所有しているものの更新を依頼することもできます。会話内でcredentialフォームが開きます。モデルはcredentialの名前とタイプを参照しますが、その値は参照しません。詳細は[AI Assistant › Credentials](../reference/ai-assistant.md#credentials)を参照してください
+- **Credentials** – Chatが作成または編集するWorkflowがcredentialを必要とする場合、Chatはどれを使用するかを尋ね、会話内で新しいものを作成することを提案するか、使用せずに続行できるようにします。また、Chatにcredentialの作成や所有しているものの更新を依頼することもできます。会話内でcredentialフォームが開きます。モデルはcredentialの名前とタイプを参照しますが、その値は参照しません（自身が所有するCredentialおよび共有されたCredentialの両方が対象です）。Chatが追加するLLMおよびAgentノードは、共有Credentialを含め、チャット用に選択されたCredentialとモデルで実行されます。ChatがWorkflowを編集する際、既存のLLMおよびAgentノードはそのCredentialとモデルを維持します。詳細は[AI Assistant › Credentials](../reference/ai-assistant.md#credentials)を参照してください
 - **Data tables** – Chatが作成または編集するWorkflowがレコードを保存する場合、Chatはどの[data table](./datatable-tab.md)を使用するかを尋ねるか、Workflowに必要な列を持つものを作成することを提案します。また、テーブルとその列を一覧表示することもできます。行の読み取りや書き込みは行いません。詳細は[AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)を参照してください
 - **ストリーミング応答** – モデルの出力がストリーミングされる様子を確認できます
 - **応答の停止** – 現在ストリーミング中の回答をいつでも中断できます。停止すると、その会話のキューされたメッセージもクリアされます

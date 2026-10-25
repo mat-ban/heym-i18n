@@ -111,6 +111,10 @@ Das Image-Tag muss die Version sein, die main ausführt, und beide Schlüssel m�
 | On | Nimm einen Worker aus der Rotation, ohne ihn zu stoppen — laufende Ausführungen werden beendet, keine neuen werden zugewiesen. Für die main-Instanz fest eingerastet: Datei-, Plugin- und Coding-Agent-Arbeit läuft dort, unabhängig davon, was der Schalter sagt |
 | Weight | Sein Anteil an verteilbaren Ausführungen |
 
+## Concurrency-Limits in einem Cluster
+
+Das [Concurrency-Limit](./webhooks.md#concurrency-limit-and-queued-runs) eines Workflows wird in PostgreSQL gezählt, sodass es über jede Instanz und jeden Prozess hinweg gilt: Zwei Instanzen führen niemals mehr Läufe eines Workflows aus, als das Limit erlaubt. Ein Lauf, der auf einen Slot gewartet hat, wird beim Start nach denselben Regeln wie jeder andere Lauf platziert, sodass ein Lauf, der auf main bleiben muss, dies weiterhin tut. Der Queue-Worker, der diese Läufe ausführt, startet nun bei jeder Installation, einschließlich einer Einzelinstanz, wo er nur die Läufe beansprucht, die seine eigene Instanz eingereiht hat. Das bedeutet, dass eine Einzelinstanz auch die Queue-Aufweck-`LISTEN`-Verbindung in jedem Prozess hält; budgetiere deren Verbindungen daher genauso wie bei einer Cluster-Instanz.
+
 ## Ausführungsverlauf
 
 Jede Ausführung im Ausführungsverlauf benennt die Instanz, die sie ausgeführt hat, und beide Verlaufsdialoge können auf eine Instanz gefiltert werden. Der Filter gleicht auf die ID der Instanz ab, während er ihren Namen anzeigt, sodass das Umbenennen einer Instanz nicht umschreibt, was alte Ausführungen sagen.

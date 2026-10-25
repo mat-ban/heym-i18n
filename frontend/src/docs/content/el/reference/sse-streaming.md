@@ -25,12 +25,17 @@
 
 | Τύπος συμβάντος | Πότε εκπέμπεται | Βασικά πεδία |
 |------------|--------------------|------------|
-| `execution_started` | Αμέσως αφού γίνει αποδεκτό το αίτημα | `execution_id`, `server_now_ms` |
+| `queued` | Το workflow βρίσκεται στο [όριο ταυτοχρονισμού](./webhooks.md#concurrency-limit-and-queued-runs) του. Αποστέλλεται ξανά κάθε φορά που αλλάζει η θέση της εκτέλεσης | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Αμέσως αφού γίνει αποδεκτό το αίτημα, ή όταν ξεκινά μια εκτέλεση σε ουρά | `execution_id`, `server_now_ms` |
 | `node_start` | Ακριβώς πριν ξεκινήσει την εκτέλεση ένας node | `node_id`, `node_label`, `started_at_ms`, προαιρετικό `message` |
 | `node_retry` | Όταν ένας node επαναλαμβάνει | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Αφού ολοκληρωθεί ένας node | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Όταν ένας Output node επιστρέφει πρόωρα | `node_label`, `output` |
 | `execution_complete` | Αφού ολοκληρωθεί το workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Εκτελέσεις σε ουρά
+
+Όταν το workflow βρίσκεται στο όριο ταυτοχρονισμού του, το stream παραμένει ανοιχτό και αποστέλλει συμβάντα `queued` ενώ η εκτέλεση περιμένει. Μια εκτέλεση σε ουρά εκτελείται στον background worker, πιθανώς σε άλλη διεργασία, επομένως το stream της μεταφέρει το `execution_started` κατά την έναρξη της εκτέλεσης και το `execution_complete` κατά τον τερματισμό της, αλλά καθόλου ενδιάμεσα συμβάντα `node_start`, `node_complete` ή token. Το `execution_complete` της περιέχει ένα κενό `node_results`. Ανοίξτε την εκτέλεση στο [Ιστορικό εκτέλεσης](./execution-history.md) για λεπτομέρειες των κόμβων. Το κλείσιμο της σύνδεσης δεν ακυρώνει μια εκτέλεση σε ουρά. Όταν η ουρά είναι γεμάτη, το αίτημα απαντάται με `429` πριν ανοίξει το stream.
 
 ## Μηνύματα Έναρξης ανά Node
 

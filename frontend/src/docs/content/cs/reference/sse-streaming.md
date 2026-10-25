@@ -25,12 +25,17 @@ Každý SSE rámec je JSON oddělený novým řádkem s prefixem `data: `.
 
 | Typ události | Kdy je vygenerována | Klíčová pole |
 |------------|--------------------|------------|
-| `execution_started` | Ihned po přijetí požadavku | `execution_id`, `server_now_ms` |
+| `queued` | Workflow dosáhl svého [limitu souběhu](./webhooks.md#concurrency-limit-and-queued-runs); odesílá se znovu při každé změně pozice běhu | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Ihned po přijetí požadavku nebo když se spustí běh ve frontě | `execution_id`, `server_now_ms` |
 | `node_start` | Těsně před zahájením spuštění uzlu | `node_id`, `node_label`, `started_at_ms`, volitelné `message` |
 | `node_retry` | Když uzel opakuje pokus | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Po dokončení uzlu | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Když výstupní uzel vrátí výsledek předčasně | `node_label`, `output` |
 | `execution_complete` | Po ukončení workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Běhy ve frontě
+
+Když workflow dosáhne svého limitu souběhu, stream zůstává otevřený a během čekání běhu odesílá události `queued`. Běh zařazený do fronty se provádí na pozadí ve workeru, případně v jiném procesu, takže jeho stream nese `execution_started` při spuštění běhu a `execution_complete` při jeho dokončení, ale žádné události `node_start`, `node_complete` nebo události tokenů mezi tím. Jeho `execution_complete` má prázdné `node_results`; otevřete běh v [Historii spuštění](./execution-history.md) pro podrobnosti o uzlech. Uzavření spojení nezruší běh ve frontě. Když je fronta plná, požadavek je zodpovězen kódem `429` ještě před otevřením streamu.
 
 ## Zprávy při spuštění jednotlivých uzlů
 

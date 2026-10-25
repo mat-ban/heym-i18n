@@ -15,7 +15,7 @@ Daži integrācijas mezgli **neprasa** akreditācijas datus. [WebSocket Trigger]
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, opcional `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Aģents](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Aģents](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, opcional `base_url` |
-| **Jira** | [Jira mezgls](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, opcional `api_version` |
+| **Jira** | [Jira mezgls](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (tikai Basic auth), opcional `api_version` |
 | **Linear** | [Linear mezgls](../nodes/linear-node.md) | `api_key`, vai `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry mezgls](../nodes/sentry-node.md) | `api_token`, opcional `base_url` |
 | **Pielāgots** | [LLM](../nodes/llm-node.md), [Aģents](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -198,7 +198,7 @@ OAuth žetoni (`access_token`, `refresh_token`, `token_expiry`) tiek glabāti un
 
 ## Jira
 
-Jira akreditācijas dati glabā Jira pamata autentifikācijas akreditācijas datus, Jira vietnes bāzes URL, izvietošanas režīmu un opciju REST API versiju [Jira mezglam](../nodes/jira-node.md). Izmantojiet `cloud` Jira Cloud vai `data_center` Jira Data Center / Server.
+Jira akreditācijas dati glabā Jira pamata autentifikācijas akreditācijas datus vai Data Center personīgo piekļuves tokenu, Jira vietnes bāzes URL, izvietošanas režīmu un opciju REST API versiju [Jira mezglam](../nodes/jira-node.md). Izmantojiet `cloud` Jira Cloud vai `data_center` Jira Data Center / Server.
 
 ### Iestatīšana
 
@@ -211,17 +211,19 @@ Jira akreditācijas dati glabā Jira pamata autentifikācijas akreditācijas dat
 
 **Jira Data Center / Server**
 
-1. Izvēlieties **Jira Data Center / Server** kā izvietošanas režīmu.
-2. Ievadiet Jira lietotājvārdu un paroli, kas izmantota pamata autentifikācijai.
-3. Ievadiet Jira vietnes URL, piemēram, `https://jira.example.com`.
-4. Izmantojiet **Pārbaudīt savienojumu**, lai pārbaudītu akreditācijas datus.
+1. Izvēlieties **Jira Data Center / Server** kā izvietojumu.
+2. Izvēlieties autentifikācijas metodi. **Lietotājvārds un parole** izmanto Basic auth. **Personal Access Token** izmanto `Authorization: Bearer <token>` un prasa Jira Data Center / Server 8.14 vai jaunāku versiju. Izveidojiet tokenu sadaļā **Profils → Personal Access Tokens** vietnē Jira.
+3. Ievadiet Jira lietotājvārdu un paroli vai ielīmējiet personīgo piekļuves tokenu (lietotājvārds nav nepieciešams).
+4. Ievadiet Jira vietnes URL, piemēram, `https://jira.example.com`.
+5. Izmantojiet **Test Connection**, lai pārbaudītu akreditācijas datus.
 
 ### Lauki
 
 | Lauks | Apraksts |
 |-------|----------|
-| `email` | Jira Cloud Atlassian konta e-pasts vai Jira Data Center / Server lietotājvārds |
-| `api_token` | Jira Cloud Atlassian API žetons vai Jira Data Center / Server parole pamata autentifikācijai |
+| `auth_mode` | `basic` (noklusējums, ja trūkst) vai `pat`. `pat` ir derīgs tikai ar `data_center` |
+| `email` | Jira Cloud Atlassian konta e-pasts vai Jira Data Center / Server lietotājvārds. Netiek izmantots `pat` režīmā |
+| `api_token` | Jira Cloud Atlassian API tokens, Jira Data Center / Server parole Basic auth vai Data Center personīgais piekļuves tokens `pat` režīmā |
 | `base_url` | Jira vietnes bāzes URL |
 | `deployment` | `cloud` Jira Cloud vai `data_center` Jira Data Center / Server |
 | `api_version` | REST API versija; noklusējuma vērtība ir `3` Jira Cloud. Data Center / Server izmanto v2 |
@@ -229,13 +231,11 @@ Jira akreditācijas dati glabā Jira pamata autentifikācijas akreditācijas dat
 ### Piezīmes
 
 - Jira mezgls nosūta problēmu aprakstus un komentārus kā Atlassian dokumentu formāta tekstus Jira Cloud REST API v3. Data Center / Server akreditācijas dati nosūta vienkāršu tekstu.
-- Data Center / Server pašlaik atbalsta tikai lietotājvārda/paroles pamata autentifikāciju. Personīgās piekļuves atslēgas un Bearer autentifikācija vēl nav atbalstīta.
+- Data Center / Server atbalsta lietotājvārda/paroles Basic auth un autentifikāciju ar personīgo piekļuves tokenu (PAT), izmantojot Bearer shēmu. PAT autentifikācijai nepieciešama Jira Data Center / Server 8.14 vai jaunāka versija.
 - Pielikumu augšupielāde pieņem base64 vai datu URL saturu un ir pakļauta platformas faila lieluma ierobežojumam (noklusējums 99 MB). Pielikumu lejupielāde var atgriezt base64 saturu, kad tas ir iespējots.
 - Lietotāju izveide, dzēšana un problēmu paziņojumi prasa, lai autentificētajam Jira kontam būtu attiecīgās Jira vietnes vai organizācijas atļaujas.
 - Izmantojiet List Projects, Search Issues un List Transitions, lai atklātu projekta atslēgas, problēmu atslēgas un pārejas ID.
-- Pielāgotām galapunktiem, kas nav iekļauti Jira mezglā, izmantojiet [HTTP mezglu](../nodes/http-node.md) ar Jira pamata autentifikāciju (`email:api_token` Cloud vai `username:password` Data Center / Server) cURL komandā vai galvenes akreditāciju ar atbilstošo `Authorization: Basic <base64(user:secret)>` vērtību.
-
-Skatiet arī:
+- Pielāgotiem endpointiem, kurus Jira mezgls neaptver, izmantojiet [HTTP mezglu](../nodes/http-node.md) ar Jira Basic Auth (`email:api_token` mākonim vai `username:password` Data Center / Server) vai PAT Bearer auth (`Authorization: Bearer <token>` Data Center / Server). Alternatīvi izmantojiet Header akreditācijas datus ar atbilstošu `Authorization` galveni.
 
 - [Jira mezgls](../nodes/jira-node.md)
 - [Akreditācijas dati](./credentials.md)

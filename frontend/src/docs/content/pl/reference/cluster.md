@@ -111,6 +111,10 @@ Tag obrazu musi odpowiadać wersji uruchomionej na main, a oba klucze muszą zos
 | On | Wyłączenie workera z rotacji bez zatrzymywania go — trwające wykonania kończą się, nowe nie są przydzielane. Zablokowane na włączone dla instancji main: praca związana z plikami, pluginami i agentami kodującymi wykonuje się tam niezależnie od ustawienia przełącznika |
 | Weight | Udział instancji w rozdzielanych uruchomieniach |
 
+## Limity współbieżności w klastrze
+
+[Limit współbieżności](./webhooks.md#concurrency-limit-and-queued-runs) workflow jest zliczany w PostgreSQL, więc obowiązuje we wszystkich instancjach i procesach: dwie instancje nigdy nie uruchomią więcej wykonań danego workflow, niż zezwala na to limit. Uruchomienie, które czekało na slot, jest przydzielane według tych samych zasad co każde inne uruchomienie w momencie startu, dzięki czemu zadanie wymagające pracy na main nadal tam pozostaje. Worker kolejki wykonujący te zadania uruchamia się teraz przy każdej instalacji, w tym na pojedynczej instancji, gdzie przejmuje tylko uruchomienia zakolejkowane przez własną instancję. Oznacza to, że pojedyncza instancja utrzymuje również połączenie `LISTEN` wybudzania kolejki w każdym procesie, dlatego należy zaplanować pulę połączeń tak samo jak dla instancji klastra.
+
 ## Historia uruchomień
 
 Każde uruchomienie w historii wykonań wskazuje instancję, która je wykonała, a oba okna historii umożliwiają filtrowanie do jednej instancji. Filtr dopasowuje identyfikator instancji, wyświetlając jej nazwę, więc zmiana nazwy instancji nie modyfikuje informacji o starych uruchomieniach.

@@ -18,7 +18,7 @@ As credentials armazenam chaves de API e segredos usados pelos nós de workflow.
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Login via assinatura do ChatGPT (OAuth) ou um token de acesso do Codex para o runner, além de um PAT do GitHub para operações em repositórios |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Uma chave de API do gateway OpenCode Go (URL base opcional) para o runner, além de um PAT do GitHub para operações em repositórios |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | Token de acesso pessoal do GitHub (PAT) para chamadas à API do GitHub, operações do Nó GitHub e integrações MCP |
-| [Jira](../nodes/jira-node.md) | Jira | E-mail/token de API do Cloud ou usuário/senha do Data Center, URL base do site Jira, modo de implantação e versão opcional da REST API |
+| [Jira](../nodes/jira-node.md) | Jira | E-mail/token de API do Cloud, usuário/senha do Data Center ou personal access token, URL base do site Jira, modo de implantação e versão opcional da REST API |
 | [Linear](../nodes/linear-node.md) | Linear | Chave de API pessoal ou OAuth2 para equipes, projetos, issues e comentários |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autenticação para requisições |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Token do bot e segredo opcional do webhook |
@@ -65,7 +65,7 @@ Alguns nós permitem expressões para autenticação. Use a [Expression DSL](./e
 
 Credenciais do Codex são intencionalmente excluídas de `$credentials`. Seja ao fazer login com ChatGPT (assinatura, sem custo de API por token) ou ao colar um `access_token` do Codex, os tokens são passados apenas para o processo local do runner do Codex. Tokens de login do ChatGPT são renovados automaticamente conforme expiram.
 
-Credenciais do Jira também são excluídas de `$credentials`. O [Nó Jira](../nodes/jira-node.md) carrega a credencial por `credentialId` em tempo de execução. Para chamadas REST personalizadas do Jira não cobertas pelo Nó Jira, use o [Nó HTTP](../nodes/http-node.md) com Jira Basic Auth (`email:api_token` para Jira Cloud ou `username:password` para Data Center / Server), por exemplo `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Você também pode usar uma credencial [Header](../nodes/http-node.md) com `Authorization: Basic <base64(user:secret)>`. Tokens de acesso pessoal e autenticação Bearer do Jira Data Center / Server ainda não são suportados pela credencial do Jira.
+Credenciais do Jira também são excluídas de `$credentials`. O [Nó Jira](../nodes/jira-node.md) carrega a credencial por `credentialId` em tempo de execução. Para chamadas REST personalizadas do Jira não cobertas pelo Nó Jira, use o [Nó HTTP](../nodes/http-node.md) com Jira Basic Auth (`email:api_token` para Jira Cloud ou `username:password` para Data Center / Server), por exemplo `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Você também pode usar uma credencial [Header](../nodes/http-node.md) com `Authorization: Basic <base64(user:secret)>`. Para personal access tokens do Jira Data Center / Server, envie `Authorization: Bearer <token>`; a própria credencial do Jira suporta isso por meio de seu modo de autenticação **Personal Access Token**.
 
 | Tipo de credencial | Valor exposto a `$credentials.Name` |
 |-----------------|--------------------------------------|

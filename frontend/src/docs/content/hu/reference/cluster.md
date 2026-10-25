@@ -111,6 +111,10 @@ Az image tagnek annak a verziónak kell lennie, amelyet a main futtat, és mindk
 | On | Vegyen ki egy workert a rotációból anélkül, hogy leállítaná — a futó végrehajtások befejeződnek, újak nem kerülnek kiosztásra. A main példány esetében zárolva bekapcsolva: a fájl-, plugin- és coding-agent munka ott fut, bármit is mond a kapcsoló |
 | Weight | A kiosztható futtatásokból való részesedése |
 
+## Konkurencialimitek klaszterben
+
+A workflow-k [konkurencialimitje](./webhooks.md#concurrency-limit-and-queued-runs) a PostgreSQL-ben kerül nyilvántartásra, így minden példányra és folyamatra kiterjed: két példány soha nem futtat több futást egy adott workflow-ból, mint amennyit a limit megenged. A helyre várakozó futás az induláskor ugyanazon szabályok szerint kerül kiosztásra, mint bármely más futás, így a main példányt igénylő futás ott is marad. Az ezeket a futásokat végrehajtó queue worker mostantól minden telepítéskor elindul, beleértve az önálló példányt is, ahol kizárólag a saját példánya által sorba állított futásokat veszi át. Ez azt jelenti, hogy egyetlen példány is fenntartja a sor ébresztésére szolgáló `LISTEN` kapcsolatot minden folyamatban, ezért a kapcsolatok számát ugyanúgy tervezze meg, mint egy klaszterpéldány esetében.
+
 ## Futtatási előzmények
 
 A végrehajtási előzményekben minden futtatás megnevezi azt a példányt, amely végrehajtotta, és mindkét előzmény-párbeszédpanel szűrhető egyetlen példányra. A szűrő a példány azonosítójára illeszkedik, miközben a nevét jeleníti meg, így a példány átnevezése nem írja át azt, amit a régi futtatások mutatnak.

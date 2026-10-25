@@ -109,6 +109,73 @@ Headers 和查询参数可在表达式中通过 `$input.headers` 和 `$input.que
 
 `test_run` 请求会绕过速率限制。
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## 并发限制与排队运行
+
+Workflow 可以限制同时执行的生产运行数量。在 workflow 级别的 **Properties** 面板中开启 **并发限制**，并设置 **最大并发运行数**。所有者和具有编辑权限的协作者可以修改它。该限制默认处于关闭状态。
+
+当达到限制时，新的运行将在先进先出（FIFO）队列中等待。这涵盖了每个生产入口点：此 endpoint、[流式 endpoint](./sse-streaming.md)、[Portal](./portal.md)、[Quick Drawer](./quick-drawer.md)、[MCP](../tabs/mcp-tab.md) 以及每个 [trigger](./triggers.md)。编辑器本身的测试运行总是立即启动，不占用并发插槽。在没有可以打开 workflow 的登录会话的情况下发送 `test_run=true` 不会绕过队列。
+
+| 设置 | 说明 |
+|---|---|
+| `concurrency_limit` | 允许同时进行的生产运行数。`0` 表示关闭限制 |
+| `concurrency_max_queue` | 可选。允许同时等待的运行数。留空表示无限制 |
+| `concurrency_max_wait_seconds` | 可选。等待时间超过此限制的运行将被记录为 `expired`。留空表示一直等待 |
+
+### 202 Accepted
+
+立即启动的调用与响应格式中所述的完全一致。必须等待的调用会立即获得 `202 Accepted`（无论 `X-Simple-Response` 为何），并带有指向其状态 URL 的 `Location` 请求头：
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| 字段 | 说明 |
+|---|---|
+| `queue.position` | 此运行在队列中的位置，从 1 开始 |
+| `queue.size` | 当前正在等待的运行数 |
+| `queue.running` | 当前占用插槽的运行数 |
+| `queue.limit` | 该 workflow 的并发限制 |
+| `status_token` | 仅限匿名 workflow。在此响应中仅返回一次 |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` 返回运行状态。使用启动运行的相同凭据调用它：会话或 JWT、[执行 token](./execution-tokens.md) 或 workflow 的自定义请求头。匿名 workflow 无需检查凭据，因此请在 `X-Heym-Run-Token` 头中发送来自 202 的 `status_token`。token 绝不会从查询字符串中读取。错误或缺失的 token 将获得 `404`，与未知执行相同。
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | 含义（必须等待并发插槽的运行将收到 [202 响应](#202-accepted) 代替） |
+|---|---|
+| `queued` | 等待插槽；`queue` 显示其所处位置 |
+| `running` | 已获得插槽并正在执行 |
+| `success` / `error` | 已完成；`outputs` 和 `error` 已填充 |
+| `pending` | 因[人工审核](./human-in-the-loop.md)而暂停 |
+| `cancelled` | 已从[运行历史](./execution-history.md)中取消 |
+| `expired` | 等待时间超过 `concurrency_max_wait_seconds` 且未曾运行 |
+
+每隔几秒轮询一次，直到状态不再是 `queued` 或 `running`。即使没有人轮询，排队的运行也会正常执行。
+
+### 队列已满
+
+当设置了 `concurrency_max_queue` 且已有相应数量的运行在等待时，调用将被拒绝并返回 `429 Concurrency queue is full`，同时在运行历史中记录一条 `queue_full` 条目。不会有任何内容进入排队。
+
 ## 响应格式
 
 Endpoint 返回 JSON：

@@ -827,6 +827,22 @@
         "waiting": "Venter",
         "neutral": "Neutral"
       }
+    },
+    "concurrencyLimit": "Samtidighedsgrænse",
+    "concurrencyLimitHelp": "Produktionskørsler (Webhooks, Cron, MCP, Portal, Triggers) over grænsen venter i en FIFO-kø. Testkørsler i editoren starter altid med det samme.",
+    "maxConcurrentRuns": "Maks. samtidige kørsler",
+    "maxQueueSizeOptional": "Maks. køstørrelse (valgfrit)",
+    "emptyNoLimit": "Tom = ingen grænse",
+    "maxWaitOptional": "Maks. ventetid (sekunder, valgfrit)",
+    "emptyWaitAsLong": "Tom = vent så længe som nødvendigt",
+    "concurrencyQueueHelp": "En fuld kø svarer med 429. En kørsel, der venter længere end maks. ventetid, registreres som udløbet.",
+    "rag": {
+      "hybridSearch": "Hybridsøgning",
+      "hybridSearchHelp": "Kombiner vektorlighed med BM25-søgeordsmatchning, så der også findes præcise termer som ID'er, navne og fejlkoder.",
+      "hybridScore": "Hybridscore (0-1)",
+      "similarityScore": "Lighedsscore",
+      "vectorSimilarity": "Vektorlighed",
+      "bm25Score": "BM25-score"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Spørg AI",
     "askAiTitle": "Spørg Chat-assistenten om denne kørsel",
-    "noNodeSpans": "Der blev ikke registreret nogen node-spans for denne kørsel."
+    "noNodeSpans": "Der blev ikke registreret nogen node-spans for denne kørsel.",
+    "queuedProgress": "I kø {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Indlæser portal...",

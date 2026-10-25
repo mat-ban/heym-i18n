@@ -30,7 +30,7 @@ Skatiet [Triggers](./triggers.md), lai uzzinātu par visiem ievades punktiem.
 | [Codex](../nodes/codex-node.md) | Palaist lokālo Codex CLI pret GitHub repozitoriju, izmantojot ChatGPT/Codex piekļuves token | 1 | 1, plus `question` izvade |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Palaist OpenCode CLI pret GitHub repozitoriju nostiprinātā konteinerā, izmantojot OpenCode Go gateway API atslēgu | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Tieši izsaukt konkrētu MCP rīku bez LLM izvēles | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Ievietot, upsert, dzēst vai meklēt Qdrant vai Postgres (pgvector) [vektoru krātuvē](../tabs/vectorstores-tab.md) RAG vajadzībām | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Ievietot, upsert, dzēst vai meklēt (vektoru vai hibrīda vektoru + BM25) Qdrant vai Postgres (pgvector) [vektoru krātuvē](../tabs/vectorstores-tab.md) RAG vajadzībām | 1 | 1 |
 
 ## Loģikas mezgli
 

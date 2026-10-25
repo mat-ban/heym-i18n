@@ -52,6 +52,8 @@ Pärast käivituse alustamist kuvab sahtel:
 
 `pending` tähendab, et workflow ootab hilisemat toimingut, näiteks inimülevaatamist.
 
+Quick Drawer'i käivitused on tootmiskäivitused, mistõttu [samaaegsuse piiranguga](./webhooks.md#concurrency-limit-and-queued-runs) workflow võib panna need ootama. Kuni käivitus seisab järjekorras, on olekuks **Waiting in queue (2/5)**; see muutub olekuks "running", kui käivitus algab, ja näitab tulemust selle lõppemisel ilma samm-sammulise edenemiseta. Käivitus, mis aegus järjekorras või tühistati ootamise ajal, lõpeb olekuga `error`.
+
 Failikäivitus toimub triggeri ühekordse üleslaadimislingi kaudu: sahtel küsib workflow'lt lingi, laadib faili sinna üles ja kuvab tulemuse, kui üleslaadimine lõpeb. Failikäivitused näitavad lõppolekut ja väljundeid, kuid mitte samm-sammulist edenemist, ning need märgitakse ajaloos samuti sildiga `Quick Drawer`. Valitud fail tühjendatakse pärast iga käivitust, sest üks link võtab vastu ühe faili.
 
 ## Brauseri salvestusruum

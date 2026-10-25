@@ -110,6 +110,8 @@ Her iki geçmiş iletişim kutusu da listenin en üstünde, geçmiş çalıştı
 - İptalden sonra, çalışan giriş bir sonraki yenilemede kaybolur; listeyi manuel olarak güncellemek için **Refresh** seçeneğine basın
 - Zaten tamamlanmış bir çalıştırmayı iptal ederseniz, istek bir no-op'tur
 
+Bir [eşzamanlılık slotu](./webhooks.md#concurrency-limit-and-queued-runs) bekleyen çalıştırmalar, **Queued 2/5** etiketi, sıradaki yerleri ve kuyruk boyutuyla aynı bölümde listelenir. Henüz hiçbir şey çalışmadığı için **Open live** düğmeleri yoktur; **Cancel**, bekleyen bir çalıştırmayı kuyruktan çıkarır ve `cancelled` olarak kaydeder. Workflow'un maksimum bekleme süresinden daha uzun süre bekleyen bir çalıştırma `expired` olarak, dolu bir kuyruk tarafından geri çevrilen bir çalıştırma ise `queue_full` olarak kaydedilir; her ikisinin de çalıştırma listesinde kendi rozeti bulunur.
+
 Canlı URL `/workflows/{workflowId}/{executionId}` şeklindedir. Gözlemci salt okunurdur: editörden
 ayrılmak yalnızca o tarayıcı sekmesinin bağlantısını keser ve workflow'u asla durdurmaz. Etkin anlık görüntüler
 PostgreSQL üzerinden paylaşılır, böylece trigger ve editör isteği farklı backend worker'larına düştüğünde bile bir çalıştırmayı açmak çalışır.

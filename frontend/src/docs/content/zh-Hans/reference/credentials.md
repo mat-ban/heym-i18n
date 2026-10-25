@@ -18,7 +18,7 @@ Credentials 存储 Workflow 节点使用的 API keys 和 secrets。您可以在 
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT 订阅登录（OAuth）或用于 runner 的 Codex access token，以及用于仓库操作的 GitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | 用于 runner 的 OpenCode Go gateway API key（可选 base URL），以及用于仓库操作的 GitHub PAT |
 | [Agent](../nodes/agent-node.md)、[HTTP](../nodes/http-node.md)、[GitHub](../nodes/github-node.md) | GitHub | 用于 GitHub API 调用、GitHub 节点操作和 MCP 集成的 GitHub personal access token (PAT) |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token 或 Data Center username/password、Jira 站点 base URL、部署模式，以及可选的 REST API 版本 |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token、Data Center username/password 或个人访问 Token、Jira 站点 base URL、部署模式，以及可选的 REST API 版本 |
 | [Linear](../nodes/linear-node.md) | Linear | 用于 teams、projects、issues 和 comments 的 Personal API key 或 OAuth2 |
 | [HTTP](../nodes/http-node.md) | Bearer、Header | 请求的认证 |
 | [Telegram](../nodes/telegram-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token 和可选的 webhook secret |
@@ -58,7 +58,7 @@ OpenCode Go 凭据也会在此列出，但标记为 **“用量不可用”**：
 
 Codex 凭据被有意排除在 `$credentials` 之外。无论您是通过 ChatGPT 登录（订阅制，无按 Token 计费的 API 成本），还是粘贴 Codex `access_token`，这些 Token 都只会传递给本地 Codex 运行进程。ChatGPT 登录 Token 会在过期时自动刷新。
 
-Jira 凭据同样被排除在 `$credentials` 之外。[Jira 节点](../nodes/jira-node.md) 在运行时通过 `credentialId` 加载凭据。对于 Jira 节点未覆盖的自定义 Jira REST 调用，可使用 [HTTP 节点](../nodes/http-node.md) 配合 Jira Basic Auth（Jira Cloud 使用 `email:api_token`，Data Center / Server 使用 `username:password`），例如 `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`。您也可以使用 [Header](../nodes/http-node.md) 凭据配合 `Authorization: Basic <base64(user:secret)>`。Jira 凭据目前尚不支持 Jira Data Center / Server 个人访问 Token 和 Bearer 认证。
+Jira 凭据同样被排除在 `$credentials` 之外。[Jira 节点](../nodes/jira-node.md) 在运行时通过 `credentialId` 加载凭据。对于 Jira 节点未覆盖的自定义 Jira REST 调用，可使用 [HTTP 节点](../nodes/http-node.md) 配合 Jira Basic Auth（Jira Cloud 使用 `email:api_token`，Data Center / Server 使用 `username:password`），例如 `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`。您也可以使用 [Header](../nodes/http-node.md) 凭据配合 `Authorization: Basic <base64(user:secret)>`。对于 Jira Data Center / Server 个人访问 Token，请改用 `Authorization: Bearer <token>`；Jira 凭据本身通过其 **Personal Access Token** 认证模式支持该功能。
 
 | 凭据类型 | 暴露给 `$credentials.Name` 的值 |
 |-----------------|--------------------------------------|

@@ -25,12 +25,17 @@ Minden SSE frame újsorral elválasztott JSON, amely `data: ` előtaggal kezdőd
 
 | Eseménytípus | Mikor kerül kibocsátásra | Kulcsfontosságú mezők |
 |------------|--------------------|------------|
-| `execution_started` | Közvetlenül a kérés elfogadása után | `execution_id`, `server_now_ms` |
+| `queued` | A workflow elérte a [párhuzamossági korlátját](./webhooks.md#concurrency-limit-and-queued-runs); újra elküldésre kerül, valahányszor megváltozik a futtatás helye | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Közvetlenül a kérés elfogadása után, vagy amikor egy sorba állított futtatás elindul | `execution_id`, `server_now_ms` |
 | `node_start` | Közvetlenül azelőtt, hogy egy csomópont megkezdi a végrehajtást | `node_id`, `node_label`, `started_at_ms`, opcionális `message` |
 | `node_retry` | Amikor egy csomópont újrapróbálkozik | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Miután egy csomópont befejeződik | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Amikor egy Output csomópont korán visszatér | `node_label`, `output` |
 | `execution_complete` | Miután a workflow befejeződik | `status`, `outputs`, `execution_time_ms` |
+
+### Sorba állított futtatások
+
+Amikor a workflow eléri a párhuzamossági korlátját, a stream nyitva marad, és `queued` eseményeket küld, miközben a futtatás várakozik. A sorba állított futtatás a háttér-feldolgozóban (background worker) hajtódik végre, esetleg egy másik folyamatban, így a stream az `execution_started` eseményt hordozza a futtatás indulásakor és az `execution_complete` eseményt a befejezésekor, de a kettő között nincsenek `node_start`, `node_complete` vagy token események. Az `execution_complete` eseménye üres `node_results` mezőt tartalmaz; nyissa meg a futtatást a [Végrehajtási előzményekben](./execution-history.md) a csomópontok részleteiért. A kapcsolat bezárása nem szakítja meg a sorba állított futtatást. Ha a sor megtelt, a kérésre `429`-es válasz érkezik a stream megnyitása előtt.
 
 ## Csomópontonkénti kezdő üzenetek
 

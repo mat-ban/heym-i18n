@@ -109,6 +109,73 @@ Workflow başına yapılandırın: `rate_limit_requests` ve `rate_limit_window_s
 
 `test_run` istekleri rate limiting'i atlar.
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Eşzamanlılık Sınırı ve Kuyruğa Alınan Çalıştırmalar
+
+Bir workflow, aynı anda kaç üretim çalıştırmasının yürütüleceğini sınırlayabilir. Workflow düzeyindeki **Properties** panelinde **Eşzamanlılık sınırı** seçeneğini açın ve **Maks. eşzamanlı çalıştırma** değerini ayarlayın. Sahipler ve düzenleme erişimine sahip ortak çalışanlar bunu değiştirebilir. Sınır varsayılan olarak kapalıdır.
+
+Sınıra ulaşıldığında yeni çalıştırmalar ilk giren ilk çıkar (FIFO) kuyruğunda bekler. Bu, tüm üretim giriş noktalarını kapsar: bu endpoint, [akış endpoint'i](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) ve her [trigger](./triggers.md). Editörün kendi test çalıştırmaları her zaman hemen başlar ve bir slot kaplamaz. Workflow'u açabilen oturum açmış bir oturum olmadan `test_run=true` göndermek kuyruğu atlamaz.
+
+| Ayar | Açıklama |
+|---|---|
+| `concurrency_limit` | Aynı anda izin verilen üretim çalıştırmaları. `0` sınırı kapatır |
+| `concurrency_max_queue` | İsteğe bağlı. Aynı anda beklemesine izin verilen çalıştırma sayısı. Boş, sınır olmadığı anlamına gelir |
+| `concurrency_max_wait_seconds` | İsteğe bağlı. Daha uzun süre bekleyen çalıştırma `expired` olarak kaydedilir. Boş, gerektiği kadar beklemesi anlamına gelir |
+
+### 202 Accepted
+
+Hemen başlayan bir çağrı, Yanıt Formatı altında açıklandığı gibi davranır. Beklemesi gereken bir çağrı, `X-Simple-Response` ne olursa olsun, durum URL'sini gösteren bir `Location` başlığıyla hemen `202 Accepted` yanıtı alır:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Alan | Açıklama |
+|---|---|
+| `queue.position` | Bu çalıştırmanın kuyruktaki sırası, 1'den başlar |
+| `queue.size` | Şu anda bekleyen çalıştırmalar |
+| `queue.running` | Şu anda bir slot tutan çalıştırmalar |
+| `queue.limit` | Workflow'un eşzamanlılık sınırı |
+| `status_token` | Yalnızca anonim workflow'lar. Bu yanıtta yalnızca bir kez döndürülür |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status`, çalıştırmanın durumunu döndürür. Bunu, çalıştırmayı başlatan aynı kimlik bilgileriyle çağırın: bir oturum veya JWT, bir [yürütme token'ı](./execution-tokens.md) veya workflow'un özel başlığı. Anonim bir workflow'un kontrol edilecek kimlik bilgisi yoktur, bu nedenle 202'den gelen `status_token` değerini `X-Heym-Run-Token` başlığında gönderin. Token asla sorgu dizesinden okunmaz. Yanlış veya eksik bir token, bilinmeyen bir çalıştırma gibi `404` alır.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Anlamı (eşzamanlılık slotu için beklemesi gereken bir çalıştırma bunun yerine [202 yanıtını](#202-accepted) alır) |
+|---|---|
+| `queued` | Bir slot bekliyor; `queue` sırasını gösterir |
+| `running` | Bir slota sahip ve yürütülüyor |
+| `success` / `error` | Tamamlandı; `outputs` ve `error` dolduruldu |
+| `pending` | [İnsan incelemesi](./human-in-the-loop.md) için duraklatıldı |
+| `cancelled` | [Çalışma geçmişinden](./execution-history.md) iptal edildi |
+| `expired` | `concurrency_max_wait_seconds` süresinden daha uzun süre bekledi ve hiç çalışmadı |
+
+Durum artık `queued` veya `running` olmayana kadar birkaç saniyede bir sorgulayın. Kuyruğa alınan bir çalıştırma, hiç kimse sorgulama yapmasa bile yürütülür.
+
+### Kuyruk Dolu
+
+`concurrency_max_queue` ayarlandığında ve zaten bu kadar sayıda çalıştırma bekliyorsa, çağrı `429 Concurrency queue is full` ve çalışma geçmişinde bir `queue_full` girdisi ile geri çevrilir. Kuyruğa hiçbir şey alınmaz.
+
 ## Yanıt Formatı
 
 Endpoint JSON döndürür:

@@ -109,6 +109,8 @@ Molemmat historiadialogit näyttävät **käynnissä olevat suoritukset** listan
 - Peruutuksen jälkeen käynnissä oleva merkintä katoaa seuraavalla päivityksellä; paina **Refresh** päivittääksesi listan manuaalisesti
 - Jos peruutat suorituksen, joka on jo valmis, pyyntö on no-op
 
+[Samanaikaisuuspaikkaa](./webhooks.md#concurrency-limit-and-queued-runs) odottavat suoritukset luetellaan samassa osiossa **Queued 2/5** -tunnisteella, jonosijoituksellaan ja jonon koolla. Niissä ei ole **Open live** -painiketta, koska mikään ei ole vielä käynnissä; **Cancel** poistaa odottavan suorituksen jonosta ja tallentaa sen tilaksi `cancelled`. Suoritus, joka odotti pidempään kuin workflow'n enimmäisodotusaika, kirjataan tilaksi `expired`, ja täyden jonon hylkäämä suoritus tilaksi `queue_full`; molemmilla on oma merkkinsä suoritusluettelossa.
+
 Live-URL on `/workflows/{workflowId}/{executionId}`. Tarkkailija on vain luku -tilassa: editorista poistuminen katkaisee vain kyseisen selainvälilehden yhteyden eikä koskaan pysäytä workflowta. Aktiiviset tilannevedokset jaetaan PostgreSQL:n kautta, joten suorituksen avaaminen toimii edelleen, vaikka trigger ja editoripyyntö osuvat eri taustaprosesseihin.
 
 ## Kaatumisen jälkeinen palautuminen

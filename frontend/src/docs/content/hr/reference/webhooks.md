@@ -108,6 +108,73 @@ Konfigurirajte po workflowu: `rate_limit_requests` i `rate_limit_window_seconds`
 | `rate_limit_window_seconds` | Trajanje prozora u sekundama |
 
 Zahtjevi s `test_run` zaobilaze ograničavanje brzine.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Ograničenje istodobnosti i izvođenja u redu čekanja
+
+Workflow može ograničiti broj produkcijskih izvođenja koja se izvršavaju istovremeno. Uključite **Ograničenje istodobnosti** na ploči **Properties** na razini workflowa i postavite **Maks. istodobnih izvođenja**. Vlasnici i suradnici s pravom uređivanja mogu to promijeniti. Ograničenje je prema zadanim postavkama isključeno.
+
+Dok je ograničenje dosegnuto, nova izvođenja čekaju u FIFO (prvi unutra, prvi van) redu čekanja. To pokriva svaku produkcijsku ulaznu točku: ovaj endpoint, [streaming endpoint](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) i svaki [trigger](./triggers.md). Vlastita testna izvođenja editora uvijek počinju odmah i ne zauzimaju mjesto. Slanje `test_run=true` bez prijavljene sesije s ovlaštenjem za otvaranje workflowa ne zaobilazi red čekanja.
+
+| Postavka | Opis |
+|---|---|
+| `concurrency_limit` | Dozvoljena produkcijska izvođenja odjednom. `0` isključuje ograničenje |
+| `concurrency_max_queue` | Opcionalno. Dozvoljeni broj izvođenja koja čekaju istovremeno. Prazno znači bez ograničenja |
+| `concurrency_max_wait_seconds` | Opcionalno. Izvođenje koje čeka duže bilježi se kao `expired`. Prazno znači da čeka koliko god je potrebno |
+
+### 202 Accepted
+
+Poziv koji se odmah pokrene ponaša se točno onako kako je opisano u odjeljku Format Odgovora. Poziv koji mora čekati odmah prima `202 Accepted`, bez obzira na `X-Simple-Response`, sa zaglavljem `Location` koje pokazuje na njegov URL statusa:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Polje | Opis |
+|---|---|
+| `queue.position` | Mjesto ovog izvođenja u redu, počevši od 1 |
+| `queue.size` | Izvođenja koja trenutno čekaju |
+| `queue.running` | Izvođenja koja trenutno drže mjesto |
+| `queue.limit` | Ograničenje istodobnosti workflowa |
+| `status_token` | Samo za anonimne workflowe. Vraća se jednom, u ovom odgovoru |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` odgovara sa stanjem izvođenja. Pozovite ga s istim vjerodajnicama koje su pokrenule izvođenje: sesijom ili JWT-om, [tokenom za izvršavanje](./execution-tokens.md) ili prilagođenim zaglavljem workflowa. Anonimni workflow nema vjerodajnice za provjeru, pa pošaljite `status_token` iz odgovora 202 u zaglavlju `X-Heym-Run-Token`. Token se nikada ne čita iz query stringa. Pogrešan ili nedostajući token dobiva `404`, isto kao i nepoznato izvođenje.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Značenje (izvođenje koje mora čekati na mjesto istodobnosti prima umjesto toga [odgovor 202](#202-accepted)) |
+|---|---|
+| `queued` | Čeka na mjesto; `queue` prikazuje položaj |
+| `running` | Ima dodijeljeno mjesto i izvršava se |
+| `success` / `error` | Dovršeno; polja `outputs` i `error` su popunjena |
+| `pending` | Pauzirano radi [ljudskog pregleda](./human-in-the-loop.md) |
+| `cancelled` | Otkazano iz [Povijesti izvršavanja](./execution-history.md) |
+| `expired` | Čekalo je duže od `concurrency_max_wait_seconds` i nikada se nije pokrenulo |
+
+Šaljite upit svakih nekoliko sekundi dok status ne prestane biti `queued` ili `running`. Izvođenje u redu izvršit će se čak i ako ga nitko ne provjerava.
+
+### Red čekanja je pun
+
+Kada je postavljeno `concurrency_max_queue` i već čeka toliki broj izvođenja, poziv se odbija s `429 Concurrency queue is full` i unosom `queue_full` u povijesti izvođenja. Ništa se ne stavlja u red čekanja.
+
 ## Format Odgovora
 
 Endpoint vraća JSON:

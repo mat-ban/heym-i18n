@@ -52,6 +52,8 @@ Dopo aver avviato un'esecuzione, il drawer mostra:
 
 `pending` indica che il workflow è in attesa di un'azione successiva, come una revisione umana.
 
+Le esecuzioni del Quick Drawer sono esecuzioni di produzione, quindi un workflow con un [limite di concorrenza](./webhooks.md#concurrency-limit-and-queued-runs) può metterle in attesa. Mentre l'esecuzione è in coda, lo stato indica **Waiting in queue (2/5)**; passa a "running" quando l'esecuzione si avvia e mostra il risultato al termine, senza avanzamento passo-passo. Un'esecuzione scaduta nella coda o annullata durante l'attesa termina con `error`.
+
 Un'esecuzione con file passa attraverso il link di caricamento monouso del trigger: il pannello richiede un link al workflow, vi carica il file e mostra il risultato al termine del caricamento. Le esecuzioni con file mostrano lo stato finale e gli output ma non l'avanzamento passo-passo, e sono anch'esse contrassegnate con `Quick Drawer` nella cronologia. Il file scelto viene rimosso dopo ogni esecuzione, poiché un link accetta un solo file.
 
 ## Memoria del Browser

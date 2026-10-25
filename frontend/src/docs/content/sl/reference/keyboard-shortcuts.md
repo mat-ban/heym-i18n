@@ -105,3 +105,5 @@ Te bližnjice so na voljo v pogovornem oknu Zgodovina izvajanja in v panelu Sled
 - [Struktura workflow](./workflow-structure.md) – Oblika vozlišč in robov
 - [Izvršni vozlišče](../nodes/execute-node.md) – Klici pod-workflow (`Ctrl + Shift + O`)
 - [Hiter začetek](../getting-started/quick-start.md) – Zgradite svoj prvi workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

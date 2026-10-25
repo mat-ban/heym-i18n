@@ -827,6 +827,22 @@
         "waiting": "Čakanje",
         "neutral": "Nevtralno"
       }
+    },
+    "concurrencyLimit": "Omejitev sočasnosti",
+    "concurrencyLimitHelp": "Produkcijski zagoni (Webhooki, Cron, MCP, Portal, Triggerji) nad omejitvijo čakajo v čakalni vrsti FIFO. Preizkusni zagoni v urejevalniku se vedno začnejo takoj.",
+    "maxConcurrentRuns": "Največ sočasnih zagonov",
+    "maxQueueSizeOptional": "Največja velikost čakalne vrste (neobvezno)",
+    "emptyNoLimit": "Prazno = brez omejitve",
+    "maxWaitOptional": "Najdaljše čakanje (sekunde, neobvezno)",
+    "emptyWaitAsLong": "Prazno = čakaj, kolikor je potrebno",
+    "concurrencyQueueHelp": "Polna čakalna vrsta odgovori s 429. Zagon, ki čaka dlje od najdaljšega časa čakanja, se zabeleži kot potekel.",
+    "rag": {
+      "hybridSearch": "Hibridno iskanje",
+      "hybridSearchHelp": "Združite vektorsko podobnost z ujemanjem ključnih besed BM25, da se najdejo tudi natančni izrazi, kot so ID-ji, imena in kode napak.",
+      "hybridScore": "Hibridna ocena (0-1)",
+      "similarityScore": "Ocena podobnosti",
+      "vectorSimilarity": "Vektorska podobnost",
+      "bm25Score": "Ocena BM25"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Vprašaj AI",
     "askAiTitle": "Vprašajte pomočnika Chat o tem zagonu",
-    "noNodeSpans": "Za ta zagon niso bili zabeleženi spani vozlišč."
+    "noNodeSpans": "Za ta zagon niso bili zabeleženi spani vozlišč.",
+    "queuedProgress": "V čakalni vrsti {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Nalaganje portala ...",

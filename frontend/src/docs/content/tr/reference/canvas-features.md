@@ -148,3 +148,5 @@ Tam dialog ayrıntıları için [Webhooks](./webhooks.md#run-with-curl-dialog) v
 - [Execution History](./execution-history.md) – Geçmiş çalıştırmalar
 - [Templates](../tabs/templates-tab.md) – Workflow'ları ve node'ları kaydedin ve yeniden kullanın
 - [Contextual Showcase](./contextual-showcase.md) – Düzenleyicide bulunan kompakt sayfa kılavuzu
+
+- [Canvas İşbirliği](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

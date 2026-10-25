@@ -111,6 +111,10 @@ De image-tag moet de versie zijn die main draait, en beide sleutels moeten exact
 | Aan | Haal een worker uit de rotatie zonder deze te stoppen — lopende uitvoeringen worden afgerond, geen nieuwe worden toegewezen. Vergrendeld aan voor de main-instantie: werk voor bestanden, plugins en coding-agents draait daar wat de schakelaar ook zegt |
 | Gewicht | Het aandeel in de verdeelbare uitvoeringen |
 
+## Concurrency-limieten in een cluster
+
+De [concurrency-limiet](./webhooks.md#concurrency-limit-and-queued-runs) van een workflow wordt geteld in PostgreSQL en geldt dus voor elke instantie en elk proces: twee instanties voeren nooit meer uitvoeringen van één workflow uit dan de limiet toestaat. Een uitvoering die op een slot heeft gewacht, wordt bij het starten volgens dezelfde regels geplaatst als elke andere uitvoering, zodat een uitvoering die op main moet blijven dat nog steeds doet. De queue-worker die deze uitvoeringen verwerkt, start nu op elke installatie, inclusief een enkele instantie, waar deze alleen de uitvoeringen claimt die door de eigen instantie in de wachtrij zijn geplaatst. Dit betekent dat een enkele instantie ook de queue wake-up `LISTEN`-verbinding in elk proces vasthoudt; begroot de verbindingen daarom op dezelfde manier als voor een cluster-instantie.
+
 ## Uitvoeringsgeschiedenis
 
 Elke uitvoering in de uitvoeringsgeschiedenis vermeldt de instantie die deze heeft uitgevoerd, en beide geschiedenisdialogen kunnen filteren op één instantie. Het filter matcht op de id van de instantie terwijl de naam wordt getoond, dus het hernoemen van een instantie herschrijft niet wat oude uitvoeringen vermelden.

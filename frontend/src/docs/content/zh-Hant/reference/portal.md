@@ -32,6 +32,10 @@
 3. **Execute**：`POST /api/portal/{slug}/execute` – Portal 聊天 UI 會呼叫此 Endpoint（啟用時，內部會改用其串流變體）；終端使用者透過聊天介面互動，而非直接呼叫 API。
 4. **Stop**：`POST /api/portal/{slug}/executions/{execution_id}/cancel` – 當使用者在 Portal 執行期間按下 **Stop** 時發出請求
 
+## 並行限制
+
+當 Workflow 設定了[並行限制](./webhooks.md#concurrency-limit-and-queued-runs)且所有槽位皆被佔用時，Portal 訊息會等待輪到它，而不是立即執行。在執行開始前，聊天進度列會顯示 **Waiting in queue (2/5)**，隨後如往常般顯示回答。即使使用者關閉頁面，執行仍會繼續進行。點擊 **Stop** 會將等待中的執行從佇列中移除。當佇列已滿時，訊息將會失敗並提示 "Concurrency queue is full"。在佇列中等待過的執行不會逐個 Token 地串流傳輸答案；完整答案會在執行完成時一次性顯示。
+
 ## Portal 執行中的 HITL
 
 若 Portal Workflow 執行至啟用 [Human-in-the-Loop](./human-in-the-loop.md) 的 [Agent 節點](../nodes/agent-node.md)，Portal 回應會顯示審查連結，而非呈現空白。

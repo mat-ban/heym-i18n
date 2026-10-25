@@ -147,3 +147,5 @@ Lihat [Webhooks](./webhooks.md#run-with-curl-dialog) untuk detail lengkap dialog
 - [Execution History](./execution-history.md) – Riwayat eksekusi
 - [Templates](../tabs/templates-tab.md) – Simpan dan gunakan kembali Workflow dan Node
 - [Contextual Showcase](./contextual-showcase.md) – Panduan halaman ringkas yang tersedia di editor
+
+- [Kolaborasi Canvas](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

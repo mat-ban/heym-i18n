@@ -148,7 +148,7 @@ AI Assistant được vận hành bởi một **workflow DSL** (ngôn ngữ đ�
    - User Rules của bạn được thêm vào dưới dạng "User Custom Rules"
    - JSON của workflow hiện tại khi bạn đang chỉnh sửa một workflow có sẵn
    - Danh sách các workflow khả dụng nếu bạn dùng node Execute
-   - Tên, loại và id của các credential của riêng bạn (không bao giờ là giá trị của chúng)
+   - Tên, loại và id của các credential bạn sở hữu hoặc được chia sẻ với bạn (không bao giờ là giá trị của chúng)
    - Tên, id, mô tả và các cột của các data table mà bạn có thể dùng (không bao giờ là các hàng của chúng)
 3. Mô hình trả về một khối JSON workflow duy nhất (với `nodes` và `edges`). Frontend phân tích nó và áp dụng lên canvas.
 

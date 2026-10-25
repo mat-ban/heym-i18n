@@ -32,6 +32,10 @@ Configureer in de editor: de knop **Portaal** in de workflow-header opent het di
 3. **Uitvoeren**: `POST /api/portal/{slug}/execute` – De portaal-chat-UI roept dit aan (of intern de streaming-variant wanneer ingeschakeld); eindgebruikers communiceren via de chat-interface en roepen de API niet rechtstreeks aan.
 4. **Stoppen**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Aangeroepen wanneer de gebruiker op **Stop** drukt tijdens een actieve portaal-uitvoering
 
+## Gelijktijdigheidslimiet
+
+Wanneer de workflow een [gelijktijdigheidslimiet](./webhooks.md#concurrency-limit-and-queued-runs) heeft en alle slots bezet zijn, wacht een portal-bericht op zijn beurt in plaats van meteen te worden uitgevoerd. De chat toont **Waiting in queue (2/5)** in de voortgangsregel totdat de run start, en daarna het antwoord zoals gebruikelijk. De run wordt nog steeds uitgevoerd als de gebruiker de pagina sluit. **Stop** verwijdert een wachtende run uit de wachtrij. Wanneer de wachtrij vol is, mislukt het bericht met "Concurrency queue is full". Een run die in de wachtrij heeft gewacht, streamt het antwoord niet token voor token; het volledige antwoord verschijnt zodra de run is voltooid.
+
 ## HITL in portaal-uitvoeringen
 
 Als een portaal-workflow een [Agent-node](../nodes/agent-node.md) bereikt met [Human-in-the-Loop](./human-in-the-loop.md) ingeschakeld, toont het portaal-antwoord een reviewlink in plaats van leeg te blijven.

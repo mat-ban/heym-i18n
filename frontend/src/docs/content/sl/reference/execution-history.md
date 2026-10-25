@@ -107,6 +107,8 @@ Oba pogovorna okna zgodovine prikazujeta **trenutno potekajoča izvajanja** na v
 - Po preklicu se tekoči vnos na naslednjem osveževanju izbriše; pritisnite **Osveži**, da seznam posodobite ročno.
 - Če prekličete zagon, ki je že končan, je zahteva brez učinka.
 
+Zagoni, ki čakajo na [režo sočasnosti](./webhooks.md#concurrency-limit-and-queued-runs), so navedeni v istem razdelku z oznako **Queued 2/5**, njihovim mestom v vrsti in velikostjo čakalne vrste. Nimajo gumba **Open live**, ker se še nič ne izvaja; **Cancel** odstrani čakajoči zagon iz čakalne vrste in ga zabeleži kot `cancelled`. Zagon, ki je čakal dlje od najdaljšega časa čakanja workflowa, se zabeleži kot `expired`, zagon, ki ga je polna čakalna vrsta zavrnila, pa kot `queue_full`; oba imata svojo značko na seznamu zagonov.
+
 Živa povezava je `/workflows/{workflowId}/{executionId}`. Opazovalec je samo za branje: zapustitev urejevalnika samo prekine to zavihko brskalnika in nikoli ne ustavi workflow. Aktivne slike se delijo preko PostgreSQL, tako da odpiranje zagona še vedno deluje, ko zahteva za sprožitev in urejevalnik prispejo na različne delavce v ozadju.
 
 ## Obnova po zrušitvi

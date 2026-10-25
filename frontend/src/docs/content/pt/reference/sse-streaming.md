@@ -25,12 +25,17 @@ Cada frame SSE é JSON delimitado por nova linha e prefixado com `data: `.
 
 | Tipo de evento | Quando é emitido | Campos principais |
 |------------|--------------------|------------|
-| `execution_started` | Imediatamente após o pedido ser aceite | `execution_id`, `server_now_ms` |
+| `queued` | O workflow atingiu o seu [limite de simultaneidade](./webhooks.md#concurrency-limit-and-queued-runs); enviado novamente sempre que o lugar da execução é alterado | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Imediatamente após o pedido ser aceite, ou quando uma execução em fila começa | `execution_id`, `server_now_ms` |
 | `node_start` | Imediatamente antes de um nó iniciar a execução | `node_id`, `node_label`, `started_at_ms`, `message` opcional |
 | `node_retry` | Quando um nó é repetido | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Após um nó terminar | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Quando um nó Output retorna antecipadamente | `node_label`, `output` |
 | `execution_complete` | Após o workflow terminar | `status`, `outputs`, `execution_time_ms` |
+
+### Execuções na fila
+
+Quando o workflow atinge o seu limite de simultaneidade, o stream permanece aberto e envia eventos `queued` enquanto a execução aguarda. Uma execução na fila é processada no worker em segundo plano, possivelmente noutro processo, pelo que o seu stream transmite `execution_started` quando a execução começa e `execution_complete` quando termina, mas nenhum evento `node_start`, `node_complete` ou de tokens de permeio. O seu `execution_complete` tem um `node_results` vazio; abra a execução no [Histórico de execuções](./execution-history.md) para obter detalhes do nó. O fecho da ligação não cancela uma execução na fila. Quando a fila está cheia, o pedido é respondido com `429` antes da abertura do stream.
 
 ## Mensagens de Início por Nó
 

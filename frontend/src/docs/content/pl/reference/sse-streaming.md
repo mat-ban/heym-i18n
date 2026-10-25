@@ -25,12 +25,17 @@ Każda ramka SSE to JSON rozdzielany znakami nowej linii, poprzedzony prefiksem 
 
 | Typ zdarzenia | Moment emisji | Kluczowe pola |
 |------------|--------------------|------------|
-| `execution_started` | Natychmiast po zaakceptowaniu żądania | `execution_id`, `server_now_ms` |
+| `queued` | Workflow osiągnął swój [limit współbieżności](./webhooks.md#concurrency-limit-and-queued-runs); wysyłane ponownie za każdym razem, gdy zmienia się miejsce uruchomienia | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Natychmiast po zaakceptowaniu żądania lub po rozpoczęciu uruchomienia w kolejce | `execution_id`, `server_now_ms` |
 | `node_start` | Tuż przed rozpoczęciem wykonania węzła | `node_id`, `node_label`, `started_at_ms`, opcjonalnie `message` |
 | `node_retry` | Gdy węzeł ponawia próbę | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Po zakończeniu pracy węzła | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Gdy węzeł Output zwraca wynik wcześniej | `node_label`, `output` |
 | `execution_complete` | Po zakończeniu workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Uruchomienia w kolejce
+
+Gdy workflow osiągnie limit współbieżności, strumień pozostaje otwarty i wysyła zdarzenia `queued`, podczas gdy uruchomienie oczekuje. Uruchomienie w kolejce jest wykonywane przez proces roboczy w tle (background worker), być może w innym procesie, dlatego jego strumień przenosi `execution_started`, gdy uruchomienie wystartuje, oraz `execution_complete`, gdy się zakończy, ale nie zawiera żadnych zdarzeń `node_start`, `node_complete` ani zdarzeń tokenów pomiędzy nimi. Jego `execution_complete` ma pustą tablicę `node_results`; otwórz uruchomienie w [Historii wykonań](./execution-history.md), aby poznać szczegóły węzłów. Zamknięcie połączenia nie anuluje uruchomienia w kolejce. Gdy kolejka jest pełna, na żądanie zwracana jest odpowiedź `429`, zanim strumień zostanie otwarty.
 
 ## Komunikaty startowe dla poszczególnych węzłów
 

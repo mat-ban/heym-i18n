@@ -30,7 +30,7 @@ Consulte [Triggers](./triggers.md) para todos os pontos de entrada.
 | [Codex](../nodes/codex-node.md) | Executa o Codex CLI local em um repositório do GitHub usando um token de acesso ChatGPT/Codex | 1 | 1, mais saída `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Executa o OpenCode CLI em um repositório do GitHub em um contêiner reforçado usando uma chave de API do gateway OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Chama uma ferramenta MCP específica diretamente, sem que um LLM a selecione | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Insere, faz upsert, exclui ou pesquisa em um [vector store](../tabs/vectorstores-tab.md) Qdrant ou Postgres (pgvector) para RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Insere, faz upsert, exclui ou pesquisa (vetorial ou híbrida vetorial + BM25) em um [vector store](../tabs/vectorstores-tab.md) Qdrant ou Postgres (pgvector) para RAG | 1 | 1 |
 
 ## Nós de Lógica
 

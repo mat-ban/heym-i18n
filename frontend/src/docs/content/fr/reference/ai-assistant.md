@@ -148,7 +148,7 @@ L'Assistant IA s'appuie sur un **workflow DSL** (langage dédié) qui décrit le
    - Vos Règles utilisateur ajoutées sous la mention « User Custom Rules »
    - Le JSON du workflow en cours lorsque vous éditez un workflow existant
    - La liste des workflows disponibles si vous utilisez le nœud Execute
-   - Les noms, types et ids de vos propres identifiants (jamais leurs valeurs)
+   - Les noms, types et ids des identifiants que vous possédez ou qui ont été partagés avec vous (jamais leurs valeurs)
    - Les noms, ids, descriptions et colonnes des tables de données que vous pouvez utiliser (jamais leurs lignes)
 3. Le modèle renvoie un unique bloc JSON de workflow (avec `nodes` et `edges`). Le frontend l'analyse et l'applique au canvas.
 ### Identifiants

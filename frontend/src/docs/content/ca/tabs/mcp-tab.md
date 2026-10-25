@@ -36,6 +36,21 @@ Cada workflow es pot exposar com a eina MCP:
 
 Les targetes de workflow mostren la descripció i una previsualització dels noms dels camps d'entrada perquè pugueu veure què espera cada eina abans d'habilitar-la.
 
+
+### Execucions en cua i heym_execution_status
+
+Un workflow amb un [límit de concurrència](../reference/webhooks.md#concurrency-limit-and-queued-runs) pot estar ocupat quan un client el crida. La crida retorna immediatament un resultat que no és un error:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+El client sondeja l'eina `heym_execution_status` amb aquest `execution_id`. Retorna el mateix cos que l'[URL d'estat](../reference/webhooks.md#status-url): `queued` amb la posició actual, `running`, i després `success` o `error` amb les sortides. Només troba execucions de workflows exposats pel mateix servidor. L'eina apareix al servidor per defecte i a cada servidor amb nom només mentre almenys un dels seus workflows tingui un límit de concurrència. Quan la cua del workflow està plena, la crida retorna l'error "Concurrency queue is full".
 ## Eina de xat de Heym
 
 La secció **Heym Capabilities** converteix el motor de la pestanya Chat en una única eina MCP anomenada `heym_chat`. Habilitau-la al servidor predeterminat, a qualsevol servidor amb nom o a tots dos — cada superfície manté el seu propi commutador i la seva pròpia selecció de model.
@@ -49,6 +64,7 @@ Quan està activada, `heym_chat` apareix a `tools/list` juntament amb les eines 
 - Informa sobre què s'està executant en aquest moment: quantes execucions estan actives, els noms dels seus workflows, quant de temps porta en execució cadascuna, el Node en què es troba actualment i un enllaç a l'execució en directe
 - Llista taulers, crea targetes i llegeix el detall de les targetes a la [pestanya Board](./board-tab.md)
 - Llista les vostres taules de dades amb les seves columnes, en crea de noves i les connecta als workflows que construeix
+- Crear o actualitzar les vostres credencials a la pàgina pròpia de Heym (vegeu [Credencials](#credencials))
 - Llegeix equips i variables globals, i cerca a la documentació
 - Aprova, edita o rebutja revisions pendents de human-in-the-loop
 
@@ -58,14 +74,28 @@ Les capacitats afegides posteriorment a la pestanya Chat esdevenen disponibles a
 
 `heym_chat` sempre executa el motor del Chat en mode de construcció. En una sola crida, l'assistent pot desar un workflow nou, executar-lo amb entrades d'exemple realistes, llegir l'informe d'execució, corregir el que hagi fallat i tornar-lo a executar, fins a cinc execucions de prova per crida. Quan l'última execució de l'últim desament té èxit, acaba amb un resum d'una frase i la resposta finalitza amb `Verified: the latest test run of the saved workflow passed.`
 
+Quan una crida crea o edita un workflow, la resposta llista cadascun amb el seu enllaç complet a l'editor, com ara `https://heym.example.com/workflows/<id>`, i els enllaços dins de la resposta de l'assistent també són enllaços complets. Utilitzen la vostra adreça Heym configurada (`FRONTEND_URL`) i s'obren per a les persones que han iniciat sessió a Heym i tenen accés a aquest workflow.
+
 - Les execucions de prova són execucions reals. Els seus efectes secundaris tenen lloc i apareixen a l'historial d'execucions del workflow com qualsevol altra execució.
 - Els desaments segueixen el camí de l'editor: un canvi al graf conserva el graf anterior a l'**Edit History** del workflow.
 - Per modificar un workflow construït anteriorment, continueu el fil amb el mateix `conversation_id`. L'assistent actualitza aquest workflow en lloc de crear-ne un de nou, i només modifica els workflows que podeu editar.
 - Quan s'esgoten les cinc execucions de prova, l'assistent s'atura i explica què continua fallant.
 
-Les credencials es queden a la interfície d'usuari: `heym_chat` mai les llista, les tria ni les crea. Quan construeix o edita un workflow, els Nodes nous que necessiten una credencial es deixen buits i la resposta els anomena, de manera que els podeu configurar a l'editor.
-
 Les taules de dades són diferents. Una taula no conté cap secret, de manera que `heym_chat` pot llistar les vostres taules, preguntar quina ha d'utilitzar un workflow i crear-ne una de nova amb les seves columnes. Mai llegeix ni escriu files.
+
+### Credencials
+
+`heym_chat` veu les credencials que teniu i les compartides amb vós, per nom i tipus, de la mateixa manera que la pestanya Chat. Quan un workflow que construeix necessita una credencial, pregunta quina utilitzar mitjançant una pregunta al resultat. Responeu-la amb el mateix `conversation_id`.
+
+Per afegir una credencial o actualitzar-ne una de vostra, l'assistent obre el formulari de credencials de Heym en una pàgina de Heym, `/credentials/setup/<id>`. Inicieu sessió allà, introduïu la clau o connecteu el compte i deseu. El valor va directament a Heym: el client MCP i el seu model només aprenen el nom i el tipus de la credencial. No enganxeu claus al client MCP; demaneu el formulari en lloc d'això.
+
+| Client | Què passa |
+|--------|-----------|
+| Admet elicitació d'URL MCP | El client us demana que obriu la pàgina de Heym. La crida espera mentre ompliu el formulari, fins a deu minuts, i després continua amb la nova credencial. |
+| Qualsevol altre | El resultat inclou l'enllaç i demana al client que torni a cridar `heym_chat` amb `wait_for_credential_form`. Aquesta crida espera fins a cinc minuts mentre ompliu el formulari i després reprèn la conversa. Si el client no espera, deseu el formulari i responeu amb el mateix `conversation_id`; la propera crida sabrà que el formulari s'ha desat i quina credencial ha creat. |
+
+La pàgina només s'obre per al compte de Heym que ha iniciat la sol·licitud, de manera que un enllaç reenviat és inútil per a qualsevol altra persona. Un formulari roman obert durant 24 hores i es pot rebutjar des de la pàgina. Un cop el deseu o el declineu, el pas a la conversa de la pestanya Chat en mostra el resultat.
+
 
 ### Credencial i model
 
@@ -78,12 +108,15 @@ Les taules de dades són diferents. Una taula no conté cap secret, de manera qu
 
 Si falta qualsevol dels dos, l'eina encara apareix a `tools/list`, però cada crida retorna un error que us indica que completeu la configuració en aquesta pestanya.
 
+
+Els nodes LLM i Agent en un workflow creat per `heym_chat` s'executen amb aquesta credencial i model, inclosa una credencial compartida amb vós, de manera que les execucions de prova funcionen sense cap pas de configuració addicional. Quan `heym_chat` edita un workflow, els nodes LLM i Agent que ja tenen una credencial la conserven juntament amb el seu model.
 ### Arguments i historial
 
 | Argument | Obligatori | Descripció |
 |----------|----------|-------------|
 | `message` | Sí | La instrucció o pregunta, en llenguatge natural. |
 | `conversation_id` | No | Un `conversation_id` d'un resultat anterior de `heym_chat`, per continuar aquell fil. |
+| `wait_for_credential_form` | No | Amb `conversation_id`: esperar que l'usuari desi o rebutgi el formulari de credencials obert pel fil i després enviar `message`. |
 
 Cada crida s'escriu al vostre historial de la [pestanya Chat](./chat-tab.md) com una conversa normal, marcada amb una icona d'endoll a la llista de converses. Els missatges, les targetes d'eines i les pauses de clarificació es veuen exactament com una conversa que hàgiu iniciat vosaltres mateixos, i podeu obrir el fil i continuar parlant al navegador. Cada resultat retorna el seu `conversation_id` perquè el client MCP pugui continuar el mateix fil en lloc d'obrir-ne un de nou a cada crida.
 

@@ -52,6 +52,8 @@ Po rozpoczęciu uruchomienia panel wyświetla:
 
 `pending` oznacza, że workflow oczekuje na późniejsze działanie, takie jak przegląd przez człowieka.
 
+Uruchomienia z Szybkiego Panelu (Quick Drawer) to uruchomienia produkcyjne, więc workflow z [limitem współbieżności](./webhooks.md#concurrency-limit-and-queued-runs) może sprawić, że będą musiały poczekać. Podczas gdy uruchomienie stoi w kolejce, jego status to **Waiting in queue (2/5)**; zmienia się na "running", gdy uruchomienie wystartuje, a po jego zakończeniu wyświetla wynik bez postępu krok po kroku. Uruchomienie, które wygasło w kolejce lub zostało anulowane podczas oczekiwania, kończy się statusem `error`.
+
 Uruchomienie z plikiem odbywa się za pośrednictwem jednorazowego linku przesyłania z triggera: panel prosi workflow o link, przesyła pod niego plik i wyświetla wynik po zakończeniu przesyłania. Uruchomienia z plikiem pokazują status końcowy i dane wyjściowe, ale bez postępu krok po kroku, a w historii są również oznaczane tagiem `Quick Drawer`. Wybrany plik jest czyszczony po każdym uruchomieniu, ponieważ jeden link przyjmuje jeden plik.
 
 ## Pamięć Przeglądarki

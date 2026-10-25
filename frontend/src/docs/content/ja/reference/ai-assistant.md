@@ -148,7 +148,7 @@ AI Assistant は、ノード、エッジ、式を記述する **workflow DSL**�
    - 「User Custom Rules」として追加された User Rules
    - 既存の Workflow を編集している場合は、現在の Workflow JSON
    - Execute ノードを使用する場合は、利用可能な Workflow のリスト
-   - 所有する Credential の名前、タイプ、ID（値は含まれません）
+   - 所有している、または共有されている Credential の名前、タイプ、ID（値は含まれません）
    - 使用可能なデータテーブルの名前、ID、説明、列（行は含まれません）
 3. モデルが単一の Workflow JSON ブロック（`nodes` と `edges` を含む）を返します。フロントエンドがそれを解析し、キャンバスに適用します。
 

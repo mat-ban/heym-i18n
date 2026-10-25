@@ -111,6 +111,10 @@ Image tag musí byť verzia, ktorú spúšťa main, a oba kľúče musia byť sk
 | On | Vyradí workera z rotácie bez toho, aby ste ho zastavili — spustené spustenia dokončí, žiadne nové sa mu nepriradia. Pre inštanciu main je uzamknutý: práca so súbormi, pluginmi a coding-agentmi beží tam bez ohľadu na to, čo hovorí prepínač |
 | Weight | Jeho podiel na distribúcii behov |
 
+## Limity súbehu v clusteri
+
+[Limit súbehu](./webhooks.md#concurrency-limit-and-queued-runs) workflow sa počíta v PostgreSQL, takže platí naprieč všetkými inštanciami a procesmi: dve inštancie nikdy nespustia viac behov jedného workflow, než povoľuje limit. Beh, ktorý čakal na slot, je pri štarte umiestnený podľa rovnakých pravidiel ako akýkoľvek iný beh, takže beh vyžadujúci zotrvanie na main na nej zostáva. Worker frontu vykonávajúci tieto behy sa teraz spúšťa pri každej inštalácii vrátane samostatnej inštancie, kde spracováva iba behy zaradené do frontu vlastnou inštanciou. To znamená, že aj samostatná inštancia udržiava v každom procese prebúdzacie spojenie `LISTEN`; dimenzujte preto jej spojenia rovnako ako pri clusterovej inštancii.
+
 ## História spustení
 
 Každé spustenie v histórii spustení uvádza inštanciu, ktorá ho vykonala, a oba dialógy histórie dokážu filtrovať na jednu inštanciu. Filter sa zhoduje podľa id inštancie, pričom zobrazuje jej názov, takže premenovanie inštancie neprepíše to, čo hovoria staré spustenia.

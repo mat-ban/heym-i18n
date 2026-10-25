@@ -32,6 +32,10 @@
 3. **Execute**: `POST /api/portal/{slug}/execute` – Portal 채팅 UI가 이를 호출합니다(또는 활성화된 경우 내부적으로 스트리밍 변형을 호출). 최종 사용자는 API를 직접 호출하는 것이 아니라 채팅 인터페이스를 통해 상호작용합니다.
 4. **Stop**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – 사용자가 활성 Portal 실행 중 **Stop**을 누를 때 요청됩니다
 
+## 동시성 제한
+
+워크플로에 [동시성 제한](./webhooks.md#concurrency-limit-and-queued-runs)이 있고 모든 슬롯이 사용 중인 경우, Portal 메시지는 즉시 실행되는 대신 차례를 기다립니다. 실행이 시작될 때까지 채팅 진행률 표시줄에 **Waiting in queue (2/5)**가 표시되고, 그 후 평소처럼 답변이 표시됩니다. 사용자가 페이지를 닫아도 실행은 계속 진행됩니다. **Stop**을 누르면 대기 중인 실행이 대기열에서 제거됩니다. 대기열이 가득 차면 메시지는 "Concurrency queue is full" 오류와 함께 실패합니다. 대기열에서 대기한 실행은 토큰 단위로 답변을 스트리밍하지 않으며, 완료 시 전체 답변이 한 번에 표시됩니다.
+
 ## Portal 실행에서의 HITL
 
 Portal Workflow가 [Human-in-the-Loop](./human-in-the-loop.md)가 활성화된 [Agent 노드](../nodes/agent-node.md)에 도달하면, Portal 응답은 비어 있는 대신 review 링크를 표시합니다.

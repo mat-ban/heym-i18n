@@ -30,7 +30,7 @@ Pogledajte [Triggers](./triggers.md) za sve ulazne točke.
 | [Codex](../nodes/codex-node.md) | Pokreće lokalni Codex CLI protiv GitHub repozitorija koristeći ChatGPT/Codex pristupni token | 1 | 1, plus `question` izlaz |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Pokreće OpenCode CLI protiv GitHub repozitorija u zaštićenoj posudi koristeći OpenCode Go gateway API ključ | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Poziva određeni MCP alat izravno bez odabira LLM-a | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Umetanje, ažuriranje, brisanje ili pretraživanje u Qdrant ili Postgres (pgvector) [vektorskom spremištu](../tabs/vectorstores-tab.md) za RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Umetanje, ažuriranje, brisanje ili pretraživanje (vektorsko ili hibridno vektorsko + BM25) u Qdrant ili Postgres (pgvector) [vektorskom spremištu](../tabs/vectorstores-tab.md) za RAG | 1 | 1 |
 
 ## Logički čvorovi
 

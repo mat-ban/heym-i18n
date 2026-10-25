@@ -108,6 +108,73 @@ Määritä workflowkohtaisesti: `rate_limit_requests` ja `rate_limit_window_seco
 | `rate_limit_window_seconds` | Ikkunan kesto sekunteina |
 
 `test_run` -pyynnöt ohittavat kutsurajoitukset.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Samanaikaisuusraja ja jonotetut ajot
+
+Workflow voi rajoittaa samanaikaisesti suoritettavien tuotantoajojen määrää. Ota **Samanaikaisuusraja** käyttöön workflow-tason **Properties**-paneelissa ja aseta **Samanaikaisten ajojen enimmäismäärä**. Omistajat ja muokkausoikeuden omaavat yhteistyökumppanit voivat muuttaa tätä. Raja on oletusarvoisesti pois päältä.
+
+Kun raja saavutetaan, uudet ajot odottavat FIFO-jonossa (ensimmäisenä sisään, ensimmäisenä ulos). Tämä kattaa jokaisen tuotannon aloituspisteen: tämän endpointin, [striimausendpointin](./sse-streaming.md), [Portalin](./portal.md), [Quick Drawerin](./quick-drawer.md), [MCP:n](../tabs/mcp-tab.md) ja jokaisen [triggerin](./triggers.md). Editorin omat testiajot käynnistyvät aina välittömästi eivätkä varaa paikkaa. Parametrin `test_run=true` lähettäminen ilman kirjautunutta istuntoa, jolla on oikeus avata kyseinen workflow, ei ohita jonoa.
+
+| Asetus | Kuvaus |
+|---|---|
+| `concurrency_limit` | Sallitut samanaikaiset tuotantoajot. `0` kytkee rajan pois päältä |
+| `concurrency_max_queue` | Valinnainen. Samanaikaisesti jonossa sallittujen ajojen määrä. Tyhjä tarkoittaa rajatonta |
+| `concurrency_max_wait_seconds` | Valinnainen. Tätä pidempään odottava ajo merkitään tilaan `expired`. Tyhjä tarkoittaa rajatonta odotusaikaa |
+
+### 202 Accepted
+
+Välittömästi käynnistyvä kutsu toimii täsmälleen Vastemuoto-osiossa kuvatulla tavalla. Odotustilaan joutuva kutsu saa välittömästi vastauksen `202 Accepted` riippumatta otsikosta `X-Simple-Response`, ja sen mukana toimitetaan tilan URL-osoitteeseen osoittava `Location`-otsake:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Kenttä | Kuvaus |
+|---|---|
+| `queue.position` | Tämän ajon sijainti jonossa, alkaen numerosta 1 |
+| `queue.size` | Tällä hetkellä odottavat ajot |
+| `queue.running` | Tällä hetkellä paikan varaavat ajot |
+| `queue.limit` | Workflow'n samanaikaisuusraja |
+| `status_token` | Vain anonyymeille workfloweille. Palautetaan vain kerran tässä vastauksessa |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` palauttaa ajon tilan. Kutsu sitä samoilla tunnistetiedoilla, joilla ajo aloitettiin: istunnolla tai JWT:llä, [suoritustokenilla](./execution-tokens.md) tai workflow'n omalla otsakkeella. Anonyymillä workflow'lla ei ole tarkistettavia tunnistetietoja, joten lähetä 202-vastauksesta saatu `status_token` otsakkeessa `X-Heym-Run-Token`. Tokenia ei koskaan lueta kyselymerkkijonosta. Väärä tai puuttuva token saa koodin `404`, aivan kuten tuntematon suoritus.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Merkitys (ajo, joka joutuu odottamaan samanaikaisuuspaikkaa, saa sen sijaan [202-vastauksen](#202-accepted)) |
+|---|---|
+| `queued` | Odottaa paikkaa; `queue` näyttää sijainnin |
+| `running` | On saanut paikan ja sitä suoritetaan |
+| `success` / `error` | Valmis; kentät `outputs` ja `error` on täytetty |
+| `pending` | Pysäytetty [ihmistarkistusta varten](./human-in-the-loop.md) |
+| `cancelled` | Peruutettu [Suoritushistoriasta](./execution-history.md) |
+| `expired` | Odotti kauemmin kuin `concurrency_max_wait_seconds` eikä suoriutunut koskaan |
+
+Tee kysely muutaman sekunnin välein, kunnes tila ei enää ole `queued` tai `running`. Jonotettu ajo suoritetaan, vaikka kukaan ei kyselisi sen tilaa.
+
+### Jono täynnä
+
+Kun `concurrency_max_queue` on asetettu ja kyseinen määrä ajoja on jo odottamassa, kutsu hylätään koodilla `429 Concurrency queue is full` ja suoritushistoriaan lisätään merkintä `queue_full`. Mitään ei aseteta jonoon.
+
 ## Vastemuoto
 
 Endpoint palauttaa JSON-muotoisen vastauksen:

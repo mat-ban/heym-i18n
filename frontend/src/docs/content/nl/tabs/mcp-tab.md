@@ -36,6 +36,21 @@ Elke workflow kan als MCP-tool beschikbaar worden gesteld:
 
 Workflowkaarten tonen de beschrijving en een voorbeeld van de namen van invoervelden, zodat u kunt zien wat elke tool verwacht voordat u deze inschakelt.
 
+
+### Uitvoeringen in de wachtrij en heym_execution_status
+
+Een workflow met een [gelijktijdigheidslimiet](../reference/webhooks.md#concurrency-limit-and-queued-runs) kan bezet zijn wanneer een client deze aanroept. De aanroep retourneert dan direct een resultaat dat geen fout is:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+De client pollt de tool `heym_execution_status` met dat `execution_id`. Het retourneert dezelfde body als de [status-URL](../reference/webhooks.md#status-url): `queued` met de huidige positie, `running`, en vervolgens `success` of `error` met de uitvoer. Het vindt alleen uitvoeringen van workflows die dezelfde server beschikbaar stelt. De tool wordt alleen vermeld op de standaardserver en op elke benoemde server zolang ten minste één van de workflows een gelijktijdigheidslimiet heeft. Wanneer de wachtrij vol is, retourneert de aanroep de fout "Concurrency queue is full".
 ## Heym chat-tool
 
 De sectie **Heym Capabilities** verandert de engine van het Chat-tabblad in één MCP-tool met de naam `heym_chat`. Schakel deze in op de standaardserver, op een benoemde server, of op beide — elk oppervlak behoudt zijn eigen schakelaar en modelselectie.
@@ -49,6 +64,7 @@ Wanneer deze is ingeschakeld, verschijnt `heym_chat` in `tools/list` naast uw wo
 - Rapporteren wat er nu actief is: hoeveel uitvoeringen actief zijn, hun workflownamen, hoe lang elk al draait, op welk knooppunt elk zich momenteel bevindt, en een link naar de live uitvoering
 - Boards weergeven, kaarten aanmaken en kaartdetails lezen op het [Board-tabblad](./board-tab.md)
 - Uw gegevenstabellen met hun kolommen weergeven, nieuwe aanmaken en deze in de workflows verwerken die het bouwt
+- Referenties aanmaken of bijwerken op Heyms eigen pagina (zie [Referenties](#referenties))
 - Teams en globale variabelen lezen, en de documentatie doorzoeken
 - Openstaande human-in-the-loop-reviews goedkeuren, bewerken of weigeren
 
@@ -58,14 +74,28 @@ Mogelijkheden die later aan het Chat-tabblad worden toegevoegd, worden automatis
 
 `heym_chat` voert de Chat-engine altijd uit in de build-modus. In één aanroep kan de assistent een nieuwe workflow opslaan, deze uitvoeren met realistische voorbeeldinvoer, het uitvoeringsrapport lezen, herstellen wat mislukte en de workflow opnieuw uitvoeren, tot maximaal vijf testruns per aanroep. Wanneer de laatste uitvoering van de laatste opslag slaagt, rondt hij af met een samenvatting van één zin en eindigt het antwoord met `Verified: the latest test run of the saved workflow passed.`
 
+Wanneer een aanroep een workflow maakt of bewerkt, vermeldt het antwoord elk van hen met de volledige editor-link, zoals `https://heym.example.com/workflows/<id>`, en de links in het antwoord van de assistent zijn ook volledige links. Ze gebruiken uw geconfigureerde Heym-adres (`FRONTEND_URL`) en openen voor mensen die zijn aangemeld bij Heym en toegang hebben tot die workflow.
+
 - Testruns zijn echte uitvoeringen. De neveneffecten vinden daadwerkelijk plaats en ze verschijnen net als elke andere uitvoering in de uitvoeringsgeschiedenis van de workflow.
 - Opslagacties volgen het pad van de editor: een wijziging in de grafiek behoudt de vorige grafiek in de **Edit History** van de workflow.
 - Om een eerder gebouwde workflow te wijzigen, zet u de thread voort met dezelfde `conversation_id`. De assistent werkt die workflow bij in plaats van een nieuwe aan te maken, en wijzigt alleen workflows die u mag bewerken.
 - Wanneer de vijf testruns zijn verbruikt, stopt de assistent en legt hij uit wat er nog steeds mislukt.
 
-Referenties blijven in de UI: `heym_chat` vermeldt, kiest of maakt deze nooit. Wanneer het een workflow bouwt of bewerkt, blijven nieuwe knooppunten die een referentie nodig hebben leeg en noemt het antwoord deze, zodat u ze in de editor kunt instellen.
-
 Gegevenstabellen zijn anders. Een tabel bevat geen geheim, dus `heym_chat` kan uw tabellen weergeven, vragen welke een workflow moet gebruiken, en een nieuwe aanmaken met de bijbehorende kolommen. Het leest of schrijft nooit rijen.
+
+### Referenties
+
+`heym_chat` ziet de referenties die u bezit en de referenties die met u zijn gedeeld, op naam en type, op dezelfde manier als het tabblad Chat. Wanneer een workflow die het bouwt een referentie nodig heeft, vraagt het als vraag in het resultaat welke moet worden gebruikt. Beantwoord dit met hetzelfde `conversation_id`.
+
+Om een referentie toe te voegen of een eigen referentie bij te werken, opent de assistent Heyms referentieformulier op een Heym-pagina, `/credentials/setup/<id>`. U meldt zich daar aan bij Heym, voert de sleutel in of koppelt het account en slaat op. De waarde gaat rechtstreeks naar Heym: de MCP-client en zijn model leren alleen de naam en het type van de referentie kennen. Plak geen sleutels in de MCP-client; vraag in plaats daarvan om het formulier.
+
+| Client | Wat er gebeurt |
+|--------|----------------|
+| Ondersteunt MCP-URL-elicitatie | De client vraagt u om de Heym-pagina te openen. De aanroep wacht terwijl u het formulier invult (maximaal tien minuten) en gaat dan verder met de nieuwe referentie. |
+| Alle andere | Het resultaat bevat de link en vraagt de client om `heym_chat` opnieuw aan te roepen met `wait_for_credential_form`. Die aanroep wacht maximaal vijf minuten terwijl u het formulier invult en hervat vervolgens het gesprek. Als de client niet wacht, sla het formulier dan op en antwoord met hetzelfde `conversation_id`; de volgende aanroep weet dat het formulier is opgeslagen en welke referentie is aangemaakt. |
+
+De pagina opent alleen voor het Heym-account dat het verzoek heeft gestart, dus een doorgestuurde link is voor niemand anders bruikbaar. Een formulier blijft 24 uur open en kan vanaf de pagina worden afgewezen. Zodra u het opslaat of afwijst, toont de stap in het gesprek van het tabblad Chat het resultaat.
+
 
 ### Referentie en model
 
@@ -78,12 +108,15 @@ Gegevenstabellen zijn anders. Een tabel bevat geen geheim, dus `heym_chat` kan u
 
 Als een van beide ontbreekt, verschijnt de tool nog steeds in `tools/list`, maar elke aanroep retourneert een fout die aangeeft dat u de configuratie op dit tabblad moet voltooien.
 
+
+LLM- en Agent-knooppunten in een workflow die `heym_chat` bouwt, worden uitgevoerd met deze referentie en dit model, inclusief referenties die iemand met u heeft gedeeld, zodat testuitvoeringen werken zonder verdere instellingsstap. Wanneer `heym_chat` een workflow bewerkt, behouden LLM- en Agent-knooppunten die al een referentie hebben deze samen met hun model.
 ### Argumenten en geschiedenis
 
 | Argument | Vereist | Beschrijving |
 |----------|----------|-------------|
 | `message` | Ja | De instructie of vraag, in natuurlijke taal. |
 | `conversation_id` | Nee | Een `conversation_id` uit een eerder `heym_chat`-resultaat, om dat gesprek voort te zetten. |
+| `wait_for_credential_form` | Nee | Met `conversation_id`: wachten tot de gebruiker het referentieformulier dat de thread heeft geopend opslaat of weigert, en vervolgens `message` verzenden. |
 
 Elke aanroep wordt als een normaal gesprek in de geschiedenis van uw [Chat-tabblad](./chat-tab.md) vastgelegd, gemarkeerd met een stekkerpictogram in de gesprekkenlijst. Berichten, toolkaarten en verduidelijkingspauzes zien er precies zo uit als een gesprek dat u zelf bent begonnen, en u kunt het gesprek openen en in de browser blijven praten. Elk resultaat retourneert zijn `conversation_id`, zodat de MCP-client hetzelfde gesprek kan voortzetten in plaats van bij elke aanroep een nieuw gesprek te openen.
 

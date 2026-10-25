@@ -8,22 +8,23 @@
 |----------|-------|
 | Indata | 1 |
 | Utdata | 1 |
-| Autentiseringsuppgift | Jira (Cloud e-post/API-token eller Data Center användarnamn/lösenord, bas-URL, distributionsläge, valfri REST API-version) |
+| Autentiseringsuppgift | Jira (Cloud e-post/API-token, Data Center användarnamn/lösenord eller personlig åtkomsttoken, bas-URL, distributionsläge, valfri REST API-version) |
 | Utdata | `$nodeLabel.*` |
 
 ## Autentiseringsuppgift
 
-Skapa en **Jira**-autentiseringsuppgift i [fliken Autentiseringsuppgifter](../tabs/credentials-tab.md). Lagrade konfigurationsnycklar är `email`, `api_token`, `base_url`, `deployment` och valfri `api_version`. För Jira Cloud lagrar `email` Atlassian-kontots e-postadress och `api_token` lagrar Atlassian API-token. För Jira Data Center / Server lagrar samma nycklar Basic auth-användarnamnet och lösenordet. Se [Tredjepartsintegrationer](../reference/integrations.md#jira) för konfigurationssteg.
+Skapa en **Jira**-autentiseringsuppgift i [fliken Autentiseringsuppgifter](../tabs/credentials-tab.md). Lagrade konfigurationsnycklar är `email`, `api_token`, `base_url`, `deployment`, `auth_mode` och valfri `api_version`. För Jira Cloud lagrar `email` Atlassian-kontots e-postadress och `api_token` lagrar Atlassian API-token. För Jira Data Center / Server lagrar samma nycklar Basic auth-användarnamnet och lösenordet, eller med `auth_mode: pat` lagrar `api_token` en personlig åtkomsttoken som skickas som Bearer-token och `email` används inte. Se [Tredjepartsintegrationer](../reference/integrations.md#jira) för konfigurationssteg.
 
 | Fält | Konfigurationsnyckel | Beskrivning |
 | --- | --- | --- |
 | Jira e-post / användarnamn | `email` | Jira Cloud Atlassian-kontots e-postadress, eller Jira Data Center / Server användarnamn |
-| API-token / lösenord | `api_token` | Jira Cloud Atlassian API-token, eller Jira Data Center / Server lösenord för Basic auth |
+| Autentisering | `auth_mode` | `basic` (standard) eller `pat` (endast Data Center / Server) |
+| API-token / lösenord / personlig åtkomsttoken | `api_token` | Jira Cloud Atlassian API-token, Jira Data Center / Server lösenord för Basic auth eller en personlig åtkomsttoken för Data Center i `pat`-läge |
 | Bas-URL | `base_url` | Jira-webbplatsens URL, till exempel `https://your-domain.atlassian.net` |
 | Distribution | `deployment` | `cloud` för Jira Cloud eller `data_center` för Jira Data Center / Server |
 | REST API-version | `api_version` | Standardvärdet är `3` för Jira Cloud. Data Center / Server använder REST API v2 |
 
-Personliga åtkomsttoken och Bearer-auth för Data Center / Server stöds ännu inte av Jira-autentiseringsuppgiften.
+Personliga åtkomsttoken kräver Jira Data Center / Server 8.14 eller senare. Att byta autentiseringsmetod rensar den sparade hemligheten, så ange det nya lösenordet eller token när du byter.
 
 Använd **Test Connection** för att verifiera autentiseringsuppgiften mot den aktuella Jira-användaren.
 

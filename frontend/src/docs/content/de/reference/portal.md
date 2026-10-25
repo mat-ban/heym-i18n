@@ -32,6 +32,10 @@ Konfiguration im Editor: Die Schaltfläche **Portal** in der Workflow-Kopfzeile 
 3. **Ausführen**: `POST /api/portal/{slug}/execute` – Die Portal-Chat-UI ruft dies auf (oder intern die Streaming-Variante, wenn aktiviert); Endnutzer interagieren über die Chat-Oberfläche, nicht durch direktes Aufrufen der API.
 4. **Stoppen**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Wird angefordert, wenn der Nutzer während eines aktiven Portal-Durchlaufs **Stop** drückt
 
+## Gleichzeitigkeitslimit
+
+Wenn der Workflow über ein [Gleichzeitigkeitslimit](./webhooks.md#concurrency-limit-and-queued-runs) verfügt und alle Slots belegt sind, wartet eine Portal-Nachricht, bis sie an der Reihe ist, anstatt sofort ausgeführt zu werden. Der Chat zeigt **Waiting in queue (2/5)** in seiner Fortschrittszeile an, bis der Lauf startet, und danach wie gewohnt die Antwort. Der Lauf wird auch dann ausgeführt, wenn der Benutzer die Seite schließt. **Stop** entfernt einen wartenden Lauf aus der Warteschlange. Wenn die Warteschlange voll ist, schlägt die Nachricht mit "Concurrency queue is full" fehl. Ein Lauf, der in der Warteschlange gewartet hat, streamt seine Antwort nicht Token für Token; die gesamte Antwort wird angezeigt, sobald er beendet ist.
+
 ## HITL in Portal-Durchläufen
 
 Wenn ein Portal-Workflow einen [Agent-Knoten](../nodes/agent-node.md) mit aktiviertem [Human-in-the-Loop](./human-in-the-loop.md) erreicht, zeigt die Portal-Antwort einen Review-Link an, statt leer zu erscheinen.

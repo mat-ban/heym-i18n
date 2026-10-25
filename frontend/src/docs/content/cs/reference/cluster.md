@@ -111,6 +111,10 @@ Tag image musí odpovídat verzi, kterou spouští main, a oba klíče musí bý
 | On | Vyřadí workera z rotace, aniž by jej zastavil — běžící spuštění dokončí, žádná nová mu nebudou přidělena. U instance main je uzamčeno na zapnuto: práce se soubory, pluginy a coding agenty na ní běží bez ohledu na přepínač |
 | Weight | Jeho podíl na distribuovatelných bězích |
 
+## Limity souběhu v clusteru
+
+[Limit souběhu](./webhooks.md#concurrency-limit-and-queued-runs) workflow se počítá v PostgreSQL, takže platí napříč všemi instancemi a všemi procesy: dvě instance nikdy nespustí více běhů jednoho workflow, než limit dovoluje. Běh, který čekal na volný slot, je při spuštění umístěn podle stejných pravidel jako jakýkoli jiný běh, takže běh vyžadující setrvání na main na něm zůstává. Worker fronty provádějící tyto běhy se nyní spouští při každé instalaci, včetně samostatné instance, kde zpracovává pouze běhy zařazené do fronty vlastní instancí. To znamená, že i samostatná instance udržuje v každém procesu probouzecí spojení `LISTEN`; dimenzujte proto její připojení stejně jako u clusterové instance.
+
 ## Historie spuštění
 
 Každé spuštění v historii spuštění uvádí instanci, která je vykonala, a oba dialogy historie lze filtrovat na jednu instanci. Filtr porovnává id instance, zatímco zobrazuje její název, takže přejmenování instance nepřepíše, co uvádějí stará spuštění.

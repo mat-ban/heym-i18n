@@ -52,6 +52,8 @@ Bir çalıştırma başlattıktan sonra çekmece şunları gösterir:
 
 `pending`, workflow'un insan incelemesi gibi sonraki bir eylemi beklediği anlamına gelir.
 
+Quick Drawer çalıştırmaları prodüksiyon çalıştırmalarıdır; bu nedenle [eşzamanlılık sınırı](./webhooks.md#concurrency-limit-and-queued-runs) olan bir workflow bunları bekletebilir. Çalıştırma sıradayken durum **Waiting in queue (2/5)** olarak görünür; çalıştırma başladığında "running" durumuna geçer ve bittiğinde adım adım ilerleme olmadan sonucu gösterir. Kuyrukta süresi dolan veya beklerken iptal edilen bir çalıştırma `error` olarak sonlanır.
+
 Dosyalı çalıştırma, trigger'ın tek kullanımlık yükleme bağlantısı üzerinden gerçekleşir: çekmece workflow'dan bir bağlantı ister, dosyayı bu bağlantıya yükler ve yükleme tamamlandığında sonucu gösterir. Dosyalı çalıştırmalar adım adım ilerlemeyi değil, yalnızca nihai durumu ve çıktıları gösterir ve geçmişte yine `Quick Drawer` olarak etiketlenir. Bir bağlantı yalnızca tek bir dosya kabul ettiğinden, seçilen dosya her çalıştırmadan sonra temizlenir.
 
 ## Tarayıcı Depolaması

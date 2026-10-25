@@ -25,12 +25,17 @@ Vsak SSE okvir je JSON, ločen z novimi vrsticami, s predpono `data: `.
 
 | Tip dogodka | Kdaj je oddan | Ključna polja |
 |-------------|---------------|----------------|
-| `execution_started` | Takoj po sprejemu zahteve | `execution_id`, `server_now_ms` |
+| `queued` | Workflow je dosegel svojo [omejitev sočasnosti](./webhooks.md#concurrency-limit-and-queued-runs); ponovno poslan vsakič, ko se spremeni mesto zagona | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Takoj po sprejemu zahteve ali ko se začne zagon v čakalni vrsti | `execution_id`, `server_now_ms` |
 | `node_start` | Tik pred začetkom izvajanja vozlišča | `node_id`, `node_label`, `started_at_ms`, opcijsko `message` |
 | `node_retry` | Ko vozlišče ponovi poskus | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Po končanem izvajanju vozlišča | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Ko vozlišče Output vrne zgodaj | `node_label`, `output` |
 | `execution_complete` | Po končanju workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Zagoni v čakalni vrsti
+
+Ko workflow doseže svojo omejitev sočasnosti, pretok ostane odprt in med čakanjem zagona pošilja dogodke `queued`. Zagon v čakalni vrsti se izvede v ozadju v delavcu (background worker), morda v drugem procesu, zato njegov pretok prenaša `execution_started`, ko se zagon začne, in `execution_complete`, ko se zaključi, vmes pa ni nobenih dogodkov `node_start`, `node_complete` ali dogodkov tokenov. Njegov `execution_complete` ima prazen `node_results`; odprite zagon v [Zgodovini izvajanja](./execution-history.md) za podrobnosti o vozliščih. Zaprtje povezave ne prekliče zagona v čakalni vrsti. Ko je čakalna vrsta polna, je na zahtevo odgovorjeno s `429`, preden se pretok odpre.
 
 ## Sporočila o začetku za posamezna vozlišča
 

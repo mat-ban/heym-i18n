@@ -148,7 +148,7 @@ AI Assistant 由一套 **workflow DSL**（領域特定語言）驅動，用以�
    - 附加為「User Custom Rules」的您的 User Rules
    - 當您正在編輯既有 Workflow 時，目前的 Workflow JSON
    - 當您使用 Execute 節點時，可用的 Workflow 清單
-   - 您自有認證的名稱、類型與 id（絕不包含其值）
+   - 您所擁有或與您共用的認證的名稱、類型與 id（絕不包含其值）
    - 您可使用的資料表的名稱、id、描述與欄位（絕不包含其資料列）
 3. 模型會回傳單一 workflow JSON 區塊（包含 `nodes` 與 `edges`）。前端會解析它並套用至畫布。
 

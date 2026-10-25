@@ -8,22 +8,23 @@ De **Jira**-node verbindt workflows met de Jira REST API voor automatisering van
 |----------|-------|
 | Invoer | 1 |
 | Uitvoer | 1 |
-| Referentie | Jira (Cloud e-mail/API-token of Data Center gebruikersnaam/wachtwoord, basis-URL, implementatiemodus, optionele REST API-versie) |
+| Referentie | Jira (Cloud e-mail/API-token, Data Center gebruikersnaam/wachtwoord of persoonlijk toegangstoken, basis-URL, implementatiemodus, optionele REST API-versie) |
 | Uitvoer | `$nodeLabel.*` |
 
 ## Referentie
 
-Maak een **Jira**-referentie aan in het tabblad [Referenties](../tabs/credentials-tab.md). Opgeslagen configuratiesleutels zijn `email`, `api_token`, `base_url`, `deployment` en optioneel `api_version`. Voor Jira Cloud slaat `email` het e-mailadres van het Atlassian-account op en `api_token` het Atlassian API-token. Voor Jira Data Center / Server slaan dezelfde sleutels de gebruikersnaam en het wachtwoord voor Basic auth op. Zie [Integraties met derden](../reference/integrations.md#jira) voor installatiestappen.
+Maak een **Jira**-referentie aan in het tabblad [Referenties](../tabs/credentials-tab.md). Opgeslagen configuratiesleutels zijn `email`, `api_token`, `base_url`, `deployment`, `auth_mode` en optioneel `api_version`. Voor Jira Cloud slaat `email` het e-mailadres van het Atlassian-account op en `api_token` het Atlassian API-token. Voor Jira Data Center / Server slaan dezelfde sleutels de gebruikersnaam en het wachtwoord voor Basic auth op, of met `auth_mode: pat` slaat `api_token` een persoonlijk toegangstoken op dat als Bearer-token wordt verzonden en wordt `email` niet gebruikt. Zie [Integraties met derden](../reference/integrations.md#jira) voor installatiestappen.
 
 | Veld | Configuratiesleutel | Beschrijving |
 | --- | --- | --- |
 | Jira e-mail / gebruikersnaam | `email` | E-mailadres van het Jira Cloud Atlassian-account, of gebruikersnaam voor Jira Data Center / Server |
-| API-token / wachtwoord | `api_token` | Atlassian API-token voor Jira Cloud, of wachtwoord voor Basic auth voor Jira Data Center / Server |
+| Authenticatie | `auth_mode` | `basic` (standaard) of `pat` (alleen Data Center / Server) |
+| API-token / wachtwoord / persoonlijk toegangstoken | `api_token` | Atlassian API-token voor Jira Cloud, wachtwoord voor Basic auth voor Jira Data Center / Server, of een Data Center persoonlijk toegangstoken in `pat`-modus |
 | Basis-URL | `base_url` | Jira-site-URL, bijvoorbeeld `https://your-domain.atlassian.net` |
 | Implementatie | `deployment` | `cloud` voor Jira Cloud of `data_center` voor Jira Data Center / Server |
 | REST API-versie | `api_version` | Standaard `3` voor Jira Cloud. Data Center / Server gebruikt REST API v2 |
 
-Persoonlijke toegangstokens en Bearer-authenticatie voor Data Center / Server worden nog niet ondersteund door de Jira-referentie.
+Persoonlijke toegangstokens vereisen Jira Data Center / Server 8.14 of hoger. Bij het wisselen van authenticatiemethode wordt het opgeslagen geheim gewist, dus voer het nieuwe wachtwoord of token in wanneer u wisselt.
 
 Gebruik **Verbinding testen** om de referentie te verifiëren tegen de huidige Jira-gebruiker.
 

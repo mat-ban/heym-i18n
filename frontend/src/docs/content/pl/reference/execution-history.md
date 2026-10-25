@@ -109,6 +109,8 @@ Oba okna historii wyświetlają **aktualnie uruchomione wykonania** na początku
 - Po anulowaniu wpis uruchomienia znika przy następnym odświeżeniu; naciśnij **Refresh**, aby zaktualizować listę ręcznie
 - Anulowanie uruchomienia, które już się zakończyło, nie przynosi żadnego efektu
 
+Uruchomienia oczekujące na [slot współbieżności](./webhooks.md#concurrency-limit-and-queued-runs) są wymienione w tej samej sekcji z etykietą **Queued 2/5**, miejscem w kolejce oraz rozmiarem kolejki. Nie mają przycisku **Open live**, ponieważ nic jeszcze nie działa; **Cancel** usuwa oczekujące uruchomienie z kolejki i zapisuje je jako `cancelled`. Uruchomienie, które czekało dłużej niż maksymalny czas oczekiwania workflow, jest rejestrowane jako `expired`, a uruchomienie odrzucone z powodu pełnej kolejki jako `queue_full`; oba mają własną odznakę na liście uruchomień.
+
 Adres URL podglądu na żywo to `/workflows/{workflowId}/{executionId}`. Obserwator działa w trybie tylko do odczytu: opuszczenie
 edytora jedynie rozłącza daną kartę przeglądarki i nigdy nie zatrzymuje workflow. Aktywne migawki
 są współdzielone przez PostgreSQL, więc otwarcie uruchomienia działa nawet wtedy, gdy trigger i żądanie edytora

@@ -36,6 +36,21 @@ Jeder Workflow kann als MCP-Tool bereitgestellt werden:
 
 Workflow-Karten zeigen die Beschreibung und eine Vorschau der Eingabefeldnamen, damit Sie vor der Aktivierung sehen, welche Parameter jedes Tool erwartet.
 
+
+### Warteschlangen-Ausführungen und heym_execution_status
+
+Ein Workflow mit einem [Parallelitätslimit](../reference/webhooks.md#concurrency-limit-and-queued-runs) kann ausgelastet sein, wenn ein Client ihn aufruft. Der Aufruf kehrt dann sofort mit einem Ergebnis zurück, das kein Fehler ist:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Der Client fragt das Tool `heym_execution_status` mit dieser `execution_id` ab. Es gibt denselben Body wie die [Status-URL](../reference/webhooks.md#status-url) zurück: `queued` mit der aktuellen Position, `running`, dann `success` oder `error` mit den Ausgaben. Es findet nur Ausführungen von Workflows, die derselbe Server bereitstellt. Das Tool wird auf dem Standard-Server und auf jedem benannten Server nur aufgeführt, solange mindestens einer seiner Workflows ein Parallelitätslimit hat. Wenn die Warteschlange des Workflows voll ist, gibt der Aufruf den Fehler „Concurrency queue is full“ zurück.
 ## Heym Chat Tool
 
 Der Abschnitt **Heym Capabilities** verwandelt die Engine des Reiters Chat in ein einziges MCP-Tool namens `heym_chat`. Aktivieren Sie es auf dem Standard-Server, auf einem beliebigen benannten Server oder auf beiden — jede Oberfläche verwaltet ihren eigenen Schalter und ihre eigene Modellauswahl.
@@ -49,6 +64,7 @@ Wenn es aktiviert ist, erscheint `heym_chat` in `tools/list` neben Ihren Workflo
 - Abrufen, was gerade ausgeführt wird: wie viele Ausführungen aktiv sind, ihre Workflow-Namen, wie lange jede bereits läuft, bei welchem Knoten sie sich aktuell befindet, sowie einen Link zum Live-Lauf
 - Boards auflisten, Karten erstellen und Kartendetails im [Reiter Board](./board-tab.md) lesen
 - Ihre Datentabellen samt Spalten auflisten, neue Tabellen erstellen und sie in die erstellten Workflows einbinden
+- Erstellen oder aktualisieren Sie Ihre Anmeldedaten auf Heyms eigener Seite (siehe [Anmeldedaten](#anmeldedaten))
 - Teams und globale Variablen lesen sowie die Dokumentation durchsuchen
 - Ausstehende Human-in-the-Loop-Prüfungen genehmigen, bearbeiten oder ablehnen
 
@@ -58,14 +74,28 @@ Fähigkeiten, die später zum Reiter Chat hinzugefügt werden, stehen automatisc
 
 `heym_chat` führt die Chat-Engine immer im Build-Modus aus. In einem einzigen Aufruf kann der Assistent einen neuen Workflow speichern, ihn mit realistischen Beispieleingaben ausführen, den Ausführungsbericht lesen, Fehler beheben und ihn erneut starten — mit bis zu fünf Testläufen pro Aufruf. Wenn der letzte Lauf der letzten Speicherung erfolgreich ist, schließt er mit einer einzeiligen Zusammenfassung ab, und die Antwort endet mit `Verified: the latest test run of the saved workflow passed.`
 
+Erstellt oder bearbeitet ein Aufruf einen Workflow, listet die Antwort jeden einzelnen mit seinem vollständigen Editor-Link auf, wie z. B. `https://heym.example.com/workflows/<id>`, und die Links in der Antwort des Assistenten sind ebenfalls vollständige Links. Sie verwenden Ihre konfigurierte Heym-Adresse (`FRONTEND_URL`) und lassen sich von Personen öffnen, die bei Heym angemeldet sind und Zugriff auf diesen Workflow haben.
+
 - Testläufe sind echte Ausführungen. Ihre Seiteneffekte treten tatsächlich ein, und sie erscheinen wie jeder andere Lauf im Ausführungsverlauf des Workflows.
 - Speicherungen folgen dem Pfad des Editors: Eine Änderung am Graphen bewahrt den vorherigen Graphen im Bearbeitungsverlauf (*Edit History*) des Workflows.
 - Um einen zuvor erstellten Workflow zu ändern, setzen Sie den Thread mit derselben `conversation_id` fort. Der Assistent aktualisiert diesen Workflow, anstatt einen neuen anzulegen, und ändert nur Workflows, die Sie bearbeiten dürfen.
 - Sind die fünf Testläufe ausgeschöpft, stoppt der Assistent und erläutert, was weiterhin fehlschlägt.
 
-Anmeldedaten verbleiben in der Benutzeroberfläche: `heym_chat` listet sie niemals auf, wählt sie nicht aus und erstellt keine neuen. Wenn es einen Workflow erstellt oder bearbeitet, bleiben neue Knoten, die Anmeldedaten benötigen, leer, und die Antwort benennt diese Knoten, sodass Sie die Anmeldedaten im Editor hinterlegen können.
-
 Bei Datentabellen verhält es sich anders. Eine Tabelle enthält keine Geheimnisse, daher kann `heym_chat` Ihre Tabellen auflisten, nachfragen, welche Tabelle ein Workflow nutzen soll, und eine neue Tabelle samt Spalten anlegen. Zeilen werden dabei niemals gelesen oder geschrieben.
+
+### Anmeldedaten
+
+`heym_chat` sieht Ihre eigenen und die mit Ihnen geteilten Anmeldedaten nach Name und Typ, genau wie der Reiter Chat. Wenn ein erstellter Workflow Anmeldedaten benötigt, fragt er als Rückfrage im Ergebnis, welche verwendet werden sollen. Antworten Sie mit derselben `conversation_id`.
+
+Um Anmeldedaten hinzuzufügen oder eigene zu aktualisieren, öffnet der Assistent Heyms Anmeldedaten-Formular auf einer Heym-Seite, `/credentials/setup/<id>`. Sie melden sich dort bei Heym an, geben den Schlüssel ein oder verknüpfen das Konto und speichern. Der Wert geht direkt an Heym: Der MCP-Client und sein Modell erfahren nur Name und Typ der Anmeldedaten. Fügen Sie niemals Schlüssel in den MCP-Client ein; fragen Sie stattdessen nach dem Formular.
+
+| Client | Verhalten |
+|--------|-----------|
+| Unterstützt MCP-URL-Elicitation | Der Client fordert Sie auf, die Heym-Seite zu öffnen. Der Aufruf wartet, während Sie das Formular ausfüllen (bis zu zehn Minuten), und fährt dann mit den neuen Anmeldedaten fort. |
+| Alle anderen | Das Ergebnis enthält den Link und bittet den Client, `heym_chat` erneut mit `wait_for_credential_form` aufzurufen. Dieser Aufruf wartet bis zu fünf Minuten, während Sie das Formular ausfüllen, und setzt dann die Konversation fort. Wenn der Client nicht wartet, speichern Sie das Formular und antworten Sie mit derselben `conversation_id`; der nächste Aufruf erkennt, dass das Formular gespeichert wurde und welche Anmeldedaten erstellt wurden. |
+
+Die Seite öffnet sich nur für das Heym-Konto, das die Anfrage gestartet hat, sodass ein weitergeleiteter Link für andere unbrauchbar ist. Ein Formular bleibt 24 Stunden lang geöffnet und kann auf der Seite abgelehnt werden. Sobald Sie es speichern oder ablehnen, zeigt der Schritt in der Konversation des Reiters Chat das Ergebnis.
+
 
 ### Anmeldedaten und Modell
 
@@ -78,12 +108,15 @@ Bei Datentabellen verhält es sich anders. Eine Tabelle enthält keine Geheimnis
 
 Fehlt eine der beiden Angaben, erscheint das Tool zwar weiterhin in `tools/list`, jeder Aufruf gibt jedoch einen Fehler zurück, der Sie auffordert, die Einrichtung in diesem Reiter abzuschließen.
 
+
+LLM- und Agent-Knoten in einem von `heym_chat` erstellten Workflow werden mit diesen Anmeldedaten und diesem Modell ausgeführt, einschließlich Anmeldedaten, die jemand mit Ihnen geteilt hat, sodass Testläufe ohne weiteren Einrichtungsschritt funktionieren. Bearbeitet `heym_chat` einen Workflow, behalten LLM- und Agent-Knoten, die bereits Anmeldedaten besitzen, diese zusammen mit ihrem Modell bei.
 ### Argumente und Verlauf
 
 | Argument | Erforderlich | Beschreibung |
 |----------|----------|-------------|
 | `message` | Ja | Die Anweisung oder Frage in natürlicher Sprache. |
 | `conversation_id` | Nein | Eine `conversation_id` aus einem vorherigen `heym_chat`-Ergebnis, um diesen Thread fortzusetzen. |
+| `wait_for_credential_form` | Nein | Mit `conversation_id`: Warten, bis der Benutzer das vom Thread geöffnete Anmeldedaten-Formular speichert oder ablehnt, dann `message` senden. |
 
 Jeder Aufruf wird als normale Unterhaltung in den Verlauf Ihres [Reiters Chat](./chat-tab.md) geschrieben und in der Konversationsliste mit einem Stecker-Symbol gekennzeichnet. Nachrichten, Tool-Karten und Rückfragepausen sehen genauso aus wie in einer selbst gestarteten Unterhaltung, und Sie können den Thread im Browser öffnen und dort weiterschreiben. Jedes Ergebnis gibt seine `conversation_id` zurück, sodass der MCP-Client denselben Thread fortsetzen kann, anstatt bei jedem Aufruf einen neuen zu öffnen.
 

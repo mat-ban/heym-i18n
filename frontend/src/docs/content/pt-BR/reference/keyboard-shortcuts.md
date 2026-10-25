@@ -105,3 +105,5 @@ Esses atalhos estão disponíveis no diálogo de Execution History e no painel d
 - [Estrutura do Workflow](./workflow-structure.md) – Formato de nó e edge
 - [Nó Execute](../nodes/execute-node.md) – Chama sub-workflows (`Ctrl + Shift + O`)
 - [Início Rápido](../getting-started/quick-start.md) – Construa seu primeiro workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

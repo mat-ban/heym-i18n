@@ -18,7 +18,7 @@ Credentials는 Workflow 노드에서 사용하는 API 키와 시크릿을 저장
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT 구독 로그인(OAuth) 또는 runner용 Codex access Token, 그리고 저장소 작업용 GitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | runner용 OpenCode Go gateway API 키(선택적 base URL), 그리고 저장소 작업용 GitHub PAT |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub API 호출, GitHub 노드 작업, MCP 통합용 GitHub personal access Token(PAT) |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud 이메일/API Token 또는 Data Center 사용자 이름/비밀번호, Jira 사이트 base URL, 배포 모드, 선택적 REST API 버전 |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud 이메일/API Token, Data Center 사용자 이름/비밀번호 또는 personal access token, Jira 사이트 base URL, 배포 모드, 선택적 REST API 버전 |
 | [Linear](../nodes/linear-node.md) | Linear | 팀, 프로젝트, 이슈, 댓글용 Personal API 키 또는 OAuth2 |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | 요청 인증 |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot Token 및 선택적 Webhook 시크릿 |
@@ -58,7 +58,7 @@ OpenCode Go 자격 증명도 여기에 나열되지만 **"usage unavailable"** �
 
 Codex 자격 증명은 의도적으로 `$credentials`에서 제외됩니다. ChatGPT(구독, 토큰당 API 비용 없음)로 로그인하든 Codex `access_token`을 붙여넣든, 토큰은 로컬 Codex runner 프로세스에만 전달됩니다. ChatGPT 로그인 토큰은 만료 시 자동으로 갱신됩니다.
 
-Jira 자격 증명도 `$credentials`에서 제외됩니다. [Jira 노드](../nodes/jira-node.md)는 실행 시 `credentialId`로 자격 증명을 로드합니다. Jira 노드에서 다루지 않는 사용자 지정 Jira REST 호출의 경우 [HTTP 노드](../nodes/http-node.md)와 Jira Basic Auth(Jira Cloud의 경우 `email:api_token`, Data Center / Server의 경우 `username:password`)를 사용하십시오. 예: `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. `Authorization: Basic <base64(user:secret)>`와 함께 [Header](../nodes/http-node.md) 자격 증명을 사용할 수도 있습니다. Jira Data Center / Server personal access token과 Bearer 인증은 아직 Jira 자격 증명에서 지원되지 않습니다.
+Jira 자격 증명도 `$credentials`에서 제외됩니다. [Jira 노드](../nodes/jira-node.md)는 실행 시 `credentialId`로 자격 증명을 로드합니다. Jira 노드에서 다루지 않는 사용자 지정 Jira REST 호출의 경우 [HTTP 노드](../nodes/http-node.md)와 Jira Basic Auth(Jira Cloud의 경우 `email:api_token`, Data Center / Server의 경우 `username:password`)를 사용하십시오. 예: `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. `Authorization: Basic <base64(user:secret)>`와 함께 [Header](../nodes/http-node.md) 자격 증명을 사용할 수도 있습니다. Jira Data Center / Server personal access token의 경우 대신 `Authorization: Bearer <token>`을 전송하십시오. Jira 자격 증명 자체가 **Personal Access Token** 인증 모드를 통해 이를 지원합니다。
 
 | 자격 증명 유형 | `$credentials.Name`에 노출되는 값 |
 |-----------------|--------------------------------------|

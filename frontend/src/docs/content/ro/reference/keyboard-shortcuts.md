@@ -105,3 +105,5 @@ Aceste scurături sunt disponibile în dialogul Istoric execuții și în panoul
 - [Structura workflow-ului](./workflow-structure.md) – Formatul nodurilor și muchiilor
 - [Nodul Execute](../nodes/execute-node.md) – Apelează sub-workflow-uri (`Ctrl + Shift + O`)
 - [Ghid rapid](../getting-started/quick-start.md) – Creați primul dumneavoastră workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

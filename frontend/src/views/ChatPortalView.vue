@@ -13,6 +13,7 @@ import WorkflowHeroBackground from "@/components/Layout/WorkflowHeroBackground.v
 import { markdownToPlainText, renderMarkdown } from "@/lib/markdown";
 import { useThemeStore } from "@/stores/theme";
 import { playSuccessSound } from "@/utils/audio";
+import { randomUUID } from "@/lib/uuid";
 
 interface PortalInfo {
   workflow_name: string;
@@ -109,7 +110,7 @@ const hasAnyInput = computed(() => {
 const hasResponses = computed(() => messages.value.some(m => m.type === "assistant"));
 
 const MAX_CONVERSATION_HISTORY = 10;
-const conversationId = crypto.randomUUID();
+const conversationId = randomUUID();
 
 const conversationHistory = computed(() => {
   const history: Array<{ role: string; content: string }> = [];
@@ -354,7 +355,7 @@ async function handleSubmit(): Promise<void> {
   if (isExecuting.value) return;
 
   const userMessage: ChatMessage = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     type: "user",
     content: formatUserMessage(),
     timestamp: new Date(),
@@ -400,7 +401,7 @@ async function handleSubmit(): Promise<void> {
       return;
     }
     messages.value.push({
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       type: "system",
       content: "Execution failed. Please try again.",
       timestamp: new Date(),
@@ -490,7 +491,13 @@ async function executeStream(
       if (line.startsWith("data: ")) {
         const data = JSON.parse(line.slice(6));
 
-        if (data.type === "execution_started" && typeof data.execution_id === "string") {
+        if (data.type === "queued" && typeof data.execution_id === "string") {
+          // The workflow is at its concurrency limit; the run starts when a slot frees up.
+          activeExecutionId.value = data.execution_id;
+          if (showProgress) {
+            currentProgress.value = [`Waiting in queue (${data.position}/${data.size})`];
+          }
+        } else if (data.type === "execution_started" && typeof data.execution_id === "string") {
           activeExecutionId.value = data.execution_id;
         } else if (data.type === "node_start") {
           const node = data.node_label || data.node_id;
@@ -516,7 +523,7 @@ async function executeStream(
           const outputImages = extractImages(outputsForDisplay, data.node_results || []);
           const duration = (performance.now() - startTime) / 1000;
           messages.value.push({
-            id: crypto.randomUUID(),
+            id: randomUUID(),
             type: "assistant",
             content: outputContent,
             timestamp: new Date(),
@@ -530,10 +537,10 @@ async function executeStream(
           currentProgress.value = [];
           if (!finalOutputDisplayed) {
             const outputContent = formatOutput(data.outputs);
-            const outputImages = extractImages(data.outputs || {}, data.node_results);
+            const outputImages = extractImages(data.outputs || {}, data.node_results || []);
             const duration = (performance.now() - startTime) / 1000;
             messages.value.push({
-              id: crypto.randomUUID(),
+              id: randomUUID(),
               type: "assistant",
               content: outputContent,
               timestamp: new Date(),
@@ -584,7 +591,7 @@ async function stopExecution(): Promise<void> {
   }
 
   messages.value.push({
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     type: "system",
     content: "Execution stopped.",
     timestamp: new Date(),

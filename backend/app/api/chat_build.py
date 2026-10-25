@@ -45,6 +45,8 @@ from app.services.chat_build_mode import (
     build_mode_instructions,
     build_run_report,
 )
+from app.services.collab.saves import queue_collab_saved
+from app.services.credential_access import load_accessible_credential_ids
 from app.services.credential_catalog import (
     CredentialPromptMode,
     format_credentials_prompt,
@@ -425,14 +427,14 @@ class ChatBuildSession:
 
         catalog = await load_credential_catalog(self.db, self.user.id)
         table_catalog = await load_data_table_catalog(self.db, self.user.id)
+        previous_nodes = existing.nodes if existing is not None else None
         nodes = _sanitize_generated_workflow_nodes(
             config["nodes"],
-            owned_credential_ids={str(credential.id) for credential in catalog},
+            accessible_credential_ids=await load_accessible_credential_ids(self.db, self.user.id),
             selected_credential=self.selected_credential,
             selected_model=self.model,
-            user_id=self.user.id,
+            previous_nodes=previous_nodes,
         )
-        previous_nodes = existing.nodes if existing is not None else None
         credential_pass = apply_generated_credentials(
             nodes,
             catalog=catalog,
@@ -485,6 +487,10 @@ class ChatBuildSession:
                 edges=edges,
             )
             self.db.add(workflow)
+        if existing is not None:
+            await queue_collab_saved(
+                self.db, workflow.id, self.user.id, session=None, state_hash=None
+            )
         await self.db.commit()
         await self.db.refresh(workflow)
         await announce_workflow_saved(workflow, self.user.id, created=existing is None)
@@ -667,6 +673,10 @@ class ChatBuildSession:
                 edges=edges,
             )
             self.db.add(workflow)
+        if existing is not None:
+            await queue_collab_saved(
+                self.db, workflow.id, self.user.id, session=None, state_hash=None
+            )
         await self.db.commit()
         await self.db.refresh(workflow)
         await announce_workflow_saved(workflow, self.user.id, created=existing is None)

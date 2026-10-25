@@ -827,6 +827,22 @@
         "waiting": "Laukiama",
         "neutral": "Neutralus"
       }
+    },
+    "concurrencyLimit": "Lygiagretumo apribojimas",
+    "concurrencyLimitHelp": "Gamybiniai vykdymo procesai (Webhookai, Cron, MCP, Portal, Triggeriai), viršijantys limitą, laukia FIFO eilėje. Redaktoriaus bandomieji vykdymo procesai visada prasideda iškart.",
+    "maxConcurrentRuns": "Maks. lygiagrečių vykdymų skaičius",
+    "maxQueueSizeOptional": "Maks. eilės dydis (neprivaloma)",
+    "emptyNoLimit": "Tuščia = be limito",
+    "maxWaitOptional": "Maks. laukimas (sekundėmis, neprivaloma)",
+    "emptyWaitAsLong": "Tuščia = laukti tiek, kiek reikia",
+    "concurrencyQueueHelp": "Pilna eilė atsako 429 kodu. Vykdymas, kuris laukia ilgiau nei nurodyta, pažymimas kaip pasibaigęs.",
+    "rag": {
+      "hybridSearch": "Hibridinė paieška",
+      "hybridSearchHelp": "Sujunkite vektorių panašumą su BM25 raktinių žodžių atitikimu, kad būtų rasti ir tikslūs terminai, tokie kaip ID, pavadinimai ir klaidų kodai.",
+      "hybridScore": "Hibridinis įvertis (0-1)",
+      "similarityScore": "Panašumo įvertis",
+      "vectorSimilarity": "Vektorių panašumas",
+      "bm25Score": "BM25 įvertis"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Klausti DI",
     "askAiTitle": "Paklauskite Chat asistento apie šį vykdymą",
-    "noNodeSpans": "Šiam vykdymui nebuvo užfiksuota mazgų span."
+    "noNodeSpans": "Šiam vykdymui nebuvo užfiksuota mazgų span.",
+    "queuedProgress": "Eilėje {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Įkeliamas portalas...",

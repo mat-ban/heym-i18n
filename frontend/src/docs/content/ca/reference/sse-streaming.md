@@ -25,12 +25,17 @@ Cada trama SSE és JSON delimitat per salts de línia amb el prefix `data: `.
 
 | Tipus d'esdeveniment | Quan s'emet | Camps clau |
 |------------|--------------------|------------|
-| `execution_started` | Immediatament després que es rebutgi la sol·licitud | `execution_id`, `server_now_ms` |
+| `queued` | El workflow ha assolit el seu [límit de concurrència](./webhooks.md#concurrency-limit-and-queued-runs); s'envia de nou cada vegada que canvia la posició de l'execució | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Immediatament després que s'accepti la sol·licitud, o quan comença una execució a la cua | `execution_id`, `server_now_ms` |
 | `node_start` | Just abans que un node comenci l'execució | `node_id`, `node_label`, `started_at_ms`, `message` opcional |
 | `node_retry` | Quan un node reintenta | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Després que un node finalitzi | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Quan un node Output retorna anticipadament | `node_label`, `output` |
 | `execution_complete` | Després que el workflow finalitzi | `status`, `outputs`, `execution_time_ms` |
+
+### Execucions a la cua
+
+Quan el workflow arriba al seu límit de concurrència, el flux es manté obert i envia esdeveniments `queued` mentre l'execució espera. Una execució a la cua s'executa al worker en segon pla, possiblement en un altre procés, de manera que el seu flux porta `execution_started` quan s'inicia l'execució i `execution_complete` quan acaba, però cap esdeveniment `node_start`, `node_complete` o de tokens entremig. El seu `execution_complete` té un `node_results` buit; obriu l'execució a l'[Historial d'execució](./execution-history.md) per veure els detalls dels nodes. Tancar la connexió no cancel·la una execució a la cua. Quan la cua és plena, la sol·licitud rep una resposta `429` abans que s'obri el flux.
 
 ## Missatges d'inici per node
 

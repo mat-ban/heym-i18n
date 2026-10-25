@@ -32,6 +32,10 @@ Konfigureerige redaktoris: **Portal** nupp workflow päises avab portaali seadet
 3. **Käivita**: `POST /api/portal/{slug}/execute` – Portaali chat-liides kutsub seda (või selle voogedastusvarianti sisemiselt, kui lubatud); lõppkasutajad suhtlevad chat-liidese kaudu, mitte ei kutsu API-t otse.
 4. **Peata**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Taotletakse, kui kasutaja vajutab **Peata** aktiivse portaali käivituse ajal
 
+## Samaaegsuse piirang
+
+Kui workflow'l on [samaaegsuse piirang](./webhooks.md#concurrency-limit-and-queued-runs) ja kõik pesad on kasutusel, ootab portaali sõnum oma järjekorda, selle asemel et kohe käivituda. Vestlus kuvab oma edenemisreal teksti **Waiting in queue (2/5)**, kuni käivitus algab, ja seejärel tavapärast vastust. Käivitus toimub ka siis, kui kasutaja lehe sulgeb. **Stop** eemaldab ootava käivituse järjekorrast. Kui järjekord on täis, ebaõnnestub sõnum teatega "Concurrency queue is full". Järjekorras oodanud käivitus ei edasta oma vastust tokeni haaval; kogu vastus ilmub pärast selle lõppemist.
+
 ## HITL portaali käivitustes
 
 Kui portaali workflow jõuab [Agendi sõlmeni](../nodes/agent-node.md), millel on lubatud [Human-in-the-Loop](./human-in-the-loop.md), kuvab portaali vastus ülevaatuse lingi selle asemel, et jääda tühjaks.

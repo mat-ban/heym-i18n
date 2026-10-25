@@ -147,3 +147,5 @@ Pogledajte [Webhooks](./webhooks.md#run-with-curl-dialog) za potpune detalje dij
 - [Povijest izvršenja](./execution-history.md) – Prošli radovi
 - [Predlošci](../tabs/templates-tab.md) – Spremite i ponovo upotrijebite workflows i čvorove
 - [Kontekstualna izložba](./contextual-showcase.md) – Kompaktni vodič dostupan u uređivaču
+
+- [Suradnja na Platnu](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

@@ -18,7 +18,7 @@ Credentials, workflow node'ları tarafından kullanılan API anahtarlarını ve 
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Runner için ChatGPT abonelik oturum açma (OAuth) veya bir Codex access token'ı ve repository işlemleri için bir GitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Runner için bir OpenCode Go gateway API anahtarı (isteğe bağlı base URL) ve repository işlemleri için bir GitHub PAT |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub API çağrıları, GitHub node işlemleri ve MCP entegrasyonları için GitHub personal access token (PAT) |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token veya Data Center kullanıcı adı/parola, Jira site base URL'si, deployment modu ve isteğe bağlı REST API sürümü |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token, Data Center kullanıcı adı/parola veya personal access token, Jira site base URL'si, deployment modu ve isteğe bağlı REST API sürümü |
 | [Linear](../nodes/linear-node.md) | Linear | Teams, projects, issues ve comments için Personal API key veya OAuth2 |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | İstekler için auth |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token ve isteğe bağlı webhook secret |
@@ -58,7 +58,7 @@ Bazı node'lar auth için expression'lara izin verir. Bir expression içinde bir
 
 Codex kimlik bilgileri kasıtlı olarak `$credentials` dışında tutulmuştur. ChatGPT ile (abonelik, token başına API maliyeti yok) oturum açsanız da bir Codex `access_token` yapıştırsanız da, token'lar yalnızca yerel Codex runner sürecine iletilir. ChatGPT oturum açma token'ları süresi doldukça otomatik olarak yenilenir.
 
-Jira kimlik bilgileri de `$credentials` dışında tutulmuştur. [Jira node](../nodes/jira-node.md), kimlik bilgisini çalışma zamanında `credentialId` ile yükler. Jira node'unun kapsamadığı özel Jira REST çağrıları için, Jira Basic Auth (`Jira Cloud` için `email:api_token` veya Data Center / Server için `username:password`) ile [HTTP node](../nodes/http-node.md) kullanın, örneğin `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Ayrıca `Authorization: Basic <base64(user:secret)>` ile bir [Header](../nodes/http-node.md) kimlik bilgisi kullanabilirsiniz. Jira Data Center / Server personal access token'ları ve Bearer auth henüz Jira kimlik bilgisi tarafından desteklenmemektedir.
+Jira kimlik bilgileri de `$credentials` dışında tutulmuştur. [Jira node](../nodes/jira-node.md), kimlik bilgisini çalışma zamanında `credentialId` ile yükler. Jira node'unun kapsamadığı özel Jira REST çağrıları için, Jira Basic Auth (`Jira Cloud` için `email:api_token` veya Data Center / Server için `username:password`) ile [HTTP node](../nodes/http-node.md) kullanın, örneğin `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Ayrıca `Authorization: Basic <base64(user:secret)>` ile bir [Header](../nodes/http-node.md) kimlik bilgisi kullanabilirsiniz. Jira Data Center / Server personal access token'ları için bunun yerine `Authorization: Bearer <token>` gönderin; Jira kimlik bilgisinin kendisi bunu **Personal Access Token** kimlik doğrulama modu aracılığıyla destekler.
 
 | Kimlik bilgisi türü | `$credentials.Name` için sunulan değer |
 |-----------------|--------------------------------------|

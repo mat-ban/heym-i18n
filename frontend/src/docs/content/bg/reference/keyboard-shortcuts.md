@@ -105,3 +105,5 @@ Command Palette е достъпна от редактора, таблото, д�
 - [Структура на Workflow](./workflow-structure.md) – Формат на възли и връзки
 - [Execute node](../nodes/execute-node.md) – Извиква под-Workflows (`Ctrl + Shift + O`)
 - [Бърз старт](../getting-started/quick-start.md) – Създайте своя първи Workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

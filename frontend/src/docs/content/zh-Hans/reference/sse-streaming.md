@@ -25,12 +25,17 @@ Workflow 可以通过 Server-Sent Events (SSE) 实时流式传输执行事件。
 
 | 事件类型 | 触发时机 | 关键字段 |
 |------------|--------------------|------------|
-| `execution_started` | 请求被接受后立即触发 | `execution_id`, `server_now_ms` |
+| `queued` | 工作流已达到其[并发限制](./webhooks.md#concurrency-limit-and-queued-runs)；每当运行的排位发生变化时会再次发送 | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | 请求被接受后立即触发，或者在排队的运行启动时触发 | `execution_id`, `server_now_ms` |
 | `node_start` | 节点开始执行之前 | `node_id`, `node_label`, `started_at_ms`, 可选 `message` |
 | `node_retry` | 节点重试时 | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | 节点完成后 | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Output 节点提前返回时 | `node_label`, `output` |
 | `execution_complete` | Workflow 结束后 | `status`, `outputs`, `execution_time_ms` |
+
+### 排队的运行
+
+当工作流达到并发限制时，数据流保持开启并在运行等待期间发送 `queued` 事件。排队的运行会在后台 worker 中执行（可能在另一个进程中），因此其数据流在运行开始时包含 `execution_started`，在结束时包含 `execution_complete`，但中间不包含 `node_start`、`node_complete` 或 Token 事件。其 `execution_complete` 具有空的 `node_results`；若要查看节点详细信息，请在[执行历史](./execution-history.md)中打开该次运行。关闭连接不会取消排队的运行。当队列已满时，请求将在数据流打开前直接返回 `429`。
 
 ## 每个节点的启动消息
 

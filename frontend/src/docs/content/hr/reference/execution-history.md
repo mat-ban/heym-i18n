@@ -109,6 +109,8 @@ Oba dijaloga povijesti prikazuju **trenutno pokrenuta izvršavanja** na vrhu pop
 - Nakon otkazivanja, pokrenuti unos nestaje pri sljedećem osvježavanju; pritisnite **Osvježi** kako biste ručno ažurirali popis
 - Ako otkažete izvršavanje koje je već završeno, zahtjev je bez učinka
 
+Pokretanja koja čekaju na [slot istovremenosti](./webhooks.md#concurrency-limit-and-queued-runs) navedena su u istom odjeljku s oznakom **Queued 2/5**, svojim mjestom u redu i veličinom reda čekanja. Nemaju gumb **Open live** jer se još ništa ne izvodi; **Cancel** uklanja pokretanje na čekanju iz reda i bilježi ga kao `cancelled`. Pokretanje koje je čekalo dulje od maksimalnog vremena čekanja workflowa bilježi se kao `expired`, a pokretanje odbijeno zbog punog reda kao `queue_full`; oba imaju vlastitu značku na popisu pokretanja.
+
 Živa URL adresa je `/workflows/{workflowId}/{executionId}`. Promatrač je samo za čitanje: napuštanjem
 uređivača samo se prekida ta kartica preglednika i nikada ne zaustavlja workflow. Aktivne snimke
 dijele se putem PostgreSQL-a, tako da otvaranje izvršavanja i dalje funkcionira kada zahtjevi za trigger i uređivač dođu na različite backend radnike.

@@ -7,7 +7,7 @@ Solmussa on **Tietokanta** -pudotusvalikko, jossa valitaan taustajärjestelmä:
 - **Qdrant** – tallentaa vektorit ulkoiseen Qdrant-palvelimeen (vaatii *RAG: Qdrant + OpenAI* -tunnistetiedot).
 - **Postgres (pgvector)** – tallentaa vektorit suoraan Heymin omaan Postgres-tietokantaan, ei ulkoista palvelua (vaatii *RAG: Psql + OpenAI* -tunnistetiedot).
 
-Oletusarvo on **Qdrant** taaksepäin yhteensopivuuden vuoksi. Tietokannan vaihtaminen suodattaa **Vektorivarasto** -listan näyttämään vain kyseisellä taustajärjestelmällä tuetut varastot. Molemmat taustajärjestelmät tukevat samoja toimintoja, metadatasuodatusta ja Cohere-arvioijien uudelleenjärjestelyä.
+Oletusarvo on **Qdrant** taaksepäin yhteensopivuuden vuoksi. Tietokannan vaihtaminen suodattaa **Vektorivarasto** -listan näyttämään vain kyseisellä taustajärjestelmällä tuetut varastot. Molemmat taustajärjestelmät tukevat samoja toimintoja, metadatasuodatusta, hybridihakua (vektori + BM25) ja Cohere-arvioijien uudelleenjärjestelyä.
 
 Kumpaankin taustajärjestelmään voidaan myös yhdistää *RAG: Custom Embeddings* -tunnistetiedoilla, jotka
 korvaavat OpenAI:n millä tahansa OpenAI-yhteensopivalla upotuspäätepisteellä ja nimeävät oman vektorivarastonsa. Tällaisilla tunnistetiedoilla luotu varasto näkyy sen kohdetietokannan alla.
@@ -19,7 +19,7 @@ Katso [Mukautetut upotukset](../reference/integrations.md#custom-embeddings-rag)
 |----------|-------|
 | Syötteet | 1 |
 | Tulosteet | 1 |
-| Tulos | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (haku), `$nodeLabel.point_id` (lisäys, päivitys), `$nodeLabel.deleted` (poisto) |
+| Tulos | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (haku), `$nodeLabel.point_id` (lisäys, päivitys), `$nodeLabel.deleted` (poisto) |
 
 ## Parametrit
 
@@ -35,6 +35,7 @@ Katso [Mukautetut upotukset](../reference/integrations.md#custom-embeddings-rag)
 | `queryText` | lauseke | Hakukysely (vain haku) |
 | `searchLimit` | numero | Enimmäistulosten määrä (oletus: 5) |
 | `metadataFilters` | JSON-merkkijono | Metadatasuodattimet haulle (arvot tukevat lausekkeita) |
+| `hybridSearch` | boolean | Yhdistä vektorihaku BM25-avainsanahakuun (vain search; oletus: pois käytöstä) |
 | `enableReranker` | boolean | Käytä Coherea hakutulosten uudelleenjärjestelyyn |
 | `rerankerCredentialId` | UUID | Cohere-tunnistetiedot uudelleenjärjestelyä varten |
 | `rerankerTopN` | numero | Uudelleenjärjestelyn jälkeen säilytettävien huipputulosten määrä |
@@ -121,6 +122,7 @@ Semanttinen haku samankaltaisille dokumenteille.
 | `queryText` | kyllä | Hakukysely |
 | `searchLimit` | ei | Enimmäistulokset (oletus: 5) |
 | `metadataFilters` | ei | Suodata metatietojen perusteella (täsmällinen JSON-objektin vastaavuus, arvot tukevat lausekkeita) |
+| `hybridSearch` | ei | Yhdistä vektorisamankaltaisuus BM25-avainsanavastaavuuteen (katso [Hybridihaku](#hybridihaku)) |
 | `enableReranker` | ei | Ota Cohere-arviointi käyttöön paremman relevanssin saamiseksi |
 | `rerankerCredentialId` | arvioinnin yhteydessä | Cohere-tunnistetiedot |
 | `rerankerTopN` | ei | Lopullinen tulosten määrä arvioinnin jälkeen |
@@ -134,13 +136,44 @@ Kun arviointi on käytössä:
 - `score` säilyy alkuperäisenä vektorisamankaltaisuuspisteenä
 - `relevance_score` on Cohere-arvioijan pisteet
 
+
+#### Hybridihaku
+
+Vektorihaku löytää tekstin, jolla on sama merkitys kuin kyselyllä. Teksti, joka sisältää vain täsmälliset sanat, voi sijoittua alemmaksi: tuotekoodi, tukipyynnön numero, henkilön nimi, virhe kuten `ERR-4021`. Kytke **Hybridihaku** päälle, ja solmu suorittaa avainsanahaun vektorihakujen rinnalla ja yhdistää molemmat listat, jolloin yksi kysely löytää molemman tyyppiset osumat.
+
+1. Vektorihaku palauttaa parhaat osumansa, aivan kuten ilman hybridihakua.
+2. Avainsanahaku pisteyttää tallennetun tekstin kyselyn sanoja vastaan **BM25**-menetelmällä, mikä suosii harvinaisia sanoja, toistuvia sanoja ja lyhyempiä dokumentteja.
+3. Kaksi järjestettyä listaa yhdistetään **reciprocal rank fusion** -menetelmällä. Molempien listojen kärjessä oleva dokumentti sijoittuu ensimmäiseksi, ja vain toisen listan löytämä dokumentti näkyy edelleen.
+
+Metadatasuodattimet koskevat molempia hakuja, ja Cohere-arvioija, jos se on käytössä, suoritetaan yhdistetyllä listalla.
+
+Jokainen tulos sisältää molempien hakujen pisteet:
+
+| Kenttä | Merkitys |
+|--------|----------|
+| `score` | Yhdistetty pistemäärä välillä 0–1. `1` tarkoittaa, että dokumentti sijoittui ensimmäiseksi molemmissa hauissa. |
+| `vector_score` | Vektorisamankaltaisuus (0–1). `null`, kun vain avainsanahaku löysi dokumentin. |
+| `keyword_score` | BM25-pisteet. `null`, kun yksikään kyselyn sanoista ei esiinny dokumentissa. |
+
+`$nodeLabel.hybrid` on `true`, kun hybridihaku suoritettiin.
+
+Hyvä tietää:
+
+- Yhdistetty `score` asettaa tulokset järjestykseen toisiinsa nähden. Kyse ei ole vektorisamankaltaisuudesta, joten yksinkertaiselle haulle määritetty kynnysarvo ei siirry suoraan.
+- Kyselyn sanat muunnetaan pieniksi kirjaimiksi ja jaetaan välilyöntien ja välimerkkien perusteella, joten `ERR-4021` haetaan sanoina `err` ja `4021`. Avainsanahaku käyttää enintään kyselyn 16 ensimmäistä erillistä sanaa.
+- Qdrant: kokoelman ensimmäinen hybridihaku luo kokoteksti-indeksin payload-kenttään `text`, mikä edellyttää Qdrant-avainta kirjoitusoikeudella. Suurissa kokoelmissa tämä kestää hetken vain kerran; myöhemmät haut käyttävät indeksiä uudelleen.
+- Postgres (pgvector): tietokantamigraatio `142_vsi_text_search_index` lisää kokoteksti-indeksin. Suorita `alembic upgrade head` päivityksen jälkeen. Hybridihaku toimii myös ilman indeksiä, mutta hitaammin suurissa varastoissa.
+- Jokaisella kyselyllä avainsanahaku lukee enintään 200 vastaavaa dokumenttia alkaen harvinaisimmista kyselyn sanoista, koska niillä on suurin painoarvo.
 ## Tulosten käyttö
 
 - `$ragNode.results.first().text` – paras hakutulos
-- `$ragNode.results.first().score` – samankaltaisuuspiste (0–1)
+- `$ragNode.results.first().score` – samankaltaisuuspiste (0–1), tai yhdistetty pistemäärä hybridihauilla
+- `$ragNode.results.first().keyword_score` – BM25-pisteet (hybridihaku)
+- `$ragNode.results.first().vector_score` – vektorisamankaltaisuus (hybridihaku)
 - `$ragNode.results.first().metadata.source` – parhaan tuloksen metatiedot
 - `$ragNode.results.map("item.text").join("\n\n")` – yhdistä LLM-kontekstia varten
 - `$ragNode.reranked` – onko arviointia käytetty
+- `$ragNode.hybrid` – käytettiinkö hybridihakua
 - `$ragNode.count` – palautettujen tulosten määrä
 - `$ragNode.replaced` – onko upsert korvannut olemassa olevan dokumentin
 - `$ragNode.deleted` – onko poisto poistanut mitään
@@ -160,6 +193,22 @@ Kun arviointi on käytössä:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Esimerkki – Hybridihaku
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

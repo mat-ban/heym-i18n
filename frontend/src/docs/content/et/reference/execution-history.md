@@ -111,6 +111,8 @@ Mõlemad ajaloo dialoogid kuvavad **hetkel käimasolevaid käivitusi** nimekirja
 - Pärast tühistamist kaob käimasolev kirje järgmisel värskendamisel; vajutage **Refresh**, et nimekirja käsitsi värskendada
 - Kui tühistate käivituse, mis on juba lõpetanud, on päring no-op
 
+Käivitused, mis ootavad [samaaegsuse pesa](./webhooks.md#concurrency-limit-and-queued-runs), on loetletud samas jaotises sildiga **Queued 2/5**, oma kohaga järjekorras ja järjekorra suurusega. Neil pole nuppu **Open live**, sest midagi veel ei käi; **Cancel** eemaldab ootava käivituse järjekorrast ja salvestab selle kui `cancelled`. Käivitus, mis ootas kauem kui workflow maksimaalne ooteaeg, salvestatakse kui `expired`, ja täis järjekorra tõttu tagasi lükatud käivitus kui `queue_full`; mõlemal on käivituste loendis oma märk.
+
 Reaalajas URL on `/workflows/{workflowId}/{executionId}`. Vaatleja on kirjutuskaitstud: redaktorist
 lahkumine ühendab ainult selle brauseri vahekaardi lahti ega peata kunagi workflow'd. Aktiivsed hetktõmmised
 jagatakse PostgreSQL kaudu, nii et käivituse avamine töötab endiselt, kui trigger ja redaktori

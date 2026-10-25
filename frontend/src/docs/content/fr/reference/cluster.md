@@ -110,6 +110,10 @@ Le tag d'image doit correspondre à la version exécutée par main, et les deux 
 | On | Retirer un worker de la rotation sans l'arrêter — les exécutions en cours se terminent, aucune nouvelle ne lui est attribuée. Verrouillé sur on pour l'instance main : le travail sur les fichiers, les plugins et l'agent de codage s'y exécute quel que soit l'état du toggle |
 | Weight | Sa part des exécutions distribuables |
 
+## Limites de simultanéité dans un cluster
+
+La [limite de simultanéité](./webhooks.md#concurrency-limit-and-queued-runs) d'un workflow est décomptée dans PostgreSQL, elle s'applique donc à chaque instance et à chaque processus : deux instances n'exécutent jamais plus d'exécutions d'un workflow que la limite ne l'autorise. Une exécution ayant attendu un emplacement est placée selon les mêmes règles que n'importe quelle autre exécution lorsqu'elle démarre, de sorte qu'une exécution devant rester sur main y reste. Le worker de file d'attente exécutant ces exécutions démarre désormais sur chaque installation, y compris une instance unique, où il ne réclame que les exécutions mises en file d'attente par sa propre instance. Cela signifie qu'une instance unique conserve également la connexion `LISTEN` de réveil de la file d'attente dans chaque processus ; prévoyez donc ses connexions de la même manière que pour une instance de cluster.
+
 ## Historique des exécutions
 
 Chaque exécution de l'historique nomme l'instance qui l'a réalisée, et les deux boîtes de dialogue d'historique peuvent filtrer sur une seule instance. Le filtre correspond à l'id de l'instance tout en affichant son nom, de sorte que renommer une instance ne réécrit pas ce qu'indiquent les anciennes exécutions.

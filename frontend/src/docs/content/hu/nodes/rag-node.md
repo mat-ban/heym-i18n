@@ -7,7 +7,7 @@ A csomópont rendelkezik egy **Database** legördülő menüvel, amely a hátté
 - **Qdrant** – vektorokat egy külső Qdrant szerveren tárol (ehhez *RAG: Qdrant + OpenAI* hitelesítési adat szükséges).
 - **Postgres (pgvector)** – vektorokat a Heym saját Postgres adatbázisában tárol, külső szolgáltatás nélkül (ehhez *RAG: Psql + OpenAI* hitelesítési adat szükséges).
 
-Az alapértelmezett érték a visszafelé kompatibilitás érdekében a **Qdrant**. A Database módosítása az adott adatbázis által támogatott tárolókra szűri a **Vector Store** listát. Mindkét háttérrendszer ugyanazokat a műveleteket, metaadatszűrést és Cohere rerankinget támogatja.
+Az alapértelmezett érték a visszafelé kompatibilitás érdekében a **Qdrant**. A Database módosítása az adott adatbázis által támogatott tárolókra szűri a **Vector Store** listát. Mindkét háttérrendszer ugyanazokat a műveleteket, metaadatszűrést, a hibrid (vektor + BM25) keresést és a Cohere rerankinget támogatja.
 
 Mindkét háttérrendszer elérhető egy *RAG: Custom Embeddings* hitelesítési adaton keresztül is, amely
 az OpenAI-t bármely OpenAI-kompatibilis embedding endpointra cseréli, és saját vektortárolót
@@ -20,7 +20,7 @@ célozza. Lásd: [Custom Embeddings](../reference/integrations.md#custom-embeddi
 |----------|-------|
 | Bemenetek | 1 |
 | Kimenetek | 1 |
-| Kimenet | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (keresés), `$nodeLabel.point_id` (beszúrás, upsert), `$nodeLabel.deleted` (törlés) |
+| Kimenet | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (keresés), `$nodeLabel.point_id` (beszúrás, upsert), `$nodeLabel.deleted` (törlés) |
 
 ## Paraméterek
 
@@ -36,6 +36,7 @@ célozza. Lásd: [Custom Embeddings](../reference/integrations.md#custom-embeddi
 | `queryText` | expression | Keresési lekérdezés (csak keresés esetén) |
 | `searchLimit` | number | Eredmények maximális száma (alapértelmezett: 5) |
 | `metadataFilters` | JSON string | Metaadatszűrők a kereséshez (az értékek támogatják a kifejezéseket) |
+| `hybridSearch` | boolean | Vektorkeresés kombinálása BM25 kulcsszavas kereséssel (csak search; alapértelmezett: kikapcsolva) |
 | `enableReranker` | boolean | A keresési eredmények Cohere-rel történő rerankelése |
 | `rerankerCredentialId` | UUID | Cohere hitelesítési adat a rerankinghez |
 | `rerankerTopN` | number | A rerankelés után megtartandó legjobb eredmények száma |
@@ -110,6 +111,7 @@ Szemantikus keresés hasonló dokumentumokra.
 | `queryText` | igen | Keresési lekérdezés |
 | `searchLimit` | nem | Eredmények maximális száma (alapértelmezett: 5) |
 | `metadataFilters` | nem | Szűrés metaadatok alapján (pontos egyezést vizsgáló JSON objektum, az értékek támogatják a kifejezéseket) |
+| `hybridSearch` | nem | Vektorhasonlóság egyesítése BM25 kulcsszóegyezéssel (lásd [Hibrid keresés](#hibrid-kereses)) |
 | `enableReranker` | nem | Cohere reranking engedélyezése a jobb relevancia érdekében |
 | `rerankerCredentialId` | reranking esetén | Cohere hitelesítési adat |
 | `rerankerTopN` | nem | Az eredmények végleges száma a reranking után |
@@ -123,13 +125,44 @@ Ha a reranking engedélyezett:
 - A `score` az eredeti vektor hasonlósági pontszám marad
 - A `relevance_score` a Cohere reranker pontszáma
 
+
+#### Hibrid keresés
+
+A vektorkeresés olyan szöveget talál meg, amelynek jelentése megegyezik a lekérdezésével. A csak pontos szavakat tartalmazó szövegek hátrébb sorolódhatnak: egy termékkód, egy hibajegyszám, egy személy neve, vagy egy olyan hiba, mint a `ERR-4021`. Kapcsolja be a **Hibrid keresés** funkciót, és a csomópont a vektorkeresés mellett egy kulcsszavas keresést is futtat, majd összefésüli a két listát, így egyetlen lekérdezés mindkét típusú találatot felkutatja.
+
+1. A vektorkeresés a legjobb találatait adja vissza, akárcsak hibrid keresés nélkül.
+2. A kulcsszavas keresés a lekérdezés szavai alapján értékeli a tárolt szöveget a **BM25** algoritmussal, amely jutalmazza a ritka szavakat, az ismétlődő szavakat és a rövidebb dokumentumokat.
+3. A két rangsorolt lista a **reciprocal rank fusion** eljárással egyesül. A mindkét lista élén szereplő dokumentum az első helyre kerül, és a csak az egyik lista által megtalált dokumentum is megjelenik.
+
+A metaadatszűrők mindkét keresésre érvényesek, és a Cohere reranker – amennyiben engedélyezve van – az egyesített listán fut le.
+
+Minden találat tartalmazza mindkét keresés pontszámát:
+
+| Mező | Jelentés |
+|------|----------|
+| `score` | Egyesített pontszám 0 és 1 között. Az `1` azt jelenti, hogy a dokumentum mindkét keresésben az első helyen végzett. |
+| `vector_score` | Vektorhasonlóság (0 és 1 között). `null`, ha a dokumentumot csak a kulcsszavas keresés találta meg. |
+| `keyword_score` | BM25 pontszám. `null`, ha a lekérdezés szavai közül egyik sem szerepel a dokumentumban. |
+
+A `$nodeLabel.hybrid` értéke `true`, ha a hibrid keresés lefutott.
+
+Jó tudni:
+
+- Az egyesített `score` egymáshoz viszonyítva rangsorolja a találatokat. Ez nem vektorhasonlóság, így az egyszerű keresésre beállított küszöbérték nem vihető át közvetlenül.
+- A lekérdezés szavai kisbetűssé alakulnak, és szóközök, valamint írásjelek mentén darabolódnak, így a `ERR-4021` keresése `err` és `4021` formájában történik. A kulcsszavas keresés a lekérdezés legfeljebb első 16 egyedi szavát használja.
+- Qdrant: a gyűjteményen végzett első hibrid keresés teljes szöveges indexet hoz létre a `text` payload mezőn, amihez írási joggal rendelkező Qdrant kulcs szükséges. Nagy gyűjteményeknél ez egyszer vesz igénybe egy pillanatot; a későbbi keresések újrahasznosítják az indexet.
+- Postgres (pgvector): a `142_vsi_text_search_index` adatbázis-migráció hozzáadja a teljes szöveges indexet. Frissítés után futtassa az `alembic upgrade head` parancsot. A hibrid keresés index nélkül is működik, de nagy tárolók esetén lassabban.
+- A kulcsszavas keresés minden lekérdezésnél legfeljebb 200 egyező dokumentumot olvas be, a legritkább lekérdezési szavakkal kezdve, mivel azok hordozzák a legnagyobb súlyt.
 ## Eredmények elérése
 
 - `$ragNode.results.first().text` – a legjobb találat tartalma
-- `$ragNode.results.first().score` – hasonlósági pontszám (0–1)
+- `$ragNode.results.first().score` – hasonlósági pontszám (0–1), vagy az egyesített pontszám hibrid keresés esetén
+- `$ragNode.results.first().keyword_score` – BM25 pontszám (hibrid keresés)
+- `$ragNode.results.first().vector_score` – vektorhasonlóság (hibrid keresés)
 - `$ragNode.results.first().metadata.source` – a legjobb találat metaadatai
 - `$ragNode.results.map("item.text").join("\n\n")` – összefűzés LLM kontextushoz
 - `$ragNode.reranked` – történt-e reranking
+- `$ragNode.hybrid` – történt-e hibrid keresés
 - `$ragNode.count` – a visszaadott eredmények száma
 - `$ragNode.replaced` – egy upsert lecserélt-e egy meglévő dokumentumot
 - `$ragNode.deleted` – egy törlés eltávolított-e bármit
@@ -149,6 +182,22 @@ Ha a reranking engedélyezett:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Példa – Hibrid keresés
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

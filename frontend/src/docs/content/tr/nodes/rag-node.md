@@ -7,7 +7,7 @@ Düğümde, arka ucu seçen bir **Database** açılır menüsü bulunur:
 - **Qdrant** – vektörleri harici bir Qdrant sunucusunda saklar (*RAG: Qdrant + OpenAI* credential gerektirir).
 - **Postgres (pgvector)** – vektörleri Heym'in kendi Postgres veritabanı içinde saklar, harici servis gerekmez (*RAG: Psql + OpenAI* credential gerektirir).
 
-Geriye dönük uyumluluk için varsayılan **Qdrant**'tır. Database değiştirildiğinde **Vector Store** listesi, o veritabanı tarafından desteklenen store'lara göre filtrelenir. Her iki arka uç da aynı işlemleri, metadata filtrelemeyi ve Cohere reranking'i destekler.
+Geriye dönük uyumluluk için varsayılan **Qdrant**'tır. Database değiştirildiğinde **Vector Store** listesi, o veritabanı tarafından desteklenen store'lara göre filtrelenir. Her iki arka uç da aynı işlemleri, metadata filtrelemeyi, hibrit (vektör + BM25) aramayı ve Cohere reranking'i destekler.
 
 Her iki arka uca da bir *RAG: Custom Embeddings* credential üzerinden erişilebilir; bu credential OpenAI'yi OpenAI uyumlu herhangi bir embedding endpoint'i ile değiştirir ve kendi vector store'unu adlandırır. Böyle bir credential'dan oluşturulan bir store, hedeflediği Database altında görünür. Bkz. [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag).
 
@@ -17,7 +17,7 @@ Her iki arka uca da bir *RAG: Custom Embeddings* credential üzerinden erişileb
 |----------|-------|
 | Girişler | 1 |
 | Çıkışlar | 1 |
-| Çıkış | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Çıkış | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parametreler
 
@@ -33,6 +33,7 @@ Her iki arka uca da bir *RAG: Custom Embeddings* credential üzerinden erişileb
 | `queryText` | expression | Arama sorgusu (yalnızca search) |
 | `searchLimit` | number | Maksimum sonuç sayısı (varsayılan: 5) |
 | `metadataFilters` | JSON string | Arama için metadata filtreleri (değerler expression destekler) |
+| `hybridSearch` | boolean | Vektör aramasını BM25 anahtar kelime aramasıyla birleştir (yalnızca search; varsayılan: kapalı) |
 | `enableReranker` | boolean | Arama sonuçlarını yeniden sıralamak için Cohere kullan |
 | `rerankerCredentialId` | UUID | Yeniden sıralama için Cohere credential |
 | `rerankerTopN` | number | Yeniden sıralama sonrası tutulacak en iyi sonuç sayısı |
@@ -106,6 +107,7 @@ Benzer belgeler için semantik arama.
 | `queryText` | evet | Arama sorgusu |
 | `searchLimit` | hayır | Maksimum sonuç (varsayılan: 5) |
 | `metadataFilters` | hayır | Metadata'ya göre filtrele (tam eşleşme JSON nesnesi, değerler ifadeleri destekler) |
+| `hybridSearch` | hayır | Vektör benzerliğini BM25 anahtar kelime eşleşmesiyle birleştir (bkz. [Hibrit arama](#hibrit-arama)) |
 | `enableReranker` | hayır | Daha iyi alaka için Cohere yeniden sıralamayı etkinleştir |
 | `rerankerCredentialId` | yeniden sıralama yapılırken | Cohere kimlik bilgisi |
 | `rerankerTopN` | hayır | Yeniden sıralamadan sonra nihai sonuç sayısı |
@@ -119,13 +121,44 @@ Yeniden sıralama etkinleştirildiğinde:
 - `score` orijinal vektör benzerlik puanı olarak kalır
 - `relevance_score` Cohere yeniden sıralayıcı puanıdır
 
+
+#### Hibrit arama
+
+Vektör araması, sorguyla aynı anlama sahip metinleri bulur. Yalnızca tam sözcükleri içeren metinler daha alt sıralarda yer alabilir: ürün kodu, bilet numarası, kişi adı veya `ERR-4021` gibi bir hata kodu. **Hibrit arama**'yı açtığınızda düğüm, vektör aramasının yanında bir anahtar kelime araması çalıştırır ve iki listeyi birleştirir, böylece tek bir sorgu her iki eşleşme türünü de bulur.
+
+1. Vektör araması, hibrit arama olmadan yaptığı gibi en iyi eşleşmelerini döndürür.
+2. Anahtar kelime araması, depolanan metni sorgunun sözcüklerine göre **BM25** ile puanlar; bu algoritma nadir sözcükleri, tekrarlanan sözcükleri ve daha kısa belgeleri ödüllendirir.
+3. Sıralanan iki liste **reciprocal rank fusion** ile birleştirilir. Her iki listenin de üst sıralarında yer alan bir belge birinci sıraya yerleşir ve yalnızca tek bir listenin bulduğu belge de listede yer almaya devam eder.
+
+Metadata filtreleri her iki arama için de geçerlidir ve Cohere reranker etkinleştirildiğinde birleştirilmiş liste üzerinde çalışır.
+
+Her sonuç her iki aramanın puanını taşır:
+
+| Alan | Anlamı |
+|------|--------|
+| `score` | 0 ile 1 arasında birleştirilmiş puan. `1`, belgenin her iki aramada da birinci sırada yer aldığını gösterir. |
+| `vector_score` | Vektör benzerliği (0 ile 1 arasında). Yalnızca anahtar kelime araması belgeyi bulduğunda `null`. |
+| `keyword_score` | BM25 puanı. Sorgu sözcüklerinin hiçbiri belgede yer almadığında `null`. |
+
+`$nodeLabel.hybrid`, hibrit arama çalıştırıldığında `true` olur.
+
+Bilmenizde fayda var:
+
+- Birleştirilmiş `score`, sonuçları birbirine göre sıralar. Bu bir vektör benzerliği değildir, dolayısıyla basit arama için ayarlanmış bir eşik doğrudan aktarılamaz.
+- Sorgu sözcükleri küçük harfe dönüştürülür ve boşluklar ile noktalama işaretlerinden ayrılır; böylece `ERR-4021`, `err` ve `4021` olarak aranır. Anahtar kelime araması sorgunun ilk 16 benzersiz sözcüğüne kadarını kullanır.
+- Qdrant: bir koleksiyondaki ilk hibrit arama, `text` payload alanında tam metin indeksi oluşturur; bu işlem yazma erişimine sahip bir Qdrant anahtarı gerektirir. Büyük koleksiyonlarda bu işlem yalnızca bir defalık bir an sürer; sonraki aramalar indeksi yeniden kullanır.
+- Postgres (pgvector): `142_vsi_text_search_index` veritabanı geçişi tam metin indeksini ekler. Güncellemeden sonra `alembic upgrade head` komutunu çalıştırın. Hibrit arama indeks olmadan da çalışır, ancak büyük store'larda daha yavaştır.
+- Her sorgu için anahtar kelime araması, en yüksek ağırlığı taşıdıkları için en nadir sorgu sözcüklerinden başlayarak en fazla 200 eşleşen belgeyi okur.
 ## Sonuçlara Erişim
 
 - `$ragNode.results.first().text` – en iyi sonuç içeriği
-- `$ragNode.results.first().score` – benzerlik puanı (0–1)
+- `$ragNode.results.first().score` – benzerlik puanı (0–1), veya hibrit arama ile birleştirilmiş puan
+- `$ragNode.results.first().keyword_score` – BM25 puanı (hibrit arama)
+- `$ragNode.results.first().vector_score` – vektör benzerliği (hibrit arama)
 - `$ragNode.results.first().metadata.source` – en iyi sonuç metadata'sı
 - `$ragNode.results.map("item.text").join("\n\n")` – LLM bağlamı için birleştir
 - `$ragNode.reranked` – yeniden sıralamanın uygulanıp uygulanmadığı
+- `$ragNode.hybrid` – hibrit aramanın uygulanıp uygulanmadığı
 - `$ragNode.count` – döndürülen sonuç sayısı
 - `$ragNode.replaced` – bir upsert'ün mevcut bir belgeyi değiştirip değiştirmediği
 - `$ragNode.deleted` – bir silmenin herhangi bir şeyi kaldırıp kaldırmadığı
@@ -145,6 +178,22 @@ Yeniden sıralama etkinleştirildiğinde:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Örnek – Hibrit arama
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

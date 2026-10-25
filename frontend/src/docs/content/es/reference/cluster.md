@@ -110,6 +110,10 @@ La etiqueta de imagen debe ser la versión que ejecuta main, y ambas claves debe
 | On | Retira un worker de la rotación sin detenerlo: las ejecuciones en curso finalizan, no se le asignan nuevas. Bloqueado en activo para la instancia main: el trabajo de archivos, plugins y agentes de programación se ejecuta allí independientemente de lo que indique el conmutador |
 | Weight | Su cuota de ejecuciones distribuibles |
 
+## Límites de concurrencia en un cluster
+
+El [límite de concurrencia](./webhooks.md#concurrency-limit-and-queued-runs) de un workflow se contabiliza en PostgreSQL, por lo que se aplica en todas las instancias y procesos: dos instancias nunca ejecutan más ejecuciones de un workflow de lo que permite el límite. Una ejecución que esperó un slot se asigna según las mismas reglas que cualquier otra ejecución cuando comienza, por lo que una ejecución que deba permanecer en main seguirá haciéndolo. El worker de cola que ejecuta estas ejecuciones ahora se inicia en cada instalación, incluida una instancia única, donde solo reclama las ejecuciones puestas en cola por su propia instancia. Esto significa que una instancia única también mantiene la conexión `LISTEN` para despertar la cola en cada proceso; dimensione sus conexiones de la misma manera que para una instancia de cluster.
+
 ## Historial de ejecuciones
 
 Cada ejecución del historial de ejecuciones indica la instancia que la ejecutó, y ambos diálogos de historial pueden filtrarse hasta una sola instancia. El filtro coincide con el id de la instancia mientras muestra su nombre, por lo que renombrar una instancia no reescribe lo que indican las ejecuciones antiguas.

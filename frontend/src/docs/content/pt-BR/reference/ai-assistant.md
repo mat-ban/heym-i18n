@@ -148,7 +148,7 @@ O Assistente de IA é alimentado por uma **DSL de workflow** (linguagem de domí
    - Suas Regras do Usuário anexadas como "User Custom Rules"
    - O JSON do workflow atual quando você está editando um workflow existente
    - A lista de workflows disponíveis se você usar o nó Execute
-   - Os nomes, tipos e ids das suas próprias credenciais (nunca seus valores)
+   - Os nomes, tipos e ids das credenciais que você possui ou que foram compartilhadas com você (nunca seus valores)
    - Os nomes, ids, descrições e colunas das tabelas de dados que você pode usar (nunca suas linhas)
 3. O modelo retorna um único bloco JSON de workflow (com `nodes` e `edges`). O frontend o interpreta e o aplica ao canvas.
 

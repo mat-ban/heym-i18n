@@ -148,7 +148,7 @@ AI asistentas veikia naudodamas **workflow DSL** (srities specifinė kalba), kur
    - Jūsų Vartotojo taisykles, pridėtas kaip "User Custom Rules"
    - Esamo workflow JSON, kai redaguojate esamą workflow
    - Prieinamų workflows sąrašą, jei naudojate Execute mazgą
-   - Jūsų pačių kredencialų pavadinimus, tipus ir id (niekada jų vertes)
+   - Kredencialų, kuriuos valdote arba kurie buvo bendrinti su jumis, pavadinimus, tipus ir id (niekada jų vertes)
    - Duomenų lentelių pavadinimus, id, aprašymus ir stulpelius, kuriuos galite naudoti (niekada jų eilučių)
 3. Modelis grąžina vieną workflow JSON bloką (su `nodes` ir `edges`). Klientas jį apdoroja ir taiko drobėje.
 

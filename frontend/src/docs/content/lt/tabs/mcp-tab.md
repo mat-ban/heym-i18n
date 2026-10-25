@@ -36,6 +36,21 @@ Kiekvienas workflow gali būti atskleistas kaip MCP įrankis:
 
 Workflow kortelės rodo aprašymą ir įvesties laukų pavadinimų peržiūrą, kad galėtumėte pamatyti, ko kiekvienas įrankis tikisi prieš jį įjungiant.
 
+
+### Paleidimai eilėje ir heym_execution_status
+
+Workflow su [lygiagretumo riba](../reference/webhooks.md#concurrency-limit-and-queued-runs) gali būti užimtas, kai klientas jį iškviečia. Tada iškvietimas iškart grąžina rezultatą, kuris nėra klaida:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klientas apklausia įrankį `heym_execution_status` su šiuo `execution_id`. Jis grąžina tą patį turinį kaip ir [būsenos URL](../reference/webhooks.md#status-url): `queued` su dabartine pozicija, `running`, tada `success` arba `error` su išvestimis. Jis randa tik tų workflows paleidimus, kuriuos pateikia tas pats serveris. Įrankis numatytajame serveryje ir kiekviename pavadintame serveryje rodomas tik tol, kol bent vienas iš jo workflows turi lygiagretumo ribą. Kai eilė pilna, iškvietimas grąžina klaidą „Concurrency queue is full“.
 ## Heym Chat Tool
 
 **Heym galimybių** skyrius paverčia Chat skirtuko variklį į vieną MCP įrankį, pavadintą `heym_chat`. Įjunkite jį numatytajame serveryje, bet kuriame pavadintame serveryje arba abiejuose — kiekviena aplinka turi savo perjungimą ir modelio pasirinkimą.
@@ -49,6 +64,7 @@ Kai jis įjungtas, `heym_chat` pasirodo `tools/list` kartu su Jūsų workflow į
 - Pranešti, kas šiuo metu vykdoma: kiek vykdymų yra aktyvių, jų workflow pavadinimai, kiek laiko kiekvienas veikia, kurį mazgą kiekvienas šiuo metu naudoja, ir nuorodą į gyvą vykdymą.
 - Išvardyti lentas, kurti korteles ir skaityti kortelių detales [Lentos skirtuke](./board-tab.md).
 - Išvardyti Jūsų duomenų lenteles su jų stulpeliais, kurti naujas ir prijungti jas prie workflows, kuriuos jis kuria.
+- Sukurkite arba atnaujinkite kredencialus Heym puslapyje (žr. [Kredencialai](#kredencialai))
 - Skaityti komandas ir globalius kintamuosius, bei ieškoti dokumentacijoje.
 - Patvirtinti, redaguoti arba atmesti laukiančius žmogaus įsikišimo atsiliepimus.
 
@@ -58,14 +74,28 @@ Galimybės, pridėtos prie Chat skirtuko, vėliau automatiškai tampa prieinamos
 
 `heym_chat` visada vykdo Chat variklį kūrimo režimu (build mode). Vieno iškvietimo metu asistentas gali išsaugoti naują workflow, paleisti jį su tikroviškais pavyzdiniais įvesties duomenimis, perskaityti vykdymo ataskaitą, ištaisyti tai, kas nepavyko, ir paleisti jį dar kartą – iki penkių bandomųjų paleidimų per vieną iškvietimą. Kai paskutinio išsaugojimo naujausias paleidimas pavyksta, jis baigia vieno sakinio santrauka, o atsakymas baigiasi tekstu `Verified: the latest test run of the saved workflow passed.`
 
+Kai iškvietimas sukuria arba redaguoja workflow, atsakyme pateikiamas kiekvieno iš jų visas redaktoriaus saitas, pvz., `https://heym.example.com/workflows/<id>`, o saitai asistento atsakyme taip pat yra visi saitai. Jie naudoja jūsų sukonfigūruotą Heym adresą (`FRONTEND_URL`) ir atveriami prie Heym prisijungusiems asmenims, turintiems prieigą prie to workflow.
+
 - Bandomieji paleidimai yra tikri paleidimai. Jų šalutiniai poveikiai įvyksta ir jie rodomi workflow vykdymo istorijoje kaip ir bet kuris kitas paleidimas.
 - Išsaugojimai vyksta redaktoriaus keliu: grafo pakeitimas išsaugo ankstesnį grafą workflow redagavimo istorijoje (**Edit History**).
 - Norėdami pakeisti anksčiau sukurtą workflow, tęskite giją su tuo pačiu `conversation_id`. Asistentas atnaujina tą workflow, o ne kuria naują, ir keičia tik tuos workflows, kuriuos galite redaguoti.
 - Kai išnaudojami visi penki bandomieji paleidimai, asistentas sustoja ir paaiškina, kas vis dar nepavyksta.
 
-Kredencialai lieka UI: `heym_chat` niekada nerodo, nepasirenka ar nesukuria jų. Kai jis kuria ar redaguoja workflow, nauji mazgai, kuriems reikia kredencialo, paliekami tušti, o atsakymas juos pavadina, kad galėtumėte nustatyti juos redaktoriuje.
-
 Duomenų lentelės yra kitokios. Lentelė neturi paslapčių, todėl `heym_chat` gali išvardyti Jūsų lenteles, paklausti, kurią workflow turėtų naudoti, ir sukurti naują su jos stulpeliais. Ji niekada neskaito ar nerašo eilučių.
+
+### Kredencialai
+
+`heym_chat` mato jūsų turimus ir su jumis bendrinamus kredencialus pagal pavadinimą ir tipą taip pat, kaip ir Chat skirtukas. Kai jo kuriamam workflow reikia kredencialo, jis pateikia klausimą rezultate, kurį naudoti. Atsakykite naudodami tą patį `conversation_id`.
+
+Norėdami pridėti kredencialą arba atnaujinti turimą, asistentas atidaro Heym formą Heym puslapyje, `/credentials/setup/<id>`. Ten prisijungiate prie Heym, įvedate raktą arba prijungiate paskyrą ir išsaugote. Vertė keliauja tiesiai į Heym: MCP klientas ir jo modelis sužino tik kredencialo pavadinimą ir tipą. Neklijuokite raktų į MCP klientą; vietoj to paprašykite formos.
+
+| Klientas | Kas nutinka |
+|----------|-------------|
+| Palaiko MCP URL gavimą | Klientas paprašo atidaryti Heym puslapį. Iškvietimas laukia, kol užpildysite formą (iki dešimties minučių), tada tęsia darbą su nauju kredencialu. |
+| Bet kas kita | Rezultate pateikiama nuoroda ir prašoma kliento vėl iškviesti `heym_chat` su `wait_for_credential_form`. Tas iškvietimas laukia iki penkių minučių pildant formą, o tada tęsia pokalbį. Jei klientas nelaukia, išsaugokite formą ir atsakykite naudodami tą patį `conversation_id`; kitas iškvietimas žinos, kad forma išsaugota ir koks kredencialas sukurtas. |
+
+Puslapis atveriamas tik tai Heym paskyrai, kuri pradėjo užklausą, todėl persiųsta nuoroda niekam kitam nenaudinga. Forma lieka atidaryta 24 valandas ir ją galima atmesti puslapyje. Išsaugojus arba atmetus, žingsnis Chat skirtuko pokalbyje parodo rezultatą.
+
 
 ### Kredencialas ir modelis
 
@@ -78,12 +108,15 @@ Duomenų lentelės yra kitokios. Lentelė neturi paslapčių, todėl `heym_chat`
 
 Jei kuris nors trūksta, įrankis vis tiek pasirodo `tools/list`, tačiau kiekvienas skambutis grąžina klaidą, pranešančią, kad turite užbaigti nustatymą šiame skirtuke.
 
+
+LLM ir Agent mazgai `heym_chat` kuriamame workflow veikia su šiuo kredencialu ir modeliu, įskaitant kredencialą, kuriuo kažkas pasidalijo su jumis, todėl bandomieji paleidimai veikia be kito nustatymo veiksmo. Kai `heym_chat` redaguoja workflow, LLM ir Agent mazgai, kurie jau turi kredencialą, išlaiko jį kartu su savo modeliu.
 ### Argumentai ir istorija
 
 | Argumentas | Privalomas | Aprašymas |
 |------------|------------|-----------|
 | `message` | Taip | Nurodymas arba klausimas, natūralia kalba. |
 | `conversation_id` | Ne | `conversation_id` iš ankstesnio `heym_chat` rezultato, kad tęstumėte tą temą. |
+| `wait_for_credential_form` | Ne | Su `conversation_id`: palaukti, kol naudotojas išsaugos arba atmes gijos atidarytą kredencialo formą, tada siųsti `message`. |
 
 Kiekvienas skambutis įrašomas į Jūsų [Chat skirtuko](./chat-tab.md) istoriją kaip įprasta pokalbis, pažymėtas kištuko ikona pokalbių sąraše. Žinutės, įrankių kortelės ir paaiškinimo pertraukos atrodo lygiai taip pat kaip pokalbis, kurį pradėjote patys, ir galite atidaryti temą ir toliau kalbėtis naršyklėje. Kiekvienas rezultatas grąžina savo `conversation_id`, kad MCP klientas galėtų tęsti tą pačią temą, o ne atidaryti naują kiekviename skambutyje.
 

@@ -827,6 +827,22 @@
         "waiting": "Waiting",
         "neutral": "Neutral"
       }
+    },
+    "concurrencyLimit": "Concurrency limit",
+    "concurrencyLimitHelp": "Production runs (webhooks, cron, MCP, Portal, triggers) above the limit wait in a first-in, first-out queue. Editor test runs always start right away.",
+    "maxConcurrentRuns": "Max concurrent runs",
+    "maxQueueSizeOptional": "Max queue size (optional)",
+    "emptyNoLimit": "Empty = no limit",
+    "maxWaitOptional": "Max wait (seconds, optional)",
+    "emptyWaitAsLong": "Empty = wait as long as it takes",
+    "concurrencyQueueHelp": "A full queue answers 429. A run that waits longer than the max wait is recorded as expired.",
+    "rag": {
+      "hybridSearch": "Hybrid Search",
+      "hybridSearchHelp": "Combine vector similarity with BM25 keyword matching, so exact terms such as IDs, names and error codes are found too.",
+      "hybridScore": "Hybrid score (0-1)",
+      "similarityScore": "Similarity score",
+      "vectorSimilarity": "Vector similarity",
+      "bm25Score": "BM25 score"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Ask AI",
     "askAiTitle": "Ask the Chat assistant about this run",
-    "noNodeSpans": "No node spans recorded for this run."
+    "noNodeSpans": "No node spans recorded for this run.",
+    "queuedProgress": "Queued {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Loading portal...",

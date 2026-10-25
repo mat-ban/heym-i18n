@@ -85,6 +85,20 @@ Discord envia webhooks d'interacció a `POST /api/discord/webhook/{node_id}`. El
 
 El consumidor de RabbitMQ s'inicia quan el worker líder s'inicialitza. Els workflows amb nodes `rabbitmq` on `rabbitmqOperation === "receive"` obtenen un consumidor. L'entrada inclou `message_data` (cos, headers, routing_key, etc.) i `triggered_by: "rabbitmq"`.
 
+## Límit de concurrència
+
+Un workflow amb un [límit de concurrència](./webhooks.md#concurrency-limit-and-queued-runs) posa a la cua les execucions de producció de cada punt d'entrada anterior quan els seus slots són plens, per ordre d'arribada (FIFO), a totes les instàncies. La manera com qui fa la crida obté el resultat depèn del punt d'entrada:
+
+| Punt d'entrada | Mentre l'execució espera |
+|---|---|
+| Webhook / API | `202 Accepted` amb un `execution_id` i un URL d'estat |
+| SSE streaming, Quick Drawer, Portal chat | El flux es manté obert i envia esdeveniments `queued` |
+| Portal without streaming | La sol·licitud espera el resultat |
+| MCP | Un resultat `queued` per sondejar amb `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | El trigger espera el resultat, el mateix temps que ho faria una execució en una altra [instància](./cluster.md). L'execució es produeix de totes maneres i s'escriu a l'historial |
+
+Quan la cua està plena, l'execució no s'inicia i l'historial la registra com a `queue_full`. Les execucions de prova de l'editor, les crides de sub-workflow (node [Execute](../nodes/execute-node.md) i eines de workflow de l'agent), les [Evals](../tabs/evals-tab.md), les proves en mode build del xat i les represes de revisió mai no es posen a la cua. Les execucions de targetes del [Board](../tabs/board-tab.md), les execucions de [File Upload](../nodes/file-upload-trigger-node.md), les execucions iniciades per l'eina run-workflow de l'assistent d'IA i els workflows de notificació d'alertes també s'inicien sense esperar un slot.
+
 ## trigger_source
 
 L'historial d'execucions registra `trigger_source` per a cada punt d'entrada:

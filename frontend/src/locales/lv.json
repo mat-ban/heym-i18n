@@ -827,6 +827,22 @@
         "waiting": "Gaida",
         "neutral": "Neitrāls"
       }
+    },
+    "concurrencyLimit": "Vienlaicības ierobežojums",
+    "concurrencyLimitHelp": "Ražošanas izpildes (Webhooki, Cron, MCP, Portal, Triggeri) virs limita gaida FIFO rindā. Redaktora testa izpildes vienmēr sākas nekavējoties.",
+    "maxConcurrentRuns": "Maks. vienlaicīgo izpilžu skaits",
+    "maxQueueSizeOptional": "Maks. rindas izmērs (neobligāts)",
+    "emptyNoLimit": "Tukšs = bez limita",
+    "maxWaitOptional": "Maks. gaidīšanas laiks (sekundes, neobligāts)",
+    "emptyWaitAsLong": "Tukšs = gaidīt tik ilgi, cik nepieciešams",
+    "concurrencyQueueHelp": "Pilna rinda atbild ar 429. Izpilde, kas gaida ilgāk par maksimālo gaidīšanas laiku, tiek reģistrēta kā beigusies.",
+    "rag": {
+      "hybridSearch": "Hibrīdā meklēšana",
+      "hybridSearchHelp": "Apvienojiet vektoru līdzību ar BM25 atslēgvārdu atbilstību, lai atrastu arī precīzus terminus, piemēram, ID, nosaukumus un kļūdu kodus.",
+      "hybridScore": "Hibrīdais rādītājs (0-1)",
+      "similarityScore": "Līdzības rādītājs",
+      "vectorSimilarity": "Vektoru līdzība",
+      "bm25Score": "BM25 rādītājs"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Vaicāt AI",
     "askAiTitle": "Pajautājiet Chat asistentam par šo izpildi",
-    "noNodeSpans": "Šai izpildei netika reģistrēti mezglu span."
+    "noNodeSpans": "Šai izpildei netika reģistrēti mezglu span.",
+    "queuedProgress": "Rindā {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Notiek portāla ielāde...",

@@ -36,6 +36,21 @@ Her workflow bir MCP aracı olarak sunulabilir:
 
 Workflow kartları, açıklamayı ve giriş alanı adlarının bir önizlemesini gösterir; böylece etkinleştirmeden önce her aracın ne beklediğini görebilirsiniz.
 
+
+### Kuyruğa Alınan Çalıştırmalar ve heym_execution_status
+
+[Eşzamanlılık sınırı](../reference/webhooks.md#concurrency-limit-and-queued-runs) olan bir workflow, bir istemci onu çağırdığında meşgul olabilir. Bu durumda çağrı hemen hata olmayan bir sonuçla döner:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+İstemci, bu `execution_id` ile `heym_execution_status` aracını sorgular. [Durum URL'si](../reference/webhooks.md#status-url) ile aynı gövdeyi döndürür: geçerli konumla `queued`, `running`, ardından çıktılarla `success` veya `error`. Yalnızca aynı sunucunun sunduğu workflow çalıştırmalarını bulur. Araç, yalnızca en az bir workflow'un eşzamanlılık sınırı olduğu sürece varsayılan sunucuda ve adlandırılmış her sunucuda listelenir. Sıra dolduğunda çağrı "Concurrency queue is full" hatası döndürür.
 ## Heym Chat Aracı
 
 **Heym Capabilities** bölümü, Chat sekmesi motorunu `heym_chat` adlı tek bir MCP aracına dönüştürür. Bunu varsayılan sunucuda, herhangi bir adlandırılmış sunucuda veya her ikisinde etkinleştirin — her yüzey kendi açma/kapama anahtarını ve model seçimini korur.
@@ -49,6 +64,7 @@ Etkinleştirildiğinde, `heym_chat` workflow araçlarınızın yanında `tools/l
 - Şu anda nelerin çalıştığını bildirin: kaç yürütmenin etkin olduğu, workflow adları, her birinin ne kadar süredir çalıştığı, her birinin şu anda hangi düğümde olduğu ve canlı çalıştırmaya bir bağlantı
 - [Board sekmesinde](./board-tab.md) board'ları listeleyin, kartlar oluşturun ve kart ayrıntılarını okuyun
 - Veri tablolarınızı sütunlarıyla birlikte listeleyin, yenilerini oluşturun ve oluşturduğu workflow'lara bağlayın
+- Heym'in kendi sayfasında kimlik bilgilerinizi oluşturun veya güncelleyin (bkz. [Kimlik Bilgileri](#kimlik-bilgileri))
 - Ekipleri ve global değişkenleri okuyun ve dokümantasyonda arama yapın
 - Bekleyen human-in-the-loop incelemelerini onaylayın, düzenleyin veya reddedin
 
@@ -58,14 +74,28 @@ Chat sekmesine sonradan eklenen yetenekler otomatik olarak `heym_chat` üzerinde
 
 `heym_chat`, Chat motorunu her zaman oluşturma modunda (build mode) çalıştırır. Tek bir çağrıda asistan yeni bir workflow kaydedebilir, gerçekçi örnek girdilerle çalıştırabilir, çalıştırma raporunu okuyabilir, başarısız olan kısımları düzeltebilir ve çağrı başına en fazla beş test çalıştırmasına kadar yeniden çalıştırabilir. Son kaydın son çalıştırması başarılı olduğunda, tek cümlelik bir özetle tamamlanır ve yanıt `Verified: the latest test run of the saved workflow passed.` ifadesiyle biter.
 
+Bir çağrı bir workflow oluşturduğunda veya düzenlediğinde yanıt, her birini `https://heym.example.com/workflows/<id>` gibi tam düzenleyici bağlantısıyla listeler ve asistanın cevabındaki bağlantılar da tam bağlantılardır. Yapılandırılmış Heym adresinizi (`FRONTEND_URL`) kullanırlar ve Heym'de oturum açmış ve o workflow'a erişebilen kişiler için açılırlar.
+
 - Test çalıştırmaları gerçek çalıştırmalardır. Yan etkileri gerçekleşir ve diğer tüm çalıştırmalar gibi workflow'un çalıştırma geçmişinde görünürler.
 - Kayıtlar düzenleyicinin yolunu izler: grafikte yapılan bir değişiklik, önceki grafiği workflow'un **Edit History** geçmişinde tutar.
 - Daha önce oluşturduğu bir workflow'u değiştirmek için aynı `conversation_id` ile ileti dizisine devam edin. Asistan yeni bir tane oluşturmak yerine o workflow'u günceller ve yalnızca düzenleyebileceğiniz workflow'ları değiştirir.
 - Beş test çalıştırması tükendiğinde asistan durur ve neyin hâlâ başarısız olduğunu açıklar.
 
-Kimlik bilgileri arayüzde kalır: `heym_chat` bunları asla listelemez, seçmez veya oluşturmaz. Bir workflow oluşturduğunda veya düzenlediğinde, kimlik bilgisi gerektiren yeni düğümler boş bırakılır ve yanıt bunları adlandırır, böylece bunları düzenleyicide ayarlayabilirsiniz.
-
 Veri tabloları farklıdır. Bir tablo hiçbir sır barındırmaz, bu nedenle `heym_chat` tablolarınızı listeleyebilir, bir workflow'un hangisini kullanması gerektiğini sorabilir ve sütunlarıyla yeni bir tablo oluşturabilir. Satırları asla okumaz veya yazmaz.
+
+### Kimlik Bilgileri
+
+`heym_chat`, sahip olduğunuz ve sizinle paylaşılan kimlik bilgilerini ada ve türe göre Chat sekmesiyle aynı şekilde görür. Oluşturduğu bir workflow kimlik bilgisine ihtiyaç duyduğunda, sonuçta bir soru olarak hangisinin kullanılacağını sorar. Aynı `conversation_id` ile yanıtlayın.
+
+Bir kimlik bilgisi eklemek veya sahip olduğunuz bir kimlik bilgisini güncellemek için asistan, `/credentials/setup/<id>` adresindeki bir Heym sayfasında Heym'in kimlik bilgisi formunu açar. Orada Heym'de oturum açar, anahtarı girer veya hesabı bağlar ve kaydet'e basarsınız. Değer doğrudan Heym'e gider: MCP istemcisi ve modeli yalnızca kimlik bilgisinin adını ve türünü öğrenir. Anahtarları MCP istemcisine yapıştırmayın; bunun yerine formu isteyin.
+
+| İstemci | Ne olur |
+|---------|---------|
+| MCP URL alımını destekler | İstemci sizden Heym sayfasını açmanızı ister. Çağrı formu doldururken on dakikaya kadar bekler, ardından yeni kimlik bilgisiyle devam eder. |
+| Diğer her şey | Sonuç bağlantıyı taşır ve istemciden `heym_chat`'i `wait_for_credential_form` ile tekrar aramasını ister. Bu çağrı formu doldururken beş dakikaya kadar bekler, ardından sohbete devam eder. İstemci beklemezse formu kaydedin ve aynı `conversation_id` ile yanıtlayın; sonraki çağrı formun kaydedildiğini ve hangi kimlik bilgisini oluşturduğunu bilir. |
+
+Sayfa yalnızca isteği başlatan Heym hesabı için açılır, bu nedenle yönlendirilen bir bağlantı başkası için işe yaramaz. Bir form 24 saat açık kalır ve sayfadan reddedebilirsiniz. Kaydettikten veya reddettikten sonra Chat sekmesi görüşmesindeki adım sonucu gösterir.
+
 
 ### Kimlik bilgisi ve model
 
@@ -78,12 +108,15 @@ Veri tabloları farklıdır. Bir tablo hiçbir sır barındırmaz, bu nedenle `h
 
 Herhangi biri eksikse, araç yine de `tools/list` içinde görünür ancak her çağrı, kurulumu bu sekmede tamamlamanızı söyleyen bir hata döndürür.
 
+
+`heym_chat`'in oluşturduğu bir workflow'daki LLM ve Agent düğümleri, sizinle paylaşılan bir kimlik bilgisi de dahil olmak üzere bu kimlik bilgisi ve model üzerinde çalışır, böylece test çalıştırmaları başka bir kurulum adımı olmadan gerçekleşir. `heym_chat` bir workflow'u düzenlediğinde, zaten bir kimlik bilgisine sahip olan LLM ve Agent düğümleri, modelleriyle birlikte bunu korur.
 ### Argümanlar ve geçmiş
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
 | `message` | Evet | Doğal dilde talimat veya soru. |
 | `conversation_id` | Hayır | O konuşma dizisini sürdürmek için önceki bir `heym_chat` sonucundan alınan bir `conversation_id`. |
+| `wait_for_credential_form` | Hayır | `conversation_id` ile: kullanıcının ileti dizisinin açtığı kimlik bilgisi formunu kaydetmesini veya reddetmesini bekleyin, ardından `message` gönderin. |
 
 Her çağrı, [Chat sekmesi](./chat-tab.md) geçmişinize normal bir konuşma olarak yazılır ve konuşma listesinde bir fiş simgesiyle işaretlenir. Mesajlar, araç kartları ve netleştirme duraklamaları, kendi başlattığınız bir konuşmayla tamamen aynı görünür ve konuşma dizisini açıp tarayıcıda konuşmaya devam edebilirsiniz. Her sonuç kendi `conversation_id` değerini döndürür, böylece MCP istemcisi her çağrıda yeni bir tane açmak yerine aynı konuşma dizisini sürdürebilir.
 

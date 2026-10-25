@@ -32,6 +32,10 @@
 3. **执行**：`POST /api/portal/{slug}/execute` – Portal 聊天 UI 调用此接口（启用时内部使用其流式变体）；最终用户通过聊天界面交互，而非直接调用 API。
 4. **停止**：`POST /api/portal/{slug}/executions/{execution_id}/cancel` – 当用户在活动 portal 运行期间按下 **Stop** 时请求
 
+## 并发限制
+
+当工作流设置了[并发限制](./webhooks.md#concurrency-limit-and-queued-runs)且所有槽位均已被占用时，Portal 消息将排队等待轮到它，而不是立即运行。在运行开始之前，聊天界面的进度行会显示 **Waiting in queue (2/5)**，随后像往常一样显示回答。即使用户关闭页面，运行仍会继续执行。点击 **Stop** 会将等待中的运行从队列中移除。当队列已满时，消息将失败并提示 "Concurrency queue is full"。在队列中等待过的运行不会逐个 Token 地流式传输答案；整个答案将在运行完成时一次性显示。
+
 ## Portal 运行中的 HITL
 
 如果 portal 工作流到达启用了 [Human-in-the-Loop](./human-in-the-loop.md) 的 [Agent 节点](../nodes/agent-node.md)，portal 响应会显示审核链接，而不是显示为空。

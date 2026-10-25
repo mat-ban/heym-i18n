@@ -18,7 +18,7 @@ Prihlasovacie údaje ukladajú API kľúče a tajné hodnoty používané uzlami
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Prihlásenie cez predplatné ChatGPT (OAuth) alebo prístupový token Codex pre runner plus GitHub PAT pre operácie s repozitárom |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API kľúč brány OpenCode Go (voliteľná základná URL adresa) pre runner plus GitHub PAT pre operácie s repozitárom |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) pre volania GitHub API, operácie uzla GitHub a integrácie MCP |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token alebo Data Center používateľské meno/heslo, základná URL adresa lokality Jira, režim nasadenia a voliteľná verzia REST API |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token, Data Center používateľské meno/heslo alebo osobný prístupový token, základná URL adresa lokality Jira, režim nasadenia a voliteľná verzia REST API |
 | [Linear](../nodes/linear-node.md) | Linear | Osobný API kľúč alebo OAuth2 pre tímy, projekty, úlohy a komentáre |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autentifikácia pre požiadavky |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Token bota a voliteľné tajné hodnoty webhooku |
@@ -64,7 +64,7 @@ Niektoré uzly povoľujú výrazy pre autentifikáciu. Použite [Expression DSL]
 
 Codex prihlasovacie údaje sú zámerne vylúčené z `$credentials`. Či už sa prihlásite cez ChatGPT (predplatné, žiadne náklady na API za token) alebo vložíte Codex `access_token`, tokeny sa odovzdávajú iba lokálnemu procesu spúšťača Codex. Tokeny na prihlásenie cez ChatGPT sa automaticky obnovujú, keď vypršia.
 
-Jira prihlasovacie údaje sú tiež vylúčené z `$credentials`. [Jira uzol](../nodes/jira-node.md) načíta prihlasovacie údaje podľa `credentialId` v čase spustenia. Pre vlastné Jira REST volania, ktoré Jira uzol nepokrýva, použite [HTTP uzol](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pre Jira Cloud alebo `username:password` pre Data Center / Server), napríklad `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Môžete tiež použiť [Header](../nodes/http-node.md) prihlasovacie údaje s `Authorization: Basic <base64(user:secret)>`. Osobné prístupové tokeny Jira Data Center / Server a Bearer autentifikácia zatiaľ nie sú Jira prihlasovacími údajmi podporované.
+Jira prihlasovacie údaje sú tiež vylúčené z `$credentials`. [Jira uzol](../nodes/jira-node.md) načíta prihlasovacie údaje podľa `credentialId` v čase spustenia. Pre vlastné Jira REST volania, ktoré Jira uzol nepokrýva, použite [HTTP uzol](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pre Jira Cloud alebo `username:password` pre Data Center / Server), napríklad `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Môžete tiež použiť [Header](../nodes/http-node.md) prihlasovacie údaje s `Authorization: Basic <base64(user:secret)>`. V prípade osobných prístupových tokenov Jira Data Center / Server pošlite namiesto toho `Authorization: Bearer <token>`; samotné prihlasovacie údaje Jira to podporujú prostredníctvom režimu overovania **Personal Access Token**.
 
 | Typ prihlasovacích údajov | Hodnota sprístupnená pre `$credentials.Name` |
 |-----------------|--------------------------------------|

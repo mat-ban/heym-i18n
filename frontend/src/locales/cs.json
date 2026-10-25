@@ -827,6 +827,22 @@
         "waiting": "Čeká se",
         "neutral": "Neutrální"
       }
+    },
+    "concurrencyLimit": "Limit souběhu",
+    "concurrencyLimitHelp": "Produkční běhy (Webhooky, Cron, MCP, Portal, Triggery) nad limit čekají ve frontě FIFO. Testovací běhy v editoru se vždy spouštějí ihned.",
+    "maxConcurrentRuns": "Max. souběžných běhů",
+    "maxQueueSizeOptional": "Max. velikost fronty (volitelné)",
+    "emptyNoLimit": "Prázdné = bez limitu",
+    "maxWaitOptional": "Max. čekání (sekundy, volitelné)",
+    "emptyWaitAsLong": "Prázdné = čekat libovolně dlouho",
+    "concurrencyQueueHelp": "Plná fronta odpovídá kódem 429. Běh, který čeká déle než maximální dobu, se zaznamená jako vypršený.",
+    "rag": {
+      "hybridSearch": "Hybridní vyhledávání",
+      "hybridSearchHelp": "Kombinujte vektorovou podobnost s vyhledáváním klíčových slov BM25, aby byly nalezeny i přesné výrazy jako identifikátory, názvy a chybové kódy.",
+      "hybridScore": "Hybridní skóre (0-1)",
+      "similarityScore": "Skóre podobnosti",
+      "vectorSimilarity": "Vektorová podobnost",
+      "bm25Score": "BM25 skóre"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Zeptat se AI",
     "askAiTitle": "Zeptat se asistenta Chat na toto spuštění",
-    "noNodeSpans": "Pro toto spuštění nebyly zaznamenány žádné spany uzlů."
+    "noNodeSpans": "Pro toto spuštění nebyly zaznamenány žádné spany uzlů.",
+    "queuedProgress": "Ve frontě {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Načítání portálu...",

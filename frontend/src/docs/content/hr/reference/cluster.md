@@ -111,6 +111,10 @@ Oznaka slike mora biti verzija koju glavni čvor pokreće, a oba ključa moraju 
 | Uključeno | Uklonite radnika iz rotacije bez zaustavljanja — izvršavanja koja se trenutno odvijaju završavaju, a nova se ne dodjeljuju. Zaključano za glavni čvor: radovi s datotekama, dodacima i kodnim agentima odvijaju se tamo bez obzira na to što prekidač kaže |
 | Težina | Njegov udio u distribuiranim izvršavanjima |
 
+## Ograničenja istodobnosti u clusteru
+
+[Ograničenje istodobnosti](./webhooks.md#concurrency-limit-and-queued-runs) workflowa broji se u PostgreSQL-u, pa vrijedi na svakoj instanci i svakom procesu: dvije instance nikada ne pokreću više izvođenja jednog workflowa nego što dopušta ograničenje. Izvođenje koje je čekalo na mjesto raspoređuje se prema istim pravilima kao i svako drugo izvođenje pri pokretanju, pa izvođenje koje mora ostati na main instanci to i dalje čini. Worker reda čekanja koji izvršava ova izvođenja sada se pokreće pri svakoj instalaciji, uključujući i pojedinačnu instancu, gdje preuzima samo izvođenja koja je u red stavila njegova vlastita instanca. To znači da pojedinačna instanca također drži vezu za buđenje reda `LISTEN` u svakom procesu, stoga planirajte njezine veze na isti način kao i za instancu cluster-a.
+
 ## Povijest izvršavanja
 
 Svako izvršavanje u povijesti izvršavanja imenuje instancu koja ga je izvršila, a oba dijaloga povijesti mogu se filtrirati na jednu instancu. Filtriranje se podudara s ID-jem instance dok prikazuje njezino ime, tako da preimenovanje instance ne prepisuje ono što stari izvršavanja kažu.

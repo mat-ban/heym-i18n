@@ -32,6 +32,10 @@ Configure en el editor: el botón **Portal** en el encabezado del workflow abre 
 3. **Execute**: `POST /api/portal/{slug}/execute` – La UI de chat del portal llama a este endpoint (o a su variante de streaming internamente cuando está habilitado); los usuarios finales interactúan a través de la interfaz de chat, no llamando directamente a la API.
 4. **Stop**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Se solicita cuando el usuario pulsa **Stop** durante una ejecución activa del portal
 
+## Límite de concurrencia
+
+Cuando el workflow tiene un [límite de concurrencia](./webhooks.md#concurrency-limit-and-queued-runs) y todos los slots están en uso, un mensaje del portal espera su turno en lugar de ejecutarse de inmediato. El chat muestra **Waiting in queue (2/5)** en su línea de progreso hasta que comienza la ejecución, y luego la respuesta habitual. La ejecución se lleva a cabo incluso si el usuario cierra la página. **Stop** elimina de la cola una ejecución en espera. Cuando la cola está llena, el mensaje falla con "Concurrency queue is full". Una ejecución que esperó en la cola no transmite su respuesta token por token; la respuesta completa aparece cuando finaliza.
+
 ## HITL en ejecuciones del portal
 
 Si un workflow del portal alcanza un [Nodo Agent](../nodes/agent-node.md) con [Human-in-the-Loop](./human-in-the-loop.md) habilitado, la respuesta del portal muestra un enlace de revisión en lugar de aparecer vacía.

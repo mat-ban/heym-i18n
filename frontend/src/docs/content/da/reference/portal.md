@@ -32,6 +32,10 @@ Konfigureres i editoren: Knappen **Portal** i workflow-headeren åbner portal-in
 3. **Kør**: `POST /api/portal/{slug}/execute` – Portal-chat-brugergrænsefladen kalder dette (eller dens streaming-variant internt når aktiveret); slutbrugere interagerer via chat-interfacet, ikke ved direkte API-kald.
 4. **Stop**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Anmodes når brugeren trykker på **Stop** under en aktiv portal-kørsel
 
+## Samtidighedsgrænse
+
+Når workflowet har en [samtidighedsgrænse](./webhooks.md#concurrency-limit-and-queued-runs), og alle pladser er optaget, venter en portalbesked på sin tur i stedet for at køre med det samme. Chatten viser **Waiting in queue (2/5)** på sin fremgangslinje, indtil kørslen starter, og derefter svaret som normalt. Kørslen gennemføres stadig, hvis brugeren lukker siden. **Stop** fjerner en ventende kørsel fra køen. Når køen er fuld, mislykkes beskeden med "Concurrency queue is full". En kørsel, der ventede i køen, streamer ikke sit svar token for token; hele svaret vises, når den afsluttes.
+
 ## HITL i portal-kørsler
 
 Hvis et portal-workflow når en [Agent Node](../nodes/agent-node.md) med [Human-in-the-Loop](./human-in-the-loop.md) aktiveret, viser portal-svaret et gennemsynslink i stedet for at vises tomt.

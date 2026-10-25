@@ -18,7 +18,7 @@ Mandaadid salvestavad API võtmeid ja saladusi, mida workflow'de sõlmed kasutav
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT tellimuse sisselogimine (OAuth) või Codex'i juurdepääsu token runneri jaoks, pluss GitHub PAT hoidla toimingute jaoks |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go lüüsi API võti (valikuline baas-URL) runneri jaoks, pluss GitHub PAT hoidla toimingute jaoks |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHubi isiklik juurdepääsu token (PAT) GitHubi API kutsete, GitHub node'i toimingute ja MCP integratsioonide jaoks |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud'i e-post/API token või Data Centeri kasutajanimi/parool, Jira saidi baas-URL, juurutusrežiim ja valikuline REST API versioon |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud'i e-post/API token, Data Centeri kasutajanimi/parool või isiklik juurdepääsutoken, Jira saidi baas-URL, juurutusrežiim ja valikuline REST API versioon |
 | [Linear](../nodes/linear-node.md) | Linear | Isiklik API võti või OAuth2 tiimide, projektide, teemade ja kommentaaride jaoks |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autentimine päringute jaoks |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Boti token ja valikuline webhooki saladus |
@@ -57,7 +57,7 @@ Mõned sõlmed lubavad autentimiseks avaldisi. Kasutage [Avaldise DSL](./express
 
 Codexi mandaadid on `$credentials`-ist teadlikult välja jäetud. Olenemata sellest, kas logite sisse ChatGPT-ga (tellimus, ilma tokenipõhise API kuluta) või kleepite Codexi `access_token`-i, edastatakse tokenid ainult kohalikule Codexi käitaja protsessile. ChatGPT sisselogimise tokenid värskendatakse automaatselt nende aegumisel.
 
-Ka Jira mandaadid on `$credentials`-ist välja jäetud. [Jira sõlm](../nodes/jira-node.md) laadib mandaadi käitusajal `credentialId` järgi. Kohandatud Jira REST-kutsete jaoks, mida Jira sõlm ei kata, kasutage [HTTP sõlme](../nodes/http-node.md) koos Jira Basic Auth-iga (`email:api_token` Jira Cloudi jaoks või `username:password` Data Centeri / Serveri jaoks), näiteks `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Võite kasutada ka [Header](../nodes/http-node.md) mandaati koos `Authorization: Basic <base64(user:secret)>`. Jira Data Centeri / Serveri isiklikud juurdepääsutokenid ja Bearer-autentimine ei ole Jira mandaadi poolt veel toetatud.
+Ka Jira mandaadid on `$credentials`-ist välja jäetud. [Jira sõlm](../nodes/jira-node.md) laadib mandaadi käitusajal `credentialId` järgi. Kohandatud Jira REST-kutsete jaoks, mida Jira sõlm ei kata, kasutage [HTTP sõlme](../nodes/http-node.md) koos Jira Basic Auth-iga (`email:api_token` Jira Cloudi jaoks või `username:password` Data Centeri / Serveri jaoks), näiteks `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Võite kasutada ka [Header](../nodes/http-node.md) mandaati koos `Authorization: Basic <base64(user:secret)>`. Jira Data Centeri / Serveri isiklike juurdepääsutokenite puhul saatke selle asemel `Authorization: Bearer <token>`; Jira mandaat ise toetab seda oma **Personal Access Token** autentimisrežiimi kaudu.
 
 | Mandaadi tüüp | Väärtus, mis on avatud `$credentials.Name`-ile |
 |-----------------|--------------------------------------|

@@ -148,7 +148,7 @@ L'Assistent d'IA funciona amb un **workflow DSL** (llenguatge específic de domi
    - Les vostres Regles d'usuari afegides com a "User Custom Rules"
    - El JSON del workflow actual quan esteu editant un workflow existent
    - La llista de workflows disponibles si utilitzeu el node Execute
-   - Els noms, tipus i ids de les vostres pròpies credencials (mai els seus valors)
+   - Els noms, tipus i ids de les credencials que teniu o que s'han compartit amb vós (mai els seus valors)
    - Els noms, ids, descripcions i columnes de les taules de dades que podeu utilitzar (mai les seves files)
 3. El model retorna un únic bloc JSON de workflow (amb `nodes` i `edges`). El frontend l'analitza i l'aplica al canvas.
 ### Credencials

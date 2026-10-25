@@ -148,7 +148,7 @@ AI Assistant je poháněn **workflow DSL** (doménově specifickým jazykem), kt
    - Vaše Uživatelská pravidla připojená jako "User Custom Rules"
    - JSON aktuálního workflow, když upravujete existující workflow
    - Seznam dostupných workflow, pokud používáte uzel Execute
-   - Názvy, typy a id Vašich vlastních přihlašovacích údajů (nikdy jejich hodnoty)
+   - Názvy, typy a id přihlašovacích údajů, které vlastníte nebo které s Vámi byly sdíleny (nikdy jejich hodnoty)
    - Názvy, id, popisy a sloupce datových tabulek, které můžete použít (nikdy jejich řádky)
 3. Model vrátí jediný blok JSON workflow (s `nodes` a `edges`). Frontend jej zpracuje a aplikuje na canvas.
 

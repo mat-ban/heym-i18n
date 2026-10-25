@@ -52,6 +52,8 @@ Efter start af en kørsel viser panelet:
 
 `pending` betyder, at workflowet venter på en senere handling såsom menneskelig gennemsyn.
 
+Quick Drawer-kørsler er produktionskørsler, så et workflow med en [samtidighedsgrænse](./webhooks.md#concurrency-limit-and-queued-runs) kan få dem til at vente. Mens kørslen er i kø, viser status **Waiting in queue (2/5)**; den skifter til "running", når kørslen starter, og viser resultatet, når den slutter, uden trin-for-trin fremgang. En kørsel, der udløb i køen eller blev annulleret under ventetiden, slutter som `error`.
+
 En filkørsel går gennem triggerens engangs-uploadlink: skuffen beder workflowet om et link, uploader filen til det og viser resultatet, når uploaden vender tilbage. Filkørsler viser den endelige status og output, men ingen trinvis fremdrift, og bliver også tagget med `Quick Drawer` i historikken. Den valgte fil ryddes efter hver kørsel, da et link kun tager imod én fil.
 
 ## Browserlager

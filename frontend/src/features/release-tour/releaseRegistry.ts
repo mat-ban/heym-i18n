@@ -17,6 +17,85 @@ import type { ReleaseEntry } from "@/features/release-tour/releaseTour.types";
  */
 export const RELEASE_REGISTRY: ReleaseEntry[] = [
   {
+    releaseId: "2026.22",
+    publishedAt: new Date("2026-10-26T12:00:00Z"),
+    headline: "Work on one canvas together, and limit how many runs execute at once",
+    releaseTour: {
+      label: "New in Heym",
+      introTitle: "New in this release",
+      introDescription:
+        "A quick look at what changed since your last update. Takes about a minute.",
+      tourEnabled: true,
+      sectionOrder: ["concurrency-limit", "canvas-collaboration"],
+    },
+    sections: [
+      {
+        id: "concurrency-limit",
+        title: "Run a workflow one at a time, or N at a time",
+        publishedAt: new Date("2026-10-26T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Turn on **Concurrency limit** in the workflow's **Properties** panel and enter how many production runs may execute at once. Webhook, cron, MCP, Portal and trigger runs above the limit wait in a first-in, first-out queue. Editor test runs always start right away.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "A webhook call that has to wait gets **202 Accepted** at once, with an `execution_id`, a status URL and its place in the queue. Poll the status URL with the same credentials until the result arrives. MCP clients get the same answer and poll with **heym_execution_status**. Optional **Max queue size** and **Max wait** fields bound the queue.",
+          },
+        ],
+        tour: {
+          description:
+            "Cap concurrent runs per workflow. Extra runs wait in order, and callers get an execution id to collect the result.",
+          useCases: [
+            "Process webhooks one at a time so two runs never update the same record",
+            "Keep a rate-limited API from seeing more than two calls at once",
+            "Let an MCP client queue work and pick up the result later",
+          ],
+          tourVisual: "concurrency-limit",
+          docTarget: {
+            categoryId: "reference",
+            slug: "webhooks",
+            title: "Webhooks",
+          },
+        },
+      },
+      {
+        id: "canvas-collaboration",
+        title: "Work on a canvas together",
+        publishedAt: new Date("2026-10-25T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Everyone who opens a workflow now shows as an avatar at the top left of the canvas. Edits reach every open canvas as they happen, and each person's pointer moves in their own color. Anyone with edit access can save the shared draft, and **Ctrl+Z** undoes only your own changes.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Click an avatar to **follow** that person: your editor shows what they look at, where they point, the dialogs and AI Assistant they open and the runs they start, with your own access. Press **Esc** to stop. Turn on the **microphone** next to the avatars to talk with everyone on the canvas.",
+          },
+        ],
+        tour: {
+          description:
+            "See who is on the canvas, edit together live, follow someone's view and talk with the microphone.",
+          useCases: [
+            "Build a workflow with a teammate without taking turns",
+            "Walk someone through a run by letting them follow you",
+            "Review a workflow together while talking it through",
+          ],
+          tourVisual: "canvas-collaboration",
+          docTarget: {
+            categoryId: "reference",
+            slug: "canvas-collaboration",
+            title: "Canvas Collaboration",
+          },
+        },
+      },
+    ],
+  },
+  {
     releaseId: "2026.21",
     publishedAt: new Date("2026-10-22T12:00:00Z"),
     headline: "Change one node with AI, and sign in to Codex with a short code",
@@ -105,7 +184,7 @@ export const RELEASE_REGISTRY: ReleaseEntry[] = [
       introDescription:
         "A quick look at what changed since your last update. Takes about a minute.",
       tourEnabled: true,
-      sectionOrder: ["slack-bot", "google-triggers"],
+      sectionOrder: ["slack-bot"],
     },
     sections: [
       {
@@ -142,89 +221,6 @@ export const RELEASE_REGISTRY: ReleaseEntry[] = [
             categoryId: "nodes",
             slug: "slack-node",
             title: "Slack",
-          },
-        },
-      },
-      {
-        id: "google-triggers",
-        title: "Start a run when a Drive file or a sheet row changes",
-        publishedAt: new Date("2026-10-17T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Two new trigger nodes. **Google Drive Trigger** starts a run when a file is created, updated, or deleted in a folder you choose. **Google Sheets Trigger** starts a run when a row is added, updated, or deleted, and tells the run which columns changed.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Each change starts exactly one run, even on a multi-instance install. Heym keeps file metadata and keyed fingerprints of cells, never cell values. Set a key column such as `Email` so inserted or sorted rows are matched correctly.",
-          },
-        ],
-        tour: {
-          description:
-            "Start a run when a file lands in a Drive folder or a row changes in a sheet, once per change.",
-          useCases: [
-            "Summarize every contract dropped into a shared folder",
-            "Score each new lead as soon as its row appears",
-            "Notify an owner when a status column changes",
-          ],
-          tourVisual: "google-triggers",
-          docTarget: {
-            categoryId: "nodes",
-            slug: "google-sheets-trigger-node",
-            title: "Google Sheets Trigger",
-          },
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.19",
-    publishedAt: new Date("2026-10-10T18:00:00Z"),
-    headline: "Heym Work for business teams, and skill zips in Chat",
-    releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
-      tourEnabled: true,
-      sectionOrder: ["heym-work"],
-    },
-    sections: [
-      {
-        id: "heym-work",
-        title: "Heym Work, the business layer on top of Heym",
-        publishedAt: new Date("2026-10-11T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "**Heym Work** is a second interface for business teams. People describe a job in their own words, answer a few questions, and get a workflow that Heym has built and tested. They work from pages built for them, answer reviews, and see every run with a name on it, while Heym runs each job in the background.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Heym admins connect it in **Settings, Heym Work**: enter Heym Work's address, generate a key, and enable the connection. People sign in with the single sign-on Heym already uses. Heym Work is licensed separately; see heym.run/enterprise.",
-          },
-        ],
-        tour: {
-          description:
-            "Business teams describe a job, answer a few questions and get a tested workflow, with Heym running it.",
-          useCases: [
-            "Give a legal, finance or operations team its own place to automate work",
-            "Connect it from Settings, Heym Work with an address and a key",
-            "Keep single sign-on, roles and approvals for every team",
-          ],
-          tourVisual: "heym-work",
-          docTarget: {
-            categoryId: "reference",
-            slug: "heym-work",
-            title: "Heym Work",
-          },
-          externalLink: {
-            url: "/enterprise",
-            title: "Learn more on heym.run",
           },
         },
       },

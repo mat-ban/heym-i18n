@@ -85,6 +85,20 @@ Discord trimite webhook-uri de interacțiune către `POST /api/discord/webhook/{
 
 Consumatorul RabbitMQ pornește când worker-ul lider se inițializează. Workflow-urile cu noduri `rabbitmq` unde `rabbitmqOperation === "receive"` primesc un consumator. Intrarea include `message_data` (body, headers, routing_key etc.) și `triggered_by: "rabbitmq"`.
 
+## Limită de concurență
+
+Un workflow cu o [limită de concurență](./webhooks.md#concurrency-limit-and-queued-runs) pune în coadă rulările de producție din fiecare punct de intrare de mai sus atunci când sloturile sale sunt pline, primul venit, primul servit, pe toate instanțele. Modul în care un apelant află rezultatul depinde de punctul de intrare:
+
+| Punct de intrare | În timp ce rularea așteaptă |
+|---|---|
+| Webhook / API | `202 Accepted` cu un `execution_id` și un URL de stare |
+| SSE streaming, Quick Drawer, Portal chat | Fluxul rămâne deschis și trimite evenimente `queued` |
+| Portal without streaming | Cererea așteaptă rezultatul |
+| MCP | Un rezultat `queued` de interogat cu `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger-ul așteaptă rezultatul, atât timp cât ar aștepta o rulare pe o altă [instanță](./cluster.md). Rularea se execută oricum și este înregistrată în istoric |
+
+Când coada este plină, rularea nu pornește și istoricul o înregistrează ca `queue_full`. Rulările de test din editor, apelurile de sub-workflow (nodul [Execute](../nodes/execute-node.md) și instrumentele de workflow ale agentului), [Evals](../tabs/evals-tab.md), rulările de test în modul chat build și reluările după revizuire nu sunt niciodată puse în coadă. Rulările de carduri din [Board](../tabs/board-tab.md), rulările [File Upload](../nodes/file-upload-trigger-node.md), rulările pornite de instrumentul run-workflow al asistentului AI și workflow-urile de notificare a alertelor pornesc de asemenea fără a aștepta un slot.
+
 ## trigger_source
 
 Istoricul execuțiilor înregistrează `trigger_source` pentru fiecare punct de intrare:

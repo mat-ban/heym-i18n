@@ -52,6 +52,8 @@ După pornirea unei rulări, panoul afișează:
 
 `pending` înseamnă că workflow-ul așteaptă o acțiune ulterioară, precum o revizuire umană.
 
+Rulările din Quick Drawer sunt rulări de producție, astfel încât un workflow cu o [limită de concurență](./webhooks.md#concurrency-limit-and-queued-runs) le poate face să aștepte. În timp ce rularea este la rând, starea indică **Waiting in queue (2/5)**; aceasta se schimbă în "running" când rularea începe și afișează rezultatul când se termină, fără progres pas cu pas. O rulare care a expirat în coadă sau a fost anulată în timpul așteptării se termină ca `error`.
+
 O rulare cu fișier trece prin linkul de încărcare de unică folosință al triggerului: sertarul solicită un link de la workflow, încarcă fișierul la acea adresă și afișează rezultatul când încărcarea se încheie. Rulările cu fișier afișează starea finală și ieșirile, dar fără progres pas cu pas, și sunt etichetate tot cu `Quick Drawer` în istoric. Fișierul ales este golit după fiecare rulare, deoarece un link acceptă un singur fișier.
 
 ## Stocarea în Browser

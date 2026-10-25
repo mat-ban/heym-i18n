@@ -18,7 +18,7 @@ Poverilnice shranjujejo API ključe in skrivnosti, ki jih uporabljajo vozlišča
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Prijava na ChatGPT naročnino (OAuth) ali dostopni token Codex za izvajalca, plus GitHub PAT za operacije z repozitoriji |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API ključ OpenCode Go prehodne točke (opcijski osnovni URL) za izvajalca, plus GitHub PAT za operacije z repozitoriji |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | Osebni dostopni token (PAT) za klice GitHub API, operacije GitHub vozlišča in MCP integracije |
-| [Jira](../nodes/jira-node.md) | Jira | Oblačni e-poštni/API token ali uporabniško ime/geslo Data Center, osnovni URL spletnega mesta Jira, način namestitve in opcijska različica REST API |
+| [Jira](../nodes/jira-node.md) | Jira | Oblačni e-poštni/API token, uporabniško ime/geslo Data Center ali osebni dostopni žeton, osnovni URL spletnega mesta Jira, način namestitve in opcijska različica REST API |
 | [Linear](../nodes/linear-node.md) | Linear | Osebni API ključ ali OAuth2 za ekipe, projekte, težave in komentarje |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Avtentikacija za zahteve |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Token bota in opcijska skrivnost webhook-a |
@@ -57,7 +57,7 @@ Nekatera vozlišča omogočajo izraze za avtentikacijo. Uporabite [Expression DS
 
 Poverilnice Codex so namerno izključene iz `$credentials`. Ne glede na to, ali se prijavite z ChatGPT (naročnina, brez stroškov API na podlagi žetonov) ali prilepite `access_token` Codex, se žetoni prenašajo samo v lokalni proces izvajalca Codex. Žetoni za prijavo ChatGPT se samodejno osvežijo, ko potečejo.
 
-Poverilnice Jira so prav tako izključene iz `$credentials`. [Jira vozlišče](../nodes/jira-node.md) naloži poverilnico po `credentialId` med izvajanjem. Za prilagojene REST klice Jira, ki jih ne pokriva Jira vozlišče, uporabite [HTTP vozlišče](../nodes/http-node.md) z osnovno avtentikacijo Jira (`email:api_token` za Jira Cloud ali `username:password` za Data Center / Server), na primer `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Uporabite lahko tudi [Header](../nodes/http-node.md) poverilnico z `Authorization: Basic <base64(user:secret)>`. Osebni dostopni žetoni in Bearer avtentikacija za Jira Data Center / Server še niso podprti s strani poverilnice Jira.
+Poverilnice Jira so prav tako izključene iz `$credentials`. [Jira vozlišče](../nodes/jira-node.md) naloži poverilnico po `credentialId` med izvajanjem. Za prilagojene REST klice Jira, ki jih ne pokriva Jira vozlišče, uporabite [HTTP vozlišče](../nodes/http-node.md) z osnovno avtentikacijo Jira (`email:api_token` za Jira Cloud ali `username:password` za Data Center / Server), na primer `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Uporabite lahko tudi [Header](../nodes/http-node.md) poverilnico z `Authorization: Basic <base64(user:secret)>`. Za osebne dostopne žetone Jira Data Center / Server namesto tega pošljite `Authorization: Bearer <token>`; sama poverilnica Jira to podpira prek svojega načina avtentikacije **Personal Access Token**.
 
 | Vrsta poverilnice | Vrednost, izpostavljena `$credentials.Name` |
 |-------------------|---------------------------------------------|

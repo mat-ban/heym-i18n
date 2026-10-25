@@ -89,6 +89,20 @@ Discord saadab interaktsiooni webhookid aadressile `POST /api/discord/webhook/{n
 
 RabbitMQ tarbija käivitub, kui juhtiv töötaja (leader worker) lähtestatakse. Workflow'd, mis sisaldavad `rabbitmq` node'e, kus `rabbitmqOperation === "receive"`, saavad tarbija. Sisend sisaldab `message_data` (body, headers, routing_key jne) ja `triggered_by: "rabbitmq"`.
 
+## Samaaegsuse piirang
+
+[Samaaegsuse piiranguga](./webhooks.md#concurrency-limit-and-queued-runs) workflow seab ülaltoodud mis tahes sisendpunkti tootmiskäivitused järjekorda, kui selle pesad on täis, põhimõttel esimesena sisse, esimesena välja, kõigis eksemplarides. See, kuidas helistaja tulemuse teada saab, sõltub sisendpunktist:
+
+| Sisendpunkt | Kuni käivitus ootab |
+|---|---|
+| Webhook / API | `202 Accepted` koos `execution_id` ja oleku URL-iga |
+| SSE streaming, Quick Drawer, Portal chat | Voog jääb avatuks ja saadab `queued` sündmusi |
+| Portal without streaming | Päring ootab tulemust |
+| MCP | `queued` tulemus, mida pärida `heym_execution_status` abil |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger ootab tulemust sama kaua, kui ootaks käivitus teises [eksemplaris](./cluster.md). Käivitus viiakse igal juhul läbi ja salvestatakse ajalukku |
+
+Kui järjekord on täis, käivitus ei alga ja ajalugu salvestab selle kui `queue_full`. Redaktori testkäivitused, alam-workflow kõned (sõlm [Execute](../nodes/execute-node.md) ja agendi workflow tööriistad), [Evals](../tabs/evals-tab.md), vestluse loomise režiimi testkäivitused ja ülevaatuse jätkamised ei lähe kunagi järjekorda. [Board](../tabs/board-tab.md) kaardikäivitused, [File Upload](../nodes/file-upload-trigger-node.md) käivitused, tehisintellekti assistendi run-workflow tööriista käivitatud jooksud ja hoiatustest teavitamise workflow'd käivituvad samuti ilma pesa ootamata.
+
 ## trigger_source
 
 Käivituste ajalugu salvestab `trigger_source` iga sisendpunkti kohta:

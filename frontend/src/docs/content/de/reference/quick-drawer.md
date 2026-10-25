@@ -52,6 +52,8 @@ Nach dem Start eines Laufs zeigt der Drawer:
 
 `pending` bedeutet, dass der Workflow auf eine spätere Aktion wie eine menschliche Überprüfung wartet.
 
+Quick-Drawer-Läufe sind Produktionsausführungen, sodass ein Workflow mit einem [Gleichzeitigkeitslimit](./webhooks.md#concurrency-limit-and-queued-runs) sie warten lassen kann. Während der Lauf in der Warteschlange steht, lautet der Status **Waiting in queue (2/5)**; er wechselt zu "running", wenn der Lauf startet, und zeigt das Ergebnis an, wenn er endet, ohne schrittweisen Fortschritt. Ein Lauf, der in der Warteschlange abgelaufen ist oder während des Wartens abgebrochen wurde, endet als `error`.
+
 Ein Dateilauf erfolgt über den einmalig verwendbaren Upload-Link des Triggers: Der Drawer fordert vom Workflow einen Link an, lädt die Datei dorthin hoch und zeigt das Ergebnis an, sobald der Upload abgeschlossen ist. Dateiläufe zeigen den Endstatus und die Ausgaben, jedoch keinen schrittweisen Fortschritt, und werden im Verlauf ebenfalls mit `Quick Drawer` markiert. Die ausgewählte Datei wird nach jedem Lauf zurückgesetzt, da ein Link nur für eine Datei gilt.
 
 ## Browser-Speicher

@@ -110,6 +110,8 @@ Entrambe le finestre di dialogo della cronologia mostrano le **esecuzioni attual
 - Dopo l'annullamento, la voce in esecuzione scompare al successivo aggiornamento; premere **Refresh** per aggiornare manualmente l'elenco
 - Se si annulla un'esecuzione già conclusa, la richiesta non produce alcun effetto
 
+Le esecuzioni in attesa di uno [slot di concorrenza](./webhooks.md#concurrency-limit-and-queued-runs) sono elencate nella stessa sezione con l'etichetta **Queued 2/5**, la loro posizione e la dimensione della coda. Non dispongono del pulsante **Open live** poiché non c'è ancora nulla in esecuzione; **Cancel** rimuove l'esecuzione in attesa dalla coda e la registra come `cancelled`. Un'esecuzione che ha atteso più del tempo massimo del workflow viene registrata come `expired`, mentre un'esecuzione respinta per coda piena viene registrata come `queue_full`; entrambe hanno un badge dedicato nell'elenco delle esecuzioni.
+
 L'URL live è `/workflows/{workflowId}/{executionId}`. L'osservatore è in sola lettura: uscire
 dall'editor disconnette solo quella scheda del browser e non interrompe mai il workflow. Gli snapshot
 attivi sono condivisi tramite PostgreSQL, quindi l'apertura di un'esecuzione funziona anche quando il trigger e la richiesta

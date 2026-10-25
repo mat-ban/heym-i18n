@@ -85,6 +85,20 @@ Discord šalje webhooks interakcija na `POST /api/discord/webhook/{node_id}`. Pa
 
 RabbitMQ potrošač započinje kada vođa radnika inicijalizira. Workflows s `rabbitmq` čvorovima gdje je `rabbitmqOperation === "receive"` dobivaju potrošača. Ulaz uključuje `message_data` (tijelo, zaglavlja, routing_key itd.) i `triggered_by: "rabbitmq"`.
 
+## Ograničenje istovremenosti
+
+Workflow s [ograničenjem istovremenosti](./webhooks.md#concurrency-limit-and-queued-runs) stavlja u red čekanja produkcijska pokretanja iz svake gore navedene ulazne točke kada su mu slotovi puni, po principu prvi unutra, prvi van (FIFO), na svim instancama. Način na koji pozivatelj saznaje rezultat ovisi o ulaznoj točki:
+
+| Ulazna točka | Dok pokretanje čeka |
+|---|---|
+| Webhook / API | `202 Accepted` s `execution_id` i URL-om statusa |
+| SSE streaming, Quick Drawer, Portal chat | Stream ostaje otvoren i šalje događaje `queued` |
+| Portal without streaming | Zahtjev čeka rezultat |
+| MCP | Rezultat `queued` za anketiranje putem `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger čeka rezultat onoliko dugo koliko bi čekalo pokretanje na drugoj [instanci](./cluster.md). Pokretanje se u svakom slučaju izvršava i zapisuje u povijest |
+
+Kada je red čekanja pun, pokretanje ne započinje i povijest ga bilježi kao `queue_full`. Testna pokretanja u uređivaču, pozivi pod-workflowa (čvor [Execute](../nodes/execute-node.md) i workflow alati agenta), [Evals](../tabs/evals-tab.md), testna pokretanja u načinu izgradnje chata i nastavci nakon pregleda nikada se ne stavljaju u red čekanja. Pokretanja kartica na [Board](../tabs/board-tab.md), pokretanja [File Upload](../nodes/file-upload-trigger-node.md), pokretanja pokrenuta alatom run-workflow AI asistenta i workflowi obavijesti o upozorenjima također započinju bez čekanja na slot.
+
 ## trigger_source
 
 Povijest izvršenja bilježi `trigger_source` za svaku ulaznu točku:

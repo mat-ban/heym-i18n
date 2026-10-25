@@ -36,6 +36,21 @@ Katru workflow var izsist kā MCP rīku:
 
 Workflow kartes rāda aprakstu un ievades lauku nosaukumu priekšskatījumu, lai Jūs varētu redzēt, ko katrs rīks sagaida pirms tā aktivizēšanas.
 
+
+### Rindā ievietotie palaidumi un heym_execution_status
+
+Workflow ar [vienlaicības ierobežojumu](../reference/webhooks.md#concurrency-limit-and-queued-runs) var būt aizņemts, kad klients to izsauc. Pēc tam izsaukums nekavējoties atgriež rezultātu, kas nav kļūda:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klients aptaujā rīku `heym_execution_status` ar šo `execution_id`. Tas atgriež to pašu pamattekstu kā [statusa URL](../reference/webhooks.md#status-url): `queued` ar pašreizējo pozīciju, `running`, pēc tam `success` vai `error` ar rezultātiem. Tas atrod tikai to workflows palaidumus, kurus atklāj viens un tas pats serveris. Rīks tiek rādīts noklusējuma serverī un katrā nosauktajā serverī tikai tik ilgi, kamēr vismaz vienam no tā workflows ir vienlaicības ierobežojums. Kad rinda ir pilna, izsaukums atgriež kļūdu "Concurrency queue is full".
 ## Heym Chat rīks
 
 **Heym Capabilities** sadaļa pārvērš Chat cilnes dzinēju par vienu MCP rīku ar nosaukumu `heym_chat`. Ieslēdziet to noklusējuma serverī, jebkurā nosauktajā serverī vai abos — katra virsma saglabā savu slēdzi un modeļa izvēli.
@@ -49,6 +64,7 @@ Kad tas ir ieslēgts, `heym_chat` parādās `tools/list` kopā ar Jūsu workflow
 - Ziņot par to, kas šobrīd tiek izpildīts: cik izpildes ir aktīvas, to workflow nosaukumi, cik ilgi katra ir darbojusi, uz kura mezgla katra pašlaik atrodas, un saite uz tiešo izpildi.
 - Sarakstīt dēļus, izveidot kartes un lasīt kartes detaļas [Board cilnē](./board-tab.md).
 - Sarakstīt savas datu tabulas ar to kolonnām, izveidot jaunas un savienot tās ar workflows, ko tas veido.
+- Izveidojiet vai atjauniniet savus akreditācijas datus Heym lapā (skatiet [Akreditācijas dati](#akreditācijas-dati))
 - Lasīt komandas un globālos mainīgos, un meklēt dokumentāciju.
 - Apstiprināt, rediģēt vai atteikt gaidošās cilvēku atsauksmes.
 
@@ -58,14 +74,28 @@ Spējas, kas vēlāk pievienotas Chat cilnei, automātiski kļūst pieejamas cau
 
 `heym_chat` vienmēr darbina Chat dzinēju izveides režīmā (build mode). Vienā izsaukumā asistents var saglabāt jaunu workflow, palaist to ar reālistiskiem parauga ievaddatiem, izlasīt izpildes pārskatu, izlabot radušās kļūdas un palaist to vēlreiz — līdz piecām testa izpildēm vienā izsaukumā. Kad pēdējās saglabātās versijas jaunākā izpilde ir veiksmīga, tas noslēdz darbu ar viena teikuma kopsavilkumu, un atbilde beidzas ar `Verified: the latest test run of the saved workflow passed.`
 
+Kad izsaukums izveido vai rediģē workflow, atbildē katrs tiek uzskaitīts ar pilnu redaktora saiti, piemēram, `https://heym.example.com/workflows/<id>`, un saites asistenta atbildē arī ir pilnas saites. Tās izmanto jūsu konfigurēto Heym adresi (`FRONTEND_URL`) un atveras Heym ielogotām personām, kurām ir piekļuve šim workflow.
+
 - Testa izpildes ir reālas izpildes. To blakusefekti patiešām notiek, un tās parādās workflow izpildes vēsturē tāpat kā jebkura cita izpilde.
 - Saglabāšana notiek pa redaktora ceļu: grafa izmaiņas saglabā iepriekšējo grafu workflow rediģēšanas vēsturē (**Edit History**).
 - Lai mainītu iepriekš izveidotu workflow, turpiniet pavedienu ar to pašu `conversation_id`. Asistents atjaunina šo workflow, nevis izveido jaunu, un maina tikai tos workflows, kurus Jums ir tiesības rediģēt.
 - Kad piecas testa izpildes ir izsmeltas, asistents apstājas un paskaidro, kas joprojām neizdodas.
 
-Akreditācijas dati paliek UI: `heym_chat` nekad neuzskaita, neizvēlas vai neizveido tos. Kad tas veido vai rediģē workflow, jauni mezgli, kuriem nepieciešama akreditācija, paliek tukši, un atbildes nosauc tos, lai Jūs varētu iestatīt tos redaktorā.
-
 Datu tabulas ir atšķirīgas. Tabula nesatur noslēpumus, tāpēc `heym_chat` var uzskaitīt Jūsu tabulas, jautāt, kuru no tām workflow vajadzētu izmantot, un izveidot jaunu ar tās kolonnām. Tā nekad nelasa vai neieraksta rindas.
+
+### Akreditācijas dati
+
+`heym_chat` redz jūsu īpašumā esošos un ar jums kopīgotos akreditācijas datus pēc nosaukuma un veida tāpat kā cilne Čats. Kad tā veidotajam workflow ir nepieciešami akreditācijas dati, tas rezultātā uzdod jautājumu, kurus izmantot. Atbildiet ar to pašu `conversation_id`.
+
+Lai pievienotu akreditācijas datus vai atjauninātu sev piederošos, asistents atver Heym akreditācijas datu veidlapu Heym lapā, `/credentials/setup/<id>`. Jūs tur piesakāties Heym, ievadāt atslēgu vai pievienojat kontu un saglabājat. Vērtība nonāk tieši Heym: MCP klients un tā modelis uzzina tikai akreditācijas datu nosaukumu un veidu. Neielīmējiet atslēgas MCP klientā; tā vietā pieprasiet veidlapu.
+
+| Klients | Kas notiek |
+|---------|------------|
+| Atbalsta MCP URL izgūšanu | Klients aicina atvērt Heym lapu. Izsaukums gaida veidlapas aizpildīšanu (līdz desmit minūtēm), pēc tam turpina ar jaunajiem akreditācijas datiem. |
+| Viss pārējais | Rezultāts satur saiti un lūdz klientam vēlreiz izsaukt `heym_chat` ar `wait_for_credential_form`. Šis izsaukums gaida līdz piecām minūtēm veidlapas aizpildīšanas laikā un pēc tam atsāk sarunu. Ja klients negaida, saglabājiet veidlapu un atbildiet ar to pašu `conversation_id`; nākamais izsaukums zinās, ka veidlapa tika saglabāta un kādi akreditācijas dati tika izveidoti. |
+
+Lapa tiek atvērta tikai tam Heym kontam, kas uzsāka pieprasījumu, tāpēc pāradresēta saite ir nederīga citiem. Veidlapa paliek atvērta 24 stundas un to var noraidīt no lapas. Tiklīdz saglabājat vai noraidāt, solis cilnes Čats sarunā parāda rezultātu.
+
 
 ### Akreditācija un modelis
 
@@ -78,12 +108,15 @@ Datu tabulas ir atšķirīgas. Tabula nesatur noslēpumus, tāpēc `heym_chat` v
 
 Ja kāds no tiem trūkst, rīks joprojām parādās `tools/list`, bet katrs izsaukums atgriež kļūdu, kas informē Jūs pabeigt iestatīšanu šajā cilnē.
 
+
+LLM un Agent mezgli `heym_chat` veidotajā workflow darbojas ar šiem akreditācijas datiem un modeli, ieskaitot akreditācijas datus, ko kāds ir kopīgojis ar jums, tāpēc testa palaidumi darbojas bez papildu iestatīšanas soļa. Kad `heym_chat` rediģē workflow, LLM un Agent mezgli, kuriem jau ir akreditācijas dati, saglabā tos kopā ar savu modeli.
 ### Argumenti un vēsture
 
 | Arguments | Nepieciešams | Apraksts |
 |-----------|--------------|----------|
 | `message` | Jā | Instrukcija vai jautājums, dabiskā valodā. |
 | `conversation_id` | Nē | `conversation_id` no iepriekšējā `heym_chat` rezultāta, lai turpinātu šo pavedienu. |
+| `wait_for_credential_form` | Nē | Ar `conversation_id`: pagaidiet, līdz lietotājs saglabā vai noraida pavediena atvērto akreditācijas datu veidlapu, pēc tam nosūtiet `message`. |
 
 Katrs izsaukums tiek pierakstīts Jūsu [Chat cilnes](./chat-tab.md) vēsturē kā parasta saruna, atzīmēta ar kontaktdakšas ikonu sarunu sarakstā. Ziņas, rīku kartes un precizēšanas pauzes izskatās tieši tāpat kā saruna, ko Jūs uzsākat paši, un Jūs varat atvērt pavedienu un turpināt runāt pārlūkā. Katrs rezultāts atgriež savu `conversation_id`, lai MCP klients varētu turpināt to pašu pavedienu, nevis atvērt jaunu katrā izsaukumā.
 

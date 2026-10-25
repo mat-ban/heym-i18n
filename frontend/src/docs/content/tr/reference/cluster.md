@@ -111,6 +111,10 @@ Image tag'i main'in çalıştırdığı sürüm olmalı ve her iki anahtar da ta
 | On | Bir worker'ı durdurmadan rotasyondan çıkarın — çalışan yürütmeler tamamlanır, yenisi atanmaz. Main instance için kilitli açıktır: dosya, plugin ve coding-agent işleri, toggle ne derse desin orada çalışır |
 | Weight | Dağıtılabilir çalışmalardan aldığı pay |
 
+## Bir cluster'da eşzamanlılık sınırları
+
+Bir workflow'un [eşzamanlılık sınırı](./webhooks.md#concurrency-limit-and-queued-runs) PostgreSQL'de sayılır, bu nedenle her örnek ve her süreç genelinde geçerlidir: iki örnek asla bir workflow'dan izin verilen sınırdan fazlasını çalıştırmaz. Bir slot bekleyen çalıştırma, başladığında diğer çalıştırmalarla aynı kurallara göre yerleştirilir, bu nedenle main üzerinde kalması gereken çalıştırma orada kalmaya devam eder. Bu çalıştırmaları yürüten kuyruk worker'ı artık tek bir örnek dahil olmak üzere her kurulumda başlar ve yalnızca kendi örneğinin kuyruğa aldığı çalıştırmaları üstlenir. Bu, tek bir örneğin her süreçte kuyruk uyandırma `LISTEN` bağlantısını da tuttuğu anlamına gelir; bu nedenle bağlantı bütçesini bir cluster örneği gibi ayarlayın.
+
 ## Çalışma geçmişi
 
 Yürütme geçmişindeki her çalışma, kendisini yürüten instance'ı adlandırır ve her iki geçmiş iletişim kutusu da tek bir instance'a göre filtreleyebilir. Filtre, instance'ın adını gösterirken id'si üzerinden eşleşir, böylece bir instance'ı yeniden adlandırmak eski çalışmaların ne söylediğini değiştirmez.

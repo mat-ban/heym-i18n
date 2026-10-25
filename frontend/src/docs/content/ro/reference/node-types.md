@@ -30,7 +30,7 @@ Consultați [Triggers](./triggers.md) pentru toate punctele de intrare.
 | [Codex](../nodes/codex-node.md) | Rulați CLI-ul Codex local împotriva unui depozit GitHub folosind un token de acces ChatGPT/Codex | 1 | 1, plus ieșirea `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Rulați CLI-ul OpenCode împotriva unui depozit GitHub într-un container securizat folosind o cheie API de gateway OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Apelați direct un instrument MCP specific fără ca un LLM să îl selecteze | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Inserați, actualizați, ștergeți sau căutați într-un [vector store](../tabs/vectorstores-tab.md) Qdrant sau Postgres (pgvector) pentru RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Inserați, actualizați, ștergeți sau căutați (vectorial sau hibrid vectorial + BM25) într-un [vector store](../tabs/vectorstores-tab.md) Qdrant sau Postgres (pgvector) pentru RAG | 1 | 1 |
 
 ## Noduri de logică
 

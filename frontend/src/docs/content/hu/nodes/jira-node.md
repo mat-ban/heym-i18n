@@ -8,22 +8,23 @@ A **Jira** csomópont a workflow-kat a Jira REST API-hoz kapcsolja projekt-, iss
 |----------|-------|
 | Bemenetek | 1 |
 | Kimenetek | 1 |
-| Hitelesítési adatok | Jira (Cloud email/API token vagy Data Center felhasználónév/jelszó, base URL, telepítési mód, opcionális REST API verzió) |
+| Hitelesítési adatok | Jira (Cloud email/API token, Data Center felhasználónév/jelszó vagy személyes hozzáférési token, base URL, telepítési mód, opcionális REST API verzió) |
 | Kimenet | `$nodeLabel.*` |
 
 ## Hitelesítési adatok
 
-Hozzon létre egy **Jira** hitelesítési adatot a [Hitelesítési adatok fülön](../tabs/credentials-tab.md). A tárolt konfigurációs kulcsok: `email`, `api_token`, `base_url`, `deployment` és opcionális `api_version`. Jira Cloud esetén az `email` az Atlassian-fiók e-mail-címét, az `api_token` pedig az Atlassian API tokent tárolja. Jira Data Center / Server esetén ugyanezek a kulcsok a Basic auth felhasználónevét és jelszavát tárolják. A beállítás lépéseit lásd a [Third-Party Integrations](../reference/integrations.md#jira) oldalon.
+Hozzon létre egy **Jira** hitelesítési adatot a [Hitelesítési adatok fülön](../tabs/credentials-tab.md). A tárolt konfigurációs kulcsok: `email`, `api_token`, `base_url`, `deployment`, `auth_mode` és opcionális `api_version`. Jira Cloud esetén az `email` az Atlassian-fiók e-mail-címét, az `api_token` pedig az Atlassian API tokent tárolja. Jira Data Center / Server esetén ugyanezek a kulcsok a Basic auth felhasználónevét és jelszavát tárolják, illetve `auth_mode: pat` esetén az `api_token` egy Bearer tokenként elküldött személyes hozzáférési tokent tárol, és az `email` nincs használatban. A beállítás lépéseit lásd a [Third-Party Integrations](../reference/integrations.md#jira) oldalon.
 
 | Mező | Konfigurációs kulcs | Leírás |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Jira Cloud Atlassian-fiók e-mail-címe, vagy Jira Data Center / Server felhasználónév |
-| API Token / Password | `api_token` | Jira Cloud Atlassian API token, vagy Jira Data Center / Server jelszó Basic auth-hoz |
+| Hitelesítés | `auth_mode` | `basic` (alapértelmezett) vagy `pat` (csak Data Center / Server) |
+| API Token / Password / Személyes hozzáférési token | `api_token` | Jira Cloud Atlassian API token, Jira Data Center / Server jelszó Basic auth-hoz vagy Data Center személyes hozzáférési token `pat` módban |
 | Base URL | `base_url` | Jira webhely URL-je, például `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` Jira Cloud esetén vagy `data_center` Jira Data Center / Server esetén |
 | REST API Version | `api_version` | Jira Cloud esetén alapértelmezés szerint `3`. Data Center / Server a REST API v2-t használja |
 
-A Data Center / Server személyes hozzáférési tokeneket és a Bearer auth-ot a Jira hitelesítési adatok egyelőre nem támogatják.
+A személyes hozzáférési tokenekhez Jira Data Center / Server 8.14 vagy újabb verzió szükséges. A hitelesítési módszer váltása törli a tárolt titkot, ezért váltáskor adja meg az új jelszót vagy tokent.
 
 A **Test Connection** használatával ellenőrizheti a hitelesítési adatokat az aktuális Jira-felhasználóval szemben.
 

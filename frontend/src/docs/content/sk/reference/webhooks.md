@@ -108,6 +108,73 @@ Konfiguruje sa pre jednotlivé workflowy: `rate_limit_requests` a `rate_limit_wi
 | `rate_limit_window_seconds` | Trvanie okna v sekundách |
 
 Požiadavky `test_run` obchádzajú rate limiting.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Limit súbehu a zaradené behy
+
+Workflow môže obmedziť počet produkčných behov vykonávaných súčasne. Zapnite **Limit súbehu** v paneli **Properties** na úrovni workflow a nastavte **Maximálny počet súbežných behov**. Vlastníci a spolupracovníci s právami na úpravu ho môžu meniť. Predvolene je limit vypnutý.
+
+Po dosiahnutí limitu nové behy čakajú vo fronte FIFO (prvý dnu, prvý von). Pokrýva to každý produkčný vstupný bod: tento endpoint, [streamingový endpoint](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) a každý [trigger](./triggers.md). Vlastné testovacie behy editora sa vždy spúšťajú okamžite a neobsadzujú slot. Odoslanie `test_run=true` bez prihlásenej relácie schopnej otvoriť workflow front neobíde.
+
+| Nastavenie | Popis |
+|---|---|
+| `concurrency_limit` | Povolené produkčné behy súčasne. `0` limit vypína |
+| `concurrency_max_queue` | Voliteľné. Povolený počet čakajúcich behov súčasne. Prázdne znamená bez limitu |
+| `concurrency_max_wait_seconds` | Voliteľné. Beh čakajúci dlhšie sa zaznamená ako `expired`. Prázdne znamená neobmedzené čakanie |
+
+### 202 Accepted
+
+Volanie, ktoré sa spustí okamžite, sa správa presne tak, ako je popísané v časti Formát odpovede. Volanie, ktoré musí čakať, okamžite dostane `202 Accepted`, bez ohľadu na hlavičku `X-Simple-Response`, s hlavičkou `Location` odkazujúcou na URL stavu:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Pole | Popis |
+|---|---|
+| `queue.position` | Miesto tohto behu v rade, začínajúc od 1 |
+| `queue.size` | Behy aktuálne čakajúce v rade |
+| `queue.running` | Behy aktuálne obsadzujúce slot |
+| `queue.limit` | Limit súbehu daného workflow |
+| `status_token` | Iba anonymné workflowy. Vrátené iba raz v tejto odpovedi |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` odpovedá stavom behu. Volajte ho s rovnakými povereniami, ktoré beh spustili: reláciou alebo JWT, [tokenom vykonania](./execution-tokens.md) alebo vlastnou hlavičkou workflowu. Anonymný workflow neoveruje prihlasovacie údaje, preto odošlite `status_token` z odpovede 202 v hlavičke `X-Heym-Run-Token`. Token sa nikdy nečíta z query stringu. Nesprávny alebo chýbajúci token dostane `404`, rovnako ako neznáma exekúcia.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Význam (beh, ktorý musí čakať na slot súbehu, dostane namiesto toho [odpoveď 202](#202-accepted)) |
+|---|---|
+| `queued` | Čaká na voľný slot; objekt `queue` zobrazuje stav |
+| `running` | Má pridelený slot a vykonáva sa |
+| `success` / `error` | Dokončené; polia `outputs` a `error` sú vyplnené |
+| `pending` | Pozastavené pre [ľudskú kontrolu](./human-in-the-loop.md) |
+| `cancelled` | Zrušené z [Histórie spustení](./execution-history.md) |
+| `expired` | Čakalo dlhšie ako `concurrency_max_wait_seconds` a nikdy sa nespustilo |
+
+Dopytujte sa každých niekoľko sekúnd, kým stav nie je iný ako `queued` alebo `running`. Zaradený beh sa vykoná aj vtedy, ak sa naň nikto nedopytuje.
+
+### Plný front
+
+Ak je nastavené `concurrency_max_queue` a toľko behov už čaká, volanie je odmietnuté s `429 Concurrency queue is full` a záznamom `queue_full` v histórii behov. Nič sa do frontu nezaradí.
+
 ## Formát odpovede
 
 Endpoint vracia JSON:

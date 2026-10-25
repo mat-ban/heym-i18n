@@ -7,7 +7,7 @@
 - **Qdrant** – 외부 Qdrant 서버에 벡터를 저장합니다(*RAG: Qdrant + OpenAI* credential 필요).
 - **Postgres (pgvector)** – Heym 자체 Postgres 데이터베이스 내부에 벡터를 저장하며, 외부 서비스가 필요하지 않습니다(*RAG: Psql + OpenAI* credential 필요).
 
-기본값은 하위 호환성을 위해 **Qdrant**입니다. Database를 변경하면 **Vector Store** 목록이 해당 데이터베이스가 지원하는 스토어로 필터링됩니다. 두 백엔드 모두 동일한 작업, 메타데이터 필터링, Cohere reranking을 지원합니다.
+기본값은 하위 호환성을 위해 **Qdrant**입니다. Database를 변경하면 **Vector Store** 목록이 해당 데이터베이스가 지원하는 스토어로 필터링됩니다. 두 백엔드 모두 동일한 작업, 메타데이터 필터링, 하이브리드(벡터 + BM25) 검색, Cohere reranking을 지원합니다.
 
 두 백엔드 모두 *RAG: Custom Embeddings* credential을 통해 접근할 수도 있습니다. 이 credential은 OpenAI를 OpenAI 호환 임베딩 endpoint로 대체하고 자체 벡터 스토어를 지정합니다. 이러한 credential로 생성된 스토어는 대상으로 하는 Database 아래에 나타납니다. [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag)를 참조하십시오.
 
@@ -17,7 +17,7 @@
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parameters
 
@@ -33,6 +33,7 @@
 | `queryText` | expression | Search query (search only) |
 | `searchLimit` | number | Max results (default: 5) |
 | `metadataFilters` | JSON string | Metadata filters for search (values support expressions) |
+| `hybridSearch` | boolean | 벡터 검색과 BM25 키워드 검색 결합 (search 전용; 기본값: 꺼짐) |
 | `enableReranker` | boolean | Use Cohere to rerank search results |
 | `rerankerCredentialId` | UUID | Cohere credential for reranking |
 | `rerankerTopN` | number | Number of top results to keep after reranking |
@@ -105,6 +106,7 @@ whether an existing version was replaced), `$nodeLabel.replaced_count`
 | `queryText` | yes | 검색 쿼리 |
 | `searchLimit` | no | 최대 결과 수 (기본값: 5) |
 | `metadataFilters` | no | 메타데이터로 필터링 (정확히 일치하는 JSON 객체, 값은 표현식 지원) |
+| `hybridSearch` | no | 벡터 유사도와 BM25 키워드 일치 융합 ([하이브리드 검색](#하이브리드-검색) 참조) |
 | `enableReranker` | no | 더 나은 관련성을 위해 Cohere reranking 활성화 |
 | `rerankerCredentialId` | when reranking | Cohere credential |
 | `rerankerTopN` | no | reranking 후 최종 결과 수 |
@@ -118,13 +120,44 @@ reranking이 활성화된 경우:
 - `score`는 원래의 벡터 유사도 점수로 유지됩니다
 - `relevance_score`는 Cohere reranker 점수입니다
 
+
+#### 하이브리드 검색
+
+벡터 검색은 쿼리와 동일한 의미를 가진 텍스트를 찾습니다. 정확한 단어만 포함된 텍스트는 제품 코드, 티켓 번호, 사람 이름, `ERR-4021`과 같은 오류 등 순위가 낮아질 수 있습니다. **하이브리드 검색**을 켜면 노드가 벡터 검색과 함께 키워드 검색을 실행하고 두 목록을 병합하므로 하나의 쿼리로 두 가지 유형의 일치 항목을 모두 찾을 수 있습니다.
+
+1. 벡터 검색은 하이브리드 검색 없이 수행하는 것처럼 최상의 일치 항목을 반환합니다.
+2. 키워드 검색은 드문 단어, 반복되는 단어, 짧은 문서에 가중치를 부여하는 **BM25**를 통해 쿼리 단어에 대해 저장된 텍스트의 점수를 매깁니다.
+3. 순위가 매겨진 두 목록은 **reciprocal rank fusion**을 통해 병합됩니다. 두 목록의 상위권에 있는 문서가 1위를 차지하며, 한 목록에서만 발견된 문서도 계속 나타납니다.
+
+메타데이터 필터는 두 검색 모두에 적용되며, Cohere reranker가 활성화되면 병합된 목록에서 실행됩니다.
+
+각 결과에는 두 검색의 점수가 모두 포함됩니다:
+
+| 필드 | 의미 |
+|---|---|
+| `score` | 0에서 1 사이의 융합 점수. `1`은 문서가 두 검색 모두에서 1위를 차지했음을 의미합니다. |
+| `vector_score` | 벡터 유사도(0 ~ 1). 키워드 검색에서만 문서를 찾은 경우 `null`. |
+| `keyword_score` | BM25 점수. 쿼리 단어 중 어느 것도 문서에 나타나지 않는 경우 `null`. |
+
+하이브리드 검색이 실행된 경우 `$nodeLabel.hybrid`는 `true`입니다.
+
+참고 사항:
+
+- 융합된 `score`는 결과의 상대적 순위를 매깁니다. 이는 벡터 유사도가 아니므로 일반 검색에 맞춰진 임계값이 직접 적용되지 않습니다.
+- 쿼리 단어는 소문자로 변환되고 공백 및 구두점으로 분할되므로 `ERR-4021`은 `err` 및 `4021`로 검색됩니다. 키워드 검색은 쿼리의 고유한 단어를 최대 16개까지 사용합니다.
+- Qdrant: 컬렉션에 대한 첫 번째 하이브리드 검색은 `text` 페이로드 필드에 전체 텍스트 인덱스를 빌드하며, 여기에는 쓰기 권한이 있는 Qdrant 키가 필요합니다. 대규모 컬렉션의 경우 처음에 한 번 약간의 시간이 걸리며, 이후 검색에서는 인덱스를 재사용합니다.
+- Postgres (pgvector): 데이터베이스 마이그레이션 `142_vsi_text_search_index`가 전체 텍스트 인덱스를 추가합니다. 업데이트 후 `alembic upgrade head`를 실행하세요. 하이브리드 검색은 인덱스 없이도 작동하지만 대형 스토어에서는 속도가 느려집니다.
+- 키워드 검색은 모든 쿼리에 대해 가장 큰 가중치를 갖는 가장 드문 쿼리 단어부터 시작하여 최대 200개의 일치하는 문서를 읽습니다.
 ## Accessing Results
 
 - `$ragNode.results.first().text` – 최상위 결과 내용
-- `$ragNode.results.first().score` – 유사도 점수 (0–1)
+- `$ragNode.results.first().score` – 유사도 점수 (0–1), 또는 하이브리드 검색 시 융합 점수
+- `$ragNode.results.first().keyword_score` – BM25 점수 (하이브리드 검색)
+- `$ragNode.results.first().vector_score` – 벡터 유사도 (하이브리드 검색)
 - `$ragNode.results.first().metadata.source` – 최상위 결과 메타데이터
 - `$ragNode.results.map("item.text").join("\n\n")` – LLM 컨텍스트를 위해 연결
 - `$ragNode.reranked` – reranking 적용 여부
+- `$ragNode.hybrid` – 하이브리드 검색 적용 여부
 - `$ragNode.count` – 반환된 결과 수
 - `$ragNode.replaced` – upsert가 기존 문서를 대체했는지 여부
 - `$ragNode.deleted` – delete가 무언가를 제거했는지 여부
@@ -144,6 +177,22 @@ reranking이 활성화된 경우:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Example – 하이브리드 검색
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

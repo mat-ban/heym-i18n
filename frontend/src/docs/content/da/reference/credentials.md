@@ -18,7 +18,7 @@ Legitimationsoplysninger lagrer API-nøgler og hemmeligheder, der bruges af work
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-abonnementslogin (OAuth) eller en Codex-adgangstoken til kørslen, plus en GitHub PAT til repository-operationer |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | En OpenCode Go gateway API-nøgle (valgfri basis-URL) til kørslen, plus en GitHub PAT til repository-operationer |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) til GitHub API-kald, GitHub-nodeoperationer og MCP-integrationer |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud-e-mail/API-token eller Data Center brugernavn/adgangskode, Jira-site basis-URL, implementeringstilstand og valgfri REST API-version |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud-e-mail/API-token, Data Center brugernavn/adgangskode eller personlig adgangstoken, Jira-site basis-URL, implementeringstilstand og valgfri REST API-version |
 | [Linear](../nodes/linear-node.md) | Linear | Personlig API-nøgle eller OAuth2 til teams, projekter, issues og kommentarer |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Godkendelse til anmodninger |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot-token og valgfri webhook-hemmelighed |
@@ -57,7 +57,7 @@ Visse noder tillader udtryk for godkendelse. Brug [Expression DSL](./expression-
 
 Codex-legitimationsoplysninger er bevidst udelukket fra `$credentials`. Uanset om der logges ind med ChatGPT (abonnement, ingen API-omkostninger per token) eller indsættes et Codex `access_token`, sendes tokens kun til den lokale Codex-kørerproces. ChatGPT-login-tokens opdateres automatisk, når de udløber.
 
-Jira-legitimationsoplysninger er også udelukket fra `$credentials`. [Jira-noden](../nodes/jira-node.md) indlæser legitimationsoplysningen ved `credentialId` under kørsel. For brugerdefinerede Jira REST-kald, som ikke dækkes af Jira-noden, kan [HTTP-noden](../nodes/http-node.md) bruges med Jira Basic Auth (`email:api_token` for Jira Cloud eller `username:password` for Data Center/Server), f.eks. `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Det er også muligt at bruge en [Header](../nodes/http-node.md)-legitimationsoplysning med `Authorization: Basic <base64(user:secret)>`. Jira Data Center/Server-personlige adgangstokens og Bearer-godkendelse understøttes endnu ikke af Jira-legitimationsoplysningen.
+Jira-legitimationsoplysninger er også udelukket fra `$credentials`. [Jira-noden](../nodes/jira-node.md) indlæser legitimationsoplysningen ved `credentialId` under kørsel. For brugerdefinerede Jira REST-kald, som ikke dækkes af Jira-noden, kan [HTTP-noden](../nodes/http-node.md) bruges med Jira Basic Auth (`email:api_token` for Jira Cloud eller `username:password` for Data Center/Server), f.eks. `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Det er også muligt at bruge en [Header](../nodes/http-node.md)-legitimationsoplysning med `Authorization: Basic <base64(user:secret)>`. For personlige adgangstokens til Jira Data Center / Server sendes i stedet `Authorization: Bearer <token>`; selve Jira-legitimationsoplysningen understøtter dette via godkendelsestilstanden **Personal Access Token**.
 
 | Legitimationsoplysningstype | Værdi eksponeret til `$credentials.Name` |
 |-----------------|--------------------------------------|

@@ -148,7 +148,7 @@ AI Assistant põhineb **workflow DSL-il** (valdkonnaspetsiifiline keel), mis kir
    - Teie kasutaja reeglid, mis on lisatud kui "User Custom Rules"
    - Praeguse workflow JSON-i, kui redigeerite olemasolevat workflow'd
    - Saadaolevate workflow'de loetelu, kui kasutate Execute sõlme
-   - Teie enda mandaatide nimesid, tüüpe ja id-sid (mitte kunagi nende väärtusi)
+   - Teie omatavate või teiega jagatud mandaatide nimesid, tüüpe ja id-sid (mitte kunagi nende väärtusi)
    - Nende andmetabelite nimesid, id-sid, kirjeldusi ja veerge, mida saate kasutada (mitte kunagi nende ridu)
 3. Mudel tagastab ühe workflow JSON-ploki (koos `nodes` ja `edges`-iga). Frontend parsib selle ja rakendab lõuendile.
 

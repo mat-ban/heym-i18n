@@ -105,3 +105,5 @@ Need kiirklahvid on saadaval käivituste ajaloo dialoogis ja käivituste paneeli
 - [Workflow struktuur](./workflow-structure.md) – Sõlmede ja servade formaat
 - [Execute sõlm](../nodes/execute-node.md) – Kutsub alam-workflow'sid (`Ctrl + Shift + O`)
 - [Kiire algus](../getting-started/quick-start.md) – Ehitage oma esimene workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

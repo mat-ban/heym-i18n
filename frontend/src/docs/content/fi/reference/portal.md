@@ -32,6 +32,10 @@ Määritä editorissa: Workflow-otsikon **Portal**-painike avaa portal-asetukset
 3. **Suoritus**: `POST /api/portal/{slug}/execute` – Portal-chat-käyttöliittymä kutsuu tätä (tai sen reaaliaikaisvarianttia sisäisesti, kun käytössä); loppukäyttäjät vuorovaikuttavat chat-käyttöliittymän kautta, eivät kutsumalla APIa suoraan.
 4. **Keskeytys**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Kutsutaan, kun käyttäjä painaa **Stop** aktiivisen portal-suorituksen aikana
 
+## Samanaikaisuusraja
+
+Kun workflow'lla on [samanaikaisuusraja](./webhooks.md#concurrency-limit-and-queued-runs) ja kaikki paikat ovat käytössä, portaaliviesti odottaa vuoroaan heti suorittamisen sijaan. Chat näyttää edistymisrivillään **Waiting in queue (2/5)**, kunnes suoritus alkaa, ja sen jälkeen vastauksen tavalliseen tapaan. Suoritus tapahtuu edelleen, vaikka käyttäjä sulkisi sivun. **Stop** poistaa odottavan suorituksen jonosta. Kun jono on täynnä, viesti epäonnistuu ilmoituksella "Concurrency queue is full". Jonossa odottanut suoritus ei suoratoista vastaustaan token kerrallaan; koko vastaus näytetään, kun se valmistuu.
+
 ## HITL portal-suorituksissa
 
 Jos portal-workflow saavuttaa [Agent-solmun](../nodes/agent-node.md), jossa [Human-in-the-Loop](./human-in-the-loop.md) on käytössä, portal-vastaus näyttää tarkastuslinkin tyhjän sijaan.

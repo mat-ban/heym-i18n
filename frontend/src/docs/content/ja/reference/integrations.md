@@ -15,7 +15,7 @@ credential は [Settings → Credentials](../tabs/credentials-tab.md) で追加�
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`、任意の `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md)、[Codex](../nodes/codex-node.md)、[OpenCode Go](../nodes/opencode-go-node.md)、[Agent](../nodes/agent-node.md)、[HTTP](../nodes/http-node.md) | `api_key`、任意の `base_url` |
-| **Jira** | [Jira ノード](../nodes/jira-node.md) | `email`、`api_token`、`base_url`、`deployment`、任意の `api_version` |
+| **Jira** | [Jira ノード](../nodes/jira-node.md) | `api_token`、`base_url`、`deployment`、`auth_mode`、`email` (Basic 認証のみ)、任意の `api_version` |
 | **Linear** | [Linear ノード](../nodes/linear-node.md) | `api_key`、または `client_id` + `client_secret` の OAuth2 |
 | **Sentry** | [Sentry ノード](../nodes/sentry-node.md) | `api_token`、任意の `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md) | `api_key`、`base_url` |
@@ -197,7 +197,7 @@ OAuth トークン（`access_token`、`refresh_token`、`token_expiry`）は自�
 
 ## Jira
 
-Jira credential は、[Jira ノード](../nodes/jira-node.md) 用の Jira Basic 認証情報、Jira サイトのベース URL、デプロイモード、およびオプションの REST API バージョンを保存します。Jira Cloud には `cloud` を、Jira Data Center / Server には `data_center` を使用してください。
+Jira credential は、[Jira ノード](../nodes/jira-node.md) 用の Jira Basic 認証情報または Data Center 個人アクセストークン、Jira サイトのベース URL、デプロイモード、およびオプションの REST API バージョンを保存します。Jira Cloud には `cloud` を、Jira Data Center / Server には `data_center` を使用してください。
 
 ### セットアップ
 
@@ -211,16 +211,18 @@ Jira credential は、[Jira ノード](../nodes/jira-node.md) 用の Jira Basic 
 **Jira Data Center / Server**
 
 1. デプロイとして **Jira Data Center / Server** を選択します。
-2. Basic 認証に使用する Jira のユーザー名とパスワードを入力します。
-3. Jira サイト URL（例：`https://jira.example.com`）を入力します。
-4. **Test Connection** を使用して credential を検証します。
+2. 認証方法を選択します。**ユーザー名とパスワード** は Basic 認証を使用します。**Personal Access Token** は `Authorization: Bearer <token>` を使用し、Jira Data Center / Server 8.14 以降が必要です。Jira の **プロフィール → Personal Access Tokens** でトークンを作成します。
+3. Jira のユーザー名とパスワードを入力するか、個人アクセストークンを貼り付けます（ユーザー名は不要です）。
+4. Jira サイト URL（例：`https://jira.example.com`）を入力します。
+5. **Test Connection** を使用して credential を検証します。
 
 ### フィールド
 
 | フィールド | 説明 |
 | --- | --- |
-| `email` | Jira Cloud の Atlassian アカウントのメールアドレス、または Jira Data Center / Server のユーザー名 |
-| `api_token` | Jira Cloud の Atlassian API トークン、または Jira Data Center / Server の Basic 認証用パスワード |
+| `auth_mode` | `basic` (省略時のデフォルト) または `pat`。`pat` は `data_center` でのみ有効です |
+| `email` | Jira Cloud Atlassian アカウントのメールアドレス、または Jira Data Center / Server のユーザー名。`pat` モードでは使用されません |
+| `api_token` | Jira Cloud Atlassian API トークン、Basic 認証用の Jira Data Center / Server パスワード、または `pat` モードの Data Center 個人アクセストークン |
 | `base_url` | Jira サイトのベース URL |
 | `deployment` | Jira Cloud の場合は `cloud`、Jira Data Center / Server の場合は `data_center` |
 | `api_version` | REST API バージョン。Jira Cloud ではデフォルトで `3` になります。Data Center / Server は v2 を使用します |
@@ -229,12 +231,11 @@ Jira credential は、[Jira ノード](../nodes/jira-node.md) 用の Jira Basic 
 
 - Jira ノードは、Jira Cloud REST API v3 向けに issue の説明とコメントを Atlassian Document Format のテキスト
   ドキュメントとして送信します。Data Center / Server の credential はプレーンテキストを送信します。
-- Data Center / Server は現在、ユーザー名／パスワードによる Basic 認証のみをサポートしています。Personal access
-  token および Bearer 認証はまだサポートされていません。
+- Data Center / Server は、ユーザー名/パスワードによる Basic 認証および Bearer スキームを使用した個人アクセストークン (PAT) 認証をサポートしています。PAT 認証には Jira Data Center / Server 8.14 以降が必要です。
 - 添付ファイルのアップロードは base64 または data URL コンテンツを受け付け、プラットフォームのファイルサイズ制限（デフォルト 99 MB）が適用されます。添付ファイルのダウンロードは、有効にすると base64 コンテンツを返すことができます。
 - ユーザーの作成、削除、および issue 通知には、認証された Jira アカウントが該当する Jira サイトまたは組織の権限を持っている必要があります。
 - List Projects、Search Issues、および List Transitions を使用して、プロジェクトキー、issue キー、および transition ID を確認してください。
-- Jira ノードでカバーされていないカスタムエンドポイントについては、cURL コマンドで Jira Basic Auth（Cloud の場合は `email:api_token`、Data Center / Server の場合は `username:password`）を指定して [HTTP ノード](../nodes/http-node.md) を使用するか、対応する `Authorization: Basic <base64(user:secret)>` 値を持つ Header credential を使用してください。
+- Jira ノードでカバーされていないカスタム endpoint については、cURL コマンドで Jira Basic Auth (Cloud の場合は `email:api_token`、Data Center / Server の場合は `username:password`) または PAT Bearer auth (Data Center / Server の場合は `Authorization: Bearer <token>`) を指定した [HTTP ノード](../nodes/http-node.md) を使用してください。または、適切な `Authorization` ヘッダーを持つ Header credential を使用します。
 
 関連項目：
 

@@ -85,6 +85,20 @@ A Discord interakciós webhookokat küld a `POST /api/discord/webhook/{node_id}`
 
 A RabbitMQ fogyasztó a leader worker inicializálásakor indul el. Azok a workflow-k, amelyek `rabbitmq` csomópontokat tartalmaznak, ahol `rabbitmqOperation === "receive"`, fogyasztót kapnak. A bemenet tartalmazza a `message_data` (body, headers, routing_key stb.) értéket és a `triggered_by: "rabbitmq"` értéket.
 
+## Párhuzamossági korlát
+
+Egy [párhuzamossági korláttal](./webhooks.md#concurrency-limit-and-queued-runs) rendelkező workflow sorba állítja az éles futtatásokat a fenti belépési pontok mindegyikéről, ha a helyei megteltek, érkezési sorrendben (FIFO), minden példányon keresztül. Az, hogy a hívó hogyan értesül az eredményről, a belépési ponttól függ:
+
+| Belépési pont | Amíg a futtatás várakozik |
+|---|---|
+| Webhook / API | `202 Accepted` egy `execution_id`-val és egy állapot URL-lel |
+| SSE streaming, Quick Drawer, Portal chat | A stream nyitva marad és `queued` eseményeket küld |
+| Portal without streaming | A kérés megvárja az eredményt |
+| MCP | Egy `queued` eredmény, amelyet a `heym_execution_status` segítségével lehet lekérdezni |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | A trigger megvárja az eredményt, ameddig egy másik [példányon](./cluster.md) futó végrehajtás várna. A futtatás mindenképpen lezajlik és bekerül az előzményekbe |
+
+Ha a sor megtelt, a futtatás nem indul el, és az előzményekben `queue_full` állapotként rögzül. A szerkesztő tesztfuttatásai, az al-workflow hívások ([Execute](../nodes/execute-node.md) csomópont és ágens workflow eszközök), az [Evals](../tabs/evals-tab.md), a chat build-módú tesztfuttatásai és a felülvizsgálati folytatások soha nem kerülnek sorba. A [Board](../tabs/board-tab.md) kártyafuttatások, a [File Upload](../nodes/file-upload-trigger-node.md) futtatások, az AI asszisztens run-workflow eszköze által indított futtatások, valamint a riasztási értesítési workflow-k szintén várakozás nélkül indulnak el.
+
 ## trigger_source
 
 A futtatások előzményei minden belépési pontnál rögzítik a `trigger_source` értéket:

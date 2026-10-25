@@ -89,6 +89,20 @@ Discord изпраща interaction webhooks към `POST /api/discord/webhook/{n
 
 RabbitMQ consumer стартира, когато leader worker се инициализира. Workflows с `rabbitmq` nodes, където `rabbitmqOperation === "receive"`, получават consumer. Входните данни включват `message_data` (body, headers, routing_key и др.) и `triggered_by: "rabbitmq"`.
 
+## Лимит за едновременност
+
+Workflow с [лимит за едновременност](./webhooks.md#concurrency-limit-and-queued-runs) нарежда на опашка производствените изпълнения от всеки входен пункт по-горе, когато слотовете му са пълни, по принципа първи влязъл, първи излязъл, във всички инстанции. Начинът, по който извикващият научава резултата, зависи от входната точка:
+
+| Entry point | Докато изпълнението изчаква |
+|---|---|
+| Webhook / API | `202 Accepted` с `execution_id` и URL адрес за статус |
+| SSE streaming, Quick Drawer, Portal chat | Потокът остава отворен и изпраща `queued` събития |
+| Portal without streaming | Заявката изчаква резултата |
+| MCP | Резултат `queued` за анкетиране с `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger-ът изчаква резултата толкова време, колкото би изчакало изпълнение на друга [инстанция](./cluster.md). Изпълнението протича във всеки случай и се записва в историята |
+
+Когато опашката е пълна, изпълнението не стартира и историята го записва като `queue_full`. Тестовите изпълнения в редактора, извикванията на под-workflow (възел [Execute](../nodes/execute-node.md) и инструменти за workflow на агент), [Evals](../tabs/evals-tab.md), тестовите изпълнения в режим chat build и възобновяванията след преглед никога не се нареждат на опашка. Изпълненията на карти от [Board](../tabs/board-tab.md), изпълненията на [File Upload](../nodes/file-upload-trigger-node.md), изпълненията, стартирани от инструмента run-workflow на AI асистента, и workflow-ите за известяване при предупреждения също стартират без изчакване на слот.
+
 ## trigger_source
 
 Историята на изпълненията записва `trigger_source` за всяка входна точка:

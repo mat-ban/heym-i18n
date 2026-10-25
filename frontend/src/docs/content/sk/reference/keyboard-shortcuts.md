@@ -105,3 +105,5 @@ Tieto skratky sú dostupné v dialógu histórie spustení a v paneli spustení.
 - [Štruktúra workflowu](./workflow-structure.md) – Formát uzlov a hrán
 - [Uzol Execute](../nodes/execute-node.md) – Volá pod-workflowy (`Ctrl + Shift + O`)
 - [Rýchly štart](../getting-started/quick-start.md) – Vytvorte svoj prvý workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

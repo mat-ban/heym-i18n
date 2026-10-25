@@ -7,7 +7,7 @@ Węzeł zawiera listę rozwijaną **Database**, która wybiera backend:
 - **Qdrant** – przechowuje wektory na zewnętrznym serwerze Qdrant (wymaga danych logowania *RAG: Qdrant + OpenAI*).
 - **Postgres (pgvector)** – przechowuje wektory w bazie Postgres należącej do Heym, bez zewnętrznej usługi (wymaga danych logowania *RAG: Psql + OpenAI*).
 
-Domyślnym ustawieniem jest **Qdrant** ze względu na kompatybilność wsteczną. Zmiana wartości Database filtruje listę **Vector Store** do magazynów opartych na wybranej bazie. Oba backendy obsługują te same operacje, filtrowanie metadanych oraz reranking Cohere.
+Domyślnym ustawieniem jest **Qdrant** ze względu na kompatybilność wsteczną. Zmiana wartości Database filtruje listę **Vector Store** do magazynów opartych na wybranej bazie. Oba backendy obsługują te same operacje, filtrowanie metadanych, wyszukiwanie hybrydowe (wektor + BM25) oraz reranking Cohere.
 
 Do każdego z backendów można również dotrzeć poprzez dane logowania *RAG: Custom Embeddings*, które zastępują OpenAI dowolnym endpointem embeddingów zgodnym z OpenAI i definiują własny magazyn wektorowy. Magazyn utworzony na podstawie takich danych logowania pojawia się pod bazą Database, do której jest przypisany. Zobacz [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag).
 
@@ -17,7 +17,7 @@ Do każdego z backendów można również dotrzeć poprzez dane logowania *RAG: 
 |----------|-------|
 | Wejścia | 1 |
 | Wyjścia | 1 |
-| Wyjście | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Wyjście | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parametry
 
@@ -33,6 +33,7 @@ Do każdego z backendów można również dotrzeć poprzez dane logowania *RAG: 
 | `queryText` | expression | Zapytanie wyszukiwania (tylko search) |
 | `searchLimit` | number | Maksymalna liczba wyników (domyślnie: 5) |
 | `metadataFilters` | JSON string | Filtry metadanych dla wyszukiwania (wartości obsługują wyrażenia) |
+| `hybridSearch` | boolean | Połączenie wyszukiwania wektorowego ze słowami kluczowymi BM25 (tylko search; domyślnie: wyłączone) |
 | `enableReranker` | boolean | Użycie Cohere do rerankingu wyników wyszukiwania |
 | `rerankerCredentialId` | UUID | Dane logowania Cohere dla rerankingu |
 | `rerankerTopN` | number | Liczba najlepszych wyników zachowywanych po rerankingu |
@@ -106,6 +107,7 @@ Wyszukiwanie semantyczne podobnych dokumentów.
 | `queryText` | tak | Zapytanie wyszukiwania |
 | `searchLimit` | nie | Maksymalna liczba wyników (domyślnie: 5) |
 | `metadataFilters` | nie | Filtrowanie po metadanych (obiekt JSON z dokładnym dopasowaniem, wartości obsługują wyrażenia) |
+| `hybridSearch` | nie | Fuzja podobieństwa wektorowego z dopasowaniem słów kluczowych BM25 (zobacz [Wyszukiwanie hybrydowe](#wyszukiwanie-hybrydowe)) |
 | `enableReranker` | nie | Włączenie rerankingu Cohere dla lepszej trafności |
 | `rerankerCredentialId` | przy rerankingu | Dane logowania Cohere |
 | `rerankerTopN` | nie | Końcowa liczba wyników po rerankingu |
@@ -119,13 +121,44 @@ Gdy reranking jest włączony:
 - `score` pozostaje oryginalnym wynikiem podobieństwa wektorowego
 - `relevance_score` to wynik rerankera Cohere
 
+
+#### Wyszukiwanie hybrydowe
+
+Wyszukiwanie wektorowe odnajduje tekst o tym samym znaczeniu co zapytanie. Tekst, który zawiera wyłącznie dokładne słowa, może znaleźć się niżej: kod produktu, numer zgłoszenia, nazwisko osoby, błąd taki jak `ERR-4021`. Włącz **Wyszukiwanie hybrydowe**, a węzeł uruchomi wyszukiwanie po słowach kluczowych obok wyszukiwania wektorowego i połączy obie listy, dzięki czemu jedno zapytanie odnajdzie oba rodzaje dopasowań.
+
+1. Wyszukiwanie wektorowe zwraca najlepsze dopasowania, tak jak bez wyszukiwania hybrydowego.
+2. Wyszukiwanie po słowach kluczowych ocenia zapisany tekst pod kątem słów zapytania za pomocą **BM25**, co nagradza rzadkie słowa, powtarzające się słowa oraz krótsze dokumenty.
+3. Obie uszeregowane listy są łączone za pomocą **reciprocal rank fusion**. Dokument znajdujący się wysoko na obu listach trafia na pierwsze miejsce, a dokument odnaleziony tylko przez jedną listę nadal się pojawia.
+
+Filtry metadanych mają zastosowanie do obu wyszukiwań, a reranker Cohere, jeśli jest włączony, działa na połączonej liście.
+
+Każdy wynik zawiera wynik obu wyszukiwań:
+
+| Pole | Znaczenie |
+|------|-----------|
+| `score` | Połączony wynik od 0 do 1. `1` oznacza, że dokument zajął pierwsze miejsce w obu wyszukiwaniach. |
+| `vector_score` | Podobieństwo wektorowe (0 do 1). `null`, gdy tylko wyszukiwanie słów kluczowych znalazło dokument. |
+| `keyword_score` | Wynik BM25. `null`, gdy żadne ze słów zapytania nie występuje w dokumencie. |
+
+`$nodeLabel.hybrid` ma wartość `true`, gdy wykonano wyszukiwanie hybrydowe.
+
+Warto wiedzieć:
+
+- Połączony `score` porządkuje wyniki względem siebie. Nie jest to podobieństwo wektorowe, dlatego próg ustawiony dla prostego wyszukiwania nie przenosi się bezpośrednio.
+- Słowa zapytania są zamieniane na małe litery i dzielone spacjami oraz znakami interpunkcyjnymi, dzięki czemu `ERR-4021` jest wyszukiwany jako `err` i `4021`. Wyszukiwanie słów kluczowych wykorzystuje do pierwszych 16 unikalnych słów zapytania.
+- Qdrant: pierwsze wyszukiwanie hybrydowe w kolekcji buduje indeks pełnotekstowy w polu payload `text`, co wymaga klucza Qdrant z uprawnieniami do zapisu. W przypadku dużych kolekcji zajmuje to chwilę jednorazowo; późniejsze wyszukiwania korzystają z indeksu.
+- Postgres (pgvector): migracja bazy danych `142_vsi_text_search_index` dodaje indeks pełnotekstowy. Po aktualizacji uruchom `alembic upgrade head`. Wyszukiwanie hybrydowe działa również bez indeksu, jednak wolniej w dużych magazynach.
+- Dla każdego zapytania wyszukiwanie słów kluczowych odczytuje do 200 pasujących dokumentów, zaczynając od najrzadszych słów zapytania, ponieważ mają one największą wagę.
 ## Dostęp do wyników
 
 - `$ragNode.results.first().text` – treść najlepszego wyniku
-- `$ragNode.results.first().score` – wynik podobieństwa (0–1)
+- `$ragNode.results.first().score` – wynik podobieństwa (0–1), lub połączony wynik przy wyszukiwaniu hybrydowym
+- `$ragNode.results.first().keyword_score` – wynik BM25 (wyszukiwanie hybrydowe)
+- `$ragNode.results.first().vector_score` – podobieństwo wektorowe (wyszukiwanie hybrydowe)
 - `$ragNode.results.first().metadata.source` – metadane najlepszego wyniku
 - `$ragNode.results.map("item.text").join("\n\n")` – konkatenacja dla kontekstu LLM
 - `$ragNode.reranked` – czy zastosowano reranking
+- `$ragNode.hybrid` – czy zastosowano wyszukiwanie hybrydowe
 - `$ragNode.count` – liczba zwróconych wyników
 - `$ragNode.replaced` – czy upsert zastąpił istniejący dokument
 - `$ragNode.deleted` – czy usunięcie cokolwiek usunęło
@@ -145,6 +178,22 @@ Gdy reranking jest włączony:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Przykład – Wyszukiwanie hybrydowe
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

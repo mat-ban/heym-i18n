@@ -52,6 +52,8 @@ Pradėjus vykdymą, dėklas rodo:
 
 `pending` reiškia, kad workflow laukia vėlesnio veiksmo, pavyzdžiui, žmogaus peržiūros.
 
+Quick Drawer vykdymai yra produkciniai vykdymai, todėl workflow su [lygiagretumo apribojimu](./webhooks.md#concurrency-limit-and-queued-runs) gali priversti juos laukti. Kol vykdymas laukia eilėje, būsena rodo **Waiting in queue (2/5)**; ji pasikeičia į "running", kai vykdymas prasideda, ir parodo rezultatą, kai jis baigiasi, be pažangos žingsnis po žingsnio. Vykdymas, kurio laikas eilėje baigėsi arba kuris buvo atšauktas laukiant, baigiasi kaip `error`.
+
 Vykdymas su failu vyksta per vienkartinę trigger įkėlimo nuorodą: stalčius paprašo workflow nuorodos, įkelia į ją failą ir parodo rezultatą, kai įkėlimas baigiasi. Vykdymai su failu rodo galutinę būseną ir išvestis, bet nerodo pažangos žingsnis po žingsnio, o istorijoje taip pat pažymimi `Quick Drawer` žyma. Pasirinktas failas išvalomas po kiekvieno vykdymo, nes viena nuoroda priima tik vieną failą.
 
 ## Naršyklės Saugykla

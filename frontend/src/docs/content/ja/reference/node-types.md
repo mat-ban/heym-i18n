@@ -30,7 +30,7 @@ Heym は Workflow を構築するためのさまざまなノードタイプを�
 | [Codex](../nodes/codex-node.md) | ChatGPT/Codex アクセス Token を使用して、GitHub リポジトリに対してローカルの Codex CLI を実行 | 1 | 1、および `question` 出力 |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go ゲートウェイ API キーを使用して、堅牢化されたコンテナ内で GitHub リポジトリに対して OpenCode CLI を実行 | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | LLM に選択させずに、特定の MCP ツールを直接呼び出し | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | RAG のために Qdrant または Postgres（pgvector）の[ベクターストア](../tabs/vectorstores-tab.md)に対して挿入、アップサート、削除、または検索を実行 | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | RAG のために Qdrant または Postgres（pgvector）の[ベクターストア](../tabs/vectorstores-tab.md)に対して挿入、アップサート、削除、または検索（ベクターまたはハイブリッドベクター + BM25）を実行 | 1 | 1 |
 
 ## ロジックノード
 

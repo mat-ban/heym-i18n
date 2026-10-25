@@ -7,7 +7,7 @@ Noden har en **Database**-dropdown, der vælger backend:
 - **Qdrant** – lagrer vektorer i en ekstern Qdrant-server (kræver en *RAG: Qdrant + OpenAI*-legitimationsoplysning).
 - **Postgres (pgvector)** – lagrer vektorer i Heyms egen Postgres-database, uden ekstern tjeneste (kræver en *RAG: Psql + OpenAI*-legitimationsoplysning).
 
-Standardvalget er **Qdrant** for bagudkompatibilitet. Ved at ændre Database filtreres listen **Vektorlagre** til lagre, der bruger denne database. Begge backends understøtter de samme operationer, metadatafiltrering og Cohere-reranking.
+Standardvalget er **Qdrant** for bagudkompatibilitet. Ved at ændre Database filtreres listen **Vektorlagre** til lagre, der bruger denne database. Begge backends understøtter de samme operationer, metadatafiltrering, hybridsøgning (vektor + BM25) og Cohere-reranking.
 
 Begge backends kan også tilgås via en *RAG: Custom Embeddings*-legitimationsoplysning, som erstatter OpenAI med enhver OpenAI-kompatibel embedding-endpoint og navngiver sit eget vektorlager. Et lager oprettet fra sådanne legitimationsoplysninger vises under den database, det henvender sig til. Se [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag).
 
@@ -17,7 +17,7 @@ Begge backends kan også tilgås via en *RAG: Custom Embeddings*-legitimationsop
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (søgning), `$nodeLabel.point_id` (indsæt, opdater), `$nodeLabel.deleted` (slet) |
+| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (søgning), `$nodeLabel.point_id` (indsæt, opdater), `$nodeLabel.deleted` (slet) |
 
 ## Parametre
 
@@ -33,6 +33,7 @@ Begge backends kan også tilgås via en *RAG: Custom Embeddings*-legitimationsop
 | `queryText` | udtryk | Søgeforespørgsel (kun søgning) |
 | `searchLimit` | tal | Maksimalt antal resultater (standard: 5) |
 | `metadataFilters` | JSON-streng | Metadatafiltre til søgning (værdier understøtter udtryk) |
+| `hybridSearch` | boolean | Kombiner vektorsøgning med BM25-nøgleordssøgning (kun search; standard: fra) |
 | `enableReranker` | boolean | Brug Cohere til reranking af søgeresultater |
 | `rerankerCredentialId` | UUID | Cohere-legitimationsoplysning til reranking |
 | `rerankerTopN` | tal | Antal topresultater der skal beholdes efter reranking |
@@ -104,6 +105,7 @@ Semantisk søgning efter lignende dokumenter.
 | `queryText` | ja | Søgeforespørgsel |
 | `searchLimit` | nej | Maksimalt antal resultater (standard: 5) |
 | `metadataFilters` | nej | Filtrer efter metadata (præcis match JSON-objekt, værdier understøtter udtryk) |
+| `hybridSearch` | nej | Sammenflet vektorlighed med BM25-nøgleordsmatchning (se [Hybridsøgning](#hybridssogning)) |
 | `enableReranker` | nej | Aktiver Cohere reranking for bedre relevans |
 | `rerankerCredentialId` | ved reranking | Cohere-legitimationsoplysninger |
 | `rerankerTopN` | nej | Endeligt antal resultater efter reranking |
@@ -117,13 +119,44 @@ Når reranking er aktiveret:
 - `score` forbliver den oprindelige vektorlighedsscore
 - `relevance_score` er Cohere reranking-score
 
+
+#### Hybridsøgning
+
+Vektorsøgning finder tekst, der har samme betydning som forespørgslen. Tekst, der kun indeholder de nøjagtige ord, kan rangeres lavere: en produktkode, et sagsnummer, en persons navn, en fejl som `ERR-4021`. Slå **Hybridsøgning** til, og knuden kører en nøgleordssøgning ved siden af vektorsøgningen og fletter begge lister sammen, så én forespørgsel finder begge typer matches.
+
+1. Vektorsøgningen returnerer sine bedste matches, præcis som den gør uden hybridsøgning.
+2. En nøgleordssøgning scorer den gemte tekst i forhold til forespørgslens ord med **BM25**, hvilket belønner sjældne ord, gentagne ord og kortere dokumenter.
+3. De to rangerede lister sammenflettes med **reciprocal rank fusion**. Et dokument nær toppen af begge lister rangerer først, og et dokument, som kun én liste fandt, vises stadig.
+
+Metadatafiltre gælder for begge søgninger, og Cohere-rerankeren kører på den sammenflettede liste, hvis den er aktiveret.
+
+Hvert resultat bærer scoren fra begge søgninger:
+
+| Felt | Betydning |
+|------|-----------|
+| `score` | Sammenflettet score fra 0 til 1. `1` betyder, at dokumentet rangerede først i begge søgninger. |
+| `vector_score` | Vektorlighed (0 til 1). `null`, når kun nøgleordssøgningen fandt dokumentet. |
+| `keyword_score` | BM25-score. `null`, når ingen af forespørgselsordene optræder i dokumentet. |
+
+`$nodeLabel.hybrid` er `true`, når hybridsøgning kørte.
+
+Godt at vide:
+
+- Den sammenflettede `score` rangerer resultaterne i forhold til hinanden. Det er ikke en vektorlighed, så en tærskelværdi indstillet til en simpel søgning kan ikke overføres direkte.
+- Ord i forespørgslen konverteres til små bogstaver og opdeles på mellemrum og tegnsætning, så `ERR-4021` søges som `err` og `4021`. Nøgleordssøgningen bruger op til de første 16 unikke ord i forespørgslen.
+- Qdrant: den første hybridsøgning på en samling opbygger et fuldtekstindeks på payload-feltet `text`, hvilket kræver en Qdrant-nøgle med skriveadgang. På store samlinger tager dette et øjeblik én enkelt gang; senere søgninger genbruger indekset.
+- Postgres (pgvector): databasemigreringen `142_vsi_text_search_index` tilføjer fuldtekstindekset. Kør `alembic upgrade head` efter opdatering. Hybridsøgning fungerer også uden indekset, blot langsommere på store lagre.
+- For hver forespørgsel læser nøgleordssøgningen op til 200 matchende dokumenter med start fra de sjældneste ord, da disse bærer mest vægt.
 ## Adgang til Resultater
 
 - `$ragNode.results.first().text` – indhold af bedste resultat
-- `$ragNode.results.first().score` – lighedsscore (0–1)
+- `$ragNode.results.first().score` – lighedsscore (0–1), eller den sammenflettede score med hybridsøgning
+- `$ragNode.results.first().keyword_score` – BM25-score (hybridsøgning)
+- `$ragNode.results.first().vector_score` – vektorlighed (hybridsøgning)
 - `$ragNode.results.first().metadata.source` – metadata for bedste resultat
 - `$ragNode.results.map("item.text").join("\n\n")` – sammenkædning til LLM-kontekst
 - `$ragNode.reranked` – om reranking blev anvendt
+- `$ragNode.hybrid` – om hybridsøgning blev anvendt
 - `$ragNode.count` – antal returnerede resultater
 - `$ragNode.replaced` – om en upsert erstattede et eksisterende dokument
 - `$ragNode.deleted` – om en sletning fjernede noget
@@ -143,6 +176,22 @@ Når reranking er aktiveret:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Eksempel – Hybridsøgning
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

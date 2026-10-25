@@ -30,7 +30,7 @@ Heym 提供多种节点类型用于构建 Workflow。在节点配置中使用[�
 | [Codex](../nodes/codex-node.md) | 使用 ChatGPT/Codex 访问 Token 针对 GitHub 仓库运行本地 Codex CLI | 1 | 1，外加 `question` 输出 |
 | [OpenCode Go](../nodes/opencode-go-node.md) | 使用 OpenCode Go 网关 API 密钥，在加固容器中针对 GitHub 仓库运行 OpenCode CLI | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | 直接调用特定的 MCP 工具，无需 LLM 选择 | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | 在 Qdrant 或 Postgres（pgvector）[向量存储](../tabs/vectorstores-tab.md)中插入、更新插入、删除或搜索，用于 RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | 在 Qdrant 或 Postgres（pgvector）[向量存储](../tabs/vectorstores-tab.md)中插入、更新插入、删除或搜索（向量或混合向量 + BM25），用于 RAG | 1 | 1 |
 
 ## 逻辑节点
 

@@ -15,7 +15,7 @@ Heym се свързва с външни услуги чрез **удостов�
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, незадължително `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, незадължително `base_url` |
-| **Jira** | [Jira node](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, незадължително `api_version` |
+| **Jira** | [Jira node](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (само Basic auth), незадължително `api_version` |
 | **Linear** | [Linear node](../nodes/linear-node.md) | `api_key`, или `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry node](../nodes/sentry-node.md) | `api_token`, незадължително `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ OAuth tokens (`access_token`, `refresh_token`, `token_expiry`) се съхран
 
 ## Jira
 
-Jira удостоверението съхранява Jira Basic auth credentials, Jira site base URL, deployment mode и опционална REST API версия за [Jira node](../nodes/jira-node.md). Използвайте `cloud` за Jira Cloud или `data_center` за Jira Data Center / Server.
+Jira удостоверението съхранява Jira Basic auth credentials или персонален токен за достъп (PAT) за Data Center, Jira site base URL, deployment mode и опционална REST API версия за [Jira node](../nodes/jira-node.md). Използвайте `cloud` за Jira Cloud или `data_center` за Jira Data Center / Server.
 
 ### Настройка
 
@@ -215,17 +215,19 @@ Jira удостоверението съхранява Jira Basic auth credentia
 
 **Jira Data Center / Server**
 
-1. Изберете **Jira Data Center / Server** като deployment.
-2. Въведете Jira username и password, използвани за Basic auth.
-3. Въведете Jira site URL, например `https://jira.example.com`.
-4. Използвайте **Test Connection**, за да проверите удостоверението.
+1. Изберете **Jira Data Center / Server** като разгръщане.
+2. Изберете метод за удостоверяване. **Потребителско име и парола** използва Basic auth. **Personal Access Token** използва `Authorization: Bearer <token>` и изисква Jira Data Center / Server 8.14 или по-нова версия. Създайте токена в **Профил → Personal Access Tokens** в Jira.
+3. Въведете потребителското име и паролата за Jira или поставете персоналния токен за достъп (не е необходимо потребителско име).
+4. Въведете URL адреса на сайта на Jira, например `https://jira.example.com`.
+5. Използвайте **Test Connection**, за да потвърдите удостоверението.
 
 ### Полета
 
 | Поле | Описание |
 | --- | --- |
-| `email` | Jira Cloud Atlassian account email или Jira Data Center / Server username |
-| `api_token` | Jira Cloud Atlassian API token или Jira Data Center / Server password за Basic auth |
+| `auth_mode` | `basic` (по подразбиране при липса) или `pat`. `pat` е валидно само с `data_center` |
+| `email` | Имейл на Atlassian акаунт в Jira Cloud или потребителско име в Jira Data Center / Server. Не се използва в режим `pat` |
+| `api_token` | Atlassian API token за Jira Cloud, парола за Jira Data Center / Server за Basic auth или персоналният токен за достъп за Data Center в режим `pat` |
 | `base_url` | Jira site base URL |
 | `deployment` | `cloud` за Jira Cloud или `data_center` за Jira Data Center / Server |
 | `api_version` | REST API версия; по подразбиране `3` за Jira Cloud. Data Center / Server използва v2 |
@@ -234,12 +236,11 @@ Jira удостоверението съхранява Jira Basic auth credentia
 
 - Jira node изпраща issue descriptions и comments като Atlassian Document Format текстови
   документи за Jira Cloud REST API v3. Data Center / Server удостоверенията изпращат plain text.
-- Data Center / Server в момента поддържа само username/password Basic auth. Personal access
-  tokens и Bearer auth все още не се поддържат.
+- Data Center / Server поддържа Basic auth с потребителско име/парола и удостоверяване с персонален токен за достъп (PAT) чрез схема Bearer. Удостоверяването с PAT изисква Jira Data Center / Server 8.14 или по-нова версия.
 - Attachment upload приема base64 или data URL съдържание и е предмет на лимита за размер на файл в платформата (по подразбиране 99 MB). Attachment download може да върне base64 съдържание, когато е разрешено.
 - Създаването, изтриването на потребители и issue notification изискват автентикираният Jira акаунт да има съответните Jira site или organization permissions.
 - Използвайте List Projects, Search Issues и List Transitions, за да откриете project keys, issue keys и transition IDs.
-- За custom endpoints, които не се покриват от Jira node, използвайте [HTTP node](../nodes/http-node.md) с Jira Basic Auth (`email:api_token` за Cloud или `username:password` за Data Center / Server) в cURL командата, или Header удостоверение със съответстващата `Authorization: Basic <base64(user:secret)>` стойност.
+- За персонализирани endpoint-и, които не се покриват от възела Jira, използвайте [възела HTTP](../nodes/http-node.md) с Jira Basic Auth (`email:api_token` за Cloud или `username:password` за Data Center / Server) или PAT Bearer auth (`Authorization: Bearer <token>` за Data Center / Server). Като алтернатива използвайте Header удостоверение със съответната заглавка `Authorization`.
 
 Вижте също:
 

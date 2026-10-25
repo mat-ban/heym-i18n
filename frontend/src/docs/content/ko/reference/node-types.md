@@ -30,7 +30,7 @@ Heym은 Workflow를 구축하기 위한 다양한 노드 유형을 제공합니�
 | [Codex](../nodes/codex-node.md) | ChatGPT/Codex 액세스 Token을 사용하여 GitHub 리포지토리에 대해 로컬 Codex CLI를 실행합니다 | 1 | 1, 그리고 `question` 출력 |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go 게이트웨이 API 키를 사용하여 강화된 컨테이너에서 GitHub 리포지토리에 대해 OpenCode CLI를 실행합니다 | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | LLM이 선택하지 않고 특정 MCP 도구를 직접 호출합니다 | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | RAG를 위해 Qdrant 또는 Postgres (pgvector) [벡터 저장소](../tabs/vectorstores-tab.md)에서 삽입, Upsert, 삭제 또는 검색합니다 | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | RAG를 위해 Qdrant 또는 Postgres (pgvector) [벡터 저장소](../tabs/vectorstores-tab.md)에서 삽입, Upsert, 삭제 또는 검색(벡터 또는 하이브리드 벡터 + BM25)합니다 | 1 | 1 |
 
 ## Logic 노드
 

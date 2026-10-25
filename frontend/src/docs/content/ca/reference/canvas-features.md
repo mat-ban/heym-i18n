@@ -147,3 +147,5 @@ Vegeu [Webhooks](./webhooks.md#run-with-curl-dialog) per als detalls complets de
 - [Execution History](./execution-history.md) – Execucions anteriors
 - [Templates](../tabs/templates-tab.md) – Desar i reutilitzar workflows i nodes
 - [Contextual Showcase](./contextual-showcase.md) – Guia compacta de la pàgina disponible a l'editor
+
+- [Col·laboració a Canvas](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

@@ -8,22 +8,23 @@
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Credential | Jira (Cloud email/API token või Data Center username/password, base URL, deployment mode, valikuline REST API version) |
+| Credential | Jira (Cloud email/API token, Data Center username/password või personal access token, base URL, deployment mode, valikuline REST API version) |
 | Output | `$nodeLabel.*` |
 
 ## Credential
 
-Looge **Jira** credential [Credentials Tab](../tabs/credentials-tab.md) vahekaardil. Salvestatud config võtmed on `email`, `api_token`, `base_url`, `deployment` ja valikuline `api_version`. Jira Cloudi puhul salvestab `email` Atlassianu konto e-posti ja `api_token` Atlassianu API tokeni. Jira Data Center / Serveri puhul salvestavad samad võtmed Basic auth kasutajanime ja parooli. Seadistamise sammud leiate jaotisest [Third-Party Integrations](../reference/integrations.md#jira).
+Looge **Jira** credential [Credentials Tab](../tabs/credentials-tab.md) vahekaardil. Salvestatud config võtmed on `email`, `api_token`, `base_url`, `deployment`, `auth_mode` ja valikuline `api_version`. Jira Cloudi puhul salvestab `email` Atlassianu konto e-posti ja `api_token` Atlassianu API tokeni. Jira Data Center / Serveri puhul salvestavad samad võtmed Basic auth kasutajanime ja parooli või režiimis `auth_mode: pat` salvestab `api_token` personal access tokeni, mis saadetakse Bearer tokenina, ning välja `email` ei kasutata. Seadistamise sammud leiate jaotisest [Third-Party Integrations](../reference/integrations.md#jira).
 
 | Field | Config key | Description |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Jira Cloudi Atlassianu konto e-post või Jira Data Center / Serveri kasutajanimi |
-| API Token / Password | `api_token` | Jira Cloudi Atlassianu API token või Jira Data Center / Serveri parool Basic auth jaoks |
+| Authentication | `auth_mode` | `basic` (vaikimisi) või `pat` (ainult Data Center / Server) |
+| API Token / Password / Personal Access Token | `api_token` | Jira Cloudi Atlassianu API token, Jira Data Center / Serveri parool Basic auth jaoks või Data Centeri personal access token režiimis `pat` |
 | Base URL | `base_url` | Jira saidi URL, näiteks `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` Jira Cloudi jaoks või `data_center` Jira Data Center / Serveri jaoks |
 | REST API Version | `api_version` | Vaikeväärtus on `3` Jira Cloudi jaoks. Data Center / Server kasutab REST API v2-te |
 
-Data Center / Serveri personal access tokenid ja Bearer auth ei ole Jira credentiali poolt veel toetatud.
+Personal access tokenid nõuavad Jira Data Center / Serveri versiooni 8.14 või uuemat. Autentimismeetodi vahetamine kustutab salvestatud saladuse, seega sisestage vahetamisel uus parool või token.
 
 Kasutage **Test Connection**, et credentiali praeguse Jira kasutaja vastu kontrollida.
 

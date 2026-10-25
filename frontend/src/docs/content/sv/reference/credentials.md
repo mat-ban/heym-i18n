@@ -18,7 +18,7 @@ Credentials lagrar API-nycklar och hemligheter som används av workflow-noder. D
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-prenumerationsinloggning (OAuth) eller en Codex access token för runner, plus en GitHub PAT för repository-operationer |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | En OpenCode Go gateway API-nyckel (valfri bas-URL) för runner, plus en GitHub PAT för repository-operationer |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) för GitHub API-anrop, GitHub-nodoperationer och MCP-integrationer |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud e-post/API-token eller Data Center användarnamn/lösenord, Jira site bas-URL, distributionsläge och valfri REST API-version |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud e-post/API-token, Data Center användarnamn/lösenord eller personlig åtkomsttoken, Jira site bas-URL, distributionsläge och valfri REST API-version |
 | [Linear](../nodes/linear-node.md) | Linear | Personlig API-nyckel eller OAuth2 för teams, projekt, ärenden och kommentarer |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autentisering för förfrågningar |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot-token och valfri webhook-hemlighet |
@@ -65,7 +65,7 @@ Vissa noder tillåter uttryck för autentisering. Använd [Expression DSL](./exp
 
 Codex-uppgifter är avsiktligt uteslutna från `$credentials`. Oavsett om inloggning sker med ChatGPT (prenumeration, ingen kostnad per token för API) eller genom att klistra in en Codex `access_token`, skickas token endast till den lokala Codex-körningsprocessen. ChatGPT-inloggningstoken förnyas automatiskt när de löper ut.
 
-Jira-uppgifter är också uteslutna från `$credentials`. [Jira-noden](../nodes/jira-node.md) laddar uppgiften via `credentialId` vid körning. För anpassade Jira REST-anrop som inte täcks av Jira-noden, använd [HTTP-noden](../nodes/http-node.md) med Jira Basic Auth (`email:api_token` för Jira Cloud eller `username:password` för Data Center / Server), till exempel `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Det går även att använda en [Header](../nodes/http-node.md)-uppgift med `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server personliga åtkomsttoken och Bearer-autentisering stöds ännu inte av Jira-uppgiften.
+Jira-uppgifter är också uteslutna från `$credentials`. [Jira-noden](../nodes/jira-node.md) laddar uppgiften via `credentialId` vid körning. För anpassade Jira REST-anrop som inte täcks av Jira-noden, använd [HTTP-noden](../nodes/http-node.md) med Jira Basic Auth (`email:api_token` för Jira Cloud eller `username:password` för Data Center / Server), till exempel `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Det går även att använda en [Header](../nodes/http-node.md)-uppgift med `Authorization: Basic <base64(user:secret)>`. För personliga åtkomsttoken för Jira Data Center / Server, skicka `Authorization: Bearer <token>` i stället; Jira-uppgiften stöder detta via sitt **Personal Access Token**-autentiseringsläge.
 
 | Uppgiftstyp | Värde som exponeras för `$credentials.Name` |
 |-----------------|--------------------------------------|

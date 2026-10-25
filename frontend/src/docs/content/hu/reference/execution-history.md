@@ -109,6 +109,8 @@ Mindkét előzmény párbeszédablak a lista tetején, a korábbi futtatások el
 - A megszakítás után a futó bejegyzés eltűnik a következő frissítéskor; nyomja meg a **Frissítés** gombot a lista manuális frissítéséhez
 - Ha egy már befejezett futtatást szakít meg, a kérés nem hajt végre műveletet
 
+A [párhuzamossági helyre](./webhooks.md#concurrency-limit-and-queued-runs) várakozó futtatások ugyanabban a szakaszban jelennek meg a **Queued 2/5** címkével, a sorban elfoglalt helyükkel és a sor méretével. Nincs **Open live** gombjuk, mert még semmi sem fut; a **Cancel** eltávolítja a várakozó futtatást a sorból, és `cancelled` állapotként rögzíti. Az a futtatás, amely hosszabb ideig várt, mint a workflow maximális várakozási ideje, `expired` állapotként kerül rögzítésre, a megtelt sor miatt elutasított futtatás pedig `queue_full` állapotként; mindkettő saját jelvénnyel rendelkezik a futtatási listában.
+
 Az élő URL a `/workflows/{workflowId}/{executionId}`. A megfigyelő csak olvasható: a szerkesztő
 elhagyása csak azt a böngészőfület kapcsolja le, és soha nem állítja le a workflow-t. Az aktív pillanatképek
 a PostgreSQL-en keresztül vannak megosztva, így egy futtatás megnyitása akkor is működik, ha a trigger és a szerkesztő

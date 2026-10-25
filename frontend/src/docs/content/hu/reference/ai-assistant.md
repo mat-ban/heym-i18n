@@ -148,7 +148,7 @@ Az AI asszisztenst egy **workflow DSL** (domain-specifikus nyelv) működteti, a
    - Az Ön Felhasználói szabályait "User Custom Rules" néven hozzáfűzve
    - Az aktuális workflow JSON-t, amikor egy meglévő workflow-t szerkeszt
    - Az elérhető workflow-k listáját, ha az Execute csomópontot használja
-   - Az Ön saját hitelesítési adatainak nevét, típusát és id-jét (soha nem az értékeiket)
+   - Az Ön által birtokolt vagy Önnel megosztott hitelesítési adatok nevét, típusát és id-jét (soha nem az értékeiket)
    - Az Ön által használható adattáblák nevét, id-jét, leírását és oszlopait (soha nem a soraikat)
 3. A modell egyetlen workflow JSON blokkot ad vissza (`nodes` és `edges` mezőkkel). A frontend elemzi, és alkalmazza a vászonra.
 

@@ -148,7 +148,7 @@ AI asistentu darbina **workflow DSL** (jomas specifiskā valoda), kas apraksta m
    - Jūsu Lietotāja noteikumus, kas pievienoti kā "User Custom Rules"
    - Pašreizējo workflow JSON, kad Jūs rediģējat esošu workflow
    - Pieejamo workflow sarakstu, ja izmantojat Execute mezglu
-   - Jūsu pašu akreditācijas datu nosaukumus, tipus un id (nekad to vērtības)
+   - Jums piederošo vai ar jums kopīgoto akreditācijas datu nosaukumus, tipus un id (nekad to vērtības)
    - Datu tabulu nosaukumus, id, aprakstus un kolonnas, ko varat izmantot (nekad to rindas)
 3. Modelis atgriež vienu workflow JSON bloku (ar `nodes` un `edges`). Frontend to parsē un piemēro kanvai.
 

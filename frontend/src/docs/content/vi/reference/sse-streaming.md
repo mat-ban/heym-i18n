@@ -25,12 +25,17 @@ Mỗi khung SSE là JSON phân tách bằng dòng mới, có tiền tố `data: 
 
 | Loại sự kiện | Khi nào được phát | Các trường chính |
 |------------|--------------------|------------|
-| `execution_started` | Ngay sau khi yêu cầu được chấp nhận | `execution_id`, `server_now_ms` |
+| `queued` | Workflow đang ở [giới hạn đồng thời](./webhooks.md#concurrency-limit-and-queued-runs); được gửi lại bất cứ khi nào vị trí của lượt chạy thay đổi | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Ngay sau khi yêu cầu được chấp nhận, hoặc khi lượt chạy trong hàng đợi bắt đầu | `execution_id`, `server_now_ms` |
 | `node_start` | Ngay trước khi một node bắt đầu thực thi | `node_id`, `node_label`, `started_at_ms`, `message` tùy chọn |
 | `node_retry` | Khi một node thử lại | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Sau khi một node hoàn thành | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Khi một node Output trả về sớm | `node_label`, `output` |
 | `execution_complete` | Sau khi workflow kết thúc | `status`, `outputs`, `execution_time_ms` |
+
+### Các lượt chạy trong hàng đợi
+
+Khi workflow ở giới hạn đồng thời, luồng sẽ tiếp tục mở và gửi các sự kiện `queued` trong khi lượt chạy đang chờ. Lượt chạy trong hàng đợi thực thi trong background worker, có thể trong một quy trình khác, do đó luồng của nó mang `execution_started` khi lượt chạy bắt đầu và `execution_complete` khi kết thúc, nhưng không có sự kiện `node_start`, `node_complete` hoặc sự kiện token nào ở giữa. `execution_complete` của nó có `node_results` trống; hãy mở lượt chạy trong [Lịch sử thực thi](./execution-history.md) để biết chi tiết về node. Việc đóng kết nối không hủy lượt chạy trong hàng đợi. Khi hàng đợi đầy, yêu cầu sẽ được trả lời `429` trước khi luồng mở.
 
 ## Thông điệp bắt đầu cho từng node
 

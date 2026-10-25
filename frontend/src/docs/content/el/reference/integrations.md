@@ -15,7 +15,7 @@
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, προαιρετικό `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, προαιρετικό `base_url` |
-| **Jira** | [Jira node](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, προαιρετικό `api_version` |
+| **Jira** | [Jira node](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (μόνο Basic auth), προαιρετικό `api_version` |
 | **Linear** | [Linear node](../nodes/linear-node.md) | `api_key`, ή `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry node](../nodes/sentry-node.md) | `api_token`, προαιρετικό `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ metadata, projects, issues και comments.
 
 ## Jira
 
-Το διαπιστευτήριο Jira αποθηκεύει τα διαπιστευτήρια Jira Basic auth, το base URL του ιστότοπου Jira, τη λειτουργία ανάπτυξης και την προαιρετική έκδοση REST API για τον [Jira node](../nodes/jira-node.md). Χρησιμοποιήστε `cloud` για το Jira Cloud ή `data_center` για το Jira Data Center / Server.
+Το διαπιστευτήριο Jira αποθηκεύει τα διαπιστευτήρια Jira Basic auth ή ένα διακριτικό προσωπικής πρόσβασης Data Center, το base URL του ιστότοπου Jira, τη λειτουργία ανάπτυξης και την προαιρετική έκδοση REST API για τον [Jira node](../nodes/jira-node.md). Χρησιμοποιήστε `cloud` για το Jira Cloud ή `data_center` για το Jira Data Center / Server.
 
 ### Ρύθμιση
 
@@ -215,17 +215,19 @@ metadata, projects, issues και comments.
 
 **Jira Data Center / Server**
 
-1. Επιλέξτε **Jira Data Center / Server** ως τη λειτουργία ανάπτυξης.
-2. Εισαγάγετε το όνομα χρήστη και τον κωδικό πρόσβασης του Jira που χρησιμοποιούνται για Basic auth.
-3. Εισαγάγετε το URL του ιστότοπου Jira, για παράδειγμα `https://jira.example.com`.
-4. Χρησιμοποιήστε το **Test Connection** για να επαληθεύσετε το διαπιστευτήριο.
+1. Επιλέξτε **Jira Data Center / Server** ως ανάπτυξη.
+2. Επιλέξτε μια μέθοδο ελέγχου ταυτότητας. Το **Όνομα χρήστη και κωδικός πρόσβασης** χρησιμοποιεί Basic auth. Το **Personal Access Token** χρησιμοποιεί `Authorization: Bearer <token>` και απαιτεί Jira Data Center / Server 8.14 ή νεότερη έκδοση. Δημιουργήστε το διακριτικό στην ενότητα **Προφίλ → Personal Access Tokens** στο Jira.
+3. Εισαγάγετε το όνομα χρήστη και τον κωδικό πρόσβασης Jira ή επικολλήστε το διακριτικό προσωπικής πρόσβασης (δεν απαιτείται όνομα χρήστη).
+4. Εισαγάγετε τη διεύθυνση URL της τοποθεσίας Jira, για παράδειγμα `https://jira.example.com`.
+5. Χρησιμοποιήστε το **Test Connection** για να επαληθεύσετε το διαπιστευτήριο.
 
 ### Πεδία
 
 | Πεδίο | Περιγραφή |
 | --- | --- |
-| `email` | Email λογαριασμού Atlassian για Jira Cloud ή όνομα χρήστη για Jira Data Center / Server |
-| `api_token` | API token Atlassian για Jira Cloud ή κωδικός πρόσβασης για Basic auth σε Jira Data Center / Server |
+| `auth_mode` | `basic` (προεπιλογή εάν λείπει) ή `pat`. Το `pat` είναι έγκυρο μόνο με `data_center` |
+| `email` | Διεύθυνση ηλεκτρονικού ταχυδρομείου λογαριασμού Atlassian Jira Cloud ή όνομα χρήστη Jira Data Center / Server. Δεν χρησιμοποιείται στη λειτουργία `pat` |
+| `api_token` | Διακριτικό API Atlassian Jira Cloud, κωδικός πρόσβασης Jira Data Center / Server για Basic auth ή το διακριτικό προσωπικής πρόσβασης Data Center στη λειτουργία `pat` |
 | `base_url` | Base URL του ιστότοπου Jira |
 | `deployment` | `cloud` για Jira Cloud ή `data_center` για Jira Data Center / Server |
 | `api_version` | Έκδοση REST API· προεπιλογή `3` για Jira Cloud. Το Data Center / Server χρησιμοποιεί v2 |
@@ -234,12 +236,11 @@ metadata, projects, issues και comments.
 
 - Ο node Jira αποστέλλει περιγραφές θεμάτων και σχόλια ως έγγραφα κειμένου Atlassian Document Format
   για το Jira Cloud REST API v3. Τα διαπιστευτήρια Data Center / Server αποστέλλουν απλό κείμενο.
-- Το Data Center / Server υποστηρίζει προς το παρόν μόνο Basic auth με όνομα χρήστη/κωδικό πρόσβασης. Personal access
-  tokens και Bearer auth δεν υποστηρίζονται ακόμη.
+- Το Data Center / Server υποστηρίζει Basic auth με όνομα χρήστη/κωδικό πρόσβασης και έλεγχο ταυτότητας με διακριτικό προσωπικής πρόσβασης (PAT) χρησιμοποιώντας το σχήμα Bearer. Ο έλεγχος ταυτότητας PAT απαιτεί Jira Data Center / Server 8.14 ή νεότερη έκδοση.
 - Η μεταφόρτωση συνημμένων δέχεται περιεχόμενο base64 ή data URL και υπόκειται στο όριο μεγέθους αρχείου της πλατφόρμας (προεπιλογή 99 MB). Η λήψη συνημμένων μπορεί να επιστρέψει περιεχόμενο base64 όταν είναι ενεργοποιημένη.
 - Η δημιουργία, η διαγραφή χρήστη και η ειδοποίηση θεμάτων απαιτούν ο ελεγχόμενος λογαριασμός Jira να έχει τα σχετικά δικαιώματα του ιστότοπου ή του οργανισμού Jira.
 - Χρησιμοποιήστε τις επιλογές List Projects, Search Issues και List Transitions για να ανακαλύψετε κλειδιά έργων, κλειδιά θεμάτων και IDs μεταβάσεων.
-- Για προσαρμοσμένα endpoints που δεν καλύπτονται από τον node Jira, χρησιμοποιήστε τον [HTTP node](../nodes/http-node.md) με Jira Basic Auth (`email:api_token` για Cloud ή `username:password` για Data Center / Server) στην εντολή cURL ή ένα διαπιστευτήριο Header με την αντίστοιχη τιμή `Authorization: Basic <base64(user:secret)>`.
+- Για προσαρμοσμένα endpoints που δεν καλύπτονται από τον κόμβο Jira, χρησιμοποιήστε τον [κόμβο HTTP](../nodes/http-node.md) με Jira Basic Auth (`email:api_token` για Cloud ή `username:password` για Data Center / Server) ή PAT Bearer auth (`Authorization: Bearer <token>` για Data Center / Server). Εναλλακτικά, χρησιμοποιήστε ένα διαπιστευτήριο Header με την κατάλληλη επικεφαλίδα `Authorization`.
 
 Δείτε επίσης:
 

@@ -25,12 +25,17 @@ Hver SSE-frame er newline-delimited JSON præfikset med `data: `.
 
 | Hændelsestype | Udsendelsestidspunkt | Nøglefelter |
 |------------|--------------------|------------|
-| `execution_started` | Umiddelbart efter anmodningen er accepteret | `execution_id`, `server_now_ms` |
+| `queued` | Workflowet er ved sin [samtidighedsgrænse](./webhooks.md#concurrency-limit-and-queued-runs); sendes igen, hver gang kørslens placering ændres | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Umiddelbart efter anmodningen er accepteret, eller når en køet kørsel starter | `execution_id`, `server_now_ms` |
 | `node_start` | Lige før en node påbegynder udførelse | `node_id`, `node_label`, `started_at_ms`, valgfri `message` |
 | `node_retry` | Når en node prøver igen | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Efter en node er færdig | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Når en Output-node returnerer tidligt | `node_label`, `output` |
 | `execution_complete` | Efter workflowet er afsluttet | `status`, `outputs`, `execution_time_ms` |
+
+### Køede kørsler
+
+Når workflowet er ved sin samtidighedsgrænse, forbliver streamen åben og sender `queued`-hændelser, mens kørslen venter. En køet kørsel udføres i baggrundsworkeren, muligvis i en anden proces, så dens stream bærer `execution_started`, når kørslen starter, og `execution_complete`, når den slutter, men ingen mellemliggende `node_start`-, `node_complete`- eller token-hændelser. Dens `execution_complete` har et tomt `node_results`; åbn kørslen i [Udførelseshistorik](./execution-history.md) for nodedetaljer. Lukning af forbindelsen annullerer ikke en køet kørsel. Når køen er fuld, besvares anmodningen med `429`, før streamen åbnes.
 
 ## Per-Node Start-beskeder
 

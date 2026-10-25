@@ -15,7 +15,7 @@ Certains nœuds d'intégration ne nécessitent **pas** d'identifiants. [WebSocke
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, `base_url` facultatif |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, `base_url` facultatif |
-| **Jira** | [Nœud Jira](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, `api_version` facultatif |
+| **Jira** | [Nœud Jira](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (Basic auth uniquement), `api_version` facultatif |
 | **Linear** | [Nœud Linear](../nodes/linear-node.md) | `api_key`, ou `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Nœud Sentry](../nodes/sentry-node.md) | `api_token`, `base_url` facultatif |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ Les tokens OAuth (`access_token`, `refresh_token`, `token_expiry`) sont stockés
 
 ## Jira
 
-L'identifiant Jira stocke les identifiants Jira Basic auth, l'URL de base du site Jira, le mode de déploiement et la version optionnelle de l'API REST pour le [nœud Jira](../nodes/jira-node.md). Utilisez `cloud` pour Jira Cloud ou `data_center` pour Jira Data Center / Server.
+L'identifiant Jira stocke les identifiants Jira Basic auth ou un jeton d'accès personnel Data Center, l'URL de base du site Jira, le mode de déploiement et la version optionnelle de l'API REST pour le [nœud Jira](../nodes/jira-node.md). Utilisez `cloud` pour Jira Cloud ou `data_center` pour Jira Data Center / Server.
 
 ### Configuration
 
@@ -216,16 +216,18 @@ L'identifiant Jira stocke les identifiants Jira Basic auth, l'URL de base du sit
 **Jira Data Center / Server**
 
 1. Sélectionnez **Jira Data Center / Server** comme déploiement.
-2. Saisissez le nom d'utilisateur et le mot de passe Jira utilisés pour Basic auth.
-3. Saisissez l'URL du site Jira, par exemple `https://jira.example.com`.
-4. Utilisez **Test Connection** pour vérifier l'identifiant.
+2. Choisissez une méthode d'authentification. **Nom d'utilisateur et mot de passe** utilise Basic auth. **Personal Access Token** utilise `Authorization: Bearer <token>` et nécessite Jira Data Center / Server 8.14 ou ultérieur. Créez le jeton sous **Profil → Personal Access Tokens** dans Jira.
+3. Saisissez le nom d'utilisateur et le mot de passe Jira, ou collez le jeton d'accès personnel (aucun nom d'utilisateur n'est requis).
+4. Saisissez l'URL du site Jira, par exemple `https://jira.example.com`.
+5. Utilisez **Test Connection** pour vérifier l'identifiant.
 
 ### Champs
 
 | Champ | Description |
 | --- | --- |
-| `email` | Email du compte Atlassian Jira Cloud, ou nom d'utilisateur Jira Data Center / Server |
-| `api_token` | Token API Atlassian Jira Cloud, ou mot de passe Jira Data Center / Server pour Basic auth |
+| `auth_mode` | `basic` (par défaut si absent) ou `pat`. `pat` n'est valide qu'avec `data_center` |
+| `email` | E-mail du compte Atlassian Jira Cloud ou nom d'utilisateur Jira Data Center / Server. Non utilisé en mode `pat` |
+| `api_token` | Jeton d'API Atlassian Jira Cloud, mot de passe Jira Data Center / Server pour Basic auth ou jeton d'accès personnel Data Center en mode `pat` |
 | `base_url` | URL de base du site Jira |
 | `deployment` | `cloud` pour Jira Cloud ou `data_center` pour Jira Data Center / Server |
 | `api_version` | Version de l'API REST ; par défaut `3` pour Jira Cloud. Data Center / Server utilise la v2 |
@@ -234,12 +236,11 @@ L'identifiant Jira stocke les identifiants Jira Basic auth, l'URL de base du sit
 
 - Le nœud Jira envoie les descriptions de tickets et les commentaires sous forme de documents texte
   Atlassian Document Format pour l'API REST Jira Cloud v3. Les identifiants Data Center / Server envoient du texte brut.
-- Data Center / Server prend actuellement en charge uniquement l'authentification Basic username/password. Les personal access
-  tokens et l'authentification Bearer ne sont pas encore pris en charge.
+- Data Center / Server prend en charge Basic auth par nom d'utilisateur/mot de passe et l'authentification par jeton d'accès personnel (PAT) à l'aide du schéma Bearer. L'authentification PAT nécessite Jira Data Center / Server 8.14 ou ultérieur.
 - L'upload de pièces jointes accepte un contenu base64 ou data URL et est soumis à la limite de taille de fichier de la plateforme (99 Mo par défaut). Le téléchargement de pièces jointes peut renvoyer un contenu base64 lorsqu'il est activé.
 - La création, la suppression d'utilisateurs et la notification de tickets nécessitent que le compte Jira authentifié dispose des permissions pertinentes sur le site ou l'organisation Jira.
 - Utilisez List Projects, Search Issues et List Transitions pour découvrir les clés de projet, les clés de ticket et les IDs de transition.
-- Pour les endpoints personnalisés non couverts par le nœud Jira, utilisez le [nœud HTTP](../nodes/http-node.md) avec Jira Basic Auth (`email:api_token` pour Cloud ou `username:password` pour Data Center / Server) dans la commande cURL, ou un identifiant Header avec la valeur `Authorization: Basic <base64(user:secret)>` correspondante.
+- Pour les endpoints personnalisés non couverts par le nœud Jira, utilisez le [nœud HTTP](../nodes/http-node.md) avec Jira Basic Auth (`email:api_token` pour Cloud ou `username:password` pour Data Center / Server) ou PAT Bearer auth (`Authorization: Bearer <token>` pour Data Center / Server). Vous pouvez également utiliser un identifiant Header avec l'en-tête `Authorization` approprié.
 
 Voir aussi :
 

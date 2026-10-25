@@ -105,3 +105,5 @@ Pintasan ini tersedia di dialog Execution History dan panel Traces.
 - [Struktur Workflow](./workflow-structure.md) – Format node dan edge
 - [Node Execute](../nodes/execute-node.md) – Memanggil sub-workflow (`Ctrl + Shift + O`)
 - [Mulai Cepat](../getting-started/quick-start.md) – Bangun workflow pertama Anda
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

@@ -147,3 +147,5 @@ Täielike dialoogi üksikasjade kohta vaadake [Webhooks](./webhooks.md#run-with-
 - [Käivituste ajalugu](./execution-history.md) – Varasemad käivitused
 - [Mallid](../tabs/templates-tab.md) – Workflow'de ja sõlmede salvestamine ja taaskasutamine
 - [Kontekstipõhine tutvustus](./contextual-showcase.md) – Kompaktne lehe juhend, mis on redaktoris saadaval
+
+- [Koostöö lõuendil](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

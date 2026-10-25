@@ -30,7 +30,7 @@ Oglejte si [Triggers](./triggers.md) za vse vhodne točke.
 | [Codex](../nodes/codex-node.md) | Zaženi lokalni Codex CLI proti GitHub repozitoriju z uporabo dostopnega žetona ChatGPT/Codex | 1 | 1, plus `question` izhod |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Zaženi OpenCode CLI proti GitHub repozitoriju v utrjenem vsebniku z uporabo OpenCode Go ključnega API | 1 | 1 |
 | [MCP Klic](../nodes/mcp-call-node.md) | Kličite specifično MCP orodje neposredno brez izbire LLM | 1 | 1 |
-| [RAG / Vektorska shramba](../nodes/rag-node.md) | Vstavite, posodobite, izbrišite ali iščite v Qdrant ali Postgres (pgvector) [vektorski shrambi](../tabs/vectorstores-tab.md) za RAG | 1 | 1 |
+| [RAG / Vektorska shramba](../nodes/rag-node.md) | Vstavite, posodobite, izbrišite ali iščite (vektorsko ali hibridno vektorsko + BM25) v Qdrant ali Postgres (pgvector) [vektorski shrambi](../tabs/vectorstores-tab.md) za RAG | 1 | 1 |
 
 ## Logična vozlišča
 

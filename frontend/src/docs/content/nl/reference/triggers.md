@@ -90,6 +90,20 @@ Discord stuurt interactie-webhooks naar `POST /api/discord/webhook/{node_id}`. D
 
 De RabbitMQ-consumer start wanneer de leader worker initialiseert. Workflows met `rabbitmq`-knooppunten waarbij `rabbitmqOperation === "receive"` krijgen een consumer. De invoer omvat `message_data` (body, headers, routing_key, enz.) en `triggered_by: "rabbitmq"`.
 
+## Gelijktijdigheidslimiet
+
+Een workflow met een [gelijktijdigheidslimiet](./webhooks.md#concurrency-limit-and-queued-runs) plaatst productieruns van elk bovenstaand entry point in de wachtrij wanneer de slots vol zijn, first in, first out, over alle instanties heen. Hoe een aanroeper het resultaat verneemt, hangt af van het entry point:
+
+| Entry point | Terwijl de run wacht |
+|---|---|
+| Webhook / API | `202 Accepted` met een `execution_id` en een status-URL |
+| SSE streaming, Quick Drawer, Portal chat | De stream blijft open en verzendt `queued`-gebeurtenissen |
+| Portal without streaming | Het verzoek wacht op het resultaat |
+| MCP | Een `queued`-resultaat om te pollen met `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | De trigger wacht op het resultaat, zolang een run op een andere [instantie](./cluster.md) zou wachten. De run wordt in elk geval uitgevoerd en naar de geschiedenis geschreven |
+
+Wanneer de wachtrij vol is, start de run niet en wordt deze in de geschiedenis geregistreerd als `queue_full`. Editor-testruns, sub-workflow-aanroepen ([Execute](../nodes/execute-node.md)-node en agent-workflowtools), [Evals](../tabs/evals-tab.md), chat build-modus testruns en hervattingen van reviews worden nooit in de wachtrij geplaatst. [Board](../tabs/board-tab.md)-kaartruns, [File Upload](../nodes/file-upload-trigger-node.md)-runs, runs gestart door de run-workflow-tool van de AI-assistent en waarschuwings-meldingsworkflows starten eveneens zonder op een slot te wachten.
+
 ## trigger_source
 
 De uitvoeringsgeschiedenis registreert `trigger_source` voor elk toegangspunt:

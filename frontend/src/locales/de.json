@@ -827,6 +827,22 @@
         "waiting": "Wartend",
         "neutral": "Neutral"
       }
+    },
+    "concurrencyLimit": "Gleichzeitigkeitslimit",
+    "concurrencyLimitHelp": "Produktionsausführungen (Webhooks, Cron, MCP, Portal, Trigger) über dem Limit warten in einer FIFO-Warteschlange. Editor-Testläufe starten immer sofort.",
+    "maxConcurrentRuns": "Max. gleichzeitige Ausführungen",
+    "maxQueueSizeOptional": "Max. Warteschlangengröße (optional)",
+    "emptyNoLimit": "Leer = kein Limit",
+    "maxWaitOptional": "Max. Wartezeit (Sekunden, optional)",
+    "emptyWaitAsLong": "Leer = beliebig lange warten",
+    "concurrencyQueueHelp": "Eine volle Warteschlange antwortet mit 429. Eine Ausführung, die länger als die max. Wartezeit wartet, wird als abgelaufen markiert.",
+    "rag": {
+      "hybridSearch": "Hybride Suche",
+      "hybridSearchHelp": "Kombiniert Vektorähnlichkeit mit BM25-Schlagwortabgleich, sodass auch exakte Begriffe wie IDs, Namen und Fehlercodes gefunden werden.",
+      "hybridScore": "Hybrid-Score (0-1)",
+      "similarityScore": "Ähnlichkeits-Score",
+      "vectorSimilarity": "Vektorähnlichkeit",
+      "bm25Score": "BM25-Score"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "KI fragen",
     "askAiTitle": "Den Chat-Assistenten zu diesem Lauf befragen",
-    "noNodeSpans": "Für diesen Lauf wurden keine Knoten-Spans aufgezeichnet."
+    "noNodeSpans": "Für diesen Lauf wurden keine Knoten-Spans aufgezeichnet.",
+    "queuedProgress": "In Warteschlange {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Portal wird geladen...",

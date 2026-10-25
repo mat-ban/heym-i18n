@@ -52,6 +52,8 @@ Efter att en körning har startats visar panelen:
 
 `pending` innebär att workflowen väntar på en senare åtgärd, såsom mänsklig granskning.
 
+Quick Drawer-körningar är produktionskörningar, så en workflow med en [samtidighetsgräns](./webhooks.md#concurrency-limit-and-queued-runs) kan få dem att vänta. Medan körningen står i kö visar statusen **Waiting in queue (2/5)**; den ändras till "running" när körningen startar och visar resultatet när den avslutas, utan förlopp steg för steg. En körning som löpt ut i kön, eller som avbröts under väntan, avslutas som `error`.
+
 En filkörning går via triggerns engångslänk för uppladdning: panelen ber workflowet om en länk, laddar upp filen dit och visar resultatet när uppladdningen är klar. Filkörningar visar slutstatus och utdata men inget steg-för-steg-förlopp, och taggas också med `Quick Drawer` i historiken. Den valda filen rensas efter varje körning eftersom en länk endast tar emot en fil.
 
 ## Webbläsarlagring

@@ -8,22 +8,23 @@ El nodo **Jira** conecta workflows con la API REST de Jira para la automatizaci�
 |----------|-------|
 | Entradas | 1 |
 | Salidas | 1 |
-| Credencial | Jira (correo electrónico/token de API de Cloud o nombre de usuario/contraseña de Data Center, URL base, modo de despliegue, versión opcional de la API REST) |
+| Credencial | Jira (correo electrónico/token de API de Cloud, nombre de usuario/contraseña o token de acceso personal de Data Center, URL base, modo de despliegue, versión opcional de la API REST) |
 | Salida | `$nodeLabel.*` |
 
 ## Credencial
 
-Cree una credencial de **Jira** en la [Pestaña Credenciales](../tabs/credentials-tab.md). Las claves de configuración almacenadas son `email`, `api_token`, `base_url`, `deployment` y `api_version` opcional. Para Jira Cloud, `email` almacena el correo electrónico de la cuenta de Atlassian y `api_token` almacena el token de API de Atlassian. Para Jira Data Center / Server, esas mismas claves almacenan el nombre de usuario y la contraseña de autenticación Basic. Consulte [Integraciones de terceros](../reference/integrations.md#jira) para conocer los pasos de configuración.
+Cree una credencial de **Jira** en la [Pestaña Credenciales](../tabs/credentials-tab.md). Las claves de configuración almacenadas son `email`, `api_token`, `base_url`, `deployment`, `auth_mode` y `api_version` opcional. Para Jira Cloud, `email` almacena el correo electrónico de la cuenta de Atlassian y `api_token` almacena el token de API de Atlassian. Para Jira Data Center / Server, esas mismas claves almacenan el nombre de usuario y la contraseña de autenticación Basic o, con `auth_mode: pat`, `api_token` almacena un token de acceso personal enviado como Bearer token y `email` no se utiliza. Consulte [Integraciones de terceros](../reference/integrations.md#jira) para conocer los pasos de configuración.
 
 | Campo | Clave de configuración | Descripción |
 | --- | --- | --- |
 | Correo electrónico / Nombre de usuario de Jira | `email` | Correo electrónico de la cuenta de Atlassian de Jira Cloud, o nombre de usuario de Jira Data Center / Server |
-| Token de API / Contraseña | `api_token` | Token de API de Atlassian de Jira Cloud, o contraseña de Jira Data Center / Server para autenticación Basic |
+| Autenticación | `auth_mode` | `basic` (predeterminado) o `pat` (solo Data Center / Server) |
+| Token de API / Contraseña / Token de acceso personal | `api_token` | Token de API de Atlassian de Jira Cloud, contraseña de Jira Data Center / Server para autenticación Basic, o un token de acceso personal de Data Center en modo `pat` |
 | URL base | `base_url` | URL del sitio de Jira, por ejemplo `https://your-domain.atlassian.net` |
 | Despliegue | `deployment` | `cloud` para Jira Cloud o `data_center` para Jira Data Center / Server |
 | Versión de la API REST | `api_version` | El valor predeterminado es `3` para Jira Cloud. Data Center / Server utiliza la API REST v2 |
 
-Los tokens de acceso personal y la autenticación Bearer de Data Center / Server aún no son compatibles con la credencial de Jira.
+Los tokens de acceso personal requieren Jira Data Center / Server 8.14 o posterior. Cambiar de método de autenticación borra el secreto almacenado, por lo que debe introducir la nueva contraseña o token al cambiar.
 
 Utilice **Test Connection** para verificar la credencial con el usuario actual de Jira.
 

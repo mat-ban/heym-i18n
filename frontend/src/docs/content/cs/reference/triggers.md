@@ -85,6 +85,20 @@ Discord odesílá interakční webhooky na `POST /api/discord/webhook/{node_id}`
 
 Konzument RabbitMQ se spustí při inicializaci leader workeru. Workflow s uzly `rabbitmq`, kde `rabbitmqOperation === "receive"`, získají konzumenta. Vstup zahrnuje `message_data` (tělo, hlavičky, routing_key atd.) a `triggered_by: "rabbitmq"`.
 
+## Limit souběhu
+
+Workflow s [limitem souběhu](./webhooks.md#concurrency-limit-and-queued-runs) zařazuje produkční běhy z každého výše uvedeného vstupního bodu do fronty, když jsou jeho sloty plné, způsobem first-in, first-out, napříč všemi instancemi. Způsob, jakým se volající dozví výsledek, závisí na vstupním bodu:
+
+| Vstupní bod | Zatímco běh čeká |
+|---|---|
+| Webhook / API | `202 Accepted` s `execution_id` a stavovou URL |
+| SSE streaming, Quick Drawer, Portal chat | Stream zůstává otevřený a odesílá události `queued` |
+| Portal without streaming | Požadavek čeká na výsledek |
+| MCP | Výsledek `queued` pro dotazování pomocí `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger čeká na výsledek stejně dlouho, jako by čekal běh na jiné [instanci](./cluster.md). Běh se provede v každém případě a zapíše se do historie |
+
+Když je fronta plná, běh se nespustí a historie jej zaznamená jako `queue_full`. Testovací běhy editoru, volání sub-workflow (uzel [Execute](../nodes/execute-node.md) a workflow nástroje agenta), [Evals](../tabs/evals-tab.md), testovací běhy v chatovacím režimu sestavení a obnovení po revizi se do fronty nikdy nezařazují. Běhy karet na [Board](../tabs/board-tab.md), běhy [File Upload](../nodes/file-upload-trigger-node.md), běhy spuštěné nástrojem run-workflow AI asistenta a notifikační workflow upozornění se rovněž spouštějí bez čekání na slot.
+
 ## trigger_source
 
 Historie spuštění zaznamenává `trigger_source` pro každý vstupní bod:

@@ -147,3 +147,5 @@ Nodes с `active: false` се пропускат. Downstream nodes не полу
 - [Execution History](./execution-history.md) – Минали изпълнения
 - [Templates](../tabs/templates-tab.md) – Запазване и повторно използване на workflows и nodes
 - [Contextual Showcase](./contextual-showcase.md) – Компактно ръководство за страницата, достъпно в редактора
+
+- [Сътрудничество на Canvas](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

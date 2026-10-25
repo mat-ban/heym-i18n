@@ -108,6 +108,73 @@ Es configura per workflow: `rate_limit_requests` i `rate_limit_window_seconds`.
 | `rate_limit_window_seconds` | Durada de la finestra en segons |
 
 Les sol·licituds `test_run` ometen la limitació de velocitat.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Límit de concurrència i execucions en cua
+
+Un workflow pot limitar quantes execucions de producció s'executen alhora. Activeu **Límit de concurrència** al panell **Properties** a nivell de workflow i configureu **Execucions simultànies màx**. Els propietaris i col·laboradors amb permís d'edició poden modificar-ho. El límit està desactivat per defecte.
+
+Mentre s'arriba al límit, les noves execucions esperen en una cua FIFO (primer a entrar, primer a sortir). Això cobreix tots els punts d'entrada de producció: aquest endpoint, l'[endpoint de streaming](./sse-streaming.md), el [Portal](./portal.md), el [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) i cada [trigger](./triggers.md). Les execucions de prova del propi editor sempre s'inicien immediatament i no consumeixen un slot. Enviar `test_run=true` sense una sessió iniciada que pugui obrir el workflow no omet la cua.
+
+| Configuració | Descripció |
+|---|---|
+| `concurrency_limit` | Execucions de producció permeses alhora. `0` desactiva el límit |
+| `concurrency_max_queue` | Opcional. Execucions autoritzades a esperar alhora. Buit significa sense límit |
+| `concurrency_max_wait_seconds` | Opcional. Una execució que espera més temps es registra com a `expired`. Buit significa que espera tot el temps necessari |
+
+### 202 Accepted
+
+Una crida que s'inicia immediatament es comporta exactament com es descriu a Format de la resposta. Una crida que ha d'esperar rep `202 Accepted` immediatament, sigui quin sigui el valor de `X-Simple-Response`, amb una capçalera `Location` que apunta al seu URL d'estat:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Camp | Descripció |
+|---|---|
+| `queue.position` | Lloc d'aquesta execució a la cua, començant a 1 |
+| `queue.size` | Execucions esperant en aquest moment |
+| `queue.running` | Execucions que ocupen un slot en aquest moment |
+| `queue.limit` | Límit de concurrència del workflow |
+| `status_token` | Només per a workflows anònims. Es retorna un sol cop, en aquesta resposta |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` respon amb l'estat de l'execució. Crideu-lo amb les mateixes credencials que han iniciat l'execució: una sessió o JWT, un [token d'execució](./execution-tokens.md) o la capçalera personalitzada del workflow. Un workflow anònim no té credencials per verificar; envieu el `status_token` del 202 a la capçalera `X-Heym-Run-Token`. El token no es llegeix mai de la query string. Un token incorrecte o absent rep `404`, igual que una execució desconeguda.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Significat (una execució que ha d'esperar per un slot de concurrència rep la [resposta 202](#202-accepted) en el seu lloc) |
+|---|---|
+| `queued` | Esperant un slot; `queue` indica la seva posició |
+| `running` | Disposa d'un slot i s'està executant |
+| `success` / `error` | Finalitzat; `outputs` i `error` estan emplenats |
+| `pending` | En pausa per a [revisió humana](./human-in-the-loop.md) |
+| `cancelled` | Cancel·lat des de l'[Historial d'execucions](./execution-history.md) |
+| `expired` | Ha esperat més de `concurrency_max_wait_seconds` i mai no s'ha executat |
+
+Consulteu cada pocs segons fins que l'estat no sigui `queued` ni `running`. Una execució en cua s'executa encara que ningú faci sondeig.
+
+### Cua plena
+
+Quan `concurrency_max_queue` està establert i ja hi ha aquest nombre d'execucions esperant, la crida és rebutjada amb `429 Concurrency queue is full` i una entrada `queue_full` a l'historial d'execucions. No s'afegeix res a la cua.
+
 ## Format de la resposta
 
 L'endpoint retorna JSON:

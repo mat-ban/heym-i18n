@@ -18,7 +18,7 @@ Credentials lưu trữ API key và secret được sử dụng bởi các node t
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Đăng nhập bằng ChatGPT subscription (OAuth) hoặc Codex access token cho runner, cùng với GitHub PAT cho các thao tác repository |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API key của OpenCode Go gateway (base URL tùy chọn) cho runner, cùng với GitHub PAT cho các thao tác repository |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) cho các lệnh gọi GitHub API, thao tác node GitHub, và tích hợp MCP |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token hoặc Data Center username/password, Jira site base URL, deployment mode, và REST API version tùy chọn |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token, Data Center username/password hoặc personal access token, Jira site base URL, deployment mode, và REST API version tùy chọn |
 | [Linear](../nodes/linear-node.md) | Linear | Personal API key hoặc OAuth2 cho teams, projects, issues, và comments |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Xác thực cho các yêu cầu |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token và webhook secret tùy chọn |
@@ -66,7 +66,7 @@ Một số node cho phép expressions dùng cho auth. Sử dụng [Expression DS
 
 Các credential Codex được cố ý loại trừ khỏi `$credentials`. Dù bạn đăng nhập bằng ChatGPT (subscription, không tốn chi phí API theo token) hay dán một Codex `access_token`, các token chỉ được truyền đến tiến trình Codex runner cục bộ. Token đăng nhập ChatGPT được làm mới tự động khi hết hạn.
 
-Các credential Jira cũng được loại trừ khỏi `$credentials`. [Jira node](../nodes/jira-node.md) tải credential theo `credentialId` tại thời điểm chạy. Đối với các lệnh gọi Jira REST tùy chỉnh không được Jira node hỗ trợ, hãy dùng [HTTP node](../nodes/http-node.md) với Jira Basic Auth (`email:api_token` cho Jira Cloud hoặc `username:password` cho Data Center / Server), ví dụ `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Bạn cũng có thể dùng credential [Header](../nodes/http-node.md) với `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server personal access token và Bearer auth chưa được credential Jira hỗ trợ.
+Các credential Jira cũng được loại trừ khỏi `$credentials`. [Jira node](../nodes/jira-node.md) tải credential theo `credentialId` tại thời điểm chạy. Đối với các lệnh gọi Jira REST tùy chỉnh không được Jira node hỗ trợ, hãy dùng [HTTP node](../nodes/http-node.md) với Jira Basic Auth (`email:api_token` cho Jira Cloud hoặc `username:password` cho Data Center / Server), ví dụ `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Bạn cũng có thể dùng credential [Header](../nodes/http-node.md) với `Authorization: Basic <base64(user:secret)>`. Đối với Jira Data Center / Server personal access token, hãy gửi `Authorization: Bearer <token>` thay thế; bản thân credential Jira hỗ trợ điều này thông qua chế độ xác thực **Personal Access Token**.
 
 | Loại credential | Giá trị được cung cấp cho `$credentials.Name` |
 |-----------------|--------------------------------------|

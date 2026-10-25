@@ -105,3 +105,5 @@ Heym 在工作流编辑器和画布中提供了键盘快捷键，以加速常见
 - [工作流结构](./workflow-structure.md) – 节点与连线格式
 - [Execute 节点](../nodes/execute-node.md) – 调用子工作流（`Ctrl + Shift + O`）
 - [快速开始](../getting-started/quick-start.md) – 构建你的第一个工作流
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

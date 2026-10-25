@@ -7,7 +7,7 @@
 - **Qdrant** – pohranjuje vektore na vanjskom Qdrant poslužitelju (zahtijeva *RAG: Qdrant + OpenAI* vjerodajnicu).
 - **Postgres (pgvector)** – pohranjuje vektore unutar vlastite Postgres baze podataka Heym-a, bez vanjske usluge (zahtijeva *RAG: Psql + OpenAI* vjerodajnicu).
 
-Zadana opcija je **Qdrant** radi unazadne kompatibilnosti. Promjena Baze podataka filtrira popis **Vektorskih spremišta** na ona koja podržava ta baza. Obje pozadine podržavaju iste operacije, filtriranje metapodataka i Cohere ponovo rangiranje.
+Zadana opcija je **Qdrant** radi unazadne kompatibilnosti. Promjena Baze podataka filtrira popis **Vektorskih spremišta** na ona koja podržava ta baza. Obje pozadine podržavaju iste operacije, filtriranje metapodataka, hibridno pretraživanje (vektorsko + BM25) i Cohere ponovo rangiranje.
 
 Bilo koja pozadina također se može doseći putem *RAG: Custom Embeddings* vjerodajnice, koja zamjenjuje OpenAI s bilo kojim OpenAI-kompatibilnim embedding endpointom i imenuje vlastitu vektorsku spremištu. Spremište stvoreno iz takve vjerodajnice pojavljuje se pod bilo kojom Bazom podataka koju cilja. Pogledajte [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag).
 
@@ -17,7 +17,7 @@ Bilo koja pozadina također se može doseći putem *RAG: Custom Embeddings* vjer
 |----------|------------|
 | Ulazi | 1 |
 | Izlazi | 1 |
-| Izlaz | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (pretraživanje), `$nodeLabel.point_id` (umetanje, ažuriranje), `$nodeLabel.deleted` (brisanje) |
+| Izlaz | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (pretraživanje), `$nodeLabel.point_id` (umetanje, ažuriranje), `$nodeLabel.deleted` (brisanje) |
 
 ## Parametri
 
@@ -33,6 +33,7 @@ Bilo koja pozadina također se može doseći putem *RAG: Custom Embeddings* vjer
 | `queryText` | izraz | Upit za pretraživanje (samo pretraživanje) |
 | `searchLimit` | broj | Maksimalni rezultati (zadano: 5) |
 | `metadataFilters` | JSON string | Filtri metapodataka za pretraživanje (vrijednosti podržavaju izraze) |
+| `hybridSearch` | boolean | Kombiniranje vektorskog pretraživanja s BM25 pretraživanjem ključnih riječi (samo search; zadano: isključeno) |
 | `enableReranker` | boolean | Koristite Cohere za ponovo rangiranje rezultata pretraživanja |
 | `rerankerCredentialId` | UUID | Cohere vjerodajnica za ponovo rangiranje |
 | `rerankerTopN` | broj | Broj najboljih rezultata koje treba zadržati nakon ponovnog rangiranja |
@@ -104,6 +105,7 @@ Semantičko pretraživanje sličnih dokumenata.
 | `queryText` | da | Upit za pretraživanje |
 | `searchLimit` | ne | Maksimalni broj rezultata (zadano: 5) |
 | `metadataFilters` | ne | Filtriranje prema metapodacima (točno podudaranje JSON objekta, vrijednosti podržavaju izraze) |
+| `hybridSearch` | ne | Spajanje vektorske sličnosti s BM25 podudaranjem ključnih riječi (pogledajte [Hibridno pretraživanje](#hibridno-pretrazivanje)) |
 | `enableReranker` | ne | Omogućite Cohere ponovno rangiranje za bolju relevantnost |
 | `rerankerCredentialId` | kada se ponovo rangira | Cohere vjerodajnica |
 | `rerankerTopN` | ne | Konačan broj rezultata nakon ponovnog rangiranja |
@@ -117,13 +119,44 @@ Kada je ponovno rangiranje omogućeno:
 - `score` ostaje izvorni vektorski rezultat sličnosti
 - `relevance_score` je rezultat Cohere ponovnog rangiranja
 
+
+#### Hibridno pretraživanje
+
+Vektorsko pretraživanje pronalazi tekst koji ima isto značenje kao i upit. Tekst koji sadrži samo točne riječi može biti niže rangiran: šifra proizvoda, broj tiketa, ime osobe, pogreška kao što je `ERR-4021`. Uključite **Hibridno pretraživanje** i čvor će pokrenuti pretraživanje ključnih riječi uz vektorsko pretraživanje i spojiti oba popisa, tako da jedan upit pronalazi obje vrste podudaranja.
+
+1. Vektorsko pretraživanje vraća svoja najbolja podudaranja, baš kao i bez hibridnog pretraživanja.
+2. Pretraživanje ključnih riječi boduje pohranjeni tekst prema riječima upita pomoću **BM25**, što nagrađuje rijetke riječi, ponovljene riječi i kraće dokumente.
+3. Dva rangirana popisa spajaju se pomoću **reciprocal rank fusion**. Dokument pri vrhu oba popisa rangira se na prvom mjestu, a dokument koji je pronašao samo jedan popis i dalje se prikazuje.
+
+Filtri metapodataka primjenjuju se na oba pretraživanja, a Cohere ponovni rangirač, kada je omogućen, radi na spojenom popisu.
+
+Svaki rezultat nosi ocjenu oba pretraživanja:
+
+| Polje | Značenje |
+|-------|----------|
+| `score` | Spojena ocjena od 0 do 1. `1` znači da je dokument bio prvi u oba pretraživanja. |
+| `vector_score` | Vektorska sličnost (0 do 1). `null` kada je samo pretraživanje ključnih riječi pronašlo dokument. |
+| `keyword_score` | BM25 ocjena. `null` kada se niti jedna riječ iz upita ne pojavljuje u dokumentu. |
+
+`$nodeLabel.hybrid` ima vrijednost `true` kada je pokrenuto hibridno pretraživanje.
+
+Korisno za znati:
+
+- Spojeni `score` rangira rezultate jedne u odnosu na druge. To nije vektorska sličnost, tako da se prag postavljen za jednostavno pretraživanje ne prenosi izravno.
+- Riječi upita pretvaraju se u mala slova i dijele po razmacima i interpunkciji, tako da se `ERR-4021` pretražuje kao `err` i `4021`. Pretraživanje ključnih riječi koristi do prvih 16 različitih riječi iz upita.
+- Qdrant: prvo hibridno pretraživanje na kolekciji gradi full-text indeks na payload polju `text`, za što je potreban Qdrant ključ s pravom pisanja. Kod velikih kolekcija to traje trenutak samo jednom; kasnija pretraživanja ponovno koriste indeks.
+- Postgres (pgvector): migracija baze podataka `142_vsi_text_search_index` dodaje full-text indeks. Pokrenite `alembic upgrade head` nakon ažuriranja. Hibridno pretraživanje radi i bez indeksa, samo sporije na velikim spremištima.
+- Za svaki upit pretraživanje ključnih riječi čita do 200 odgovarajućih dokumenata, počevši od najrjeđih riječi upita, budući da one nose najveću težinu.
 ## Pristupanje Rezultatima
 
 - `$ragNode.results.first().text` – sadržaj najboljeg rezultata
-- `$ragNode.results.first().score` – rezultat sličnosti (0–1)
+- `$ragNode.results.first().score` – rezultat sličnosti (0–1), ili spojena ocjena s hibridnim pretraživanjem
+- `$ragNode.results.first().keyword_score` – BM25 rezultat (hibridno pretraživanje)
+- `$ragNode.results.first().vector_score` – vektorska sličnost (hibridno pretraživanje)
 - `$ragNode.results.first().metadata.source` – metapodaci najboljeg rezultata
 - `$ragNode.results.map("item.text").join("\n\n")` – spojite za LLM kontekst
 - `$ragNode.reranked` – je li primijenjeno ponovno rangiranje
+- `$ragNode.hybrid` – je li primijenjeno hibridno pretraživanje
 - `$ragNode.count` – broj vraćenih rezultata
 - `$ragNode.replaced` – je li upsert zamijenio postojeći dokument
 - `$ragNode.deleted` – je li brisanje uklonilo nešto
@@ -143,6 +176,22 @@ Kada je ponovno rangiranje omogućeno:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Primjer – Hibridno pretraživanje
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

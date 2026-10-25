@@ -52,6 +52,8 @@ Na het starten van een uitvoering toont de drawer:
 
 `pending` betekent dat de workflow wacht op een latere actie, zoals menselijke beoordeling.
 
+Quick Drawer-runs zijn productieruns, dus een workflow met een [gelijktijdigheidslimiet](./webhooks.md#concurrency-limit-and-queued-runs) kan ze laten wachten. Terwijl de run in de rij staat, geeft de status **Waiting in queue (2/5)** aan; dit verandert in "running" wanneer de run start en toont het resultaat wanneer deze eindigt, zonder stapsgewijze voortgang. Een run die in de wachtrij is verlopen of tijdens het wachten is geannuleerd, eindigt als `error`.
+
 Een bestandsuitvoering verloopt via de eenmalige uploadlink van de trigger: de drawer vraagt de workflow om een link, uploadt het bestand daarnaartoe en toont het resultaat zodra de upload klaar is. Bestandsuitvoeringen tonen de eindstatus en uitvoer, maar geen stapsgewijze voortgang, en krijgen in de geschiedenis eveneens het label `Quick Drawer`. Het gekozen bestand wordt na elke uitvoering gewist, omdat een link slechts één bestand accepteert.
 
 ## Browseropslag

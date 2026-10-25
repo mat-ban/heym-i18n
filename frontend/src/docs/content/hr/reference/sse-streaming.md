@@ -25,12 +25,17 @@ Svaki SSE okvir je JSON odvojen novim redom s prefiksom `data: `.
 
 | Tip događaja | Kada se emitira | Ključna polja |
 |--------------|------------------|----------------|
-| `execution_started` | Odmah nakon što je zahtjev prihvaćen | `execution_id`, `server_now_ms` |
+| `queued` | Workflow je dosegao svoje [ograničenje istovremenosti](./webhooks.md#concurrency-limit-and-queued-runs); šalje se ponovno kad god se promijeni mjesto pokretanja | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Odmah nakon što je zahtjev prihvaćen ili kada započne pokretanje u redu čekanja | `execution_id`, `server_now_ms` |
 | `node_start` | Prije nego što čvor započne izvršavanje | `node_id`, `node_label`, `started_at_ms`, opcionalno `message` |
 | `node_retry` | Kada čvor ponavlja pokušaj | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Nakon što čvor završi | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Kada Output čvor ranije vraća | `node_label`, `output` |
 | `execution_complete` | Nakon završetka workflow-a | `status`, `outputs`, `execution_time_ms` |
+
+### Pokretanja u redu čekanja
+
+Kada workflow dosegne svoje ograničenje istovremenosti, stream ostaje otvoren i šalje događaje `queued` dok pokretanje čeka. Pokretanje u redu čekanja izvršava se u pozadinskom radniku (background worker), moguće u drugom procesu, tako da njegov stream nosi `execution_started` kada pokretanje započne i `execution_complete` kada završi, ali bez događaja `node_start`, `node_complete` ili događaja tokena između njih. Njegov `execution_complete` ima prazan `node_results`; otvorite pokretanje u [Povijesti izvršavanja](./execution-history.md) za pojedinosti o čvoru. Zatvaranje veze ne otkazuje pokretanje u redu čekanja. Kada je red pun, na zahtjev se odgovara s `429` prije nego što se stream otvori.
 
 ## Poruke o početku po čvorovima
 

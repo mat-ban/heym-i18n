@@ -148,7 +148,7 @@ L'Assistente IA è basato su un **workflow DSL** (linguaggio specifico del domin
    - Le Regole utente aggiunte come "User Custom Rules"
    - Il JSON del workflow corrente quando si modifica un workflow esistente
    - L'elenco dei workflow disponibili se si utilizza il nodo Execute
-   - I nomi, i tipi e gli id delle credenziali dell'utente (mai i relativi valori)
+   - I nomi, i tipi e gli id delle credenziali possedute o condivise con l'utente (mai i relativi valori)
    - I nomi, gli id, le descrizioni e le colonne delle tabelle dati utilizzabili (mai le relative righe)
 3. Il modello restituisce un singolo blocco JSON di workflow (con `nodes` ed `edges`). Il frontend lo analizza e lo applica al canvas.
 ### Credenziali

@@ -7,7 +7,7 @@ Node có một dropdown **Database** để chọn backend:
 - **Qdrant** – lưu trữ vector trong một máy chủ Qdrant bên ngoài (yêu cầu credential *RAG: Qdrant + OpenAI*).
 - **Postgres (pgvector)** – lưu trữ vector bên trong cơ sở dữ liệu Postgres của chính Heym, không cần dịch vụ bên ngoài (yêu cầu credential *RAG: Psql + OpenAI*).
 
-Mặc định là **Qdrant** để đảm bảo tương thích ngược. Việc thay đổi Database sẽ lọc danh sách **Vector Store** để chỉ hiển thị các store được hỗ trợ bởi database đó. Cả hai backend đều hỗ trợ cùng các thao tác, lọc metadata và xếp hạng lại bằng Cohere.
+Mặc định là **Qdrant** để đảm bảo tương thích ngược. Việc thay đổi Database sẽ lọc danh sách **Vector Store** để chỉ hiển thị các store được hỗ trợ bởi database đó. Cả hai backend đều hỗ trợ cùng các thao tác, lọc metadata, tìm kiếm kết hợp (vector + BM25) và xếp hạng lại bằng Cohere.
 
 Mỗi backend cũng có thể được truy cập thông qua credential *RAG: Custom Embeddings*, thay thế OpenAI bằng bất kỳ endpoint embedding tương thích OpenAI nào và đặt tên cho vector store riêng của nó. Một store được tạo từ credential như vậy sẽ xuất hiện dưới Database mà nó nhắm tới. Xem [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag).
 
@@ -17,7 +17,7 @@ Mỗi backend cũng có thể được truy cập thông qua credential *RAG: Cu
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Output | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Tham số
 
@@ -33,6 +33,7 @@ Mỗi backend cũng có thể được truy cập thông qua credential *RAG: Cu
 | `queryText` | expression | Truy vấn tìm kiếm (chỉ search) |
 | `searchLimit` | number | Số kết quả tối đa (mặc định: 5) |
 | `metadataFilters` | JSON string | Bộ lọc metadata cho tìm kiếm (các giá trị hỗ trợ expression) |
+| `hybridSearch` | boolean | Kết hợp tìm kiếm vector với tìm kiếm từ khóa BM25 (chỉ search; mặc định: tắt) |
 | `enableReranker` | boolean | Sử dụng Cohere để xếp hạng lại kết quả tìm kiếm |
 | `rerankerCredentialId` | UUID | Credential Cohere cho việc xếp hạng lại |
 | `rerankerTopN` | number | Số kết quả hàng đầu giữ lại sau khi xếp hạng lại |
@@ -106,6 +107,7 @@ Tìm kiếm ngữ nghĩa cho các tài liệu tương tự.
 | `queryText` | có | Truy vấn tìm kiếm |
 | `searchLimit` | không | Số kết quả tối đa (mặc định: 5) |
 | `metadataFilters` | không | Lọc theo metadata (JSON object khớp chính xác, giá trị hỗ trợ biểu thức) |
+| `hybridSearch` | không | Hợp nhất độ tương đồng vector với khớp từ khóa BM25 (xem [Tìm kiếm kết hợp](#tim-kiem-ket-hop)) |
 | `enableReranker` | không | Bật Cohere reranking để tăng độ liên quan |
 | `rerankerCredentialId` | khi reranking | Cohere credential |
 | `rerankerTopN` | không | Số kết quả cuối cùng sau khi reranking |
@@ -119,13 +121,44 @@ Khi reranking được bật:
 - `score` vẫn là điểm tương đồng vector gốc
 - `relevance_score` là điểm Cohere reranker
 
+
+#### Tìm kiếm kết hợp
+
+Tìm kiếm vector tìm văn bản có cùng ý nghĩa với truy vấn. Văn bản chỉ chứa các từ chính xác có thể bị xếp hạng thấp hơn: mã sản phẩm, số phiếu hỗ trợ, tên người, mã lỗi như `ERR-4021`. Bật **Tìm kiếm kết hợp** và nút sẽ chạy tìm kiếm từ khóa bên cạnh tìm kiếm vector rồi hợp nhất cả hai danh sách, giúp một truy vấn tìm thấy cả hai loại kết quả khớp.
+
+1. Tìm kiếm vector trả về các kết quả khớp tốt nhất, tương tự như khi không có tìm kiếm kết hợp.
+2. Tìm kiếm từ khóa chấm điểm văn bản được lưu trữ dựa trên các từ của truy vấn bằng **BM25**, ưu tiên các từ hiếm, các từ lặp lại và tài liệu ngắn hơn.
+3. Hai danh sách được xếp hạng sẽ hợp nhất bằng **reciprocal rank fusion**. Tài liệu nằm gần đầu cả hai danh sách sẽ xếp thứ nhất, và tài liệu chỉ xuất hiện trong một danh sách vẫn sẽ hiển thị.
+
+Bộ lọc metadata áp dụng cho cả hai tìm kiếm và Cohere reranker, nếu được bật, sẽ chạy trên danh sách đã hợp nhất.
+
+Mỗi kết quả mang điểm của cả hai tìm kiếm:
+
+| Trường | Ý nghĩa |
+|--------|---------|
+| `score` | Điểm hợp nhất từ 0 đến 1. `1` có nghĩa là tài liệu xếp thứ nhất trong cả hai tìm kiếm. |
+| `vector_score` | Độ tương đồng vector (0 đến 1). `null` khi chỉ có tìm kiếm từ khóa tìm thấy tài liệu. |
+| `keyword_score` | Điểm BM25. `null` khi không có từ nào của truy vấn xuất hiện trong tài liệu. |
+
+`$nodeLabel.hybrid` là `true` khi tìm kiếm kết hợp đã chạy.
+
+Điều cần biết:
+
+- Điểm `score` hợp nhất xếp hạng các kết quả với nhau. Đây không phải là độ tương đồng vector, vì vậy ngưỡng được điều chỉnh cho tìm kiếm thông thường không áp dụng trực tiếp được.
+- Các từ trong truy vấn được chuyển thành chữ thường và phân tách bằng khoảng trắng và dấu câu, do đó `ERR-4021` được tìm kiếm dưới dạng `err` và `4021`. Tìm kiếm từ khóa sử dụng tối đa 16 từ riêng biệt đầu tiên của truy vấn.
+- Qdrant: lần tìm kiếm kết hợp đầu tiên trên một bộ sưu tập sẽ xây dựng chỉ mục toàn văn trên trường payload `text`, yêu cầu khóa Qdrant có quyền ghi. Đối với các bộ sưu tập lớn, quá trình này chỉ mất một chút thời gian một lần duy nhất; các lần tìm kiếm sau sẽ sử dụng lại chỉ mục.
+- Postgres (pgvector): migration cơ sở dữ liệu `142_vsi_text_search_index` thêm chỉ mục toàn văn. Chạy `alembic upgrade head` sau khi cập nhật. Tìm kiếm kết hợp vẫn hoạt động khi không có chỉ mục, nhưng chậm hơn trên các store lớn.
+- Với mỗi truy vấn, tìm kiếm từ khóa đọc tối đa 200 tài liệu khớp, bắt đầu từ những từ truy vấn hiếm nhất vì chúng mang trọng số lớn nhất.
 ## Truy cập kết quả
 
 - `$ragNode.results.first().text` – nội dung kết quả hàng đầu
-- `$ragNode.results.first().score` – điểm tương đồng (0–1)
+- `$ragNode.results.first().score` – điểm tương đồng (0–1), hoặc điểm hợp nhất với tìm kiếm kết hợp
+- `$ragNode.results.first().keyword_score` – điểm BM25 (tìm kiếm kết hợp)
+- `$ragNode.results.first().vector_score` – độ tương đồng vector (tìm kiếm kết hợp)
 - `$ragNode.results.first().metadata.source` – metadata kết quả hàng đầu
 - `$ragNode.results.map("item.text").join("\n\n")` – nối lại cho ngữ cảnh LLM
 - `$ragNode.reranked` – liệu reranking có được áp dụng
+- `$ragNode.hybrid` – liệu tìm kiếm kết hợp có được áp dụng
 - `$ragNode.count` – số kết quả trả về
 - `$ragNode.replaced` – liệu một upsert có thay thế tài liệu hiện có
 - `$ragNode.deleted` – liệu một thao tác xóa có xóa bất cứ thứ gì
@@ -145,6 +178,22 @@ Khi reranking được bật:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Ví dụ – Tìm kiếm kết hợp
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

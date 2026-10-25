@@ -18,7 +18,7 @@ Referenties (Credentials) slaan API keys en secrets op die door workflow-knooppu
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-abonnement aanmelding (OAuth) of een Codex access token voor de runner, plus een GitHub PAT voor repository-operaties |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Een OpenCode Go gateway API key (optionele base URL) voor de runner, plus een GitHub PAT voor repository-operaties |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) voor GitHub API-aanroepen, GitHub-knooppuntoperaties en MCP-integraties |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud e-mail/API token of Data Center gebruikersnaam/wachtwoord, Jira site base URL, deployment mode en optionele REST API-versie |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud e-mail/API token, Data Center gebruikersnaam/wachtwoord of personal access token, Jira site base URL, deployment mode en optionele REST API-versie |
 | [Linear](../nodes/linear-node.md) | Linear | Persoonlijke API key of OAuth2 voor teams, projecten, issues en opmerkingen |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Auth voor aanvragen |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token en optioneel webhook secret |
@@ -66,7 +66,7 @@ Sommige knooppunten ondersteunen expressies voor authenticatie. Gebruik [Express
 
 Codex-referenties zijn bewust uitgesloten van `$credentials`. Of u nu inlogt met ChatGPT (abonnement, geen API-kosten per token) of een Codex `access_token` plakt, de tokens worden uitsluitend doorgegeven aan het lokale Codex-runnerproces. ChatGPT-inlogtokens worden automatisch vernieuwd wanneer ze verlopen.
 
-Jira-referenties zijn eveneens uitgesloten van `$credentials`. Het [Jira-knooppunt](../nodes/jira-node.md) laadt de referentie tijdens de uitvoering via `credentialId`. Voor aangepaste Jira REST-aanroepen die niet door het Jira-knooppunt worden ondersteund, gebruikt u het [HTTP-knooppunt](../nodes/http-node.md) met Jira Basic Auth (`email:api_token` voor Jira Cloud of `username:password` voor Data Center / Server), bijvoorbeeld `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. U kunt ook een [Header](../nodes/http-node.md)-referentie gebruiken met `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server personal access tokens en Bearer-authenticatie worden nog niet ondersteund door de Jira-referentie.
+Jira-referenties zijn eveneens uitgesloten van `$credentials`. Het [Jira-knooppunt](../nodes/jira-node.md) laadt de referentie tijdens de uitvoering via `credentialId`. Voor aangepaste Jira REST-aanroepen die niet door het Jira-knooppunt worden ondersteund, gebruikt u het [HTTP-knooppunt](../nodes/http-node.md) met Jira Basic Auth (`email:api_token` voor Jira Cloud of `username:password` voor Data Center / Server), bijvoorbeeld `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. U kunt ook een [Header](../nodes/http-node.md)-referentie gebruiken met `Authorization: Basic <base64(user:secret)>`. Stuur voor Jira Data Center / Server personal access tokens in plaats daarvan `Authorization: Bearer <token>`; de Jira-referentie zelf ondersteunt dit via de **Personal Access Token** authenticatiemodus.
 
 | Referentietype | Waarde die wordt blootgesteld aan `$credentials.Name` |
 |-----------------|--------------------------------------|

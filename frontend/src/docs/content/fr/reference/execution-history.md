@@ -110,6 +110,8 @@ Les deux boîtes de dialogue d'historique affichent les **exécutions en cours**
 - Après annulation, l'entrée en cours disparaît au prochain rafraîchissement ; appuyez sur **Refresh** pour mettre à jour la liste manuellement
 - Si vous annulez une exécution déjà terminée, la requête est sans effet
 
+Les exécutions en attente d'un [slot de simultanéité](./webhooks.md#concurrency-limit-and-queued-runs) sont répertoriées dans la même section avec l'étiquette **Queued 2/5**, leur position dans la file d'attente et la taille de la file. Elles n'ont pas de bouton **Open live** car rien n'est encore en cours d'exécution ; **Cancel** retire une exécution en attente de la file et l'enregistre comme `cancelled`. Une exécution qui a attendu plus longtemps que le délai d'attente maximal du workflow est enregistrée comme `expired`, et une exécution rejetée par une file d'attente pleine comme `queue_full` ; toutes deux ont leur propre badge dans la liste des exécutions.
+
 L'URL live est `/workflows/{workflowId}/{executionId}`. L'observateur est en lecture seule : quitter
 l'éditeur ne fait que déconnecter cet onglet du navigateur et n'arrête jamais le workflow. Les snapshots
 actifs sont partagés via PostgreSQL, de sorte que l'ouverture d'une exécution fonctionne même lorsque le trigger et la requête de l'éditeur

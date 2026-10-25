@@ -111,6 +111,10 @@ A tag da imagem deve ser a versão que a main executa, e ambas as chaves devem s
 | On | Retira um worker da rotação sem pará-lo — execuções em andamento terminam, nenhuma nova é atribuída. Bloqueado como ativado para a instância main: trabalho de arquivo, plugin e agente de codificação é executado nela independentemente do que o toggle diga |
 | Weight | Sua parcela das execuções distribuíveis |
 
+## Limites de simultaneidade em um cluster
+
+O [limite de simultaneidade](./webhooks.md#concurrency-limit-and-queued-runs) de um workflow é contabilizado no PostgreSQL, aplicando-se a todas as instâncias e a todos os processos: duas instâncias nunca executam mais execuções de um mesmo workflow do que o limite permite. Uma execução que aguardou por um slot é alocada segundo as mesmas regras de qualquer outra execução ao iniciar, de modo que uma execução que precise permanecer em main continua lá. O worker de fila que executa essas execuções agora inicia em toda instalação, incluindo em uma instância única, onde reivindica apenas as execuções enfileiradas por sua própria instância. Isso significa que uma instância única também mantém a conexão `LISTEN` de ativação da fila em cada processo; planeje suas conexões da mesma forma que para uma instância de cluster.
+
 ## Histórico de execuções
 
 Toda execução no histórico de execuções nomeia a instância que a executou, e ambos os diálogos de histórico podem filtrar por uma única instância. O filtro corresponde ao id da instância enquanto exibe seu nome, portanto renomear uma instância não reescreve o que execuções antigas exibem.

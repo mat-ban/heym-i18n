@@ -30,7 +30,7 @@ Všetky vstupné body nájdete v časti [Triggers](./triggers.md).
 | [Codex](../nodes/codex-node.md) | Spustí lokálne Codex CLI proti GitHub repozitáru pomocou prístupového tokenu ChatGPT/Codex | 1 | 1, plus výstup `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Spustí OpenCode CLI proti GitHub repozitáru v zabezpečenom kontajneri pomocou API kľúča brány OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Zavolá konkrétny MCP nástroj priamo bez toho, aby ho vyberal LLM | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Vkladanie, upsert, mazanie alebo vyhľadávanie v Qdrant alebo Postgres (pgvector) [vektorovom úložisku](../tabs/vectorstores-tab.md) pre RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Vkladanie, upsert, mazanie alebo vyhľadávanie (vektorové alebo hybridné vektorové + BM25) v Qdrant alebo Postgres (pgvector) [vektorovom úložisku](../tabs/vectorstores-tab.md) pre RAG | 1 | 1 |
 
 ## Logické uzly
 

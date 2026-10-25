@@ -22,7 +22,7 @@
 - **Kanban 任務建立** – 以自然語言要求新增任務或建立卡片。Chat 會將其新增至所要求看板的第一個欄位；當您有多個看板且未指定名稱時，Chat 會在建立卡片前顯示看板選擇器
 - **排隊的後續訊息** – 在答案串流期間傳送更多訊息。排隊的訊息會被保存，可在開始執行前編輯或刪除，並在目前回應完成後依序執行
 - **規劃暫停** – 當 Chat 需要規劃細節時，它會提出釐清問題並暫停排隊的後續訊息，直到您回答為止。規劃答案完成後，排隊的訊息會繼續執行
-- **Credentials** – 當 Chat 建立或編輯的 Workflow 需要 credential 時，Chat 會詢問要使用哪一組、提供在對話中建立新 credential 的選項，或讓您選擇不使用。您也可以要求 Chat 建立 credential 或更新您擁有的 credential；它會在對話中開啟 credential 表單。模型只會看到 credential 的名稱與類型，永遠不會看到其值。請參閱 [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
+- **Credentials** – 當 Chat 建立或編輯的 Workflow 需要 credential 時，Chat 會詢問要使用哪一組、提供在對話中建立新 credential 的選項，或讓您選擇不使用。您也可以要求 Chat 建立 credential 或更新您擁有的 credential；它會在對話中開啟 credential 表單。模型只會看到 credential 的名稱與類型，永遠不會看到其值，對於您擁有的 credential 以及與您共用的 credential 均是如此。Chat 新增的 LLM 和 Agent 節點會使用為該聊天選取的 credential 與模型運作（包含共用的 credential）；當 Chat 編輯 Workflow 時，其既有的 LLM 與 Agent 節點會保留各自的 credential 與模型。請參閱 [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
 - **Data tables** – 當 Chat 建立或編輯的 Workflow 會儲存記錄時，Chat 會詢問要使用哪個 [data table](./datatable-tab.md)，或提供建立一個包含 Workflow 所需欄位的 data table。它也可以列出您的資料表及其欄位。它永遠不會讀取或寫入資料列。請參閱 [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
 - **串流回應** – 在模型輸出串流時即時查看
 - **停止回應** – 隨時中斷目前串流中的答案；停止也會清除該對話中排隊的訊息

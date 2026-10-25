@@ -86,6 +86,20 @@ Discord는 상호작용 Webhook을 `POST /api/discord/webhook/{node_id}`로 전�
 
 RabbitMQ consumer는 리더 워커가 초기화될 때 시작됩니다. `rabbitmqOperation === "receive"`인 `rabbitmq` 노드를 가진 Workflow는 consumer를 할당받습니다. 입력에는 `message_data`(body, headers, routing_key 등)와 `triggered_by: "rabbitmq"`가 포함됩니다.
 
+## 동시성 제한
+
+[동시성 제한](./webhooks.md#concurrency-limit-and-queued-runs)이 있는 워크플로는 슬롯이 가득 찼을 때 위의 모든 진입점에서의 프로덕션 실행을 모든 인스턴스에 걸쳐 선입선출(FIFO) 방식으로 대기열에 추가합니다. 호출자가 결과를 확인하는 방법은 진입점에 따라 다릅니다:
+
+| 진입점 | 실행이 대기하는 동안 |
+|---|---|
+| Webhook / API | `execution_id` 및 상태 URL과 함께 `202 Accepted` |
+| SSE streaming, Quick Drawer, Portal chat | 스트림이 열린 상태로 유지되며 `queued` 이벤트를 전송 |
+| Portal without streaming | 요청이 결과를 대기 |
+| MCP | `heym_execution_status`로 폴링할 `queued` 결과 |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger는 다른 [인스턴스](./cluster.md)에서의 실행과 동일한 시간 동안 결과를 대기합니다. 실행은 어느 쪽이든 진행되며 기록에 남습니다 |
+
+대기열이 가득 차면 실행이 시작되지 않고 기록에 `queue_full`로 기록됩니다. 편집기의 테스트 실행, 서브 워크플로 호출([Execute](../nodes/execute-node.md) 노드 및 에이전트 워크플로 도구), [Evals](../tabs/evals-tab.md), 채팅 빌드 모드 테스트 실행 및 리뷰 재개는 절대 대기열에 추가되지 않습니다. [Board](../tabs/board-tab.md) 카드 실행, [File Upload](../nodes/file-upload-trigger-node.md) 실행, AI 어시스턴트의 run-workflow 도구로 시작된 실행, 경고 알림 워크플로 또한 슬롯을 기다리지 않고 시작됩니다.
+
 ## trigger_source
 
 실행 기록은 모든 진입점에 대해 `trigger_source`를 기록합니다:

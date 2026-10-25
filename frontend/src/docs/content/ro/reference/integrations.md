@@ -15,7 +15,7 @@ Unele noduri de integrare **nu** necesită acreditări. [WebSocket Trigger](../n
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, opțional `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, opțional `base_url` |
-| **Jira** | [Nodul Jira](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, opțional `api_version` |
+| **Jira** | [Nodul Jira](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (doar autentificare Basic), opțional `api_version` |
 | **Linear** | [Nodul Linear](../nodes/linear-node.md) | `api_key`, sau `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Nodul Sentry](../nodes/sentry-node.md) | `api_token`, opțional `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ Token-urile OAuth (`access_token`, `refresh_token`, `token_expiry`) sunt stocate
 
 ## Jira
 
-Acreditarea Jira stochează acreditările Jira Basic auth, URL-ul de bază al site-ului Jira, modul de implementare și versiunea opțională a API-ului REST pentru [nodul Jira](../nodes/jira-node.md). Utilizați `cloud` pentru Jira Cloud sau `data_center` pentru Jira Data Center / Server.
+Acreditarea Jira stochează acreditările Jira Basic auth sau un token de acces personal Data Center, URL-ul de bază al site-ului Jira, modul de implementare și versiunea opțională a API-ului REST pentru [nodul Jira](../nodes/jira-node.md). Utilizați `cloud` pentru Jira Cloud sau `data_center` pentru Jira Data Center / Server.
 
 ### Configurare
 
@@ -216,16 +216,18 @@ Acreditarea Jira stochează acreditările Jira Basic auth, URL-ul de bază al si
 **Jira Data Center / Server**
 
 1. Selectați **Jira Data Center / Server** ca implementare.
-2. Introduceți numele de utilizator și parola Jira folosite pentru Basic auth.
-3. Introduceți URL-ul site-ului Jira, de exemplu `https://jira.example.com`.
-4. Utilizați **Test Connection** pentru a verifica acreditarea.
+2. Alegeți o metodă de autentificare. **Nume de utilizator și parolă** utilizează autentificarea Basic. **Personal Access Token** utilizează `Authorization: Bearer <token>` și necesită Jira Data Center / Server 8.14 sau o versiune ulterioară. Creați tokenul în **Profil → Personal Access Tokens** în Jira.
+3. Introduceți numele de utilizator și parola Jira sau inserați tokenul de acces personal (nu este necesar un nume de utilizator).
+4. Introduceți URL-ul site-ului Jira, de exemplu `https://jira.example.com`.
+5. Utilizați **Test Connection** pentru a verifica acreditarea.
 
 ### Câmpuri
 
 | Câmp | Descriere |
 | --- | --- |
-| `email` | Email-ul contului Atlassian Jira Cloud sau numele de utilizator Jira Data Center / Server |
-| `api_token` | Token-ul API Atlassian Jira Cloud sau parola Jira Data Center / Server pentru Basic auth |
+| `auth_mode` | `basic` (implicit dacă lipsește) sau `pat`. `pat` este valid numai cu `data_center` |
+| `email` | E-mailul contului Atlassian Jira Cloud sau numele de utilizator Jira Data Center / Server. Neutilizat în modul `pat` |
+| `api_token` | Tokenul de API Atlassian Jira Cloud, parola Jira Data Center / Server pentru autentificarea Basic sau tokenul de acces personal Data Center în modul `pat` |
 | `base_url` | URL-ul de bază al site-ului Jira |
 | `deployment` | `cloud` pentru Jira Cloud sau `data_center` pentru Jira Data Center / Server |
 | `api_version` | Versiunea API-ului REST; implicit `3` pentru Jira Cloud. Data Center / Server utilizează v2 |
@@ -233,11 +235,11 @@ Acreditarea Jira stochează acreditările Jira Basic auth, URL-ul de bază al si
 ### Note
 
 - Nodul Jira trimite descrierile problemelor și comentariile ca documente text în format Atlassian Document Format pentru Jira Cloud REST API v3. Acreditările Data Center / Server trimit text simplu.
-- Data Center / Server acceptă în prezent doar Basic auth cu nume de utilizator/parolă. Token-urile de acces personal și autentificarea Bearer nu sunt încă acceptate.
+- Data Center / Server acceptă autentificarea Basic prin nume de utilizator/parolă și autentificarea cu token de acces personal (PAT) folosind schema Bearer. Autentificarea PAT necesită Jira Data Center / Server 8.14 sau o versiune ulterioară.
 - Încărcarea atașamentelor acceptă conținut base64 sau data URL și este supusă limitei de dimensiune a fișierului din platformă (implicit 99 MB). Descărcarea atașamentelor poate returna conținut base64 atunci când este activată.
 - Crearea, ștergerea utilizatorilor și notificarea problemelor necesită ca contul Jira autentificat să aibă permisiunile relevante pentru site-ul sau organizația Jira.
 - Utilizați List Projects, Search Issues și List Transitions pentru a descoperi cheile de proiect, cheile de probleme și ID-urile de tranziție.
-- Pentru endpoint-uri personalizate neacoperite de nodul Jira, utilizați [nodul HTTP](../nodes/http-node.md) cu Jira Basic Auth (`email:api_token` pentru Cloud sau `username:password` pentru Data Center / Server) în comanda cURL, sau o acreditare Header cu valoarea corespunzătoare `Authorization: Basic <base64(user:secret)>`.
+- Pentru endpointuri personalizate care nu sunt acoperite de nodul Jira, utilizați [nodul HTTP](../nodes/http-node.md) cu Jira Basic Auth (`email:api_token` pentru Cloud sau `username:password` pentru Data Center / Server) sau PAT Bearer auth (`Authorization: Bearer <token>` pentru Data Center / Server). Alternativ, utilizați o acreditare Header cu antetul `Authorization` corespunzător.
 
 Vezi și:
 

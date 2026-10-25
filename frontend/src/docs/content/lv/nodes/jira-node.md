@@ -8,22 +8,23 @@
 |----------|-------|
 | Ievades | 1 |
 | Izvades | 1 |
-| Akreditācijas dati | Jira (Cloud email/API token vai Data Center username/password, base URL, deployment mode, neobligāts REST API version) |
+| Akreditācijas dati | Jira (Cloud email/API token, Data Center username/password vai personīgās piekļuves tokens, base URL, deployment mode, neobligāts REST API version) |
 | Izvade | `$nodeLabel.*` |
 
 ## Akreditācijas dati
 
-Izveidojiet **Jira** akreditācijas datus sadaļā [Credentials Tab](../tabs/credentials-tab.md). Saglabātās konfigurācijas atslēgas ir `email`, `api_token`, `base_url`, `deployment` un neobligāts `api_version`. Jira Cloud gadījumā `email` saglabā Atlassian konta e-pastu, bet `api_token` saglabā Atlassian API token. Jira Data Center / Server gadījumā šīs pašas atslēgas saglabā Basic auth lietotājvārdu un paroli. Iestatīšanas soļus skatiet sadaļā [Third-Party Integrations](../reference/integrations.md#jira).
+Izveidojiet **Jira** akreditācijas datus sadaļā [Credentials Tab](../tabs/credentials-tab.md). Saglabātās konfigurācijas atslēgas ir `email`, `api_token`, `base_url`, `deployment`, `auth_mode` un neobligāts `api_version`. Jira Cloud gadījumā `email` saglabā Atlassian konta e-pastu, bet `api_token` saglabā Atlassian API token. Jira Data Center / Server gadījumā šīs pašas atslēgas saglabā Basic auth lietotājvārdu un paroli, vai, izmantojot `auth_mode: pat`, `api_token` saglabā personīgās piekļuves tokenu, kas tiek nosūtīts kā Bearer tokens, un `email` netiek izmantots. Iestatīšanas soļus skatiet sadaļā [Third-Party Integrations](../reference/integrations.md#jira).
 
 | Lauks | Konfigurācijas atslēga | Apraksts |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Jira Cloud Atlassian konta e-pasts vai Jira Data Center / Server lietotājvārds |
-| API Token / Password | `api_token` | Jira Cloud Atlassian API token vai Jira Data Center / Server parole Basic auth |
+| Autentifikācija | `auth_mode` | `basic` (noklusējums) vai `pat` (tikai Data Center / Server) |
+| API Token / Password / Personīgās piekļuves tokens | `api_token` | Jira Cloud Atlassian API token, Jira Data Center / Server parole Basic auth vai Data Center personīgās piekļuves tokens `pat` režīmā |
 | Base URL | `base_url` | Jira vietnes URL, piemēram, `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` Jira Cloud vai `data_center` Jira Data Center / Server |
 | REST API Version | `api_version` | Noklusējums ir `3` Jira Cloud. Data Center / Server izmanto REST API v2 |
 
-Data Center / Server personīgās piekļuves tokens un Bearer auth Jira akreditācijas dati vēl neatbalsta.
+Personīgās piekļuves tokeniem nepieciešams Jira Data Center / Server 8.14 vai jaunāka versija. Autentifikācijas metodes maiņa dzēš saglabāto noslēpumu, tāpēc maiņas laikā ievadiet jauno paroli vai tokenu.
 
 Izmantojiet **Test Connection**, lai pārbaudītu akreditācijas datus pret pašreizējo Jira lietotāju.
 

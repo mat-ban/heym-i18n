@@ -105,3 +105,5 @@ Komandu palete ir pieejama no redaktora, dashboard, dokumentācijas un novērtē
 - [Workflow struktūra](./workflow-structure.md) – Mezglu un savienojumu formāts
 - [Execute mezgls](../nodes/execute-node.md) – Izsauc apakš-workflow (`Ctrl + Shift + O`)
 - [Ātrā sākšana](../getting-started/quick-start.md) – Izveidojiet savu pirmo workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

@@ -105,3 +105,5 @@ Ezek a billentyűparancsok a Futtatási előzmények párbeszédablakban és a F
 - [Workflow struktúra](./workflow-structure.md) – Csomópont- és élformátum
 - [Execute csomópont](../nodes/execute-node.md) – Al-workflow-k hívása (`Ctrl + Shift + O`)
 - [Gyors kezdés](../getting-started/quick-start.md) – Az első workflow felépítése
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

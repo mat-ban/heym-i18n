@@ -86,6 +86,20 @@ Discord invia i webhook di interazione a `POST /api/discord/webhook/{node_id}`. 
 
 Il consumer RabbitMQ si avvia quando il worker leader viene inizializzato. I workflow con nodi `rabbitmq` in cui `rabbitmqOperation === "receive"` ricevono un consumer. L'input include `message_data` (body, headers, routing_key, ecc.) e `triggered_by: "rabbitmq"`.
 
+## Limite di concorrenza
+
+Un workflow con un [limite di concorrenza](./webhooks.md#concurrency-limit-and-queued-runs) mette in coda le esecuzioni di produzione di ogni entry point sopra indicato quando i suoi slot sono pieni, secondo la logica FIFO (first in, first out), su tutte le istanze. Il modo in cui un chiamante apprende il risultato dipende dall'entry point:
+
+| Entry point | Mentre l'esecuzione è in attesa |
+|---|---|
+| Webhook / API | `202 Accepted` con un `execution_id` e un URL di stato |
+| SSE streaming, Quick Drawer, Portal chat | Lo stream rimane aperto e invia eventi `queued` |
+| Portal without streaming | La richiesta attende il risultato |
+| MCP | Un risultato `queued` da interrogare con `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Il trigger attende il risultato, per il tempo che richiederebbe un'esecuzione su un'altra [istanza](./cluster.md). L'esecuzione viene comunque avviata e registrata nella cronologia |
+
+Quando la coda è piena, l'esecuzione non si avvia e la cronologia la registra come `queue_full`. Le esecuzioni di test dell'editor, le chiamate a sotto-workflow (nodo [Execute](../nodes/execute-node.md) e strumenti workflow dell'agente), le [Evals](../tabs/evals-tab.md), i test in modalità chat build e le riprese di revisione non vengono mai messi in coda. Le esecuzioni di schede del [Board](../tabs/board-tab.md), le esecuzioni di [File Upload](../nodes/file-upload-trigger-node.md), le esecuzioni avviate dallo strumento run-workflow dell'assistente IA e i workflow di notifica avvisi si avviano senza attendere uno slot.
+
 ## trigger_source
 
 La cronologia delle esecuzioni registra `trigger_source` per ogni punto di ingresso:

@@ -15,7 +15,7 @@ Sommige integratienodes vereisen **geen** referenties. [WebSocket Trigger](../no
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, optioneel `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, optioneel `base_url` |
-| **Jira** | [Jira-node](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, optioneel `api_version` |
+| **Jira** | [Jira-node](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (alleen Basic-auth), optioneel `api_version` |
 | **Linear** | [Linear-node](../nodes/linear-node.md) | `api_key`, of `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry-node](../nodes/sentry-node.md) | `api_token`, optioneel `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -201,7 +201,7 @@ OAuth-tokens (`access_token`, `refresh_token`, `token_expiry`) worden automatisc
 
 ## Jira
 
-De Jira-referentie slaat Jira Basic auth-referenties, de Jira-site-basis-URL, de deployment-modus en een optionele REST API-versie op voor de [Jira-node](../nodes/jira-node.md). Gebruik `cloud` voor Jira Cloud of `data_center` voor Jira Data Center / Server.
+De Jira-referentie slaat Jira Basic auth-referenties of een Data Center personal access token, de Jira-site-basis-URL, de deployment-modus en een optionele REST API-versie op voor de [Jira-node](../nodes/jira-node.md). Gebruik `cloud` voor Jira Cloud of `data_center` voor Jira Data Center / Server.
 
 ### Configuratie
 
@@ -214,17 +214,19 @@ De Jira-referentie slaat Jira Basic auth-referenties, de Jira-site-basis-URL, de
 
 **Jira Data Center / Server**
 
-1. Selecteer **Jira Data Center / Server** als de deployment.
-2. Voer de Jira-gebruikersnaam en het wachtwoord in die voor Basic auth worden gebruikt.
-3. Voer de Jira-site-URL in, bijvoorbeeld `https://jira.example.com`.
-4. Gebruik **Test Connection** om de referentie te verifiëren.
+1. Selecteer **Jira Data Center / Server** als implementatie.
+2. Kies een verificatiemethode. **Gebruikersnaam en wachtwoord** gebruikt Basic-auth. **Personal Access Token** gebruikt `Authorization: Bearer <token>` en vereist Jira Data Center / Server 8.14 of nieuwer. Maak het token aan onder **Profiel → Personal Access Tokens** in Jira.
+3. Voer de Jira-gebruikersnaam en het wachtwoord in, of plak het personal access token (geen gebruikersnaam vereist).
+4. Voer de Jira-site-URL in, bijvoorbeeld `https://jira.example.com`.
+5. Gebruik **Test Connection** om de inloggegevens te verifiëren.
 
 ### Velden
 
 | Veld | Beschrijving |
 | --- | --- |
-| `email` | Jira Cloud Atlassian-account-e-mailadres, of Jira Data Center / Server-gebruikersnaam |
-| `api_token` | Jira Cloud Atlassian API-token, of Jira Data Center / Server-wachtwoord voor Basic auth |
+| `auth_mode` | `basic` (standaard bij ontbreken) of `pat`. `pat` is alleen geldig met `data_center` |
+| `email` | E-mailadres van het Jira Cloud Atlassian-account of gebruikersnaam van Jira Data Center / Server. Niet gebruikt in de `pat`-modus |
+| `api_token` | Jira Cloud Atlassian API-token, Jira Data Center / Server-wachtwoord voor Basic-auth of het Data Center personal access token in de `pat`-modus |
 | `base_url` | Jira-site-basis-URL |
 | `deployment` | `cloud` voor Jira Cloud of `data_center` voor Jira Data Center / Server |
 | `api_version` | REST API-versie; standaard `3` voor Jira Cloud. Data Center / Server gebruikt v2 |
@@ -232,11 +234,11 @@ De Jira-referentie slaat Jira Basic auth-referenties, de Jira-site-basis-URL, de
 ### Opmerkingen
 
 - De Jira-node verzendt issue-beschrijvingen en opmerkingen als Atlassian Document Format-tekstdocumenten voor Jira Cloud REST API v3. Data Center / Server-referenties verzenden platte tekst.
-- Data Center / Server ondersteunt momenteel alleen gebruikersnaam/wachtwoord Basic auth. Personal access tokens en Bearer auth worden nog niet ondersteund.
+- Data Center / Server ondersteunt Basic-auth met gebruikersnaam/wachtwoord en verificatie via een personal access token (PAT) met het Bearer-schema. PAT-verificatie vereist Jira Data Center / Server 8.14 of nieuwer.
 - Het uploaden van bijlagen accepteert base64- of data-URL-inhoud en is onderhevig aan de bestandsgroottelimiet van het platform (standaard 99 MB). Het downloaden van bijlagen kan base64-inhoud retourneren wanneer dit is ingeschakeld.
 - Het aanmaken en verwijderen van gebruikers en het verzenden van issue-meldingen vereisen dat het geauthenticeerde Jira-account de relevante Jira-site- of organisatiemachtigingen heeft.
 - Gebruik List Projects, Search Issues en List Transitions om projectkeys, issue-keys en transition-ID's te achterhalen.
-- Gebruik voor aangepaste endpoints die niet door de Jira-node worden ondersteund de [HTTP-node](../nodes/http-node.md) met Jira Basic Auth (`email:api_token` voor Cloud of `username:password` voor Data Center / Server) in het cURL-commando, of een Header-referentie met de bijbehorende `Authorization: Basic <base64(user:secret)>`-waarde.
+- Voor aangepaste endpoints die niet door de Jira-node worden gedekt, gebruikt u de [HTTP-node](../nodes/http-node.md) met Jira Basic Auth (`email:api_token` voor Cloud of `username:password` voor Data Center / Server) of PAT Bearer-auth (`Authorization: Bearer <token>` voor Data Center / Server). Gebruik eventueel een Header-credential met de juiste `Authorization`-header.
 
 Zie ook:
 

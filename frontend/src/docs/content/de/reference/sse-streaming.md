@@ -25,12 +25,17 @@ Jeder SSE-Frame ist durch Zeilenumbrüche getrenntes JSON mit dem Präfix `data:
 
 | Ereignistyp | Wann er ausgegeben wird | Wichtige Felder |
 |------------|--------------------|------------|
-| `execution_started` | Unmittelbar nachdem die Anfrage akzeptiert wurde | `execution_id`, `server_now_ms` |
+| `queued` | Der Workflow hat sein [Gleichzeitigkeitslimit](./webhooks.md#concurrency-limit-and-queued-runs) erreicht; wird jedes Mal erneut gesendet, wenn sich der Platz des Laufs ändert | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Unmittelbar nachdem die Anfrage akzeptiert wurde oder wenn ein in der Warteschlange befindlicher Lauf startet | `execution_id`, `server_now_ms` |
 | `node_start` | Kurz bevor ein Knoten mit der Ausführung beginnt | `node_id`, `node_label`, `started_at_ms`, optional `message` |
 | `node_retry` | Wenn ein Knoten erneut versucht wird | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Nachdem ein Knoten abgeschlossen ist | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Wenn ein Output-Knoten vorzeitig zurückkehrt | `node_label`, `output` |
 | `execution_complete` | Nachdem der Workflow beendet ist | `status`, `outputs`, `execution_time_ms` |
+
+### In die Warteschlange eingereihte Ausführungen
+
+Wenn der Workflow sein Concurrency Limit erreicht hat, bleibt der Stream geöffnet und sendet `queued`-Ereignisse, während der Lauf wartet. Ein in der Warteschlange befindlicher Lauf wird im Hintergrund-Worker ausgeführt, möglicherweise in einem anderen Prozess, sodass sein Stream `execution_started` beim Start des Laufs und `execution_complete` bei dessen Beendigung überträgt, jedoch keine `node_start`-, `node_complete`- oder Token-Ereignisse dazwischen. Sein `execution_complete` enthält leere `node_results`; öffne den Lauf in der [Ausführungshistorie](./execution-history.md) für Knotendetails. Das Schließen der Verbindung bricht einen eingereihten Lauf nicht ab. Wenn die Warteschlange voll ist, wird die Anfrage mit `429` beantwortet, bevor der Stream geöffnet wird.
 
 ## Start-Nachrichten pro Knoten
 

@@ -105,3 +105,5 @@ Command Palette 可從編輯器、儀表板、文件與 evals 檢視中使用。
 - [Workflow 結構](./workflow-structure.md) – 節點與邊格式
 - [Execute 節點](../nodes/execute-node.md) – 呼叫子 Workflow（`Ctrl + Shift + O`）
 - [快速開始](../getting-started/quick-start.md) – 建立您的第一個 Workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

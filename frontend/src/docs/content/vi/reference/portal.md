@@ -32,6 +32,10 @@ Cấu hình trong trình chỉnh sửa: Nút **Portal** trong tiêu đề workfl
 3. **Thực thi**: `POST /api/portal/{slug}/execute` – Giao diện chat portal gọi endpoint này (hoặc biến thể streaming của nó ở bên trong khi được bật); người dùng cuối tương tác qua giao diện chat, không gọi API trực tiếp.
 4. **Dừng**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Được yêu cầu khi người dùng nhấn **Stop** trong một lượt chạy portal đang hoạt động
 
+## Giới hạn đồng thời
+
+Khi workflow có [giới hạn đồng thời](./webhooks.md#concurrency-limit-and-queued-runs) và mọi vị trí đều đang được sử dụng, thông điệp portal sẽ chờ đến lượt thay vì chạy ngay lập tức. Đoạn chat hiển thị **Waiting in queue (2/5)** trong dòng tiến trình cho đến khi lượt chạy bắt đầu, sau đó câu trả lời xuất hiện như bình thường. Lượt chạy vẫn diễn ra nếu người dùng đóng trang. **Stop** sẽ xóa lượt chạy đang chờ khỏi hàng đợi. Khi hàng đợi đầy, thông điệp thất bại với "Concurrency queue is full". Lượt chạy đã chờ trong hàng đợi không phát trực tuyến câu trả lời theo từng token; toàn bộ câu trả lời sẽ xuất hiện khi nó kết thúc.
+
 ## HITL trong các lượt chạy Portal
 
 Nếu một workflow portal gặp [Node Agent](../nodes/agent-node.md) với [Human-in-the-Loop](./human-in-the-loop.md) được bật, phản hồi portal sẽ hiển thị liên kết đánh giá thay vì xuất hiện trống.

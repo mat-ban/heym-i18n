@@ -111,6 +111,8 @@ Ambele dialoguri de istoric afișează **execuțiile în curs de rulare** în pa
 - După anulare, intrarea în curs de rulare dispare la următoarea reîmprospătare; apăsați **Refresh** pentru a actualiza lista manual
 - Dacă anulați o rulare care s-a încheiat deja, cererea nu are niciun efect
 
+Rulările care așteaptă un [slot de concurență](./webhooks.md#concurrency-limit-and-queued-runs) sunt listate în aceeași secțiune cu eticheta **Queued 2/5**, poziția lor în coadă și dimensiunea cozii. Nu au un buton **Open live**, deoarece nimic nu rulează încă; **Cancel** elimină o rulare în așteptare din coadă și o înregistrează ca `cancelled`. O rulare care a așteptat mai mult decât timpul maxim de așteptare al workflow-ului este înregistrată ca `expired`, iar o rulare respinsă din cauza unei cozi pline ca `queue_full`; ambele au propria insignă în lista de rulări.
+
 URL-ul live este `/workflows/{workflowId}/{executionId}`. Observatorul este read-only: părăsirea
 editorului doar deconectează acea filă de browser și nu oprește niciodată workflow-ul. Instantaneele active
 sunt partajate prin PostgreSQL, astfel încât deschiderea unei rulări funcționează chiar și atunci când trigger-ul și cererea

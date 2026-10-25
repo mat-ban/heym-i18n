@@ -110,6 +110,8 @@ Cả hai hộp thoại lịch sử đều hiển thị **các execution đang ch
 - Sau khi hủy, mục đang chạy sẽ biến mất ở lần làm mới tiếp theo; nhấn **Refresh** để cập nhật danh sách thủ công
 - Nếu bạn hủy một lần chạy đã kết thúc, yêu cầu sẽ không có tác dụng gì
 
+Các lượt chạy đang chờ một [vị trí đồng thời](./webhooks.md#concurrency-limit-and-queued-runs) được liệt kê trong cùng một phần với nhãn **Queued 2/5**, vị trí trong hàng đợi và kích thước hàng đợi. Chúng không có nút **Open live** vì chưa có gì đang chạy; **Cancel** sẽ đưa lượt chạy đang chờ ra khỏi hàng đợi và ghi lại là `cancelled`. Lượt chạy chờ lâu hơn thời gian chờ tối đa của workflow được ghi lại là `expired`, và lượt chạy bị từ chối do hàng đợi đầy được ghi lại là `queue_full`; cả hai đều có huy hiệu riêng trong danh sách lượt chạy.
+
 URL trực tiếp là `/workflows/{workflowId}/{executionId}`. Observer chỉ có quyền đọc: rời khỏi
 editor chỉ ngắt kết nối tab trình duyệt đó và không bao giờ dừng workflow. Các snapshot đang hoạt động
 được chia sẻ qua PostgreSQL, vì vậy việc mở một lần chạy vẫn hoạt động khi trigger và yêu cầu

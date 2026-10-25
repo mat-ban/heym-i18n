@@ -1228,7 +1228,8 @@
     "toolCalls": "Tool-aanroepen",
     "askAi": "AI vragen",
     "askAiTitle": "De Chat-assistent vragen naar deze run",
-    "noNodeSpans": "Voor deze run zijn geen node-spans vastgelegd."
+    "noNodeSpans": "Voor deze run zijn geen node-spans vastgelegd.",
+    "queuedProgress": "In wachtrij {position}/{size}"
   },
   "logs": {
     "all": "Alle",
@@ -1834,6 +1835,22 @@
         "waiting": "Wachten",
         "neutral": "Neutraal"
       }
+    },
+    "concurrencyLimit": "Gelijktijdigheidslimiet",
+    "concurrencyLimitHelp": "Productie-uitvoeringen (Webhooks, Cron, MCP, Portal, Triggers) boven de limiet wachten in een FIFO-wachtrij. Editor-testuitvoeringen starten altijd direct.",
+    "maxConcurrentRuns": "Max. gelijktijdige uitvoeringen",
+    "maxQueueSizeOptional": "Max. wachtrijgrootte (optioneel)",
+    "emptyNoLimit": "Leeg = geen limiet",
+    "maxWaitOptional": "Max. wachttijd (seconden, optioneel)",
+    "emptyWaitAsLong": "Leeg = zolang wachten als nodig",
+    "concurrencyQueueHelp": "Een volle wachtrij antwoordt met 429. Een uitvoering die langer wacht dan de maximale wachttijd wordt als verlopen geregistreerd.",
+    "rag": {
+      "hybridSearch": "Hybride zoeken",
+      "hybridSearchHelp": "Combineer vectorovereenkomst met BM25-trefwoordmatching, zodat ook exacte termen zoals ID's, namen en foutcodes worden gevonden.",
+      "hybridScore": "Hybride score (0-1)",
+      "similarityScore": "Overeenkomstscore",
+      "vectorSimilarity": "Vectorovereenkomst",
+      "bm25Score": "BM25-score"
     }
   },
   "settings": {

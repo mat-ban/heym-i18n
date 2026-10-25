@@ -30,7 +30,7 @@
 | [Codex](../nodes/codex-node.md) | Εκτέλεση του τοπικού Codex CLI σε αποθετήριο GitHub χρησιμοποιώντας token πρόσβασης ChatGPT/Codex | 1 | 1, συν έξοδο `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Εκτέλεση του OpenCode CLI σε αποθετήριο GitHub σε ενισχυμένο container χρησιμοποιώντας κλειδί API της πύλης OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Απευθείας κλήση συγκεκριμένου εργαλείου MCP χωρίς επιλογή από LLM | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Εισαγωγή, upsert, διαγραφή ή αναζήτηση σε [διανυσματικό χώρο αποθήκευσης](../tabs/vectorstores-tab.md) Qdrant ή Postgres (pgvector) για RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Εισαγωγή, upsert, διαγραφή ή αναζήτηση (διανυσματική ή υβριδική διανυσματική + BM25) σε [διανυσματικό χώρο αποθήκευσης](../tabs/vectorstores-tab.md) Qdrant ή Postgres (pgvector) για RAG | 1 | 1 |
 
 ## Κόμβοι Λογικής
 

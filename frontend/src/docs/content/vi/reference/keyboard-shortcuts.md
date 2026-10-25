@@ -105,3 +105,5 @@ Các phím tắt này khả dụng trong hộp thoại Execution History và b�
 - [Cấu trúc Workflow](./workflow-structure.md) – Định dạng node và cạnh
 - [Node Execute](../nodes/execute-node.md) – Gọi các sub-workflow (`Ctrl + Shift + O`)
 - [Bắt đầu nhanh](../getting-started/quick-start.md) – Xây dựng workflow đầu tiên của bạn
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

@@ -36,6 +36,21 @@ Each workflow can be exposed as an MCP tool:
 
 Workflow cards show the description and a preview of input field names so you can see what each tool expects before enabling it.
 
+### Queued runs and heym_execution_status
+
+A workflow with a [concurrency limit](../reference/webhooks.md#concurrency-limit-and-queued-runs) may be busy when a client calls it. The call then returns at once with a result that is not an error:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+The client polls the `heym_execution_status` tool with that `execution_id`. It returns the same body as the [status URL](../reference/webhooks.md#status-url): `queued` with the current position, `running`, then `success` or `error` with the outputs. It only finds runs of workflows that the same server exposes. The tool is listed on the default server and on each named server only while at least one of its workflows has a concurrency limit. When the workflow's queue is full, the call returns an error, "Concurrency queue is full".
+
 ## Heym Chat Tool
 
 The **Heym Capabilities** section turns the Chat tab engine into a single MCP tool named `heym_chat`. Enable it on the default server, on any named server, or on both — each surface keeps its own toggle and model selection.
@@ -59,6 +74,8 @@ Capabilities added to the Chat tab later become available through `heym_chat` au
 
 `heym_chat` always runs the Chat engine in build mode, the same mode the [Chat tab](./chat-tab.md#creating-workflows) uses. In one call the assistant can save a new workflow, run it with realistic sample inputs, read the run report, fix what failed, and run it again, up to five test runs per call. When the latest run of the latest save passes, it finishes with a one-sentence summary, and the reply ends with `Verified: the latest test run of the saved workflow passed.`
 
+When a call creates or edits a workflow, the reply lists each one with its full editor link, such as `https://heym.example.com/workflows/<id>`, and the links inside the assistant's answer are full links too. They use your configured Heym address (`FRONTEND_URL`) and open for people signed in to Heym who can access that workflow.
+
 - Test runs are real runs. Their side effects happen, and they appear in the workflow's run history like any other run.
 - Saves take the editor's path: a change to the graph keeps the previous graph in the workflow's Edit History.
 - To change a workflow it built earlier, continue the thread with the same `conversation_id`. The assistant updates that workflow instead of creating a new one, and it only changes workflows you can edit.
@@ -68,7 +85,7 @@ A table holds no secret, so `heym_chat` can list your tables, ask which one a wo
 
 ### Credentials
 
-`heym_chat` sees your credentials by name and type, the same way the Chat tab does. When a workflow it builds needs a credential, it asks which one to use, as a question in the result. Answer it with the same `conversation_id`.
+`heym_chat` sees the credentials you own and the ones shared with you, by name and type, the same way the Chat tab does. When a workflow it builds needs a credential, it asks which one to use, as a question in the result. Answer it with the same `conversation_id`.
 
 To add a credential, or to update one you own, the assistant opens Heym's credential form on a Heym page, `/credentials/setup/<id>`. You sign in to Heym there, enter the key or connect the account, and press save. The value goes straight to Heym: the MCP client and its model only learn the credential's name and type. Do not paste keys into the MCP client; ask for the form instead.
 
@@ -91,6 +108,8 @@ The page only opens for the Heym account that started the request, so a forwarde
 | **Model** | Loaded from the selected credential. Prefilled from your preferred model when the credential matches. |
 
 If either is missing, the tool still appears in `tools/list` but each call returns an error telling you to finish the setup in this tab.
+
+LLM and Agent nodes in a workflow `heym_chat` builds run on this credential and model, including a credential someone shared with you, so test runs work without another setup step. When `heym_chat` edits a workflow, LLM and Agent nodes that already have a credential keep it, along with their model.
 
 ### Arguments and history
 

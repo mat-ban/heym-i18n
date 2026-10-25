@@ -8,22 +8,23 @@
 |----------|-------|
 | Входи | 1 |
 | Виходи | 1 |
-| Облікові дані | Jira (Cloud email/API token або Data Center username/password, base URL, режим розгортання, опційна версія REST API) |
+| Облікові дані | Jira (Cloud email/API token, Data Center username/password або персональний токен доступу, base URL, режим розгортання, опційна версія REST API) |
 | Вивід | `$nodeLabel.*` |
 
 ## Облікові дані
 
-Створіть облікові дані **Jira** на вкладці [Облікові дані](../tabs/credentials-tab.md). Збережені ключі конфігурації: `email`, `api_token`, `base_url`, `deployment` та опційний `api_version`. Для Jira Cloud `email` зберігає електронну адресу облікового запису Atlassian, а `api_token` — Atlassian API token. Для Jira Data Center / Server ці самі ключі зберігають ім'я користувача та пароль для Basic auth. Кроки налаштування дивіться в розділі [Third-Party Integrations](../reference/integrations.md#jira).
+Створіть облікові дані **Jira** на вкладці [Облікові дані](../tabs/credentials-tab.md). Збережені ключі конфігурації: `email`, `api_token`, `base_url`, `deployment`, `auth_mode` та опційний `api_version`. Для Jira Cloud `email` зберігає електронну адресу облікового запису Atlassian, а `api_token` — Atlassian API token. Для Jira Data Center / Server ці самі ключі зберігають ім'я користувача та пароль для Basic auth, або, якщо вказано `auth_mode: pat`, `api_token` зберігає персональний токен доступу, що надсилається як Bearer token, а `email` не використовується. Кроки налаштування дивіться в розділі [Third-Party Integrations](../reference/integrations.md#jira).
 
 | Поле | Ключ конфігурації | Опис |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Електронна адреса облікового запису Atlassian для Jira Cloud або ім'я користувача Jira Data Center / Server |
-| API Token / Password | `api_token` | Atlassian API token для Jira Cloud або пароль Jira Data Center / Server для Basic auth |
+| Автентифікація | `auth_mode` | `basic` (за замовчуванням) або `pat` (лише Data Center / Server) |
+| API Token / Password / Персональний токен доступу | `api_token` | Токен API Atlassian для Jira Cloud, пароль Jira Data Center / Server для Basic auth або персональний токен доступу Data Center у режимі `pat` |
 | Base URL | `base_url` | URL сайту Jira, наприклад `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` для Jira Cloud або `data_center` для Jira Data Center / Server |
 | REST API Version | `api_version` | За замовчуванням `3` для Jira Cloud. Data Center / Server використовує REST API v2 |
 
-Персональні токени доступу та Bearer auth для Data Center / Server поки що не підтримуються обліковими даними Jira.
+Персональні токени доступу вимагають Jira Data Center / Server 8.14 або новішої версії. Зміна методу автентифікації очищає збережений секрет, тому під час перемикання введіть новий пароль або токен.
 
 Скористайтеся **Test Connection**, щоб перевірити облікові дані щодо поточного користувача Jira.
 

@@ -30,7 +30,7 @@ Lihat [Trigger](./triggers.md) untuk semua titik masuk.
 | [Codex](../nodes/codex-node.md) | Jalankan Codex CLI lokal terhadap repositori GitHub menggunakan token akses ChatGPT/Codex | 1 | 1, plus output `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Jalankan OpenCode CLI terhadap repositori GitHub dalam kontainer yang diperkuat menggunakan kunci API gateway OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Panggil tool MCP tertentu secara langsung tanpa LLM yang memilihnya | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Sisipkan, upsert, hapus, atau cari di [vector store](../tabs/vectorstores-tab.md) Qdrant atau Postgres (pgvector) untuk RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Sisipkan, upsert, hapus, atau cari (vektor atau hibrida vektor + BM25) di [vector store](../tabs/vectorstores-tab.md) Qdrant atau Postgres (pgvector) untuk RAG | 1 | 1 |
 
 ## Node Logika
 

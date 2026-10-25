@@ -7,7 +7,7 @@ Nodul are un dropdown **Database** care selectează backend-ul:
 - **Qdrant** – stochează vectorii într-un server Qdrant extern (necesită o acreditare *RAG: Qdrant + OpenAI*).
 - **Postgres (pgvector)** – stochează vectorii în baza de date Postgres proprie Heym, fără serviciu extern (necesită o acreditare *RAG: Psql + OpenAI*).
 
-Valoarea implicită este **Qdrant** pentru compatibilitate retroactivă. Schimbarea Database filtrează lista **Vector Store** la depozitele susținute de acea bază de date. Ambele backend-uri suportă aceleași operațiuni, filtrare pe metadate și reranking Cohere.
+Valoarea implicită este **Qdrant** pentru compatibilitate retroactivă. Schimbarea Database filtrează lista **Vector Store** la depozitele susținute de acea bază de date. Ambele backend-uri suportă aceleași operațiuni, filtrare pe metadate, căutarea hibridă (vector + BM25) și reranking Cohere.
 
 Oricare backend poate fi accesat și printr-o acreditare *RAG: Custom Embeddings*, care
 înlocuiește OpenAI cu orice endpoint de embeddings compatibil OpenAI și își numește propriul
@@ -20,7 +20,7 @@ care țintește. Consultați [Custom Embeddings](../reference/integrations.md#cu
 |----------|-------|
 | Intrări | 1 |
 | Ieșiri | 1 |
-| Ieșire | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (căutare), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Ieșire | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (căutare), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parametri
 
@@ -36,6 +36,7 @@ care țintește. Consultați [Custom Embeddings](../reference/integrations.md#cu
 | `queryText` | expression | Interogarea de căutare (doar search) |
 | `searchLimit` | number | Număr maxim de rezultate (implicit: 5) |
 | `metadataFilters` | JSON string | Filtre pe metadate pentru căutare (valorile suportă expresii) |
+| `hybridSearch` | boolean | Combină căutarea vectorială cu căutarea după cuvinte-cheie BM25 (doar search; implicit: dezactivat) |
 | `enableReranker` | boolean | Folosește Cohere pentru reranking-ul rezultatelor căutării |
 | `rerankerCredentialId` | UUID | Acreditare Cohere pentru reranking |
 | `rerankerTopN` | number | Numărul de rezultate de top de păstrat după reranking |
@@ -125,6 +126,7 @@ Căutare semantică pentru documente similare.
 | `queryText` | da | Interogarea de căutare |
 | `searchLimit` | nu | Număr maxim de rezultate (implicit: 5) |
 | `metadataFilters` | nu | Filtrare după metadate (obiect JSON cu potrivire exactă, valorile acceptă expresii) |
+| `hybridSearch` | nu | Fuzionează similaritatea vectorială cu potrivirea după cuvinte-cheie BM25 (consultați [Căutare hibridă](#cautare-hibrida)) |
 | `enableReranker` | nu | Activează reranking-ul Cohere pentru relevanță sporită |
 | `rerankerCredentialId` | la reranking | Acreditarea Cohere |
 | `rerankerTopN` | nu | Numărul final de rezultate după reranking |
@@ -138,13 +140,44 @@ Când reranking-ul este activat:
 - `score` rămâne scorul original de similaritate vectorială
 - `relevance_score` este scorul reranker-ului Cohere
 
+
+#### Căutare hibridă
+
+Căutarea vectorială găsește text care are aceeași semnificație ca și interogarea. Textul care conține doar cuvintele exacte se poate clasa mai jos: un cod de produs, un număr de tichet, numele unei persoane, o eroare precum `ERR-4021`. Activați **Căutare hibridă**, iar nodul va rula o căutare după cuvinte-cheie alături de căutarea vectorială și va îmbina ambele liste, astfel încât o singură interogare să găsească ambele tipuri de potriviri.
+
+1. Căutarea vectorială returnează cele mai bune potriviri ale sale, la fel ca fără căutarea hibridă.
+2. O căutare după cuvinte-cheie evaluează textul stocat în raport cu cuvintele interogării cu **BM25**, ceea ce recompensează cuvintele rare, cuvintele repetate și documentele mai scurte.
+3. Cele două liste clasificate sunt îmbinate prin **reciprocal rank fusion**. Un document situat aproape de începutul ambelor liste se clasează pe primul loc, iar un document găsit doar de o listă continuă să apară.
+
+Filtrele pe metadate se aplică ambelor căutări, iar reranker-ul Cohere, dacă este activat, rulează pe lista îmbinată.
+
+Fiecare rezultat poartă scorul ambelor căutări:
+
+| Câmp | Semnificație |
+|------|--------------|
+| `score` | Scor îmbinat de la 0 la 1. `1` înseamnă că documentul s-a clasat pe primul loc în ambele căutări. |
+| `vector_score` | Similaritate vectorială (de la 0 la 1). `null` când doar căutarea după cuvinte-cheie a găsit documentul. |
+| `keyword_score` | Scor BM25. `null` când niciunul dintre cuvintele interogării nu apare în document. |
+
+`$nodeLabel.hybrid` este `true` când s-a executat căutarea hibridă.
+
+Bine de știut:
+
+- Scorul `score` îmbinat clasifică rezultatele unul în raport cu celălalt. Nu este o similaritate vectorială, astfel încât un prag ajustat pentru o căutare simplă nu se transferă direct.
+- Cuvintele interogării sunt convertite în minuscule și împărțite pe spații și punctuație, astfel încât `ERR-4021` este căutat ca `err` și `4021`. Căutarea după cuvinte-cheie folosește până la primele 16 cuvinte distincte ale interogării.
+- Qdrant: prima căutare hibridă pe o colecție construiește un index full-text pe câmpul de payload `text`, ceea ce necesită o cheie Qdrant cu permisiune de scriere. În colecțiile mari, aceasta durează un moment doar o singură dată; căutările ulterioare reutilizează indexul.
+- Postgres (pgvector): migrarea bazei de date `142_vsi_text_search_index` adaugă indexul full-text. Rulați `alembic upgrade head` după actualizare. Căutarea hibridă funcționează și fără index, doar că este mai lentă pe stocările mari.
+- Pentru fiecare interogare, căutarea după cuvinte-cheie citește până la 200 de documente potrivite, începând cu cele mai rare cuvinte ale interogării, deoarece acestea poartă cea mai mare pondere.
 ## Accesarea rezultatelor
 
 - `$ragNode.results.first().text` – conținutul primului rezultat
-- `$ragNode.results.first().score` – scorul de similaritate (0–1)
+- `$ragNode.results.first().score` – scorul de similaritate (0–1), sau scorul îmbinat cu căutarea hibridă
+- `$ragNode.results.first().keyword_score` – scor BM25 (căutare hibridă)
+- `$ragNode.results.first().vector_score` – similaritate vectorială (căutare hibridă)
 - `$ragNode.results.first().metadata.source` – metadatele primului rezultat
 - `$ragNode.results.map("item.text").join("\n\n")` – concatenare pentru contextul LLM
 - `$ragNode.reranked` – dacă reranking-ul a fost aplicat
+- `$ragNode.hybrid` – dacă a fost aplicată căutarea hibridă
 - `$ragNode.count` – numărul de rezultate returnate
 - `$ragNode.replaced` – dacă un upsert a înlocuit un document existent
 - `$ragNode.deleted` – dacă o ștergere a eliminat ceva
@@ -164,6 +197,22 @@ Când reranking-ul este activat:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Exemplu – Căutare hibridă
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

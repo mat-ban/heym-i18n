@@ -156,7 +156,7 @@ Uzel Decision klade rozhodovacímu modelu otázky týkající se stavu spuštěn
 Vyžaduje přihlašovací údaje Decision Model; přirozeně se kombinuje s [Switch](../nodes/switch-node.md), [Condition](../nodes/condition-node.md) a [Agent Node](../nodes/agent-node.md).
 #### [RAG / Vector Store](../nodes/rag-node.md)
 
-Uzel RAG / Vector Store vkládá, aktualizuje (upsert), maže a vyhledává dokumenty ve vektorovém úložišti pro retrieval-augmented generation. Rozbalovací nabídka Database vybírá backend — **Qdrant** (externí server) nebo **Postgres (pgvector)** (vlastní databáze Heym, bez externí služby), přičemž výchozí je Qdrant. Vyberte vektorové úložiště na kartě [Vectorstores](../tabs/vectorstores-tab.md) a nastavte operaci na insert, upsert, delete nebo search. Operace upsert a delete adresují dokument pomocí jedinečného id uloženého v payloadu — pole **Document ID Field** pojmenovává toto pole (výchozí `doc_id`) a **Document ID** nese jeho hodnotu — takže dokument si zachovává id, které již používá Váš vlastní systém: upsert nahradí každý odpovídající bod před uložením nové verze a delete hlásí, zda bylo něco nalezeno. Metadata dokumentu přijímají ve svých hodnotách výrazy, takže `{"url": "$start.url"}` uloží to, co dané spuštění vytvořilo. Vyhledávání podporuje filtry metadat a volitelné přehodnocení (reranking) Cohere a vrací pole výsledků s textem, skóre, metadaty, příznakem reranked a počtem pro použití v tocích [LLM](../nodes/llm-node.md) nebo [Agent Node](../nodes/agent-node.md).
+Uzel RAG / Vector Store vkládá, aktualizuje (upsert), maže a vyhledává dokumenty ve vektorovém úložišti pro retrieval-augmented generation. Rozbalovací nabídka Database vybírá backend — **Qdrant** (externí server) nebo **Postgres (pgvector)** (vlastní databáze Heym, bez externí služby), přičemž výchozí je Qdrant. Vyberte vektorové úložiště na kartě [Vectorstores](../tabs/vectorstores-tab.md) a nastavte operaci na insert, upsert, delete nebo search. Operace upsert a delete adresují dokument pomocí jedinečného id uloženého v payloadu — pole **Document ID Field** pojmenovává toto pole (výchozí `doc_id`) a **Document ID** nese jeho hodnotu — takže dokument si zachovává id, které již používá Váš vlastní systém: upsert nahradí každý odpovídající bod před uložením nové verze a delete hlásí, zda bylo něco nalezeno. Metadata dokumentu přijímají ve svých hodnotách výrazy, takže `{"url": "$start.url"}` uloží to, co dané spuštění vytvořilo. Vyhledávání podporuje filtry metadat, volitelné **Hybrid Search** (vektorová podobnost sloučená s klíčovými slovy BM25, takže přesné výrazy jako identifikátory a chybové kódy jsou nalezeny vedle sémantických shod) a volitelné přehodnocení Cohere (reranking) a vrací pole výsledků s text, score, metadata, příznaky reranked a hybrid a počtem count pro použití v tocích [LLM](../nodes/llm-node.md) nebo [Agent Node](../nodes/agent-node.md).
 
 Běžnými navazujícími uzly jsou [LLM](../nodes/llm-node.md) a [Agent Node](../nodes/agent-node.md); nastavení vektorového úložiště najdete v části [Vectorstores](../tabs/vectorstores-tab.md).
 
@@ -554,7 +554,7 @@ Viz také [Uzel Agent](../nodes/agent-node.md), [Portál](./portal.md), [Histori
 
 ### [Webhooky](./webhooks.md)
 
-Workflow lze spouštět prostřednictvím [HTTP](../nodes/http-node.md) na adrese `POST /api/workflows/{workflow_id}/execute` nebo streamovat inkrementálně z `POST /api/workflows/{workflow_id}/execute/stream`. Tělo požadavku je předáno jako body do uzlů [Input](../nodes/input-node.md); hlavičky a parametry dotazu jsou dostupné ve výrazech [Expression DSL](./expression-dsl.md). Nakonfigurujte ověřování pro jednotlivá workflow: anonymní, JWT nebo vlastní hlavička. Volitelné cachování odpovědí, omezení rychlosti a dialog Run with cURL v editoru jsou umístěny na úrovni workflow a platí pro oba režimy.
+Workflow lze spouštět prostřednictvím [HTTP](../nodes/http-node.md) na adrese `POST /api/workflows/{workflow_id}/execute` nebo streamovat inkrementálně z `POST /api/workflows/{workflow_id}/execute/stream`. Tělo požadavku je předáno jako body do uzlů [Input](../nodes/input-node.md); hlavičky a parametry dotazu jsou dostupné ve výrazech [Expression DSL](./expression-dsl.md). Nakonfigurujte ověřování pro jednotlivá workflow: anonymní, JWT nebo vlastní hlavička. Volitelné cachování odpovědí, omezení rychlosti a dialog Run with cURL v editoru jsou umístěny na úrovni workflow a platí pro oba režimy. S [limitem souběhu](./webhooks.md#concurrency-limit-and-queued-runs) obdrží volání, které musí čekat, místo toho kód `202 Accepted` s ID spuštění a URL adresou stavu.
 
 Viz také [Input](../nodes/input-node.md), [Spouštěcí tokeny](./execution-tokens.md), [SSE Streaming](./sse-streaming.md), [HTTP](../nodes/http-node.md) a [Struktura workflow](./workflow-structure.md).
 
@@ -599,6 +599,10 @@ Pokrývá každý netestovací běh na nejvyšší úrovni: oba execute endpoint
 ### Časový limit workflow
 
 Každý workflow může mít nastaven **časový limit workflow** v sekundách v panelu **Vlastnosti** na úrovni workflow. Hodnota `0` (výchozí) jej vypíná. Je-li nastaven, spuštění, které překročí limit, je zastaveno na hranici následujícího uzlu a zaznamenáno jako neúspěšné spuštění s chybou „timed out". Časový limit se vztahuje na ruční, API i triggerovaná spuštění. Dlouhé uzly [Wait](../nodes/wait-node.md) jsou přerušeny neprodleně, namísto aby blokovaly po celou svou dobu trvání.
+
+### Limit souběhu
+
+Každý workflow může omezit počet současně prováděných produkčních běhů pomocí volby **Limit souběhu** v panelu **Properties** na úrovni workflow; vlastník a spolupracovníci s právy k úpravám jej mohou měnit a ve výchozím stavu je vypnutý. Po dosažení limitu nové běhy z endpointů [webhooku](./webhooks.md#concurrency-limit-and-queued-runs) a [streamování](./sse-streaming.md), z [Portalu](./portal.md), z [Quick Drawer](./quick-drawer.md), z [MCP](../tabs/mcp-tab.md) a z každého [triggeru](./triggers.md) čekají ve frontě FIFO (první dovnitř, první ven), počítané napříč všemi instancemi [clusteru](./cluster.md). Testovací běhy editoru, volání sub-workflow, [Evals](../tabs/evals-tab.md) a pokračování po kontrole se do fronty nikdy nezařazují a běhy karet z [Boardu](../tabs/board-tab.md), nahrávání souborů, běhy spuštěné nástrojem run-workflow asistenta AI a workflowy pro upozornění na výstrahy startují bez čekání na volný slot. Volání webhooku, které musí čekat, obdrží okamžitě `202 Accepted` s identifikátorem `execution_id`, URL adresou stavu ověřující stejná pověření, svou pozicí, velikostí fronty a počtem běžících úloh; klient MCP obdrží stejnou odpověď a dotazuje se nástroje `heym_execution_status`. Volitelná volba **Maximální velikost fronty** odmítá další volání kódem `429` a volitelná **Maximální doba čekání** označí běh čekající příliš dlouho jako `expired`. Čekající běhy se zobrazují v [Historii spuštění](./execution-history.md) jako **Ve frontě n/m** a lze je zde zrušit.
 
 ### Ušetřený čas
 
@@ -859,3 +863,9 @@ Viz také [Drive](./drive.md), [File Generation](./file-generation.md) a [uzel D
 
 <video src="/features/showcase/drive.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/drive.webm">▶ Watch Drive demo</a></p>
+
+### [Spolupráce na plátně](./canvas-collaboration.md)
+
+Everyone with a workflow open shares one live draft. Edits appear instantly, each person's pointer moves in their color, following mirrors everything they see and do, and you can talk over direct peer-to-peer audio.
+
+See also [Canvas Features](./canvas-features.md), [Edit History](./edit-history.md), and [Keyboard Shortcuts](./keyboard-shortcuts.md).

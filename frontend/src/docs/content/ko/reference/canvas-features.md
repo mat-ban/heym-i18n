@@ -148,3 +148,5 @@ Debug panel은 **workflow 실행** 로그(노드 결과, 출력)를 표시합니
 - [실행 이력](./execution-history.md) – 과거 실행
 - [템플릿](../tabs/templates-tab.md) – Workflow 및 노드 저장 및 재사용
 - [상황별 쇼케이스](./contextual-showcase.md) – 편집기에서 사용 가능한 간략한 페이지 가이드
+
+- [Canvas 협업](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

@@ -148,7 +148,7 @@ De AI-assistent wordt aangedreven door een **workflow-DSL** (domeinspecifieke ta
    - Uw Gebruikersregels toegevoegd als "User Custom Rules"
    - De huidige workflow-JSON wanneer u een bestaande workflow bewerkt
    - De lijst met beschikbare workflows als u de Execute-node gebruikt
-   - De namen, typen en id's van uw eigen referenties (nooit hun waarden)
+   - De namen, typen en id's van de referenties die u bezit of die met u zijn gedeeld (nooit hun waarden)
    - De namen, id's, beschrijvingen en kolommen van de gegevenstabellen die u kunt gebruiken (nooit hun rijen)
 3. Het model retourneert één workflow-JSON-blok (met `nodes` en `edges`). De frontend parseert dit en past het toe op het canvas.
 

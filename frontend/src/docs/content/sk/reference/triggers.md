@@ -91,6 +91,20 @@ workflow ako `interaction`, `type`, `data`, sanitizované `headers`, `triggered_
 
 Konzument RabbitMQ sa spustí pri inicializácii leader workera. Workflowy s uzlami `rabbitmq`, kde `rabbitmqOperation === "receive"`, získajú konzumenta. Vstup obsahuje `message_data` (telo, hlavičky, routing_key atď.) a `triggered_by: "rabbitmq"`.
 
+## Limit súbehu
+
+Workflow s [limitom súbehu](./webhooks.md#concurrency-limit-and-queued-runs) zaraďuje produkčné spustenia z každého vyššie uvedeného vstupného bodu do radu, keď sú jeho sloty plné, podľa princípu first-in, first-out, naprieč všetkými inštanciami. Spôsob, akým sa volajúci dozvie výsledok, závisí od vstupného bodu:
+
+| Vstupný bod | Kým spustenie čaká |
+|---|---|
+| Webhook / API | `202 Accepted` s `execution_id` a stavovou URL |
+| SSE streaming, Quick Drawer, Portal chat | Stream zostáva otvorený a odosiela udalosti `queued` |
+| Portal without streaming | Požiadavka čaká na výsledok |
+| MCP | Výsledok `queued` na dopytovanie pomocou `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger čaká na výsledok rovnako dlho, ako by čakalo spustenie na inej [inštancii](./cluster.md). Spustenie sa vykoná v každom prípade a zapíše sa do histórie |
+
+Keď je rad plný, spustenie sa nezačne a história ho zaznamená ako `queue_full`. Testovacie spustenia editora, volania podriadených workflowov (uzol [Execute](../nodes/execute-node.md) a workflow nástroje agenta), [Evals](../tabs/evals-tab.md), testovacie spustenia v režime zostavovania chatu a obnovenia po revízii sa do radu nikdy nezaradzujú. Spustenia kariet na nástenke [Board](../tabs/board-tab.md), spustenia [File Upload](../nodes/file-upload-trigger-node.md), spustenia iniciované nástrojom run-workflow AI asistenta a notifikačné workflowy upozornení sa tiež spúšťajú bez čakania na slot.
+
 ## trigger_source
 
 História spustení zaznamenáva `trigger_source` pre každý vstupný bod:

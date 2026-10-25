@@ -36,6 +36,21 @@ Heym은 두 가지 모드를 지원합니다. 모든 MCP 활성화 Workflow를 �
 
 Workflow 카드는 설명과 입력 필드 이름의 미리보기를 표시하므로, 활성화하기 전에 각 도구가 무엇을 기대하는지 확인할 수 있습니다.
 
+
+### 대기 중인 실행 및 heym_execution_status
+
+[동시성 제한](../reference/webhooks.md#concurrency-limit-and-queued-runs)이 있는 Workflow는 클라이언트가 호출할 때 사용 중일 수 있습니다. 이 경우 호출은 오류가 아닌 결과로 즉시 반환됩니다:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+클라이언트는 해당 `execution_id`를 사용하여 `heym_execution_status` 도구를 폴링합니다. [상태 URL](../reference/webhooks.md#status-url)과 동일한 본문을 반환합니다: 현재 대기 순위가 포함된 `queued`, `running`, 그리고 출력이 포함된 `success` 또는 `error`. 동일한 서버가 노출하는 Workflow의 실행만 찾습니다. 이 도구는 기본 서버 및 각 명명된 서버에서 하나 이상의 Workflow에 동시성 제한이 설정되어 있는 동안에만 목록에 표시됩니다. 대기열이 가득 찬 경우 호출은 "Concurrency queue is full" 오류를 반환합니다.
 ## Heym Chat 도구
 
 **Heym Capabilities** 섹션은 Chat 탭 엔진을 `heym_chat`이라는 단일 MCP 도구로 전환합니다. 기본 서버, 임의의 명명된 서버 또는 둘 모두에서 활성화할 수 있으며, 각 표면은 자체 토글과 모델 선택을 유지합니다.
@@ -49,6 +64,7 @@ Workflow 카드는 설명과 입력 필드 이름의 미리보기를 표시하�
 - 현재 실행 중인 항목을 보고합니다. 활성 실행 수, 해당 Workflow 이름, 각 실행의 경과 시간, 현재 위치한 노드, 그리고 라이브 실행 링크를 보고합니다.
 - [Board 탭](./board-tab.md)에서 보드를 나열하고, 카드를 생성하며, 카드 상세를 읽습니다.
 - 데이터 테이블을 열과 함께 나열하고, 새로 생성하며, 자신이 구축하는 Workflow에 연결합니다.
+- Heym 자체 페이지에서 credential 생성 또는 업데이트([Credentials](#credentials) 참조)
 - 팀과 전역 변수를 읽고, 문서를 검색합니다.
 - 대기 중인 human-in-the-loop 검토를 승인, 편집 또는 거부합니다.
 
@@ -58,14 +74,28 @@ Workflow 카드는 설명과 입력 필드 이름의 미리보기를 표시하�
 
 `heym_chat`은 항상 Chat 엔진을 빌드 모드(build mode)로 실행합니다. 한 번의 호출로 어시스턴트는 새 Workflow를 저장하고, 현실적인 샘플 입력으로 실행하고, 실행 보고서를 읽고, 실패한 부분을 수정한 뒤 다시 실행하는 과정을 호출당 최대 다섯 번의 테스트 실행까지 수행할 수 있습니다. 최신 저장본의 가장 최근 실행이 통과하면 한 문장의 요약으로 마무리하며, 응답은 `Verified: the latest test run of the saved workflow passed.`로 끝납니다.
 
+호출을 통해 Workflow를 생성하거나 편집하면 응답에 `https://heym.example.com/workflows/<id>`와 같은 전체 편집기 링크가 나열되며, 어시스턴트 답변 내부의 링크도 전체 링크입니다. 구성된 Heym 주소(`FRONTEND_URL`)를 사용하며 Heym에 로그인되어 해당 Workflow에 액세스할 수 있는 사용자에게 열립니다.
+
 - 테스트 실행은 실제 실행입니다. 부수 효과(side effects)가 실제로 발생하며, 다른 실행과 마찬가지로 Workflow의 실행 기록에 표시됩니다.
 - 저장은 에디터 경로를 따릅니다. 그래프를 변경하면 이전 그래프가 Workflow의 **Edit History**에 유지됩니다.
 - 이전에 만든 Workflow를 변경하려면 동일한 `conversation_id`로 스레드를 이어가세요. 어시스턴트는 새 Workflow를 만드는 대신 해당 Workflow를 업데이트하며, 사용자가 편집할 수 있는 Workflow만 변경합니다.
 - 다섯 번의 테스트 실행을 모두 소진하면 어시스턴트는 멈추고 무엇이 여전히 실패하는지 설명합니다.
 
-Credential은 UI에 남아 있습니다. `heym_chat`은 Credential을 나열, 선택 또는 생성하지 않습니다. Workflow를 구축하거나 편집할 때 Credential이 필요한 새 노드는 비워 두며, 응답에서 해당 노드의 이름을 알려주므로 편집기에서 설정할 수 있습니다.
-
 데이터 테이블은 다릅니다. 테이블에는 비밀이 담기지 않으므로, `heym_chat`은 테이블을 나열하고, Workflow가 어느 테이블을 사용해야 하는지 묻고, 열과 함께 새 테이블을 생성할 수 있습니다. 행을 읽거나 쓰지는 않습니다.
+
+### Credentials
+
+`heym_chat`은 Chat 탭과 동일하게 이름과 유형별로 사용자가 소유한 credential과 공유된 credential을 확인합니다. 구축하는 Workflow에 credential이 필요한 경우 결과에서 어떤 것을 사용할지 질문합니다. 동일한 `conversation_id`로 응답하십시오.
+
+credential을 추가하거나 소유한 credential을 업데이트하려면 어시스턴트가 Heym 페이지(`/credentials/setup/<id>`)에서 Heym의 credential 양식을 엽니다. 거기서 Heym에 로그인하고 키를 입력하거나 계정을 연결한 후 저장을 누릅니다. 값은 Heym으로 직접 전달됩니다. MCP 클라이언트와 해당 모델은 credential의 이름과 유형만 알게 됩니다. MCP 클라이언트에 키를 붙여넣지 마십시오. 대신 양식을 요청하십시오.
+
+| 클라이언트 | 동작 |
+|------------|------|
+| MCP URL 도출 지원 | 클라이언트가 Heym 페이지를 열도록 요청합니다. 양식을 작성하는 동안 최대 10분 동안 대기한 다음 새 credential로 계속 진행합니다. |
+| 기타 모든 클라이언트 | 결과에 링크가 포함되며 `wait_for_credential_form`을 사용하여 `heym_chat`을 다시 호출하도록 요청합니다. 해당 호출은 양식을 작성하는 동안 최대 5분 동안 대기한 후 대화를 재개합니다. 클라이언트가 기다리지 않는 경우 양식을 저장하고 동일한 `conversation_id`로 회신하십시오. 다음 호출에서 양식이 저장되었는지와 생성된 credential을 인식합니다. |
+
+페이지는 요청을 시작한 Heym 계정에 대해서만 열리므로 전달된 링크는 다른 사람에게 유용하지 않습니다. 양식은 24시간 동안 열려 있으며 페이지에서 거부할 수 있습니다. 저장하거나 거부하면 Chat 탭 대화의 단계에 결과가 표시됩니다.
+
 
 ### Credential 및 모델
 
@@ -78,12 +108,15 @@ Credential은 UI에 남아 있습니다. `heym_chat`은 Credential을 나열, �
 
 둘 중 하나라도 누락되면 도구는 여전히 `tools/list`에 나타나지만, 각 호출은 이 탭에서 설정을 완료하라는 오류를 반환합니다.
 
+
+`heym_chat`이 구축하는 Workflow의 LLM 및 Agent 노드는 공유 credential을 포함하여 이 credential과 모델에서 실행되므로 추가 설정 단계 없이 테스트 실행이 작동합니다. `heym_chat`이 Workflow를 편집할 때 이미 credential이 있는 LLM 및 Agent 노드는 해당 모델과 함께 이를 유지합니다.
 ### 인수 및 이력
 
 | 인수 | 필수 | 설명 |
 |----------|----------|-------------|
 | `message` | 예 | 자연어로 된 지시 또는 질문입니다. |
 | `conversation_id` | 아니오 | 이전 `heym_chat` 결과의 `conversation_id`로, 해당 스레드를 이어갑니다. |
+| `wait_for_credential_form` | 아니요 | `conversation_id` 사용 시: 스레드가 연 credential 양식을 사용자가 저장하거나 거부할 때까지 대기한 후 `message`를 전송합니다. |
 
 모든 호출은 일반 대화로 [Chat 탭](./chat-tab.md) 이력에 기록되며, 대화 목록에서 플러그 아이콘으로 표시됩니다. 메시지, 도구 카드 및 명확화 일시 중지는 직접 시작한 대화와 똑같이 보이며, 브라우저에서 스레드를 열고 계속 대화할 수 있습니다. 각 결과는 `conversation_id`를 반환하므로 MCP 클라이언트는 매 호출마다 새 스레드를 여는 대신 동일한 스레드를 이어갈 수 있습니다.
 

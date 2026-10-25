@@ -36,6 +36,21 @@ Fiecare workflow poate fi expus ca instrument MCP:
 
 Cardurile workflow-urilor afișează descrierea și o previzualizare a numelor câmpurilor de intrare, astfel încât să puteți vedea ce așteaptă fiecare instrument înainte de a-l activa.
 
+
+### Rulări în coadă și heym_execution_status
+
+Un workflow cu o [limită de concurență](../reference/webhooks.md#concurrency-limit-and-queued-runs) poate fi ocupat atunci când un client îl apelează. Apelul returnează imediat un rezultat care nu este o eroare:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Clientul interoghează instrumentul `heym_execution_status` cu acel `execution_id`. Acesta returnează același corp ca și [URL-ul de stare](../reference/webhooks.md#status-url): `queued` cu poziția curentă, `running`, apoi `success` sau `error` cu ieșirile. Găsește doar rulările workflow-urilor expuse de același server. Instrumentul este afișat pe serverul implicit și pe fiecare server numit doar atâta timp cât cel puțin unul dintre workflow-urile sale are o limită de concurență. Când coada este plină, apelul returnează eroarea „Concurrency queue is full”.
 ## Instrumentul de chat Heym
 
 Secțiunea **Heym Capabilities** transformă motorul filei Chat într-un singur instrument MCP numit `heym_chat`. Activați-l pe serverul implicit, pe orice server denumit sau pe ambele — fiecare suprafață își păstrează propriul comutator și propria selecție de model.
@@ -49,6 +64,7 @@ Când este activ, `heym_chat` apare în `tools/list` alături de instrumentele w
 - Raportează ce rulează în acest moment: câte execuții sunt active, numele workflow-urilor lor, de cât timp rulează fiecare, nodul pe care se află în prezent fiecare și un link către rularea live
 - Listează board-uri, creează carduri și citește detaliile cardurilor în [fila Board](./board-tab.md)
 - Listează tabelele de date cu coloanele lor, creează altele noi și le conectează în workflow-urile pe care le construiește
+- Creați sau actualizați credențialele pe pagina dedicată Heym (consultați [Credențiale](#credențiale))
 - Citește echipele și variabilele globale și caută în documentație
 - Aprobă, editează sau refuză recenziile în așteptare human-in-the-loop
 
@@ -58,14 +74,28 @@ Capacitățile adăugate ulterior filei Chat devin disponibile automat prin `hey
 
 `heym_chat` rulează întotdeauna motorul Chat în modul build. Într-un singur apel, asistentul poate salva un workflow nou, îl poate rula cu intrări eșantion realiste, poate citi raportul rulării, poate repara ceea ce a eșuat și îl poate rula din nou, până la cinci rulări de test per apel. Când ultima rulare a ultimei salvări reușește, acesta încheie cu un rezumat de o propoziție, iar răspunsul se termină cu `Verified: the latest test run of the saved workflow passed.`
 
+Când un apel creează sau editează un workflow, răspunsul listează fiecare dintre ele cu linkul său complet către editor, cum ar fi `https://heym.example.com/workflows/<id>`, iar linkurile din răspunsul asistentului sunt, de asemenea, linkuri complete. Acestea folosesc adresa dvs. Heym configurată (`FRONTEND_URL`) și se deschid pentru persoanele conectate la Heym care au acces la acel workflow.
+
 - Rulările de test sunt rulări reale. Efectele lor secundare au loc și apar în istoricul rulărilor workflow-ului ca orice altă rulare.
 - Salvările urmează calea editorului: o modificare a grafului păstrează graful anterior în **Edit History** al workflow-ului.
 - Pentru a modifica un workflow construit anterior, continuați firul cu același `conversation_id`. Asistentul actualizează acel workflow în loc să creeze unul nou și modifică doar workflow-urile pe care le puteți edita.
 - Când cele cinci rulări de test sunt epuizate, asistentul se oprește și explică ce anume eșuează în continuare.
 
-Credențialele rămân în interfață: `heym_chat` nu le listează, nu le alege și nu le creează niciodată. Când construiește sau editează un workflow, nodurile noi care necesită o credențială sunt lăsate goale, iar răspunsul le numește, astfel încât să le puteți seta în editor.
-
 Tabelele de date sunt diferite. Un tabel nu conține secrete, astfel încât `heym_chat` poate lista tabelele dumneavoastră, poate întreba pe care ar trebui să îl utilizeze un workflow și poate crea unul nou cu coloanele sale. Nu citește și nu scrie niciodată rânduri.
+
+### Credențiale
+
+`heym_chat` vede credențialele pe care le dețineți și pe cele partajate cu dvs., după nume și tip, la fel ca fila Chat. Când un workflow pe care îl construiește are nevoie de o credențială, întreabă pe care să o folosească printr-o întrebare în rezultat. Răspundeți cu același `conversation_id`.
+
+Pentru a adăuga o credențială sau pentru a actualiza una proprie, asistentul deschide formularul de credențiale Heym pe o pagină Heym, `/credentials/setup/<id>`. Vă conectați acolo la Heym, introduceți cheia sau conectați contul și salvați. Valoarea merge direct la Heym: clientul MCP și modelul său află doar numele și tipul credențialei. Nu lipiți chei în clientul MCP; cereți în schimb formularul.
+
+| Client | Ce se întâmplă |
+|--------|----------------|
+| Suportă elicitarea URL MCP | Clientul vă solicită să deschideți pagina Heym. Apelul așteaptă în timp ce completați formularul, până la zece minute, apoi continuă cu noua credențială. |
+| Oricare altul | Rezultatul conține linkul și solicită clientului să apeleze din nou `heym_chat` cu `wait_for_credential_form`. Acel apel așteaptă până la cinci minute în timp ce completați formularul, apoi reia conversația. Dacă clientul nu așteaptă, salvați formularul și răspundeți cu același `conversation_id`; următorul apel va ști că formularul a fost salvat și ce credențială a creat. |
+
+Pagina se deschide doar pentru contul Heym care a inițiat cererea, astfel încât un link redirecționat este inutil pentru oricine altcineva. Un formular rămâne deschis timp de 24 de ore și îl puteți refuza de pe pagină. Odată ce îl salvați sau îl refuzați, pasul din conversația filei Chat arată rezultatul.
+
 
 ### Credențială și model
 
@@ -78,12 +108,15 @@ Tabelele de date sunt diferite. Un tabel nu conține secrete, astfel încât `he
 
 Dacă oricare dintre ele lipsește, instrumentul apare în continuare în `tools/list`, dar fiecare apel returnează o eroare care vă indică să finalizați configurarea în această filă.
 
+
+Nodurile LLM și Agent dintr-un workflow construit de `heym_chat` rulează pe această credențială și acest model, inclusiv o credențială partajată cu dvs., astfel încât rulările de testare să funcționeze fără un alt pas de configurare. Când `heym_chat` editează un workflow, nodurile LLM și Agent care au deja o credențială o păstrează împreună cu modelul lor.
 ### Argumente și istoric
 
 | Argument | Obligatoriu | Descriere |
 |----------|----------|-------------|
 | `message` | Da | Instrucțiunea sau întrebarea, în limbaj natural. |
 | `conversation_id` | Nu | Un `conversation_id` dintr-un rezultat `heym_chat` anterior, pentru a continua acel fir. |
+| `wait_for_credential_form` | Nu | Cu `conversation_id`: așteptați până când utilizatorul salvează sau refuză formularul de credențiale deschis de fir, apoi trimiteți `message`. |
 
 Fiecare apel este scris în istoricul [filei Chat](./chat-tab.md) ca o conversație normală, marcată cu o pictogramă de ștecher în lista de conversații. Mesajele, cardurile instrumentelor și pauzele de clarificare arată exact ca o conversație pe care ați început-o dumneavoastră, iar puteți deschide firul și continua discuția în browser. Fiecare rezultat returnează `conversation_id`-ul său, astfel încât clientul MCP să poată continua același fir în loc să deschidă unul nou la fiecare apel.
 

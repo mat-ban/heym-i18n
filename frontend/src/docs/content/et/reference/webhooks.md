@@ -108,6 +108,73 @@ Konfigureerige iga workflow jaoks: `rate_limit_requests` ja `rate_limit_window_s
 | `rate_limit_window_seconds` | Akna kestus sekundites |
 
 `test_run` päringud mööduvad rate limitingust.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Paralleelsuse limiit ja järjekorras käivitused
+
+Workflow saab piirata korraga toimuvate produktsioonikäivituste arvu. Lülitage sisse **Paralleelsuse limiit** workflow taseme **Properties** paneelil ja määrake **Maksimaalselt paralleelseid käivitusi**. Omanikud ja muutmisõigusega kaastöötajad saavad seda muuta. Limiit on vaikimisi välja lülitatud.
+
+Kui limiit on täis, ootavad uued käivitused FIFO-järjekorras (esimesena sisse, esimesena välja). See hõlmab kõiki produktsiooni sisenemispunkte: seda endpointi, [streaming endpointi](./sse-streaming.md), [Portali](./portal.md), [Quick Draweri](./quick-drawer.md), [MCP-d](../tabs/mcp-tab.md) ja kõiki [triggereid](./triggers.md). Redaktori enda testkäivitused algavad alati kohe ega võta vaba pesa. Päringu `test_run=true` saatmine ilma sisselogitud sessioonita, millel on õigus workflow avada, ei lähe järjekorrast mööda.
+
+| Seadistus | Kirjeldus |
+|---|---|
+| `concurrency_limit` | Korraga lubatud produktsioonikäivitused. `0` lülitab limiidi välja |
+| `concurrency_max_queue` | Valikuline. Korraga järjekorras lubatud käivituste arv. Tühi tähendab piiranguteta |
+| `concurrency_max_wait_seconds` | Valikuline. Käivitus, mis ootab kauem, märgitakse olekusse `expired`. Tühi tähendab piiramatut ooteaega |
+
+### 202 Accepted
+
+Kohe algav väljakutse käitub täpselt nii, nagu on kirjeldatud jaotises Vastuse formaat. Väljakutse, mis peab ootama, saab kohe vastuse `202 Accepted`, sõltumata päisest `X-Simple-Response`, koos päisega `Location`, mis viitab selle oleku URL-ile:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Väli | Kirjeldus |
+|---|---|
+| `queue.position` | Selle käivituse koht järjekorras, alates 1-st |
+| `queue.size` | Hetkel järjekorras ootavad käivitused |
+| `queue.running` | Hetkel pesa hõivavad käivitused |
+| `queue.limit` | Workflow paralleelsuse limiit |
+| `status_token` | Ainult anonüümsete workflow'de puhul. Tagastatakse ainult üks kord selles vastuses |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` vastab käivituse olekuga. Kutsuge seda välja samade mandaatidega, mis käivituse algatasid: sessiooni või JWT, [käivitustokeni](./execution-tokens.md) või workflow kohandatud päisega. Anonüümsel workflow'l pole kontrollitavaid volitusi, seega saatke 202 vastusest saadud `status_token` päises `X-Heym-Run-Token`. Tokenit ei loeta kunagi päringustringist. Vale või puuduv token saab vastuse `404`, täpselt nagu tundmatu täitmine.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Tähendus (käivitus, mis peab ootama paralleelsuse pesa, saab selle asemel [vastuse 202](#202-accepted)) |
+|---|---|
+| `queued` | Ootab vaba pesa; `queue` näitab positsiooni |
+| `running` | Omab vaba pesa ja seda täidetakse |
+| `success` / `error` | Lõpetatud; väljad `outputs` ja `error` on täidetud |
+| `pending` | Peatatud [inimese ülevaatuseks](./human-in-the-loop.md) |
+| `cancelled` | Tühistatud [Käivituste ajaloost](./execution-history.md) |
+| `expired` | Ootas kauem kui `concurrency_max_wait_seconds` ja seda ei käivitatud kunagi |
+
+Pärige iga paari sekundi tagant, kuni olek pole enam `queued` ega `running`. Järjekorras olev käivitus viiakse läbi ka siis, kui keegi selle olekut ei päri.
+
+### Järjekord on täis
+
+Kui `concurrency_max_queue` on määratud ja nii palju käivitusi juba ootab, lükatakse väljakutse tagasi veaga `429 Concurrency queue is full` ja kirje `queue_full` salvestatakse käivituste ajalukku. Midagi järjekorda ei lisata.
+
 ## Vastuse formaat
 
 Endpoint tagastab JSON-i:

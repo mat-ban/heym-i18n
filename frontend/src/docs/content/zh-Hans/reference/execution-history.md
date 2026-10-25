@@ -109,6 +109,8 @@
 - 取消后，运行中的条目会在下次刷新时消失；按 **Refresh** 可手动更新列表
 - 如果取消一个已经完成的运行，该请求将不执行任何操作
 
+等待[并发槽位](./webhooks.md#concurrency-limit-and-queued-runs)的运行会在同一区域列出，带有 **Queued 2/5** 标签、队列中的排位以及队列大小。由于尚未开始运行，它们没有 **Open live** 按钮；点击 **Cancel** 会将等待中的运行移出队列并记录为 `cancelled`。等待时间超过工作流最大等待时长的运行会被记录为 `expired`，因队列已满而被拒绝的运行则会被记录为 `queue_full`；两者在运行列表中都有专属徽章。
+
 实时 URL 为 `/workflows/{workflowId}/{executionId}`。观察者是只读的：离开编辑器只会断开该浏览器标签页的连接，绝不会停止 workflow。活动快照通过 PostgreSQL 共享，因此当 Trigger 和编辑器请求落在不同的后端 worker 上时，打开运行仍然有效。
 
 ## 崩溃恢复

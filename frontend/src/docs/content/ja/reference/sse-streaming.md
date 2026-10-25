@@ -25,12 +25,17 @@ Workflow は Server-Sent Events（SSE）を使用して、実行イベントを�
 
 | イベントタイプ | 送信されるタイミング | 主要フィールド |
 |------------|--------------------|------------|
-| `execution_started` | リクエストが受け入れられた直後 | `execution_id`、`server_now_ms` |
+| `queued` | Workflow が[同時実行制限](./webhooks.md#concurrency-limit-and-queued-runs)に達しています。実行の順番が変わるたびに再送信されます | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | リクエストが受け入れられた直後、またはキューに入った実行が開始されたとき | `execution_id`, `server_now_ms` |
 | `node_start` | ノードが実行を開始する直前 | `node_id`、`node_label`、`started_at_ms`、任意の `message` |
 | `node_retry` | ノードがリトライするとき | `node_id`、`attempt`、`max_attempts` |
 | `node_complete` | ノードが完了した後 | `node_id`、`node_label`、`status`、`output`、`execution_time_ms` |
 | `final_output` | Output ノードが早期に結果を返すとき | `node_label`、`output` |
 | `execution_complete` | workflow が終了した後 | `status`、`outputs`、`execution_time_ms` |
+
+### キューに入れられた実行
+
+Workflow が同時実行制限に達している場合、実行が待機している間ストリームは開いたまま維持され、`queued` イベントを送信します。キューに入れられた実行はバックグラウンドワーカー（場合によっては別のプロセス）で実行されるため、そのストリームには実行開始時の `execution_started` と終了時の `execution_complete` が含まれますが、その間の `node_start`、`node_complete`、またはトークンイベントは含まれません。その `execution_complete` には空の `node_results` が含まれます。ノードの詳細については、[実行履歴](./execution-history.md)で実行を開いてください。接続を閉じても、キューに入れられた実行はキャンセルされません。キューがいっぱいの場合、ストリームが開く前にリクエストは `429` で応答されます。
 
 ## ノードごとの開始メッセージ
 

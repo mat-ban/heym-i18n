@@ -25,12 +25,17 @@ Každý SSE rámec je JSON oddeľovaný novými riadkami s predponou `data: `.
 
 | Typ udalosti | Kedy sa vysiela | Kľúčové polia |
 |------------|--------------------|------------|
-| `execution_started` | Ihneď po prijatí požiadavky | `execution_id`, `server_now_ms` |
+| `queued` | Workflow dosiahol svoj [limit súbehu](./webhooks.md#concurrency-limit-and-queued-runs); odosiela sa znova pri každej zmene pozície spustenia | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Ihneď po prijatí požiadavky alebo pri spustení behu v rade | `execution_id`, `server_now_ms` |
 | `node_start` | Tesne predtým, než uzol začne vykonávanie | `node_id`, `node_label`, `started_at_ms`, voliteľné `message` |
 | `node_retry` | Keď uzol opakuje pokus | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Po dokončení uzla | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Keď výstupný uzol vráti výsledok predčasne | `node_label`, `output` |
 | `execution_complete` | Po skončení workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Spustenia v rade
+
+Keď workflow dosiahne svoj limit súbehu, stream zostáva otvorený a počas čakania spustenia odosiela udalosti `queued`. Spustenie zaradené do radu sa vykonáva na pozadí vo workeri, prípadne v inom procese, takže jeho stream nesie `execution_started` pri začiatku spustenia a `execution_complete` pri jeho dokončení, ale žiadne udalosti `node_start`, `node_complete` ani udalosti tokenov medzi tým. Jeho `execution_complete` má prázdne `node_results`; otvorte spustenie v [Histórii spustení](./execution-history.md) pre podrobnosti o uzloch. Uzatvorenie spojenia nezruší spustenie v rade. Keď je rad plný, požiadavka je zodpovedaná kódom `429` ešte pred otvorením streamu.
 
 ## Správy o spustení pre jednotlivé uzly
 

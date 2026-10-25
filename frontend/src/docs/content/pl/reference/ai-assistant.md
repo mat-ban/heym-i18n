@@ -148,7 +148,7 @@ Asystent AI jest oparty na **workflow DSL** (języku dziedzinowym), który opisu
    - Reguły użytkownika dołączone jako "User Custom Rules"
    - Bieżący JSON workflow, gdy edytowany jest istniejący workflow
    - Listę dostępnych workflow, jeśli używany jest węzeł Execute
-   - Nazwy, typy i identyfikatory własnych danych logowania (nigdy ich wartości)
+   - Nazwy, typy i identyfikatory danych logowania będących Twoją własnością lub Ci udostępnionych (nigdy ich wartości)
    - Nazwy, identyfikatory, opisy i kolumny tabel danych, których można użyć (nigdy ich wiersze)
 3. Model zwraca pojedynczy blok JSON workflow (z `nodes` i `edges`). Frontend parsuje go i stosuje na canvasie.
 

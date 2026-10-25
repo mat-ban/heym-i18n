@@ -18,7 +18,7 @@ Kredencialai saugo API raktus ir slaptažodžius, naudojamus workflow mazguose. 
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT prenumeratos prisijungimas (OAuth) arba Codex prieigos raktas vykdytojui, plius GitHub PAT saugyklos operacijoms |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go vartotojo API raktas (neprivalomas pagrindinis URL) vykdytojui, plius GitHub PAT saugyklos operacijoms |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub asmeninis prieigos raktas (PAT) GitHub API skambučiams, GitHub mazgo operacijoms ir MCP integracijoms |
-| [Jira](../nodes/jira-node.md) | Jira | Debesų el. pašto/API raktas arba Data Center vartotojo vardas/slaptažodis, Jira svetainės pagrindinis URL, diegimo režimas ir neprivaloma REST API versija |
+| [Jira](../nodes/jira-node.md) | Jira | Debesų el. pašto/API raktas, Data Center vartotojo vardas/slaptažodis arba asmeninis prieigos tokenas, Jira svetainės pagrindinis URL, diegimo režimas ir neprivaloma REST API versija |
 | [Linear](../nodes/linear-node.md) | Linear | Asmeninis API raktas arba OAuth2 komandoms, projektams, užduotims ir komentarams |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autentifikacija užklausoms |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token ir neprivalomas webhook slaptažodis |
@@ -57,7 +57,7 @@ Kai kurie mazgai leidžia naudoti išraiškas autentifikacijai. Naudokite [Expre
 
 Codex kredencialai tyčia yra neįtraukti į `$credentials`. Nesvarbu, ar prisijungiate su ChatGPT (prenumerata, be mokėjimo už kiekvieną tokeną API) ar įklijuojate Codex `access_token`, tokenai perduodami tik vietiniam Codex vykdytojui. ChatGPT prisijungimo tokenai automatiškai atnaujinami, kai jie pasibaigia.
 
-Jira kredencialai taip pat yra neįtraukti į `$credentials`. [Jira mazgas](../nodes/jira-node.md) įkelia kredencialą pagal `credentialId` vykdymo metu. Norint atlikti individualias Jira REST užklausas, kurios nėra apimtos Jira mazgo, naudokite [HTTP mazgą](../nodes/http-node.md) su Jira Basic Auth (`email:api_token` Jira Cloud arba `username:password` Data Center / Server), pavyzdžiui, `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Taip pat galite naudoti [Header](../nodes/http-node.md) kredencialą su `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server asmeniniai prieigos tokenai ir Bearer auth dar nėra palaikomi Jira kredenciale.
+Jira kredencialai taip pat yra neįtraukti į `$credentials`. [Jira mazgas](../nodes/jira-node.md) įkelia kredencialą pagal `credentialId` vykdymo metu. Norint atlikti individualias Jira REST užklausas, kurios nėra apimtos Jira mazgo, naudokite [HTTP mazgą](../nodes/http-node.md) su Jira Basic Auth (`email:api_token` Jira Cloud arba `username:password` Data Center / Server), pavyzdžiui, `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Taip pat galite naudoti [Header](../nodes/http-node.md) kredencialą su `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server asmeniniams prieigos tokenams vietoj to siųskite `Authorization: Bearer <token>`; pati Jira kredencialas tai palaiko per savo **Personal Access Token** autentifikavimo režimą.
 
 | Kredencialo tipas | Vertė, atskleista `$credentials.Name` |
 |-------------------|---------------------------------------|

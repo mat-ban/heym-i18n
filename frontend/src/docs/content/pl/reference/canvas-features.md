@@ -147,3 +147,5 @@ Pełne szczegóły okna dialogowego znajdują się w sekcji [Webhooks](./webhook
 - [Execution History](./execution-history.md) – Minione uruchomienia
 - [Templates](../tabs/templates-tab.md) – Zapisuj i wykorzystuj ponownie workflow oraz węzły
 - [Contextual Showcase](./contextual-showcase.md) – Kompaktowy przewodnik po stronie dostępny w edytorze
+
+- [Współpraca na canvasie](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

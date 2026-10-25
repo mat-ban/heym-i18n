@@ -108,6 +108,73 @@ Se configurează per workflow: `rate_limit_requests` și `rate_limit_window_seco
 | `rate_limit_window_seconds` | Durata ferestrei în secunde |
 
 Cererile `test_run` ocolesc limitarea ratei.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Limita de concurență și rulările în coadă
+
+Un workflow poate limita numărul de execuții de producție care se desfășoară simultan. Activați **Limita de concurență** în panoul **Properties** la nivel de workflow și setați **Rulări simultane maxime**. Proprietarii și colaboratorii cu acces de editare pot modifica această valoare. Limita este dezactivată în mod implicit.
+
+Când limita este atinsă, noile rulări așteaptă într-o coadă FIFO (primul intrat, primul ieșit). Aceasta acoperă fiecare punct de intrare în producție: acest endpoint, [endpointul de streaming](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) și fiecare [trigger](./triggers.md). Rulările de test din editor pornesc întotdeauna imediat și nu ocupă un slot. Trimiterea parametrului `test_run=true` fără o sesiune autentificată care poate deschide workflow-ul nu ocolește coada.
+
+| Setare | Descriere |
+|---|---|
+| `concurrency_limit` | Execuții de producție permise simultan. `0` dezactivează limita |
+| `concurrency_max_queue` | Opțional. Rulări permise să aștepte în același timp. Gol înseamnă fără limită |
+| `concurrency_max_wait_seconds` | Opțional. O rulare care așteaptă mai mult este înregistrată ca `expired`. Gol înseamnă că așteaptă oricât este necesar |
+
+### 202 Accepted
+
+Un apel care pornește imediat se comportă exact așa cum este descris în Formatul răspunsului. Un apel care trebuie să aștepte primește imediat `202 Accepted`, indiferent de ce indică `X-Simple-Response`, cu un antet `Location` care indică spre URL-ul său de stare:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Câmp | Descriere |
+|---|---|
+| `queue.position` | Poziția acestei rulări în rând, începând de la 1 |
+| `queue.size` | Rulări care așteaptă în acest moment |
+| `queue.running` | Rulări care ocupă un slot în acest moment |
+| `queue.limit` | Limita de concurență a workflow-ului |
+| `status_token` | Doar pentru workflow-uri anonime. Returnat o singură dată, în acest răspuns |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` răspunde cu starea rulării. Apelați-l cu aceleași acreditări care au inițiat rularea: o sesiune sau JWT, un [token de execuție](./execution-tokens.md) sau antetul personalizat al workflow-ului. Un workflow anonim nu are acreditări de verificat, prin urmare trimiteți `status_token` din răspunsul 202 în antetul `X-Heym-Run-Token`. Tokenul nu este citit niciodată din query string. Un token greșit sau lipsă primește `404`, la fel ca o execuție necunoscută.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Semnificație (o rulare care trebuie să aștepte un slot de concurență primește în schimb [răspunsul 202](#202-accepted)) |
+|---|---|
+| `queued` | Așteaptă un slot; `queue` indică poziția |
+| `running` | Are un slot și este în execuție |
+| `success` / `error` | Finalizat; `outputs` și `error` sunt populate |
+| `pending` | Întrerupt pentru [revizuire umană](./human-in-the-loop.md) |
+| `cancelled` | Anulat din [Istoricul execuțiilor](./execution-history.md) |
+| `expired` | A așteptat mai mult de `concurrency_max_wait_seconds` și nu a rulat niciodată |
+
+Interogați la fiecare câteva secunde până când starea nu mai este `queued` sau `running`. O rulare în coadă se execută chiar dacă nimeni nu o interoghează.
+
+### Coadă plină
+
+Când este setat `concurrency_max_queue` și numărul respectiv de rulări așteaptă deja, apelul este respins cu `429 Concurrency queue is full` și o intrare `queue_full` în istoricul rulărilor. Nimic nu este plasat în coadă.
+
 ## Formatul răspunsului
 
 Endpoint-ul returnează JSON:

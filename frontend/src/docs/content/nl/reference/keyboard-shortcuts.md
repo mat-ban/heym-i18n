@@ -105,3 +105,5 @@ Deze sneltoetsen zijn beschikbaar in het dialoogvenster Uitvoeringsgeschiedenis 
 - [Workflow-structuur](./workflow-structure.md) – Node- en edge-indeling
 - [Execute-node](../nodes/execute-node.md) – Roept sub-workflows aan (`Ctrl + Shift + O`)
 - [Snelstart](../getting-started/quick-start.md) – Bouw uw eerste workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

@@ -32,6 +32,10 @@ Editörde yapılandırın: Workflow başlığındaki **Portal** düğmesi, porta
 3. **Yürütme**: `POST /api/portal/{slug}/execute` – Portal sohbet arayüzü bunu çağırır (veya etkinleştirildiğinde dahili olarak streaming varyantını); son kullanıcılar API'yi doğrudan çağırarak değil, sohbet arayüzü üzerinden etkileşime girer.
 4. **Durdurma**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Kullanıcı etkin bir portal çalışması sırasında **Durdur**'a bastığında istenir
 
+## Eşzamanlılık sınırı
+
+Workflow'un bir [eşzamanlılık sınırı](./webhooks.md#concurrency-limit-and-queued-runs) olduğunda ve tüm slotlar kullanımda olduğunda, bir portal mesajı hemen çalışmak yerine sırasını bekler. Çalıştırma başlayana kadar sohbet ilerleme satırında **Waiting in queue (2/5)** gösterilir, ardından her zamanki gibi yanıt gelir. Kullanıcı sayfayı kapatsa bile çalıştırma devam eder. **Stop**, bekleyen bir çalıştırmayı kuyruktan çıkarır. Kuyruk dolduğunda mesaj "Concurrency queue is full" hatasıyla başarısız olur. Kuyrukta bekleyen bir çalıştırma, yanıtını token token yayınlamaz; çalıştırma bittiğinde yanıtın tamamı görünür.
+
 ## Portal Çalışmalarında HITL
 
 Bir portal workflow'u, [Human-in-the-Loop](./human-in-the-loop.md) etkinleştirilmiş bir [Agent Düğümüne](../nodes/agent-node.md) ulaşırsa, portal yanıtı boş görünmek yerine bir inceleme bağlantısı gösterir.

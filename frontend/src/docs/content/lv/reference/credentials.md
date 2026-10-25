@@ -18,7 +18,7 @@ Akreditācijas dati glabā API atslēgas un noslēpumus, ko izmanto workflow mez
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT abonementa pierakstīšanās (OAuth) vai Codex piekļuves token runner, kā arī GitHub PAT repozitoriju darbībām |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go gateway API atslēga (neobligāts bāzes URL) runner, kā arī GitHub PAT repozitoriju darbībām |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personīgās piekļuves token (PAT) GitHub API izsaukumiem, GitHub mezgla darbībām un MCP integrācijām |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud e-pasts/API token vai Data Center lietotājvārds/parole, Jira vietnes bāzes URL, izvietošanas režīms un neobligāta REST API versija |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud e-pasts/API token, Data Center lietotājvārds/parole vai personīgās piekļuves tokens, Jira vietnes bāzes URL, izvietošanas režīms un neobligāta REST API versija |
 | [Linear](../nodes/linear-node.md) | Linear | Personīgā API atslēga vai OAuth2 komandām, projektiem, uzdevumiem un komentāriem |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autentifikācija pieprasījumiem |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token un neobligāts webhook noslēpums |
@@ -64,7 +64,7 @@ Daži mezgli atļauj izteiksmes autentifikācijai. Izmantojiet [Expression DSL](
 
 Codex akreditācijas dati apzināti ir izslēgti no `$credentials`. Neatkarīgi no tā, vai pierakstāties ar ChatGPT (abonements, bez API izmaksām par tokenu) vai ielīmējat Codex `access_token`, tokeni tiek nodoti tikai vietējam Codex izpildes procesam. ChatGPT pierakstīšanās tokeni tiek automātiski atjaunoti, kad tie noveco.
 
-Jira akreditācijas dati arī ir izslēgti no `$credentials`. [Jira mezgls](../nodes/jira-node.md) ielādē akreditācijas datus pēc `credentialId` izpildes laikā. Pielāgotiem Jira REST izsaukumiem, ko Jira mezgls neaptver, izmantojiet [HTTP mezglu](../nodes/http-node.md) ar Jira Basic Auth (`email:api_token` Jira Cloud vai `username:password` Data Center / Server), piemēram, `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Varat arī izmantot [Header](../nodes/http-node.md) akreditācijas datus ar `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server personīgās piekļuves tokeni un Bearer autentifikācija Jira akreditācijas datos vēl netiek atbalstīti.
+Jira akreditācijas dati arī ir izslēgti no `$credentials`. [Jira mezgls](../nodes/jira-node.md) ielādē akreditācijas datus pēc `credentialId` izpildes laikā. Pielāgotiem Jira REST izsaukumiem, ko Jira mezgls neaptver, izmantojiet [HTTP mezglu](../nodes/http-node.md) ar Jira Basic Auth (`email:api_token` Jira Cloud vai `username:password` Data Center / Server), piemēram, `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Varat arī izmantot [Header](../nodes/http-node.md) akreditācijas datus ar `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server personīgās piekļuves tokeniem tā vietā nosūtiet `Authorization: Bearer <token>`; pati Jira akreditācijas datu vienība to atbalsta, izmantojot tās **Personal Access Token** autentifikācijas režīmu.
 
 | Akreditācijas datu tips | Vērtība, kas pieejama `$credentials.Name` |
 |-----------------|--------------------------------------|

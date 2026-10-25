@@ -25,12 +25,17 @@ Her SSE çerçevesi, `data: ` öneki ile başlayan ve satır sonu ile ayrılmı�
 
 | Olay türü | Ne zaman yayılır | Anahtar alanlar |
 |------------|--------------------|------------|
-| `execution_started` | İstek kabul edildikten hemen sonra | `execution_id`, `server_now_ms` |
+| `queued` | Workflow [eşzamanlılık sınırındadır](./webhooks.md#concurrency-limit-and-queued-runs); çalıştırmanın yeri her değiştiğinde tekrar gönderilir | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | İstek kabul edildikten hemen sonra veya kuyruktaki bir çalıştırma başladığında | `execution_id`, `server_now_ms` |
 | `node_start` | Bir düğüm yürütülmeye başlamadan hemen önce | `node_id`, `node_label`, `started_at_ms`, isteğe bağlı `message` |
 | `node_retry` | Bir düğüm yeniden denendiğinde | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Bir düğüm tamamlandıktan sonra | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Bir Output düğümü erken döndüğünde | `node_label`, `output` |
 | `execution_complete` | Workflow sona erdikten sonra | `status`, `outputs`, `execution_time_ms` |
+
+### Kuyruktaki çalıştırmalar
+
+Workflow eşzamanlılık sınırına ulaştığında, çalıştırma beklerken akış açık kalır ve `queued` olaylarını gönderir. Kuyruğa alınan bir çalıştırma arka plan worker'ında (muhtemelen başka bir süreçte) yürütülür, bu nedenle akışı çalıştırma başladığında `execution_started` ve bittiğinde `execution_complete` taşır, ancak arada hiçbir `node_start`, `node_complete` veya token olayı taşımaz. `execution_complete` olayı boş bir `node_results` içerir; node ayrıntıları için çalıştırmayı [Çalıştırma Geçmişi](./execution-history.md) bölümünde açın. Bağlantıyı kapatmak kuyruğa alınmış bir çalıştırmayı iptal etmez. Kuyruk dolu olduğunda, akış açılmadan önce istek `429` ile yanıtlanır.
 
 ## Düğüm Başına Başlangıç Mesajları
 

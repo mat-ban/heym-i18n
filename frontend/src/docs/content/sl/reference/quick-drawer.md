@@ -52,6 +52,8 @@ Po začetku izvajanja predal prikazuje:
 
 `v čakanju` pomeni, da workflow čaka na kasnejšo akcijo, kot je človeški pregled.
 
+Zagoni iz Hitrega predala (Quick Drawer) so produkcijski zagoni, zato jih lahko workflow z [omejitvijo sočasnosti](./webhooks.md#concurrency-limit-and-queued-runs) postavi na čakanje. Medtem ko je zagon v vrsti, status prikazuje **Waiting in queue (2/5)**; ko se zagon začne, se spremeni v "running" in ob zaključku prikaže rezultat, brez postopnega napredka po korakih. Zagon, ki je potekel v čakalni vrsti ali bil med čakanjem preklican, se konča kot `error`.
+
 Zagon z datoteko poteka prek enkratne povezave za nalaganje triggerja: predal od workflowa zahteva povezavo, nanjo naloži datoteko in prikaže rezultat, ko se nalaganje zaključi. Zagoni z datoteko prikažejo končni status in izhode, ne pa tudi napredka po korakih, v zgodovini pa so prav tako označeni s `Quick Drawer`. Izbrana datoteka se po vsakem zagonu počisti, saj ena povezava sprejme le eno datoteko.
 
 ## Shramba Brskalnika

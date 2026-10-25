@@ -148,7 +148,7 @@ Asistentul AI este alimentat de un **workflow DSL** (limbaj specific domeniului)
    - Regulile dvs. de utilizator adăugate ca "User Custom Rules"
    - JSON-ul workflow-ului curent atunci când editați un workflow existent
    - Lista workflow-urilor disponibile dacă utilizați nodul Execute
-   - Numele, tipurile și ID-urile acreditărilor dvs. (niciodată valorile acestora)
+   - Numele, tipurile și ID-urile acreditărilor pe care le dețineți sau care v-au fost partajate (niciodată valorile acestora)
    - Numele, ID-urile, descrierile și coloanele tabelelor de date pe care le puteți utiliza (niciodată rândurile acestora)
 3. Modelul returnează un singur bloc JSON de workflow (cu `nodes` și `edges`). Frontend-ul îl analizează și îl aplică pe canvas.
 

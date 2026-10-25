@@ -36,6 +36,21 @@ Heymは2つのモードをサポートしています。すべてのMCP対応Wor
 
 Workflowカードには説明と入力フィールド名のプレビューが表示されるため、有効化する前に各ツールが何を期待するかを確認できます。
 
+
+### キューイングされた実行と heym_execution_status
+
+[同時実行制限](../reference/webhooks.md#concurrency-limit-and-queued-runs)が設定された Workflow は、クライアントが呼び出したときにビジー状態になる場合があります。その場合、呼び出しはエラーではない結果を直ちに返します：
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+クライアントはその `execution_id` を指定して `heym_execution_status` ツールをポーリングします。[ステータス URL](../reference/webhooks.md#status-url) と同じボディを返します：現在のキュー位置を示す `queued`、`running`、そして出力を含む `success` または `error` です。同じサーバーが公開している Workflow の実行のみを検索します。このツールは、デフォルトサーバーおよび各名前付きサーバーにおいて、少なくとも1つの Workflow に同時実行制限が設定されている間のみ一覧に表示されます。キューがいっぱいの場合、呼び出しは "Concurrency queue is full" エラーを返します。
 ## Heymチャットツール
 
 **Heym Capabilities**セクションでは、Chatタブのエンジンを`heym_chat`という単一のMCPツールに変換します。デフォルトサーバー、任意の名前付きサーバー、またはその両方で有効化できます。それぞれのサーフェスが独自のトグルとモデル選択を保持します。
@@ -49,6 +64,7 @@ Workflowカードには説明と入力フィールド名のプレビューが表
 - 現在実行中の内容のレポート：アクティブな実行数、Workflow名、各実行の経過時間、現在処理中のノード、ライブ実行へのリンク
 - [Boardタブ](./board-tab.md)でのボード一覧、カード作成、カード詳細の読み取り
 - データテーブルの列一覧表示、新規作成、および構築するWorkflowへの組み込み
+- Heym 専用ページで Credential を作成または更新する（[Credentials](#credentials) を参照）
 - チームとグローバル変数の読み取り、およびドキュメントの検索
 - 保留中のhuman-in-the-loopレビューの承認、編集、拒否
 
@@ -58,14 +74,28 @@ Chatタブに後から追加された機能は、自動的に`heym_chat`から�
 
 `heym_chat` は常にビルドモード（build mode）で Chat エンジンを実行します。1 回の呼び出しで、アシスタントは新しい Workflow を保存し、現実的なサンプル入力で実行し、実行レポートを読み取り、失敗した箇所を修正して再実行するプロセスを、1 回の呼び出しにつき最大 5 回のテスト実行まで行えます。最新の保存に対する最新の実行が成功すると、1 文の要約で締めくくり、返信の末尾は `Verified: the latest test run of the saved workflow passed.` となります。
 
+呼び出しによって Workflow が作成または編集されると、返信には `https://heym.example.com/workflows/<id>` などの完全なエディタリンク付きで各 Workflow が一覧表示され、アシスタントの回答内のリンクも完全なリンクになります。これらは設定された Heym アドレス (`FRONTEND_URL`) を使用し、Heym にログインしていてその Workflow にアクセスできるユーザー向けに開きます。
+
 - テスト実行は実際の実行です。副作用も実際に発生し、他の実行と同様に Workflow の実行履歴に表示されます。
 - 保存はエディターの経路を通ります。グラフを変更すると、以前のグラフは Workflow の **Edit History** に保持されます。
 - 以前に構築した Workflow を変更するには、同じ `conversation_id` でスレッドを続行してください。アシスタントは新しい Workflow を作成する代わりにその Workflow を更新し、あなたが編集可能な Workflow のみを変更します。
 - 5 回のテスト実行を使い切ると、アシスタントは停止し、何がまだ失敗しているかを説明します。
 
-CredentialはUIに留まります。`heym_chat`がCredentialを一覧表示、選択、作成することはありません。Workflowを構築または編集する際、Credentialを必要とする新しいノードは空のままにされ、返信でその名前が示されるため、エディタで設定できます。
-
 データテーブルは異なります。テーブルには秘密情報が含まれないため、`heym_chat`はテーブルの一覧表示、Workflowがどのテーブルを使用すべきかの問い合わせ、列を指定した新規テーブルの作成を行えます。行の読み取りや書き込みは行いません。
+
+### Credentials
+
+`heym_chat` は、Chat タブと同様に、自身が所有する Credential および共有された Credential を名前とタイプで認識します。構築する Workflow が Credential を必要とする場合、結果内の質問としてどれを使用するかを尋ねます。同じ `conversation_id` で回答してください。
+
+Credential を追加するか、所有しているものを更新する場合、アシスタントは Heym ページ `/credentials/setup/<id>` で Credential フォームを開きます。そこで Heym にサインインし、キーを入力するかアカウントを接続して保存をクリックします。値は Heym に直接送信されます。MCP クライアントとそのモデルは Credential の名前とタイプのみを認識します。MCP クライアントにキーを貼り付けないでください。代わりにフォームをリクエストしてください。
+
+| クライアント | 動作 |
+|------------|------|
+| MCP URL エリシテーションに対応 | クライアントが Heym ページを開くよう促します。フォームを入力する間、最大10分間待機し、新しい Credential で処理を続行します。 |
+| それ以外 | 結果にリンクが含まれ、`wait_for_credential_form` を指定して再度 `heym_chat` を呼び出すようクライアントに要求します。その呼び出しはフォーム入力中に最大5分間待機し、その後会話を再開します。クライアントが待機しない場合は、フォームを保存してから同じ `conversation_id` で返信してください。次の呼び出しでフォームが保存されたことと作成された Credential が認識されます。 |
+
+ページはリクエストを開始した Heym アカウント専用に開くため、転送されたリンクは他の誰にも使用できません。フォームは24時間有効で、ページから辞退することもできます。保存または辞退すると、Chat タブの会話内のステップに結果が表示されます。
+
 
 ### Credentialとモデル
 
@@ -78,12 +108,15 @@ CredentialはUIに留まります。`heym_chat`がCredentialを一覧表示、�
 
 いずれかが欠けている場合でも、ツールは`tools/list`に表示されますが、各呼び出しはこのタブでセットアップを完了するよう促すエラーを返します。
 
+
+`heym_chat` が構築する Workflow 内の LLM ノードおよび Agent ノードは、共有 Credential を含め、この Credential とモデルで実行されるため、追加のセットアップ手順なしでテスト実行が機能します。`heym_chat` が Workflow を編集する場合、すでに Credential を持つ LLM ノードおよび Agent ノードは、モデルとともにそれを維持します。
 ### 引数と履歴
 
 | 引数 | 必須 | 説明 |
 |----------|----------|-------------|
 | `message` | はい | 自然言語による指示または質問。 |
 | `conversation_id` | いいえ | 以前の`heym_chat`の結果から得た`conversation_id`。そのスレッドを継続するために使用します。 |
+| `wait_for_credential_form` | いいえ | `conversation_id` と共に指定：スレッドが開いた Credential フォームをユーザーが保存または辞退するまで待機してから `message` を送信します。 |
 
 すべての呼び出しは、通常の会話として[Chatタブ](./chat-tab.md)の履歴に記録され、会話一覧ではプラグアイコンで示されます。メッセージ、ツールカード、確認のための一時停止は、自分で開始した会話とまったく同じように表示され、スレッドを開いてブラウザ上で会話を続けることもできます。各結果は`conversation_id`を返すため、MCPクライアントは呼び出しごとに新しいスレッドを開くのではなく、同じスレッドを継続できます。
 

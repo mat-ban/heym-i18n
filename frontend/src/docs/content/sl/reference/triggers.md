@@ -85,6 +85,20 @@ Discord pošilja interakcijske webhooke na `POST /api/discord/webhook/{node_id}`
 
 Porabnik RabbitMQ se zažene, ko se vodilni delavec inicializira. Workflows z `rabbitmq` vozlišči, kjer `rabbitmqOperation === "receive"`, pridobijo porabnika. Vhod vključuje `message_data` (telo, glave, routing_key itd.) in `triggered_by: "rabbitmq"`.
 
+## Omejitev sočasnosti
+
+Workflow z [omejitvijo sočasnosti](./webhooks.md#concurrency-limit-and-queued-runs) uvrsti produkcijske zagone iz vsake zgornje vhodne točke v čakalno vrsto, ko so njegove reže polne, po načelu prvi noter, prvi ven, na vseh instancah. Kako klicatelj izve za rezultat, je odvisno od vhodne točke:
+
+| Vhodna točka | Medtem ko zagon čaka |
+|---|---|
+| Webhook / API | `202 Accepted` z `execution_id` in URL-jem stanja |
+| SSE streaming, Quick Drawer, Portal chat | Pretok ostane odprt in pošilja dogodke `queued` |
+| Portal without streaming | Zahteva čaka na rezultat |
+| MCP | Rezultat `queued` za poizvedovanje z `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger čaka na rezultat tako dolgo, kot bi čakal zagon na drugi [instanci](./cluster.md). Zagon se v vsakem primeru izvede in zapiše v zgodovino |
+
+Ko je čakalna vrsta polna, se zagon ne začne in zgodovina ga zabeleži kot `queue_full`. Testni zagoni v urejevalniku, klici pod-workflowov (vozlišče [Execute](../nodes/execute-node.md) in orodja agenta za workflow), [Evals](../tabs/evals-tab.md), testni zagoni v načinu gradnje klepeta ter nadaljevanja po pregledu se nikoli ne uvrstijo v čakalno vrsto. Zagoni kartic na [Board](../tabs/board-tab.md), zagoni [File Upload](../nodes/file-upload-trigger-node.md), zagoni, ki jih sproži orodje run-workflow pomočnika AI, in opozorilni obvestilni workflowi se prav tako zaženejo brez čakanja na prosto režo.
+
 ## trigger_source
 
 Zgodovina izvajanja beleži `trigger_source` za vsak vhodni točki:

@@ -36,6 +36,21 @@ Každý workflow lze zpřístupnit jako nástroj MCP:
 
 Karty workflows zobrazují popis a náhled názvů vstupních polí, takže před povolením vidíte, co každý nástroj očekává.
 
+
+### Spuštění ve frontě a heym_execution_status
+
+Workflow s [limitem souběhu](../reference/webhooks.md#concurrency-limit-and-queued-runs) může být zaneprázdněno, když jej klient zavolá. Volání pak okamžitě vrátí výsledek, který není chybou:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klient se dotazuje nástroje `heym_execution_status` s tímto `execution_id`. Vrací stejné tělo jako [stavová URL](../reference/webhooks.md#status-url): `queued` s aktuální pozicí, `running` a poté `success` nebo `error` s výstupy. Nalezne pouze běhy workflows vystavených stejným serverem. Nástroj je uveden na výchozím serveru a na každém pojmenovaném serveru pouze tehdy, pokud alespoň jedno z jeho workflows má limit souběhu. Když je fronta plná, volání vrátí chybu „Concurrency queue is full“.
 ## Nástroj Heym chat
 
 Sekce **Heym Capabilities** mění engine karty Chat na jediný nástroj MCP s názvem `heym_chat`. Můžete jej povolit na výchozím serveru, na kterémkoli pojmenovaném serveru nebo na obou — každé rozhraní má vlastní přepínač a volbu modelu.
@@ -49,6 +64,7 @@ Když je povolen, `heym_chat` se objevuje v `tools/list` vedle nástrojů vašic
 - Podávat přehled o tom, co právě běží: kolik spuštění je aktivních, jejich názvy workflows, jak dlouho každé běží, na kterém uzlu se právě nachází, a odkaz na živý běh
 - Vypisovat boards, vytvářet karty a číst detail karty na [kartě Board](./board-tab.md)
 - Vypisovat vaše datové tabulky s jejich sloupci, vytvářet nové a zapojovat je do workflows, které sestavuje
+- Vytvořit nebo aktualizovat své credentials na vyhrazené stránce Heym (viz [Credentials](#credentials))
 - Číst týmy a globální proměnné a prohledávat dokumentaci
 - Schvalovat, upravovat nebo odmítat čekající human-in-the-loop recenze
 
@@ -58,14 +74,28 @@ Schopnosti přidané na kartu Chat později se automaticky zpřístupní přes `
 
 `heym_chat` vždy spouští engine Chatu v režimu sestavení (build mode). V jediném volání může asistent uložit nový workflow, spustit jej s realistickými vzorovými vstupy, přečíst zprávu o běhu, opravit to, co selhalo, a spustit jej znovu – až pět testovacích běhů na jedno volání. Když poslední běh posledního uložení projde, skončí jednovětým shrnutím a odpověď končí textem `Verified: the latest test run of the saved workflow passed.`
 
+Když volání vytvoří nebo upraví workflow, odpověď zobrazí každé z nich s plným odkazem do editoru, jako například `https://heym.example.com/workflows/<id>`, a odkazy v odpovědi asistenta jsou také úplné. Používají vaši nakonfigurovanou adresu Heym (`FRONTEND_URL`) a otevřou se uživatelům přihlášeným do Heym, kteří mají k tomuto workflow přístup.
+
 - Testovací běhy jsou skutečné běhy. Jejich vedlejší účinky se provedou a zobrazí se v historii běhů daného workflow jako každý jiný běh.
 - Uložení probíhají cestou editoru: změna grafu zachová předchozí graf v historii úprav (**Edit History**) daného workflow.
 - Chcete-li změnit workflow, který asistent vytvořil dříve, pokračujte ve vlákně se stejným `conversation_id`. Asistent tento workflow aktualizuje, místo aby vytvářel nový, a mění pouze workflows, které můžete upravovat.
 - Když je vyčerpáno všech pět testovacích běhů, asistent se zastaví a vysvětlí, co stále selhává.
 
-Přihlašovací údaje zůstávají v UI: `heym_chat` je nikdy nevypisuje, nevybírá ani nevytváří. Když sestavuje nebo upravuje workflow, nové uzly vyžadující přihlašovací údaj zůstanou prázdné a odpověď je pojmenuje, abyste je mohli nastavit v editoru.
-
 Datové tabulky jsou jiné. Tabulka neobsahuje žádné tajemství, takže `heym_chat` může vypisovat vaše tabulky, zeptat se, kterou má workflow použít, a vytvořit novou s jejími sloupci. Nikdy nečte ani nezapisuje řádky.
+
+### Credentials
+
+`heym_chat` vidí credentials, které vlastníte i které s vámi někdo sdílí, podle názvu a typu, stejně jako karta Chat. Když workflow, které staví, potřebuje credential, zeptá se ve výsledku, které použít. Odpovězte se stejným `conversation_id`.
+
+Chcete-li přidat credential nebo aktualizovat vlastní, asistent otevře formulář pro credentials Heym na stránce Heym, `/credentials/setup/<id>`. Zde se přihlásíte do Heym, zadáte klíč nebo propojíte účet a uložíte. Hodnota jde přímo do Heym: MCP klient a jeho model se dozví pouze název a typ credential. Nevkládejte klíče do klienta MCP; místo toho požádejte o formulář.
+
+| Klient | Co se stane |
+|--------|-------------|
+| Podporuje MCP URL elicitaci | Klient vás vyzve k otevření stránky Heym. Volání čeká na vyplnění formuláře (až deset minut) a poté pokračuje s novým credential. |
+| Jakýkoli jiný | Výsledek obsahuje odkaz a žádá klienta, aby znovu zavolal `heym_chat` s parametrem `wait_for_credential_form`. Toto volání čeká až pět minut při vyplňování formuláře a poté pokračuje v konverzaci. Pokud klient nečeká, uložte formulář a odpovězte se stejným `conversation_id`; další volání ví, že formulář byl uložen a jaký credential vytvořil. |
+
+Stránka se otevře pouze pro účet Heym, který požadavek zahájil, takže přeposlaný odkaz je pro kohokoli jiného nepoužitelný. Formulář zůstává otevřený 24 hodin a lze jej ze stránky odmítnout. Jakmile jej uložíte nebo odmítnete, krok v konverzaci na kartě Chat zobrazí výsledek.
+
 
 ### Přihlašovací údaj a model
 
@@ -78,12 +108,15 @@ Datové tabulky jsou jiné. Tabulka neobsahuje žádné tajemství, takže `heym
 
 Pokud některý z nich chybí, nástroj se stále objevuje v `tools/list`, ale každé volání vrátí chybu s výzvou k dokončení nastavení na této kartě.
 
+
+Uzly LLM a Agent ve workflow vytvořeném `heym_chat` běží na tomto credential a modelu, včetně credentials sdílených s vámi, takže testovací běhy fungují bez dalších kroků nastavení. Když `heym_chat` upravuje workflow, uzly LLM a Agent, které již credential mají, si jej ponechají spolu se svým modelem.
 ### Argumenty a historie
 
 | Argument | Povinný | Popis |
 |----------|----------|-------------|
 | `message` | Ano | Instrukce nebo otázka v přirozeném jazyce. |
 | `conversation_id` | Ne | `conversation_id` z předchozího výsledku `heym_chat` pro pokračování v daném vlákně. |
+| `wait_for_credential_form` | Ne | S `conversation_id`: počkat, dokud uživatel neuloží nebo neodmítne formulář credential otevřený vláknem, a poté odeslat `message`. |
 
 Každé volání se zapíše do historie vaší [karty Chat](./chat-tab.md) jako běžná konverzace označená ikonou zástrčky v seznamu konverzací. Zprávy, karty nástrojů a pauzy pro upřesnění vypadají přesně jako konverzace, kterou jste zahájili sami, a můžete vlákno otevřít a pokračovat v prohlížeči. Každý výsledek vrací své `conversation_id`, takže MCP klient může pokračovat ve stejném vlákně místo otevírání nového při každém volání.
 

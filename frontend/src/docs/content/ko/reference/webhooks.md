@@ -109,6 +109,73 @@ workflow별로 구성합니다: `rate_limit_requests`와 `rate_limit_window_seco
 
 `test_run` 요청은 rate limiting을 우회합니다.
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## 동시 실행 제한 및 대기열 실행
+
+워크플로우는 한 번에 실행되는 프로덕션 실행 수를 제한할 수 있습니다. 워크플로우 수준의 **Properties** 패널에서 **동시 실행 제한**을 켜고 **최대 동시 실행 수**를 설정합니다. 소유자와 편집 권한이 있는 공동 작업자가 변경할 수 있습니다. 제한은 기본적으로 꺼져 있습니다.
+
+제한에 도달하면 새 실행은 FIFO(선입선출) 큐에서 대기합니다. 이는 모든 프로덕션 진입점을 포괄합니다: 이 endpoint, [스트리밍 Endpoint](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) 및 모든 [trigger](./triggers.md). 에디터 자체의 테스트 실행은 항상 즉시 시작되며 슬롯을 차지하지 않습니다. 워크플로우를 열 수 있는 로그인된 세션 없이 `test_run=true`를 보내도 대기열을 건너뛸 수 없습니다.
+
+| 설정 | 설명 |
+|---|---|
+| `concurrency_limit` | 한 번에 허용되는 프로덕션 실행 수입니다. `0`은 제한을 끕니다 |
+| `concurrency_max_queue` | 선택 사항입니다. 한 번에 대기할 수 있는 실행 수입니다. 비어 있으면 제한이 없습니다 |
+| `concurrency_max_wait_seconds` | 선택 사항입니다. 더 오래 대기하는 실행은 `expired`로 기록됩니다. 비어 있으면 필요한 만큼 대기합니다 |
+
+### 202 Accepted
+
+즉시 시작되는 호출은 응답 형식에 설명된 대로 정확하게 동작합니다. 대기해야 하는 호출은 `X-Simple-Response` 내용과 관계없이 상태 URL을 가리키는 `Location` 헤더와 함께 즉시 `202 Accepted`를 받습니다:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| 필드 | 설명 |
+|---|---|
+| `queue.position` | 큐에서 이 실행의 순서(1부터 시작) |
+| `queue.size` | 현재 대기 중인 실행 수 |
+| `queue.running` | 현재 슬롯을 차지하고 있는 실행 수 |
+| `queue.limit` | 워크플로우의 동시 실행 제한 |
+| `status_token` | 익명 워크플로우 전용입니다. 이 응답에서 한 번만 반환됩니다 |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status`는 실행 상태로 응답합니다. 세션 또는 JWT, [실행 토큰](./execution-tokens.md) 또는 워크플로우의 커스텀 헤더 등 실행을 시작한 것과 동일한 자격 증명으로 호출하세요. 익명 워크플로우에는 확인할 자격 증명이 없으므로 202의 `status_token`을 `X-Heym-Run-Token` 헤더로 보냅니다. 토큰은 쿼리 문자열에서 절대 읽지 않습니다. 잘못되었거나 누락된 토큰은 알 수 없는 실행과 마찬가지로 `404`를 받습니다.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | 의미 (동시 실행 슬롯을 기다려야 하는 실행은 대신 [202 응답](#202-accepted)을 받습니다) |
+|---|---|
+| `queued` | 슬롯을 대기 중입니다. `queue`가 위치를 보여줍니다 |
+| `running` | 슬롯을 확보하여 실행 중입니다 |
+| `success` / `error` | 완료되었습니다. `outputs` 및 `error`가 채워집니다 |
+| `pending` | [휴먼 검토](./human-in-the-loop.md)를 위해 일시 정지되었습니다 |
+| `cancelled` | [실행 기록](./execution-history.md)에서 취소되었습니다 |
+| `expired` | `concurrency_max_wait_seconds`보다 오래 대기했으며 실행되지 않았습니다 |
+
+상태가 `queued` 또는 `running`이 아닐 때까지 몇 초마다 폴링하세요. 큐에 들어간 실행은 아무도 폴링하지 않더라도 실행됩니다.
+
+### 큐 가득 참
+
+`concurrency_max_queue`가 설정되어 있고 이미 해당 수만큼의 실행이 대기 중인 경우, 호출은 `429 Concurrency queue is full` 및 실행 기록의 `queue_full` 항목과 함께 거부됩니다. 대기열에 아무것도 추가되지 않습니다.
+
 ## 응답 형식
 
 Endpoint는 JSON을 반환합니다:

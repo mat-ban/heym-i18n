@@ -148,3 +148,5 @@ Xem [Webhooks](./webhooks.md#run-with-curl-dialog) để biết chi tiết đầ
 - [Execution History](./execution-history.md) – Các lần chạy trước đó
 - [Templates](../tabs/templates-tab.md) – Lưu và tái sử dụng workflow và node
 - [Contextual Showcase](./contextual-showcase.md) – Hướng dẫn trang rút gọn có sẵn trong trình chỉnh sửa
+
+- [Cộng tác trên Canvas](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

@@ -18,7 +18,7 @@
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Вход с ChatGPT абонамент (OAuth) или Codex access token за runner-а, плюс GitHub PAT за операции с repository |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API ключ за OpenCode Go gateway (опционален base URL) за runner-а, плюс GitHub PAT за операции с repository |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) за GitHub API заявки, операции на GitHub node и MCP интеграции |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token или Data Center потребителско име/парола, base URL на Jira сайт, режим на внедряване и опционална REST API версия |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token, Data Center потребителско име/парола или personal access token, base URL на Jira сайт, режим на внедряване и опционална REST API версия |
 | [Linear](../nodes/linear-node.md) | Linear | Personal API ключ или OAuth2 за екипи, проекти, issues и коментари |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Удостоверяване за заявки |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token и опционална webhook тайна |
@@ -65,7 +65,7 @@ Jira, Linear, Supabase, Notion, Sentry и ClickHouse удостоверения�
 
 Codex удостоверенията са умишлено изключени от `$credentials`. Независимо дали влизате с ChatGPT (абонамент, без разход на API за token) или поставяте Codex `access_token`, token-ите се предават само на локалния процес на Codex runner. Token-ите за вход с ChatGPT се обновяват автоматично при изтичане.
 
-Jira удостоверенията също са изключени от `$credentials`. [Jira node](../nodes/jira-node.md) зарежда удостоверението чрез `credentialId` по време на изпълнение. За персонализирани Jira REST заявки, които не се покриват от Jira node, използвайте [HTTP node](../nodes/http-node.md) с Jira Basic Auth (`email:api_token` за Jira Cloud или `username:password` за Data Center / Server), например `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Може да използвате и [Header](../nodes/http-node.md) удостоверение с `Authorization: Basic <base64(user:secret)>`. Jira Data Center / Server personal access token-и и Bearer auth все още не се поддържат от Jira удостоверението.
+Jira удостоверенията също са изключени от `$credentials`. [Jira node](../nodes/jira-node.md) зарежда удостоверението чрез `credentialId` по време на изпълнение. За персонализирани Jira REST заявки, които не се покриват от Jira node, използвайте [HTTP node](../nodes/http-node.md) с Jira Basic Auth (`email:api_token` за Jira Cloud или `username:password` за Data Center / Server), например `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Може да използвате и [Header](../nodes/http-node.md) удостоверение с `Authorization: Basic <base64(user:secret)>`. За Jira Data Center / Server personal access token-и изпратете вместо това `Authorization: Bearer <token>`; самото Jira удостоверение поддържа това чрез своя режим на удостоверяване **Personal Access Token**.
 
 | Тип удостоверение | Стойност, предоставена на `$credentials.Name` |
 |-----------------|--------------------------------------|

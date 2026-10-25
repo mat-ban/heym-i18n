@@ -827,6 +827,22 @@
         "waiting": "Bekliyor",
         "neutral": "Nötr"
       }
+    },
+    "concurrencyLimit": "Eşzamanlılık sınırı",
+    "concurrencyLimitHelp": "Sınırı aşan üretim çalıştırmaları (Webhook'lar, Cron, MCP, Portal, Trigger'lar) bir FIFO kuyruğunda bekler. Düzenleyici test çalıştırmaları her zaman hemen başlar.",
+    "maxConcurrentRuns": "Maks. eşzamanlı çalıştırma",
+    "maxQueueSizeOptional": "Maks. kuyruk boyutu (isteğe bağlı)",
+    "emptyNoLimit": "Boş = sınır yok",
+    "maxWaitOptional": "Maks. bekleme (saniye, isteğe bağlı)",
+    "emptyWaitAsLong": "Boş = gerektiği kadar bekle",
+    "concurrencyQueueHelp": "Dolu bir kuyruk 429 ile yanıt verir. Maksimum bekleme süresinden daha uzun süre bekleyen bir çalıştırma süresi dolmuş olarak kaydedilir.",
+    "rag": {
+      "hybridSearch": "Hibrit Arama",
+      "hybridSearchHelp": "Vektör benzerliğini BM25 anahtar kelime eşleştirmesiyle birleştirin; böylece kimlikler, adlar ve hata kodları gibi tam terimler de bulunur.",
+      "hybridScore": "Hibrit puan (0-1)",
+      "similarityScore": "Benzerlik puanı",
+      "vectorSimilarity": "Vektör benzerliği",
+      "bm25Score": "BM25 puanı"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "AI'ya sor",
     "askAiTitle": "Bu çalıştırma hakkında Chat asistanına sorun",
-    "noNodeSpans": "Bu çalıştırma için düğüm span'i kaydedilmedi."
+    "noNodeSpans": "Bu çalıştırma için düğüm span'i kaydedilmedi.",
+    "queuedProgress": "Kuyrukta {position}/{size}"
   },
   "templates": {
     "useThisTemplate": "Bu Template'i Kullan",

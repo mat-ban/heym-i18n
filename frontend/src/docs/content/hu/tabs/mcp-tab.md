@@ -36,6 +36,21 @@ Minden workflow MCP-eszközként tehető elérhetővé:
 
 A workflow-kártyák megjelenítik a leírást és a bemeneti mezőnevek előnézetét, így az engedélyezés előtt láthatja, mit vár el az egyes eszközök.
 
+
+### Sorban álló futások és a heym_execution_status
+
+Egy [párhuzamossági korláttal](../reference/webhooks.md#concurrency-limit-and-queued-runs) rendelkező workflow foglalt lehet, amikor egy kliens meghívja. A hívás ilyenkor azonnal visszatér egy olyan eredménnyel, amely nem hiba:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+A kliens lekérdezi a `heym_execution_status` eszközt ezzel az `execution_id`-val. Ugyanazt a törzset adja vissza, mint az [állapot URL](../reference/webhooks.md#status-url): `queued` az aktuális pozícióval, `running`, majd `success` vagy `error` a kimenetekkel. Csak azon workflow-k futásait találja meg, amelyeket ugyanaz a szerver tesz közzé. Az eszköz csak akkor szerepel az alapértelmezett és a megnevezett szervereken, amíg legalább az egyik workflow-ja párhuzamossági korláttal rendelkezik. Amikor a sor megtelik, a hívás a „Concurrency queue is full” hibát adja vissza.
 ## Heym chat eszköz
 
 A **Heym Capabilities** szakasz a Chat lap motorját egyetlen `heym_chat` nevű MCP-eszközzé alakítja. Engedélyezheti az alapértelmezett szerveren, bármely elnevezett szerveren vagy mindkettőn — minden felület saját kapcsolóval és modellválasztással rendelkezik.
@@ -49,6 +64,7 @@ Amikor be van kapcsolva, a `heym_chat` megjelenik a `tools/list` listában a wor
 - Annak jelentése, hogy mi fut éppen most: hány futtatás aktív, azok workflow-nevei, mennyi ideje futnak, melyik csomóponton vannak éppen, és egy hivatkozás az élő futtatásra
 - Táblák listázása, kártyák létrehozása és kártyarészletek olvasása a [Board lapon](./board-tab.md)
 - Adattáblák listázása oszlopaikkal együtt, újak létrehozása és beillesztése az általa épített workflow-kba
+- Hitelesítési adatok létrehozása vagy frissítése a Heym saját oldalán (lásd: [Hitelesítési adatok](#hitelesítési-adatok))
 - Csapatok és globális változók olvasása, valamint a dokumentációban való keresés
 - Függőben lévő human-in-the-loop felülvizsgálatok jóváhagyása, szerkesztése vagy elutasítása
 
@@ -58,14 +74,28 @@ A Chat laphoz később hozzáadott képességek automatikusan elérhetővé vál
 
 A `heym_chat` mindig építési módban (build mode) futtatja a Chat motort. Egyetlen hívásban az asszisztens képes elmenteni egy új workflow-t, valósághű mintabemenetekkel lefuttatni, elolvasni a futási jelentést, kijavítani a hibát, majd újra lefuttatni — hívásonként legfeljebb öt tesztfuttatásig. Amikor a legutóbbi mentés legutóbbi futtatása sikeres, egy egymondatos összefoglalóval zár, és a válasz a következővel végződik: `Verified: the latest test run of the saved workflow passed.`
 
+Amikor egy hívás létrehoz vagy szerkeszt egy workflow-t, a válasz mindegyiket felsorolja a teljes szerkesztői linkjével, mint például `https://heym.example.com/workflows/<id>`, és az asszisztens válaszában található linkek is teljes linkek. Ezek az Ön konfigurált Heym címét (`FRONTEND_URL`) használják, és a Heym-be bejelentkezett felhasználók számára nyílnak meg, akik hozzáférnek az adott workflow-hoz.
+
 - A tesztfuttatások valódi futtatások. Mellékhatásaik megtörténnek, és bármely más futtatáshoz hasonlóan megjelennek a workflow futási előzményeiben.
 - A mentések a szerkesztő útvonalát követik: a gráf módosítása megőrzi az előző gráfot a workflow szerkesztési előzményeiben (**Edit History**).
 - Egy korábban épített workflow módosításához folytassa a szálat ugyanazzal a `conversation_id` értékkel. Az asszisztens új létrehozása helyett azt a workflow-t frissíti, és csak olyan workflow-kat módosít, amelyeket Ön szerkeszthet.
 - Ha az öt tesztfuttatás elfogy, az asszisztens megáll, és elmagyarázza, mi hibázik még mindig.
 
-A hitelesítési adatok a felületen maradnak: a `heym_chat` soha nem listázza, választja ki vagy hozza létre azokat. Amikor workflow-t épít vagy szerkeszt, a hitelesítési adatot igénylő új csomópontok üresen maradnak, és a válasz megnevezi azokat, így Ön beállíthatja őket a szerkesztőben.
-
 Az adattáblák esetében ez másképp van. Egy tábla nem tartalmaz titkot, így a `heym_chat` listázhatja a tábláit, megkérdezheti, hogy egy workflow melyiket használja, és létrehozhat egy újat az oszlopaival együtt. Sorokat soha nem olvas vagy ír.
+
+### Hitelesítési adatok
+
+A `heym_chat` a saját és az Önnel megosztott hitelesítési adatokat név és típus szerint látja, ugyanúgy, mint a Chat lap. Amikor az általa épített workflow-nak hitelesítési adatra van szüksége, az eredményben feltett kérdésként megkérdezi, melyiket használja. Válaszoljon rá ugyanazzal a `conversation_id`-val.
+
+Hitelesítési adat hozzáadásához vagy saját adat frissítéséhez az asszisztens megnyitja a Heym hitelesítési adat űrlapját a `/credentials/setup/<id>` Heym oldalon. Ott bejelentkezik a Heym-be, megadja a kulcsot vagy összekapcsolja a fiókot, majd a mentésre kattint. Az érték közvetlenül a Heym-be kerül: az MCP kliens és modellje csak a hitelesítési adat nevét és típusát ismeri meg. Soha ne illesszen be kulcsokat az MCP kliensbe; kérje inkább az űrlapot.
+
+| Kliens | Mi történik |
+|--------|-------------|
+| Támogatja az MCP URL-bekérést | A kliens felkéri a Heym oldal megnyitására. A hívás megvárja az űrlap kitöltését (legfeljebb tíz percig), majd folytatja az új hitelesítési adattal. |
+| Bármi más | Az eredmény tartalmazza a hivatkozást, és felkéri a klienst, hogy hívja meg újra a `heym_chat`-et a `wait_for_credential_form` paraméterrel. Ez a hívás legfeljebb öt percet vár az űrlap kitöltésére, majd folytatja a beszélgetést. Ha a kliens nem vár, mentse el az űrlapot, és válaszoljon ugyanazzal a `conversation_id`-val; a következő hívás tudni fogja, hogy az űrlap mentésre került és milyen hitelesítési adat jött létre. |
+
+Az oldal csak ahhoz a Heym-fiókhoz nyílik meg, amelyik a kérést elindította, így a továbbított link más számára használhatatlan. Az űrlap 24 órán át marad nyitva, és elutasítható az oldalról. Miután elmentette vagy elutasította, a Chat lap beszélgetésében lévő lépés megjeleníti az eredményt.
+
 
 ### Hitelesítési adat és modell
 
@@ -78,12 +108,15 @@ A `heym_chat` az Ön Heym-fiókján futtatja a motort, így saját LLM hitelesí
 
 Ha bármelyik hiányzik, az eszköz továbbra is megjelenik a `tools/list` listában, de minden hívás hibát ad vissza, amely arra kéri, hogy fejezze be a beállítást ezen a lapon.
 
+
+A `heym_chat` által épített workflow-ban lévő LLM- és Agent-csomópontok ezzel a hitelesítési adattal és modellel futnak, beleértve a megosztott hitelesítési adatokat is, így a tesztfutások további beállítási lépés nélkül működnek. Amikor a `heym_chat` workflow-t szerkeszt, a már hitelesítési adattal rendelkező LLM- és Agent-csomópontok megtartják azt a modelljükkel együtt.
 ### Argumentumok és előzmények
 
 | Argumentum | Kötelező | Leírás |
 |----------|----------|-------------|
 | `message` | Igen | Az utasítás vagy kérdés, természetes nyelven. |
 | `conversation_id` | Nem | Egy `conversation_id` egy korábbi `heym_chat` eredményből, hogy folytassa azt a szálat. |
+| `wait_for_credential_form` | Nem | `conversation_id`-val: várjon, amíg a felhasználó elmenti vagy elutasítja a szál által megnyitott hitelesítési adat űrlapot, majd küldje el a `message` üzenetet. |
 
 Minden hívás bekerül a [Chat lap](./chat-tab.md) előzményeibe normál beszélgetésként, amely a beszélgetéslistában egy dugó ikonnal van megjelölve. Az üzenetek, eszközkártyák és a tisztázási szünetek pontosan úgy néznek ki, mint egy Ön által indított beszélgetés, és a szálat a böngészőben megnyitva folytathatja a beszélgetést. Minden eredmény visszaadja a `conversation_id`-t, így az MCP-kliens ugyanazt a szálat folytathatja ahelyett, hogy minden hívásnál újat nyitna.
 

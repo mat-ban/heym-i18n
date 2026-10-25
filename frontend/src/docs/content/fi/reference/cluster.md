@@ -111,6 +111,10 @@ Kuvan tunnisteen on oltava sama versio kuin pääinstanssilla, ja molempien avai
 | Päällä | Poista työntekijäinstanssi kierrosta pysäyttämättä sitä – käynnissä olevat suoritukset saavat päätökseen, uusia ei määrätä. Pääinstanssilla lukittu päälle: tiedostot, liitännäiset ja koodausagenttien työt suoritetaan siellä riippumatta asetuksesta |
 | Paino | Sen osuus jaettavista suorituksista |
 
+## Samanaikaisuusrajat klusterissa
+
+Workflow'n [samanaikaisuusraja](./webhooks.md#concurrency-limit-and-queued-runs) lasketaan PostgreSQL:ssä, joten se pätee kaikissa instansseissa ja prosesseissa: kaksi instanssia ei koskaan suorita samasta workflow'sta enempää ajoja kuin raja sallii. Paikkaa odottanut ajo sijoitetaan käynnistyessään samojen sääntöjen mukaisesti kuin mikä tahansa muu ajo, joten main-instanssiin sidottu ajo pysyy siellä. Näitä suorituksia ajava jonoworker käynnistyy nyt jokaisessa asennuksessa, myös yksittäisessä instanssissa, jossa se käsittelee vain oman instanssinsa jonoon asettamat ajot. Tämä tarkoittaa, että myös yksittäinen instanssi varaa jonon herätysyhteyden `LISTEN` jokaisessa prosessissa; varaa sen yhteydet samalla tavalla kuin klusteri-instanssille.
+
 ## Suoritushistoria
 
 Jokainen suoritushistorian suoritus nimeää sen suorittaneen instanssin, ja molemmat historian valintaikkulat voivat suodattaa yhteen instanssiin. Suodatin vastaa instanssin tunnistetta näyttäen sen nimen, joten instanssin uudelleennimeäminen ei muuta vanhojen suoritusten tekstiä.

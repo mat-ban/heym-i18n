@@ -108,6 +108,73 @@ Konfigureras per workflow: `rate_limit_requests` och `rate_limit_window_seconds`
 | `rate_limit_window_seconds` | Fönstrets varaktighet i sekunder |
 
 `test_run`-förfrågningar kringgår rate limiting.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Concurrency-gräns och köade körningar
+
+Ett workflow kan begränsa hur många produktionskörningar som utförs samtidigt. Aktivera **Concurrency-gräns** i panelen **Properties** på workflow-nivå och ställ in **Max samtidiga körningar**. Ägare och medarbetare med redigeringsbehörighet kan ändra detta. Gränsen är avstängd som standard.
+
+När gränsen nås väntar nya körningar i en FIFO-kö (först in, först ut). Detta omfattar alla startpunkter i produktion: denna endpoint, [streaming-endpointen](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) och varje [trigger](./triggers.md). Editorns egna testkörningar startar alltid omedelbart och tar ingen plats. Att skicka `test_run=true` utan en inloggad session med behörighet att öppna workflowet kringgår inte kön.
+
+| Inställning | Beskrivning |
+|---|---|
+| `concurrency_limit` | Tillåtna produktionskörningar samtidigt. `0` stänger av gränsen |
+| `concurrency_max_queue` | Valfritt. Antal körningar som tillåts vänta samtidigt. Tomt innebär ingen gräns |
+| `concurrency_max_wait_seconds` | Valfritt. En körning som väntar längre registreras som `expired`. Tomt innebär obegränsad väntetid |
+
+### 202 Accepted
+
+Ett anrop som startar direkt fungerar precis som beskrivs under Svarsformat. Ett anrop som måste vänta får omedelbart `202 Accepted`, oavsett vad `X-Simple-Response` anger, med ett `Location`-huvud som pekar på dess status-URL:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Fält | Beskrivning |
+|---|---|
+| `queue.position` | Denna körnings plats i kön, med början på 1 |
+| `queue.size` | Körningar som väntar just nu |
+| `queue.running` | Körningar som upptar en plats just nu |
+| `queue.limit` | Workflowets concurrency-gräns |
+| `status_token` | Endast anonyma workflows. Returneras endast en gång i detta svar |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` svarar med körningens tillstånd. Anropa det med samma autentiseringsuppgifter som startade körningen: en session eller JWT, en [körningstoken](./execution-tokens.md) eller workflowets anpassade header. Ett anonymt workflow har inga autentiseringsuppgifter att validera; skicka därför `status_token` från 202-svaret i `X-Heym-Run-Token`-headern. Token läses aldrig från frågesträngen. En felaktig eller saknad token får `404`, precis som en okänd körning.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Betydelse (en körning som måste vänta på en concurrency-plats får [202-svaret](#202-accepted) i stället) |
+|---|---|
+| `queued` | Väntar på en plats; `queue` visar positionen |
+| `running` | Innehar en plats och körs för närvarande |
+| `success` / `error` | Klar; `outputs` och `error` är ifyllda |
+| `pending` | Pausad för [mänsklig granskning](./human-in-the-loop.md) |
+| `cancelled` | Avbruten från [Körningshistorik](./execution-history.md) |
+| `expired` | Väntade längre än `concurrency_max_wait_seconds` och kördes aldrig |
+
+Fråga med några sekunders mellanrum tills statusen inte längre är `queued` eller `running`. En köad körning utförs även om ingen frågar efter status.
+
+### Kön är full
+
+När `concurrency_max_queue` är inställt och så många körningar redan väntar avvisas anropet med `429 Concurrency queue is full` och en `queue_full`-post i körningshistoriken. Inget läggs i kön.
+
 ## Svarsformat
 
 Endpointen returnerar JSON:

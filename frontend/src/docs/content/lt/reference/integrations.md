@@ -15,7 +15,7 @@ Kai kurie integracijos mazgai **nereikalauja** kredencialų. [WebSocket Trigger]
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, pasirenkamas `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, pasirenkamas `base_url` |
-| **Jira** | [Jira mazgas](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, pasirenkamas `api_version` |
+| **Jira** | [Jira mazgas](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (tik Basic auth), pasirenkamas `api_version` |
 | **Linear** | [Linear mazgas](../nodes/linear-node.md) | `api_key`, arba `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry mazgas](../nodes/sentry-node.md) | `api_token`, pasirenkamas `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -201,7 +201,7 @@ OAuth žetonai (`access_token`, `refresh_token`, `token_expiry`) saugomi ir atna
 
 ## Jira
 
-Jira kredencialas saugo Jira Basic auth kredencialus, Jira svetainės pagrindinį URL, diegimo režimą ir pasirinktą REST API versiją [Jira mazgui](../nodes/jira-node.md). Naudokite `cloud` Jira Cloud arba `data_center` Jira Data Center / Server.
+Jira kredencialas saugo Jira Basic auth kredencialus arba Data Center asmeninį prieigos tokeną, Jira svetainės pagrindinį URL, diegimo režimą ir pasirinktą REST API versiją [Jira mazgui](../nodes/jira-node.md). Naudokite `cloud` Jira Cloud arba `data_center` Jira Data Center / Server.
 
 ### Nustatymas
 
@@ -215,16 +215,18 @@ Jira kredencialas saugo Jira Basic auth kredencialus, Jira svetainės pagrindin�
 **Jira Data Center / Server**
 
 1. Pasirinkite **Jira Data Center / Server** kaip diegimą.
-2. Įveskite Jira vartotojo vardą ir slaptažodį, naudojamus Basic auth.
-3. Įveskite Jira svetainės URL, pavyzdžiui, `https://jira.example.com`.
-4. Naudokite **Išbandyti ryšį**, kad patvirtintumėte kredencialą.
+2. Pasirinkite autentifikavimo metodą. **Vartotojo vardas ir slaptažodis** naudoja Basic auth. **Personal Access Token** naudoja `Authorization: Bearer <token>` ir reikalauja Jira Data Center / Server 8.14 ar vėlesnės versijos. Sukurkite tokeną skiltyje **Profilis → Personal Access Tokens** sistemoje Jira.
+3. Įveskite Jira vartotojo vardą ir slaptažodį arba įklijuokite asmeninį prieigos tokeną (vartotojo vardo nereikia).
+4. Įveskite Jira svetainės URL, pavyzdžiui, `https://jira.example.com`.
+5. Norėdami patikrinti kredencialą, naudokite **Test Connection**.
 
 ### Laukai
 
 | Laukas | Aprašymas |
 |--------|-----------|
-| `email` | Jira Cloud Atlassian paskyros el. paštas arba Jira Data Center / Server vartotojo vardas |
-| `api_token` | Jira Cloud Atlassian API raktas arba Jira Data Center / Server slaptažodis Basic auth |
+| `auth_mode` | `basic` (numatytasis, jei trūksta) arba `pat`. `pat` galioja tik su `data_center` |
+| `email` | Jira Cloud Atlassian paskyros el. paštas arba Jira Data Center / Server vartotojo vardas. Nenaudojama `pat` režimu |
+| `api_token` | Jira Cloud Atlassian API tokenas, Jira Data Center / Server slaptažodis Basic auth arba Data Center asmeninis prieigos tokenas `pat` režimu |
 | `base_url` | Jira svetainės pagrindinis URL |
 | `deployment` | `cloud` Jira Cloud arba `data_center` Jira Data Center / Server |
 | `api_version` | REST API versija; numatytoji `3` Jira Cloud. Data Center / Server naudoja v2 |
@@ -232,13 +234,11 @@ Jira kredencialas saugo Jira Basic auth kredencialus, Jira svetainės pagrindin�
 ### Pastabos
 
 - Jira mazgas siunčia problemų aprašymus ir komentarus kaip Atlassian dokumentų formato tekstinius dokumentus Jira Cloud REST API v3. Data Center / Server kredencialai siunčia paprastą tekstą.
-- Data Center / Server šiuo metu palaiko tik vartotojo vardo/slaptažodžio Basic auth. Asmeniniai prieigos raktai ir Bearer auth dar nepalaikomi.
+- Data Center / Server palaiko vartotojo vardo / slaptažodžio Basic auth ir asmeninio prieigos tokeno (PAT) autentifikavimą naudojant Bearer schemą. PAT autentifikavimui reikalinga Jira Data Center / Server 8.14 ar naujesnė versija.
 - Prikabintų failų įkėlimas priima base64 arba duomenų URL turinį ir yra ribojamas platformos failo dydžio limito (numatytas 99 MB). Prikabintų failų atsisiuntimas gali grąžinti base64 turinį, kai tai leidžiama.
 - Vartotojų kūrimas, naikinimas ir problemų pranešimai reikalauja, kad autentifikuota Jira paskyra turėtų atitinkamas Jira svetainės ar organizacijos teises.
 - Naudokite List Projects, Search Issues ir List Transitions, kad atrastumėte projekto raktus, problemų raktus ir perėjimo ID.
-- Norint naudoti pasirinktinius endpoint'us, kurie nėra aprašyti Jira mazge, naudokite [HTTP mazgą](../nodes/http-node.md) su Jira Basic Auth (`email:api_token` Cloud arba `username:password` Data Center / Server) cURL komandoje, arba Header kredencialą su atitinkamu `Authorization: Basic <base64(user:secret)>` vertės.
-
-Taip pat žr.:
+- Individualiems endpoint'ams, kurių Jira mazgas neapima, naudokite [HTTP mazgą](../nodes/http-node.md) su Jira Basic Auth (`email:api_token` debesyje arba `username:password` Data Center / Server) arba PAT Bearer auth (`Authorization: Bearer <token>` Data Center / Server). Arba naudokite Header kredencialą su atitinkama `Authorization` antrašte.
 
 - [Jira mazgas](../nodes/jira-node.md)
 - [Kredencialai](./credentials.md)

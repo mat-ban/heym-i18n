@@ -147,3 +147,5 @@ Katso [Webhookit](./webhooks.md#run-with-curl-dialog) täydellisistä ikkunan ti
 - [Suoritushistoria](./execution-history.md) – Aikaisemmat suoritukset
 - [Mallit](../tabs/templates-tab.md) – Tallenna ja käytä uudelleen työnkulkuja ja solmuja
 - [Kontekstuaalinen esittely](./contextual-showcase.md) – Tiivis sivun opas, joka on saatavilla editorissa
+
+- [Canvas-yhteistyö](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

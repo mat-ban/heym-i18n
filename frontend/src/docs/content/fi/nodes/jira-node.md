@@ -8,22 +8,23 @@
 |----------|-------|
 | Syötteet | 1 |
 | Tulosteet | 1 |
-| Tunnistetiedot | Jira (Pilvipalvelun sähköposti/API-token tai Data Center -käyttäjätunnus/salasana, perus-URL, käyttöönotto-tila, valinnainen REST API -versio) |
+| Tunnistetiedot | Jira (Pilvipalvelun sähköposti/API-token, Data Center -käyttäjätunnus/salasana tai henkilökohtainen käyttöoikeustoken, perus-URL, käyttöönotto-tila, valinnainen REST API -versio) |
 | Tulos | `$nodeLabel.*` |
 
 ## Tunnistetiedot
 
-Luo **Jira**-tunnistetiedot [Tunnistetiedot-välilehdessä](../tabs/credentials-tab.md). Tallennetut määritysavaimet ovat `email`, `api_token`, `base_url`, `deployment` ja valinnainen `api_version`. Jira Pilvipalvelussa `email` tallentaa Atlassian-tilin sähköpostiosoitteen ja `api_token` tallentaa Atlassian API-tokenin. Jira Data Center / Server -versiossa nämä samat avaimet tallentavat Basic-auth -käyttäjätunnuksen ja salasanan. Katso [Kolmannen osapuolen integraatiot](../reference/integrations.md#jira) asennusohjeisiin.
+Luo **Jira**-tunnistetiedot [Tunnistetiedot-välilehdessä](../tabs/credentials-tab.md). Tallennetut määritysavaimet ovat `email`, `api_token`, `base_url`, `deployment`, `auth_mode` ja valinnainen `api_version`. Jira Pilvipalvelussa `email` tallentaa Atlassian-tilin sähköpostiosoitteen ja `api_token` tallentaa Atlassian API-tokenin. Jira Data Center / Server -versiossa nämä samat avaimet tallentavat Basic-auth -käyttäjätunnuksen ja salasanan, tai tilassa `auth_mode: pat` `api_token` tallentaa henkilökohtaisen käyttöoikeustokenin, joka lähetetään Bearer-tokenina, eikä kenttää `email` käytetä. Katso [Kolmannen osapuolen integraatiot](../reference/integrations.md#jira) asennusohjeisiin.
 
 | Kenttä | Määritysavain | Kuvaus |
 | --- | --- | --- |
 | Jira-sähköposti / Käyttäjätunnus | `email` | Jira Pilvipalvelun Atlassian-tilin sähköposti tai Jira Data Center / Server -käyttäjätunnus |
-| API-token / Salasana | `api_token` | Jira Pilvipalvelun Atlassian API-token tai Jira Data Center / Server -salasana Basic-authia varten |
+| Todennus | `auth_mode` | `basic` (oletus) tai `pat` (vain Data Center / Server) |
+| API-token / Salasana / Henkilökohtainen käyttöoikeustoken | `api_token` | Jira Pilvipalvelun Atlassian API-token, Jira Data Center / Server -salasana Basic-authia varten tai Data Centerin henkilökohtainen käyttöoikeustoken `pat`-tilassa |
 | Perus-URL | `base_url` | Jira-sivuston URL, esimerkiksi `https://yrityksesi.atlassian.net` |
 | Käyttöönotto | `deployment` | `cloud` Jira Pilvipalvelulle tai `data_center` Jira Data Center / Server -versiolle |
 | REST API -versio | `api_version` | Oletusarvo `3` Jira Pilvipalvelulle. Data Center / Server käyttää REST API v2:ta |
 
-Data Center / Server -henkilökohtaisia käyttöoikeustokenia ja Bearer-authia ei vielä tueta Jira-tunnistetiedoissa.
+Henkilökohtaiset käyttöoikeustokenit edellyttävät Jira Data Center / Server 8.14 -versiota tai uudempaa. Todennustavan vaihtaminen tyhjentää tallennetun salaisuuden, joten syötä uusi salasana tai token vaihdon yhteydessä.
 
 Käytä **Testaa yhteys** -toimintoa varmistaaksesi tunnistetiedot nykyistä Jira-käyttäjää vastaan.
 

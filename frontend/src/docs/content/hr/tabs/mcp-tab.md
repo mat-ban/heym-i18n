@@ -36,6 +36,21 @@ Svaki workflow može biti izložen kao MCP alat:
 
 Kartice workflow-a prikazuju opis i pregled imena ulaznih polja kako biste mogli vidjeti što svaki alat očekuje prije nego što ga omogućite.
 
+
+### Pokretanja u redu čekanja i heym_execution_status
+
+Workflow s [ograničenjem istodobnosti](../reference/webhooks.md#concurrency-limit-and-queued-runs) može biti zauzet kada ga klijent pozove. Poziv tada odmah vraća rezultat koji nije pogreška:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klijent proziva alat `heym_execution_status` s tim `execution_id`. On vraća isto tijelo kao i [URL statusa](../reference/webhooks.md#status-url): `queued` s trenutnom pozicijom, `running`, zatim `success` ili `error` s izlazima. Pronalazi samo pokretanja onih workflows koje isti poslužitelj izlaže. Alat je naveden na zadanom poslužitelju i na svakom imenovanom poslužitelju samo dok barem jedan od njegovih workflows ima ograničenje istodobnosti. Kada je red čekanja pun, poziv vraća pogrešku „Concurrency queue is full“.
 ## Heym Chat Alat
 
 Odjeljak **Heym Mogućnosti** pretvara Chat tab motor u jedan MCP alat nazvan `heym_chat`. Omogućite ga na zadanom poslužitelju, na bilo kojem imenovanom poslužitelju ili na oba — svaka površina zadržava svoj vlastiti preklopnik i odabir modela.
@@ -49,6 +64,7 @@ Kada je uključen, `heym_chat` se pojavljuje u `tools/list` uz Vaše workflow al
 - Izvještavanje o tome što se trenutno izvršava: koliko je izvršavanja aktivno, njihova imena workflow-a, koliko dugo svako traje, na kojem se čvoru trenutno nalazi, i poveznica na aktivno izvršavanje.
 - Popis ploča, kreiranje kartica i čitanje detalja kartica na [Board tab](./board-tab.md).
 - Popis Vaših tablica podataka s njihovim stupcima, kreiranje novih i povezivanje u workflows koje gradi.
+- Stvaranje ili ažuriranje vjerodajnica na vlastitoj stranici Heyma (pogledajte [Vjerodajnice](#vjerodajnice))
 - Čitanje timova i globalnih varijabli, te pretraživanje dokumentacije.
 - Odobravanje, uređivanje ili odbijanje čekajućih recenzija ljudi u petlji.
 
@@ -58,14 +74,28 @@ Mogućnosti dodane u Chat tab kasnije postaju dostupne putem `heym_chat` automat
 
 `heym_chat` uvijek pokreće Chat pogon u načinu izgradnje (build mode). U jednom pozivu asistent može spremiti novi workflow, pokrenuti ga s realističnim oglednim ulazima, pročitati izvješće o pokretanju, popraviti ono što nije uspjelo i ponovno ga pokrenuti, do pet testnih pokretanja po pozivu. Kada posljednje pokretanje posljednjeg spremanja uspije, završava sažetkom u jednoj rečenici, a odgovor završava s `Verified: the latest test run of the saved workflow passed.`
 
+Kada poziv stvori ili uredi workflow, odgovor navodi svaki s njegovom punom vezom uređivača, kao što je `https://heym.example.com/workflows/<id>`, a veze unutar odgovora asistenta također su pune veze. Koriste vašu konfiguriranu Heym adresu (`FRONTEND_URL`) i otvaraju se korisnicima prijavljenim u Heym koji imaju pristup tom workflowu.
+
 - Testna pokretanja su stvarna pokretanja. Njihovi popratni učinci se događaju i pojavljuju se u povijesti pokretanja workflowa kao i svako drugo pokretanje.
 - Spremanja slijede put uređivača: promjena grafa zadržava prethodni graf u **Edit History** workflowa.
 - Da biste promijenili workflow koji je ranije izgradio, nastavite nit s istim `conversation_id`. Asistent ažurira taj workflow umjesto stvaranja novog i mijenja samo workflowe koje možete uređivati.
 - Kada se iskoristi pet testnih pokretanja, asistent staje i objašnjava što i dalje ne uspijeva.
 
-Vjerodajnice ostaju u UI-u: `heym_chat` nikada ne navodi, ne bira niti ne stvara ih. Kada gradi ili uređuje workflow, novi čvorovi koji trebaju vjerodajnicu ostaju prazni, a odgovor ih imenuje, tako da ih možete postaviti u uređivaču.
-
 Tablice podataka su drugačije. Tablica ne sadrži tajne, tako da `heym_chat` može popisati Vaše tablice, pitati koju bi workflow trebao koristiti i stvoriti novu s njenim stupcima. Nikada ne čita niti piše redove.
+
+### Vjerodajnice
+
+`heym_chat` vidi vjerodajnice u vašem vlasništvu i one podijeljene s vama, po imenu i vrsti, na isti način kao i kartica Chat. Kada workflow koji gradi treba vjerodajnicu, postavlja pitanje u rezultatu koju koristiti. Odgovorite s istim `conversation_id`.
+
+Za dodavanje vjerodajnice ili ažuriranje one u vašem vlasništvu, asistent otvara obrazac vjerodajnica Heyma na stranici Heyma, `/credentials/setup/<id>`. Tamo se prijavljujete u Heym, unosite ključ ili povezujete račun i spremate. Vrijednost ide izravno u Heym: MCP klijent i njegov model saznaju samo naziv i vrstu vjerodajnice. Nemojte lijepiti ključeve u MCP klijent; umjesto toga zatražite obrazac.
+
+| Klijent | Što se događa |
+|---------|---------------|
+| Podržava MCP URL elicitaciju | Klijent od vas traži da otvorite stranicu Heyma. Poziv čeka dok ispunjavate obrazac (do deset minuta), a zatim nastavlja s novom vjerodajnicom. |
+| Bilo što drugo | Rezultat nosi poveznicu i traži od klijenta da ponovno pozove `heym_chat` s `wait_for_credential_form`. Taj poziv čeka do pet minuta dok ispunjavate obrazac, a zatim nastavlja razgovor. Ako klijent ne čeka, spremite obrazac i odgovorite s istim `conversation_id`; sljedeći poziv zna da je obrazac spremljen i koju je vjerodajnicu stvorio. |
+
+Stranica se otvara samo za Heym račun koji je pokrenuo zahtjev, stoga je proslijeđena poveznica beskorisna bilo kome drugome. Obrazac ostaje otvoren 24 sata i možete ga odbiti sa stranice. Nakon što ga spremite ili odbijete, korak u razgovoru kartice Chat prikazuje rezultat.
+
 
 ### Vjerodajnica i model
 
@@ -78,12 +108,15 @@ Tablice podataka su drugačije. Tablica ne sadrži tajne, tako da `heym_chat` mo
 
 Ako bilo što nedostaje, alat se i dalje pojavljuje u `tools/list`, ali svaki poziv vraća grešku koja Vas obavještava da završite postavljanje u ovoj kartici.
 
+
+LLM i Agent čvorovi u workflowu koji `heym_chat` gradi pokreću se na ovoj vjerodajnici i modelu, uključujući vjerodajnicu podijeljenu s vama, tako da testna pokretanja rade bez dodatnog koraka postavljanja. Kada `heym_chat` uređuje workflow, LLM i Agent čvorovi koji već imaju vjerodajnicu zadržavaju je zajedno sa svojim modelom.
 ### Argumenti i povijest
 
 | Argument | Obavezno | Opis |
 |----------|----------|-------------|
 | `message` | Da | Uputa ili pitanje, na prirodnom jeziku. |
 | `conversation_id` | Ne | `conversation_id` iz prethodnog `heym_chat` rezultata, za nastavak tog razgovora. |
+| `wait_for_credential_form` | Ne | S `conversation_id`: pričekajte dok korisnik ne spremi ili odbije obrazac vjerodajnice koji je otvorila nit, a zatim pošaljite `message`. |
 
 Svaki poziv zapisuje se u Vaš [Chat tab](./chat-tab.md) povijest kao normalan razgovor, označen ikonom utikača u popisu razgovora. Poruke, kartice alata i pauze za pojašnjenje izgledaju točno kao razgovor koji ste sami započeli, a možete otvoriti nit i nastaviti razgovor u pregledniku. Svaki rezultat vraća svoj `conversation_id` tako da MCP klijent može nastaviti istu nit umjesto da otvara novu pri svakom pozivu.
 

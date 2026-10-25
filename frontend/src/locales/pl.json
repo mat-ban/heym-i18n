@@ -827,6 +827,22 @@
         "waiting": "Oczekiwanie",
         "neutral": "Neutralny"
       }
+    },
+    "concurrencyLimit": "Limit współbieżności",
+    "concurrencyLimitHelp": "Uruchomienia produkcyjne (Webhooki, Cron, MCP, Portal, Triggery) powyżej limitu oczekują w kolejce FIFO. Testy w edytorze zawsze uruchamiają się od razu.",
+    "maxConcurrentRuns": "Maks. współbieżnych uruchomień",
+    "maxQueueSizeOptional": "Maks. rozmiar kolejki (opcjonalnie)",
+    "emptyNoLimit": "Puste = brak limitu",
+    "maxWaitOptional": "Maks. czas oczekiwania (sekundy, opcjonalnie)",
+    "emptyWaitAsLong": "Puste = czekaj tak długo, jak potrzeba",
+    "concurrencyQueueHelp": "Pełna kolejka zwraca 429. Uruchomienie oczekujące dłużej niż maks. czas oczekiwania jest oznaczane jako wygasłe.",
+    "rag": {
+      "hybridSearch": "Wyszukiwanie hybrydowe",
+      "hybridSearchHelp": "Łącz podobieństwo wektorowe z dopasowywaniem słów kluczowych BM25, aby odnajdować także dokładne terminy, takie jak identyfikatory, nazwy i kody błędów.",
+      "hybridScore": "Wynik hybrydowy (0-1)",
+      "similarityScore": "Wynik podobieństwa",
+      "vectorSimilarity": "Podobieństwo wektorowe",
+      "bm25Score": "Wynik BM25"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Zapytaj AI",
     "askAiTitle": "Zapytaj asystenta Chat o to uruchomienie",
-    "noNodeSpans": "Dla tego uruchomienia nie zapisano żadnych spanów węzłów."
+    "noNodeSpans": "Dla tego uruchomienia nie zapisano żadnych spanów węzłów.",
+    "queuedProgress": "W kolejce {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Ładowanie portalu...",

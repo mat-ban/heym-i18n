@@ -8,22 +8,23 @@ Node **Jira** kết nối workflow với Jira REST API để tự động hóa p
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Credential | Jira (Cloud email/API token hoặc Data Center username/password, base URL, deployment mode, REST API version tùy chọn) |
+| Credential | Jira (Cloud email/API token, Data Center username/password hoặc personal access token, base URL, deployment mode, REST API version tùy chọn) |
 | Output | `$nodeLabel.*` |
 
 ## Credential
 
-Tạo credential **Jira** trong [Credentials Tab](../tabs/credentials-tab.md). Các config key được lưu là `email`, `api_token`, `base_url`, `deployment`, và `api_version` tùy chọn. Đối với Jira Cloud, `email` lưu email tài khoản Atlassian và `api_token` lưu Atlassian API token. Đối với Jira Data Center / Server, các key tương tự lưu username và password Basic auth. Xem [Third-Party Integrations](../reference/integrations.md#jira) để biết các bước thiết lập.
+Tạo credential **Jira** trong [Credentials Tab](../tabs/credentials-tab.md). Các config key được lưu là `email`, `api_token`, `base_url`, `deployment`, `auth_mode`, và `api_version` tùy chọn. Đối với Jira Cloud, `email` lưu email tài khoản Atlassian và `api_token` lưu Atlassian API token. Đối với Jira Data Center / Server, các key tương tự lưu username và password Basic auth, hoặc với `auth_mode: pat`, `api_token` lưu trữ personal access token được gửi dưới dạng Bearer token và `email` không được sử dụng. Xem [Third-Party Integrations](../reference/integrations.md#jira) để biết các bước thiết lập.
 
 | Trường | Config key | Mô tả |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Email tài khoản Atlassian của Jira Cloud, hoặc username Jira Data Center / Server |
-| API Token / Password | `api_token` | Atlassian API token của Jira Cloud, hoặc password Jira Data Center / Server cho Basic auth |
+| Xác thực | `auth_mode` | `basic` (mặc định) hoặc `pat` (chỉ dành cho Data Center / Server) |
+| API Token / Password / Personal Access Token | `api_token` | Atlassian API token của Jira Cloud, password Jira Data Center / Server cho Basic auth, hoặc personal access token của Data Center ở chế độ `pat` |
 | Base URL | `base_url` | URL site Jira, ví dụ `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` cho Jira Cloud hoặc `data_center` cho Jira Data Center / Server |
 | REST API Version | `api_version` | Mặc định là `3` cho Jira Cloud. Data Center / Server sử dụng REST API v2 |
 
-Personal access token và Bearer auth của Data Center / Server chưa được credential Jira hỗ trợ.
+Personal access token yêu cầu Jira Data Center / Server 8.14 trở lên. Chuyển đổi phương thức xác thực sẽ xóa secret đã lưu trữ, vì vậy hãy nhập mật khẩu hoặc token mới khi bạn chuyển đổi.
 
 Sử dụng **Test Connection** để xác minh credential với user Jira hiện tại.
 

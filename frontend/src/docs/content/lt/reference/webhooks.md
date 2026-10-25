@@ -108,6 +108,73 @@ Konfigūruokite kiekvienam workflow: `rate_limit_requests` ir `rate_limit_window
 | `rate_limit_window_seconds` | Langelio trukmė sekundėmis |
 
 `test_run` užklausos apeina greičio ribojimą.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Lygiagretumo apribojimas ir eilėje laukiantys vykdymai
+
+Workflow gali apriboti, kiek gamybinių vykdymų atliekama vienu metu. Įjunkite **Lygiagretumo apribojimas** workflow lygio skydelyje **Properties** ir nustatykite **Maks. lygiagrečių vykdymų**. Savininkai ir bendradarbiai, turintys redagavimo prieigą, gali tai keisti. Pagal numatytuosius nustatymus apribojimas yra išjungtas.
+
+Pasiekus ribą, nauji vykdymai laukia FIFO (pirmas įeina, pirmas išeina) eilėje. Tai apima kiekvieną gamybinį įėjimo tašką: šį endpoint'ą, [srautinio perdavimo endpoint'ą](./sse-streaming.md), [Portalą](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) ir kiekvieną [triggerį](./triggers.md). Paties redaktoriaus bandomieji vykdymai visada prasideda nedelsiant ir neužima vietos. Parametro `test_run=true` siuntimas be prisijungusios sesijos, galinčios atidaryti workflow, neapeina eilės.
+
+| Nustatymas | Aprašymas |
+|---|---|
+| `concurrency_limit` | Vienu metu leidžiami gamybiniai vykdymai. `0` išjungia apribojimą |
+| `concurrency_max_queue` | Neprivaloma. Vienu metu eilėje leidžiamų vykdymų skaičius. Tuščia reiškia be apribojimų |
+| `concurrency_max_wait_seconds` | Neprivaloma. Vykdymas, laukiantis ilgiau, registruojamas kaip `expired`. Tuščia reiškia neribotą laukimą |
+
+### 202 Accepted
+
+Iškart prasidedantis iškvietimas elgiasi tiksliai taip, kaip aprašyta skyriuje Atsakymo Formatavimas. Iškvietimas, kuriam tenka laukti, nedelsiant gauna `202 Accepted`, nepriklausomai nuo antraštės `X-Simple-Response`, su antrašte `Location`, rodančia į jo būsenos URL:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Laukas | Aprašymas |
+|---|---|
+| `queue.position` | Šio vykdymo vieta eilėje, pradedant nuo 1 |
+| `queue.size` | Šiuo metu eilėje laukiantys vykdymai |
+| `queue.running` | Šiuo metu vietą užimantys vykdymai |
+| `queue.limit` | Darbo eigos lygiagretumo apribojimas |
+| `status_token` | Tik anoniminėms workflow. Grąžinama tik vieną kartą šiame atsakyme |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` atsako su vykdymo būsena. Iškvieskite jį su tais pačiais kredencialais, kuriais pradėtas vykdymas: sesija arba JWT, [vykdymo tokenu](./execution-tokens.md) arba individualia workflow antrašte. Anoniminis workflow neturi tikrintinų kredencialų, todėl atsakyme 202 gautą `status_token` siųskite antraštėje `X-Heym-Run-Token`. Tokenas niekada neskaitomas iš užklausos eilutės. Klaidingas arba trūkstamas tokenas gauna `404`, kaip ir nežinomas vykdymas.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Reikšmė (vykdymas, kuriam tenka laukti lygiagretumo vietos, vietoj to gauna [202 atsakymą](#202-accepted)) |
+|---|---|
+| `queued` | Laukia laisvos vietos; `queue` rodo poziciją |
+| `running` | Turi vietą ir yra vykdomas |
+| `success` / `error` | Užbaigtas; laukai `outputs` ir `error` užpildyti |
+| `pending` | Pristabdytas [žmogaus peržiūrai](./human-in-the-loop.md) |
+| `cancelled` | Atšauktas iš [Vykdymo istorijos](./execution-history.md) |
+| `expired` | Laukė ilgiau nei `concurrency_max_wait_seconds` ir niekada nebuvo įvykdytas |
+
+Siųskite užklausą kas kelias sekundes, kol būsena nebėra `queued` arba `running`. Į eilę įtrauktas vykdymas įvykdomas net jei niekas jo būsenos netikrina.
+
+### Eilė pilna
+
+Kai nustatytas `concurrency_max_queue` ir tiek vykdymų jau laukia, iškvietimas atmetamas su klaida `429 Concurrency queue is full` ir įrašu `queue_full` vykdymo istorijoje. Nieko į eilę neįtraukiama.
+
 ## Atsakymo Formatavimas
 
 Endpointas grąžina JSON:

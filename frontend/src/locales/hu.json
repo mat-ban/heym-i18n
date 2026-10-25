@@ -827,6 +827,22 @@
         "waiting": "Várakozás",
         "neutral": "Semleges"
       }
+    },
+    "concurrencyLimit": "Párhuzamossági korlát",
+    "concurrencyLimitHelp": "A korlát feletti éles futások (Webhookok, Cron, MCP, Portal, Triggerek) egy FIFO sorban várakoznak. A szerkesztő tesztfutásai mindig azonnal elindulnak.",
+    "maxConcurrentRuns": "Max. párhuzamos futás",
+    "maxQueueSizeOptional": "Max. sorméret (opcionális)",
+    "emptyNoLimit": "Üres = nincs korlát",
+    "maxWaitOptional": "Max. várakozás (másodperc, opcionális)",
+    "emptyWaitAsLong": "Üres = tetszőleges ideig várakozik",
+    "concurrencyQueueHelp": "A teli sor 429-es kóddal válaszol. A maximális várakozási időnél tovább várakozó futás lejárttá minősül.",
+    "rag": {
+      "hybridSearch": "Hibrid keresés",
+      "hybridSearchHelp": "Kombinálja a vektoros hasonlóságot a BM25 kulcsszavas egyezéssel, így a pontos kifejezések, például az azonosítók, nevek és hibakódok is megtalálhatók.",
+      "hybridScore": "Hibrid pontszám (0-1)",
+      "similarityScore": "Hasonlósági pontszám",
+      "vectorSimilarity": "Vektoros hasonlóság",
+      "bm25Score": "BM25 pontszám"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Kérdezze az AI-t",
     "askAiTitle": "A Chat asszisztens megkérdezése erről a futtatásról",
-    "noNodeSpans": "Ehhez a futtatáshoz nem rögzítettek csomópont-spaneket."
+    "noNodeSpans": "Ehhez a futtatáshoz nem rögzítettek csomópont-spaneket.",
+    "queuedProgress": "Sorban {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Portál betöltése...",

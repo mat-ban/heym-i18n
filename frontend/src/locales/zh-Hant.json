@@ -827,6 +827,22 @@
         "waiting": "等候中",
         "neutral": "中性"
       }
+    },
+    "concurrencyLimit": "並行限制",
+    "concurrencyLimitHelp": "超出限制的生產執行（Webhook、Cron、MCP、Portal、Trigger）將在 FIFO 隊列中等待。編輯器測試執行始終立即啟動。",
+    "maxConcurrentRuns": "最大並行執行數",
+    "maxQueueSizeOptional": "最大隊列大小（選填）",
+    "emptyNoLimit": "留空 = 無限制",
+    "maxWaitOptional": "最長等待時間（秒，選填）",
+    "emptyWaitAsLong": "留空 = 一直等待",
+    "concurrencyQueueHelp": "隊列已滿將回傳 429。等待時間超過最長限制的執行將被記錄為已過期。",
+    "rag": {
+      "hybridSearch": "混合搜尋",
+      "hybridSearchHelp": "將向量相似度與 BM25 關鍵詞比對相結合，以便同時找到 ID、名稱和錯誤代碼等精確術語。",
+      "hybridScore": "混合得分 (0-1)",
+      "similarityScore": "相似度得分",
+      "vectorSimilarity": "向量相似度",
+      "bm25Score": "BM25 得分"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "詢問 AI",
     "askAiTitle": "就此次執行詢問 Chat 助理",
-    "noNodeSpans": "此次執行未記錄任何節點 span。"
+    "noNodeSpans": "此次執行未記錄任何節點 span。",
+    "queuedProgress": "排隊中 {position}/{size}"
   },
   "portal": {
     "loadingPortal": "正在載入入口網站...",

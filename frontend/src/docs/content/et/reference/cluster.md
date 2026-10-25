@@ -111,6 +111,10 @@ Image'i tag peab olema versioon, mida main käitab, ja mõlemad võtmed tuleb t�
 | On | Võtke worker rotatsioonist välja ilma seda peatamata — töötavad käivitused lõpetatakse, uusi ei määrata. Main-instantsi jaoks lukustatud sisse: faili-, plugin- ja kodeerimisagendi töö toimub seal olenemata lüliti asendist |
 | Weight | Selle osa jaotatavatest käivitustest |
 
+## Paralleelsuse limiidid klastris
+
+Workflow [paralleelsuse limiit](./webhooks.md#concurrency-limit-and-queued-runs) loendatakse PostgreSQL-is, seega kehtib see kõigis instantsides ja protsessides: kaks instantsi ei käivita kunagi ühe workflow kohta rohkem käivitusi kui limiit lubab. Pesa oodanud käivitus paigutatakse käivitumisel samade reeglite järgi nagu mis tahes muu käivitus, seega peab käivitus, mis peab jääma main-instantsi, jääma sinna edasi. Neid käivitusi teostav järjekorra worker käivitub nüüd igal installimisel, sealhulgas üksikul instantsil, kus see võtab ainult oma instantsi järjekorda seatud käivitused. See tähendab, et üksik instants hoiab samuti igas protsessis järjekorra äratamise `LISTEN` ühendust; planeerige selle ühendused samamoodi nagu klastri instantsi puhul.
+
 ## Käivituste ajalugu
 
 Iga käivitus täitmise ajaloos nimetab instantsi, mis selle täitis, ja mõlemad ajaloo dialoogid saavad filtreerida ühele instantsile. Filter vastab instantsi id-le, näidates selle nime, seega instantsi ümbernimetamine ei kirjuta ümber seda, mida vanad käivitused ütlevad.

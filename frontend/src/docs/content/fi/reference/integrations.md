@@ -15,7 +15,7 @@ Jotkut integraatiosolmut **eivät** vaadi tunnistetietoja. [WebSocket Trigger](.
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, valinnainen `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, valinnainen `base_url` |
-| **Jira** | [Jira-solmu](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, valinnainen `api_version` |
+| **Jira** | [Jira-solmu](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (vain Basic auth), valinnainen `api_version` |
 | **Linear** | [Linear-solmu](../nodes/linear-node.md) | `api_key`, tai `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry-solmu](../nodes/sentry-node.md) | `api_token`, valinnainen `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -197,7 +197,7 @@ OAuth-tunnukset (`access_token`, `refresh_token`, `token_expiry`) tallennetaan j
 
 ## Jira
 
-Jira-tunnistetiedot tallentavat Jiran Basic-auth-tunnistetiedot, Jira-sivuston perusosoitteen, käyttöönoton tilan ja valinnaisen REST-API-version [Jira-solmun](../nodes/jira-node.md) käyttöön. Käytä `cloud` Jira Cloudille tai `data_center` Jira Data Center / Serverille.
+Jira-tunnistetiedot tallentavat Jiran Basic-auth-tunnistetiedot tai Data Centerin henkilökohtaisen pääsytunnisteen (PAT), Jira-sivuston perusosoitteen, käyttöönoton tilan ja valinnaisen REST-API-version [Jira-solmun](../nodes/jira-node.md) käyttöön. Käytä `cloud` Jira Cloudille tai `data_center` Jira Data Center / Serverille.
 
 ### Asennus
 
@@ -210,17 +210,19 @@ Jira-tunnistetiedot tallentavat Jiran Basic-auth-tunnistetiedot, Jira-sivuston p
 
 **Jira Data Center / Server**
 
-1. Valitse **Jira Data Center / Server** käyttöönoton tilaksi.
-2. Syötä Jiran käyttäjätunnus ja salasana Basic-authia varten.
-3. Syötä Jira-sivuston URL, esimerkiksi `https://jira.example.com`.
-4. Vahvista tunnistetiedot **Testaa yhteys** -painikkeella.
+1. Valitse käyttöönotoksi **Jira Data Center / Server**.
+2. Valitse todennustapa. **Käyttäjätunnus ja salasana** käyttää Basic auth -todennusta. **Personal Access Token** käyttää otsaketta `Authorization: Bearer <token>` ja vaatii Jira Data Center / Server 8.14 -version tai uudemman. Luo token Jirassa kohdassa **Profiili → Personal Access Tokens**.
+3. Anna Jiran käyttäjätunnus ja salasana tai liitä henkilökohtainen pääsytunniste (käyttäjätunnusta ei tarvita).
+4. Anna Jiran sivuston URL-osoite, esimerkiksi `https://jira.example.com`.
+5. Vahvista tunnistetiedot valitsemalla **Test Connection**.
 
 ### Kentät
 
 | Kenttä | Kuvaus |
 | --- | --- |
-| `email` | Jira Cloud Atlassian-tilin sähköposti tai Jira Data Center / Server -käyttäjätunnus |
-| `api_token` | Jira Cloud Atlassian API-tunnus tai Jira Data Center / Server -salasana Basic-authia varten |
+| `auth_mode` | `basic` (oletus puuttuessa) tai `pat`. `pat` on kelvollinen vain arvolla `data_center` |
+| `email` | Jira Cloud Atlassian -tilin sähköpostiosoite tai Jira Data Center / Server -käyttäjätunnus. Ei käytetä `pat`-tilassa |
+| `api_token` | Jira Cloud Atlassian API-token, Jira Data Center / Server -salasana Basic auth -todennukselle tai Data Centerin henkilökohtainen pääsytunniste `pat`-tilassa |
 | `base_url` | Jira-sivuston perusosoite |
 | `deployment` | `cloud` Jira Cloudille tai `data_center` Jira Data Center / Serverille |
 | `api_version` | REST-API-versio; Jira Cloudille oletus on `3`. Data Center / Server käyttää versiota 2 |
@@ -228,11 +230,11 @@ Jira-tunnistetiedot tallentavat Jiran Basic-auth-tunnistetiedot, Jira-sivuston p
 ### Huomioita
 
 - Jira-solmu lähettää ongelmien kuvaukset ja kommentit Atlassian Document Format -tekstiasiakirjoina Jira Cloud REST API v3:lle. Data Center / Server -tunnistetiedot lähettävät pelkkää tekstiä.
-- Data Center / Server tukee tällä hetkellä vain käyttäjätunnus/salasana Basic-authia. Henkilökohtaiset käyttöoikeustunnukset ja Bearer-auth eivät ole vielä tuettuja.
+- Data Center / Server tukee käyttäjätunnus/salasana Basic auth -todennusta ja henkilökohtaisen pääsytunnisteen (PAT) todennusta Bearer-skeeman avulla. PAT-todennus vaatii Jira Data Center / Server 8.14:n tai uudemman.
 - Liitetiedoston lataus hyväksyy base64- tai data-URL-sisällön ja on alttiina alustan tiedostokoolle (oletus 99 Mt). Liitetiedoston lataus voi palauttaa base64-sisällön, kun se on käytössä.
 - Käyttäjien luominen, poistaminen ja ongelmien ilmoittaminen edellyttävät, että todentanut Jira-tili on saanut asianmukaiset Jira-sivuston tai organisaation käyttöoikeudet.
 - Käytä Listaa projektit, Hae ongelmia ja Listaa siirtymät -toimintoja löytääksesi projektiavaimet, ongelmiavaimet ja siirtymä-ID:t.
-- Mukautettuja päätepisteitä varten, joita Jira-solmu ei kata, käytä [HTTP-solmua](../nodes/http-node.md) Jira Basic Authilla (`email:api_token` Cloudille tai `username:password` Data Center / Serverille) cURL-komennossa tai Header-tunnistetietoa vastaavalla `Authorization: Basic <base64(user:secret)>` -arvolla.
+- Mukautetuille endpointeille, joita Jira-solmu ei kata, käytä [HTTP-solmua](../nodes/http-node.md) Jira Basic Auth -todennuksella (`email:api_token` Cloudille tai `username:password` Data Center / Serverille) tai PAT Bearer auth -todennuksella (`Authorization: Bearer <token>` Data Center / Serverille). Vaihtoehtoisesti käytä Header-tunnistetietoa asianmukaisella `Authorization`-otsakkeella.
 
 Katso myös:
 

@@ -148,3 +148,5 @@ Debugパネルは**Workflow実行**ログ（ノード結果、出力）を表示
 - [Execution History](./execution-history.md) – 過去の実行
 - [Templates](../tabs/templates-tab.md) – workflow とノードの保存と再利用
 - [Contextual Showcase](./contextual-showcase.md) – エディタで利用可能なコンパクトなページガイド
+
+- [Canvas コラボレーション](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

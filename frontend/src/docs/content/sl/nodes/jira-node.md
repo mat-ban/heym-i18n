@@ -8,22 +8,23 @@
 |----------|-------|
 | Vhodi | 1 |
 | Izhodi | 1 |
-| Poverilnica | Jira (Cloud e-pošta/API žeton ali Data Center uporabniško ime/geslo, osnovni URL, način namestitve, neobvezna različica REST API) |
+| Poverilnica | Jira (Cloud e-pošta/API žeton, Data Center uporabniško ime/geslo ali osebni dostopni žeton, osnovni URL, način namestitve, neobvezna različica REST API) |
 | Izhod | `$nodeLabel.*` |
 
 ## Poverilnica
 
-Ustvarite **Jira** poverilnico na [Zavihek Poverilnice](../tabs/credentials-tab.md). Shranjeni konfiguracijski ključi so `email`, `api_token`, `base_url`, `deployment` in neobvezna `api_version`. Za Jira Cloud `email` shranjuje e-poštni naslov Atlassian računa, `api_token` pa shranjuje Atlassian API žeton. Za Jira Data Center / Server ti isti ključi shranjujejo uporabniško ime in geslo za osnovno avtentikacijo. Oglejte si [Integracije tretjih oseb](../reference/integrations.md#jira) za korake nastavitve.
+Ustvarite **Jira** poverilnico na [Zavihek Poverilnice](../tabs/credentials-tab.md). Shranjeni konfiguracijski ključi so `email`, `api_token`, `base_url`, `deployment`, `auth_mode` in neobvezna `api_version`. Za Jira Cloud `email` shranjuje e-poštni naslov Atlassian računa, `api_token` pa shranjuje Atlassian API žeton. Za Jira Data Center / Server ti isti ključi shranjujejo uporabniško ime in geslo za osnovno avtentikacijo ali pa pri `auth_mode: pat` `api_token` hrani osebni dostopni žeton, poslan kot Bearer žeton, `email` pa se ne uporablja. Oglejte si [Integracije tretjih oseb](../reference/integrations.md#jira) za korake nastavitve.
 
 | Polje | Konfiguracijski ključ | Opis |
 | --- | --- | --- |
 | Jira E-pošta / Uporabniško ime | `email` | E-pošta Atlassian računa za Jira Cloud ali uporabniško ime za Jira Data Center / Server |
-| API Žeton / Geslo | `api_token` | API žeton Atlassian za Jira Cloud ali geslo za Jira Data Center / Server za osnovno avtentikacijo |
+| Avtentikacija | `auth_mode` | `basic` (privzeto) ali `pat` (samo Data Center / Server) |
+| API Žeton / Geslo / Osebni dostopni žeton | `api_token` | API žeton Atlassian za Jira Cloud, geslo za Jira Data Center / Server za osnovno avtentikacijo ali osebni dostopni žeton Data Center v načinu `pat` |
 | Osnovni URL | `base_url` | URL strani Jira, na primer `https://your-domain.atlassian.net` |
 | Način namestitve | `deployment` | `cloud` za Jira Cloud ali `data_center` za Jira Data Center / Server |
 | Različica REST API | `api_version` | Privzeto `3` za Jira Cloud. Data Center / Server uporablja REST API v2 |
 
-Osebni dostopni žetoni in Bearer avtentikacija za Data Center / Server še niso podprti s strani Jira poverilnice.
+Osebni dostopni žetoni zahtevajo Jira Data Center / Server 8.14 ali novejši. Preklop načina avtentikacije počisti shranjeno skrivnost, zato ob preklopu vnesite novo geslo ali žeton.
 
 Uporabite **Preizkusi povezave** za preverjanje poverilnice glede na trenutnega uporabnika Jira.
 

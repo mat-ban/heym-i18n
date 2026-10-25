@@ -109,6 +109,8 @@ Oba dialógy histórie zobrazujú **aktuálne spúšťané spustenia** v hornej 
 - Po zrušení záznam spustenia zmizne pri ďalšej aktualizácii; stlačením **Obnoviť** aktualizujete zoznam manuálne
 - Ak zrušíte beh, ktorý sa už dokončil, požiadavka nemá žiadny efekt
 
+Spustenia čakajúce na [slot súbehu](./webhooks.md#concurrency-limit-and-queued-runs) sú uvedené v rovnakej sekcii s označením **Queued 2/5**, ich miestom v rade a veľkosťou radu. Nemajú tlačidlo **Open live**, pretože zatiaľ nič nebeží; **Cancel** odstráni čakajúce spustenie z radu a zaznamená ho ako `cancelled`. Spustenie, ktoré čakalo dlhšie ako maximálna doba čakania workflowu, sa zaznamená ako `expired`, a spustenie odmietnuté plným radom ako `queue_full`; obe majú v zozname spustení svoj vlastný odznak.
+
 Živá URL adresa je `/workflows/{workflowId}/{executionId}`. Pozorovateľ je iba na čítanie: opustenie
 editora iba odpojí danú kartu prehliadača a nikdy nezastaví workflow. Aktívne snímky
 sa zdieľajú cez PostgreSQL, takže otvorenie behu stále funguje, aj keď trigger a požiadavka

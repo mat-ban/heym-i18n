@@ -105,3 +105,4 @@ Aquestes dreceres estan disponibles al diàleg de l'historial d'execucions i al 
 - [Estructura del workflow](./workflow-structure.md) – Format de nodes i arestes
 - [Node Execute](../nodes/execute-node.md) – Crida sub-workflows (`Ctrl + Shift + O`)
 - [Inici ràpid](../getting-started/quick-start.md) – Creeu el vostre primer workflow
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

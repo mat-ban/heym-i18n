@@ -111,6 +111,10 @@ Tag-ul imaginii trebuie să fie versiunea pe care o rulează main, iar ambele ch
 | On | Scoate un worker din rotație fără a-l opri — execuțiile în curs se termină, nu se atribuie altele noi. Blocat pe activat pentru instanța main: lucrul cu fișiere, pluginuri și agenți de cod rulează acolo indiferent de valoarea comutatorului |
 | Weight | Ponderea sa din execuțiile distribuibile |
 
+## Limite de concurență într-un cluster
+
+[Limita de concurență](./webhooks.md#concurrency-limit-and-queued-runs) a unui workflow este contorizată în PostgreSQL, astfel încât este valabilă pe toate instanțele și procesele: două instanțe nu vor rula niciodată mai multe execuții ale unui workflow decât permite limita. O execuție care a așteptat un slot este plasată după aceleași reguli ca orice altă execuție la pornire, astfel încât o execuție care trebuie să rămână pe main va rămâne acolo. Worker-ul de coadă care execută aceste rulări pornește acum la fiecare instalare, inclusiv pe o singură instanță, unde preia doar rulările puse în coadă de propria instanță. Aceasta înseamnă că o singură instanță menține, de asemenea, conexiunea `LISTEN` de trezire a cozii în fiecare proces; dimensionați conexiunile în același mod ca pentru o instanță de cluster.
+
 ## Istoricul execuțiilor
 
 Fiecare execuție din istoricul execuțiilor indică instanța care a executat-o, iar ambele dialoguri de istoric pot filtra până la o singură instanță. Filtrul se potrivește pe id-ul instanței afișându-i numele, astfel încât redenumirea unei instanțe nu rescrie ceea ce spun execuțiile vechi.

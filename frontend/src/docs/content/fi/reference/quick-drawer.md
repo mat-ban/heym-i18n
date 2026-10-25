@@ -52,6 +52,8 @@ Suorituksen aloittamisen jälkeen valikko näyttää:
 
 `pending` tarkoittaa, että workflow odottaa myöhempää toimintoa, kuten ihmisen arviointia.
 
+Quick Drawer -suoritukset ovat tuotantosuorituksia, joten workflow, jolla on [samanaikaisuusraja](./webhooks.md#concurrency-limit-and-queued-runs), voi asettaa ne odottamaan. Suorituksen ollessa jonossa tilana lukee **Waiting in queue (2/5)**; tila vaihtuu muotoon "running" suorituksen alkaessa ja näyttää tuloksen sen päättyessä ilman vaiheittaista edistymistä. Jonossa vanhentunut tai odottaessa peruutettu suoritus päättyy tilaan `error`.
+
 Tiedostosuoritus kulkee triggerin kertakäyttöisen latauslinkin kautta: paneeli pyytää workflow'lta linkin, lataa tiedoston siihen ja näyttää tuloksen latauksen valmistuttua. Tiedostosuorituksissa näytetään lopullinen tila ja tulosteet mutta ei vaiheittaista edistymistä, ja ne merkitään historiassa myös `Quick Drawer` -tunnisteella. Valittu tiedosto tyhjennetään jokaisen suorituksen jälkeen, koska yksi linkki vastaanottaa vain yhden tiedoston.
 
 ## Selaintallennus

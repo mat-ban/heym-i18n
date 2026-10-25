@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 
 import { heymClientHeaders } from "@/constants/httpIdentity";
 import type {
@@ -81,6 +81,7 @@ import type {
   InputField,
   LLMBatchProgressEvent,
   NodeResult,
+  QueuedRunEvent,
   ServerExecutionHistory,
   ExecutionToken,
   ExecutionTokenListItem,
@@ -211,6 +212,20 @@ const api = axios.create({
   withCredentials: true,
 });
 
+let requestGuard: ((config: InternalAxiosRequestConfig) => string | null) | null = null;
+
+/** Lets a mode refuse requests before they leave, e.g. writes while following someone. */
+export function setRequestGuard(
+  guard: ((config: InternalAxiosRequestConfig) => string | null) | null,
+): void {
+  requestGuard = guard;
+}
+
+api.interceptors.request.use((config) => {
+  const reason = requestGuard?.(config);
+  return reason ? Promise.reject(new axios.CanceledError(reason)) : config;
+});
+
 /** The server's `detail` for a failed request, else the error's message, else `fallback`. */
 export function getErrorDetail(error: unknown, fallback: string): string {
   if (axios.isAxiosError(error)) {
@@ -264,6 +279,8 @@ export interface WorkflowExecuteOptions {
   triggerSource?: string;
   /** When false, request full JSON (node_results, etc.). Default API behavior is outputs-only (x-simple-response). */
   simpleResponse?: boolean;
+  /** Streaming only: the run is waiting for a concurrency slot (sent again when its place changes). */
+  onQueued?: (data: QueuedRunEvent) => void;
 }
 
 function buildWorkflowExecuteRequest(
@@ -617,14 +634,22 @@ export const workflowApi = {
         | "error_workflow_id"
         | "minutes_saved_per_run"
         | "workflow_timeout_seconds"
+        | "concurrency_limit"
+        | "concurrency_max_queue"
+        | "concurrency_max_wait_seconds"
       >
     > & {
       // Optimistic concurrency: the revision this edit is based on. The server answers 409 when
       // the stored workflow is newer. Omit to save unconditionally.
       base_updated_at?: string;
     },
+    headers?: Record<string, string>,
   ): Promise<Workflow> => {
-    const response = await api.put<Workflow>(`/workflows/${id}`, data);
+    const response = await api.put<Workflow>(
+      `/workflows/${id}`,
+      data,
+      headers ? { headers } : undefined,
+    );
     return noteWorkflowRevision(response.data);
   },
 
@@ -1062,7 +1087,15 @@ export const workflowApi = {
             if (line.startsWith("data: ")) {
               const data = JSON.parse(line.slice(6));
 
-              if (data.type === "execution_started") {
+              if (data.type === "queued") {
+                options?.onQueued?.({
+                  execution_id: data.execution_id,
+                  position: data.position,
+                  size: data.size,
+                  running: data.running,
+                  limit: data.limit ?? null,
+                });
+              } else if (data.type === "execution_started") {
                 onExecutionStarted({
                   execution_id: data.execution_id,
                   server_now_ms:

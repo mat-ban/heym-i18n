@@ -148,7 +148,7 @@ El AI Assistant funciona mediante un **workflow DSL** (lenguaje específico de d
    - Sus Reglas de usuario añadidas como "User Custom Rules"
    - El JSON del workflow actual cuando usted está editando un workflow existente
    - La lista de workflows disponibles si utiliza el nodo Execute
-   - Los nombres, tipos e ids de sus propias credenciales (nunca sus valores)
+   - Los nombres, tipos e ids de las credenciales que posee o que se compartieron con usted (nunca sus valores)
    - Los nombres, ids, descripciones y columnas de las tablas de datos que puede utilizar (nunca sus filas)
 3. El modelo devuelve un único bloque JSON de workflow (con `nodes` y `edges`). El frontend lo analiza y lo aplica al canvas.
 ### Credenciales

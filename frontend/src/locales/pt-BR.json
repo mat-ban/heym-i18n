@@ -1228,7 +1228,8 @@
     "toolCalls": "Chamadas de ferramentas",
     "askAi": "Perguntar à IA",
     "askAiTitle": "Perguntar ao assistente de Chat sobre esta execução",
-    "noNodeSpans": "Nenhum span de nó foi registrado para esta execução."
+    "noNodeSpans": "Nenhum span de nó foi registrado para esta execução.",
+    "queuedProgress": "Na fila {position}/{size}"
   },
   "logs": {
     "all": "Todos",
@@ -1741,6 +1742,22 @@
         "waiting": "Aguardando",
         "neutral": "Neutro"
       }
+    },
+    "concurrencyLimit": "Limite de simultaneidade",
+    "concurrencyLimitHelp": "Execuções de produção (Webhooks, Cron, MCP, Portal, Triggers) acima do limite aguardam em uma fila FIFO. As execuções de teste do editor iniciam sempre imediatamente.",
+    "maxConcurrentRuns": "Execuções simultâneas máximas",
+    "maxQueueSizeOptional": "Tamanho máximo da fila (opcional)",
+    "emptyNoLimit": "Vazio = sem limite",
+    "maxWaitOptional": "Espera máxima (segundos, opcional)",
+    "emptyWaitAsLong": "Vazio = aguardar o tempo necessário",
+    "concurrencyQueueHelp": "Uma fila cheia responde 429. Uma execução que aguardar mais do que a espera máxima é registrada como expirada.",
+    "rag": {
+      "hybridSearch": "Pesquisa híbrida",
+      "hybridSearchHelp": "Combine a similaridade vetorial com a correspondência de palavras-chave BM25, para encontrar termos exatos como IDs, nomes e códigos de erro.",
+      "hybridScore": "Pontuação híbrida (0-1)",
+      "similarityScore": "Pontuação de similaridade",
+      "vectorSimilarity": "Similaridade vetorial",
+      "bm25Score": "Pontuação BM25"
     }
   },
   "quickDrawer": {

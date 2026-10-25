@@ -109,6 +109,73 @@ Se configure par workflow : `rate_limit_requests` et `rate_limit_window_seconds`
 
 Les requêtes `test_run` contournent la limitation de débit.
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Limite de simultanéité et exécutions en file d'attente
+
+Un workflow peut plafonner le nombre d'exécutions de production simultanées. Activez **Limite de simultanéité** dans le panneau **Properties** au niveau du workflow et définissez **Exécutions simultanées max**. Les propriétaires et collaborateurs disposant d'un accès en édition peuvent le modifier. La limite est désactivée par défaut.
+
+Lorsque la limite est atteinte, les nouvelles exécutions attendent dans une file d'attente premier entré, premier sorti (FIFO). Cela couvre chaque point d'entrée de production : cet endpoint, l'[endpoint de streaming](./sse-streaming.md), le [Portal](./portal.md), le [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) et chaque [trigger](./triggers.md). Les exécutions de test de l'éditeur démarrent toujours immédiatement et ne consomment pas de slot. Envoyer `test_run=true` sans session connectée autorisée à ouvrir le workflow n'évite pas la file d'attente.
+
+| Paramètre | Description |
+|---|---|
+| `concurrency_limit` | Exécutions de production autorisées simultanément. `0` désactive la limite |
+| `concurrency_max_queue` | Facultatif. Nombre d'exécutions autorisées à attendre simultanément. Vide signifie aucune limite |
+| `concurrency_max_wait_seconds` | Facultatif. Une exécution qui attend plus longtemps est enregistrée comme `expired`. Vide signifie qu'elle attend aussi longtemps que nécessaire |
+
+### 202 Accepted
+
+Un appel qui démarre immédiatement se comporte exactement comme décrit dans Format de la réponse. Un appel devant attendre reçoit immédiatement `202 Accepted`, indépendamment de `X-Simple-Response`, avec un en-tête `Location` pointant vers son URL de statut :
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Champ | Description |
+|---|---|
+| `queue.position` | Place de cette exécution dans la file, commençant à 1 |
+| `queue.size` | Exécutions actuellement en attente |
+| `queue.running` | Exécutions occupant actuellement un emplacement |
+| `queue.limit` | Limite de simultanéité du workflow |
+| `status_token` | Workflows anonymes uniquement. Renvoyé une seule fois, dans cette réponse |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` répond avec l'état de l'exécution. Appelez-le avec les mêmes identifiants que ceux ayant démarré l'exécution : une session ou un JWT, un [jeton d'exécution](./execution-tokens.md) ou l'en-tête personnalisé du workflow. Un workflow anonyme n'ayant aucun identifiant à vérifier, envoyez le `status_token` reçu du 202 dans l'en-tête `X-Heym-Run-Token`. Le jeton n'est jamais lu depuis la query string. Un jeton erroné ou manquant reçoit `404`, tout comme une exécution inconnue.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Signification (une exécution devant attendre un créneau de simultanéité reçoit la [réponse 202](#202-accepted) à la place) |
+|---|---|
+| `queued` | En attente d'un emplacement ; `queue` indique son avancement |
+| `running` | Dispose d'un emplacement et est en cours d'exécution |
+| `success` / `error` | Terminé ; `outputs` et `error` sont renseignés |
+| `pending` | En pause pour [révision humaine](./human-in-the-loop.md) |
+| `cancelled` | Annulé depuis l'[Historique des exécutions](./execution-history.md) |
+| `expired` | A attendu plus longtemps que `concurrency_max_wait_seconds` et n'a jamais été exécuté |
+
+Interrogez toutes les quelques secondes jusqu'à ce que le statut ne soit plus `queued` ni `running`. Une exécution en file d'attente s'exécute même si personne ne l'interroge.
+
+### File d'attente pleine
+
+Lorsque `concurrency_max_queue` est défini et que ce nombre d'exécutions est déjà atteint dans la file d'attente, l'appel est rejeté avec `429 Concurrency queue is full` et une entrée `queue_full` dans l'historique des exécutions. Rien n'est mis en file d'attente.
+
 ## Format de la réponse
 
 L'endpoint renvoie du JSON :

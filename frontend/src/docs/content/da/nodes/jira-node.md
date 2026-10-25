@@ -8,22 +8,23 @@
 |----------|-------|
 | Inputs | 1 |
 | Outputs | 1 |
-| Legitimationsoplysninger | Jira (Cloud email/API-token eller Data Center brugernavn/adgangskode, basis-URL, deployment-tilstand, valgfri REST API-version) |
+| Legitimationsoplysninger | Jira (Cloud email/API-token, Data Center brugernavn/adgangskode eller personligt adgangstoken, basis-URL, deployment-tilstand, valgfri REST API-version) |
 | Output | `$nodeLabel.*` |
 
 ## Legitimationsoplysninger
 
-Opret **Jira**-legitimationsoplysninger under [Legitimationsoplysninger-fanen](../tabs/credentials-tab.md). Gemte konfigurationsnøgler er `email`, `api_token`, `base_url`, `deployment` og valgfri `api_version`. For Jira Cloud gemmes Atlassian-kontoens email i `email` og Atlassian API-token i `api_token`. For Jira Data Center/Server gemmes Basic auth-brugernavn og -adgangskode i de samme nøgler. Se [Tredjepartsintegrationer](../reference/integrations.md#jira) for opsætningsinstruktioner.
+Opret **Jira**-legitimationsoplysninger under [Legitimationsoplysninger-fanen](../tabs/credentials-tab.md). Gemte konfigurationsnøgler er `email`, `api_token`, `base_url`, `deployment`, `auth_mode` og valgfri `api_version`. For Jira Cloud gemmes Atlassian-kontoens email i `email` og Atlassian API-token i `api_token`. For Jira Data Center/Server gemmes Basic auth-brugernavn og -adgangskode i de samme nøgler, eller med `auth_mode: pat` gemmer `api_token` et personligt adgangstoken sendt som et Bearer-token, og `email` bruges ikke. Se [Tredjepartsintegrationer](../reference/integrations.md#jira) for opsætningsinstruktioner.
 
 | Felt | Konfigurationsnøgle | Beskrivelse |
 | --- | --- | --- |
 | Jira Email / Brugernavn | `email` | Atlassian-kontoens email for Jira Cloud, eller brugernavn for Jira Data Center/Server |
-| API-token / Adgangskode | `api_token` | Atlassian API-token for Jira Cloud, eller adgangskode til Basic auth for Jira Data Center/Server |
+| Godkendelse | `auth_mode` | `basic` (standard) eller `pat` (kun Data Center / Server) |
+| API-token / Adgangskode / Personligt adgangstoken | `api_token` | Atlassian API-token for Jira Cloud, adgangskode til Basic auth for Jira Data Center/Server, eller et personligt Data Center-adgangstoken i `pat`-tilstand |
 | Basis-URL | `base_url` | Jira-site-URL, f.eks. `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` for Jira Cloud eller `data_center` for Jira Data Center/Server |
 | REST API-version | `api_version` | Standard er `3` for Jira Cloud. Data Center/Server bruger REST API v2 |
 
-Data Center/Server-personlige adgangstokens og Bearer auth understøttes ikke af Jira-legitimationsoplysningerne endnu.
+Personlige adgangstokens kræver Jira Data Center / Server 8.14 eller nyere. Skift af godkendelsesmetode rydder den gemte hemmelighed, så indtast den nye adgangskode eller token, når du skifter.
 
 Brug **Test Forbindelse** for at verificere legitimationsoplysningerne mod den aktuelle Jira-bruger.
 

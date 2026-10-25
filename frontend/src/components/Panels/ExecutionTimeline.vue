@@ -21,6 +21,7 @@ import {
   isSameSpan,
   LIVE_TIMELINE_REFRESH_INTERVAL_MS,
   orderSpansByStart,
+  runWallTimes,
   summarizeTimelineModel,
 } from "@/components/Panels/executionTimeline";
 import ExecutionSpanDetails from "@/components/Panels/ExecutionSpanDetails.vue";
@@ -35,6 +36,8 @@ interface Props {
   totalTimeMs: number;
   subAgentLabelToParentId: Map<string, string>;
   serverClockOffsetMs?: number;
+  /** When the run started, as stored in its history row. */
+  startedAt?: string | null;
 }
 
 const props = defineProps<Props>();
@@ -208,6 +211,30 @@ const timelineSummary = computed(() =>
   summarizeTimelineModel(fullTimelineModel.value.rows, fullTimelineModel.value.timeWindow),
 );
 
+interface WallTimeLabel {
+  short: string;
+  full: string;
+}
+
+const wallTimes = computed(() => runWallTimes(props.nodeResults, props.startedAt));
+const startedLabel = computed((): WallTimeLabel | null => {
+  const ms = wallTimes.value.startedMs;
+  if (ms === null) return null;
+  const started = new Date(ms);
+  return { short: started.toLocaleString(), full: started.toISOString() };
+});
+// The finish drops the date when it is the same day as the start.
+const finishedLabel = computed((): WallTimeLabel | null => {
+  const { startedMs, finishedMs } = wallTimes.value;
+  if (finishedMs === null) return null;
+  const finished = new Date(finishedMs);
+  const sameDay =
+    startedMs !== null && new Date(startedMs).toDateString() === finished.toDateString();
+  return {
+    short: sameDay ? finished.toLocaleTimeString() : finished.toLocaleString(),
+    full: finished.toISOString(),
+  };
+});
 const rows = computed(() => fullTimelineModel.value.rows);
 const hiddenRowKeys = ref<Set<string>>(new Set());
 const visibleNodeResults = computed(() =>
@@ -372,6 +399,16 @@ function showAllRows(): void {
       class="flex items-center gap-3 px-2 py-1.5 border-b border-border/20 bg-background/40 text-[10px] text-muted-foreground"
     >
       <span class="font-medium text-foreground/80">{{ $t("history.timeline.executionSummary") }}</span>
+      <span
+        v-if="startedLabel"
+        :title="startedLabel.full"
+        data-testid="execution-timeline-started-at"
+      >Started {{ startedLabel.short }}</span>
+      <span
+        v-if="finishedLabel"
+        :title="finishedLabel.full"
+        data-testid="execution-timeline-finished-at"
+      >Finished {{ finishedLabel.short }}</span>
       <span>{{ formatTimelineMs(timelineSummary.totalDurationMs) }}</span>
       <span>{{ $t("history.timeline.spansCount", { count: timelineSummary.spanCount }) }}</span>
       <span
@@ -410,7 +447,7 @@ function showAllRows(): void {
               transform: marker.pct === 100 ? 'translateX(-100%)' : marker.pct > 0 ? 'translateX(-50%)' : 'none',
             }"
           >
-            <span class="text-[9px] text-muted-foreground/40 leading-none px-0.5 font-mono">
+            <span class="text-[10px] text-muted-foreground leading-none px-0.5 font-mono">
               {{ marker.label }}
             </span>
           </div>

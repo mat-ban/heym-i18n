@@ -85,6 +85,20 @@ Discord wysyła webhooki interakcji do `POST /api/discord/webhook/{node_id}`. Pa
 
 Konsument RabbitMQ uruchamia się, gdy inicjalizuje się lider worker. Workflow z węzłami `rabbitmq`, w których `rabbitmqOperation === "receive"`, otrzymują konsumenta. Dane wejściowe obejmują `message_data` (body, headers, routing_key itp.) oraz `triggered_by: "rabbitmq"`.
 
+## Limit współbieżności
+
+Workflow z [limitem współbieżności](./webhooks.md#concurrency-limit-and-queued-runs) umieszcza w kolejce uruchomienia produkcyjne z każdego powyższego punktu wejścia, gdy jego sloty są pełne, zgodnie z zasadą FIFO (pierwsze weszło, pierwsze wyszło), we wszystkich instancjach. Sposób, w jaki wywołujący otrzymuje wynik, zależy od punktu wejścia:
+
+| Punkt wejścia | Podczas gdy uruchomienie oczekuje |
+|---|---|
+| Webhook / API | `202 Accepted` z `execution_id` oraz adresem URL statusu |
+| SSE streaming, Quick Drawer, Portal chat | Strumień pozostaje otwarty i wysyła zdarzenia `queued` |
+| Portal without streaming | Żądanie oczekuje na wynik |
+| MCP | Wynik `queued` do odpytania za pomocą `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger oczekuje na wynik tak długo, jak trwałoby to w przypadku uruchomienia na innej [instancji](./cluster.md). Uruchomienie i tak jest wykonywane i zapisywane w historii |
+
+Gdy kolejka jest pełna, uruchomienie nie rozpoczyna się, a historia zapisuje je jako `queue_full`. Testowe uruchomienia w edytorze, wywołania podrzędnych workflow (węzeł [Execute](../nodes/execute-node.md) oraz narzędzia workflow agenta), [Evals](../tabs/evals-tab.md), testy w trybie budowania czatu oraz wznowienia po recenzji nigdy nie trafiają do kolejki. Uruchomienia kart [Board](../tabs/board-tab.md), uruchomienia [File Upload](../nodes/file-upload-trigger-node.md), uruchomienia rozpoczęte przez narzędzie run-workflow asystenta AI oraz workflowy powiadomień o alertach również startują bez oczekiwania na slot.
+
 ## trigger_source
 
 Historia wykonań rejestruje `trigger_source` dla każdego punktu wejścia:

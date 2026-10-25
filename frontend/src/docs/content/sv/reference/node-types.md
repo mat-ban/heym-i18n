@@ -30,7 +30,7 @@ Se [Triggers](./triggers.md) för alla ingångspunkter.
 | [Codex](../nodes/codex-node.md) | Kör det lokala Codex CLI mot ett GitHub-repositorium med en ChatGPT/Codex-åtkomsttoken | 1 | 1, plus `question`-utdata |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Kör OpenCode CLI mot ett GitHub-repositorium i en härdad container med en OpenCode Go gateway API-nyckel | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Anropa ett specifikt MCP-verktyg direkt utan att en LLM väljer det | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Infoga, upserta, ta bort eller sök i en Qdrant- eller Postgres (pgvector) [vector store](../tabs/vectorstores-tab.md) för RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Infoga, upserta, ta bort eller sök (vektor eller hybrid vektor + BM25) i en Qdrant- eller Postgres (pgvector) [vector store](../tabs/vectorstores-tab.md) för RAG | 1 | 1 |
 
 ## Logiknoder
 

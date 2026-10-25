@@ -8,22 +8,23 @@ Węzeł **Jira** łączy workflow z Jira REST API w zakresie automatyzacji proje
 |----------|-------|
 | Wejścia | 1 |
 | Wyjścia | 1 |
-| Dane logowania | Jira (Cloud: email/API token lub Data Center: nazwa użytkownika/hasło, base URL, tryb wdrożenia, opcjonalna wersja REST API) |
+| Dane logowania | Jira (Cloud: email/API token, Data Center: nazwa użytkownika/hasło lub token dostępu osobistego, base URL, tryb wdrożenia, opcjonalna wersja REST API) |
 | Wyjście | `$nodeLabel.*` |
 
 ## Dane logowania
 
-Należy utworzyć dane logowania **Jira** w [zakładce Dane logowania](../tabs/credentials-tab.md). Przechowywane klucze konfiguracji to `email`, `api_token`, `base_url`, `deployment` oraz opcjonalny `api_version`. W przypadku Jira Cloud pole `email` przechowuje adres e-mail konta Atlassian, a `api_token` przechowuje token API Atlassian. W przypadku Jira Data Center / Server te same klucze przechowują nazwę użytkownika i hasło do uwierzytelniania Basic. Kroki konfiguracji opisano w sekcji [Integracje zewnętrzne](../reference/integrations.md#jira).
+Należy utworzyć dane logowania **Jira** w [zakładce Dane logowania](../tabs/credentials-tab.md). Przechowywane klucze konfiguracji to `email`, `api_token`, `base_url`, `deployment`, `auth_mode` oraz opcjonalny `api_version`. W przypadku Jira Cloud pole `email` przechowuje adres e-mail konta Atlassian, a `api_token` przechowuje token API Atlassian. W przypadku Jira Data Center / Server te same klucze przechowują nazwę użytkownika i hasło do uwierzytelniania Basic, lub z parametrem `auth_mode: pat` pole `api_token` przechowuje token dostępu osobistego wysyłany jako token Bearer, a `email` nie jest używany. Kroki konfiguracji opisano w sekcji [Integracje zewnętrzne](../reference/integrations.md#jira).
 
 | Pole | Klucz konfiguracji | Opis |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Adres e-mail konta Atlassian w Jira Cloud lub nazwa użytkownika Jira Data Center / Server |
-| API Token / Password | `api_token` | Token API Atlassian w Jira Cloud lub hasło do uwierzytelniania Basic w Jira Data Center / Server |
+| Uwierzytelnianie | `auth_mode` | `basic` (domyślnie) lub `pat` (tylko Data Center / Server) |
+| API Token / Password / Token dostępu osobistego | `api_token` | Token API Atlassian w Jira Cloud, hasło do uwierzytelniania Basic w Jira Data Center / Server lub token dostępu osobistego Data Center w trybie `pat` |
 | Base URL | `base_url` | Adres URL witryny Jira, na przykład `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` dla Jira Cloud lub `data_center` dla Jira Data Center / Server |
 | REST API Version | `api_version` | Domyślnie `3` dla Jira Cloud. Data Center / Server korzysta z REST API v2 |
 
-Tokeny dostępu osobistego oraz uwierzytelnianie Bearer dla Data Center / Server nie są jeszcze obsługiwane przez dane logowania Jira.
+Tokeny dostępu osobistego wymagają Jira Data Center / Server w wersji 8.14 lub nowszej. Zmiana metody uwierzytelniania czyści zapisany wpis tajny, dlatego należy wprowadzić nowe hasło lub token po przełączeniu.
 
 Należy użyć przycisku **Test Connection**, aby zweryfikować dane logowania względem bieżącego użytkownika Jira.
 

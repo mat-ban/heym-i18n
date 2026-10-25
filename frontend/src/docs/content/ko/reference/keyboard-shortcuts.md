@@ -105,3 +105,5 @@ Command Palette는 편집기, 대시보드, 문서 및 evals 뷰에서 사용할
 - [Workflow 구조](./workflow-structure.md) – 노드 및 엣지 형식
 - [Execute 노드](../nodes/execute-node.md) – 하위 Workflow 호출 (`Ctrl + Shift + O`)
 - [빠른 시작](../getting-started/quick-start.md) – 첫 번째 Workflow 구축
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

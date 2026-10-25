@@ -86,6 +86,20 @@ Discord gửi các webhook tương tác đến `POST /api/discord/webhook/{node_
 
 Consumer RabbitMQ khởi động khi worker leader khởi tạo. Các workflow có node `rabbitmq` với `rabbitmqOperation === "receive"` sẽ được cấp một consumer. Đầu vào bao gồm `message_data` (body, headers, routing_key, v.v.) và `triggered_by: "rabbitmq"`.
 
+## Giới hạn đồng thời
+
+Một workflow có [giới hạn đồng thời](./webhooks.md#concurrency-limit-and-queued-runs) sẽ xếp hàng đợi các lượt chạy sản xuất từ mọi điểm vào ở trên khi các vị trí của nó đầy, vào trước ra trước, trên tất cả các instance. Cách người gọi nhận kết quả tùy thuộc vào điểm vào:
+
+| Entry point | Trong khi lượt chạy đang chờ |
+|---|---|
+| Webhook / API | `202 Accepted` với `execution_id` và một URL trạng thái |
+| SSE streaming, Quick Drawer, Portal chat | Luồng tiếp tục mở và gửi các sự kiện `queued` |
+| Portal without streaming | Yêu cầu chờ kết quả |
+| MCP | Kết quả `queued` để thăm dò bằng `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger chờ kết quả chừng nào một lượt chạy trên một [instance](./cluster.md) khác phải chờ. Lượt chạy vẫn thực thi theo cách này hay cách khác và được ghi vào lịch sử |
+
+Khi hàng đợi đầy, lượt chạy không bắt đầu và lịch sử ghi lại dưới dạng `queue_full`. Các lượt chạy thử của editor, lệnh gọi sub-workflow (node [Execute](../nodes/execute-node.md) và công cụ workflow của tác tử), [Evals](../tabs/evals-tab.md), lượt chạy thử ở chế độ chat build và tiếp tục xem xét không bao giờ được xếp vào hàng đợi. Các lượt chạy thẻ [Board](../tabs/board-tab.md), lượt chạy [File Upload](../nodes/file-upload-trigger-node.md), các lượt chạy do công cụ run-workflow của trợ lý AI khởi tạo và workflow thông báo cảnh báo cũng bắt đầu mà không cần chờ vị trí.
+
 ## trigger_source
 
 Lịch sử thực thi ghi lại `trigger_source` cho mọi điểm vào:

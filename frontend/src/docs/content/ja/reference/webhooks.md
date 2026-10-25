@@ -109,6 +109,73 @@ Workflowごとに構成します: `rate_limit_requests` と `rate_limit_window_s
 
 `test_run` リクエストはレート制限をバイパスします。
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## 同時実行制限とキューに入った実行
+
+ワークフローは、同時に実行される本番実行の数を制限できます。ワークフローレベルの **Properties** パネルで **同時実行制限** を有効にし、**最大同時実行数** を設定します。オーナーおよび編集アクセス権を持つ共同編集者がこれを変更できます。この制限はデフォルトで無効になっています。
+
+制限に達している間、新しい実行は先入れ先出し (FIFO) キューで待機します。これは、すべての本番エントリポイントを対象とします。この endpoint、[ストリーミングEndpoint](./sse-streaming.md)、[Portal](./portal.md)、[Quick Drawer](./quick-drawer.md)、[MCP](../tabs/mcp-tab.md)、および各 [trigger](./triggers.md) です。エディタ自身のテスト実行は常にすぐに開始され、スロットを消費しません。ワークフローを開くことができるサインインセッションなしで `test_run=true` を送信しても、キューをバイパスすることはできません。
+
+| 設定 | 説明 |
+|---|---|
+| `concurrency_limit` | 同時に許可される本番実行数。`0` で制限が無効になります |
+| `concurrency_max_queue` | 任意。同時に待機できる実行数。空の場合は無制限 |
+| `concurrency_max_wait_seconds` | 任意。これより長く待機した実行は `expired` として記録されます。空の場合は必要なだけ待機します |
+
+### 202 Accepted
+
+すぐに開始される呼び出しは、レスポンス形式に記載されているとおりに動作します。待機する必要がある呼び出しは、`X-Simple-Response` の値にかかわらず直ちに `202 Accepted` を受け取り、ステータス URL を指す `Location` ヘッダーが返されます:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| フィールド | 説明 |
+|---|---|
+| `queue.position` | キュー内でのこの実行の位置 (1 から開始) |
+| `queue.size` | 現在待機中の実行数 |
+| `queue.running` | 現在スロットを保持している実行数 |
+| `queue.limit` | ワークフローの同時実行制限 |
+| `status_token` | 匿名ワークフローのみ。このレスポンスで一度だけ返されます |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` は実行の状態を返します。実行を開始したのと同じ認証情報 (セッションまたは JWT、[実行トークン](./execution-tokens.md)、またはワークフローのカスタムヘッダー) で呼び出します。匿名ワークフローには確認する認証情報がないため、202 レスポンスからの `status_token` を `X-Heym-Run-Token` ヘッダーで送信します。トークンがクエリ文字列から読み取られることはありません。トークンが間違っているか存在しない場合は、不明な実行と同様に `404` が返されます。
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | 意味 (同時実行スロットを待機する必要がある実行は、代わりに [202 レスポンス](#202-accepted) を受け取ります) |
+|---|---|
+| `queued` | スロットを待機中。`queue` がその順位を示します |
+| `running` | スロットを確保して実行中 |
+| `success` / `error` | 完了。`outputs` と `error` が入力されています |
+| `pending` | [人間によるレビュー](./human-in-the-loop.md) のため一時停止中 |
+| `cancelled` | [実行履歴](./execution-history.md) からキャンセルされました |
+| `expired` | `concurrency_max_wait_seconds` を超えて待機し、実行されませんでした |
+
+ステータスが `queued` または `running` でなくなるまで数秒ごとにポーリングします。キューに入れられた実行は、誰もポーリングしなくても実行されます。
+
+### キューが満杯
+
+`concurrency_max_queue` が設定されており、すでにその数の実行が待機している場合、呼び出しは `429 Concurrency queue is full` で拒否され、実行履歴に `queue_full` エントリが記録されます。キューには何も追加されません。
+
 ## レスポンス形式
 
 Endpoint は JSON を返します：

@@ -147,3 +147,5 @@ Paverskite pasirinktus mazgus į pakartotinai naudojamą sub-workflow ir pakeisk
 - [Vykdymo istorija](./execution-history.md) – Praeities vykdymai
 - [Šablonai](../tabs/templates-tab.md) – Išsaugoti ir pakartotinai naudoti workflows ir mazgus
 - [Kontekstinis demonstravimas](./contextual-showcase.md) – Kompaktiška puslapio instrukcija, prieinama redaktoriuje
+
+- [Bendradarbiavimas drobėje](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

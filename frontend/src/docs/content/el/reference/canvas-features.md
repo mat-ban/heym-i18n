@@ -147,3 +147,5 @@
 - [Execution History](./execution-history.md) – Προηγούμενες εκτελέσεις
 - [Templates](../tabs/templates-tab.md) – Αποθήκευση και επαναχρησιμοποίηση workflows και κόμβων
 - [Contextual Showcase](./contextual-showcase.md) – Συμπαγής οδηγός σελίδας διαθέσιμος στον επεξεργαστή
+
+- [Συνεργασία στον Καμβά](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

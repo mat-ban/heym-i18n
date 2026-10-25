@@ -108,6 +108,73 @@ Konfigurowane dla każdego workflow: `rate_limit_requests` oraz `rate_limit_wind
 | `rate_limit_window_seconds` | Czas trwania okna w sekundach |
 
 Żądania `test_run` pomijają ograniczanie szybkości.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Limit współbieżności i uruchomienia w kolejce
+
+Workflow może ograniczać liczbę jednoczesnych uruchomień produkcyjnych. Włącz **Limit współbieżności** w panelu **Properties** na poziomie workflow i ustaw **Maks. liczba równoczesnych uruchomień**. Właściciele i współpracownicy z uprawnieniami do edycji mogą to zmieniać. Limit jest domyślnie wyłączony.
+
+Po osiągnięciu limitu nowe uruchomienia czekają w kolejce FIFO (pierwsze weszło, pierwsze wyszło). Obejmuje to każdy punkt wejścia w środowisku produkcyjnym: ten endpoint, [endpoint strumieniowy](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) oraz każdy [trigger](./triggers.md). Uruchomienia testowe z edytora zawsze startują natychmiast i nie zajmują slotu. Przesłanie `test_run=true` bez zalogowanej sesji z dostępem do otwarcia workflow nie omija kolejki.
+
+| Ustawienie | Opis |
+|---|---|
+| `concurrency_limit` | Dozwolona liczba uruchomień produkcyjnych jednocześnie. `0` wyłącza limit |
+| `concurrency_max_queue` | Opcjonalnie. Dozwolona liczba oczekujących uruchomień. Puste pole oznacza brak limitu |
+| `concurrency_max_wait_seconds` | Opcjonalnie. Uruchomienie czekające dłużej jest oznaczane jako `expired`. Puste pole oznacza brak limitu czasu oczekiwania |
+
+### 202 Accepted
+
+Wywołanie uruchamiane od razu działa dokładnie tak, jak opisano w sekcji Format odpowiedzi. Wywołanie, które musi poczekać, natychmiast otrzymuje kod `202 Accepted`, niezależnie od nagłówka `X-Simple-Response`, z nagłówkiem `Location` wskazującym adres URL statusu:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Pole | Opis |
+|---|---|
+| `queue.position` | Miejsce tego uruchomienia w kolejce, począwszy od 1 |
+| `queue.size` | Uruchomienia aktualnie oczekujące |
+| `queue.running` | Uruchomienia zajmujące aktualnie slot |
+| `queue.limit` | Limit współbieżności danego workflow |
+| `status_token` | Tylko anonimowe workflow. Zwracane jednorazowo, w tej odpowiedzi |
+
+### Status URL
+
+Metoda `GET /api/workflows/{workflow_id}/executions/{execution_id}/status` zwraca stan uruchomienia. Należy ją wywoływać z tymi samymi poświadczeniami, które uruchomiły zadanie: sesją lub JWT, [tokenem wykonania](./execution-tokens.md) lub niestandardowym nagłówkiem workflow. Anonimowy workflow nie wymaga weryfikacji poświadczeń, dlatego należy przesłać `status_token` z odpowiedzi 202 w nagłówku `X-Heym-Run-Token`. Token nigdy nie jest odczytywany z query string. Błędny lub brakujący token zwraca błąd `404`, tak samo jak nieznane wykonanie.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Znaczenie (uruchomienie, które musi poczekać na slot współbieżności, otrzymuje zamiast tego [odpowiedź 202](#202-accepted)) |
+|---|---|
+| `queued` | Oczekuje na slot; obiekt `queue` pokazuje stan |
+| `running` | Posiada slot i jest w trakcie wykonywania |
+| `success` / `error` | Zakończono; pola `outputs` i `error` są wypełnione |
+| `pending` | Wstrzymano w celu [przeglądu przez człowieka](./human-in-the-loop.md) |
+| `cancelled` | Anulowano z poziomu [Historii uruchomień](./execution-history.md) |
+| `expired` | Oczekiwało dłużej niż `concurrency_max_wait_seconds` i nie zostało wykonane |
+
+Wysyłaj zapytania co kilka sekund, aż status przestanie być `queued` lub `running`. Zakolejkowane uruchomienie wykona się nawet wtedy, gdy nikt nie sprawdza jego stanu.
+
+### Przepełniona kolejka
+
+Gdy parametr `concurrency_max_queue` jest ustawiony i tyle uruchomień już oczekuje, wywołanie zostaje odrzucone z błędem `429 Concurrency queue is full` oraz wpisem `queue_full` w historii uruchomień. Nic nie zostaje zakolejkowane.
+
 ## Format odpowiedzi
 
 Endpoint zwraca JSON:

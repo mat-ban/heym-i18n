@@ -111,6 +111,10 @@ Image-tagget skal være den version, main kører, og begge nøgler skal kopieres
 | Til | Tag en worker ud af rotation uden at stoppe den - igangværende kørsler afsluttes, ingen nye tildeles. Låst til for main-instansen: fil-, plugin- og coding-agent-arbejde kører der uanset indstillingen |
 | Vægt | Dens andel af distribuerbare kørsler |
 
+## Concurrency-grænser i et cluster
+
+Et workflows [concurrency-grænse](./webhooks.md#concurrency-limit-and-queued-runs) tælles i PostgreSQL, så den gælder på tværs af alle instanser og alle processer: to instanser kører aldrig flere kørsler af et workflow, end grænsen tillader. En kørsel, der ventede på en plads, placeres efter de samme regler som enhver anden kørsel, når den starter, så en kørsel, der skal forblive på main, gør det stadig. Den kø-worker, der udfører disse kørsler, starter nu på enhver installation, herunder en enkelt instans, hvor den kun overtager kørsler, som dens egen instans har sat i kø. Det betyder, at en enkelt instans også holder kø-vække-`LISTEN`-forbindelsen i hver proces; budgetter derfor dens forbindelser på samme måde som for en cluster-instans.
+
 ## Kørselshistorik
 
 Hver kørsel i kørselshistorikken navngiver den instans, der udførte den, og begge historik-dialoger kan filtreres ned til én instans. Filtret matcher på instansens id, mens dens navn vises, så omdøbning af en instans omskriver ikke, hvad gamle kørsler angiver.

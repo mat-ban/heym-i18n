@@ -148,7 +148,7 @@ AI Assistant didukung oleh **workflow DSL** (domain-specific language) yang mend
    - User Rules Anda yang ditambahkan sebagai "User Custom Rules"
    - JSON workflow saat ini ketika Anda sedang mengedit workflow yang sudah ada
    - Daftar workflow yang tersedia jika Anda menggunakan node Execute
-   - Nama, tipe, dan id credential milik Anda (tidak pernah nilainya)
+   - Nama, tipe, dan id credential milik Anda atau yang dibagikan kepada Anda (tidak pernah nilainya)
    - Nama, id, deskripsi, dan kolom data table yang dapat Anda gunakan (tidak pernah barisnya)
 3. Model mengembalikan satu blok JSON workflow (dengan `nodes` dan `edges`). Frontend mem-parsing-nya dan menerapkannya ke kanvas.
 

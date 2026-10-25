@@ -36,6 +36,21 @@ Hvert workflow kan eksponeres som et MCP-værktøj:
 
 Workflow-kort viser beskrivelsen og en forhåndsvisning af inputfeltnavne, så det er muligt at se, hvad hvert værktøj forventer, før det aktiveres.
 
+
+### Kørsler i kø og heym_execution_status
+
+Et workflow med en [samtidighedsgrænse](../reference/webhooks.md#concurrency-limit-and-queued-runs) kan være optaget, når en klient kalder det. Kaldet returnerer straks et resultat, der ikke er en fejl:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klienten poller værktøjet `heym_execution_status` med dette `execution_id`. Det returnerer samme krop som [status-URL'en](../reference/webhooks.md#status-url): `queued` med den aktuelle position, `running`, derefter `success` eller `error` med outputtene. Det finder kun kørsler af workflows, som den samme server udstiller. Værktøjet vises på standardserveren og på hver navngiven server kun, så længe mindst ét af dens workflows har en samtidighedsgrænse. Når køen er fuld, returnerer kaldet fejlen "Concurrency queue is full".
 ## Heym Chat-værktøj
 
 Sektionen **Heym-funktioner** omdanner Chat-fanens motor til ét MCP-værktøj ved navn `heym_chat`. Aktiver det på standardserveren, på enhver navngiven server eller på begge – hver overflade har sin egen toggle og modelvalg.
@@ -49,6 +64,7 @@ Når det er aktiveret, vises `heym_chat` i `tools/list` sammen med workflow-vær
 - Rapporter, hvad der kører lige nu: hvor mange eksekveringer der er aktive, deres workflownavne, hvor længe hver har kørt, hvilken node hver er på, og et link til den aktive kørsel
 - List boards, opret kort og læs kortdetaljer på [Board-fanen](./board-tab.md)
 - List datatabeller med deres kolonner, opret nye og forbind dem til de workflows, den bygger
+- Opret eller opdater dine legitimationsoplysninger på Heyms egen side (se [Legitimationsoplysninger](#legitimationsoplysninger))
 - Læs teams og globale variabler, og søg i dokumentationen
 - Godkend, rediger eller afvis afventende human-in-the-loop-godkendelser
 
@@ -58,14 +74,28 @@ Funktioner tilføjet til Chat-fanen senere bliver automatisk tilgængelige via `
 
 `heym_chat` kører altid Chat-motoren i build-tilstand. I ét kald kan assistenten gemme et nyt workflow, køre det med realistiske eksempelinput, læse kørselsrapporten, rette det der fejlede og køre det igen – op til fem testkørsler pr. kald. Når den seneste kørsel af den seneste gemte version gennemføres, afslutter den med et resumé på én sætning, og svaret slutter med `Verified: the latest test run of the saved workflow passed.`
 
+Når et kald opretter eller redigerer et workflow, viser svaret hvert enkelt med dets fulde editor-link, såsom `https://heym.example.com/workflows/<id>`, og linkene inde i assistentens svar er også fulde links. De bruger din konfigurerede Heym-adresse (`FRONTEND_URL`) og åbner for personer, der er logget ind på Heym og har adgang til dette workflow.
+
 - Testkørsler er rigtige kørsler. Deres sideeffekter udføres, og de fremgår af workflowets kørselshistorik som enhver anden kørsel.
 - Gem handlinger følger editorens sti: en ændring af grafen bevarer den tidligere graf i workflowets **Edit History**.
 - For at ændre et workflow, den tidligere har oprettet, skal du fortsætte tråden med samme `conversation_id`. Assistenten opdaterer det pågældende workflow i stedet for at oprette et nyt, og den ændrer kun workflows, du har rettigheder til at redigere.
 - Når de fem testkørsler er brugt op, stopper assistenten og forklarer, hvad der stadig fejler.
 
-Legitimationsoplysninger forbliver i brugergrænsefladen: `heym_chat` lister dem aldrig op, vælger eller opretter dem. Når den bygger eller redigerer et workflow, efterlades nye noder, der kræver legitimationsoplysninger, tomme, og svaret navngiver dem, så det er muligt at angive dem i editoren.
-
 Datatabeller er anderledes. En tabel indeholder ingen hemmeligheder, så `heym_chat` kan liste tabellerne, spørge hvilken et workflow skal bruge, og oprette en ny med dens kolonner. Den læser eller skriver aldrig rækker.
+
+### Legitimationsoplysninger
+
+`heym_chat` ser de legitimationsoplysninger, du ejer, og dem, der er delt med dig, efter navn og type, på samme måde som fanen Chat. Når et workflow, den bygger, har brug for legitimationsoplysninger, spørger den, hvilke der skal bruges, som et spørgsmål i resultatet. Svar med det samme `conversation_id`.
+
+For at tilføje legitimationsoplysninger eller opdatere nogle, du ejer, åbner assistenten Heyms formular på en Heym-side, `/credentials/setup/<id>`. Du logger ind på Heym der, indtaster nøglen eller forbinder kontoen og gemmer. Værdien sendes direkte til Heym: MCP-klienten og dens model modtager kun legitimationsoplysningernes navn og type. Indsæt ikke nøgler i MCP-klienten; bed om formularen i stedet.
+
+| Klient | Hvad der sker |
+|--------|---------------|
+| Understøtter MCP URL-elicitering | Klienten beder dig om at åbne Heym-siden. Kaldet venter, mens du udfylder formularen (op til ti minutter), og fortsætter derefter med de nye legitimationsoplysninger. |
+| Alt andet | Resultatet indeholder linket og beder klienten om at kalde `heym_chat` igen med `wait_for_credential_form`. Det kald venter op til fem minutter, mens du udfylder formularen, og genoptager derefter samtalen. Hvis klienten ikke venter, gem formularen og svar med det samme `conversation_id`; det næste kald ved, at formularen blev gemt, og hvilke legitimationsoplysninger den oprettede. |
+
+Siden åbnes kun for den Heym-konto, der startede anmodningen, så et videresendt link er ubrugeligt for alle andre. En formular forbliver åben i 24 timer og kan afvises fra siden. Når du gemmer eller afviser den, viser trinnet i fanen Chats samtale resultatet.
+
 
 ### Legitimationsoplysninger og model
 
@@ -78,12 +108,15 @@ Datatabeller er anderledes. En tabel indeholder ingen hemmeligheder, så `heym_c
 
 Hvis noget mangler, vises værktøjet stadig i `tools/list`, men hvert kald returnerer en fejl, der beder om at fuldføre opsætningen i denne fane.
 
+
+LLM- og Agent-noder i et workflow, som `heym_chat` bygger, kører på disse legitimationsoplysninger og denne model, inklusive legitimationsoplysninger, som nogen har delt med dig, så testkørsler fungerer uden yderligere opsætningstrin. Når `heym_chat` redigerer et workflow, beholder LLM- og Agent-noder, der allerede har legitimationsoplysninger, disse sammen med deres model.
 ### Argumenter og historik
 
 | Argument | Påkrævet | Beskrivelse |
 |----------|----------|-------------|
 | `message` | Ja | Instruktionen eller spørgsmålet på naturligt sprog. |
 | `conversation_id` | Nej | En `conversation_id` fra et tidligere `heym_chat`-resultat for at fortsætte den tråd. |
+| `wait_for_credential_form` | Nej | Med `conversation_id`: vent, indtil brugeren gemmer eller afviser legitimationsformularen, som tråden åbnede, og send derefter `message`. |
 
 Hvert kald skrives til [Chat-fanens](./chat-tab.md) historik som en normal samtale, markeret med et stik-ikon i samtaleoversigten. Beskeder, værktøjskort og afklaringspauser ser nøjagtigt ud som en samtale startet manuelt, og det er muligt at åbne tråden og fortsætte samtalen i browseren. Hvert resultat returnerer sin `conversation_id`, så MCP-klienten kan fortsætte den samme tråd i stedet for at åbne en ny ved hvert kald.
 

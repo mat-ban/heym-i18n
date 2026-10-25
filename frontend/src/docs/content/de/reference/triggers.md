@@ -85,6 +85,20 @@ Discord sendet Interaktions-Webhooks an `POST /api/discord/webhook/{node_id}`. D
 
 Der RabbitMQ-Consumer startet, wenn der Leader-Worker initialisiert wird. Workflows mit `rabbitmq`-Knoten, bei denen `rabbitmqOperation === "receive"` gilt, erhalten einen Consumer. Die Eingabe umfasst `message_data` (Body, Headers, routing_key usw.) und `triggered_by: "rabbitmq"`.
 
+## Gleichzeitigkeitslimit
+
+Ein Workflow mit einem [Gleichzeitigkeitslimit](./webhooks.md#concurrency-limit-and-queued-runs) reiht Produktionsläufe von jedem der oben genannten Einstiegspunkte in eine Warteschlange ein, wenn seine Slots voll sind, nach dem FIFO-Prinzip (First In, First Out) über alle Instanzen hinweg. Wie ein Aufrufer das Ergebnis erfährt, hängt vom Einstiegspunkt ab:
+
+| Einstiegspunkt | Während der Lauf wartet |
+|---|---|
+| Webhook / API | `202 Accepted` mit einer `execution_id` und einer Status-URL |
+| SSE streaming, Quick Drawer, Portal chat | Der Stream bleibt geöffnet und sendet `queued`-Ereignisse |
+| Portal without streaming | Die Anfrage wartet auf das Ergebnis |
+| MCP | Ein `queued`-Ergebnis zur Abfrage mit `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Der Trigger wartet auf das Ergebnis, so lange wie ein Lauf auf einer anderen [Instanz](./cluster.md) warten würde. Der Lauf wird in jedem Fall ausgeführt und in die Historie geschrieben |
+
+Wenn die Warteschlange voll ist, startet der Lauf nicht und die Historie zeichnet ihn als `queue_full` auf. Editor-Testläufe, Sub-Workflow-Aufrufe ([Execute](../nodes/execute-node.md)-Knoten und Agent-Workflow-Tools), [Evals](../tabs/evals-tab.md), Chat-Build-Modus-Testläufe und Review-Wiederaufnahmen werden niemals in eine Warteschlange gestellt. [Board](../tabs/board-tab.md)-Kartenläufe, [File Upload](../nodes/file-upload-trigger-node.md)-Läufe, vom Run-Workflow-Tool des AI Assistant gestartete Läufe und Benachrichtigungs-Workflows für Warnungen starten ebenfalls ohne Wartezeit auf einen Slot.
+
 ## trigger_source
 
 Der Ausführungsverlauf zeichnet `trigger_source` für jeden Einstiegspunkt auf:

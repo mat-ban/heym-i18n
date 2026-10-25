@@ -70,7 +70,10 @@ from app.services.assistant_yolo import (
     stream_yolo_assistant_turn,
 )
 from app.services.codex_followup_service import get_codex_followup_by_token
-from app.services.credential_access import get_accessible_credential
+from app.services.credential_access import (
+    get_accessible_credential,
+    load_accessible_credential_ids,
+)
 from app.services.credential_catalog import (
     CredentialPromptMode,
     build_credentials_prompt,
@@ -108,6 +111,7 @@ from app.services.generated_data_tables import (
     parse_data_table_choices,
     requires_data_table_payload,
 )
+from app.services.generated_node_match import previous_node_version
 from app.services.global_variables_service import get_global_variables_context
 from app.services.hitl_service import (
     build_hitl_resolved_output,
@@ -491,7 +495,7 @@ DASHBOARD_CHAT_SYSTEM_PROMPT = """You are an assistant that helps the user with 
 6a. When the user asks about scheduled cron runs, the calendar, or when workflows will run (today, this week, this month, upcoming times), use get_schedule_events with view_window day, week, or month, optional reference_date (YYYY-MM-DD), include_shared false for owned-only or true to include shared workflows, or start_iso/end_iso for a custom range. Summarize events (workflow name and time) in the user's language.
 6b. When the user asks about kanban boards or their tasks (which boards exist, how many boards, what jobs/tasks are on a board, their status, what is running/pending/failed/done, or what is in a column), use list_boards for an overview and get_board_tasks (optional board_id to scope, optional status filter) for the tasks. For a specific task/card (what it is, its description, the comments/conversation on it, what happened, its output or error), use get_card_detail with the card_id from get_board_tasks. Answer from the results in the user's language; do not execute workflows for these questions.
 6c. When the user naturally asks to add or create a kanban task/card, use create_board_task; this is a board action, not a request to create a workflow, and no command prefix is needed. Pass the user's requested title and optional description. If the user clearly names a board, call list_boards first to resolve its exact board_id. If no board is specified, call create_board_task without board_id: it will create the task when there is exactly one board, or return requires_board_selection with the available boards when there are several. For requires_board_selection, emit one heym-clarify question of type single whose options are the returned board names, then stop and wait. After the user selects a board, call list_boards again to resolve the selected name to its board_id, then call create_board_task exactly once. If a named board is missing or ambiguous, use the same single-choice board selection. Never ask which column to use: create_board_task always places the task in the first column.
-6d. When the user asks what is running right now (e.g. "what is running?", "how many workflows are active?", "is anything still going?", "which node is it on?", "how long has it been running?"), use get_active_executions. It takes no arguments and returns count, running_count, pending_count, and one entry per in-progress run with workflow_name, running_for (human-readable elapsed time), current_nodes (the node or nodes executing right now), last_completed_node, and url. Answer with the count first, then one line per run: workflow name, how long it has been running, the current node label, and the url as a markdown link. If count is 0, say plainly that nothing is running right now. Entries with status "pending" are not executing; they are waiting for human review (pending_kind hitl or codex), so say that instead of reporting them as running. Do not use get_recent_executions for this question: that tool lists finished runs.
+6d. When the user asks what is running right now (e.g. "what is running?", "how many workflows are active?", "is anything still going?", "which node is it on?", "how long has it been running?"), use get_active_executions. It takes no arguments and returns count, running_count, pending_count, and one entry per in-progress run with workflow_name, running_for (human-readable elapsed time), current_nodes (the node or nodes executing right now), last_completed_node, and url. Answer with the count first, then one line per run: workflow name, how long it has been running, the current node label, and the url as a markdown link. If count is 0, say plainly that nothing is running right now. Entries with status "pending" are not executing; they are waiting for human review (pending_kind hitl or codex), so say that instead of reporting them as running. Entries with status "queued" are not executing either; they are waiting for a concurrency slot of their workflow, at queue_position of queue_size, so say they are queued and where they stand. Do not use get_recent_executions for this question: that tool lists finished runs.
 7. When a workflow is waiting for human review (HITL review, with review_url or kind "hitl") and the user says to approve, continue, edit, or refuse it, use resolve_hitl_review. Prefer the latest pending request_id or review_url from recent tool results in the conversation. Never call resolve_hitl_review for Codex follow-up pauses (with answer_url or kind "codex"): Codex questions cannot be resolved via resolve_hitl_review.
 8. When the user asks you to wait, monitor, or check again for a workflow that is still running or pending, use wait_for_execution_update instead of repeatedly polling yourself. Default to 5 seconds between checks and at most 5 checks unless the user explicitly asks otherwise.
 9. If execute_workflow or wait_for_execution_update returns a pending workflow:
@@ -1873,7 +1877,7 @@ def _normalize_agent_tool_parameters(nodes: list[dict[str, Any]]) -> None:
 
 def _is_placeholder_or_unowned_credential_id(
     credential_id: object,
-    owned_credential_ids: set[str],
+    accessible_credential_ids: set[str],
 ) -> bool:
     if not isinstance(credential_id, str) or not credential_id.strip():
         return True
@@ -1884,38 +1888,77 @@ def _is_placeholder_or_unowned_credential_id(
         normalized = str(uuid.UUID(credential_id))
     except ValueError:
         return True
-    return normalized not in owned_credential_ids
+    return normalized not in accessible_credential_ids
 
 
-def _selected_credential_is_owned_llm(credential: Credential, user_id: uuid.UUID) -> bool:
-    return credential.owner_id == user_id and credential.type in LLM_CREDENTIAL_TYPES
+def _selected_llm_credential_id(credential: Credential, accessible_credential_ids: set[str]) -> str:
+    """The chat's own model credential when the user can use it on nodes, else ""."""
+    if credential.type not in LLM_CREDENTIAL_TYPES:
+        return ""
+    if str(credential.id) not in accessible_credential_ids:
+        return ""
+    return str(credential.id)
 
 
 def _clear_unowned_credential_field(
-    data: dict[str, Any], field_name: str, owned_ids: set[str]
+    data: dict[str, Any], field_name: str, accessible_ids: set[str], old_value: object = None
 ) -> None:
+    """Clear a credential the user cannot use, unless the field already held that exact value."""
     value = data.get(field_name)
-    if value and _is_placeholder_or_unowned_credential_id(value, owned_ids):
+    if not value or (old_value and value == old_value):
+        return
+    if _is_placeholder_or_unowned_credential_id(value, accessible_ids):
         data[field_name] = ""
+
+
+def _fill_model_credential(
+    data: dict[str, Any],
+    old_data: dict[str, Any],
+    accessible_ids: set[str],
+    selected_credential_id: str,
+    selected_model: str,
+) -> None:
+    """Keep the model credential an edited node had; give a new or empty one the chat's own."""
+    old_credential_id = old_data.get("credentialId")
+    credential_id = data.get("credentialId")
+    if old_credential_id and credential_id == old_credential_id:
+        if not str(data.get("model") or "").strip():
+            data["model"] = old_data.get("model") or ""
+        return
+    if not _is_placeholder_or_unowned_credential_id(credential_id, accessible_ids):
+        if selected_credential_id and not str(data.get("model") or "").strip():
+            data["model"] = selected_model
+        return
+    # A model written next to a placeholder was never paired with a real credential.
+    if old_credential_id:
+        data["credentialId"] = old_credential_id
+        data["model"] = old_data.get("model") or ""
+        return
+    data["credentialId"] = selected_credential_id
+    if selected_credential_id:
+        data["model"] = selected_model
 
 
 def _sanitize_generated_workflow_nodes(
     nodes: list[dict[str, Any]],
     *,
-    owned_credential_ids: set[str],
+    accessible_credential_ids: set[str],
     selected_credential: Credential,
     selected_model: str,
-    user_id: uuid.UUID,
+    previous_nodes: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Clear unsafe generated LLM credentials and fill LLM nodes from the selected credential.
 
-    Integration credential fields go through `apply_generated_credentials` instead.
+    `accessible_credential_ids` holds the credentials the user owns or was shared, and is the
+    only source of a new id on a node. A field of a node that already existed in
+    `previous_nodes` may keep the exact value it had, even one this user cannot read (a
+    collaborator editing the owner's workflow); that value never moves to another field or
+    node. Integration credential fields go through `apply_generated_credentials` instead.
     """
-    selected_llm_credential_id = (
-        str(selected_credential.id)
-        if _selected_credential_is_owned_llm(selected_credential, user_id)
-        else ""
+    selected_llm_credential_id = _selected_llm_credential_id(
+        selected_credential, accessible_credential_ids
     )
+    previous = [node for node in previous_nodes or [] if isinstance(node, dict)]
     sanitized = copy.deepcopy(nodes)
     for node in sanitized:
         if not isinstance(node, dict):
@@ -1924,33 +1967,50 @@ def _sanitize_generated_workflow_nodes(
         data = node.get("data")
         if not isinstance(data, dict):
             continue
+        before = previous_node_version(node, previous)
+        old_data = before.get("data") if before is not None else None
+        old_data = old_data if isinstance(old_data, dict) else {}
 
         if node_type in {"llm", "agent"}:
-            if _is_placeholder_or_unowned_credential_id(
-                data.get("credentialId"), owned_credential_ids
+            _fill_model_credential(
+                data,
+                old_data,
+                accessible_credential_ids,
+                selected_llm_credential_id,
+                selected_model,
+            )
+            for field_name, model_field in (
+                ("fallbackCredentialId", "fallbackModel"),
+                ("guardrailCredentialId", "guardrailModel"),
             ):
-                data["credentialId"] = selected_llm_credential_id
-            if selected_llm_credential_id and not str(data.get("model") or "").strip():
-                data["model"] = selected_model
-            _clear_unowned_credential_field(data, "fallbackCredentialId", owned_credential_ids)
-            if not data.get("fallbackCredentialId"):
-                data["fallbackModel"] = ""
-            _clear_unowned_credential_field(data, "guardrailCredentialId", owned_credential_ids)
-            if not data.get("guardrailCredentialId"):
-                data["guardrailModel"] = ""
+                _clear_unowned_credential_field(
+                    data, field_name, accessible_credential_ids, old_data.get(field_name)
+                )
+                if not data.get(field_name):
+                    data[model_field] = ""
 
         if node_type == "playwright":
-            _clear_unowned_credential_field(data, "credentialId", owned_credential_ids)
+            _clear_unowned_credential_field(
+                data, "credentialId", accessible_credential_ids, old_data.get("credentialId")
+            )
             for steps_field in ("playwrightSteps", "playwrightAuthFallbackSteps"):
                 steps = data.get(steps_field)
                 if not isinstance(steps, list):
                     continue
-                for step in steps:
+                old_steps = old_data.get(steps_field)
+                old_steps = old_steps if isinstance(old_steps, list) else []
+                for index, step in enumerate(steps):
                     if not isinstance(step, dict):
                         continue
                     if step.get("action") != "aiStep":
                         continue
-                    _clear_unowned_credential_field(step, "credentialId", owned_credential_ids)
+                    old_step = old_steps[index] if index < len(old_steps) else None
+                    old_step_credential = (
+                        old_step.get("credentialId") if isinstance(old_step, dict) else None
+                    )
+                    _clear_unowned_credential_field(
+                        step, "credentialId", accessible_credential_ids, old_step_credential
+                    )
                     if not step.get("credentialId"):
                         step["model"] = ""
 
@@ -2208,10 +2268,9 @@ async def create_and_run_generated_workflow_tool(
 
         nodes = _sanitize_generated_workflow_nodes(
             workflow_config["nodes"],
-            owned_credential_ids={str(credential.id) for credential in catalog},
+            accessible_credential_ids=await load_accessible_credential_ids(db, user.id),
             selected_credential=selected_credential,
             selected_model=selected_model,
-            user_id=user.id,
         )
         credential_pass = apply_generated_credentials(
             nodes, catalog=catalog, choices=choices, previous_nodes=None, mode=builder_mode
@@ -2370,10 +2429,10 @@ async def edit_and_run_generated_workflow_tool(
 
         nodes = _sanitize_generated_workflow_nodes(
             workflow_config["nodes"],
-            owned_credential_ids={str(credential.id) for credential in catalog},
+            accessible_credential_ids=await load_accessible_credential_ids(db, user.id),
             selected_credential=selected_credential,
             selected_model=selected_model,
-            user_id=user.id,
+            previous_nodes=old_nodes,
         )
         credential_pass = apply_generated_credentials(
             nodes, catalog=catalog, choices=choices, previous_nodes=old_nodes, mode=builder_mode
@@ -3395,7 +3454,9 @@ def _summarize_tool_result(tool_name: str, result_json: str) -> str:
             if count == 0:
                 return "No workflows are running right now"
             pending = int(data.get("pending_count") or 0)
+            queued = int(data.get("queued_count") or 0)
             suffix = f", {pending} awaiting review" if pending else ""
+            suffix += f", {queued} queued" if queued else ""
             return f"{count} active execution(s){suffix}"
         return result_json[:200] + ("..." if len(result_json) > 200 else "")
     if tool_name == "search_documentation":

@@ -15,7 +15,7 @@ Vissa integrationsnoder kräver **inte** autentiseringsuppgifter. [WebSocket Tri
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, valfritt `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, valfritt `base_url` |
-| **Jira** | [Jira-nod](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, valfritt `api_version` |
+| **Jira** | [Jira-nod](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (endast Basic auth), valfritt `api_version` |
 | **Linear** | [Linear-nod](../nodes/linear-node.md) | `api_key`, eller `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry-nod](../nodes/sentry-node.md) | `api_token`, valfritt `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ OAuth-token (`access_token`, `refresh_token`, `token_expiry`) lagras och förnya
 
 ## Jira
 
-Jira-autentiseringsuppgiften lagrar Jira Basic auth-uppgifter, bas-URL för Jira-sajten, distributionsläge och valfri REST API-version för [Jira-noden](../nodes/jira-node.md). Använd `cloud` för Jira Cloud eller `data_center` för Jira Data Center / Server.
+Jira-autentiseringsuppgiften lagrar Jira Basic auth-uppgifter eller en personlig åtkomsttoken för Data Center, bas-URL för Jira-sajten, distributionsläge och valfri REST API-version för [Jira-noden](../nodes/jira-node.md). Använd `cloud` för Jira Cloud eller `data_center` för Jira Data Center / Server.
 
 ### Konfiguration
 
@@ -216,16 +216,18 @@ Jira-autentiseringsuppgiften lagrar Jira Basic auth-uppgifter, bas-URL för Jira
 **Jira Data Center / Server**
 
 1. Välj **Jira Data Center / Server** som distribution.
-2. Ange Jira-användarnamn och lösenord som används för Basic auth.
-3. Ange Jira-sajtens URL, till exempel `https://jira.example.com`.
-4. Använd **Test Connection** för att verifiera autentiseringsuppgiften.
+2. Välj en autentiseringsmetod. **Användarnamn och lösenord** använder Basic auth. **Personal Access Token** använder `Authorization: Bearer <token>` och kräver Jira Data Center / Server 8.14 eller senare. Skapa token under **Profil → Personal Access Tokens** i Jira.
+3. Ange användarnamn och lösenord för Jira, eller klistra in personlig åtkomsttoken (inget användarnamn krävs).
+4. Ange webbadressen till Jira-webbplatsen, till exempel `https://jira.example.com`.
+5. Använd **Test Connection** för att verifiera autentiseringsuppgiften.
 
 ### Fält
 
 | Fält | Beskrivning |
 | --- | --- |
-| `email` | Atlassian-kontots e-postadress för Jira Cloud, eller användarnamn för Jira Data Center / Server |
-| `api_token` | Atlassian API-token för Jira Cloud, eller lösenord för Basic auth för Jira Data Center / Server |
+| `auth_mode` | `basic` (standard om det saknas) eller `pat`. `pat` är endast giltigt med `data_center` |
+| `email` | E-post för Jira Cloud Atlassian-konto eller användarnamn för Jira Data Center / Server. Används inte i läget `pat` |
+| `api_token` | Jira Cloud Atlassian API-token, lösenord för Jira Data Center / Server för Basic auth eller personlig åtkomsttoken för Data Center i `pat`-läget |
 | `base_url` | Bas-URL för Jira-sajten |
 | `deployment` | `cloud` för Jira Cloud eller `data_center` för Jira Data Center / Server |
 | `api_version` | REST API-version; standardvärdet är `3` för Jira Cloud. Data Center / Server använder v2 |
@@ -234,12 +236,11 @@ Jira-autentiseringsuppgiften lagrar Jira Basic auth-uppgifter, bas-URL för Jira
 
 - Jira-noden skickar ärendebeskrivningar och kommentarer som Atlassian Document Format-textdokument
   för Jira Cloud REST API v3. Autentiseringsuppgifter för Data Center / Server skickar vanlig text.
-- Data Center / Server stöder för närvarande endast Basic auth med användarnamn/lösenord. Personliga åtkomsttoken
-  och Bearer auth stöds ännu inte.
+- Data Center / Server stöder Basic auth med användarnamn/lösenord och autentisering med personlig åtkomsttoken (PAT) med Bearer-schemat. PAT-autentisering kräver Jira Data Center / Server 8.14 eller senare.
 - Uppladdning av bilagor accepterar base64- eller data URL-innehåll och omfattas av plattformens filstorleksgräns (standard 99 MB). Nedladdning av bilagor kan returnera base64-innehåll när det är aktiverat.
 - Skapande och borttagning av användare samt ärendenotifieringar kräver att det autentiserade Jira-kontot har relevanta behörigheter för Jira-sajten eller organisationen.
 - Använd List Projects, Search Issues och List Transitions för att hitta projektnycklar, ärendenycklar och övergångs-ID:n.
-- För anpassade endpoints som inte täcks av Jira-noden används [HTTP-noden](../nodes/http-node.md) med Jira Basic Auth (`email:api_token` för Cloud eller `username:password` för Data Center / Server) i cURL-kommandot, eller en Header-autentiseringsuppgift med matchande `Authorization: Basic <base64(user:secret)>`-värde.
+- För anpassade endpoints som inte täcks av Jira-noden använder du [HTTP-noden](../nodes/http-node.md) med Jira Basic Auth (`email:api_token` för Cloud eller `username:password` för Data Center / Server) eller PAT Bearer auth (`Authorization: Bearer <token>` för Data Center / Server). Alternativt kan du använda en Header-autentiseringsuppgift med lämplig `Authorization`-header.
 
 Se även:
 

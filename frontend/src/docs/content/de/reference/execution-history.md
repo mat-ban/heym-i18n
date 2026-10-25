@@ -110,6 +110,8 @@ Beide Verlaufsdialoge zeigen **aktuell laufende Ausführungen** oben in der List
 - Nach dem Abbrechen verschwindet der laufende Eintrag beim nächsten Aktualisieren; drücke **Aktualisieren**, um die Liste manuell zu aktualisieren
 - Wenn du einen Lauf abbrichst, der bereits beendet ist, ist die Anfrage ein No-op
 
+Läufe, die auf einen [Concurrency-Slot](./webhooks.md#concurrency-limit-and-queued-runs) warten, werden im selben Abschnitt mit der Kennzeichnung **Queued 2/5**, ihrem Platz in der Warteschlange und der Warteschlangengröße aufgeführt. Sie haben keine Schaltfläche **Live öffnen**, da noch nichts ausgeführt wird; **Abbrechen** nimmt einen wartenden Lauf aus der Warteschlange und zeichnet ihn als `cancelled` auf. Ein Lauf, der länger als die maximale Wartezeit des Workflows gewartet hat, wird als `expired` erfasst, und ein Lauf, der von einer vollen Warteschlange abgewiesen wurde, als `queue_full`; beide verfügen über ein eigenes Badge in der Ausführungsliste.
+
 Die Live-URL ist `/workflows/{workflowId}/{executionId}`. Der Beobachter ist schreibgeschützt: Das Verlassen
 des Editors trennt nur diesen Browser-Reiter und stoppt niemals den Workflow. Aktive Snapshots
 werden über PostgreSQL geteilt, sodass das Öffnen eines Laufs auch dann funktioniert, wenn der Trigger und die Editor-

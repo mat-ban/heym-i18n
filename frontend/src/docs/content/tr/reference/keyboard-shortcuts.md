@@ -105,3 +105,5 @@ Bu kısayollar, Execution History diyaloğunda ve Traces panelinde kullanılabil
 - [Workflow Yapısı](./workflow-structure.md) – Düğüm ve kenar formatı
 - [Execute Düğümü](../nodes/execute-node.md) – Alt workflow'ları çağırır (`Ctrl + Shift + O`)
 - [Hızlı Başlangıç](../getting-started/quick-start.md) – İlk workflow'unuzu oluşturun
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

@@ -148,7 +148,7 @@ AI Assistant는 노드, 엣지, 표현식을 기술하는 **workflow DSL**(도�
    - "User Custom Rules"로 추가된 User Rules
    - 기존 Workflow를 편집 중일 때 현재 workflow JSON
    - Execute 노드를 사용하는 경우 사용 가능한 Workflow 목록
-   - 본인 credential의 이름, 유형, id(값은 절대 포함되지 않음)
+   - 본인이 소유하거나 공유받은 credential의 이름, 유형, id(값은 절대 포함되지 않음)
    - 사용할 수 있는 데이터 테이블의 이름, id, 설명, 컬럼(행은 절대 포함되지 않음)
 3. 모델이 단일 workflow JSON 블록(`nodes`와 `edges` 포함)을 반환합니다. 프런트엔드가 이를 파싱하여 캔버스에 적용합니다.
 

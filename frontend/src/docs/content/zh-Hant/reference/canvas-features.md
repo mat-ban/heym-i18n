@@ -148,3 +148,5 @@ Debug 面板顯示的是 **workflow 執行**記錄（節點結果、輸出）。
 - [Execution History](./execution-history.md) – 過往的執行紀錄
 - [Templates](../tabs/templates-tab.md) – 儲存並重複使用 workflow 與節點
 - [Contextual Showcase](./contextual-showcase.md) – 編輯器中提供的精簡頁面導引
+
+- [Canvas 協作](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

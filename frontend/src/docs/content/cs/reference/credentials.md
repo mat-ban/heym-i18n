@@ -18,7 +18,7 @@ Přihlašovací údaje ukládají API klíče a tajné hodnoty používané uzly
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Přihlášení k předplatnému ChatGPT (OAuth) nebo přístupový token Codex pro runner plus GitHub PAT pro operace s repozitářem |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API klíč brány OpenCode Go (volitelná základní URL) pro runner plus GitHub PAT pro operace s repozitářem |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) pro volání GitHub API, operace uzlu GitHub a integrace MCP |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token nebo Data Center uživatelské jméno/heslo, základní URL Jira site, režim nasazení a volitelná verze REST API |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token, Data Center uživatelské jméno/heslo nebo osobní přístupový token, základní URL Jira site, režim nasazení a volitelná verze REST API |
 | [Linear](../nodes/linear-node.md) | Linear | Osobní API klíč nebo OAuth2 pro týmy, projekty, úkoly a komentáře |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Autentizace pro požadavky |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Token bota a volitelné tajemství webhooku |
@@ -64,7 +64,7 @@ Některé uzly povolují výrazy pro autentizaci. Použijte [Expression DSL](./e
 
 Přihlašovací údaje Codex jsou záměrně vyloučeny z `$credentials`. Ať už se přihlásíte přes ChatGPT (předplatné, žádné náklady na API za token), nebo vložíte Codex `access_token`, tokeny se předávají pouze lokálnímu procesu runneru Codex. Přihlašovací tokeny ChatGPT se automaticky obnovují, jak vyprší.
 
-Přihlašovací údaje Jira jsou také vyloučeny z `$credentials`. [Uzel Jira](../nodes/jira-node.md) načítá přihlašovací údaj podle `credentialId` za běhu. Pro vlastní volání Jira REST, která uzel Jira nepokrývá, použijte [uzel HTTP](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pro Jira Cloud nebo `username:password` pro Data Center / Server), například `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Můžete také použít přihlašovací údaj [Header](../nodes/http-node.md) s `Authorization: Basic <base64(user:secret)>`. Osobní přístupové tokeny Jira Data Center / Server a Bearer autentizace zatím nejsou přihlašovacím údajem Jira podporovány.
+Přihlašovací údaje Jira jsou také vyloučeny z `$credentials`. [Uzel Jira](../nodes/jira-node.md) načítá přihlašovací údaj podle `credentialId` za běhu. Pro vlastní volání Jira REST, která uzel Jira nepokrývá, použijte [uzel HTTP](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pro Jira Cloud nebo `username:password` pro Data Center / Server), například `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Můžete také použít přihlašovací údaj [Header](../nodes/http-node.md) s `Authorization: Basic <base64(user:secret)>`. Pro osobní přístupové tokeny Jira Data Center / Server odešlete místo toho `Authorization: Bearer <token>`; samotný přihlašovací údaj Jira to podporuje prostřednictvím režimu ověřování **Personal Access Token**.
 
 | Typ přihlašovacího údaje | Hodnota vystavená do `$credentials.Name` |
 |-----------------|--------------------------------------|

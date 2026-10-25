@@ -107,6 +107,8 @@ Abiejuose istorijos dialoguose viršuje rodomi **šiuo metu vykdomi vykdymai**, 
 - Po atšaukimo, vykdomas įrašas dingsta kitame atnaujinime; paspauskite **Atnaujinti**, kad atnaujintumėte sąrašą rankiniu būdu
 - Jei atšauksite vykdymą, kuris jau baigtas, užklausa bus be veiksmų
 
+Vykdymai, laukiantys [lygiagretumo lizdo](./webhooks.md#concurrency-limit-and-queued-runs), pateikiami tame pačiame skyriuje su etikete **Queued 2/5**, jų vieta eilėje ir eilės dydžiu. Jie neturi mygtuko **Open live**, nes dar niekas nevyksta; **Cancel** pašalina laukiantį vykdymą iš eilės ir užregistruoja jį kaip `cancelled`. Vykdymas, kuris laukė ilgiau nei nustatytas workflow maksimalus laukimo laikas, užregistruojamas kaip `expired`, o pilnos eilės atmestas vykdymas – kaip `queue_full`; abu vykdymų sąraše turi savo ženklelį.
+
 Gyvas URL yra `/workflows/{workflowId}/{executionId}`. Stebėtojas yra tik skaitymo režimu: palikus redaktorių, tik tas naršyklės skirtukas atsijungia ir niekada nesustabdo workflow. Aktyvūs momentiniai vaizdai dalijami per PostgreSQL, todėl atidarius vykdymą vis tiek veikia, kai trigger ir redaktoriaus užklausa patenka į skirtingus backend darbininkus.
 
 ## Avarijų atkūrimas

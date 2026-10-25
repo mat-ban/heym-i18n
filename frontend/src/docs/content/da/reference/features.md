@@ -156,7 +156,7 @@ Decision-noden stiller en beslutningsmodel typede spørgsmål om kørslens tilst
 Kræver en Decision Model-legitimationsoplysning; passer naturligt sammen med [Switch](../nodes/switch-node.md), [Condition](../nodes/condition-node.md) og [Agent Node](../nodes/agent-node.md).
 #### [RAG / Vektorlagre](../nodes/rag-node.md)
 
-RAG / Vektorlagre-noden indsætter, opdaterer, sletter og søger dokumenter i et vektorlagre til retrieval-augmenteret generering. En Database-dropdown vælger backend'en — **Qdrant** (ekstern server) eller **Postgres (pgvector)** (Heyms egen database, ingen ekstern tjeneste), med Qdrant som standard. Vælg et vektorlagre fra fanen [Vektorlagre](../tabs/vectorstores-tab.md) og indstil operationen til insert, upsert, delete eller search. Upsert og delete adresserer et dokument via et unikt id gemt i payload'en — et **Document ID Field** navngiver dette felt (standard `doc_id`) og **Document ID** indeholder dets værdi — så et dokument beholder det id, som det allerede har i det eksisterende system: upsert erstatter alle matchende punkter før lagring af den nye version, og delete rapporterer om der blev fundet noget. Dokumentmetadata accepterer udtryk i sine værdier, så `{"url": "$start.url"}` lagrer det, som kørslen producerede. Search understøtter metadatafiltre og valgfri Cohere-reranking og returnerer et array af resultater med tekst, score, metadata, reranked-flag og count til brug i [LLM](../nodes/llm-node.md) eller [Agent Node](../nodes/agent-node.md) workflows.
+RAG / Vektorlagre-noden indsætter, opdaterer, sletter og søger dokumenter i et vektorlagre til retrieval-augmenteret generering. En Database-dropdown vælger backend'en — **Qdrant** (ekstern server) eller **Postgres (pgvector)** (Heyms egen database, ingen ekstern tjeneste), med Qdrant som standard. Vælg et vektorlagre fra fanen [Vektorlagre](../tabs/vectorstores-tab.md) og indstil operationen til insert, upsert, delete eller search. Upsert og delete adresserer et dokument via et unikt id gemt i payload'en — et **Document ID Field** navngiver dette felt (standard `doc_id`) og **Document ID** indeholder dets værdi — så et dokument beholder det id, som det allerede har i det eksisterende system: upsert erstatter alle matchende punkter før lagring af den nye version, og delete rapporterer om der blev fundet noget. Dokumentmetadata accepterer udtryk i sine værdier, så `{"url": "$start.url"}` lagrer det, som kørslen producerede. Search understøtter metadatafiltre, valgfri **Hybrid Search** (vektorlighed fusioneret med BM25-nøgleordsmatchning, så nøjagtige termer som ID'er og fejlkoder findes ved siden af semantiske matches) og valgfri Cohere-omrangering (reranking) og returnerer et array af resultater med text, score, metadata, reranked- og hybrid-flag og count til brug i [LLM](../nodes/llm-node.md) eller [Agent Node](../nodes/agent-node.md) workflows.
 
 Almindelige efterfølgende noder er [LLM](../nodes/llm-node.md) og [Agent Node](../nodes/agent-node.md); opsætning af vektorlagre findes i [Vektorlagre](../tabs/vectorstores-tab.md).
 
@@ -554,7 +554,7 @@ Se også [Agent Node](../nodes/agent-node.md), [Portal](./portal.md), [Execution
 
 ### [Webhooks](./webhooks.md)
 
-Workflows kan udløses via [HTTP](../nodes/http-node.md) på `POST /api/workflows/{workflow_id}/execute` eller streames inkrementelt fra `POST /api/workflows/{workflow_id}/execute/stream`. Request-body sendes som body til [Input](../nodes/input-node.md)-noder; headers og query-parametre er tilgængelige i [Expression DSL](./expression-dsl.md)-udtryk. Konfigurer per-workflow-autentificering: anonym, JWT eller brugerdefineret header. Valgfri response-caching, rate-limiting og editorens Run with cURL-dialog findes på workflow-niveau og gælder for begge tilstande.
+Workflows kan udløses via [HTTP](../nodes/http-node.md) på `POST /api/workflows/{workflow_id}/execute` eller streames inkrementelt fra `POST /api/workflows/{workflow_id}/execute/stream`. Request-body sendes som body til [Input](../nodes/input-node.md)-noder; headers og query-parametre er tilgængelige i [Expression DSL](./expression-dsl.md)-udtryk. Konfigurer per-workflow-autentificering: anonym, JWT eller brugerdefineret header. Valgfri response-caching, rate-limiting og editorens Run with cURL-dialog findes på workflow-niveau og gælder for begge tilstande. Med en [concurrency-grænse](./webhooks.md#concurrency-limit-and-queued-runs) modtager et kald, der skal vente, i stedet `202 Accepted` med et eksekverings-ID og en status-URL.
 
 Se også [Input](../nodes/input-node.md), [Execution Tokens](./execution-tokens.md), [SSE Streaming](./sse-streaming.md), [HTTP](../nodes/http-node.md) og [Workflow Structure](./workflow-structure.md).
 
@@ -599,6 +599,10 @@ Det dækker hver ikke-test topniveau-kørsel: både execute-endpoints, [Portal](
 ### Workflow Timeout
 
 Det er muligt at angive en **workflow timeout** i sekunder på workflow-niveau i **Properties**-panelet. Standardværdien `0` deaktiverer funktionen. Når timeout er sat, afbrydes en kørsel, der overskrider grænsen, ved næste node-grænse og registreres som en mislykket kørsel med en "timed out"-fejl. Timeout gælder for manuelle, API- og triggered kørsler. Lange [Wait](../nodes/wait-node.md)-noder afbrydes omgående i stedet for at blokere for deres fulde varighed.
+
+### Concurrency-grænse
+
+Hvert workflow kan begrænse, hvor mange produktionskørsler der afvikles samtidigt med **Concurrency-grænse** i panelet **Properties** på workflow-niveau; ejeren og bidragydere med redigeringsadgang kan ændre det, og det er slået fra som standard. Når grænsen nås, venter nye kørsler fra [webhook-](./webhooks.md#concurrency-limit-and-queued-runs) og [streaming-endpoints](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) og hver [trigger](./triggers.md) i en FIFO-kø (først ind, først ud), talt på tværs af alle instanser i et [cluster](./cluster.md). Editortestkørsler, sub-workflowkald, [Evals](../tabs/evals-tab.md) og genoptagelser efter review sættes aldrig i kø, og kortkørsler på [Board](../tabs/board-tab.md), filuploadkørsler, kørsler startet af AI-assistentens run-workflow-værktøj og advarselsmeddelelsesworkflows starter uden at vente på en plads. Et webhook-kald, der skal vente, modtager straks `202 Accepted` med et `execution_id`, en status-URL, der svarer med de samme legitimationsoplysninger, dens position, køstørrelsen og antallet af kørende instanser; en MCP-klient modtager det samme og poller værktøjet `heym_execution_status`. Den valgfrie indstilling **Maks. køstørrelse** afviser ekstra kald med `429`, og den valgfrie **Maks. ventetid** registrerer en kørsel, der ventede for længe, som `expired`. Ventende kørsler vises i [Kørselshistorik](./execution-history.md) som **I kø n/m** og kan annulleres der.
 
 ### Tid sparet
 
@@ -859,3 +863,9 @@ Se også [Drive](./drive.md), [File Generation](./file-generation.md) og [Drive-
 
 <video src="/features/showcase/drive.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/drive.webm">▶ Se Drive-demo</a></p>
+
+### [Canvas-samarbejde](./canvas-collaboration.md)
+
+Everyone with a workflow open shares one live draft. Edits appear instantly, each person's pointer moves in their color, following mirrors everything they see and do, and you can talk over direct peer-to-peer audio.
+
+See also [Canvas Features](./canvas-features.md), [Edit History](./edit-history.md), and [Keyboard Shortcuts](./keyboard-shortcuts.md).

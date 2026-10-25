@@ -86,6 +86,20 @@ Discord はインタラクション Webhook を `POST /api/discord/webhook/{node
 
 RabbitMQ コンシューマーは、リーダーワーカーが初期化されたときに起動します。`rabbitmqOperation === "receive"` である `rabbitmq` ノードを持つ Workflow にはコンシューマーが割り当てられます。入力には `message_data`（body、headers、routing_key など）と `triggered_by: "rabbitmq"` が含まれます。
 
+## 同時実行制限
+
+[同時実行制限](./webhooks.md#concurrency-limit-and-queued-runs)を持つ Workflow は、スロットがいっぱいになると、上記のエントリーポイントからの本番実行をすべてのインスタンスにわたって先入れ先出し（FIFO）でキューに入れます。呼び出し元が結果を受け取る方法は、エントリーポイントによって異なります：
+
+| エントリーポイント | 実行が待機している間 |
+|---|---|
+| Webhook / API | `execution_id` とステータス URL を含む `202 Accepted` |
+| SSE streaming, Quick Drawer, Portal chat | ストリームは開いたまま維持され、`queued` イベントを送信 |
+| Portal without streaming | リクエストは結果を待機 |
+| MCP | `heym_execution_status` でポーリングする `queued` 結果 |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger は、別の[インスタンス](./cluster.md)での実行と同じ時間だけ結果を待機します。実行はいずれにしても行われ、履歴に記録されます |
+
+キューがいっぱいの場合、実行は開始されず、履歴には `queue_full` として記録されます。エディターのテスト実行、サブワークフローの呼び出し（[Execute](../nodes/execute-node.md) ノードおよびエージェントのワークフローツール）、[Evals](../tabs/evals-tab.md)、チャット構築モードのテスト実行、およびレビュー再開がキューに入れられることはありません。[Board](../tabs/board-tab.md) のカード実行、[File Upload](../nodes/file-upload-trigger-node.md) 実行、AI アシスタントの run-workflow ツールによって開始された実行、およびアラート通知ワークフローも、スロットを待たずに開始されます。
+
 ## trigger_source
 
 実行履歴は、すべてのエントリーポイントに対して `trigger_source` を記録します：

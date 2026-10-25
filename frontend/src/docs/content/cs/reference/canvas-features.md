@@ -150,3 +150,5 @@ Tlačítko **cURL** na panelu nástrojů editoru (vpravo nahoře) otevře dialog
 - [Historie spuštění](./execution-history.md) – Minulá spuštění
 - [Šablony](../tabs/templates-tab.md) – Ukládání a opětovné použití workflow a uzlů
 - [Kontextová nápověda](./contextual-showcase.md) – Stručný průvodce stránkou dostupný v editoru
+
+- [Spolupráce na plátně](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

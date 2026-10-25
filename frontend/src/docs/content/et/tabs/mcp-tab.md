@@ -36,6 +36,21 @@ Iga workflow'd saab eksponeerida MCP tööriistana:
 
 Workflow kaardid näitavad kirjeldust ja sisendväljade nimede eelvaadet, et näeksite, mida iga tööriist enne lubamist ootab.
 
+
+### Järjekorras käitused ja heym_execution_status
+
+Workflow, millel on [paralleelsuse piirmäär](../reference/webhooks.md#concurrency-limit-and-queued-runs), võib olla hõivatud, kui klient seda kutsub. Kutse tagastab kohe tulemuse, mis ei ole viga:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klient küsib tööriista `heym_execution_status` selle `execution_id`-ga. See tagastab sama keha nagu [oleku URL](../reference/webhooks.md#status-url): `queued` praeguse positsiooniga, `running`, seejärel `success` või `error` koos väljunditega. See leiab ainult nende workflows käitusi, mida sama server pakub. Tööriist kuvatakse vaikeserveris ja igas nimega serveris ainult seni, kuni vähemalt ühel selle workflow-l on paralleelsuse piirmäär. Kui järjekord on täis, tagastab kutse vea „Concurrency queue is full“.
 ## Heymi chat-tööriist
 
 Jaotis **Heymi võimekused** muudab Chat vahekaardi mootori üheks MCP tööriistaks nimega `heym_chat`. Lubage see vaikeserveril, mis tahes nimega serveril või mõlemal — igal pinnal on oma lüliti ja mudeli valik.
@@ -49,6 +64,7 @@ Kui see on sisse lülitatud, kuvatakse `heym_chat` loendis `tools/list` koos tei
 - Praegu toimuvate asjade raporteerimine: mitu käivitust on aktiivsed, nende workflow nimed, kui kaua igaüks on töötanud, millisel sõlmel see parasjagu on, ja link reaalajas käivitusele
 - Tahvlite loetlemine, kaartide loomine ja kaardi detailide lugemine [Tahvli vahekaardil](./board-tab.md)
 - Teie andmetabelite loetlemine koos veergudega, uute loomine ja nende ühendamine workflow'desse, mida see ehitab
+- Mandaatide loomine või värskendamine Heymi lehel (vt [Mandaadid](#mandaadid))
 - Meeskondade ja globaalsete muutujate lugemine ning dokumentatsioonis otsimine
 - Ootel inimkonna-tsüklis ülevaatuste kinnitamine, muutmine või tagasilükkamine
 
@@ -58,14 +74,28 @@ Hiljem Chat vahekaardile lisatud võimekused muutuvad automaatselt kättesaadava
 
 `heym_chat` käivitab Chat mootori alati ehitusrežiimis (build mode). Ühe väljakutsega saab assistent salvestada uue workflow, käivitada selle realistlike näidissisenditega, lugeda käivitusaruannet, parandada ebaõnnestunud osad ja käivitada selle uuesti – kuni viis testkäivitust väljakutse kohta. Kui viimase salvestuse viimane käivitus õnnestub, lõpetab see ühelauselise kokkuvõttega ning vastus lõpeb tekstiga `Verified: the latest test run of the saved workflow passed.`
 
+Kui kutse loob või muudab workflow'd, loetleb vastus igaüks oma täieliku redaktori lingiga, näiteks `https://heym.example.com/workflows/<id>`, ja lingid assistendi vastuses on samuti täielikud lingid. Need kasutavad teie konfigureeritud Heymi aadressi (`FRONTEND_URL`) ja avanevad Heymi sisse logitud inimestele, kellel on sellele workflow-le juurdepääs.
+
 - Testkäivitused on päris käivitused. Nende kõrvalmõjud toimuvad päriselt ja need ilmuvad workflow käivitusajaloos nagu iga teine käivitus.
 - Salvestamised järgivad redaktori teekonda: graafi muudatus säilitab eelmise graafi workflow muutmise ajaloos (**Edit History**).
 - Varem loodud workflow muutmiseks jätkake lõime sama `conversation_id`-ga. Assistent uuendab seda workflow'd uue loomise asemel ning muudab ainult neid workflow'sid, mida teil on õigus muuta.
 - Kui viis testkäivitust on ära kasutatud, assistent peatub ja selgitab, mis endiselt ebaõnnestub.
 
-Mandaadid jäävad kasutajaliidesesse: `heym_chat` ei loetle, vali ega loo neid kunagi. Kui see ehitab või muudab workflow'd, jäetakse mandaati vajavad uued sõlmed tühjaks ja vastuses nimetatakse need, et saaksite need redaktoris seada.
-
 Andmetabelid on erinevad. Tabel ei sisalda saladusi, seega `heym_chat` saab loetleda teie tabeleid, küsida, millist workflow peaks kasutama, ja luua uue koos veergudega. See ei loe ega kirjuta kunagi ridu.
+
+### Mandaadid
+
+`heym_chat` näeb teile kuuluvaid ja teiega jagatud mandaate nime ja tüübi järgi samamoodi nagu Chati vahekaart. Kui selle koostatud workflow vajab mandaati, küsib see tulemuses küsimusena, millist kasutada. Vastake sama `conversation_id`-ga.
+
+Mandaadi lisamiseks või oma mandaadi värskendamiseks avab assistent Heymi mandaadivormi Heymi lehel, `/credentials/setup/<id>`. Logite seal Heymi sisse, sisestate võtme või ühendate konto ja salvestate. Väärtus läheb otse Heymi: MCP klient ja selle mudel saavad teada ainult mandaadi nime ja tüübi. Ärge kleepige võtmeid MCP klienti; küsige selle asemel vormi.
+
+| Klient | Mis juhtub |
+|--------|------------|
+| Toetab MCP URL-i esilekutsumist | Klient palub teil avada Heymi lehe. Kutse ootab vormi täitmist (kuni kümme minutit) ja jätkab seejärel uue mandaadiga. |
+| Kõik muud | Tulemus sisaldab linki ja palub kliendil uuesti kutsuda `heym_chat` parameetriga `wait_for_credential_form`. See kutse ootab vormi täitmisel kuni viis minutit ja jätkab seejärel vestlust. Kui klient ei oota, salvestage vorm ja vastake sama `conversation_id`-ga; järgmine kutse teab, et vorm salvestati ja milline mandaat loodi. |
+
+Leht avaneb ainult päringu algatanud Heymi konto jaoks, seega edastatud link on kõigile teistele kasutu. Vorm jääb avatuks 24 tunniks ja sellest saab lehel keelduda. Kui olete selle salvestanud või tagasi lükanud, kuvab Chati vahekaardi vestluse samm tulemuse.
+
 
 ### Mandaat ja mudel
 
@@ -78,12 +108,15 @@ Andmetabelid on erinevad. Tabel ei sisalda saladusi, seega `heym_chat` saab loet
 
 Kui kumbki puudub, kuvatakse tööriist endiselt loendis `tools/list`, kuid iga kutse tagastab vea, mis palub seadistamise sellel vahekaardil lõpetada.
 
+
+LLM- ja Agent-sõlmed `heym_chat` loodud workflow-s töötavad selle mandaadi ja mudeliga, sealhulgas teiega jagatud mandaadiga, nii et testkäitused toimivad ilma täiendava seadistamiseta. Kui `heym_chat` muudab workflow'd, säilitavad LLM- ja Agent-sõlmed, millel juba on mandaat, selle koos oma mudeliga.
 ### Argumendid ja ajalugu
 
 | Argument | Nõutav | Kirjeldus |
 |----------|----------|-------------|
 | `message` | Jah | Juhis või küsimus loomulikus keeles. |
 | `conversation_id` | Ei | `conversation_id` eelmisest `heym_chat` tulemusest, et jätkata seda vestlust. |
+| `wait_for_credential_form` | Ei | Koos `conversation_id`: oodake, kuni kasutaja salvestab või lükkab tagasi lõime avatud mandaadivormi, seejärel saatke `message`. |
 
 Iga kutse kirjutatakse teie [Chat vahekaardi](./chat-tab.md) ajalukku tavalise vestlusena, tähistatud pistiku ikooniga vestluste loendis. Sõnumid, tööriistakaardid ja täpsustamise pausid näevad välja täpselt nagu vestlus, mille te ise algatasite, ja saate vestluse avada ning brauseris edasi rääkida. Iga tulemus tagastab oma `conversation_id`, et MCP klient saaks jätkata sama vestlust, selle asemel et avada iga kutse jaoks uus.
 

@@ -25,12 +25,17 @@ Setiap frame SSE berupa JSON yang dipisahkan baris baru dengan awalan `data: `.
 
 | Jenis event | Kapan dipancarkan | Field utama |
 |------------|--------------------|------------|
-| `execution_started` | Segera setelah permintaan diterima | `execution_id`, `server_now_ms` |
+| `queued` | Workflow berada pada [batas konkurensi](./webhooks.md#concurrency-limit-and-queued-runs); dikirim lagi setiap kali posisi run berubah | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Segera setelah permintaan diterima, atau ketika run yang diantrekan dimulai | `execution_id`, `server_now_ms` |
 | `node_start` | Tepat sebelum node mulai dieksekusi | `node_id`, `node_label`, `started_at_ms`, opsional `message` |
 | `node_retry` | Saat node melakukan percobaan ulang | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Setelah node selesai | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Saat node Output mengembalikan hasil lebih awal | `node_label`, `output` |
 | `execution_complete` | Setelah workflow berakhir | `status`, `outputs`, `execution_time_ms` |
+
+### Run yang diantrekan
+
+Ketika workflow berada pada batas konkurensinya, stream tetap terbuka dan mengirim event `queued` saat run menunggu. Run yang diantrekan dijalankan di background worker, kemungkinan di proses lain, sehingga stream-nya membawa `execution_started` saat run dimulai dan `execution_complete` saat berakhir, tetapi tanpa event `node_start`, `node_complete`, atau token di antaranya. `execution_complete`-nya memiliki `node_results` kosong; buka run di [Riwayat Eksekusi](./execution-history.md) untuk detail node. Menutup koneksi tidak membatalkan run yang sedang diantrekan. Ketika antrean penuh, permintaan dijawab dengan `429` sebelum stream dibuka.
 
 ## Pesan Start per Node
 

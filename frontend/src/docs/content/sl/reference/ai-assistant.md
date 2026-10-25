@@ -148,7 +148,7 @@ AI Assistant deluje na osnovi **workflow DSL** (jezik specifičen za domeno), ki
    - Vaša Uporabniška pravila dodana kot "Uporabniška prilagojena pravila"
    - Trenutni workflow JSON, ko urejate obstoječi workflow
    - Seznam razpoložljivih workflows, če uporabljate Execute vozlišče
-   - Imena, tipe in id-je vaših poverilnic (nikoli njihovih vrednosti)
+   - Imena, tipe in id-je poverilnic, ki si jih lastite ali so bile deljene z vami (nikoli njihovih vrednosti)
    - Imena, id-je, opise in stolpce podatkovnih tabel, ki jih lahko uporabite (nikoli njihovih vrstic)
 3. Model vrne en sam workflow JSON blok (z `nodes` in `edges`). Frontend ga analizira in uporabi na platnu.
 

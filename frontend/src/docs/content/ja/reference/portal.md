@@ -32,6 +32,10 @@
 3. **Execute**: `POST /api/portal/{slug}/execute` – Portal のチャット UI がこれを呼び出します（有効時は内部的にストリーミング版が使用されます）。エンドユーザーは API を直接呼び出すのではなく、チャットインターフェースを通じて操作します。
 4. **Stop**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – ユーザーがアクティブな Portal 実行中に **Stop** を押した際にリクエストされます
 
+## 同時実行制限
+
+Workflow に[同時実行制限](./webhooks.md#concurrency-limit-and-queued-runs)があり、すべてのスロットが使用中の場合、Portal のメッセージはすぐに実行されず、順番を待機します。実行が開始されるまで、チャットのプログレスラインには **Waiting in queue (2/5)** と表示され、開始後は通常どおり回答が表示されます。ユーザーがページを閉じても実行は継続されます。**Stop** をクリックすると、待機中の実行がキューから削除されます。キューがいっぱいの場合、メッセージは "Concurrency queue is full" で失敗します。キューで待機していた実行は、回答をトークンごとにストリーミングせず、終了時に回答全体が一度に表示されます。
+
 ## Portal 実行における HITL
 
 Portal の Workflow が、[Human-in-the-Loop](./human-in-the-loop.md) を有効化した [Agent ノード](../nodes/agent-node.md) に到達した場合、Portal の応答は空になる代わりにレビューリンクを表示します。

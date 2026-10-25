@@ -32,6 +32,8 @@ import type {
   Workflow,
 } from "@/types/workflow";
 
+import ActiveExecutionStatusLabel from "@/components/Panels/ActiveExecutionStatusLabel.vue";
+import { activeExecutionStatus } from "@/components/Panels/activeExecutionStatus";
 import ExecutionHistoryAskAiButton from "@/components/Panels/ExecutionHistoryAskAiButton.vue";
 import ExecutionHistoryTimeline from "@/components/Panels/ExecutionHistoryTimeline.vue";
 import ExecutionHistoryViewToggle from "@/components/Panels/ExecutionHistoryViewToggle.vue";
@@ -1120,8 +1122,10 @@ function bringToCanvas(): void {
           >
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2">
-                <Loader2 class="w-4 h-4 text-blue-400 animate-spin shrink-0" />
-                <span class="text-sm font-medium text-blue-400">{{ $t('history.running') }}</span>
+                <ActiveExecutionStatusLabel
+                  :item="active"
+                  size="md"
+                />
                 <span class="text-sm text-muted-foreground truncate">
                   {{ formatTime(active.started_at) }}
                 </span>
@@ -1132,6 +1136,7 @@ function bringToCanvas(): void {
             </div>
             <div class="flex shrink-0 items-center gap-1 sm:gap-1.5">
               <Button
+                v-if="activeExecutionStatus(active).canOpenLive"
                 variant="outline"
                 size="sm"
                 class="h-6 px-2 text-xs"
@@ -1394,6 +1399,7 @@ function bringToCanvas(): void {
                 :total-time-ms="selectedEntry?.execution_time_ms ?? 0"
                 :nodes="selectedWorkflowGraph?.nodes ?? []"
                 :edges="selectedWorkflowGraph?.edges ?? []"
+                :started-at="selectedEntry?.started_at ?? null"
               />
 
               <div

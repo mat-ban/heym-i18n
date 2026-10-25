@@ -50,6 +50,15 @@ class TestFormatDuration(unittest.TestCase):
 
 
 class TestCollectActiveExecutions(unittest.IsolatedAsyncioTestCase):
+    def setUp(self) -> None:
+        # Held runs are read from the same session; these tests mock it for other sections.
+        held = patch(
+            "app.services.active_execution_overview.workflow_concurrency.list_held_runs_for_user",
+            AsyncMock(return_value=[]),
+        )
+        held.start()
+        self.addCleanup(held.stop)
+
     async def test_merges_persisted_and_pending_newest_first(self):
         older = _active_record(
             workflow_name="Older run",
@@ -308,3 +317,60 @@ class TestNodeLabelIndex(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestActiveExecutionOrder(unittest.IsolatedAsyncioTestCase):
+    async def test_running_first_then_the_queue_in_the_order_it_runs(self):
+        now = datetime.now(timezone.utc)
+        running = _active_record(workflow_name="Running", started_at=now - timedelta(seconds=4))
+        held = [
+            SimpleNamespace(
+                execution_id=uuid.uuid4(),
+                workflow_id=running.workflow_id,
+                workflow_name=name,
+                enqueued_at=now - timedelta(seconds=seconds_ago),
+                inputs={},
+                position=position,
+                size=2,
+            )
+            # Newest request last in line: it waits behind the one that came first.
+            for name, seconds_ago, position in (("Second", 1, 2), ("First", 2, 1))
+        ]
+        with (
+            patch(
+                f"{MODULE}.list_persisted_active_executions_for_user",
+                AsyncMock(return_value=[running]),
+            ),
+            patch(f"{MODULE}.list_active_executions", return_value=[]),
+            patch(f"{MODULE}.list_pending_review_executions_for_user", AsyncMock(return_value=[])),
+            patch(
+                f"{MODULE}.workflow_concurrency.list_held_runs_for_user",
+                AsyncMock(return_value=held),
+            ),
+        ):
+            items = await collect_active_executions_for_user(AsyncMock(), uuid.uuid4())
+
+        self.assertEqual([item.workflow_name for item in items], ["Running", "First", "Second"])
+        self.assertEqual([item.queue_position for item in items], [None, 1, 2])
+
+
+class TestQueuedRunsInOverview(unittest.IsolatedAsyncioTestCase):
+    async def test_queued_runs_are_counted_apart_with_their_place_in_line(self):
+        workflow_id = uuid.uuid4()
+        item = ActiveExecutionItem(
+            execution_id=str(uuid.uuid4()),
+            workflow_id=str(workflow_id),
+            workflow_name="Invoice sync",
+            started_at=datetime.now(timezone.utc) - timedelta(seconds=30),
+            status="queued",
+            queue_position=2,
+            queue_size=3,
+        )
+        db = AsyncMock()
+        db.execute = AsyncMock(return_value=_rows([SimpleNamespace(id=workflow_id, nodes=[])]))
+        with patch(f"{MODULE}.collect_active_executions_for_user", AsyncMock(return_value=[item])):
+            result = await build_active_execution_overview(db, uuid.uuid4(), None)
+
+        self.assertEqual((result["running_count"], result["queued_count"]), (0, 1))
+        (entry,) = result["executions"]
+        self.assertEqual((entry["queue_position"], entry["queue_size"]), (2, 3))

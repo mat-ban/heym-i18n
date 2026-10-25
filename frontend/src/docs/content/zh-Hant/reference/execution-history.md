@@ -110,6 +110,8 @@ Execution history 會記錄 workflow 的執行：輸入、輸出、節點結果�
 - 取消後，執行中的項目會在下一次重新整理時消失；按下 **Refresh** 可手動更新清單
 - 若取消的是已經完成的執行，該請求不會有任何作用
 
+等待[並行槽位](./webhooks.md#concurrency-limit-and-queued-runs)的執行會在同一區域列出，並帶有 **Queued 2/5** 標籤、排隊順序以及佇列大小。由於尚未開始執行，它們沒有 **Open live** 按鈕；點擊 **Cancel** 會將等待中的執行移出佇列並記錄為 `cancelled`。等待時間超過 Workflow 最大等待時間的執行會記錄為 `expired`，因佇列已滿而被拒絕的執行則會記錄為 `queue_full`；兩者在執行清單中皆有各自的徽章。
+
 即時 URL 為 `/workflows/{workflowId}/{executionId}`。觀察者為唯讀：離開
 編輯器只會中斷該瀏覽器分頁的連線，絕不會停止 workflow。作用中的快照
 透過 PostgreSQL 共享，因此當 Trigger 與編輯器

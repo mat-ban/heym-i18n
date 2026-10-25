@@ -25,12 +25,17 @@ Fiecare cadru SSE este JSON delimitat prin linii noi, prefixat cu `data: `.
 
 | Tip de eveniment | Când este emis | Câmpuri cheie |
 |------------|--------------------|------------|
-| `execution_started` | Imediat după ce cererea este acceptată | `execution_id`, `server_now_ms` |
+| `queued` | Workflow-ul a atins [limita de concurență](./webhooks.md#concurrency-limit-and-queued-runs); trimis din nou ori de câte ori se schimbă poziția rulării | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Imediat după ce cererea este acceptată, sau când începe o rulare din coadă | `execution_id`, `server_now_ms` |
 | `node_start` | Chiar înainte ca un nod să înceapă execuția | `node_id`, `node_label`, `started_at_ms`, `message` opțional |
 | `node_retry` | Când un nod reîncearcă | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | După ce un nod se finalizează | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Când un nod Output returnează mai devreme | `node_label`, `output` |
 | `execution_complete` | După ce workflow-ul se încheie | `status`, `outputs`, `execution_time_ms` |
+
+### Rulări în coadă
+
+Când workflow-ul atinge limita de concurență, fluxul rămâne deschis și trimite evenimente `queued` în timp ce rularea așteaptă. O rulare din coadă se execută în procesul worker de fundal, eventual într-un alt proces, astfel încât fluxul său conține `execution_started` la începerea rulării și `execution_complete` la finalizare, dar niciun eveniment `node_start`, `node_complete` sau evenimente de token intermediare. `execution_complete` al său conține un `node_results` gol; deschideți rularea în [Istoricul execuțiilor](./execution-history.md) pentru detaliile nodurilor. Închiderea conexiunii nu anulează o rulare aflată în coadă. Când coada este plină, cererea primește răspunsul `429` înainte de deschiderea fluxului.
 
 ## Mesaje de început pentru fiecare nod
 

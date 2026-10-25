@@ -30,7 +30,7 @@ Katso [Käynnistimet](./triggers.md) kaikista aloituspisteistä.
 | [Codex](../nodes/codex-node.md) | Suorita paikallinen Codex CLI GitHub-repositoriota vastaan käyttäen ChatGPT/Codex -pääsyavainta | 1 | 1, plus `question`-lähtö |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Suorita OpenCode CLI GitHub-repositoriota vastaan kovettetussa kontissa käyttäen OpenCode Go -yhdyskäytävän API-avainta | 1 | 1 |
 | [MCP-kutsu](../nodes/mcp-call-node.md) | Kutsu tiettyä MCP-työkalua suoraan ilman, että LLM valitsee sen | 1 | 1 |
-| [RAG / Vektorivarasto](../nodes/rag-node.md) | Lisää, päivitä, poista tai hae Qdrant- tai Postgres (pgvector) -[vektorivarastosta](../tabs/vectorstores-tab.md) RAG:ia varten | 1 | 1 |
+| [RAG / Vektorivarasto](../nodes/rag-node.md) | Lisää, päivitä, poista tai hae (vektori- tai hybridivektori + BM25) Qdrant- tai Postgres (pgvector) -[vektorivarastosta](../tabs/vectorstores-tab.md) RAG:ia varten | 1 | 1 |
 
 ## Logiikkasolmut
 

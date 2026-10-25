@@ -105,3 +105,5 @@
 - [Δομή Workflow](./workflow-structure.md) – Μορφή node και edge
 - [Execute Node](../nodes/execute-node.md) – Καλεί sub-workflows (`Ctrl + Shift + O`)
 - [Γρήγορη Εκκίνηση](../getting-started/quick-start.md) – Δημιουργήστε το πρώτο σας workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

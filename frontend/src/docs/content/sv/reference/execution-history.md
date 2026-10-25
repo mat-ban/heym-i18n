@@ -109,6 +109,8 @@ Båda historikdialogerna visar **aktuellt körande exekveringar** högst upp i l
 - Efter avbrytande försvinner den körande posten vid nästa uppdatering; tryck på **Refresh** för att uppdatera listan manuellt
 - Om en körning som redan har slutförts avbryts är begäran en no-op
 
+Körningar som väntar på en [samtidighets-slot](./webhooks.md#concurrency-limit-and-queued-runs) listas i samma avsnitt med etiketten **Queued 2/5**, sin plats i kön och köns storlek. De har ingen **Open live**-knapp eftersom ingenting körs ännu; **Cancel** tar bort en väntande körning från kön och registrerar den som `cancelled`. En körning som väntat längre än workflowens maximala väntetid registreras som `expired`, och en körning som avvisats av en full kö som `queue_full`; båda har en egen badge i körningslistan.
+
 Den live-URL som används är `/workflows/{workflowId}/{executionId}`. Observatören är skrivskyddad: att lämna
 editorn kopplar endast bort den webbläsarfliken och stoppar aldrig workflowen. Aktiva snapshots
 delas via PostgreSQL, så att öppna en körning fungerar även när triggern och editor-

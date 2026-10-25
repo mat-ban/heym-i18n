@@ -25,12 +25,17 @@ Varje SSE-frame är radavgränsad JSON med prefixet `data: `.
 
 | Händelsetyp | När den sänds ut | Viktiga fält |
 |------------|--------------------|------------|
-| `execution_started` | Omedelbart efter att begäran har accepterats | `execution_id`, `server_now_ms` |
+| `queued` | Workflowen har nått sin [samtidighetsgräns](./webhooks.md#concurrency-limit-and-queued-runs); skickas igen när körningens plats ändras | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Omedelbart efter att begäran har accepterats, eller när en köad körning startar | `execution_id`, `server_now_ms` |
 | `node_start` | Precis innan en nod börjar köras | `node_id`, `node_label`, `started_at_ms`, valfritt `message` |
 | `node_retry` | När en nod gör ett nytt försök | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Efter att en nod har slutförts | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | När en Output-nod returnerar i förtid | `node_label`, `output` |
 | `execution_complete` | Efter att workflowen har avslutats | `status`, `outputs`, `execution_time_ms` |
+
+### Köade körningar
+
+När workflowen har nått sin samtidighetsgräns hålls strömmen öppen och skickar `queued`-händelser medan körningen väntar. En köad körning körs i bakgrundsworkern, eventuellt i en annan process, så dess ström bär `execution_started` när körningen startar och `execution_complete` när den avslutas, men inga `node_start`-, `node_complete`- eller token-händelser däremellan. Dess `execution_complete` har en tom `node_results`; öppna körningen i [Exekveringshistorik](./execution-history.md) för noddetaljer. Att stänga anslutningen avbryter inte en köad körning. När kön är full besvaras begäran med `429` innan strömmen öppnas.
 
 ## Startmeddelanden per nod
 

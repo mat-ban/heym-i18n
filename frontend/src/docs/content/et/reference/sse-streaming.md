@@ -25,12 +25,17 @@ Iga SSE kaader on reavahedega eraldatud JSON, millele eelneb `data: `.
 
 | Sündmuse tüüp | Millal see saadetakse | Põhiväljad |
 |------------|--------------------|------------|
-| `execution_started` | Kohe pärast päringu vastuvõtmist | `execution_id`, `server_now_ms` |
+| `queued` | Workflow on saavutanud oma [samaaegsuse piirangu](./webhooks.md#concurrency-limit-and-queued-runs); saadetakse uuesti iga kord, kui käivituse koht muutub | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Kohe pärast päringu vastuvõtmist või järjekorras oleva käivituse alguses | `execution_id`, `server_now_ms` |
 | `node_start` | Vahetult enne, kui sõlm alustab täitmist | `node_id`, `node_label`, `started_at_ms`, valikuline `message` |
 | `node_retry` | Kui sõlm teeb uuesti katse | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Pärast seda, kui sõlm on lõpetanud | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Kui Output sõlm tagastab varakult | `node_label`, `output` |
 | `execution_complete` | Pärast workflow lõppemist | `status`, `outputs`, `execution_time_ms` |
+
+### Järjekorras olevad käivitused
+
+Kui workflow on saavutanud oma samaaegsuse piirangu, jääb voog avatuks ja saadab käivituse ootamise ajal sündmusi `queued`. Järjekorras olev käivitus viiakse läbi taustaprotsessis (background worker), võimalik, et teises protsessis, seega kannab selle voog sündmust `execution_started`, kui käivitus algab, ja sündmust `execution_complete`, kui see lõpeb, kuid vahepeal puuduvad sündmused `node_start`, `node_complete` või tokeni sündmused. Selle `execution_complete` sisaldab tühja välja `node_results`; sõlme üksikasjade vaatamiseks avage käivitus jaotises [Käivituse ajalugu](./execution-history.md). Ühenduse sulgemine ei tühista järjekorras olevat käivitust. Kui järjekord on täis, vastatakse päringule koodiga `429` enne voo avanemist.
 
 ## Sõlmede kaupa algussõnumid
 

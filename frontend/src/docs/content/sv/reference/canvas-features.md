@@ -147,3 +147,5 @@ Se [Webhooks](./webhooks.md#run-with-curl-dialog) för fullständiga detaljer om
 - [Execution History](./execution-history.md) – Tidigare körningar
 - [Templates](../tabs/templates-tab.md) – Spara och återanvänd workflows och noder
 - [Contextual Showcase](./contextual-showcase.md) – Kompakt sidguide tillgänglig i redigeraren
+
+- [Canvas-samarbete](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

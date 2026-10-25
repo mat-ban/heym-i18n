@@ -147,3 +147,5 @@ Skatiet [Webhooks](./webhooks.md#run-with-curl-dialog) pilnām dialoga detaļām
 - [Execution History](./execution-history.md) – Iepriekšējie izpildes gadījumi
 - [Templates](../tabs/templates-tab.md) – Saglabāt un atkārtoti izmantot workflow un mezglus
 - [Contextual Showcase](./contextual-showcase.md) – Kompakts lapas ceļvedis, kas pieejams redaktorā
+
+- [Sadarbība uz kanvas](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

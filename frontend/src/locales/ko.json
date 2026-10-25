@@ -827,6 +827,22 @@
         "waiting": "대기 중",
         "neutral": "중립"
       }
+    },
+    "concurrencyLimit": "동시성 제한",
+    "concurrencyLimitHelp": "제한을 초과하는 프로덕션 실행(Webhook, Cron, MCP, Portal, Trigger)은 FIFO 큐에서 대기합니다. 편집기 테스트 실행은 항상 즉시 시작됩니다.",
+    "maxConcurrentRuns": "최대 동시 실행 수",
+    "maxQueueSizeOptional": "최대 큐 크기 (선택 사항)",
+    "emptyNoLimit": "비워 둠 = 제한 없음",
+    "maxWaitOptional": "최대 대기 시간 (초, 선택 사항)",
+    "emptyWaitAsLong": "비워 둠 = 필요한 만큼 대기",
+    "concurrencyQueueHelp": "큐가 가득 차면 429를 응답합니다. 최대 대기 시간보다 오래 대기한 실행은 만료된 것으로 기록됩니다.",
+    "rag": {
+      "hybridSearch": "하이브리드 검색",
+      "hybridSearchHelp": "벡터 유사도와 BM25 키워드 매칭을 결합하여 ID, 이름, 오류 코드와 같은 정확한 용어도 검색할 수 있습니다.",
+      "hybridScore": "하이브리드 점수 (0-1)",
+      "similarityScore": "유사도 점수",
+      "vectorSimilarity": "벡터 유사도",
+      "bm25Score": "BM25 점수"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "AI에게 질문",
     "askAiTitle": "이 실행에 대해 Chat 어시스턴트에게 질문",
-    "noNodeSpans": "이 실행에 대해 기록된 노드 span이 없습니다."
+    "noNodeSpans": "이 실행에 대해 기록된 노드 span이 없습니다.",
+    "queuedProgress": "대기 중 {position}/{size}"
   },
   "portal": {
     "loadingPortal": "포털 로드 중...",

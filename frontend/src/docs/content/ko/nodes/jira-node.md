@@ -8,22 +8,23 @@
 |----------|-------|
 | 입력 | 1 |
 | 출력 | 1 |
-| Credential | Jira (Cloud 이메일/API token 또는 Data Center 사용자 이름/비밀번호, base URL, 배포 모드, 선택적 REST API 버전) |
+| Credential | Jira (Cloud 이메일/API token, Data Center 사용자 이름/비밀번호 또는 personal access token, base URL, 배포 모드, 선택적 REST API 버전) |
 | 출력 | `$nodeLabel.*` |
 
 ## Credential
 
-[Credentials Tab](../tabs/credentials-tab.md)에서 **Jira** credential을 생성하십시오. 저장되는 config 키는 `email`, `api_token`, `base_url`, `deployment`, 그리고 선택적 `api_version`입니다. Jira Cloud의 경우 `email`에는 Atlassian 계정 이메일이, `api_token`에는 Atlassian API token이 저장됩니다. Jira Data Center / Server의 경우 동일한 키에 Basic 인증 사용자 이름과 비밀번호가 저장됩니다. 설정 단계는 [Third-Party Integrations](../reference/integrations.md#jira)를 참조하십시오.
+[Credentials Tab](../tabs/credentials-tab.md)에서 **Jira** credential을 생성하십시오. 저장되는 config 키는 `email`, `api_token`, `base_url`, `deployment`, `auth_mode`, 그리고 선택적 `api_version`입니다. Jira Cloud의 경우 `email`에는 Atlassian 계정 이메일이, `api_token`에는 Atlassian API token이 저장됩니다. Jira Data Center / Server의 경우 동일한 키에 Basic 인증 사용자 이름과 비밀번호가 저장됩니다 또는 `auth_mode: pat`인 경우 `api_token`은 Bearer 토큰으로 전송되는 personal access token을 저장하며 `email`은 사용되지 않습니다. 설정 단계는 [Third-Party Integrations](../reference/integrations.md#jira)를 참조하십시오.
 
 | 필드 | Config 키 | 설명 |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Jira Cloud Atlassian 계정 이메일 또는 Jira Data Center / Server 사용자 이름 |
-| API Token / Password | `api_token` | Jira Cloud Atlassian API token 또는 Jira Data Center / Server Basic 인증 비밀번호 |
+| 인증 | `auth_mode` | `basic` (기본값) 또는 `pat` (Data Center / Server 전용) |
+| API Token / Password / Personal Access Token | `api_token` | Jira Cloud Atlassian API token, Jira Data Center / Server Basic 인증 비밀번호, 또는 `pat` 모드의 Data Center personal access token |
 | Base URL | `base_url` | Jira 사이트 URL, 예: `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | Jira Cloud의 경우 `cloud`, Jira Data Center / Server의 경우 `data_center` |
 | REST API Version | `api_version` | Jira Cloud의 경우 기본값은 `3`입니다. Data Center / Server는 REST API v2를 사용합니다 |
 
-Data Center / Server personal access token과 Bearer 인증은 아직 Jira credential에서 지원되지 않습니다.
+Personal access token은 Jira Data Center / Server 8.14 이상이 필요합니다. 인증 방법을 전환하면 저장된 보안 정보가 지워지므로 전환할 때 새 비밀번호 또는 토큰을 입력하십시오.
 
 **Test Connection**을 사용하여 현재 Jira 사용자에 대해 credential을 검증하십시오.
 

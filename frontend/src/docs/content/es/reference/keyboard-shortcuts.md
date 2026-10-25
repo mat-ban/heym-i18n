@@ -105,3 +105,4 @@ Estos atajos están disponibles en el diálogo Historial de ejecuciones y en el 
 - [Estructura del workflow](./workflow-structure.md) – Formato de nodos y conexiones
 - [Nodo Execute](../nodes/execute-node.md) – Llama a sub-workflows (`Ctrl + Shift + O`)
 - [Inicio rápido](../getting-started/quick-start.md) – Cree su primer workflow
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

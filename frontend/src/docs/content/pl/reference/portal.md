@@ -32,6 +32,10 @@ Konfiguracja w edytorze: przycisk **Portal** w nagłówku workflow otwiera okno 
 3. **Execute**: `POST /api/portal/{slug}/execute` – UI chat portalu wywołuje ten endpoint (lub wewnętrznie jego wariant strumieniowy, gdy jest włączony); użytkownicy końcowi wchodzą w interakcję poprzez interfejs chat, a nie poprzez bezpośrednie wywoływanie API.
 4. **Stop**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Wywoływane, gdy użytkownik naciśnie **Stop** podczas aktywnego uruchomienia portalu
 
+## Limit współbieżności
+
+Gdy workflow ma [limit współbieżności](./webhooks.md#concurrency-limit-and-queued-runs) i wszystkie sloty są zajęte, wiadomość w portalu czeka na swoją kolej, zamiast uruchamiać się natychmiast. Na pasku postępu czatu wyświetla się **Waiting in queue (2/5)**, dopóki uruchomienie się nie rozpocznie, a następnie standardowa odpowiedź. Uruchomienie odbywa się nawet wtedy, gdy użytkownik zamknie stronę. **Stop** usuwa oczekujące uruchomienie z kolejki. Gdy kolejka jest pełna, wiadomość kończy się błędem "Concurrency queue is full". Uruchomienie, które czekało w kolejce, nie przesyła odpowiedzi strumieniowo token po tokenie; cała odpowiedź pojawia się po jego zakończeniu.
+
 ## HITL w uruchomieniach portalu
 
 Jeśli workflow portalu osiągnie [Węzeł agenta](../nodes/agent-node.md) z włączonym [Human-in-the-Loop](./human-in-the-loop.md), odpowiedź portalu pokazuje link do przeglądu zamiast pozostać pusta.

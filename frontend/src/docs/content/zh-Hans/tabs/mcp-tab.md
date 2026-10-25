@@ -36,6 +36,21 @@ Heym 支持两种模式：**默认服务器**，在单一 endpoint 下暴露所�
 
 Workflow 卡片会显示描述以及输入字段名称的预览，以便您在启用前了解每个工具的预期输入。
 
+
+### 排队运行与 heym_execution_status
+
+具有[并发限制](../reference/webhooks.md#concurrency-limit-and-queued-runs)的 workflow 在客户端调用时可能处于繁忙状态。调用将立即返回非错误的结果：
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+客户端使用该 `execution_id` 轮询 `heym_execution_status` 工具。它返回与[状态 URL](../reference/webhooks.md#status-url)相同的响应体：带有当前位置的 `queued`、`running`，随后是带有输出的 `success` 或 `error`。它仅能查找由同一服务器公开的 workflow 运行。该工具仅在默认服务器和每个命名服务器上至少有一个 workflow 设置了并发限制时才会列出。当 workflow 的队列已满时，调用将返回错误 "Concurrency queue is full"。
 ## Heym Chat 工具
 
 **Heym Capabilities** 部分将 Chat 标签页引擎转换为名为 `heym_chat` 的单个 MCP 工具。您可以在默认服务器、任意命名服务器或两者上启用它——每个界面都保留各自的开关和模型选择。
@@ -49,6 +64,7 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 - 报告当前正在运行的内容：活跃执行数量、其 workflow 名称、各自已运行时长、当前所在节点，以及实时运行的链接
 - 在 [Board 标签页](./board-tab.md)上列出看板、创建卡片并读取卡片详情
 - 列出您的数据表及其列，创建新表，并将其接入它所构建的 workflow 中
+- 在 Heym 专属页面上创建或更新您的凭据（参见[凭据](#凭据))
 - 读取团队和全局变量，并搜索文档
 - 批准、编辑或拒绝待处理的人工介入审核
 
@@ -58,14 +74,28 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 
 `heym_chat` 始终以构建模式（build mode）运行 Chat 引擎。在单次调用中，助手可以保存新 workflow、使用真实的示例输入运行它、读取运行报告、修复失败之处并再次运行，每次调用最多可进行五次测试运行。当最新保存版本的最新一次运行通过时，它会以一句话总结收尾，且回复以 `Verified: the latest test run of the saved workflow passed.` 结束。
 
+当调用创建或编辑 workflow 时，回复会列出每个 workflow 及其完整的编辑器链接（例如 `https://heym.example.com/workflows/<id>`），助手回答中的链接也是完整链接。它们使用您配置的 Heym 地址（`FRONTEND_URL`），已登录 Heym 且有权访问该 workflow 的用户均可打开。
+
 - 测试运行是真实的运行。它们的副作用会实际发生，并且会像其他运行一样出现在 workflow 的运行历史记录中。
 - 保存操作遵循编辑器的路径：对图结构的更改会将先前的图保留在 workflow 的编辑历史（**Edit History**）中。
 - 若要修改其先前构建的 workflow，请使用相同的 `conversation_id` 继续该对话线程。助手会更新该 workflow 而不是新建一个，并且仅会修改您有权编辑的 workflow。
 - 当五次测试运行用尽时，助手会停止并说明仍然失败的原因。
 
-凭证保留在 UI 中：`heym_chat` 从不列出、选择或创建凭证。当它构建或编辑 workflow 时，需要凭证的新节点会留空，并在回复中指明这些节点，以便您在编辑器中设置。
-
 数据表则不同。表不包含任何机密信息，因此 `heym_chat` 可以列出您的表、询问 workflow 应使用哪张表，并创建带有列的新表。它从不读取或写入行数据。
+
+### 凭据
+
+`heym_chat` 与 Chat 标签页一样，按名称和类型查看您拥有的凭据以及与您共享的凭据。当它构建的 workflow 需要凭据时，会在结果中以提问的方式询问使用哪一个。请使用相同的 `conversation_id` 进行回复。
+
+要添加凭据或更新您拥有的凭据，助手会在 Heym 页面 `/credentials/setup/<id>` 上打开凭据表单。您在该页面登录 Heym，输入密钥或连接账户，然后保存。该值直接存入 Heym：MCP 客户端及其模型只能获知凭据的名称和类型。切勿将密钥粘贴到 MCP 客户端中，请改为主动作出表单请求。
+
+| 客户端 | 处理方式 |
+|--------|----------|
+| 支持 MCP URL 引导弹出 | 客户端会提示您打开 Heym 页面。调用会等待您填写表单（最多十分钟），然后使用新凭据继续。 |
+| 其他客户端 | 结果中附带链接并提示客户端携带 `wait_for_credential_form` 再次调用 `heym_chat`。该调用在您填写表单时最多等待五分钟，然后恢复对话。如果客户端没有等待，请保存表单并使用相同的 `conversation_id` 回复；下一次调用将获知表单已保存并使用了哪个凭据。 |
+
+该页面仅针对发起请求的 Heym 账户打开，因此转发的链接对其他任何人无效。表单有效期为 24 小时，您也可以在页面上拒绝。一旦您保存或拒绝，Chat 标签页对话中的相应步骤就会显示结果。
+
 
 ### 凭证与模型
 
@@ -78,12 +108,15 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 
 如果任一缺失，该工具仍会出现在 `tools/list` 中，但每次调用都会返回错误，提示您在此标签页中完成设置。
 
+
+`heym_chat` 构建的 workflow 中的 LLM 和 Agent 节点在此凭据和模型上运行（包括与您共享的凭据），因此无需其他设置步骤即可直接进行测试运行。当 `heym_chat` 编辑 workflow 时，已有凭据的 LLM 和 Agent 节点将保留原有凭据及其模型。
 ### 参数与历史记录
 
 | 参数 | 必填 | 描述 |
 |----------|----------|-------------|
 | `message` | 是 | 以自然语言给出的指令或问题。 |
 | `conversation_id` | 否 | 来自先前 `heym_chat` 结果的 `conversation_id`，用于继续该对话线程。 |
+| `wait_for_credential_form` | 否 | 配合 `conversation_id`：等待用户保存或拒绝该线程打开的凭据表单，然后发送 `message`。 |
 
 每次调用都会作为普通对话写入您的 [Chat 标签页](./chat-tab.md)历史记录，并在对话列表中标记为插头图标。消息、工具卡片和澄清暂停看起来与您自己发起的对话完全一致，您可以打开该线程并在浏览器中继续对话。每个结果都会返回其 `conversation_id`，以便 MCP 客户端继续同一线程，而不是在每次调用时打开新线程。
 

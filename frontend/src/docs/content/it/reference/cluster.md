@@ -110,6 +110,10 @@ Il tag dell'immagine deve corrispondere alla versione eseguita da main, ed entra
 | On | Esclude un worker dalla rotazione senza arrestarlo — le esecuzioni in corso terminano, non ne vengono assegnate di nuove. Bloccato su On per l'istanza main: le attività di file, plugin e coding-agent vengono eseguite lì indipendentemente dallo stato dell'interruttore |
 | Weight | La sua quota di esecuzioni distribuibili |
 
+## Limiti di concorrenza in un cluster
+
+Il [limite di concorrenza](./webhooks.md#concurrency-limit-and-queued-runs) di un workflow viene conteggiato in PostgreSQL, pertanto si applica su ogni istanza e su ogni processo: due istanze non eseguono mai più esecuzioni di un workflow di quante ne consenta il limite. Un'esecuzione che ha atteso uno slot viene collocata in base alle stesse regole di qualsiasi altra esecuzione all'avvio, garantendo che un'esecuzione che deve rimanere su main vi rimanga. Il worker di coda che esegue tali esecuzioni si avvia ora su ogni installazione, inclusa una singola istanza, in cui acquisisce solo le esecuzioni accodate dalla propria istanza. Ciò significa che anche una singola istanza mantiene la connessione `LISTEN` di risveglio della coda in ogni processo; pianifichi quindi le sue connessioni allo stesso modo di quelle di un'istanza di cluster.
+
 ## Cronologia delle esecuzioni
 
 Ogni esecuzione nella cronologia indica l'istanza che l'ha eseguita, ed entrambe le finestre di dialogo della cronologia possono essere filtrate su una singola istanza. Il filtro corrisponde all'id dell'istanza mostrandone il nome, pertanto rinominare un'istanza non riscrive quanto riportato dalle esecuzioni precedenti.

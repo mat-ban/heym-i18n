@@ -8,22 +8,23 @@
 |----------|-------|
 | Είσοδοι | 1 |
 | Έξοδοι | 1 |
-| Διαπιστευτήριο | Jira (Cloud email/API token ή Data Center username/password, base URL, deployment mode, προαιρετική έκδοση REST API) |
+| Διαπιστευτήριο | Jira (Cloud email/API token, Data Center username/password ή personal access token, base URL, deployment mode, προαιρετική έκδοση REST API) |
 | Έξοδος | `$nodeLabel.*` |
 
 ## Διαπιστευτήριο
 
-Δημιουργήστε ένα **Jira** διαπιστευτήριο στην [Καρτέλα Διαπιστευτηρίων](../tabs/credentials-tab.md). Τα αποθηκευμένα κλειδιά ρυθμίσεων είναι `email`, `api_token`, `base_url`, `deployment` και προαιρετικά `api_version`. Για το Jira Cloud, το `email` αποθηκεύει το email του λογαριασμού Atlassian και το `api_token` αποθηκεύει το Atlassian API token. Για το Jira Data Center / Server, αυτά τα ίδια κλειδιά αποθηκεύουν το όνομα χρήστη και τον κωδικό πρόσβασης του Basic auth. Ανατρέξτε στις [Ενσωματώσεις Τρίτων](../reference/integrations.md#jira) για τα βήματα ρύθμισης.
+Δημιουργήστε ένα **Jira** διαπιστευτήριο στην [Καρτέλα Διαπιστευτηρίων](../tabs/credentials-tab.md). Τα αποθηκευμένα κλειδιά ρυθμίσεων είναι `email`, `api_token`, `base_url`, `deployment`, `auth_mode` και προαιρετικά `api_version`. Για το Jira Cloud, το `email` αποθηκεύει το email του λογαριασμού Atlassian και το `api_token` αποθηκεύει το Atlassian API token. Για το Jira Data Center / Server, αυτά τα ίδια κλειδιά αποθηκεύουν το όνομα χρήστη και τον κωδικό πρόσβασης του Basic auth, ή, με `auth_mode: pat`, το `api_token` αποθηκεύει ένα personal access token που αποστέλλεται ως Bearer token και το `email` δεν χρησιμοποιείται. Ανατρέξτε στις [Ενσωματώσεις Τρίτων](../reference/integrations.md#jira) για τα βήματα ρύθμισης.
 
 | Πεδίο | Κλειδί ρύθμισης | Περιγραφή |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Email λογαριασμού Atlassian για Jira Cloud, ή όνομα χρήστη για Jira Data Center / Server |
-| API Token / Password | `api_token` | Atlassian API token για Jira Cloud, ή κωδικός πρόσβασης για Basic auth σε Jira Data Center / Server |
+| Έλεγχος ταυτότητας | `auth_mode` | `basic` (προεπιλογή) ή `pat` (μόνο Data Center / Server) |
+| API Token / Password / Personal Access Token | `api_token` | Atlassian API token για Jira Cloud, κωδικός πρόσβασης για Basic auth σε Jira Data Center / Server ή personal access token του Data Center σε λειτουργία `pat` |
 | Base URL | `base_url` | URL του ιστότοπου Jira, για παράδειγμα `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` για Jira Cloud ή `data_center` για Jira Data Center / Server |
 | REST API Version | `api_version` | Προεπιλογή `3` για Jira Cloud. Το Data Center / Server χρησιμοποιεί REST API v2 |
 
-Τα personal access tokens και το Bearer auth του Data Center / Server δεν υποστηρίζονται ακόμη από το διαπιστευτήριο Jira.
+Τα personal access tokens απαιτούν Jira Data Center / Server 8.14 ή νεότερη έκδοση. Η αλλαγή μεθόδου ελέγχου ταυτότητας εκκαθαρίζει το αποθηκευμένο μυστικό, επομένως εισαγάγετε τον νέο κωδικό πρόσβασης ή το νέο token κατά την εναλλαγή.
 
 Χρησιμοποιήστε το **Test Connection** για να επαληθεύσετε το διαπιστευτήριο έναντι του τρέχοντος χρήστη Jira.
 

@@ -108,6 +108,73 @@ Konfigurirajte za vsak workflow: `rate_limit_requests` in `rate_limit_window_sec
 | `rate_limit_window_seconds` | Trajanje okna v sekundah |
 
 Zahteve `test_run` obidejo omejevanje hitrosti.
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Omejitev sočasnosti in izvajanja v čakalni vrsti
+
+Workflow lahko omeji število produkcijskih izvajanj, ki se izvajajo hkrati. Vklopite **Omejitev sočasnosti** v plošči **Properties** na ravni workflowa in nastavite **Največ sočasnih izvajanj**. Lastniki in sodelavci z dostopom za urejanje lahko to spremenijo. Omejitev je privzeto izklopljena.
+
+Ko je omejitev dosežena, nova izvajanja čakajo v čakalni vrsti FIFO (prvi noter, prvi ven). To pokriva vsako produkcijsko vstopno točko: ta endpoint, [streaming endpoint](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) in vsak [trigger](./triggers.md). Lastna preizkusna izvajanja urejevalnika se vedno začnejo takoj in ne zasedejo reže. Pošiljanje `test_run=true` brez prijavljene seje z dovoljenjem za odpiranje workflowa ne zaobide čakalne vrste.
+
+| Nastavitev | Opis |
+|---|---|
+| `concurrency_limit` | Dovoljena produkcijska izvajanja hkrati. `0` izklopi omejitev |
+| `concurrency_max_queue` | Izbirno. Dovoljeno število čakajočih izvajanj hkrati. Prazno pomeni brez omejitve |
+| `concurrency_max_wait_seconds` | Izbirno. Izvajanje, ki čaka dlje, se zabeleži kot `expired`. Prazno pomeni neomejeno čakanje |
+
+### 202 Accepted
+
+Klic, ki se začne takoj, se obnaša natanko tako, kot je opisano v poglavju Oblika Odgovora. Klic, ki mora počakati, takoj prejme `202 Accepted`, ne glede na glavo `X-Simple-Response`, z glavo `Location`, ki kaže na URL njegovega stanja:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Polje | Opis |
+|---|---|
+| `queue.position` | Mesto tega izvajanja v vrsti, začenši z 1 |
+| `queue.size` | Izvajanja, ki trenutno čakajo |
+| `queue.running` | Izvajanja, ki trenutno zasedajo režo |
+| `queue.limit` | Omejitev sočasnosti workflowa |
+| `status_token` | Samo za anonimne workflowe. Vrne se enkrat v tem odgovoru |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` odgovarja s stanjem izvajanja. Pokličite ga z istimi poverilnicami, s katerimi se je izvajanje začelo: sejo ali JWT, [žetonom izvajanja](./execution-tokens.md) ali prilagojeno glavo workflowa. Anonimni workflow nima poverilnic za preverjanje, zato pošljite `status_token` iz odgovora 202 v glavi `X-Heym-Run-Token`. Žeton se nikoli ne bere iz poizvedovalnega niza. Napačen ali manjkajoči žeton prejme `404`, enako kot neznano izvajanje.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Pomen (izvajanje, ki mora počakati na režo sočasnosti, namesto tega prejme [odgovor 202](#202-accepted)) |
+|---|---|
+| `queued` | Čaka na režo; `queue` prikazuje položaj |
+| `running` | Ima dodeljeno režo in se izvaja |
+| `success` / `error` | Zaključeno; polji `outputs` in `error` sta izpolnjeni |
+| `pending` | Zaustavljeno za [človeški pregled](./human-in-the-loop.md) |
+| `cancelled` | Preklicano iz [Zgodovine izvajanja](./execution-history.md) |
+| `expired` | Čakalo je dlje kot `concurrency_max_wait_seconds` in se nikoli ni izvedlo |
+
+Poizvedujte vsakih nekaj sekund, dokler stanje ni več `queued` ali `running`. Izvajanje v čakalni vrsti se izvede tudi, če nihče ne poizveduje.
+
+### Polna čakalna vrsta
+
+Ko je nastavljen `concurrency_max_queue` in že čaka toliko izvajanj, se klic zavrne z `429 Concurrency queue is full` in vnosom `queue_full` v zgodovini izvajanja. Nič se ne postavi v čakalno vrsto.
+
 ## Oblika Odgovora
 
 Endpoint vrne JSON:

@@ -7,7 +7,7 @@
 - **Qdrant** – 將向量儲存於外部 Qdrant 伺服器（需要 *RAG: Qdrant + OpenAI* 認證）。
 - **Postgres (pgvector)** – 將向量儲存於 Heym 自身的 Postgres 資料庫內，無需外部服務（需要 *RAG: Psql + OpenAI* 認證）。
 
-為維持向後相容性，預設值為 **Qdrant**。變更 Database 會將 **Vector Store** 清單篩選為由該資料庫支援的儲存區。兩種後端皆支援相同的操作、中繼資料篩選及 Cohere 重排序。
+為維持向後相容性，預設值為 **Qdrant**。變更 Database 會將 **Vector Store** 清單篩選為由該資料庫支援的儲存區。兩種後端皆支援相同的操作、中繼資料篩選、混合（向量 + BM25）搜尋及 Cohere 重排序。
 
 任一後端亦可透過 *RAG: Custom Embeddings* 認證存取，該認證會以任何與 OpenAI 相容的嵌入端點取代 OpenAI，並為其自身的向量儲存區命名。以此類認證建立的儲存區會顯示於其目標 Database 之下。請參閱 [Custom Embeddings](../reference/integrations.md#custom-embeddings-rag)。
 
@@ -17,7 +17,7 @@
 |----------|-------|
 | 輸入 | 1 |
 | 輸出 | 1 |
-| 輸出 | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count`（搜尋）、`$nodeLabel.point_id`（插入、upsert）、`$nodeLabel.deleted`（刪除） |
+| 輸出 | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count`（搜尋）、`$nodeLabel.point_id`（插入、upsert）、`$nodeLabel.deleted`（刪除） |
 
 ## 參數
 
@@ -33,6 +33,7 @@
 | `queryText` | expression | 搜尋查詢（僅限搜尋） |
 | `searchLimit` | number | 結果數量上限（預設：5） |
 | `metadataFilters` | JSON string | 搜尋用的中繼資料篩選條件（值支援表達式） |
+| `hybridSearch` | boolean | 將向量搜尋與 BM25 關鍵字搜尋結合（僅限 search；預設：關閉） |
 | `enableReranker` | boolean | 使用 Cohere 對搜尋結果進行重排序 |
 | `rerankerCredentialId` | UUID | 用於重排序的 Cohere 認證 |
 | `rerankerTopN` | number | 重排序後保留的頂部結果數量 |
@@ -104,6 +105,7 @@
 | `queryText` | 是 | 搜尋查詢 |
 | `searchLimit` | 否 | 最大結果數（預設：5） |
 | `metadataFilters` | 否 | 依 metadata 篩選（精確比對 JSON 物件，值支援表達式） |
+| `hybridSearch` | 否 | 將向量相似度與 BM25 關鍵字比對融合（參見[混合搜尋](#混合搜尋)） |
 | `enableReranker` | 否 | 啟用 Cohere reranking 以提升相關性 |
 | `rerankerCredentialId` | 啟用 reranking 時 | Cohere 認證 |
 | `rerankerTopN` | 否 | reranking 後的最終結果數量 |
@@ -117,13 +119,44 @@
 - `score` 仍為原始的向量相似度分數
 - `relevance_score` 為 Cohere reranker 分數
 
+
+#### 混合搜尋
+
+向量搜尋能找出與查詢語義相同的文字。僅包含完全符合字詞的文字排名可能較低：例如產品代碼、工單編號、人名、類似 `ERR-4021` 的錯誤代碼。開啟**混合搜尋**後，節點將在向量搜尋的同時執行關鍵字搜尋並合併兩個清單，使單次查詢能同時取得兩種比對結果。
+
+1. 向量搜尋傳回其最佳比對結果，與未啟用混合搜尋時相同。
+2. 關鍵字搜尋使用 **BM25** 演算法根據查詢詞對儲存的文字進行評分，該演算法偏好罕見詞、重複詞與較短的文件。
+3. 兩個排序清單透過 **倒數排名融合（reciprocal rank fusion）** 進行合併。同時位於兩個清單前列的文件將排名第一，僅被單一清單找到的文件仍會顯示。
+
+中繼資料篩選條件同時適用於兩種搜尋；若啟用了 Cohere 重排序器，它將在合併後的清單上運作。
+
+每個結果皆包含兩種搜尋的分數：
+
+| 欄位 | 意義 |
+|------|------|
+| `score` | 0 到 1 的融合分數。`1` 表示該文件在兩種搜尋中皆排名第一。 |
+| `vector_score` | 向量相似度（0 到 1）。僅當關鍵字搜尋找到該文件時為 `null`。 |
+| `keyword_score` | BM25 分數。當文件中未出現任何查詢詞時為 `null`。 |
+
+當混合搜尋執行時，`$nodeLabel.hybrid` 為 `true`。
+
+注意事項：
+
+- 融合後的 `score` 用於對結果進行相對排序。它不是向量相似度，因此針對一般搜尋調整的閾值無法直接沿用。
+- 查詢詞會轉為小寫並在空格及標點符號處分割，因此 `ERR-4021` 會以 `err` 與 `4021` 進行搜尋。關鍵字搜尋最多使用查詢中的前 16 個不重複字詞。
+- Qdrant：在集合上首次執行混合搜尋時，會在 `text` payload 欄位上建立全文索引，這需要具備寫入權限的 Qdrant 金鑰。對於大型集合，此操作僅需耗時一次；後續搜尋將重複使用該索引。
+- Postgres (pgvector)：資料庫遷移 `142_vsi_text_search_index` 新增了全文索引。更新後請執行 `alembic upgrade head`。混合搜尋在沒有索引的情況下也能運作，但在大型儲存區中速度較慢。
+- 針對每次查詢，關鍵字搜尋最多讀取 200 筆相符文件，並從最罕見的查詢詞開始讀取，因為它們權重最高。
 ## 存取結果
 
 - `$ragNode.results.first().text` – 最頂端結果的內容
-- `$ragNode.results.first().score` – 相似度分數（0–1）
+- `$ragNode.results.first().score` – 相似度分數（0–1），或混合搜尋的融合分數
+- `$ragNode.results.first().keyword_score` – BM25 分數（混合搜尋）
+- `$ragNode.results.first().vector_score` – 向量相似度（混合搜尋）
 - `$ragNode.results.first().metadata.source` – 最頂端結果的 metadata
 - `$ragNode.results.map("item.text").join("\n\n")` – 串接以作為 LLM 上下文
 - `$ragNode.reranked` – 是否套用了 reranking
+- `$ragNode.hybrid` – 是否套用了混合搜尋
 - `$ragNode.count` – 回傳的結果數量
 - `$ragNode.replaced` – upsert 是否取代了既有文件
 - `$ragNode.deleted` – delete 是否移除了任何內容
@@ -143,6 +176,22 @@
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## 範例 – 混合搜尋
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

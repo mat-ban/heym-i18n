@@ -36,6 +36,21 @@ Cada workflow pode ser exposto como uma ferramenta MCP:
 
 Os cartões dos workflows apresentam a descrição e uma pré-visualização dos nomes dos campos de entrada, para que possa ver o que cada ferramenta espera antes de a ativar.
 
+
+### Execuções em fila e heym_execution_status
+
+Um workflow com um [limite de concorrência](../reference/webhooks.md#concurrency-limit-and-queued-runs) pode estar ocupado quando um cliente o chama. A chamada retorna imediatamente um resultado que não é um erro:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+O cliente consulta a ferramenta `heym_execution_status` com esse `execution_id`. Ela retorna o mesmo corpo do [URL de estado](../reference/webhooks.md#status-url): `queued` com a posição atual, `running`, e depois `success` ou `error` com as saídas. Só localiza execuções de workflows expostos pelo mesmo servidor. A ferramenta é listada no servidor predefinido e em cada servidor nomeado apenas enquanto pelo menos um dos seus workflows tiver um limite de concorrência. Quando a fila do workflow está cheia, a chamada retorna o erro "Concurrency queue is full".
 ## Ferramenta de Chat do Heym
 
 A secção **Capacidades do Heym** transforma o motor do separador Chat numa única ferramenta MCP denominada `heym_chat`. Ative-a no servidor predefinido, em qualquer servidor nomeado, ou em ambos — cada superfície mantém a sua própria ativação e seleção de modelo.
@@ -49,6 +64,7 @@ Quando está ativada, `heym_chat` aparece em `tools/list` juntamente com as ferr
 - Reportar o que está a ser executado neste momento: quantas execuções estão ativas, os nomes dos respetivos workflows, há quanto tempo cada uma está em execução, o nó em que cada uma se encontra atualmente e uma ligação para a execução em direto
 - Listar quadros, criar cartões e ler o detalhe dos cartões no [separador Board](./board-tab.md)
 - Listar as suas tabelas de dados com as respetivas colunas, criar novas e integrá-las nos workflows que constrói
+- Criar ou atualizar as suas credenciais na página própria do Heym (consulte [Credenciais](#credenciais))
 - Ler equipas e variáveis globais e pesquisar na documentação
 - Aprovar, editar ou recusar revisões pendentes de human-in-the-loop
 
@@ -58,14 +74,28 @@ As capacidades adicionadas posteriormente ao separador Chat ficam automaticament
 
 O `heym_chat` executa sempre o motor de Chat em modo build. Numa única chamada, o assistente pode guardar um novo workflow, executá-lo com entradas de exemplo realistas, ler o relatório de execução, corrigir o que falhou e executá-lo novamente, até cinco execuções de teste por chamada. Quando a última execução da última gravação é bem-sucedida, termina com um resumo de uma frase e a resposta conclui com `Verified: the latest test run of the saved workflow passed.`
 
+Quando uma chamada cria ou edita um workflow, a resposta lista cada um com a respetiva ligação completa do editor, tal como `https://heym.example.com/workflows/<id>`, e as ligações na resposta do assistente são também ligações completas. Utilizam o seu endereço Heym configurado (`FRONTEND_URL`) e abrem para utilizadores com sessão iniciada no Heym que tenham acesso a esse workflow.
+
 - As execuções de teste são execuções reais. Os seus efeitos secundários ocorrem e aparecem no histórico de execuções do workflow como qualquer outra execução.
 - As gravações seguem o caminho do editor: uma alteração ao grafo mantém o grafo anterior no **Edit History** do workflow.
 - Para alterar um workflow construído anteriormente, continue o tópico com o mesmo `conversation_id`. O assistente atualiza esse workflow em vez de criar um novo e apenas altera workflows que tenha permissão para editar.
 - Quando as cinco execuções de teste se esgotam, o assistente para e explica o que continua a falhar.
 
-As credenciais permanecem na interface: `heym_chat` nunca as lista, escolhe ou cria. Quando constrói ou edita um workflow, os novos nós que necessitam de uma credencial são deixados em branco e a resposta nomeia-os, para que possa defini-los no editor.
-
 As tabelas de dados são diferentes. Uma tabela não contém segredos, pelo que `heym_chat` pode listar as suas tabelas, perguntar qual delas um workflow deve utilizar e criar uma nova com as respetivas colunas. Nunca lê nem escreve linhas.
+
+### Credenciais
+
+`heym_chat` vê as credenciais que possui e as partilhadas consigo, por nome e tipo, da mesma forma que o separador Chat. Quando um workflow que constrói necessita de uma credencial, pergunta qual utilizar através de uma questão no resultado. Responda com o mesmo `conversation_id`.
+
+Para adicionar uma credencial ou atualizar uma sua, o assistente abre o formulário de credenciais do Heym numa página Heym, `/credentials/setup/<id>`. Inicia sessão aí, introduz a chave ou liga a conta e guarda. O valor vai diretamente para o Heym: o cliente MCP e o respetivo modelo apenas tomam conhecimento do nome e tipo da credencial. Não cole chaves no cliente MCP; peça antes o formulário.
+
+| Cliente | O que acontece |
+|---------|----------------|
+| Suporta elicitação de URL MCP | O cliente solicita que abra a página do Heym. A chamada aguarda enquanto preenche o formulário, até dez minutos, continuando depois com a nova credencial. |
+| Qualquer outro | O resultado inclui a ligação e pede ao cliente para chamar novamente `heym_chat` com `wait_for_credential_form`. Essa chamada aguarda até cinco minutos enquanto preenche o formulário e depois retoma a conversa. Se o cliente não aguardar, guarde o formulário e responda com o mesmo `conversation_id`; a próxima chamada saberá que o formulário foi guardado e qual credencial foi criada. |
+
+A página só abre para a conta Heym que iniciou o pedido, pelo que uma ligação reencaminhada é inútil para qualquer outra pessoa. Um formulário fica disponível durante 24 horas e pode ser recusado a partir da página. Assim que guardar ou recusar, o passo na conversa do separador Chat mostra o resultado.
+
 
 ### Credencial e modelo
 
@@ -78,12 +108,15 @@ As tabelas de dados são diferentes. Uma tabela não contém segredos, pelo que 
 
 Se algum destes estiver em falta, a ferramenta continua a aparecer em `tools/list`, mas cada chamada devolve um erro a indicar que deve concluir a configuração neste separador.
 
+
+Os nós LLM e Agent num workflow construído por `heym_chat` são executados com esta credencial e modelo, incluindo credenciais partilhadas consigo, para que as execuções de teste funcionem sem etapas adicionais de configuração. Quando `heym_chat` edita um workflow, os nós LLM e Agent que já possuem uma credencial mantêm-na juntamente com o seu modelo.
 ### Argumentos e histórico
 
 | Argumento | Obrigatório | Descrição |
 |----------|----------|-------------|
 | `message` | Sim | A instrução ou pergunta, em linguagem natural. |
 | `conversation_id` | Não | Um `conversation_id` de um resultado anterior de `heym_chat`, para continuar essa conversa. |
+| `wait_for_credential_form` | Não | Com `conversation_id`: aguardar até que o utilizador guarde ou recuse o formulário de credencial aberto pelo tópico e depois enviar `message`. |
 
 Cada chamada é registada no histórico do seu [separador Chat](./chat-tab.md) como uma conversa normal, marcada com um ícone de ficha na lista de conversas. As mensagens, os cartões de ferramentas e as pausas para esclarecimento são exatamente iguais aos de uma conversa iniciada por si, e pode abrir a conversa e continuar a falar no navegador. Cada resultado devolve o respetivo `conversation_id`, para que o cliente MCP possa continuar a mesma conversa em vez de abrir uma nova a cada chamada.
 

@@ -30,7 +30,7 @@ Zie [Triggers](./triggers.md) voor alle invoerpunten.
 | [Codex](../nodes/codex-node.md) | Voer de lokale Codex CLI uit tegen een GitHub-repository met behulp van een ChatGPT/Codex-toegangstoken | 1 | 1, plus `question`-uitvoer |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Voer de OpenCode CLI uit tegen een GitHub-repository in een gehardende container met behulp van een OpenCode Go gateway-API-sleutel | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Roep een specifieke MCP-tool rechtstreeks aan zonder dat een LLM deze selecteert | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Invoegen, upserten, verwijderen of zoeken in een Qdrant- of Postgres (pgvector) [vectoropslag](../tabs/vectorstores-tab.md) voor RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Invoegen, upserten, verwijderen of zoeken (vector of hybride vector + BM25) in een Qdrant- of Postgres (pgvector) [vectoropslag](../tabs/vectorstores-tab.md) voor RAG | 1 | 1 |
 
 ## Logica-knooppunten
 

@@ -25,12 +25,17 @@ Elk SSE-frame is newline-gescheiden JSON met het voorvoegsel `data: `.
 
 | Gebeurtenistype | Wanneer het wordt verzonden | Belangrijkste velden |
 |------------|--------------------|------------|
-| `execution_started` | Onmiddellijk nadat het verzoek is geaccepteerd | `execution_id`, `server_now_ms` |
+| `queued` | De workflow heeft de [gelijktijdigheidslimiet](./webhooks.md#concurrency-limit-and-queued-runs) bereikt; opnieuw verzonden wanneer de positie van de run verandert | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Onmiddellijk nadat het verzoek is geaccepteerd, of wanneer een run in de wachtrij start | `execution_id`, `server_now_ms` |
 | `node_start` | Vlak voordat een node met de uitvoering begint | `node_id`, `node_label`, `started_at_ms`, optioneel `message` |
 | `node_retry` | Wanneer een node opnieuw probeert | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Nadat een node is voltooid | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Wanneer een Output-node vroegtijdig terugkeert | `node_label`, `output` |
 | `execution_complete` | Nadat de workflow is beëindigd | `status`, `outputs`, `execution_time_ms` |
+
+### Uitvoeringen in de wachtrij
+
+Wanneer de workflow de gelijktijdigheidslimiet heeft bereikt, blijft de stream open en verzendt deze `queued`-gebeurtenissen terwijl de run wacht. Een in de wachtrij geplaatste run wordt uitgevoerd in de achtergrond-worker, mogelijk in een ander proces, waardoor de stream `execution_started` bevat wanneer de run start en `execution_complete` wanneer deze eindigt, maar geen tussentijdse `node_start`, `node_complete` of token-gebeurtenissen. De `execution_complete` bevat een lege `node_results`; open de run in de [Uitvoeringsgeschiedenis](./execution-history.md) voor knooppuntdetails. Het sluiten van de verbinding annuleert een run in de wachtrij niet. Wanneer de wachtrij vol is, wordt het verzoek beantwoord met `429` voordat de stream opent.
 
 ## Startberichten per node
 

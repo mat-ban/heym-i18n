@@ -25,12 +25,17 @@ Ogni frame SSE è un JSON delimitato da newline, preceduto da `data: `.
 
 | Tipo di evento | Quando viene emesso | Campi principali |
 |------------|--------------------|------------|
-| `execution_started` | Immediatamente dopo l'accettazione della richiesta | `execution_id`, `server_now_ms` |
+| `queued` | Il workflow ha raggiunto il [limite di concorrenza](./webhooks.md#concurrency-limit-and-queued-runs); inviato nuovamente ogni volta che la posizione dell'esecuzione cambia | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Immediatamente dopo l'accettazione della richiesta, o all'avvio di un'esecuzione in coda | `execution_id`, `server_now_ms` |
 | `node_start` | Subito prima che un nodo inizi l'esecuzione | `node_id`, `node_label`, `started_at_ms`, `message` opzionale |
 | `node_retry` | Quando un nodo esegue un nuovo tentativo | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Dopo che un nodo ha terminato | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Quando un Nodo Output restituisce un risultato anticipato | `node_label`, `output` |
 | `execution_complete` | Dopo la conclusione del workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Esecuzioni in coda
+
+Quando il workflow ha raggiunto il limite di concorrenza, lo stream rimane aperto e invia eventi `queued` mentre l'esecuzione è in attesa. Un'esecuzione in coda viene eseguita nel worker in background, eventualmente in un altro processo, quindi il suo stream trasmette `execution_started` all'avvio dell'esecuzione e `execution_complete` al termine, ma nessun evento `node_start`, `node_complete` o eventi di token intermedi. Il suo `execution_complete` presenta un `node_results` vuoto; aprire l'esecuzione nella [Cronologia esecuzioni](./execution-history.md) per i dettagli sui nodi. La chiusura della connessione non annulla un'esecuzione in coda. Quando la coda è piena, la richiesta riceve una risposta `429` prima dell'apertura dello stream.
 
 ## Messaggi di avvio per singolo nodo
 

@@ -18,7 +18,7 @@ Credentials 用於儲存 workflow 節點所使用的 API keys 與 secrets。您�
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT 訂閱登入（OAuth）或供 runner 使用的 Codex access token，以及用於 repository 操作的 GitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | 供 runner 使用的 OpenCode Go gateway API key（選用 base URL），以及用於 repository 操作的 GitHub PAT |
 | [Agent](../nodes/agent-node.md)、[HTTP](../nodes/http-node.md)、[GitHub](../nodes/github-node.md) | GitHub | 用於 GitHub API 呼叫、GitHub 節點操作及 MCP 整合的 GitHub personal access token（PAT） |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token 或 Data Center 使用者名稱/密碼、Jira site base URL、部署模式，以及選用的 REST API 版本 |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token、Data Center 使用者名稱/密碼或 personal access token、Jira site base URL、部署模式，以及選用的 REST API 版本 |
 | [Linear](../nodes/linear-node.md) | Linear | 用於 teams、projects、issues 及 comments 的 Personal API key 或 OAuth2 |
 | [HTTP](../nodes/http-node.md) | Bearer、Header | 請求的驗證 |
 | [Telegram](../nodes/telegram-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token 及選用的 webhook secret |
@@ -58,7 +58,7 @@ OpenCode Go 認證也會列於該處，但標示為 **「usage unavailable」**�
 
 Codex 認證刻意排除於 `$credentials` 之外。無論您是使用 ChatGPT 登入（訂閱制，無 per-token API 費用），或貼上 Codex `access_token`，這些 token 只會傳遞給本機的 Codex runner 程序。ChatGPT 登入 token 會在過期時自動更新。
 
-Jira 認證同樣排除於 `$credentials` 之外。[Jira 節點](../nodes/jira-node.md)會在執行時依 `credentialId` 載入認證。對於 Jira 節點未涵蓋的自訂 Jira REST 呼叫，請使用 [HTTP 節點](../nodes/http-node.md)搭配 Jira Basic Auth（Jira Cloud 使用 `email:api_token`，Data Center / Server 使用 `username:password`），例如 `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`。您也可以使用 [Header](../nodes/http-node.md) 認證搭配 `Authorization: Basic <base64(user:secret)>`。Jira Data Center / Server 的 personal access token 與 Bearer auth 目前尚未獲得 Jira 認證支援。
+Jira 認證同樣排除於 `$credentials` 之外。[Jira 節點](../nodes/jira-node.md)會在執行時依 `credentialId` 載入認證。對於 Jira 節點未涵蓋的自訂 Jira REST 呼叫，請使用 [HTTP 節點](../nodes/http-node.md)搭配 Jira Basic Auth（Jira Cloud 使用 `email:api_token`，Data Center / Server 使用 `username:password`），例如 `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`。您也可以使用 [Header](../nodes/http-node.md) 認證搭配 `Authorization: Basic <base64(user:secret)>`。對於 Jira Data Center / Server 的 personal access token，請改傳送 `Authorization: Bearer <token>`；Jira 認證本身透過其 **Personal Access Token** 驗證模式支援此功能。
 
 | 認證類型 | 暴露給 `$credentials.Name` 的值 |
 |-----------------|--------------------------------------|

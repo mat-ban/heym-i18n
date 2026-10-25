@@ -151,3 +151,5 @@ Data Pin дозволяє закріпити вихід вузла з остан
 - [Execution History](./execution-history.md) – Минулі запуски
 - [Templates](../tabs/templates-tab.md) – Збереження та повторне використання workflows і вузлів
 - [Contextual Showcase](./contextual-showcase.md) – Компактний посібник зі сторінки, доступний у редакторі
+
+- [Співпраця на Canvas](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

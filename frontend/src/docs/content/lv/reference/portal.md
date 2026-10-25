@@ -32,6 +32,10 @@ Konfigurējiet redaktorā: **Portal** poga workflow galvenē atver portāla iest
 3. **Izpilde**: `POST /api/portal/{slug}/execute` – Portāla chat UI izsauc šo (vai tā straumēšanas variantu iekšēji, ja iespējots); galalietotāji mijiedarbojas, izmantojot chat interfeisu, nevis tieši izsaucot API.
 4. **Apturēšana**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Tiek pieprasīts, kad lietotājs nospiež **Stop** aktīvas portāla izpildes laikā
 
+## Vienlaicības ierobežojums
+
+Kad darbplūsmai ir [vienlaicības ierobežojums](./webhooks.md#concurrency-limit-and-queued-runs) un visas vietas ir aizņemtas, portāla ziņojums gaida savu kārtu, nevis tiek palaists nekavējoties. Tērzēšanas progresa rindā tiek rādīts **Waiting in queue (2/5)**, līdz izpilde sākas, un pēc tam atbilde parādās kā parasti. Izpilde notiek arī tad, ja lietotājs aizver lapu. **Stop** noņem gaidošo izpildi no rindas. Kad rinda ir pilna, ziņojums neizdodas ar "Concurrency queue is full". Izpilde, kas gaidījusi rindā, nestraumē savu atbildi pa vienam tokenam; visa atbilde parādās, kad tā ir pabeigta.
+
 ## HITL portāla izpildēs
 
 Ja portāla workflow sasniedz [Agent Node](../nodes/agent-node.md) ar iespējotu [Human-in-the-Loop](./human-in-the-loop.md), portāla atbilde parāda pārskatīšanas saiti, nevis parādās tukša.

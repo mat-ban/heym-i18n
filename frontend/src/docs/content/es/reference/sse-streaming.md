@@ -25,12 +25,17 @@ Cada trama SSE es JSON delimitado por saltos de línea con el prefijo `data: `.
 
 | Tipo de evento | Cuándo se emite | Campos clave |
 |------------|--------------------|------------|
-| `execution_started` | Inmediatamente después de que se acepta la solicitud | `execution_id`, `server_now_ms` |
+| `queued` | El workflow está en su [límite de concurrencia](./webhooks.md#concurrency-limit-and-queued-runs); se envía de nuevo cada vez que cambia la posición de la ejecución | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Inmediatamente después de que se acepta la solicitud, o cuando comienza una ejecución en cola | `execution_id`, `server_now_ms` |
 | `node_start` | Justo antes de que un nodo comience su ejecución | `node_id`, `node_label`, `started_at_ms`, `message` opcional |
 | `node_retry` | Cuando un nodo reintenta | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Después de que un nodo finaliza | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Cuando un Nodo Output retorna anticipadamente | `node_label`, `output` |
 | `execution_complete` | Después de que el workflow finaliza | `status`, `outputs`, `execution_time_ms` |
+
+### Ejecuciones en cola
+
+Cuando el workflow alcanza su límite de concurrencia, el flujo permanece abierto y envía eventos `queued` mientras la ejecución espera. Una ejecución en cola se procesa en el worker en segundo plano, posiblemente en otro proceso, por lo que su flujo transporta `execution_started` cuando se inicia y `execution_complete` cuando finaliza, pero ningún evento `node_start`, `node_complete` o de tokens entre medias. Su `execution_complete` tiene un `node_results` vacío; abra la ejecución en el [Historial de ejecuciones](./execution-history.md) para ver los detalles de los nodos. Cerrar la conexión no cancela una ejecución en cola. Cuando la cola está llena, la solicitud se responde con `429` antes de que se abra el flujo.
 
 ## Mensajes de inicio por Nodo
 

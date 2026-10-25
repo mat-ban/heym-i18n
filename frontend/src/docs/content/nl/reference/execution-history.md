@@ -110,6 +110,8 @@ Beide geschiedenisdialogen tonen **momenteel actieve uitvoeringen** bovenaan de 
 - Na annulering verdwijnt de actieve vermelding bij de volgende verversing; klik op **Refresh** om de lijst handmatig bij te werken
 - Bij het annuleren van een run die al is voltooid, is het verzoek een no-op
 
+Runs die wachten op een [concurrency-slot](./webhooks.md#concurrency-limit-and-queued-runs) worden in dezelfde sectie weergegeven met het label **Queued 2/5**, hun positie in de rij en de wachtrijgrootte. Ze hebben geen **Open live** knop omdat er nog niets wordt uitgevoerd; **Cancel** haalt een wachtende run uit de wachtrij en registreert deze als `cancelled`. Een run die langer heeft gewacht dan de maximale wachttijd van de workflow wordt geregistreerd als `expired`, en een run die door een volle wachtrij is afgewezen als `queue_full`; beide hebben hun eigen badge in de runlijst.
+
 De live-URL is `/workflows/{workflowId}/{executionId}`. De observer is alleen-lezen: het verlaten
 van de editor verbreekt alleen dat browsertabblad en stopt nooit de workflow. Actieve snapshots
 worden gedeeld via PostgreSQL, dus het openen van een run werkt nog steeds wanneer de trigger en het editorverzoek

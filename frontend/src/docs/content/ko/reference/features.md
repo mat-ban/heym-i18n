@@ -156,7 +156,7 @@ Decision 노드는 run의 state에 대해 decision model에 typed question을 �
 Decision Model credential이 필요하며, [Switch](../nodes/switch-node.md), [Condition](../nodes/condition-node.md), [Agent Node](../nodes/agent-node.md)와 자연스럽게 어울립니다.
 #### [RAG / Vector Store](../nodes/rag-node.md)
 
-RAG / Vector Store 노드는 검색 증강 생성(retrieval-augmented generation)을 위해 벡터 스토어에 문서를 삽입, upsert, 삭제 및 검색합니다. Database 드롭다운에서 백엔드를 선택합니다 — **Qdrant**(외부 서버) 또는 **Postgres (pgvector)**(Heym 자체 데이터베이스, 외부 서비스 불필요)이며, 기본값은 Qdrant입니다. [Vectorstores](../tabs/vectorstores-tab.md) 탭에서 벡터 스토어를 선택하고 작업을 insert, upsert, delete 또는 search로 설정하십시오. Upsert와 delete는 payload 내부에 저장된 고유 id로 문서를 지정합니다 — **Document ID Field**는 해당 필드의 이름을 지정하고(기본값 `doc_id`), **Document ID**는 그 값을 담습니다 — 따라서 문서는 여러분의 시스템이 이미 사용하는 id를 그대로 유지합니다. upsert는 일치하는 모든 point를 교체한 후 새 버전을 저장하며, delete는 일치하는 항목이 있었는지 보고합니다. 문서 메타데이터는 값에 표현식을 허용하므로 `{"url": "$start.url"}`은 실행이 생성한 값을 저장합니다. 검색은 메타데이터 필터와 선택적 Cohere reranking을 지원하며, text, score, metadata, reranked flag, count를 포함한 결과 배열을 반환하여 [LLM](../nodes/llm-node.md) 또는 [Agent Node](../nodes/agent-node.md) 흐름에서 사용할 수 있습니다.
+RAG / Vector Store 노드는 검색 증강 생성(retrieval-augmented generation)을 위해 벡터 스토어에 문서를 삽입, upsert, 삭제 및 검색합니다. Database 드롭다운에서 백엔드를 선택합니다 — **Qdrant**(외부 서버) 또는 **Postgres (pgvector)**(Heym 자체 데이터베이스, 외부 서비스 불필요)이며, 기본값은 Qdrant입니다. [Vectorstores](../tabs/vectorstores-tab.md) 탭에서 벡터 스토어를 선택하고 작업을 insert, upsert, delete 또는 search로 설정하십시오. Upsert와 delete는 payload 내부에 저장된 고유 id로 문서를 지정합니다 — **Document ID Field**는 해당 필드의 이름을 지정하고(기본값 `doc_id`), **Document ID**는 그 값을 담습니다 — 따라서 문서는 여러분의 시스템이 이미 사용하는 id를 그대로 유지합니다. upsert는 일치하는 모든 point를 교체한 후 새 버전을 저장하며, delete는 일치하는 항목이 있었는지 보고합니다. 문서 메타데이터는 값에 표현식을 허용하므로 `{"url": "$start.url"}`은 실행이 생성한 값을 저장합니다. 검색은 메타데이터 필터, 선택적 **Hybrid Search**(벡터 유사도와 BM25 키워드 매칭을 융합하여 ID 및 에러 코드와 같은 정확한 용어를 시맨틱 매칭과 함께 검색) 및 선택적 Cohere reranking을 지원하며, [LLM](../nodes/llm-node.md) 또는 [Agent Node](../nodes/agent-node.md) 흐름에서 사용할 수 있도록 text, score, metadata, reranked 및 hybrid 플래그, count를 포함한 결과 배열을 반환합니다.
 
 일반적인 다운스트림 노드는 [LLM](../nodes/llm-node.md)과 [Agent Node](../nodes/agent-node.md)이며, 벡터 스토어 설정은 [Vectorstores](../tabs/vectorstores-tab.md)에 있습니다.
 
@@ -554,7 +554,7 @@ Human-in-the-Loop를 사용하면 [Agent 노드](../nodes/agent-node.md)가 특�
 
 ### [Webhooks](./webhooks.md)
 
-Workflow는 `POST /api/workflows/{workflow_id}/execute`에서 [HTTP](../nodes/http-node.md)를 통해 트리거되거나, `POST /api/workflows/{workflow_id}/execute/stream`에서 점진적으로 스트리밍될 수 있습니다. 요청 본문은 [Input](../nodes/input-node.md) 노드에 body로 전달되며, 헤더와 쿼리 파라미터는 [Expression DSL](./expression-dsl.md) 표현식에서 사용할 수 있습니다. Workflow별 인증(익명, JWT 또는 사용자 정의 헤더)을 구성하십시오. 선택적 응답 캐싱, 속도 제한, 편집기의 Run with cURL 대화 상자는 모두 Workflow에 있으며 두 모드 모두에 적용됩니다.
+Workflow는 `POST /api/workflows/{workflow_id}/execute`에서 [HTTP](../nodes/http-node.md)를 통해 트리거되거나, `POST /api/workflows/{workflow_id}/execute/stream`에서 점진적으로 스트리밍될 수 있습니다. 요청 본문은 [Input](../nodes/input-node.md) 노드에 body로 전달되며, 헤더와 쿼리 파라미터는 [Expression DSL](./expression-dsl.md) 표현식에서 사용할 수 있습니다. Workflow별 인증(익명, JWT 또는 사용자 정의 헤더)을 구성하십시오. 선택적 응답 캐싱, 속도 제한, 편집기의 Run with cURL 대화 상자는 모두 Workflow에 있으며 두 모드 모두에 적용됩니다. [동시 실행 제한](./webhooks.md#concurrency-limit-and-queued-runs)이 설정되어 있으면 대기해야 하는 호출은 대신 실행 ID와 상태 URL이 포함된 `202 Accepted`를 받습니다.
 
 [Input](../nodes/input-node.md), [Execution Tokens](./execution-tokens.md), [SSE Streaming](./sse-streaming.md), [HTTP](../nodes/http-node.md), [Workflow 구조](./workflow-structure.md)도 참조하십시오.
 
@@ -599,6 +599,10 @@ Error Workflow는 모든 비테스트 최상위 실행을 대상으로 합니다
 ### Workflow Timeout
 
 각 Workflow는 workflow 수준의 **Properties** 패널에서 **workflow timeout**을 초 단위로 설정할 수 있습니다. `0`(기본값)은 이를 비활성화합니다. 설정된 경우, 제한 시간을 초과한 실행은 다음 노드 경계에서 중지되며 "timed out" 오류와 함께 실패한 실행으로 기록됩니다. 이 timeout은 수동, API, Trigger 실행 모두에 적용됩니다. 긴 [Wait](../nodes/wait-node.md) 노드는 전체 시간 동안 차단되는 대신 즉시 중단됩니다.
+
+### 동시 실행 제한
+
+각 워크플로우는 워크플로우 수준의 **Properties** 패널에 있는 **동시 실행 제한**을 통해 한 번에 실행되는 프로덕션 실행 수를 제한할 수 있습니다. 소유자와 편집 권한이 있는 공동 작업자가 변경할 수 있으며 기본적으로 꺼져 있습니다. 제한에 도달하면 [webhook](./webhooks.md#concurrency-limit-and-queued-runs) 및 [스트리밍](./sse-streaming.md) endpoint, [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) 및 모든 [trigger](./triggers.md)의 새 실행은 [클러스터](./cluster.md)의 모든 인스턴스에 걸쳐 계산되는 FIFO(선입선출) 큐에서 대기합니다. 에디터의 테스트 실행, 하위 워크플로우 호출, [Evals](../tabs/evals-tab.md) 및 검토 재개는 대기열에 들어가지 않으며, [Board](../tabs/board-tab.md) 카드 실행, 파일 업로드 실행, AI 어시스턴트의 run-workflow 도구로 시작된 실행 및 알림 통지 워크플로우는 슬롯을 기다리지 않고 시작됩니다. 대기해야 하는 webhook 호출은 즉시 `execution_id`, 동일한 자격 증명으로 응답하는 상태 URL, 대기 순서, 큐 크기 및 실행 중인 카운트와 함께 `202 Accepted`를 받습니다. MCP 클라이언트도 동일하게 수신하고 `heym_execution_status` 도구를 폴링합니다. 선택 사항인 **최대 큐 크기**는 초과 호출을 `429`로 거부하고, 선택 사항인 **최대 대기 시간**은 너무 오래 대기한 실행을 `expired`로 기록합니다. 대기 중인 실행은 [실행 기록](./execution-history.md)에 **대기 중 n/m**으로 표시되며 거기서 취소할 수 있습니다.
 
 ### Time Saved
 
@@ -865,3 +869,9 @@ Drive 탭은 Workflow 전반에서 스킬에 의해 생성된 모든 파일을 �
 
 <video src="/features/showcase/drive.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/drive.webm">▶ Drive 데모 시청</a></p>
+
+### [Canvas 협업](./canvas-collaboration.md)
+
+Everyone with a workflow open shares one live draft. Edits appear instantly, each person's pointer moves in their color, following mirrors everything they see and do, and you can talk over direct peer-to-peer audio.
+
+See also [Canvas Features](./canvas-features.md), [Edit History](./edit-history.md), and [Keyboard Shortcuts](./keyboard-shortcuts.md).

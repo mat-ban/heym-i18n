@@ -36,6 +36,21 @@ Ogni workflow può essere esposto come strumento MCP:
 
 Le schede dei workflow mostrano la descrizione e un'anteprima dei nomi dei campi di input, così è possibile vedere cosa si aspetta ciascuno strumento prima di attivarlo.
 
+
+### Esecuzioni in coda e heym_execution_status
+
+Un workflow con un [limite di concorrenza](../reference/webhooks.md#concurrency-limit-and-queued-runs) può risultare occupato quando un client lo chiama. La chiamata restituisce immediatamente un risultato che non costituisce un errore:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Il client esegue il polling dello strumento `heym_execution_status` con quell'`execution_id`. Esso restituisce lo stesso corpo dell'[URL di stato](../reference/webhooks.md#status-url): `queued` con la posizione attuale, `running`, quindi `success` o `error` con gli output. Trova unicamente le esecuzioni dei workflow esposti dallo stesso server. Lo strumento viene elencato sul server predefinito e su ciascun server con nome solo finché almeno uno dei suoi workflow presenta un limite di concorrenza. Se la coda del workflow è piena, la chiamata restituisce l'errore "Concurrency queue is full".
 ## Strumento chat di Heym
 
 La sezione **Heym Capabilities** trasforma il motore della scheda Chat in un unico strumento MCP denominato `heym_chat`. È possibile attivarlo sul server predefinito, su qualsiasi server denominato o su entrambi — ciascuna superficie mantiene il proprio interruttore e la propria selezione del modello.
@@ -49,6 +64,7 @@ Quando è attivo, `heym_chat` compare in `tools/list` insieme agli strumenti dei
 - Riportare cosa è in esecuzione in questo momento: quante esecuzioni sono attive, i nomi dei relativi workflow, da quanto tempo ciascuna è in esecuzione, il nodo su cui si trova attualmente e un link all'esecuzione in tempo reale
 - Elencare le board, creare card e leggere il dettaglio delle card nella [scheda Board](./board-tab.md)
 - Elencare le tabelle dati con le relative colonne, crearne di nuove e collegarle ai workflow che costruisce
+- Creare o aggiornare le proprie credenziali sulla pagina dedicata di Heym (vedere [Credenziali](#credenziali))
 - Leggere team e variabili globali e cercare nella documentazione
 - Approvare, modificare o rifiutare le revisioni human-in-the-loop in sospeso
 
@@ -58,14 +74,28 @@ Le capacità aggiunte successivamente alla scheda Chat diventano automaticamente
 
 `heym_chat` esegue sempre il motore Chat in modalità build. In una singola chiamata l'assistente può salvare un nuovo workflow, eseguirlo con input di esempio realistici, leggere il report di esecuzione, correggere ciò che non ha funzionato ed eseguirlo di nuovo, fino a cinque esecuzioni di test per chiamata. Quando l'ultima esecuzione dell'ultimo salvataggio ha esito positivo, conclude con un riepilogo di una frase e la risposta termina con `Verified: the latest test run of the saved workflow passed.`
 
+Quando una chiamata crea o modifica un workflow, la risposta elenca ciascuno di essi con il rispettivo link completo all'editor, come `https://heym.example.com/workflows/<id>`, e anche i link all'interno della risposta dell'assistente sono link completi. Essi utilizzano il tuo indirizzo Heym configurato (`FRONTEND_URL`) e si aprono per gli utenti che hanno effettuato l'accesso a Heym e dispongono dell'accesso a quel workflow.
+
 - Le esecuzioni di test sono esecuzioni reali. I relativi effetti collaterali si verificano e compaiono nella cronologia delle esecuzioni del workflow come qualsiasi altra esecuzione.
 - I salvataggi seguono il percorso dell'editor: una modifica al grafo mantiene il grafo precedente nella **Edit History** del workflow.
 - Per modificare un workflow creato in precedenza, continuare la conversazione con lo stesso `conversation_id`. L'assistente aggiorna quel workflow invece di crearne uno nuovo e modifica solo i workflow che l'utente ha il permesso di modificare.
 - Quando le cinque esecuzioni di test sono esaurite, l'assistente si ferma e spiega cosa continua a fallire.
 
-Le credenziali restano nell'interfaccia: `heym_chat` non le elenca, non le sceglie e non le crea mai. Quando costruisce o modifica un workflow, i nuovi nodi che richiedono una credenziale vengono lasciati vuoti e la risposta ne indica i nomi, così è possibile impostarle nell'editor.
-
 Le tabelle dati sono diverse. Una tabella non contiene segreti, quindi `heym_chat` può elencare le tabelle, chiedere quale debba usare un workflow e crearne una nuova con le relative colonne. Non legge né scrive mai righe.
+
+### Credenziali
+
+`heym_chat` vede le credenziali di tua proprietà e quelle condivise con te, per nome e tipo, allo stesso modo della scheda Chat. Quando un workflow che costruisce necessita di una credenziale, chiede quale utilizzare tramite una domanda nel risultato. Rispondi con lo stesso `conversation_id`.
+
+Per aggiungere una credenziale o aggiornarne una di tua proprietà, l'assistente apre il modulo credenziali di Heym su una pagina Heym, `/credentials/setup/<id>`. Effettui l'accesso a Heym, inserisci la chiave o colleghi l'account e premi Salva. Il valore giunge direttamente a Heym: il client MCP e il suo modello apprendono solo il nome e il tipo della credenziale. Non incollare chiavi nel client MCP; richiedi invece il modulo.
+
+| Client | Comportamento |
+|--------|---------------|
+| Supporta l'elicitazione di URL MCP | Il client richiede di aprire la pagina Heym. La chiamata attende durante la compilazione del modulo, fino a dieci minuti, quindi prosegue con la nuova credenziale. |
+| Qualsiasi altro | Il risultato include il link e invita il client a chiamare nuovamente `heym_chat` con `wait_for_credential_form`. La chiamata attende fino a cinque minuti durante la compilazione del modulo, quindi riprende la conversazione. Se il client non attende, salva il modulo e rispondi con lo stesso `conversation_id`; la chiamata successiva saprà che il modulo è stato salvato e quale credenziale ha creato. |
+
+La pagina si apre unicamente per l'account Heym che ha avviato la richiesta; un link inoltrato è pertanto inutile per chiunque altro. Un modulo rimane attivo per 24 ore ed è possibile rifiutarlo direttamente dalla pagina. Una volta salvato o rifiutato, il passaggio nella conversazione della scheda Chat ne mostra l'esito.
+
 
 ### Credenziale e modello
 
@@ -78,12 +108,15 @@ Le tabelle dati sono diverse. Una tabella non contiene segreti, quindi `heym_cha
 
 Se uno dei due è mancante, lo strumento compare comunque in `tools/list` ma ogni chiamata restituisce un errore che invita a completare la configurazione in questa scheda.
 
+
+I nodi LLM e Agent in un workflow creato da `heym_chat` vengono eseguiti con questa credenziale e questo modello, inclusa una credenziale condivisa con te, in modo che le esecuzioni di prova funzionino senza passaggi di configurazione aggiuntivi. Quando `heym_chat` modifica un workflow, i nodi LLM e Agent che dispongono già di una credenziale mantengono quest'ultima insieme al loro modello.
 ### Argomenti e cronologia
 
 | Argomento | Obbligatorio | Descrizione |
 |----------|----------|-------------|
 | `message` | Sì | L'istruzione o la domanda, in linguaggio naturale. |
 | `conversation_id` | No | Un `conversation_id` da un precedente risultato di `heym_chat`, per continuare quella conversazione. |
+| `wait_for_credential_form` | No | Con `conversation_id`: attendere che l'utente salvi o rifiuti il modulo di credenziali aperto dal thread, quindi inviare `message`. |
 
 Ogni chiamata viene scritta nella cronologia della [scheda Chat](./chat-tab.md) come una normale conversazione, contrassegnata da un'icona a spina nell'elenco delle conversazioni. Messaggi, card degli strumenti e pause di chiarimento appaiono esattamente come in una conversazione avviata manualmente, ed è possibile aprire la conversazione e continuare a scrivere nel browser. Ogni risultato restituisce il proprio `conversation_id`, così il client MCP può continuare la stessa conversazione invece di aprirne una nuova a ogni chiamata.
 

@@ -30,7 +30,7 @@ Az összes belépési pontot lásd a [Triggers](./triggers.md) oldalon.
 | [Codex](../nodes/codex-node.md) | A helyi Codex CLI futtatása egy GitHub-tárolón ChatGPT/Codex hozzáférési tokennel | 1 | 1, valamint `question` kimenet |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Az OpenCode CLI futtatása egy GitHub-tárolón megerősített konténerben, OpenCode Go gateway API-kulccsal | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Egy adott MCP-eszköz közvetlen meghívása anélkül, hogy egy LLM választaná ki | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Beszúrás, upsert, törlés vagy keresés egy Qdrant vagy Postgres (pgvector) [vektortárolóban](../tabs/vectorstores-tab.md) RAG-hoz | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Beszúrás, upsert, törlés vagy keresés (vektoros vagy hibrid vektoros + BM25) egy Qdrant vagy Postgres (pgvector) [vektortárolóban](../tabs/vectorstores-tab.md) RAG-hoz | 1 | 1 |
 
 ## Logikai csomópontok
 

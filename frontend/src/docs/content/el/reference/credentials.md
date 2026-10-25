@@ -18,7 +18,7 @@
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Σύνδεση με συνδρομή ChatGPT (OAuth) ή ένα Codex access token για τον runner, συν ένα GitHub PAT για λειτουργίες αποθετηρίου |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Ένα API key πύλης OpenCode Go (προαιρετικό base URL) για τον runner, συν ένα GitHub PAT για λειτουργίες αποθετηρίου |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) για κλήσεις GitHub API, λειτουργίες του κόμβου GitHub και ενσωματώσεις MCP |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token ή Data Center username/password, base URL του ιστότοπου Jira, λειτουργία ανάπτυξης και προαιρετική έκδοση REST API |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud email/API token, Data Center username/password ή personal access token, base URL του ιστότοπου Jira, λειτουργία ανάπτυξης και προαιρετική έκδοση REST API |
 | [Linear](../nodes/linear-node.md) | Linear | Personal API key ή OAuth2 για ομάδες, έργα, ζητήματα και σχόλια |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Έλεγχος ταυτότητας για αιτήματα |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token και προαιρετικό webhook secret |
@@ -65,7 +65,7 @@ Enterprise Server αντί για το GitHub.com. Όταν επεξεργάζε
 
 Τα διαπιστευτήρια Codex εξαιρούνται σκόπιμα από το `$credentials`. Είτε συνδεθείτε με ChatGPT (συνδρομή, χωρίς κόστος API ανά token) είτε επικολλήσετε ένα Codex `access_token`, τα tokens περνούν μόνο στη διεργασία του τοπικού Codex runner. Τα tokens σύνδεσης ChatGPT ανανεώνονται αυτόματα καθώς λήγουν.
 
-Τα διαπιστευτήρια Jira εξαιρούνται επίσης από το `$credentials`. Ο [Jira node](../nodes/jira-node.md) φορτώνει το διαπιστευτήριο μέσω `credentialId` κατά τον χρόνο εκτέλεσης. Για προσαρμοσμένες κλήσεις Jira REST που δεν καλύπτονται από τον Jira node, χρησιμοποιήστε τον [HTTP node](../nodes/http-node.md) με Jira Basic Auth (`email:api_token` για Jira Cloud ή `username:password` για Data Center / Server), για παράδειγμα `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Μπορείτε επίσης να χρησιμοποιήσετε ένα διαπιστευτήριο [Header](../nodes/http-node.md) με `Authorization: Basic <base64(user:secret)>`. Τα personal access tokens και το Bearer auth του Jira Data Center / Server δεν υποστηρίζονται ακόμη από το διαπιστευτήριο Jira.
+Τα διαπιστευτήρια Jira εξαιρούνται επίσης από το `$credentials`. Ο [Jira node](../nodes/jira-node.md) φορτώνει το διαπιστευτήριο μέσω `credentialId` κατά τον χρόνο εκτέλεσης. Για προσαρμοσμένες κλήσεις Jira REST που δεν καλύπτονται από τον Jira node, χρησιμοποιήστε τον [HTTP node](../nodes/http-node.md) με Jira Basic Auth (`email:api_token` για Jira Cloud ή `username:password` για Data Center / Server), για παράδειγμα `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Μπορείτε επίσης να χρησιμοποιήσετε ένα διαπιστευτήριο [Header](../nodes/http-node.md) με `Authorization: Basic <base64(user:secret)>`. Για τα personal access tokens του Jira Data Center / Server, στείλτε αντ' αυτού `Authorization: Bearer <token>`. Το ίδιο το διαπιστευτήριο Jira το υποστηρίζει μέσω της λειτουργίας ελέγχου ταυτότητας **Personal Access Token**.
 
 | Τύπος διαπιστευτηρίου | Τιμή που εκτίθεται στο `$credentials.Name` |
 |-----------------|--------------------------------------|

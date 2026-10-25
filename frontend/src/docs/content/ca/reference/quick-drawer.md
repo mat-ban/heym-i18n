@@ -52,6 +52,8 @@ Després d'iniciar una execució, el calaix mostra:
 
 `pending` significa que el workflow està esperant una acció posterior, com ara una revisió humana.
 
+Les execucions del Quick Drawer són execucions de producció, de manera que un workflow amb un [límit de concurrència](./webhooks.md#concurrency-limit-and-queued-runs) pot fer-les esperar. Mentre l'execució és a la cua, l'estat indica **Waiting in queue (2/5)**; canvia a "running" quan s'inicia l'execució i mostra el resultat quan acaba, sense progrés pas a pas. Una execució que ha caducat a la cua, o que s'ha cancel·lat mentre esperava, acaba com a `error`.
+
 Una execució amb fitxer passa per l'enllaç de pujada d'un sol ús del trigger: el calaix demana un enllaç al workflow, hi puja el fitxer i mostra el resultat quan la pujada finalitza. Les execucions amb fitxer mostren l'estat final i les sortides però no el progrés pas a pas, i també s'etiqueten amb `Quick Drawer` a l'historial. El fitxer triat s'esborra després de cada execució, perquè un enllaç només admet un fitxer.
 
 ## Emmagatzematge del navegador

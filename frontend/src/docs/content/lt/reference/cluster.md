@@ -111,6 +111,10 @@ Vaizdo žyma turi būti ta pati versija, kurią vykdo pagrindinis mazgas, ir abu
 | On | Pašalina darbuotoją iš rotacijos, nesustabdydamas jo — vykdomi vykdymai baigiasi, nauji nebepriskiriami. Užrakinta pagrindiniam mazgui: failų, papildinių ir kodavimo agentų darbo vykdymai vyksta ten, nesvarbu, ką rodo perjungimas |
 | Svoris | Jo dalis paskirstomų vykdymų |
 
+## Lygiagretumo apribojimai klasteryje
+
+Darbo eigos [lygiagretumo apribojimas](./webhooks.md#concurrency-limit-and-queued-runs) skaičiuojamas PostgreSQL, todėl jis galioja kiekvienoje instancijoje ir kiekviename procese: dvi instancijos niekada nevykdo daugiau vieno workflow vykdymų, nei leidžia limitas. Vykdymas, laukęs laisvos vietos, pradėdamas veiklą paskirstomas pagal tas pačias taisykles kaip ir bet kuris kitas vykdymas, užtikrinant, kad vykdymas, kuris privalo likti main, ten ir liktų. Eilės worker, vykdantis šiuos vykdymus, dabar paleidžiamas kiekviename diegime, įskaitant ir pavienę instanciją, kurioje jis apdoroja tik savo paties instancijos į eilę įtrauktus vykdymus. Tai reiškia, kad pavienė instancija taip pat palaiko eilės pažadinimo `LISTEN` ryšį kiekviename procese; numatykite jos ryšius taip pat, kaip ir klasterio instancijai.
+
 ## Vykdymo istorija
 
 Kiekvienas vykdymas vykdymo istorijoje nurodo mazgą, kuris jį vykdė, o abu istorijos dialogai gali filtruoti iki vieno mazgo. Filtras atitinka mazgo ID, rodydamas jo pavadinimą, todėl pervadinus mazgą, nesikeičia tai, ką sako seni vykdymai.

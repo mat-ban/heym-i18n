@@ -148,3 +148,5 @@ Zie [Webhooks](./webhooks.md#run-with-curl-dialog) voor volledige details van he
 - [Uitvoeringsgeschiedenis](./execution-history.md) – Eerdere uitvoeringen
 - [Sjablonen](../tabs/templates-tab.md) – Workflows en knooppunten opslaan en hergebruiken
 - [Contextuele showcase](./contextual-showcase.md) – Compacte paginagids beschikbaar in de editor
+
+- [Canvas-samenwerking](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

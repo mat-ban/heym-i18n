@@ -30,7 +30,7 @@ Xem [Triggers](./triggers.md) để biết tất cả các điểm nhập.
 | [Codex](../nodes/codex-node.md) | Chạy Codex CLI cục bộ trên kho GitHub bằng token truy cập ChatGPT/Codex | 1 | 1, cộng với đầu ra `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Chạy OpenCode CLI trên kho GitHub trong container được gia cố bằng API key của cổng OpenCode Go | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Gọi trực tiếp một công cụ MCP cụ thể mà không cần LLM chọn | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Chèn, upsert, xóa hoặc tìm kiếm trong [vector store](../tabs/vectorstores-tab.md) Qdrant hoặc Postgres (pgvector) cho RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Chèn, upsert, xóa hoặc tìm kiếm (vector hoặc kết hợp vector + BM25) trong [vector store](../tabs/vectorstores-tab.md) Qdrant hoặc Postgres (pgvector) cho RAG | 1 | 1 |
 
 ## Node Logic
 

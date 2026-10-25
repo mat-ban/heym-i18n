@@ -18,7 +18,7 @@ Credentials menyimpan API key dan secret yang digunakan oleh Node Workflow. Anda
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Sign-in langganan ChatGPT (OAuth) atau access token Codex untuk runner, plus GitHub PAT untuk operasi repositori |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API key gateway OpenCode Go (base URL opsional) untuk runner, plus GitHub PAT untuk operasi repositori |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) untuk panggilan GitHub API, operasi Node GitHub, dan integrasi MCP |
-| [Jira](../nodes/jira-node.md) | Jira | Email/API token Cloud atau username/password Data Center, base URL situs Jira, mode deployment, dan versi REST API opsional |
+| [Jira](../nodes/jira-node.md) | Jira | Email/API token Cloud, username/password Data Center atau personal access token, base URL situs Jira, mode deployment, dan versi REST API opsional |
 | [Linear](../nodes/linear-node.md) | Linear | Personal API key atau OAuth2 untuk tim, proyek, issue, dan komentar |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Auth untuk permintaan |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Bot token dan webhook secret opsional |
@@ -65,7 +65,7 @@ Beberapa Node mengizinkan expressions untuk auth. Gunakan [Expression DSL](./exp
 
 Kredensial Codex sengaja dikecualikan dari `$credentials`. Baik Anda masuk dengan ChatGPT (langganan, tanpa biaya API per-token) atau menempelkan Codex `access_token`, token hanya diteruskan ke proses Codex runner lokal. Token sign-in ChatGPT di-refresh secara otomatis saat kedaluwarsa.
 
-Kredensial Jira juga dikecualikan dari `$credentials`. [Jira node](../nodes/jira-node.md) memuat kredensial berdasarkan `credentialId` saat runtime. Untuk panggilan Jira REST kustom yang tidak tercakup oleh Jira node, gunakan [HTTP node](../nodes/http-node.md) dengan Jira Basic Auth (`email:api_token` untuk Jira Cloud atau `username:password` untuk Data Center / Server), misalnya `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Anda juga dapat menggunakan kredensial [Header](../nodes/http-node.md) dengan `Authorization: Basic <base64(user:secret)>`. Personal access token dan Bearer auth Jira Data Center / Server belum didukung oleh kredensial Jira.
+Kredensial Jira juga dikecualikan dari `$credentials`. [Jira node](../nodes/jira-node.md) memuat kredensial berdasarkan `credentialId` saat runtime. Untuk panggilan Jira REST kustom yang tidak tercakup oleh Jira node, gunakan [HTTP node](../nodes/http-node.md) dengan Jira Basic Auth (`email:api_token` untuk Jira Cloud atau `username:password` untuk Data Center / Server), misalnya `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Anda juga dapat menggunakan kredensial [Header](../nodes/http-node.md) dengan `Authorization: Basic <base64(user:secret)>`. Untuk personal access token Jira Data Center / Server, kirim `Authorization: Bearer <token>` sebagai gantinya; kredensial Jira itu sendiri mendukung hal ini melalui mode autentikasi **Personal Access Token**.
 
 | Tipe kredensial | Nilai yang diekspos ke `$credentials.Name` |
 |-----------------|--------------------------------------|

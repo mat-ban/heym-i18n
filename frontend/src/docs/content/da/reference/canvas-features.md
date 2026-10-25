@@ -147,3 +147,5 @@ Se [Webhooks](./webhooks.md#run-with-curl-dialog) for fulde dialogdetaljer og [S
 - [Kørselshistorik](./execution-history.md) – Tidligere kørsler
 - [Skabeloner](../tabs/templates-tab.md) – Gem og genbrug workflows og noder
 - [Kontekstvisning](./contextual-showcase.md) – Kompakt sideguide tilgængelig i editoren
+
+- [Canvas-samarbejde](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

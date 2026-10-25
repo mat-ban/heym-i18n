@@ -827,6 +827,22 @@
         "waiting": "Väntar",
         "neutral": "Neutral"
       }
+    },
+    "concurrencyLimit": "Samtidighetsgräns",
+    "concurrencyLimitHelp": "Produktionskörningar (Webhooks, Cron, MCP, Portal, Triggers) över gränsen väntar i en FIFO-kö. Testkörningar i editorn startar alltid direkt.",
+    "maxConcurrentRuns": "Max samtidiga körningar",
+    "maxQueueSizeOptional": "Max köstorlek (valfritt)",
+    "emptyNoLimit": "Tomt = ingen gräns",
+    "maxWaitOptional": "Max väntetid (sekunder, valfritt)",
+    "emptyWaitAsLong": "Tomt = vänta så länge som krävs",
+    "concurrencyQueueHelp": "En full kö svarar med 429. En körning som väntar längre än max väntetid registreras som utgången.",
+    "rag": {
+      "hybridSearch": "Hybridsökning",
+      "hybridSearchHelp": "Kombinera vektorlikhet med BM25-nyckelordsmatchning så att även exakta termer som ID:n, namn och felkoder hittas.",
+      "hybridScore": "Hybridpoäng (0-1)",
+      "similarityScore": "Likhetspoäng",
+      "vectorSimilarity": "Vektorlikhet",
+      "bm25Score": "BM25-poäng"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Fråga AI",
     "askAiTitle": "Fråga Chat-assistenten om den här körningen",
-    "noNodeSpans": "Inga nod-spans registrerades för den här körningen."
+    "noNodeSpans": "Inga nod-spans registrerades för den här körningen.",
+    "queuedProgress": "I kö {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Portalen laddas...",

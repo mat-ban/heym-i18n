@@ -7,7 +7,7 @@ De node heeft een **Database**-dropdown die de backend selecteert:
 - **Qdrant** – slaat vectoren op in een externe Qdrant-server (vereist een *RAG: Qdrant + OpenAI*-referentie).
 - **Postgres (pgvector)** – slaat vectoren op in Heym's eigen Postgres-database, zonder externe service (vereist een *RAG: Psql + OpenAI*-referentie).
 
-De standaardwaarde is **Qdrant** voor achterwaartse compatibiliteit. Het wijzigen van de Database filtert de **Vector Store**-lijst tot stores die door die database worden ondersteund. Beide backends ondersteunen dezelfde bewerkingen, metadata-filtering en Cohere-reranking.
+De standaardwaarde is **Qdrant** voor achterwaartse compatibiliteit. Het wijzigen van de Database filtert de **Vector Store**-lijst tot stores die door die database worden ondersteund. Beide backends ondersteunen dezelfde bewerkingen, metadata-filtering, hybride (vector + BM25) zoekopdrachten en Cohere-reranking.
 
 Beide backends kunnen ook worden bereikt via een *RAG: Custom Embeddings*-referentie, die
 OpenAI vervangt door een OpenAI-compatibel embedding-endpoint en zijn eigen vectorstore
@@ -20,7 +20,7 @@ Database waarop deze is gericht. Zie [Custom Embeddings](../reference/integratio
 |----------|-------|
 | Invoer | 1 |
 | Uitvoer | 1 |
-| Uitvoer | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
+| Uitvoer | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (search), `$nodeLabel.point_id` (insert, upsert), `$nodeLabel.deleted` (delete) |
 
 ## Parameters
 
@@ -36,6 +36,7 @@ Database waarop deze is gericht. Zie [Custom Embeddings](../reference/integratio
 | `queryText` | expression | Zoekopdracht (alleen search) |
 | `searchLimit` | number | Maximaal aantal resultaten (standaard: 5) |
 | `metadataFilters` | JSON string | Metadata-filters voor search (waarden ondersteunen expressies) |
+| `hybridSearch` | boolean | Vectorzoekopdrachten combineren met BM25-zoekopdrachten op trefwoord (alleen search; standaard: uit) |
 | `enableReranker` | boolean | Cohere gebruiken om zoekresultaten te reranken |
 | `rerankerCredentialId` | UUID | Cohere-referentie voor reranking |
 | `rerankerTopN` | number | Aantal topresultaten om te behouden na reranking |
@@ -110,6 +111,7 @@ Semantisch zoeken naar vergelijkbare documenten.
 | `queryText` | ja | Zoekopdracht |
 | `searchLimit` | nee | Maximaal aantal resultaten (standaard: 5) |
 | `metadataFilters` | nee | Filteren op metadata (exacte overeenkomst JSON-object, waarden ondersteunen expressies) |
+| `hybridSearch` | nee | Vectorsimilariteit combineren met BM25-trefwoordovereenkomst (zie [Hybride zoekopdracht](#hybride-zoekopdracht)) |
 | `enableReranker` | nee | Cohere-reranking inschakelen voor betere relevantie |
 | `rerankerCredentialId` | bij reranking | Cohere-referentie |
 | `rerankerTopN` | nee | Definitief aantal resultaten na reranking |
@@ -123,13 +125,44 @@ Wanneer reranking is ingeschakeld:
 - `score` blijft de oorspronkelijke vectorsimilariteitsscore
 - `relevance_score` is de Cohere-rerankerscore
 
+
+#### Hybride zoekopdracht
+
+Vectorzoekopdrachten vinden tekst met dezelfde betekenis als de zoekopdracht. Tekst die alleen de exacte woorden bevat, kan lager scoren: een productcode, een ticketnummer, de naam van een persoon, een fout zoals `ERR-4021`. Schakel **Hybride zoekopdracht** in en de knooppunt voert naast de vectorzoekopdracht een zoekopdracht op trefwoord uit en voegt beide lijsten samen, zodat één query beide soorten overeenkomsten vindt.
+
+1. De vectorzoekopdracht levert zijn beste resultaten op, net zoals zonder hybride zoekopdracht.
+2. Een zoekopdracht op trefwoord beoordeelt de opgeslagen tekst aan de hand van de woorden in de query met **BM25**, wat zeldzame woorden, herhaalde woorden en kortere documenten beloont.
+3. De twee gerangschikte lijsten worden samengevoegd met **reciprocal rank fusion**. Een document dat bovenaan beide lijsten staat, eindigt op de eerste plaats, en een document dat slechts in één lijst voorkomt, verschijnt nog steeds.
+
+Metadata-filters zijn van toepassing op beide zoekopdrachten en de Cohere-reranker wordt, indien ingeschakeld, uitgevoerd op de samengevoegde lijst.
+
+Elk resultaat bevat de score van beide zoekopdrachten:
+
+| Veld | Betekenis |
+|------|-----------|
+| `score` | Samengevoegde score van 0 tot 1. `1` betekent dat het document in beide zoekopdrachten op de eerste plaats stond. |
+| `vector_score` | Vectorsimilariteit (0 tot 1). `null` wanneer alleen de trefwoordzoekopdracht het document heeft gevonden. |
+| `keyword_score` | BM25-score. `null` wanneer geen van de zoekwoorden in het document voorkomt. |
+
+`$nodeLabel.hybrid` is `true` wanneer een hybride zoekopdracht is uitgevoerd.
+
+Goed om te weten:
+
+- De samengevoegde `score` rangschikt resultaten ten opzichte van elkaar. Het is geen vectorsimilariteit, waardoor een drempelwaarde die is afgestemd op een gewone zoekopdracht niet direct overdraagbaar is.
+- Woorden uit de query worden omgezet in kleine letters en gesplitst op spaties en leestekens, zodat `ERR-4021` wordt gezocht als `err` en `4021`. De zoekopdracht op trefwoord gebruikt maximaal de eerste 16 unieke woorden van de query.
+- Qdrant: bij de eerste hybride zoekopdracht op een verzameling wordt een fulltext-index opgebouwd voor het payload-veld `text`, waarvoor een Qdrant-sleutel met schrijftoegang nodig is. Bij grote verzamelingen duurt dit eenmalig even; latere zoekopdrachten hergebruiken de index.
+- Postgres (pgvector): de databasemigratie `142_vsi_text_search_index` voegt de fulltext-index toe. Voer `alembic upgrade head` uit na het updaten. De hybride zoekopdracht werkt ook zonder de index, maar trager bij grote opslagruimten.
+- Bij elke query leest de zoekopdracht op trefwoord maximaal 200 overeenkomende documenten, te beginnen met de zeldzaamste querywoorden, aangezien deze het zwaarst wegen.
 ## Resultaten openen
 
 - `$ragNode.results.first().text` – inhoud van het beste resultaat
-- `$ragNode.results.first().score` – similariteitsscore (0–1)
+- `$ragNode.results.first().score` – similariteitsscore (0–1), of de samengevoegde score bij een hybride zoekopdracht
+- `$ragNode.results.first().keyword_score` – BM25-score (hybride zoekopdracht)
+- `$ragNode.results.first().vector_score` – vectorsimilariteit (hybride zoekopdracht)
 - `$ragNode.results.first().metadata.source` – metadata van het beste resultaat
 - `$ragNode.results.map("item.text").join("\n\n")` – samenvoegen voor LLM-context
 - `$ragNode.reranked` – of reranking is toegepast
+- `$ragNode.hybrid` – of de hybride zoekopdracht is toegepast
 - `$ragNode.count` – aantal geretourneerde resultaten
 - `$ragNode.replaced` – of een upsert een bestaand document heeft vervangen
 - `$ragNode.deleted` – of een verwijdering iets heeft verwijderd
@@ -149,6 +182,22 @@ Wanneer reranking is ingeschakeld:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Voorbeeld – Hybride zoekopdracht
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

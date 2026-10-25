@@ -147,3 +147,5 @@ Consultați [Webhooks](./webhooks.md#run-with-curl-dialog) pentru detalii comple
 - [Execution History](./execution-history.md) – Rulări anterioare
 - [Templates](../tabs/templates-tab.md) – Salvați și reutilizați workflow-uri și noduri
 - [Contextual Showcase](./contextual-showcase.md) – Ghid compact al paginii disponibil în editor
+
+- [Colaborare pe Canvas](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

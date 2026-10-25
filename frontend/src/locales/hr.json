@@ -827,6 +827,22 @@
         "waiting": "Na čekanju",
         "neutral": "Neutralno"
       }
+    },
+    "concurrencyLimit": "Ograničenje istovremenosti",
+    "concurrencyLimitHelp": "Produkcijska pokretanja (Webhookovi, Cron, MCP, Portal, Triggeri) iznad ograničenja čekaju u FIFO redu. Probna pokretanja u uređivaču uvijek počinju odmah.",
+    "maxConcurrentRuns": "Maks. istovremenih pokretanja",
+    "maxQueueSizeOptional": "Maks. veličina reda (neobavezno)",
+    "emptyNoLimit": "Prazno = bez ograničenja",
+    "maxWaitOptional": "Maks. čekanje (sekunde, neobavezno)",
+    "emptyWaitAsLong": "Prazno = čekaj koliko god je potrebno",
+    "concurrencyQueueHelp": "Pun red odgovara s 429. Pokretanje koje čeka duže od maksimalnog čekanja bilježi se kao isteklo.",
+    "rag": {
+      "hybridSearch": "Hibridno pretraživanje",
+      "hybridSearchHelp": "Kombinirajte vektorsku sličnost s podudaranjem ključnih riječi BM25, tako da se pronađu i točni pojmovi poput ID-ova, naziva i kodova pogrešaka.",
+      "hybridScore": "Hibridni rezultat (0-1)",
+      "similarityScore": "Rezultat sličnosti",
+      "vectorSimilarity": "Vektorska sličnost",
+      "bm25Score": "BM25 rezultat"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Pitaj AI",
     "askAiTitle": "Pitajte Chat asistenta o ovom pokretanju",
-    "noNodeSpans": "Za ovo pokretanje nisu zabilježeni spanovi čvorova."
+    "noNodeSpans": "Za ovo pokretanje nisu zabilježeni spanovi čvorova.",
+    "queuedProgress": "U redu čekanja {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Učitavanje portala...",

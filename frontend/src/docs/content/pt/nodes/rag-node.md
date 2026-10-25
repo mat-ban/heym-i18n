@@ -7,7 +7,7 @@ O nó possui uma lista suspensa **Database** que seleciona o backend:
 - **Qdrant** – armazena vetores em um servidor Qdrant externo (requer uma credencial *RAG: Qdrant + OpenAI*).
 - **Postgres (pgvector)** – armazena vetores dentro do próprio banco de dados Postgres do Heym, sem serviço externo (requer uma credencial *RAG: Psql + OpenAI*).
 
-O padrão é **Qdrant** por compatibilidade retroativa. Alterar o Database filtra a lista **Vector Store** para os armazenamentos suportados por esse banco de dados. Ambos os backends suportam as mesmas operações, filtragem de metadados e reranking do Cohere.
+O padrão é **Qdrant** por compatibilidade retroativa. Alterar o Database filtra a lista **Vector Store** para os armazenamentos suportados por esse banco de dados. Ambos os backends suportam as mesmas operações, filtragem de metadados, busca híbrida (vetor + BM25) e reranking do Cohere.
 
 Qualquer um dos backends também pode ser acessado por meio de uma credencial *RAG: Custom Embeddings*, que
 substitui a OpenAI por qualquer endpoint de embeddings compatível com OpenAI e nomeia seu próprio armazenamento
@@ -20,7 +20,7 @@ ele utiliza. Consulte [Custom Embeddings](../reference/integrations.md#custom-em
 |----------|-------|
 | Entradas | 1 |
 | Saídas | 1 |
-| Saída | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.count` (pesquisa), `$nodeLabel.point_id` (inserção, upsert), `$nodeLabel.deleted` (exclusão) |
+| Saída | `$nodeLabel.results` / `$nodeLabel.reranked` / `$nodeLabel.hybrid` / `$nodeLabel.count` (pesquisa), `$nodeLabel.point_id` (inserção, upsert), `$nodeLabel.deleted` (exclusão) |
 
 ## Parâmetros
 
@@ -36,6 +36,7 @@ ele utiliza. Consulte [Custom Embeddings](../reference/integrations.md#custom-em
 | `queryText` | expressão | Consulta de pesquisa (somente pesquisa) |
 | `searchLimit` | número | Máximo de resultados (padrão: 5) |
 | `metadataFilters` | string JSON | Filtros de metadados para pesquisa (os valores suportam expressões) |
+| `hybridSearch` | boolean | Combinar busca vetorial com busca por palavras-chave BM25 (apenas search; padrão: desativado) |
 | `enableReranker` | booleano | Usar o Cohere para reranquear os resultados da pesquisa |
 | `rerankerCredentialId` | UUID | Credencial do Cohere para reranking |
 | `rerankerTopN` | número | Número de resultados principais a manter após o reranking |
@@ -125,6 +126,7 @@ Busca semântica por documentos similares.
 | `queryText` | sim | Consulta de busca |
 | `searchLimit` | não | Máximo de resultados (padrão: 5) |
 | `metadataFilters` | não | Filtrar por metadados (objeto JSON de correspondência exata, os valores suportam expressões) |
+| `hybridSearch` | não | Fundir similaridade vetorial com correspondência por palavras-chave BM25 (ver [Busca híbrida](#busca-hibrida)) |
 | `enableReranker` | não | Habilitar o reranking da Cohere para melhor relevância |
 | `rerankerCredentialId` | ao fazer reranking | Credencial da Cohere |
 | `rerankerTopN` | não | Número final de resultados após o reranking |
@@ -138,13 +140,44 @@ Quando o reranking está habilitado:
 - `score` permanece a pontuação de similaridade vetorial original
 - `relevance_score` é a pontuação do reranker da Cohere
 
+
+#### Busca híbrida
+
+A busca vetorial encontra texto que tem o mesmo significado que a consulta. O texto que apenas contém as palavras exatas pode ficar abaixo na classificação: um código de produto, um número de ticket, o nome de uma pessoa, um erro como `ERR-4021`. Ative **Busca híbrida** e o nó executará uma busca por palavras-chave juntamente com a busca vetorial e fundirá ambas as listas, para que uma única consulta encontre ambos os tipos de correspondência.
+
+1. A busca vetorial retorna as suas melhores correspondências, tal como acontece sem a busca híbrida.
+2. Uma busca por palavras-chave pontua o texto armazenado em relação às palavras da consulta com **BM25**, recompensando palavras raras, palavras repetidas e documentos mais curtos.
+3. As duas listas classificadas são fundidas com **reciprocal rank fusion**. Um documento no topo de ambas as listas classifica-se em primeiro lugar, e um documento encontrado por apenas uma lista continua a surgir.
+
+Os filtros de metadados aplicam-se a ambas as buscas, e o reranker da Cohere, quando ativado, é executado na lista fundida.
+
+Cada resultado apresenta a pontuação de ambas as buscas:
+
+| Campo | Significado |
+|-------|-------------|
+| `score` | Pontuação fundida de 0 a 1. `1` significa que o documento ficou em primeiro lugar em ambas as buscas. |
+| `vector_score` | Similaridade vetorial (0 a 1). `null` quando apenas a busca por palavras-chave encontrou o documento. |
+| `keyword_score` | Pontuação BM25. `null` quando nenhuma das palavras da consulta surge no documento. |
+
+`$nodeLabel.hybrid` é `true` quando a busca híbrida foi executada.
+
+Importante saber:
+
+- O `score` fundido classifica os resultados uns em relação aos outros. Não se trata de uma similaridade vetorial, pelo que um limiar ajustado a uma busca simples não se transfere diretamente.
+- As palavras da consulta são convertidas para minúsculas e divididas por espaços e pontuação, pelo que `ERR-4021` é pesquisado como `err` e `4021`. A busca por palavras-chave utiliza até às primeiras 16 palavras distintas da consulta.
+- Qdrant: a primeira busca híbrida numa coleção cria um índice de texto integral no campo de payload `text`, o que exige uma chave Qdrant com permissão de escrita. Em coleções grandes, isto demora um momento apenas uma vez; as buscas posteriores reutilizam o índice.
+- Postgres (pgvector): a migração de base de dados `142_vsi_text_search_index` adiciona o índice de texto integral. Execute `alembic upgrade head` após a atualização. A busca híbrida também funciona sem o índice, mas mais lentamente em armazenamentos grandes.
+- Para cada consulta, a busca por palavras-chave lê até 200 documentos correspondentes, começando pelas palavras mais raras da consulta, uma vez que estas têm maior peso.
 ## Acessando Resultados
 
 - `$ragNode.results.first().text` – conteúdo do resultado principal
-- `$ragNode.results.first().score` – pontuação de similaridade (0–1)
+- `$ragNode.results.first().score` – pontuação de similaridade (0–1), ou a pontuação fundida com a busca híbrida
+- `$ragNode.results.first().keyword_score` – pontuação BM25 (busca híbrida)
+- `$ragNode.results.first().vector_score` – similaridade vetorial (busca híbrida)
 - `$ragNode.results.first().metadata.source` – metadados do resultado principal
 - `$ragNode.results.map("item.text").join("\n\n")` – concatenar para contexto do LLM
 - `$ragNode.reranked` – se o reranking foi aplicado
+- `$ragNode.hybrid` – se a busca híbrida foi aplicada
 - `$ragNode.count` – número de resultados retornados
 - `$ragNode.replaced` – se um upsert substituiu um documento existente
 - `$ragNode.deleted` – se um delete removeu algo
@@ -164,6 +197,22 @@ Quando o reranking está habilitado:
     "enableReranker": true,
     "rerankerCredentialId": "cohere-credential-uuid",
     "rerankerTopN": 5
+  }
+}
+```
+
+## Exemplo – Busca híbrida
+
+```json
+{
+  "type": "rag",
+  "data": {
+    "label": "findTicket",
+    "vectorStoreId": "vector-store-uuid",
+    "ragOperation": "search",
+    "queryText": "$userInput.body.text",
+    "searchLimit": 5,
+    "hybridSearch": true
   }
 }
 ```

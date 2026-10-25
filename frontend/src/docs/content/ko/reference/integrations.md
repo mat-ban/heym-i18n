@@ -15,7 +15,7 @@ credential은 [Settings → Credentials](../tabs/credentials-tab.md)에서 추�
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, 선택적 `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, 선택적 `base_url` |
-| **Jira** | [Jira 노드](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, 선택적 `api_version` |
+| **Jira** | [Jira 노드](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (Basic auth 전용), 선택적 `api_version` |
 | **Linear** | [Linear 노드](../nodes/linear-node.md) | `api_key`, 또는 `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry 노드](../nodes/sentry-node.md) | `api_token`, 선택적 `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -197,7 +197,7 @@ OAuth token(`access_token`, `refresh_token`, `token_expiry`)은 자동으로 저
 
 ## Jira
 
-Jira credential은 [Jira 노드](../nodes/jira-node.md)를 위한 Jira Basic auth credential, Jira 사이트 base URL, 배포 모드, 그리고 선택적 REST API 버전을 저장합니다. Jira Cloud에는 `cloud`를, Jira Data Center / Server에는 `data_center`를 사용하십시오.
+Jira credential은 [Jira 노드](../nodes/jira-node.md)를 위한 Jira Basic auth credential 또는 Data Center 개인 액세스 토큰, Jira 사이트 base URL, 배포 모드, 그리고 선택적 REST API 버전을 저장합니다. Jira Cloud에는 `cloud`를, Jira Data Center / Server에는 `data_center`를 사용하십시오.
 
 ### 설정
 
@@ -210,17 +210,19 @@ Jira credential은 [Jira 노드](../nodes/jira-node.md)를 위한 Jira Basic aut
 
 **Jira Data Center / Server**
 
-1. 배포 유형으로 **Jira Data Center / Server**를 선택합니다.
-2. Basic auth에 사용할 Jira 사용자 이름과 비밀번호를 입력합니다.
-3. Jira 사이트 URL을 입력합니다. 예: `https://jira.example.com`.
-4. **Test Connection**을 사용하여 credential을 검증합니다.
+1. 배포 방식으로 **Jira Data Center / Server**를 선택합니다.
+2. 인증 방법을 선택합니다. **사용자 이름 및 비밀번호**는 Basic auth를 사용합니다. **Personal Access Token**은 `Authorization: Bearer <token>`을 사용하며 Jira Data Center / Server 8.14 이상이 필요합니다. Jira의 **프로필 → Personal Access Tokens**에서 토큰을 생성합니다.
+3. Jira 사용자 이름과 비밀번호를 입력하거나 개인 액세스 토큰을 붙여넣습니다(사용자 이름은 필요하지 않습니다).
+4. Jira 사이트 URL(예: `https://jira.example.com`)을 입력합니다.
+5. **Test Connection**을 사용하여 credential을 확인합니다.
 
 ### 필드
 
 | 필드 | 설명 |
 | --- | --- |
-| `email` | Jira Cloud Atlassian 계정 이메일 또는 Jira Data Center / Server 사용자 이름 |
-| `api_token` | Jira Cloud Atlassian API token 또는 Basic auth용 Jira Data Center / Server 비밀번호 |
+| `auth_mode` | `basic`(누락 시 기본값) 또는 `pat`. `pat`는 `data_center`에서만 유효합니다 |
+| `email` | Jira Cloud Atlassian 계정 이메일 또는 Jira Data Center / Server 사용자 이름입니다. `pat` 모드에서는 사용되지 않습니다 |
+| `api_token` | Jira Cloud Atlassian API token, Basic auth용 Jira Data Center / Server 비밀번호, 또는 `pat` 모드의 Data Center 개인 액세스 토큰입니다 |
 | `base_url` | Jira 사이트 base URL |
 | `deployment` | Jira Cloud의 경우 `cloud`, Jira Data Center / Server의 경우 `data_center` |
 | `api_version` | REST API 버전이며, Jira Cloud의 기본값은 `3`입니다. Data Center / Server는 v2를 사용합니다 |
@@ -229,14 +231,11 @@ Jira credential은 [Jira 노드](../nodes/jira-node.md)를 위한 Jira Basic aut
 
 - Jira 노드는 Jira Cloud REST API v3의 경우 이슈 설명과 댓글을 Atlassian Document Format 텍스트
   문서로 전송합니다. Data Center / Server credential은 일반 텍스트를 전송합니다.
-- Data Center / Server는 현재 사용자 이름/비밀번호 Basic auth만 지원합니다. Personal access
-  token과 Bearer auth는 아직 지원되지 않습니다.
+- Data Center / Server는 사용자 이름/비밀번호 Basic auth 및 Bearer 스키마를 사용하는 개인 액세스 토큰(PAT) 인증을 지원합니다. PAT 인증에는 Jira Data Center / Server 8.14 이상이 필요합니다.
 - 첨부 파일 업로드는 base64 또는 data URL 콘텐츠를 허용하며 플랫폼 파일 크기 제한(기본 99 MB)이 적용됩니다. 첨부 파일 다운로드는 활성화된 경우 base64 콘텐츠를 반환할 수 있습니다.
 - 사용자 생성, 삭제, 이슈 알림은 인증된 Jira 계정이 관련 Jira 사이트 또는 조직 권한을 보유해야 합니다.
 - 프로젝트 키, 이슈 키, transition ID를 확인하려면 List Projects, Search Issues, List Transitions를 사용하십시오.
-- Jira 노드에서 다루지 않는 사용자 정의 endpoint의 경우, cURL 명령에 Jira Basic Auth(Cloud의 경우 `email:api_token`, Data Center / Server의 경우 `username:password`)를 사용하는 [HTTP 노드](../nodes/http-node.md)를 사용하거나, 일치하는 `Authorization: Basic <base64(user:secret)>` 값을 가진 Header credential을 사용하십시오.
-
-참고 항목:
+- Jira 노드에서 다루지 않는 커스텀 endpoint의 경우, Jira Basic Auth(Cloud의 경우 `email:api_token`, Data Center / Server의 경우 `username:password`) 또는 PAT Bearer auth(Data Center / Server의 경우 `Authorization: Bearer <token>`)와 함께 [HTTP 노드](../nodes/http-node.md)를 사용하세요. 또는 적절한 `Authorization` 헤더가 있는 Header credential을 사용합니다.
 
 - [Jira 노드](../nodes/jira-node.md)
 - [Credentials](./credentials.md)

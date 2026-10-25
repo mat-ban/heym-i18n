@@ -148,7 +148,7 @@ Der KI-Assistent wird von einer **Workflow-DSL** (domänenspezifische Sprache) a
    - Deine Benutzerregeln, angehängt als "User Custom Rules"
    - Das aktuelle Workflow-JSON, wenn du einen bestehenden Workflow bearbeitest
    - Die Liste der verfügbaren Workflows, wenn du den Execute-Knoten verwendest
-   - Die Namen, Typen und IDs deiner eigenen Anmeldedaten (niemals deren Werte)
+   - Die Namen, Typen und IDs der Anmeldedaten, die du besitzt oder die mit dir geteilt wurden (niemals deren Werte)
    - Die Namen, IDs, Beschreibungen und Spalten der Datentabellen, die du verwenden kannst (niemals deren Zeilen)
 3. Das Modell gibt einen einzelnen Workflow-JSON-Block zurück (mit `nodes` und `edges`). Das Frontend parst ihn und wendet ihn auf den Canvas an.
 

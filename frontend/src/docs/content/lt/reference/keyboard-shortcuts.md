@@ -105,3 +105,5 @@ Komandų Paletė yra prieinama iš redaktoriaus, prietaisų skydelio, dokumentac
 - [Darbo Eigos Struktūra](./workflow-structure.md) – Mazgo ir briaunos formatas
 - [Vykdyti Mazgą](../nodes/execute-node.md) – Kviečia sub-darbo eigas (`Ctrl + Shift + O`)
 - [Greitas Pradžia](../getting-started/quick-start.md) – Sukurkite savo pirmąją darbo eigą
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

@@ -105,3 +105,5 @@ Ces raccourcis sont disponibles dans la boîte de dialogue Historique d'exécuti
 - [Structure du workflow](./workflow-structure.md) – Format des nœuds et des liens
 - [Nœud Execute](../nodes/execute-node.md) – Appelle des sous-workflows (`Ctrl + Shift + O`)
 - [Démarrage rapide](../getting-started/quick-start.md) – Créez votre premier workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

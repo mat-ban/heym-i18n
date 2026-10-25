@@ -15,7 +15,7 @@ Beberapa node integrasi **tidak** memerlukan credential. [WebSocket Trigger](../
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, opsional `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, opsional `base_url` |
-| **Jira** | [Node Jira](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, opsional `api_version` |
+| **Jira** | [Node Jira](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (khusus Basic auth), opsional `api_version` |
 | **Linear** | [Node Linear](../nodes/linear-node.md) | `api_key`, atau `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Node Sentry](../nodes/sentry-node.md) | `api_token`, opsional `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ Token OAuth (`access_token`, `refresh_token`, `token_expiry`) disimpan dan diper
 
 ## Jira
 
-Kredensial Jira menyimpan kredensial Basic auth Jira, base URL situs Jira, mode deployment, dan versi REST API opsional untuk [node Jira](../nodes/jira-node.md). Gunakan `cloud` untuk Jira Cloud atau `data_center` untuk Jira Data Center / Server.
+Kredensial Jira menyimpan kredensial Basic auth Jira atau token akses pribadi Data Center, base URL situs Jira, mode deployment, dan versi REST API opsional untuk [node Jira](../nodes/jira-node.md). Gunakan `cloud` untuk Jira Cloud atau `data_center` untuk Jira Data Center / Server.
 
 ### Penyiapan
 
@@ -216,16 +216,18 @@ Kredensial Jira menyimpan kredensial Basic auth Jira, base URL situs Jira, mode 
 **Jira Data Center / Server**
 
 1. Pilih **Jira Data Center / Server** sebagai deployment.
-2. Masukkan username dan password Jira yang digunakan untuk Basic auth.
-3. Masukkan URL situs Jira, misalnya `https://jira.example.com`.
-4. Gunakan **Test Connection** untuk memverifikasi kredensial.
+2. Pilih metode autentikasi. **Nama pengguna dan kata sandi** menggunakan Basic auth. **Personal Access Token** menggunakan `Authorization: Bearer <token>` dan memerlukan Jira Data Center / Server 8.14 atau yang lebih baru. Buat token di bawah **Profil → Personal Access Tokens** di Jira.
+3. Masukkan nama pengguna dan kata sandi Jira, atau tempelkan token akses pribadi (nama pengguna tidak diperlukan).
+4. Masukkan URL situs Jira, misalnya `https://jira.example.com`.
+5. Gunakan **Test Connection** untuk memverifikasi kredensial.
 
 ### Field
 
 | Field | Deskripsi |
 | --- | --- |
-| `email` | Email akun Atlassian Jira Cloud, atau username Jira Data Center / Server |
-| `api_token` | API token Atlassian Jira Cloud, atau password Jira Data Center / Server untuk Basic auth |
+| `auth_mode` | `basic` (default jika tidak ada) atau `pat`. `pat` hanya valid dengan `data_center` |
+| `email` | Email akun Atlassian Jira Cloud, atau nama pengguna Jira Data Center / Server. Tidak digunakan dalam mode `pat` |
+| `api_token` | Token API Atlassian Jira Cloud, kata sandi Jira Data Center / Server untuk Basic auth, atau token akses pribadi Data Center dalam mode `pat` |
 | `base_url` | Base URL situs Jira |
 | `deployment` | `cloud` untuk Jira Cloud atau `data_center` untuk Jira Data Center / Server |
 | `api_version` | Versi REST API; default `3` untuk Jira Cloud. Data Center / Server menggunakan v2 |
@@ -234,12 +236,11 @@ Kredensial Jira menyimpan kredensial Basic auth Jira, base URL situs Jira, mode 
 
 - Node Jira mengirim deskripsi dan komentar issue sebagai dokumen teks Atlassian Document Format
   untuk Jira Cloud REST API v3. Kredensial Data Center / Server mengirim teks biasa.
-- Data Center / Server saat ini hanya mendukung Basic auth username/password. Personal access
-  token dan Bearer auth belum didukung.
+- Data Center / Server mendukung autentikasi Basic nama pengguna/kata sandi dan autentikasi token akses pribadi (PAT) menggunakan skema Bearer. Autentikasi PAT memerlukan Jira Data Center / Server 8.14 atau yang lebih baru.
 - Unggahan lampiran menerima konten base64 atau data URL dan tunduk pada batas ukuran file platform (default 99 MB). Unduhan lampiran dapat mengembalikan konten base64 jika diaktifkan.
 - Pembuatan pengguna, penghapusan, dan notifikasi issue memerlukan akun Jira yang terautentikasi untuk memiliki izin situs atau organisasi Jira yang relevan.
 - Gunakan List Projects, Search Issues, dan List Transitions untuk menemukan project key, issue key, dan transition ID.
-- Untuk endpoint kustom yang tidak tercakup oleh node Jira, gunakan [node HTTP](../nodes/http-node.md) dengan Jira Basic Auth (`email:api_token` untuk Cloud atau `username:password` untuk Data Center / Server) pada perintah cURL, atau kredensial Header dengan nilai `Authorization: Basic <base64(user:secret)>` yang sesuai.
+- Untuk endpoint kustom yang tidak dicakup oleh node Jira, gunakan [node HTTP](../nodes/http-node.md) dengan Jira Basic Auth (`email:api_token` untuk Cloud atau `username:password` untuk Data Center / Server), atau PAT Bearer auth (`Authorization: Bearer <token>` untuk Data Center / Server). Alternatifnya, gunakan kredensial Header dengan header `Authorization` yang sesuai.
 
 Lihat juga:
 

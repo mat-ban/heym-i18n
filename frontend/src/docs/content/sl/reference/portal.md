@@ -32,6 +32,10 @@ Konfigurirajte v urejevalniku: **Portal** gumb v glavi workflow-a odpre pogovorn
 3. **Izvedba**: `POST /api/portal/{slug}/execute` – Klepetalni vmesnik portala to kliče (ali njegovo različico za pretakanje, ko je omogočeno); končni uporabniki komunicirajo prek klepetalnega vmesnika, ne pa prek neposrednega klica API-ja.
 4. **Ustavitev**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Zahtevano, ko uporabnik pritisne **Ustavi** med aktivnim izvajanjem portala
 
+## Omejitev sočasnosti
+
+Ko ima workflow [omejitev sočasnosti](./webhooks.md#concurrency-limit-and-queued-runs) in so vse reže zasedene, sporočilo portala počaka na vrsto, namesto da bi se izvedlo takoj. Klepet prikazuje **Waiting in queue (2/5)** v vrstici napredka, dokler se zagon ne začne, nato pa odgovor kot običajno. Zagon se še vedno izvede, če uporabnik zapre stran. **Stop** odstrani čakajoči zagon iz čakalne vrste. Ko je čakalna vrsta polna, sporočilo spodleti z "Concurrency queue is full". Zagon, ki je čakal v čakalni vrsti, ne pretaka odgovora token za tokenom; celoten odgovor se prikaže ob zaključku.
+
 ## HITL v izvajanju portala
 
 Če workflow portala doseže [Agent Node](../nodes/agent-node.md) z omogočenim [Human-in-the-Loop](./human-in-the-loop.md), se v odzivu portala prikaže povezava za pregled namesto praznega odgovora.

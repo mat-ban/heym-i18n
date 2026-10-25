@@ -105,3 +105,5 @@ Disse genveje er tilgængelige i dialogen Eksekveringshistorik og panelet Kørsl
 - [Workflow-struktur](./workflow-structure.md) – Node- og kantformat
 - [Execute-node](../nodes/execute-node.md) – Kalder underworkflows (`Ctrl + Shift + O`)
 - [Hurtig start](../getting-started/quick-start.md) – Byg det første workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

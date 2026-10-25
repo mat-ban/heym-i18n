@@ -86,6 +86,20 @@ Discord 會將互動 webhook 傳送至 `POST /api/discord/webhook/{node_id}`。P
 
 RabbitMQ 消費者會在 leader worker 初始化時啟動。具有 `rabbitmq` 節點且 `rabbitmqOperation === "receive"` 的 Workflow 會取得一個消費者。輸入包含 `message_data`（body、headers、routing_key 等）以及 `triggered_by: "rabbitmq"`。
 
+## 並行限制
+
+設定了[並行限制](./webhooks.md#concurrency-limit-and-queued-runs)的 Workflow 在其槽位已滿時，會將上述每個進入點的生產執行按先進先出（FIFO）原則在所有執行個體間排隊。呼叫方如何取得結果取決於進入點：
+
+| 進入點 | 當執行等待時 |
+|---|---|
+| Webhook / API | `202 Accepted`，隨附 `execution_id` 和狀態 URL |
+| SSE streaming, Quick Drawer, Portal chat | 串流保持開啟並發送 `queued` 事件 |
+| Portal without streaming | 請求等待結果 |
+| MCP | 一個 `queued` 結果，可使用 `heym_execution_status` 輪詢 |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger 會等待結果，其等待時間與在另一個[執行個體](./cluster.md)上的執行相同。無論如何，執行都會進行並寫入歷史記錄 |
+
+當佇列已滿時，執行不會啟動，歷史記錄會將其記錄為 `queue_full`。編輯器的測試執行、子工作流程呼叫（[Execute](../nodes/execute-node.md) 節點與代理工作流程工具）、[Evals](../tabs/evals-tab.md)、聊天建置模式下的測試執行以及審查恢復絕不會排隊。[Board](../tabs/board-tab.md) 卡片執行、[File Upload](../nodes/file-upload-trigger-node.md) 執行、由 AI 助理的 run-workflow 工具啟動的執行以及警報通知工作流程也會直接啟動，無需等待槽位。
+
 ## trigger_source
 
 執行歷史記錄會為每個進入點記錄 `trigger_source`：

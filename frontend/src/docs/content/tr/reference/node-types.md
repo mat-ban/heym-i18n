@@ -30,7 +30,7 @@ Tüm giriş noktaları için [Triggers](./triggers.md) bölümüne bakın.
 | [Codex](../nodes/codex-node.md) | Bir ChatGPT/Codex erişim token'ı kullanarak yerel Codex CLI'yi bir GitHub deposuna karşı çalıştırın | 1 | 1, ayrıca `question` çıktısı |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Bir OpenCode Go gateway API anahtarı kullanarak OpenCode CLI'yi sıkılaştırılmış bir container içinde bir GitHub deposuna karşı çalıştırın | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Bir LLM'in seçmesine gerek kalmadan belirli bir MCP aracını doğrudan çağırın | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | RAG için bir Qdrant veya Postgres (pgvector) [vector store](../tabs/vectorstores-tab.md) içine ekleyin, upsert edin, silin veya arayın | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | RAG için bir Qdrant veya Postgres (pgvector) [vector store](../tabs/vectorstores-tab.md) içine ekleyin, upsert edin, silin veya arayın (vektör veya hibrit vektör + BM25) | 1 | 1 |
 
 ## Logic Node'ları
 

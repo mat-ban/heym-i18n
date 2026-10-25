@@ -111,6 +111,10 @@ Tag image harus berupa versi yang dijalankan main, dan kedua kunci harus disalin
 | On | Keluarkan worker dari rotasi tanpa menghentikannya — eksekusi yang sedang berjalan diselesaikan, tidak ada eksekusi baru yang ditugaskan. Terkunci aktif untuk instance main: pekerjaan file, plugin, dan coding-agent dijalankan di sana apa pun yang dikatakan toggle |
 | Weight | Bagiannya dari eksekusi yang dapat didistribusikan |
 
+## Batas konkurensi dalam cluster
+
+[Batas konkurensi](./webhooks.md#concurrency-limit-and-queued-runs) sebuah workflow dihitung di PostgreSQL, sehingga berlaku di setiap instance dan setiap proses: dua instance tidak akan pernah menjalankan lebih banyak eksekusi dari satu workflow daripada yang diizinkan batas. Eksekusi yang menunggu slot ditempatkan berdasarkan aturan yang sama seperti eksekusi lainnya saat dimulai, sehingga eksekusi yang harus tetap berada di main akan tetap di sana. Queue worker yang mengeksekusi proses-proses ini kini dimulai pada setiap instalasi, termasuk satu instance tunggal, yang hanya mengambil eksekusi yang diantrekan oleh instansinya sendiri. Ini berarti instance tunggal juga menahan koneksi bangun antrean `LISTEN` di setiap proses; anggarkan koneksinya dengan cara yang sama seperti instance cluster.
+
 ## Riwayat eksekusi
 
 Setiap eksekusi dalam riwayat eksekusi menyebutkan instance yang menjalankannya, dan kedua dialog riwayat dapat difilter hingga satu instance. Filter mencocokkan berdasarkan id instance sambil menampilkan namanya, sehingga mengganti nama instance tidak menulis ulang apa yang dikatakan eksekusi lama.

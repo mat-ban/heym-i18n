@@ -25,12 +25,17 @@ Workflow는 SSE(Server-Sent Events)를 통해 실행 이벤트를 실시간으�
 
 | 이벤트 유형 | 발생 시점 | 주요 필드 |
 |------------|--------------------|------------|
-| `execution_started` | 요청이 수락된 직후 | `execution_id`, `server_now_ms` |
+| `queued` | 워크플로가 [동시성 제한](./webhooks.md#concurrency-limit-and-queued-runs)에 도달했습니다. 실행 순서가 변경될 때마다 다시 전송됩니다 | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | 요청이 수락된 직후 또는 대기열의 실행이 시작될 때 | `execution_id`, `server_now_ms` |
 | `node_start` | 노드가 실행을 시작하기 직전 | `node_id`, `node_label`, `started_at_ms`, 선택적 `message` |
 | `node_retry` | 노드가 재시도할 때 | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | 노드가 완료된 후 | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Output 노드가 조기 반환할 때 | `node_label`, `output` |
 | `execution_complete` | workflow가 종료된 후 | `status`, `outputs`, `execution_time_ms` |
+
+### 대기열에 추가된 실행
+
+워크플로가 동시성 제한에 도달하면 실행이 대기하는 동안 스트림이 열린 상태로 유지되고 `queued` 이벤트를 전송합니다. 대기열에 추가된 실행은 백그라운드 워커(다른 프로세스일 수 있음)에서 실행되므로 해당 스트림은 실행 시작 시 `execution_started`와 종료 시 `execution_complete`를 전송하지만 그 사이의 `node_start`, `node_complete` 또는 토큰 이벤트는 전송하지 않습니다. 해당 `execution_complete`에는 빈 `node_results`가 포함됩니다. 노드 세부 정보를 보려면 [실행 기록](./execution-history.md)에서 실행을 엽니다. 연결을 닫아도 대기열에 추가된 실행은 취소되지 않습니다. 대기열이 가득 차면 스트림이 열리기 전에 요청에 `429`로 응답합니다.
 
 ## 노드별 시작 메시지
 

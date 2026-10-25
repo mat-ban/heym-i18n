@@ -15,7 +15,7 @@ Heym 通过 **credentials** 连接外部服务。每种 credential 类型存储�
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`，可选 `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md)、[Codex](../nodes/codex-node.md)、[OpenCode Go](../nodes/opencode-go-node.md)、[Agent](../nodes/agent-node.md)、[HTTP](../nodes/http-node.md) | `api_key`，可选 `base_url` |
-| **Jira** | [Jira 节点](../nodes/jira-node.md) | `email`、`api_token`、`base_url`、`deployment`，可选 `api_version` |
+| **Jira** | [Jira 节点](../nodes/jira-node.md) | `api_token`、`base_url`、`deployment`、`auth_mode`、`email`（仅限 Basic auth），可选 `api_version` |
 | **Linear** | [Linear 节点](../nodes/linear-node.md) | `api_key`，或 `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry 节点](../nodes/sentry-node.md) | `api_token`，可选 `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md) | `api_key`、`base_url` |
@@ -197,7 +197,7 @@ OAuth token（`access_token`、`refresh_token`、`token_expiry`）会被自动�
 
 ## Jira
 
-Jira credential 为 [Jira 节点](../nodes/jira-node.md) 存储 Jira Basic auth 凭据、Jira 站点 base URL、部署模式以及可选的 REST API 版本。Jira Cloud 使用 `cloud`，Jira Data Center / Server 使用 `data_center`。
+Jira credential 为 [Jira 节点](../nodes/jira-node.md) 存储 Jira Basic auth 凭据或 Data Center 个人访问 token（PAT）、Jira 站点 base URL、部署模式以及可选的 REST API 版本。Jira Cloud 使用 `cloud`，Jira Data Center / Server 使用 `data_center`。
 
 ### 设置
 
@@ -211,16 +211,18 @@ Jira credential 为 [Jira 节点](../nodes/jira-node.md) 存储 Jira Basic auth 
 **Jira Data Center / Server**
 
 1. 选择 **Jira Data Center / Server** 作为部署模式。
-2. 输入用于 Basic auth 的 Jira 用户名和密码。
-3. 输入 Jira 站点 URL，例如 `https://jira.example.com`。
-4. 使用 **Test Connection** 验证 credential。
+2. 选择身份验证方式。**用户名和密码** 使用 Basic auth。**Personal Access Token** 使用 `Authorization: Bearer <token>`，需要 Jira Data Center / Server 8.14 或更高版本。在 Jira 的 **个人资料 → Personal Access Tokens** 中创建 token。
+3. 输入 Jira 用户名和密码，或粘贴个人访问 token（无需用户名）。
+4. 输入 Jira 站点 URL，例如 `https://jira.example.com`。
+5. 使用 **Test Connection** 验证 credential。
 
 ### 字段
 
 | 字段 | 描述 |
 | --- | --- |
-| `email` | Jira Cloud 的 Atlassian 账户邮箱，或 Jira Data Center / Server 的用户名 |
-| `api_token` | Jira Cloud 的 Atlassian API token，或用于 Basic auth 的 Jira Data Center / Server 密码 |
+| `auth_mode` | `basic`（缺失时默认）或 `pat`。`pat` 仅对 `data_center` 有效 |
+| `email` | Jira Cloud Atlassian 账户邮箱或 Jira Data Center / Server 用户名。在 `pat` 模式下不使用 |
+| `api_token` | Jira Cloud Atlassian API token、用于 Basic auth 的 Jira Data Center / Server 密码，或 `pat` 模式下的 Data Center 个人访问 token |
 | `base_url` | Jira 站点 base URL |
 | `deployment` | Jira Cloud 使用 `cloud`，Jira Data Center / Server 使用 `data_center` |
 | `api_version` | REST API 版本；Jira Cloud 默认为 `3`。Data Center / Server 使用 v2 |
@@ -228,11 +230,11 @@ Jira credential 为 [Jira 节点](../nodes/jira-node.md) 存储 Jira Basic auth 
 ### 注意事项
 
 - 对于 Jira Cloud REST API v3，Jira 节点将 issue 描述和评论作为 Atlassian Document Format 文本文档发送。Data Center / Server credential 发送纯文本。
-- Data Center / Server 目前仅支持用户名/密码 Basic auth。尚不支持个人 access token 和 Bearer auth。
+- Data Center / Server 支持用户名/密码 Basic auth 以及使用 Bearer 方案的个人访问 token（PAT）身份验证。PAT 身份验证需要 Jira Data Center / Server 8.14 或更高版本。
 - 附件上传接受 base64 或 data URL 内容，并受平台文件大小限制（默认 99 MB）。启用后，附件下载可以返回 base64 内容。
 - 用户创建、删除和 issue 通知要求已认证的 Jira 账户具有相关的 Jira 站点或组织权限。
 - 使用 List Projects、Search Issues 和 List Transitions 来发现 project key、issue key 和 transition ID。
-- 对于 Jira 节点未覆盖的自定义 endpoint，请在 cURL 命令中使用 [HTTP 节点](../nodes/http-node.md) 配合 Jira Basic Auth（Cloud 使用 `email:api_token`，Data Center / Server 使用 `username:password`），或使用带有匹配 `Authorization: Basic <base64(user:secret)>` 值的 Header credential。
+- 对于 Jira 节点未覆盖的自定义 endpoint，请在 cURL 命令中使用带有 Jira Basic Auth（Cloud 使用 `email:api_token`，Data Center / Server 使用 `username:password`）或 PAT Bearer auth（Data Center / Server 使用 `Authorization: Bearer <token>`）的 [HTTP 节点](../nodes/http-node.md)。或者，使用带有相应 `Authorization` 头的 Header credential。
 
 另请参阅：
 

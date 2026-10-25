@@ -148,7 +148,7 @@ Tekoälyavustaja käyttää **workflow-DSL:ää** (domain-specific language), jo
    - Käyttäjän säännöt liitettynä "Käyttäjän mukautetut säännöt" -osiona
    - Nykyisen workflown JSON, kun muokkaat olemassa olevaa workflowta
    - Käytettävissä olevien workflowjen lista, jos käytät Suorita-solmua
-   - Omien tunnistetietojesi nimet, tyypit ja id:t (ei koskaan arvoja)
+   - Omistamiesi tai kanssasi jaettujen tunnistetietojen nimet, tyypit ja id:t (ei koskaan arvoja)
    - Käytettävissä olevien datataulukoiden nimet, id:t, kuvaukset ja sarakkeet (ei koskaan rivejä)
 3. Malli palauttaa yhden workflow-JSON-lohkon (kentät `nodes` ja `edges`). Frontend jäsentää sen ja soveltaa canvasille.
 

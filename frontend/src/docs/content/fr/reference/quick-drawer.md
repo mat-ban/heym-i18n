@@ -52,6 +52,8 @@ Après le démarrage d'une exécution, le tiroir affiche :
 
 `pending` signifie que le workflow attend une action ultérieure telle qu'une revue humaine.
 
+Les exécutions du Tiroir rapide sont des exécutions de production, de sorte qu'un workflow doté d'une [limite de simultanéité](./webhooks.md#concurrency-limit-and-queued-runs) peut les faire patienter. Pendant que l'exécution fait la queue, le statut affiche **Waiting in queue (2/5)** ; il passe à "running" lorsque l'exécution démarre et affiche le résultat à la fin, sans progression étape par étape. Une exécution ayant expiré dans la file d'attente ou ayant été annulée pendant l'attente se termine en `error`.
+
 Une exécution avec fichier passe par le lien d'envoi à usage unique du trigger : le tiroir demande un lien au workflow, y téléverse le fichier et affiche le résultat au retour de l'envoi. Les exécutions avec fichier affichent le statut final et les sorties mais pas la progression étape par étape, et portent également l'étiquette `Quick Drawer` dans l'historique. Le fichier choisi est effacé après chaque exécution, car un lien n'accepte qu'un seul fichier.
 
 ## Stockage du navigateur

@@ -105,3 +105,5 @@ Te skróty są dostępne w oknie dialogowym Historii wykonań oraz w panelu Wyko
 - [Struktura workflow](./workflow-structure.md) – Format węzłów i krawędzi
 - [Węzeł Execute](../nodes/execute-node.md) – Wywołuje pod-workflow (`Ctrl + Shift + O`)
 - [Szybki start](../getting-started/quick-start.md) – Zbuduj pierwszy workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

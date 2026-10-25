@@ -111,6 +111,10 @@ Attēla tagam jābūt tādam pašam kā galvenajam, un abām atslēgām jābūt 
 | On | Izņemiet darbinieku no rotācijas, neapturot to — notiekošās izpildes pabeidzas, jaunas netiek piešķirtas. Bloķēts galvenajai instancei: failu, spraudņu un kodēšanas aģentu darba izpildes notiek tur, neskatoties uz to, ko slēdzis saka |
 | Svars | Tās daļa no izplatāmajām izpildēm |
 
+## Konkurences ierobežojumi klasterī
+
+Darbplūsmas [konkurences ierobežojums](./webhooks.md#concurrency-limit-and-queued-runs) tiek uzskaitīts PostgreSQL, tāpēc tas darbojas visās instancēs un visos procesos: divas instances nekad neizpilda vairāk viena workflow izpilžu, nekā atļauj limits. Izpilde, kas gaidīja brīvu vietu, startējot tiek izvietota pēc tiem pašiem noteikumiem kā jebkura cita izpilde, nodrošinot, ka izpilde, kurai jāpaliek uz main, tur arī paliek. Rindas worker, kas veic šīs izpildes, tagad startē katrā instalācijā, tostarp vienā instancē, kur tas apstrādā tikai savas instances rindā ievietotās izpildes. Tas nozīmē, ka pat viena instance uztur rindas modināšanas `LISTEN` savienojumu katrā procesā; plānojiet tās savienojumus tāpat kā klastera instancei.
+
 ## Izpildes vēsture
 
 Katrs izpildes vēsturē nosauc instanci, kas to izpildīja, un abas vēstures dialogi var filtrēt uz vienu instanci. Filtrs atbilst instancēm ID, vienlaikus rādīdams tās nosaukumu, tāpēc instancēm pārdēvēšana nepārveido to, ko vecās izpildes saka.

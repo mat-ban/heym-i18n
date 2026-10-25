@@ -52,6 +52,8 @@ Pēc izpildes sākšanas panelis rāda:
 
 `pending` nozīmē, ka darbplūsma gaida vēlāku darbību, piemēram, cilvēka pārskatīšanu.
 
+Quick Drawer izpildes ir produkcijas izpildes, tāpēc darbplūsma ar [vienlaicības ierobežojumu](./webhooks.md#concurrency-limit-and-queued-runs) var likt tām gaidīt. Kamēr izpilde gaida rindā, statuss rāda **Waiting in queue (2/5)**; tas mainās uz "running", kad izpilde sākas, un parāda rezultātu, kad tā beidzas, bez soļu progresa. Izpilde, kurai beidzies derīguma termiņš rindā vai kura tika atcelta gaidīšanas laikā, beidzas kā `error`.
+
 Faila izpilde notiek caur trigger vienreizlietojamo augšupielādes saiti: atvilktne pieprasa no workflow saiti, augšupielādē tajā failu un parāda rezultātu, kad augšupielāde ir pabeigta. Faila izpildes parāda gala statusu un izvades, bet ne soli pa solim progresu, un vēsturē tās arī tiek atzīmētas ar `Quick Drawer`. Izvēlētais fails tiek notīrīts pēc katras izpildes, jo viena saite pieņem vienu failu.
 
 ## Pārlūkprogrammas krātuve

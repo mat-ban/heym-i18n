@@ -15,7 +15,7 @@ Một số node tích hợp **không** yêu cầu credentials. [WebSocket Trigge
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, tùy chọn `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, tùy chọn `base_url` |
-| **Jira** | [Node Jira](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, tùy chọn `api_version` |
+| **Jira** | [Node Jira](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (chỉ Basic auth), tùy chọn `api_version` |
 | **Linear** | [Node Linear](../nodes/linear-node.md) | `api_key`, hoặc `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Node Sentry](../nodes/sentry-node.md) | `api_token`, tùy chọn `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ OAuth token (`access_token`, `refresh_token`, `token_expiry`) được lưu tr�
 
 ## Jira
 
-Credential Jira lưu trữ thông tin xác thực Jira Basic auth, URL cơ sở của site Jira, chế độ triển khai và phiên bản REST API tùy chọn cho [node Jira](../nodes/jira-node.md). Sử dụng `cloud` cho Jira Cloud hoặc `data_center` cho Jira Data Center / Server.
+Credential Jira lưu trữ thông tin xác thực Jira Basic auth hoặc personal access token Data Center, URL cơ sở của site Jira, chế độ triển khai và phiên bản REST API tùy chọn cho [node Jira](../nodes/jira-node.md). Sử dụng `cloud` cho Jira Cloud hoặc `data_center` cho Jira Data Center / Server.
 
 ### Thiết lập
 
@@ -215,17 +215,19 @@ Credential Jira lưu trữ thông tin xác thực Jira Basic auth, URL cơ sở 
 
 **Jira Data Center / Server**
 
-1. Chọn **Jira Data Center / Server** làm chế độ triển khai.
-2. Nhập username và password Jira được sử dụng cho Basic auth.
-3. Nhập URL site Jira, ví dụ `https://jira.example.com`.
-4. Sử dụng **Test Connection** để xác minh credential.
+1. Chọn **Jira Data Center / Server** làm triển khai.
+2. Chọn phương thức xác thực. **Tên người dùng và mật khẩu** sử dụng Basic auth. **Personal Access Token** sử dụng `Authorization: Bearer <token>` và yêu cầu Jira Data Center / Server 8.14 trở lên. Tạo token tại mục **Hồ sơ → Personal Access Tokens** trong Jira.
+3. Nhập tên người dùng và mật khẩu Jira, hoặc dán personal access token (không cần tên người dùng).
+4. Nhập URL trang web Jira, ví dụ `https://jira.example.com`.
+5. Sử dụng **Test Connection** để xác minh credential.
 
 ### Các trường
 
 | Trường | Mô tả |
 | --- | --- |
-| `email` | Email tài khoản Atlassian của Jira Cloud, hoặc username Jira Data Center / Server |
-| `api_token` | API token Atlassian của Jira Cloud, hoặc password Jira Data Center / Server cho Basic auth |
+| `auth_mode` | `basic` (mặc định khi thiếu) hoặc `pat`. `pat` chỉ hợp lệ với `data_center` |
+| `email` | Email tài khoản Atlassian Jira Cloud hoặc tên người dùng Jira Data Center / Server. Không được dùng trong chế độ `pat` |
+| `api_token` | Token API Atlassian Jira Cloud, mật khẩu Jira Data Center / Server cho Basic auth hoặc personal access token Data Center ở chế độ `pat` |
 | `base_url` | URL cơ sở của site Jira |
 | `deployment` | `cloud` cho Jira Cloud hoặc `data_center` cho Jira Data Center / Server |
 | `api_version` | Phiên bản REST API; mặc định là `3` cho Jira Cloud. Data Center / Server sử dụng v2 |
@@ -234,12 +236,11 @@ Credential Jira lưu trữ thông tin xác thực Jira Basic auth, URL cơ sở 
 
 - Node Jira gửi mô tả issue và comment dưới dạng tài liệu văn bản Atlassian Document Format
   cho Jira Cloud REST API v3. Credential Data Center / Server gửi văn bản thuần.
-- Data Center / Server hiện chỉ hỗ trợ Basic auth với username/password. Personal access
-  token và Bearer auth chưa được hỗ trợ.
+- Data Center / Server hỗ trợ xác thực Basic bằng tên người dùng/mật khẩu và xác thực bằng personal access token (PAT) sử dụng lược đồ Bearer. Xác thực PAT yêu cầu Jira Data Center / Server 8.14 trở lên.
 - Tải lên tệp đính kèm chấp nhận nội dung base64 hoặc data URL và phụ thuộc vào giới hạn kích thước tệp của nền tảng (mặc định 99 MB). Tải xuống tệp đính kèm có thể trả về nội dung base64 khi được bật.
 - Tạo người dùng, xóa và thông báo issue yêu cầu tài khoản Jira đã xác thực phải có quyền phù hợp trên site hoặc tổ chức Jira.
 - Sử dụng List Projects, Search Issues và List Transitions để khám phá project key, issue key và transition ID.
-- Đối với các endpoint tùy chỉnh không được node Jira hỗ trợ, sử dụng [node HTTP](../nodes/http-node.md) với Jira Basic Auth (`email:api_token` cho Cloud hoặc `username:password` cho Data Center / Server) trong lệnh cURL, hoặc credential Header với giá trị `Authorization: Basic <base64(user:secret)>` tương ứng.
+- Đối với các endpoint tùy chỉnh không được hỗ trợ bởi node Jira, hãy sử dụng [node HTTP](../nodes/http-node.md) với Jira Basic Auth (`email:api_token` cho Cloud hoặc `username:password` cho Data Center / Server) hoặc PAT Bearer auth (`Authorization: Bearer <token>` cho Data Center / Server). Ngoài ra, có thể sử dụng credential Header với tiêu đề `Authorization` phù hợp.
 
 Xem thêm:
 

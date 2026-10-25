@@ -30,7 +30,7 @@ Heym siūlo įvairius mazgų tipus, skirtus Workflow kūrimui. Naudokite [išrai
 | [Codex](../nodes/codex-node.md) | Vykdyti vietinį Codex CLI prieš GitHub saugyklą naudojant ChatGPT/Codex prieigos tokeną | 1 | 1, plius `question` išėjimas |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Vykdyti OpenCode CLI prieš GitHub saugyklą sustiprintame konteineryje naudojant OpenCode Go gateway API raktą | 1 | 1 |
 | [MCP Skambinimas](../nodes/mcp-call-node.md) | Skambinti konkrečiam MCP įrankiui tiesiogiai be LLM pasirinkimo | 1 | 1 |
-| [RAG / Vektorių Saugykla](../nodes/rag-node.md) | Įterpti, atnaujinti, ištrinti arba ieškoti Qdrant arba Postgres (pgvector) [vektorių saugykloje](../tabs/vectorstores-tab.md) RAG | 1 | 1 |
+| [RAG / Vektorių Saugykla](../nodes/rag-node.md) | Įterpti, atnaujinti, ištrinti arba ieškoti (vektorinė arba hibridinė vektorinė + BM25) Qdrant arba Postgres (pgvector) [vektorių saugykloje](../tabs/vectorstores-tab.md) RAG | 1 | 1 |
 
 ## Logikos Mazgai
 

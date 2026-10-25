@@ -15,7 +15,7 @@ Bazı entegrasyon düğümleri credential **gerektirmez**. [WebSocket Trigger](.
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, isteğe bağlı `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, isteğe bağlı `base_url` |
-| **Jira** | [Jira düğümü](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, isteğe bağlı `api_version` |
+| **Jira** | [Jira düğümü](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (yalnızca Basic auth), isteğe bağlı `api_version` |
 | **Linear** | [Linear düğümü](../nodes/linear-node.md) | `api_key` veya `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry düğümü](../nodes/sentry-node.md) | `api_token`, isteğe bağlı `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -197,7 +197,7 @@ OAuth token'ları (`access_token`, `refresh_token`, `token_expiry`) otomatik ola
 
 ## Jira
 
-Jira credential'ı, [Jira düğümü](../nodes/jira-node.md) için Jira Basic auth kimlik bilgilerini, Jira site base URL'sini, deployment modunu ve isteğe bağlı REST API sürümünü saklar. Jira Cloud için `cloud`, Jira Data Center / Server için `data_center` kullanın.
+Jira credential'ı, [Jira düğümü](../nodes/jira-node.md) için Jira Basic auth kimlik bilgilerini veya bir Data Center kişisel erişim token'ını, Jira site base URL'sini, deployment modunu ve isteğe bağlı REST API sürümünü saklar. Jira Cloud için `cloud`, Jira Data Center / Server için `data_center` kullanın.
 
 ### Kurulum
 
@@ -210,17 +210,19 @@ Jira credential'ı, [Jira düğümü](../nodes/jira-node.md) için Jira Basic au
 
 **Jira Data Center / Server**
 
-1. Deployment olarak **Jira Data Center / Server** seçeneğini seçin.
-2. Basic auth için kullanılan Jira kullanıcı adını ve parolasını girin.
-3. Jira site URL'sini girin, örneğin `https://jira.example.com`.
-4. Credential'ı doğrulamak için **Test Connection** seçeneğini kullanın.
+1. Dağıtım olarak **Jira Data Center / Server** seçeneğini belirleyin.
+2. Bir kimlik doğrulama yöntemi seçin. **Kullanıcı adı ve parola** Basic auth kullanır. **Personal Access Token** `Authorization: Bearer <token>` kullanır ve Jira Data Center / Server 8.14 veya üzerini gerektirir. Token'ı Jira'da **Profil → Personal Access Tokens** altında oluşturun.
+3. Jira kullanıcı adını ve parolasını girin ya da kişisel erişim token'ını yapıştırın (kullanıcı adı gerekmez).
+4. Jira site URL'sini girin, örneğin `https://jira.example.com`.
+5. Kimlik bilgisini doğrulamak için **Test Connection** kullanın.
 
 ### Alanlar
 
 | Alan | Açıklama |
 | --- | --- |
-| `email` | Jira Cloud Atlassian hesap e-postası veya Jira Data Center / Server kullanıcı adı |
-| `api_token` | Jira Cloud Atlassian API token'ı veya Basic auth için Jira Data Center / Server parolası |
+| `auth_mode` | `basic` (eksik olduğunda varsayılan) veya `pat`. `pat` yalnızca `data_center` ile geçerlidir |
+| `email` | Jira Cloud Atlassian hesap e-postası veya Jira Data Center / Server kullanıcı adı. `pat` modunda kullanılmaz |
+| `api_token` | Jira Cloud Atlassian API token'ı, Basic auth için Jira Data Center / Server parolası veya `pat` modunda Data Center kişisel erişim token'ı |
 | `base_url` | Jira site base URL'si |
 | `deployment` | Jira Cloud için `cloud` veya Jira Data Center / Server için `data_center` |
 | `api_version` | REST API sürümü; Jira Cloud için varsayılan olarak `3`'tür. Data Center / Server v2 kullanır |
@@ -228,11 +230,11 @@ Jira credential'ı, [Jira düğümü](../nodes/jira-node.md) için Jira Basic au
 ### Notlar
 
 - Jira düğümü, Jira Cloud REST API v3 için issue açıklamalarını ve yorumlarını Atlassian Document Format metin belgeleri olarak gönderir. Data Center / Server credential'ları düz metin gönderir.
-- Data Center / Server şu anda yalnızca kullanıcı adı/parola Basic auth'u destekler. Kişisel access token'lar ve Bearer auth henüz desteklenmemektedir.
+- Data Center / Server, kullanıcı adı/parola ile Basic auth ve Bearer şemasını kullanan kişisel erişim token'ı (PAT) kimlik doğrulamasını destekler. PAT kimlik doğrulaması Jira Data Center / Server 8.14 veya üzerini gerektirir.
 - Ek dosya yükleme, base64 veya data URL içeriğini kabul eder ve platform dosya boyutu sınırına tabidir (varsayılan 99 MB). Ek dosya indirme, etkinleştirildiğinde base64 içeriği döndürebilir.
 - Kullanıcı oluşturma, silme ve issue bildirimi, kimliği doğrulanmış Jira hesabının ilgili Jira site veya organizasyon izinlerine sahip olmasını gerektirir.
 - Proje anahtarlarını, issue anahtarlarını ve transition ID'lerini keşfetmek için List Projects, Search Issues ve List Transitions seçeneklerini kullanın.
-- Jira düğümünün kapsamadığı özel endpoint'ler için, cURL komutunda Jira Basic Auth (`Cloud için email:api_token` veya `Data Center / Server için username:password`) ile [HTTP düğümünü](../nodes/http-node.md) kullanın veya eşleşen `Authorization: Basic <base64(user:secret)>` değerine sahip bir Header credential'ı kullanın.
+- Jira düğümü tarafından kapsanmayan özel endpoint'ler için cURL komutunda Jira Basic Auth (`email:api_token` Cloud için veya `username:password` Data Center / Server için) veya PAT Bearer auth (`Authorization: Bearer <token>` Data Center / Server için) ile [HTTP düğümünü](../nodes/http-node.md) kullanın. Alternatif olarak, uygun `Authorization` başlığına sahip bir Header kimlik bilgisi kullanın.
 
 Ayrıca bakınız:
 

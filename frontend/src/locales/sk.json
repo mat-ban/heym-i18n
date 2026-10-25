@@ -827,6 +827,22 @@
         "waiting": "Čaká sa",
         "neutral": "Neutrálny"
       }
+    },
+    "concurrencyLimit": "Limit súbehu",
+    "concurrencyLimitHelp": "Produkčné behy (Webhooky, Cron, MCP, Portal, Triggery) nad limit čakajú v rade FIFO. Testovacie behy v editore sa vždy spúšťajú ihneď.",
+    "maxConcurrentRuns": "Max. súbežných behov",
+    "maxQueueSizeOptional": "Max. veľkosť radu (voliteľné)",
+    "emptyNoLimit": "Prázdne = bez limitu",
+    "maxWaitOptional": "Max. čakanie (sekundy, voliteľné)",
+    "emptyWaitAsLong": "Prázdne = čakať ľubovoľne dlho",
+    "concurrencyQueueHelp": "Plný rad odpovedá kódom 429. Beh, ktorý čaká dlhšie ako maximálny čas, sa zaznamená ako expirovaný.",
+    "rag": {
+      "hybridSearch": "Hybridné vyhľadávanie",
+      "hybridSearchHelp": "Kombinujte vektorovú podobnosť so zhodou kľúčových slov BM25, aby sa našli aj presné výrazy ako identifikátory, názvy a chybové kódy.",
+      "hybridScore": "Hybridné skóre (0-1)",
+      "similarityScore": "Skóre podobnosti",
+      "vectorSimilarity": "Vektorová podobnosť",
+      "bm25Score": "BM25 skóre"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Opýtať sa AI",
     "askAiTitle": "Opýtať sa asistenta Chat na toto spustenie",
-    "noNodeSpans": "Pre toto spustenie sa nezaznamenali žiadne spany uzlov."
+    "noNodeSpans": "Pre toto spustenie sa nezaznamenali žiadne spany uzlov.",
+    "queuedProgress": "V rade {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Načítava sa portál...",

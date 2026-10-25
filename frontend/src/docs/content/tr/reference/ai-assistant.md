@@ -148,7 +148,7 @@ AI Assistant, düğümleri, kenarları ve ifadeleri tanımlayan bir **workflow D
    - "User Custom Rules" olarak eklenen User Rules'larınız
    - Mevcut bir workflow'u düzenlerken mevcut workflow JSON'u
    - Execute düğümünü kullanıyorsanız mevcut workflow'ların listesi
-   - Kendi credential'larınızın adları, türleri ve id'leri (asla değerleri değil)
+   - Sahip olduğunuz veya sizinle paylaşılan credential'ların adları, türleri ve id'leri (asla değerleri değil)
    - Kullanabileceğiniz veri tablolarının adları, id'leri, açıklamaları ve sütunları (asla satırları değil)
 3. Model tek bir workflow JSON bloğu (`nodes` ve `edges` içeren) döndürür. Frontend bunu ayrıştırır ve canvas'a uygular.
 

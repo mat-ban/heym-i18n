@@ -827,6 +827,22 @@
         "waiting": "Ootel",
         "neutral": "Neutraalne"
       }
+    },
+    "concurrencyLimit": "Samaaegsuse piirang",
+    "concurrencyLimitHelp": "Tootmiskäitused (Webhookid, Cron, MCP, Portal, Triggerid) üle piirangu ootavad FIFO-järjekorras. Redaktori testkäitused algavad alati kohe.",
+    "maxConcurrentRuns": "Maks. samaaegseid käitusi",
+    "maxQueueSizeOptional": "Maks. järjekorra suurus (valikuline)",
+    "emptyNoLimit": "Tühi = piiranguta",
+    "maxWaitOptional": "Maks. ooteaeg (sekundit, valikuline)",
+    "emptyWaitAsLong": "Tühi = oota nii kaua kui vajalik",
+    "concurrencyQueueHelp": "Täis järjekord vastab koodiga 429. Käitus, mis ootab kauem kui maks. ooteaeg, märgitakse aegunuks.",
+    "rag": {
+      "hybridSearch": "Hübriidotsing",
+      "hybridSearchHelp": "Ühendage vektorite sarnasus BM25 märksõnade sobitamisega, et leida ka täpseid termineid, nagu ID-d, nimed ja veakoodid.",
+      "hybridScore": "Hübriidskoor (0-1)",
+      "similarityScore": "Sarnasusskoor",
+      "vectorSimilarity": "Vektorsarnasus",
+      "bm25Score": "BM25 skoor"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Küsi tehisintellektilt",
     "askAiTitle": "Küsige Chat-assistendilt selle käivituse kohta",
-    "noNodeSpans": "Selle käivituse kohta ei salvestatud sõlme spane."
+    "noNodeSpans": "Selle käivituse kohta ei salvestatud sõlme spane.",
+    "queuedProgress": "Järjekorras {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Portaali laadimine...",

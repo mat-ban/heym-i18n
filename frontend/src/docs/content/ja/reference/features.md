@@ -156,7 +156,7 @@ Decision ノードは、実行の状態について型付きの質問を決定�
 Decision Model クレデンシャルが必要です。[Switch](../nodes/switch-node.md)、[Condition](../nodes/condition-node.md)、[Agent Node](../nodes/agent-node.md) と自然に組み合わせられます。
 #### [RAG / Vector Store](../nodes/rag-node.md)
 
-RAG / Vector Store ノードは、検索拡張生成（retrieval-augmented generation）のために、vector store へのドキュメントの挿入、upsert、削除、検索を行います。Database ドロップダウンでバックエンドを選択します — **Qdrant**（外部サーバー）または **Postgres (pgvector)**（Heym 自身のデータベース、外部サービス不要）で、デフォルトは Qdrant です。[Vectorstores](../tabs/vectorstores-tab.md) タブから vector store を選択し、操作を insert、upsert、delete、search のいずれかに設定します。upsert と delete は、payload 内に格納された一意の id によってドキュメントを指定します — **Document ID Field** がそのフィールド名を指定し（デフォルトは `doc_id`）、**Document ID** がその値を保持します — これにより、ドキュメントはお客様自身のシステムが既に使用している id を維持できます。upsert は新しいバージョンを保存する前に一致するすべての point を置き換え、delete は一致したものがあるかどうかを報告します。ドキュメントの metadata はその値に式を受け付けるため、`{"url": "$start.url"}` は実行が生成した内容を保存します。Search は metadata フィルターとオプションの Cohere reranking をサポートし、text、score、metadata、reranked フラグ、count を含む結果の配列を返します。これは [LLM](../nodes/llm-node.md) または [Agent Node](../nodes/agent-node.md) のフローで使用できます。
+RAG / Vector Store ノードは、検索拡張生成（retrieval-augmented generation）のために、vector store へのドキュメントの挿入、upsert、削除、検索を行います。Database ドロップダウンでバックエンドを選択します — **Qdrant**（外部サーバー）または **Postgres (pgvector)**（Heym 自身のデータベース、外部サービス不要）で、デフォルトは Qdrant です。[Vectorstores](../tabs/vectorstores-tab.md) タブから vector store を選択し、操作を insert、upsert、delete、search のいずれかに設定します。upsert と delete は、payload 内に格納された一意の id によってドキュメントを指定します — **Document ID Field** がそのフィールド名を指定し（デフォルトは `doc_id`）、**Document ID** がその値を保持します — これにより、ドキュメントはお客様自身のシステムが既に使用している id を維持できます。upsert は新しいバージョンを保存する前に一致するすべての point を置き換え、delete は一致したものがあるかどうかを報告します。ドキュメントの metadata はその値に式を受け付けるため、`{"url": "$start.url"}` は実行が生成した内容を保存します。Search は metadata フィルター、オプションの **Hybrid Search** (ベクトル類似度と BM25 キーワードマッチングを融合し、ID やエラーコードなどの正確な用語をセマンティック一致の横で見つけることができます)、およびオプションの Cohere reranking をサポートし、text、score、metadata、reranked および hybrid フラグ、count を含む結果の配列を返します。これは [LLM](../nodes/llm-node.md) または [Agent Node](../nodes/agent-node.md) のフローで使用できます。
 
 一般的な下流ノードは [LLM](../nodes/llm-node.md) と [Agent Node](../nodes/agent-node.md) です。vector store のセットアップについては [Vectorstores](../tabs/vectorstores-tab.md) を参照してください。
 
@@ -554,7 +554,7 @@ Human-in-the-Loop を使用すると、[Agent ノード](../nodes/agent-node.md)
 
 ### [Webhooks](./webhooks.md)
 
-Workflow は `POST /api/workflows/{workflow_id}/execute` で [HTTP](../nodes/http-node.md) を介してトリガーすることも、`POST /api/workflows/{workflow_id}/execute/stream` からインクリメンタルにストリーミングすることもできます。リクエストボディは body として [Input](../nodes/input-node.md) ノードに渡されます。ヘッダーとクエリパラメータは [Expression DSL](./expression-dsl.md) 式で利用できます。Workflow ごとの認証（anonymous、JWT、またはカスタムヘッダー）を設定できます。オプションのレスポンスキャッシュ、レート制限、およびエディターの Run with cURL ダイアログはすべて Workflow 上にあり、両方のモードに適用されます。
+Workflow は `POST /api/workflows/{workflow_id}/execute` で [HTTP](../nodes/http-node.md) を介してトリガーすることも、`POST /api/workflows/{workflow_id}/execute/stream` からインクリメンタルにストリーミングすることもできます。リクエストボディは body として [Input](../nodes/input-node.md) ノードに渡されます。ヘッダーとクエリパラメータは [Expression DSL](./expression-dsl.md) 式で利用できます。Workflow ごとの認証（anonymous、JWT、またはカスタムヘッダー）を設定できます。オプションのレスポンスキャッシュ、レート制限、およびエディターの Run with cURL ダイアログはすべて Workflow 上にあり、両方のモードに適用されます。 [同時実行制限](./webhooks.md#concurrency-limit-and-queued-runs) がある場合、待機する必要がある呼び出しは代わりに実行 ID とステータス URL を含む `202 Accepted` を受け取ります。
 
 [Input](../nodes/input-node.md)、[Execution Tokens](./execution-tokens.md)、[SSE Streaming](./sse-streaming.md)、[HTTP](../nodes/http-node.md)、および [Workflow Structure](./workflow-structure.md) も参照してください。
 
@@ -599,6 +599,10 @@ Workflow は、失敗時に実行する別の Workflow を指定できます。W
 ### Workflow Timeout
 
 各 Workflow では、Workflow レベルの **Properties** パネルで **workflow timeout** を秒単位で設定できます。`0`（デフォルト）に設定すると無効になります。設定した場合、制限時間を超えた実行は次のノード境界で停止され、「timed out」エラーを伴う失敗した実行として記録されます。このタイムアウトは、手動実行、API 実行、および Trigger による実行に適用されます。長時間の [Wait](../nodes/wait-node.md) ノードは、その全期間にわたってブロックされることなく、速やかに中断されます。
+
+### 同時実行制限
+
+各ワークフローは、ワークフローレベルの **Properties** パネルにある **同時実行制限** で同時に実行される本番実行数を制限できます。オーナーおよび編集アクセス権を持つ共同編集者が変更でき、デフォルトでは無効になっています。制限に達すると、[webhook](./webhooks.md#concurrency-limit-and-queued-runs) および [ストリーミング](./sse-streaming.md) endpoint、[Portal](./portal.md)、[Quick Drawer](./quick-drawer.md)、[MCP](../tabs/mcp-tab.md)、および各 [trigger](./triggers.md) からの新しい実行は、[クラスタ](./cluster.md) のすべてのインスタンスにわたってカウントされる先入れ先出し (FIFO) キューで待機します。エディタのテスト実行、サブワークフロー呼び出し、[Evals](../tabs/evals-tab.md)、およびレビューの再開はキューに入れられず、[Board](../tabs/board-tab.md) カードの実行、ファイルアップロードの実行、AI アシスタントの run-workflow ツールによって開始された実行、およびアラート通知ワークフローはスロットを待たずに開始されます。待機する必要がある webhook 呼び出しは、`execution_id`、同じ認証情報で応答するステータス URL、順位、キューのサイズ、および実行中のカウントとともに直ちに `202 Accepted` を受け取ります。MCP クライアントも同様に受け取り、`heym_execution_status` ツールをポーリングします。オプションの **最大キューサイズ** は超過した呼び出しを `429` で拒否し、オプションの **最大待機時間** は待機時間が長すぎた実行を `expired` として記録します。待機中の実行は [実行履歴](./execution-history.md) に **キュー内 n/m** として表示され、そこでキャンセルできます。
 
 ### Time Saved
 
@@ -864,3 +868,9 @@ Drive タブには、Workflow 全体のスキルによって生成されたす�
 
 <video src="/features/showcase/drive.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/drive.webm">▶ Drive デモを見る</a></p>
+
+### [Canvas コラボレーション](./canvas-collaboration.md)
+
+Everyone with a workflow open shares one live draft. Edits appear instantly, each person's pointer moves in their color, following mirrors everything they see and do, and you can talk over direct peer-to-peer audio.
+
+See also [Canvas Features](./canvas-features.md), [Edit History](./edit-history.md), and [Keyboard Shortcuts](./keyboard-shortcuts.md).

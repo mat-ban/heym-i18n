@@ -32,6 +32,10 @@ Konfigurirajte u uređivaču: **Portal** gumb u zaglavlju workflow-a otvara dija
 3. **Izvršavanje**: `POST /api/portal/{slug}/execute` – Portal chat UI poziva ovo (ili njegovu streaming varijantu interno kada je omogućeno); krajnji korisnici komuniciraju putem chat sučelja, a ne izravnim pozivanjem API-ja.
 4. **Prekid**: `POST /api/portal/{slug}/executions/{execution_id}/cancel` – Zatraženo kada korisnik pritisne **Stop** tijekom aktivnog izvršavanja portala
 
+## Ograničenje istovremenosti
+
+Kada workflow ima [ograničenje istovremenosti](./webhooks.md#concurrency-limit-and-queued-runs) i svi su slotovi zauzeti, portal poruka čeka svoj red umjesto da se pokrene odmah. Chat prikazuje **Waiting in queue (2/5)** u svojoj liniji napretka sve dok pokretanje ne započne, a zatim odgovor kao i obično. Pokretanje se i dalje odvija ako korisnik zatvori stranicu. **Stop** uklanja pokretanje na čekanju iz reda. Kada je red pun, poruka ne uspijeva uz "Concurrency queue is full". Pokretanje koje je čekalo u redu ne struji svoj odgovor token po token; cijeli se odgovor pojavljuje kada završi.
+
 ## HITL u Portal Pokretanjima
 
 Ako portal workflow dosegne [Agent Node](../nodes/agent-node.md) s omogućenom [Human-in-the-Loop](./human-in-the-loop.md), odgovor portala prikazuje poveznicu za recenziju umjesto da ostane prazan.

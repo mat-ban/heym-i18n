@@ -85,6 +85,20 @@ Discord sūta mijiedarbības webhook uz `POST /api/discord/webhook/{node_id}`. P
 
 RabbitMQ patērētājs tiek palaists, kad līdera worker tiek inicializēts. Workflow ar `rabbitmq` mezgliem, kuros `rabbitmqOperation === "receive"`, iegūst patērētāju. Ievade ietver `message_data` (body, headers, routing_key utt.) un `triggered_by: "rabbitmq"`.
 
+## Vienlaicības ierobežojums
+
+Darbplūsma ar [vienlaicības ierobežojumu](./webhooks.md#concurrency-limit-and-queued-runs) ievieto rindā ražošanas izpildes no katra iepriekš minētā ieejas punkta, kad tās sloti ir pilni, pēc rindas kārtības (FIFO), visās instancēs. Tas, kā izsaucējs uzzina rezultātu, ir atkarīgs no ieejas punkta:
+
+| Ieejas punkts | Kamēr izpilde gaida |
+|---|---|
+| Webhook / API | `202 Accepted` ar `execution_id` un statusa URL |
+| SSE streaming, Quick Drawer, Portal chat | Straumēšana paliek atvērta un nosūta `queued` notikumus |
+| Portal without streaming | Pieprasījums gaida rezultātu |
+| MCP | `queued` rezultāts aptaujai ar `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger gaida rezultātu tikpat ilgi, cik gaidītu izpilde citā [instancē](./cluster.md). Izpilde notiek jebkurā gadījumā un tiek ierakstīta vēsturē |
+
+Kad rinda ir pilna, izpilde netiek sākta un vēsturē tā tiek reģistrēta kā `queue_full`. Redaktora testa izpildes, apakš-darbplūsmu izsaukumi ([Execute](../nodes/execute-node.md) node un aģenta darbplūsmas rīki), [Evals](../tabs/evals-tab.md), tērzēšanas veidošanas režīma testa izpildes un pārskatīšanas atsākšanas nekad netiek ievietotas rindā. [Board](../tabs/board-tab.md) karšu izpildes, [File Upload](../nodes/file-upload-trigger-node.md) izpildes, AI asistenta run-workflow rīka palaistās izpildes un brīdinājumu paziņojumu darbplūsmas arī sākas, negaidot brīvu vietu.
+
 ## trigger_source
 
 Izpildes vēsture reģistrē `trigger_source` katram ieejas punktam:

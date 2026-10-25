@@ -52,6 +52,8 @@ Nakon pokretanja izvršavanja, izbornik prikazuje:
 
 `pending` znači da workflow čeka na kasniju akciju kao što je ljudski pregled.
 
+Pokretanja iz Quick Drawera su produkcijska pokretanja, pa ih workflow s [ograničenjem istovremenosti](./webhooks.md#concurrency-limit-and-queued-runs) može staviti na čekanje. Dok je pokretanje u redu, status prikazuje **Waiting in queue (2/5)**; mijenja se u "running" kada pokretanje započne i prikazuje rezultat kada završi, bez napretka korak po korak. Pokretanje koje je isteklo u redu ili je otkazano tijekom čekanja završava kao `error`.
+
 Pokretanje s datotekom odvija se putem jednokratne poveznice za prijenos triggera: ladica zatraži poveznicu od workflowa, prenese datoteku na nju i prikaže rezultat kada prijenos završi. Pokretanja s datotekom prikazuju konačni status i izlaze, ali ne i napredak korak po korak, te su u povijesti također označena s `Quick Drawer`. Odabrana datoteka briše se nakon svakog pokretanja jer jedna poveznica prima samo jednu datoteku.
 
 ## Pohrana u Pregledniku

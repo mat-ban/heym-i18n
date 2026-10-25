@@ -18,7 +18,7 @@ Dane logowania przechowują klucze API oraz sekrety wykorzystywane przez węzły
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Logowanie do subskrypcji ChatGPT (OAuth) lub token dostępu Codex dla runnera oraz GitHub PAT do operacji na repozytorium |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Klucz API bramy OpenCode Go (opcjonalny bazowy URL) dla runnera oraz GitHub PAT do operacji na repozytorium |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) do wywołań GitHub API, operacji węzła GitHub oraz integracji MCP |
-| [Jira](../nodes/jira-node.md) | Jira | Cloud: e-mail/token API lub Data Center: nazwa użytkownika/hasło, bazowy URL witryny Jira, tryb wdrożenia oraz opcjonalna wersja REST API |
+| [Jira](../nodes/jira-node.md) | Jira | Cloud: e-mail/token API, Data Center: nazwa użytkownika/hasło lub osobisty token dostępu, bazowy URL witryny Jira, tryb wdrożenia oraz opcjonalna wersja REST API |
 | [Linear](../nodes/linear-node.md) | Linear | Osobisty klucz API lub OAuth2 dla zespołów, projektów, zgłoszeń i komentarzy |
 | [HTTP](../nodes/http-node.md) | Bearer, Header | Uwierzytelnianie żądań |
 | [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram | Token bota oraz opcjonalny sekret webhook |
@@ -64,7 +64,7 @@ Niektóre węzły pozwalają na wyrażenia dla uwierzytelniania. Należy użyć 
 
 Dane logowania Codex są celowo wykluczone z `$credentials`. Niezależnie od tego, czy logowanie odbywa się przez ChatGPT (subskrypcja, bez kosztu API za token), czy przez wklejenie Codex `access_token`, tokeny są przekazywane wyłącznie do lokalnego procesu runnera Codex. Tokeny logowania ChatGPT są odświeżane automatycznie w miarę wygasania.
 
-Dane logowania Jira są również wykluczone z `$credentials`. [Węzeł Jira](../nodes/jira-node.md) ładuje dane logowania przez `credentialId` w czasie wykonania. W przypadku niestandardowych wywołań Jira REST nieobsługiwanych przez węzeł Jira należy użyć [węzła HTTP](../nodes/http-node.md) z Jira Basic Auth (`email:api_token` dla Jira Cloud lub `username:password` dla Data Center / Server), na przykład `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Można również użyć danych logowania [Header](../nodes/http-node.md) z `Authorization: Basic <base64(user:secret)>`. Osobiste tokeny dostępu Jira Data Center / Server oraz uwierzytelnianie Bearer nie są jeszcze obsługiwane przez dane logowania Jira.
+Dane logowania Jira są również wykluczone z `$credentials`. [Węzeł Jira](../nodes/jira-node.md) ładuje dane logowania przez `credentialId` w czasie wykonania. W przypadku niestandardowych wywołań Jira REST nieobsługiwanych przez węzeł Jira należy użyć [węzła HTTP](../nodes/http-node.md) z Jira Basic Auth (`email:api_token` dla Jira Cloud lub `username:password` dla Data Center / Server), na przykład `curl -u you@example.com:YOUR_API_TOKEN https://your-domain.atlassian.net/rest/api/3/myself`. Można również użyć danych logowania [Header](../nodes/http-node.md) z `Authorization: Basic <base64(user:secret)>`. W przypadku osobistych tokenów dostępu Jira Data Center / Server wyślij zamiast tego `Authorization: Bearer <token>`; same dane logowania Jira obsługują to poprzez tryb uwierzytelniania **Personal Access Token**.
 
 | Typ danych logowania | Wartość udostępniana do `$credentials.Name` |
 |-----------------|--------------------------------------|

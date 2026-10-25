@@ -148,7 +148,7 @@ AI-assistenten drivs av en **workflow-DSL** (domänspecifikt språk) som beskriv
    - Användarregler som läggs till som "User Custom Rules"
    - Den aktuella workflowens JSON när en befintlig workflow redigeras
    - Listan över tillgängliga workflows om Execute-noden används
-   - Namnen, typerna och id:na för egna autentiseringsuppgifter (aldrig deras värden)
+   - Namnen, typerna och id:na för autentiseringsuppgifterna som du äger eller som har delats med dig (aldrig deras värden)
    - Namnen, id:na, beskrivningarna och kolumnerna för de datatabeller som kan användas (aldrig deras rader)
 3. Modellen returnerar ett enda workflow-JSON-block (med `nodes` och `edges`). Frontend tolkar det och tillämpar det på canvas.
 

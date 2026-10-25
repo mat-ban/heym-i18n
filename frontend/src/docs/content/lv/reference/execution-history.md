@@ -109,6 +109,8 @@ Abi vēstures dialogi saraksta augšdaļā pirms iepriekšējām izpildēm rāda
 - Pēc atcelšanas notiekošais ieraksts pazūd nākamajā atjaunināšanas reizē; nospiediet **Refresh**, lai sarakstu atjauninātu manuāli
 - Ja atceļat jau pabeigtu izpildi, pieprasījums tiek ignorēts
 
+Izpildes, kas gaida [vienlaicības slotu](./webhooks.md#concurrency-limit-and-queued-runs), ir uzskaitītas tajā pašā sadaļā ar birku **Queued 2/5**, norādot to vietu rindā un rindas izmēru. Tām nav pogas **Open live**, jo vēl nekas nedarbojas; **Cancel** izņem gaidošo izpildi no rindas un reģistrē to kā `cancelled`. Izpilde, kas gaidījusi ilgāk par darbplūsmas maksimālo gaidīšanas laiku, tiek reģistrēta kā `expired`, bet pilnas rindas noraidīta izpilde — kā `queue_full`; abām izpildes sarakstā ir sava nozīmīte.
+
 Tiešraides URL ir `/workflows/{workflowId}/{executionId}`. Novērotājs ir tikai lasīšanas režīmā: redaktora
 aizvēršana tikai atvieno šo pārlūka cilni un nekad neaptur workflow. Aktīvie momentuzņēmumi
 tiek koplietoti caur PostgreSQL, tāpēc izpildes atvēršana joprojām darbojas, ja trigger un redaktora

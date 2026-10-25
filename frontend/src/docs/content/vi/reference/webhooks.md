@@ -109,6 +109,73 @@ Cấu hình theo từng workflow: `rate_limit_requests` và `rate_limit_window_s
 
 Các request `test_run` bỏ qua rate limiting.
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Giới hạn đồng thời và các lượt chạy xếp hàng
+
+Một workflow có thể giới hạn số lượng lượt chạy sản xuất được thực thi cùng lúc. Bật **Giới hạn đồng thời** trong bảng **Properties** ở cấp workflow và đặt **Lượt chạy đồng thời tối đa**. Chủ sở hữu và cộng tác viên có quyền chỉnh sửa có thể thay đổi mục này. Giới hạn này tắt theo mặc định.
+
+Khi đạt đến giới hạn, các lượt chạy mới sẽ đợi trong hàng đợi FIFO (vào trước, ra trước). Cơ chế này bao gồm mọi điểm vào sản xuất: endpoint này, [endpoint streaming](./sse-streaming.md), [Portal](./portal.md), [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) và mọi [trigger](./triggers.md). Các lượt chạy thử nghiệm của chính trình chỉnh sửa luôn bắt đầu ngay lập tức và không chiếm vị trí slot. Việc gửi `test_run=true` mà không có phiên đăng nhập có thể mở workflow sẽ không bỏ qua hàng đợi.
+
+| Cài đặt | Mô tả |
+|---|---|
+| `concurrency_limit` | Số lượt chạy sản xuất được phép cùng lúc. `0` tắt giới hạn |
+| `concurrency_max_queue` | Tùy chọn. Số lượt chạy được phép chờ cùng lúc. Để trống nghĩa là không giới hạn |
+| `concurrency_max_wait_seconds` | Tùy chọn. Lượt chạy chờ lâu hơn sẽ được ghi nhận là `expired`. Để trống nghĩa là chờ bao lâu tùy ý |
+
+### 202 Accepted
+
+Một cuộc gọi bắt đầu ngay lập tức sẽ hoạt động chính xác như mô tả trong Định dạng phản hồi. Một cuộc gọi phải chờ sẽ nhận ngay `202 Accepted`, bất kể `X-Simple-Response` trả về gì, với tiêu đề `Location` trỏ đến URL trạng thái của nó:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Trường | Mô tả |
+|---|---|
+| `queue.position` | Vị trí của lượt chạy này trong hàng, bắt đầu từ 1 |
+| `queue.size` | Các lượt chạy hiện đang chờ |
+| `queue.running` | Các lượt chạy hiện đang chiếm slot |
+| `queue.limit` | Giới hạn đồng thời của workflow |
+| `status_token` | Chỉ áp dụng cho workflow ẩn danh. Được trả về một lần trong phản hồi này |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` trả về trạng thái của lượt chạy. Hãy gọi endpoint này bằng cùng thông tin xác thực đã khởi chạy lượt chạy: phiên hoặc JWT, [token thực thi](./execution-tokens.md) hoặc tiêu đề tùy chỉnh của workflow. Workflow ẩn danh không có thông tin xác thực để kiểm tra, vì vậy hãy gửi `status_token` từ phản hồi 202 trong tiêu đề `X-Heym-Run-Token`. Token không bao giờ được đọc từ chuỗi truy vấn. Token sai hoặc bị thiếu sẽ nhận mã `404`, tương tự như một lượt thực thi không xác định.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Ý nghĩa (lượt chạy phải chờ slot đồng thời sẽ nhận [phản hồi 202](#202-accepted) thay thế) |
+|---|---|
+| `queued` | Đang chờ slot; `queue` hiển thị vị trí hiện tại |
+| `running` | Đã có slot và đang thực thi |
+| `success` / `error` | Hoàn thành; các trường `outputs` và `error` đã được điền |
+| `pending` | Tạm dừng để [đánh giá thủ công](./human-in-the-loop.md) |
+| `cancelled` | Đã hủy từ [Lịch sử lượt chạy](./execution-history.md) |
+| `expired` | Đã chờ lâu hơn `concurrency_max_wait_seconds` và không bao giờ chạy |
+
+Thực hiện thăm dò vài giây một lần cho đến khi trạng thái không còn là `queued` hoặc `running`. Lượt chạy xếp hàng vẫn được thực thi ngay cả khi không có ai thăm dò.
+
+### Hàng đợi đầy
+
+Khi `concurrency_max_queue` được thiết lập và số lượng lượt chạy chờ đã đạt đến mức đó, cuộc gọi sẽ bị từ chối với mã `429 Concurrency queue is full` và mục `queue_full` trong lịch sử lượt chạy. Không có gì được xếp vào hàng đợi.
+
 ## Định dạng phản hồi
 
 Endpoint trả về JSON:

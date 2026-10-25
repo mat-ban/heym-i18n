@@ -8,22 +8,23 @@
 |----------|-------|
 | Įvestys | 1 |
 | Išvestys | 1 |
-| Kredencialas | Jira (Cloud el. paštas/API raktas arba Data Center vartotojo vardas/slaptažodis, pagrindinis URL, diegimo režimas, pasirenkama REST API versija) |
+| Kredencialas | Jira (Cloud el. paštas/API raktas, Data Center vartotojo vardas/slaptažodis arba asmeninis prieigos raktas, pagrindinis URL, diegimo režimas, pasirenkama REST API versija) |
 | Išvestis | `$nodeLabel.*` |
 
 ## Kredencialas
 
-Sukurkite **Jira** kredencialą [Kredencialų skirtuke](../tabs/credentials-tab.md). Saugojimo konfigūracijos raktai yra `email`, `api_token`, `base_url`, `deployment` ir pasirenkama `api_version`. Jira Cloud atveju `email` saugo Atlassian paskyros el. paštą, o `api_token` saugo Atlassian API raktą. Jira Data Center / Server atveju tie patys raktai saugo Basic auth vartotojo vardą ir slaptažodį. Daugiau informacijos žr. [Trečiųjų šalių integracijos](../reference/integrations.md#jira) nustatymo žingsniuose.
+Sukurkite **Jira** kredencialą [Kredencialų skirtuke](../tabs/credentials-tab.md). Saugojimo konfigūracijos raktai yra `email`, `api_token`, `base_url`, `deployment`, `auth_mode` ir pasirenkama `api_version`. Jira Cloud atveju `email` saugo Atlassian paskyros el. paštą, o `api_token` saugo Atlassian API raktą. Jira Data Center / Server atveju tie patys raktai saugo Basic auth vartotojo vardą ir slaptažodį. Daugiau informacijos žr arba, nustačius `auth_mode: pat`, `api_token` saugo asmeninį prieigos raktą, siunčiamą kaip Bearer raktą, o `email` nenaudojamas. [Trečiųjų šalių integracijos](../reference/integrations.md#jira) nustatymo žingsniuose.
 
 | Laukas | Konfigūracijos raktas | Aprašymas |
 | --- | --- | --- |
 | Jira el. paštas / Vartotojo vardas | `email` | Jira Cloud Atlassian paskyros el. paštas arba Jira Data Center / Server vartotojo vardas |
-| API raktas / Slaptažodis | `api_token` | Jira Cloud Atlassian API raktas arba Jira Data Center / Server slaptažodis Basic auth |
+| Autentifikavimas | `auth_mode` | `basic` (numatytasis) arba `pat` (tik Data Center / Server) |
+| API raktas / Slaptažodis / Asmeninis prieigos raktas | `api_token` | Jira Cloud Atlassian API raktas, Jira Data Center / Server slaptažodis Basic auth arba Data Center asmeninis prieigos raktas `pat` režimu |
 | Pagrindinis URL | `base_url` | Jira svetainės URL, pavyzdžiui, `https://your-domain.atlassian.net` |
 | Diegimas | `deployment` | `cloud` Jira Cloud arba `data_center` Jira Data Center / Server |
 | REST API versija | `api_version` | Numatytoji vertė yra `3` Jira Cloud. Data Center / Server naudoja REST API v2 |
 
-Data Center / Server asmeniniai prieigos raktai ir Bearer auth šiuo metu nėra palaikomi Jira kredenciale.
+Asmeniniams prieigos raktams reikalinga Jira Data Center / Server 8.14 ar naujesnė versija. Autentifikavimo metodo pakeitimas išvalo išsaugotą paslaptį, todėl perjungdami įveskite naują slaptažodį arba raktą.
 
 Naudokite **Test Connection**, kad patvirtintumėte kredencialą pagal dabartinį Jira vartotoją.
 

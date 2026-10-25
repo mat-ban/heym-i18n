@@ -109,6 +109,73 @@ Configureer per workflow: `rate_limit_requests` en `rate_limit_window_seconds`.
 
 `test_run`-verzoeken omzeilen rate limiting.
 
+<a id="concurrency-limit-and-queued-runs"></a>
+
+## Concurrency-limiet en uitvoeringen in de wachtrij
+
+Een workflow kan het aantal gelijktijdige productie-uitvoeringen beperken. Schakel **Concurrency-limiet** in via het **Properties**-paneel op workflow-niveau en stel **Max. gelijktijdige uitvoeringen** in. Eigenaren en bijdragers met bewerkingstoegang kunnen dit wijzigen. De limiet is standaard uitgeschakeld.
+
+Zodra de limiet is bereikt, wachten nieuwe uitvoeringen in een first-in, first-out wachtrij. Dit geldt voor elk productie-invalspunt: dit endpoint, het [streaming-endpoint](./sse-streaming.md), het [Portal](./portal.md), de [Quick Drawer](./quick-drawer.md), [MCP](../tabs/mcp-tab.md) en elke [trigger](./triggers.md). Testuitvoeringen van de editor starten altijd direct en nemen geen slot in beslag. Het verzenden van `test_run=true` zonder een aangemelde sessie die de workflow mag openen, omzeilt de wachtrij niet.
+
+| Instelling | Beschrijving |
+|---|---|
+| `concurrency_limit` | Productie-uitvoeringen tegelijk toegestaan. `0` schakelt de limiet uit |
+| `concurrency_max_queue` | Optioneel. Uitvoeringen die tegelijk mogen wachten. Leeg betekent geen limiet |
+| `concurrency_max_wait_seconds` | Optioneel. Een uitvoering die langer wacht, wordt geregistreerd als `expired`. Leeg betekent dat deze zolang wacht als nodig |
+
+### 202 Accepted
+
+Een aanroep die direct start, gedraagt zich exact zoals beschreven onder Antwoordformaat. Een aanroep die moet wachten, ontvangt direct `202 Accepted`, ongeacht `X-Simple-Response`, met een `Location`-header die verwijst naar de status-URL:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "status_url": "https://heym.example.com/api/workflows/{workflow_id}/executions/{execution_id}/status",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "status_token": "..."
+}
+```
+
+| Veld | Beschrijving |
+|---|---|
+| `queue.position` | Positie van deze uitvoering in de rij, beginnend bij 1 |
+| `queue.size` | Uitvoeringen die momenteel wachten |
+| `queue.running` | Uitvoeringen die momenteel een slot bezet houden |
+| `queue.limit` | De concurrency-limiet van de workflow |
+| `status_token` | Alleen voor anonieme workflows. Eenmalig geretourneerd in dit antwoord |
+
+### Status URL
+
+`GET /api/workflows/{workflow_id}/executions/{execution_id}/status` beantwoordt met de status van de uitvoering. Roep dit aan met dezelfde inloggegevens waarmee de uitvoering is gestart: een sessie of JWT, een [uitvoeringstoken](./execution-tokens.md) of de aangepaste header van de workflow. Een anonieme workflow heeft geen inloggegevens om te controleren; stuur daarom het `status_token` van de 202 mee in de `X-Heym-Run-Token`-header. Het token wordt nooit uit de query-string gelezen. Een onjuist of ontbrekend token krijgt `404`, net als een onbekende uitvoering.
+
+```json
+{
+  "execution_id": "...",
+  "workflow_id": "...",
+  "status": "success",
+  "queue": null,
+  "outputs": { "done": { "result": "ok" } },
+  "error": null,
+  "execution_time_ms": 5120
+}
+```
+
+| `status` | Betekenis (een uitvoering die moet wachten op een concurrency-slot ontvangt in plaats daarvan het [202-antwoord](#202-accepted)) |
+|---|---|
+| `queued` | Wachten op een slot; `queue` toont de positie |
+| `running` | Beschikt over een slot en wordt uitgevoerd |
+| `success` / `error` | Voltooid; `outputs` en `error` zijn ingevuld |
+| `pending` | Gepauzeerd voor [menselijke beoordeling](./human-in-the-loop.md) |
+| `cancelled` | Geannuleerd vanuit de [Uitvoeringsgeschiedenis](./execution-history.md) |
+| `expired` | Heeft langer gewacht dan `concurrency_max_wait_seconds` en is nooit uitgevoerd |
+
+Poll om de paar seconden totdat de status niet langer `queued` of `running` is. Een uitvoering in de wachtrij wordt uitgevoerd, zelfs als niemand pollt.
+
+### Wachtrij vol
+
+Wanneer `concurrency_max_queue` is ingesteld en dat aantal uitvoeringen al wacht, wordt de aanroep geweigerd met `429 Concurrency queue is full` en een `queue_full`-vermelding in de geschiedenis. Er wordt niets in de wachtrij geplaatst.
+
 ## Antwoordformaat
 
 Het endpoint retourneert JSON:

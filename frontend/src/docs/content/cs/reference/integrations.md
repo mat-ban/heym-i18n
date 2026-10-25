@@ -15,7 +15,7 @@ Některé integrační uzly **nevyžadují** přihlašovací údaje. [WebSocket 
 | **OpenCode Go** | [OpenCode Go](../nodes/opencode-go-node.md) | `api_key`, volitelně `base_url` |
 | **Google** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key` |
 | **GitHub** | [GitHub](../nodes/github-node.md), [Codex](../nodes/codex-node.md), [OpenCode Go](../nodes/opencode-go-node.md), [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md) | `api_key`, volitelně `base_url` |
-| **Jira** | [Uzel Jira](../nodes/jira-node.md) | `email`, `api_token`, `base_url`, `deployment`, volitelně `api_version` |
+| **Jira** | [Uzel Jira](../nodes/jira-node.md) | `api_token`, `base_url`, `deployment`, `auth_mode`, `email` (pouze Basic auth), volitelně `api_version` |
 | **Linear** | [Uzel Linear](../nodes/linear-node.md) | `api_key`, nebo `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Uzel Sentry](../nodes/sentry-node.md) | `api_token`, volitelně `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
@@ -202,7 +202,7 @@ OAuth tokeny (`access_token`, `refresh_token`, `token_expiry`) se ukládají a o
 
 ## Jira
 
-Přihlašovací údaje Jira ukládají přihlašovací údaje Jira Basic auth, základní URL Jira site, režim nasazení a volitelnou verzi REST API pro [uzel Jira](../nodes/jira-node.md). Použijte `cloud` pro Jira Cloud nebo `data_center` pro Jira Data Center / Server.
+Přihlašovací údaje Jira ukládají přihlašovací údaje Jira Basic auth nebo osobní přístupový token Data Center, základní URL Jira site, režim nasazení a volitelnou verzi REST API pro [uzel Jira](../nodes/jira-node.md). Použijte `cloud` pro Jira Cloud nebo `data_center` pro Jira Data Center / Server.
 
 ### Nastavení
 
@@ -215,17 +215,19 @@ Přihlašovací údaje Jira ukládají přihlašovací údaje Jira Basic auth, z
 
 **Jira Data Center / Server**
 
-1. Jako nasazení zvolte **Jira Data Center / Server**.
-2. Zadejte uživatelské jméno a heslo Jira používané pro Basic auth.
-3. Zadejte URL Jira site, například `https://jira.example.com`.
-4. Pomocí **Test Connection** ověřte přihlašovací údaje.
+1. Jako nasazení vyberte **Jira Data Center / Server**.
+2. Zvolte metodu ověřování. **Uživatelské jméno a heslo** využívá Basic auth. **Personal Access Token** využívá `Authorization: Bearer <token>` a vyžaduje Jira Data Center / Server 8.14 nebo novější. Vytvořte token v nabídce **Profil → Personal Access Tokens** v Jira.
+3. Zadejte uživatelské jméno a heslo Jira nebo vložte osobní přístupový token (uživatelské jméno není vyžadováno).
+4. Zadejte URL adresu webu Jira, například `https://jira.example.com`.
+5. K ověření pověření použijte **Test Connection**.
 
 ### Pole
 
 | Pole | Popis |
 | --- | --- |
-| `email` | E-mail účtu Atlassian pro Jira Cloud nebo uživatelské jméno pro Jira Data Center / Server |
-| `api_token` | API token Atlassian pro Jira Cloud nebo heslo pro Basic auth pro Jira Data Center / Server |
+| `auth_mode` | `basic` (výchozí při neuvedení) nebo `pat`. `pat` je platné pouze s `data_center` |
+| `email` | E-mail účtu Atlassian Jira Cloud nebo uživatelské jméno Jira Data Center / Server. V režimu `pat` se nepoužívá |
+| `api_token` | API token Atlassian Jira Cloud, heslo Jira Data Center / Server pro Basic auth nebo osobní přístupový token Data Center v režimu `pat` |
 | `base_url` | Základní URL Jira site |
 | `deployment` | `cloud` pro Jira Cloud nebo `data_center` pro Jira Data Center / Server |
 | `api_version` | Verze REST API; výchozí hodnota je `3` pro Jira Cloud. Data Center / Server používá v2 |
@@ -234,12 +236,11 @@ Přihlašovací údaje Jira ukládají přihlašovací údaje Jira Basic auth, z
 
 - Uzel Jira odesílá popisy issues a komentáře jako textové dokumenty Atlassian Document Format
   pro Jira Cloud REST API v3. Přihlašovací údaje Data Center / Server odesílají prostý text.
-- Data Center / Server aktuálně podporuje pouze Basic auth s uživatelským jménem a heslem. Osobní přístupové
-  tokeny a Bearer auth zatím nejsou podporovány.
+- Data Center / Server podporuje Basic auth pomocí uživatelského jména/hesla a ověřování pomocí osobního přístupového tokenu (PAT) se schématem Bearer. Ověřování PAT vyžaduje Jira Data Center / Server 8.14 nebo novější.
 - Nahrávání příloh přijímá obsah ve formátu base64 nebo data URL a podléhá limitu velikosti souboru platformy (výchozí 99 MB). Stahování příloh může při povolení vracet obsah base64.
 - Vytváření a mazání uživatelů a oznámení o issues vyžadují, aby měl ověřený účet Jira příslušná oprávnění k Jira site nebo organizaci.
 - Pomocí List Projects, Search Issues a List Transitions zjistěte klíče projektů, klíče issues a ID přechodů.
-- Pro vlastní endpointy, které uzel Jira nepokrývá, použijte [uzel HTTP](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pro Cloud nebo `username:password` pro Data Center / Server) v příkazu cURL, nebo přihlašovací údaje typu Header s odpovídající hodnotou `Authorization: Basic <base64(user:secret)>`.
+- Pro vlastní endpointy nepokryté uzlem Jira použijte [uzel HTTP](../nodes/http-node.md) s Jira Basic Auth (`email:api_token` pro Cloud nebo `username:password` pro Data Center / Server) nebo PAT Bearer auth (`Authorization: Bearer <token>` pro Data Center / Server). Případně použijte pověření Header s odpovídající hlavičkou `Authorization`.
 
 Viz také:
 

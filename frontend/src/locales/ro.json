@@ -827,6 +827,22 @@
         "waiting": "În așteptare",
         "neutral": "Neutru"
       }
+    },
+    "concurrencyLimit": "Limită de concurență",
+    "concurrencyLimitHelp": "Rulările de producție (Webhook-uri, Cron, MCP, Portal, Triggere) care depășesc limita așteaptă într-o coadă FIFO. Rulările de test din editor pornesc întotdeauna imediat.",
+    "maxConcurrentRuns": "Rulări concurente maxime",
+    "maxQueueSizeOptional": "Dimensiunea maximă a cozii (opțional)",
+    "emptyNoLimit": "Gol = fără limită",
+    "maxWaitOptional": "Așteptare maximă (secunde, opțional)",
+    "emptyWaitAsLong": "Gol = așteaptă cât este necesar",
+    "concurrencyQueueHelp": "O coadă plină răspunde cu 429. O rulare care așteaptă mai mult decât timpul maxim este înregistrată ca expirată.",
+    "rag": {
+      "hybridSearch": "Căutare hibridă",
+      "hybridSearchHelp": "Combinați similaritatea vectorială cu potrivirea cuvintelor cheie BM25, astfel încât să fie găsiți și termeni exacți precum ID-uri, nume și coduri de eroare.",
+      "hybridScore": "Scor hibrid (0-1)",
+      "similarityScore": "Scor de similaritate",
+      "vectorSimilarity": "Similaritate vectorială",
+      "bm25Score": "Scor BM25"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "Întreabă AI",
     "askAiTitle": "Întrebați asistentul Chat despre această rulare",
-    "noNodeSpans": "Pentru această rulare nu au fost înregistrate span-uri de nod."
+    "noNodeSpans": "Pentru această rulare nu au fost înregistrate span-uri de nod.",
+    "queuedProgress": "În coadă {position}/{size}"
   },
   "portal": {
     "loadingPortal": "Se încarcă portalul...",

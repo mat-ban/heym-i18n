@@ -45,7 +45,7 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/chat-tab": {
-    "h": "9a2a389c",
+    "h": "e6ce101b",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -85,7 +85,7 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/mcp-tab": {
-    "h": "9c2d194f",
+    "h": "c8bf0e85",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -105,7 +105,7 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/traces-tab": {
-    "h": "acc198fe",
+    "h": "5bd1a836",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -115,12 +115,12 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/workflows-tab": {
-    "h": "651e8e18",
+    "h": "70c2925a",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
   "nodes/agent-node": {
-    "h": "61e6635d",
+    "h": "61c28a71",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -150,7 +150,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/codex-node": {
-    "h": "442938c3",
+    "h": "436a6a5a",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -185,7 +185,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/decision-node": {
-    "h": "8f5cfc33",
+    "h": "6a1b849b",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -235,12 +235,12 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/google-drive-node": {
-    "h": "c5d5e837",
+    "h": "ff95bb0d",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
   "nodes/google-sheets-node": {
-    "h": "3589f46a",
+    "h": "cf869422",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -280,7 +280,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/jira-node": {
-    "h": "97003e13",
+    "h": "b0e1521f",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -295,7 +295,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/llm-node": {
-    "h": "718e23bf",
+    "h": "77d3e561",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -350,7 +350,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/rag-node": {
-    "h": "b0d64bc4",
+    "h": "2fbee62b",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -375,12 +375,12 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/slack-node": {
-    "h": "ecbf9580",
+    "h": "4b7f35c5",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
   "nodes/slack-trigger-node": {
-    "h": "14c600fa",
+    "h": "f1e4a7ad",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -445,7 +445,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/ai-assistant": {
-    "h": "615665d3",
+    "h": "aa6a8766",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -455,7 +455,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/canvas-features": {
-    "h": "64ab13b6",
+    "h": "0eff3a64",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -470,7 +470,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/cluster": {
-    "h": "73e966cb",
+    "h": "c901f97c",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -480,12 +480,12 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/credentials-sharing": {
-    "h": "ea417052",
+    "h": "7615c04a",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
   "reference/credentials": {
-    "h": "7d394a1b",
+    "h": "ccacb296",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -510,7 +510,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/execution-history": {
-    "h": "bf42d516",
+    "h": "998cbc14",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -530,7 +530,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/features": {
-    "h": "9dfd0210",
+    "h": "099ab65f",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -554,27 +554,27 @@
     "s": "reviewed"
   },
   "reference/human-in-the-loop": {
-    "h": "b80d3588",
+    "h": "8040d6f3",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
   "reference/integrations": {
-    "h": "2c58b910",
+    "h": "ec7b8fed",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
   "reference/keyboard-shortcuts": {
-    "h": "860298ec",
+    "h": "633a4a77",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
   "reference/node-types": {
-    "h": "65823972",
+    "h": "9a917fe9",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
   "reference/opentelemetry": {
-    "h": "f68fd7b2",
+    "h": "1e3975ef",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -589,12 +589,12 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/portal": {
-    "h": "82571d80",
+    "h": "45326ac0",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
   "reference/quick-drawer": {
-    "h": "8ae91a52",
+    "h": "9e287263",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -604,7 +604,7 @@
     "r": "wave2a@2026-10-11"
   },
   "reference/sse-streaming": {
-    "h": "352231fd",
+    "h": "bbf5cd80",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -619,7 +619,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/triggers": {
-    "h": "ca784955",
+    "h": "1b109b5c",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -629,7 +629,7 @@
     "r": "wave2a@2026-10-11"
   },
   "reference/webhooks": {
-    "h": "51b7ceb3",
+    "h": "5a5b1b60",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -657,5 +657,10 @@
     "h": "405b7eb7",
     "s": "reviewed",
     "r": "upstream@0.0.132"
+  },
+  "reference/canvas-collaboration": {
+    "h": "34f5ca32",
+    "s": "reviewed",
+    "r": "feature/i18n@v0.0.138"
   }
 }

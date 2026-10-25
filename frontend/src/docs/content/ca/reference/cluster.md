@@ -110,6 +110,10 @@ L'etiqueta d'imatge ha de ser la versió que executa main, i ambdues claus s'han
 | On | Treu un worker de rotació sense aturar-lo — les execucions en curs finalitzen, no se n'assignen de noves. Bloquejat per a la instància main: la feina de fitxers, plugins i agents de codi s'executa allà independentment de l'estat del commutador |
 | Weight | La seva quota d'execucions distribuïbles |
 
+## Límits de concurrència en un clúster
+
+El [límit de concurrència](./webhooks.md#concurrency-limit-and-queued-runs) d'un workflow es comptabilitza a PostgreSQL, de manera que s'aplica a totes les instàncies i processos: dues instàncies mai no executen més execucions d'un workflow del que permet el límit. Una execució que ha esperat un slot s'ubica segons les mateixes regles que qualsevol altra execució quan s'inicia, de manera que una execució que hagi de romandre a main continua fent-ho. El worker de cua que executa aquestes execucions ara s'inicia a cada instal·lació, inclosa una instància única, on només reclama les execucions posades a la cua per la seva pròpia instància. Això significa que una instància única també manté la connexió `LISTEN` de reactivació de la cua a cada procés; pressuposteu les seves connexions de la mateixa manera que per a una instància de clúster.
+
 ## Historial d'execucions
 
 Cada execució de l'historial d'execucions indica la instància que la va dur a terme, i tots dos diàlegs d'historial poden filtrar-se fins a una sola instància. El filtre coincideix amb l'id de la instància mentre en mostra el nom, de manera que canviar el nom d'una instància no reescriu el que diuen les execucions antigues.

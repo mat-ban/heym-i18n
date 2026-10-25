@@ -1216,7 +1216,8 @@
     "bringToCanvas": "Ouvrir dans le Canvas",
     "askAi": "Demander à l'IA",
     "askAiTitle": "Interroger l'assistant Chat sur cette exécution",
-    "noNodeSpans": "Aucun span de nœud n'a été enregistré pour cette exécution."
+    "noNodeSpans": "Aucun span de nœud n'a été enregistré pour cette exécution.",
+    "queuedProgress": "En file d'attente {position}/{size}"
   },
   "logs": {
     "all": "Tous",
@@ -1744,6 +1745,22 @@
         "waiting": "En attente",
         "neutral": "Neutre"
       }
+    },
+    "concurrencyLimit": "Limite de simultanéité",
+    "concurrencyLimitHelp": "Les exécutions de production (Webhooks, Cron, MCP, Portal, Triggers) au-delà de la limite attendent dans une file d'attente FIFO. Les exécutions de test de l'éditeur démarrent toujours immédiatement.",
+    "maxConcurrentRuns": "Exécutions simultanées maximales",
+    "maxQueueSizeOptional": "Taille maximale de la file d'attente (optionnel)",
+    "emptyNoLimit": "Vide = aucune limite",
+    "maxWaitOptional": "Attente maximale (secondes, optionnel)",
+    "emptyWaitAsLong": "Vide = attendre aussi longtemps que nécessaire",
+    "concurrencyQueueHelp": "Une file d'attente pleine répond 429. Une exécution qui attend plus longtemps que le délai maximal est enregistrée comme expirée.",
+    "rag": {
+      "hybridSearch": "Recherche hybride",
+      "hybridSearchHelp": "Associez la similarité vectorielle à la correspondance par mots-clés BM25 afin de trouver également les termes exacts comme les identifiants, les noms et les codes d'erreur.",
+      "hybridScore": "Score hybride (0-1)",
+      "similarityScore": "Score de similarité",
+      "vectorSimilarity": "Similarité vectorielle",
+      "bm25Score": "Score BM25"
     }
   },
   "quickDrawer": {

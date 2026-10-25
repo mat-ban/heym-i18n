@@ -36,6 +36,21 @@ Varje workflow kan exponeras som ett MCP-verktyg:
 
 Workflow-kort visar beskrivningen och en förhandsvisning av namn på inmatningsfält så att det går att se vad varje verktyg förväntar sig innan det aktiveras.
 
+
+### Köade körningar och heym_execution_status
+
+Ett workflow med en [samtidighetsgräns](../reference/webhooks.md#concurrency-limit-and-queued-runs) kan vara upptaget när en klient anropar det. Anropet returnerar omedelbart ett resultat som inte är ett fel:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Klienten pollar verktyget `heym_execution_status` med detta `execution_id`. Det returnerar samma kropp som [status-URL:en](../reference/webhooks.md#status-url): `queued` med aktuell position, `running`, sedan `success` eller `error` med utdata. Det hittar bara körningar av workflows som samma server exponerar. Verktyget listas på standardservern och på varje namngiven server endast så länge minst ett av dess workflows har en samtidighetsgräns. När kön är full returnerar anropet felet "Concurrency queue is full".
 ## Heym-chattverktyget
 
 Avsnittet **Heym Capabilities** gör motorn från Chat-fliken till ett enda MCP-verktyg med namnet `heym_chat`. Det kan aktiveras på standardservern, på valfri namngiven server eller på båda — varje yta har sin egen växel och modellval.
@@ -49,6 +64,7 @@ När det är aktiverat visas `heym_chat` i `tools/list` tillsammans med workflow
 - Rapportera vad som körs just nu: hur många körningar som är aktiva, deras workflow-namn, hur länge var och en har kört, vilken nod var och en för närvarande befinner sig på och en länk till den live-körningen
 - Lista boards, skapa kort och läsa kortdetaljer på [Board-fliken](./board-tab.md)
 - Lista datatabeller med deras kolumner, skapa nya och koppla in dem i de workflows som byggs
+- Skapa eller uppdatera dina autentiseringsuppgifter på Heyms egen sida (se [Autentiseringsuppgifter](#autentiseringsuppgifter))
 - Läsa teams och globala variabler samt söka i dokumentationen
 - Godkänna, redigera eller avvisa väntande human-in-the-loop-granskningar
 
@@ -58,14 +74,28 @@ Förmågor som läggs till i Chat-fliken senare blir automatiskt tillgängliga v
 
 `heym_chat` kör alltid Chat-motorn i byggläge (build mode). I ett enda anrop kan assistenten spara ett nytt workflow, köra det med realistiska exempelindata, läsa körningsrapporten, åtgärda det som misslyckades och köra det igen, upp till fem testkörningar per anrop. När den senaste körningen av den senaste sparningen lyckas avslutar den med en sammanfattning på en mening, och svaret slutar med `Verified: the latest test run of the saved workflow passed.`
 
+När ett anrop skapar eller redigerar ett workflow listar svaret vart och ett med dess fullständiga redigeringslänk, såsom `https://heym.example.com/workflows/<id>`, och länkarna i assistentens svar är också fullständiga länkar. De använder din konfigurerade Heym-adress (`FRONTEND_URL`) och öppnas för personer som är inloggade på Heym och har behörighet till det workflowet.
+
 - Testkörningar är riktiga körningar. Deras sidoeffekter inträffar och de visas i workflowets körningshistorik precis som alla andra körningar.
 - Sparningar följer redigerarens väg: en ändring i grafen behåller den föregående grafen i workflowets **Edit History**.
 - För att ändra ett workflow som den byggde tidigare fortsätter du tråden med samma `conversation_id`. Assistenten uppdaterar det workflowet istället för att skapa ett nytt, och ändrar bara workflows som du har behörighet att redigera.
 - När de fem testkörningarna är förbrukade stannar assistenten och förklarar vad som fortfarande misslyckas.
 
-Credentials stannar i gränssnittet: `heym_chat` listar, väljer eller skapar aldrig några. När den bygger eller redigerar en workflow lämnas nya noder som behöver en credential tomma och svaret namnger dem, så att de kan anges i editorn.
-
 Datatabeller är annorlunda. En tabell innehåller inga hemligheter, så `heym_chat` kan lista tabeller, fråga vilken en workflow ska använda och skapa en ny med dess kolumner. Den läser eller skriver aldrig rader.
+
+### Autentiseringsuppgifter
+
+`heym_chat` ser de autentiseringsuppgifter du äger och de som delats med dig, efter namn och typ, på samma sätt som fliken Chat. När ett workflow den bygger behöver en autentiseringsuppgift frågar den vilken som ska användas i resultatet. Svara med samma `conversation_id`.
+
+För att lägga till en autentiseringsuppgift eller uppdatera en du äger öppnar assistenten Heyms formulär på en Heym-sida, `/credentials/setup/<id>`. Du loggar in på Heym där, anger nyckeln eller ansluter kontot och trycker på spara. Värdet går direkt till Heym: MCP-klienten och dess modell får bara information om autentiseringsuppgiftens namn och typ. Klistra inte in nycklar i MCP-klienten; be om formuläret istället.
+
+| Klient | Vad som händer |
+|--------|----------------|
+| Stöder MCP URL-elicitering | Klienten ber dig att öppna Heym-sidan. Anropet väntar medan du fyller i formuläret (upp till tio minuter) och fortsätter sedan med den nya autentiseringsuppgiften. |
+| Allt annat | Resultatet innehåller länken och ber klienten anropa `heym_chat` igen med `wait_for_credential_form`. Det anropet väntar upp till fem minuter medan du fyller i formuläret och återupptar sedan konversationen. Om klienten inte väntar, spara formuläret och svara med samma `conversation_id`; nästa anrop vet att formuläret sparades och vilken autentiseringsuppgift det skapade. |
+
+Sidan öppnas endast för det Heym-konto som startade begäran, så en vidarebefordrad länk är oanvändbar för alla andra. Ett formulär hålls öppet i 24 timmar och kan avvisas från sidan. När du sparar eller avvisar det visar steget i konversationen i fliken Chat resultatet.
+
 
 ### Credential och modell
 
@@ -78,12 +108,15 @@ Datatabeller är annorlunda. En tabell innehåller inga hemligheter, så `heym_c
 
 Om någon av dem saknas visas verktyget fortfarande i `tools/list`, men varje anrop returnerar ett fel som uppmanar att slutföra konfigurationen i denna flik.
 
+
+LLM- och Agent-noder i ett workflow som `heym_chat` bygger körs på denna autentiseringsuppgift och modell, inklusive autentiseringsuppgifter som delats med dig, så att testkörningar fungerar utan ytterligare konfigurationssteg. När `heym_chat` redigerar ett workflow behåller LLM- och Agent-noder som redan har en autentiseringsuppgift denna tillsammans med sin modell.
 ### Argument och historik
 
 | Argument | Krävs | Beskrivning |
 |----------|----------|-------------|
 | `message` | Ja | Instruktionen eller frågan, i naturligt språk. |
 | `conversation_id` | Nej | En `conversation_id` från ett tidigare `heym_chat`-resultat, för att fortsätta den tråden. |
+| `wait_for_credential_form` | Nej | Med `conversation_id`: vänta tills användaren sparar eller avvisar formuläret som tråden öppnade, och skicka sedan `message`. |
 
 Varje anrop skrivs till historiken i [Chat-fliken](./chat-tab.md) som en vanlig konversation, markerad med en pluggikon i konversationslistan. Meddelanden, verktygskort och pauser för förtydliganden ser exakt ut som en konversation som har startats själv, och tråden kan öppnas och fortsätta i webbläsaren. Varje resultat returnerar sin `conversation_id` så att MCP-klienten kan fortsätta samma tråd istället för att öppna en ny vid varje anrop.
 

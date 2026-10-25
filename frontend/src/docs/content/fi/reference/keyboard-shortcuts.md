@@ -105,3 +105,5 @@ Nämä pikanäppäimet ovat käytettävissä Suoritushistoria-valintaikkunassa j
 - [Workflown rakenne](./workflow-structure.md) – Solmun ja yhteyden muoto
 - [Execute-solmu](../nodes/execute-node.md) – Kutsuu aliworkflowja (`Ctrl + Shift + O`)
 - [Pika-aloitus](../getting-started/quick-start.md) – Rakenna ensimmäinen workflowsi
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

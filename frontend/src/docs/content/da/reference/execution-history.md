@@ -109,6 +109,8 @@ Begge historik-dialoger viser **kørsler i gang** øverst på listen, før tidli
 - Efter annullering forsvinder den kørende post ved næste opdatering; tryk på **Opdater** for at opdatere listen manuelt
 - Hvis en allerede afsluttet kørsel annulleres, har anmodningen ingen effekt
 
+Kørsler, der venter på en [samtidigheds-slot](./webhooks.md#concurrency-limit-and-queued-runs), er opført i samme sektion med en **Queued 2/5**-etiket, deres placering i køen og køens størrelse. De har ingen **Open live**-knap, fordi intet kører endnu; **Cancel** fjerner en ventende kørsel fra køen og registrerer den som `cancelled`. En kørsel, der ventede længere end workflowets maksimale ventetid, registreres som `expired`, og en kørsel afvist af en fuld kø som `queue_full`; begge har deres eget badge på kørselslisten.
+
 Den live URL er `/workflows/{workflowId}/{executionId}`. Observatøren er skrivebeskyttet: ved at forlade
 editoren afbrydes kun den browserfane og workflowet stoppes aldrig. Aktive snapshots
 deles via PostgreSQL, så det stadig er muligt at åbne en kørsel, selv når triggeren og editor-anmodningen

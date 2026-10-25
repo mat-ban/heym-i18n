@@ -148,3 +148,5 @@ Debug 面板显示 **Workflow 执行**日志（节点结果、输出）。[Logs 
 - [Execution History](./execution-history.md) – 历史运行记录
 - [Templates](../tabs/templates-tab.md) – 保存和复用 Workflow 与节点
 - [Contextual Showcase](./contextual-showcase.md) – 编辑器中可用的精简页面指南
+
+- [Canvas 协作](./canvas-collaboration.md): Live editing on a shared draft with pointers, following, and voice.

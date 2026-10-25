@@ -86,6 +86,20 @@ Discord envoie les webhooks d'interaction vers `POST /api/discord/webhook/{node_
 
 Le consommateur RabbitMQ démarre lors de l'initialisation du worker leader. Les workflows comportant des nœuds `rabbitmq` où `rabbitmqOperation === "receive"` obtiennent un consommateur. L'entrée inclut `message_data` (body, headers, routing_key, etc.) et `triggered_by: "rabbitmq"`.
 
+## Limite de simultanéité
+
+Un workflow doté d'une [limite de simultanéité](./webhooks.md#concurrency-limit-and-queued-runs) met en file d'attente les exécutions de production de chaque point d'entrée ci-dessus lorsque ses slots sont pleins, selon le principe premier entré, premier sorti, sur toutes les instances. La manière dont un appelant apprend le résultat dépend du point d'entrée :
+
+| Point d'entrée | Pendant que l'exécution attend |
+|---|---|
+| Webhook / API | `202 Accepted` avec un `execution_id` et une URL de statut |
+| SSE streaming, Quick Drawer, Portal chat | Le flux reste ouvert et envoie des événements `queued` |
+| Portal without streaming | La requête attend le résultat |
+| MCP | Un résultat `queued` à interroger avec `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Le trigger attend le résultat, aussi longtemps qu'une exécution sur une autre [instance](./cluster.md) le ferait. L'exécution a lieu dans tous les cas et est enregistrée dans l'historique |
+
+Lorsque la file d'attente est pleine, l'exécution ne démarre pas et l'historique l'enregistre comme `queue_full`. Les exécutions de test de l'éditeur, les appels de sous-workflows (nœud [Execute](../nodes/execute-node.md) et outils de workflow de l'agent), les [Evals](../tabs/evals-tab.md), les tests en mode build du chat et les reprises de révision ne sont jamais mis en file d'attente. Les exécutions de cartes du [Board](../tabs/board-tab.md), les exécutions de [File Upload](../nodes/file-upload-trigger-node.md), les exécutions lancées par l'outil run-workflow de l'assistant IA et les workflows de notification d'alerte démarrent également sans attendre de slot.
+
 ## trigger_source
 
 L'historique des exécutions enregistre `trigger_source` pour chaque point d'entrée :

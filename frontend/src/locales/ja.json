@@ -827,6 +827,22 @@
         "waiting": "待機中",
         "neutral": "中立"
       }
+    },
+    "concurrencyLimit": "同時実行制限",
+    "concurrencyLimitHelp": "制限を超える本番実行（Webhook、Cron、MCP、Portal、Trigger）は FIFO キューで待機します。エディタのテスト実行は常に即座に開始されます。",
+    "maxConcurrentRuns": "最大同時実行数",
+    "maxQueueSizeOptional": "最大キューサイズ（省略可能）",
+    "emptyNoLimit": "空 = 制限なし",
+    "maxWaitOptional": "最大待機時間（秒、省略可能）",
+    "emptyWaitAsLong": "空 = 必要なだけ待機",
+    "concurrencyQueueHelp": "キューがいっぱいの場合は 429 が返されます。最大待機時間を超えて待機した実行は期限切れとして記録されます。",
+    "rag": {
+      "hybridSearch": "ハイブリッド検索",
+      "hybridSearchHelp": "ベクトルの類似性と BM25 キーワードマッチングを組み合わせることで、ID、名前、エラーコードなどの正確な用語も検出されます。",
+      "hybridScore": "ハイブリッドスコア (0-1)",
+      "similarityScore": "類似性スコア",
+      "vectorSimilarity": "ベクトル類似性",
+      "bm25Score": "BM25 スコア"
     }
   },
   "vectorStores": {
@@ -1684,7 +1700,8 @@
     },
     "askAi": "AI に質問",
     "askAiTitle": "この実行について Chat アシスタントに質問",
-    "noNodeSpans": "この実行にはノードの span が記録されていません。"
+    "noNodeSpans": "この実行にはノードの span が記録されていません。",
+    "queuedProgress": "待機中 {position}/{size}"
   },
   "portal": {
     "loadingPortal": "ポータルを読み込み中...",

@@ -8,22 +8,23 @@
 |----------|-------|
 | 輸入 | 1 |
 | 輸出 | 1 |
-| Credential | Jira（Cloud 電子郵件/API Token 或 Data Center 使用者名稱/密碼、Base URL、部署模式、選用的 REST API 版本） |
+| Credential | Jira（Cloud 電子郵件/API Token、Data Center 使用者名稱/密碼或個人存取 Token、Base URL、部署模式、選用的 REST API 版本） |
 | 輸出 | `$nodeLabel.*` |
 
 ## Credential
 
-在 [Credentials Tab](../tabs/credentials-tab.md) 中建立 **Jira** Credential。儲存的設定鍵為 `email`、`api_token`、`base_url`、`deployment`，以及選用的 `api_version`。對於 Jira Cloud，`email` 儲存 Atlassian 帳號電子郵件，`api_token` 儲存 Atlassian API Token。對於 Jira Data Center / Server，這些相同的鍵則儲存 Basic 驗證的使用者名稱與密碼。設定步驟請參閱 [Third-Party Integrations](../reference/integrations.md#jira)。
+在 [Credentials Tab](../tabs/credentials-tab.md) 中建立 **Jira** Credential。儲存的設定鍵為 `email`、`api_token`、`base_url`、`deployment`、`auth_mode`，以及選用的 `api_version`。對於 Jira Cloud，`email` 儲存 Atlassian 帳號電子郵件，`api_token` 儲存 Atlassian API Token。對於 Jira Data Center / Server，這些相同的鍵則儲存 Basic 驗證的使用者名稱與密碼；或者在 `auth_mode: pat` 模式下，`api_token` 會儲存以 Bearer Token 形式傳送的個人存取 Token，此時不會使用 `email`。設定步驟請參閱 [Third-Party Integrations](../reference/integrations.md#jira)。
 
 | 欄位 | 設定鍵 | 說明 |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Jira Cloud Atlassian 帳號電子郵件，或 Jira Data Center / Server 使用者名稱 |
-| API Token / Password | `api_token` | Jira Cloud Atlassian API Token，或 Jira Data Center / Server 用於 Basic 驗證的密碼 |
+| 驗證方式 | `auth_mode` | `basic`（預設）或 `pat`（僅限 Data Center / Server） |
+| API Token / Password / 個人存取 Token | `api_token` | Jira Cloud Atlassian API Token、Jira Data Center / Server 用於 Basic 驗證的密碼，或 `pat` 模式下的 Data Center 個人存取 Token |
 | Base URL | `base_url` | Jira 站台 URL，例如 `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | Jira Cloud 請填 `cloud`，Jira Data Center / Server 請填 `data_center` |
 | REST API Version | `api_version` | Jira Cloud 預設為 `3`。Data Center / Server 使用 REST API v2 |
 
-Jira Credential 目前尚不支援 Data Center / Server 的個人存取 Token 與 Bearer 驗證。
+個人存取 Token 需要 Jira Data Center / Server 8.14 或更高版本。切換驗證方式會清除儲存的密鑰，因此切換時請輸入新的密碼或 Token。
 
 使用 **Test Connection** 以針對目前的 Jira 使用者驗證 Credential。
 

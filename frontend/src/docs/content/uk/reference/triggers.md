@@ -90,6 +90,20 @@ Discord надсилає interaction webhooks на `POST /api/discord/webhook/{n
 
 Consumer RabbitMQ запускається, коли ініціалізується leader worker. Workflow з вузлами `rabbitmq`, де `rabbitmqOperation === "receive"`, отримують consumer. Input містить `message_data` (body, headers, routing_key тощо) та `triggered_by: "rabbitmq"`.
 
+## Ліміт одночасності
+
+Workflow із [лімітом одночасності](./webhooks.md#concurrency-limit-and-queued-runs) ставить у чергу виробничі запуски з кожної точки входу вище, коли його слоти заповнені, у порядку живої черги (FIFO), на всіх екземплярах. Те, як клієнт дізнається про результат, залежить від точки входу:
+
+| Entry point | Поки запуск очікує |
+|---|---|
+| Webhook / API | `202 Accepted` із `execution_id` та URL статусу |
+| SSE streaming, Quick Drawer, Portal chat | Потік залишається відкритим і надсилає події `queued` |
+| Portal without streaming | Запит очікує на результат |
+| MCP | Результат `queued` для опитування через `heym_execution_status` |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger очікує на результат так само довго, як і запуск на іншому [екземплярі](./cluster.md). Запуск виконується в будь-якому випадку і записується в історію |
+
+Коли черга заповнена, запуск не починається, а історія записує його як `queue_full`. Тестові запуски редактора, виклики під-workflow (вузол [Execute](../nodes/execute-node.md) та інструменти workflow агента), [Evals](../tabs/evals-tab.md), тестові запуски в режимі chat build та відновлення після перегляду ніколи не ставляться в чергу. Запуски карток [Board](../tabs/board-tab.md), запуски [File Upload](../nodes/file-upload-trigger-node.md), запуски, ініційовані інструментом run-workflow асистента ШІ, та workflow сповіщень про попередження також запускаються без очікування слота.
+
 ## trigger_source
 
 Історія виконань записує `trigger_source` для кожної точки входу:

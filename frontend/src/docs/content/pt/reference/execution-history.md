@@ -110,6 +110,8 @@ Ambos os diálogos de histórico apresentam as **execuções em curso** no topo 
 - Após o cancelamento, a entrada em execução desaparece na atualização seguinte; prima **Atualizar** para atualizar a lista manualmente
 - Se cancelar uma execução que já terminou, o pedido não tem efeito
 
+As execuções à espera de um [slot de simultaneidade](./webhooks.md#concurrency-limit-and-queued-runs) são listadas na mesma secção com a etiqueta **Queued 2/5**, o seu lugar na fila e o tamanho da fila. Não têm o botão **Open live** porque nada está ainda em execução; **Cancel** retira uma execução em espera da fila e regista-a como `cancelled`. Uma execução que aguardou mais do que o tempo máximo de espera do workflow é registada como `expired`, e uma execução rejeitada por fila cheia como `queue_full`; ambas têm o seu próprio distintivo na lista de execuções.
+
 O URL em direto é `/workflows/{workflowId}/{executionId}`. O observador é apenas de leitura: sair
 do editor apenas desliga esse separador do navegador e nunca interrompe o workflow. Os snapshots
 ativos são partilhados através do PostgreSQL, pelo que abrir uma execução continua a funcionar quando o trigger e o pedido

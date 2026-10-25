@@ -111,6 +111,8 @@ Oba dialogy historie zobrazují **aktuálně běžící executions** v horní č
 - Po zrušení běžící záznam zmizí při příštím obnovení; seznam aktualizujete ručně stisknutím **Refresh**
 - Pokud zrušíte běh, který již skončil, požadavek nemá žádný efekt
 
+Běhy čekající na [slot souběhu](./webhooks.md#concurrency-limit-and-queued-runs) jsou uvedeny ve stejné sekci s popiskem **Queued 2/5**, svým místem ve frontě a velikostí fronty. Nemají tlačítko **Open live**, protože zatím nic neběží; **Cancel** vyjme čekající běh z fronty a zaznamená jej jako `cancelled`. Běh, který čekal déle než maximální doba čekání workflow, je zaznamenán jako `expired`, a běh odmítnutý plnou frontou jako `queue_full`; oba mají v seznamu běhů svůj vlastní odznak.
+
 Live URL je `/workflows/{workflowId}/{executionId}`. Observer je pouze pro čtení: opuštění
 editoru pouze odpojí danou kartu prohlížeče a nikdy nezastaví workflow. Aktivní snapshoty
 jsou sdíleny přes PostgreSQL, takže otevření běhu stále funguje, i když trigger a požadavek

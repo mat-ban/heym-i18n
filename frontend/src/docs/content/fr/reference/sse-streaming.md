@@ -25,12 +25,17 @@ Chaque trame SSE est un JSON délimité par des retours à la ligne et préfixé
 
 | Type d'événement | Moment d'émission | Champs clés |
 |------------|--------------------|------------|
-| `execution_started` | Immédiatement après l'acceptation de la requête | `execution_id`, `server_now_ms` |
+| `queued` | Le workflow a atteint sa [limite de simultanéité](./webhooks.md#concurrency-limit-and-queued-runs) ; renvoyé chaque fois que la position de l'exécution change | `execution_id`, `position`, `size`, `running`, `limit` |
+| `execution_started` | Immédiatement après l'acceptation de la requête, ou lorsqu'une exécution en file d'attente démarre | `execution_id`, `server_now_ms` |
 | `node_start` | Juste avant qu'un nœud ne commence son exécution | `node_id`, `node_label`, `started_at_ms`, `message` facultatif |
 | `node_retry` | Lorsqu'un nœud effectue une nouvelle tentative | `node_id`, `attempt`, `max_attempts` |
 | `node_complete` | Après qu'un nœud a terminé | `node_id`, `node_label`, `status`, `output`, `execution_time_ms` |
 | `final_output` | Lorsqu'un Nœud Output retourne de manière anticipée | `node_label`, `output` |
 | `execution_complete` | Après la fin du workflow | `status`, `outputs`, `execution_time_ms` |
+
+### Exécutions en file d'attente
+
+Lorsque le workflow a atteint sa limite de simultanéité, le flux reste ouvert et envoie des événements `queued` pendant que l'exécution attend. Une exécution en file d'attente s'exécute dans le worker d'arrière-plan, éventuellement dans un autre processus, de sorte que son flux transporte `execution_started` lorsque l'exécution commence et `execution_complete` lorsqu'elle se termine, mais aucun événement `node_start`, `node_complete` ou d'événements de token entre les deux. Son `execution_complete` contient un `node_results` vide ; ouvrez l'exécution dans l'[Historique d'exécution](./execution-history.md) pour obtenir les détails du nœud. La fermeture de la connexion n'annule pas une exécution en file d'attente. Lorsque la file est pleine, la requête reçoit la réponse `429` avant que le flux ne s'ouvre.
 
 ## Messages de démarrage par nœud
 

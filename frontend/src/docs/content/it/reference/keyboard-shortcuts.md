@@ -105,3 +105,4 @@ Queste scorciatoie sono disponibili nella finestra di dialogo della Cronologia d
 - [Struttura del workflow](./workflow-structure.md) – Formato di nodi e collegamenti
 - [Nodo Execute](../nodes/execute-node.md) – Richiama sub-workflow (`Ctrl + Shift + O`)
 - [Guida rapida](../getting-started/quick-start.md) – Crea il Suo primo workflow
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

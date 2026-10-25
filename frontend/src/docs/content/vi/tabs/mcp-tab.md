@@ -36,6 +36,21 @@ Mỗi workflow có thể được hiển thị như một công cụ MCP:
 
 Thẻ workflow hiển thị mô tả và bản xem trước tên các trường đầu vào để bạn có thể thấy mỗi công cụ yêu cầu gì trước khi bật.
 
+
+### Các lượt chạy trong hàng đợi và heym_execution_status
+
+Một workflow có [giới hạn đồng thời](../reference/webhooks.md#concurrency-limit-and-queued-runs) có thể bận khi máy khách gọi nó. Cuộc gọi sau đó sẽ trả về ngay lập tức một kết quả không phải là lỗi:
+
+```json
+{
+  "status": "queued",
+  "execution_id": "6f1c0c2e-...",
+  "queue": { "position": 2, "size": 5, "running": 1, "limit": 1 },
+  "next_step": "Call heym_execution_status with this execution_id every 5-10 seconds until status is success, error, cancelled or expired."
+}
+```
+
+Client thăm dò công cụ `heym_execution_status` với `execution_id` đó. Nó trả về nội dung tương tự như [URL trạng thái](../reference/webhooks.md#status-url): `queued` với vị trí hiện tại, `running`, sau đó là `success` hoặc `error` cùng với kết quả đầu ra. Nó chỉ tìm thấy các lần chạy của các workflow mà cùng một máy chủ cung cấp. Công cụ này chỉ được liệt kê trên máy chủ mặc định và trên mỗi máy chủ được đặt tên khi có ít nhất một workflow có giới hạn đồng thời. Khi hàng đợi đầy, lệnh gọi sẽ trả về lỗi "Concurrency queue is full".
 ## Công cụ chat Heym
 
 Phần **Khả năng của Heym** biến engine của Tab Chat thành một công cụ MCP duy nhất có tên `heym_chat`. Bật nó trên máy chủ mặc định, trên bất kỳ máy chủ có tên nào, hoặc cả hai — mỗi bề mặt giữ công tắc và lựa chọn model riêng.
@@ -49,6 +64,7 @@ Khi được bật, `heym_chat` xuất hiện trong `tools/list` cùng với cá
 - Báo cáo những gì đang chạy ngay lúc này: có bao nhiêu thực thi đang hoạt động, tên workflow của chúng, mỗi cái đã chạy bao lâu, node hiện tại của mỗi cái, và liên kết đến lần chạy trực tiếp
 - Liệt kê board, tạo card và đọc chi tiết card trên [Tab Board](./board-tab.md)
 - Liệt kê các bảng dữ liệu của bạn cùng các cột, tạo bảng mới và kết nối chúng vào các workflow mà nó xây dựng
+- Tạo hoặc cập nhật credential của bạn trên trang riêng của Heym (xem [Credentials](#credentials))
 - Đọc team và biến toàn cục, và tìm kiếm tài liệu
 - Phê duyệt, chỉnh sửa hoặc từ chối các đánh giá human-in-the-loop đang chờ xử lý
 
@@ -58,14 +74,28 @@ Các khả năng được thêm vào Tab Chat sau này sẽ tự động khả d
 
 `heym_chat` luôn chạy công cụ Chat ở chế độ build. Trong một lần gọi, trợ lý có thể lưu một workflow mới, chạy nó với các đầu vào mẫu thực tế, đọc báo cáo chạy, sửa những gì bị lỗi và chạy lại, tối đa năm lần chạy thử mỗi lần gọi. Khi lần chạy mới nhất của bản lưu mới nhất thành công, nó kết thúc bằng một câu tóm tắt và phản hồi kết thúc bằng `Verified: the latest test run of the saved workflow passed.`
 
+Khi một lệnh gọi tạo hoặc chỉnh sửa một workflow, câu trả lời sẽ liệt kê từng workflow với liên kết trình chỉnh sửa đầy đủ, chẳng hạn như `https://heym.example.com/workflows/<id>`, và các liên kết bên trong câu trả lời của trợ lý cũng là các liên kết đầy đủ. Chúng sử dụng địa chỉ Heym đã định cấu hình của bạn (`FRONTEND_URL`) và mở cho những người đã đăng nhập vào Heym có quyền truy cập vào workflow đó.
+
 - Các lần chạy thử là lần chạy thật. Các tác dụng phụ của chúng thực sự xảy ra và chúng xuất hiện trong lịch sử chạy của workflow giống như bất kỳ lần chạy nào khác.
 - Việc lưu đi theo luồng của trình chỉnh sửa: một thay đổi đối với đồ thị sẽ giữ lại đồ thị trước đó trong **Edit History** của workflow.
 - Để thay đổi một workflow đã xây dựng trước đó, hãy tiếp tục chuỗi hội thoại với cùng `conversation_id`. Trợ lý sẽ cập nhật workflow đó thay vì tạo mới, và chỉ thay đổi những workflow mà bạn có quyền chỉnh sửa.
 - Khi đã dùng hết năm lần chạy thử, trợ lý sẽ dừng lại và giải thích những gì vẫn còn lỗi.
 
-Thông tin xác thực vẫn nằm trong giao diện: `heym_chat` không bao giờ liệt kê, chọn hoặc tạo chúng. Khi nó xây dựng hoặc chỉnh sửa workflow, các node mới cần thông tin xác thực sẽ được để trống và phản hồi sẽ nêu tên chúng, để bạn có thể thiết lập trong trình chỉnh sửa.
-
 Bảng dữ liệu thì khác. Một bảng không chứa bí mật, nên `heym_chat` có thể liệt kê các bảng của bạn, hỏi workflow nên dùng bảng nào, và tạo bảng mới cùng các cột. Nó không bao giờ đọc hoặc ghi các hàng.
+
+### Credentials
+
+`heym_chat` nhìn thấy các credential bạn sở hữu và các credential được chia sẻ với bạn, theo tên và loại, giống như tab Chat. Khi một workflow mà nó xây dựng cần một credential, nó sẽ hỏi bạn muốn dùng cái nào dưới dạng câu hỏi trong kết quả. Trả lời với cùng một `conversation_id`.
+
+Để thêm credential hoặc cập nhật credential bạn sở hữu, trợ lý sẽ mở biểu mẫu credential của Heym trên một trang Heym, `/credentials/setup/<id>`. Bạn đăng nhập vào Heym tại đó, nhập khóa hoặc kết nối tài khoản và nhấn lưu. Giá trị sẽ được gửi thẳng đến Heym: máy khách MCP và mô hình của nó chỉ biết tên và loại của credential. Không dán khóa vào máy khách MCP; thay vào đó hãy yêu cầu biểu mẫu.
+
+| Máy khách | Điều gì xảy ra |
+|-----------|----------------|
+| Hỗ trợ lấy URL MCP | Máy khách yêu cầu bạn mở trang Heym. Lệnh gọi sẽ đợi trong khi bạn điền vào biểu mẫu, tối đa mười phút, sau đó tiếp tục với credential mới. |
+| Bất kỳ điều gì khác | Kết quả mang liên kết và yêu cầu máy khách gọi lại `heym_chat` với `wait_for_credential_form`. Lệnh gọi đó đợi tối đa năm phút trong khi bạn điền vào biểu mẫu, sau đó tiếp tục cuộc trò chuyện. Nếu máy khách không đợi, hãy lưu biểu mẫu và trả lời bằng cùng một `conversation_id`; lệnh gọi tiếp theo sẽ biết biểu mẫu đã được lưu và credential nào đã được tạo. |
+
+Trang chỉ mở cho tài khoản Heym đã bắt đầu yêu cầu, vì vậy liên kết được chuyển tiếp là vô dụng đối với bất kỳ ai khác. Biểu mẫu mở trong 24 giờ và bạn có thể từ chối biểu mẫu đó từ trang. Sau khi bạn lưu hoặc từ chối, bước trong cuộc trò chuyện tab Chat sẽ hiển thị kết quả.
+
 
 ### Thông tin xác thực và model
 
@@ -78,12 +108,15 @@ Bảng dữ liệu thì khác. Một bảng không chứa bí mật, nên `heym_
 
 Nếu thiếu một trong hai, công cụ vẫn xuất hiện trong `tools/list` nhưng mỗi lần gọi sẽ trả về lỗi yêu cầu bạn hoàn tất thiết lập trong tab này.
 
+
+Các node LLM và Agent trong workflow do `heym_chat` xây dựng sẽ chạy trên credential và model này, bao gồm cả credential được chia sẻ với bạn, do đó các lần chạy thử nghiệm sẽ hoạt động mà không cần thêm bước thiết lập nào khác. Khi `heym_chat` chỉnh sửa một workflow, các node LLM và Agent đã có credential sẽ giữ nguyên credential cùng với model của chúng.
 ### Đối số và lịch sử
 
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
 | `message` | Có | Chỉ thị hoặc câu hỏi, bằng ngôn ngữ tự nhiên. |
 | `conversation_id` | Không | Một `conversation_id` từ kết quả `heym_chat` trước đó, để tiếp tục luồng hội thoại đó. |
+| `wait_for_credential_form` | Không | Với `conversation_id`: đợi cho đến khi người dùng lưu hoặc từ chối biểu mẫu credential mà luồng đã mở, sau đó gửi `message`. |
 
 Mỗi lần gọi đều được ghi vào lịch sử [Tab Chat](./chat-tab.md) như một cuộc hội thoại bình thường, được đánh dấu bằng biểu tượng phích cắm trong danh sách hội thoại. Tin nhắn, thẻ công cụ và các khoảng dừng để làm rõ trông giống hệt một cuộc hội thoại do bạn tự bắt đầu, và bạn có thể mở luồng và tiếp tục trò chuyện trên trình duyệt. Mỗi kết quả trả về `conversation_id` của nó để ứng dụng MCP có thể tiếp tục cùng luồng thay vì mở luồng mới ở mỗi lần gọi.
 

@@ -8,22 +8,23 @@
 |----------|-------|
 | 输入 | 1 |
 | 输出 | 1 |
-| 凭证 | Jira（Cloud 邮箱/API token 或 Data Center 用户名/密码、base URL、部署模式、可选的 REST API 版本） |
+| 凭证 | Jira（Cloud 邮箱/API token、Data Center 用户名/密码或个人访问 token、base URL、部署模式、可选的 REST API 版本） |
 | 输出 | `$nodeLabel.*` |
 
 ## 凭证
 
-在[凭证选项卡](../tabs/credentials-tab.md)中创建 **Jira** 凭证。存储的配置键为 `email`、`api_token`、`base_url`、`deployment` 以及可选的 `api_version`。对于 Jira Cloud，`email` 存储 Atlassian 账户邮箱，`api_token` 存储 Atlassian API token。对于 Jira Data Center / Server，这些相同的键存储 Basic 认证的用户名和密码。设置步骤请参阅[第三方集成](../reference/integrations.md#jira)。
+在[凭证选项卡](../tabs/credentials-tab.md)中创建 **Jira** 凭证。存储的配置键为 `email`、`api_token`、`base_url`、`deployment`、`auth_mode` 以及可选的 `api_version`。对于 Jira Cloud，`email` 存储 Atlassian 账户邮箱，`api_token` 存储 Atlassian API token。对于 Jira Data Center / Server，这些相同的键存储 Basic 认证的用户名和密码；或者在 `auth_mode: pat` 模式下，`api_token` 存储作为 Bearer token 发送的个人访问 token，此时不使用 `email`。设置步骤请参阅[第三方集成](../reference/integrations.md#jira)。
 
 | 字段 | 配置键 | 描述 |
 | --- | --- | --- |
 | Jira Email / Username | `email` | Jira Cloud 的 Atlassian 账户邮箱，或 Jira Data Center / Server 的用户名 |
-| API Token / Password | `api_token` | Jira Cloud 的 Atlassian API token，或 Jira Data Center / Server 用于 Basic 认证的密码 |
+| 认证方式 | `auth_mode` | `basic`（默认）或 `pat`（仅限 Data Center / Server） |
+| API Token / Password / 个人访问 Token | `api_token` | Jira Cloud 的 Atlassian API token、Jira Data Center / Server 用于 Basic 认证的密码，或 `pat` 模式下的 Data Center 个人访问 token |
 | Base URL | `base_url` | Jira 站点 URL，例如 `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` 表示 Jira Cloud，`data_center` 表示 Jira Data Center / Server |
 | REST API Version | `api_version` | Jira Cloud 默认为 `3`。Data Center / Server 使用 REST API v2 |
 
-Jira 凭证目前尚不支持 Data Center / Server 的个人访问 token 和 Bearer 认证。
+个人访问 token 需要 Jira Data Center / Server 8.14 或更高版本。切换认证方式会清除已保存的密钥，因此在切换时请重新输入新密码或 token。
 
 使用 **Test Connection** 针对当前 Jira 用户验证凭证。
 

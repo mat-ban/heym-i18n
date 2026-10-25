@@ -30,7 +30,7 @@ Heym предоставя разнообразие от типове възли 
 | [Codex](../nodes/codex-node.md) | Стартира локалния Codex CLI срещу GitHub хранилище, използвайки ChatGPT/Codex token за достъп | 1 | 1, плюс изход `question` |
 | [OpenCode Go](../nodes/opencode-go-node.md) | Стартира OpenCode CLI срещу GitHub хранилище в защитена среда (hardened container), използвайки API ключ за OpenCode Go gateway | 1 | 1 |
 | [MCP Call](../nodes/mcp-call-node.md) | Извиква конкретен MCP инструмент директно, без LLM да го избира | 1 | 1 |
-| [RAG / Vector Store](../nodes/rag-node.md) | Вмъква, upsert-ва, изтрива или търси в Qdrant или Postgres (pgvector) [векторно хранилище](../tabs/vectorstores-tab.md) за RAG | 1 | 1 |
+| [RAG / Vector Store](../nodes/rag-node.md) | Вмъква, upsert-ва, изтрива или търси (векторно или хибридно векторно + BM25) в Qdrant или Postgres (pgvector) [векторно хранилище](../tabs/vectorstores-tab.md) за RAG | 1 | 1 |
 
 ## Логически възли
 

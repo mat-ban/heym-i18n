@@ -86,6 +86,20 @@ Discord, etkileşim webhook'larını `POST /api/discord/webhook/{node_id}` adres
 
 RabbitMQ consumer, leader worker başlatıldığında çalışmaya başlar. `rabbitmqOperation === "receive"` olan `rabbitmq` node'larına sahip workflow'lar bir consumer alır. Girdi `message_data` (body, headers, routing_key vb.) ve `triggered_by: "rabbitmq"` içerir.
 
+## Eşzamanlılık sınırı
+
+[Eşzamanlılık sınırı](./webhooks.md#concurrency-limit-and-queued-runs) olan bir workflow, slotları dolduğunda yukarıdaki her giriş noktasından gelen prodüksiyon çalıştırmalarını tüm örneklerde ilk giren ilk çıkar esasına göre kuyruğa alır. Bir arayanın sonucu nasıl öğrendiği giriş noktasına bağlıdır:
+
+| Giriş noktası | Çalıştırma beklerken |
+|---|---|
+| Webhook / API | `execution_id` ve bir durum URL'si ile `202 Accepted` |
+| SSE streaming, Quick Drawer, Portal chat | Akış açık kalır ve `queued` olaylarını gönderir |
+| Portal without streaming | İstek sonucu bekler |
+| MCP | `heym_execution_status` ile sorgulanacak `queued` bir sonuç |
+| Cron, IMAP, Google Drive / Sheets, WebSocket, RabbitMQ, Slack, Discord, Telegram, Heym events, error workflows, Dashboard run widgets | Trigger, başka bir [örnekteki](./cluster.md) bir çalıştırmanın bekleyeceği kadar sonucu bekler. Çalıştırma her durumda gerçekleşir ve geçmişe yazılır |
+
+Kuyruk dolduğunda çalıştırma başlamaz ve geçmiş bunu `queue_full` olarak kaydeder. Editör test çalıştırmaları, alt workflow çağrıları ([Execute](../nodes/execute-node.md) node'u ve ajan workflow araçları), [Evals](../tabs/evals-tab.md), sohbet oluşturma modu test çalıştırmaları ve inceleme devamları asla kuyruğa alınmaz. [Board](../tabs/board-tab.md) kart çalıştırmaları, [File Upload](../nodes/file-upload-trigger-node.md) çalıştırmaları, yapay zeka asistanının run-workflow aracı tarafından başlatılan çalıştırmalar ve uyarı bildirim workflow'ları da bir slot beklemeden başlar.
+
 ## trigger_source
 
 Execution history, her giriş noktası için `trigger_source` kaydeder:

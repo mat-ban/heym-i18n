@@ -148,7 +148,7 @@ AI asistent pokreće **workflow DSL** (jezik specifičan za domenu) koji opisuje
    - Vaša pravila korisnika dodana kao "User Custom Rules"
    - Trenutni workflow JSON kada uređujete postojeći workflow
    - Popis dostupnih workflows ako koristite Execute čvor
-   - Imena, tipove i ID-eve Vaših vlastitih vjerodajnica (nikada njihove vrijednosti)
+   - Imena, tipove i ID-eve vjerodajnica koje posjedujete ili koje su podijeljene s Vama (nikada njihove vrijednosti)
    - Imena, ID-eve, opise i stupce tablica podataka koje možete koristiti (nikada njihove redove)
 3. Model vraća jedan workflow JSON blok (s `nodes` i `edges`). Frontend ga analizira i primjenjuje na platnu.
 

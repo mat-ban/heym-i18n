@@ -150,3 +150,5 @@ Siehe [Webhooks](./webhooks.md#run-with-curl-dialog) für vollständige Dialogde
 - [Ausführungsverlauf](./execution-history.md) – Vergangene Ausführungen
 - [Vorlagen](../tabs/templates-tab.md) – Workflows und Knoten speichern und wiederverwenden
 - [Kontextbezogene Showcase](./contextual-showcase.md) – Kompakte Seitenanleitung, die im Editor verfügbar ist
+
+- [Canvas-Zusammenarbeit](./canvas-collaboration.md): Gemeinsames Arbeiten an einem geteilten Entwurf mit Zeigern, Folgen und Sprachchat.

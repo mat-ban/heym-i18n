@@ -8,22 +8,23 @@ Uzel **Jira** propojuje workflow s Jira REST API pro automatizaci projektů, iss
 |----------|-------|
 | Vstupy | 1 |
 | Výstupy | 1 |
-| Přihlašovací údaje | Jira (Cloud email/API token nebo Data Center uživatelské jméno/heslo, base URL, režim nasazení, volitelná verze REST API) |
+| Přihlašovací údaje | Jira (Cloud e-mail/API token, Data Center uživatelské jméno/heslo nebo osobní přístupový token, base URL, režim nasazení, volitelná verze REST API) |
 | Výstup | `$nodeLabel.*` |
 
 ## Přihlašovací údaje
 
-Vytvořte přihlašovací údaje **Jira** na [kartě Přihlašovací údaje](../tabs/credentials-tab.md). Uložené konfigurační klíče jsou `email`, `api_token`, `base_url`, `deployment` a volitelný `api_version`. Pro Jira Cloud ukládá `email` e-mail účtu Atlassian a `api_token` ukládá Atlassian API token. Pro Jira Data Center / Server ukládají tytéž klíče uživatelské jméno a heslo pro Basic auth. Postup nastavení naleznete v části [Third-Party Integrations](../reference/integrations.md#jira).
+Vytvořte přihlašovací údaje **Jira** na [kartě Přihlašovací údaje](../tabs/credentials-tab.md). Uložené konfigurační klíče jsou `email`, `api_token`, `base_url`, `deployment`, `auth_mode` a volitelný `api_version`. Pro Jira Cloud ukládá `email` e-mail účtu Atlassian a `api_token` ukládá Atlassian API token. Pro Jira Data Center / Server ukládají tytéž klíče uživatelské jméno a heslo pro Basic auth, nebo při `auth_mode: pat` ukládá `api_token` osobní přístupový token odesílaný jako Bearer token a `email` se nepoužívá. Postup nastavení naleznete v části [Third-Party Integrations](../reference/integrations.md#jira).
 
 | Pole | Konfigurační klíč | Popis |
 | --- | --- | --- |
 | Jira Email / Username | `email` | E-mail účtu Atlassian pro Jira Cloud, nebo uživatelské jméno pro Jira Data Center / Server |
-| API Token / Password | `api_token` | Atlassian API token pro Jira Cloud, nebo heslo pro Basic auth u Jira Data Center / Server |
+| Ověření | `auth_mode` | `basic` (výchozí) nebo `pat` (pouze Data Center / Server) |
+| API Token / Password / Osobní přístupový token | `api_token` | Atlassian API token pro Jira Cloud, heslo pro Basic auth u Jira Data Center / Server nebo osobní přístupový token Data Center v režimu `pat` |
 | Base URL | `base_url` | URL stránky Jira, například `https://your-domain.atlassian.net` |
 | Deployment | `deployment` | `cloud` pro Jira Cloud nebo `data_center` pro Jira Data Center / Server |
 | REST API Version | `api_version` | Výchozí hodnota je `3` pro Jira Cloud. Data Center / Server používá REST API v2 |
 
-Osobní přístupové tokeny a Bearer auth pro Data Center / Server zatím přihlašovací údaje Jira nepodporují.
+Osobní přístupové tokeny vyžadují Jira Data Center / Server 8.14 nebo novější. Přepnutí metody ověření vymaže uložený tajný klíč, proto při přepnutí zadejte nové heslo nebo token.
 
 Pomocí **Test Connection** ověřte přihlašovací údaje vůči aktuálnímu uživateli Jira.
 

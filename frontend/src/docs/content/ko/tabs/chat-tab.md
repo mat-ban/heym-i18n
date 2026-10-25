@@ -22,7 +22,7 @@
 - **Kanban 작업 생성** – 자연스럽게 작업 추가 또는 카드 생성을 요청합니다. Chat은 요청한 보드의 첫 번째 열에 이를 추가합니다. 여러 보드가 있고 특정 보드를 지정하지 않은 경우, Chat은 카드를 생성하기 전에 보드 선택기를 표시합니다.
 - **대기열에 추가된 후속 메시지** – 답변이 스트리밍되는 동안에도 메시지를 더 보낼 수 있습니다. 대기열에 추가된 메시지는 영구 저장되며, 시작되기 전에 편집하거나 삭제할 수 있고, 활성 응답 이후 순서대로 실행됩니다.
 - **계획 일시 중지** – Chat이 계획 세부 정보를 필요로 할 때, 명확화 질문을 하고 답변할 때까지 대기열에 추가된 후속 메시지를 일시 중지합니다. 계획 답변이 완료되면 대기열에 추가된 메시지가 재개됩니다.
-- **Credentials** – Chat이 생성하거나 편집하는 Workflow에 credential이 필요할 때, Chat은 사용할 credential을 묻거나, 대화 중에 새로 생성할 것을 제안하거나, 없이 계속 진행할 수 있게 합니다. 또한 Chat에 credential 생성을 요청하거나 소유한 credential 업데이트를 요청할 수 있으며, 대화 중에 credential 양식이 열립니다. 모델은 credential의 이름과 유형만 보며, 값은 절대 보지 않습니다. [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)를 참조하십시오.
+- **Credentials** – Chat이 생성하거나 편집하는 Workflow에 credential이 필요할 때, Chat은 사용할 credential을 묻거나, 대화 중에 새로 생성할 것을 제안하거나, 없이 계속 진행할 수 있게 합니다. 또한 Chat에 credential 생성을 요청하거나 소유한 credential 업데이트를 요청할 수 있으며, 대화 중에 credential 양식이 열립니다. 모델은 credential의 이름과 유형만 보며, 값은 절대 보지 않습니다(사용자 소유의 credential 및 공유받은 credential 모두 해당). Chat이 추가하는 LLM 및 Agent 노드는 공유 credential을 포함하여 해당 채팅에 선택된 credential과 모델에서 실행됩니다. Chat이 Workflow를 편집할 때 기존 LLM 및 Agent 노드는 기존의 credential과 모델을 그대로 유지합니다. [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)를 참조하십시오.
 - **데이터 테이블** – Chat이 생성하거나 편집하는 Workflow가 레코드를 저장할 때, Chat은 사용할 [데이터 테이블](./datatable-tab.md)을 묻거나 Workflow에 필요한 열을 포함하여 새로 생성할 것을 제안합니다. 또한 테이블과 해당 열을 나열할 수 있습니다. 행은 절대 읽거나 쓰지 않습니다. [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)를 참조하십시오.
 - **스트리밍 응답** – 모델의 출력이 스트리밍되는 것을 확인합니다.
 - **응답 중지** – 현재 스트리밍 중인 답변을 언제든지 중단합니다. 중지하면 해당 대화의 대기열에 추가된 메시지도 지워집니다.

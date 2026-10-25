@@ -105,3 +105,5 @@ Tyto zkratky jsou dostupné v dialogu Execution History a v panelu Traces.
 - [Struktura workflow](./workflow-structure.md) – Formát uzlů a hran
 - [Uzel Execute](../nodes/execute-node.md) – Volá sub-workflow (`Ctrl + Shift + O`)
 - [Rychlý start](../getting-started/quick-start.md) – Vytvořte své první workflow
+
+- **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).

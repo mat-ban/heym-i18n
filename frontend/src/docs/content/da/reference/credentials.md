@@ -14,7 +14,7 @@ Legitimationsoplysninger lagrer API-nøgler og hemmeligheder, der bruges af work
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evalueringer](../tabs/evals-tab.md) | OpenAI, Google, Tilpasset | API-nøgle til modellen |
 | [Beslutning](../nodes/decision-node.md), [Evalueringer](../tabs/evals-tab.md) judge | Beslutningsmodel | Basis-URL for en beslutningsmodels endpoint, plus en valgfri API-nøgle |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI-standardindstillinger | Modelrouter (Auto Model) | Vælger hvilken af modellerne der skal servicere hver anmodning ved hjælp af en beslutningsmodel |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI-standardindstillinger, [Evalueringer](../tabs/evals-tab.md) prompt-suiter | Modelrouter (Auto Model) | Vælger hvilken af modellerne der skal servicere hver anmodning ved hjælp af en beslutningsmodel |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-abonnementslogin (OAuth) eller en Codex-adgangstoken til kørslen, plus en GitHub PAT til repository-operationer |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | En OpenCode Go gateway API-nøgle (valgfri basis-URL) til kørslen, plus en GitHub PAT til repository-operationer |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) til GitHub API-kald, GitHub-nodeoperationer og MCP-integrationer |

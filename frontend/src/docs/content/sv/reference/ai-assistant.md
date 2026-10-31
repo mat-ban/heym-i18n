@@ -173,7 +173,7 @@ När ett workflow sparar, lagrar eller slår upp poster och ingen annan lagring 
 
 Välj den nya tabellen och tryck på **Skicka svar**: kortet skapar tabellen, och assistenten anger dess id på noden och använder dess exakta kolumnnamn. Det går även att begära en tabell separat, till exempel "skapa en tabell för mina leads".
 
-Assistenten ser tabellnamn, beskrivningar och kolumner, aldrig rader. Den ändrar aldrig kolumnerna i en befintlig tabell: om en tabell saknar en kolumn som workflowet behöver, namnges kolumnen och en ny tabell erbjuds i stället. Kolumner läggs till i [fliken DataTable](../tabs/datatable-tab.md).
+Canvas-assistenten ser tabellnamn, beskrivningar och kolumner, aldrig rader. Den konfigurerar workflow-noder utifrån dessa metadata; lägg till kolumner på [fliken DataTable](../tabs/datatable-tab.md) eller be [Chat](../tabs/chat-tab.md). Chat och `heym_chat` kan granska rader och direkt lägga till eller ta bort kolumner samt infoga, uppdatera eller ta bort rader i tabeller du äger eller har skrivbehörighet till, inklusive teamdelningar. Borttagning av kolumner och rensning av alla rader kräver bekräftelse innan data tas bort.
 
 ## Relaterat
 

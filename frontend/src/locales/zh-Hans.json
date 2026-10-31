@@ -83,7 +83,8 @@
     "run": "运行",
     "dropFileOrClick": "将文件拖放到此处，或点击选择",
     "removeFile": "移除文件",
-    "chooseFileFor": "为 {label} 选择文件"
+    "chooseFileFor": "为 {label} 选择文件",
+    "new": "新建"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "无：每个模型自行评分",
     "removeJudge": "移除评判",
     "judgeModel": "评判模型",
-    "enterJudgeModel": "请输入用于此评判的评判模型。"
+    "enterJudgeModel": "请输入用于此评判的评判模型。",
+    "promptSuite": "Prompt 套件",
+    "promptSuiteDesc": "跨模型测试系统 Prompt",
+    "agentSuite": "Agent 套件",
+    "agentSuiteDesc": "检查 Agent 的实际运行：工具、延迟、成本",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "搜索套件...",
+    "loadingSuite": "正在加载套件...",
+    "couldNotLoadSuite": "无法加载此套件。"
   },
   "statusFilter": {
     "status": "状态",
@@ -1701,7 +1711,9 @@
     "askAi": "询问 AI",
     "askAiTitle": "就此次运行询问 Chat 助手",
     "noNodeSpans": "此次运行未记录任何节点 span。",
-    "queuedProgress": "排队中 {position}/{size}"
+    "queuedProgress": "排队中 {position}/{size}",
+    "clickToSelectRun": "点击选择此运行",
+    "doubleClickOrOpenNewTab": "双击将此运行显示在画布上，按住 Ctrl/Cmd 单击以在新标签页中打开"
   },
   "portal": {
     "loadingPortal": "正在加载门户...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "将您的 Workflow 作为 MCP 工具开放给 AI 助手使用",
+    "subtitle": "将您的工作流作为 MCP 工具公开，并通过 MCP 和 A2A 公开 Heym Agent",
     "connection": "MCP 连接",
     "connectionSubtitle": "通过 MCP 协议将您的 AI 助手连接到您的 Workflow。",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "在 自定义应用 下，点击 添加自定义应用",
     "geminiStep3": "粘贴上方的 MCP 服务器 URL 并保持 高级功能 折叠；Gemini 将自动注册",
     "geminiStep4": "点击 下一步 并使用 Heym 凭据授权",
-    "geminiInfo": "Gemini 使用 OAuth 进行安全认证。Heym 凭据仅用于授权访问，绝不会与 Gemini 共享。连接完成后，Heym 还可在 Gemini 移动应用中使用。"
+    "geminiInfo": "Gemini 使用 OAuth 进行安全认证。Heym 凭据仅用于授权访问，绝不会与 Gemini 共享。连接完成后，Heym 还可在 Gemini 移动应用中使用。",
+    "agentReach": {
+      "off": "关闭：MCP 和 A2A 客户端无法访问 Heym Agent",
+      "unconfigured": "选择凭据和模型以使 Heym Agent 能够运行",
+      "mcpA2a": "可通过 MCP 和 A2A 访问",
+      "mcpOnly": "在 MCP 上可作为 heym_chat 访问"
+    },
+    "a2aEnabledOnServer": "已在“{name}”上启用 A2A",
+    "a2aEnabled": "已启用 A2A",
+    "a2aDisabledOnServer": "已在“{name}”上禁用 A2A",
+    "a2aDisabled": "已禁用 A2A",
+    "agentAndA2aDisabledOnServer": "已在“{name}”上禁用 Heym Agent 和 A2A",
+    "agentAndA2aDisabled": "已禁用 Heym Agent 和 A2A",
+    "a2a": {
+      "enable": "启用 A2A",
+      "description": "其他 Agent 可以通过 Agent2Agent 协议（A2A 1.0）向 Heym Agent 发送任务。它们使用此服务器在 X-MCP-Key 请求头中的密钥或通过 Heym OAuth 进行身份验证。",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC 端点",
+      "checkCardLive": "检查该卡片是否处于活动状态：",
+      "copyLabel": "复制 {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "分析看板",
@@ -2087,6 +2119,25 @@
       "errors": "错误数",
       "avgLatencyMs": "平均延迟（毫秒）",
       "latencyTitle": "平均延迟趋势"
+    },
+    "last1Hour": "最近 1 小时",
+    "last3Hours": "最近 3 小时",
+    "last6Hours": "最近 6 小时",
+    "nodeTypes": "节点类型",
+    "nodeChart": {
+      "emptyMessage": "此时间段暂无节点数据。更新后的运行才会记录节点分析。",
+      "duration": {
+        "title": "耗时最长的节点类型",
+        "subtitle": "每次调用的平均持续时间"
+      },
+      "errors": {
+        "title": "失败最多的节点类型",
+        "subtitle": "随时间变化的错误数"
+      },
+      "calls": {
+        "title": "调用最多的节点类型",
+        "subtitle": "随时间变化的调用数"
+      }
     }
   },
   "dashboards": {

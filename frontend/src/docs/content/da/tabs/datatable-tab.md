@@ -73,11 +73,11 @@ Del tabeller med andre brugere eller teams:
 1. Åbn delingsdialogen fra tabeldetaljevisningen  
 2. Tilføj brugere via email med **læse-** eller **skrive**-tilladelse  
 3. Tilføj teams med **læse-** eller **skrive**-tilladelse  
-4. Læsebrugere kan se data; skrivebrugere kan ændre rækker  
+4. Skrivebeskyttede brugere kan se data; brugere med skriveadgang kan ændre rækker og kolonner. Omdøbning af tabellen, ændring af dens beskrivelse og administration af delinger forbliver forbeholdt ejeren.
 
 ## Oprettelse af tabeller fra AI-assistenten
 
-Canvas [AI-assistenten](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) og `heym_chat`-værktøjet på [MCP-fanen](./mcp-tab.md) kan vælge en af tabellerne til et workflow de bygger, eller oprette en ny. De foreslår et navn og kolonner og opretter tabellen, når spørgsmålskortet indsendes. De ændrer aldrig eksisterende tabelkolonner eller rører dens rækker: tilføj eller rediger kolonner her.  
+[AI-assistenten](../reference/ai-assistant.md#data-tables) på canvasen, [Chat](./chat-tab.md) og værktøjet `heym_chat` under [fanen MCP](./mcp-tab.md) kan vælge en af dine tabeller til et workflow, de bygger, eller oprette en ny. De foreslår et navn og kolonner og opretter tabellen, når du indsender spørgsmålskortet. Canvas-assistenten konfigurerer workflow-noder ud fra tabellens metadata. Chat og `heym_chat` kan også inspicere rækker, tilføje eller fjerne kolonner samt indsætte, opdatere eller slette rækker direkte. Giv dem et tabelnavn eller linket til denne fane. Skrivning kræver ejerskab eller direkte/team **skriveadgang**. Tilføjelse af kolonner bevarer eksisterende data; fjernelse af kolonner sletter deres værdier fra hver række. Fjernelse af kolonner og rydning af alle rækker beder om bekræftelse, svarende til denne fane.
 
 ## Brug i workflows
 

@@ -47,7 +47,7 @@ V aplikaci karta **Logs** čte stejný výstup kontejneru. Je řízena proměnno
 
 ## Co se loguje
 
-Loguje se každá změna stavu. Čtení se loguje pouze tam, kde je čtení samo o sobě citlivým úkonem — zobrazení historie spuštění workflow, otevření credentialu, stažení souboru. Běžné čtení seznamů a detailů se neaudituje; přístupový log již zaznamenává, že požadavek proběhl, a auditování každého `GET` by zahlcovalo řádky, na kterých záleží.
+Loguje se každá změna stavu. Čtení se loguje pouze tam, kde je čtení samo o sobě citlivým úkonem — zobrazení historie spuštění workflow, otevření credentialu, stažení souboru. Běžné čtení seznamů a detailů se neaudituje; přístupový log již zaznamenává, že požadavek proběhl, a auditování každého `GET` by zahlcovalo řádky, na kterých záleží. Jedinou výjimkou jsou [zobrazení stránek](#page-views), která zaznamenávají, kam přihlášený uživatel v aplikaci přešel.
 
 ### Autentizace
 
@@ -62,9 +62,34 @@ Loguje se každá změna stavu. Čtení se loguje pouze tam, kde je čtení samo
 | `sso_settings.update` | Administrátor změnil konfiguraci [SSO](./sso.md). Zaznamenává `enabled` a `password_login_disabled`, nikdy client secret. |
 | `sso_settings.test` | Administrátor spustil test připojení SSO. |
 
+### Zobrazení stránek
+
+Záznam `page.view` je zapsán pokaždé, když přihlášený uživatel otevře stránku ve webové aplikaci, s URL cestou v poli `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Cesta představuje interní trasu aplikace. Karty dashboardu jsou její součástí (`/?tab=traces`), stejně jako identifikátory označující, co je otevřeno, například `/workflows/<id>`. Zachovává se pouze krátký seznam parametrů dotazu identifikujících stránku (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); vše ostatní v řetězci dotazu a celý fragment se zahazují. Stránky, jejichž odkaz nese tajný údaj, například `/review/<token>`, se logují se zástupným symbolem `:token` namísto tajného údaje.
+
+Prohlížeč cestu hlásí, takže řádek `page.view` ukazuje, kam uživatel podle svých slov přešel. Nedokazuje, že server danou stránku vrátil. Návštěvy přihlašovací stránky a odkazy otevřené v odhlášeném stavu se nezaznamenávají, protože k nim není přiřazen žádný uživatel.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` se zapisuje při spuštění běhu prostřednictvím API: tlačítko Spustit v editoru, koncový bod execute s relací, klíčem API nebo webhookem, chatovací portál a nástroje MCP. Zaznamenává, kdo běh spustil, jak a s jakým výsledkem skončil:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` propojuje řádek s během v Historii spuštění. `outcome` je `failure`, pokud běh skončil stavem `error`, `cancelled` nebo `timeout`. Běh pozastavený pro lidskou kontrolu nebo držený ve frontě souběžnosti je řádek `success` se statusem `status=pending` nebo `status=queued`. Volání bez přihlášeného uživatele, jako je anonymní webhook nebo návštěvník portálu, nemá `actor_id` ani `actor_email`. Vstupy a výstupy se nikdy nezaznamenávají.
+
+Běhy spuštěné plánovačem, uzlem triggeru, frontou nebo událostí nejsou auditními řádky. Provádějí se na instanci, která je převzala, a zaznamenávají se do Historie spuštění se svým zdrojem triggeru a instancí, která je provedla.
+
+`workflow.history_view` se zapisuje, když někdo otevře historii spuštění workflow. Krátký dotaz zobrazující nejnovější běh workflow na plátně nebo v seznamu se neaudituje.
+
 
 `workflow.history_view` zaznamenává `owned=false`, když spolupracovník čte historii spuštění někoho jiného. `workflow.delete` zaznamenává `outcome=denied` s `reason=not_owner`, když se spolupracovník pokusí o smazání.
 
@@ -96,6 +121,27 @@ Hromadné operace se logují jednou na požadavek s počtem, nikoli jednou na ř
 To vynucují dvě věci. Místa volání jsou napsána tak, aby předávala pouze bezpečná pole, a pomocná funkce auditu provádí redakci jako záchrannou síť: jakékoli pole, jehož název obsahuje `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` nebo podobně, je před sestavením řádku nahrazeno hodnotou `***`. Nadměrná redakce je záměrná — neužitečný řádek je lepší než uniklý přihlašovací údaj.
 
 Pokud je tajný údaj pro záznam skutečně relevantní, loguje se pouze jeho podoba. Sdílení souboru zaznamenává `password_protected=true`, nikdy samotné heslo.
+
+## Heym Work
+
+Když provozujete Heym Work společně s Heym, Work vysílá auditní řádky na stdout svého vlastního kontejneru ve stejném formátu Winston:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work zaznamenává akce uživatelů na stránkách, tabulích a záznamech:
+
+| Akce | Význam |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Změny stránek a rozvržení dashboardu |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Změny rozvržení sloupců Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Události životního cyklu karet |
+| `record.create`, `record.update`, `record.delete` | Mutace záznamů datové tabulky prostřednictvím Work |
+| `chat.message` | Uživatelský prompt odeslaný asistentovi Work |
+| `export.csv`, `export.json` | Exporty dat |
+
+Každý řádek nese stejná pole `actor_id`, `actor_email`, `timestamp` a `outcome` jako auditní řádky Heym, takže sběrače logů mohou zpracovávat obojí pomocí jediné pipeline.
 
 ## Uchovávání
 

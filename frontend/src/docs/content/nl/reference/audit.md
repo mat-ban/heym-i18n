@@ -47,7 +47,7 @@ In de app leest het tabblad **Logs** dezelfde containeruitvoer. De toegang hiert
 
 ## Wat wordt gelogd
 
-Elke statuswijziging wordt gelogd. Leesacties worden alleen gelogd wanneer het lezen zelf de gevoelige handeling is — het bekijken van de uitvoeringsgeschiedenis van een workflow, het openen van een referentie, het downloaden van een bestand. Gewone lijst- en detailweergaven worden niet geaudit; het access log registreert al dat er een verzoek heeft plaatsgevonden, en het auditen van elke `GET` zou de regels die ertoe doen overschaduwen.
+Elke statuswijziging wordt gelogd. Leesacties worden alleen gelogd wanneer het lezen zelf de gevoelige handeling is — het bekijken van de uitvoeringsgeschiedenis van een workflow, het openen van een referentie, het downloaden van een bestand. Gewone lijst- en detailweergaven worden niet geaudit; het access log registreert al dat er een verzoek heeft plaatsgevonden, en het auditen van elke `GET` zou de regels die ertoe doen overschaduwen. De enige uitzondering zijn [paginaweergaven](#page-views), die vastleggen waar een aangemelde gebruiker in de app naartoe is gegaan.
 
 ### Authenticatie
 
@@ -62,9 +62,34 @@ Elke statuswijziging wordt gelogd. Leesacties worden alleen gelogd wanneer het l
 | `sso_settings.update` | Een beheerder heeft de [SSO](./sso.md)-configuratie gewijzigd. Registreert `enabled` en `password_login_disabled`, nooit het client secret. |
 | `sso_settings.test` | Een beheerder heeft de SSO-verbindingstest uitgevoerd. |
 
+### Paginaweergaven
+
+`page.view` wordt weggeschreven telkens wanneer een aangemelde gebruiker een pagina in de web-app opent, met het URL-pad in een `path`-veld:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Het pad is de route binnen de app. Dashboard-tabbladen maken er deel van uit (`/?tab=traces`), evenals de id's die aangeven wat er geopend is, zoals `/workflows/<id>`. Slechts een korte lijst met queryparameters die de pagina identificeren wordt bewaard (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); al het overige in de querytekenreeks en het volledige fragment worden genegeerd. Pagina's waarvan de link een geheim bevat, zoals `/review/<token>`, worden gelogd met de tijdelijke aanduiding `:token` in plaats van het geheim.
+
+De browser rapporteert het pad, dus een `page.view`-regel toont waar een gebruiker zegt te zijn geweest. Het bewijst niet dat de server die pagina heeft geretourneerd. Bezoeken aan de aanmeldpagina en aan koppelingen die zijn geopend terwijl men was afgemeld, worden niet geregistreerd, omdat er geen gebruiker aan is gekoppeld.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` wordt geschreven wanneer een uitvoering wordt gestart via de API: de knop Uitvoeren van de editor, het execute-endpoint met een sessie, API-sleutel of webhook, het chatportaal en MCP-tools. Het registreert wie de uitvoering startte, hoe, en hoe deze eindigde:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` koppelt de regel aan de uitvoering in de uitvoeringsgeschiedenis. `outcome` is `failure` wanneer de uitvoering eindigde in `error`, `cancelled` of `timeout`. Een uitvoering die wacht op menselijke beoordeling of wordt vastgehouden in de wachtrij voor gelijktijdigheid, is een `success`-regel met `status=pending` of `status=queued`. Een aanroep zonder aangemelde gebruiker, zoals een anonieme webhook of een portaalbezoeker, heeft geen `actor_id` of `actor_email`. Invoer en uitvoer worden nooit weggeschreven.
+
+Uitvoeringen die zijn gestart door een planning, een trigger-knooppunt, een wachtrij of een gebeurtenis, zijn geen auditregels. Ze worden uitgevoerd op de instantie die ze heeft geclaimd en worden geregistreerd in de uitvoeringsgeschiedenis met hun trigger-bron en de uitvoerende instantie.
+
+`workflow.history_view` wordt geschreven wanneer iemand de uitvoeringsgeschiedenis van een workflow opent. De kleine zoekactie die de laatste uitvoering op het canvas of in een lijst toont, wordt niet geauditeerd.
+
 
 `workflow.history_view` registreert `owned=false` wanneer een collaborator de uitvoeringsgeschiedenis van iemand anders leest. `workflow.delete` registreert `outcome=denied` met `reason=not_owner` wanneer een collaborator probeert te verwijderen.
 
@@ -96,6 +121,27 @@ Een auditregel legt identificaties, namen en aantallen vast. Deze legt nooit de 
 Twee zaken zorgen hiervoor. Aanroepen zijn zodanig geschreven dat alleen veilige velden worden doorgegeven, en de audit-helper redigeert als vangnet: elk veld waarvan de naam `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` of iets dergelijks bevat, wordt vervangen door `***` voordat de regel wordt opgebouwd. Overmatige redactie is bewust — een onbruikbare regel is beter dan een gelekt referentie.
 
 Waar een secret daadwerkelijk relevant is voor de registratie, wordt alleen de vorm ervan gelogd. Een bestandsshare registreert `password_protected=true`, nooit het wachtwoord.
+
+## Heym Work
+
+Wanneer u Heym Work naast Heym uitvoert, zendt Work auditregels uit naar de stdout van zijn eigen container in hetzelfde Winston-formaat:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work logt gebruikersacties op pagina's, borden en records:
+
+| Actie | Betekenis |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Wijzigingen aan dashboardpagina's en -indelingen |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Wijzigingen in de indeling van Kanban-kolommen |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Levenscyclusgebeurtenissen van kaarten |
+| `record.create`, `record.update`, `record.delete` | Mutaties van gegevenstabelrecords via Work |
+| `chat.message` | Gebruikersprompt verzonden naar de Work-assistent |
+| `export.csv`, `export.json` | Gegevensexports |
+
+Elke regel bevat dezelfde velden `actor_id`, `actor_email`, `timestamp` en `outcome` als de auditregels van Heym, zodat logverzamelaars beide met één pipeline kunnen verwerken.
 
 ## Retentie
 

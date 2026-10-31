@@ -173,7 +173,7 @@ Kada workflow sprema, pohranjuje ili pretražuje zapise, a Vi niste imenovali dr
 
 Odaberite novu tablicu i pritisnite **Pošaljite odgovore**: kartica kreira tablicu, a asistent stavlja njezin ID na čvor i koristi točne nazive stupaca. Također možete zatražiti tablicu samostalno, na primjer "kreiraj tablicu za moje kontakte".
 
-Asistent vidi imena tablica, opise i stupce, nikada redove. Nikada ne mijenja stupce postojeće tablice: ako tablica nema stupac koji workflow treba, imenuje stupac i nudi novu tablicu umjesto toga. Dodajte stupce u [DataTable kartici](../tabs/datatable-tab.md).
+Asistent na platnu vidi nazive tablica, opise i stupce, nikada retke. Konfigurira čvorove workflowa iz tih metapodataka; dodajte stupce na [kartici DataTable](../tabs/datatable-tab.md) ili zatražite u [Chatu](../tabs/chat-tab.md). Chat i `heym_chat` mogu pregledavati retke i izravno dodavati ili uklanjati stupce te umetati, ažurirati ili brisati retke u tablicama koje posjedujete ili imate pravo pisanja, uključujući dijeljenja s timom. Uklanjanje stupaca i brisanje svih redaka traže potvrdu prije brisanja podataka.
 
 ## Povezano
 

@@ -14,7 +14,7 @@ Referenties (Credentials) slaan API keys en secrets op die door workflow-knooppu
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API key voor het model |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Base URL van een decision model endpoint, plus een optionele API key |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Kiest welk van uw modellen elke aanvraag bedient, met behulp van een decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) prompt-suites | Model Router (Auto Model) | Kiest welk van uw modellen elke aanvraag bedient, met behulp van een decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-abonnement aanmelding (OAuth) of een Codex access token voor de runner, plus een GitHub PAT voor repository-operaties |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Een OpenCode Go gateway API key (optionele base URL) voor de runner, plus een GitHub PAT voor repository-operaties |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) voor GitHub API-aanroepen, GitHub-knooppuntoperaties en MCP-integraties |

@@ -73,11 +73,11 @@ Partagez des tables avec d'autres utilisateurs ou équipes :
 1. Ouvrez la boîte de dialogue de partage depuis la vue détaillée de la table
 2. Ajoutez des utilisateurs par e-mail avec la permission **read** ou **write**
 3. Ajoutez des équipes avec la permission **read** ou **write**
-4. Les utilisateurs en lecture seule peuvent consulter les données ; les utilisateurs en écriture peuvent modifier les lignes
+4. Les utilisateurs en lecture seule peuvent consulter les données ; les utilisateurs en écriture peuvent modifier les lignes et les colonnes. Renommer la table, modifier sa description et gérer les partages restent réservés au propriétaire.
 
 ## Création de tables depuis l'AI Assistant
 
-L'[AI Assistant](../reference/ai-assistant.md#data-tables) du canvas, le [Chat](./chat-tab.md) et l'outil `heym_chat` de l'[onglet MCP](./mcp-tab.md) peuvent sélectionner l'une de vos tables pour un workflow qu'ils construisent, ou en créer une nouvelle. Ils proposent un nom et des colonnes, et créent la table lorsque vous soumettez la carte de question. Ils ne modifient jamais les colonnes d'une table existante et ne touchent pas à ses lignes : ajoutez ou modifiez les colonnes ici.
+L'assistant du canvas [AI Assistant](../reference/ai-assistant.md#data-tables), le [Chat](./chat-tab.md) et l'outil `heym_chat` de l'[onglet MCP](./mcp-tab.md) peuvent choisir l'une de vos tables pour un workflow qu'ils construisent ou en créer une nouvelle. Ils proposent un nom et des colonnes, et créent la table lorsque vous soumettez la carte de questions. L'assistant du canvas configure les nœuds du workflow à partir des métadonnées de la table. Le Chat et `heym_chat` peuvent également inspecter les lignes, ajouter ou supprimer des colonnes et insérer, mettre à jour ou supprimer des lignes directement. Donnez-leur un nom de table ou le lien de cet onglet. L'écriture nécessite la propriété ou un accès en **écriture** direct ou d'équipe. L'ajout de colonnes conserve les données existantes ; la suppression de colonnes efface leurs valeurs de chaque ligne. La suppression de colonnes et la suppression de toutes les lignes nécessitent une confirmation, à l'identique de cet onglet.
 
 ## Utilisation dans les workflows
 

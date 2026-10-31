@@ -23,7 +23,8 @@ De asemenea, puteți începe o conversație din caseta de chat de pe [fila Workf
 - **Mesaje ulterioare în coadă** – Trimiteți mai multe mesaje în timp ce un răspuns este în streaming. Mesajele din coadă sunt persistate, pot fi editate sau șterse înainte de a începe și rulează în ordine după răspunsul activ
 - **Pauze de planificare** – Când Chat are nevoie de detalii de planificare, adresează întrebări de clarificare și suspendă mesajele ulterioare din coadă până când răspundeți. După ce răspunsul de planificare se încheie, mesajele din coadă se reiau
 - **Credentiale** – Când un workflow creat sau editat de Chat necesită o credentială, Chat întreabă pe care să o folosească, oferă să creeze una nouă în conversație sau vă lasă să continuați fără. De asemenea, puteți cere Chat să creeze o credentială sau să actualizeze una pe care o dețineți; acesta deschide formularul de credentială în conversație. Modelul vede numele și tipul credentialei, niciodată valorile acesteia, atât pentru credențialele deținute, cât și pentru cele partajate cu dvs. Nodurile LLM și Agent adăugate de Chat rulează cu credențiala și modelul selectate pentru chat, inclusiv credențialele partajate; când Chat editează un workflow, nodurile sale LLM și Agent existente își păstrează credențiala și modelul. Consultați [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Tabele de date** – Când un workflow creat sau editat de Chat stochează înregistrări, Chat întreabă ce [tabel de date](./datatable-tab.md) să folosească sau oferă să creeze unul cu coloanele de care are nevoie workflow-ul. De asemenea, poate lista tabelele dumneavoastră și coloanele acestora. Nu citește și nu scrie niciodată rânduri. Consultați [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Întrebați ce [dashboards](./dashboard-tab.md) aveți, ce se află pe unul dintre ele sau pe ce dashboard este situat un workflow. Cereți Chat-ului să adauge un widget nou pe un dashboard (plasează un widget gol acolo, apoi construiește și testează workflow-ul său), să pună un workflow existent pe un dashboard ca widget, să redenumească sau să șteargă un widget sau să aranjeze aspectul unui dashboard. Heym Work afișează aceste dashboard-uri ca pagini ale sale. Consultați [Dashboard › Din Chat și MCP](./dashboard-tab.md#din-chat-și-mcp)
+- **Tabele de date** – Când un workflow creat sau editat de Chat stochează înregistrări, Chat întreabă ce [tabel de date](./datatable-tab.md) să folosească sau oferă să creeze unul cu coloanele necesare. De asemenea, poate inspecta rânduri, poate adăuga sau elimina coloane și poate introduce, actualiza sau șterge rânduri direct în tabelele pe care le dețineți sau le puteți edita. Furnizați un nume de tabel sau un link DataTable. Eliminarea coloanelor și ștergerea tuturor rândurilor cer confirmare; adăugarea de coloane păstrează datele existente. Consultați [Asistent AI › Tabele de date](../reference/ai-assistant.md#data-tables)
 - **Răspunsuri în streaming** – Vedeți ieșirea modelului pe măsură ce este transmisă în streaming
 - **Oprire răspuns** – Întrerupeți răspunsul curent în streaming în orice moment; oprirea elimină și mesajele din coadă pentru acea conversație
 - **Randare Markdown** – Răspunsurile acceptă formatare markdown, inclusiv imagini inline
@@ -33,16 +34,17 @@ De asemenea, puteți începe o conversație din caseta de chat de pe [fila Workf
 - **Introducere vocală** – Folosiți butonul de microfon pentru conversie vorbire-în-text (acceptată de browser). Când înregistrarea se oprește, Heym poate curăța ușor transcrierea înainte de a o trimite
 - **Workflow-uri programate** – Întrebați când rulează workflow-urile cron (astăzi, săptămâna aceasta, luna aceasta sau un interval de date personalizat). Asistentul folosește aceleași date de programare ca fila [Scheduled](./scheduled-tab.md) și poate limita rezultatele la workflow-urile pe care le dețineți sau le poate include pe cele partajate cu dumneavoastră
 - **Istoric de rulare a workflow-urilor** – Întrebați despre un workflow ("de câte ori a rulat raportul zilnic?", "a eșuat?", "când a rulat ultima dată?"). Chat caută workflow-ul după ID-ul său și răspunde pe baza numărului de rulări, defalcării pe stări, orei primei și ultimei rulări și duratei medii. Întrebați de ce a eșuat o rulare sau ce a returnat, iar Chat deschide acea singură rulare pentru a citi intrările, ieșirile și erorile pe nod
+- **Unde eșuează rulările și de ce sunt lente** – Întrebați unde eșuează workflow-urile dvs. sau de ce sunt lente, iar Chat va numi workflow-urile care au rulat cel mai mult, au eșuat cel mai des și sunt cele mai lente, precum și tipurile de noduri care consumă cel mai mult timp (medie pe apel și total), eșuează cel mai mult și rulează cel mai des, aceleași numere ca în fila [Analytics](./analytics-tab.md). Tipurile de noduri sunt contorizate pentru rulările începând cu versiunea care a introdus analiza nodurilor. Întrebați despre ultima oră, 3 sau 6 ore, 24 de ore, 7 sau 30 de zile sau din tot istoricul; ferestrele de ore încep la oră fixă, astfel încât „ultima oră” la 15:20 acoperă intervalul de la 14:00 până acum.
 - **Stare de rulare în timp real** – Întrebați ce rulează chiar acum, iar Chat răspunde cu numărul, numele workflow-urilor, de cât timp rulează fiecare, pe ce nod se află și un link direct către rularea live
 ## Utilizarea Chat-ului dintr-un client MCP
 
-Motorul Chat poate fi accesat și din afara browserului. Activați **Heym Chat Tool** în [filamentul MCP](./mcp-tab.md), iar clienții MCP — Claude, Cursor și orice altceva care vorbește MCP — primesc un singur instrument `heym_chat` care rulează același motor cu toate capacitățile sale.
+Motorul de Chat poate fi accesat și din afara browserului. Activați **Heym Agent** în [fila MCP / A2A](./mcp-tab.md), iar clienții MCP (Claude, Cursor și orice alt instrument compatibil MCP) primesc un singur instrument `heym_chat` care rulează același motor cu toate capacitățile sale. Bifați și **Activare A2A**, iar alți agenți îi pot trimite sarcini prin [A2A](../reference/a2a.md); acele conversații afișează o pictogramă de rețea în listă.
 
 Acele conversații ajung în istoricul acestui filament, marcate cu o pictogramă de ștecher în lista de conversații. Deschideți una pentru a citi ce a solicitat clientul, pentru a vedea cardurile de instrumente declanșate și pentru a continua firul dumneavoastră. Răspunsul la o întrebare de clarificare funcționează la fel, indiferent dacă tura a început aici sau dintr-un client MCP.
 
 Prin MCP, Chat nu listează, nu selectează și nu creează credențiale. Workflow-urile pe care le construiește lasă câmpurile de credențiale goale, iar răspunsul numește nodurile care necesită o credențială, astfel încât să le puteți configura în editor.
 
-Tabelele de date funcționează și prin MCP: Chat listează tabelele dumneavoastră, creează altele noi și le conectează în workflow-urile pe care le construiește. Întrebarea sa despre tabel ajunge ca text în rezultat, așa că răspundeți la ea cu același `conversation_id`.
+Tabelele de date funcționează și prin MCP: Chat poate edita direct coloane și rânduri, poate crea tabele și le poate conecta în workflow-uri. Întrebările despre tabele și confirmările de ștergere sosesc ca text în rezultat; răspundeți cu același `conversation_id`.
 
 ## Limita de context
 
@@ -113,9 +115,33 @@ poate da un răspuns diferit.
 ## Reguli de utilizator
 
 [Regulile de utilizator](../reference/user-settings.md) (configurate în Settings) sunt injectate automat în fiecare conversație Chat ca instrucțiuni la nivel de sistem. Configurați-le o dată pentru a aplica preferințe persistente tuturor solicitărilor de chat.
+## Lucrul cu Evaluările
+
+Chat poate crea, modifica și rula suitele din [Evals](./evals-tab.md), atât suite de prompturi, cât și suite de agent:
+
+- **Suită de prompturi**: „creează o suită de prompturi pentru promptul meu de răspuns la asistență cu 8 cazuri de testare și compară gpt-4o cu gpt-4.1-mini”. Chat scrie cazurile de testare cu răspunsurile lor așteptate, alege o metodă de punctare și salvează suita.
+  - Înainte de a crea suita, stabilește ce credențială LLM și ce modele să utilizeze. Dacă există exact o credențială LLM, o folosește pe aceea și menționează acest lucru; în caz contrar, întreabă.
+  - Pentru punctarea LLM-as-Judge, întreabă de asemenea dacă un judecător separat ar trebui să evalueze răspunsurile.
+- **Suită de agent**: „verifică dacă agentul meu de asistență caută întotdeauna în documentație și nu trimite niciodată e-mailuri”. Chat găsește agentul și salvează verificările de instrumente și pragurile. Când solicitați, rulează workflow-ul, generând o intrare diferită pentru fiecare rulare.
+  - Rulările suitelor de agent sunt rulări reale de workflow, așa că efectele lor secundare au loc. Chat precizează câte rulări inițiază.
+- **Baseline**: Chat poate lucra cu baseline-ul unui agent în trei moduri:
+  - Să îl raporteze din cele mai recente rulări ale agentului.
+  - Să îl construiască din rulările pe care le pornește („rulează-l de 5 ori și folosește asta ca baseline”).
+  - Să stocheze numerele pe care i le transmiteți („setează baseline-ul la 3 secunde p95 și 0,01 $ per rulare”).
+- **Rulări**: Chat așteaptă până la un minut pentru o rulare, apoi raportează rezultatul:
+  - Pentru o suită de prompturi: numărul de treceri ale fiecărui model și cazurile care au eșuat.
+  - Pentru o suită de agent: rata de trecere, verificările eșuate și deviația față de baseline.
+  - O rulare mai lungă continuă în Evals; cereți Chat-ului să o verifice din nou.
+
+După ce Chat creează sau modifică o suită, răspunsul afișează un card cu numele suitei, tipul acesteia și un buton **Deschide în Evals**, la fel ca la un workflow salvat. Prin MCP, rezultatul `heym_chat` listează linkul fiecărei suite salvate în acel apel.
+
+Același lucru funcționează de la un client MCP prin `heym_chat` (consultați [Utilizarea Chat dintr-un client MCP](#utilizarea-chat-dintr-un-client-mcp)). Instrumentele de evaluare rămân în interiorul `heym_chat`; clienții MCP nu le văd ca instrumente separate.
+
+Asistentul AI din editor nu creează suite.
+
 ## Asociat
 
-- [Fila MCP](./mcp-tab.md) – Expuneți acest motor clienților MCP ca instrumentul `heym_chat`
+- [Fila MCP / A2A](./mcp-tab.md) – Expuneți acest motor clienților MCP ca instrumentul `heym_chat`
 - [Setări](../reference/user-settings.md) – Configurați Regulile de Utilizator aplicate tuturor solicitărilor de chat
 - [Fila Credențiale](./credentials-tab.md) – Adăugați și gestionați chei API
 - [Fila Variabile](./global-variables-tab.md) – Variabile globale disponibile pentru Chat

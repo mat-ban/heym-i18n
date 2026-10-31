@@ -15,6 +15,7 @@
 
 ## Laiko intervalas
 
+- **1h**, **3h**, **6h** – Paskutinė 1 valanda, 3 valandos arba 6 valandos. Analitika saugoma kas valandą, todėl skaičiuojama visa lango pradžios valanda: Paskutinė valanda 15:20 apima laikotarpį nuo 14:00 iki dabar
 - **24h** – Paskutinės 24 valandos
 - **7d** – Paskutinės 7 dienos
 - **30d** – Paskutinės 30 dienų
@@ -38,9 +39,19 @@ Dvi lentelės rodo workflow naudojimą: **Dažniausiai naudojami** (platesnė) i
 - **Vykdymo apimtis per laiką** – Linijinė diagrama, rodanti vykdymus per laiko intervalus
 - **Sėkmės vs Klaidos rodiklis** – Ploto diagrama, lyginanti sėkmingus ir nepavykusius vykdymus
 - **Vidutinė latencija per laiką** – Linijinė diagrama, rodanti atsako laiko pokyčius
-- **Vilkti pasirinkti** – Spustelėkite ir vilkite bet kurioje diagramoje, kad sutelktumėte dėmesį į pasirinktą datų intervalą
+- **Vilkti norint pasirinkti** – Spustelėkite ir vilkite bet kurioje diagramoje, kad sutelktumėte dėmesį į pasirinktinį datų intervalą. Pasirinkimas turi apimti bent du taškus diagramoje; paprastas spustelėjimas nieko nepasirenka
 - **Pasirinkimo režimas** – Pasirinkti intervalai atnaujina santraukos korteles, diagramas ir workflow lenteles, nekeisdami pagrindinio nustatymo
 - **Išvalyti pasirinkimą** – Grįžkite prie numatyto laiko lango, kai baigsite tyrinėti
+
+## Mazgų tipai
+
+Po delsos procentiliais trys diagramos rodo, kur eina mazgų laikas ir klaidos, sugrupuotos pagal mazgo tipą (Agent, HTTP Request, Code ir pan.) peržiūrimuose workflow:
+
+- **Daugiausiai laiko reikalaujantys mazgai** – 10 mazgų tipų, kurių bendras vykdymo laikas yra didžiausias, pavaizduoti kaip vidutinė trukmė vienam iškvietimui. Valanda be tam tikro tipo iškvietimų paaiškinime rodo **Iškvietimų nėra**.
+- **Dažniausiai klystantys mazgų tipai** – 10 mazgų tipų su daugiausiai klaidų (klaida arba timeout), kiekvienas su savo klaidų skaičiumi per laiko intervalą.
+- **Dažniausiai kviečiami mazgų tipai** – 10 mazgų tipų, kurie buvo paleisti dažniausiai, kiekvienas su savo iškvietimų skaičiumi per laiko intervalą. Praleisti mazgai neįskaičiuojami.
+
+Užveskite pelės žymeklį ant diagramos, kad pamatytumėte mazgo tipą tiesiai šalia žymeklio. Mazgo tipas, kuris yra per mažas, kad būtų matomas šalia didžiausio diagramoje (mažiau nei 1 % jo vertės), neįtraukiamas į tą diagramą ir jos legendą. Diagramos atsižvelgia į workflow filtrą, laiko intervalą ir bet kokį intervalą, kurį pažymite vilkdami. Mazgų analitika įrašoma vykdymams nuo versijos, kuri ją įvedė, o baigtas vykdymas pasirodo maždaug per minutę. Senesni vykdymai neįtraukiami.
 
 ## Automatinis atnaujinimas
 

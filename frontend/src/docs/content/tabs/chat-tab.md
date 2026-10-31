@@ -23,7 +23,8 @@ You can also start a conversation from the chat box on the [Workflows tab](./wor
 - **Queued follow-ups** – Send more messages while an answer is streaming. Queued messages are persisted, can be edited or deleted before they start, and run in order after the active response
 - **Planning pauses** – When Chat needs planning details, it asks clarification questions and pauses queued follow-ups until you answer. After the planning answer finishes, queued messages resume
 - **Credentials** – When a workflow Chat creates or edits needs a credential, Chat asks which one to use, offers to create a new one in the conversation, or lets you continue without. You can also ask Chat to create a credential or to update one you own; it opens the credential form in the conversation. The model sees the credential's name and type, never its values, for credentials you own and ones shared with you. LLM and Agent nodes Chat adds run on the credential and model selected for the chat, shared credentials included; when Chat edits a workflow, its existing LLM and Agent nodes keep their credential and model. See [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Data tables** – When a workflow Chat creates or edits stores records, Chat asks which [data table](./datatable-tab.md) to use or offers to create one with the columns the workflow needs. It can also list your tables and their columns. It never reads or writes rows. See [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Ask which [dashboards](./dashboard-tab.md) you have, what is on one, or which dashboard a workflow is on, ask Chat to add a new widget to a dashboard (it puts an empty widget there, then builds and tests its workflow), put an existing workflow on a dashboard as a widget, rename or delete a widget, or tidy a dashboard's layout. Heym Work shows these dashboards as its pages. See [Dashboard › From Chat and MCP](./dashboard-tab.md#from-chat-and-mcp)
+- **Data tables** – When a workflow Chat creates or edits stores records, Chat asks which [data table](./datatable-tab.md) to use or offers to create one with the columns the workflow needs. It can also inspect rows, add or remove columns, and insert, update or delete rows directly on tables you own or can write. Give it a table name or DataTable link. Column removal and clearing all rows ask for confirmation; adding columns preserves existing data. See [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
 - **Streaming responses** – See the model's output as it streams
 - **Stop response** – Interrupt the current streaming answer at any time; stopping also clears queued messages for that conversation
 - **Markdown rendering** – Responses support markdown formatting, including inline images
@@ -33,18 +34,19 @@ You can also start a conversation from the chat box on the [Workflows tab](./wor
 - **Voice input** – Use the microphone button for speech-to-text (browser-supported). When recording stops, Heym can lightly clean up the transcript before you send it
 - **Scheduled workflows** – Ask when cron workflows run (today, this week, this month, or a custom date range). The assistant uses the same schedule data as the [Scheduled](./scheduled-tab.md) tab and can limit results to workflows you own or include those shared with you
 - **Workflow run history** – Ask about one workflow ("how many times did the daily report run?", "did it fail?", "when did it last run?"). Chat looks the workflow up by its ID and answers from its run count, status breakdown, first and last run time, and average duration. Ask why a run failed or what it returned and Chat then opens that single run to read its inputs, outputs, and per-node errors
+- **Where runs fail and why they are slow** – Ask where your workflows fail or why they are slow and Chat names the workflows that ran most, failed most and are slowest, and the node types that take the most time (average per call and total), fail most and run most, the same numbers as the [Analytics](./analytics-tab.md) tab. Node types are counted for runs from the release that added node analytics. Ask about the last hour, 3 or 6 hours, 24 hours, 7 or 30 days, or all time; the hour windows start on the hour, so "the last hour" at 15:20 covers 14:00 until now.
 - **Live run status** – Ask what is running right now and Chat answers with the count, the workflow names, how long each run has been going, which node it is on, and a link straight to the live run
 - **Run context chips** – **Ask AI** in [Execution History](../reference/execution-history.md#ask-ai) opens a new conversation with the selected workflow run attached as chips. See [Asking About a Run](#asking-about-a-run)
 
 ## Using Chat from an MCP Client
 
-The Chat engine can also be reached from outside the browser. Enable the **Heym Chat Tool** in the [MCP tab](./mcp-tab.md) and MCP clients — Claude, Cursor, and anything else that speaks MCP — get a single `heym_chat` tool that runs this same engine with all of its capabilities.
+The Chat engine can also be reached from outside the browser. Turn on the **Heym Agent** in the [MCP / A2A tab](./mcp-tab.md) and MCP clients (Claude, Cursor, and anything else that speaks MCP) get a single `heym_chat` tool that runs this same engine with all of its capabilities. Tick **Enable A2A** as well and other agents can send it tasks over [A2A](../reference/a2a.md); those conversations show a network icon in the list.
 
 Those conversations land in this tab's history, marked with a plug icon in the conversation list. Open one to read what the client asked, see the tool cards it triggered, and continue the thread yourself. Answering a clarification question works the same way whether the turn started here or from an MCP client.
 
 Over MCP, Chat asks which credential a workflow should use as a question in the result. To create or update a credential it opens Heym's credential form on a Heym page in your browser, so the value never passes through the MCP client. See [MCP tab › Credentials](./mcp-tab.md#credentials).
 
-Data tables work over MCP too: Chat lists your tables, creates new ones and wires them into the workflows it builds. Its table question arrives as text in the result, so answer it with the same `conversation_id`.
+Data tables work over MCP too: Chat can edit columns and rows directly, create tables and wire them into workflows. Table questions and deletion confirmations arrive as text in the result; answer with the same `conversation_id`.
 
 ## Context Limit
 
@@ -124,13 +126,38 @@ the trigger-source breakdown for execution-count alerts. It reports what was tru
 fired rather than recomputing the window, because the window has passed and a fresh calculation
 can give a different answer.
 
+## Working with Evals
+
+Chat can create, change and run the suites in [Evals](./evals-tab.md), both prompt suites and agent suites:
+
+- **Prompt suite**: "make a prompt suite for my support reply prompt with 8 test cases and compare gpt-4o with gpt-4.1-mini". Chat writes the test cases with their expected answers, picks a scoring method and saves the suite.
+  - Before it creates the suite, it settles which LLM credential and models to use. With exactly one LLM credential it uses that one and says so; otherwise it asks.
+  - For LLM-as-Judge scoring, it also asks whether a separate judge should score the answers.
+- **Agent suite**: "check that my support agent always searches the docs and never sends email". Chat finds the agent and saves the tool checks and thresholds. When you ask, it runs the workflow, writing a different input for each run.
+  - Agent suite runs are real workflow runs, so their side effects happen. Chat says how many runs it starts.
+- **Baseline**: Chat can work with an agent's baseline in three ways:
+  - Report it from the agent's latest runs.
+  - Build it from runs it starts ("run it 5 times and use that as the baseline").
+  - Store numbers you give it ("set the baseline to 3 seconds p95 and $0.01 per run").
+- **Runs**: Chat waits up to a minute for a run, then reports the result:
+  - For a prompt suite: each model's pass count and the cases that failed.
+  - For an agent suite: the pass rate, the failed checks and the drift from the baseline.
+  - A longer run keeps going in Evals; ask Chat to check it again.
+
+After Chat creates or changes a suite, the reply shows a card with the suite's name, its type and an **Open in Evals** button, like the card of a saved workflow. Over MCP, the `heym_chat` result lists the link of every suite saved in that call.
+
+The same works from an MCP client through `heym_chat` (see [Using Chat from an MCP Client](#using-chat-from-an-mcp-client)). The eval tools stay inside `heym_chat`; MCP clients do not see them as separate tools.
+
+The editor's AI Assistant does not create suites.
+
 ## User Rules
 
 [User Rules](../reference/user-settings.md) (configured in Settings) are automatically injected into every Chat conversation as system-level instructions. Set them once to apply persistent preferences to all chat requests.
 
 ## Related
 
-- [MCP Tab](./mcp-tab.md) – Expose this engine to MCP clients as the `heym_chat` tool
+- [MCP / A2A Tab](./mcp-tab.md) – Expose this engine to MCP clients as the `heym_chat` tool
+- [A2A](../reference/a2a.md) – Let other agents send this engine tasks
 - [Settings](../reference/user-settings.md) – Set User Rules applied to all chat requests
 - [Credentials Tab](./credentials-tab.md) – Add and manage API keys
 - [Variables Tab](./global-variables-tab.md) – Global variables available to Chat

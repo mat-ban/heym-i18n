@@ -73,11 +73,11 @@ Ossza meg a táblákat más felhasználókkal vagy csapatokkal:
 1. Nyissa meg a megosztási párbeszédablakot a tábla részletes nézetéből
 2. Adjon hozzá felhasználókat e-mail-cím alapján **read** vagy **write** jogosultsággal
 3. Adjon hozzá csapatokat **read** vagy **write** jogosultsággal
-4. A csak olvasási jogosultsággal rendelkező felhasználók megtekinthetik az adatokat; az írási jogosultsággal rendelkezők módosíthatják a sorokat
+4. A csak olvasható felhasználók megtekinthetik az adatokat; az írási jogosultsággal rendelkező felhasználók módosíthatják a sorokat és az oszlopokat. A tábla átnevezése, leírásának módosítása és a megosztások kezelése kizárólag a tulajdonos számára engedélyezett.
 
 ## Táblák létrehozása az AI Assistant segítségével
 
-A vászon [AI Assistant](../reference/ai-assistant.md#data-tables), a [Chat](./chat-tab.md) és az [MCP lap](./mcp-tab.md) `heym_chat` eszköze kiválaszthatja az egyik tábláját egy általuk épített workflow-hoz, vagy létrehozhat egy újat. Javasolnak egy nevet és oszlopokat, és a táblát a kérdéskártya beküldésekor hozzák létre. Soha nem módosítják egy meglévő tábla oszlopait és nem nyúlnak annak soraihoz: az oszlopokat itt adhatja hozzá vagy szerkesztheti.
+A vásznon lévő [AI-asszisztens](../reference/ai-assistant.md#data-tables), a [Chat](./chat-tab.md) és az [MCP fülön](./mcp-tab.md) található `heym_chat` eszköz kiválaszthatja az Ön egyik tábláját az általa felépített workflow-hoz, vagy létrehozhat egy újat. Nevet és oszlopokat javasolnak, majd a kérdéskártya elküldésekor létrehozzák a táblát. A vászonasszisztens a tábla metaadataiból konfigurálja a workflow csomópontjait. A Chat és a `heym_chat` képes megvizsgálni a sorokat, oszlopokat hozzáadni vagy eltávolítani, valamint közvetlenül sorokat beszúrni, frissíteni vagy törölni. Adjon meg nekik egy táblanevet vagy ennek a fülnek a linkjét. Az íráshoz tulajdonjog vagy közvetlen/csapatos **írási** hozzáférés szükséges. Az oszlopok hozzáadása megőrzi a meglévő adatokat; az oszlopok eltávolítása törli azok értékeit minden sorból. Az oszlopok eltávolítása és az összes sor törlése megerősítést kér, megegyezően ezzel a füllel.
 
 ## Használat workflow-kban
 

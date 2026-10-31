@@ -10,7 +10,7 @@
 | 출력 | 0 (종단) |
 | Output | 표준화된 차트 Payload |
 
-이 노드는 dashboard-widget Workflow에서 **마지막**에 배치하십시오. 바로 앞 노드는 다음과 같이 행 객체의 배열을 생성해야 합니다.
+이 노드는 dashboard-widget Workflow에서 **마지막**에 배치하십시오. 엔티티 관계의 경우 바로 앞 노드는 그래프 객체를 생성합니다([Entity relationships](#entity-relationships-db) 참조). 기타 데이터 기반 차트는 다음과 같이 행 객체의 배열을 사용합니다.
 
 ```json
 [
@@ -26,9 +26,9 @@
 | 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
 | `label` | string | 노드 식별자 (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text`, 또는 `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text`, 또는 `hitl` |
 | `orientation` | string | `vertical` 또는 `horizontal` (bar 차트 전용) |
-| `dataPath` | string | 상위 출력 내부의 행 배열에 대한 점 표기법 경로 (예: `data` 또는 `result.items`). 비워 두면 자동 감지합니다. |
+| `dataPath` | string | 상위 출력 내부의 행 배열(또는 `erDiagram`용 그래프 객체)에 대한 점 표기법 경로 (예: `data` 또는 `result.items`). 비워 두면 자동 감지합니다. |
 | `labelField` | string | 카테고리 레이블로 사용되는 행 키 (pie/bar/line) |
 | `valueField` | string | 숫자 값으로 사용되는 행 키 (pie/bar/line/numeric/gauge) |
 | `series` | array | bar/line용 선택적 다중 시리즈 정의 `[{ "name": "Sent", "field": "sent" }]` (`valueField`를 재정의함) |
@@ -54,8 +54,51 @@
 - **scatter** — 상관관계 플롯을 위한 `xField` 및 `yField`의 X/Y 포인트입니다.
 - **proportion** — 백분율 범례와 함께 지분으로 분할된 단일 수평 막대입니다 (예: 언어별 분포). `labelField` + `valueField`를 사용합니다.
 - **barGauge** — 빨강→초록 그라디언트와 값을 가진 행당 하나의 수평 게이지입니다 (예: 여유 디스크 공간). `labelField` + `valueField`를 사용하며, 선택적 `unit` 및 `max` (기본값은 가장 큰 행 값)를 지원합니다.
+- **gantt** — 날짜, 진행 상황 및 종속성이 포함된 작업 일정. [Gantt 일정](#gantt-schedules) 참조.
+- **erDiagram** — 데이터베이스 엔티티, 필드, 키 및 관계. [Entity relationships](#entity-relationships-db) 참조.
 - **text** — Markdown 메시지입니다 (예: "Last execution at 19:47"과 같은 상태 메모). 정적 메시지의 경우 `text`에 Markdown을 넣거나, `text`를 비워 두고 `valueField`를 설정하여 상위에서 생성된 문자열을 렌더링합니다. 제목, 굵게/기울임, [목록](../nodes/chart-output-node.md#interactive-task-lists), 링크, 인라인 코드를 지원합니다.
 - **hitl** — 대기 중인 사람의 리뷰를 보여주는 캐러셀입니다. 헤더에는 `1/n pending`이 표시되며, 첫 번째 카드에서는 왼쪽 화살표가, 마지막 카드에서는 오른쪽 화살표가 비활성화됩니다. Workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 리뷰를 처리할 수 있으며, 위젯 제목 옆의 기록 아이콘을 클릭하면 같은 페이지의 기록 대화상자에서 해당 실행이 열립니다. 이 차트 타입은 상위 행을 무시하므로, 위젯 Workflow는 Chart Output 노드만으로 구성됩니다. 로그인한 각 사용자는 자신이 소유한 Workflow의 리뷰를 봅니다. 노드 속성 또는 위젯 설정에서 **Workflow**(리뷰 단계가 여러 개이면 **Select agent**도)를 선택하면, 대신 해당 Workflow의 리뷰가 그 Workflow를 열 수 있는 모든 사용자에게 표시됩니다. [HITL 위젯](../tabs/dashboard-tab.md#hitl-widgets)을 참조하세요.
+
+### Gantt 일정
+
+프로젝트 일정 및 작업 타임라인에는 **Gantt**(`gantt`)를 선택하십시오. `dataPath`를 `tasks`와 같은 작업 배열로 설정합니다. 행은 고정된 필드 이름을 사용합니다.
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` 및 `end`는 ISO 날짜 또는 datetime을 허용합니다. 표준 시간대가 없는 값은 UTC를 사용하며 표준 시간대 오프셋은 UTC로 변환됩니다. `end`는 `start`와 같거나 이후여야 합니다. `progress`는 선택 사항입니다(0–100, 기본값 0). `dependencies`에는 기존 작업 ID가 포함됩니다. ID는 고유해야 합니다. 작업 위로 마우스를 가져가면 전체 날짜, 진행 상황 및 종속성을 확인할 수 있습니다. 큰 차트는 위젯 내부에서 스크롤됩니다. 최대 500개의 작업이 허용됩니다.
+
+샘플 데이터의 경우 `tasks`라는 Set 매핑에서 `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`를 사용할 수 있습니다. 이를 `chartType: "gantt"` 및 `dataPath: "tasks"`로 Chart Output에 연결합니다. Set 노드를 사용하여 소스 열을 이러한 고정된 이름으로 매핑합니다. `labelField` 및 `valueField`는 사용되지 않습니다.
+
+### Entity relationships (DB)
+
+데이터베이스 스키마 및 엔티티 연결에는 **Entity relationships (DB)**(`erDiagram`)를 선택하십시오. `dataPath`를 두 배열이 모두 포함된 `graph`와 같은 그래프 **객체**로 설정합니다.
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+필드에는 `name`, 선택적 `type` 및 선택적 `key`(`PK`, `FK`, `PK/FK` 또는 빈 값)가 있습니다. 관계는 기존 엔티티 ID를 참조하며 선택적 `sourceField` 및 `targetField`가 명명된 필드에 연결을 고정합니다. `cardinality`는 `one-to-one`, `one-to-many`(기본값), `many-to-one` 또는 `many-to-many`를 허용합니다. 엔티티 ID 및 각 엔티티 내의 필드 이름은 고유해야 합니다. 최대 100개의 엔티티, 엔티티당 100개의 필드 및 500개의 관계가 허용됩니다.
+
+Set 노드를 사용하여 `$dict(entities=array(dict(...)), relations=array(dict(...)))`로 `graph`를 구성합니다. `chartType: "erDiagram"` 및 `dataPath: "graph"`를 사용하십시오. 이는 제공된 스키마의 시각화이며 라이브 데이터베이스를 자동으로 검사하지 않습니다.
+
+두 유형 모두 미리보기와 함께 **위젯 추가** 및 캔버스 노드의 차트 유형 선택기에 나타납니다. Heym Work는 일정이나 데이터베이스 스키마를 설명할 때 이러한 유형을 제안하고 페이지를 작성하기 전에 제안된 작업이나 엔티티의 미리보기를 그릴 수 있습니다.
 
 ### 대화형 작업 목록
 

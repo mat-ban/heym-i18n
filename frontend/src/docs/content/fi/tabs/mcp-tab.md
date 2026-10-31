@@ -1,6 +1,6 @@
-# MCP-välilehti
+# MCP- / A2A-välilehti
 
-**MCP**-välilehdellä määritetään Model Context Protocol (MCP) -integraatio. MCP mahdollistaa tekoälyasiakkaiden (kuten Clauden, ChatGPT:n, Geminin, Cursorin ja muiden MCP-yhteensopivien työkalujen) käyttää Heymin workflowteja työkaluina.
+**MCP**-välilehdellä määritetään Model Context Protocol (MCP) -integraatio, ja [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) -palvelimina, joille muut agentit voivat delegoida tehtäviä. MCP mahdollistaa tekoälyasiakkaiden (kuten Clauden, ChatGPT:n, Geminin, Cursorin ja muiden MCP-yhteensopivien työkalujen) käyttää Heymin workflowteja työkaluina.
 
 Heym tukee kahta toimintatapaa: **oletuspalvelinta**, joka tarjoaa kaikki MCP-käyttöön otetut workflowt yhden päätepisteen kautta, ja **nimettyjä palvelimia**, joissa jokaisella workflow-ryhmällä on oma dedikoitu URL-osoite ja API-avain.
 
@@ -51,7 +51,7 @@ Workflow, jolla on [samanaikaisuusrajoitus](../reference/webhooks.md#concurrency
 ```
 
 Asiakas kysyy `heym_execution_status` -työkalulta tällä `execution_id`-tunnuksella. Se palauttaa saman rungon kuin [tila-URL](../reference/webhooks.md#status-url): `queued` nykyisellä sijainnilla, `running`, sitten `success` tai `error` tulosten kera. Se löytää vain saman palvelimen tarjoamien workflow-prosessien suoritukset. Työkalu on lueteltu oletuspalvelimella ja jokaisella nimetyllä palvelimella vain niin kauan kuin vähintään yhdellä sen workflow-prosesseista on samanaikaisuusrajoitus. Kun jono on täynnä, kutsu palauttaa virheen "Concurrency queue is full".
-## Heym-keskustelutyökalu
+## Heym-agentti
 
 **Heym Capabilities** -osassa Chat-välilehden moottori muunnetaan yhdeksi MCP-työkaluksi nimeltä `heym_chat`. Ota se käyttöön oletuspalvelimessa, missä tahansa nimetyssä palvelimessa tai molemmissa – jokaisella pinnalla on oma kytkentänsä ja mallivalinta.
 
@@ -60,15 +60,20 @@ Kun se on käytössä, `heym_chat` näkyy `tools/list` -listauksessa workflow-ty
 - Luo workflow, koeaja se esimerkkisyötteillä, korjaa virheet ja lopeta, kun suoritus menee läpi (katso [Rakennustila](#build-mode))
 - Tarkastele ja suorita olemassa olevia workflowtejasi
 - Raportoi analytiikkaa, viimeisimpiä suorituksia ja tulevia cron-aikatauluja.
+- Selittää, missä työnkulut epäonnistuvat ja miksi ne ovat hitaita: eniten suoritetut, eniten epäonnistuneet ja hitaimmat työnkulut sekä solmutyypit, joihin on kulunut eniten aikaa, virheitä ja kutsuja viimeisten 1, 3 tai 6 tunnin, 24 tunnin, 7 tai 30 päivän tai koko historian aikana
 - Raportoi yhden workflown suoritushistorian: kuinka monta kertaa se on suoritettu, tilastot, milloin se on suoritettu, ja pyynnöstä yhden suorituksen syötteet, tulosteet ja solmukohtaiset virheet.
 - Raportoi, mitä parhaillaan suoritetaan: kuinka monta suoritusta on käynnissä, niiden workflownimet, kauanko kukin on ollut käynnissä, nykyinen solmu ja linkki live-suoritukseen.
 - Listaa taulut, luo kortteja ja lue korttien tietoja [Board-välilehdellä](./board-tab.md).
-- Listaa datataulukot niiden sarakkeineen, luo uusia ja liitä niitä workflowihin, joita se rakentaa.
+- Listaa koontinäytöt (Heym Workin sivut) ja niiden widgetit, selvittää, millä koontinäytöllä työnkulku on, lisää uuden widgetin ja rakentaa sen työnkulun, asettaa olemassa olevan työnkulun widgetiksi, nimeää uudelleen tai poistaa widgettejä tai siistii asettelua (katso [Dashboard › Chatista ja MCP:stä](./dashboard-tab.md#from-chat-and-mcp))
+- Tarkastaa datataulukoita ja rivejä, luo taulukoita, lisää tai poistaa sarakkeita, lisää, päivittää tai poistaa rivejä ja kytkee taulukoita työnkulkuihin
+- Luo, muokkaa ja suorittaa kehotteiden ja agenttien arviointipaketteja ([Eval suites](./evals-tab.md#from-chat-and-mcp)), mukaan lukien agentin perustaso: raportoitu, suorituksista rakennettu tai numeerisesti ilmoitettu. Tulos luetteloi jokaisen tallennetun paketin Evals-linkin.
 - Luo tai päivitä tunnistetietosi Heymin omalla sivulla (katso [Tunnistetiedot](#tunnistetiedot))
 - Lue tiimien ja globaalien muuttujien arvoja ja etsi dokumentaatiosta.
 - Hyväksy, muokkaa tai hylkää odottavia ihmisen vahvistusta vaativia tarkistuksia.
 
 Chat-välilehdelle myöhemmin lisätyt ominaisuudet tulevat automaattisesti käyttöön myös `heym_chat` -työkalussa – ei tarvitse synkronoida erillisiä kytkimiä.
+
+Nämä toiminnot suoritetaan `heym_chat`-työkalun sisällä: `tools/list` näyttää `heym_chat`-työkalun ja työnkulkutyökalusi, ei koskaan chatin sisäisiä työkaluja, kuten arviointipakettien työkaluja.
 
 ### Rakennustila
 
@@ -121,6 +126,14 @@ Jos jompikumpi puuttuu, työkalu näkyy edelleen `tools/list` -listauksessa, mut
 Jokainen kutsu kirjataan [Chat-välilehden](./chat-tab.md) historiaan tavallisena keskusteluna, merkittynä pistorasia-kuvakkeella keskustelulistassa. Viestit, työkalukortit ja selvennysten tauot näyttävät täsmälleen samoilta kuin itse aloittamasi keskustelut, ja voit avata ketjun ja jatkaa keskustelua selaimessa. Jokainen tulos palauttaa `conversation_id` -tunnisteen, jotta MCP-asiakas voi jatkaa samaa keskustelua uuden avaamisen sijaan jokaisella kutsulla.
 
 Kun apuohjelma tarvitsee selvennystä, se pysähtyy ja ilmoittaa siitä; vastaa selvennyksillä käyttäen samaa `conversation_id` -tunnistetta.
+### Ota A2A käyttöön
+
+Kun Heym-agentti on kytketty päälle, kortissa näkyy valintaruutu **Ota A2A käyttöön**. Valitse se, niin muut agentit voivat lähettää tehtäviä Heym-agentille Agent2Agent-protokollan (A2A 1.0) kautta. Kortissa näkyy tällöin **Agent Card** -osoite ja **JSON-RPC endpoint**, joissa kummassakin on kopiointipainike, sekä `curl`-komento kortin noutamiseksi. A2A käyttää samaa avainta ja OAuth-kirjautumista kuin MCP. Agentin poistaminen käytöstä poistaa myös A2A:n käytöstä. Katso [A2A](../reference/a2a.md) menetelmien, tehtävätilojen ja esimerkin osalta.
+
+### Edistyminen
+
+Pitkäkestoinen `heym_chat`-kutsu raportoi agentin toiminnan MCP-edistymisenä (`notifications/progress`), samoilla ilmauksilla kuin Chat-välilehti näyttää, esimerkiksi `Testataan työnkulkua · yritys 2/5`. Asiakkaat, jotka nollaavat aikakatkaisunsa edistymisilmoituksen yhteydessä, jatkavat odottamista agentin työskennellessä.
+
 ## Nimettyjen MCP-palvelimien hallinta
 
 Nimettyjen palvelimien avulla voit segmentoida workflowt eristetyille MCP-endpointeille. Kullakin palvelimella on oma URL-osoite ja API-avain, jolloin eri tekoälyasiakkaat, tiimit tai käyttötapaukset voivat kytkeytyä tarkalleen niihin workflowihin, joita he tarvitsevat.
@@ -140,7 +153,9 @@ Jokainen palvelinkortti näyttää seuraavat asetukset:
 | **SSE-endpoint** | Yksilöllinen URL-osoite: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API-avain** | Riippumaton avain, joka näytetään vain luonnin tai uudelleenluonnin yhteydessä. Kopioi se heti; avain tallennetaan tiivistettynä eikä sitä voida paljastaa myöhemmin |
 | **Yhdistäminen** | **Kopioi JSON** kopioi valmiin liitettävän MCP-konfiguraation; **Lisää kursoriin** asentaa sen yhdellä klikkauksella |
-| **Heym-ominaisuudet** | Ota käyttöön `heym_chat` -työkalu tälle palvelimelle ja valitse sen tunnistetiedot ja malli |
+| **Heym Capabilities** | Kytke Heym-agentti (`heym_chat`) päälle tai pois tälle palvelimelle ja valitse sen credential ja malli |
+| **Ota A2A käyttöön** | Tämän palvelimen oma A2A-kytkin omalla Agent Cardilla osoitteessa `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Ota A2A käyttöön** | Tämän palvelimen oma A2A-kytkin omalla Agent Cardilla osoitteessa `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Määritetyt workflowt** | Valitse, mitkä workflowt tämä palvelin paljastaa |
 
 ### Workflowjen määrittäminen

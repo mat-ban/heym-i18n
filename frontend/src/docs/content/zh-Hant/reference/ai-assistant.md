@@ -173,7 +173,7 @@ DSL 強制使用 camelCase 標籤、統一的表達式規則，以及各節點�
 
 選擇新資料表並按下 **Submit answers**：卡片會建立該資料表，助理會將其 id 放到節點上，並使用其確切的欄位名稱。你也可以單獨要求建立資料表，例如「create a table for my leads」。
 
-助理能看到資料表名稱、說明與欄位，但永遠看不到資料列。它永遠不會變更現有資料表的欄位：若某個資料表缺少 Workflow 所需的欄位，它會指出該欄位並改為提供新的資料表。請在 [DataTable tab](../tabs/datatable-tab.md) 中新增欄位。
+Canvas 助理可以看到資料表名稱、描述和欄，但永遠看不到列。它根據這些中繼資料設定 Workflow 節點；請在 [DataTable 分頁](../tabs/datatable-tab.md)中新增欄或向 [Chat](../tabs/chat-tab.md) 提出要求。Chat 和 `heym_chat` 可以檢查列，並直接在您擁有或擁有寫入權限的資料表（包括團隊共用）上新增或刪除欄，以及插入、更新或刪除列。在刪除資料之前，刪除欄和清除所有列都會要求確認。
 
 ## Related
 

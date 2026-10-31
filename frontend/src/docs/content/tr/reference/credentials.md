@@ -14,7 +14,7 @@ Credentials, workflow node'ları tarafından kullanılan API anahtarlarını ve 
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | Model için API anahtarı |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Bir decision model endpoint'inin base URL'si ve isteğe bağlı bir API anahtarı |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Bir decision model kullanarak her isteğe hangi modelinizin hizmet vereceğini seçer |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) prompt paketleri | Model Router (Auto Model) | Bir decision model kullanarak her isteğe hangi modelinizin hizmet vereceğini seçer |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Runner için ChatGPT abonelik oturum açma (OAuth) veya bir Codex access token'ı ve repository işlemleri için bir GitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Runner için bir OpenCode Go gateway API anahtarı (isteğe bağlı base URL) ve repository işlemleri için bir GitHub PAT |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub API çağrıları, GitHub node işlemleri ve MCP entegrasyonları için GitHub personal access token (PAT) |

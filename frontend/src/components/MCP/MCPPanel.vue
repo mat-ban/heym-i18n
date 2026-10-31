@@ -278,14 +278,35 @@ async function toggleServerWorkflow(server: MCPServerItem, workflowId: string): 
   }
 }
 
+function agentToast(update: MCPChatToolUpdate, wasA2A: boolean, serverName?: string): string | null {
+  if (update.a2a_enabled !== undefined) {
+    return update.a2a_enabled
+      ? (serverName ? t("mcp.a2aEnabledOnServer", { name: serverName }) : t("mcp.a2aEnabled"))
+      : (serverName ? t("mcp.a2aDisabledOnServer", { name: serverName }) : t("mcp.a2aDisabled"));
+  }
+  if (update.enabled === undefined) return null;
+  if (!update.enabled && wasA2A) {
+    return serverName
+      ? t("mcp.agentAndA2aDisabledOnServer", { name: serverName })
+      : t("mcp.agentAndA2aDisabled");
+  }
+  if (update.enabled) {
+    return serverName
+      ? t("mcp.chatToolEnabledOnServer", { name: serverName })
+      : t("mcp.chatToolEnabled");
+  }
+  return serverName
+    ? t("mcp.chatToolDisabledOnServer", { name: serverName })
+    : t("mcp.chatToolDisabled");
+}
+
 async function updateGlobalChatTool(update: MCPChatToolUpdate): Promise<void> {
   if (!config.value) return;
   const previous = config.value.chat_tool;
   try {
     config.value.chat_tool = await mcpApi.updateChatTool(update);
-    if (update.enabled !== undefined) {
-      showToast(update.enabled ? t("mcp.chatToolEnabled") : t("mcp.chatToolDisabled"));
-    }
+    const message = agentToast(update, previous.a2a_enabled);
+    if (message) showToast(message);
   } catch {
     config.value.chat_tool = previous;
     showToast(t("mcp.failedToUpdateChatTool"), "error");
@@ -298,16 +319,12 @@ async function updateServerChatTool(
 ): Promise<void> {
   const idx = namedServers.value.findIndex((s) => s.id === server.id);
   if (idx === -1) return;
+  const wasA2A = namedServers.value[idx].chat_tool.a2a_enabled;
   try {
     const chatTool = await mcpServersApi.updateChatTool(server.id, update);
     namedServers.value[idx] = { ...namedServers.value[idx], chat_tool: chatTool };
-    if (update.enabled !== undefined) {
-      showToast(
-        update.enabled
-          ? t("mcp.chatToolEnabledOnServer", { name: server.name })
-          : t("mcp.chatToolDisabledOnServer", { name: server.name }),
-      );
-    }
+    const message = agentToast(update, wasA2A, server.name);
+    if (message) showToast(message);
   } catch {
     showToast(t("mcp.failedToUpdateChatTool"), "error");
   }
@@ -413,7 +430,7 @@ function addToCursor(): void {
     <div class="flex items-center justify-between mb-6">
       <div>
         <h2 class="text-2xl font-bold tracking-tight">
-          {{ $t("mcp.title") }}
+          MCP / A2A
         </h2>
         <p class="text-muted-foreground mt-1">
           {{ $t("mcp.subtitle") }}
@@ -716,6 +733,7 @@ function addToCursor(): void {
           :chat-tool="config.chat_tool"
           :credentials="llmCredentials"
           @update="updateGlobalChatTool"
+          @copy="copyToClipboard"
         />
       </div>
 
@@ -1073,8 +1091,10 @@ function addToCursor(): void {
                 <MCPChatToolControls
                   :chat-tool="server.chat_tool"
                   :credentials="llmCredentials"
+                  :server-id="server.id"
                   compact
                   @update="updateServerChatTool(server, $event)"
+                  @copy="copyToClipboard"
                 />
               </div>
 

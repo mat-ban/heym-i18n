@@ -51,6 +51,8 @@ Atverot workflow vietnē `/workflows/{workflowId}/{executionId}`, šī izpilde t
 
 ### Lietošanas gadījumi
 
+Turiet nospiestu Ctrl/Cmd un noklikšķiniet uz izpildes jebkurā no vēstures sarakstiem, lai atvērtu šo tiešo saiti jaunā pārlūkprogrammas cilnē. Pašreizējā cilne un atvērtais dialoglodziņš paliek nemainīgi. Tērzēšanas un asistenta izpildēm nav workflow, tāēc saīsne tos tikai atlasa, līdzīgi parastam klikšķim.
+
 - Atkārtoti palaist workflow ar tādiem pašiem ievades datiem
 - Atkļūdot neveiksmīgu izpildi, pārbaudot ievades un mezglu izvades
 - Salīdzināt izvades starp izpildēm

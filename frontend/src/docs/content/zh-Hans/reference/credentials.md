@@ -14,7 +14,7 @@ Credentials 存储 Workflow 节点使用的 API keys 和 secrets。您可以在 
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、[Evals](../tabs/evals-tab.md) | OpenAI、Google、Custom | 模型的 API key |
 | [Decision](../nodes/decision-node.md)、[Evals](../tabs/evals-tab.md) judge | Decision Model | 决策模型 Endpoint 的 Base URL，以及可选的 API key |
-| [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、Chat、AI Defaults | Model Router (Auto Model) | 使用决策模型选择由哪个模型处理每个请求 |
+| [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、Chat、AI Defaults, [Evals](../tabs/evals-tab.md) Prompt 套件 | Model Router (Auto Model) | 使用决策模型选择由哪个模型处理每个请求 |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT 订阅登录（OAuth）或用于 runner 的 Codex access token，以及用于仓库操作的 GitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | 用于 runner 的 OpenCode Go gateway API key（可选 base URL），以及用于仓库操作的 GitHub PAT |
 | [Agent](../nodes/agent-node.md)、[HTTP](../nodes/http-node.md)、[GitHub](../nodes/github-node.md) | GitHub | 用于 GitHub API 调用、GitHub 节点操作和 MCP 集成的 GitHub personal access token (PAT) |

@@ -51,6 +51,8 @@ Ved åbning af et workflow på `/workflows/{workflowId}/{executionId}` bringes d
 
 ### Anvendelsestilfælde
 
+Ctrl/Cmd-klik på en kørsel i en af historiklisterne for at åbne det direkte link i en ny fane i browseren. Den aktuelle fane og den åbne dialogboks forbliver uændrede. Chat- og assistentkørsler har intet workflow, så genvejen markerer dem blot, ligesom et almindeligt klik.
+
 - Genkør et workflow med de samme inputs
 - Fejlfinding af en mislykket kørsel ved inspektion af inputs og node-outputs
 - Sammenligning af outputs på tværs af kørsler

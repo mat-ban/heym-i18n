@@ -50,6 +50,8 @@ Luotu raportti kattaa kolme osaa järjestyksessä: **Improvement areas** (konkre
 3. **Network nodes** – solmille, jotka tekevät verkkopyyntöjä (kuten [HTTP](../nodes/http-node.md) ja integraatiosolmut), raportti suosittelee solmukohtaista virheenkäsittelyä (yritä uudelleen ja/tai jatka virheestä) näille solmuille.
 4. **Alerts** – kun workflowlle ei ole määritetty [hälytyksiä](../tabs/alerts-tab.md), raportti suosittelee hälytysten määrittämistä ennen tuotantoon vientiä.
 
+5. **Evals**: kun workflowssa on [Agent](../nodes/agent-node.md)-solmu ilman agenttisarjaa, raportti suosittelee **Agent Suite** (tai **Prompt Suite**) -sarjaa kohdassa [Evals](../tabs/evals-tab.md#agent-suites); kun siinä on [LLM](../nodes/llm-node.md)-solmu, se suosittelee **Prompt Suite** -sarjaa promptin testaamiseksi eri mallien välillä.
+
 ### Analyysin suorittaminen ominaisuuksista
 
 Kun workflowssa on solmuja canvaksella mutta analyysidokumenttia ei vielä ole, **Run Analyzer** -painike näkyy workflow-tason [Properties](./canvas-features.md) -paneelissa (näkyy, kun mitään solmua ei ole valittuna). Se avaa tämän Workflow Analysis -paneelin, jossa voit valita tunnistetiedon ja mallin ja luoda raportin.

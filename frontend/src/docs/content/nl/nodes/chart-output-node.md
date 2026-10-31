@@ -10,7 +10,7 @@ De **Chart Output**-node is de terminale node van een [dashboardwidget](../tabs/
 | Uitvoer | 0 (terminaal) |
 | Uitvoer | Gestandaardiseerde chart-payload |
 
-Plaats deze node **als laatste** in een dashboardwidget-workflow. De node ervoor dient een array van rij-objecten te produceren, bijvoorbeeld:
+Plaats deze node **als laatste** in een dashboardwidget-workflow. Voor entity relationships produceert de node ervoor een graafobject (zie [Entity relationships](#entity-relationships-db)). Andere gegevensgestuurde grafieken gebruiken een array van rij-objecten, bijvoorbeeld:
 
 ```json
 [
@@ -26,9 +26,9 @@ Wanneer uitsluitend voorbeeld-/samplegegevens beschikbaar zijn (geen echte bron)
 | Parameter | Type | Beschrijving |
 |-----------|------|-------------|
 | `label` | string | Node-identificatie (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` of `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` of `hitl` |
 | `orientation` | string | `vertical` of `horizontal` (alleen voor staafdiagrammen) |
-| `dataPath` | string | Dot-pad naar de rijen-array binnen de upstream-uitvoer (bijv. `data` of `result.items`). Laat leeg voor automatische detectie. |
+| `dataPath` | string | Dot-pad naar de rijen-array (of graafobject voor `erDiagram`) binnen de upstream-uitvoer (bijv. `data` of `result.items`). Laat leeg voor automatische detectie. |
 | `labelField` | string | Rijsleutel die als categorielabel wordt gebruikt (pie/bar/line) |
 | `valueField` | string | Rijsleutel die als numerieke waarde wordt gebruikt (pie/bar/line/numeric/gauge) |
 | `series` | array | Optionele multi-series-definitie `[{ "name": "Sent", "field": "sent" }]` voor bar/line (overschrijft `valueField`) |
@@ -54,8 +54,51 @@ Wanneer uitsluitend voorbeeld-/samplegegevens beschikbaar zijn (geen echte bron)
 - **scatter** — X/Y-punten uit `xField` en `yField` voor correlatieplots.
 - **proportion** — een enkele horizontale balk opgesplitst in aandelen met een percentagelegenda (bijv. een taalverdeling). Gebruikt `labelField` + `valueField`.
 - **barGauge** — één horizontale gauge per rij met een rood→groen verloop en een waarde (bijv. vrije schijfruimte). Gebruikt `labelField` + `valueField`, optionele `unit` en `max` (standaard de grootste rijwaarde).
+- **gantt** — taakplanningen met datums, voortgang en afhankelijkheden; zie [Gantt-planningen](#gantt-schedules).
+- **erDiagram** — database-entiteiten, velden, sleutels en relaties; zie [Entity relationships](#entity-relationships-db).
 - **text** — een markdown-bericht (bijv. een statusnotitie zoals "Last execution at 19:47"). Plaats de markdown in `text` voor een statisch bericht, of laat `text` leeg en stel `valueField` in om een string te renderen die upstream wordt geproduceerd. Ondersteunt koppen, vet/cursief, [lijsten](../nodes/chart-output-node.md#interactive-task-lists), links en inline code.
 - **hitl** — een carrousel van uw openstaande human reviews. De kop toont `1/n pending`; de linkpijl is uitgeschakeld op de eerste kaart en de rechterpijl op de laatste. De workflownaam opent die uitvoering op het canvas. **Approve**, **Request changes** en **Reject** lossen deze op, en het geschiedenis-pictogram naast de widgettitel opent die uitvoering in het geschiedenis-dialoogvenster op dezelfde pagina. Dit charttype negeert upstream-rijen, dus de widget-workflow bestaat alleen uit de Chart Output-node. Elke aangemelde persoon ziet de reviews van workflows die hij of zij bezit. Kies een **Workflow** (en **Select agent** als die meerdere reviewstappen heeft) in de eigenschappen van het knooppunt of de instellingen van de widget om in plaats daarvan de reviews van die Workflow te tonen, aan iedereen die de Workflow kan openen; zie [HITL-widgets](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt-planningen
+
+Kies **Gantt** (`gantt`) voor projectplanningen en taak-tijdlijnen. Stel `dataPath` in op de task-array, zoals `tasks`. Rijen gebruiken vaste veldnamen:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` en `end` accepteren ISO-datums of datumtijden. Waarden zonder tijdzone gebruiken UTC; tijdzoneverschuivingen worden omgezet naar UTC. `end` moet op of na `start` vallen. `progress` is optioneel (0–100, standaard 0); `dependencies` bevat bestaande taak-id's. Id's moeten uniek zijn. Beweeg over een taak om de volledige datums, voortgang en afhankelijkheden te bekijken. Grote grafieken kunnen binnen de widget scrollen. Maximaal 500 taken worden geaccepteerd.
+
+Voor voorbeeldgegevens kan een Set-toewijzing genaamd `tasks` `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))` gebruiken. Verbind deze met Chart Output via `chartType: "gantt"` en `dataPath: "tasks"`. Wijs bronkolommen toe aan deze vaste namen met een Set-node; `labelField` en `valueField` worden niet gebruikt.
+
+### Entity relationships (DB)
+
+Kies **Entity relationships (DB)** (`erDiagram`) voor databaseschema's en entiteitsverbindingen. Stel `dataPath` in op een graaf-**object**, zoals `graph`, dat beide arrays bevat:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Velden hebben een `name`, optioneel `type` en optionele `key` (`PK`, `FK`, `PK/FK` of leeg). Relaties verwijzen naar bestaande entiteits-id's; optionele `sourceField` en `targetField` verankeren de verbinding aan benoemde velden. `cardinality` accepteert `one-to-one`, `one-to-many` (standaard), `many-to-one` of `many-to-many`. Entiteits-id's en veldnamen binnen elke entiteit moeten uniek zijn. Maximaal 100 entiteiten, 100 velden per entiteit en 500 relaties worden geaccepteerd.
+
+Bouw met een Set-node `graph` op met `$dict(entities=array(dict(...)), relations=array(dict(...)))`; gebruik `chartType: "erDiagram"` en `dataPath: "graph"`. Dit is een visualisatie van het aangeleverde schema; er wordt niet automatisch een actieve database geïnspecteerd.
+
+Beide typen verschijnen in **Widget toevoegen** met een voorbeeld en in de grafiektype-kiezer van de canvasnode. Heym Work kan deze typen voorstellen wanneer u een planning of databaseschema beschrijft, waarbij vooraf voorbeelden van de voorgestelde taken of entiteiten worden getekend voordat u de pagina bouwt.
 
 ### Interactieve takenlijsten
 

@@ -47,7 +47,7 @@ No aplicativo, a aba **Logs** lê a mesma saída do contêiner. Ela é controlad
 
 ## O Que É Registrado
 
-Toda mudança de estado é registrada. As leituras são registradas apenas quando a própria leitura é o ato sensível — visualizar o histórico de execuções de um workflow, abrir uma credencial, baixar um arquivo. Leituras comuns de listagem e de detalhes não são auditadas; o log de acesso já registra que uma requisição ocorreu, e auditar cada `GET` sepultaria as linhas que importam.
+Toda mudança de estado é registrada. As leituras são registradas apenas quando a própria leitura é o ato sensível — visualizar o histórico de execuções de um workflow, abrir uma credencial, baixar um arquivo. Leituras comuns de listagem e de detalhes não são auditadas; o log de acesso já registra que uma requisição ocorreu, e auditar cada `GET` sepultaria as linhas que importam. A única exceção são as [visualizações de página](#page-views), que registram para onde um usuário autenticado navegou no aplicativo.
 
 ### Autenticação
 
@@ -62,9 +62,34 @@ Toda mudança de estado é registrada. As leituras são registradas apenas quand
 | `sso_settings.update` | Um administrador alterou a configuração de [SSO](./sso.md). Registra `enabled` e `password_login_disabled`, nunca o client secret. |
 | `sso_settings.test` | Um administrador executou o teste de conexão SSO. |
 
+### Visualizações de página
+
+`page.view` é registrado sempre que um usuário autenticado abre uma página no aplicativo web, com o caminho da URL em um campo `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+O caminho é a rota interna do aplicativo. As abas do dashboard fazem parte dele (`/?tab=traces`), assim como os identificadores que indicam o que está aberto, como `/workflows/<id>`. Apenas uma lista restrita de parâmetros de consulta que identificam a página é mantida (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); todo o restante na string de consulta e todo o fragmento são descartados. Páginas cujo link transporta um segredo, como `/review/<token>`, são registradas com o espaço reservado `:token` em vez do segredo.
+
+O navegador informa o caminho, de modo que uma linha `page.view` mostra para onde o usuário declarou ter ido. Ela não prova que o servidor retornou essa página. Visitas à página de login e a links abertos sem autenticação não são registradas, pois nenhum usuário está associado a elas.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` é registrado quando uma execução é iniciada pela API: o botão Executar do editor, o endpoint de execução com sessão, chave de API ou webhook, o portal de chat e as ferramentas MCP. Registra quem iniciou, como e de que forma terminou:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` vincula a linha à execução no Histórico de execuções. `outcome` é `failure` quando a execução terminou em `error`, `cancelled` ou `timeout`. Uma execução em pausa para revisão humana ou retida na fila de simultaneidade é uma linha `success` com `status=pending` ou `status=queued`. Uma chamada sem usuário autenticado, como um webhook anônimo ou um visitante do portal, não possui `actor_id` ou `actor_email`. Entradas e saídas nunca são registradas.
+
+Execuções iniciadas por agendamento, nó trigger, fila ou evento não constituem linhas de auditoria. Elas são executadas na instância que as reivindicou e registradas no Histórico de execuções com sua fonte de trigger e a instância executora.
+
+`workflow.history_view` é registrado quando alguém abre o histórico de execuções de um workflow. A consulta rápida que mostra a última execução de um workflow na tela ou em uma lista não gera auditoria.
+
 
 `workflow.history_view` registra `owned=false` quando um colaborador lê o histórico de execuções de outra pessoa. `workflow.delete` registra `outcome=denied` com `reason=not_owner` quando um colaborador tenta excluir.
 
@@ -96,6 +121,27 @@ Uma linha de auditoria registra identificadores, nomes e contagens. Ela nunca re
 Dois mecanismos garantem isso. Os pontos de chamada são escritos para passar apenas campos seguros, e o helper de auditoria aplica redação como salvaguarda: qualquer campo cujo nome contenha `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` ou similares é substituído por `***` antes que a linha seja construída. A redação excessiva é intencional — uma linha pouco útil é melhor do que uma credencial vazada.
 
 Quando um segredo é genuinamente relevante para o registro, apenas sua forma é registrada. Um compartilhamento de arquivo registra `password_protected=true`, nunca a senha.
+
+## Heym Work
+
+Ao executar o Heym Work juntamente com o Heym, o Work emite linhas de auditoria na saída padrão do seu próprio contêiner no mesmo formato Winston:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+O Work registra ações de usuários em páginas, quadros e registros:
+
+| Ação | Significado |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Alterações em páginas e layouts de dashboard |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Alterações de layout de colunas Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Eventos do ciclo de vida dos cartões |
+| `record.create`, `record.update`, `record.delete` | Mutações de registros de tabelas de dados pelo Work |
+| `chat.message` | Prompt do usuário enviado ao assistente do Work |
+| `export.csv`, `export.json` | Exportações de dados |
+
+Cada linha inclui os mesmos campos `actor_id`, `actor_email`, `timestamp` e `outcome` que as linhas de auditoria do Heym, permitindo que coletores de logs processem ambos por meio de um único pipeline.
 
 ## Retenção
 

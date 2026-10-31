@@ -51,6 +51,8 @@ Odprtje workflow-a na `/workflows/{workflowId}/{executionId}` samodejno prinese 
 
 ### Uporabniški primeri
 
+Pritisnite Ctrl/Cmd+klik na izvedbo v katerem koli seznamu zgodovine, da odprete to neposredno povezavo v novem zavihku brskalnika. Trenutni zavihek in odprto pogovorno okno ostaneta nespremenjena. Zagoni klepeta in asistenta nimajo workflowa, zato jih bližnjica le izbere, enako kot običajen klik.
+
 - Ponovno izvajanje workflow-a z istimi vhodnimi podatki
 - Odpravljanje napak pri neuspelem izvajanju z pregledom vhodnih podatkov in izhodov vozlišč
 - Primerjava izhodov med izvajanjami

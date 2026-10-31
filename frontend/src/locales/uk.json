@@ -83,7 +83,8 @@
     "run": "Запустити",
     "dropFileOrClick": "Перетягніть файл сюди або натисніть, щоб вибрати",
     "removeFile": "Видалити файл",
-    "chooseFileFor": "Виберіть файл для {label}"
+    "chooseFileFor": "Виберіть файл для {label}",
+    "new": "Новий"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1260,7 +1261,16 @@
     "judgeNoneSelfScore": "Немає: кожна модель оцінює себе сама",
     "removeJudge": "Видалити judge",
     "judgeModel": "Judge Model",
-    "enterJudgeModel": "Введіть judge model для запуску з цим judge."
+    "enterJudgeModel": "Введіть judge model для запуску з цим judge.",
+    "promptSuite": "Набір промптів",
+    "promptSuiteDesc": "Тестуйте системний промпт у різних моделях",
+    "agentSuite": "Набір агентів",
+    "agentSuiteDesc": "Перевіряйте реальні запуски агента: інструменти, затримка, вартість",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Шукати набори...",
+    "loadingSuite": "Завантаження набору...",
+    "couldNotLoadSuite": "Не вдалося завантажити цей набір."
   },
   "dashboard": {
     "greeting": "Вітаємо, {name},",
@@ -1701,7 +1711,9 @@
     "askAi": "Запитати AI",
     "askAiTitle": "Запитайте Chat-асистента про цей запуск",
     "noNodeSpans": "Для цього запуску не записано жодних span вузлів.",
-    "queuedProgress": "У черзі {position}/{size}"
+    "queuedProgress": "У черзі {position}/{size}",
+    "clickToSelectRun": "Натисніть, щоб вибрати цей запуск",
+    "doubleClickOrOpenNewTab": "Двічі клацніть, щоб перенести цей запуск на полотно, Ctrl/Cmd+клік, щоб відкрити на новій вкладці"
   },
   "portal": {
     "loadingPortal": "Завантаження порталу...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Надайте доступ до Ваших workflows як MCP tools для AI-асистентів",
+    "subtitle": "Відкривайте свої workflow як інструменти MCP і Heym Agent через MCP та A2A",
     "connection": "MCP Connection",
     "connectionSubtitle": "Підключіть Вашого AI-асистента до Ваших workflows через MCP протокол.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "У розділі Власні додатки натисніть Додати власний додаток",
     "geminiStep3": "Вставте URL-адресу сервера MCP, наведену вище, і залиште Розширені функції закритими; Gemini зареєструється автоматично",
     "geminiStep4": "Натисніть Далі та авторизуйтесь за допомогою облікових даних Heym",
-    "geminiInfo": "Gemini використовує OAuth для безпечної автентифікації. Ваші облікові дані Heym використовуються для авторизації доступу й ніколи не передаються Gemini. Після підключення Heym також працює в мобільному додатку Gemini."
+    "geminiInfo": "Gemini використовує OAuth для безпечної автентифікації. Ваші облікові дані Heym використовуються для авторизації доступу й ніколи не передаються Gemini. Після підключення Heym також працює в мобільному додатку Gemini.",
+    "agentReach": {
+      "off": "Вимкнено: клієнти MCP і A2A не можуть зв'язатися з Heym Agent",
+      "unconfigured": "Виберіть облікові дані та модель, щоб Heym Agent міг працювати",
+      "mcpA2a": "Доступний через MCP та A2A",
+      "mcpOnly": "Доступний як heym_chat через MCP"
+    },
+    "a2aEnabledOnServer": "A2A увімкнено на «{name}»",
+    "a2aEnabled": "A2A увімкнено",
+    "a2aDisabledOnServer": "A2A вимкнено на «{name}»",
+    "a2aDisabled": "A2A вимкнено",
+    "agentAndA2aDisabledOnServer": "Heym Agent та A2A вимкнено на «{name}»",
+    "agentAndA2aDisabled": "Heym Agent та A2A вимкнено",
+    "a2a": {
+      "enable": "Увімкнути A2A",
+      "description": "Інші агенти можуть надсилати завдання до Heym Agent за протоколом Agent2Agent (A2A 1.0). Вони автентифікуються ключем цього сервера в заголовку X-MCP-Key або через Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Перевірте, чи картка активна:",
+      "copyLabel": "Копіювати {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Панель аналітики",
@@ -2087,6 +2119,25 @@
       "errors": "Помилки",
       "avgLatencyMs": "Середня затримка (мс)",
       "latencyTitle": "Середня затримка у часі"
+    },
+    "last1Hour": "Остання година",
+    "last3Hours": "Останні 3 години",
+    "last6Hours": "Останні 6 годин",
+    "nodeTypes": "Типи вузлів",
+    "nodeChart": {
+      "emptyMessage": "Даних вузлів за цей період ще немає. Аналітика вузлів записується для запусків після цього оновлення.",
+      "duration": {
+        "title": "Найдовші за часом вузли",
+        "subtitle": "Середня тривалість на виклик"
+      },
+      "errors": {
+        "title": "Типи вузлів з найбільшою кількістю збоїв",
+        "subtitle": "Помилки з часом"
+      },
+      "calls": {
+        "title": "Найчастіше викликані типи вузлів",
+        "subtitle": "Виклики з часом"
+      }
     }
   },
   "dashboards": {

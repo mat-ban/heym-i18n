@@ -23,6 +23,8 @@ Impala on yksittäinen kaavio ruudukossa. Tuetut kaaviotyypit:
 - **Mittari** (yksi arvo min–max-välillä, esim. prosentti)
 - **Hajontakuva** (X/Y-pisteet korrelaatioiden visualisointiin)
 - **Osuus** (yksi pylväs jaettuna osuuksiin prosenttilegendin kanssa, esim. kielijakauma)
+- **Gantt** (tehtävien päivämäärät, valmistuminen ja riippuvuudet)
+- **Entity relationships (DB)** (taulukot, kentät, PK/FK-avaimet ja yhteydet)
 - **Pylväsmittari** (vaakasuora mittari per rivi punaisesta vihreään gradientilla ja arvolla, esim. levytilaa)
 - **Teksti** (Markdown-viesti, esim. tilatieto kuten "Viimeisin suoritus klo 19:47"; tukee [interaktiivisia valintalistoja](../nodes/chart-output-node.md#interactive-task-lists) staattisessa Markdownissa ja [numeroituja listoja](../nodes/chart-output-node.md#numbered-lists) mukautettua tai laskevaa numerointia varten)
 - **HITL** (odottavat ihmisten tekemät tarkistukset. Otsikko näyttää `1/n odottaa`. Workflown nimi avaa kyseisen suorituksen canvasilla. **Hyväksy**, **Pyydä muutoksia** ja **Hylkää** ratkaisevat tarkistuksen. Historia-kuvake impalan otsikon vieressä avaa kyseisen suorituksen historianäkymään tällä sivulla. Impala ei käytä yläpuolisia rivejä, ja jokainen näkee oman jononsa. Se voi sen sijaan näyttää yhden Workflowin tarkistukset kaikille, joilla on oikeus avata kyseinen Workflow; katso [HITL-widgetit](#hitl-widgetit))
@@ -96,6 +98,18 @@ Widget-ohjelmointirajapinta voi luoda myös **laskurikortin** ilman AI:ta: `text
 
 Käytä impalan **Hienosäädä tekoälyllä** -painiketta muokataksesi olemassa olevaa impalaa uudella ohjeella. Jokainen tekoälyhienosääntö tallentaa edellisen workflown version impalan **Muokkaushistoriaan**, josta voit tarkastella tai palata muutoksiin workflow-editorissa.
 
+## Chatista ja MCP:stä
+
+[Chat](./chat-tab.md) ja MCP-asiakkaat [`heym_chat`-työkalun](./mcp-tab.md) kautta voivat lukea dashboardejasi, lisätä niihin widgettejä, nimetä tai poistaa widgettejä ja siistiä dashboardin asettelua. Heym Work näyttää jokaisen dashboardin sivuna, joten samat vastaukset kattavat sen sivut.
+
+- **Mitä dashboardeja on olemassa ja mitä niissä on.** Kysy "mitä dashboardeja minulla on?", "mitä Myynti-dashboardilla on?" tai "millä dashboardilla liikevaihto-workflow on?". Chat listaa omat ja kanssasi jaetut dashboardit käyttöoikeuksineen ja linkkeineen kuhunkin, sekä jokaisen niissä olevan widgetin: otsikon, kaaviotyypin ja sen taustalla olevan workflow'n. [HITL-widget](#hitl-widgets), joka on suodatettu sellaiseen workflow'hun, jota et voi avata, pysyy piilossa aivan kuten itse dashboardilla.
+- **Uusi widget.** Pyydä "lisää avoimien tapausten kaavio tilan mukaan Myynti-dashboardille". Chat asettaa ensin tyhjän widgetin dashboardille, kirjoittaa sitten widgetin oman workflow'n, suorittaa testiajoja ja korjaa virheitä, kunnes ajo onnistuu, samalla tavalla kuin se [luo workflow'ita](./chat-tab.md#workflow-iden-luominen). Erillistä workflow'ta ei jätetä taustalle, ja jokainen tallennus näkyy widgetin Edit Historyssa. Widgetin otsikko ja kaaviotyyppi noudattavat sitä, mitä Chat tallentaa.
+- **Olemassa oleva workflow.** Pyydä "aseta liikevaihto-workflow Myynti-dashboardille". Workflow, joka päättyy Chart Output -solmuun, muuttuu kaaviowidgetiksi, jolla on oma kopio workflow'sta, joten widgetin myöhemmät muutokset eivät koskaan kosketa alkuperäistä. Workflow, jossa on trigger- tai input-solmu, ei voi muuttua kaaviowidgetiksi. Kaikista muista workflow'ista tulee [suorituswidgettejä](#run-widgets), jotka vaativat myös workflow'n, jonka dashboardin omistaja voi suorittaa.
+- **Widgetin nimeäminen tai poistaminen.** Pyydä "nimeä Liikevaihto-widget uudelleen nimelle Myynti" tai "poista widget Avoimet tapaukset". Kaaviowidgetin workflow ottaa myös uuden nimen; suorituswidgetin workflow säilyttää omansa. Kaaviowidgetin poistaminen poistaa sen workflow'n samalla tavalla kuin widgetin poistopainike tekee; suorituswidgetin workflow säilyy. Chat poistaa vain widgetin, jota nimenomaisesti pyysit, ja kysyy ensin tarkennusta, jos sanasi vastaavat useita widgettejä.
+- **Siistiminen.** Pyydä "siisti Myynti-dashboard" tai "lisää nämä kolme widgettiä ja siisti". Chat järjestää näkemäsi widgetit järjestykseensä samalla tavalla kuin **Siisti**-painike tekee: satunnaisia kahden tai kolmen rivejä, joten uusi pyyntö antaa toisen asettelun. Pyydä tietty määrä riviä kohden ("kolme riviä kohden") saadaksesi kyseisen kokoisia rivejä. Tämä järjestää dashboardin Heymissä; Heym Work säilyttää oman sivun asettelunsa, jota sivun oma **Siisti**-painike muuttaa.
+
+Uudet widgetit sijoitetaan dashboardin olemassa olevien widgettien alapuolelle ja ne suoritetaan, kuten mikä tahansa widget, dashboardin omistajan oikeuksilla. Lisääminen, nimeäminen, poistaminen ja siistiminen vaativat kirjoitusoikeuden dashboardiin. Uuden widgetin luominen edellyttää chattia, joka pystyy rakentamaan workflow'ita: Chat-välilehteä, Heym Work Chatia muokkaajille ja `heym_chat`-työkalua.
+
 ## Asettelun muokkaaminen
 
 Vaihda **Muokkaa**-tilaan siirtyäksesi muokkaustilaan, jossa voit raahata impaloita ja muuttaa niiden kokoa 12-sarakkeisessa ruudukossa. Asettelumuutokset tallennetaan automaattisesti. Impalien otsikoita voidaan muokata suoraan otsikkopalkista.
@@ -127,3 +141,7 @@ Jaon poistaminen tai kirjoitusoikeuden muuttaminen luku-oikeudeksi tulee voimaan
 
 - [Kaaviotulosolmu](../nodes/chart-output-node.md)
 - [Analytiikkavälilehti](analytics-tab.md) — sisäänrakennetut suoritusmittarit (erillään käyttäjien rakentamista kojelaudoista)
+
+## Aikataulut ja tietokantakaaviot
+
+Valitse Lisää widget -kohdasta **Gantt** näyttääksesi tehtävät ajassa valmistumisen ja riippuvuuslinkkien kera, tai **Entity relationships (DB)** kartoittaaksesi taulukot, kentät ja niiden suhteet. Molemmat tyypit käyttävät [Chart Output -solmua](../nodes/chart-output-node.md#gantt-schedules) ja ovat saatavilla myös Heym Work -sivuilla. Kun Work ehdottaa widgettejä aikataululle tai tietokantakaaviolle, se piirtää esikatselut ehdotetuista tehtävistä tai entiteeteistä.

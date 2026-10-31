@@ -23,7 +23,8 @@ Rozmowę można również rozpocząć z poziomu pola czatu w zakładce [Workflow
 - **Kolejkowanie kontynuacji** – Więcej wiadomości można wysyłać, gdy odpowiedź jest strumieniowana. Zakolejkowane wiadomości są utrwalane, można je edytować lub usuwać przed rozpoczęciem, a uruchamiają się w kolejności po zakończeniu aktywnej odpowiedzi
 - **Pauzy planowania** – Gdy Chat potrzebuje szczegółów planowania, zadaje pytania doprecyzowujące i wstrzymuje zakolejkowane kontynuacje do czasu udzielenia odpowiedzi. Po zakończeniu odpowiedzi planowania zakolejkowane wiadomości są wznawiane
 - **Dane logowania** – Gdy workflow tworzony lub edytowany przez Chat wymaga danych logowania, Chat pyta, których użyć, proponuje utworzenie nowych w rozmowie lub pozwala kontynuować bez nich. Można również poprosić Chat o utworzenie danych logowania lub aktualizację posiadanych; otwiera on formularz danych logowania w rozmowie. Model widzi nazwę i typ danych logowania, nigdy ich wartości, zarówno dla danych logowania należących do użytkownika, jak i udostępnionych mu. Węzły LLM i Agent dodawane przez Chat działają na danych logowania i modelu wybranym dla czatu, w tym na udostępnionych danych logowania; gdy Chat edytuje workflow, jego istniejące węzły LLM i Agent zachowują swoje dane logowania i model. Zobacz [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Tabele danych** – Gdy workflow tworzony lub edytowany przez Chat zapisuje rekordy, Chat pyta, której [tabeli danych](./datatable-tab.md) użyć, lub proponuje utworzenie nowej z kolumnami wymaganymi przez workflow. Może również wyświetlić listę tabel i ich kolumn. Nigdy nie odczytuje ani nie zapisuje wierszy. Zobacz [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Zapytaj, jakie masz [dashboards](./dashboard-tab.md), co znajduje się na danym dashboardzie lub na którym dashboardzie znajduje się workflow. Poproś Chat o dodanie nowego widżetu do dashboardu (umieszcza tam pusty widżet, a następnie buduje i testuje jego workflow), umieszczenie istniejącego workflow na dashboardzie jako widżetu, zmianę nazwy lub usunięcie widżetu albo uporządkowanie układu dashboardu. Heym Work wyświetla te dashboardy jako swoje strony. Zobacz [Dashboard › Z poziomu Chat i MCP](./dashboard-tab.md#z-poziomu-chat-i-mcp)
+- **Tabele danych** – Gdy workflow tworzony lub edytowany przez Chat zapisuje rekordy, Chat pyta, której [tabeli danych](./datatable-tab.md) użyć lub proponuje utworzenie nowej z wymaganymi kolumnami. Może również przeglądać wiersze, dodawać lub usuwać kolumny oraz bezpośrednio wstawiać, aktualizować lub usuwać wiersze w tabelach, których jesteś właścicielem lub masz do nich prawa zapisu. Wystarczy podać nazwę tabeli lub link DataTable. Usunięcie kolumn i wyczyszczenie wszystkich wierszy wymaga potwierdzenia; dodawanie kolumn zachowuje istniejące dane. Zobacz [Asystent AI › Tabele danych](../reference/ai-assistant.md#data-tables)
 - **Strumieniowanie odpowiedzi** – Odpowiedź modelu jest widoczna w miarę jej strumieniowania
 - **Zatrzymanie odpowiedzi** – Bieżącą strumieniowaną odpowiedź można przerwać w dowolnym momencie; zatrzymanie usuwa również zakolejkowane wiadomości dla tej rozmowy
 - **Renderowanie Markdown** – Odpowiedzi obsługują formatowanie Markdown, w tym obrazy w tekście
@@ -33,16 +34,17 @@ Rozmowę można również rozpocząć z poziomu pola czatu w zakładce [Workflow
 - **Wprowadzanie głosowe** – Przycisk mikrofonu umożliwia zamianę mowy na tekst (obsługiwane przez przeglądarkę). Po zakończeniu nagrywania Heym może lekko oczyścić transkrypcję przed jej wysłaniem
 - **Harmonogramy workflow** – Można pytać, kiedy uruchamiają się workflow cron (dzisiaj, w tym tygodniu, w tym miesiącu lub w niestandardowym zakresie dat). Asystent korzysta z tych samych danych harmonogramu co zakładka [Scheduled](./scheduled-tab.md) i może ograniczyć wyniki do posiadanych workflow lub uwzględnić te udostępnione
 - **Historia uruchomień workflow** – Można pytać o konkretny workflow („ile razy uruchomił się raport dzienny?”, „czy zakończył się błędem?”, „kiedy ostatnio został uruchomiony?”). Chat wyszukuje workflow po jego ID i odpowiada na podstawie liczby uruchomień, podziału statusów, czasu pierwszego i ostatniego uruchomienia oraz średniego czasu trwania. Pytanie o przyczynę błędu uruchomienia lub jego wynik powoduje, że Chat otwiera to pojedyncze uruchomienie, aby odczytać jego dane wejściowe, wyjściowe i błędy poszczególnych węzłów
+- **Gdzie wykonania kończą się niepowodzeniem i dlaczego działają wolno** – Zapytaj, gdzie Twoje workflow zawodzą lub dlaczego działają wolno, a Chat wskaże workflow, które uruchamiały się najczęściej, miały najwięcej awarii i działały najwolniej, a także typy węzłów zajmujące najwięcej czasu (średnio na wywołanie i łącznie), ulegające najczęstszym awariom i uruchamiane najczęściej — dokładnie te same wartości, co w zakładce [Analytics](./analytics-tab.md). Typy węzłów są zliczane dla uruchomień począwszy od wersji, która wprowadziła analitykę węzłów. Możesz pytać o ostatnią godzinę, 3 lub 6 godzin, 24 godziny, 7 lub 30 dni bądź cały okres; okna godzinowe zaczynają się o pełnej godzinie, więc „ostatnia godzina” o 15:20 obejmuje zakres od 14:00 do teraz.
 - **Bieżący status uruchomień** – Pytanie o to, co działa teraz, skutkuje odpowiedzią Chatu zawierającą liczbę uruchomień, nazwy workflow, czas trwania każdego uruchomienia, węzeł, na którym się znajduje, oraz bezpośredni link do bieżącego uruchomienia
 ## Korzystanie z Chat z klienta MCP
 
-Silnik Chat można również uruchamiać spoza przeglądarki. Po włączeniu narzędzia **Heym Chat Tool** w zakładce [MCP](./mcp-tab.md) klienci MCP — Claude, Cursor oraz wszelkie inne narzędzia obsługujące MCP — otrzymują jedno narzędzie `heym_chat`, które uruchamia ten sam silnik wraz z pełnym zestawem jego możliwości.
+Silnik Chat można również uruchamiać spoza przeglądarki. Po włączeniu **Heym Agent** w [zakładce MCP / A2A](./mcp-tab.md) klienci MCP (Claude, Cursor i wszelkie inne narzędzia obsługujące MCP) zyskują jedno narzędzie `heym_chat`, które uruchamia ten sam silnik z pełnią jego możliwości. Zaznacz także **Włącz A2A**, aby inni agenci mogli przesyłać zadania za pośrednictwem protokołu [A2A](../reference/a2a.md); takie konwersacje są oznaczone ikoną sieci na liście.
 
 Takie rozmowy trafiają do historii tej zakładki i są oznaczone ikoną wtyczki na liście rozmów. Wystarczy otworzyć jedną z nich, aby przeczytać, o co pytał klient, zobaczyć karty narzędzi, które zostały wywołane, oraz samodzielnie kontynuować wątek. Odpowiadanie na pytanie doprecyzowujące przebiega identycznie niezależnie od tego, czy tura rozpoczęła się tutaj, czy z klienta MCP.
 
 W trybie MCP Chat nie wyświetla, nie wybiera ani nie tworzy danych logowania. Budowane przez niego workflow pozostawiają pola danych logowania puste, a odpowiedź wskazuje węzły wymagające danych logowania, aby można było ustawić je w edytorze.
 
-Tabele danych działają również przez MCP: Chat wyświetla listę tabel, tworzy nowe i podłącza je do budowanych workflow. Jego pytanie dotyczące tabeli pojawia się jako tekst w wyniku, dlatego należy odpowiedzieć na nie z tym samym `conversation_id`.
+Tabele danych działają również przez MCP: Chat może bezpośrednio edytować kolumny i wiersze, tworzyć tabele i włączać je do workflow. Pytania dotyczące tabel i potwierdzenia usunięcia pojawiają się jako tekst w wyniku; odpowiedz, podając ten sam `conversation_id`.
 
 ## Limit kontekstu
 
@@ -111,9 +113,34 @@ ponieważ okno już minęło, a świeże obliczenie może dać inny wynik.
 ## Reguły użytkownika
 
 [Reguły użytkownika](../reference/user-settings.md) (konfigurowane w Ustawieniach) są automatycznie wstrzykiwane do każdej rozmowy Chat jako instrukcje na poziomie systemowym. Wystarczy ustawić je raz, aby trwałe preferencje były stosowane do wszystkich żądań w Chat.
+
+## Praca z Ewaluacjami
+
+Chat potrafi tworzyć, modyfikować i uruchamiać zestawy w [Evals](./evals-tab.md), zarówno zestawy promptów, jak i zestawy agentów:
+
+- **Zestaw promptów**: „utwórz zestaw promptów dla mojego promptu odpowiedzi wsparcia z 8 przypadkami testowymi i porównaj gpt-4o z gpt-4.1-mini”. Chat tworzy przypadki testowe z oczekiwanymi odpowiedziami, wybiera metodę oceniania i zapisuje zestaw.
+  - Przed utworzeniem zestawu ustala, które dane logowania LLM i modele mają zostać użyte. W przypadku dokładnie jednych danych logowania LLM używa ich i informuje o tym; w przeciwnym razie pyta.
+  - W przypadku oceniania LLM-as-Judge pyta także, czy odpowiedzi ma oceniać oddzielny sędzia.
+- **Zestaw agenta**: „sprawdź, czy mój agent wsparcia zawsze przeszukuje dokumentację i nigdy nie wysyła wiadomości e-mail”. Chat odnajduje agenta i zapisuje weryfikacje narzędzi oraz progi. Na żądanie uruchamia workflow, generując inne dane wejściowe dla każdego uruchomienia.
+  - Uruchomienia zestawów agentów to rzeczywiste wykonania workflow, więc ich efekty uboczne mają miejsce w rzeczywistości. Chat informuje, ile uruchomień rozpoczyna.
+- **Baseline**: Chat może pracować z linią bazową agenta na trzy sposoby:
+  - Zgłosić ją na podstawie ostatnich uruchomień agenta.
+  - Zbudować ją z uruchomień, które sam rozpoczyna („uruchom go 5 razy i użyj tego jako baseline”).
+  - Zapisać wartości podane przez użytkownika („ustaw baseline na 3 sekundy p95 i 0,01 $ za uruchomienie”).
+- **Wykonania**: Chat czeka do jednej minuty na wykonanie, a następnie raportuje wynik:
+  - W przypadku zestawu promptów: liczbę zaliczeń każdego modelu i przypadki zakończone niepowodzeniem.
+  - W przypadku zestawu agenta: wskaźnik zaliczeń, testy zakończone niepowodzeniem i odchylenie od linii bazowej.
+  - Dłuższe wykonanie jest kontynuowane w Evals; poproś Chat o ponowne sprawdzenie.
+
+Gdy Chat utworzy lub zmodyfikuje zestaw, odpowiedź zawiera kartę z nazwą zestawu, jego typem oraz przyciskiem **Otwórz w Evals**, podobnie jak w przypadku karty zapisanego workflow. Przez MCP wynik `heym_chat` zawiera listę linków do każdego zestawu zapisanego w danym wywołaniu.
+
+To samo działa z poziomu klienta MCP za pośrednictwem `heym_chat` (zobacz [Korzystanie z Chat z klienta MCP](#korzystanie-z-chat-z-klienta-mcp)). Narzędzia ewaluacyjne pozostają wewnątrz `heym_chat`; klienci MCP nie widzą ich jako odrębnych narzędzi.
+
+Asystent AI w edytorze nie tworzy zestawów.
+
 ## Powiązane
 
-- [Karta MCP](./mcp-tab.md) – Udostępnia ten silnik klientom MCP jako narzędzie `heym_chat`
+- [Karta MCP / A2A](./mcp-tab.md) – Udostępnia ten silnik klientom MCP jako narzędzie `heym_chat`
 - [Ustawienia](../reference/user-settings.md) – Konfiguracja reguł użytkownika stosowanych do wszystkich żądań Chat
 - [Karta Dane logowania](./credentials-tab.md) – Dodawanie i zarządzanie kluczami API
 - [Karta Zmienne](./global-variables-tab.md) – Zmienne globalne dostępne dla Chat

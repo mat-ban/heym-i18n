@@ -47,7 +47,7 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 
 ## 기록되는 항목
 
-모든 상태 변경이 기록됩니다. 읽기는 읽기 자체가 민감한 행위인 경우에만 기록됩니다 — Workflow의 실행 이력 조회, Credential 열기, 파일 다운로드 등입니다. 일반적인 목록 및 상세 조회는 감사되지 않습니다. 액세스 로그가 이미 요청이 발생했음을 기록하고 있으며, 모든 `GET`을 감사하면 중요한 로그 줄이 묻히게 됩니다.
+모든 상태 변경이 기록됩니다. 읽기는 읽기 자체가 민감한 행위인 경우에만 기록됩니다 — Workflow의 실행 이력 조회, Credential 열기, 파일 다운로드 등입니다. 일반적인 목록 및 상세 조회는 감사되지 않습니다. 액세스 로그가 이미 요청이 발생했음을 기록하고 있으며, 모든 `GET`을 감사하면 중요한 로그 줄이 묻히게 됩니다. 유일한 예외는 로그인한 사용자가 앱에서 어디로 이동했는지를 기록하는 [페이지 뷰](#page-views)입니다.
 
 ### 인증
 
@@ -62,9 +62,34 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `sso_settings.update` | 관리자가 [SSO](./sso.md) 구성을 변경했습니다. `enabled`와 `password_login_disabled`를 기록하며, client secret은 절대 기록하지 않습니다. |
 | `sso_settings.test` | 관리자가 SSO 연결 테스트를 실행했습니다. |
 
+### 페이지 뷰
+
+`page.view`는 로그인한 사용자가 웹 앱에서 페이지를 열 때마다 `path` 필드에 URL 경로와 함께 기록됩니다:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+경로는 앱 내부 라우트입니다. 대시보드 탭은 그 일부이며(`/?tab=traces`), `/workflows/<id>`와 같이 열려 있는 대상을 지정하는 ID도 마찬가지입니다. 페이지를 식별하는 쿼리 매개변수의 짧은 목록만 유지되고(`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`), 쿼리 문자열의 다른 모든 항목과 전체 조각은 삭제됩니다. `/review/<token>`과 같이 링크에 비밀이 포함된 페이지는 비밀 대신 자리 표시자 `:token`으로 기록됩니다.
+
+브라우저가 경로를 보고하므로 `page.view` 라인은 사용자가 이동했다고 보고한 위치를 보여줍니다. 서버가 해당 페이지를 반환했음을 증명하지는 않습니다. 로그인 페이지 방문 및 로그아웃 상태에서 열린 링크는 연결된 사용자가 없으므로 기록되지 않습니다.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run`은 API(편집기의 실행 버튼, 세션이 있는 execute 엔드포인트, API 키 또는 웹훅, 채팅 포털 및 MCP 도구)를 통해 실행이 시작될 때 기록됩니다. 누가, 어떻게 시작했는지, 어떻게 끝났는지를 기록합니다:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id`는 해당 라인을 실행 이력의 실행과 연결합니다. 실행이 `error`, `cancelled` 또는 `timeout`으로 끝난 경우 `outcome`은 `failure`입니다. 사람의 검토를 위해 일시 중지되었거나 동시성 큐에 보관된 실행은 `status=pending` 또는 `status=queued`가 있는 `success` 라인입니다. 익명 웹훅이나 포털 방문자와 같이 로그인한 사용자가 없는 호출에는 `actor_id` 또는 `actor_email`이 없습니다. 입력과 출력은 절대 기록되지 않습니다.
+
+일정, 트리거 노드, 큐 또는 이벤트에 의해 시작된 실행은 감사 라인이 아닙니다. 이를 요구한 인스턴스에서 실행되며 트리거 소스 및 이를 실행한 인스턴스와 함께 실행 이력에 기록됩니다.
+
+`workflow.history_view`는 누군가가 워크플로의 실행 이력을 열 때 기록됩니다. 캔버스나 목록에서 워크플로의 최신 실행을 보여주는 간단한 조회는 감사되지 않습니다.
+
 
 `workflow.history_view`는 협업자가 다른 사람의 실행 이력을 읽을 때 `owned=false`를 기록합니다. `workflow.delete`는 협업자가 삭제를 시도할 때 `reason=not_owner`와 함께 `outcome=denied`를 기록합니다.
 
@@ -96,6 +121,27 @@ Bulk 작업은 행마다 한 번이 아니라 요청당 한 번, 건수와 함�
 이를 강제하는 두 가지 장치가 있습니다. 호출 지점은 안전한 필드만 전달하도록 작성되며, 감사 헬퍼는 백스톱으로서 민감 정보를 마스킹합니다. 이름에 `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` 또는 이와 유사한 문자열이 포함된 모든 필드는 라인이 생성되기 전에 `***`로 대체됩니다. 과도한 마스킹은 의도된 것입니다. 도움이 되지 않는 라인이 자격 증명 유출보다 낫습니다.
 
 Secret이 해당 레코드에 실제로 관련이 있는 경우에는 그 형태만 기록됩니다. 파일 공유는 `password_protected=true`를 기록하며, 비밀번호는 절대 기록하지 않습니다.
+
+## Heym Work
+
+Heym과 함께 Heym Work를 실행하면 Work는 동일한 Winston 형식으로 자체 컨테이너의 stdout에 감사 라인을 출력합니다:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work는 페이지, 보드 및 레코드에 대한 사용자 작업을 기록합니다:
+
+| 작업 | 의미 |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | 대시보드 페이지 및 레이아웃 변경 |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Kanban 열 레이아웃 변경 |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | 카드 수명 주기 이벤트 |
+| `record.create`, `record.update`, `record.delete` | Work를 통한 데이터 테이블 레코드 변경 |
+| `chat.message` | Work 어시스턴트에게 전송된 사용자 프롬프트 |
+| `export.csv`, `export.json` | 데이터 내보내기 |
+
+각 라인은 Heym 감사 라인과 동일한 `actor_id`, `actor_email`, `timestamp` 및 `outcome` 필드를 포함하므로 로그 수집기는 단일 파이프라인으로 두 로그를 모두 구문 분석할 수 있습니다.
 
 ## 보존
 

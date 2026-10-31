@@ -73,11 +73,11 @@ Comparta tablas con otros usuarios o equipos:
 1. Abra el diálogo de compartir desde la vista de detalle de la tabla
 2. Añada usuarios por correo electrónico con permiso de **read** o **write**
 3. Añada equipos con permiso de **read** o **write**
-4. Los usuarios de solo lectura pueden ver los datos; los usuarios con permiso de escritura pueden modificar filas
+4. Los usuarios de solo lectura pueden ver datos; los usuarios de escritura pueden modificar filas y columnas. Renombrar la tabla, cambiar su descripción y gestionar los recursos compartidos siguen siendo exclusivos del propietario.
 
 ## Crear tablas desde el AI Assistant
 
-El [AI Assistant](../reference/ai-assistant.md#data-tables) del canvas, el [Chat](./chat-tab.md) y la herramienta `heym_chat` de la [pestaña MCP](./mcp-tab.md) pueden seleccionar una de sus tablas para un workflow que construyan, o crear una nueva. Proponen un nombre y columnas, y crean la tabla cuando se envía la tarjeta de pregunta. Nunca modifican las columnas de una tabla existente ni tocan sus filas: añada o edite columnas aquí.
+El [Asistente de IA](../reference/ai-assistant.md#data-tables) del canvas, el [Chat](./chat-tab.md) y la herramienta `heym_chat` de la [pestaña MCP](./mcp-tab.md) pueden elegir una de sus tablas para un workflow que construyan, o crear una nueva. Proponen un nombre y columnas, y crean la tabla cuando envía la tarjeta de preguntas. El asistente del canvas configura los nodos del workflow a partir de los metadatos de la tabla. Chat y `heym_chat` también pueden inspeccionar filas, añadir o eliminar columnas e insertar, actualizar o eliminar filas directamente. Proporcióneles el nombre de una tabla o el enlace de esta pestaña. Las escrituras requieren propiedad o acceso de **escritura** directo o de equipo. Añadir columnas mantiene los datos existentes; eliminar columnas borra sus valores de cada fila. La eliminación de columnas y el vaciado de todas las filas solicitan confirmación, coincidiendo con esta pestaña.
 
 ## Uso en workflows
 

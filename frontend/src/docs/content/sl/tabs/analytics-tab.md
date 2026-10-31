@@ -15,6 +15,7 @@ Zavihek **Analitika** prikazuje metrike in trende izvajanja vaših workflows. Sp
 
 ## Časovno Obdobje
 
+- **1h**, **3h**, **6h** – Zadnja 1 ura, 3 ure ali 6 ur. Analitika se beleži po urah, zato te možnosti upoštevajo začetno uro okna v celoti: Zadnja ura ob 15:20 pokriva čas od 14:00 do zdaj
 - **24h** – Zadnjih 24 ur
 - **7d** – Zadnjih 7 dni
 - **30d** – Zadnjih 30 dni
@@ -38,9 +39,19 @@ Dve tabeli prikazujeta uporabo workflow: **Najbolj Uporabljeni** (širša) in **
 - **Obseg Izvajanja Čez Čas** – Črtni graf z izvajanji na časovnem intervalu
 - **Stopnja Uspeha proti Napaki** – Območje graf, ki primerja zdrave in neuspešne zagon
 - **Povprečna Latenca Čez Čas** – Črtni graf, ki prikazuje spremembe časa odziva
-- **Povlecite za izbiro** – Kliknite in povlecite na katerem koli grafu, da osredotočite prilagojeno časovno obdobje
+- **Povlecite za izbiro** – Kliknite in povlecite na katerem koli grafikonu, da se osredotočite na prilagojeno časovno obdobje. Izbira mora zajemati vsaj dve točki na grafikonu; preprost klik ne izbere ničesar
 - **Način izbire** – Izbrane vrednosti osvežijo povzetke, grafe in tabele workflow brez spreminjanja osnovne prednastavitve
 - **Počisti Izbiro** – Vrnite se na prednastavljeno časovno okno, ko končate z raziskovanjem
+
+## Vrste vozlišč
+
+Pod percentili latence trije grafikoni prikazujejo, kam gre čas in kje se pojavljajo napake vozlišč, razvrščeni po vrsti vozlišča (Agent, HTTP Request, Code itd.) v vseh prikazanih workflowih:
+
+- **Časovno najzahtevnejša vozlišča** – 10 vrst vozlišč z največjim skupnim časom izvajanja, prikazanih kot povprečno trajanje na klic. Ura brez klicev določene vrste v orodnem namigu prikaže **Brez klicev**.
+- **Vrste vozlišč z največ napakami** – 10 vrst vozlišč z največjim številom napak (napaka ali timeout), vsaka z lastnim številom napak na časovni interval.
+- **Najpogosteje klicane vrste vozlišč** – 10 vrst vozlišč, ki so se izvajala najpogosteje, vsaka z lastnim številom klicev na časovni interval. Preskočena vozlišča se ne štejejo.
+
+Z miško se pomaknite nad grafikon, da vidite vrsto vozlišča tik ob kazalcu. Vrsta vozlišča, ki je premajhna, da bi bila vidna poleg največje na grafikonu (manj kot 1 % njene vrednosti), se izključi iz tega grafikona in njegove legende. Grafikoni upoštevajo filter workflowa, časovni razpon in kateri koli razpon, izbran s potegom. Analitika vozlišč se beleži za zagone od različice, ki jo je uvedla; zaključen zagon se prikaže v približno eni minuti. Starejši zagoni se ne upoštevajo.
 
 ## Samodejno Osveževanje
 

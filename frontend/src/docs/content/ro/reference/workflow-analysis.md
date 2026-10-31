@@ -43,12 +43,14 @@ Ambele acțiuni **rulează mai întâi workflow-ul** (când acesta este valid ș
 
 Raportul generat acoperă trei secțiuni, în ordine: **Zone de îmbunătățire** (sugestii concrete, inclusiv o perspectivă de **securitate** ori de câte ori workflow-ul atinge acreditări, input de la utilizator, cereri externe sau expunere de date), **Scopul** workflow-ului și **Ce face** (o parcurgere pas cu pas prin noduri).
 
-Secțiunea **Zone de îmbunătățire** rulează întotdeauna patru verificări explicite:
+Secțiunea **Zone de îmbunătățire** rulează întotdeauna cinci verificări explicite:
 
 1. **Acoperirea erorilor** — dacă canvas-ul nu are niciun nod [Error Handler](../nodes/error-handler-node.md) și nu este configurat niciun workflow de eroare, raportul semnalează acest lucru și recomandă adăugarea gestionării erorilor.
 2. **Timp economisit** — dacă nu este setată nicio estimare a timpului economisit per rulare, raportul recomandă configurarea uneia, astfel încât metrica **Time Saved** din [Analytics](../tabs/analytics-tab.md) să se poată popula.
 3. **Noduri de rețea** — pentru nodurile care efectuează apeluri de rețea (cum ar fi [HTTP](../nodes/http-node.md) și nodurile de integrare), raportul recomandă gestionarea erorilor specifică nodului (retry și/sau continue-on-error) pe acele noduri.
 4. **Alerte** — când nu sunt configurate [alerte](../tabs/alerts-tab.md) pentru workflow, raportul recomandă configurarea alertelor înainte de a trece în producție.
+
+5. **Evals**: când workflow-ul include un nod [Agent](../nodes/agent-node.md) fără o suită de agent, raportul recomandă o **Agent Suite** (sau o **Prompt Suite**) în [Evals](../tabs/evals-tab.md#agent-suites); când conține un nod [LLM](../nodes/llm-node.md), recomandă o **Prompt Suite** pentru a testa acel prompt pe mai multe modele.
 
 ### Rularea Analyzer din Properties
 

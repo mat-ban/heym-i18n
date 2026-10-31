@@ -47,7 +47,7 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 
 ## 记录内容
 
-每一次状态变更都会被记录。读取操作仅在读取本身即为敏感行为时才会被记录 —— 查看 workflow 的运行历史、打开 credential、下载文件。普通的列表和详情读取不会被审计；访问日志已记录请求的发生，而审计每一次 `GET` 会淹没真正重要的记录。
+每一次状态变更都会被记录。读取操作仅在读取本身即为敏感行为时才会被记录 —— 查看 workflow 的运行历史、打开 credential、下载文件。普通的列表和详情读取不会被审计；访问日志已记录请求的发生，而审计每一次 `GET` 会淹没真正重要的记录。 唯一的例外是[页面访问](#page-views)，它记录已登录用户在应用中的访问路径。
 
 ### 身份验证
 
@@ -62,9 +62,34 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `sso_settings.update` | 管理员更改了 [SSO](./sso.md) 配置。记录 `enabled` 和 `password_login_disabled`，绝不记录 client secret。 |
 | `sso_settings.test` | 管理员运行了 SSO 连接测试。 |
 
+### 页面访问
+
+每当已登录用户在 Web 应用中打开页面时，系统都会记录 `page.view`，并在 `path` 字段中记录 URL 路径：
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+路径为应用内路由。仪表板标签页是其中的一部分（`/?tab=traces`），用于命名打开内容的 ID 也是如此，例如 `/workflows/<id>`。仅保留用于标识页面的少数查询参数（`tab`、`dashboard`、`board`、`suite`、`workflowId`、`traceId`）；查询字符串中的其余所有内容和完整片段均被舍弃。链接中带有机密的页面（例如 `/review/<token>`）将使用占位符 `:token` 代替机密内容进行记录。
+
+浏览器会报告路径，因此 `page.view` 行显示了用户所声称访问的位置。它并不证明服务器一定返回了该页面。访问登录页面以及在未登录状态下打开的链接不会被记录，因为没有任何用户与之关联。
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+通过 API 启动运行（编辑器的“运行”按钮、携带会话、API 密钥或 Webhook 的 execute 端点、聊天门户以及 MCP 工具）时，会记录 `workflow.run`。它记录了启动者、方式以及结束结果：
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` 将该行关联到运行历史中的运行记录。如果运行以 `error`、`cancelled` 或 `timeout` 结束，则 `outcome` 为 `failure`。因人工审查而暂停或保留在并发队列中的运行是一条 `success` 行，状态为 `status=pending` 或 `status=queued`。没有登录用户的调用（例如匿名 Webhook 或门户访客）没有 `actor_id` 或 `actor_email`。输入和输出绝不会被记录。
+
+通过定时计划、触发器节点、队列或事件启动的运行不是审计行。它们在认领它们的实例上执行，并记录在运行历史中，包含其触发来源和运行它们的实例。
+
+当有人打开 workflow 的运行历史时，会记录 `workflow.history_view`。在画布或列表中显示 workflow 最新运行的小型查询不会进行审计。
+
 
 当协作者读取他人的运行历史时，`workflow.history_view` 记录 `owned=false`。当协作者尝试删除时，`workflow.delete` 记录 `outcome=denied` 且 `reason=not_owner`。
 
@@ -96,6 +121,27 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 有两点对此加以保障。调用点被编写为仅传递安全字段，而审计辅助函数作为兜底进行脱敏：任何名称包含 `password`、`secret`、`token`、`api_key`、`value`、`authorization`、`cookie` 或类似字样的字段，在构建该行之前都会被替换为 `***`。过度脱敏是刻意为之——一行无用的记录总好过泄露的凭据。
 
 当密钥确实与记录相关时，仅记录其形态。文件分享记录 `password_protected=true`，绝不记录密码本身。
+
+## Heym Work
+
+当您与 Heym 一起运行 Heym Work 时，Work 会以相同的 Winston 格式将其自身容器的 stdout 发出审计行：
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work 记录用户在页面、看板和记录上的操作：
+
+| 操作 | 含义 |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | 仪表板页面和布局的更改 |
+| `board.column_create`, `board.column_move`, `board.column_delete` | 看板列布局更改 |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | 卡片生命周期事件 |
+| `record.create`, `record.update`, `record.delete` | 通过 Work 进行的数据表记录变更 |
+| `chat.message` | 发送给 Work 助手的用户提示词 |
+| `export.csv`, `export.json` | 数据导出 |
+
+每一行都包含与 Heym 审计行相同的 `actor_id`、`actor_email`、`timestamp` 和 `outcome` 字段，因此日志收集器可以通过单一管道解析两者。
 
 ## 保留策略
 

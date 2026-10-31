@@ -173,7 +173,7 @@ Keď workflow ukladá, uchováva alebo vyhľadáva záznamy a nemáte pomenovan�
 
 Vyberte novú tabuľku a stlačte **Odoslať odpovede**: karta vytvorí tabuľku a asistent umiestni jej id na uzol a použije jej presné názvy stĺpcov. Môžete tiež požiadať o tabuľku samostatne, napríklad „vytvor tabuľku pre moje leady".
 
-Asistent vidí názvy tabuliek, popisy a stĺpce, nikdy riadky. Nikdy nemení stĺpce existujúcej tabuľky: ak tabuľke chýba stĺpec, ktorý workflow potrebuje, pomenuje stĺpec a namiesto toho ponúkne novú tabuľku. Stĺpce pridajte v [karte DataTable](../tabs/datatable-tab.md).
+Asistent na plátne vidí názvy tabuliek, popisy a stĺpce, nikdy riadky. Z týchto metadát konfiguruje uzly workflow; stĺpce môžete pridať na [karte DataTable](../tabs/datatable-tab.md) alebo o to požiadať v [Chate](../tabs/chat-tab.md). Chat a `heym_chat` môžu kontrolovať riadky a priamo pridávať alebo odstraňovať stĺpce a vkladať, aktualizovať alebo mazať riadky v tabuľkách, ktoré vlastníte alebo ku ktorým máte práva na zápis, vrátane tímových zdieľaní. Odstránenie stĺpcov a vymazanie všetkých riadkov vyžaduje pred vymazaním údajov potvrdenie.
 
 ## Súvisiace
 

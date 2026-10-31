@@ -43,12 +43,14 @@ Abi veiklos pirmiausia **vykdo darbo eigą** (kai ji yra galiojanti ir vykdoma) 
 
 Sugeneruota ataskaita apima tris skyrius, eilės tvarka: **Tobulinimo sritys** (konkretūs pasiūlymai, įskaitant **saugumo** aspektą, kai darbo eiga liečia kredencialus, vartotojo įvestį, išorinius užklausimus ar duomenų atskleidimą), darbo eigos **Paskirtis** ir **Ką ji daro** (žingsnis po žingsnio perėjimas per mazgus).
 
-**Tobulinimo sričių** skyrius visada vykdo keturis aiškius patikrinimus:
+**Tobulinimo sričių** skyrius visada vykdo penkis aiškius patikrinimus:
 
 1. **Klaidų aprėptis** — jei drobėje nėra [Klaidų Apdorojimo](../nodes/error-handler-node.md) mazgo ir nėra sukonfigūruota klaidų darbo eiga, ataskaita tai pabrėžia ir rekomenduoja pridėti klaidų apdorojimą.
 2. **Laikas, sutaupytas** — jei nėra nustatyto numatomo laiko, sutaupomo per vykdymą, ataskaita rekomenduoja sukonfigūruoti vieną, kad [Analitika](../tabs/analytics-tab.md) **Sutaupytas Laikas** metrika galėtų užpildyti.
 3. **Tinklo mazgai** — mazgams, kurie atlieka tinklo užklausas (pvz., [HTTP](../nodes/http-node.md) ir integracijos mazgai), ataskaita rekomenduoja mazgams specifinį klaidų apdorojimą (pakartoti ir/arba tęsti klaidos atveju).
 4. **Įspėjimai** — kai nėra sukonfigūruotų [įspėjimų](../tabs/alerts-tab.md) darbo eigai, ataskaita rekomenduoja nustatyti įspėjimus prieš pereinant į gamybą.
+
+5. **Evals**: kai workflow turi [Agent](../nodes/agent-node.md) mazgą be agento rinkinio, ataskaitoje rekomenduojama sukurti **Agent Suite** (arba **Prompt Suite**) skiltyje [Evals](../tabs/evals-tab.md#agent-suites); kai turi [LLM](../nodes/llm-node.md) mazgą, rekomenduojama **Prompt Suite**, kad išbandytumėte šią užklausą keliuose modeliuose.
 
 ### Analizatoriaus Vykdymas Iš Ypatybių
 

@@ -14,7 +14,7 @@ Kredencialai saugo API raktus ir slaptažodžius, naudojamus workflow mazguose. 
 |-------------|---------------------|-----------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API raktas modeliui |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) sprendimų | Sprendimų modelis | Pagrindinis URL sprendimų modelio endpointui, plius neprivalomas API raktas |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Pasirenka, kuris iš jūsų modelių aptarnauja kiekvieną užklausą, naudodamas sprendimų modelį |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) užklausų rinkiniai | Model Router (Auto Model) | Pasirenka, kuris iš jūsų modelių aptarnauja kiekvieną užklausą, naudodamas sprendimų modelį |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT prenumeratos prisijungimas (OAuth) arba Codex prieigos raktas vykdytojui, plius GitHub PAT saugyklos operacijoms |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go vartotojo API raktas (neprivalomas pagrindinis URL) vykdytojui, plius GitHub PAT saugyklos operacijoms |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub asmeninis prieigos raktas (PAT) GitHub API skambučiams, GitHub mazgo operacijoms ir MCP integracijoms |

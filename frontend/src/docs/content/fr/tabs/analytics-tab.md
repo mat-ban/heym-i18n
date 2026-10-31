@@ -15,6 +15,7 @@ L'onglet **Analytics** affiche les métriques d'exécution et les tendances de v
 
 ## Plage temporelle
 
+- **1h**, **3h**, **6h** – Dernière heure, 3 heures ou 6 heures. Les analyses sont conservées par heure, donc elles comptabilisent l'heure de début de la fenêtre dans son intégralité : Dernière heure à 15h20 couvre de 14h00 jusqu'à maintenant
 - **24h** – Dernières 24 heures
 - **7d** – 7 derniers jours
 - **30d** – 30 derniers jours
@@ -38,9 +39,19 @@ Deux tables présentent l'utilisation des workflows : **Most Used** (plus large)
 - **Execution Volume Over Time** – Graphique linéaire des exécutions par intervalle de temps
 - **Success vs Error Rate** – Graphique en aires comparant les exécutions saines et échouées
 - **Average Latency Over Time** – Graphique linéaire montrant l'évolution des temps de réponse
-- **Drag to select** – Cliquez et faites glisser sur n'importe quel graphique pour cibler une plage de dates personnalisée
+- **Drag to select** – Cliquez et faites glisser sur n'importe quel graphique pour cibler une plage de dates personnalisée. Une sélection doit couvrir au moins deux points sur le graphique ; un simple clic ne sélectionne rien
 - **Selection mode** – Les plages sélectionnées actualisent les cartes récapitulatives, les graphiques et les tables de workflows sans modifier le préréglage de base
 - **Clear Selection** – Revenez à la fenêtre temporelle préréglée une fois l'analyse terminée
+
+## Types de nœuds
+
+Sous les centiles de latence, trois graphiques montrent la répartition du temps et des erreurs par type de nœud (Agent, HTTP Request, Code, etc.) sur l'ensemble des workflows affichés :
+
+- **Nœuds les plus chronophages** – Les 10 types de nœuds totalisant le plus de temps d'exécution, tracés selon la durée moyenne par appel. Une heure sans appel d'un type donné affiche **Aucun appel** dans l'infobulle.
+- **Types de nœuds les plus défaillants** – Les 10 types de nœuds enregistrant le plus d'erreurs (erreur ou timeout), chacun avec son propre décompte d'erreurs par créneau horaire.
+- **Types de nœuds les plus appelés** – Les 10 types de nœuds ayant tourné le plus souvent, chacun avec son décompte d'appels par créneau horaire. Les nœuds ignorés ne sont pas comptabilisés.
+
+Survolez un graphique pour afficher le type de nœud sous le curseur, juste à côté. Un type de nœud trop restreint pour être visible à côté du plus grand (inférieur à 1 % de ce dernier) est exclu du graphique et de sa légende. Les graphiques respectent le filtre de workflow, la plage de temps et toute plage sélectionnée par glissement. Les analyses de nœuds sont enregistrées pour les exécutions à partir de la version qui les a introduites, et une exécution terminée apparaît en l'espace d'environ une minute. Les exécutions plus anciennes ne sont pas prises en compte.
 
 ## Auto Refresh
 

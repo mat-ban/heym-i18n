@@ -51,6 +51,8 @@ Bir workflow'u `/workflows/{workflowId}/{executionId}` adresinde açmak, o execu
 
 ### Kullanım durumları
 
+Bu derin bağlantıyı yeni bir tarayıcı sekmesinde açmak için geçmiş listelerindeki herhangi bir çalıştırmaya Ctrl/Cmd tuşunu basılı tutarak tıklayın. Geçerli sekme ve açık iletişim kutusu olduğu gibi kalır. Chat ve asistan çalıştırmalarının bir workflow'u yoktur, bu nedenle kısayol normal bir tıklama gibi onları yalnızca seçer.
+
 - Bir workflow'u aynı girdilerle yeniden çalıştırma
 - Girdileri ve node çıktılarını inceleyerek başarısız bir çalışmayı debug etme
 - Çalışmalar arasında çıktıları karşılaştırma

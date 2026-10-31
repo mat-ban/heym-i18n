@@ -43,12 +43,14 @@ Beide acties **voeren eerst de workflow uit** (wanneer deze geldig en uitvoerbaa
 
 Het gegenereerde rapport behandelt drie secties, in deze volgorde: **Verbeterpunten** (concrete suggesties, inclusief een **beveiligings**invalshoek wanneer de workflow te maken heeft met referenties, gebruikersinvoer, externe verzoeken of gegevensblootstelling), het **Doel** van de workflow, en **Wat het doet** (een stapsgewijze doorloop van de nodes).
 
-De sectie **Verbeterpunten** voert altijd vier expliciete controles uit:
+De sectie **Verbeterpunten** voert altijd vijf expliciete controles uit:
 
 1. **Foutdekking** — als het canvas geen [Error Handler](../nodes/error-handler-node.md)-node heeft en er geen foutworkflow is geconfigureerd, wijst het rapport hierop en raadt het aan foutafhandeling toe te voegen.
 2. **Bespaarde tijd** — als er geen geschatte bespaarde tijd per uitvoering is ingesteld, raadt het rapport aan er een te configureren zodat de [Analytics](../tabs/analytics-tab.md)-metriek **Time Saved** kan worden gevuld.
 3. **Netwerk-nodes** — voor nodes die netwerkoproepen doen (zoals [HTTP](../nodes/http-node.md) en integratienodes), raadt het rapport nodespecifieke foutafhandeling aan (retry en/of continue-on-error) op die nodes.
 4. **Waarschuwingen** — wanneer er geen [waarschuwingen](../tabs/alerts-tab.md) zijn geconfigureerd voor de workflow, raadt het rapport aan waarschuwingen in te stellen voordat men naar productie gaat.
+
+5. **Evals**: wanneer de workflow een [Agent](../nodes/agent-node.md)-knooppunt bevat zonder agent-suite, beveelt het rapport een **Agent Suite** (of een **Prompt Suite**) aan in [Evals](../tabs/evals-tab.md#agent-suites); wanneer het een [LLM](../nodes/llm-node.md)-knooppunt bevat, beveelt het een **Prompt Suite** aan om die prompt voor verschillende modellen te testen.
 
 ### Analyzer uitvoeren vanuit Eigenschappen
 

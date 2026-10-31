@@ -1,10 +1,10 @@
-# MCP Tab
+# MCP / A2A Tab
 
-The **MCP** tab configures Model Context Protocol (MCP) integration. MCP lets AI clients (Claude, ChatGPT, Gemini, Cursor, and any MCP-compatible tool) call your Heym workflows as tools.
+The **MCP / A2A** tab configures Model Context Protocol (MCP) integration and the Heym Agent's Agent2Agent (A2A) face. MCP lets AI clients (Claude, ChatGPT, Gemini, Cursor, and any MCP-compatible tool) call your Heym workflows as tools.
 
 Heym supports two modes: a **default server** that exposes all MCP-enabled workflows under a single endpoint, and **named servers** that give each logical group of workflows its own dedicated URL and API key.
 
-Both modes can expose two kinds of tools: individual **workflows**, and the **Heym chat tool** — the whole [Chat tab](./chat-tab.md) engine behind one `heym_chat` tool.
+Both modes can expose two kinds of tools: individual **workflows**, and the **Heym Agent**, the whole [Chat tab](./chat-tab.md) engine behind one `heym_chat` tool, which other agents can also reach over [A2A](../reference/a2a.md).
 
 <video src="/features/showcase/mcp.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
 <p class="github-video-link"><a href="../../../../public/features/showcase/mcp.webm">▶ Watch MCP demo</a></p>
@@ -51,7 +51,7 @@ A workflow with a [concurrency limit](../reference/webhooks.md#concurrency-limit
 
 The client polls the `heym_execution_status` tool with that `execution_id`. It returns the same body as the [status URL](../reference/webhooks.md#status-url): `queued` with the current position, `running`, then `success` or `error` with the outputs. It only finds runs of workflows that the same server exposes. The tool is listed on the default server and on each named server only while at least one of its workflows has a concurrency limit. When the workflow's queue is full, the call returns an error, "Concurrency queue is full".
 
-## Heym Chat Tool
+## Heym Agent
 
 The **Heym Capabilities** section turns the Chat tab engine into a single MCP tool named `heym_chat`. Enable it on the default server, on any named server, or on both — each surface keeps its own toggle and model selection.
 
@@ -60,15 +60,20 @@ When it is on, `heym_chat` appears in `tools/list` alongside your workflow tools
 - Build a workflow, test-run it with sample inputs, fix it, and finish when a run passes (see [Build mode](#build-mode))
 - Inspect and run your existing workflows
 - Report analytics, recent executions, and upcoming cron schedules
+- Explain where workflows fail and why they are slow: the workflows that ran most, failed most and are slowest, and the node types with the most time, errors and calls, over the last 1, 3 or 6 hours, 24 hours, 7 or 30 days, or all time
 - Report the run history of one workflow: how many times it ran, status counts, when it ran, and on request the inputs, outputs, and per-node errors of a single run
 - Report what is running right now: how many executions are active, their workflow names, how long each has been running, the node each is currently on, and a link to the live run
 - List boards, create cards, and read card detail on the [Board tab](./board-tab.md)
-- List your data tables with their columns, create new ones, and wire them into the workflows it builds
+- List your dashboards (Heym Work's pages) with the widgets on each, find which dashboard a workflow is on, add a new widget to a dashboard and build its workflow, put an existing workflow on a dashboard as a widget, rename or delete a widget, or tidy a dashboard's layout (see [Dashboard › From Chat and MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Inspect data tables and rows, create tables, add or remove columns, insert, update or delete rows, and wire tables into workflows
+- Create, edit and run prompt and agent [eval suites](./evals-tab.md#from-chat-and-mcp), including an agent's baseline: reported, built from runs, or stated as numbers. The result lists the Evals link of every suite saved in the call.
 - Create or update your credentials on Heym's own page (see [Credentials](#credentials))
 - Read teams and global variables, and search the documentation
 - Approve, edit, or refuse pending human-in-the-loop reviews
 
 Capabilities added to the Chat tab later become available through `heym_chat` automatically — there is no per-capability toggle to keep in sync.
+
+These capabilities run inside `heym_chat`: `tools/list` shows `heym_chat` and your workflow tools, never the chat's internal tools such as the eval suite ones.
 
 ### Build mode
 
@@ -81,7 +86,9 @@ When a call creates or edits a workflow, the reply lists each one with its full 
 - To change a workflow it built earlier, continue the thread with the same `conversation_id`. The assistant updates that workflow instead of creating a new one, and it only changes workflows you can edit.
 - When the five test runs are used up, the assistant stops and explains what still fails.
 
-A table holds no secret, so `heym_chat` can list your tables, ask which one a workflow should use, and create a new one with its columns. It never reads or writes rows.
+`heym_chat` can inspect your tables and rows, create tables, add or remove columns, and insert, update or delete rows. Give it a table name, UUID or DataTable link, for example: “Add two string columns, name and surname, to https://heym.example/?tab=datatable/<table-id>.” It changes the table directly and preserves existing columns and values when adding columns.
+
+Writes require ownership or **write** access through a direct or team share. Read-only access allows inspection. Row writes use the DataTable tab's type, default, required and unique checks; partial imports report rejected rows. Removing columns deletes their values from every row. As in the DataTable tab, column removal and clearing all rows ask for confirmation first; reply with the same `conversation_id` to confirm. Deleting a selected row needs no extra confirmation.
 
 ### Credentials
 
@@ -123,6 +130,14 @@ Every call is written to your [Chat tab](./chat-tab.md) history as a normal conv
 
 When the assistant needs clarification, it pauses and says so; reply with the answers using the same `conversation_id`.
 
+### Enable A2A
+
+While the Heym Agent is on, the card shows an **Enable A2A** checkbox. Tick it and other agents can send the Heym Agent tasks over the Agent2Agent protocol (A2A 1.0). The card then lists the **Agent Card** URL and the **JSON-RPC endpoint**, each with a copy button, and a `curl` that fetches the card. A2A uses the same key and OAuth sign-in as MCP. Turning the agent off turns A2A off too. See [A2A](../reference/a2a.md) for the methods, task states and an example.
+
+### Progress
+
+A long `heym_chat` call reports what the agent is doing as MCP progress (`notifications/progress`), in the words the Chat tab shows, for example `Testing the workflow · attempt 2/5`. Clients that reset their timeout on progress keep waiting while the agent works.
+
 ## Named MCP Servers
 
 Named servers let you segment workflows into isolated MCP endpoints. Each server has its own URL and API key, so different AI clients, teams, or use cases can connect to exactly the workflows they need.
@@ -142,7 +157,8 @@ Each server card shows:
 | **SSE Endpoint** | Unique URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Independent key, shown once when generated or regenerated. Copy it right away; it is stored hashed and cannot be revealed later |
 | **How to connect** | **Copy JSON** copies the ready-to-paste MCP config; **Add to Cursor** installs it in one click |
-| **Heym Capabilities** | Toggle the `heym_chat` tool for this server and pick its credential and model |
+| **Heym Capabilities** | Toggle the Heym Agent (`heym_chat`) for this server and pick its credential and model |
+| **Enable A2A** | This server's own A2A switch, with its own Agent Card at `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Toggle which of your workflows this server exposes |
 
 ### Workflow Assignment
@@ -179,6 +195,7 @@ Both endpoints support the SSE transport (GET, MCP spec 2024-11-05) and Streamab
 - [Agent Architecture](../reference/agent-architecture.md) – MCP client, tool dispatch, orchestrator
 - [Triggers](../reference/triggers.md) – MCP as a workflow entry point
 - [Chat Tab](./chat-tab.md) – The engine behind the `heym_chat` tool
+- [A2A](../reference/a2a.md) – The Heym Agent over the Agent2Agent protocol
 - [Workflows Tab](./workflows-tab.md) – Create and manage workflows
 - [Node Types](../reference/node-types.md) – AI nodes overview
 - [Contextual Showcase](../reference/contextual-showcase.md) – Compact page guide for dashboard surfaces

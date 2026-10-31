@@ -47,7 +47,7 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 
 ## 何が記録されるか
 
-すべての状態変更が記録されます。読み取りは、読み取り自体が機微な行為である場合にのみ記録されます — Workflow の実行履歴の閲覧、credential を開くこと、ファイルのダウンロードなどです。通常の一覧および詳細の読み取りは監査されません。アクセスログがすでにリクエストが発生したことを記録しており、すべての `GET` を監査すると重要な行が埋もれてしまうためです。
+すべての状態変更が記録されます。読み取りは、読み取り自体が機微な行為である場合にのみ記録されます — Workflow の実行履歴の閲覧、credential を開くこと、ファイルのダウンロードなどです。通常の一覧および詳細の読み取りは監査されません。アクセスログがすでにリクエストが発生したことを記録しており、すべての `GET` を監査すると重要な行が埋もれてしまうためです。 唯一の例外は[ページビュー](#page-views)で、サインインしたユーザーがアプリ内でどこに移動したかを記録します。
 
 ### 認証
 
@@ -62,9 +62,34 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `sso_settings.update` | 管理者が [SSO](./sso.md) 設定を変更しました。`enabled` と `password_login_disabled` を記録し、client secret は決して記録しません。 |
 | `sso_settings.test` | 管理者が SSO 接続テストを実行しました。 |
 
+### ページビュー
+
+`page.view` は、サインインしたユーザーがWebアプリでページを開くたびに書き込まれ、URLパスが `path` フィールドに記録されます:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+パスはアプリ内ルートです。ダッシュボードタブはその一部であり（`/?tab=traces`）、`/workflows/<id>` のように開いているものを指定するIDも同様です。ページを識別するクエリパラメータの短いリストのみが保持され（`tab`、`dashboard`、`board`、`suite`、`workflowId`、`traceId`）、クエリ文字列内のその他の要素とフラグメント全体は破棄されます。`/review/<token>` のようにリンクにシークレットが含まれるページは、シークレットの代わりにプレースホルダー `:token` でログに記録されます。
+
+ブラウザがパスを報告するため、`page.view` 行はユーザーが移動したと主張した場所を示します。サーバーが実際にそのページを返したことを証明するものではありません。サインインページへのアクセスや、サインアウト中に開かれたリンクは、ユーザーが関連付けられていないため記録されません。
+
 ### Workflow
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` は、API（エディタの実行ボタン、セッション、APIキーまたはWebhookを使用したexecuteエンドポイント、チャットポータル、およびMCPツール）を介して実行が開始されたときに書き込まれます。誰が、どのように開始し、どのように終了したかを記録します:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` は、その行を実行履歴の実行とリンクします。実行が `error`、`cancelled`、または `timeout` で終了した場合、`outcome` は `failure` になります。人間の確認のために保留中、または同時実行キューで保持されている実行は、`status=pending` または `status=queued` を持つ `success` 行になります。匿名のWebhookやポータル訪問者のようにサインインしたユーザーがいない呼び出しには、`actor_id` や `actor_email` はありません。入力と出力は決して書き込まれません。
+
+スケジュール、トリガーノード、キュー、またはイベントによって開始された実行は監査行ではありません。それらを要求したインスタンス上で実行され、トリガーソースと実行したインスタンスと共に見実行履歴に記録されます。
+
+`workflow.history_view` は、誰かがワークフローの実行履歴を開いたときに書き込まれます。キャンバス上またはリスト内でワークフローの最新の実行を表示する小さな検索は監査されません。
+
 
 `workflow.history_view` は、コラボレーターが他人の実行履歴を読む場合に `owned=false` を記録します。`workflow.delete` は、コラボレーターが削除を試みた場合に `outcome=denied` と `reason=not_owner` を記録します。
 
@@ -96,6 +121,27 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 これを徹底する仕組みは 2 つあります。呼び出し箇所は安全なフィールドのみを渡すように記述されており、監査ヘルパーは最後の防壁として秘匿化を行います。名前が `password`、`secret`、`token`、`api_key`、`value`、`authorization`、`cookie` などを含むフィールドは、行が構築される前に `***` に置き換えられます。過剰な秘匿化は意図的なものです。役に立たない行のほうが、credential が漏洩するよりはましです。
 
 シークレットが記録に真に関連する場合でも、その形状のみがログに記録されます。ファイル共有では `password_protected=true` が記録され、パスワードそのものは決して記録されません。
+
+## Heym Work
+
+Heym WorkをHeymと併せて実行すると、Workは同じWinston形式で自身のコンテナのstdoutに監査行を出力します:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Workは、ページ、ボード、およびレコードに対するユーザーのアクションをログに記録します:
+
+| アクション | 意味 |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | ダッシュボードページおよびレイアウトの変更 |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Kanban列レイアウトの変更 |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | カードのライフサイクルイベント |
+| `record.create`, `record.update`, `record.delete` | Workを介したデータテーブルレコードの変更 |
+| `chat.message` | Workアシスタントに送信されたユーザープロンプト |
+| `export.csv`, `export.json` | データのエクスポート |
+
+各行には、Heymの監査行と同じ `actor_id`、`actor_email`、`timestamp`、および `outcome` フィールドが含まれているため、ログコレクターは単一のパイプラインで両方を解析できます。
 
 ## 保持期間
 

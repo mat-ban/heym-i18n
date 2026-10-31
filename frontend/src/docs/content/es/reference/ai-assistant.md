@@ -173,7 +173,7 @@ Cuando un workflow guarda, almacena o busca registros y usted no ha indicado otr
 
 Seleccione la nueva tabla y pulse **Submit answers**: la tarjeta crea la tabla y el asistente coloca su id en el nodo y utiliza sus nombres de columna exactos. También puede solicitar una tabla por sí sola, por ejemplo "create a table for my leads".
 
-El asistente ve nombres de tablas, descripciones y columnas, nunca filas. Nunca modifica las columnas de una tabla existente: si a una tabla le falta una columna que el workflow necesita, nombra la columna y ofrece una nueva tabla en su lugar. Añada columnas en la [DataTable tab](../tabs/datatable-tab.md).
+El asistente del canvas ve nombres de tablas, descripciones y columnas, nunca filas. Configura los nodos del workflow a partir de esos metadatos; añada columnas en la [pestaña DataTable](../tabs/datatable-tab.md) o solicítelo en el [Chat](../tabs/chat-tab.md). Chat y `heym_chat` pueden inspeccionar filas y añadir o eliminar columnas directamente, así como insertar, actualizar o eliminar filas en las tablas de su propiedad o con permisos de escritura, incluidos los recursos compartidos con equipos. La eliminación de columnas y el vaciado de todas las filas solicitan confirmación antes de borrar datos.
 
 ## Relacionado
 

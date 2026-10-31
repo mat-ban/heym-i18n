@@ -174,8 +174,7 @@ Wenn ein Workflow Datensätze speichert, ablegt oder nachschlägt und du keinen 
 
 Wähle die neue Tabelle und drücke **Submit answers**: Die Karte erstellt die Tabelle, und der Assistent setzt ihre ID auf den Knoten und verwendet ihre exakten Spaltennamen. Du kannst auch allein nach einer Tabelle fragen, zum Beispiel "create a table for my leads".
 
-Der Assistent sieht Tabellennamen, Beschreibungen und Spalten, niemals Zeilen. Er ändert niemals die Spalten einer bestehenden Tabelle: Wenn einer Tabelle eine Spalte fehlt, die der Workflow benötigt, benennt er die Spalte und bietet stattdessen eine neue Tabelle an. Füge Spalten im [DataTable-Reiter](../tabs/datatable-tab.md) hinzu.
-## Verwandte Themen
+Der Canvas-Assistent sieht Tabellennamen, Beschreibungen und Spalten, niemals Zeilen. Er konfiguriert Workflow-Knoten anhand dieser Metadaten; Spalten können im [Reiter DataTable](../tabs/datatable-tab.md) hinzugefügt oder über den [Chat](../tabs/chat-tab.md) angefordert werden. Chat und `heym_chat` können Zeilen einsehen sowie Spalten direkt hinzufügen oder entfernen und Zeilen in Tabellen einfügen, aktualisieren oder löschen, die Sie besitzen oder für die Sie Schreibzugriff (einschließlich Teamfreigaben) haben. Beim Entfernen von Spalten und beim Leeren aller Zeilen wird vor dem Löschen der Daten um Bestätigung gebeten.
 
 - [Warum Heym](../getting-started/why-heym.md) – Natural-Language-Building als erste Phase des Agenten-Lebenszyklus
 - [Schnellstart](../getting-started/quick-start.md) – Erstelle deinen ersten Workflow

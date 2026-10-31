@@ -53,6 +53,8 @@ Deschiderea unui workflow la `/workflows/{workflowId}/{executionId}` aduce autom
 
 ### Cazuri de utilizare
 
+Apăsați Ctrl/Cmd+clic pe o rulare din oricare dintre listele de istoric pentru a deschide acel link direct într-o filă nouă a browserului. Fila curentă și caseta de dialog deschisă rămân neschimbate. Rulările de chat și asistent nu au workflow, așa că scurtătura doar le selectează, la fel ca un clic obișnuit.
+
 - Re-rularea unui workflow cu aceleași intrări
 - Depanarea unei rulări eșuate prin inspectarea intrărilor și ieșirilor nodurilor
 - Compararea ieșirilor între rulări

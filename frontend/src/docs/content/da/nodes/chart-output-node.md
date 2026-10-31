@@ -10,7 +10,7 @@
 | Outputs | 0 (terminal) |
 | Output | Standardiseret chart-payload |
 
-Placer denne node **sidst** i et dashboard-widget-workflow. Noden før den bør producere et array af rækkeobjekter, for eksempel:
+Placer denne node **sidst** i et dashboard-widget-workflow. For entitetsrelationer producerer noden før den et grafobjekt (se [Entity relationships](#entity-relationships-db)). Andre datadrevne diagrammer bruger et array af rækkeobjekter, for eksempel:
 
 ```json
 [
@@ -26,9 +26,9 @@ Når der kun er eksempel-/prøvedata (ingen reel kilde), kan disse rækker produ
 | Parameter | Type | Beskrivelse |
 |-----------|------|-------------|
 | `label` | string | Node-identifikator (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text`, eller `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text`, eller `hitl` |
 | `orientation` | string | `vertical` eller `horizontal` (kun til bar charts) |
-| `dataPath` | string | Dot-path til række-arrayet i det opstrøms output (f.eks. `data` eller `result.items`). Lad være tom for automatisk detektering. |
+| `dataPath` | string | Dot-path til række-arrayet (eller grafobjekt for `erDiagram`) i det opstrøms output (f.eks. `data` eller `result.items`). Lad være tom for automatisk detektering. |
 | `labelField` | string | Rækkekey, der bruges som kategorilabel (pie/bar/line) |
 | `valueField` | string | Rækkekey, der bruges som numerisk værdi (pie/bar/line/numeric/gauge) |
 | `series` | array | Valgfri multi-serie-definition `[{ "name": "Sent", "field": "sent" }]` for bar/line (tilsidesætter `valueField`) |
@@ -54,8 +54,51 @@ Når der kun er eksempel-/prøvedata (ingen reel kilde), kan disse rækker produ
 - **scatter** — X/Y-punkter fra `xField` og `yField` til korrelationsplot.
 - **proportion** — en enkelt vandret bar opdelt i andele med en procentdel-legende (f.eks. et sprogfordeling). Bruger `labelField` + `valueField`.
 - **barGauge** — en vandret gauge pr. række med en rød→grøn gradient og en værdi (f.eks. ledig diskplads). Bruger `labelField` + `valueField`, valgfri `unit` og `max` (standard er den største rækkeværdi).
+- **gantt** — opgaveplaner med datoer, fremdrift og afhængigheder; se [Gantt-tidsplaner](#gantt-schedules).
+- **erDiagram** — databaseentiteter, felter, nøgler og relationer; se [Entity relationships](#entity-relationships-db).
 - **text** — en markdown-besked (f.eks. en statusnote som "Sidste kørsel kl. 19:47"). Indsæt markdown i `text` til en statisk besked, eller lad `text` være tom og indstil `valueField` for at gengive en streng produceret opstrøms. Understøtter overskrifter, fed/kursiv, [lister](../nodes/chart-output-node.md#interactive-task-lists), links og inline-kode.
 - **hitl** — et karussel af afventende menneskelige gennemgange. Overskriften viser `1/n pending`; venstre pil er deaktiveret på det første kort og højre pil på det sidste. Workflow-navnet åbner den pågældende kørsel på canvas. **Approve**, **Request changes**, og **Reject** afslutter den, og historikikonet ved siden af widgettitlen åbner den pågældende kørsel i historikdialogen på samme side. Denne charttype ignorerer opstrøms rækker, så widget-workflowet kun består af Chart Output-noden. Hver logget ind person ser gennemgange på workflows, de ejer. Vælg et **Workflow** (og **Select agent**, når det har flere gennemgangstrin) i nodens egenskaber eller widgettens indstillinger for i stedet at vise det Workflows gennemgange for alle, der kan åbne det; se [HITL-widgets](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt-tidsplaner
+
+Vælg **Gantt** (`gantt`) til projektplaner og opgavetidslinjer. Indstil `dataPath` til opgavearrayet, såsom `tasks`. Rækker bruger faste feltnavne:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` og `end` accepterer ISO-datoer eller datetimes. Værdier uden tidszone anvender UTC; tidszoneforskydninger konverteres til UTC. `end` skal være på eller efter `start`. `progress` er valgfri (0–100, standard 0); `dependencies` indeholder eksisterende opgave-id'er. Id'er skal være unikke. Hold markøren over en opgave for at læse dens fulde datoer, fremdrift og afhængigheder. Store diagrammer ruller inde i widgetten. Højst 500 opgaver accepteres.
+
+For eksempeldata kan en Set-mapping ved navn `tasks` bruge `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Forbind den til Chart Output med `chartType: "gantt"` og `dataPath: "tasks"`. Knyt kildekolonner til disse faste navne med en Set-node; `labelField` og `valueField` anvendes ikke.
+
+### Entity relationships (DB)
+
+Vælg **Entity relationships (DB)** (`erDiagram`) til databaseskemaer og entitetsforbindelser. Indstil `dataPath` til et graf-**objekt**, såsom `graph`, der indeholder begge arrays:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Felter har et `name`, valgfrit `type` og valgfri `key` (`PK`, `FK`, `PK/FK` eller tom). Relationer refererer til eksisterende entitets-id'er; valgfri `sourceField` og `targetField` forankrer forbindelsen til navngivne felter. `cardinality` accepterer `one-to-one`, `one-to-many` (standard), `many-to-one` eller `many-to-many`. Entitets-id'er og feltnavne inden for hver entitet skal være unikke. Højst 100 entiteter, 100 felter pr. entitet og 500 relationer accepteres.
+
+Med en Set-node opbygges `graph` med `$dict(entities=array(dict(...)), relations=array(dict(...)))`; brug `chartType: "erDiagram"` og `dataPath: "graph"`. Dette er en visualisering af det angivne skema; den inspicerer ikke automatisk en aktiv database.
+
+Begge typer vises i **Tilføj widget** med en forhåndsvisning og i canvasnodens diagramtypevælger. Heym Work kan foreslå disse typer, når man beskriver en tidsplan eller et databaseskema, og tegner forhåndsvisninger af de foreslåede opgaver eller entiteter, før siden oprettes.
 
 ### Interaktive opgavelister
 

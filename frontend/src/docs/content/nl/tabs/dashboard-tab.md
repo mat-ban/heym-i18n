@@ -23,6 +23,8 @@ Een widget is een enkele grafiek op het raster. Ondersteunde grafiektypen:
 - **Gauge** (één waarde tegen een min–max-bereik, bijvoorbeeld een percentage)
 - **Scatter** (X/Y-punten voor correlatiegrafieken)
 - **Proportion** (één balk opgesplitst in aandelen met een percentagelegenda, bijvoorbeeld een taalverdeling)
+- **Gantt** (taakdatums, voltooiing en afhankelijkheden)
+- **Entity relationships (DB)** (tabellen, velden, PK/FK-sleutels en verbindingen)
 - **Bar gauge** (één horizontale gauge per rij met een rood→groen verloop en een waarde, bijvoorbeeld vrije schijfruimte)
 - **Text** (een markdown-bericht, bijvoorbeeld een statusnotitie zoals "Laatste uitvoering om 19:47"; ondersteunt [interactieve selectievakjes](../nodes/chart-output-node.md#interactive-task-lists) wanneer de markdown statisch is, en [expliciete genummerde lijsten](../nodes/chart-output-node.md#numbered-lists) voor aangepaste of aflopende nummering)
 - **HITL** (uw openstaande menselijke beoordelingen. De kop toont `1/n pending`. De workflownaam opent die uitvoering op het canvas. **Approve**, **Request changes** en **Reject** lossen deze op. Het geschiedenis-pictogram naast de widgettitel opent die uitvoering in het geschiedenisdialoogvenster op deze pagina. De widget gebruikt geen bovenliggende rijen en elke persoon ziet zijn eigen wachtrij. Het kan in plaats daarvan de beoordelingen van één Workflow tonen, voor iedereen die die Workflow kan openen; zie [HITL-widgets](#hitl-widgets))
@@ -96,6 +98,18 @@ De widget-API kan ook zonder AI een **telkaart** maken: een `text`-widget op een
 
 Gebruik de knop **Fine-tune with AI** van een widget om een bestaande widget met een nieuwe instructie te herzien. Elke AI-finetuning maakt een momentopname van de vorige workflow in de **Edit History** van de widget, zodat u wijzigingen kunt bekijken of terugdraaien vanuit de workflow-editor.
 
+## Vanuit Chat en MCP
+
+[Chat](./chat-tab.md), en MCP-clients via de [`heym_chat`-tool](./mcp-tab.md), kunnen uw dashboards lezen, widgets toevoegen, hernoemen of verwijderen en de indeling van een dashboard opschonen. Heym Work toont elk dashboard als een pagina, zodat dezelfde antwoorden ook de pagina's dekken.
+
+- **Welke dashboards er zijn en wat erop staat.** Vraag "welke dashboards heb ik?", "wat staat er op het Sales-dashboard?" of "op welk dashboard staat de omzet-workflow?". Chat somt uw eigen dashboards en de met u gedeelde dashboards op, met uw toegangsrechten en een link naar elk dashboard, plus elke widget erop: titel, grafiektype en de workflow erachter. Een [HITL-widget](#hitl-widgets) gefilterd op een workflow die u niet kunt openen, blijft verborgen, net als op het dashboard zelf.
+- **Een nieuwe widget.** Vraag "voeg een grafiek van openstaande cases per status toe aan het Sales-dashboard". Chat plaatst eerst een lege widget op het dashboard, schrijft vervolgens de eigen workflow van de widget, voert testruns uit en lost fouten op totdat een run slaagt, op dezelfde manier waarop het [workflows bouwt](./chat-tab.md#workflows-maken). Er blijft geen afzonderlijke workflow achter en elke opslag verschijnt in de Edit History van de widget. De titel en het grafiektype van de widget volgen wat Chat opslaat.
+- **Een bestaande workflow.** Vraag "plaats de omzet-workflow op het Sales-dashboard". Een workflow die eindigt in een Chart Output-node wordt een grafiekwidget met een eigen kopie van de workflow, zodat latere wijzigingen aan de widget het origineel nooit beïnvloeden. Een workflow met een trigger- of input-node kan geen grafiekwidget worden. Elke andere workflow wordt een [run-widget](#run-widgets), waarvoor ook een workflow nodig is die de dashboardeigenaar kan uitvoeren.
+- **Een widget hernoemen of verwijderen.** Vraag "hernoem de Omzet-widget naar Sales" of "verwijder de widget Openstaande cases". De workflow van een grafiekwidget krijgt ook de nieuwe naam; de workflow van een run-widget behoudt zijn eigen naam. Het verwijderen van een grafiekwidget verwijdert ook de workflow ervan, net zoals de verwijderknop van de widget; de workflow van een run-widget blijft behouden. Chat verwijdert alleen een widget die u expliciet hebt aangevraagd, en vraagt eerst om verduidelijking als uw woorden overeenkomen met meerdere widgets.
+- **Opschonen.** Vraag "schoon het Sales-dashboard op", of "voeg deze drie widgets toe en schoon op". Chat rangschikt de widgets die u ziet in hun volgorde, net zoals de knop **Opschonen** doet: rijen van twee of drie willekeurig, zodat opnieuw vragen een andere opstelling oplevert. Vraag om een aantal per rij ("drie per rij") om rijen van die grootte te krijgen. Dit ordent het dashboard in Heym; Heym Work behoudt zijn eigen rangschikking van een pagina, die via de eigen **Opschonen**-knop van de pagina wordt gewijzigd.
+
+Nieuwe widgets komen onder de bestaande widgets van het dashboard en worden, zoals elke widget, uitgevoerd als de dashboardeigenaar. Toevoegen, hernoemen, verwijderen en opschonen vereisen schrijftoegang tot het dashboard. Het bouwen van een nieuwe widget vereist een chat die workflows kan bouwen: het tabblad Chat, Heym Work Chat voor editors en `heym_chat`.
+
 ## De lay-out bewerken
 
 Schakel **Edit** in om de bewerkingsmodus te openen, waarin u widgets kunt slepen en het formaat ervan kunt wijzigen op een raster van 12 kolommen. Lay-outwijzigingen worden automatisch opgeslagen. Widgettitels kunnen inline vanuit de widgetkop worden bewerkt.
@@ -128,3 +142,7 @@ Het verwijderen van een deling, of het verlagen van schrijven naar lezen, wordt 
 
 - [Chart Output-knooppunt](../nodes/chart-output-node.md)
 - [Analytics-tab](analytics-tab.md) — ingebouwde uitvoeringsstatistieken (te onderscheiden van door gebruikers gebouwde dashboards)
+
+## Planningen en databasediagrammen
+
+Kies **Gantt** in Widget toevoegen om taken in de loop van de tijd met voltooiing en afhankelijkheidskoppelingen weer te geven, of **Entity relationships (DB)** om tabellen, velden en hun relaties in kaart te brengen. Beide typen gebruiken de [Chart Output-node](../nodes/chart-output-node.md#gantt-schedules) en zijn ook beschikbaar op Heym Work-pagina's. Wanneer Work widgets voorstelt voor een planning of databaseschema, tekent het voorbeelden op basis van de voorgestelde taken of entiteiten.

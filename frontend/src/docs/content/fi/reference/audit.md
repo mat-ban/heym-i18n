@@ -47,7 +47,7 @@ Sovelluksen **Lokit**-välilehti lukee saman kontainerin tulostuksen. Se on suoj
 
 ## Mitä Kirjataan
 
-Jokainen tilan muutos kirjataan. Lukutoiminnot kirjataan vain, jos lukeminen itsessään on arkaluonteinen toiminto — esimerkiksi workflown suoritushistorian tarkastelu, tunnistetiedon avaaminen tai tiedoston lataaminen. Tavalliset listaus- ja tietojenlukuoperaatiot eivät ole auditointikohteita; pyyntöloki kirjaa jo, että pyyntö tapahtui, ja jokaisen `GET`-pyynnön kirjaaminen hautaisi merkitykselliset rivit.
+Jokainen tilan muutos kirjataan. Lukutoiminnot kirjataan vain, jos lukeminen itsessään on arkaluonteinen toiminto — esimerkiksi workflown suoritushistorian tarkastelu, tunnistetiedon avaaminen tai tiedoston lataaminen. Tavalliset listaus- ja tietojenlukuoperaatiot eivät ole auditointikohteita; pyyntöloki kirjaa jo, että pyyntö tapahtui, ja jokaisen `GET`-pyynnön kirjaaminen hautaisi merkitykselliset rivit. Ainoa poikkeus ovat [sivukatselut](#page-views), jotka tallentavat, missä kirjautunut käyttäjä liikkui sovelluksessa.
 
 ### Todennus
 
@@ -62,9 +62,34 @@ Jokainen tilan muutos kirjataan. Lukutoiminnot kirjataan vain, jos lukeminen its
 | `sso_settings.update` | Ylläpitäjä muutti [SSO](./sso.md) -asetuksia. Kirjaa `enabled` ja `password_login_disabled`, ei koskaan asiakassalaisuutta. |
 | `sso_settings.test` | Ylläpitäjä suoritti SSO-yhteyden testin. |
 
+### Sivukatselut
+
+`page.view` kirjataan aina, kun kirjautunut käyttäjä avaa sivun verkkosovelluksessa, ja URL-polku tallennetaan `path`-kenttään:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Polku on sovelluksen sisäinen reitti. Koontinäytön välilehdet kuuluvat siihen (`/?tab=traces`), kuten myös avattua kohdetta nimeävät tunnisteet, kuten `/workflows/<id>`. Vain lyhyt luettelo sivun yksilöivistä kyselyparametreista säilytetään (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); kaikki muu kyselymerkkijonossa ja koko fragmentti hylätään. Sivut, joiden linkki sisältää salaisuuden, kuten `/review/<token>`, kirjataan paikkamerkillä `:token` salaisuuden sijasta.
+
+Selain ilmoittaa polun, joten `page.view`-rivi näyttää, mihin käyttäjä ilmoitti siirtyneensä. Se ei todista, että palvelin palautti kyseisen sivun. Kirjautumissivulla käyntejä ja uloskirjautuneena avattuja linkkejä ei tallenneta, koska niihin ei liity käyttäjää.
+
 ### Workflowt
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` kirjataan, kun suoritus käynnistetään API:n kautta: editorin Suorita-painike, execute-päätepiste istunnon, API-avaimen tai webhookin avulla, chat-portaali ja MCP-työkalut. Se tallentaa kuka sen käynnisti, miten ja miten se päättyi:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` yhdistää rivin suoritukseen Suoritushistoriassa. `outcome` on `failure`, kun suoritus päättyi tilaan `error`, `cancelled` tai `timeout`. Suoritus, joka on pysäytetty ihmisen tarkistusta varten tai jota pidetään samanaikaisuusjonossa, on `success`-rivi tilalla `status=pending` tai `status=queued`. Kutsulla, jossa ei ole kirjautunutta käyttäjää, kuten anonyymillä webhookilla tai portaalivierailijalla, ei ole `actor_id`- tai `actor_email`-tietoja. Syötteitä ja tulosteita ei koskaan kirjata.
+
+Aikataulun, trigger-solmun, jonon tai tapahtuman käynnistämät suoritukset eivät muodosta auditrivejä. Ne suoritetaan instanssissa, joka otti ne vastaan, ja ne tallennetaan Suoritushistoriaan trigger-lähteensä ja suorittaneen instanssin kera.
+
+`workflow.history_view` kirjataan, kun joku avaa työnkulun suoritushistorian. Pieni kysely, joka näyttää työnkulun viimeisimmän suorituksen kankaalla tai luettelossa, ei muodosta tarkastuslokia.
+
 
 `workflow.history_view` kirjaa `owned=false`, kun yhteistyökumppani lukee jonkun muun suoritushistorian. `workflow.delete` kirjaa `outcome=denied` syyllä `reason=not_owner`, kun yhteistyökumppani yrittää poistaa.
 
@@ -96,6 +121,27 @@ Tarkistusrivi tallentaa tunnisteet, nimet ja määrät. Se ei koskaan tallenna t
 Tämän varmistavat kaksi asiaa. Kutsukohdat on kirjoitettu välittämään vain turvallisia kenttiä, ja tarkistusapuohjelma suodattaa tiedot viimeisenä varmistuksena: mikä tahansa kenttä, jonka nimi sisältää `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` tai vastaavan, korvataan merkkijonolla `***` ennen rivin muodostamista. Liiallinen suodatus on tarkoituksellista - hyödytön rivi on parempi kuin vuotanut tunnistetieto.
 
 Jos salaisuus on aidosti merkityksellinen tietueelle, kirjataan vain sen muoto. Tiedostonjako tallentaa `password_protected=true`, ei koskaan salasanaa.
+
+## Heym Work
+
+Kun suoritat Heym Workia Heymin rinnalla, Work lähettää auditrivit oman konttinsa stdout-virtaan samassa Winston-muodossa:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work kirjaa käyttäjien toimet sivuilla, tauluilla ja tietueissa:
+
+| Toiminto | Merkitys |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Muutokset koontinäytön sivuihin ja asetteluihin |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Kanban-sarakkeiden asettelumuutokset |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Korttien elinkaaritapahtumat |
+| `record.create`, `record.update`, `record.delete` | Datataulukkotietueiden muutokset Workin kautta |
+| `chat.message` | Käyttäjän kehote lähetetty Work-avustajalle |
+| `export.csv`, `export.json` | Dataviennit |
+
+Jokaisella rivillä on samat kentät `actor_id`, `actor_email`, `timestamp` ja `outcome` kuin Heymin auditriveillä, joten lokien kerääjät voivat jäsentää molemmat yhdellä liukuhihnalla.
 
 ## Säilytys
 

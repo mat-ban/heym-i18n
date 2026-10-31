@@ -23,7 +23,8 @@ Também pode iniciar uma conversa a partir da caixa de chat no [separador Workfl
 - **Mensagens de seguimento em fila** – Envie mais mensagens enquanto uma resposta está em streaming. As mensagens em fila são persistidas, podem ser editadas ou eliminadas antes de iniciarem e são executadas por ordem após a resposta ativa
 - **Pausas de planeamento** – Quando o Chat necessita de detalhes de planeamento, coloca questões de esclarecimento e suspende as mensagens de seguimento em fila até obter resposta. Após a conclusão da resposta de planeamento, as mensagens em fila são retomadas
 - **Credenciais** – Quando um workflow criado ou editado pelo Chat necessita de uma credencial, o Chat pergunta qual utilizar, oferece a criação de uma nova na conversa ou permite continuar sem credencial. Também pode pedir ao Chat para criar uma credencial ou atualizar uma que possua; este abre o formulário de credencial na conversa. O modelo vê o nome e o tipo da credencial, nunca os seus valores, tanto para credenciais próprias como para partilhadas consigo. Os nós LLM e Agent adicionados pelo Chat são executados com a credencial e o modelo selecionados para o chat, incluindo credenciais partilhadas; quando o Chat edita um workflow, os seus nós LLM e Agent existentes mantêm a sua credencial e modelo. Consulte [Assistente de IA › Credenciais](../reference/ai-assistant.md#credentials)
-- **Tabelas de dados** – Quando um workflow criado ou editado pelo Chat armazena registos, o Chat pergunta qual [tabela de dados](./datatable-tab.md) utilizar ou oferece a criação de uma com as colunas necessárias ao workflow. Também pode listar as suas tabelas e respetivas colunas. Nunca lê nem escreve linhas. Consulte [Assistente de IA › Tabelas de dados](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Pergunte quais [dashboards](./dashboard-tab.md) possui, o que está num deles ou em que dashboard se encontra um workflow. Peça ao Chat para adicionar um novo widget a um dashboard (coloca um widget vazio lá, construindo e testando depois o respetivo workflow), colocar um workflow existente num dashboard como widget, renomear ou eliminar um widget, ou organizar o esquema de um dashboard. O Heym Work apresenta estes dashboards como as suas páginas. Consulte [Dashboard › A partir do Chat e MCP](./dashboard-tab.md#a-partir-do-chat-e-mcp)
+- **Tabelas de dados** – Quando um workflow que o Chat cria ou edita armazena registos, o Chat pergunta que [tabela de dados](./datatable-tab.md) utilizar ou oferece-se para criar uma com as colunas necessárias. Também pode inspecionar linhas, adicionar ou remover colunas e inserir, atualizar ou eliminar linhas diretamente em tabelas que possui ou pode editar. Forneça um nome de tabela ou ligação DataTable. A remoção de colunas e a limpeza de todas as linhas solicitam confirmação; a adição de colunas preserva os dados existentes. Consulte [Assistente de IA › Tabelas de dados](../reference/ai-assistant.md#data-tables)
 - **Respostas em streaming** – Veja a saída do modelo à medida que é transmitida
 - **Parar resposta** – Interrompa a resposta em streaming em qualquer momento; parar também limpa as mensagens em fila dessa conversa
 - **Renderização de Markdown** – As respostas suportam formatação markdown, incluindo imagens em linha
@@ -33,19 +34,20 @@ Também pode iniciar uma conversa a partir da caixa de chat no [separador Workfl
 - **Entrada de voz** – Utilize o botão do microfone para conversão de fala em texto (suportado pelo navegador). Quando a gravação termina, o Heym pode efetuar uma ligeira limpeza da transcrição antes de a enviar
 - **Workflows agendados** – Pergunte quando são executados os workflows cron (hoje, esta semana, este mês ou um intervalo de datas personalizado). O assistente utiliza os mesmos dados de agendamento que o separador [Agendamentos](./scheduled-tab.md) e pode limitar os resultados aos workflows que possui ou incluir os partilhados consigo
 - **Histórico de execuções de workflows** – Pergunte sobre um workflow ("quantas vezes foi executado o relatório diário?", "falhou?", "quando foi a última execução?"). O Chat procura o workflow pelo seu ID e responde com base na contagem de execuções, distribuição por estado, primeira e última execução e duração média. Pergunte porque falhou uma execução ou o que devolveu e o Chat abre essa execução individual para ler as suas entradas, saídas e erros por nó
+- **Onde as execuções falham e por que são lentas** – Pergunte onde os seus workflows falham ou por que motivo são lentos e o Chat indica os workflows que mais executaram, que mais falharam e que são mais lentos, bem como os tipos de nós que consomem mais tempo (média por chamada e total), que mais falham e que mais executam, os mesmos números do separador [Analytics](./analytics-tab.md). Os tipos de nós são contabilizados para execuções a partir da versão que introduziu a análise de nós. Pergunte sobre a última hora, 3 ou 6 horas, 24 horas, 7 ou 30 dias, ou todo o histórico; as janelas de horas iniciam à hora certa, pelo que "a última hora" às 15:20 abrange das 14:00 até agora.
 - **Estado de execução em tempo real** – Pergunte o que está a ser executado neste momento e o Chat responde com a contagem, os nomes dos workflows, há quanto tempo cada execução está em curso, em que nó se encontra e uma ligação direta para a execução em tempo real
 
 - **Chips de contexto de execução** – **Perguntar à IA** no [Execution History](../reference/execution-history.md#ask-ai) abre uma nova conversa com a execução de Workflow selecionada anexada como chips. Consulte [Perguntar sobre uma execução](#perguntar-sobre-uma-execucao)
 
 ## Utilizar o Chat a partir de um Cliente MCP
 
-O motor de Chat também pode ser acedido fora do navegador. Ative a **Heym Chat Tool** no [separador MCP](./mcp-tab.md) e os clientes MCP — Claude, Cursor e qualquer outro que fale MCP — obtêm uma única ferramenta `heym_chat` que executa este mesmo motor com todas as suas capacidades.
+O motor de Chat também pode ser acedido fora do navegador. Ative o **Heym Agent** no [separador MCP / A2A](./mcp-tab.md) e os clientes MCP (Claude, Cursor e qualquer outra ferramenta compatível com MCP) recebem uma única ferramenta `heym_chat` que executa este mesmo motor com todas as suas capacidades. Assinale também **Ativar A2A** e outros agentes poderão enviar-lhe tarefas através do [A2A](../reference/a2a.md); essas conversas apresentam um ícone de rede na lista.
 
 Essas conversas ficam no histórico deste separador, marcadas com um ícone de ficha na lista de conversas. Abra uma para ler o que o cliente pediu, ver os cartões de ferramentas que acionou e continuar o fio de conversa. Responder a uma pergunta de esclarecimento funciona da mesma forma, quer o turno tenha começado aqui ou a partir de um cliente MCP.
 
 Através de MCP, o Chat não lista, escolhe nem cria credenciais. Os Workflows que constrói deixam os campos de credenciais vazios, e a resposta nomeia os nós que necessitam de uma credencial para que possa defini-los no editor.
 
-As Tabelas de dados também funcionam através de MCP: o Chat lista as suas tabelas, cria novas e integra-as nos Workflows que constrói. A sua pergunta sobre a tabela chega como texto no resultado, pelo que deve respondê-la com o mesmo `conversation_id`.
+As tabelas de dados também funcionam através de MCP: o Chat pode editar colunas e linhas diretamente, criar tabelas e associá-las a workflows. As questões sobre tabelas e as confirmações de eliminação chegam como texto no resultado; responda com o mesmo `conversation_id`.
 
 ## Limite de Contexto
 
@@ -117,9 +119,57 @@ pode dar uma resposta diferente.
 
 As [Regras do Utilizador](../reference/user-settings.md) (configuradas nas Definições) são automaticamente injetadas em cada conversa de Chat como instruções ao nível do sistema. Defina-as uma vez para aplicar preferências persistentes a todos os pedidos de Chat.
 
+## Trabalhar com Avaliações
+
+O Chat pode criar, alterar e executar as suites em [Evals](./evals-tab.md), tanto suites de prompts como suites de agente:
+
+- **Suite de prompts**: "cria uma suite de prompts para o meu prompt de resposta de suporte com 8 casos de teste e compara o gpt-4o com o gpt-4.1-mini". O Chat escreve os casos de teste com as respostas esperadas, seleciona um método de pontuação e guarda a suite.
+  - Antes de criar a suite, define que credencial LLM e modelos utilizar. Com exatamente uma credencial LLM, utiliza essa e informa; caso contrário, pergunta.
+  - Para a pontuação LLM-as-Judge, também pergunta se um juiz separado deve pontuar as respostas.
+- **Suite de agente**: "verifica se o meu agente de suporte pesquisa sempre a documentação e nunca envia e-mails". O Chat localiza o agente e guarda as verificações de ferramentas e limites. Quando solicitado, executa o workflow, gerando uma entrada diferente para cada execução.
+  - As execuções de suites de agente são execuções reais de workflow, pelo que os seus efeitos secundários ocorrem. O Chat indica quantas execuções inicia.
+- **Baseline**: O Chat pode trabalhar com a baseline de um agente de três formas:
+  - Reportá-la a partir das últimas execuções do agente.
+  - Construí-la a partir das execuções que inicia ("executa-o 5 vezes e usa isso como baseline").
+  - Guardar os valores que fornecer ("define a baseline para 3 segundos p95 e 0,01 $ por execução").
+- **Execuções**: O Chat aguarda até um minuto por uma execução e depois reporta o resultado:
+  - Para uma suite de prompts: a contagem de aprovações de cada modelo e os casos que falharam.
+  - Para uma suite de agente: a taxa de aprovação, as verificações com falha e o desvio em relação à baseline.
+  - Uma execução mais longa continua no Evals; peça ao Chat para a verificar novamente.
+
+Depois de o Chat criar ou alterar uma suite, a resposta apresenta um cartão com o nome da suite, o respetivo tipo e um botão **Abrir no Evals**, à semelhança do cartão de um workflow guardado. Através do MCP, o resultado do `heym_chat` lista a ligação de cada suite guardada nessa chamada.
+
+O mesmo funciona a partir de um cliente MCP através de `heym_chat` (consulte [Utilizar o Chat a partir de um cliente MCP](#utilizar-o-chat-a-partir-de-um-cliente-mcp)). As ferramentas de avaliação permanecem dentro do `heym_chat`; os clientes MCP não as visualizam como ferramentas separadas.
+
+O Assistente de IA do editor não cria suites.
+
+## Trabalhar com Avaliações
+
+O Chat pode criar, alterar e executar as suites em [Evals](./evals-tab.md), tanto suites de prompts como suites de agente:
+
+- **Suite de prompts**: "cria uma suite de prompts para o meu prompt de resposta de suporte com 8 casos de teste e compara o gpt-4o com o gpt-4.1-mini". O Chat escreve os casos de teste com as respostas esperadas, seleciona um método de pontuação e guarda a suite.
+  - Antes de criar a suite, define que credencial LLM e modelos utilizar. Com exatamente uma credencial LLM, utiliza essa e informa; caso contrário, pergunta.
+  - Para a pontuação LLM-as-Judge, também pergunta se um juiz separado deve pontuar as respostas.
+- **Suite de agente**: "verifica se o meu agente de suporte pesquisa sempre a documentação e nunca envia e-mails". O Chat localiza o agente e guarda as verificações de ferramentas e limites. Quando solicitado, executa o workflow, gerando uma entrada diferente para cada execução.
+  - As execuções de suites de agente são execuções reais de workflow, pelo que os seus efeitos secundários ocorrem. O Chat indica quantas execuções inicia.
+- **Baseline**: O Chat pode trabalhar com a baseline de um agente de três formas:
+  - Reportá-la a partir das últimas execuções do agente.
+  - Construí-la a partir das execuções que inicia ("executa-o 5 vezes e usa isso como baseline").
+  - Guardar os valores que fornecer ("define a baseline para 3 segundos p95 e 0,01 $ por execução").
+- **Execuções**: O Chat aguarda até um minuto por uma execução e depois reporta o resultado:
+  - Para uma suite de prompts: a contagem de aprovações de cada modelo e os casos que falharam.
+  - Para uma suite de agente: a taxa de aprovação, as verificações com falha e o desvio em relação à baseline.
+  - Uma execução mais longa continua no Evals; peça ao Chat para a verificar novamente.
+
+Depois de o Chat criar ou alterar uma suite, a resposta apresenta um cartão com o nome da suite, o respetivo tipo e um botão **Abrir no Evals**, à semelhança do cartão de um workflow guardado. Através do MCP, o resultado do `heym_chat` lista a ligação de cada suite guardada nessa chamada.
+
+O mesmo funciona a partir de um cliente MCP através de `heym_chat` (consulte [Utilizar o Chat a partir de um cliente MCP](#utilizar-o-chat-a-partir-de-um-cliente-mcp)). As ferramentas de avaliação permanecem dentro do `heym_chat`; os clientes MCP não as visualizam como ferramentas separadas.
+
+O Assistente de IA do editor não cria suites.
+
 ## Relacionado
 
-- [Separador MCP](./mcp-tab.md) – Exponha este motor a clientes MCP como a ferramenta `heym_chat`
+- [Separador MCP / A2A](./mcp-tab.md) – Exponha este motor a clientes MCP como a ferramenta `heym_chat`
 - [Definições](../reference/user-settings.md) – Defina Regras de Utilizador aplicadas a todos os pedidos de chat
 - [Separador Credenciais](./credentials-tab.md) – Adicione e faça a gestão de chaves de API
 - [Separador Variáveis](./global-variables-tab.md) – Variáveis globais disponíveis para o Chat

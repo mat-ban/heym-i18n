@@ -23,6 +23,8 @@ En widget er et enkelt diagram på gitteret. Understøttede diagramtyper:
 - **Måler** (en enkelt værdi i forhold til et min-maks interval, f.eks. en procentdel)
 - **Punkt** (X/Y-punkter til korrelationsplot)
 - **Proportion** (en søjle opdelt i andele med procentvis fordeling, f.eks. en sprogfordeling)
+- **Gantt** (opgavedatoer, færdiggørelse og afhængigheder)
+- **Entity relationships (DB)** (tabeller, felter, PK/FK-nøgler og forbindelser)
 - **Søjlemåler** (en vandret måler pr. række med rød→grøn gradient og en værdi, f.eks. ledig diskplads)
 - **Tekst** (en markdown-besked, f.eks. en statusnote som "Sidste kørsel kl. 19:47"; understøtter [interaktive afkrydsningsfelter](../nodes/chart-output-node.md#interactive-task-lists) ved statisk markdown, og [eksplicitte nummererede lister](../nodes/chart-output-node.md#numbered-lists) til brugerdefineret eller faldende nummerering)
 - **HITL** (ventende menneskelige gennemgange. Overskriften viser `1/n ventende`. Workflow-navnet åbner kørslen på canvas. **Godkend**, **Anmod om ændringer** og **Afvis** afslutter processen. Historik-ikonet ved siden af widget-titlen åbner kørslen i historikdialogen på denne side. Widgeten bruger ikke opstrømsrækker, og hver person ser sin egen kø. Den kan i stedet vise gennemgangene for et enkelt Workflow for alle, der kan åbne dette Workflow; se [HITL-widgets](#hitl-widgets))
@@ -96,6 +98,18 @@ Widget-API'et kan også oprette et **tællerkort** uden AI: en `text`-widget på
 
 Brug en widgets **Finjuster med AI**-knap til at revidere en eksisterende widget med en ny instruktion. Hver AI-finjustering gemmer det foregående workflow i widgetens **Redigeringshistorik**, så der kan gennemses eller rulles tilbage fra workflow-editoren.
 
+## Fra Chat og MCP
+
+[Chat](./chat-tab.md) og MCP-klienter via [`heym_chat`-værktøjet](./mcp-tab.md) kan læse dine dashboards, tilføje widgets til dem, omdøbe eller slette widgets og rydde op i et dashboards layout. Heym Work viser hvert dashboard som en side, så de samme svar dækker dets sider.
+
+- **Hvilke dashboards der findes, og hvad der er på dem.** Spørg "hvilke dashboards har jeg?", "hvad er der på Salg-dashboardet?" eller "hvilket dashboard er omsætnings-workflowet på?". Chat lister dine egne dashboards og dem, der er delt med dig, med din adgang og et link til hvert, samt hver widget på dem: titel, diagramtype og workflowet bag. En [HITL-widget](#hitl-widgets) filtreret på et workflow, du ikke kan åbne, forbliver skjult, ligesom på selve dashboardet.
+- **En ny widget.** Spørg "tilføj et diagram over åbne sager efter status til Salg-dashboardet". Chat placerer først en tom widget på dashboardet, skriver derefter widgettens eget workflow, kører testkørsler og retter fejl, indtil en kørsel lykkes, på samme måde som den [bygger workflows](./chat-tab.md#oprettelse-af-workflows). Der efterlades intet separat workflow, og hver lagring vises i widgettens Edit History. Widgettens titel og diagramtype følger det, Chat gemmer.
+- **Et eksisterende workflow.** Spørg "placer omsætnings-workflowet på Salg-dashboardet". Et workflow, der slutter i en Chart Output-node, bliver til en diagramwidget med sin egen kopi af workflowet, så senere ændringer af widgetten aldrig berører originalen. Et workflow med en trigger- eller input-node kan ikke blive en diagramwidget. Ethvert andet workflow bliver en [kørsels-widget](#run-widgets), som også kræver et workflow, dashboard-ejeren kan køre.
+- **Omdøb eller slet en widget.** Spørg "omdøb Omsætning-widgetten til Salg" eller "slet widgetten Åbne sager". En diagramwidgets workflow overtager også det nye navn; en kørselswidgets workflow beholder sit eget. Sletning af en diagramwidget sletter dens workflow med den, ligesom widgettens sletteknap gør; en kørselswidgets workflow bevares. Chat sletter kun en widget, du har bedt om, og spørger hvilken først, hvis dine ord matcher flere.
+- **Ryd op.** Spørg "ryd op i Salg-dashboardet" eller "tilføj disse tre widgets og ryd op". Chat arrangerer de widgets, du ser, i deres rækkefølge, ligesom knappen **Ryd op** gør: tilfældige rækker af to eller tre, så en ny forespørgsel giver et andet arrangement. Angiv et antal pr. række ("tre pr. række") for at få rækker af den størrelse. Dette arrangerer dashboardet i Heym; Heym Work bevarer sit eget arrangement af en side, som sidens egen **Ryd op**-knap ændrer.
+
+Nye widgets placeres under dashboardets eksisterende widgets og kører, som enhver widget, i dashboard-ejerens kontekst. Tilføjelse, omdøbning, sletning og oprydning kræver skriveadgang til dashboardet. Opbygning af en ny widget kræver en chat, der kan bygge workflows: fanen Chat, Heym Work Chat for redaktører og `heym_chat`.
+
 ## Redigering af layout
 
 Aktiver **Rediger** for at indgå i redigeringsmode, hvor widgets kan trækkes og ændres i størrelse på et 12-kolonners gitter. Layoutændringer gemmes automatisk. Widget-titler kan redigeres direkte fra widget-hovedet.
@@ -127,3 +141,7 @@ Fjernelse af en deling eller nedgradering fra skrive til læse træder i kraft m
 
 - [Chart Output node](../nodes/chart-output-node.md)
 - [Analytics-fanen](analytics-tab.md) — indbyggede kørselsstatistikker (adskilt fra brugeroprettede dashboards)
+
+## Tidsplaner og databasediagrammer
+
+Vælg **Gantt** i Tilføj widget for at vise opgaver over tid med fuldførelse og afhængighedslinks, eller **Entity relationships (DB)** for at kortlægge tabeller, felter og deres relationer. Begge typer bruger [Chart Output-noden](../nodes/chart-output-node.md#gantt-schedules) og er også tilgængelige på Heym Work-sider. Når Work foreslår widgets til en tidsplan eller et databaseskema, tegner det forhåndsvisninger ud fra de foreslåede opgaver eller entiteter.

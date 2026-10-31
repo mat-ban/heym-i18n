@@ -1,6 +1,6 @@
-# MCP Tab
+# MCP / A2A Tab
 
-**MCP** 标签页用于配置 Model Context Protocol (MCP) 集成。MCP 允许 AI 客户端（Claude、ChatGPT、Gemini、Cursor 以及任何兼容 MCP 的工具）将您的 Heym workflow 作为工具进行调用。
+**MCP** 标签页用于配置 Model Context Protocol (MCP) 集成。MCP 允许 AI 客户端（Claude、ChatGPT、Gemini、Cursor 以及任何兼容 MCP 的工具）将您的 Heym workflow 作为工具进行调用。，并作为其他智能体可以委托任务的 [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) 服务器。
 
 Heym 支持两种模式：**默认服务器**，在单一 endpoint 下暴露所有启用了 MCP 的 workflow；以及**命名服务器**，为每个逻辑 workflow 分组提供专属 URL 和 API key。
 
@@ -51,7 +51,7 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 ```
 
 客户端使用该 `execution_id` 轮询 `heym_execution_status` 工具。它返回与[状态 URL](../reference/webhooks.md#status-url)相同的响应体：带有当前位置的 `queued`、`running`，随后是带有输出的 `success` 或 `error`。它仅能查找由同一服务器公开的 workflow 运行。该工具仅在默认服务器和每个命名服务器上至少有一个 workflow 设置了并发限制时才会列出。当 workflow 的队列已满时，调用将返回错误 "Concurrency queue is full"。
-## Heym Chat 工具
+## Heym Agent
 
 **Heym Capabilities** 部分将 Chat 标签页引擎转换为名为 `heym_chat` 的单个 MCP 工具。您可以在默认服务器、任意命名服务器或两者上启用它——每个界面都保留各自的开关和模型选择。
 
@@ -60,15 +60,20 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 - 构建 workflow，使用示例输入进行测试运行，修复问题，并在运行通过时完成（参见[构建模式](#build-mode)）
 - 检查并运行您现有的 workflow
 - 报告分析数据、近期执行记录以及即将到来的 cron 计划
+- 说明 workflow 在何处失败以及为何缓慢：运行最多、失败最多和最慢的 workflow，以及在过去 1、3 或 6 小时、24 小时、7 或 30 天或所有时间内耗时最多、错误最多和调用最多的节点类型
 - 报告单个 workflow 的运行历史：运行次数、状态计数、运行时间，并可按需提供单次运行的输入、输出以及各节点错误
 - 报告当前正在运行的内容：活跃执行数量、其 workflow 名称、各自已运行时长、当前所在节点，以及实时运行的链接
 - 在 [Board 标签页](./board-tab.md)上列出看板、创建卡片并读取卡片详情
-- 列出您的数据表及其列，创建新表，并将其接入它所构建的 workflow 中
+- 列出仪表板（Heym Work 页面）及其组件，查找 workflow 所在的仪表板，添加新组件并构建其 workflow，将现有 workflow 作为组件放置，重命名或删除组件，或整理布局（参见 [Dashboard › 从 Chat 和 MCP](./dashboard-tab.md#from-chat-and-mcp)）
+- 检查数据表和行，创建数据表，添加或删除列，插入、更新或删除行，并将数据表接入 workflow
+- 创建、编辑和运行提示词与智能体评估套件（[Eval suites](./evals-tab.md#from-chat-and-mcp)），包括智能体的基线：报告的、从运行中构建的或以数值指定的。结果列出调用中保存的每个套件的 Evals 链接。
 - 在 Heym 专属页面上创建或更新您的凭据（参见[凭据](#凭据))
 - 读取团队和全局变量，并搜索文档
 - 批准、编辑或拒绝待处理的人工介入审核
 
 后续添加到 Chat 标签页的能力会自动通过 `heym_chat` 可用——无需逐项同步开关。
+
+这些功能在 `heym_chat` 内部运行：`tools/list` 仅显示 `heym_chat` 和您的 workflow 工具，从不显示聊天内部工具（例如评估套件工具）。
 
 ### 构建模式
 
@@ -81,7 +86,12 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 - 若要修改其先前构建的 workflow，请使用相同的 `conversation_id` 继续该对话线程。助手会更新该 workflow 而不是新建一个，并且仅会修改您有权编辑的 workflow。
 - 当五次测试运行用尽时，助手会停止并说明仍然失败的原因。
 
-数据表则不同。表不包含任何机密信息，因此 `heym_chat` 可以列出您的表、询问 workflow 应使用哪张表，并创建带有列的新表。它从不读取或写入行数据。
+`heym_chat` 可以检查您的数据表和行，创建表，添加或删除列，以及插入、更新或删除行。为其提供表名、UUID 或 DataTable 链接，例如：“向 https://heym.example/?tab=datatable/<table-id> 添加两列字符串：姓名”。它直接修改表，并在添加列时保留现有列和值。
+
+`heym_chat` 可以检查您的数据表和行，创建表，添加或删除列，以及插入、更新或删除行。为其提供表名、UUID 或 DataTable 链接，例如：“向 https://heym.example/?tab=datatable/<table-id> 添加两列字符串：姓名”。它直接修改表，并在添加列时保留现有列和值。
+
+写入操作需要所有权或通过直接/团队共享获得的**写入**权限。只读访问允许检查。行写入遵循 DataTable 标签页的类型、默认值、必填和唯一性检查；部分导入会报告被拒绝的行。删除列会从每行中清除其对应的值。与 DataTable 标签页一样，删除列和清空所有行需要先确认；使用相同的 `conversation_id` 进行回复以确认。删除选定行无需额外确认。
+
 
 ### 凭据
 
@@ -122,6 +132,14 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 
 当助手需要澄清时，它会暂停并说明；请使用相同的 `conversation_id` 回复答案。
 
+### 启用 A2A
+
+当 Heym Agent 开启时，卡片上会显示 **启用 A2A** 复选框。勾选后，其他智能体可以通过 Agent2Agent 协议 (A2A 1.0) 向 Heym Agent 发送任务。卡片随后会列出 **Agent Card** URL 和 **JSON-RPC endpoint**（各配有复制按钮），以及获取卡片的 `curl` 命令。A2A 使用与 MCP 相同的密钥和 OAuth 登录凭据。关闭智能体也会同时关闭 A2A。有关方法、任务状态和示例，请参阅 [A2A](../reference/a2a.md)。
+
+### 进度
+
+较长时间的 `heym_chat` 调用会以 MCP 进度通知 (`notifications/progress`) 形式报告智能体的操作，使用 Chat 标签页中显示的文本，例如 `正在测试 workflow · 尝试 2/5`。在收到进度通知时重置超时的客户端会在智能体工作期间继续等待。
+
 ## 命名 MCP Servers
 
 命名服务器让您可以将 workflows 划分为相互隔离的 MCP endpoints。每个服务器拥有自己的 URL 和 API key，因此不同的 AI 客户端、团队或用例可以精确连接到所需的 workflows。
@@ -141,7 +159,9 @@ Workflow 卡片会显示描述以及输入字段名称的预览，以便您在�
 | **SSE Endpoint** | 唯一 URL：`{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | 独立密钥，在生成或重新生成时仅显示一次。请立即复制；密钥以哈希形式存储，之后无法再次查看 |
 | **How to connect** | **Copy JSON** 复制可直接粘贴的 MCP 配置；**Add to Cursor** 一键安装 |
-| **Heym Capabilities** | 为此服务器切换 `heym_chat` 工具，并选择其凭据和模型 |
+| **Heym Capabilities** | 为此服务器切换 Heym Agent (`heym_chat`) 工具，并选择其凭据和模型 |
+| **启用 A2A** | 此服务器专属的 A2A 开关，在 `{origin}/api/a2a/servers/{uuid}/agent-card.json` 拥有独立的 Agent Card |
+| **启用 A2A** | 此服务器专属的 A2A 开关，在 `{origin}/api/a2a/servers/{uuid}/agent-card.json` 拥有独立的 Agent Card |
 | **Assigned Workflows** | 切换此服务器暴露哪些 workflows |
 
 ### Workflow 分配

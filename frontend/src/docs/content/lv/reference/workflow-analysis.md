@@ -43,12 +43,14 @@ Abas darbības vispirms **palaiž workflow** (kad tas ir derīgs un izpildāms) 
 
 Ģenerētais ziņojums aptver trīs sadaļas šādā secībā: **Improvement areas** (konkrēti ieteikumi, tostarp **security** aspekts ikreiz, kad workflow skar credentials, lietotāja ievadi, ārējus pieprasījumus vai datu atklāšanu), workflow **Purpose** un **What it does** (soli pa solim pārskats par node).
 
-Sadaļa **Improvement areas** vienmēr veic četras skaidras pārbaudes:
+Sadaļa **Improvement areas** vienmēr veic piecas skaidras pārbaudes:
 
 1. **Error coverage** — ja kanvā nav [Error Handler](../nodes/error-handler-node.md) node un nav konfigurēts error workflow, ziņojums to norāda un iesaka pievienot kļūdu apstrādi.
 2. **Time saved** — ja nav iestatīts aptuvenais ietaupītais laiks uz vienu izpildi, ziņojums iesaka to konfigurēt, lai [Analytics](../tabs/analytics-tab.md) metrika **Time Saved** varētu tikt aizpildīta.
 3. **Network nodes** — attiecībā uz node, kas veic tīkla izsaukumus (piemēram, [HTTP](../nodes/http-node.md) un integrāciju node), ziņojums iesaka konkrētam node raksturīgu kļūdu apstrādi (retry un/vai continue-on-error) šiem node.
 4. **Alerts** — ja workflow nav konfigurēti [alerts](../tabs/alerts-tab.md), ziņojums iesaka iestatīt alerts pirms pārejas uz prod.
+
+5. **Evals**: ja darbplūsmai ir [Agent](../nodes/agent-node.md) mezgls bez aģenta komplekta, ziņojumā ieteikts izmantot **Agent Suite** (vai **Prompt Suite**) sadaļā [Evals](../tabs/evals-tab.md#agent-suites); ja tai ir [LLM](../nodes/llm-node.md) mezgls, ieteikts izmantot **Prompt Suite**, lai pārbaudītu šo uzvedni vairākos modeļos.
 
 ### Run Analyzer no Properties
 

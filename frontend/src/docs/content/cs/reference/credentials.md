@@ -14,7 +14,7 @@ Přihlašovací údaje ukládají API klíče a tajné hodnoty používané uzly
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API klíč pro model |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Základní URL endpointu rozhodovacího modelu plus volitelný API klíč |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Vybírá, který z vašich modelů obslouží každý požadavek, pomocí rozhodovacího modelu |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) sady promptů | Model Router (Auto Model) | Vybírá, který z vašich modelů obslouží každý požadavek, pomocí rozhodovacího modelu |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Přihlášení k předplatnému ChatGPT (OAuth) nebo přístupový token Codex pro runner plus GitHub PAT pro operace s repozitářem |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API klíč brány OpenCode Go (volitelná základní URL) pro runner plus GitHub PAT pro operace s repozitářem |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) pro volání GitHub API, operace uzlu GitHub a integrace MCP |

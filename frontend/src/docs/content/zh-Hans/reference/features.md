@@ -381,7 +381,7 @@ HTML 输出映射器节点渲染单个 HTML 模板，将 `$nodeLabel.field` 表�
 
 #### [Chart Output](../nodes/chart-output-node.md)
 
-Chart Output 节点是 [Dashboard](../tabs/dashboard-tab.md) 小组件工作流的终端节点。它将上游节点产生的行转换为仪表板渲染所用的标准化图表 payload。选择一个 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（多系列时为 `series`，markdown 消息时为 `text`），并将其放在最后；它没有输出边。HITL 会忽略上游行，并列出你待处理的人工审核。另一列作为可在新标签页中打开 URL 的链接按钮（`linkColumn`，使用 `linkLabel` 指定按钮文本）
+Chart Output 节点是 [Dashboard](../tabs/dashboard-tab.md)、Gantt、entity relationships 小组件工作流的终端节点。它将上游节点产生的行转换为仪表板渲染所用的标准化图表 payload。选择一个 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（多系列时为 `series`，markdown 消息时为 `text`），并将其放在最后；它没有输出边。 Gantt 读取包含 ISO 开始/结束日期、进度和依赖项 ID 的任务行。Entity relationships 读取包含实体、字段、PK/FK 键和关系的图对象。两者也会在 Heym Work 页面及其组件方案预览中渲染。HITL 会忽略上游行，并列出你待处理的人工审核。另一列作为可在新标签页中打开 URL 的链接按钮（`linkColumn`，使用 `linkLabel` 指定按钮文本）
 
 另请参阅 [Dashboard](../tabs/dashboard-tab.md)、[Set](../nodes/set-node.md) 和 [Output](../nodes/output-node.md)。
 
@@ -480,7 +480,7 @@ AI 助手是一个从 Debug 面板打开的聊天面板，允许你使用自然�
 
 点击画布上任何节点上方的 **AI** 即可仅更改或修复该节点。面板会显示其正在修改的节点（运行后带有其最新结果），并提供 **Change this node as ...**、**Fix error in this node ...** 和 **Other**。仅该节点会被更新；工作流的其余部分和布局保持原样。请参阅 [AI Assistant › 修改单个节点](./ai-assistant.md#changing-one-node)。
 
-当 Workflow 需要存储记录时，助手会询问使用哪个[数据表](../tabs/datatable-tab.md)，或者创建一个包含 Workflow 所需列的数据表。请参阅 [AI 助手 › 数据表](./ai-assistant.md#data-tables)。
+当 Workflow 需要存储记录时，助手会询问使用哪个[数据表](../tabs/datatable-tab.md)，或者创建一个包含 Workflow 所需列的数据表。请参阅 [AI 助手 › 数据表](./Chat 和 MCP `heym_chat` 也可以使用所有者或写入权限直接编辑列和行，并在删除列或清空所有行之前进行确认。 Chat 和 MCP `heym_chat` 也可以使用所有者或写入权限直接编辑列和行，并在删除列或清空所有行之前进行确认。 ai-assistant.md#data-tables)。
 
 当当前 Workflow 包含 [Agent 节点](../nodes/agent-node.md) 技能时，助手仅将每个技能的 `SKILL.md` 发送到 Workflow 上下文中。附加的 `.py` 文件和二进制技能资源会在请求前被排除，以避免大型技能包溢出模型上下文窗口。
 
@@ -805,7 +805,7 @@ Analytics 标签页显示执行指标和趋势。汇总统计包括总执行次�
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 标签页是一个 Grafana 风格的空间，你可以在其中构建图表 widget 网格，每个 widget 都由其各自隐藏的 Heym workflow 渲染。按需保留任意数量的 dashboard，并将每个 dashboard 与用户或团队共享，可设为只读或可编辑；widget 始终以所有者的凭证运行，因此每个人看到的数据都相同。用自然语言描述一个指标，AI 会生成该 widget，或者手动添加一个并选择图表类型，用示例数据预览：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是你待处理的人工审核的轮播。标题栏显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核，widget 标题旁的历史图标会在同一页面的历史对话框中打开该次运行。Widget 会缓存其结果，可以用 AI 微调（每次更改都会保存到 [Edit History](./edit-history.md)），连同其完整 workflow 一起克隆，通过 Tidy up 重新排列，并在编辑模式下拖动或调整大小。表格可以显示状态标签并将其行链接到将所点击行的记录读取为 `$page.record` 的详情仪表板，而运行（Run）小部件可从仪表板运行 workflow：基于拖放的文件、使用其输入字段或通过“运行”按钮。因为每个 widget 都是一个 workflow，任何你能获取的数据——一次 [HTTP](../nodes/http-node.md) 调用、一次 [BigQuery](../nodes/bigquery-node.md) 查询、一次 [RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 输出——都可以变成一个图表。HITL 小部件的设置可以将其缩小到单个工作流的审核，或其中的代理或 Slack 批准步骤；这样的小部件会向所有可以打开该工作流的人显示它们，并对无法打开的人隐藏。
+Dashboard 标签页是一个 Grafana 风格的空间，你可以在其中构建图表 widget 网格，每个 widget 都由其各自隐藏的 Heym workflow 渲染。按需保留任意数量的 dashboard，并将每个 dashboard 与用户或团队共享，可设为只读或可编辑；widget 始终以所有者的凭证运行，因此每个人看到的数据都相同。用自然语言描述一个指标，AI 会生成该 widget，或者手动添加一个并选择图表类型，用示例数据预览：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是你待处理的人工审核的轮播。标题栏显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核，widget 标题旁的历史图标会在同一页面的历史对话框中打开该次运行。Widget 会缓存其结果，可以用 AI 微调（每次更改都会保存到 [Edit History](./edit-history.md)），连同其完整 workflow 一起克隆，通过 Tidy up 重新排列，并在编辑模式下拖动或调整大小。表格可以显示状态标签并将其行链接到将所点击行的记录读取为 `$page.record` 的详情仪表板，而运行（Run）小部件可从仪表板运行 workflow：基于拖放的文件、使用其输入字段或通过“运行”按钮。因为每个 widget 都是一个 workflow，任何你能获取的数据——一次 [HTTP](../nodes/http-node.md) 调用、一次 [BigQuery](../nodes/bigquery-node.md) 查询、一次 [RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 输出——都可以变成一个图表。HITL 小部件的设置可以将其缩小到单个工作流的审核，或其中的代理或 Slack 批准步骤；这样的小部件会向所有可以打开该工作流的人显示它们，并对无法打开的人隐藏。 [Chat](../tabs/chat-tab.md) 和 MCP `heym_chat` 工具列出您的仪表板及其组件，说明 workflow 位于哪个仪表板上，添加新组件（首先是一个空组件，随后 Chat 会构建并测试其 workflow），将现有 workflow 作为组件放置在仪表板上，重命名或删除组件，并像“整理”按钮一样整理布局。
 
 另请参阅 [Chart Output 节点](../nodes/chart-output-node.md)、[Analytics](../tabs/analytics-tab.md) 和 [Execution History](./execution-history.md)。
 
@@ -814,6 +814,8 @@ Dashboard 标签页是一个 Grafana 风格的空间，你可以在其中构建�
 ### [Evals](../tabs/evals-tab.md)
 
 Evals 标签页（位于 `/evals`）允许你创建评估套件、添加或生成测试用例、优化套件 Prompt，并针对 [Agent 节点](../nodes/agent-node.md) Workflow 运行评估。选择一个或多个模型，选择评分方法（Exact Match、Contains 或 LLM-as-Judge），可选地让单独的模型或 [Decision 模型](../nodes/decision-node.md) 来评判 LLM-as-Judge 答案，设置每个测试的运行次数（以及 Exact Match 和 Contains 的 temperature 和 reasoning effort），然后比较通过/失败结果和各模型的输出。查看过往评估的运行历史，包括每次运行所使用的评判模型，使用相同评判模型重新运行某次评估，将其导出为 JSON，并在 [Traces](../tabs/traces-tab.md) 中交叉验证底层行为。
+
+**智能体套件**则检查单个智能体节点：它显示智能体在真实运行中的基线延迟、美元成本、Token 和工具调用，允许您将每个工具、MCP 工具、子智能体、子 workflow 或技能标记为智能体必须调用或绝不能调用的项目，将上限设置为基线上浮 20%，使用上次运行的输入或 AI 编写的输入按所选次数运行 workflow，并根据失败原因对每次运行进行评分。套件选择器列出了两种类型及其分类并支持搜索，[Workflow Analysis](./workflow-analysis.md) 报告会为包含智能体或 LLM 节点的 workflow 推荐套件。
 
 另请参阅 [Agent 节点](../nodes/agent-node.md)、[Traces](../tabs/traces-tab.md) 和 [执行历史](./execution-history.md)。
 

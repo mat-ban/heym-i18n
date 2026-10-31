@@ -23,6 +23,8 @@ Một widget là một biểu đồ đơn lẻ trên lưới. Các loại biểu
 - **Gauge** (một giá trị đơn lẻ so với khoảng min–max, ví dụ: phần trăm)
 - **Scatter** (các điểm X/Y cho biểu đồ tương quan)
 - **Proportion** (một thanh được chia thành các phần với chú giải phần trăm, ví dụ: phân bổ ngôn ngữ)
+- **Gantt** (ngày thực hiện nhiệm vụ, hoàn thành và các phụ thuộc)
+- **Entity relationships (DB)** (bảng, trường, khóa PK/FK và các kết nối)
 - **Bar gauge** (một gauge ngang cho mỗi hàng với gradient đỏ→xanh và một giá trị, ví dụ: dung lượng đĩa trống)
 - **Text** (một thông điệp markdown, ví dụ: ghi chú trạng thái như "Lần thực thi cuối lúc 19:47"; hỗ trợ [hộp kiểm tương tác](../nodes/chart-output-node.md#interactive-task-lists) khi markdown là tĩnh, và [danh sách đánh số rõ ràng](../nodes/chart-output-node.md#numbered-lists) cho đánh số tùy chỉnh hoặc giảm dần)
 - **HITL** (các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes**, và **Reject** giải quyết nó. Biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên trang này. Widget không sử dụng các hàng upstream, và mỗi người thấy hàng đợi của riêng họ. Nó có thể hiển thị các đánh giá của một Workflow duy nhất cho bất kỳ ai có thể mở Workflow đó; xem [Widget HITL](#widget-hitl))
@@ -96,6 +98,18 @@ API widget cũng có thể tạo **thẻ đếm** mà không cần AI: widget `t
 
 Sử dụng nút **Fine-tune with AI** của một widget để chỉnh sửa một widget hiện có với một hướng dẫn mới. Mỗi lần tinh chỉnh bằng AI sẽ chụp nhanh workflow trước đó vào **Edit History** của widget, để bạn có thể xem lại hoặc khôi phục các thay đổi từ trình chỉnh sửa workflow.
 
+## Từ Chat và MCP
+
+[Chat](./chat-tab.md), và các client MCP thông qua công cụ [`heym_chat`](./mcp-tab.md), có thể đọc dashboard của bạn, thêm widget, đổi tên hoặc xóa widget và sắp xếp lại bố cục của dashboard. Heym Work hiển thị mỗi dashboard dưới dạng một trang, do đó các câu trả lời tương tự cũng áp dụng cho các trang của nó.
+
+- **Những dashboard nào hiện có và có những gì trên đó.** Hãy hỏi "tôi có những dashboard nào?", "có gì trên dashboard Bán hàng?" hoặc "workflow doanh thu nằm trên dashboard nào?". Chat liệt kê các dashboard của riêng bạn và các dashboard được chia sẻ với bạn, cùng với quyền truy cập và liên kết đến từng dashboard, cũng như mọi widget trên đó: tiêu đề, loại biểu đồ và workflow phía sau. Một [widget HITL](#hitl-widgets) được lọc theo một workflow mà bạn không thể mở sẽ vẫn bị ẩn, giống như trên chính dashboard.
+- **Một widget mới.** Hãy yêu cầu "thêm biểu đồ các trường hợp đang mở theo trạng thái vào dashboard Bán hàng". Chat trước tiên đặt một widget trống lên dashboard, sau đó viết workflow riêng của widget, chạy thử nghiệm và sửa lỗi cho đến khi lượt chạy thành công, tương tự như cách nó [xây dựng workflow](./chat-tab.md#tao-workflow). Không có workflow riêng biệt nào bị bỏ lại, và mỗi lần lưu đều xuất hiện trong Edit History của widget. Tiêu đề và loại biểu đồ của widget tuân theo những gì Chat lưu.
+- **Một workflow hiện có.** Hãy yêu cầu "đặt workflow doanh thu lên dashboard Bán hàng". Một workflow kết thúc bằng node Chart Output sẽ trở thành widget biểu đồ với bản sao workflow của riêng nó, do đó các thay đổi sau này đối với widget không bao giờ ảnh hưởng đến bản gốc. Một workflow có node trigger hoặc input không thể trở thành widget biểu đồ. Bất kỳ workflow nào khác sẽ trở thành [widget chạy](#run-widgets), loại widget này cũng cần một workflow mà chủ sở hữu dashboard có thể chạy.
+- **Đổi tên hoặc xóa widget.** Hãy yêu cầu "đổi tên widget Doanh thu thành Bán hàng" hoặc "xóa widget Trường hợp mở". Workflow của widget biểu đồ cũng lấy tên mới; workflow của widget chạy vẫn giữ nguyên tên của nó. Xóa widget biểu đồ sẽ xóa luôn workflow của nó, giống như nút xóa của widget; workflow của widget chạy vẫn được giữ lại. Chat chỉ xóa widget mà bạn đã yêu cầu rõ ràng, và sẽ hỏi trước nếu từ ngữ của bạn khớp với nhiều widget.
+- **Sắp xếp gọn gàng.** Hãy yêu cầu "sắp xếp gọn gàng dashboard Bán hàng" hoặc "thêm ba widget này và sắp xếp lại". Chat sắp xếp các widget bạn thấy theo thứ tự của chúng, giống như nút **Sắp xếp gọn gàng**: các hàng ngẫu nhiên gồm hai hoặc ba widget, do đó yêu cầu lại sẽ tạo ra bố cục khác. Hãy yêu cầu một số lượng cụ thể trên mỗi hàng ("ba widget mỗi hàng") để có các hàng có kích thước đó. Thao tác này sắp xếp dashboard trong Heym; Heym Work giữ cách sắp xếp riêng của trang, được thay đổi bởi nút **Sắp xếp gọn gàng** của chính trang đó.
+
+Các widget mới nằm bên dưới các widget hiện có của dashboard và giống như mọi widget, chạy với tư cách là chủ sở hữu dashboard. Việc thêm, đổi tên, xóa và sắp xếp yêu cầu quyền ghi vào dashboard. Việc xây dựng một widget mới cần một trình trò chuyện có thể xây dựng workflow: tab Chat, Heym Work Chat dành cho biên tập viên và `heym_chat`.
+
 ## Chỉnh sửa bố cục
 
 Bật **Edit** để vào chế độ chỉnh sửa, nơi bạn có thể kéo các widget và thay đổi kích thước chúng trên một lưới 12 cột. Các thay đổi bố cục được lưu tự động. Tiêu đề widget có thể chỉnh sửa trực tiếp từ tiêu đề widget.
@@ -128,3 +142,7 @@ Việc gỡ bỏ một lượt chia sẻ, hoặc hạ nó từ write xuống rea
 
 - [Node Chart Output](../nodes/chart-output-node.md)
 - [Tab Analytics](analytics-tab.md) — các chỉ số thực thi tích hợp sẵn (khác với dashboard do người dùng tự tạo)
+
+## Lịch biểu và sơ đồ cơ sở dữ liệu
+
+Chọn **Gantt** trong Thêm widget để hiển thị các nhiệm vụ theo thời gian kèm theo trạng thái hoàn thành và liên kết phụ thuộc, hoặc **Entity relationships (DB)** để ánh xạ các bảng, trường và mối quan hệ của chúng. Cả hai loại đều sử dụng [node Chart Output](../nodes/chart-output-node.md#gantt-schedules) và cũng có sẵn trên các trang Heym Work. Khi Work đề xuất các widget cho một lịch biểu hoặc lược đồ cơ sở dữ liệu, nó sẽ vẽ các bản xem trước từ các nhiệm vụ hoặc thực thể được đề xuất trước khi bạn xây dựng trang.

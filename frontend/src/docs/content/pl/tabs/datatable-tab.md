@@ -73,11 +73,11 @@ Udostępniaj tabele innym użytkownikom lub zespołom:
 1. Otwórz okno udostępniania z widoku szczegółów tabeli
 2. Dodaj użytkowników według adresu e-mail z uprawnieniem **odczytu** lub **zapisu**
 3. Dodaj zespoły z uprawnieniem **odczytu** lub **zapisu**
-4. Użytkownicy z uprawnieniem tylko do odczytu mogą przeglądać dane; użytkownicy z uprawnieniem zapisu mogą modyfikować wiersze
+4. Użytkownicy z uprawnieniami tylko do odczytu mogą przeglądać dane; użytkownicy z prawami zapisu mogą modyfikować wiersze i kolumny. Zmiana nazwy tabeli, zmiana jej opisu oraz zarządzanie udostępnieniami pozostają dostępne wyłącznie dla właściciela.
 
 ## Tworzenie tabel z poziomu Asystenta AI
 
-Asystent AI na canvasie [Asystent AI](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) oraz narzędzie `heym_chat` w [zakładce MCP](./mcp-tab.md) mogą wybrać jedną z tabel do workflow, który budują, lub utworzyć nową. Proponują nazwę i kolumny, a tabelę tworzą po zatwierdzeniu karty pytania. Nigdy nie zmieniają kolumn istniejącej tabeli ani nie modyfikują jej wierszy: kolumny należy dodawać lub edytować tutaj.
+[Asystent AI](../reference/ai-assistant.md#data-tables) canvasu, [Chat](./chat-tab.md) oraz narzędzie `heym_chat` w [zakładce MCP](./mcp-tab.md) mogą wybrać jedną z Twoich tabel dla tworzonego workflow lub utworzyć nową. Proponują nazwę oraz kolumny i tworzą tabelę po przesłaniu karty pytań. Asystent canvasu konfiguruje węzły workflow na podstawie metadanych tabeli. Chat oraz `heym_chat` mogą także przeglądać wiersze, dodawać lub usuwać kolumny oraz bezpośrednio wstawiać, aktualizować lub usuwać wiersze. Wystarczy podać nazwę tabeli lub link do tej zakładki. Zapis wymaga uprawnień właściciela lub bezpośredniego/zespołowego prawa do **zapisu**. Dodawanie kolumn zachowuje istniejące dane; usunięcie kolumn kasuje ich wartości z każdego wiersza. Usunięcie kolumn oraz wyczyszczenie wszystkich wierszy wymaga potwierdzenia, podobnie jak w tej zakładce.
 
 ## Wykorzystanie w workflow
 

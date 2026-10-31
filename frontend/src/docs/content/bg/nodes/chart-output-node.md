@@ -10,7 +10,7 @@
 | Изходи | 0 (терминален) |
 | Изход | Стандартизиран chart payload |
 
-Поставете този node **последен** в workflow за dashboard widget. Node-ът преди него трябва да произвежда масив от row objects, например:
+Поставете този node **последен** в workflow за dashboard widget. За entity relationships node-ът преди него произвежда графов обект (вижте [Entity relationships](#entity-relationships-db)). Другите управлявани от данни диаграми използват масив от row objects, например:
 
 ```json
 [
@@ -26,9 +26,9 @@
 | Параметър | Тип | Описание |
 |-----------|------|-------------|
 | `label` | string | Идентификатор на node (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` или `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` или `hitl` |
 | `orientation` | string | `vertical` или `horizontal` (само за bar charts) |
-| `dataPath` | string | Dot path до масива с редове във upstream изхода (напр. `data` или `result.items`). Оставете празно за автоматично откриване. |
+| `dataPath` | string | Dot path до масива с редове (или графов обект за `erDiagram`) във upstream изхода (напр. `data` или `result.items`). Оставете празно за автоматично откриване. |
 | `labelField` | string | Ключ на ред, използван като категориен етикет (pie/bar/line) |
 | `valueField` | string | Ключ на ред, използван като числова стойност (pie/bar/line/numeric/gauge) |
 | `series` | array | Опционална дефиниция за multi-series `[{ "name": "Sent", "field": "sent" }]` за bar/line (замества `valueField`) |
@@ -54,8 +54,51 @@
 - **scatter** — X/Y точки от `xField` и `yField` за correlation plots.
 - **proportion** — единична хоризонтална лента, разделена на дялове с процентна легенда (напр. разбивка по езици). Използва `labelField` + `valueField`.
 - **barGauge** — един хоризонтален gauge на ред с градиент от червено към зелено и стойност (напр. свободно дисково пространство). Използва `labelField` + `valueField`, опционални `unit` и `max` (по подразбиране — най-голямата стойност в реда).
+- **gantt** — графици на задачи с дати, напредък и зависимости; вижте [Gantt графици](#gantt-schedules).
+- **erDiagram** — обекти на база данни, полета, ключове и връзки; вижте [Entity relationships](#entity-relationships-db).
 - **text** — markdown съобщение (напр. статусна бележка като "Last execution at 19:47"). Поставете markdown-а в `text` за статично съобщение или оставете `text` празно и задайте `valueField`, за да рендирате низ, произведен upstream. Поддържа заглавия, bold/italic, [списъци](../nodes/chart-output-node.md#interactive-task-lists), връзки и inline code.
 - **hitl** — карусел с Вашите чакащи human reviews. Хедърът показва `1/n pending`; лявата стрелка е деактивирана на първата карта, а дясната — на последната. Името на workflow-а отваря това изпълнение на canvas-а. **Approve**, **Request changes** и **Reject** го разрешават, а иконата за история до заглавието на widget-а отваря това изпълнение в history dialog-а на същата страница. Този chart type игнорира upstream редовете, така че workflow-ът на widget-а е само Chart Output node. Всеки влязъл в профила си човек вижда reviews по workflow-ите, които притежава. Изберете **Workflow** (и **Select agent**, когато има няколко стъпки за преглед) в свойствата на възела или в настройките на уиджета, за да се показват вместо това прегледите на този Workflow, на всеки, който може да го отвори; вижте [HITL уиджети](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt графици
+
+Изберете **Gantt** (`gantt`) за графици на проекти и времеви линии на задачи. Задайте `dataPath` към масива със задачи, като например `tasks`. Редовете използват фиксирани имена на полета:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` и `end` приемат ISO дати или datetimes. Стойности без часова зона използват UTC; отместванията на часовата зона се преобразуват в UTC. `end` трябва да бъде на или след `start`. `progress` е незадължителен (0–100, по подразбиране 0); `dependencies` съдържа идентификатори на съществуващи задачи. Идентификаторите трябва да са уникални. Задръжте курсора над задача, за да видите пълните дати, напредъка и зависимостите. Големите диаграми се превъртат вътре в widget-а. Приемат се най-много 500 задачи.
+
+За примерни данни Set съпоставяне с име `tasks` може да използва `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Свържете го към Chart Output с `chartType: "gantt"` и `dataPath: "tasks"`. Съпоставете изходните колони към тези фиксирани имена чрез Set node; `labelField` и `valueField` не се използват.
+
+### Entity relationships (DB)
+
+Изберете **Entity relationships (DB)** (`erDiagram`) за схеми на бази данни и връзки между същности. Задайте `dataPath` към графов **обект**, като например `graph`, съдържащ и двата масива:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Полетата имат `name`, незадължителен `type` и незадължителен `key` (`PK`, `FK`, `PK/FK` или празно). Релациите реферират съществуващи идентификатори на същности; незадължителните `sourceField` и `targetField` закотвят връзката към посочените полета. `cardinality` приема `one-to-one`, `one-to-many` (по подразбиране), `many-to-one` или `many-to-many`. Идентификаторите на същности и имената на полета във всяка същност трябва да са уникални. Приемат се най-много 100 същности, 100 полета на същност и 500 релации.
+
+С помощта на Set node конструирайте `graph` чрез `$dict(entities=array(dict(...)), relations=array(dict(...)))`; използвайте `chartType: "erDiagram"` и `dataPath: "graph"`. Това е визуализация на предоставената схема; тя не проверява автоматично активна база данни.
+
+И двата типа се появяват в **Добавяне на widget** с предварителен преглед и в селектора на тип диаграма на node-а върху платното. Heym Work може да предложи тези типове, когато описвате график или схема на база данни, чертаейки визуализации на предложените задачи или същности, преди да създадете страницата.
 
 ### Interactive task lists
 

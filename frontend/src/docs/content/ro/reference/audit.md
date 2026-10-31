@@ -47,7 +47,7 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 
 ## Ce Se Jurnalizează
 
-Fiecare schimbare de stare este jurnalizată. Citirile sunt jurnalizate doar acolo unde citirea este ea însăși actul sensibil — vizualizarea istoricului de execuție al unui workflow, deschiderea unei acreditări, descărcarea unui fișier. Citirile obișnuite de listare și de detaliu nu sunt auditate; jurnalul de acces înregistrează deja că o cerere a avut loc, iar auditarea fiecărui `GET` ar îngropa liniile care contează.
+Fiecare schimbare de stare este jurnalizată. Citirile sunt jurnalizate doar acolo unde citirea este ea însăși actul sensibil — vizualizarea istoricului de execuție al unui workflow, deschiderea unei acreditări, descărcarea unui fișier. Citirile obișnuite de listare și de detaliu nu sunt auditate; jurnalul de acces înregistrează deja că o cerere a avut loc, iar auditarea fiecărui `GET` ar îngropa liniile care contează. Singura excepție o reprezintă [vizualizările de pagină](#page-views), care înregistrează unde a navigat un utilizator conectat în aplicație.
 
 ### Autentificare
 
@@ -62,9 +62,34 @@ Fiecare schimbare de stare este jurnalizată. Citirile sunt jurnalizate doar aco
 | `sso_settings.update` | Un administrator a modificat configurația [SSO](./sso.md). Înregistrează `enabled` și `password_login_disabled`, niciodată secretul clientului. |
 | `sso_settings.test` | Un administrator a rulat testul de conexiune SSO. |
 
+### Vizualizări de pagină
+
+`page.view` este scris de fiecare dată când un utilizator conectat deschide o pagină în aplicația web, cu calea URL într-un câmp `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Calea este ruta internă din aplicație. Filele tabloului de bord fac parte din ea (`/?tab=traces`), la fel ca și ID-urile care denumesc elementul deschis, cum ar fi `/workflows/<id>`. Se păstrează doar o listă scurtă de parametri de interogare care identifică pagina (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); restul șirului de interogare și întregul fragment sunt eliminate. Paginile al căror link conține un secret, cum ar fi `/review/<token>`, sunt înregistrate cu substituentul `:token` în locul secretului.
+
+Navigatorul raportează calea, astfel încât o linie `page.view` arată unde a declarat utilizatorul că a mers. Aceasta nu dovedește că serverul a returnat pagina respectivă. Vizitele pe pagina de conectare și la linkurile deschise în timp ce utilizatorul era deconectat nu sunt înregistrate, deoarece nu le este asociat niciun utilizator.
+
 ### Workflow-uri
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` este scris atunci când o rulare este pornită prin API: butonul Rulare din editor, endpoint-ul de execuție cu o sesiune, o cheie API sau un webhook, portalul de chat și instrumentele MCP. Înregistrează cine a pornit-o, cum și cum s-a încheiat:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` leagă linia de rularea din Istoricul rulărilor. `outcome` este `failure` atunci când rularea s-a încheiat cu `error`, `cancelled` sau `timeout`. O rulare întreruptă pentru revizuire umană sau ținută în coada de concurență este o linie `success` cu `status=pending` sau `status=queued`. Un apel fără utilizator conectat, cum ar fi un webhook anonim sau un vizitator de portal, nu are `actor_id` sau `actor_email`. Intrările și ieșirile nu sunt scrise niciodată.
+
+Rulările pornite de o programare, un nod trigger, o coadă sau un eveniment nu sunt linii de audit. Ele se execută pe instanța care le-a revendicat și sunt înregistrate în Istoricul rulărilor cu sursa lor de trigger și instanța care le-a rulat.
+
+`workflow.history_view` este scris atunci când cineva deschide istoricul de rulare al unui flux de lucru. Interogarea restrânsă care afișează ultima rulare a unui flux pe canvas sau într-o listă nu este auditată.
+
 
 `workflow.history_view` înregistrează `owned=false` când un colaborator citește istoricul de execuție al altcuiva. `workflow.delete` înregistrează `outcome=denied` cu `reason=not_owner` când un colaborator încearcă să șteargă.
 
@@ -96,6 +121,27 @@ O linie de audit înregistrează identificatori, nume și numărători. Nu înre
 Două mecanisme impun acest lucru. Locurile de apel sunt scrise astfel încât să transmită doar câmpuri sigure, iar funcția auxiliară de audit aplică o redactare ca plasă de siguranță: orice câmp al cărui nume conține `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` sau similar este înlocuit cu `***` înainte de construirea liniei. Supra-redactarea este intenționată — o linie nefolositoare este mai bună decât o acreditare scursă.
 
 Acolo unde un secret este cu adevărat relevant pentru înregistrare, se loghează doar forma sa. O partajare de fișier înregistrează `password_protected=true`, niciodată parola.
+
+## Heym Work
+
+Când rulați Heym Work alături de Heym, Work emite linii de audit pe stdout-ul propriului container în același format Winston:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work înregistrează acțiunile utilizatorilor pe pagini, panouri și înregistrări:
+
+| Acțiune | Semnificație |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Modificări ale paginilor și aspectelor tabloului de bord |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Modificări ale aspectului coloanelor Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Evenimente din ciclul de viață al cardurilor |
+| `record.create`, `record.update`, `record.delete` | Mutații ale înregistrărilor tabelelor de date prin Work |
+| `chat.message` | Prompt al utilizatorului trimis asistentului Work |
+| `export.csv`, `export.json` | Exporturi de date |
+
+Fiecare linie conține aceleași câmpuri `actor_id`, `actor_email`, `timestamp` și `outcome` ca liniile de audit Heym, astfel încât colectoarele de loguri pot procesa ambele fluxuri cu o singură conductă.
 
 ## Retenție
 

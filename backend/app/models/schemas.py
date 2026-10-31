@@ -1279,17 +1279,20 @@ class MCPWorkflowItem(BaseModel):
 
 
 class MCPChatToolConfig(BaseModel):
-    """Chat-tool exposure settings for one MCP surface."""
+    """Heym Agent exposure settings for one MCP surface."""
 
     enabled: bool = False
     credential_id: uuid.UUID | None = None
     model: str | None = None
+    # The agent is reachable over A2A too. Never true while `enabled` is false.
+    a2a_enabled: bool = False
 
 
 class MCPChatToolUpdate(BaseModel):
     enabled: bool | None = None
     credential_id: uuid.UUID | None = None
     model: str | None = Field(None, max_length=128)
+    a2a_enabled: bool | None = None
 
 
 class MCPConfigResponse(BaseModel):
@@ -1556,6 +1559,20 @@ class WorkflowBreakdownItem(BaseModel):
 
 class WorkflowBreakdownResponse(BaseModel):
     items: list[WorkflowBreakdownItem] = Field(default_factory=list)
+
+
+class NodeTypeSeriesItem(BaseModel):
+    node_type: str
+    total: float
+    average: float | None = None
+    values: list[float | None]
+
+
+class NodeTypeAnalyticsResponse(BaseModel):
+    time_buckets: list[str] = Field(default_factory=list)
+    most_duration: list[NodeTypeSeriesItem] = Field(default_factory=list)
+    most_errors: list[NodeTypeSeriesItem] = Field(default_factory=list)
+    most_calls: list[NodeTypeSeriesItem] = Field(default_factory=list)
 
 
 # ── Templates ────────────────────────────────────────────────────────────────

@@ -51,6 +51,8 @@ Abrir um workflow em `/workflows/{workflowId}/{executionId}` traz automaticament
 
 ### Casos de utilização
 
+Prima Ctrl/Cmd+clique numa execução em qualquer uma das listas de histórico para abrir essa ligação direta num novo separador do navegador. O separador atual e a caixa de diálogo aberta permanecem inalterados. As execuções de chat e assistente não têm workflow, pelo que o atalho apenas as seleciona, tal como um clique normal.
+
 - Voltar a executar um workflow com as mesmas entradas
 - Depurar uma execução falhada inspecionando as entradas e as saídas dos nós
 - Comparar saídas entre execuções

@@ -83,7 +83,8 @@
     "run": "Käivita",
     "dropFileOrClick": "Lohistage fail siia või klõpsake valimiseks",
     "removeFile": "Eemalda fail",
-    "chooseFileFor": "Valige fail üksusele {label}"
+    "chooseFileFor": "Valige fail üksusele {label}",
+    "new": "Uus"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Puudub: iga mudel hindab iseennast",
     "removeJudge": "Eemalda hindaja",
     "judgeModel": "Hindaja mudel",
-    "enterJudgeModel": "Sisestage hindaja mudel, millega käivitada."
+    "enterJudgeModel": "Sisestage hindaja mudel, millega käivitada.",
+    "promptSuite": "Prompti komplekt",
+    "promptSuiteDesc": "Katsetage süsteemiprompti erinevates mudelites",
+    "agentSuite": "Agendi komplekt",
+    "agentSuiteDesc": "Kontrollige agendi tegelikke käivitusi: tööriistad, latentsus, maksumus",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Otsi komplekte...",
+    "loadingSuite": "Komplekti laadimine...",
+    "couldNotLoadSuite": "Seda komplekti ei saanud laadida."
   },
   "statusFilter": {
     "status": "Olek",
@@ -1701,7 +1711,9 @@
     "askAi": "Küsi tehisintellektilt",
     "askAiTitle": "Küsige Chat-assistendilt selle käivituse kohta",
     "noNodeSpans": "Selle käivituse kohta ei salvestatud sõlme spane.",
-    "queuedProgress": "Järjekorras {position}/{size}"
+    "queuedProgress": "Järjekorras {position}/{size}",
+    "clickToSelectRun": "Klõpsake selle käivituse valimiseks",
+    "doubleClickOrOpenNewTab": "Topeltklõpsake selle käivituse lõuendile toomiseks, Ctrl/Cmd+klõpsake uuel vahelehel avamiseks"
   },
   "portal": {
     "loadingPortal": "Portaali laadimine...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Expose your workflows as MCP tools for AI assistants",
+    "subtitle": "Avalikustage oma workflow-d MCP-tööriistadena ja Heym Agent MCP ja A2A kaudu",
     "connection": "MCP Connection",
     "connectionSubtitle": "Connect your AI assistant to your workflows via MCP protocol.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Jaotises Kohandatud rakendused klõpsake Lisa kohandatud rakendus",
     "geminiStep3": "Kleepige ülaltoodud MCP-serveri URL ja jätke Täpsemad funktsioonid suletuks; Gemini registreerub automaatselt",
     "geminiStep4": "Klõpsake Edasi ja autoriseerige oma Heymi mandaadiga",
-    "geminiInfo": "Gemini kasutab turvaliseks autentimiseks OAuth-protokolli. Teie Heymi mandaati kasutatakse juurdepääsu volitamiseks ja seda ei jagata kunagi Geminiga. Pärast ühenduse loomist töötab Heym ka Gemini mobiilirakenduses."
+    "geminiInfo": "Gemini kasutab turvaliseks autentimiseks OAuth-protokolli. Teie Heymi mandaati kasutatakse juurdepääsu volitamiseks ja seda ei jagata kunagi Geminiga. Pärast ühenduse loomist töötab Heym ka Gemini mobiilirakenduses.",
+    "agentReach": {
+      "off": "Väljas: MCP ja A2A kliendid ei saa ühendust Heym Agentiga",
+      "unconfigured": "Valige mandaat ja mudel, et Heym Agent saaks töötada",
+      "mcpA2a": "Kättesaadav MCP ja A2A kaudu",
+      "mcpOnly": "Kättesaadav kui heym_chat MCP kaudu"
+    },
+    "a2aEnabledOnServer": "A2A lubatud serveris \"{name}\"",
+    "a2aEnabled": "A2A lubatud",
+    "a2aDisabledOnServer": "A2A keelatud serveris \"{name}\"",
+    "a2aDisabled": "A2A keelatud",
+    "agentAndA2aDisabledOnServer": "Heym Agent ja A2A keelatud serveris \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent ja A2A keelatud",
+    "a2a": {
+      "enable": "Luba A2A",
+      "description": "Teised agendid saavad saata Heym Agentile ülesandeid Agent2Agent protokolli (A2A 1.0) kaudu. Nad autendivad selle serveri võtmega päises X-MCP-Key või Heym OAuthiga.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Kontrollige, kas kaart on aktiivne:",
+      "copyLabel": "Kopeeri {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analüütika töölaud",
@@ -2087,6 +2119,25 @@
       "errors": "Vead",
       "avgLatencyMs": "Keskmine latentsus (ms)",
       "latencyTitle": "Keskmine latentsus ajas"
+    },
+    "last1Hour": "Viimane tund",
+    "last3Hours": "Viimased 3 tundi",
+    "last6Hours": "Viimased 6 tundi",
+    "nodeTypes": "Sõlmetüübid",
+    "nodeChart": {
+      "emptyMessage": "Selle perioodi kohta pole veel sõlmeandmeid. Sõlmeanalüütika salvestatakse pärast seda uuendust toimuvate käivituste jaoks.",
+      "duration": {
+        "title": "Enim aega nõudvad sõlmed",
+        "subtitle": "Keskmine kestus väljakutse kohta"
+      },
+      "errors": {
+        "title": "Enim ebaõnnestunud sõlmetüübid",
+        "subtitle": "Vead aja jooksul"
+      },
+      "calls": {
+        "title": "Enim kutsutud sõlmetüübid",
+        "subtitle": "Väljakutsed aja jooksul"
+      }
     }
   },
   "dashboards": {

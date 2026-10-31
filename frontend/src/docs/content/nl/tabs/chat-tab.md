@@ -23,7 +23,8 @@ Er kan ook een gesprek worden gestart vanuit het chatvak op het tabblad [Workflo
 - **Follow-ups in wachtrij** – Er kunnen meer berichten worden verzonden terwijl een antwoord streamt. Berichten in de wachtrij worden opgeslagen, kunnen worden bewerkt of verwijderd voordat ze starten, en worden in volgorde na het actieve antwoord uitgevoerd
 - **Pauzes tijdens planning** – Wanneer Chat planningsdetails nodig heeft, stelt het verduidelijkingsvragen en pauzeert het follow-ups in de wachtrij totdat deze zijn beantwoord. Nadat het planningsantwoord is afgerond, worden de berichten in de wachtrij hervat
 - **Referenties** – Wanneer een workflow die Chat maakt of bewerkt een referentie nodig heeft, vraagt Chat welke gebruikt moet worden, biedt het aan een nieuwe in het gesprek aan te maken, of kan er zonder worden doorgegaan. Er kan ook gevraagd worden om een referentie aan te maken of een bestaande bij te werken; Chat opent het referentieformulier in het gesprek. Het model ziet de naam en het type van de referentie, nooit de waarden, voor referenties die u bezit en referenties die met u zijn gedeeld. LLM- en Agent-knooppunten die Chat toevoegt, worden uitgevoerd met de referentie en het model die voor de chat zijn geselecteerd, inclusief gedeelde referenties; wanneer Chat een workflow bewerkt, behouden de bestaande LLM- en Agent-knooppunten hun referentie en model. Zie [AI-assistent › Referenties](../reference/ai-assistant.md#credentials)
-- **Gegevenstabellen** – Wanneer een workflow die Chat maakt of bewerkt records opslaat, vraagt Chat welke [gegevenstabel](./datatable-tab.md) gebruikt moet worden of biedt het aan er een aan te maken met de kolommen die de workflow nodig heeft. Chat kan ook de tabellen en hun kolommen weergeven. Chat leest of schrijft nooit rijen. Zie [AI-assistent › Gegevenstabellen](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Vraag welke [dashboards](./dashboard-tab.md) u heeft, wat er op een dashboard staat of op welk dashboard een workflow staat. Vraag Chat om een nieuwe widget aan een dashboard toe te voegen (plaatst daar een lege widget, bouwt en test vervolgens de workflow), plaats een bestaande workflow op een dashboard als widget, hernoem of verwijder een widget, of ruim de lay-out van een dashboard op. Heym Work toont deze dashboards als pagina's. Zie [Dashboard › Vanuit Chat en MCP](./dashboard-tab.md#vanuit-chat-en-mcp)
+- **Gegevenstabellen** – Wanneer een workflow die Chat maakt of bewerkt records opslaat, vraagt Chat welke [gegevenstabel](./datatable-tab.md) moet worden gebruikt of biedt aan er een aan te maken met de benodigde kolommen. Chat kan ook rijen inspecteren, kolommen toevoegen of verwijderen en rechtstreeks rijen invoegen, bijwerken of verwijderen in tabellen waarvan u eigenaar bent of die u kunt bewerken. Geef een tabelnaam of DataTable-link op. Het verwijderen van kolommen en het wissen van alle rijen vraagt om bevestiging; kolommen toevoegen behoudt bestaande gegevens. Zie [AI-assistent › Gegevenstabellen](../reference/ai-assistant.md#data-tables)
 - **Streamende antwoorden** – De uitvoer van het model is zichtbaar terwijl deze streamt
 - **Antwoord stoppen** – Onderbreek het huidige streamende antwoord op elk moment; bij stoppen worden ook de berichten in de wachtrij voor dat gesprek gewist
 - **Markdown-weergave** – Antwoorden ondersteunen markdown-opmaak, inclusief inline afbeeldingen
@@ -33,19 +34,20 @@ Er kan ook een gesprek worden gestart vanuit het chatvak op het tabblad [Workflo
 - **Spraakinvoer** – Gebruik de microfoonknop voor spraak-naar-tekst (door browser ondersteund). Wanneer de opname stopt, kan Heym het transcript licht opschonen voordat het verzonden wordt
 - **Geplande workflows** – Vraag wanneer cron-workflows worden uitgevoerd (vandaag, deze week, deze maand of een aangepast datumbereik). De assistent gebruikt dezelfde planningsgegevens als het tabblad [Gepland](./scheduled-tab.md) en kan resultaten beperken tot workflows die eigendom zijn van de gebruiker of gedeelde workflows meenemen
 - **Uitvoeringsgeschiedenis van workflows** – Vraag naar één specifieke workflow ("hoe vaak is het dagelijkse rapport uitgevoerd?", "is het mislukt?", "wanneer is het voor het laatst uitgevoerd?"). Chat zoekt de workflow op via het ID en antwoordt op basis van het aantal uitvoeringen, de statusverdeling, de eerste en laatste uitvoeringstijd en de gemiddelde duur. Vraag waarom een uitvoering is mislukt of wat deze heeft geretourneerd, en Chat opent die specifieke uitvoering om de invoer, uitvoer en fouten per knooppunt te lezen
+- **Waar runs mislukken en waarom ze traag zijn** – Vraag waar uw workflows mislukken of waarom ze traag zijn en Chat noemt de workflows die het meest zijn uitgevoerd, het vaakst zijn mislukt en het traagst zijn, evenals de knooppunttypen die de meeste tijd kosten (gemiddelde per aanroep en totaal), het vaakst mislukken en het meest worden uitgevoerd, dezelfde getallen als op het tabblad [Analytics](./analytics-tab.md). Knooppunttypen worden geteld voor runs vanaf de release waarin knooppuntanalyses zijn toegevoegd. Vraag naar het afgelopen uur, 3 of 6 uur, 24 uur, 7 of 30 dagen, of de volledige geschiedenis; de uurvensters beginnen op het hele uur, dus "het afgelopen uur" om 15:20 beslaat 14:00 tot nu.
 - **Live uitvoeringsstatus** – Vraag wat er nu wordt uitgevoerd en Chat antwoordt met het aantal, de workflownamen, hoe lang elke uitvoering al bezig is, op welk knooppunt deze zich bevindt en een directe link naar de live uitvoering
 
 - **Run-contextchips** – **AI vragen** in de [Execution History](../reference/execution-history.md#ask-ai) opent een nieuw gesprek met de geselecteerde Workflow-run als chips bijgevoegd. Zie [Vragen over een run](#vragen-over-een-run)
 
 ## Chat gebruiken vanuit een MCP-client
 
-De Chat-engine kan ook buiten de browser worden bereikt. Schakel de **Heym Chat Tool** in op het tabblad [MCP](./mcp-tab.md) in en MCP-clients — Claude, Cursor en al het andere dat MCP ondersteunt — krijgen één `heym_chat`-tool die deze zelfde engine met al zijn mogelijkheden uitvoert.
+De Chat-engine kan ook buiten de browser worden bereikt. Schakel de **Heym Agent** in op het [MCP / A2A-tabblad](./mcp-tab.md) en MCP-clients (Claude, Cursor en alle andere tools die MCP ondersteunen) krijgen een enkele `heym_chat`-tool die dezelfde engine met al zijn mogelijkheden uitvoert. Vink ook **A2A inschakelen** aan, zodat andere agents taken kunnen sturen via [A2A](../reference/a2a.md); die gesprekken tonen een netwerkpictogram in de lijst.
 
 Die gesprekken komen terecht in de geschiedenis van dit tabblad, gemarkeerd met een stekkerpictogram in de gesprekkenlijst. Open er een om te lezen wat de client heeft gevraagd, de toolkaarten te bekijken die zijn geactiveerd en de thread zelf voort te zetten. Het beantwoorden van een verduidelijkingsvraag werkt hetzelfde, ongeacht of de beurt hier of vanuit een MCP-client is gestart.
 
 Via MCP worden in Chat geen inloggegevens weergegeven, gekozen of aangemaakt. Workflows die het bouwt, laten velden voor inloggegevens leeg, en het antwoord vermeldt de knooppunten die een inloggegeven nodig hebben, zodat u deze in de editor kunt instellen.
 
-Gegevenstabellen werken ook via MCP: Chat toont uw tabellen, maakt nieuwe aan en verbindt deze met de workflows die het bouwt. De vraag over de tabel verschijnt als tekst in het resultaat, dus beantwoord deze met dezelfde `conversation_id`.
+Gegevenstabellen werken ook via MCP: Chat kan kolommen en rijen rechtstreeks bewerken, tabellen aanmaken en deze in workflows koppelen. Tabelvragen en verwijderingsbevestigingen komen als tekst binnen in het resultaat; antwoord met hetzelfde `conversation_id`.
 
 ## Contextlimiet
 
@@ -113,9 +115,33 @@ een ander antwoord kan geven.
 
 [Gebruikersregels](../reference/user-settings.md) (geconfigureerd in Instellingen) worden automatisch in elk Chat-gesprek geïnjecteerd als instructies op systeemniveau. Stel ze één keer in om persistente voorkeuren toe te passen op alle chatverzoeken.
 
+## Werken met Evals
+
+Chat kan de suites in [Evals](./evals-tab.md) aanmaken, wijzigen en uitvoeren, zowel prompt-suites als agent-suites:
+
+- **Prompt-suite**: "maak een prompt-suite voor mijn support-antwoordprompt met 8 testcases en vergelijk gpt-4o met gpt-4.1-mini". Chat schrijft de testcases met hun verwachte antwoorden, kiest een beoordelingsmethode en slaat de suite op.
+  - Voordat de suite wordt aangemaakt, bepaalt Chat welke LLM-referentie en modellen moeten worden gebruikt. Bij precies één LLM-referentie gebruikt Chat deze en meldt dit; anders vraagt Chat erom.
+  - Voor LLM-as-Judge-beoordeling vraagt Chat ook of een afzonderlijke judge de antwoorden moet scoren.
+- **Agent-suite**: "controleer of mijn support-agent altijd de documentatie doorzoekt en nooit e-mails verstuurt". Chat vindt de agent en slaat de toolcontroles en drempelwaarden op. Wanneer u daarom vraagt, voert Chat de workflow uit, waarbij voor elke run een andere invoer wordt gegenereerd.
+  - Runs van agent-suites zijn echte workflow-runs, dus hun neveneffecten vinden daadwerkelijk plaats. Chat meldt hoeveel runs worden gestart.
+- **Baseline**: Chat kan op drie manieren met de baseline van een agent werken:
+  - Deze rapporteren op basis van de meest recente runs van de agent.
+  - Deze opbouwen op basis van runs die Chat start ("voer 5 keer uit en gebruik dat als baseline").
+  - Getallen opslaan die u opgeeft ("stel de baseline in op 3 seconden p95 en $ 0,01 per run").
+- **Runs**: Chat wacht maximaal één minuut op een run en rapporteert vervolgens het resultaat:
+  - Voor een prompt-suite: het aantal geslaagde tests per model en de mislukte testcases.
+  - Voor een agent-suite: het slagingspercentage, de mislukte controles en de afwijking ten opzichte van de baseline.
+  - Een langere run gaat door in Evals; vraag Chat om deze later opnieuw te controleren.
+
+Nadat Chat een suite heeft aangemaakt of gewijzigd, toont het antwoord een kaart met de naam van de suite, het type en een knop **Openen in Evals**, vergelijkbaar met de kaart van een opgeslagen workflow. Via MCP vermeldt het `heym_chat`-resultaat de link van elke suite die tijdens die aanroep is opgeslagen.
+
+Hetzelfde werkt vanuit een MCP-client via `heym_chat` (zie [Chat gebruiken vanuit een MCP-client](#chat-gebruiken-vanuit-een-mcp-client)). De evaluatietools blijven binnen `heym_chat`; MCP-clients zien ze niet als afzonderlijke tools.
+
+De AI-assistent van de editor maakt geen suites aan.
+
 ## Gerelateerd
 
-- [MCP-tabblad](./mcp-tab.md) – Stel deze engine beschikbaar aan MCP-clients als de `heym_chat`-tool
+- [MCP / A2A-tabblad](./mcp-tab.md) – Stel deze engine beschikbaar aan MCP-clients als de `heym_chat`-tool
 - [Instellingen](../reference/user-settings.md) – Stel Gebruikersregels in die op alle chatverzoeken worden toegepast
 - [Tabblad Referenties](./credentials-tab.md) – API-sleutels toevoegen en beheren
 - [Tabblad Variabelen](./global-variables-tab.md) – Globale variabelen beschikbaar voor Chat

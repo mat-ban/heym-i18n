@@ -23,6 +23,8 @@ Vidin on üksik diagramm ruudustikul. Toetatud diagrammitüübid:
 - **Mõõdik** (üks väärtus min–max vahemiku suhtes, nt protsent)
 - **Hajuvus** (X/Y punktid korrelatsiooni graafikute jaoks)
 - **Proportsioon** (üks tulp jagatud osadeks protsendilise legendiga, nt keelte jaotus)
+- **Gantt** (ülesannete kuupäevad, lõpetamine ja sõltuvused)
+- **Entity relationships (DB)** (tabelid, väljad, PK/FK võtmed ja seosed)
 - **Tulpmõõdik** (üks horisontaalne mõõdik rea kohta punasest roheliseks gradiendiga ja väärtusega, nt vaba kettaruum)
 - **Tekst** (markdown-sõnum, nt olekumärkus nagu "Viimane käivitus 19:47"; toetab [interaktiivseid märkeruute](../nodes/chart-output-node.md#interactive-task-lists), kui markdown on staatiline, ja [selgesõnalisi nummerdatud loendeid](../nodes/chart-output-node.md#numbered-lists) kohandatud või kahaneva nummerduse jaoks)
 - **HITL** (teie ootel inimülevaatused. Päis näitab `1/n pending`. Workflow nimi avab selle käivituse lõuendil. **Kinnita**, **Taotle muudatusi** ja **Lükka tagasi** lahendavad selle. Vidinа pealkirja kõrval olev ajaloo ikoon avab selle käivituse selle lehe ajaloo dialoogis. Vidin ei kasuta ülemvoo ridu ja iga inimene näeb oma järjekorda. See võib selle asemel kuvada ühe Workflow ülevaatusi kõigile, kes saavad seda Workflow'd avada; vaadake [HITL-vidinad](#hitl-vidinad))
@@ -96,6 +98,18 @@ Vidina API saab luua ka **loendurikaardi** ilma AI-ta: `text` vidin andmetabelil
 
 Kasutage vidinа nuppu **Peenhäälesta AI-ga**, et olemasolevat vidinat uue juhisega muuta. Iga AI peenhäälestus salvestab eelmise workflow vidinа **Muudatuste ajalukku**, seega saate workflow redaktorist muudatusi üle vaadata või tagasi pöörata.
 
+## Chat ja MCP kaudu
+
+[Chat](./chat-tab.md) ja MCP-kliendid tööriista [`heym_chat`](./mcp-tab.md) kaudu saavad lugeda teie armatuurlaudu, lisada neile vidinaid, vidinaid ümber nimetada või kustutada ning armatuurlaua paigutust korrastada. Heym Work kuvab iga armatuurlaua lehena, seega hõlmavad samad vastused ka selle lehti.
+
+- **Millised armatuurlauad on olemas ja mis neil asub.** Küsige "millised armatuurlauad mul on?", "mis asub Müügi armatuurlaual?" või "millisel armatuurlaual asub tulu workflow?". Chat loetleb teie enda armatuurlauad ja teiega jagatud armatuurlauad koos teie juurdepääsuõiguste ja lingiga igale neist ning kõik neil asuvad vidinad: pealkirja, diagrammitüübi ja selle taga oleva workflow. [HITL-vidin](#hitl-widgets), mis on filtreeritud workflow järgi, mida te ei saa avada, jääb peidetuks, nagu ka armatuurlaual endal.
+- **Uus vidin.** Küsige "lisa Müügi armatuurlauale avatud juhtumite diagramm staatuse järgi". Chat asetab esmalt armatuurlauale tühja vidina, kirjutab seejärel vidina enda workflow, viib läbi testkäivitusi ja parandab vigu, kuni käivitus õnnestub, samal viisil nagu see [ehitab workflow'sid](./chat-tab.md#workflow-de-loomine). Eraldi workflow'd maha ei jäeta ja iga salvestus ilmub vidina Edit History's. Vidina pealkiri ja diagrammitüüp järgivad seda, mida Chat salvestab.
+- **Olemasolev workflow.** Küsige "aseta tulu workflow Müügi armatuurlauale". Workflow, mis lõpeb Chart Output sõlmega, muutub diagrammividinaks koos oma koopiaga workflow'st, nii et hilisemad muudatused vidinas ei mõjuta kunagi originaali. Trigger- või input-sõlmega workflow ei saa muutuda diagrammividinaks. Mis tahes muu workflow muutub [käivitusvidinaks](#run-widgets), mis vajab samuti workflow'd, mida armatuurlaua omanik saab käivitada.
+- **Vidina ümbernimetamine või kustutamine.** Küsige "nimeta Tulu vidin ümber Müügiks" või "kustuta vidin Avatud juhtumid". Diagrammividina workflow võtab samuti uue nime; käivitusvidina workflow säilitab oma nime. Diagrammividina kustutamine kustutab koos sellega ka selle workflow, täpselt nagu vidina kustutamisnupp; käivitusvidina workflow jääb alles. Chat kustutab ainult vidina, mida selgesõnaliselt palusite, ja küsib esmalt selgitust, kui teie sõnad vastavad mitmele.
+- **Korrastamine.** Küsige "korrasta Müügi armatuurlaud" või "lisa need kolm vidinat ja korrasta". Chat paigutab nähtavad vidinad nende järjekorras, täpselt nagu nupp **Korrasta**: juhuslikud kahe- või kolmekaupa read, nii et uuesti küsimine annab teise paigutuse. Määrake arv rea kohta ("kolm rea kohta"), et saada sellise suurusega ridu. See korrastab armatuurlaua Heym-is; Heym Work säilitab oma lehe paigutuse, mida muudab lehe enda nupp **Korrasta**.
+
+Uued vidinad paigutatakse armatuurlaua olemasolevate vidinate alla ja töötavad nagu iga vidin armatuurlaua omaniku kontekstis. Lisamine, ümbernimetamine, kustutamine ja korrastamine nõuavad armatuurlauale kirjutamisõigust. Uue vidina loomine nõuab vestlust, mis suudab ehitada workflow'sid: vahekaarti Chat, toimetajate vestlust Heym Work Chat ja `heym_chat`.
+
 ## Paigutuse muutmine
 
 Lülitage **Muuda**, et siseneda muutmisrežiimi, kus saate vidinaid lohistada ja neid 12-veerulises ruudustikus suurust muuta. Paigutuse muudatused salvestatakse automaatselt. Vidinа pealkirjad on redigeeritavad reas vidinа päisest.
@@ -127,3 +141,7 @@ Jagamise eemaldamine või selle alandamine write'ilt read'ile jõustub kohe.
 
 - [Chart Output node](../nodes/chart-output-node.md)
 - [Analytics tab](analytics-tab.md) — sisseehitatud käivituste mõõdikud (erinevad kasutaja loodud armatuurlaudades)
+
+## Ajakavad ja andmebaasidiagrammid
+
+Valige jaotises Lisa vidin **Gantt**, et kuvada ülesandeid ajas koos lõpetamise ja sõltuvuste linkidega, või **Entity relationships (DB)**, et kaardistada tabeleid, välju ja nende seoseid. Mõlemad tüübid kasutavad [Chart Output sõlme](../nodes/chart-output-node.md#gantt-schedules) ja on saadaval ka Heym Work lehtedel. Kui Work soovitab vidinaid ajakava või andmebaasiskeemi jaoks, joonistab see ettepanekute põhjal eelvaated.

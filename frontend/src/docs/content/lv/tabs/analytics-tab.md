@@ -15,6 +15,7 @@
 
 ## Laika intervāls
 
+- **1h**, **3h**, **6h** – Pēdējā stunda, 3 stundas vai 6 stundas. Analītika tiek glabāta pa stundām, tāpēc tās skaita loga sākuma stundu pilnībā: Pēdējā stunda plkst. 15:20 ietver laiku no 14:00 līdz šim brīdim
 - **24h** – Pēdējās 24 stundas
 - **7d** – Pēdējās 7 dienas
 - **30d** – Pēdējās 30 dienas
@@ -38,9 +39,19 @@ Divas tabulas rāda workflow lietojumu: **Visvairāk izmantotie** (platāki) un 
 - **Izpildes apjoms laika gaitā** – Līniju diagramma par izpildēm pa laika intervāliem
 - **Veiksmju pret kļūdu procentu** – Platuma diagramma, kas salīdzina veselīgas un neizdevušās izpildes
 - **Vidējā latentums laika gaitā** – Līniju diagramma, kas rāda atbildes laika izmaiņas
-- **Velciet, lai izvēlētos** – Noklikšķiniet un velciet jebkurā diagrammā, lai fokusētos uz pielāgotu datumu intervālu
+- **Vilkt, lai atlasītu** – Noklikšķiniet un velciet jebkurā diagrammā, lai fokusētu pielāgotu datumu diapazonu. Atlasē ir jāaptver vismaz divi punkti diagrammā; vienkāršs klikšķis neko neizvēlas
 - **Izvēles režīms** – Izvēlētie intervāli atsvaidzinās kopsavilkuma kartes, diagrammas un workflow tabulas, nemainot bāzes iestatījumus
 - **Notīrīt izvēli** – Atgriezieties pie iepriekš iestatītā laika loga, kad esat pabeidzis izpēti
+
+## Mezglu tipi
+
+Zem latentuma procentīlēm trīs diagrammas parāda, kur tiek patērēts mezglu laiks un kļūdas, sagrupētas pēc mezgla tipa (Agent, HTTP Request, Code utt.) visās skatītajās darbplūsmās:
+
+- **Mezgli ar lielāko patērēto laiku** – 10 mezglu tipi ar lielāko kopējo izpildes laiku, attēloti kā vidējais ilgums uz izsaukumu. Stunda bez noteikta tipa izsaukumiem rīka padomā rāda **Nav izsaukumu**.
+- **Mezglu tipi ar visvairāk kļūdām** – 10 mezglu tipi ar visvairāk kļūdām (kļūda vai timeout), katrs ar savu kļūdu skaitu laika posmā.
+- **Visvairāk izsauktie mezglu tipi** – 10 mezglu tipi, kas tika darbināti visbiežāk, katrs ar savu izsaukumu skaitu laika posmā. Izlaistie mezgli netiek skaitīti.
+
+Novietojiet kursoru virs diagrammas, lai redzētu mezgla tipu tieši blakus rādītājam. Mezgla tips, kas ir pārāk mazs, lai to redzētu blakus lielākajam diagrammā (zem 1% no tā), tiek izslēgts no šīs diagrammas un tās leģendas. Diagrammas ievēro darbplūsmas filtru, laika diapazonu un jebkuru apgabalu, ko velkat diagrammā. Mezglu analītika tiek reģistrēta izpildēm, sākot no laidiena, kurā tā tika pievienota, un pabeigta izpilde parādās aptuveni minūtes laikā. Vecākas izpildes netiek ņemtas vērā.
 
 ## Automātiskā atsvaidzināšana
 

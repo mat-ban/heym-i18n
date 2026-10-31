@@ -23,7 +23,8 @@ Beszélgetést a [Workflow-k fül](./workflows-tab.md) chat mezőjéből is ind�
 - **Sorba állított utánkövetések** – Küldjön további üzeneteket, miközben egy válasz streamel. A sorba állított üzenetek megmaradnak, szerkeszthetők vagy törölhetők az indulás előtt, és az aktív válasz után sorrendben futnak le
 - **Tervezési szünetek** – Amikor a Chatnek tervezési részletekre van szüksége, tisztázó kérdéseket tesz fel, és szünetelteti a sorba állított utánkövetéseket, amíg Ön nem válaszol. A tervezési válasz befejezése után a sorba állított üzenetek folytatódnak
 - **Hitelesítési adatok** – Amikor a Chat által létrehozott vagy szerkesztett workflow-hoz hitelesítési adat szükséges, a Chat megkérdezi, melyiket használja, felajánlja egy új létrehozását a beszélgetésben, vagy hagyja, hogy nélküle folytassa. Azt is kérheti a Chattől, hogy hozzon létre hitelesítési adatot, vagy frissítsen egy Ön által birtokoltat; ez megnyitja a hitelesítési adat űrlapját a beszélgetésben. A modell a hitelesítési adat nevét és típusát látja, az értékeit soha, mind a saját, mind a megosztott hitelesítési adatok esetén. A Chat által hozzáadott LLM- és Agent-csomópontok a chathoz kiválasztott hitelesítési adattal és modellel futnak, beleértve a megosztott hitelesítési adatokat is; amikor a Chat workflow-t szerkeszt, a meglévő LLM- és Agent-csomópontok megtartják hitelesítési adatukat és modelljüket. Lásd: [AI asszisztens › Hitelesítési adatok](../reference/ai-assistant.md#credentials)
-- **Adattáblák** – Amikor a Chat által létrehozott vagy szerkesztett workflow rekordokat tárol, a Chat megkérdezi, melyik [adattáblát](./datatable-tab.md) használja, vagy felajánlja egy új létrehozását a workflow-hoz szükséges oszlopokkal. Kilistázhatja a tábláit és azok oszlopait is. Sorokat soha nem olvas vagy ír. Lásd: [AI asszisztens › Adattáblák](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Kérdezze meg, milyen [dashboards](./dashboard-tab.md) felületei vannak, mi található az egyiken, vagy melyik dashboardon van egy workflow. Kérje meg a Chatet, hogy adjon hozzá egy új widgetet egy dashboardhoz (elhelyez ott egy üres widgetet, majd felépíti és teszteli annak workflow-ját), helyezzen el egy meglévő workflow-t egy dashboardon widgetként, nevezzen át vagy töröljön egy widgetet, vagy rendezze el egy dashboard elrendezését. A Heym Work ezeket a dashboardokat jeleníti meg oldalaiként. Lásd [Dashboard › Chatből és MCP-ből](./dashboard-tab.md#chatböl-és-mcp-böl)
+- **Adattáblák** – Amikor a Chat által létrehozott vagy szerkesztett workflow rekordokat tárol, a Chat megkérdezi, melyik [adattáblát](./datatable-tab.md) használja, vagy felajánlja egy új létrehozását a szükséges oszlopokkal. Képes megvizsgálni a sorokat, oszlopokat hozzáadni vagy eltávolítani, valamint közvetlenül sorokat beszúrni, frissíteni vagy törölni az Ön tulajdonában lévő vagy írható táblákban. Adjon meg egy táblanevet vagy DataTable-linket. Az oszlopok eltávolítása és az összes sor törlése megerősítést kér; az oszlopok hozzáadása megőrzi a meglévő adatokat. Lásd [AI-asszisztens › Adattáblák](../reference/ai-assistant.md#data-tables)
 - **Streamelő válaszok** – A modell kimenetének megtekintése streamelés közben
 - **Válasz leállítása** – Az aktuális streamelő válasz bármikor megszakítható; a leállítás az adott beszélgetés sorba állított üzeneteit is törli
 - **Markdown megjelenítés** – A válaszok támogatják a markdown formázást, beleértve a beágyazott képeket is
@@ -33,16 +34,17 @@ Beszélgetést a [Workflow-k fül](./workflows-tab.md) chat mezőjéből is ind�
 - **Hangbevitel** – Használja a mikrofon gombot beszédfelismeréshez (böngésző által támogatott). Amikor a felvétel leáll, a Heym könnyedén megtisztíthatja az átiratot, mielőtt elküldi
 - **Ütemezett workflow-k** – Kérdezze meg, mikor futnak a cron workflow-k (ma, ezen a héten, ebben a hónapban vagy egyéni dátumtartományban). Az asszisztens ugyanazokat az ütemezési adatokat használja, mint az [Ütemezések](./scheduled-tab.md) fül, és az eredményeket korlátozhatja az Ön által birtokolt workflow-kra, vagy az Önnel megosztottakat is belefoglalhatja
 - **Workflow futtatási előzmények** – Kérdezzen egy workflow-ról ("hányszor futott le a napi jelentés?", "sikertelen volt?", "mikor futott utoljára?"). A Chat az azonosítója alapján keresi ki a workflow-t, és a futtatási számából, állapot szerinti bontásából, első és utolsó futtatási idejéből, valamint átlagos időtartamából válaszol. Kérdezze meg, miért hibázott egy futtatás, vagy mit adott vissza, és a Chat megnyitja azt az egyetlen futtatást, hogy elolvassa annak bemeneteit, kimeneteit és csomópontonkénti hibáit
+- **Hol hiúsulnak meg a futtatások és miért lassúak** – Kérdezze meg, hol hiúsulnak meg a workflow-k vagy miért lassúak, és a Chat megnevezi a legtöbbet futott, a legtöbbet hibázott és a leglassabb workflow-kat, valamint azokat a csomóponttípusokat, amelyek a legtöbb időt veszik igénybe (hívásonkénti átlag és összesen), a legtöbbet hibáznak és a legtöbbször futnak – ugyanazokat a számokat, mint az [Analytics](./analytics-tab.md) fülön. A csomóponttípusokat a csomópont-analitikát bevezető kiadástól kezdődően számoljuk. Érdeklődhet az elmúlt 1 óra, 3 vagy 6 óra, 24 óra, 7 vagy 30 nap vagy a teljes időszak felől; az órás ablakok egész órakor kezdődnek, így „az elmúlt óra” 15:20-kor a 14:00-tól mostanáig tartó időszakot fedi le.
 - **Élő futtatási állapot** – Kérdezze meg, mi fut éppen most, és a Chat a számmal, a workflow-nevekkel, az egyes futtatások időtartamával, az aktuális csomóponttal és egy közvetlen hivatkozással válaszol az élő futtatásra
 ## Chat használata MCP-kliensből
 
-A Chat motor a böngészőn kívülről is elérhető. Engedélyezze a **Heym Chat Tool** eszközt az [MCP lapon](./mcp-tab.md), és az MCP-kliensek — a Claude, a Cursor és bármi más, ami MCP-t beszél — egyetlen `heym_chat` eszközt kapnak, amely ugyanezt a motort futtatja, annak minden képességével együtt.
+A Chat-motor a böngészőn kívülről is elérhető. Kapcsolja be a **Heym Agent** eszközt az [MCP / A2A fülön](./mcp-tab.md), és az MCP-kliensek (Claude, Cursor és bármilyen más MCP-kompatibilis eszköz) egyetlen `heym_chat` eszközt kapnak, amely ugyanezt a motort futtatja annak minden képességével. Jelölje be az **A2A engedélyezése** opciót is, így más ügynökök feladatokat küldhetnek neki az [A2A](../reference/a2a.md) protokollon keresztül; ezek a beszélgetések hálózati ikont jelenítenek meg a listában.
 
 Ezek a beszélgetések e lap előzményeibe kerülnek, és a beszélgetéslistában egy dugasz ikon jelöli őket. Nyisson meg egyet, hogy elolvassa, mit kért a kliens, lássa az általa kiváltott eszközkártyákat, és Ön is folytathassa a beszélgetést. A tisztázó kérdés megválaszolása ugyanúgy működik, akár innen, akár egy MCP-kliensből indult a kör.
 
 MCP-n keresztül a Chat nem listázza, nem választja ki és nem hozza létre a hitelesítési adatokat. Az általa épített workflow-k üresen hagyják a hitelesítési adatok mezőit, és a válasz megnevezi azokat a csomópontokat, amelyekhez hitelesítési adat szükséges, így Ön beállíthatja azokat a szerkesztőben.
 
-Az adattáblák MCP-n keresztül is működnek: a Chat listázza a tábláit, újakat hoz létre, és beköti azokat az általa épített workflow-kba. A táblázatra vonatkozó kérdése szövegként érkezik az eredményben, ezért ugyanazzal a `conversation_id`-vel válaszoljon rá.
+Az adattáblák MCP-n keresztül is működnek: a Chat közvetlenül szerkesztheti az oszlopokat és sorokat, táblákat hozhat létre és köthet be a workflow-kba. A táblákkal kapcsolatos kérdések és a törlési megerősítések szövegként érkeznek meg az eredményben; válaszoljon ugyanazzal a `conversation_id` azonosítóval.
 
 ## Kontextuslimit
 
@@ -110,9 +112,58 @@ a trigger-forrás szerinti bontást a végrehajtásszám-riasztásokhoz. Azt jel
 ## Felhasználói szabályok
 
 A [User Rules](../reference/user-settings.md) (a Settingsben beállítva) automatikusan bekerülnek minden Chat-beszélgetésbe rendszerszintű utasításként. Állítsa be egyszer, hogy állandó preferenciákat alkalmazzon minden chat-kérésre.
+
+## Munka az Értékelésekkel
+
+A Chat képes létrehozni, módosítani és futtatni az [Evals](./evals-tab.md) felületén található csomagokat, mind a prompt-csomagokat, mind az ügynökcsomagokat:
+
+- **Prompt-csomag**: „hozz létre egy prompt-csomagot az ügyfélszolgálati válaszpromptomhoz 8 tesztesettel, és hasonlítsd össze a gpt-4o modellt a gpt-4.1-mini modellel”. A Chat megírja a teszteseteket a várt válaszokkal, kiválasztja a pontozási módszert, és elmenti a csomagot.
+  - A csomag létrehozása előtt tisztázza, melyik LLM hitelesítési adatot és modelleket kell használni. Pontosan egy LLM hitelesítési adat esetén azt használja, és ezt jelzi is; ellenkező esetben megkérdezi.
+  - LLM-as-Judge pontozás esetén azt is megkérdezi, hogy egy külön bíráló értékelje-e a válaszokat.
+- **Ügynökcsomag**: „ellenőrizd, hogy a támogatási ügynököm mindig keres-e a dokumentációban, és soha nem küld-e e-mailt”. A Chat megkeresi az ügynököt, és elmenti az eszközellenőrzéseket és a küszöbértékeket. Kérésre futtatja a workflow-t, minden futtatáshoz eltérő bemenetet generálva.
+  - Az ügynökcsomagok futtatásai valódi workflow-futtatások, így azok mellékhatásai ténylegesen bekövetkeznek. A Chat közli, hány futtatást indít el.
+- **Baseline**: A Chat háromféleképpen tud dolgozni egy ügynök bázisvonalával:
+  - Jelenti azt az ügynök legutóbbi futtatásaiból.
+  - Felépíti az általa indított futtatásokból („futtasd le 5-ször, és használd azt bázisvonalként”).
+  - Eltárolja az Ön által megadott számokat („állítsd a bázisvonalat 3 másodperc p95-re és futtatásonként 0,01 $-ra”).
+- **Futtatások**: A Chat legfeljebb egy percet vár a futtatásra, majd közli az eredményt:
+  - Prompt-csomag esetén: az egyes modellek sikeres futtatásainak számát és a sikertelen eseteket.
+  - Ügynökcsomag esetén: a sikerességi arányt, a sikertelen ellenőrzéseket és a bázisvonaltól való eltérést.
+  - A hosszabb futtatás folytatódik az Evals-ban; kérje meg a Chatet, hogy ellenőrizze újra.
+
+Miután a Chat létrehoz vagy módosít egy csomagot, a válaszban megjelenik egy kártya a csomag nevével, típusával és egy **Megnyitás az Evals-ban** gombbal, hasonlóan a mentett workflow kártyájához. MCP-n keresztül a `heym_chat` eredmény felsorolja az adott hívásban mentett összes csomag hivatkozását.
+
+Ugyanez működik MCP-kliensből is a `heym_chat` segítségével (lásd [A Chat használata MCP-kliensből](#a-chat-használata-mcp-kliensből)). Az értékelési eszközök a `heym_chat` belsejében maradnak; az MCP-kliensek nem látják őket különálló eszközökként.
+
+A szerkesztő AI-asszisztense nem hoz létre csomagokat.
+
+## Munka az Értékelésekkel
+
+A Chat képes létrehozni, módosítani és futtatni az [Evals](./evals-tab.md) felületén található csomagokat, mind a prompt-csomagokat, mind az ügynökcsomagokat:
+
+- **Prompt-csomag**: „hozz létre egy prompt-csomagot az ügyfélszolgálati válaszpromptomhoz 8 tesztesettel, és hasonlítsd össze a gpt-4o modellt a gpt-4.1-mini modellel”. A Chat megírja a teszteseteket a várt válaszokkal, kiválasztja a pontozási módszert, és elmenti a csomagot.
+  - A csomag létrehozása előtt tisztázza, melyik LLM hitelesítési adatot és modelleket kell használni. Pontosan egy LLM hitelesítési adat esetén azt használja, és ezt jelzi is; ellenkező esetben megkérdezi.
+  - LLM-as-Judge pontozás esetén azt is megkérdezi, hogy egy külön bíráló értékelje-e a válaszokat.
+- **Ügynökcsomag**: „ellenőrizd, hogy a támogatási ügynököm mindig keres-e a dokumentációban, és soha nem küld-e e-mailt”. A Chat megkeresi az ügynököt, és elmenti az eszközellenőrzéseket és a küszöbértékeket. Kérésre futtatja a workflow-t, minden futtatáshoz eltérő bemenetet generálva.
+  - Az ügynökcsomagok futtatásai valódi workflow-futtatások, így azok mellékhatásai ténylegesen bekövetkeznek. A Chat közli, hány futtatást indít el.
+- **Baseline**: A Chat háromféleképpen tud dolgozni egy ügynök bázisvonalával:
+  - Jelenti azt az ügynök legutóbbi futtatásaiból.
+  - Felépíti az általa indított futtatásokból („futtasd le 5-ször, és használd azt bázisvonalként”).
+  - Eltárolja az Ön által megadott számokat („állítsd a bázisvonalat 3 másodperc p95-re és futtatásonként 0,01 $-ra”).
+- **Futtatások**: A Chat legfeljebb egy percet vár a futtatásra, majd közli az eredményt:
+  - Prompt-csomag esetén: az egyes modellek sikeres futtatásainak számát és a sikertelen eseteket.
+  - Ügynökcsomag esetén: a sikerességi arányt, a sikertelen ellenőrzéseket és a bázisvonaltól való eltérést.
+  - A hosszabb futtatás folytatódik az Evals-ban; kérje meg a Chatet, hogy ellenőrizze újra.
+
+Miután a Chat létrehoz vagy módosít egy csomagot, a válaszban megjelenik egy kártya a csomag nevével, típusával és egy **Megnyitás az Evals-ban** gombbal, hasonlóan a mentett workflow kártyájához. MCP-n keresztül a `heym_chat` eredmény felsorolja az adott hívásban mentett összes csomag hivatkozását.
+
+Ugyanez működik MCP-kliensből is a `heym_chat` segítségével (lásd [A Chat használata MCP-kliensből](#a-chat-használata-mcp-kliensből)). Az értékelési eszközök a `heym_chat` belsejében maradnak; az MCP-kliensek nem látják őket különálló eszközökként.
+
+A szerkesztő AI-asszisztense nem hoz létre csomagokat.
+
 ## Kapcsolódó
 
-- [MCP lap](./mcp-tab.md) – Tegye elérhetővé ezt a motort MCP kliensek számára `heym_chat` eszközként
+- [MCP / A2A lap](./mcp-tab.md) – Tegye elérhetővé ezt a motort MCP kliensek számára `heym_chat` eszközként
 - [Beállítások](../reference/user-settings.md) – Állítsa be az összes chat-kérésre érvényes felhasználói szabályokat
 - [Hitelesítési adatok lap](./credentials-tab.md) – API-kulcsok hozzáadása és kezelése
 - [Változók lap](./global-variables-tab.md) – A Chat számára elérhető globális változók

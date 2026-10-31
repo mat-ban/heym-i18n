@@ -83,7 +83,8 @@
     "run": "Kør",
     "dropFileOrClick": "Slip en fil her, eller klik for at vælge",
     "removeFile": "Fjern fil",
-    "chooseFileFor": "Vælg en fil til {label}"
+    "chooseFileFor": "Vælg en fil til {label}",
+    "new": "Ny"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Ingen: hver model scorer sig selv",
     "removeJudge": "Fjern judge",
     "judgeModel": "Judge-model",
-    "enterJudgeModel": "Angiv judge-modellen, der skal køres med denne judge."
+    "enterJudgeModel": "Angiv judge-modellen, der skal køres med denne judge.",
+    "promptSuite": "Prompt-pakke",
+    "promptSuiteDesc": "Test en systemprompt på tværs af modeller",
+    "agentSuite": "Agent-pakke",
+    "agentSuiteDesc": "Tjek en agents rigtige kørsler: værktøjer, latenstid, omkostninger",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Søg efter pakker...",
+    "loadingSuite": "Indlæser pakke...",
+    "couldNotLoadSuite": "Kunne ikke indlæse denne pakke."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "Spørg AI",
     "askAiTitle": "Spørg Chat-assistenten om denne kørsel",
     "noNodeSpans": "Der blev ikke registreret nogen node-spans for denne kørsel.",
-    "queuedProgress": "I kø {position}/{size}"
+    "queuedProgress": "I kø {position}/{size}",
+    "clickToSelectRun": "Klik for at vælge denne kørsel",
+    "doubleClickOrOpenNewTab": "Dobbeltklik for at bringe denne kørsel til canvas, Ctrl/Cmd+klik for at åbne i en ny fane"
   },
   "portal": {
     "loadingPortal": "Indlæser portal...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP-server",
-    "subtitle": "Eksponer Workflows som MCP-værktøjer til AI-assistenter",
+    "subtitle": "Eksponer workflows som MCP-værktøjer og Heym Agent over MCP og A2A",
     "connection": "MCP-forbindelse",
     "connectionSubtitle": "Forbind AI-assistenten til Workflows via MCP-protokollen.",
     "apiKeyTab": "API-nøgle",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Under Tilpassede apps klikkes på Tilføj en tilpasset app",
     "geminiStep3": "Indsæt MCP-serverens URL ovenfor og lad Avancerede funktioner være lukkede; Gemini registreres automatisk",
     "geminiStep4": "Klik på Næste og godkend med Heym-legitimationsoplysninger",
-    "geminiInfo": "Gemini bruger OAuth til sikker godkendelse. Heym-legitimationsoplysninger bruges til at godkende adgang og deles aldrig med Gemini. Når forbindelsen er oprettet, fungerer Heym også i Gemini-mobilappen."
+    "geminiInfo": "Gemini bruger OAuth til sikker godkendelse. Heym-legitimationsoplysninger bruges til at godkende adgang og deles aldrig med Gemini. Når forbindelsen er oprettet, fungerer Heym også i Gemini-mobilappen.",
+    "agentReach": {
+      "off": "Fra: MCP- og A2A-klienter kan ikke nå Heym Agent",
+      "unconfigured": "Vælg legitimationsoplysninger og en model, så Heym Agent kan køre",
+      "mcpA2a": "Kan nås over MCP og A2A",
+      "mcpOnly": "Kan nås som heym_chat over MCP"
+    },
+    "a2aEnabledOnServer": "A2A aktiveret på \"{name}\"",
+    "a2aEnabled": "A2A aktiveret",
+    "a2aDisabledOnServer": "A2A deaktiveret på \"{name}\"",
+    "a2aDisabled": "A2A deaktiveret",
+    "agentAndA2aDisabledOnServer": "Heym Agent og A2A deaktiveret på \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent og A2A deaktiveret",
+    "a2a": {
+      "enable": "Aktivér A2A",
+      "description": "Andre agenter kan sende opgaver til Heym Agent via Agent2Agent-protokollen (A2A 1.0). De godkender med denne servers nøgle i X-MCP-Key-headeren eller med Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC-endpoint",
+      "checkCardLive": "Kontroller, at kortet er aktivt:",
+      "copyLabel": "Kopier {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analyse-dashboard",
@@ -2087,6 +2119,25 @@
       "errors": "Fejl",
       "avgLatencyMs": "Gns. latenstid (ms)",
       "latencyTitle": "Gennemsnitlig latenstid over tid"
+    },
+    "last1Hour": "Sidste time",
+    "last3Hours": "Sidste 3 timer",
+    "last6Hours": "Sidste 6 timer",
+    "nodeTypes": "Nodetyper",
+    "nodeChart": {
+      "emptyMessage": "Ingen nodedata for denne periode endnu. Nodeanalyser registreres for kørsler efter denne opdatering.",
+      "duration": {
+        "title": "Mest tidskrævende noder",
+        "subtitle": "Gennemsnitlig varighed pr. kald"
+      },
+      "errors": {
+        "title": "Nodetyper med flest fejl",
+        "subtitle": "Fejl over tid"
+      },
+      "calls": {
+        "title": "Mest kaldte nodetyper",
+        "subtitle": "Kald over tid"
+      }
     }
   },
   "dashboards": {

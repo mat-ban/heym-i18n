@@ -14,7 +14,7 @@ Credentials lưu trữ API key và secret được sử dụng bởi các node t
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API key cho model |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Base URL của decision model endpoint, cùng với API key tùy chọn |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Chọn model nào của bạn phục vụ mỗi yêu cầu, sử dụng decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) bộ prompt | Model Router (Auto Model) | Chọn model nào của bạn phục vụ mỗi yêu cầu, sử dụng decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Đăng nhập bằng ChatGPT subscription (OAuth) hoặc Codex access token cho runner, cùng với GitHub PAT cho các thao tác repository |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API key của OpenCode Go gateway (base URL tùy chọn) cho runner, cùng với GitHub PAT cho các thao tác repository |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) cho các lệnh gọi GitHub API, thao tác node GitHub, và tích hợp MCP |

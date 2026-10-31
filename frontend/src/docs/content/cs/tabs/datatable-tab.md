@@ -73,11 +73,11 @@ Sdílejte tabulky s dalšími uživateli nebo týmy:
 1. Otevřete dialog sdílení z detailu tabulky
 2. Přidejte uživatele podle e-mailu s oprávněním **read** nebo **write**
 3. Přidejte týmy s oprávněním **read** nebo **write**
-4. Uživatelé s právem pouze pro čtení mohou data zobrazovat; uživatelé s právem zápisu mohou upravovat řádky
+4. Uživatelé s přístupem pouze pro čtení mohou data prohlížet; uživatelé s právem zápisu mohou upravovat řádky i sloupce. Přejmenování tabulky, změna jejího popisu a správa sdílení zůstávají vyhrazeny pouze vlastníku.
 
 ## Vytváření tabulek z AI Assistant
 
-Canvas [AI Assistant](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) a nástroj `heym_chat` na kartě [MCP](./mcp-tab.md) mohou vybrat jednu z vašich tabulek pro workflow, které vytvářejí, nebo vytvořit novou. Navrhnou název a sloupce a tabulku vytvoří, když odešlete kartu s dotazem. Nikdy nemění sloupce existující tabulky ani se nedotýkají jejích řádků: sloupce přidávejte nebo upravujte zde.
+[AI asistent](../reference/ai-assistant.md#data-tables) na plátně, [Chat](./chat-tab.md) a nástroj `heym_chat` na [kartě MCP](./mcp-tab.md) mohou vybrat jednu z vašich tabulek pro workflow, který vytvářejí, nebo vytvořit novou. Navrhnou název a sloupce a po odeslání karty s otázkami tabulku vytvoří. Asistent na plátně konfiguruje uzly workflow z metadat tabulky. Chat a `heym_chat` mohou také kontrolovat řádky, přidávat nebo odebírat sloupce a přímo vkládat, aktualizovat nebo mazat řádky. Zadejte jim název tabulky nebo odkaz na tuto kartu. Zápisy vyžadují vlastnictví nebo přímý/týmový přístup k **zápisu**. Přidání sloupců zachová stávající data; odstranění sloupců vymaže jejich hodnoty z každého řádku. Odstranění sloupců a vymazání všech řádků vyžaduje potvrzení, stejně jako na této kartě.
 
 ## Použití ve workflow
 

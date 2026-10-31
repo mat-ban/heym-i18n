@@ -50,6 +50,8 @@
 3. **Network nodes** — за nodes, които правят мрежови заявки (като [HTTP](../nodes/http-node.md) и integration nodes), докладът препоръчва специфична за node обработка на грешки (retry и/или continue-on-error) на тези nodes.
 4. **Alerts** — когато не са конфигурирани [alerts](../tabs/alerts-tab.md) за workflow-а, докладът препоръчва настройване на alerts преди преминаване към prod.
 
+5. **Evals**: когато workflow има възел [Agent](../nodes/agent-node.md) без пакет за агент, отчетът препоръчва **Agent Suite** (или **Prompt Suite**) в [Evals](../tabs/evals-tab.md#agent-suites); когато има възел [LLM](../nodes/llm-node.md), препоръчва **Prompt Suite** за тестване на този prompt за различни модели.
+
 ### Стартиране на Analyzer от Properties
 
 Когато даден workflow има nodes на canvas-а, но все още няма документ за анализ, в панела [Properties](./canvas-features.md) на ниво workflow (показан, когато не е избран node) се появява бутон **Run Analyzer**. Той отваря този панел за Анализ на Workflow, за да можете да изберете credential и модел и да генерирате доклада.

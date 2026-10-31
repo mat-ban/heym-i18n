@@ -85,6 +85,7 @@ import { resolveShowcaseContext } from "@/features/showcase/showcaseResolver";
 import TemplatesPage from "@/features/templates/components/TemplatesPage.vue";
 import { useRunbookPlayer } from "@/features/runbook/useRunbookPlayer";
 import { joinOriginAndPath } from "@/lib/appUrl";
+import { dashboardTabAlias } from "@/lib/dashboardTabAliases";
 import {
   buildHeymUsersFolder,
   collectHeymUsersWorkflowIds,
@@ -117,13 +118,17 @@ const tabParam = route.query.tab as string;
 if (tabParam === "chat") {
   void router.replace("/chats");
 }
+const initialTabAlias = dashboardTabAlias(tabParam);
+if (initialTabAlias) {
+  void router.replace({ path: "/", query: { ...route.query, tab: initialTabAlias } });
+}
 
 function parseTabParam(raw: string | undefined | null): { tab: string; subPath: string | null } {
   if (!raw) return { tab: "workflows", subPath: null };
   if (raw.startsWith("datatable/")) {
     return { tab: "datatable", subPath: raw.slice("datatable/".length) };
   }
-  return { tab: raw, subPath: null };
+  return { tab: dashboardTabAlias(raw) ?? raw, subPath: null };
 }
 
 const validTabs = new Set([
@@ -198,6 +203,11 @@ watch(
   (newTabParam) => {
     if (newTabParam === "chat") {
       void router.replace("/chats");
+      return;
+    }
+    const aliasTab = dashboardTabAlias(newTabParam as string);
+    if (aliasTab) {
+      void router.replace({ query: { ...route.query, tab: aliasTab } });
       return;
     }
     const parsed = parseTabParam(newTabParam as string);
@@ -1850,6 +1860,26 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                   >
                     {{ workflowCountLabel }}
                   </span>
+                  <div class="ml-auto flex items-center gap-1.5 sm:hidden">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      class="min-h-[36px] min-w-[36px]"
+                      :title="$t('workflows.newFolder')"
+                      @click="openCreateFolderDialog(null)"
+                    >
+                      <FolderPlus class="w-3.5 h-3.5" />
+                    </Button>
+                    <Button
+                      variant="gradient"
+                      size="sm"
+                      data-testid="new-workflow-button-mobile"
+                      @click="showCreateDialog = true; pushOverlayState()"
+                    >
+                      <Plus class="w-3.5 h-3.5" />
+                      {{ $t('common.new') }}
+                    </Button>
+                  </div>
                 </div>
                 <p class="text-muted-foreground mt-0.5 text-sm">
                   {{ $t('dashboard.subtitle') }}
@@ -1870,7 +1900,7 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                 </Button>
                 <div
                   v-if="!loading && (workflows.length > 0 || folderStore.folderTree.length > 0)"
-                  class="relative order-4 w-full min-w-[220px] sm:order-none sm:w-72 md:w-80"
+                  class="relative order-2 min-w-[9rem] flex-1 sm:order-none sm:w-72 sm:min-w-[220px] sm:flex-none md:w-80"
                 >
                   <Search class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                   <input
@@ -1893,20 +1923,15 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                     <X class="h-4 w-4" />
                   </button>
                 </div>
-                <WorkflowStatusFilter
+                <div
                   v-if="!loading && workflows.length > 0"
-                  v-model="statusFilter"
-                  :counts="workflowStatusCounts"
-                  class="order-4 sm:order-none"
-                />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  class="order-2 sm:hidden min-h-[36px] min-w-[36px]"
-                  @click="openCreateFolderDialog(null)"
+                  class="order-1 sm:order-none"
                 >
-                  <FolderPlus class="w-3.5 h-3.5" />
-                </Button>
+                  <WorkflowStatusFilter
+                    v-model="statusFilter"
+                    :counts="workflowStatusCounts"
+                  />
+                </div>
                 <Button
                   variant="outline"
                   size="sm"
@@ -1919,13 +1944,12 @@ async function restoreFromTrash(workflowId: string, event: Event): Promise<void>
                 <Button
                   variant="gradient"
                   size="sm"
-                  class="order-3 sm:order-none"
+                  class="hidden sm:inline-flex"
                   data-testid="new-workflow-button"
                   @click="showCreateDialog = true; pushOverlayState()"
                 >
                   <Plus class="w-3.5 h-3.5" />
-                  <span class="hidden sm:inline">{{ $t('workflows.newWorkflow') }}</span>
-                  <span class="sm:hidden">{{ $t('common.add') }}</span>
+                  {{ $t('workflows.newWorkflow') }}
                 </Button>
               </div>
             </div>

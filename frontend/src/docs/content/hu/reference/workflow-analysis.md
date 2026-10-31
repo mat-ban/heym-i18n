@@ -50,6 +50,8 @@ Az **Improvement areas** szakasz mindig négy explicit ellenőrzést futtat:
 3. **Network nodes** — a hálózati hívásokat végző csomópontok (például [HTTP](../nodes/http-node.md) és integrációs csomópontok) esetén a jelentés csomópont-specifikus hibakezelést (retry és/vagy continue-on-error) javasol ezeken a csomópontokon.
 4. **Alerts** — amikor nincs [alerts](../tabs/alerts-tab.md) beállítva a workflow-hoz, a jelentés azt javasolja, hogy a prod-ba kerülés előtt állítson be riasztásokat.
 
+5. **Evals**: ha a workflow rendelkezik egy ügynökcsomag nélküli [Agent](../nodes/agent-node.md) csomóponttal, a jelentés egy **Agent Suite** (vagy **Prompt Suite**) használatát javasolja az [Evals](../tabs/evals-tab.md#agent-suites) felületen; ha [LLM](../nodes/llm-node.md) csomóponttal rendelkezik, egy **Prompt Suite** használatát javasolja a prompt modellek közötti teszteléséhez.
+
 ### Az Analyzer futtatása a Properties panelről
 
 Amikor egy workflow-nak vannak csomópontjai a vásznon, de még nincs elemzési dokumentuma, egy **Run Analyzer** gomb jelenik meg a workflow-szintű [Properties](./canvas-features.md) panelen (amely akkor látható, ha nincs csomópont kiválasztva). Ez megnyitja ezt a Workflow Analysis panelt, hogy kiválaszthasson egy credential-t és modellt, és generálhassa a jelentést.

@@ -50,6 +50,8 @@
 3. **Network nodes** — 네트워크 호출을 수행하는 노드(예: [HTTP](../nodes/http-node.md) 및 통합 노드)에 대해, 보고서는 해당 노드에 노드별 오류 처리(재시도 및/또는 continue-on-error)를 권장합니다.
 4. **Alerts** — 워크플로우에 구성된 [alerts](../tabs/alerts-tab.md)가 없는 경우, 보고서는 프로덕션 배포 전에 알림을 설정할 것을 권장합니다.
 
+5. **Evals**: Workflow에 에이전트 스위트가 없는 [Agent 노드](../nodes/agent-node.md)가 있는 경우, 보고서는 [Evals](../tabs/evals-tab.md#agent-suites)에서 **Agent Suite**(또는 **Prompt Suite**) 생성을 권장합니다. [LLM](../nodes/llm-node.md) 노드가 있는 경우 모델 전반에서 해당 프롬프트를 테스트할 수 있는 **Prompt Suite** 생성을 권장합니다.
+
 ### Properties에서 Run Analyzer 실행
 
 워크플로우에 캔버스 상의 노드는 있지만 분석 문서가 아직 없는 경우, 워크플로우 수준 [Properties](./canvas-features.md) 패널(노드가 선택되지 않았을 때 표시됨)에 **Run Analyzer** 버튼이 나타납니다. 이 버튼은 Workflow Analysis 패널을 열어 credential과 모델을 선택하고 보고서를 생성할 수 있게 합니다.

@@ -173,7 +173,7 @@ Bir workflow kayıtları kaydettiğinde, depoladığında veya aradığında ve 
 
 Yeni tabloyu seçin ve **Yanıtları gönder**'e basın: kart tabloyu oluşturur ve asistan onun id'sini düğüme yerleştirir ve tam sütun adlarını kullanır. Ayrıca tek başına bir tablo da isteyebilirsiniz, örneğin "lead'lerim için bir tablo oluştur".
 
-Asistan tablo adlarını, açıklamalarını ve sütunlarını görür, asla satırları görmez. Mevcut bir tablonun sütunlarını asla değiştirmez: eğer bir tabloda workflow'un ihtiyaç duyduğu bir sütun yoksa, sütunu adlandırır ve bunun yerine yeni bir tablo önerir. Sütunları [DataTable sekmesinden](../tabs/datatable-tab.md) ekleyin.
+Canvas asistanı tablo adlarını, açıklamalarını ve sütunlarını görür, satırları asla görmez. Workflow düğümlerini bu meta verilerden yapılandırır; sütunları [DataTable sekmesinde](../tabs/datatable-tab.md) ekleyin veya [Chat](../tabs/chat-tab.md)'ten isteyin. Chat ve `heym_chat`, satırları inceleyebilir ve doğrudan sütun ekleyip kaldırabilir, ayrıca sahip olduğunuz veya ekip paylaşımları dahil yazma erişiminiz bulunan tablolarda satır ekleyebilir, güncelleyebilir veya silebilir. Sütunların kaldırılması ve tüm satırların temizlenmesi, veriler silinmeden önce onay ister.
 
 ## İlgili
 

@@ -10,7 +10,7 @@ Node **Chart Output** adalah node terminal dari workflow [widget dashboard](../t
 | Output | 0 (terminal) |
 | Output | Payload chart terstandardisasi |
 
-Tempatkan node ini **terakhir** dalam workflow widget dashboard. Node sebelumnya harus menghasilkan array objek baris, misalnya:
+Tempatkan node ini **terakhir** dalam workflow widget dashboard. Untuk entity relationship, node sebelumnya menghasilkan objek graf (lihat [Entity relationships](#entity-relationships-db)). Diagram berbasis data lainnya menggunakan array objek baris, misalnya:
 
 ```json
 [
@@ -26,9 +26,9 @@ Ketika Anda hanya memiliki data contoh/sampel (tanpa sumber nyata), hasilkan bar
 | Parameter | Tipe | Deskripsi |
 |-----------|------|-------------|
 | `label` | string | Pengidentifikasi node (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text`, atau `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text`, atau `hitl` |
 | `orientation` | string | `vertical` atau `horizontal` (hanya untuk bar chart) |
-| `dataPath` | string | Jalur bertitik (dot path) ke array baris di dalam output upstream (misalnya `data` atau `result.items`). Biarkan kosong untuk deteksi otomatis. |
+| `dataPath` | string | Jalur bertitik (dot path) ke array baris (atau objek graf untuk `erDiagram`) di dalam output upstream (misalnya `data` atau `result.items`). Biarkan kosong untuk deteksi otomatis. |
 | `labelField` | string | Kunci baris yang digunakan sebagai label kategori (pie/bar/line) |
 | `valueField` | string | Kunci baris yang digunakan sebagai nilai numerik (pie/bar/line/numeric/gauge) |
 | `series` | array | Definisi multi-series opsional `[{ "name": "Sent", "field": "sent" }]` untuk bar/line (menimpa `valueField`) |
@@ -54,8 +54,51 @@ Ketika Anda hanya memiliki data contoh/sampel (tanpa sumber nyata), hasilkan bar
 - **scatter** — titik X/Y dari `xField` dan `yField` untuk plot korelasi.
 - **proportion** — satu bar horizontal yang dibagi menjadi beberapa bagian dengan legenda persentase (misalnya rincian bahasa). Menggunakan `labelField` + `valueField`.
 - **barGauge** — satu gauge horizontal per baris dengan gradien merah→hijau dan sebuah nilai (misalnya ruang disk kosong). Menggunakan `labelField` + `valueField`, `unit` opsional dan `max` (default-nya adalah nilai baris terbesar).
+- **gantt** — jadwal tugas dengan tanggal, progres, dan dependensi; lihat [Jadwal Gantt](#gantt-schedules).
+- **erDiagram** — entitas database, bidang, kunci, dan relasi; lihat [Entity relationships](#entity-relationships-db).
 - **text** — pesan markdown (misalnya catatan status seperti "Last execution at 19:47"). Letakkan markdown di `text` untuk pesan statis, atau biarkan `text` kosong dan setel `valueField` untuk merender string yang dihasilkan upstream. Mendukung heading, bold/italic, [daftar](../nodes/chart-output-node.md#interactive-task-lists), tautan, dan inline code.
 - **hitl** — carousel tinjauan manusia (human review) Anda yang tertunda. Header menampilkan `1/n pending`; panah kiri dinonaktifkan pada kartu pertama dan panah kanan pada kartu terakhir. Nama workflow membuka run tersebut di canvas. **Approve**, **Request changes**, dan **Reject** menyelesaikannya, dan ikon riwayat di samping judul widget membuka run tersebut di dialog riwayat pada halaman yang sama. Tipe chart ini mengabaikan baris upstream, sehingga workflow widget hanya berupa node Chart Output. Setiap orang yang masuk akan melihat tinjauan pada workflow yang mereka miliki. Pilih **Workflow** (dan **Select agent** jika memiliki beberapa langkah review) di properti node atau pengaturan widget untuk menampilkan review Workflow tersebut, kepada semua orang yang dapat membukanya; lihat [widget HITL](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Jadwal Gantt
+
+Pilih **Gantt** (`gantt`) untuk jadwal proyek dan linimasa tugas. Tetapkan `dataPath` ke array tugas, seperti `tasks`. Baris menggunakan nama bidang tetap:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` dan `end` menerima tanggal atau datetime ISO. Nilai tanpa zona waktu menggunakan UTC; offset zona waktu dikonversi ke UTC. `end` harus jatuh pada atau setelah `start`. `progress` bersifat opsional (0–100, default 0); `dependencies` berisi ID tugas yang ada. ID harus unik. Arahkan kursor ke tugas untuk membaca tanggal lengkap, progres, dan dependensi. Diagram besar dapat digulir di dalam widget. Maksimal 500 tugas diterima.
+
+Untuk data sampel, pemetaan Set bernama `tasks` dapat menggunakan `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Hubungkan ke Chart Output dengan `chartType: "gantt"` dan `dataPath: "tasks"`. Petakan kolom sumber ke nama tetap ini dengan node Set; `labelField` dan `valueField` tidak digunakan.
+
+### Entity relationships (DB)
+
+Pilih **Entity relationships (DB)** (`erDiagram`) untuk skema database dan koneksi entitas. Tetapkan `dataPath` ke **objek** graf, seperti `graph`, yang berisi kedua array:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Bidang memiliki `name`, `type` opsional, dan `key` opsional (`PK`, `FK`, `PK/FK`, atau kosong). Relasi merujuk pada ID entitas yang ada; `sourceField` dan `targetField` opsional menambatkan koneksi ke bidang bernama. `cardinality` menerima `one-to-one`, `one-to-many` (default), `many-to-one`, atau `many-to-many`. ID entitas dan nama bidang dalam setiap entitas harus unik. Maksimal 100 entitas, 100 bidang per entitas, dan 500 relasi diterima.
+
+Dengan node Set, buat `graph` dengan `$dict(entities=array(dict(...)), relations=array(dict(...)))`; gunakan `chartType: "erDiagram"` dan `dataPath: "graph"`. Ini adalah visualisasi skema yang Anda berikan; tidak memeriksa database aktif secara otomatis.
+
+Kedua jenis muncul di **Tambah widget** dengan pratinjau dan di pemilih jenis diagram node kanvas. Heym Work dapat menyarankan jenis ini saat Anda mendeskripsikan jadwal atau skema database, menggambar pratinjau tugas atau entitas yang diusulkan sebelum Anda membuat halaman.
 
 ### Daftar tugas interaktif
 

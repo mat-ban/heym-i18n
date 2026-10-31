@@ -73,11 +73,11 @@ Compartilhe tabelas com outros usuários ou equipes:
 1. Abra o diálogo de compartilhamento na visualização de detalhes da tabela
 2. Adicione usuários por e-mail com permissão de **read** ou **write**
 3. Adicione equipes com permissão de **read** ou **write**
-4. Usuários somente leitura podem visualizar os dados; usuários com permissão de escrita podem modificar linhas
+4. Usuários com permissão apenas de leitura podem visualizar dados; usuários com permissão de escrita podem modificar linhas e colunas. Renomear a tabela, alterar sua descrição e gerenciar compartilhamentos permanecem exclusivos do proprietário.
 
 ## Criando Tabelas a partir do Assistente de IA
 
-O [AI Assistant](../reference/ai-assistant.md#data-tables) do canvas, o [Chat](./chat-tab.md) e a ferramenta `heym_chat` na [aba MCP](./mcp-tab.md) podem escolher uma de suas tabelas para um workflow que construírem, ou criar uma nova. Eles propõem um nome e colunas, e criam a tabela quando você envia o cartão de pergunta. Eles nunca alteram as colunas de uma tabela existente nem tocam em suas linhas: adicione ou edite colunas aqui.
+O [Assistente de IA](../reference/ai-assistant.md#data-tables) do canvas, o [Chat](./chat-tab.md) e a ferramenta `heym_chat` na [aba MCP](./mcp-tab.md) podem escolher uma de suas tabelas para um workflow que constroem, ou criar uma nova. Eles propõem um nome e colunas, criando a tabela quando você envia o cartão de perguntas. O assistente do canvas configura os nós do workflow a partir dos metadados da tabela. O Chat e o `heym_chat` também podem inspecionar linhas, adicionar ou remover colunas e inserir, atualizar ou excluir linhas diretamente. Forneça a eles o nome de uma tabela ou o link desta aba. As gravações exigem propriedade ou acesso de **escrita** direto ou de equipe. Adicionar colunas mantém os dados existentes; remover colunas exclui seus valores de cada linha. A remoção de colunas e a limpeza de todas as linhas solicitam confirmação, correspondendo a esta aba.
 
 ## Usando em Workflows
 

@@ -50,6 +50,8 @@ Sekcja **Improvement areas** zawsze przeprowadza cztery jawne kontrole:
 3. **Network nodes** — dla węzłów wykonujących wywołania sieciowe (takich jak [HTTP](../nodes/http-node.md) oraz węzły integracyjne) raport zaleca obsługę błędów specyficzną dla węzła (retry i/lub continue-on-error).
 4. **Alerts** — gdy dla workflow nie skonfigurowano żadnych [alertów](../tabs/alerts-tab.md), raport zaleca skonfigurowanie alertów przed wdrożeniem na produkcję.
 
+5. **Evals**: gdy workflow zawiera węzeł [Agent](../nodes/agent-node.md) bez zestawu agenta, raport zaleca utworzenie **Agent Suite** (lub **Prompt Suite**) w [Evals](../tabs/evals-tab.md#agent-suites); gdy zawiera węzeł [LLM](../nodes/llm-node.md), zaleca **Prompt Suite** w celu przetestowania promptu w wielu modelach.
+
 ### Uruchamianie Analyzera z panelu Properties
 
 Gdy workflow ma węzły na canvas, ale nie ma jeszcze dokumentu analizy, w panelu [Properties](./canvas-features.md) na poziomie workflow (wyświetlanym, gdy żaden węzeł nie jest zaznaczony) pojawia się przycisk **Run Analyzer**. Otwiera on panel Analizy Workflow, umożliwiając wybór credentiala i modelu oraz wygenerowanie raportu.

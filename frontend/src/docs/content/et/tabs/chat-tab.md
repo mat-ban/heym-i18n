@@ -23,7 +23,8 @@ Vestlust saab alustada ka [Workflows-vahekaardi](./workflows-tab.md) chat-kastis
 - **Järjekorda pandud järeltegevused** – Saatke vastuse voogedastamise ajal rohkem sõnumeid. Järjekorda pandud sõnumid säilitatakse, neid saab enne käivitumist muuta või kustutada ning need käivituvad aktiivse vastuse järel järjekorras
 - **Planeerimise pausid** – Kui Chat vajab planeerimise üksikasju, esitab ta täpsustavaid küsimusi ja peatab järjekorda pandud järeltegevused, kuni Te vastate. Pärast planeerimisvastuse lõppemist jätkuvad järjekorras olevad sõnumid
 - **Mandaadid** – Kui Chatil loodud või muudetud workflow vajab mandaati, küsib Chat, millist kasutada, pakub vestluses uue loomist või lubab ilma jätkata. Samuti saate paluda Chatil mandaat luua või muuta mandaati, mille omanik Te olete; see avab vestluses mandaadi vormi. Mudel näeb mandaadi nime ja tüüpi, mitte kunagi selle väärtusi, nii teile kuuluvate kui ka teiega jagatud mandaatide puhul. Chati lisatud LLM- ja Agent-sõlmed töötavad chati jaoks valitud mandaadi ja mudeliga, sealhulgas jagatud mandaatidega; kui Chat muudab workflow'd, säilitavad selle olemasolevad LLM- ja Agent-sõlmed oma mandaadi ja mudeli. Vt [AI Assistant › Mandaadid](../reference/ai-assistant.md#credentials)
-- **Andmetabelid** – Kui Chatil loodud või muudetud workflow salvestab kirjeid, küsib Chat, millist [andmetabelit](./datatable-tab.md) kasutada, või pakub luua tabeli workflow'le vajalike veergudega. Samuti saab see loetleda Teie tabeleid ja nende veerge. See ei loe ega kirjuta kunagi ridu. Vt [AI Assistant › Andmetabelid](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Küsige, millised [dashboards](./dashboard-tab.md) teil on, mis neil asub või millisel töölaual workflow paikneb. Paluge Chatil lisada töölauale uus vidin (see asetab sinna tühja vidina, seejärel koostab ja testib selle workflow'd), asetada olemasolev workflow töölauale vidinana, nimetada vidin ümber või kustutada see või korrastada töölaua paigutust. Heym Work kuvab neid töölaudu oma lehtedena. Vaadake [Dashboard › Chatist ja MCP-st](./dashboard-tab.md#chatist-ja-mcp-st)
+- **Andmetabelid** – Kui Chati loodud või muudetud workflow salvestab kirjeid, küsib Chat, millist [andmetabelit](./datatable-tab.md) kasutada, või pakub vajalike veergudega uue loomist. Samuti saab see vaadata ridu, lisada või eemaldada veerge ning sisestada, värskendada või kustutada ridu otseselt tabelites, mida te omate või saate muuta. Andke sellele tabeli nimi või DataTable'i link. Veergude eemaldamine ja kõigi ridade tühjendamine küsivad kinnitust; veergude lisamine säilitab olemasolevad andmed. Vaadake [AI-assistent › Andmetabelid](../reference/ai-assistant.md#data-tables)
 - **Voogedastatavad vastused** – Näete mudeli väljundit selle voogedastamise ajal
 - **Vastuse peatamine** – Katkestage praegune voogedastatav vastus igal ajal; peatamine tühjendab ka selle vestluse järjekorda pandud sõnumid
 - **Markdowni renderdamine** – Vastused toetavad markdown-vormingut, sealhulgas reasisesed pildid
@@ -33,16 +34,17 @@ Vestlust saab alustada ka [Workflows-vahekaardi](./workflows-tab.md) chat-kastis
 - **Häälsisend** – Kasutage kõnetuvastuseks mikrofoninuppu (brauseri toega). Salvestuse peatamisel võib Heym transkriptsiooni enne saatmist kergelt puhastada
 - **Ajakavaga workflow'd** – Küsige, millal cron-workflow'd käivituvad (täna, sel nädalal, sel kuul või kohandatud kuupäevavahemikus). Assistent kasutab samu ajakava andmeid nagu [Ajakavad-vahekaart](./scheduled-tab.md) ning saab piirata tulemused workflow'dele, mille omanik Te olete, või lisada need, mis on Teiega jagatud
 - **Workflow'de käivituste ajalugu** – Küsige ühe workflow kohta ("mitu korda päevane aruanne käivitus?", "kas see ebaõnnestus?", "millal see viimati käivitus?"). Chat otsib workflow üles selle ID järgi ja vastab selle käivituste arvu, olekute jaotuse, esimese ja viimase käivituse aja ning keskmise kestuse põhjal. Küsige, miks käivitus ebaõnnestus või mida see tagastas, ja Chat avab seejärel selle üksiku käivituse, et lugeda selle sisendeid, väljundeid ja sõlmede kaupa vigu
+- **Kus käivitused ebaõnnestuvad ja miks need on aeglased** – Küsige, kus teie workflow'd ebaõnnestuvad või miks need on aeglased, ja Chat nimetab enim käivitatud, enim ebaõnnestunud ja aeglaseimad workflow'd ning enim aega võtvad sõlmetüübid (keskmine väljakutse kohta ja kokku), mis ebaõnnestuvad enim ja töötavad enim – täpselt samad arvud nagu vahekaardil [Analytics](./analytics-tab.md). Sõlmetüüpe loendatakse käivituste puhul alates versioonist, mis lisas sõlmede analüütika. Küsige viimase tunni, 3 või 6 tunni, 24 tunni, 7 või 30 päeva või kogu aja kohta; tunnivahemikud algavad täistunnil, seega "viimane tund" kell 15:20 katab ajavahemikku 14:00-st kuni praeguseni.
 - **Reaalajas käivituse olek** – Küsige, mis parasjagu töötab, ja Chat vastab arvu, workflow'de nimede, iga käivituse kestuse, selle hetkel oleva sõlme ja otselingiga reaalajas käivitusele
 ## Chat'i kasutamine MCP-kliendist
 
-Chat'i mootorile saab ligi ka väljaspool brauserit. Lubage **Heym Chat Tool** [MCP vahekaardil](./mcp-tab.md) ja MCP-kliendid — Claude, Cursor ja kõik muud MCP-d toetavad rakendused — saavad ühe `heym_chat` tööriista, mis käivitab sama mootori kõigi oma võimalustega.
+Chati mootorile pääseb ligi ka väljastpoolt brauserit. Lülitage [MCP / A2A vahekaardil](./mcp-tab.md) sisse **Heym Agent** ja MCP kliendid (Claude, Cursor ja mis tahes muu MCP-d toetav tööriist) saavad ühe tööriista `heym_chat`, mis käitab seda sama mootorit kõigi selle võimalustega. Märkige ka **Luba A2A**, et teised agendid saaksid sellele ülesandeid saata üle [A2A](../reference/a2a.md); need vestlused kuvavad loendis võrguikooni.
 
 Need vestlused jõuavad selle vahekaardi ajalukku, tähistatuna vestluste loendis pistiku ikooniga. Avage üks, et lugeda, mida klient küsis, näha selle käivitatud tööriistakaarte ja jätkata lõime ise. Täpsustava küsimuse vastamine toimib samamoodi olenemata sellest, kas voor algas siin või MCP-kliendist.
 
 MCP kaudu Chat ei loetle, vali ega loo mandaate. Workflow'd, mida see loob, jätavad mandaadi väljad tühjaks ning vastuses nimetatakse sõlmed, mis vajavad mandaati, et saaksite need redaktoris seadistada.
 
-Andmetabelid töötavad samuti MCP kaudu: Chat loetleb teie tabelid, loob uusi ja ühendab need workflow'desse, mida see loob. Selle tabeliküsimus saabub tulemuses tekstina, seega vastake sellele sama `conversation_id`-ga.
+Andmetabelid töötavad ka üle MCP: Chat saab otse redigeerida veerge ja ridu, luua tabeleid ning siduda need workflow'desse. Tabeliküsimused ja kustutamiskinnitused saabuvad tulemuses tekstina; vastake sama `conversation_id`-ga.
 
 ## Konteksti limiit
 
@@ -110,9 +112,58 @@ võib anda erineva vastuse.
 ## Kasutaja reeglid
 
 [User Rules](../reference/user-settings.md) (seadistatud Settings'is) sisestatakse automaatselt igasse Chat'i vestlusesse süsteemitasemeliste juhistena. Seadistage need üks kord, et rakendada püsivaid eelistusi kõigile chat'i päringutele.
+
+## Töötamine Evalsiga
+
+Chat saab luua, muuta ja käitada komplekte jaotises [Evals](./evals-tab.md), nii prompt-komplekte kui ka agendikomplekte:
+
+- **Prompt-komplekt**: „loo prompt-komplekt minu klienditoe vastuse promptile 8 testjuhtumiga ja võrdle gpt-4o mudeliga gpt-4.1-mini”. Chat koostab testjuhtumid koos oodatavate vastustega, valib hindamismeetodi ja salvestab komplekti.
+  - Enne komplekti loomist määrab see, milliseid LLM-mandaate ja mudeleid kasutada. Täpselt ühe LLM-mandaadi korral kasutab see seda ja teatab sellest; vastasel juhul küsib.
+  - LLM-as-Judge hindamise korral küsib see samuti, kas vastuseid peaks hindama eraldi kohtunik.
+- **Agendikomplekt**: „kontrolli, et mu klienditoe agent otsiks alati dokumentatsioonist ega saadaks kunagi e-kirju”. Chat leiab agendi ning salvestab tööriistakontrollid ja künnised. Teie soovil käitab see workflow'd, kirjutades igaks käivituseks erineva sisendi.
+  - Agendikomplekti käivitused on tõelised workflow käivitused, seega nende kõrvalmõjud toimuvad reaalselt. Chat ütleb, mitu käivitust see alustab.
+- **Baseline**: Chat saab agendi baastasemega töötada kolmel viisil:
+  - Raporteerida seda agendi viimastest käivitustest.
+  - Luua see enda alustatud käivitustest („käita seda 5 korda ja kasuta seda baastasemena”).
+  - Salvestada teie antud arvud („määra baastasemeks 3 sekundit p95 ja 0,01 $ käivituse kohta”).
+- **Käivitused**: Chat ootab käivitust kuni ühe minuti ja teatab seejärel tulemuse:
+  - Prompt-komplekti puhul: iga mudeli läbimiste arvu ja ebaõnnestunud juhtumid.
+  - Agendikomplekti puhul: läbimise määra, ebaõnnestunud kontrollid ja kõrvalekalde baastasemest.
+  - Pikem käivitus jätkub Evals'is; paluge Chatil seda uuesti kontrollida.
+
+Kui Chat loob või muudab komplekti, kuvatakse vastuses kaart komplekti nime, selle tüübi ja nupuga **Ava Evals'is**, sarnaselt salvestatud workflow kaardile. MCP kaudu loetleb `heym_chat` tulemus iga selles väljakutses salvestatud komplekti lingi.
+
+Sama toimib MCP kliendist `heym_chat` kaudu (vt [Chati kasutamine MCP kliendist](#chati-kasutamine-mcp-kliendist)). Hindamistööriistad jäävad `heym_chat` sisse; MCP kliendid ei näe neid eraldi tööriistadena.
+
+Redaktori AI-assistent komplekte ei loo.
+
+## Töötamine Evalsiga
+
+Chat saab luua, muuta ja käitada komplekte jaotises [Evals](./evals-tab.md), nii prompt-komplekte kui ka agendikomplekte:
+
+- **Prompt-komplekt**: „loo prompt-komplekt minu klienditoe vastuse promptile 8 testjuhtumiga ja võrdle gpt-4o mudeliga gpt-4.1-mini”. Chat koostab testjuhtumid koos oodatavate vastustega, valib hindamismeetodi ja salvestab komplekti.
+  - Enne komplekti loomist määrab see, milliseid LLM-mandaate ja mudeleid kasutada. Täpselt ühe LLM-mandaadi korral kasutab see seda ja teatab sellest; vastasel juhul küsib.
+  - LLM-as-Judge hindamise korral küsib see samuti, kas vastuseid peaks hindama eraldi kohtunik.
+- **Agendikomplekt**: „kontrolli, et mu klienditoe agent otsiks alati dokumentatsioonist ega saadaks kunagi e-kirju”. Chat leiab agendi ning salvestab tööriistakontrollid ja künnised. Teie soovil käitab see workflow'd, kirjutades igaks käivituseks erineva sisendi.
+  - Agendikomplekti käivitused on tõelised workflow käivitused, seega nende kõrvalmõjud toimuvad reaalselt. Chat ütleb, mitu käivitust see alustab.
+- **Baseline**: Chat saab agendi baastasemega töötada kolmel viisil:
+  - Raporteerida seda agendi viimastest käivitustest.
+  - Luua see enda alustatud käivitustest („käita seda 5 korda ja kasuta seda baastasemena”).
+  - Salvestada teie antud arvud („määra baastasemeks 3 sekundit p95 ja 0,01 $ käivituse kohta”).
+- **Käivitused**: Chat ootab käivitust kuni ühe minuti ja teatab seejärel tulemuse:
+  - Prompt-komplekti puhul: iga mudeli läbimiste arvu ja ebaõnnestunud juhtumid.
+  - Agendikomplekti puhul: läbimise määra, ebaõnnestunud kontrollid ja kõrvalekalde baastasemest.
+  - Pikem käivitus jätkub Evals'is; paluge Chatil seda uuesti kontrollida.
+
+Kui Chat loob või muudab komplekti, kuvatakse vastuses kaart komplekti nime, selle tüübi ja nupuga **Ava Evals'is**, sarnaselt salvestatud workflow kaardile. MCP kaudu loetleb `heym_chat` tulemus iga selles väljakutses salvestatud komplekti lingi.
+
+Sama toimib MCP kliendist `heym_chat` kaudu (vt [Chati kasutamine MCP kliendist](#chati-kasutamine-mcp-kliendist)). Hindamistööriistad jäävad `heym_chat` sisse; MCP kliendid ei näe neid eraldi tööriistadena.
+
+Redaktori AI-assistent komplekte ei loo.
+
 ## Seotud
 
-- [MCP vahekaart](./mcp-tab.md) – Avaldage see mootor MCP klientidele tööriistana `heym_chat`
+- [MCP / A2A vahekaart](./mcp-tab.md) – Avaldage see mootor MCP klientidele tööriistana `heym_chat`
 - [Seaded](../reference/user-settings.md) – Määrake kasutajareeglid, mida rakendatakse kõikidele chat-päringutele
 - [Mandaatide vahekaart](./credentials-tab.md) – Lisage ja haldake API võtmeid
 - [Muutujate vahekaart](./global-variables-tab.md) – Globaalsed muutujad, mis on Chatis saadaval

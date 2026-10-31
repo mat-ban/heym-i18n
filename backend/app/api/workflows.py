@@ -1,5 +1,6 @@
 import asyncio
 import copy
+import hmac
 import json
 import logging
 import time
@@ -28,11 +29,11 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from app.api.analytics import upsert_workflow_analytics_snapshot
 from app.api.deps import get_client_ip, get_current_user, get_current_user_optional
+from app.api.workflow_run_audit import RunActor, audit_workflow_run
 from app.db.models import (
     ActiveWorkflowExecution,
     Credential,
     CredentialType,
-    DashboardWidget,
     ExecutionHistory,
     RunHistory,
     Team,
@@ -131,6 +132,7 @@ from app.services.hitl_service import (
 from app.services.hitl_widget_service import ensure_saved_filter_allowed
 from app.services.html_response import build_html_response, find_sole_html_terminal
 from app.services.instance_admin import is_instance_admin
+from app.services.node_analytics_rollup import pending_on_first_write
 from app.services.pending_execution import needs_local_pending_persist
 from app.services.pending_review_cancel import cancel_pending_review_execution
 from app.services.queued_run_stream import queued_run_events
@@ -174,6 +176,7 @@ from app.services.workflow_save import (
     WorkflowSnapshot,
     add_workflow_version,
     announce_workflow_saved,
+    sync_dashboard_widget,
 )
 from app.services.workflow_status import (
     compute_trigger_status,
@@ -196,7 +199,7 @@ _SENSITIVE_HEADERS: frozenset[str] = frozenset(
     }
 )
 _INTERNAL_STREAM_TRIGGER_SOURCES: frozenset[str] = frozenset({"Canvas", "Quick Drawer"})
-WORKFLOW_SSE_HEARTBEAT_SECONDS = 10.0
+WORKFLOW_SSE_KEEPALIVE_SECONDS = 10.0
 WORKFLOW_STREAM_QUEUE_POLL_SECONDS = 0.01
 # Observe-stream polls at 0.25s; give a vanished execution 10s to surface its
 # history entry before telling the canvas the run is gone for good.
@@ -647,6 +650,8 @@ async def _finalize_allow_downstream_history(
             )
             history_entry.status = execution_result.status
             history_entry.execution_time_ms = execution_result.execution_time_ms
+            # The full node list is in now; let the node analytics rollup count it.
+            history_entry.node_analytics_pending = True
             flag_modified(history_entry, "outputs")
             flag_modified(history_entry, "node_results")
 
@@ -1335,7 +1340,7 @@ async def stream_active_workflow_execution(
         stream_mode = "derived"
         event_cursor = 0
         loop = asyncio.get_running_loop()
-        last_heartbeat_at = loop.time()
+        last_keepalive_at = loop.time()
 
         def derived_catch_up_frames(
             running_node_ids: list[str],
@@ -1420,10 +1425,10 @@ async def stream_active_workflow_execution(
 
                 now = loop.time()
                 if emitted_event:
-                    last_heartbeat_at = now
-                elif now - last_heartbeat_at >= WORKFLOW_SSE_HEARTBEAT_SECONDS:
-                    last_heartbeat_at = now
-                    yield ": heartbeat\n\n"
+                    last_keepalive_at = now
+                elif now - last_keepalive_at >= WORKFLOW_SSE_KEEPALIVE_SECONDS:
+                    last_keepalive_at = now
+                    yield ": keepalive\n\n"
                 await asyncio.sleep(0.25)
                 continue
 
@@ -1470,10 +1475,10 @@ async def stream_active_workflow_execution(
                         emitted_event = True
                 now = loop.time()
                 if emitted_event:
-                    last_heartbeat_at = now
-                elif now - last_heartbeat_at >= WORKFLOW_SSE_HEARTBEAT_SECONDS:
-                    last_heartbeat_at = now
-                    yield ": heartbeat\n\n"
+                    last_keepalive_at = now
+                elif now - last_keepalive_at >= WORKFLOW_SSE_KEEPALIVE_SECONDS:
+                    last_keepalive_at = now
+                    yield ": keepalive\n\n"
                 await asyncio.sleep(0.25)
                 continue
 
@@ -1851,34 +1856,13 @@ async def update_workflow(
 
     # Keep the dashboard widget metadata/cache in sync when its hidden workflow
     # is edited on the canvas (canvas -> dashboard direction).
-    if getattr(workflow, "kind", None) == "dashboard_widget" and (
-        workflow_data.name is not None
-        or workflow_data.description is not None
-        or sanitized_nodes is not None
-        or sanitized_edges is not None
-    ):
-        widget_result = await db.execute(
-            select(DashboardWidget).where(DashboardWidget.workflow_id == workflow_id)
-        )
-        widget = widget_result.scalar_one_or_none()
-        if widget is not None:
-            if workflow_data.name is not None:
-                widget.title = workflow.name
-            if workflow_data.description is not None:
-                widget.description = workflow.description
-            if sanitized_nodes is not None or sanitized_edges is not None:
-                chart_nodes = [
-                    node
-                    for node in (workflow.nodes or [])
-                    if isinstance(node, dict) and node.get("type") == "chartOutput"
-                ]
-                if chart_nodes:
-                    widget.chart_type = (
-                        chart_nodes[-1].get("data", {}).get("chartType", widget.chart_type)
-                    )
-                widget.cached_payload = None
-                widget.cached_at = None
-                widget.cached_workflow_version = None
+    await sync_dashboard_widget(
+        db,
+        workflow,
+        renamed=workflow_data.name is not None,
+        described=workflow_data.description is not None,
+        graph_changed=sanitized_nodes is not None or sanitized_edges is not None,
+    )
 
     if should_create_version:
         await add_workflow_version(
@@ -3080,7 +3064,9 @@ async def validate_workflow_auth(
             )
 
         header_value = request.headers.get(workflow.auth_header_key)
-        if header_value != workflow.auth_header_value:
+        if not header_value or not hmac.compare_digest(
+            header_value.encode(), workflow.auth_header_value.encode()
+        ):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid or missing authentication header",
@@ -3455,6 +3441,16 @@ async def execute_workflow_endpoint(
             mint_status_token=getattr(workflow, "auth_type", None) == WorkflowAuthType.anonymous,
         )
     except WorkflowCancelledError:
+        audit_workflow_run(
+            workflow_id=workflow.id,
+            workflow_name=workflow.name,
+            status="cancelled",
+            execution_time_ms=0,
+            trigger_source=trigger_source,
+            execution_id=execution_id,
+            actor=RunActor.of(current_user),
+            test_run=test_run,
+        )
         if not test_run:
             history_entry = ExecutionHistory(
                 id=execution_id,
@@ -3495,11 +3491,32 @@ async def execute_workflow_endpoint(
         queued = workflow_concurrency.queued_body(
             execution_result, workflow_id=workflow.id, base_url=build_public_base_url(request)
         )
+        audit_workflow_run(
+            workflow_id=workflow.id,
+            workflow_name=workflow.name,
+            status="queued",
+            execution_time_ms=0,
+            trigger_source=trigger_source,
+            execution_id=execution_id,
+            actor=RunActor.of(current_user),
+            test_run=test_run,
+        )
         return JSONResponse(
             status_code=status.HTTP_202_ACCEPTED,
             content=queued,
             headers={"Location": queued["status_url"], "Retry-After": "5"},
         )
+
+    audit_workflow_run(
+        workflow_id=workflow.id,
+        workflow_name=workflow.name,
+        status=execution_result.status,
+        execution_time_ms=execution_result.execution_time_ms,
+        trigger_source=trigger_source,
+        execution_id=execution_id,
+        actor=RunActor.of(current_user),
+        test_run=test_run,
+    )
 
     if needs_local_pending_persist(execution_result):
         if is_codex_pending_execution(execution_result):
@@ -3579,6 +3596,7 @@ async def execute_workflow_endpoint(
             status=execution_result.status,
             execution_time_ms=execution_result.execution_time_ms,
             trigger_source=trigger_source,
+            node_analytics_pending=pending_on_first_write(execution_result),
         )
         db.add(history_entry)
         if not execution_result.allow_downstream_pending:
@@ -3786,7 +3804,7 @@ async def stream_workflow_execution_history_entry(
 
     async def event_generator():
         last_payload = ""
-        heartbeat_tick = 0
+        keepalive_tick = 0
 
         while True:
             if await request.is_disconnected():
@@ -3821,15 +3839,15 @@ async def stream_workflow_execution_history_entry(
                 update_event = {"type": "history_update", "entry": entry_payload}
                 yield f"data: {json.dumps(update_event)}\n\n"
                 last_payload = serialized_payload
-                heartbeat_tick = 0
+                keepalive_tick = 0
 
                 if history.status != "pending":
                     yield f"data: {json.dumps({'type': 'done'})}\n\n"
                     break
             else:
-                heartbeat_tick += 1
-                if heartbeat_tick >= 15:
-                    heartbeat_tick = 0
+                keepalive_tick += 1
+                if keepalive_tick >= 15:
+                    keepalive_tick = 0
                     yield ": keepalive\n\n"
 
             await asyncio.sleep(1)
@@ -3856,14 +3874,21 @@ async def get_execution_history(
     trigger_source: str | None = Query(default=None),
     instance_id: str | None = Query(default=None),
     execution_status: str | None = Query(default=None, alias="status"),
+    latest_only: bool = False,
 ) -> HistoryListResponse:
-    """List workflow execution history (lightweight, paginated)."""
+    """List workflow execution history (lightweight, paginated).
+
+    ``latest_only`` is for a status badge: it returns the newest run, ignores ``limit``,
+    ``offset`` and ``search``, and is not audited because it opens no history view.
+    """
     workflow = await get_workflow_for_user(db, workflow_id, current_user.id)
     if workflow is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Workflow not found",
         )
+    if latest_only:
+        limit, offset, search = 1, 0, None
     status_clause = history_status_clause(ExecutionHistory.status, execution_status)
     total_query = (
         select(func.count())
@@ -3925,16 +3950,17 @@ async def get_execution_history(
         )
         for h in history
     ]
-    audit(
-        action="workflow.history_view",
-        actor=current_user,
-        target_type="workflow",
-        target_id=workflow_id,
-        target_name=workflow.name,
-        owned=workflow.owner_id == current_user.id,
-        returned=len(items),
-        total=total,
-    )
+    if not latest_only:
+        audit(
+            action="workflow.history_view",
+            actor=current_user,
+            target_type="workflow",
+            target_id=workflow_id,
+            target_name=workflow.name,
+            owned=workflow.owner_id == current_user.id,
+            returned=len(items),
+            total=total,
+        )
     return HistoryListResponse(total=total, items=items)
 
 
@@ -4184,6 +4210,9 @@ async def execute_workflow_stream(
     trace_user_id = current_user.id if current_user else workflow.owner_id
     global_variables_context = await get_global_variables_context(db, credentials_owner_id)
     public_base_url = build_public_base_url(request)
+    # Read now: finalize_execution audits the run after this request's session is gone.
+    run_actor = RunActor.of(current_user)
+    run_workflow_name = workflow.name
 
     execution_id = uuid.uuid4()
     # Only the editor's own test runs skip the queue; ?test_run=true alone does not.
@@ -4413,6 +4442,16 @@ async def execute_workflow_stream(
             await run_future
         except Exception:
             logger.exception("Streaming execution %s failed", execution_id)
+        audit_workflow_run(
+            workflow_id=workflow_id,
+            workflow_name=run_workflow_name,
+            status="cancelled" if was_cancelled else str(final_result.get("status") or "error"),
+            execution_time_ms=final_result.get("execution_time_ms"),
+            trigger_source=trigger_source,
+            execution_id=execution_id,
+            actor=run_actor,
+            test_run=test_run,
+        )
         try:
             await persist_terminal_result()
         except Exception:
@@ -4429,7 +4468,7 @@ async def execute_workflow_stream(
         with _non_blocking_thread_pool(max_workers=1) as pool:
             future = loop.run_in_executor(pool, run_executor)
             _spawn_detached_task(finalize_execution(future))
-            last_heartbeat_at = loop.time()
+            last_keepalive_at = loop.time()
             yield (
                 "data: "
                 + json.dumps(
@@ -4441,7 +4480,7 @@ async def execute_workflow_stream(
                 )
                 + "\n\n"
             )
-            last_heartbeat_at = loop.time()
+            last_keepalive_at = loop.time()
 
             while True:
                 if await request.is_disconnected():
@@ -4452,7 +4491,7 @@ async def execute_workflow_stream(
                     event = event_queue.get_nowait()
                     if event is None:
                         break
-                    last_heartbeat_at = loop.time()
+                    last_keepalive_at = loop.time()
                     if (
                         event.get("type") == "execution_complete"
                         and event.get("status") == "pending"
@@ -4515,16 +4554,16 @@ async def execute_workflow_stream(
                         cancel_event.set()
                         break
                     now = loop.time()
-                    if now - last_heartbeat_at >= WORKFLOW_SSE_HEARTBEAT_SECONDS:
-                        last_heartbeat_at = now
-                        yield ": heartbeat\n\n"
+                    if now - last_keepalive_at >= WORKFLOW_SSE_KEEPALIVE_SECONDS:
+                        last_keepalive_at = now
+                        yield ": keepalive\n\n"
                         continue
                     if future.done():
                         while not event_queue.empty():
                             event = event_queue.get_nowait()
                             if event is None:
                                 break
-                            last_heartbeat_at = loop.time()
+                            last_keepalive_at = loop.time()
                             if (
                                 event.get("type") == "execution_complete"
                                 and event.get("status") == "pending"

@@ -43,12 +43,14 @@ Ambas acciones primero **ejecutan el workflow** (cuando es válido y ejecutable)
 
 El informe generado abarca tres secciones, en orden: **Improvement areas** (sugerencias concretas, incluido un enfoque de **security** siempre que el workflow involucre credenciales, entrada del usuario, solicitudes externas o exposición de datos), el **Purpose** del workflow y **What it does** (un recorrido paso a paso por los nodos).
 
-La sección **Improvement areas** siempre ejecuta cuatro comprobaciones explícitas:
+La sección **Improvement areas** siempre ejecuta cinco comprobaciones explícitas:
 
 1. **Error coverage** — si el canvas no tiene ningún nodo [Error Handler](../nodes/error-handler-node.md) y no hay configurado ningún workflow de error, el informe lo señala y recomienda añadir gestión de errores.
 2. **Time saved** — si no se ha establecido un tiempo estimado ahorrado por ejecución, el informe recomienda configurar uno para que la métrica **Time Saved** de [Analytics](../tabs/analytics-tab.md) pueda rellenarse.
 3. **Network nodes** — para los nodos que realizan llamadas de red (como [HTTP](../nodes/http-node.md) y los nodos de integración), el informe recomienda una gestión de errores específica del nodo (retry y/o continue-on-error) en esos nodos.
 4. **Alerts** — cuando no hay [alerts](../tabs/alerts-tab.md) configuradas para el workflow, el informe recomienda configurar alertas antes de pasar a producción.
+
+5. **Evals**: cuando el workflow tiene un nodo [Agent](../nodes/agent-node.md) sin una suite de agentes, el informe recomienda una **Agent Suite** (o una **Prompt Suite**) en [Evals](../tabs/evals-tab.md#agent-suites); cuando tiene un nodo [LLM](../nodes/llm-node.md), recomienda una **Prompt Suite** para probar ese prompt en distintos modelos.
 
 ### Ejecutar el analizador desde Properties
 

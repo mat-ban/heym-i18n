@@ -10,7 +10,7 @@
 | 输出 | 0（终端） |
 | 输出 | 标准化 chart payload |
 
-将此节点放在 dashboard-widget workflow 的**最后**。其前一个节点应生成一个行对象数组，例如：
+将此节点放在 dashboard-widget workflow 的**最后**。对于实体关系，其前一个节点生成一个图对象（参见 [Entity relationships](#entity-relationships-db)）。其他数据驱动的图表使用行对象数组，例如：
 
 ```json
 [
@@ -26,9 +26,9 @@
 | 参数 | 类型 | 描述 |
 |-----------|------|-------------|
 | `label` | string | 节点标识符（camelCase） |
-| `chartType` | string | `pie`、`bar`、`line`、`area`、`table`、`numeric`、`gauge`、`scatter`、`proportion`、`barGauge`、`text` 或 `hitl` |
+| `chartType` | string | `pie`、`bar`、`line`、`area`、`table`、`numeric`、`gauge`、`scatter`、`proportion`、`barGauge`、`gantt`、`erDiagram`、`text` 或 `hitl` |
 | `orientation` | string | `vertical` 或 `horizontal`（仅限 bar 图表） |
-| `dataPath` | string | 上游输出中行数组的点路径（例如 `data` 或 `result.items`）。留空则自动检测。 |
+| `dataPath` | string | 上游输出中行数组（或 `erDiagram` 的图对象）的点路径（例如 `data` 或 `result.items`）。留空则自动检测。 |
 | `labelField` | string | 用作类别标签的行键（pie/bar/line） |
 | `valueField` | string | 用作数值的行键（pie/bar/line/numeric/gauge） |
 | `series` | array | 可选的多系列定义 `[{ "name": "Sent", "field": "sent" }]`，用于 bar/line（覆盖 `valueField`） |
@@ -54,8 +54,51 @@
 - **scatter** — 来自 `xField` 和 `yField` 的 X/Y 点，用于相关性图。
 - **proportion** — 单个水平条，按份额分割并带百分比图例（例如语言分布）。使用 `labelField` + `valueField`。
 - **barGauge** — 每行一个水平 gauge，带红→绿渐变和一个值（例如可用磁盘空间）。使用 `labelField` + `valueField`，可选 `unit` 和 `max`（默认为最大行值）。
+- **gantt** — 包含日期、进度和依赖关系的任务计划；参见 [甘特图计划](#gantt-schedules)。
+- **erDiagram** — 数据库实体、字段、主键/外键及关联；参见 [Entity relationships](#entity-relationships-db)。
 - **text** — 一条 markdown 消息（例如状态备注，如 "Last execution at 19:47"）。将 markdown 放入 `text` 以显示静态消息，或留空 `text` 并设置 `valueField` 以渲染上游生成的字符串。支持标题、粗体/斜体、[列表](../nodes/chart-output-node.md#interactive-task-lists)、链接和行内代码。
 - **hitl** — 你待处理的人工审核的轮播。标题显示 `1/n pending`；左箭头在第一张卡片上禁用，右箭头在最后一张卡片上禁用。workflow 名称会在画布上打开该运行。**Approve**、**Request changes** 和 **Reject** 会解决它，widget 标题旁的历史图标会在同一页面的历史对话框中打开该运行。此 chart 类型忽略上游行，因此 widget workflow 仅为 Chart Output 节点。每个已登录用户会看到其拥有的 workflow 上的审核。 在节点属性或小组件设置中选择一个 **Workflow**（当它有多个评审步骤时，还需选择 **Select agent**），即可改为向所有能打开该 Workflow 的人显示其评审；参见 [HITL 小组件](../tabs/dashboard-tab.md#hitl-widgets)。
+
+### 甘特图计划
+
+选择 **Gantt**（`gantt`）用于项目进度计划与任务时间线。将 `dataPath` 设置为任务数组，例如 `tasks`。行使用固定的字段名称：
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` 和 `end` 接受 ISO 日期或日期时间。无时区的值使用 UTC；时区偏移量将转换为 UTC。`end` 必须等于或晚于 `start`。`progress` 为可选（0–100，默认 0）；`dependencies` 包含现有任务 ID。ID 必须唯一。悬停在任务上可查看完整日期、进度与依赖关系。大型图表可在 widget 内滚动。最多接受 500 个任务。
+
+对于示例数据，名为 `tasks` 的 Set 映射可以使用 `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`。将其连接到 Chart Output，并设置 `chartType: "gantt"` 和 `dataPath: "tasks"`。使用 Set 节点将源列映射到这些固定名称；不使用 `labelField` 和 `valueField`。
+
+### Entity relationships (DB)
+
+选择 **Entity relationships (DB)**（`erDiagram`）用于数据库架构与实体连接。将 `dataPath` 设置为包含两个数组的图**对象**，例如 `graph`：
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+字段具有 `name`、可选的 `type` 和可选的 `key`（`PK`、`FK`、`PK/FK` 或留空）。关系引用现有的实体 ID；可选的 `sourceField` 和 `targetField` 将连接定位到指定字段。`cardinality` 接受 `one-to-one`、`one-to-many`（默认）、`many-to-one` 或 `many-to-many`。实体 ID 以及每个实体内的字段名称必须唯一。最多接受 100 个实体、每个实体 100 个字段以及 500 个关系。
+
+使用 Set 节点通过 `$dict(entities=array(dict(...)), relations=array(dict(...)))` 构建 `graph`；设置 `chartType: "erDiagram"` 和 `dataPath: "graph"`。这是所提供架构的可视化展示；它不会自动检查实时数据库。
+
+这两种类型都会带有预览显示在 **添加 widget** 中，并出现在画布节点的图表类型选择器中。当您描述进度计划或数据库架构时，Heym Work 可以建议这些类型，在构建页面之前绘制建议的任务或实体预览。
 
 ### 交互式任务列表
 

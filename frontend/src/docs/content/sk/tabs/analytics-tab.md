@@ -15,6 +15,7 @@ Karta **Analytics** zobrazuje metriky spustení a trendy pre Vaše workflowy. Sl
 
 ## Časové rozpätie
 
+- **1h**, **3h**, **6h** – Posledná hodina, 3 hodiny alebo 6 hodín. Analytika sa uchováva po hodinách, takže tieto voľby počítajú počiatočnú hodinu okna ako celú: Posledná hodina o 15:20 pokrýva čas od 14:00 do teraz
 - **24h** – Posledných 24 hodín
 - **7d** – Posledných 7 dní
 - **30d** – Posledných 30 dní
@@ -38,9 +39,19 @@ Dve tabuľky zobrazujú využitie workflowov: **Most Used** (širšia) a **Most 
 - **Execution Volume Over Time** – Čiarový graf spustení za časový interval
 - **Success vs Error Rate** – Plošný graf porovnávajúci úspešné a neúspešné behy
 - **Average Latency Over Time** – Čiarový graf zobrazujúci zmeny času odozvy
-- **Potiahnutím vyberte** – Kliknutím a potiahnutím na ľubovoľnom grafe vyberiete vlastné časové rozpätie
+- **Výber potiahnutím** – Kliknutím a potiahnutím na ľubovoľnom grafe zameriate vlastný rozsah dátumov. Výber musí pokrývať aspoň dva body na grafe; jednoduché kliknutie nevyberie nič
 - **Režim výberu** – Vybrané rozpätia obnovia súhrnné karty, grafy a tabuľky workflowov bez zmeny základného prednastavenia
 - **Clear Selection** – Návrat k prednastavenému časovému oknu po dokončení podrobného skúmania
+
+## Typy uzlov
+
+Pod percentilmi latencie ukazujú tri grafy, kam smeruje čas a chyby uzlov, zoskupené podľa typu uzla (Agent, HTTP Request, Code atď.) naprieč zobrazenými workflow:
+
+- **Časovo najnáročnejšie uzly** – 10 typov uzlov s najdlhším celkovým časom behu, vykreslených ako priemerná doba trvania na volanie. Hodina bez volaní daného typu zobrazuje v tooltipe **Žiadne volania**.
+- **Najčastejšie chybujúce typy uzlov** – 10 typov uzlov s najväčším počtom chýb (chyba alebo timeout), každý s vlastným počtom chýb za daný časový úsek.
+- **Najviac volané typy uzlov** – 10 typov uzlov, ktoré bežali najčastejšie, každý s vlastným počtom volaní za časový úsek. Preskočené uzly sa nepočítajú.
+
+Prejdite myšou na graf a uvidíte typ uzla pod ukazovateľom priamo vedľa neho. Typ uzla príliš malý na to, aby bol vedľa najväčšieho na grafe viditeľný (pod 1 % z neho), je z grafu aj jeho legendy vynechaný. Grafy rešpektujú filter workflow, časový rozsah aj akýkoľvek rozsah vybraný potiahnutím. Analytika uzlov sa zaznamenáva pre behy od verzie, ktorá ju zaviedla; dokončený beh sa objaví zhruba do minúty. Staršie behy sa nezapočítavajú.
 
 ## Automatické obnovovanie
 

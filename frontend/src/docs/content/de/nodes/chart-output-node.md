@@ -10,7 +10,7 @@ Der **Diagramm-Ausgabe**-Knoten ist der Endknoten eines [Dashboard-Widget](../ta
 | Ausgaben | 0 (Endknoten) |
 | Ausgabe | Standardisierte Chart-Payload |
 
-Platziere diesen Knoten **zuletzt** in einem Dashboard-Widget-Workflow. Der Knoten davor sollte ein Array von Zeilenobjekten erzeugen, zum Beispiel:
+Platziere diesen Knoten **zuletzt** in einem Dashboard-Widget-Workflow. Bei Entity Relationships erzeugt der Knoten davor ein Graph-Objekt (siehe [Entity Relationships](#entity-relationships-db)). Andere datengesteuerte Diagramme verwenden ein Array von Zeilenobjekten, zum Beispiel:
 
 ```json
 [
@@ -26,9 +26,9 @@ Wenn du nur über Beispiel-/Musterdaten verfügst (keine echte Quelle), erzeuge 
 | Parameter | Typ | Beschreibung |
 |-----------|------|-------------|
 | `label` | string | Knotenbezeichner (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` oder `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` oder `hitl` |
 | `orientation` | string | `vertical` oder `horizontal` (nur bei Balkendiagrammen) |
-| `dataPath` | string | Punktpfad zum Zeilen-Array innerhalb der vorgelagerten Ausgabe (z. B. `data` oder `result.items`). Leer lassen für automatische Erkennung. |
+| `dataPath` | string | Punktpfad zum Zeilen-Array (oder Graph-Objekt für `erDiagram`) innerhalb der vorgelagerten Ausgabe (z. B. `data` oder `result.items`). Leer lassen für automatische Erkennung. |
 | `labelField` | string | Zeilenschlüssel, der als Kategorie-Label verwendet wird (pie/bar/line) |
 | `valueField` | string | Zeilenschlüssel, der als numerischer Wert verwendet wird (pie/bar/line/numeric/gauge) |
 | `series` | array | Optionale Multi-Serien-Definition `[{ "name": "Sent", "field": "sent" }]` für bar/line (überschreibt `valueField`) |
@@ -54,8 +54,51 @@ Wenn du nur über Beispiel-/Musterdaten verfügst (keine echte Quelle), erzeuge 
 - **scatter** — X/Y-Punkte aus `xField` und `yField` für Korrelationsdiagramme.
 - **proportion** — ein einzelner horizontaler Balken, der in Anteile mit einer prozentualen Legende aufgeteilt ist (z. B. eine Sprachaufschlüsselung). Verwendet `labelField` + `valueField`.
 - **barGauge** — ein horizontaler Gauge pro Zeile mit einem Rot→Grün-Verlauf und einem Wert (z. B. freier Speicherplatz). Verwendet `labelField` + `valueField`, optional `unit` und `max` (standardmäßig der größte Zeilenwert).
+- **gantt** — Aufgabenzeitpläne mit Datumsangaben, Fortschritt und Abhängigkeiten; siehe [Gantt-Zeitpläne](#gantt-schedules).
+- **erDiagram** — Datenbank-Entitäten, Felder, Schlüssel und Beziehungen; siehe [Entity Relationships](#entity-relationships-db).
 - **text** — eine Markdown-Nachricht (z. B. eine Statusnotiz wie „Letzte Ausführung um 19:47"). Setze das Markdown in `text` für eine statische Nachricht, oder lasse `text` leer und setze `valueField`, um einen vorgelagert erzeugten String zu rendern. Unterstützt Überschriften, Fett/Kursiv, [Listen](../nodes/chart-output-node.md#interactive-task-lists), Links und Inline-Code.
 - **hitl** — ein Karussell deiner ausstehenden menschlichen Reviews. Die Kopfzeile zeigt `1/n pending`; der linke Pfeil ist auf der ersten Karte deaktiviert und der rechte Pfeil auf der letzten. Der Workflow-Name öffnet diesen Lauf auf dem Canvas. **Approve**, **Request changes** und **Reject** lösen ihn auf, und das Verlaufssymbol neben dem Widget-Titel öffnet diesen Lauf im Verlaufsdialog auf derselben Seite. Dieser Chart-Typ ignoriert vorgelagerte Zeilen, sodass der Widget-Workflow nur aus dem Chart Output-Knoten besteht. Jede angemeldete Person sieht die Reviews zu Workflows, die sie besitzt. Wählen Sie in den Eigenschaften des Knotens oder in den Einstellungen des Widgets einen **Workflow** (und **Select agent**, wenn er mehrere Review-Schritte hat), um stattdessen die Reviews dieses Workflows anzuzeigen, und zwar für alle, die ihn öffnen können; siehe [HITL-Widgets](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt-Zeitpläne
+
+Wählen Sie **Gantt** (`gantt`) für Projektzeitpläne und Aufgaben-Timelines. Setzen Sie `dataPath` auf das Aufgaben-Array, etwa `tasks`. Zeilen verwenden feste Feldnamen:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` und `end` akzeptieren ISO-Datumsangaben oder Datetime-Werte. Werte ohne Zeitzone verwenden UTC; Zeitzonen-Offsets werden nach UTC konvertiert. `end` muss am oder nach `start` liegen. `progress` ist optional (0–100, Standard 0); `dependencies` enthält bestehende Aufgaben-IDs. IDs müssen eindeutig sein. Fahren Sie mit der Maus über eine Aufgabe, um vollständige Datumsangaben, Fortschritt und Abhängigkeiten abzulesen. Große Diagramme scrollen innerhalb des Widgets. Maximal 500 Aufgaben werden akzeptiert.
+
+Für Beispieldaten kann ein Set-Mapping namens `tasks` `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))` verwenden. Verbinden Sie es mit Chart Output mit `chartType: "gantt"` und `dataPath: "tasks"`. Mappen Sie Quellspalten mit einem Set-Knoten in diese festen Namen; `labelField` und `valueField` werden nicht verwendet.
+
+### Entity Relationships (DB)
+
+Wählen Sie **Entity relationships (DB)** (`erDiagram`) für Datenbankschemata und Entitätsverbindungen. Setzen Sie `dataPath` auf ein Graph-**Objekt**, etwa `graph`, das beide Arrays enthält:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Felder besitzen einen `name`, optionalen `type` und optionalen `key` (`PK`, `FK`, `PK/FK` oder leer). Relationen verweisen auf bestehende Entitäts-IDs; optionale Felder `sourceField` und `targetField` verankern die Verbindung an benannten Feldern. `cardinality` akzeptiert `one-to-one`, `one-to-many` (Standard), `many-to-one` oder `many-to-many`. Entitäts-IDs und Feldnamen innerhalb jeder Entität müssen eindeutig sein. Maximal 100 Entitäten, 100 Felder pro Entität und 500 Relationen werden akzeptiert.
+
+Konstruieren Sie `graph` mit einem Set-Knoten über `$dict(entities=array(dict(...)), relations=array(dict(...)))`; verwenden Sie `chartType: "erDiagram"` und `dataPath: "graph"`. Dies ist eine Visualisierung des von Ihnen bereitgestellten Schemas; eine Live-Datenbank wird nicht automatisch abgefragt.
+
+Beide Typen erscheinen in **Ein Widget hinzufügen** mit einer Vorschau sowie in der Diagrammtyp-Auswahl des Knotens auf dem Canvas. Heym Work kann diese Typen vorschlagen, wenn Sie einen Zeitplan oder ein Datenbankschema beschreiben, und zeichnet Vorschauen der vorgeschlagenen Aufgaben oder Entitäten, bevor Sie die Seite erstellen.
 
 ### Interaktive Aufgabenlisten
 

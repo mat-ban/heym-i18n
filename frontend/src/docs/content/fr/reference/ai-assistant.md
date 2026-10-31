@@ -173,7 +173,7 @@ Lorsqu'un workflow enregistre, stocke ou recherche des enregistrements et que vo
 
 Sélectionnez la nouvelle table et appuyez sur **Submit answers** : la carte crée la table, et l'assistant place son id sur le nœud et utilise ses noms de colonnes exacts. Vous pouvez également demander une table seule, par exemple « create a table for my leads ».
 
-L'assistant voit les noms, descriptions et colonnes des tables, jamais les lignes. Il ne modifie jamais les colonnes d'une table existante : si une table ne possède pas une colonne dont le workflow a besoin, il nomme la colonne et propose une nouvelle table à la place. Ajoutez des colonnes dans l'onglet [DataTable](../tabs/datatable-tab.md).
+L'assistant du canvas voit les noms, descriptions et colonnes des tables, jamais les lignes. Il configure les nœuds du workflow à partir de ces métadonnées ; ajoutez des colonnes dans l'[onglet DataTable](../tabs/datatable-tab.md) ou demandez au [Chat](../tabs/chat-tab.md). Le Chat et `heym_chat` peuvent inspecter les lignes et directement ajouter ou supprimer des colonnes, ainsi qu'insérer, mettre à jour ou supprimer des lignes sur les tables que vous possédez ou sur lesquelles vous disposez d'un accès en écriture, y compris via les partages d'équipe. La suppression de colonnes et la suppression de toutes les lignes nécessitent une confirmation avant de supprimer les données.
 
 ## Related
 

@@ -265,7 +265,26 @@
     "notSet": "Niet ingesteld",
     "okCol": "OK",
     "allTime": "Alle tijd",
-    "allWorkflows": "Alle Workflows"
+    "allWorkflows": "Alle Workflows",
+    "last1Hour": "Afgelopen uur",
+    "last3Hours": "Afgelopen 3 uur",
+    "last6Hours": "Afgelopen 6 uur",
+    "nodeTypes": "Knooppunttypes",
+    "nodeChart": {
+      "emptyMessage": "Nog geen knooppuntgegevens voor deze periode. Knooppuntanalyses worden geregistreerd voor uitvoeringen na deze update.",
+      "duration": {
+        "title": "Meest tijdrovende knooppunten",
+        "subtitle": "Gemiddelde duur per aanroep"
+      },
+      "errors": {
+        "title": "Meest gefaalde knooppunttypes",
+        "subtitle": "Fouten in de loop van de tijd"
+      },
+      "calls": {
+        "title": "Meest aangeroepen knooppunttypes",
+        "subtitle": "Aanroepen in de loop van de tijd"
+      }
+    }
   },
   "auth": {
     "alreadyHaveAccount": "Hebt u al een account?",
@@ -523,7 +542,8 @@
     "run": "Uitvoeren",
     "dropFileOrClick": "Sleep hier een bestand naartoe of klik om er een te kiezen",
     "removeFile": "Bestand verwijderen",
-    "chooseFileFor": "Kies een bestand voor {label}"
+    "chooseFileFor": "Kies een bestand voor {label}",
+    "new": "Nieuw"
   },
   "credentials": {
     "accessVia": "Toegang via",
@@ -1117,7 +1137,16 @@
     "newSuiteDefault": "Nieuwe evaluatiesuite",
     "noTestCases": "Geen testcases. Voeg een rij toe of genereer testgegevens.",
     "optimize": "Optimaliseren",
-    "optimizePrompt": "Prompt optimaliseren"
+    "optimizePrompt": "Prompt optimaliseren",
+    "promptSuite": "Prompt-suite",
+    "promptSuiteDesc": "Test een systeemprompt over meerdere modellen",
+    "agentSuite": "Agent-suite",
+    "agentSuiteDesc": "Controleer de werkelijke uitvoeringen van een agent: tools, latentie, kosten",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Suites zoeken...",
+    "loadingSuite": "Suite laden...",
+    "couldNotLoadSuite": "Kan deze suite niet laden."
   },
   "header": {
     "darkMode": "Overschakelen naar donkere modus",
@@ -1229,7 +1258,9 @@
     "askAi": "AI vragen",
     "askAiTitle": "De Chat-assistent vragen naar deze run",
     "noNodeSpans": "Voor deze run zijn geen node-spans vastgelegd.",
-    "queuedProgress": "In wachtrij {position}/{size}"
+    "queuedProgress": "In wachtrij {position}/{size}",
+    "clickToSelectRun": "Klik om deze uitvoering te selecteren",
+    "doubleClickOrOpenNewTab": "Dubbelklik om deze uitvoering naar het canvas te brengen, Ctrl/Cmd+klik om te openen in een nieuw tabblad"
   },
   "logs": {
     "all": "Alle",
@@ -1369,7 +1400,7 @@
     "serverNamePlaceholder": "Servernaam (bijv. CRM Tools)",
     "setupInstructions": "Installatie-instructies",
     "sseEndpointUrl": "SSE Endpoint URL",
-    "subtitle": "Stel uw workflows beschikbaar als MCP-tools voor AI-assistenten",
+    "subtitle": "Stel uw workflows beschikbaar als MCP-tools en de Heym Agent via MCP en A2A",
     "title": "MCP-server",
     "workflowDisabled": "\"{name}\" uitgeschakeld voor MCP",
     "workflowEnabled": "\"{name}\" ingeschakeld voor MCP",
@@ -1379,7 +1410,27 @@
     "geminiStep2": "Klik onder Aangepaste apps op Een aangepaste app toevoegen",
     "geminiStep3": "Plak de bovenstaande MCP-server-URL en laat Geavanceerde functies gesloten; Gemini registreert zich automatisch",
     "geminiStep4": "Klik op Volgende en autoriseer met uw Heym-inloggegevens",
-    "geminiInfo": "Gemini gebruikt OAuth voor veilige authenticatie. Uw Heym-inloggegevens worden gebruikt om toegang te autoriseren en worden nooit gedeeld met Gemini. Eenmaal verbonden werkt Heym ook in de mobiele Gemini-app."
+    "geminiInfo": "Gemini gebruikt OAuth voor veilige authenticatie. Uw Heym-inloggegevens worden gebruikt om toegang te autoriseren en worden nooit gedeeld met Gemini. Eenmaal verbonden werkt Heym ook in de mobiele Gemini-app.",
+    "agentReach": {
+      "off": "Uit: MCP- en A2A-clients kunnen de Heym Agent niet bereiken",
+      "unconfigured": "Kies inloggegevens en een model zodat de Heym Agent kan worden uitgevoerd",
+      "mcpA2a": "Bereikbaar via MCP en A2A",
+      "mcpOnly": "Bereikbaar als heym_chat via MCP"
+    },
+    "a2aEnabledOnServer": "A2A ingeschakeld op \"{name}\"",
+    "a2aEnabled": "A2A ingeschakeld",
+    "a2aDisabledOnServer": "A2A uitgeschakeld op \"{name}\"",
+    "a2aDisabled": "A2A uitgeschakeld",
+    "agentAndA2aDisabledOnServer": "Heym Agent en A2A uitgeschakeld op \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent en A2A uitgeschakeld",
+    "a2a": {
+      "enable": "A2A inschakelen",
+      "description": "Andere agents kunnen taken naar de Heym Agent sturen via het Agent2Agent-protocol (A2A 1.0). Ze verifiëren zich met de sleutel van deze server in de X-MCP-Key-header of met Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC-endpoint",
+      "checkCardLive": "Controleer of de card actief is:",
+      "copyLabel": "Kopieer {label}"
+    }
   },
   "nav": {
     "alerts": "Waarschuwingen",

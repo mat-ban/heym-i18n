@@ -47,7 +47,7 @@ Uygulamada **Logs** sekmesi aynı container çıktısını okur. `DOCKER_LOGS_EN
 
 ## Neler Günlüğe Kaydedilir
 
-Her durum değişikliği günlüğe kaydedilir. Okumalar yalnızca okumanın kendisinin hassas eylem olduğu durumlarda günlüğe kaydedilir — bir workflow'un çalıştırma geçmişini görüntüleme, bir credential'ı açma, bir dosya indirme. Sıradan liste ve ayrıntı okumaları denetlenmez; erişim günlüğü zaten bir isteğin gerçekleştiğini kaydeder ve her `GET` isteğini denetlemek önemli olan satırları gömer.
+Her durum değişikliği günlüğe kaydedilir. Okumalar yalnızca okumanın kendisinin hassas eylem olduğu durumlarda günlüğe kaydedilir — bir workflow'un çalıştırma geçmişini görüntüleme, bir credential'ı açma, bir dosya indirme. Sıradan liste ve ayrıntı okumaları denetlenmez; erişim günlüğü zaten bir isteğin gerçekleştiğini kaydeder ve her `GET` isteğini denetlemek önemli olan satırları gömer. Tek istisna, oturum açmış bir kullanıcının uygulamada nereye gittiğini kaydeden [sayfa görüntülemeleridir](#page-views).
 
 ### Kimlik Doğrulama
 
@@ -62,9 +62,34 @@ Her durum değişikliği günlüğe kaydedilir. Okumalar yalnızca okumanın ken
 | `sso_settings.update` | Bir yönetici [SSO](./sso.md) yapılandırmasını değiştirdi. `enabled` ve `password_login_disabled` kaydeder, client secret'ı asla. |
 | `sso_settings.test` | Bir yönetici SSO bağlantı testini çalıştırdı. |
 
+### Sayfa Görüntülemeleri
+
+`page.view`, oturum açmış bir kullanıcı web uygulamasında bir sayfa açtığında, URL yolu bir `path` alanında olacak şekilde yazılır:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Yol, uygulama içi rotadır. Dashboard sekmeleri bunun bir parçasıdır (`/?tab=traces`), açık olan öğeyi adlandıran kimlikler de öyledir (örneğin `/workflows/<id>`). Sayfayı tanımlayan sorgu parametrelerinin yalnızca kısa bir listesi tutulur (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); sorgu dizesindeki diğer her şey ve tüm parça atılır. Bağlantısı bir gizli bilgi taşıyan sayfalar (örneğin `/review/<token>`), gizli bilgi yerine `:token` yer tutucusuyla kaydedilir.
+
+Tarayıcı yolu bildirdiği için bir `page.view` satırı, kullanıcının nereye gittiğini beyan ettiğini gösterir. Sunucunun o sayfayı döndürdüğünü kanıtlamaz. Oturum açma sayfasına yapılan ziyaretler ve oturum kapalıyken açılan bağlantılar kaydedilmez, çünkü bunlara bağlı bir kullanıcı yoktur.
+
 ### Workflow'lar
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run`, API aracılığıyla bir çalıştırma başlatıldığında yazılır: düzenleyicinin Çalıştır düğmesi, bir oturum, API anahtarı veya webhook içeren execute uç noktası, sohbet portalı ve MCP araçları. Kimin başlattığını, nasıl başlattığını ve nasıl bittiğini kaydeder:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id`, satırı Çalıştırma Geçmişi'ndeki çalıştırmaya bağlar. Çalıştırma `error`, `cancelled` veya `timeout` ile bittiğinde `outcome` değeri `failure` olur. İnsan incelemesi için bekletilen veya eşzamanlılık kuyruğunda tutulan bir çalıştırma, `status=pending` veya `status=queued` durumuna sahip bir `success` satırıdır. Anonim bir webhook veya bir portal ziyaretçisi gibi oturum açmış kullanıcısı olmayan bir çağrının `actor_id` veya `actor_email` değeri yoktur. Girdiler ve çıktılar asla yazılmaz.
+
+Bir zamanlama, bir tetikleyici düğümü, bir kuyruk veya bir olay tarafından başlatılan çalıştırmalar denetim satırları değildir. Bunları talep eden örnek üzerinde yürütülürler ve tetikleyici kaynakları ve bunları çalıştıran örnekle birlikte Çalıştırma Geçmişi'ne kaydedilirler.
+
+`workflow.history_view`, biri bir workflow'un çalıştırma geçmişini açtığında yazılır. Bir workflow'un tuvaldeki veya listedeki en son çalıştırmasını gösteren küçük arama denetlenmez.
+
 
 `workflow.history_view`, bir işbirlikçi başkasının çalıştırma geçmişini okuduğunda `owned=false` kaydeder. `workflow.delete`, bir işbirlikçi silmeye çalıştığında `reason=not_owner` ile `outcome=denied` kaydeder.
 
@@ -96,6 +121,27 @@ Bir denetim satırı; tanımlayıcıları, adları ve sayımları kaydeder. Bir 
 Bunu iki şey zorunlu kılar. Çağrı noktaları yalnızca güvenli alanları geçecek şekilde yazılmıştır ve denetim yardımcısı bir güvenlik ağı olarak redaksiyon uygular: adı `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` veya benzerini içeren her alan, satır oluşturulmadan önce `***` ile değiştirilir. Aşırı redaksiyon kasıtlıdır — yararsız bir satır, sızdırılmış bir credential'dan daha iyidir.
 
 Bir gizli bilginin kayıtla gerçekten ilgili olduğu durumlarda yalnızca biçimi kaydedilir. Bir dosya paylaşımı `password_protected=true` kaydeder, asla parolayı kaydetmez.
+
+## Heym Work
+
+Heym Work'ü Heym ile birlikte çalıştırdığınızda, Work kendi konteynerinin stdout'una aynı Winston formatında denetim satırları yayar:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work, sayfalarda, panolarda ve kayıtlarda kullanıcı eylemlerini günlüğe kaydeder:
+
+| Eylem | Anlamı |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Dashboard sayfalarında ve düzenlerinde yapılan değişiklikler |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Kanban sütun düzeni değişiklikleri |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Kart yaşam döngüsü olayları |
+| `record.create`, `record.update`, `record.delete` | Work üzerinden veri tablosu kaydı mutasyonları |
+| `chat.message` | Work asistanına gönderilen kullanıcı promptu |
+| `export.csv`, `export.json` | Veri dışa aktarmaları |
+
+Her satır, Heym denetim satırlarıyla aynı `actor_id`, `actor_email`, `timestamp` ve `outcome` alanlarını taşır, böylece günlük toplayıcıları her ikisini de tek bir işlem hattıyla ayrıştırabilir.
 
 ## Saklama
 

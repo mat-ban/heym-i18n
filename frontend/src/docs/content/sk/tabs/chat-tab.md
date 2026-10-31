@@ -23,7 +23,8 @@ Konverzáciu môžete začať aj z chatového poľa na karte [Workflowy](./workf
 - **Zaradené následné správy** – Posielajte ďalšie správy, kým odpoveď streamuje. Zaradené správy sa uchovávajú, môžete ich upraviť alebo odstrániť pred ich spustením a spúšťajú sa v poradí po aktívnej odpovedi
 - **Pauzy pri plánovaní** – Keď Chat potrebuje podrobnosti plánovania, položí doplňujúce otázky a pozastaví zaradené následné správy, kým neodpoviete. Po dokončení odpovede na plánovanie sa zaradené správy obnovia
 - **Prihlasovacie údaje** – Keď workflow, ktorý Chat vytvára alebo upravuje, potrebuje prihlasovacie údaje, Chat sa opýta, ktoré použiť, ponúkne vytvorenie nových v konverzácii alebo vám umožní pokračovať bez nich. Môžete tiež požiadať Chat o vytvorenie prihlasovacích údajov alebo o aktualizáciu tých, ktoré vlastníte; otvorí formulár prihlasovacích údajov v konverzácii. Model vidí názov a typ prihlasovacích údajov, nikdy nie ich hodnoty, a to pre prihlasovacie údaje, ktoré vlastníte, aj pre tie, ktoré s vami niekto zdieľa. Uzly LLM a Agent pridané Chatom bežia na prihlasovacích údajoch a modeli vybranom pre chat vrátane zdieľaných údajov; keď Chat upravuje workflow, existujúce uzly LLM a Agent si svoje prihlasovacie údaje a model ponechajú. Pozrite si [AI Assistant › Prihlasovacie údaje](../reference/ai-assistant.md#credentials)
-- **Dátové tabuľky** – Keď workflow, ktorý Chat vytvára alebo upravuje, ukladá záznamy, Chat sa opýta, ktorú [dátovú tabuľku](./datatable-tab.md) použiť, alebo ponúkne vytvorenie novej so stĺpcami, ktoré workflow potrebuje. Dokáže tiež vypísať vaše tabuľky a ich stĺpce. Nikdy nečíta ani nezapisuje riadky. Pozrite si [AI Assistant › Dátové tabuľky](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Opýtajte sa, aké [dashboards](./dashboard-tab.md) máte, čo sa na niektorom z nich nachádza alebo na ktorom dashboarde je workflow. Požiadajte Chat o pridanie nového widgetu na dashboard (umiestni tam prázdny widget, potom zostaví a otestuje jeho workflow), umiestnenie existujúceho workflow na dashboard ako widgetu, premenovanie alebo odstránenie widgetu či usporiadanie rozloženia dashboardu. Heym Work zobrazuje tieto dashboardy ako svoje stránky. Pozrite si [Dashboard › Z Chatu a MCP](./dashboard-tab.md#z-chatu-a-mcp)
+- **Dátové tabuľky** – Keď workflow vytváraný alebo upravovaný Chatom ukladá záznamy, Chat sa opýta, akú [dátovú tabuľku](./datatable-tab.md) použiť, alebo ponúkne vytvorenie novej so stĺpcami, ktoré workflow potrebuje. Môže tiež kontrolovať riadky, pridávať alebo odstraňovať stĺpce a priamo vkladať, aktualizovať alebo mazať riadky v tabuľkách, ktoré vlastníte alebo k nim máte prístup na zápis. Zadajte názov tabuľky alebo odkaz DataTable. Odstránenie stĺpcov a vymazanie všetkých riadkov vyžaduje potvrdenie; pridanie stĺpcov zachová existujúce údaje. Pozrite si [AI asistent › Dátové tabuľky](../reference/ai-assistant.md#data-tables)
 - **Streamované odpovede** – Sledujte výstup modelu počas streamovania
 - **Zastavenie odpovede** – Kedykoľvek prerušte aktuálnu streamovanú odpoveď; zastavenie tiež vymaže zaradené správy pre danú konverzáciu
 - **Vykresľovanie Markdownu** – Odpovede podporujú formátovanie markdownu vrátane inline obrázkov
@@ -33,16 +34,17 @@ Konverzáciu môžete začať aj z chatového poľa na karte [Workflowy](./workf
 - **Hlasový vstup** – Použite tlačidlo mikrofónu na prevod reči na text (podporované prehliadačom). Po zastavení nahrávania môže Heym mierne vyčistiť prepis pred jeho odoslaním
 - **Plánované workflowy** – Pýtajte sa, kedy sa spúšťajú cron workflowy (dnes, tento týždeň, tento mesiac alebo vlastný rozsah dátumov). Asistent používa rovnaké údaje o pláne ako karta [Plány](./scheduled-tab.md) a dokáže obmedziť výsledky na workflowy, ktoré vlastníte, alebo zahrnúť tie, ktoré sú s vami zdieľané
 - **História spustení workflowov** – Pýtajte sa na jeden workflow („koľkokrát sa spustila denná zostava?", „zlyhalo to?", „kedy sa naposledy spustil?"). Chat vyhľadá workflow podľa jeho ID a odpovie na základe počtu spustení, prehľadu stavov, času prvého a posledného spustenia a priemerného trvania. Opýtajte sa, prečo spustenie zlyhalo alebo čo vrátilo, a Chat potom otvorí to konkrétne spustenie, aby prečítalo jeho vstupy, výstupy a chyby jednotlivých uzlov
+- **Kde behy zlyhávajú a prečo sú pomalé** – Opýtajte sa, kde vaše workflow zlyhávajú alebo prečo sú pomalé, a Chat uvedie workflow, ktoré bežali najčastejšie, najviac zlyhávali a sú najpomalšie, a tiež typy uzlov, ktoré zaberajú najviac času (priemer na volanie a celkovo), najviac zlyhávajú a bežia najčastejšie, teda rovnaké čísla ako na karte [Analytics](./analytics-tab.md). Typy uzlov sa počítajú pre behy od verzie, ktorá pridala analýzu uzlov. Opýtajte sa na poslednú hodinu, 3 alebo 6 hodín, 24 hodín, 7 alebo 30 dní či celú históriu; hodinové okná sa začínajú v celú hodinu, takže „posledná hodina“ o 15:20 pokrýva čas od 14:00 do súčasnosti.
 - **Živý stav spustení** – Opýtajte sa, čo práve beží, a Chat odpovie s počtom, názvami workflowov, ako dlho každé spustenie prebieha, na ktorom uzle sa nachádza a s priamym odkazom na živé spustenie
 ## Používanie Chatu z MCP klienta
 
-Chat engine je možné dosiahnuť aj z prostredia mimo prehliadača. Povoľte nástroj **Heym Chat Tool** na karte [MCP](./mcp-tab.md) a MCP klienti — Claude, Cursor a čokoľvek ďalšie, čo komunikuje cez MCP — získajú jediný nástroj `heym_chat`, ktorý spúšťa tento rovnaký engine so všetkými jeho schopnosťami.
+Engine Chatu je možné používať aj mimo prehliadača. Zapnite **Heym Agent** na [karte MCP / A2A](./mcp-tab.md) a klienti MCP (Claude, Cursor a akékoľvek iné nástroje podporujúce MCP) získajú jediný nástroj `heym_chat`, ktorý spúšťa tento istý engine so všetkými jeho schopnosťami. Začiarknite tiež **Povoliť A2A** a ďalší agenti mu môžu posielať úlohy cez [A2A](../reference/a2a.md); tieto konverzácie zobrazujú v zozname ikonu siete.
 
 Tieto konverzácie sa ukladajú do histórie tejto karty a v zozname konverzácií sú označené ikonou zástrčky. Otvorte jednu z nich, aby ste si prečítali, na čo sa klient pýtal, pozrite si karty nástrojov, ktoré spustil, a pokračujte vo vlákne sami. Odpovedanie na doplňujúcu otázku funguje rovnako, či už turn začal tu alebo z MCP klienta.
 
 Cez MCP Chat nezobrazuje, nevyberá ani nevytvára prihlasovacie údaje. Workflowy, ktoré zostaví, ponechávajú polia prihlasovacích údajov prázdne a odpoveď uvádza uzly, ktoré vyžadujú prihlasovacie údaje, aby ste ich mohli nastaviť v editore.
 
-Dátové tabuľky fungujú cez MCP tiež: Chat zobrazí zoznam vašich tabuliek, vytvorí nové a zapojí ich do workflowov, ktoré zostaví. Jeho otázka k tabuľke prichádza ako text vo výsledku, takže na ňu odpovedzte s rovnakým `conversation_id`.
+Dátové tabuľky fungujú aj cez MCP: Chat môže priamo upravovať stĺpce a riadky, vytvárať tabuľky a prepájať ich do workflow. Otázky k tabuľkám a potvrdenia o vymazaní prichádzajú ako text vo výsledku; odpovedzte s rovnakým `conversation_id`.
 
 ## Limit kontextu
 
@@ -111,9 +113,58 @@ môže dať inú odpoveď.
 ## Pravidlá používateľa
 
 [Pravidlá používateľa](../reference/user-settings.md) (nakonfigurované v Nastaveniach) sa automaticky vkladajú do každej konverzácie Chatu ako inštrukcie na úrovni systému. Nastavte ich raz, aby sa trvalé preferencie uplatnili na všetky požiadavky chatu.
+
+## Práca s Evals
+
+Chat môže vytvárať, upravovať a spúšťať sady v [Evals](./evals-tab.md), ako sady promptov, tak sady agentov:
+
+- **Sada promptov**: „vytvor sadu promptov pre môj prompt odpovede podpory s 8 testovacími prípadmi a porovnaj gpt-4o s gpt-4.1-mini“. Chat spíše testovacie prípady s očakávanými odpoveďami, vyberie metódu hodnotenia a sadu uloží.
+  - Pred vytvorením sady určí, ktoré prihlasovacie údaje LLM a modely použiť. S presne jednými údajmi LLM použije tieto a oznámi to; inak sa opýta.
+  - Pre hodnotenie LLM-as-Judge sa tiež opýta, či má odpovede hodnotiť samostatný rozhodca.
+- **Sada agenta**: „skontroluj, či môj agent podpory vždy prehľadáva dokumentáciu a nikdy neodosiela e-maily“. Chat vyhľadá agenta a uloží kontroly nástrojov a prahové hodnoty. Na požiadanie spustí workflow a pre každý beh vygeneruje iný vstup.
+  - Behy sád agentov sú skutočné behy workflow, takže dochádza k ich vedľajším účinkom. Chat uvádza, koľko behov spúšťa.
+- **Baseline**: Chat môže s východiskovou hodnotou agenta pracovať tromi spôsobmi:
+  - Nahlásiť ju z posledných behov agenta.
+  - Zostaviť ju z behov, ktoré sám spustí („spusť ho 5-krát a použi to ako baseline“).
+  - Uložiť čísla, ktoré mu zadáte („nastav baseline na 3 sekundy p95 a 0,01 $ za beh“).
+- **Behy**: Chat čaká na beh až jednu minútu a potom oznámi výsledok:
+  - Pri sade promptov: počet úspešných testov každého modelu a prípady, ktoré zlyhali.
+  - Pri sade agenta: mieru úspešnosti, neúspešné kontroly a odchýlku od baseline.
+  - Dlhší beh pokračuje v Evals; požiadajte Chat, aby ho skontroloval znova.
+
+Potom, čo Chat vytvorí alebo upraví sadu, odpoveď zobrazí kartu s názvom sady, jej typom a tlačidlom **Otvoriť v Evals**, podobne ako karta uloženého workflow. Cez MCP výsledok `heym_chat` uvádza odkaz na každú sadu uloženú v tomto volaní.
+
+To isté funguje z klienta MCP prostredníctvom `heym_chat` (pozrite si [Používanie Chatu z klienta MCP](#používanie-chatu-z-klienta-mcp)). Nástroje na hodnotenie zostávajú vo vnútri `heym_chat`; klienti MCP ich nevidia ako samostatné nástroje.
+
+AI asistent v editore sady nevytvára.
+
+## Práca s Evals
+
+Chat môže vytvárať, upravovať a spúšťať sady v [Evals](./evals-tab.md), ako sady promptov, tak sady agentov:
+
+- **Sada promptov**: „vytvor sadu promptov pre môj prompt odpovede podpory s 8 testovacími prípadmi a porovnaj gpt-4o s gpt-4.1-mini“. Chat spíše testovacie prípady s očakávanými odpoveďami, vyberie metódu hodnotenia a sadu uloží.
+  - Pred vytvorením sady určí, ktoré prihlasovacie údaje LLM a modely použiť. S presne jednými údajmi LLM použije tieto a oznámi to; inak sa opýta.
+  - Pre hodnotenie LLM-as-Judge sa tiež opýta, či má odpovede hodnotiť samostatný rozhodca.
+- **Sada agenta**: „skontroluj, či môj agent podpory vždy prehľadáva dokumentáciu a nikdy neodosiela e-maily“. Chat vyhľadá agenta a uloží kontroly nástrojov a prahové hodnoty. Na požiadanie spustí workflow a pre každý beh vygeneruje iný vstup.
+  - Behy sád agentov sú skutočné behy workflow, takže dochádza k ich vedľajším účinkom. Chat uvádza, koľko behov spúšťa.
+- **Baseline**: Chat môže s východiskovou hodnotou agenta pracovať tromi spôsobmi:
+  - Nahlásiť ju z posledných behov agenta.
+  - Zostaviť ju z behov, ktoré sám spustí („spusť ho 5-krát a použi to ako baseline“).
+  - Uložiť čísla, ktoré mu zadáte („nastav baseline na 3 sekundy p95 a 0,01 $ za beh“).
+- **Behy**: Chat čaká na beh až jednu minútu a potom oznámi výsledok:
+  - Pri sade promptov: počet úspešných testov každého modelu a prípady, ktoré zlyhali.
+  - Pri sade agenta: mieru úspešnosti, neúspešné kontroly a odchýlku od baseline.
+  - Dlhší beh pokračuje v Evals; požiadajte Chat, aby ho skontroloval znova.
+
+Potom, čo Chat vytvorí alebo upraví sadu, odpoveď zobrazí kartu s názvom sady, jej typom a tlačidlom **Otvoriť v Evals**, podobne ako karta uloženého workflow. Cez MCP výsledok `heym_chat` uvádza odkaz na každú sadu uloženú v tomto volaní.
+
+To isté funguje z klienta MCP prostredníctvom `heym_chat` (pozrite si [Používanie Chatu z klienta MCP](#používanie-chatu-z-klienta-mcp)). Nástroje na hodnotenie zostávajú vo vnútri `heym_chat`; klienti MCP ich nevidia ako samostatné nástroje.
+
+AI asistent v editore sady nevytvára.
+
 ## Súvisiace
 
-- [Karta MCP](./mcp-tab.md) – Sprístupnite tento engine pre MCP klientov ako nástroj `heym_chat`
+- [Karta MCP / A2A](./mcp-tab.md) – Sprístupnite tento engine pre MCP klientov ako nástroj `heym_chat`
 - [Nastavenia](../reference/user-settings.md) – Nastavte Pravidlá používateľa aplikované na všetky požiadavky v Chate
 - [Karta Prihlasovacie údaje](./credentials-tab.md) – Pridávanie a správa API kľúčov
 - [Karta Premenné](./global-variables-tab.md) – Globálne premenné dostupné pre Chat

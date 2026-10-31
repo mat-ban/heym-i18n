@@ -10,7 +10,7 @@ A **Chart Output** csomópont egy [dashboard widget](../tabs/dashboard-tab.md) w
 | Kimenetek | 0 (terminális) |
 | Kimenet | Szabványosított chart payload |
 
-Helyezze ezt a csomópontot **utolsóként** egy dashboard-widget workflow-ba. Az előtte lévő csomópontnak sorobjektumok tömbjét kell előállítania, például:
+Helyezze ezt a csomópontot **utolsóként** egy dashboard-widget workflow-ba. Entitáskapcsolatok esetén az előtte lévő csomópont egy gráfobjektumot állít elő (lásd [Entity relationships](#entity-relationships-db)). Az egyéb adatvezérelt diagramok sorobjektumok tömbjét használják, például:
 
 ```json
 [
@@ -26,9 +26,9 @@ Ha csak példa/mintaadatokkal rendelkezik (valós forrás nélkül), állítsa e
 | Paraméter | Típus | Leírás |
 |-----------|------|-------------|
 | `label` | string | Csomópont-azonosító (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` vagy `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` vagy `hitl` |
 | `orientation` | string | `vertical` vagy `horizontal` (csak bar chartok esetén) |
-| `dataPath` | string | Pontozott útvonal a felfelé kapcsolódó kimeneten belüli sorok tömbjéhez (pl. `data` vagy `result.items`). Hagyja üresen az automatikus felismeréshez. |
+| `dataPath` | string | Pontozott útvonal a felfelé kapcsolódó kimeneten belüli sorok tömbjéhez (vagy gráfobjektumhoz `erDiagram` esetén) (pl. `data` vagy `result.items`). Hagyja üresen az automatikus felismeréshez. |
 | `labelField` | string | A kategóriacímkeként használt sorkulcs (pie/bar/line) |
 | `valueField` | string | A numerikus értékként használt sorkulcs (pie/bar/line/numeric/gauge) |
 | `series` | array | Opcionális többsoros definíció `[{ "name": "Sent", "field": "sent" }]` bar/line esetén (felülírja a `valueField` értékét) |
@@ -54,8 +54,51 @@ Ha csak példa/mintaadatokkal rendelkezik (valós forrás nélkül), állítsa e
 - **scatter** — X/Y pontok az `xField` és `yField` alapján korrelációs ábrákhoz.
 - **proportion** — egyetlen vízszintes sáv részekre osztva, százalékos jelmagyarázattal (pl. nyelvi megoszlás). A `labelField` + `valueField` értékét használja.
 - **barGauge** — soronként egy vízszintes gauge piros→zöld színátmenettel és egy értékkel (pl. szabad lemezterület). A `labelField` + `valueField` értékét használja, opcionális `unit` és `max` paraméterrel (alapértelmezésben a legnagyobb sorérték).
+- **gantt** — feladatütemezések dátumokkal, előrehaladással és függőségekkel; lásd [Gantt-ütemezések](#gantt-schedules).
+- **erDiagram** — adatbázis-entitások, mezők, kulcsok és kapcsolatok; lásd [Entity relationships](#entity-relationships-db).
 - **text** — egy markdown üzenet (pl. egy állapotjelzés, mint „Last execution at 19:47”). Helyezze a markdown szöveget a `text` mezőbe statikus üzenethez, vagy hagyja üresen a `text` mezőt, és állítsa be a `valueField` értékét egy felfelé kapcsolódó adatokból származó string megjelenítéséhez. Támogatja a címsorokat, a félkövér/dőlt szöveget, a [listákat](../nodes/chart-output-node.md#interactive-task-lists), a linkeket és az inline kódot.
 - **hitl** — a függőben lévő emberi felülvizsgálatok körhintája. A fejléc `1/n pending` értéket mutat; a bal nyíl az első kártyán, a jobb nyíl az utolsón van letiltva. A workflow neve megnyitja az adott futtatást a vásznon. Az **Approve**, a **Request changes** és a **Reject** gombok lezárják azt, a widget címe melletti előzmények ikon pedig ugyanazon az oldalon nyitja meg az adott futtatást az előzmények párbeszédablakban. Ez a chart típus figyelmen kívül hagyja a felfelé kapcsolódó sorokat, így a widget workflow csak a Chart Output csomópontból áll. Minden bejelentkezett személy az általa birtokolt workflow-khoz tartozó felülvizsgálatokat látja. Válasszon egy **Workflow**-t (és **Select agent**-et, ha több felülvizsgálati lépése van) a csomópont tulajdonságaiban vagy a widget beállításaiban, hogy helyette annak a Workflow-nak az értékelései jelenjenek meg mindenki számára, aki megnyithatja; lásd: [HITL widgetek](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt-ütemezések
+
+Válassza a **Gantt** (`gantt`) lehetőséget projektütemezésekhez és feladat-idővonalakhoz. Állítsa a `dataPath` értékét a feladattömbre, például `tasks`. A sorok rögzített mezőneveket használnak:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+A `start` és az `end` ISO-dátumokat vagy időbélyegeket fogad el. Az időzóna nélküli értékek az UTC-t használják; az időzóna-eltérések UTC-re konvertálódnak. Az `end` értékének a `start` időpontjával megegyezőnek vagy annál későbbinek kell lennie. A `progress` opcionális (0–100, alapértelmezett: 0); a `dependencies` a meglévő feladatazonosítókat tartalmazza. Az azonosítóknak egyedieknek kell lenniük. Vigye a kurzort a feladat fölé a teljes dátumok, előrehaladás és függőségek megtekintéséhez. A nagy diagramok a widgeten belül görgethetők. Legfeljebb 500 feladat támogatott.
+
+Mintaadatokhoz egy `tasks` nevű Set leképezés a következőt használhatja: `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Csatlakoztassa a Chart Output csomóponthoz a `chartType: "gantt"` és `dataPath: "tasks"` beállításokkal. Képezze le a forrásoszlopokat ezekre a rögzített nevekre egy Set csomóponttal; a `labelField` és a `valueField` nem használatos.
+
+### Entity relationships (DB)
+
+Válassza az **Entity relationships (DB)** (`erDiagram`) lehetőséget adatbázissémákhoz és entitáskapcsolatokhoz. Állítsa a `dataPath` értékét egy gráf-**objektumra**, például `graph`, amely mindkét tömböt tartalmazza:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+A mezők rendelkeznek `name`, opcionális `type` és opcionális `key` (`PK`, `FK`, `PK/FK` vagy üres) tulajdonsággal. A relációk meglévő entitásazonosítókra hivatkoznak; az opcionális `sourceField` és `targetField` mezők a megnevezett mezőkhöz rögzítik a kapcsolatot. A `cardinality` a `one-to-one`, `one-to-many` (alapértelmezett), `many-to-one` vagy `many-to-many` értékeket fogadja el. Az entitásazonosítóknak és a mezőneveknek minden entitáson belül egyedieknek kell lenniük. Legfeljebb 100 entitás, entitásonként 100 mező és 500 reláció fogadható el.
+
+Egy Set csomóponttal hozza létre a `graph` objektumot a `$dict(entities=array(dict(...)), relations=array(dict(...)))` kifejezéssel; használja a `chartType: "erDiagram"` és `dataPath: "graph"` beállításokat. Ez a megadott séma vizualizációja; nem vizsgálja automatikusan az élő adatbázist.
+
+Mindkét típus megjelenik a **Widget hozzáadása** menüben előnézettel, valamint a vásznon lévő csomópont diagramtípus-választójában. A Heym Work javasolhatja ezeket a típusokat ütemezés vagy adatbázisséma leírásakor, előnézetet rajzolva a javasolt feladatokból vagy entitásokból az oldal felépítése előtt.
 
 ### Interaktív feladatlisták
 

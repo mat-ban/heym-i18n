@@ -14,7 +14,7 @@ Anmeldedaten speichern API-Schlüssel und Secrets, die von Workflow-Knoten verwe
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evaluierung](../tabs/evals-tab.md) | OpenAI, Google, Custom | API-Schlüssel für das Modell |
 | [Decision](../nodes/decision-node.md), [Evaluierung](../tabs/evals-tab.md) Judge | Decision Model | Basis-URL eines Decision-Model-Endpoints, plus ein optionaler API-Schlüssel |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Wählt aus, welches deiner Modelle jede Anfrage bedient, unter Verwendung eines Decision-Models |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evaluierung](../tabs/evals-tab.md) Prompt-Suites | Model Router (Auto Model) | Wählt aus, welches deiner Modelle jede Anfrage bedient, unter Verwendung eines Decision-Models |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-Abonnement-Anmeldung (OAuth) oder ein Codex-Zugriffstoken für den Runner, plus ein GitHub-PAT für Repository-Operationen |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Ein OpenCode Go Gateway-API-Schlüssel (optionale Basis-URL) für den Runner, plus ein GitHub-PAT für Repository-Operationen |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub Personal Access Token (PAT) für GitHub-API-Aufrufe, GitHub-Knotenoperationen und MCP-Integrationen |

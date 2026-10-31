@@ -10,7 +10,7 @@
 | Tulosteet | 0 (päätesolmu) |
 | Tuloste | Standardoitu kaaviodata |
 
-Sijoita tämä solmu **viimeiseksi** dashboard-widgetin workflowssa. Sen edeltävän solmun tulisi tuottaa riviobjekteja sisältävä taulukko, esimerkiksi:
+Sijoita tämä solmu **viimeiseksi** dashboard-widgetin workflowssa. Entiteettisuhteissa sitä edeltävä solmu tuottaa graafiobjektin (katso [Entity relationships](#entity-relationships-db)). Muut datavetoiset kaaviot käyttävät riviobjektien taulukkoa, esimerkiksi:
 
 ```json
 [
@@ -26,9 +26,9 @@ Kun käytössä on vain esimerkkidataa (ei todellista lähdettä), nämä rivit 
 | Parametri | Tyyppi | Kuvaus |
 |-----------|------|-------------|
 | `label` | merkkijono | Solmun tunniste (camelCase) |
-| `chartType` | merkkijono | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` tai `hitl` |
+| `chartType` | merkkijono | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` tai `hitl` |
 | `orientation` | merkkijono | `vertical` tai `horizontal` (vain pylväskaavioille) |
-| `dataPath` | merkkijono | Pistepolku rivitaulukkoon ylävirran tulosteessa (esim. `data` tai `result.items`). Jätä tyhjäksi automaattista tunnistusta varten. |
+| `dataPath` | merkkijono | Pistepolku rivitaulukkoon (tai graafiobjektiin tyypille `erDiagram`) ylävirran tulosteessa (esim. `data` tai `result.items`). Jätä tyhjäksi automaattista tunnistusta varten. |
 | `labelField` | merkkijono | Rivin avain, jota käytetään kategorian nimikkeenä (pie/bar/line) |
 | `valueField` | merkkijono | Rivin avain, jota käytetään numeerisena arvona (pie/bar/line/numeric/gauge) |
 | `series` | taulukko | Valinnainen monisarjainen määrittely `[{ "name": "Sent", "field": "sent" }]` pylväs-/viivakaavioille (korvaa `valueField`) |
@@ -54,8 +54,51 @@ Kun käytössä on vain esimerkkidataa (ei todellista lähdettä), nämä rivit 
 - **scatter** — X/Y-pisteet `xField`- ja `yField`-kentistä korrelaatioiden visualisointiin.
 - **proportion** — yksi vaakasuora palkki, joka on jaettu osuuksiin prosenttilegendin kanssa (esim. kielijakauma). Käyttää `labelField` + `valueField` -parametreja.
 - **barGauge** — yksi vaakasuora mittari per rivi punaisesta→vihreään gradientilla ja arvolla (esim. vapaana oleva levytila). Käyttää `labelField` + `valueField` -parametreja, valinnaisesti `unit` ja `max` (oletusarvoisesti suurin riviarvo).
+- **gantt** — tehtäväaikataulut päivämäärillä, edistymisellä ja riippuvuuksilla; katso [Gantt-aikataulut](#gantt-schedules).
+- **erDiagram** — tietokantaentiteetit, kentät, avaimet ja suhteet; katso [Entity relationships](#entity-relationships-db).
 - **text** — Markdown-viesti (esim. tilanneilmoitus kuten "Viimeisin suoritus klo 19:47"). Aseta markdown `text`-kenttään staattista viestiä varten tai jätä `text` tyhjäksi ja aseta `valueField` renderöitäväksi ylävirran tuottamaksi merkkijonoksi. Tukee otsikoita, lihavoitua/kursivoitua, [listoja](../nodes/chart-output-node.md#interactive-task-lists), linkkejä ja inline-koodia.
 - **hitl** — katseltavien odottavien ihmisten arvioiden karuselli. Otsikko näyttää `1/n odottaa`; vasen nuoli on pois käytöstä ensimmäisellä kortilla ja oikea nuoli viimeisellä. Workflown nimi avaa kyseisen suorituksen canvasilla. **Hyväksy**, **Pyydä muutoksia** ja **Hylkää** ratkaisevat arvioinnin, ja widgetin otsikon vieressä oleva historia-ikoni avaa kyseisen suorituksen historian dialogissa samalla sivulla. Tämä kaaviotyyppi ohittaa ylävirran rivit, joten widgetin workflow koostuu vain Chart Output -solmusta. Jokainen kirjautunut käyttäjä näkee omistamiensa workflowjen arvioinnit. Valitse **Workflow** (ja **Select agent**, kun siinä on useita tarkistusvaiheita) solmun ominaisuuksissa tai widgetin asetuksissa, jolloin sen workflow'n tarkistukset näytetään sen sijaan kaikille, jotka voivat avata sen; katso [HITL-widgetit](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt-aikataulut
+
+Valitse **Gantt** (`gantt`) projektiaikatauluille ja tehtävien aikajanoille. Aseta `dataPath` tehtävätaulukkoon, kuten `tasks`. Rivit käyttävät kiinteitä kenttänimiä:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` ja `end` hyväksyvät ISO-päivämääriä tai aikaleimoja. Ilman aikavyöhykettä olevat arvot käyttävät UTC-aikaa; aikavyöhykepoikkeamat muunnetaan UTC-aikaan. `end`-arvon on oltava sama tai myöhempi kuin `start`. `progress` on valinnainen (0–100, oletusarvo 0); `dependencies` sisältää olemassa olevien tehtävien tunnisteet. Tunnisteiden on oltava yksilöllisiä. Vie hiiri tehtävän päälle nähdäksesi täydet päivämäärät, edistymisen ja riippuvuudet. Suuret kaaviot vierittyvät widgetin sisällä. Enintään 500 tehtävää hyväksytään.
+
+Esimerkkidatalle Set-määritys nimeltä `tasks` voi käyttää `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Yhdistä se Chart Output -solmuun asetuksilla `chartType: "gantt"` ja `dataPath: "tasks"`. Kartoita lähdesarakkeet näihin kiinteisiin nimiin Set-solmun avulla; kenttiä `labelField` ja `valueField` ei käytetä.
+
+### Entity relationships (DB)
+
+Valitse **Entity relationships (DB)** (`erDiagram`) tietokantakaavioille ja entiteettien välisille yhteyksille. Aseta `dataPath` graafi-**objektiin**, kuten `graph`, joka sisältää molemmat taulukot:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Kentillä on `name`, valinnainen `type` ja valinnainen `key` (`PK`, `FK`, `PK/FK` tai tyhjä). Suhteet viittaavat olemassa oleviin entiteettitunnisteisiin; valinnaiset `sourceField`- ja `targetField`-kentät ankkuroivat yhteyden nimettyihin kenttiin. `cardinality` hyväksyy arvot `one-to-one`, `one-to-many` (oletus), `many-to-one` tai `many-to-many`. Entiteettitunnisteiden ja kenttänimien on oltava yksilöllisiä kussakin entiteetissä. Enintään 100 entiteettiä, 100 kenttää entiteettiä kohden ja 500 suhdetta hyväksytään.
+
+Luo Set-solmulla `graph` käyttäen lauseketta `$dict(entities=array(dict(...)), relations=array(dict(...)))`; käytä asetuksia `chartType: "erDiagram"` ja `dataPath: "graph"`. Tämä on annetun kaavion visualisointi; se ei automaattisesti tutki aktiivista tietokantaa.
+
+Molemmat tyypit näkyvät **Lisää widget** -valikossa esikatselun kera sekä kanvaasin solmun kaaviotyypin valitsimessa. Heym Work voi ehdottaa näitä tyyppejä kuvailtaessa aikataulua tai tietokantakaaviota piirtäen esikatselut ehdotetuista tehtävistä tai entiteeteistä ennen sivun luomista.
 
 ### Interaktiiviset tehtävälistat
 

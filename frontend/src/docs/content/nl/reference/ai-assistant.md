@@ -173,7 +173,7 @@ Wanneer een workflow records opslaat, bewaart of opzoekt en u geen andere opslag
 
 Kies de nieuwe tabel en druk op **Antwoorden indienen**: de kaart maakt de tabel aan, en de assistent plaatst het id op de node en gebruikt de exacte kolomnamen. U kunt ook afzonderlijk om een tabel vragen, bijvoorbeeld "maak een tabel voor mijn leads".
 
-De assistent ziet tabelnamen, beschrijvingen en kolommen, nooit rijen. De assistent wijzigt nooit de kolommen van een bestaande tabel: als een tabel een kolom mist die de workflow nodig heeft, benoemt de assistent de kolom en biedt in plaats daarvan een nieuwe tabel aan. Voeg kolommen toe in het [DataTable-tabblad](../tabs/datatable-tab.md).
+De canvas-assistent ziet tabelnamen, beschrijvingen en kolommen, nooit rijen. Deze configureert workflow-knooppunten op basis van die metagegevens; voeg kolommen toe op het [DataTable-tabblad](../tabs/datatable-tab.md) of vraag het aan de [Chat](../tabs/chat-tab.md). Chat en `heym_chat` kunnen rijen inspecteren en rechtstreeks kolommen toevoegen of verwijderen en rijen invoegen, bijwerken of verwijderen in tabellen waarvan u eigenaar bent of schrijftoegang hebt, inclusief teamshares. Het verwijderen van kolommen en het wissen van alle rijen vraagt om bevestiging voordat gegevens worden verwijderd.
 
 ## Gerelateerd
 

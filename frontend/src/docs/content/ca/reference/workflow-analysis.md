@@ -43,12 +43,14 @@ Totes dues accions primer **executen el workflow** (quan és vàlid i executable
 
 L'informe generat cobreix tres seccions, en ordre: **Àrees de millora** (suggeriments concrets, incloent-hi una perspectiva de **seguretat** sempre que el workflow toqui credencials, entrada d'usuari, peticions externes o exposició de dades), el **Propòsit** del workflow, i **Què fa** (un recorregut pas a pas pels nodes).
 
-La secció **Àrees de millora** sempre executa quatre comprovacions explícites:
+La secció **Àrees de millora** sempre executa cinc comprovacions explícites:
 
 1. **Cobertura d'errors** — si el canvas no té cap node [Error Handler](../nodes/error-handler-node.md) i no hi ha cap workflow d'error configurat, l'informe ho assenyala i recomana afegir gestió d'errors.
 2. **Temps estalviat** — si no s'ha definit cap temps estalviat estimat per execució, l'informe recomana configurar-ne un perquè la mètrica **Time Saved** d'[Analytics](../tabs/analytics-tab.md) es pugui omplir.
 3. **Nodes de xarxa** — per als nodes que fan crides de xarxa (com ara [HTTP](../nodes/http-node.md) i nodes d'integració), l'informe recomana una gestió d'errors específica del node (retry i/o continue-on-error) en aquests nodes.
 4. **Alertes** — quan no hi ha [alertes](../tabs/alerts-tab.md) configurades per al workflow, l'informe recomana configurar alertes abans de passar a producció.
+
+5. **Evals**: quan el workflow té un node [Agent](../nodes/agent-node.md) sense suite d'agents, l'informe recomana una **Agent Suite** (o una **Prompt Suite**) a [Evals](../tabs/evals-tab.md#agent-suites); quan té un node [LLM](../nodes/llm-node.md), recomana una **Prompt Suite** per provar aquest prompt en diferents models.
 
 ### Executar l'Analyzer des de Properties
 

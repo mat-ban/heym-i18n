@@ -43,12 +43,14 @@ Båda åtgärderna **kör först workflowen** (när den är giltig och körbar) 
 
 Den genererade rapporten omfattar tre avsnitt, i ordning: **Improvement areas** (konkreta förslag, inklusive en **säkerhetsaspekt** när workflowen hanterar autentiseringsuppgifter, användarinmatning, externa anrop eller dataexponering), workflowens **Purpose** och **What it does** (en steg-för-steg-genomgång av noderna).
 
-Avsnittet **Improvement areas** utför alltid fyra explicita kontroller:
+Avsnittet **Improvement areas** utför alltid fem explicita kontroller:
 
 1. **Error coverage** — om canvasen saknar en [Error Handler](../nodes/error-handler-node.md)-nod och ingen felhanterings-workflow är konfigurerad påpekar rapporten detta och rekommenderar att felhantering läggs till.
 2. **Time saved** — om ingen uppskattad tidsbesparing per körning är angiven rekommenderar rapporten att en sådan konfigureras så att måttet **Time Saved** i [Analytics](../tabs/analytics-tab.md) kan fyllas i.
 3. **Network nodes** — för noder som gör nätverksanrop (som [HTTP](../nodes/http-node.md) och integrationsnoder) rekommenderar rapporten nodspecifik felhantering (retry och/eller continue-on-error) på dessa noder.
 4. **Alerts** — när inga [alerts](../tabs/alerts-tab.md) är konfigurerade för workflowen rekommenderar rapporten att aviseringar ställs in innan den går till produktion.
+
+5. **Evals**: när workflowet har en [Agent](../nodes/agent-node.md)-nod utan en agentsvit rekommenderar rapporten en **Agent Suite** (eller en **Prompt Suite**) i [Evals](../tabs/evals-tab.md#agent-suites); när det har en [LLM](../nodes/llm-node.md)-nod rekommenderar den en **Prompt Suite** för att testa prompten över flera modeller.
 
 ### Kör Analyzer från Properties
 

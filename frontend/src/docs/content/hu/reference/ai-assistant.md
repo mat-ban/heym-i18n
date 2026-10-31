@@ -173,7 +173,7 @@ Amikor egy workflow rekordokat ment, tárol vagy keres ki, és Ön nem nevezett 
 
 Válassza ki az új táblát, és nyomja meg a **Submit answers** gombot: a kártya létrehozza a táblát, az asszisztens pedig ráhelyezi annak id-jét a csomópontra, és annak pontos oszlopneveit használja. Ön önállóan is kérhet táblát, például: „create a table for my leads”.
 
-Az asszisztens a táblaneveket, leírásokat és oszlopokat látja, a sorokat soha. Soha nem módosítja egy meglévő tábla oszlopait: ha egy táblából hiányzik a workflow által igényelt oszlop, megnevezi az oszlopot, és helyette egy új táblát ajánl fel. Oszlopokat a [DataTable tab](../tabs/datatable-tab.md) felületen adhat hozzá.
+A vászonasszisztens a táblák nevét, leírását és oszlopait látja, a sorokat soha. A workflow csomópontjait ezen metaadatok alapján konfigurálja; oszlopokat a [DataTable fülön](../tabs/datatable-tab.md) adhat hozzá, vagy kérheti a [Chat](../tabs/chat-tab.md) felületén. A Chat és a `heym_chat` képes megvizsgálni a sorokat, közvetlenül oszlopokat hozzáadni vagy eltávolítani, valamint sorokat beszúrni, frissíteni vagy törölni az Ön tulajdonában lévő vagy írási joggal elérhető táblákban, beleértve a csapatmegosztásokat is. Az oszlopok eltávolítása és az összes sor törlése megerősítést kér az adatok törlése előtt.
 
 ## Kapcsolódó
 

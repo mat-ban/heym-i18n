@@ -47,7 +47,7 @@ Az alkalmazásban a **Logs** fül ugyanezt a konténerkimenetet olvassa. A hozz�
 
 ## Mit naplózunk
 
-Minden állapotváltozás naplózásra kerül. Az olvasási műveletek csak ott kerülnek naplózásra, ahol maga az olvasás a bizalmas művelet — egy workflow futtatási előzményeinek megtekintése, egy hitelesítési adat megnyitása, egy fájl letöltése. A szokásos lista- és részletolvasások nem képezik audit tárgyát; a hozzáférési napló már rögzíti, hogy megtörtént egy kérés, és minden `GET` auditálása elfedné a valóban fontos sorokat.
+Minden állapotváltozás naplózásra kerül. Az olvasási műveletek csak ott kerülnek naplózásra, ahol maga az olvasás a bizalmas művelet — egy workflow futtatási előzményeinek megtekintése, egy hitelesítési adat megnyitása, egy fájl letöltése. A szokásos lista- és részletolvasások nem képezik audit tárgyát; a hozzáférési napló már rögzíti, hogy megtörtént egy kérés, és minden `GET` auditálása elfedné a valóban fontos sorokat. Az egyetlen kivételt az [oldalmegtekintések](#page-views) képezik, amelyek rögzítik, hogy egy bejelentkezett felhasználó merre járt az alkalmazásban.
 
 ### Hitelesítés
 
@@ -62,9 +62,34 @@ Minden állapotváltozás naplózásra kerül. Az olvasási műveletek csak ott 
 | `sso_settings.update` | Egy adminisztrátor módosította az [SSO](./sso.md) konfigurációt. Rögzíti az `enabled` és `password_login_disabled` értékeket, soha nem a client secretet. |
 | `sso_settings.test` | Egy adminisztrátor lefuttatta az SSO kapcsolattesztet. |
 
+### Oldalmegtekintések
+
+A `page.view` bejegyzés minden alkalommal létrejön, amikor egy bejelentkezett felhasználó megnyit egy oldalt a webes alkalmazásban, az URL-útvonallal egy `path` mezőben:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Az útvonal az alkalmazáson belüli útvonal. Az irányítópult lapjai részei ennek (`/?tab=traces`), akárcsak a megnyitott elemet megnevező azonosítók, mint például a `/workflows/<id>`. Csak az oldalt azonosító lekérdezési paraméterek rövid listája marad meg (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); minden más a lekérdezési karakterláncban és a teljes töredék elvetésre kerül. Azok az oldalak, amelyek linkje titkot tartalmaz, mint például a `/review/<token>`, a titok helyett a `:token` helyőrzővel kerülnek naplózásra.
+
+A böngésző jelenti az útvonalat, így a `page.view` sor azt mutatja, hogy a felhasználó saját bevallása szerint hová navigált. Nem bizonyítja, hogy a szerver valóban visszaküldte azt az oldalt. A bejelentkezési oldal meglátogatása és a kijelentkezett állapotban megnyitott hivatkozások nem kerülnek rögzítésre, mivel nincs hozzájuk felhasználó társítva.
+
 ### Workflow-k
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+A `workflow.run` akkor kerül naplózásra, amikor egy futtatást az API-n keresztül indítanak: a szerkesztő Futtatás gombja, az execute végpont munkamenettel, API-kulccsal vagy webhookkal, a chat portál és az MCP-eszközök. Rögzíti, hogy ki indította, hogyan és miként fejeződött be:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+Az `execution_id` összekapcsolja a sort a futtatással a Futtatási előzményekben. Az `outcome` értéke `failure`, ha a futtatás `error`, `cancelled` vagy `timeout` állapotban ért véget. Az emberi felülvizsgálatra várakozó vagy a párhuzamossági sorban tartott futtatás egy `success` sor `status=pending` vagy `status=queued` állapottal. A bejelentkezett felhasználó nélküli hívások, például egy névtelen webhook vagy egy portállátogató, nem rendelkeznek `actor_id` vagy `actor_email` mezővel. A bemenetek és kimenetek soha nem kerülnek feljegyzésre.
+
+Az ütemezés, trigger csomópont, sor vagy esemény által indított futtatások nem minősülnek audit soroknak. Azon a példányon futnak, amely lefoglalta őket, és a Futtatási előzményekben kerülnek rögzítésre a trigger forrásukkal és a futtató példánnyal együtt.
+
+A `workflow.history_view` akkor kerül feljegyzésre, amikor valaki megnyitja egy workflow futtatási előzményeit. A vásznon vagy egy listában a legutóbbi futtatást megjelenítő gyors keresés nem képez auditot.
+
 
 A `workflow.history_view` `owned=false` értéket rögzít, amikor egy munkatárs másvalaki futtatási előzményeit olvassa. A `workflow.delete` `outcome=denied` értéket rögzít a `reason=not_owner` okkal, amikor egy munkatárs megpróbálja törölni.
 
@@ -96,6 +121,27 @@ Egy audit sor azonosítókat, neveket és darabszámokat rögzít. Soha nem rög
 Ezt két dolog kényszeríti ki. A hívási pontok úgy vannak megírva, hogy csak biztonságos mezőket adjanak át, az audit segédfüggvény pedig végső védőhálóként redaktál: minden olyan mező, amelynek neve tartalmazza a `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` vagy hasonló karakterláncot, a sor összeállítása előtt `***`-ra cserélődik. A túlzott redaktálás szándékos — egy használhatatlan sor jobb, mint egy kiszivárgott hitelesítési adat.
 
 Ahol egy titok valóban releváns a rekord szempontjából, csak annak alakja kerül naplózásra. Egy fájlmegosztás `password_protected=true` értéket rögzít, soha nem a jelszót.
+
+## Heym Work
+
+Amikor a Heym Worköt a Heym mellett futtatja, a Work a saját konténerének stdoutjára bocsát ki audit sorokat ugyanabban a Winston formátumban:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+A Work naplózza a felhasználói műveleteket az oldalakon, táblákon és rekordokon:
+
+| Művelet | Jelentés |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Változások az irányítópult oldalain és elrendezésein |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Kanban oszlopelrendezés változásai |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Kártya életciklus események |
+| `record.create`, `record.update`, `record.delete` | Adattábla rekordmutációk a Workön keresztül |
+| `chat.message` | A Work asszisztensnek küldött felhasználói prompt |
+| `export.csv`, `export.json` | Adatexportálások |
+
+Minden sor ugyanazokat az `actor_id`, `actor_email`, `timestamp` és `outcome` mezőket hordozza, mint a Heym audit sorai, így a naplógyűjtők mindkettőt egyetlen pipeline-nal dolgozhatják fel.
 
 ## Megőrzés
 

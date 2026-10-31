@@ -14,7 +14,7 @@ Credentials menyimpan API key dan secret yang digunakan oleh Node Workflow. Anda
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API key untuk model |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Base URL dari endpoint decision model, plus API key opsional |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Memilih model mana milik Anda yang melayani setiap permintaan, menggunakan decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) suite prompt | Model Router (Auto Model) | Memilih model mana milik Anda yang melayani setiap permintaan, menggunakan decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Sign-in langganan ChatGPT (OAuth) atau access token Codex untuk runner, plus GitHub PAT untuk operasi repositori |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API key gateway OpenCode Go (base URL opsional) untuk runner, plus GitHub PAT untuk operasi repositori |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) untuk panggilan GitHub API, operasi Node GitHub, dan integrasi MCP |

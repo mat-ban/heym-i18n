@@ -381,7 +381,7 @@ HTML 輸出映射器節點會渲染單一 HTML 範本，並將 `$nodeLabel.field
 
 #### [Chart Output](../nodes/chart-output-node.md)
 
-Chart Output 節點是 [Dashboard](../tabs/dashboard-tab.md) 小工具 Workflow 的終端節點。它會將上游節點所產生的資料列轉換為標準化的圖表 Payload，供 Dashboard 渲染。選擇 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（或多系列時使用 `series`，或使用 `text` 作為 markdown 訊息），並將其置於最後；它沒有輸出邊。HITL 會忽略上游資料列，並列出您待處理的人工審核項目。另一列作為可在新標籤頁中打開 URL 的鏈接按鈕（`linkColumn`，使用 `linkLabel` 指定按鈕文本）
+Chart Output 節點是 [Dashboard](../tabs/dashboard-tab.md)、Gantt、entity relationships 小工具 Workflow 的終端節點。它會將上游節點所產生的資料列轉換為標準化的圖表 Payload，供 Dashboard 渲染。選擇 `chartType`（bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL），映射 `labelField`/`valueField`（或多系列時使用 `series`，或使用 `text` 作為 markdown 訊息），並將其置於最後；它沒有輸出邊。 Gantt 讀取包含 ISO 開始／結束日期、進度與相依性 ID 的工作列。Entity relationships 讀取包含實體、欄位、PK/FK 鍵與關聯的圖物件。兩者也會在 Heym Work 頁面及其元件提議預覽中轉譯。HITL 會忽略上游資料列，並列出您待處理的人工審核項目。另一列作為可在新標籤頁中打開 URL 的鏈接按鈕（`linkColumn`，使用 `linkLabel` 指定按鈕文本）
 
 另請參閱 [Dashboard](../tabs/dashboard-tab.md)、[Set](../nodes/set-node.md) 及 [Output](../nodes/output-node.md)。
 
@@ -480,7 +480,7 @@ AI Assistant 是一個從 Debug 面板開啟的聊天面板，讓你以自然語
 
 點擊畫布上任何節點上方的 **AI** 即可僅更改或修復該節點。面板會顯示其正在修改的節點（運行後帶有其最新結果），並提供 **Change this node as ...**、**Fix error in this node ...** 和 **Other**。僅該節點會被更新；工作流的其餘部分和佈局保持原樣。請參閱 [AI Assistant › 修改單個節點](./ai-assistant.md#changing-one-node)。
 
-當 workflow 儲存記錄時，assistant 會詢問要使用哪個 [data table](../tabs/datatable-tab.md)，或建立一個包含 workflow 所需欄位的 data table。請參閱 [AI Assistant › Data tables](./ai-assistant.md#data-tables)。
+當 workflow 儲存記錄時，assistant 會詢問要使用哪個 [data table](../tabs/datatable-tab.md)，或建立一個包含 workflow 所需欄位的 data table。請參閱 [AI Assistant › Data tables](./Chat 和 MCP `heym_chat` 也可以使用擁有者或寫入權限直接編輯欄與列，並在移除欄或清空所有列之前進行確認。 Chat 和 MCP `heym_chat` 也可以使用擁有者或寫入權限直接編輯欄與列，並在移除欄或清空所有列之前進行確認。 ai-assistant.md#data-tables)。
 
 當目前的 workflow 包含 [Agent Node](../nodes/agent-node.md) skills 時，assistant 只會將每個 skill 的 `SKILL.md` 傳送至 workflow 上下文中。附加的 `.py` 檔案與二進位 skill 資產會在請求前被排除，以避免大型 skill 組合超出 model 上下文視窗。
 
@@ -811,7 +811,7 @@ Analytics 分頁顯示執行指標與趨勢。摘要統計包含總執行次數�
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 分頁是一個 Grafana 風格的空間，您可以在其中建立圖表小工具的網格，每個小工具都由其各自隱藏的 Heym workflow 算繪而成。您可以建立所需數量的 dashboard，並將每個 dashboard 以唯讀或可編輯的方式與使用者或 teams 分享；小工具一律以擁有者的 credentials 執行，因此每個人看到的資料都相同。用自然語言描述一個指標，AI 便會產生該小工具，或手動新增一個並挑選圖表類型，以範例資料預覽：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是您待處理的人工審查的輪播。標頭會顯示 `1/n pending`。workflow 名稱會在畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目，而小工具標題旁的歷史圖示會在同一頁面的歷史對話框中開啟該次執行。小工具會快取其結果，可用 AI 微調（每次變更都會儲存至 [Edit History](./edit-history.md)），可連同其完整 workflow 一併複製，可用 Tidy up 重新排列，並可在編輯模式中拖曳或調整大小。表格可顯示狀態標籤，並將其資料列連結至會將所點擊資料列記錄讀取為 `$page.record` 的詳細資訊儀表板；而執行（Run）小工具可從儀表板執行 workflow：針對拖放的檔案、搭配其輸入欄位，或透過執行按鈕。由於每個小工具都是一個 workflow，任何您能取得的資料——[HTTP](../nodes/http-node.md) 呼叫、[BigQuery](../nodes/bigquery-node.md) 查詢、[RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 輸出——都能成為圖表。HITL 小部件的設置可以將其縮小到單個工作流的審核，或其中的代理或 Slack 批准步驟；這樣的小部件會向所有可以打開該工作流的人顯示它們，並對無法打開的人隱藏。
+Dashboard 分頁是一個 Grafana 風格的空間，您可以在其中建立圖表小工具的網格，每個小工具都由其各自隱藏的 Heym workflow 算繪而成。您可以建立所需數量的 dashboard，並將每個 dashboard 以唯讀或可編輯的方式與使用者或 teams 分享；小工具一律以擁有者的 credentials 執行，因此每個人看到的資料都相同。用自然語言描述一個指標，AI 便會產生該小工具，或手動新增一個並挑選圖表類型，以範例資料預覽：bar、line、area、pie、table、numeric、gauge、scatter、proportion、bar gauge、text 或 HITL。HITL 是您待處理的人工審查的輪播。標頭會顯示 `1/n pending`。workflow 名稱會在畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目，而小工具標題旁的歷史圖示會在同一頁面的歷史對話框中開啟該次執行。小工具會快取其結果，可用 AI 微調（每次變更都會儲存至 [Edit History](./edit-history.md)），可連同其完整 workflow 一併複製，可用 Tidy up 重新排列，並可在編輯模式中拖曳或調整大小。表格可顯示狀態標籤，並將其資料列連結至會將所點擊資料列記錄讀取為 `$page.record` 的詳細資訊儀表板；而執行（Run）小工具可從儀表板執行 workflow：針對拖放的檔案、搭配其輸入欄位，或透過執行按鈕。由於每個小工具都是一個 workflow，任何您能取得的資料——[HTTP](../nodes/http-node.md) 呼叫、[BigQuery](../nodes/bigquery-node.md) 查詢、[RAG](../nodes/rag-node.md) 查找或 [LLM](../nodes/llm-node.md) 輸出——都能成為圖表。HITL 小部件的設置可以將其縮小到單個工作流的審核，或其中的代理或 Slack 批准步驟；這樣的小部件會向所有可以打開該工作流的人顯示它們，並對無法打開的人隱藏。 [Chat](../tabs/chat-tab.md) 和 MCP `heym_chat` 工具列出您的儀表板及其元件，說明 Workflow 位於哪個儀表板上，新增元件（首先是一個空白元件，隨後 Chat 會建構並測試其 Workflow），將現有 Workflow 作為元件放置在儀表板上，重新命名或刪除元件，並像「整理」按鈕一樣整理版面配置。
 
 另請參閱 [Chart Output node](../nodes/chart-output-node.md)、[Analytics](../tabs/analytics-tab.md) 與 [Execution History](./execution-history.md)。
 
@@ -820,6 +820,8 @@ Dashboard 分頁是一個 Grafana 風格的空間，您可以在其中建立圖�
 ### [Evals](../tabs/evals-tab.md)
 
 Evals 分頁（位於 `/evals`）可讓您建立評估套件、新增或產生測試案例、最佳化套件 Prompt，並針對 [Agent Node](../nodes/agent-node.md) Workflow 執行評估。選取一個或多個模型、選擇評分方式（Exact Match、Contains 或 LLM-as-Judge），可選擇讓另一個模型或 [Decision Model](../nodes/decision-node.md) 來評判 LLM-as-Judge 的答案，設定每個測試的執行次數（以及 Exact Match 與 Contains 的 temperature 與 reasoning effort），然後比較通過/失敗結果與各模型的輸出。檢閱過去評估的執行歷史記錄，包括每次執行所使用的 judge，以相同的 judge 重新執行一次、將其匯出為 JSON，並在 [Traces](../tabs/traces-tab.md) 中交叉檢查底層行為。
+
+**Agent 套件**則檢查單一 Agent 節點：它顯示 Agent 在真實執行中的基準線延遲、美元成本、Token 和工具呼叫，允許您將每個工具、MCP 工具、子 Agent、子 Workflow 或技能標記為 Agent 必須呼叫或絕不能呼叫的項目，將上限設定為基準線增加 20%，使用上次執行的輸入或 AI 編寫的輸入依所選次數執行 Workflow，並根據失敗原因對每次執行進行評分。套件選取器列出了兩種種類及其類型並支援搜尋，[Workflow Analysis](./workflow-analysis.md) 報告會為包含 Agent 或 LLM 節點的 Workflow 推薦套件。
 
 另請參閱 [Agent Node](../nodes/agent-node.md)、[Traces](../tabs/traces-tab.md) 與 [Execution History](./execution-history.md)。
 

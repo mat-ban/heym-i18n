@@ -50,6 +50,8 @@
 3. **Network nodes** — 對於會發出網路呼叫的節點（例如 [HTTP](../nodes/http-node.md) 與整合節點），報告會建議在這些節點上設定節點專屬的錯誤處理（retry 及／或 continue-on-error）。
 4. **Alerts** — 當該 workflow 未設定任何 [alerts](../tabs/alerts-tab.md) 時，報告會建議在進入正式環境前先設定 alerts。
 
+5. **Evals**：當 Workflow 包含沒有 Agent 套件的 [Agent 節點](../nodes/agent-node.md)時，報告建議在 [Evals](../tabs/evals-tab.md#agent-suites) 中建立 **Agent Suite**（或 **Prompt Suite**）；當包含 [LLM](../nodes/llm-node.md) 節點時，建議使用 **Prompt Suite** 跨模型測試該 Prompt。
+
 ### 從 Properties 執行 Analyzer
 
 當 workflow 在畫布上有節點但尚無分析文件時，workflow 層級的 [Properties](./canvas-features.md) 面板（未選取任何節點時顯示）會出現 **Run Analyzer** 按鈕。它會開啟此 Workflow Analysis 面板，讓你能選擇 credential 與 model 並產生報告。

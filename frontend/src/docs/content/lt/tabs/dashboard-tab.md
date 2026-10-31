@@ -23,6 +23,8 @@ Valdiklis yra viena diagrama tinkle. Palaikomi diagramų tipai:
 - **Matuoklis** (viena vertė pagal min–max intervalą, pvz., procentas)
 - **Taškų** (X/Y taškai koreliacijos diagramoms)
 - **Proporcija** (vienas stulpelis padalintas į dalis su procentų legenda, pvz., kalbos pasiskirstymas)
+- **Gantt** (užduočių datos, užbaigimas ir priklausomybės)
+- **Entity relationships (DB)** (lentelės, laukai, PK/FK raktai ir ryšiai)
 - **Stulpelinio matuoklio** (vienas horizontalus matuoklis kiekviename eilutėje su raudona→žalia gradientu ir verte, pvz., laisvos disko vietos)
 - **Tekstas** (markdown žinutė, pvz., statuso pastaba kaip "Paskutinis vykdymas 19:47"; palaiko [interaktyvius žymeklius](../nodes/chart-output-node.md#interactive-task-lists), kai markdown yra statinis, ir [aiškius numeruotus sąrašus](../nodes/chart-output-node.md#numbered-lists) pagal užsakymą arba mažėjimo tvarka)
 - **HITL** (jūsų laukiančios žmogaus apžvalgos. Antraštėje rodomas `1/n laukia`. Workflow pavadinimas atidaro tą vykdymą drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** išsprendžia tai. Istorijos piktograma šalia valdiklio pavadinimo atidaro tą vykdymą istorijos dialoge šioje pusėje. Valdiklis nenaudoja aukštesnių eilučių, ir kiekvienas asmuo mato savo eilę. Vietoj to jis gali rodyti vieno Workflow peržiūras visiems, kurie gali atverti tą Workflow; žr. [HITL valdikliai](#hitl-valdikliai))
@@ -96,6 +98,18 @@ Valdiklių API taip pat gali sukurti **skaitiklio kortelę** be AI: `text` valdi
 
 Naudokite valdiklio **Tobulinti su AI** mygtuką, kad peržiūrėtumėte esamą valdiklį su nauja instrukcija. Kiekvienas AI tobulinimas užfiksuoja ankstesnį workflow valdiklio **Redagavimo istorijoje**, todėl galite peržiūrėti arba grąžinti pakeitimus iš workflow redaktoriaus.
 
+## Iš Chat ir MCP
+
+[Chat](./chat-tab.md) ir MCP klientai per [`heym_chat` įrankį](./mcp-tab.md) gali skaityti jūsų informacijos suvestines, pridėti prie jų valdiklių, pervadinti ar ištrinti valdiklius ir sutvarkyti suvestinės išdėstymą. Heym Work kiekvieną suvestinę rodo kaip puslapį, todėl tie patys atsakymai apima ir jos puslapius.
+
+- **Kokios suvestinės yra ir kas jose yra.** Paklauskite "kokias informacijos suvestines turiu?", "kas yra Pardavimų suvestinėje?" arba "kurioje suvestinėje yra pajamų workflow?". Chat išvardija jūsų suvestines ir bendrinamas su jumis suvestines, nurodydamas jūsų prieigos teises ir nuorodą į kiekvieną iš jų, taip pat kiekvieną jose esantį valdiklį: pavadinimą, diagramos tipą ir susietą workflow. [HITL valdiklis](#hitl-widgets), filtruojamas pagal workflow, kurio negalite atidaryti, lieka paslėptas, kaip ir pačioje suvestinėje.
+- **Naujas valdiklis.** Paprašykite "pridėk atvirų atvejų diagramą pagal būseną į Pardavimų suvestinę". Chat pirmiausia įkelia tuščią valdiklį į suvestinę, tada sukuria paties valdiklio workflow, atlieka bandomuosius vykdymus ir taiso klaidas, kol vykdymas bus sėkmingas, lygiai taip pat, kaip [kuria workflows](./chat-tab.md#workflows-kurimas). Jokio atskiro workflow nepaliekama, o kiekvienas išsaugojimas rodomas valdiklio Edit History. Valdiklio pavadinimas ir diagramos tipas atitinka tai, ką išsaugo Chat.
+- **Esamas workflow.** Paprašykite "įkelk pajamų workflow į Pardavimų suvestinę". Workflow, kuris baigiasi Chart Output mazgu, tampa diagramos valdikliu su savo workflow kopija, todėl vėlesni valdiklio pakeitimai niekada nepaveikia originalo. Workflow su trigger arba input mazgu negali tapti diagramos valdikliu. Bet koks kitas workflow tampa [vykdymo valdikliu](#run-widgets), kuriam taip pat reikalingas workflow, kurį suvestinės savininkas gali vykdyti.
+- **Valdiklio pervadinimas arba ištrynimas.** Paprašykite "pervadink Pajamų valdiklį į Pardavimai" arba "ištrink valdiklį Atviri atvejai". Diagramos valdiklio workflow taip pat perima naują pavadinimą; vykdymo valdiklio workflow išlaiko savąjį. Ištrynus diagramos valdiklį, ištrinamas ir jo workflow, lygiai taip pat, kaip veikia valdiklio trynimo mygtukas; vykdymo valdiklio workflow lieka. Chat ištrina tik tą valdiklį, kurio aiškiai paprašėte, ir pirmiausia paprašo patikslinti, jei žodžiai atitinka kelis valdiklius.
+- **Sutvarkymas.** Paprašykite "sutvarkyk Pardavimų suvestinę" arba "pridėk šiuos tris valdiklius ir sutvarkyk". Chat išdėsto matomus valdiklius jų tvarka, lygiai taip pat, kaip mygtukas **Sutvarkyti**: atsitiktinės dviejų ar trijų eilutės, todėl paklausus dar kartą pateikiamas kitoks išdėstymas. Nurodykite skaičių eilutėje ("po tris eilutėje"), kad gautumėte tokio dydžio eilutes. Tai sutvarko suvestinę Heym sistemoje; Heym Work išlaiko savo puslapio išdėstymą, kurį keičia paties puslapio mygtukas **Sutvarkyti**.
+
+Nauji valdikliai perkeliami po esamais suvestinės valdikliais ir, kaip ir kiekvienas valdiklis, vykdomi suvestinės savininko vardu. Pridėjimui, pervadinimui, trynimui ir tvarkymui reikalinga rašymo prieiga prie suvestinės. Norint sukurti naują valdiklį, reikalingas pokalbis, galintis kurti workflows: skirtukas Chat, Heym Work Chat redaktoriams ir `heym_chat`.
+
 ## Išdėstymo redagavimas
 
 Perjunkite **Redaguoti**, kad patektumėte į redagavimo režimą, kur galite vilkti valdiklius ir keisti jų dydį 12 stulpelių tinkle. Išdėstymo pakeitimai automatiškai išsaugomi. Valdiklių pavadinimai yra redaguojami tiesiogiai iš valdiklio antraštės.
@@ -127,3 +141,7 @@ Pašalinus dalijimąsi arba sumažinus jį iš rašymo į skaitymą, tai įsigal
 
 - [Chart Output mazgas](../nodes/chart-output-node.md)
 - [Analizės skirtukas](analytics-tab.md) — integruoti vykdymo metrikai (skirtingi nuo vartotojų sukurtų informacinių lentelių)
+
+## Grafikai ir duomenų bazių diagramos
+
+Pasirinkite **Gantt** skiltyje Pridėti valdiklį, kad parodytumėte užduotis laike su užbaigimo ir priklausomybės ryšiais, arba **Entity relationships (DB)**, kad susietumėte lenteles, laukus ir jų ryšius. Abu tipai naudoja [Chart Output mazgą](../nodes/chart-output-node.md#gantt-schedules) ir yra prieinami Heym Work puslapiuose. Kai Work siūlo valdiklius grafikui ar duomenų bazės schemai, ji nubraižo peržiūras pagal siūlomas užduotis ar esybes.

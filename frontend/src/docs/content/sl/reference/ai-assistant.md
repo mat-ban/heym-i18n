@@ -173,7 +173,7 @@ Ko workflow shranjuje, shranjuje ali išče zapise in niste poimenovali druge sh
 
 Izberite novo tabelo in pritisnite **Potrdi odgovore**: kartica ustvari tabelo, asistent pa doda njen id na vozlišče in uporabi njene točne imenske stolpce. Prav tako lahko zahtevate tabelo samostojno, na primer "ustvari tabelo za moje potencialne stranke".
 
-Asistent vidi imena tabel, opise in stolpce, nikoli pa vrstic. Nikoli ne spremeni stolpcev obstoječe tabele: če tabeli manjka stolpec, ki ga workflow potrebuje, imenuje stolpec in ponudi novo tabelo namesto tega. Dodajte stolpce na [zavihek DataTable](../tabs/datatable-tab.md).
+Asistent na platnu vidi imena tabel, opise in stolpce, nikoli vrstic. Iz teh metapodatkov konfigurira vozlišča workflowa; stolpce dodajte v [zavihku DataTable](../tabs/datatable-tab.md) ali prosite v [Chatu](../tabs/chat-tab.md). Chat in `heym_chat` lahko pregledujeta vrstice ter neposredno dodajata ali odstranjujeta stolpce in vstavljata, posodabljata ali brišeta vrstice v tabelah, katerih lastnik ste ali imate pravice za pisanje, vključno z deljenji ekipe. Odstranitev stolpcev in brisanje vseh vrstic zahtevata potrditev pred brisanjem podatkov.
 
 ## Sorodno
 

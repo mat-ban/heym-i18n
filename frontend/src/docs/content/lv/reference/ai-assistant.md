@@ -173,7 +173,7 @@ Kad workflow saglabā, glabā vai meklē ierakstus un Jūs neesat norādījis ci
 
 Izvēlieties jauno tabulu un nospiediet **Iesniegt atbildes**: kartīte izveido tabulu, un asistents ievieto tās id mezglā un izmanto tās precīzos kolonnu nosaukumus. Jūs varat arī lūgt tabulu atsevišķi, piemēram, "izveido tabulu maniem leads".
 
-Asistents redz tabulu nosaukumus, aprakstus un kolonnas, nekad rindas. Tas nekad nemaina esošas tabulas kolonnas: ja tabulai trūkst kolonnas, kas nepieciešama workflow, tas nosauc kolonnu un tā vietā piedāvā jaunu tabulu. Pievienojiet kolonnas cilnē [DataTable](../tabs/datatable-tab.md).
+Audekla asistents redz tabulu nosaukumus, aprakstus un kolonnas, bet nekad rindas. Tas konfigurē darbplūsmas mezglus no šiem metadatiem; pievienojiet kolonnas [cilnē DataTable](../tabs/datatable-tab.md) vai jautājiet [Chat](../tabs/chat-tab.md). Chat un `heym_chat` var pārbaudīt rindas un tieši pievienot vai noņemt kolonnas, kā arī ievietot, atjaunināt vai dzēst rindas tabulās, kas jums pieder vai kurām ir rakstīšanas piekļuve, tostarp komandas koplietojumos. Kolonnu noņemšana un visu rindu notīrīšana pirms datu dzēšanas prasa apstiprinājumu.
 
 ## Saistītais
 

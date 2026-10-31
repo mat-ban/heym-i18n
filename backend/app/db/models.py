@@ -129,6 +129,8 @@ class User(Base):
         nullable=True,
     )
     mcp_chat_model: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # Makes the global server's Heym Agent reachable over A2A too. Needs mcp_chat_enabled.
+    mcp_a2a_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -205,6 +207,8 @@ class MCPServer(Base):
         nullable=True,
     )
     chat_model: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # Makes this server's Heym Agent reachable over A2A too. Needs chat_enabled.
+    a2a_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -691,6 +695,9 @@ class ExecutionHistory(Base):
         String(128), nullable=True, index=True
     )
     executed_by_instance_name: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # True until the node analytics rollup has counted this run (see
+    # app/services/node_analytics_rollup.py). Rows written before migration 148 read false.
+    node_analytics_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     workflow: Mapped["Workflow"] = relationship("Workflow", back_populates="executions")
     hitl_requests: Mapped[list["HITLRequest"]] = relationship(
@@ -864,9 +871,39 @@ class WorkflowAnalyticsSnapshot(Base):
     owner: Mapped["User | None"] = relationship("User")
 
 
+class NodeAnalyticsSnapshot(Base):
+    """Hourly totals per node type for one workflow, written only by the node analytics rollup."""
+
+    __tablename__ = "node_analytics_snapshots"
+    __table_args__ = (
+        UniqueConstraint(
+            "workflow_id", "node_type", "bucket_start", name="uq_node_analytics_snapshot_scope"
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    workflow_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("workflows.id", ondelete="CASCADE"), nullable=False
+    )
+    node_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    bucket_start: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, index=True
+    )
+    call_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    error_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    total_duration_ms: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 class LLMTrace(Base):
     __tablename__ = "llm_traces"
-    __table_args__ = (Index("ix_llm_traces_user_created", "user_id", "created_at"),)
+    __table_args__ = (
+        Index("ix_llm_traces_user_created", "user_id", "created_at"),
+        Index("ix_llm_traces_workflow_node_created", "workflow_id", "node_id", "created_at"),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID] = mapped_column(
@@ -1691,6 +1728,16 @@ class EvalRun(Base):
     temperature: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
     reasoning_effort: Mapped[str | None] = mapped_column(String(20), nullable=True)
     max_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    runs_per_test: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=1, server_default="1"
+    )
+    # The credential the models under test ran on; the suite opens with it again.
+    credential_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("credentials.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     # The judge (a model or a decision model) that scored an LLM-as-Judge run; both stay
     # empty when each model scored its own answer. The model outlives a deleted credential.
     judge_credential_id: Mapped[uuid.UUID | None] = mapped_column(
@@ -1740,6 +1787,62 @@ class EvalRunResult(Base):
 
     run: Mapped["EvalRun"] = relationship("EvalRun", back_populates="results")
     test_case: Mapped["EvalTestCase"] = relationship("EvalTestCase", back_populates="run_results")
+
+
+class AgentSuite(Base):
+    """Checks one agent node's real runs, read from its LLM traces, against tool
+    assertions and metric thresholds. It never starts a run of its own."""
+
+    __tablename__ = "agent_suites"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    owner_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    workflow_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("workflows.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    node_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    node_label: Mapped[str] = mapped_column(String(255), nullable=False, default="")
+    tool_assertions: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    thresholds: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    baseline: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class AgentSuiteRun(Base):
+    """One press of Run on an agent suite: its workflow executed a chosen number of times.
+
+    ``results`` holds one entry per execution with the agent's trace ids, so the report
+    scores exactly these runs.
+    """
+
+    __tablename__ = "agent_suite_runs"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    suite_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("agent_suites.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="running")
+    requested_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    generate_inputs: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    inputs: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    results: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # Written every few seconds while the runner is alive; see agent_suite_service.
+    heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class GeneratedFile(Base):
@@ -2091,7 +2194,8 @@ class DashboardConversation(Base):
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
     )
     title: Mapped[str] = mapped_column(String(255), nullable=False, default="New Chat")
-    # Where the conversation originated: "chat" (the Chat tab) or "mcp" (the heym_chat MCP tool).
+    # Where the conversation originated: "chat" (the Chat tab), "mcp" (the heym_chat MCP
+    # tool) or "a2a" (an A2A client).
     source: Mapped[str] = mapped_column(String(20), nullable=False, default="chat")
     is_pinned: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_running: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
@@ -2135,11 +2239,50 @@ class DashboardMessage(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     tool_calls: Mapped[list | None] = mapped_column(JSONB, nullable=True, default=None)
+    # Set on the messages of the turns an A2A task ran, so the task can return its history.
+    a2a_task_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("a2a_tasks.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
 
     conversation: Mapped["DashboardConversation"] = relationship(
         "DashboardConversation",
         back_populates="messages",
         foreign_keys=[conversation_id],
+    )
+
+
+class A2ATask(Base):
+    """One A2A task: a message an A2A client sent the Heym Agent, and the turns it ran."""
+
+    __tablename__ = "a2a_tasks"
+    __table_args__ = (
+        Index("ix_a2a_tasks_user_server_updated", "user_id", "mcp_server_id", "updated_at"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    # Null for the global server.
+    mcp_server_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("mcp_servers.id", ondelete="CASCADE"), nullable=True
+    )
+    context_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("dashboard_conversations.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    # The ProtoJSON state name, for example TASK_STATE_WORKING.
+    state: Mapped[str] = mapped_column(String(32), nullable=False)
+    status_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    artifacts: Mapped[dict | None] = mapped_column(JSONB, nullable=True, default=None)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
 

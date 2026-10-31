@@ -83,7 +83,8 @@
     "run": "Pokreni",
     "dropFileOrClick": "Ispustite datoteku ovdje ili kliknite za odabir",
     "removeFile": "Ukloni datoteku",
-    "chooseFileFor": "Odaberite datoteku za {label}"
+    "chooseFileFor": "Odaberite datoteku za {label}",
+    "new": "Novo"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Nijedan: svaki model ocjenjuje sam sebe",
     "removeJudge": "Ukloni ocjenjivač",
     "judgeModel": "Model ocjenjivača",
-    "enterJudgeModel": "Unesite model ocjenjivača za pokretanje s ovim ocjenjivačem."
+    "enterJudgeModel": "Unesite model ocjenjivača za pokretanje s ovim ocjenjivačem.",
+    "promptSuite": "Paket promptova",
+    "promptSuiteDesc": "Testirajte sistemski prompt na različitim modelima",
+    "agentSuite": "Paket agenata",
+    "agentSuiteDesc": "Provjerite stvarna izvođenja agenta: alati, latencija, trošak",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Pretraži pakete...",
+    "loadingSuite": "Učitavanje paketa...",
+    "couldNotLoadSuite": "Nije uspjelo učitavanje ovog paketa."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "Pitaj AI",
     "askAiTitle": "Pitajte Chat asistenta o ovom pokretanju",
     "noNodeSpans": "Za ovo pokretanje nisu zabilježeni spanovi čvorova.",
-    "queuedProgress": "U redu čekanja {position}/{size}"
+    "queuedProgress": "U redu čekanja {position}/{size}",
+    "clickToSelectRun": "Kliknite za odabir ovog izvođenja",
+    "doubleClickOrOpenNewTab": "Dvaput kliknite da dovedete ovo izvođenje na platno, Ctrl/Cmd+klik za otvaranje na novoj kartici"
   },
   "portal": {
     "loadingPortal": "Učitavanje portala...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP poslužitelj",
-    "subtitle": "Izložite svoje Workflows kao MCP alate za AI asistente",
+    "subtitle": "Izložite svoje workflowe kao MCP alate i Heym Agent putem MCP-a i A2A",
     "connection": "MCP veza",
     "connectionSubtitle": "Povežite svoj AI asistent s Workflows putem MCP protokola.",
     "apiKeyTab": "API ključ",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Pod Prilagođene aplikacije kliknite Dodaj prilagođenu aplikaciju",
     "geminiStep3": "Zalijepite gornji URL MCP poslužitelja i ostavite Napredne značajke zatvorenima; Gemini će se automatski registrirati",
     "geminiStep4": "Kliknite Dalje i autorizirajte svojim Heym vjerodajnicama",
-    "geminiInfo": "Gemini koristi OAuth za sigurnu provjeru autentičnosti. Vaše Heym vjerodajnice koriste se za autorizaciju pristupa i nikada se ne dijele s Geminijem. Nakon povezivanja, Heym radi i u mobilnoj aplikaciji Gemini."
+    "geminiInfo": "Gemini koristi OAuth za sigurnu provjeru autentičnosti. Vaše Heym vjerodajnice koriste se za autorizaciju pristupa i nikada se ne dijele s Geminijem. Nakon povezivanja, Heym radi i u mobilnoj aplikaciji Gemini.",
+    "agentReach": {
+      "off": "Isključeno: MCP i A2A klijenti ne mogu pristupiti Heym Agentu",
+      "unconfigured": "Odaberite vjerodajnicu i model kako bi se Heym Agent mogao pokrenuti",
+      "mcpA2a": "Dostupno putem MCP-a i A2A",
+      "mcpOnly": "Dostupno kao heym_chat putem MCP-a"
+    },
+    "a2aEnabledOnServer": "A2A omogućen na \"{name}\"",
+    "a2aEnabled": "A2A omogućen",
+    "a2aDisabledOnServer": "A2A onemogućen na \"{name}\"",
+    "a2aDisabled": "A2A onemogućen",
+    "agentAndA2aDisabledOnServer": "Heym Agent i A2A onemogućeni na \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent i A2A onemogućeni",
+    "a2a": {
+      "enable": "Omogući A2A",
+      "description": "Drugi agenti mogu slati zadatke Heym Agentu putem protokola Agent2Agent (A2A 1.0). Provjeravaju autentičnost ključem ovog poslužitelja u zaglavlju X-MCP-Key ili putem Heym OAuth-a.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Provjerite je li kartica aktivna:",
+      "copyLabel": "Kopiraj {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analitička nadzorna ploča",
@@ -2087,6 +2119,25 @@
       "errors": "Pogreške",
       "avgLatencyMs": "Prosječna latencija (ms)",
       "latencyTitle": "Prosječna latencija kroz vrijeme"
+    },
+    "last1Hour": "Zadnji sat",
+    "last3Hours": "Zadnja 3 sata",
+    "last6Hours": "Zadnjih 6 sati",
+    "nodeTypes": "Vrste čvorova",
+    "nodeChart": {
+      "emptyMessage": "Još nema podataka o čvorovima za ovo razdoblje. Analitika čvorova bilježi se za izvođenja nakon ovog ažuriranja.",
+      "duration": {
+        "title": "Čvorovi s najdužim trajanjem",
+        "subtitle": "Prosječno trajanje po pozivu"
+      },
+      "errors": {
+        "title": "Vrste čvorova s najviše neuspjeha",
+        "subtitle": "Pogreške tijekom vremena"
+      },
+      "calls": {
+        "title": "Najčešće pozivane vrste čvorova",
+        "subtitle": "Pozivi tijekom vremena"
+      }
     }
   },
   "dashboards": {

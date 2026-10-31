@@ -50,6 +50,8 @@ Oluşturulan rapor sırasıyla üç bölümü kapsar: **İyileştirme alanları*
 3. **Ağ node'ları** — ağ çağrıları yapan node'lar için ([HTTP](../nodes/http-node.md) ve entegrasyon node'ları gibi), rapor bu node'larda node'a özgü hata işleme (retry ve/veya continue-on-error) önerir.
 4. **Uyarılar** — workflow için hiç [alerts](../tabs/alerts-tab.md) yapılandırılmamışsa, rapor prod'a geçmeden önce uyarıların kurulmasını önerir.
 
+5. **Evals**: workflow bir agent paketine sahip olmayan bir [Agent](../nodes/agent-node.md) düğümü içerdiğinde rapor [Evals](../tabs/evals-tab.md#agent-suites) içinde bir **Agent Suite** (veya bir **Prompt Suite**) önerir; bir [LLM](../nodes/llm-node.md) düğümü içerdiğinde bu prompt'u modeller arasında test etmek için bir **Prompt Suite** önerir.
+
 ### Properties'ten Analyzer Çalıştırma
 
 Bir workflow'un canvas'ta node'ları olduğunda ancak henüz bir analiz belgesi olmadığında, workflow düzeyindeki [Properties](./canvas-features.md) panelinde (hiçbir node seçili olmadığında gösterilir) bir **Run Analyzer** düğmesi görünür. Bu düğme, bir credential ve model seçip raporu oluşturabilmeniz için bu Workflow Analizi panelini açar.

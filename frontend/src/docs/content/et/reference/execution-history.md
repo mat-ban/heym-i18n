@@ -53,6 +53,8 @@ Workflow' avamine aadressil `/workflows/{workflowId}/{executionId}` toob selle k
 
 ### Kasutusjuhud
 
+Hoidke all Ctrl/Cmd ja klõpsake käivitusel kummaski ajaloo loendis, et avada see otselink uuel brauseri vahekaardil. Praegune vahekaart ja avatud dialoog jäävad muutmata kujul alles. Chati ja assistendi käivitustel puudub workflow, mistõttu kiirklahv vaid valib need sarnaselt tavalise klõpsuga.
+
 - Käivitage workflow uuesti samade sisenditega
 - Siluge ebaõnnestunud käivitust, uurides sisendeid ja sõlmede väljundeid
 - Võrrelge väljundeid käivituste lõikes

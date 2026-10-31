@@ -149,11 +149,9 @@ function submit(): void {
               class="relative mt-1 rounded-md border border-dashed bg-background/60 p-2"
               data-testid="add-widget-chart-example"
             >
-              <span
-                class="absolute right-2 top-1.5 z-10 rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground"
-              >
-                {{ $t("dashboards.example") }}
-              </span>
+              <div class="mb-1 flex justify-end">
+                <span class="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{{ $t("dashboards.example") }}</span>
+              </div>
               <!-- Keyed on the type: ApexCharts does not redraw cleanly across chart types. -->
               <div class="h-40">
                 <ChartRenderer

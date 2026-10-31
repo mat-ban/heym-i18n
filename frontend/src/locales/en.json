@@ -83,7 +83,8 @@
     "run": "Run",
     "dropFileOrClick": "Drop a file here or click to choose one",
     "removeFile": "Remove file",
-    "chooseFileFor": "Choose a file for {label}"
+    "chooseFileFor": "Choose a file for {label}",
+    "new": "New"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "None: each model scores itself",
     "removeJudge": "Remove judge",
     "judgeModel": "Judge Model",
-    "enterJudgeModel": "Enter the judge model to run with this judge."
+    "enterJudgeModel": "Enter the judge model to run with this judge.",
+    "promptSuite": "Prompt suite",
+    "promptSuiteDesc": "Test a system prompt across models",
+    "agentSuite": "Agent suite",
+    "agentSuiteDesc": "Check an agent's real runs: tools, latency, cost",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Search suites...",
+    "loadingSuite": "Loading suite...",
+    "couldNotLoadSuite": "Could not load this suite."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "Ask AI",
     "askAiTitle": "Ask the Chat assistant about this run",
     "noNodeSpans": "No node spans recorded for this run.",
-    "queuedProgress": "Queued {position}/{size}"
+    "queuedProgress": "Queued {position}/{size}",
+    "clickToSelectRun": "Click to select this run",
+    "doubleClickOrOpenNewTab": "Double-click to bring this run to the canvas, Ctrl/Cmd+click to open it in a new tab"
   },
   "portal": {
     "loadingPortal": "Loading portal...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Expose your workflows as MCP tools for AI assistants",
+    "subtitle": "Expose your workflows as MCP tools and the Heym Agent over MCP and A2A",
     "connection": "MCP Connection",
     "connectionSubtitle": "Connect your AI assistant to your workflows via MCP protocol.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Under Custom apps, click Add a custom app",
     "geminiStep3": "Paste the MCP Server URL above and leave Advanced features closed; Gemini will register automatically",
     "geminiStep4": "Click Next and authorize with your Heym credentials",
-    "geminiInfo": "Gemini uses OAuth to securely authenticate. Your Heym credentials are used to authorize access and are never shared with Gemini. Once connected, Heym also works in the Gemini mobile app."
+    "geminiInfo": "Gemini uses OAuth to securely authenticate. Your Heym credentials are used to authorize access and are never shared with Gemini. Once connected, Heym also works in the Gemini mobile app.",
+    "agentReach": {
+      "off": "Off: MCP and A2A clients cannot reach the Heym Agent",
+      "unconfigured": "Pick a credential and a model so the Heym Agent can run",
+      "mcpA2a": "Reachable over MCP and A2A",
+      "mcpOnly": "Reachable as heym_chat over MCP"
+    },
+    "a2aEnabledOnServer": "A2A enabled on \"{name}\"",
+    "a2aEnabled": "A2A enabled",
+    "a2aDisabledOnServer": "A2A disabled on \"{name}\"",
+    "a2aDisabled": "A2A disabled",
+    "agentAndA2aDisabledOnServer": "Heym Agent and A2A disabled on \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent and A2A disabled",
+    "a2a": {
+      "enable": "Enable A2A",
+      "description": "Other agents can send the Heym Agent tasks over the Agent2Agent protocol (A2A 1.0). They authenticate with this server's key in the X-MCP-Key header, or with Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Check that the card is live:",
+      "copyLabel": "Copy the {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analytics Dashboard",
@@ -2087,6 +2119,25 @@
       "errors": "Errors",
       "avgLatencyMs": "Avg Latency (ms)",
       "latencyTitle": "Average Latency Over Time"
+    },
+    "last1Hour": "Last Hour",
+    "last3Hours": "Last 3 Hours",
+    "last6Hours": "Last 6 Hours",
+    "nodeTypes": "Node Types",
+    "nodeChart": {
+      "emptyMessage": "No node data for this period yet. Node analytics are recorded for runs after this update.",
+      "duration": {
+        "title": "Most Time Taken Nodes",
+        "subtitle": "Average duration per call"
+      },
+      "errors": {
+        "title": "Most Failed Node Types",
+        "subtitle": "Errors over time"
+      },
+      "calls": {
+        "title": "Most Called Node Types",
+        "subtitle": "Calls over time"
+      }
     }
   },
   "dashboards": {

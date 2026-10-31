@@ -47,7 +47,7 @@ Lietotnē cilne **Logs** nolasa to pašu konteinera izvadi. Tā ir ierobežota a
 
 ## Kas tiek žurnālēts
 
-Katra stāvokļa maiņa tiek žurnālēta. Lasīšanas tiek žurnālētas tikai tad, ja pati lasīšana ir sensitīva darbība — workflow izpildes vēstures apskate, akreditācijas datu atvēršana, faila lejupielāde. Parastas saraksta un detaļu lasīšanas netiek auditētas; piekļuves žurnāls jau reģistrē, ka pieprasījums notika, un katra `GET` auditēšana apraktu rindas, kurām ir nozīme.
+Katra stāvokļa maiņa tiek žurnālēta. Lasīšanas tiek žurnālētas tikai tad, ja pati lasīšana ir sensitīva darbība — workflow izpildes vēstures apskate, akreditācijas datu atvēršana, faila lejupielāde. Parastas saraksta un detaļu lasīšanas netiek auditētas; piekļuves žurnāls jau reģistrē, ka pieprasījums notika, un katra `GET` auditēšana apraktu rindas, kurām ir nozīme. Vienīgais izņēmums ir [lapu skatījumi](#page-views), kas reģistrē, kur lietotnē pārvietojies pieteicies lietotājs.
 
 ### Autentifikācija
 
@@ -62,9 +62,34 @@ Katra stāvokļa maiņa tiek žurnālēta. Lasīšanas tiek žurnālētas tikai 
 | `sso_settings.update` | Administrators mainīja [SSO](./sso.md) konfigurāciju. Reģistrē `enabled` un `password_login_disabled`, nekad client secret. |
 | `sso_settings.test` | Administrators palaida SSO savienojuma testu. |
 
+### Lapu skatījumi
+
+`page.view` tiek ierakstīts katru reizi, kad pieteicies lietotājs atver lapu tīmekļa lietotnē, norādot URL ceļu laukā `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Ceļš ir lietotnes iekšējais maršruts. Informācijas paneļa cilnes ir tā daļa (`/?tab=traces`), tāpat kā identifikatori, kas nosauc atvērto vienumu, piemēram, `/workflows/<id>`. Tiek saglabāts tikai īss vaicājuma parametru saraksts, kas identificē lapu (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); viss pārējais vaicājuma virknē un viss fragments tiek atmests. Lapas, kuru saite satur noslēpumu, piemēram, `/review/<token>`, tiek reģistrētas ar vietturi `:token`, nevis pašu noslēpumu.
+
+Pārlūkprogramma ziņo ceļu, tāpēc rinda `page.view` parāda, kur lietotājs apgalvo, ka devies. Tas nepierāda, ka serveris atgrieza šo lapu. Pieteikšanās lapas apmeklējumi un saites, kas atvērtas, kamēr lietotājs nav pieteicies, netiek reģistrēti, jo tiem nav piesaistīts neviens lietotājs.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` tiek ierakstīts, kad izpilde tiek sākta caur API: redaktora poga Palaist, execute galapunkts ar sesiju, API atslēgu vai tīmekļa aizāķi (webhook), tērzēšanas portāls un MCP rīki. Tas reģistrē, kurš to palaida, kā un kā tā beidzās:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` saista rindu ar izpildi Izpildes vēsturē. `outcome` ir `failure`, ja izpilde beidzās ar `error`, `cancelled` vai `timeout`. Izpilde, kas apturēta cilvēka pārbaudei vai aizturēta vienlaicības rindā, ir `success` rinda ar `status=pending` vai `status=queued`. Izsaukumam bez pieteikta lietotāja, piemēram, anonīmam tīmekļa aizāķim vai portāla apmeklētājam, nav `actor_id` vai `actor_email`. Ievades un izvades dati nekad netiek ierakstīti.
+
+Izpildes, ko sācis grafiks, trigera mezgls, rinda vai notikums, nav audita rindas. Tās tiek izpildītas instancē, kas tās pieprasīja, un tiek reģistrētas Izpildes vēsturē ar to trigera avotu un instanci, kas tās palaida.
+
+`workflow.history_view` tiek ierakstīts, kad kāds atver darbplūsmas izpildes vēsturi. Nelielā meklēšana, kas parāda darbplūsmas jaunāko izpildi uz audekla vai sarakstā, netiek auditēta.
+
 
 `workflow.history_view` reģistrē `owned=false`, kad līdzautors lasa kāda cita izpildes vēsturi. `workflow.delete` reģistrē `outcome=denied` ar `reason=not_owner`, kad līdzautors mēģina dzēst.
 
@@ -96,6 +121,27 @@ Audita ieraksts satur identifikatorus, nosaukumus un skaitļus. Tas nekad nesatu
 To nodrošina divas lietas. Izsaukumu vietas ir rakstītas tā, lai nodotu tikai drošus laukus, un audita palīgfunkcija veic rediģēšanu kā drošības tīklu: jebkurš lauks, kura nosaukums satur `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` vai līdzīgu, tiek aizstāts ar `***`, pirms ieraksts tiek izveidots. Pārmērīga rediģēšana ir apzināta — neizsmeļošs ieraksts ir labāks par noplūdušiem akreditācijas datiem.
 
 Ja noslēpums patiešām ir būtisks ierakstam, tiek reģistrēta tikai tā forma. Faila koplietošana reģistrē `password_protected=true`, nekad pašu paroli.
+
+## Heym Work
+
+Darbinot Heym Work līdzās Heym, Work izvada audita rindas uz sava konteinera stdout tajā pašā Winston formātā:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work reģistrē lietotāju darbības lapās, dēļos un ierakstos:
+
+| Darbība | Nozīme |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Izmaiņas informācijas paneļu lapās un izkārtojumos |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Kanban kolonnu izkārtojuma izmaiņas |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Karšu dzīves cikla notikumi |
+| `record.create`, `record.update`, `record.delete` | Datu tabulu ierakstu mutācijas, izmantojot Work |
+| `chat.message` | Lietotāja uzvedne, kas nosūtīta Work asistentam |
+| `export.csv`, `export.json` | Datu eksportēšana |
+
+Katra rinda satur tos pašus laukus `actor_id`, `actor_email`, `timestamp` un `outcome` kā Heym audita rindas, ļaujot žurnālu apkopotājiem parsēt abus ar vienu konveijeru.
 
 ## Uzglabāšanas Ilgums
 

@@ -47,7 +47,7 @@ V aplikaciji zavihka **Dnevniki** preberejo isti izhod kontejnerja. Dostop do nj
 
 ## Kaj je zabeleženo
 
-Vsaka sprememba stanja je zabeležena. Branja so zabeležena le, kjer je branje samo po sebi občutljivo dejanje — ogled zgodovine izvajanja workflow-a, odpiranje poverilnice, prenos datoteke. Običajna branja seznamov in podrobnosti niso revizijska; dnevnik dostopa že beleži, da je zahteva potekala, in revizija vsakega `GET` bi zasula vrstice, ki so pomembne.
+Vsaka sprememba stanja je zabeležena. Branja so zabeležena le, kjer je branje samo po sebi občutljivo dejanje — ogled zgodovine izvajanja workflow-a, odpiranje poverilnice, prenos datoteke. Običajna branja seznamov in podrobnosti niso revizijska; dnevnik dostopa že beleži, da je zahteva potekala, in revizija vsakega `GET` bi zasula vrstice, ki so pomembne. Edina izjema so [ogledi strani](#page-views), ki beležijo, kam se je prijavljeni uporabnik premaknil v aplikaciji.
 
 ### Avtentikacija
 
@@ -62,9 +62,34 @@ Vsaka sprememba stanja je zabeležena. Branja so zabeležena le, kjer je branje 
 | `sso_settings.update` | Administrator je spremenil konfiguracijo [SSO](./sso.md). Zabeleženi so `enabled` in `password_login_disabled`, nikoli pa skrivnost stranke. |
 | `sso_settings.test` | Administrator je izvedel test povezave SSO. |
 
+### Ogledi strani
+
+Vnos `page.view` se zapiše vsakič, ko prijavljeni uporabnik odpre stran v spletni aplikaciji, s potjo URL v polju `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Pot predstavlja interno pot aplikacije. Zavihki nadzorne plošče so del nje (`/?tab=traces`), prav tako identifikatorji, ki poimenujejo odprto vsebino, na primer `/workflows/<id>`. Ohrani se le kratek seznam parametrov poizvedbe, ki identificirajo stran (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); vse ostalo v nizu poizvedbe in celoten fragment se zavržeta. Strani, katerih povezava nosi skrivnost, na primer `/review/<token>`, se beležijo z nadomestnim znakom `:token` namesto skrivnosti.
+
+Brskalnik poroča o poti, zato vrstica `page.view` prikazuje, kam je uporabnik po lastnih navedbah šel. To ne dokazuje, da je strežnik to stran dejansko vrnil. Obiski strani za prijavo in povezav, odprtih v odjavljenem stanju, se ne beležijo, saj z njimi ni povezan noben uporabnik.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` se zapiše, ko se zagon sproži prek API-ja: gumb Zaženi v urejevalniku, končna točka execute s sejo, ključem API ali spletnim kavljem (webhook), portal za klepet in orodja MCP. Beleži, kdo ga je zagnal, kako in s kakšnim izidom se je zaključil:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` povezuje vrstico z zagonom v Zgodovini izvajanja. `outcome` je `failure`, kadar se je zagon končal z `error`, `cancelled` ali `timeout`. Zagon, ustavljen za človeški pregled ali zadržan v čakalni vrsti za sočasnost, je vrstica `success` s stanjem `status=pending` ali `status=queued`. Klic brez prijavljenega uporabnika, kot je anonimni spletni kavelj ali obiskovalec portala, nima `actor_id` ali `actor_email`. Vhodi in izhodi se nikoli ne zapisujejo.
+
+Zagoni, ki jih sproži urnik, sprožilno vozlišče, čakalna vrsta ali dogodek, niso revizijske vrstice. Izvajajo se na instanci, ki jih je prevzela, in se beležijo v Zgodovini izvajanja z virom sprožilca in instanco, ki jih je izvedla.
+
+`workflow.history_view` se zapiše, ko nekdo odpre zgodovino izvajanja delovnega toka. Kratek vpogled, ki prikazuje zadnji zagon delovnega toka na platnu ali v seznamu, se ne revidira.
+
 
 `workflow.history_view` zabeleži `owned=false`, ko sodelavec prebere zgodovino izvajanja nekoga drugega. `workflow.delete` zabeleži `outcome=denied` z `reason=not_owner`, ko sodelavec poskuša izbrisati.
 
@@ -96,6 +121,27 @@ Vloga revizije beleži identifikatorje, imena in števila. Nikoli ne beleži vse
 Dve stvari to zagotavljata. Klicne točke so napisane tako, da prenašajo le varna polja, in revizijski pomočnik redaktira kot zaščito: katero koli polje, katerega ime vsebuje `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` ali podobno, se pred izgradnjo vrstice nadomesti z `***`. Prekomerna redakcija je namerna — neuporabna vrstica je boljša od razkritja poverilnice.
 
 Kjer je skrivnost resnično pomembna za zapis, se beleži le njen oblikovni vzorec. Deljenje datoteke beleži `password_protected=true`, nikoli pa gesla.
+
+## Heym Work
+
+Ko izvajate Heym Work skupaj s Heymom, Work oddaja revizijske vrstice v stdout svojega lastnega vsebnika v isti obliki Winston:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work beleži dejanja uporabnikov na straneh, tablah in zapisih:
+
+| Dejanje | Pomen |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Spremembe strani in postavitev nadzorne plošče |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Spremembe postavitve stolpcev Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Dogodki življenjskega cikla kartic |
+| `record.create`, `record.update`, `record.delete` | Spremembe zapisov podatkovne tabele prek Work |
+| `chat.message` | Uporabniški poziv, poslan pomočniku Work |
+| `export.csv`, `export.json` | Izvozi podatkov |
+
+Vsaka vrstica vsebuje ista polja `actor_id`, `actor_email`, `timestamp` in `outcome` kot revizijske vrstice Heym, kar zbiralnikom dnevnikov omogoča obdelavo obeh z enim samim cevovodom.
 
 ## Hranjenje
 

@@ -47,7 +47,7 @@ I appen läser fliken **Loggar** samma containerutdata. Den styrs av `DOCKER_LOG
 
 ## Vad som loggas
 
-Varje tillståndsändring loggas. Läsningar loggas endast där läsningen i sig är den känsliga åtgärden — att visa en workflows körningshistorik, att öppna en autentiseringsuppgift, att ladda ned en fil. Vanliga list- och detaljläsningar granskas inte; åtkomstloggen registrerar redan att en förfrågan inträffade, och att granska varje `GET` skulle begrava de rader som spelar roll.
+Varje tillståndsändring loggas. Läsningar loggas endast där läsningen i sig är den känsliga åtgärden — att visa en workflows körningshistorik, att öppna en autentiseringsuppgift, att ladda ned en fil. Vanliga list- och detaljläsningar granskas inte; åtkomstloggen registrerar redan att en förfrågan inträffade, och att granska varje `GET` skulle begrava de rader som spelar roll. Det enda undantaget är [sidvisningar](#page-views), som registrerar var en inloggad användare har navigerat i appen.
 
 ### Autentisering
 
@@ -62,9 +62,34 @@ Varje tillståndsändring loggas. Läsningar loggas endast där läsningen i sig
 | `sso_settings.update` | En administratör ändrade konfigurationen för [SSO](./sso.md). Registrerar `enabled` och `password_login_disabled`, aldrig klienthemligheten. |
 | `sso_settings.test` | En administratör körde anslutningstestet för SSO. |
 
+### Sidvisningar
+
+`page.view` skrivs varje gång en inloggad användare öppnar en sida i webbappen, med URL-sökvägen i fältet `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Sökvägen är appens interna rutt. Instrumentpanelens flikar är en del av den (`/?tab=traces`), liksom de id:n som anger vad som är öppet, till exempel `/workflows/<id>`. Endast en kort lista med frågeparametrar som identifierar sidan behålls (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); allt annat i frågesträngen och hela fragmentet ignoreras. Sidor vars länk innehåller en hemlighet, till exempel `/review/<token>`, loggas med platshållaren `:token` istället för hemligheten.
+
+Webbläsaren rapporterar sökvägen, så en `page.view`-rad visar var användaren uppgav sig ha navigerat. Det bevisar inte att servern returnerade sidan. Besök på inloggningssidan och länkar som öppnas i utloggat läge registreras inte, eftersom ingen användare är kopplad till dem.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` skrivs när en körning startas via API:t: redigerarens Kör-knapp, execute-slutpunkten med en session, API-nyckel eller webhook, chattportalen och MCP-verktyg. Den registrerar vem som startade den, hur och hur den avslutades:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` kopplar raden till körningen i Körningshistoriken. `outcome` är `failure` när körningen slutade med `error`, `cancelled` eller `timeout`. En körning som pausats för mänsklig granskning eller hålls i samtidighetskön är en `success`-rad med `status=pending` eller `status=queued`. Ett anrop utan inloggad användare, såsom en anonym webhook eller en portalbesökare, saknar `actor_id` och `actor_email`. Indata och utdata skrivs aldrig.
+
+Körningar som startas av ett schema, en triggernod, en kö eller en händelse är inte auditrader. De körs på den instans som tilldelats dem och registreras i Körningshistoriken med sin triggerkälla och instansen som körde dem.
+
+`workflow.history_view` skrivs när någon öppnar ett arbetsflödes körningshistorik. Den korta sökningen som visar ett arbetsflödes senaste körning på canvasen eller i en lista granskas inte.
+
 
 `workflow.history_view` registrerar `owned=false` när en medarbetare läser någon annans körningshistorik. `workflow.delete` registrerar `outcome=denied` med `reason=not_owner` när en medarbetare försöker radera.
 
@@ -96,6 +121,27 @@ En granskningsrad registrerar identifierare, namn och antal. Den registrerar ald
 Två saker upprätthåller detta. Anropsställen skrivs för att endast skicka säkra fält, och granskningshjälparen redigerar som en skyddsåtgärd: alla fält vars namn innehåller `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` eller liknande ersätts med `***` innan raden byggs. Överdriven redigering är avsiktlig — en icke-informativ rad är bättre än en läckt autentiseringsuppgift.
 
 När en hemlighet är genuint relevant för posten loggas endast dess form. En filresurs registrerar `password_protected=true`, aldrig lösenordet.
+
+## Heym Work
+
+När Heym Work körs parallellt med Heym, genererar Work auditrader till sin egen containers stdout i samma Winston-format:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work loggar användaråtgärder på sidor, tavlor och poster:
+
+| Åtgärd | Betydelse |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Ändringar av instrumentpanelsidor och layouter |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Ändringar av Kanban-kolumnlayouter |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Händelser i kortens livscykel |
+| `record.create`, `record.update`, `record.delete` | Ändringar av datatabellposter via Work |
+| `chat.message` | Användarprompt som skickas till Work-assistenten |
+| `export.csv`, `export.json` | Dataexporter |
+
+Varje rad innehåller samma fält `actor_id`, `actor_email`, `timestamp` och `outcome` som Heyms auditrader, vilket gör att loggsamlare kan bearbeta båda med en enda pipeline.
 
 ## Kvarhållning
 

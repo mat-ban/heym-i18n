@@ -35,7 +35,7 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/analytics-tab": {
-    "h": "306ec3e4",
+    "h": "e15aa7c4",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -45,7 +45,7 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/chat-tab": {
-    "h": "e6ce101b",
+    "h": "033d3110",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -55,12 +55,12 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/dashboard-tab": {
-    "h": "b5781af4",
+    "h": "a7f23827",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
   "tabs/datatable-tab": {
-    "h": "d09da2b1",
+    "h": "34e6df03",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -70,7 +70,7 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/evals-tab": {
-    "h": "6d462422",
+    "h": "b2d3dc4b",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -85,7 +85,7 @@
     "r": "wave2a@2026-10-11"
   },
   "tabs/mcp-tab": {
-    "h": "c8bf0e85",
+    "h": "387fb587",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -135,7 +135,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "nodes/chart-output-node": {
-    "h": "ca76388d",
+    "h": "74763244",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -445,12 +445,12 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/ai-assistant": {
-    "h": "aa6a8766",
+    "h": "bfd02da5",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
   "reference/audit": {
-    "h": "5efc2f64",
+    "h": "eb5040f7",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -485,7 +485,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/credentials": {
-    "h": "ccacb296",
+    "h": "530f27ac",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -510,7 +510,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/execution-history": {
-    "h": "998cbc14",
+    "h": "dbdb1e13",
     "s": "reviewed",
     "r": "wave2a@2026-10-11"
   },
@@ -530,7 +530,7 @@
     "r": "phase4.1@2026-10-11"
   },
   "reference/features": {
-    "h": "099ab65f",
+    "h": "91a0ecf4",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -634,7 +634,7 @@
     "r": "wave2a@2026-10-11"
   },
   "reference/workflow-analysis": {
-    "h": "47e6b7f7",
+    "h": "31f08c96",
     "s": "reviewed",
     "r": "phase4.1@2026-10-11"
   },
@@ -662,5 +662,9 @@
     "h": "34f5ca32",
     "s": "reviewed",
     "r": "feature/i18n@v0.0.138"
+  },
+  "reference/a2a": {
+    "h": "ebad7d69",
+    "s": "reviewed"
   }
 }

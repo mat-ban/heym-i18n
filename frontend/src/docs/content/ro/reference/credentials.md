@@ -14,7 +14,7 @@ Credentialele stochează chei API și secrete utilizate de nodurile workflow-ulu
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | Cheie API pentru model |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | URL-ul de bază al unui endpoint de model de decizie, plus o cheie API opțională |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Selectează care dintre modelele dumneavoastră deservește fiecare cerere, utilizând un model de decizie |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) suite de prompturi | Model Router (Auto Model) | Selectează care dintre modelele dumneavoastră deservește fiecare cerere, utilizând un model de decizie |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Autentificare prin abonament ChatGPT (OAuth) sau un token de acces Codex pentru runner, plus un PAT GitHub pentru operațiuni pe repository |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | O cheie API pentru gateway-ul OpenCode Go (URL de bază opțional) pentru runner, plus un PAT GitHub pentru operațiuni pe repository |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | Token de acces personal GitHub (PAT) pentru apeluri API GitHub, operațiuni ale nodului GitHub și integrări MCP |

@@ -23,6 +23,8 @@ Widget adalah satu chart pada kisi. Jenis chart yang didukung:
 - **Gauge** (satu nilai terhadap rentang min–maks, misalnya persentase)
 - **Scatter** (titik X/Y untuk plot korelasi)
 - **Proportion** (satu bar yang dibagi menjadi beberapa bagian dengan legenda persentase, misalnya rincian bahasa)
+- **Gantt** (tanggal tugas, penyelesaian, dan dependensi)
+- **Entity relationships (DB)** (tabel, bidang, kunci PK/FK, dan koneksi)
 - **Bar gauge** (satu gauge horizontal per baris dengan gradien merah→hijau dan sebuah nilai, misalnya ruang disk kosong)
 - **Text** (pesan markdown, misalnya catatan status seperti "Last execution at 19:47"; mendukung [interactive checkboxes](../nodes/chart-output-node.md#interactive-task-lists) ketika markdown bersifat statis, dan [explicit numbered lists](../nodes/chart-output-node.md#numbered-lists) untuk penomoran kustom atau menurun)
 - **HITL** (tinjauan human review Anda yang tertunda. Header menampilkan `1/n pending`. Nama Workflow membuka run tersebut di canvas. **Approve**, **Request changes**, dan **Reject** menyelesaikannya. Ikon riwayat di samping judul widget membuka run tersebut dalam dialog riwayat di halaman ini. Widget ini tidak menggunakan baris upstream, dan setiap orang melihat antreannya sendiri. Widget ini juga dapat menampilkan tinjauan dari satu Workflow untuk semua orang yang dapat membuka Workflow tersebut; lihat [Widget HITL](#widget-hitl))
@@ -96,6 +98,18 @@ API widget juga dapat membuat **kartu hitungan** tanpa AI: widget `text` pada ta
 
 Gunakan tombol **Fine-tune with AI** pada widget untuk merevisi widget yang sudah ada dengan instruksi baru. Setiap fine-tune AI mengambil snapshot Workflow sebelumnya ke dalam **Edit History** widget, sehingga Anda dapat meninjau atau mengembalikan perubahan dari editor Workflow.
 
+## Dari Chat dan MCP
+
+[Chat](./chat-tab.md), dan klien MCP melalui alat [`heym_chat`](./mcp-tab.md), dapat membaca dashboard Anda, menambahkan widget, mengganti nama atau menghapus widget, serta merapikan tata letak dashboard. Heym Work menampilkan setiap dashboard sebagai halaman, sehingga jawaban yang sama mencakup halamannya.
+
+- **Dashboard mana saja yang ada dan apa isinya.** Tanyakan "dashboard apa saja yang saya miliki?", "apa yang ada di dashboard Penjualan?" atau "di dashboard mana workflow pendapatan berada?". Chat mencantumkan dashboard Anda sendiri dan yang dibagikan kepada Anda, beserta izin akses Anda dan tautan ke masing-masing, serta setiap widget di dalamnya: judul, jenis diagram, dan workflow di baliknya. [Widget HITL](#hitl-widgets) yang difilter pada workflow yang tidak dapat Anda buka tetap tersembunyi, sama seperti pada dashboard itu sendiri.
+- **Widget baru.** Minta "tambahkan diagram kasus terbuka berdasarkan status ke dashboard Penjualan". Chat pertama-tama menempatkan widget kosong di dashboard, lalu menulis workflow widget itu sendiri, menjalankan uji coba, dan memperbaiki kesalahan hingga berjalan sukses, dengan cara yang sama seperti saat [membangun workflow](./chat-tab.md#membuat-workflow). Tidak ada workflow terpisah yang ditinggalkan, dan setiap penyimpanan muncul di Edit History widget. Judul dan jenis diagram widget mengikuti apa yang disimpan Chat.
+- **Workflow yang ada.** Minta "tempatkan workflow pendapatan di dashboard Penjualan". Workflow yang berakhir pada node Chart Output menjadi widget diagram dengan salinan workflow-nya sendiri, sehingga perubahan selanjutnya pada widget tidak pernah memengaruhi yang asli. Workflow dengan node trigger atau input tidak dapat menjadi widget diagram. Workflow lain apa pun menjadi [widget eksekusi](#run-widgets), yang juga memerlukan workflow yang dapat dijalankan oleh pemilik dashboard.
+- **Mengganti nama atau menghapus widget.** Minta "ganti nama widget Pendapatan menjadi Penjualan" atau "hapus widget Kasus terbuka". Workflow widget diagram juga menggunakan nama baru tersebut; workflow widget eksekusi mempertahankan namanya sendiri. Menghapus widget diagram akan menghapus workflow-nya bersamaan, seperti yang dilakukan tombol hapus widget; workflow widget eksekusi tetap ada. Chat hanya menghapus widget yang Anda minta secara eksplisit, dan meminta klarifikasi terlebih dahulu jika kata-kata Anda cocok dengan beberapa widget.
+- **Merapikan.** Minta "rapikan dashboard Penjualan", atau "tambahkan ketiga widget ini dan rapikan". Chat mengatur widget yang Anda lihat sesuai urutannya, persis seperti yang dilakukan tombol **Rapikan**: baris acak dua atau tiga, sehingga meminta lagi memberikan susunan lain. Minta jumlah per baris ("tiga per baris") untuk mendapatkan baris sebesar itu. Ini menata dashboard di Heym; Heym Work mempertahankan susunan halamannya sendiri, yang diubah oleh tombol **Rapikan** milik halaman itu sendiri.
+
+Widget baru ditempatkan di bawah widget dashboard yang sudah ada dan, seperti setiap widget, berjalan atas nama pemilik dashboard. Menambahkan, mengganti nama, menghapus, dan merapikan memerlukan akses tulis ke dashboard. Membangun widget baru memerlukan obrolan yang dapat membangun workflow: tab Chat, Heym Work Chat untuk editor, dan `heym_chat`.
+
 ## Mengedit tata letak
 
 Aktifkan **Edit** untuk masuk ke mode edit, tempat Anda dapat menyeret widget dan mengubah ukurannya pada kisi 12 kolom. Perubahan tata letak disimpan secara otomatis. Judul widget dapat diedit secara inline dari header widget.
@@ -127,3 +141,7 @@ Menghapus pembagian, atau menurunkannya dari write menjadi read, berlaku segera.
 
 - [Node Chart Output](../nodes/chart-output-node.md)
 - [Tab Analytics](analytics-tab.md) — metrik eksekusi bawaan (berbeda dari dashboard buatan pengguna)
+
+## Jadwal dan diagram database
+
+Pilih **Gantt** di Tambah widget untuk menampilkan tugas dari waktu ke waktu dengan penyelesaian dan tautan dependensi, atau **Entity relationships (DB)** untuk memetakan tabel, bidang, dan relasinya. Kedua jenis menggunakan [node Chart Output](../nodes/chart-output-node.md#gantt-schedules), dan juga tersedia di halaman Heym Work. Ketika Work menyarankan widget untuk jadwal atau skema database, Work akan menggambar pratinjau dari tugas atau entitas yang diusulkan sebelum Anda membuat halaman.

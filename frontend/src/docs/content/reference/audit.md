@@ -47,7 +47,7 @@ In the app, the **Logs** tab reads the same container output. It is gated by `DO
 
 ## What Is Logged
 
-Every state change is logged. Reads are logged only where reading is itself the sensitive act — viewing a workflow's run history, opening a credential, downloading a file. Ordinary list and detail reads are not audited; the access log already records that a request happened, and auditing every `GET` would bury the lines that matter.
+Every state change is logged. Reads are logged only where reading is itself the sensitive act — viewing a workflow's run history, opening a credential, downloading a file. Ordinary list and detail reads are not audited; the access log already records that a request happened, and auditing every `GET` would bury the lines that matter. The one exception is [page views](#page-views), which record where a signed-in user went in the app.
 
 ### Authentication
 
@@ -62,11 +62,33 @@ Every state change is logged. Reads are logged only where reading is itself the 
 | `sso_settings.update` | An administrator changed the [SSO](./sso.md) configuration. Records `enabled` and `password_login_disabled`, never the client secret. |
 | `sso_settings.test` | An administrator ran the SSO connection test. |
 
+### Page Views
+
+`page.view` is written each time a signed-in user opens a page in the web app, with the URL path in a `path` field:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+The path is the in-app route. Dashboard tabs are part of it (`/?tab=traces`), and so are the ids that name what is open, such as `/workflows/<id>`. Only a short list of query parameters that identify the page is kept (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); everything else in the query string and the whole fragment is dropped. Pages whose link carries a secret, such as `/review/<token>`, are logged with the placeholder `:token` instead of the secret.
+
+The browser reports the path, so a `page.view` line shows where a user says they went. It does not prove that the server returned that page. Visits to the sign-in page and to links opened while signed out are not recorded, because no user is attached to them.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
 
-`workflow.history_view` records `owned=false` when a collaborator reads someone else's run history. `workflow.delete` records `outcome=denied` with `reason=not_owner` when a collaborator tries to delete.
+`workflow.run` is written when a run is started through the API: the editor's Run button, the execute endpoint with a session, API key or webhook, the chat portal, and MCP tools. It records who started it, how, and how it ended:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` links the line to the run in Run History. `outcome` is `failure` when the run ended in `error`, `cancelled` or `timeout`. A run parked for human review or held in the concurrency queue is a `success` line with `status=pending` or `status=queued`. A call with no signed-in user, such as an anonymous webhook or a portal visitor, has no `actor_id` or `actor_email`. Inputs and outputs are never written.
+
+Runs started by a schedule, a trigger node, a queue or an event are not audit lines. They execute on whichever instance claimed them and are recorded in Run History with their trigger source and the instance that ran them.
+
+`workflow.history_view` is written when someone opens a workflow's run history. The small lookup that shows a workflow's latest run in the dashboard preview is not a history view and is not logged. `workflow.history_view` records `owned=false` when a collaborator reads someone else's run history. `workflow.delete` records `outcome=denied` with `reason=not_owner` when a collaborator tries to delete.
 
 ### Credentials
 
@@ -97,6 +119,38 @@ An audit line records identifiers, names, and counts. It never records a credent
 Two things enforce this. Call sites are written to pass only safe fields, and the audit helper redacts as a backstop: any field whose name contains `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie`, or similar is replaced with `***` before the line is built. Over-redaction is deliberate — an unhelpful line is better than a leaked credential.
 
 Where a secret is genuinely relevant to the record, only its shape is logged. A file share records `password_protected=true`, never the password.
+
+## Heym Work
+
+Heym Work also writes audit lines to its own stdout under `winston.audit`, using the
+same formatting, outcomes, truncation and secret redaction as Heym. Local audit logging
+is always on and needs no additional configuration.
+
+Work records every `/api/` request as `work.request`, including its authenticated actor,
+route template, operation, UUID resource identifiers, HTTP status and duration. This
+covers Work-only actions such as flow changes, preferences, pins, widget layouts and
+demo content, as well as permission refusals, validation errors and server failures.
+Health checks and static assets are excluded.
+
+Calls Work makes to Heym are recorded independently as `work.heym_request`. Streamed
+responses pass through immediately; an interrupted stream is a failure even if its
+HTTP headers were already successful. These lines describe Work's HTTP operation,
+not a workflow's final execution result. Request and response bodies, headers, raw
+capability paths and query strings are never included.
+
+Work's own scheduled activity records `work.license_sync`, `work.heym_info_refresh`,
+`work.compat_check` and `work.survey_delivery`, including successful repetitions and
+failures. Unexpected background failures produce `work.background_job`.
+
+These additional records are produced locally. Work does not copy or consume Heym's
+audit records, and they add no audit calls to Heym. The existing forwarding of Work's
+privileged `work.*` events remains unchanged. Heym's workflow schedules and triggers
+continue to execute and retain their histories in Heym.
+
+```bash
+# Work's own local audit output
+docker logs heym-work 2>&1 | grep '\[winston.audit\]'
+```
 
 ## Retention
 

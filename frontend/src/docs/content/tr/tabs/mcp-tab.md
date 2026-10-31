@@ -1,6 +1,6 @@
-# MCP Sekmesi
+# MCP / A2A Sekmesi
 
-**MCP** sekmesi, Model Context Protocol (MCP) entegrasyonunu yapılandırır. MCP, AI istemcilerinin (Claude, ChatGPT, Gemini, Cursor ve MCP uyumlu herhangi bir araç) Heym workflow'larınızı araç olarak çağırmasına olanak tanır.
+**MCP** sekmesi, Model Context Protocol (MCP) entegrasyonunu yapılandırır, ve diğer ajanların görev devredebileceği [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) sunucuları olarak sunmanıza olanak tanır. MCP, AI istemcilerinin (Claude, ChatGPT, Gemini, Cursor ve MCP uyumlu herhangi bir araç) Heym workflow'larınızı araç olarak çağırmasına olanak tanır.
 
 Heym iki modu destekler: tüm MCP etkin workflow'ları tek bir endpoint altında sunan bir **varsayılan sunucu** ve her mantıksal workflow grubuna kendi özel URL'sini ve API anahtarını veren **adlandırılmış sunucular**.
 
@@ -51,7 +51,7 @@ Workflow kartları, açıklamayı ve giriş alanı adlarının bir önizlemesini
 ```
 
 İstemci, bu `execution_id` ile `heym_execution_status` aracını sorgular. [Durum URL'si](../reference/webhooks.md#status-url) ile aynı gövdeyi döndürür: geçerli konumla `queued`, `running`, ardından çıktılarla `success` veya `error`. Yalnızca aynı sunucunun sunduğu workflow çalıştırmalarını bulur. Araç, yalnızca en az bir workflow'un eşzamanlılık sınırı olduğu sürece varsayılan sunucuda ve adlandırılmış her sunucuda listelenir. Sıra dolduğunda çağrı "Concurrency queue is full" hatası döndürür.
-## Heym Chat Aracı
+## Heym Ajanı
 
 **Heym Capabilities** bölümü, Chat sekmesi motorunu `heym_chat` adlı tek bir MCP aracına dönüştürür. Bunu varsayılan sunucuda, herhangi bir adlandırılmış sunucuda veya her ikisinde etkinleştirin — her yüzey kendi açma/kapama anahtarını ve model seçimini korur.
 
@@ -60,15 +60,20 @@ Etkinleştirildiğinde, `heym_chat` workflow araçlarınızın yanında `tools/l
 - Bir workflow oluşturma, örnek girdilerle test çalıştırması yapma, hataları düzeltme ve bir çalıştırma başarılı olduğunda tamamlama (bkz. [Oluşturma modu](#build-mode))
 - Mevcut workflow'larınızı inceleme ve çalıştırma
 - Analitikleri, son çalıştırmaları ve yaklaşan cron zamanlamalarını bildirin
+- Workflow'ların nerede başarısız olduğunu ve neden yavaş olduğunu açıklar: en çok çalışan, en çok başarısız olan ve en yavaş workflow'lar ile son 1, 3 veya 6 saat, 24 saat, 7 veya 30 gün ya da tüm zamanlar boyunca en çok zaman, hata ve çağrı alan düğüm türleri
 - Tek bir workflow'un çalıştırma geçmişini bildirin: kaç kez çalıştığı, durum sayıları, ne zaman çalıştığı ve istendiğinde tek bir çalıştırmanın girişleri, çıktıları ve düğüm başına hataları
 - Şu anda nelerin çalıştığını bildirin: kaç yürütmenin etkin olduğu, workflow adları, her birinin ne kadar süredir çalıştığı, her birinin şu anda hangi düğümde olduğu ve canlı çalıştırmaya bir bağlantı
 - [Board sekmesinde](./board-tab.md) board'ları listeleyin, kartlar oluşturun ve kart ayrıntılarını okuyun
-- Veri tablolarınızı sütunlarıyla birlikte listeleyin, yenilerini oluşturun ve oluşturduğu workflow'lara bağlayın
+- Dashboard'larınızı (Heym Work sayfaları) ve widget'larını listeler, bir workflow'un hangi dashboard'da olduğunu bulur, yeni bir widget ekleyip workflow'unu oluşturur, mevcut bir workflow'u widget olarak yerleştirir, widget'ları yeniden adlandırır veya siler ya da düzeni toparlar (bkz. [Dashboard › Chat ve MCP Üzerinden](./dashboard-tab.md#from-chat-and-mcp))
+- Veri tablolarını ve satırlarını inceler, tablolar oluşturur, sütunlar ekler veya kaldırır, satırlar ekler, günceller veya siler ve tabloları workflow'lara bağlar
+- Prompt ve ajan değerlendirme paketlerini ([Eval suites](./evals-tab.md#from-chat-and-mcp)) oluşturur, düzenler ve çalıştırır; buna bir ajanın temel çizgisi de dahildir: raporlanan, çalıştırmalardan oluşturulan veya sayılarla belirtilen. Sonuç, kaydedilen her paketin Evals bağlantısını listeler.
 - Heym'in kendi sayfasında kimlik bilgilerinizi oluşturun veya güncelleyin (bkz. [Kimlik Bilgileri](#kimlik-bilgileri))
 - Ekipleri ve global değişkenleri okuyun ve dokümantasyonda arama yapın
 - Bekleyen human-in-the-loop incelemelerini onaylayın, düzenleyin veya reddedin
 
 Chat sekmesine sonradan eklenen yetenekler otomatik olarak `heym_chat` üzerinden kullanılabilir hale gelir — senkronize tutulacak yetenek başına bir açma/kapama anahtarı yoktur.
+
+Bu yetenekler `heym_chat` içinde çalışır: `tools/list` `heym_chat`'i ve workflow araçlarınızı gösterir, değerlendirme paketlerininkiler gibi dahili sohbet araçlarını asla göstermez.
 
 ### Oluşturma modu
 
@@ -122,6 +127,14 @@ Her çağrı, [Chat sekmesi](./chat-tab.md) geçmişinize normal bir konuşma ol
 
 Asistanın netleştirmeye ihtiyacı olduğunda duraklar ve bunu söyler; aynı `conversation_id` ile yanıtları gönderin.
 
+### A2A'yı Etkinleştir
+
+Heym Ajanı açıkken kartta **A2A'yı Etkinleştir** onay kutusu gösterilir. Bunu işaretlediğinizde diğer ajanlar Agent2Agent protokolü (A2A 1.0) üzerinden Heym Ajanına görevler gönderebilir. Kart daha sonra **Agent Card** URL'sini ve **JSON-RPC endpoint**'ini (her biri bir kopyalama düğmesiyle) ve kartı alan bir `curl` komutunu listeler. A2A, MCP ile aynı anahtarı ve OAuth oturum açmasını kullanır. Ajanın kapatılması A2A'yı da kapatır. Yöntemler, görev durumları ve bir örnek için [A2A](../reference/a2a.md) sayfasına bakın.
+
+### İlerleme
+
+Uzun süren bir `heym_chat` çağrısı, ajanın ne yaptığını Chat sekmesinin gösterdiği ifadelerle bir MCP ilerlemesi (`notifications/progress`) olarak bildirir; örneğin `Workflow test ediliyor · 2/5 deneme`. İlerleme bildiriminde zaman aşımını sıfırlayan istemciler, ajan çalışırken beklemeye devam eder.
+
 ## Adlandırılmış MCP Sunucuları
 
 Adlandırılmış sunucular, workflow'larınızı yalıtılmış MCP endpoint'lerine bölmenizi sağlar. Her sunucunun kendi URL'si ve API key'i vardır; böylece farklı AI istemcileri, ekipler veya kullanım senaryoları tam olarak ihtiyaç duydukları workflow'lara bağlanabilir.
@@ -141,7 +154,9 @@ Her sunucu kartı şunları gösterir:
 | **SSE Endpoint** | Benzersiz URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Bağımsız key; oluşturulduğunda veya yeniden oluşturulduğunda bir kez gösterilir. Hemen kopyalayın; hash'lenmiş olarak saklanır ve sonradan görüntülenemez |
 | **How to connect** | **Copy JSON** kullanıma hazır MCP config'ini kopyalar; **Add to Cursor** tek tıklamayla kurar |
-| **Heym Capabilities** | Bu sunucu için `heym_chat` aracını açıp kapatın ve credential ile modelini seçin |
+| **Heym Capabilities** | Bu sunucu için Heym Ajanını (`heym_chat`) açıp kapatın ve credential ile modelini seçin |
+| **A2A'yı Etkinleştir** | `{origin}/api/a2a/servers/{uuid}/agent-card.json` adresindeki kendi Agent Card'ı ile bu sunucunun kendi A2A anahtarı |
+| **A2A'yı Etkinleştir** | `{origin}/api/a2a/servers/{uuid}/agent-card.json` adresindeki kendi Agent Card'ı ile bu sunucunun kendi A2A anahtarı |
 | **Assigned Workflows** | Bu sunucunun hangi workflow'larınızı sunduğunu açıp kapatın |
 
 ### Workflow Ataması

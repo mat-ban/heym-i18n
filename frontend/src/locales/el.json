@@ -83,7 +83,8 @@
     "run": "Εκτέλεση",
     "dropFileOrClick": "Σύρετε ένα αρχείο εδώ ή κάντε κλικ για επιλογή",
     "removeFile": "Κατάργηση αρχείου",
-    "chooseFileFor": "Επιλέξτε αρχείο για {label}"
+    "chooseFileFor": "Επιλέξτε αρχείο για {label}",
+    "new": "Νέο"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Κανένα: κάθε μοντέλο αξιολογεί τον εαυτό του",
     "removeJudge": "Αφαίρεση judge",
     "judgeModel": "Μοντέλο Judge",
-    "enterJudgeModel": "Εισαγάγετε το μοντέλο judge για εκτέλεση με αυτόν τον judge."
+    "enterJudgeModel": "Εισαγάγετε το μοντέλο judge για εκτέλεση με αυτόν τον judge.",
+    "promptSuite": "Σουίτα prompt",
+    "promptSuiteDesc": "Δοκιμάστε ένα prompt συστήματος σε διάφορα μοντέλα",
+    "agentSuite": "Σουίτα πρακτόρων",
+    "agentSuiteDesc": "Ελέγξτε τις πραγματικές εκτελέσεις ενός πράκτορα: εργαλεία, καθυστέρηση, κόστος",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Αναζήτηση σουιτών...",
+    "loadingSuite": "Φόρτωση σουίτας...",
+    "couldNotLoadSuite": "Δεν ήταν δυνατή η φόρτωση αυτής της σουίτας."
   },
   "statusFilter": {
     "status": "Κατάσταση",
@@ -1701,7 +1711,9 @@
     "askAi": "Ρωτήστε το AI",
     "askAiTitle": "Ρωτήστε τον βοηθό Chat για αυτήν την εκτέλεση",
     "noNodeSpans": "Δεν καταγράφηκαν spans κόμβων για αυτήν την εκτέλεση.",
-    "queuedProgress": "Σε ουρά {position}/{size}"
+    "queuedProgress": "Σε ουρά {position}/{size}",
+    "clickToSelectRun": "Κάντε κλικ για να επιλέξετε αυτήν την εκτέλεση",
+    "doubleClickOrOpenNewTab": "Κάντε διπλό κλικ για να μεταφέρετε αυτήν την εκτέλεση στον καμβά, Ctrl/Cmd+κλικ για άνοιγμα σε νέα καρτέλα"
   },
   "portal": {
     "loadingPortal": "Φόρτωση portal...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Εκθέστε τα Workflows σας ως MCP tools για βοηθούς τεχνητής νοημοσύνης",
+    "subtitle": "Εκθέστε τα workflow σας ως εργαλεία MCP και το Heym Agent μέσω MCP και A2A",
     "connection": "MCP Connection",
     "connectionSubtitle": "Συνδέστε τον βοηθό τεχνητής νοημοσύνης σας με τα Workflows σας μέσω του πρωτοκόλλου MCP.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Στην ενότητα Προσαρμοσμένες εφαρμογές, κάντε κλικ στην Προσθήκη προσαρμοσμένης εφαρμογής",
     "geminiStep3": "Επικολλήστε τη διεύθυνση URL διακομιστή MCP παραπάνω και αφήστε τις Σύνθετες λειτουργίες κλειστές. Το Gemini θα εγγραφεί αυτόματα",
     "geminiStep4": "Κάντε κλικ στο Επόμενο και εξουσιοδοτήστε με τα διαπιστευτήρια Heym σας",
-    "geminiInfo": "Το Gemini χρησιμοποιεί το OAuth για ασφαλή έλεγχο ταυτότητας. Τα διαπιστευτήριά σας στο Heym χρησιμοποιούνται για την εξουσιοδότηση πρόσβασης και δεν κοινοποιούνται ποτέ στο Gemini. Μόλις συνδεθεί, το Heym λειτουργεί επίσης στην εφαρμογή Gemini για κινητά."
+    "geminiInfo": "Το Gemini χρησιμοποιεί το OAuth για ασφαλή έλεγχο ταυτότητας. Τα διαπιστευτήριά σας στο Heym χρησιμοποιούνται για την εξουσιοδότηση πρόσβασης και δεν κοινοποιούνται ποτέ στο Gemini. Μόλις συνδεθεί, το Heym λειτουργεί επίσης στην εφαρμογή Gemini για κινητά.",
+    "agentReach": {
+      "off": "Ανενεργό: οι πελάτες MCP και A2A δεν μπορούν να προσεγγίσουν το Heym Agent",
+      "unconfigured": "Επιλέξτε ένα διαπιστευτήριο και ένα μοντέλο ώστε να μπορεί να εκτελεστεί το Heym Agent",
+      "mcpA2a": "Προσβάσιμο μέσω MCP και A2A",
+      "mcpOnly": "Προσβάσιμο ως heym_chat μέσω MCP"
+    },
+    "a2aEnabledOnServer": "Το A2A ενεργοποιήθηκε στο «{name}»",
+    "a2aEnabled": "Το A2A ενεργοποιήθηκε",
+    "a2aDisabledOnServer": "Το A2A απενεργοποιήθηκε στο «{name}»",
+    "a2aDisabled": "Το A2A απενεργοποιήθηκε",
+    "agentAndA2aDisabledOnServer": "Το Heym Agent και το A2A απενεργοποιήθηκαν στο «{name}»",
+    "agentAndA2aDisabled": "Το Heym Agent και το A2A απενεργοποιήθηκαν",
+    "a2a": {
+      "enable": "Ενεργοποίηση A2A",
+      "description": "Άλλοι πράκτορες μπορούν να στείλουν εργασίες στο Heym Agent μέσω του πρωτοκόλλου Agent2Agent (A2A 1.0). Ελέγχουν την ταυτότητά τους με το κλειδί αυτού του διακομιστή στην κεφαλίδα X-MCP-Key ή με Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Ελέγξτε ότι η κάρτα είναι ενεργή:",
+      "copyLabel": "Αντιγραφή {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Πίνακας αναλυτικών στοιχείων",
@@ -2087,6 +2119,25 @@
       "errors": "Σφάλματα",
       "avgLatencyMs": "Μέση καθυστέρηση (ms)",
       "latencyTitle": "Μέση καθυστέρηση διαχρονικά"
+    },
+    "last1Hour": "Τελευταία ώρα",
+    "last3Hours": "Τελευταίες 3 ώρες",
+    "last6Hours": "Τελευταίες 6 ώρες",
+    "nodeTypes": "Τύποι κόμβων",
+    "nodeChart": {
+      "emptyMessage": "Δεν υπάρχουν ακόμη δεδομένα κόμβων για αυτήν την περίοδο. Τα αναλυτικά στοιχεία κόμβων καταγράφονται για εκτελέσεις μετά από αυτήν την ενημέρωση.",
+      "duration": {
+        "title": "Κόμβοι με τη μεγαλύτερη διάρκεια",
+        "subtitle": "Μέση διάρκεια ανά κλήση"
+      },
+      "errors": {
+        "title": "Τύποι κόμβων με τα περισσότερα σφάλματα",
+        "subtitle": "Σφάλματα συναρτήσει του χρόνου"
+      },
+      "calls": {
+        "title": "Τύποι κόμβων με τις περισσότερες κλήσεις",
+        "subtitle": "Κλήσεις συναρτήσει του χρόνου"
+      }
     }
   },
   "dashboards": {

@@ -51,6 +51,8 @@ Het openen van een workflow op `/workflows/{workflowId}/{executionId}` brengt di
 
 ### Gebruiksscenario's
 
+Houd Ctrl/Cmd ingedrukt en klik op een run in een van de geschiedenislijsten om die deeplink in een nieuw browsertabblad te openen. Het huidige tabblad en het geopende dialoogvenster blijven ongewijzigd. Chat- en assistent-runs hebben geen workflow, dus de sneltoets selecteert ze alleen, net als een gewone klik.
+
 - Een workflow opnieuw uitvoeren met dezelfde inputs
 - Een mislukte run debuggen door inputs en knooppuntoutputs te inspecteren
 - Outputs tussen runs vergelijken

@@ -173,7 +173,7 @@ Ketika sebuah workflow menyimpan, menyimpan, atau mencari record dan Anda belum 
 
 Pilih tabel baru dan tekan **Submit answers**: kartu tersebut membuat tabel, dan asisten menempatkan id-nya pada node serta menggunakan nama kolomnya secara persis. Anda juga dapat meminta tabel secara terpisah, misalnya "create a table for my leads".
 
-Asisten melihat nama tabel, deskripsi, dan kolom, tidak pernah melihat baris. Asisten tidak pernah mengubah kolom tabel yang sudah ada: jika sebuah tabel kekurangan kolom yang dibutuhkan workflow, asisten akan menamai kolom tersebut dan menawarkan tabel baru sebagai gantinya. Tambahkan kolom di [DataTable tab](../tabs/datatable-tab.md).
+Asisten canvas melihat nama tabel, deskripsi, dan kolom, tidak pernah baris. Ini mengonfigurasi node workflow dari metadata tersebut; tambahkan kolom di [tab DataTable](../tabs/datatable-tab.md) atau minta ke [Chat](../tabs/chat-tab.md). Chat dan `heym_chat` dapat memeriksa baris dan secara langsung menambah atau menghapus kolom serta menyisipkan, memperbarui, atau menghapus baris pada tabel yang Anda miliki atau memiliki akses tulis, termasuk pembagian tim. Penghapusan kolom dan pengosongan semua baris meminta konfirmasi sebelum menghapus data.
 
 ## Terkait
 

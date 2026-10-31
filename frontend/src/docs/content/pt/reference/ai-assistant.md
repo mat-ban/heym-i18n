@@ -173,7 +173,7 @@ Quando um workflow salva, armazena ou consulta registros e você não nomeou out
 
 Escolha a nova tabela e pressione **Enviar respostas**: o cartão cria a tabela, e o assistente coloca seu id no nó e usa seus nomes de coluna exatos. Você também pode solicitar uma tabela isoladamente, por exemplo "criar uma tabela para meus leads".
 
-O assistente vê nomes de tabelas, descrições e colunas, nunca linhas. Ele nunca altera as colunas de uma tabela existente: se uma tabela não tiver uma coluna de que o workflow precisa, ele nomeia a coluna e oferece uma nova tabela em vez disso. Adicione colunas na [aba DataTable](../tabs/datatable-tab.md).
+O assistente do canvas vê nomes de tabelas, descrições e colunas, nunca linhas. Configura os nós do workflow a partir desses metadados; adicione colunas no [separador DataTable](../tabs/datatable-tab.md) ou solicite-o no [Chat](../tabs/chat-tab.md). O Chat e o `heym_chat` podem inspecionar linhas e adicionar ou remover colunas diretamente, bem como inserir, atualizar ou eliminar linhas em tabelas de que seja proprietário ou para as quais tenha permissão de escrita, incluindo partilhas de equipa. A remoção de colunas e a limpeza de todas as linhas solicitam confirmação antes de eliminar dados.
 
 ## Relacionados
 

@@ -10,7 +10,7 @@ Nodul **Ieșire grafic** este nodul terminal al unui workflow de [widget de dash
 | Ieșiri | 0 (terminal) |
 | Ieșire | Payload standardizat de grafic |
 
-Plasați acest nod **ultimul** într-un workflow de widget de dashboard. Nodul anterior acestuia ar trebui să producă un array de obiecte rând, de exemplu:
+Plasați acest nod **ultimul** într-un workflow de widget de dashboard. Pentru relațiile dintre entități, nodul anterior produce un obiect graf (consultați [Entity relationships](#entity-relationships-db)). Alte grafice bazate pe date utilizează un array de obiecte rând, de exemplu:
 
 ```json
 [
@@ -26,9 +26,9 @@ Când aveți doar date de exemplu (fără o sursă reală), produceți aceste r�
 | Parametru | Tip | Descriere |
 |-----------|------|-------------|
 | `label` | string | Identificatorul nodului (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` sau `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` sau `hitl` |
 | `orientation` | string | `vertical` sau `horizontal` (doar pentru grafice cu bare) |
-| `dataPath` | string | Cale cu puncte către array-ul de rânduri din ieșirea nodului anterior (de ex. `data` sau `result.items`). Lăsați gol pentru detectare automată. |
+| `dataPath` | string | Cale cu puncte către array-ul de rânduri (sau obiect graf pentru `erDiagram`) din ieșirea nodului anterior (de ex. `data` sau `result.items`). Lăsați gol pentru detectare automată. |
 | `labelField` | string | Cheia rândului folosită ca etichetă de categorie (pie/bar/line) |
 | `valueField` | string | Cheia rândului folosită ca valoare numerică (pie/bar/line/numeric/gauge) |
 | `series` | array | Definiție opțională multi-serie `[{ "name": "Sent", "field": "sent" }]` pentru bar/line (suprascrie `valueField`) |
@@ -54,8 +54,51 @@ Când aveți doar date de exemplu (fără o sursă reală), produceți aceste r�
 - **scatter** — puncte X/Y din `xField` și `yField` pentru grafice de corelație.
 - **proportion** — o singură bară orizontală împărțită în proporții cu o legendă procentuală (de ex. o defalcare pe limbi). Folosește `labelField` + `valueField`.
 - **barGauge** — un gauge orizontal per rând cu un gradient roșu→verde și o valoare (de ex. spațiu liber pe disc). Folosește `labelField` + `valueField`, `unit` opțional și `max` (implicit valoarea maximă a rândului).
+- **gantt** — planificări de sarcini cu date, progres și dependențe; consultați [Planificări Gantt](#gantt-schedules).
+- **erDiagram** — entități de bază de date, câmpuri, chei și relații; consultați [Entity relationships](#entity-relationships-db).
 - **text** — un mesaj markdown (de ex. o notă de stare precum „Ultima execuție la 19:47"). Puneți markdown-ul în `text` pentru un mesaj static, sau lăsați `text` gol și setați `valueField` pentru a afișa un string produs anterior. Suportă titluri, bold/italic, [liste](../nodes/chart-output-node.md#interactive-task-lists), linkuri și cod inline.
 - **hitl** — un carusel cu recenziile dvs. umane în așteptare. Antetul afișează `1/n pending`; săgeata stângă este dezactivată pe primul card, iar săgeata dreaptă pe ultimul. Numele workflow-ului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă, iar pictograma de istoric de lângă titlul widget-ului deschide acea execuție în dialogul de istoric de pe aceeași pagină. Acest tip de grafic ignoră rândurile anterioare, astfel încât workflow-ul widget-ului este doar nodul Ieșire grafic. Fiecare persoană autentificată vede recenziile pentru workflow-urile pe care le deține. Alegeți un **Workflow** (și **Select agent** când are mai mulți pași de revizuire) în proprietățile nodului sau în setările widgetului pentru a afișa în schimb recenziile acelui workflow, tuturor celor care îl pot deschide; vedeți [widgeturi HITL](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Planificări Gantt
+
+Alegeți **Gantt** (`gantt`) pentru calendare de proiect și cronologii de sarcini. Setați `dataPath` pe array-ul de sarcini, cum ar fi `tasks`. Rândurile folosesc nume fixe de câmpuri:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` și `end` acceptă date sau marcaje temporale ISO. Valorile fără fus orar utilizează UTC; decalajele de fus orar sunt convertite în UTC. `end` trebuie să fie egal sau ulterior lui `start`. `progress` este opțional (0–100, implicit 0); `dependencies` conține ID-uri ale sarcinilor existente. ID-urile trebuie să fie unice. Treceți cu cursorul peste o sarcină pentru a citi datele complete, progresul și dependențele. Diagramele mari permit derularea în interiorul widgetului. Sunt acceptate cel mult 500 de sarcini.
+
+Pentru date demonstrative, o mapare Set numită `tasks` poate utiliza `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Conectați-o la Chart Output cu `chartType: "gantt"` și `dataPath: "tasks"`. Mapați coloanele sursă în aceste nume fixe cu un nod Set; `labelField` și `valueField` nu sunt utilizate.
+
+### Entity relationships (DB)
+
+Alegeți **Entity relationships (DB)** (`erDiagram`) pentru scheme de baze de date și conexiuni între entități. Setați `dataPath` pe un **obiect** graf, cum ar fi `graph`, conținând ambele array-uri:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Câmpurile conțin un `name`, `type` opțional și `key` opțională (`PK`, `FK`, `PK/FK` sau gol). Relațiile fac referire la ID-uri de entități existente; câmpurile opționale `sourceField` și `targetField` ancorează conexiunea la câmpurile denumite. `cardinality` acceptă `one-to-one`, `one-to-many` (implicit), `many-to-one` sau `many-to-many`. ID-urile entităților și numele de câmpuri din fiecare entitate trebuie să fie unice. Sunt acceptate cel mult 100 de entități, 100 de câmpuri per entitate și 500 de relații.
+
+Cu un nod Set, construiți `graph` prin `$dict(entities=array(dict(...)), relations=array(dict(...)))`; utilizați `chartType: "erDiagram"` și `dataPath: "graph"`. Aceasta este o vizualizare a schemei furnizate; nu inspectează automat o bază de date activă.
+
+Ambele tipuri apar în **Adăugare widget** cu o previzualizare și în selectorul de tip de diagramă al nodului pe canvas. Heym Work poate propune aceste tipuri atunci când descrieți o planificare sau o schemă de bază de date, desenând previzualizări ale sarcinilor sau entităților propuse înainte de a crea pagina.
 
 ### Liste de activități interactive
 

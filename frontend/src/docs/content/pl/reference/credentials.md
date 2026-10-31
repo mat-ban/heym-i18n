@@ -14,7 +14,7 @@ Dane logowania przechowują klucze API oraz sekrety wykorzystywane przez węzły
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Ewaluacja](../tabs/evals-tab.md) | OpenAI, Google, Custom | Klucz API dla modelu |
 | [Decision](../nodes/decision-node.md), sędzia [Ewaluacji](../tabs/evals-tab.md) | Decision Model | Bazowy URL endpointu modelu decyzyjnego oraz opcjonalny klucz API |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Wybiera, który z modeli obsłuży każde żądanie, korzystając z modelu decyzyjnego |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Ewaluacja](../tabs/evals-tab.md) zestawy promptów | Model Router (Auto Model) | Wybiera, który z modeli obsłuży każde żądanie, korzystając z modelu decyzyjnego |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Logowanie do subskrypcji ChatGPT (OAuth) lub token dostępu Codex dla runnera oraz GitHub PAT do operacji na repozytorium |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Klucz API bramy OpenCode Go (opcjonalny bazowy URL) dla runnera oraz GitHub PAT do operacji na repozytorium |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) do wywołań GitHub API, operacji węzła GitHub oraz integracji MCP |

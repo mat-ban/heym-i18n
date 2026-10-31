@@ -73,11 +73,11 @@ Koplietojiet tabulas ar citiem lietotājiem vai komandām:
 1. Atveriet koplietošanas dialogu no tabulas detaļu skata
 2. Pievienojiet lietotājus pa e-pastu ar **lasīšanas** vai **rakstīšanas** atļaujām
 3. Pievienojiet komandas ar **lasīšanas** vai **rakstīšanas** atļaujām
-4. Lasīšanas tiesību lietotāji var skatīt datus; rakstīšanas tiesību lietotāji var modificēt rindas
+4. Tikai lasīšanas lietotāji var skatīt datus; lietotāji ar rakstīšanas piekļuvi var modificēt rindas un kolonnas. Tabulas pārdēvēšana, tās apraksta mainīšana un koplietojumu pārvaldība paliek tikai īpašnieka ziņā.
 
 ## Tabulu izveide no AI asistenta
 
-Kanva [AI asistents](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) un rīks `heym_chat` [MCP cilnē](./mcp-tab.md) var izvēlēties vienu no Jūsu tabulām darbplūsmai, ko tie veido, vai izveidot jaunu. Tie ierosina nosaukumu un kolonnas un izveido tabulu, kad Jūs iesniedzat jautājuma karti. Tie nekad nemaina esošās tabulas kolonnas vai neietekmē tās rindas: pievienojiet vai rediģējiet kolonnas šeit.
+Audekla [AI asistents](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) un rīks `heym_chat` [MCP cilnē](./mcp-tab.md) var izvēlēties kādu no jūsu tabulām darbplūsmai, ko tie veido, vai izveidot jaunu. Tie piedāvā nosaukumu un kolonnas un izveido tabulu, kad iesniedzat jautājumu kartīti. Audekla asistents konfigurē darbplūsmas mezglus no tabulas metadatiem. Chat un `heym_chat` var arī pārbaudīt rindas, pievienot vai noņemt kolonnas un tieši ievietot, atjaunināt vai dzēst rindas. Norādiet tabulas nosaukumu vai šīs cilnes saiti. Rakstīšanai nepieciešamas īpašumtiesības vai tieša/komandas **rakstīšanas** piekļuve. Kolonnu pievienošana saglabā esošos datus; kolonnu noņemšana dzēš to vērtības no katras rindas. Kolonnu noņemšana un visu rindu notīrīšana prasa apstiprinājumu, tāpat kā šajā cilnē.
 
 ## Izmantošana darbplūsmās
 

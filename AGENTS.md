@@ -107,6 +107,7 @@ A dashboard chat turn that carries `allow_build` (Heym's Chat tab, Heym Work's C
 - `MAX_BUILD_TEST_RUNS` equals the editor's `MAX_YOLO_ATTEMPTS` (`yoloProtocol.ts`); change both together.
 - Saves go through `backend/app/services/workflow_save.py`, like the editor's update endpoint, so Edit History, trigger resync and platform events stay identical. Do not write workflow versions anywhere else.
 - `finish` is refused until a test run of the latest save has passed. The Verified card depends on that; keep it.
+- Build turns also carry the eval suite tools (`backend/app/api/chat_evals.py`); skill-only turns and the canvas assistant do not, and MCP `tools/list` never shows them. They call `prompt_suite_service.py`, `agent_suite_service.py` and `launch_agent_suite_run`, the same code as the Evals routes. Do not write eval rows anywhere else.
 - Every model request and test run in a build turn carries the conversation id as its OpenCode session (`ChatBuildSession.llm_session_id`); see the OpenCode section above.
 
 ### Credentials over MCP (URL elicitation)
@@ -239,7 +240,7 @@ OTel tracing is env-gated (`HEYM_OTEL_ENABLED`, disabled by default) and bootstr
 ### Release tour (announce user-visible work)
 **Any change a user can see must ship with its release tour entry in the same change.** A feature nobody discovers was not delivered. This covers new UI, new node types, new tabs or panels, and reworked UX flows. Pure refactors, backend-only changes, and bug fixes with no visible surface are exempt.
 
-The system lives in `frontend/src/features/release-tour/`, mounted through `ReleaseTourHost.vue`. It is **desktop only** (above the 768px breakpoint) and is mounted on three screens: the dashboard (every tab), Chat, and Docs. The launcher button teleports into `#release-tour-launcher-slot`, which each of those views puts in `AppHeader`'s `before-docs` slot. The header button appears immediately; only the *automatic* popup waits for a screen's intro video to be dismissed. `releaseRegistry.ts` is the source of truth; `releaseTourMapper.ts` holds the pure logic and must stay side-effect free.
+The system lives in `frontend/src/features/release-tour/`, mounted through `ReleaseTourHost.vue`. It is **desktop only** (above the 768px breakpoint) and is mounted on four screens: the dashboard (every tab), Chat, Docs and Evals. The launcher button teleports into `#release-tour-launcher-slot`, which each of those views puts in `AppHeader`'s `before-docs` slot. The header button appears immediately; only the *automatic* popup waits for a screen's intro video to be dismissed. `releaseRegistry.ts` is the source of truth; `releaseTourMapper.ts` holds the pure logic and must stay side-effect free.
 
 - Add a section to the **current unreleased** entry in `releaseRegistry.ts`: `id`, `title`, a `blocks` prose summary, and `tour` metadata (`description`, `useCases`, `tourVisual`).
 - List the new section's `id` in that release's `sectionOrder`. A section missing from `sectionOrder` never reaches the tour.

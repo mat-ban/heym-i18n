@@ -13,8 +13,11 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from app.api import (
+    a2a,
     admin_cluster,
     agent_memory,
+    agent_suite_runs,
+    agent_suites,
     ai_assistant,
     alerts,
     analytics,
@@ -52,6 +55,7 @@ from app.api import (
     notion_oauth,
     oauth,
     opencode_go,
+    page_views,
     playwright,
     plugins,
     portal,
@@ -392,6 +396,8 @@ app.include_router(skill_builder.router, prefix="/api/ai", tags=["Skill Builder"
 app.include_router(config.router, prefix="/api/config", tags=["Config"])
 app.include_router(mcp.router, prefix="/api/mcp", tags=["MCP"])
 app.include_router(mcp_servers.router, prefix="/api/mcp/servers", tags=["MCP Servers"])
+app.include_router(a2a.router, prefix="/api/a2a", tags=["A2A"])
+app.include_router(a2a.well_known_router, tags=["A2A"])
 app.include_router(traces.router, prefix="/api/traces", tags=["Traces"])
 app.include_router(llm_pricing.router, prefix="/api/llm-pricing", tags=["LLM Pricing"])
 app.include_router(portal.router, prefix="/api/portal", tags=["Portal"])
@@ -406,8 +412,11 @@ app.include_router(alerts.router, prefix="/api/alerts", tags=["Alerts"])
 app.include_router(dashboards.router, prefix="/api/dashboards", tags=["Dashboards"])
 app.include_router(boards.router, prefix="/api/boards", tags=["Boards"])
 app.include_router(logs.router, prefix="/api/logs", tags=["Logs"])
+app.include_router(page_views.router, prefix="/api/audit", tags=["Audit"])
 app.include_router(plugins.router, prefix="/api/plugins", tags=["Plugins"])
 app.include_router(evals.router, prefix="/api/evals", tags=["Evals"])
+app.include_router(agent_suites.router, prefix="/api/evals", tags=["Evals"])
+app.include_router(agent_suite_runs.router, prefix="/api/evals", tags=["Evals"])
 app.include_router(chats.router, prefix="/api/chats", tags=["Chats"])
 app.include_router(voice.router, prefix="/api/voice", tags=["Voice"])
 app.include_router(expressions.router, prefix="/api/expressions", tags=["Expressions"])

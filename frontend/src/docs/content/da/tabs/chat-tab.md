@@ -23,7 +23,8 @@ En samtale kan også startes fra chatfeltet på [Workflows-fanen](./workflows-ta
 - **Opkøede opfølgninger** – Flere beskeder kan sendes, mens et svar streames. Opkøede beskeder bevares, kan redigeres eller slettes før start og køres i rækkefølge efter det aktive svar
 - **Planlægningspauser** – Når Chat har brug for planlægningsdetaljer, stilles afklarende spørgsmål, og opkøede opfølgninger sættes på pause, indtil der svares. Når planlægningssvaret er færdigt, genoptages opkøede beskeder
 - **Legitimationsoplysninger** – Når et workflow, som Chat opretter eller redigerer, har brug for en legitimationsoplysning, spørger Chat hvilken der skal anvendes, tilbyder at oprette en ny i samtalen eller lader arbejdet fortsætte uden. Chat kan også anmodes om at oprette en legitimationsoplysning eller opdatere en, der ejes; den åbner legitimationsformularen i samtalen. Modellen ser kun legitimationsoplysningens navn og type, aldrig dens værdier, både for legitimationsoplysninger, du ejer, og dem, der er delt med dig. LLM- og Agent-noder, som Chat tilføjer, kører på de legitimationsoplysninger og den model, der er valgt til chatten, inklusive delte legitimationsoplysninger; når Chat redigerer et workflow, beholder dets eksisterende LLM- og Agent-noder deres legitimationsoplysninger og model. Se [AI-assistent › Legitimationsoplysninger](../reference/ai-assistant.md#credentials)
-- **Datatabeller** – Når et workflow, som Chat opretter eller redigerer, gemmer poster, spørger Chat hvilken [datatabel](./datatable-tab.md) der skal anvendes, eller tilbyder at oprette en med de kolonner, workflowet har brug for. Chat kan også liste tabeller og deres kolonner. Den læser eller skriver aldrig rækker. Se [AI-assistent › Datatabeller](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Spørg hvilke [dashboards](./dashboard-tab.md) du har, hvad der er på et dashboard, eller hvilket dashboard et workflow befinder sig på. Bed Chat om at tilføje en ny widget til et dashboard (den placerer en tom widget der, bygger og tester derefter dens workflow), placere et eksisterende workflow på et dashboard som en widget, omdøbe eller slette en widget eller rydde op i et dashboards layout. Heym Work viser disse dashboards som sine sider. Se [Dashboard › Fra Chat og MCP](./dashboard-tab.md#fra-chat-og-mcp)
+- **Datatabeller** – Når et workflow, som Chat opretter eller redigerer, gemmer poster, spørger Chat hvilken [datatabel](./datatable-tab.md) der skal bruges, eller tilbyder at oprette en med de nødvendige kolonner. Den kan også inspicere rækker, tilføje eller fjerne kolonner samt indsætte, opdatere eller slette rækker direkte i tabeller, du ejer eller kan redigere. Giv den et tabelnavn eller et DataTable-link. Fjernelse af kolonner og rydning af alle rækker beder om bekræftelse; tilføjelse af kolonner bevarer eksisterende data. Se [AI-assistent › Datatabeller](../reference/ai-assistant.md#data-tables)
 - **Streaming-svar** – Modellens output vises, mens det streames
 - **Stop svar** – Det aktuelle streaming-svar kan afbrydes til enhver tid; stop rydder også opkøede beskeder for den pågældende samtale
 - **Markdown-gengivelse** – Svar understøtter markdown-formatering, herunder inline-billeder
@@ -33,16 +34,17 @@ En samtale kan også startes fra chatfeltet på [Workflows-fanen](./workflows-ta
 - **Stemmeinput** – Anvend mikrofonknappen til tale-til-tekst (understøttet af browseren). Når optagelsen stopper, kan Heym let rense transskriptionen, før den sendes
 - **Tidsplanlagte workflows** – Spørg hvornår cron-workflows kører (i dag, denne uge, denne måned eller et brugerdefineret datointerval). Assistenten anvender samme tidsplandata som [Tidsplaner](./scheduled-tab.md)-fanen og kan begrænse resultater til egne workflows eller inkludere dem, der er delt. 
 - **Kørselshistorik for workflows** – Spørg til et enkelt workflow ("hvor mange gange kørte den daglige rapport?", "fejlede den?", "hvornår kørte den sidst?"). Chat slår workflowet op via dets ID og svarer ud fra antal kørsler, statusfordeling, første og sidste kørselstidspunkt samt gennemsnitlig varighed. Spørg hvorfor en kørsel fejlede, eller hvad den returnerede, og Chat åbner den pågældende kørsel for at læse input, output og fejl pr. node
+- **Hvor kørsler mislykkes og hvorfor de er langsomme** – Spørg hvor dine workflow mislykkes eller hvorfor de er langsomme, og Chat nævner de workflow, der kørte mest, fejlede mest og er langsomst, samt de nodetyper, der tager mest tid (gennemsnit pr. kald og total), fejler mest og kører mest, de samme tal som under fanen [Analytics](./analytics-tab.md). Nodetyper tælles for kørsler fra og med udgivelsen, der introducerede nodeanalyse. Spørg om den seneste time, 3 eller 6 timer, 24 timer, 7 eller 30 dage eller al tid; timevinduerne starter ved hele timer, så "den seneste time" kl. 15:20 dækker 14:00 indtil nu.
 - **Live kørselsstatus** – Spørg hvad der kører lige nu, og Chat svarer med antallet, workflow-navnene, hvor længe hver kørsel har været i gang, hvilken node den er på, samt et direkte link til den aktive kørsel
 ## Brug af Chat fra en MCP-klient
 
-Chat-motoren kan også tilgås udefra browseren. Aktivér **Heym Chat-værktøjet** i [MCP-fanen](./mcp-tab.md), hvorefter MCP-klienter — Claude, Cursor og alt andet, der taler MCP — får et enkelt `heym_chat`-værktøj, som kører denne samme motor med alle dens funktioner.
+Chat-motoren kan også tilgås uden for browseren. Slå **Heym Agent** til under [fanen MCP / A2A](./mcp-tab.md), og MCP-klienter (Claude, Cursor og ethvert andet værktøj, der taler MCP) får et enkelt `heym_chat`-værktøj, der kører samme motor med alle dens funktioner. Markér også **Aktivér A2A**, så andre agenter kan sende opgaver til den over [A2A](../reference/a2a.md); disse samtaler viser et netværksikon på listen.
 
 Disse samtaler lander i denne fanes historik og markeres med et stikikon i samtalelisten. Åbn en for at læse, hvad klienten spurgte om, se de værktøjskort, den udløste, og fortsæt selv tråden. Besvarelse af et afklarende spørgsmål fungerer på samme måde, uanset om turen startede her eller fra en MCP-klient.
 
 Over MCP viser Chat ikke, vælger ikke og opretter ikke legitimationsoplysninger. Workflows, som den bygger, efterlader legitimationsfelter tomme, og svaret navngiver de noder, der kræver en legitimationsoplysning, så de kan angives i editoren.
 
-Datatabeller fungerer også over MCP: Chat viser de relevante tabeller, opretter nye og forbinder dem til de workflows, den bygger. Dets tabelspørgsmål ankommer som tekst i resultatet, så det besvares med samme `conversation_id`.
+Datatabeller fungerer også over MCP: Chat kan redigere kolonner og rækker direkte, oprette tabeller og integrere dem i workflow. Tabelspørgsmål og sletningsbekræftelser ankommer som tekst i resultatet; svar med samme `conversation_id`.
 
 ## Kontekstgrænse
 
@@ -104,9 +106,58 @@ Ved et "hvorfor blev den udløst"-spørgsmål læser Chat udløsningsregistrerin
 ## Brugerregler
 
 [Brugerregler](../reference/user-settings.md) (konfigureret i Indstillinger) injiceres automatisk i hver Chat-samtale som instruktioner på systemniveau. Angiv dem én gang for at anvende vedvarende præferencer på alle chat-anmodninger.
+
+## Arbejde med Evals
+
+Chat kan oprette, ændre og køre suiterne i [Evals](./evals-tab.md), både prompt-suiter og agentsuiter:
+
+- **Prompt-suite**: "lav en prompt-suite til min supportsvars-prompt med 8 testcases og sammenlign gpt-4o med gpt-4.1-mini". Chat skriver testcasene med deres forventede svar, vælger en scoringsmetode og gemmer suiten.
+  - Før den opretter suiten, afklarer den hvilke LLM-legitimationsoplysninger og modeller der skal bruges. Med præcis én LLM-legitimationsoplysning bruges denne og det meddeles; ellers spørger den.
+  - Til LLM-as-Judge-scoring spørger den også om en separat dommer skal bedømme svarene.
+- **Agentsuite**: "tjek at min supportagent altid søger i dokumentationen og aldrig sender e-mail". Chat finder agenten og gemmer værktøjstjek og tærskelværdier. Når du beder om det, kører den workflowet og genererer et nyt input for hver kørsel.
+  - Agentsuitekørsler er rigtige workflow-kørsler, så deres bivirkninger finder sted. Chat angiver hvor mange kørsler den starter.
+- **Baseline**: Chat kan arbejde med en agents baseline på tre måder:
+  - Rapportere den fra agentens seneste kørsler.
+  - Opbygge den fra kørsler den starter ("kør den 5 gange og brug det som baseline").
+  - Gemme tal du angiver ("sæt baseline til 3 sekunder p95 og $0,01 pr. kørsel").
+- **Kørsler**: Chat venter op til et minut på en kørsel og rapporterer derefter resultatet:
+  - For en prompt-suite: hver models antal beståede og de cases der fejlede.
+  - For en agentsuite: beståelsesprocenten, de fejlede tjek og afvigelsen fra baseline.
+  - En længere kørsel fortsætter i Evals; bed Chat om at tjekke den igen.
+
+Efter Chat opretter eller ændrer en suite, viser svaret et kort med suitens navn, dens type og en knap til **Åbn i Evals**, ligesom kortet for et gemt workflow. Over MCP lister `heym_chat`-resultatet linket til hver suite, der er gemt i det kald.
+
+Det samme fungerer fra en MCP-klient via `heym_chat` (se [Brug af Chat fra en MCP-klient](#brug-af-chat-fra-en-mcp-klient)). Eval-værktøjerne forbliver inde i `heym_chat`; MCP-klienter ser dem ikke som separate værktøjer.
+
+Editorens AI-assistent opretter ikke suiter.
+
+## Arbejde med Evals
+
+Chat kan oprette, ændre og køre suiterne i [Evals](./evals-tab.md), både prompt-suiter og agentsuiter:
+
+- **Prompt-suite**: "lav en prompt-suite til min supportsvars-prompt med 8 testcases og sammenlign gpt-4o med gpt-4.1-mini". Chat skriver testcasene med deres forventede svar, vælger en scoringsmetode og gemmer suiten.
+  - Før den opretter suiten, afklarer den hvilke LLM-legitimationsoplysninger og modeller der skal bruges. Med præcis én LLM-legitimationsoplysning bruges denne og det meddeles; ellers spørger den.
+  - Til LLM-as-Judge-scoring spørger den også om en separat dommer skal bedømme svarene.
+- **Agentsuite**: "tjek at min supportagent altid søger i dokumentationen og aldrig sender e-mail". Chat finder agenten og gemmer værktøjstjek og tærskelværdier. Når du beder om det, kører den workflowet og genererer et nyt input for hver kørsel.
+  - Agentsuitekørsler er rigtige workflow-kørsler, så deres bivirkninger finder sted. Chat angiver hvor mange kørsler den starter.
+- **Baseline**: Chat kan arbejde med en agents baseline på tre måder:
+  - Rapportere den fra agentens seneste kørsler.
+  - Opbygge den fra kørsler den starter ("kør den 5 gange og brug det som baseline").
+  - Gemme tal du angiver ("sæt baseline til 3 sekunder p95 og $0,01 pr. kørsel").
+- **Kørsler**: Chat venter op til et minut på en kørsel og rapporterer derefter resultatet:
+  - For en prompt-suite: hver models antal beståede og de cases der fejlede.
+  - For en agentsuite: beståelsesprocenten, de fejlede tjek og afvigelsen fra baseline.
+  - En længere kørsel fortsætter i Evals; bed Chat om at tjekke den igen.
+
+Efter Chat opretter eller ændrer en suite, viser svaret et kort med suitens navn, dens type og en knap til **Åbn i Evals**, ligesom kortet for et gemt workflow. Over MCP lister `heym_chat`-resultatet linket til hver suite, der er gemt i det kald.
+
+Det samme fungerer fra en MCP-klient via `heym_chat` (se [Brug af Chat fra en MCP-klient](#brug-af-chat-fra-en-mcp-klient)). Eval-værktøjerne forbliver inde i `heym_chat`; MCP-klienter ser dem ikke som separate værktøjer.
+
+Editorens AI-assistent opretter ikke suiter.
+
 ## Relateret
 
-- [MCP-fane](./mcp-tab.md) – Eksponér denne engine for MCP-klienter som `heym_chat`-værktøjet
+- [MCP / A2A-fane](./mcp-tab.md) – Eksponér denne engine for MCP-klienter som `heym_chat`-værktøjet
 - [Indstillinger](../reference/user-settings.md) – Angiv brugerregler, der anvendes på alle chatforespørgsler
 - [Legitimationsoplysninger-fane](./credentials-tab.md) – Tilføj og administrer API-nøgler
 - [Variabler-fane](./global-variables-tab.md) – Globale variabler tilgængelige for Chat

@@ -265,7 +265,26 @@
     "notSet": "Non défini",
     "okCol": "OK",
     "allTime": "Tout l'historique",
-    "allWorkflows": "Tous les workflows"
+    "allWorkflows": "Tous les workflows",
+    "last1Hour": "Dernière heure",
+    "last3Hours": "Dernières 3 heures",
+    "last6Hours": "Dernières 6 heures",
+    "nodeTypes": "Types de nœuds",
+    "nodeChart": {
+      "emptyMessage": "Aucune donnée de nœud pour cette période pour le moment. Les analyses de nœuds sont enregistrées pour les exécutions postérieures à cette mise à jour.",
+      "duration": {
+        "title": "Nœuds les plus lents",
+        "subtitle": "Durée moyenne par appel"
+      },
+      "errors": {
+        "title": "Types de nœuds les plus défaillants",
+        "subtitle": "Erreurs au fil du temps"
+      },
+      "calls": {
+        "title": "Types de nœuds les plus appelés",
+        "subtitle": "Appels au fil du temps"
+      }
+    }
   },
   "auth": {
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
@@ -523,7 +542,8 @@
     "run": "Exécuter",
     "dropFileOrClick": "Déposez un fichier ici ou cliquez pour en choisir un",
     "removeFile": "Supprimer le fichier",
-    "chooseFileFor": "Choisir un fichier pour {label}"
+    "chooseFileFor": "Choisir un fichier pour {label}",
+    "new": "Nouveau"
   },
   "credentials": {
     "accessVia": "Accès via",
@@ -1117,7 +1137,16 @@
     "temperature": "Température : {temp}",
     "testCases": "Cas de test",
     "title": "Évaluations",
-    "tokensSummary": "Tokens : {tokens}"
+    "tokensSummary": "Tokens : {tokens}",
+    "promptSuite": "Suite de prompts",
+    "promptSuiteDesc": "Testez un prompt système sur plusieurs modèles",
+    "agentSuite": "Suite d'agents",
+    "agentSuiteDesc": "Vérifiez les exécutions réelles d'un agent : outils, latence, coût",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Rechercher des suites...",
+    "loadingSuite": "Chargement de la suite...",
+    "couldNotLoadSuite": "Impossible de charger cette suite."
   },
   "history": {
     "clearAll": "Tout effacer",
@@ -1217,7 +1246,9 @@
     "askAi": "Demander à l'IA",
     "askAiTitle": "Interroger l'assistant Chat sur cette exécution",
     "noNodeSpans": "Aucun span de nœud n'a été enregistré pour cette exécution.",
-    "queuedProgress": "En file d'attente {position}/{size}"
+    "queuedProgress": "En file d'attente {position}/{size}",
+    "clickToSelectRun": "Cliquez pour sélectionner cette exécution",
+    "doubleClickOrOpenNewTab": "Double-cliquez pour charger cette exécution sur le canevas, Ctrl/Cmd+clic pour l'ouvrir dans un nouvel onglet"
   },
   "logs": {
     "all": "Tous",
@@ -1302,7 +1333,7 @@
     "serverNamePlaceholder": "Nom du serveur (ex. CRM Tools)",
     "setupInstructions": "Instructions de configuration",
     "sseEndpointUrl": "URL de l'Endpoint SSE",
-    "subtitle": "Exposez vos workflows en tant qu'outils MCP pour les assistants IA",
+    "subtitle": "Exposez vos workflows sous forme d'outils MCP et le Heym Agent via MCP et A2A",
     "title": "Serveur MCP",
     "workflowDisabled": "\"{name}\" désactivé pour MCP",
     "workflowEnabled": "\"{name}\" activé pour MCP",
@@ -1367,7 +1398,27 @@
     "geminiStep2": "Sous Applications personnalisées, cliquez sur Ajouter une application personnalisée",
     "geminiStep3": "Collez l'URL du serveur MCP ci-dessus et laissez les Fonctionnalités avancées fermées ; Gemini s'enregistrera automatiquement",
     "geminiStep4": "Cliquez sur Suivant et autorisez avec vos identifiants Heym",
-    "geminiInfo": "Gemini utilise OAuth pour s'authentifier en toute sécurité. Vos identifiants Heym sont utilisés pour autoriser l'accès et ne sont jamais partagés avec Gemini. Une fois connecté, Heym fonctionne également dans l'application mobile Gemini."
+    "geminiInfo": "Gemini utilise OAuth pour s'authentifier en toute sécurité. Vos identifiants Heym sont utilisés pour autoriser l'accès et ne sont jamais partagés avec Gemini. Une fois connecté, Heym fonctionne également dans l'application mobile Gemini.",
+    "agentReach": {
+      "off": "Désactivé : les clients MCP et A2A ne peuvent pas joindre le Heym Agent",
+      "unconfigured": "Choisissez un identifiant et un modèle pour permettre l'exécution du Heym Agent",
+      "mcpA2a": "Accessible via MCP et A2A",
+      "mcpOnly": "Accessible en tant que heym_chat via MCP"
+    },
+    "a2aEnabledOnServer": "A2A activé sur « {name} »",
+    "a2aEnabled": "A2A activé",
+    "a2aDisabledOnServer": "A2A désactivé sur « {name} »",
+    "a2aDisabled": "A2A désactivé",
+    "agentAndA2aDisabledOnServer": "Heym Agent et A2A désactivés sur « {name} »",
+    "agentAndA2aDisabled": "Heym Agent et A2A désactivés",
+    "a2a": {
+      "enable": "Activer A2A",
+      "description": "D'autres agents peuvent envoyer des tâches au Heym Agent via le protocole Agent2Agent (A2A 1.0). Ils s'authentifient avec la clé de ce serveur dans l'en-tête X-MCP-Key ou via Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Vérifiez que la carte est active :",
+      "copyLabel": "Copier le {label}"
+    }
   },
   "nav": {
     "alerts": "Alertes",

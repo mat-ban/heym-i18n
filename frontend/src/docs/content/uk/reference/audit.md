@@ -47,7 +47,7 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 
 ## Що саме логується
 
-Кожна зміна стану логується. Читання логується лише там, де саме читання є чутливою дією — перегляд історії виконань workflow, відкриття облікових даних, завантаження файлу. Звичайні операції переліку та перегляду деталей не підлягають аудиту; журнал доступу вже фіксує, що запит відбувся, а аудит кожного `GET` поховав би рядки, які справді мають значення.
+Кожна зміна стану логується. Читання логується лише там, де саме читання є чутливою дією — перегляд історії виконань workflow, відкриття облікових даних, завантаження файлу. Звичайні операції переліку та перегляду деталей не підлягають аудиту; журнал доступу вже фіксує, що запит відбувся, а аудит кожного `GET` поховав би рядки, які справді мають значення. Єдиним винятком є [перегляди сторінок](#page-views), які фіксують, куди авторизований користувач переходив у застосунку.
 
 ### Автентифікація
 
@@ -62,9 +62,34 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `sso_settings.update` | Адміністратор змінив конфігурацію [SSO](./sso.md). Фіксує `enabled` та `password_login_disabled`, але ніколи — client secret. |
 | `sso_settings.test` | Адміністратор запустив перевірку з'єднання SSO. |
 
+### Перегляди сторінок
+
+Запис `page.view` створюється кожного разу, коли авторизований користувач відкриває сторінку у веб-застосунку, із зазначенням URL-шляху в полі `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Шлях є внутрішнім маршрутом застосунку. Вкладки інформаційної панелі є його частиною (`/?tab=traces`), як і ідентифікатори, що визначають відкритий об'єкт, наприклад `/workflows/<id>`. Зберігається лише короткий список параметрів запиту, які ідентифікують сторінку (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); усе інше в рядку запиту та весь фрагмент відкидаються. Сторінки, посилання на які містить секрет, наприклад `/review/<token>`, журналюються з плейсхолдером `:token` замість секрету.
+
+Браузер повідомляє шлях, тому рядок `page.view` показує, куди, за твердженням користувача, він перейшов. Це не доводить, що сервер повернув цю сторінку. Відвідування сторінки входу та посилань, відкритих у неавторизованому стані, не фіксуються, оскільки до них не прив'язаний жоден користувач.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` записується, коли запуск ініціюється через API: кнопка Запустити в редакторі, кінцева точка execute із сесією, ключем API або вебхуком, портал чату та інструменти MCP. Він фіксує, хто його запустив, як і з яким результатом він завершився:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` пов'язує рядок із запуском в Історії запусків. `outcome` має значення `failure`, якщо запуск завершився зі статусом `error`, `cancelled` або `timeout`. Запуск, зупинений для перевірки людиною або утримуваний у черзі паралелізму, є рядком `success` зі статусом `status=pending` або `status=queued`. Виклик без авторизованого користувача, наприклад анонімний вебхук або відвідувач порталу, не має полів `actor_id` чи `actor_email`. Вхідні та вихідні дані ніколи не записуються.
+
+Запуски, ініційовані розкладом, тригерним вузлом, чергою або подією, не є рядками аудиту. Вони виконуються на тому екземплярі, який їх перехопив, і фіксуються в Історії запусків із джерелом тригера та екземпляром, що виконав їх.
+
+`workflow.history_view` записується, коли хтось відкриває історію запусків робочого процесу. Коротка перевірка, яка показує останній запуск робочого процесу на полотні або в списку, аудиту не підлягає.
+
 
 `workflow.history_view` фіксує `owned=false`, коли співробітник читає історію виконань когось іншого. `workflow.delete` фіксує `outcome=denied` з `reason=not_owner`, коли співробітник намагається виконати видалення.
 
@@ -96,6 +121,27 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 Це забезпечується двома механізмами. Місця виклику написано так, щоб передавати лише безпечні поля, а помічник аудиту виконує редагування як запобіжний захід: будь-яке поле, назва якого містить `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` або подібне, замінюється на `***` перед формуванням рядка. Надмірне редагування є навмисним — неінформативний рядок кращий за витік облікових даних.
 
 Якщо секрет справді стосується запису, журналюється лише його форма. Для спільного доступу до файлу фіксується `password_protected=true`, але ніколи не сам пароль.
+
+## Heym Work
+
+Коли ви запускаєте Heym Work паралельно з Heym, Work виводить рядки аудиту в stdout власного контейнера в тому самому форматі Winston:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work фіксує дії користувачів на сторінках, дошках та записах:
+
+| Дія | Значення |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Зміни сторінок та макетів інформаційних панелей |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Зміни структури колонок Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Події життєвого циклу карток |
+| `record.create`, `record.update`, `record.delete` | Зміни записів таблиць даних через Work |
+| `chat.message` | Користувацький промпт, надісланий асистенту Work |
+| `export.csv`, `export.json` | Експорт даних |
+
+Кожен рядок містить ті самі поля `actor_id`, `actor_email`, `timestamp` та `outcome`, що й рядки аудиту Heym, дозволяючи збирачам логів обробляти обидва джерела єдиним конвеєром.
 
 ## Зберігання
 

@@ -1,6 +1,6 @@
-# MCP Zavihek
+# MCP / A2A Zavihek
 
-Zavihek **MCP** konfigurira integracijo Model Context Protocol (MCP). MCP omogoča AI strankam (Claude, ChatGPT, Gemini, Cursor in katerikoli MCP-združljiv pripomoček), da kličete vaše Heym workflows kot pripomočke.
+Zavihek **MCP** konfigurira integracijo Model Context Protocol (MCP), ter kot strežniki [Agent2Agent](https://github.com/google/A2A) (A2A 1.0), na katere lahko drugi agenti prenašajo naloge. MCP omogoča AI strankam (Claude, ChatGPT, Gemini, Cursor in katerikoli MCP-združljiv pripomoček), da kličete vaše Heym workflows kot pripomočke.
 
 Heym podpira dva načina: **privzeti strežnik**, ki izpostavi vse workflows, omogočene za MCP, pod enim samim endpointom, in **imenovane strežnike**, ki vsaki logični skupini workflows dodelijo svojo lastno URL in API ključ.
 
@@ -51,7 +51,7 @@ Workflow z [omejitvijo sočasnosti](../reference/webhooks.md#concurrency-limit-a
 ```
 
 Odjemalec poizveduje po orodju `heym_execution_status` s tem `execution_id`. Vrne isto telo kot [stanje URL](../reference/webhooks.md#status-url): `queued` s trenutnim položajem, `running`, nato `success` ali `error` z izhodi. Najde le zagone tistih workflows, ki jih izpostavlja isti strežnik. Orodje je na privzetem strežniku in na vsakem imenovanem strežniku navedeno le, dokler ima vsaj eden od njegovih workflows omejitev sočasnosti. Ko je čakalna vrsta polna, klic vrne napako »Concurrency queue is full«.
-## Heym Chat Pripomoček
+## Heym Agent
 
 Oddelek **Heym Zmožnosti** pretvori motor Chat zavihka v en sam MCP pripomoček z imenom `heym_chat`. Omogočite ga na privzetem strežniku, na katerem koli imenovanem strežniku ali na obeh — vsaka površina ima svoj preklop in izbiro modela.
 
@@ -60,15 +60,20 @@ Ko je vklopljen, se `heym_chat` prikaže v `tools/list` skupaj z vašimi workflo
 - Zgradite workflow, ga testno zaženite z vzorčnimi vhodi, ga popravite in zaključite, ko zagon uspe (glejte [Način gradnje](#build-mode))
 - Pregledujte in zaganjajte svoje obstoječe workflowe
 - Poročajte o analitiki, nedavnih izvajanjih in prihajajočih cron urnikih.
+- Razloži, kje delovni tokovi odpovedo in zakaj so počasni: delovne tokove, ki so se največkrat izvajali, največkrat odpovedali in so najpočasnejši, ter vrste vozlišč z največ časa, napakami in klici v zadnjih 1, 3 ali 6 urah, 24 urah, 7 ali 30 dneh ali v celotnem obdobju
 - Poročajte o zgodovini izvajanja enega workflow: kolikokrat je bil izveden, število statusov, kdaj je bil izveden, in na zahtevo vhodih, izhodih ter napakah po vozliščih enega izvajanja.
 - Poročajte, kaj se trenutno izvaja: kolikšna števila izvajanj je aktivnih, imena njihovih workflow, kako dolgo se vsako izvaja, na katerem vozlišču se trenutno nahajajo, in povezavo do živega izvajanja.
 - Na [Board zavihku](./board-tab.md) naštejte table, ustvarite karte in preberite podrobnosti kart.
-- Naštejte svoje podatkovne tabele z njihovimi stolpci, ustvarite nove in jih povežite v workflows, ki jih gradi.
+- Prikazuje vaše nadzorne plošče (strani Heym Work) in njihove gradnike, ugotovi, na kateri nadzorni plošči je delovni potek, doda nov gradnik in zgradi njegov potek, postavi obstoječi potek kot gradnik, preimenuje ali izbriše gradnike ter uredi postavitev (glejte [Dashboard › Iz Chata in MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Pregleduje podatkovne tabele in vrstice, ustvarja tabele, dodaja ali odstranjuje stolpce, vstavlja, posodablja ali briše vrstice ter povezuje tabele v delovne tokove
+- Ustvarja, ureja in izvaja ocenjevalne zbirke pozivov in agentov ([Eval suites](./evals-tab.md#from-chat-and-mcp)), vključno z izhodiščem agenta: sporočenim, zgrajenim iz izvajanj ali navedenim s številkami. Rezultat navaja povezavo Evals za vsako shranjeno zbirko.
 - Ustvarjanje ali posodabljanje poverilnic na namenski strani Heym (oglejte si [Poverilnice](#poverilnice))
 - Preberite ekipe in globalne spremenljivke ter iščite dokumentacijo.
 - Odobrite, uredite ali zavrnite čakajoče preglede človeka v zanki.
 
 Zmožnosti, dodane v Chat zavihek, postanejo kasneje na voljo preko `heym_chat` samodejno — ni potrebnega preklopa za vsako zmožnost, da ostaneta sinhronizirana.
+
+Te zmogljivosti tečejo znotraj `heym_chat`: `tools/list` prikazuje `heym_chat` in vaša orodja delovnih tokov, nikoli notranjih orodij klepeta, kot so tista za ocenjevalne zbirke.
 
 ### Način gradnje
 
@@ -81,7 +86,12 @@ Ko klic ustvari ali uredi workflow, odgovor navede vsakega z njegovo celotno pov
 - Če želite spremeniti workflow, ki ga je zgradil prej, nadaljujte nit z istim `conversation_id`. Pomočnik posodobi ta workflow, namesto da bi ustvaril novega, in spreminja le workflowe, ki jih lahko urejate.
 - Ko je porabljenih vseh pet testnih zagonov, se pomočnik ustavi in pojasni, kaj še vedno ne uspe.
 
-Podatkovne tabele so drugačne. Tabela ne vsebuje nobene skrivnosti, zato lahko `heym_chat` našteje vaše tabele, vpraša, katero naj uporabi workflow, in ustvari novo s svojimi stolpci. Nikoli ne bere ali piše vrstic.
+`heym_chat` lahko pregleda vaše tabele in vrstice, ustvari tabele, doda ali odstrani stolpce ter vstavi, posodobi ali izbriše vrstice. Navedite ime tabele, UUID ali povezavo DataTable, na primer: „Dodaj dva stolpca z nizom, ime in priimek, v https://heym.example/?tab=datatable/<table-id>“. Neposredno spremeni tabelo in ohrani obstoječe stolpce in vrednosti ob dodajanju stolpcev.
+
+`heym_chat` lahko pregleda vaše tabele in vrstice, ustvari tabele, doda ali odstrani stolpce ter vstavi, posodobi ali izbriše vrstice. Navedite ime tabele, UUID ali povezavo DataTable, na primer: „Dodaj dva stolpca z nizom, ime in priimek, v https://heym.example/?tab=datatable/<table-id>“. Neposredno spremeni tabelo in ohrani obstoječe stolpce in vrednosti ob dodajanju stolpcev.
+
+Zapisovanje zahteva lastništvo ali pravico do **pisanja** prek neposredne ali skupinske skupne rabe. Dostop samo za branje omogoča pregled. Zapisovanje vrstic uporablja preverjanja vrste, privzete vrednosti, obveznosti in edinstvenosti zavihka DataTable; delni uvozi poročajo o zavrnjenih vrsticah. Odstranjevanje stolpcev izbriše njihove vrednosti iz vsake vrstice. Enako kot v zavihku DataTable odstranjevanje stolpcev in brisanje vseh vrstic najprej zahteva potrditev; za potrditev odgovorite z istim `conversation_id`. Brisanje izbrane vrstice ne zahteva dodatne potrditve.
+
 
 ### Poverilnice
 
@@ -121,6 +131,22 @@ Vozlišča LLM in Agent v workflowu, ki ga gradi `heym_chat`, se izvajajo s to p
 Vsak klic se zapiše v vašo [Chat zavihek](./chat-tab.md) zgodovino kot običajen pogovor, označen z ikono vtiča v seznamu pogovorov. Sporočila, kartice pripomočkov in pavze za pojasnilo izgledajo natanko tako kot pogovor, ki ste ga začeli sami, in lahko odprete nit ter nadaljujete pogovor v brskalniku. Vsak rezultat vrne svoj `conversation_id`, tako da lahko MCP stranka nadaljuje isto nit namesto da bi odprla novo pri vsakem klicu.
 
 Ko asistent potrebuje pojasnilo, se ustavi in to pove; odgovorite z odgovori, ki uporabljajo isti `conversation_id`.
+### Omogoči A2A
+
+Ko je Heym Agent vklopljen, kartica prikazuje potrditveno polje **Omogoči A2A**. Označite ga in drugi agenti bodo lahko pošiljali naloge Heym Agentu prek protokola Agent2Agent (A2A 1.0). Kartica nato navede URL za **Agent Card** in končno točko **JSON-RPC endpoint**, vsaka z gumbom za kopiranje, ter ukaz `curl` za pridobitev kartice. A2A uporablja isti ključ in prijavo OAuth kot MCP. Če izklopite agenta, se izklopi tudi A2A. Za metode, stanja nalog in primer glejte [A2A](../reference/a2a.md).
+
+### Napredek
+
+Dolgotrajen klic `heym_chat` poroča o dejavnostih agenta kot napredek MCP (`notifications/progress`), z istimi besedami, kot jih prikazuje zavihek Chat, na primer `Preizkušanje delovnega toka · poskus 2/5`. Odjemalci, ki ob obvestilu o napredku ponastavijo svojo časovno omejitev, še naprej čakajo, medtem ko agent dela.
+
+### Omogoči A2A
+
+Ko je Heym Agent vklopljen, kartica prikazuje potrditveno polje **Omogoči A2A**. Označite ga in drugi agenti bodo lahko pošiljali naloge Heym Agentu prek protokola Agent2Agent (A2A 1.0). Kartica nato navede URL za **Agent Card** in končno točko **JSON-RPC endpoint**, vsaka z gumbom za kopiranje, ter ukaz `curl` za pridobitev kartice. A2A uporablja isti ključ in prijavo OAuth kot MCP. Če izklopite agenta, se izklopi tudi A2A. Za metode, stanja nalog in primer glejte [A2A](../reference/a2a.md).
+
+### Napredek
+
+Dolgotrajen klic `heym_chat` poroča o dejavnostih agenta kot napredek MCP (`notifications/progress`), z istimi besedami, kot jih prikazuje zavihek Chat, na primer `Preizkušanje delovnega toka · poskus 2/5`. Odjemalci, ki ob obvestilu o napredku ponastavijo svojo časovno omejitev, še naprej čakajo, medtem ko agent dela.
+
 ## Imenovani MCP strežniki
 
 Imenovani strežniki vam omogočajo segmentacijo workflows v izolirane MCP endpoint-e. Vsak strežnik ima svojo URL povezavo in API ključ, tako da se lahko različni AI odjemalci, ekipe ali uporabe povežejo natančno na tiste workflows, ki jih potrebujejo.
@@ -140,7 +166,9 @@ Vsaka kartica strežnika prikazuje:
 | **SSE Endpoint** | Edinstvena URL povezava: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API ključ** | Neodvisen ključ, prikazan enkrat ob generiranju ali regeneriranju. Takoj ga kopirajte; shranjen je v hashirani obliki in ga kasneje ni mogoče razkriti |
 | **Kako se povezati** | **Kopiraj JSON** kopira pripravljen MCP konfiguracijo za lepljenje; **Dodaj v Kazalec** ga namesti z enim klikom |
-| **Heym zmožnosti** | Preklopite orodje `heym_chat` za ta strežnik in izberite njegove poverilnice in model |
+| **Heym Capabilities** | Preklopite Heym Agenta (`heym_chat`) za ta strežnik in izberite njegovo poverilnico ter model |
+| **Omogoči A2A** | Lastno stikalo A2A tega strežnika z lastno Agent Card na `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Omogoči A2A** | Lastno stikalo A2A tega strežnika z lastno Agent Card na `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Dodeljeni Workflows** | Preklopite, kateri od vaših workflows ta strežnik izpostavi |
 
 ### Dodelitev Workflows

@@ -83,7 +83,8 @@
     "run": "Palaist",
     "dropFileOrClick": "Ievelciet failu šeit vai noklikšķiniet, lai izvēlētos",
     "removeFile": "Noņemt failu",
-    "chooseFileFor": "Izvēlieties failu vienumam {label}"
+    "chooseFileFor": "Izvēlieties failu vienumam {label}",
+    "new": "Jauns"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Nav: katrs modelis vērtē sevi",
     "removeJudge": "Noņemt vērtētāju",
     "judgeModel": "Vērtētāja modelis",
-    "enterJudgeModel": "Ievadiet vērtētāja modeli, ar ko veikt šo novērtējumu."
+    "enterJudgeModel": "Ievadiet vērtētāja modeli, ar ko veikt šo novērtējumu.",
+    "promptSuite": "Promptu kopa",
+    "promptSuiteDesc": "Pārbaudiet sistēmas promptu dažādos modeļos",
+    "agentSuite": "Aģentu kopa",
+    "agentSuiteDesc": "Pārbaudiet aģenta reālos izpildes rādītājus: rīki, latentums, izmaksas",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Meklēt kopas...",
+    "loadingSuite": "Ielādē kopu...",
+    "couldNotLoadSuite": "Nevarēja ielādēt šo kopu."
   },
   "statusFilter": {
     "status": "Statuss",
@@ -1701,7 +1711,9 @@
     "askAi": "Vaicāt AI",
     "askAiTitle": "Pajautājiet Chat asistentam par šo izpildi",
     "noNodeSpans": "Šai izpildei netika reģistrēti mezglu span.",
-    "queuedProgress": "Rindā {position}/{size}"
+    "queuedProgress": "Rindā {position}/{size}",
+    "clickToSelectRun": "Noklikšķiniet, lai atlasītu šo izpildi",
+    "doubleClickOrOpenNewTab": "Veiciet dubultklikšķi, lai pārvietotu šo izpildi uz audeklu, Ctrl/Cmd+klikšķis, lai atvērtu jaunā cilnē"
   },
   "portal": {
     "loadingPortal": "Notiek portāla ielāde...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Publicējiet savus Workflows kā MCP rīkus AI asistentiem",
+    "subtitle": "Eksponējiet savas darbplūsmas kā MCP rīkus un Heym Agent, izmantojot MCP un A2A",
     "connection": "MCP savienojums",
     "connectionSubtitle": "Savienojiet savu AI asistentu ar saviem Workflows, izmantojot MCP protokolu.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Sadaļā Pielāgotas lietotnes noklikšķiniet uz Pievienot pielāgotu lietotni",
     "geminiStep3": "Ielīmējiet augstāk norādīto MCP servera URL un atstājiet Papildu funkcijas aizvērtas; Gemini reģistrēsies automātiski",
     "geminiStep4": "Noklikšķiniet uz Tālāk un autorizējieties ar saviem Heym akreditācijas datiem",
-    "geminiInfo": "Gemini izmanto OAuth drošai autentifikācijai. Jūsu Heym akreditācijas dati tiek izmantoti piekļuves autorizēšanai un nekad netiek kopīgoti ar Gemini. Pēc savienojuma izveides Heym darbojas arī Gemini mobilajā lietotnē."
+    "geminiInfo": "Gemini izmanto OAuth drošai autentifikācijai. Jūsu Heym akreditācijas dati tiek izmantoti piekļuves autorizēšanai un nekad netiek kopīgoti ar Gemini. Pēc savienojuma izveides Heym darbojas arī Gemini mobilajā lietotnē.",
+    "agentReach": {
+      "off": "Izslēgts: MCP un A2A klienti nevar sasniegt Heym Agent",
+      "unconfigured": "Izvēlieties akreditācijas datus un modeli, lai Heym Agent varētu darboties",
+      "mcpA2a": "Sasniedzams, izmantojot MCP un A2A",
+      "mcpOnly": "Sasniedzams kā heym_chat, izmantojot MCP"
+    },
+    "a2aEnabledOnServer": "A2A iespējots serverī \"{name}\"",
+    "a2aEnabled": "A2A iespējots",
+    "a2aDisabledOnServer": "A2A atspējots serverī \"{name}\"",
+    "a2aDisabled": "A2A atspējots",
+    "agentAndA2aDisabledOnServer": "Heym Agent un A2A atspējoti serverī \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent un A2A atspējoti",
+    "a2a": {
+      "enable": "Iespējot A2A",
+      "description": "Citi aģenti var nosūtīt uzdevumus Heym Agent, izmantojot Agent2Agent protokolu (A2A 1.0). Tie autentificējas ar šī servera atslēgu X-MCP-Key galvenē vai ar Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Pārbaudiet, vai karte ir aktīva:",
+      "copyLabel": "Kopēt {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analītikas panelis",
@@ -2087,6 +2119,25 @@
       "errors": "Kļūdas",
       "avgLatencyMs": "Vid. aizture (ms)",
       "latencyTitle": "Vidējā aizture laika gaitā"
+    },
+    "last1Hour": "Pēdējā stunda",
+    "last3Hours": "Pēdējās 3 stundas",
+    "last6Hours": "Pēdējās 6 stundas",
+    "nodeTypes": "Mezglu veidi",
+    "nodeChart": {
+      "emptyMessage": "Šim periodam vēl nav mezglu datu. Mezglu analītika tiek reģistrēta izpildēm pēc šī atjauninājuma.",
+      "duration": {
+        "title": "Laika ziņā ietilpīgākie mezgli",
+        "subtitle": "Vidējais ilgums uz izsaukumu"
+      },
+      "errors": {
+        "title": "Mezglu veidi ar visvairāk kļūdām",
+        "subtitle": "Kļūdas laika gaitā"
+      },
+      "calls": {
+        "title": "Visbiežāk izsauktie mezglu veidi",
+        "subtitle": "Izsaukumi laika gaitā"
+      }
     }
   },
   "dashboards": {

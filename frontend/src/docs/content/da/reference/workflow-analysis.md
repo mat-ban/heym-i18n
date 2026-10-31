@@ -43,12 +43,14 @@ Begge handlinger **kører først workflowet** (når det er gyldigt og kørbart) 
 
 Den genererede rapport dækker tre sektioner i rækkefølge: **Forbedringsområder** (konkrete forslag, inklusive en **sikkerhedsvinkel**, når workflowet håndterer legitimationsoplysninger, brugerinput, eksterne anmodninger eller dataeksponering), workflowets **Formål** og **Hvad det gør** (en trin-for-trin gennemgang af noderne).
 
-Sektionen **Forbedringsområder** indeholder altid fire eksplicitte kontroller:
+Sektionen **Forbedringsområder** indeholder altid fem eksplicitte kontroller:
 
 1. **Fejldækning** – hvis canvas ikke har en [Error Handler](../nodes/error-handler-node.md)-node og intet fejlworkflow er konfigureret, påpeges dette, og der anbefales at tilføje fejlhåndtering.
 2. **Tid sparet** – hvis der ikke er angivet en estimeret tid sparet pr. kørsel, anbefales det at konfigurere dette, så [Analytics](../tabs/analytics-tab.md)-målet **Tid sparet** kan udfyldes.
 3. **Netværksnoder** – for noder, der foretager netværkskald (såsom [HTTP](../nodes/http-node.md) og integrationsnoder), anbefales nodespecifik fejlhåndtering (gentagelse og/eller fortsæt-ved-fejl) for disse noder.
 4. **Advarsler** – når der ikke er konfigureret [advarsler](../tabs/alerts-tab.md) for workflowet, anbefales det at opsætte advarsler før produktionssætning.
+
+5. **Evals**: når workflowet indeholder en [Agent](../nodes/agent-node.md)-node uden en agentsuite, anbefaler rapporten en **Agent Suite** (eller en **Prompt Suite**) i [Evals](../tabs/evals-tab.md#agent-suites); når det har en [LLM](../nodes/llm-node.md)-node, anbefaler den en **Prompt Suite** til at teste dette prompt på tværs af modeller.
 
 ### Kør analysator fra Egenskaber
 

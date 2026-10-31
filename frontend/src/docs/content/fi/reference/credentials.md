@@ -14,7 +14,7 @@ Tunnistetiedot tallentavat API-avaimia ja salaisuuksia, joita workflow-solmut k�
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agentti](../nodes/agent-node.md), [Arvioinnit](../tabs/evals-tab.md) | OpenAI, Google, Mukautettu | Mallin API-avain |
 | [Päätös](../nodes/decision-node.md), [Arvioinnit](../tabs/evals-tab.md) tuomari | Päätösmalli | Päätösmallin endpointin perusosoite ja valinnainen API-avain |
-| [LLM](../nodes/llm-node.md), [Agentti](../nodes/agent-node.md), Keskustelu, AI-oletukset | Mallireititin (Auto Model) | Valitsee, mikä malleistasi käsittelee kunkin pyynnön, käyttäen päätösmallia |
+| [LLM](../nodes/llm-node.md), [Agentti](../nodes/agent-node.md), Keskustelu, AI-oletukset, [Arvioinnit](../tabs/evals-tab.md) prompt-sarjat | Mallireititin (Auto Model) | Valitsee, mikä malleistasi käsittelee kunkin pyynnön, käyttäen päätösmallia |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-tilauksen kirjautuminen (OAuth) tai Codex-käyttöoikeustunnus suorittimelle sekä GitHub PAT -tunnus repository-toimintoja varten |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go -yhdyskäytävän API-avain (valinnainen perusosoite) suorittimelle sekä GitHub PAT -tunnus repository-toimintoja varten |
 | [Agentti](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHubin henkilökohtainen käyttöoikeustunnus (PAT) GitHub API -kutsuille, GitHub-solmun toiminnoille ja MCP-integraatioille |

@@ -73,11 +73,11 @@ Jagage tabeleid teiste kasutajate või tiimidega:
 1. Avage tabeli detailvaatest jagamise dialoog
 2. Lisage kasutajaid e-posti järgi **read** või **write** õigusega
 3. Lisage tiime **read** või **write** õigusega
-4. Ainult lugemisõigusega kasutajad saavad andmeid vaadata; kirjutamisõigusega kasutajad saavad ridu muuta
+4. Ainult lugevad kasutajad saavad andmeid vaadata; kirjutamisõigusega kasutajad saavad muuta ridu ja veerge. Tabeli ümbernimetamine, selle kirjelduse muutmine ja jagamiste haldamine jäävad ainult omaniku õiguseks.
 
 ## Tabelite loomine AI-assistendiga
 
-Lõuendi [AI Assistant](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) ja [MCP vahekaardi](./mcp-tab.md) tööriist `heym_chat` saavad valida ühe teie tabelitest nende loodud workflow jaoks või luua uue. Nad pakuvad välja nime ja veerud ning loovad tabeli, kui esitate küsimusekaardi. Nad ei muuda kunagi olemasoleva tabeli veerge ega puuduta selle ridu: veerge lisage või muutke siin.
+Lõuendi [AI-assistent](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) ja tööriist `heym_chat` [MCP vahekaardil](./mcp-tab.md) saavad valida ühe teie tabelitest loodava workflow jaoks või luua uue. Nad pakuvad välja nime ja veerud ning loovad tabeli, kui esitate küsimusekaardi. Lõuendiassistent konfigureerib workflow sõlmed tabeli metaandmetest. Chat ja `heym_chat` saavad ka ridu vaadata, veerge lisada või eemaldada ning ridu otseselt sisestada, värskendada või kustutada. Andke neile tabeli nimi või selle vahekaardi link. Kirjutamistoimingud nõuavad omanikuõigust või otsest/tiimi **kirjutusõigust**. Veergude lisamine säilitab olemasolevad andmed; veergude eemaldamine kustutab nende väärtused igalt realt. Veergude eemaldamine ja kõigi ridade tühjendamine küsivad kinnitust, vastavalt sellele vahekaardile.
 
 ## Kasutamine workflow'des
 

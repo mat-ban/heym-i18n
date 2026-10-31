@@ -173,7 +173,7 @@ Quando un workflow salva, memorizza o cerca record e non è stato indicato un al
 
 Selezionare la nuova tabella e premere **Submit answers**: la scheda crea la tabella e l'assistente ne assegna l'id al nodo e utilizza i nomi esatti delle sue colonne. È inoltre possibile richiedere una tabella singolarmente, ad esempio "create a table for my leads".
 
-L'assistente vede i nomi delle tabelle, le descrizioni e le colonne, mai le righe. Non modifica mai le colonne di una tabella esistente: se a una tabella manca una colonna necessaria al workflow, ne indica il nome e propone invece una nuova tabella. Le colonne si aggiungono nella [DataTable tab](../tabs/datatable-tab.md).
+L'assistente del canvas vede i nomi delle tabelle, le descrizioni e le colonne, mai le righe. Configura i nodi del workflow a partire da tali metadati; è possibile aggiungere colonne nella [scheda DataTable](../tabs/datatable-tab.md) o richiederlo nella [Chat](../tabs/chat-tab.md). La Chat e `heym_chat` possono ispezionare le righe e aggiungere o rimuovere direttamente colonne, nonché inserire, aggiornare o eliminare righe sulle tabelle di cui si è proprietari o per cui si dispone di accesso in scrittura, comprese le condivisioni di team. La rimozione di colonne e la cancellazione di tutte le righe richiedono conferma prima di eliminare i dati.
 
 ## Related
 

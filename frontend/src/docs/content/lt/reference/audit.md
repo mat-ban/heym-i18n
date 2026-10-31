@@ -47,7 +47,7 @@ Programoje **Logs** skiltis skaito tą pačią konteinerio išvestį. Ji yra rib
 
 ## Kas Yra Užfiksuota
 
-Kiekvienas būsenos pokytis yra užfiksuotas. Skaitymai yra fiksuojami tik ten, kur skaitymas pats yra jautrus veiksmas — peržiūrint darbo eigos vykdymo istoriją, atidarant kredencialą, atsisiunčiant failą. Įprasti sąrašo ir detalių skaitymai nėra audituojami; prieigos žurnalas jau fiksuoja, kad užklausa įvyko, o audituoti kiekvieną `GET` užklausą užgožtų svarbias eilutes.
+Kiekvienas būsenos pokytis yra užfiksuotas. Skaitymai yra fiksuojami tik ten, kur skaitymas pats yra jautrus veiksmas — peržiūrint darbo eigos vykdymo istoriją, atidarant kredencialą, atsisiunčiant failą. Įprasti sąrašo ir detalių skaitymai nėra audituojami; prieigos žurnalas jau fiksuoja, kad užklausa įvyko, o audituoti kiekvieną `GET` užklausą užgožtų svarbias eilutes. Vienintelė išimtis yra [puslapių peržiūros](#page-views), kuriose fiksuojama, kur prisijungęs vartotojas naršė programėlėje.
 
 ### Autentifikacija
 
@@ -62,9 +62,34 @@ Kiekvienas būsenos pokytis yra užfiksuotas. Skaitymai yra fiksuojami tik ten, 
 | `sso_settings.update` | Administratorius pakeitė [SSO](./sso.md) konfigūraciją. Fiksuojama `enabled` ir `password_login_disabled`, niekada neatskleidžiant kliento slaptažodžio. |
 | `sso_settings.test` | Administratorius atliko SSO ryšio testą. |
 
+### Puslapių peržiūros
+
+`page.view` įrašomas kaskart, kai prisijungęs vartotojas atidaro puslapį žiniatinklio programėlėje, su URL keliu lauke `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Kelias yra programėlės vidinis maršrutas. Prietaisų skydelio skirtukai yra jo dalis (`/?tab=traces`), kaip ir identifikatoriai, nurodantys, kas atidaryta, pavyzdžiui, `/workflows/<id>`. Išsaugomas tik trumpas puslapį identifikuojančių užklausos parametrų sąrašas (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); visa kita užklausos eilutėje ir visas fragmentas atmetami. Puslapiai, kurių nuorodoje yra paslaptis, pavyzdžiui, `/review/<token>`, registruojami su vietos rezervavimo ženklu `:token`, o ne pačia paslaptimi.
+
+Naršyklė praneša kelią, todėl `page.view` eilutė rodo, kur vartotojas teigė nuėjęs. Tai neįrodo, kad serveris grąžino tą puslapį. Prisijungimo puslapio lankymai ir atsijungus atidarytos nuorodos nefiksuojami, nes su jais nesusietas joks vartotojas.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` įrašomas, kai vykdymas pradedamas per API: rengyklės mygtukas Vykdyti, execute galinis taškas su sesija, API raktu ar saityno kabliuku (webhook), pokalbių portalas ir MCP įrankiai. Jame fiksuojama, kas jį paleido, kaip ir kuo jis baigėsi:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` susieja eilutę su vykdymu Vykdymo istorijoje. `outcome` yra `failure`, kai vykdymas baigėsi būsena `error`, `cancelled` arba `timeout`. Vykdymas, sustabdytas žmogaus peržiūrai arba laikomas lygiagretumo eilėje, yra `success` eilutė su `status=pending` arba `status=queued`. Iškvietimas be prisijungusio vartotojo, pavyzdžiui, anoniminis saityno kabliukas ar portalo lankytojas, neturi `actor_id` arba `actor_email`. Įvestys ir išvestys niekada neįrašomos.
+
+Vykdymai, pradėti pagal grafiką, paleidiklio mazgą, eilę ar įvykį, nėra audito eilutės. Jie vykdomi egzemplioriuje, kuris juos perėmė, ir registruojami Vykdymo istorijoje su savo paleidiklio šaltiniu ir juos vykdžiusiu egzemplioriumi.
+
+`workflow.history_view` įrašomas, kai kas nors atidaro darbo eigos vykdymo istoriją. Trumpa paieška, rodanti naujausią darbo eigos vykdymą drobėje arba sąraše, nėra audituojama.
+
 
 `workflow.history_view` fiksuoja `owned=false`, kai bendradarbis skaito kito asmens vykdymo istoriją. `workflow.delete` fiksuoja `outcome=denied` su `reason=not_owner`, kai bendradarbis bando ištrinti.
 
@@ -96,6 +121,27 @@ Audito eilutėse registruojami identifikatoriai, pavadinimai ir skaičiai. Nieka
 Dvi dalys tai užtikrina. Kviečiamieji taškai rašomi taip, kad perduotų tik saugius laukus, o audito pagalbininkas redaguoja kaip atsarginę priemonę: bet kuris laukas, kurio pavadinime yra `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` ar panašiai, yra pakeičiamas į `***` prieš eilutės sudarymą. Perteklinis redagavimas yra sąmoningas — neinformatyvi eilutė yra geriau nei nutekinta kredencialas.
 
 Kur paslaptis iš tiesų yra svarbi įrašui, registruojama tik jos forma. Failo bendrinimas registruoja `password_protected=true`, niekada slaptažodžio.
+
+## Heym Work
+
+Kai paleidžiate „Heym Work“ kartu su „Heym“, „Work“ siunčia audito eilutes į savo konteinerio stdout tuo pačiu „Winston“ formatu:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+„Work“ registruoja vartotojų veiksmus puslapiuose, lentose ir įrašuose:
+
+| Veiksmas | Reikšmė |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Prietaisų skydelio puslapių ir išdėstymų pakeitimai |
+| `board.column_create`, `board.column_move`, `board.column_delete` | „Kanban“ stulpelių išdėstymo pakeitimai |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Kortelių gyvavimo ciklo įvykiai |
+| `record.create`, `record.update`, `record.delete` | Duomenų lentelės įrašų mutacijos per „Work“ |
+| `chat.message` | Vartotojo užklausa, išsiųsta „Work“ asistentui |
+| `export.csv`, `export.json` | Duomenų eksportavimas |
+
+Kiekvienoje eilutėje yra tie patys laukai `actor_id`, `actor_email`, `timestamp` ir `outcome` kaip ir „Heym“ audito eilutėse, todėl žurnalų surinkėjai gali analizuoti abu naudodami vieną konvejerį.
 
 ## Išlaikymas
 

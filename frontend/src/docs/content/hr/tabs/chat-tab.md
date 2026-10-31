@@ -23,7 +23,8 @@ Također možete započeti razgovor iz okvira za chat na [Workflows tab](./workf
 - **Redoslijed slijedećih poruka** – Šaljite više poruka dok se odgovor prenosi. Poruke u redu se čuvaju, mogu se uređivati ili brisati prije nego što započnu, a izvršavaju se redom nakon aktivnog odgovora
 - **Pauze za planiranje** – Kada Chat treba detalje o planiranju, postavlja pitanja za pojašnjenje i pauzira poruke u redu dok ne odgovorite. Nakon što se odgovor na planiranje završi, poruke u redu se nastavljaju
 - **Vjerodajnice** – Kada workflow koji Chat stvara ili uređuje treba vjerodajnicu, Chat pita koju koristiti, nudi stvaranje nove u razgovoru ili vam omogućuje nastavak bez nje. Također možete zatražiti od Chata da stvori vjerodajnicu ili ažurira onu koju posjedujete; otvara obrazac za vjerodajnice u razgovoru. Model vidi ime i tip vjerodajnice, nikada njezine vrijednosti, kako za vjerodajnice u vašem vlasništvu tako i za one podijeljene s vama. LLM i Agent čvorovi koje Chat dodaje pokreću se na vjerodajnici i modelu odabranom za chat, uključujući dijeljene vjerodajnice; kada Chat uređuje workflow, postojeći LLM i Agent čvorovi zadržavaju svoju vjerodajnicu i model. Pogledajte [AI Assistant › Vjerodajnice](../reference/ai-assistant.md#credentials)
-- **Tablice podataka** – Kada workflow koji Chat stvara ili uređuje pohranjuje zapise, Chat pita koju [tablicu podataka](./datatable-tab.md) koristiti ili nudi stvaranje nove s kolonama koje workflow treba. Također može navesti vaše tablice i njihove kolone. Nikada ne čita niti piše redove. Pogledajte [AI Assistant › Tablice podataka](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Pitajte koje [dashboards](./dashboard-tab.md) imate, što je na nekoj od njih ili na kojoj se upravljačkoj ploči nalazi workflow. Zatražite od Chata da doda novi widget na dashboard (ondje postavlja prazan widget, a zatim gradi i testira njegov workflow), stavi postojeći workflow na dashboard kao widget, preimenuje ili izbriše widget ili uredi izgled dashboarda. Heym Work prikazuje ove ploče kao svoje stranice. Pogledajte [Dashboard › Iz Chata i MCP-a](./dashboard-tab.md#iz-chata-i-mcp-a)
+- **Tablice podataka** – Kada workflow koji Chat stvara ili uređuje pohranjuje zapise, Chat pita koju [tablicu podataka](./datatable-tab.md) koristiti ili nudi stvaranje nove sa stupcima koji su potrebni workflowu. Također može pregledavati retke, dodavati ili uklanjati stupce te izravno umetati, ažurirati ili brisati retke u tablicama koje posjedujete ili možete uređivati. Navedite mu naziv tablice ili poveznicu DataTable. Uklanjanje stupaca i brisanje svih redaka traže potvrdu; dodavanje stupaca zadržava postojeće podatke. Pogledajte [AI asistent › Tablice podataka](../reference/ai-assistant.md#data-tables)
 - **Streaming odgovori** – Vidite izlaz modela dok se prenosi
 - **Prekid odgovora** – Prekinite trenutni streaming odgovor u bilo kojem trenutku; prekid također briše poruke u redu za taj razgovor
 - **Markdown renderiranje** – Odgovori podržavaju markdown formatiranje, uključujući inline slike
@@ -33,10 +34,11 @@ Također možete započeti razgovor iz okvira za chat na [Workflows tab](./workf
 - **Unos glasa** – Koristite gumb mikrofona za pretvaranje govora u tekst (podržano u pregledniku). Kada snimanje završi, Heym može lagano očistiti transkript prije nego što ga pošaljete
 - **Raspoređeni workflows-i** – Pitajte kada se cron workflows-i izvode (danas, ovaj tjedan, ovaj mjesec ili prilagođeni datum). Asistent koristi iste podatke o rasporedu kao [Raspoređeni](./scheduled-tab.md) tab i može ograničiti rezultate na workflows-e koje posjedujete ili uključiti one koje su s vama dijeljene
 - **Povijest izvršavanja workflows-a** – Pitajte o jednom workflow-u ("koliko je puta dnevno izvješće izvršeno?", "je li neuspješno?", "kada je posljednji put izvršeno?"). Chat pretražuje workflow prema njegovom ID-u i odgovara na temelju broja izvršavanja, razdiobe statusa, vremena prvog i posljednjeg izvršavanja te prosječnog trajanja. Pitajte zašto je izvršavanje neuspjelo ili što je vratilo, a Chat tada otvara to pojedinačno izvršavanje kako bi pročitao njegove ulaze, izlaze i greške po čvorovima
+- **Gdje izvođenja ne uspijevaju i zašto su spora** – Pitajte gdje vaši workflowi ne uspijevaju ili zašto su spori i Chat će navesti workflowe koji su se najviše izvodili, najviše puta nisu uspjeli i najsporiji su, kao i vrste čvorova koji oduzimaju najviše vremena (prosjek po pozivu i ukupno), najviše puta ne uspijevaju i najviše se izvode, iste brojke kao na kartici [Analytics](./analytics-tab.md). Vrste čvorova broje se za izvođenja od izdanja koje je dodalo analitiku čvorova. Pitajte o zadnjem satu, 3 ili 6 sati, 24 sata, 7 ili 30 dana ili za cijelo vrijeme; satni prozori počinju na puni sat, pa „zadnji sat” u 15:20 pokriva vrijeme od 14:00 do sada.
 - **Status aktivnog izvršavanja** – Pitajte što se trenutno izvršava i Chat odgovara s brojem, imenima workflows-a, koliko dugo svako izvršavanje traje, na kojem je čvoru i poveznicom izravno na aktivno izvršavanje
 ## Korištenje Chata iz MCP Klijenta
 
-Chat motor također se može koristiti izvan preglednika. Omogućite **Heym Chat Alat** u [MCP kartici](./mcp-tab.md) i MCP klijenti — Claude, Cursor i bilo što drugo što podržava MCP — dobivaju jedan `heym_chat` alat koji pokreće ovaj isti motor sa svim svojim mogućnostima.
+Chat motor također se može koristiti izvan preglednika. Omogućite **Heym Chat Alat** u [MCP / A2A kartici](./mcp-tab.md) i MCP klijenti — Claude, Cursor i bilo što drugo što podržava MCP — dobivaju jedan `heym_chat` alat koji pokreće ovaj isti motor sa svim svojim mogućnostima.
 
 Te razgovore možete pronaći u povijesti ove kartice, označene ikonom utičnice u popisu razgovora. Otvorite jedan kako biste pročitali što je klijent pitao, vidjeli alate koje je aktivirao i nastavili raspravu sami. Odgovaranje na pitanje za pojašnjenje funkcionira na isti način, bez obzira na to je li razgovor započeo ovdje ili iz MCP klijenta.
 
@@ -98,9 +100,58 @@ Za pitanje "zašto se aktiviralo", Chat čita zapis o aktivaciji i citira stvarn
 ## Pravila Korisnika
 
 [Pravila Korisnika](../reference/user-settings.md) (konfigurirana u Postavkama) automatski se umetnu u svaki Chat razgovor kao upute na razini sustava. Postavite ih jednom kako biste primijenili trajne preferencije na sve chat zahtjeve.
+
+## Rad s Evals
+
+Chat može stvarati, mijenjati i pokretati pakete u [Evals](./evals-tab.md), kako pakete promptova tako i pakete agenata:
+
+- **Paket promptova**: „napravi paket promptova za moj prompt odgovora podrške s 8 testnih slučajeva i usporedi gpt-4o s gpt-4.1-mini”. Chat piše testne slučajeve s očekivanim odgovorima, bira metodu ocjenjivanja i sprema paket.
+  - Prije stvaranja paketa određuje koje LLM vjerodajnice i modele koristiti. S točno jednom LLM vjerodajnicom koristi nju i to napominje; u suprotnom pita.
+  - Za ocjenjivanje LLM-as-Judge također pita treba li zasebni sudac ocijeniti odgovore.
+- **Paket agenta**: „provjeri pretražuje li moj agent podrške uvijek dokumentaciju i nikada ne šalje e-poštu”. Chat pronalazi agenta i sprema provjere alata i pragove. Na zahtjev pokreće workflow, generirajući različit unos za svako izvođenje.
+  - Izvođenja paketa agenta stvarna su izvođenja workflowa, pa se njihovi nuspojave događaju. Chat navodi koliko izvođenja pokreće.
+- **Baseline**: Chat može raditi s početnom linijom agenta na tri načina:
+  - Izvijestiti o njoj iz najnovijih izvođenja agenta.
+  - Izgraditi je iz izvođenja koja pokreće („pokreni ga 5 puta i koristi to kao baseline”).
+  - Pohraniti brojeve koje mu zadate („postavi baseline na 3 sekunde p95 i 0,01 $ po izvođenju”).
+- **Izvođenja**: Chat čeka do jedne minute na izvođenje, a zatim javlja rezultat:
+  - Za paket promptova: broj prolaza svakog modela i slučajeve koji nisu uspjeli.
+  - Za paket agenta: stopu prolaznosti, neuspjele provjere i odstupanje od početne linije.
+  - Duže izvođenje nastavlja se u Evals; zatražite od Chata da ga ponovno provjeri.
+
+Nakon što Chat stvori ili promijeni paket, odgovor prikazuje karticu s nazivom paketa, njegovom vrstom i gumbom **Otvori u Evals**, slično kartici spremljenog workflowa. Putem MCP-a rezultat `heym_chat` navodi poveznicu svakog paketa spremljenog u tom pozivu.
+
+Isto funkcionira iz MCP klijenta putem `heym_chat` (pogledajte [Korištenje Chata iz MCP klijenta](#korištenje-chata-iz-mcp-klijenta)). Alati za evaluaciju ostaju unutar `heym_chat`; MCP klijenti ih ne vide kao zasebne alate.
+
+AI asistent u uređivaču ne stvara pakete.
+
+## Rad s Evals
+
+Chat može stvarati, mijenjati i pokretati pakete u [Evals](./evals-tab.md), kako pakete promptova tako i pakete agenata:
+
+- **Paket promptova**: „napravi paket promptova za moj prompt odgovora podrške s 8 testnih slučajeva i usporedi gpt-4o s gpt-4.1-mini”. Chat piše testne slučajeve s očekivanim odgovorima, bira metodu ocjenjivanja i sprema paket.
+  - Prije stvaranja paketa određuje koje LLM vjerodajnice i modele koristiti. S točno jednom LLM vjerodajnicom koristi nju i to napominje; u suprotnom pita.
+  - Za ocjenjivanje LLM-as-Judge također pita treba li zasebni sudac ocijeniti odgovore.
+- **Paket agenta**: „provjeri pretražuje li moj agent podrške uvijek dokumentaciju i nikada ne šalje e-poštu”. Chat pronalazi agenta i sprema provjere alata i pragove. Na zahtjev pokreće workflow, generirajući različit unos za svako izvođenje.
+  - Izvođenja paketa agenta stvarna su izvođenja workflowa, pa se njihovi nuspojave događaju. Chat navodi koliko izvođenja pokreće.
+- **Baseline**: Chat može raditi s početnom linijom agenta na tri načina:
+  - Izvijestiti o njoj iz najnovijih izvođenja agenta.
+  - Izgraditi je iz izvođenja koja pokreće („pokreni ga 5 puta i koristi to kao baseline”).
+  - Pohraniti brojeve koje mu zadate („postavi baseline na 3 sekunde p95 i 0,01 $ po izvođenju”).
+- **Izvođenja**: Chat čeka do jedne minute na izvođenje, a zatim javlja rezultat:
+  - Za paket promptova: broj prolaza svakog modela i slučajeve koji nisu uspjeli.
+  - Za paket agenta: stopu prolaznosti, neuspjele provjere i odstupanje od početne linije.
+  - Duže izvođenje nastavlja se u Evals; zatražite od Chata da ga ponovno provjeri.
+
+Nakon što Chat stvori ili promijeni paket, odgovor prikazuje karticu s nazivom paketa, njegovom vrstom i gumbom **Otvori u Evals**, slično kartici spremljenog workflowa. Putem MCP-a rezultat `heym_chat` navodi poveznicu svakog paketa spremljenog u tom pozivu.
+
+Isto funkcionira iz MCP klijenta putem `heym_chat` (pogledajte [Korištenje Chata iz MCP klijenta](#korištenje-chata-iz-mcp-klijenta)). Alati za evaluaciju ostaju unutar `heym_chat`; MCP klijenti ih ne vide kao zasebne alate.
+
+AI asistent u uređivaču ne stvara pakete.
+
 ## Povezano
 
-- [MCP Tab](./mcp-tab.md) – Izložite ovaj motor klijentima MCP-a kao alat `heym_chat`
+- [MCP / A2A Tab](./mcp-tab.md) – Izložite ovaj motor klijentima MCP-a kao alat `heym_chat`
 - [Postavke](../reference/user-settings.md) – Postavite korisnička pravila primjenjiva na sve chat zahtjeve
 - [Tablica vjerodajnica](./credentials-tab.md) – Dodajte i upravljajte API ključevima
 - [Tablica varijabli](./global-variables-tab.md) – Globalne varijable dostupne za Chat

@@ -83,7 +83,8 @@
     "run": "Zaženi",
     "dropFileOrClick": "Spustite datoteko sem ali kliknite za izbiro",
     "removeFile": "Odstrani datoteko",
-    "chooseFileFor": "Izberite datoteko za {label}"
+    "chooseFileFor": "Izberite datoteko za {label}",
+    "new": "Novo"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Brez: vsak model se oceni sam",
     "removeJudge": "Odstrani ocenjevalca",
     "judgeModel": "Model ocenjevalca",
-    "enterJudgeModel": "Vnesite model ocenjevalca za izvajanje s tem ocenjevalcem."
+    "enterJudgeModel": "Vnesite model ocenjevalca za izvajanje s tem ocenjevalcem.",
+    "promptSuite": "Zbirka promptov",
+    "promptSuiteDesc": "Preizkusite sistemski prompt v več modelih",
+    "agentSuite": "Zbirka agentov",
+    "agentSuiteDesc": "Preverite dejanska izvajanja agenta: orodja, zakasnitev, stroški",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Išči zbirke...",
+    "loadingSuite": "Nalaganje zbirke...",
+    "couldNotLoadSuite": "Te zbirke ni bilo mogoče naložiti."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "Vprašaj AI",
     "askAiTitle": "Vprašajte pomočnika Chat o tem zagonu",
     "noNodeSpans": "Za ta zagon niso bili zabeleženi spani vozlišč.",
-    "queuedProgress": "V čakalni vrsti {position}/{size}"
+    "queuedProgress": "V čakalni vrsti {position}/{size}",
+    "clickToSelectRun": "Kliknite, da izberete to izvajanje",
+    "doubleClickOrOpenNewTab": "Dvokliknite, da to izvajanje prenesete na platno, Ctrl/Cmd+klik za odpiranje v novem zavihku"
   },
   "portal": {
     "loadingPortal": "Nalaganje portala ...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP strežnik",
-    "subtitle": "Izpostavite svoje Workflows kot MCP orodja za AI asistente",
+    "subtitle": "Izpostavite svoje workflowe kot orodja MCP in Heym Agent prek MCP in A2A",
     "connection": "MCP povezava",
     "connectionSubtitle": "Povežite svojega AI asistenta s svojimi Workflows prek protokola MCP.",
     "apiKeyTab": "API ključ",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "V razdelku Aplikacije po meri kliknite Dodaj aplikacijo po meri",
     "geminiStep3": "Prilepite zgornji URL strežnika MCP in pustite Napredne funkcije zaprte; Gemini se bo samodejno registriral",
     "geminiStep4": "Kliknite Naprej in avtorizirajte s svojimi poverilnicami Heym",
-    "geminiInfo": "Gemini uporablja OAuth za varno preverjanje pristnosti. Vaše poverilnice Heym se uporabljajo za odobritev dostopa in se nikoli ne delijo z Geminijem. Po vzpostavitvi povezave Heym deluje tudi v mobilni aplikaciji Gemini."
+    "geminiInfo": "Gemini uporablja OAuth za varno preverjanje pristnosti. Vaše poverilnice Heym se uporabljajo za odobritev dostopa in se nikoli ne delijo z Geminijem. Po vzpostavitvi povezave Heym deluje tudi v mobilni aplikaciji Gemini.",
+    "agentReach": {
+      "off": "Izklopljeno: odjemalci MCP in A2A ne morejo doseči Heym Agent",
+      "unconfigured": "Izberite poverilnico in model, da se lahko zažene Heym Agent",
+      "mcpA2a": "Dosegljivo prek MCP in A2A",
+      "mcpOnly": "Dosegljivo kot heym_chat prek MCP"
+    },
+    "a2aEnabledOnServer": "A2A omogočen na »{name}«",
+    "a2aEnabled": "A2A omogočen",
+    "a2aDisabledOnServer": "A2A onemogočen na »{name}«",
+    "a2aDisabled": "A2A onemogočen",
+    "agentAndA2aDisabledOnServer": "Heym Agent in A2A onemogočena na »{name}«",
+    "agentAndA2aDisabled": "Heym Agent in A2A onemogočena",
+    "a2a": {
+      "enable": "Omogoči A2A",
+      "description": "Drugi agenti lahko pošiljajo naloge v Heym Agent prek protokola Agent2Agent (A2A 1.0). Preverjajo pristnost s ključem tega strežnika v glavi X-MCP-Key ali s Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Preverite, ali je kartica aktivna:",
+      "copyLabel": "Kopiraj {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Nadzorna plošča za analitiko",
@@ -2087,6 +2119,25 @@
       "errors": "Napake",
       "avgLatencyMs": "Povprečna latenčnost (ms)",
       "latencyTitle": "Povprečna latenčnost skozi čas"
+    },
+    "last1Hour": "Zadnja ura",
+    "last3Hours": "Zadnje 3 ure",
+    "last6Hours": "Zadnjih 6 ur",
+    "nodeTypes": "Vrste vozlišč",
+    "nodeChart": {
+      "emptyMessage": "Za to obdobje še ni podatkov o vozliščih. Analitika vozlišč se beleži za izvajanja po tej posodobitvi.",
+      "duration": {
+        "title": "Časovno najbolj potratna vozlišča",
+        "subtitle": "Povprečno trajanje na klic"
+      },
+      "errors": {
+        "title": "Vrste vozlišč z največ napakami",
+        "subtitle": "Napake skozi čas"
+      },
+      "calls": {
+        "title": "Najpogosteje klicane vrste vozlišč",
+        "subtitle": "Klici skozi čas"
+      }
     }
   },
   "dashboards": {

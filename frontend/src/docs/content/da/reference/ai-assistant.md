@@ -173,7 +173,7 @@ Når et workflow gemmer, lagrer eller opsøger poster, og der ikke er navngivet 
 
 Vælg den nye tabel og tryk på **Indsend svar**: kortet opretter tabellen, og assistenten placerer dens id på noden samt bruger de præcise kolonnenavne. Det er også muligt at anmode om en tabel separat, f.eks. "opret en tabel til mine leads".
 
-Assistenten ser tabelnavne, beskrivelser og kolonner, men aldrig rækker. Den ændrer aldrig kolonner i en eksisterende tabel: hvis en tabel mangler en nødvendig kolonne, navngives kolonnen og der tilbydes en ny tabel i stedet. Kolonner tilføjes under fanen [DataTable](../tabs/datatable-tab.md).
+Canvas-assistenten ser tabelnavne, beskrivelser og kolonner, aldrig rækker. Den konfigurerer workflow-noder ud fra disse metadata; tilføj kolonner under [fanen DataTable](../tabs/datatable-tab.md) eller spørg [Chat](../tabs/chat-tab.md). Chat og `heym_chat` kan inspicere rækker og direkte tilføje eller fjerne kolonner samt indsætte, opdatere eller slette rækker i tabeller, du ejer eller har skriveadgang til, inklusive teamdelinger. Fjernelse af kolonner og rydning af alle rækker beder om bekræftelse, før data slettes.
 
 ## Relateret
 

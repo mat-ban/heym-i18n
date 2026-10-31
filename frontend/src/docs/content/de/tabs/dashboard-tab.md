@@ -23,6 +23,8 @@ Ein Widget ist ein einzelnes Diagramm im Raster. Unterstützte Diagrammtypen:
 - **Gauge** (ein einzelner Wert innerhalb eines Min–Max-Bereichs, z. B. ein Prozentsatz)
 - **Scatter** (X/Y-Punkte für Korrelationsdiagramme)
 - **Proportion** (ein in Anteile unterteilter Balken mit Prozent-Legende, z. B. eine Sprachverteilung)
+- **Gantt** (Aufgabentermine, Fertigstellung und Abhängigkeiten)
+- **Entity relationships (DB)** (Tabellen, Felder, PK/FK-Schlüssel und Verbindungen)
 - **Bar gauge** (eine horizontale Anzeige pro Zeile mit Rot→Grün-Verlauf und Wert, z. B. freier Speicherplatz)
 - **Text** (eine Markdown-Nachricht, z. B. eine Statusnotiz wie „Letzte Ausführung um 19:47"; unterstützt [interaktive Kontrollkästchen](../nodes/chart-output-node.md#interactive-task-lists) bei statischem Markdown sowie [explizite nummerierte Listen](../nodes/chart-output-node.md#numbered-lists) für benutzerdefinierte oder absteigende Nummerierung)
 - **HITL** (Ihre ausstehenden menschlichen Prüfungen. Die Kopfzeile zeigt `1/n pending`. Der Workflow-Name öffnet diesen Lauf auf der Arbeitsfläche. **Approve**, **Request changes** und **Reject** schließen ihn ab. Das Verlaufssymbol neben dem Widget-Titel öffnet diesen Lauf im Verlaufsdialog auf dieser Seite. Das Widget verwendet keine vorgelagerten Zeilen, und jede Person sieht ihre eigene Warteschlange. Es kann stattdessen die Prüfungen eines Workflows anzeigen, für alle, die diesen Workflow öffnen können; siehe [HITL-Widgets](#hitl-widgets))
@@ -98,6 +100,18 @@ Die Widget-API kann auch ohne KI eine **Zähler-Karte** erstellen: Ein `text`-Wi
 
 Mit der Schaltfläche **Fine-tune with AI** eines Widgets passen Sie ein bestehendes Widget per neuer Anweisung an. Jede KI-Verfeinerung speichert vorab einen Snapshot des bisherigen Workflows im **Edit History**-Verlauf des Widgets, sodass Sie Änderungen im Workflow-Editor überprüfen oder zurücksetzen können.
 
+## Aus Chat und MCP
+
+[Chat](./chat-tab.md) und MCP-Clients über das [`heym_chat`-Werkzeug](./mcp-tab.md) können Ihre Dashboards lesen, Widgets hinzufügen, umbenennen oder löschen und das Layout eines Dashboards aufräumen. Heym Work stellt jedes Dashboard als Seite dar, sodass dieselben Antworten auch dessen Seiten abdecken.
+
+- **Welche Dashboards vorhanden sind und was sich darauf befindet.** Fragen Sie „Welche Dashboards habe ich?“, „Was befindet sich auf dem Vertriebs-Dashboard?“ oder „Auf welchem Dashboard liegt der Umsatz-Workflow?“. Chat listet Ihre eigenen sowie die mit Ihnen geteilten Dashboards mit Ihren Zugriffsrechten und einem Link zu jedem auf, samt jedem darauf befindlichen Widget: Titel, Diagrammtyp und der dahinterliegende Workflow. Ein [HITL-Widget](#hitl-widgets), das nach einem Workflow gefiltert ist, den Sie nicht öffnen können, bleibt ausgeblendet, genau wie auf dem Dashboard selbst.
+- **Ein neues Widget.** Bitten Sie Chat darum: „Füge dem Vertriebs-Dashboard ein Diagramm der offenen Fälle nach Status hinzu“. Chat platziert zunächst ein leeres Widget auf dem Dashboard, erstellt dann den zugehörigen Workflow des Widgets, führt Testläufe durch und behebt Fehler, bis ein Durchlauf erfolgreich ist — auf dieselbe Weise, wie er [Workflows erstellt](./chat-tab.md#workflows-erstellen). Es bleibt kein separater Workflow zurück, und jeder Speichervorgang erscheint im Edit History des Widgets. Titel und Diagrammtyp des Widgets richten sich nach dem, was Chat speichert.
+- **Ein bestehender Workflow.** Sagen Sie „Platziere den Umsatz-Workflow auf dem Vertriebs-Dashboard“. Ein Workflow, der in einem Chart-Output-Knoten endet, wird zu einem Diagramm-Widget mit einer eigenen Kopie des Workflows, sodass spätere Änderungen am Widget das Original niemals verändern. Ein Workflow mit einem Trigger- oder Input-Knoten kann nicht zu einem Diagramm-Widget werden. Jeder andere Workflow wird zu einem [Ausführungs-Widget](#run-widgets), das ebenfalls einen Workflow erfordert, den der Dashboard-Eigentümer ausführen kann.
+- **Ein Widget umbenennen oder löschen.** Sagen Sie „Benenne das Umsatz-Widget in Vertrieb um“ oder „Lösche das Widget für offene Fälle“. Der Workflow eines Diagramm-Widgets übernimmt ebenfalls den neuen Namen; der Workflow eines Ausführungs-Widgets behält seinen ursprünglichen Namen. Das Löschen eines Diagramm-Widgets löscht dessen Workflow mit, genau wie die Löschen-Schaltfläche des Widgets; der Workflow eines Ausführungs-Widgets bleibt erhalten. Chat löscht nur Widgets, um die Sie ausdrücklich gebeten haben, und fragt bei Mehrdeutigkeiten nach.
+- **Aufräumen.** Bitten Sie Chat: „Räume das Vertriebs-Dashboard auf“ oder „Füge diese drei Widgets hinzu und räume auf“. Chat ordnet die angezeigten Widgets in ihrer Reihenfolge an, genau wie die Schaltfläche **Aufräumen**: in zufälligen Zeilen zu zweit oder dritt, sodass eine erneute Anfrage eine andere Anordnung erzeugt. Nennen Sie eine Anzahl pro Zeile („drei pro Zeile“), um Zeilen dieser Größe zu erhalten. Dies ordnet das Dashboard in Heym; Heym Work behält seine eigene Anordnung einer Seite bei, die über die eigene **Aufräumen**-Schaltfläche der Seite geändert wird.
+
+Neue Widgets werden unterhalb der vorhandenen Widgets des Dashboards platziert und laufen wie jedes Widget im Kontext des Dashboard-Eigentümers. Hinzufügen, Umbenennen, Löschen und Aufräumen erfordern Schreibzugriff auf das Dashboard. Das Erstellen eines neuen Widgets erfordert einen Chat mit der Fähigkeit zur Workflow-Erstellung: den Reiter Chat, den Chat für Editoren in Heym Work sowie `heym_chat`.
+
 ## Layout bearbeiten
 
 Schalten Sie **Edit** ein, um in den Bearbeitungsmodus zu wechseln, in dem Sie Widgets auf einem 12-Spalten-Raster verschieben und in der Größe ändern können. Layoutänderungen werden automatisch gespeichert. Widget-Titel lassen sich direkt in der Kopfzeile des Widgets bearbeiten.
@@ -130,3 +144,7 @@ Das Entfernen einer Freigabe oder das Herabstufen von Schreiben auf Lesen wird s
 
 - [Chart-Output-Knoten](../nodes/chart-output-node.md)
 - [Reiter Analysen](analytics-tab.md) — integrierte Ausführungsmetriken (unabhängig von benutzererstellten Dashboards)
+
+## Zeitpläne und Datenbankdiagramme
+
+Wählen Sie **Gantt** unter „Ein Widget hinzufügen“, um Aufgaben im Zeitverlauf mit Fertigstellung und Abhängigkeitsverknüpfungen darzustellen, oder **Entity relationships (DB)**, um Tabellen, Felder und deren Beziehungen abzubilden. Beide Typen nutzen den [Chart-Output-Knoten](../nodes/chart-output-node.md#gantt-schedules) und stehen auch auf Heym Work-Seiten zur Verfügung. Schlägt Work Widgets für einen Zeitplan oder ein Datenbankschema vor, generiert es Vorschauen anhand der vorgeschlagenen Aufgaben oder Entitäten.

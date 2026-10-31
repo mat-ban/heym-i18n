@@ -10,7 +10,7 @@
 | Väljundid | 0 (terminalne) |
 | Väljund | Standardiseeritud diagrammi payload |
 
-Paigutage see node **viimasena** armatuurlaud-vidina workflow's. Selle eelnev node peaks tootma rea-objektide massiivi, näiteks:
+Paigutage see node **viimasena** armatuurlaud-vidina workflow's. Olemisuhete puhul toodab eelnev node graafiobjekti (vaadake [Entity relationships](#entity-relationships-db)). Muud andmepõhised diagrammid kasutavad rea-objektide massiivi, näiteks:
 
 ```json
 [
@@ -26,9 +26,9 @@ Kui teil on ainult näidis/example-andmed (päris allikat pole), tootke need rea
 | Parameeter | Tüüp | Kirjeldus |
 |-----------|------|-------------|
 | `label` | string | Node'i identifikaator (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` või `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` või `hitl` |
 | `orientation` | string | `vertical` või `horizontal` (ainult tulpdiagrammide puhul) |
-| `dataPath` | string | Punktteega tee rea-massiivini ülesvoolu väljundis (nt `data` või `result.items`). Jätke tühjaks automaatseks tuvastamiseks. |
+| `dataPath` | string | Punktteega tee rea-massiivini (või graafiobjektini `erDiagram` puhul) ülesvoolu väljundis (nt `data` või `result.items`). Jätke tühjaks automaatseks tuvastamiseks. |
 | `labelField` | string | Rea võti, mida kasutatakse kategooria sildina (pie/bar/line) |
 | `valueField` | string | Rea võti, mida kasutatakse numbrilise väärtusena (pie/bar/line/numeric/gauge) |
 | `series` | array | Valikuline mitme seeria definitsioon `[{ "name": "Sent", "field": "sent" }]` bar/line jaoks (alistab `valueField`) |
@@ -54,8 +54,51 @@ Kui teil on ainult näidis/example-andmed (päris allikat pole), tootke need rea
 - **scatter** — X/Y punktid `xField`-ist ja `yField`-ist korrelatsiooni graafikute jaoks.
 - **proportion** — üksik horisontaalne tulp, mis on jaotatud osadeks protsentuaalse legendiga (nt keelte jaotus). Kasutab `labelField` + `valueField`.
 - **barGauge** — üks horisontaalne gauge iga rea kohta punasest roheliseks gradiendiga ja väärtusega (nt vaba kettaruum). Kasutab `labelField` + `valueField`, valikuline `unit` ja `max` (vaikimisi suurim rea väärtus).
+- **gantt** — ülesannete ajakavad kuupäevade, edenemise ja sõltuvustega; vaadake [Gantti ajakavad](#gantt-schedules).
+- **erDiagram** — andmebaasi olemid, väljad, võtmed ja seosed; vaadake [Entity relationships](#entity-relationships-db).
 - **text** — markdown-sõnum (nt oleku märkus nagu "Viimane käivitus kell 19:47"). Pange markdown `text`-i staatilise sõnumi jaoks või jätke `text` tühjaks ja määrake `valueField`, et renderdada ülesvoolu toodetud stringi. Toetab pealkirju, paksu/kaldkirja, [loendeid](../nodes/chart-output-node.md#interactive-task-lists), linke ja reasisest koodi.
 - **hitl** — karussell teie ootel inimülevaatustest. Päis näitab `1/n pending`; vasak nool on esimesel kaardil keelatud ja parem nool viimasel. Workflow nimi avab selle käivituse lõuendil. **Approve**, **Request changes** ja **Reject** lahendavad selle ning vidina pealkirja kõrval olev ajaloo ikoon avab selle käivituse ajaloo dialoogis samal lehel. See diagrammi tüüp eirab ülesvoolu ridu, seega vidina workflow on ainult Chart Output node. Iga sisselogitud isik näeb ülevaatusi workflow'del, mille omanik ta on. Valige sõlme atribuutides või vidina seadetes **Workflow** (ja **Select agent**, kui sellel on mitu ülevaatussammu), et selle asemel kuvada selle Workflow ülevaatusi kõigile, kes seda avada saavad; vt [HITL-vidinad](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantti ajakavad
+
+Valige **Gantt** (`gantt`) projekti ajakavade ja ülesannete ajatelgede jaoks. Määrake `dataPath` ülesannete massiivile, näiteks `tasks`. Read kasutavad fikseeritud väljanimesid:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` ja `end` aktsepteerivad ISO kuupäevi või ajatempleid. Ajavööndita väärtused kasutavad UTC-d; ajavööndi nihked teisendatakse UTC-ks. `end` peab olema `start` kuupäeval või sellest hilisem. `progress` on valikuline (0–100, vaikimisi 0); `dependencies` sisaldab olemasolevate ülesannete ID-sid. ID-d peavad olema unikaalsed. Hõljuge ülesande kohal, et lugeda selle täielikke kuupäevi, edenemist ja sõltuvusi. Suured diagrammid kerivad vidina sees. Aktsepteeritakse kuni 500 ülesannet.
+
+Näidisandmete jaoks võib Set-vastendamine nimega `tasks` kasutada `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Ühendage see Chart Output sõlmega väärtustega `chartType: "gantt"` ja `dataPath: "tasks"`. Vastendage allikaveerud nendesse fikseeritud nimedesse Set-sõlme abil; välju `labelField` ja `valueField` ei kasutata.
+
+### Entity relationships (DB)
+
+Valige **Entity relationships (DB)** (`erDiagram`) andmebaasiskeemide ja olemite vaheliste seoste jaoks. Määrake `dataPath` graafi-**objektile**, näiteks `graph`, mis sisaldab mõlemat massiivi:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Väljadel on `name`, valikuline `type` ja valikuline `key` (`PK`, `FK`, `PK/FK` või tühi). Seosed viitavad olemasolevatele olemite ID-dele; valikulised väljad `sourceField` ja `targetField` ankurdavad seose nimega väljade külge. `cardinality` aktsepteerib väärtusi `one-to-one`, `one-to-many` (vaikimisi), `many-to-one` või `many-to-many`. Olemite ID-d ja väljanimed igas olemis peavad olema unikaalsed. Aktsepteeritakse kuni 100 olemit, 100 välja olemi kohta ja 500 seost.
+
+Koostage Set-sõlme abil `graph` koodiga `$dict(entities=array(dict(...)), relations=array(dict(...)))`; kasutage `chartType: "erDiagram"` ja `dataPath: "graph"`. See on teie esitatud skeemi visualiseering; see ei uuri automaatselt reaalajas andmebaasi.
+
+Mõlemad tüübid kuvatakse jaotises **Lisa vidin** koos eelvaatega ja lõuendil oleva sõlme diagrammitüübi valijas. Heym Work võib neid tüüpe soovitada ajakava või andmebaasiskeemi kirjeldamisel, joonistades enne lehe koostamist ettepanekute eelvaateid.
 
 ### Interaktiivsed ülesannete loendid
 

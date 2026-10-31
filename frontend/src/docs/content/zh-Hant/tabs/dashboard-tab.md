@@ -23,6 +23,8 @@
 - **Gauge**（單一數值對應最小–最大範圍，例如百分比）
 - **Scatter**（用於相關性繪圖的 X/Y 點）
 - **Proportion**（單一長條分割為多個佔比，並附百分比圖例，例如語言分佈）
+- **Gantt**（工作日期、完成情況與相依性）
+- **Entity relationships (DB)**（資料表、欄位、主鍵/外鍵與連線）
 - **Bar gauge**（每列一個水平量測條，搭配紅→綠漸層與數值，例如可用磁碟空間）
 - **Text**（markdown 訊息，例如「Last execution at 19:47」這類狀態備註；當 markdown 為靜態時支援[互動式核取方塊](../nodes/chart-output-node.md#interactive-task-lists)，並支援[明確編號清單](../nodes/chart-output-node.md#numbered-lists)以自訂或遞減編號）
 - **HITL**（您待處理的人工審核。標題會顯示 `1/n pending`。Workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目。小工具標題旁的歷史圖示會於此頁面的歷史對話框中開啟該次執行。此小工具不使用上游資料列，且每個人只會看到自己的佇列。 也可以改為顯示單一 Workflow 的審查，面向所有能夠開啟該 Workflow 的人員；請參閱 [HITL 元件](#hitl-yuan-jian)）
@@ -96,6 +98,18 @@
 
 使用小工具的 **Fine-tune with AI** 按鈕，即可透過新指令修訂現有小工具。每次 AI 微調都會將先前的 Workflow 快照至小工具的 **Edit History**，因此您可以在 Workflow 編輯器中檢閱或還原變更。
 
+## 來自 Chat 與 MCP
+
+[Chat](./chat-tab.md) 以及透過 [`heym_chat` 工具](./mcp-tab.md) 的 MCP 用戶端可以讀取您的儀表板、向其新增小工具、重新命名或刪除小工具，並整理儀表板的版面配置。Heym Work 將每個儀表板顯示為一個頁面，因此相同的回答也涵蓋其頁面。
+
+- **有哪些儀表板以及上面有什麼。** 詢問「我有哪些儀表板？」、「銷售儀表板上有什麼？」或「營收 workflow 在哪個儀表板上？」。Chat 會列出您擁有的儀表板以及與您共用的儀表板、您的存取權限以及指向每個儀表板的連結，以及上面的每個小工具：標題、圖表類型和背後的 workflow。篩選至您無法開啟之 workflow 上的 [HITL 小工具](#hitl-widgets) 會保持隱藏，就像在儀表板上一樣。
+- **新增小工具。** 提出要求：「向銷售儀表板新增一個依狀態劃分的待處理案件圖表」。Chat 首先在儀表板上放置一個空白小工具，接著撰寫小工具自己的 workflow，執行測試並修復錯誤直到執行通過，就像它[建立 workflow](./chat-tab.md#jianli-workflow) 一樣。不會留下獨立的 workflow，每次儲存都會出現在小工具的 Edit History 中。小工具的標題與圖表類型會遵循 Chat 所儲存的內容。
+- **現有 workflow。** 提出要求：「將營收 workflow 放置在銷售儀表板上」。以 Chart Output 節點結尾的 workflow 會變成圖表小工具，並附帶該 workflow 的獨立複本，因此日後對小工具的變更絕不會影響原始項目。帶有 trigger 或 input 節點的 workflow 不能成為圖表小工具。任何其他 workflow 都會變成[執行小工具](#run-widgets)，這同樣需要一個儀表板擁有者可以執行的 workflow。
+- **重新命名或刪除小工具。** 提出要求：「將『營收』小工具重新命名為『銷售』」，或「刪除『待處理案件』小工具」。圖表小工具的 workflow 也會採用新名稱；執行小工具的 workflow 則保留其名稱。刪除圖表小工具會連同其 workflow 一併刪除，就像小工具的刪除按鈕一樣；執行小工具的 workflow 則會保留。Chat 僅刪除您明確要求的小工具，若您的描述符合多個小工具時會先詢問確認。
+- **整理版面配置。** 提出要求：「整理銷售儀表板」，或「新增這三個小工具並整理」。Chat 會按順序排列您看到的小工具，就像 **整理** 按鈕一樣：隨機兩列或三列排列，因此再次詢問會產生另一種排列。要求每列指定數量（「每列三個」）以取得該大小的列。這會在 Heym 中整理儀表板；Heym Work 保留其頁面的獨立排列，該排列可透過頁面專屬的 **整理** 按鈕變更。
+
+新小工具位於儀表板現有小工具的下方，並且與每個小工具相同，在儀表板擁有者的身分下執行。新增、重新命名、刪除和整理需要對儀表板具備寫入存取權。建構新小工具需要能夠建構 workflow 的聊天：Chat 索引標籤、Heym Work 編輯人員專用 Chat 以及 `heym_chat`。
+
 ## 編輯版面配置
 
 切換 **Edit** 以進入編輯模式，您可以在 12 欄網格上拖曳小工具並調整其大小。版面配置變更會自動儲存。小工具標題可從小工具標題列就地編輯。
@@ -128,3 +142,7 @@
 
 - [Chart Output 節點](../nodes/chart-output-node.md)
 - [Analytics 分頁](analytics-tab.md) — 內建的執行指標（與使用者自建的 dashboard 不同）
+
+## 排程與資料庫圖表
+
+在「新增小工具」中選擇 **Gantt** 可隨時間呈現工作以及完成狀況與相依性連結，或選擇 **Entity relationships (DB)** 繪製資料表、欄位及其關聯圖。這兩種類型皆使用 [Chart Output 節點](../nodes/chart-output-node.md#gantt-schedules)，且同樣可在 Heym Work 頁面中使用。當 Work 為排程或資料庫綱要提供小工具建議時，會在您建置頁面之前依據建議的工作或實體繪製預覽。

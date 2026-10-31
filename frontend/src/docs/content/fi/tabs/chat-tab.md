@@ -23,7 +23,8 @@ Keskustelun voi aloittaa myös [Workflowt-välilehden](./workflows-tab.md) chat-
 - **Jonotetut jatkokysymykset** – Lähetä lisää viestejä, kun vastaus on vielä virtaamassa. Jonotetut viestit säilyvät, niitä voi muokata tai poistaa ennen kuin ne alkavat, ja ne suoritetaan järjestyksessä aktiivisen vastauksen jälkeen
 - **Suunnittelutauot** – Kun Keskustelu tarvitsee suunnittelutietoja, se esittää selvennyskysymyksiä ja keskeyttää jonotetut jatkokysymykset, kunnes vastaat. Kun suunnitteluvastaus on valmis, jonotetut viestit jatkavat
 - **Tunnistetiedot** – Kun Keskustelun luoma tai muokkaama workflow tarvitsee tunnistetiedot, Keskustelu kysyy mitä käyttää, tarjoaa uuden luomista keskustelussa tai antaa jatkaa ilman. Voit myös pyytää Keskustelua luomaan tunnistetiedot tai päivittämään omistamiasi; se avaa tunnistetietolomakkeen keskusteluun. Malli näkee tunnistetietojen nimen ja tyypin, ei koskaan arvoja, sekä omistamillesi että kanssasi jaetuille tunnistetiedoille. Keskustelun lisäämät LLM- ja Agent-solmut suoritetaan keskusteluun valitulla tunnistetiedolla ja mallilla, mukaan lukien jaetut tunnistetiedot; kun Keskustelu muokkaa workflow'ta, sen olemassa olevat LLM- ja Agent-solmut säilyttävät tunnistetietonsa ja mallinsa. Katso [AI-avustaja › Tunnistetiedot](../reference/ai-assistant.md#credentials)
-- **Datataulukot** – Kun Keskustelun luoma tai muokkaama workflow tallentaa tietueita, Keskustelu kysyy mitä [datataulukkoa](./datatable-tab.md) käyttää tai tarjoaa uuden luomista workflown tarvitsemilla sarakkeilla. Se voi myös listata taulukot ja niiden sarakkeet. Se ei koskaan lue tai kirjoita rivejä. Katso [AI-avustaja › Datataulukot](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Kysy, mitä [dashboards](./dashboard-tab.md) -koontinäyttöjä sinulla on, mitä jollakin niistä on tai millä koontinäytöllä workflow on. Pyydä Chatia lisäämään uusi widget koontinäyttöön (se asettaa tyhjän widgetin, rakentaa ja testaa sen workflow'n), sijoittamaan olemassa olevan workflow'n koontinäyttöön widgettinä, nimeämään uudelleen tai poistamaan widgetin tai siistimään koontinäytön asettelua. Heym Work näyttää nämä koontinäytöt sivuinaan. Katso [Dashboard › Chatista ja MCP:stä](./dashboard-tab.md#chatista-ja-mcp-stä)
+- **Datataulukot** – Kun Chatin luoma tai muokkaama workflow tallentaa tietueita, Chat kysyy, mitä [datataulukkoa](./datatable-tab.md) käytetään, tai tarjoaa uuden luomista tarvittavilla sarakkeilla. Se voi myös tarkastaa rivejä, lisätä tai poistaa sarakkeita sekä lisätä, päivittää tai poistaa rivejä suoraan taulukoissa, jotka omistat tai joita voit muokata. Anna sille taulukon nimi tai DataTable-linkki. Sarakkeiden poistaminen ja kaikkien rivien tyhjentäminen pyytävät vahvistuksen; sarakkeiden lisääminen säilyttää olemassa olevat tiedot. Katso [AI-avustaja › Datataulukot](../reference/ai-assistant.md#data-tables)
 - **Virtaavat vastaukset** – Näe mallin tuloste virtaamassa reaaliajassa
 - **Vastauksen keskeytys** – Keskeytä virtaava vastaus milloin tahansa; keskeyttäminen tyhjentää myös kyseisen keskustelun jonotetut viestit
 - **Markdown-muotoilu** – Vastaukset tukevat Markdown-muotoilua, mukaan lukien upotetut kuvat
@@ -33,16 +34,17 @@ Keskustelun voi aloittaa myös [Workflowt-välilehden](./workflows-tab.md) chat-
 - **Äänisyöte** – Käytä mikrofoni-painiketta puheentunnistukseen (selaimen tukema). Kun tallennus pysähtyy, Heym voi siistiä tekstin hieman ennen lähettämistä
 - **Aikataulutetut workflowt** – Kysy milloin cron-workflowt suoritetaan (tänään, tällä viikolla, tässä kuussa tai mukautetulla aikavälillä). Avustaja käyttää samaa aikataulutietoa kuin [Aikataulutetut](./scheduled-tab.md) -välilehti ja voi rajoittaa tulokset omistamiisi workflowihin tai sisältää jaetut
 - **Workflown suoritushistoria** – Kysy yhdestä workflowsta ("kuinka monta kertaa päivittäinen raportti suoritettiin?", "epäonnistuiko se?", "milloin se viimeksi suoritettiin?"). Keskustelu etsii workflown ID:llä ja vastaa sen suoritusmäärästä, tilajakaumasta, ensimmäisestä ja viimeisestä suoritusajasta sekä keskimääräisestä kestosta. Kysy miksi suoritus epäonnistui tai mitä se palautti, ja Keskustelu avaa kyseisen suorituksen lukeakseen sen syötteet, tulosteet ja solmukohtaiset virheet
+- **Missä suoritukset epäonnistuvat ja miksi ne ovat hitaita** – Kysy, missä workflowsi epäonnistuvat tai miksi ne ovat hitaita, ja Chat nimeää workflowt, joita suoritettiin eniten, jotka epäonnistuivat eniten ja jotka ovat hitaimpia, sekä solmutyypit, jotka vievät eniten aikaa (keskiarvo kutsua kohden ja yhteensä), epäonnistuvat eniten ja suoritetaan eniten – samat luvut kuin [Analytics](./analytics-tab.md) -välilehdellä. Solmutyypit lasketaan suorituksista siitä versiosta alkaen, joka toi solmuanalytiikan. Kysy viimeisestä tunnista, 3 tai 6 tunnista, 24 tunnista, 7 tai 30 päivästä tai koko ajalta; tuntiaukot alkavat tasatunnein, joten "viimeinen tunti" klo 15:20 kattaa ajan klo 14:00:sta tähän hetkeen.
 - **Live-suoritustila** – Kysy mitä parhaillaan suoritetaan, ja Keskustelu vastaa määrällä, workflowjen nimillä, kunkin suorituksen kestolla, millä solmulla se on ja linkillä suoraan live-suoritukseen
 ## Chatin käyttö MCP-asiakasohjelmasta
 
-Chat-moottoriin voi ottaa yhteyttä myös selaimen ulkopuolelta. Ota **Heym Chat -työkalu** käyttöön [MCP-välilehdessä](./mcp-tab.md), jolloin MCP-asiakasohjelmat – kuten Claude, Cursor ja muut MCP-yhteensopivat ohjelmat – saavat käyttöönsä `heym_chat`-työkalun, joka käyttää samaa moottoria kaikine ominaisuuksineen.
+Chat-moottoriin voi ottaa yhteyttä myös selaimen ulkopuolelta. Ota **Heym Chat -työkalu** käyttöön [MCP / A2A-välilehdessä](./mcp-tab.md), jolloin MCP-asiakasohjelmat – kuten Claude, Cursor ja muut MCP-yhteensopivat ohjelmat – saavat käyttöönsä `heym_chat`-työkalun, joka käyttää samaa moottoria kaikine ominaisuuksineen.
 
 Näistä keskusteluista näkyy historia Chat-välilehdessä, ja ne on merkitty pistokekuvakkeella keskustelulistassa. Avaa keskustelu nähdäksesi, mitä asiakasohjelma kysyi, mitä työkortteja se laukaisi, ja jatka keskustelua itse. Kysymyksiin vastaaminen toimii samalla tavalla, riippumatta siitä alkoiko vuoro Chat-välilehdessä vai MCP-asiakasohjelmasta.
 
 MCP-yhteyden kautta Chat ei näytä, valitse tai luo tunnistetietoja. Sen luomien workflowjen tunnistetietokentät jäävät tyhjiksi, ja vastauksessa kerrotaan, mitkä solmut vaativat tunnistetiedon, jotta voit asettaa ne editorissa.
 
-Myös datataulukot toimivat MCP-yhteyden yli: Chat listaa taulukot, luo uusia ja yhdistää ne workflowhin. Taulukkoon liittyvät kysymykset tulevat vastauksessa tekstinä, joten vastaa niihin käyttämällä samaa `conversation_id`-tunnistetta.
+Datataulukot toimivat myös MCP:n kautta: Chat voi muokata sarakkeita ja rivejä suoraan, luoda taulukoita ja kytkeä ne workflow-malleihin. Taulukkokysymykset ja poistovahvistukset saapuvat tekstinä tuloksessa; vastaa samalla `conversation_id`:llä.
 
 ## Kontekstirajoitus
 
@@ -103,9 +105,58 @@ laukaisulähteen jakauma suoritusmäärähälytyksissä. Se raportoi tilanteen h
 ## Käyttäjän säännöt
 
 [Käyttäjän säännöt](../reference/user-settings.md) (asetuksista määriteltävät) lisätään automaattisesti jokaiseen Chat-keskusteluun järjestelmätason ohjeina. Aseta ne kerran soveltaaksesi pysyviä mieltymyksiä kaikkiin chat-pyyntöihin.
+
+## Työskentely Evals-osion kanssa
+
+Chat voi luoda, muuttaa ja suorittaa sarjoja [Evals](./evals-tab.md) -osiossa, sekä prompt-sarjoja että agenttisarjoja:
+
+- **Prompt-sarja**: "tee prompt-sarja tukivastauspromptilleni 8 testitapauksella ja vertaa gpt-4o:ta gpt-4.1-miniin". Chat kirjoittaa testitapaukset odotettuine vastauksineen, valitsee pisteytysmenetelmän ja tallentaa sarjan.
+  - Ennen sarjan luomista se selvittää, mitä LLM-tunnistetietoa ja malleja käytetään. Jos LLM-tunnistetietoja on tasan yksi, se käyttää sitä ja ilmoittaa siitä; muussa tapauksessa se kysyy.
+  - LLM-as-Judge-pisteytyksessä se kysyy myös, pitäisikö erillisen tuomarin arvioida vastaukset.
+- **Agenttisarja**: "tarkista, että tukiagenttini etsii aina dokumentaatiosta eikä koskaan lähetä sähköpostia". Chat löytää agentin ja tallentaa työkalutarkistukset ja kynnysarvot. Pyydettäessä se suorittaa workflow'n luoden eri syötteen jokaista suoritusta varten.
+  - Agenttisarjan suoritukset ovat todellisia workflow-suorituksia, joten niiden sivuvaikutukset tapahtuvat oikeasti. Chat ilmoittaa, kuinka monta suoritusta se käynnistää.
+- **Baseline**: Chat voi käsitellä agentin perustasoa kolmella tavalla:
+  - Raportoida sen agentin viimeisimmistä suorituksista.
+  - Rakentaa sen käynnistämistään suorituksista ("suorita se 5 kertaa ja käytä sitä perustasona").
+  - Tallentaa antamasi luvut ("aseta perustasoksi 3 sekuntia p95 ja 0,01 $ suoritusta kohden").
+- **Suoritukset**: Chat odottaa suoritusta enintään minuutin ja raportoi sitten tuloksen:
+  - Prompt-sarjalle: kunkin mallin hyväksyttyjen määrän ja epäonnistuneet tapaukset.
+  - Agenttisarjalle: hyväksymisprosentin, epäonnistuneet tarkistukset ja poikkeaman perustasosta.
+  - Pidempi suoritus jatkuu Evals-osiossa; pyydä Chatia tarkistamaan se uudelleen.
+
+Kun Chat luo tai muuttaa sarjaa, vastaus näyttää kortin, jossa on sarjan nimi, sen tyyppi ja **Avaa Evals-osiossa** -painike, aivan kuten tallennetun workflow'n kortissa. MCP:n kautta `heym_chat`-tulos luetteloi linkin jokaiseen kyseisessä kutsussa tallennettuun sarjaan.
+
+Sama toimii MCP-asiakkaasta `heym_chat`-työkalun kautta (katso [Chatin käyttö MCP-asiakkaasta](#chatin-käyttö-mcp-asiakkaasta)). Arviointityökalut pysyvät `heym_chat`-työkalun sisällä; MCP-asiakkaat eivät näe niitä erillisinä työkaluina.
+
+Editorin AI-avustaja ei luo sarjoja.
+
+## Työskentely Evals-osion kanssa
+
+Chat voi luoda, muuttaa ja suorittaa sarjoja [Evals](./evals-tab.md) -osiossa, sekä prompt-sarjoja että agenttisarjoja:
+
+- **Prompt-sarja**: "tee prompt-sarja tukivastauspromptilleni 8 testitapauksella ja vertaa gpt-4o:ta gpt-4.1-miniin". Chat kirjoittaa testitapaukset odotettuine vastauksineen, valitsee pisteytysmenetelmän ja tallentaa sarjan.
+  - Ennen sarjan luomista se selvittää, mitä LLM-tunnistetietoa ja malleja käytetään. Jos LLM-tunnistetietoja on tasan yksi, se käyttää sitä ja ilmoittaa siitä; muussa tapauksessa se kysyy.
+  - LLM-as-Judge-pisteytyksessä se kysyy myös, pitäisikö erillisen tuomarin arvioida vastaukset.
+- **Agenttisarja**: "tarkista, että tukiagenttini etsii aina dokumentaatiosta eikä koskaan lähetä sähköpostia". Chat löytää agentin ja tallentaa työkalutarkistukset ja kynnysarvot. Pyydettäessä se suorittaa workflow'n luoden eri syötteen jokaista suoritusta varten.
+  - Agenttisarjan suoritukset ovat todellisia workflow-suorituksia, joten niiden sivuvaikutukset tapahtuvat oikeasti. Chat ilmoittaa, kuinka monta suoritusta se käynnistää.
+- **Baseline**: Chat voi käsitellä agentin perustasoa kolmella tavalla:
+  - Raportoida sen agentin viimeisimmistä suorituksista.
+  - Rakentaa sen käynnistämistään suorituksista ("suorita se 5 kertaa ja käytä sitä perustasona").
+  - Tallentaa antamasi luvut ("aseta perustasoksi 3 sekuntia p95 ja 0,01 $ suoritusta kohden").
+- **Suoritukset**: Chat odottaa suoritusta enintään minuutin ja raportoi sitten tuloksen:
+  - Prompt-sarjalle: kunkin mallin hyväksyttyjen määrän ja epäonnistuneet tapaukset.
+  - Agenttisarjalle: hyväksymisprosentin, epäonnistuneet tarkistukset ja poikkeaman perustasosta.
+  - Pidempi suoritus jatkuu Evals-osiossa; pyydä Chatia tarkistamaan se uudelleen.
+
+Kun Chat luo tai muuttaa sarjaa, vastaus näyttää kortin, jossa on sarjan nimi, sen tyyppi ja **Avaa Evals-osiossa** -painike, aivan kuten tallennetun workflow'n kortissa. MCP:n kautta `heym_chat`-tulos luetteloi linkin jokaiseen kyseisessä kutsussa tallennettuun sarjaan.
+
+Sama toimii MCP-asiakkaasta `heym_chat`-työkalun kautta (katso [Chatin käyttö MCP-asiakkaasta](#chatin-käyttö-mcp-asiakkaasta)). Arviointityökalut pysyvät `heym_chat`-työkalun sisällä; MCP-asiakkaat eivät näe niitä erillisinä työkaluina.
+
+Editorin AI-avustaja ei luo sarjoja.
+
 ## Liittyvät
 
-- [MCP-välilehti](./mcp-tab.md) – Näytä tämä moottori MCP-asiakkaille `heym_chat` -työkaluna
+- [MCP / A2A-välilehti](./mcp-tab.md) – Näytä tämä moottori MCP-asiakkaille `heym_chat` -työkaluna
 - [Asetukset](../reference/user-settings.md) – Määritä käyttäjäsäännöt, jotka koskevat kaikkia keskustelupyyntöjä
 - [Tunnistetiedot-välilehti](./credentials-tab.md) – Lisää ja hallinnoi API-avaimia
 - [Muuttujat-välilehti](./global-variables-tab.md) – Keskustelussa käytettävissä olevat globaalit muuttujat

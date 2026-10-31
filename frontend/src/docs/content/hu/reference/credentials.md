@@ -14,7 +14,7 @@ A hitelesítési adatok tárolják a workflow-csomópontok által használt API-
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API-kulcs a modellhez |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) bíráló | Decision Model | Egy döntési modell endpointjának alap URL-je, valamint opcionális API-kulcs |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Kiválasztja, hogy az Ön modelljei közül melyik szolgálja ki az egyes kéréseket, döntési modell segítségével |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) prompt-csomagok | Model Router (Auto Model) | Kiválasztja, hogy az Ön modelljei közül melyik szolgálja ki az egyes kéréseket, döntési modell segítségével |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-előfizetés bejelentkezés (OAuth) vagy Codex hozzáférési token a runnerhez, valamint GitHub PAT a repository-műveletekhez |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go gateway API-kulcs (opcionális alap URL) a runnerhez, valamint GitHub PAT a repository-műveletekhez |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub személyes hozzáférési token (PAT) GitHub API-hívásokhoz, GitHub csomópont-műveletekhez és MCP-integrációkhoz |

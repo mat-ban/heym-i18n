@@ -23,6 +23,8 @@ Un widget este un singur grafic pe grilă. Tipuri de grafice acceptate:
 - **Gauge** (o singură valoare raportată la un interval min–max, de ex. un procent)
 - **Scatter** (puncte X/Y pentru grafice de corelație)
 - **Proportion** (o bară împărțită în cote cu o legendă procentuală, de ex. o defalcare pe limbi)
+- **Gantt** (datele sarcinilor, finalizarea și dependențele)
+- **Entity relationships (DB)** (tabele, câmpuri, chei PK/FK și conexiuni)
 - **Bar gauge** (un gauge orizontal pe rând cu un gradient roșu→verde și o valoare, de ex. spațiu liber pe disc)
 - **Text** (un mesaj markdown, de ex. o notă de stare precum „Ultima execuție la 19:47"; acceptă [casete de selectare interactive](../nodes/chart-output-node.md#interactive-task-lists) când markdownul este static și [liste numerotate explicite](../nodes/chart-output-node.md#numbered-lists) pentru numerotare personalizată sau descendentă)
 - **HITL** (recenziile dumneavoastră umane în așteptare. Antetul afișează `1/n pending`. Numele workflowului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă. Pictograma de istoric de lângă titlul widgetului deschide acea execuție în dialogul de istoric de pe această pagină. Widgetul nu utilizează rânduri din amonte, iar fiecare persoană își vede propria coadă. În schimb, poate afișa verificările unui singur Workflow, pentru toți cei care pot deschide acel Workflow; vedeți [Widget-uri HITL](#widget-uri-hitl))
@@ -96,6 +98,18 @@ API-ul de widget-uri poate crea și un **card de numărare** fără AI: un widge
 
 Utilizați butonul **Fine-tune with AI** al unui widget pentru a revizui un widget existent cu o nouă instrucțiune. Fiecare ajustare AI salvează instantaneu workflowul anterior în **Edit History** al widgetului, astfel încât să puteți examina sau reveni asupra modificărilor din editorul de workflowuri.
 
+## Din Chat și MCP
+
+[Chat](./chat-tab.md) și clienții MCP prin intermediul instrumentului [`heym_chat`](./mcp-tab.md) pot citi dashboardurile dumneavoastră, pot adăuga widgeturi, le pot redenumi sau șterge și pot aranja aspectul unui dashboard. Heym Work afișează fiecare dashboard ca pe o pagină, astfel încât aceleași răspunsuri acoperă și paginile sale.
+
+- **Ce dashboarduri există și ce conțin acestea.** Întrebați „ce dashboarduri am?”, „ce se află pe dashboardul Vânzări?” sau „pe ce dashboard se află workflow-ul de venituri?”. Chat listează propriile dashboarduri și pe cele partajate cu dumneavoastră, împreună cu drepturile de acces și un link către fiecare, precum și fiecare widget prezent: titlul, tipul de diagramă și workflow-ul asociat. Un [widget HITL](#hitl-widgets) filtrat după un workflow pe care nu îl puteți deschide rămâne ascuns, exact ca pe dashboardul propriu-zis.
+- **Un widget nou.** Cereți „adaugă o diagramă a cazurilor deschise după status pe dashboardul Vânzări”. Chat plasează mai întâi un widget gol pe dashboard, apoi scrie workflow-ul propriu al widgetului, rulează teste și remediază erorile până când o rulare reușește, la fel cum [creează workflows](./chat-tab.md#crearea-de-workflows). Nu rămâne niciun workflow separat în urmă, iar fiecare salvare apare în Edit History al widgetului. Titlul și tipul de diagramă ale widgetului respectă ceea ce salvează Chat.
+- **Un workflow existent.** Cereți „plasează workflow-ul de venituri pe dashboardul Vânzări”. Un workflow care se termină într-un nod Chart Output devine un widget de tip diagramă cu propria copie a workflow-ului, astfel încât modificările ulterioare aduse widgetului nu afectează niciodată originalul. Un workflow cu un nod trigger sau input nu poate deveni widget de tip diagramă. Orice alt workflow devine un [widget de rulare](#run-widgets), care necesită, de asemenea, un workflow pe care proprietarul dashboardului îl poate rula.
+- **Redenumirea sau ștergerea unui widget.** Cereți „redenumește widgetul Venituri în Vânzări” sau „șterge widgetul Cazuri deschise”. Workflow-ul unui widget de tip diagramă preia și noul nume; workflow-ul unui widget de rulare își păstrează numele. Ștergerea unui widget de tip diagramă șterge și workflow-ul asociat, la fel ca butonul de ștergere al widgetului; workflow-ul unui widget de rulare rămâne. Chat șterge doar widgetul solicitat în mod explicit și cere mai întâi clarificări dacă termenii se potrivesc cu mai multe widgeturi.
+- **Aranjare.** Cereți „aranjează dashboardul Vânzări” sau „adaugă aceste trei widgeturi și aranjează”. Chat organizează widgeturile vizibile în ordinea lor, la fel cum face butonul **Aranjare**: rânduri aleatorii de două sau trei, astfel încât o nouă solicitare oferă o altă dispunere. Cereți un anumit număr per rând („trei pe rând”) pentru a obține rânduri de acea dimensiune. Aceasta aranjează dashboardul în Heym; Heym Work își păstrează propria aranjare pe pagină, pe care butonul **Aranjare** propriu al paginii o modifică.
+
+Widgeturile noi sunt plasate sub widgeturile existente ale dashboardului și, la fel ca orice widget, rulează în contextul proprietarului dashboardului. Adăugarea, redenumirea, ștergerea și aranjarea necesită acces de scriere la dashboard. Crearea unui widget nou necesită un chat capabil să construiască workflows: fila Chat, Chatul Heym Work pentru editori și `heym_chat`.
+
 ## Editarea aspectului
 
 Comutați **Edit** pentru a intra în modul de editare, unde puteți trage widgeturile și le puteți redimensiona pe o grilă de 12 coloane. Modificările de aspect sunt salvate automat. Titlurile widgeturilor sunt editabile inline din antetul widgetului.
@@ -127,3 +141,7 @@ Eliminarea unei partajări sau reducerea acesteia de la write la read produce ef
 
 - [Nodul Chart Output](../nodes/chart-output-node.md)
 - [Fila Analytics](analytics-tab.md) — metrici de execuție integrate (diferite de dashboard-urile create de utilizatori)
+
+## Planificări și diagrame de baze de date
+
+Alegeți **Gantt** în Adăugare widget pentru a afișa sarcini în timp cu legături de finalizare și dependență, sau **Entity relationships (DB)** pentru a mapa tabele, câmpuri și relațiile acestora. Ambele tipuri utilizează [nodul Chart Output](../nodes/chart-output-node.md#gantt-schedules) și sunt disponibile și pe paginile Heym Work. Când Work sugerează widgeturi pentru o planificare sau o schemă de bază de date, generează previzualizări pe baza sarcinilor sau entităților propuse.

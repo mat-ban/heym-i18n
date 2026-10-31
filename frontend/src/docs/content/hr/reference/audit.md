@@ -47,7 +47,7 @@ U aplikaciji, **Logs** kartica čita isti izlaz iz kontejnera. Pristup je ograni
 
 ## Što Se Evidentira
 
-Svaka promjena stanja se evidentira. Čitanja se evidentiraju samo kada je čitanje samo po sebi osjetljiva radnja — pregled povijesti izvršavanja workflow-a, otvaranje vjerodajnice, preuzimanje datoteke. Obična čitanja popisa i detalja nisu evidentirana; log pristupa već bilježi da se zahtjev dogodio, a evidentiranje svakog `GET`-a bi zakopalo linije koje su važne.
+Svaka promjena stanja se evidentira. Čitanja se evidentiraju samo kada je čitanje samo po sebi osjetljiva radnja — pregled povijesti izvršavanja workflow-a, otvaranje vjerodajnice, preuzimanje datoteke. Obična čitanja popisa i detalja nisu evidentirana; log pristupa već bilježi da se zahtjev dogodio, a evidentiranje svakog `GET`-a bi zakopalo linije koje su važne. Jedina iznimka su [pregledi stranica](#page-views), koji bilježe kamo je prijavljeni korisnik navigirao u aplikaciji.
 
 ### Autentifikacija
 
@@ -62,9 +62,34 @@ Svaka promjena stanja se evidentira. Čitanja se evidentiraju samo kada je čita
 | `sso_settings.update` | Administrator je promijenio [SSO](./sso.md) konfiguraciju. Bilježi `enabled` i `password_login_disabled`, nikada klijentsku tajnu. |
 | `sso_settings.test` | Administrator je izvršio test veze SSO-a. |
 
+### Pregledi stranica
+
+Zapis `page.view` se zapisuje svaki put kada prijavljeni korisnik otvori stranicu u web aplikaciji, s URL putanjom u polju `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Putanja je interna ruta aplikacije. Kartice nadzorne ploče dio su nje (`/?tab=traces`), kao i identifikatori koji imenuju ono što je otvoreno, poput `/workflows/<id>`. Zadržava se samo kratki popis parametara upita koji identificiraju stranicu (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); sve ostalo u nizu upita i cijeli fragment se odbacuju. Stranice čija poveznica nosi tajnu, poput `/review/<token>`, bilježe se s rezerviranim mjestom `:token` umjesto tajne.
+
+Preglednik javlja putanju, tako da redak `page.view` prikazuje kamo je korisnik izjavio da je otišao. To ne dokazuje da je poslužitelj vratio tu stranicu. Posjeti stranici za prijavu i poveznicama otvorenim u odjavljenom stanju se ne bilježe jer uz njih nije vezan niti jedan korisnik.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` se zapisuje kada se pokrene izvođenje putem API-ja: gumb Pokreni u uređivaču, krajnja točka execute sa sesijom, API ključem ili webhookom, portal za razgovor i MCP alati. Bilježi tko ga je pokrenuo, kako i s kojim ishodom je završilo:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` povezuje redak s izvođenjem u Povijesti izvođenja. `outcome` je `failure` kada je izvođenje završilo s `error`, `cancelled` ili `timeout`. Izvođenje zaustavljeno radi ljudskog pregleda ili zadržano u redu čekanja za konkurentnost je redak `success` sa statusom `status=pending` ili `status=queued`. Poziv bez prijavljenog korisnika, poput anonimnog webhooka ili posjetitelja portala, nema `actor_id` niti `actor_email`. Ulazi i izlazi se nikada ne zapisuju.
+
+Izvođenja pokrenuta rasporedom, čvorom triggera, redom čekanja ili događajem nisu revizijski redci. Ona se izvršavaju na instanci koja ih je preuzela i bilježe se u Povijesti izvođenja sa svojim izvorom triggera i instancom koja ih je pokrenula.
+
+`workflow.history_view` se zapisuje kada netko otvori povijest izvođenja workflowa. Kratki pregled koji prikazuje najnovije izvođenje workflowa na platnu ili na popisu ne podliježe reviziji.
+
 
 `workflow.history_view` bilježi `owned=false` kada suradnik pregleda povijest izvršavanja nekoga drugoga. `workflow.delete` bilježi `outcome=denied` s `reason=not_owner` kada suradnik pokuša obrisati.
 
@@ -96,6 +121,27 @@ Linija revizije bilježi identifikatore, imena i brojeve. Nikada ne bilježi sad
 Dva su faktora koja to osiguravaju. Mjesta poziva su napisana da proslijede samo sigurna polja, a pomoćnik za reviziju redigira kao zaštitu: bilo koje polje čije ime sadrži `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` ili slično zamjenjuje se s `***` prije nego što se linija izgradi. Prekomjerna redakcija je namjerna — neodgovarajuća linija je bolja od propuštene vjerodajnice.
 
 Gdje je tajna zaista relevantna za zapis, bilježi se samo njezin oblik. Dijeljenje datoteka bilježi `password_protected=true`, nikada lozinku.
+
+## Heym Work
+
+Kada pokrećete Heym Work zajedno s Heymom, Work emitira revizijske retke na stdout vlastitog kontejnera u istom Winston formatu:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work bilježi radnje korisnika na stranicama, pločama i zapisima:
+
+| Radnja | Značenje |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Promjene na stranicama i izgledima nadzorne ploče |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Promjene izgleda Kanban stupaca |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Događaji životnog ciklusa kartica |
+| `record.create`, `record.update`, `record.delete` | Mutacije zapisa tablice podataka putem Worka |
+| `chat.message` | Korisnički prompt poslan Work asistentu |
+| `export.csv`, `export.json` | Izvozi podataka |
+
+Svaki redak nosi ista polja `actor_id`, `actor_email`, `timestamp` i `outcome` kao i revizijski redci Heyma, tako da sakupljači zapisa mogu analizirati oboje putem jednog cjevovoda.
 
 ## Zadržavanje
 

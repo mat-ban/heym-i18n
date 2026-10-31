@@ -1,6 +1,6 @@
-# Tab MCP
+# Tab MCP / A2A / A2A
 
-Tab **MCP** mengonfigurasi integrasi Model Context Protocol (MCP). MCP memungkinkan klien AI (Claude, ChatGPT, Gemini, Cursor, dan alat apa pun yang kompatibel dengan MCP) memanggil Workflow Heym Anda sebagai tools.
+Tab **MCP** mengonfigurasi integrasi Model Context Protocol (MCP), dan sebagai server [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) yang dapat didelegasikan tugas oleh agen lain. MCP memungkinkan klien AI (Claude, ChatGPT, Gemini, Cursor, dan alat apa pun yang kompatibel dengan MCP) memanggil Workflow Heym Anda sebagai tools.
 
 Heym mendukung dua mode: **server default** yang mengekspos semua Workflow dengan MCP aktif di bawah satu Endpoint, dan **server bernama** yang memberikan setiap grup Workflow logis URL khusus dan API Key tersendiri.
 
@@ -51,7 +51,7 @@ Workflow dengan [batas konkurensi](../reference/webhooks.md#concurrency-limit-an
 ```
 
 Klien melakukan polling pada alat `heym_execution_status` dengan `execution_id` tersebut. Ini mengembalikan isi yang sama dengan [URL status](../reference/webhooks.md#status-url): `queued` dengan posisi saat ini, `running`, lalu `success` atau `error` beserta keluarannya. Ini hanya menemukan eksekusi workflow yang diekspos oleh server yang sama. Alat ini terdaftar di server default dan di setiap server bernama hanya selama setidaknya satu workflow memiliki batas konkurensi. Saat antrean penuh, panggilan mengembalikan kesalahan "Concurrency queue is full".
-## Heym Chat Tool
+## Agen Heym
 
 Bagian **Heym Capabilities** mengubah mesin Tab Chat menjadi satu tool MCP bernama `heym_chat`. Aktifkan pada server default, pada server bernama mana pun, atau pada keduanya — setiap permukaan menyimpan toggle dan pemilihan modelnya sendiri.
 
@@ -60,15 +60,20 @@ Saat aktif, `heym_chat` muncul di `tools/list` bersama tools Workflow Anda. Klie
 - Membangun Workflow, melakukan uji jalan dengan input sampel, memperbaikinya, dan menyelesaikan saat eksekusi berhasil (lihat [Mode Build](#build-mode))
 - Memeriksa dan menjalankan Workflow Anda yang sudah ada
 - Melaporkan analitik, eksekusi terbaru, dan jadwal Cron yang akan datang
+- Menjelaskan di mana workflow gagal dan mengapa lambat: workflow yang paling sering dijalankan, paling sering gagal, dan paling lambat, serta jenis node dengan waktu, kesalahan, dan panggilan terbanyak selama 1, 3, atau 6 jam, 24 jam, 7 atau 30 hari terakhir, atau sepanjang waktu
 - Melaporkan riwayat eksekusi satu Workflow: berapa kali dijalankan, jumlah status, kapan dijalankan, dan atas permintaan input, output, serta error per-Node dari satu eksekusi
 - Melaporkan apa yang sedang berjalan saat ini: berapa banyak eksekusi aktif, nama Workflow-nya, berapa lama masing-masing berjalan, Node yang sedang dijalani, dan tautan ke eksekusi langsung
 - Menampilkan daftar board, membuat card, dan membaca detail card pada [Tab Board](./board-tab.md)
-- Menampilkan daftar data table Anda beserta kolomnya, membuat yang baru, dan menghubungkannya ke Workflow yang dibangunnya
+- Mencantumkan dashboard Anda (halaman Heym Work) dan widget-nya, menemukan di dashboard mana workflow berada, menambahkan widget baru dan membangun workflow-nya, menempatkan workflow yang ada sebagai widget, mengganti nama atau menghapus widget, atau merapikan tata letak (lihat [Dashboard › Dari Chat dan MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Memeriksa tabel data dan baris, membuat tabel, menambah atau menghapus kolom, menyisipkan, memperbarui, atau menghapus baris, dan menghubungkan tabel ke dalam workflow
+- Membuat, mengedit, dan menjalankan rangkaian evaluasi prompt dan agen ([Eval suites](./evals-tab.md#from-chat-and-mcp)), termasuk baseline agen: dilaporkan, dibangun dari proses eksekusi, atau dinyatakan dalam angka. Hasilnya mencantumkan tautan Evals dari setiap suite yang disimpan.
 - Buat atau perbarui credential Anda di halaman khusus Heym (lihat [Credentials](#credentials))
 - Membaca team dan global variable, serta mencari dokumentasi
 - Menyetujui, mengedit, atau menolak review human-in-the-loop yang tertunda
 
 Kemampuan yang ditambahkan ke Tab Chat di kemudian hari otomatis tersedia melalui `heym_chat` — tidak ada toggle per-kemampuan yang perlu disinkronkan.
+
+Kemampuan ini berjalan di dalam `heym_chat`: `tools/list` menampilkan `heym_chat` dan alat workflow Anda, tidak pernah alat internal chat seperti alat rangkaian evaluasi.
 
 ### Mode Build
 
@@ -81,7 +86,12 @@ Saat panggilan membuat atau mengedit workflow, jawabannya mencantumkan masing-ma
 - Untuk mengubah Workflow yang dibuat sebelumnya, lanjutkan utas dengan `conversation_id` yang sama. Asisten memperbarui Workflow tersebut alih-alih membuat yang baru, dan hanya mengubah Workflow yang dapat Anda edit.
 - Ketika lima uji jalan telah terpakai, asisten berhenti dan menjelaskan apa yang masih gagal.
 
-Data table berbeda. Table tidak menyimpan rahasia, sehingga `heym_chat` dapat menampilkan daftar table Anda, menanyakan table mana yang harus digunakan Workflow, dan membuat table baru beserta kolomnya. Ia tidak pernah membaca atau menulis baris.
+`heym_chat` dapat memeriksa tabel dan baris Anda, membuat tabel, menambah atau menghapus kolom, serta menyisipkan, memperbarui, atau menghapus baris. Berikan nama tabel, UUID, atau tautan DataTable, misalnya: „Tambahkan dua kolom string, nama depan dan nama belakang, ke https://heym.example/?tab=datatable/<table-id>”. Ini mengubah tabel secara langsung dan mempertahankan kolom serta nilai yang ada saat menambahkan kolom baru.
+
+`heym_chat` dapat memeriksa tabel dan baris Anda, membuat tabel, menambah atau menghapus kolom, serta menyisipkan, memperbarui, atau menghapus baris. Berikan nama tabel, UUID, atau tautan DataTable, misalnya: „Tambahkan dua kolom string, nama depan dan nama belakang, ke https://heym.example/?tab=datatable/<table-id>”. Ini mengubah tabel secara langsung dan mempertahankan kolom serta nilai yang ada saat menambahkan kolom baru.
+
+Operasi tulis memerlukan kepemilikan atau akses **tulis** melalui pembagian langsung atau tim. Akses hanya-baca memungkinkan inspeksi. Penulisan baris menerapkan pemeriksaan tipe, nilai default, keharusan, dan keunikan dari tab DataTable; impor parsial melaporkan baris yang ditolak. Menghapus kolom akan menghapus nilainya dari setiap baris. Seperti pada tab DataTable, penghapusan kolom dan pengosongan semua baris memerlukan konfirmasi terlebih dahulu; balas dengan `conversation_id` yang sama untuk mengonfirmasi. Menghapus baris yang dipilih tidak memerlukan konfirmasi tambahan.
+
 
 ### Credentials
 
@@ -121,6 +131,14 @@ Node LLM dan Agent dalam workflow yang dibangun `heym_chat` berjalan pada creden
 Setiap panggilan ditulis ke riwayat [Tab Chat](./chat-tab.md) Anda sebagai percakapan normal, ditandai dengan ikon plug di daftar percakapan. Pesan, tool card, dan jeda klarifikasi terlihat persis seperti percakapan yang Anda mulai sendiri, dan Anda dapat membuka thread tersebut serta terus berbicara di browser. Setiap hasil mengembalikan `conversation_id`-nya sehingga klien MCP dapat melanjutkan thread yang sama alih-alih membuka thread baru pada setiap panggilan.
 
 Saat asisten memerlukan klarifikasi, ia berhenti sejenak dan memberitahukannya; balas dengan jawabannya menggunakan `conversation_id` yang sama.
+### Aktifkan A2A
+
+Saat Agen Heym aktif, kartu menampilkan kotak centang **Aktifkan A2A**. Centang kotak ini dan agen lain dapat mengirim tugas ke Agen Heym melalui protokol Agent2Agent (A2A 1.0). Kartu kemudian mencantumkan URL **Agent Card** dan **JSON-RPC endpoint**, masing-masing dengan tombol salin, serta perintah `curl` untuk mengambil kartu. A2A menggunakan kunci dan info masuk OAuth yang sama dengan MCP. Menonaktifkan agen juga menonaktifkan A2A. Lihat [A2A](../reference/a2a.md) untuk metode, status tugas, dan contoh.
+
+### Kemajuan
+
+Panggilan `heym_chat` yang berlangsung lama melaporkan aktivitas agen sebagai kemajuan MCP (`notifications/progress`), dengan kata-kata yang ditampilkan pada tab Chat, misalnya `Menguji workflow · percobaan 2/5`. Klien yang menyetel ulang batas waktu saat pemberitahuan kemajuan akan terus menunggu saat agen bekerja.
+
 ## Named MCP Server
 
 Server bernama memungkinkan Anda memisahkan Workflow ke dalam endpoint MCP yang terisolasi. Setiap server memiliki URL dan API key tersendiri, sehingga klien AI, tim, atau kasus penggunaan yang berbeda dapat terhubung tepat ke Workflow yang mereka butuhkan.
@@ -140,7 +158,9 @@ Setiap kartu server menampilkan:
 | **SSE Endpoint** | URL unik: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Key independen, ditampilkan satu kali saat dibuat atau dibuat ulang. Salin segera; key disimpan dalam bentuk hash dan tidak dapat ditampilkan kembali di kemudian hari |
 | **How to connect** | **Copy JSON** menyalin konfigurasi MCP yang siap ditempel; **Add to Cursor** memasangnya dengan satu klik |
-| **Heym Capabilities** | Aktifkan/nonaktifkan tool `heym_chat` untuk server ini dan pilih credential serta model-nya |
+| **Heym Capabilities** | Aktifkan/nonaktifkan Agen Heym (`heym_chat`) untuk server ini dan pilih credential serta modelnya |
+| **Aktifkan A2A** | Sakelar A2A milik server ini, dengan Agent Card sendiri di `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Aktifkan A2A** | Sakelar A2A milik server ini, dengan Agent Card sendiri di `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Aktifkan/nonaktifkan Workflow mana saja yang diekspos oleh server ini |
 
 ### Penetapan Workflow

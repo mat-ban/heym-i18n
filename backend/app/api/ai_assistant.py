@@ -6,7 +6,7 @@ import logging
 import re
 import time
 import uuid
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from threading import Event, Thread
@@ -20,8 +20,26 @@ from pydantic import BaseModel, ValidationError
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.analytics import compute_analytics_stats, upsert_workflow_analytics_snapshot
+from app.api.analytics import (
+    compute_analytics_breakdown,
+    compute_analytics_stats,
+    upsert_workflow_analytics_snapshot,
+)
 from app.api.boards import create_card as create_board_card
+from app.api.chat_dashboards import (
+    DASHBOARD_TOOL_NAMES,
+    DASHBOARD_TOOL_SCHEMAS,
+    call_dashboard_tool,
+    dashboard_tool_label,
+    summarize_dashboard_tool,
+)
+from app.api.chat_data_tables import (
+    DATA_TABLE_TOOL_NAMES,
+    DATA_TABLE_TOOL_SCHEMAS,
+    call_data_table_tool,
+    data_table_tool_label,
+    summarize_data_table_tool,
+)
 from app.api.data_tables import create_data_table as create_data_table_route
 from app.api.deps import get_current_user
 from app.api.schedules import fetch_schedule_events_for_user
@@ -130,6 +148,7 @@ from app.services.model_router import (
     build_router_for_credential,
     load_option_credential,
 )
+from app.services.node_analytics_rollup import pending_on_first_write
 from app.services.openai_client import create_guarded_openai_client, create_openai_client
 from app.services.pending_execution import persist_pending_execution
 from app.services.run_history import record_run_history
@@ -246,11 +265,12 @@ WORKFLOW_ANALYZE_SYSTEM_PROMPT = """You analyze an automation workflow and produ
 Given the workflow's nodes and edges, write Markdown with these sections, in this exact order:
 
 ## Improvement areas
-A bulleted list of concrete, actionable suggestions (reliability, error handling, missing validation, cost, clarity). Whenever the workflow handles credentials, user input, external requests, data exposure, injection-prone steps, or anything else security-relevant, include a clear **security** angle here (risks and how to mitigate them). Always cover these four checks explicitly:
+A bulleted list of concrete, actionable suggestions (reliability, error handling, missing validation, cost, clarity). Whenever the workflow handles credentials, user input, external requests, data exposure, injection-prone steps, or anything else security-relevant, include a clear **security** angle here (risks and how to mitigate them). Always cover these five checks explicitly:
 1. **Error handling** — Inspect the provided `analysisContext`. ONLY when BOTH `hasErrorHandler` is false AND `errorWorkflowConfigured` is false (the workflow has no error handling at all), call this out and recommend adding an errorHandler node and/or configuring an error workflow ("on error, run workflow"). If at least one is present (`hasErrorHandler` true OR `errorWorkflowConfigured` true), the workflow already catches errors — do NOT mention error handling at all: no suggestion to add more, and no acknowledgement.
 2. **Time saved** — ONLY when `minutesSavedPerRun` is null or zero, recommend setting an estimated "time saved per run" so the analytics time saved metric can populate. If it is already set, do NOT mention time saved at all (no acknowledgement).
 3. **Network nodes** — For any node that performs network I/O (e.g. `httpRequest` and integration/API nodes such as slack, drive, notion, etc.), recommend node-specific error handling (enable retry and/or onError "continue on error") on those specific nodes by label.
 4. **Alerts** — Inspect the provided `analysisContext`. ONLY when `hasAlertConfigured` is false (no alerts watch this workflow), recommend setting up alerts before going to prod — for example an error, duration, or cost alert. If alerts are already configured, do NOT mention alerts at all.
+5. **Evals** — Inspect the provided `analysisContext`. When `agentNodes` is not empty and `hasAgentSuite` is false, recommend adding an **Agent Suite** in Evals for those agents (name them by label) to check which tools they must and must not call, and their latency, USD cost, tokens and tool calls against a baseline, or a **Prompt Suite** to test the agent's prompt across models. When `llmNodes` is not empty, recommend a **Prompt Suite** in Evals to test those LLM nodes' prompts (by label) across models. When both lists are empty, or the only agents already have an agent suite and there are no LLM nodes, do NOT mention evals.
 
 If the workflow already looks solid, say so and suggest small refinements.
 
@@ -263,9 +283,21 @@ A numbered, step-by-step walk through the nodes in execution order, in plain lan
 Output ONLY Markdown. Do not include JSON, code fences around the whole document, or tool calls. Be concise and specific to THIS workflow."""
 
 
+def _node_labels(nodes: list, node_type: str) -> list[str]:
+    labels = []
+    for node in nodes:
+        if not isinstance(node, dict) or node.get("type") != node_type:
+            continue
+        data = node.get("data") if isinstance(node.get("data"), dict) else {}
+        label = data.get("label")
+        labels.append(label if isinstance(label, str) and label.strip() else str(node.get("id")))
+    return labels
+
+
 def _build_workflow_analysis_context(
     current_workflow: dict | None,
     has_alert_configured: bool,
+    has_agent_suite: bool = False,
 ) -> dict[str, Any]:
     """Derive the ``analysisContext`` block the analyzer prompt reasons over."""
     workflow = current_workflow or {}
@@ -276,6 +308,9 @@ def _build_workflow_analysis_context(
         "errorWorkflowConfigured": bool(workflow.get("error_workflow_id")),
         "minutesSavedPerRun": workflow.get("minutes_saved_per_run"),
         "hasAlertConfigured": has_alert_configured,
+        "agentNodes": _node_labels(nodes, "agent"),
+        "llmNodes": _node_labels(nodes, "llm"),
+        "hasAgentSuite": has_agent_suite,
     }
 
 
@@ -294,15 +329,31 @@ async def _workflow_has_alert(db: AsyncSession, user: Any, workflow_id: uuid.UUI
     return bool((result.scalar_one() or 0) > 0)
 
 
+async def _workflow_has_agent_suite(
+    db: AsyncSession, user: Any, workflow_id: uuid.UUID | None
+) -> bool:
+    """True when the user already has an agent suite on the given workflow."""
+    if workflow_id is None:
+        return False
+    from app.db.models import AgentSuite
+
+    result = await db.execute(
+        select(func.count())
+        .select_from(AgentSuite)
+        .where(AgentSuite.owner_id == user.id, AgentSuite.workflow_id == workflow_id)
+    )
+    return bool((result.scalar_one() or 0) > 0)
+
+
 MAX_DASHBOARD_CHAT_HISTORY = 25
 DASHBOARD_CHAT_TEMPERATURE = 0.1
 WORKFLOW_BUILDER_TEMPERATURE = 0.0
-WORKFLOW_ASSISTANT_SSE_HEARTBEAT_SECONDS = 10.0
-DASHBOARD_CHAT_SSE_HEARTBEAT_SECONDS = 10.0
+WORKFLOW_ASSISTANT_SSE_KEEPALIVE_SECONDS = 10.0
+DASHBOARD_CHAT_SSE_KEEPALIVE_SECONDS = 10.0
 
 
-WORKFLOW_ASSISTANT_SSE_HEARTBEAT_SECONDS = 10.0
-DASHBOARD_CHAT_SSE_HEARTBEAT_SECONDS = 10.0
+WORKFLOW_ASSISTANT_SSE_KEEPALIVE_SECONDS = 10.0
+DASHBOARD_CHAT_SSE_KEEPALIVE_SECONDS = 10.0
 EXECUTION_LOG_NODE_OUTPUT_MAX_CHARS = 2048
 EXECUTION_LOG_TOTAL_MAX_CHARS = 12_000
 
@@ -489,7 +540,8 @@ DASHBOARD_CHAT_SYSTEM_PROMPT = """You are an assistant that helps the user with 
 2. Answer questions about what is inside a workflow (e.g. "what is in the backlog?", "what do the sticky notes say?", "what tasks are in workflow X?") without running it: use list_workflows to find the workflow by name, then get_workflow_definition(workflow_id) to get its content (nodes, sticky notes, labels), and answer from that. Do not execute in these cases.
 3. Execute a workflow by ID with given inputs only when the user clearly wants to run one or when the answer cannot be given from workflow metadata or content alone (e.g. "send WhatsApp message to X saying Y", "run the birthday workflow", "when is the next birthday?").
 4. When the user only asks what workflows exist, what they do, or what inputs they need, use list_workflows and answer from that information—do not execute. Only call execute_workflow when the user explicitly wants to run something or when you need the runtime result (e.g. next birthday date) to answer.
-5. When the user asks about execution or analytics statistics (e.g. how many requests today, how many runs in the last 24 hours, error rate), use get_analytics_stats with the appropriate time_range (24h for today, 7d for last week, 30d, or all). You may pass an optional workflow_id to filter by one workflow (get id from list_workflows). Summarize the result in the user's language.
+5. When the user asks about execution or analytics statistics (e.g. how many requests today, how many runs in the last 24 hours, error rate), use get_analytics_stats with the appropriate time_range (1h, 3h or 6h for the last hours, 24h for today, 7d for last week, 30d, or all). The hour windows of the analytics tools start at the top of the hour, so 1h asked at 15:20 covers 14:00 until now: say so when the user asks for an exact number of minutes. You may pass an optional workflow_id to filter by one workflow (get id from list_workflows). Summarize the result in the user's language.
+5a. When the user asks where workflows fail, which workflow or node fails most, why workflows are slow, what takes the most time, or which workflows ran and how many distinct ones, use get_analytics_breakdown with the same time_range rules (default 7d) and an optional workflow_id. It returns the workflows that ran most (most_run_workflows), failed most (most_failed_workflows, with error_count and error_rate) and are slowest (slowest_workflows, by avg_latency_ms), and the node types (agent, httpRequest, code and so on) that take the most time (node_types_by_time, with avg_duration_ms per call and total_duration_ms), fail most (node_types_by_errors) and run most (node_types_by_calls). Explain slowness from avg_duration_ms and total_duration_ms and failures from error_count and error_rate, naming the workflows and node types. Node types are only counted for runs since node analytics were added: when note is set, say that node-level data is not available for this window yet. For the reason behind one failed run, follow up with get_workflow_run_history. For plain totals use get_analytics_stats; for what is running right now use get_active_executions.
 6. When the user asks for details of what ran or what came in (e.g. what ran, show details, list recent runs), use get_recent_executions with the appropriate time_range and optionally limit. Summarize the list (workflow name, time, status, brief output) in the user's language.
 6e. When the user asks about the runs of one specific workflow (how many times it ran, whether it failed, when it last ran, what its last status was, why a run failed), use list_workflows to find the workflow_id, then get_workflow_run_history(workflow_id) for metadata: total_runs, status_counts, first_run_at, last_run_at, last_run, avg_execution_time_ms and a page of runs. Answer from that metadata first. Only if the user wants the content of a run, or the reason for a failure, call get_workflow_run_history again with the execution_id of the relevant run (from runs or last_run) to read its inputs, outputs and per-node trace; look at nodes with status error. Use the status argument to list only failed runs, and offset when has_more is true. Do not use get_recent_executions for a question about one named workflow: it only returns the latest runs across all workflows, so the workflow may be missing.
 6a. When the user asks about scheduled cron runs, the calendar, or when workflows will run (today, this week, this month, upcoming times), use get_schedule_events with view_window day, week, or month, optional reference_date (YYYY-MM-DD), include_shared false for owned-only or true to include shared workflows, or start_iso/end_iso for a custom range. Summarize events (workflow name and time) in the user's language.
@@ -515,14 +567,16 @@ Respond in the same language the user uses. Be concise and helpful. When you run
 
 If a tool returns an error or no relevant data, do not invent an answer. Say clearly that you do not have that information (e.g. "I don't have this information"). Base your answers only on data from the tools (workflows, analytics, execution results); when you do not know something, say so.
 
-When the user asks for something you cannot do with your tools (e.g. console logs, server logs) AND no workflow matches, say clearly that you do not have access to that, then offer what you can do in a short numbered list. Always include: (1) I can show recent runs, (2) I can show what is running right now (with elapsed time and current node), (3) I can show analytics stats, (4) I can show scheduled cron times (day/week/month), (5) I can run a workflow and show its result, (6) I can list workflows and you can talk about them or ask me to run one, (7) I can list your teams, (8) I can list your data tables and their columns. End with something like: Which would you like?
+When the user asks for something you cannot do with your tools (e.g. console logs, server logs) AND no workflow matches, say clearly that you do not have access to that, then offer what you can do in a short numbered list. Always include: (1) I can show recent runs, (2) I can show what is running right now (with elapsed time and current node), (3) I can show analytics stats and where workflows fail or slow down, (4) I can show scheduled cron times (day/week/month), (5) I can run a workflow and show its result, (6) I can list workflows and you can talk about them or ask me to run one, (7) I can list your teams, (8) I can inspect your data tables, add or remove columns, and read, add, update or delete rows, (9) I can list your dashboards and the widgets on each, and add, rename, delete or tidy widgets. End with something like: Which would you like?
 
 11. When the user asks about teams (e.g. "my teams", "which teams am I in?", "who is in team X?"), use get_teams. Optionally pass team_name to filter by name.
 12. When the user asks about Heym features, nodes, expressions, workflows, or how to use the platform, use search_documentation. Call search_documentation at most 2 times per user message. Use one comprehensive query first (e.g. "canvas features", "portal"). Only call again with a different query if the first returns no relevant docs. In your response, cite the documentation with markdown links: [Document Title](/docs/category/slug). Example: [LLM Node](/docs/nodes/llm-node). When the documentation contains a video tag (e.g. `<video src="/features/showcase/..."`), include it in your response so the user can watch a demo directly in chat. Respond in the user's language.
 13. When the user asks you to create, build, generate, or set up a new workflow/automation, call create_workflow. This tool uses the Workflow AI Builder engine to generate Heym DSL and saves it. It does NOT run the workflow; the user runs it from the Run button on the workflow card. Do not run the workflow yourself unless the user explicitly asks you to. After it succeeds, do not include a separate workflow link in your prose; the chat UI shows a workflow preview card with its own Open workflow link. Do not answer with only instructions, platform alternatives, or raw workflow JSON for these requests.
 14. When the user gives feedback in the same chat about a workflow you just created (for example "make it do X", "change it like this", "add a step", "remove that", "şöyle yap", "böyle değiştir"), call edit_workflow with the workflow_id from the previous workflow link, hidden workflow context marker, or tool result. Do not create a second workflow for feedback on the existing generated workflow unless the user explicitly asks for a new separate workflow.
 15. When the user asks about alerts — what alerts exist, whether something is being monitored, which alerts are firing, or why/when an alert triggered — use list_alerts, get_alert_detail, and get_alert_events. For a "why did it fire" question always call get_alert_events and quote the actual observed value, the threshold, and the time window from the event, plus the contributing detail in its context (failing executions and error messages, per-model spend, or trigger source). Do not guess a reason and do not recompute the numbers yourself; the event stores what was true when it fired. Respond in the user's language.
-16. Heym DataTables store records inside Heym. Call list_data_tables when a workflow will save, store, log or look up records and the user names no other store, or when the user mentions a data table, asks to create one, or asks which tables or columns they have. Never read or write rows yourself; workflows do that. When the user names a table that fits, use it. Otherwise emit one single heym-clarify question with up to five fitting tables as table options and one createTable option (see the Clarification Protocol), with allowOther, then stop. An answer `Created data table "<name>" (id <id>)` means the table exists: never create it again. Call create_data_table when an answer picks your createTable option without saying Created (a typed answer), or when the user asks for a table and names its columns; when the user asks for a table without naming its columns, emit the same question with only the createTable option. Never change an existing table's columns: when a table lacks a column, say which one and offer a new table; columns are added in the DataTable tab. Pass the chosen tables to create_workflow and edit_workflow in data_table_choices, with an empty table_id when the user wants to pick the table later. If a tool returns requires_data_table, ask the same way, then call it again. If a result lists data_table_warnings, tell the user which columns the table lacks and that columns are added in the DataTable tab."""
+16. Heym DataTables store records inside Heym. Call list_data_tables when a workflow will save, store, log or look up records and the user names no other store, or when the user mentions a data table, asks to create one, or asks which tables or columns they have. When the user names a table that fits, use it. Otherwise emit one single heym-clarify question with up to five fitting tables as table options and one createTable option (see the Clarification Protocol), with allowOther, then stop. An answer `Created data table "<name>" (id <id>)` means the table exists: never create it again. Call create_data_table when an answer picks your createTable option without saying Created (a typed answer), or when the user asks for a table and names its columns; when the user asks for a table without naming its columns, emit the same question with only the createTable option. Pass the chosen tables to create_workflow and edit_workflow in data_table_choices, with an empty table_id when the user wants to pick the table later. If a tool returns requires_data_table, ask the same way, then call it again. If a result lists data_table_warnings, name the missing columns and offer to add them with add_data_table_columns.
+16a. Direct DataTable actions are real actions, not advice or workflow builds. When the user asks to inspect rows, add or remove columns, or insert, update, delete or clear rows, use the DataTable tools directly. Do not build a workflow for a one-off table edit and do not send the user to the DataTable tab. A table UUID or a link such as https://heym.example/?tab=datatable/<uuid> identifies the table; inspect it with get_data_table. For a name, resolve it with list_data_tables; ask only if ambiguous. Owner and write access (direct or team) allow column and row changes; read access permits inspection only. Preserve existing columns and row values when adding columns. Use string for columns whose type the user did not specify. Use list_data_table_rows to find actual row UUIDs before changing or deleting selected rows, paginating when has_more is true. Report validation errors and partial imports accurately; never claim a failed action succeeded. Removing columns and clearing all rows follow the DataTable tab's confirmation: first call without confirmed, show the returned warning (including the affected rows and irreversible value loss), emit a heym-clarify confirmation question and stop. Only after the user confirms in a follow-up may you call the same action with confirmed=true. Single-row deletion on request needs no extra confirmation. The workflow DSL catalog contains no row values; its builder-only restrictions do not prohibit these direct DataTable tools.
+17. Dashboards hold widgets, and Heym Work shows each dashboard as a page. When the user asks which dashboards or pages exist, what is on one, or which dashboard or page a widget or workflow is on, call list_dashboards (dashboard_id to read one, workflow_id to find where a workflow is placed) and answer from it, linking each dashboard's url. When the user asks for a new widget, chart or metric on a dashboard or page, resolve the dashboard with list_dashboards and call add_dashboard_widget without workflow_id, with a short title and the chart_type: it puts an empty widget on the dashboard. Then follow its next_step: write the widget's graph with save_workflow and the widget's workflow_id, test it with run_workflow_test and finish. Never build a separate workflow to copy onto a dashboard. When the user asks to put, add or place an existing workflow on a dashboard or page, resolve the workflow with list_workflows and call add_dashboard_widget with its workflow_id. Call add_dashboard_widget once per widget. If the user names no dashboard and several have permission owner or write, emit one heym-clarify question of type single whose options are those dashboard names, then stop and wait. A dashboard with permission read cannot take widgets: say so. After adding, say whether it became a chart widget or a run widget and link the dashboard url. Changes to a chart widget go to the widget's workflow_id from the result, never to the workflow it was copied from. To rename a widget, call rename_dashboard_widget with its id from list_dashboards. Call delete_dashboard_widget only when the user asked to delete or remove that widget; if their words match more than one widget, ask which with one heym-clarify question first. Deleting a chart widget deletes its workflow too. When the user asks to tidy, arrange or clean up a dashboard or page, also when they ask in the same message as adding widgets, call tidy_dashboard once the widgets are added, with per_row when they name how many widgets go in a row; another call gives another arrangement. tidy_dashboard arranges the dashboard in Heym. A Heym Work page keeps its own arrangement, which the Tidy up button on that page changes: say so when the user means a page in Heym Work."""
 
 DASHBOARD_CHAT_SYSTEM_PROMPT = DASHBOARD_CHAT_SYSTEM_PROMPT + CLARIFY_PROTOCOL_PROMPT
 
@@ -562,6 +616,18 @@ _DATA_TABLE_CHOICES_SCHEMA: dict[str, Any] = {
         },
         "required": ["table_id"],
     },
+}
+
+# The hour windows start on the hour, like the Analytics tab.
+CHAT_TIME_RANGES = ["1h", "3h", "6h", "24h", "7d", "30d", "all"]
+RECENT_EXECUTIONS_SINCE_HOURS: dict[str, int | None] = {
+    "1h": 1,
+    "3h": 3,
+    "6h": 6,
+    "24h": 24,
+    "7d": 168,
+    "30d": 720,
+    "all": None,
 }
 
 DASHBOARD_CHAT_TOOLS = [
@@ -729,7 +795,7 @@ DASHBOARD_CHAT_TOOLS = [
         "type": "function",
         "function": {
             "name": "get_analytics_stats",
-            "description": "Get execution/analytics statistics (total runs, success/error counts and rates, latencies). Use when the user asks about execution stats (e.g. 'how many requests today?', 'how many runs in the last 24 hours?', 'error rate?'). For 'today' use time_range 24h. Optional workflow_id to filter by one workflow (get id from list_workflows).",
+            "description": "Get execution/analytics statistics (total runs, success/error counts and rates, latencies). Use when the user asks about execution stats (e.g. 'how many requests today?', 'how many runs in the last 24 hours?', 'error rate?'). For 'today' use time_range 24h, for the last hour or the last few hours use 1h, 3h or 6h. Optional workflow_id to filter by one workflow (get id from list_workflows).",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -739,8 +805,30 @@ DASHBOARD_CHAT_TOOLS = [
                     },
                     "time_range": {
                         "type": "string",
-                        "description": "Time range: 24h (last 24 hours / today), 7d, 30d, or all",
-                        "enum": ["24h", "7d", "30d", "all"],
+                        "description": "Time range: 1h, 3h or 6h (the last hours), 24h (last 24 hours / today), 7d, 30d, or all",
+                        "enum": list(CHAT_TIME_RANGES),
+                    },
+                },
+                "required": [],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_analytics_breakdown",
+            "description": "Explain where workflows fail and why they are slow: the workflows that ran most, failed most and are slowest, and the node types (agent, httpRequest, code, ...) with the most time (average per call and total), errors and calls. Use for 'where do my workflows fail?', 'why are workflows slow?', 'which node takes the longest?', 'which workflows ran today?'. Node types cover runs since node analytics were added. Optional workflow_id to focus on one workflow (get id from list_workflows).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "workflow_id": {
+                        "type": "string",
+                        "description": "Optional UUID of the workflow to break down; omit for all workflows",
+                    },
+                    "time_range": {
+                        "type": "string",
+                        "description": "Time range: 1h, 3h or 6h (the last hours), 24h (last 24 hours / today), 7d (default), 30d, or all",
+                        "enum": list(CHAT_TIME_RANGES),
                     },
                 },
                 "required": [],
@@ -757,8 +845,8 @@ DASHBOARD_CHAT_TOOLS = [
                 "properties": {
                     "time_range": {
                         "type": "string",
-                        "description": "Time window: 24h, 7d, 30d, or all",
-                        "enum": ["24h", "7d", "30d", "all"],
+                        "description": "Time window: 1h, 3h, 6h, 24h, 7d, 30d, or all",
+                        "enum": list(CHAT_TIME_RANGES),
                     },
                     "limit": {
                         "type": "integer",
@@ -787,8 +875,8 @@ DASHBOARD_CHAT_TOOLS = [
                     },
                     "time_range": {
                         "type": "string",
-                        "description": "Window for metadata: 24h, 7d, 30d, or all. Default all.",
-                        "enum": ["24h", "7d", "30d", "all"],
+                        "description": "Window for metadata: 1h, 3h, 6h, 24h, 7d, 30d, or all. Default all.",
+                        "enum": list(CHAT_TIME_RANGES),
                     },
                     "status": {
                         "type": "string",
@@ -1091,6 +1179,8 @@ DASHBOARD_CHAT_TOOLS = [
             },
         },
     },
+    *DASHBOARD_TOOL_SCHEMAS,
+    *DATA_TABLE_TOOL_SCHEMAS,
 ]
 
 
@@ -2595,6 +2685,7 @@ async def run_execute_workflow_tool(
                 status=execution_result.status,
                 execution_time_ms=execution_result.execution_time_ms,
                 trigger_source=trigger_source,
+                node_analytics_pending=pending_on_first_write(execution_result),
             )
             db.add(history_entry)
             if execution_result.allow_downstream_pending:
@@ -3429,6 +3520,16 @@ def _summarize_tool_result(tool_name: str, result_json: str) -> str:
         total = data.get("total_executions", 0) or 0
         rate = data.get("success_rate", 0) or 0
         return f"Analytics: {total} executions, {rate:.0f}% success"
+    if tool_name == "get_analytics_breakdown":
+        if not isinstance(data, dict):
+            return str(data)[:200]
+        ran = data.get("workflows_run", 0) or 0
+        failed = len(data.get("most_failed_workflows") or [])
+        summary = f"Breakdown: {ran} workflow(s) ran, {failed} with errors"
+        by_time = data.get("node_types_by_time") or []
+        if by_time and isinstance(by_time[0], dict) and by_time[0].get("node_type"):
+            summary += f", most time in {by_time[0]['node_type']} nodes"
+        return summary
     if tool_name == "get_recent_executions":
         if isinstance(data, list):
             return f"{len(data)} recent execution(s) listed"
@@ -3514,6 +3615,10 @@ def _summarize_tool_result(tool_name: str, result_json: str) -> str:
             column_count = len(table.get("columns") or [])
             return f"Created data table {table.get('name')!r} with {column_count} column(s)"
         return result_json[:200] + ("..." if len(result_json) > 200 else "")
+    if tool_name in DASHBOARD_TOOL_NAMES:
+        return summarize_dashboard_tool(tool_name, data)
+    if tool_name in DATA_TABLE_TOOL_NAMES:
+        return summarize_data_table_tool(tool_name, data)
     if tool_name == "get_board_tasks":
         if isinstance(data, dict) and "error" in data:
             return f"Error: {str(data.get('error'))[:150]}"
@@ -4716,16 +4821,21 @@ async def stream_dashboard_chat(
                         run_steps[-1]["execution_time_ms"],
                         status=_chat_tool_lifecycle_status(name, result),
                     )
-                elif name == "get_analytics_stats":
+                elif name in ("get_analytics_stats", "get_analytics_breakdown"):
+                    is_breakdown = name == "get_analytics_breakdown"
                     workflow_id_str = args.get("workflow_id") or ""
-                    time_range = args.get("time_range") or "24h"
+                    time_range = args.get("time_range") or ("7d" if is_breakdown else "24h")
                     wid: uuid.UUID | None = None
                     if workflow_id_str:
                         try:
                             wid = uuid.UUID(workflow_id_str)
                         except (ValueError, TypeError):
                             wid = None
-                    step_label = "Fetching analytics..."
+                    step_label = (
+                        "Finding where workflows fail and slow down..."
+                        if is_breakdown
+                        else "Fetching analytics..."
+                    )
                     yield (
                         "data: "
                         + json.dumps(
@@ -4740,8 +4850,12 @@ async def stream_dashboard_chat(
                         + "\n\n"
                     )
                     step_start = time.time()
-                    stats = await compute_analytics_stats(db, user_id, wid, time_range)
-                    result = json.dumps(stats.model_dump(), default=str)
+                    if is_breakdown:
+                        breakdown = await compute_analytics_breakdown(db, user_id, wid, time_range)
+                        result = json.dumps(asdict(breakdown), default=str)
+                    else:
+                        stats = await compute_analytics_stats(db, user_id, wid, time_range)
+                        result = json.dumps(stats.model_dump(), default=str)
                     step_ms = round((time.time() - step_start) * 1000, 2)
                     run_steps.append(
                         {
@@ -4809,8 +4923,7 @@ async def stream_dashboard_chat(
                     limit = 30
                     if isinstance(limit_raw, int) and 1 <= limit_raw <= 50:
                         limit = limit_raw
-                    since_hours_map = {"24h": 24, "7d": 168, "30d": 720, "all": None}
-                    since_hours = since_hours_map.get(time_range, 24)
+                    since_hours = RECENT_EXECUTIONS_SINCE_HOURS.get(time_range, 24)
                     step_label = "Listing recent executions..."
                     yield (
                         "data: "
@@ -5363,6 +5476,83 @@ async def stream_dashboard_chat(
                         run_steps[-1]["execution_time_ms"],
                         status=_chat_tool_lifecycle_status(name, result),
                     )
+                elif name in DATA_TABLE_TOOL_NAMES:
+                    step_label = data_table_tool_label(name)
+                    yield (
+                        "data: "
+                        + json.dumps(
+                            {
+                                "type": "tool_start",
+                                "id": tc.id,
+                                "name": name,
+                                "label": step_label,
+                                "args": args,
+                            }
+                        )
+                        + "\n\n"
+                    )
+                    step_start = time.time()
+                    result = json.dumps(await call_data_table_tool(db, user, name, args))
+                    step_ms = round((time.time() - step_start) * 1000, 2)
+                    run_steps.append(
+                        {
+                            "label": step_label,
+                            "tool": name,
+                            "request": args,
+                            "response_summary": _summarize_tool_result(name, result),
+                            "execution_time_ms": step_ms,
+                        }
+                    )
+                    yield _tool_end_yield(
+                        tc.id,
+                        run_steps[-1]["response_summary"],
+                        step_ms,
+                        status=_chat_tool_lifecycle_status(name, result),
+                    )
+                elif name in DASHBOARD_TOOL_NAMES:
+                    step_label = dashboard_tool_label(name)
+                    yield (
+                        "data: "
+                        + json.dumps(
+                            {
+                                "type": "tool_start",
+                                "id": tc.id,
+                                "name": name,
+                                "label": step_label,
+                                "args": args,
+                            }
+                        )
+                        + "\n\n"
+                    )
+                    step_start = time.time()
+                    result = json.dumps(
+                        await call_dashboard_tool(
+                            db,
+                            user,
+                            name,
+                            args,
+                            public_base_url,
+                            can_build=build is not None
+                            and not build.request.skill_only
+                            and build.request.target_workflow_id is None,
+                        )
+                    )
+                    step_ms = round((time.time() - step_start) * 1000, 2)
+                    run_steps.append(
+                        {
+                            "label": step_label,
+                            "tool": name,
+                            "request": args,
+                            "response_summary": _summarize_tool_result(name, result),
+                            "execution_time_ms": step_ms,
+                        }
+                    )
+                    yield _tool_end_yield(
+                        tc.id,
+                        run_steps[-1]["response_summary"],
+                        run_steps[-1]["execution_time_ms"],
+                        status=_chat_tool_lifecycle_status(name, result),
+                    )
                 else:
                     step_label = f"Running {name}..."
                     yield (
@@ -5543,10 +5733,10 @@ async def stream_llm_response(
         yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
 
 
-async def _stream_sse_with_heartbeat(
+async def _stream_sse_with_keepalive(
     source: AsyncGenerator[str, None],
     *,
-    heartbeat_seconds: float,
+    keepalive_seconds: float,
 ) -> AsyncGenerator[str, None]:
     """Forward SSE chunks from a sync-backed generator while sending idle keepalives."""
     queue: asyncio.Queue[str | Exception | None] = asyncio.Queue()
@@ -5568,9 +5758,9 @@ async def _stream_sse_with_heartbeat(
 
     while True:
         try:
-            item = await asyncio.wait_for(queue.get(), timeout=heartbeat_seconds)
+            item = await asyncio.wait_for(queue.get(), timeout=keepalive_seconds)
         except TimeoutError:
-            yield ": heartbeat\n\n"
+            yield ": keepalive\n\n"
             continue
 
         if item is None:
@@ -5612,7 +5802,9 @@ async def analyze_workflow_stream(
         system_prompt += f"\n\nWorkflow:\n```json\n{wf_summary}\n```"
         has_alert_configured = await _workflow_has_alert(db, current_user, workflow_id)
         analysis_context = _build_workflow_analysis_context(
-            request.current_workflow, has_alert_configured
+            request.current_workflow,
+            has_alert_configured,
+            await _workflow_has_agent_suite(db, current_user, workflow_id),
         )
         system_prompt += (
             "\n\nanalysisContext:\n```json\n"
@@ -5649,9 +5841,9 @@ async def analyze_workflow_stream(
     )
 
     return StreamingResponse(
-        _stream_sse_with_heartbeat(
+        _stream_sse_with_keepalive(
             assistant_stream,
-            heartbeat_seconds=WORKFLOW_ASSISTANT_SSE_HEARTBEAT_SECONDS,
+            keepalive_seconds=WORKFLOW_ASSISTANT_SSE_KEEPALIVE_SECONDS,
         ),
         media_type="text/event-stream",
         headers={
@@ -5724,7 +5916,7 @@ def _yolo_assistant_response(
             turn,
             is_disconnected=http_request.is_disconnected,
             cancel_event=cancel_event,
-            heartbeat_seconds=WORKFLOW_ASSISTANT_SSE_HEARTBEAT_SECONDS,
+            keepalive_seconds=WORKFLOW_ASSISTANT_SSE_KEEPALIVE_SECONDS,
         ),
         media_type="text/event-stream",
         headers={
@@ -5891,9 +6083,9 @@ async def workflow_assistant_stream(
     )
 
     return StreamingResponse(
-        _stream_sse_with_heartbeat(
+        _stream_sse_with_keepalive(
             assistant_stream,
-            heartbeat_seconds=WORKFLOW_ASSISTANT_SSE_HEARTBEAT_SECONDS,
+            keepalive_seconds=WORKFLOW_ASSISTANT_SSE_KEEPALIVE_SECONDS,
         ),
         media_type="text/event-stream",
         headers={
@@ -6034,7 +6226,7 @@ async def dashboard_chat_stream(
             while True:
                 try:
                     item = await asyncio.wait_for(
-                        queue.get(), timeout=DASHBOARD_CHAT_SSE_HEARTBEAT_SECONDS
+                        queue.get(), timeout=DASHBOARD_CHAT_SSE_KEEPALIVE_SECONDS
                     )
                 except TimeoutError:
                     if cancel_event.is_set():

@@ -23,6 +23,8 @@ Widget je jedan grafikon na mreži. Podržani tipovi grafikona:
 - **Gauge** (jedna vrijednost u odnosu na min–max raspon, npr. postotak)
 - **Scatter** (X/Y točke za korelacijske grafikone)
 - **Proportion** (jedna traka podijeljena na dijelove s postotnom legendom, npr. raspodjela jezika)
+- **Gantt** (datumi zadataka, dovršenost i ovisnosti)
+- **Entity relationships (DB)** (tablice, polja, PK/FK ključevi i veze)
 - **Bar gauge** (jedan horizontalni mjerač po redu s crvenom→zelenom gradijentom i vrijednošću, npr. slobodni prostor na disku)
 - **Text** (markdown poruka, npr. statusna napomena poput "Posljednje izvršavanje u 19:47"; podržava [interaktivne potvrdne okvire](../nodes/chart-output-node.md#interactive-task-lists) kada je markdown statičan, i [izričite numerirane popise](../nodes/chart-output-node.md#numbered-lists) za prilagođeno ili silazno numeriranje)
 - **HITL** (vaši neodgovoreni ljudski pregledi. Naslov prikazuje `1/n pending`. Ime workflow-a otvara tu izvedbu na platnu. **Odobri**, **Zatraži promjene** i **Odbij** rješavaju to. Ikona povijesti pored naslova widgeta otvara tu izvedbu u dijalogu povijesti na ovoj stranici. Widget ne koristi uzvodne redove, a svaka osoba vidi svoju vlastitu čekajuću listu. Umjesto toga može prikazati provjere jednog Workflowa, za svakoga tko može otvoriti taj Workflow; pogledajte [HITL widgeti](#hitl-widgeti))
@@ -96,6 +98,18 @@ API widgeta također može stvoriti **karticu brojača** bez AI-ja: widget `text
 
 Koristite gumb **Fino podešavanje s AI** widgeta za reviziju postojećeg widgeta s novom instrukcijom. Svako AI fino podešavanje snima prethodni workflow u **Povijesti uređivanja** widgeta, tako da možete pregledati ili vratiti promjene iz uređivača workflow-a.
 
+## Iz Chat i MCP
+
+[Chat](./chat-tab.md) i MCP klijenti putem alata [`heym_chat`](./mcp-tab.md) mogu čitati vaše nadzorne ploče, dodavati widgete na njih, preimenovati ih ili brisati te urediti izgled nadzorne ploče. Heym Work prikazuje svaku nadzornu ploču kao stranicu, pa isti odgovori pokrivaju i njezine stranice.
+
+- **Koje nadzorne ploče postoje i što je na njima.** Pitajte "koje nadzorne ploče imam?", "što se nalazi na ploči Prodaja?" ili "na kojoj se ploči nalazi workflow prihoda?". Chat navodi vaše vlastite nadzorne ploče i one podijeljene s vama, s vašom razinom pristupa i poveznicom na svaku, te svaki widget na njima: naslov, vrstu grafikona i workflow iza njega. [HITL widget](#hitl-widgets) filtriran prema workflowu koji ne možete otvoriti ostaje skriven, baš kao i na samoj nadzornoj ploči.
+- **Novi widget.** Zatražite "dodaj grafikon otvorenih slučajeva po statusu na ploču Prodaja". Chat prvo postavlja prazan widget na nadzornu ploču, zatim piše vlastiti workflow widgeta, pokreće testne vožnje i ispravlja pogreške dok izvođenje ne uspije, na isti način na koji [gradi workflowe](./chat-tab.md#izrada-workflowa). Ne ostaje nikakav zaseban workflow i svako spremanje pojavljuje se u Edit History widgeta. Naslov i vrsta grafikona widgeta prate ono što Chat spremi.
+- **Postojeći workflow.** Zatražite "postavi workflow prihoda na ploču Prodaja". Workflow koji završava čvorom Chart Output postaje widget grafikona s vlastitom kopijom workflowa, tako da kasnije promjene na widgetu nikada ne utječu na original. Workflow s čvorom trigger ili input ne može postati widget grafikona. Bilo koji drugi workflow postaje [widget za pokretanje](#run-widgets), koji također zahtijeva workflow koji vlasnik nadzorne ploče može pokrenuti.
+- **Preimenovanje ili brisanje widgeta.** Zatražite "preimenuj widget Prihodi u Prodaja" ili "izbriši widget Otvoreni slučajevi". Workflow widgeta grafikona također preuzima novi naziv; workflow widgeta za pokretanje zadržava svoj. Brisanje widgeta grafikona briše i njegov workflow, baš kao što to čini gumb za brisanje widgeta; workflow widgeta za pokretanje ostaje. Chat briše samo widget koji ste izričito zatražili i prvo pita za pojašnjenje ako vaše riječi odgovaraju nekolicini.
+- **Uređivanje.** Zatražite "uredi ploču Prodaja" ili "dodaj ova tri widgeta i uredi". Chat raspoređuje vidljive widgete prema njihovom redoslijedu, baš kao što to čini gumb **Uredi**: nasumični redovi od dva ili tri, tako da ponovni upit daje drugačiji raspored. Zatražite određeni broj po redu ("tri po redu") kako biste dobili redove te veličine. Time se nadzorna ploča uređuje u Heym-u; Heym Work zadržava vlastiti raspored stranice, koji mijenja vlastiti gumb **Uredi** na stranici.
+
+Novi widgeti idu ispod postojećih widgeta nadzorne ploče i, kao i svaki widget, izvode se u kontekstu vlasnika nadzorne ploče. Dodavanje, preimenovanje, brisanje i uređivanje zahtijevaju pristup za pisanje na nadzornoj ploči. Izrada novog widgeta zahtijeva chat koji može graditi workflowe: karticu Chat, Heym Work Chat za urednike i `heym_chat`.
+
 ## Uređivanje izgleda
 
 Prebacite se na **Uredi** kako biste ušli u način uređivanja, gdje možete povlačiti widgete i mijenjati njihovu veličinu na mreži od 12 kolona. Promjene izgleda se automatski spremaju. Naslovi widgeta su uređivi izravno iz zaglavlja widgeta.
@@ -127,3 +141,7 @@ Uklanjanje dijeljenja ili smanjenje s pisanja na čitanje odmah stupa na snagu.
 
 - [Chart Output node](../nodes/chart-output-node.md)
 - [Analytics tab](analytics-tab.md) — ugrađene metrike izvršavanja (različite od korisnički izgrađenih nadzornih ploča)
+
+## Rasporedi i dijagrami baza podataka
+
+Odaberite **Gantt** u Dodaj widget za prikaz zadataka tijekom vremena s vezama dovršenosti i ovisnosti, ili **Entity relationships (DB)** za mapiranje tablica, polja i njihovih relacija. Obje vrste koriste [čvor Chart Output](../nodes/chart-output-node.md#gantt-schedules) i također su dostupne na Heym Work stranicama. Kada Work predlaže widgete za raspored ili shemu baze podataka, iscrtava preglede na temelju predloženih zadataka ili entiteta.

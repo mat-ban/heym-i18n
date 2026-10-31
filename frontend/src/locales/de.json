@@ -83,7 +83,8 @@
     "run": "Ausführen",
     "dropFileOrClick": "Datei hier ablegen oder klicken, um eine auszuwählen",
     "removeFile": "Datei entfernen",
-    "chooseFileFor": "Datei für {label} auswählen"
+    "chooseFileFor": "Datei für {label} auswählen",
+    "new": "Neu"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Keine: Jedes Modell bewertet sich selbst",
     "removeJudge": "Judge entfernen",
     "judgeModel": "Judge-Modell",
-    "enterJudgeModel": "Geben Sie das Judge-Modell für diese Bewertung ein."
+    "enterJudgeModel": "Geben Sie das Judge-Modell für diese Bewertung ein.",
+    "promptSuite": "Prompt-Suite",
+    "promptSuiteDesc": "Testen Sie einen System-Prompt über mehrere Modelle hinweg",
+    "agentSuite": "Agent-Suite",
+    "agentSuiteDesc": "Prüfen Sie reale Agent-Läufe: Tools, Latenz, Kosten",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Suiten suchen...",
+    "loadingSuite": "Suite wird geladen...",
+    "couldNotLoadSuite": "Diese Suite konnte nicht geladen werden."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "KI fragen",
     "askAiTitle": "Den Chat-Assistenten zu diesem Lauf befragen",
     "noNodeSpans": "Für diesen Lauf wurden keine Knoten-Spans aufgezeichnet.",
-    "queuedProgress": "In Warteschlange {position}/{size}"
+    "queuedProgress": "In Warteschlange {position}/{size}",
+    "clickToSelectRun": "Klicken, um diesen Lauf auszuwählen",
+    "doubleClickOrOpenNewTab": "Doppelklick bringt diesen Lauf auf das Canvas, Strg/Cmd+Klick öffnet ihn in einem neuen Tab"
   },
   "portal": {
     "loadingPortal": "Portal wird geladen...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP-Server",
-    "subtitle": "Stellen Sie Ihre Workflows als MCP-Tools für KI-Assistenten bereit",
+    "subtitle": "Veröffentlichen Sie Ihre Workflows als MCP-Tools und den Heym Agent über MCP und A2A",
     "connection": "MCP-Verbindung",
     "connectionSubtitle": "Verbinden Sie Ihren KI-Assistenten über das MCP-Protokoll mit Ihren Workflows.",
     "apiKeyTab": "API-Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Klicken Sie unter Benutzerdefinierte Apps auf Benutzerdefinierte App hinzufügen",
     "geminiStep3": "Fügen Sie die obige MCP-Server-URL ein und lassen Sie Erweiterte Funktionen geschlossen; Gemini registriert sich automatisch",
     "geminiStep4": "Klicken Sie auf Weiter und autorisieren Sie sich mit Ihren Heym-Anmeldedaten",
-    "geminiInfo": "Gemini verwendet OAuth für eine sichere Authentifizierung. Ihre Heym-Anmeldedaten werden zur Autorisierung des Zugriffs verwendet und niemals an Gemini weitergegeben. Nach der Verbindung funktioniert Heym auch in der mobilen Gemini-App."
+    "geminiInfo": "Gemini verwendet OAuth für eine sichere Authentifizierung. Ihre Heym-Anmeldedaten werden zur Autorisierung des Zugriffs verwendet und niemals an Gemini weitergegeben. Nach der Verbindung funktioniert Heym auch in der mobilen Gemini-App.",
+    "agentReach": {
+      "off": "Aus: MCP- und A2A-Clients können den Heym Agent nicht erreichen",
+      "unconfigured": "Wählen Sie Zugangsdaten und ein Modell, damit der Heym Agent ausgeführt werden kann",
+      "mcpA2a": "Über MCP und A2A erreichbar",
+      "mcpOnly": "Als heym_chat über MCP erreichbar"
+    },
+    "a2aEnabledOnServer": "A2A aktiviert auf \"{name}\"",
+    "a2aEnabled": "A2A aktiviert",
+    "a2aDisabledOnServer": "A2A deaktiviert auf \"{name}\"",
+    "a2aDisabled": "A2A deaktiviert",
+    "agentAndA2aDisabledOnServer": "Heym Agent und A2A deaktiviert auf \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent und A2A deaktiviert",
+    "a2a": {
+      "enable": "A2A aktivieren",
+      "description": "Andere Agents können dem Heym Agent Aufgaben über das Agent2Agent-Protokoll (A2A 1.0) senden. Die Authentifizierung erfolgt mit dem Schlüssel dieses Servers im X-MCP-Key-Header oder per Heym-OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC Endpoint",
+      "checkCardLive": "Prüfen Sie, ob die Card aktiv ist:",
+      "copyLabel": "{label} kopieren"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analyse-Dashboard",
@@ -2087,6 +2119,25 @@
       "errors": "Fehler",
       "avgLatencyMs": "Ø Latenz (ms)",
       "latencyTitle": "Durchschnittliche Latenz im Zeitverlauf"
+    },
+    "last1Hour": "Letzte Stunde",
+    "last3Hours": "Letzte 3 Stunden",
+    "last6Hours": "Letzte 6 Stunden",
+    "nodeTypes": "Knotentypen",
+    "nodeChart": {
+      "emptyMessage": "Noch keine Knotendaten für diesen Zeitraum. Knotenanalysen werden für Ausführungen nach diesem Update erfasst.",
+      "duration": {
+        "title": "Zeitintensivste Knotentypen",
+        "subtitle": "Durchschnittliche Dauer pro Aufruf"
+      },
+      "errors": {
+        "title": "Fehleranfälligste Knotentypen",
+        "subtitle": "Fehler im Zeitverlauf"
+      },
+      "calls": {
+        "title": "Meistaufgerufene Knotentypen",
+        "subtitle": "Aufrufe im Zeitverlauf"
+      }
     }
   },
   "dashboards": {

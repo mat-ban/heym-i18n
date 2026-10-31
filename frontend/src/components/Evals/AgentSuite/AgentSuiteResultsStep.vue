@@ -1,0 +1,287 @@
+<script setup lang="ts">
+import { RefreshCw, Trash2 } from "lucide-vue-next";
+import { computed, ref, watch } from "vue";
+
+import AgentSuiteMetricTile from "@/components/Evals/AgentSuite/AgentSuiteMetricTile.vue";
+import AgentSuiteRunsTable from "@/components/Evals/AgentSuite/AgentSuiteRunsTable.vue";
+import {
+  RUN_LIMIT_OPTIONS,
+  apiErrorText,
+  formatCount,
+  formatMs,
+  formatRunTime,
+  formatUsd,
+} from "@/components/Evals/AgentSuite/agentSuiteFormat";
+import Button from "@/components/ui/Button.vue";
+import Select from "@/components/ui/Select.vue";
+import { evalsApi } from "@/services/api";
+import type {
+  AgentDeltaMetric,
+  AgentMetricDelta,
+  AgentSuiteReport,
+  AgentSuiteRun,
+  AgentSuiteRunSummary,
+} from "@/types/evals";
+
+interface Props {
+  suiteId: string;
+  /** Bumped by the parent after the checks change, to score the runs again. */
+  reloadKey?: number;
+  /** The newest suite run, refreshed while it goes; its progress updates the report live. */
+  activeRun?: AgentSuiteRun | null;
+  /** The chosen scope, kept by the parent so it survives switching to another view. */
+  scope?: string | null;
+}
+
+const props = withDefaults(defineProps<Props>(), { reloadKey: 0, activeRun: null, scope: null });
+
+const emit = defineEmits<{
+  (e: "update:scope", value: string): void;
+}>();
+
+// A scope is one suite run ("run:<id>") or the agent's last N runs ("10").
+const RUN_PREFIX = "run:";
+const DEFAULT_SCOPE = String(RUN_LIMIT_OPTIONS[0]);
+const STATUS_SUFFIX: Record<string, string> = {
+  running: " · running",
+  cancelled: " · stopped",
+  failed: " · failed",
+};
+
+const report = ref<AgentSuiteReport | null>(null);
+const loading = ref(false);
+const error = ref<string | null>(null);
+const suiteRuns = ref<AgentSuiteRunSummary[]>([]);
+const scope = computed({
+  get: (): string => props.scope ?? "",
+  set: (value: string) => emit("update:scope", value),
+});
+
+const selectedRunId = computed((): string | null =>
+  scope.value.startsWith(RUN_PREFIX) ? scope.value.slice(RUN_PREFIX.length) : null,
+);
+const selectedRun = computed(() => suiteRuns.value.find((run) => run.id === selectedRunId.value));
+
+const scopeOptions = computed(() => [
+  ...suiteRuns.value.map((run) => ({
+    value: `${RUN_PREFIX}${run.id}`,
+    label: `${formatRunTime(run.created_at)} · ${run.finished_count}/${run.requested_count} runs${STATUS_SUFFIX[run.status] ?? ""}`,
+  })),
+  ...RUN_LIMIT_OPTIONS.map((value) => ({ value: String(value), label: `Last ${value} runs` })),
+]);
+
+async function loadSuiteRuns(): Promise<void> {
+  try {
+    suiteRuns.value = await evalsApi.listAgentSuiteRuns(props.suiteId);
+  } catch {
+    suiteRuns.value = [];
+  }
+  const kept = suiteRuns.value.some((run) => `${RUN_PREFIX}${run.id}` === scope.value);
+  if (scope.value.startsWith(RUN_PREFIX) && !kept) scope.value = DEFAULT_SCOPE;
+  // First visit: the newest suite run, or the agent's latest runs when there is none.
+  if (!scope.value) {
+    const newest = props.activeRun?.id ?? suiteRuns.value[0]?.id;
+    scope.value = newest ? `${RUN_PREFIX}${newest}` : DEFAULT_SCOPE;
+  }
+}
+
+// A suite run's numbers change only while it goes; the agent's latest runs keep changing.
+const showRefresh = computed((): boolean => !selectedRunId.value);
+const followsActiveRun = computed(
+  (): boolean => !selectedRunId.value || selectedRunId.value === props.activeRun?.id,
+);
+
+async function deleteSelectedRun(): Promise<void> {
+  const run = selectedRun.value;
+  if (!run || !confirm("Delete this suite run? Its workflow runs stay in Execution History.")) {
+    return;
+  }
+  try {
+    await evalsApi.deleteAgentSuiteRun(run.id);
+    scope.value = DEFAULT_SCOPE;
+    await loadSuiteRuns();
+  } catch (e: unknown) {
+    error.value = apiErrorText(e, "Could not delete the suite run.");
+  }
+}
+
+const TILES: { metric: AgentDeltaMetric; label: string; format: (v: number | null) => string }[] = [
+  { metric: "latency_p95_ms", label: "Latency p95", format: formatMs },
+  { metric: "cost_avg_usd", label: "Cost per run", format: formatUsd },
+  { metric: "tokens_avg", label: "Tokens per run", format: (v) => formatCount(v) },
+  { metric: "tool_calls_avg", label: "Tool calls per run", format: (v) => formatCount(v, 1) },
+];
+
+const deltaByMetric = computed(
+  () => new Map<string, AgentMetricDelta>((report.value?.deltas ?? []).map((d) => [d.metric, d])),
+);
+
+function checkTotal(passed: number, failed: number): number {
+  return passed + failed;
+}
+
+async function loadReport(): Promise<void> {
+  if (!scope.value) return;
+  loading.value = true;
+  error.value = null;
+  try {
+    const runId = selectedRunId.value;
+    report.value = await evalsApi.getAgentSuiteReport(
+      props.suiteId,
+      runId ? undefined : Number(scope.value),
+      runId,
+    );
+  } catch (e: unknown) {
+    error.value = apiErrorText(e, "Could not load the report.");
+  } finally {
+    loading.value = false;
+  }
+}
+
+// A new press of Run is shown as it starts.
+watch(
+  () => props.activeRun?.id,
+  async (runId, previous) => {
+    if (!runId || runId === previous) return;
+    scope.value = `${RUN_PREFIX}${runId}`;
+    await loadSuiteRuns();
+  },
+);
+
+// Each finished workflow run, and the end of the suite run, refresh the list and the report.
+watch(
+  () => `${props.activeRun?.results.length}:${props.activeRun?.status}`,
+  async () => {
+    if (!props.activeRun) return;
+    await loadSuiteRuns();
+    if (followsActiveRun.value) await loadReport();
+  },
+);
+
+watch([() => props.suiteId, () => props.reloadKey, scope], loadReport, { immediate: true });
+watch(() => props.suiteId, loadSuiteRuns, { immediate: true });
+</script>
+
+<template>
+  <div class="space-y-5">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div
+        v-if="report"
+        class="flex items-baseline gap-3"
+      >
+        <span
+          class="text-3xl font-semibold tabular-nums text-foreground"
+          data-testid="agent-suite-pass-rate"
+        >
+          {{ report.pass_rate === null ? "—" : `${report.pass_rate}%` }}
+        </span>
+        <span class="text-sm text-muted-foreground">
+          {{ report.passed_count }} of {{ report.run_count }} runs passed
+        </span>
+      </div>
+      <div class="ml-auto flex items-center gap-2">
+        <Select
+          v-model="scope"
+          :options="scopeOptions"
+          class="w-60"
+          data-testid="agent-suite-report-scope"
+        />
+        <Button
+          v-if="selectedRun && selectedRun.status !== 'running'"
+          variant="outline"
+          size="icon"
+          title="Delete this suite run"
+          class="text-muted-foreground hover:text-destructive"
+          data-testid="agent-suite-run-delete"
+          @click="deleteSelectedRun"
+        >
+          <Trash2 class="h-4 w-4" />
+        </Button>
+        <Button
+          v-if="showRefresh"
+          variant="outline"
+          size="icon"
+          title="Refresh"
+          :loading="loading"
+          @click="loadReport"
+        >
+          <RefreshCw class="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+
+    <p
+      v-if="error"
+      class="text-sm text-destructive"
+    >
+      {{ error }}
+    </p>
+
+    <template v-if="report">
+      <div
+        v-if="report.run_count === 0"
+        class="rounded-xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground"
+      >
+        <template v-if="selectedRunId">
+          None of these runs reached the agent.
+        </template>
+        <template v-else>
+          No runs to score yet. Run the workflow above, or wait for the agent's next run.
+        </template>
+      </div>
+      <template v-else>
+        <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <AgentSuiteMetricTile
+            v-for="tile in TILES"
+            :key="tile.metric"
+            :label="tile.label"
+            :value="tile.format(deltaByMetric.get(tile.metric)?.current ?? null)"
+            :sub="`Baseline ${tile.format(deltaByMetric.get(tile.metric)?.baseline ?? null)}`"
+            :delta-pct="deltaByMetric.get(tile.metric)?.delta_pct ?? null"
+          />
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-medium text-foreground">
+            Checks
+          </h3>
+          <div class="divide-y divide-border/40 rounded-xl border border-border/60">
+            <div
+              v-for="check in report.checks"
+              :key="check.key"
+              class="flex items-center gap-3 px-3 py-2.5"
+              data-testid="agent-suite-check-row"
+            >
+              <span class="min-w-0 flex-1 truncate text-sm text-foreground">{{ check.label }}</span>
+              <div class="hidden h-1.5 w-32 overflow-hidden rounded-full bg-muted sm:block">
+                <div
+                  class="h-full rounded-full"
+                  :class="check.failed > 0 ? 'bg-destructive' : 'bg-emerald-500'"
+                  :style="{
+                    width: `${checkTotal(check.passed, check.failed) === 0 ? 0 : (check.passed / checkTotal(check.passed, check.failed)) * 100}%`,
+                  }"
+                />
+              </div>
+              <span class="w-20 text-right text-xs tabular-nums text-muted-foreground">
+                {{ check.passed }}/{{ checkTotal(check.passed, check.failed) }} passed
+              </span>
+              <span
+                v-if="check.skipped > 0"
+                class="text-xs text-muted-foreground"
+              >
+                {{ check.skipped }} skipped
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-medium text-foreground">
+            Runs
+          </h3>
+          <AgentSuiteRunsTable :runs="report.runs" />
+        </div>
+      </template>
+    </template>
+  </div>
+</template>

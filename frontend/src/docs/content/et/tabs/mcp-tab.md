@@ -1,6 +1,6 @@
-# MCP vahekaart
+# MCP / A2A vahekaart
 
-**MCP** vahekaart konfigureerib Model Context Protocol (MCP) integratsiooni. MCP võimaldab AI-klienditel (Claude, ChatGPT, Gemini, Cursor ja mis tahes MCP-ühilduv tööriist) kutsuda teie Heymi workflow'sid tööriistadena.
+**MCP** vahekaart konfigureerib Model Context Protocol (MCP) integratsiooni, ning [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) serveritena, millele teised agendid saavad ülesandeid delegeerida. MCP võimaldab AI-klienditel (Claude, ChatGPT, Gemini, Cursor ja mis tahes MCP-ühilduv tööriist) kutsuda teie Heymi workflow'sid tööriistadena.
 
 Heym toetab kahte režiimi: **vaikeserver**, mis eksponeerib kõik MCP-lubatud workflow'd ühe endpoint'i all, ja **nimega serverid**, mis annavad igale workflow'de loogilisele grupile omaette URL-i ja API võtme.
 
@@ -51,7 +51,7 @@ Workflow, millel on [paralleelsuse piirmäär](../reference/webhooks.md#concurre
 ```
 
 Klient küsib tööriista `heym_execution_status` selle `execution_id`-ga. See tagastab sama keha nagu [oleku URL](../reference/webhooks.md#status-url): `queued` praeguse positsiooniga, `running`, seejärel `success` või `error` koos väljunditega. See leiab ainult nende workflows käitusi, mida sama server pakub. Tööriist kuvatakse vaikeserveris ja igas nimega serveris ainult seni, kuni vähemalt ühel selle workflow-l on paralleelsuse piirmäär. Kui järjekord on täis, tagastab kutse vea „Concurrency queue is full“.
-## Heymi chat-tööriist
+## Heymi agent
 
 Jaotis **Heymi võimekused** muudab Chat vahekaardi mootori üheks MCP tööriistaks nimega `heym_chat`. Lubage see vaikeserveril, mis tahes nimega serveril või mõlemal — igal pinnal on oma lüliti ja mudeli valik.
 
@@ -60,15 +60,20 @@ Kui see on sisse lülitatud, kuvatakse `heym_chat` loendis `tools/list` koos tei
 - Workflow loomine, selle testkäivitamine näidissisenditega, parandamine ja lõpetamine, kui käivitus õnnestub (vt [Ehitusrežiim](#build-mode))
 - Olemasolevate workflow'de uurimine ja käivitamine
 - Analüütika, hiljutiste käivituste ja tulevaste cron ajakavade raporteerimine
+- Selgitab, kus töövood ebaõnnestuvad ja miks need on aeglased: töövood, mida on kõige rohkem käivitatud, mis on kõige sagedamini ebaõnnestunud ja kõige aeglasemad, ning sõlmetüübid, millele kulub kõige rohkem aega, vigu ja väljakutseid viimase 1, 3 või 6 tunni, 24 tunni, 7 või 30 päeva või kogu ajaloo jooksul
 - Ühe workflow käivituste ajaloo raporteerimine: mitu korda see käivitus, olekute loendused, millal see käivitus, ja nõudmisel ühe käivituse sisendid, väljundid ja sõlmede kaupa vead
 - Praegu toimuvate asjade raporteerimine: mitu käivitust on aktiivsed, nende workflow nimed, kui kaua igaüks on töötanud, millisel sõlmel see parasjagu on, ja link reaalajas käivitusele
 - Tahvlite loetlemine, kaartide loomine ja kaardi detailide lugemine [Tahvli vahekaardil](./board-tab.md)
-- Teie andmetabelite loetlemine koos veergudega, uute loomine ja nende ühendamine workflow'desse, mida see ehitab
+- Loetleb juhtpaneelid (Heym Worki lehed) ja nende vidinad, tuvastab, millisel juhtpaneelil töövoog asub, lisab uue vidina ja koostab selle töövoo, paigutab olemasoleva töövoo vidinana, nimetab ümber või kustutab vidinaid või korrastab paigutust (vt [Dashboard › Chatist ja MCP-st](./dashboard-tab.md#from-chat-and-mcp))
+- Uurib andmetabeleid ja ridu, loob tabeleid, lisab või eemaldab veerge, lisab, uuendab või kustutab ridu ning seob tabeleid töövoogudesse
+- Loob, redigeerib ja käivitab viipade ja agentide hindamiskomplekte ([Eval suites](./evals-tab.md#from-chat-and-mcp)), sealhulgas agendi baastaset: raporteeritud, käivitustest koostatud või arvuliselt määratud. Tulemus loetleb iga salvestatud komplekti Evals-lingi.
 - Mandaatide loomine või värskendamine Heymi lehel (vt [Mandaadid](#mandaadid))
 - Meeskondade ja globaalsete muutujate lugemine ning dokumentatsioonis otsimine
 - Ootel inimkonna-tsüklis ülevaatuste kinnitamine, muutmine või tagasilükkamine
 
 Hiljem Chat vahekaardile lisatud võimekused muutuvad automaatselt kättesaadavaks ka `heym_chat` kaudu — ühtegi võimekuse kaupa lülitit pole vaja sünkroonida.
+
+Need funktsioonid töötavad `heym_chat` sees: `tools/list` kuvab `heym_chat` ja teie töövoo tööriistad, mitte kunagi chati sise-tööriistu, nagu hindamiskomplektide omi.
 
 ### Ehitusrežiim
 
@@ -121,6 +126,14 @@ LLM- ja Agent-sõlmed `heym_chat` loodud workflow-s töötavad selle mandaadi ja
 Iga kutse kirjutatakse teie [Chat vahekaardi](./chat-tab.md) ajalukku tavalise vestlusena, tähistatud pistiku ikooniga vestluste loendis. Sõnumid, tööriistakaardid ja täpsustamise pausid näevad välja täpselt nagu vestlus, mille te ise algatasite, ja saate vestluse avada ning brauseris edasi rääkida. Iga tulemus tagastab oma `conversation_id`, et MCP klient saaks jätkata sama vestlust, selle asemel et avada iga kutse jaoks uus.
 
 Kui assistent vajab täpsustamist, teeb see pausi ja ütleb seda; vastake vastustega, kasutades sama `conversation_id`.
+### Luba A2A
+
+Kui Heymi agent on sisse lülitatud, kuvatakse kaardil märkeruut **Luba A2A**. Märkige see ja teised agendid saavad saata Heymi agendile ülesandeid Agent2Agent protokolli (A2A 1.0) kaudu. Seejärel kuvatakse kaardil **Agent Card** URL ja **JSON-RPC endpoint**, mõlemal kopeerimisnupp, ning käsk `curl` kaardi allalaadimiseks. A2A kasutab sama võtit ja OAuth-sisselogimist nagu MCP. Agendi väljalülitamine lülitab välja ka A2A. Meetodite, ülesannete olekute ja näite kohta vaadake jaotist [A2A](../reference/a2a.md).
+
+### Edenemine
+
+Pikaajaline `heym_chat` väljakutse teatab agendi tegevusest MCP edenemisena (`notifications/progress`), samade sõnadega, mida kuvatakse Chati vahekaardil, näiteks `Töövoo testimine · katse 2/5`. Kliendid, kes lähtestavad oma ajalõpu edenemise teatamisel, ootavad jätkuvalt, kuni agent töötab.
+
 ## Nimega MCP serverid
 
 Nimega serverid võimaldavad teil workflow'sid jaotada isoleeritud MCP endpointideks. Igal serveril on oma URL ja API key, nii et erinevad AI kliendid, meeskonnad või kasutusjuhud saavad ühenduda täpselt nende workflow'dega, mida nad vajavad.
@@ -140,7 +153,9 @@ Iga serveri kaart kuvab:
 | **SSE Endpoint** | Unikaalne URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Sõltumatu key, kuvatakse üks kord genereerimisel või uuesti genereerimisel. Kopeerige see kohe; seda hoitakse räsitud kujul ja hiljem ei saa seda paljastada |
 | **How to connect** | **Copy JSON** kopeerib valmis kleepimiseks mõeldud MCP konfiguratsiooni; **Add to Cursor** installib selle ühe klõpsuga |
-| **Heym Capabilities** | Lülitage selle serveri jaoks sisse `heym_chat` tööriist ning valige selle mandaat ja mudel |
+| **Heym Capabilities** | Lülitage Heymi agent (`heym_chat`) selle serveri jaoks sisse või välja ning valige selle credential ja mudel |
+| **Luba A2A** | Selle serveri enda A2A lüliti koos oma Agent Cardiga aadressil `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Luba A2A** | Selle serveri enda A2A lüliti koos oma Agent Cardiga aadressil `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Lülitage sisse, milliseid teie workflow'sid see server avalikustab |
 
 ### Workflow'de määramine

@@ -23,6 +23,8 @@ Un widget est un graphique unique sur la grille. Types de graphiques pris en cha
 - **Jauge** (une valeur unique sur une plage min–max, par exemple un pourcentage)
 - **Nuage de points** (points X/Y pour les graphiques de corrélation)
 - **Proportion** (une barre divisée en parts avec une légende en pourcentage, par exemple une répartition par langue)
+- **Gantt** (dates des tâches, réalisation et dépendances)
+- **Entity relationships (DB)** (tables, champs, clés PK/FK et liaisons)
 - **Jauge à barres** (une jauge horizontale par ligne avec un dégradé rouge→vert et une valeur, par exemple l'espace disque libre)
 - **Texte** (un message markdown, par exemple une note de statut telle que « Dernière exécution à 19:47 » ; prend en charge les [cases à cocher interactives](../nodes/chart-output-node.md#interactive-task-lists) lorsque le markdown est statique, ainsi que les [listes numérotées explicites](../nodes/chart-output-node.md#numbered-lists) pour une numérotation personnalisée ou décroissante)
 - **HITL** (vos revues humaines en attente. L'en-tête affiche `1/n pending`. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** permettent de la résoudre. L'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique de cette page. Le widget n'utilise pas les lignes en amont, et chaque personne voit sa propre file d'attente. Il peut afficher à la place les validations d'un seul Workflow, pour toutes les personnes pouvant ouvrir ce Workflow ; voir [Widgets HITL](#widgets-hitl))
@@ -96,6 +98,18 @@ L'API des widgets peut aussi créer une **carte de comptage** sans IA : un widge
 
 Utilisez le bouton **Fine-tune with AI** d'un widget pour réviser un widget existant avec une nouvelle instruction. Chaque ajustement par IA enregistre un instantané du workflow précédent dans l'**Edit History** du widget, ce qui vous permet de consulter ou d'annuler les modifications depuis l'éditeur de workflow.
 
+## Depuis Chat et MCP
+
+[Chat](./chat-tab.md), et les clients MCP via l'outil [`heym_chat`](./mcp-tab.md), peuvent lire vos tableaux de bord, y ajouter des widgets, les renommer ou les supprimer, et réorganiser la disposition d'un tableau de bord. Heym Work affiche chaque tableau de bord sous forme de page, de sorte que les mêmes réponses couvrent ses pages.
+
+- **Quels tableaux de bord et ce qu'ils contiennent.** Demandez "quels tableaux de bord ai-je ?", "que contient le tableau de bord Ventes ?" ou "sur quel tableau de bord se trouve le workflow de revenus ?". Chat répertorie vos propres tableaux de bord et ceux partagés avec vous, avec vos droits d'accès et un lien vers chacun, ainsi que chaque widget présent : son titre, son type de graphique et le workflow sous-jacent. Un [widget HITL](#hitl-widgets) filtré sur un workflow que vous ne pouvez pas ouvrir reste masqué, tout comme sur le tableau de bord lui-même.
+- **Un nouveau widget.** Demandez "ajoute un graphique des dossiers ouverts par statut au tableau de bord Ventes". Chat place d'abord un widget vide sur le tableau de bord, puis écrit le workflow propre au widget, effectue des tests et corrige les erreurs jusqu'à ce qu'une exécution réussisse, de la même manière qu'il [crée des workflows](./chat-tab.md#creation-de-workflows). Aucun workflow distinct n'est conservé, et chaque enregistrement apparaît dans le Edit History du widget. Le titre et le type de graphique du widget s'adaptent à ce que Chat enregistre.
+- **Un workflow existant.** Demandez "place le workflow de revenus sur le tableau de bord Ventes". Un workflow qui se termine par un nœud Chart Output devient un widget de graphique avec sa propre copie du workflow, de sorte que les modifications ultérieures apportées au widget ne touchent jamais l'original. Un workflow avec un nœud trigger ou input ne peut pas devenir un widget de graphique. Tout autre workflow devient un [widget d'exécution](#run-widgets), qui nécessite également un workflow que le propriétaire du tableau de bord peut exécuter.
+- **Renommer ou supprimer un widget.** Demandez "renomme le widget Revenus en Ventes" ou "supprime le widget Dossiers ouverts". Le workflow d'un widget de graphique prend également le nouveau nom ; le workflow d'un widget d'exécution conserve le sien. La suppression d'un widget de graphique supprime son workflow avec lui, tout comme le fait le bouton de suppression du widget ; le workflow d'un widget d'exécution est conservé. Chat ne supprime que le widget expressément demandé et clarifie d'abord votre choix lorsque vos termes correspondent à plusieurs widgets.
+- **Ranger la disposition.** Demandez "réorganise le tableau de bord Ventes", ou "ajoute ces trois widgets et range". Chat organise les widgets visibles dans leur ordre, tout comme le fait le bouton **Ranger** : des rangées aléatoires de deux ou trois, de sorte qu'une nouvelle demande propose une autre disposition. Indiquez un nombre par ligne ("trois par ligne") pour obtenir des rangées de cette taille. Cela réorganise le tableau de bord dans Heym ; Heym Work conserve sa propre disposition d'une page, que le bouton **Ranger** propre à la page modifie.
+
+Les nouveaux widgets s'insèrent sous les widgets existants du tableau de bord et, comme tout widget, s'exécutent avec les autorisations du propriétaire du tableau de bord. L'ajout, le renommage, la suppression et le rangement nécessitent un accès en écriture au tableau de bord. La création d'un nouveau widget nécessite un chat capable de concevoir des workflows : l'onglet Chat, le Chat pour éditeurs de Heym Work et `heym_chat`.
+
 ## Modification de la disposition
 
 Activez **Edit** pour passer en mode édition, dans lequel vous pouvez faire glisser les widgets et les redimensionner sur une grille de 12 colonnes. Les modifications de disposition sont enregistrées automatiquement. Les titres des widgets sont modifiables en ligne depuis l'en-tête du widget.
@@ -128,3 +142,7 @@ La suppression d'un partage, ou son abaissement d'écriture à lecture, prend ef
 
 - [Nœud Chart Output](../nodes/chart-output-node.md)
 - [Onglet Analytique](analytics-tab.md) — métriques d'exécution intégrées (distinctes des tableaux de bord créés par les utilisateurs)
+
+## Plannings et diagrammes de bases de données
+
+Choisissez **Gantt** dans Ajouter un widget pour afficher les tâches dans le temps avec l'état d'achèvement et les liens de dépendance, ou **Entity relationships (DB)** pour cartographier les tables, les champs et leurs relations. Les deux types utilisent le [nœud Chart Output](../nodes/chart-output-node.md#gantt-schedules) et sont également disponibles sur les pages Heym Work. Lorsque Work suggère des widgets pour un planning ou un schéma de base de données, il génère des aperçus à partir des tâches ou entités proposées.

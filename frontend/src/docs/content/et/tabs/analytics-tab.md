@@ -15,6 +15,7 @@
 
 ## Ajavahemik
 
+- **1h**, **3h**, **6h** – Viimane tund, 3 tundi või 6 tundi. Analüütikat peetakse tunnikaupa, nii et need arvestavad akna algustundi tervikuna: Viimane tund kell 15:20 katab aja alates 14:00 kuni praeguseni
 - **24h** – viimased 24 tundi
 - **7d** – viimased 7 päeva
 - **30d** – viimased 30 päeva
@@ -38,9 +39,19 @@ Kaks tabelit näitavad workflow'de kasutust: **Enim kasutatud** (laiem) ja **Eni
 - **Käivituste maht ajas** – joondiagramm käivituste kohta ajavahemiku lõikes
 - **Õnnestumise ja vigade määr** – pinddiagramm, mis võrdleb õnnestunud ja ebaõnnestunud käivitusi
 - **Keskmine latentsus ajas** – joondiagramm, mis näitab vastuseaja muutusi
-- **Lohistage valimiseks** – klõpsake ja lohistage mis tahes diagrammil, et keskenduda kohandatud kuupäevavahemikule
+- **Lohistage valimiseks** – Klõpsake ja lohistage mis tahes diagrammil, et teravustada kohandatud kuupäevavahemikku. Valik peab hõlmama diagrammil vähemalt kahte punkti; lihtne klõps ei vali midagi
 - **Valikurežiim** – valitud vahemikud värskendavad kokkuvõtvaid kaarte, diagramme ja workflow'de tabeleid ilma põhiseadet muutmata
 - **Tühjendage valik** – naaske eelseadistatud ajavahemikku, kui olete süvitsi uurimise lõpetanud
+
+## Sõlmetüübid
+
+Latentsuse persentiilide all näitavad kolm diagrammi, kuhu kuluvad sõlmede aeg ja vead, rühmitatuna sõlmetüübi järgi (Agent, HTTP Request, Code jne) kuvatavates workflow'des:
+
+- **Enim aega võtvad sõlmed** – 10 sõlmetüüpi, millel on suurim kogutäitmisaeg, esitatuna keskmise kestusena kutse kohta. Tund ilma teatud tüüpi kutseteta kuvab kohtspikris **Kutseid pole**.
+- **Enim ebaõnnestunud sõlmetüübid** – 10 sõlmetüüpi, kus esineb enim vigu (viga või timeout), igaüks oma veakordade arvuga ajavahemiku kohta.
+- **Enim kutsutud sõlmetüübid** – 10 sõlmetüüpi, mida käitati kõige rohkem, igaüks oma kutsete arvuga ajavahemiku kohta. Vahelejäänud sõlmi ei arvestata.
+
+Hõljutage kursorit diagrammi kohal, et näha sõlmetüüpi otse kursori kõrval. Sõlmetüüp, mis on liiga väike, et paista diagrammi suurima kõrval (alla 1% sellest), jäetakse diagrammilt ja selle legendist välja. Diagrammid järgivad workflow filtrit, ajavahemikku ja mis tahes vahemikku, mille diagrammile lohistate. Sõlmeanalüütika salvestatakse käituste jaoks alates versioonist, mis selle lisas, ning lõppenud käitus ilmub umbes minuti jooksul. Vanemaid käitusi ei arvestata.
 
 ## Automaatne värskendamine
 

@@ -23,6 +23,8 @@ A widget is a single chart on the grid. Supported chart types:
 - **Gauge** (a single value against a min–max range, e.g. a percentage)
 - **Scatter** (X/Y points for correlation plots)
 - **Proportion** (one bar split into shares with a percentage legend, e.g. a language breakdown)
+- **Gantt** (task dates, completion and dependencies)
+- **Entity relationships (DB)** (tables, fields, PK/FK keys and connections)
 - **Bar gauge** (one horizontal gauge per row with a red→green gradient and a value, e.g. free disk space)
 - **Text** (a markdown message, e.g. a status note like "Last execution at 19:47"; supports [interactive checkboxes](../nodes/chart-output-node.md#interactive-task-lists) when the markdown is static, and [explicit numbered lists](../nodes/chart-output-node.md#numbered-lists) for custom or descending numbering)
 - **HITL** (your pending human reviews. The header shows `1/n pending`. The workflow name opens that run on the canvas. **Approve**, **Request changes**, and **Reject** resolve it. The history icon beside the widget title opens that run in the history dialog on this page. The widget does not use upstream rows, and each person sees their own queue. It can show one workflow's reviews instead, for everyone who can open that workflow; see [HITL widgets](#hitl-widgets))
@@ -98,6 +100,18 @@ The widget API can also make a **count card** without AI: a `text` widget on a d
 
 Use a widget's **Fine-tune with AI** button to revise an existing widget with a new instruction. Each AI fine-tune snapshots the previous workflow into the widget's **Edit History**, so you can review or roll back changes from the workflow editor.
 
+## From Chat and MCP
+
+[Chat](./chat-tab.md), and MCP clients through the [`heym_chat` tool](./mcp-tab.md), can read your dashboards, add widgets to them, rename or delete widgets, and tidy a dashboard's layout. Heym Work shows each dashboard as a page, so the same answers cover its pages.
+
+- **Which dashboards, and what is on them.** Ask "which dashboards do I have?", "what is on the Sales dashboard?" or "which dashboard is the revenue workflow on?". Chat lists your own dashboards and the ones shared with you, with your access and a link to each, and every widget on them: its title, chart type, and the workflow behind it. A [HITL widget](#hitl-widgets) filtered on a workflow you cannot open stays hidden, as it does on the dashboard.
+- **A new widget.** Ask "add a chart of open cases by status to the Sales dashboard". Chat first puts an empty widget on the dashboard, then writes the widget's own workflow, test-runs it and fixes it until a run passes, the same way it [builds workflows](./chat-tab.md#creating-workflows). No separate workflow is left behind, and each save appears in the widget's Edit History. The widget's title and chart type follow what Chat saves.
+- **An existing workflow.** Ask "put the revenue workflow on the Sales dashboard". A workflow that ends in a Chart Output node becomes a chart widget with its own copy of the workflow, so later changes to the widget never touch the original. A workflow with a trigger or input node cannot become a chart widget. Any other workflow becomes a [run widget](#run-widgets), which also needs a workflow the dashboard owner can run.
+- **Rename or delete a widget.** Ask "rename the Revenue widget to Sales" or "delete the Open cases widget". A chart widget's workflow takes the new name too; a run widget's workflow keeps its own. Deleting a chart widget deletes its workflow with it, as the widget's delete button does; a run widget's workflow stays. Chat deletes only a widget you asked it to, and asks which one first when your words match several.
+- **Tidy up.** Ask "tidy up the Sales dashboard", or "add these three widgets and tidy up". Chat arranges the widgets you see in their order, as the **Tidy up** button does: rows of two or three at random, so asking again gives another arrangement. Ask for a number per row ("three per row") to get rows of that size. This arranges the dashboard in Heym; Heym Work keeps its own arrangement of a page, which the page's own **Tidy up** button changes.
+
+New widgets go below the dashboard's existing widgets and, like every widget, run as the dashboard owner. Adding, renaming, deleting and tidying need write access to the dashboard. Building a new widget needs a chat that can build workflows: the Chat tab, Heym Work's Chat for editors, and `heym_chat`.
+
 ## Editing the layout
 
 Toggle **Edit** to enter edit mode, where you can drag widgets and resize them on a 12-column grid. Layout changes are saved automatically. Widget titles are editable inline from the widget header.
@@ -130,3 +144,7 @@ Removing a share, or lowering it from write to read, takes effect immediately.
 
 - [Chart Output node](../nodes/chart-output-node.md)
 - [Analytics tab](analytics-tab.md) — built-in execution metrics (distinct from user-built dashboards)
+
+## Schedules and database diagrams
+
+Choose **Gantt** in Add widget to show tasks over time with completion and dependency links, or **Entity relationships (DB)** to map tables, fields and their relationships. Both types use the [Chart Output node](../nodes/chart-output-node.md#gantt-schedules), and are also available on Heym Work pages. When Work suggests widgets for a schedule or database schema, it draws previews from the proposed tasks or entities.

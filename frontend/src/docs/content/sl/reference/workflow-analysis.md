@@ -50,6 +50,8 @@ Odsek **Področja izboljšav** vedno izvede štiri eksplicitne preglede:
 3. **Mrežna vozlišča** — za vozlišča, ki izvajajo mrežne klice (kot so [HTTP](../nodes/http-node.md) in integracijska vozlišča), poročilo priporoča obravnavo napak specifično za vozlišča (ponovno poskusi in/ali nadaljuj ob napaki) na teh vozliščih.
 4. **Opozorila** — ko za workflow niso konfigurirana [opozorila](../tabs/alerts-tab.md), poročilo priporoča nastavitev opozoril pred prehodom v produkcijo.
 
+5. **Evals**: ko ima workflow vozel [Agent](../nodes/agent-node.md) brez zbirke agenta, poročilo priporoča **Agent Suite** (ali **Prompt Suite**) v [Evals](../tabs/evals-tab.md#agent-suites); kadar ima vozel [LLM](../nodes/llm-node.md), priporoča **Prompt Suite** za preizkus poziva v različnih modelih.
+
 ### Zagon analize iz lastnosti
 
 Ko ima workflow vozlišča na platnu, vendar še nima analitičnega dokumenta, se v panelu [Lastnosti](./canvas-features.md) na ravni workflowa prikaže gumb **Zagon analize** (prikazan, ko nobeno vozlišče ni izbrano). Odpre ta panel za Analizo Workflowa, da lahko izberete poverilnico in model ter ustvarite poročilo.

@@ -73,11 +73,11 @@ Compartiu taules amb altres usuaris o equips:
 1. Obriu el diàleg de compartir des de la vista de detall de la taula
 2. Afegiu usuaris per correu electrònic amb permís de **read** o **write**
 3. Afegiu equips amb permís de **read** o **write**
-4. Els usuaris de només lectura poden veure les dades; els usuaris d'escriptura poden modificar files
+4. Els usuaris de només lectura poden veure dades; els usuaris d'escriptura poden modificar files i columnes. Canviar el nom de la taula, modificar-ne la descripció i gestionar els recursos compartits continuen sent exclusius del propietari.
 
 ## Crear taules des de l'Assistent d'IA
 
-L'[Assistent d'IA](../reference/ai-assistant.md#data-tables) del canvas, el [Chat](./chat-tab.md) i l'eina `heym_chat` de la [pestanya MCP](./mcp-tab.md) poden triar una de les vostres taules per a un workflow que construeixin, o crear-ne una de nova. Proposen un nom i columnes, i creen la taula quan envieu la targeta de pregunta. Mai no canvien les columnes d'una taula existent ni toquen les seves files: afegiu o editeu columnes aquí.
+L'[Assistent d'IA](../reference/ai-assistant.md#data-tables) del canvas, el [Chat](./chat-tab.md) i l'eina `heym_chat` de la [pestanya MCP](./mcp-tab.md) poden triar una de les vostres taules per a un workflow que construeixin o crear-ne una de nova. Proposen un nom i columnes, i creen la taula quan envieu la targeta de preguntes. L'assistent del canvas configura els nodes del workflow a partir de les metadades de la taula. El Chat i `heym_chat` també poden inspeccionar files, afegir o eliminar columnes i inserir, actualitzar o suprimir files directament. Indiqueu-los un nom de taula o l'enllaç d'aquesta pestanya. L'escriptura requereix propietat o accés d'**escriptura** directe o d'equip. Afegir columnes manté les dades existents; eliminar columnes n'esborra els valors de cada fila. L'eliminació de columnes i el buidatge de totes les files demanen confirmació, igual que en aquesta pestanya.
 
 ## Ús en workflows
 

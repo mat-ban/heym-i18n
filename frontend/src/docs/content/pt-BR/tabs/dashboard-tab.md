@@ -23,6 +23,8 @@ Um widget é um único gráfico na grade. Tipos de gráfico suportados:
 - **Gauge** (um único valor em relação a um intervalo mín–máx, por exemplo, uma porcentagem)
 - **Scatter** (pontos X/Y para gráficos de correlação)
 - **Proportion** (uma barra dividida em fatias com uma legenda de porcentagem, por exemplo, uma divisão por idioma)
+- **Gantt** (datas de tarefas, conclusão e dependências)
+- **Entity relationships (DB)** (tabelas, campos, chaves PK/FK e conexões)
 - **Bar gauge** (um medidor horizontal por linha com um gradiente de vermelho→verde e um valor, por exemplo, espaço livre em disco)
 - **Text** (uma mensagem markdown, por exemplo, uma nota de status como "Última execução às 19:47"; suporta [checkboxes interativos](../nodes/chart-output-node.md#interactive-task-lists) quando o markdown é estático, e [listas numeradas explícitas](../nodes/chart-output-node.md#numbered-lists) para numeração personalizada ou decrescente)
 - **HITL** (suas revisões humanas pendentes. O cabeçalho mostra `1/n pending`. O nome do Workflow abre aquela execução no canvas. **Approve**, **Request changes** e **Reject** a resolvem. O ícone de histórico ao lado do título do widget abre aquela execução no diálogo de histórico nesta página. O widget não usa linhas upstream, e cada pessoa vê sua própria fila. Ele pode, em vez disso, mostrar as revisões de um único Workflow, para todos que puderem abrir esse Workflow; veja [Widgets HITL](#widgets-hitl))
@@ -98,6 +100,18 @@ A API de widgets também pode criar um **cartão de contagem** sem IA: um widget
 
 Use o botão **Fine-tune with AI** de um widget para revisar um widget existente com uma nova instrução. Cada ajuste fino por IA cria um snapshot do Workflow anterior no **Edit History** do widget, para que você possa revisar ou reverter alterações a partir do editor de Workflow.
 
+## A partir do Chat e MCP
+
+O [Chat](./chat-tab.md), e os clientes MCP por meio da ferramenta [`heym_chat`](./mcp-tab.md), podem ler seus dashboards, adicionar widgets, renomear ou excluir widgets e organizar o layout de um dashboard. O Heym Work exibe cada dashboard como uma página, de modo que as mesmas respostas cobrem suas páginas.
+
+- **Quais dashboards existem e o que contêm.** Pergunte "quais dashboards eu tenho?", "o que está no dashboard de Vendas?" ou "em qual dashboard está o workflow de receita?". O Chat lista seus próprios dashboards e os compartilhados com você, com suas permissões de acesso e um link para cada um, além de todos os widgets neles: título, tipo de gráfico e o workflow subjacente. Um [widget HITL](#hitl-widgets) filtrado em um workflow que você não pode abrir permanece oculto, exatamente como no próprio dashboard.
+- **Um novo widget.** Peça "adicione um gráfico de casos abertos por status ao dashboard de Vendas". O Chat coloca primeiro um widget vazio no dashboard, escreve o workflow próprio do widget, faz execuções de teste e corrige erros até que uma execução seja bem-sucedida, da mesma forma que [cria workflows](./chat-tab.md#criando-workflows). Nenhum workflow separado é deixado para trás e cada salvamento aparece no Edit History do widget. O título e o tipo de gráfico do widget seguem o que o Chat salvar.
+- **Um workflow existente.** Peça "coloque o workflow de receita no dashboard de Vendas". Um workflow que termina em um nó Chart Output torna-se um widget de gráfico com sua própria cópia do workflow, de modo que alterações posteriores no widget nunca alteram o original. Um workflow com um nó trigger ou input não pode se tornar um widget de gráfico. Qualquer outro workflow torna-se um [widget de execução](#run-widgets), que também requer um workflow que o proprietário do dashboard possa executar.
+- **Renomear ou excluir um widget.** Peça "renomeie o widget Receita para Vendas" ou "exclua o widget Casos abertos". O workflow de um widget de gráfico assume também o novo nome; o workflow de um widget de execução mantém o seu. A exclusão de um widget de gráfico exclui seu workflow junto, assim como faz o botão de exclusão do widget; o workflow de um widget de execução é mantido. O Chat exclui apenas o widget solicitado e pergunta primeiro caso suas palavras correspondam a vários.
+- **Organizar.** Peça "organize o dashboard de Vendas" ou "adicione estes três widgets e organize". O Chat organiza os widgets visíveis em sua ordem, assim como faz o botão **Organizar**: linhas aleatórias de dois ou três, de modo que pedir novamente gera outra disposição. Peça um número por linha ("três por linha") para obter linhas desse tamanho. Isso organiza o dashboard no Heym; o Heym Work mantém sua própria disposição em uma página, que o botão **Organizar** próprio da página altera.
+
+Novos widgets vão abaixo dos widgets existentes do dashboard e, como qualquer widget, são executados no contexto do proprietário do dashboard. Adicionar, renomear, excluir e organizar exigem acesso de gravação ao dashboard. A criação de um novo widget requer um chat capaz de criar workflows: a aba Chat, o Chat para editores do Heym Work e o `heym_chat`.
+
 ## Editando o layout
 
 Ative **Edit** para entrar no modo de edição, onde você pode arrastar widgets e redimensioná-los em uma grade de 12 colunas. As alterações de layout são salvas automaticamente. Os títulos dos widgets são editáveis inline a partir do cabeçalho do widget.
@@ -129,3 +143,7 @@ Remover um compartilhamento, ou reduzi-lo de escrita para leitura, tem efeito im
 
 - [Nó Chart Output](../nodes/chart-output-node.md)
 - [Aba Analytics](analytics-tab.md) — métricas de execução integradas (distintas dos dashboards criados pelo usuário)
+
+## Cronogramas e diagramas de banco de dados
+
+Escolha **Gantt** em Adicionar widget para exibir tarefas ao longo do tempo com links de conclusão e dependência, ou **Entity relationships (DB)** para mapear tabelas, campos e seus relacionamentos. Ambos os tipos usam o [nó Chart Output](../nodes/chart-output-node.md#gantt-schedules) e também estão disponíveis nas páginas do Heym Work. Quando o Work sugere widgets para um cronograma ou esquema de banco de dados, desenha prévias a partir das tarefas ou entidades propostas.

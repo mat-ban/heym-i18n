@@ -51,6 +51,8 @@ Mở một workflow tại `/workflows/{workflowId}/{executionId}` sẽ tự đ�
 
 ### Các trường hợp sử dụng
 
+Nhấn Ctrl/Cmd+nhấp vào một lượt chạy trong một trong hai danh sách lịch sử để mở liên kết sâu đó trong tab trình duyệt mới. Tab hiện tại và hộp thoại đang mở vẫn giữ nguyên. Các lượt chạy chat và trợ lý không có workflow, do đó phím tắt chỉ chọn chúng như một thao tác nhấp thông thường.
+
 - Chạy lại một workflow với cùng inputs
 - Debug một lần chạy thất bại bằng cách kiểm tra inputs và node outputs
 - So sánh outputs giữa các lần chạy

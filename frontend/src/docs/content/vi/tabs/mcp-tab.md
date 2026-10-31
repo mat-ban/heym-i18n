@@ -1,6 +1,6 @@
-# Tab MCP
+# Tab MCP / A2A / A2A
 
-Tab **MCP** cấu hình tích hợp Model Context Protocol (MCP). MCP cho phép các ứng dụng AI (Claude, ChatGPT, Gemini, Cursor và bất kỳ công cụ tương thích MCP nào) gọi các workflow của Heym như các công cụ.
+Tab **MCP** cấu hình tích hợp Model Context Protocol (MCP), và dưới dạng máy chủ [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) mà các agent khác có thể ủy quyền tác vụ. MCP cho phép các ứng dụng AI (Claude, ChatGPT, Gemini, Cursor và bất kỳ công cụ tương thích MCP nào) gọi các workflow của Heym như các công cụ.
 
 Heym hỗ trợ hai chế độ: một **máy chủ mặc định** hiển thị tất cả các workflow được bật MCP dưới một endpoint duy nhất, và các **máy chủ có tên** cấp cho mỗi nhóm workflow logic một URL và API key riêng.
 
@@ -51,7 +51,7 @@ Một workflow có [giới hạn đồng thời](../reference/webhooks.md#concur
 ```
 
 Client thăm dò công cụ `heym_execution_status` với `execution_id` đó. Nó trả về nội dung tương tự như [URL trạng thái](../reference/webhooks.md#status-url): `queued` với vị trí hiện tại, `running`, sau đó là `success` hoặc `error` cùng với kết quả đầu ra. Nó chỉ tìm thấy các lần chạy của các workflow mà cùng một máy chủ cung cấp. Công cụ này chỉ được liệt kê trên máy chủ mặc định và trên mỗi máy chủ được đặt tên khi có ít nhất một workflow có giới hạn đồng thời. Khi hàng đợi đầy, lệnh gọi sẽ trả về lỗi "Concurrency queue is full".
-## Công cụ chat Heym
+## Agent Heym
 
 Phần **Khả năng của Heym** biến engine của Tab Chat thành một công cụ MCP duy nhất có tên `heym_chat`. Bật nó trên máy chủ mặc định, trên bất kỳ máy chủ có tên nào, hoặc cả hai — mỗi bề mặt giữ công tắc và lựa chọn model riêng.
 
@@ -60,15 +60,20 @@ Khi được bật, `heym_chat` xuất hiện trong `tools/list` cùng với cá
 - Xây dựng workflow, chạy thử với dữ liệu đầu vào mẫu, sửa lỗi và hoàn tất khi lần chạy thành công (xem [Chế độ Build](#build-mode))
 - Kiểm tra và chạy các workflow hiện có của bạn
 - Báo cáo phân tích, các lần thực thi gần đây và các lịch cron sắp tới
+- Giải thích nơi các workflow bị lỗi và lý do chúng chạy chậm: các workflow được chạy nhiều nhất, lỗi nhiều nhất và chậm nhất, cũng như các loại node chiếm nhiều thời gian, lỗi và lượt gọi nhất trong 1, 3 hoặc 6 giờ, 24 giờ, 7 hoặc 30 ngày qua hoặc toàn bộ thời gian
 - Báo cáo lịch sử chạy của một workflow: số lần chạy, số lượng theo trạng thái, thời điểm chạy, và khi được yêu cầu thì cả đầu vào, đầu ra và lỗi theo từng node của một lần chạy
 - Báo cáo những gì đang chạy ngay lúc này: có bao nhiêu thực thi đang hoạt động, tên workflow của chúng, mỗi cái đã chạy bao lâu, node hiện tại của mỗi cái, và liên kết đến lần chạy trực tiếp
 - Liệt kê board, tạo card và đọc chi tiết card trên [Tab Board](./board-tab.md)
-- Liệt kê các bảng dữ liệu của bạn cùng các cột, tạo bảng mới và kết nối chúng vào các workflow mà nó xây dựng
+- Liệt kê các trang tổng quan (trang của Heym Work) và widget của chúng, tìm trang tổng quan chứa workflow, thêm widget mới và xây dựng workflow của nó, đặt workflow hiện có làm widget, đổi tên hoặc xóa widget, hoặc sắp xếp lại bố cục (xem [Dashboard › Từ Chat và MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Kiểm tra bảng dữ liệu và các hàng, tạo bảng, thêm hoặc xóa cột, chèn, cập nhật hoặc xóa hàng, và kết nối bảng vào workflow
+- Tạo, chỉnh sửa và chạy các bộ đánh giá prompt và agent ([Eval suites](./evals-tab.md#from-chat-and-mcp)), bao gồm đường cơ sở của agent: được báo cáo, xây dựng từ các lượt chạy hoặc được chỉ định bằng số. Kết quả liệt kê liên kết Evals của mỗi bộ được lưu.
 - Tạo hoặc cập nhật credential của bạn trên trang riêng của Heym (xem [Credentials](#credentials))
 - Đọc team và biến toàn cục, và tìm kiếm tài liệu
 - Phê duyệt, chỉnh sửa hoặc từ chối các đánh giá human-in-the-loop đang chờ xử lý
 
 Các khả năng được thêm vào Tab Chat sau này sẽ tự động khả dụng qua `heym_chat` — không có công tắc riêng cho từng khả năng cần đồng bộ.
+
+Các khả năng này chạy bên trong `heym_chat`: `tools/list` hiển thị `heym_chat` và các công cụ workflow của bạn, không bao giờ hiển thị các công cụ nội bộ của chat như công cụ bộ đánh giá.
 
 ### Chế độ Build
 
@@ -122,6 +127,14 @@ Mỗi lần gọi đều được ghi vào lịch sử [Tab Chat](./chat-tab.md)
 
 Khi trợ lý cần làm rõ, nó sẽ tạm dừng và thông báo; hãy trả lời bằng cùng `conversation_id`.
 
+### Bật A2A
+
+Khi Agent Heym đang bật, thẻ hiển thị hộp kiểm **Bật A2A**. Đánh dấu vào đó và các agent khác có thể gửi tác vụ cho Agent Heym qua giao thức Agent2Agent (A2A 1.0). Thẻ sau đó liệt kê URL **Agent Card** và **JSON-RPC endpoint**, mỗi mục có một nút sao chép, và lệnh `curl` để tải thẻ. A2A sử dụng cùng khóa và thông tin đăng nhập OAuth như MCP. Tắt agent cũng sẽ tắt A2A. Xem [A2A](../reference/a2a.md) để biết các phương thức, trạng thái tác vụ và ví dụ.
+
+### Tiến độ
+
+Một lệnh gọi `heym_chat` kéo dài sẽ báo cáo hoạt động của agent dưới dạng tiến độ MCP (`notifications/progress`), bằng các từ ngữ hiển thị trên tab Chat, ví dụ `Đang thử nghiệm workflow · lần thử 2/5`. Các ứng dụng đặt lại thời gian chờ khi nhận thông báo tiến độ sẽ tiếp tục chờ trong khi agent làm việc.
+
 ## Named MCP Servers
 
 Named servers cho phép bạn phân tách các workflow thành các MCP endpoint biệt lập. Mỗi server có URL và API key riêng, vì vậy các AI client, nhóm hoặc trường hợp sử dụng khác nhau có thể kết nối chính xác đến những workflow mà họ cần.
@@ -141,7 +154,9 @@ Mỗi thẻ server hiển thị:
 | **SSE Endpoint** | URL duy nhất: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Key độc lập, chỉ hiển thị một lần khi được tạo hoặc tạo lại. Hãy sao chép ngay; key được lưu dưới dạng băm và không thể hiển thị lại sau đó |
 | **How to connect** | **Copy JSON** sao chép cấu hình MCP sẵn sàng để dán; **Add to Cursor** cài đặt chỉ với một nhấp |
-| **Heym Capabilities** | Bật/tắt công cụ `heym_chat` cho server này và chọn credential cùng model của nó |
+| **Heym Capabilities** | Bật/tắt Agent Heym (`heym_chat`) cho máy chủ này và chọn credential cùng model của nó |
+| **Bật A2A** | Công tắc A2A riêng của máy chủ này, với Agent Card riêng tại `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Bật A2A** | Công tắc A2A riêng của máy chủ này, với Agent Card riêng tại `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Bật/tắt những workflow mà server này hiển thị |
 
 ### Gán Workflow

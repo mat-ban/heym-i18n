@@ -14,7 +14,7 @@
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Оценяване](../tabs/evals-tab.md) | OpenAI, Google, Custom | API ключ за модела |
 | [Decision](../nodes/decision-node.md), [Оценяване](../tabs/evals-tab.md) judge | Decision Model | Base URL на endpoint за decision model, плюс опционален API ключ |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Избира кой от Вашите модели обслужва всяка заявка, използвайки decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Оценяване](../tabs/evals-tab.md) набори от промптове | Model Router (Auto Model) | Избира кой от Вашите модели обслужва всяка заявка, използвайки decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Вход с ChatGPT абонамент (OAuth) или Codex access token за runner-а, плюс GitHub PAT за операции с repository |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API ключ за OpenCode Go gateway (опционален base URL) за runner-а, плюс GitHub PAT за операции с repository |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) за GitHub API заявки, операции на GitHub node и MCP интеграции |

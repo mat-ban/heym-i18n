@@ -15,6 +15,7 @@ O separador **Analytics** apresenta métricas de execução e tendências dos se
 
 ## Intervalo Temporal
 
+- **1h**, **3h**, **6h** – Última hora, 3 horas ou 6 horas. As analíticas são guardadas por hora, pelo que contabilizam a hora de início da janela na totalidade: Última hora às 15:20 abrange desde as 14:00 até agora
 - **24h** – Últimas 24 horas
 - **7d** – Últimos 7 dias
 - **30d** – Últimos 30 dias
@@ -38,9 +39,19 @@ Duas tabelas apresentam a utilização dos workflows: **Mais Utilizados** (mais 
 - **Volume de Execuções ao Longo do Tempo** – Gráfico de linhas das execuções por intervalo temporal
 - **Taxa de Sucesso vs Erro** – Gráfico de área que compara execuções saudáveis e falhadas
 - **Latência Média ao Longo do Tempo** – Gráfico de linhas que mostra as variações do tempo de resposta
-- **Arrastar para selecionar** – Clique e arraste sobre qualquer gráfico para focar um intervalo de datas personalizado
+- **Arrastar para selecionar** – Clique e arraste sobre qualquer gráfico para focar um intervalo de datas personalizado. Uma seleção deve abranger pelo menos dois pontos no gráfico; um clique simples não seleciona nada
 - **Modo de seleção** – Os intervalos selecionados atualizam os cartões de resumo, os gráficos e as tabelas de workflows sem alterar a predefinição base
 - **Limpar Seleção** – Regresse à janela temporal predefinida quando terminar a análise detalhada
+
+## Tipos de nós
+
+Abaixo dos percentis de latência, três gráficos mostram para onde vão o tempo e as falhas dos nós, agrupados por tipo de nó (Agent, HTTP Request, Code, etc.) em todos os workflows em visualização:
+
+- **Nós com maior tempo consumido** – Os 10 tipos de nós com maior tempo de execução total, representados como duração média por chamada. Uma hora sem chamadas de um determinado tipo apresenta **Sem chamadas** na tooltip.
+- **Tipos de nós com mais falhas** – Os 10 tipos de nós com mais erros (erro ou timeout), cada um com a sua própria contagem de erros por intervalo temporal.
+- **Tipos de nós mais chamados** – Os 10 tipos de nós que mais executaram, cada um com a sua própria contagem de chamadas por intervalo temporal. Nós ignorados não são contabilizados.
+
+Passe o cursor sobre um gráfico para ver o tipo de nó sob o apontador, mesmo ao lado. Um tipo de nó demasiado reduzido para ser visível ao lado do maior num gráfico (abaixo de 1% deste) é excluído desse gráfico e da sua legenda. Os gráficos seguem o filtro de workflow, o intervalo temporal e qualquer seleção arrastada sobre um gráfico. As analíticas de nós são registadas para execuções a partir da versão que as introduziu, surgindo uma execução concluída em cerca de um minuto. Execuções mais antigas não são contabilizadas.
 
 ## Atualização Automática
 

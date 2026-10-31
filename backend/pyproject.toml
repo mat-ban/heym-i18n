@@ -1,6 +1,6 @@
 [project]
 name = "heym-backend"
-version = "0.0.138"
+version = "0.0.142"
 description = "Heym backend: infrastructure for running and governing AI agents in production"
 license = { text = "MIT with Commons Clause condition" }
 requires-python = ">=3.11"
@@ -74,5 +74,6 @@ filterwarnings = [
 
 [dependency-groups]
 dev = [
+    "a2a-sdk==1.2.2",
     "pytest>=9.0.3",
 ]

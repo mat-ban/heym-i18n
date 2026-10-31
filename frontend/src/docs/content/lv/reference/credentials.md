@@ -14,7 +14,7 @@ Akreditācijas dati glabā API atslēgas un noslēpumus, ko izmanto workflow mez
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Novērtējumi](../tabs/evals-tab.md) | OpenAI, Google, Custom | API atslēga modelim |
 | [Decision](../nodes/decision-node.md), [Novērtējumi](../tabs/evals-tab.md) tiesnesis | Decision Model | Decision model endpoint bāzes URL, kā arī neobligāta API atslēga |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Izvēlas, kurš no Jūsu modeļiem apkalpo katru pieprasījumu, izmantojot decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Novērtējumi](../tabs/evals-tab.md) uzvedņu komplekti | Model Router (Auto Model) | Izvēlas, kurš no Jūsu modeļiem apkalpo katru pieprasījumu, izmantojot decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT abonementa pierakstīšanās (OAuth) vai Codex piekļuves token runner, kā arī GitHub PAT repozitoriju darbībām |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go gateway API atslēga (neobligāts bāzes URL) runner, kā arī GitHub PAT repozitoriju darbībām |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personīgās piekļuves token (PAT) GitHub API izsaukumiem, GitHub mezgla darbībām un MCP integrācijām |

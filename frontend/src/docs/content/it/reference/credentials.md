@@ -14,7 +14,7 @@ Le Credenziali memorizzano chiavi API e segreti utilizzati dai nodi del workflow
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Valutazioni](../tabs/evals-tab.md) | OpenAI, Google, Custom | Chiave API per il modello |
 | [Decision](../nodes/decision-node.md), giudice [Valutazioni](../tabs/evals-tab.md) | Decision Model | Base URL di un endpoint di decision model, più una chiave API opzionale |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Seleziona quale dei modelli serve ogni richiesta, utilizzando un decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Valutazioni](../tabs/evals-tab.md) suite di prompt | Model Router (Auto Model) | Seleziona quale dei modelli serve ogni richiesta, utilizzando un decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Accesso tramite abbonamento ChatGPT (OAuth) o un token di accesso Codex per il runner, più un PAT GitHub per le operazioni sui repository |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Una chiave API del gateway OpenCode Go (base URL opzionale) per il runner, più un PAT GitHub per le operazioni sui repository |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | Personal access token (PAT) GitHub per chiamate all'API GitHub, operazioni del nodo GitHub e integrazioni MCP |

@@ -47,7 +47,7 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 
 ## Τι Καταγράφεται
 
-Κάθε αλλαγή κατάστασης καταγράφεται. Οι αναγνώσεις καταγράφονται μόνο όπου η ίδια η ανάγνωση αποτελεί ευαίσθητη ενέργεια — η προβολή του ιστορικού εκτελέσεων ενός workflow, το άνοιγμα ενός credential, η λήψη ενός αρχείου. Οι συνήθεις αναγνώσεις λιστών και λεπτομερειών δεν ελέγχονται· το access log καταγράφει ήδη ότι συνέβη ένα αίτημα, και ο έλεγχος κάθε `GET` θα έθαβε τις γραμμές που έχουν σημασία.
+Κάθε αλλαγή κατάστασης καταγράφεται. Οι αναγνώσεις καταγράφονται μόνο όπου η ίδια η ανάγνωση αποτελεί ευαίσθητη ενέργεια — η προβολή του ιστορικού εκτελέσεων ενός workflow, το άνοιγμα ενός credential, η λήψη ενός αρχείου. Οι συνήθεις αναγνώσεις λιστών και λεπτομερειών δεν ελέγχονται· το access log καταγράφει ήδη ότι συνέβη ένα αίτημα, και ο έλεγχος κάθε `GET` θα έθαβε τις γραμμές που έχουν σημασία. Η μόνη εξαίρεση είναι οι [προβολές σελίδων](#page-views), οι οποίες καταγράφουν πού πλοηγήθηκε ένας συνδεδεμένος χρήστης στην εφαρμογή.
 
 ### Authentication
 
@@ -62,9 +62,34 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `sso_settings.update` | Ένας διαχειριστής άλλαξε τη διαμόρφωση [SSO](./sso.md). Καταγράφει `enabled` και `password_login_disabled`, ποτέ το client secret. |
 | `sso_settings.test` | Ένας διαχειριστής εκτέλεσε τη δοκιμή σύνδεσης SSO. |
 
+### Προβολές σελίδων
+
+Το `page.view` εγγράφεται κάθε φορά που ένας συνδεδεμένος χρήστης ανοίγει μια σελίδα στην εφαρμογή ιστού, με τη διαδρομή URL σε ένα πεδίο `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Η διαδρομή είναι η εσωτερική διαδρομή της εφαρμογής. Οι καρτέλες του πίνακα ελέγχου αποτελούν μέρος της (`/?tab=traces`), όπως και τα αναγνωριστικά που ονομάζουν αυτό που είναι ανοιχτό, όπως το `/workflows/<id>`. Διατηρείται μόνο μια σύντομη λίστα παραμέτρων ερωτήματος που προσδιορίζουν τη σελίδα (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`). Όλα τα άλλα στο string ερωτήματος και ολόκληρο το τμήμα απορρίπτονται. Οι σελίδες των οποίων ο σύνδεσμος φέρει μυστικό, όπως το `/review/<token>`, καταγράφονται με το σύμβολο κράτησης θέσης `:token` αντί για το μυστικό.
+
+Το πρόγραμμα περιήγησης αναφέρει τη διαδρομή, επομένως μια γραμμή `page.view` δείχνει πού δήλωσε ο χρήστης ότι πήγε. Δεν αποδεικνύει ότι ο διακομιστής επέστρεψε αυτή τη σελίδα. Οι επισκέψεις στη σελίδα σύνδεσης και σε συνδέσμους που ανοίγουν ενώ είστε αποσυνδεδεμένοι δεν καταγράφονται, επειδή δεν συνδέεται χρήστης με αυτές.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+Το `workflow.run` εγγράφεται όταν ξεκινά μια εκτέλεση μέσω του API: το κουμπί Εκτέλεση του επεξεργαστή, το τελικό σημείο execute με περίοδο σύνδεσης, κλειδί API ή webhook, η πύλη συνομιλίας και τα εργαλεία MCP. Καταγράφει ποιος την ξεκίνησε, πώς και πώς τελείωσε:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+Το `execution_id` συνδέει τη γραμμή με την εκτέλεση στο Ιστορικό εκτελέσεων. Το `outcome` είναι `failure` όταν η εκτέλεση ολοκληρώθηκε με `error`, `cancelled` ή `timeout`. Μια εκτέλεση που διακόπτεται για ανθρώπινη αναθεώρηση ή διατηρείται στην ουρά ταυτόχρονης εκτέλεσης είναι μια γραμμή `success` με `status=pending` ή `status=queued`. Μια κλήση χωρίς συνδεδεμένο χρήστη, όπως ένα ανώνυμο webhook ή ένας επισκέπτης πύλης, δεν έχει `actor_id` ή `actor_email`. Οι είσοδοι και οι έξοδοι δεν εγγράφονται ποτέ.
+
+Οι εκτελέσεις που ξεκινούν από χρονοδιάγραμμα, κόμβο trigger, ουρά ή συμβάν δεν αποτελούν γραμμές ελέγχου. Εκτελούνται σε οποιαδήποτε παρουσία τις διεκδίκησε και καταγράφονται στο Ιστορικό εκτελέσεων με την πηγή trigger και την παρουσία που τις εκτέλεσε.
+
+Το `workflow.history_view` εγγράφεται όταν κάποιος ανοίγει το ιστορικό εκτελέσεων μιας ροής εργασίας. Η σύντομη αναζήτηση που εμφανίζει την τελευταία εκτέλεση ενός workflow στον καμβά ή σε μια λίστα δεν ελέγχεται.
+
 
 Το `workflow.history_view` καταγράφει `owned=false` όταν ένας συνεργάτης διαβάζει το ιστορικό εκτελέσεων κάποιου άλλου. Το `workflow.delete` καταγράφει `outcome=denied` με `reason=not_owner` όταν ένας συνεργάτης επιχειρεί διαγραφή.
 
@@ -96,6 +121,27 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 Δύο πράγματα το επιβάλλουν αυτό. Τα σημεία κλήσης είναι γραμμένα ώστε να περνούν μόνο ασφαλή πεδία, και ο βοηθός ελέγχου αποκρύπτει ως δικλείδα ασφαλείας: οποιοδήποτε πεδίο του οποίου το όνομα περιέχει `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` ή παρόμοιο αντικαθίσταται με `***` πριν κατασκευαστεί η γραμμή. Η υπερβολική απόκρυψη είναι σκόπιμη — μια μη χρήσιμη γραμμή είναι καλύτερη από ένα διαρρεύσαν διαπιστευτήριο.
 
 Όπου ένα μυστικό είναι πραγματικά σχετικό με την εγγραφή, καταγράφεται μόνο η μορφή του. Μια κοινή χρήση αρχείου καταγράφει `password_protected=true`, ποτέ τον κωδικό πρόσβασης.
+
+## Heym Work
+
+Όταν εκτελείτε το Heym Work παράλληλα με το Heym, το Work εκπέμπει γραμμές ελέγχου στο stdout του δικού του κοντέινερ στην ίδια μορφή Winston:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Το Work καταγράφει τις ενέργειες των χρηστών σε σελίδες, πίνακες και εγγραφές:
+
+| Ενέργεια | Σημασία |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Αλλαγές σε σελίδες και διατάξεις πίνακα ελέγχου |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Αλλαγές διάταξης στηλών Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Συμβάντα κύκλου ζωής καρτών |
+| `record.create`, `record.update`, `record.delete` | Μεταλλάξεις εγγραφών πίνακα δεδομένων μέσω του Work |
+| `chat.message` | Προτροπή χρήστη που στάλθηκε στον βοηθό Work |
+| `export.csv`, `export.json` | Εξαγωγές δεδομένων |
+
+Κάθε γραμμή φέρει τα ίδια πεδία `actor_id`, `actor_email`, `timestamp` και `outcome` με τις γραμμές ελέγχου του Heym, ώστε οι συλλέκτες αρχείων καταγραφής να μπορούν να αναλύσουν και τα δύο με έναν ενιαίο αγωγό.
 
 ## Διατήρηση
 

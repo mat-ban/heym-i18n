@@ -51,6 +51,8 @@ Membuka Workflow pada `/workflows/{workflowId}/{executionId}` secara otomatis me
 
 ### Kasus penggunaan
 
+Tekan Ctrl/Cmd+klik pada eksekusi di salah satu daftar riwayat untuk membuka deep link tersebut di tab browser baru. Tab saat ini dan dialog yang terbuka tetap seperti semula. Eksekusi chat dan asisten tidak memiliki workflow, sehingga pintasan hanya memilihnya seperti klik biasa.
+
 - Menjalankan ulang Workflow dengan input yang sama
 - Men-debug eksekusi yang gagal dengan memeriksa input dan output Node
 - Membandingkan output antar eksekusi

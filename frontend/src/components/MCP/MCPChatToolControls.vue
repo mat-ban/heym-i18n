@@ -6,6 +6,7 @@ import { MessagesSquare, ToggleLeft, ToggleRight } from "lucide-vue-next";
 import type { CredentialListItem, LLMModel } from "@/types/credential";
 import type { MCPChatToolConfig, MCPChatToolUpdate } from "@/services/api";
 
+import MCPA2AControls from "@/components/MCP/MCPA2AControls.vue";
 import SearchableSelect from "@/components/ui/SearchableSelect.vue";
 import { useAiDefaults } from "@/composables/useAiDefaults";
 import { cn } from "@/lib/utils";
@@ -16,12 +17,15 @@ interface Props {
   credentials: CredentialListItem[];
   /** Rendered inside a named server panel, which uses tighter spacing. */
   compact?: boolean;
+  /** The named server this card belongs to; null for the global server. */
+  serverId?: string | null;
 }
 
-const props = withDefaults(defineProps<Props>(), { compact: false });
+const props = withDefaults(defineProps<Props>(), { compact: false, serverId: null });
 
 const emit = defineEmits<{
   update: [update: MCPChatToolUpdate];
+  copy: [text: string, label: string];
 }>();
 
 const aiDefaults = useAiDefaults();
@@ -65,9 +69,10 @@ const isConfigured = computed(
 );
 
 const statusText = computed(() => {
-  if (!props.chatTool.enabled) return t("mcp.chatTool.disabled");
-  if (!isConfigured.value) return t("mcp.chatTool.unconfigured");
-  return t("mcp.chatTool.enabled");
+  if (!props.chatTool.enabled) return t("mcp.agentReach.off");
+  if (!isConfigured.value) return t("mcp.agentReach.unconfigured");
+  if (props.chatTool.a2a_enabled) return t("mcp.agentReach.mcpA2a");
+  return t("mcp.agentReach.mcpOnly");
 });
 
 async function loadModels(credentialId: string | null): Promise<void> {
@@ -221,5 +226,12 @@ function onModelSelect(value: string | undefined): void {
     >
       {{ $t("mcp.chatTool.notConfiguredWarning") }}
     </p>
+    <MCPA2AControls
+      v-if="chatTool.enabled"
+      :chat-tool="chatTool"
+      :server-id="serverId"
+      @update="emitUpdate"
+      @copy="(text, label) => emit('copy', text, label)"
+    />
   </div>
 </template>

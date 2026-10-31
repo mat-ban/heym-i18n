@@ -51,6 +51,8 @@ Obrir un Workflow a `/workflows/{workflowId}/{executionId}` porta automàticamen
 
 ### Casos d'ús
 
+Feu Ctrl/Cmd+clic en una execució de qualsevol de les llistes d'historial per obrir aquest enllaç directe en una pestanya nova del navegador. La pestanya actual i el diàleg obert es mantenen tal com estan. Les execucions de xat i assistent no tenen workflow, de manera que la drecera només les selecciona, com un clic normal.
+
 - Tornar a executar un Workflow amb les mateixes entrades
 - Depurar una execució fallida inspeccionant les entrades i les sortides dels Nodes
 - Comparar sortides entre execucions

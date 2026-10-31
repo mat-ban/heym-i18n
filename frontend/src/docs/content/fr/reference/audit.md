@@ -47,7 +47,7 @@ Dans l'application, l'onglet **Logs** lit la même sortie du conteneur. Il est c
 
 ## Ce qui est journalisé
 
-Chaque changement d'état est journalisé. Les lectures ne sont journalisées que lorsque la lecture constitue elle-même l'acte sensible — consulter l'historique d'exécution d'un workflow, ouvrir un identifiant, télécharger un fichier. Les lectures ordinaires de listes et de détails ne sont pas auditées ; le journal d'accès enregistre déjà qu'une requête a eu lieu, et auditer chaque `GET` noierait les lignes qui comptent.
+Chaque changement d'état est journalisé. Les lectures ne sont journalisées que lorsque la lecture constitue elle-même l'acte sensible — consulter l'historique d'exécution d'un workflow, ouvrir un identifiant, télécharger un fichier. Les lectures ordinaires de listes et de détails ne sont pas auditées ; le journal d'accès enregistre déjà qu'une requête a eu lieu, et auditer chaque `GET` noierait les lignes qui comptent. La seule exception concerne les [affichages de page](#page-views), qui enregistrent les déplacements d'un utilisateur connecté dans l'application.
 
 ### Authentification
 
@@ -62,9 +62,34 @@ Chaque changement d'état est journalisé. Les lectures ne sont journalisées qu
 | `sso_settings.update` | Un administrateur a modifié la configuration [SSO](./sso.md). Enregistre `enabled` et `password_login_disabled`, jamais le client secret. |
 | `sso_settings.test` | Un administrateur a lancé le test de connexion SSO. |
 
+### Affichages de page
+
+`page.view` est consigné chaque fois qu'un utilisateur connecté ouvre une page dans l'application web, avec le chemin d'URL dans un champ `path` :
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Le chemin correspond à la route interne de l'application. Les onglets du tableau de bord en font partie (`/?tab=traces`), tout comme les identifiants désignant l'élément ouvert, tel que `/workflows/<id>`. Seule une sélection restreinte de paramètres de requête identifiant la page est conservée (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`) ; tout le reste de la chaîne de requête et l'intégralité du fragment sont ignorés. Les pages dont le lien transporte un secret, comme `/review/<token>`, sont enregistrées avec l'espace réservé `:token` à la place du secret.
+
+Le navigateur signalant le chemin, une ligne `page.view` reflète la destination déclarée par l'utilisateur. Elle ne prouve pas que le serveur a renvoyé cette page. Les visites de la page de connexion et les liens ouverts en étant déconnecté ne sont pas enregistrés, car aucun utilisateur n'y est associé.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` est consigné lorsqu'une exécution est lancée via l'API : le bouton Exécuter de l'éditeur, l'endpoint d'exécution avec une session, une clé API ou un webhook, le portail de chat et les outils MCP. Il enregistre qui l'a lancée, comment, et comment elle s'est terminée :
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` relie la ligne à l'exécution dans l'historique d'exécution. `outcome` est `failure` lorsque l'exécution s'est terminée par `error`, `cancelled` ou `timeout`. Une exécution en attente de révision humaine ou retenue dans la file de concurrence est une ligne `success` avec `status=pending` ou `status=queued`. Un appel sans utilisateur connecté, tel qu'un webhook anonyme ou un visiteur de portail, ne comporte ni `actor_id` ni `actor_email`. Les entrées et les sorties ne sont jamais consignées.
+
+Les exécutions déclenchées par un planning, un nœud trigger, une file ou un événement ne constituent pas des lignes d'audit. Elles s'exécutent sur l'instance qui les a prises en charge et sont enregistrées dans l'historique d'exécution avec leur source de déclenchement et l'instance d'exécution.
+
+`workflow.history_view` est consigné lorsque quelqu'un ouvre l'historique d'exécution d'un workflow. La consultation ponctuelle affichant la dernière exécution sur le canevas ou dans une liste n'est pas auditée.
+
 
 `workflow.history_view` enregistre `owned=false` lorsqu'un collaborateur consulte l'historique d'exécution de quelqu'un d'autre. `workflow.delete` enregistre `outcome=denied` avec `reason=not_owner` lorsqu'un collaborateur tente de supprimer.
 
@@ -96,6 +121,27 @@ Une ligne d'audit enregistre des identifiants, des noms et des compteurs. Elle n
 Deux mécanismes garantissent cela. Les sites d'appel sont écrits de manière à ne transmettre que des champs sûrs, et l'helper d'audit effectue une rédaction en dernier recours : tout champ dont le nom contient `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` ou un terme similaire est remplacé par `***` avant la construction de la ligne. La sur-rédaction est délibérée — une ligne peu utile vaut mieux qu'un identifiant divulgué.
 
 Lorsqu'un secret est réellement pertinent pour l'enregistrement, seule sa forme est journalisée. Un partage de fichier enregistre `password_protected=true`, jamais le mot de passe.
+
+## Heym Work
+
+Lorsque vous exécutez Heym Work aux côtés de Heym, Work émet des lignes d'audit sur le stdout de son propre conteneur dans le même format Winston :
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work journalise les actions des utilisateurs sur les pages, les tableaux et les enregistrements :
+
+| Action | Signification |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Modifications des pages et dispositions de tableau de bord |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Modifications de disposition des colonnes Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Événements du cycle de vie des cartes |
+| `record.create`, `record.update`, `record.delete` | Mutations d'enregistrements de table de données via Work |
+| `chat.message` | Prompt utilisateur envoyé à l'assistant Work |
+| `export.csv`, `export.json` | Exports de données |
+
+Chaque ligne comporte les mêmes champs `actor_id`, `actor_email`, `timestamp` et `outcome` que les lignes d'audit de Heym, permettant aux collecteurs de journaux de traiter les deux avec un pipeline unique.
 
 ## Rétention
 

@@ -14,7 +14,7 @@
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Αξιολογήσεις](../tabs/evals-tab.md) | OpenAI, Google, Custom | API key για το μοντέλο |
 | [Decision](../nodes/decision-node.md), [Αξιολογήσεις](../tabs/evals-tab.md) judge | Decision Model | Base URL ενός endpoint μοντέλου αποφάσεων, συν ένα προαιρετικό API key |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Επιλέγει ποιο από τα μοντέλα σας εξυπηρετεί κάθε αίτημα, χρησιμοποιώντας ένα μοντέλο αποφάσεων |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Αξιολογήσεις](../tabs/evals-tab.md) σουίτες prompt | Model Router (Auto Model) | Επιλέγει ποιο από τα μοντέλα σας εξυπηρετεί κάθε αίτημα, χρησιμοποιώντας ένα μοντέλο αποφάσεων |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Σύνδεση με συνδρομή ChatGPT (OAuth) ή ένα Codex access token για τον runner, συν ένα GitHub PAT για λειτουργίες αποθετηρίου |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Ένα API key πύλης OpenCode Go (προαιρετικό base URL) για τον runner, συν ένα GitHub PAT για λειτουργίες αποθετηρίου |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) για κλήσεις GitHub API, λειτουργίες του κόμβου GitHub και ενσωματώσεις MCP |

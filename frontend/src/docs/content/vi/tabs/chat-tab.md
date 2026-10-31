@@ -23,7 +23,8 @@ Bạn cũng có thể bắt đầu cuộc trò chuyện từ ô chat trên [tab 
 - **Tin nhắn tiếp theo trong hàng đợi** – Gửi thêm tin nhắn trong khi câu trả lời đang streaming. Các tin nhắn trong hàng đợi được lưu lại, có thể chỉnh sửa hoặc xóa trước khi bắt đầu, và chạy theo thứ tự sau khi phản hồi đang hoạt động kết thúc
 - **Tạm dừng để lập kế hoạch** – Khi Chat cần thông tin chi tiết để lập kế hoạch, nó đặt câu hỏi làm rõ và tạm dừng các tin nhắn tiếp theo trong hàng đợi cho đến khi bạn trả lời. Sau khi câu trả lời lập kế hoạch hoàn tất, các tin nhắn trong hàng đợi tiếp tục
 - **Credentials** – Khi workflow mà Chat tạo hoặc chỉnh sửa cần một credential, Chat hỏi bạn muốn dùng credential nào, đề nghị tạo credential mới ngay trong cuộc trò chuyện, hoặc cho phép bạn tiếp tục mà không cần. Bạn cũng có thể yêu cầu Chat tạo credential hoặc cập nhật credential bạn sở hữu; nó mở form credential trong cuộc trò chuyện. Model chỉ thấy tên và loại của credential, không bao giờ thấy giá trị, đối với cả credential bạn sở hữu và credential được chia sẻ với bạn. Các node LLM và Agent do Chat thêm vào sẽ chạy trên credential và model đã chọn cho chat, bao gồm cả credential được chia sẻ; khi Chat chỉnh sửa workflow, các node LLM và Agent hiện có sẽ giữ nguyên credential và model của chúng. Xem [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Data tables** – Khi workflow mà Chat tạo hoặc chỉnh sửa lưu trữ bản ghi, Chat hỏi bạn muốn dùng [data table](./datatable-tab.md) nào hoặc đề nghị tạo một data table với các cột mà workflow cần. Nó cũng có thể liệt kê các bảng của bạn và các cột của chúng. Nó không bao giờ đọc hoặc ghi các hàng. Xem [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Hỏi bạn có những [dashboards](./dashboard-tab.md) nào, những gì có trên một bảng điều khiển, hoặc một workflow nằm trên bảng điều khiển nào. Yêu cầu Chat thêm một tiện ích mới vào bảng điều khiển (nó đặt một tiện ích trống ở đó, sau đó xây dựng và kiểm thử workflow của nó), đặt một workflow hiện có lên bảng điều khiển dưới dạng tiện ích, đổi tên hoặc xóa tiện ích, hoặc sắp xếp gọn gàng bố cục bảng điều khiển. Heym Work hiển thị các bảng điều khiển này dưới dạng các trang của nó. Xem [Dashboard › Từ Chat và MCP](./dashboard-tab.md#từ-chat-và-mcp)
+- **Bảng dữ liệu** – Khi một workflow do Chat tạo hoặc chỉnh sửa lưu trữ các bản ghi, Chat sẽ hỏi nên sử dụng [bảng dữ liệu](./datatable-tab.md) nào hoặc đề nghị tạo một bảng mới với các cột cần thiết. Nó cũng có thể kiểm tra các hàng, thêm hoặc xóa cột và chèn, cập nhật hoặc xóa hàng trực tiếp trên các bảng bạn sở hữu hoặc có thể chỉnh sửa. Cung cấp cho nó tên bảng hoặc liên kết DataTable. Việc xóa cột và xóa tất cả các hàng đều yêu cầu xác nhận; việc thêm cột giữ nguyên dữ liệu hiện có. Xem [Trợ lý AI › Bảng dữ liệu](../reference/ai-assistant.md#data-tables)
 - **Phản hồi streaming** – Xem đầu ra của model khi nó streaming
 - **Dừng phản hồi** – Ngắt câu trả lời đang streaming bất cứ lúc nào; việc dừng cũng xóa các tin nhắn trong hàng đợi của cuộc trò chuyện đó
 - **Hiển thị Markdown** – Phản hồi hỗ trợ định dạng markdown, bao gồm hình ảnh inline
@@ -33,19 +34,20 @@ Bạn cũng có thể bắt đầu cuộc trò chuyện từ ô chat trên [tab 
 - **Nhập bằng giọng nói** – Sử dụng nút microphone để chuyển giọng nói thành văn bản (được trình duyệt hỗ trợ). Khi dừng ghi âm, Heym có thể tinh chỉnh nhẹ bản ghi trước khi bạn gửi
 - **Workflow đã lên lịch** – Hỏi khi nào các cron workflow chạy (hôm nay, tuần này, tháng này hoặc khoảng ngày tùy chỉnh). Trợ lý sử dụng cùng dữ liệu lịch trình như tab [Scheduled](./scheduled-tab.md) và có thể giới hạn kết quả ở các workflow bạn sở hữu hoặc bao gồm cả những workflow được chia sẻ với bạn
 - **Lịch sử chạy workflow** – Hỏi về một workflow ("báo cáo hàng ngày đã chạy bao nhiêu lần?", "nó có thất bại không?", "lần chạy cuối là khi nào?"). Chat tra cứu workflow theo ID và trả lời dựa trên số lần chạy, phân loại trạng thái, thời gian chạy đầu và cuối, và thời lượng trung bình. Hỏi tại sao một lần chạy thất bại hoặc nó trả về gì, Chat sẽ mở lần chạy đó để đọc input, output và lỗi theo từng node
+- **Nơi các lượt chạy thất bại và lý do chúng chậm** – Hãy hỏi xem workflow của bạn thất bại ở đâu hoặc tại sao chúng chậm và Chat sẽ gọi tên các workflow chạy nhiều nhất, thất bại nhiều nhất và chậm nhất, cùng các loại nút chiếm nhiều thời gian nhất (trung bình mỗi lần gọi và tổng cộng), thất bại nhiều nhất và chạy nhiều nhất, những con số tương tự như trong tab [Analytics](./analytics-tab.md). Các loại nút được tính cho các lần chạy từ bản phát hành đã thêm phân tích nút. Hãy hỏi về giờ qua, 3 hoặc 6 giờ, 24 giờ, 7 hoặc 30 ngày, hoặc toàn bộ thời gian; các khung giờ bắt đầu đúng giờ, do đó "giờ qua" lúc 15:20 bao gồm từ 14:00 cho đến hiện tại.
 - **Trạng thái chạy trực tiếp** – Hỏi hiện tại đang có gì chạy và Chat trả lời với số lượng, tên các workflow, mỗi lần chạy đã diễn ra bao lâu, đang ở node nào, và liên kết trực tiếp đến lần chạy trực tiếp
 
 - **Chip ngữ cảnh chạy** – **Hỏi AI** trong [Execution History](../reference/execution-history.md#ask-ai) sẽ mở một cuộc trò chuyện mới với lần chạy Workflow đã chọn được đính kèm dưới dạng chip. Xem [Hỏi về một lần chạy](#hoi-ve-mot-lan-chay)
 
 ## Sử dụng Chat từ một MCP Client
 
-Engine Chat cũng có thể được truy cập từ bên ngoài trình duyệt. Bật **Heym Chat Tool** trong [tab MCP](./mcp-tab.md) và các MCP client — Claude, Cursor, và bất kỳ công cụ nào khác hỗ trợ MCP — sẽ nhận được một tool `heym_chat` duy nhất, chạy chính engine này với đầy đủ các khả năng của nó.
+Công cụ Chat cũng có thể được truy cập từ bên ngoài trình duyệt. Bật **Heym Agent** trong [tab MCP / A2A](./mcp-tab.md) và các máy khách MCP (Claude, Cursor và bất kỳ công cụ nào khác hỗ trợ MCP) sẽ nhận được một công cụ `heym_chat` duy nhất chạy chính công cụ này với tất cả các khả năng của nó. Đánh dấu chọn **Bật A2A** để các agent khác có thể gửi tác vụ cho nó qua [A2A](../reference/a2a.md); các cuộc trò chuyện đó hiển thị biểu tượng mạng trong danh sách.
 
 Những cuộc hội thoại đó sẽ xuất hiện trong lịch sử của tab này, được đánh dấu bằng biểu tượng phích cắm trong danh sách hội thoại. Mở một cuộc hội thoại để đọc nội dung client đã hỏi, xem các tool card mà nó đã kích hoạt, và tự mình tiếp tục mạch hội thoại. Việc trả lời một câu hỏi làm rõ diễn ra giống nhau dù lượt đó bắt đầu từ đây hay từ một MCP client.
 
 Qua MCP, Chat không liệt kê, chọn hay tạo credentials. Các Workflow mà nó tạo ra sẽ để trống các trường credential, và phần trả lời sẽ nêu tên các node cần credential để bạn có thể thiết lập chúng trong editor.
 
-Data table cũng hoạt động qua MCP: Chat liệt kê các bảng của bạn, tạo bảng mới và kết nối chúng vào các workflow mà nó tạo ra. Câu hỏi về bảng của nó đến dưới dạng văn bản trong kết quả, vì vậy hãy trả lời bằng cùng `conversation_id`.
+Các bảng dữ liệu cũng hoạt động qua MCP: Chat có thể trực tiếp chỉnh sửa các cột và hàng, tạo bảng và liên kết chúng vào các workflow. Các câu hỏi về bảng và xác nhận xóa xuất hiện dưới dạng văn bản trong kết quả; trả lời bằng cùng một `conversation_id`.
 
 ## Giới hạn ngữ cảnh
 
@@ -116,9 +118,57 @@ có thể cho kết quả khác.
 
 [User Rules](../reference/user-settings.md) (được cấu hình trong Settings) sẽ tự động được đưa vào mọi cuộc hội thoại Chat như các chỉ dẫn ở cấp hệ thống. Hãy thiết lập một lần để áp dụng các tùy chọn lâu dài cho tất cả yêu cầu chat.
 
+## Làm việc với Evals
+
+Chat có thể tạo, thay đổi và chạy các bộ kiểm thử trong [Evals](./evals-tab.md), bao gồm cả bộ prompt và bộ agent:
+
+- **Bộ prompt**: "tạo một bộ prompt cho prompt trả lời hỗ trợ của tôi với 8 trường hợp kiểm thử và so sánh gpt-4o với gpt-4.1-mini". Chat viết các trường hợp kiểm thử với câu trả lời mong đợi, chọn phương pháp tính điểm và lưu bộ kiểm thử.
+  - Trước khi tạo bộ kiểm thử, nó xác định thông tin đăng nhập LLM và các mô hình cần sử dụng. Với đúng một thông tin đăng nhập LLM, nó sẽ sử dụng thông tin đó và thông báo; nếu không, nó sẽ hỏi.
+  - Đối với phương pháp chấm điểm LLM-as-Judge, nó cũng hỏi xem có nên để một giám khảo riêng biệt chấm điểm các câu trả lời hay không.
+- **Bộ agent**: "kiểm tra xem agent hỗ trợ của tôi có luôn tìm kiếm tài liệu và không bao giờ gửi email hay không". Chat tìm thấy agent và lưu các kiểm tra công cụ cùng ngưỡng giới hạn. Khi bạn yêu cầu, nó sẽ chạy workflow, tạo đầu vào khác nhau cho mỗi lần chạy.
+  - Các lần chạy bộ agent là các lần chạy workflow thực sự, do đó các tác dụng phụ của chúng sẽ diễn ra. Chat cho biết nó bắt đầu bao nhiêu lượt chạy.
+- **Baseline**: Chat có thể làm việc với đường cơ sở của agent theo ba cách:
+  - Báo cáo từ các lần chạy gần đây nhất của agent.
+  - Xây dựng từ các lần chạy mà nó bắt đầu ("chạy 5 lần và sử dụng kết quả đó làm baseline").
+  - Lưu các con số bạn cung cấp ("đặt baseline thành 3 giây p95 và 0,01 $ cho mỗi lần chạy").
+- **Các lần chạy**: Chat đợi tối đa một phút cho một lần chạy, sau đó báo cáo kết quả:
+  - Đối với bộ prompt: số lần vượt qua của mỗi mô hình và các trường hợp thất bại.
+  - Đối với bộ agent: tỷ lệ vượt qua, các kiểm tra thất bại và độ lệch so với đường cơ sở.
+  - Một lần chạy dài hơn sẽ tiếp tục trong Evals; hãy yêu cầu Chat kiểm tra lại.
+
+Sau khi Chat tạo hoặc thay đổi một bộ kiểm thử, câu trả lời sẽ hiển thị một thẻ có tên bộ kiểm thử, loại của nó và nút **Mở trong Evals**, giống như thẻ của một workflow đã lưu. Qua MCP, kết quả của `heym_chat` liệt kê liên kết của mọi bộ kiểm thử được lưu trong lệnh gọi đó.
+
+Điều tương tự cũng hoạt động từ ứng dụng khách MCP thông qua `heym_chat` (xem [Sử dụng Chat từ ứng dụng khách MCP](#sử-dụng-chat-từ-ứng-dụng-khách-mcp)). Các công cụ đánh giá vẫn nằm bên trong `heym_chat`; các ứng dụng khách MCP không thấy chúng dưới dạng các công cụ riêng biệt.
+
+Trợ lý AI của trình chỉnh sửa không tạo các bộ kiểm thử.
+
+## Làm việc với Evals
+
+Chat có thể tạo, thay đổi và chạy các bộ kiểm thử trong [Evals](./evals-tab.md), bao gồm cả bộ prompt và bộ agent:
+
+- **Bộ prompt**: "tạo một bộ prompt cho prompt trả lời hỗ trợ của tôi với 8 trường hợp kiểm thử và so sánh gpt-4o với gpt-4.1-mini". Chat viết các trường hợp kiểm thử với câu trả lời mong đợi, chọn phương pháp tính điểm và lưu bộ kiểm thử.
+  - Trước khi tạo bộ kiểm thử, nó xác định thông tin đăng nhập LLM và các mô hình cần sử dụng. Với đúng một thông tin đăng nhập LLM, nó sẽ sử dụng thông tin đó và thông báo; nếu không, nó sẽ hỏi.
+  - Đối với phương pháp chấm điểm LLM-as-Judge, nó cũng hỏi xem có nên để một giám khảo riêng biệt chấm điểm các câu trả lời hay không.
+- **Bộ agent**: "kiểm tra xem agent hỗ trợ của tôi có luôn tìm kiếm tài liệu và không bao giờ gửi email hay không". Chat tìm thấy agent và lưu các kiểm tra công cụ cùng ngưỡng giới hạn. Khi bạn yêu cầu, nó sẽ chạy workflow, tạo đầu vào khác nhau cho mỗi lần chạy.
+  - Các lần chạy bộ agent là các lần chạy workflow thực sự, do đó các tác dụng phụ của chúng sẽ diễn ra. Chat cho biết nó bắt đầu bao nhiêu lượt chạy.
+- **Baseline**: Chat có thể làm việc với đường cơ sở của agent theo ba cách:
+  - Báo cáo từ các lần chạy gần đây nhất của agent.
+  - Xây dựng từ các lần chạy mà nó bắt đầu ("chạy 5 lần và sử dụng kết quả đó làm baseline").
+  - Lưu các con số bạn cung cấp ("đặt baseline thành 3 giây p95 và 0,01 $ cho mỗi lần chạy").
+- **Các lần chạy**: Chat đợi tối đa một phút cho một lần chạy, sau đó báo cáo kết quả:
+  - Đối với bộ prompt: số lần vượt qua của mỗi mô hình và các trường hợp thất bại.
+  - Đối với bộ agent: tỷ lệ vượt qua, các kiểm tra thất bại và độ lệch so với đường cơ sở.
+  - Một lần chạy dài hơn sẽ tiếp tục trong Evals; hãy yêu cầu Chat kiểm tra lại.
+
+Sau khi Chat tạo hoặc thay đổi một bộ kiểm thử, câu trả lời sẽ hiển thị một thẻ có tên bộ kiểm thử, loại của nó và nút **Mở trong Evals**, giống như thẻ của một workflow đã lưu. Qua MCP, kết quả của `heym_chat` liệt kê liên kết của mọi bộ kiểm thử được lưu trong lệnh gọi đó.
+
+Điều tương tự cũng hoạt động từ ứng dụng khách MCP thông qua `heym_chat` (xem [Sử dụng Chat từ ứng dụng khách MCP](#sử-dụng-chat-từ-ứng-dụng-khách-mcp)). Các công cụ đánh giá vẫn nằm bên trong `heym_chat`; các ứng dụng khách MCP không thấy chúng dưới dạng các công cụ riêng biệt.
+
+Trợ lý AI của trình chỉnh sửa không tạo các bộ kiểm thử.
+
 ## Liên quan
 
-- [Tab MCP](./mcp-tab.md) – Hiển thị engine này cho các MCP client dưới dạng công cụ `heym_chat`
+- [Tab MCP / A2A](./mcp-tab.md) – Hiển thị engine này cho các MCP client dưới dạng công cụ `heym_chat`
 - [Cài đặt](../reference/user-settings.md) – Thiết lập User Rules áp dụng cho mọi yêu cầu chat
 - [Tab Credentials](./credentials-tab.md) – Thêm và quản lý API key
 - [Tab Variables](./global-variables-tab.md) – Biến toàn cục khả dụng cho Chat

@@ -173,7 +173,7 @@ Gdy workflow zapisuje, przechowuje lub wyszukuje rekordy, a nie wskazano innego 
 
 Należy wybrać nową tabelę i nacisnąć **Prześlij odpowiedzi**: karta utworzy tabelę, a asystent umieści jej identyfikator w węźle i użyje dokładnych nazw jej kolumn. Można również poprosić o samą tabelę, na przykład „utwórz tabelę dla moich leadów”.
 
-Asystent widzi nazwy tabel, opisy i kolumny, nigdy wiersze. Nigdy nie zmienia kolumn istniejącej tabeli: jeśli w tabeli brakuje kolumny wymaganej przez workflow, wskazuje tę kolumnę i proponuje nową tabelę. Kolumny należy dodawać w [zakładce DataTable](../tabs/datatable-tab.md).
+Asystent canvasu widzi nazwy tabel, opisy i kolumny, nigdy wiersze. Konfiguruje węzły workflow na podstawie tych metadanych; kolumny można dodać w [zakładce DataTable](../tabs/datatable-tab.md) lub poprosić o to [Chat](../tabs/chat-tab.md). Chat oraz `heym_chat` mogą przeglądać wiersze oraz bezpośrednio dodawać lub usuwać kolumny, a także wstawiać, aktualizować lub usuwać wiersze w tabelach, do których masz uprawnienia właściciela lub prawa zapisu, w tym w ramach udostępnień zespołowych. Usunięcie kolumn oraz wyczyszczenie wszystkich wierszy wymaga potwierdzenia przed usunięciem danych.
 
 ## Powiązane
 

@@ -51,6 +51,8 @@ Aprendo un workflow all'indirizzo `/workflows/{workflowId}/{executionId}` si por
 
 ### Casi d'uso
 
+Faccia Ctrl/Cmd+clic su un'esecuzione in uno dei due elenchi della cronologia per aprire il deep link in una nuova scheda del browser. La scheda corrente e la finestra di dialogo aperta rimangono invariate. Le esecuzioni di chat e assistente non hanno un workflow, pertanto la scorciatoia si limita a selezionarle, come un semplice clic.
+
 - Rieseguire un workflow con gli stessi input
 - Effettuare il debug di un'esecuzione fallita ispezionando input e output dei nodi
 - Confrontare gli output tra diverse esecuzioni

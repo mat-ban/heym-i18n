@@ -23,7 +23,8 @@
 - **Kuyruğa alınan takip mesajları** – Bir yanıt akış hâlindeyken daha fazla mesaj gönderin. Kuyruğa alınan mesajlar kalıcıdır, başlamadan önce düzenlenebilir veya silinebilir ve etkin yanıttan sonra sırayla çalışır
 - **Planlama duraklamaları** – Chat'in planlama ayrıntılarına ihtiyacı olduğunda, açıklayıcı sorular sorar ve siz yanıtlayana kadar kuyruğa alınan takip mesajlarını duraklatır. Planlama yanıtı tamamlandıktan sonra kuyruğa alınan mesajlar devam eder
 - **Credentials** – Chat'in oluşturduğu veya düzenlediği bir workflow bir credential gerektirdiğinde, Chat hangisinin kullanılacağını sorar, sohbet içinde yeni bir tane oluşturmayı önerir veya credentialsız devam etmenize izin verir. Ayrıca Chat'ten bir credential oluşturmasını veya sahip olduğunuz birini güncellemesini isteyebilirsiniz; credential formunu sohbet içinde açar. Model, credential'ın adını ve türünü görür, değerlerini asla görmez; bu durum hem sahip olduğunuz hem de sizinle paylaşılan kimlik bilgileri için geçerlidir. Chat'in eklediği LLM ve Agent düğümleri, paylaşılan kimlik bilgileri de dahil olmak üzere sohbet için seçilen kimlik bilgisi ve model üzerinde çalışır; Chat bir workflow'u düzenlediğinde, mevcut LLM ve Agent düğümleri kendi kimlik bilgilerini ve modellerini korur. Bkz. [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Data tables** – Chat'in oluşturduğu veya düzenlediği bir workflow kayıtları depoladığında, Chat hangi [data table](./datatable-tab.md)'ın kullanılacağını sorar veya workflow'un ihtiyaç duyduğu sütunlarla bir tane oluşturmayı önerir. Ayrıca tablolarınızı ve sütunlarını listeleyebilir. Satırları asla okumaz veya yazmaz. Bkz. [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Hangi [dashboards](./dashboard-tab.md) panellerine sahip olduğunuzu, birinde ne olduğunu veya bir workflow'un hangi panoda olduğunu sorun. Chat'ten bir panoya yeni bir pencere öğesi eklemesini (oraya boş bir pencere öğesi yerleştirir, ardından workflow'unu oluşturur ve test eder), mevcut bir workflow'u bir panoya pencere öğesi olarak yerleştirmesini, bir pencere öğesini yeniden adlandırmasını veya silmesini ya da bir panonun düzenini toplamasını isteyin. Heym Work bu panoları kendi sayfaları olarak gösterir. Bkz. [Dashboard › Chat ve MCP'den](./dashboard-tab.md#chat-ve-mcp-den)
+- **Veri tabloları** – Chat'in oluşturduğu veya düzenlediği bir workflow kayıtları sakladığında, Chat hangi [veri tablosunun](./datatable-tab.md) kullanılacağını sorar veya gerekli sütunlara sahip yeni bir tane oluşturmayı önerir. Ayrıca satırları inceleyebilir, sütun ekleyip kaldırabilir ve sahip olduğunuz veya düzenleyebileceğiniz tablolarda doğrudan satır ekleyebilir, güncelleyebilir veya silebilir. Ona bir tablo adı veya DataTable bağlantısı verin. Sütunların kaldırılması ve tüm satırların temizlenmesi onay ister; sütun ekleme mevcut verileri korur. Bkz. [AI Asistanı › Veri tabloları](../reference/ai-assistant.md#data-tables)
 - **Streaming yanıtlar** – Modelin çıktısını akış hâlinde görün
 - **Yanıtı durdur** – Geçerli streaming yanıtını istediğiniz zaman kesintiye uğratın; durdurmak o sohbete ait kuyruğa alınan mesajları da temizler
 - **Markdown oluşturma** – Yanıtlar, satır içi görseller dahil olmak üzere markdown biçimlendirmesini destekler
@@ -33,19 +34,20 @@
 - **Sesli giriş** – Konuşmadan metne dönüştürme için mikrofon düğmesini kullanın (tarayıcı destekli). Kayıt durduğunda, Heym göndermeden önce transkripti hafifçe temizleyebilir
 - **Zamanlanmış workflow'lar** – Cron workflow'larının ne zaman çalıştığını sorun (bugün, bu hafta, bu ay veya özel bir tarih aralığı). Asistan, [Scheduled](./scheduled-tab.md) sekmesiyle aynı zamanlama verilerini kullanır ve sonuçları sahip olduğunuz workflow'larla sınırlayabilir veya sizinle paylaşılanları dahil edebilir
 - **Workflow çalıştırma geçmişi** – Tek bir workflow hakkında sorun ("günlük rapor kaç kez çalıştı?", "başarısız oldu mu?", "en son ne zaman çalıştı?"). Chat, workflow'u ID'siyle bulur ve çalıştırma sayısı, durum dağılımı, ilk ve son çalıştırma zamanı ve ortalama süresinden yanıt verir. Bir çalıştırmanın neden başarısız olduğunu veya ne döndürdüğünü sorun; Chat ardından girdilerini, çıktılarını ve node başına hatalarını okumak için o tek çalıştırmayı açar
+- **Çalıştırmalar nerede başarısız oluyor ve neden yavaş** – Workflow'larınızın nerede başarısız olduğunu veya neden yavaş olduğunu sorun; Chat en çok çalışan, en çok başarısız olan ve en yavaş olan workflow'ları ve en çok zaman alan (çağrı başına ortalama ve toplam), en çok başarısız olan ve en çok çalışan düğüm türlerini adlandırır; bu veriler [Analytics](./analytics-tab.md) sekmesindeki sayılarla aynıdır. Düğüm türleri, düğüm analitiğini ekleyen sürümden itibaren yapılan çalıştırmalar için sayılır. Son saat, 3 veya 6 saat, 24 saat, 7 veya 30 gün ya da tüm zamanlar hakkında bilgi isteyin; saat pencereleri saat başında başlar, bu nedenle 15:20'deki "son saat" 14:00'ten şu ana kadar olan süreyi kapsar.
 - **Canlı çalıştırma durumu** – Şu anda neyin çalıştığını sorun; Chat sayı, workflow adları, her çalıştırmanın ne kadar süredir devam ettiği, hangi node'da olduğu ve doğrudan canlı çalıştırmaya bir bağlantı ile yanıt verir
 
 - **Çalıştırma bağlam çipleri** – [Execution History](../reference/execution-history.md#ask-ai) içindeki **AI'ya Sor**, seçilen Workflow çalıştırmasının çip olarak eklendiği yeni bir konuşma açar. Bkz. [Bir Çalıştırma Hakkında Sorma](#bir-calistirma-hakkinda-sorma)
 
 ## Bir MCP İstemcisinden Chat Kullanma
 
-Chat motoruna tarayıcı dışından da erişilebilir. [MCP sekmesinde](./mcp-tab.md) **Heym Chat Tool**'u etkinleştirin; Claude, Cursor ve MCP konuşan diğer tüm MCP istemcileri, bu aynı motoru tüm yetenekleriyle çalıştıran tek bir `heym_chat` aracına kavuşur.
+Chat motoruna tarayıcı dışından da erişilebilir. [MCP / A2A sekmesinde](./mcp-tab.md) **Heym Agent** özelliğini açın; MCP istemcileri (Claude, Cursor ve MCP destekleyen diğer tüm araçlar), bu motoru tüm yetenekleriyle çalıştıran tek bir `heym_chat` aracı elde eder. Ayrıca **A2A'yı Etkinleştir** seçeneğini işaretleyin; böylece diğer agent'lar [A2A](../reference/a2a.md) üzerinden görev gönderebilir; bu konuşmalar listede bir ağ simgesi gösterir.
 
 Bu konuşmalar, bu sekmenin geçmişine düşer ve konuşma listesinde fiş simgesiyle işaretlenir. Birini açarak istemcinin ne sorduğunu okuyabilir, tetiklediği araç kartlarını görebilir ve konuşmayı kendiniz sürdürebilirsiniz. Bir netleştirme sorusunu yanıtlamak, tur buradan ya da bir MCP istemcisinden başlamış olsun, aynı şekilde çalışır.
 
 MCP üzerinden Chat, kimlik bilgilerini listelemez, seçmez veya oluşturmaz. Oluşturduğu Workflow'lar kimlik bilgisi alanlarını boş bırakır ve yanıt, bir kimlik bilgisi gerektiren node'ları adlandırır; böylece bunları editörde ayarlayabilirsiniz.
 
-Veri tabloları MCP üzerinden de çalışır: Chat tablolarınızı listeler, yenilerini oluşturur ve oluşturduğu Workflow'lara bağlar. Tablo sorusu, sonuçta metin olarak gelir; bu yüzden aynı `conversation_id` ile yanıtlayın.
+Veri tabloları MCP üzerinden de çalışır: Chat sütunları ve satırları doğrudan düzenleyebilir, tablolar oluşturabilir ve bunları workflow'lara bağlayabilir. Tablo soruları ve silme onayları sonuçta metin olarak gelir; aynı `conversation_id` ile yanıt verin.
 
 ## Bağlam Sınırı
 
@@ -114,9 +116,34 @@ farklı bir sonuç verebilir.
 
 (Ayarlar'da yapılandırılan) [Kullanıcı Kuralları](../reference/user-settings.md), her Chat konuşmasına sistem düzeyinde talimatlar olarak otomatik olarak enjekte edilir. Bunları bir kez ayarlayarak tüm chat isteklerine kalıcı tercihler uygulayın.
 
+
+## Evals ile Çalışma
+
+Chat, [Evals](./evals-tab.md) içindeki paketleri, hem prompt paketlerini hem de agent paketlerini oluşturabilir, değiştirebilir ve çalıştırabilir:
+
+- **Prompt paketi**: "destek yanıt prompt'um için 8 test senaryosu içeren bir prompt paketi oluştur ve gpt-4o ile gpt-4.1-mini'yi karşılaştır". Chat, test senaryolarını beklenen yanıtlarıyla birlikte yazar, bir puanlama yöntemi seçer ve paketi kaydeder.
+  - Paketi oluşturmadan önce hangi LLM kimlik bilgisinin ve modellerin kullanılacağını belirler. Tam olarak bir LLM kimlik bilgisi varsa onu kullanır ve bunu belirtir; aksi takdirde sorar.
+  - LLM-as-Judge puanlaması için ayrı bir hakemin yanıtları puanlaması gerekip gerekmediğini de sorar.
+- **Agent paketi**: "destek agent'ımın her zaman belgeleri aradığını ve asla e-posta göndermediğini kontrol et". Chat agent'ı bulur ve araç kontrollerini ile eşik değerlerini kaydeder. İstediğinizde workflow'u çalıştırır ve her çalıştırma için farklı bir girdi oluşturur.
+  - Agent paketi çalıştırmaları gerçek workflow çalıştırmalarıdır, dolayısıyla yan etkileri gerçekleşir. Chat kaç çalıştırma başlattığını belirtir.
+- **Baseline**: Chat, bir agent'ın temel çizgisiyle üç şekilde çalışabilir:
+  - Agent'ın en son çalıştırmalarından bunu bildirmek.
+  - Başlattığı çalıştırmalardan oluşturmak ("5 kez çalıştır ve bunu baseline olarak kullan").
+  - Verdiğiniz sayıları saklamak ("baseline'ı 3 saniye p95 ve çalıştırma başına 0,01 $ olarak ayarla").
+- **Çalıştırmalar**: Chat bir çalıştırma için bir dakikaya kadar bekler, ardından sonucu bildirir:
+  - Bir prompt paketi için: her modelin başarı sayısı ve başarısız olan durumlar.
+  - Bir agent paketi için: başarı oranı, başarısız kontroller ve temel çizgiden sapma.
+  - Daha uzun süren bir çalıştırma Evals içinde devam eder; Chat'ten tekrar kontrol etmesini isteyin.
+
+Chat bir paketi oluşturduktan veya değiştirdikten sonra yanıt, kaydedilmiş bir workflow kartı gibi paketin adını, türünü ve **Evals'ta Aç** düğmesini içeren bir kart gösterir. MCP üzerinden `heym_chat` sonucu, bu çağrıda kaydedilen her paketin bağlantısını listeler.
+
+Aynı işlem `heym_chat` aracılığıyla bir MCP istemcisinden de çalışır (bkz. [Chat'i bir MCP İstemcisinden Kullanma](#chati-bir-mcp-istemcisinden-kullanma)). Değerlendirme araçları `heym_chat` içinde kalır; MCP istemcileri bunları ayrı araçlar olarak görmez.
+
+Düzenleyicinin AI Asistanı paketler oluşturmaz.
+
 ## İlgili
 
-- [MCP Sekmesi](./mcp-tab.md) – Bu motoru MCP istemcilerine `heym_chat` aracı olarak sunun
+- [MCP / A2A Sekmesi](./mcp-tab.md) – Bu motoru MCP istemcilerine `heym_chat` aracı olarak sunun
 - [Ayarlar](../reference/user-settings.md) – Tüm sohbet isteklerine uygulanan Kullanıcı Kurallarını belirleyin
 - [Kimlik Bilgileri Sekmesi](./credentials-tab.md) – API anahtarlarını ekleyin ve yönetin
 - [Değişkenler Sekmesi](./global-variables-tab.md) – Sohbet için kullanılabilir global değişkenler

@@ -43,12 +43,14 @@ Entrambe le azioni **eseguono prima il workflow** (quando è valido ed eseguibil
 
 Il report generato copre tre sezioni, nell'ordine: **Improvement areas** (suggerimenti concreti, inclusa una prospettiva di **security** ogni volta che il workflow tocca credenziali, input utente, richieste esterne o esposizione di dati), lo **Purpose** del workflow e **What it does** (una descrizione dettagliata passo per passo dei nodi).
 
-La sezione **Improvement areas** esegue sempre quattro verifiche esplicite:
+La sezione **Improvement areas** esegue sempre cinque verifiche esplicite:
 
 1. **Error coverage** — se il canvas non contiene alcun nodo [Error Handler](../nodes/error-handler-node.md) e non è configurato alcun workflow di errore, il report lo segnala e raccomanda di aggiungere una gestione degli errori.
 2. **Time saved** — se non è impostato un tempo stimato risparmiato per esecuzione, il report raccomanda di configurarne uno affinché la metrica **Time Saved** di [Analytics](../tabs/analytics-tab.md) possa essere popolata.
 3. **Network nodes** — per i nodi che effettuano chiamate di rete (come [HTTP](../nodes/http-node.md) e i nodi di integrazione), il report raccomanda una gestione degli errori specifica per il nodo (retry e/o continue-on-error) su tali nodi.
 4. **Alerts** — quando non sono configurati [alerts](../tabs/alerts-tab.md) per il workflow, il report raccomanda di impostare gli avvisi prima del passaggio in produzione.
+
+5. **Evals**: quando il workflow contiene un nodo [Agent](../nodes/agent-node.md) privo di suite di agenti, il report consiglia una **Agent Suite** (o una **Prompt Suite**) in [Evals](../tabs/evals-tab.md#agent-suites); quando contiene un nodo [LLM](../nodes/llm-node.md), consiglia una **Prompt Suite** per testare il prompt su diversi modelli.
 
 ### Esecuzione dell'Analyzer dalle Properties
 

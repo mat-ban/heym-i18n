@@ -73,11 +73,11 @@ Dalinkitės lentelėmis su kitais vartotojais ar komandomis:
 1. Atidarykite dalijimosi dialogą iš lentelės detalių peržiūros
 2. Pridėkite vartotojus pagal el. paštą su **skaitymo** arba **rašymo** teise
 3. Pridėkite komandas su **skaitymo** arba **rašymo** teise
-4. Skaitymo teisę turintys vartotojai gali peržiūrėti duomenis; rašymo teisę turintys vartotojai gali keisti eilutes
+4. Tik skaitantys vartotojai gali peržiūrėti duomenis; vartotojai su rašymo prieiga gali modifikuoti eilutes ir stulpelius. Lentelės pervadinimas, jos aprašymo keitimas ir bendrinimų valdymas lieka prieinami tik savininkui.
 
 ## Lentelių kūrimas naudojant AI asistentą
 
-Drobė [AI Asistentas](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) ir `heym_chat` įrankis [MCP skirtuke](./mcp-tab.md) gali pasirinkti vieną iš Jūsų lentelių workflow, kuriuos jie kuria, arba sukurti naują. Jie siūlo pavadinimą ir stulpelius, ir sukuria lentelę, kai Jūs pateikiate klausimo kortelę. Jie niekada nekeičia esamos lentelės stulpelių ar nepaliečia jos eilučių: pridėkite ar redaguokite stulpelius čia.
+Drobės [AI asistentas](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) ir `heym_chat` įrankis [MCP skirtuke](./mcp-tab.md) gali pasirinkti vieną iš jūsų lentelių kuriamam workflow arba sukurti naują. Jie pasiūlo pavadinimą bei stulpelius ir sukuria lentelę, kai pateikiate klausimų kortelę. Drobės asistentas konfigūruoja workflow mazgus iš lentelės metaduomenų. Chat ir `heym_chat` taip pat gali tikrinti eilutes, pridėti arba pašalinti stulpelius bei tiesiogiai įterpti, atnaujinti arba ištrinti eilutes. Nurodykite lentelės pavadinimą arba šio skirtuko nuorodą. Rašymui reikalinga nuosavybė arba tiesioginė/komandos **rašymo** prieiga. Stulpelių pridėjimas išlaiko esamus duomenis; stulpelių šalinimas ištrina jų reikšmes iš kiekvienos eilutės. Stulpelių šalinimas ir visų eilučių išvalymas reikalauja patvirtinimo, atitinkant šį skirtuką.
 
 ## Naudojimas workflows
 

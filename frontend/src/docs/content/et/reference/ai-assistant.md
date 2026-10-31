@@ -173,7 +173,7 @@ Kui workflow salvestab, hoiustab või otsib kirjeid ja te ei ole määranud teis
 
 Valige uus tabel ja vajutage **Esita vastused**: kaart loob tabeli ning assistent paneb selle id node'ile ja kasutab selle täpseid veerunimesid. Võite ka paluda tabelit eraldi, näiteks "loo tabel minu müügivihjete jaoks".
 
-Assistent näeb tabelite nimesid, kirjeldusi ja veerge, mitte kunagi ridu. Ta ei muuda kunagi olemasoleva tabeli veerge: kui tabelil puudub veerg, mida workflow vajab, nimetab ta veeru ja pakub selle asemel uut tabelit. Lisage veerge [DataTable vahekaardil](../tabs/datatable-tab.md).
+Lõuendiassistent näeb tabelite nimesid, kirjeldusi ja veerge, mitte kunagi ridu. Ta konfigureerib workflow sõlmed nende metaandmete põhjal; lisage veerge [DataTable'i vahekaardil](../tabs/datatable-tab.md) või küsige [Chatilt](../tabs/chat-tab.md). Chat ja `heym_chat` saavad ridu vaadata ning otseselt veerge lisada või eemaldada ja ridu sisestada, värskendada või kustutada tabelites, mida te omate või millele teil on kirjutusõigus, sealhulgas tiimijagamiste kaudu. Veergude eemaldamine ja kõigi ridade tühjendamine küsivad enne andmete kustutamist kinnitust.
 
 ## Seotud
 

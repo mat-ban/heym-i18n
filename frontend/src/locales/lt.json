@@ -83,7 +83,8 @@
     "run": "Vykdyti",
     "dropFileOrClick": "Nutempkite failą čia arba spustelėkite, kad pasirinktumėte",
     "removeFile": "Pašalinti failą",
-    "chooseFileFor": "Pasirinkite failą {label}"
+    "chooseFileFor": "Pasirinkite failą {label}",
+    "new": "Naujas"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Nėra: kiekvienas modelis vertina save",
     "removeJudge": "Pašalinti vertintoją",
     "judgeModel": "Vertintojo modelis",
-    "enterJudgeModel": "Įveskite vertintojo modelį, kuris bus naudojamas su šiuo vertintoju."
+    "enterJudgeModel": "Įveskite vertintojo modelį, kuris bus naudojamas su šiuo vertintoju.",
+    "promptSuite": "Raginimų rinkinys",
+    "promptSuiteDesc": "Išbandykite sistemos raginimą keliuose modeliuose",
+    "agentSuite": "Agentų rinkinys",
+    "agentSuiteDesc": "Patikrinkite tikrus agento paleidimus: įrankiai, vėlavimas, kaina",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Ieškoti rinkinių...",
+    "loadingSuite": "Įkeliamas rinkinys...",
+    "couldNotLoadSuite": "Nepavyko įkelti šio rinkinio."
   },
   "statusFilter": {
     "status": "Būsena",
@@ -1701,7 +1711,9 @@
     "askAi": "Klausti DI",
     "askAiTitle": "Paklauskite Chat asistento apie šį vykdymą",
     "noNodeSpans": "Šiam vykdymui nebuvo užfiksuota mazgų span.",
-    "queuedProgress": "Eilėje {position}/{size}"
+    "queuedProgress": "Eilėje {position}/{size}",
+    "clickToSelectRun": "Spustelėkite, jei norite pasirinkti šį vykdymą",
+    "doubleClickOrOpenNewTab": "Dukart spustelėkite, jei norite perkelti šį vykdymą į drobę, Ctrl/Cmd+spustelėjimas atidaro naujoje kortelėje"
   },
   "portal": {
     "loadingPortal": "Įkeliamas portalas...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Pateikite savo Workflows kaip MCP įrankius DI asistentams",
+    "subtitle": "Pateikite savo darbo eigas kaip MCP įrankius ir „Heym Agent“ per MCP ir A2A",
     "connection": "MCP ryšys",
     "connectionSubtitle": "Prijunkite savo DI asistentą prie Workflows naudodami MCP protokolą.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Skiltyje Tinkintos programos spustelėkite Pridėti tinkintą programą",
     "geminiStep3": "Įklijuokite aukščiau nurodytą MCP serverio URL ir palikite Išplėstines funkcijas uždarytas; Gemini užsiregistruos automatiškai",
     "geminiStep4": "Spustelėkite Pirmyn ir autorizuokite naudodami Heym prisijungimo duomenis",
-    "geminiInfo": "Gemini naudoja OAuth saugiam autentifikavimui. Jūsų Heym prisijungimo duomenys naudojami prieigai autorizuoti ir niekada nebendrinami su Gemini. Prisijungus Heym taip pat veikia Gemini mobiliojoje programėlėje."
+    "geminiInfo": "Gemini naudoja OAuth saugiam autentifikavimui. Jūsų Heym prisijungimo duomenys naudojami prieigai autorizuoti ir niekada nebendrinami su Gemini. Prisijungus Heym taip pat veikia Gemini mobiliojoje programėlėje.",
+    "agentReach": {
+      "off": "Išjungta: MCP ir A2A klientai negali pasiekti „Heym Agent“",
+      "unconfigured": "Pasirinkite kredencialą ir modelį, kad „Heym Agent“ galėtų veikti",
+      "mcpA2a": "Pasiekiamas per MCP ir A2A",
+      "mcpOnly": "Pasiekiamas kaip heym_chat per MCP"
+    },
+    "a2aEnabledOnServer": "A2A įjungtas serveryje „{name}“",
+    "a2aEnabled": "A2A įjungtas",
+    "a2aDisabledOnServer": "A2A išjungtas serveryje „{name}“",
+    "a2aDisabled": "A2A išjungtas",
+    "agentAndA2aDisabledOnServer": "„Heym Agent“ ir A2A išjungti serveryje „{name}“",
+    "agentAndA2aDisabled": "„Heym Agent“ ir A2A išjungti",
+    "a2a": {
+      "enable": "Įjungti A2A",
+      "description": "Kiti agentai gali siųsti užduotis „Heym Agent“ per „Agent2Agent“ protokolą (A2A 1.0). Jie autentifikuojasi su šio serverio raktu X-MCP-Key antraštėje arba per „Heym OAuth“.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Patikrinkite, ar kortelė aktyvi:",
+      "copyLabel": "Kopijuoti {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analitikos suvestinė",
@@ -2087,6 +2119,25 @@
       "errors": "Klaidos",
       "avgLatencyMs": "Vid. vėlavimas (ms)",
       "latencyTitle": "Vidutinis vėlavimas laikui bėgant"
+    },
+    "last1Hour": "Paskutinė valanda",
+    "last3Hours": "Paskutinės 3 valandos",
+    "last6Hours": "Paskutinės 6 valandos",
+    "nodeTypes": "Mazgų tipai",
+    "nodeChart": {
+      "emptyMessage": "Šiam laikotarpiui dar nėra mazgų duomenų. Mazgų analitika registruojama vykdymams po šio atnaujinimo.",
+      "duration": {
+        "title": "Daugiausiai laiko užimantys mazgai",
+        "subtitle": "Vidutinė trukmė per iškvietimą"
+      },
+      "errors": {
+        "title": "Dažniausiai stringantys mazgų tipai",
+        "subtitle": "Klaidos laikui bėgant"
+      },
+      "calls": {
+        "title": "Dažniausiai iškviečiami mazgų tipai",
+        "subtitle": "Iškvietimai laikui bėgant"
+      }
     }
   },
   "dashboards": {

@@ -43,12 +43,14 @@
 
 Згенерований звіт охоплює три розділи, у такому порядку: **Improvement areas** (конкретні пропозиції, включно з аспектом **security**, коли workflow торкається credentials, введення користувача, зовнішніх запитів або розкриття даних), **Purpose** workflow та **What it does** (покроковий огляд вузлів).
 
-Розділ **Improvement areas** завжди виконує чотири явні перевірки:
+Розділ **Improvement areas** завжди виконує п'ять явних перевірок:
 
 1. **Error coverage** — якщо на canvas немає вузла [Error Handler](../nodes/error-handler-node.md) і не налаштовано error workflow, звіт звертає на це увагу та рекомендує додати обробку помилок.
 2. **Time saved** — якщо не встановлено оцінку зекономленого часу на один запуск, звіт рекомендує налаштувати її, щоб метрика **Time Saved** у [Analytics](../tabs/analytics-tab.md) могла заповнюватися.
 3. **Network nodes** — для вузлів, які виконують мережеві виклики (наприклад, [HTTP](../nodes/http-node.md) та інтеграційні вузли), звіт рекомендує специфічну для вузла обробку помилок (retry та/або continue-on-error) на цих вузлах.
 4. **Alerts** — коли для workflow не налаштовано жодних [alerts](../tabs/alerts-tab.md), звіт рекомендує налаштувати сповіщення перед переходом у prod.
+
+5. **Evals**: якщо workflow містить вузол [Agent](../nodes/agent-node.md) без набору агента, звіт рекомендує створити **Agent Suite** (або **Prompt Suite**) у [Evals](../tabs/evals-tab.md#agent-suites); якщо містить вузол [LLM](../nodes/llm-node.md), рекомендується **Prompt Suite** для тестування цього промпту на різних моделях.
 
 ### Запуск Analyzer із Properties
 

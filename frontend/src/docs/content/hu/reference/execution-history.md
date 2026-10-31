@@ -51,6 +51,8 @@ Egy workflow megnyitása a `/workflows/{workflowId}/{executionId}` címen automa
 
 ### Használati esetek
 
+Tartsa lenyomva a Ctrl/Cmd billentyűt és kattintson egy futtatásra a két előzménylista bármelyikében, hogy a közvetlen linket egy új böngészőlapon nyissa meg. Az aktuális lap és a megnyitott párbeszédpanel változatlan marad. A chat- és asszisztensfuttatások nem rendelkeznek workflow-val, így a billentyűparancs csupán kijelöli őket, akárcsak egy sima kattintás.
+
 - Workflow újrafuttatása ugyanazokkal a bemenetekkel
 - Sikertelen futtatás hibakeresése a bemenetek és csomópont-kimenetek vizsgálatával
 - Kimenetek összehasonlítása a futtatások között

@@ -14,7 +14,7 @@ Les credencials emmagatzemen claus API i secrets utilitzats pels nodes del workf
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | Claus API per al model |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | URL base d'un endpoint de model de decisió, més una clau API opcional |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Selecciona quin dels vostres models serveix cada sol·licitud, utilitzant un model de decisió |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) suites de prompts | Model Router (Auto Model) | Selecciona quin dels vostres models serveix cada sol·licitud, utilitzant un model de decisió |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Inici de sessió amb subscripció de ChatGPT (OAuth) o un token d'accés de Codex per al runner, més un PAT de GitHub per a operacions de repositori |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | Una clau API de la passarel·la OpenCode Go (URL base opcional) per al runner, més un PAT de GitHub per a operacions de repositori |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | Token d'accés personal de GitHub (PAT) per a crides a l'API de GitHub, operacions del node GitHub i integracions MCP |

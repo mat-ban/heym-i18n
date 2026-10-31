@@ -1,6 +1,6 @@
-# Separador MCP
+# Separador MCP / A2A / A2A
 
-O separador **MCP** configura a integração com o Model Context Protocol (MCP). O MCP permite que clientes de IA (Claude, ChatGPT, Gemini, Cursor e qualquer ferramenta compatível com MCP) invoquem os seus workflows Heym como ferramentas.
+O separador **MCP** configura a integração com o Model Context Protocol (MCP), e como servidores [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) aos quais outros agentes podem delegar tarefas. O MCP permite que clientes de IA (Claude, ChatGPT, Gemini, Cursor e qualquer ferramenta compatível com MCP) invoquem os seus workflows Heym como ferramentas.
 
 O Heym suporta dois modos: um **servidor predefinido** que expõe todos os workflows com MCP ativado sob um único endpoint, e **servidores nomeados** que atribuem a cada grupo lógico de workflows o seu próprio URL dedicado e chave de API.
 
@@ -51,7 +51,7 @@ Um workflow com um [limite de concorrência](../reference/webhooks.md#concurrenc
 ```
 
 O cliente consulta a ferramenta `heym_execution_status` com esse `execution_id`. Ela retorna o mesmo corpo do [URL de estado](../reference/webhooks.md#status-url): `queued` com a posição atual, `running`, e depois `success` ou `error` com as saídas. Só localiza execuções de workflows expostos pelo mesmo servidor. A ferramenta é listada no servidor predefinido e em cada servidor nomeado apenas enquanto pelo menos um dos seus workflows tiver um limite de concorrência. Quando a fila do workflow está cheia, a chamada retorna o erro "Concurrency queue is full".
-## Ferramenta de Chat do Heym
+## Agente Heym
 
 A secção **Capacidades do Heym** transforma o motor do separador Chat numa única ferramenta MCP denominada `heym_chat`. Ative-a no servidor predefinido, em qualquer servidor nomeado, ou em ambos — cada superfície mantém a sua própria ativação e seleção de modelo.
 
@@ -60,15 +60,20 @@ Quando está ativada, `heym_chat` aparece em `tools/list` juntamente com as ferr
 - Construir um workflow, testá-lo com entradas de exemplo, corrigi-lo e concluir quando uma execução for bem-sucedida (consulte [Modo Build](#build-mode))
 - Inspecionar e executar os seus workflows existentes
 - Reportar análises, execuções recentes e agendamentos cron futuros
+- Explicar onde os workflows falham e por que motivo são lentos: os workflows que mais executaram, que mais falharam e os mais lentos, bem como os tipos de nós com maior tempo, erros e chamadas nas últimas 1, 3 ou 6 horas, 24 horas, 7 ou 30 dias, ou desde sempre
 - Reportar o histórico de execuções de um workflow: quantas vezes foi executado, contagens por estado, quando foi executado e, a pedido, as entradas, saídas e erros por nó de uma única execução
 - Reportar o que está a ser executado neste momento: quantas execuções estão ativas, os nomes dos respetivos workflows, há quanto tempo cada uma está em execução, o nó em que cada uma se encontra atualmente e uma ligação para a execução em direto
 - Listar quadros, criar cartões e ler o detalhe dos cartões no [separador Board](./board-tab.md)
-- Listar as suas tabelas de dados com as respetivas colunas, criar novas e integrá-las nos workflows que constrói
+- Listar os seus dashboards (páginas do Heym Work) e respetivos widgets, identificar em que dashboard se encontra um workflow, adicionar um novo widget e criar o seu workflow, colocar um workflow existente como widget num dashboard, renomear ou eliminar widgets ou organizar o esquema (ver [Dashboard › A partir do Chat e MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Inspecionar tabelas de dados e linhas, criar tabelas, adicionar ou remover colunas, inserir, atualizar ou eliminar linhas e interligar tabelas em workflows
+- Criar, editar e executar suites de avaliação de prompts e de agentes ([Eval suites](./evals-tab.md#from-chat-and-mcp)), incluindo a linha de base de um agente: reportada, construída a partir de execuções ou especificada numericamente. O resultado lista a ligação de Evals de cada suite guardada.
 - Criar ou atualizar as suas credenciais na página própria do Heym (consulte [Credenciais](#credenciais))
 - Ler equipas e variáveis globais e pesquisar na documentação
 - Aprovar, editar ou recusar revisões pendentes de human-in-the-loop
 
 As capacidades adicionadas posteriormente ao separador Chat ficam automaticamente disponíveis através de `heym_chat` — não existe qualquer ativação por capacidade a manter sincronizada.
+
+Estas capacidades são executadas dentro de `heym_chat`: `tools/list` apresenta `heym_chat` e as suas ferramentas de workflow, nunca as ferramentas internas do chat, como as suites de avaliação.
 
 ### Modo Build
 
@@ -122,6 +127,22 @@ Cada chamada é registada no histórico do seu [separador Chat](./chat-tab.md) c
 
 Quando o assistente necessita de esclarecimento, faz uma pausa e indica-o; responda com as respostas utilizando o mesmo `conversation_id`.
 
+### Ativar A2A
+
+Enquanto o Agente Heym estiver ativo, o cartão apresenta a caixa de verificação **Ativar A2A**. Assinale-a para permitir que outros agentes enviem tarefas ao Agente Heym através do protocolo Agent2Agent (A2A 1.0). O cartão apresenta então o URL do **Agent Card** e o **endpoint JSON-RPC**, cada um com um botão de cópia, e um comando `curl` que obtém o cartão. O A2A utiliza a mesma chave e autenticação OAuth do MCP. Desativar o agente desativa igualmente o A2A. Consulte [A2A](../reference/a2a.md) para métodos, estados de tarefas e um exemplo prático.
+
+### Progresso
+
+Uma chamada longa a `heym_chat` comunica a atividade do agente como progresso MCP (`notifications/progress`), com as mesmas palavras apresentadas no separador Chat, por exemplo `A testar o workflow · tentativa 2/5`. Os clientes que reiniciam o seu tempo limite a cada notificação de progresso continuam a aguardar enquanto o agente trabalha.
+
+### Ativar A2A
+
+Enquanto o Agente Heym estiver ativo, o cartão apresenta a caixa de verificação **Ativar A2A**. Assinale-a para permitir que outros agentes enviem tarefas ao Agente Heym através do protocolo Agent2Agent (A2A 1.0). O cartão apresenta então o URL do **Agent Card** e o **endpoint JSON-RPC**, cada um com um botão de cópia, e um comando `curl` que obtém o cartão. O A2A utiliza a mesma chave e autenticação OAuth do MCP. Desativar o agente desativa igualmente o A2A. Consulte [A2A](../reference/a2a.md) para métodos, estados de tarefas e um exemplo prático.
+
+### Progresso
+
+Uma chamada longa a `heym_chat` comunica a atividade do agente como progresso MCP (`notifications/progress`), com as mesmas palavras apresentadas no separador Chat, por exemplo `A testar o workflow · tentativa 2/5`. Os clientes que reiniciam o seu tempo limite a cada notificação de progresso continuam a aguardar enquanto o agente trabalha.
+
 ## Servidores MCP com Nome
 
 Os servidores com nome permitem segmentar workflows em endpoints MCP isolados. Cada servidor tem o seu próprio URL e chave de API, para que diferentes clientes de IA, equipas ou casos de utilização se possam ligar exatamente aos workflows de que necessitam.
@@ -141,7 +162,9 @@ Cada cartão de servidor apresenta:
 | **SSE Endpoint** | URL único: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Chave independente, apresentada uma única vez quando é gerada ou regenerada. Copie-a de imediato; é armazenada com hash e não pode ser revelada posteriormente |
 | **How to connect** | **Copy JSON** copia a configuração MCP pronta a colar; **Add to Cursor** instala-a com um clique |
-| **Heym Capabilities** | Ative ou desative a ferramenta `heym_chat` para este servidor e escolha a respetiva credencial e modelo |
+| **Heym Capabilities** | Ative ou desative o Agente Heym (`heym_chat`) para este servidor e selecione a sua credencial e modelo |
+| **Ativar A2A** | Interruptor A2A próprio deste servidor, com o seu próprio Agent Card em `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Ativar A2A** | Interruptor A2A próprio deste servidor, com o seu próprio Agent Card em `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Ative ou desative quais dos seus workflows este servidor expõe |
 
 ### Atribuição de Workflows

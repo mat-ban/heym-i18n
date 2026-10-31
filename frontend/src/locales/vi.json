@@ -83,7 +83,8 @@
     "run": "Chạy",
     "dropFileOrClick": "Thả tệp vào đây hoặc nhấp để chọn",
     "removeFile": "Xóa tệp",
-    "chooseFileFor": "Chọn tệp cho {label}"
+    "chooseFileFor": "Chọn tệp cho {label}",
+    "new": "Mới"
   },
   "auth": {
     "signInInstead": "Đăng nhập thay thế",
@@ -1260,7 +1261,16 @@
     "newSuite": "Suite mới",
     "suiteName": "Tên suite",
     "enterSuiteName": "Nhập tên suite...",
-    "systemPrompt": "System Prompt"
+    "systemPrompt": "System Prompt",
+    "promptSuite": "Bộ prompt",
+    "promptSuiteDesc": "Kiểm tra prompt hệ thống trên các mô hình",
+    "agentSuite": "Bộ agent",
+    "agentSuiteDesc": "Kiểm tra các lần chạy thực tế của agent: công cụ, độ trễ, chi phí",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Tìm kiếm bộ...",
+    "loadingSuite": "Đang tải bộ...",
+    "couldNotLoadSuite": "Không thể tải bộ này."
   },
   "statusFilter": {
     "status": "Trạng thái",
@@ -1701,7 +1711,9 @@
     "askAi": "Hỏi AI",
     "askAiTitle": "Hỏi trợ lý Chat về lần chạy này",
     "noNodeSpans": "Không có span nút nào được ghi lại cho lần chạy này.",
-    "queuedProgress": "Trong hàng đợi {position}/{size}"
+    "queuedProgress": "Trong hàng đợi {position}/{size}",
+    "clickToSelectRun": "Nhấp để chọn lần chạy này",
+    "doubleClickOrOpenNewTab": "Nhấp đúp để đưa lần chạy này lên canvas, Ctrl/Cmd+nhấp để mở trong tab mới"
   },
   "portal": {
     "loadingPortal": "Đang tải portal...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Hiển thị các Workflow của bạn dưới dạng công cụ MCP cho trợ lý AI",
+    "subtitle": "Hiển thị workflow của bạn dưới dạng công cụ MCP và Heym Agent qua MCP và A2A",
     "connection": "Kết nối MCP",
     "connectionSubtitle": "Kết nối trợ lý AI của bạn với các Workflow thông qua giao thức MCP.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Trong mục Ứng dụng tùy chỉnh, nhấp vào Thêm ứng dụng tùy chỉnh",
     "geminiStep3": "Dán URL máy chủ MCP ở trên và để mục Tính năng nâng cao đóng; Gemini sẽ tự động đăng ký",
     "geminiStep4": "Nhấp vào Tiếp theo và cấp quyền bằng thông tin đăng nhập Heym của bạn",
-    "geminiInfo": "Gemini sử dụng OAuth để xác thực an toàn. Thông tin xác thực Heym của bạn được dùng để cấp quyền truy cập và không bao giờ được chia sẻ với Gemini. Sau khi kết nối, Heym cũng hoạt động trong ứng dụng di động Gemini."
+    "geminiInfo": "Gemini sử dụng OAuth để xác thực an toàn. Thông tin xác thực Heym của bạn được dùng để cấp quyền truy cập và không bao giờ được chia sẻ với Gemini. Sau khi kết nối, Heym cũng hoạt động trong ứng dụng di động Gemini.",
+    "agentReach": {
+      "off": "Tắt: Máy khách MCP và A2A không thể kết nối với Heym Agent",
+      "unconfigured": "Chọn thông tin đăng nhập và mô hình để Heym Agent có thể chạy",
+      "mcpA2a": "Có thể tiếp cận qua MCP và A2A",
+      "mcpOnly": "Có thể tiếp cận dưới dạng heym_chat qua MCP"
+    },
+    "a2aEnabledOnServer": "Đã bật A2A trên \"{name}\"",
+    "a2aEnabled": "Đã bật A2A",
+    "a2aDisabledOnServer": "Đã tắt A2A trên \"{name}\"",
+    "a2aDisabled": "Đã tắt A2A",
+    "agentAndA2aDisabledOnServer": "Đã tắt Heym Agent và A2A trên \"{name}\"",
+    "agentAndA2aDisabled": "Đã tắt Heym Agent và A2A",
+    "a2a": {
+      "enable": "Bật A2A",
+      "description": "Các agent khác có thể gửi tác vụ cho Heym Agent qua giao thức Agent2Agent (A2A 1.0). Chúng xác thực bằng khóa của máy chủ này trong tiêu đề X-MCP-Key hoặc bằng Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Kiểm tra xem card có hoạt động không:",
+      "copyLabel": "Sao chép {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Bảng điều khiển Analytics",
@@ -2087,6 +2119,25 @@
       "errors": "Lỗi",
       "avgLatencyMs": "Độ trễ trung bình (ms)",
       "latencyTitle": "Độ trễ trung bình theo thời gian"
+    },
+    "last1Hour": "1 giờ qua",
+    "last3Hours": "3 giờ qua",
+    "last6Hours": "6 giờ qua",
+    "nodeTypes": "Loại nút",
+    "nodeChart": {
+      "emptyMessage": "Chưa có dữ liệu nút cho khoảng thời gian này. Phân tích nút được ghi lại cho các lần chạy sau bản cập nhật này.",
+      "duration": {
+        "title": "Nút tốn nhiều thời gian nhất",
+        "subtitle": "Thời lượng trung bình mỗi cuộc gọi"
+      },
+      "errors": {
+        "title": "Loại nút thất bại nhiều nhất",
+        "subtitle": "Lỗi theo thời gian"
+      },
+      "calls": {
+        "title": "Loại nút được gọi nhiều nhất",
+        "subtitle": "Cuộc gọi theo thời gian"
+      }
     }
   },
   "dashboards": {

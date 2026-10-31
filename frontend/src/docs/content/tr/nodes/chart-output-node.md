@@ -10,7 +10,7 @@
 | Çıkışlar | 0 (terminal) |
 | Çıkış | Standartlaştırılmış chart payload |
 
-Bu düğümü bir dashboard-widget workflow'unda **en sona** yerleştirin. Kendisinden önceki düğüm, bir satır nesneleri dizisi üretmelidir, örneğin:
+Bu düğümü bir dashboard-widget workflow'unda **en sona** yerleştirin. Varlık ilişkileri için kendisinden önceki düğüm bir grafik nesnesi üretir (bkz. [Entity relationships](#entity-relationships-db)). Diğer veri odaklı grafikler bir satır nesneleri dizisi kullanır, örneğin:
 
 ```json
 [
@@ -26,9 +26,9 @@ Yalnızca örnek/numune veriniz olduğunda (gerçek bir kaynak olmadan), bu sat�
 | Parametre | Tür | Açıklama |
 |-----------|------|-------------|
 | `label` | string | Düğüm tanımlayıcısı (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` veya `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` veya `hitl` |
 | `orientation` | string | `vertical` veya `horizontal` (yalnızca bar chart'lar için) |
-| `dataPath` | string | Yukarı akış çıktısı içindeki satırlar dizisine giden nokta yolu (örn. `data` veya `result.items`). Otomatik algılama için boş bırakın. |
+| `dataPath` | string | Yukarı akış çıktısı içindeki satırlar dizisine (veya `erDiagram` için grafik nesnesine) giden nokta yolu (örn. `data` veya `result.items`). Otomatik algılama için boş bırakın. |
 | `labelField` | string | Kategori etiketi olarak kullanılan satır anahtarı (pie/bar/line) |
 | `valueField` | string | Sayısal değer olarak kullanılan satır anahtarı (pie/bar/line/numeric/gauge) |
 | `series` | array | Bar/line için isteğe bağlı çoklu seri tanımı `[{ "name": "Sent", "field": "sent" }]` (`valueField`'i geçersiz kılar) |
@@ -54,8 +54,51 @@ Yalnızca örnek/numune veriniz olduğunda (gerçek bir kaynak olmadan), bu sat�
 - **scatter** — korelasyon grafikleri için `xField` ve `yField`'den X/Y noktaları.
 - **proportion** — yüzde açıklamalı paylara bölünmüş tek bir yatay bar (örn. bir dil dağılımı). `labelField` + `valueField` kullanır.
 - **barGauge** — kırmızıdan yeşile gradyanlı ve bir değerli, her satır için bir yatay gauge (örn. boş disk alanı). `labelField` + `valueField`, isteğe bağlı `unit` ve `max` kullanır (varsayılan olarak en büyük satır değeri).
+- **gantt** — tarihler, ilerleme ve bağımlılıklar içeren görev planları; bkz. [Gantt planları](#gantt-schedules).
+- **erDiagram** — veritabanı varlıkları, alanları, anahtarları ve ilişkileri; bkz. [Entity relationships](#entity-relationships-db).
 - **text** — bir markdown mesajı (örn. "Last execution at 19:47" gibi bir durum notu). Statik bir mesaj için markdown'ı `text` içine koyun veya `text`'i boş bırakın ve yukarı akışta üretilen bir string oluşturmak için `valueField` ayarlayın. Başlıkları, kalın/italik yazıyı, [listeleri](../nodes/chart-output-node.md#interactive-task-lists), bağlantıları ve satır içi kodu destekler.
 - **hitl** — bekleyen insan incelemelerinizin bir carousel'i. Başlık `1/n pending` gösterir; sol ok ilk kartta, sağ ok ise son kartta devre dışıdır. Workflow adı, o çalıştırmayı canvas üzerinde açar. **Approve**, **Request changes** ve **Reject** bunu çözer ve widget başlığının yanındaki geçmiş simgesi, o çalıştırmayı aynı sayfadaki geçmiş iletişim kutusunda açar. Bu chart türü yukarı akış satırlarını yok sayar, bu nedenle widget workflow'u yalnızca Chart Output düğümüdür. Oturum açmış her kişi, sahip olduğu workflow'lardaki incelemeleri görür. Düğümün özelliklerinde veya widget'ın ayarlarında bir **Workflow** (birden fazla inceleme adımı varsa **Select agent**) seçerek, bunun yerine o Workflow'un incelemelerini onu açabilen herkese gösterebilirsiniz; bkz. [HITL widget'ları](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt planları
+
+Proje planları ve görev zaman çizelgeleri için **Gantt** (`gantt`) seçeneğini belirleyin. `dataPath` parametresini `tasks` gibi görev dizisine ayarlayın. Satırlar sabit alan adları kullanır:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` ve `end`, ISO tarihlerini veya datetime değerlerini kabul eder. Saat dilimi içermeyen değerler UTC kullanır; saat dilimi farkları UTC'ye dönüştürülür. `end`, `start` ile aynı veya daha sonra olmalıdır. `progress` isteğe bağlıdır (0–100, varsayılan 0); `dependencies` mevcut görev kimliklerini içerir. Kimlikler benzersiz olmalıdır. Tam tarihleri, ilerlemeyi ve bağımlılıkları görmek için imleci bir görevin üzerine getirin. Büyük grafikler widget içinde kaydırılabilir. En fazla 500 görev kabul edilir.
+
+Örnek veriler için `tasks` adlı bir Set eşlemesi `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))` kullanabilir. Bunu `chartType: "gantt"` ve `dataPath: "tasks"` ile Chart Output düğümüne bağlayın. Kaynak sütunları bir Set düğümü ile bu sabit adlara eşleyin; `labelField` ve `valueField` kullanılmaz.
+
+### Entity relationships (DB)
+
+Veritabanı şemaları ve varlık bağlantıları için **Entity relationships (DB)** (`erDiagram`) seçeneğini belirleyin. `dataPath` parametresini her iki diziyi de içeren `graph` gibi bir grafik **nesnesine** ayarlayın:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Alanlar bir `name`, isteğe bağlı `type` ve isteğe bağlı `key` (`PK`, `FK`, `PK/FK` veya boş) içerir. İlişkiler mevcut varlık kimliklerine başvurur; isteğe bağlı `sourceField` ve `targetField` bağlantıyı adlandırılmış alanlara bağlar. `cardinality`, `one-to-one`, `one-to-many` (varsayılan), `many-to-one` veya `many-to-many` değerlerini kabul eder. Varlık kimlikleri ve her varlık içindeki alan adları benzersiz olmalıdır. En fazla 100 varlık, varlık başına 100 alan ve 500 ilişki kabul edilir.
+
+Bir Set düğümü ile `graph` nesnesini `$dict(entities=array(dict(...)), relations=array(dict(...)))` kullanarak oluşturun; `chartType: "erDiagram"` ve `dataPath: "graph"` kullanın. Bu, sağladığınız şemanın bir görselleştirmesidir; canlı bir veritabanını otomatik olarak incelemez.
+
+Her iki tür de önizleme ile **Widget ekle** bölümünde ve tuval üzerindeki düğümün grafik türü seçicisinde görünür. Heym Work, bir zaman çizelgesi veya veritabanı şeması tanımladığınızda bu türleri önerebilir ve sayfayı oluşturmadan önce önerilen görevlerin veya varlıkların önizlemelerini çizer.
 
 ### Etkileşimli görev listeleri
 

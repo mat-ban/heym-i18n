@@ -83,7 +83,8 @@
     "run": "Futtatás",
     "dropFileOrClick": "Húzzon ide egy fájlt, vagy kattintson a kiválasztáshoz",
     "removeFile": "Fájl eltávolítása",
-    "chooseFileFor": "Fájl kiválasztása ehhez: {label}"
+    "chooseFileFor": "Fájl kiválasztása ehhez: {label}",
+    "new": "Új"
   },
   "nav": {
     "workflows": "Workflow-k",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Nincs: minden modell önmagát értékeli",
     "removeJudge": "Bíró eltávolítása",
     "judgeModel": "Kiértékelő modell",
-    "enterJudgeModel": "Adja meg a kiértékelő modellt, amellyel ez a kiértékelő fut."
+    "enterJudgeModel": "Adja meg a kiértékelő modellt, amellyel ez a kiértékelő fut.",
+    "promptSuite": "Prompt-készlet",
+    "promptSuiteDesc": "Rendszerprompt tesztelése modellek között",
+    "agentSuite": "Agent-készlet",
+    "agentSuiteDesc": "Ellenőrizze az ágens valós futásait: eszközök, késleltetés, költség",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Készletek keresése...",
+    "loadingSuite": "Készlet betöltése...",
+    "couldNotLoadSuite": "Nem sikerült betölteni ezt a készletet."
   },
   "statusFilter": {
     "status": "Állapot",
@@ -1701,7 +1711,9 @@
     "askAi": "Kérdezze az AI-t",
     "askAiTitle": "A Chat asszisztens megkérdezése erről a futtatásról",
     "noNodeSpans": "Ehhez a futtatáshoz nem rögzítettek csomópont-spaneket.",
-    "queuedProgress": "Sorban {position}/{size}"
+    "queuedProgress": "Sorban {position}/{size}",
+    "clickToSelectRun": "Kattintson a futtatás kiválasztásához",
+    "doubleClickOrOpenNewTab": "Kattintson duplán a futtatás vászonra helyezéséhez, Ctrl/Cmd+kattintás új lapon történő megnyitásához"
   },
   "portal": {
     "loadingPortal": "Portál betöltése...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP szerver",
-    "subtitle": "Tegye elérhetővé Workflow-jait MCP eszközként AI-asszisztensek számára",
+    "subtitle": "Tegye közzé workflow-jait MCP-eszközként és a Heym Agent-et MCP és A2A protokollon",
     "connection": "MCP kapcsolat",
     "connectionSubtitle": "Csatlakoztassa AI asszisztensét a Workflow-jaihoz az MCP protokollon keresztül.",
     "apiKeyTab": "API kulcs",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Az Egyéni alkalmazások alatt kattintson az Egyéni alkalmazás hozzáadása lehetőségre",
     "geminiStep3": "Illessze be a fenti MCP-kiszolgáló URL-címét, és hagyja bezárva a Speciális funkciók részt; a Gemini automatikusan regisztrál",
     "geminiStep4": "Kattintson a Tovább gombra, és engedélyezze a Heym-hitelesítő adataival",
-    "geminiInfo": "A Gemini az OAuth protokollt használja a biztonságos hitelesítéshez. Az Ön Heym-hitelesítő adatait a hozzáférés engedélyezésére használja, és soha nem osztja meg a Geminivel. A csatlakozást követően a Heym a Gemini mobilalkalmazásban is működik."
+    "geminiInfo": "A Gemini az OAuth protokollt használja a biztonságos hitelesítéshez. Az Ön Heym-hitelesítő adatait a hozzáférés engedélyezésére használja, és soha nem osztja meg a Geminivel. A csatlakozást követően a Heym a Gemini mobilalkalmazásban is működik.",
+    "agentReach": {
+      "off": "Kikapcsolva: az MCP és A2A kliensek nem érik el a Heym Agent-et",
+      "unconfigured": "Válasszon hitelesítő adatot és modellt a Heym Agent futtatásához",
+      "mcpA2a": "Elérhető MCP és A2A protokollon keresztül",
+      "mcpOnly": "Elérhető heym_chat-ként MCP-n keresztül"
+    },
+    "a2aEnabledOnServer": "A2A engedélyezve a(z) „{name}” szerveren",
+    "a2aEnabled": "A2A engedélyezve",
+    "a2aDisabledOnServer": "A2A letiltva a(z) „{name}” szerveren",
+    "a2aDisabled": "A2A letiltva",
+    "agentAndA2aDisabledOnServer": "A Heym Agent és az A2A letiltva a(z) „{name}” szerveren",
+    "agentAndA2aDisabled": "Heym Agent és A2A letiltva",
+    "a2a": {
+      "enable": "A2A engedélyezése",
+      "description": "Más ágensek feladatokat küldhetnek a Heym Agent-nek az Agent2Agent protokollon (A2A 1.0) keresztül. A kiszolgáló kulcsával hitelesítik magukat az X-MCP-Key fejlécben vagy Heym OAuth-on keresztül.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Ellenőrizze, hogy a kártya aktív-e:",
+      "copyLabel": "{label} másolása"
+    }
   },
   "analytics": {
     "dashboardTitle": "Elemzési irányítópult",
@@ -2087,6 +2119,25 @@
       "errors": "Hibák",
       "avgLatencyMs": "Átlagos késleltetés (ms)",
       "latencyTitle": "Átlagos késleltetés az idő függvényében"
+    },
+    "last1Hour": "Elmúlt 1 óra",
+    "last3Hours": "Elmúlt 3 óra",
+    "last6Hours": "Elmúlt 6 óra",
+    "nodeTypes": "Csomóponttípusok",
+    "nodeChart": {
+      "emptyMessage": "Ebben az időszakban még nincsenek csomópontadatok. A csomópontelemzések a frissítés utáni futtatásokról rögzítésre kerülnek.",
+      "duration": {
+        "title": "A legtöbb időt igénylő csomópontok",
+        "subtitle": "Átlagos időtartam hívásonként"
+      },
+      "errors": {
+        "title": "A legtöbbször sikertelen csomóponttípusok",
+        "subtitle": "Hibák az idő függvényében"
+      },
+      "calls": {
+        "title": "A legtöbbször hívott csomóponttípusok",
+        "subtitle": "Hívások az idő függvényében"
+      }
     }
   },
   "dashboards": {

@@ -23,6 +23,8 @@ Un widget è un singolo grafico sulla griglia. Tipi di grafico supportati:
 - **Gauge** (un singolo valore rispetto a un intervallo min–max, ad esempio una percentuale)
 - **Scatter** (punti X/Y per grafici di correlazione)
 - **Proportion** (una barra suddivisa in quote con legenda percentuale, ad esempio una ripartizione per lingua)
+- **Gantt** (date delle attività, completamento e dipendenze)
+- **Entity relationships (DB)** (tabelle, campi, chiavi PK/FK e collegamenti)
 - **Bar gauge** (un indicatore orizzontale per riga con gradiente dal rosso al verde e un valore, ad esempio lo spazio su disco libero)
 - **Text** (un messaggio markdown, ad esempio una nota di stato come "Ultima esecuzione alle 19:47"; supporta [caselle di controllo interattive](../nodes/chart-output-node.md#interactive-task-lists) quando il markdown è statico, ed [elenchi numerati espliciti](../nodes/chart-output-node.md#numbered-lists) per numerazioni personalizzate o decrescenti)
 - **HITL** (le revisioni umane in sospeso. L'intestazione mostra `1/n pending`. Il nome del workflow apre quella esecuzione sul canvas. **Approve**, **Request changes** e **Reject** la risolvono. L'icona della cronologia accanto al titolo del widget apre quella esecuzione nella finestra di dialogo della cronologia su questa pagina. Il widget non utilizza le righe a monte e ogni persona vede la propria coda. Può invece mostrare le revisioni di un solo Workflow, per tutti coloro che possono aprire quel Workflow; vedere [Widget HITL](#widget-hitl))
@@ -96,6 +98,18 @@ L'API dei widget può anche creare una **scheda di conteggio** senza IA: un widg
 
 Utilizzare il pulsante **Fine-tune with AI** di un widget per rivedere un widget esistente con una nuova istruzione. Ogni fine-tune con IA salva un'istantanea del workflow precedente nella **Edit History** del widget, così da poter rivedere o ripristinare le modifiche dall'editor dei workflow.
 
+## Da Chat e MCP
+
+[Chat](./chat-tab.md), e i client MCP tramite lo strumento [`heym_chat`](./mcp-tab.md), possono leggere le dashboard, aggiungere widget, rinominarli o eliminarli e riordinare il layout di una dashboard. Heym Work mostra ogni dashboard come una pagina, quindi le stesse risposte coprono anche le sue pagine.
+
+- **Quali dashboard sono presenti e cosa contengono.** Chiedere "quali dashboard ho?", "cosa c'è nella dashboard Vendite?" o "su quale dashboard si trova il workflow delle entrate?". Chat elenca le proprie dashboard e quelle condivise con l'utente, con i relativi permessi di accesso e un link per ciascuna, oltre a ogni widget presente: titolo, tipo di grafico e il workflow sottostante. Un [widget HITL](#hitl-widgets) filtrato su un workflow che non si ha il permesso di aprire rimane nascosto, esattamente come nella dashboard stessa.
+- **Un nuovo widget.** Chiedere "aggiungi un grafico dei casi aperti per stato alla dashboard Vendite". Chat posiziona prima un widget vuoto sulla dashboard, quindi scrive il workflow specifico del widget, esegue esecuzioni di test e corregge eventuali errori fino a quando un'esecuzione ha successo, nello stesso modo in cui [crea workflows](./chat-tab.md#creazione-di-workflows). Non viene lasciato alcun workflow separato e ogni salvataggio compare nella Edit History del widget. Il titolo e il tipo di grafico del widget seguono ciò che Chat salva.
+- **Un workflow esistente.** Chiedere "inserisci il workflow delle entrate nella dashboard Vendite". Un workflow che termina con un nodo Chart Output diventa un widget grafico con una propria copia del workflow, pertanto modifiche successive al widget non alterano mai l'originale. Un workflow con un nodo trigger o input non può diventare un widget grafico. Qualsiasi altro workflow diventa un [widget di esecuzione](#run-widgets), che necessita anch'esso di un workflow eseguibile dal proprietario della dashboard.
+- **Rinominare o eliminare un widget.** Chiedere "rinomina il widget Entrate in Vendite" o "elimina il widget Casi aperti". Anche il workflow di un widget grafico prende il nuovo nome; il workflow di un widget di esecuzione mantiene il proprio. L'eliminazione di un widget grafico elimina anche il relativo workflow, esattamente come fa il pulsante di eliminazione del widget; il workflow di un widget di esecuzione viene invece conservato. Chat elimina solo il widget espressamente richiesto e chiede conferma preventiva se le parole fornite corrispondono a più elementi.
+- **Riordinare.** Chiedere "riordina la dashboard Vendite" o "aggiungi questi tre widget e riordina". Chat dispone i widget visibili nel loro ordine, come fa il pulsante **Riordina**: righe casuali da due o tre, quindi una nuova richiesta fornirà una disposizione differente. È possibile specificare un numero per riga ("tre per riga") per ottenere righe di quella dimensione. Questo sistema riordina la dashboard in Heym; Heym Work mantiene la propria disposizione specifica per ogni pagina, modificabile con il pulsante **Riordina** della pagina stessa.
+
+I nuovi widget vengono posizionati sotto i widget esistenti della dashboard e, come ogni widget, vengono eseguiti nel contesto del proprietario della dashboard. L'aggiunta, la ridenominazione, l'eliminazione e il riordino richiedono l'accesso in scrittura alla dashboard. La creazione di un nuovo widget richiede una chat in grado di creare workflows: la scheda Chat, la Chat per redattori di Heym Work e `heym_chat`.
+
 ## Modifica del layout
 
 Attivare **Edit** per entrare in modalità modifica, in cui è possibile trascinare i widget e ridimensionarli su una griglia a 12 colonne. Le modifiche al layout vengono salvate automaticamente. I titoli dei widget sono modificabili in linea dall'intestazione del widget.
@@ -128,3 +142,7 @@ La rimozione di una condivisione, o la sua riduzione da write a read, ha effetto
 
 - [Nodo Chart Output](../nodes/chart-output-node.md)
 - [Scheda Analytics](analytics-tab.md) — metriche di esecuzione integrate (distinte dalle dashboard create dall'utente)
+
+## Pianificazioni e diagrammi di database
+
+Scegliere **Gantt** in Aggiungi widget per visualizzare le attività nel tempo con collegamenti di avanzamento e dipendenza, oppure **Entity relationships (DB)** per mappare tabelle, campi e le relative relazioni. Entrambi i tipi utilizzano il [nodo Chart Output](../nodes/chart-output-node.md#gantt-schedules) e sono disponibili anche nelle pagine di Heym Work. Quando Work suggerisce widget per una pianificazione o uno schema di database, genera anteprime basate sulle attività o entità proposte.

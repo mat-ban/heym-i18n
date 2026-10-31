@@ -10,7 +10,7 @@ Węzeł **Wyjście wykresu** jest węzłem końcowym workflow [widgetu dashboard
 | Wyjścia | 0 (końcowe) |
 | Wyjście | Standardowy payload wykresu |
 
-Węzeł ten należy umieścić **na końcu** workflow widgetu dashboardu. Węzeł poprzedzający powinien generować tablicę obiektów wierszy, na przykład:
+Węzeł ten należy umieścić **na końcu** workflow widgetu dashboardu. W przypadku relacji encji węzeł poprzedzający generuje obiekt grafu (zob. [Entity relationships](#entity-relationships-db)). Inne wykresy oparte na danych używają tablicy obiektów wierszy, na przykład:
 
 ```json
 [
@@ -26,9 +26,9 @@ Gdy dostępne są wyłącznie dane przykładowe (bez rzeczywistego źródła), n
 | Parametr | Typ | Opis |
 |-----------|------|-------------|
 | `label` | string | Identyfikator węzła (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` lub `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` lub `hitl` |
 | `orientation` | string | `vertical` lub `horizontal` (tylko wykresy słupkowe) |
-| `dataPath` | string | Ścieżka kropkowa do tablicy wierszy w wyjściu węzła poprzedzającego (np. `data` lub `result.items`). Pozostawić puste, aby wykryć automatycznie. |
+| `dataPath` | string | Ścieżka kropkowa do tablicy wierszy (lub obiektu grafu dla `erDiagram`) w wyjściu węzła poprzedzającego (np. `data` lub `result.items`). Pozostawić puste, aby wykryć automatycznie. |
 | `labelField` | string | Klucz wiersza używany jako etykieta kategorii (pie/bar/line) |
 | `valueField` | string | Klucz wiersza używany jako wartość liczbowa (pie/bar/line/numeric/gauge) |
 | `series` | array | Opcjonalna definicja wielu serii `[{ "name": "Sent", "field": "sent" }]` dla bar/line (zastępuje `valueField`) |
@@ -54,8 +54,51 @@ Gdy dostępne są wyłącznie dane przykładowe (bez rzeczywistego źródła), n
 - **scatter** — punkty X/Y z `xField` i `yField` dla wykresów korelacji.
 - **proportion** — pojedynczy poziomy pasek podzielony na udziały z legendą procentową (np. podział według języka). Używa `labelField` + `valueField`.
 - **barGauge** — jeden poziomy wskaźnik na wiersz z gradientem od czerwonego do zielonego oraz wartością (np. wolne miejsce na dysku). Używa `labelField` + `valueField`, opcjonalnie `unit` i `max` (domyślnie największa wartość wiersza).
+- **gantt** — harmonogramy zadań z datami, postępem i zależnościami; zob. [Harmonogramy Gantta](#gantt-schedules).
+- **erDiagram** — encje bazy danych, pola, klucze i relacje; zob. [Entity relationships](#entity-relationships-db).
 - **text** — wiadomość w formacie markdown (np. notatka statusu typu „Ostatnie wykonanie o 19:47”). Umieścić markdown w `text` dla wiadomości statycznej lub pozostawić `text` puste i ustawić `valueField`, aby renderować ciąg znaków generowany przez węzeł poprzedzający. Obsługuje nagłówki, pogrubienie/kursywę, [listy](../nodes/chart-output-node.md#interactive-task-lists), linki oraz kod w linii.
 - **hitl** — karuzela oczekujących recenzji użytkownika. Nagłówek wyświetla `1/n pending`; strzałka w lewo jest nieaktywna na pierwszej karcie, a strzałka w prawo na ostatniej. Nazwa workflow otwiera to wykonanie na canvasie. Przyciski **Approve**, **Request changes** i **Reject** rozstrzygają recenzję, a ikona historii obok tytułu widgetu otwiera to wykonanie w oknie historii na tej samej stronie. Ten typ wykresu ignoruje wiersze z węzłów poprzedzających, więc workflow widgetu składa się wyłącznie z węzła Wyjście wykresu. Każda zalogowana osoba widzi recenzje workflow, których jest właścicielem. Proszę wybrać **Workflow** (oraz **Select agent**, jeśli ma kilka kroków recenzji) we właściwościach węzła lub w ustawieniach widżetu, aby zamiast tego pokazać recenzje tego Workflow wszystkim, którzy mogą go otworzyć; zob. [widżety HITL](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Harmonogramy Gantta
+
+Wybierz **Gantt** (`gantt`) dla harmonogramów projektów i osi czasu zadań. Ustaw `dataPath` na tablicę zadań, np. `tasks`. Wiersze używają stałych nazw pól:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` i `end` przyjmują daty lub znaczniki czasu ISO. Wartości bez strefy czasowej używają UTC; przesunięcia stref są konwertowane na UTC. `end` musi przypadać w tym samym dniu lub po `start`. Pole `progress` jest opcjonalne (0–100, domyślnie 0); `dependencies` zawiera identyfikatory istniejących zadań. Identyfikatory muszą być unikalne. Najedź kursorem na zadanie, aby odczytać pełne daty, postęp i zależności. Duże wykresy przewijają się wewnątrz widgetu. Akceptowanych jest maksymalnie 500 zadań.
+
+Dla danych przykładowych mapowanie Set o nazwie `tasks` może użyć `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Połącz je z Chart Output z `chartType: "gantt"` i `dataPath: "tasks"`. Zmapuj kolumny źródłowe na te stałe nazwy za pomocą węzła Set; `labelField` i `valueField` nie są używane.
+
+### Entity relationships (DB)
+
+Wybierz **Entity relationships (DB)** (`erDiagram`) dla schematów baz danych i połączeń encji. Ustaw `dataPath` na **obiekt** grafu, np. `graph`, zawierający obie tablice:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Pola posiadają `name`, opcjonalny `type` oraz opcjonalny `key` (`PK`, `FK`, `PK/FK` lub puste). Relacje odwołują się do istniejących identyfikatorów encji; opcjonalne pola `sourceField` i `targetField` kotwiczą połączenie z nazwanymi polami. `cardinality` akceptuje `one-to-one`, `one-to-many` (domyślnie), `many-to-one` lub `many-to-many`. Identyfikatory encji i nazwy pól w obrębie każdej encji muszą być unikalne. Akceptowanych jest maksymalnie 100 encji, 100 pól na encję i 500 relacji.
+
+Za pomocą węzła Set skonstruuj `graph` przez `$dict(entities=array(dict(...)), relations=array(dict(...)))`; użyj `chartType: "erDiagram"` i `dataPath: "graph"`. Jest to wizualizacja dostarczonego schematu; nie dokonuje automatycznej inspekcji aktywnej bazy danych.
+
+Oba typy pojawiają się w **Dodaj widget** z podglądem oraz w selektorze typu wykresu węzła na canvasie. Heym Work może proponować te typy podczas opisywania harmonogramu lub schematu bazy danych, rysując podglądy proponowanych zadań lub encji przed utworzeniem strony.
 
 ### Interaktywne listy zadań
 

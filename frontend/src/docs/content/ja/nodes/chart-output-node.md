@@ -10,7 +10,7 @@
 | 出力 | 0（終端） |
 | Output | 標準化された chart payload |
 
-このノードは dashboard-widget Workflow の**最後**に配置してください。その直前のノードは、行オブジェクトの配列を生成する必要があります。例：
+このノードは dashboard-widget Workflow の**最後**に配置してください。エンティティ関係の場合、直前のノードはグラフオブジェクトを生成します（[Entity relationships](#entity-relationships-db) を参照）。その他のデータ駆動型チャートでは、以下のように行オブジェクトの配列を使用します。
 
 ```json
 [
@@ -26,9 +26,9 @@
 | パラメータ | 型 | 説明 |
 |-----------|------|-------------|
 | `label` | string | ノード識別子（camelCase） |
-| `chartType` | string | `pie`、`bar`、`line`、`area`、`table`、`numeric`、`gauge`、`scatter`、`proportion`、`barGauge`、`text`、または `hitl` |
+| `chartType` | string | `pie`、`bar`、`line`、`area`、`table`、`numeric`、`gauge`、`scatter`、`proportion`、`barGauge`、`gantt`、`erDiagram`、`text`、または `hitl` |
 | `orientation` | string | `vertical` または `horizontal`（bar チャートのみ） |
-| `dataPath` | string | 上流の出力内にある行配列へのドットパス（例：`data` または `result.items`）。空欄にすると自動検出されます。 |
+| `dataPath` | string | 上流の出力内にある行配列（または `erDiagram` 用のグラフオブジェクト）へのドットパス（例：`data` または `result.items`）。空欄にすると自動検出されます。 |
 | `labelField` | string | カテゴリラベルとして使用する行のキー（pie/bar/line） |
 | `valueField` | string | 数値として使用する行のキー（pie/bar/line/numeric/gauge） |
 | `series` | array | bar/line 用の任意の複数系列定義 `[{ "name": "Sent", "field": "sent" }]`（`valueField` を上書きします） |
@@ -54,8 +54,51 @@
 - **scatter** — 相関プロット用に `xField` と `yField` から取得した X/Y の点です。
 - **proportion** — パーセンテージ凡例付きで、割合ごとに分割された単一の水平バー（例：言語の内訳）。`labelField` + `valueField` を使用します。
 - **barGauge** — 赤→緑のグラデーションと値を持つ、行ごとの水平ゲージ（例：空きディスク容量）。`labelField` + `valueField` を使用し、任意で `unit` と `max`（デフォルトは最大の行値）を指定できます。
+- **gantt** — 日付、進捗状況、依存関係を含むタスクスケジュール。[Gantt スケジュール](#gantt-schedules) を参照してください。
+- **erDiagram** — データベースエンティティ、フィールド、キー、リレーションシップ。[Entity relationships](#entity-relationships-db) を参照してください。
 - **text** — markdown メッセージ（例：「Last execution at 19:47」のようなステータスノート）。静的なメッセージの場合は `text` に markdown を記述するか、`text` を空欄にして `valueField` を設定すると、上流で生成された文字列をレンダリングします。見出し、太字/斜体、[リスト](../nodes/chart-output-node.md#interactive-task-lists)、リンク、インラインコードをサポートします。
 - **hitl** — 保留中のヒューマンレビューのカルーセルです。ヘッダーには `1/n pending` が表示され、左矢印は最初のカードで、右矢印は最後のカードで無効になります。Workflow 名をクリックすると、その実行がキャンバス上で開きます。**Approve**、**Request changes**、**Reject** で解決でき、ウィジェットタイトルの横にある履歴アイコンをクリックすると、同じページの履歴ダイアログでその実行が開きます。この chart type は上流の行を無視するため、ウィジェット Workflow は Chart Output ノードのみとなります。サインインしている各ユーザーには、自身が所有する Workflow のレビューが表示されます。 ノードのプロパティまたはウィジェットの設定で **Workflow**（複数のレビューステップがある場合は **Select agent** も）を選択すると、代わりにその Workflow のレビューが、それを開けるすべてのユーザーに表示されます。[HITL ウィジェット](../tabs/dashboard-tab.md#hitl-widgets)を参照してください。
+
+### Gantt スケジュール
+
+プロジェクトのスケジュールやタスクのタイムラインには **Gantt**（`gantt`）を選択します。`dataPath` には `tasks` などのタスク配列を指定します。行には固定のフィールド名を使用します。
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` と `end` は ISO 日付または日時を受け入れます。タイムゾーンのない値は UTC を使用し、タイムゾーンオフセットは UTC に変換されます。`end` は `start` と同日またはそれ以降である必要があります。`progress` はオプションです（0〜100、デフォルト 0）。`dependencies` には既存のタスク ID を指定します。ID は一意である必要があります。タスクにカーソルを合わせると、完全な日付、進捗状況、依存関係が表示されます。大きなチャートはウィジェット内でスクロールします。最大 500 件のタスクを受け入れます。
+
+サンプルデータの場合、`tasks` という名前の Set マッピングで `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))` を使用できます。これを `chartType: "gantt"` および `dataPath: "tasks"` で Chart Output に接続します。Set ノードを使用してソース列をこれらの固定名にマッピングします。`labelField` と `valueField` は使用されません。
+
+### Entity relationships (DB)
+
+データベーススキーマとエンティティ接続には **Entity relationships (DB)**（`erDiagram`）を選択します。`dataPath` には両方の配列を含む `graph` などのグラフ**オブジェクト**を指定します。
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+フィールドには `name`、オプションの `type`、オプションの `key`（`PK`、`FK`、`PK/FK`、または空）があります。リレーションは既存のエンティティ ID を参照し、オプションの `sourceField` と `targetField` が指定されたフィールドに接続を固定します。`cardinality` は `one-to-one`、`one-to-many`（デフォルト）、`many-to-one`、または `many-to-many` を受け入れます。エンティティ ID と各エンティティ内のフィールド名は一意である必要があります。最大 100 個のエンティティ、エンティティあたり 100 個のフィールド、および 500 個のリレーションを受け入れます。
+
+Set ノードを使用して、`$dict(entities=array(dict(...)), relations=array(dict(...)))` で `graph` を構築します。`chartType: "erDiagram"` および `dataPath: "graph"` を使用します。これは指定されたスキーマの視覚化であり、稼働中のデータベースを自動的に検査するものではありません。
+
+両方のタイプはプレビュー付きで **ウィジェットを追加** に表示され、キャンバスノードのチャートタイプセレクターにも表示されます。Heym Work は、スケジュールやデータベーススキーマを記述するときにこれらのタイプを提案し、ページを作成する前に提案されたタスクやエンティティのプレビューを描画できます。
 
 ### Interactive task lists
 

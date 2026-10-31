@@ -51,6 +51,8 @@ Abrir un workflow en `/workflows/{workflowId}/{executionId}` trae automáticamen
 
 ### Casos de uso
 
+Haga Ctrl/Cmd+clic en una ejecución de cualquiera de las listas de historial para abrir ese enlace directo en una nueva pestaña del navegador. La pestaña actual y el diálogo abierto se mantienen sin cambios. Las ejecuciones de chat y asistente no tienen workflow, por lo que el atajo simplemente las selecciona, como un clic normal.
+
 - Volver a ejecutar un workflow con las mismas entradas
 - Depurar una ejecución fallida inspeccionando las entradas y las salidas de los nodos
 - Comparar salidas entre ejecuciones

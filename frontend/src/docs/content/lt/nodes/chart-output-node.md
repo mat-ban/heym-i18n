@@ -10,7 +10,7 @@
 | Išvestys | 0 (terminalinis) |
 | Išvestis | Standartizuotas diagramos payload |
 
-Šį mazgą įdėkite **paskutinį** informacijos suvestinės valdiklio workflow. Mazgas prieš jį turėtų sukurti eilučių objektų masyvą, pavyzdžiui:
+Šį mazgą įdėkite **paskutinį** informacijos suvestinės valdiklio workflow. Esybių ryšiams mazgas prieš jį sukuria grafo objektą (žr. [Entity relationships](#entity-relationships-db)). Kitos duomenimis pagrįstos diagramos naudoja eilučių objektų masyvą, pavyzdžiui:
 
 ```json
 [
@@ -26,9 +26,9 @@ Kai turite tik pavyzdinius/samples duomenis (be tikro šaltinio), sukurkite šia
 | Parametras | Tipas | Aprašymas |
 |------------|-------|-----------|
 | `label` | string | Mazgo identifikatorius (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text`, arba `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text`, arba `hitl` |
 | `orientation` | string | `vertical` arba `horizontal` (tik juostinėms diagramoms) |
-| `dataPath` | string | Taško kelias į eilučių masyvą aukščiau esančioje išvestyje (pvz., `data` arba `result.items`). Palikite tuščią, kad automatiškai nustatytų. |
+| `dataPath` | string | Taško kelias į eilučių masyvą (arba grafo objektą `erDiagram`) aukščiau esančioje išvestyje (pvz., `data` arba `result.items`). Palikite tuščią, kad automatiškai nustatytų. |
 | `labelField` | string | Eilutės raktas, naudojamas kaip kategorijos etiketė (pyrago/juostinės/linijinės) |
 | `valueField` | string | Eilutės raktas, naudojamas kaip skaitinė vertė (pyrago/juostinės/linijinės/skaitinės/indikatoriaus) |
 | `series` | array | Pasirinktinė daugiasekvenčių apibrėžtis `[{ "name": "Sent", "field": "sent" }]` juostinėms/linijinėms (perrašoma `valueField`) |
@@ -54,8 +54,51 @@ Kai turite tik pavyzdinius/samples duomenis (be tikro šaltinio), sukurkite šia
 - **sklaida** — X/Y taškai iš `xField` ir `yField` koreliacijos diagramoms.
 - **proporcija** — viena horizontalioji juosta, padalinta į dalis su procentų legenda (pvz., kalbos pasiskirstymas). Naudoja `labelField` + `valueField`.
 - **juostos indikatorius** — viena horizontalioji juosta kiekvienai eilutei su raudona→žalia gradientu ir verte (pvz., laisvos disko vietos). Naudoja `labelField` + `valueField`, pasirinktinį `unit` ir `max` (numatyta pagal didžiausią eilutės vertę).
+- **gantt** — užduočių tvarkaraščiai su datomis, eiga ir priklausomybėmis; žr. [Gantt schedules](#gantt-schedules).
+- **erDiagram** — duomenų bazės esybės, laukai, raktai ir ryšiai; žr. [Entity relationships](#entity-relationships-db).
 - **tekstas** — markdown žinutė (pvz., statuso užrašas, pvz., "Paskutinis vykdymas 19:47"). Įdėkite markdown į `text` statinei žinutei, arba palikite `text` tuščią ir nustatykite `valueField`, kad atvaizduotumėte iš aukščiau gautą eilutę. Palaiko antraštes, paryškintą/italiką, [sąrašus](../nodes/chart-output-node.md#interactive-task-lists), nuorodas ir įterptą kodą.
 - **hitl** — karuselė laukiančių žmogaus atsiliepimų. Antraštėje rodomas `1/n laukia`; kairysis rodyklė yra neaktyvi pirmame kortelėje, o dešinysis rodyklė paskutinėje. Workflow pavadinimas atidaro tą vykdymą drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** išsprendžia tai, o istorijos piktograma šalia valdiklio pavadinimo atidaro tą vykdymą istorijos dialoge toje pačioje pusėje. Šis diagramos tipas ignoruoja aukščiau esančias eiles, todėl valdiklio workflow yra tik Diagramos Išvestis mazgas. Kiekvienas prisijungęs asmuo mato atsiliepimus apie workflows, kuriuos jie valdo. Mazgo savybėse arba valdiklio nustatymuose pasirinkite **Workflow** (ir **Select agent**, kai jis turi kelis peržiūros žingsnius), kad vietoj to būtų rodomos to Workflow peržiūros visiems, kurie gali jį atidaryti; žr. [HITL valdikliai](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt schedules
+
+Pasirinkite **Gantt** (`gantt`) projektų grafikams ir užduočių laiko juostoms. Nustatykite `dataPath` į užduočių masyvą, pvz., `tasks`. Eilutėse naudojami fiksuoti laukų pavadinimai:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` ir `end` priima ISO datas arba datos ir laiko reikšmes. Reikšmės be laiko juostos naudoja UTC; laiko juostų poslinkiai konvertuojami į UTC. `end` turi sutapti su `start` arba būti vėlesnė. `progress` yra neprivalomas (0–100, numatytoji reikšmė 0); `dependencies` pateikia esamų užduočių ID. ID turi būti unikalūs. Užveskite pelės žymeklį virš užduoties, kad pamatytumėte visas datas, eigą ir priklausomybes. Didelės diagramos slenkamos valdiklio viduje. Priimama ne daugiau kaip 500 užduočių.
+
+Pavyzdiniams duomenims Set susiejimas pavadinimu `tasks` gali naudoti `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Prijunkite jį prie Chart Output naudodami `chartType: "gantt"` ir `dataPath: "tasks"`. Šaltinio stulpelius susiekite su šiais fiksuotais pavadinimais per Set mazgą; `labelField` ir `valueField` nenaudojami.
+
+### Entity relationships (DB)
+
+Pasirinkite **Entity relationships (DB)** (`erDiagram`) duomenų bazių schemoms ir esybių ryšiams. Nustatykite `dataPath` į grafo **objektą**, pvz., `graph`, kuriame yra abu masyvai:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Laukai turi `name`, neprivalomą `type` ir neprivalomą `key` (`PK`, `FK`, `PK/FK` arba tuščias). Ryšiai nurodo esamų esybių ID; neprivalomi laukai `sourceField` ir `targetField` susieja ryšį su nurodytais laukais. `cardinality` priima `one-to-one`, `one-to-many` (numatytasis), `many-to-one` arba `many-to-many`. Esybių ID ir laukų pavadinimai kiekvienoje esybėje turi būti unikalūs. Priimama ne daugiau kaip 100 esybių, 100 laukų vienai esybei ir 500 ryšių.
+
+Naudodami Set mazgą sukonstruokite `graph` per `$dict(entities=array(dict(...)), relations=array(dict(...)))`; naudokite `chartType: "erDiagram"` ir `dataPath: "graph"`. Tai pateiktos schemos vizualizacija; ji automatiškai netikrina veikiančios duomenų bazės.
+
+Abu tipai rodomi skiltyje **Pridėti valdiklį** su peržiūra ir mazgo diagramos tipo pasirinkime drobėje. Heym Work gali siūlyti šiuos tipus aprašant grafiką ar duomenų bazės schemą, nubraižydama siūlomų užduočių ar esybių peržiūras prieš sukuriant puslapį.
 
 ### Interaktyvūs užduočių sąrašai
 

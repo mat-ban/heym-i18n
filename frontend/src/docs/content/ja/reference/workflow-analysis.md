@@ -50,6 +50,8 @@
 3. **Network nodes** — ネットワーク呼び出しを行うノード（[HTTP](../nodes/http-node.md) や各種連携ノードなど）について、レポートはそれらのノードに固有のエラーハンドリング（retry および／または continue-on-error）を推奨します。
 4. **Alerts** — Workflow に [alerts](../tabs/alerts-tab.md) が設定されていない場合、レポートは本番稼働前にアラートを設定することを推奨します。
 
+5. **Evals**: Workflow にエージェントスイートのない [Agent ノード](../nodes/agent-node.md)が含まれている場合、レポートは [Evals](../tabs/evals-tab.md#agent-suites) で **Agent Suite**（または **Prompt Suite**）を作成することを推奨します。[LLM](../nodes/llm-node.md) ノードが含まれている場合は、複数のモデル間でその Prompt をテストするために **Prompt Suite** を推奨します。
+
 ### Properties から Analyzer を実行する
 
 キャンバスにノードがあるものの、まだ分析ドキュメントがない場合、Workflow レベルの [Properties](./canvas-features.md) パネル（ノードが選択されていないときに表示されます）に **Run Analyzer** ボタンが表示されます。これをクリックするとこの Workflow Analysis パネルが開き、Credential と Model を選択してレポートを生成できます。

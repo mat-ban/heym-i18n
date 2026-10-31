@@ -14,7 +14,7 @@ Credentials зберігають API keys і secrets, які використо�
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API key для моделі |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Base URL для decision model endpoint, плюс опціональний API key |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Вибирає, яка з ваших моделей обслуговує кожен запит, використовуючи decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) набори промптів | Model Router (Auto Model) | Вибирає, яка з ваших моделей обслуговує кожен запит, використовуючи decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Вхід за підпискою ChatGPT (OAuth) або Codex access token для runner, плюс GitHub PAT для операцій з репозиторієм |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API key для OpenCode Go gateway (опціональний base URL) для runner, плюс GitHub PAT для операцій з репозиторієм |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) для викликів GitHub API, операцій вузла GitHub і MCP integrations |

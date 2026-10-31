@@ -83,7 +83,8 @@
     "run": "実行",
     "dropFileOrClick": "ここにファイルをドロップするか、クリックして選択",
     "removeFile": "ファイルを削除",
-    "chooseFileFor": "{label} のファイルを選択"
+    "chooseFileFor": "{label} のファイルを選択",
+    "new": "新規"
   },
   "nav": {
     "workflows": "Workflow",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "なし: 各モデルが自己採点します",
     "removeJudge": "Judgeを削除",
     "judgeModel": "Judgeモデル",
-    "enterJudgeModel": "このJudgeで実行するJudgeモデルを入力してください。"
+    "enterJudgeModel": "このJudgeで実行するJudgeモデルを入力してください。",
+    "promptSuite": "Prompt スイート",
+    "promptSuiteDesc": "複数のモデルでシステム Prompt をテスト",
+    "agentSuite": "Agent スイート",
+    "agentSuiteDesc": "Agent の実際の実行を確認: ツール、レイテンシ、コスト",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "スイートを検索...",
+    "loadingSuite": "スイートを読み込み中...",
+    "couldNotLoadSuite": "このスイートを読み込めませんでした。"
   },
   "statusFilter": {
     "status": "ステータス",
@@ -1701,7 +1711,9 @@
     "askAi": "AI に質問",
     "askAiTitle": "この実行について Chat アシスタントに質問",
     "noNodeSpans": "この実行にはノードの span が記録されていません。",
-    "queuedProgress": "待機中 {position}/{size}"
+    "queuedProgress": "待機中 {position}/{size}",
+    "clickToSelectRun": "クリックしてこの実行を選択",
+    "doubleClickOrOpenNewTab": "ダブルクリックでこの実行をキャンバスに表示、Ctrl/Cmd+クリックで新しいタブで開きます"
   },
   "portal": {
     "loadingPortal": "ポータルを読み込み中...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "WorkflowをMCPツールとしてAIアシスタントに公開できます",
+    "subtitle": "ワークフローを MCP ツールとして公開し、Heym Agent を MCP および A2A 経由で公開します",
     "connection": "MCP Connection",
     "connectionSubtitle": "MCPプロトコルを介してAIアシスタントをWorkflowに接続できます。",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "カスタム アプリ の下にある カスタム アプリを追加 をクリックします",
     "geminiStep3": "上記の MCP サーバー URL を貼り付け、高度な機能 は閉じたままにします。Gemini が自動的に登録されます",
     "geminiStep4": "次へ をクリックし、Heym の認証情報で認証します",
-    "geminiInfo": "Gemini は安全な認証のために OAuth を使用します。Heym の認証情報はアクセス承認のために使用され、Gemini と共有されることはありません。接続すると、Heym は Gemini モバイルアプリでも動作します。"
+    "geminiInfo": "Gemini は安全な認証のために OAuth を使用します。Heym の認証情報はアクセス承認のために使用され、Gemini と共有されることはありません。接続すると、Heym は Gemini モバイルアプリでも動作します。",
+    "agentReach": {
+      "off": "オフ: MCP および A2A クライアントは Heym Agent に到達できません",
+      "unconfigured": "Heym Agent を実行できるように資格情報とモデルを選択してください",
+      "mcpA2a": "MCP および A2A 経由で到達可能",
+      "mcpOnly": "MCP 経由で heym_chat として到達可能"
+    },
+    "a2aEnabledOnServer": "「{name}」で A2A が有効化されました",
+    "a2aEnabled": "A2A が有効化されました",
+    "a2aDisabledOnServer": "「{name}」で A2A が無効化されました",
+    "a2aDisabled": "A2A が無効化されました",
+    "agentAndA2aDisabledOnServer": "「{name}」で Heym Agent と A2A が無効化されました",
+    "agentAndA2aDisabled": "Heym Agent と A2A が無効化されました",
+    "a2a": {
+      "enable": "A2A を有効化",
+      "description": "他の Agent は Agent2Agent プロトコル（A2A 1.0）経由で Heym Agent にタスクを送信できます。X-MCP-Key ヘッダー内のこのサーバーのキー、または Heym OAuth で認証します。",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC エンドポイント",
+      "checkCardLive": "カードがアクティブであることを確認します:",
+      "copyLabel": "{label} をコピー"
+    }
   },
   "analytics": {
     "dashboardTitle": "分析ダッシュボード",
@@ -2087,6 +2119,25 @@
       "errors": "エラー",
       "avgLatencyMs": "平均レイテンシ（ms）",
       "latencyTitle": "平均レイテンシの推移"
+    },
+    "last1Hour": "過去 1 時間",
+    "last3Hours": "過去 3 時間",
+    "last6Hours": "過去 6 時間",
+    "nodeTypes": "ノードタイプ",
+    "nodeChart": {
+      "emptyMessage": "この期間のノードデータはまだありません。ノード分析はこの更新後の実行から記録されます。",
+      "duration": {
+        "title": "最も時間がかかったノード",
+        "subtitle": "呼び出しごとの平均所要時間"
+      },
+      "errors": {
+        "title": "最も失敗したノードタイプ",
+        "subtitle": "時間経過に伴うエラー"
+      },
+      "calls": {
+        "title": "最も呼び出されたノードタイプ",
+        "subtitle": "時間経過に伴う呼び出し"
+      }
     }
   },
   "dashboards": {

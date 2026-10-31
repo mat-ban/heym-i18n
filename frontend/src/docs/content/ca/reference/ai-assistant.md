@@ -173,7 +173,7 @@ Quan un workflow desa, emmagatzema o cerca registres i no heu anomenat cap altre
 
 Trieu la taula nova i premeu **Envia les respostes**: la targeta crea la taula, i l'assistent col·loca el seu id al node i utilitza els seus noms de columna exactes. També podeu demanar una taula per si sola, per exemple "crea una taula per als meus leads".
 
-L'assistent veu noms de taula, descripcions i columnes, mai files. No canvia mai les columnes d'una taula existent: si una taula no té una columna que el workflow necessita, anomena la columna i ofereix una taula nova en el seu lloc. Afegiu columnes a la [pestanya Taula de dades](../tabs/datatable-tab.md).
+L'assistent del canvas veu noms de taules, descripcions i columnes, mai files. Configura els nodes del workflow a partir d'aquestes metadades; afegiu columnes a la [pestanya DataTable](../tabs/datatable-tab.md) o demaneu-ho al [Chat](../tabs/chat-tab.md). El Chat i `heym_chat` poden inspeccionar files i afegir o eliminar columnes directament, així com inserir, actualitzar o suprimir files en taules de la vostra propietat o amb accés d'escriptura, incloent-hi els recursos compartits d'equip. L'eliminació de columnes i el buidatge de totes les files demanen confirmació abans de suprimir dades.
 
 ## Relacionat
 

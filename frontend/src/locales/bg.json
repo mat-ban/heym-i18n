@@ -83,7 +83,8 @@
     "run": "Стартиране",
     "dropFileOrClick": "Пуснете файл тук или щракнете за избор",
     "removeFile": "Премахване на файла",
-    "chooseFileFor": "Изберете файл за {label}"
+    "chooseFileFor": "Изберете файл за {label}",
+    "new": "Нов"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Няма: всеки модел се оценява сам",
     "removeJudge": "Премахване на оценяващ",
     "judgeModel": "Модел за оценяване",
-    "enterJudgeModel": "Въведете модела за оценяване, с който да се изпълни това оценяване."
+    "enterJudgeModel": "Въведете модела за оценяване, с който да се изпълни това оценяване.",
+    "promptSuite": "Пакет от промптове",
+    "promptSuiteDesc": "Тествайте системен промпт в различни модели",
+    "agentSuite": "Пакет от агенти",
+    "agentSuiteDesc": "Проверете реалните изпълнения на агент: инструменти, латентност, цена",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Търсене на пакети...",
+    "loadingSuite": "Зареждане на пакета...",
+    "couldNotLoadSuite": "Този пакет не можа да бъде зареден."
   },
   "statusFilter": {
     "status": "Статус",
@@ -1701,7 +1711,9 @@
     "askAi": "Попитай AI",
     "askAiTitle": "Попитайте Chat асистента за това изпълнение",
     "noNodeSpans": "За това изпълнение не са записани span-ове на възли.",
-    "queuedProgress": "На опашка {position}/{size}"
+    "queuedProgress": "На опашка {position}/{size}",
+    "clickToSelectRun": "Кликнете, за да изберете това изпълнение",
+    "doubleClickOrOpenNewTab": "Щракнете два пъти, за да пренесете това изпълнение на платното, Ctrl/Cmd+щракване за отваряне в нов раздел"
   },
   "portal": {
     "loadingPortal": "Порталът се зарежда...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Предоставете Вашите Workflows като MCP инструменти за AI асистенти",
+    "subtitle": "Предоставете вашите работни потоци като MCP инструменти и Heym Agent чрез MCP и A2A",
     "connection": "MCP връзка",
     "connectionSubtitle": "Свържете Вашия AI асистент към Вашите Workflows чрез MCP протокола.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Под Персонализирани приложения щракнете върху Добавяне на персонализирано приложение",
     "geminiStep3": "Поставете URL адреса на MCP сървъра по-горе и оставете Разширени функции затворени; Gemini ще се регистрира автоматично",
     "geminiStep4": "Щракнете върху Напред и упълномощете с вашите идентификационни данни за Heym",
-    "geminiInfo": "Gemini използва OAuth за сигурно удостоверяване. Вашите данни за Heym се използват за упълномощаване на достъпа и никога не се споделят с Gemini. След свързване Heym работи и в мобилното приложение Gemini."
+    "geminiInfo": "Gemini използва OAuth за сигурно удостоверяване. Вашите данни за Heym се използват за упълномощаване на достъпа и никога не се споделят с Gemini. След свързване Heym работи и в мобилното приложение Gemini.",
+    "agentReach": {
+      "off": "Изключено: MCP и A2A клиентите не могат да достигнат Heym Agent",
+      "unconfigured": "Изберете идентификационни данни и модел, за да може Heym Agent да работи",
+      "mcpA2a": "Достъпен чрез MCP и A2A",
+      "mcpOnly": "Достъпен като heym_chat чрез MCP"
+    },
+    "a2aEnabledOnServer": "A2A е активиран на „{name}“",
+    "a2aEnabled": "A2A е активиран",
+    "a2aDisabledOnServer": "A2A е деактивиран на „{name}“",
+    "a2aDisabled": "A2A е деактивиран",
+    "agentAndA2aDisabledOnServer": "Heym Agent и A2A са деактивирани на „{name}“",
+    "agentAndA2aDisabled": "Heym Agent и A2A са деактивирани",
+    "a2a": {
+      "enable": "Активиране на A2A",
+      "description": "Други агенти могат да изпращат задачи към Heym Agent чрез протокола Agent2Agent (A2A 1.0). Те се удостоверяват с ключа на този сървър в заглавката X-MCP-Key или чрез Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC endpoint",
+      "checkCardLive": "Проверете дали картата е активна:",
+      "copyLabel": "Копиране на {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Табло за анализи",
@@ -2087,6 +2119,25 @@
       "errors": "Грешки",
       "avgLatencyMs": "Средна латентност (ms)",
       "latencyTitle": "Средна латентност във времето"
+    },
+    "last1Hour": "Последен час",
+    "last3Hours": "Последни 3 часа",
+    "last6Hours": "Последни 6 часа",
+    "nodeTypes": "Типове възли",
+    "nodeChart": {
+      "emptyMessage": "Все още няма данни за възли за този период. Анализът на възлите се записва за изпълнения след тази актуализация.",
+      "duration": {
+        "title": "Възли с най-голяма продължителност",
+        "subtitle": "Средна продължителност на повикване"
+      },
+      "errors": {
+        "title": "Типове възли с най-много грешки",
+        "subtitle": "Грешки във времето"
+      },
+      "calls": {
+        "title": "Най-често извиквани типове възли",
+        "subtitle": "Повиквания във времето"
+      }
     }
   },
   "dashboards": {

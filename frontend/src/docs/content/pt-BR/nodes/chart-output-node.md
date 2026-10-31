@@ -10,7 +10,7 @@ O nó **Saída de Gráfico** é o nó terminal de um workflow de [widget de dash
 | Saídas | 0 (terminal) |
 | Saída | Payload de gráfico padronizado |
 
-Posicione este nó **por último** em um workflow de widget de dashboard. O nó anterior a ele deve produzir um array de objetos de linha, por exemplo:
+Posicione este nó **por último** em um workflow de widget de dashboard. Para relações de entidade, o nó anterior produz um objeto grafo (consulte [Entity relationships](#entity-relationships-db)). Outros gráficos orientados a dados usam um array de objetos de linha, por exemplo:
 
 ```json
 [
@@ -26,9 +26,9 @@ Quando você tiver apenas dados de exemplo/amostra (sem fonte real), produza ess
 | Parâmetro | Tipo | Descrição |
 |-----------|------|-------------|
 | `label` | string | Identificador do nó (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` ou `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` ou `hitl` |
 | `orientation` | string | `vertical` ou `horizontal` (apenas para gráficos de barra) |
-| `dataPath` | string | Caminho com pontos até o array de linhas dentro da saída anterior (ex.: `data` ou `result.items`). Deixe vazio para detecção automática. |
+| `dataPath` | string | Caminho com pontos até o array de linhas (ou objeto grafo para `erDiagram`) dentro da saída anterior (ex.: `data` ou `result.items`). Deixe vazio para detecção automática. |
 | `labelField` | string | Chave da linha usada como rótulo de categoria (pie/bar/line) |
 | `valueField` | string | Chave da linha usada como valor numérico (pie/bar/line/numeric/gauge) |
 | `series` | array | Definição opcional de múltiplas séries `[{ "name": "Sent", "field": "sent" }]` para bar/line (substitui `valueField`) |
@@ -54,8 +54,51 @@ Quando você tiver apenas dados de exemplo/amostra (sem fonte real), produza ess
 - **scatter** — pontos X/Y de `xField` e `yField` para gráficos de correlação.
 - **proportion** — uma única barra horizontal dividida em frações com uma legenda de porcentagem (por exemplo, uma distribuição de idiomas). Usa `labelField` + `valueField`.
 - **barGauge** — um medidor horizontal por linha com um gradiente de vermelho→verde e um valor (por exemplo, espaço livre em disco). Usa `labelField` + `valueField`, `unit` opcional e `max` (o padrão é o maior valor de linha).
+- **gantt** — cronogramas de tarefas com datas, progresso e dependências; consulte [Cronogramas de Gantt](#gantt-schedules).
+- **erDiagram** — entidades de banco de dados, campos, chaves e relacionamentos; consulte [Entity relationships](#entity-relationships-db).
 - **text** — uma mensagem em markdown (por exemplo, uma nota de status como "Última execução às 19:47"). Coloque o markdown em `text` para uma mensagem estática, ou deixe `text` vazio e defina `valueField` para renderizar uma string produzida anteriormente. Suporta títulos, negrito/itálico, [listas](../nodes/chart-output-node.md#interactive-task-lists), links e código embutido.
 - **hitl** — um carrossel das suas revisões humanas pendentes. O cabeçalho mostra `1/n pending`; a seta esquerda fica desabilitada no primeiro cartão e a seta direita no último. O nome do workflow abre essa execução no canvas. **Approve**, **Request changes** e **Reject** a resolvem, e o ícone de histórico ao lado do título do widget abre essa execução no diálogo de histórico na mesma página. Este tipo de gráfico ignora as linhas anteriores, portanto o workflow do widget é apenas o nó Saída de Gráfico. Cada pessoa autenticada vê as revisões nos workflows que possui. Escolha um **Workflow** (e **Select agent** quando ele tiver várias etapas de revisão) nas propriedades do nó ou nas configurações do widget para mostrar, em vez disso, as revisões desse workflow, para todos que puderem abri-lo; veja [widgets HITL](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Cronogramas de Gantt
+
+Escolha **Gantt** (`gantt`) para cronogramas de projetos e linhas do tempo de tarefas. Defina `dataPath` para o array de tarefas, como `tasks`. As linhas usam nomes de campos fixos:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` e `end` aceitam datas ou datetimes ISO. Valores sem fuso horário utilizam UTC; diferenças de fuso horário são convertidas para UTC. `end` deve ser igual ou posterior a `start`. `progress` é opcional (0–100, padrão 0); `dependencies` contém IDs de tarefas existentes. Os IDs devem ser exclusivos. Passe o cursor sobre uma tarefa para ler datas completas, progresso e dependências. Gráficos extensos têm rolagem dentro do widget. É aceito um máximo de 500 tarefas.
+
+Para dados de exemplo, um mapeamento Set chamado `tasks` pode usar `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Conecte-o ao Chart Output com `chartType: "gantt"` e `dataPath: "tasks"`. Mapeie as colunas de origem para esses nomes fixos com um nó Set; `labelField` e `valueField` não são usados.
+
+### Entity relationships (DB)
+
+Escolha **Entity relationships (DB)** (`erDiagram`) para esquemas de banco de dados e conexões entre entidades. Defina `dataPath` para um **objeto** grafo, como `graph`, contendo ambos os arrays:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Os campos possuem `name`, `type` opcional e `key` opcional (`PK`, `FK`, `PK/FK` ou vazio). Os relacionamentos fazem referência a IDs de entidades existentes; os campos opcionais `sourceField` e `targetField` ancoram a conexão a campos nomeados. `cardinality` aceita `one-to-one`, `one-to-many` (padrão), `many-to-one` ou `many-to-many`. IDs de entidades e nomes de campos dentro de cada entidade devem ser exclusivos. São aceitos no máximo 100 entidades, 100 campos por entidade e 500 relacionamentos.
+
+Com um nó Set, construa `graph` com `$dict(entities=array(dict(...)), relations=array(dict(...)))`; use `chartType: "erDiagram"` e `dataPath: "graph"`. Trata-se de uma visualização do esquema fornecido; ela não inspeciona um banco de dados ativo automaticamente.
+
+Ambos os tipos aparecem em **Adicionar widget** com pré-visualização e no seletor de tipo de gráfico do nó no canvas. O Heym Work pode propor esses tipos ao descrever um cronograma ou esquema de banco de dados, desenhando prévias das tarefas ou entidades propostas antes de criar a página.
 
 ### Listas de tarefas interativas
 

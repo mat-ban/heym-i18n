@@ -51,6 +51,8 @@ Atidarius workflow adresu `/workflows/{workflowId}/{executionId}`, automatiškai
 
 ### Naudojimo atvejai
 
+Paspauskite Ctrl/Cmd ir spustelėkite vykdymą bet kuriame istorijos sąraše, kad atidarytumėte šią tiesioginę nuorodą naujame naršyklės skirtuke. Dabartinis skirtukas ir atidarytas dialogo langas lieka nepakitę. Pokalbių ir asistento vykdymo procesai neturi workflow, todėl spartusis klavišas juos tik pasirenka, kaip paprastas spustelėjimas.
+
 - Pakartotinai vykdyti workflow su tomis pačiomis įvestimis
 - Taisyti nesėkmingą vykdymą tikrinant įvestis ir mazgų išvestis
 - Palyginti išvestis tarp vykdymų

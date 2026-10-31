@@ -14,7 +14,7 @@ Vjerodajnice pohranjuju API ključeve i tajne koje koriste čvorovi u workflow-i
 |-----------|----------------------|-------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evaluacije](../tabs/evals-tab.md) | OpenAI, Google, Custom | API ključ za model |
 | [Odluka](../nodes/decision-node.md), [Evaluacije](../tabs/evals-tab.md) sudac | Model odluke | Osnovni URL endpointa modela odluke, plus opcionalni API ključ |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Zadaci | Model Router (Auto Model) | Određuje koji od Vaših modela poslužuje svaki zahtjev, koristeći model odluke |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Zadaci, [Evaluacije](../tabs/evals-tab.md) paketi promptova | Model Router (Auto Model) | Određuje koji od Vaših modela poslužuje svaki zahtjev, koristeći model odluke |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | Prijava za ChatGPT pretplatu (OAuth) ili pristupni token za Codex za izvršitelja, plus GitHub PAT za operacije s repozitorijem |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | API ključ za OpenCode Go gateway (opcionalni osnovni URL) za izvršitelja, plus GitHub PAT za operacije s repozitorijem |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | Osobni pristupni token (PAT) za GitHub API pozive, operacije s GitHub čvorovima i MCP integracije |

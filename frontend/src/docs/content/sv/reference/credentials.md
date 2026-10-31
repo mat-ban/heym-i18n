@@ -14,7 +14,7 @@ Credentials lagrar API-nycklar och hemligheter som används av workflow-noder. D
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API-nyckel för modellen |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Bas-URL för en decision model-endpoint, plus en valfri API-nyckel |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | Väljer vilken av modellerna som hanterar varje begäran, med hjälp av en decision model |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) prompt-sviter | Model Router (Auto Model) | Väljer vilken av modellerna som hanterar varje begäran, med hjälp av en decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT-prenumerationsinloggning (OAuth) eller en Codex access token för runner, plus en GitHub PAT för repository-operationer |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | En OpenCode Go gateway API-nyckel (valfri bas-URL) för runner, plus en GitHub PAT för repository-operationer |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub personal access token (PAT) för GitHub API-anrop, GitHub-nodoperationer och MCP-integrationer |

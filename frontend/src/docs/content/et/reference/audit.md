@@ -47,7 +47,7 @@ Rakenduses loeb vahekaart **Logs** sama konteineri väljundit. Seda reguleerivad
 
 ## Mida logitakse
 
-Iga olekumuudatus logitakse. Lugemised logitakse ainult seal, kus lugemine ise on tundlik toiming — workflow' käivituste ajaloo vaatamine, mandaadi avamine, faili allalaadimine. Tavalisi loendi- ja üksikasjapäringuid ei auditeerita; juurdepääsulogi juba salvestab, et päring toimus, ning iga `GET`-päringu auditeerimine mataks olulised read.
+Iga olekumuudatus logitakse. Lugemised logitakse ainult seal, kus lugemine ise on tundlik toiming — workflow' käivituste ajaloo vaatamine, mandaadi avamine, faili allalaadimine. Tavalisi loendi- ja üksikasjapäringuid ei auditeerita; juurdepääsulogi juba salvestab, et päring toimus, ning iga `GET`-päringu auditeerimine mataks olulised read. Ainus erand on [lehevaatamised](#page-views), mis registreerivad, kuhu sisselogitud kasutaja rakenduses liikus.
 
 ### Autentimine
 
@@ -62,9 +62,34 @@ Iga olekumuudatus logitakse. Lugemised logitakse ainult seal, kus lugemine ise o
 | `sso_settings.update` | Administraator muutis [SSO](./sso.md) konfiguratsiooni. Salvestab `enabled` ja `password_login_disabled`, mitte kunagi kliendi saladust. |
 | `sso_settings.test` | Administraator käivitas SSO ühenduse testi. |
 
+### Lehevaatamised
+
+`page.view` kirjutatakse iga kord, kui sisselogitud kasutaja avab veebirakenduses lehe, koos URL-i teega väljal `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Tee on rakendusesisene marsruut. Juhtpaneeli vahekaardid on osa sellest (`/?tab=traces`), nagu ka identifikaatorid, mis tähistavad avatud üksust, näiteks `/workflows/<id>`. Säilitatakse ainult lühike loend lehte tuvastavatest päringuparameetritest (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); kõik muu päringustringis ja kogu fragment jäetakse kõrvale. Lehed, mille link sisaldab saladust, näiteks `/review/<token>`, logitakse saladuse asemel kohatäitjaga `:token`.
+
+Brauser teatab tee, seega näitab rida `page.view`, kuhu kasutaja enda sõnul liikus. See ei tõesta, et server selle lehe tagastas. Sisselogimislehe külastusi ja väljalogituna avatud linke ei salvestata, kuna nendega pole seotud ühtegi kasutajat.
+
 ### Workflow'd
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` kirjutatakse, kui käivitamine algatatakse API kaudu: redaktori nupp Käivita, execute-lõpp-punkt seansi, API-võtme või veebihaagiga (webhook), vestlusportaal ja MCP-tööriistad. See salvestab, kes selle käivitas, kuidas ja kuidas see lõppes:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` seob rea käivitamisega Käivitusajaloos. `outcome` on `failure`, kui käivitamine lõppes olekuga `error`, `cancelled` või `timeout`. Inimülevaatuseks peatatud või samaaegsuse järjekorras hoitav käivitus on rida `success` olekuga `status=pending` või `status=queued`. Kõnel ilma sisselogitud kasutajata, näiteks anonüümsel veebihaagil või portaali külastajal, puuduvad `actor_id` ja `actor_email`. Sisendeid ja väljundeid ei kirjutata kunagi.
+
+Ajakava, päästikusõlme, järjekorra või sündmuse käivitatud käivitused ei ole auditiread. Need käivitatakse eksemplaris, mis need vastu võttis, ja salvestatakse Käivitusajalukku koos nende päästikuallika ja käivitanud eksemplariga.
+
+`workflow.history_view` kirjutatakse, kui keegi avab töövoo käivitusajaloo. Väikest päringut, mis kuvab töövoo viimast käivitust lõuendil või loendis, ei auditeerita.
+
 
 `workflow.history_view` salvestab `owned=false`, kui kaastöötaja loeb kellegi teise käivituste ajalugu. `workflow.delete` salvestab `outcome=denied` koos `reason=not_owner`, kui kaastöötaja üritab kustutada.
 
@@ -96,6 +121,27 @@ Auditirida salvestab identifikaatorid, nimed ja loendused. See ei salvesta kunag
 Seda tagavad kaks asjaolu. Kutsekohad on kirjutatud nii, et edastatakse ainult turvalisi välju, ning audit-abifunktsioon redigeerib need tagatiseks: iga väli, mille nimi sisaldab `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` või muud sarnast, asendatakse enne rea koostamist väärtusega `***`. Üleliigne redigeerimine on tahtlik — kasutu rida on parem kui lekkinud mandaat.
 
 Kui saladus on kirje jaoks tõesti oluline, logitakse ainult selle kuju. Faili jagamine salvestab `password_protected=true`, mitte kunagi parooli ennast.
+
+## Heym Work
+
+Kui käitate Heym Worki koos Heymiga, väljastab Work auditiridu oma konteineri stdout-voogu samas Winstoni vormingus:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work logib kasutajate tegevusi lehtedel, tahvlitel ja kirjetes:
+
+| Tegevus | Tähendus |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Juhtpaneeli lehtede ja paigutuste muudatused |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Kanbani veergude paigutuse muudatused |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Kaartide elutsükli sündmused |
+| `record.create`, `record.update`, `record.delete` | Andmetabeli kirjete muudatused Worki kaudu |
+| `chat.message` | Kasutaja viip, mis saadeti Worki assistendile |
+| `export.csv`, `export.json` | Andmete eksport |
+
+Iga rida sisaldab samu välju `actor_id`, `actor_email`, `timestamp` ja `outcome` nagu Heymi auditiread, võimaldades logikogujatel mõlemat töödelda ühe konveieriga.
 
 ## Säilitamine
 

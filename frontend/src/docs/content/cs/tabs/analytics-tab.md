@@ -15,6 +15,7 @@ Záložka **Analytics** zobrazuje metriky provádění a trendy pro vaše workfl
 
 ## Časové rozmezí
 
+- **1h**, **3h**, **6h** – Poslední hodina, 3 hodiny nebo 6 hodin. Analytika se uchovává po hodinách, takže tyto volby počítají počáteční hodinu okna jako celou: Poslední hodina v 15:20 pokrývá čas od 14:00 do teď
 - **24h** – Posledních 24 hodin
 - **7d** – Posledních 7 dní
 - **30d** – Posledních 30 dní
@@ -38,9 +39,19 @@ Dvě tabulky zobrazují využití workflow: **Nejpoužívanější** (širší) 
 - **Objem spuštění v čase** – Spojnicový graf spuštění za časový interval
 - **Míra úspěchu vs. chybovosti** – Plošný graf porovnávající úspěšná a neúspěšná spuštění
 - **Průměrná latence v čase** – Spojnicový graf zobrazující změny doby odezvy
-- **Tažením vyberte** – Kliknutím a tažením v libovolném grafu zaměřte vlastní časové rozmezí
+- **Výběr přetažením** – Kliknutím a tažením na libovolném grafu zaměříte vlastní rozsah dat. Výběr musí pokrývat alespoň dva body na grafu; pouhé kliknutí nevybere nic
 - **Režim výběru** – Vybraná rozmezí aktualizují souhrnné karty, grafy a tabulky workflow, aniž by se změnil základní preset
 - **Zrušit výběr** – Návrat k přednastavenému časovému oknu, jakmile dokončíte podrobné zkoumání
+
+## Typy uzlů
+
+Pod percentily latence ukazují tři grafy, kam směřuje čas a chyby uzlů, seskupené podle typu uzlu (Agent, HTTP Request, Code atd.) napříč zobrazenými workflow:
+
+- **Časově nejnáročnější uzly** – 10 typů uzlů s nejdelším celkovým časem běhu, vykreslených jako průměrná doba trvání na volání. Hodina bez volání daného typu zobrazuje v tooltipu **Žádná volání**.
+- **Nejčastěji chybující typy uzlů** – 10 typů uzlů s největším počtem chyb (chyba nebo timeout), každý s vlastním počtem chyb za daný časový úsek.
+- **Nejvíce volané typy uzlů** – 10 typů uzlů, které běžely nejčastěji, každý s vlastním počtem volání za časový úsek. Přeskočené uzly se nepočítají.
+
+Najeďte myší na graf a uvidíte typ uzlu pod ukazatelem přímo vedle něj. Typ uzlu příliš malý na to, aby byl vedle největšího na grafu viditelný (pod 1 % z něj), je z grafu i jeho legendy vynechán. Grafy respektují filtr workflow, časový rozsah i jakýkoli rozsah vybraný přetažením. Analytika uzlů se zaznamenává pro běhy od verze, která ji zavedla; dokončený běh se objeví zhruba do minuty. Starší běhy se nezapočítávají.
 
 ## Automatická aktualizace
 

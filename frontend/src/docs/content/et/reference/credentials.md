@@ -14,7 +14,7 @@ Mandaadid salvestavad API võtmeid ja saladusi, mida workflow'de sõlmed kasutav
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Hindamised](../tabs/evals-tab.md) | OpenAI, Google, Kohandatud | API võti mudeli jaoks |
 | [Otsus](../nodes/decision-node.md), [Hindamiste](../tabs/evals-tab.md) hindaja | Otsustusmudel | Otsustusmudeli endpoint'i baas-URL ja valikuline API võti |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI vaikeväärtused | Mudelite ruuter (automaatne mudel) | Valib otsustusmudeli abil, milline teie mudelitest teenindab iga päringut |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI vaikeväärtused, [Hindamised](../tabs/evals-tab.md) prompt-komplektid | Mudelite ruuter (automaatne mudel) | Valib otsustusmudeli abil, milline teie mudelitest teenindab iga päringut |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT tellimuse sisselogimine (OAuth) või Codex'i juurdepääsu token runneri jaoks, pluss GitHub PAT hoidla toimingute jaoks |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | OpenCode Go lüüsi API võti (valikuline baas-URL) runneri jaoks, pluss GitHub PAT hoidla toimingute jaoks |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHubi isiklik juurdepääsu token (PAT) GitHubi API kutsete, GitHub node'i toimingute ja MCP integratsioonide jaoks |

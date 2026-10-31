@@ -173,7 +173,7 @@ Kun workflow tallentaa, säilöö tai hakee tietueita eikä ole nimetty toista v
 
 Valitse uusi taulukko ja paina **Lähetä vastaukset**: kortti luo taulukon, ja apuri asettaa sen tunnisteen solmuun ja käyttää sen tarkkoja sarakenimiä. Voit myös pyytää taulukkoa itsessään, esimerkiksi "luo taulukko liideilleni".
 
-Apuri näkee taulukoiden nimet, kuvaukset ja sarakkeet, ei koskaan rivejä. Se ei koskaan muuta olemassa olevan taulukon sarakkeita: jos taulukosta puuttuu workflowin tarvitsema sarake, se nimeää sarakkeen ja tarjoaa uuden taulukon sen sijaan. Lisää sarakkeita [DataTable-välilehdessä](../tabs/datatable-tab.md).
+Canvas-avustaja näkee taulukoiden nimet, kuvaukset ja sarakkeet, ei koskaan rivejä. Se määrittää workflow-solmut kyseisten metatietojen perusteella; lisää sarakkeita [DataTable-välilehdellä](../tabs/datatable-tab.md) tai pyydä [Chatissa](../tabs/chat-tab.md). Chat ja `heym_chat` voivat tarkastaa rivejä sekä lisätä tai poistaa sarakkeita suoraan ja lisätä, päivittää tai poistaa rivejä taulukoissa, jotka omistat tai joihin sinulla on kirjoitusoikeus, mukaan lukien tiimijaot. Sarakkeiden poistaminen ja kaikkien rivien tyhjentäminen pyytävät vahvistuksen ennen tietojen poistamista.
 
 ## Aiheeseen liittyvää
 

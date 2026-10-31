@@ -53,6 +53,8 @@ Otevření workflow na adrese `/workflows/{workflowId}/{executionId}` automatick
 
 ### Případy použití
 
+Stisknutím Ctrl/Cmd a kliknutím na spuštění v libovolném seznamu historie otevřete tento přímý odkaz na nové kartě prohlížeče. Aktuální karta i otevřený dialog zůstanou beze změny. Běhy chatu a asistenta nemají žádný workflow, takže je klávesová zkratka pouze vybere, stejně jako běžné kliknutí.
+
 - Opětovné spuštění workflow se stejnými vstupy
 - Ladění neúspěšného běhu kontrolou vstupů a výstupů uzlů
 - Porovnání výstupů napříč běhy

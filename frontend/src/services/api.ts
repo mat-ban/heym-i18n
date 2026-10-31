@@ -98,6 +98,7 @@ import type {
 import type {
   AnalyticsQueryOptions,
   AnalyticsStats,
+  NodeTypeAnalytics,
   TimeSeriesMetrics,
   WorkflowBreakdownItem,
   WorkflowBreakdownResponse,
@@ -110,6 +111,15 @@ import type {
   UpdateGlobalVariableRequest,
 } from "@/types/globalVariable";
 import type {
+  AgentCandidate,
+  AgentMetrics,
+  AgentSuite,
+  AgentSuiteReport,
+  AgentSuiteRun,
+  AgentSuiteRunInputs,
+  AgentSuiteRunSummary,
+  CreateAgentSuiteRunRequest,
+  CreateAgentSuiteRequest,
   CreateSuiteRequest,
   CreateTestCaseRequest,
   EvalRun,
@@ -121,6 +131,7 @@ import type {
   OptimizePromptRequest,
   OptimizePromptResponse,
   RunEvalsRequest,
+  UpdateAgentSuiteRequest,
   UpdateSuiteRequest,
   UpdateTestCaseRequest,
 } from "@/types/evals";
@@ -180,12 +191,14 @@ import type {
   ConversationDetail,
   ConversationUpdate,
   ContextUsage,
+  EvalSuitePreview,
   Message,
   QueuedMessage,
   SendMessageResponse,
   ToolCallTerminalStatus,
   WorkflowPreview,
 } from "@/types/chat";
+import { parseEvalSuiteSaved } from "@/lib/evalSuitePreview";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 const AI_REQUEST_TIMEOUT_MS = 120_000;
@@ -708,6 +721,14 @@ export const workflowApi = {
       },
     );
     return response.data;
+  },
+  /** Newest run for a status badge. The server does not audit it as a history view. */
+  getLatestRun: async (id: string): Promise<AllExecutionHistoryEntryLight | null> => {
+    const response = await api.get<HistoryListResponse<AllExecutionHistoryEntryLight>>(
+      `/workflows/${id}/history`,
+      { params: { latest_only: true } },
+    );
+    return response.data.items[0] ?? null;
   },
   getWorkflowHistoryEntry: async (
     workflowId: string,
@@ -2557,12 +2578,15 @@ export interface MCPChatToolConfig {
   enabled: boolean;
   credential_id: string | null;
   model: string | null;
+  /** The Heym Agent is also reachable over A2A. Never true while `enabled` is false. */
+  a2a_enabled: boolean;
 }
 
 export interface MCPChatToolUpdate {
   enabled?: boolean;
   credential_id?: string | null;
   model?: string | null;
+  a2a_enabled?: boolean;
 }
 
 export interface MCPConfigResponse {
@@ -3248,6 +3272,18 @@ export const analyticsApi = {
     });
     return response.data.items;
   },
+
+  getNodeTypeAnalytics: async (
+    workflowId?: string,
+    options: AnalyticsQueryOptions = {},
+  ): Promise<NodeTypeAnalytics> => {
+    const params: Record<string, string> = buildAnalyticsQueryParams(options);
+    if (workflowId) {
+      params.workflow_id = workflowId;
+    }
+    const response = await api.get<NodeTypeAnalytics>("/analytics/nodes", { params });
+    return response.data;
+  },
 };
 
 function buildAnalyticsQueryParams(options: AnalyticsQueryOptions): Record<string, string> {
@@ -3383,6 +3419,103 @@ export const evalsApi = {
 
   clearAllRuns: async (suiteId: string): Promise<void> => {
     await api.delete(`/evals/suites/${suiteId}/runs`);
+  },
+
+  listAgents: async (): Promise<AgentCandidate[]> => {
+    const response = await api.get<AgentCandidate[]>("/evals/agents");
+    return response.data;
+  },
+
+  getAgentMetrics: async (
+    workflowId: string,
+    nodeId: string,
+    limit?: number,
+  ): Promise<AgentMetrics> => {
+    const response = await api.get<AgentMetrics>("/evals/agent-metrics", {
+      params: { workflow_id: workflowId, node_id: nodeId, limit },
+    });
+    return response.data;
+  },
+
+  createAgentSuite: async (data: CreateAgentSuiteRequest): Promise<AgentSuite> => {
+    const response = await api.post<AgentSuite>("/evals/agent-suites", data);
+    return response.data;
+  },
+
+  getAgentSuite: async (id: string): Promise<AgentSuite> => {
+    const response = await api.get<AgentSuite>(`/evals/agent-suites/${id}`);
+    return response.data;
+  },
+
+  updateAgentSuite: async (
+    id: string,
+    data: UpdateAgentSuiteRequest,
+  ): Promise<AgentSuite> => {
+    const response = await api.patch<AgentSuite>(`/evals/agent-suites/${id}`, data);
+    return response.data;
+  },
+
+  deleteAgentSuite: async (id: string): Promise<void> => {
+    await api.delete(`/evals/agent-suites/${id}`);
+  },
+
+  getAgentSuiteReport: async (
+    id: string,
+    limit?: number,
+    runId?: string | null,
+  ): Promise<AgentSuiteReport> => {
+    const response = await api.get<AgentSuiteReport>(`/evals/agent-suites/${id}/report`, {
+      params: { limit, run_id: runId ?? undefined },
+    });
+    return response.data;
+  },
+
+  getAgentSuiteRunInputs: async (id: string): Promise<AgentSuiteRunInputs> => {
+    const response = await api.get<AgentSuiteRunInputs>(`/evals/agent-suites/${id}/run-inputs`);
+    return response.data;
+  },
+
+  startAgentSuiteRun: async (
+    id: string,
+    data: CreateAgentSuiteRunRequest,
+  ): Promise<AgentSuiteRun> => {
+    const response = await api.post<AgentSuiteRun>(`/evals/agent-suites/${id}/runs`, data);
+    return response.data;
+  },
+
+  getLatestAgentSuiteRun: async (id: string): Promise<AgentSuiteRun | null> => {
+    const response = await api.get<AgentSuiteRun | null>(`/evals/agent-suites/${id}/runs/latest`);
+    return response.data;
+  },
+
+  getAgentSuiteRun: async (runId: string): Promise<AgentSuiteRun> => {
+    const response = await api.get<AgentSuiteRun>(`/evals/agent-suite-runs/${runId}`);
+    return response.data;
+  },
+
+  listAgentSuiteRuns: async (suiteId: string): Promise<AgentSuiteRunSummary[]> => {
+    const response = await api.get<AgentSuiteRunSummary[]>(`/evals/agent-suites/${suiteId}/runs`);
+    return response.data;
+  },
+
+  cancelAgentSuiteRun: async (runId: string): Promise<AgentSuiteRun> => {
+    const response = await api.post<AgentSuiteRun>(`/evals/agent-suite-runs/${runId}/cancel`);
+    return response.data;
+  },
+
+  deleteAgentSuiteRun: async (runId: string): Promise<void> => {
+    await api.delete(`/evals/agent-suite-runs/${runId}`);
+  },
+};
+
+export const auditApi = {
+  /** Best effort: a page view that cannot be recorded must never disturb navigation. */
+  recordPageView: async (path: string): Promise<void> => {
+    try {
+      await api.post("/audit/page-view", { path });
+    } catch {
+      // Dropped on purpose: the audit trail is not worth a toast or a retry.
+    }
   },
 };
 
@@ -3858,6 +3991,7 @@ export const chatApi = {
     onQueuedMessageDeleted?: (queuedMessageId: string) => void,
     onQueueCleared?: () => void,
     onQueuedMessageStarted?: (payload: { queuedMessageId: string; userMessage: Message }) => void,
+    onEvalSuiteSaved?: (suite: EvalSuitePreview, messageId?: string) => void,
     signal?: AbortSignal,
   ): Promise<void> => {
     const base = import.meta.env.VITE_API_URL || "";
@@ -3980,6 +4114,9 @@ export const chatApi = {
               nodes: parsed.nodes,
               edges: parsed.edges,
             }, messageId);
+          } else if (parsed.type === "eval_suite_saved") {
+            const suite = parseEvalSuiteSaved(parsed);
+            if (suite) onEvalSuiteSaved?.(suite, messageId);
           } else if (parsed.type === "queued_message_created" && parsed.queued_message) {
             onQueuedMessageCreated?.(parsed.queued_message as QueuedMessage);
           } else if (parsed.type === "queued_message_updated" && parsed.queued_message) {

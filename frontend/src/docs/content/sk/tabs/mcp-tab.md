@@ -1,6 +1,6 @@
-# Karta MCP
+# Karta MCP / A2A / A2A
 
-Karta **MCP** konfiguruje integráciu Model Context Protocol (MCP). MCP umožňuje AI klientom (Claude, ChatGPT, Gemini, Cursor a akýkoľvek nástroj kompatibilný s MCP) volať Vaše workflowy Heym ako nástroje.
+Karta **MCP** konfiguruje integráciu Model Context Protocol (MCP), a ako servery [Agent2Agent](https://github.com/google/A2A) (A2A 1.0), ktorým môžu iní agenti delegovať úlohy. MCP umožňuje AI klientom (Claude, ChatGPT, Gemini, Cursor a akýkoľvek nástroj kompatibilný s MCP) volať Vaše workflowy Heym ako nástroje.
 
 Heym podporuje dva režimy: **predvolený server**, ktorý sprístupňuje všetky workflowy s povoleným MCP pod jedným endpointom, a **pomenované servery**, ktoré každú logickú skupinu workflowov sprístupňujú pod vlastnou vyhradenou URL a API kľúčom.
 
@@ -51,7 +51,7 @@ Workflow s [limitom súbežnosti](../reference/webhooks.md#concurrency-limit-and
 ```
 
 Klient dopytuje nástroj `heym_execution_status` s týmto `execution_id`. Vracia rovnaké telo ako [URL stavu](../reference/webhooks.md#status-url): `queued` s aktuálnou pozíciou, `running` a potom `success` alebo `error` s výstupmi. Nájde iba behy workflows, ktoré vystavuje rovnaký server. Nástroj je uvedený na predvolenom serveri a na každom pomenovanom serveri len vtedy, ak aspoň jeden z jeho workflows má limit súbežnosti. Keď je rad plný, volanie vráti chybu „Concurrency queue is full“.
-## Nástroj Heym chat
+## Heym Agent
 
 Sekcia **Heym Capabilities** mení engine karty Chat na jediný nástroj MCP s názvom `heym_chat`. Povoľte ho na predvolenom serveri, na ktoromkoľvek pomenovanom serveri alebo na oboch — každé rozhranie si zachováva vlastný prepínač a výber modelu.
 
@@ -60,15 +60,20 @@ Keď je zapnutý, `heym_chat` sa zobrazuje v `tools/list` spolu s nástrojmi Va�
 - Vytvoriť workflow, otestovať ho so vzorovými vstupmi, opraviť ho a dokončiť, keď beh úspešne prejde (pozri [Režim vytvárania](#build-mode))
 - Skúmať a spúšťať Vaše existujúce workflowy
 - Podávať analytiku, nedávne spustenia a nadchádzajúce cron plány
+- Vysvetlenie, kde workflow zlyhávajú a prečo sú pomalé: workflow s najvyšším počtom spustení, chýb a najdlhším trvaním, ako aj typy uzlov s najväčším časom, chybami a volaniami za posledné 1, 3 alebo 6 hodín, 24 hodín, 7 alebo 30 dní alebo za celé obdobie
 - Podávať históriu behov jedného workflowu: koľkokrát bežal, počty stavov, kedy bežal, a na požiadanie vstupy, výstupy a chyby jednotlivých uzlov jedného behu
 - Podávať, čo práve beží: koľko spustení je aktívnych, ich názvy workflowov, ako dlho každé beží, na ktorom uzle sa práve nachádza, a odkaz na živý beh
 - Zoznamovať nástenky, vytvárať karty a čítať detail karty na [karte Board](./board-tab.md)
-- Zoznamovať Vaše dátové tabuľky s ich stĺpcami, vytvárať nové a zapájať ich do workflowov, ktoré vytvára
+- Zoznam dashboardov (stránok Heym Work) a ich widgetov, zistenie, na ktorom dashboarde sa workflow nachádza, pridanie nového widgetu a zostavenie jeho workflow, umiestnenie existujúceho workflow ako widgetu, premenovanie alebo odstránenie widgetov či usporiadanie rozloženia (pozri [Dashboard › Z Chatu a MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Kontrola dátových tabuliek a riadkov, vytváranie tabuliek, pridávanie alebo odstraňovanie stĺpcov, vkladanie, aktualizácia alebo mazanie riadkov a prepájanie tabuliek vo workflow
+- Vytváranie, úprava a spúšťanie evaluačných sád promptov a agentov ([Eval suites](./evals-tab.md#from-chat-and-mcp)), vrátane východiskového stavu agenta: nahláseného, zostaveného z behov alebo zadaného číselne. Výsledok uvádza odkaz Evals pre každú uloženú sadu.
 - Vytvoriť alebo aktualizovať svoje prihlasovacie údaje na vyhradenej stránke Heym (pozrite si [Prihlasovacie údaje](#prihlasovacie-údaje))
 - Čítať tímové a globálne premenné a prehľadávať dokumentáciu
 - Schvaľovať, upravovať alebo odmietať čakajúce human-in-the-loop kontroly
 
 Schopnosti pridané do karty Chat neskôr sa prostredníctvom `heym_chat` sprístupnia automaticky — neexistuje žiadny prepínač pre jednotlivé schopnosti, ktorý by bolo potrebné udržiavať v synchronizácii.
+
+Tieto funkcie bežia vo vnútri `heym_chat`: `tools/list` zobrazuje `heym_chat` a vaše nástroje workflow, nikdy interné nástroje chatu, ako sú tie pre evaluačné sady.
 
 ### Režim vytvárania
 
@@ -121,6 +126,14 @@ Uzly LLM a Agent vo workflow vytvorenom cez `heym_chat` bežia na týchto prihla
 Každé volanie sa zapíše do histórie Vašej [karty Chat](./chat-tab.md) ako bežná konverzácia, označená ikonou zástrčky v zozname konverzácií. Správy, karty nástrojov a pauzy na objasnenie vyzerajú presne ako konverzácia, ktorú ste začali sami, a vlákno môžete otvoriť a pokračovať v rozprávaní v prehliadači. Každý výsledok vracia svoj `conversation_id`, takže MCP klient môže pokračovať v tom istom vlákne namiesto otvárania nového pri každom volaní.
 
 Keď asistent potrebuje objasnenie, pozastaví sa a oznámi to; odpovedzte s odpoveďami pomocou rovnakého `conversation_id`.
+### Povoliť A2A
+
+Keď je Heym Agent zapnutý, karta zobrazuje začiarkavacie políčko **Povoliť A2A**. Začiarknite ho a iní agenti budú môcť Heym Agentovi odosielať úlohy prostredníctvom protokolu Agent2Agent (A2A 1.0). Karta potom zobrazí adresu URL pre **Agent Card** a koncový bod **JSON-RPC endpoint**, každý s tlačidlom kopírovania, a príkaz `curl` na načítanie karty. A2A používa rovnaký kľúč a prihlásenie OAuth ako MCP. Vypnutím agenta sa vypne aj A2A. Pozrite si [A2A](../reference/a2a.md) pre metódy, stavy úloh a príklad.
+
+### Priebeh
+
+Dlhé volanie `heym_chat` hlási činnosť agenta ako priebeh MCP (`notifications/progress`), s rovnakými formuláciami, aké zobrazuje karta Chat, napríklad `Testovanie workflow · pokus 2/5`. Klienti, ktorí pri hlásení priebehu resetujú svoj časový limit, pokračujú v čakaní, kým agent pracuje.
+
 ## Pomenované MCP servery
 
 Pomenované servery vám umožňujú segmentovať workflowy do izolovaných MCP endpointov. Každý server má vlastnú URL a API kľúč, takže rôzni AI klienti, tímy alebo prípady použitia sa môžu pripojiť presne k tým workflowom, ktoré potrebujú.
@@ -140,7 +153,9 @@ Každá karta servera zobrazuje:
 | **SSE Endpoint** | Jedinečná URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Nezávislý kľúč, zobrazený raz pri vygenerovaní alebo opätovnom vygenerovaní. Skopírujte ho okamžite; je uložený v hashovanej podobe a neskôr ho už nie je možné zobraziť |
 | **How to connect** | **Copy JSON** skopíruje MCP konfiguráciu pripravenú na vloženie; **Add to Cursor** ju nainštaluje jedným kliknutím |
-| **Heym Capabilities** | Prepnite nástroj `heym_chat` pre tento server a vyberte jeho prihlasovacie údaje a model |
+| **Heym Capabilities** | Prepnite Heym Agenta (`heym_chat`) pre tento server a vyberte jeho credential a model |
+| **Povoliť A2A** | Vlastný prepínač A2A tohto servera s vlastnou Agent Card na `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Povoliť A2A** | Vlastný prepínač A2A tohto servera s vlastnou Agent Card na `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Prepnite, ktoré z vašich workflowov tento server sprístupňuje |
 
 ### Priradenie workflowov

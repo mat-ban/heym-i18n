@@ -15,6 +15,7 @@ La pestanya **Analytics** mostra mètriques d'execució i tendències dels vostr
 
 ## Interval de temps
 
+- **1h**, **3h**, **6h** – Darrera hora, 3 hores o 6 hores. Les analítiques es guarden per hora, de manera que comptabilitzen l'hora d'inici de la finestra sencera: Darrera hora a les 15:20 cobreix de 14:00 fins ara
 - **24h** – Últimes 24 hores
 - **7d** – Últims 7 dies
 - **30d** – Últims 30 dies
@@ -38,9 +39,19 @@ Dues taules mostren l'ús dels workflows: **Most Used** (més àmplia) i **Most 
 - **Execution Volume Over Time** – Gràfic de línies d'execucions per interval de temps
 - **Success vs Error Rate** – Gràfic d'àrea que compara execucions correctes i fallides
 - **Average Latency Over Time** – Gràfic de línies que mostra els canvis en el temps de resposta
-- **Arrossegueu per seleccionar** – Feu clic i arrossegueu sobre qualsevol gràfic per enfocar un interval de dates personalitzat
+- **Arrossegar per seleccionar** – Feu clic i arrossegueu sobre qualsevol gràfic per enfocar un interval de dates personalitzat. Una selecció ha de cobrir almenys dos punts al gràfic; un simple clic no selecciona res
 - **Mode de selecció** – Els intervals seleccionats actualitzen les targetes de resum, els gràfics i les taules de workflows sense canviar el preset base
 - **Clear Selection** – Torneu a la finestra de temps predefinida quan hàgiu acabat d'aprofundir
+
+## Tipus de nodes
+
+Sota els percentils de latència, tres gràfics mostren on van el temps dels nodes i les fallades, agrupats per tipus de node (Agent, HTTP Request, Code, etc.) en tots els workflows a la vista:
+
+- **Nodes amb més temps dedicat** – Els 10 tipus de nodes amb més temps total d'execució, traçats com a durada mitjana per crida. Una hora sense crides d'un tipus mostra **Sense crides** a la informació sobre eines.
+- **Tipus de nodes amb més fallades** – Els 10 tipus de nodes amb més errors (error o timeout), cadascun amb el seu propi recompte d'errors per interval temporal.
+- **Tipus de nodes més cridats** – Els 10 tipus de nodes que més s'han executat, cadascun amb el seu propi recompte de crides per interval temporal. Els nodes omesos no es comptabilitzen.
+
+Passeu el cursor per sobre d'un gràfic per veure el tipus de node sota el punter, just al costat. Un tipus de node massa petit per veure's al costat del més gran d'un gràfic (per sota de l'1% d'aquest) s'omet d'aquest gràfic i de la seva llegenda. Els gràfics segueixen el filtre de workflow, l'interval de temps i qualsevol interval que arrossegueu sobre un gràfic. Les analítiques de nodes s'enregistren per a les execucions a partir de la versió que les va introduir, i una execució acabada apareix en aproximadament un minut. Les execucions més antigues no es comptabilitzen.
 
 ## Actualització automàtica
 

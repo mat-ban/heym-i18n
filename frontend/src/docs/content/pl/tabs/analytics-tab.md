@@ -15,6 +15,7 @@ Karta **Analityka** prezentuje metryki wykonań oraz trendy dla workflow. Umożl
 
 ## Zakres czasu
 
+- **1h**, **3h**, **6h** – Ostatnia godzina, 3 godziny lub 6 godzin. Analityka prowadzona jest w ujęciu godzinnym, więc zliczana jest pełna godzina początkowa okna: Ostatnia godzina o 15:20 obejmuje czas od 14:00 do teraz
 - **24h** – Ostatnie 24 godziny
 - **7d** – Ostatnie 7 dni
 - **30d** – Ostatnie 30 dni
@@ -38,9 +39,19 @@ Dwie tabele prezentują użycie workflow: **Najczęściej używane** (szersza) o
 - **Wolumen wykonań w czasie** – Wykres liniowy liczby wykonań w przedziałach czasowych
 - **Wskaźnik sukcesu vs błędów** – Wykres obszarowy porównujący udane i nieudane uruchomienia
 - **Średnie opóźnienie w czasie** – Wykres liniowy zmian czasu odpowiedzi
-- **Przeciągnij, aby wybrać** – Kliknięcie i przeciągnięcie na dowolnym wykresie pozwala zawęzić niestandardowy zakres dat
+- **Przeciągnij, aby wybrać** – Kliknięcie i przeciągnięcie na dowolnym wykresie pozwala zawęzić niestandardowy zakres dat. Zaznaczenie musi obejmować co najmniej dwa punkty na wykresie; zwykłe kliknięcie niczego nie wybiera
 - **Tryb zaznaczenia** – Wybrane zakresy odświeżają karty podsumowania, wykresy i tabele workflow bez zmiany bazowego presetu
 - **Wyczyść zaznaczenie** – Powrót do zaprogramowanego okna czasowego po zakończeniu analizy
+
+## Typy węzłów
+
+Poniżej percentyli opóźnienia trzy wykresy przedstawiają, na co przypada czas i błędy węzłów, w podziale na typ węzła (Agent, HTTP Request, Code itd.) w ramach widocznych workflow:
+
+- **Węzły o najdłuższym czasie pracy** – 10 typów węzłów o największym łącznym czasie wykonania, przedstawionych jako średni czas trwania na wywołanie. Godzina bez wywołań danego typu wyświetla w tooltipie komunikat **Brak wywołań**.
+- **Typy węzłów z największą liczbą błędów** – 10 typów węzłów z największą liczbą błędów (błąd lub timeout), każdy z własną liczbą błędów w danym przedziale czasu.
+- **Najczęściej wywoływane typy węzłów** – 10 typów węzłów uruchamianych najczęściej, każdy z własną liczbą wywołań w danym przedziale czasu. Pominięte węzły nie są wliczane.
+
+Najedź kursorem na wykres, aby zobaczyć typ węzła tuż obok wskaźnika myszy. Typ węzła zbyt mały, by był zauważalny obok największego na wykresie (poniżej 1% jego wartości), zostaje pominięty na tym wykresie oraz w jego legendzie. Wykresy uwzględniają filtr workflow, zakres czasu oraz dowolny zakres zaznaczony przeciągnięciem. Analityka węzłów jest rejestrowana dla uruchomień począwszy od wersji, która wprowadziła tę funkcję, a ukończone wykonanie pojawia się w ciągu około minuty. Wcześniejsze wykonania nie są uwzględniane.
 
 ## Automatyczne odświeżanie
 

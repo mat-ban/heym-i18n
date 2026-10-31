@@ -23,6 +23,8 @@ Pripomoček je en sam graf na mreži. Podprti tipi grafov:
 - **Merilnik** (ena vrednost v razponu min–max, npr. odstotek)
 - **Razpršeni** (X/Y točke za korelacijske grafe)
 - **Delež** (en stolpec razdeljen na dele z odstotkovno legendo, npr. razčlenitev po jeziku)
+- **Gantt** (datumi opravil, dokončanje in odvisnosti)
+- **Entity relationships (DB)** (tabele, polja, ključi PK/FK in povezave)
 - **Stolpčni merilnik** (ena vodoravna merilna enota na vrstico z rdeče→zelena gradientom in vrednostjo, npr. prosti prostor na disku)
 - **Besedilo** (sporočilo v markdown formatu, npr. statusna opomba kot "Zadnje izvajanje ob 19:47"; podpira [interaktivne potrditvene okvirčke](../nodes/chart-output-node.md#interactive-task-lists), ko je markdown statičen, in [izrecne številčne sezname](../nodes/chart-output-node.md#numbered-lists) za prilagojeno ali padajoče številčenje)
 - **HITL** (vaši čakajoči človeški pregledi. Glava prikazuje `1/n čakajočih`. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo. Ikona zgodovine poleg naslova pripomočka odpre to izvajanje v pogovornem oknu zgodovine na tej strani. Pripomoček ne uporablja zgornjih vrstic, in vsakdo vidi svojo lastno vrsto. Namesto tega lahko prikazuje preglede enega samega Workflowa za vsakogar, ki lahko ta Workflow odpre; glejte [Gradniki HITL](#gradniki-hitl))
@@ -96,6 +98,18 @@ API za gradnike lahko ustvari tudi **kartico števca** brez AI: gradnik `text` n
 
 Uporabite gumb **Natančno prilagodi z AI** pripomočka za revizijo obstoječega pripomočka z novim navodilom. Vsaka natančna prilagoditev AI posname prejšnji workflow v **Zgodovini urejanja** pripomočka, tako da lahko pregledate ali vrnete spremembe iz urejevalnika workflow-ov.
 
+## Iz Chat in MCP
+
+[Chat](./chat-tab.md) in odjemalci MCP prek orodja [`heym_chat`](./mcp-tab.md) lahko berejo vaše nadzorne plošče, vanje dodajajo pripomočke, jih preimenujejo ali brišejo ter uredijo postavitev nadzorne plošče. Heym Work prikazuje vsako nadzorno ploščo kot stran, zato isti odgovori pokrivajo tudi njene strani.
+
+- **Katere nadzorne plošče obstajajo in kaj je na njih.** Vprašajte "katere nadzorne plošče imam?", "kaj je na plošči Prodaja?" ali "na kateri nadzorni plošči je workflow prihodkov?". Chat navede vaše lastne nadzorne plošče in tiste, ki so deljene z vami, z vašimi pravicami dostopa in povezavo do vsake, ter vsak pripomoček na njih: naslov, vrsto grafikona in pripadajoči workflow. [Pripomoček HITL](#hitl-widgets), filtriran po workflowu, ki ga ne morete odpreti, ostane skrit, tako kot na sami nadzorni plošči.
+- **Nov pripomoček.** Zahtevajte "dodaj grafikon odprtih primerov po stanju na ploščo Prodaja". Chat najprej postavi prazen pripomoček na nadzorno ploščo, nato napiše lasten workflow pripomočka, izvede preskusne zagone in odpravlja napake, dokler zagon ne uspe, na enak način, kot [ustvarja workflowe](./chat-tab.md#ustvarjanje-workflowov). Noben ločen workflow ne ostane zadaj in vsako shranjevanje se pojavi v Edit History pripomočka. Naslov in vrsta grafikona pripomočka sledita temu, kar Chat shrani.
+- **Obstoječi workflow.** Zahtevajte "postavi workflow prihodkov na ploščo Prodaja". Workflow, ki se konča z vozliščem Chart Output, postane grafični pripomoček z lastno kopijo workflowa, zato poznejše spremembe pripomočka nikoli ne vplivajo na izvirnik. Workflow z vozliščem trigger ali input ne more postati grafični pripomoček. Vsak drug workflow postane [pripomoček za zagon](#run-widgets), ki prav tako potrebuje workflow, ki ga lastnik nadzorne plošče lahko zažene.
+- **Preimenovanje ali brisanje pripomočka.** Zahtevajte "preimenuj pripomoček Prihodki v Prodaja" ali "izbriši pripomoček Odprti primeri". Workflow grafičnega pripomočka prevzame tudi novo ime; workflow pripomočka za zagon ohrani svoje. Z brisanjem grafičnega pripomočka se izbriše tudi njegov workflow, tako kot to stori gumb za brisanje pripomočka; workflow pripomočka za zagon ostane. Chat izbriše samo pripomoček, ki ste ga izrecno zahtevali, in najprej vpraša za pojasnilo, če se vaše besede ujemajo z več možnostmi.
+- **Urejanje postavitve.** Zahtevajte "uredi ploščo Prodaja" ali "dodaj te tri pripomočke in uredi". Chat razporedi vidne pripomočke po njihovem vrstnem redu, tako kot to stori gumb **Uredi**: naključne vrstice po dva ali tri, tako da ponovna zahteva ponudi drugačno razporeditev. Zahtevajte določeno število na vrstico ("tri na vrstico"), da dobite vrstice te velikosti. To uredi nadzorno ploščo v Heym; Heym Work ohrani svojo lastno ureditev strani, ki jo spreminja lasten gumb **Uredi** na strani.
+
+Novi pripomočki gredo pod obstoječe pripomočke nadzorne plošče in se, tako kot vsak pripomoček, izvajajo v kontekstu lastnika nadzorne plošče. Dodajanje, preimenovanje, brisanje in urejanje zahtevajo pravico za pisanje na nadzorni plošči. Izdelava novega pripomočka zahteva klepet, ki lahko gradi workflowe: zavihek Chat, Heym Work Chat za urednike in `heym_chat`.
+
 ## Urejanje postavitve
 
 Preklopite na **Uredi**, da vstopite v način urejanja, kjer lahko povlečete pripomočke in jih spremenite na mreži s 12 stolpci. Spremembe postavitve se shranijo samodejno. Naslove pripomočkov je mogoče urejati neposredno iz naslova pripomočka.
@@ -127,3 +141,7 @@ Odstranitev deljenja ali znižanje pravic z pisanja na branje začne veljati tak
 
 - [Vhodni vozlišče za grafikon](../nodes/chart-output-node.md)
 - [Zavihek analitika](analytics-tab.md) — vgrajene metrike izvajanja (različne od uporabniško zgrajenih nadzornih plošč)
+
+## Urniki in diagrami zbirk podatkov
+
+Izberite **Gantt** v Dodaj pripomoček za prikaz opravil skozi čas s povezavami dokončanja in odvisnosti, ali **Entity relationships (DB)** za preslikavo tabel, polj in njihovih relacij. Obe vrsti uporabljata [vozlišče Chart Output](../nodes/chart-output-node.md#gantt-schedules) in sta na voljo tudi na straneh Heym Work. Ko Work predlaga pripomočke za urnik ali shemo zbirke podatkov, izriše predoglede na podlagi predlaganih opravil ali entitet.

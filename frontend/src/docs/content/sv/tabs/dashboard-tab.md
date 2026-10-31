@@ -23,6 +23,8 @@ En widget är ett enskilt diagram i rutnätet. Diagramtyper som stöds:
 - **Gauge** (ett enskilt värde mot ett min–max-intervall, t.ex. en procentandel)
 - **Scatter** (X/Y-punkter för korrelationsdiagram)
 - **Proportion** (en stapel uppdelad i andelar med en procentteckenförklaring, t.ex. en språkfördelning)
+- **Gantt** (uppgiftsdatum, slutförande och beroenden)
+- **Entity relationships (DB)** (tabeller, fält, PK/FK-nycklar och kopplingar)
 - **Bar gauge** (en horisontell gauge per rad med en röd→grön gradient och ett värde, t.ex. ledigt diskutrymme)
 - **Text** (ett markdown-meddelande, t.ex. en statusnotis som "Senaste körning 19:47"; stöder [interaktiva kryssrutor](../nodes/chart-output-node.md#interactive-task-lists) när markdown är statisk, och [explicita numrerade listor](../nodes/chart-output-node.md#numbered-lists) för anpassad eller fallande numrering)
 - **HITL** (egna väntande mänskliga granskningar. Rubriken visar `1/n pending`. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den. Historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på denna sida. Widgeten använder inte uppströms rader, och varje person ser sin egen kö. Den kan istället visa granskningarna för ett enskilt Workflow, för alla som har behörighet att öppna det; se [HITL-widgets](#hitl-widgets))
@@ -98,6 +100,18 @@ Widget-API:et kan också skapa ett **räknarkort** utan AI: en `text`-widget på
 
 Använd en widgets **Fine-tune with AI**-knapp för att revidera en befintlig widget med en ny instruktion. Varje AI-fintuning tar en ögonblicksbild av det föregående workflowet i widgetens **Edit History**, så ändringar kan granskas eller rullas tillbaka från workflow-editorn.
 
+## Från Chat och MCP
+
+[Chat](./chat-tab.md) och MCP-klienter via verktyget [`heym_chat`](./mcp-tab.md) kan läsa dina dashboards, lägga till widgets på dem, byta namn på eller ta bort widgets samt städa upp en dashboards layout. Heym Work visar varje dashboard som en sida, så samma svar täcker dess sidor.
+
+- **Vilka dashboards som finns och vad som finns på dem.** Fråga "vilka dashboards har jag?", "vad finns på instrumentpanelen Försäljning?" eller "vilken dashboard finns omsättnings-workflowet på?". Chat listar dina egna dashboards och de som delas med dig, med din behörighet och en länk till var och en, samt varje widget på dem: titel, diagramtyp och workflowet bakom. En [HITL-widget](#hitl-widgets) som filtrerats på ett workflow du inte kan öppna förblir dold, precis som på själva dashboarden.
+- **En ny widget.** Fråga "lägg till ett diagram över öppna ärenden efter status på Försäljning". Chat placerar först en tom widget på dashboarden, skriver sedan widgetens eget workflow, kör testkörningar och åtgärdar fel tills en körning lyckas, på samma sätt som den [skapar workflows](./chat-tab.md#skapa-workflows). Inget separat workflow lämnas kvar, och varje sparning visas i widgetens Edit History. Widgetens titel och diagramtyp följer vad Chat sparar.
+- **Ett befintligt workflow.** Fråga "lägg till omsättnings-workflowet på instrumentpanelen Försäljning". Ett workflow som slutar i en Chart Output-nod blir en diagramwidget med en egen kopia av workflowet, så senare ändringar av widgeten påverkar aldrig originalet. Ett workflow med en trigger- eller input-nod kan inte bli en diagramwidget. Alla andra workflows blir en [kör-widget](#run-widgets), som också kräver ett workflow som instrumentpanelens ägare kan köra.
+- **Byt namn på eller ta bort en widget.** Fråga "byt namn på Omsättning till Försäljning" eller "ta bort widgeten Öppna ärenden". En diagramwidgets workflow tar också det nya namnet; en kör-widgets workflow behåller sitt eget. Om du tar bort en diagramwidget tas dess workflow bort tillsammans med den, precis som widgetens raderingsknapp gör; en kör-widgets workflow finns kvar. Chat tar bara bort en widget du uttryckligen bad om, och frågar först om dina ord matchar flera.
+- **Städa upp.** Fråga "städa upp Försäljning-dashboarden" eller "lägg till dessa tre widgets och städa upp". Chat ordnar widgetarna du ser i deras ordning, precis som knappen **Städa upp** gör: slumpmässiga rader med två eller tre, så att fråga igen ger en annan layout. Ange ett antal per rad ("tre per rad") för att få rader av den storleken. Detta ordnar dashboarden i Heym; Heym Work behåller sin egen placering på en sida, som sidans egen **Städa upp**-knapp ändrar.
+
+Nya widgets hamnar under dashboardens befintliga widgets och körs, som alla widgets, som dashboardens ägare. Att lägga till, byta namn på, ta bort och städa upp kräver skrivbehörighet till dashboarden. Att skapa en ny widget kräver en chatt som kan bygga workflows: fliken Chat, Heym Works chatt för redigerare och `heym_chat`.
+
 ## Redigera layouten
 
 Växla **Edit** för att gå in i redigeringsläge, där widgetar kan dras och storleksändras i ett rutnät med 12 kolumner. Layoutändringar sparas automatiskt. Widgettitlar kan redigeras direkt i widgetrubriken.
@@ -129,3 +143,7 @@ Att ta bort en delning, eller sänka den från write till read, träder i kraft 
 
 - [Chart Output node](../nodes/chart-output-node.md)
 - [Analytics tab](analytics-tab.md) — inbyggda körningsmått (skiljer sig från användarskapade dashboards)
+
+## Scheman och databasdiagram
+
+Välj **Gantt** i Lägg till widget för att visa uppgifter över tid med slutförande och beroendelänkar, eller **Entity relationships (DB)** för att kartlägga tabeller, fält och deras relationer. Båda typerna använder [Chart Output-noden](../nodes/chart-output-node.md#gantt-schedules) och finns även tillgängliga på Heym Work-sidor. När Work föreslår widgets för ett schema eller ett databasschema ritar det förhandsgranskningar utifrån de föreslagna uppgifterna eller entiteterna.

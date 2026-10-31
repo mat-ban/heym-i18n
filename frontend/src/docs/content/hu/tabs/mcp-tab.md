@@ -1,6 +1,6 @@
-# MCP lap
+# MCP / A2A lap
 
-Az **MCP** lap a Model Context Protocol (MCP) integrációt konfigurálja. Az MCP lehetővé teszi, hogy az AI-kliensek (Claude, ChatGPT, Gemini, Cursor és bármely MCP-kompatibilis eszköz) az Ön Heym workflow-jait eszközként hívják meg.
+Az **MCP** lap a Model Context Protocol (MCP) integrációt konfigurálja, valamint olyan [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) szerverként, amelyre más ágensek feladatokat delegálhatnak. Az MCP lehetővé teszi, hogy az AI-kliensek (Claude, ChatGPT, Gemini, Cursor és bármely MCP-kompatibilis eszköz) az Ön Heym workflow-jait eszközként hívják meg.
 
 A Heym két módot támogat: egy **alapértelmezett szervert**, amely az összes MCP-vel engedélyezett workflow-t egyetlen endpoint alatt teszi elérhetővé, valamint **elnevezett szervereket**, amelyek minden logikai workflow-csoport számára saját dedikált URL-t és API-kulcsot biztosítanak.
 
@@ -51,7 +51,7 @@ Egy [párhuzamossági korláttal](../reference/webhooks.md#concurrency-limit-and
 ```
 
 A kliens lekérdezi a `heym_execution_status` eszközt ezzel az `execution_id`-val. Ugyanazt a törzset adja vissza, mint az [állapot URL](../reference/webhooks.md#status-url): `queued` az aktuális pozícióval, `running`, majd `success` vagy `error` a kimenetekkel. Csak azon workflow-k futásait találja meg, amelyeket ugyanaz a szerver tesz közzé. Az eszköz csak akkor szerepel az alapértelmezett és a megnevezett szervereken, amíg legalább az egyik workflow-ja párhuzamossági korláttal rendelkezik. Amikor a sor megtelik, a hívás a „Concurrency queue is full” hibát adja vissza.
-## Heym chat eszköz
+## Heym Agent
 
 A **Heym Capabilities** szakasz a Chat lap motorját egyetlen `heym_chat` nevű MCP-eszközzé alakítja. Engedélyezheti az alapértelmezett szerveren, bármely elnevezett szerveren vagy mindkettőn — minden felület saját kapcsolóval és modellválasztással rendelkezik.
 
@@ -60,15 +60,20 @@ Amikor be van kapcsolva, a `heym_chat` megjelenik a `tools/list` listában a wor
 - Workflow építése, tesztfuttatása mintabemenetekkel, javítása és befejezése, amikor egy futtatás sikeres (lásd: [Építési mód](#build-mode))
 - Meglévő workflow-k vizsgálata és futtatása
 - Analitikák, legutóbbi futtatások és közelgő cron ütemezések jelentése
+- Elmagyarázza, hol hiúsulnak meg a workflow-k és miért lassúak: a legtöbbször futtatott, legtöbbször meghiúsult és leglassabb workflow-kat, valamint az elmúlt 1, 3 vagy 6 órában, 24 órában, 7 vagy 30 napban, illetve a teljes időtartam alatt legtöbb időt, hibát és hívást felhalmozó csomóponttípusokat
 - Egy workflow futási előzményeinek jelentése: hányszor futott, állapotszámok, mikor futott, valamint kérésre egyetlen futtatás bemenetei, kimenetei és csomópontonkénti hibái
 - Annak jelentése, hogy mi fut éppen most: hány futtatás aktív, azok workflow-nevei, mennyi ideje futnak, melyik csomóponton vannak éppen, és egy hivatkozás az élő futtatásra
 - Táblák listázása, kártyák létrehozása és kártyarészletek olvasása a [Board lapon](./board-tab.md)
-- Adattáblák listázása oszlopaikkal együtt, újak létrehozása és beillesztése az általa épített workflow-kba
+- Kilistázza az irányítópultokat (a Heym Work oldalait) és widgetjeiket, megkeresi, melyik irányítópulton található egy workflow, új widgetet ad hozzá és felépíti annak workflow-ját, meglévő workflow-t helyez el widgetként, átnevezi vagy törli a widgeteket, illetve rendezi az elrendezést (lásd [Dashboard › Chatből és MCP-ből](./dashboard-tab.md#from-chat-and-mcp))
+- Megvizsgálja az adattáblákat és sorokat, táblákat hoz létre, oszlopokat ad hozzá vagy távolít el, sorokat szúr be, frissít vagy töröl, és beköti a táblákat a workflow-kba
+- Létrehozza, szerkeszti és futtatja a prompt- és ágens-[kiértékelési csomagokat](./evals-tab.md#from-chat-and-mcp), beleértve az ágens alapértékeit: jelentve, futtatásokból felépítve vagy számszerűen megadva. Az eredmény felsorolja minden mentett csomag Evals hivatkozását.
 - Hitelesítési adatok létrehozása vagy frissítése a Heym saját oldalán (lásd: [Hitelesítési adatok](#hitelesítési-adatok))
 - Csapatok és globális változók olvasása, valamint a dokumentációban való keresés
 - Függőben lévő human-in-the-loop felülvizsgálatok jóváhagyása, szerkesztése vagy elutasítása
 
 A Chat laphoz később hozzáadott képességek automatikusan elérhetővé válnak a `heym_chat`-en keresztül — nincs szükség képességenkénti kapcsolóra, amelyet szinkronban kellene tartani.
+
+Ezek a képességek a `heym_chat` belsejében futnak: a `tools/list` a `heym_chat`-et és az Ön workflow-eszközeit jeleníti meg, a chat belső eszközeit (például az értékelési csomagokéit) soha.
 
 ### Építési mód
 
@@ -121,6 +126,14 @@ A `heym_chat` által épített workflow-ban lévő LLM- és Agent-csomópontok e
 Minden hívás bekerül a [Chat lap](./chat-tab.md) előzményeibe normál beszélgetésként, amely a beszélgetéslistában egy dugó ikonnal van megjelölve. Az üzenetek, eszközkártyák és a tisztázási szünetek pontosan úgy néznek ki, mint egy Ön által indított beszélgetés, és a szálat a böngészőben megnyitva folytathatja a beszélgetést. Minden eredmény visszaadja a `conversation_id`-t, így az MCP-kliens ugyanazt a szálat folytathatja ahelyett, hogy minden hívásnál újat nyitna.
 
 Amikor az asszisztensnek tisztázásra van szüksége, szünetet tart és jelzi ezt; válaszoljon a válaszokkal ugyanazon `conversation_id` használatával.
+### A2A engedélyezése
+
+Amíg a Heym Agent be van kapcsolva, a kártyán megjelenik az **A2A engedélyezése** jelölőnégyzet. Jelölje be, és más ágensek feladatokat küldhetnek a Heym Agentnek az Agent2Agent protokollon (A2A 1.0) keresztül. A kártya ezután felsorolja az **Agent Card** URL-jét és a **JSON-RPC endpointot**, mindkettőt másolás gombbal, valamint egy `curl` parancsot a kártya lekéréséhez. Az A2A ugyanazt a kulcsot és OAuth-bejelentkezést használja, mint az MCP. Az ágens kikapcsolása az A2A-t is kikapcsolja. A módszerekről, feladatállapotokról és egy példáról lásd: [A2A](../reference/a2a.md).
+
+### Előrehaladás
+
+Egy hosszabb `heym_chat` hívás MCP-előrehaladásként (`notifications/progress`) jelenti az ágens tevékenységét, a Chat lapon látható megfogalmazásban, például `Workflow tesztelése · 2/5 kísérlet`. Azok az ügyfelek, amelyek az előrehaladás során visszaállítják az időtúllépési időzítőt, tovább várakoznak, amíg az ágens dolgozik.
+
 ## Elnevezett MCP-szerverek
 
 Az elnevezett szerverek lehetővé teszik a workflow-k elkülönített MCP-végpontokra történő szegmentálását. Minden szerver saját URL-lel és API-kulccsal rendelkezik, így a különböző AI-kliensek, csapatok vagy felhasználási esetek pontosan azokhoz a workflow-khoz kapcsolódhatnak, amelyekre szükségük van.
@@ -140,7 +153,9 @@ Minden szerverkártya a következőket mutatja:
 | **SSE Endpoint** | Egyedi URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Független kulcs, amely a létrehozásakor vagy újragenerálásakor egyszer jelenik meg. Azonnal másolja ki; hash-elve tárolódik, és később nem jeleníthető meg |
 | **How to connect** | A **Copy JSON** a beillesztésre kész MCP-konfigurációt másolja; az **Add to Cursor** egy kattintással telepíti |
-| **Heym Capabilities** | Kapcsolja be a `heym_chat` eszközt ehhez a szerverhez, és válassza ki a hitelesítési adatait és modelljét |
+| **Heym Capabilities** | Kapcsolja be vagy ki a Heym Agentet (`heym_chat`) ehhez a szerverhez, és válassza ki a hitelesítő adatot és modellt |
+| **A2A engedélyezése** | Ennek a szervernek a saját A2A kapcsolója, saját Agent Carddal a `{origin}/api/a2a/servers/{uuid}/agent-card.json` címen |
+| **A2A engedélyezése** | Ennek a szervernek a saját A2A kapcsolója, saját Agent Carddal a `{origin}/api/a2a/servers/{uuid}/agent-card.json` címen |
 | **Assigned Workflows** | Kapcsolja be, hogy a workflow-k közül melyeket tegye elérhetővé ez a szerver |
 
 ### Workflow hozzárendelése

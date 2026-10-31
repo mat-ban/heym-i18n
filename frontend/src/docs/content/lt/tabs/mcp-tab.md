@@ -1,6 +1,6 @@
-# MCP skirtukas
+# MCP / A2A skirtukas
 
-**MCP** skirtukas konfigūruoja Model Context Protocol (MCP) integraciją. MCP leidžia AI klientams (Claude, ChatGPT, Gemini, Cursor ir bet kuriam MCP suderinamam įrankiui) skambinti Jūsų Heym workflows kaip įrankiams.
+**MCP** skirtukas konfigūruoja Model Context Protocol (MCP) integraciją, ir kaip [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) serverius, kuriems kiti agentai gali deleguoti užduotis. MCP leidžia AI klientams (Claude, ChatGPT, Gemini, Cursor ir bet kuriam MCP suderinamam įrankiui) skambinti Jūsų Heym workflows kaip įrankiams.
 
 Heym palaiko du režimus: **numatytąjį serverį**, kuris atskleidžia visus MCP įgalintus workflows po vienu endpoint, ir **pavadintus serverius**, kurie suteikia kiekvienai loginei workflows grupei savo dedikuotą URL ir API raktą.
 
@@ -51,7 +51,7 @@ Workflow su [lygiagretumo riba](../reference/webhooks.md#concurrency-limit-and-q
 ```
 
 Klientas apklausia įrankį `heym_execution_status` su šiuo `execution_id`. Jis grąžina tą patį turinį kaip ir [būsenos URL](../reference/webhooks.md#status-url): `queued` su dabartine pozicija, `running`, tada `success` arba `error` su išvestimis. Jis randa tik tų workflows paleidimus, kuriuos pateikia tas pats serveris. Įrankis numatytajame serveryje ir kiekviename pavadintame serveryje rodomas tik tol, kol bent vienas iš jo workflows turi lygiagretumo ribą. Kai eilė pilna, iškvietimas grąžina klaidą „Concurrency queue is full“.
-## Heym Chat Tool
+## „Heym“ agentas
 
 **Heym galimybių** skyrius paverčia Chat skirtuko variklį į vieną MCP įrankį, pavadintą `heym_chat`. Įjunkite jį numatytajame serveryje, bet kuriame pavadintame serveryje arba abiejuose — kiekviena aplinka turi savo perjungimą ir modelio pasirinkimą.
 
@@ -60,15 +60,20 @@ Kai jis įjungtas, `heym_chat` pasirodo `tools/list` kartu su Jūsų workflow į
 - Sukurti workflow, išbandyti jį su pavyzdiniais įvesties duomenimis, pataisyti ir užbaigti, kai vykdymas pavyksta (žr. [Kūrimo režimas](#build-mode))
 - Tikrinti ir vykdyti esamus workflows
 - Pranešti apie analitiką, neseniai vykdytus vykdymus ir artėjančius cron tvarkaraščius.
+- Paaiškina, kur darbo eigos stringa ir kodėl jos lėtos: dažniausiai vykdytas, dažniausiai nesėkmes patyrusias ir lėčiausias darbo eigas, taip pat mazgų tipus su daugiausia laiko, klaidų ir iškvietimų per pastarąsias 1, 3 ar 6 valandas, 24 valandas, 7 ar 30 dienų arba per visą laiką
 - Pranešti apie vieno workflow vykdymo istoriją: kiek kartų jis buvo vykdytas, būsenos skaičius, kada jis buvo vykdytas, ir pagal užklausą įvestis, išvestis bei klaidos kiekviename mazge.
 - Pranešti, kas šiuo metu vykdoma: kiek vykdymų yra aktyvių, jų workflow pavadinimai, kiek laiko kiekvienas veikia, kurį mazgą kiekvienas šiuo metu naudoja, ir nuorodą į gyvą vykdymą.
 - Išvardyti lentas, kurti korteles ir skaityti kortelių detales [Lentos skirtuke](./board-tab.md).
-- Išvardyti Jūsų duomenų lenteles su jų stulpeliais, kurti naujas ir prijungti jas prie workflows, kuriuos jis kuria.
+- Išvardija prietaisų skydelius („Heym Work“ puslapius) ir jų valdiklius, nustato, kuriame skydelyje yra darbo eiga, prideda naują valdiklį ir sukuria jo darbo eigą, patalpina esamą darbo eigą kaip valdiklį, pervadina ar ištrina valdiklius arba sutvarko išdėstymą (žr. [Dashboard › Iš Chat ir MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Tikrina duomenų lenteles ir eilutes, kuria lenteles, prideda ar pašalina stulpelius, įterpia, atnaujina ar ištrina eilutes bei susieja lenteles darbo eigose
+- Kuria, redaguoja ir vykdo užklausų bei agentų vertinimo rinkinius ([Eval suites](./evals-tab.md#from-chat-and-mcp)), įskaitant agento bazinį lygį: pateiktą, sukurtą iš vykdymų arba nurodytą skaičiais. Rezultate nurodoma kiekvieno išsaugoto rinkinio „Evals“ nuoroda.
 - Sukurkite arba atnaujinkite kredencialus Heym puslapyje (žr. [Kredencialai](#kredencialai))
 - Skaityti komandas ir globalius kintamuosius, bei ieškoti dokumentacijoje.
 - Patvirtinti, redaguoti arba atmesti laukiančius žmogaus įsikišimo atsiliepimus.
 
 Galimybės, pridėtos prie Chat skirtuko, vėliau automatiškai tampa prieinamos per `heym_chat` — nėra jokio per galimybę perjungimo, kad būtų galima sinchronizuoti.
+
+Šios galimybės veikia `heym_chat` viduje: `tools/list` rodo `heym_chat` ir jūsų darbo eigos įrankius, niekada vidinių pokalbio įrankių, tokių kaip vertinimo rinkiniai.
 
 ### Kūrimo režimas
 
@@ -121,6 +126,14 @@ LLM ir Agent mazgai `heym_chat` kuriamame workflow veikia su šiuo kredencialu i
 Kiekvienas skambutis įrašomas į Jūsų [Chat skirtuko](./chat-tab.md) istoriją kaip įprasta pokalbis, pažymėtas kištuko ikona pokalbių sąraše. Žinutės, įrankių kortelės ir paaiškinimo pertraukos atrodo lygiai taip pat kaip pokalbis, kurį pradėjote patys, ir galite atidaryti temą ir toliau kalbėtis naršyklėje. Kiekvienas rezultatas grąžina savo `conversation_id`, kad MCP klientas galėtų tęsti tą pačią temą, o ne atidaryti naują kiekviename skambutyje.
 
 Kai asistentui reikia paaiškinimo, jis sustoja ir tai sako; atsakykite su atsakymais naudodami tą patį `conversation_id`.
+### Įjungti A2A
+
+Kai „Heym“ agentas yra įjungtas, kortelėje rodomas žymimasis langelis **Įjungti A2A**. Pažymėkite jį ir kiti agentai galės siųsti užduotis „Heym“ agentui per „Agent2Agent“ protokolą (A2A 1.0). Tada kortelėje pateikiamas **Agent Card** URL ir **JSON-RPC endpoint**, kiekvienas su kopijavimo mygtuku, bei `curl` komanda kortelei gauti. A2A naudoja tą patį raktą ir „OAuth“ prisijungimą kaip MCP. Išjungus agentą, išjungiamas ir A2A. Metodus, užduočių būsenas ir pavyzdį rasite skyriuje [A2A](../reference/a2a.md).
+
+### Eiga
+
+Ilgas `heym_chat` iškvietimas praneša apie agento veiksmus kaip MCP eigą (`notifications/progress`), tais pačiais žodžiais, kuriuos rodo skirtukas „Chat“, pavyzdžiui, `Tikrinama darbo eiga · 2/5 bandymas`. Klientai, kurie atnaujina laukimo skirtąjį laiką gavę eigos pranešimą, toliau laukia, kol agentas dirba.
+
 ## Pavadinti MCP Serveriai
 
 Pavadinti serveriai leidžia segmentuoti workflows į izoliuotus MCP endpointus. Kiekvienas serveris turi savo URL ir API raktą, todėl skirtingi AI klientai, komandos ar naudojimo atvejai gali prisijungti prie būtent tų workflows, kurių jiems reikia.
@@ -140,7 +153,9 @@ Kiekviena serverio kortelė rodo:
 | **SSE Endpoint** | Unikalus URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Nepriklausomas raktas, rodomas vieną kartą, kai jis sugeneruojamas arba regeneruojamas. Nukopijuokite jį iš karto; jis saugomas užšifruotas ir vėliau negali būti atskleistas |
 | **Kaip prisijungti** | **Copy JSON** nukopijuoja paruoštą MCP konfigūraciją; **Add to Cursor** įdiegia ją vienu paspaudimu |
-| **Heym Galimybės** | Įjunkite `heym_chat` įrankį šiam serveriui ir pasirinkite jo kredencialus bei modelį |
+| **Heym Capabilities** | Perjunkite „Heym“ agentą (`heym_chat`) šiam serveriui ir pasirinkite jo kredencialą bei modelį |
+| **Įjungti A2A** | Šio serverio asmeninis A2A jungiklis su nuosava „Agent Card“ adresu `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Įjungti A2A** | Šio serverio asmeninis A2A jungiklis su nuosava „Agent Card“ adresu `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Priskirti Workflows** | Įjunkite, kurie iš jūsų workflows šis serveris atskleidžia |
 
 ### Workflow Priskyrimas

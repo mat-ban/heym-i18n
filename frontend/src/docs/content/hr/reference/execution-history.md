@@ -51,6 +51,8 @@ Otvaranje workflow-a na `/workflows/{workflowId}/{executionId}` automatski donos
 
 ### Primjeri korištenja
 
+Pritisnite Ctrl/Cmd+klik na izvođenje u bilo kojem popisu povijesti kako biste otvorili tu izravnu poveznicu na novoj kartici preglednika. Trenutna kartica i otvoreni dijaloški okvir ostaju nepromijenjeni. Izvođenja chata i asistenta nemaju workflow, pa ih prečac samo odabire, poput običnog klika.
+
 - Ponovno pokretanje workflow-a s istim ulazima
 - Otklanjanje grešaka u neuspješnom pokretanju inspekcijom ulaza i izlaza čvorova
 - Usporedba izlaza između pokretanja

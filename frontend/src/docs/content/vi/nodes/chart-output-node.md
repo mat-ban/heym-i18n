@@ -10,7 +10,7 @@ Node **Chart Output** là node đầu cuối của workflow [dashboard widget](.
 | Đầu ra | 0 (đầu cuối) |
 | Output | Payload biểu đồ chuẩn hóa |
 
-Đặt node này **cuối cùng** trong workflow dashboard-widget. Node đứng trước nó nên tạo ra một mảng các đối tượng hàng, ví dụ:
+Đặt node này **cuối cùng** trong workflow dashboard-widget. Đối với entity relationships, node đứng trước nó tạo ra một đối tượng đồ thị (xem [Entity relationships](#entity-relationships-db)). Các biểu đồ hướng dữ liệu khác sử dụng một mảng các đối tượng hàng, ví dụ:
 
 ```json
 [
@@ -26,9 +26,9 @@ Khi bạn chỉ có dữ liệu ví dụ/mẫu (không có nguồn thực), hãy
 | Tham số | Kiểu | Mô tả |
 |-----------|------|-------------|
 | `label` | string | Định danh node (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text`, hoặc `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text`, hoặc `hitl` |
 | `orientation` | string | `vertical` hoặc `horizontal` (chỉ biểu đồ bar) |
-| `dataPath` | string | Đường dẫn dot tới mảng hàng bên trong output thượng nguồn (ví dụ `data` hoặc `result.items`). Để trống để tự động phát hiện. |
+| `dataPath` | string | Đường dẫn dot tới mảng hàng (hoặc đối tượng đồ thị cho `erDiagram`) bên trong output thượng nguồn (ví dụ `data` hoặc `result.items`). Để trống để tự động phát hiện. |
 | `labelField` | string | Khóa hàng được dùng làm nhãn danh mục (pie/bar/line) |
 | `valueField` | string | Khóa hàng được dùng làm giá trị số (pie/bar/line/numeric/gauge) |
 | `series` | array | Định nghĩa đa chuỗi tùy chọn `[{ "name": "Sent", "field": "sent" }]` cho bar/line (ghi đè `valueField`) |
@@ -54,8 +54,51 @@ Khi bạn chỉ có dữ liệu ví dụ/mẫu (không có nguồn thực), hãy
 - **scatter** — các điểm X/Y từ `xField` và `yField` cho biểu đồ tương quan.
 - **proportion** — một thanh ngang đơn được chia thành các phần với chú thích phần trăm (ví dụ phân bố ngôn ngữ). Sử dụng `labelField` + `valueField`.
 - **barGauge** — một gauge ngang cho mỗi hàng với gradient đỏ→xanh và một giá trị (ví dụ dung lượng đĩa trống). Sử dụng `labelField` + `valueField`, `unit` và `max` tùy chọn (mặc định là giá trị hàng lớn nhất).
+- **gantt** — lịch biểu nhiệm vụ với ngày tháng, tiến độ và các phụ thuộc; xem [Lịch biểu Gantt](#gantt-schedules).
+- **erDiagram** — thực thể cơ sở dữ liệu, trường, khóa và mối quan hệ; xem [Entity relationships](#entity-relationships-db).
 - **text** — một thông điệp markdown (ví dụ ghi chú trạng thái như "Lần thực thi cuối lúc 19:47"). Đặt markdown trong `text` cho thông điệp tĩnh, hoặc để trống `text` và đặt `valueField` để hiển thị chuỗi được tạo từ thượng nguồn. Hỗ trợ tiêu đề, in đậm/in nghiêng, [danh sách](../nodes/chart-output-node.md#interactive-task-lists), liên kết và inline code.
 - **hitl** — băng chuyền các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`; mũi tên trái bị vô hiệu hóa ở thẻ đầu tiên và mũi tên phải ở thẻ cuối cùng. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes**, và **Reject** giải quyết nó, và biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên cùng trang. Loại biểu đồ này bỏ qua các hàng thượng nguồn, vì vậy workflow widget chỉ là node Chart Output. Mỗi người đã đăng nhập sẽ thấy các đánh giá trên các workflow mà họ sở hữu. Hãy chọn một **Workflow** (và **Select agent** khi nó có nhiều bước review) trong thuộc tính của node hoặc trong phần cài đặt của widget để hiển thị các bản review của Workflow đó, cho mọi người có thể mở nó; xem [widget HITL](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Lịch biểu Gantt
+
+Chọn **Gantt** (`gantt`) cho lịch biểu dự án và tiến trình nhiệm vụ. Đặt `dataPath` thành mảng nhiệm vụ, chẳng hạn như `tasks`. Các hàng sử dụng tên trường cố định:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` và `end` chấp nhận ngày hoặc datetime theo chuẩn ISO. Các giá trị không có múi giờ sẽ sử dụng UTC; độ lệch múi giờ được chuyển đổi sang UTC. `end` phải bằng hoặc sau `start`. `progress` là tùy chọn (0–100, mặc định 0); `dependencies` chứa id của các nhiệm vụ hiện có. Các id phải là duy nhất. Di chuột qua một nhiệm vụ để xem đầy đủ ngày tháng, tiến độ và phụ thuộc. Biểu đồ lớn có thể cuộn bên trong widget. Tối đa 500 nhiệm vụ được chấp nhận.
+
+Đối với dữ liệu mẫu, ánh xạ Set có tên `tasks` có thể sử dụng `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Kết nối nó với Chart Output bằng `chartType: "gantt"` và `dataPath: "tasks"`. Ánh xạ các cột nguồn vào các tên cố định này bằng node Set; `labelField` và `valueField` không được sử dụng.
+
+### Entity relationships (DB)
+
+Chọn **Entity relationships (DB)** (`erDiagram`) cho lược đồ cơ sở dữ liệu và kết nối thực thể. Đặt `dataPath` thành một **đối tượng** đồ thị, chẳng hạn như `graph`, chứa cả hai mảng:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Các trường có `name`, `type` tùy chọn và `key` tùy chọn (`PK`, `FK`, `PK/FK` hoặc để trống). Các quan hệ tham chiếu đến các id thực thể hiện có; `sourceField` và `targetField` tùy chọn neo kết nối vào các trường được đặt tên. `cardinality` chấp nhận `one-to-one`, `one-to-many` (mặc định), `many-to-one` hoặc `many-to-many`. Id thực thể và tên trường trong mỗi thực thể phải là duy nhất. Tối đa 100 thực thể, 100 trường trên mỗi thực thể và 500 quan hệ được chấp nhận.
+
+Với node Set, hãy xây dựng `graph` bằng `$dict(entities=array(dict(...)), relations=array(dict(...)))`; sử dụng `chartType: "erDiagram"` và `dataPath: "graph"`. Đây là hình ảnh trực quan hóa lược đồ bạn cung cấp; nó không tự động kiểm tra cơ sở dữ liệu thực tế.
+
+Cả hai loại đều xuất hiện trong **Thêm widget** kèm bản xem trước và trong bộ chọn loại biểu đồ của node trên canvas. Heym Work có thể đề xuất các loại này khi bạn mô tả một lịch biểu hoặc lược đồ cơ sở dữ liệu, hiển thị trước các nhiệm vụ hoặc thực thể đề xuất trước khi bạn xây dựng trang.
 
 ### Danh sách tác vụ tương tác
 

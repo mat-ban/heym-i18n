@@ -73,11 +73,11 @@ Dela tabeller med andra användare eller team:
 1. Öppna delningsdialogen från tabellens detaljvy
 2. Lägg till användare via e-post med **read**- eller **write**-behörighet
 3. Lägg till team med **read**- eller **write**-behörighet
-4. Skrivskyddade användare kan visa data; användare med write-behörighet kan ändra rader
+4. Skrivskyddade användare kan visa data; skrivbehöriga användare kan ändra rader och kolumner. Att byta namn på tabellen, ändra dess beskrivning och hantera delningar är fortfarande endast tillgängligt för ägaren.
 
 ## Skapa tabeller från AI-assistenten
 
-Canvas-[AI-assistenten](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) och verktyget `heym_chat` på [MCP-fliken](./mcp-tab.md) kan välja en av tabellerna för en Workflow som de bygger, eller skapa en ny. De föreslår ett namn och kolumner och skapar tabellen när frågekortet skickas in. De ändrar aldrig en befintlig tabells kolumner eller rör dess rader: kolumner läggs till eller redigeras här.
+[AI-assistenten](../reference/ai-assistant.md#data-tables) på canvasen, [Chat](./chat-tab.md) och verktyget `heym_chat` på [fliken MCP](./mcp-tab.md) kan välja en av dina tabeller för ett workflow de bygger, eller skapa en ny. De föreslår ett namn och kolumner och skapar tabellen när du skickar frågekortet. Canvas-assistenten konfigurerar workflow-noder från tabellens metadata. Chat och `heym_chat` kan också granska rader, lägga till eller ta bort kolumner och direkt infoga, uppdatera eller ta bort rader. Ge dem ett tabellnamn eller länken till den här fliken. Skrivning kräver ägarskap eller direkt/team **skrivbehörighet**. Att lägga till kolumner behåller befintliga data; att ta bort kolumner raderar deras värden från varje rad. Borttagning av kolumner och rensning av alla rader kräver bekräftelse, precis som på den här fliken.
 
 ## Användning i Workflows
 

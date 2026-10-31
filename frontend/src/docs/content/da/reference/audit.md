@@ -47,7 +47,7 @@ I appen læser fanen **Logs** den samme container-output. Adgang styres af `DOCK
 
 ## Hvad logges
 
-Alle tilstandsændringer logges. Læsninger logges kun, hvor læsningen i sig selv er den følsomme handling — f.eks. visning af en workflows kørselshistorik, åbning af legitimationsoplysninger, download af filer. Almindelige liste- og detaljelæsninger auditeres ikke; access-loggen registrerer allerede, at en request er forekommet, og at auditere hver enkelt `GET` ville begrave de linjer, der betyder noget.
+Alle tilstandsændringer logges. Læsninger logges kun, hvor læsningen i sig selv er den følsomme handling — f.eks. visning af en workflows kørselshistorik, åbning af legitimationsoplysninger, download af filer. Almindelige liste- og detaljelæsninger auditeres ikke; access-loggen registrerer allerede, at en request er forekommet, og at auditere hver enkelt `GET` ville begrave de linjer, der betyder noget. Den eneste undtagelse er [sidevisninger](#page-views), som registrerer hvor en logget ind bruger navigerede hen i appen.
 
 ### Autentifikation
 
@@ -62,9 +62,34 @@ Alle tilstandsændringer logges. Læsninger logges kun, hvor læsningen i sig se
 | `sso_settings.update` | En administrator har ændret [SSO](./sso.md)-konfigurationen. Registrerer `enabled` og `password_login_disabled`, aldrig klienthemmeligheden. |
 | `sso_settings.test` | En administrator har kørt SSO-forbindelsestesten. |
 
+### Sidevisninger
+
+`page.view` skrives hver gang en logget ind bruger åbner en side i webappen, med URL-stien i et `path`-felt:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Stien er appens interne rute. Dashboard-fanerne er en del af den (`/?tab=traces`), ligesom de id'er der angiver hvad der er åbent, såsom `/workflows/<id>`. Kun en kort liste over forespørgselsparametre, der identificerer siden, bevares (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); alt andet i forespørgselsstrengen og hele fragmentet kasseres. Sider, hvis link bærer en hemmelighed, såsom `/review/<token>`, logges med pladsholderen `:token` i stedet for hemmeligheden.
+
+Browseren rapporterer stien, så en `page.view`-linje viser, hvor brugeren oplyser at have navigeret hen. Det beviser ikke, at serveren returnerede siden. Besøg på logind-siden og links, der åbnes mens man er logget ud, registreres ikke, da der ikke er knyttet nogen bruger til dem.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` skrives, når en kørsel startes via API'et: editorens Kør-knap, execute-slutpunktet med en session, API-nøgle eller webhook, chatportalen og MCP-værktøjer. Det registrerer, hvem der startede den, hvordan, og hvordan den sluttede:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` forbinder linjen med kørslen i Kørselshistorikken. `outcome` er `failure`, når kørslen endte i `error`, `cancelled` eller `timeout`. En kørsel sat på pause til menneskelig gennemgang eller tilbageholdt i samtidighedskøen er en `success`-linje med `status=pending` eller `status=queued`. Et kald uden en logget ind bruger, såsom en anonym webhook eller en portalbesøgende, har ingen `actor_id` eller `actor_email`. Input og output skrives aldrig.
+
+Kørsler startet af en tidsplan, en triggernode, en kø eller en hændelse er ikke auditlinjer. De udføres på den instans, der overtog dem, og registreres i Kørselshistorikken med deres triggerkilde og den instans, der kørte dem.
+
+`workflow.history_view` skrives, når nogen åbner en arbejdsgangs kørselshistorik. Det lille opslag, der viser en arbejdsgangs seneste kørsel på canvas eller i en liste, auditeres ikke.
+
 
 `workflow.history_view` registrerer `owned=false`, når en samarbejdspartner læser en andens kørselshistorik. `workflow.delete` registrerer `outcome=denied` med `reason=not_owner`, når en samarbejdspartner forsøger at slette.
 
@@ -96,6 +121,27 @@ En revisionslinje registrerer identifikatorer, navne og antal. Den registrerer a
 To ting håndhæver dette. Kaldsteder er skrevet til kun at videregive sikre felter, og revisionshjælperen redigerer som en sikkerhedsforanstaltning: ethvert felt, hvis navn indeholder `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` eller lignende, erstattes med `***` før linjen oprettes. Over-redigering er bevidst - en ubrugelig linje er bedre end en lækket legitimationsoplysning.
 
 Hvor en hemmelighed er virkelig relevant for registreringen, logges kun dens form. En filshare registrerer `password_protected=true`, aldrig adgangskoden.
+
+## Heym Work
+
+Når du kører Heym Work sammen med Heym, udsender Work auditlinjer til sit eget containers stdout i samme Winston-format:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work logger brugerhandlinger på sider, tavler og poster:
+
+| Handling | Betydning |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Ændringer af dashboardsider og layouts |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Ændringer i layout af Kanban-kolonner |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Begivenheder i kortenes livscyklus |
+| `record.create`, `record.update`, `record.delete` | Mutationer af datatabelposter via Work |
+| `chat.message` | Brugerprompt sendt til Work-assistenten |
+| `export.csv`, `export.json` | Dataeksporter |
+
+Hver linje bærer de samme felter `actor_id`, `actor_email`, `timestamp` og `outcome` som Heyms auditlinjer, så logopsamlere kan behandle begge med en enkelt pipeline.
 
 ## Opbevaring
 

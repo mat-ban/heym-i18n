@@ -381,7 +381,7 @@ HTML output mapper 노드는 단일 HTML 템플릿을 렌더링하며, `$nodeLab
 
 #### [Chart Output](../nodes/chart-output-node.md)
 
-Chart Output 노드는 [Dashboard](../tabs/dashboard-tab.md) 위젯 워크플로우의 종료 노드입니다. 상위 노드에서 생성된 행을 대시보드가 렌더링하는 표준화된 차트 payload로 변환합니다. `chartType`(bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text 또는 HITL)을 선택하고, `labelField`/`valueField`(또는 다중 시리즈의 경우 `series`, markdown 메시지의 경우 `text`)를 매핑한 후 마지막에 배치하십시오. 출력 엣지가 없습니다. HITL은 상위 행을 무시하고 대기 중인 사람 검토 목록을 표시합니다. 다른 하나는 새 탭에서 URL을 여는 링크 버튼으로 렌더링할 수 있습니다(`linkColumn`, 버튼 텍스트의 경우 `linkLabel` 사용)
+Chart Output 노드는 [Dashboard](../tabs/dashboard-tab.md) 위젯 워크플로우의 종료 노드입니다. 상위 노드에서 생성된 행을 대시보드가 렌더링하는 표준화된 차트 payload로 변환합니다. `chartType`(bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, Gantt, entity relationships, text 또는 HITL)을 선택하고, `labelField`/`valueField`(또는 다중 시리즈의 경우 `series`, markdown 메시지의 경우 `text`)를 매핑한 후 마지막에 배치하십시오. 출력 엣지가 없습니다. HITL은 상위 행을 무시하고 대기 중인 사람 검토 목록을 표시합니다. 다른 하나는 새 탭에서 URL을 여는 링크 버튼으로 렌더링할 수 있습니다(`linkColumn`, 버튼 텍스트의 경우 `linkLabel` 사용)
 
 [Dashboard](../tabs/dashboard-tab.md), [Set](../nodes/set-node.md), [Output](../nodes/output-node.md)도 참조하십시오.
 
@@ -480,7 +480,7 @@ AI Assistant는 Debug 패널에서 열리는 채팅 패널로, 자연어로 Work
 
 캔버스의 노드 위에 있는 **AI**를 클릭하여 해당 노드만 변경하거나 수정할 수 있습니다. 패널에는 수정 중인 노드가 표시되며(실행 후 최신 결과 포함) **Change this node as ...**, **Fix error in this node ...**, **Other**를 제공합니다. 해당 노드만 업데이트되며 나머지 워크플로우와 레이아웃은 그대로 유지됩니다. [AI Assistant › 단일 노드 변경](./ai-assistant.md#changing-one-node)을 참조하세요.
 
-Workflow가 레코드를 저장할 때 어시스턴트는 사용할 [data table](../tabs/datatable-tab.md)을 묻거나, Workflow에 필요한 컬럼으로 새로 생성합니다. [AI Assistant › Data tables](./ai-assistant.md#data-tables)를 참조하십시오.
+Workflow가 레코드를 저장할 때 어시스턴트는 사용할 [data table](../tabs/datatable-tab.md)을 묻거나, Workflow에 필요한 컬럼으로 새로 생성합니다. [AI Assistant › Data tables](./Chat 및 MCP `heym_chat`은 소유자 또는 쓰기 권한을 사용하여 열과 행을 직접 편집할 수도 있으며, 열 제거 또는 모든 행 지우기 전에 확인을 요청합니다. Chat 및 MCP `heym_chat`은 소유자 또는 쓰기 권한을 사용하여 열과 행을 직접 편집할 수도 있으며, 열 제거 또는 모든 행 지우기 전에 확인을 요청합니다. ai-assistant.md#data-tables)를 참조하십시오.
 
 현재 Workflow에 [Agent Node](../nodes/agent-node.md) 스킬이 포함된 경우, 어시스턴트는 각 스킬의 `SKILL.md`만 Workflow 컨텍스트로 전송합니다. 첨부된 `.py` 파일과 바이너리 스킬 자산은 요청 전에 제외되므로, 대용량 스킬 번들이 모델 컨텍스트 윈도우를 초과하지 않습니다.
 
@@ -811,7 +811,7 @@ Analytics 탭은 실행 메트릭과 추세를 보여줍니다. 요약 통계에
 
 ### [Dashboard](../tabs/dashboard-tab.md)
 
-Dashboard 탭은 Grafana 스타일의 공간으로, 각각 자체적인 숨겨진 Heym workflow에서 렌더링되는 차트 위젯 그리드를 구성할 수 있습니다. 필요한 만큼 대시보드를 만들고 각각을 사용자 또는 팀과 읽기 전용 또는 편집 가능으로 공유할 수 있습니다. 위젯은 항상 소유자의 자격 증명으로 실행되므로 모든 사람이 동일한 데이터를 봅니다. 자연어로 메트릭을 설명하면 AI가 위젯을 생성하거나, 수동으로 추가하여 차트 유형을 선택할 수 있으며 샘플 데이터로 미리 볼 수 있습니다: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text, HITL. HITL은 대기 중인 사람 검토의 캐러셀입니다. 헤더에는 `1/n pending`이 표시됩니다. workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 처리하며, 위젯 제목 옆의 이력 아이콘을 클릭하면 같은 페이지의 이력 대화 상자에서 해당 실행이 열립니다. 위젯은 결과를 캐시하고, AI로 세부 조정할 수 있으며(각 변경 사항은 [Edit History](./edit-history.md)에 저장됨), 완전한 workflow와 함께 복제되고, Tidy up으로 재배치되며, 편집 모드에서 드래그하거나 크기를 조정할 수 있습니다. 테이블은 상태 칩을 표시하고 클릭한 행의 레코드를 `$page.record`로 읽어오는 상세 대시보드에 행을 연결할 수 있으며, Run 위젯은 드롭된 파일, 입력 필드 또는 실행 버튼을 사용해 대시보드에서 바로 workflow를 실행합니다. 각 위젯이 workflow이므로, 가져올 수 있는 모든 데이터 — [HTTP](../nodes/http-node.md) 호출, [BigQuery](../nodes/bigquery-node.md) 쿼리, [RAG](../nodes/rag-node.md) 조회, 또는 [LLM](../nodes/llm-node.md) 출력 — 이 차트가 될 수 있습니다. HITL 위젯의 설정은 이를 단일 워크플로우의 검토 또는 그 안의 에이전트나 Slack 승인 단계로 좁힐 수 있습니다. 이러한 위젯은 해당 워크플로우를 열 수 있는 모든 사람에게 이를 표시하고 열 수 없는 사람에게는 숨깁니다.
+Dashboard 탭은 Grafana 스타일의 공간으로, 각각 자체적인 숨겨진 Heym workflow에서 렌더링되는 차트 위젯 그리드를 구성할 수 있습니다. 필요한 만큼 대시보드를 만들고 각각을 사용자 또는 팀과 읽기 전용 또는 편집 가능으로 공유할 수 있습니다. 위젯은 항상 소유자의 자격 증명으로 실행되므로 모든 사람이 동일한 데이터를 봅니다. 자연어로 메트릭을 설명하면 AI가 위젯을 생성하거나, 수동으로 추가하여 차트 유형을 선택할 수 있으며 샘플 데이터로 미리 볼 수 있습니다: bar, line, area, pie, table, numeric, gauge, scatter, proportion, bar gauge, text, HITL. HITL은 대기 중인 사람 검토의 캐러셀입니다. 헤더에는 `1/n pending`이 표시됩니다. workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject**로 처리하며, 위젯 제목 옆의 이력 아이콘을 클릭하면 같은 페이지의 이력 대화 상자에서 해당 실행이 열립니다. 위젯은 결과를 캐시하고, AI로 세부 조정할 수 있으며(각 변경 사항은 [Edit History](./edit-history.md)에 저장됨), 완전한 workflow와 함께 복제되고, Tidy up으로 재배치되며, 편집 모드에서 드래그하거나 크기를 조정할 수 있습니다. 테이블은 상태 칩을 표시하고 클릭한 행의 레코드를 `$page.record`로 읽어오는 상세 대시보드에 행을 연결할 수 있으며, Run 위젯은 드롭된 파일, 입력 필드 또는 실행 버튼을 사용해 대시보드에서 바로 workflow를 실행합니다. 각 위젯이 workflow이므로, 가져올 수 있는 모든 데이터 — [HTTP](../nodes/http-node.md) 호출, [BigQuery](../nodes/bigquery-node.md) 쿼리, [RAG](../nodes/rag-node.md) 조회, 또는 [LLM](../nodes/llm-node.md) 출력 — 이 차트가 될 수 있습니다. HITL 위젯의 설정은 이를 단일 워크플로우의 검토 또는 그 안의 에이전트나 Slack 승인 단계로 좁힐 수 있습니다. 이러한 위젯은 해당 워크플로우를 열 수 있는 모든 사람에게 이를 표시하고 열 수 없는 사람에게는 숨깁니다. [Chat](../tabs/chat-tab.md) 및 MCP `heym_chat` 도구는 위젯이 포함된 대시보드를 나열하고, 워크플로가 어떤 대시보드에 있는지 확인하며, 새 위젯을 추가하고(먼저 빈 위젯이 추가된 후 Chat이 해당 워크플로를 빌드하고 테스트함), 기존 워크플로를 위젯으로 대시보드에 배치하고, 위젯 이름을 바꾸거나 삭제하며, 정리 버튼처럼 레이아웃을 정돈합니다.
 
 [Chart Output node](../nodes/chart-output-node.md), [Analytics](../tabs/analytics-tab.md), [Execution History](./execution-history.md)도 참조하십시오.
 
@@ -820,6 +820,8 @@ Dashboard 탭은 Grafana 스타일의 공간으로, 각각 자체적인 숨겨�
 ### [Evals](../tabs/evals-tab.md)
 
 Evals 탭(`/evals`)에서는 평가 스위트를 생성하고, 테스트 케이스를 추가하거나 생성하며, 스위트 Prompt를 최적화하고, [Agent 노드](../nodes/agent-node.md) Workflow에 대한 평가를 실행할 수 있습니다. 하나 이상의 모델을 선택하고, 채점 방식(Exact Match, Contains, LLM-as-Judge)을 고르며, 선택적으로 별도의 모델이나 [Decision 노드](../nodes/decision-node.md)가 LLM-as-Judge 응답을 판정하도록 할 수 있습니다. 테스트당 실행 횟수(Exact Match 및 Contains의 경우 temperature와 reasoning effort 포함)를 설정한 다음, 통과/실패 여부와 모델별 출력을 비교하십시오. 과거 평가의 실행 이력을 검토하고(각 실행에서 사용한 judge 포함), 동일한 judge로 재실행하고, JSON으로 내보내며, [Traces](../tabs/traces-tab.md)에서 기반 동작을 교차 확인하십시오.
+
+**에이전트 스위트**는 대신 단일 에이전트 노드를 검사합니다. 에이전트의 실제 실행에서 기준 지연 시간, USD 비용, 토큰 및 도구 호출을 표시하고, 각 도구, MCP 도구, 서브 에이전트, 서브 워크플로 또는 스킬을 에이전트가 호출해야 하거나 호출해서는 안 되는 항목으로 표시할 수 있도록 하며, 기준선보다 20% 높은 상한을 설정하고, 마지막 실행의 입력 또는 AI가 작성한 입력으로 선택한 횟수만큼 워크플로를 실행하며, 실패한 이유와 함께 각 실행을 채점합니다. 스위트 선택기는 두 종류를 유형과 함께 나열하고 검색할 수 있으며, [Workflow Analysis](./workflow-analysis.md) 보고서는 에이전트 또는 LLM 노드가 있는 워크플로에 대한 스위트를 제안합니다.
 
 [Agent 노드](../nodes/agent-node.md), [Traces](../tabs/traces-tab.md), [Execution History](./execution-history.md)도 참조하십시오.
 

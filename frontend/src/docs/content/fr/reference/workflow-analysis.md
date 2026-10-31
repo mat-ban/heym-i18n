@@ -43,12 +43,14 @@ Les deux actions **exécutent d'abord le workflow** (lorsqu'il est valide et ex�
 
 Le rapport généré couvre trois sections, dans l'ordre : **Improvement areas** (suggestions concrètes, incluant un angle **security** chaque fois que le workflow touche à des credentials, à des saisies utilisateur, à des requêtes externes ou à une exposition de données), le **Purpose** du workflow, et **What it does** (un parcours étape par étape à travers les nœuds).
 
-La section **Improvement areas** exécute toujours quatre vérifications explicites :
+La section **Improvement areas** exécute toujours cinq vérifications explicites :
 
 1. **Error coverage** — si le canvas ne contient aucun nœud [Error Handler](../nodes/error-handler-node.md) et qu'aucun workflow d'erreur n'est configuré, le rapport le signale et recommande d'ajouter une gestion des erreurs.
 2. **Time saved** — si aucun temps estimé gagné par exécution n'est défini, le rapport recommande d'en configurer un afin que la métrique **Time Saved** des [Analytics](../tabs/analytics-tab.md) puisse être alimentée.
 3. **Network nodes** — pour les nœuds effectuant des appels réseau (tels que [HTTP](../nodes/http-node.md) et les nœuds d'intégration), le rapport recommande une gestion des erreurs propre à ces nœuds (retry et/ou continue-on-error).
 4. **Alerts** — lorsqu'aucune [alerte](../tabs/alerts-tab.md) n'est configurée pour le workflow, le rapport recommande de mettre en place des alertes avant la mise en production.
+
+5. **Evals** : lorsque le workflow comporte un nœud [Agent](../nodes/agent-node.md) sans suite d'agent, le rapport recommande une **Agent Suite** (ou une **Prompt Suite**) dans [Evals](../tabs/evals-tab.md#agent-suites) ; lorsqu'il comporte un nœud [LLM](../nodes/llm-node.md), il recommande une **Prompt Suite** pour tester ce Prompt sur plusieurs modèles.
 
 ### Lancer l'analyseur depuis Properties
 

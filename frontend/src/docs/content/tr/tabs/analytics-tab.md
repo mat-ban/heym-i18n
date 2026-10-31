@@ -15,6 +15,7 @@
 
 ## Zaman Aralığı
 
+- **1h**, **3h**, **6h** – Son 1 saat, 3 saat veya 6 saat. Analitikler saatlik tutulur, bu nedenle pencerenin başladığı saati bütün olarak sayarlar: 15:20'de Son Saat, 14:00'ten şu ana kadar olan süreyi kapsar
 - **24h** – Son 24 saat
 - **7d** – Son 7 gün
 - **30d** – Son 30 gün
@@ -38,9 +39,19 @@
 - **Zaman İçinde Yürütme Hacmi** – Zaman aralığı başına yürütmelerin çizgi grafiği
 - **Başarı ve Hata Oranı** – Sağlıklı ve başarısız çalıştırmaları karşılaştıran alan grafiği
 - **Zaman İçinde Ortalama Gecikme** – Yanıt süresi değişimlerini gösteren çizgi grafiği
-- **Seçmek için sürükleyin** – Özel bir tarih aralığına odaklanmak için herhangi bir grafikte tıklayıp sürükleyin
+- **Seçmek için sürükleyin** – Özel bir tarih aralığına odaklanmak için herhangi bir grafik üzerinde tıklayıp sürükleyin. Bir seçim grafikte en az iki noktayı kapsamalıdır; düz bir tıklama hiçbir şey seçmez
 - **Seçim modu** – Seçilen aralıklar, temel ön ayarı değiştirmeden özet kartlarını, grafikleri ve workflow tablolarını yeniler
 - **Seçimi Temizle** – İnceleme işiniz bittiğinde ön ayarlı zaman penceresine dönün
+
+## Düğüm Tipleri
+
+Gecikme yüzdeliklerinin altında, görünümdeki workflow'lar genelinde düğüm tipine (Agent, HTTP Request, Code vb.) göre gruplanmış olarak düğüm süresinin ve hatalarının nereye gittiğini gösteren üç grafik yer alır:
+
+- **En Çok Zaman Alan Düğümler** – Çağrı başına ortalama süre olarak çizilen, en çok toplam çalışma süresine sahip 10 düğüm tipi. Bir tipte çağrı yapılmayan bir saat, araç ipucunda **Çağrı yok** olarak gösterilir.
+- **En Çok Hata Veren Düğüm Tipleri** – Her biri zaman dilimi başına kendi hata sayısına sahip, en çok hataya (hata veya timeout) sahip 10 düğüm tipi.
+- **En Çok Çağrılan Düğüm Tipleri** – Her biri zaman dilimi başına kendi çağrı sayısına sahip, en çok çalışan 10 düğüm tipi. Atlanan düğümler sayılmaz.
+
+İşaretçinin altındaki düğüm tipini hemen yanında görmek için fareyi bir grafiğin üzerine getirin. Bir grafikteki en büyük düğüm tipinin yanında görülemeyecek kadar küçük olan bir düğüm tipi (onun %1'inin altı), o grafikten ve göstergesinden çıkarılır. Grafikler workflow filtresini, zaman aralığını ve bir grafik üzerinde sürüklediğiniz herhangi bir aralığı takip eder. Düğüm analitiği, bunları ekleyen sürümden itibaren yapılan çalıştırmalar için kaydedilir ve tamamlanan bir çalıştırma yaklaşık bir dakika içinde görünür. Daha eski çalıştırmalar sayılmaz.
 
 ## Otomatik Yenileme
 

@@ -83,7 +83,8 @@
     "run": "Kör",
     "dropFileOrClick": "Släpp en fil här eller klicka för att välja",
     "removeFile": "Ta bort fil",
-    "chooseFileFor": "Välj en fil för {label}"
+    "chooseFileFor": "Välj en fil för {label}",
+    "new": "Ny"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Ingen: varje modell bedömer sig själv",
     "removeJudge": "Ta bort domare",
     "judgeModel": "Judge-modell",
-    "enterJudgeModel": "Ange judge-modell för denna bedömning."
+    "enterJudgeModel": "Ange judge-modell för denna bedömning.",
+    "promptSuite": "Prompt-svit",
+    "promptSuiteDesc": "Testa en systemprompt över modeller",
+    "agentSuite": "Agent-svit",
+    "agentSuiteDesc": "Kontrollera en agents verkliga körningar: verktyg, latens, kostnad",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Sök sviter...",
+    "loadingSuite": "Läser in svit...",
+    "couldNotLoadSuite": "Det gick inte att läsa in denna svit."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "Fråga AI",
     "askAiTitle": "Fråga Chat-assistenten om den här körningen",
     "noNodeSpans": "Inga nod-spans registrerades för den här körningen.",
-    "queuedProgress": "I kö {position}/{size}"
+    "queuedProgress": "I kö {position}/{size}",
+    "clickToSelectRun": "Klicka för att välja denna körning",
+    "doubleClickOrOpenNewTab": "Dubbelklicka för att föra denna körning till canvas, Ctrl/Cmd+klicka för att öppna i en ny flik"
   },
   "portal": {
     "loadingPortal": "Portalen laddas...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP-server",
-    "subtitle": "Exponera Workflows som MCP-verktyg för AI-assistenter",
+    "subtitle": "Exponera workflows som MCP-verktyg och Heym Agent via MCP och A2A",
     "connection": "MCP-anslutning",
     "connectionSubtitle": "Anslut AI-assistenten till Workflows via MCP-protokollet.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Under Anpassade appar, klicka på Lägg till en anpassad app",
     "geminiStep3": "Klistra in MCP-server-URL:en ovan och lämna Avancerade funktioner stängda; Gemini registreras automatiskt",
     "geminiStep4": "Klicka på Nästa och auktorisera med Heym-inloggningsuppgifter",
-    "geminiInfo": "Gemini använder OAuth för säker autentisering. Heym-uppgifter används för att auktorisera åtkomst och delas aldrig med Gemini. När anslutningen är klar fungerar Heym även i mobilappen Gemini."
+    "geminiInfo": "Gemini använder OAuth för säker autentisering. Heym-uppgifter används för att auktorisera åtkomst och delas aldrig med Gemini. När anslutningen är klar fungerar Heym även i mobilappen Gemini.",
+    "agentReach": {
+      "off": "Av: MCP- och A2A-klienter kan inte nå Heym Agent",
+      "unconfigured": "Välj autentiseringsuppgift och modell så att Heym Agent kan köras",
+      "mcpA2a": "Nåbar via MCP och A2A",
+      "mcpOnly": "Nåbar som heym_chat via MCP"
+    },
+    "a2aEnabledOnServer": "A2A aktiverat på \"{name}\"",
+    "a2aEnabled": "A2A aktiverat",
+    "a2aDisabledOnServer": "A2A inaktiverat på \"{name}\"",
+    "a2aDisabled": "A2A inaktiverat",
+    "agentAndA2aDisabledOnServer": "Heym Agent och A2A inaktiverade på \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent och A2A inaktiverade",
+    "a2a": {
+      "enable": "Aktivera A2A",
+      "description": "Andra agenter kan skicka uppgifter till Heym Agent via Agent2Agent-protokollet (A2A 1.0). De autentiserar med denna servers nyckel i X-MCP-Key-headern eller med Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC-endpoint",
+      "checkCardLive": "Kontrollera att kortet är aktivt:",
+      "copyLabel": "Kopiera {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analyspanel",
@@ -2087,6 +2119,25 @@
       "errors": "Fel",
       "avgLatencyMs": "Genomsnittlig latens (ms)",
       "latencyTitle": "Genomsnittlig latens över tid"
+    },
+    "last1Hour": "Senaste timmen",
+    "last3Hours": "Senaste 3 timmarna",
+    "last6Hours": "Senaste 6 timmarna",
+    "nodeTypes": "Nodtyper",
+    "nodeChart": {
+      "emptyMessage": "Inga noddata för denna period ännu. Nodanalys registreras för körningar efter denna uppdatering.",
+      "duration": {
+        "title": "Noder som tar längst tid",
+        "subtitle": "Genomsnittlig varaktighet per anrop"
+      },
+      "errors": {
+        "title": "Nodtyper med flest fel",
+        "subtitle": "Fel över tid"
+      },
+      "calls": {
+        "title": "Mest anropade nodtyper",
+        "subtitle": "Anrop över tid"
+      }
     }
   },
   "dashboards": {

@@ -15,6 +15,7 @@ Az **Analytics** fül a workflow-k végrehajtási mutatóit és trendjeit jelen�
 
 ## Időtartomány
 
+- **1h**, **3h**, **6h** – Utolsó 1 óra, 3 óra vagy 6 óra. Az elemzések óránként kerülnek rögzítésre, így a kezdő órát egészében számolják: az Utolsó óra 15:20-kor a 14:00-tól mostanáig tartó időszakot fedi le
 - **24h** – Elmúlt 24 óra
 - **7d** – Elmúlt 7 nap
 - **30d** – Elmúlt 30 nap
@@ -38,9 +39,19 @@ Két táblázat mutatja a workflow-k használatát: **Most Used** (szélesebb) �
 - **Végrehajtási volumen az idő függvényében** – Vonaldiagram a futtatásokról időintervallumonként
 - **Siker vs. hibaarány** – Területdiagram a sikeres és a sikertelen futtatások összehasonlításához
 - **Átlagos késleltetés az idő függvényében** – Vonaldiagram a válaszidő változásairól
-- **Kijelölés húzással** – Kattintson és húzzon bármelyik diagramon egy egyedi dátumtartomány kijelöléséhez
+- **Húzással történő kijelölés** – Kattintson és húzza az egeret bármely diagramon egyéni dátumtartomány fókuszálásához. A kijelölésnek legalább két pontot kell lefednie a diagramon; egy egyszerű kattintás nem jelöl ki semmit
 - **Kijelölési mód** – A kijelölt tartományok frissítik az összesítő kártyákat, a diagramokat és a workflow-táblázatokat anélkül, hogy az alapértelmezett beállítást megváltoztatnák
 - **Kijelölés törlése** – Térjen vissza az előre beállított időablakhoz, amikor befejezte a részletes vizsgálódást
+
+## Csomóponttípusok
+
+A késleltetési percentilisek alatt három diagram mutatja be, hogy a csomóponti idő és a hibák hogyan oszlanak meg csomóponttípusok szerint (Agent, HTTP Request, Code stb.) a megjelenített workflow-kban:
+
+- **A legtöbb időt igénylő csomópontok** – A 10 legnagyobb összegzett futásidejű csomóponttípus, hívásonkénti átlagos időtartamként ábrázolva. Egy olyan óra, amelyben nem történt az adott típusú hívás, a **Nincs hívás** feliratot jeleníti meg a tooltipben.
+- **A legtöbb hibát produkáló csomóponttípusok** – A 10 legtöbb hibát (hiba vagy timeout) felhalmozó csomóponttípus, mindegyik a saját hibaszámával időintervallumonként.
+- **A legtöbbször meghívott csomóponttípusok** – A 10 leggyakrabban lefutott csomóponttípus, mindegyik a saját hívásszámával időintervallumonként. A kihagyott csomópontok nem számítanak bele.
+
+Vigye az egeret egy diagram fölé a mutató alatti csomóponttípus megtekintéséhez közvetlenül mellette. Az a csomóponttípus, amely túl kicsi ahhoz, hogy a diagram legnagyobb eleme mellett látható legyen (annak 1%-a alatti), kimarad a diagramból és annak jelmagyarázatából. A diagramok követik a workflow-szűrőt, az időtartományt és a diagramon kijelölt bármely szakaszt. A csomóponti analitika azon verzió óta rögzítésre kerül, amely bevezette azt, és a befejezett futás körülbelül egy percen belül megjelenik. A régebbi futások nem kerülnek beszámításra.
 
 ## Automatikus frissítés
 

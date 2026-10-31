@@ -14,7 +14,7 @@ Credentialsは、Workflowノードで使用されるAPIキーとシークレッ�
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、[Evals](../tabs/evals-tab.md) | OpenAI、Google、Custom | モデル用のAPIキー |
 | [Decision](../nodes/decision-node.md)、[Evals](../tabs/evals-tab.md) judge | Decision Model | Decision ModelのEndpointのベースURL、およびオプションのAPIキー |
-| [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、Chat、AI Defaults | Model Router (Auto Model) | Decision Modelを使用して、各リクエストを処理するモデルを選択 |
+| [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、Chat、AI Defaults, [Evals](../tabs/evals-tab.md) Prompt スイート | Model Router (Auto Model) | Decision Modelを使用して、各リクエストを処理するモデルを選択 |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPTサブスクリプションのサインイン（OAuth）またはランナー用のCodexアクセスToken、およびリポジトリ操作用のGitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | ランナー用のOpenCode GoゲートウェイAPIキー（オプションのベースURL）、およびリポジトリ操作用のGitHub PAT |
 | [Agent](../nodes/agent-node.md)、[HTTP](../nodes/http-node.md)、[GitHub](../nodes/github-node.md) | GitHub | GitHub API呼び出し、GitHubノード操作、MCP統合用のGitHub personal access token（PAT） |

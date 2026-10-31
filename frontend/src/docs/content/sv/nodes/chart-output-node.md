@@ -10,7 +10,7 @@ Noden **Diagramutdata** är slutnoden i ett workflow för en [dashboard-widget](
 | Utdata | 0 (slutnod) |
 | Utdata | Standardiserad diagram-payload |
 
-Placera denna nod **sist** i ett workflow för en dashboard-widget. Noden före den bör producera en array av radobjekt, till exempel:
+Placera denna nod **sist** i ett workflow för en dashboard-widget. För entitetsrelationer producerar noden före den ett grafobjekt (se [Entity relationships](#entity-relationships-db)). Andra datadrivna diagram använder en array av radobjekt, till exempel:
 
 ```json
 [
@@ -26,9 +26,9 @@ När endast exempel-/provdata finns tillgänglig (ingen verklig källa) producer
 | Parameter | Typ | Beskrivning |
 |-----------|-----|-------------|
 | `label` | string | Nodidentifierare (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` eller `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` eller `hitl` |
 | `orientation` | string | `vertical` eller `horizontal` (endast stapeldiagram) |
-| `dataPath` | string | Punktseparerad sökväg till radarrayen i den uppströms nodens utdata (t.ex. `data` eller `result.items`). Lämna tom för automatisk identifiering. |
+| `dataPath` | string | Punktseparerad sökväg till radarrayen (eller grafobjekt för `erDiagram`) i den uppströms nodens utdata (t.ex. `data` eller `result.items`). Lämna tom för automatisk identifiering. |
 | `labelField` | string | Radnyckel som används som kategorietikett (pie/bar/line) |
 | `valueField` | string | Radnyckel som används som numeriskt värde (pie/bar/line/numeric/gauge) |
 | `series` | array | Valfri definition för flera serier `[{ "name": "Sent", "field": "sent" }]` för bar/line (åsidosätter `valueField`) |
@@ -54,8 +54,51 @@ När endast exempel-/provdata finns tillgänglig (ingen verklig källa) producer
 - **scatter** — X/Y-punkter från `xField` och `yField` för korrelationsdiagram.
 - **proportion** — en enskild horisontell stapel uppdelad i andelar med en procentteckenförklaring (t.ex. en språkfördelning). Använder `labelField` + `valueField`.
 - **barGauge** — en horisontell gauge per rad med en röd→grön gradient och ett värde (t.ex. ledigt diskutrymme). Använder `labelField` + `valueField`, valfri `unit` och `max` (standardvärdet är det största radvärdet).
+- **gantt** — uppgiftsscheman med datum, förlopp och beroenden; se [Gantt-scheman](#gantt-schedules).
+- **erDiagram** — databasentiteter, fält, nycklar och relationer; se [Entity relationships](#entity-relationships-db).
 - **text** — ett markdown-meddelande (t.ex. en statusnotis som "Senaste körning kl. 19:47"). Placera markdown-texten i `text` för ett statiskt meddelande, eller lämna `text` tomt och ange `valueField` för att rendera en sträng som producerats uppströms. Stöder rubriker, fetstil/kursiv stil, [listor](../nodes/chart-output-node.md#interactive-task-lists), länkar och inline-kod.
 - **hitl** — en karusell med väntande mänskliga granskningar. Rubriken visar `1/n pending`; vänsterpilen är inaktiverad på det första kortet och högerpilen på det sista. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den, och historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på samma sida. Denna diagramtyp ignorerar uppströms rader, så widgetens workflow består endast av noden Diagramutdata. Varje inloggad person ser granskningarna för de workflows som personen äger. Välj ett **Workflow** (och **Select agent** när det har flera granskningssteg) i nodens egenskaper eller widgetens inställningar för att i stället visa det Workflowets granskningar för alla som kan öppna det; se [HITL-widgetar](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt-scheman
+
+Välj **Gantt** (`gantt`) för projektscheman och uppgiftstidslinjer. Ange `dataPath` till uppgiftsarrayen, såsom `tasks`. Rader använder fasta fältnamn:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` och `end` accepterar ISO-datum eller datumtider. Värden utan tidszon använder UTC; tidszonsförskjutningar konverteras till UTC. `end` måste vara samma som eller efter `start`. `progress` är valfritt (0–100, standard 0); `dependencies` innehåller befintliga uppgifts-id:n. Id:n måste vara unika. Håll muspekaren över en uppgift för att läsa fullständiga datum, förlopp och beroenden. Stora diagram rullar inuti widgeten. Högst 500 uppgifter accepteras.
+
+För exempeldata kan en Set-mappning med namnet `tasks` använda `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Anslut den till Chart Output med `chartType: "gantt"` och `dataPath: "tasks"`. Mappa källkolumner till dessa fasta namn med en Set-nod; `labelField` och `valueField` används inte.
+
+### Entity relationships (DB)
+
+Välj **Entity relationships (DB)** (`erDiagram`) för databasscheman och entitetskopplingar. Ange `dataPath` till ett graf-**objekt**, såsom `graph`, som innehåller båda arrayerna:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Fält har ett `name`, valfri `type` och valfri `key` (`PK`, `FK`, `PK/FK` eller tom). Relationer refererar till befintliga entitets-id:n; valfria `sourceField` och `targetField` förankrar kopplingen till namngivna fält. `cardinality` accepterar `one-to-one`, `one-to-many` (standard), `many-to-one` eller `many-to-many`. Entitets-id:n och fältnamn inom varje entitet måste vara unika. Högst 100 entiteter, 100 fält per entitet och 500 relationer accepteras.
+
+Med en Set-nod konstrueras `graph` med `$dict(entities=array(dict(...)), relations=array(dict(...)))`; använd `chartType: "erDiagram"` och `dataPath: "graph"`. Detta är en visualisering av det schema du anger; det inspekterar inte en aktiv databas automatiskt.
+
+Båda typerna visas i **Lägg till widget** med förhandsgranskning och i nodens diagramtypsväljare på canvasen. Heym Work kan föreslå dessa typer när du beskriver ett schema eller ett databasschema, och ritar förhandsgranskningar av de föreslagna uppgifterna eller entiteterna innan du skapar sidan.
 
 ### Interaktiva uppgiftslistor
 

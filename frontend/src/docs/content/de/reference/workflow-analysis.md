@@ -43,12 +43,14 @@ Beide Aktionen **führen zuerst den Workflow aus** (wenn er gültig und ausführ
 
 Der generierte Bericht deckt drei Abschnitte ab, in dieser Reihenfolge: **Verbesserungsbereiche** (konkrete Vorschläge, einschließlich eines **Sicherheits**-Aspekts, wann immer der Workflow Anmeldedaten, Benutzereingaben, externe Anfragen oder Datenexposition berührt), den **Zweck** des Workflows und **Was er tut** (ein schrittweiser Durchgang durch die Knoten).
 
-Der Abschnitt **Verbesserungsbereiche** führt immer vier explizite Prüfungen durch:
+Der Abschnitt **Verbesserungsbereiche** führt immer fünf explizite Prüfungen durch:
 
 1. **Fehlerabdeckung** – wenn der Canvas keinen [Error Handler](../nodes/error-handler-node.md)-Knoten hat und kein Fehler-Workflow konfiguriert ist, weist der Bericht darauf hin und empfiehlt, Fehlerbehandlung hinzuzufügen.
 2. **Eingesparte Zeit** – wenn keine geschätzte eingesparte Zeit pro Ausführung festgelegt ist, empfiehlt der Bericht, eine zu konfigurieren, damit die **Eingesparte Zeit**-Metrik der [Analytik](../tabs/analytics-tab.md) befüllt werden kann.
 3. **Netzwerk-Knoten** – für Knoten, die Netzwerkaufrufe durchführen (wie [HTTP](../nodes/http-node.md) und Integrations-Knoten), empfiehlt der Bericht knotenspezifische Fehlerbehandlung (Retry und/oder Continue-on-Error) auf diesen Knoten.
 4. **Warnungen** – wenn keine [Warnungen](../tabs/alerts-tab.md) für den Workflow konfiguriert sind, empfiehlt der Bericht, Warnungen einzurichten, bevor es in die Produktion geht.
+
+5. **Evals**: Wenn der Workflow einen [Agent](../nodes/agent-node.md)-Knoten ohne Agent-Suite enthält, empfiehlt der Bericht eine **Agent Suite** (oder eine **Prompt Suite**) in [Evals](../tabs/evals-tab.md#agent-suites); besitzt er einen [LLM](../nodes/llm-node.md)-Knoten, empfiehlt er eine **Prompt Suite**, um diesen Prompt modellübergreifend zu testen.
 
 ### Analyzer aus den Eigenschaften ausführen
 

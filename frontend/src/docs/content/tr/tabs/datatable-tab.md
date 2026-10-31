@@ -73,11 +73,11 @@ Tabloları diğer kullanıcılarla veya takımlarla paylaşın:
 1. Tablo detay görünümünden paylaşma iletişim kutusunu açın
 2. **read** veya **write** izniyle e-posta ile kullanıcı ekleyin
 3. **read** veya **write** izniyle takım ekleyin
-4. Salt okunur kullanıcılar verileri görüntüleyebilir; yazma kullanıcıları satırları değiştirebilir
+4. Yalnızca okuma izinli kullanıcılar verileri görüntüleyebilir; yazma izinli kullanıcılar satırları ve sütunları değiştirebilir. Tabloyu yeniden adlandırma, açıklamasını değiştirme ve paylaşımları yönetme işlemleri yalnızca sahibe özel kalır.
 
 ## AI Assistant'tan Tablo Oluşturma
 
-Canvas [AI Assistant](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) ve [MCP tab](./mcp-tab.md) üzerindeki `heym_chat` aracı, oluşturdukları bir workflow için tablolarınızdan birini seçebilir veya yeni bir tane oluşturabilir. Bir ad ve sütunlar önerirler ve soru kartını gönderdiğinizde tabloyu oluştururlar. Mevcut bir tablonun sütunlarını asla değiştirmezler veya satırlarına dokunmazlar: sütunları buradan ekleyin veya düzenleyin.
+Canvas'taki [AI Asistanı](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) ve [MCP sekmesindeki](./mcp-tab.md) `heym_chat` aracı, oluşturdukları bir workflow için tablolarınızdan birini seçebilir veya yeni bir tane oluşturabilir. Bir ad ve sütunlar önerirler ve soru kartını gönderdiğinizde tabloyu oluştururlar. Canvas asistanı, workflow düğümlerini tablo meta verilerinden yapılandırır. Chat ve `heym_chat` ayrıca satırları inceleyebilir, sütun ekleyip kaldırabilir ve doğrudan satır ekleyebilir, güncelleyebilir veya silebilir. Onlara bir tablo adı veya bu sekmenin bağlantısını verin. Yazma işlemleri sahiplik veya doğrudan/ekip **yazma** erişimi gerektirir. Sütun ekleme mevcut verileri korur; sütunları kaldırma değerlerini her satırdan siler. Sütunların kaldırılması ve tüm satırların temizlenmesi, bu sekmeyle eşleşen şekilde onay ister.
 
 ## Workflow'larda Kullanma
 

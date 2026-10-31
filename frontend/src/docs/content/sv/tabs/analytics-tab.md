@@ -15,6 +15,7 @@ Fliken **Analytics** visar körningsstatistik och trender för workflows. Använ
 
 ## Tidsintervall
 
+- **1h**, **3h**, **6h** – Senaste timmen, 3 timmarna eller 6 timmarna. Analyser sparas per timme, så dessa räknar hela starttimmen för fönstret: Senaste timmen vid 15:20 täcker 14:00 fram till nu
 - **24h** – Senaste 24 timmarna
 - **7d** – Senaste 7 dagarna
 - **30d** – Senaste 30 dagarna
@@ -38,9 +39,19 @@ Två tabeller visar workflow-användning: **Most Used** (bredare) och **Most Fai
 - **Execution Volume Over Time** – Linjediagram över körningar per tidsintervall
 - **Success vs Error Rate** – Ytdiagram som jämför lyckade och misslyckade körningar
 - **Average Latency Over Time** – Linjediagram som visar förändringar i svarstid
-- **Drag to select** – Klicka och dra i valfritt diagram för att fokusera på ett anpassat datumintervall
+- **Dra för att välja** – Klicka och dra på valfritt diagram för att fokusera på ett anpassat datumintervall. En markering måste omfatta minst två punkter i diagrammet; ett enkelt klick väljer ingenting
 - **Selection mode** – Valda intervall uppdaterar sammanfattningskorten, diagrammen och workflow-tabellerna utan att ändra den valda förinställningen
 - **Clear Selection** – Återgå till den förinställda tidsperioden när genomgången är klar
+
+## Nodtyper
+
+Under latenspercentilerna visar tre diagram var nodtid och fel hamnar, grupperade efter nodtyp (Agent, HTTP Request, Code och så vidare) över de visade workflowen:
+
+- **Noder som tar mest tid** – De 10 nodtyperna med mest total körningstid, ritade som genomsnittlig varaktighet per anrop. En timme utan anrop av en viss typ visar **Inga anrop** i verktygstipset.
+- **Nodtyper med flest fel** – De 10 nodtyperna med flest fel (fel eller timeout), var och en med sitt eget felantal per tidsintervall.
+- **Mest anropade nodtyper** – De 10 nodtyperna som kördes mest, var och en med sitt eget anropsantal per tidsintervall. Överhoppade noder räknas inte.
+
+Hovra över ett diagram för att se nodtypen under pekaren precis bredvid. En nodtyp som är för liten för att synas bredvid den största på ett diagram (under 1 % av den) utelämnas från det diagrammet och dess teckenförklaring. Diagrammen följer workflow-filtret, tidsintervallet och eventuellt intervall som dras på ett diagram. Nodanlyser registreras för körningar från och med versionen som introducerade dem, och en slutförd körning visas inom ungefär en minut. Äldre körningar räknas inte in.
 
 ## Auto Refresh
 

@@ -10,7 +10,7 @@
 | Izlazi | 0 (završni) |
 | Izlaz | Standardizirani chart payload |
 
-Postavite ovaj čvor **posljednji** u workflowu dashboard widgeta. Čvor prije njega trebao bi proizvesti array objekata redaka, na primjer:
+Postavite ovaj čvor **posljednji** u workflowu dashboard widgeta. Za entity relationships čvor prije njega proizvodi objekt grafa (pogledajte [Entity relationships](#entity-relationships-db)). Ostali grafikoni temeljeni na podacima koriste array objekata redaka, na primjer:
 
 ```json
 [
@@ -26,9 +26,9 @@ Kada imate samo primjerene/testne podatke (bez stvarnog izvora), proizvedite te 
 | Parametar | Tip | Opis |
 |-----------|------|-------------|
 | `label` | string | Identifikator čvora (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` ili `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` ili `hitl` |
 | `orientation` | string | `vertical` ili `horizontal` (samo za bar chartove) |
-| `dataPath` | string | Dot putanja do arraya redaka unutar izlaza prethodnog čvora (npr. `data` ili `result.items`). Ostavite prazno za automatsko prepoznavanje. |
+| `dataPath` | string | Dot putanja do arraya redaka (ili objekta grafa za `erDiagram`) unutar izlaza prethodnog čvora (npr. `data` ili `result.items`). Ostavite prazno za automatsko prepoznavanje. |
 | `labelField` | string | Ključ retka koji se koristi kao oznaka kategorije (pie/bar/line) |
 | `valueField` | string | Ključ retka koji se koristi kao numerička vrijednost (pie/bar/line/numeric/gauge) |
 | `series` | array | Neobavezna definicija više serija `[{ "name": "Sent", "field": "sent" }]` za bar/line (nadjačava `valueField`) |
@@ -54,8 +54,51 @@ Kada imate samo primjerene/testne podatke (bez stvarnog izvora), proizvedite te 
 - **scatter** — X/Y točke iz `xField` i `yField` za prikaze korelacije.
 - **proportion** — jedna horizontalna traka podijeljena na udjele s postotnom legendom (npr. raspodjela jezika). Koristi `labelField` + `valueField`.
 - **barGauge** — jedan horizontalni gauge po retku s gradijentom crveno→zeleno i vrijednošću (npr. slobodan prostor na disku). Koristi `labelField` + `valueField`, neobavezne `unit` i `max` (zadano je najveća vrijednost retka).
+- **gantt** — rasporedi zadataka s datumima, napretkom i ovisnostima; pogledajte [Gantt rasporedi](#gantt-schedules).
+- **erDiagram** — entiteti baze podataka, polja, ključevi i relacije; pogledajte [Entity relationships](#entity-relationships-db).
 - **text** — markdown poruka (npr. statusna napomena poput "Last execution at 19:47"). Stavite markdown u `text` za statičnu poruku ili ostavite `text` prazno i postavite `valueField` za renderiranje stringa proizvedenog na prethodnom čvoru. Podržava naslove, podebljano/kurziv, [popise](../nodes/chart-output-node.md#interactive-task-lists), poveznice i inline kod.
 - **hitl** — carousel vaših recenzija koje čekaju ljudsku obradu. Zaglavlje prikazuje `1/n pending`; lijeva strelica onemogućena je na prvoj kartici, a desna na posljednjoj. Naziv workflowa otvara to izvršavanje na canvasu. **Approve**, **Request changes** i **Reject** rješavaju recenziju, a ikona povijesti pokraj naslova widgeta otvara to izvršavanje u dijalogu povijesti na istoj stranici. Ovaj chart type zanemaruje retke prethodnog čvora, pa je workflow widgeta samo Chart Output čvor. Svaka prijavljena osoba vidi recenzije na workflowima koje posjeduje. Odaberite **Workflow** (i **Select agent** kada ima više koraka recenzije) u svojstvima čvora ili postavkama widgeta kako bi se umjesto toga prikazale recenzije tog Workflowa svima koji ga mogu otvoriti; pogledajte [HITL widgete](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt rasporedi
+
+Odaberite **Gantt** (`gantt`) za rasporede projekata i vremenske crte zadataka. Postavite `dataPath` na array zadataka, kao što je `tasks`. Redci koriste fiksna imena polja:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` i `end` prihvaćaju ISO datume ili datetimes. Vrijednosti bez vremenske zone koriste UTC; pomaci vremenskih zona pretvaraju se u UTC. `end` mora biti na ili nakon `start`. `progress` je neobavezan (0–100, zadano 0); `dependencies` sadrži identifikatore postojećih zadataka. Identifikatori moraju biti jedinstveni. Prijeđite pokazivačem miša preko zadatka kako biste pročitali pune datume, napredak i ovisnosti. Veliki grafikoni se pomiču unutar widgeta. Prihvaća se najviše 500 zadataka.
+
+Za ogledne podatke Set mapiranje pod nazivom `tasks` može koristiti `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Spojite ga na Chart Output s `chartType: "gantt"` i `dataPath: "tasks"`. Mapirajte izvorne stupce u ova fiksna imena pomoću Set čvora; `labelField` i `valueField` se ne koriste.
+
+### Entity relationships (DB)
+
+Odaberite **Entity relationships (DB)** (`erDiagram`) za sheme baza podataka i veze entiteta. Postavite `dataPath` na **objekt** grafa, kao što je `graph`, koji sadrži oba arraya:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Polja imaju `name`, neobavezni `type` i neobavezni `key` (`PK`, `FK`, `PK/FK` ili prazno). Relacije referenciraju postojeće identifikatore entiteta; neobavezni `sourceField` i `targetField` sidre vezu na imenovana polja. `cardinality` prihvaća `one-to-one`, `one-to-many` (zadano), `many-to-one` ili `many-to-many`. Identifikatori entiteta i imena polja unutar svakog entiteta moraju biti jedinstveni. Prihvaća se najviše 100 entiteta, 100 polja po entitetu i 500 relacija.
+
+Pomoću Set čvora konstruirajte `graph` s `$dict(entities=array(dict(...)), relations=array(dict(...)))`; koristite `chartType: "erDiagram"` i `dataPath: "graph"`. Ovo je vizualizacija sheme koju navedete; ne pregledava automatski aktivnu bazu podataka.
+
+Oba tipa pojavljuju se u **Dodaj widget** s pregledom i u biraču tipa grafikona čvora na canvasu. Heym Work može predložiti ove tipove kada opisujete raspored ili shemu baze podataka, iscrtavajući preglede predloženih zadataka ili entiteta prije izrade stranice.
 
 ### Interaktivni popisi zadataka
 

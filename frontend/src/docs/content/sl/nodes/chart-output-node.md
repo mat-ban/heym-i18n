@@ -10,7 +10,7 @@ Vozlišče **Izhod Grafikon** je terminalno vozlišče [widgeta nadzorne plošč
 | Izhodi | 0 (terminal) |
 | Izhod | Standardiziran grafični payload |
 
-To vozlišče postavite **na konec** workflow-a widgeta nadzorne plošče. Vozlišče pred njim mora proizvesti tabelo objektov vrstic, na primer:
+To vozlišče postavite **na konec** workflow-a widgeta nadzorne plošče. Za entity relationships vozlišče pred njim proizvede objekt grafa (glejte [Entity relationships](#entity-relationships-db)). Drugi podatkovno vodeni grafikoni uporabljajo tabelo objektov vrstic, na primer:
 
 ```json
 [
@@ -26,9 +26,9 @@ Ko imate samo primer/sample podatke (brez pravega vira), proizvedite te vrstice 
 | Parameter | Tip | Opis |
 |-----------|------|-------------|
 | `label` | niz | Identifikator vozlišča (camelCase) |
-| `chartType` | niz | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text`, ali `hitl` |
+| `chartType` | niz | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text`, ali `hitl` |
 | `orientation` | niz | `vertical` ali `horizontal` (samo za stolpčne grafikone) |
-| `dataPath` | niz | Dot pot do tabele vrstic znotraj zgornjega izhoda (npr. `data` ali `result.items`). Pustite prazno za samodejno zaznavanje. |
+| `dataPath` | niz | Dot pot do tabele vrstic (ali objekta grafa za `erDiagram`) znotraj zgornjega izhoda (npr. `data` ali `result.items`). Pustite prazno za samodejno zaznavanje. |
 | `labelField` | niz | Ključ vrstice, ki se uporablja kot oznaka kategorije (pie/bar/line) |
 | `valueField` | niz | Ključ vrstice, ki se uporablja kot numerična vrednost (pie/bar/line/numeric/gauge) |
 | `series` | tabela | Neobvezna definicija več serij `[{ "name": "Sent", "field": "sent" }]` za bar/line (prepisuje `valueField`) |
@@ -54,8 +54,51 @@ Ko imate samo primer/sample podatke (brez pravega vira), proizvedite te vrstice 
 - **scatter** — X/Y točke iz `xField` in `yField` za korelacijske diagrame.
 - **proportion** — ena horizontalna vrstica razdeljena na dele z legendami odstotkov (npr. razčlenitev po jeziku). Uporablja `labelField` + `valueField`.
 - **barGauge** — ena horizontalna merilna naprava na vrstico z rdeče→zelena gradientom in vrednostjo (npr. prosti prostor na disku). Uporablja `labelField` + `valueField`, neobvezno `unit` in `max` (privzeto na največjo vrednost vrstice).
+- **gantt** — urniki opravil z datumi, napredkom in odvisnostmi; glejte [Gantt urniki](#gantt-schedules).
+- **erDiagram** — entitete baze podatkov, polja, ključi in razmerja; glejte [Entity relationships](#entity-relationships-db).
 - **text** — markdown sporočilo (npr. statusna opomba, kot je "Zadnje izvajanje ob 19:47"). Vstavite markdown v `text` za statično sporočilo ali pustite `text` prazno in nastavite `valueField`, da prikažete niz, ki ga proizvedejo zgornji podatki. Podpira naslove, krepko/poševno, [seznami](../nodes/chart-output-node.md#interactive-task-lists), povezave in vgrajeno kodo.
 - **hitl** — karusel vaših čakajočih človeških pregledov. Glava prikazuje `1/n pending`; leva puščica je onemogočena na prvi kartici in desna puščica na zadnji. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo, ikona zgodovine poleg naslova widgeta pa odpre to izvajanje v pogovornem oknu zgodovine na isti strani. Ta tip grafikona ignorira zgornje vrstice, zato je workflow widgeta samo vozlišče Izhod Grafikon. Vsaka prijavljena oseba vidi preglede na workflow-ih, ki jih ima v lasti. V lastnostih vozlišča ali nastavitvah pripomočka izberite **Workflow** (in **Select agent**, če ima več korakov pregleda), da se namesto tega prikažejo pregledi tega Workflowa vsem, ki ga lahko odprejo; glejte [pripomočki HITL](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Gantt urniki
+
+Izberite **Gantt** (`gantt`) za projektne urnike in časovnice opravil. Nastavite `dataPath` na tabelo opravil, kot je `tasks`. Vrstice uporabljajo fiksna imena polj:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` in `end` sprejemata ISO datume ali časovne žige. Vrednosti brez časovnega pasu uporabljajo UTC; časovni zamiki se pretvorijo v UTC. `end` mora biti enak ali po `start`. `progress` je neobvezen (0–100, privzeto 0); `dependencies` vsebuje identifikatorje obstoječih opravil. Identifikatorji morajo biti edinstveni. Premaknite kazalec miške nad opravilo, da preberete polne datume, napredek in odvisnosti. Veliki grafikoni se pomikajo znotraj pripomočka. Sprejme se največ 500 opravil.
+
+Za vzorčne podatke lahko preslikava Set z imenom `tasks` uporabi `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Povežite jo z izhodom Chart Output s `chartType: "gantt"` in `dataPath: "tasks"`. Preslikajte izvorne stolpce v ta fiksna imena z vozliščem Set; `labelField` in `valueField` se ne uporabljata.
+
+### Entity relationships (DB)
+
+Izberite **Entity relationships (DB)** (`erDiagram`) za sheme zbirk podatkov in povezave entitet. Nastavite `dataPath` na **objekt** grafa, kot je `graph`, ki vsebuje obe tabeli:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Polja imajo `name`, neobvezen `type` in neobvezen `key` (`PK`, `FK`, `PK/FK` ali prazno). Razmerja se sklicujejo na obstoječe identifikatorje entitet; neobvezna `sourceField` in `targetField` zasidrata povezavo na poimenovana polja. `cardinality` sprejema `one-to-one`, `one-to-many` (privzeto), `many-to-one` ali `many-to-many`. Identifikatorji entitet in imena polj v vsaki entiteti morajo biti edinstveni. Sprejme se največ 100 entitet, 100 polj na entiteto in 500 razmerij.
+
+Z vozliščem Set sestavite `graph` z `$dict(entities=array(dict(...)), relations=array(dict(...)))`; uporabite `chartType: "erDiagram"` in `dataPath: "graph"`. To je vizualizacija podane sheme; ne pregleduje samodejno aktivne zbirke podatkov.
+
+Obe vrsti se pojavita v **Dodaj pripomoček** s predogledom in v izbirniku vrste grafikona vozlišča na platnu. Heym Work lahko te vrste predlaga, ko opišete urnik ali shemo zbirke podatkov, pri čemer nariše predoglede predlaganih opravil ali entitet, preden zgradite stran.
 
 ### Interaktivni seznami nalog
 

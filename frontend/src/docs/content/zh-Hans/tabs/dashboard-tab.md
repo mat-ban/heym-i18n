@@ -23,6 +23,8 @@ widget 是网格上的单个图表。支持的图表类型：
 - **Gauge**（针对最小–最大范围的单个值，例如百分比）
 - **Scatter**（用于相关性图的 X/Y 点）
 - **Proportion**（一个条形拆分为多个份额，带百分比图例，例如语言分布）
+- **Gantt**（任务日期、完成情况与依赖关系）
+- **Entity relationships (DB)**（数据表、字段、主键/外键及连接）
 - **Bar gauge**（每行一个水平仪表，带红→绿渐变和数值，例如可用磁盘空间）
 - **Text**（markdown 消息，例如“Last execution at 19:47”这样的状态说明；当 markdown 为静态时支持[交互式复选框](../nodes/chart-output-node.md#interactive-task-lists)，并支持[显式编号列表](../nodes/chart-output-node.md#numbered-lists)以实现自定义或降序编号）
 - **HITL**（您待处理的人工审核。标题显示 `1/n pending`。workflow 名称会在画布上打开该次运行。**Approve**、**Request changes** 和 **Reject** 可解决该审核。widget 标题旁的历史图标会在本页的历史对话框中打开该次运行。该 widget 不使用上游行，每个人看到自己的队列。 也可以转为显示单个 Workflow 的审查，面向所有能够打开该 Workflow 的人员；请参阅 [HITL 部件](#hitl-bu-jian)）
@@ -96,6 +98,18 @@ widget 是网格上的单个图表。支持的图表类型：
 
 使用 widget 的 **Fine-tune with AI** 按钮，通过新指令修改现有 widget。每次 AI 微调都会将之前的 workflow 快照保存到 widget 的 **Edit History** 中，因此您可以从 workflow 编辑器查看或回滚更改。
 
+## 来自 Chat 和 MCP
+
+[Chat](./chat-tab.md) 以及通过 [`heym_chat` 工具](./mcp-tab.md) 的 MCP 客户端可以读取您的仪表板、向其添加 widget、重命名或删除 widget，并整理仪表板的布局。Heym Work 将每个仪表板显示为一个页面，因此相同的回答也涵盖其页面。
+
+- **有哪些仪表板以及上面有什么。** 询问“我有哪些仪表板？”、“销售仪表板上有什么？”或“收入 workflow 在哪个仪表板上？”。Chat 会列出您拥有的仪表板以及与您共享的仪表板、您的访问权限以及指向每个仪表板的链接，以及上面的每个 widget：标题、图表类型和背后的 workflow。过滤到您无法打开的 workflow 上的 [HITL widget](#hitl-widgets) 会保持隐藏，就像在仪表板上一样。
+- **新建 widget。** 提出要求：“向销售仪表板添加一个按状态分类的未解决用例图表”。Chat 首先在仪表板上放置一个空白 widget，然后编写 widget 自己的 workflow，运行测试并修复错误直到运行通过，就像它[构建 workflow](./chat-tab.md#chuangjian-workflow) 一样。不会留下单独的 workflow，每次保存都会出现在 widget 的 Edit History 中。widget 的标题和图表类型遵循 Chat 保存的内容。
+- **现有 workflow。** 提出要求：“将收入 workflow 放置在销售仪表板上”。以 Chart Output 节点结尾的 workflow 会变成图表 widget，并带有该 workflow 的独立副本，因此以后对 widget 的更改绝不会触及原始 workflow。带有 trigger 或 input 节点的 workflow 不能成为图表 widget。任何其他 workflow 都会变成[运行 widget](#run-widgets)，这也需要一个仪表板所有者可以运行的 workflow。
+- **重命名或删除 widget。** 提出要求：“将‘收入’widget 重命名为‘销售’”，或“删除‘未解决用例’widget”。图表 widget 的 workflow 也会采用新名称；运行 widget 的 workflow 则保留自己的名称。删除图表 widget 会连同其 workflow 一起删除，就像 widget 的删除按钮一样；运行 widget 的 workflow 则保留。Chat 仅删除您明确要求的 widget，当您的描述匹配多个 widget 时会先询问具体删除哪一个。
+- **整理布局。** 提出要求：“整理销售仪表板”，或“添加这三个 widget 并整理”。Chat 会按顺序排列您看到的 widget，就像 **整理** 按钮一样：随机两行或三行排列，因此再次询问会产生另一种布局。要求每行指定数量（“每行三个”）以获得该大小的行。这会在 Heym 中整理仪表板；Heym Work 保留其页面的独立排列，该排列可通过页面自身的 **整理** 按钮更改。
+
+新 widget 位于仪表板现有 widget 的下方，并且与每个 widget 一样，在仪表板所有者的身份下运行。添加、重命名、删除和整理需要对仪表板的写入权限。构建新 widget 需要能够构建 workflow 的对话：Chat 选项卡、Heym Work 面向编辑人员的 Chat 以及 `heym_chat`。
+
 ## 编辑布局
 
 切换 **Edit** 进入编辑模式，您可以在 12 列网格上拖动 widget 并调整其大小。布局更改会自动保存。widget 标题可在 widget 标题栏中内联编辑。
@@ -128,3 +142,7 @@ widget 是网格上的单个图表。支持的图表类型：
 
 - [Chart Output 节点](../nodes/chart-output-node.md)
 - [Analytics 标签页](analytics-tab.md) — 内置执行指标（区别于用户自建的仪表盘）
+
+## 进度计划与数据库图表
+
+在“添加 widget”中选择 **Gantt** 可随时间显示任务以及完成情况和依赖关系链接，或选择 **Entity relationships (DB)** 可映射数据表、字段及其关系。这两种类型均使用 [Chart Output 节点](../nodes/chart-output-node.md#gantt-schedules)，并且在 Heym Work 页面上也可用。当 Work 为进度计划或数据库架构建议 widget 时，它会在构建页面之前根据建议的任务或实体绘制预览。

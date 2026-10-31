@@ -73,11 +73,11 @@ Bagikan tabel dengan pengguna atau tim lain:
 1. Buka dialog berbagi dari tampilan detail tabel
 2. Tambahkan pengguna berdasarkan email dengan izin **read** atau **write**
 3. Tambahkan tim dengan izin **read** atau **write**
-4. Pengguna hanya-baca dapat melihat data; pengguna dengan izin tulis dapat mengubah baris
+4. Pengguna baca-saja dapat melihat data; pengguna tulis dapat memodifikasi baris dan kolom. Mengubah nama tabel, mengubah deskripsinya, dan mengelola pembagian tetap khusus untuk pemilik.
 
 ## Membuat Tabel dari AI Assistant
 
-[AI Assistant](../reference/ai-assistant.md#data-tables) pada kanvas, [Chat](./chat-tab.md), dan tool `heym_chat` pada [tab MCP](./mcp-tab.md) dapat memilih salah satu tabel Anda untuk Workflow yang mereka buat, atau membuat tabel baru. Mereka mengusulkan nama dan kolom, lalu membuat tabel saat Anda mengirimkan kartu pertanyaan. Mereka tidak pernah mengubah kolom tabel yang sudah ada atau menyentuh barisnya: tambahkan atau edit kolom di sini.
+[Asisten AI](../reference/ai-assistant.md#data-tables) canvas, [Chat](./chat-tab.md), dan alat `heym_chat` di [tab MCP](./mcp-tab.md) dapat memilih salah satu tabel Anda untuk workflow yang mereka buat, atau membuat tabel baru. Mereka mengusulkan nama dan kolom, lalu membuat tabel saat Anda mengirimkan kartu pertanyaan. Asisten canvas mengonfigurasi node workflow dari metadata tabel. Chat dan `heym_chat` juga dapat memeriksa baris, menambah atau menghapus kolom, dan menyisipkan, memperbarui, atau menghapus baris secara langsung. Berikan nama tabel atau link tab ini kepada mereka. Penulisan memerlukan kepemilikan atau akses **tulis** langsung/tim. Menambahkan kolom mempertahankan data yang ada; menghapus kolom akan menghapus nilainya dari setiap baris. Penghapusan kolom dan pengosongan semua baris meminta konfirmasi, sesuai dengan tab ini.
 
 ## Penggunaan dalam Workflow
 

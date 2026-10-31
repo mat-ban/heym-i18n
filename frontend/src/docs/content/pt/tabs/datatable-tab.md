@@ -73,11 +73,11 @@ Partilhe tabelas com outros utilizadores ou equipas:
 1. Abra a caixa de diálogo de partilha a partir da vista de detalhe da tabela
 2. Adicione utilizadores por email com permissão de **leitura** ou **escrita**
 3. Adicione equipas com permissão de **leitura** ou **escrita**
-4. Os utilizadores só de leitura podem ver os dados; os utilizadores com escrita podem modificar linhas
+4. Os utilizadores de apenas leitura podem ver dados; os utilizadores com permissão de escrita podem modificar linhas e colunas. Mudar o nome da tabela, alterar a respetiva descrição e gerir partilhas permanecem ações exclusivas do proprietário.
 
 ## Criar tabelas a partir do Assistente de IA
 
-O [Assistente de IA](../reference/ai-assistant.md#data-tables) do canvas, o [Chat](./chat-tab.md) e a ferramenta `heym_chat` no [separador MCP](./mcp-tab.md) podem escolher uma das suas tabelas para um workflow que construam, ou criar uma nova. Propõem um nome e colunas, e criam a tabela quando submete o cartão de pergunta. Nunca alteram as colunas de uma tabela existente nem tocam nas suas linhas: adicione ou edite colunas aqui.
+O [Assistente de IA](../reference/ai-assistant.md#data-tables) do canvas, o [Chat](./chat-tab.md) e a ferramenta `heym_chat` no [separador MCP](./mcp-tab.md) podem escolher uma das suas tabelas para um workflow que constroem, ou criar uma nova. Propõem um nome e colunas e criam a tabela quando submete o cartão de perguntas. O assistente do canvas configura os nós do workflow a partir dos metadados da tabela. O Chat e o `heym_chat` também podem inspecionar linhas, adicionar ou remover colunas e inserir, atualizar ou eliminar linhas diretamente. Forneça-lhes um nome de tabela ou a ligação deste separador. As escritas requerem propriedade ou acesso de **escrita** direto ou de equipa. A adição de colunas mantém os dados existentes; a remoção de colunas elimina os seus valores de cada linha. A remoção de colunas e a limpeza de todas as linhas solicitam confirmação, tal como neste separador.
 
 ## Utilizar em workflows
 

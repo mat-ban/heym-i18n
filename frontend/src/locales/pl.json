@@ -83,7 +83,8 @@
     "run": "Uruchom",
     "dropFileOrClick": "Upuść plik tutaj lub kliknij, aby wybrać",
     "removeFile": "Usuń plik",
-    "chooseFileFor": "Wybierz plik dla {label}"
+    "chooseFileFor": "Wybierz plik dla {label}",
+    "new": "Nowy"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Brak: każdy model ocenia sam siebie",
     "removeJudge": "Usuń oceniającego",
     "judgeModel": "Model oceniający",
-    "enterJudgeModel": "Wprowadź model oceniający dla tego oceniającego."
+    "enterJudgeModel": "Wprowadź model oceniający dla tego oceniającego.",
+    "promptSuite": "Zestaw promptów",
+    "promptSuiteDesc": "Testuj prompt systemowy na różnych modelach",
+    "agentSuite": "Zestaw agentów",
+    "agentSuiteDesc": "Sprawdzaj rzeczywiste przebiegi agenta: narzędzia, opóźnienia, koszty",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Szukaj zestawów...",
+    "loadingSuite": "Ładowanie zestawu...",
+    "couldNotLoadSuite": "Nie udało się załadować tego zestawu."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "Zapytaj AI",
     "askAiTitle": "Zapytaj asystenta Chat o to uruchomienie",
     "noNodeSpans": "Dla tego uruchomienia nie zapisano żadnych spanów węzłów.",
-    "queuedProgress": "W kolejce {position}/{size}"
+    "queuedProgress": "W kolejce {position}/{size}",
+    "clickToSelectRun": "Kliknij, aby wybrać to uruchomienie",
+    "doubleClickOrOpenNewTab": "Kliknij dwukrotnie, aby przenieść to uruchomienie na płótno, Ctrl/Cmd+kliknięcie, aby otworzyć w nowej karcie"
   },
   "portal": {
     "loadingPortal": "Ładowanie portalu...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "Serwer MCP",
-    "subtitle": "Udostępnij swoje workflows jako narzędzia MCP dla asystentów AI",
+    "subtitle": "Udostępniaj swoje workflowy jako narzędzia MCP oraz Heym Agent przez MCP i A2A",
     "connection": "Połączenie MCP",
     "connectionSubtitle": "Połącz asystenta AI z Workflows za pośrednictwem protokołu MCP.",
     "apiKeyTab": "Klucz API",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "W sekcji Aplikacje niestandardowe kliknij Dodaj aplikację niestandardową",
     "geminiStep3": "Wklej powyższy adres URL serwera MCP i pozostaw Funkcje zaawansowane zamknięte; Gemini zarejestruje się automatycznie",
     "geminiStep4": "Kliknij Dalej i autoryzuj przy użyciu danych logowania Heym",
-    "geminiInfo": "Gemini używa protokołu OAuth do bezpiecznego uwierzytelniania. Dane uwierzytelniające Heym służą do autoryzacji dostępu i nigdy nie są udostępniane Gemini. Po połączeniu Heym działa również w aplikacji mobilnej Gemini."
+    "geminiInfo": "Gemini używa protokołu OAuth do bezpiecznego uwierzytelniania. Dane uwierzytelniające Heym służą do autoryzacji dostępu i nigdy nie są udostępniane Gemini. Po połączeniu Heym działa również w aplikacji mobilnej Gemini.",
+    "agentReach": {
+      "off": "Wyłączone: klienci MCP i A2A nie mogą połączyć się z Heym Agent",
+      "unconfigured": "Wybierz poświadczenie i model, aby Heym Agent mógł działać",
+      "mcpA2a": "Dostępny przez MCP i A2A",
+      "mcpOnly": "Dostępny jako heym_chat przez MCP"
+    },
+    "a2aEnabledOnServer": "Włączono A2A na „{name}”",
+    "a2aEnabled": "Włączono A2A",
+    "a2aDisabledOnServer": "Wyłączono A2A na „{name}”",
+    "a2aDisabled": "Wyłączono A2A",
+    "agentAndA2aDisabledOnServer": "Heym Agent i A2A wyłączone na „{name}”",
+    "agentAndA2aDisabled": "Heym Agent i A2A wyłączone",
+    "a2a": {
+      "enable": "Włącz A2A",
+      "description": "Inni agenci mogą przesyłać zadania do Heym Agent za pośrednictwem protokołu Agent2Agent (A2A 1.0). Uwierzytelniają się kluczem tego serwera w nagłówku X-MCP-Key lub przez Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Sprawdź, czy karta jest aktywna:",
+      "copyLabel": "Kopiuj {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Panel analityczny",
@@ -2087,6 +2119,25 @@
       "errors": "Błędy",
       "avgLatencyMs": "Średnie opóźnienie (ms)",
       "latencyTitle": "Średnie opóźnienie w czasie"
+    },
+    "last1Hour": "Ostatnia godzina",
+    "last3Hours": "Ostatnie 3 godziny",
+    "last6Hours": "Ostatnie 6 godzin",
+    "nodeTypes": "Typy węzłów",
+    "nodeChart": {
+      "emptyMessage": "Brak danych węzłów dla tego okresu. Analityka węzłów jest rejestrowana dla uruchomień po tej aktualizacji.",
+      "duration": {
+        "title": "Węzły o najdłuższym czasie",
+        "subtitle": "Średni czas trwania na wywołanie"
+      },
+      "errors": {
+        "title": "Najbardziej zawodne typy węzłów",
+        "subtitle": "Błędy w czasie"
+      },
+      "calls": {
+        "title": "Najczęściej wywoływane typy węzłów",
+        "subtitle": "Wywołania w czasie"
+      }
     }
   },
   "dashboards": {

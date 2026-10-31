@@ -11,7 +11,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from app.api import chat_build
 from app.api.ai_assistant import DASHBOARD_CHAT_TOOLS, FileAttachment
 from app.db.models import CredentialType, Workflow, WorkflowVersion
-from app.services.chat_build_mode import MAX_BUILD_TEST_RUNS, BuildRequest
+from app.services.chat_build_mode import MAX_BUILD_TEST_RUNS, BuildRequest, BuildToolOutcome
+from app.services.chat_eval_mode import EVAL_TOOL_NAMES
 from app.services.credential_catalog import CatalogCredential, CredentialPromptMode
 
 DSL = {
@@ -52,6 +53,27 @@ AGENT_DSL = {
         },
     ],
     "edges": [{"id": "e1", "source": "start", "target": "writer"}],
+}
+
+
+WIDGET_DSL = {
+    "name": "Open cases",
+    "description": "Cases still open",
+    "nodes": [
+        {
+            "id": "rows",
+            "type": "set",
+            "position": {"x": 0, "y": 0},
+            "data": {"label": "rows", "mappings": [{"key": "rows", "value": "$array(1, 2)"}]},
+        },
+        {
+            "id": "chart",
+            "type": "chartOutput",
+            "position": {"x": 300, "y": 0},
+            "data": {"label": "chart", "chartType": "numeric", "dataPath": "rows"},
+        },
+    ],
+    "edges": [{"id": "e1", "source": "rows", "target": "chart"}],
 }
 
 
@@ -213,6 +235,50 @@ class ChatBuildSessionTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.target.name, "Lead intake")
         self.assertEqual(session.progress.workflow_id, self.target.id)
 
+    def _widget_target(self) -> Workflow:
+        return Workflow(
+            id=uuid.uuid4(),
+            owner_id=self.user.id,
+            name="Widget",
+            description=None,
+            kind="dashboard_widget",
+            nodes=[],
+            edges=[],
+        )
+
+    async def test_saving_a_widget_workflow_carries_onto_its_widget(self) -> None:
+        self.target = self._widget_target()
+        session = self._session()
+        sync = AsyncMock()
+
+        with patch.object(chat_build, "sync_dashboard_widget", sync):
+            outcome = await session.call(
+                "save_workflow", {"workflow_id": str(self.target.id), "workflow": WIDGET_DSL}
+            )
+
+        self.assertEqual(json.loads(outcome.result)["status"], "saved")
+        sync.assert_awaited_once_with(
+            self.db, self.target, renamed=True, described=True, graph_changed=True
+        )
+
+    async def test_a_widget_workflow_without_a_chart_is_refused(self) -> None:
+        self.target = self._widget_target()
+        session = self._session()
+        nodes = [n for n in WIDGET_DSL["nodes"] if n["type"] != "chartOutput"]
+
+        outcome = await session.call(
+            "save_workflow",
+            {
+                "workflow_id": str(self.target.id),
+                "workflow": {**WIDGET_DSL, "nodes": nodes, "edges": []},
+            },
+        )
+
+        self.assertEqual(outcome.status, "error")
+        self.assertIn("chartOutput", outcome.result)
+        self.db.commit.assert_not_awaited()
+        self.assertEqual(self.target.nodes, [])
+
     async def test_save_refuses_another_workflow_on_a_targeted_turn(self) -> None:
         target = uuid.uuid4()
         session = self._session(target=target)
@@ -371,6 +437,42 @@ class ChatBuildSessionTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn(f'"Lead intake" ({self.target.id})', prompt)
         self.assertIn("## Workflow DSL reference", prompt)
         self.assertIn("## Current Workflow Context", prompt)
+        self.assertIn("## Eval suites", prompt)
+
+    async def test_build_turns_offer_the_eval_tools_and_hand_them_over(self) -> None:
+        session = self._session()
+        names = [t["function"]["name"] for t in session.tools(DASHBOARD_CHAT_TOOLS)]
+        self.assertTrue(EVAL_TOOL_NAMES <= set(names))
+        self.assertEqual(names[-3:], ["save_workflow", "run_workflow_test", "finish"])
+        self.assertTrue(session.handles("run_eval_suite"))
+        self.assertEqual(session.step_label("save_prompt_suite"), "Saving the prompt suite...")
+        self.assertEqual(
+            session.display_args("save_prompt_suite", {"name": "x", "test_cases": [{}, {}]}),
+            {"name": "x", "test_cases": 2},
+        )
+        outcome = BuildToolOutcome(result="{}", summary="2 suites", status="success")
+        with patch.object(session.evals, "call", AsyncMock(return_value=outcome)) as call:
+            self.assertIs(await session.call("list_eval_suites", {}), outcome)
+        call.assert_awaited_once_with("list_eval_suites", {})
+
+    async def test_skill_only_turns_get_no_eval_tools(self) -> None:
+        session = chat_build.ChatBuildSession(
+            db=self.db,
+            user=self.user,
+            request=BuildRequest(skill_only=True),
+            selected_credential=SimpleNamespace(
+                id=uuid.uuid4(), owner_id=self.user.id, type="openai"
+            ),
+            model="gpt-5.5",
+            credential_mode=CredentialPromptMode.ASK_AND_CREATE,
+            public_base_url="http://localhost",
+            cancel_event=None,
+            llm_session_id="conv-1",
+        )
+        names = {t["function"]["name"] for t in session.tools(DASHBOARD_CHAT_TOOLS)}
+        self.assertFalse(EVAL_TOOL_NAMES & names)
+        self.assertFalse(session.handles("save_prompt_suite"))
+        self.assertIsNone(session.evals)
 
     async def test_tools_replace_the_ai_builder_and_follow_the_budget(self) -> None:
         session = self._session()

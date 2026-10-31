@@ -173,7 +173,7 @@ Atunci când un workflow salvează, stochează sau caută înregistrări și nu 
 
 Selectați tabelul nou și apăsați **Trimiteți răspunsurile**: cardul creează tabelul, iar asistentul plasează id-ul acestuia pe nod și utilizează numele exacte ale coloanelor sale. De asemenea, puteți solicita un tabel separat, de exemplu „creați un tabel pentru clienții mei potențiali”.
 
-Asistentul vede numele tabelelor, descrierile și coloanele, niciodată rândurile. Nu modifică niciodată coloanele unui tabel existent: dacă unui tabel îi lipsește o coloană de care are nevoie workflow-ul, acesta numește coloana și oferă în schimb un tabel nou. Adăugați coloane în [fila DataTable](../tabs/datatable-tab.md).
+Asistentul din canvas vede numele tabelelor, descrierile și coloanele, niciodată rândurile. Acesta configurează nodurile de workflow din acele metadate; adăugați coloane în [fila DataTable](../tabs/datatable-tab.md) sau solicitați în [Chat](../tabs/chat-tab.md). Chat și `heym_chat` pot inspecta rânduri și pot adăuga sau elimina direct coloane și pot introduce, actualiza sau șterge rânduri în tabelele pe care le dețineți sau la care aveți acces de scriere, inclusiv partajările de echipă. Eliminarea coloanelor și ștergerea tuturor rândurilor solicită confirmare înainte de ștergerea datelor.
 
 ## Resurse conexe
 

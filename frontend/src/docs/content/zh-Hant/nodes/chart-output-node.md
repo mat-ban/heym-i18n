@@ -10,7 +10,7 @@
 | 輸出 | 0（終端） |
 | 輸出 | 標準化 chart payload |
 
-將此節點放在 dashboard-widget workflow 的**最後**。其前一個節點應產生資料列物件的陣列，例如：
+將此節點放在 dashboard-widget workflow 的**最後**。對於實體關聯，其前一個節點會產生圖形物件（請參閱 [Entity relationships](#entity-relationships-db)）。其他資料驅動的圖表則使用資料列物件陣列，例如：
 
 ```json
 [
@@ -26,9 +26,9 @@
 | 參數 | 類型 | 說明 |
 |-----------|------|-------------|
 | `label` | string | 節點識別碼（camelCase） |
-| `chartType` | string | `pie`、`bar`、`line`、`area`、`table`、`numeric`、`gauge`、`scatter`、`proportion`、`barGauge`、`text` 或 `hitl` |
+| `chartType` | string | `pie`、`bar`、`line`、`area`、`table`、`numeric`、`gauge`、`scatter`、`proportion`、`barGauge`、`gantt`、`erDiagram`、`text` 或 `hitl` |
 | `orientation` | string | `vertical` 或 `horizontal`（僅限 bar charts） |
-| `dataPath` | string | 上游輸出中資料列陣列所在的點路徑（例如 `data` 或 `result.items`）。留空以自動偵測。 |
+| `dataPath` | string | 上游輸出中資料列陣列（或 `erDiagram` 的圖形物件）所在的點路徑（例如 `data` 或 `result.items`）。留空以自動偵測。 |
 | `labelField` | string | 用作類別標籤的資料列鍵（pie/bar/line） |
 | `valueField` | string | 用作數值的資料列鍵（pie/bar/line/numeric/gauge） |
 | `series` | array | 選用的多系列定義 `[{ "name": "Sent", "field": "sent" }]`，用於 bar/line（會覆寫 `valueField`） |
@@ -54,8 +54,51 @@
 - **scatter** — 由 `xField` 與 `yField` 取得的 X/Y 點，用於相關性圖。 
 - **proportion** — 單一水平長條，分割為各佔比並附百分比圖例（例如語言分佈）。使用 `labelField` + `valueField`。
 - **barGauge** — 每一列一個水平 gauge，具有紅→綠漸層與數值（例如可用磁碟空間）。使用 `labelField` + `valueField`，可搭配選用的 `unit` 與 `max`（預設為最大的資料列值）。
+- **gantt** — 包含日期、進度與相依性的工作排程；請參閱 [甘特圖排程](#gantt-schedules)。
+- **erDiagram** — 資料庫實體、欄位、主鍵/外鍵與關聯；請參閱 [Entity relationships](#entity-relationships-db)。
 - **text** — 一段 markdown 訊息（例如狀態備註，如「Last execution at 19:47」）。將 markdown 放入 `text` 以顯示靜態訊息，或將 `text` 留空並設定 `valueField`，以渲染上游產生的字串。支援標題、粗體／斜體、[清單](../nodes/chart-output-node.md#interactive-task-lists)、連結與行內程式碼。
 - **hitl** — 你待處理的人工審查的輪播。標頭顯示 `1/n pending`；左箭頭在第一張卡片時停用，右箭頭在最後一張時停用。workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 會解決該項目，而 widget 標題旁的歷史圖示會於同一頁面的歷史對話框中開啟該次執行。此 chart type 會忽略上游資料列，因此 widget workflow 僅有 Chart Output 節點。每位已登入的使用者會看到其所擁有 workflow 的審查項目。 在節點屬性或小工具設定中選擇一個 **Workflow**（若有多個審核步驟，則還需選擇 **Select agent**），即可改為向所有能開啟該 Workflow 的人顯示其審核；請參閱 [HITL 小工具](../tabs/dashboard-tab.md#hitl-widgets)。
+
+### 甘特圖排程
+
+選擇 **Gantt**（`gantt`）以呈現專案時程與工作時間軸。將 `dataPath` 設定為工作陣列，例如 `tasks`。資料列使用固定的欄位名稱：
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` 與 `end` 接受 ISO 日期或日期時間。未包含時區的值將使用 UTC；時區位移量會轉換為 UTC。`end` 必須等於或晚於 `start`。`progress` 為選填（0–100，預設為 0）；`dependencies` 包含現有的工作 ID。ID 必須保持唯一。將滑鼠懸停於工作上可檢視完整日期、進度與相依性。大型圖表可在小工具內部捲動。最多接受 500 個工作。
+
+針對範例資料，名為 `tasks` 的 Set 對應可使用 `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`。將其連接至 Chart Output，並設定 `chartType: "gantt"` 與 `dataPath: "tasks"`。使用 Set 節點將來源欄位對應至這些固定名稱；不使用 `labelField` 與 `valueField`。
+
+### Entity relationships (DB)
+
+選擇 **Entity relationships (DB)**（`erDiagram`）以呈現資料庫結構綱要與實體連線。將 `dataPath` 設定為包含這兩個陣列的圖形**物件**，例如 `graph`：
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+欄位具備 `name`、選填的 `type` 與選填的 `key`（`PK`、`FK`、`PK/FK` 或留空）。關聯參照現有的實體 ID；選填的 `sourceField` 與 `targetField` 會將連線固定至具名欄位。`cardinality` 接受 `one-to-one`、`one-to-many`（預設）、`many-to-one` 或 `many-to-many`。實體 ID 以及每個實體內的欄位名稱皆必須唯一。最多接受 100 個實體、每個實體 100 個欄位與 500 個關聯。
+
+使用 Set 節點透過 `$dict(entities=array(dict(...)), relations=array(dict(...)))` 建構 `graph`；使用 `chartType: "erDiagram"` 與 `dataPath: "graph"`。這是所提供結構綱要的可視化呈現；它不會自動檢查線上即時資料庫。
+
+這兩種類型都會隨附預覽出現在 **新增小工具** 中，並出現在畫布節點的圖表類型選取器中。當您描述時程或資料庫綱要時，Heym Work 可以建議這些類型，在您建構頁面之前繪製所建議工作或實體的預覽。
 
 ### 互動式任務清單
 

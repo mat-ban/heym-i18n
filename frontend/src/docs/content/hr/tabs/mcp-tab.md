@@ -1,6 +1,6 @@
-# MCP Kartica
+# MCP / A2A Kartica
 
-Kartica **MCP** konfigurira integraciju Model Context Protocol (MCP). MCP omogućuje AI klijentima (Claude, ChatGPT, Gemini, Cursor i bilo kojem alatu kompatibilnom s MCP-om) da pozivaju Vaše Heym workflows kao alate.
+Kartica **MCP** konfigurira integraciju Model Context Protocol (MCP), te kao [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) poslužitelji kojima drugi agenti mogu delegirati zadatke. MCP omogućuje AI klijentima (Claude, ChatGPT, Gemini, Cursor i bilo kojem alatu kompatibilnom s MCP-om) da pozivaju Vaše Heym workflows kao alate.
 
 Heym podržava dva načina: **zadani poslužitelj** koji izlaže sve workflows omogućene za MCP pod jednim endpointom, i **imenovane poslužitelje** koji daju svakoj logičkoj grupi workflows vlastitu posvećenu URL adresu i API ključ.
 
@@ -51,7 +51,7 @@ Workflow s [ograničenjem istodobnosti](../reference/webhooks.md#concurrency-lim
 ```
 
 Klijent proziva alat `heym_execution_status` s tim `execution_id`. On vraća isto tijelo kao i [URL statusa](../reference/webhooks.md#status-url): `queued` s trenutnom pozicijom, `running`, zatim `success` ili `error` s izlazima. Pronalazi samo pokretanja onih workflows koje isti poslužitelj izlaže. Alat je naveden na zadanom poslužitelju i na svakom imenovanom poslužitelju samo dok barem jedan od njegovih workflows ima ograničenje istodobnosti. Kada je red čekanja pun, poziv vraća pogrešku „Concurrency queue is full“.
-## Heym Chat Alat
+## Heym Agent
 
 Odjeljak **Heym Mogućnosti** pretvara Chat tab motor u jedan MCP alat nazvan `heym_chat`. Omogućite ga na zadanom poslužitelju, na bilo kojem imenovanom poslužitelju ili na oba — svaka površina zadržava svoj vlastiti preklopnik i odabir modela.
 
@@ -60,15 +60,20 @@ Kada je uključen, `heym_chat` se pojavljuje u `tools/list` uz Vaše workflow al
 - Izgradnja workflowa, testno pokretanje s oglednim ulazima, popravljanje i završetak kada pokretanje uspije (pogledajte [Način izgradnje](#build-mode))
 - Inspekcija i pokretanje Vaših postojećih workflowa
 - Izvještavanje o analitici, nedavnim izvršavanjima i nadolazećim cron rasporedima.
+- Objašnjava gdje workflowi ne uspijevaju i zašto su spori: workflowe koji su se najčešće izvodili, najviše puta podbacili i koji su najsporiji, kao i tipove čvorova s najviše vremena, pogrešaka i poziva tijekom posljednjih 1, 3 ili 6 sati, 24 sata, 7 ili 30 dana ili za sve vrijeme
 - Izvještavanje o povijesti izvršavanja jednog workflow-a: koliko je puta pokrenut, brojevi statusa, kada je pokrenut, i na zahtjev ulazi, izlazi i greške po čvoru jednog izvršavanja.
 - Izvještavanje o tome što se trenutno izvršava: koliko je izvršavanja aktivno, njihova imena workflow-a, koliko dugo svako traje, na kojem se čvoru trenutno nalazi, i poveznica na aktivno izvršavanje.
 - Popis ploča, kreiranje kartica i čitanje detalja kartica na [Board tab](./board-tab.md).
-- Popis Vaših tablica podataka s njihovim stupcima, kreiranje novih i povezivanje u workflows koje gradi.
+- Prikazuje vaše nadzorne ploče (stranice Heym Worka) i njihove widgete, pronalazi na kojoj se nadzornoj ploči nalazi workflow, dodaje novi widget i gradi njegov workflow, postavlja postojeći workflow kao widget, preimenuje ili briše widgete ili uređuje raspored (pogledajte [Dashboard › Iz Chata i MCP-a](./dashboard-tab.md#from-chat-and-mcp))
+- Pregledava podatkovne tablice i retke, stvara tablice, dodaje ili uklanja stupce, umeće, ažurira ili briše retke te povezuje tablice u workflowe
+- Stvara, uređuje i pokreće evaluacijske pakete promptova i agenata ([Eval suites](./evals-tab.md#from-chat-and-mcp)), uključujući polaznu osnovu agenta: prijavljenu, izgrađenu iz izvođenja ili navedenu brojkama. Rezultat navodi vezu Evals za svaki spremljeni paket.
 - Stvaranje ili ažuriranje vjerodajnica na vlastitoj stranici Heyma (pogledajte [Vjerodajnice](#vjerodajnice))
 - Čitanje timova i globalnih varijabli, te pretraživanje dokumentacije.
 - Odobravanje, uređivanje ili odbijanje čekajućih recenzija ljudi u petlji.
 
 Mogućnosti dodane u Chat tab kasnije postaju dostupne putem `heym_chat` automatski — ne postoji preklopnik po mogućnosti za održavanje sinkronizacije.
+
+Ove mogućnosti rade unutar `heym_chat`: `tools/list` prikazuje `heym_chat` i vaše alate za workflow, nikada interne alate chata kao što su oni za evaluacijske pakete.
 
 ### Način izgradnje
 
@@ -121,6 +126,14 @@ LLM i Agent čvorovi u workflowu koji `heym_chat` gradi pokreću se na ovoj vjer
 Svaki poziv zapisuje se u Vaš [Chat tab](./chat-tab.md) povijest kao normalan razgovor, označen ikonom utikača u popisu razgovora. Poruke, kartice alata i pauze za pojašnjenje izgledaju točno kao razgovor koji ste sami započeli, a možete otvoriti nit i nastaviti razgovor u pregledniku. Svaki rezultat vraća svoj `conversation_id` tako da MCP klijent može nastaviti istu nit umjesto da otvara novu pri svakom pozivu.
 
 Kada asistent treba pojašnjenje, pauzira i to kaže; odgovorite s odgovorima koristeći isti `conversation_id`.
+### Omogući A2A
+
+Dok je Heym Agent uključen, kartica prikazuje potvrdni okvir **Omogući A2A**. Označite ga i drugi agenti moći će slati zadatke Heym Agentu putem protokola Agent2Agent (A2A 1.0). Kartica zatim navodi URL za **Agent Card** i krajnju točku **JSON-RPC endpoint**, svaka s gumbom za kopiranje, te naredbu `curl` koja dohvaća karticu. A2A koristi isti ključ i OAuth prijavu kao MCP. Isključivanjem agenta isključuje se i A2A. Pogledajte [A2A](../reference/a2a.md) za metode, stanja zadataka i primjer.
+
+### Napredak
+
+Dugi poziv `heym_chat` prijavljuje što agent radi kao napredak u MCP-u (`notifications/progress`), istim riječima koje prikazuje kartica Chat, na primjer `Testiranje workflowa · pokušaj 2/5`. Klijenti koji poništavaju svoje vremensko ograničenje pri primitku obavijesti o napretku nastavljaju čekati dok agent radi.
+
 ## Imenovani MCP poslužitelji
 
 Imenovani poslužitelji omogućuju segmentiranje workflows-a u izolirane MCP endpoint-e. Svaki poslužitelj ima svoju URL adresu i API ključ, tako da različiti AI klijenti, timovi ili slučajevi upotrebe mogu povezati točno one workflows-e koji su im potrebni.
@@ -140,7 +153,9 @@ Svaka kartica poslužitelja prikazuje:
 | **SSE Endpoint** | Jedinstvena URL adresa: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Ključ** | Nezavisni ključ, prikazan jednom kada je generiran ili regeneriran. Kopirajte ga odmah; pohranjuje se u hashiranom obliku i ne može se kasnije otkriti |
 | **Kako se povezati** | **Kopiraj JSON** kopira spremnu MCP konfiguraciju; **Dodaj u Cursor** instalira je jednim klikom |
-| **Heym Mogućnosti** | Uključite alat `heym_chat` za ovaj poslužitelj i odaberite njegove vjerodajnice i model |
+| **Heym Capabilities** | Uključite ili isključite Heym Agenta (`heym_chat`) za ovaj poslužitelj i odaberite njegove vjerodajnice i model |
+| **Omogući A2A** | Vlastiti A2A prekidač ovog poslužitelja, s vlastitom Agent Card na `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Omogući A2A** | Vlastiti A2A prekidač ovog poslužitelja, s vlastitom Agent Card na `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Dodijeljeni Workflows** | Uključite koji od Vaših workflows-a ovaj poslužitelj izlaže |
 
 ### Dodjela Workflows-a

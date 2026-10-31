@@ -51,6 +51,8 @@ Ouvrir un workflow à l'adresse `/workflows/{workflowId}/{executionId}` amène a
 
 ### Cas d'usage
 
+Faites Ctrl/Cmd+clic sur une exécution dans l'une des listes d'historique pour ouvrir ce lien direct dans un nouvel onglet du navigateur. L'onglet actuel et la boîte de dialogue ouverte restent inchangés. Les exécutions de chat et d'assistant n'ont pas de workflow, le raccourci se contente donc de les sélectionner, comme un clic standard.
+
 - Relancer un workflow avec les mêmes entrées
 - Déboguer une exécution échouée en inspectant les entrées et les sorties des nœuds
 - Comparer les sorties entre plusieurs exécutions

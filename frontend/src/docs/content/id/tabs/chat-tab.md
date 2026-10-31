@@ -23,7 +23,8 @@ Anda juga dapat memulai percakapan dari kotak chat pada [tab Workflows](./workfl
 - **Tindak lanjut dalam antrean** – Kirim lebih banyak pesan saat jawaban sedang streaming. Pesan dalam antrean disimpan secara persisten, dapat diedit atau dihapus sebelum dimulai, dan dijalankan secara berurutan setelah respons aktif
 - **Jeda perencanaan** – Ketika Chat memerlukan detail perencanaan, Chat mengajukan pertanyaan klarifikasi dan menjeda tindak lanjut dalam antrean hingga Anda menjawab. Setelah jawaban perencanaan selesai, pesan dalam antrean dilanjutkan
 - **Credentials** – Ketika Workflow yang dibuat atau diedit oleh Chat memerlukan credential, Chat menanyakan credential mana yang akan digunakan, menawarkan untuk membuat yang baru dalam percakapan, atau memungkinkan Anda melanjutkan tanpa credential. Anda juga dapat meminta Chat membuat credential atau memperbarui credential yang Anda miliki; Chat membuka formulir credential dalam percakapan. Model hanya melihat nama dan tipe credential, tidak pernah nilainya, baik untuk credential yang Anda miliki maupun yang dibagikan kepada Anda. Node LLM dan Agent yang ditambahkan Chat berjalan dengan credential dan model yang dipilih untuk chat, termasuk credential bersama; saat Chat mengedit workflow, node LLM dan Agent yang ada tetap mempertahankan credential dan modelnya. Lihat [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Data tables** – Ketika Workflow yang dibuat atau diedit oleh Chat menyimpan record, Chat menanyakan [data table](./datatable-tab.md) mana yang akan digunakan atau menawarkan untuk membuatnya dengan kolom yang dibutuhkan Workflow. Chat juga dapat menampilkan daftar tabel Anda beserta kolomnya. Chat tidak pernah membaca atau menulis baris. Lihat [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Tanyakan [dashboards](./dashboard-tab.md) apa saja yang Anda miliki, apa yang ada di dalamnya, atau di dasbor mana sebuah workflow berada. Minta Chat untuk menambahkan widget baru ke dasbor (menempatkan widget kosong di sana, lalu membangun dan menguji workflow-nya), menempatkan workflow yang ada ke dasbor sebagai widget, mengganti nama atau menghapus widget, atau merapikan tata letak dasbor. Heym Work menampilkan dasbor ini sebagai halamannya. Lihat [Dashboard › Dari Chat dan MCP](./dashboard-tab.md#dari-chat-dan-mcp)
+- **Tabel data** – Ketika workflow yang dibuat atau diedit oleh Chat menyimpan catatan, Chat menanyakan [tabel data](./datatable-tab.md) mana yang akan digunakan atau menawarkan untuk membuat yang baru dengan kolom yang diperlukan. Ini juga dapat memeriksa baris, menambah atau menghapus kolom, dan menyisipkan, memperbarui, atau menghapus baris secara langsung pada tabel yang Anda miliki atau dapat diedit. Berikan nama tabel atau tautan DataTable. Penghapusan kolom dan pengosongan semua baris meminta konfirmasi; penambahan kolom mempertahankan data yang ada. Lihat [Asisten AI › Tabel data](../reference/ai-assistant.md#data-tables)
 - **Respons streaming** – Lihat output model saat di-streaming
 - **Hentikan respons** – Hentikan jawaban yang sedang streaming kapan saja; menghentikan juga menghapus pesan dalam antrean untuk percakapan tersebut
 - **Rendering Markdown** – Respons mendukung pemformatan markdown, termasuk gambar inline
@@ -33,10 +34,11 @@ Anda juga dapat memulai percakapan dari kotak chat pada [tab Workflows](./workfl
 - **Input suara** – Gunakan tombol mikrofon untuk speech-to-text (didukung browser). Ketika perekaman berhenti, Heym dapat sedikit merapikan transkrip sebelum Anda mengirimnya
 - **Workflow terjadwal** – Tanyakan kapan Workflow cron berjalan (hari ini, minggu ini, bulan ini, atau rentang tanggal khusus). Asisten menggunakan data jadwal yang sama dengan tab [Scheduled](./scheduled-tab.md) dan dapat membatasi hasil pada Workflow yang Anda miliki atau menyertakan yang dibagikan kepada Anda
 - **Riwayat eksekusi Workflow** – Tanyakan tentang satu Workflow ("berapa kali laporan harian berjalan?", "apakah gagal?", "kapan terakhir berjalan?"). Chat mencari Workflow berdasarkan ID-nya dan menjawab dari jumlah eksekusi, rincian status, waktu eksekusi pertama dan terakhir, serta durasi rata-rata. Tanyakan mengapa suatu eksekusi gagal atau apa yang dikembalikannya, dan Chat kemudian membuka eksekusi tunggal tersebut untuk membaca input, output, dan error per-Node
+- **Di mana eksekusi gagal dan mengapa lambat** – Tanyakan di mana workflow Anda gagal atau mengapa lambat dan Chat menyebutkan workflow yang paling sering berjalan, paling banyak gagal, dan paling lambat, serta tipe node yang paling banyak memakan waktu (rata-rata per panggilan dan total), paling sering gagal, dan paling banyak berjalan, angka yang sama seperti pada tab [Analytics](./analytics-tab.md). Tipe node dihitung untuk eksekusi sejak rilis yang menambahkan analitik node. Tanyakan tentang satu jam terakhir, 3 atau 6 jam, 24 jam, 7 atau 30 hari, atau sepanjang waktu; jendela jam dimulai tepat pada jamnya, jadi "satu jam terakhir" pada pukul 15:20 mencakup 14:00 hingga sekarang.
 - **Status eksekusi langsung** – Tanyakan apa yang sedang berjalan saat ini dan Chat menjawab dengan jumlah, nama Workflow, berapa lama setiap eksekusi berjalan, Node mana yang sedang diproses, dan tautan langsung ke eksekusi langsung
 ## Menggunakan Chat dari MCP Client
 
-Mesin Chat juga dapat diakses dari luar browser. Aktifkan **Heym Chat Tool** di [tab MCP](./mcp-tab.md) dan MCP client — Claude, Cursor, serta apa pun yang mendukung MCP — akan mendapatkan satu tool `heym_chat` yang menjalankan mesin yang sama dengan seluruh kemampuannya.
+Engine Chat juga dapat diakses dari luar browser. Aktifkan **Heym Agent** di [tab MCP / A2A](./mcp-tab.md) dan klien MCP (Claude, Cursor, dan alat lain apa pun yang mendukung MCP) mendapatkan satu alat `heym_chat` yang menjalankan engine yang sama ini beserta seluruh kemampuannya. Centang juga **Aktifkan A2A** agar agen lain dapat mengiriminya tugas melalui [A2A](../reference/a2a.md); percakapan tersebut menampilkan ikon jaringan dalam daftar.
 
 Percakapan tersebut tersimpan dalam riwayat tab ini, ditandai dengan ikon plug pada daftar percakapan. Buka salah satunya untuk membaca apa yang diminta oleh client, melihat tool card yang dipicu, dan melanjutkan thread tersebut sendiri. Menjawab pertanyaan klarifikasi bekerja dengan cara yang sama, baik giliran dimulai dari sini maupun dari MCP client.
 
@@ -113,9 +115,58 @@ dapat memberikan jawaban yang berbeda.
 ## User Rules
 
 [User Rules](../reference/user-settings.md) (dikonfigurasi di Settings) secara otomatis disuntikkan ke setiap percakapan Chat sebagai instruksi tingkat sistem. Atur sekali untuk menerapkan preferensi persisten ke semua permintaan chat.
+
+## Bekerja dengan Evals
+
+Chat dapat membuat, mengubah, dan menjalankan suite di [Evals](./evals-tab.md), baik suite prompt maupun suite agent:
+
+- **Suite prompt**: "buat suite prompt untuk prompt balasan dukungan saya dengan 8 kasus uji dan bandingkan gpt-4o dengan gpt-4.1-mini". Chat menulis kasus uji beserta jawaban yang diharapkan, memilih metode penilaian, dan menyimpan suite.
+  - Sebelum membuat suite, Chat menentukan kredensial LLM dan model mana yang akan digunakan. Dengan tepat satu kredensial LLM, Chat menggunakannya dan memberitahukannya; jika tidak, Chat akan bertanya.
+  - Untuk penilaian LLM-as-Judge, Chat juga menanyakan apakah penilai terpisah harus menilai jawabannya.
+- **Suite agent**: "periksa apakah agen dukungan saya selalu mencari di dokumen dan tidak pernah mengirim email". Chat menemukan agen dan menyimpan pemeriksaan alat serta ambang batasnya. Saat Anda memintanya, Chat menjalankan workflow, menghasilkan input berbeda untuk setiap eksekusi.
+  - Eksekusi suite agent adalah eksekusi workflow yang sebenarnya, sehingga efek sampingnya benar-benar terjadi. Chat menyebutkan berapa banyak eksekusi yang dimulai.
+- **Baseline**: Chat dapat bekerja dengan garis dasar agen dalam tiga cara:
+  - Melaporkannya dari eksekusi terbaru agen.
+  - Membangunnya dari eksekusi yang dimulainya ("jalankan 5 kali dan gunakan itu sebagai baseline").
+  - Menyimpan angka yang Anda berikan ("atur baseline ke 3 detik p95 dan $0,01 per eksekusi").
+- **Eksekusi**: Chat menunggu hingga satu menit untuk sebuah eksekusi, lalu melaporkan hasilnya:
+  - Untuk suite prompt: jumlah kelulusan setiap model dan kasus yang gagal.
+  - Untuk suite agent: tingkat kelulusan, pemeriksaan yang gagal, dan penyimpangan dari baseline.
+  - Eksekusi yang lebih lama terus berjalan di Evals; minta Chat untuk memeriksanya lagi.
+
+Setelah Chat membuat atau mengubah suite, balasannya menampilkan kartu dengan nama suite, tipenya, dan tombol **Buka di Evals**, seperti kartu workflow yang disimpan. Melalui MCP, hasil `heym_chat` mencantumkan tautan setiap suite yang disimpan dalam panggilan tersebut.
+
+Hal yang sama berfungsi dari klien MCP melalui `heym_chat` (lihat [Menggunakan Chat dari Klien MCP](#menggunakan-chat-dari-klien-mcp)). Alat evaluasi tetap berada di dalam `heym_chat`; klien MCP tidak melihatnya sebagai alat terpisah.
+
+Asisten AI editor tidak membuat suite.
+
+## Bekerja dengan Evals
+
+Chat dapat membuat, mengubah, dan menjalankan suite di [Evals](./evals-tab.md), baik suite prompt maupun suite agent:
+
+- **Suite prompt**: "buat suite prompt untuk prompt balasan dukungan saya dengan 8 kasus uji dan bandingkan gpt-4o dengan gpt-4.1-mini". Chat menulis kasus uji beserta jawaban yang diharapkan, memilih metode penilaian, dan menyimpan suite.
+  - Sebelum membuat suite, Chat menentukan kredensial LLM dan model mana yang akan digunakan. Dengan tepat satu kredensial LLM, Chat menggunakannya dan memberitahukannya; jika tidak, Chat akan bertanya.
+  - Untuk penilaian LLM-as-Judge, Chat juga menanyakan apakah penilai terpisah harus menilai jawabannya.
+- **Suite agent**: "periksa apakah agen dukungan saya selalu mencari di dokumen dan tidak pernah mengirim email". Chat menemukan agen dan menyimpan pemeriksaan alat serta ambang batasnya. Saat Anda memintanya, Chat menjalankan workflow, menghasilkan input berbeda untuk setiap eksekusi.
+  - Eksekusi suite agent adalah eksekusi workflow yang sebenarnya, sehingga efek sampingnya benar-benar terjadi. Chat menyebutkan berapa banyak eksekusi yang dimulai.
+- **Baseline**: Chat dapat bekerja dengan garis dasar agen dalam tiga cara:
+  - Melaporkannya dari eksekusi terbaru agen.
+  - Membangunnya dari eksekusi yang dimulainya ("jalankan 5 kali dan gunakan itu sebagai baseline").
+  - Menyimpan angka yang Anda berikan ("atur baseline ke 3 detik p95 dan $0,01 per eksekusi").
+- **Eksekusi**: Chat menunggu hingga satu menit untuk sebuah eksekusi, lalu melaporkan hasilnya:
+  - Untuk suite prompt: jumlah kelulusan setiap model dan kasus yang gagal.
+  - Untuk suite agent: tingkat kelulusan, pemeriksaan yang gagal, dan penyimpangan dari baseline.
+  - Eksekusi yang lebih lama terus berjalan di Evals; minta Chat untuk memeriksanya lagi.
+
+Setelah Chat membuat atau mengubah suite, balasannya menampilkan kartu dengan nama suite, tipenya, dan tombol **Buka di Evals**, seperti kartu workflow yang disimpan. Melalui MCP, hasil `heym_chat` mencantumkan tautan setiap suite yang disimpan dalam panggilan tersebut.
+
+Hal yang sama berfungsi dari klien MCP melalui `heym_chat` (lihat [Menggunakan Chat dari Klien MCP](#menggunakan-chat-dari-klien-mcp)). Alat evaluasi tetap berada di dalam `heym_chat`; klien MCP tidak melihatnya sebagai alat terpisah.
+
+Asisten AI editor tidak membuat suite.
+
 ## Terkait
 
-- [Tab MCP](./mcp-tab.md) – Ekspos engine ini ke klien MCP sebagai tool `heym_chat`
+- [Tab MCP / A2A](./mcp-tab.md) – Ekspos engine ini ke klien MCP sebagai tool `heym_chat`
 - [Pengaturan](../reference/user-settings.md) – Tetapkan User Rules yang berlaku untuk semua permintaan chat
 - [Tab Credentials](./credentials-tab.md) – Tambahkan dan kelola API key
 - [Tab Variables](./global-variables-tab.md) – Variabel global yang tersedia untuk Chat

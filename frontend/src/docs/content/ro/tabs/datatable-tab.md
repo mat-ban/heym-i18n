@@ -73,11 +73,11 @@ Partajați tabelele cu alți utilizatori sau echipe:
 1. Deschideți dialogul de partajare din vizualizarea detaliată a tabelului
 2. Adăugați utilizatori după email cu permisiune de **read** sau **write**
 3. Adăugați echipe cu permisiune de **read** sau **write**
-4. Utilizatorii cu permisiune de citire pot vizualiza datele; utilizatorii cu permisiune de scriere pot modifica rândurile
+4. Utilizatorii doar-în-citire pot vizualiza datele; utilizatorii cu acces de scriere pot modifica rândurile și coloanele. Redenumirea tabelului, modificarea descrierii acestuia și gestionarea partajărilor rămân permise doar proprietarului.
 
 ## Crearea tabelelor din AI Assistant
 
-[AI Assistant](../reference/ai-assistant.md#data-tables) din canvas, [Chat](./chat-tab.md) și instrumentul `heym_chat` din [fila MCP](./mcp-tab.md) pot alege unul dintre tabelele dumneavoastră pentru un workflow pe care îl construiesc sau pot crea unul nou. Acestea propun un nume și coloane și creează tabelul când trimiteți cardul cu întrebarea. Nu modifică niciodată coloanele unui tabel existent și nu ating rândurile acestuia: adăugați sau editați coloanele aici.
+[Asistentul AI](../reference/ai-assistant.md#data-tables) din canvas, [Chat](./chat-tab.md) și instrumentul `heym_chat` din [fila MCP](./mcp-tab.md) pot alege unul dintre tabelele dvs. pentru un workflow pe care îl construiesc sau pot crea unul nou. Acestea propun un nume și coloane și creează tabelul când trimiteți cardul de întrebări. Asistentul din canvas configurează nodurile de workflow din metadatele tabelului. Chat și `heym_chat` pot, de asemenea, să inspecteze rânduri, să adauge sau să elimine coloane și să introducă, să actualizeze sau să șteargă rânduri direct. Numiți-le un tabel sau linkul acestei file. Scrierile necesită calitatea de proprietar sau acces direct/de echipă de **scriere**. Adăugarea de coloane păstrează datele existente; eliminarea coloanelor șterge valorile acestora din fiecare rând. Eliminarea coloanelor și ștergerea tuturor rândurilor cer confirmare, similar acestei file.
 
 ## Utilizarea în workflow-uri
 

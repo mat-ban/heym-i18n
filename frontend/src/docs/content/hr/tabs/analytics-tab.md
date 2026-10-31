@@ -15,6 +15,7 @@ Završni **Analytics** tab prikazuje metrike izvršavanja i trendove za Vaše wo
 
 ## Raspon Vremena
 
+- **1h**, **3h**, **6h** – Zadnji 1 sat, 3 sata ili 6 sati. Analitika se vodi po satima, pa ove opcije računaju početni sat prozora u cijelosti: Zadnji sat u 15:20 pokriva razdoblje od 14:00 do sada
 - **24h** – Posljednjih 24 sata
 - **7d** – Posljednjih 7 dana
 - **30d** – Posljednjih 30 dana
@@ -38,9 +39,19 @@ Dvije tablice prikazuju korištenje workflow-a: **Najviše korišteni** (šira) 
 - **Obujam izvršavanja tijekom vremena** – Linijski grafikon izvršavanja po vremenskim intervalima
 - **Stopa uspjeha naspram greške** – Područje grafikon koji uspoređuje zdrava i neuspješna pokretanja
 - **Prosječna latencija tijekom vremena** – Linijski grafikon koji prikazuje promjene vremena odgovora
-- **Povucite za odabir** – Kliknite i povucite na bilo kojem grafikonu da fokusirate prilagođeni raspon datuma
+- **Povuci za odabir** – Kliknite i povucite na bilo kojem grafikonu kako biste fokusirali prilagođeni datumski raspon. Odabir mora obuhvatiti najmanje dvije točke na grafikonu; običan klik ne odabire ništa
 - **Način odabira** – Odabrani rasponi osvježavaju sažetak kartica, grafikone i tablice workflow-a bez promjene osnovnog unaprijed postavljenog
 - **Očisti odabir** – Vratite se na unaprijed postavljeno vremensko razdoblje kada završite s istraživanjem
+
+## Vrste čvorova
+
+Ispod percentila latencije tri grafikona prikazuju kamo odlaze vrijeme i pogreške čvorova, grupirani prema vrsti čvora (Agent, HTTP Request, Code itd.) u svim prikazanim workflowima:
+
+- **Čvorovi s najviše utrošenog vremena** – 10 vrsta čvorova s najvećim ukupnim vremenom izvođenja, prikazanih kao prosječno trajanje po pozivu. Sat bez poziva određene vrste prikazuje **Nema poziva** u tooltipu.
+- **Vrste čvorova s najviše pogrešaka** – 10 vrsta čvorova s najviše pogrešaka (pogreška ili timeout), svaka s vlastitim brojem pogrešaka po vremenskom intervalu.
+- **Najčešće pozivane vrste čvorova** – 10 vrsta čvorova koji su se najviše izvodili, svaka s vlastitim brojem poziva po vremenskom intervalu. Preskočeni čvorovi se ne računaju.
+
+Zadržite pokazivač iznad grafikona kako biste vidjeli vrstu čvora ispod pokazivača, odmah pored njega. Vrsta čvora koja je premala da bi bila vidljiva pored najveće na grafikonu (ispod 1% njezine vrijednosti) izostavlja se iz tog grafikona i njegove legende. Grafikoni prate filtar workflowa, vremenski raspon i bilo koji raspon označen povlačenjem. Analitika čvorova bilježi se za pokretanja počevši od verzije koja ju je uvela, a dovršeno pokretanje pojavljuje se unutar otprilike jedne minute. Starija pokretanja se ne računaju.
 
 ## Automatsko Osvježavanje
 

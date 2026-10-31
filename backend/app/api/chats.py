@@ -3,9 +3,8 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-import re
 import uuid
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Awaitable, Callable
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from threading import Event
@@ -59,20 +58,24 @@ from app.models.chat_schemas import (
 )
 from app.services import chat_task_registry as registry
 from app.services.chat_build_mode import BuildRequest
+from app.services.chat_eval_mode import EVAL_SUITE_SAVED_EVENT
 from app.services.credential_access import get_accessible_credential
 from app.services.credential_catalog import CredentialPromptMode, build_credentials_prompt
 from app.services.credential_setup import CredentialFormTool
 from app.services.encryption import decrypt_config
-from app.services.hitl_service import build_public_base_url
-from app.services.llm_trace import LLMTraceContext
-from app.services.mcp_chat_service import (
-    MCPChatError,
-    MCPChatResult,
+from app.services.heym_agent.errors import AgentError
+from app.services.heym_agent.links import (
     WorkflowLink,
     absolutize_workflow_links,
+    eval_suite_link,
+    strip_hidden_markers,
     workflow_link,
 )
+from app.services.heym_agent.turn import AgentOutcome, AgentTurnResult, outcome_of
+from app.services.hitl_service import build_public_base_url
+from app.services.llm_trace import LLMTraceContext
 from app.services.mcp_elicitation import MCPClientChannel
+from app.services.prompt_suite_service import owned_suite_name
 from app.services.workflow_access import user_can_write_workflow
 
 router = APIRouter()
@@ -90,7 +93,7 @@ DEFAULT_QUICK_PROMPTS: list[str] = [
 ]
 MAX_QUICK_PROMPTS = 7
 MAX_PROMPT_LENGTH = 200
-CHAT_STREAM_HEARTBEAT_SECONDS = 10.0
+CHAT_STREAM_KEEPALIVE_SECONDS = 10.0
 CLARIFY_FENCE = "```heym-clarify"
 
 
@@ -107,6 +110,10 @@ class ChatTurn:
     build: BuildRequest | None = None
     # MCP turns: opens credential forms on Heym's own page (`request_credential_form`).
     credential_form: CredentialFormTool | None = None
+    # Agent turns: told about every stream event, so MCP and A2A clients can report progress.
+    on_event: Callable[[dict], Awaitable[None]] | None = None
+    # A2A turns: tags this turn's messages with their task, for the task's history.
+    a2a_task_id: uuid.UUID | None = None
 
 
 @dataclass(frozen=True)
@@ -116,11 +123,19 @@ class ChatTurnResult:
     stop_worker: bool = False
     # Ids from this turn's own `workflow_created` events, never from the model's text.
     saved_workflow_ids: tuple[str, ...] = ()
+    # Ids from this turn's own `eval_suite_saved` events, never from the model's text.
+    saved_eval_suite_ids: tuple[str, ...] = ()
 
 
 def _build_hidden_workflow_context_marker(workflow_id: str, workflow_name: str) -> str:
     safe_name = workflow_name.replace("--", "").strip()
     return f"\n<!-- heym-workflow-id:{workflow_id} heym-workflow-name:{safe_name} -->"
+
+
+def _build_hidden_eval_suite_marker(suite_id: str, suite_name: str) -> str:
+    """Keeps the suite's id in the history, so a later turn can change or run it."""
+    safe_name = suite_name.replace("--", "").strip()
+    return f"\n<!-- heym-eval-suite-id:{suite_id} heym-eval-suite-name:{safe_name} -->"
 
 
 def _ingest_tool_event(tool_calls_for_message: list[dict], payload: dict) -> None:
@@ -324,6 +339,14 @@ def request_chat_cancel(conv_id: str) -> bool:
     return found
 
 
+async def _notify_turn_event(on_event: Callable[[dict], Awaitable[None]], payload: dict) -> None:
+    """Tell an agent client about a stream event; a broken client never stops the turn."""
+    try:
+        await on_event(payload)
+    except Exception:  # noqa: BLE001 - progress is best effort
+        logger.warning("Agent progress callback failed", exc_info=True)
+
+
 async def _run_chat_turn(
     conv_id: str,
     user_id: uuid.UUID,
@@ -392,6 +415,7 @@ async def _run_chat_turn(
                 cancel_event = Event()
                 _cancel_events[conv_id] = cancel_event
             workflow_note_ids: list[str] = []
+            eval_suite_ids: list[str] = []
 
             build: ChatBuildSession | None = None
             if turn.build is not None:
@@ -461,8 +485,18 @@ async def _run_chat_turn(
                             workflow_context_markers.append(
                                 _build_hidden_workflow_context_marker(w_id, w_name or "Workflow")
                             )
+                    elif ptype == EVAL_SUITE_SAVED_EVENT:
+                        s_id = str(payload.get("suite_id") or "").strip()
+                        s_name = str(payload.get("suite_name") or "").strip()
+                        if s_id and s_id not in eval_suite_ids:
+                            eval_suite_ids.append(s_id)
+                            workflow_context_markers.append(
+                                _build_hidden_eval_suite_marker(s_id, s_name or "Eval suite")
+                            )
                     elif ptype in ("tool_start", "tool_end", "compressed"):
                         _ingest_tool_event(tool_calls_for_message, payload)
+                    if turn.on_event is not None and payload:
+                        await _notify_turn_event(turn.on_event, payload)
                 await _publish_payload_with_message_id(conv_id, chunk, assistant_message_id)
 
             assistant_content = "".join(assistant_chunks)
@@ -479,6 +513,7 @@ async def _run_chat_turn(
                         role="assistant",
                         content=assistant_content,
                         tool_calls=tool_calls_for_message or None,
+                        a2a_task_id=turn.a2a_task_id,
                     )
                 )
 
@@ -510,6 +545,7 @@ async def _run_chat_turn(
                 paused_for_clarification,
                 assistant_message_id,
                 saved_workflow_ids=tuple(workflow_note_ids),
+                saved_eval_suite_ids=tuple(eval_suite_ids),
             )
 
     except asyncio.CancelledError:
@@ -531,6 +567,7 @@ async def _run_chat_turn(
                         role="assistant",
                         content=assistant_content,
                         tool_calls=tool_calls_for_message or None,
+                        a2a_task_id=turn.a2a_task_id,
                     )
                 )
             conv_result = await cancel_db.execute(
@@ -786,16 +823,18 @@ async def _process_chat_queue(
 
 
 MCP_CONVERSATION_SOURCE = "mcp"
+A2A_CONVERSATION_SOURCE = "a2a"
 
 
-async def _get_or_create_mcp_conversation(
+async def _get_or_create_agent_conversation(
     db: AsyncSession,
     user_id: uuid.UUID,
     conversation_id: uuid.UUID | None,
     *,
+    source: str = MCP_CONVERSATION_SOURCE,
     for_update: bool = False,
 ) -> tuple[DashboardConversation, bool]:
-    """Resolve the conversation an MCP chat turn writes into.
+    """Resolve the conversation an agent turn writes into.
 
     Returns the conversation and whether it was just created, so the caller
     knows if the turn should also generate a title.
@@ -810,20 +849,28 @@ async def _get_or_create_mcp_conversation(
         result = await db.execute(query)
         conversation = result.scalar_one_or_none()
         if conversation is None:
-            raise MCPChatError("conversation_id does not match a conversation you can access.")
+            raise AgentError("conversation_id does not match a conversation you can access.")
         return conversation, False
 
     conversation = DashboardConversation(
         id=uuid.uuid4(),
         user_id=user_id,
         title=DEFAULT_CONVERSATION_TITLE,
-        source=MCP_CONVERSATION_SOURCE,
+        source=source,
     )
     db.add(conversation)
     return conversation, True
 
 
-async def run_mcp_chat_turn(
+async def create_agent_conversation(user_id: uuid.UUID, source: str) -> uuid.UUID:
+    """Start an empty conversation for an agent client that needs its id before the turn."""
+    async with async_session_maker() as db:
+        conversation, _ = await _get_or_create_agent_conversation(db, user_id, None, source=source)
+        await db.commit()
+        return conversation.id
+
+
+async def run_agent_chat_turn(
     *,
     user_id: uuid.UUID,
     message: str,
@@ -832,19 +879,24 @@ async def run_mcp_chat_turn(
     model: str,
     public_base_url: str,
     client: MCPClientChannel | None = None,
-) -> MCPChatResult:
-    """Run one dashboard chat turn started by the `heym_chat` MCP tool.
+    source: str = MCP_CONVERSATION_SOURCE,
+    on_event: Callable[[dict], Awaitable[None]] | None = None,
+    a2a_task_id: uuid.UUID | None = None,
+) -> AgentTurnResult:
+    """Run one dashboard chat turn for the Heym Agent (MCP `heym_chat` or A2A).
 
-    Reuses the Chat tab's turn worker so MCP-driven turns stream to any open Chat
+    Reuses the Chat tab's turn worker so agent-driven turns stream to any open Chat
     tab and persist messages, tool calls, and clarification pauses identically.
     `client` lets a credential form open in the user's browser while the turn waits.
+    The turn runs as its own task, registered like a Chat tab turn, so Stop in the
+    Chat tab and A2A `CancelTask` interrupt it right away.
     """
     async with async_session_maker() as db:
-        conversation, is_new = await _get_or_create_mcp_conversation(
-            db, user_id, conversation_id, for_update=True
+        conversation, is_new = await _get_or_create_agent_conversation(
+            db, user_id, conversation_id, source=source, for_update=True
         )
         if conversation.is_running:
-            raise MCPChatError(
+            raise AgentError(
                 "This conversation is already running. Wait for it to finish, or omit "
                 "conversation_id to start a new one."
             )
@@ -859,6 +911,7 @@ async def run_mcp_chat_turn(
                 role="user",
                 content=user_message["content"],
                 created_at=datetime.now(timezone.utc),
+                a2a_task_id=a2a_task_id,
             )
         )
         conversation.is_running = True
@@ -882,17 +935,37 @@ async def run_mcp_chat_turn(
         attachment_data=None,
         should_generate_title=should_generate_title,
         credential_mode=CredentialPromptMode.ASK_AND_LINK,
-        # heym_chat exists only when MCP chat is enabled, and it always builds.
+        # Agent turns exist only while the agent is enabled, and they always build.
         build=BuildRequest(),
         credential_form=credential_form,
+        on_event=on_event,
+        a2a_task_id=a2a_task_id,
     )
     await registry.create_task(conv_id)
+    turn_task = asyncio.create_task(_run_chat_turn(conv_id, user_id, turn, public_base_url))
+    _chat_tasks[conv_id] = turn_task
+    cancelled = False
     try:
-        result = await _run_chat_turn(conv_id, user_id, turn, public_base_url)
+        result = await turn_task
+    except asyncio.CancelledError:
+        current = asyncio.current_task()
+        if current is not None and current.cancelling():
+            raise
+        cancelled = True
     finally:
+        if _chat_tasks.get(conv_id) is turn_task:
+            _chat_tasks.pop(conv_id, None)
         _cancel_events.pop(conv_id, None)
         await _finish_worker_state(conv_id)
         await registry.finish(conv_id)
+
+    if cancelled:
+        return AgentTurnResult(
+            conversation_id=conv_uuid,
+            text="The turn was canceled.",
+            tool_names=[],
+            outcome=AgentOutcome.CANCELED,
+        )
 
     async with async_session_maker() as db:
         msg_result = await db.execute(
@@ -902,26 +975,54 @@ async def run_mcp_chat_turn(
         workflow_links = await _saved_workflow_links(
             db, user_id, result.saved_workflow_ids, public_base_url
         )
+        eval_suite_links = await _saved_eval_suite_links(
+            db, user_id, result.saved_eval_suite_ids, public_base_url
+        )
 
     if assistant_message is None:
-        raise MCPChatError("The assistant did not produce a reply. Try again.")
+        raise AgentError("The assistant did not produce a reply. Try again.")
 
     tool_calls = assistant_message.tool_calls or []
     tool_names = [str(call.get("name") or "") for call in tool_calls if call.get("name")]
     verified = any(
         call.get("name") == "finish" and call.get("status") == "success" for call in tool_calls
     )
-    return MCPChatResult(
+    form_urls = tuple(credential_form.waiting_urls)
+    return AgentTurnResult(
         conversation_id=conv_uuid,
         text=absolutize_workflow_links(
-            _strip_hidden_markers(assistant_message.content), public_base_url
+            strip_hidden_markers(assistant_message.content), public_base_url
         ),
         tool_names=tool_names,
-        awaiting_clarification=result.paused_for_clarification,
+        outcome=outcome_of(
+            cancelled=False,
+            form_urls=form_urls,
+            paused_for_clarification=result.paused_for_clarification,
+        ),
         verified=verified,
-        credential_form_urls=tuple(credential_form.waiting_urls),
+        credential_form_urls=form_urls,
         workflow_links=workflow_links,
+        eval_suite_links=eval_suite_links,
     )
+
+
+async def _saved_eval_suite_links(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    suite_ids: tuple[str, ...],
+    public_base_url: str,
+) -> tuple[WorkflowLink, ...]:
+    """Evals links for the suites a turn saved, limited to ones the user still owns."""
+    links: list[WorkflowLink] = []
+    for raw_id in suite_ids:
+        try:
+            suite_id = uuid.UUID(raw_id)
+        except ValueError:
+            continue
+        name = await owned_suite_name(db, suite_id, user_id)
+        if name is not None:
+            links.append(eval_suite_link(public_base_url, suite_id, name))
+    return tuple(links)
 
 
 async def _saved_workflow_links(
@@ -941,11 +1042,6 @@ async def _saved_workflow_links(
         if workflow is not None:
             links.append(workflow_link(public_base_url, workflow.id, workflow.name))
     return tuple(links)
-
-
-def _strip_hidden_markers(content: str) -> str:
-    """Drop the hidden HTML comment markers the Chat UI uses for workflow context."""
-    return re.sub(r"<!--\s*heym-workflow-id:.*?-->", "", content).strip()
 
 
 @router.get("", response_model=ConversationListResponse)
@@ -1460,7 +1556,7 @@ async def stream_conversation(
             while True:
                 try:
                     item = await asyncio.wait_for(
-                        queue.get(), timeout=CHAT_STREAM_HEARTBEAT_SECONDS
+                        queue.get(), timeout=CHAT_STREAM_KEEPALIVE_SECONDS
                     )
                 except TimeoutError:
                     yield ": ping\n\n"

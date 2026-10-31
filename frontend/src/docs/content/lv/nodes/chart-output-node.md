@@ -10,7 +10,7 @@
 | Izvades | 0 (terminālis) |
 | Izvade | Standartizēts diagrammas payload |
 
-Novietojiet šo mezglu **pēdējo** vadības paneļa logrīka workflow. Mezglam pirms tā jāģenerē rindu objektu masīvs, piemēram:
+Novietojiet šo mezglu **pēdējo** vadības paneļa logrīka workflow. Entītiju attiecībām mezgls pirms tā ģenerē grafa objektu (skatīt [Entity relationships](#entity-relationships-db)). Citas datu vadītas diagrammas izmanto rindu objektu masīvu, piemēram:
 
 ```json
 [
@@ -26,9 +26,9 @@ Ja ir pieejami tikai piemēra/parauga dati (bez reāla avota), ģenerējiet šī
 | Parametrs | Tips | Apraksts |
 |-----------|------|-------------|
 | `label` | string | Mezgla identifikators (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` vai `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` vai `hitl` |
 | `orientation` | string | `vertical` vai `horizontal` (tikai joslu diagrammām) |
-| `dataPath` | string | Punktu ceļš uz rindu masīvu iepriekšējā mezgla izvadē (piem., `data` vai `result.items`). Atstājiet tukšu, lai noteiktu automātiski. |
+| `dataPath` | string | Punktu ceļš uz rindu masīvu (vai grafa objektu `erDiagram`) iepriekšējā mezgla izvadē (piem., `data` vai `result.items`). Atstājiet tukšu, lai noteiktu automātiski. |
 | `labelField` | string | Rindas atslēga, ko izmanto kā kategorijas apzīmējumu (pie/bar/line) |
 | `valueField` | string | Rindas atslēga, ko izmanto kā skaitlisko vērtību (pie/bar/line/numeric/gauge) |
 | `series` | array | Neobligāta vairāku sēriju definīcija `[{ "name": "Sent", "field": "sent" }]` joslu/līniju diagrammām (aizstāj `valueField`) |
@@ -54,8 +54,51 @@ Ja ir pieejami tikai piemēra/parauga dati (bez reāla avota), ģenerējiet šī
 - **scatter** — X/Y punkti no `xField` un `yField` korelācijas grafikiem.
 - **proportion** — viena horizontāla josla, kas sadalīta daļās ar procentuālo leģendu (piem., valodu sadalījums). Izmanto `labelField` + `valueField`.
 - **barGauge** — viens horizontāls mērītājs katrai rindai ar sarkanu→zaļu gradientu un vērtību (piem., brīvā diska vieta). Izmanto `labelField` + `valueField`, neobligāmu `unit` un `max` (pēc noklusējuma lielākā rindas vērtība).
+- **gantt** — uzdevumu grafiki ar datumiem, progresu un atkarībām; skatīt [Ganta grafiki](#gantt-schedules).
+- **erDiagram** — datubāzes entītijas, lauki, atslēgas un attiecības; skatīt [Entity relationships](#entity-relationships-db).
 - **text** — markdown ziņojums (piem., statusa piezīme, piemēram, "Last execution at 19:47"). Ievietojiet markdown `text` laukā statiskam ziņojumam vai atstājiet `text` tukšu un iestatiet `valueField`, lai attēlotu virkni, kas ģenerēta iepriekšējos mezglos. Atbalsta virsrakstus, treknrakstu/slīprakstu, [sarakstus](../nodes/chart-output-node.md#interactive-task-lists), saites un iekļauto kodu.
 - **hitl** — karuselis ar Jūsu gaidošajām cilvēku pārbaudēm. Galvene rāda `1/n pending`; kreisā bultiņa ir atspējota pirmajā kartītē, bet labā bultiņa — pēdējā. Workflow nosaukums atver šo izpildi kanvā. **Approve**, **Request changes** un **Reject** to atrisina, un vēstures ikona blakus logrīka virsrakstam atver šo izpildi vēstures dialogā tajā pašā lapā. Šis diagrammas tips ignorē iepriekšējās rindas, tāpēc logrīka workflow sastāv tikai no Diagrammas izvades mezgla. Katra pierakstījusies persona redz pārbaudes workflow, kas pieder viņai. Mezgla rekvizītos vai logrīka iestatījumos izvēlieties **Workflow** (un **Select agent**, ja tam ir vairāki pārskatīšanas soļi), lai tā vietā tiktu rādītas šī Workflow pārskatīšanas visiem, kas to var atvērt; skatiet [HITL logrīki](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Ganta grafiki
+
+Izvēlieties **Gantt** (`gantt`) projektu grafikiem un uzdevumu laika skalām. Iestatiet `dataPath` uz uzdevumu masīvu, piemēram, `tasks`. Rindās tiek izmantoti fiksēti lauku nosaukumi:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` un `end` pieņem ISO datumus vai datuma/laika vērtības. Vērtības bez laika joslas izmanto UTC; laika joslu nobīdes tiek pārveidotas uz UTC. `end` jābūt vienādam ar `start` vai vēlākam. `progress` nav obligāts (0–100, pēc noklusējuma 0); `dependencies` satur esošo uzdevumu ID. ID jābūt unikāliem. Novietojiet kursoru virs uzdevuma, lai skatītu pilnus datumus, progresu un atkarības. Lielas diagrammas ritinās logrīka ietvaros. Tiek pieņemti ne vairāk kā 500 uzdevumi.
+
+Parauga datiem Set kartēšana ar nosaukumu `tasks` var izmantot `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Savienojiet to ar Chart Output mezglu, norādot `chartType: "gantt"` un `dataPath: "tasks"`. Kartējiet avota kolonnas šajos fiksētajos nosaukumos, izmantojot Set mezglu; `labelField` un `valueField` netiek izmantoti.
+
+### Entity relationships (DB)
+
+Izvēlieties **Entity relationships (DB)** (`erDiagram`) datubāzu shēmām un entītiju savienojumiem. Iestatiet `dataPath` uz grafa **objektu**, piemēram, `graph`, kas satur abus masīvus:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Laukiem ir `name`, neobligāts `type` un neobligāts `key` (`PK`, `FK`, `PK/FK` vai tukšs). Relācijas atsaucas uz esošajiem entītiju ID; neobligātie lauki `sourceField` un `targetField` noenkuro savienojumu pie norādītajiem laukiem. `cardinality` pieņem `one-to-one`, `one-to-many` (noklusējums), `many-to-one` vai `many-to-many`. Entītiju ID un lauku nosaukumiem katrā entītijā jābūt unikāliem. Tiek pieņemtas ne vairāk kā 100 entītijas, 100 lauki katrai entītijai un 500 relācijas.
+
+Ar Set mezglu izveidojiet `graph`, izmantojot `$dict(entities=array(dict(...)), relations=array(dict(...)))`; izmantojiet `chartType: "erDiagram"` un `dataPath: "graph"`. Šī ir jūsu norādītās shēmas vizualizācija; tā automātiski nepārbauda aktīvu datubāzi.
+
+Abi tipi parādās sadaļā **Pievienot logrīku** ar priekšskatījumu un mezgla diagrammas tipa atlasītājā uz audekla. Heym Work var piedāvāt šos tipus, aprakstot grafiku vai datubāzes shēmu, zīmējot ierosināto uzdevumu vai entītiju priekšskatījumus pirms lapas izveides.
 
 ### Interaktīvie uzdevumu saraksti
 

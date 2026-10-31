@@ -73,11 +73,11 @@ Condividere le tabelle con altri utenti o team:
 1. Aprire la finestra di dialogo di condivisione dalla vista di dettaglio della tabella
 2. Aggiungere utenti tramite email con permesso di **lettura** o **scrittura**
 3. Aggiungere team con permesso di **lettura** o **scrittura**
-4. Gli utenti in sola lettura possono visualizzare i dati; gli utenti con permesso di scrittura possono modificare le righe
+4. Gli utenti di sola lettura possono visualizzare i dati; gli utenti con accesso in scrittura possono modificare righe e colonne. Rinominare la tabella, modificarne la descrizione e gestire le condivisioni rimangono operazioni riservate al proprietario.
 
 ## Creazione di tabelle dall'Assistente IA
 
-L'[Assistente IA](../reference/ai-assistant.md#data-tables) del canvas, la [Chat](./chat-tab.md) e lo strumento `heym_chat` nella [scheda MCP](./mcp-tab.md) possono selezionare una delle tabelle disponibili per un workflow che stanno costruendo, oppure crearne una nuova. Propongono un nome e delle colonne e creano la tabella al momento dell'invio della scheda di domanda. Non modificano mai le colonne di una tabella esistente né toccano le relative righe: per aggiungere o modificare colonne, utilizzare questa sezione.
+L'[Assistente AI](../reference/ai-assistant.md#data-tables) del canvas, la [Chat](./chat-tab.md) e lo strumento `heym_chat` nella [scheda MCP](./mcp-tab.md) possono scegliere una delle tabelle per un workflow creato o crearne una nuova. Propongono un nome e le colonne, creando la tabella quando si invia la scheda della domanda. L'assistente del canvas configura i nodi del workflow dai metadati della tabella. La Chat e `heym_chat` possono anche ispezionare le righe, aggiungere o rimuovere colonne e inserire, aggiornare o eliminare righe direttamente. Basta fornire il nome di una tabella o il link di questa scheda. La scrittura richiede la proprietà o l'accesso in **scrittura** diretto o di team. L'aggiunta di colonne conserva i dati esistenti; la rimozione di colonne ne cancella i valori da ogni riga. La rimozione di colonne e la cancellazione di tutte le righe richiedono conferma, esattamente come in questa scheda.
 
 ## Utilizzo nei workflow
 

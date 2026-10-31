@@ -173,7 +173,7 @@ Kai workflow išsaugo, saugo arba ieško įrašų ir Jūs nenurodėte kitos saug
 
 Pasirinkite naują lentelę ir paspauskite **Pateikti atsakymus**: kortelė sukuria lentelę, o asistentas įrašo jos ID į mazgą ir naudoja tikslius stulpelių pavadinimus. Taip pat galite paprašyti lentelės savarankiškai, pavyzdžiui, "sukurti lentelę mano potencialiems klientams".
 
-Asistentas mato lentelių pavadinimus, aprašymus ir stulpelius, bet niekada nemato eilučių. Jis niekada nekeičia esamų lentelių stulpelių: jei lentelėje trūksta stulpelio, kurio reikia workflow, jis pavadina stulpelį ir siūlo naują lentelę. Stulpelius galima pridėti [DataTable skirtuke](../tabs/datatable-tab.md).
+Drobės asistentas mato lentelių pavadinimus, aprašymus ir stulpelius, bet niekada eilučių. Jis konfigūruoja workflow mazgus pagal šiuos metaduomenis; pridėkite stulpelius [skirtuke DataTable](../tabs/datatable-tab.md) arba paprašykite [Chat](../tabs/chat-tab.md). Chat ir `heym_chat` gali tikrinti eilutes ir tiesiogiai pridėti arba pašalinti stulpelius bei įterpti, atnaujinti arba ištrinti eilutes lentelėse, kurias valdote arba turite rašymo prieigą, įskaitant komandos bendrinimus. Prieš ištrinant duomenis, stulpelių šalinimas ir visų eilučių išvalymas reikalauja patvirtinimo.
 
 ## Susiję
 

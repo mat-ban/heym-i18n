@@ -47,7 +47,7 @@ In der App liest der Reiter **Logs** dieselbe Container-Ausgabe. Er ist durch `D
 
 ## Was protokolliert wird
 
-Jede Zustandsänderung wird protokolliert. Lesezugriffe werden nur dort protokolliert, wo das Lesen selbst der sensible Vorgang ist — das Anzeigen des Ausführungsverlaufs eines Workflows, das Öffnen einer Anmeldedaten, das Herunterladen einer Datei. Gewöhnliche Listen- und Detail-Lesezugriffe werden nicht auditiert; das Zugriffsprotokoll zeichnet bereits auf, dass eine Anfrage stattgefunden hat, und jede `GET`-Anfrage zu auditieren würde die Zeilen, auf die es ankommt, unter sich begraben.
+Jede Zustandsänderung wird protokolliert. Lesezugriffe werden nur dort protokolliert, wo das Lesen selbst der sensible Vorgang ist — das Anzeigen des Ausführungsverlaufs eines Workflows, das Öffnen einer Anmeldedaten, das Herunterladen einer Datei. Gewöhnliche Listen- und Detail-Lesezugriffe werden nicht auditiert; das Zugriffsprotokoll zeichnet bereits auf, dass eine Anfrage stattgefunden hat, und jede `GET`-Anfrage zu auditieren würde die Zeilen, auf die es ankommt, unter sich begraben. Die einzige Ausnahme bilden [Seitenaufrufe](#page-views), die aufzeichnen, wohin sich ein angemeldeter Benutzer in der App bewegt hat.
 
 ### Authentifizierung
 
@@ -62,9 +62,34 @@ Jede Zustandsänderung wird protokolliert. Lesezugriffe werden nur dort protokol
 | `sso_settings.update` | Ein Administrator hat die [SSO](./sso.md)-Konfiguration geändert. Zeichnet `enabled` und `password_login_disabled` auf, niemals das Client-Secret. |
 | `sso_settings.test` | Ein Administrator hat den SSO-Verbindungstest ausgeführt. |
 
+### Seitenaufrufe
+
+`page.view` wird jedes Mal geschrieben, wenn ein angemeldeter Benutzer eine Seite in der Web-App öffnet, mit dem URL-Pfad im Feld `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Der Pfad ist die In-App-Route. Dashboard-Reiter gehören dazu (`/?tab=traces`), ebenso wie die IDs, die das geöffnete Element bezeichnen, wie `/workflows/<id>`. Es wird nur eine kurze Liste von Abfrageparametern beibehalten, die die Seite identifizieren (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); alles andere im Query-String und das gesamte Fragment werden verworfen. Seiten, deren Link ein Secret enthält, wie `/review/<token>`, werden mit dem Platzhalter `:token` anstelle des Secrets protokolliert.
+
+Der Browser meldet den Pfad, daher zeigt eine `page.view`-Zeile, wohin der Benutzer nach eigenen Angaben navigiert ist. Sie beweist nicht, dass der Server diese Seite zurückgegeben hat. Besuche der Anmeldeseite und von Links, die im abgemeldeten Zustand geöffnet wurden, werden nicht erfasst, da ihnen kein Benutzer zugeordnet ist.
+
 ### Workflows
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` wird geschrieben, wenn eine Ausführung über die API gestartet wird: die Schaltfläche „Ausführen“ im Editor, der Execute-Endpoint mit einer Session, einem API-Key oder Webhook, das Chat-Portal und MCP-Tools. Es wird aufgezeichnet, wer sie gestartet hat, wie und wie sie endete:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` verknüpft die Zeile mit dem Lauf im Ausführungsverlauf. `outcome` ist `failure`, wenn der Lauf mit `error`, `cancelled` oder `timeout` endete. Ein Lauf, der für eine manuelle Prüfung (HITL) pausiert oder in der Parallelitätswarteschlange gehalten wird, ist eine `success`-Zeile mit `status=pending` oder `status=queued`. Ein Aufruf ohne angemeldeten Benutzer, z. B. ein anonymer Webhook oder ein Portalbesucher, hat keine `actor_id` oder `actor_email`. Eingaben und Ausgaben werden niemals geschrieben.
+
+Ausführungen, die durch einen Zeitplan, einen Trigger-Knoten, eine Warteschlange oder ein Ereignis gestartet werden, sind keine Audit-Zeilen. Sie werden auf derjenigen Instanz ausgeführt, die sie beansprucht hat, und im Ausführungsverlauf mit ihrer Trigger-Quelle und der ausführenden Instanz erfasst.
+
+`workflow.history_view` wird geschrieben, wenn jemand den Ausführungsverlauf eines Workflows öffnet. Die kleine Abfrage, die den letzten Lauf eines Workflows auf der Canvas oder in einer Liste anzeigt, wird nicht auditiert.
+
 
 `workflow.history_view` zeichnet `owned=false` auf, wenn ein Mitbearbeiter den Ausführungsverlauf eines anderen liest. `workflow.delete` zeichnet `outcome=denied` mit `reason=not_owner` auf, wenn ein Mitbearbeiter versucht zu löschen.
 
@@ -96,6 +121,27 @@ Eine Audit-Zeile zeichnet Identifikatoren, Namen und Anzahlen auf. Sie zeichnet 
 Zwei Dinge erzwingen dies. Aufrufstellen sind so geschrieben, dass sie nur sichere Felder übergeben, und der Audit-Helper redigiert als Absicherung: Jedes Feld, dessen Name `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` oder Ähnliches enthält, wird durch `***` ersetzt, bevor die Zeile erstellt wird. Übermäßige Redaktion ist beabsichtigt — eine wenig hilfreiche Zeile ist besser als eine geleakte Anmeldedaten.
 
 Wo ein Secret tatsächlich für den Datensatz relevant ist, wird nur seine Form protokolliert. Eine Dateifreigabe zeichnet `password_protected=true` auf, niemals das Passwort.
+
+## Heym Work
+
+Wenn Sie Heym Work parallel zu Heym ausführen, gibt Work Audit-Zeilen auf dem stdout seines eigenen Containers im selben Winston-Format aus:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work protokolliert Benutzeraktionen auf Seiten, Boards und Datensätzen:
+
+| Aktion | Bedeutung |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Änderungen an Dashboard-Seiten und -Layouts |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Änderungen am Layout von Kanban-Spalten |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Lebenszyklus-Ereignisse von Karten |
+| `record.create`, `record.update`, `record.delete` | Mutationen von Datentabellen-Datensätzen über Work |
+| `chat.message` | An den Work-Assistenten gesendeter Benutzer-Prompt |
+| `export.csv`, `export.json` | Datenexporte |
+
+Jede Zeile enthält dieselben Felder `actor_id`, `actor_email`, `timestamp` und `outcome` wie Heym-Audit-Zeilen, sodass Log-Kollektoren beide mit einer einzigen Pipeline parsen können.
 
 ## Aufbewahrung
 

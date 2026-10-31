@@ -173,7 +173,7 @@ Khi một workflow lưu, lưu trữ hoặc tra cứu bản ghi và bạn chưa c
 
 Chọn bảng mới và nhấn **Submit answers**: thẻ sẽ tạo bảng, và trợ lý sẽ đặt id của bảng lên node và sử dụng chính xác tên các cột của bảng. Bạn cũng có thể yêu cầu tạo một bảng riêng, ví dụ "create a table for my leads".
 
-Trợ lý chỉ thấy tên bảng, mô tả và các cột, không bao giờ thấy các hàng. Trợ lý không bao giờ thay đổi các cột của một bảng hiện có: nếu một bảng thiếu cột mà workflow cần, trợ lý sẽ nêu tên cột đó và đề xuất một bảng mới thay thế. Hãy thêm cột trong [DataTable tab](../tabs/datatable-tab.md).
+Trợ lý canvas nhìn thấy tên bảng, mô tả và cột, không bao giờ thấy các hàng. Nó định cấu hình các nút workflow từ siêu dữ liệu đó; thêm cột trong [tab DataTable](../tabs/datatable-tab.md) hoặc yêu cầu [Chat](../tabs/chat-tab.md). Chat và `heym_chat` có thể kiểm tra các hàng và trực tiếp thêm hoặc xóa cột cũng như chèn, cập nhật hoặc xóa hàng trên các bảng bạn sở hữu hoặc có quyền ghi, bao gồm cả chia sẻ nhóm. Việc xóa cột và xóa tất cả các hàng đều yêu cầu xác nhận trước khi xóa dữ liệu.
 
 ## Related
 

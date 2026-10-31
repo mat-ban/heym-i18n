@@ -43,12 +43,14 @@ Cả hai hành động trước tiên đều **chạy workflow** (khi nó hợp 
 
 Báo cáo được tạo bao gồm ba phần, theo thứ tự: **Improvement areas** (các đề xuất cụ thể, bao gồm cả góc độ **security** bất cứ khi nào workflow chạm đến credential, đầu vào người dùng, yêu cầu bên ngoài, hoặc phơi bày dữ liệu), **Purpose** (Mục đích) của workflow, và **What it does** (Nó làm gì — một bước đi từng bước qua các node).
 
-Phần **Improvement areas** luôn thực hiện bốn kiểm tra rõ ràng:
+Phần **Improvement areas** luôn thực hiện năm kiểm tra rõ ràng:
 
 1. **Error coverage** — nếu canvas không có node [Error Handler](../nodes/error-handler-node.md) và không có error workflow nào được cấu hình, báo cáo sẽ nêu rõ điều này và đề xuất thêm xử lý lỗi.
 2. **Time saved** — nếu chưa đặt thời gian tiết kiệm ước tính cho mỗi lần chạy, báo cáo đề xuất cấu hình một giá trị để chỉ số **Time Saved** của [Analytics](../tabs/analytics-tab.md) có thể được điền.
 3. **Network nodes** — đối với các node thực hiện gọi mạng (như [HTTP](../nodes/http-node.md) và các node tích hợp), báo cáo đề xuất xử lý lỗi riêng cho node đó (retry và/hoặc continue-on-error) trên các node đó.
 4. **Alerts** — khi không có [alerts](../tabs/alerts-tab.md) nào được cấu hình cho workflow, báo cáo đề xuất thiết lập alerts trước khi đưa lên prod.
+
+5. **Evals**: khi workflow có nút [Agent](../nodes/agent-node.md) mà không có bộ kiểm thử agent, báo cáo khuyến nghị một **Agent Suite** (hoặc **Prompt Suite**) trong [Evals](../tabs/evals-tab.md#agent-suites); khi có nút [LLM](../nodes/llm-node.md), báo cáo khuyến nghị một **Prompt Suite** để kiểm thử prompt đó trên nhiều mô hình.
 
 ### Chạy Analyzer từ Properties
 

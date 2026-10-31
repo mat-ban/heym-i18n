@@ -51,6 +51,8 @@ Das Öffnen eines Workflows unter `/workflows/{workflowId}/{executionId}` bringt
 
 ### Anwendungsfälle
 
+Halten Sie Strg/Cmd gedrückt und klicken Sie auf eine Ausführung in einer der Verlaufslisten, um diesen Deep-Link in einem neuen Browser-Tab zu öffnen. Der aktuelle Tab und der geöffnete Dialog bleiben unverändert. Chat- und Assistentenläufe besitzen keinen Workflow; der Kurzbefehl wählt sie daher wie ein normaler Klick lediglich aus.
+
 - Einen Workflow mit denselben Eingaben erneut ausführen
 - Einen fehlgeschlagenen Lauf debuggen, indem Eingaben und Knotenausgaben inspiziert werden
 - Ausgaben über Läufe hinweg vergleichen

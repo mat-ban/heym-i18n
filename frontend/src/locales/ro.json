@@ -83,7 +83,8 @@
     "run": "Execută",
     "dropFileOrClick": "Plasați un fișier aici sau faceți clic pentru a alege",
     "removeFile": "Elimină fișierul",
-    "chooseFileFor": "Alegeți un fișier pentru {label}"
+    "chooseFileFor": "Alegeți un fișier pentru {label}",
+    "new": "Nou"
   },
   "nav": {
     "workflows": "Workflow-uri",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Niciunul: fiecare model se autoevaluează",
     "removeJudge": "Eliminați evaluatorul",
     "judgeModel": "Model judge",
-    "enterJudgeModel": "Introduceți modelul de evaluare pentru acest judge."
+    "enterJudgeModel": "Introduceți modelul de evaluare pentru acest judge.",
+    "promptSuite": "Suită de prompturi",
+    "promptSuiteDesc": "Testați un prompt de sistem pe mai multe modele",
+    "agentSuite": "Suită de agenți",
+    "agentSuiteDesc": "Verificați rulările reale ale unui agent: instrumente, latență, cost",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Căutare suite...",
+    "loadingSuite": "Se încarcă suita...",
+    "couldNotLoadSuite": "Nu s-a putut încărca această suită."
   },
   "statusFilter": {
     "status": "Status",
@@ -1701,7 +1711,9 @@
     "askAi": "Întreabă AI",
     "askAiTitle": "Întrebați asistentul Chat despre această rulare",
     "noNodeSpans": "Pentru această rulare nu au fost înregistrate span-uri de nod.",
-    "queuedProgress": "În coadă {position}/{size}"
+    "queuedProgress": "În coadă {position}/{size}",
+    "clickToSelectRun": "Faceți clic pentru a selecta această rulare",
+    "doubleClickOrOpenNewTab": "Faceți dublu clic pentru a aduce această rulare pe pânză, Ctrl/Cmd+clic pentru a o deschide într-o filă nouă"
   },
   "portal": {
     "loadingPortal": "Se încarcă portalul...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "Server MCP",
-    "subtitle": "Expuneți Workflow-urile dumneavoastră ca instrumente MCP pentru asistenți AI",
+    "subtitle": "Expuneți-vă workflow-urile ca instrumente MCP și Heym Agent prin MCP și A2A",
     "connection": "Conexiune MCP",
     "connectionSubtitle": "Conectați asistentul dumneavoastră AI la workflow-uri prin protocolul MCP.",
     "apiKeyTab": "Cheie API",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Sub Aplicații personalizate, faceți clic pe Adăugați o aplicație personalizată",
     "geminiStep3": "Lipiți adresa URL a serverului MCP de mai sus și lăsați Funcțiile avansate închise; Gemini se va înregistra automat",
     "geminiStep4": "Faceți clic pe Înainte și autorizați cu datele dvs. de conectare Heym",
-    "geminiInfo": "Gemini utilizează OAuth pentru autentificare securizată. Datele dvs. Heym sunt utilizate pentru a autoriza accesul și nu sunt partajate niciodată cu Gemini. Odată conectat, Heym funcționează și în aplicația mobilă Gemini."
+    "geminiInfo": "Gemini utilizează OAuth pentru autentificare securizată. Datele dvs. Heym sunt utilizate pentru a autoriza accesul și nu sunt partajate niciodată cu Gemini. Odată conectat, Heym funcționează și în aplicația mobilă Gemini.",
+    "agentReach": {
+      "off": "Oprit: clienții MCP și A2A nu pot accesa Heym Agent",
+      "unconfigured": "Alegeți o credențială și un model pentru ca Heym Agent să poată rula",
+      "mcpA2a": "Accesibil prin MCP și A2A",
+      "mcpOnly": "Accesibil ca heym_chat prin MCP"
+    },
+    "a2aEnabledOnServer": "A2A activat pe „{name}”",
+    "a2aEnabled": "A2A activat",
+    "a2aDisabledOnServer": "A2A dezactivat pe „{name}”",
+    "a2aDisabled": "A2A dezactivat",
+    "agentAndA2aDisabledOnServer": "Heym Agent și A2A dezactivate pe „{name}”",
+    "agentAndA2aDisabled": "Heym Agent și A2A dezactivate",
+    "a2a": {
+      "enable": "Activează A2A",
+      "description": "Alți agenți pot trimite sarcini către Heym Agent prin protocolul Agent2Agent (A2A 1.0). Aceștia se autentifică cu cheia acestui server în antetul X-MCP-Key sau prin Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Verificați dacă cardul este activ:",
+      "copyLabel": "Copiază {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Tablou de bord analize",
@@ -2087,6 +2119,25 @@
       "errors": "Erori",
       "avgLatencyMs": "Latență medie (ms)",
       "latencyTitle": "Latență medie în timp"
+    },
+    "last1Hour": "Ultima oră",
+    "last3Hours": "Ultimele 3 ore",
+    "last6Hours": "Ultimele 6 ore",
+    "nodeTypes": "Tipuri de noduri",
+    "nodeChart": {
+      "emptyMessage": "Nu există încă date despre noduri pentru această perioadă. Analizele nodurilor sunt înregistrate pentru rulările ulterioare acestei actualizări.",
+      "duration": {
+        "title": "Noduri cu cel mai mare consum de timp",
+        "subtitle": "Durată medie per apel"
+      },
+      "errors": {
+        "title": "Tipuri de noduri cu cele mai multe eșecuri",
+        "subtitle": "Erori în timp"
+      },
+      "calls": {
+        "title": "Cele mai apelate tipuri de noduri",
+        "subtitle": "Apeluri în timp"
+      }
     }
   },
   "dashboards": {

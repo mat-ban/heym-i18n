@@ -23,6 +23,8 @@ Widget to pojedynczy wykres na siatce. Obsługiwane typy wykresów:
 - **Gauge** (pojedyncza wartość w zakresie min–max, np. wartość procentowa)
 - **Scatter** (punkty X/Y do wykresów korelacji)
 - **Proportion** (jeden słupek podzielony na udziały z legendą procentową, np. podział według języka)
+- **Gantt** (daty zadań, ukończenie i zależności)
+- **Entity relationships (DB)** (tabele, pola, klucze PK/FK i połączenia)
 - **Bar gauge** (jeden poziomy wskaźnik w każdym wierszu z gradientem od czerwonego do zielonego i wartością, np. wolne miejsce na dysku)
 - **Text** (komunikat w formacie markdown, np. notatka o statusie w rodzaju „Ostatnie wykonanie o 19:47"; obsługuje [interaktywne pola wyboru](../nodes/chart-output-node.md#interactive-task-lists), gdy markdown jest statyczny, oraz [jawne listy numerowane](../nodes/chart-output-node.md#numbered-lists) dla niestandardowej lub malejącej numeracji)
 - **HITL** (oczekujące przeglądy wykonywane przez człowieka. Nagłówek wyświetla `1/n pending`. Nazwa workflow otwiera dane wykonanie na canvasie. Przyciski **Approve**, **Request changes** i **Reject** rozstrzygają przegląd. Ikona historii obok tytułu widgetu otwiera to wykonanie w oknie historii na tej stronie. Widget nie korzysta z wierszy źródłowych, a każda osoba widzi własną kolejkę. Może zamiast tego pokazywać weryfikacje pojedynczego Workflow dla każdego, kto ma do niego dostęp; zobacz [Widgety HITL](#widgety-hitl))
@@ -96,6 +98,18 @@ API widgetów może również utworzyć **kartę licznika** bez użycia AI: widg
 
 Przycisk **Fine-tune with AI** w widgecie służy do zmodyfikowania istniejącego widgetu nową instrukcją. Każde dostrojenie AI zapisuje poprzedni workflow jako snapshot w **Edit History** widgetu, dzięki czemu zmiany można przejrzeć lub wycofać z edytora workflow.
 
+## Z poziomu Chat i MCP
+
+[Chat](./chat-tab.md) oraz klienci MCP za pośrednictwem narzędzia [`heym_chat`](./mcp-tab.md) mogą odczytywać Twoje dashboardy, dodawać do nich widgety, zmieniać ich nazwy lub je usuwać oraz porządkować układ dashboardu. Heym Work wyświetla każdy dashboard jako stronę, więc te same odpowiedzi obejmują również jego strony.
+
+- **Jakie dashboardy istnieją i co się na nich znajduje.** Zapytaj "jakie mam dashboardy?", "co znajduje się na dashboardzie Sprzedaż?" lub "na którym dashboardzie znajduje się workflow przychodów?". Chat wyświetla Twoje własne dashboardy oraz te udostępnione Tobie, wraz z poziomem dostępu i linkiem do każdego z nich, a także każdy znajdujący się na nich widget: jego tytuł, typ wykresu oraz powiązany workflow. [Widget HITL](#hitl-widgets) odfiltrowany według workflow, którego nie możesz otworzyć, pozostaje ukryty, podobnie jak na samym dashboardzie.
+- **Nowy widget.** Poproś "dodaj wykres otwartych spraw według statusu do dashboardu Sprzedaż". Chat najpierw umieszcza pusty widget na dashboardzie, następnie tworzy własny workflow widgetu, przeprowadza przebiegi testowe i poprawia błędy do momentu pomyślnego ukończenia, w taki sam sposób, w jaki [tworzy workflowy](./chat-tab.md#tworzenie-workflowow). Nie pozostaje żaden oddzielny workflow, a każdy zapis pojawia się w Edit History widgetu. Tytuł i typ wykresu widgetu odpowiadają temu, co zapisze Chat.
+- **Istniejący workflow.** Poproś "umieść workflow przychodów na dashboardzie Sprzedaż". Workflow kończący się węzłem Chart Output staje się widgetem wykresu z własną kopią workflow, dzięki czemu późniejsze zmiany w widgecie nigdy nie modyfikują oryginału. Workflow z węzłem trigger lub input nie może stać się widgetem wykresu. Każdy inny workflow staje się [widgetem uruchomienia](#run-widgets), który również wymaga workflow, jaki właściciel dashboardu może uruchomić.
+- **Zmiana nazwy lub usunięcie widgetu.** Poproś "zmień nazwę widgetu Przychody na Sprzedaż" lub "usuń widget Otwarte sprawy". Workflow widgetu wykresu również przyjmuje nową nazwę; workflow widgetu uruchomienia zachowuje własną. Usunięcie widgetu wykresu usuwa wraz z nim powiązany workflow, tak samo jak przycisk usuwania widgetu; workflow widgetu uruchomienia pozostaje. Chat usuwa tylko widget, o który wyraźnie poproszono, i w razie dopasowania do kilku prosi najpierw o doprecyzowanie.
+- **Uporządkowanie.** Poproś "uporządkuj dashboard Sprzedaż" lub "dodaj te trzy widgety i uporządkuj". Chat rozmieszcza widoczne widgety w ich kolejności, tak jak robi to przycisk **Uporządkuj**: losowe rzędy po dwa lub trzy, więc ponowne zapytanie da inny układ. Poproś o określoną liczbę w rzędzie ("po trzy w rzędzie"), aby uzyskać rzędy o tej wielkości. Porządkuje to dashboard w Heym; Heym Work zachowuje własny układ strony, który zmienia dedykowany przycisk **Uporządkuj** na stronie.
+
+Nowe widgety trafiają poniżej istniejących widgetów dashboardu i, jak każdy widget, działają w kontekście właściciela dashboardu. Dodawanie, zmiana nazwy, usuwanie i porządkowanie wymagają dostępu do zapisu do dashboardu. Zbudowanie nowego widgetu wymaga czatu posiadającego uprawnienia do tworzenia workflowów: zakładki Chat, Heym Work Chat dla edytorów oraz `heym_chat`.
+
 ## Edycja układu
 
 Przełączenie **Edit** włącza tryb edycji, w którym można przeciągać widgety i zmieniać ich rozmiar na siatce 12-kolumnowej. Zmiany układu są zapisywane automatycznie. Tytuły widgetów można edytować bezpośrednio w nagłówku widgetu.
@@ -127,3 +141,7 @@ Usunięcie udostępnienia lub obniżenie jego poziomu z zapisu do odczytu dział
 
 - [Węzeł Chart Output](../nodes/chart-output-node.md)
 - [Zakładka Analytics](analytics-tab.md) — wbudowane metryki wykonań (odrębne od dashboardów budowanych przez użytkownika)
+
+## Harmonogramy i diagramy baz danych
+
+Wybierz **Gantt** w Dodaj widget, aby wyświetlić zadania w czasie z powiązaniami ukończenia i zależności, lub **Entity relationships (DB)**, aby zmapować tabele, pola i ich relacje. Oba typy używają [węzła Chart Output](../nodes/chart-output-node.md#gantt-schedules) i są również dostępne na stronach Heym Work. Gdy Work sugeruje widgety dla harmonogramu lub schematu bazy danych, generuje podglądy na podstawie proponowanych zadań lub encji.

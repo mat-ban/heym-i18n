@@ -173,7 +173,7 @@ Když workflow ukládá, uchovává nebo vyhledává záznamy a nepojmenovali js
 
 Vyberte novou tabulku a stiskněte **Odeslat odpovědi**: karta tabulku vytvoří a asistent na uzel umístí její id a použije její přesné názvy sloupců. Můžete také požádat o tabulku samostatně, například „vytvoř tabulku pro moje leady".
 
-Asistent vidí názvy tabulek, popisy a sloupce, nikdy ne řádky. Nikdy nemění sloupce existující tabulky: pokud tabulce chybí sloupec, který workflow potřebuje, pojmenuje tento sloupec a místo toho nabídne novou tabulku. Sloupce přidávejte na kartě [DataTable](../tabs/datatable-tab.md).
+Asistent na plátně vidí názvy tabulek, popisy a sloupce, nikdy řádky. Z těchto metadat konfiguruje uzly workflow; sloupce můžete přidat na [kartě DataTable](../tabs/datatable-tab.md) nebo o to požádat v [Chatu](../tabs/chat-tab.md). Chat a `heym_chat` mohou kontrolovat řádky a přímo přidávat nebo odebírat sloupce a vkládat, aktualizovat nebo mazat řádky v tabulkách, které vlastníte nebo k nimž máte práva k zápisu, včetně týmových sdílení. Odstranění sloupců a vymazání všech řádků vyžaduje před smazáním dat potvrzení.
 
 ## Související
 

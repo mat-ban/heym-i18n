@@ -83,7 +83,8 @@
     "run": "Spustit",
     "dropFileOrClick": "Přetáhněte soubor sem nebo klikněte pro výběr",
     "removeFile": "Odebrat soubor",
-    "chooseFileFor": "Vyberte soubor pro {label}"
+    "chooseFileFor": "Vyberte soubor pro {label}",
+    "new": "Nový"
   },
   "nav": {
     "workflows": "Workflow",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Žádný: každý model hodnotí sám sebe",
     "removeJudge": "Odebrat hodnotitele",
     "judgeModel": "Model hodnocení",
-    "enterJudgeModel": "Zadejte model hodnocení pro spuštění s tímto hodnotitelem."
+    "enterJudgeModel": "Zadejte model hodnocení pro spuštění s tímto hodnotitelem.",
+    "promptSuite": "Sada promptů",
+    "promptSuiteDesc": "Otestujte systémový prompt napříč modely",
+    "agentSuite": "Sada agentů",
+    "agentSuiteDesc": "Zkontrolujte skutečné běhy agenta: nástroje, latence, náklady",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Hledat sady...",
+    "loadingSuite": "Načítání sady...",
+    "couldNotLoadSuite": "Tuto sadu se nepodařilo načíst."
   },
   "statusFilter": {
     "status": "Stav",
@@ -1701,7 +1711,9 @@
     "askAi": "Zeptat se AI",
     "askAiTitle": "Zeptat se asistenta Chat na toto spuštění",
     "noNodeSpans": "Pro toto spuštění nebyly zaznamenány žádné spany uzlů.",
-    "queuedProgress": "Ve frontě {position}/{size}"
+    "queuedProgress": "Ve frontě {position}/{size}",
+    "clickToSelectRun": "Kliknutím vyberte toto spuštění",
+    "doubleClickOrOpenNewTab": "Dvojitým kliknutím přenesete toto spuštění na plátno, Ctrl/Cmd+kliknutím jej otevřete na nové kartě"
   },
   "portal": {
     "loadingPortal": "Načítání portálu...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Zpřístupněte své Workflow jako MCP nástroje pro AI asistenty",
+    "subtitle": "Zpřístupněte své workflow jako nástroje MCP a Heym Agent přes MCP a A2A",
     "connection": "MCP připojení",
     "connectionSubtitle": "Připojte svého AI asistenta ke svým Workflow prostřednictvím protokolu MCP.",
     "apiKeyTab": "API klíč",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "V části Vlastní aplikace klikněte na Přidat vlastní aplikaci",
     "geminiStep3": "Vložte výše uvedenou adresu URL serveru MCP a ponechte Pokročilé funkce zavřené; Gemini se zaregistruje automaticky",
     "geminiStep4": "Klikněte na Další a proveďte autorizaci pomocí svých přihlašovacích údajů Heym",
-    "geminiInfo": "Gemini používá pro bezpečné ověření protokol OAuth. Vaše přihlašovací údaje Heym slouží k autorizaci přístupu a nikdy nejsou sdíleny se společností Gemini. Po připojení funguje Heym také v mobilní aplikaci Gemini."
+    "geminiInfo": "Gemini používá pro bezpečné ověření protokol OAuth. Vaše přihlašovací údaje Heym slouží k autorizaci přístupu a nikdy nejsou sdíleny se společností Gemini. Po připojení funguje Heym také v mobilní aplikaci Gemini.",
+    "agentReach": {
+      "off": "Vypnuto: klienti MCP a A2A nemohou kontaktovat Heym Agent",
+      "unconfigured": "Vyberte přihlašovací údaje a model, aby bylo možné spustit Heym Agent",
+      "mcpA2a": "Dosažitelný přes MCP a A2A",
+      "mcpOnly": "Dosažitelný jako heym_chat přes MCP"
+    },
+    "a2aEnabledOnServer": "A2A povoleno na „{name}“",
+    "a2aEnabled": "A2A povoleno",
+    "a2aDisabledOnServer": "A2A zakázáno na „{name}“",
+    "a2aDisabled": "A2A zakázáno",
+    "agentAndA2aDisabledOnServer": "Heym Agent a A2A zakázány na „{name}“",
+    "agentAndA2aDisabled": "Heym Agent a A2A zakázány",
+    "a2a": {
+      "enable": "Povolit A2A",
+      "description": "Ostatní agenti mohou posílat úkoly do Heym Agent přes protokol Agent2Agent (A2A 1.0). Ověřují se pomocí klíče tohoto serveru v hlavičce X-MCP-Key nebo pomocí Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Zkontrolujte, zda je karta aktivní:",
+      "copyLabel": "Zkopírovat {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Dashboard analýzy",
@@ -2087,6 +2119,25 @@
       "errors": "Chyby",
       "avgLatencyMs": "Průměrná latence (ms)",
       "latencyTitle": "Průměrná latence v čase"
+    },
+    "last1Hour": "Poslední hodina",
+    "last3Hours": "Poslední 3 hodiny",
+    "last6Hours": "Posledních 6 hodin",
+    "nodeTypes": "Typy uzlů",
+    "nodeChart": {
+      "emptyMessage": "Pro toto období zatím nejsou k dispozici žádná data uzlů. Analytika uzlů se zaznamenává pro spuštění po této aktualizaci.",
+      "duration": {
+        "title": "Časově nejnáročnější uzly",
+        "subtitle": "Průměrná doba trvání na volání"
+      },
+      "errors": {
+        "title": "Nejčastěji selhávající typy uzlů",
+        "subtitle": "Chyby v čase"
+      },
+      "calls": {
+        "title": "Nejvolanější typy uzlů",
+        "subtitle": "Volání v čase"
+      }
     }
   },
   "dashboards": {

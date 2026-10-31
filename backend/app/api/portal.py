@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.analytics import upsert_workflow_analytics_snapshot
 from app.api.deps import get_client_ip, get_current_user
+from app.api.workflow_run_audit import audit_workflow_run
 from app.api.workflows import (
     _persist_global_variables_from_execution,
     _sanitize_headers,
@@ -69,7 +70,7 @@ from app.services.workflow_executor import (
 router = APIRouter()
 
 _session_ttl_hours = 168
-PORTAL_SSE_HEARTBEAT_SECONDS = 10.0
+PORTAL_SSE_KEEPALIVE_SECONDS = 10.0
 
 
 def _generate_session_token() -> str:
@@ -374,6 +375,14 @@ async def portal_execute(
         waited = await wait_for_result(
             execution_id, timeout_seconds=workflow.workflow_timeout_seconds
         )
+        audit_workflow_run(
+            workflow_id=workflow.id,
+            workflow_name=workflow.name,
+            status=waited.status,
+            execution_time_ms=waited.execution_time_ms,
+            trigger_source="portal",
+            execution_id=execution_id,
+        )
         return WorkflowExecuteResponse(
             workflow_id=workflow.id,
             status=waited.status,
@@ -417,6 +426,15 @@ async def portal_execute(
         if holds_slot:
             with contextlib.suppress(Exception):
                 await workflow_concurrency.release(execution_id)
+
+    audit_workflow_run(
+        workflow_id=workflow.id,
+        workflow_name=workflow.name,
+        status=execution_result.status,
+        execution_time_ms=execution_result.execution_time_ms,
+        trigger_source="portal",
+        execution_id=execution_id,
+    )
 
     if execution_result.status == "pending":
         if is_codex_pending_execution(execution_result):
@@ -675,7 +693,7 @@ async def portal_execute_stream(
                 release_task = asyncio.create_task(_release_slot_after(future, execution_id))
                 _SLOT_RELEASE_TASKS.add(release_task)
                 release_task.add_done_callback(_SLOT_RELEASE_TASKS.discard)
-            last_heartbeat_at = loop.time()
+            last_keepalive_at = loop.time()
             yield (
                 "data: "
                 + json.dumps(
@@ -699,7 +717,7 @@ async def portal_execute_stream(
                     if event is None:
                         break
                     event = progress_tracker.observe_event(event)
-                    last_heartbeat_at = loop.time()
+                    last_keepalive_at = loop.time()
                     if (
                         event.get("type") == "execution_complete"
                         and event.get("status") == "pending"
@@ -751,9 +769,9 @@ async def portal_execute_stream(
                         cancel_event.set()
                         break
                     now = loop.time()
-                    if now - last_heartbeat_at >= PORTAL_SSE_HEARTBEAT_SECONDS:
-                        last_heartbeat_at = now
-                        yield ": heartbeat\n\n"
+                    if now - last_keepalive_at >= PORTAL_SSE_KEEPALIVE_SECONDS:
+                        last_keepalive_at = now
+                        yield ": keepalive\n\n"
                         continue
                     if future.done():
                         while not event_queue.empty():
@@ -761,7 +779,7 @@ async def portal_execute_stream(
                             if event is None:
                                 break
                             event = progress_tracker.observe_event(event)
-                            last_heartbeat_at = loop.time()
+                            last_keepalive_at = loop.time()
                             if (
                                 event.get("type") == "execution_complete"
                                 and event.get("status") == "pending"
@@ -821,6 +839,14 @@ async def portal_execute_stream(
                     cancel_event.set()
                     break
 
+            audit_workflow_run(
+                workflow_id=workflow.id,
+                workflow_name=workflow.name,
+                status="cancelled" if was_cancelled else str(final_result.get("status") or "error"),
+                execution_time_ms=final_result.get("execution_time_ms"),
+                trigger_source="portal",
+                execution_id=execution_id,
+            )
             if was_cancelled and not final_result:
                 # Without this row the run simply disappears: canvases observing it
                 # (live view in another tab) never receive a terminal event.

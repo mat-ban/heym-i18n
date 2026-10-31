@@ -89,7 +89,26 @@
     "noLatencyData": "Tidak ada data latensi yang tersedia untuk periode waktu ini",
     "noSuccessErrorData": "Tidak ada data keberhasilan/error yang tersedia untuk periode waktu ini",
     "notSet": "Tidak Diatur",
-    "okCol": "OK"
+    "okCol": "OK",
+    "last1Hour": "1 Jam Terakhir",
+    "last3Hours": "3 Jam Terakhir",
+    "last6Hours": "6 Jam Terakhir",
+    "nodeTypes": "Tipe Node",
+    "nodeChart": {
+      "emptyMessage": "Belum ada data node untuk periode ini. Analitik node dicatat untuk eksekusi setelah pembaruan ini.",
+      "duration": {
+        "title": "Node Paling Banyak Memakan Waktu",
+        "subtitle": "Durasi rata-rata per panggilan"
+      },
+      "errors": {
+        "title": "Tipe Node Paling Sering Gagal",
+        "subtitle": "Kesalahan dari waktu ke waktu"
+      },
+      "calls": {
+        "title": "Tipe Node Paling Banyak Dipanggil",
+        "subtitle": "Panggilan dari waktu ke waktu"
+      }
+    }
   },
   "auth": {
     "alreadyHaveAccount": "Sudah memiliki akun?",
@@ -523,7 +542,8 @@
     "run": "Jalankan",
     "dropFileOrClick": "Tarik file ke sini atau klik untuk memilih",
     "removeFile": "Hapus file",
-    "chooseFileFor": "Pilih file untuk {label}"
+    "chooseFileFor": "Pilih file untuk {label}",
+    "new": "Baru"
   },
   "credentials": {
     "accessVia": "Akses melalui",
@@ -1117,7 +1137,16 @@
     "temperature": "Temperature: {temp}",
     "testCases": "Kasus Pengujian",
     "title": "Evaluasi",
-    "tokensSummary": "Token: {tokens}"
+    "tokensSummary": "Token: {tokens}",
+    "promptSuite": "Rangkaian prompt",
+    "promptSuiteDesc": "Uji prompt sistem di berbagai model",
+    "agentSuite": "Rangkaian agen",
+    "agentSuiteDesc": "Periksa eksekusi nyata agen: alat, latensi, biaya",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Cari rangkaian...",
+    "loadingSuite": "Memuat rangkaian...",
+    "couldNotLoadSuite": "Tidak dapat memuat rangkaian ini."
   },
   "history": {
     "clearAll": "Hapus Semua",
@@ -1217,7 +1246,9 @@
     "askAi": "Tanya AI",
     "askAiTitle": "Tanyakan kepada asisten Chat tentang eksekusi ini",
     "noNodeSpans": "Tidak ada span node yang dicatat untuk eksekusi ini.",
-    "queuedProgress": "Dalam antrean {position}/{size}"
+    "queuedProgress": "Dalam antrean {position}/{size}",
+    "clickToSelectRun": "Klik untuk memilih run ini",
+    "doubleClickOrOpenNewTab": "Klik dua kali untuk membawa run ini ke canvas, Ctrl/Cmd+klik untuk membukanya di tab baru"
   },
   "header": {
     "darkMode": "Beralih ke mode gelap",
@@ -1338,7 +1369,7 @@
     "serverNamePlaceholder": "Nama server (mis. CRM Tools)",
     "setupInstructions": "Petunjuk Penyiapan",
     "sseEndpointUrl": "URL Endpoint SSE",
-    "subtitle": "Ekspos Workflow Anda sebagai tool MCP untuk asisten AI",
+    "subtitle": "Ekspos workflow Anda sebagai alat MCP dan Heym Agent melalui MCP dan A2A",
     "title": "Server MCP",
     "workflowDisabled": "\"{name}\" dinonaktifkan untuk MCP",
     "workflowEnabled": "\"{name}\" diaktifkan untuk MCP",
@@ -1379,7 +1410,27 @@
     "geminiStep2": "Di bawah Aplikasi kustom, klik Tambahkan aplikasi kustom",
     "geminiStep3": "Tempel URL Server MCP di atas dan biarkan Fitur lanjutan tertutup; Gemini akan mendaftar secara otomatis",
     "geminiStep4": "Klik Berikutnya dan beri otorisasi dengan kredensial Heym Anda",
-    "geminiInfo": "Gemini menggunakan OAuth untuk mengautentikasi secara aman. Kredensial Heym Anda digunakan untuk mengotorisasi akses dan tidak pernah dibagikan kepada Gemini. Setelah terhubung, Heym juga berfungsi di aplikasi seluler Gemini."
+    "geminiInfo": "Gemini menggunakan OAuth untuk mengautentikasi secara aman. Kredensial Heym Anda digunakan untuk mengotorisasi akses dan tidak pernah dibagikan kepada Gemini. Setelah terhubung, Heym juga berfungsi di aplikasi seluler Gemini.",
+    "agentReach": {
+      "off": "Mati: Klien MCP dan A2A tidak dapat mencapai Heym Agent",
+      "unconfigured": "Pilih kredensial dan model agar Heym Agent dapat berjalan",
+      "mcpA2a": "Dapat dijangkau melalui MCP dan A2A",
+      "mcpOnly": "Dapat dijangkau sebagai heym_chat melalui MCP"
+    },
+    "a2aEnabledOnServer": "A2A diaktifkan pada \"{name}\"",
+    "a2aEnabled": "A2A diaktifkan",
+    "a2aDisabledOnServer": "A2A dinonaktifkan pada \"{name}\"",
+    "a2aDisabled": "A2A dinonaktifkan",
+    "agentAndA2aDisabledOnServer": "Heym Agent dan A2A dinonaktifkan pada \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent dan A2A dinonaktifkan",
+    "a2a": {
+      "enable": "Aktifkan A2A",
+      "description": "Agen lain dapat mengirimkan tugas ke Heym Agent melalui protokol Agent2Agent (A2A 1.0). Mereka mengautentikasi dengan kunci server ini di header X-MCP-Key, atau dengan Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Periksa apakah card aktif:",
+      "copyLabel": "Salin {label}"
+    }
   },
   "nav": {
     "alerts": "Peringatan",

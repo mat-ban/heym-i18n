@@ -23,7 +23,8 @@ En konversation kan även startas från chattrutan på [Workflows-fliken](./work
 - **Köade uppföljningar** – Skicka fler meddelanden medan ett svar strömmar. Köade meddelanden sparas, kan redigeras eller tas bort innan de startar och körs i ordning efter det aktiva svaret
 - **Planeringspauser** – När Chat behöver planeringsdetaljer ställer den förtydligandefrågor och pausar köade uppföljningar tills de besvaras. När planeringssvaret är klart återupptas köade meddelanden
 - **Credentials** – När en Workflow som Chat skapar eller redigerar behöver en credential frågar Chat vilken som ska användas, erbjuder att skapa en ny i konversationen eller låter användaren fortsätta utan. Det går även att be Chat skapa en credential eller uppdatera en befintlig; den öppnar credential-formuläret i konversationen. Modellen ser credentialens namn och typ, aldrig dess värden, för autentiseringsuppgifter du äger och de som delats med dig. LLM- och Agent-noder som Chat lägger till körs med den autentiseringsuppgift och modell som valts för chatten, inklusive delade autentiseringsuppgifter; när Chat redigerar ett workflow behåller befintliga LLM- och Agent-noder sin autentiseringsuppgift och modell. Se [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Datatabeller** – När en Workflow som Chat skapar eller redigerar lagrar poster frågar Chat vilken [datatabell](./datatable-tab.md) som ska användas eller erbjuder att skapa en med de kolumner som Workflowen behöver. Den kan även lista befintliga tabeller och deras kolumner. Den läser eller skriver aldrig rader. Se [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Fråga vilka [dashboards](./dashboard-tab.md) du har, vad som finns på en instrumentpanel eller vilken dashboard ett workflow ligger på. Be Chat att lägga till en ny widget på en dashboard (den placerar en tom widget där, bygger och testar sedan dess workflow), placera ett befintligt workflow på en dashboard som widget, byta namn på eller ta bort en widget, eller städa upp instrumentpanelens layout. Heym Work visar dessa instrumentpaneler som sina sidor. Se [Dashboard › Från Chat och MCP](./dashboard-tab.md#från-chat-och-mcp)
+- **Datatabeller** – När ett workflow som Chat skapar eller redigerar sparar poster, frågar Chat vilken [datatabell](./datatable-tab.md) som ska användas eller erbjuder sig att skapa en med de kolumner som behövs. Den kan också granska rader, lägga till eller ta bort kolumner och direkt infoga, uppdatera eller ta bort rader i tabeller du äger eller kan redigera. Ange ett tabellnamn eller en DataTable-länk. Borttagning av kolumner och rensning av alla rader kräver bekräftelse; att lägga till kolumner behåller befintliga data. Se [AI-assistent › Datatabeller](../reference/ai-assistant.md#data-tables)
 - **Strömmande svar** – Se modellens utdata medan de strömmar
 - **Stoppa svar** – Avbryt det aktuella strömmande svaret när som helst; att stoppa rensar även köade meddelanden för den konversationen
 - **Markdown-rendering** – Svar stöder markdown-formatering, inklusive inline-bilder
@@ -33,16 +34,17 @@ En konversation kan även startas från chattrutan på [Workflows-fliken](./work
 - **Röstinmatning** – Använd mikrofonknappen för tal-till-text (webbläsarstödd). När inspelningen stoppas kan Heym göra en lätt rensning av transkriptionen innan den skickas
 - **Schemalagda Workflows** – Fråga när cron-Workflows körs (idag, denna vecka, denna månad eller ett anpassat datumintervall). Assistenten använder samma schemadata som fliken [Scheduled](./scheduled-tab.md) och kan begränsa resultaten till Workflows som ägs eller inkludera de som delats
 - **Körningshistorik för Workflows** – Fråga om en specifik Workflow ("hur många gånger kördes den dagliga rapporten?", "misslyckades den?", "när kördes den senast?"). Chat slår upp Workflowen via dess ID och svarar utifrån dess körningsantal, statusfördelning, första och senaste körningstid samt genomsnittlig varaktighet. Fråga varför en körning misslyckades eller vad den returnerade, och Chat öppnar då den enskilda körningen för att läsa dess indata, utdata och fel per nod
+- **Var körningar misslyckas och varför de är långsamma** – Fråga var dina workflow misslyckas eller varför de är långsamma och Chat nämner de workflow som kördes mest, misslyckades mest och är långsammast, samt de nodtyper som tar mest tid (genomsnitt per anrop och totalt), misslyckas mest och körs mest, samma siffror som på fliken [Analytics](./analytics-tab.md). Nodtyper räknas för körningar från och med versionen som introducerade nodanalys. Fråga om den senaste timmen, 3 eller 6 timmar, 24 timmar, 7 eller 30 dagar, eller hela historiken; timfönstren startar vid hel timme, så "den senaste timmen" vid 15:20 täcker 14:00 fram till nu.
 - **Live-körningsstatus** – Fråga vad som körs just nu och Chat svarar med antalet, Workflow-namnen, hur länge varje körning har pågått, vilken nod den är på och en direktlänk till live-körningen
 ## Använda Chat från en MCP-klient
 
-Chat-motorn kan även nås utanför webbläsaren. Aktivera **Heym Chat Tool** på fliken [MCP](./mcp-tab.md) och MCP-klienter — Claude, Cursor och allt annat som talar MCP — får ett enda `heym_chat`-verktyg som kör samma motor med alla dess funktioner.
+Chat-motorn kan även nås utanför webbläsaren. Aktivera **Heym Chat Tool** på fliken [MCP / A2A](./mcp-tab.md) och MCP-klienter — Claude, Cursor och allt annat som talar MCP — får ett enda `heym_chat`-verktyg som kör samma motor med alla dess funktioner.
 
 Dessa konversationer hamnar i denna fliks historik och markeras med en pluggikon i konversationslistan. Öppna en för att läsa vad klienten frågade, se de verktygskort som den utlöste och fortsätt tråden själv. Att besvara en klargörandefråga fungerar på samma sätt oavsett om turen startade här eller från en MCP-klient.
 
 Över MCP listar, väljer eller skapar Chat inga autentiseringsuppgifter. Workflows som den bygger lämnar fält för autentiseringsuppgifter tomma, och svaret namnger de noder som behöver en autentiseringsuppgift så att dessa kan anges i editorn.
 
-Datatabeller fungerar även över MCP: Chat listar tabeller, skapar nya och kopplar in dem i de workflows som den bygger. Dess tabellfråga anländer som text i resultatet, så besvara den med samma `conversation_id`.
+Datatabeller fungerar även över MCP: Chat kan redigera kolumner och rader direkt, skapa tabeller och koppla in dem i workflow. Tabellfrågor och bekräftelser på borttagning anländer som text i resultatet; svara med samma `conversation_id`.
 
 ## Kontextgräns
 
@@ -112,9 +114,58 @@ kan ge ett annat svar.
 ## Användarregler
 
 [Användarregler](../reference/user-settings.md) (konfigurerade i Inställningar) injiceras automatiskt i varje Chat-konversation som systemnivåinstruktioner. Ange dem en gång för att tillämpa beständiga preferenser på alla chattförfrågningar.
+
+## Arbeta med Evals
+
+Chat kan skapa, ändra och köra sviter i [Evals](./evals-tab.md), både prompt-sviter och agentsviter:
+
+- **Prompt-svit**: "skapa en prompt-svit för min supportsvars-prompt med 8 testfall och jämför gpt-4o med gpt-4.1-mini". Chat skriver testfallen med deras förväntade svar, väljer en bedömningsmetod och sparar sviten.
+  - Innan den skapar sviten avgör den vilka LLM-autentiseringsuppgifter och modeller som ska användas. Med exakt en LLM-uppgift används den och meddelas; annars frågar den.
+  - För LLM-as-Judge-bedömning frågar den också om en separat domare ska bedöma svaren.
+- **Agentsvit**: "kontrollera att min supportagent alltid söker i dokumentationen och aldrig skickar e-post". Chat hittar agenten och sparar verktygskontroller och tröskelvärden. På begäran kör den workflowet och skapar en ny indata för varje körning.
+  - Körningar av agentsviter är riktiga workflow-körningar, så deras sidoeffekter inträffar. Chat anger hur många körningar den startar.
+- **Baseline**: Chat kan arbeta med en agents baseline på tre sätt:
+  - Rapportera den från agentens senaste körningar.
+  - Bygga den från körningar den startar ("kör 5 gånger och använd det som baseline").
+  - Spara siffror du anger ("ställ in baseline till 3 sekunder p95 och 0,01 $ per körning").
+- **Körningar**: Chat väntar upp till en minut på en körning och rapporterar sedan resultatet:
+  - För en prompt-svit: varje modells antal godkända och de fall som misslyckades.
+  - För en agentsvit: andelen godkända, misslyckade kontroller och avvikelsen från baslinjen.
+  - En längre körning fortsätter i Evals; be Chat att kontrollera den igen.
+
+När Chat har skapat eller ändrat en svit visar svaret ett kort med svitens namn, dess typ och en knapp för **Öppna i Evals**, precis som kortet för ett sparat workflow. Över MCP listar `heym_chat`-resultatet länken till varje svit som sparats i det anropet.
+
+Detsamma fungerar från en MCP-klient via `heym_chat` (se [Använda Chat från en MCP-klient](#använda-chat-från-en-mcp-klient)). Utvärderingsverktygen förblir inuti `heym_chat`; MCP-klienter ser dem inte som separata verktyg.
+
+Editorns AI-assistent skapar inte sviter.
+
+## Arbeta med Evals
+
+Chat kan skapa, ändra och köra sviter i [Evals](./evals-tab.md), både prompt-sviter och agentsviter:
+
+- **Prompt-svit**: "skapa en prompt-svit för min supportsvars-prompt med 8 testfall och jämför gpt-4o med gpt-4.1-mini". Chat skriver testfallen med deras förväntade svar, väljer en bedömningsmetod och sparar sviten.
+  - Innan den skapar sviten avgör den vilka LLM-autentiseringsuppgifter och modeller som ska användas. Med exakt en LLM-uppgift används den och meddelas; annars frågar den.
+  - För LLM-as-Judge-bedömning frågar den också om en separat domare ska bedöma svaren.
+- **Agentsvit**: "kontrollera att min supportagent alltid söker i dokumentationen och aldrig skickar e-post". Chat hittar agenten och sparar verktygskontroller och tröskelvärden. På begäran kör den workflowet och skapar en ny indata för varje körning.
+  - Körningar av agentsviter är riktiga workflow-körningar, så deras sidoeffekter inträffar. Chat anger hur många körningar den startar.
+- **Baseline**: Chat kan arbeta med en agents baseline på tre sätt:
+  - Rapportera den från agentens senaste körningar.
+  - Bygga den från körningar den startar ("kör 5 gånger och använd det som baseline").
+  - Spara siffror du anger ("ställ in baseline till 3 sekunder p95 och 0,01 $ per körning").
+- **Körningar**: Chat väntar upp till en minut på en körning och rapporterar sedan resultatet:
+  - För en prompt-svit: varje modells antal godkända och de fall som misslyckades.
+  - För en agentsvit: andelen godkända, misslyckade kontroller och avvikelsen från baslinjen.
+  - En längre körning fortsätter i Evals; be Chat att kontrollera den igen.
+
+När Chat har skapat eller ändrat en svit visar svaret ett kort med svitens namn, dess typ och en knapp för **Öppna i Evals**, precis som kortet för ett sparat workflow. Över MCP listar `heym_chat`-resultatet länken till varje svit som sparats i det anropet.
+
+Detsamma fungerar från en MCP-klient via `heym_chat` (se [Använda Chat från en MCP-klient](#använda-chat-från-en-mcp-klient)). Utvärderingsverktygen förblir inuti `heym_chat`; MCP-klienter ser dem inte som separata verktyg.
+
+Editorns AI-assistent skapar inte sviter.
+
 ## Relaterat
 
-- [MCP-fliken](./mcp-tab.md) – Exponera denna motor för MCP-klienter som verktyget `heym_chat`
+- [MCP / A2A-fliken](./mcp-tab.md) – Exponera denna motor för MCP-klienter som verktyget `heym_chat`
 - [Inställningar](../reference/user-settings.md) – Ange användarregler som tillämpas på alla chattförfrågningar
 - [Fliken Autentiseringsuppgifter](./credentials-tab.md) – Lägg till och hantera API-nycklar
 - [Fliken Variabler](./global-variables-tab.md) – Globala variabler tillgängliga för Chat

@@ -73,11 +73,11 @@ Delite tabele z drugimi uporabniki ali ekipami:
 1. Odprite pogovorno okno za deljenje iz podrobnega pogleda tabele
 2. Dodajte uporabnike po e-pošti s **pravicami za branje** ali **pisanje**
 3. Dodajte ekipe s **pravicami za branje** ali **pisanje**
-4. Uporabniki samo za branje lahko vidijo podatke; uporabniki za pisanje lahko spreminjajo vrstice
+4. Uporabniki z dostopom samo za branje si lahko ogledajo podatke; uporabniki s pravicami za pisanje lahko spreminjajo vrstice in stolpce. Preimenovanje tabele, spreminjanje njenega opisa in upravljanje deljenja ostajajo dovoljeni le lastniku.
 
 ## Ustvarjanje tabel z AI pomočnikom
 
-Platno [AI pomočnik](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) in orodje `heym_chat` na [MCP zavihku](./mcp-tab.md) lahko izberejo eno od vaših tabel za workflow, ki ga gradijo, ali ustvarijo novo. Predlagajo ime in stolpce ter ustvarijo tabelo, ko oddate vprašanje. Nikoli ne spremenijo stolpcev obstoječe tabele ali se dotaknejo njenih vrstic: tukaj dodajte ali uredite stolpce.
+[AI asistent](../reference/ai-assistant.md#data-tables) na platnu, [Chat](./chat-tab.md) in orodje `heym_chat` v [zavihku MCP](./mcp-tab.md) lahko izberejo eno od vaših tabel za workflow, ki ga gradijo, ali ustvarijo novo. Predlagajo ime in stolpce ter ustvarijo tabelo, ko pošljete kartico z vprašanji. Asistent na platnu konfigurira vozlišča workflowa iz metapodatkov tabele. Chat in `heym_chat` lahko tudi pregledujeta vrstice, dodajata ali odstranjujeta stolpce ter neposredno vstavljata, posodabljata ali brišeta vrstice. Navedite jim ime tabele ali povezavo tega zavihka. Zapisovanja zahtevajo lastništvo ali neposreden/ekipni dostop za **pisanje**. Dodajanje stolpcev ohrani obstoječe podatke; odstranjevanje stolpcev izbriše njihove vrednosti iz vsake vrstice. Odstranitev stolpcev in brisanje vseh vrstic zahtevata potrditev, enako kot v tem zavihku.
 
 ## Uporaba v workflows
 

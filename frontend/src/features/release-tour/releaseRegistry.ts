@@ -17,18 +17,157 @@ import type { ReleaseEntry } from "@/features/release-tour/releaseTour.types";
  */
 export const RELEASE_REGISTRY: ReleaseEntry[] = [
   {
-    releaseId: "2026.22",
-    publishedAt: new Date("2026-10-26T12:00:00Z"),
-    headline: "Work on one canvas together, and limit how many runs execute at once",
+    releaseId: "2026.24",
+    publishedAt: new Date("2026-10-30T12:00:00Z"),
+    headline: "Plan schedules and map database relationships with new widgets",
+    releaseTour: {
+      label: "New in Heym",
+      introTitle: "New in this release",
+      introDescription: "Gantt schedules and entity relationships, in Heym and Heym Work.",
+      tourEnabled: false,
+      sectionOrder: ["planning-widgets"],
+    },
+    sections: [{
+      id: "planning-widgets",
+      title: "Gantt schedules and database relationship diagrams",
+      publishedAt: new Date("2026-10-30T12:00:00Z"),
+      blocks: [{
+        type: "prose",
+        markdown: "Add a **Gantt** widget for tasks with start and end dates, completion percentages and dependencies. Choose **Entity relationships (DB)** to show tables, their fields, primary and foreign keys, and the relationships between them. Both types are available in Add widget and the Chart Output node. Heym Work can propose either view and draw a preview using the page’s own plan before you build it.",
+      }],
+      tour: {
+        description: "See project schedules and database relationships on your dashboards and Work pages.",
+        useCases: ["Track a delivery plan with task progress and dependencies", "Document a database with primary and foreign keys", "Preview a proposed timeline or schema in Heym Work"],
+        tourVisual: "planning-widgets",
+        docTarget: { categoryId: "nodes", slug: "chart-output-node", title: "Chart Output" },
+      },
+    }],
+  },
+  {
+    releaseId: "2026.23",
+    publishedAt: new Date("2026-10-27T12:00:00Z"),
+    headline: "Reach the Heym Agent from other agents over A2A",
     releaseTour: {
       label: "New in Heym",
       introTitle: "New in this release",
       introDescription:
         "A quick look at what changed since your last update. Takes about a minute.",
       tourEnabled: true,
-      sectionOrder: ["concurrency-limit", "canvas-collaboration"],
+      sectionOrder: ["a2a-agent"],
     },
     sections: [
+      {
+        id: "a2a-agent",
+        title: "The Heym Agent, over MCP and A2A",
+        publishedAt: new Date("2026-10-27T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "The **MCP** tab is now **MCP / A2A**, and the Heym Chat tool is the **Heym Agent**: the same engine as the Chat tab, which MCP clients call as `heym_chat`. Tick **Enable A2A** on the global server or on any named server, and other agents can send it tasks over the Agent2Agent protocol (A2A 1.0). The card shows the Agent Card URL and the JSON-RPC endpoint to copy.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "A task streams what the agent is doing, step by step, and ends with the reply and links to every workflow or eval suite it saved. A clarifying question pauses the task as **input required**; a credential the agent needs opens on Heym's own page and pauses it as **auth required**, so no secret passes through the other agent. Every task is a conversation in the Chat tab, and MCP clients now see the agent's real steps as progress too.",
+          },
+        ],
+        tour: {
+          description:
+            "Tick Enable A2A and other agents can delegate work to the Heym Agent, with the same abilities as Chat.",
+          useCases: [
+            "Let a company assistant built on another platform build and run Heym workflows",
+            "Hand an agent's research results to Heym to turn into a scheduled workflow",
+            "Follow a long build from another agent with streamed progress",
+          ],
+          tourVisual: "a2a-agent",
+          docTarget: {
+            categoryId: "reference",
+            slug: "a2a",
+            title: "A2A",
+          },
+        },
+      },
+    ],
+  },
+  {
+    releaseId: "2026.22",
+    publishedAt: new Date("2026-10-26T12:00:00Z"),
+    headline:
+      "Work on one canvas together, limit how many runs execute at once, and check agents against their real runs, from Evals or from Chat",
+    releaseTour: {
+      label: "New in Heym",
+      introTitle: "New in this release",
+      introDescription:
+        "A quick look at what changed since your last update. Takes about a minute.",
+      tourEnabled: true,
+      sectionOrder: ["agent-suite", "chat-evals", "concurrency-limit"],
+    },
+    sections: [
+      {
+        id: "agent-suite",
+        title: "Agent suites: check an agent against its real runs",
+        publishedAt: new Date("2026-10-26T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "In **Evals**, choose **New Suite** and then **Agent suite**, and pick a workflow's agent node. The suite reads the agent's last runs from Traces and shows its latency, USD cost, tokens and tool calls, with every tool, MCP tool, sub-agent, sub-workflow and skill it called and how often.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "Mark each one **Must call** or **Must not call**, and keep the upper bounds for latency, cost, tokens and tool calls that start 20% above the baseline. **Results** runs the workflow as many times as you choose, with the last run's inputs or inputs an AI model writes, scores every run against the checks and links each failed run to its trace. The suite picker now lists prompt and agent suites together, with their type, and is searchable.",
+          },
+        ],
+        tour: {
+          description:
+            "Pick an agent, see its baseline from real runs, and fail any run that calls the wrong tool or costs too much.",
+          useCases: [
+            "Make sure a support agent always searches the docs before answering",
+            "Catch an agent that starts sending email it should only draft",
+            "Notice when a prompt change makes runs slower or more expensive",
+          ],
+          tourVisual: "agent-suite",
+          docTarget: {
+            categoryId: "tabs",
+            slug: "evals-tab",
+            title: "Evals",
+          },
+        },
+      },
+      {
+        id: "chat-evals",
+        title: "Create and run eval suites from Chat",
+        publishedAt: new Date("2026-10-26T12:00:00Z"),
+        blocks: [
+          {
+            type: "prose",
+            markdown:
+              "Ask **Chat** for an eval suite in plain words, for example *\"make a prompt suite for my support prompt and compare gpt-4o with gpt-4.1-mini\"*. Chat writes the test cases with their expected answers. It asks which credential and models to use, or uses your only one. Then it saves the suite in **Evals**, runs it, and reports each model's pass count and the cases that failed.",
+          },
+          {
+            type: "prose",
+            markdown:
+              "For an **agent suite**, Chat picks the agent and writes the run inputs itself. It can run the workflow and save those runs as the baseline, take the baseline from the agent's latest runs, or store the numbers you give it. The same works from an MCP client through `heym_chat`.",
+          },
+        ],
+        tour: {
+          description:
+            "Describe the suite you want. Chat writes the test cases, picks the credential with you, and runs it.",
+          useCases: [
+            "Compare two models on a prompt without building the suite by hand",
+            "Build an agent's baseline from fresh runs when it has none yet",
+            "Re-run a suite from an MCP client and read what failed",
+          ],
+          tourVisual: "chat-evals",
+          docTarget: {
+            categoryId: "tabs",
+            slug: "chat-tab",
+            title: "Chat",
+          },
+        },
+      },
       {
         id: "concurrency-limit",
         title: "Run a workflow one at a time, or N at a time",
@@ -58,169 +197,6 @@ export const RELEASE_REGISTRY: ReleaseEntry[] = [
             categoryId: "reference",
             slug: "webhooks",
             title: "Webhooks",
-          },
-        },
-      },
-      {
-        id: "canvas-collaboration",
-        title: "Work on a canvas together",
-        publishedAt: new Date("2026-10-25T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Everyone who opens a workflow now shows as an avatar at the top left of the canvas. Edits reach every open canvas as they happen, and each person's pointer moves in their own color. Anyone with edit access can save the shared draft, and **Ctrl+Z** undoes only your own changes.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Click an avatar to **follow** that person: your editor shows what they look at, where they point, the dialogs and AI Assistant they open and the runs they start, with your own access. Press **Esc** to stop. Turn on the **microphone** next to the avatars to talk with everyone on the canvas.",
-          },
-        ],
-        tour: {
-          description:
-            "See who is on the canvas, edit together live, follow someone's view and talk with the microphone.",
-          useCases: [
-            "Build a workflow with a teammate without taking turns",
-            "Walk someone through a run by letting them follow you",
-            "Review a workflow together while talking it through",
-          ],
-          tourVisual: "canvas-collaboration",
-          docTarget: {
-            categoryId: "reference",
-            slug: "canvas-collaboration",
-            title: "Canvas Collaboration",
-          },
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.21",
-    publishedAt: new Date("2026-10-22T12:00:00Z"),
-    headline: "Change one node with AI, and sign in to Codex with a short code",
-    releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
-      tourEnabled: true,
-      sectionOrder: ["node-ai-edit", "codex-device-sign-in"],
-    },
-    sections: [
-      {
-        id: "node-ai-edit",
-        title: "Change or fix one node with AI",
-        publishedAt: new Date("2026-10-22T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Hover a node on the canvas and click **AI** above it. The AI Assistant opens on that node and offers **Change this node as ...**, **Fix error in this node ...** and **Other**. The assistant changes only that node: the other nodes, the connections and the layout stay as they are.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "The panel shows which node it is changing. Once the node has run, it reads **Modifying Node: (Has Node Output)** and shows the last status and error, and the assistant uses that output, so a fix starts from what went wrong. Close the node focus to edit the whole workflow again.",
-          },
-        ],
-        tour: {
-          description:
-            "Click AI above a node to change or fix that node only. The rest of the workflow stays as it is.",
-          useCases: [
-            "Fix the node that failed in the last run without touching the others",
-            "Change what a condition or an HTTP request checks in one sentence",
-            "Ask about one node in Ask mode",
-          ],
-          tourVisual: "node-ai-edit",
-          docTarget: {
-            categoryId: "reference",
-            slug: "ai-assistant",
-            title: "AI Assistant",
-          },
-        },
-      },
-      {
-        id: "codex-device-sign-in",
-        title: "Sign in to ChatGPT for Codex with a short code",
-        publishedAt: new Date("2026-10-18T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "The **OpenAI Codex** credential now signs in to ChatGPT with a short code. Click **Sign in with ChatGPT**, enter the code Heym shows (it is already copied) on OpenAI's page, and approve. Heym finishes on its own and closes the OpenAI window. There is no `localhost:1455` address to copy back anymore.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Device code sign-in has to be allowed in ChatGPT under **Settings → Security**, and a workspace admin has to allow it for workspace accounts. Where it is off, **paste a redirect URL instead** keeps the previous flow.",
-          },
-        ],
-        tour: {
-          description:
-            "Connect a ChatGPT subscription to the Codex node with a short code. Nothing to paste back.",
-          useCases: [
-            "Run Codex on a ChatGPT Plus or Pro plan instead of API credits",
-            "Reconnect a Codex credential without leaving the dialog",
-            "Sign in from a phone or another computer by entering the code there",
-          ],
-          tourVisual: "codex-device-sign-in",
-          docTarget: {
-            categoryId: "nodes",
-            slug: "codex-node",
-            title: "Codex",
-          },
-        },
-      },
-    ],
-  },
-  {
-    releaseId: "2026.20",
-    publishedAt: new Date("2026-10-17T12:00:00Z"),
-    headline: "Slack approvals, buttons and forms that pause a run",
-    releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
-      tourEnabled: true,
-      sectionOrder: ["slack-bot"],
-    },
-    sections: [
-      {
-        id: "slack-bot",
-        title: "Slack with a bot token: approvals, buttons, forms and threads",
-        publishedAt: new Date("2026-10-17T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "A new **Slack Bot (Token)** credential turns the **Slack** node into a full Slack step: channel messages and DMs, thread replies, message updates, colored outcome cards, reactions, reading messages and looking people up. Each post returns its `channel`, `ts` and `threadTs`, so later steps stay in one thread.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "**Request approval**, **Send message with buttons** and **Send form** pause the run until someone answers in Slack. The same request waits in the inbox, so it can be decided in Heym too, and the step continues with `approval`, `choice` or the form's `values`. **Copy app manifest** in the credential dialog sets up the Slack app with every scope.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "One Slack app now serves every **Slack Trigger** on its credential: point Event Subscriptions at the credential's events URL, and each workflow starts only on what it listens to, such as direct messages to the bot, mentions, or one channel.",
-          },
-        ],
-        tour: {
-          description:
-            "Post to Slack with a bot token, and let a click on Approve or a submitted form continue the run.",
-          useCases: [
-            "Ask a finance channel to approve a refund before it is paid",
-            "Collect incident details through a Slack form, then file them",
-            "Close the loop with an outcome card in the same thread",
-          ],
-          tourVisual: "slack-bot",
-          docTarget: {
-            categoryId: "nodes",
-            slug: "slack-node",
-            title: "Slack",
           },
         },
       },

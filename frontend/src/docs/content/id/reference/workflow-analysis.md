@@ -43,12 +43,14 @@ Kedua tindakan tersebut terlebih dahulu **menjalankan workflow** (ketika workflo
 
 Laporan yang dihasilkan mencakup tiga bagian, secara berurutan: **Improvement areas** (saran konkret, termasuk sudut pandang **security** setiap kali workflow menyentuh credential, input pengguna, permintaan eksternal, atau paparan data), **Purpose** workflow, dan **What it does** (penelusuran langkah demi langkah melalui node-node).
 
-Bagian **Improvement areas** selalu menjalankan empat pemeriksaan eksplisit:
+Bagian **Improvement areas** selalu menjalankan lima pemeriksaan eksplisit:
 
 1. **Error coverage** — jika canvas tidak memiliki node [Error Handler](../nodes/error-handler-node.md) dan tidak ada error workflow yang dikonfigurasi, laporan akan menyoroti hal ini dan merekomendasikan penambahan penanganan error.
 2. **Time saved** — jika estimasi waktu yang dihemat per eksekusi belum ditetapkan, laporan merekomendasikan untuk mengonfigurasinya agar metrik **Time Saved** pada [Analytics](../tabs/analytics-tab.md) dapat terisi.
 3. **Network nodes** — untuk node yang melakukan panggilan jaringan (seperti [HTTP](../nodes/http-node.md) dan node integrasi), laporan merekomendasikan penanganan error khusus node (retry dan/atau continue-on-error) pada node tersebut.
 4. **Alerts** — ketika tidak ada [alerts](../tabs/alerts-tab.md) yang dikonfigurasi untuk workflow, laporan merekomendasikan penyiapan alerts sebelum masuk ke produksi.
+
+5. **Evals**: ketika workflow memiliki node [Agent](../nodes/agent-node.md) tanpa agent suite, laporan menyarankan **Agent Suite** (atau **Prompt Suite**) di [Evals](../tabs/evals-tab.md#agent-suites); ketika memiliki node [LLM](../nodes/llm-node.md), disarankan **Prompt Suite** untuk menguji prompt tersebut di berbagai model.
 
 ### Menjalankan Analyzer dari Properties
 

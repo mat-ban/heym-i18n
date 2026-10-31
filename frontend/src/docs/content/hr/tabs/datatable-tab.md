@@ -73,11 +73,11 @@ Dijelite tablice s drugim korisnicima ili timovima:
 1. Otvorite dijalog za dijeljenje iz prikaza detalja tablice
 2. Dodajte korisnike putem e-pošte s **čitanje** ili **pisanje** dozvolom
 3. Dodajte timove s **čitanje** ili **pisanje** dozvolom
-4. Korisnici s dozvolom samo za čitanje mogu pregledavati podatke; korisnici s dozvolom za pisanje mogu mijenjati redove
+4. Korisnici s pravom samo za čitanje mogu pregledavati podatke; korisnici s pravom pisanja mogu mijenjati retke i stupce. Preimenovanje tablice, promjena njezinog opisa i upravljanje dijeljenjem ostaju rezervirani samo za vlasnika.
 
 ## Stvaranje tablica putem AI asistenta
 
-Platno [AI Asistent](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) i alat `heym_chat` na [MCP kartici](./mcp-tab.md) mogu odabrati jednu od vaših tablica za workflow koji grade ili stvoriti novu. Predlažu naziv i stupce, te stvaraju tablicu kada pošaljete karticu pitanja. Nikada ne mijenjaju stupce postojeće tablice niti dodiruju njezine redove: dodajte ili uredite stupce ovdje.
+[AI asistent](../reference/ai-assistant.md#data-tables) na platnu, [Chat](./chat-tab.md) i alat `heym_chat` na [kartici MCP](./mcp-tab.md) mogu odabrati jednu od vaših tablica za workflow koji grade ili stvoriti novu. Predlažu naziv i stupce te stvaraju tablicu kada pošaljete karticu s pitanjima. Asistent na platnu konfigurira čvorove workflowa iz metapodataka tablice. Chat i `heym_chat` također mogu pregledavati retke, dodavati ili uklanjati stupce te izravno umetati, ažurirati ili brisati retke. Navedite im naziv tablice ili poveznicu ove kartice. Pisanje zahtijeva vlasništvo ili izravan/timski pristup za **pisanje**. Dodavanje stupaca zadržava postojeće podatke; uklanjanje stupaca briše njihove vrijednosti iz svakog retka. Uklanjanje stupaca i brisanje svih redaka traže potvrdu, jednako kao na ovoj kartici.
 
 ## Korištenje u Workflows
 

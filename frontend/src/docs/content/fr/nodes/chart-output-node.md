@@ -10,7 +10,7 @@ Le nœud **Sortie de graphique** est le nœud terminal d'un workflow de [widget 
 | Sorties | 0 (terminal) |
 | Sortie | Payload de graphique standardisé |
 
-Placez ce nœud **en dernier** dans un workflow de widget de tableau de bord. Le nœud qui le précède doit produire un tableau d'objets ligne, par exemple :
+Placez ce nœud **en dernier** dans un workflow de widget de tableau de bord. Pour les relations d'entités, le nœud précédent produit un objet graphe (voir [Entity relationships](#entity-relationships-db)). Les autres graphiques pilotés par les données utilisent un tableau d'objets ligne, par exemple :
 
 ```json
 [
@@ -26,9 +26,9 @@ Lorsque vous ne disposez que de données d'exemple (sans source réelle), produi
 | Paramètre | Type | Description |
 |-----------|------|-------------|
 | `label` | string | Identifiant du nœud (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` ou `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` ou `hitl` |
 | `orientation` | string | `vertical` ou `horizontal` (graphiques à barres uniquement) |
-| `dataPath` | string | Chemin pointé vers le tableau de lignes dans la sortie en amont (par ex. `data` ou `result.items`). Laissez vide pour une détection automatique. |
+| `dataPath` | string | Chemin pointé vers le tableau de lignes (ou objet graphe pour `erDiagram`) dans la sortie en amont (par ex. `data` ou `result.items`). Laissez vide pour une détection automatique. |
 | `labelField` | string | Clé de ligne utilisée comme libellé de catégorie (pie/bar/line) |
 | `valueField` | string | Clé de ligne utilisée comme valeur numérique (pie/bar/line/numeric/gauge) |
 | `series` | array | Définition optionnelle multi-séries `[{ "name": "Sent", "field": "sent" }]` pour bar/line (remplace `valueField`) |
@@ -54,8 +54,51 @@ Lorsque vous ne disposez que de données d'exemple (sans source réelle), produi
 - **scatter** — points X/Y issus de `xField` et `yField` pour des graphiques de corrélation.
 - **proportion** — une barre horizontale unique divisée en parts avec une légende en pourcentage (par ex. une répartition linguistique). Utilise `labelField` + `valueField`.
 - **barGauge** — une jauge horizontale par ligne avec un dégradé rouge→vert et une valeur (par ex. l'espace disque libre). Utilise `labelField` + `valueField`, avec `unit` et `max` optionnels (par défaut, la valeur de ligne la plus élevée).
+- **gantt** — plannings de tâches avec dates, progression et dépendances ; voir [Plannings Gantt](#gantt-schedules).
+- **erDiagram** — entités de base de données, champs, clés et relations ; voir [Entity relationships](#entity-relationships-db).
 - **text** — un message markdown (par ex. une note de statut comme « Dernière exécution à 19:47 »). Placez le markdown dans `text` pour un message statique, ou laissez `text` vide et définissez `valueField` pour afficher une chaîne produite en amont. Prend en charge les titres, le gras/l'italique, les [listes](../nodes/chart-output-node.md#interactive-task-lists), les liens et le code en ligne.
 - **hitl** — un carrousel de vos revues humaines en attente. L'en-tête affiche `1/n pending` ; la flèche gauche est désactivée sur la première carte et la flèche droite sur la dernière. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** la résolvent, et l'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique sur la même page. Ce type de graphique ignore les lignes en amont, de sorte que le workflow du widget se compose uniquement du nœud Sortie de graphique. Chaque personne connectée voit les revues des workflows dont elle est propriétaire. Choisissez un **Workflow** (et **Select agent** lorsqu'il comporte plusieurs étapes de revue) dans les propriétés du nœud ou dans les paramètres du widget pour afficher à la place les revues de ce workflow, pour toutes les personnes qui peuvent l'ouvrir ; voir [widgets HITL](../tabs/dashboard-tab.md#hitl-widgets).
+### Plannings Gantt
+
+Choisissez **Gantt** (`gantt`) pour les plannings de projets et les chronologies de tâches. Définissez `dataPath` sur le tableau de tâches, par exemple `tasks`. Les lignes utilisent des noms de champs fixes :
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` et `end` acceptent des dates ou des horodatages ISO. Les valeurs sans fuseau horaire utilisent UTC ; les décalages horaires sont convertis en UTC. `end` doit être supérieur ou égal à `start`. `progress` est optionnel (0–100, valeur par défaut 0) ; `dependencies` contient les identifiants de tâches existantes. Les identifiants doivent être uniques. Survolez une tâche pour lire ses dates complètes, sa progression et ses dépendances. Les graphiques volumineux défilent dans le widget. 500 tâches au maximum sont acceptées.
+
+Pour des données d'exemple, un mappage Set nommé `tasks` peut utiliser `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Connectez-le à Chart Output avec `chartType: "gantt"` et `dataPath: "tasks"`. Mappez les colonnes sources dans ces noms fixes à l'aide d'un nœud Set ; `labelField` et `valueField` ne sont pas utilisés.
+
+### Entity relationships (DB)
+
+Choisissez **Entity relationships (DB)** (`erDiagram`) pour les schémas de base de données et les liaisons d'entités. Définissez `dataPath` sur un **objet** graphe, tel que `graph`, contenant les deux tableaux :
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Les champs comportent un `name`, un `type` optionnel et une `key` optionnelle (`PK`, `FK`, `PK/FK` ou vide). Les relations référencent des identifiants d'entités existants ; les champs optionnels `sourceField` et `targetField` ancrent la liaison aux champs nommés. `cardinality` accepte `one-to-one`, `one-to-many` (par défaut), `many-to-one` ou `many-to-many`. Les identifiants d'entités et les noms de champs dans chaque entité doivent être uniques. 100 entités, 100 champs par entité et 500 relations au maximum sont acceptés.
+
+Avec un nœud Set, construisez `graph` à l'aide de `$dict(entities=array(dict(...)), relations=array(dict(...)))` ; utilisez `chartType: "erDiagram"` et `dataPath: "graph"`. Il s'agit d'une visualisation du schéma fourni ; elle n'inspecte pas automatiquement une base de données active.
+
+Les deux types apparaissent dans **Ajouter un widget** avec un aperçu et dans le sélecteur de type de graphique du nœud sur le canevas. Heym Work peut proposer ces types lorsque vous décrivez un planning ou un schéma de base de données, en esquissant des aperçus des tâches ou entités proposées avant de construire la page.
+
 ### Listes de tâches interactives
 
 Utilisez la syntaxe de liste de tâches Markdown de type GitHub dans le champ statique `text` :

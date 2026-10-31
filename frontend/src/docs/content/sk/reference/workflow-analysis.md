@@ -43,12 +43,14 @@ Obe akcie najprv **spustia workflow** (ak je platné a spustiteľné) a zahrnú 
 
 Vygenerovaná správa pokrýva tri sekcie v tomto poradí: **Oblasti na zlepšenie** (konkrétne návrhy vrátane uhla **bezpečnosti** vždy, keď workflow pracuje s prihlasovacími údajmi, vstupom používateľa, externými požiadavkami alebo vystavením údajov), **Účel** workflow a **Čo robí** (krok za krokom cez uzly).
 
-Sekcia **Oblasti na zlepšenie** vždy vykonáva štyri explicitné kontroly:
+Sekcia **Oblasti na zlepšenie** vždy vykonáva päť explicitných kontrol:
 
 1. **Pokrytie chýb** — ak plátno neobsahuje uzol [Error Handler](../nodes/error-handler-node.md) a nie je nakonfigurovaný žiadny error workflow, správa na to upozorní a odporučí pridať ošetrenie chýb.
 2. **Ušetrený čas** — ak nie je nastavený odhadovaný ušetrený čas na jedno spustenie, správa odporučí nakonfigurovať ho, aby sa metrika **Time Saved** v [Analytike](../tabs/analytics-tab.md) mohla naplniť.
 3. **Sieťové uzly** — pre uzly, ktoré vykonávajú sieťové volania (ako [HTTP](../nodes/http-node.md) a integračné uzly), správa odporučí špecifické ošetrenie chýb pre dané uzly (retry a/alebo continue-on-error).
 4. **Upozornenia** — ak pre workflow nie sú nakonfigurované žiadne [upozornenia](../tabs/alerts-tab.md), správa odporučí nastaviť upozornenia pred nasadením do produkcie.
+
+5. **Evals**: ak workflow obsahuje uzol [Agent](../nodes/agent-node.md) bez sady agenta, správa odporúča vytvoriť **Agent Suite** (alebo **Prompt Suite**) v [Evals](../tabs/evals-tab.md#agent-suites); ak obsahuje uzol [LLM](../nodes/llm-node.md), odporúča **Prompt Suite** na otestovanie daného promptu naprieč modelmi.
 
 ### Spustenie analyzátora z Vlastností
 

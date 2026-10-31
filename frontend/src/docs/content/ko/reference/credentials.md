@@ -14,7 +14,7 @@ Credentials는 Workflow 노드에서 사용하는 API 키와 시크릿을 저장
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | 모델용 API 키 |
 | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | decision model Endpoint의 Base URL 및 선택적 API 키 |
-| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | Model Router (Auto Model) | decision model을 사용하여 각 요청을 처리할 모델을 선택 |
+| [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) 프롬프트 스위트 | Model Router (Auto Model) | decision model을 사용하여 각 요청을 처리할 모델을 선택 |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT 구독 로그인(OAuth) 또는 runner용 Codex access Token, 그리고 저장소 작업용 GitHub PAT |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | runner용 OpenCode Go gateway API 키(선택적 base URL), 그리고 저장소 작업용 GitHub PAT |
 | [Agent](../nodes/agent-node.md), [HTTP](../nodes/http-node.md), [GitHub](../nodes/github-node.md) | GitHub | GitHub API 호출, GitHub 노드 작업, MCP 통합용 GitHub personal access Token(PAT) |

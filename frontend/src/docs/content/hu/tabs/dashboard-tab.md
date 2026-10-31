@@ -23,6 +23,8 @@ A widget egyetlen diagram a rácson. Támogatott diagramtípusok:
 - **Gauge** (egyetlen érték egy min–max tartományhoz viszonyítva, pl. egy százalék)
 - **Scatter** (X/Y pontok korrelációs ábrázoláshoz)
 - **Proportion** (egy sáv részekre osztva százalékos jelmagyarázattal, pl. nyelvi megoszlás)
+- **Gantt** (feladatdátumok, befejezés és függőségek)
+- **Entity relationships (DB)** (táblák, mezők, PK/FK kulcsok és kapcsolatok)
 - **Bar gauge** (egy vízszintes gauge soronként piros→zöld színátmenettel és egy értékkel, pl. szabad lemezterület)
 - **Text** (markdown üzenet, pl. egy állapotjelző megjegyzés, mint „Utolsó futtatás 19:47-kor"; támogatja az [interaktív jelölőnégyzeteket](../nodes/chart-output-node.md#interactive-task-lists), ha a markdown statikus, valamint a [kifejezett számozott listákat](../nodes/chart-output-node.md#numbered-lists) egyéni vagy csökkenő számozáshoz)
 - **HITL** (az Ön függőben lévő emberi felülvizsgálatai. A fejléc `1/n pending` értéket mutat. A workflow neve megnyitja azt a futtatást a vásznon. Az **Approve**, a **Request changes** és a **Reject** gombok lezárják. A widget címe melletti előzmények ikon megnyitja azt a futtatást az előzmények párbeszédablakban ezen az oldalon. A widget nem használ upstream sorokat, és mindenki a saját sorát látja. Ehelyett megjelenítheti egyetlen Workflow ellenőrzéseit is mindazok számára, akik megnyithatják azt a Workflow-t; lásd: [HITL widgetek](#hitl-widgetek))
@@ -96,6 +98,18 @@ A widget-API AI nélkül is képes létrehozni egy **számlálókártyát**: egy
 
 Használja egy widget **Fine-tune with AI** gombját egy meglévő widget új utasítással történő módosításához. Minden AI finomhangolás pillanatképet készít az előző workflow-ról a widget **Edit History** részébe, így a workflow-szerkesztőből áttekintheti vagy visszaállíthatja a változtatásokat.
 
+## Chatből és MCP-ből
+
+A [Chat](./chat-tab.md), valamint az MCP-kliensek a [`heym_chat` eszközön](./mcp-tab.md) keresztül képesek olvasni a dashboardjait, widgeteket hozzáadni, átnevezni vagy törölni, és elrendezni a dashboard elrendezését. A Heym Work minden dashboardot oldalként jelenít meg, így ugyanazok a válaszok lefedik az oldalait is.
+
+- **Milyen dashboardok léteznek és mi található rajtuk.** Kérdezze meg: "milyen dashboardjaim vannak?", "mi található az Értékesítés dashboardon?" vagy "melyik dashboardon van a bevételi workflow?". A Chat felsorolja a saját és a megosztott dashboardokat a hozzáférési jogosultságokkal és hivatkozásokkal, valamint a rajtuk lévő összes widgettel: cím, diagramtípus és a mögöttes workflow. Egy [HITL widget](#hitl-widgets), amely olyan workflow-ra van szűrve, amelyet nem tud megnyitni, rejtve marad, ahogy a dashboardon is.
+- **Új widget.** Kérje ezt: "adj hozzá egy nyitott esetek diagramot állapot szerint az Értékesítés dashboardhoz". A Chat először elhelyez egy üres widgetet a dashboardon, majd megírja a widget saját workflow-ját, tesztfuttatásokat végez és kijavítja a hibákat, amíg egy futtatás sikeres nem lesz, ugyanúgy, ahogyan a [workflow-kat készíti](./chat-tab.md#workflow-k-letrehozasa). Nem marad különálló workflow, és minden mentés megjelenik a widget Edit Historyjában. A widget címe és diagramtípusa követi azt, amit a Chat elment.
+- **Meglévő workflow.** Kérje ezt: "helyezd el a bevételi workflow-t az Értékesítés dashboardon". Egy olyan workflow, amely egy Chart Output csomópontban végződik, diagramwidgetté válik a workflow saját másolatával, így a widget későbbi módosításai soha nem érintik az eredetit. Egy trigger vagy input csomópontot tartalmazó workflow nem válhat diagramwidgetté. Minden más workflow [futtatási widgetté](#run-widgets) válik, amelyhez szintén olyan workflow szükséges, amelyet a dashboard tulajdonosa futtathat.
+- **Widget átnevezése vagy törlése.** Kérje ezt: "nevezd át a Bevétel widgetet Értékesítésre" vagy "töröld a Nyitott esetek widgetet". A diagramwidget workflow-ja is felveszi az új nevet; a futtatási widget workflow-ja megtartja a sajátját. Egy diagramwidget törlése a workflow-ját is törli vele együtt, ahogy a widget törlés gombja teszi; a futtatási widget workflow-ja megmarad. A Chat csak azt a widgetet törli, amelyet kifejezetten kért, és először pontosítást kér, ha szavai több widgetre is illeszkednek.
+- **Rendezés.** Kérje ezt: "rendezd el az Értékesítés dashboardot" vagy "add hozzá ezt a három widgetet és rendezd el". A Chat sorrendjükben rendezi el a látható widgeteket, ahogyan a **Rendezés** gomb teszi: véletlenszerű két vagy három elemű sorok, így az újbóli kérés más elrendezést eredményez. Kérjen megadott számot soronként ("hármat soronként"), hogy ekkora sorokat kapjon. Ez elrendezi a dashboardot a Heymben; a Heym Work megtartja az oldal saját elrendezését, amelyet az oldal saját **Rendezés** gombja módosít.
+
+Az új widgetek a dashboard meglévő widgetjei alá kerülnek, és mint minden widget, a dashboard tulajdonosának jogkörében futnak. A hozzáadás, átnevezés, törlés és rendezés írási hozzáférést igényel a dashboardhoz. Egy új widget létrehozásához olyan csevegésre van szükség, amely képes workflow-kat építeni: a Chat fülre, a Heym Work Chat szerkesztőknek felületre és a `heym_chat` eszközre.
+
 ## Az elrendezés szerkesztése
 
 Kapcsolja be az **Edit** módot a szerkesztési módba lépéshez, ahol widgeteket húzhat és méretezhet egy 12 oszlopos rácson. Az elrendezés módosításai automatikusan mentődnek. A widget címek soron belül szerkeszthetők a widget fejlécéből.
@@ -127,3 +141,7 @@ Egy megosztás eltávolítása vagy írásról olvasásra való csökkentése az
 
 - [Chart Output csomópont](../nodes/chart-output-node.md)
 - [Analytics lap](analytics-tab.md) — beépített futtatási metrikák (a felhasználók által épített irányítópultoktól eltérően)
+
+## Ütemezések és adatbázis-diagramok
+
+Válassza a **Gantt** lehetőséget a Widget hozzáadása menüben a feladatok időbeli megjelenítéséhez befejezési és függőségi kapcsolatokkal, vagy az **Entity relationships (DB)** lehetőséget a táblák, mezők és kapcsolataik feltérképezéséhez. Mindkét típus a [Chart Output csomópontot](../nodes/chart-output-node.md#gantt-schedules) használja, és a Heym Work oldalakon is elérhető. Amikor a Work widgeteket javasol egy ütemezéshez vagy adatbázissémához, előnézeteket rajzol a javasolt feladatokból vagy entitásokból.

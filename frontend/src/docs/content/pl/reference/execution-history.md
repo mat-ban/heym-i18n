@@ -51,6 +51,8 @@ Otwarcie workflow pod adresem `/workflows/{workflowId}/{executionId}` automatycz
 
 ### Przypadki użycia
 
+Przytrzymaj klawisz Ctrl/Cmd i kliknij wykonanie na dowolnej liście historii, aby otworzyć ten link bezpośredni w nowej karcie przeglądarki. Bieżąca karta i otwarte okno dialogowe pozostają bez zmian. Uruchomienia czatu i asystenta nie mają przypisanego workflow, więc skrót jedynie je zaznacza, podobnie jak zwykłe kliknięcie.
+
 - Ponowne uruchomienie workflow z tymi samymi danymi wejściowymi
 - Debugowanie nieudanego uruchomienia poprzez analizę danych wejściowych i wyników węzłów
 - Porównywanie danych wyjściowych między uruchomieniami

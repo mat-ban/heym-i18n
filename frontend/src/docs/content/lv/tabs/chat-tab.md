@@ -23,7 +23,8 @@ Jūs varat arī uzsākt sarunu no čata lodziņa [Workflows cilnē](./workflows-
 - **Rindā esošie sekojošie ziņojumi** – Nosūtiet vairāk ziņojumu, kamēr atbilde tiek straumēta. Rindā esošie ziņojumi tiek saglabāti, var tikt rediģēti vai dzēsti pirms to uzsākšanas, un tiek izpildīti secībā pēc aktīvās atbildes
 - **Plānošanas pauzes** – Kad Čatam ir nepieciešami plānošanas detalizējumi, tas uzdod precizējošus jautājumus un pauzē rindā esošos sekojošos ziņojumus, līdz Jūs atbildat. Pēc plānošanas atbildes pabeigšanas rindā esošie ziņojumi atsākas
 - **Akreditācijas dati** – Kad workflow, ko Čats izveido vai rediģē, prasa akreditācijas datus, Čats jautā, kuru izmantot, piedāvā izveidot jaunu sarunu laikā vai ļauj Jums turpināt bez tā. Jūs varat arī lūgt Čatu izveidot akreditācijas datus vai atjaunināt Jums piederošos; tas atver akreditācijas datu veidlapu sarunā. Modelis redz akreditācijas datu nosaukumu un veidu, nekad to vērtības, gan jūsu īpašumā esošajiem, gan ar jums kopīgotajiem akreditācijas datiem. Čata pievienotie LLM un Agent mezgli darbojas ar čatam izvēlētajiem akreditācijas datiem un modeli, tostarp kopīgotajiem akreditācijas datiem; kad Čats rediģē workflow, tā esošie LLM un Agent mezgli saglabā savus akreditācijas datus un modeli. Skatiet [AI Palīgs › Akreditācijas dati](../reference/ai-assistant.md#credentials)
-- **Datu tabulas** – Kad workflow, ko Čats izveido vai rediģē, glabā ierakstus, Čats jautā, kuru [datu tabulu](./datatable-tab.md) izmantot vai piedāvā izveidot jaunu ar kolonnām, kuras workflow nepieciešams. Tas var arī uzskaitīt Jūsu tabulas un to kolonnas. Tas nekad nelasa vai neraksta rindas. Skatiet [AI Palīgs › Datu tabulas](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Jautājiet, kādi [dashboards](./dashboard-tab.md) jums ir, kas atrodas kādā no tiem vai kurā informācijas panelī atrodas workflow. Lūdziet Chat pievienot jaunu logrīku informācijas panelim (tas ievieto tur tukšu logrīku, pēc tam izveido un pārbauda tā darbplūsmu), ievietot esošu darbplūsmu informācijas panelī kā logrīku, pārdēvēt vai dzēst logrīku vai sakārtot informācijas paneļa izkārtojumu. Heym Work parāda šos informācijas paneļus kā savas lapas. Skatiet [Dashboard › No Chat un MCP](./dashboard-tab.md#no-chat-un-mcp)
+- **Datu tabulas** – Kad Chat izveidotā vai rediģētā darbplūsma saglabā ierakstus, Chat jautā, kuru [datu tabulu](./datatable-tab.md) izmantot, vai piedāvā izveidot jaunu ar nepieciešamajām kolonnām. Tas var arī pārbaudīt rindas, pievienot vai noņemt kolonnas un tieši ievietot, atjaunināt vai dzēst rindas tabulās, kas jums pieder vai kuras varat rediģēt. Norādiet tabulas nosaukumu vai DataTable saiti. Kolonnu noņemšana un visu rindu notīrīšana prasa apstiprinājumu; kolonnu pievienošana saglabā esošos datus. Skatiet [AI asistents › Datu tabulas](../reference/ai-assistant.md#data-tables)
 - **Straumējošas atbildes** – Redziet modeļa izvadi, kamēr tā tiek straumēta
 - **Pārtraukt atbildi** – Pārtrauciet pašreizējo straumējošo atbildi jebkurā laikā; pārtraukšana arī notīra rindā esošos ziņojumus šai sarunai
 - **Markdown attēlošana** – Atbildes atbalsta markdown formatējumu, tostarp iekļautas attēlus
@@ -33,10 +34,11 @@ Jūs varat arī uzsākt sarunu no čata lodziņa [Workflows cilnē](./workflows-
 - **Balss ievade** – Izmantojiet mikrofonu, lai pārvērstu runu tekstā (pārlūkprogrammas atbalstīts). Kad ierakstīšana apstājas, Heym var viegli notīrīt transkriptu pirms Jūs to nosūtāt
 - **Ieplānotie workflows** – Jautājiet, kad cron workflows tiek izpildīti (šodien, šonedēļ, šomēnes vai pielāgotā datu diapazonā). Palīgs izmanto tos pašus grafika datus kā [Ieplānotie](./scheduled-tab.md) cilne un var ierobežot rezultātus uz workflows, kas pieder Jums, vai iekļaut tos, kas kopīgoti ar Jums
 - **Workflow izpildes vēsture** – Jautājiet par vienu workflow ("cik reizes tika izpildīts ikdienas ziņojums?", "vai tas neizdevās?", "kad tas pēdējo reizi tika izpildīts?"). Čats meklē workflow pēc tā ID un atbild no tā izpildes skaita, statusa sadalījuma, pirmās un pēdējās izpildes laika un vidējā ilguma. Jautājiet, kāpēc izpilde neizdevās vai ko tā atgrieza, un Čats tad atver šo vienīgo izpildi, lai izlasītu tās ievades, izvades un kļūdas pa mezgliem
+- **Kur izpildes neizdodas un kāpēc tās ir lēnas** – Jautājiet, kur jūsu darbplūsmas neizdodas vai kāpēc tās ir lēnas, un Chat nosauks darbplūsmas, kas darbojās visbiežāk, visvairāk neizdevās un ir vislēnākās, kā arī mezglu tipus, kas aizņem visvairāk laika (vidēji uz vienu izsaukumu un kopā), visbiežāk neizdodas un tiek izpildīti visvairāk – tieši tādus pašus skaitļus kā cilnē [Analytics](./analytics-tab.md). Mezglu tipi tiek skaitīti izpildēm, sākot no laidiena, kurā tika ieviesta mezglu analītika. Jautājiet par pēdējo stundu, 3 vai 6 stundām, 24 stundām, 7 vai 30 dienām vai visu laiku; stundu logi sākas apaļā stundā, tāpēc "pēdējā stunda" pulksten 15:20 aptver laiku no 14:00 līdz šim brīdim.
 - **Tiešraides izpildes statuss** – Jautājiet, kas šobrīd tiek izpildīts, un Čats atbild ar skaitu, workflow nosaukumiem, cik ilgi katra izpilde ir notikusi, kurā mezglā tā atrodas, un saiti tieši uz tiešo izpildi
 ## Izmantojot Chat no MCP klienta
 
-Chat dzinējs ir pieejams arī ārpus pārlūkprogrammas. Iespējojiet **Heym Chat Tool** [MCP cilnē](./mcp-tab.md), un MCP klienti — Claude, Cursor un jebkas cits, kas runā MCP — saņem vienu `heym_chat` rīku, kas darbojas ar šo pašu dzinēju un visām tā iespējām.
+Chat dzinējs ir pieejams arī ārpus pārlūkprogrammas. Iespējojiet **Heym Chat Tool** [MCP / A2A cilnē](./mcp-tab.md), un MCP klienti — Claude, Cursor un jebkas cits, kas runā MCP — saņem vienu `heym_chat` rīku, kas darbojas ar šo pašu dzinēju un visām tā iespējām.
 
 Šīs sarunas tiek saglabātas šīs cilnes vēsturē, atzīmētas ar kontaktligzdas ikonu sarunu sarakstā. Atveriet vienu, lai izlasītu, ko klients jautāja, redzētu rīku kartes, kuras tas aktivizēja, un turpinātu pavedienu pats. Atbildot uz precizējošu jautājumu, tas darbojas tāpat, vai nu pagrieziens sākās šeit, vai no MCP klienta.
 
@@ -98,9 +100,34 @@ Uz jautājumu "kāpēc tas aktivizējās", Chat lasa aktivizēšanas ierakstu un
 ## Lietotāja noteikumi
 
 [Lietotāja noteikumi](../reference/user-settings.md) (konfigurēti Iestatījumos) tiek automātiski iekļauti katrā Chat sarunā kā sistēmas līmeņa instrukcijas. Iestatiet tos vienreiz, lai piemērotu pastāvīgas preferences visiem sarunu pieprasījumiem.
+
+## Darbs ar Evals
+
+Chat var izveidot, mainīt un palaist komplektus sadaļā [Evals](./evals-tab.md), gan uzvedņu komplektus, gan aģentu komplektus:
+
+- **Uzvedņu komplekts**: "izveido uzvedņu komplektu manai atbalsta atbildes uzvednei ar 8 testa gadījumiem un salīdzini gpt-4o ar gpt-4.1-mini". Chat uzraksta testa gadījumus ar to paredzamajām atbildēm, izvēlas vērtēšanas metodi un saglabā komplektu.
+  - Pirms komplekta izveides tas noskaidro, kādus LLM akreditācijas datus un modeļus izmantot. Ar tieši vieniem LLM datiem tas izmanto tos un paziņo par to; pretējā gadījumā tas jautā.
+  - LLM-as-Judge vērtēšanai tas arī jautā, vai atbildes jāvērtē atsevišķam tiesnesim.
+- **Aģenta komplekts**: "pārbaudi, vai mans atbalsta aģents vienmēr meklē dokumentācijā un nekad nesūta e-pastus". Chat atrod aģentu un saglabā rīku pārbaudes un sliekšņus. Pēc pieprasījuma tas palaiž darbplūsmu, ģenerējot atšķirīgu ievadi katrai izpildei.
+  - Aģenta komplekta izpildes ir reālas darbplūsmas izpildes, tāpēc to blakusefekti faktiski notiek. Chat norāda, cik izpildes tas sāk.
+- **Baseline**: Chat var strādāt ar aģenta bāzes līniju trīs veidos:
+  - Ziņot par to no aģenta jaunākajām izpildēm.
+  - Izveidot to no izpildēm, ko tas pats sāk ("palaid to 5 reizes un izmanto to kā baseline").
+  - Saglabāt skaitļus, ko tam norādāt ("iestati baseline uz 3 sekundēm p95 un 0,01 $ par izpildi").
+- **Izpildes**: Chat gaida izpildi līdz vienai minūtei un pēc tam ziņo par rezultātu:
+  - Uzvedņu komplektam: katra modeļa sekmīgo pārbaužu skaitu un neveiksmīgos gadījumus.
+  - Aģenta komplektam: sekmības rādītāju, neveiksmīgās pārbaudes un novirzi no bāzes līnijas.
+  - Garāka izpilde turpinās Evals; lūdziet Chat to pārbaudīt vēlreiz.
+
+Pēc tam, kad Chat izveido vai maina komplektu, atbildē tiek parādīta kartīte ar komplekta nosaukumu, tā veidu un pogu **Atvērt Evals**, līdzīgi kā saglabātas darbplūsmas kartīte. Izmantojot MCP, `heym_chat` rezultātā tiek norādīta saite uz katru šajā izsaukumā saglabāto komplektu.
+
+Tas pats darbojas no MCP klienta, izmantojot `heym_chat` (skatiet [Chat izmantošana no MCP klienta](#chat-izmantošana-no-mcp-klienta)). Novērtēšanas rīki paliek `heym_chat` iekšienē; MCP klienti tos neredz kā atsevišķus rīkus.
+
+Redaktora AI asistents komplektus neveido.
+
 ## Saistītie
 
-- [MCP Tab](./mcp-tab.md) – Izvērsiet šo dzinēju MCP klientiem kā `heym_chat` rīku
+- [MCP / A2A Tab](./mcp-tab.md) – Izvērsiet šo dzinēju MCP klientiem kā `heym_chat` rīku
 - [Iestatījumi](../reference/user-settings.md) – Iestatiet lietotāja noteikumus, kas attiecas uz visām čata pieprasījumiem
 - [Akreditācijas dati](./credentials-tab.md) – Pievienojiet un pārvaldiet API atslēgas
 - [Mainīgie](./global-variables-tab.md) – Globālie mainīgie, kas pieejami Chat

@@ -23,6 +23,8 @@ Widget je jeden graf v mriežke. Podporované typy grafov:
 - **Gauge** (jedna hodnota voči rozsahu min–max, napr. percento)
 - **Scatter** (body X/Y pre korelačné grafy)
 - **Proportion** (jeden pruh rozdelený na podiely s percentuálnou legendou, napr. rozpis jazykov)
+- **Gantt** (dátumy úloh, dokončenie a závislosti)
+- **Entity relationships (DB)** (tabuľky, polia, kľúče PK/FK a prepojenia)
 - **Bar gauge** (jeden horizontálny gauge na riadok s prechodom červená→zelená a hodnotou, napr. voľné miesto na disku)
 - **Text** (markdown správa, napr. stavová poznámka ako „Posledné spustenie o 19:47"; podporuje [interaktívne zaškrtávacie políčka](../nodes/chart-output-node.md#interactive-task-lists), keď je markdown statický, a [explicitné číslované zoznamy](../nodes/chart-output-node.md#numbered-lists) pre vlastné alebo zostupné číslovanie)
 - **HITL** (Vaše čakajúce ľudské revízie. Hlavička zobrazuje `1/n pending`. Názov workflowu otvorí toto spustenie na plátne. **Approve**, **Request changes** a **Reject** ho vyriešia. Ikona histórie vedľa názvu widgetu otvorí toto spustenie v dialógu histórie na tejto stránke. Widget nepoužíva riadky z upstreamu a každá osoba vidí svoj vlastný front. Namiesto toho môže zobrazovať kontroly jedného Workflow, a to pre každého, kto môže tento Workflow otvoriť; pozrite [Widgety HITL](#widgety-hitl))
@@ -96,6 +98,18 @@ API widgetov dokáže vytvoriť **kartu s počtom** aj bez AI: widget `text` nad
 
 Pomocou tlačidla **Fine-tune with AI** daného widgetu upravte existujúci widget novým pokynom. Každé doladenie pomocou AI uloží snímku predchádzajúceho workflowu do **Edit History** widgetu, takže môžete zmeny skontrolovať alebo vrátiť z editora workflowu.
 
+## Z Chat a MCP
+
+[Chat](./chat-tab.md) a klienti MCP prostredníctvom nástroja [`heym_chat`](./mcp-tab.md) môžu čítať vaše dashboardy, pridávať do nich widgety, premenovávať alebo mazať widgety a usporiadať rozloženie dashboardu. Heym Work zobrazuje každý dashboard ako stránku, takže rovnaké odpovede pokrývajú aj jeho stránky.
+
+- **Ktoré dashboardy existujú a čo na nich je.** Spýtajte sa "aké dashboardy mám?", "čo je na dashboarde Predaj?" alebo "na ktorom dashboarde je workflow tržieb?". Chat vypíše vaše vlastné dashboardy aj tie, ktoré s vami boli zdieľané, s vaším prístupom a odkazom na každý z nich, a každý widget na nich: jeho názov, typ grafu a workflow za ním. [Widget HITL](#hitl-widgets) filtrovaný na workflow, ktoré nemôžete otvoriť, zostáva skrytý, rovnako ako na samotnom dashboarde.
+- **Nový widget.** Požiadajte "pridaj graf otvorených prípadov podľa stavu na dashboard Predaj". Chat najprv umiestni na dashboard prázdny widget, potom napíše vlastný workflow widgetu, vykoná testovacie behy a opravuje chyby, kým beh neprejde, rovnakým spôsobom, akým [vytvára workflowy](./chat-tab.md#vytvaranie-workflowov). Nezostane žiadny samostatný workflow a každé uloženie sa objaví v Edit History widgetu. Názov a typ grafu widgetu sa riadia tým, čo Chat uloží.
+- **Existujúci workflow.** Požiadajte "umiestni workflow tržieb na dashboard Predaj". Workflow, ktoré končí uzlom Chart Output, sa stane widgetom grafu s vlastnou kópiou workflowu, takže neskoršie zmeny widgetu nikdy neovplyvnia originál. Workflow s uzlom trigger alebo input sa nemôže stať widgetom grafu. Akýkoľvek iný workflow sa stane [spúšťacím widgetom](#run-widgets), ktorý tiež vyžaduje workflow, ktorý vlastník dashboardu môže spustiť.
+- **Premenovanie alebo zmazanie widgetu.** Požiadajte "premenuj widget Tržby na Predaj" alebo "zmaž widget Otvorené prípady". Workflow widgetu grafu preberá aj nový názov; workflow spúšťacieho widgetu si ponechá svoj vlastný. Zmazaním widgetu grafu sa zmaže aj jeho workflow, rovnako ako to robí tlačidlo zmazania widgetu; workflow spúšťacieho widgetu zostáva. Chat zmaže iba widget, o ktorý ste výslovne požiadali, a najprv sa opýta na spresnenie, ak vaše slová zodpovedajú viacerým widgetom.
+- **Usporiadanie.** Požiadajte "usporiadaj dashboard Predaj" alebo "pridaj tieto tri widgety a usporiadaj". Chat usporiada zobrazené widgety v ich poradí, rovnako ako tlačidlo **Usporiadať**: náhodné riadky po dvoch alebo troch, takže opakovaná žiadosť poskytne iné rozloženie. Požiadajte o počet na riadok ("tri na riadok"), aby ste získali riadky tejto veľkosti. Tým sa dashboard usporiada v Heym; Heym Work si zachováva vlastné usporiadanie stránky, ktoré mení vlastné tlačidlo **Usporiadať** na stránke.
+
+Nové widgety sa umiestňujú pod existujúce widgety dashboardu a rovnako ako každý widget bežia v kontexte vlastníka dashboardu. Pridávanie, premenovanie, mazanie a usporiadanie vyžadujú prístup na zápis do dashboardu. Vytvorenie nového widgetu vyžaduje chat schopný vytvárať workflowy: kartu Chat, Heym Work Chat pre editorov a `heym_chat`.
+
 ## Úprava rozloženia
 
 Prepnite **Edit** na vstup do režimu úprav, kde môžete widgety presúvať a meniť ich veľkosť v mriežke s 12 stĺpcami. Zmeny rozloženia sa ukladajú automaticky. Názvy widgetov je možné upravovať priamo v hlavičke widgetu.
@@ -127,3 +141,7 @@ Odstránenie zdieľania alebo jeho zníženie z write na read nadobúda účinno
 
 - [Uzol Chart Output](../nodes/chart-output-node.md)
 - [Karta Analytics](analytics-tab.md) — vstavané metriky spustení (odlišné od dashboardov vytvorených používateľmi)
+
+## Časové plány a databázové diagramy
+
+Zvoľte **Gantt** v Pridať widget na zobrazenie úloh v čase s väzbami na dokončenie a závislosti, alebo **Entity relationships (DB)** na zmapovanie tabuliek, polí a ich relácií. Oba typy používajú [uzol Chart Output](../nodes/chart-output-node.md#gantt-schedules) a sú tiež k dispozícii na stránkach Heym Work. Keď Work navrhuje widgety pre časový plán alebo databázovú schému, vykresľuje ukážky z navrhovaných úloh alebo entít.

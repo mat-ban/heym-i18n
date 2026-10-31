@@ -83,7 +83,8 @@
     "run": "Suorita",
     "dropFileOrClick": "Pudota tiedosto tähän tai valitse napsauttamalla",
     "removeFile": "Poista tiedosto",
-    "chooseFileFor": "Valitse tiedosto kohteelle {label}"
+    "chooseFileFor": "Valitse tiedosto kohteelle {label}",
+    "new": "Uusi"
   },
   "nav": {
     "workflows": "Workflowt",
@@ -1297,7 +1298,16 @@
     "judgeNoneSelfScore": "Ei mitään: kukin malli pisteyttää itsensä",
     "removeJudge": "Poista arvioija",
     "judgeModel": "Arviointimalli",
-    "enterJudgeModel": "Syötä arviointimalli, jota käytetään tämän arvioijan kanssa."
+    "enterJudgeModel": "Syötä arviointimalli, jota käytetään tämän arvioijan kanssa.",
+    "promptSuite": "Prompt-sarja",
+    "promptSuiteDesc": "Testaa järjestelmäpromptia eri mallien välillä",
+    "agentSuite": "Agentti-sarja",
+    "agentSuiteDesc": "Tarkista agentin todelliset ajot: työkalut, viive, kustannukset",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Hae sarjoja...",
+    "loadingSuite": "Ladataan sarjaa...",
+    "couldNotLoadSuite": "Tätä sarjaa ei voitu ladata."
   },
   "statusFilter": {
     "status": "Tila",
@@ -1701,7 +1711,9 @@
     "askAi": "Kysy tekoälyltä",
     "askAiTitle": "Kysy Chat-avustajalta tästä ajosta",
     "noNodeSpans": "Tälle ajolle ei tallennettu solmu-spaneja.",
-    "queuedProgress": "Jonossa {position}/{size}"
+    "queuedProgress": "Jonossa {position}/{size}",
+    "clickToSelectRun": "Napsauta valitaksesi tämän ajon",
+    "doubleClickOrOpenNewTab": "Kaksoisnapsauta tuodaksesi tämän ajon kankaalle, Ctrl/Cmd+napsauta avataksesi uudessa välilehdessä"
   },
   "portal": {
     "loadingPortal": "Ladataan portaalia...",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP-palvelin",
-    "subtitle": "Julkaise Workflow't MCP-työkaluina tekoälyavustajille",
+    "subtitle": "Julkaise workflow-työnkulkusi MCP-työkaluina ja Heym Agent MCP- ja A2A-protokollien kautta",
     "connection": "MCP-yhteys",
     "connectionSubtitle": "Yhdistä tekoälyavustaja Workflow-hin MCP-protokollan kautta.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Napsauta Mukautetut sovellukset -kohdassa Lisää mukautettu sovellus",
     "geminiStep3": "Liitä yllä oleva MCP-palvelimen URL-osoite ja jätä Lisäominaisuudet suljetuiksi; Gemini rekisteröityy automaattisesti",
     "geminiStep4": "Napsauta Seuraava ja valtuuta Heym-tunnuksillasi",
-    "geminiInfo": "Gemini käyttää OAuth-todennusta turvalliseen kirjautumiseen. Heym-tunnuksiasi käytetään pääsyn valtuuttamiseen, eikä niitä koskaan jaeta Geminille. Yhdistämisen jälkeen Heym toimii myös Gemini-mobiilisovelluksessa."
+    "geminiInfo": "Gemini käyttää OAuth-todennusta turvalliseen kirjautumiseen. Heym-tunnuksiasi käytetään pääsyn valtuuttamiseen, eikä niitä koskaan jaeta Geminille. Yhdistämisen jälkeen Heym toimii myös Gemini-mobiilisovelluksessa.",
+    "agentReach": {
+      "off": "Pois päältä: MCP- ja A2A-asiakkaat eivät voi tavoittaa Heym Agentia",
+      "unconfigured": "Valitse tunnistetiedot ja malli, jotta Heym Agent voi toimia",
+      "mcpA2a": "Tavoitettavissa MCP- ja A2A-yhteydellä",
+      "mcpOnly": "Tavoitettavissa heym_chat-työkaluna MCP:n kautta"
+    },
+    "a2aEnabledOnServer": "A2A otettu käyttöön kohteessa \"{name}\"",
+    "a2aEnabled": "A2A otettu käyttöön",
+    "a2aDisabledOnServer": "A2A poistettu käytöstä kohteessa \"{name}\"",
+    "a2aDisabled": "A2A poistettu käytöstä",
+    "agentAndA2aDisabledOnServer": "Heym Agent ja A2A poistettu käytöstä kohteessa \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent ja A2A poistettu käytöstä",
+    "a2a": {
+      "enable": "Ota A2A käyttöön",
+      "description": "Muut agentit voivat lähettää tehtäviä Heym Agentille Agent2Agent-protokollan (A2A 1.0) kautta. Ne todentavat tämän palvelimen avaimella X-MCP-Key-otsikossa tai Heym OAuthilla.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC-endpoint",
+      "checkCardLive": "Tarkista, että kortti on aktiivinen:",
+      "copyLabel": "Kopioi {label}"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analytiikan kojelauta",
@@ -2087,6 +2119,25 @@
       "errors": "Virheet",
       "avgLatencyMs": "Keskimääräinen viive (ms)",
       "latencyTitle": "Keskimääräinen viive ajan kuluessa"
+    },
+    "last1Hour": "Viimeinen tunti",
+    "last3Hours": "Viimeiset 3 tuntia",
+    "last6Hours": "Viimeiset 6 tuntia",
+    "nodeTypes": "Solmutyypit",
+    "nodeChart": {
+      "emptyMessage": "Ei solmutietoja tälle ajanjaksolle vielä. Solmuanalytiikka tallennetaan tämän päivityksen jälkeisille ajoille.",
+      "duration": {
+        "title": "Eniten aikaa vievät solmut",
+        "subtitle": "Keskimääräinen kesto kutsua kohden"
+      },
+      "errors": {
+        "title": "Eniten epäonnistuneet solmutyypit",
+        "subtitle": "Virheet ajan kuluessa"
+      },
+      "calls": {
+        "title": "Eniten kutsutut solmutyypit",
+        "subtitle": "Kutsut ajan kuluessa"
+      }
     }
   },
   "dashboards": {

@@ -23,6 +23,8 @@ Un giny és un sol gràfic a la graella. Tipus de gràfic compatibles:
 - **Indicador** (un sol valor en un interval mínim–màxim, per exemple un percentatge)
 - **Dispersió** (punts X/Y per a gràfics de correlació)
 - **Proporció** (una barra dividida en porcions amb una llegenda de percentatges, per exemple un desglossament per idioma)
+- **Gantt** (dates de les tasques, finalització i dependències)
+- **Entity relationships (DB)** (taules, camps, claus PK/FK i connexions)
 - **Indicador de barres** (un indicador horitzontal per fila amb un gradient de vermell→verd i un valor, per exemple espai de disc lliure)
 - **Text** (un missatge en markdown, per exemple una nota d'estat com "Última execució a les 19:47"; admet [caselles de selecció interactives](../nodes/chart-output-node.md#interactive-task-lists) quan el markdown és estàtic, i [llistes numerades explícites](../nodes/chart-output-node.md#numbered-lists) per a numeració personalitzada o descendent)
 - **HITL** (les vostres revisions humanes pendents. La capçalera mostra `1/n pending`. El nom del Workflow obre aquesta execució al canvas. **Aprova**, **Sol·licita canvis** i **Rebutja** la resolen. La icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial d'aquesta pàgina. El giny no utilitza files d'origen, i cada persona veu la seva pròpia cua. Pot mostrar en el seu lloc les revisions d'un sol Workflow, per a tothom que pugui obrir aquest Workflow; vegeu [Widgets HITL](#widgets-hitl))
@@ -96,6 +98,18 @@ L'API de widgets també pot crear una **targeta de recompte** sense IA: un widge
 
 Utilitzeu el botó **Ajustar amb IA** d'un giny per revisar un giny existent amb una instrucció nova. Cada ajust amb IA fa una instantània del Workflow anterior a l'**Historial d'edicions** del giny, de manera que podeu revisar o revertir els canvis des de l'editor de Workflows.
 
+## Des de Chat i MCP
+
+[Chat](./chat-tab.md), i els clients MCP a través de l'eina [`heym_chat`](./mcp-tab.md), poden llegir els vostres taulers, afegir-hi ginys, canviar-los el nom o eliminar-los, i endreçar la disposició d'un tauler. Heym Work mostra cada tauler com una pàgina, de manera que les mateixes respostes cobreixen les seves pàgines.
+
+- **Quins taulers hi ha i què contenen.** Pregunteu "quins taulers tinc?", "què hi ha al tauler de Vendes?" o "a quin tauler es troba el workflow d'ingressos?". Chat llista els vostres propis taulers i els compartits amb vosaltres, amb els vostres permisos d'accés i un enllaç a cadascun, així com tots els ginys que contenen: títol, tipus de gràfic i el workflow que hi ha al darrere. Un [giny HITL](#hitl-widgets) filtrat en un workflow que no podeu obrir roman ocult, igual que al mateix tauler.
+- **Un giny nou.** Demaneu "afegeix un gràfic de casos oberts per estat al tauler de Vendes". Chat primer col·loca un giny buit al tauler, després escriu el workflow propi del giny, fa execucions de prova i corregeix errors fins que una execució s'aprova, de la mateixa manera que [crea workflows](./chat-tab.md#creacio-de-workflows). No es deixa cap workflow separat i cada desat apareix a l'Edit History del giny. El títol i el tipus de gràfic del giny segueixen el que Chat desa.
+- **Un workflow existent.** Demaneu "posa el workflow d'ingressos al tauler de Vendes". Un workflow que acaba en un node Chart Output es converteix en un giny de gràfic amb la seva pròpia còpia del workflow, de manera que els canvis posteriors al giny mai no toquen l'original. Un workflow amb un node trigger o input no es pot convertir en un giny de gràfic. Qualsevol altre workflow es converteix en un [giny d'execució](#run-widgets), que també necessita un workflow que el propietari del tauler pugui executar.
+- **Canviar el nom o eliminar un giny.** Demaneu "canvia el nom del giny Ingressos a Vendes" o "elimina el giny Casos oberts". El workflow d'un giny de gràfic també pren el nom nou; el workflow d'un giny d'execució manté el seu. Eliminar un giny de gràfic elimina el seu workflow juntament amb ell, tal com fa el botó d'eliminació del giny; el workflow d'un giny d'execució es manté. Chat només elimina el giny que heu demanat i demana aclariment primer si les vostres paraules coincideixen amb diversos.
+- **Endreçar.** Demaneu "endreça el tauler de Vendes", o "afegeix aquests tres ginys i endreça". Chat disposa els ginys visibles en el seu ordre, tal com fa el botó **Endreça**: files de dos o tres a l'atzar, de manera que tornar-ho a demanar proporciona una altra distribució. Demaneu un nombre per fila ("tres per fila") per obtenir files d'aquesta mida. Això organitza el tauler a Heym; Heym Work manté la seva pròpia disposició d'una pàgina, que el botó propi **Endreça** de la pàgina canvia.
+
+Els ginys nous van a sota dels ginys existents del tauler i, com qualsevol giny, s'executen com a propietari del tauler. Afegir, canviar el nom, eliminar i endreçar requereixen accés d'escriptura al tauler. Crear un giny nou requereix un xat capaç de construir workflows: la pestanya Chat, el Chat per a editors de Heym Work i `heym_chat`.
+
 ## Editar la disposició
 
 Activeu **Edita** per entrar al mode d'edició, on podeu arrossegar ginys i redimensionar-los en una graella de 12 columnes. Els canvis de disposició es desen automàticament. Els títols dels ginys es poden editar en línia des de la capçalera del giny.
@@ -127,3 +141,7 @@ Eliminar una compartició, o rebaixar-la d'escriptura a lectura, té efecte imme
 
 - [Node de sortida de gràfic](../nodes/chart-output-node.md)
 - [Pestanya d'analítiques](analytics-tab.md) — mètriques d'execució integrades (diferents dels taulers creats per l'usuari)
+
+## Cronogrames i diagrames de bases de dades
+
+Trieu **Gantt** a Afegeix un giny per mostrar tasques al llarg del temps amb finalització i enllaços de dependència, o **Entity relationships (DB)** per mapar taules, camps i les seves relacions. Tots dos tipus utilitzen el [node Chart Output](../nodes/chart-output-node.md#gantt-schedules) i també estan disponibles a les pàgines de Heym Work. Quan Work suggereix ginys per a un calendari o esquema de base de dades, dibuixa visualitzacions prèvies a partir de les tasques o entitats proposades.

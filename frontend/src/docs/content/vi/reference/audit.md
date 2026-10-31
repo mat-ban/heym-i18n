@@ -47,7 +47,7 @@ Trong ứng dụng, tab **Logs** đọc cùng đầu ra container đó. Nó đư
 
 ## Những gì được ghi nhật ký
 
-Mọi thay đổi trạng thái đều được ghi nhật ký. Các thao tác đọc chỉ được ghi nhật ký khi bản thân việc đọc là hành động nhạy cảm — xem lịch sử chạy của một workflow, mở một credential, tải xuống một tệp. Các thao tác đọc danh sách và chi tiết thông thường không được kiểm toán; access log đã ghi lại rằng một yêu cầu đã xảy ra, và việc kiểm toán mọi `GET` sẽ chôn vùi những dòng quan trọng.
+Mọi thay đổi trạng thái đều được ghi nhật ký. Các thao tác đọc chỉ được ghi nhật ký khi bản thân việc đọc là hành động nhạy cảm — xem lịch sử chạy của một workflow, mở một credential, tải xuống một tệp. Các thao tác đọc danh sách và chi tiết thông thường không được kiểm toán; access log đã ghi lại rằng một yêu cầu đã xảy ra, và việc kiểm toán mọi `GET` sẽ chôn vùi những dòng quan trọng. Ngoại lệ duy nhất là [lượt xem trang](#page-views), ghi lại nơi người dùng đã đăng nhập điều hướng trong ứng dụng.
 
 ### Xác thực
 
@@ -62,9 +62,34 @@ Mọi thay đổi trạng thái đều được ghi nhật ký. Các thao tác �
 | `sso_settings.update` | Quản trị viên đã thay đổi cấu hình [SSO](./sso.md). Ghi lại `enabled` và `password_login_disabled`, không bao giờ ghi client secret. |
 | `sso_settings.test` | Quản trị viên đã chạy kiểm tra kết nối SSO. |
 
+### Lượt xem trang
+
+`page.view` được ghi lại mỗi khi người dùng đã đăng nhập mở một trang trong ứng dụng web, với đường dẫn URL trong trường `path`:
+
+```
+2026-10-29 09:14:02 INFO [winston.audit] audit action=page.view outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com path="/?tab=traces"
+```
+
+Đường dẫn là route nội bộ của ứng dụng. Các tab của trang tổng quan là một phần của nó (`/?tab=traces`), cũng như các id đặt tên cho những gì đang mở, chẳng hạn như `/workflows/<id>`. Chỉ một danh sách ngắn các tham số truy vấn xác định trang được giữ lại (`tab`, `dashboard`, `board`, `suite`, `workflowId`, `traceId`); mọi thứ khác trong chuỗi truy vấn và toàn bộ fragment đều bị loại bỏ. Các trang có liên kết chứa bí mật, chẳng hạn như `/review/<token>`, được ghi nhật ký với trình giữ chỗ `:token` thay vì bí mật đó.
+
+Trình duyệt báo cáo đường dẫn, vì vậy dòng `page.view` hiển thị nơi người dùng cho biết họ đã đến. Nó không chứng minh rằng máy chủ đã trả về trang đó. Các lượt truy cập vào trang đăng nhập và các liên kết được mở khi đã đăng xuất không được ghi lại, vì không có người dùng nào được gắn kèm.
+
 ### Workflow
 
-`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+`workflow.create` · `workflow.update` · `workflow.delete` · `workflow.version_revert` · `workflow.run` · `workflow.history_view` · `workflow.history_clear` · `workflow.share_add` · `workflow.share_remove` · `workflow.team_share_add` · `workflow.team_share_remove` · `workflow.execution_token_create` · `workflow.execution_token_revoke`
+
+`workflow.run` được ghi khi một lượt chạy được khởi động qua API: nút Run của trình chỉnh sửa, endpoint execute với một phiên, khóa API hoặc webhook, cổng chat và các công cụ MCP. Nó ghi lại ai đã bắt đầu, bằng cách nào và kết thúc ra sao:
+
+```
+[winston.audit] audit action=workflow.run outcome=success actor_id=8f2c1b04-3d5a-4f21-9c7e-1a2b3c4d5e6f actor_email=alex@example.com target=workflow:3a91d7e2-55c8-4b19-b0a1-9e8d7c6b5a43 target_name="Invoice triage" status=success trigger_source=Canvas execution_id=c1d2e3f4-0a1b-4c2d-8e3f-5a6b7c8d9e0f duration_ms=1235 test_run=true
+```
+
+`execution_id` liên kết dòng này với lượt chạy trong Lịch sử chạy. `outcome` là `failure` khi lượt chạy kết thúc bằng `error`, `cancelled` hoặc `timeout`. Một lượt chạy bị tạm dừng để con người xem xét hoặc được giữ trong hàng đợi đồng thời là một dòng `success` với `status=pending` hoặc `status=queued`. Một lệnh gọi không có người dùng đăng nhập, chẳng hạn như webhook ẩn danh hoặc khách truy cập cổng thông tin, không có `actor_id` hoặc `actor_email`. Đầu vào và đầu ra không bao giờ được ghi.
+
+Các lượt chạy được bắt đầu bởi lịch trình, node trigger, hàng đợi hoặc sự kiện không phải là dòng kiểm toán. Chúng thực thi trên bất kỳ phiên bản nào tiếp nhận chúng và được ghi vào Lịch sử chạy cùng với nguồn trigger và phiên bản đã chạy chúng.
+
+`workflow.history_view` được ghi khi ai đó mở lịch sử chạy của một workflow. Tra cứu nhỏ hiển thị lượt chạy gần đây nhất của workflow trên canvas hoặc trong danh sách không được kiểm toán.
+
 
 `workflow.history_view` ghi lại `owned=false` khi một cộng tác viên đọc lịch sử chạy của người khác. `workflow.delete` ghi lại `outcome=denied` với `reason=not_owner` khi một cộng tác viên cố gắng xóa.
 
@@ -96,6 +121,27 @@ Một dòng audit ghi lại các định danh, tên và số lượng. Nó khôn
 Hai điều đảm bảo điều này. Các điểm gọi (call site) được viết để chỉ truyền các trường an toàn, và helper audit sẽ che giấu (redact) như một lớp bảo vệ dự phòng: bất kỳ trường nào có tên chứa `password`, `secret`, `token`, `api_key`, `value`, `authorization`, `cookie` hoặc tương tự đều được thay bằng `***` trước khi dòng log được tạo. Việc che giấu quá mức là có chủ đích — một dòng log không hữu ích vẫn tốt hơn một credential bị rò rỉ.
 
 Khi một secret thực sự liên quan đến bản ghi, chỉ hình dạng của nó được ghi log. Một chia sẻ tệp ghi lại `password_protected=true`, không bao giờ ghi mật khẩu.
+
+## Heym Work
+
+Khi bạn chạy Heym Work cùng với Heym, Work sẽ phát ra các dòng kiểm toán tới stdout của vùng chứa của chính nó ở cùng định dạng Winston:
+
+```bash
+docker logs heym-work 2>&1 | grep '[winston.audit]'
+```
+
+Work ghi lại các hành động của người dùng trên các trang, bảng và bản ghi:
+
+| Hành động | Ý nghĩa |
+|---|---|
+| `page.create`, `page.update`, `page.delete` | Thay đổi đối với các trang và bố cục trang tổng quan |
+| `board.column_create`, `board.column_move`, `board.column_delete` | Thay đổi bố cục cột Kanban |
+| `card.create`, `card.move`, `card.archive`, `card.delete` | Sự kiện vòng đời của thẻ |
+| `record.create`, `record.update`, `record.delete` | Đột biến bản ghi bảng dữ liệu thông qua Work |
+| `chat.message` | Lời nhắc của người dùng được gửi tới trợ lý Work |
+| `export.csv`, `export.json` | Xuất dữ liệu |
+
+Mỗi dòng mang cùng các trường `actor_id`, `actor_email`, `timestamp` và `outcome` như các dòng kiểm toán Heym, do đó bộ thu thập nhật ký có thể phân tích cú pháp cả hai bằng một đường ống duy nhất.
 
 ## Lưu Trữ
 

@@ -89,7 +89,26 @@
     "workflowAnalysis": "Anàlisi de Workflow",
     "workflowCol": "Workflow",
     "allTime": "Tot el període",
-    "allWorkflows": "Tots els workflows"
+    "allWorkflows": "Tots els workflows",
+    "last1Hour": "Darrera hora",
+    "last3Hours": "Darreres 3 hores",
+    "last6Hours": "Darreres 6 hores",
+    "nodeTypes": "Tipus de nodes",
+    "nodeChart": {
+      "emptyMessage": "Encara no hi ha dades de nodes per a aquest període. Les anàlisis de nodes es registren per a les execucions posteriors a aquesta actualització.",
+      "duration": {
+        "title": "Nodes que requereixen més temps",
+        "subtitle": "Durada mitjana per crida"
+      },
+      "errors": {
+        "title": "Tipus de nodes amb més fallades",
+        "subtitle": "Errors al llarg del temps"
+      },
+      "calls": {
+        "title": "Tipus de nodes més cridats",
+        "subtitle": "Crides al llarg del temps"
+      }
+    }
   },
   "board": {
     "required": "Obligatori",
@@ -483,7 +502,8 @@
     "run": "Executar",
     "dropFileOrClick": "Arrossegueu un fitxer aquí o feu clic per triar-ne un",
     "removeFile": "Eliminar el fitxer",
-    "chooseFileFor": "Trieu un fitxer per a {label}"
+    "chooseFileFor": "Trieu un fitxer per a {label}",
+    "new": "Nou"
   },
   "chat": {
     "suggestion6": "Quines plantilles de Workflow hi ha disponibles?",
@@ -1117,7 +1137,16 @@
     "temperature": "Temperatura: {temp}",
     "testCases": "Casos de prova",
     "title": "Avaluacions",
-    "tokensSummary": "Tokens: {tokens}"
+    "tokensSummary": "Tokens: {tokens}",
+    "promptSuite": "Suite de prompts",
+    "promptSuiteDesc": "Proveu un prompt de sistema en diversos models",
+    "agentSuite": "Suite d'agents",
+    "agentSuiteDesc": "Comproveu les execucions reals d'un agent: eines, latència, cost",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Cerca suites...",
+    "loadingSuite": "Carregant suite...",
+    "couldNotLoadSuite": "No s'ha pogut carregar aquesta suite."
   },
   "header": {
     "darkMode": "Canviar al mode fosc",
@@ -1229,7 +1258,9 @@
     "askAi": "Pregunta a la IA",
     "askAiTitle": "Preguntar a l'assistent de Chat sobre aquesta execució",
     "noNodeSpans": "No s'ha registrat cap span de node per a aquesta execució.",
-    "queuedProgress": "A la cua {position}/{size}"
+    "queuedProgress": "A la cua {position}/{size}",
+    "clickToSelectRun": "Feu clic per seleccionar aquesta execució",
+    "doubleClickOrOpenNewTab": "Feu doble clic per portar aquesta execució al llenç, Ctrl/Cmd+clic per obrir-la en una pestanya nova"
   },
   "logs": {
     "all": "Tots",
@@ -1314,7 +1345,7 @@
     "serverNamePlaceholder": "Nom del servidor (p. ex. CRM Tools)",
     "setupInstructions": "Instruccions de configuració",
     "sseEndpointUrl": "URL de l'Endpoint SSE",
-    "subtitle": "Exposeu els vostres Workflows com a eines MCP per a assistents d'IA",
+    "subtitle": "Exposeu els vostres workflows com a eines MCP i el Heym Agent a través de MCP i A2A",
     "title": "Servidor MCP",
     "workflowDisabled": "\"{name}\" desactivat per a MCP",
     "workflowEnabled": "\"{name}\" activat per a MCP",
@@ -1379,7 +1410,27 @@
     "geminiStep2": "A Aplicacions personalitzades, feu clic a Afegeix una aplicació personalitzada",
     "geminiStep3": "Enganxeu l'URL del servidor MCP anterior i deixeu les Funcions avançades tancades; Gemini es registrarà automàticament",
     "geminiStep4": "Feu clic a Següent i autoritzeu amb les vostres credencials de Heym",
-    "geminiInfo": "Gemini utilitza OAuth per autenticar-se de manera segura. Les vostres credencials de Heym s'utilitzen per autoritzar l'accés i mai no es comparteixen amb Gemini. Un cop connectat, Heym també funciona a l'aplicació mòbil de Gemini."
+    "geminiInfo": "Gemini utilitza OAuth per autenticar-se de manera segura. Les vostres credencials de Heym s'utilitzen per autoritzar l'accés i mai no es comparteixen amb Gemini. Un cop connectat, Heym també funciona a l'aplicació mòbil de Gemini.",
+    "agentReach": {
+      "off": "Desactivat: els clients MCP i A2A no poden arribar al Heym Agent",
+      "unconfigured": "Trieu una credencial i un model perquè el Heym Agent pugui executar-se",
+      "mcpA2a": "Accessible a través de MCP i A2A",
+      "mcpOnly": "Accessible com a heym_chat a través de MCP"
+    },
+    "a2aEnabledOnServer": "A2A activat a \"{name}\"",
+    "a2aEnabled": "A2A activat",
+    "a2aDisabledOnServer": "A2A desactivat a \"{name}\"",
+    "a2aDisabled": "A2A desactivat",
+    "agentAndA2aDisabledOnServer": "Heym Agent i A2A desactivats a \"{name}\"",
+    "agentAndA2aDisabled": "Heym Agent i A2A desactivats",
+    "a2a": {
+      "enable": "Activar A2A",
+      "description": "Altres agents poden enviar tasques al Heym Agent mitjançant el protocol Agent2Agent (A2A 1.0). S'autentiquen amb la clau d'aquest servidor a la capçalera X-MCP-Key o amb Heym OAuth.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "Endpoint JSON-RPC",
+      "checkCardLive": "Comproveu que la card estigui activa:",
+      "copyLabel": "Copia {label}"
+    }
   },
   "nav": {
     "alerts": "Alertes",

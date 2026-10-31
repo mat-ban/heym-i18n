@@ -51,6 +51,8 @@ Att öppna en workflow på `/workflows/{workflowId}/{executionId}` hämtar autom
 
 ### Användningsfall
 
+Ctrl/Cmd-klicka på en körning i någon av historiklistorna för att öppna direktlänken i en ny webbläsareflik. Den aktuella fliken och den öppna dialogrutan förblir oförändrade. Chat- och assistentkörningar har inget workflow, så genvägen markerar dem bara, precis som ett vanligt klick.
+
 - Köra en workflow igen med samma indata
 - Felsöka en misslyckad körning genom att granska indata och nodutdata
 - Jämföra utdata mellan körningar

@@ -51,6 +51,8 @@ Workflown avaaminen osoitteessa `/workflows/{workflowId}/{executionId}` lataa au
 
 ### Käyttötapaukset
 
+Paina Ctrl/Cmd ja napsauta suoritusta kummassakin historialuettelossa avataksesi suoran linkin uuteen selainvälilehteen. Nykyinen välilehti ja avoin valintaikkuna säilyvät ennallaan. Chat- ja avustajasuorituksilla ei ole workflowta, joten pikanäppäin vain valitsee ne tavallisen napsautuksen tavoin.
+
 - Suorita workflow uudelleen samoilla syötteillä
 - Debuggaa epäonnistunutta suoritusta tarkastelemalla syötteitä ja solmujen tuloksia
 - Vertaa tulosteita eri suoritusten välillä

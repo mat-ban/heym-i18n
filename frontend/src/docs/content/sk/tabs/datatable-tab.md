@@ -73,11 +73,11 @@ Zdieľajte tabuľky s ostatnými používateľmi alebo tímami:
 1. Otvorte dialóg zdieľania v zobrazení detailu tabuľky
 2. Pridajte používateľov podľa e-mailu s právom **read** alebo **write**
 3. Pridajte tímy s právom **read** alebo **write**
-4. Používatelia s právom iba na čítanie môžu zobrazovať údaje; používatelia s právom zápisu môžu upravovať riadky
+4. Používatelia s prístupom iba na čítanie môžu údaje prezerať; používatelia s právami na zápis môžu upravovať riadky aj stĺpce. Premenovanie tabuľky, zmena jej popisu a správa zdieľaní zostávajú vyhradené iba vlastníkovi.
 
 ## Vytváranie tabuliek z AI asistenta
 
-[AI asistent](../reference/ai-assistant.md#data-tables) na plátne, [Chat](./chat-tab.md) a nástroj `heym_chat` na [karte MCP](./mcp-tab.md) môžu vybrať jednu z vašich tabuliek pre workflow, ktorý vytvárajú, alebo vytvoriť novú. Navrhnú názov a stĺpce a tabuľku vytvoria po odoslaní karty s otázkou. Nikdy nemenia stĺpce existujúcej tabuľky ani nezasahujú do jej riadkov: stĺpce pridávajte alebo upravujte tu.
+[AI asistent](../reference/ai-assistant.md#data-tables) na plátne, [Chat](./chat-tab.md) a nástroj `heym_chat` na [karte MCP](./mcp-tab.md) môžu vybrať jednu z vašich tabuliek pre workflow, ktorý vytvárajú, alebo vytvoriť novú. Navrhnú názov a stĺpce a po odoslaní karty s otázkami tabuľku vytvoria. Asistent na plátne konfiguruje uzly workflow z metadát tabuľky. Chat a `heym_chat` môžu tiež kontrolovať riadky, pridávať alebo odstraňovať stĺpce a priamo vkladať, aktualizovať alebo mazať riadky. Zadajte im názov tabuľky alebo odkaz na túto kartu. Zápisy vyžadujú vlastníctvo alebo priamy/tímový prístup na **zápis**. Pridanie stĺpcov zachová existujúce údaje; odstránenie stĺpcov vymaže ich hodnoty z každého riadka. Odstránenie stĺpcov a vymazanie všetkých riadkov vyžaduje potvrdenie, rovnako ako na tejto karte.
 
 ## Použitie vo workflowoch
 

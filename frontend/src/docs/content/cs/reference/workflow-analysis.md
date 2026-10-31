@@ -43,12 +43,14 @@ Obě akce nejprve **spustí workflow** (pokud je platné a spustitelné) a zahrn
 
 Vygenerovaný report pokrývá tři sekce v tomto pořadí: **Improvement areas** (konkrétní návrhy včetně hlediska **security**, kdykoli workflow pracuje s přihlašovacími údaji, vstupem od uživatele, externími požadavky nebo vystavením dat), **Purpose** workflow a **What it does** (krok za krokem průchod uzly).
 
-Sekce **Improvement areas** vždy provádí čtyři explicitní kontroly:
+Sekce **Improvement areas** vždy provádí pět explicitních kontrol:
 
 1. **Error coverage** — pokud canvas neobsahuje uzel [Error Handler](../nodes/error-handler-node.md) a není nakonfigurováno žádné error workflow, report na to upozorní a doporučí přidat ošetření chyb.
 2. **Time saved** — pokud není nastaven odhad ušetřeného času na jedno spuštění, report doporučí jeho konfiguraci, aby se mohla naplnit metrika **Time Saved** v [Analytics](../tabs/analytics-tab.md).
 3. **Network nodes** — u uzlů, které provádějí síťová volání (například [HTTP](../nodes/http-node.md) a integrační uzly), report doporučí specifické ošetření chyb (retry a/nebo continue-on-error) na těchto uzlech.
 4. **Alerts** — pokud pro workflow nejsou nakonfigurovány žádné [alerts](../tabs/alerts-tab.md), report doporučí nastavit výstrahy před nasazením do produkce.
+
+5. **Evals**: pokud workflow obsahuje uzel [Agent](../nodes/agent-node.md) bez sady agenta, zpráva doporučuje vytvořit **Agent Suite** (nebo **Prompt Suite**) v [Evals](../tabs/evals-tab.md#agent-suites); pokud obsahuje uzel [LLM](../nodes/llm-node.md), doporučuje **Prompt Suite** k otestování daného promptu napříč modely.
 
 ### Spuštění analyzátoru z Properties
 

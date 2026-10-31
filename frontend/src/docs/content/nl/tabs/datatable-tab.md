@@ -73,11 +73,11 @@ Tabellen delen met andere gebruikers of teams:
 1. Open de deel-dialoog vanuit de tabeldetailweergave
 2. Voeg gebruikers toe via e-mail met **lees-** of **schrijfrechten**
 3. Voeg teams toe met **lees-** of **schrijfrechten**
-4. Gebruikers met alleen leesrechten kunnen gegevens bekijken; gebruikers met schrijfrechten kunnen rijen wijzigen
+4. Alleen-lezen gebruikers kunnen gegevens bekijken; schrijfgebruikers kunnen rijen en kolommen wijzigen. Het hernoemen van de tabel, het wijzigen van de beschrijving en het beheren van shares blijven voorbehouden aan de eigenaar.
 
 ## Tabellen aanmaken vanuit de AI Assistant
 
-De canvas [AI Assistant](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) en de `heym_chat`-tool op het [MCP-tabblad](./mcp-tab.md) kunnen een van de tabellen selecteren voor een workflow die zij bouwen, of een nieuwe tabel aanmaken. Zij stellen een naam en kolommen voor en maken de tabel aan zodra de vraagkaart wordt ingediend. Zij wijzigen nooit de kolommen van een bestaande tabel en raken de rijen niet aan: kolommen toevoegen of bewerken gebeurt hier.
+De canvas [AI-assistent](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) en de `heym_chat`-tool op het [MCP-tabblad](./mcp-tab.md) kunnen een van uw tabellen kiezen voor een workflow die ze bouwen, of een nieuwe aanmaken. Ze stellen een naam en kolommen voor en maken de tabel aan wanneer u de vragenkaart indient. De canvas-assistent configureert workflow-knooppunten op basis van tabelmetagegevens. Chat en `heym_chat` kunnen ook rijen inspecteren, kolommen toevoegen of verwijderen en rechtstreeks rijen invoegen, bijwerken of verwijderen. Geef ze een tabelnaam of de link van dit tabblad. Schrijfbewerkingen vereisen eigendom of directe/team **schrijftoegang**. Kolommen toevoegen behoudt bestaande gegevens; kolommen verwijderen wist hun waarden uit elke rij. Het verwijderen van kolommen en het wissen van alle rijen vraagt om bevestiging, net als op dit tabblad.
 
 ## Gebruik in workflows
 

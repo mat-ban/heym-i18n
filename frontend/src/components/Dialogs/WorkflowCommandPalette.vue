@@ -35,6 +35,14 @@ import { heymWebUrl } from "@/lib/heymWeb";
 
 import { usePluginDocCategories } from "@/composables/usePluginDocCategories";
 import { getAllDocItems } from "@/docs/manifest";
+import {
+  type PaletteQuery,
+  type PaletteScope,
+  paletteScore,
+  parsePaletteQuery,
+  rankByPaletteScore,
+  unscopedQuery,
+} from "@/lib/paletteSearch";
 import { cn, formatDate } from "@/lib/utils";
 import { isTileFillingIcon, nodeIcons } from "@/lib/nodeIcons";
 import { useRecentWorkflows } from "@/composables/useRecentWorkflows";
@@ -50,7 +58,7 @@ const TABS = [
   { id: "drive", label: "Drive", icon: HardDrive },
   { id: "credentials", label: "Credentials", icon: Key },
   { id: "vectorstores", label: "Vectors", icon: Database },
-  { id: "mcp", label: "MCP", icon: Server },
+  { id: "mcp", label: "MCP / A2A", icon: Server },
   { id: "traces", label: "Traces", icon: Activity },
   { id: "alerts", label: "Alerts", icon: BellRing },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
@@ -162,78 +170,80 @@ const itemRefs = ref<(HTMLDivElement | null)[]>([]);
 
 const recentWorkflows = computed(() => getRecent());
 
-const filteredTabs = computed(() => {
-  const query = searchQuery.value.toLowerCase().trim();
-  if (!query) return TABS;
-  return TABS.filter(
-    (tab) =>
-      tab.label.toLowerCase().includes(query) ||
-      t(`nav.${tab.id}`).toLowerCase().includes(query)
+function tabsFor(terms: string[]): (typeof TABS)[number][] {
+  return rankByPaletteScore([...TABS], terms, (tab) => ({
+    label: tab.label,
+    others: [tab.id, t(`nav.${tab.id}`)],
+  }));
+}
+
+function workflowsFor(terms: string[], scheduled: boolean): WorkflowListItem[] {
+  return rankByPaletteScore(
+    props.workflows.filter((w) => Boolean(w.scheduled_for_deletion) === scheduled),
+    terms,
+    (w) => ({ label: w.name, others: [w.description] }),
   );
+}
+
+function templatesFor(terms: string[]): WorkflowTemplate[] {
+  return rankByPaletteScore(workflowTemplates.value, terms, (t) => ({
+    label: t.name,
+    others: [t.description, ...(t.tags ?? [])],
+  }));
+}
+
+function nodeTemplatesFor(terms: string[]): NodeTemplate[] {
+  return rankByPaletteScore(nodeTemplates.value, terms, (t) => ({
+    label: t.name,
+    others: [t.description, t.node_type, ...(t.tags ?? [])],
+  }));
+}
+
+function docsFor(terms: string[]): ReturnType<typeof getAllDocItems> {
+  return rankByPaletteScore(getAllDocItems(pluginDocCategories.value, locale.value), terms, (item) => ({
+    label: item.title,
+    others: [item.slug, item.categoryLabel],
+  }));
+}
+
+const SCOPE_COUNTS: Record<PaletteScope, (terms: string[]) => number> = {
+  tabs: (terms) => tabsFor(terms).length,
+  workflows: (terms) => workflowsFor(terms, false).length + workflowsFor(terms, true).length,
+  templates: (terms) => templatesFor(terms).length + nodeTemplatesFor(terms).length,
+  docs: (terms) => docsFor(terms).length,
+};
+
+// A group word narrows the search ("mcp tab"); when nothing in that group matches, the
+// word is searched like any other, so a workflow called "Doc summarizer" is still found.
+const activeQuery = computed((): PaletteQuery => {
+  const parsed = parsePaletteQuery(searchQuery.value);
+  if (!parsed.scope || SCOPE_COUNTS[parsed.scope](parsed.terms) > 0) return parsed;
+  return unscopedQuery(searchQuery.value);
 });
 
-const filteredWorkflows = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return props.workflows.filter((w) => !w.scheduled_for_deletion);
-  }
-  const query = searchQuery.value.toLowerCase();
-  return props.workflows.filter((w) => {
-    if (w.scheduled_for_deletion) return false;
-    const nameMatch = w.name.toLowerCase().includes(query);
-    const descriptionMatch = w.description
-      ? w.description.toLowerCase().includes(query)
-      : false;
-    return nameMatch || descriptionMatch;
-  });
-});
+function inScope(scope: PaletteScope): boolean {
+  return activeQuery.value.scope === null || activeQuery.value.scope === scope;
+}
 
-const filteredScheduledWorkflows = computed(() => {
-  const scheduled = props.workflows.filter((w) => w.scheduled_for_deletion);
-  if (!searchQuery.value.trim()) return scheduled;
-  const query = searchQuery.value.toLowerCase();
-  return scheduled.filter((w) => {
-    const nameMatch = w.name.toLowerCase().includes(query);
-    const descriptionMatch = w.description
-      ? w.description.toLowerCase().includes(query)
-      : false;
-    return nameMatch || descriptionMatch;
-  });
-});
+const filteredTabs = computed(() => (inScope("tabs") ? tabsFor(activeQuery.value.terms) : []));
 
-const filteredTemplates = computed(() => {
-  const q = searchQuery.value.toLowerCase().trim();
-  if (!q) return workflowTemplates.value;
-  return workflowTemplates.value.filter(
-    (t) =>
-      t.name.toLowerCase().includes(q) ||
-      (t.description ?? "").toLowerCase().includes(q) ||
-      (t.tags ?? []).some((tag) => tag.toLowerCase().includes(q))
-  );
-});
+const filteredWorkflows = computed(() =>
+  inScope("workflows") ? workflowsFor(activeQuery.value.terms, false) : [],
+);
 
-const filteredNodeTemplates = computed(() => {
-  const q = searchQuery.value.toLowerCase().trim();
-  if (!q) return nodeTemplates.value;
-  return nodeTemplates.value.filter(
-    (t) =>
-      t.name.toLowerCase().includes(q) ||
-      (t.description ?? "").toLowerCase().includes(q) ||
-      t.node_type.toLowerCase().includes(q) ||
-      (t.tags ?? []).some((tag) => tag.toLowerCase().includes(q))
-  );
-});
+const filteredScheduledWorkflows = computed(() =>
+  inScope("workflows") ? workflowsFor(activeQuery.value.terms, true) : [],
+);
 
-const filteredDocs = computed(() => {
-  const query = searchQuery.value.toLowerCase().trim();
-  const items = getAllDocItems(pluginDocCategories.value, locale.value);
-  if (!query) return items;
-  return items.filter(
-    (item) =>
-      item.title.toLowerCase().includes(query) ||
-      item.slug.toLowerCase().includes(query) ||
-      item.categoryLabel.toLowerCase().includes(query)
-  );
-});
+const filteredTemplates = computed(() =>
+  inScope("templates") ? templatesFor(activeQuery.value.terms) : [],
+);
+
+const filteredNodeTemplates = computed(() =>
+  inScope("templates") ? nodeTemplatesFor(activeQuery.value.terms) : [],
+);
+
+const filteredDocs = computed(() => (inScope("docs") ? docsFor(activeQuery.value.terms) : []));
 
 interface CategoryGroup {
   id: string;
@@ -242,13 +252,13 @@ interface CategoryGroup {
 }
 
 const categoryGroups = computed((): CategoryGroup[] => {
-  const query = searchQuery.value.toLowerCase().trim();
+  const { terms, scope } = activeQuery.value;
   const groups: CategoryGroup[] = [];
 
   // 1. Recent (always at top)
   const recentItems: PaletteItem[] = [];
   recentWorkflows.value.forEach((r) => {
-    if (!query || r.name.toLowerCase().includes(query)) {
+    if (inScope("workflows") && (terms.length === 0 || paletteScore(r.name, [], terms) > 0)) {
       const workflow = props.workflows.find((w) => w.id === r.id);
       recentItems.push({
         type: "history",
@@ -354,6 +364,7 @@ const categoryGroups = computed((): CategoryGroup[] => {
   }
 
   const q = searchQuery.value.toLowerCase().trim();
+  if (scope !== null) return groups;
   if (
     !q ||
     "support".includes(q) ||

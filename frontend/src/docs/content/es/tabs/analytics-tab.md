@@ -15,6 +15,7 @@ La pestaña **Analytics** muestra métricas de ejecución y tendencias de sus wo
 
 ## Rango temporal
 
+- **1h**, **3h**, **6h** – Última hora, 3 horas o 6 horas. Las analíticas se guardan por hora, por lo que estas cuentan la hora en que inicia la ventana completa: Última hora a las 15:20 cubre desde las 14:00 hasta ahora
 - **24h** – Últimas 24 horas
 - **7d** – Últimos 7 días
 - **30d** – Últimos 30 días
@@ -38,9 +39,19 @@ Dos tablas muestran el uso de los workflows: **Most Used** (más ancha) y **Most
 - **Execution Volume Over Time** – Gráfico de líneas de ejecuciones por intervalo temporal
 - **Success vs Error Rate** – Gráfico de área que compara ejecuciones correctas y fallidas
 - **Average Latency Over Time** – Gráfico de líneas que muestra la evolución del tiempo de respuesta
-- **Arrastrar para seleccionar** – Haga clic y arrastre sobre cualquier gráfico para enfocar un rango de fechas personalizado
+- **Arrastrar para seleccionar** – Haga clic y arrastre sobre cualquier gráfico para enfocar un rango de fechas personalizado. Una selección debe cubrir al menos dos puntos en el gráfico; un simple clic no selecciona nada
 - **Modo de selección** – Los rangos seleccionados actualizan las tarjetas de resumen, los gráficos y las tablas de workflows sin cambiar el preset base
 - **Clear Selection** – Vuelva a la ventana temporal predefinida cuando termine el análisis detallado
+
+## Tipos de nodo
+
+Debajo de los percentiles de latencia, tres gráficos muestran adónde van el tiempo de los nodos y los fallos, agrupados por tipo de nodo (Agent, HTTP Request, Code, etc.) en todos los workflows a la vista:
+
+- **Nodos que más tiempo consumen** – Los 10 tipos de nodo con mayor tiempo total de ejecución, representados como duración media por llamada. Una hora sin llamadas de un tipo muestra **Sin llamadas** en el tooltip.
+- **Tipos de nodo más fallidos** – Los 10 tipos de nodo con más errores (error o timeout), cada uno con su propio recuento de errores por intervalo temporal.
+- **Tipos de nodo más llamados** – Los 10 tipos de nodo que más se ejecutaron, cada uno con su propio recuento de llamadas por intervalo temporal. Los nodos omitidos no se cuentan.
+
+Pase el cursor sobre un gráfico para ver el tipo de nodo bajo el puntero, justo al lado. Si un tipo de nodo es demasiado pequeño para verse junto al mayor de un gráfico (menos del 1 % de este), se excluye de ese gráfico y de su leyenda. Los gráficos siguen el filtro de workflow, el rango de tiempo y cualquier rango que arrastre sobre un gráfico. Las analíticas de nodo se registran para las ejecuciones a partir de la versión que las incorporó, y una ejecución finalizada aparece en aproximadamente un minuto. Las ejecuciones más antiguas no se contabilizan.
 
 ## Actualización automática
 

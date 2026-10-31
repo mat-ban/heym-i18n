@@ -10,7 +10,7 @@ El node **Sortida de gràfic** és el node terminal d'un workflow de [giny de ta
 | Sortides | 0 (terminal) |
 | Sortida | Payload de gràfic estandarditzat |
 
-Col·loqueu aquest node **al final** d'un workflow de giny de tauler. El node anterior hauria de produir un array d'objectes de fila, per exemple:
+Col·loqueu aquest node **al final** d'un workflow de giny de tauler. Per a relacions d'entitats, el node anterior produeix un objecte graf (vegeu [Entity relationships](#entity-relationships-db)). Altres gràfics basats en dades utilitzen un array d'objectes de fila, per exemple:
 
 ```json
 [
@@ -26,9 +26,9 @@ Quan només disposeu de dades d'exemple (sense cap font real), produïu aquestes
 | Paràmetre | Tipus | Descripció |
 |-----------|------|-------------|
 | `label` | string | Identificador del node (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` o `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` o `hitl` |
 | `orientation` | string | `vertical` o `horizontal` (només per a gràfics de barres) |
-| `dataPath` | string | Camí amb punts fins a l'array de files dins de la sortida upstream (per exemple `data` o `result.items`). Deixeu-lo buit per detectar-lo automàticament. |
+| `dataPath` | string | Camí amb punts fins a l'array de files (o objecte graf per a `erDiagram`) dins de la sortida upstream (per exemple `data` o `result.items`). Deixeu-lo buit per detectar-lo automàticament. |
 | `labelField` | string | Clau de fila utilitzada com a etiqueta de categoria (pie/bar/line) |
 | `valueField` | string | Clau de fila utilitzada com a valor numèric (pie/bar/line/numeric/gauge) |
 | `series` | array | Definició opcional de múltiples sèries `[{ "name": "Sent", "field": "sent" }]` per a bar/line (substitueix `valueField`) |
@@ -54,8 +54,51 @@ Quan només disposeu de dades d'exemple (sense cap font real), produïu aquestes
 - **scatter** — punts X/Y a partir de `xField` i `yField` per a gràfics de correlació.
 - **proportion** — una única barra horitzontal dividida en porcions amb una llegenda de percentatges (per exemple, un desglossament per idioma). Utilitza `labelField` + `valueField`.
 - **barGauge** — un gauge horitzontal per fila amb un gradient de vermell a verd i un valor (per exemple, espai lliure de disc). Utilitza `labelField` + `valueField`, `unit` i `max` opcionals (per defecte, el valor de fila més gran).
+- **gantt** — cronogrames de tasques amb dates, progrés i dependències; vegeu [Cronogrames de Gantt](#gantt-schedules).
+- **erDiagram** — entitats de base de dades, camps, claus i relacions; vegeu [Entity relationships](#entity-relationships-db).
 - **text** — un missatge markdown (per exemple, una nota d'estat com "Last execution at 19:47"). Poseu el markdown a `text` per a un missatge estàtic, o deixeu `text` buit i establiu `valueField` per renderitzar una cadena produïda upstream. Admet encapçalaments, negreta/cursiva, [llistes](../nodes/chart-output-node.md#interactive-task-lists), enllaços i codi en línia.
 - **hitl** — un carrusel de les vostres revisions humanes pendents. L'encapçalament mostra `1/n pending`; la fletxa esquerra està desactivada a la primera targeta i la fletxa dreta a l'última. El nom del workflow obre aquesta execució al canvas. **Approve**, **Request changes** i **Reject** la resolen, i la icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial de la mateixa pàgina. Aquest tipus de gràfic ignora les files upstream, de manera que el workflow del giny és només el node Sortida de gràfic. Cada persona autenticada veu les revisions dels workflows que posseeix. Trieu un **Workflow** (i **Select agent** quan tingui diversos passos de revisió) a les propietats del node o a la configuració del widget per mostrar-hi, en lloc d'això, les revisions d'aquest workflow, a tothom qui el pugui obrir; vegeu [widgets HITL](../tabs/dashboard-tab.md#hitl-widgets).
+### Cronogrames de Gantt
+
+Trieu **Gantt** (`gantt`) per a planificacions de projectes i cronologies de tasques. Establiu `dataPath` a l'array de tasques, com ara `tasks`. Les files utilitzen noms de camps fixos:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` i `end` accepten dates o datetimes ISO. Els valors sense zona horària utilitzen UTC; els desplaçaments horaris es converteixen a UTC. `end` ha de ser igual o posterior a `start`. `progress` és opcional (0–100, per defecte 0); `dependencies` conté identificadors de tasques existents. Els identificadors han de ser únics. Passeu el cursor per sobre d'una tasca per llegir-ne les dates completes, el progrés i les dependències. Els gràfics grans es desplacen dins del giny. S'accepten com a màxim 500 tasques.
+
+Per a dades d'exemple, un mapatge Set anomenat `tasks` pot utilitzar `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Connecteu-lo a Chart Output amb `chartType: "gantt"` i `dataPath: "tasks"`. Mapegeu les columnes d'origen en aquests noms fixos amb un node Set; `labelField` i `valueField` no s'utilitzen.
+
+### Entity relationships (DB)
+
+Trieu **Entity relationships (DB)** (`erDiagram`) per a esquemes de bases de dades i connexions d'entitats. Establiu `dataPath` a un **objecte** graf, com ara `graph`, que contingui ambdós arrays:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Els camps tenen un `name`, `type` opcional i `key` opcional (`PK`, `FK`, `PK/FK` o buit). Les relacions fan referència a identificadors d'entitats existents; els camps opcionals `sourceField` i `targetField` ancoren la connexió a camps anomenats. `cardinality` accepta `one-to-one`, `one-to-many` (per defecte), `many-to-one` o `many-to-many`. Els identificadors d'entitats i els noms de camps dins de cada entitat han de ser únics. S'accepten com a màxim 100 entitats, 100 camps per entitat i 500 relacions.
+
+Amb un node Set, construïu `graph` mitjançant `$dict(entities=array(dict(...)), relations=array(dict(...)))`; utilitzeu `chartType: "erDiagram"` i `dataPath: "graph"`. Es tracta d'una visualització de l'esquema que proporcioneu; no inspecciona automàticament una base de dades activa.
+
+Tots dos tipus apareixen a **Afegeix un giny** amb una visualització prèvia i al selector de tipus de gràfic del node al llenç. Heym Work pot proposar aquests tipus quan descriviu un calendari o un esquema de base de dades, dibuixant previsualitzacions de les tasques o entitats proposades abans de crear la pàgina.
+
 ### Llistes de tasques interactives
 
 Utilitzeu la sintaxi de llistes de tasques Markdown de GitHub al camp estàtic `text`:

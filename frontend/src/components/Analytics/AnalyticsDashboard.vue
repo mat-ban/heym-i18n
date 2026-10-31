@@ -2,12 +2,13 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, Clock, ExternalLink, TrendingDown, TrendingUp, Zap } from "lucide-vue-next";
+import { ArrowDown, ArrowUp, ArrowUpDown, BarChart3, Clock, ExternalLink, Loader2, TrendingDown, TrendingUp, Zap } from "lucide-vue-next";
 import type {
   AnalyticsDateRange,
   AnalyticsQueryOptions,
   AnalyticsStats,
   BucketSize,
+  NodeTypeAnalytics,
   TimeSeriesMetrics,
   TimeRange,
   WorkflowBreakdownItem,
@@ -15,6 +16,8 @@ import type {
 import type { WorkflowListItem } from "@/types/workflow";
 import Button from "@/components/ui/Button.vue";
 import Card from "@/components/ui/Card.vue";
+import AnalyticsKpiCard from "@/components/Analytics/AnalyticsKpiCard.vue";
+import NodeTypeCharts from "@/components/Analytics/NodeTypeCharts.vue";
 import Select from "@/components/ui/Select.vue";
 import { analyticsApi, workflowApi } from "@/services/api";
 
@@ -25,6 +28,10 @@ const emit = defineEmits<{
 const stats = ref<AnalyticsStats | null>(null);
 const metrics = ref<TimeSeriesMetrics | null>(null);
 const loading = ref(true);
+// A reload the user asked for (filter, range, selection, Refresh): the current data is
+// dimmed under a loading badge until the new data arrives. Auto refresh stays silent.
+const reloading = ref(false);
+let loadSequence = 0;
 const error = ref<string | null>(null);
 const timeRange = ref<TimeRange>("7d");
 const selectedDateRange = ref<AnalyticsDateRange | null>(null);
@@ -33,6 +40,7 @@ const workflows = ref<WorkflowListItem[]>([]);
 const autoRefresh = ref(false);
 const refreshInterval = ref<number | null>(null);
 const workflowBreakdown = ref<WorkflowBreakdownItem[] | null>(null);
+const nodeTypeAnalytics = ref<NodeTypeAnalytics | null>(null);
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
@@ -101,12 +109,6 @@ function getBucketSizeMs(bucketSize: BucketSize): number {
   return HOUR_IN_MS;
 }
 
-function findClosestBucket(target: number, buckets: number[]): number {
-  return buckets.reduce((closest, current) => {
-    return Math.abs(current - target) < Math.abs(closest - target) ? current : closest;
-  }, buckets[0]);
-}
-
 function buildSelectedDateRange(min: number, max: number): AnalyticsDateRange | null {
   if (!metrics.value) {
     return null;
@@ -122,12 +124,14 @@ function buildSelectedDateRange(min: number, max: number): AnalyticsDateRange | 
   const lowerBound = Math.min(min, max);
   const upperBound = Math.max(min, max);
   const selectedBuckets = buckets.filter((bucket) => bucket >= lowerBound && bucket <= upperBound);
-  const alignedBuckets = selectedBuckets.length > 0
-    ? selectedBuckets
-    : [findClosestBucket(lowerBound, buckets), findClosestBucket(upperBound, buckets)];
+  // A click, or a drag that covers fewer than two points, is not a range: snapping it to the
+  // nearest point filtered the whole page to a single bucket.
+  if (selectedBuckets.length < 2) {
+    return null;
+  }
 
-  const startMs = Math.min(...alignedBuckets);
-  const endMs = Math.max(...alignedBuckets) + getBucketSizeMs(activeBucketSize.value);
+  const startMs = Math.min(...selectedBuckets);
+  const endMs = Math.max(...selectedBuckets) + getBucketSizeMs(activeBucketSize.value);
   if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) {
     return null;
   }
@@ -246,6 +250,8 @@ const chartOptions = computed(() => ({
   chart: {
     type: "line",
     height: 300,
+    // ApexCharts adds 15px under every chart by default; the card's padding is enough.
+    parentHeightOffset: 0,
     toolbar: {
       show: false,
       autoSelected: "selection",
@@ -369,7 +375,8 @@ const successErrorChart = computed(() => {
     ],
     options: {
       ...chartOptions.value,
-      chart: { ...chartOptions.value.chart, type: "area", stacked: true },
+      // Unstacked so each line shows its own count and the y axis fits the larger one.
+      chart: { ...chartOptions.value.chart, type: "area", stacked: false },
       colors: ["#10b981", "#ef4444"],
       title: {
         text: "Success vs Error Rate",
@@ -480,9 +487,18 @@ const mostFailedWorkflows = computed<WorkflowBreakdownItem[]>(() => {
   );
 });
 
-async function loadData(): Promise<void> {
+interface LoadOptions {
+  silent?: boolean;
+}
+
+async function loadData(options: LoadOptions = {}): Promise<void> {
+  // Only the latest request may write: a slow answer for an older range must not win.
+  const sequence = ++loadSequence;
   try {
     loading.value = true;
+    if (!options.silent) {
+      reloading.value = true;
+    }
     error.value = null;
     const baseRequests = [
       analyticsApi.getStats(workflowId.value, activeAnalyticsQuery.value),
@@ -493,17 +509,24 @@ async function loadData(): Promise<void> {
         ? analyticsApi.getWorkflowBreakdown(activeAnalyticsQuery.value, 10)
         : Promise.resolve<WorkflowBreakdownItem[] | null>(null);
 
-    const [statsData, metricsData, breakdownData] = await Promise.all([
+    const [statsData, metricsData, breakdownData, nodeTypeData] = await Promise.all([
       ...baseRequests,
       breakdownRequest,
+      analyticsApi.getNodeTypeAnalytics(workflowId.value, activeAnalyticsQuery.value),
     ]);
+    if (sequence !== loadSequence) return;
     stats.value = statsData;
     metrics.value = metricsData;
     workflowBreakdown.value = breakdownData;
+    nodeTypeAnalytics.value = nodeTypeData;
   } catch (err) {
+    if (sequence !== loadSequence) return;
     error.value = err instanceof Error ? err.message : "Failed to load analytics";
   } finally {
-    loading.value = false;
+    if (sequence === loadSequence) {
+      loading.value = false;
+      reloading.value = false;
+    }
   }
 }
 
@@ -565,7 +588,7 @@ watch(
 watch(autoRefresh, (enabled) => {
   if (enabled) {
     refreshInterval.value = window.setInterval(() => {
-      void loadData();
+      void loadData({ silent: true });
     }, 30000);
   } else if (refreshInterval.value !== null) {
     clearInterval(refreshInterval.value);
@@ -676,6 +699,9 @@ function goToWorkflow(): void {
         <Select
           v-model="timeRange"
           :options="[
+            { value: '1h', label: t('analytics.last1Hour') },
+            { value: '3h', label: t('analytics.last3Hours') },
+            { value: '6h', label: t('analytics.last6Hours') },
             { value: '24h', label: t('analytics.last24Hours') },
             { value: '7d', label: t('analytics.last7Days') },
             { value: '30d', label: t('analytics.last30Days') },
@@ -697,7 +723,7 @@ function goToWorkflow(): void {
             variant="outline"
             size="sm"
             :disabled="loading"
-            @click="loadData"
+            @click="loadData()"
           >
             {{ $t("analytics.refresh") }}
           </Button>
@@ -758,96 +784,58 @@ function goToWorkflow(): void {
 
     <div
       v-else-if="stats"
-      class="space-y-6"
+      class="relative space-y-6"
+      :aria-busy="reloading"
     >
+      <div
+        v-if="reloading"
+        class="absolute inset-0 z-10 flex justify-center rounded-lg bg-background/60"
+        data-testid="analytics-loading"
+      >
+        <div class="sticky top-24 flex h-fit items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm text-muted-foreground shadow-sm">
+          <Loader2 class="h-4 w-4 animate-spin" />
+          Loading analytics...
+        </div>
+      </div>
       <div
         data-testid="analytics-kpi-cards"
         class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
       >
-        <Card class="p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-muted-foreground">
-                {{ $t("analytics.totalExecutions") }}
-              </p>
-              <p class="text-2xl font-bold">
-                {{ formatNumber(stats.total_executions) }}
-              </p>
-              <p class="text-xs text-muted-foreground mt-1">
-                {{ selectedRangeLabel ?? $t("analytics.last24hCount", { count: formatNumber(stats.total_executions_24h) }) }}
-              </p>
-            </div>
-            <BarChart3 class="h-8 w-8 text-muted-foreground" />
-          </div>
-        </Card>
-
-        <Card class="p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-muted-foreground">
-                {{ $t("analytics.successRate") }}
-              </p>
-              <p class="text-2xl font-bold">
-                {{ stats.success_rate.toFixed(1) }}%
-              </p>
-              <p class="text-xs text-muted-foreground mt-1">
-                {{ formatNumber(stats.success_count) }} / {{ formatNumber(stats.total_executions) }}
-              </p>
-            </div>
-            <TrendingUp class="h-8 w-8 text-green-500" />
-          </div>
-        </Card>
-
-        <Card class="p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-muted-foreground">
-                {{ $t("analytics.errorRate") }}
-              </p>
-              <p class="text-2xl font-bold">
-                {{ stats.error_rate.toFixed(1) }}%
-              </p>
-              <p class="text-xs text-muted-foreground mt-1">
-                {{ $t("analytics.errorCount", { count: formatNumber(stats.error_count) }) }}
-              </p>
-            </div>
-            <TrendingDown class="h-8 w-8 text-red-500" />
-          </div>
-        </Card>
-
-        <Card class="p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-muted-foreground">
-                {{ $t("analytics.avgLatency") }}
-              </p>
-              <p class="text-2xl font-bold">
-                {{ formatLatency(stats.avg_latency_ms) }}
-              </p>
-              <p class="text-xs text-muted-foreground mt-1">
-                {{ $t("analytics.p95Latency", { latency: formatLatency(stats.p95_latency_ms) }) }}
-              </p>
-            </div>
-            <Zap class="h-8 w-8 text-yellow-500" />
-          </div>
-        </Card>
-
-        <Card class="p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-muted-foreground">
-                {{ $t("analytics.timeSaved") }}
-              </p>
-              <p class="text-2xl font-bold">
-                {{ formatTimeSaved(stats.time_saved_minutes) }}
-              </p>
-              <p class="text-xs text-muted-foreground mt-1">
-                {{ $t("analytics.basedOnEstimates") }}
-              </p>
-            </div>
-            <Clock class="h-8 w-8 text-blue-500" />
-          </div>
-        </Card>
+        <AnalyticsKpiCard
+          :label="$t('analytics.totalExecutions')"
+          :value="formatNumber(stats.total_executions)"
+          :caption="selectedRangeLabel ?? $t('analytics.last24hCount', { count: formatNumber(stats.total_executions_24h) })"
+          :icon="BarChart3"
+          icon-class="text-muted-foreground"
+        />
+        <AnalyticsKpiCard
+          :label="$t('analytics.successRate')"
+          :value="`${stats.success_rate.toFixed(1)}%`"
+          :caption="`${formatNumber(stats.success_count)} / ${formatNumber(stats.total_executions)}`"
+          :icon="TrendingUp"
+          icon-class="text-green-500"
+        />
+        <AnalyticsKpiCard
+          :label="$t('analytics.errorRate')"
+          :value="`${stats.error_rate.toFixed(1)}%`"
+          :caption="$t('analytics.errorCount', { count: formatNumber(stats.error_count) })"
+          :icon="TrendingDown"
+          icon-class="text-red-500"
+        />
+        <AnalyticsKpiCard
+          :label="$t('analytics.avgLatency')"
+          :value="formatLatency(stats.avg_latency_ms)"
+          :caption="$t('analytics.p95Latency', { latency: formatLatency(stats.p95_latency_ms) })"
+          :icon="Zap"
+          icon-class="text-yellow-500"
+        />
+        <AnalyticsKpiCard
+          :label="$t('analytics.timeSaved')"
+          :value="formatTimeSaved(stats.time_saved_minutes)"
+          :caption="$t('analytics.basedOnEstimates')"
+          :icon="Clock"
+          icon-class="text-blue-500"
+        />
       </div>
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -934,6 +922,12 @@ function goToWorkflow(): void {
           </div>
         </div>
       </Card>
+
+      <NodeTypeCharts
+        :analytics="nodeTypeAnalytics"
+        :base-options="chartOptions"
+        :scope-key="chartScopeKey"
+      />
 
       <div
         v-if="!workflowId && workflowBreakdown && workflowBreakdown.length > 0"

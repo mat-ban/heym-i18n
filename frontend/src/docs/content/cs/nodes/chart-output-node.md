@@ -10,7 +10,7 @@ Uzel **Výstup grafu** je koncovým uzlem workflow [widgetu dashboardu](../tabs/
 | Výstupy | 0 (koncový) |
 | Výstup | Standardizovaný payload grafu |
 
-Umístěte tento uzel **jako poslední** ve workflow widgetu dashboardu. Uzel před ním by měl vytvářet pole objektů řádků, například:
+Umístěte tento uzel **jako poslední** ve workflow widgetu dashboardu. Pro entity relationships uzel před ním vytváří objekt grafu (viz [Entity relationships](#entity-relationships-db)). Ostatní grafy řízené daty používají pole objektů řádků, například:
 
 ```json
 [
@@ -26,9 +26,9 @@ Pokud máte k dispozici pouze ukázková data (bez skutečného zdroje), vytvoř
 | Parametr | Typ | Popis |
 |-----------|------|-------------|
 | `label` | string | Identifikátor uzlu (camelCase) |
-| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `text` nebo `hitl` |
+| `chartType` | string | `pie`, `bar`, `line`, `area`, `table`, `numeric`, `gauge`, `scatter`, `proportion`, `barGauge`, `gantt`, `erDiagram`, `text` nebo `hitl` |
 | `orientation` | string | `vertical` nebo `horizontal` (pouze pro sloupcové grafy) |
-| `dataPath` | string | Tečkovaná cesta k poli řádků uvnitř výstupu předchozího uzlu (např. `data` nebo `result.items`). Ponechte prázdné pro automatickou detekci. |
+| `dataPath` | string | Tečkovaná cesta k poli řádků (nebo objektu grafu pro `erDiagram`) uvnitř výstupu předchozího uzlu (např. `data` nebo `result.items`). Ponechte prázdné pro automatickou detekci. |
 | `labelField` | string | Klíč řádku použitý jako popisek kategorie (pie/bar/line) |
 | `valueField` | string | Klíč řádku použitý jako číselná hodnota (pie/bar/line/numeric/gauge) |
 | `series` | array | Volitelná definice více sérií `[{ "name": "Sent", "field": "sent" }]` pro bar/line (přebíjí `valueField`) |
@@ -54,8 +54,51 @@ Pokud máte k dispozici pouze ukázková data (bez skutečného zdroje), vytvoř
 - **scatter** — body X/Y z `xField` a `yField` pro korelační grafy.
 - **proportion** — jediný horizontální pruh rozdělený na podíly s procentuální legendou (např. rozložení jazyků). Používá `labelField` + `valueField`.
 - **barGauge** — jeden horizontální gauge na řádek s přechodem červená→zelená a hodnotou (např. volné místo na disku). Používá `labelField` + `valueField`, volitelnou `unit` a `max` (výchozí je největší hodnota řádku).
+- **gantt** — časové plány úkolů s daty, průběhem a závislostmi; viz [Ganttovy diagramy](#gantt-schedules).
+- **erDiagram** — databázové entity, pole, klíče a relace; viz [Entity relationships](#entity-relationships-db).
 - **text** — zpráva ve formátu markdown (např. stavová poznámka jako „Poslední spuštění v 19:47"). Pro statickou zprávu vložte markdown do `text`, nebo ponechte `text` prázdné a nastavte `valueField` pro vykreslení řetězce vytvořeného předchozím uzlem. Podporuje nadpisy, tučné/kurzíva, [seznamy](../nodes/chart-output-node.md#interactive-task-lists), odkazy a inline kód.
 - **hitl** — karusel vašich čekajících lidských revizí. Hlavička zobrazuje `1/n pending`; levá šipka je zakázána na první kartě a pravá na poslední. Název workflow otevře dané spuštění na canvasu. Tlačítka **Approve**, **Request changes** a **Reject** jej vyřeší a ikona historie vedle názvu widgetu otevře dané spuštění v dialogu historie na stejné stránce. Tento typ grafu ignoruje řádky z předchozích uzlů, takže workflow widgetu tvoří pouze uzel Výstup grafu. Každá přihlášená osoba vidí revize u workflow, která vlastní. Vyberte **Workflow** (a **Select agent**, pokud má více kroků recenze) ve vlastnostech uzlu nebo v nastavení widgetu, aby se místo toho zobrazily recenze tohoto Workflow všem, kdo jej mohou otevřít; viz [widgety HITL](../tabs/dashboard-tab.md#hitl-widgets).
+
+### Ganttovy diagramy
+
+Zvolte **Gantt** (`gantt`) pro projektové plány a časové osy úkolů. Nastavte `dataPath` na pole úkolů, například `tasks`. Řádky používají pevné názvy polí:
+
+```json
+{
+  "tasks": [
+    { "id": "design", "label": "Design", "start": "2026-10-01", "end": "2026-10-05", "progress": 100 },
+    { "id": "build", "label": "Build", "start": "2026-10-05", "end": "2026-10-14", "progress": 40, "dependencies": ["design"] }
+  ]
+}
+```
+
+`start` a `end` přijímají data nebo časová razítka ISO. Hodnoty bez časového pásma používají UTC; posuny časových pásem jsou převedeny na UTC. `end` musí být ve stejný den nebo po `start`. Pole `progress` je volitelné (0–100, výchozí 0); `dependencies` obsahuje identifikátory existujících úkolů. Identifikátory musí být jedinečné. Přejetím myší nad úkolem zobrazíte úplná data, průběh a závislosti. Velké grafy se v rámci widgetu posouvají. Přijímá se maximálně 500 úkolů.
+
+Pro ukázková data může mapování Set s názvem `tasks` použít `$array(dict(id="design", label="Design", start="2026-10-01", end="2026-10-05", progress=60))`. Propojte jej s Chart Output s `chartType: "gantt"` a `dataPath: "tasks"`. Namapujte zdrojové sloupce na tyto pevné názvy pomocí uzlu Set; `labelField` a `valueField` se nepoužívají.
+
+### Entity relationships (DB)
+
+Zvolte **Entity relationships (DB)** (`erDiagram`) pro databázová schémata a propojení entit. Nastavte `dataPath` na **objekt** grafu, například `graph`, obsahující obě pole:
+
+```json
+{
+  "graph": {
+    "entities": [
+      { "id": "customers", "label": "Customers", "fields": [{ "name": "id", "type": "uuid", "key": "PK" }] },
+      { "id": "orders", "label": "Orders", "fields": [{ "name": "customer_id", "type": "uuid", "key": "FK" }] }
+    ],
+    "relations": [
+      { "source": "customers", "target": "orders", "sourceField": "id", "targetField": "customer_id", "cardinality": "one-to-many", "label": "places" }
+    ]
+  }
+}
+```
+
+Pole mají `name`, volitelný `type` a volitelný `key` (`PK`, `FK`, `PK/FK` nebo prázdné). Relace odkazují na existující identifikátory entit; volitelná pole `sourceField` a `targetField` ukotvují propojení k pojmenovaným polím. `cardinality` přijímá `one-to-one`, `one-to-many` (výchozí), `many-to-one` nebo `many-to-many`. Identifikátory entit a názvy polí v rámci každé entity musí být jedinečné. Přijímá se maximálně 100 entit, 100 polí na entitu a 500 relací.
+
+Pomocí uzlu Set sestavte `graph` přes `$dict(entities=array(dict(...)), relations=array(dict(...)))`; použijte `chartType: "erDiagram"` a `dataPath: "graph"`. Jedná se o vizualizaci dodaného schématu; neprovádí automatickou kontrolu živé databáze.
+
+Oba typy se zobrazují v **Přidat widget** s náhledem a ve výběru typu grafu uzlu na plátně. Heym Work může tyto typy navrhnout při popisu časového plánu nebo databázového schématu a vykreslit náhledy navržených úkolů či entit ještě před vytvořením stránky.
 
 ### Interaktivní seznamy úkolů
 

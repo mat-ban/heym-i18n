@@ -23,6 +23,8 @@ Logrīks ir viena diagramma uz režģa. Atbalstītie diagrammu tipi:
 - **Mērītājs** (viena vērtība pret min–max diapazonu, piemēram, procents)
 - **Izkliedēšana** (X/Y punkti korelācijas diagrammām)
 - **Proporcija** (viens stabiņš sadalīts daļās ar procentu leģendu, piemēram, valodas sadalījums)
+- **Gantt** (uzdevumu datumi, izpilde un atkarības)
+- **Entity relationships (DB)** (tabulas, lauki, PK/FK atslēgas un savienojumi)
 - **Stabiņa mērītājs** (viens horizontāls mērītājs katrā rindā ar sarkano→zaļo gradientu un vērtību, piemēram, brīva diska vieta)
 - **Teksts** (markdown ziņojums, piemēram, statusa piezīme "Pēdējā izpilde plkst. 19:47"; atbalsta [interaktīvos izvēles rūtiņas](../nodes/chart-output-node.md#interactive-task-lists), kad markdown ir statisks, un [skaitliskās sarakstus](../nodes/chart-output-node.md#numbered-lists) pielāgotai vai dilstošai numurēšanai)
 - **HITL** (jūsu gaidošās cilvēku atsauksmes. Galvene rāda `1/n gaidošs`. Workflow nosaukums atver šo izpildi kanvā. **Apstiprināt**, **Pieprasīt izmaiņas** un **Noraidīt** to atrisina. Vēstures ikona blakus logrīka nosaukumam atver šo izpildi vēstures dialogā šajā lapā. Logrīks neizmanto augšupējo rindas, un katra persona redz savu rindu. Tā vietā tā var rādīt viena Workflow pārskatīšanas ikvienam, kurš var atvērt šo Workflow; skatiet [HITL logrīki](#hitl-logriki))
@@ -96,6 +98,18 @@ Logrīku API var arī izveidot **skaitītāja karti** bez AI: `text` logrīks da
 
 Izmantojiet logrīka pogu **Pielāgot ar AI**, lai pārskatītu esošu logrīku ar jaunu instrukciju. Katrs AI pielāgojums saglabā iepriekšējo workflow logrīka **Vēstures rediģēšana**, tāpēc Jūs varat pārskatīt vai atgriezt izmaiņas no workflow redaktora.
 
+## No Chat un MCP
+
+[Chat](./chat-tab.md) un MCP klienti, izmantojot rīku [`heym_chat`](./mcp-tab.md), var lasīt jūsu vadības paneļus, pievienot tiem logrīkus, pārdēvēt vai dzēst logrīkus un sakārtot vadības paneļa izkārtojumu. Heym Work katru vadības paneli rāda kā lapu, tāpēc tās pašas atbildes attiecas arī uz tā lapām.
+
+- **Kādi vadības paneļi pastāv un kas tajos atrodas.** Jautājiet "kādi vadības paneļi man ir?", "kas atrodas Pārdošanas vadības panelī?" vai "kurā vadības panelī atrodas ieņēmumu workflow?". Chat uzskaita jūsu personīgos un ar jums kopīgotos vadības paneļus ar jūsu piekļuves tiesībām un saiti uz katru no tiem, kā arī katru tajos esošo logrīku: nosaukumu, diagrammas tipu un saistīto workflow. [HITL logrīks](#hitl-widgets), kas filtrēts pēc workflow, kuru nevarat atvērt, paliek paslēpts, tāpat kā pašā vadības panelī.
+- **Jauns logrīks.** Pieprasiet "pievieno atvērto pieteikumu diagrammu pēc statusa Pārdošanas vadības panelim". Chat vispirms vadības panelī ievieto tukšu logrīku, pēc tam uzraksta paša logrīka workflow, veic testa izpildi un novērš kļūdas, līdz izpilde izdodas, tieši tāpat kā tas [veido workflowus](./chat-tab.md#workflow-izveide). Netiek atstāts atsevisķs neatkarīgs workflow, un katra saglabāšana parādās logrīka Edit History. Logrīka nosaukums un diagrammas tips atbilst tam, ko Chat saglabā.
+- **Esošs workflow.** Pieprasiet "ievieto ieņēmumu workflow Pārdošanas vadības panelī". Workflow, kas beidzas ar Chart Output mezglu, kļūst par diagrammas logrīku ar savu workflow kopiju, tāpēc vēlākas logrīka izmaiņas nekad neietekmē oriģinālu. Workflow ar trigger vai input mezglu nevar kļūt par diagrammas logrīku. Jebkurš cits workflow kļūst par [izpildes logrīku](#run-widgets), kam nepieciešams arī workflow, ko vadības paneļa īpašnieks var izpildīt.
+- **Logrīka pārdēvēšana vai dzēšana.** Pieprasiet "pārdēvē logrīku Ieņēmumi par Pārdošana" vai "izdzēs logrīku Atvērtie pieteikumi". Diagrammas logrīka workflow pārņem arī jauno nosaukumu; izpildes logrīka workflow saglabā savu. Diagrammas logrīka dzēšana izdzēš arī tā workflow, tieši tāpat kā logrīka dzēšanas poga; izpildes logrīka workflow paliek. Chat dzēš tikai to logrīku, kuru skaidri pieprasījāt, un vispirms lūdz precizēt, ja jūsu vārdi atbilst vairākiem.
+- **Sakārtošana.** Pieprasiet "sakārto Pārdošanas vadības paneli" vai "pievieno šos trīs logrīkus un sakārto". Chat sakārto redzamos logrīkus to secībā, tieši tāpat kā poga **Sakārtot**: nejaušas rindas pa diviem vai trim, tāpēc atkārtots pieprasījums sniedz citu izkārtojumu. Pieprasiet konkrētu skaitu rindā ("trīs rindā"), lai iegūtu šāda izmēra rindas. Tas sakārto vadības paneli programmā Heym; Heym Work saglabā savu lapas izkārtojumu, kuru maina pašas lapas poga **Sakārtot**.
+
+Jauni logrīki tiek ievietoti zem vadības paneļa esošajiem logrīkiem un, tāpat kā jebkurš logrīks, darbojas vadības paneļa īpašnieka vārdā. Pievienošanai, pārdēvēšanai, dzēšanai un sakārtošanai nepieciešama rakstīšanas piekļuve vadības panelim. Jauna logrīka izveidei nepieciešama tērzēšana, kas spēj veidot workflowus: cilne Chat, Heym Work Chat redaktoriem un `heym_chat`.
+
 ## Izkārtojuma rediģēšana
 
 Pārslēdziet **Rediģēt**, lai ieietu rediģēšanas režīmā, kurā Jūs varat vilkt logrīkus un mainīt to izmērus 12 kolonnās. Izkārtojuma izmaiņas tiek saglabātas automātiski. Logrīku nosaukumi ir rediģējami tieši no logrīka galvenes.
@@ -127,3 +141,7 @@ Koplietošanas noņemšana vai samazināšana no rakstīšanas uz lasīšanu st�
 
 - [Diagrammas izejas mezgls](../nodes/chart-output-node.md)
 - [Analītikas cilne](analytics-tab.md) — iebūvētie izpildes metriķi (atšķirīgi no lietotāju veidotajiem informācijas paneļiem)
+
+## Grafiki un datubāzu diagrammas
+
+Izvēlieties **Gantt** sadaļā Pievienot logrīku, lai parādītu uzdevumus laikā ar izpildes un atkarību saitēm, vai **Entity relationships (DB)**, lai kartētu tabulas, laukus un to attiecības. Abi tipi izmanto [Chart Output mezglu](../nodes/chart-output-node.md#gantt-schedules) un ir pieejami arī Heym Work lapās. Kad Work iesaka logrīkus grafikam vai datubāzes shēmai, tas ģenerē priekšskatījumus, pamatojoties uz ierosinātajiem uzdevumiem vai entītijām.

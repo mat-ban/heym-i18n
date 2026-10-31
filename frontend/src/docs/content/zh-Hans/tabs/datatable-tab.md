@@ -73,11 +73,11 @@
 1. 从表格详情视图打开共享对话框
 2. 按邮箱添加用户，授予 **read** 或 **write** 权限
 3. 添加团队，授予 **read** 或 **write** 权限
-4. 只读用户可以查看数据；写入用户可以修改行
+4. 只读用户可以查看数据；写入用户可以修改行和列。重命名表、更改表描述以及管理共享仍仅限所有者操作。
 
 ## 从 AI Assistant 创建表格
 
-画布 [AI Assistant](../reference/ai-assistant.md#data-tables)、[Chat](./chat-tab.md) 以及 [MCP 标签页](./mcp-tab.md)上的 `heym_chat` 工具可以为其构建的 Workflow 选择您的某个表格，或创建一个新表格。它们会提出名称和列建议，并在您提交问题卡片时创建表格。它们绝不会更改已有表格的列或触碰其行数据：请在此处添加或编辑列。
+Canvas [AI 助手](../reference/ai-assistant.md#data-tables)、[Chat](./chat-tab.md) 以及 [MCP 标签页](./mcp-tab.md)上的 `heym_chat` 工具可以为其构建的 Workflow 选择您的某个表，或创建一个新表。它们会建议名称和列，并在您提交问题卡时创建表。Canvas 助手根据表元数据配置 Workflow 节点。Chat 和 `heym_chat` 还可以检查行、添加或删除列，并直接插入、更新或删除行。向它们提供表名或此标签页的链接即可。写入操作需要所有权或直接/团队**写入**权限。添加列会保留现有数据；删除列会从每行中删除其对应的值。删除列和清除所有行都会要求确认，与此标签页一致。
 
 ## 在 Workflow 中使用
 

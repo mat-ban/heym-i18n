@@ -73,11 +73,11 @@ Chia sẻ bảng với người dùng hoặc nhóm khác:
 1. Mở hộp thoại chia sẻ từ chế độ xem chi tiết bảng
 2. Thêm người dùng bằng email với quyền **read** hoặc **write**
 3. Thêm nhóm với quyền **read** hoặc **write**
-4. Người dùng chỉ đọc có thể xem dữ liệu; người dùng ghi có thể sửa đổi các hàng
+4. Người dùng chỉ đọc có thể xem dữ liệu; người dùng có quyền ghi có thể sửa đổi các hàng và cột. Việc đổi tên bảng, thay đổi mô tả và quản lý chia sẻ vẫn chỉ dành riêng cho chủ sở hữu.
 
 ## Tạo bảng từ AI Assistant
 
-[AI Assistant](../reference/ai-assistant.md#data-tables) trên canvas, [Chat](./chat-tab.md) và công cụ `heym_chat` trên [MCP tab](./mcp-tab.md) có thể chọn một trong các bảng của bạn cho một workflow mà chúng xây dựng, hoặc tạo một bảng mới. Chúng đề xuất tên và các cột, và tạo bảng khi bạn gửi thẻ câu hỏi. Chúng không bao giờ thay đổi các cột của bảng hiện có hoặc chạm vào các hàng của nó: hãy thêm hoặc chỉnh sửa cột tại đây.
+[Trợ lý AI](../reference/ai-assistant.md#data-tables) trên canvas, [Chat](./chat-tab.md) và công cụ `heym_chat` trên [tab MCP](./mcp-tab.md) có thể chọn một trong các bảng của bạn cho workflow mà chúng xây dựng, hoặc tạo một bảng mới. Chúng đề xuất tên và các cột, đồng thời tạo bảng khi bạn gửi thẻ câu hỏi. Trợ lý canvas định cấu hình các nút workflow từ siêu dữ liệu bảng. Chat và `heym_chat` cũng có thể kiểm tra các hàng, thêm hoặc xóa cột và chèn, cập nhật hoặc xóa hàng trực tiếp. Cung cấp cho chúng tên bảng hoặc liên kết của tab này. Thao tác ghi yêu cầu quyền sở hữu hoặc quyền **ghi** trực tiếp/nhóm. Việc thêm cột giữ nguyên dữ liệu hiện có; việc xóa cột sẽ xóa giá trị của chúng khỏi mỗi hàng. Việc xóa cột và xóa tất cả các hàng đều yêu cầu xác nhận, tương ứng với tab này.
 
 ## Sử dụng trong Workflow
 

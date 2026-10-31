@@ -23,6 +23,8 @@ Bir widget, ızgara üzerindeki tek bir grafikdir. Desteklenen grafik türleri:
 - **Gauge** (min–max aralığına karşı tek bir değer, örn. bir yüzde)
 - **Scatter** (korelasyon grafikleri için X/Y noktaları)
 - **Proportion** (yüzde göstergeli paylara bölünmüş tek bir bar, örn. bir dil dağılımı)
+- **Gantt** (görev tarihleri, tamamlanma ve bağımlılıklar)
+- **Entity relationships (DB)** (tablolar, alanlar, PK/FK anahtarları ve bağlantılar)
 - **Bar gauge** (kırmızıdan yeşile gradyanlı ve değerli, her satır için bir yatay gösterge, örn. boş disk alanı)
 - **Text** (bir markdown mesajı, örn. "Son çalıştırma 19:47'de" gibi bir durum notu; markdown statik olduğunda [etkileşimli onay kutularını](../nodes/chart-output-node.md#interactive-task-lists) ve özel veya azalan numaralandırma için [açık numaralı listeleri](../nodes/chart-output-node.md#numbered-lists) destekler)
 - **HITL** (bekleyen insan incelemeleriniz. Başlık `1/n pending` gösterir. Workflow adı, o çalıştırmayı canvas üzerinde açar. **Approve**, **Request changes** ve **Reject** bunu çözer. Widget başlığının yanındaki geçmiş simgesi, o çalıştırmayı bu sayfadaki geçmiş iletişim kutusunda açar. Widget, üst kaynak satırlarını kullanmaz ve her kişi kendi kuyruğunu görür. Bunun yerine, bu Workflow'u açabilen herkes için tek bir Workflow'un incelemelerini gösterebilir; bkz. [HITL widget'ları](#hitl-widgetlari))
@@ -96,6 +98,18 @@ Widget API'si AI olmadan da bir **sayaç kartı** oluşturabilir: `count_column`
 
 Mevcut bir widget'ı yeni bir talimatla revize etmek için bir widget'ın **Fine-tune with AI** düğmesini kullanın. Her AI fine-tune işlemi, önceki workflow'u widget'ın **Edit History**'sine anlık görüntü olarak kaydeder; böylece workflow editöründen değişiklikleri inceleyebilir veya geri alabilirsiniz.
 
+## Chat ve MCP Üzerinden
+
+[Chat](./chat-tab.md) ve [`heym_chat` aracı](./mcp-tab.md) aracılığıyla MCP istemcileri panolarınızı okuyabilir, panolara widget ekleyebilir, widget'ları yeniden adlandırabilir veya silebilir ve bir panonun düzenini toparlayabilir. Heym Work her panoyu bir sayfa olarak gösterir, böylece aynı yanıtlar sayfalarını da kapsar.
+
+- **Hangi panolar var ve üzerlerinde ne bulunuyor.** "Hangi panolarım var?", "Satış panosunda ne var?" veya "gelir workflow'u hangi panoda?" diye sorun. Chat, kendi panolarınızı ve sizinle paylaşılanları erişim düzeyiniz ve her birine giden bir bağlantıyla birlikte listeler; ayrıca üzerlerindeki her widget'ı: başlığını, grafik türünü ve arkasındaki workflow'u gösterir. Açma izniniz olmayan bir workflow'a filtrelenmiş bir [HITL widget'ı](#hitl-widgets), panonun kendisinde olduğu gibi gizli kalır.
+- **Yeni bir widget.** "Satış panosuna duruma göre açık talepler grafiği ekle" deyin. Chat önce panoya boş bir widget yerleştirir, ardından widget'ın kendi workflow'unu yazar, test çalıştırmaları yapar ve bir çalıştırma başarılı olana kadar hataları düzeltir; tıpkı [workflow oluşturduğu](./chat-tab.md#workflow-olusturma) gibi. Geride ayrı bir workflow kalmaz ve her kaydetme widget'ın Edit History geçmişinde görünür. Widget'ın başlığı ve grafik türü Chat'in kaydettiği bilgileri takip eder.
+- **Mevcut bir workflow.** "Gelir workflow'unu Satış panosuna yerleştir" deyin. Chart Output düğümüyle biten bir workflow, workflow'un kendi kopyasına sahip bir grafik widget'ı haline gelir; böylece widget'ta yapılan daha sonraki değişiklikler asla orijinaline dokunmaz. Trigger veya input düğümü olan bir workflow grafik widget'ı olamaz. Diğer herhangi bir workflow, pano sahibinin çalıştırabileceği bir workflow da gerektiren bir [çalıştırma widget'ı](#run-widgets) haline gelir.
+- **Bir widget'ı yeniden adlandırma veya silme.** "Gelir widget'ını Satış olarak yeniden adlandır" veya "Açık talepler widget'ını sil" deyin. Grafik widget'ının workflow'u da yeni adı alır; çalıştırma widget'ının workflow'u kendi adını korur. Bir grafik widget'ını silmek, widget'ın silme düğmesinin yaptığı gibi workflow'unu da birlikte siler; bir çalıştırma widget'ının workflow'u kalır. Chat yalnızca açıkça istediğiniz widget'ı siler ve kelimeleriniz birden fazlasıyla eşleştiğinde önce hangisi olduğunu sorar.
+- **Düzeni toparlama.** "Satış panosunu toparla" veya "bu üç widget'ı ekle ve toparla" deyin. Chat, gördüğünüz widget'ları sıralarına göre yerleştirir, tıpkı **Toparla** düğmesinin yaptığı gibi: rastgele ikişerli veya üçerli satırlar, böylece tekrar sormak başka bir düzenleme verir. Bu boyutta satırlar elde etmek için satır başına bir sayı ("satır başına üç") isteyin. Bu işlem panoyu Heym içinde düzenler; Heym Work, sayfanın kendi **Toparla** düğmesinin değiştirdiği sayfa düzenini korur.
+
+Yeni widget'lar panonun mevcut widget'larının altına eklenir ve her widget gibi pano sahibinin yetkileriyle çalışır. Ekleme, yeniden adlandırma, silme ve toparlama panoya yazma erişimi gerektirir. Yeni bir widget oluşturmak, workflow inşa edebilen bir sohbet gerektirir: Chat sekmesi, editörler için Heym Work Chat ve `heym_chat`.
+
 ## Düzeni düzenleme
 
 Widget'ları sürükleyip 12 sütunlu bir ızgarada yeniden boyutlandırabileceğiniz düzenleme moduna girmek için **Edit**'i açın. Düzen değişiklikleri otomatik olarak kaydedilir. Widget başlıkları, widget başlığından satır içi olarak düzenlenebilir.
@@ -128,3 +142,7 @@ Bir paylaşımı kaldırmak veya write'tan read'e düşürmek anında etkili olu
 
 - [Chart Output node](../nodes/chart-output-node.md)
 - [Analytics tab](analytics-tab.md) — yerleşik execution metrikleri (kullanıcı tarafından oluşturulan dashboard'lardan farklıdır)
+
+## Planlar ve veritabanı diyagramları
+
+Görevleri zaman içinde tamamlama ve bağımlılık bağlantılarıyla göstermek için Widget ekle bölümünden **Gantt**'ı veya tabloları, alanları ve ilişkilerini haritalamak için **Entity relationships (DB)**'yi seçin. Her iki tür de [Chart Output düğümünü](../nodes/chart-output-node.md#gantt-schedules) kullanır ve Heym Work sayfalarında da mevcuttur. Work bir plan veya veritabanı şeması için widget'lar önerdiğinde, sayfayı oluşturmadan önce önerilen görevlerden veya varlıklardan önizlemeler çizer.

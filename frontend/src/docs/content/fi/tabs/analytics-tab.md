@@ -15,6 +15,7 @@
 
 ## Aikaväli
 
+- **1h**, **3h**, **6h** – Viimeinen tunti, 3 tuntia tai 6 tuntia. Analytiikka tallennetaan tunneittain, joten nämä laskevat ikkunan aloitusajan kokonaisuudessaan: Viimeinen tunti klo 15:20 kattaa ajan klo 14:00 tähän hetkeen
 - **24h** – Viimeiset 24 tuntia
 - **7d** – Viimeiset 7 päivää
 - **30d** – Viimeiset 30 päivää
@@ -38,9 +39,19 @@ Kaksi taulukkoa näyttää workflowien käyttöä: **Eniten käytetyt** (leveäm
 - **Suoritusmäärät aikajanalla** – Viivakaavio suorituksista aikaväleittäin
 - **Onnistuneet vs. epäonnistuneet** – Aluekaavio, joka vertaa terveitä ja epäonnistuneita suorituksia
 - **Keskimääräinen viive aikajanalla** – Viivakaavio, joka näyttää vastausaikojen muutokset
-- **Valitse vetämällä** – Napsauta ja vedä kaaviossa keskittyäksesi mukautetulle päivämääräalueelle
+- **Valitse vetämällä** – Napsauta ja vedä millä tahansa kaaviolla tarkastellaksesi mukautettua ajanjaksoa. Valinnan on katettava vähintään kaksi pistettä kaaviossa; tavallinen napsautus ei valitse mitään
 - **Valintatila** – Valitut alueet päivittävät yhteenvetokortit, kaaviot ja workflowtaulukot muuttamatta perusasetusta
 - **Tyhjennä valinta** – Palaa esiasetettuun aikaväliin, kun olet valmis tarkasteluun
+
+## Solmutyypit
+
+Viivepersentiilien alapuolella kolme kaaviota näyttää, mihin solmujen aika ja virheet kuluvat, ryhmiteltynä solmutyypeittäin (Agent, HTTP Request, Code jne.) tarkasteltavissa workflow'issa:
+
+- **Eniten aikaa vievät solmut** – 10 solmutyyppiä, joilla on suurin kokonaissuoritusaika, esitettynä keskimääräisenä kestona kutsua kohden. Tunti ilman kyseisen tyypin kutsuja näyttää työkaluvihjeessä **Ei kutsuja**.
+- **Useimmin epäonnistuvat solmutyypit** – 10 solmutyyppiä, joissa on eniten virheitä (virhe tai timeout), kukin omalla virhemäärällään aikaväliä kohden.
+- **Eniten kutsutut solmutyypit** – 10 solmutyyppiä, joita suoritettiin eniten, kukin omalla kutsumäärällään aikaväliä kohden. Ohitettuja solmuja ei lasketa.
+
+Vie kohdistin kaavion päälle nähdäksesi osoittimen alla olevan solmutyypin aivan sen vieressä. Solmutyyppi, joka on liian pieni näkyäkseen kaavion suurimman rinnalla (alle 1 % siitä), jätetään pois kyseisestä kaaviosta ja sen selitteestä. Kaaviot noudattavat workflow-suodatinta, aikaväliä ja mitä tahansa kaaviosta vedettyä aluetta. Solmuanalytiikka tallennetaan ajoille siitä versiosta lähtien, joka toi sen mukaan, ja valmistunut ajo näkyy noin minuutin kuluessa. Vanhempia ajoja ei lasketa mukaan.
 
 ## Automaattinen päivitys
 

@@ -15,6 +15,7 @@ Tab **Analytics** menampilkan metrik eksekusi dan tren untuk Workflow Anda. Pant
 
 ## Rentang Waktu
 
+- **1h**, **3h**, **6h** – 1 jam, 3 jam, atau 6 jam terakhir. Analitik disimpan per jam, sehingga ini menghitung jam awal jendela secara penuh: Jam Terakhir pada pukul 15:20 mencakup rentang dari 14:00 hingga sekarang
 - **24j** – 24 jam terakhir
 - **7h** – 7 hari terakhir
 - **30h** – 30 hari terakhir
@@ -38,9 +39,19 @@ Dua tabel menampilkan penggunaan Workflow: **Paling Banyak Digunakan** (lebih le
 - **Volume Eksekusi dari Waktu ke Waktu** – Grafik garis eksekusi per interval waktu
 - **Tingkat Keberhasilan vs Kesalahan** – Grafik area yang membandingkan eksekusi yang sehat dan yang gagal
 - **Latensi Rata-rata dari Waktu ke Waktu** – Grafik garis yang menunjukkan perubahan waktu respons
-- **Seret untuk memilih** – Klik dan seret pada grafik mana pun untuk memfokuskan rentang tanggal khusus
+- **Seret untuk memilih** – Klik dan seret pada grafik mana saja untuk memfokuskan rentang tanggal kustom. Pilihan harus mencakup setidaknya dua titik pada grafik; klik biasa tidak memilih apa pun
 - **Mode pemilihan** – Rentang yang dipilih akan menyegarkan kartu ringkasan, grafik, dan tabel Workflow tanpa mengubah preset dasar
 - **Hapus Pilihan** – Kembali ke jendela waktu preset setelah selesai menelusuri
+
+## Tipe Node
+
+Di bawah persentil latensi, tiga grafik menunjukkan ke mana waktu node dan kegagalan dialokasikan, dikelompokkan berdasarkan tipe node (Agent, HTTP Request, Code, dll.) di seluruh workflow yang terlihat:
+
+- **Node yang Paling Banyak Memakan Waktu** – 10 tipe node dengan total waktu eksekusi terbanyak, diplot sebagai durasi rata-rata per panggilan. Satu jam tanpa panggilan dari tipe tertentu menampilkan **Tidak ada panggilan** di tooltip.
+- **Tipe Node yang Paling Sering Gagal** – 10 tipe node dengan kesalahan terbanyak (kesalahan atau timeout), masing-masing dengan jumlah kesalahan per rentang waktu.
+- **Tipe Node yang Paling Sering Dipanggil** – 10 tipe node yang paling sering berjalan, masing-masing dengan jumlah panggilan per rentang waktu. Node yang dilewati tidak dihitung.
+
+Arahkan kursor ke grafik untuk melihat tipe node tepat di samping penunjuk. Tipe node yang terlalu kecil untuk dilihat di samping yang terbesar pada grafik (di bawah 1% darinya) dikeluarkan dari grafik tersebut dan legendanya. Grafik mengikuti filter workflow, rentang waktu, dan rentang apa pun yang Anda seret pada grafik. Analitik node dicatat untuk eksekusi mulai dari rilis yang memperkenalkannya, dan eksekusi yang selesai akan muncul dalam waktu sekitar satu menit. Eksekusi yang lebih lama tidak dihitung.
 
 ## Auto Refresh
 

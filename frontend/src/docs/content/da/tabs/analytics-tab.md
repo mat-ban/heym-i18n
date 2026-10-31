@@ -15,6 +15,7 @@
 
 ## Tidsinterval
 
+- **1t**, **3t**, **6t** – Sidste time, 3 timer eller 6 timer. Analyser gemmes pr. time, så disse tæller hele starttimen for vinduet med: Sidste time kl. 15:20 dækker fra 14:00 indtil nu
 - **24t** – Seneste 24 timer
 - **7d** – Seneste 7 dage
 - **30d** – Seneste 30 dage
@@ -38,9 +39,19 @@ To tabeller viser workflow-brug: **Mest brugte** (bredere) og **Mest fejlende**.
 - **Eksekveringsvolumen over tid** – Linjediagram over eksekveringer per tidsinterval
 - **Succes vs fejlrate** – Områdediagram der sammenligner sunde og fejlende kørsler
 - **Gennemsnitlig ventetid over tid** – Linjediagram der viser ændringer i responstid
-- **Træk for at vælge** – Klik og træk på ethvert diagram for at fokusere på et brugerdefineret datointerval
+- **Træk for at vælge** – Klik og træk på et vilkårligt diagram for at fokusere på et brugerdefineret datointerval. En markering skal dække mindst to punkter på diagrammet; et almindeligt klik vælger intet
 - **Udvalgsmode** – Valgte intervaller opdaterer oversigtskortene, diagrammer og workflow-tabeller uden at ændre basispræsentationen
 - **Ryd udvalg** – Vend tilbage til det forudindstillede tidsvindue når der er færdig med at analysere
+
+## Knudetyper
+
+Under latenstidsprocentilerne viser tre diagrammer, hvor knudetid og fejl opstår, grupperet efter knudetype (Agent, HTTP Request, Code osv.) på tværs af de viste workflow:
+
+- **Knuder med mest tidsforbrug** – De 10 knudetyper med mest samlet kørselstid, afbildet som gennemsnitlig varighed pr. kald. En time uden kald af en given type viser **Ingen kald** i værktøjstippet.
+- **Knudetyper med flest fejl** – De 10 knudetyper med flest fejl (fejl eller timeout), hver med sit eget antal fejl pr. tidsinterval.
+- **Mest kaldte knudetyper** – De 10 knudetyper, der kørte mest, hver med sit eget antal kald pr. tidsinterval. Sprungne knuder tælles ikke med.
+
+Hold markøren over et diagram for at se knudetypen under markøren lige ved siden af. En knudetype, der er for lille til at kunne ses ved siden af den største på et diagram (under 1 % af den), udelades fra det diagram og dets forklaring. Diagrammerne følger workflow-filteret, tidsintervallet og ethvert interval, der trækkes på et diagram. Knudeanalyser registreres for kørsler fra og med versionen, der introducerede dem, og en afsluttet kørsel vises inden for cirka et minut. Ældre kørsler tælles ikke med.
 
 ## Auto-opdatering
 

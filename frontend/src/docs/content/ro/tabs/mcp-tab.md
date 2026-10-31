@@ -1,6 +1,6 @@
-# Filă MCP
+# Filă MCP / A2A / A2A
 
-Fila **MCP** configurează integrarea Model Context Protocol (MCP). MCP permite clienților AI (Claude, ChatGPT, Gemini, Cursor și orice instrument compatibil MCP) să apeleze workflow-urile Heym ca instrumente.
+Fila **MCP** configurează integrarea Model Context Protocol (MCP), și ca servere [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) cărora alți agenți le pot delega sarcini. MCP permite clienților AI (Claude, ChatGPT, Gemini, Cursor și orice instrument compatibil MCP) să apeleze workflow-urile Heym ca instrumente.
 
 Heym acceptă două moduri: un **server implicit** care expune toate workflow-urile cu MCP activat sub un singur endpoint și **servere denumite** care oferă fiecărui grup logic de workflow-uri propriul URL dedicat și propria cheie API.
 
@@ -51,7 +51,7 @@ Un workflow cu o [limită de concurență](../reference/webhooks.md#concurrency-
 ```
 
 Clientul interoghează instrumentul `heym_execution_status` cu acel `execution_id`. Acesta returnează același corp ca și [URL-ul de stare](../reference/webhooks.md#status-url): `queued` cu poziția curentă, `running`, apoi `success` sau `error` cu ieșirile. Găsește doar rulările workflow-urilor expuse de același server. Instrumentul este afișat pe serverul implicit și pe fiecare server numit doar atâta timp cât cel puțin unul dintre workflow-urile sale are o limită de concurență. Când coada este plină, apelul returnează eroarea „Concurrency queue is full”.
-## Instrumentul de chat Heym
+## Agent Heym
 
 Secțiunea **Heym Capabilities** transformă motorul filei Chat într-un singur instrument MCP numit `heym_chat`. Activați-l pe serverul implicit, pe orice server denumit sau pe ambele — fiecare suprafață își păstrează propriul comutator și propria selecție de model.
 
@@ -60,15 +60,20 @@ Când este activ, `heym_chat` apare în `tools/list` alături de instrumentele w
 - Construiește un workflow, îl rulează de test cu intrări eșantion, îl corectează și finalizează când o rulare reușește (vezi [Modul Build](#build-mode))
 - Inspectează și rulează workflow-urile existente
 - Raportează analize, execuții recente și programări cron viitoare
+- Explicarea locurilor unde eșuează fluxurile de lucru și a motivelor pentru care sunt lente: fluxurile cele mai rulate, cu cele mai multe eșecuri și cele mai lente, precum și tipurile de noduri cu cel mai mult timp, erori și apeluri în ultimele 1, 3 sau 6 ore, 24 de ore, 7 sau 30 de zile sau din toate timpurile
 - Raportează istoricul de rulare al unui workflow: de câte ori a rulat, numărul de stări, când a rulat și, la cerere, intrările, ieșirile și erorile per nod ale unei singure rulări
 - Raportează ce rulează în acest moment: câte execuții sunt active, numele workflow-urilor lor, de cât timp rulează fiecare, nodul pe care se află în prezent fiecare și un link către rularea live
 - Listează board-uri, creează carduri și citește detaliile cardurilor în [fila Board](./board-tab.md)
-- Listează tabelele de date cu coloanele lor, creează altele noi și le conectează în workflow-urile pe care le construiește
+- Listarea tablourilor de bord (paginile Heym Work) și a widgeturilor acestora, identificarea tabloului de bord pe care se află un flux de lucru, adăugarea unui nou widget și construirea fluxului său de lucru, plasarea unui flux de lucru existent ca widget, redenumirea sau ștergerea widgeturilor ori organizarea aspectului (consultați [Dashboard › Din Chat și MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Inspectarea tabelelor de date și a rândurilor, crearea tabelelor, adăugarea sau eliminarea coloanelor, inserarea, actualizarea sau ștergerea rândurilor și conectarea tabelelor în fluxurile de lucru
+- Crearea, editarea și rularea suitelor de evaluare a prompturilor și a agenților ([Eval suites](./evals-tab.md#from-chat-and-mcp)), inclusiv linia de bază a unui agent: raportată, construită din rulări sau specificată numeric. Rezultatul listează linkul Evals al fiecărei suite salvate.
 - Creați sau actualizați credențialele pe pagina dedicată Heym (consultați [Credențiale](#credențiale))
 - Citește echipele și variabilele globale și caută în documentație
 - Aprobă, editează sau refuză recenziile în așteptare human-in-the-loop
 
 Capacitățile adăugate ulterior filei Chat devin disponibile automat prin `heym_chat` — nu există un comutator per capacitate de menținut sincronizat.
+
+Aceste capacități rulează în interiorul `heym_chat`: `tools/list` afișează `heym_chat` și instrumentele fluxurilor dvs. de lucru, niciodată instrumentele interne ale chatului, cum ar fi cele ale suitelor de evaluare.
 
 ### Modul Build
 
@@ -121,6 +126,14 @@ Nodurile LLM și Agent dintr-un workflow construit de `heym_chat` rulează pe ac
 Fiecare apel este scris în istoricul [filei Chat](./chat-tab.md) ca o conversație normală, marcată cu o pictogramă de ștecher în lista de conversații. Mesajele, cardurile instrumentelor și pauzele de clarificare arată exact ca o conversație pe care ați început-o dumneavoastră, iar puteți deschide firul și continua discuția în browser. Fiecare rezultat returnează `conversation_id`-ul său, astfel încât clientul MCP să poată continua același fir în loc să deschidă unul nou la fiecare apel.
 
 Când asistentul are nevoie de clarificări, face o pauză și anunță acest lucru; răspundeți cu răspunsurile utilizând același `conversation_id`.
+### Activați A2A
+
+Cât timp Agentul Heym este activat, cardul afișează caseta de selectare **Activați A2A**. Bifați-o și alți agenți vor putea trimite sarcini Agentului Heym prin protocolul Agent2Agent (A2A 1.0). Cardul listează apoi adresa URL a **Agent Card** și **endpoint-ul JSON-RPC**, fiecare cu un buton de copiere, și o comandă `curl` care preia cardul. A2A utilizează aceeași cheie și conectare OAuth ca MCP. Dezactivarea agentului dezactivează și A2A. Consultați [A2A](../reference/a2a.md) pentru metode, stările sarcinilor și un exemplu practic.
+
+### Progres
+
+Un apel prelungit `heym_chat` raportează activitatea agentului ca progres MCP (`notifications/progress`), în aceiași termeni afișați în fila Chat, de exemplu `Se testează fluxul de lucru · încercarea 2/5`. Clienții care își resetează timpul de expirare la fiecare notificare de progres continuă să aștepte în timp ce agentul lucrează.
+
 ## Servere MCP cu nume
 
 Serverele cu nume permit segmentarea workflow-urilor în endpoint-uri MCP izolate. Fiecare server are propriul URL și propria cheie API, astfel încât diferiți clienți AI, echipe sau cazuri de utilizare se pot conecta exact la workflow-urile de care au nevoie.
@@ -140,7 +153,9 @@ Fiecare card de server afișează:
 | **SSE Endpoint** | URL unic: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Cheie independentă, afișată o singură dată la generare sau regenerare. Copiați-o imediat; este stocată sub formă de hash și nu mai poate fi dezvăluită ulterior |
 | **How to connect** | **Copy JSON** copiază configurația MCP gata de lipit; **Add to Cursor** o instalează cu un singur clic |
-| **Heym Capabilities** | Activați/dezactivați instrumentul `heym_chat` pentru acest server și alegeți credențialele și modelul acestuia |
+| **Heym Capabilities** | Comutați Agentul Heym (`heym_chat`) pentru acest server și alegeți credențialul și modelul |
+| **Activați A2A** | Comutator A2A dedicat acestui server, cu propriul său Agent Card la `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Activați A2A** | Comutator A2A dedicat acestui server, cu propriul său Agent Card la `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Activați/dezactivați care dintre workflow-urile dumneavoastră sunt expuse de acest server |
 
 ### Atribuirea workflow-urilor

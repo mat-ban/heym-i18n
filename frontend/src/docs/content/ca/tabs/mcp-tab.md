@@ -1,6 +1,6 @@
-# Pestanya MCP
+# Pestanya MCP / A2A / A2A
 
-La pestanya **MCP** configura la integració del Model Context Protocol (MCP). MCP permet que els clients d'IA (Claude, ChatGPT, Gemini, Cursor i qualsevol eina compatible amb MCP) cridin els vostres workflows de Heym com a eines.
+La pestanya **MCP** configura la integració del Model Context Protocol (MCP), i com a servidors [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) als quals altres agents poden delegar tasques. MCP permet que els clients d'IA (Claude, ChatGPT, Gemini, Cursor i qualsevol eina compatible amb MCP) cridin els vostres workflows de Heym com a eines.
 
 Heym admet dos modes: un **servidor predeterminat** que exposa tots els workflows habilitats per a MCP sota un únic endpoint, i **servidors amb nom** que atorguen a cada grup lògic de workflows la seva pròpia URL dedicada i la seva clau API.
 
@@ -51,7 +51,7 @@ Un workflow amb un [límit de concurrència](../reference/webhooks.md#concurrenc
 ```
 
 El client sondeja l'eina `heym_execution_status` amb aquest `execution_id`. Retorna el mateix cos que l'[URL d'estat](../reference/webhooks.md#status-url): `queued` amb la posició actual, `running`, i després `success` o `error` amb les sortides. Només troba execucions de workflows exposats pel mateix servidor. L'eina apareix al servidor per defecte i a cada servidor amb nom només mentre almenys un dels seus workflows tingui un límit de concurrència. Quan la cua del workflow està plena, la crida retorna l'error "Concurrency queue is full".
-## Eina de xat de Heym
+## Agent Heym
 
 La secció **Heym Capabilities** converteix el motor de la pestanya Chat en una única eina MCP anomenada `heym_chat`. Habilitau-la al servidor predeterminat, a qualsevol servidor amb nom o a tots dos — cada superfície manté el seu propi commutador i la seva pròpia selecció de model.
 
@@ -60,15 +60,20 @@ Quan està activada, `heym_chat` apareix a `tools/list` juntament amb les eines 
 - Crea un workflow, executa'l en prova amb entrades d'exemple, corregeix-lo i finalitza quan una execució passi correctament (vegeu [Mode de construcció](#build-mode))
 - Inspecciona i executa els vostres workflows existents
 - Informa sobre analítiques, execucions recents i properes programacions cron
+- Explicar on fallen els workflows i per què són lents: els workflows amb més execucions, més fallades i major lentitud, així com els tipus de nodes amb més temps, errors i crides en les darreres 1, 3 o 6 hores, 24 hores, 7 o 30 dies, o des de l'inici
 - Informa sobre l'historial d'execució d'un workflow: quantes vegades s'ha executat, recomptes d'estats, quan s'ha executat i, si es demana, les entrades, les sortides i els errors per Node d'una única execució
 - Informa sobre què s'està executant en aquest moment: quantes execucions estan actives, els noms dels seus workflows, quant de temps porta en execució cadascuna, el Node en què es troba actualment i un enllaç a l'execució en directe
 - Llista taulers, crea targetes i llegeix el detall de les targetes a la [pestanya Board](./board-tab.md)
-- Llista les vostres taules de dades amb les seves columnes, en crea de noves i les connecta als workflows que construeix
+- Llistar els vostres dashboards (pàgines de Heym Work) i els seus widgets, identificar en quin dashboard es troba un workflow, afegir un nou widget i construir el seu workflow, situar un workflow existent com a widget, reanomenar o eliminar widgets o organitzar el disseny (vegeu [Dashboard › Des de Chat i MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Inspeccionar taules de dades i files, crear taules, afegir o suprimir columnes, inserir, actualitzar o eliminar files i interconnectar taules en workflows
+- Crear, editar i executar suites d'avaluació de prompts i d'agents ([Eval suites](./evals-tab.md#from-chat-and-mcp)), incloent la línia base d'un agent: reportada, construïda a partir d'execucions o especificada numèricament. El resultat llista l'enllaç d'Evals de cada suite desada.
 - Crear o actualitzar les vostres credencials a la pàgina pròpia de Heym (vegeu [Credencials](#credencials))
 - Llegeix equips i variables globals, i cerca a la documentació
 - Aprova, edita o rebutja revisions pendents de human-in-the-loop
 
 Les capacitats afegides posteriorment a la pestanya Chat esdevenen disponibles automàticament a través de `heym_chat` — no hi ha cap commutador per capacitat que s'hagi de mantenir sincronitzat.
+
+Aquestes capacitats s'executen dins de `heym_chat`: `tools/list` mostra `heym_chat` i les vostres eines de workflow, mai les eines internes del chat com les suites d'avaluació.
 
 ### Mode de construcció
 
@@ -81,7 +86,12 @@ Quan una crida crea o edita un workflow, la resposta llista cadascun amb el seu 
 - Per modificar un workflow construït anteriorment, continueu el fil amb el mateix `conversation_id`. L'assistent actualitza aquest workflow en lloc de crear-ne un de nou, i només modifica els workflows que podeu editar.
 - Quan s'esgoten les cinc execucions de prova, l'assistent s'atura i explica què continua fallant.
 
-Les taules de dades són diferents. Una taula no conté cap secret, de manera que `heym_chat` pot llistar les vostres taules, preguntar quina ha d'utilitzar un workflow i crear-ne una de nova amb les seves columnes. Mai llegeix ni escriu files.
+`heym_chat` pot inspeccionar les vostres taules i files, crear taules, afegir o suprimir columnes i inserir, actualitzar o eliminar files. Proporcioneu-li un nom de taula, UUID o enllaç de DataTable, per exemple: «Afegeix dues columnes de text, nom i cognom, a https://heym.example/?tab=datatable/<table-id>». Modifica directament la taula i preserva les columnes i valors existents en afegir columnes.
+
+`heym_chat` pot inspeccionar les vostres taules i files, crear taules, afegir o suprimir columnes i inserir, actualitzar o eliminar files. Proporcioneu-li un nom de taula, UUID o enllaç de DataTable, per exemple: «Afegeix dues columnes de text, nom i cognom, a https://heym.example/?tab=datatable/<table-id>». Modifica directament la taula i preserva les columnes i valors existents en afegir columnes.
+
+Les operacions d'escriptura requereixen propietat o accés d'**escriptura** mitjançant ús compartit directe o d'equip. L'accés de només lectura permet la inspecció. L'escriptura de files aplica les comprovacions de tipus, valor per defecte, obligatorietat i unicitat de la pestanya DataTable; les importacions parcials informen de les files rebutjades. Suprimir columnes n'elimina els valors de totes les files. Igual que a la pestanya DataTable, la supressió de columnes i el buidatge de totes les files sol·liciten confirmació prèvia; responeu amb el mateix `conversation_id` per confirmar. Eliminar una fila seleccionada no requereix confirmació addicional.
+
 
 ### Credencials
 
@@ -121,6 +131,14 @@ Els nodes LLM i Agent en un workflow creat per `heym_chat` s'executen amb aquest
 Cada crida s'escriu al vostre historial de la [pestanya Chat](./chat-tab.md) com una conversa normal, marcada amb una icona d'endoll a la llista de converses. Els missatges, les targetes d'eines i les pauses de clarificació es veuen exactament com una conversa que hàgiu iniciat vosaltres mateixos, i podeu obrir el fil i continuar parlant al navegador. Cada resultat retorna el seu `conversation_id` perquè el client MCP pugui continuar el mateix fil en lloc d'obrir-ne un de nou a cada crida.
 
 Quan l'assistent necessita una aclariment, fa una pausa i ho indica; responeu amb les respostes utilitzant el mateix `conversation_id`.
+### Habilitar A2A
+
+Mentre l'Agent Heym està actiu, la targeta mostra la casella de selecció **Habilitar A2A**. Marqueu-la per permetre que altres agents enviïn tasques a l'Agent Heym mitjançant el protocol Agent2Agent (A2A 1.0). La targeta mostra aleshores l'URL de l'**Agent Card** i l'**endpoint JSON-RPC**, cadascun amb un botó de còpia, i una ordre `curl` per obtenir la targeta. L'A2A utilitza la mateixa clau i inici de sessió OAuth que MCP. Desactivar l'agent desactiva també l'A2A. Consulteu [A2A](../reference/a2a.md) per a mètodes, estats de tasca i un exemple pràctic.
+
+### Progrés
+
+Una crida perllongada a `heym_chat` informa de l'activitat de l'agent com a progrés MCP (`notifications/progress`), amb les mateixes paraules que mostra la pestanya Chat, per exemple `Provant el workflow · intent 2/5`. Els clients que restableixen el seu temps d'espera amb cada notificació de progrés continuen esperant mentre l'agent treballa.
+
 ## Servidors MCP amb nom
 
 Els servidors amb nom permeten segmentar els workflows en endpoints MCP aïllats. Cada servidor té la seva pròpia URL i clau API, de manera que diferents clients d'IA, equips o casos d'ús poden connectar-se exactament als workflows que necessiten.
@@ -140,7 +158,9 @@ Cada targeta de servidor mostra:
 | **SSE Endpoint** | URL única: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | Clau independent, mostrada una sola vegada en generar-se o regenerar-se. Copieu-la de seguida; s'emmagatzema amb hash i no es pot revelar posteriorment |
 | **How to connect** | **Copy JSON** copia la configuració MCP a punt per enganxar; **Add to Cursor** la instal·la amb un sol clic |
-| **Heym Capabilities** | Activeu o desactiveu l'eina `heym_chat` per a aquest servidor i trieu-ne la credencial i el model |
+| **Heym Capabilities** | Activeu o desactiveu l'Agent Heym (`heym_chat`) per a aquest servidor i seleccioneu la credencial i model |
+| **Habilitar A2A** | Interruptor A2A propi d'aquest servidor, amb la seva pròpia Agent Card a `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Habilitar A2A** | Interruptor A2A propi d'aquest servidor, amb la seva pròpia Agent Card a `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Assigned Workflows** | Activeu o desactiveu quins dels vostres workflows exposa aquest servidor |
 
 ### Assignació de workflows

@@ -1,6 +1,6 @@
-# MCP cilne
+# MCP / A2A cilne
 
-**MCP** cilne konfigurē Model Context Protocol (MCP) integrāciju. MCP ļauj AI klientiem (Claude, ChatGPT, Gemini, Cursor un jebkuram MCP saderīgam rīkam) izsaukt Jūsu Heym workflows kā rīkus.
+**MCP** cilne konfigurē Model Context Protocol (MCP) integrāciju, un kā [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) serverus, kuriem citi aģenti var deleģēt uzdevumus. MCP ļauj AI klientiem (Claude, ChatGPT, Gemini, Cursor un jebkuram MCP saderīgam rīkam) izsaukt Jūsu Heym workflows kā rīkus.
 
 Heym atbalsta divus režīmus: **noklusējuma serveri**, kas izsaka visus MCP iespējotos workflows zem viena endpoint, un **nosauktus serverus**, kas katrai loģiskajai grupai no workflows piešķir savu veltītu URL un API atslēgu.
 
@@ -51,7 +51,7 @@ Workflow ar [vienlaicības ierobežojumu](../reference/webhooks.md#concurrency-l
 ```
 
 Klients aptaujā rīku `heym_execution_status` ar šo `execution_id`. Tas atgriež to pašu pamattekstu kā [statusa URL](../reference/webhooks.md#status-url): `queued` ar pašreizējo pozīciju, `running`, pēc tam `success` vai `error` ar rezultātiem. Tas atrod tikai to workflows palaidumus, kurus atklāj viens un tas pats serveris. Rīks tiek rādīts noklusējuma serverī un katrā nosauktajā serverī tikai tik ilgi, kamēr vismaz vienam no tā workflows ir vienlaicības ierobežojums. Kad rinda ir pilna, izsaukums atgriež kļūdu "Concurrency queue is full".
-## Heym Chat rīks
+## Heym aģents
 
 **Heym Capabilities** sadaļa pārvērš Chat cilnes dzinēju par vienu MCP rīku ar nosaukumu `heym_chat`. Ieslēdziet to noklusējuma serverī, jebkurā nosauktajā serverī vai abos — katra virsma saglabā savu slēdzi un modeļa izvēli.
 
@@ -60,15 +60,20 @@ Kad tas ir ieslēgts, `heym_chat` parādās `tools/list` kopā ar Jūsu workflow
 - Izveidot workflow, veikt tā testa izpildi ar parauga ievaddatiem, izlabot to un pabeigt, kad izpilde ir veiksmīga (skatiet [Izveides režīms](#build-mode))
 - Pārbaudīt un izpildīt Jūsu esošos workflows
 - Ziņot par analītiku, nesenajām izpildēm un gaidāmajām cron grafikām.
+- Paskaidro, kur darbplūsmas neizdodas un kāpēc tās ir lēnas: darbplūsmas, kas palaistas visbiežāk, visvairāk cietušas neveiksmi un ir vislēnākās, kā arī mezglu tipus ar vislielāko laiku, kļūdām un izsaukumiem pēdējo 1, 3 vai 6 stundu, 24 stundu, 7 vai 30 dienu laikā vai visā periodā
 - Ziņot par viena workflow izpildes vēsturi: cik reizes tas ir izpildīts, statusa skaitļi, kad tas tika izpildīts, un pēc pieprasījuma ievades, izejas un katra mezgla kļūdas vienas izpildes laikā.
 - Ziņot par to, kas šobrīd tiek izpildīts: cik izpildes ir aktīvas, to workflow nosaukumi, cik ilgi katra ir darbojusi, uz kura mezgla katra pašlaik atrodas, un saite uz tiešo izpildi.
 - Sarakstīt dēļus, izveidot kartes un lasīt kartes detaļas [Board cilnē](./board-tab.md).
-- Sarakstīt savas datu tabulas ar to kolonnām, izveidot jaunas un savienot tās ar workflows, ko tas veido.
+- Uzskaita informācijas paneļus (Heym Work lapas) un to logrīkus, noskaidro, kurā panelī atrodas darbplūsma, pievieno jaunu logrīku un izveido tā darbplūsmu, ievieto esošu darbplūsmu kā logrīku, pārdēvē vai dzēš logrīkus vai sakārto izkārtojumu (sk. [Dashboard › No Chat un MCP](./dashboard-tab.md#from-chat-and-mcp))
+- Pārbauda datu tabulas un rindas, izveido tabulas, pievieno vai noņem kolonnas, ievieto, atjaunina vai dzēš rindas un savieno tabulas darbplūsmās
+- Izveido, rediģē un izpilda uzvedņu un aģentu novērtēšanas komplektus ([Eval suites](./evals-tab.md#from-chat-and-mcp)), tostarp aģenta bāzes līniju: ziņotu, izveidotu no izpildēm vai norādītu skaitliski. Rezultātā tiek norādīta saite Evals katram saglabātajam komplektam.
 - Izveidojiet vai atjauniniet savus akreditācijas datus Heym lapā (skatiet [Akreditācijas dati](#akreditācijas-dati))
 - Lasīt komandas un globālos mainīgos, un meklēt dokumentāciju.
 - Apstiprināt, rediģēt vai atteikt gaidošās cilvēku atsauksmes.
 
 Spējas, kas vēlāk pievienotas Chat cilnei, automātiski kļūst pieejamas caur `heym_chat` — nav nepieciešama atsevišķa slēdzis katrai spējai, lai saglabātu sinhronizāciju.
+
+Šīs iespējas darbojas rīkā `heym_chat`: `tools/list` parāda `heym_chat` un jūsu darbplūsmas rīkus, nekad tērzēšanas iekšējos rīkus, piemēram, novērtēšanas komplektus.
 
 ### Izveides režīms
 
@@ -81,7 +86,12 @@ Kad izsaukums izveido vai rediģē workflow, atbildē katrs tiek uzskaitīts ar 
 - Lai mainītu iepriekš izveidotu workflow, turpiniet pavedienu ar to pašu `conversation_id`. Asistents atjaunina šo workflow, nevis izveido jaunu, un maina tikai tos workflows, kurus Jums ir tiesības rediģēt.
 - Kad piecas testa izpildes ir izsmeltas, asistents apstājas un paskaidro, kas joprojām neizdodas.
 
-Datu tabulas ir atšķirīgas. Tabula nesatur noslēpumus, tāpēc `heym_chat` var uzskaitīt Jūsu tabulas, jautāt, kuru no tām workflow vajadzētu izmantot, un izveidot jaunu ar tās kolonnām. Tā nekad nelasa vai neieraksta rindas.
+`heym_chat` var pārbaudīt jūsu tabulas un rindas, izveidot tabulas, pievienot vai noņemt kolonnas, kā arī ievietot, atjaunināt vai dzēst rindas. Norādiet tabulas nosaukumu, UUID vai DataTable saiti, piemēram: „Pievienot divas teksta kolonnas, vārdu un uzvārdu, vietnē https://heym.example/?tab=datatable/<table-id>”. Tas tieši maina tabulu un saglabā esošās kolonnas un vērtības, pievienojot jaunas kolonnas.
+
+`heym_chat` var pārbaudīt jūsu tabulas un rindas, izveidot tabulas, pievienot vai noņemt kolonnas, kā arī ievietot, atjaunināt vai dzēst rindas. Norādiet tabulas nosaukumu, UUID vai DataTable saiti, piemēram: „Pievienot divas teksta kolonnas, vārdu un uzvārdu, vietnē https://heym.example/?tab=datatable/<table-id>”. Tas tieši maina tabulu un saglabā esošās kolonnas un vērtības, pievienojot jaunas kolonnas.
+
+Rakstīšanas darbībām ir nepieciešamas īpašumtiesības vai **rakstīšanas** piekļuve, izmantojot tiešo vai komandas koplietošanu. Tikai lasīšanas piekļuve ļauj veikt pārbaudi. Rindu rakstīšanā tiek izmantotas cilnes DataTable tipa, noklusējuma vērtības, obligātuma un unikalitātes pārbaudes; daļējs imports ziņo par noraidītajām rindām. Kolonnu noņemšana dzēš to vērtības no katras rindas. Tāpat kā cilnē DataTable, kolonnu noņemšanai un visu rindu dzēšanai vispirms nepieciešams apstiprinājums; atbildiet ar to pašu `conversation_id`, lai apstiprinātu. Atlasītās rindas dzēšanai nav nepieciešams papildu apstiprinājums.
+
 
 ### Akreditācijas dati
 
@@ -121,6 +131,14 @@ LLM un Agent mezgli `heym_chat` veidotajā workflow darbojas ar šiem akreditāc
 Katrs izsaukums tiek pierakstīts Jūsu [Chat cilnes](./chat-tab.md) vēsturē kā parasta saruna, atzīmēta ar kontaktdakšas ikonu sarunu sarakstā. Ziņas, rīku kartes un precizēšanas pauzes izskatās tieši tāpat kā saruna, ko Jūs uzsākat paši, un Jūs varat atvērt pavedienu un turpināt runāt pārlūkā. Katrs rezultāts atgriež savu `conversation_id`, lai MCP klients varētu turpināt to pašu pavedienu, nevis atvērt jaunu katrā izsaukumā.
 
 Kad asistents prasa precizējumu, tas apstājas un to norāda; atbildiet ar atbildēm, izmantojot to pašu `conversation_id`.
+### Iespējot A2A
+
+Kamēr Heym aģents ir ieslēgts, kartītē ir redzama izvēles rūtiņa **Iespējot A2A**. Atzīmējiet to, un citi aģenti varēs nosūtīt uzdevumus Heym aģentam, izmantojot Agent2Agent protokolu (A2A 1.0). Pēc tam kartītē tiek parādīts **Agent Card** URL un **JSON-RPC endpoint**, katrs ar kopēšanas pogu, kā arī komanda `curl` kartītes iegūšanai. A2A izmanto to pašu atslēgu un OAuth pieteikšanos, ko MCP. Izslēdzot aģentu, tiek izslēgts arī A2A. Skatiet [A2A](../reference/a2a.md) par metodēm, uzdevumu stāvokļiem un piemēru.
+
+### Progress
+
+Ilgstošs `heym_chat` izsaukums ziņo par aģenta darbībām kā MCP progresu (`notifications/progress`), lietojot tos pašus vārdus, kas redzami cilnē Chat, piemēram, `Darbplūsmas testēšana · 2/5 mēģinājums`. Klienti, kuri atiestata noildzi pēc progresa saņemšanas, turpina gaidīt, kamēr aģents strādā.
+
 ## Nosaukti MCP Serveri
 
 Nosaukti serveri ļauj Jums segmentēt workflows izolētos MCP endpointos. Katram serverim ir sava URL un API atslēga, tādējādi dažādi AI klienti, komandas vai lietošanas gadījumi var savienoties tieši ar tiem workflows, kas viņiem nepieciešami.
@@ -140,7 +158,9 @@ Katras servera kartes informācija:
 | **SSE Endpoint** | Unikāla URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Atslēga** | Neatkarīga atslēga, kas tiek rādīta tikai vienu reizi, kad tā tiek ģenerēta vai atjaunota. Nokopējiet to uzreiz; tā tiek glabāta hashētā veidā un vēlāk nevar tikt atklāta |
 | **Kā savienoties** | **Kopēt JSON** kopē gatavo MCP konfigurāciju, ko var ielīmēt; **Pievienot Kursoram** instalē to ar vienu klikšķi |
-| **Heym Iespējas** | Pārslēdziet `heym_chat` rīku šim serverim un izvēlieties tā akreditācijas datus un modeli |
+| **Heym Capabilities** | Pārslēdziet Heym aģentu (`heym_chat`) šim serverim un izvēlieties tā akreditācijas datus un modeli |
+| **Iespējot A2A** | Šī servera personīgais A2A slēdzis ar savu Agent Card adresē `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
+| **Iespējot A2A** | Šī servera personīgais A2A slēdzis ar savu Agent Card adresē `{origin}/api/a2a/servers/{uuid}/agent-card.json` |
 | **Piešķirtie Workflows** | Pārslēdziet, kuri no Jūsu workflows šis serveris izsaka |
 
 ### Workflow Piešķiršana

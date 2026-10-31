@@ -23,7 +23,8 @@ També podeu iniciar una conversa des del quadre de xat de la [pestanya Workflow
 - **Seguiments en cua** – Envieu més missatges mentre una resposta està en streaming. Els missatges en cua es conserven, es poden editar o eliminar abans que comencin, i s'executen en ordre després de la resposta activa
 - **Pauses de planificació** – Quan el Chat necessita detalls de planificació, fa preguntes d'aclariment i posa en pausa els seguiments en cua fins que respongueu. Un cop finalitza la resposta de planificació, es reprenen els missatges en cua
 - **Credencials** – Quan un Workflow que el Chat crea o edita necessita una credencial, el Chat pregunta quina utilitzar, ofereix crear-ne una de nova a la conversa o us permet continuar sense. També podeu demanar al Chat que creï una credencial o que actualitzi una de la qual sou propietari; obre el formulari de credencial a la conversa. El model veu el nom i el tipus de la credencial, mai els seus valors, tant per a les credencials que teniu com per a les compartides amb vós. Els nodes LLM i Agent afegits pel Chat s'executen amb la credencial i el model seleccionats per al xat, incloses les credencials compartides; quan el Chat edita un workflow, els seus nodes LLM i Agent existents conserven la seva credencial i model. Vegeu [Assistent d'IA › Credencials](../reference/ai-assistant.md#credentials)
-- **Taules de dades** – Quan un Workflow que el Chat crea o edita emmagatzema registres, el Chat pregunta quina [taula de dades](./datatable-tab.md) utilitzar o ofereix crear-ne una amb les columnes que el Workflow necessita. També pot llistar les vostres taules i les seves columnes. Mai llegeix ni escriu files. Vegeu [Assistent d'IA › Taules de dades](../reference/ai-assistant.md#data-tables)
+- **Dashboards** – Pregunteu quins [dashboards](./dashboard-tab.md) teniu, què hi ha en un d'ells o en quin dashboard es troba un workflow. Demaneu al Chat que afegeixi un widget nou a un dashboard (hi col·loca un widget buit, després construeix i prova el seu workflow), posi un workflow existent en un dashboard com a widget, canviï el nom o elimini un widget, o endreci la disposició d'un dashboard. Heym Work mostra aquests dashboards com les seves pàgines. Vegeu [Dashboard › Des del Chat i MCP](./dashboard-tab.md#des-del-chat-i-mcp)
+- **Taules de dades** – Quan un workflow que el Chat crea o edita emmagatzema registres, el Chat pregunta quina [taula de dades](./datatable-tab.md) utilitzar o proposa crear-ne una amb les columnes necessàries. També pot inspeccionar files, afegir o eliminar columnes i inserir, actualitzar o suprimir files directament a les taules que teniu o podeu editar. Indiqueu-li un nom de taula o enllaç DataTable. L'eliminació de columnes i el buidatge de totes les files demanen confirmació; afegir columnes conserva les dades existents. Vegeu [Assistent d'IA › Taules de dades](../reference/ai-assistant.md#data-tables)
 - **Respostes en streaming** – Vegeu la sortida del model mentre s'emet en streaming
 - **Aturar resposta** – Interrompeu la resposta en streaming actual en qualsevol moment; aturar també esborra els missatges en cua d'aquella conversa
 - **Renderització de Markdown** – Les respostes admeten format Markdown, incloent-hi imatges en línia
@@ -33,10 +34,11 @@ També podeu iniciar una conversa des del quadre de xat de la [pestanya Workflow
 - **Entrada de veu** – Utilitzeu el botó del micròfon per a la conversió de veu a text (compatible amb el navegador). Quan s'atura l'enregistrament, Heym pot fer una neteja lleugera de la transcripció abans que l'envieu
 - **Workflows programats** – Pregunteu quan s'executen els Workflows de tipus cron (avui, aquesta setmana, aquest mes o un interval de dates personalitzat). L'assistent utilitza les mateixes dades de planificació que la pestanya [Scheduled](./scheduled-tab.md) i pot limitar els resultats als Workflows dels quals sou propietari o incloure els compartits amb vosaltres
 - **Historial d'execucions de Workflows** – Pregunteu sobre un Workflow ("quantes vegades s'ha executat l'informe diari?", "ha fallat?", "quan s'ha executat per última vegada?"). El Chat cerca el Workflow pel seu ID i respon a partir del seu recompte d'execucions, desglossament d'estats, primera i última hora d'execució i durada mitjana. Pregunteu per què ha fallat una execució o què ha retornat, i el Chat obre aquella execució concreta per llegir-ne les entrades, les sortides i els errors per Node
+- **On fallen les execucions i per què són lentes** – Pregunteu on fallen els vostres workflows o per què són lents i Chat indicarà els workflows que més s'han executat, que més han fallat i que són més lents, així com els tipus de nodes que consumeixen més temps (mitjana per crida i total), que fallen més i que s'executen més, les mateixes xifres que a la pestanya [Analytics](./analytics-tab.md). Els tipus de nodes es comptabilitzen per a les execucions a partir de la versió que va introduir l'analítica de nodes. Pregunteu per l'última hora, 3 o 6 hores, 24 hores, 7 o 30 dies, o tot l'historial; les finestres d'hores comencen a l'hora en punt, de manera que «l'última hora» a les 15:20 cobreix de 14:00 fins ara.
 - **Estat d'execució en directe** – Pregunteu què s'està executant en aquest moment i el Chat respon amb el recompte, els noms dels Workflows, quant de temps porta en marxa cada execució, en quin Node es troba i un enllaç directe a l'execució en directe
 ## Ús del Chat des d'un client MCP
 
-El motor de Chat també és accessible des de fora del navegador. Activeu l'**Heym Chat Tool** a la [pestanya MCP](./mcp-tab.md) i els clients MCP — Claude, Cursor i qualsevol altre que parli MCP — obtenen una única eina `heym_chat` que executa aquest mateix motor amb totes les seves capacitats.
+El motor de Chat també és accessible des de fora del navegador. Activeu el **Heym Agent** a la [pestanya MCP / A2A](./mcp-tab.md) i els clients MCP (Claude, Cursor i qualsevol altra eina compatible amb MCP) obtindran una única eina `heym_chat` que executa aquest mateix motor amb totes les seves funcionalitats. Marqueu també **Activar A2A** i altres agents podran enviar-li tasques a través d'[A2A](../reference/a2a.md); aquestes converses mostren una icona de xarxa a la llista.
 
 Aquestes converses apareixen a l'historial d'aquesta pestanya, marcades amb una icona d'endoll a la llista de converses. Obriu-ne una per llegir què ha demanat el client, veure les targetes d'eines que ha activat i continuar el fil vosaltres mateixos. Respondre una pregunta d'aclariment funciona igual tant si el torn s'ha iniciat aquí com des d'un client MCP.
 
@@ -98,9 +100,33 @@ Per a una pregunta de "per què s'ha activat", el Chat llegeix el registre d'act
 ## Regles d'usuari
 
 Les [User Rules](../reference/user-settings.md) (configurades a Settings) s'injecten automàticament a cada conversa de Chat com a instruccions a nivell de sistema. Configureu-les una vegada per aplicar preferències persistents a totes les sol·licituds de xat.
+## Treballar amb Avaluacions
+
+El Chat pot crear, modificar i executar les suites a [Evals](./evals-tab.md), tant suites de prompts com suites d'agent:
+
+- **Suite de prompts**: "crea una suite de prompts per al meu prompt de resposta de suport amb 8 casos de prova i compara gpt-4o amb gpt-4.1-mini". El Chat redacta els casos de prova amb les seves respostes esperades, tria un mètode de puntuació i desa la suite.
+  - Abans de crear la suite, estableix quina credencial LLM i quins models utilitzar. Amb exactament una credencial LLM, utilitza aquesta i ho indica; en cas contrari, ho pregunta.
+  - Per a la puntuació LLM-as-Judge, també pregunta si un jutge independent ha de puntuar les respostes.
+- **Suite d'agent**: "comprova que el meu agent de suport cerqui sempre a la documentació i mai enviï correus electrònics". El Chat localitza l'agent i desa les comprovacions d'eines i els llindars. Quan ho demaneu, executa el workflow, escrivint una entrada diferent per a cada execució.
+  - Les execucions de suites d'agent són execucions reals de workflow, de manera que els seus efectes secundaris es produeixen. El Chat indica quantes execucions inicia.
+- **Baseline**: El Chat pot treballar amb la baseline d'un agent de tres maneres:
+  - Reportar-la a partir de les últimes execucions de l'agent.
+  - Construir-la a partir de les execucions que inicia ("executa'l 5 vegades i utilitza això com a baseline").
+  - Desar els valors que li proporcioneu ("estableix la baseline a 3 segons p95 i 0,01 $ per execució").
+- **Execucions**: El Chat espera fins a un minut per a una execució i després en reporta el resultat:
+  - Per a una suite de prompts: el recompte d'aprovats de cada model i els casos que han fallat.
+  - Per a una suite d'agent: la taxa d'aprovats, les comprovacions fallides i la desviació respecte a la baseline.
+  - Una execució més llarga continua a Evals; demaneu al Chat que la torni a comprovar.
+
+Després que el Chat creï o modifiqui una suite, la resposta mostra una targeta amb el nom de la suite, el seu tipus i un botó **Obrir a Evals**, similar a la targeta d'un workflow desat. Mitjançant MCP, el resultat de `heym_chat` enumera l'enllaç de cada suite desada en aquesta crida.
+
+El mateix funciona des d'un client MCP a través de `heym_chat` (vegeu [Ús del Chat des d'un client MCP](#ús-del-chat-des-dun-client-mcp)). Les eines d'avaluació es mantenen dins de `heym_chat`; els clients MCP no les veuen com a eines separades.
+
+L'Assistent d'IA de l'editor no crea suites.
+
 ## Relacionat
 
-- [MCP Tab](./mcp-tab.md) – Exposeu aquest motor als clients MCP com l'eina `heym_chat`
+- [MCP / A2A Tab](./mcp-tab.md) – Exposeu aquest motor als clients MCP com l'eina `heym_chat`
 - [Settings](../reference/user-settings.md) – Definiu les User Rules aplicades a totes les sol·licituds de xat
 - [Credentials Tab](./credentials-tab.md) – Afegiu i gestioneu claus API
 - [Variables Tab](./global-variables-tab.md) – Variables globals disponibles per al xat

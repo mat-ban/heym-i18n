@@ -50,6 +50,8 @@ Odjeljak **Područja poboljšanja** uvijek provodi četiri eksplicitne provjere:
 3. **Mrežni čvorovi** — za čvorove koji izvršavaju mrežne pozive (kao što su [HTTP](../nodes/http-node.md) i integracijski čvorovi), izvještaj preporučuje specifičnu obradu grešaka za te čvorove (ponovno pokušaj i/ili nastavak u slučaju greške).
 4. **Upozorenja** — kada nisu konfigurirana [upozorenja](../tabs/alerts-tab.md) za workflow, izvještaj preporučuje postavljanje upozorenja prije nego što se pređe u produkciju.
 
+5. **Evals**: kada workflow sadrži čvor [Agent](../nodes/agent-node.md) bez paketa agenta, izvješće preporučuje **Agent Suite** (ili **Prompt Suite**) u [Evals](../tabs/evals-tab.md#agent-suites); kada sadrži čvor [LLM](../nodes/llm-node.md), preporučuje **Prompt Suite** za testiranje tog prompta na više modela.
+
 ### Pokretanje Analizatora iz Svojstava
 
 Kada workflow ima čvorove na platnu, ali još nema dokument analize, gumb **Pokreni analizator** pojavljuje se u panelu [Svojstva](./canvas-features.md) na razini workflow-a (prikazuje se kada nijedan čvor nije odabran). Otvara ovaj panel Analize Workflows-a kako biste mogli odabrati vjerodajnicu i model te generirati izvještaj.

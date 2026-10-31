@@ -83,7 +83,8 @@
     "run": "Çalıştır",
     "dropFileOrClick": "Bir dosyayı buraya bırakın veya seçmek için tıklayın",
     "removeFile": "Dosyayı kaldır",
-    "chooseFileFor": "{label} için bir dosya seçin"
+    "chooseFileFor": "{label} için bir dosya seçin",
+    "new": "Yeni"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1260,7 +1261,16 @@
     "judgeNoneSelfScore": "Yok: her model kendini puanlar",
     "removeJudge": "Judge'ı kaldır",
     "judgeModel": "Judge Model",
-    "enterJudgeModel": "Bu judge ile çalıştırılacak judge modelini girin."
+    "enterJudgeModel": "Bu judge ile çalıştırılacak judge modelini girin.",
+    "promptSuite": "Prompt paketi",
+    "promptSuiteDesc": "Bir sistem promptunu modeller arasında test edin",
+    "agentSuite": "Ajan paketi",
+    "agentSuiteDesc": "Bir ajanın gerçek çalıştırmalarını kontrol edin: araçlar, gecikme, maliyet",
+    "typePrompt": "Prompt",
+    "typeAgent": "Agent",
+    "searchSuites": "Paketleri ara...",
+    "loadingSuite": "Paket yükleniyor...",
+    "couldNotLoadSuite": "Bu paket yüklenemedi."
   },
   "dashboard": {
     "greeting": "Hoş geldiniz {name},",
@@ -1701,7 +1711,9 @@
     "askAi": "AI'ya sor",
     "askAiTitle": "Bu çalıştırma hakkında Chat asistanına sorun",
     "noNodeSpans": "Bu çalıştırma için düğüm span'i kaydedilmedi.",
-    "queuedProgress": "Kuyrukta {position}/{size}"
+    "queuedProgress": "Kuyrukta {position}/{size}",
+    "clickToSelectRun": "Bu çalıştırmayı seçmek için tıklayın",
+    "doubleClickOrOpenNewTab": "Bu çalıştırmayı tuvale getirmek için çift tıklayın, yeni bir sekmede açmak için Ctrl/Cmd+tıklayın"
   },
   "templates": {
     "useThisTemplate": "Bu Template'i Kullan",
@@ -1875,7 +1887,7 @@
   },
   "mcp": {
     "title": "MCP Server",
-    "subtitle": "Workflow'larınızı AI asistanları için MCP araçları olarak sunun",
+    "subtitle": "Workflow'larınızı MCP araçları ve Heym Agent'ı MCP ile A2A üzerinden sunun",
     "connection": "MCP Bağlantısı",
     "connectionSubtitle": "AI asistanınızı MCP protokolü üzerinden Workflow'larınıza bağlayın.",
     "apiKeyTab": "API Key",
@@ -1995,7 +2007,27 @@
     "geminiStep2": "Özel uygulamalar altında Özel bir uygulama ekle seçeneğine tıklayın",
     "geminiStep3": "Yukarıdaki MCP Sunucu URL'sini yapıştırın ve Gelişmiş özellikler bölümünü kapalı bırakın; Gemini otomatik olarak kaydolacaktır",
     "geminiStep4": "İleri'ye tıklayın ve Heym kimlik bilgilerinizle yetkilendirin",
-    "geminiInfo": "Gemini, güvenli kimlik doğrulaması için OAuth kullanır. Heym kimlik bilgileriniz erişimi yetkilendirmek için kullanılır ve asla Gemini ile paylaşılmaz. Bağlandıktan sonra Heym, Gemini mobil uygulamasında da çalışır."
+    "geminiInfo": "Gemini, güvenli kimlik doğrulaması için OAuth kullanır. Heym kimlik bilgileriniz erişimi yetkilendirmek için kullanılır ve asla Gemini ile paylaşılmaz. Bağlandıktan sonra Heym, Gemini mobil uygulamasında da çalışır.",
+    "agentReach": {
+      "off": "Kapalı: MCP ve A2A istemcileri Heym Agent'a erişemez",
+      "unconfigured": "Heym Agent'ın çalışabilmesi için bir kimlik bilgisi ve model seçin",
+      "mcpA2a": "MCP ve A2A üzerinden erişilebilir",
+      "mcpOnly": "MCP üzerinden heym_chat olarak erişilebilir"
+    },
+    "a2aEnabledOnServer": "\"{name}\" üzerinde A2A etkinleştirildi",
+    "a2aEnabled": "A2A etkinleştirildi",
+    "a2aDisabledOnServer": "\"{name}\" üzerinde A2A devre dışı bırakıldı",
+    "a2aDisabled": "A2A devre dışı bırakıldı",
+    "agentAndA2aDisabledOnServer": "\"{name}\" üzerinde Heym Agent ve A2A devre dışı bırakıldı",
+    "agentAndA2aDisabled": "Heym Agent ve A2A devre dışı bırakıldı",
+    "a2a": {
+      "enable": "A2A'yı Etkinleştir",
+      "description": "Diğer ajanlar Heym Agent'a Agent2Agent protokolü (A2A 1.0) üzerinden görev gönderebilir. X-MCP-Key başlığındaki bu sunucunun anahtarıyla veya Heym OAuth ile kimlik doğrulaması yaparlar.",
+      "agentCard": "Agent Card",
+      "jsonRpcEndpoint": "JSON-RPC Endpoint'i",
+      "checkCardLive": "Kartın etkin olduğunu kontrol edin:",
+      "copyLabel": "{label} kopyala"
+    }
   },
   "analytics": {
     "dashboardTitle": "Analitik Panosu",
@@ -2087,6 +2119,25 @@
       "errors": "Hatalar",
       "avgLatencyMs": "Ort. Gecikme (ms)",
       "latencyTitle": "Zaman İçinde Ortalama Gecikme"
+    },
+    "last1Hour": "Son 1 Saat",
+    "last3Hours": "Son 3 Saat",
+    "last6Hours": "Son 6 Saat",
+    "nodeTypes": "Düğüm Türleri",
+    "nodeChart": {
+      "emptyMessage": "Bu dönem için henüz düğüm verisi yok. Düğüm analizleri bu güncellemeden sonraki çalıştırmalar için kaydedilir.",
+      "duration": {
+        "title": "En Çok Zaman Alan Düğümler",
+        "subtitle": "Çağrı başına ortalama süre"
+      },
+      "errors": {
+        "title": "En Çok Başarısız Olan Düğüm Türleri",
+        "subtitle": "Zaman içindeki hatalar"
+      },
+      "calls": {
+        "title": "En Çok Çağrılan Düğüm Türleri",
+        "subtitle": "Zaman içindeki çağrılar"
+      }
     }
   },
   "dashboards": {

@@ -1,6 +1,6 @@
-# MCP 탭
+# MCP / A2A 탭
 
-**MCP** 탭은 Model Context Protocol(MCP) 연동을 구성합니다. MCP를 사용하면 AI 클라이언트(Claude, ChatGPT, Gemini, Cursor 및 모든 MCP 호환 도구)가 귀하의 Heym Workflow를 도구로 호출할 수 있습니다.
+**MCP** 탭은 Model Context Protocol(MCP) 연동을 구성합니다, 다른 에이전트가 작업을 위임할 수 있는 [Agent2Agent](https://github.com/google/A2A) (A2A 1.0) 서버로 노출할 수 있습니다. MCP를 사용하면 AI 클라이언트(Claude, ChatGPT, Gemini, Cursor 및 모든 MCP 호환 도구)가 귀하의 Heym Workflow를 도구로 호출할 수 있습니다.
 
 Heym은 두 가지 모드를 지원합니다. 모든 MCP 활성화 Workflow를 단일 Endpoint 아래에 노출하는 **기본 서버**와, 각 논리적 Workflow 그룹에 전용 URL 및 API Key를 부여하는 **명명된 서버**입니다.
 
@@ -51,7 +51,7 @@ Workflow 카드는 설명과 입력 필드 이름의 미리보기를 표시하�
 ```
 
 클라이언트는 해당 `execution_id`를 사용하여 `heym_execution_status` 도구를 폴링합니다. [상태 URL](../reference/webhooks.md#status-url)과 동일한 본문을 반환합니다: 현재 대기 순위가 포함된 `queued`, `running`, 그리고 출력이 포함된 `success` 또는 `error`. 동일한 서버가 노출하는 Workflow의 실행만 찾습니다. 이 도구는 기본 서버 및 각 명명된 서버에서 하나 이상의 Workflow에 동시성 제한이 설정되어 있는 동안에만 목록에 표시됩니다. 대기열이 가득 찬 경우 호출은 "Concurrency queue is full" 오류를 반환합니다.
-## Heym Chat 도구
+## Heym Agent
 
 **Heym Capabilities** 섹션은 Chat 탭 엔진을 `heym_chat`이라는 단일 MCP 도구로 전환합니다. 기본 서버, 임의의 명명된 서버 또는 둘 모두에서 활성화할 수 있으며, 각 표면은 자체 토글과 모델 선택을 유지합니다.
 
@@ -60,15 +60,20 @@ Workflow 카드는 설명과 입력 필드 이름의 미리보기를 표시하�
 - Workflow를 구축하고, 샘플 입력으로 테스트 실행하고, 수정하여 실행이 통과하면 완료하기([빌드 모드](#build-mode) 참조)
 - 기존 Workflow 검사 및 실행
 - 분석, 최근 실행 및 예정된 cron 스케줄을 보고합니다.
+- 워크플로가 어디서 실패하고 왜 느린지 설명: 가장 많이 실행되고 가장 많이 실패하며 가장 느린 워크플로와 지난 1, 3, 6시간, 24시간, 7일 또는 30일, 혹은 전체 기간 동안 가장 많은 시간, 오류 및 호출을 기록한 노드 유형
 - 하나의 Workflow 실행 이력을 보고합니다. 실행 횟수, 상태별 집계, 실행 시점, 그리고 요청 시 단일 실행의 입력, 출력 및 노드별 오류를 보고합니다.
 - 현재 실행 중인 항목을 보고합니다. 활성 실행 수, 해당 Workflow 이름, 각 실행의 경과 시간, 현재 위치한 노드, 그리고 라이브 실행 링크를 보고합니다.
 - [Board 탭](./board-tab.md)에서 보드를 나열하고, 카드를 생성하며, 카드 상세를 읽습니다.
-- 데이터 테이블을 열과 함께 나열하고, 새로 생성하며, 자신이 구축하는 Workflow에 연결합니다.
+- 대시보드(Heym Work의 페이지)와 해당 위젯 나열, 워크플로가 있는 대시보드 찾기, 새 위젯 추가 및 워크플로 구축, 기존 워크플로를 위젯으로 배치, 위젯 이름 변경 또는 삭제, 레이아웃 정리([Dashboard › Chat 및 MCP에서](./dashboard-tab.md#from-chat-and-mcp) 참조)
+- 데이터 테이블 및 행 검사, 테이블 생성, 열 추가 또는 제거, 행 삽입, 업데이트 또는 삭제, 워크플로에 테이블 연결
+- 프롬프트 및 에이전트 평가 스위트([Eval suites](./evals-tab.md#from-chat-and-mcp)) 생성, 편집 및 실행(보고되거나 실행에서 빌드되거나 숫자로 지정된 에이전트 기준선 포함). 결과에는 저장된 모든 스위트의 Evals 링크가 나열됩니다.
 - Heym 자체 페이지에서 credential 생성 또는 업데이트([Credentials](#credentials) 참조)
 - 팀과 전역 변수를 읽고, 문서를 검색합니다.
 - 대기 중인 human-in-the-loop 검토를 승인, 편집 또는 거부합니다.
 
 나중에 Chat 탭에 추가되는 기능은 `heym_chat`을 통해 자동으로 사용 가능해집니다. 동기화를 유지해야 할 기능별 토글은 없습니다.
+
+이러한 기능은 `heym_chat` 내부에서 실행됩니다. `tools/list`에는 `heym_chat`과 워크플로 도구만 표시되며 평가 스위트 도구와 같은 채팅 내부 도구는 표시되지 않습니다.
 
 ### 빌드 모드
 
@@ -81,7 +86,12 @@ Workflow 카드는 설명과 입력 필드 이름의 미리보기를 표시하�
 - 이전에 만든 Workflow를 변경하려면 동일한 `conversation_id`로 스레드를 이어가세요. 어시스턴트는 새 Workflow를 만드는 대신 해당 Workflow를 업데이트하며, 사용자가 편집할 수 있는 Workflow만 변경합니다.
 - 다섯 번의 테스트 실행을 모두 소진하면 어시스턴트는 멈추고 무엇이 여전히 실패하는지 설명합니다.
 
-데이터 테이블은 다릅니다. 테이블에는 비밀이 담기지 않으므로, `heym_chat`은 테이블을 나열하고, Workflow가 어느 테이블을 사용해야 하는지 묻고, 열과 함께 새 테이블을 생성할 수 있습니다. 행을 읽거나 쓰지는 않습니다.
+`heym_chat`은 테이블과 행을 검사하고, 테이블을 생성하며, 열을 추가하거나 제거하고, 행을 삽입, 업데이트 또는 삭제할 수 있습니다. 테이블 이름, UUID 또는 DataTable 링크를 제공하십시오(예: „https://heym.example/?tab=datatable/<table-id> 에 이름과 성 두 개의 문자열 열 추가”). 테이블을 직접 수정하며 열을 추가할 때 기존 열과 값을 보존합니다.
+
+`heym_chat`은 테이블과 행을 검사하고, 테이블을 생성하며, 열을 추가하거나 제거하고, 행을 삽입, 업데이트 또는 삭제할 수 있습니다. 테이블 이름, UUID 또는 DataTable 링크를 제공하십시오(예: „https://heym.example/?tab=datatable/<table-id> 에 이름과 성 두 개의 문자열 열 추가”). 테이블을 직접 수정하며 열을 추가할 때 기존 열과 값을 보존합니다.
+
+쓰기 작업에는 직접 또는 팀 공유를 통한 소유권이나 **쓰기** 권한이 필요합니다. 읽기 전용 액세스는 검사만 허용합니다. 행 쓰기에는 DataTable 탭의 유형, 기본값, 필수 및 고유성 검사가 적용되며 부분 가져오기는 거부된 행을 보고합니다. 열을 제거하면 모든 행에서 해당 값이 지워집니다. DataTable 탭에서와 마찬가지로 열 제거 및 모든 행 지우기는 먼저 확인을 요청합니다. 확인하려면 동일한 `conversation_id`로 응답하십시오. 선택한 행을 삭제할 때는 추가 확인이 필요하지 않습니다.
+
 
 ### Credentials
 
@@ -122,6 +132,14 @@ credential을 추가하거나 소유한 credential을 업데이트하려면 어�
 
 어시스턴트가 명확화를 필요로 하면 일시 중지하고 그렇게 알립니다. 동일한 `conversation_id`를 사용하여 답변을 회신하십시오.
 
+### A2A 활성화
+
+Heym Agent가 켜져 있는 동안 카드에 **A2A 활성화** 확인란이 표시됩니다. 이를 선택하면 다른 에이전트가 Agent2Agent 프로토콜(A2A 1.0)을 통해 Heym Agent에 작업을 보낼 수 있습니다. 그런 다음 카드에는 각각 복사 버튼이 있는 **Agent Card** URL과 **JSON-RPC endpoint**, 그리고 카드를 가져오는 `curl` 명령이 나열됩니다. A2A는 MCP와 동일한 키 및 OAuth 로그인을 사용합니다. 에이전트를 끄면 A2A도 꺼집니다. 메서드, 작업 상태 및 예제는 [A2A](../reference/a2a.md)를 참조하십시오.
+
+### 진행 상황
+
+오래 걸리는 `heym_chat` 호출은 Chat 탭에 표시되는 문구(예: `워크플로 테스트 중 · 시도 2/5`)로 에이전트의 작업을 MCP 진행 상황(`notifications/progress`)으로 보고합니다. 진행 상황 수신 시 시간 초과를 재설정하는 클라이언트는 에이전트가 작업하는 동안 계속 대기합니다.
+
 ## 명명된 MCP 서버
 
 명명된 서버를 사용하면 Workflow를 격리된 MCP Endpoint로 분할할 수 있습니다. 각 서버는 자체 URL과 API Key를 가지므로, 서로 다른 AI 클라이언트, 팀 또는 사용 사례가 필요한 Workflow에 정확히 연결할 수 있습니다.
@@ -141,7 +159,9 @@ credential을 추가하거나 소유한 credential을 업데이트하려면 어�
 | **SSE Endpoint** | 고유 URL: `{origin}/api/mcp/servers/{uuid}/sse` |
 | **API Key** | 독립적인 Key로, 생성 또는 재생성 시 한 번만 표시됩니다. 즉시 복사하십시오. 해시되어 저장되므로 나중에 다시 확인할 수 없습니다 |
 | **How to connect** | **Copy JSON**은 바로 붙여넣을 수 있는 MCP config를 복사합니다. **Add to Cursor**는 한 번의 클릭으로 설치합니다 |
-| **Heym Capabilities** | 이 서버의 `heym_chat` 도구를 토글하고 credential과 model을 선택합니다 |
+| **Heym Capabilities** | 이 서버에 대해 Heym Agent (`heym_chat`)를 켜거나 끄고 credential과 모델을 선택합니다 |
+| **A2A 활성화** | `{origin}/api/a2a/servers/{uuid}/agent-card.json`에 자체 Agent Card를 보유한 이 서버 전용 A2A 스위치 |
+| **A2A 활성화** | `{origin}/api/a2a/servers/{uuid}/agent-card.json`에 자체 Agent Card를 보유한 이 서버 전용 A2A 스위치 |
 | **Assigned Workflows** | 이 서버가 노출할 Workflow를 토글합니다 |
 
 ### Workflow 할당

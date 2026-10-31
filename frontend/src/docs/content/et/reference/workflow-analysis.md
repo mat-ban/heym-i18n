@@ -50,6 +50,8 @@ Jaotis **Improvement areas** teostab alati neli selgesõnalist kontrolli:
 3. **Network nodes** — sõlmede puhul, mis teevad võrgupäringuid (näiteks [HTTP](../nodes/http-node.md) ja integratsioonisõlmed), soovitab aruanne neil sõlmedel sõlmepõhist veakäsitlust (retry ja/või continue-on-error).
 4. **Alerts** — kui workflow'le pole [alerts](../tabs/alerts-tab.md) konfigureeritud, soovitab aruanne seadistada alerts enne prod keskkonda minekut.
 
+5. **Evals**: kui workflow'l on [Agent](../nodes/agent-node.md) sõlm ilma agendikomplektita, soovitab aruanne luua **Agent Suite** (või **Prompt Suite**) jaotises [Evals](../tabs/evals-tab.md#agent-suites); kui sellel on [LLM](../nodes/llm-node.md) sõlm, soovitab see **Prompt Suite**'i selle prompti testimiseks mudelite lõikes.
+
 ### Run Analyzer from Properties
 
 Kui workflow'l on lõuendil sõlmed, kuid analüüsidokumenti veel pole, kuvatakse workflow-tasemel [Properties](./canvas-features.md) paneelis nupp **Run Analyzer** (kuvatakse, kui ükski sõlm pole valitud). See avab selle Workflow analüüsi paneeli, et saaksite valida mandaadi ja mudeli ning aruande genereerida.

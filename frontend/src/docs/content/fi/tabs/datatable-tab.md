@@ -73,11 +73,11 @@ Jaa taulukoita muiden käyttäjien tai tiimien kanssa:
 1. Avaa jakodialogi taulukon yksityiskohtanäkymästä
 2. Lisää käyttäjiä sähköpostiosoitteella **luku**- tai **kirjoitus**-oikeuksilla
 3. Lisää tiimejä **luku**- tai **kirjoitus**-oikeuksilla
-4. Lukuoikeudet antavat lukuaccessin; kirjoitusoikeudet mahdollistavat rivien muokkaamisen
+4. Vain luku -käyttäjät voivat tarkastella tietoja; kirjoitusoikeudelliset käyttäjät voivat muokata rivejä ja sarakkeita. Taulukon nimeäminen uudelleen, sen kuvauksen muuttaminen ja jakojen hallinta säilyvät vain omistajan oikeuksina.
 
 ## Taulukoiden luonti tekoälyavustajalla
 
-Canvasin [AI Assistant](../reference/ai-assistant.md#data-tables), [Keskustelu](./chat-tab.md) ja `heym_chat`-työkalu [MCP-välilehdellä](./mcp-tab.md) voivat valita yhden taulukoistasi workflowa varten tai luoda uuden. Ne ehdottavat nimeä ja sarakkeita sekä luovat taulukon, kun hyväksyt ehdotuksen. Ne eivät koskaan muuta olemassa olevan taulukon sarakkeita tai rivejä - lisää tai muokkaa sarakkeita tässä.
+Canvasin [AI-avustaja](../reference/ai-assistant.md#data-tables), [Chat](./chat-tab.md) ja `heym_chat`-työkalu [MCP-välilehdellä](./mcp-tab.md) voivat valita yhden taulukoistasi rakentamaansa workflowta varten tai luoda uuden. Ne ehdottavat nimeä ja sarakkeita ja luovat taulukon, kun lähetät kysymyskortin. Canvas-avustaja määrittää workflow-solmut taulukon metatiedoista. Chat ja `heym_chat` voivat myös tarkastaa rivejä, lisätä tai poistaa sarakkeita sekä lisätä, päivittää tai poistaa rivejä suoraan. Anna niille taulukon nimi tai tämän välilehden linkki. Kirjoitukset vaativat omistajuuden tai suoran/tiimin **kirjoitusoikeuden**. Sarakkeiden lisääminen säilyttää olemassa olevat tiedot; sarakkeiden poistaminen poistaa niiden arvot jokaiselta riviltä. Sarakkeiden poistaminen ja kaikkien rivien tyhjentäminen pyytävät vahvistuksen tämän välilehden mukaisesti.
 
 ## Käyttö workfloweissa
 

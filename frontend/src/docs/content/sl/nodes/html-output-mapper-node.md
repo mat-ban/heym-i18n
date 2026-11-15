@@ -68,3 +68,5 @@ Enaka pravila kot pri [Output](./output-node.md): tega vozlišča ne postavljajt
 - [Output](./output-node.md) – Sporočilo ali odgovor na podlagi sheme z ovitkom `result`
 - [Webhook](../reference/webhooks.md) – Izvršni endpoint, metode zahtev in odgovori
 - [Vrste vozlišč](../reference/node-types.md) – Vse vrste vozlišč
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

@@ -140,3 +140,6 @@ Nieudane logowanie powraca do ekranu logowania z czytelnym komunikatem. Heym nig
 - **Wiele jednoczesnych dostawców.** Jedna instancja łączy się z jednym dostawcą.
 - **Mapowanie grup lub ról** na podstawie oświadczeń dostawcy.
 - **Pojedyncze wylogowanie.** Wylogowanie z Heym nie powoduje wylogowania z dostawcy.
+
+- **Uwierzytelnianie dwuskładnikowe leży po stronie dostawcy.** `HEYM_REQUIRE_MFA` ma zastosowanie wyłącznie do logowania hasłem; logowanie SSO nigdy nie wymaga kodu Heym. Wymagaj MFA u swojego dostawcy tożsamości.
+- **Dezaktywacja obowiązuje również tutaj.** Konto dezaktywowane przez administratora w **Ustawienia → Użytkownicy** zostanie odrzucone, nawet jeśli dostawca nadal je uwierzytelnia.

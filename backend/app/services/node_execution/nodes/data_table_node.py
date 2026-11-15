@@ -5,6 +5,7 @@ import uuid
 from importlib import import_module
 
 from app.services.node_execution.base import NodeExecutionContext
+from app.services.node_execution.json_fields import resolve_json_field as _resolve_json_field
 
 
 def _build_data_table_sort_clauses(sort_str: str, columns: list) -> list:
@@ -158,10 +159,9 @@ def execute(ctx: NodeExecutionContext) -> object:
 
         if operation == "find":
             filter_template = node_data.get("dataTableFilter", "{}")
-            filter_str = self.evaluate_message_template(filter_template, inputs, node_id)
             try:
-                filter_dict = json.loads(filter_str) if isinstance(filter_str, str) else filter_str
-            except Exception:
+                filter_dict = _resolve_json_field(self, filter_template, inputs, node_id)
+            except json.JSONDecodeError:
                 filter_dict = {}
 
             query = db.query(DataTableRow).filter(DataTableRow.table_id == data_table_id)
@@ -227,10 +227,9 @@ def execute(ctx: NodeExecutionContext) -> object:
 
         elif operation == "count":
             filter_template = node_data.get("dataTableFilter", "{}")
-            filter_str = self.evaluate_message_template(filter_template, inputs, node_id)
             try:
-                filter_dict = json.loads(filter_str) if isinstance(filter_str, str) else filter_str
-            except Exception:
+                filter_dict = _resolve_json_field(self, filter_template, inputs, node_id)
+            except json.JSONDecodeError:
                 filter_dict = {}
 
             query = db.query(DataTableRow).filter(DataTableRow.table_id == data_table_id)
@@ -273,10 +272,9 @@ def execute(ctx: NodeExecutionContext) -> object:
 
         elif operation == "insert":
             data_template = node_data.get("dataTableData", "{}")
-            data_str = self.evaluate_message_template(data_template, inputs, node_id)
             try:
-                row_data = json.loads(data_str) if isinstance(data_str, str) else data_str
-            except Exception:
+                row_data = _resolve_json_field(self, data_template, inputs, node_id)
+            except json.JSONDecodeError:
                 row_data = {}
 
             coerced_data = row_data if isinstance(row_data, dict) else {}
@@ -311,10 +309,9 @@ def execute(ctx: NodeExecutionContext) -> object:
                 raise ValueError("DataTable update requires a row ID")
 
             data_template = node_data.get("dataTableData", "{}")
-            data_str = self.evaluate_message_template(data_template, inputs, node_id)
             try:
-                update_data = json.loads(data_str) if isinstance(data_str, str) else data_str
-            except Exception:
+                update_data = _resolve_json_field(self, data_template, inputs, node_id)
+            except json.JSONDecodeError:
                 update_data = {}
 
             row = (
@@ -376,26 +373,40 @@ def execute(ctx: NodeExecutionContext) -> object:
 
         elif operation == "upsert":
             filter_template = node_data.get("dataTableFilter", "{}")
-            filter_str = self.evaluate_message_template(filter_template, inputs, node_id)
             try:
-                filter_dict = json.loads(filter_str) if isinstance(filter_str, str) else filter_str
-            except Exception:
+                filter_dict = _resolve_json_field(self, filter_template, inputs, node_id)
+            except json.JSONDecodeError:
                 filter_dict = {}
 
             data_template = node_data.get("dataTableData", "{}")
-            data_str = self.evaluate_message_template(data_template, inputs, node_id)
             try:
-                upsert_data = json.loads(data_str) if isinstance(data_str, str) else data_str
-            except Exception:
+                upsert_data = _resolve_json_field(self, data_template, inputs, node_id)
+            except json.JSONDecodeError:
                 upsert_data = {}
 
             # Try to find existing row by filter
             existing_row = None
-            if filter_dict and isinstance(filter_dict, dict):
-                query = db.query(DataTableRow).filter(DataTableRow.table_id == data_table_id)
-                for col_name, col_value in filter_dict.items():
-                    query = query.filter(DataTableRow.data.op("->>")(col_name) == str(col_value))
-                existing_row = query.first()
+            # Serialise lookup and write per table, like the unique check (same re-entrant
+            # lock, released on commit). Otherwise concurrent upserts of one key all see
+            # "no row" and all insert, or fail the unique check instead of updating.
+            from sqlalchemy import text
+
+            from app.api.data_tables import _unique_lock_statement
+
+            lock_sql, lock_params = _unique_lock_statement(data_table_id)
+            db.execute(text(lock_sql), lock_params)
+            if (
+                filter_dict
+                and isinstance(filter_dict, dict)
+                and not any(isinstance(v, dict) for v in filter_dict.values())
+            ):
+                clauses = _build_data_table_filter_clauses(filter_dict, columns)
+                if clauses:
+                    query = db.query(DataTableRow).filter(
+                        DataTableRow.table_id == data_table_id,
+                        *clauses,
+                    )
+                    existing_row = query.first()
 
             if existing_row:
                 merged = {

@@ -42,7 +42,7 @@ Sesiones de formación práctica adaptadas al nivel de habilidad y los casos de 
 
 ## Despliegue en Kubernetes
 
-La guía estándar de [Ejecución y despliegue](../getting-started/running-and-deployment.md) cubre Docker Compose para configuraciones de producción en un único servidor. Los clientes Enterprise reciben asistencia con despliegues de Kubernetes en producción para alta disponibilidad y escalado horizontal:
+La guía estándar de [Ejecución y despliegue](../getting-started/running-and-deployment.md) cubre Docker Compose para configuraciones de producción en un único servidor. [Kubernetes Deployment](../getting-started/kubernetes.md). Los clientes Enterprise reciben asistencia con despliegues de Kubernetes en producción para alta disponibilidad y escalado horizontal:
 
 - **Múltiples nodos worker** — Distribución de los workers del backend de Heym entre varios nodos de Kubernetes para redundancia y balanceo de carga
 - **Contenedores sidecar** — Configuración de patrones sidecar para recopilación de logs, agentes de monitorización, mallas de servicios (Istio, Linkerd) e inyección de secretos (Vault)

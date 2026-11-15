@@ -92,6 +92,10 @@ To prav tako določa vrstni red nadgradnje. Nadgradnja glavnega vozlišča najpr
 
 **Delavska vozlišča imajo drugačen odhodni IP.** Vsaka API, ki dovoljuje seznam virov, vidi nov. Pošiljanje e-pošte deluje na glavnem vozlišču prav iz tega razloga; za HTTP vozlišče bodisi dajte klasterju en sam NAT izhodni naslov ali dovoljenjite vsako vozlišče.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Dodajanje delavca na drugo napravo
 
 `docker-compose.worker.yml` v korenu repozitorija zažene delavca na svojem gostitelju. Nima baze podatkov in uporabniškega vmesnika: dostopa do PostgreSQL glavnega vozlišča in prevzame svoj delež ozadja.
@@ -124,7 +128,7 @@ Nič od tega se ne prikaže pri namestitvi z enim vozliščem: polja so prazna, 
 
 **Če delavec umre med izvajanjem**, njegov srčni utrip postane zastarel in vodja ponovno izvede izvajanje na aktivni instanci. Vrstica v čakalni vrsti, ki jo je prevzel, se ločeno umakne: ko ne obstaja aktivno izvajanje zanj in mine dve minuti milosti, vodja označi vrstico kot neuspešno in obudi tiste, ki so čakali na rezultat. Starost sama po sebi nikoli ni sprožilec, zato se legitimno dolga izvajanja pustijo pri miru; vrstica se označi kot neuspešna namesto da bi se ponovno dodala v čakalno vrsto, ker okrevanje že prevzema ponovni zagon, ponovna dodajanja v čakalno vrsto pa bi izvajala isti workflow dvakrat.
 
-**Če glavni sistem preneha delovati**, cron še naprej deluje iz delavca in distribuirana izvajanja se nadaljujejo. Izvajanja, ki potrebujejo glavni sistem, se zberejo in čakajo, ter se izpraznijo, ko se vrne — vendar le znotraj okna milosti za napačno aktivacijo (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, privzeto 600 sekund). Vse, kar je starejše, se označi kot preskočeno, z razlogom zabeleženim, namesto da bi se enkrat predvajalo ure zamude.
+**Če glavni sistem preneha delovati**, cron še naprej deluje iz delavca in distribuirana izvajanja se nadaljujejo. Izvajanja, ki potrebujejo glavni sistem, se zberejo in čakajo, ter se izpraznijo, ko se vrne — vendar le znotraj okna milosti za napačno aktivacijo (`CRON_MISFIRE_GRACE_SECONDS`, privzeto 600 sekund). Vse, kar je starejše, se označi kot preskočeno, z razlogom zabeleženim, namesto da bi se enkrat predvajalo ure zamude.
 
 Uporabniški vmesnik, API, MCP in urejevalnik niso na voljo, medtem ko glavni sistem ne deluje, ker so to vstopne točke.
 

@@ -22,7 +22,7 @@ Solmu vaatii myös **GitHub** -tunnistetiedot yksityisten repositorioiden kloona
 Suorituksen eristys valitaan `HEYM_OPENCODE_CLI_COMMAND` -muuttujan avulla, kuten Codex-solussa:
 
 - **Paikallinen kehitys (`run.sh`)** jättää sen oletusarvoon `opencode`, jolloin OpenCode suoritetaan isäntäprosessina kloonatussa työtilassa — Dockeria ei tarvita, eikä lisälippuja.
-- **Docker-käyttöönotot (`deploy.sh` ja yksittäinen GHCR-kuva)** asettavat sen arvoon `/usr/local/bin/heym-opencode-docker`, joka on wrapperi OpenCode-säiliön sisällä suoritettavalle `opencode run` -komennolle **kovettetussa, kertakäyttöisessä sisarsäiliössä**, joka jakaa OpenCode-työtilan nimetyn volyymin.
+- **Docker-käyttöönotot (`deploy.sh` ja yksittäinen GHCR-kuva)** asettavat sen arvoon `/usr/local/bin/heym-opencode-docker`, joka on wrapperi OpenCode-säiliön sisällä suoritettavalle `opencode run` -komennolle **kovettetussa, kertakäyttöisessä sisarsäiliössä**, joka jakaa OpenCode-työtilan nimetyn volyymin. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Kovennettu suoritussäiliö pudottaa kaikki Linux-käyttöoikeudet, asettaa `no-new-privileges` -lipun, käyttää vain luku -juurihakemistoa tmpfs-tyyppisellä `/tmp` -hakemistolla ja asettaa pid/muisti/CPU-rajoitukset. Verkosta poistuminen on sallittua (OpenCode-säiliön on päästävä malliyhdyskäytävään). **GitHub-tokenia ei koskaan sijoiteta säiliöön** — kaikki git- ja GitHub-toiminnot suoritetaan isännällä, joten vain OpenCode API-avain ja repositorion tiedostot ovat koskaan säiliön sisällä.
 

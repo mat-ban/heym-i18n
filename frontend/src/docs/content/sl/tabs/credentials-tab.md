@@ -83,3 +83,7 @@ Oglejte si [Expression DSL](../reference/expression-dsl.md) za referenciranje vr
 - [Zavihek vektorskih shramb](./vectorstores-tab.md) – Uporablja Qdrant ali Postgres (pgvector) poverilnice
 - [Zavihek Chat](./chat-tab.md) – Uporablja OpenAI/Google poverilnice
 - [Kontekstni prikaz](../reference/contextual-showcase.md) – Kompaktni vodnik po površinah nadzorne plošče
+
+## Iskanje
+
+Uporabite iskalno polje nad seznamom ali pritisnite **Ctrl+F** (ali **Cmd+F**) za filtriranje poverilnic po imenu ali vrsti med tipkanjem. Pritisnite **Escape**, da počistite iskanje.

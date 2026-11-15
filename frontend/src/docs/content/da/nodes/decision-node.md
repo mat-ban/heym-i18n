@@ -157,6 +157,8 @@ Ved redigering af legitimationsoplysninger bevares den gemte nøgle, når nøgle
 
 Den samme legitimationsoplysning kan bedømme [Evalueringer](../tabs/evals-tab.md)-kørsler: ved valg af **LLM-as-Judge** vælges den som bedømmer, og beslutningsmodellen scorer hvert svar mod det forventede output.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym blokerer som standard udgående anmodninger til private og loopback-adresser, så et beslutningsendpoint, der køres lokalt på `localhost` eller et privat netværk, kræver `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Beslutningsmodeller optræder ikke i de LLM-pristabeller, som Heym synkroniserer, så kolonnen **Cost** i [Kørsler](../tabs/traces-tab.md) forbliver tom for disse kald. Tokenantal registreres stadig, og det er muligt at tilføje en brugerdefineret pris med en prisoverride.

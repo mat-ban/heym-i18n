@@ -2,6 +2,9 @@
 
 La pestaña **Alertas** permite definir condiciones de umbral sobre una ventana temporal y recibir aviso cuando se cruzan. Heym ya registra los resultados de las ejecuciones, la duración de las mismas y el gasto en LLM, pero nunca ofrece esa información por iniciativa propia. Una alerta es la forma de solicitarla.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Ver demo de Alerts</a></p>
+
 Cada alerta se evalúa sobre una **ventana temporal** que usted elige, nunca sobre un único evento. Una ejecución fallida es ruido. Doce ejecuciones fallidas en diez minutos son un incidente.
 
 ## Tipos de alerta

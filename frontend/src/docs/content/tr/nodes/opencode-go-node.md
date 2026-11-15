@@ -22,7 +22,7 @@ Düğüm ayrıca özel depoları klonlamak, çalışma dalını push etmek ve pu
 Yürütme izolasyonu, tıpkı Codex düğümünde olduğu gibi `HEYM_OPENCODE_CLI_COMMAND` tarafından seçilir:
 
 - **Yerel geliştirme (`run.sh`)** bunu varsayılan `opencode` değerinde bırakır, böylece OpenCode klonlanan çalışma alanına karşı bir ana makine alt süreci olarak çalışır — Docker gerekmez, ek bayrak gerekmez.
-- **Docker dağıtımları (`deploy.sh` ve tek GHCR imajı)** bunu `/usr/local/bin/heym-opencode-docker` olarak ayarlar; bu, OpenCode çalışma alanı adlı volume'ünü paylaşan **sıkılaştırılmış, tek kullanımlık bir kardeş konteyner** içinde `opencode run` komutunu çalıştıran bir sarmalayıcıdır.
+- **Docker dağıtımları (`deploy.sh` ve tek GHCR imajı)** bunu `/usr/local/bin/heym-opencode-docker` olarak ayarlar; bu, OpenCode çalışma alanı adlı volume'ünü paylaşan **sıkılaştırılmış, tek kullanımlık bir kardeş konteyner** içinde `opencode run` komutunu çalıştıran bir sarmalayıcıdır. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Sıkılaştırılmış runner konteyneri tüm Linux yeteneklerini düşürür, `no-new-privileges` ayarlar, salt okunur bir kök ve bir tmpfs `/tmp` kullanır ve pid/bellek/CPU limitleri uygular. Ağ çıkışına izin verilir (OpenCode model ağ geçidine ulaşmalıdır). **GitHub token'ı asla konteynerin içine yerleştirilmez** — tüm git ve GitHub işlemleri ana makine tarafında çalışır, böylece içeride yalnızca OpenCode API anahtarı ve depo dosyaları bulunur.
 

@@ -2,6 +2,9 @@
 
 Kartica **Upozorenja** omogućuje vam definiranje uvjetnih pragova unutar vremenskog okvira i obavještavanje kada su ti pragovi prekoračeni. Heym već bilježi rezultate izvršavanja, trajanje izvođenja i troškove LLM-a, ali nikada to ne nudi bez zahtjeva. Upozorenje je način na koji to tražite.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Pogledajte demo za Alerts</a></p>
+
 Svako upozorenje se procjenjuje unutar **vremenskog okvira** koji odaberete, nikada na temelju jednog događaja. Jedno neuspješno izvršavanje je šum. Dvanaest neuspješnih izvršavanja u deset minuta je incident.
 
 ## Tipovi Upozorenja

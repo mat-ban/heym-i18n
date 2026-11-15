@@ -107,3 +107,6 @@ Command Palette는 편집기, 대시보드, 문서 및 evals 뷰에서 사용할
 - [빠른 시작](../getting-started/quick-start.md) – 첫 번째 Workflow 구축
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+**Credentials** 및 **DataTable** 탭도 동일하게 작동합니다. `Ctrl + F` / `Cmd + F`는 검색 필드에 포커스를 맞추고 입력 시 목록이 좁혀지며 `Escape`를 누르면 초기화됩니다.

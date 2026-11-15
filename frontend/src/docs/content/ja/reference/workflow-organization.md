@@ -71,6 +71,11 @@ Workflow レベルの **Properties** パネルにある **On error, run workflow
 
 コラボレーターは、共有された Workflow の実行トークンを発行できます。実行は **トークンを発行したユーザー** に帰属するため、オーナーではなくそのユーザーの Credentials とグローバル変数を使用します。真に匿名の呼び出し — 呼び出し元のいない `auth_type: anonymous` — のみがオーナーのコンテキストで実行されます。
 
+
+### Who counts as the caller
+
+On `/execute` and `/execute/stream`, a caller is someone who chose to run the workflow: a bearer token in the `Authorization` header (API clients, execution tokens), or Heym's own app, which marks its requests with `X-Heym-Client`. The browser's session cookie on its own does not make the visitor the caller. Opening an execute URL from a link, an e-mail or another site while signed in is therefore treated like a call with no session: an `Anonymous` workflow runs in the owner's context, and a `JWT` workflow answers `401`. This keeps a link from running a workflow with the credentials of whoever happens to click it.
+
 ## 削除のスケジュール
 
 Workflow は、即座に削除する代わりに削除をスケジュールできます。

@@ -174,3 +174,7 @@ Okna dialogowe historii canvasu i dashboardu utrzymują elementy sterujące uruc
 - [Historia edycji](./edit-history.md) – Kontrola wersji zapisów workflow (przywracanie, porównywanie)
 - [Szybki start](../getting-started/quick-start.md) – Zbuduj i uruchom pierwszy workflow
 - [Zakładka Workflows](../tabs/workflows-tab.md) – Tworzenie workflow i zarządzanie nimi
+
+## Related
+
+- [Operations Runbook (L1): Zaległości w kolejce](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Rozróżnianie wykonań w kolejce, wstrzymanych, przerwanych i odzyskanych przed ponownym uruchomieniem

@@ -122,3 +122,6 @@ Se nenhuma linha corresponder, o modelo é listado no aviso **Unpriced models** 
 - [Aba Traces](./traces-tab.md) - Usa a LLM Cost Table para o gráfico de rosca de custos e os cards de KPI
 - [Nó Grist](../nodes/grist-node.md) - Alternativa de planilha externa
 - [Aba Variables](./global-variables-tab.md) - Alternativa de armazenamento chave-valor
+## Pesquisa
+
+Use o campo de pesquisa acima da lista de tabelas ou pressione **Ctrl+F** (ou **Cmd+F**) para filtrar tabelas por nome ou descrição enquanto digita. Pressione **Escape** para limpar a pesquisa.

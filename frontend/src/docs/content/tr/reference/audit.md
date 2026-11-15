@@ -59,6 +59,10 @@ Her durum değişikliği günlüğe kaydedilir. Okumalar yalnızca okumanın ken
 | `auth.token_refresh` | `reason=refresh_token_replayed_or_revoked` ile `outcome=denied` — uyarı verilmesi gereken bir token hırsızlığı sinyali. |
 | `auth.password_change` | Mevcut parola yanlış olduğunda `outcome=failure`. |
 | `auth.sso_login` | Tek oturum açma. `outcome=failure`, sağlayıcı yanıtının reddedilme nedenini taşır; `denied` ise `email_not_verified`, `domain_not_allowed` veya `provisioning_disabled` taşır. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Bir yönetici [SSO](./sso.md) yapılandırmasını değiştirdi. `enabled` ve `password_login_disabled` kaydeder, client secret'ı asla. |
 | `sso_settings.test` | Bir yönetici SSO bağlantı testini çalıştırdı. |
 

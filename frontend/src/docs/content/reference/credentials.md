@@ -13,7 +13,7 @@ Credentials store API keys and secrets used by workflow nodes. You add them in t
 | Node type | Typical credential | Purpose |
 |-----------|--------------------|---------|
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Evals](../tabs/evals-tab.md) | OpenAI, Google, Custom | API key for the model |
-| [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge | Decision Model | Base URL of a decision model endpoint, plus an optional API key |
+| [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) judge, [RAG](../nodes/rag-node.md#reranking) reranker | Decision Model | Base URL of a decision model endpoint, plus an optional API key |
 | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults, [Evals](../tabs/evals-tab.md) prompt suites | Model Router (Auto Model) | Picks which of your models serves each request, using a decision model |
 | [Codex](../nodes/codex-node.md) | OpenAI Codex + GitHub | ChatGPT subscription sign-in (OAuth) or a Codex access token for the runner, plus a GitHub PAT for repository operations |
 | [OpenCode Go](../nodes/opencode-go-node.md) | OpenCode Go + GitHub | An OpenCode Go gateway API key (optional base URL) for the runner, plus a GitHub PAT for repository operations |
@@ -32,6 +32,7 @@ Credentials store API keys and secrets used by workflow nodes. You add them in t
 | [Grist](../nodes/grist-node.md) | Grist | API key + server URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 consent |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 consent |
+| **Google Meet (OAuth2)** | [Google Meet](../nodes/google-meet-node.md) | Google OAuth client ID + client secret, then Connect |
 | [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md) | Google Sheets (OAuth2) | Same credential as the Google Sheets node |
 | [Google Drive Trigger](../nodes/google-drive-trigger-node.md) | Google Drive (OAuth2) | Same credential as the Google Drive node |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 consent |
@@ -88,6 +89,12 @@ $credentials.MyNotionWorkspace
 ```
 
 Use the Notion **node** for native database, page, and block operations. Use `$credentials` when a custom [HTTP](../nodes/http-node.md) request needs the same Notion bearer token.
+
+## Credentials from Kubernetes Secrets
+
+On Kubernetes, an operator can declare credentials as Secrets labelled `heym.run/credential: "true"`, with annotations for the name, type, owner and sharing. They appear on the Credentials tab with a **Kubernetes** badge and work like any other credential in nodes and `$credentials`, but they are read-only in Heym: edit, delete and share are disabled, and the masked value shows the Secret's name instead of the first characters of the value. Their values are kept in memory and never stored in Heym's database. Change them where the Secret is managed; a change takes effect without a restart.
+
+If the Secret is deleted, the credential stays listed but unavailable, and runs that use it fail with the Secret's name. Admins see every such credential, and why one isn't usable, under **Settings → Kubernetes**, which appears while `HEYM_K8S_CREDENTIALS` is on. Setup is in the [Kubernetes guide](../getting-started/kubernetes.md#credentials-from-kubernetes-secrets).
 
 ## Creating Credentials from Chat
 

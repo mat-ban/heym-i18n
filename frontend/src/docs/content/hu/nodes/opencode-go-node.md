@@ -22,7 +22,7 @@ A csomópont emellett **GitHub** hitelesítési adatot is igényel a privát ada
 A végrehajtás izolációját a `HEYM_OPENCODE_CLI_COMMAND` választja ki, pontosan úgy, mint a Codex csomópont esetében:
 
 - **Helyi fejlesztés (`run.sh`)** az alapértelmezett `opencode` értéken hagyja, így az OpenCode host-alprocesszént fut a klónozott munkaterületen — Docker nem szükséges, extra kapcsolók nélkül.
-- **Docker telepítések (`deploy.sh` és az egységes GHCR image)** a `/usr/local/bin/heym-opencode-docker` értékre állítják, amely egy wrapper, és az `opencode run` parancsot egy **megerősített, eldobható testvérkonténerben** futtatja, amely az OpenCode munkaterület nevű kötetét osztja meg.
+- **Docker telepítések (`deploy.sh` és az egységes GHCR image)** a `/usr/local/bin/heym-opencode-docker` értékre állítják, amely egy wrapper, és az `opencode run` parancsot egy **megerősített, eldobható testvérkonténerben** futtatja, amely az OpenCode munkaterület nevű kötetét osztja meg. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 A megerősített futtatókonténer eltávolítja az összes Linux capability-t, beállítja a `no-new-privileges` opciót, csak olvasható root fájlrendszert használ egy tmpfs `/tmp` könyvtárral, valamint pid-, memória- és CPU-korlátokat alkalmaz. A hálózati kimenő forgalom engedélyezett (az OpenCode-nak el kell érnie a modellátjárót). A **GitHub token soha nem kerül a konténerbe** — minden git- és GitHub-művelet host oldalon fut, így csak az OpenCode API key és az adattár fájljai vannak a konténerben.
 

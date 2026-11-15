@@ -68,7 +68,9 @@
 
 **AI Auto Heal** は、Workflow を DOM の変更に対して耐性のあるものにします。セレクタが2回失敗すると（例: サイトのリニューアル後）、Heym は LLM を呼び出して代替ロケータ—通常は CSS セレクタの代わりに `role=button[name='Submit']` や `text=Exact text`—を探します。
 
-AI step のプロパティで **Auto heal mode** を有効にします。保存されたステップが失敗した場合:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.AI step のプロパティで **Auto heal mode** を有効にします。保存されたステップが失敗した場合:
 
 1. Heym が現在の HTML とスクリーンショットをキャプチャします
 2. 失敗したステップとページコンテキストを LLM へ送信します

@@ -116,6 +116,8 @@ Odwołanie do zapisanego pliku w dalszej części workflow: `$saveAudio.id`, `$s
 
 Odwołanie do zawartości base64 w dalszej części workflow: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Obrazy zwrócone przez `file_base64` są wyświetlane bezpośrednio w panelu debugowania podczas uruchamiania workflow.
 
 ## Przykład — lista plików Drive

@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap`-legitimationsoplysninger indeholdende server, login, postkasse og SSL-indstillinger |
 | `pollIntervalMinutes` | Integer | Interval i minutter mellem Heyms tjek for ny e-mail |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Opsætningsvejledning
 
@@ -62,6 +63,8 @@ Efter noden har udløst, kan downstream-noder tilgå:
 | `$nodeLabel.email.text` | Ren tekst-body |
 | `$nodeLabel.email.html` | HTML-body |
 | `$nodeLabel.email.attachments` | Array med vedhæftningsmetadata (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekodet header-objekt |
 | `$nodeLabel.email.uid` | IMAP UID til deduplicering eller logging |
 | `$nodeLabel.triggered_by` | Triggerkilde-label (`"imap"`) |

@@ -192,7 +192,7 @@ Sustav traga namjenski je izgrađen za otklanjanje pogrešaka agentnog ponašanj
 Svaki LLM poziv u Heymu automatski se naplaćuje. [Kartica Traces](../tabs/traces-tab.md) prikazuje broj ulaznih i izlaznih tokena po tragu uz USD trošak u stvarnom vremenu izveden iz sinkronizirane tablice cijena.
 
 - **Trošak po tragu** – Ulazni tokeni, izlazni tokeni i ukupni USD prikazani na svakom retku traga
-- **Analitika troškova** – KPI kartice i grafikon troškova po modelu ažuriraju se s odabranim vremenskim rasponom (1h / 24h / 7d / 30d / All)
+- **Analitika troškova** – KPI kartice i grafikon troškova po modelu ažuriraju se s odabranim vremenskim rasponom (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **LLM Cost Table** – Sustavna tablica u [kartici DataTable](../tabs/datatable-tab.md) puni se iz Heliconea svakih 24 sata; možete nadjačati cijene ili dodati prilagođene retke za modele koji još nisu navedeni
 - **Upozorenje o nedostajućoj cijeni** – Tragovi za modele bez unosa cijene prikazuju umetnuto upozorenje s izravnom vezom na tablicu troškova
 
@@ -278,7 +278,7 @@ Workflowi se mogu pozivati putem HTTP-a na `/api/workflows/{workflow_id}/execute
 Heym ima nativnu [MCP](../tabs/mcp-tab.md) podršku na obje strane:
 
 - **Kao klijent**: Agent nodeovi se povezuju na vanjske MCP servere (Filesystem, Browserbase, prilagođeni alati) putem stdio ili SSE i automatski konzumiraju njihove alate
-- **Kao server**: Workflowi s uključenim MCP-om postaju alati na zadanom serveru na `/api/mcp/sse`, ili na imenovanim serverima s vlastitim URL-om i API ključem, tako da Claude Desktop, Cursor i drugi MCP klijenti mogu izravno pozivati Vaše Heym Workflowe
+- **Kao server**: Workflowi s uključenim MCP-om postaju alati na zadanom serveru na `/api/mcp (or /api/mcp/sse for legacy connections)`, ili na imenovanim serverima s vlastitim URL-om i API ključem, tako da Claude Desktop, Cursor i drugi MCP klijenti mogu izravno pozivati Vaše Heym Workflowe
 
 Agenti mogu konzumirati nekoliko MCP servera istovremeno, a svaki Workflow može postati alat za vanjskog MCP klijenta.
 

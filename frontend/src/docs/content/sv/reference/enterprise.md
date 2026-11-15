@@ -42,7 +42,7 @@ Praktiska utbildningssessioner anpassade efter teamets kunskapsnivå och använd
 
 ## Kubernetes-driftsättning
 
-Standardsguiden [Köra & Driftsätta](../getting-started/running-and-deployment.md) täcker Docker Compose för produktionsuppsättningar på en server. Enterprise-kunder får hjälp med Kubernetes-driftsättningar i produktion för hög tillgänglighet och horisontell skalning:
+Standardsguiden [Köra & Driftsätta](../getting-started/running-and-deployment.md) täcker Docker Compose för produktionsuppsättningar på en server. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise-kunder får hjälp med Kubernetes-driftsättningar i produktion för hög tillgänglighet och horisontell skalning:
 
 - **Flera worker-noder** — Distribuering av Heyms backend-workers över flera Kubernetes-noder för redundans och lastbalansering
 - **Sidecar-containrar** — Konfigurering av sidecar-mönster för logginsamling, övervakningsagenter, service mesh (Istio, Linkerd) och hemlighetsinjektion (Vault)

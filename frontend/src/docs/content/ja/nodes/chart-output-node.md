@@ -368,3 +368,6 @@ Text（動的 — メッセージ文字列は上流で生成され、`valueField
 ボタンになるのは、`http://` と `https://` のアドレス、および単一の `/` で始まるパスのみです。`javascript:` や `//host` などそれ以外の値はプレーンテキストのままで、空のセルには何も表示されません。
 
 このボタンは[行リンク](../tabs/dashboard-tab.md#detail-pages)と併用できます。ボタンをクリックするとそのリンクが新しいタブで開き、行のそれ以外の場所をクリックすると従来どおり詳細ページが開きます。
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

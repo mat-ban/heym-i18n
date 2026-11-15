@@ -45,7 +45,7 @@
 
 Editorin **Suorita**-välilehdessä (Defined-webhook-tila) jokainen syötekenttä tukee tiedostojen raahaamista ja upotettua liitetiedoston valintaa (kentän oikeassa alakulmassa):
 
-- **Tekstitiedostot** (`.txt`, `.md`, `.json`, `.csv` ja vastaavat) luetaan pelkkänä tekstinä.
+- **Tekstitiedostot** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Kuvat** (JPEG, PNG, GIF, WebP) tallennetaan `data:`-URL-osoitteina (base64) kentän arvoksi – käytä kenttäavaimia kuten `imageUrl` tai `base64`, kun myöhemmät solmut odottavat kuvadataa.
 - **PDF**-tiedostot muunnetaan puretuksi tekstiksi (enintään 5 MB:n tiedosto, 100 000 merkkiä sisältöä).
 

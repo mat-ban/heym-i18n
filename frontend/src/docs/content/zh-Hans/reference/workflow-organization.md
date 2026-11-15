@@ -121,3 +121,8 @@ Workflow 可以被安排删除，而不是立即移除。
 - [Core Concepts](../getting-started/core-concepts.md) – Workflow、节点和执行
 - [Workflow Structure](./workflow-structure.md) – Workflow 的 JSON 格式
 - [Triggers](./triggers.md) – 起始节点和入口点
+
+
+### Who counts as the caller
+
+On `/execute` and `/execute/stream`, a caller is someone who chose to run the workflow: a bearer token in the `Authorization` header (API clients, execution tokens), or Heym's own app, which marks its requests with `X-Heym-Client`. The browser's session cookie on its own does not make the visitor the caller. Opening an execute URL from a link, an e-mail or another site while signed in is therefore treated like a call with no session: an `Anonymous` workflow runs in the owner's context, and a `JWT` workflow answers `401`. This keeps a link from running a workflow with the credentials of whoever happens to click it.

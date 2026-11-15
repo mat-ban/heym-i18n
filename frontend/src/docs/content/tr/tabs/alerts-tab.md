@@ -2,6 +2,9 @@
 
 **Alerts** sekmesi, bir zaman penceresi üzerinde eşik koşulları tanımlamanıza ve bu eşikler aşıldığında haberdar edilmenize olanak tanır. Heym, yürütme sonuçlarını, çalışma süresini ve LLM harcamasını zaten kaydeder, ancak bunların hiçbirini kendiliğinden bildirmez. Bir alert, bunu talep etme yolunuzdur.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Alerts demosunu izleyin</a></p>
+
 Her alert, seçtiğiniz bir **zaman penceresi** üzerinde değerlendirilir, asla tek bir olay üzerinde değil. Tek bir başarısız çalışma gürültüdür. On dakikada on iki başarısız çalışma ise bir olaydır.
 
 ## Alert Türleri

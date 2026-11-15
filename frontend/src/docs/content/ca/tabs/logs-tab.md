@@ -50,3 +50,8 @@ Si el registre està obert, creeu el compte d'administrador de confiança abans 
 - [Analytics Tab](./analytics-tab.md) – Mètriques d'execució
 - [Workflows Tab](./workflows-tab.md) – Gestió de Workflows
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacta de pàgina per a les superfícies del tauler
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Enrutar símptomes en temps d'execució al procediment d'incident adequat
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnosticar fallades de base de dades, serveis, clúster i sandbox

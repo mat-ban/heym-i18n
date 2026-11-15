@@ -12,7 +12,7 @@ Các node bắt đầu (không có cạnh đi vào) khởi tạo quá trình th�
 | [Cron](../nodes/cron-node.md) | Chạy theo lịch (cron expression, ví dụ `0 * * * *` cho mỗi giờ). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Khởi động khi Telegram gửi bản cập nhật webhook của bot đến URL webhook riêng của node. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Khởi động khi Discord gửi webhook của Interactions API đến endpoint riêng của node. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Poll một hộp thư IMAP và khởi động một lần cho mỗi email mới được phát hiện. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Poll một hộp thư IMAP và khởi động một lần cho mỗi email mới được phát hiện. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Khởi động khi Heym phát hành một sự kiện nền tảng. Các sự kiện trong cùng một cửa sổ dispatch đến cùng nhau dưới dạng một mảng. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Mở một kết nối client hướng ra đến socket bên ngoài và khởi động theo các sự kiện socket được chọn. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Tạo một URL upload dùng một lần và khởi động khi bên gọi gửi lên một tệp multipart lớn. |

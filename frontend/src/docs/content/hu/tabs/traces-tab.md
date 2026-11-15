@@ -23,6 +23,7 @@ A szűrősáv tetején található egyetlen **Időtartomány** választó vezér
 
 - A kiválasztott időtartományon belüli legutóbbi nyomkövetések lapozható listája
 - Minden nyomkövetés a következőket mutatja: workflow, csomópont, hitelesítési adatok, időbélyeg, időtartam
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Kattintson egy nyomkövetésre a részletes nézet megnyitásához
 - A **Előző / Következő** gombokkal a részletes párbeszédpanelen belül válthat a nyomkövetések között anélkül, hogy bezárná azt
 
@@ -66,3 +67,7 @@ Amikor megnyit egy nyomkövetést:
 - [OpenTelemetry nyomkövetés](../reference/opentelemetry.md) – Opcionális OTel-export workflow-, csomópont- és Agent-eszközspanelekhez
 - [Adattáblák lap](./datatable-tab.md) – Az költségdiagram által használt LLM-költségtáblát tartalmazza
 - [Kontextuális bemutató](../reference/contextual-showcase.md) – Kompakt oldalútmutató a dashboard felületeihez
+
+## Időtartomány
+
+A szűrősáv tetején található egyetlen **Időtartomány** választó vezérli mind a statisztikai fejlécet, mind a nyomkövetési listát. Választási lehetőségek: Elmúlt 1 óra, Elmúlt 3 óra, Elmúlt 6 óra, Elmúlt 24 óra, Elmúlt 7 nap (alapértelmezett), Elmúlt 30 nap, Minden idő. A tartomány módosítása visszaállítja az oldalszámozást, és együtt újratölti a diagramokat és a listát.

@@ -22,7 +22,7 @@ Węzeł wymaga również danych logowania **GitHub** do klonowania prywatnych re
 Izolacja wykonania jest wybierana przez `HEYM_OPENCODE_CLI_COMMAND`, dokładnie tak jak w węźle Codex:
 
 - **Środowisko lokalne (`run.sh`)** pozostawia ją przy domyślnej wartości `opencode`, więc OpenCode działa jako podproces hosta przeciwko sklonowanemu obszarowi roboczemu — bez wymogu Docker i bez dodatkowych flag.
-- **Wdrożenia Docker (`deploy.sh` oraz pojedynczy obraz GHCR)** ustawiają ją na `/usr/local/bin/heym-opencode-docker`, wrapper uruchamiający `opencode run` wewnątrz **wzmocnionego, jednorazowego kontenera siostrzanego** współdzielącego nazwany wolumen obszaru roboczego OpenCode.
+- **Wdrożenia Docker (`deploy.sh` oraz pojedynczy obraz GHCR)** ustawiają ją na `/usr/local/bin/heym-opencode-docker`, wrapper uruchamiający `opencode run` wewnątrz **wzmocnionego, jednorazowego kontenera siostrzanego** współdzielącego nazwany wolumen obszaru roboczego OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Wzmocniony kontener runnera odrzuca wszystkie uprawnienia Linux, ustawia `no-new-privileges`, używa głównego systemu plików tylko do odczytu z tmpfs `/tmp` oraz stosuje limity pid/pamięci/CPU. Ruch wychodzący sieci jest dozwolony (OpenCode musi dotrzeć do gateway modeli). **Token GitHub nigdy nie jest umieszczany wewnątrz kontenera** — wszystkie operacje git i GitHub są wykonywane po stronie hosta, więc wewnątrz znajdują się wyłącznie klucz API OpenCode i pliki repozytorium.
 

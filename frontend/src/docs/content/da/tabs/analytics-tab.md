@@ -65,3 +65,7 @@ Hold markøren over et diagram for at se knudetypen under markøren lige ved sid
 - [Kontekstuel showcase](../reference/contextual-showcase.md) – Kompakt sideguide til dashboard-overflader
 
 Når et diagram viser en tendens der ønskes advaret om i stedet for at overvåge manuelt, kan den konverteres til en [advarsel](./alerts-tab.md): fejltælling, kørselsvarighed, LLM-forbrug og eksekveringsantal kan alle tildeles en tærskelværdi over et tidsvindue.
+
+## Related
+
+- [Operations Runbook (L1): Ressourceforbrug](../reference/operations-runbook.md#most-resource-consuming-workflows) - Find arbejdsgange med stor volumen og lang driftstid, og sammenhold CPU, hukommelse og tokens

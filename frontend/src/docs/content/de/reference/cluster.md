@@ -92,6 +92,10 @@ Das definiert auch die Upgrade-Reihenfolge. Ein Upgrade von main zuerst markiert
 
 **Worker-Instanzen haben eine andere ausgehende IP.** Jede API, die Quelladressen auf eine Allowlist setzt, sieht die neue. Send Email läuft aus genau diesem Grund auf main; für den HTTP-Knoten gib entweder dem Cluster eine einzelne NAT-Egress-Adresse oder setze jede Instanz auf die Allowlist.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Hinzufügen eines Workers auf einer anderen Maschine
 
 `docker-compose.worker.yml` im Repository-Stammverzeichnis führt einen Worker auf seinem eigenen Host aus. Er hat keine Datenbank und keine UI: Er erreicht das PostgreSQL der main-Instanz und übernimmt seinen Anteil der Hintergrundausführungen.
@@ -125,7 +129,7 @@ Nichts davon erscheint bei einer Einzelinstanz-Installation: Die Felder sind lee
 
 **Wenn ein Worker mitten in einer Ausführung stirbt**, wird sein Heartbeat veraltet, und der bestehende Recovery-Sweep des Leaders führt die Ausführung auf einer lebenden Instanz erneut aus. Die Queue-Zeile, die er beansprucht hatte, wird separat zurückgezogen: Sobald keine aktive Ausführung für sie existiert und eine zweiminütige Karenzzeit verstrichen ist, lässt der Leader die Zeile fehlschlagen und weckt jeden, der auf das Ergebnis gewartet hat. Das Alter allein ist niemals der Grund dafür, sodass eine legitim lange Ausführung in Ruhe gelassen wird; und die Zeile wird fehlschlagen gelassen statt erneut in die Queue gestellt, weil die Wiederherstellung bereits die erneute Ausführung besitzt und ein erneutes Einreihen denselben Workflow zweimal ausführen würde.
 
-**Wenn main ausfällt**, feuert cron weiter von einem Worker, und verteilbare Ausführungen werden weiter ausgeführt. Ausführungen, die main benötigen, reihen sich ein und warten und werden abgearbeitet, wenn es zurückkehrt — aber nur innerhalb des Misfire-Karenzfensters (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, standardmäßig 600 Sekunden). Alles Ältere wird als übersprungen geschlossen, mit aufgezeichnetem Grund, statt stundenlangen Rückstand auf einmal nachzuspielen.
+**Wenn main ausfällt**, feuert cron weiter von einem Worker, und verteilbare Ausführungen werden weiter ausgeführt. Ausführungen, die main benötigen, reihen sich ein und warten und werden abgearbeitet, wenn es zurückkehrt — aber nur innerhalb des Misfire-Karenzfensters (`CRON_MISFIRE_GRACE_SECONDS`, standardmäßig 600 Sekunden). Alles Ältere wird als übersprungen geschlossen, mit aufgezeichnetem Grund, statt stundenlangen Rückstand auf einmal nachzuspielen.
 
 Die UI, die API, MCP und der Editor sind nicht verfügbar, während main ausgefallen ist, weil Ingress dorthin zeigt.
 ## Verwandte Themen

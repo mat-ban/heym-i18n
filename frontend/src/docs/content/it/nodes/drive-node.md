@@ -115,6 +115,8 @@ Fare riferimento al file archiviato a valle: `$saveAudio.id`, `$saveAudio.downlo
 
 Fare riferimento al contenuto base64 a valle: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Le immagini restituite tramite `file_base64` vengono visualizzate inline nel pannello di debug durante l'esecuzione del workflow.
 
 ## Esempio — Elencare i file di Drive

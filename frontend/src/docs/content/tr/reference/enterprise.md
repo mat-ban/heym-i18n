@@ -42,7 +42,7 @@ Ekibinizin beceri düzeyine ve kullanım durumlarına göre uyarlanmış birebir
 
 ## Kubernetes Dağıtımı
 
-Standart [Çalıştırma & Dağıtım](../getting-started/running-and-deployment.md) kılavuzu, tek sunuculu üretim kurulumları için Docker Compose'u kapsar. Kurumsal müşteriler, yüksek kullanılabilirlik ve yatay ölçeklendirme için üretim Kubernetes dağıtımlarında yardım alır:
+Standart [Çalıştırma & Dağıtım](../getting-started/running-and-deployment.md) kılavuzu, tek sunuculu üretim kurulumları için Docker Compose'u kapsar. [Kubernetes Deployment](../getting-started/kubernetes.md). Kurumsal müşteriler, yüksek kullanılabilirlik ve yatay ölçeklendirme için üretim Kubernetes dağıtımlarında yardım alır:
 
 - **Çoklu worker node'ları** — Yedeklilik ve yük dengeleme için Heym backend worker'larını birden fazla Kubernetes node'una dağıtma
 - **Sidecar container'lar** — Log toplama, izleme agent'ları, service mesh'ler (Istio, Linkerd) ve secret enjeksiyonu (Vault) için sidecar kalıplarını yapılandırma

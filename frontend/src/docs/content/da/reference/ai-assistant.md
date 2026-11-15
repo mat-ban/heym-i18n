@@ -48,6 +48,7 @@ I Agent-tilstand aktiveres **YOLO-tilstand** via boksen under beskedfeltet, hvil
 - Indtast anmodningen i inputfeltet (f.eks. "Opret et workflow der tager brugerinput og sender det til en LLM")
 - Tryk **Enter** for at sende (Shift+Enter for linjeskift)
 - AI'en streamer sit svar. I **Agent**-tilstand, hvis svaret indeholder et workflow i et \`\`\`json-kodeblock, parses det automatisk og anvendes på canvas. I **Spørg**-tilstand ændres canvas aldrig.
+- Mens workflowets JSON streames, angiver en linje under svaret workflowets navn og de noder, der er skrevet indtil videre, for eksempel `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Brug **Ryd** for at nulstille samtalen
 - Hold musen over en besked og klik på kopieringsikonet for at kopiere den viste tekst, inklusive eventuelt workflow-JSON
 - Træk i linjen over beskedfeltet for at gøre feltet højere. Inputområdet kan vokse til 60% af panelet og vender tilbage til standardhøjde når siden genindlæses

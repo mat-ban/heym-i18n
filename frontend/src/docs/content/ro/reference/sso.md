@@ -140,3 +140,6 @@ O autentificare eșuată revine la ecranul de autentificare cu un mesaj lizibil.
 - **Mai mulți provideri simultan.** O instanță se conectează la un singur provider.
 - **Maparea grupurilor sau rolurilor** din claim-urile providerului.
 - **Single logout.** Deconectarea din Heym nu vă deconectează din provider.
+
+- **Autentificarea cu doi factori aparține furnizorului.** `HEYM_REQUIRE_MFA` se aplică numai conectării cu parolă; o conectare SSO nu cere niciodată un cod Heym. Solicitați MFA în furnizorul dvs. de identitate.
+- **Dezactivarea se aplică și aici.** Un cont dezactivat de un administrator în **Setări → Utilizatori** este refuzat chiar dacă furnizorul îl autentifică în continuare.

@@ -59,6 +59,10 @@ Elke statuswijziging wordt gelogd. Leesacties worden alleen gelogd wanneer het l
 | `auth.token_refresh` | `outcome=denied` met `reason=refresh_token_replayed_or_revoked` — een signaal van token-diefstal waarop gealarmeerd dient te worden. |
 | `auth.password_change` | `outcome=failure` wanneer het huidige wachtwoord onjuist was. |
 | `auth.sso_login` | Single sign-on. `outcome=failure` bevat de reden waarom het antwoord van de provider is afgewezen; `denied` bevat `email_not_verified`, `domain_not_allowed` of `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Een beheerder heeft de [SSO](./sso.md)-configuratie gewijzigd. Registreert `enabled` en `password_login_disabled`, nooit het client secret. |
 | `sso_settings.test` | Een beheerder heeft de SSO-verbindingstest uitgevoerd. |
 

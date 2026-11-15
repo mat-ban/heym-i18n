@@ -19,6 +19,7 @@ Beim Klick auf eine Trace-Zeile öffnet sich die detaillierte Ablaufanalyse:
 - **Schritte-Timeline** – Geordnete Kette aller Interaktionen: `System → User → Assistant → Tool → Answer`. Jeder Schritt ist aufklappbar und zeigt formatierte Nachrichten sowie den vollständigen JSON-Baum
 - **Request / Response** – Vollständige API-Payloads mit Umschaltung zwischen formatierter Baumansicht (Tree) und Rohdaten (Raw)
 - **Tool-Metriken** – Dauer, Status (`success`, `error`, `timeout`, `cancelled`) und Ein-/Ausgaben jedes Werkzeugaufrufs
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - **Zeitaufschlüsselung** – Aufteilung der Gesamtlaufzeit in `llm_ms`, `tools_ms` und Netzwerkzeiten
 - **Zum Workflow springen** – Direkte Navigation zum zugehörigen Workflow
 
@@ -32,3 +33,7 @@ Beim Klick auf eine Trace-Zeile öffnet sich die detaillierte Ablaufanalyse:
 - [Agent-Knoten](../nodes/agent-node.md) – Agent mit Tool-Calling
 - [OpenTelemetry Tracing](../reference/opentelemetry.md) – Export von Spans via OTLP
 - [Reiter DataTable](./datatable-tab.md) – LLM-Kostentabelle\n
+
+## Zeitbereich
+
+Eine einzelne **Zeitbereich**-Auswahl am oberen Rand der Filterleiste steuert sowohl den Statistik-Header als auch die Trace-Liste. Optionen: Letzte 1 Stunde, Letzte 3 Stunden, Letzte 6 Stunden, Letzte 24 Stunden, Letzte 7 Tage (Standard), Letzte 30 Tage, Gesamte Zeit. Das Ändern des Bereichs setzt die Paginierung zurück und lädt Diagramme und Liste gemeinsam neu.

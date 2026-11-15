@@ -17,18 +17,19 @@ Trang mở đầu bằng phần tóm tắt số liệu phía trên danh sách tr
 
 ## Time Range
 
-Một bộ chọn **Time range** duy nhất ở đầu thanh lọc điều khiển cả stats header và danh sách trace. Các lựa chọn: Last 1 hour, Last 24 hours, Last 7 days (mặc định), Last 30 days, All time. Thay đổi khoảng thời gian sẽ đặt lại phân trang và tải lại cả biểu đồ lẫn danh sách cùng lúc.
+Một bộ chọn **Time range** duy nhất ở đầu thanh lọc điều khiển cả stats header và danh sách trace. Các lựa chọn: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days (mặc định), Last 30 days, All time. Thay đổi khoảng thời gian sẽ đặt lại phân trang và tải lại cả biểu đồ lẫn danh sách cùng lúc.
 
 ## Trace List
 
 - Danh sách phân trang các trace gần đây trong khoảng thời gian đã chọn
 - Mỗi trace hiển thị: workflow, node, credential, timestamp, duration
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Nhấp vào một trace để mở chế độ xem chi tiết
 - Dùng **Prev / Next** bên trong hộp thoại chi tiết để di chuyển giữa các trace mà không cần đóng hộp thoại
 
 ## Filtering
 
-- **Time range** – 1h / 24h / 7d / 30d / All; lọc cả biểu đồ và danh sách cùng lúc
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; lọc cả biểu đồ và danh sách cùng lúc
 - **Credential** – Lọc theo credential (API key) đã sử dụng
 - **Source** – Lọc theo workflow hoặc nguồn thực thi
 - **Search** – Tìm kiếm theo model, workflow, credential hoặc nhãn node

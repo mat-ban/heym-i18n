@@ -26,6 +26,8 @@ Uzol tiež vyžaduje prihlasovacie údaje **GitHub** na klonovanie súkromných 
 
 V Docker nasadeniach Heym spúšťa Codex vnútri súbežného kontajnera z rovnakého Heym image (nie samostatného GHCR image). Tento kontajner pripája iba Codex workspace volume a umožňuje vlastnému bubblewrap sandboxu Codex vytvárať namespaces a nový `/proc`. Runner pridáva `SYS_ADMIN`, unconfined seccomp a AppArmor a `systempaths=unconfined` (Docker Engine 25+). Bez posledného flagu každý príkaz zlyhá pred spustením s `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 Odkazy na OpenAI:
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

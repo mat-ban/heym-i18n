@@ -22,7 +22,7 @@ Uzel také vyžaduje přihlašovací údaj **GitHub** pro klonování soukromýc
 Izolace spouštění se volí pomocí `HEYM_OPENCODE_CLI_COMMAND`, přesně jako u uzlu Codex:
 
 - **Lokální vývoj (`run.sh`)** jej ponechává na výchozí hodnotě `opencode`, takže OpenCode běží jako podproces hostitele proti naklonovanému pracovnímu prostoru — není vyžadován Docker, žádné další přepínače.
-- **Nasazení v Dockeru (`deploy.sh` a jediný obraz GHCR)** jej nastavují na `/usr/local/bin/heym-opencode-docker`, wrapper, který spouští `opencode run` uvnitř **zabezpečeného, dočasného sourozeneckého kontejneru** sdílejícího pojmenovaný svazek pracovního prostoru OpenCode.
+- **Nasazení v Dockeru (`deploy.sh` a jediný obraz GHCR)** jej nastavují na `/usr/local/bin/heym-opencode-docker`, wrapper, který spouští `opencode run` uvnitř **zabezpečeného, dočasného sourozeneckého kontejneru** sdílejícího pojmenovaný svazek pracovního prostoru OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Zabezpečený kontejner runneru ruší všechny linuxové schopnosti (capabilities), nastavuje `no-new-privileges`, používá kořenový systém souborů pouze pro čtení s tmpfs `/tmp` a uplatňuje limity na pid/paměť/CPU. Síťový výstup je povolen (OpenCode musí dosáhnout na modelovou bránu). **GitHub token není nikdy umístěn uvnitř kontejneru** — všechny operace git a GitHub běží na straně hostitele, takže uvnitř je vždy pouze API klíč OpenCode a soubory repozitáře.
 

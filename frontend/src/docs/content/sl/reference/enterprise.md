@@ -42,7 +42,7 @@ Praktične seje usposabljanja, prilagojene znanju in primerom uporabe vaše ekip
 
 ## Uvajanje Kubernetes
 
-Standardni [vodnik za izvajanje in uvajanje](../getting-started/running-and-deployment.md) pokriva Docker Compose za enostavne produkcijske nastavitve. Stranke v okviru načrta Enterprise prejmejo pomoč pri produkcijskih uvajanju Kubernetes za visoko razpoložljivost in horizontalno skaliranje:
+Standardni [vodnik za izvajanje in uvajanje](../getting-started/running-and-deployment.md) pokriva Docker Compose za enostavne produkcijske nastavitve. [Kubernetes Deployment](../getting-started/kubernetes.md). Stranke v okviru načrta Enterprise prejmejo pomoč pri produkcijskih uvajanju Kubernetes za visoko razpoložljivost in horizontalno skaliranje:
 
 - **Več delovnih vozlišč** — Porazdelitev delavcev Heym backend-a po več Kubernetes vozliščih za redundanco in uravnoteženje obremenitve
 - **Stranski kontejnerji** — Konfiguracija stranskih vzorcev za zbiranje dnevnikov, nadzor agentov, storitvene mreže (Istio, Linkerd) in injiciranje skrivnosti (Vault)

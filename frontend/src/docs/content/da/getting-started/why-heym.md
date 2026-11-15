@@ -274,7 +274,7 @@ Workflows kan kaldes over HTTP på `/api/workflows/{workflow_id}/execute`, som r
 Heym har native [MCP](../tabs/mcp-tab.md)-support på begge sider:
 
 - **Som klient**: Agent-noder forbinder til eksterne MCP-servere (Filesystem, Browserbase, brugerdefinerede værktøjer) via stdio eller SSE og forbruger deres værktøjer automatisk
-- **Som server**: Workflows med MCP slået til bliver værktøjer på standardserveren på `/api/mcp/sse`, eller på navngivne servere med deres egen URL og API-nøgle, så Claude Desktop, Cursor og andre MCP-klienter kan kalde Heym-workflows direkte
+- **Som server**: Workflows med MCP slået til bliver værktøjer på standardserveren på `/api/mcp (or /api/mcp/sse for legacy connections)`, eller på navngivne servere med deres egen URL og API-nøgle, så Claude Desktop, Cursor og andre MCP-klienter kan kalde Heym-workflows direkte
 
 Agenter kan forbruge flere MCP-servere på én gang, og enhver workflow kan blive et værktøj for en ekstern MCP-klient.
 

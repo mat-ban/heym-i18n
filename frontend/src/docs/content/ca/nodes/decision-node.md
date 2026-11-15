@@ -157,6 +157,8 @@ En editar una credencial, es conserva la clau emmagatzemada quan el camp de la c
 
 La mateixa credencial pot jutjar execucions d'[Avaluacions](../tabs/evals-tab.md): amb **LLM-as-Judge** seleccionat, trieu-la com a jutge i el model de decisió puntua cada resposta respecte a la sortida esperada.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym bloqueja per defecte les sol·licituds sortints a adreces privades i de loopback, de manera que un endpoint de decisió que executeu vosaltres mateixos a `localhost` o en un rang privat necessita `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Els models de decisió no apareixen a les taules de preus d'LLM que Heym sincronitza, de manera que la columna **Cost** a [Execucions](../tabs/traces-tab.md) queda buida per a aquestes crides. Els recomptes de tokens sí que es registren, i podeu afegir el vostre propi preu amb una substitució de preus.

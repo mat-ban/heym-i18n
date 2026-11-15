@@ -116,6 +116,8 @@ Referiți fișierul stocat în aval: `$saveAudio.id`, `$saveAudio.download_url`
 
 Referiți conținutul base64 în aval: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Imaginile returnate prin `file_base64` sunt afișate inline în panoul de depanare atunci când rulați workflow-ul.
 
 ## Exemplu — Listarea fișierelor Drive

@@ -10,13 +10,15 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import select, text
+from sqlalchemy import func, select, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from app.config import settings
 from app.db.models import ClusterInstance
 from app.db.session import async_session_maker
 from app.services.cluster import identity
+from app.services.k8s_credentials.store import store as k8s_credential_store
+from app.services.sandbox import get_sandbox_manager
 
 logger = logging.getLogger("cluster")
 
@@ -40,6 +42,11 @@ class InstanceView:
     docker_ok: bool
     db_latency_ms: float
     heartbeat_at: datetime
+    # None until a process of this instance has synced its Kubernetes credentials.
+    credentials_synced_at: datetime | None = None
+    # Every key it decrypts with, primary first. Empty from an instance that predates
+    # key rotation, which can decrypt with its primary only.
+    decrypt_fingerprints: tuple[str, ...] = ()
 
 
 def is_live(instance: InstanceView, *, now: datetime) -> bool:
@@ -66,18 +73,73 @@ def is_live_now(instance: InstanceView, *, now: datetime, connected_ids: set[str
     return instance.id in connected_ids
 
 
+def credentials_synced(instance: InstanceView, *, now: datetime) -> bool:
+    """Whether a process of this instance with synced Kubernetes credentials beat recently.
+
+    Read like liveness: the timestamp is refreshed on every heartbeat while synced, so
+    it goes stale when no process of the instance can serve a Secret-backed credential.
+    When the feature is off, every heartbeat counts as synced.
+    """
+    synced_at = instance.credentials_synced_at
+    return synced_at is not None and synced_at >= now - timedelta(seconds=LIVENESS_WINDOW_SECONDS)
+
+
+def primary_fingerprint(instance: InstanceView) -> str:
+    """The ENCRYPTION_KEY half of keys_fingerprint: the key the instance encrypts with."""
+    return instance.keys_fingerprint[: len(instance.keys_fingerprint) // 2]
+
+
+def secret_fingerprint(instance: InstanceView) -> str:
+    """The SECRET_KEY half of keys_fingerprint."""
+    return instance.keys_fingerprint[len(instance.keys_fingerprint) // 2 :]
+
+
+def can_decrypt(instance: InstanceView, fingerprint: str) -> bool:
+    """Whether the instance holds the key with this fingerprint."""
+    return fingerprint in (instance.decrypt_fingerprints or (primary_fingerprint(instance),))
+
+
 def is_compatible_with(instance: InstanceView, main: InstanceView) -> bool:
     """Whether this instance can safely execute work main would have executed.
 
-    A version or schema difference means it may not know a node type. A key
-    fingerprint difference means it cannot decrypt credentials at all, and the
-    resulting failures name nothing useful - so it is excluded up front.
+    A version or schema difference means it may not know a node type. SECRET_KEY must
+    match exactly. ENCRYPTION_KEY need not, during a rotation: each must be able to
+    decrypt what the other writes, so main holds this instance's primary and this
+    instance holds main's. Outside a rotation that is the same as an exact match.
     """
     return (
         instance.version == main.version
         and instance.schema_revision == main.schema_revision
-        and instance.keys_fingerprint == main.keys_fingerprint
+        and secret_fingerprint(instance) == secret_fingerprint(main)
+        and can_decrypt(instance, primary_fingerprint(main))
+        and can_decrypt(main, primary_fingerprint(instance))
     )
+
+
+def compatible_ids(instances: list[InstanceView], *, now: datetime) -> set[str]:
+    """Instances that can read what every other one writes, anchored on main.
+
+    First, each instance is compared with main (`is_compatible_with`). Then, among those,
+    an instance stays only if it can decrypt the primary of every other live one: during
+    a rotation, a worker that skipped phase 1 still matches a main that hasn't rolled
+    yet, but can't read rows another worker already wrote under the new key.
+
+    Anchoring on main means a bad instance only excludes itself: a worker that joins with
+    a typo in its key fails the first step, so it never pushes main or anyone else out.
+    The second step can drop two instances that each fail on the other (three primaries
+    at once), which only costs capacity; main can't drop out, and the rollout order
+    never produces that state.
+    """
+    main = find_main(instances)
+    if main is None:
+        return set()
+    first = [i for i in instances if is_compatible_with(i, main)]
+    writers = [i for i in first if i.id == main.id or is_live(i, now=now)]
+    return {
+        i.id
+        for i in first
+        if all(can_decrypt(i, primary_fingerprint(w)) for w in writers if w.id != i.id)
+    }
 
 
 def find_main(instances: list[InstanceView]) -> InstanceView | None:
@@ -89,15 +151,36 @@ def find_main(instances: list[InstanceView]) -> InstanceView | None:
 
 def candidate_instances(instances: list[InstanceView], *, now: datetime) -> list[InstanceView]:
     """Instances eligible to receive an ANYWHERE run, in stable id order."""
-    main = find_main(instances)
-    if main is None:
-        return []
+    compatible = compatible_ids(instances, now=now)
     eligible = [
         i
         for i in instances
-        if i.enabled and i.weight > 0 and is_live(i, now=now) and is_compatible_with(i, main)
+        if i.enabled
+        and i.weight > 0
+        and is_live(i, now=now)
+        and credentials_synced(i, now=now)
+        and i.id in compatible
     ]
     return sorted(eligible, key=lambda i: i.id)
+
+
+async def may_lead() -> bool:
+    """Whether a process of this instance may take the leader lock.
+
+    The leader runs cron, the pollers and the RabbitMQ consumers, which read credentials
+    and write them back on an OAuth refresh, so in cluster mode it must pass the same
+    compatibility rule as dispatch. Only that rule: not `enabled` or the weight, or a
+    main kept at weight 0 for the UI could never lead. Main's last published row counts
+    even while main is down, so cron keeps running on a worker then. An instance with no
+    heartbeat row yet can't lead, which makes the startup order irrelevant.
+    """
+    if not settings.cluster_enabled:
+        return True
+    instances = await list_instances()
+    own_id = identity.instance_id()
+    if not any(i.id == own_id for i in instances):
+        return False
+    return own_id in compatible_ids(instances, now=datetime.now(timezone.utc))
 
 
 def _docker_reachable() -> bool:
@@ -108,6 +191,14 @@ def _docker_reachable() -> bool:
         return True
     except OSError:
         return False
+
+
+def _sandbox_reachable() -> bool:
+    """``docker_ok`` now means "a sandbox backend is reachable" (column name kept)."""
+    manager = get_sandbox_manager()
+    if manager.backend_name == "kubernetes":
+        return manager.available()
+    return _docker_reachable()
 
 
 APPLICATION_NAME_PREFIX = "heym-"
@@ -153,25 +244,35 @@ async def write_heartbeat() -> None:
         version=settings.resolved_version,
         schema_revision=revision,
         keys_fingerprint=identity.keys_fingerprint(),
-        docker_ok=_docker_reachable(),
+        decrypt_fingerprints=identity.decrypt_fingerprints(),
+        docker_ok=await asyncio.to_thread(_sandbox_reachable),
         db_latency_ms=latency_ms,
         heartbeat_at=datetime.now(timezone.utc),
     )
+    # Every process of the instance upserts this one row, but sync state is per process.
+    # GREATEST keeps the newest synced beat, so an unsynced sibling (None) can't clear it.
+    synced_at = values["heartbeat_at"] if k8s_credential_store.ready() else None
+    insert = pg_insert(ClusterInstance)
     # name, enabled and weight are owned by the admin UI: set on insert, never
     # overwritten by a heartbeat, or a restart would undo the operator's changes.
-    stmt = (
-        pg_insert(ClusterInstance)
-        .values(
+    stmt = insert.values(
+        **values,
+        credentials_synced_at=synced_at,
+        name=identity.instance_name(),
+        enabled=True,
+        # Main's 100 is deliberate, so it is never a candidate for seeding.
+        # A worker starts unweighted and unconfigured: automatic weighting
+        # gives it a share on the leader's next pass, once.
+        weight=100 if identity.is_main() else 0,
+        weight_configured=identity.is_main(),
+    ).on_conflict_do_update(
+        index_elements=[ClusterInstance.id],
+        set_={
             **values,
-            name=identity.instance_name(),
-            enabled=True,
-            # Main's 100 is deliberate, so it is never a candidate for seeding.
-            # A worker starts unweighted and unconfigured: automatic weighting
-            # gives it a share on the leader's next pass, once.
-            weight=100 if identity.is_main() else 0,
-            weight_configured=identity.is_main(),
-        )
-        .on_conflict_do_update(index_elements=[ClusterInstance.id], set_=values)
+            "credentials_synced_at": func.greatest(
+                ClusterInstance.credentials_synced_at, insert.excluded.credentials_synced_at
+            ),
+        },
     )
     async with async_session_maker() as db:
         await db.execute(stmt)
@@ -204,6 +305,8 @@ async def list_instances(*, use_cache: bool = False) -> list[InstanceView]:
                 docker_ok=row.docker_ok,
                 db_latency_ms=row.db_latency_ms,
                 heartbeat_at=row.heartbeat_at,
+                credentials_synced_at=row.credentials_synced_at,
+                decrypt_fingerprints=tuple(row.decrypt_fingerprints or ()),
             )
             for row in result.scalars().all()
         ]

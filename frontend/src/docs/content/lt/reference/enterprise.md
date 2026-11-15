@@ -42,7 +42,7 @@ Praktiniai mokymai, pritaikyti Jūsų komandos įgūdžių lygiui ir naudojimo a
 
 ## Kubernetes diegimas
 
-Standartinis [Veikimo ir diegimo](../getting-started/running-and-deployment.md) vadovas apima Docker Compose vieno serverio gamybos nustatymams. Įmonių klientai gauna pagalbą su gamybos Kubernetes diegimais, užtikrinančiais didelį prieinamumą ir horizontalų mastelio didinimą:
+Standartinis [Veikimo ir diegimo](../getting-started/running-and-deployment.md) vadovas apima Docker Compose vieno serverio gamybos nustatymams. [Kubernetes Deployment](../getting-started/kubernetes.md). Įmonių klientai gauna pagalbą su gamybos Kubernetes diegimais, užtikrinančiais didelį prieinamumą ir horizontalų mastelio didinimą:
 
 - **Daugiadarbiniai mazgai** — Heym backend darbuotojų paskirstymas per kelis Kubernetes mazgus, siekiant užtikrinti atsargines kopijas ir apkrovos balansavimą
 - **Šoninės konteinerių konfigūracijos** — Šoninių modelių konfigūravimas žurnalų rinkimui, stebėjimo agentams, paslaugų tinklams (Istio, Linkerd) ir slaptažodžių injekcijai (Vault)

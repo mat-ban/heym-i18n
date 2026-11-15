@@ -95,7 +95,7 @@ In un filtro `find` o `count`, un valore semplice indica uguaglianza; un valore 
 | `$contains` | Corrispondenza di sottostringa senza distinzione tra maiuscole e minuscole |
 | `$in` | Il valore è presente nell'array specificato |
 
-Esempio che ne combina diversi: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Gli operatori sconosciuti vengono ignorati. I filtri `upsert` utilizzano comunque valori a corrispondenza esatta per individuare la riga da aggiornare.
+Esempio che ne combina diversi: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Gli operatori sconosciuti vengono ignorati. I filtri `upsert` utilizzano comunque valori a corrispondenza esatta per individuare la riga da aggiornare.
 
 È inoltre possibile filtrare sui metadati della riga — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — che sono memorizzati come colonne reali anziché all'interno dei dati. Per le date, passare un valore completo per i confronti di intervallo (ad es. `{"created_at": {"$gt": "2026-06-04"}}`) oppure utilizzare `$contains` per una corrispondenza testuale parziale (ad es. `{"created_at": {"$contains": "2026-06-04"}}`). Se una delle proprie colonne ha lo stesso nome di un campo di metadati, prevale la colonna dati.
 

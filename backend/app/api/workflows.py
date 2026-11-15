@@ -28,7 +28,12 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.orm.attributes import flag_modified
 
 from app.api.analytics import upsert_workflow_analytics_snapshot
-from app.api.deps import get_client_ip, get_current_user, get_current_user_optional
+from app.api.deps import (
+    get_client_ip,
+    get_current_user,
+    get_current_user_optional,
+    get_execution_caller,
+)
 from app.api.workflow_run_audit import RunActor, audit_workflow_run
 from app.db.models import (
     ActiveWorkflowExecution,
@@ -93,7 +98,7 @@ from app.services.codex_followup_service import (
 )
 from app.services.collab.protocol import parse_collab_hash_header, parse_collab_session_header
 from app.services.collab.saves import queue_collab_saved
-from app.services.credential_context import credential_context_value
+from app.services.credential_context import CredentialsContext, credential_context_value
 from app.services.dashboard_widget_policy import dashboard_widget_blocked_nodes_error
 from app.services.encryption import decrypt_config
 from app.services.execution_cancellation import (
@@ -132,6 +137,7 @@ from app.services.hitl_service import (
 from app.services.hitl_widget_service import ensure_saved_filter_allowed
 from app.services.html_response import build_html_response, find_sole_html_terminal
 from app.services.instance_admin import is_instance_admin
+from app.services.k8s_credentials.store import CredentialUnavailableError
 from app.services.node_analytics_rollup import pending_on_first_write
 from app.services.pending_execution import needs_local_pending_persist
 from app.services.pending_review_cancel import cancel_pending_review_execution
@@ -168,6 +174,8 @@ from app.services.workflow_last_trigger import (
     fetch_last_trigger_sources,
 )
 from app.services.workflow_lifecycle import (
+    OWNER_DEACTIVATED_MARKER,
+    close_expired_reviews,
     has_unfinished_workflow_executions,
     set_automatic_triggers_paused,
 )
@@ -1942,6 +1950,36 @@ async def _set_workflow_triggers_paused(
     return response
 
 
+async def set_owner_triggers_paused(
+    owner_id: uuid.UUID, paused: bool, current_user: User, db: AsyncSession
+) -> int:
+    """Pause or resume the automatic triggers of every workflow one account owns.
+
+    Used when an administrator deactivates or reactivates that account. Each save goes
+    through `update_workflow`, like the per-workflow pause, so Edit History and trigger
+    resync stay identical. Returns how many workflows changed.
+    """
+    result = await db.execute(
+        select(Workflow).where(Workflow.owner_id == owner_id).order_by(Workflow.created_at)
+    )
+    changed = 0
+    for workflow in result.scalars().all():
+        current_nodes = workflow.nodes or []
+        nodes = set_automatic_triggers_paused(
+            current_nodes, paused=paused, marker=OWNER_DEACTIVATED_MARKER
+        )
+        if nodes == current_nodes:
+            continue
+        await update_workflow(
+            workflow.id,
+            WorkflowUpdate(nodes=nodes, base_updated_at=workflow.updated_at),
+            current_user,
+            db,
+        )
+        changed += 1
+    return changed
+
+
 @router.post("/{workflow_id}/pause-triggers", response_model=WorkflowResponse)
 async def pause_workflow_triggers(
     workflow_id: uuid.UUID,
@@ -2009,6 +2047,9 @@ async def delete_workflow(
             detail="Only the owner or an instance administrator can delete this workflow",
         )
 
+    # Close reviews nobody can answer any more while the workflow still exists, so a
+    # board card parked on one is released instead of staying pending without it.
+    await close_expired_reviews(db, workflow_id)
     if await has_unfinished_workflow_executions(db, workflow_id):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -2842,10 +2883,13 @@ async def get_credentials_context(
         seen_ids.add(cred.id)
         all_credentials.append(cred)
 
-    context: dict[str, str] = {}
+    context = CredentialsContext()
     for cred in all_credentials:
         try:
             value = await credential_context_value(cred, decrypt_config(cred.encrypted_config))
+        except CredentialUnavailableError as exc:
+            context.unavailable[cred.name] = str(exc)
+            continue
         except Exception:
             continue
         if value is not None:
@@ -2989,7 +3033,7 @@ async def _resolve_execution_token_actor(db: AsyncSession, payload: dict) -> Use
         else:
             actor_result = await db.execute(select(User).where(User.id == actor_id))
             actor = actor_result.scalar_one_or_none()
-    if actor is None:
+    if actor is None or not actor.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Execution token subject is no longer valid",
@@ -3243,7 +3287,7 @@ async def execute_workflow_endpoint(
     workflow_id: uuid.UUID,
     request: Request,
     background_tasks: BackgroundTasks = None,
-    current_user: User | None = Depends(get_current_user_optional),
+    current_user: User | None = Depends(get_execution_caller),
     db: AsyncSession = Depends(get_db),
 ) -> WorkflowExecuteResponse:
     raw_body, test_run, trigger_source, simple_response = await parse_execute_body(request)
@@ -4009,7 +4053,7 @@ async def clear_execution_history(
 async def execute_workflow_stream(
     workflow_id: uuid.UUID,
     request: Request,
-    current_user: User | None = Depends(get_current_user_optional),
+    current_user: User | None = Depends(get_execution_caller),
     db: AsyncSession = Depends(get_db),
     run_until_node_id: Annotated[
         str | None,

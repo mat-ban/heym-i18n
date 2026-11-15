@@ -16,6 +16,7 @@ Der **Konverter**-Knoten konvertiert Daten und Dateien zwischen Formaten, ohne d
 |-----------|------|-------------|
 | `label` | string | Knoten-Bezeichner (camelCase) |
 | `conversion` | string | `csvToJson` (CSV-Text → Array von Zeilenobjekten), `jsonToCsv` (Array von Objekten/Zeilen → CSV-Text), `xmlToJson` (XML-Text → Objekt), `jsonToXml` (Objekt → XML-Text), `imageToText` (OCR eines Bildes), `pdfToText` (OCR jeder ausgewählten PDF-Seite) oder `fileConvert` (eine gespeicherte Datei in einem anderen Format neu schreiben) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Die zu konvertierenden Daten. Leer lassen, um die erste Eingabe des Knotens zu verwenden |
 | `delimiter` | string | Einzelzeichen-Feldtrenner (Standard `,`) |
 | `hasHeader` | boolean | Nur `csvToJson` — die erste Zeile als Kopfzeile behandeln (Standard `true`) |
@@ -169,3 +170,6 @@ OCR ruft `tesseract` und popplers `pdftoppm` über die Shell auf, und die Dokume
 - [Drive](./drive-node.md) – Dateien speichern, abrufen und teilen
 - [Knotentypen](../reference/node-types.md) – Überblick über alle Knotentypen
 - [Ausdrucks-DSL](../reference/expression-dsl.md) – Funktionen und Syntax
+## Sprachtranskription (Whisper)
+
+Der Converter-Knoten transkribiert gesprochenes Audio lokal mithilfe eines eingebetteten Whisper-Modells, ohne Sprachdaten an externe APIs zu senden. Er gibt den vollständigen `text` zusammen mit zeitgestempelten Abschnitten (`segments` mit `start_seconds`, `end_seconds`, `text`) und der erkannten Sprache (`language`) aus.

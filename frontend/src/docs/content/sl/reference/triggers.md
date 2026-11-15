@@ -12,7 +12,7 @@ Začetna vozlišča (brez vhodnih robov), ki sprožijo izvajanje:
 | [Cron](../nodes/cron-node.md) | Deluje po urniku (cron izraz, npr. `0 * * * *` za vsakih 60 minut). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Začne se, ko Telegram pošlje posodobitev webhooka bota na URL specifičen za vozlišče. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Začne se, ko Discord pošlje webhook prek Interactions API na endpoint specifičen za vozlišče. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Preverja IMAP poštni predal in se zažene enkrat za vsak nov zaznan e-poštni naslov. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Preverja IMAP poštni predal in se zažene enkrat za vsak nov zaznan e-poštni naslov. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Začne se, ko Heym objavi dogodek platforme. Dogodki v enem oknu pošiljanja prispejo skupaj kot niz. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Odpre odhodno povezavo stranke na zunanji socket in se zažene ob izbranih dogodkih socket. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Ustvari enkratno URL za nalaganje in se zažene, ko klicatelj pošlje velik multipart datoteko. |

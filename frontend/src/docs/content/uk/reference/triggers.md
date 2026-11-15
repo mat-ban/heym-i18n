@@ -12,7 +12,7 @@ Workflow запускаються **trigger nodes** або **entry points**. К�
 | [Cron](../nodes/cron-node.md) | Запускається за розкладом (cron expression, наприклад `0 * * * *` для щогодинного запуску). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Запускається, коли Telegram надсилає оновлення bot webhook на webhook URL, специфічний для node. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Запускається, коли Discord надсилає webhook Interactions API на endpoint, специфічний для node. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Опитує поштову скриньку IMAP і запускається один раз для кожного нововиявленого листа. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Опитує поштову скриньку IMAP і запускається один раз для кожного нововиявленого листа. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Запускається, коли Heym публікує подію платформи. Події в одному вікні dispatch надходять разом як масив. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Відкриває вихідне клієнтське з'єднання до зовнішнього socket і запускається на вибраних подіях socket. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Створює одноразовий upload URL і запускається, коли викликач надсилає великий multipart-файл. |

@@ -16,6 +16,7 @@ Node **IMAP Trigger** thăm dò hộp thư đến theo một khoảng thời gia
 |-----------|------|-------------|
 | `credentialId` | UUID | Thông tin xác thực `imap` chứa server, login, mailbox và cài đặt SSL |
 | `pollIntervalMinutes` | Integer | Tần suất Heym kiểm tra hộp thư để tìm email mới |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Hướng dẫn thiết lập
 
@@ -62,6 +63,8 @@ Sau khi node kích hoạt, các node hạ nguồn có thể truy cập:
 | `$nodeLabel.email.text` | Nội dung văn bản thuần |
 | `$nodeLabel.email.html` | Nội dung HTML |
 | `$nodeLabel.email.attachments` | Mảng metadata tệp đính kèm (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Đối tượng header đã giải mã |
 | `$nodeLabel.email.uid` | IMAP UID để khử trùng lặp hoặc ghi log |
 | `$nodeLabel.triggered_by` | Nhãn nguồn trigger (`"imap"`) |

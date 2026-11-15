@@ -103,7 +103,8 @@
     "confirmDeleteBoard": "Eliminar o quadro \"{name}\" e todos os seus cartões?",
     "confirmDeleteCard": "Eliminar o cartão \"{title}\"?",
     "confirmDeleteColumn": "Eliminar esta coluna? Deve estar vazia.",
-    "confirmEmptyColumn": "Eliminar todos os cartões na coluna \"{name}\"?"
+    "confirmEmptyColumn": "Eliminar todos os cartões na coluna \"{name}\"?",
+    "details": "Detalhes"
   },
   "canvas": {
     "analyze": "Analisar",
@@ -355,7 +356,9 @@
     "unpin": "Desafixar",
     "unreadMessage": "Mensagem não lida",
     "subtitle": "Executar Workflows e fazer perguntas",
-    "modelsLoadFailedDisabled": "Não foi possível carregar a lista de modelos desta credencial. O chat permanece desativado até ser possível obter um modelo."
+    "modelsLoadFailedDisabled": "Não foi possível carregar a lista de modelos desta credencial. O chat permanece desativado até ser possível obter um modelo.",
+    "dropFilesToAttach": "Solte arquivos para anexar",
+    "attachFiles": "Anexar arquivos"
   },
   "activeWorkflows": {
     "activeRefreshFailed": "{count} ativos · Última atualização falhou",
@@ -543,7 +546,8 @@
     "dropFileOrClick": "Arraste um ficheiro para aqui ou clique para escolher",
     "removeFile": "Remover ficheiro",
     "chooseFileFor": "Escolher um ficheiro para {label}",
-    "new": "Novo"
+    "new": "Novo",
+    "clearSearch": "Limpar busca"
   },
   "curl": {
     "command": "Comando",
@@ -1003,7 +1007,8 @@
       "refine": "Afinar com IA",
       "refresh": "Atualizar",
       "refreshDashboard": "Atualizar dashboard",
-      "settings": "Definições"
+      "settings": "Definições",
+      "revertPrevious": "Reverter anterior"
     },
     "addDescriptionPlaceholder": "Opcional. Apresentado no canvas, não na grelha.",
     "addWidget": "Adicionar widget",
@@ -1079,7 +1084,9 @@
     "noWorkflowsMatch": "Nenhum workflow corresponde a este filtro.",
     "quickStartTemplates": "Modelos de início rápido",
     "subtitle": "Crie, orquestre e execute os seus agentes autónomos modulares",
-    "whatToAutomate": "O que pretende automatizar?"
+    "whatToAutomate": "O que pretende automatizar?",
+    "noWorkflowsMatchAll": "Tente um título, descrição ou nome de pasta diferente.",
+    "noWorkflowsMatchFilter": "Tente um título, descrição, nome de pasta ou filtro de status diferente."
   },
   "evals": {
     "optimizedPrompt": "Prompt otimizado",
@@ -2039,7 +2046,9 @@
     "enablePlugin": "Ativar",
     "disablePlugin": "Desativar",
     "uninstallPlugin": "Desinstalar",
-    "pluginOperationFailed": "Falha na operação do plugin"
+    "pluginOperationFailed": "Falha na operação do plugin",
+    "users": "Usuários",
+    "encryption": "Criptografia"
   },
   "showcase": {
     "askAboutDoc": "Perguntar sobre esta documentação",
@@ -2285,7 +2294,9 @@
     "tokensLower": "tokens",
     "traceDetail": "Detalhes do rastreio",
     "tracePosition": "{current} / {total}",
-    "unpricedModelsNotice": "{count} modelo(s) sem preços definidos:"
+    "unpricedModelsNotice": "{count} modelo(s) sem preços definidos:",
+    "timeRange3h": "Últimas 3 horas",
+    "timeRange6h": "Últimas 6 horas"
   },
   "variables": {
     "addVariable": "Adicionar variável",

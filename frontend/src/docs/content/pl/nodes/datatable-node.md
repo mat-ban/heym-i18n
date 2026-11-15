@@ -95,7 +95,7 @@ W filtrze `find` lub `count` zwykła wartość oznacza równość; wartość obi
 | `$contains` | Dopasowanie podciągu bez rozróżniania wielkości liter |
 | `$in` | Wartość znajduje się w podanej tablicy |
 
-Przykład łączący kilka: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nieznane operatory są ignorowane. Filtry `upsert` nadal używają wartości dokładnego dopasowania do znalezienia wiersza do aktualizacji.
+Przykład łączący kilka: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nieznane operatory są ignorowane. Filtry `upsert` nadal używają wartości dokładnego dopasowania do znalezienia wiersza do aktualizacji.
 
 Można również filtrować po metadanych wiersza — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — które są przechowywane jako rzeczywiste kolumny, a nie wewnątrz danych. W przypadku dat należy podać pełną wartość dla porównań zakresowych (np. `{"created_at": {"$gt": "2026-06-04"}}`) lub użyć `$contains` dla częściowego dopasowania tekstowego (np. `{"created_at": {"$contains": "2026-06-04"}}`). Jeśli jedna z własnych kolumn ma taką samą nazwę jak pole metadanych, kolumna danych ma pierwszeństwo.
 

@@ -107,3 +107,6 @@ Te bližnjice so na voljo v pogovornem oknu Zgodovina izvajanja in v panelu Sled
 - [Hiter začetek](../getting-started/quick-start.md) – Zgradite svoj prvi workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Zavihka **Poverilnice** in **DataTable** delujeta enako: `Ctrl + F` / `Cmd + F` izostri iskalno polje, seznam se med tipkanjem zožuje, `Escape` pa ga počisti.

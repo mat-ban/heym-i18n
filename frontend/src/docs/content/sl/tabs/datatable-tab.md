@@ -122,3 +122,6 @@ Ko nadzorna plošča Izvodi izračuna stroške, primerja vsak `trace.model` z:
 - [Traces Tab](./traces-tab.md) - Uporablja LLM Cost Table za stroškovni donut in KPI kartice
 - [Grist Node](../nodes/grist-node.md) - Alternativa za zunanjo preglednico
 - [Variables Tab](./global-variables-tab.md) - Alternativa za shranjevanje ključ-vrednost
+## Iskanje
+
+Uporabite iskalno polje nad seznamom tabel ali pritisnite **Ctrl+F** (ali **Cmd+F**) za filtriranje tabel po imenu ali opisu med tipkanjem. Pritisnite **Escape**, da počistite iskanje.

@@ -245,7 +245,8 @@
     "pickCredentialModelTooltip": "Pilih kredensial dan model di atas untuk menggunakan board",
     "read": "Baca",
     "remove": "Hapus",
-    "removeAttachmentAria": "Hapus {name}"
+    "removeAttachmentAria": "Hapus {name}",
+    "details": "Detail"
   },
   "alerts": {
     "wizard": {
@@ -456,7 +457,9 @@
     "suggestion4": "Tambahkan tugas ke papan Kanban saya",
     "suggestion5": "Apa yang tersimpan dalam variabel global saya?",
     "subtitle": "Jalankan Workflow dan ajukan pertanyaan",
-    "modelsLoadFailedDisabled": "Daftar model untuk kredensial ini tidak dapat dimuat. Chat tetap dinonaktifkan hingga model dapat diambil."
+    "modelsLoadFailedDisabled": "Daftar model untuk kredensial ini tidak dapat dimuat. Chat tetap dinonaktifkan hingga model dapat diambil.",
+    "dropFilesToAttach": "Lepaskan berkas untuk dilampirkan",
+    "attachFiles": "Lampirkan berkas"
   },
   "common": {
     "actions": "Tindakan",
@@ -543,7 +546,8 @@
     "dropFileOrClick": "Tarik file ke sini atau klik untuk memilih",
     "removeFile": "Hapus file",
     "chooseFileFor": "Pilih file untuk {label}",
-    "new": "Baru"
+    "new": "Baru",
+    "clearSearch": "Hapus pencarian"
   },
   "credentials": {
     "accessVia": "Akses melalui",
@@ -762,7 +766,9 @@
     "noWorkflowsMatch": "Tidak ada Workflow yang cocok dengan filter ini.",
     "quickStartTemplates": "Templat mulai cepat",
     "subtitle": "Buat, orkestrasi, dan jalankan agen otonom modular Anda",
-    "whatToAutomate": "Apa yang ingin Anda otomatiskan?"
+    "whatToAutomate": "Apa yang ingin Anda otomatiskan?",
+    "noWorkflowsMatchAll": "Coba judul, deskripsi, atau nama folder lain.",
+    "noWorkflowsMatchFilter": "Coba judul, deskripsi, nama folder, atau filter status lain."
   },
   "dashboards": {
     "actions": {
@@ -777,7 +783,8 @@
       "refine": "Sempurnakan dengan AI",
       "refresh": "Segarkan",
       "refreshDashboard": "Segarkan dasbor",
-      "settings": "Pengaturan"
+      "settings": "Pengaturan",
+      "revertPrevious": "Kembalikan sebelumnya"
     },
     "addDescriptionPlaceholder": "Opsional. Ditampilkan di Canvas, bukan di kisi.",
     "addWidget": "Tambah widget",
@@ -2017,7 +2024,9 @@
     "enablePlugin": "Aktifkan",
     "disablePlugin": "Nonaktifkan",
     "uninstallPlugin": "Copot",
-    "pluginOperationFailed": "Operasi plugin gagal"
+    "pluginOperationFailed": "Operasi plugin gagal",
+    "users": "Pengguna",
+    "encryption": "Enkripsi"
   },
   "showcase": {
     "askAboutDoc": "Tanyakan Tentang Dokumen Ini",
@@ -2285,7 +2294,9 @@
     "tokensLower": "token",
     "traceDetail": "Detail Trace",
     "tracePosition": "{current} / {total}",
-    "unpricedModelsNotice": "{count} model tanpa harga:"
+    "unpricedModelsNotice": "{count} model tanpa harga:",
+    "timeRange3h": "3 jam terakhir",
+    "timeRange6h": "6 jam terakhir"
   },
   "variables": {
     "newVariable": "Variabel Baru",

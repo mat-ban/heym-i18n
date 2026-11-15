@@ -84,3 +84,7 @@ GitHub Enterprise Server上の**GitHub** Credentialを編集する際、オプ�
 - [Vectorstoresタブ](./vectorstores-tab.md) – QdrantまたはPostgres（pgvector）の認証情報を使用します
 - [Chatタブ](./chat-tab.md) – OpenAI/Googleの認証情報を使用します
 - [コンテキストショーケース](../reference/contextual-showcase.md) – ダッシュボード画面のコンパクトなページガイド
+
+## 検索
+
+リスト上部の検索フィールドを使用するか、**Ctrl+F**（または **Cmd+F**）を押して、入力中に名前やタイプで Credential を絞り込みます。検索をクリアするには **Escape** を押します。

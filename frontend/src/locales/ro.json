@@ -84,7 +84,8 @@
     "dropFileOrClick": "Plasați un fișier aici sau faceți clic pentru a alege",
     "removeFile": "Elimină fișierul",
     "chooseFileFor": "Alegeți un fișier pentru {label}",
-    "new": "Nou"
+    "new": "Nou",
+    "clearSearch": "Ștergeți căutarea"
   },
   "nav": {
     "workflows": "Workflow-uri",
@@ -285,7 +286,9 @@
     "enablePlugin": "Activează",
     "disablePlugin": "Dezactivează",
     "uninstallPlugin": "Dezinstalează",
-    "pluginOperationFailed": "Operațiunea asupra pluginului a eșuat"
+    "pluginOperationFailed": "Operațiunea asupra pluginului a eșuat",
+    "users": "Utilizatori",
+    "encryption": "Criptare"
   },
   "workflows": {
     "title": "Workflow-uri",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Copiați ID-ul execuției",
     "openTrace": "Deschideți execuția",
     "message": "Mesaj",
-    "emptyReply": "Răspuns gol."
+    "emptyReply": "Răspuns gol.",
+    "timeRange3h": "Ultimele 3 ore",
+    "timeRange6h": "Ultimele 6 ore"
   },
   "tables": {
     "title": "Tabele de date",
@@ -1215,7 +1220,9 @@
     "browseAll": "Răsfoiți toate →",
     "askAi": "Întrebați AI",
     "dropToImport": "Plasați JSON sau ZIP pentru import",
-    "noWorkflowsMatch": "Niciun Workflow nu corespunde acestui filtru."
+    "noWorkflowsMatch": "Niciun Workflow nu corespunde acestui filtru.",
+    "noWorkflowsMatchAll": "Încercați un alt titlu, o altă descriere sau un alt nume de folder.",
+    "noWorkflowsMatchFilter": "Încercați un alt titlu, o altă descriere, un alt nume de folder sau un alt filtru de stare."
   },
   "schedules": {
     "title": "Programări",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Inițiat de un client MCP",
     "newChatTitle": "Chat nou",
     "subtitle": "Rulați Workflows și puneți întrebări",
-    "modelsLoadFailedDisabled": "Lista de modele a acestor credențiale nu a putut fi încărcată. Chat-ul rămâne dezactivat până când poate fi preluat un model."
+    "modelsLoadFailedDisabled": "Lista de modele a acestor credențiale nu a putut fi încărcată. Chat-ul rămâne dezactivat până când poate fi preluat un model.",
+    "dropFilesToAttach": "Trageți fișierele pentru a le atașa",
+    "attachFiles": "Atașați fișiere"
   },
   "teams": {
     "title": "Echipe",
@@ -1883,7 +1892,8 @@
       "skipped": "Omis"
     },
     "permissionRead": "citire",
-    "permissionWrite": "scriere"
+    "permissionWrite": "scriere",
+    "details": "Detalii"
   },
   "mcp": {
     "title": "Server MCP",
@@ -2197,7 +2207,8 @@
       "actions": "Acțiuni",
       "failedToLoadWidget": "Încărcarea widget-ului a eșuat",
       "failedToUpdateCheckbox": "Actualizarea casetei de selectare a eșuat",
-      "refreshDashboard": "Reîmprospătați tabloul de bord"
+      "refreshDashboard": "Reîmprospătați tabloul de bord",
+      "revertPrevious": "Reveniți la anteriorul"
     },
     "hitl": {
       "previousReview": "Verificarea anterioară",

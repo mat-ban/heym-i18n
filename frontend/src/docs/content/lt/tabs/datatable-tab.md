@@ -122,3 +122,6 @@ Jei jokia eilutė neatitinka, modelis yra nurodytas po **Neįkainotų modelių**
 - [Traces Tab](./traces-tab.md) - Naudoja LLM Cost Table kainos donutui ir KPI kortelėms
 - [Grist Node](../nodes/grist-node.md) - Išorinio skaičiuoklės alternatyva
 - [Variables Tab](./global-variables-tab.md) - Raktų-vertės saugojimo alternatyva
+## Paieška
+
+Naudokite paieškos lauką virš lentelių sąrašo arba paspauskite **Ctrl+F** (arba **Cmd+F**), kad rašydami filtruotumėte lenteles pagal pavadinimą arba aprašą. Paspauskite **Escape**, kad išvalytumėte paiešką.

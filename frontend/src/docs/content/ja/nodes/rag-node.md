@@ -251,3 +251,5 @@ id フィールドが一致するすべての point が最初に削除される�
 - [Third-Party Integrations](../reference/integrations.md#qdrant) – Qdrant および Postgres（pgvector）の credential 設定
 - [Agent Node](./agent-node.md) – RAG の結果をエージェントのコンテキストとして使用
 - [LLM Node](./llm-node.md) – RAG の結果を LLM のシステム Prompt に投入
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

@@ -95,7 +95,7 @@
 | `$contains` | 不区分大小写的子字符串匹配 |
 | `$in` | 值在给定数组中 |
 
-组合多个运算符的示例：`{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`。未知运算符将被忽略。`upsert` 过滤器仍使用精确匹配值来查找要更新的行。
+组合多个运算符的示例：`{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`。未知运算符将被忽略。`upsert` 过滤器仍使用精确匹配值来查找要更新的行。
 
 你还可以基于行元数据进行过滤——`id`、`table_id`、`created_at`、`updated_at`、`created_by`、`updated_by`——这些元数据作为真实列存储，而非存储在你的数据内部。对于日期，进行范围比较时请传入完整值（例如 `{"created_at": {"$gt": "2026-06-04"}}`），或使用 `$contains` 进行部分文本匹配（例如 `{"created_at": {"$contains": "2026-06-04"}}`）。如果你自己的某个列与元数据字段同名，则数据列优先。
 

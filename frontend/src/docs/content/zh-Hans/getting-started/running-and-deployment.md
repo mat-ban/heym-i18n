@@ -34,6 +34,7 @@ cp .env.example .env
 |----------|-------------|
 | `SECRET_KEY` | **必填。** JWT 签名密钥。为空时由 `run.sh`/`deploy.sh` 自动生成。 |
 | `ENCRYPTION_KEY` | **必填。** 凭据加密密钥。为空时由 `run.sh`/`deploy.sh` 自动生成。 |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | 可选的数据库连接字符串覆盖项。若为空，Heym 将根据 `POSTGRES_*` 设置构建。 |
 | `BACKEND_PORT` | 后端 API 端口——默认为 `10105` |
 | `FRONTEND_PORT` | 前端端口——默认为 `4017` |
@@ -350,3 +351,11 @@ git pull
 - [Environment Variables](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – 完整配置参考
 - [Security](../reference/security.md) – JWT、加密和 CORS 设置
 - [Load Distribution](../reference/cluster.md) – 针对一个数据库运行多个实例
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

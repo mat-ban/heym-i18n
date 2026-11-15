@@ -140,3 +140,6 @@ Egy sikertelen bejelentkezés egy olvasható üzenettel tér vissza a bejelentke
 - **Több egyidejű szolgáltató.** Egy instance egy szolgáltatóhoz kapcsolódik.
 - **Csoport- vagy szerepkör-leképezés** a szolgáltatói claimekből.
 - **Egyszeri kijelentkezés.** A Heymből való kijelentkezés nem jelentkezteti ki Önt a szolgáltatóból.
+
+- **A kétfaktoros bejelentkezés a szolgáltató feladata.** A `HEYM_REQUIRE_MFA` csak a jelszavas bejelentkezésre vonatkozik; az SSO-bejelentkezés soha nem kér Heym-kódot. Írja elő az MFA-t az identitásszolgáltatójánál.
+- **A deaktiválás itt is érvényes.** A rendszergazda által a **Beállítások → Felhasználók** menüben deaktivált fiók elutasításra kerül, még akkor is, ha a szolgáltató továbbra is hitelesíti.

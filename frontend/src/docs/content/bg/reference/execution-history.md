@@ -174,3 +174,7 @@ URL адресът на живо е `/workflows/{workflowId}/{executionId}`. Н�
 - [История на редакциите](./edit-history.md) – Контрол на версиите за запазени workflow-и (връщане, diff)
 - [Бърз старт](../getting-started/quick-start.md) – Създайте и стартирайте първия си workflow
 - [Раздел Workflows](../tabs/workflows-tab.md) – Създаване и управление на workflow-и
+
+## Related
+
+- [Operations Runbook (L1): Натрупване в опашката](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Разграничаване на чакащи, задържани, прекъснати и възстановени изпълнения преди повторение

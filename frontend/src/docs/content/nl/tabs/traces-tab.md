@@ -17,12 +17,13 @@ De pagina opent met een statistiekensamenvatting boven de tracelijst, berekend o
 
 ## Tijdbereik
 
-Een enkele **Time range**-selector bovenaan de filterbalk stuurt zowel de statistiekenkop als de tracelijst aan. Keuzes: Last 1 hour, Last 24 hours, Last 7 days (standaard), Last 30 days, All time. Het wijzigen van het bereik reset de paginering en herlaadt diagrammen en lijst samen.
+Een enkele **Time range**-selector bovenaan de filterbalk stuurt zowel de statistiekenkop als de tracelijst aan. Keuzes: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days (standaard), Last 30 days, All time. Het wijzigen van het bereik reset de paginering en herlaadt diagrammen en lijst samen.
 
 ## Tracelijst
 
 - Gepagineerde lijst van recente traces binnen het geselecteerde tijdbereik
 - Elke trace toont: workflow, knooppunt, referentie, tijdstempel, duur
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Klik op een trace om de detailweergave te openen
 - Gebruik **Prev / Next** in het detailvenster om tussen traces te navigeren zonder het te sluiten
 

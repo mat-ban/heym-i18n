@@ -48,6 +48,7 @@ Comutați între moduri oricând. Schimbarea modului nu șterge conversația.
 - Tastați cererea în câmpul de introducere (de ex. „Create a workflow that takes user input and sends it to an LLM")
 - Apăsați **Enter** pentru a trimite (Shift+Enter pentru linie nouă)
 - AI-ul transmite răspunsul în flux. În modul **Agent**, dacă răspunsul include un workflow într-un bloc de cod \`\`\`json, acesta este analizat automat și aplicat pe canvas. În modul **Ask**, canvas-ul nu este niciodată modificat.
+- În timp ce codul JSON al workflow-ului este transmis în flux, o linie de sub răspuns indică numele workflow-ului și nodurile scrise până în prezent, de exemplu `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Folosiți **Clear** pentru a reseta conversația
 - Treceți cu cursorul peste un mesaj și faceți clic pe pictograma de copiere pentru a copia textul afișat, inclusiv orice JSON de workflow
 - Trageți linia de deasupra casetei de mesaj pentru a mări caseta. Zona de introducere poate crește până la 60% din panou și revine la înălțimea implicită la reîncărcarea paginii

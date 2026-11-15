@@ -19,7 +19,7 @@ Niektóre węzły integracyjne **nie** wymagają danych logowania. [WebSocket Tr
 | **Linear** | [Węzeł Linear](../nodes/linear-node.md) | `api_key` lub `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Węzeł Sentry](../nodes/sentry-node.md) | `api_token`, opcjonalnie `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Ewaluacja](../tabs/evals-tab.md) (sędzia LLM-as-Judge) | `base_url`, opcjonalnie `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Ewaluacja](../tabs/evals-tab.md) (sędzia LLM-as-Judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, opcjonalnie `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, Domyślne ustawienia AI | dane logowania modelu decyzyjnego oraz opcje modeli odwołujące się do pozostałych danych logowania |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Magazyny wektorowe | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Niektóre węzły integracyjne **nie** wymagają danych logowania. [WebSocket Tr
 | **Grist** | [Węzeł Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Węzeł Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + zgoda OAuth2 |
 | **Google Drive** | [Węzeł Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + zgoda OAuth2 (pełny zakres Drive) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Węzeł BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + zgoda OAuth2 |
 | **Supabase** | [Węzeł Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, opcjonalnie `supabase_schema` |
 | **ClickHouse** | [Węzeł ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -902,3 +903,6 @@ Kieruje każde żądanie do jednych z istniejących danych logowania modelu, wyk
 ### Uwagi
 
 Nazwy opcji to wartości, między którymi wybiera model decyzyjny, dlatego muszą być rozróżnialne. Opcja nie może wskazywać innego Model Routera.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

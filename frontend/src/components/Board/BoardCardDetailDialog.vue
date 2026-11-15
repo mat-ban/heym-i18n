@@ -18,15 +18,17 @@ import {
   User as UserIcon,
 } from "lucide-vue-next";
 
+import type { BoardCard, CardActivity, CardAttachment, CardDetail, CardRun } from "@/types/board";
 import Dialog from "@/components/ui/Dialog.vue";
 import Button from "@/components/ui/Button.vue";
 import Textarea from "@/components/ui/Textarea.vue";
 import UserAvatar from "@/components/ui/UserAvatar.vue";
-import type { CardActivity, CardAttachment, CardDetail, CardRun } from "@/types/board";
 import { boardApi } from "@/services/api";
 import { useBoardStore } from "@/stores/board";
 import { playSuccessSound } from "@/utils/audio";
 import { useToast } from "@/composables/useToast";
+import BoardCardDescription from "./BoardCardDescription.vue";
+import BoardCardFieldsEditor from "./BoardCardFieldsEditor.vue";
 
 const props = defineProps<{ open: boolean; cardId: string | null }>();
 const emit = defineEmits<{ (e: "close"): void }>();
@@ -184,6 +186,11 @@ watch(activeBoardCardStatus, (status) => {
 
 onUnmounted(stopPolling);
 
+async function onFieldsSaved(card: BoardCard): Promise<void> {
+  if (detail.value) detail.value = { ...detail.value, card };
+  await boardStore.refreshActiveBoard();
+}
+
 const descriptionDirty = computed<boolean>(
   () => detail.value !== null && editedContent.value !== detail.value.card.content,
 );
@@ -334,6 +341,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
   <Dialog
     :open="open"
     :title="detail?.card.title ?? $t('board.card')"
+    size="4xl"
     close-on-back
     @close="emit('close')"
   >
@@ -412,13 +420,23 @@ async function openLiveRun(run: CardRun): Promise<void> {
     >
       <section>
         <h3 class="mb-1 text-xs font-semibold uppercase text-muted-foreground">
-          {{ $t("board.description") }}
+          {{ $t("board.details") }}
         </h3>
-        <Textarea
-          v-model="editedContent"
-          :rows="3"
-          :placeholder="$t('board.describeJobPlaceholder')"
+        <BoardCardFieldsEditor
+          v-if="boardStore.activeBoard"
+          :board-id="boardStore.activeBoard.id"
+          :card="detail.card"
+          :members="boardStore.members"
+          :read-only="!boardStore.canWrite"
+          @saved="onFieldsSaved"
         />
+        />
+      </section>
+
+      <BoardCardDescription
+        :key="detail.card.id"
+        v-model="editedContent"
+      >
         <div class="mt-2 flex items-center justify-end gap-2">
           <span
             v-if="descriptionSaved"
@@ -437,7 +455,7 @@ async function openLiveRun(run: CardRun): Promise<void> {
             {{ $t("board.saveDescription") }}
           </Button>
         </div>
-      </section>
+      </BoardCardDescription>
 
       <section>
         <h3 class="mb-1 text-xs font-semibold uppercase text-muted-foreground">

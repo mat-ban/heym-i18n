@@ -253,3 +253,5 @@ Bra att veta:
 - [Tredjepartsintegrationer](../reference/integrations.md#qdrant) – Konfiguration av Qdrant- och Postgres-autentiseringsuppgifter (pgvector)
 - [Agentnod](./agent-node.md) – Använd RAG-resultat som agentkontext
 - [LLM-nod](./llm-node.md) – Mata in RAG-resultat i LLM:ens systemprompt
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

@@ -65,3 +65,7 @@ Passeu el cursor per sobre d'un gràfic per veure el tipus de node sota el punte
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacta de pàgina per a les superfícies del tauler
 
 Quan un gràfic mostri una tendència sobre la qual vulgueu rebre notificacions en lloc de vigilar-la, convertiu-la en una [alert](./alerts-tab.md): el recompte d'errors, la durada d'execució, la despesa en LLM i el recompte d'execucions es poden configurar amb un llindar durant una finestra de temps.
+
+## Related
+
+- [Operations Runbook (L1): Ús de recursos](../reference/operations-runbook.md#most-resource-consuming-workflows) - Trobeu workflows d'alt volum i llarga durada i correlacioneu CPU, memòria i tokens

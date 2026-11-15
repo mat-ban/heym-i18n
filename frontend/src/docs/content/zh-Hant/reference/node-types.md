@@ -69,6 +69,7 @@ Heym 提供多種節點類型以建置 Workflow。請在節點配置中使用如
 | [Linear](../nodes/linear-node.md) | 透過 GraphQL 管理 Linear 團隊、專案、issue、workflow 狀態及留言 | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | 透過 OAuth2 讀取／寫入 Google Sheets | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | 透過 OAuth2 列出、下載、更新及刪除 Google Drive 檔案 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | 讀取空閒狀態並建立、更新或刪除 Meet 邀請 | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | 在 BigQuery 中執行 SQL 查詢及插入資料列 | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | 透過 PostgREST 查詢及異動 Supabase 資料表 | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | 對 ClickHouse 執行 SQL、CRUD 及計數操作 | 1 | 1 |

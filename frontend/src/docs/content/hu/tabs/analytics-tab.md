@@ -65,3 +65,7 @@ Vigye az egeret egy diagram fölé a mutató alatti csomóponttípus megtekinté
 - [Kontextuális bemutató](../reference/contextual-showcase.md) – Kompakt oldalútmutató az irányítópult felületeihez
 
 Amikor egy diagram olyan trendet mutat, amelyről inkább értesítést szeretne kapni, mintsem figyelni rá, alakítsa át [riasztássá](./alerts-tab.md): a hibaszám, a futtatás időtartama, az LLM-költés és a végrehajtások száma mind kaphat küszöbértéket egy adott időablakra vonatkozóan.
+
+## Related
+
+- [Operations Runbook (L1): Erőforrás-használat](../reference/operations-runbook.md#most-resource-consuming-workflows) - Keresse meg a nagy volumenű és hosszan futó workflow-kat, és korrelálja a CPU-t, a memóriát és a tokeneket

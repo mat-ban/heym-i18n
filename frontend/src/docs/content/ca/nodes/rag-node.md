@@ -251,3 +251,5 @@ Cada resultat porta la puntuació de totes dues cerques:
 - [Integracions de tercers](../reference/integrations.md#qdrant) – Configuració de credencials de Qdrant i Postgres (pgvector)
 - [Node Agent](./agent-node.md) – Utilitzeu els resultats de RAG com a context de l'agent
 - [Node LLM](./llm-node.md) – Introduïu els resultats de RAG al prompt de sistema de l'LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

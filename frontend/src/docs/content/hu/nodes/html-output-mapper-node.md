@@ -68,3 +68,5 @@ Ugyanaz a szabály, mint az [Output](./output-node.md) esetében: ne helyezze ez
 - [Output](./output-node.md) – Üzenet- vagy sémaalapú válasz `result` burkolással
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, request metódusok és válaszok
 - [Node Types](../reference/node-types.md) – Az összes csomóponttípus
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

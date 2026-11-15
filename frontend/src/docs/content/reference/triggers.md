@@ -26,7 +26,7 @@ Start nodes (no incoming edges) that initiate execution:
 | Trigger | Endpoint / Source | Auth |
 |---------|-------------------|------|
 | **Webhook/API** | `POST /api/workflows/{id}/execute` | `anonymous` / `jwt` / `header_auth` |
-| **MCP** | `POST /api/mcp/tools/call`, `/message`, `/sse` | `X-MCP-Key` header or `Authorization: Bearer` (headers only) |
+| **MCP** | `POST /api/mcp`, `/tools/call`, `/message`, `/sse` | `X-MCP-Key` header or `Authorization: Bearer` (headers only) |
 | **Portal** | `POST /api/portal/{slug}/execute` | Portal session token |
 | **Board** | [Board](../tabs/board-tab.md) card move / follow-up run into a column with a workflow chain (`trigger_source="board"`) | JWT (board owner) |
 | **Cron** | Cron scheduler (runs every 60s, evaluates cron expressions) | N/A |
@@ -63,7 +63,7 @@ The cron scheduler runs every 60 seconds, finds workflows with active `cron` nod
 
 ### IMAP
 
-The IMAP trigger manager runs in the leader worker and checks active `imapTrigger` nodes on their configured `pollIntervalMinutes`. Each node stores an IMAP cursor (`UIDVALIDITY` + last seen UID). Input includes `email`, `triggered_by: "imap"`, `trigger_node_id`, and `triggered_at`.
+The IMAP trigger manager runs in the leader worker and checks active `imapTrigger` nodes on their configured `pollIntervalMinutes`. Each node stores an IMAP cursor (`UIDVALIDITY` + last seen UID). Input includes `email` (with its `uid` and `uidvalidity`), `triggered_by: "imap"`, `trigger_node_id`, and `triggered_at`. The input carries attachment metadata only, never file contents. With **Download attachments to Drive** on, the trigger node fetches the email again by UID during the run and saves its attachments to Heym Drive, so those runs stay on the [main instance](./cluster.md).
 
 ### Google Drive and Google Sheets
 
@@ -83,7 +83,9 @@ The [File Upload Trigger](../nodes/file-upload-trigger-node.md) mints a TTL-boun
 upload slot when the workflow is invoked through the API, MCP, or canvas. Uploading multipart form
 data to `POST /api/file-intake/u/{token}` consumes the slot, stores the file as a Drive file, and
 starts the workflow synchronously. Input includes `file`, `uploaded_at`,
-`triggered_by: "file_upload"`, and upload metadata.
+`triggered_by: "file_upload"`, and upload metadata. Set `Accept: text/event-stream`
+to receive [heartbeats and the final result](./sse-streaming.md#file-uploads-and-run-widgets)
+without leaving a long-running request silent.
 
 ### Telegram
 
@@ -143,7 +145,7 @@ Execution history records `trigger_source` for every entry point:
 - **Cron**: `{"triggered_by": "cron"}`
 - **Telegram**: `update` + `message` + optional `callback_query` + sanitized `headers` + `triggered_by: "telegram"` + `trigger_node_id` + `triggered_at`
 - **Discord**: `interaction` + `type` + `data` + sanitized `headers` + `triggered_by: "Discord"` + `trigger_node_id` + `triggered_at`
-- **IMAP**: `email` + `triggered_by: "imap"` + `trigger_node_id` + `triggered_at`
+- **IMAP**: `email` (including `uid` and `uidvalidity`) + `triggered_by: "imap"` + `trigger_node_id` + `triggered_at`
 - **Google Drive / Sheets**: `change` + `triggered_by: "google_drive"` or `"google_sheets"` + `trigger_node_id` + `triggered_at`
 - **WebSocket**: `eventName` + `url` + `triggered_by: "websocket"` + `message` / `connection` / `close`
 - **File Upload**: `file` + `uploaded_at` + `triggered_by: "file_upload"`

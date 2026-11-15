@@ -65,3 +65,7 @@
 - [Contextual Showcase](../reference/contextual-showcase.md) – 대시보드 화면을 위한 간결한 페이지 가이드
 
 차트에서 지켜보기보다 알림을 받고 싶은 추세가 나타나면 이를 [alert](./alerts-tab.md)로 전환하십시오: 오류 수, 실행 시간, LLM 지출, 실행 횟수 모두 시간 범위에 대한 임계값을 설정할 수 있습니다.
+
+## Related
+
+- [Operations Runbook (L1): 리소스 사용량](../reference/operations-runbook.md#most-resource-consuming-workflows) - 대량 및 장시간 실행되는 워크플로를 찾고 CPU, 메모리, 토큰 간의 상관관계 파악

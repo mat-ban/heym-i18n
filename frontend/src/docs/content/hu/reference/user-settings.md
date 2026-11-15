@@ -131,3 +131,6 @@ A panel azt is jelenti, hogy az elmúlt 24 óra futtatásai közül mennyi tudot
 - [Biztonság](./security.md) – Munkamenet-kezelés, rate limiting, hitelesítési adatok titkosítása
 - [Egyszeri bejelentkezés](./sso.md) – Külső OpenID Connect szolgáltató összekapcsolása
 - [OpenTelemetry Tracing](./opentelemetry.md) – Elosztott tracing workflow- és csomópont-végrehajtásokhoz
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

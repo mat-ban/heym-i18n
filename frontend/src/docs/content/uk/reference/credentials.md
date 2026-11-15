@@ -32,6 +32,7 @@ Credentials зберігають API keys і secrets, які використо�
 | [Grist](../nodes/grist-node.md) | Grist | API key + server URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 consent |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 consent |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 consent |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Project URL + API key (+ опціональна default schema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + username/password + database (+ secure) |

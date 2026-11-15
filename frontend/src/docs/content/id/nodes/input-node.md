@@ -45,7 +45,7 @@ Node **Input** adalah titik masuk untuk workflow yang menerima data dari penggun
 
 Pada tab **Run** di editor (mode webhook Defined), setiap field input mendukung drag-and-drop dan kontrol lampiran inline (di kanan bawah field):
 
-- **File teks** (`.txt`, `.md`, `.json`, `.csv`, dan sejenisnya) dibaca sebagai teks biasa.
+- **File teks** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Gambar** (JPEG, PNG, GIF, WebP) disimpan sebagai URL `data:` (base64) pada nilai field — gunakan kunci field seperti `imageUrl` atau `base64` ketika node hilir mengharapkan data gambar.
 - **File PDF** dikonversi menjadi teks yang diekstrak (maksimal file 5 MB, 100k karakter konten).
 

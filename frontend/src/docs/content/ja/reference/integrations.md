@@ -19,7 +19,7 @@ credential は [Settings → Credentials](../tabs/credentials-tab.md) で追加�
 | **Linear** | [Linear ノード](../nodes/linear-node.md) | `api_key`、または `client_id` + `client_secret` の OAuth2 |
 | **Sentry** | [Sentry ノード](../nodes/sentry-node.md) | `api_token`、任意の `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md) | `api_key`、`base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md)、[Evals](../tabs/evals-tab.md)（LLM-as-Judge ジャッジ） | `base_url`、任意の `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md)、[Evals](../tabs/evals-tab.md)（LLM-as-Judge ジャッジ）, [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`、任意の `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、Chat、AI Defaults | decision model の credential、および他の credential を参照するモデルオプション |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md)、Vectorstores | `qdrant_host`、`openai_api_key` |
@@ -28,6 +28,7 @@ credential は [Settings → Credentials](../tabs/credentials-tab.md) で追加�
 | **Grist** | [Grist ノード](../nodes/grist-node.md) | `api_key`、`server_url` |
 | **Google Sheets** | [Google Sheets ノード](../nodes/google-sheets-node.md) | `client_id`、`client_secret` + OAuth2 同意 |
 | **Google Drive** | [Google Drive ノード](../nodes/google-drive-node.md) | `client_id`、`client_secret` + OAuth2 同意（Drive のフルスコープ） |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery ノード](../nodes/bigquery-node.md) | `client_id`、`client_secret` + OAuth2 同意 |
 | **Supabase** | [Supabase ノード](../nodes/supabase-node.md) | `supabase_url`、`supabase_key`、任意の `supabase_schema` |
 | **ClickHouse** | [ClickHouse ノード](../nodes/clickhouse-node.md) | `host`、`port`、`username`、`password`、`database`、`secure` |
@@ -886,3 +887,6 @@ OpenAI はシステム Prompt の静的な（変化しない）プレフィッ�
 ### 注意事項
 
 オプション名は decision model が選択する際の対象となるため、それぞれ異なる名前にする必要があります。オプションは別の Model Router を指すことはできません。
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

@@ -84,7 +84,8 @@
     "dropFileOrClick": "Nutempkite failą čia arba spustelėkite, kad pasirinktumėte",
     "removeFile": "Pašalinti failą",
     "chooseFileFor": "Pasirinkite failą {label}",
-    "new": "Naujas"
+    "new": "Naujas",
+    "clearSearch": "Išvalyti paiešką"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Įjungti",
     "disablePlugin": "Išjungti",
     "uninstallPlugin": "Pašalinti",
-    "pluginOperationFailed": "Įskiepio operacija nepavyko"
+    "pluginOperationFailed": "Įskiepio operacija nepavyko",
+    "users": "Vartotojai",
+    "encryption": "Šifravimas"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopijuoti Trace ID",
     "openTrace": "Atidaryti Trace",
     "message": "Žinutė",
-    "emptyReply": "Tuščias atsakymas."
+    "emptyReply": "Tuščias atsakymas.",
+    "timeRange3h": "Paskutinės 3 valandos",
+    "timeRange6h": "Paskutinės 6 valandos"
   },
   "tables": {
     "title": "Duomenų lentelės",
@@ -1215,7 +1220,9 @@
     "browseAll": "Peržiūrėti visus →",
     "askAi": "Klausti AI",
     "dropToImport": "Numeskite JSON arba ZIP, kad importuotumėte",
-    "noWorkflowsMatch": "Nė vienas workflow neatitinka šio filtro."
+    "noWorkflowsMatch": "Nė vienas workflow neatitinka šio filtro.",
+    "noWorkflowsMatchAll": "Išbandykite kitą pavadinimą, aprašą arba aplanko pavadinimą.",
+    "noWorkflowsMatchFilter": "Išbandykite kitą pavadinimą, aprašą, aplanko pavadinimą arba būsenos filtrą."
   },
   "schedules": {
     "title": "Tvarkaraščiai",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Paleista MCP kliento",
     "newChatTitle": "Naujas chat",
     "subtitle": "Vykdykite Workflows ir užduokite klausimų",
-    "modelsLoadFailedDisabled": "Šių prisijungimo duomenų modelių sąrašo nepavyko įkelti. Chat lieka išjungtas, kol bus galima gauti modelį."
+    "modelsLoadFailedDisabled": "Šių prisijungimo duomenų modelių sąrašo nepavyko įkelti. Chat lieka išjungtas, kol bus galima gauti modelį.",
+    "dropFilesToAttach": "Nutempkite failus, kad pridėtumėte",
+    "attachFiles": "Prisegti failus"
   },
   "teams": {
     "title": "Komandos",
@@ -1883,7 +1892,8 @@
       "skipped": "Praleista"
     },
     "permissionRead": "skaityti",
-    "permissionWrite": "rašyti"
+    "permissionWrite": "rašyti",
+    "details": "Išsami informacija"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "Veiksmai",
       "failedToLoadWidget": "Nepavyko įkelti widget",
       "failedToUpdateCheckbox": "Nepavyko atnaujinti checkbox",
-      "refreshDashboard": "Atnaujinti dashboard"
+      "refreshDashboard": "Atnaujinti dashboard",
+      "revertPrevious": "Grąžinti ankstesnį"
     },
     "hitl": {
       "previousReview": "Ankstesnė peržiūra",

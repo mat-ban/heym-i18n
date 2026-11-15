@@ -2,6 +2,9 @@
 
 Fila **Dashboard** este un spațiu de tip Grafana în care construiți grile de widgeturi grafice. Fiecare widget este randat din rezultatul propriului său workflow Heym ascuns, astfel încât orice dată pe care o puteți produce într-un workflow — interogări de baze de date, apeluri API, căutări RAG, rezultate LLM — poate deveni un grafic. Puteți păstra mai multe dashboarduri și partaja fiecare dintre ele cu persoane sau echipe.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboarduri
 
 Toată lumea începe cu un dashboard, creat prima dată când deschide fila. Utilizați selectorul de dashboarduri din partea de sus a filei pentru a comuta între dashboarduri, iar **+** de lângă el pentru a crea unul nou. Selectorul listează mai întâi dashboardurile dumneavoastră, apoi pe cele partajate cu dumneavoastră, etichetate cu numele persoanei care le-a partajat.
@@ -27,6 +30,8 @@ Un widget este un singur grafic pe grilă. Tipuri de grafice acceptate:
 - **Entity relationships (DB)** (tabele, câmpuri, chei PK/FK și conexiuni)
 - **Bar gauge** (un gauge orizontal pe rând cu un gradient roșu→verde și o valoare, de ex. spațiu liber pe disc)
 - **Text** (un mesaj markdown, de ex. o notă de stare precum „Ultima execuție la 19:47"; acceptă [casete de selectare interactive](../nodes/chart-output-node.md#interactive-task-lists) când markdownul este static și [liste numerotate explicite](../nodes/chart-output-node.md#numbered-lists) pentru numerotare personalizată sau descendentă)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (recenziile dumneavoastră umane în așteptare. Antetul afișează `1/n pending`. Numele workflowului deschide acea execuție pe canvas. **Approve**, **Request changes** și **Reject** o rezolvă. Pictograma de istoric de lângă titlul widgetului deschide acea execuție în dialogul de istoric de pe această pagină. Widgetul nu utilizează rânduri din amonte, iar fiecare persoană își vede propria coadă. În schimb, poate afișa verificările unui singur Workflow, pentru toți cei care pot deschide acel Workflow; vedeți [Widget-uri HITL](#widget-uri-hitl))
 
 Pe lângă grafice, un widget **Run a workflow** rulează unul dintre workflowurile dvs. direct din dashboard: pe un fișier plasat, cu câmpurile sale de intrare sau cu un buton Run; consultați [Widgeturi de rulare](#run-widgets).
@@ -145,3 +150,5 @@ Eliminarea unei partajări sau reducerea acesteia de la write la read produce ef
 ## Planificări și diagrame de baze de date
 
 Alegeți **Gantt** în Adăugare widget pentru a afișa sarcini în timp cu legături de finalizare și dependență, sau **Entity relationships (DB)** pentru a mapa tabele, câmpuri și relațiile acestora. Ambele tipuri utilizează [nodul Chart Output](../nodes/chart-output-node.md#gantt-schedules) și sunt disponibile și pe paginile Heym Work. Când Work sugerează widgeturi pentru o planificare sau o schemă de bază de date, generează previzualizări pe baza sarcinilor sau entităților propuse.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

@@ -92,6 +92,10 @@ Tệp compose ví dụ đặt các giá trị đó và `max_connections = 300`. 
 
 **Các instance worker có địa chỉ IP ra khác.** Bất kỳ API nào có danh sách cho phép địa chỉ nguồn sẽ thấy địa chỉ mới. Các lượt chạy Send Email chạy trên main chính vì lý do này; đối với node HTTP, hoặc cấp cho cluster một địa chỉ NAT egress duy nhất, hoặc thêm mọi instance vào danh sách cho phép.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Thêm một worker trên máy khác
 
 `docker-compose.worker.yml` trong thư mục gốc của kho chạy một worker trên host riêng của nó. Nó không có cơ sở dữ liệu và không có giao diện người dùng: nó kết nối tới PostgreSQL của instance main và nhận phần việc của mình trong các lượt chạy nền.
@@ -124,7 +128,7 @@ Không có gì về điều này xuất hiện trên bản cài đặt một ins
 
 **Nếu một worker chết giữa lúc đang chạy**, heartbeat của nó trở nên cũ và cơ chế quét khôi phục hiện có của leader sẽ chạy lại execution trên một instance còn sống. Hàng đợi mà nó đã nhận sẽ được xử lý riêng: một khi không còn execution nào đang hoạt động cho hàng đó và đã qua hai phút ân hạn, leader sẽ đánh dấu hàng đó là thất bại và đánh thức bất kỳ ai đang chờ kết quả. Thời gian tồn tại đơn thuần không bao giờ là trigger, vì vậy một lượt chạy dài hợp lệ sẽ được để yên; và hàng đó bị đánh dấu thất bại thay vì đưa lại vào hàng đợi, bởi vì cơ chế khôi phục đã đảm nhận việc chạy lại và việc đưa lại vào hàng đợi sẽ khiến cùng một workflow chạy hai lần.
 
-**Nếu main ngừng hoạt động**, cron vẫn tiếp tục kích hoạt từ một worker và các lượt chạy có thể phân phối vẫn tiếp tục thực thi. Các lượt chạy cần main sẽ xếp hàng và chờ, rồi được xử lý khi main trở lại — nhưng chỉ trong cửa sổ ân hạn misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, mặc định 600 giây). Bất kỳ thứ gì cũ hơn sẽ bị đóng với trạng thái bỏ qua, kèm lý do được ghi lại, thay vì phát lại hàng giờ tồn đọng cùng một lúc.
+**Nếu main ngừng hoạt động**, cron vẫn tiếp tục kích hoạt từ một worker và các lượt chạy có thể phân phối vẫn tiếp tục thực thi. Các lượt chạy cần main sẽ xếp hàng và chờ, rồi được xử lý khi main trở lại — nhưng chỉ trong cửa sổ ân hạn misfire (`CRON_MISFIRE_GRACE_SECONDS`, mặc định 600 giây). Bất kỳ thứ gì cũ hơn sẽ bị đóng với trạng thái bỏ qua, kèm lý do được ghi lại, thay vì phát lại hàng giờ tồn đọng cùng một lúc.
 
 UI, API, MCP và editor không khả dụng khi main ngừng hoạt động, vì ingress trỏ tới đó.
 

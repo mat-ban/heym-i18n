@@ -189,7 +189,7 @@ Sistemul de trasee este conceput special pentru depanarea comportamentului agent
 Fiecare apel LLM din Heym este costat automat. [Fila Traces](../tabs/traces-tab.md) afișează numărul de tokenuri de intrare și de ieșire pentru fiecare trace, împreună cu un cost USD în timp real derivat dintr-un tabel de prețuri sincronizat.
 
 - **Cost per trace** – Tokenuri de intrare, tokenuri de ieșire și totalul USD afișate pe fiecare rând de trace
-- **Analiză costuri** – Cardurile KPI și graficul de costuri per model se actualizează în funcție de intervalul de timp selectat (1h / 24h / 7d / 30d / All)
+- **Analiză costuri** – Cardurile KPI și graficul de costuri per model se actualizează în funcție de intervalul de timp selectat (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **Tabelul de costuri LLM** – Un tabel de sistem din [fila DataTable](../tabs/datatable-tab.md) este populat din Helicone la fiecare 24 de ore; puteți suprascrie prețurile sau adăuga rânduri personalizate pentru modelele care nu sunt încă listate
 - **Avertisment privind prețul lipsă** – Trace-urile pentru modelele fără o intrare de preț afișează un avertisment inline cu un link direct către tabelul de costuri
 
@@ -274,7 +274,7 @@ Workflow-urile sunt apelabile prin HTTP la `/api/workflows/{workflow_id}/execute
 Heym are suport nativ [MCP](../tabs/mcp-tab.md) pe ambele părți:
 
 - **Ca client**: Nodurile Agent se conectează la servere MCP externe (Filesystem, Browserbase, unelte personalizate) prin stdio sau SSE și consumă automat uneltele acestora
-- **Ca server**: Workflow-urile cu MCP activat devin unelte pe serverul implicit la `/api/mcp/sse`, sau pe servere denumite cu propriul URL și API key, astfel încât Claude Desktop, Cursor și alți clienți MCP să poată apela direct workflow-urile dumneavoastră Heym
+- **Ca server**: Workflow-urile cu MCP activat devin unelte pe serverul implicit la `/api/mcp (or /api/mcp/sse for legacy connections)`, sau pe servere denumite cu propriul URL și API key, astfel încât Claude Desktop, Cursor și alți clienți MCP să poată apela direct workflow-urile dumneavoastră Heym
 
 Agenții pot consuma mai multe servere MCP simultan, iar orice workflow poate deveni o unealtă pentru un client MCP extern.
 

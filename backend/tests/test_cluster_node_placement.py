@@ -37,6 +37,35 @@ class NodePlacementTests(unittest.TestCase):
         node = {"type": "agent", "data": {"skills": [{"name": "report"}]}}
         self.assertEqual(node_placement(node), Placement.MAIN_ONLY)
 
+    def test_code_node_reading_drive_files_is_pinned_to_main(self) -> None:
+        for files in ("$Upload.file.id", ["a"]):
+            node = {"type": "code", "data": {"codeFiles": files}}
+            self.assertEqual(node_placement(node), Placement.MAIN_ONLY)
+
+    def test_code_node_with_blank_files_runs_anywhere(self) -> None:
+        for files in ("", "   ", [], None):
+            node = {"type": "code", "data": {"codeFiles": files}}
+            self.assertEqual(node_placement(node), Placement.ANYWHERE)
+
+    def test_slack_file_operations_are_pinned_to_main(self) -> None:
+        for operation in ("downloadFile", "sendFile"):
+            node = {"type": "slack", "data": {"slackOperation": operation}}
+            self.assertEqual(node_placement(node), Placement.MAIN_ONLY)
+
+    def test_other_slack_operations_run_anywhere(self) -> None:
+        for data in ({}, {"slackOperation": "sendMessage"}, {"slackOperation": "getMessages"}):
+            node = {"type": "slack", "data": data}
+            self.assertEqual(node_placement(node), Placement.ANYWHERE)
+
+    def test_imap_trigger_saving_attachments_is_pinned_to_main(self) -> None:
+        node = {"type": "imapTrigger", "data": {"imapDownloadAttachments": True}}
+        self.assertEqual(node_placement(node), Placement.MAIN_ONLY)
+
+    def test_imap_trigger_without_attachments_runs_anywhere(self) -> None:
+        for data in ({}, {"imapDownloadAttachments": False}, {"imapDownloadAttachments": None}):
+            node = {"type": "imapTrigger", "data": data}
+            self.assertEqual(node_placement(node), Placement.ANYWHERE)
+
     def test_unknown_node_type_is_pinned_to_main(self) -> None:
         self.assertEqual(node_placement({"type": "acmePlugin", "data": {}}), Placement.MAIN_ONLY)
 

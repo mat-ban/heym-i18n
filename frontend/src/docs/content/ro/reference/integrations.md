@@ -19,7 +19,7 @@ Unele noduri de integrare **nu** necesită acreditări. [WebSocket Trigger](../n
 | **Linear** | [Nodul Linear](../nodes/linear-node.md) | `api_key`, sau `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Nodul Sentry](../nodes/sentry-node.md) | `api_token`, opțional `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evaluare](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, opțional `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evaluare](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, opțional `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | o acreditare de tip decision model, plus opțiuni de model care fac referire la celelalte acreditări ale dvs. |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Depozite vectoriale | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Unele noduri de integrare **nu** necesită acreditări. [WebSocket Trigger](../n
 | **Grist** | [Nodul Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Nodul Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + consimțământ OAuth2 |
 | **Google Drive** | [Nodul Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + consimțământ OAuth2 (domeniu complet Drive) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Nodul BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + consimțământ OAuth2 |
 | **Supabase** | [Nodul Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, opțional `supabase_schema` |
 | **ClickHouse** | [Nodul ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -909,3 +910,6 @@ a alege. Stochează referințe, niciodată o cheie proprie.
 
 Numele opțiunilor sunt cele între care alege modelul de decizie, prin urmare trebuie să fie distincte. O
 opțiune nu poate indica un alt Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

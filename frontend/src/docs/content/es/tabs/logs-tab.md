@@ -50,3 +50,8 @@ Si el registro está abierto, cree la cuenta de administrador de confianza antes
 - [Pestaña Analytics](./analytics-tab.md) – Métricas de ejecución
 - [Pestaña Workflows](./workflows-tab.md) – Gestión de Workflows
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guía compacta de páginas para las superficies del dashboard
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Enrutar síntomas en tiempo de ejecución al procedimiento de incidente adecuado
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnosticar fallos de base de datos, servicios, clúster y sandbox

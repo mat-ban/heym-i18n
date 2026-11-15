@@ -134,6 +134,27 @@ class TestReadRange(unittest.TestCase):
         )
         self.assertEqual(result["total"], 2)
 
+    def test_read_range_with_header_returns_max_rows_from_any_start_row(self) -> None:
+        """Max Rows counts data rows whether Start Row is 1 (the default) or 2 or later."""
+        sheet = [["Name"]] + [[f"User{i}"] for i in range(1, 8)]  # rows 2-8 hold User1-7
+
+        def get(url: str, headers: dict) -> MagicMock:
+            end_row = int(url.rsplit(":Z", 1)[1])
+            response = MagicMock()
+            response.json.return_value = {"values": sheet[:end_row]}
+            response.raise_for_status = MagicMock()
+            return response
+
+        svc = self._make_service()
+        cases = {1: ["User1", "User2", "User3"], 2: ["User1", "User2", "User3"]}
+        cases[4] = ["User3", "User4", "User5"]
+        for start_row, expected in cases.items():
+            with self.subTest(start_row=start_row), patch("httpx.get", side_effect=get):
+                result = svc.read_range(
+                    "spreadsheet-id", "Sheet1", start_row=start_row, max_rows=3, has_header=True
+                )
+            self.assertEqual([row["Name"] for row in result["rows"]], expected)
+
     def test_read_range_max_rows_zero_fetches_all(self) -> None:
         """max_rows=0 means fetch all rows — no end row in A1 notation."""
         svc = self._make_service()
@@ -368,3 +389,69 @@ class TestReadSheetValues(unittest.TestCase):
         with patch("app.services.google_sheets_service.httpx.get", return_value=response):
             with self.assertRaises(RuntimeError):
                 self.service.read_sheet_values("S1", "Leads")
+
+
+class TestTabNamesWithReservedCharacters(unittest.TestCase):
+    """A tab named like "Orders #2" or "Q3/Q4" is addressed whole by every values call."""
+
+    def _service(self):
+        from app.services.google_sheets_service import GoogleSheetsService
+
+        return GoogleSheetsService("cred-id-1", _make_config(), MagicMock())
+
+    @staticmethod
+    def _response(payload: dict) -> MagicMock:
+        response = MagicMock()
+        response.json.return_value = payload
+        response.raise_for_status = MagicMock()
+        return response
+
+    @staticmethod
+    def _range_of(url: str) -> str:
+        import httpx
+
+        parsed = httpx.URL(url)
+        assert not parsed.fragment and not parsed.query, url
+        return parsed.path.split("/values/", 1)[1]
+
+    def test_every_operation_keeps_the_whole_tab_name(self) -> None:
+        svc = self._service()
+        for name in ("Orders #2", "Q3/Q4", "Leads?", "Bob's tab"):
+            quoted = "'" + name.replace("'", "''") + "'"
+            with self.subTest(name=name):
+                with patch("httpx.get", return_value=self._response({"values": []})) as get:
+                    svc.read_range("sid", name, start_row=1, max_rows=0)
+                self.assertEqual(self._range_of(get.call_args[0][0]), f"{quoted}!A1:Z")
+
+                with patch("httpx.post", return_value=self._response({})) as post:
+                    svc.append_rows("sid", name, [["a"]])
+                self.assertEqual(self._range_of(post.call_args[0][0]), f"{quoted}!A1:append")
+
+                with patch("httpx.put", return_value=self._response({})) as put:
+                    svc.update_range("sid", name, 3, [["a"]])
+                self.assertEqual(self._range_of(put.call_args[0][0]), f"{quoted}!A3:Z3")
+                self.assertEqual(put.call_args[1]["json"]["range"], f"{quoted}!A3:Z3")
+
+                with patch("httpx.post", return_value=self._response({})) as post:
+                    svc.clear_range("sid", name)
+                self.assertEqual(self._range_of(post.call_args[0][0]), f"{quoted}!A:Z:clear")
+
+    def test_a_plain_tab_name_is_sent_as_before(self) -> None:
+        svc = self._service()
+        with patch("httpx.get", return_value=self._response({"values": []})) as get:
+            svc.read_range("sid", "Sheet 1", start_row=1, max_rows=0)
+        self.assertEqual(self._range_of(get.call_args[0][0]), "Sheet 1!A1:Z")
+
+    def test_the_column_picker_reads_the_header_of_the_whole_tab(self) -> None:
+        from app.api import google_sheets as sheets_api
+
+        response = self._response({"values": [["Name", "Email"]]})
+        with (
+            patch.object(sheets_api, "SessionLocal", MagicMock()),
+            patch.object(sheets_api.GoogleSheetsService, "access_token", return_value="tok"),
+            patch("app.api.google_sheets.httpx.get", return_value=response) as get,
+        ):
+            header = sheets_api._read_header("cred-id-1", _make_config(), "sid", "Orders #2")
+
+        self.assertEqual(header, ["Name", "Email"])
+        self.assertEqual(self._range_of(get.call_args[0][0]), "'Orders #2'!A1:Z1")

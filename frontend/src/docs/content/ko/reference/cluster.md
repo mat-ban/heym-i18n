@@ -92,6 +92,9 @@ main 역할은 리더 선출과는 별개입니다. Heym은 이미 클러스터 
 
 **워커 인스턴스는 다른 아웃바운드 IP를 가집니다.** 소스 주소를 허용 목록에 등록하는 모든 API가 새 IP를 보게 됩니다. Send Email이 바로 이 이유로 main에서 실행됩니다. HTTP 노드의 경우, 클러스터에 단일 NAT 이그레스 주소를 부여하거나 모든 인스턴스를 허용 목록에 등록하십시오.
 
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## 다른 머신에 워커 추가하기
 
 저장소 루트의 `docker-compose.worker.yml`은 자체 호스트에서 워커를 실행합니다. 데이터베이스도 UI도 없습니다. main 인스턴스의 PostgreSQL에 연결하여 백그라운드 실행의 자기 몫을 가져갑니다.
@@ -124,7 +127,7 @@ main 역할은 리더 선출과는 별개입니다. Heym은 이미 클러스터 
 
 **worker가 실행 중에 종료되면**, 해당 worker의 heartbeat가 오래된 상태가 되고, leader의 기존 복구 sweep이 살아 있는 인스턴스에서 실행을 다시 수행합니다. worker가 점유했던 queue row는 별도로 정리됩니다. 해당 row에 대한 활성 실행이 더 이상 존재하지 않고 2분의 유예 시간이 지나면, leader가 해당 row를 실패 처리하고 결과를 기다리던 주체를 깨웁니다. 경과 시간만으로는 절대 trigger가 되지 않으므로, 정당하게 오래 실행되는 작업은 그대로 유지됩니다. 또한 row는 requeue가 아니라 실패 처리되는데, 복구가 이미 재실행을 담당하고 있어 requeue하면 동일한 Workflow가 두 번 실행되기 때문입니다.
 
-**main이 다운되면**, cron은 worker에서 계속 발화하고 distributable 실행은 계속 수행됩니다. main이 필요한 실행은 queue에 쌓여 대기하다가 main이 복귀하면 처리됩니다. 다만 misfire 유예 window(`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 기본 600초) 내에서만 그렇습니다. 그보다 오래된 것은 몇 시간 분량의 backlog를 한꺼번에 재생하는 대신, 사유를 기록한 채 skipped로 종료됩니다.
+**main이 다운되면**, cron은 worker에서 계속 발화하고 distributable 실행은 계속 수행됩니다. main이 필요한 실행은 queue에 쌓여 대기하다가 main이 복귀하면 처리됩니다. 다만 misfire 유예 window(`CRON_MISFIRE_GRACE_SECONDS`, 기본 600초) 내에서만 그렇습니다. 그보다 오래된 것은 몇 시간 분량의 backlog를 한꺼번에 재생하는 대신, 사유를 기록한 채 skipped로 종료됩니다.
 
 main이 다운된 동안에는 UI, API, MCP, editor를 사용할 수 없습니다. ingress가 main을 가리키기 때문입니다.
 

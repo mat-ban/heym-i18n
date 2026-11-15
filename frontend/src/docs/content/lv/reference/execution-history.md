@@ -174,3 +174,7 @@ Kanvas un dashboard vēstures dialogi saglabā to izpildes vadīklas vienā rind
 - [Edit History](./edit-history.md) – Versiju kontrole workflow saglabāšanai (atgriešana, diff)
 - [Quick Start](../getting-started/quick-start.md) – Izveidojiet un palaidiet savu pirmo workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Veidojiet un pārvaldiet workflow
+
+## Related
+
+- [Operations Runbook (L1): Rindas kavēšanās](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Nošķiriet rindā esošos, aizturētos, pārtrauktos un atgūtos izpildījumus pirms atkārtošanas

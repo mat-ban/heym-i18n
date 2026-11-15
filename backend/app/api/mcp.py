@@ -14,6 +14,11 @@ from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.analytics import upsert_workflow_analytics_snapshot
+from app.api.chat_memory import (
+    USER_MEMORY_TOOL_NAMES,
+    build_user_memory_mcp_tools,
+    call_user_memory_tool,
+)
 from app.api.deps import get_current_user
 from app.api.workflow_run_audit import RunActor, audit_workflow_run
 from app.api.workflows import (
@@ -57,9 +62,10 @@ from app.services import (
     mcp_execution_status,
     workflow_concurrency,
 )
+from app.services.background_tasks import spawn_background_task
 from app.services.cluster.dispatch import dispatch_workflow
 from app.services.credential_access import get_accessible_credential
-from app.services.credential_context import credential_context_value
+from app.services.credential_context import CredentialsContext, credential_context_value
 from app.services.credential_setup import record_elicitation_reply
 from app.services.encryption import decrypt_config
 from app.services.execution_cancellation import (
@@ -76,6 +82,7 @@ from app.services.hitl_service import (
     build_default_public_base_url,
     build_public_base_url,
 )
+from app.services.k8s_credentials.store import CredentialUnavailableError
 from app.services.mcp_elicitation import (
     MCP_SESSION_HEADER,
     MCPClientChannel,
@@ -272,7 +279,7 @@ def _schedule_legacy_sse_jsonrpc_response(
     msg: MCPJSONRPCRequest,
     operation_factory: Callable[[AsyncSession, MCPClientChannel], Awaitable[dict[str, Any]]],
 ) -> None:
-    asyncio.create_task(
+    spawn_background_task(
         _send_legacy_sse_jsonrpc_response(
             session_token=session_token,
             msg=msg,
@@ -333,6 +340,22 @@ def _stream_mcp_jsonrpc_response(
         media_type="text/event-stream",
         headers=_mcp_stream_headers(),
     )
+
+
+async def session_user_active(user_id_str: str) -> bool:
+    """Whether the account behind a short-lived MCP session token may still act.
+
+    The session store lives in one process's memory, so deactivation on another instance
+    cannot clear it; the account row is the check every instance shares. It runs in its
+    own short session so a long tool call never holds a pooled connection for it.
+    """
+    try:
+        user_id = uuid.UUID(user_id_str)
+    except ValueError:
+        return False
+    async with async_session_maker() as db:
+        result = await db.execute(select(User.is_active).where(User.id == user_id))
+        return result.scalar_one_or_none() is True
 
 
 def _session_user_from_id(user_id_str: str) -> User:
@@ -446,6 +469,12 @@ async def get_mcp_user(
                 headers={"WWW-Authenticate": 'Bearer realm="heym-mcp"'},
             )
         user_id_str, _ = resolve_result  # ignore server_id for default server
+        if not await session_user_active(user_id_str):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or expired session token",
+                headers={"WWW-Authenticate": 'Bearer realm="heym-mcp"'},
+            )
         return _session_user_from_id(user_id_str)
 
     # 1. Check for Bearer token (OAuth). Header only: a long-lived token in the
@@ -476,7 +505,7 @@ async def get_mcp_user(
 
         user_result = await db.execute(select(User).where(User.id == token_record.user_id))
         user = user_result.scalar_one_or_none()
-        if user is None:
+        if user is None or not user.is_active:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="User not found",
@@ -496,7 +525,7 @@ async def get_mcp_user(
     result = await db.execute(select(User).where(User.mcp_api_key == hash_secret(api_key)))
     user = result.scalar_one_or_none()
 
-    if user is None:
+    if user is None or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid MCP API key",
@@ -622,6 +651,20 @@ async def build_tools_with_chat(
     return tools
 
 
+async def global_mcp_tools(
+    workflows: list[Workflow],
+    chat_settings: agent_settings.AgentSettings,
+) -> list[MCPTool]:
+    """The global server's tools: the shared list plus the user memory tools.
+
+    The memory tools win a name clash, so a workflow named like one is not listed. Named servers
+    use `build_tools_with_chat` directly and do not offer memory.
+    """
+    tools = await build_tools_with_chat(workflows, chat_settings)
+    kept = [tool for tool in tools if tool.name not in USER_MEMORY_TOOL_NAMES]
+    return kept + build_user_memory_mcp_tools()
+
+
 async def dispatch_chat_tool_call(
     *,
     request: Request,
@@ -709,10 +752,13 @@ async def get_credentials_context_for_user(db: AsyncSession, user_id: uuid.UUID)
         seen_ids.add(cred.id)
         all_credentials.append(cred)
 
-    context: dict[str, str] = {}
+    context = CredentialsContext()
     for cred in all_credentials:
         try:
             value = await credential_context_value(cred, decrypt_config(cred.encrypted_config))
+        except CredentialUnavailableError as exc:
+            context.unavailable[cred.name] = str(exc)
+            continue
         except Exception:
             continue
         if value is not None:
@@ -881,7 +927,7 @@ async def get_mcp_config(
         base_url = f"{forwarded_proto}://{forwarded_host}"
     else:
         base_url = str(request.base_url).rstrip("/")
-    mcp_endpoint_url = f"{base_url}/api/mcp/sse"
+    mcp_endpoint_url = f"{base_url}/api/mcp"
 
     return MCPConfigResponse(
         mcp_api_key=None,
@@ -1012,7 +1058,7 @@ async def list_mcp_tools(
 ) -> MCPToolsListResponse:
     workflows = await get_user_mcp_workflows(db, mcp_user.id)
     chat_settings = await agent_settings.get_global_agent_settings(db, mcp_user.id)
-    return MCPToolsListResponse(tools=await build_tools_with_chat(workflows, chat_settings))
+    return MCPToolsListResponse(tools=await global_mcp_tools(workflows, chat_settings))
 
 
 # Server-side ceiling for the caller-supplied MCP connect timeout. The outer HTTP
@@ -1095,6 +1141,15 @@ async def call_mcp_tool(
     body = await request.json()
     tool_name = body.get("name", "")
     arguments = body.get("arguments", {})
+
+    if tool_name in USER_MEMORY_TOOL_NAMES:
+        memory_result = await call_user_memory_tool(
+            db, mcp_user, tool_name, arguments or {}, source="mcp"
+        )
+        return MCPToolResult(
+            content=[MCPTextContent(text=json.dumps(memory_result, indent=2))],
+            isError=bool(memory_result.get("error")),
+        )
 
     if tool_name == mcp_chat_service.MCP_CHAT_TOOL_NAME:
         chat_settings = await agent_settings.get_global_agent_settings(db, mcp_user.id)
@@ -1189,6 +1244,7 @@ async def call_mcp_tool(
             trace_user_id=mcp_user.id,
             actor_user_id=mcp_user.id,
             cancel_event=cancel_event,
+            timeout_seconds=getattr(target_workflow, "workflow_timeout_seconds", None),
             concurrency_limit=target_workflow.concurrency_limit,
             on_queued="return",
         )
@@ -1356,7 +1412,7 @@ async def _dispatch_mcp_jsonrpc(
     if msg.method == "tools/list":
         workflows = await get_user_mcp_workflows(db, mcp_user.id)
         chat_settings = await agent_settings.get_global_agent_settings(db, mcp_user.id)
-        tools = await build_tools_with_chat(workflows, chat_settings)
+        tools = await global_mcp_tools(workflows, chat_settings)
         return {
             "jsonrpc": "2.0",
             "id": msg.id,
@@ -1366,6 +1422,16 @@ async def _dispatch_mcp_jsonrpc(
     if msg.method == "tools/call":
         tool_name = msg.params.get("name", "")
         arguments = msg.params.get("arguments", {})
+
+        if tool_name in USER_MEMORY_TOOL_NAMES:
+            memory_result = await call_user_memory_tool(
+                db, mcp_user, tool_name, arguments or {}, source="mcp"
+            )
+            return _mcp_tool_result_jsonrpc_response(
+                msg.id,
+                json.dumps(memory_result, indent=2),
+                is_error=bool(memory_result.get("error")),
+            )
 
         if tool_name == mcp_chat_service.MCP_CHAT_TOOL_NAME:
             chat_settings = await agent_settings.get_global_agent_settings(db, mcp_user.id)
@@ -1460,6 +1526,7 @@ async def _dispatch_mcp_jsonrpc(
                 trace_user_id=mcp_user.id,
                 actor_user_id=mcp_user.id,
                 cancel_event=cancel_event,
+                timeout_seconds=getattr(target_workflow, "workflow_timeout_seconds", None),
                 concurrency_limit=target_workflow.concurrency_limit,
                 on_queued="return",
             )
@@ -1638,6 +1705,8 @@ async def handle_mcp_message(
     return sse_response or response
 
 
+@router.post("", response_model=None)
+@router.post("/", response_model=None, include_in_schema=False)
 @router.post("/sse", response_model=None)
 async def mcp_sse_post_endpoint(
     request: Request,

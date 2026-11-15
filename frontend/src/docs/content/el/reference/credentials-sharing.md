@@ -87,6 +87,7 @@ $credentials.MyNotionWorkspace
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Στοιχεία σύνδεσης ClickHouse (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Διαπιστευτήριο Telegram bot |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Διαπιστευτήριο Discord public key ή webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant ή Postgres (pgvector) vector DB, μέσω διαπιστευτηρίου Qdrant, Psql ή Custom Embeddings RAG |
 | Evals | `credential_id`, `judge_credential_id` | Διαπιστευτήριο μοντέλου· διαπιστευτήριο μοντέλου ή Decision Model για τον κριτή LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) AI step | `credentialId` | Μοντέλο LLM/Vision (για AI step και [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ $credentials.MyNotionWorkspace
 - [Expression DSL](./expression-dsl.md) – Σύνταξη `$credentials`
 - [Node Types](./node-types.md) – Κόμβοι που χρησιμοποιούν διαπιστευτήρια ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Χρησιμοποιεί `credentialId` για LLM
+
+## Δικαιώματα ημερολογίου Google Meet
+
+Η κοινή χρήση ενός [διαπιστευτηρίου Google Meet](../nodes/google-meet-node.md) επιτρέπει στα workflows να διαβάζουν τα διαστήματα διαθεσιμότητας προσβάσιμων ημερολογίων και να δημιουργούν, τροποποιούν ή διαγράφουν συμβάντα ως ο συνδεδεμένος λογαριασμός Google, συμπεριλαμβανομένης της αποστολής προσκλήσεων και ακυρώσεων. Το email συμμετέχοντα του επισκέπτη δεν αλλάζει τον λογαριασμό που κατέχει ή εξουσιοδοτεί το συμβάν. Μόνο ο κάτοχος του διαπιστευτηρίου μπορεί να επανασυνδέσει την εξουσιοδότηση Google.

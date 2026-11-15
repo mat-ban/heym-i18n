@@ -116,6 +116,8 @@ Referera till den lagrade filen nedströms: `$saveAudio.id`, `$saveAudio.downloa
 
 Referera till base64-innehållet nedströms: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Bilder som returneras via `file_base64` visas inline i felsökningspanelen när workflowet körs.
 
 ## Exempel — Lista Drive-filer

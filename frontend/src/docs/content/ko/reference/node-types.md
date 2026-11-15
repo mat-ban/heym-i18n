@@ -69,6 +69,7 @@ Heym은 Workflow를 구축하기 위한 다양한 노드 유형을 제공합니�
 | [Linear](../nodes/linear-node.md) | GraphQL을 통해 Linear 팀, 프로젝트, 이슈, Workflow 상태 및 댓글을 관리합니다 | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | OAuth2를 통해 Google Sheets를 읽고 씁니다 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | OAuth2를 통해 Google Drive 파일을 나열, 다운로드, 업데이트 및 삭제합니다 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | 가용성을 확인하고 Meet 초대를 생성, 업데이트 또는 삭제 | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery에서 SQL 쿼리를 실행하고 행을 삽입합니다 | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | PostgREST를 통해 Supabase 테이블을 조회하고 변경합니다 | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse에 대해 SQL, CRUD 및 count 작업을 실행합니다 | 1 | 1 |

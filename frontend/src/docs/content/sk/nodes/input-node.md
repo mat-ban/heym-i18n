@@ -45,7 +45,7 @@ Uzol **Vstup** je vstupným bodom pre workflowy, ktoré prijímajú dáta od pou
 
 V editore na karte **Run** (režim Defined webhook) každé vstupné pole podporuje drag-and-drop a inline ovládací prvok pre prílohu (v pravom dolnom rohu poľa):
 
-- **Textové súbory** (`.txt`, `.md`, `.json`, `.csv` a podobné) sa načítajú ako čistý text.
+- **Textové súbory** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Obrázky** (JPEG, PNG, GIF, WebP) sa uložia ako `data:` URL (base64) do hodnoty poľa — použite kľúče polí ako `imageUrl` alebo `base64`, ak následné uzly očakávajú obrazové dáta.
 - **PDF** súbory sa konvertujú na extrahovaný text (max. 5 MB súbor, 100 000 znakov obsahu).
 

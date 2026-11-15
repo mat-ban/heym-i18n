@@ -2,6 +2,9 @@
 
 Vahekaart **Teavitused** võimaldab määratleda läviväärtustingimusi ajaakna kohta ja saada teada, kui need ületatakse. Heym salvestab juba käivituste tulemusi, käivituse kestust ja LLM-kulu, kuid ei teata neist kunagi omal algatusel. Teavitus on viis, kuidas seda küsida.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Vaata Alerts demonstratsiooni</a></p>
+
 Iga teavitust hinnatakse teie valitud **ajaakna** jooksul, mitte kunagi üksiku sündmuse põhjal. Üks ebaõnnestunud käivitus on müra. Kaksteist ebaõnnestunud käivitust kümne minuti jooksul on intsident.
 
 ## Teavituse tüübid

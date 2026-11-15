@@ -72,6 +72,7 @@ Název: `heym.agent.tool.execute`, vytvořený pod aktivním spanem uzlu Agent.
 | `heym.agent.tool.args_bytes` | Velikost serializovaných argumentů nástroje v UTF-8. |
 | `heym.agent.tool.result_bytes` | Velikost serializovaného výsledku nástroje v UTF-8. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` nebo `cancelled`. Chyby nástroje nastaví stav spanu na `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Surové argumenty a výsledky nástrojů se ke spanům ve výchozím stavu nepřipojují.
 

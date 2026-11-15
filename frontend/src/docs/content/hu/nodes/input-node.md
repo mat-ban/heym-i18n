@@ -45,7 +45,7 @@ Az **Input** csomópont azon workflow-k belépési pontja, amelyek adatokat foga
 
 A szerkesztő **Run** fülén (Defined webhook mód) minden bemeneti mező támogatja a drag-and-drop műveletet és egy beágyazott csatolmány-vezérlőt (a mező jobb alsó sarkában):
 
-- A **szöveges fájlokat** (`.txt`, `.md`, `.json`, `.csv` és hasonlók) egyszerű szövegként olvassa be.
+- A **szöveges fájlokat** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - A **képeket** (JPEG, PNG, GIF, WebP) `data:` URL-ként (base64) tárolja a mező értékében — használjon olyan mezőkulcsokat, mint az `imageUrl` vagy a `base64`, amikor a downstream csomópontok képadatokat várnak.
 - A **PDF** fájlokat kinyert szöveggé alakítja (max. 5 MB fájlméret, 100k karakter tartalom).
 

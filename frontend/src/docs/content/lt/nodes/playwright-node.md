@@ -68,7 +68,9 @@ Išjungti žingsniai yra nematomi likusiai mazgo daliai: jie nepatenka į "pirma
 
 **AI Auto Heal** padaro workflows atsparius DOM pokyčiams. Kai selektorius nepavyksta du kartus (pvz., po svetainės dizaino atnaujinimo), Heym skambina LLM, kad rastų alternatyvų lokatorių — paprastai `role=button[name='Submit']` arba `text=Exact text` vietoj CSS selektorių.
 
-Įjunkite **Auto heal mode** AI žingsnio parametruose. Jei išsaugotas žingsnis nepavyksta:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Įjunkite **Auto heal mode** AI žingsnio parametruose. Jei išsaugotas žingsnis nepavyksta:
 
 1. Heym fiksuoja dabartinį HTML ir ekrano nuotrauką
 2. Siunčia nepavykusį žingsnį + puslapio kontekstą LLM

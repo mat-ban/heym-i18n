@@ -48,6 +48,7 @@ In modalità Agent, la casella **YOLO mode** sotto il campo del messaggio fa sì
 - Digitare la richiesta nel campo di input (es. "Crea un workflow che riceve input dall'utente e li invia a un LLM")
 - Premere **Invio** per inviare (Shift+Invio per andare a capo)
 - L'IA trasmette la risposta in streaming. In modalità **Agent**, se la risposta include un workflow in un blocco di codice \`\`\`json, questo viene analizzato automaticamente e applicato al canvas. In modalità **Ask** il canvas non viene mai modificato.
+- Mentre il JSON del workflow viene trasmesso in streaming, una riga sotto la risposta indica il nome del workflow e i nodi scritti fino a quel momento, ad esempio `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Utilizzare **Clear** per reimpostare la conversazione
 - Passare il cursore su un messaggio e fare clic sulla relativa icona di copia per copiare il testo visualizzato, incluso l'eventuale JSON del workflow
 - Trascinare la linea sopra la casella del messaggio per aumentarne l'altezza. L'area di input può espandersi fino al 60% del pannello e torna all'altezza predefinita al ricaricamento della pagina

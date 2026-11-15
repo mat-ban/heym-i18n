@@ -174,3 +174,7 @@ A vászon és az irányítópult előzményei párbeszédablakai egy sorban tart
 - [Edit History](./edit-history.md) – Verziókezelés a workflow-mentésekhez (visszaállítás, diff)
 - [Quick Start](../getting-started/quick-start.md) – Építse meg és futtassa első workflow-ját
 - [Workflows Tab](../tabs/workflows-tab.md) – Workflow-k létrehozása és kezelése
+
+## Related
+
+- [Operations Runbook (L1): Várakozási sor felhalmozódás](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Különböztesse meg a sorba állított, visszatartott, megszakított és helyreállított futásokat az újrajátszás előtt

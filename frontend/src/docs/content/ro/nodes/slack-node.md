@@ -54,3 +54,5 @@ Utilizați împreună cu [Error Handler](./error-handler-node.md) pentru notific
 - [Tipuri de noduri](../reference/node-types.md) – Prezentare generală a tuturor tipurilor de noduri
 - [Error Handler](./error-handler-node.md) – Trimite Slack la eșecul workflow-ului
 - [Fila Acreditări](../tabs/credentials-tab.md) – Adăugați webhook Slack
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

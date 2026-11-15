@@ -54,3 +54,5 @@ Käytä [Virheenkäsittelijä](./error-handler-node.md) -solmun kanssa virhe-ilm
 - [Solmutyypit](../reference/node-types.md) – Yleiskatsaus kaikista solmutyypeistä
 - [Virheenkäsittelijä](./error-handler-node.md) – Lähetä Slack-viesti workflow-virheen sattuessa
 - [Tunnistetiedot-välilehti](../tabs/credentials-tab.md) – Lisää Slack-webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

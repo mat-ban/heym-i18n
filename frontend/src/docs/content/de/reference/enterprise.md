@@ -42,7 +42,7 @@ Praktische Schulungssitzungen, zugeschnitten auf das Kompetenzniveau und die Anw
 
 ## Kubernetes Deployment
 
-Der Standard-Leitfaden [Betrieb & Deployment](../getting-started/running-and-deployment.md) behandelt Docker Compose für Single-Server-Produktions-Setups. Enterprise-Kunden erhalten Unterstützung bei Kubernetes-Produktions-Deployments für Hochverfügbarkeit und horizontale Skalierung:
+Der Standard-Leitfaden [Betrieb & Deployment](../getting-started/running-and-deployment.md) behandelt Docker Compose für Single-Server-Produktions-Setups. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise-Kunden erhalten Unterstützung bei Kubernetes-Produktions-Deployments für Hochverfügbarkeit und horizontale Skalierung:
 
 - **Mehrere Worker-Nodes** — Verteilung der Heym-Backend-Worker über mehrere Kubernetes-Nodes für Redundanz und Lastverteilung
 - **Sidecar-Container** — Konfiguration von Sidecar-Mustern für Log-Sammlung, Monitoring-Agenten, Service Meshes (Istio, Linkerd) und Secret-Injection (Vault)

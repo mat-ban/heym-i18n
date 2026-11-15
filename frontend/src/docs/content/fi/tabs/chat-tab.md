@@ -16,6 +16,9 @@ Keskustelun voi aloittaa myös [Workflowt-välilehden](./workflows-tab.md) chat-
 ## Ominaisuudet
 
 - **Globaalit muuttujat kontekstina** – [Globaalit muuttujat](../reference/global-variables.md) ovat saatavilla LLM:lle, joten voit kysyä niistä tai viitata tallennettuihin arvoihin
+- **Kanban boards** – Ask naturally to add, assign, move, update or comment on a task, list your overdue tasks or what waits for a review, or create and arrange boards and columns. When you have multiple boards and do not name one, Chat presents a board picker before creating a card. See [Board › From Chat and MCP](./board-tab.md#from-chat-and-mcp)
+- **Send now** – Click **Send now** beside a queued message to stop the active reply and send that message immediately. The partial reply stays in the conversation, followed by your message and the new answer. The message keeps its files and chosen model; the other queued messages remain and resume in order afterward
+- **Changing direction** – After **Send now**, your latest message controls the task. A cancelled question stays as context and is not another pending job. Interrupted requests appear as **cancelled** in Traces and run history, including ones stopped before the model answers
 - **Työtilan mallipohjat kontekstina** – Työtilan jaettujen workflowjen ja solmujen mallipohjat sisältyvät kontekstiin, joten Keskustelu voi vastata saatavilla olevista malleista
 - **Pitkäkestoinen agentti** – Keskustelu jatkaa toimintaansa taustalla, vaikka selain suljettaisiin, joten voit palata toiselta laitteelta ja jatkaa samaa keskustelua
 - **Workflown luominen** – Pyydä Keskustelua luomaan tai määrittelemään workflow, ja se käyttää samaa Workflow AI Builder -moottoria kuin editoriavustaja workflown luomiseen ja tallentamiseen

@@ -54,3 +54,5 @@ Kasutage koos [Error Handleriga](./error-handler-node.md) ebaõnnestumisteavitus
 - [Node Types](../reference/node-types.md) – Ülevaade kõigist node'i tüüpidest
 - [Error Handler](./error-handler-node.md) – Slacki saatmine workflow' ebaõnnestumisel
 - [Credentials Tab](../tabs/credentials-tab.md) – Slacki webhooki lisamine
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

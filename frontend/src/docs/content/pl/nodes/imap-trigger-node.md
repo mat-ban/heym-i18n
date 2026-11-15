@@ -16,6 +16,7 @@ Węzeł **Trigger IMAP** odpytuje skrzynkę e-mail w ustalonym interwale i uruch
 |-----------|------|-------------|
 | `credentialId` | UUID | Dane logowania `imap` zawierające serwer, login, skrzynkę i ustawienia SSL |
 | `pollIntervalMinutes` | Integer | Jak często Heym sprawdza skrzynkę w poszukiwaniu nowej poczty |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Przewodnik konfiguracji
 
@@ -62,6 +63,8 @@ Po uruchomieniu triggera węzły downstream mogą uzyskać dostęp do:
 | `$nodeLabel.email.text` | Treść w postaci zwykłego tekstu |
 | `$nodeLabel.email.html` | Treść HTML |
 | `$nodeLabel.email.attachments` | Tablica metadanych załączników (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Zdekodowany obiekt nagłówków |
 | `$nodeLabel.email.uid` | IMAP UID do deduplikacji lub logowania |
 | `$nodeLabel.triggered_by` | Etykieta źródła triggera (`"imap"`) |

@@ -19,7 +19,7 @@ Jotkut integraatiosolmut **eivät** vaadi tunnistetietoja. [WebSocket Trigger](.
 | **Linear** | [Linear-solmu](../nodes/linear-node.md) | `api_key`, tai `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry-solmu](../nodes/sentry-node.md) | `api_token`, valinnainen `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Arvioinnit](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, valinnainen `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Arvioinnit](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, valinnainen `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Keskustelu, AI Defaults | decision model -tunnistetieto sekä mallivaihtoehdot, jotka viittaavat muihin tunnistetietoihin |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektorivarastot | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Jotkut integraatiosolmut **eivät** vaadi tunnistetietoja. [WebSocket Trigger](.
 | **Grist** | [Grist-solmu](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets -solmu](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 -suostumus |
 | **Google Drive** | [Google Drive -solmu](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 -suostumus (täysi Drive-käyttöoikeusalue) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery-solmu](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 -suostumus |
 | **Supabase** | [Supabase-solmu](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, valinnainen `supabase_schema` |
 | **ClickHouse** | [ClickHouse-solmu](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -897,3 +898,6 @@ Reitittää jokaisen pyynnön jollekin käytettävissä olevista mallitunnisteti
 ### Huomiot
 
 Vaihtoehtojen nimet ovat se, mitä päätösmalli valitsee, joten niiden on oltava erillisiä. Vaihtoehto ei voi viitata toiseen Model Routeriin.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

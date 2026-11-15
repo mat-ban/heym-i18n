@@ -32,6 +32,7 @@ Credentials 存储 Workflow 节点使用的 API keys 和 secrets。您可以在 
 | [Grist](../nodes/grist-node.md) | Grist | API key + 服务器 URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 consent |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 consent |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 consent |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Project URL + API key（+ 可选默认 schema） |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + username/password + database（+ secure） |

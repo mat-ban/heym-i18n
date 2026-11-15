@@ -368,3 +368,6 @@ Una `table` pot convertir una columna en botons que obren un enllaç. Definiu **
 Només les adreces `http://` i `https://` i els camins que comencen amb una sola `/` es converteixen en botons. Qualsevol altre valor, com `javascript:` o `//host`, es manté com a text pla, i una cel·la buida no mostra res.
 
 El botó funciona al costat d'un [enllaç de fila](../tabs/dashboard-tab.md#detail-pages): en fer clic al botó s'obre el seu enllaç en una pestanya nova, i en fer clic en qualsevol altre punt de la fila continua obrint-se la pàgina de detall.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

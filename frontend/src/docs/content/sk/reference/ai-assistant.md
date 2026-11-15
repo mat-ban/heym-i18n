@@ -48,6 +48,7 @@ V režime Agent pole **YOLO mode** pod poľom pre správu spôsobí, že asisten
 - Napíšte svoju požiadavku do vstupného poľa (napr. „Create a workflow that takes user input and sends it to an LLM“)
 - Stlačením **Enter** ju odošlete (Shift+Enter pre nový riadok)
 - AI streamuje svoju odpoveď. V režime **Agent**, ak odpoveď obsahuje workflow v bloku kódu \`\`\`json, automaticky sa spracuje a aplikuje na plátno. V režime **Ask** sa plátno nikdy neupraví.
+- Počas streamovania JSON kódu workflow riadok pod odpoveďou uvádza názov workflow a doteraz zapísané uzly, napríklad `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Pomocou **Clear** resetujete konverzáciu
 - Ukážte na správu a kliknite na jej ikonu kopírovania, čím skopírujete text, ktorý zobrazuje, vrátane akéhokoľvek JSON s workflowom
 - Potiahnutím riadku nad poľom pre správu pole zväčšíte. Vstupná oblasť môže narásť na 60 % panela a pri opätovnom načítaní stránky sa vráti do predvolenej výšky

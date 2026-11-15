@@ -16,6 +16,7 @@ Az **IMAP Trigger** csomópont egy e-mail postafiókot kérdez le rögzített id
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap` hitelesítési adat, amely tartalmazza a szervert, a bejelentkezést, a postafiókot és az SSL beállításokat |
 | `pollIntervalMinutes` | Integer | Milyen gyakran ellenőrzi a Heym a postafiókot új e-mail után |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Beállítási útmutató
 
@@ -62,6 +63,8 @@ Miután a csomópont triggerelt, a downstream csomópontok hozzáférhetnek a k�
 | `$nodeLabel.email.text` | Egyszerű szöveges törzs |
 | `$nodeLabel.email.html` | HTML törzs |
 | `$nodeLabel.email.attachments` | Melléklet metaadatok tömbje (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekódolt fejléc objektum |
 | `$nodeLabel.email.uid` | IMAP UID deduplikációhoz vagy naplózáshoz |
 | `$nodeLabel.triggered_by` | Trigger forrás címkéje (`"imap"`) |

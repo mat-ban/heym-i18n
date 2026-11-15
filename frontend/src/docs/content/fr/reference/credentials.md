@@ -32,6 +32,7 @@ Les identifiants stockent les clés API et les secrets utilisés par les nœuds 
 | [Grist](../nodes/grist-node.md) | Grist | Clé API + URL du serveur |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + consentement OAuth2 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + consentement OAuth2 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + consentement OAuth2 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL du projet + clé API (+ schéma par défaut facultatif) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Hôte + port + nom d'utilisateur/mot de passe + base de données (+ secure) |

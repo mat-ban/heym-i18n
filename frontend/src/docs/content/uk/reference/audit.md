@@ -59,6 +59,10 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `auth.token_refresh` | `outcome=denied` з `reason=refresh_token_replayed_or_revoked` — сигнал про викрадення token, на який варто налаштувати сповіщення. |
 | `auth.password_change` | `outcome=failure`, коли поточний пароль був хибний. |
 | `auth.sso_login` | Єдиний вхід. `outcome=failure` містить причину, з якої відповідь провайдера було відхилено; `denied` містить `email_not_verified`, `domain_not_allowed` або `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Адміністратор змінив конфігурацію [SSO](./sso.md). Фіксує `enabled` та `password_login_disabled`, але ніколи — client secret. |
 | `sso_settings.test` | Адміністратор запустив перевірку з'єднання SSO. |
 

@@ -189,7 +189,7 @@ O sistema de traces é projetado especificamente para depurar comportamento agê
 Toda chamada de LLM no Heym é automaticamente precificada. A [Aba de Traces](../tabs/traces-tab.md) exibe as contagens de tokens de entrada e saída por trace, juntamente com um custo em USD em tempo real, derivado de uma tabela de preços sincronizada.
 
 - **Custo por trace** – Tokens de entrada, tokens de saída e total em USD exibidos em cada linha de trace
-- **Análise de custos** – Cards de KPI e um gráfico de custo por modelo são atualizados conforme o intervalo de tempo selecionado (1h / 24h / 7d / 30d / Tudo)
+- **Análise de custos** – Cards de KPI e um gráfico de custo por modelo são atualizados conforme o intervalo de tempo selecionado (1h / 3h / 6h / 24h / 7d / 30d / Tudo)
 - **Tabela de Custo de LLM** – Uma tabela de sistema na [Aba de DataTable](../tabs/datatable-tab.md) é populada a partir do Helicone a cada 24 horas; você pode sobrescrever preços ou adicionar linhas personalizadas para modelos ainda não listados
 - **Aviso de preço ausente** – Traces de modelos sem entrada de preço exibem um aviso inline com um link direto para a tabela de custos
 
@@ -274,7 +274,7 @@ Workflows são chamáveis via HTTP em `/api/workflows/{workflow_id}/execute`, qu
 O Heym tem suporte nativo a [MCP](../tabs/mcp-tab.md) em ambos os lados:
 
 - **Como cliente**: Nós Agente se conectam a servidores MCP externos (Filesystem, Browserbase, ferramentas customizadas) via stdio ou SSE e consomem suas ferramentas automaticamente
-- **Como servidor**: Workflows com MCP ativado se tornam ferramentas no servidor padrão em `/api/mcp/sse`, ou em servidores nomeados com sua própria URL e API key, para que Claude Desktop, Cursor e outros clientes MCP possam chamar seus workflows do Heym diretamente
+- **Como servidor**: Workflows com MCP ativado se tornam ferramentas no servidor padrão em `/api/mcp (or /api/mcp/sse for legacy connections)`, ou em servidores nomeados com sua própria URL e API key, para que Claude Desktop, Cursor e outros clientes MCP possam chamar seus workflows do Heym diretamente
 
 Agentes podem consumir vários servidores MCP ao mesmo tempo, e qualquer workflow pode se tornar uma ferramenta para um cliente MCP externo.
 

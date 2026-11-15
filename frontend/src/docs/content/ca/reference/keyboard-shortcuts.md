@@ -106,3 +106,6 @@ Aquestes dreceres estan disponibles al diàleg de l'historial d'execucions i al 
 - [Node Execute](../nodes/execute-node.md) – Crida sub-workflows (`Ctrl + Shift + O`)
 - [Inici ràpid](../getting-started/quick-start.md) – Creeu el vostre primer workflow
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Les pestanyes **Credencials** i **DataTable** funcionen de la mateixa manera: `Ctrl + F` / `Cmd + F` enfoca el camp de cerca, la llista es redueix mentre escriviu i `Esc` la neteja.

@@ -68,3 +68,5 @@ Isto pravilo kao kod [Output](./output-node.md): ne postavljajte ovaj čvor unut
 - [Output](./output-node.md) – Odgovor temeljen na poruci ili shemi s omotavanjem `result`
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, request metode i odgovori
 - [Node Types](../reference/node-types.md) – Sve vrste čvorova
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

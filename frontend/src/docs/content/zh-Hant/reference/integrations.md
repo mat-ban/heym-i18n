@@ -19,7 +19,7 @@ Heym 透過 **credentials** 連接外部服務。每種 credential 類型會儲�
 | **Linear** | [Linear 節點](../nodes/linear-node.md) | `api_key`，或 `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry 節點](../nodes/sentry-node.md) | `api_token`、選用 `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md) | `api_key`、`base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md)、[Evals](../tabs/evals-tab.md)（LLM-as-Judge 評審） | `base_url`、選用 `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md)、[Evals](../tabs/evals-tab.md)（LLM-as-Judge 評審）, [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`、選用 `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、Chat、AI Defaults | 一個 decision model credential，以及參照您其他 credentials 的 model options |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md)、Vectorstores | `qdrant_host`、`openai_api_key` |
@@ -28,6 +28,7 @@ Heym 透過 **credentials** 連接外部服務。每種 credential 類型會儲�
 | **Grist** | [Grist 節點](../nodes/grist-node.md) | `api_key`、`server_url` |
 | **Google Sheets** | [Google Sheets 節點](../nodes/google-sheets-node.md) | `client_id`、`client_secret` + OAuth2 同意 |
 | **Google Drive** | [Google Drive 節點](../nodes/google-drive-node.md) | `client_id`、`client_secret` + OAuth2 同意（完整 Drive 範圍） |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery 節點](../nodes/bigquery-node.md) | `client_id`、`client_secret` + OAuth2 同意 |
 | **Supabase** | [Supabase 節點](../nodes/supabase-node.md) | `supabase_url`、`supabase_key`、選用 `supabase_schema` |
 | **ClickHouse** | [ClickHouse 節點](../nodes/clickhouse-node.md) | `host`、`port`、`username`、`password`、`database`、`secure` |
@@ -885,3 +886,6 @@ OpenAI 會自動快取系統 Prompt 中靜態（不變）的前綴部分——�
 ### 備註
 
 選項名稱即為決策模型從中挑選的依據，因此它們必須彼此不同。一個選項不能指向另一個 Model Router。
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

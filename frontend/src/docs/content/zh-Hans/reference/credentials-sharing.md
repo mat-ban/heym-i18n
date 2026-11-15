@@ -87,6 +87,7 @@ $credentials.MyNotionWorkspace
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse 连接详情（host、port、auth、database） |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md)、[Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot 凭据 |
 | [Discord Trigger](../nodes/discord-trigger-node.md)、[Discord](../nodes/discord-node.md) | `credentialId` | Discord 公钥或 webhook 凭据 |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant 或 Postgres（pgvector）向量数据库，通过 Qdrant、Psql 或 Custom Embeddings RAG 凭据 |
 | Evals | `credential_id`、`judge_credential_id` | 模型凭据；用于 LLM-as-Judge 评判的模型或 Decision Model 凭据 |
 | [Playwright](../nodes/playwright-node.md) AI step | `credentialId` | LLM/Vision 模型（用于 AI step 和 [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)） |
@@ -105,3 +106,7 @@ $credentials.MyNotionWorkspace
 - [Expression DSL](./expression-dsl.md) – `$credentials` 语法
 - [Node Types](./node-types.md) – 使用凭据的节点（[LLM](../nodes/llm-node.md)、[Agent](../nodes/agent-node.md)、[Codex](../nodes/codex-node.md)、[Jira](../nodes/jira-node.md)、[Linear](../nodes/linear-node.md)、[RAG](../nodes/rag-node.md)、[Playwright](../nodes/playwright-node.md)、[HTTP](../nodes/http-node.md)、[Notion](../nodes/notion-node.md)、[Sentry](../nodes/sentry-node.md)、[Supabase](../nodes/supabase-node.md)、[ClickHouse](../nodes/clickhouse-node.md)、[Telegram](../nodes/telegram-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md)、[Discord](../nodes/discord-node.md)、[Discord Trigger](../nodes/discord-trigger-node.md)、[Slack](../nodes/slack-node.md)）
 - [Agent Node](../nodes/agent-node.md) – 使用 `credentialId` 调用 LLM
+
+## Google Meet 日历权限
+
+共享 [Google Meet 凭证](../nodes/google-meet-node.md) 允许使用它的工作流读取可访问日历的忙闲时间段，并作为连接的 Google 账户创建、修改或删除日程事件，包括发送邀请和取消通知。访客的与会者电子邮箱不会改变哪个账户拥有或授权该事件。只有凭证所有者可以重新连接其 Google 授权。

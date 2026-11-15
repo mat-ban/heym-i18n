@@ -23,6 +23,7 @@ Filtre çubuğunun üst kısmındaki tek bir **Time range** seçici hem istatist
 
 - Seçili zaman aralığındaki son trace'lerin sayfalanmış listesi
 - Her trace şunları gösterir: workflow, node, credential, zaman damgası, süre
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Detay görünümünü açmak için bir trace'e tıklayın
 - Detay iletişim kutusunu kapatmadan trace'ler arasında geçiş yapmak için içindeki **Prev / Next** düğmelerini kullanın
 
@@ -66,3 +67,7 @@ Bir trace'i açtığınızda:
 - [OpenTelemetry Tracing](../reference/opentelemetry.md) – Workflow, node ve Agent tool span'leri için isteğe bağlı OTel dışa aktarımı
 - [DataTable Tab](./datatable-tab.md) – Maliyet grafiğinin kullandığı LLM Cost Table'ı barındırır
 - [Contextual Showcase](../reference/contextual-showcase.md) – Dashboard yüzeyleri için kısa sayfa kılavuzu
+
+## Zaman Aralığı
+
+Filtre çubuğunun üst kısmındaki tek bir **Zaman aralığı** seçici, hem istatistik başlığını hem de izleme listesini yönetir. Seçenekler: Son 1 saat, Son 3 saat, Son 6 saat, Son 24 saat, Son 7 gün (varsayılan), Son 30 gün, Tüm zamanlar. Aralığın değiştirilmesi sayfalandırmayı sıfırlar ve grafikleri ile listeyi birlikte yeniden yükler.

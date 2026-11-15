@@ -2,6 +2,9 @@
 
 Tab **Alerts** cho phép bạn định nghĩa các điều kiện ngưỡng trong một khoảng thời gian và được thông báo khi chúng bị vượt qua. Heym đã ghi lại kết quả thực thi, thời lượng chạy và chi phí LLM, nhưng nó không bao giờ tự động thông báo những điều đó. Alert là cách bạn yêu cầu nó làm điều đó.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Xem bản demo Alerts</a></p>
+
 Mỗi alert được đánh giá trong một **khoảng thời gian** bạn chọn, không bao giờ dựa trên một sự kiện đơn lẻ. Một lần chạy thất bại là nhiễu. Mười hai lần chạy thất bại trong mười phút là một sự cố.
 
 ## Các loại Alert

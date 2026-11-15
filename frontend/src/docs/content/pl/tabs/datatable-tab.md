@@ -122,3 +122,6 @@ Jeśli żaden wiersz nie pasuje, model zostaje wymieniony w powiadomieniu **Unpr
 - [Karta Traces](./traces-tab.md) — wykorzystuje tabelę kosztów LLM do wyświetlania wykresu kołowego kosztów i kart KPI
 - [Węzeł Grist](../nodes/grist-node.md) — alternatywa dla zewnętrznego arkusza kalkulacyjnego
 - [Karta Zmienne](./global-variables-tab.md) — alternatywa dla przechowywania klucz-wartość
+## Wyszukiwanie
+
+Użyj pola wyszukiwania nad listą tabel lub naciśnij **Ctrl+F** (lub **Cmd+F**), aby filtrować tabele według nazwy lub opisu w trakcie pisania. Naciśnij **Escape**, aby wyczyścić wyszukiwanie.

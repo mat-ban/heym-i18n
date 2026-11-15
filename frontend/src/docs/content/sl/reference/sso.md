@@ -140,3 +140,6 @@ Neuspešna prijava se vrne na prijavni zaslon z berljivim sporočilom. Heym niko
 - **Več hkratnih ponudnikov.** Ena instanca se povezuje z enim ponudnikom.
 - **Mapping skupin ali vlog** iz zahtevkov ponudnika.
 - **Enotno odjavljanje.** Odjava iz Heym-a vas ne odjavi iz ponudnika.
+
+- **Dvofaktorska prijava je v domeni ponudnika.** `HEYM_REQUIRE_MFA` velja le za prijavo z geslom; prijava prek SSO nikoli ne zahteva kode Heym. Zahtevajte MFA pri svojem ponudniku identitete.
+- **Deaktivacija velja tudi tukaj.** Račun, ki ga je skrbnik onemogočil v **Nastavitve → Uporabniki**, je zavrnjen, tudi če ga ponudnik še vedno preverja.

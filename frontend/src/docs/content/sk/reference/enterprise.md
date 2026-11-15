@@ -42,7 +42,7 @@ Praktické školiace stretnutia prispôsobené úrovni zručností a prípadom p
 
 ## Kubernetes Deployment
 
-Štandardný návod [Spustenie a nasadenie](../getting-started/running-and-deployment.md) pokrýva Docker Compose pre produkčné nastavenia na jednom serveri. Zákazníci plánu Enterprise dostávajú pomoc s produkčnými nasadeniami Kubernetes pre vysokú dostupnosť a horizontálne škálovanie:
+Štandardný návod [Spustenie a nasadenie](../getting-started/running-and-deployment.md) pokrýva Docker Compose pre produkčné nastavenia na jednom serveri. [Kubernetes Deployment](../getting-started/kubernetes.md). Zákazníci plánu Enterprise dostávajú pomoc s produkčnými nasadeniami Kubernetes pre vysokú dostupnosť a horizontálne škálovanie:
 
 - **Viaceré worker uzly** — Distribúcia backendových workerov Heym naprieč viacerými uzlami Kubernetes pre redundanciu a vyvažovanie záťaže
 - **Sidecar kontajnery** — Konfigurácia sidecar vzorov pre zber logov, monitorovacích agentov, service meshes (Istio, Linkerd) a injektovanie secretov (Vault)

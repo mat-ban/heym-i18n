@@ -12,23 +12,24 @@ Sidan inleds med en statistiksammanfattning ovanför spårlistan, beräknad öve
 - **KPI-kort** – Total Calls, Total Tokens, Total Cost (USD), Avg Latency, Error %
 - **Tokens by Model** – Donutdiagram över tokenvolym per modell
 - **Cost by Model** – Donutdiagram över USD-kostnad per modell. Modeller utan prissättning visar en länk "Configure pricing" till [LLM Cost Table](./datatable-tab.md#llm-cost-table-system-table)
-- **Calls Over Time** – Staplat ytdiagram över lyckade vs misslyckade anrop per bucket (5 min / 1 h / 6 h / 1 dag, väljs automatiskt per intervall)
+- **Calls Over Time** – Staplat ytdiagram över lyckade vs misslyckade anrop per bucket (5 min / 15 min / 30 min / 1 h / 6 h / 1 dag, väljs automatiskt per intervall)
 - **Unpriced models notice** – Visas under diagrammen när vissa spårade modeller saknar prissättningsrad, med länk till LLM Cost Table
 
 ## Tidsintervall
 
-En enda **Time range**-väljare högst upp i filterfältet styr både statistikrubriken och spårlistan. Val: Last 1 hour, Last 24 hours, Last 7 days (standard), Last 30 days, All time. Ändring av intervallet återställer paginering och laddar om diagram och lista tillsammans.
+En enda **Time range**-väljare högst upp i filterfältet styr både statistikrubriken och spårlistan. Val: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days (standard), Last 30 days, All time. Ändring av intervallet återställer paginering och laddar om diagram och lista tillsammans.
 
 ## Spårlista
 
 - Paginerad lista över senaste spår inom det valda tidsintervallet
 - Varje spår visar: workflow, nod, credential, tidsstämpel, varaktighet
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Klicka på ett spår för att öppna detaljvyn
 - Använd **Prev / Next** i detaljdialogen för att navigera mellan spår utan att stänga den
 
 ## Filtrering
 
-- **Time range** – 1h / 24h / 7d / 30d / All; filtrerar diagram och lista tillsammans
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; filtrerar diagram och lista tillsammans
 - **Credential** – Filtrera efter använd credential (API-nyckel)
 - **Source** – Filtrera efter workflow eller körningskälla
 - **Search** – Sök efter modell, workflow, credential eller nodetikett

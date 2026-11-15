@@ -95,7 +95,7 @@ In een `find`- of `count`-filter betekent een gewone waarde gelijk aan; een obje
 | `$contains` | Substring-overeenkomst zonder onderscheid tussen hoofd- en kleine letters |
 | `$in` | Waarde bevindt zich in de opgegeven array |
 
-Voorbeeld met meerdere gecombineerd: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Onbekende operatoren worden genegeerd. `upsert`-filters gebruiken nog steeds exacte overeenkomstwaarden om de bij te werken rij te vinden.
+Voorbeeld met meerdere gecombineerd: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Onbekende operatoren worden genegeerd. `upsert`-filters gebruiken nog steeds exacte overeenkomstwaarden om de bij te werken rij te vinden.
 
 U kunt ook filteren op rijmetadata — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — die als echte kolommen worden opgeslagen in plaats van binnen uw gegevens. Geef voor datums een volledige waarde door voor bereikvergelijkingen (bijv. `{"created_at": {"$gt": "2026-06-04"}}`) of gebruik `$contains` voor een gedeeltelijke tekstovereenkomst (bijv. `{"created_at": {"$contains": "2026-06-04"}}`). Als een van uw eigen kolommen dezelfde naam heeft als een metadataveld, krijgt de gegevenskolom voorrang.
 

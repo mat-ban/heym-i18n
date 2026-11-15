@@ -189,7 +189,7 @@ A trace rendszer célirányosan az agentic viselkedés hibakeresésére készül
 Minden LLM-hívás a Heym-ben automatikusan költséget kap. A [Traces Tab](../tabs/traces-tab.md) nyomkövetésenként mutatja a bemeneti és kimeneti tokenek számát, valamint a szinkronizált árazási táblából származtatott valós idejű USD-költséget.
 
 - **Nyomkövetésenkénti költség** – Bemeneti tokenek, kimeneti tokenek és teljes USD minden nyomkövetési sorban megjelenítve
-- **Költségelemzés** – KPI-kártyák és modellenkénti költségdiagram frissül a kiválasztott időtartomány szerint (1h / 24h / 7d / 30d / All)
+- **Költségelemzés** – KPI-kártyák és modellenkénti költségdiagram frissül a kiválasztott időtartomány szerint (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **LLM Cost Table** – A [DataTable tab](../tabs/datatable-tab.md) rendszertáblája 24 óránként frissül a Helicone-ból; felülírhatja az árakat, vagy egyedi sorokat adhat hozzá még nem szereplő modellekhez
 - **Hiányzó ár figyelmeztetés** – Az árazási bejegyzéssel nem rendelkező modellek nyomkövetései beágyazott figyelmeztetést jelenítenek meg, közvetlen hivatkozással a költségtáblára
 
@@ -274,7 +274,7 @@ A munkafolyamatok HTTP-n keresztül hívhatók a `/api/workflows/{workflow_id}/e
 A Heym natív [MCP](../tabs/mcp-tab.md) támogatással rendelkezik mindkét oldalon:
 
 - **Kliensként**: Az ügynök csomópontok külső MCP szerverekhez csatlakoznak (Filesystem, Browserbase, egyedi eszközök) stdio vagy SSE segítségével, és automatikusan használják azok eszközeit
-- **Szerverként**: Az MCP-vel rendelkező munkafolyamatok eszközökké válnak az alapértelmezett szerveren a `/api/mcp/sse` címen, vagy névvel ellátott szervereken saját URL-lel és API kulccsal, így a Claude Desktop, Cursor és más MCP kliensek közvetlenül hívhatják az Ön Heym munkafolyamatait
+- **Szerverként**: Az MCP-vel rendelkező munkafolyamatok eszközökké válnak az alapértelmezett szerveren a `/api/mcp (or /api/mcp/sse for legacy connections)` címen, vagy névvel ellátott szervereken saját URL-lel és API kulccsal, így a Claude Desktop, Cursor és más MCP kliensek közvetlenül hívhatják az Ön Heym munkafolyamatait
 
 Az ügynökök egyszerre több MCP szervert is használhatnak, és bármely munkafolyamat eszközzé válhat egy külső MCP kliens számára.
 

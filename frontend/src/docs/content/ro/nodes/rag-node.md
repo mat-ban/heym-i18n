@@ -272,3 +272,5 @@ Bine de știut:
 - [Integrări terțe](../reference/integrations.md#qdrant) – Configurarea acreditărilor Qdrant și Postgres (pgvector)
 - [Nod Agent](./agent-node.md) – Utilizarea rezultatelor RAG ca context pentru agent
 - [Nod LLM](./llm-node.md) – Alimentarea prompt-ului de sistem LLM cu rezultatele RAG
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

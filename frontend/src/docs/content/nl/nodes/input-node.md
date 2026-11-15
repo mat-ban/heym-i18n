@@ -45,7 +45,7 @@ De **Input**-node is het toegangspunt voor workflows die gegevens ontvangen van 
 
 In het tabblad **Run** van de editor (Defined webhook-modus) ondersteunt elk invoerveld drag-and-drop en een inline bijlageregeling (rechtsonder in het veld):
 
-- **Tekstbestanden** (`.txt`, `.md`, `.json`, `.csv` en vergelijkbaar) worden als platte tekst gelezen.
+- **Tekstbestanden** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Afbeeldingen** (JPEG, PNG, GIF, WebP) worden opgeslagen als een `data:`-URL (base64) in de veldwaarde — gebruik veldnamen zoals `imageUrl` of `base64` wanneer downstream-nodes afbeeldingsgegevens verwachten.
 - **PDF**-bestanden worden geconverteerd naar geëxtraheerde tekst (max. 5 MB bestand, 100k tekens aan inhoud).
 

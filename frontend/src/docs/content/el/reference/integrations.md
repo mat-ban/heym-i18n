@@ -19,7 +19,7 @@
 | **Linear** | [Linear node](../nodes/linear-node.md) | `api_key`, ή `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry node](../nodes/sentry-node.md) | `api_token`, προαιρετικό `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Αξιολογήσεις](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, προαιρετικό `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Αξιολογήσεις](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, προαιρετικό `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | ένα διαπιστευτήριο decision model, συν επιλογές μοντέλου που παραπέμπουν στα άλλα διαπιστευτήριά σας |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@
 | **Grist** | [Grist node](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets node](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + συγκατάθεση OAuth2 |
 | **Google Drive** | [Google Drive node](../nodes/google-drive-node.md) | `client_id`, `client_secret` + συγκατάθεση OAuth2 (πλήρες πεδίο Drive) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery node](../nodes/bigquery-node.md) | `client_id`, `client_secret` + συγκατάθεση OAuth2 |
 | **Supabase** | [Supabase node](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, προαιρετικό `supabase_schema` |
 | **ClickHouse** | [ClickHouse node](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -915,3 +916,6 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 
 Τα ονόματα των επιλογών είναι αυτά μεταξύ των οποίων επιλέγει το μοντέλο απόφασης, επομένως πρέπει να είναι διακριτά. Μία
 επιλογή δεν μπορεί να δείχνει σε άλλο Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

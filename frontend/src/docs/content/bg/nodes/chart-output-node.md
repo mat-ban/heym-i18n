@@ -368,3 +368,6 @@ Text (динамично — низът на съобщението се съз�
 Само адресите с `http://` и `https://` и пътищата, започващи с единичен `/`, стават бутони. Всяка друга стойност, например `javascript:` или `//host`, остава обикновен текст, а празна клетка не показва нищо.
 
 Бутонът работи заедно с [връзка на ред](../tabs/dashboard-tab.md#detail-pages): щракването върху бутона отваря връзката му в нов раздел, а щракването другаде по реда продължава да отваря страницата с подробности.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

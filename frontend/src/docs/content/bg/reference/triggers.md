@@ -12,7 +12,7 @@ Workflows се стартират от **trigger nodes** или **entry points**
 | [Cron](../nodes/cron-node.md) | Изпълнява се по график (cron израз, напр. `0 * * * *` за всеки час). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Стартира, когато Telegram изпрати webhook update от бот към специфичния за node webhook URL. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Стартира, когато Discord изпрати webhook от Interactions API към специфичния за node endpoint. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Периодично проверява IMAP пощенска кутия и стартира веднъж за всеки новооткрит имейл. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Периодично проверява IMAP пощенска кутия и стартира веднъж за всеки новооткрит имейл. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Стартира, когато Heym публикува платформено събитие. Събитията в един dispatch прозорец пристигат заедно като масив. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Отваря изходяща клиентска връзка към външен socket и стартира при избрани socket събития. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Генерира URL за еднократно качване и стартира, когато извикващият изпрати голям multipart файл. |

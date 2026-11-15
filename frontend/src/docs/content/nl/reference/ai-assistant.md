@@ -48,6 +48,7 @@ In Agent-modus zorgt het vak **YOLO mode** onder het berichtveld ervoor dat de a
 - Typ uw verzoek in het invoerveld (bijv. "Create a workflow that takes user input and sends it to an LLM")
 - Druk op **Enter** om te verzenden (Shift+Enter voor een nieuwe regel)
 - De AI streamt het antwoord. In **Agent**-modus wordt een workflow in een \`\`\`json-codeblok automatisch geparseerd en op het canvas toegepast. In **Ask**-modus wordt het canvas nooit gewijzigd.
+- Terwijl de workflow-JSON binnenstroomt, toont een regel onder het antwoord de naam van de workflow en de tot nu toe geschreven knooppunten, bijvoorbeeld `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Gebruik **Clear** om het gesprek te resetten
 - Beweeg de muis over een bericht en klik op het kopieerpictogram om de weergegeven tekst te kopiëren, inclusief eventuele workflow-JSON
 - Versleep de lijn boven het berichtvak om het vak hoger te maken. Het invoergebied kan tot 60% van het paneel groeien en keert bij het herladen van de pagina terug naar de standaardhoogte

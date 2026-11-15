@@ -368,3 +368,6 @@ Un `table` poate transforma o coloană în butoane care deschid un link. Setați
 Doar adresele `http://` și `https://` și căile care încep cu un singur `/` devin butoane. Orice altă valoare, cum ar fi `javascript:` sau `//host`, rămâne text simplu, iar o celulă goală nu afișează nimic.
 
 Butonul funcționează alături de un [link de rând](../tabs/dashboard-tab.md#detail-pages): un clic pe buton deschide linkul său într-o filă nouă, iar un clic în orice altă parte a rândului deschide în continuare pagina de detalii.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

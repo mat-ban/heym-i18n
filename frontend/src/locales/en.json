@@ -84,7 +84,8 @@
     "dropFileOrClick": "Drop a file here or click to choose one",
     "removeFile": "Remove file",
     "chooseFileFor": "Choose a file for {label}",
-    "new": "New"
+    "new": "New",
+    "clearSearch": "Clear search"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Enable",
     "disablePlugin": "Disable",
     "uninstallPlugin": "Uninstall",
-    "pluginOperationFailed": "Plugin operation failed"
+    "pluginOperationFailed": "Plugin operation failed",
+    "users": "Users",
+    "encryption": "Encryption"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Copy trace ID",
     "openTrace": "Open trace",
     "message": "Message",
-    "emptyReply": "Empty reply."
+    "emptyReply": "Empty reply.",
+    "timeRange3h": "Last 3 hours",
+    "timeRange6h": "Last 6 hours"
   },
   "tables": {
     "title": "DataTables",
@@ -1215,7 +1220,9 @@
     "browseAll": "Browse all →",
     "askAi": "Ask AI",
     "dropToImport": "Drop JSON or ZIP to import",
-    "noWorkflowsMatch": "No workflows match this filter."
+    "noWorkflowsMatch": "No workflows match this filter.",
+    "noWorkflowsMatchAll": "Try a different title, description or folder name.",
+    "noWorkflowsMatchFilter": "Try a different title, description, folder name or status filter."
   },
   "schedules": {
     "title": "Schedules",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Started by an MCP client",
     "newChatTitle": "New chat",
     "subtitle": "Run workflows and ask questions",
-    "modelsLoadFailedDisabled": "This credential's model list could not be loaded. Chat stays disabled until a model can be fetched."
+    "modelsLoadFailedDisabled": "This credential's model list could not be loaded. Chat stays disabled until a model can be fetched.",
+    "dropFilesToAttach": "Drop files to attach",
+    "attachFiles": "Attach files"
   },
   "teams": {
     "title": "Teams",
@@ -1883,7 +1892,8 @@
       "skipped": "Skipped"
     },
     "permissionRead": "read",
-    "permissionWrite": "write"
+    "permissionWrite": "write",
+    "details": "Details"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "Actions",
       "failedToLoadWidget": "Failed to load widget",
       "failedToUpdateCheckbox": "Failed to update checkbox",
-      "refreshDashboard": "Refresh dashboard"
+      "refreshDashboard": "Refresh dashboard",
+      "revertPrevious": "Revert previous"
     },
     "hitl": {
       "previousReview": "Previous review",

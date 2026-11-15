@@ -87,6 +87,7 @@ $credentials.MyNotionWorkspace
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse 연결 정보 (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot credential |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord public key 또는 webhook credential |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant 또는 Postgres (pgvector) vector DB, Qdrant, Psql 또는 Custom Embeddings RAG credential을 통해 |
 | Evals | `credential_id`, `judge_credential_id` | 모델 credential; LLM-as-Judge judge를 위한 모델 또는 Decision Model credential |
 | [Playwright](../nodes/playwright-node.md) AI step | `credentialId` | LLM/Vision 모델 (AI step 및 [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)용) |
@@ -105,3 +106,7 @@ executor는 데이터베이스에서 ID로 credential을 직접 로드하고 con
 - [Expression DSL](./expression-dsl.md) – `$credentials` 구문
 - [노드 유형](./node-types.md) – Credential을 사용하는 노드 ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent 노드](../nodes/agent-node.md) – LLM에 `credentialId` 사용
+
+## Google Meet 캘린더 권한
+
+[Google Meet credential](../nodes/google-meet-node.md)을 공유하면 이를 사용하는 워크플로가 접근 가능한 캘린더의 한가함/바쁨 간격을 읽고, 초대 및 취소 전송을 포함하여 연결된 Google 계정으로 일정을 생성, 수정 또는 삭제할 수 있습니다. 방문자의 참석자 이메일은 일정을 소유하거나 승인하는 계정을 변경하지 않습니다. credential 소유자만이 Google 인증을 다시 연결할 수 있습니다.

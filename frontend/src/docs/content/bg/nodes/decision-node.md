@@ -157,6 +157,8 @@ Input → Decision (triage) → Condition ($triage.answers.department.confidence
 
 Същото удостоверение може да оценява изпълнения на [Оценяване](../tabs/evals-tab.md): с избран **LLM-as-Judge** го изберете като съдия и моделът за решения ще оценява всеки отговор спрямо очаквания изход.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym блокира изходящи заявки към частни и loopback адреси по подразбиране, така че endpoint за решения, който стартирате сами на `localhost` или в частен диапазон, се нуждае от `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Моделите за решения не се появяват в таблиците с цени на LLM, които Heym синхронизира, така че колоната **Cost** в [Изпълнения](../tabs/traces-tab.md) остава празна за тези извиквания. Броят на token-ите все още се записва и можете да добавите своя собствена цена чрез override на ценообразуването.

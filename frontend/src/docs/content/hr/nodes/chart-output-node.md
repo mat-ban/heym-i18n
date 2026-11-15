@@ -368,3 +368,6 @@ Prilikom generiranja widgeta pomoću **AI**, promptovi poput ovih jasno se mapir
 Gumbima postaju samo adrese `http://` i `https://` te putanje koje počinju jednom kosom crtom `/`. Svaka druga vrijednost, poput `javascript:` ili `//host`, ostaje običan tekst, a prazna ćelija ne prikazuje ništa.
 
 Gumb radi uz [poveznicu retka](../tabs/dashboard-tab.md#detail-pages): klik na gumb otvara njegovu poveznicu u novoj kartici, a klik bilo gdje drugdje u retku i dalje otvara stranicu s detaljima.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

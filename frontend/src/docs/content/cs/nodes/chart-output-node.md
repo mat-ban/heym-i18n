@@ -368,3 +368,6 @@ Sloupec v `table` lze změnit na tlačítka, která otevírají odkaz. Nastavte 
 Tlačítky se stanou pouze adresy `http://` a `https://` a cesty začínající jedním `/`. Jakákoli jiná hodnota, například `javascript:` nebo `//host`, zůstane prostým textem a prázdná buňka nezobrazí nic.
 
 Tlačítko funguje vedle [odkazu řádku](../tabs/dashboard-tab.md#detail-pages): kliknutí na tlačítko otevře jeho odkaz v nové kartě a kliknutí kamkoli jinam na řádku stále otevře stránku s detaily.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

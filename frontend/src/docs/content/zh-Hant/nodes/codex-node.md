@@ -26,6 +26,8 @@ Codex 認證資訊不接受 API key。此節點不會提交雲端 Codex 任務�
 
 在 Docker 部署中，Heym 會從相同的 Heym 映像檔啟動同層級容器（而非獨立的 GHCR 映像檔）來執行 Codex。該容器僅掛載 Codex 工作區磁碟區，並讓 Codex 自身的 bubblewrap 沙箱建立命名空間與全新的 `/proc`。執行器會加入 `SYS_ADMIN`、unconfined seccomp 與 AppArmor，以及 `systempaths=unconfined`（Docker Engine 25+）。若缺少最後一個旗標，每個指令都會在啟動前失敗，並顯示 `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`。
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI 參考資料：
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

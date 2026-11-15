@@ -94,3 +94,7 @@ Node yapılandırmasında credential'lara adlarıyla başvurun. Örneğin:
 - [Vectorstores Tab](./vectorstores-tab.md) – Qdrant veya Postgres (pgvector) credential'larını kullanır
 - [Chat Tab](./chat-tab.md) – OpenAI/Google credential'larını kullanır
 - [Contextual Showcase](../reference/contextual-showcase.md) – Dashboard yüzeyleri için kompakt sayfa kılavuzu
+
+## Arama
+
+Kimlik bilgilerini yazarken ada veya türe göre filtrelemek için listenin üzerindeki arama alanını kullanın veya **Ctrl+F** (veya **Cmd+F**) tuşlarına basın. Aramayı temizlemek için **Escape** tuşuna basın.

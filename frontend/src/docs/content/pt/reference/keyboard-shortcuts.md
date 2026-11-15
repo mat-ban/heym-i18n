@@ -106,3 +106,6 @@ Estes atalhos estão disponíveis no diálogo de Histórico de Execuções e no 
 - [Nó Execute](../nodes/execute-node.md) – Chama sub-workflows (`Ctrl + Shift + O`)
 - [Início Rápido](../getting-started/quick-start.md) – Construa seu primeiro workflow
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Os separadores **Credenciais** e **DataTable** funcionam da mesma forma: `Ctrl + F` / `Cmd + F` foca o campo de pesquisa, a lista é filtrada enquanto digita e `Escape` limpa-a.

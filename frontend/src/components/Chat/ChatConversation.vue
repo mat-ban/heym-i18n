@@ -18,14 +18,16 @@ import {
   TriangleAlert,
   Volume2,
   AudioLines,
-  X,
 } from "lucide-vue-next";
 
-import type { Message, QueuedMessage, WorkflowPreview } from "@/types/chat";
+import type { Message, WorkflowPreview } from "@/types/chat";
 import ChatToolCall from "@/components/Chat/ChatToolCall.vue";
 import ChatContextBadge from "@/components/Chat/ChatContextBadge.vue";
+import ChatAttachmentChips from "@/components/Chat/ChatAttachmentChips.vue";
 import ChatContextChips from "@/components/Chat/ChatContextChips.vue";
 import ChatEvalSuiteCards from "@/components/Chat/ChatEvalSuiteCards.vue";
+import ChatMessageEditor from "@/components/Chat/ChatMessageEditor.vue";
+import ChatMessageQueue from "@/components/Chat/ChatMessageQueue.vue";
 import ReadonlyCanvasPreview from "@/components/Canvas/ReadonlyCanvasPreview.vue";
 import Button from "@/components/ui/Button.vue";
 import ClarifyCard from "@/components/ui/ClarifyCard.vue";
@@ -47,15 +49,17 @@ import {
   type ChatContextItem,
   type ExtractedChatContext,
 } from "@/lib/chatContext";
+import { editableMessage, editedMessageContent } from "@/lib/chatMessageEdit";
 import { estimateTokens } from "@/lib/contextEstimator";
 import { markdownToPlainText, renderMarkdown } from "@/lib/markdown";
-import { aiApi } from "@/services/api";
+import { aiApi, getErrorDetail } from "@/services/api";
 import { useChatModelSelection } from "@/composables/useChatModelSelection";
 import { useDictation } from "@/composables/useDictation";
-import { useFileAttachment } from "@/composables/useFileAttachment";
-import type { AttachedFile } from "@/composables/useFileAttachment";
+import { splitAttachmentBlocks } from "@/lib/chatAttachment";
+import { pastedFiles, transferFiles, useFileAttachment } from "@/composables/useFileAttachment";
 import { useQuickPrompts } from "@/composables/useQuickPrompts";
 import { useThinkingWord } from "@/composables/useThinkingWord";
+import { visibleDraft } from "@/lib/chatLive";
 import {
   consumeShowcaseChatDraft,
   SHOWCASE_CHAT_DRAFT_EVENT,
@@ -111,9 +115,10 @@ const {
 });
 
 const copiedMessageId = ref<string | null>(null);
-const queueEditingId = ref<string | null>(null);
-const queueEditingValue = ref("");
-const queueBusyIds = reactive<Set<string>>(new Set());
+// Edit and resend: the user message open in the inline editor.
+const editingMessageId = ref<string | null>(null);
+const editError = ref<string | null>(null);
+const isSavingEdit = ref(false);
 const isFixingTranscription = ref(false);
 // Dictation fills the message box; stopping it asks the model to clean the text up.
 const dictation = useDictation({
@@ -155,8 +160,16 @@ let messagesResizeObserver: ResizeObserver | null = null;
 let chatScrollbarDragStartY = 0;
 let chatScrollbarDragStartScrollTop = 0;
 
-const { attachedFile, attachmentError, attachmentLoading, processFile, clearAttachment } =
-  useFileAttachment();
+const {
+  attachedFiles,
+  attachmentErrors,
+  attachmentLoading,
+  attachmentPayloads,
+  addFiles,
+  removeAttachment,
+  dismissAttachmentErrors,
+  clearAttachments,
+} = useFileAttachment();
 const { editingIndex: qpEditingIndex, editingValue: qpEditingValue, startEdit: qpStartEdit, commitEdit: qpCommitEdit, onEditKeydown: qpOnEditKeydown } =
   useQuickPrompts();
 
@@ -188,10 +201,15 @@ function handleDrop(event: DragEvent): void {
   event.preventDefault();
   dragCounter = 0;
   isDraggingFile.value = false;
-  const file = event.dataTransfer?.files[0];
-  if (file) {
-    void processFile(file);
-  }
+  void addFiles(transferFiles(event.dataTransfer));
+}
+
+/** Pasted files (a screenshot, files copied in a file manager) attach; pasted text stays text. */
+function handlePaste(event: ClipboardEvent): void {
+  const files = pastedFiles(event.clipboardData);
+  if (files.length === 0) return;
+  event.preventDefault();
+  void addFiles(files);
 }
 
 const isShowingConversation = computed(
@@ -214,7 +232,14 @@ const userMessageParts = computed(() => {
 });
 
 function messageText(msg: Message): string {
-  return userMessageParts.value.get(msg.id)?.text ?? msg.content;
+  const text = userMessageParts.value.get(msg.id)?.text ?? msg.content;
+  return msg.role === "user" ? splitAttachmentBlocks(text).text : text;
+}
+
+function messageAttachmentNames(msg: Message): string[] {
+  if (msg.attachmentNames && msg.attachmentNames.length > 0) return msg.attachmentNames;
+  if (msg.role !== "user") return [];
+  return splitAttachmentBlocks(msg.content).blocks.map((block) => block.name);
 }
 
 function messageContextItems(msg: Message): ChatContextItem[] {
@@ -251,6 +276,7 @@ const canSendMessage = computed(() => isShowingConversation.value && !isConversa
 const streamState = computed(() => chatStore.getStreamState(props.conversationId));
 const isThisConvStreaming = computed(() => streamState.value.isStreaming);
 const thinkingWord = useThinkingWord(computed(() => isThisConvStreaming.value && !streamState.value.content));
+const liveDraft = computed((): string => visibleDraft(streamState.value.draft));
 const draftTokens = computed(() => estimateTokens(input.value));
 const contextUsageForBadge = computed(() => {
   const live = streamState.value.contextUsage;
@@ -292,6 +318,7 @@ watch(
   (id) => {
     void loadConversationForRoute(id);
     contextItems.value = [];
+    cancelMessageEdit();
     applyShowcaseDraft();
     applyContextDraft();
     focusInputWhenReady();
@@ -306,7 +333,7 @@ watch(messages, () => {
 });
 
 watch(
-  () => streamState.value.content,
+  () => [streamState.value.content, streamState.value.draft, streamState.value.progress],
   () => {
     if (!isThisConvStreaming.value) return;
     nextTick(() => {
@@ -596,42 +623,46 @@ async function copyMessage(msg: Message): Promise<void> {
   }
 }
 
-function startQueuedEdit(message: QueuedMessage): void {
-  queueEditingId.value = message.id;
-  queueEditingValue.value = message.content;
-  nextTick(() => {
-    (chatRootRef.value?.querySelector("[data-queued-edit]") as HTMLTextAreaElement | null)
-      ?.focus();
-  });
-}
-
-function cancelQueuedEdit(): void {
-  queueEditingId.value = null;
-  queueEditingValue.value = "";
-}
-
-async function saveQueuedEdit(message: QueuedMessage): Promise<void> {
-  const nextContent = queueEditingValue.value.trim();
-  if (!nextContent || queueBusyIds.has(message.id)) return;
-  queueBusyIds.add(message.id);
-  try {
-    await chatStore.updateQueuedMessage(props.conversationId, message.id, nextContent);
-    cancelQueuedEdit();
-  } finally {
-    queueBusyIds.delete(message.id);
+const editBlockedReason = computed((): string | null => {
+  if (isThisConvStreaming.value) return "Wait for the reply to finish, or stop it, to send the edit.";
+  if (!selectedCredentialId.value || !selectedModel.value || modelsLoadFailed.value) {
+    return "Choose a model above to send the edit.";
   }
+  return null;
+});
+
+function startMessageEdit(msg: Message): void {
+  if (msg.role !== "user" || isThisConvStreaming.value) return;
+  editingMessageId.value = msg.id;
+  editError.value = null;
 }
 
-async function deleteQueuedMessage(message: QueuedMessage): Promise<void> {
-  if (queueBusyIds.has(message.id)) return;
-  queueBusyIds.add(message.id);
+function cancelMessageEdit(): void {
+  editingMessageId.value = null;
+  editError.value = null;
+}
+
+async function saveMessageEdit(msg: Message, text: string): Promise<void> {
+  const trimmed = text.trim();
+  if (!trimmed || isSavingEdit.value || editBlockedReason.value) return;
+  if (!selectedCredentialId.value || !selectedModel.value) return;
+  isSavingEdit.value = true;
+  editError.value = null;
   try {
-    await chatStore.deleteQueuedMessage(props.conversationId, message.id);
-    if (queueEditingId.value === message.id) {
-      cancelQueuedEdit();
-    }
+    await chatStore.editMessage(
+      props.conversationId,
+      msg.id,
+      editedMessageContent(msg.content, trimmed),
+      selectedCredentialId.value,
+      selectedModel.value,
+      messageAttachmentNames(msg),
+    );
+    editingMessageId.value = null;
+    focusInputWhenReady();
+  } catch (error: unknown) {
+    editError.value = getErrorDetail(error, "The edited message could not be sent.");
   } finally {
-    queueBusyIds.delete(message.id);
+    isSavingEdit.value = false;
   }
 }
 
@@ -688,10 +719,9 @@ function openFilePicker(): void {
 
 async function handleFileInputChange(event: Event): Promise<void> {
   const target = event.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (!file) return;
-  await processFile(file);
+  const files = Array.from(target.files ?? []);
   target.value = "";
+  await addFiles(files);
 }
 
 async function fixTranscriptionIfNeeded(): Promise<void> {
@@ -760,7 +790,6 @@ async function send(): Promise<void> {
     !selectedCredentialId.value ||
     !selectedModel.value ||
     modelsLoadFailed.value ||
-    attachmentError.value !== null ||
     attachmentLoading.value
   ) {
     return;
@@ -769,20 +798,14 @@ async function send(): Promise<void> {
   resetChatInputHeight();
   const content = appendChatContext(text, contextItems.value);
   contextItems.value = [];
-  const payloadAttachment: AttachedFile | null = attachedFile.value;
-  clearAttachment();
+  const payloads = attachmentPayloads.value;
+  clearAttachments();
   await chatStore.sendMessage(
     props.conversationId,
     content,
     selectedCredentialId.value,
     selectedModel.value,
-    payloadAttachment
-      ? {
-          name: payloadAttachment.name,
-          kind: payloadAttachment.kind,
-          content: payloadAttachment.content,
-        }
-      : null,
+    payloads,
   );
   focusInputWhenReady();
 }
@@ -832,7 +855,7 @@ onUnmounted(() => {
         <div class="flex flex-col items-center gap-2 text-primary/70">
           <Paperclip class="w-10 h-10" />
           <p class="text-sm font-medium">
-            {{ $t('chat.dropFileToAttach') }}
+            {{ $t('chat.dropFilesToAttach') }}
           </p>
         </div>
       </div>
@@ -980,56 +1003,101 @@ onUnmounted(() => {
             <Bot class="w-4 h-4 text-primary" />
           </div>
 
+          <ChatMessageEditor
+            v-if="msg.role === 'user' && editingMessageId === msg.id"
+            :text="editableMessage(msg.content).text"
+            :items="editableMessage(msg.content).items"
+            :attachment-names="messageAttachmentNames(msg)"
+            :sending="isSavingEdit"
+            :error="editError"
+            :blocked-reason="editBlockedReason"
+            @save="(text: string) => saveMessageEdit(msg, text)"
+            @cancel="cancelMessageEdit"
+          />
           <div
+            v-else
             :class="[
-              'group/message relative min-w-0 rounded-2xl px-4 py-2.5 pr-[4.25rem] text-sm leading-relaxed break-words',
+              'group/message relative min-w-0 rounded-2xl px-4 py-2.5 text-sm leading-relaxed break-words',
               msg.workflowPreview ? 'w-[min(92%,920px)] max-w-[920px]' : 'max-w-[88%] sm:max-w-[72%]',
               msg.role === 'user'
-                ? 'bg-primary text-primary-foreground rounded-tr-sm'
-                : 'bg-muted text-foreground rounded-tl-sm'
+                ? 'bg-primary text-primary-foreground rounded-tr-sm pr-[6.25rem] sm:pr-4'
+                : 'bg-muted text-foreground rounded-tl-sm pr-[4.25rem]'
             ]"
           >
-            <button
-              type="button"
-              class="absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-lg text-current opacity-60 transition-opacity hover:bg-black/10 sm:opacity-0 sm:group-hover/message:opacity-70 hover:opacity-100"
-              :title="copiedMessageId === msg.id ? 'Copied' : 'Copy'"
-              :aria-label="copiedMessageId === msg.id ? 'Copied' : 'Copy message'"
-              @click="copyMessage(msg)"
+            <!-- On wider screens a question's actions sit outside the bubble, to its left,
+                 so a short question keeps a short bubble. -->
+            <div
+              :class="[
+                'absolute right-1.5 top-1.5 flex items-center',
+                msg.role === 'user'
+                  ? 'sm:right-full sm:pr-1.5 sm:text-muted-foreground'
+                  : '',
+              ]"
+              data-testid="chat-message-actions"
             >
-              <Check
-                v-if="copiedMessageId === msg.id"
-                class="w-3.5 h-3.5"
-              />
-              <Copy
-                v-else
-                class="w-3.5 h-3.5"
-              />
-            </button>
-            <button
-              type="button"
-              class="absolute right-9 top-1.5 flex h-7 w-7 items-center justify-center rounded-lg text-current opacity-60 transition-opacity hover:bg-black/10 sm:opacity-0 sm:group-hover/message:opacity-70 hover:opacity-100"
-              :title="tts.playingId.value === msg.id ? 'Stop' : 'Read aloud'"
-              :aria-label="tts.playingId.value === msg.id ? 'Stop reading' : 'Read message aloud'"
-              @click="readMessageAloud(msg)"
-            >
-              <Square
-                v-if="tts.playingId.value === msg.id"
-                class="w-3.5 h-3.5"
-              />
-              <Volume2
-                v-else
-                class="w-3.5 h-3.5"
-              />
-            </button>
+              <button
+                type="button"
+                class="flex h-7 w-7 items-center justify-center rounded-lg text-current opacity-60 transition-opacity hover:bg-black/10 sm:opacity-0 sm:group-hover/message:opacity-70 hover:opacity-100"
+                :title="tts.playingId.value === msg.id ? 'Stop' : 'Read aloud'"
+                :aria-label="tts.playingId.value === msg.id ? 'Stop reading' : 'Read message aloud'"
+                @click="readMessageAloud(msg)"
+              >
+                <Square
+                  v-if="tts.playingId.value === msg.id"
+                  class="w-3.5 h-3.5"
+                />
+                <Volume2
+                  v-else
+                  class="w-3.5 h-3.5"
+                />
+              </button>
+              <button
+                v-if="msg.role === 'user'"
+                type="button"
+                class="flex h-7 w-7 items-center justify-center rounded-lg text-current opacity-60 transition-opacity hover:bg-black/10 hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-30 sm:opacity-0 sm:group-hover/message:opacity-70 sm:disabled:opacity-0 sm:group-hover/message:disabled:opacity-30"
+                :title="isThisConvStreaming ? 'Wait for the reply to finish to edit' : 'Edit'"
+                aria-label="Edit message"
+                data-testid="chat-message-edit"
+                :disabled="isThisConvStreaming"
+                @click="startMessageEdit(msg)"
+              >
+                <Pencil class="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                class="flex h-7 w-7 items-center justify-center rounded-lg text-current opacity-60 transition-opacity hover:bg-black/10 sm:opacity-0 sm:group-hover/message:opacity-70 hover:opacity-100"
+                :title="copiedMessageId === msg.id ? 'Copied' : 'Copy'"
+                :aria-label="copiedMessageId === msg.id ? 'Copied' : 'Copy message'"
+                @click="copyMessage(msg)"
+              >
+                <Check
+                  v-if="copiedMessageId === msg.id"
+                  class="w-3.5 h-3.5"
+                />
+                <Copy
+                  v-else
+                  class="w-3.5 h-3.5"
+                />
+              </button>
+            </div>
             <div
               v-if="msg.role === 'assistant' && msg.tool_calls && msg.tool_calls.length > 0"
               class="mb-2 flex flex-col gap-1.5"
             >
-              <ChatToolCall
+              <template
                 v-for="tc in msg.tool_calls"
                 :key="tc.id"
-                :tool-call="tc"
-              />
+              >
+                <!-- eslint-disable vue/no-v-html -->
+                <div
+                  v-if="tc.narration"
+                  class="chat-markdown my-1"
+                  data-testid="chat-tool-narration"
+                  v-html="renderMarkdown(tc.narration)"
+                />
+                <!-- eslint-enable vue/no-v-html -->
+                <ChatToolCall :tool-call="tc" />
+              </template>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -1125,11 +1193,17 @@ onUnmounted(() => {
               :suites="msg.evalSuites"
             />
             <div
-              v-if="msg.attachmentName"
-              class="mt-1.5 flex items-center gap-1 text-xs opacity-70"
+              v-if="messageAttachmentNames(msg).length > 0"
+              class="mt-1.5 flex flex-col gap-0.5 text-xs opacity-70"
             >
-              <Paperclip class="w-3 h-3 shrink-0" />
-              <span class="truncate">{{ msg.attachmentName }}</span>
+              <div
+                v-for="(name, index) in messageAttachmentNames(msg)"
+                :key="index"
+                class="flex min-w-0 items-center gap-1"
+              >
+                <Paperclip class="w-3 h-3 shrink-0" />
+                <span class="truncate">{{ name }}</span>
+              </div>
             </div>
           </div>
 
@@ -1159,11 +1233,20 @@ onUnmounted(() => {
               v-if="streamState.toolCalls.length > 0"
               class="mb-3 flex flex-col gap-1.5"
             >
-              <ChatToolCall
+              <template
                 v-for="tc in streamState.toolCalls"
                 :key="tc.id"
-                :tool-call="tc"
-              />
+              >
+                <!-- eslint-disable vue/no-v-html -->
+                <div
+                  v-if="tc.narration"
+                  class="chat-markdown my-1"
+                  data-testid="chat-tool-narration"
+                  v-html="renderMarkdown(tc.narration)"
+                />
+                <!-- eslint-enable vue/no-v-html -->
+                <ChatToolCall :tool-call="tc" />
+              </template>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -1172,12 +1255,23 @@ onUnmounted(() => {
               @click="handleMarkdownImageClick"
               v-html="renderMarkdown(streamState.content)"
             />
+            <div
+              v-else-if="liveDraft"
+              class="chat-markdown"
+              data-testid="chat-stream-draft"
+              v-html="renderMarkdown(liveDraft)"
+            />
             <!-- eslint-enable vue/no-v-html -->
             <div
-              v-if="!streamState.content && streamState.images.length === 0"
+              v-if="!streamState.content && streamState.images.length === 0 && (!liveDraft || streamState.progress)"
               class="flex items-center gap-2 text-muted-foreground"
             >
-              <span v-if="streamState.toolCalls.length > 0">Preparing response...</span>
+              <span
+                v-if="streamState.progress"
+                class="min-w-0 truncate"
+                data-testid="chat-stream-progress"
+              >{{ streamState.progress }}...</span>
+              <span v-else-if="streamState.toolCalls.length > 0">Preparing response...</span>
               <Transition
                 v-else
                 mode="out-in"
@@ -1319,109 +1413,20 @@ onUnmounted(() => {
       <input
         ref="fileInputRef"
         type="file"
-        accept=".txt,.csv,.json,.md,.py,.ts,.js,.html,.xml,.yaml,.yml,.log,.jpg,.jpeg,.png,.gif,.webp,.pdf,.zip"
+        multiple
         class="hidden"
         @change="handleFileInputChange"
       >
       <div
-        v-if="queuedMessages.length > 0 || attachedFile || attachmentError || contextItems.length > 0"
+        v-if="queuedMessages.length > 0 || attachedFiles.length > 0 || attachmentErrors.length > 0 || contextItems.length > 0"
         class="mb-1.5 flex flex-col gap-1.5 px-1"
       >
-        <div
+        <ChatMessageQueue
           v-if="queuedMessages.length > 0"
-          class="w-full min-w-0 rounded-lg border border-border/50 bg-muted/35 px-2.5 py-2"
-        >
-          <p class="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-            Queue
-          </p>
-          <ul class="flex max-h-24 flex-col divide-y divide-border/40 overflow-y-auto">
-            <li
-              v-for="queued in queuedMessages"
-              :key="queued.id"
-              class="group/queue relative min-w-0 py-1.5 pr-[4.5rem] first:pt-0 last:pb-0"
-            >
-              <template v-if="queueEditingId === queued.id">
-                <div class="mb-1 flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
-                  <span
-                    v-if="queueBusyIds.has(queued.id)"
-                    class="uppercase tracking-wide"
-                  >
-                    Saving...
-                  </span>
-                </div>
-                <textarea
-                  v-model="queueEditingValue"
-                  data-queued-edit
-                  rows="2"
-                  class="min-h-16 w-full resize-y rounded-lg border border-border/60 bg-background/80 px-2 py-1.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary/40"
-                  :disabled="queueBusyIds.has(queued.id)"
-                  @keydown.enter.exact.prevent="saveQueuedEdit(queued)"
-                  @keydown.esc.prevent="cancelQueuedEdit"
-                />
-                <div class="mt-2 flex justify-end gap-1.5">
-                  <button
-                    type="button"
-                    class="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
-                    :title="$t('chat.cancelEdit')"
-                    :disabled="queueBusyIds.has(queued.id)"
-                    @click="cancelQueuedEdit"
-                  >
-                    <X class="h-3.5 w-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    class="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
-                    :title="$t('chat.saveQueuedMessage')"
-                    :disabled="!queueEditingValue.trim() || queueBusyIds.has(queued.id)"
-                    @click="saveQueuedEdit(queued)"
-                  >
-                    <Check class="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </template>
-              <template v-else>
-                <div class="flex min-w-0 items-start gap-2 text-sm text-foreground">
-                  <span
-                    class="mt-[3px] shrink-0 text-xs leading-none text-muted-foreground"
-                    aria-hidden="true"
-                  >
-                    •
-                  </span>
-                  <div class="min-w-0 flex-1">
-                    <p class="min-w-0 truncate leading-5">
-                      {{ extractChatContext(queued.content).text }}
-                    </p>
-                    <div
-                      v-if="queued.attachment_name"
-                      class="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground"
-                    >
-                      <Paperclip class="h-3 w-3 shrink-0" />
-                      <span class="truncate">{{ queued.attachment_name }}</span>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  class="absolute right-8 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-40"
-                  :title="$t('chat.editQueuedMessage')"
-                  :disabled="queueBusyIds.has(queued.id)"
-                  @click="startQueuedEdit(queued)"
-                >
-                  <Pencil class="h-3.5 w-3.5" />
-                </button>
-                <button
-                  type="button"
-                  class="absolute right-1.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-40"
-                  :title="$t('chat.deleteQueuedMessage')"
-                  :disabled="queueBusyIds.has(queued.id)"
-                  @click="deleteQueuedMessage(queued)"
-                >
-                  <X class="h-3.5 w-3.5" />
-                </button>
-              </template>
-            </li>
-          </ul>
-        </div>
+:key="conversationId"
+          :conversation-id="conversationId"
+          :messages="queuedMessages"
+        />
 
         <ChatContextChips
           v-if="contextItems.length > 0"
@@ -1430,33 +1435,13 @@ onUnmounted(() => {
           @remove="removeContextItem"
         />
 
-        <div
-          v-if="attachedFile || attachmentError"
-          class="flex min-w-0 items-center justify-end gap-2"
-        >
-          <div
-            v-if="attachedFile"
-            class="flex items-center gap-1.5 rounded-lg bg-muted/60 border border-border/40 px-2.5 py-1 text-xs text-foreground max-w-xs"
-          >
-            <Paperclip class="w-3 h-3 shrink-0 text-muted-foreground" />
-            <span class="truncate">{{ attachedFile.name }}</span>
-            <span class="text-muted-foreground shrink-0">· {{ attachedFile.sizeKb }} KB</span>
-            <button
-              type="button"
-              class="shrink-0 ml-0.5 rounded hover:bg-muted/80 p-0.5"
-              aria-label="Remove attachment"
-              @click="clearAttachment"
-            >
-              <X class="w-3 h-3" />
-            </button>
-          </div>
-          <p
-            v-if="attachmentError"
-            class="text-xs text-destructive"
-          >
-            {{ attachmentError }}
-          </p>
-        </div>
+        <ChatAttachmentChips
+          class="items-end"
+          :files="attachedFiles"
+          :errors="attachmentErrors"
+          @remove="removeAttachment"
+          @dismiss-errors="dismissAttachmentErrors"
+        />
       </div>
       <form
         class="flex items-center gap-0.5 sm:gap-2 rounded-2xl bg-muted/40 border border-border/40 px-1.5 sm:px-3 py-1.5 sm:py-2 min-h-[44px] sm:min-h-[52px] focus-within:border-primary/30 focus-within:bg-muted/50 transition-colors"
@@ -1465,19 +1450,12 @@ onUnmounted(() => {
         <button
           type="button"
           class="shrink-0 h-7 w-7 sm:h-9 sm:w-9 min-h-7 min-w-7 sm:min-h-[36px] sm:min-w-[36px] rounded-lg sm:rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 disabled:opacity-50 disabled:pointer-events-none touch-manipulation transition-colors"
-          :disabled="attachmentLoading"
-          :title="$t('chat.attachFile')"
-          :aria-label="$t('chat.attachFile')"
+:disabled="attachmentLoading"
+          :title="$t('chat.attachFiles')"
+          :aria-label="$t('chat.attachFiles')"
           @click="openFilePicker"
         >
-          <Loader2
-            v-if="attachmentLoading"
-            class="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin"
-          />
-          <Paperclip
-            v-else
-            class="w-3.5 h-3.5 sm:w-4 sm:h-4"
-          />
+          <Paperclip class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
         <textarea
           ref="chatInputRef"
@@ -1487,6 +1465,7 @@ onUnmounted(() => {
           class="chat-input flex-1 min-w-0 min-h-[36px] sm:min-h-[44px] max-h-40 resize-none bg-transparent border-0 px-0.5 sm:px-1 py-2 sm:py-3 text-sm text-left focus:outline-none focus:ring-0 disabled:opacity-50 touch-manipulation placeholder:text-muted-foreground leading-5"
           :disabled="!canSendMessage || !selectedCredentialId || !selectedModel || modelsLoadFailed"
           @keydown="onKeydown"
+          @paste="handlePaste"
           @input="resizeChatInput"
         />
         <Tooltip
@@ -1539,7 +1518,7 @@ onUnmounted(() => {
           variant="gradient"
           size="icon"
           aria-label="Send message"
-          :disabled="!input.trim() || !canSendMessage || !selectedCredentialId || !selectedModel || modelsLoadFailed || !!attachmentError || attachmentLoading"
+          :disabled="!input.trim() || !canSendMessage || !selectedCredentialId || !selectedModel || modelsLoadFailed || attachmentLoading"
           class="shrink-0 !h-7 !w-7 sm:!h-9 sm:!w-9 !min-h-7 !min-w-7 sm:!min-h-[36px] sm:!min-w-[36px] rounded-lg sm:rounded-xl touch-manipulation"
         >
           <Send class="w-3.5 h-3.5 sm:w-4 sm:h-4" />

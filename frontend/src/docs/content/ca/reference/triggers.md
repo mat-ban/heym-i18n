@@ -12,7 +12,7 @@ Nodes d'inici (sense arestes entrants) que inicien l'execució:
 | [Cron](../nodes/cron-node.md) | S'executa segons una planificació (expressió cron, p. ex. `0 * * * *` per cada hora). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | S'inicia quan Telegram envia una actualització de webhook del bot a la URL de webhook específica del Node. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | S'inicia quan Discord envia un webhook de l'API d'Interactions a l'endpoint específic del Node. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Consulta periòdicament una bústia IMAP i s'inicia una vegada per cada correu electrònic nou detectat. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Consulta periòdicament una bústia IMAP i s'inicia una vegada per cada correu electrònic nou detectat. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | S'inicia quan Heym publica un esdeveniment de plataforma. Els esdeveniments d'una mateixa finestra de despatx arriben junts com un array. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Obre una connexió de client sortint a un socket extern i s'inicia amb els esdeveniments de socket seleccionats. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Genera una URL de càrrega d'un sol ús i s'inicia quan un sol·licitant publica un fitxer multipart gran. |

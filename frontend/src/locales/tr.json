@@ -84,7 +84,8 @@
     "dropFileOrClick": "Bir dosyayı buraya bırakın veya seçmek için tıklayın",
     "removeFile": "Dosyayı kaldır",
     "chooseFileFor": "{label} için bir dosya seçin",
-    "new": "Yeni"
+    "new": "Yeni",
+    "clearSearch": "Aramayı temizle"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Etkinleştir",
     "disablePlugin": "Devre Dışı Bırak",
     "uninstallPlugin": "Kaldır",
-    "pluginOperationFailed": "Eklenti işlemi başarısız oldu"
+    "pluginOperationFailed": "Eklenti işlemi başarısız oldu",
+    "users": "Kullanıcılar",
+    "encryption": "Şifreleme"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Trace ID'yi kopyala",
     "openTrace": "Trace'i aç",
     "message": "Mesaj",
-    "emptyReply": "Boş yanıt."
+    "emptyReply": "Boş yanıt.",
+    "timeRange3h": "Son 3 saat",
+    "timeRange6h": "Son 6 saat"
   },
   "tables": {
     "title": "DataTables",
@@ -1282,7 +1287,9 @@
     "browseAll": "Tümüne göz atın →",
     "askAi": "AI'ya Sor",
     "dropToImport": "İçe aktarmak için JSON veya ZIP bırakın",
-    "noWorkflowsMatch": "Bu filtreyle eşleşen workflow yok."
+    "noWorkflowsMatch": "Bu filtreyle eşleşen workflow yok.",
+    "noWorkflowsMatchAll": "Farklı bir başlık, açıklama veya klasör adı deneyin.",
+    "noWorkflowsMatchFilter": "Farklı bir başlık, açıklama, klasör adı veya durum filtresi deneyin."
   },
   "schedules": {
     "title": "Zamanlamalar",
@@ -1477,7 +1484,9 @@
     "saveQueuedMessage": "Kuyruktaki mesajı kaydet",
     "editQueuedMessage": "Kuyruktaki mesajı düzenle",
     "subtitle": "Workflow'ları çalıştırın ve soru sorun",
-    "modelsLoadFailedDisabled": "Bu kimlik bilgisinin model listesi yüklenemedi. Bir model alınabilene kadar Chat devre dışı kalır."
+    "modelsLoadFailedDisabled": "Bu kimlik bilgisinin model listesi yüklenemedi. Bir model alınabilene kadar Chat devre dışı kalır.",
+    "dropFilesToAttach": "Eklemek için dosyaları bırakın",
+    "attachFiles": "Dosyaları ekle"
   },
   "teams": {
     "title": "Teams",
@@ -1868,7 +1877,8 @@
     "model": "Model",
     "searchModels": "Model ara…",
     "color": "Renk",
-    "noColor": "Renk yok"
+    "noColor": "Renk yok",
+    "details": "Ayrıntılar"
   },
   "portal": {
     "loadingPortal": "Portal yükleniyor...",
@@ -2197,7 +2207,8 @@
       "actions": "İşlemler",
       "failedToLoadWidget": "Widget yüklenemedi",
       "failedToUpdateCheckbox": "Onay kutusu güncellenemedi",
-      "refreshDashboard": "Dashboard'u yenile"
+      "refreshDashboard": "Dashboard'u yenile",
+      "revertPrevious": "Öncekine geri dön"
     },
     "hitl": {
       "previousReview": "Önceki inceleme",

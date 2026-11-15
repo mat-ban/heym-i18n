@@ -26,6 +26,8 @@ Düğüm ayrıca özel depoları klonlamak, çalışma dalını push etmek ve ta
 
 Docker dağıtımlarında Heym, Codex'i aynı Heym imajından bir kardeş container içinde çalıştırır (ayrı bir GHCR imajı değil). Bu container yalnızca Codex çalışma alanı birimini bağlar ve Codex'in kendi bubblewrap sandbox'ının namespace'ler ve yeni bir `/proc` oluşturmasına izin verir. Çalıştırıcı `SYS_ADMIN`, kısıtlanmamış seccomp ve AppArmor ile `systempaths=unconfined` (Docker Engine 25+) ekler. Son bayrak olmadan, her komut başlatılmadan önce `bwrap: Can't mount proc on /newroot/proc: Operation not permitted` hatasıyla başarısız olur.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI referansları:
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

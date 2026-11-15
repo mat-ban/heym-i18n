@@ -83,3 +83,7 @@ Se [Expression DSL](../reference/expression-dsl.md) for at referere til værdier
 - [Vektorlagre-fane](./vectorstores-tab.md) – Bruger Qdrant- eller Postgres (pgvector)-legitimationsoplysninger
 - [Chat-fane](./chat-tab.md) – Bruger OpenAI/Google-legitimationsoplysninger
 - [Kontekstuel visning](../reference/contextual-showcase.md) – Kompakt sidevejledning til dashboard-overflader
+
+## Søgning
+
+Brug søgefeltet over listen, eller tryk på **Ctrl+F** (eller **Cmd+F**), for at filtrere legitimationsoplysninger efter navn eller type, mens du skriver. Tryk på **Escape** for at rydde søgningen.

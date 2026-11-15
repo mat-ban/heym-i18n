@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap` 凭证，包含服务器、登录信息、邮箱和 SSL 设置 |
 | `pollIntervalMinutes` | Integer | Heym 检查邮箱中新邮件的频率 |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## 设置指南
 
@@ -62,6 +63,8 @@
 | `$nodeLabel.email.text` | 纯文本正文 |
 | `$nodeLabel.email.html` | HTML 正文 |
 | `$nodeLabel.email.attachments` | 附件元数据数组（`filename`、`content_type`、`size_bytes`） |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | 解码后的标头对象 |
 | `$nodeLabel.email.uid` | 用于去重或日志记录的 IMAP UID |
 | `$nodeLabel.triggered_by` | Trigger 来源标签（`"imap"`） |

@@ -68,3 +68,5 @@ Dieselbe Regel wie bei [Output](./output-node.md): Platziere diesen Knoten nicht
 - [Output](./output-node.md) – Nachrichten- oder schema-basierte Antwort mit `result`-Wrapping
 - [Webhooks](../reference/webhooks.md) – Execute-Endpoint, Request-Methoden und Antworten
 - [Knotentypen](../reference/node-types.md) – Alle Knotentypen
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

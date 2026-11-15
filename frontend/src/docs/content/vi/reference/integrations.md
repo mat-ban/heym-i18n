@@ -19,7 +19,7 @@ Một số node tích hợp **không** yêu cầu credentials. [WebSocket Trigge
 | **Linear** | [Node Linear](../nodes/linear-node.md) | `api_key`, hoặc `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Node Sentry](../nodes/sentry-node.md) | `api_token`, tùy chọn `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, tùy chọn `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, tùy chọn `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | một credential decision model, cùng các tùy chọn model tham chiếu tới các credentials khác của bạn |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Một số node tích hợp **không** yêu cầu credentials. [WebSocket Trigge
 | **Grist** | [Node Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Node Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **Google Drive** | [Node Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 consent (phạm vi Drive đầy đủ) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Node BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **Supabase** | [Node Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, tùy chọn `supabase_schema` |
 | **ClickHouse** | [Node ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -923,3 +924,6 @@ lựa chọn. Nó chỉ lưu trữ các tham chiếu, không bao giờ lưu key 
 
 Tên tùy chọn là những gì decision model lựa chọn, vì vậy chúng phải khác nhau. Một
 tùy chọn không thể trỏ đến một Model Router khác.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

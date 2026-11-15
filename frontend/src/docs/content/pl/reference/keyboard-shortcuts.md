@@ -107,3 +107,6 @@ Te skróty są dostępne w oknie dialogowym Historii wykonań oraz w panelu Wyko
 - [Szybki start](../getting-started/quick-start.md) – Zbuduj pierwszy workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Karty **Dane logowania** i **DataTable** działają w ten sam sposób: `Ctrl + F` / `Cmd + F` ustawia kursor w polu wyszukiwania, lista zawęża się w trakcie pisania, a `Escape` czyści filtr.

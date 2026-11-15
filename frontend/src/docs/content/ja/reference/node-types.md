@@ -69,6 +69,7 @@ Heym は Workflow を構築するためのさまざまなノードタイプを�
 | [Linear](../nodes/linear-node.md) | GraphQLを通じて、Linearチーム、プロジェクト、Issue、Workflowステート、コメントを管理します | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | OAuth2経由でGoogle Sheetsの読み書きを行います | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | OAuth2経由でGoogle Driveファイルの一覧表示、ダウンロード、更新、削除を行います | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | 空き情報を読み取り、Meet 招待を作成、更新、削除 | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | BigQueryでSQLクエリを実行し、行を挿入します | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | PostgRESTを通じてSupabaseテーブルのクエリと変更を行います | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouseに対してSQL、CRUD、カウント操作を実行します | 1 | 1 |

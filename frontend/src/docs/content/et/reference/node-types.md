@@ -68,6 +68,7 @@ Kõigi sisestuspunktide kohta vt [Triggerid](./triggers.md).
 | [Linear](../nodes/linear-node.md) | Linear tiimide, projektide, probleemide, workflow' olekute ja kommentaaride haldamine GraphQL kaudu | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheetsi lugemine/kirjutamine OAuth2 kaudu | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive'i failide loetlemine, allalaadimine, uuendamine ja kustutamine OAuth2 kaudu | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Saadavuse lugemine ning Meeti kutsete loomine, uuendamine või kustutamine | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | SQL-päringute käivitamine ja ridade lisamine BigQuery's | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Supabase'i tabelite pärimine ja muutmine PostgREST kaudu | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | SQL-, CRUD- ja loendusoperatsioonide käivitamine ClickHouse'i vastu | 1 | 1 |

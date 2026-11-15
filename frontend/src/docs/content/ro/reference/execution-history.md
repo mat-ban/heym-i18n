@@ -176,3 +176,7 @@ Dialogurile de istoric din canvas și dashboard păstrează controalele de rular
 - [Edit History](./edit-history.md) – Controlul versiunilor pentru salvările de workflow (revert, diff)
 - [Quick Start](../getting-started/quick-start.md) – Construiți și rulați primul dumneavoastră workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Creați și gestionați workflow-uri
+
+## Related
+
+- [Operations Runbook (L1): Coadă de așteptare](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Distincția între execuțiile în coadă, reținute, întrerupte și recuperate înainte de reluare

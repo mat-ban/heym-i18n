@@ -83,3 +83,7 @@ Katso [Expression DSL](../reference/expression-dsl.md) saadaksesi tietoa tunnist
 - [Vektorivarastot-välilehti](./vectorstores-tab.md) – Käyttää Qdrant- tai Postgres (pgvector) -tunnistetietoja
 - [Keskustelu-välilehti](./chat-tab.md) – Käyttää OpenAI/Google-tunnistetietoja
 - [Kontekstuaalinen esittely](../reference/contextual-showcase.md) – Tiivis sivun opas dashboardin käyttöliittymälle
+
+## Haku
+
+Käytä luettelon yläpuolella olevaa hakukenttää tai paina **Ctrl+F** (tai **Cmd+F**) suodattaaksesi tunnistetietoja nimen tai tyypin mukaan kirjoittaessasi. Tyhjennä haku painamalla **Escape**.

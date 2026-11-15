@@ -48,6 +48,7 @@ I Agent-läget gör rutan **YOLO-läge** under meddelandefältet att assistenten
 - Skriv in önskad begäran i inmatningsfältet (t.ex. "Skapa en workflow som tar emot användarinmatning och skickar den till en LLM")
 - Tryck **Enter** för att skicka (Shift+Enter för ny rad)
 - AI:n strömmar sitt svar. I **Agent**-läget, om svaret innehåller en workflow i ett \`\`\`json-kodblock, tolkas det automatiskt och tillämpas på canvasen. I **Fråga**-läget ändras aldrig canvasen.
+- Medan arbetsflödets JSON strömmas namnger en rad under svaret arbetsflödet och de noder som skrivits hittills, till exempel `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Använd **Rensa** för att återställa konversationen
 - Håll muspekaren över ett meddelande och klicka på dess kopieringsikon för att kopiera texten det visar, inklusive eventuell workflow-JSON
 - Dra i linjen ovanför meddelanderutan för att göra rutan högre. Inmatningsområdet kan växa till 60 % av panelen och återgår till sin standardhöjd när sidan laddas om

@@ -145,7 +145,9 @@ class OAuthEndpointFlowTests(unittest.IsolatedAsyncioTestCase):
             redirect_uris=["https://client.example/callback"],
             is_confidential=False,
         )
-        user = SimpleNamespace(id=uuid.uuid4(), email="user@example.com", hashed_password="hash")
+        user = SimpleNamespace(
+            id=uuid.uuid4(), email="user@example.com", hashed_password="hash", is_active=True
+        )
         verifier = "correct-horse-battery-staple"
         challenge = _pkce_challenge(verifier)
 
@@ -156,14 +158,19 @@ class OAuthEndpointFlowTests(unittest.IsolatedAsyncioTestCase):
         db.execute = AsyncMock(
             side_effect=[
                 _query_result(client),
-                _query_result(user),
-                # The consent form now consults the SSO settings before accepting a password.
+                # The consent form signs in through password_sign_in(), which reads the SSO
+                # settings before it looks the account up.
                 _query_result(_sso_settings_row()),
+                _query_result(user),
             ]
         )
 
         authorize_response = None
-        with patch("app.api.oauth.verify_password", return_value=True):
+        with (
+            patch("app.api.auth.verify_password", return_value=True),
+            patch("app.api.auth.login_limiter") as limiter,
+        ):
+            limiter.is_allowed.return_value = (True, 0)
             authorize_response = await authorize_post(
                 request=_request(
                     path="/authorize",
@@ -276,7 +283,7 @@ class OAuthRegistrationTests(unittest.IsolatedAsyncioTestCase):
 class MCPBearerTokenLookupTests(unittest.IsolatedAsyncioTestCase):
     async def test_default_mcp_auth_queries_only_the_digest(self) -> None:
         raw_token = "legacy-access-token"
-        user = SimpleNamespace(id=uuid.uuid4())
+        user = SimpleNamespace(id=uuid.uuid4(), is_active=True)
         token_record = SimpleNamespace(user_id=user.id)
         db = AsyncMock()
         db.execute = AsyncMock(
@@ -306,7 +313,7 @@ class MCPBearerTokenLookupTests(unittest.IsolatedAsyncioTestCase):
     async def test_named_mcp_server_auth_queries_only_the_digest(self) -> None:
         raw_token = "legacy-server-token"
         server_id = uuid.uuid4()
-        user = SimpleNamespace(id=uuid.uuid4())
+        user = SimpleNamespace(id=uuid.uuid4(), is_active=True)
         server = SimpleNamespace(id=server_id, user_id=user.id)
         token_record = SimpleNamespace(user_id=user.id)
         db = AsyncMock()
@@ -516,7 +523,9 @@ class TestRedirectUriEndpointRegression(unittest.IsolatedAsyncioTestCase):
             redirect_uris=["javascript:alert(1)"],  # registered before fix
             is_confidential=False,
         )
-        user = SimpleNamespace(id=uuid.uuid4(), email="user@example.com", hashed_password="hash")
+        user = SimpleNamespace(
+            id=uuid.uuid4(), email="user@example.com", hashed_password="hash", is_active=True
+        )
         db = AsyncMock()
         db.add = MagicMock()
         db.flush = AsyncMock()
@@ -527,7 +536,7 @@ class TestRedirectUriEndpointRegression(unittest.IsolatedAsyncioTestCase):
             ]
         )
 
-        with patch("app.api.oauth.verify_password", return_value=True):
+        with patch("app.api.auth.verify_password", return_value=True):
             with self.assertRaises(HTTPException) as ctx:
                 await authorize_post(
                     request=_request(

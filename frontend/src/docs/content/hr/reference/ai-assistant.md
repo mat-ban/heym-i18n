@@ -48,6 +48,7 @@ U Agent modu, **YOLO mode** okvir ispod polja za poruke omogućuje asistentu da 
 - Upisujte svoj zahtjev u unos (npr. "Kreirajte workflow koji uzima korisnički unos i šalje ga LLM-u")
 - Pritisnite **Enter** za slanje (Shift+Enter za novi red)
 - AI streama svoj odgovor. U **Agent** modu, ako odgovor uključuje workflow u \`\`\`json kod bloku, automatski se analizira i primjenjuje na platnu. U **Ask** modu platno nikada nije modificirano.
+- Dok se prenosi JSON radnog toka, redak ispod odgovora navodi naziv radnog toka i do sada zapisane čvorove, na primjer `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Koristite **Clear** za resetiranje razgovora
 - Pređite mišem preko poruke i kliknite na ikonu kopiranja kako biste kopirali tekst koji prikazuje, uključujući bilo koji workflow JSON
 - Povucite liniju iznad okvira za poruke kako biste povećali visinu okvira. Područje za unos može rasti do 60% panela, a vraća se na svoju zadanu visinu kada se stranica ponovo učita.

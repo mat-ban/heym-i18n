@@ -116,6 +116,8 @@ Referencie o arquivo armazenado em etapas posteriores: `$saveAudio.id`, `$saveAu
 
 Referencie o conteúdo base64 em etapas posteriores: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Imagens retornadas via `file_base64` são exibidas inline no painel de depuração quando você executa o workflow.
 
 ## Exemplo — Listar Arquivos do Drive

@@ -3,11 +3,13 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import time
 import uuid
 from collections.abc import AsyncGenerator, Awaitable, Callable
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from threading import Event
+from typing import Any
 
 import sqlalchemy as sa
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -29,6 +31,7 @@ from app.api.ai_assistant import (
     stream_dashboard_chat,
 )
 from app.api.chat_build import ChatBuildSession
+from app.api.chat_files import ChatFileTools
 from app.api.deps import get_current_user, get_current_user_id, get_db
 from app.api.workflows import get_workflow_for_user
 from app.db.models import (
@@ -57,12 +60,25 @@ from app.models.chat_schemas import (
     SendMessageResponse,
 )
 from app.services import chat_task_registry as registry
+from app.services.chat_attachments import MAX_CHAT_ATTACHMENTS, stored_attachments
 from app.services.chat_build_mode import BuildRequest
 from app.services.chat_eval_mode import EVAL_SUITE_SAVED_EVENT
+from app.services.chat_history import INTERRUPTED_TURN_INSTRUCTIONS, messages_for_chat_turn
+from app.services.chat_message_edit import (
+    EDIT_NOT_FOUND,
+    EDIT_WHILE_RUNNING,
+    carried_attachments,
+    messages_from_edit,
+)
 from app.services.credential_access import get_accessible_credential
 from app.services.credential_catalog import CredentialPromptMode, build_credentials_prompt
 from app.services.credential_setup import CredentialFormTool
+from app.services.drive_file_access import get_accessible_file
 from app.services.encryption import decrypt_config
+from app.services.file_sandbox.chat_workspaces import (
+    delete_all_chat_workspaces,
+    delete_chat_workspace,
+)
 from app.services.heym_agent.errors import AgentError
 from app.services.heym_agent.links import (
     WorkflowLink,
@@ -73,9 +89,10 @@ from app.services.heym_agent.links import (
 )
 from app.services.heym_agent.turn import AgentOutcome, AgentTurnResult, outcome_of
 from app.services.hitl_service import build_public_base_url
-from app.services.llm_trace import LLMTraceContext
+from app.services.llm_trace import LLMTraceContext, record_llm_trace
 from app.services.mcp_elicitation import MCPClientChannel
 from app.services.prompt_suite_service import owned_suite_name
+from app.services.run_history import record_run_history
 from app.services.workflow_access import user_can_write_workflow
 
 router = APIRouter()
@@ -102,7 +119,8 @@ class ChatTurn:
     content: str
     credential_id: uuid.UUID
     model: str
-    attachment_data: dict | None
+    # Each attachment as stored, in the order it was attached.
+    attachments: list[dict]
     should_generate_title: bool
     # UI turns open the credential dialog; MCP turns open a Heym page instead.
     credential_mode: CredentialPromptMode = CredentialPromptMode.ASK_AND_CREATE
@@ -114,6 +132,7 @@ class ChatTurn:
     on_event: Callable[[dict], Awaitable[None]] | None = None
     # A2A turns: tags this turn's messages with their task, for the task's history.
     a2a_task_id: uuid.UUID | None = None
+    interrupted: bool = False
 
 
 @dataclass(frozen=True)
@@ -138,19 +157,40 @@ def _build_hidden_eval_suite_marker(suite_id: str, suite_name: str) -> str:
     return f"\n<!-- heym-eval-suite-id:{suite_id} heym-eval-suite-name:{safe_name} -->"
 
 
-def _ingest_tool_event(tool_calls_for_message: list[dict], payload: dict) -> None:
+class _RoundNarration:
+    """Text a model round wrote before its tool calls, kept with the round's first call."""
+
+    def __init__(self) -> None:
+        self._round: object = None
+        self._parts: list[str] = []
+
+    def add(self, payload: dict) -> None:
+        if payload.get("round") != self._round:
+            self._round, self._parts = payload.get("round"), []
+        self._parts.append(str(payload.get("text") or ""))
+
+    def take(self) -> str:
+        text = "".join(self._parts).split("```heym-clarify")[0].strip()
+        self._parts = []
+        return text
+
+
+def _ingest_tool_event(
+    tool_calls_for_message: list[dict], payload: dict, narration: str = ""
+) -> None:
     """Update tool_calls_for_message in place from a parsed SSE payload."""
     ptype = payload.get("type")
     if ptype == "tool_start":
-        tool_calls_for_message.append(
-            {
-                "id": str(payload.get("id") or ""),
-                "name": str(payload.get("name") or ""),
-                "label": str(payload.get("label") or ""),
-                "args": payload.get("args") or {},
-                "status": "running",
-            }
-        )
+        entry = {
+            "id": str(payload.get("id") or ""),
+            "name": str(payload.get("name") or ""),
+            "label": str(payload.get("label") or ""),
+            "args": payload.get("args") or {},
+            "status": "running",
+        }
+        if narration:
+            entry["narration"] = narration
+        tool_calls_for_message.append(entry)
     elif ptype == "tool_end":
         tc_id = str(payload.get("id") or "")
         for entry in tool_calls_for_message:
@@ -178,14 +218,14 @@ def _ingest_tool_event(tool_calls_for_message: list[dict], payload: dict) -> Non
 
 
 def _queued_message_response(item: DashboardChatQueueItem) -> QueuedMessageResponse:
-    attachment = item.attachment if isinstance(item.attachment, dict) else None
-    attachment_name = attachment.get("name") if attachment else None
+    names = [str(data["name"]) for data in stored_attachments(item.attachment) if data.get("name")]
     return QueuedMessageResponse(
         id=item.id,
         content=item.content,
         credential_id=item.credential_id,
         model=item.model,
-        attachment_name=str(attachment_name) if attachment_name else None,
+        attachment_name=names[0] if names else None,
+        attachment_names=names,
         created_at=item.created_at,
         updated_at=item.updated_at,
     )
@@ -238,6 +278,8 @@ class SystemPromptParts:
     user_rules: str
     credentials_block: str = ""
     build_block: str = ""
+    build_reference: str = ""
+    workflows: tuple[dict[str, Any], ...] = ()
 
 
 async def _assemble_system_prompt_parts(
@@ -246,7 +288,10 @@ async def _assemble_system_prompt_parts(
     *,
     include_attachment_instructions: bool,
     credential_mode: CredentialPromptMode = CredentialPromptMode.ASK_AND_CREATE,
+    build_reference: str = "",
+    file_rules: str = "",
 ) -> SystemPromptParts:
+    """The turn's system prompt, fixed parts first so providers can cache the longest prefix."""
     workflows = await get_workflows_for_user_with_inputs(db, user.id)
     workflows_block = _format_workflows_for_prompt(workflows)
     agents_md = _load_agents_md_content() or ""
@@ -266,6 +311,7 @@ async def _assemble_system_prompt_parts(
             + "\n\n---\n\n"
             + system_prompt
         )
+    system_prompt += build_reference + file_rules
     if workflows_block:
         system_prompt = (
             system_prompt
@@ -289,6 +335,8 @@ async def _assemble_system_prompt_parts(
         workflows_block=workflows_block,
         user_rules=user_rules,
         credentials_block=credentials_block,
+        build_reference=build_reference,
+        workflows=tuple(workflows),
     )
 
 
@@ -318,6 +366,8 @@ async def _get_conversation_or_404(
 # Postgres-backed registry.
 _cancel_events: dict[str, Event] = {}
 _chat_tasks: dict[str, "asyncio.Task[None]"] = {}
+# Workers still stopping their predecessor and claiming the requested queue item.
+_queue_interrupt_tasks: set[asyncio.Task[None]] = set()
 
 
 def request_chat_cancel(conv_id: str) -> bool:
@@ -359,6 +409,17 @@ async def _run_chat_turn(
     assistant_chunks: list[str] = []
     workflow_context_markers: list[str] = []
     tool_calls_for_message: list[dict] = []
+    narration = _RoundNarration()
+    started = time.monotonic()
+    stream_started = False
+    trace_context = LLMTraceContext(
+        user_id=user_id,
+        credential_id=turn.credential_id,
+        node_label="Dashboard Chat",
+        source="dashboard_chat",
+        session_id=conv_id,
+    )
+    history: list[dict[str, str]] = []
 
     try:
         async with async_session_maker() as db:
@@ -375,15 +436,7 @@ async def _run_chat_turn(
 
             config = decrypt_config(credential.encrypted_config)
 
-            attachment = (
-                FileAttachment(
-                    name=turn.attachment_data["name"],
-                    kind=turn.attachment_data["kind"],
-                    content=turn.attachment_data["content"],
-                )
-                if turn.attachment_data
-                else None
-            )
+            attachments = [FileAttachment.model_validate(data) for data in turn.attachments]
 
             msg_result = await db.execute(
                 select(DashboardMessage)
@@ -391,7 +444,7 @@ async def _run_chat_turn(
                 .order_by(DashboardMessage.created_at)
             )
             all_messages = msg_result.scalars().all()
-            history = [{"role": m.role, "content": m.content} for m in all_messages]
+            history = messages_for_chat_turn(all_messages, interrupted=turn.interrupted)
             if len(history) > MAX_DASHBOARD_CHAT_HISTORY:
                 history = history[-MAX_DASHBOARD_CHAT_HISTORY:]
 
@@ -402,12 +455,6 @@ async def _run_chat_turn(
                 node_label="Dashboard Chat",
                 source="dashboard_chat",
                 session_id=conv_id,
-            )
-            parts = await _assemble_system_prompt_parts(
-                user,
-                db,
-                include_attachment_instructions=turn.attachment_data is not None,
-                credential_mode=turn.credential_mode,
             )
 
             cancel_event = _cancel_events.get(conv_id)
@@ -429,10 +476,21 @@ async def _run_chat_turn(
                     public_base_url=public_base_url,
                     cancel_event=cancel_event,
                     llm_session_id=conv_id,
-                    attachment=attachment,
+                    attachments=attachments,
                     credential_form=turn.credential_form,
+                    conversation_id=conv_uuid,
                 )
-                build_block = await build.prompt()
+            files = ChatFileTools(user=user, conversation_id=conv_uuid)
+            parts = await _assemble_system_prompt_parts(
+                user,
+                db,
+                include_attachment_instructions=bool(turn.attachments),
+                credential_mode=turn.credential_mode,
+                build_reference=build.reference() if build is not None else "",
+                file_rules=files.instructions(),
+            )
+            if build is not None:
+                build_block = await build.prompt(list(parts.workflows))
                 parts = replace(
                     parts,
                     full_system_prompt=parts.full_system_prompt + build_block,
@@ -441,8 +499,20 @@ async def _run_chat_turn(
             if turn.credential_form is not None:
                 forms_block = await turn.credential_form.conversation_forms_prompt()
                 parts = replace(parts, full_system_prompt=parts.full_system_prompt + forms_block)
+            workspace_block = await asyncio.to_thread(files.workspace_block)
+            if workspace_block:
+                parts = replace(
+                    parts, full_system_prompt=parts.full_system_prompt + workspace_block
+                )
 
-            client, provider, model, trace_context = resolve_model_binding(
+            if turn.interrupted:
+                parts = replace(
+                    parts,
+                    full_system_prompt=parts.full_system_prompt + INTERRUPTED_TURN_INSTRUCTIONS,
+                )
+            # A Model Router decision is a blocking model call; keep it off the event loop.
+            client, provider, model, trace_context = await asyncio.to_thread(
+                resolve_model_binding,
                 credential,
                 config,
                 turn.model,
@@ -452,6 +522,7 @@ async def _run_chat_turn(
                 message=turn.content,
             )
 
+            stream_started = True
             async for chunk in stream_dashboard_chat(
                 client,
                 model,
@@ -463,11 +534,12 @@ async def _run_chat_turn(
                 public_base_url,
                 trace_context,
                 cancel_event,
-                attachment,
+                attachments,
                 credential,
                 system_prompt_parts=parts,
                 credential_mode=turn.credential_mode,
                 build=build,
+                files=files,
             ):
                 if chunk.startswith("data: "):
                     try:
@@ -477,6 +549,8 @@ async def _run_chat_turn(
                     ptype = payload.get("type")
                     if ptype == "content":
                         assistant_chunks.append(str(payload.get("text") or ""))
+                    elif ptype == "draft":
+                        narration.add(payload)
                     elif ptype == "workflow_created":
                         w_id = str(payload.get("workflow_id") or "").strip()
                         w_name = str(payload.get("workflow_name") or "").strip()
@@ -494,7 +568,8 @@ async def _run_chat_turn(
                                 _build_hidden_eval_suite_marker(s_id, s_name or "Eval suite")
                             )
                     elif ptype in ("tool_start", "tool_end", "compressed"):
-                        _ingest_tool_event(tool_calls_for_message, payload)
+                        lead = narration.take() if ptype == "tool_start" else ""
+                        _ingest_tool_event(tool_calls_for_message, payload, lead)
                     if turn.on_event is not None and payload:
                         await _notify_turn_event(turn.on_event, payload)
                 await _publish_payload_with_message_id(conv_id, chunk, assistant_message_id)
@@ -549,6 +624,29 @@ async def _run_chat_turn(
             )
 
     except asyncio.CancelledError:
+        if not stream_started:
+            elapsed_ms = round((time.monotonic() - started) * 1000, 2)
+            record_llm_trace(
+                context=trace_context,
+                request_type="chat.completions",
+                request={
+                    "model": turn.model,
+                    "messages": history or [{"role": "user", "content": turn.content}],
+                },
+                response={"cancelled": True, "text": "", "turn_timings": []},
+                model=turn.model,
+                elapsed_ms=elapsed_ms,
+            )
+            record_run_history(
+                user_id=user_id,
+                run_type="dashboard_chat",
+                workflow_id=None,
+                inputs={"message": turn.content},
+                outputs={"text": ""},
+                status="cancelled",
+                execution_time_ms=elapsed_ms,
+                trigger_source="dashboard_chat",
+            )
         assistant_content = "".join(assistant_chunks)
         for marker in workflow_context_markers:
             if marker and marker not in assistant_content:
@@ -574,12 +672,15 @@ async def _run_chat_turn(
                 select(DashboardConversation).where(DashboardConversation.id == conv_uuid)
             )
             conversation = conv_result.scalar_one_or_none()
-            if conversation is not None:
+            owns_worker = _worker_has_ownership(conv_id)
+            if conversation is not None and owns_worker:
                 conversation.is_running = False
                 conversation.queue_paused_by_message_id = None
-            await _clear_queue_items(cancel_db, conv_uuid)
+            if owns_worker:
+                await _clear_queue_items(cancel_db, conv_uuid)
             await cancel_db.commit()
-        await registry.publish(conv_id, {"type": "queue_cleared"})
+        if owns_worker:
+            await registry.publish(conv_id, {"type": "queue_cleared"})
         await registry.publish(
             conv_id,
             {
@@ -591,7 +692,7 @@ async def _run_chat_turn(
         raise
 
 
-async def _dequeue_next_turn(conv_id: str) -> ChatTurn | None:
+async def _dequeue_next_turn(conv_id: str, item_id: uuid.UUID | None = None) -> ChatTurn | None:
     conv_uuid = uuid.UUID(conv_id)
     async with async_session_maker() as db:
         conv_result = await db.execute(
@@ -607,11 +708,15 @@ async def _dequeue_next_turn(conv_id: str) -> ChatTurn | None:
             await db.commit()
             return None
 
+        item_query = select(DashboardChatQueueItem).where(
+            DashboardChatQueueItem.conversation_id == conv_uuid
+        )
+        if item_id is not None:
+            item_query = item_query.where(DashboardChatQueueItem.id == item_id)
         item_result = await db.execute(
-            select(DashboardChatQueueItem)
-            .where(DashboardChatQueueItem.conversation_id == conv_uuid)
-            .order_by(DashboardChatQueueItem.created_at, DashboardChatQueueItem.id)
-            .limit(1)
+            item_query.order_by(DashboardChatQueueItem.created_at, DashboardChatQueueItem.id).limit(
+                1
+            )
         )
         item = item_result.scalar_one_or_none()
         if item is None:
@@ -619,16 +724,10 @@ async def _dequeue_next_turn(conv_id: str) -> ChatTurn | None:
             await db.commit()
             return None
 
-        attachment = (
-            FileAttachment(
-                name=item.attachment["name"],
-                kind=item.attachment["kind"],
-                content=item.attachment["content"],
-            )
-            if isinstance(item.attachment, dict)
-            else None
+        queued_attachments = stored_attachments(item.attachment)
+        user_message_data = _build_user_message(
+            item.content, [FileAttachment.model_validate(data) for data in queued_attachments]
         )
-        user_message_data = _build_user_message(item.content, attachment)
         message_created_at = datetime.now(timezone.utc)
         user_message = DashboardMessage(
             id=uuid.uuid4(),
@@ -653,12 +752,13 @@ async def _dequeue_next_turn(conv_id: str) -> ChatTurn | None:
             content=item.content,
             credential_id=item.credential_id,
             model=item.model,
-            attachment_data=dict(item.attachment) if isinstance(item.attachment, dict) else None,
+            attachments=queued_attachments,
             should_generate_title=False,
             build=queued_build,
         )
         queued_item_id = item.id
         await db.delete(item)
+        conversation.is_running = True
         conversation.has_unread = False
         conversation.last_credential_id = turn.credential_id
         conversation.last_model = turn.model
@@ -704,7 +804,7 @@ async def _process_chat(
     content: str,
     credential_id: uuid.UUID,
     model: str,
-    attachment_data: dict | None,
+    attachments: list[dict],
     public_base_url: str,
     should_generate_title: bool,
     build: BuildRequest | None = None,
@@ -719,7 +819,7 @@ async def _process_chat(
         content=content,
         credential_id=credential_id,
         model=model,
-        attachment_data=attachment_data,
+        attachments=attachments,
         should_generate_title=should_generate_title,
         build=build,
     )
@@ -771,17 +871,38 @@ async def _process_chat_queue(
     conv_id: str,
     user_id: uuid.UUID,
     public_base_url: str,
+    first_item_id: uuid.UUID | None = None,
+    interrupted_task: asyncio.Task[None] | None = None,
 ) -> None:
-    """Background coroutine: starts from the persisted queue and drains it."""
+    """Drain the queue, optionally stopping a predecessor and starting a chosen item."""
     if not await registry.has_task(conv_id) or not _worker_has_ownership(conv_id):
         return
 
     cancel_event = Event()
     _cancel_events[conv_id] = cancel_event
+    turn_started = False
     try:
-        turn = await _dequeue_next_turn(conv_id)
+        if interrupted_task is not None:
+            try:
+                await asyncio.shield(interrupted_task)
+            except asyncio.CancelledError:
+                current = asyncio.current_task()
+                if current is not None and current.cancelling():
+                    raise
+        if not _worker_has_ownership(conv_id):
+            return
+        turn = (
+            await _dequeue_next_turn(conv_id, first_item_id)
+            if first_item_id is not None
+            else await _dequeue_next_turn(conv_id)
+        )
+        if turn is not None and first_item_id is not None:
+            turn = replace(turn, interrupted=True)
+        _queue_interrupt_tasks.discard(asyncio.current_task())
         while turn is not None:
+            turn_started = True
             result = await _run_chat_turn(conv_id, user_id, turn, public_base_url)
+            turn_started = False
             if result.stop_worker or result.paused_for_clarification:
                 break
             turn = await _dequeue_next_turn(conv_id)
@@ -790,6 +911,17 @@ async def _process_chat_queue(
             await registry.finish(conv_id)
     except asyncio.CancelledError:
         if _worker_has_ownership(conv_id):
+            if not turn_started:
+                # Stop can arrive while the previous worker is persisting its partial reply.
+                async with async_session_maker() as cancel_db:
+                    await cancel_db.execute(
+                        sa.update(DashboardConversation)
+                        .where(DashboardConversation.id == uuid.UUID(conv_id))
+                        .values(is_running=False, queue_paused_by_message_id=None)
+                    )
+                    await _clear_queue_items(cancel_db, uuid.UUID(conv_id))
+                    await cancel_db.commit()
+                await registry.publish(conv_id, {"type": "queue_cleared"})
             await registry.finish(conv_id)
         return
     except Exception:
@@ -812,6 +944,7 @@ async def _process_chat_queue(
             await registry.publish(conv_id, {"type": "queue_cleared"})
             await registry.finish(conv_id)
     finally:
+        _queue_interrupt_tasks.discard(asyncio.current_task())
         if _worker_has_ownership(conv_id):
             if (
                 _cancel_events.get(conv_id) is cancel_event
@@ -903,7 +1036,7 @@ async def run_agent_chat_turn(
 
         conv_uuid = conversation.id
         should_generate_title = is_new or conversation.title == DEFAULT_CONVERSATION_TITLE
-        user_message = _build_user_message(message, None)
+        user_message = _build_user_message(message)
         db.add(
             DashboardMessage(
                 id=uuid.uuid4(),
@@ -932,7 +1065,7 @@ async def run_agent_chat_turn(
         content=message,
         credential_id=credential_id,
         model=model,
-        attachment_data=None,
+        attachments=[],
         should_generate_title=should_generate_title,
         credential_mode=CredentialPromptMode.ASK_AND_LINK,
         # Agent turns exist only while the agent is enabled, and they always build.
@@ -1092,6 +1225,7 @@ async def clear_conversations(
         delete(DashboardConversation).where(DashboardConversation.user_id == current_user.id)
     )
     await db.commit()
+    await asyncio.to_thread(delete_all_chat_workspaces, current_user.id)
 
 
 @router.get("/quick-prompts", response_model=QuickPromptsResponse)
@@ -1212,6 +1346,7 @@ async def delete_conversation(
     conversation = await _get_conversation_or_404(conversation_id, current_user.id, db)
     await db.delete(conversation)
     await db.commit()
+    await asyncio.to_thread(delete_chat_workspace, current_user.id, conversation_id)
 
 
 def _fallback_title_from_content(content: str) -> str:
@@ -1301,6 +1436,75 @@ async def _resolve_build_request(
     return BuildRequest(target_workflow_id=body.target_workflow_id, skill_only=skill_only)
 
 
+async def _attachments_data(
+    db: AsyncSession, user_id: uuid.UUID, body: MessageCreate
+) -> list[dict]:
+    """The attachments as stored; each Drive file is checked and described from its row."""
+    requested = body.requested_attachments()
+    if len(requested) > MAX_CHAT_ATTACHMENTS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Attach at most {MAX_CHAT_ATTACHMENTS} files to one message",
+        )
+    stored: list[dict] = []
+    for attachment in requested:
+        if attachment.kind != "file":
+            stored.append(attachment.model_dump(mode="json"))
+            continue
+        if attachment.file_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="file_id is required"
+            )
+        data = await _drive_attachment_data(db, user_id, attachment.file_id)
+        if data is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found")
+        stored.append(data)
+    return stored
+
+
+async def _edited_turn_input(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    content: str,
+    original_content: str,
+    attachments: list[dict],
+) -> tuple[str, list[dict]]:
+    """The edited turn's content and attachments, keeping the original's attachments.
+
+    New attachments replace the old ones. A Drive file the user can no longer open keeps its
+    stored reference as text, as it stood in the conversation; so do inline files.
+    """
+    if attachments:
+        return content, attachments
+    kept: list[dict] = []
+    for carried in carried_attachments(original_content):
+        if carried.drive_file_id is not None:
+            data = await _drive_attachment_data(db, user_id, carried.drive_file_id)
+            if data is not None:
+                kept.append(data)
+                continue
+        content += carried.text_tail
+    return content, kept
+
+
+async def _drive_attachment_data(
+    db: AsyncSession, user_id: uuid.UUID, file_id: uuid.UUID
+) -> dict | None:
+    """A Drive file the user can open, described from its row; None when they cannot."""
+    access = await get_accessible_file(db, file_id, user_id)
+    if access is None:
+        return None
+    row = access.file
+    return {
+        "name": row.filename,
+        "kind": "file",
+        "content": "",
+        "file_id": str(row.id),
+        "size": row.size_bytes,
+        "mime": row.mime_type,
+    }
+
+
 @router.post(
     "/{conversation_id}/messages",
     response_model=SendMessageResponse,
@@ -1335,7 +1539,25 @@ async def send_message(
         )
 
     build = await _resolve_build_request(db, current_user.id, body)
-    attachment_data = body.attachment.model_dump() if body.attachment else None
+    attachments_data = await _attachments_data(db, current_user.id, body)
+    content = body.content
+    if body.edit_message_id is not None:
+        if conversation.is_running:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=EDIT_WHILE_RUNNING)
+        dropped = messages_from_edit(existing_messages, body.edit_message_id)
+        if dropped is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=EDIT_NOT_FOUND)
+        content, attachments_data = await _edited_turn_input(
+            db, current_user.id, content, dropped[0].content, attachments_data
+        )
+        # The conversation rewinds to the point before the edited message.
+        await db.execute(
+            delete(DashboardMessage).where(
+                DashboardMessage.conversation_id == conversation_id,
+                DashboardMessage.id.in_([message.id for message in dropped]),
+            )
+        )
+        existing_messages = existing_messages[: len(existing_messages) - len(dropped)]
     conv_id_str = str(conversation_id)
     if conversation.is_running:
         queued_at = datetime.now(timezone.utc)
@@ -1345,7 +1567,7 @@ async def send_message(
             content=body.content,
             credential_id=credential.id,
             model=body.model,
-            attachment=attachment_data,
+            attachment=attachments_data or None,
             allow_build=build is not None and not build.skill_only,
             allow_skill_write=build is not None and build.skill_only,
             build_target_workflow_id=build.target_workflow_id if build is not None else None,
@@ -1396,16 +1618,9 @@ async def send_message(
             queued_message=queued_response,
         )
 
-    attachment = (
-        FileAttachment(
-            name=body.attachment.name,
-            kind=body.attachment.kind,
-            content=body.attachment.content,
-        )
-        if body.attachment
-        else None
+    user_message = _build_user_message(
+        content, [FileAttachment.model_validate(data) for data in attachments_data]
     )
-    user_message = _build_user_message(body.content, attachment)
     message_created_at = datetime.now(timezone.utc)
     message = DashboardMessage(
         id=uuid.uuid4(),
@@ -1433,10 +1648,10 @@ async def send_message(
         _process_chat(
             conv_id=conv_id_str,
             user_id=current_user.id,
-            content=body.content,
+            content=content,
             credential_id=credential.id,
             model=body.model,
-            attachment_data=attachment_data,
+            attachments=attachments_data,
             public_base_url=public_base_url,
             should_generate_title=should_generate_title,
             build=build,
@@ -1510,6 +1725,71 @@ async def update_queued_message(
             },
         )
     return response
+
+
+@router.post(
+    "/{conversation_id}/queue/{item_id}/send-now",
+    response_model=SendMessageResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+async def send_queued_message_now(
+    http_request: Request,
+    conversation_id: uuid.UUID,
+    item_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> SendMessageResponse:
+    """Interrupt the current reply and append this queued message as the next turn.
+
+    Keep the remaining queue, the item's attachments and its saved model/build settings.
+    The existing stream publishes the partial reply before the selected user message.
+    """
+    conversation = await _get_conversation_or_404(
+        conversation_id, current_user.id, db, for_update=True
+    )
+    item = await _get_queue_item_or_404(conversation_id, item_id, current_user.id, db)
+    conv_id = str(conversation_id)
+    previous = _chat_tasks.get(conv_id)
+    if previous is not None and previous.done():
+        previous = None
+    if previous in _queue_interrupt_tasks or (conversation.is_running and previous is None):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="The current response cannot be interrupted yet. Please try again shortly.",
+        )
+    response = _queued_message_response(item)
+    conversation.is_running = True
+    conversation.has_unread = False
+    conversation.queue_paused_by_message_id = None
+
+    def launch_worker() -> None:
+        task = asyncio.create_task(
+            _process_chat_queue(
+                conv_id=conv_id,
+                user_id=current_user.id,
+                public_base_url=build_public_base_url(http_request),
+                first_item_id=item_id,
+                interrupted_task=previous,
+            )
+        )
+        _chat_tasks[conv_id] = task
+        _queue_interrupt_tasks.add(task)
+        task.add_done_callback(_queue_interrupt_tasks.discard)
+
+    if previous is not None:
+        request_chat_cancel(conv_id)
+        # Transfer ownership before releasing the row lock. The old worker persists its
+        # partial reply without clearing the queue; the successor waits for that to finish.
+        launch_worker()
+        await db.commit()
+    else:
+        await db.commit()
+        await registry.create_task(conv_id)
+        launch_worker()
+
+    return SendMessageResponse(
+        conversation_id=conversation_id, status="started", queued_message=response
+    )
 
 
 @router.delete("/{conversation_id}/queue/{item_id}", status_code=status.HTTP_204_NO_CONTENT)

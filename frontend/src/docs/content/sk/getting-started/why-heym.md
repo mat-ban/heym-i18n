@@ -189,7 +189,7 @@ Systém traces je účelovo navrhnutý na ladenie agentického správania, s úp
 Každé volanie LLM v Heym je automaticky spoplatnené. [Karta Traces](../tabs/traces-tab.md) zobrazuje počty vstupných a výstupných tokenov pre každý trace spolu s nákladmi v USD v reálnom čase, ktoré sa odvodzujú zo synchronizovanej cenovej tabuľky.
 
 - **Náklady na trace** – Vstupné tokeny, výstupné tokeny a celková suma v USD zobrazená v každom riadku trace
-- **Analytika nákladov** – KPI karty a graf nákladov podľa modelu sa aktualizujú podľa zvoleného časového rozsahu (1h / 24h / 7d / 30d / All)
+- **Analytika nákladov** – KPI karty a graf nákladov podľa modelu sa aktualizujú podľa zvoleného časového rozsahu (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **Tabuľka nákladov na LLM** – Systémová tabuľka v [karte DataTable](../tabs/datatable-tab.md) sa napĺňa z Helicone každých 24 hodín; môžete prepísať ceny alebo pridať vlastné riadky pre modely, ktoré ešte nie sú uvedené
 - **Upozornenie na chýbajúcu cenu** – Pri trace pre modely bez cenovej položky sa zobrazí inline upozornenie s priamym odkazom na tabuľku nákladov
 
@@ -274,7 +274,7 @@ Workflow sú volateľné cez HTTP na `/api/workflows/{workflow_id}/execute`, kto
 Heym má natívnu podporu [MCP](../tabs/mcp-tab.md) na oboch stranách:
 
 - **Ako klient**: Uzly agentov sa pripájajú k externým MCP serverom (Filesystem, Browserbase, vlastné nástroje) cez stdio alebo SSE a automaticky konzumujú ich nástroje
-- **Ako server**: Workflow so zapnutým MCP sa stanú nástrojmi na predvolenom serveri na `/api/mcp/sse` alebo na pomenovaných serveroch s vlastnou URL a API kľúčom, takže Claude Desktop, Cursor a ďalší MCP klienti môžu priamo volať vaše Heym Workflow
+- **Ako server**: Workflow so zapnutým MCP sa stanú nástrojmi na predvolenom serveri na `/api/mcp (or /api/mcp/sse for legacy connections)` alebo na pomenovaných serveroch s vlastnou URL a API kľúčom, takže Claude Desktop, Cursor a ďalší MCP klienti môžu priamo volať vaše Heym Workflow
 
 Agenti môžu konzumovať niekoľko MCP serverov naraz a akýkoľvek Workflow sa môže stať nástrojom pre externého MCP klienta.
 

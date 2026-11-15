@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap` mandaat, mis sisaldab serveri, sisselogimise, postkasti ja SSL-i seadeid |
 | `pollIntervalMinutes` | Täisarv | Kui tihti Heym postkasti uue e-posti suhtes kontrollib |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Seadistusjuhend
 
@@ -62,6 +63,8 @@ Pärast node'i käivitumist saavad allavoolu node'id juurde pääseda järgmisel
 | `$nodeLabel.email.text` | Lihttekstina sisu |
 | `$nodeLabel.email.html` | HTML sisu |
 | `$nodeLabel.email.attachments` | Manuste metaandmete massiiv (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekodeeritud päiste objekt |
 | `$nodeLabel.email.uid` | IMAP UID duplikaatide tuvastamiseks või logimiseks |
 | `$nodeLabel.triggered_by` | Triggeri allika silt (`"imap"`) |

@@ -45,7 +45,7 @@
 
 I editorns **Run**-flik (Defined webhook-läge) stöder varje inmatningsfält drag-and-drop samt en inline-bilagakontroll (längst ned till höger i fältet):
 
-- **Textfiler** (`.txt`, `.md`, `.json`, `.csv` och liknande) läses som ren text.
+- **Textfiler** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Bilder** (JPEG, PNG, GIF, WebP) lagras som en `data:`-URL (base64) i fältets värde — använd fältnycklar som `imageUrl` eller `base64` när efterföljande noder förväntar sig bilddata.
 - **PDF**-filer konverteras till extraherad text (max 5 MB fil, 100k tecken innehåll).
 

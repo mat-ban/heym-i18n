@@ -19,7 +19,7 @@ Neki čvorovi integracije **ne** zahtijevaju vjerodajnice. [WebSocket Trigger](.
 | **Linear** | [Linear čvor](../nodes/linear-node.md) | `api_key`, ili `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry čvor](../nodes/sentry-node.md) | `api_token`, opcionalno `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evaluacije](../tabs/evals-tab.md) (LLM-as-Judge sudac) | `base_url`, opcionalno `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evaluacije](../tabs/evals-tab.md) (LLM-as-Judge sudac), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, opcionalno `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | vjerodajnica modela odluke, plus opcije modela koje upućuju na Vaše druge vjerodajnice |
 | **Cohere** | Ugradnje | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektorska spremišta | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Neki čvorovi integracije **ne** zahtijevaju vjerodajnice. [WebSocket Trigger](.
 | **Grist** | [Grist čvor](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets čvor](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 suglasnost |
 | **Google Drive** | [Google Drive čvor](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 suglasnost (cjelokupni opseg Drive-a) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery čvor](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 suglasnost |
 | **Supabase** | [Supabase čvor](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, opcionalno `supabase_schema` |
 | **ClickHouse** | [ClickHouse čvor](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -898,3 +899,6 @@ Usmjerava svaki zahtjev na jednu od vaših postojećih model vjerodajnica, koris
 ### Napomene
 
 Imena opcija su ono između čega model odluke bira, stoga moraju biti različita. Opcija ne može upućivati na drugi Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

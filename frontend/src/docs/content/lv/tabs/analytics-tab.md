@@ -65,3 +65,7 @@ Novietojiet kursoru virs diagrammas, lai redzētu mezgla tipu tieši blakus rād
 - [Kontekstualā demonstrācija](../reference/contextual-showcase.md) – Kompakts lapas ceļvedis informācijas paneļa virsmām
 
 Kad diagramma rāda tendenci, par kuru Jūs vēlaties tikt informēts, nevis to vērot, pārvērtiet to par [brīdinājumu](./alerts-tab.md): kļūdu skaits, izpildes ilgums, LLM izdevumi un izpildes skaits var tikt noteikti ar slieksni laika logā.
+
+## Related
+
+- [Operations Runbook (L1): Resursu izmantošana](../reference/operations-runbook.md#most-resource-consuming-workflows) - Atrodiet liela apjoma un ilgstošas darbplūsmas un korelējiet procesoru, atmiņu un marķierus

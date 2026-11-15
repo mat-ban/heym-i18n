@@ -284,3 +284,8 @@ Dacă header-ul nu este trimis, `trigger_source` are valoarea implicită `"API"`
 - [Triggers](./triggers.md) – Toate punctele de intrare ale Workflow-ului, inclusiv Webhook
 - [Workflow Structure](./workflow-structure.md) – Noduri și muchii
 - [Expression DSL](./expression-dsl.md) – Accesați `$input.body`, `$input.headers`, `$input.query`
+
+
+### Who counts as the caller
+
+On `/execute` and `/execute/stream`, a caller is someone who chose to run the workflow: a bearer token in the `Authorization` header (API clients, execution tokens), or Heym's own app, which marks its requests with `X-Heym-Client`. The browser's session cookie on its own does not make the visitor the caller. Opening an execute URL from a link, an e-mail or another site while signed in is therefore treated like a call with no session: an `Anonymous` workflow runs in the owner's context, and a `JWT` workflow answers `401`. This keeps a link from running a workflow with the credentials of whoever happens to click it.

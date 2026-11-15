@@ -48,6 +48,7 @@ Dalam mode Agent, kotak **YOLO mode** di bawah kolom pesan membuat asisten menja
 - Ketik permintaan Anda di input (mis. "Create a workflow that takes user input and sends it to an LLM")
 - Tekan **Enter** untuk mengirim (Shift+Enter untuk baris baru)
 - AI melakukan streaming responsnya. Dalam mode **Agent**, jika respons menyertakan workflow dalam blok kode \`\`\`json, blok tersebut otomatis diuraikan dan diterapkan ke canvas. Dalam mode **Ask**, canvas tidak pernah dimodifikasi.
+- Saat JSON workflow dialirkan, sebuah baris di bawah jawaban menyebutkan nama workflow dan node yang telah ditulis sejauh ini, misalnya `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Gunakan **Clear** untuk mengatur ulang percakapan
 - Arahkan kursor ke pesan dan klik ikon salinnya untuk menyalin teks yang ditampilkan, termasuk JSON workflow apa pun
 - Seret garis di atas kotak pesan untuk membuat kotak lebih tinggi. Area input dapat tumbuh hingga 60% dari panel, dan kembali ke tinggi defaultnya saat halaman dimuat ulang

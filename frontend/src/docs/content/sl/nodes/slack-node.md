@@ -54,3 +54,5 @@ Uporabite z [Obvladovalcem napak](./error-handler-node.md) za obvestila o napaka
 - [Vrste vozlišč](../reference/node-types.md) – Pregled vseh vrst vozlišč
 - [Obvladovalec napak](./error-handler-node.md) – Pošlji Slack ob neuspehu delovnega toka
 - [Zavihek Poverilnice](../tabs/credentials-tab.md) – Dodaj Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

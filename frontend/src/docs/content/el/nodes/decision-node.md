@@ -157,6 +157,8 @@ Input → Decision (triage) → Condition ($triage.answers.department.confidence
 
 Το ίδιο διαπιστευτήριο μπορεί να αξιολογεί εκτελέσεις [Αξιολογήσεων](../tabs/evals-tab.md): με επιλεγμένο το **LLM-as-Judge**, επιλέξτε το ως κριτή και το μοντέλο αποφάσεων βαθμολογεί κάθε απάντηση έναντι της αναμενόμενης εξόδου.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Το Heym αποκλείει εξερχόμενα αιτήματα προς ιδιωτικές και loopback διευθύνσεις από προεπιλογή, οπότε ένα endpoint αποφάσεων που εκτελείτε εσείς σε `localhost` ή σε ιδιωτικό εύρος χρειάζεται `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Τα μοντέλα αποφάσεων δεν εμφανίζονται στους πίνακες τιμολόγησης LLM που συγχρονίζει το Heym, οπότε η στήλη **Cost** στις [Εκτελέσεις](../tabs/traces-tab.md) παραμένει κενή για αυτές τις κλήσεις. Οι μετρήσεις token καταγράφονται ακόμα και μπορείτε να προσθέσετε τη δική σας τιμή με μια παράκαμψη τιμολόγησης.

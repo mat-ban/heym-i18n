@@ -29,8 +29,11 @@ Placement is decided from the workflow's nodes before the run starts. A run stay
 | File Upload trigger | The upload lands on main's disk |
 | Send Email | Corporate SMTP relays commonly allowlist one source address |
 | Plugin nodes | A plugin is installed on one instance's disk |
+| Code node reading Drive files | The files are read from Heym Drive on main's disk |
+| Slack file operations | Downloaded and sent files live in Heym Drive |
+| IMAP Trigger with **Download attachments to Drive** on | The attachments are saved to Heym Drive during the run |
 
-**Everything else is distributed** — including the Code node, Playwright and Agent Python tools. Every instance runs the same image with its own Docker socket, so a sandbox is not a reason to keep a run on main, and those are the most CPU-hungry nodes in the product.
+**Everything else is distributed** — including the Code node, Playwright and Agent Python tools. Every instance runs the same image with its own sandbox backend (a Docker socket, or Kubernetes API access), so a sandbox is not a reason to keep a run on main, and those are the most CPU-hungry nodes in the product.
 
 A workflow whose sub-workflow is chosen by an expression cannot be inspected ahead of time, so it stays on main.
 
@@ -51,6 +54,8 @@ So with a strong main and a smaller worker, start nearer 60/40 than the machines
 Weights are renormalized across the instances that are currently live and enabled. With `main=70, A=15, B=15`, if A goes offline the split becomes 70/85 and 15/85 between main and B, and returns to 70/15/15 when A comes back.
 
 **An instance that comes back is not owed the runs it missed.** Time spent Offline, Disabled or on a mismatched version is not counted against it, so a worker that spends a night unavailable rejoins at the pool's current position and the split reads 70/30 again from its first run — it does not absorb every run until it has caught up. A worker that was available the whole time still catches up, which is what makes main's percentage a ceiling.
+
+**Queued runs follow the instances that can take them.** A run is assigned an instance when it is queued. If that instance goes Offline, is disabled, is set to 0 or shows Mismatch before it claims the run, the leader moves the run to an instance that can take work, usually within a minute. Scaling a worker away therefore does not strand its queue. A run the instance had already claimed when it stopped is marked as failed, not retried.
 
 ### A new instance joins at zero
 
@@ -83,7 +88,7 @@ The example compose file sets those and `max_connections = 300`. That takes a tw
 
 ## Requirements the cluster cannot enforce for you
 
-**Every instance must use the same `SECRET_KEY` and `ENCRYPTION_KEY`.** A worker with a different `ENCRYPTION_KEY` cannot decrypt credentials, and every credential-using run would fail with an error naming nothing useful. Heym compares a digest of both keys on each heartbeat, along with the app version and the database revision, and marks a mismatched instance **Mismatch** so it receives no work at all. Load falls back to main until you fix it.
+**Every instance must use the same `SECRET_KEY` and `ENCRYPTION_KEY`**, except while [rotating `ENCRYPTION_KEY`](./security.md#rotating-the-key), when the instances may differ as long as each can read what the others write. A worker with a different `ENCRYPTION_KEY` cannot decrypt credentials, and every credential-using run would fail with an error naming nothing useful. An instance whose keys don't fit can't become the leader that runs cron and the pollers either. Heym compares a digest of both keys on each heartbeat, along with the app version and the database revision, and marks a mismatched instance **Mismatch** so it receives no work at all. Load falls back to main until you fix it.
 
 That also defines the upgrade order. Upgrading main first marks every worker incompatible; work returns to main, and each worker rejoins as it is upgraded. Slower, visible, and reversible.
 
@@ -92,6 +97,8 @@ That also defines the upgrade order. Upgrading main first marks every worker inc
 **Every instance needs `FRONTEND_URL`, set to the same public address.** A run that pauses for human review mints its review link on the instance that executed it, not on main, and the same holds for Codex follow-up links and for the download URLs of generated files. A worker left without it builds those links against its own local address, and whoever receives one cannot open it.
 
 **Worker instances have a different outbound IP.** Any API that allowlists source addresses sees the new one. Send Email runs on main for exactly this reason; for the HTTP node, either give the cluster a single NAT egress address or allowlist every instance.
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
 
 ## Adding a worker on another machine
 
@@ -126,12 +133,14 @@ Nothing about this appears on a single-instance install: the fields are empty, n
 
 **If a worker dies mid-run**, its heartbeat goes stale and the leader's existing recovery sweep re-runs the execution on a live instance. The queue row it had claimed is retired separately: once no active execution exists for it and a two-minute grace has passed, the leader fails the row and wakes whoever was waiting on the result. Age alone is never the trigger, so a legitimately long run is left alone; and the row is failed rather than requeued, because recovery already owns the rerun and requeueing would run the same workflow twice.
 
-**If main goes down**, cron keeps firing from a worker and distributable runs keep executing. Runs that need main queue up and wait, and drain when it returns — but only within the misfire grace window (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 seconds by default). Anything older is closed as skipped, with the reason recorded, rather than replaying hours of backlog at once.
+**If main goes down**, cron keeps firing from a worker and distributable runs keep executing. Runs that need main queue up and wait, and drain when it returns — but only within the misfire grace window (`CRON_MISFIRE_GRACE_SECONDS`, 600 seconds by default). Anything older is closed as skipped, with the reason recorded, rather than replaying hours of backlog at once.
 
 The UI, the API, MCP and the editor are unavailable while main is down, because ingress points there.
 
 ## Related
 
+- [Incident Playbook (L0)](./incident-playbook.md) - First response and failure expectations
+- [Operations Runbook (L1): Cluster checks](./operations-runbook.md#cluster-mode-checks) - Eligibility, leadership, queue placement, and main recovery
 - [Running & Deployment](../getting-started/running-and-deployment.md) – Deploy a single instance first; the environment variables and key setup live there
 - [Settings](./user-settings.md) – The Instances tab, and who can see it
 - [Traces](../tabs/traces-tab.md) – Compare real run durations between instances before changing the split

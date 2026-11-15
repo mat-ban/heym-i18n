@@ -115,6 +115,8 @@ Référencez le fichier stocké en aval : `$saveAudio.id`, `$saveAudio.download_
 
 Référencez le contenu base64 en aval : `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Les images renvoyées via `file_base64` sont affichées directement dans le panneau de débogage lors de l'exécution du workflow.
 
 ## Exemple — Lister les fichiers Drive

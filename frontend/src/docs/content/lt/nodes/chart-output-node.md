@@ -368,3 +368,6 @@ Kuriant valdiklį su **AI**, tokie promptai aiškiai atitinka kiekvieną tipą:
 Mygtukais tampa tik `http://` ir `https://` adresai bei keliai, prasidedantys vienu `/`. Bet kuri kita reikšmė, pavyzdžiui, `javascript:` ar `//host`, lieka paprastu tekstu, o tuščias langelis nieko nerodo.
 
 Mygtukas veikia šalia [eilutės nuorodos](../tabs/dashboard-tab.md#detail-pages): spustelėjus mygtuką jo nuoroda atidaroma naujame skirtuke, o spustelėjus bet kur kitur eilutėje vis tiek atidaromas išsamios informacijos puslapis.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

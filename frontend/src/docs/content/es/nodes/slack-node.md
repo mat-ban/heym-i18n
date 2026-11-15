@@ -54,3 +54,5 @@ Utilícelo con [Error Handler](./error-handler-node.md) para notificaciones de f
 - [Tipos de nodos](../reference/node-types.md) – Descripción general de todos los tipos de nodos
 - [Error Handler](./error-handler-node.md) – Enviar Slack ante un fallo del workflow
 - [Pestaña Credenciales](../tabs/credentials-tab.md) – Añadir un webhook de Slack
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

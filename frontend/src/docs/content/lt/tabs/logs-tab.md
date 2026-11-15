@@ -50,3 +50,8 @@ Jei registracija yra atvira, sukurkite patikimą administratoriaus paskyrą prie
 - [Analitikos skirtukas](./analytics-tab.md) – Vykdymo metrikos
 - [Darbo eigos skirtukas](./workflows-tab.md) – Darbo eigos valdymas
 - [Kontekstinis demonstravimas](../reference/contextual-showcase.md) – Kompaktiška puslapio gairė valdymo skydeliams
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Nukreipkite vykdymo metu kylančius simptomus į tinkamą incidentų procedūrą
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnozuokite duomenų bazės, paslaugų, klasterio ir izoliuotos aplinkos (sandbox) triktis

@@ -23,6 +23,7 @@ Pojedynczy selektor **Zakres czasowy** u góry paska filtrów steruje zarówno n
 
 - Paginowana lista ostatnich wykonań w wybranym zakresie czasowym
 - Każde wykonanie prezentuje: workflow, węzeł, dane logowania, znacznik czasu, czas trwania
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Kliknięcie wykonania otwiera widok szczegółów
 - Przyciski **Prev / Next** w oknie szczegółów umożliwiają przechodzenie między wykonaniami bez zamykania okna
 
@@ -66,3 +67,7 @@ Po otwarciu wykonania:
 - [Śledzenie OpenTelemetry](../reference/opentelemetry.md) – Opcjonalny eksport OTel dla spanów workflow, węzłów i narzędzi Agenta
 - [Karta Tabele danych](./datatable-tab.md) – Mieści Tabelę kosztów LLM używaną przez wykres kosztów
 - [Kontekstowy przewodnik](../reference/contextual-showcase.md) – Zwięzły przewodnik po powierzchniach Dashboardu
+
+## Zakres czasu
+
+Pojedynczy selektor **Zakresu czasu** na górze paska filtrów steruje zarówno nagłówkiem statystyk, jak i listą śladów. Opcje: Ostatnia 1 godzina, Ostatnie 3 godziny, Ostatnie 6 godzin, Ostatnie 24 godziny, Ostatnie 7 dni (domyślnie), Ostatnie 30 dni, Cały czas. Zmiana zakresu resetuje paginację i ponownie ładuje wykresy wraz z listą.

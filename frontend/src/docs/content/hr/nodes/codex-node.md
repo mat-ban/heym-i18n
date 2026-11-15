@@ -26,6 +26,8 @@ API ključevi nisu prihvaćeni za Codex vjerodajnicu. Čvor ne šalje cloud Code
 
 U Docker implementacijama, Heym pokreće Codex unutar sestrinskog kontejnera iz iste Heym slike (ne zasebne GHCR slike). Taj kontejner montira samo Codex radni volumen i dopušta Codexovom vlastitom bubblewrap sandboxu stvaranje namespaceova i svježeg `/proc`. Runner dodaje `SYS_ADMIN`, neograničeni seccomp i AppArmor te `systempaths=unconfined` (Docker Engine 25+). Bez posljednje zastavice svaka naredba ne uspije prije pokretanja s `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI reference:
 
 - [Codex autentifikacija](https://developers.openai.com/codex/auth)

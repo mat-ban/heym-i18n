@@ -17,18 +17,19 @@
 
 ## 시간 범위
 
-필터 바 상단의 단일 **Time range** 선택기가 통계 헤더와 trace 목록을 모두 제어합니다. 선택 항목: Last 1 hour, Last 24 hours, Last 7 days(기본값), Last 30 days, All time. 범위를 변경하면 페이지네이션이 초기화되고 차트와 목록이 함께 다시 로드됩니다.
+필터 바 상단의 단일 **Time range** 선택기가 통계 헤더와 trace 목록을 모두 제어합니다. 선택 항목: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days(기본값), Last 30 days, All time. 범위를 변경하면 페이지네이션이 초기화되고 차트와 목록이 함께 다시 로드됩니다.
 
 ## Trace 목록
 
 - 선택한 시간 범위 내 최근 trace의 페이지네이션된 목록
 - 각 trace는 Workflow, 노드, credential, 타임스탬프, 소요 시간을 표시합니다
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - trace를 클릭하면 상세 보기가 열립니다
 - 상세 대화상자 내에서 **Prev / Next**를 사용하면 대화상자를 닫지 않고 trace 간을 이동할 수 있습니다
 
 ## 필터링
 
-- **Time range** – 1h / 24h / 7d / 30d / All; 차트와 목록을 함께 필터링합니다
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; 차트와 목록을 함께 필터링합니다
 - **Credential** – 사용된 credential(API key)로 필터링합니다
 - **Source** – Workflow 또는 실행 소스로 필터링합니다
 - **Search** – 모델, Workflow, credential 또는 노드 레이블로 검색합니다

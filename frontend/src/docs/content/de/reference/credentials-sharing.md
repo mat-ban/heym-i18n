@@ -87,6 +87,7 @@ Einige Knoten speichern `credentialId` (UUID) in `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse-Verbindungsdetails (Host, Port, Authentifizierung, Datenbank) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram-Bot-Anmeldedaten |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord Public Key oder Webhook-Anmeldedaten |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant- oder Postgres- (pgvector) Vektordatenbank, über Qdrant-, Psql- oder Custom Embeddings RAG-Anmeldedaten |
 | Evals | `credential_id`, `judge_credential_id` | Modell-Anmeldedaten; Modell- oder Decision Model-Anmeldedaten für den LLM-as-Judge-Richter |
 | [Playwright](../nodes/playwright-node.md) AI step | `credentialId` | LLM/Vision-Modell (für AI step und [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Nach der Ausführung maskiert `mask_sensitive_output()` Anmeldedaten-Werte in Au
 - [Ausdrucks-DSL](./expression-dsl.md) – `$credentials`-Syntax
 - [Knotentypen](./node-types.md) – Knoten, die Anmeldedaten verwenden ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent-Knoten](../nodes/agent-node.md) – Verwendet `credentialId` für LLM
+
+## Berechtigungen für Google Meet-Kalender
+
+Durch das Teilen von [Google Meet-Anmeldedaten](../nodes/google-meet-node.md) können Workflows die Frei/Gebucht-Intervalle zugänglicher Kalender lesen sowie Termine als verbundenes Google-Konto erstellen, ändern oder löschen, einschließlich des Versendens von Einladungen und Absagen. Die Teilnehmer-E-Mail des Besuchers ändert nichts daran, welches Konto den Termin besitzt oder autorisiert. Nur der Eigentümer der Anmeldedaten kann die Google-Autorisierung erneut verbinden.

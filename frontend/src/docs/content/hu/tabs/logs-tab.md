@@ -50,3 +50,8 @@ Ha a regisztráció nyitott, hozza létre a megbízható adminisztrátori fióko
 - [Analitika lap](./analytics-tab.md) – Végrehajtási metrikák
 - [Workflow-k lap](./workflows-tab.md) – Workflow-kezelés
 - [Kontextuális bemutató](../reference/contextual-showcase.md) – Kompakt oldalútmutató az irányítópult felületeihez
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - A futásidejű tünetek megfelelő incidensfolyamathoz irányítása
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Adatbázis-, szolgáltatás-, fürt- és sandbox-hibák diagnosztizálása

@@ -107,3 +107,6 @@ Ezek a billentyűparancsok a Futtatási előzmények párbeszédablakban és a F
 - [Gyors kezdés](../getting-started/quick-start.md) – Az első workflow felépítése
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+A **Hitelesítési adatok** és a **DataTable** lapok ugyanígy működnek: a `Ctrl + F` / `Cmd + F` fókuszálja a keresőmezőt, a lista gépelés közben szűkül, az `Escape` pedig törli azt.

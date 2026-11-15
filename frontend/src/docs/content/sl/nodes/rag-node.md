@@ -251,3 +251,5 @@ Dobro je vedeti:
 - [Integracije tretjih oseb](../reference/integrations.md#qdrant) – Nastavitev poverilnic za Qdrant in Postgres (pgvector)
 - [Agent Node](./agent-node.md) – Uporabite RAG rezultate kot kontekst agenta
 - [LLM Node](./llm-node.md) – Vnesite RAG rezultate v sistemski poziv LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

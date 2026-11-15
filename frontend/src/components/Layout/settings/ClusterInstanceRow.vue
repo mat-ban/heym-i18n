@@ -10,15 +10,22 @@ const props = defineProps<{ instance: ClusterInstance }>();
 
 const emit = defineEmits<{ update: [value: ClusterInstanceUpdate] }>();
 
+/** Live and compatible, but no process has synced its Kubernetes credentials yet. */
+const unsynced = computed<boolean>(
+  () => props.instance.compatible && props.instance.live && !props.instance.credentials_synced,
+);
+
 const statusLabel = computed<string>(() => {
   if (!props.instance.compatible) return "Miss";
   if (!props.instance.live) return "Off";
+  if (unsynced.value) return "Sync";
   return "Live";
 });
 
 const statusClass = computed<string>(() => {
   if (!props.instance.compatible) return "text-destructive";
   if (!props.instance.live) return "text-muted-foreground";
+  if (unsynced.value) return "text-amber-600 dark:text-amber-400";
   return "text-emerald-600 dark:text-emerald-400";
 });
 
@@ -27,15 +34,34 @@ const isMain = computed<boolean>(() => props.instance.role === "main");
 const dotClass = computed<string>(() => {
   if (!props.instance.compatible) return "bg-destructive";
   if (!props.instance.live) return "bg-muted-foreground/50";
+  if (unsynced.value) return "bg-amber-500";
   return "bg-emerald-500";
 });
 
+/** Which keys it uses, by fingerprint: where an ENCRYPTION_KEY rotation stands. */
+const keysLine = computed<string>(() => {
+  const { primary_fingerprint: primary, decrypt_fingerprints: decrypts } = props.instance;
+  if (!primary) return "";
+  const extra = decrypts.filter((fingerprint) => fingerprint !== primary);
+  return extra.length
+    ? `\nEncrypts with key ${primary}; also decrypts with ${extra.join(", ")}.`
+    : `\nEncrypts with key ${primary}.`;
+});
+
 const statusTitle = computed<string>(() => {
+  let status: string;
   if (!props.instance.compatible) {
-    return "This instance's version, database revision or keys differ from the main instance, so it receives no work.";
+    status =
+      "This instance's version, database revision or keys don't fit the main instance or the other instances, so it receives no work and can't lead.";
+  } else if (!props.instance.live) {
+    status = "No heartbeat in the last 30 seconds.";
+  } else if (unsynced.value) {
+    status =
+      "No process of this instance has synced its Kubernetes credentials yet, so it receives no work.";
+  } else {
+    status = `Version ${props.instance.version}`;
   }
-  if (!props.instance.live) return "No heartbeat in the last 30 seconds.";
-  return `Version ${props.instance.version}`;
+  return status + keysLine.value;
 });
 
 /** The field grows only for a three-digit weight, so 100 is never clipped and a

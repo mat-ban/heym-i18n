@@ -44,6 +44,14 @@ class Settings(BaseSettings):
         return v
 
     encryption_key: str = ""
+    # Keys accepted for decryption only, comma-separated. During a rotation this holds the
+    # new key while it is introduced, then the old key once the new one is ENCRYPTION_KEY.
+    encryption_keys_extra: str = ""
+    # Accept ENCRYPTION_KEY as this database's key even though nothing stored decrypts with
+    # it: the way out for an install whose key changed before key checking existed.
+    accept_current_encryption_key: bool = Field(
+        default=False, validation_alias="HEYM_ACCEPT_CURRENT_ENCRYPTION_KEY"
+    )
     jwt_algorithm: str = "HS256"
     jwt_access_token_expire_minutes: int = 1440
     jwt_refresh_token_expire_days: int = 30
@@ -55,6 +63,8 @@ class Settings(BaseSettings):
     # How late a cron slot may still run. Protects against a scheduler that was
     # paused (leadership handoff, restart, host suspend) firing a whole backlog.
     cron_misfire_grace_seconds: int = 600
+    # How many cron runs may be in flight at once; each holds a database connection.
+    cron_max_parallel_runs: int = 4
     oauth_access_token_expire_seconds: int = 3600
     oauth_refresh_token_expire_days: int = 30
     oauth_auth_code_expire_minutes: int = 10
@@ -73,6 +83,11 @@ class Settings(BaseSettings):
     # may always sign in with a password, which is the break-glass path when SSO is
     # misconfigured. An empty value grants nobody.
     admin_emails: str = Field(default="", validation_alias="HEYM_ADMIN_EMAILS")
+    # Turns on two-factor sign-in: every password sign-in asks for an authenticator code,
+    # and an account without one enrols at its next sign-in. SSO sign-in is never affected.
+    require_mfa: bool = Field(default=False, validation_alias="HEYM_REQUIRE_MFA")
+    # Execution history and LLM traces older than this are deleted daily. 0 keeps everything.
+    data_retention_days: int = Field(default=90, ge=0, validation_alias="HEYM_DATA_RETENTION_DAYS")
     # Load distribution across instances sharing this database. The role defaults to
     # "main" so an existing single-instance deployment keeps behaving as main with no
     # configuration change.
@@ -80,6 +95,13 @@ class Settings(BaseSettings):
     instance_name: str = Field(default="", validation_alias="HEYM_INSTANCE_NAME")
     instance_role: str = Field(default="main", validation_alias="HEYM_INSTANCE_ROLE")
     cluster_enabled: bool = Field(default=False, validation_alias="HEYM_CLUSTER_ENABLED")
+    # Credentials declared as labelled Kubernetes Secrets (services/k8s_credentials).
+    # Off by default: turning it on needs list/watch on Secrets in the namespace below.
+    k8s_credentials: bool = Field(default=False, validation_alias="HEYM_K8S_CREDENTIALS")
+    # Empty means the namespace Heym itself runs in.
+    k8s_credentials_namespace: str = Field(
+        default="", validation_alias="HEYM_K8S_CREDENTIALS_NAMESPACE"
+    )
     db_pool_size: int = Field(default=10, validation_alias="HEYM_DB_POOL_SIZE")
     db_max_overflow: int = Field(default=20, validation_alias="HEYM_DB_MAX_OVERFLOW")
     db_sync_pool_size: int = Field(default=5, validation_alias="HEYM_DB_SYNC_POOL_SIZE")
@@ -209,6 +231,58 @@ class Settings(BaseSettings):
                 'python -c "import secrets; print(secrets.token_hex(32))"'
             )
         return v
+
+    @field_validator("encryption_keys_extra")
+    @classmethod
+    def encryption_keys_extra_are_real_keys(cls, v: str) -> str:
+        """Drop empty entries and refuse the placeholder, as for ENCRYPTION_KEY.
+
+        Without dropping them, a trailing comma would add the empty string as a key that
+        decrypts: every key goes through the same sha256 derivation, empty or not.
+        """
+        keys = [key.strip() for key in v.split(",") if key.strip()]
+        if _ENCRYPTION_KEY_PLACEHOLDER in keys:
+            raise ValueError(
+                "ENCRYPTION_KEYS_EXTRA must not contain the placeholder value "
+                f"{_ENCRYPTION_KEY_PLACEHOLDER!r}."
+            )
+        return ",".join(keys)
+
+    @property
+    def encryption_keys(self) -> list[str]:
+        """ENCRYPTION_KEY first, then each extra key once. Encryption uses only the first."""
+        keys = [self.encryption_key]
+        for key in self.encryption_keys_extra.split(","):
+            if key and key not in keys:
+                keys.append(key)
+        return keys
+
+    @model_validator(mode="after")
+    def k8s_credentials_refuse_subprocess_sandboxes(self) -> "Settings":
+        """Refuse Kubernetes credentials while user code can run inside the backend container.
+
+        The ServiceAccount token that reads Secrets is a file in this container, so a
+        `subprocess` sandbox could read it however well it scrubs the environment.
+        `auto` and `docker` fail closed instead of falling back to a subprocess.
+        """
+        if not self.k8s_credentials:
+            return self
+        modes = {
+            "HEYM_PYTHON_TOOL_SANDBOX": os.environ.get("HEYM_PYTHON_TOOL_SANDBOX", ""),
+            "HEYM_PLAYWRIGHT_SANDBOX": os.environ.get("HEYM_PLAYWRIGHT_SANDBOX", ""),
+            "HEYM_MCP_STDIO_SANDBOX": os.environ.get("HEYM_MCP_STDIO_SANDBOX")
+            or self.mcp_stdio_sandbox,
+        }
+        offending = sorted(
+            name for name, value in modes.items() if str(value).strip().lower() == "subprocess"
+        )
+        if offending:
+            raise ValueError(
+                "HEYM_K8S_CREDENTIALS cannot be enabled while "
+                f"{', '.join(offending)}=subprocess: user code would run next to the "
+                "ServiceAccount token that reads Secrets. Use auto or docker."
+            )
+        return self
 
     @property
     def effective_timezone(self) -> str:

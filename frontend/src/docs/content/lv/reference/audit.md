@@ -59,6 +59,10 @@ Katra stāvokļa maiņa tiek žurnālēta. Lasīšanas tiek žurnālētas tikai 
 | `auth.token_refresh` | `outcome=denied` ar `reason=refresh_token_replayed_or_revoked` — token zādzības signāls, par ko ir vērts izveidot brīdinājumu. |
 | `auth.password_change` | `outcome=failure`, ja pašreizējā parole bija nepareiza. |
 | `auth.sso_login` | Vienotā pieteikšanās. `outcome=failure` satur iemeslu, kāpēc pakalpojuma sniedzēja atbilde tika noraidīta; `denied` satur `email_not_verified`, `domain_not_allowed` vai `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Administrators mainīja [SSO](./sso.md) konfigurāciju. Reģistrē `enabled` un `password_login_disabled`, nekad client secret. |
 | `sso_settings.test` | Administrators palaida SSO savienojuma testu. |
 

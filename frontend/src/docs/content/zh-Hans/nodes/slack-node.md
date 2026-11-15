@@ -54,3 +54,5 @@
 - [Node Types](../reference/node-types.md) – 所有节点类型概览
 - [Error Handler](./error-handler-node.md) – 在 Workflow 失败时发送 Slack 消息
 - [Credentials Tab](../tabs/credentials-tab.md) – 添加 Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

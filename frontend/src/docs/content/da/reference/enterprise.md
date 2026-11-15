@@ -42,7 +42,7 @@ Praktiske træningssessioner skræddersyet til teamets kompetenceniveau og brugs
 
 ## Kubernetes-implementering
 
-Den standard [Kørsel & Implementering](../getting-started/running-and-deployment.md)-vejledning dækker Docker Compose til single-server-produktionsopsætninger. Enterprise-kunder modtager assistance med produktionsklar Kubernetes-implementering til høj tilgængelighed og horisontal skalering:
+Den standard [Kørsel & Implementering](../getting-started/running-and-deployment.md)-vejledning dækker Docker Compose til single-server-produktionsopsætninger. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise-kunder modtager assistance med produktionsklar Kubernetes-implementering til høj tilgængelighed og horisontal skalering:
 
 - **Flere worker-noder** - Fordeling af Heym-backend-workers på tværs af flere Kubernetes-noder til redundans og belastningsfordeling
 - **Sidecar-containere** - Konfiguration af sidecar-mønstre til logindsamling, monitoreringsagenter, service-meshes (Istio, Linkerd) og hemmelighedsinjektion (Vault)

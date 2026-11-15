@@ -107,3 +107,6 @@ Komandų Paletė yra prieinama iš redaktoriaus, prietaisų skydelio, dokumentac
 - [Greitas Pradžia](../getting-started/quick-start.md) – Sukurkite savo pirmąją darbo eigą
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Kortelės **Kredencialai** ir **DataTable** veikia tokiu pat būdu: `Ctrl + F` / `Cmd + F` suaktyvina paieškos lauką, sąrašas siaurėja rašant, o `Escape` jį išvalo.

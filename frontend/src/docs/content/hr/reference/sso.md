@@ -140,3 +140,6 @@ Neuspješna prijava vraća se na ekran za prijavu s čitljivom porukom. Heym nik
 - **Više istovremenih pružatelja.** Jedna instanca povezuje se s jednim pružateljem.
 - **Mapiranje grupa ili uloga** iz tvrdnji pružatelja.
 - **Jedinstveno odjavljivanje.** Odjavljivanje iz Heyma ne odjavljuje Vas iz pružatelja.
+
+- **Dvofaktorska prijava je u nadležnosti pružatelja usluge.** `HEYM_REQUIRE_MFA` odnosi se samo na prijavu lozinkom; prijava putem SSO-a nikada ne traži Heym kod. Zahtijevajte MFA kod svog pružatelja identiteta.
+- **Deaktivacija vrijedi i ovdje.** Račun koji je administrator deaktivirao u **Postavke → Korisnici** odbija se čak i ako ga pružatelj još uvijek autentificira.

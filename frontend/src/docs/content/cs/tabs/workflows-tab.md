@@ -85,6 +85,10 @@ Na počítači zobrazuje kruhový odznak v horní liště nástrojů, kolik work
 ## Vyhledávání
 
 Pomocí vyhledávacího pole workflow vedle **Stavu** nebo stisknutím **Ctrl+F** (či **Cmd+F**) filtrujte workflow podle názvu nebo popisu. Odpovídající workflow uvnitř složek se zobrazují s rozbalenými větvemi složek. Stisknutím **Escape** vyhledávání vymažete.
+## Hledání
+
+Použijte vyhledávací pole pro workflow vedle **Stavu** nebo stiskněte **Ctrl+F** (nebo **Cmd+F**) pro filtrování workflow podle názvu nebo popisu nebo složek podle názvu. Odpovídající workflow ve složkách se zobrazí s rozbalenými větvemi a složka s odpovídajícím názvem se zobrazí včetně veškerého obsahu. Stisknutím **Escape** vyhledávání zrušíte.
+
 ## Složky
 
 - Uspořádejte workflows do [složek a podsložek](../reference/workflow-organization.md)

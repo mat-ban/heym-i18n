@@ -189,7 +189,7 @@ Systém traces je účelově navržen pro ladění agentic chování, s plnými 
 Každé volání LLM v Heym je automaticky oceněno. [Záložka Traces](../tabs/traces-tab.md) zobrazuje počty vstupních a výstupních tokenů pro každý trace spolu s cenou v USD v reálném čase, odvozenou ze synchronizované cenové tabulky.
 
 - **Cena za trace** – Vstupní tokeny, výstupní tokeny a celková cena v USD zobrazená u každého řádku trace
-- **Analytika nákladů** – KPI karty a graf nákladů podle modelu se aktualizují podle zvoleného časového rozsahu (1h / 24h / 7d / 30d / Vše)
+- **Analytika nákladů** – KPI karty a graf nákladů podle modelu se aktualizují podle zvoleného časového rozsahu (1h / 3h / 6h / 24h / 7d / 30d / Vše)
 - **Tabulka nákladů LLM** – Systémová tabulka v [záložce DataTable](../tabs/datatable-tab.md) je naplňována z Helicone každých 24 hodin; můžete přepsat ceny nebo přidat vlastní řádky pro modely, které zde ještě nejsou uvedeny
 - **Upozornění na chybějící cenu** – U tras modelů bez cenové položky se zobrazí inline upozornění s přímým odkazem na tabulku nákladů
 
@@ -274,7 +274,7 @@ Workflowy jsou volatelná přes HTTP na `/api/workflows/{workflow_id}/execute`, 
 Heym má nativní podporu [MCP](../tabs/mcp-tab.md) na obou stranách:
 
 - **Jako klient**: Uzly agentů se připojují k externím MCP serverům (Filesystem, Browserbase, vlastní nástroje) přes stdio nebo SSE a automaticky konzumují jejich nástroje
-- **Jako server**: Workflowy s zapnutým MCP se stávají nástroji na výchozím serveru na `/api/mcp/sse`, nebo na pojmenovaných serverech s vlastní URL a API klíčem, takže Claude Desktop, Cursor a další MCP klienti mohou přímo volat vaše Heym workflowy
+- **Jako server**: Workflowy s zapnutým MCP se stávají nástroji na výchozím serveru na `/api/mcp (or /api/mcp/sse for legacy connections)`, nebo na pojmenovaných serverech s vlastní URL a API klíčem, takže Claude Desktop, Cursor a další MCP klienti mohou přímo volat vaše Heym workflowy
 
 Agenti mohou konzumovat několik MCP serverů najednou a jakýkoli workflow se může stát nástrojem pro externího MCP klienta.
 

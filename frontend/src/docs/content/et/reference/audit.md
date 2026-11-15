@@ -59,6 +59,10 @@ Iga olekumuudatus logitakse. Lugemised logitakse ainult seal, kus lugemine ise o
 | `auth.token_refresh` | `outcome=denied` koos `reason=refresh_token_replayed_or_revoked` — tokeni varguse signaal, mille kohta tasub teavitust seadistada. |
 | `auth.password_change` | `outcome=failure`, kui praegune parool oli vale. |
 | `auth.sso_login` | Ühekordne sisselogimine. `outcome=failure` sisaldab põhjust, miks teenusepakkuja vastus tagasi lükati; `denied` sisaldab `email_not_verified`, `domain_not_allowed` või `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Administraator muutis [SSO](./sso.md) konfiguratsiooni. Salvestab `enabled` ja `password_login_disabled`, mitte kunagi kliendi saladust. |
 | `sso_settings.test` | Administraator käivitas SSO ühenduse testi. |
 

@@ -4,7 +4,7 @@ import copy
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import select, union_all
+from sqlalchemy import func, select, union_all
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import CompoundSelect
 
@@ -36,44 +36,89 @@ def _unfinished_execution_query(workflow_id: UUID) -> CompoundSelect:
                 [STATUS_HELD, STATUS_QUEUED, STATUS_WAITING_FOR_MAIN, STATUS_CLAIMED]
             ),
         ),
+        # Only a review that can still be answered can still resume the run. Past
+        # expires_at every answer path refuses it, so it would block deletion forever.
         select(HITLRequest.execution_history_id).where(
             HITLRequest.workflow_id == workflow_id,
             HITLRequest.status == "pending",
+            HITLRequest.expires_at > func.now(),
             HITLRequest.execution_history_id.is_not(None),
         ),
         select(CodexFollowupRequest.execution_history_id).where(
             CodexFollowupRequest.workflow_id == workflow_id,
             CodexFollowupRequest.status == "pending",
+            CodexFollowupRequest.expires_at > func.now(),
             CodexFollowupRequest.execution_history_id.is_not(None),
         ),
     )
 
 
+ADMIN_PAUSE_MARKER = "_adminPaused"
+# Separate from the admin marker, so reactivating an account never resumes a workflow an
+# administrator paused on purpose, and an admin resume never undoes a deactivation.
+OWNER_DEACTIVATED_MARKER = "_ownerDeactivated"
+
+
 def set_automatic_triggers_paused(
-    nodes: list[dict[str, Any]], *, paused: bool
+    nodes: list[dict[str, Any]], *, paused: bool, marker: str = ADMIN_PAUSE_MARKER
 ) -> list[dict[str, Any]]:
-    """Pause/resume triggers without enabling ones already off before an admin pause.
+    """Pause/resume triggers without enabling ones already off before the pause.
 
     Remember affected triggers in their stored node data so Resume survives reloads
-    and works from another administrator's session. Older paused graphs without this
-    marker can still be resumed by enabling their automatic triggers.
+    and works from another administrator's session. Older admin-paused graphs without
+    the marker can still be resumed by enabling their automatic triggers.
     """
     updated = copy.deepcopy(nodes)
     triggers = [node for node in updated if node.get("type") in TRIGGER_NODE_TYPES]
-    has_pause_marker = any(node.get("data", {}).get("_adminPaused") is True for node in triggers)
-    resume_unmarked = not has_pause_marker and all(
-        node.get("data", {}).get("active") is False for node in triggers
+    has_pause_marker = any(node.get("data", {}).get(marker) is True for node in triggers)
+    resume_unmarked = (
+        marker == ADMIN_PAUSE_MARKER
+        and not has_pause_marker
+        and all(node.get("data", {}).get("active") is False for node in triggers)
     )
     for node in triggers:
         data = node.setdefault("data", {})
         if paused:
             if data.get("active") is not False:
-                data["_adminPaused"] = True
+                data[marker] = True
                 data["active"] = False
-        elif resume_unmarked or data.get("_adminPaused") is True:
+        elif resume_unmarked or data.get(marker) is True:
             data["active"] = True
-            data.pop("_adminPaused", None)
+            data.pop(marker, None)
     return updated
+
+
+async def close_expired_reviews(db: AsyncSession, workflow_id: UUID) -> int:
+    """Cancel the workflow's runs parked on reviews nobody can answer any more.
+
+    Goes through ``cancel_pending_review_execution``, the path Cancel uses: the history
+    row becomes ``cancelled`` and a board chain parked on the review resumes, which it
+    could no longer do once the workflow is gone. Commits. Returns how many were closed.
+    """
+    from app.services.pending_review_cancel import cancel_pending_review_execution
+
+    expired = union_all(
+        select(HITLRequest.execution_history_id).where(
+            HITLRequest.workflow_id == workflow_id,
+            HITLRequest.status == "pending",
+            HITLRequest.expires_at <= func.now(),
+            HITLRequest.execution_history_id.is_not(None),
+        ),
+        select(CodexFollowupRequest.execution_history_id).where(
+            CodexFollowupRequest.workflow_id == workflow_id,
+            CodexFollowupRequest.status == "pending",
+            CodexFollowupRequest.expires_at <= func.now(),
+            CodexFollowupRequest.execution_history_id.is_not(None),
+        ),
+    )
+    execution_ids = {row[0] for row in (await db.execute(expired)).all()}
+    closed = 0
+    for execution_id in execution_ids:
+        if await cancel_pending_review_execution(
+            db, workflow_id=workflow_id, execution_id=execution_id
+        ):
+            closed += 1
+    return closed
 
 
 async def has_unfinished_workflow_executions(db: AsyncSession, workflow_id: UUID) -> bool:

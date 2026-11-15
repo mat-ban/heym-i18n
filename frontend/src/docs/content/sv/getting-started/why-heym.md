@@ -189,7 +189,7 @@ Spårningssystemet är specialbyggt för att felsöka agentiskt beteende, med fu
 Varje LLM-anrop i Heym kostnadsberäknas automatiskt. Fliken [Traces](../tabs/traces-tab.md) visar antal input- och output-tokens per trace tillsammans med en realtidskostnad i USD som härleds från en synkroniserad pristabell.
 
 - **Kostnad per trace** – Input-tokens, output-tokens och total USD visas på varje trace-rad
-- **Kostnadsanalys** – KPI-kort och ett kostnadsdiagram per modell uppdateras med det valda tidsintervallet (1h / 24h / 7d / 30d / All)
+- **Kostnadsanalys** – KPI-kort och ett kostnadsdiagram per modell uppdateras med det valda tidsintervallet (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **LLM Cost Table** – En systemtabell i fliken [DataTable](../tabs/datatable-tab.md) seedas från Helicone var 24:e timme; priser kan åsidosättas eller anpassade rader läggas till för modeller som ännu inte finns med
 - **Varning för saknat pris** – Traces för modeller utan prispost visar en inline-varning med en direktlänk till kostnadstabellen
 
@@ -274,7 +274,7 @@ Workflows kan anropas över HTTP på `/api/workflows/{workflow_id}/execute`, vil
 Heym har inbyggt stöd för [MCP](../tabs/mcp-tab.md) på båda sidor:
 
 - **Som klient**: Agentnoder ansluter till externa MCP-servrar (Filesystem, Browserbase, anpassade verktyg) via stdio eller SSE och konsumerar deras verktyg automatiskt
-- **Som server**: Workflows med MCP aktiverat blir verktyg på standardservern på `/api/mcp/sse`, eller på namngivna servrar med egen URL och API-nyckel, så att Claude Desktop, Cursor och andra MCP-klienter kan anropa Heym-workflows direkt
+- **Som server**: Workflows med MCP aktiverat blir verktyg på standardservern på `/api/mcp (or /api/mcp/sse for legacy connections)`, eller på namngivna servrar med egen URL och API-nyckel, så att Claude Desktop, Cursor och andra MCP-klienter kan anropa Heym-workflows direkt
 
 Agenter kan konsumera flera MCP-servrar samtidigt, och vilken workflow som helst kan bli ett verktyg för en extern MCP-klient.
 

@@ -72,6 +72,7 @@ HEYM_OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 | `heym.agent.tool.args_bytes` | シリアライズされたツール引数の UTF-8 サイズ。 |
 | `heym.agent.tool.result_bytes` | シリアライズされたツール結果の UTF-8 サイズ。 |
 | `heym.agent.tool.status` | `success`、`error`、`pending`、`timeout`、または `cancelled`。ツールエラー時は span ステータスが `ERROR` に設定されます。 |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 生のツール引数および結果は、デフォルトでは span に付加されません。
 

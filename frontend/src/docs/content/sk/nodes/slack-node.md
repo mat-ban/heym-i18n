@@ -54,3 +54,5 @@ Použite s [Error Handler](./error-handler-node.md) na notifikácie o zlyhaní:
 - [Node Types](../reference/node-types.md) – Prehľad všetkých typov uzlov
 - [Error Handler](./error-handler-node.md) – Odoslanie Slack pri zlyhaní workflowu
 - [Credentials Tab](../tabs/credentials-tab.md) – Pridanie Slack webhooku
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

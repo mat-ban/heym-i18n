@@ -84,7 +84,8 @@
     "dropFileOrClick": "Перетягніть файл сюди або натисніть, щоб вибрати",
     "removeFile": "Видалити файл",
     "chooseFileFor": "Виберіть файл для {label}",
-    "new": "Новий"
+    "new": "Новий",
+    "clearSearch": "Очистити пошук"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Увімкнути",
     "disablePlugin": "Вимкнути",
     "uninstallPlugin": "Видалити",
-    "pluginOperationFailed": "Не вдалося виконати операцію з плагіном"
+    "pluginOperationFailed": "Не вдалося виконати операцію з плагіном",
+    "users": "Користувачі",
+    "encryption": "Шифрування"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "allCredentials": "Усі Credentials",
     "allWorkflows": "Усі Workflows",
     "noTracesYet": "Traces поки відсутні.",
-    "noTracesSubtitle": "Виконуйте Workflow з LLM-вузлами, щоб переглядати spans виконання, затримку та використання token."
+    "noTracesSubtitle": "Виконуйте Workflow з LLM-вузлами, щоб переглядати spans виконання, затримку та використання token.",
+    "timeRange3h": "Останні 3 години",
+    "timeRange6h": "Останні 6 годин"
   },
   "tables": {
     "title": "DataTables",
@@ -1282,7 +1287,9 @@
     "browseAll": "Переглянути всі →",
     "askAi": "Запитати AI",
     "dropToImport": "Перетягніть JSON або ZIP для імпорту",
-    "noWorkflowsMatch": "Жоден Workflow не відповідає цьому фільтру."
+    "noWorkflowsMatch": "Жоден Workflow не відповідає цьому фільтру.",
+    "noWorkflowsMatchAll": "Спробуйте іншу назву, опис або назву папки.",
+    "noWorkflowsMatchFilter": "Спробуйте іншу назву, опис, назву папки або фільтр статусу."
   },
   "schedules": {
     "title": "Розклади",
@@ -1477,7 +1484,9 @@
     "saveQueuedMessage": "Зберегти повідомлення в черзі",
     "editQueuedMessage": "Редагувати повідомлення в черзі",
     "subtitle": "Запускайте Workflows і ставте запитання",
-    "modelsLoadFailedDisabled": "Не вдалося завантажити список моделей цих облікових даних. Chat залишається вимкненим, доки не вдасться отримати модель."
+    "modelsLoadFailedDisabled": "Не вдалося завантажити список моделей цих облікових даних. Chat залишається вимкненим, доки не вдасться отримати модель.",
+    "dropFilesToAttach": "Перетягніть файли для вкладення",
+    "attachFiles": "Прикріпити файли"
   },
   "teams": {
     "title": "Команди",
@@ -1862,7 +1871,8 @@
       "skipped": "Пропущено"
     },
     "permissionRead": "читання",
-    "permissionWrite": "запис"
+    "permissionWrite": "запис",
+    "details": "Деталі"
   },
   "variables": {
     "title": "Глобальні змінні",
@@ -2242,7 +2252,8 @@
       "actions": "Дії",
       "failedToLoadWidget": "Не вдалося завантажити віджет",
       "failedToUpdateCheckbox": "Не вдалося оновити прапорець",
-      "refreshDashboard": "Оновити дашборд"
+      "refreshDashboard": "Оновити дашборд",
+      "revertPrevious": "Повернути попередній"
     },
     "widgetType": "Тип віджета",
     "workflow": "Workflow",

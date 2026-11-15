@@ -68,3 +68,7 @@ Eine schreibgeschützte Systemtabelle, die Tokenpreise verschiedener Anbieter er
 - [DataTable-Knoten](../nodes/datatable-node.md) – Tabellenzugriff im Workflow
 - [KI-Assistent](../reference/ai-assistant.md) – Tabellenerstellung über den Chat
 - [Reiter Ausführungen](./traces-tab.md) – Kostenkalkulation
+
+## Suche
+
+Verwenden Sie das Suchfeld über der Tabellenliste oder drücken Sie **Ctrl+F** (oder **Cmd+F**), um Tabellen während der Eingabe nach Name oder Beschreibung zu filtern. Drücken Sie **Escape**, um die Suche zurückzusetzen.

@@ -97,3 +97,21 @@ data: {"type":"execution_complete","status":"success","outputs":{"LLM":{"text":"
 - [Parallel Execution](./parallel-execution.md) – 스트리밍이 Heym의 DAG 스케줄러에 통합되는 방식
 - [Canvas Features](./canvas-features.md) – Run with cURL을 포함한 편집기 컨트롤
 - [Security](./security.md) – 인증 및 시크릿 처리
+
+## File uploads and run widgets
+
+`POST /api/file-intake/u/{token}` (multipart) and
+`POST /api/dashboards/widgets/{widget_id}/run` (JSON inputs) accept
+`Accept: text/event-stream`. They send an immediate SSE comment and a heartbeat every
+15 seconds while the workflow runs, followed by one JSON event:
+
+```text
+data: {"type":"result","result":{"run_id":"...","status":"success","output":{}}}
+```
+
+A failure after streaming starts sends `{"type":"error","status":500,"detail":"..."}`.
+Validation and access refusals before streaming keep their HTTP status. Without that
+Accept header, these endpoints keep their existing JSON response. A disconnected
+listener does not cancel a run that has already started; check execution history
+before submitting it again. File runs and run widgets appear in active executions
+while running and retain the same execution ID in history.

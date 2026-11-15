@@ -72,6 +72,7 @@ Nosaukums: `heym.agent.tool.execute`, izveidots aktīvā aģenta mezgla span.
 | `heym.agent.tool.args_bytes` | UTF-8 sērijveida rīka argumentu izmērs. |
 | `heym.agent.tool.result_bytes` | UTF-8 sērijveida rīka rezultāta izmērs. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` vai `cancelled`. Rīka kļūdas iestata span statusu uz `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Nekādas izejas rīka argumenti un rezultāti pēc noklusējuma netiek pievienoti span.
 

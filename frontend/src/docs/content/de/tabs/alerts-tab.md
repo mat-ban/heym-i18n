@@ -2,6 +2,9 @@
 
 Der Reiter **Warnungen** (Alerts) ermöglicht das Definieren von Schwellenwerten über gleitende Zeitfenster, um bei Unregelmäßigkeiten oder Fehlern frühzeitig benachrichtigt zu werden.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Alerts-Demo ansehen</a></p>
+
 ## Alarm-Typen
 
 | Typ | Überwachte Fragestellung | Datenquelle |

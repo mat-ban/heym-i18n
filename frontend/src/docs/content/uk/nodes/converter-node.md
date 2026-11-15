@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | Ідентифікатор вузла (camelCase) |
 | `conversion` | string | `csvToJson` (текст CSV → масив об'єктів рядків), `jsonToCsv` (масив об'єктів/рядків → текст CSV), `xmlToJson` (текст XML → об'єкт), `jsonToXml` (об'єкт → текст XML), `imageToText` (OCR зображення), `pdfToText` (OCR кожної вибраної сторінки PDF) або `fileConvert` (перезапис збереженого файлу в іншому форматі) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Дані для перетворення. Залиште порожнім, щоб використати перший вхід вузла |
 | `delimiter` | string | Односимвольний роздільник полів (типово `,`) |
 | `hasHeader` | boolean | Лише `csvToJson` — вважати перший рядок заголовком (типово `true`) |
@@ -169,3 +170,6 @@ OCR викликає зовнішні `tesseract` та `pdftoppm` з poppler, а
 - [Drive](./drive-node.md) – Зберігання, отримання та поширення файлів
 - [Node Types](../reference/node-types.md) – Огляд усіх типів вузлів
 - [Expression DSL](../reference/expression-dsl.md) – Функції та синтаксис
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

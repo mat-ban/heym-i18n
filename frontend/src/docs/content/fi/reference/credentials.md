@@ -32,6 +32,7 @@ Tunnistetiedot tallentavat API-avaimia ja salaisuuksia, joita workflow-solmut k�
 | [Grist](../nodes/grist-node.md) | Grist | API-avain + palvelimen URL-osoite |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Asiakas-ID + Asiakassalaisuus + OAuth2-suostumus |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Asiakas-ID + Asiakassalaisuus + OAuth2-suostumus |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Asiakas-ID + Asiakassalaisuus + OAuth2-suostumus |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Projektin URL-osoite + API-avain (+ valinnainen oletusskeema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Is채nt채 + portti + k채ytt채j채tunnus/salasana + tietokanta (+ suojattu) |

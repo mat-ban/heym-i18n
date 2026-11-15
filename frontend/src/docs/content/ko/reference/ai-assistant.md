@@ -48,6 +48,7 @@ Agent 모드에서 메시지 필드 아래의 **YOLO mode** 상자를 선택하�
 - 입력란에 요청을 입력합니다(예: "Create a workflow that takes user input and sends it to an LLM")
 - **Enter**를 눌러 전송합니다(줄바꿈은 Shift+Enter)
 - AI가 응답을 스트리밍합니다. **Agent** 모드에서 응답에 \`\`\`json 코드 블록의 Workflow가 포함되어 있으면 자동으로 파싱되어 캔버스에 적용됩니다. **Ask** 모드에서는 캔버스가 절대 수정되지 않습니다.
+- 워크플로 JSON이 스트리밍되는 동안 답변 아래의 한 줄에 워크플로 이름과 지금까지 작성된 노드가 표시됩니다(예: `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`).
 - **Clear**를 사용하여 대화를 초기화합니다
 - 메시지에 마우스를 올리고 복사 아이콘을 클릭하면 표시된 텍스트(Workflow JSON 포함)를 복사할 수 있습니다
 - 메시지 상자 위의 선을 드래그하면 상자가 더 커집니다. 입력 영역은 패널의 60%까지 커질 수 있으며, 페이지를 새로고침하면 기본 높이로 돌아갑니다

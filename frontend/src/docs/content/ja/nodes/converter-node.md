@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | ノード識別子（camelCase） |
 | `conversion` | string | `csvToJson`（CSV テキスト → 行オブジェクトの配列）、`jsonToCsv`（オブジェクト/行の配列 → CSV テキスト）、`xmlToJson`（XML テキスト → オブジェクト）、`jsonToXml`（オブジェクト → XML テキスト）、`imageToText`（画像を OCR）、`pdfToText`（選択した PDF の各ページを OCR）、`fileConvert`（保存済みファイルを別フォーマットに書き換え）のいずれか |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | 変換対象のデータ。空欄の場合はノードの最初の入力を使用します |
 | `delimiter` | string | 単一文字のフィールド区切り文字（デフォルト `,`） |
 | `hasHeader` | boolean | `csvToJson` のみ — 先頭行をヘッダーとして扱います（デフォルト `true`） |
@@ -169,3 +170,6 @@ OCR は `tesseract` と poppler の `pdftoppm` を呼び出し、ドキュメン
 - [Drive](./drive-node.md) – ファイルの保存、取得、共有
 - [Node Types](../reference/node-types.md) – すべてのノードタイプの概要
 - [Expression DSL](../reference/expression-dsl.md) – 関数と構文
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

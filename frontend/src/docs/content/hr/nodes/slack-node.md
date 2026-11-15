@@ -54,3 +54,5 @@ Koristite s [Error Handler](./error-handler-node.md) za obavijesti o pogreškama
 - [Node Types](../reference/node-types.md) – Pregled svih tipova čvorova
 - [Error Handler](./error-handler-node.md) – Pošaljite Slack pri pogrešci workflowa
 - [Credentials Tab](../tabs/credentials-tab.md) – Dodajte Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

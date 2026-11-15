@@ -12,7 +12,7 @@ Startnoder (inga inkommande kanter) som initierar körning:
 | [Cron](../nodes/cron-node.md) | Körs enligt ett schema (cron-uttryck, t.ex. `0 * * * *` för varje timme). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Startar när Telegram skickar en bot-webhook-uppdatering till nodens specifika webhook-URL. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Startar när Discord skickar en Interactions API-webhook till nodens specifika endpoint. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Pollar en IMAP-brevlåda och startar en gång för varje nyupptäckt e-postmeddelande. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Pollar en IMAP-brevlåda och startar en gång för varje nyupptäckt e-postmeddelande. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Startar när Heym publicerar en plattformshändelse. Händelser inom ett dispatch-fönster anländer tillsammans som en array. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Öppnar en utgående klientanslutning till en extern socket och startar vid valda socket-händelser. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Skapar en engångs-uppladdnings-URL och startar när en anropare skickar en stor multipart-fil. |

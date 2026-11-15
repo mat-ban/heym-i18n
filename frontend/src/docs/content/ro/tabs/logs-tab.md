@@ -50,3 +50,8 @@ Dacă înregistrarea este deschisă, creați contul de administrator de încrede
 - [Analytics Tab](./analytics-tab.md) – Metrici de execuție
 - [Workflows Tab](./workflows-tab.md) – Gestionarea workflow-urilor
 - [Contextual Showcase](../reference/contextual-showcase.md) – Ghid compact de pagină pentru suprafețele dashboard-ului
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Rutarea simptomelor la execuție către procedura de incident adecvată
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnosticarea defecțiunilor bazei de date, serviciilor, clusterului și sandbox-ului

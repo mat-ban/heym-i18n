@@ -72,6 +72,7 @@ Nume: `heym.agent.tool.execute`, creat sub spanul nodului Agent activ.
 | `heym.agent.tool.args_bytes` | Dimensiunea UTF-8 a argumentelor serializate ale instrumentului. |
 | `heym.agent.tool.result_bytes` | Dimensiunea UTF-8 a rezultatului serializat al instrumentului. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` sau `cancelled`. Erorile instrumentului setează statusul spanului la `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Argumentele și rezultatele brute ale instrumentelor nu sunt atașate la spanuri implicit.
 

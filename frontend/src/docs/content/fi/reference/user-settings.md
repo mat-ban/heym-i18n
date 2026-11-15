@@ -131,3 +131,6 @@ Paneeli raportoi myös, kuinka suuri osa viimeisen 24 tunnin suorituksista pysty
 - [Turvallisuus](./security.md) – Istuntonhallinta, käyttökiellot, tunnistetietojen salaus
 - [Kertakirjautuminen](./sso.md) – Yhdistä ulkoinen OpenID Connect -palveluntarjoaja
 - [OpenTelemetry Tracing](./opentelemetry.md) – Hajautettu jäljitys workflow- ja solmujen suorituksille
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

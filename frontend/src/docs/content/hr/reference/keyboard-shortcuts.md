@@ -107,3 +107,6 @@ Ovi prečaci su dostupni u dijalogu Povijest Izvršenja i panelu Tragovi.
 - [Brzi Početak](../getting-started/quick-start.md) – Izradite svoj prvi workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Kartice **Vjerodajnice** i **DataTable** rade na isti način: `Ctrl + F` / `Cmd + F` fokusira polje za pretraživanje, popis se sužava dok tipkate, a `Escape` ga briše.

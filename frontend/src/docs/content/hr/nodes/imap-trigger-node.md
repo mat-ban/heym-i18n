@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap` vjerodajnica koja sadrži poslužitelj, podatke za prijavu, poštanski sandučić i SSL postavke |
 | `pollIntervalMinutes` | Integer | Koliko često Heym provjerava poštanski sandučić za novu e-poštu |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Vodič za postavljanje
 
@@ -62,6 +63,8 @@ Nakon što se čvor aktivira, nizvodni čvorovi mogu pristupiti:
 | `$nodeLabel.email.text` | Tijelo u običnom tekstu |
 | `$nodeLabel.email.html` | HTML tijelo |
 | `$nodeLabel.email.attachments` | Polje metapodataka o privicima (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekodirani objekt zaglavlja |
 | `$nodeLabel.email.uid` | IMAP UID za deduplikaciju ili bilježenje |
 | `$nodeLabel.triggered_by` | Oznaka izvora triggera (`"imap"`) |

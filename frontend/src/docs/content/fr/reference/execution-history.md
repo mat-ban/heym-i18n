@@ -176,3 +176,7 @@ Les boîtes de dialogue d'historique du canvas et du tableau de bord conservent 
 - [Edit History](./edit-history.md) – Gestion de versions des sauvegardes de workflow (restauration, diff)
 - [Quick Start](../getting-started/quick-start.md) – Créez et exécutez votre premier workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Créez et gérez des workflows
+
+## Related
+
+- [Operations Runbook (L1) : File d'attente](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Distinguer les exécutions en attente, suspendues, interrompues et récupérées avant rejeu

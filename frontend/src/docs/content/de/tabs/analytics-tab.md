@@ -65,3 +65,7 @@ Fahren Sie mit der Maus über ein Diagramm, um den Knotentyp unter dem Mauszeige
 - [Kontextuelle Feature-Tour](../reference/contextual-showcase.md) – Kompakter Seitenleitfaden für Dashboard-Oberflächen
 
 Wenn ein Diagramm einen Trend zeigt, über den Sie informiert werden möchten, anstatt ihn manuell zu beobachten, wandeln Sie ihn in eine [Warnung](./alerts-tab.md) um: Fehleranzahl, Laufzeit, LLM-Kosten und Ausführungsanzahl können jeweils mit einem Schwellenwert über ein Zeitfenster versehen werden.
+
+## Related
+
+- [Operations Runbook (L1): Ressourcennutzung](../reference/operations-runbook.md#most-resource-consuming-workflows) - Finden Sie ressourcenintensive und langlebige Workflows und korrelieren Sie CPU, Speicher und Token

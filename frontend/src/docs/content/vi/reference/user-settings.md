@@ -132,3 +132,6 @@ Bảng điều khiển cũng báo cáo có bao nhiêu trong số các run của 
 - [Security](./security.md) – Quản lý session, rate limiting, mã hóa credential
 - [Single Sign-On](./sso.md) – Kết nối một nhà cung cấp OpenID Connect bên ngoài
 - [OpenTelemetry Tracing](./opentelemetry.md) – Distributed tracing cho các lần thực thi workflow và node
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

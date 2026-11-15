@@ -84,7 +84,8 @@
     "dropFileOrClick": "Lohistage fail siia või klõpsake valimiseks",
     "removeFile": "Eemalda fail",
     "chooseFileFor": "Valige fail üksusele {label}",
-    "new": "Uus"
+    "new": "Uus",
+    "clearSearch": "Tühjenda otsing"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Luba",
     "disablePlugin": "Keela",
     "uninstallPlugin": "Desinstalli",
-    "pluginOperationFailed": "Plugina toiming ebaõnnestus"
+    "pluginOperationFailed": "Plugina toiming ebaõnnestus",
+    "users": "Kasutajad",
+    "encryption": "Krüpteerimine"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopeeri trace'i ID",
     "openTrace": "Ava trace",
     "message": "Sõnum",
-    "emptyReply": "Tühi vastus."
+    "emptyReply": "Tühi vastus.",
+    "timeRange3h": "Viimased 3 tundi",
+    "timeRange6h": "Viimased 6 tundi"
   },
   "tables": {
     "title": "Andmetabelid",
@@ -1215,7 +1220,9 @@
     "browseAll": "Sirvi kõiki →",
     "askAi": "Küsi AI-lt",
     "dropToImport": "Importimiseks lohistage JSON või ZIP",
-    "noWorkflowsMatch": "Sellele filtrile ei vasta ükski Workflow."
+    "noWorkflowsMatch": "Sellele filtrile ei vasta ükski Workflow.",
+    "noWorkflowsMatchAll": "Proovige teist pealkirja, kirjeldust või kausta nime.",
+    "noWorkflowsMatchFilter": "Proovige teist pealkirja, kirjeldust, kausta nime või olekufiltrit."
   },
   "schedules": {
     "title": "Ajakavad",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Käivitatud MCP kliendi poolt",
     "newChatTitle": "Uus chat",
     "subtitle": "Käivitage Workflow'sid ja esitage küsimusi",
-    "modelsLoadFailedDisabled": "Nende volituste mudelinimekirja ei õnnestunud laadida. Chat jääb keelatuks, kuni mudelit on võimalik hankida."
+    "modelsLoadFailedDisabled": "Nende volituste mudelinimekirja ei õnnestunud laadida. Chat jääb keelatuks, kuni mudelit on võimalik hankida.",
+    "dropFilesToAttach": "Lohista failid manustamiseks",
+    "attachFiles": "Manusta failid"
   },
   "teams": {
     "title": "Tiimid",
@@ -1883,7 +1892,8 @@
       "skipped": "Vahele jäetud"
     },
     "permissionRead": "lugemine",
-    "permissionWrite": "kirjutamine"
+    "permissionWrite": "kirjutamine",
+    "details": "Üksikasjad"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "Toimingud",
       "failedToLoadWidget": "Vidina laadimine ebaõnnestus",
       "failedToUpdateCheckbox": "Märkeruudu uuendamine ebaõnnestus",
-      "refreshDashboard": "Värskenda töölauda"
+      "refreshDashboard": "Värskenda töölauda",
+      "revertPrevious": "Taasta eelmine"
     },
     "hitl": {
       "previousReview": "Eelmine ülevaatus",

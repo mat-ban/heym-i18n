@@ -176,3 +176,7 @@ Il canvas e le finestre di dialogo della cronologia della dashboard mantengono i
 - [Cronologia modifiche](./edit-history.md) – Controllo di versione per i salvataggi dei workflow (ripristino, diff)
 - [Avvio rapido](../getting-started/quick-start.md) – Creare ed eseguire il primo workflow
 - [Scheda Workflows](../tabs/workflows-tab.md) – Creare e gestire i workflow
+
+## Related
+
+- [Operations Runbook (L1): Coda di esecuzione](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Distinguere le esecuzioni in coda, sospese, interrotte e ripristinate prima di rieseguirle

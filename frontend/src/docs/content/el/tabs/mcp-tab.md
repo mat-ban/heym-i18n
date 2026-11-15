@@ -11,7 +11,7 @@
 
 ## Default MCP Server
 
-Ο default server είναι πάντα διαθέσιμος στη διεύθυνση `{origin}/api/mcp/sse`. Όλα τα workflows με ενεργοποιημένο MCP εμφανίζονται εδώ ως εργαλεία.
+Ο default server είναι πάντα διαθέσιμος στη διεύθυνση `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)`. Όλα τα workflows με ενεργοποιημένο MCP εμφανίζονται εδώ ως εργαλεία.
 
 ### MCP API Key
 
@@ -180,7 +180,7 @@
 
 | Server | Endpoint |
 |--------|----------|
-| Default | `{origin}/api/mcp/sse` |
+| Default | `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
 Και τα δύο endpoints υποστηρίζουν το SSE transport (GET, MCP spec 2024-11-05) και το Streamable HTTP transport (POST, MCP spec 2025-03-26). Τα Claude, ChatGPT και Gemini χρησιμοποιούν OAuth 2.1 / PKCE για ασφαλή σύνδεση και στα δύο.
@@ -195,3 +195,17 @@
 - [Workflows Tab](./workflows-tab.md) – Δημιουργία και διαχείριση workflows
 - [Node Types](../reference/node-types.md) – Επισκόπηση AI nodes
 - [Contextual Showcase](../reference/contextual-showcase.md) – Συμπαγής οδηγός σελίδας για επιφάνειες dashboard
+
+### Memory tools: get_user_memory and set_user_memory
+
+The default server always lists two more tools, with or without `heym_chat`, so any MCP client shares one memory with Heym's Chat and Heym Work. The memory is your [User Rules](../reference/user-settings.md#user-rules-as-memory).
+
+| Tool | Arguments | Returns |
+|------|-----------|---------|
+| `get_user_memory` | none | `content` (your User Rules), `revision`, `length`, `max_length` |
+| `set_user_memory` | `mode` (`append` or `replace`), `content`, `revision` (required for `replace`) | `status` (`added`, `replaced`, `unchanged`, `conflict`, `refused`) and the memory after the write |
+
+- `append` adds one line.
+- `replace` rewrites the whole text and only lands when `revision` matches the stored text. On `conflict`, the result carries the current text and revision to merge and retry.
+- Text that looks like an API key, token, password or other credential is refused, and nothing is saved.
+- Named servers do not list these tools. A workflow named `get_user_memory` or `set_user_memory` is not listed on the default server.

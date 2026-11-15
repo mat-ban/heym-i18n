@@ -123,3 +123,6 @@ Als geen rij overeenkomt, wordt het model vermeld onder de **Unpriced models**-m
 - [Traces Tab](./traces-tab.md) - Uses the LLM Cost Table for the cost donut and KPI cards
 - [Grist Node](../nodes/grist-node.md) - External spreadsheet alternative
 - [Variables Tab](./global-variables-tab.md) - Key-value storage alternative
+## Zoeken
+
+Gebruik het zoekveld boven de tabellenlijst of druk op **Ctrl+F** (of **Cmd+F**) om tabellen tijdens het typen op naam of beschrijving te filteren. Druk op **Escape** om de zoekopdracht te wissen.

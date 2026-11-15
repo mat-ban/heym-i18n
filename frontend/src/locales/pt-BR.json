@@ -103,7 +103,8 @@
     "pickCredentialModelTooltip": "Selecione uma credencial e um modelo acima para usar o board",
     "read": "Ler",
     "remove": "Remover",
-    "removeAttachmentAria": "Remover {name}"
+    "removeAttachmentAria": "Remover {name}",
+    "details": "Detalhes"
   },
   "canvas": {
     "analyze": "Analisar",
@@ -456,7 +457,9 @@
     "suggestion4": "Adicionar uma tarefa ao meu quadro Kanban",
     "suggestion5": "O que está armazenado nas minhas variáveis globais?",
     "subtitle": "Executar Workflows e fazer perguntas",
-    "modelsLoadFailedDisabled": "Não foi possível carregar a lista de modelos desta credencial. O chat permanece desativado até que um modelo possa ser obtido."
+    "modelsLoadFailedDisabled": "Não foi possível carregar a lista de modelos desta credencial. O chat permanece desativado até que um modelo possa ser obtido.",
+    "dropFilesToAttach": "Solte arquivos para anexar",
+    "attachFiles": "Anexar arquivos"
   },
   "common": {
     "actions": "Ações",
@@ -543,7 +546,8 @@
     "dropFileOrClick": "Arraste um arquivo aqui ou clique para selecionar",
     "removeFile": "Remover arquivo",
     "chooseFileFor": "Escolher um arquivo para {label}",
-    "new": "Novo"
+    "new": "Novo",
+    "clearSearch": "Limpar busca"
   },
   "credentials": {
     "accessVia": "Acessar via",
@@ -762,7 +766,9 @@
     "noWorkflowsMatch": "Nenhum workflow corresponde a este filtro.",
     "quickStartTemplates": "Modelos de início rápido",
     "subtitle": "Crie, orquestre e execute seus agentes autônomos modulares",
-    "whatToAutomate": "O que você deseja automatizar?"
+    "whatToAutomate": "O que você deseja automatizar?",
+    "noWorkflowsMatchAll": "Tente um título, descrição ou nome de pasta diferente.",
+    "noWorkflowsMatchFilter": "Tente um título, descrição, nome de pasta ou filtro de status diferente."
   },
   "dashboards": {
     "actions": {
@@ -777,7 +783,8 @@
       "refine": "Ajustar com IA",
       "refresh": "Atualizar",
       "refreshDashboard": "Atualizar dashboard",
-      "settings": "Configurações"
+      "settings": "Configurações",
+      "revertPrevious": "Reverter anterior"
     },
     "addDescriptionPlaceholder": "Opcional. Exibido no canvas, não na grade.",
     "addWidget": "Adicionar widget",
@@ -2039,7 +2046,9 @@
     "enablePlugin": "Ativar",
     "disablePlugin": "Desativar",
     "uninstallPlugin": "Desinstalar",
-    "pluginOperationFailed": "Falha na operação do plugin"
+    "pluginOperationFailed": "Falha na operação do plugin",
+    "users": "Usuários",
+    "encryption": "Criptografia"
   },
   "showcase": {
     "askAboutDoc": "Perguntar sobre esta documentação",
@@ -2257,7 +2266,9 @@
     "noTraces": "Nenhuma execução ainda.",
     "noTracesSubtitle": "Execute workflows com nós LLM para inspecionar spans de execução, latência e uso de Tokens.",
     "noTracesYet": "Nenhuma execução ainda.",
-    "openTrace": "Abrir execução"
+    "openTrace": "Abrir execução",
+    "timeRange3h": "Últimas 3 horas",
+    "timeRange6h": "Últimas 6 horas"
   },
   "variables": {
     "addVariable": "Adicionar Variável",

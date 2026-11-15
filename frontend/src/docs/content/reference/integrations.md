@@ -19,7 +19,7 @@ Some integration nodes do **not** require credentials. [WebSocket Trigger](../no
 | **Linear** | [Linear node](../nodes/linear-node.md) | `api_key`, or `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry node](../nodes/sentry-node.md) | `api_token`, optional `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, optional `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, optional `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | a decision model credential, plus model options referencing your other credentials |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Some integration nodes do **not** require credentials. [WebSocket Trigger](../no
 | **Grist** | [Grist node](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets node](../nodes/google-sheets-node.md), [Google Sheets Trigger](../nodes/google-sheets-trigger-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **Google Drive** | [Google Drive node](../nodes/google-drive-node.md), [Google Drive Trigger](../nodes/google-drive-trigger-node.md) | `client_id`, `client_secret` + OAuth2 consent (full Drive scope) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + Google OAuth consent for Calendar events and availability |
 | **BigQuery** | [BigQuery node](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **Supabase** | [Supabase node](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, optional `supabase_schema` |
 | **ClickHouse** | [ClickHouse node](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -111,6 +112,7 @@ A decision model answers typed questions about a state and returns probabilities
 
 - [Decision](../nodes/decision-node.md)
 - [Evals](../tabs/evals-tab.md) – scores `LLM-as-Judge` answers against the expected output
+- [RAG](../nodes/rag-node.md#reranking) – reranks search results by scoring each one against the query
 
 ## OpenAI Codex
 
@@ -367,7 +369,7 @@ store, then pick **Postgres (pgvector)** in the RAG node's Database dropdown.
 ### Notes
 
 - No host/port is needed — vectors are written to Heym's own database; Heym never connects to a different database.
-- Every RAG feature available with Qdrant (insert, search, metadata filters, Cohere reranking, cloning, sharing) works identically with the Postgres backend.
+- Every RAG feature available with Qdrant (insert, search, metadata filters, Cohere or Decision Model reranking, cloning, sharing) works identically with the Postgres backend.
 - Requires the `vector` extension. Heym keeps the official `postgres:16` image unchanged (so existing data is never touched) and **auto-installs the `postgresql-16-pgvector` package at startup** — `run.sh`, `deploy.sh`, and `run_e2e.sh` all handle this. The install is non-fatal: if it cannot run (e.g. no network), Qdrant RAG keeps working and the Postgres backend stays inactive (the migration skips the table gracefully).
 - If you run the published single-container image (`ghcr.io/heymrun/heym`) against **your own external Postgres**, that database must support the `vector` extension (Heym cannot install it into a database it does not manage). Without it, creating or uploading to a Postgres vector store returns a clear message and Qdrant RAG continues to work.
 
@@ -817,7 +819,7 @@ The Slack Bot credential stores a Slack app's **Bot User OAuth Token** (`xoxb-�
 
 ### Notes
 
-- **Copy app manifest** in the credential dialog creates the Slack app with every scope at once: `chat:write`, `chat:write.public`, `im:write`, `users:read`, `users:read.email`, `channels:read`, `groups:read`, `channels:history`, `groups:history`, `reactions:write`.
+- **Copy app manifest** in the credential dialog creates the Slack app with every scope at once: `chat:write`, `chat:write.public`, `im:write`, `users:read`, `users:read.email`, `channels:read`, `groups:read`, `channels:history`, `groups:history`, `im:history`, `app_mentions:read`, `reactions:write`, `files:read`, `files:write`.
 - After saving, the dialog shows the credential's **Interactivity Request URL** (`<Heym URL>/api/slack/interactions/<credential id>`). Paste it under **Interactivity & Shortcuts** in the Slack app.
 - The same credential verifies [Slack Trigger](../nodes/slack-trigger-node.md) events, so one Slack app covers listening and replying.
 - `$credentials.<name>` resolves to the bot token, so the [HTTP node](../nodes/http-node.md) can call any Slack Web API method with `Authorization: Bearer $credentials.<name>`.
@@ -960,3 +962,7 @@ choose. It stores references, never a key of its own.
 
 Option names are what the decision model picks between, so they must be distinct. An
 option cannot point at another Model Router.
+
+## Google Meet (OAuth2)
+
+The [Google Meet node](../nodes/google-meet-node.md) uses Google Calendar API for free/busy reads and Meet-enabled invitations. Enable **Google Calendar API**, create a **Web application** OAuth client, and register `https://your-heym-domain/api/credentials/google-meet/oauth/callback`. Create a Google Meet credential and click **Connect**. Grant `https://www.googleapis.com/auth/calendar.events` and `https://www.googleapis.com/auth/calendar.events.freebusy`. Tokens are encrypted and refreshed automatically. Calendar sharing permissions still control which calendars can be read or changed.

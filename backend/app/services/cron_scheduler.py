@@ -30,6 +30,7 @@ from app.services.cron_slot_state import (
     cleanup_old_cleanup_slot_claims,
     iso_week_slot,
 )
+from app.services.data_retention import apply_retention, retention_cutoff
 from app.services.distributed_lock import lock_service
 from app.services.execution_history_maintenance import reclaim_execution_history_toast
 from app.services.global_variables_service import get_global_variables_context
@@ -47,15 +48,28 @@ logger = logging.getLogger("cron_scheduler")
 EXECUTION_HISTORY_TOAST_RECLAIM_JOB = "execution_history_toast_reclaim"
 
 
+def _is_repeated_wall_time(moment: datetime) -> bool:
+    """Whether this is the second occurrence of a wall time repeated when clocks go back."""
+    if moment.tzinfo is None or moment.fold == 0:
+        return False
+    return moment.replace(fold=0).utcoffset() != moment.utcoffset()
+
+
 class CronScheduler:
     def __init__(self) -> None:
         self._running = False
         self._task: asyncio.Task | None = None
         self._last_check: dict[str, datetime] = {}
+        # Claimed slots run as tasks so one long run never holds up the pass: other
+        # workflows' slots, alerts and queue maintenance are checked meanwhile.
+        self._slot_runs: dict[uuid.UUID, asyncio.Task] = {}
+        # Each run in flight holds a database connection on the leader, so cap them.
+        self._parallel_runs = asyncio.Semaphore(max(1, settings.cron_max_parallel_runs))
         self._last_cleanup_date: str | None = None
         self._last_portal_session_cleanup_date: str | None = None
         self._last_workflow_version_cleanup_date: str | None = None
         self._last_refresh_token_cleanup_date: str | None = None
+        self._last_data_retention_date: str | None = None
         self._last_file_access_token_cleanup_date: str | None = None
         self._last_response_cache_cleanup_date: str | None = None
         self._last_cron_slot_claim_cleanup_date: str | None = None
@@ -77,6 +91,10 @@ class CronScheduler:
                 await self._task
             except asyncio.CancelledError:
                 pass
+        slot_runs = list(self._slot_runs.values())
+        for run in slot_runs:
+            run.cancel()
+        await asyncio.gather(*slot_runs, return_exceptions=True)
         logger.info("Cron scheduler stopped")
 
     async def _run_loop(self) -> None:
@@ -96,6 +114,7 @@ class CronScheduler:
                 await self._check_portal_session_cleanup()
                 await self._check_workflow_version_cleanup()
                 await self._check_refresh_token_cleanup()
+                await self._check_data_retention()
                 await self._check_file_access_token_cleanup()
                 await self._check_response_cache_cleanup()
                 await self._check_cron_slot_claim_cleanup()
@@ -111,6 +130,11 @@ class CronScheduler:
             now = datetime.now(tz)
 
             for workflow in workflows:
+                if workflow.id in self._slot_runs:
+                    # One run per workflow at a time, as when the pass waited for it:
+                    # its next slots stay due until this run ends.
+                    continue
+                claimed_runs = 0
                 cron_nodes = self._find_cron_nodes(workflow.nodes)
                 for node in cron_nodes:
                     cron_expr = node.get("data", {}).get("cronExpression", "")
@@ -137,7 +161,7 @@ class CronScheduler:
                             # risk a duplicate.
                             self.mark_slot_handled(node_key, slot)
                             if claimed:
-                                await self._execute_workflow(db, workflow)
+                                claimed_runs += 1
                             else:
                                 logger.debug(
                                     "Cron slot %s for %s already claimed by another worker",
@@ -151,6 +175,10 @@ class CronScheduler:
                             node.get("id"),
                             e,
                         )
+                if claimed_runs:
+                    # Cron nodes of one workflow due in the same pass run one after
+                    # another in a single task, as the pass used to run them.
+                    self._start_slot_run(workflow, claimed_runs)
 
     async def _get_workflows_with_cron(self, db: AsyncSession) -> list[Workflow]:
         result = await db.execute(select(Workflow))
@@ -179,16 +207,29 @@ class CronScheduler:
         dropped instead of being replayed hours late.
         """
         try:
-            prev_time = croniter(cron_expr, now).get_prev(datetime)
+            schedule = croniter(cron_expr, now)
+            prev_time = schedule.get_prev(datetime)
         except Exception as e:
             logger.error("Invalid cron expression '%s': %s", cron_expr, e)
             return None
 
-        slot = prev_time.replace(tzinfo=now.tzinfo)
+        local_slot = prev_time.replace(tzinfo=now.tzinfo)
+        hour_pinned = schedule.expanded[1] != ["*"]
+        minute_wildcard = "*" in schedule.expressions[0]
+        if _is_repeated_wall_time(local_slot) and hour_pinned and not minute_wildcard:
+            # Clocks went back: like cron, a job at a fixed time runs once, at the first
+            # 02:30. Jobs with a wildcard or step in the hour or the minute (`*/5 2 * * *`)
+            # keep running in real time through the repeated hour.
+            return None
+
+        # Compare real instants. Two datetimes sharing one ZoneInfo compare and subtract
+        # by wall clock, ignoring the UTC offset and fold, which loses the repeated hour
+        # when clocks go back and misjudges lateness when they go forward.
+        slot = local_slot.astimezone(timezone.utc)
         if self._last_check.get(node_key) == slot:
             return None
 
-        lateness = (now - slot).total_seconds()
+        lateness = (now.astimezone(timezone.utc) - slot).total_seconds()
         if lateness > settings.cron_misfire_grace_seconds:
             if self._last_check.get(node_key) is not None:
                 logger.info(
@@ -206,6 +247,31 @@ class CronScheduler:
     def mark_slot_handled(self, node_key: str, slot: datetime) -> None:
         """Record a slot as settled for this process so later passes skip it."""
         self._last_check[node_key] = slot
+
+    def _start_slot_run(self, workflow: Workflow, runs: int = 1) -> None:
+        """Run claimed slots without making the scheduler pass wait for them."""
+        task = asyncio.create_task(self._run_slot(workflow, runs))
+        self._slot_runs[workflow.id] = task
+
+        def _forget(done: asyncio.Task, workflow_id: uuid.UUID = workflow.id) -> None:
+            if self._slot_runs.get(workflow_id) is done:
+                del self._slot_runs[workflow_id]
+
+        task.add_done_callback(_forget)
+
+    async def _run_slot(self, workflow: Workflow, runs: int = 1) -> None:
+        """Execute claimed slots in order, each in its own session.
+
+        The pass's session closes first. Waits for a free place under
+        ``cron_max_parallel_runs`` before opening a session.
+        """
+        async with self._parallel_runs:
+            for _ in range(runs):
+                try:
+                    async with async_session_maker() as db:
+                        await self._execute_workflow(db, workflow)
+                except Exception:
+                    logger.exception("Cron run for workflow %s failed", workflow.id)
 
     async def _execute_workflow(self, db: AsyncSession, workflow: Workflow) -> None:
         logger.info("Executing workflow %s via cron trigger", workflow.id)
@@ -249,6 +315,7 @@ class CronScheduler:
                     actor_user_id=workflow.owner_id,
                     public_base_url=public_base_url,
                     cancel_event=cancel_event,
+                    timeout_seconds=getattr(workflow, "workflow_timeout_seconds", None),
                     concurrency_limit=workflow.concurrency_limit,
                 )
             finally:
@@ -417,7 +484,10 @@ class CronScheduler:
                     logger.debug("Scheduled deletion cleanup already handled by another worker")
 
     async def _cleanup_scheduled_workflows(self) -> None:
-        from app.services.workflow_lifecycle import has_unfinished_workflow_executions
+        from app.services.workflow_lifecycle import (
+            close_expired_reviews,
+            has_unfinished_workflow_executions,
+        )
 
         async with async_session_maker() as db:
             result = await db.execute(
@@ -427,9 +497,11 @@ class CronScheduler:
 
             deleted_count = 0
             for workflow in scheduled_workflows:
-                if self._should_delete_workflow(
-                    workflow
-                ) and not await has_unfinished_workflow_executions(db, workflow.id):
+                should_delete = self._should_delete_workflow(workflow)
+                if should_delete:
+                    # Commits on its own; run per workflow, right before its delete.
+                    await close_expired_reviews(db, workflow.id)
+                if should_delete and not await has_unfinished_workflow_executions(db, workflow.id):
                     logger.info(
                         "Deleting scheduled workflow %s (%s) - all start nodes deactivated",
                         workflow.id,
@@ -568,6 +640,25 @@ class CronScheduler:
                 else:
                     logger.debug("Refresh token cleanup already handled by another worker")
 
+    async def _check_data_retention(self) -> None:
+        """Delete history older than HEYM_DATA_RETENTION_DAYS, once a day after 05:00."""
+        tz = get_configured_timezone()
+        now = datetime.now(tz)
+        current_date = now.strftime("%Y%m%d")
+        if now.hour < 5 or self._last_data_retention_date == current_date:
+            return
+        self._last_data_retention_date = current_date
+        if retention_cutoff() is None:
+            return
+        if not await claim_cleanup_slot(
+            job_name="data_retention",
+            slot_date=current_date,
+            worker_id=lock_service.worker_id,
+        ):
+            logger.debug("Data retention already handled by another worker")
+            return
+        await apply_retention()
+
     async def _cleanup_expired_refresh_tokens(self) -> None:
         from app.services.auth import cleanup_expired_refresh_tokens
 
@@ -687,7 +778,7 @@ class CronScheduler:
             logger.exception("Error reclaiming execution_history TOAST space: %s", e)
 
     async def _maintain_run_queue(self) -> None:
-        """Retire stale queued runs, run the concurrency pass, and release waiting_for_main.
+        """Retire stale queued runs, run the concurrency pass, and rehome or release queued runs.
 
         Runs on the leader. The run queue now carries concurrency-queued runs on a
         single instance too, so only the hand-back to a returning main stays
@@ -710,6 +801,9 @@ class CronScheduler:
                 await run_queue.notify_done(execution_id)
             if not settings.cluster_enabled:
                 return
+            retargeted = await run_queue.retarget_unclaimable_rows()
+            if retargeted:
+                logger.info("Moved %d queued runs off instances that cannot take work", retargeted)
             instances = await registry.list_instances()
             main = registry.find_main(instances)
             if main is not None and registry.is_live(main, now=datetime.now(timezone.utc)):

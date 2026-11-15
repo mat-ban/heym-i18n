@@ -22,7 +22,7 @@ Nodul necesită, de asemenea, o acreditare **GitHub** pentru clonarea depozitelo
 Izolarea execuției este aleasă prin `HEYM_OPENCODE_CLI_COMMAND`, exact ca la nodul Codex:
 
 - **Dezvoltarea locală (`run.sh`)** îl lasă la valoarea implicită `opencode`, astfel încât OpenCode rulează ca subproces pe host împotriva spațiului de lucru clonat — nu este necesar Docker, fără flag-uri suplimentare.
-- **Implementările Docker (`deploy.sh` și imaginea unică GHCR)** îl setează la `/usr/local/bin/heym-opencode-docker`, un wrapper care rulează `opencode run` în interiorul unui **container frate efemer și securizat**, care partajează volumul numit al spațiului de lucru OpenCode.
+- **Implementările Docker (`deploy.sh` și imaginea unică GHCR)** îl setează la `/usr/local/bin/heym-opencode-docker`, un wrapper care rulează `opencode run` în interiorul unui **container frate efemer și securizat**, care partajează volumul numit al spațiului de lucru OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Containerul de rulare securizat elimină toate capabilitățile Linux, setează `no-new-privileges`, utilizează un root read-only cu un tmpfs `/tmp` și aplică limite de pid/memorie/CPU. Egress-ul de rețea este permis (OpenCode trebuie să atingă gateway-ul de modele). **Token-ul GitHub nu este niciodată plasat în interiorul containerului** — toate operațiunile git și GitHub rulează pe host, astfel încât doar cheia API OpenCode și fișierele depozitului se află vreodată în interior.
 

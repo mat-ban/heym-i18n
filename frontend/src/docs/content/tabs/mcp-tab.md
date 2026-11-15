@@ -11,7 +11,7 @@ Both modes can expose two kinds of tools: individual **workflows**, and the **He
 
 ## Default MCP Server
 
-The default server is always available at `{origin}/api/mcp/sse`. All workflows with MCP toggled on appear as tools here.
+The default server is available at `{origin}/api/mcp` (with backwards compatibility for existing connections at `{origin}/api/mcp/sse`). All workflows with MCP toggled on appear as tools here.
 
 ### MCP API Key
 
@@ -51,6 +51,20 @@ A workflow with a [concurrency limit](../reference/webhooks.md#concurrency-limit
 
 The client polls the `heym_execution_status` tool with that `execution_id`. It returns the same body as the [status URL](../reference/webhooks.md#status-url): `queued` with the current position, `running`, then `success` or `error` with the outputs. It only finds runs of workflows that the same server exposes. The tool is listed on the default server and on each named server only while at least one of its workflows has a concurrency limit. When the workflow's queue is full, the call returns an error, "Concurrency queue is full".
 
+### Memory tools: get_user_memory and set_user_memory
+
+The default server always lists two more tools, with or without `heym_chat`, so any MCP client shares one memory with Heym's Chat and Heym Work. The memory is your [User Rules](../reference/user-settings.md#user-rules-as-memory).
+
+| Tool | Arguments | Returns |
+|------|-----------|---------|
+| `get_user_memory` | none | `content` (your User Rules), `revision`, `length`, `max_length` |
+| `set_user_memory` | `mode` (`append` or `replace`), `content`, `revision` (required for `replace`) | `status` (`added`, `replaced`, `unchanged`, `conflict`, `refused`) and the memory after the write |
+
+- `append` adds one line.
+- `replace` rewrites the whole text and only lands when `revision` matches the stored text. On `conflict`, the result carries the current text and revision to merge and retry.
+- Text that looks like an API key, token, password or other credential is refused, and nothing is saved.
+- Named servers do not list these tools. A workflow named `get_user_memory` or `set_user_memory` is not listed on the default server.
+
 ## Heym Agent
 
 The **Heym Capabilities** section turns the Chat tab engine into a single MCP tool named `heym_chat`. Enable it on the default server, on any named server, or on both — each surface keeps its own toggle and model selection.
@@ -73,7 +87,7 @@ When it is on, `heym_chat` appears in `tools/list` alongside your workflow tools
 
 Capabilities added to the Chat tab later become available through `heym_chat` automatically — there is no per-capability toggle to keep in sync.
 
-These capabilities run inside `heym_chat`: `tools/list` shows `heym_chat` and your workflow tools, never the chat's internal tools such as the eval suite ones.
+These capabilities run inside `heym_chat`: `tools/list` shows `heym_chat` and your workflow tools, never the chat's internal tools such as the eval suite ones. The [memory tools](#memory-tools-get_user_memory-and-set_user_memory) are the one exception: `heym_chat` uses them too, and the default server also lists them on their own.
 
 ### Build mode
 
@@ -86,7 +100,7 @@ When a call creates or edits a workflow, the reply lists each one with its full 
 - To change a workflow it built earlier, continue the thread with the same `conversation_id`. The assistant updates that workflow instead of creating a new one, and it only changes workflows you can edit.
 - When the five test runs are used up, the assistant stops and explains what still fails.
 
-`heym_chat` can inspect your tables and rows, create tables, add or remove columns, and insert, update or delete rows. Give it a table name, UUID or DataTable link, for example: “Add two string columns, name and surname, to https://heym.example/?tab=datatable/<table-id>.” It changes the table directly and preserves existing columns and values when adding columns.
+`heym_chat` can inspect your tables and rows, create tables, add or remove columns, and insert, update or delete rows. Give it a table name, UUID or DataTable link, for example: “Add two string columns, name and surname, to `https://heym.example/?tab=datatable/<table-id>`.” It changes the table directly and preserves existing columns and values when adding columns.
 
 Writes require ownership or **write** access through a direct or team share. Read-only access allows inspection. Row writes use the DataTable tab's type, default, required and unique checks; partial imports report rejected rows. Removing columns deletes their values from every row. As in the DataTable tab, column removal and clearing all rows ask for confirmation first; reply with the same `conversation_id` to confirm. Deleting a selected row needs no extra confirmation.
 
@@ -154,7 +168,7 @@ Each server card shows:
 
 | Setting | Description |
 |---------|-------------|
-| **SSE Endpoint** | Unique URL: `{origin}/api/mcp/servers/{uuid}/sse` |
+| **MCP Endpoint** | Unique URL: `{origin}/api/mcp/servers/{uuid}/mcp` (new servers) or `{origin}/api/mcp/servers/{uuid}/sse` (existing servers) |
 | **API Key** | Independent key, shown once when generated or regenerated. Copy it right away; it is stored hashed and cannot be revealed later |
 | **How to connect** | **Copy JSON** copies the ready-to-paste MCP config; **Add to Cursor** installs it in one click |
 | **Heym Capabilities** | Toggle the Heym Agent (`heym_chat`) for this server and pick its credential and model |
@@ -179,14 +193,15 @@ Named servers support the same authentication methods as the default server:
 
 Click the **X** icon on a server card header. Deletion removes the server and all its workflow assignments; workflows themselves are not affected.
 
-## SSE Endpoint
+## MCP Endpoints
 
 | Server | Endpoint |
 |--------|----------|
-| Default | `{origin}/api/mcp/sse` |
-| Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
+| Default | `{origin}/api/mcp` (legacy: `{origin}/api/mcp/sse`) |
+| Named (new) | `{origin}/api/mcp/servers/{server-uuid}/mcp` |
+| Named (existing) | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
-Both endpoints support the SSE transport (GET, MCP spec 2024-11-05) and Streamable HTTP transport (POST, MCP spec 2025-03-26). Claude, ChatGPT and Gemini use OAuth 2.1 / PKCE for secure sign-in on both.
+Both default and named `/mcp` endpoints support the modern Streamable HTTP transport (POST, MCP spec 2025-03-26). The legacy `/sse` endpoints also support the SSE transport (GET, MCP spec 2024-11-05). Claude, ChatGPT and Gemini use OAuth 2.1 / PKCE for secure sign-in across all endpoints.
 
 ## Related
 

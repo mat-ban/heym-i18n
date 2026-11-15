@@ -176,3 +176,7 @@ Dialogy historie plátna a dashboardu udržují ovládací prvky spuštění v j
 - [Edit History](./edit-history.md) – Správa verzí uložení workflow (vrácení, diff)
 - [Quick Start](../getting-started/quick-start.md) – Vytvořte a spusťte své první workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Vytvářejte a spravujte workflows
+
+## Related
+
+- [Operations Runbook (L1): Nevyřízená fronta](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Rozlišení mezi zařazenými, pozastavenými, přerušenými a obnovenými spuštěními před opakováním

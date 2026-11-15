@@ -123,3 +123,6 @@ Si ninguna fila coincide, el modelo se lista bajo el aviso **Unpriced models** e
 - [Pestaña Trazas](./traces-tab.md) - Utiliza la tabla de costes de LLM para el gráfico de anillo de costes y las tarjetas de KPI
 - [Nodo Grist](../nodes/grist-node.md) - Alternativa de hoja de cálculo externa
 - [Pestaña Variables](./global-variables-tab.md) - Alternativa de almacenamiento clave-valor
+## Búsqueda
+
+Utilice el campo de búsqueda situado sobre la lista de tablas o pulse **Ctrl+F** (o **Cmd+F**) para filtrar tablas por nombre o descripción mientras escribe. Pulse **Escape** para borrar la búsqueda.

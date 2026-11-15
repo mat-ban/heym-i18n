@@ -92,3 +92,7 @@ Nuorodų kredencialus pagal pavadinimą mazgo konfigūracijoje. Pavyzdžiui:
 - [Vektorių saugyklos skirtukas](./vectorstores-tab.md) – Naudoja Qdrant arba Postgres (pgvector) kredencialus
 - [Chat skirtukas](./chat-tab.md) – Naudoja OpenAI/Google kredencialus
 - [Kontekstinis demonstravimas](../reference/contextual-showcase.md) – Kompaktiška puslapio instrukcija valdymo skydeliams
+
+## Paieška
+
+Naudokite paieškos lauką virš sąrašo arba paspauskite **Ctrl+F** (arba **Cmd+F**), kad rašydami filtruotumėte kredencialus pagal pavadinimą arba tipą. Paspauskite **Escape**, kad išvalytumėte paiešką.

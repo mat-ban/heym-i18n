@@ -92,6 +92,10 @@ Aceasta definește și ordinea de upgrade. Dacă actualizați mai întâi main, 
 
 **Instanțele worker au o adresă IP de ieșire diferită.** Orice API care permite doar anumite adrese sursă o va vedea pe cea nouă. Send Email rulează pe main exact din acest motiv; pentru nodul HTTP, fie atribuiți clusterului o singură adresă NAT de egress, fie permiteți toate instanțele.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Adăugarea unui worker pe altă mașină
 
 `docker-compose.worker.yml` din rădăcina repository-ului rulează un worker pe propriul host. Nu are bază de date și nici UI: ajunge la PostgreSQL-ul instanței main și preia partea sa din execuțiile de fundal.
@@ -124,7 +128,7 @@ Nimic din toate acestea nu apare într-o instalare cu o singură instanță: câ
 
 **Dacă un worker se oprește în timpul unei execuții**, heartbeat-ul acestuia devine învechit, iar procesul de recuperare existent al leader-ului reia execuția pe o instanță activă. Rândul din coadă pe care acesta îl revendicase este retras separat: odată ce nu mai există nicio execuție activă pentru el și a trecut o perioadă de grație de două minute, leader-ul marchează rândul ca eșuat și trezește pe oricine aștepta rezultatul. Vechimea singură nu este niciodată trigger-ul, astfel încât o execuție legitim de lungă este lăsată în pace; iar rândul este marcat ca eșuat în loc să fie reintrodus în coadă, deoarece recuperarea deține deja reluarea, iar reintroducerea în coadă ar executa același workflow de două ori.
 
-**Dacă main cade**, cron continuă să se declanșeze de pe un worker, iar execuțiile distribuite continuă să ruleze. Execuțiile care necesită main se pun în coadă și așteaptă, și se drenează când acesta revine — dar numai în fereastra de grație pentru declanșări ratate (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 de secunde implicit). Orice este mai vechi este închis ca omis, cu motivul înregistrat, în loc să se redea ore întregi de backlog dintr-o dată.
+**Dacă main cade**, cron continuă să se declanșeze de pe un worker, iar execuțiile distribuite continuă să ruleze. Execuțiile care necesită main se pun în coadă și așteaptă, și se drenează când acesta revine — dar numai în fereastra de grație pentru declanșări ratate (`CRON_MISFIRE_GRACE_SECONDS`, 600 de secunde implicit). Orice este mai vechi este închis ca omis, cu motivul înregistrat, în loc să se redea ore întregi de backlog dintr-o dată.
 
 Interfața UI, API-ul, MCP și editorul sunt indisponibile cât timp main este căzut, deoarece punctele de intrare se află acolo.
 

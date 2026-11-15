@@ -50,3 +50,8 @@ Ja reģistrācija ir atvērta, izveidojiet uzticamo administratora kontu pirms D
 - [Analītikas cilne](./analytics-tab.md) – Izpildes metri
 - [Darba plūsmu cilne](./workflows-tab.md) – Darba plūsmu pārvaldība
 - [Kontekstualizēta demonstrācija](../reference/contextual-showcase.md) – Kompakts lapas ceļvedis informācijas paneļa virsmām
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Novirziet izpildlaika simptomus uz pareizo incidentu procedūru
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnosticējiet datubāzes, pakalpojumu, klastera un sandbox kļūmes

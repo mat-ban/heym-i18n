@@ -12,7 +12,7 @@ La página se abre con un resumen de estadísticas sobre la lista de trazas, cal
 - **Tarjetas KPI** – Total de llamadas, Total de tokens, Coste total (USD), Latencia media, % de errores
 - **Tokens por modelo** – Gráfico de anillo con el volumen de tokens por modelo
 - **Coste por modelo** – Gráfico de anillo con el gasto en USD por modelo. Los modelos sin precios muestran un enlace "Configurar precios" a la [Tabla de costes de LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Llamadas a lo largo del tiempo** – Gráfico de área apilada de llamadas exitosas frente a fallidas por intervalo (5 min / 1 h / 6 h / 1 día, elegido automáticamente según el rango)
+- **Llamadas a lo largo del tiempo** – Gráfico de área apilada de llamadas exitosas frente a fallidas por intervalo (5 min / 15 min / 30 min / 1 h / 6 h / 1 día, elegido automáticamente según el rango)
 - **Aviso de modelos sin precio** – Aparece bajo los gráficos cuando algunos modelos trazados no tienen fila de precios, con enlace a la Tabla de costes de LLM
 
 ## Rango temporal
@@ -23,12 +23,13 @@ Un único selector de **Rango temporal** en la parte superior de la barra de fil
 
 - Lista paginada de trazas recientes dentro del rango temporal seleccionado
 - Cada traza muestra: workflow, nodo, credencial, marca temporal, duración
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Haga clic en una traza para abrir la vista de detalle
 - Use **Prev / Next** dentro del diálogo de detalle para moverse entre trazas sin cerrarlo
 
 ## Filtrado
 
-- **Rango temporal** – 1h / 24h / 7d / 30d / Todo; filtra los gráficos y la lista de forma conjunta
+- **Rango temporal** – 1h / 3h / 6h / 24h / 7d / 30d / Todo; filtra los gráficos y la lista de forma conjunta
 - **Credencial** – Filtrar por la credencial (API key) utilizada
 - **Origen** – Filtrar por workflow o por origen de la ejecución
 - **Búsqueda** – Buscar por modelo, workflow, credencial o etiqueta de nodo

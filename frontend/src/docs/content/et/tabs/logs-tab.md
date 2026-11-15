@@ -50,3 +50,8 @@ Kui registreerimine on avatud, looge usaldusväärne admin-konto enne Dockeri lo
 - [Analüütika vahekaart](./analytics-tab.md) – Käivitamise mõõdikud
 - [Workflow'de vahekaart](./workflows-tab.md) – Workflow'de haldamine
 - [Kontekstipõhine showcase](../reference/contextual-showcase.md) – Kompaktne lehejuhend armatuurlaua vaadetele
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Suunake käitusaegsed sümptomid õigesse intsidentide protseduuri
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Tuvastage andmebaasi-, teenuse-, klastri- ja liivakasti tõrked

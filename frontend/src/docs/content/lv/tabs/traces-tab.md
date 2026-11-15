@@ -23,12 +23,13 @@ Vienkāršs **Laika diapazona** izvēlētājs filtru joslas augšpusē kontrolē
 
 - Lapojošs saraksts ar nesenajām izpildēm izvēlētajā laika diapazonā
 - Katrs izpildes ieraksts rāda: workflow, mezgls, akreditācijas dati, laika zīmogs, ilgums
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Noklikšķiniet uz izpildes, lai atvērtu detalizētu skatu
 - Izmantojiet **Iepriekšējais / Nākamais** iekšējā detalizētā dialogā, lai pārvietotos starp izpildēm, to neaizverot
 
 ## Filtrēšana
 
-- **Laika diapazons** – 1h / 24h / 7d / 30d / Visi; filtrē diagrammas un sarakstu kopā
+- **Laika diapazons** – 1h / 3h / 6h / 24h / 7d / 30d / Visi; filtrē diagrammas un sarakstu kopā
 - **Akreditācijas dati** – Filtrēt pēc izmantotajiem akreditācijas datiem (API atslēga)
 - **Avots** – Filtrēt pēc workflow vai izpildes avota
 - **Meklēšana** – Meklēt pēc modeļa, workflow, akreditācijas datiem vai mezgla etiķetes

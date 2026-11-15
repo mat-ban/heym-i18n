@@ -12,7 +12,7 @@ Stránka sa otvára súhrnom štatistík nad zoznamom spustení, vypočítaným 
 - **KPI karty** – Celkové volania, Celkové tokeny, Celkové náklady (USD), Priemerná latencia, % chýb
 - **Tokeny podľa modelu** – Donut graf objemu tokenov na model
 - **Náklady podľa modelu** – Donut graf výdavkov v USD na model. Modely bez cien zobrazujú odkaz „Konfigurovať ceny" na [Tabuľku nákladov LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Volania v čase** – Skladaný plošný graf úspešných vs neúspešných volaní na interval (5 min / 1 h / 6 h / 1 deň, zvolený automaticky podľa rozsahu)
+- **Volania v čase** – Skladaný plošný graf úspešných vs neúspešných volaní na interval (5 min / 15 min / 30 min / 1 h / 6 h / 1 deň, zvolený automaticky podľa rozsahu)
 - **Upozornenie na modely bez cien** – Zobrazí sa pod grafmi, keď niektoré spustené modely nemajú riadok s cenami, s odkazom na Tabuľku nákladov LLM
 
 ## Časový rozsah
@@ -23,12 +23,13 @@ Jediný selektor **Časový rozsah** v hornej časti filtračnej lišty ovláda 
 
 - Stránkovaný zoznam nedávnych spustení v rámci zvoleného časového rozsahu
 - Každé spustenie zobrazuje: workflow, uzol, prihlasovacie údaje, časovú značku, trvanie
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Kliknutím na spustenie otvoríte detailné zobrazenie
 - Použite **Predchádzajúce / Ďalšie** v dialógu s detailmi na pohyb medzi spusteniami bez jeho zatvorenia
 
 ## Filtrovanie
 
-- **Časový rozsah** – 1h / 24h / 7d / 30d / Všetko; filtruje grafy a zoznam spolu
+- **Časový rozsah** – 1h / 3h / 6h / 24h / 7d / 30d / Všetko; filtruje grafy a zoznam spolu
 - **Prihlasovacie údaje** – Filtrovanie podľa použitých prihlasovacích údajov (API kľúč)
 - **Zdroj** – Filtrovanie podľa workflow alebo zdroja spustenia
 - **Hľadať** – Hľadanie podľa modelu, workflow, prihlasovacích údajov alebo označenia uzla

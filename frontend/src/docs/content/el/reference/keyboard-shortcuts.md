@@ -107,3 +107,6 @@
 - [Γρήγορη Εκκίνηση](../getting-started/quick-start.md) – Δημιουργήστε το πρώτο σας workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Οι καρτέλες **Διαπιστευτήρια** και **DataTable** λειτουργούν με τον ίδιο τρόπο: το `Ctrl + F` / `Cmd + F` εστιάζει στο πεδίο αναζήτησης, η λίστα στενεύει καθώς πληκτρολογείτε και το `Escape` την εκκαθαρίζει.

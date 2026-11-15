@@ -7,7 +7,7 @@ Tab **Workflows** adalah tampilan dasbor default. Tab ini menampilkan daftar wor
 
 ## Mulai Chat
 
-Di atas daftar workflow terdapat kotak chat yang menyapa Anda dengan nama dan menanyakan apa yang ingin Anda otomatiskan. Ketikkan prompt, secara opsional lampirkan satu file, lalu pilih credential dan model yang Anda inginkan. Kedua dropdown dapat dicari dan dimulai dari [default AI](../reference/user-settings.md) Anda.
+Di atas daftar workflow terdapat kotak chat yang menyapa Anda dengan nama dan menanyakan apa yang ingin Anda otomatiskan. Ketikkan prompt, secara opsional lampirkan up to 10 files, lalu pilih credential dan model yang Anda inginkan. Kedua dropdown dapat dicari dan dimulai dari [default AI](../reference/user-settings.md) Anda.
 
 Mengirim akan membuat percakapan baru dan membukanya di [tab Chat](./chat-tab.md), tempat balasan di-streaming. Lampiran yang didukung adalah file teks, gambar, dan PDF, satu per pesan, sama seperti composer chat.
 

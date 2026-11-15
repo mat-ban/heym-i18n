@@ -109,6 +109,10 @@ HITL 仅适用于文本模式的 agent 输出。在 v1 中，它不能与 `jsonO
 
 你可以将受支持的 Workflow 节点连接到 Agent 的 **tools** 句柄，使 Agent 能够在运行时调用该节点。这样无需编写 Python 即可将现有的画布操作和转换变为可调用的工具。
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 当你希望由 Agent 决定何时运行某个已配置的节点，同时仍将凭证、静态字段和 Workflow 特定设置保留在节点 UI 中时，请使用画布节点工具。
 
 ### Agent 提供的字段
@@ -385,3 +389,6 @@ Skills 部分还包含 **AI Build**：
 - [快速开始](../getting-started/quick-start.md) – 使用 LLM 和表达式的基础工作流
 - [Credentials 标签页](../tabs/credentials-tab.md) – 为 Agent 添加 API 密钥
 - [MCP 标签页](../tabs/mcp-tab.md) – 为工作流工具配置 MCP
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

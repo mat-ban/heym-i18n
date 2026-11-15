@@ -2,6 +2,9 @@
 
 **Dashboard** 分頁是一個 Grafana 風格的空間，您可以在其中建立圖表小工具的網格。每個小工具都是從其專屬的隱藏 Heym Workflow 輸出所渲染，因此您能在 Workflow 中產生的任何資料——資料庫查詢、API 呼叫、RAG 查找、LLM 輸出——都能成為圖表。您可以保留多個 Dashboard，並將每個 Dashboard 分享給人員或團隊。
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboards
 
 每個人在首次開啟此分頁時都會建立一個 Dashboard。使用分頁頂端的 Dashboard 選擇器即可切換不同 Dashboard，並使用其旁邊的 **+** 建立新的 Dashboard。選擇器會先列出您自己的 Dashboard，再列出分享給您的 Dashboard，並標示分享者的名稱。
@@ -27,6 +30,8 @@
 - **Entity relationships (DB)**（資料表、欄位、主鍵/外鍵與連線）
 - **Bar gauge**（每列一個水平量測條，搭配紅→綠漸層與數值，例如可用磁碟空間）
 - **Text**（markdown 訊息，例如「Last execution at 19:47」這類狀態備註；當 markdown 為靜態時支援[互動式核取方塊](../nodes/chart-output-node.md#interactive-task-lists)，並支援[明確編號清單](../nodes/chart-output-node.md#numbered-lists)以自訂或遞減編號）
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL**（您待處理的人工審核。標題會顯示 `1/n pending`。Workflow 名稱會於畫布上開啟該次執行。**Approve**、**Request changes** 與 **Reject** 可解決該項目。小工具標題旁的歷史圖示會於此頁面的歷史對話框中開啟該次執行。此小工具不使用上游資料列，且每個人只會看到自己的佇列。 也可以改為顯示單一 Workflow 的審查，面向所有能夠開啟該 Workflow 的人員；請參閱 [HITL 元件](#hitl-yuan-jian)）
 
 除了圖表之外，**Run a workflow** 小工具還能直接從 Dashboard 執行您的其中一個 Workflow：透過拖放檔案、填寫其輸入欄位，或點擊 Run 按鈕；請參閱[執行類小工具](#run-widgets)。
@@ -146,3 +151,5 @@
 ## 排程與資料庫圖表
 
 在「新增小工具」中選擇 **Gantt** 可隨時間呈現工作以及完成狀況與相依性連結，或選擇 **Entity relationships (DB)** 繪製資料表、欄位及其關聯圖。這兩種類型皆使用 [Chart Output 節點](../nodes/chart-output-node.md#gantt-schedules)，且同樣可在 Heym Work 頁面中使用。當 Work 為排程或資料庫綱要提供小工具建議時，會在您建置頁面之前依據建議的工作或實體繪製預覽。
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

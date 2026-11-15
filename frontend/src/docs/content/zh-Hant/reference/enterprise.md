@@ -42,7 +42,7 @@ Heym 團隊協助您為業務流程設計、建置及強化 Agent 與 Workflow�
 
 ## Kubernetes Deployment
 
-標準的[執行與部署](../getting-started/running-and-deployment.md)指南涵蓋適用於單一伺服器正式環境的 Docker Compose 設定。Enterprise 客戶可獲得正式環境 Kubernetes 部署的協助，以實現高可用性與水平擴展：
+標準的[執行與部署](../getting-started/running-and-deployment.md)指南涵蓋適用於單一伺服器正式環境的 Docker Compose 設定。 [Kubernetes 部署](../getting-started/kubernetes.md)指南涵蓋清單、Helm、儲存、網路原則和 worker。Enterprise 客戶可獲得正式環境 Kubernetes 部署的協助，以實現高可用性與水平擴展：
 
 - **多個 worker 節點** — 將 Heym 後端 worker 分散至多個 Kubernetes 節點，以實現備援與負載平衡
 - **Sidecar 容器** — 為日誌收集、監控 Agent、服務網格（Istio、Linkerd）及機密注入（Vault）配置 sidecar 模式

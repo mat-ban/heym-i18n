@@ -122,3 +122,6 @@ Si cap fila coincideix, el model es llista sota l'avís de **Models sense preu**
 - [Pestanya Traces](./traces-tab.md) - Utilitza la taula de costos d'LLM per al gràfic de donut de costos i les targetes KPI
 - [Node Grist](../nodes/grist-node.md) - Alternativa de full de càlcul extern
 - [Pestanya Variables](./global-variables-tab.md) - Alternativa d'emmagatzematge clau-valor
+## Cerca
+
+Utilitzeu el camp de cerca sobre la llista de taules o premeu **Ctrl+F** (o **Cmd+F**) per filtrar les taules per nom o descripció mentre escriviu. Premeu **Esc** per netejar la cerca.

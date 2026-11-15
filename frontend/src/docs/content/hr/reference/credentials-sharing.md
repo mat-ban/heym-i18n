@@ -87,6 +87,7 @@ Neki čvorovi pohranjuju `credentialId` (UUID) u `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Detalji o ClickHouse vezi (host, port, autentifikacija, baza podataka) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Vjerodajnica za Telegram bot |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord javni ključ ili webhook vjerodajnica |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vektorska Spremišta | `credential_id` | Qdrant ili Postgres (pgvector) vektorska DB, putem Qdrant, Psql ili prilagođene RAG vjerodajnice |
 | Evaluacije | `credential_id`, `judge_credential_id` | Vjerodajnica modela; vjerodajnica modela ili Odluka Modela za LLM-as-Judge suca |
 | [Playwright](../nodes/playwright-node.md) AI korak | `credentialId` | LLM/Vision model (za AI korak i [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Nakon izvršenja, `mask_sensitive_output()` maskira vrijednosti vjerodajnica u i
 - [Expression DSL](./expression-dsl.md) – `$credentials` sintaksa
 - [Tipovi Čvorova](./node-types.md) – Čvorovi koji koriste vjerodajnice ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Čvor](../nodes/agent-node.md) – Koristi `credentialId` za LLM
+
+## Dozvole kalendara Google Meet
+
+Dijeljenje [vjerodajnice Google Meet](../nodes/google-meet-node.md) omogućuje radnim tokovima čitanje intervala slobodno/zauzeto dostupnih kalendara te stvaranje, promjenu ili brisanje događaja kao povezani Google račun, uključujući slanje pozivnica i otkazivanja. E-pošta sudionika posjetitelja ne mijenja račun koji posjeduje ili autorizira događaj. Samo vlasnik vjerodajnice može ponovno povezati svoju Google autorizaciju.

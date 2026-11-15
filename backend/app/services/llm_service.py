@@ -28,14 +28,19 @@ from app.services.llm_chat_bridge import BridgedChatTransport, OpenAIChatTranspo
 from app.services.llm_provider import is_reasoning_model
 from app.services.llm_trace import LLMTraceContext, record_llm_trace
 from app.services.llm_transport import (
+    MAX_TRUNCATED_TOOL_TURNS,
+    TRUNCATED_TOOL_CALL_ERROR,
     ChatCompletionsTransport,
     LLMTransport,
     RequestOpts,
     ResponsesTransport,
     ToolResult,
+    is_truncated_turn,
+    parse_tool_arguments,
+    rejects_disable_reasoning,
 )
 from app.services.llm_transport_gemini import GeminiTransport
-from app.services.llm_transport_messages import AnthropicMessagesTransport
+from app.services.llm_transport_messages import DEFAULT_MAX_TOKENS, AnthropicMessagesTransport
 from app.services.model_router import (
     ModelRouter,
     fit_tool_outputs_to_budget,
@@ -159,6 +164,18 @@ GOOGLE_IMAGEN_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/model
 LLM_REQUEST_TIMEOUT = 60.0
 BATCH_POLL_INTERVAL_SECONDS = 6.0
 _BATCH_TERMINAL_STATUSES = {"completed", "failed", "expired", "cancelled"}
+
+
+HITL_REVIEW_DEFERRED_ERROR = (
+    "Not run: the human review request in this turn has arguments that are not valid JSON, "
+    "so nothing has been approved. Send the review request again with its arguments as a "
+    "JSON object, then call this tool after the review."
+)
+
+HITL_DUPLICATE_REVIEW_ERROR = (
+    "Not sent: only one human review request is handled per turn, and another one in this "
+    "turn was already answered. If a review is still needed, request it again in a new turn."
+)
 
 
 @dataclass
@@ -998,21 +1015,15 @@ class LLMService:
                 break
             except Exception as exc:
                 elapsed_ms = (time.time() - start_time) * 1000
-                err_msg = str(exc).lower()
-                is_422 = getattr(exc, "status_code", None) == 422 or "422" in err_msg
-                has_disable_reasoning = extra_body is not None and "disable_reasoning" in (
-                    extra_body or {}
-                )
-                if (
-                    attempt == 0
-                    and is_422
-                    and has_disable_reasoning
-                    and ("disable_reasoning" in err_msg or "disabling reasoning" in err_msg)
-                ):
+                if attempt == 0 and rejects_disable_reasoning(exc, opts.extra_body):
                     opts.extra_body = None
                     kwargs = transport.build_kwargs(
                         model=model, history=history, tools=None, opts=opts
                     )
+                    trace_request = {**kwargs, **transport.trace_request(history, None)}
+                    if skills_included:
+                        trace_request["skills_included"] = skills_included
+                    _log_request(provider, str(base_url), kwargs)
                     logger.info(
                         "Retrying without extra_body (disable_reasoning not supported by model %s)",
                         model,
@@ -1458,6 +1469,7 @@ class LLMService:
         last_assistant_turn_had_tool_calls = False
         output_repairs = 0
         repair_errors: list[str] = []
+        truncated_tool_turns = 0
         # With a router this is the Chat Completions transport a turn falls back to.
         run_transport = transport
         repair_turn = False
@@ -1482,6 +1494,12 @@ class LLMService:
             if skills_included:
                 req["skills_included"] = skills_included
             return req
+
+        def _invocation_token_usage() -> tuple[int, int, int]:
+            invocation_prompt_tokens = total_prompt_tokens - initial_prompt_tokens
+            invocation_completion_tokens = total_completion_tokens - initial_completion_tokens
+            invocation_total_tokens = invocation_prompt_tokens + invocation_completion_tokens
+            return invocation_prompt_tokens, invocation_completion_tokens, invocation_total_tokens
 
         def _build_error_result(
             error_text: str,
@@ -1520,6 +1538,7 @@ class LLMService:
             if combined_tool_calls:
                 result["tool_calls"] = combined_tool_calls
             _attach_tool_metrics(result)
+            inv_prompt, inv_completion, inv_total = _invocation_token_usage()
             self._record_trace(
                 request_type=transport.name,
                 provider=provider,
@@ -1528,9 +1547,9 @@ class LLMService:
                 response=result,
                 error=error_text,
                 elapsed_ms=round(total_elapsed_ms, 2),
-                prompt_tokens=total_prompt_tokens,
-                completion_tokens=total_completion_tokens,
-                total_tokens=total_prompt_tokens + total_completion_tokens,
+                prompt_tokens=inv_prompt,
+                completion_tokens=inv_completion,
+                total_tokens=inv_total,
                 binding=binding,
             )
             return self._attach_routing_summary(result)
@@ -1673,6 +1692,8 @@ class LLMService:
                     provider=provider,
                     error=str(exc),
                 )
+                # Earlier turns were billed already; record only this invocation's usage.
+                inv_prompt, inv_completion, inv_total = _invocation_token_usage()
                 self._record_trace(
                     request_type=transport.name,
                     provider=provider,
@@ -1681,6 +1702,9 @@ class LLMService:
                     response=None,
                     error=str(exc),
                     elapsed_ms=round(elapsed_ms, 2),
+                    prompt_tokens=inv_prompt if inv_total else None,
+                    completion_tokens=inv_completion if inv_total else None,
+                    total_tokens=inv_total if inv_total else None,
                     binding=binding,
                 )
                 raise
@@ -1721,6 +1745,7 @@ class LLMService:
                 if tool_calls_collected:
                     result["tool_calls"] = tool_calls_collected
                 _attach_tool_metrics(result)
+                inv_prompt, inv_completion, inv_total = _invocation_token_usage()
                 self._record_trace(
                     request_type=transport.name,
                     provider=provider,
@@ -1729,9 +1754,9 @@ class LLMService:
                     response=result,
                     error=None,
                     elapsed_ms=round(total_elapsed_ms, 2),
-                    prompt_tokens=total_prompt_tokens,
-                    completion_tokens=total_completion_tokens,
-                    total_tokens=total_prompt_tokens + total_completion_tokens,
+                    prompt_tokens=inv_prompt,
+                    completion_tokens=inv_completion,
+                    total_tokens=inv_total,
                     binding=binding,
                 )
                 return self._attach_routing_summary(result)
@@ -1770,6 +1795,7 @@ class LLMService:
                 if repair_errors:
                     result["json_repairs"] = repair_errors
                 _attach_tool_metrics(result)
+                inv_prompt, inv_completion, inv_total = _invocation_token_usage()
                 self._record_trace(
                     request_type=transport.name,
                     provider=provider,
@@ -1778,12 +1804,121 @@ class LLMService:
                     response=result,
                     error=None,
                     elapsed_ms=round(total_elapsed_ms, 2),
-                    prompt_tokens=total_prompt_tokens,
-                    completion_tokens=total_completion_tokens,
-                    total_tokens=total_prompt_tokens + total_completion_tokens,
+                    prompt_tokens=inv_prompt,
+                    completion_tokens=inv_completion,
+                    total_tokens=inv_total,
                     binding=binding,
                 )
                 return self._attach_routing_summary(result)
+
+            def _refused_tool_call(
+                tc: Any, reason: str, refusal: str
+            ) -> tuple[str, dict[str, Any]]:
+                """The error the model gets, and the trace entry, for a call that is not run.
+
+                ``refusal`` (``truncated``, ``invalid_arguments``, ``review_deferred`` or
+                ``duplicate_review``) is
+                the span's ``heym.agent.tool.refused`` value. No raw arguments go on the span.
+                """
+                tool_result = {"error": reason, "status": "error"}
+                refused_def = tools_by_name.get(tc.name)
+                with tracing.agent_tool_span(
+                    tool_name=tc.name,
+                    tool_call_id=getattr(tc, "id", None),
+                    source=refused_def.get("_source") if refused_def else None,
+                    mcp_server=refused_def.get("_mcp_server") if refused_def else None,
+                    workflow_id=(
+                        str(self.trace_context.workflow_id)
+                        if self.trace_context and self.trace_context.workflow_id
+                        else None
+                    ),
+                    node_id=self.trace_context.node_id if self.trace_context else None,
+                    node_label=self.trace_context.node_label if self.trace_context else None,
+                    iteration=iteration,
+                ) as refused_span:
+                    from opentelemetry.trace import StatusCode
+
+                    tracing.set_span_attribute(refused_span, "heym.agent.tool.status", "error")
+                    tracing.set_span_attribute(refused_span, "heym.agent.tool.refused", refusal)
+                    tracing.set_span_status(refused_span, StatusCode.ERROR, reason)
+                now_ms = int(time.time() * 1000)
+                parsed_args, parse_error = parse_tool_arguments(tc.arguments)
+                # Parsed arguments stay structured so credential keys are redacted by name.
+                # Text redaction cannot tell a credential in an unparsed fragment (`token`,
+                # `service_token`), so only its length is kept.
+                persisted_args = (
+                    parsed_args
+                    if parse_error is None
+                    else {"unparsed_arguments_chars": len(tc.arguments or "")}
+                )
+                entry = sanitize_persisted_tool_entry(
+                    {
+                        "tool_call_id": getattr(tc, "id", None),
+                        "name": tc.name,
+                        "arguments": persisted_args,
+                        "result": tool_result,
+                        "elapsed_ms": 0.0,
+                        "start_ms": self._offset_ms(),
+                        "status": "error",
+                        "started_at": now_ms,
+                        "finished_at": now_ms,
+                    }
+                )
+                if on_tool_call:
+                    for phase in ("start", "end", "result"):
+                        on_tool_call(
+                            {
+                                "name": tc.name,
+                                "arguments": {},
+                                "result": entry["result"] if phase == "result" else None,
+                                "elapsed_ms": 0,
+                                "phase": phase,
+                                **({} if phase == "start" else {"status": "error"}),
+                                "tool_call_id": getattr(tc, "id", None),
+                                "timestamp": now_ms,
+                            }
+                        )
+                return json.dumps(tool_result), entry
+
+            if is_truncated_turn(turn.finish_reason):
+                # Before the HITL branch: no call of a cut turn runs or pauses, including
+                # calls whose own arguments arrived whole.
+                truncated_tool_turns += 1
+                logger.warning(
+                    "Turn from %s stopped at the output token limit (%s) with %d tool call(s); "
+                    "not running them",
+                    model,
+                    turn.finish_reason,
+                    len(tool_calls),
+                )
+                transport.append_turn(history, turn)
+                refused = [
+                    _refused_tool_call(tc, TRUNCATED_TOOL_CALL_ERROR, "truncated")
+                    for tc in tool_calls
+                ]
+                tool_calls_collected.extend(entry for _result_str, entry in refused)
+                transport.append_tool_results(
+                    history,
+                    [
+                        ToolResult(call_id=tc.id, output=result_str)
+                        for tc, (result_str, _entry) in zip(tool_calls, refused)
+                    ],
+                )
+                if truncated_tool_turns >= MAX_TRUNCATED_TOOL_TURNS:
+                    if max_tokens is not None:
+                        limit = f"the node's maxTokens ({max_tokens})"
+                    elif isinstance(transport, AnthropicMessagesTransport):
+                        limit = f"{DEFAULT_MAX_TOKENS} (the Messages transport default)"
+                    else:
+                        limit = "the model's own output limit"
+                    return _build_error_result(
+                        f"The model reached the output token limit in {truncated_tool_turns} "
+                        "tool-calling turns in a row, so their tool calls were not run. "
+                        f"The limit in use is {limit}. Set maxTokens on this node in the "
+                        "workflow JSON, or ask the assistant to raise it."
+                    )
+                continue
+            truncated_tool_turns = 0
 
             messages_before_tool_response = copy.deepcopy(transport.dump(history))
             hitl_tcs = [
@@ -1853,6 +1988,7 @@ class LLMService:
                 if pending_tool_calls:
                     result["tool_calls"] = pending_tool_calls
                 _attach_tool_metrics(result)
+                inv_prompt, inv_completion, inv_total = _invocation_token_usage()
                 self._record_trace(
                     request_type=transport.name,
                     provider=provider,
@@ -1861,9 +1997,9 @@ class LLMService:
                     response=result,
                     error=None,
                     elapsed_ms=round(total_elapsed_ms, 2),
-                    prompt_tokens=total_prompt_tokens,
-                    completion_tokens=total_completion_tokens,
-                    total_tokens=total_prompt_tokens + total_completion_tokens,
+                    prompt_tokens=inv_prompt,
+                    completion_tokens=inv_completion,
+                    total_tokens=inv_total,
                     binding=binding,
                 )
                 return self._attach_routing_summary(result)
@@ -1874,10 +2010,7 @@ class LLMService:
                 name = tc.name
                 tool_call_id = getattr(tc, "id", None)
                 args_str = tc.arguments or "{}"
-                try:
-                    args = json.loads(args_str)
-                except json.JSONDecodeError:
-                    args = {}
+                args, args_error = parse_tool_arguments(tc.arguments)
                 tool_def = tools_by_name.get(name)
                 # Preflight: stop before start/executor when the run was cancelled after
                 # a prior tool's terminal callbacks (or between sequential tools).
@@ -1885,6 +2018,10 @@ class LLMService:
                     preflight_abort = should_abort()
                     if preflight_abort:
                         return tc.id, None, None, None, preflight_abort
+                if args_error is not None:
+                    # Running on `{}` would act on the tool's defaults, not on the request.
+                    result_str, entry = _refused_tool_call(tc, args_error, "invalid_arguments")
+                    return tc.id, result_str, entry, None, None
                 # Emit "tool started" progress early (do not include values to avoid secrets).
                 if on_tool_call:
                     safe_args = _progress_safe_tool_arguments(name, tool_def, args)
@@ -2132,13 +2269,33 @@ class LLMService:
 
             if hitl_tcs:
                 paused_tc = hitl_tcs[0]
-                _tid, _result_str, entry, pause_request, abort_reason = await _run_one_tool(
+                _tid, hitl_result_str, entry, pause_request, abort_reason = await _run_one_tool(
                     paused_tc
                 )
                 if pause_request is not None:
                     return _build_pending_result(paused_tc.name, pause_request, entry)
                 if abort_reason:
                     return _build_error_result(abort_reason, entry)
+                # A call that did not pause (unparseable arguments, for one) still owes the
+                # model its result.
+                _store_completed_tool_slot(tool_calls.index(paused_tc), hitl_result_str, entry)
+                if parse_tool_arguments(paused_tc.arguments)[1] is not None:
+                    # The review request never reached the reviewer, so nothing in this batch
+                    # is approved. Defer the rest until the model sends a review that parses.
+                    for slot, tc in enumerate(tool_calls):
+                        if tc is not paused_tc:
+                            slot_results[slot] = _refused_tool_call(
+                                tc, HITL_REVIEW_DEFERRED_ERROR, "review_deferred"
+                            )
+                    transport.append_turn(history, turn)
+                    _commit_completed_tool_slots()
+                    continue
+                # Only the first review request runs; every other one in this turn still owes
+                # the model a result, or the next request has a tool call with no tool message.
+                for extra_tc in hitl_tcs[1:]:
+                    slot_results[tool_calls.index(extra_tc)] = _refused_tool_call(
+                        extra_tc, HITL_DUPLICATE_REVIEW_ERROR, "duplicate_review"
+                    )
 
             transport.append_turn(history, turn)
 
@@ -2268,6 +2425,7 @@ class LLMService:
                         if tool_calls_collected:
                             result["tool_calls"] = tool_calls_collected
                         _attach_tool_metrics(result)
+                        inv_prompt, inv_completion, inv_total = _invocation_token_usage()
                         self._record_trace(
                             request_type=transport.name,
                             provider=provider,
@@ -2276,9 +2434,9 @@ class LLMService:
                             response=result,
                             error=None,
                             elapsed_ms=round(total_elapsed_ms, 2),
-                            prompt_tokens=total_prompt_tokens,
-                            completion_tokens=total_completion_tokens,
-                            total_tokens=total_prompt_tokens + total_completion_tokens,
+                            prompt_tokens=inv_prompt,
+                            completion_tokens=inv_completion,
+                            total_tokens=inv_total,
                             binding=binding,
                         )
                         return self._attach_routing_summary(result)
@@ -2296,7 +2454,22 @@ class LLMService:
         }
         if tool_calls_collected:
             result["tool_calls"] = tool_calls_collected
-        return _attach_tool_metrics(result)
+        _attach_tool_metrics(result)
+        inv_prompt, inv_completion, inv_total = _invocation_token_usage()
+        self._record_trace(
+            request_type=transport.name,
+            provider=provider,
+            model=model,
+            request=_trace_request(),
+            response=result,
+            error=None,
+            elapsed_ms=round(total_elapsed_ms, 2),
+            prompt_tokens=inv_prompt,
+            completion_tokens=inv_completion,
+            total_tokens=inv_total,
+            binding=binding,
+        )
+        return self._attach_routing_summary(result)
 
     async def execute_image_generation(
         self,
@@ -2962,9 +3135,8 @@ def _load_skill_drive_files(actor_user_id: str | None) -> list[dict[str, Any]]:
 
     import uuid as _uuid
 
-    from app.db.models import FileTeamShare, GeneratedFile, TeamMember
     from app.db.session import SessionLocal
-    from app.services.file_storage import get_file_path
+    from app.services.file_sandbox.manifest import list_accessible_files
 
     try:
         actor_uuid = _uuid.UUID(str(actor_user_id))
@@ -2972,48 +3144,21 @@ def _load_skill_drive_files(actor_user_id: str | None) -> list[dict[str, Any]]:
         return []
 
     with SessionLocal() as db:
-        owned_rows = (
-            db.query(GeneratedFile)
-            .filter(GeneratedFile.owner_id == actor_uuid)
-            .order_by(GeneratedFile.created_at.desc())
-            .all()
-        )
-        shared_rows = (
-            db.query(GeneratedFile)
-            .join(FileTeamShare, FileTeamShare.file_id == GeneratedFile.id)
-            .join(TeamMember, TeamMember.team_id == FileTeamShare.team_id)
-            .filter(TeamMember.user_id == actor_uuid)
-            .order_by(GeneratedFile.created_at.desc())
-            .all()
-        )
-
-        rows_by_id: dict[Any, Any] = {}
-        for row in [*owned_rows, *shared_rows]:
-            rows_by_id.setdefault(row.id, row)
-
-        rows = sorted(
-            rows_by_id.values(),
-            key=lambda row: row.created_at,
-            reverse=True,
-        )
-        drive_files: list[dict[str, Any]] = []
-        for row in rows:
-            source_path = get_file_path(row)
-            if not source_path.exists():
-                continue
-            drive_files.append(
-                {
-                    "id": str(row.id),
-                    "filename": row.filename,
-                    "mime_type": row.mime_type,
-                    "size_bytes": row.size_bytes,
-                    "workflow_id": str(row.workflow_id) if row.workflow_id else None,
-                    "source_node_label": row.source_node_label,
-                    "created_at": row.created_at,
-                    "source_path": str(source_path),
-                }
-            )
-        return drive_files
+        refs, _total = list_accessible_files(db, actor_uuid)
+    return [
+        {
+            "id": str(ref.id),
+            "filename": ref.name,
+            "mime_type": ref.mime,
+            "size_bytes": ref.size,
+            "workflow_id": str(ref.workflow_id) if ref.workflow_id else None,
+            "source_node_label": ref.source,
+            "created_at": ref.created_at,
+            "source_path": str(ref.storage_path),
+        }
+        for ref in refs
+        if ref.storage_path is not None and ref.storage_path.exists()
+    ]
 
 
 def _unified_tool_executor(
@@ -3032,6 +3177,12 @@ def _unified_tool_executor(
         # the agent-level toolTimeoutSeconds only when the connection has none.
         mcp_timeout = float(connection.get("timeoutSeconds") or timeout_seconds)
         return execute_mcp_tool(connection, name, args, mcp_timeout)
+    if tool_def.get("_source") == "file_sandbox":
+        output = tool_def["_file_toolbox"].call(name, args)
+        # Same key skills use, so the agent output surfaces the download links.
+        if output.get("generated_files"):
+            output["_generated_files"] = output["generated_files"]
+        return output
     if tool_def.get("_source") == "skill":
         from app.services.skill_python_executor import SkillExecutionResult, execute_skill_python
 

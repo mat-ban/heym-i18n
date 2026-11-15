@@ -141,3 +141,6 @@ Başarısız bir oturum açma, okunabilir bir mesajla oturum açma ekranına dö
 - **Aynı anda birden fazla sağlayıcı.** Bir örnek tek bir sağlayıcıya bağlanır.
 - Sağlayıcı claim'lerinden **grup veya rol eşleme**.
 - **Tek çıkış.** Heym'den çıkış yapmak sizi sağlayıcıdan çıkış yapmaz.
+
+- **İki faktörlü oturum açma sağlayıcıya aittir.** `HEYM_REQUIRE_MFA` yalnızca şifreyle oturum açma için geçerlidir; bir SSO oturum açmasında asla Heym kodu istenmez. Bunun yerine kimlik sağlayıcınızda MFA zorunlu kılın.
+- **Devre dışı bırakma burada da geçerlidir.** Bir yöneticinin **Ayarlar → Kullanıcılar** bölümünden devre dışı bıraktığı bir hesap, sağlayıcı tarafından doğrulanmaya devam etse bile reddedilir.

@@ -116,6 +116,10 @@ Välj workflows i avsnittet Sub-Workflows i agentkonfigurationen. Agenten anropa
 
 En workflow-nod som stöds kan kopplas till en agents **tools**-handtag så att agenten kan anropa noden vid körning. Detta omvandlar befintliga canvas-åtgärder och -transformer till anropbara verktyg utan att skriva Python.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Använd canvas-nodverktyg när agenten ska avgöra när en konfigurerad nod körs, samtidigt som autentiseringsuppgifter, statiska fält och workflow-specifika inställningar behålls i nodens UI.
 
 ### Agent-tillhandahållna fält
@@ -397,3 +401,6 @@ Komprimering är automatiskt och alltid aktivt för Agent-noder. Det gäller **i
 - [Snabbstart](../getting-started/quick-start.md) – Grundläggande workflow med LLM och uttryck
 - [Fliken Autentiseringsuppgifter](../tabs/credentials-tab.md) – Lägg till API-nycklar för agenten
 - [Fliken MCP](../tabs/mcp-tab.md) – Konfigurera MCP för workflow-verktyg
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

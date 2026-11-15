@@ -368,3 +368,6 @@ Text (динамічний — рядок повідомлення формує�
 Кнопками стають лише адреси `http://` і `https://` та шляхи, що починаються з одного `/`. Будь-яке інше значення, наприклад `javascript:` або `//host`, залишається звичайним текстом, а порожня клітинка нічого не показує.
 
 Кнопка працює поряд із [посиланням рядка](../tabs/dashboard-tab.md#detail-pages): клік по кнопці відкриває її посилання в новій вкладці, а клік будь-де в іншому місці рядка, як і раніше, відкриває сторінку деталей.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

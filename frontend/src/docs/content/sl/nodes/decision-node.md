@@ -157,6 +157,8 @@ Urejanje poverilnice ohrani shranjeni ključ, ko je polje ključa prazno; ponovn
 
 Enaka poverilnica lahko ocenjuje izvajanja [Vrednotenja](../tabs/evals-tab.md): z izbrano možnostjo **LLM-as-Judge** jo izberite kot sodnika, model odločanja pa oceni vsak odgovor glede na pričakovani izhod.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym privzeto blokira odhodne zahteve na zasebne in povratne naslove, zato potrebuje odločitev, ki jo izvajate sami na `localhost` ali v zasebnem razponu, nastavitev `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Modeli odločanja se ne prikažejo v tabelah cen LLM, ki jih sinhronizira Heym, zato ostane stolpec **Strošek** v [Zgodovini](../tabs/traces-tab.md) prazen za te klice. Število tokenov se še vedno beleži, vi pa lahko dodate svojo ceno z nadomestnim cenikom.

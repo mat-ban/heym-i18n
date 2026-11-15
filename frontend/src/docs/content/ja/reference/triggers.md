@@ -141,7 +141,7 @@ RabbitMQ コンシューマーは、リーダーワーカーが初期化され�
 
 - [Webhooks](./webhooks.md) – Webhook の TTL、キャッシュ、レート制限、認証
 - [Workflow Structure](./workflow-structure.md) – ノードとエッジ
-- [Node Types](./node-types.md) – [Input](../nodes/input-node.md)、[Cron](../nodes/cron-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md)、[IMAP Trigger](../nodes/imap-trigger-node.md)、[Heym Trigger](../nodes/heym-trigger-node.md)、[WebSocket Trigger](../nodes/websocket-trigger-node.md)、[File Upload Trigger](../nodes/file-upload-trigger-node.md)、[RabbitMQ](../nodes/rabbitmq-node.md)
+- [Node Types](./node-types.md) – [Input](../nodes/input-node.md)、[Cron](../nodes/cron-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md)、[IMAP Trigger](../nodes/imap-trigger-node.md)、[Heym Trigger](. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`../nodes/heym-trigger-node.md)、[WebSocket Trigger](../nodes/websocket-trigger-node.md)、[File Upload Trigger](../nodes/file-upload-trigger-node.md)、[RabbitMQ](../nodes/rabbitmq-node.md)
 - [Discord Trigger](../nodes/discord-trigger-node.md) – Discord インタラクション Webhook Trigger
 - [Quick Start](../getting-started/quick-start.md) – Input を使用した Workflow の構築
 - [Portal](./portal.md) – Portal Trigger とチャット UI

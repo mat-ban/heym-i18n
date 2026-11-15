@@ -257,3 +257,5 @@ Goed om te weten:
 - [Integraties van derden](../reference/integrations.md#qdrant) – Qdrant en Postgres (pgvector) referentie-instelling
 - [Agent-node](./agent-node.md) – RAG-resultaten gebruiken als agent-context
 - [LLM-node](./llm-node.md) – RAG-resultaten invoeren in de LLM-systeemprompt
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

@@ -48,6 +48,7 @@ W trybie Agent pole **YOLO mode** pod polem wiadomości sprawia, że asystent ur
 - Wpisz żądanie w polu wprowadzania (np. „Create a workflow that takes user input and sends it to an LLM”)
 - Naciśnij **Enter**, aby wysłać (Shift+Enter wstawia nowy wiersz)
 - AI strumieniuje odpowiedź. W trybie **Agent**, jeśli odpowiedź zawiera workflow w bloku kodu \`\`\`json, jest on automatycznie parsowany i stosowany na canvasie. W trybie **Ask** canvas nigdy nie jest modyfikowany.
+- Podczas przesyłania strumieniowego kodu JSON workflowu linia pod odpowiedzią podaje nazwę workflowu i dotychczas zapisane węzły, na przykład `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Użyj przycisku **Clear**, aby zresetować rozmowę
 - Najedź kursorem na wiadomość i kliknij jej ikonę kopiowania, aby skopiować wyświetlany tekst, w tym ewentualny JSON workflow
 - Przeciągnij linię nad polem wiadomości, aby zwiększyć wysokość pola. Obszar wprowadzania może urosnąć do 60% wysokości panelu i wraca do domyślnej wysokości po przeładowaniu strony

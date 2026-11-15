@@ -3,7 +3,6 @@
 Handles URL verification challenge and routes events to workflow execution.
 """
 
-import asyncio
 import hashlib
 import hmac
 import json
@@ -24,6 +23,7 @@ from app.api.workflows import (
 )
 from app.db.models import Credential, CredentialType, ExecutionHistory, Workflow
 from app.db.session import async_session_maker
+from app.services.background_tasks import spawn_background_task
 from app.services.cluster.dispatch import dispatch_workflow, log_offloaded_run
 from app.services.credential_access import get_accessible_credential
 from app.services.encryption import decrypt_config
@@ -106,7 +106,20 @@ def _is_bot_echo(body: dict[str, Any]) -> bool:
     event = body.get("event")
     if not isinstance(event, dict):
         return False
-    return bool(event.get("bot_id")) or event.get("subtype") in _ECHO_SUBTYPES
+    if event.get("bot_id") or event.get("subtype") in _ECHO_SUBTYPES:
+        return True
+    # A file the app uploads can arrive as the bot user's own file_share message.
+    user = event.get("user")
+    return bool(user) and user in _app_bot_users(body)
+
+
+def _app_bot_users(body: dict[str, Any]) -> set[str]:
+    """The bot user ids this delivery was made for (Slack lists them in `authorizations`)."""
+    users: set[str] = set()
+    for item in body.get("authorizations") or []:
+        if isinstance(item, dict) and item.get("is_bot") and item.get("user_id"):
+            users.add(str(item["user_id"]))
+    return users
 
 
 # Message subtypes that are still a person writing; joins, topic changes and the like are not.
@@ -120,11 +133,16 @@ def _event_matches(node_data: dict[str, Any], body: dict[str, Any]) -> bool:
     `all` (the default, and what older nodes have) starts on every event. The other scopes
     start on a person's message: `messages` anywhere the bot hears, `directMessages` in a
     DM with the bot, `mentions` when the bot is mentioned, `channel` in `slackEventChannel`.
+    `slackEventFilesOnly` also requires the message to carry files.
     """
+    event = body.get("event")
+    if node_data.get("slackEventFilesOnly") and not (
+        isinstance(event, dict) and isinstance(event.get("files"), list) and event["files"]
+    ):
+        return False
     scope = str(node_data.get("slackEventScope") or "all")
     if scope == "all":
         return True
-    event = body.get("event")
     if not isinstance(event, dict):
         return False
     if scope == "mentions":
@@ -277,6 +295,7 @@ async def _execute_workflow_background(
                     trace_user_id=fresh_workflow.owner_id,
                     actor_user_id=fresh_workflow.owner_id,
                     cancel_event=cancel_event,
+                    timeout_seconds=getattr(fresh_workflow, "workflow_timeout_seconds", None),
                     concurrency_limit=fresh_workflow.concurrency_limit,
                 )
             finally:
@@ -476,7 +495,7 @@ async def slack_webhook(node_id: str, request: Request) -> dict[str, Any]:
     safe_headers = {k: v for k, v in request.headers.items() if k.lower() not in _SENSITIVE_HEADERS}
 
     # Fire workflow execution as background task — Slack requires 200 within 3s
-    asyncio.create_task(_execute_workflow_background(workflow, node_id, body, safe_headers))
+    spawn_background_task(_execute_workflow_background(workflow, node_id, body, safe_headers))
 
     return {"ok": True}
 
@@ -521,7 +540,9 @@ async def slack_events(credential_id: str, request: Request) -> dict[str, Any]:
     started = 0
     for workflow, node_id, node_data in targets:
         if _event_matches(node_data, body):
-            asyncio.create_task(_execute_workflow_background(workflow, node_id, body, safe_headers))
+            spawn_background_task(
+                _execute_workflow_background(workflow, node_id, body, safe_headers)
+            )
             started += 1
     logger.info("Slack event for credential %s started %d workflow(s)", credential_id, started)
     return {"ok": True}

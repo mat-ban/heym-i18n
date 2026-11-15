@@ -32,6 +32,7 @@ Anmeldedaten speichern API-Schlüssel und Secrets, die von Workflow-Knoten verwe
 | [Grist](../nodes/grist-node.md) | Grist | API-Schlüssel + Server-URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client-ID + Client-Secret + OAuth2-Zustimmung |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client-ID + Client-Secret + OAuth2-Zustimmung |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client-ID + Client-Secret + OAuth2-Zustimmung |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Projekt-URL + API-Schlüssel (+ optionales Standard-Schema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + Port + Benutzername/Passwort + Datenbank (+ Secure) |

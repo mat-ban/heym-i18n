@@ -80,6 +80,51 @@ test("browses documentation articles", async ({ page }) => {
   await expect(page.getByText("Delete an issue:", { exact: true })).toBeVisible();
 });
 
+test("navigates incident procedures and restores section links after reload", { tag: "@smoke" }, async ({ page }) => {
+  await page.goto("/docs/getting-started/introduction");
+  await page.getByPlaceholder("Search docs...").fill("incident");
+  await page.getByRole("link", { name: "Incident Playbook (L0)", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Heym Incident Playbook (L0)", exact: true })).toBeVisible();
+
+  const article = page.locator(".doc-markdown");
+  await article.getByRole("link", { name: "Database down", exact: true }).click();
+  await expect(page).toHaveURL(/\/docs\/reference\/operations-runbook#postgresql-down-or-not-writable$/);
+  await expect(page.getByRole("heading", { name: "PostgreSQL down or not writable", exact: true })).toBeInViewport();
+
+  await article.locator('a[href="#active-db-connections-pool-saturation-and-locks"]').first().click();
+  await expect(page).toHaveURL(/#active-db-connections-pool-saturation-and-locks$/);
+  await expect(page.getByRole("heading", { name: "Active DB connections, pool saturation, and locks", exact: true })).toBeInViewport();
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Active DB connections, pool saturation, and locks", exact: true })).toBeInViewport();
+  await expect(article.locator("pre code").first()).toContainText("heym_compose");
+  await expect(article.getByRole("table").first()).toBeAttached();
+  expect(page.context().pages()).toHaveLength(1);
+
+  await page.goto("/docs/reference/features");
+  await article.getByRole("link", { name: "Incident Playbook (L0)", exact: true }).click();
+  await expect(page).toHaveURL(/\/docs\/reference\/incident-playbook$/);
+});
+
+test("finds Kubernetes deployment from docs navigation and Ctrl+K", async ({ page }) => {
+  await page.goto("/docs/getting-started/introduction");
+  await page.getByPlaceholder("Search docs...").fill("kubernetes");
+  await page.getByRole("link", { name: "Kubernetes Deployment", exact: true }).click();
+
+  await expect(page).toHaveURL(/\/docs\/getting-started\/kubernetes$/);
+  await expect(page.getByRole("heading", { name: "Heym on Kubernetes", exact: true })).toBeVisible();
+  for (const name of ["Helm", "OpenShift", "Cilium with kube-proxy replacement", "Load distribution"]) {
+    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  }
+
+  await page.goto("/docs/getting-started/introduction");
+  await expect(page.getByRole("heading", { name: "Introduction", exact: true })).toBeVisible();
+  await page.keyboard.press("Control+k");
+  await page.getByPlaceholder("Search workflows, tabs, docs...").fill("kubernetes");
+  await page.getByRole("option", { name: /Kubernetes Deployment/ }).click();
+  await expect(page).toHaveURL(/\/docs\/getting-started\/kubernetes$/);
+  await expect(page.getByRole("heading", { name: "Heym on Kubernetes", exact: true })).toBeVisible();
+});
+
 test("filters Chat with Heym credentials and models with searchable selectors", async ({ page }) => {
   const openAiCredentialId = "22222222-2222-4222-8222-222222222225";
   const cerebrasCredentialId = "22222222-2222-4222-8222-222222222226";

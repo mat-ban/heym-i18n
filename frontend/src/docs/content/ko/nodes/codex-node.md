@@ -26,6 +26,8 @@ Codex credential에는 API 키를 사용할 수 없습니다. 이 노드는 클�
 
 Docker 배포 환경에서 Heym은 동일한 Heym 이미지의 형제 컨테이너 내부에서 Codex를 실행합니다(별도의 GHCR 이미지가 아님). 해당 컨테이너는 Codex 워크스페이스 볼륨만 마운트하며, Codex 자체의 bubblewrap sandbox가 네임스페이스와 새로운 `/proc`을 생성하도록 허용합니다. Runner는 `SYS_ADMIN`, unconfined seccomp 및 AppArmor, 그리고 `systempaths=unconfined`(Docker Engine 25+)를 추가합니다. 마지막 플래그가 없으면 모든 명령이 실행 전에 `bwrap: Can't mount proc on /newroot/proc: Operation not permitted` 오류와 함께 실패합니다.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI 참고 자료:
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

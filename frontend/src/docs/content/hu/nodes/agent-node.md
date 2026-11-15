@@ -2,6 +2,10 @@
 
 Az **AI Agent** csomópont egy LLM csomópont tool-hívási képességgel. Képes Python toolokat futtatni, a csatlakoztatott vászon-csomópontokat toolként meghívni, MCP szerverekhez kapcsolódni, skilleket használni, opcionálisan orchestratorként működni, amely más agent csomópontoknak delegál, más workflow-kat toolként meghívni, valamint szüneteltetni [emberi felülvizsgálat](../reference/human-in-the-loop.md) céljából.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 ## Áttekintés
 
 | Tulajdonság | Érték |
@@ -397,3 +401,6 @@ A tömörítés automatikus és mindig aktív az Agent csomópontok esetében. *
 - [Gyors kezdés](../getting-started/quick-start.md) – Alap workflow LLM-mel és kifejezésekkel
 - [Hitelesítési adatok fül](../tabs/credentials-tab.md) – API kulcsok hozzáadása az ügynökhöz
 - [MCP fül](../tabs/mcp-tab.md) – MCP konfigurálása workflow eszközökhöz
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

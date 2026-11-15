@@ -157,6 +157,8 @@ La editarea unei acreditări, cheia stocată este păstrată atunci când câmpu
 
 Aceeași acreditare poate evalua rulările de [Evals](../tabs/evals-tab.md): cu **LLM-as-Judge** selectat, alegeți-o ca judecător, iar modelul de decizie punctează fiecare răspuns în raport cu output-ul așteptat.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym blochează implicit cererile către adrese private și de tip loopback, astfel încât un endpoint de decizie pe care îl rulați dumneavoastră pe `localhost` sau într-un interval privat necesită `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Modelele de decizie nu apar în tabelele de prețuri LLM sincronizate de Heym, astfel încât coloana **Cost** din [Traces](../tabs/traces-tab.md) rămâne goală pentru aceste apeluri. Numărul de token-uri este totuși înregistrat, iar dumneavoastră puteți adăuga propriul preț printr-o suprascriere de preț.

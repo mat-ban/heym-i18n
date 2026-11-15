@@ -68,3 +68,5 @@ La misma regla que en [Output](./output-node.md): no coloque este nodo dentro de
 - [Output](./output-node.md) – Respuesta basada en mensaje o esquema con envoltura `result`
 - [Webhooks](../reference/webhooks.md) – Endpoint de ejecución, métodos de solicitud y respuestas
 - [Tipos de nodo](../reference/node-types.md) – Todos los tipos de nodo
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

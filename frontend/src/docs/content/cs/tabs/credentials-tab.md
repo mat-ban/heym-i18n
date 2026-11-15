@@ -93,3 +93,7 @@ Podívejte se na [Expression DSL](../reference/expression-dsl.md) pro odkazován
 - [Záložka Vectorstores](./vectorstores-tab.md) – Používá přihlašovací údaje Qdrant nebo Postgres (pgvector)
 - [Záložka Chat](./chat-tab.md) – Používá přihlašovací údaje OpenAI/Google
 - [Kontextová prezentace](../reference/contextual-showcase.md) – Kompaktní průvodce stránkami pro povrchy dashboardu
+
+## Hledání
+
+Použijte vyhledávací pole nad seznamem nebo stiskněte **Ctrl+F** (nebo **Cmd+F**) pro filtrování přihlašovacích údajů podle názvu nebo typu během psaní. Stisknutím **Escape** vyhledávání zrušíte.

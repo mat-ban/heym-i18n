@@ -19,6 +19,7 @@ Nodul **Cod** rulează cod Python scris de dumneavoastră, cu propriul fișier `
 | `codeParameters` | expression | Un obiect JSON care conectează datele din workflow la cod. Expresiile sunt rezolvate înainte de rularea codului |
 | `codeRequirements` | string | Conținutul fișierului `requirements.txt`, un pachet pe linie. Dacă este gol, instalarea este omisă |
 | `codeAllowNetwork` | boolean | Dacă codul în sine poate accesa rețeaua (implicit `false`) |
+| `codeFiles` | expression | Optional Drive files mounted read-only for the run: an id, several ids, or an expression such as `$Upload.file.id` |
 
 ## Funcția `main`
 
@@ -124,3 +125,16 @@ def main(params):
 ```
 
 Cu `codeParameters` setat la `{ "rows": "$fetchRows.result" }`, nodurile din aval citesc `$scoreRows.result.total`.
+## Reading Drive files
+
+Set **Files** (`codeFiles`) to give the code the files of the run. It accepts an id, ids separated by commas, a list, or an expression that resolves to a file or its id, such as `$Upload.file.id` or `$Upload.file`. A file opens when it came into this workflow: uploaded through its [File Upload trigger](./file-upload-trigger-node.md) or written to [Drive](../reference/drive.md) by one of its nodes. Other Drive files are not available to a run, so a workflow cannot be used to read someone's Drive.
+
+```python
+import heym_files
+import pandas as pd
+
+def main(params):
+    workbook = params.files[0]
+    df = pd.read_excel(heym_files.path(workbook.name), sheet_name="Summary")
+    return {"rows": len(df), "columns": list(df.columns)}
+```

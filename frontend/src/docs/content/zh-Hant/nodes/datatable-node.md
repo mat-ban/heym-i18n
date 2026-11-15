@@ -95,7 +95,7 @@
 | `$contains` | 不區分大小寫的子字串比對 |
 | `$in` | 值位於給定的陣列中 |
 
-結合多個運算子的範例：`{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`。未知的運算子會被忽略。`upsert` 篩選條件仍使用完全相符的值來尋找要更新的資料列。
+結合多個運算子的範例：`{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`。未知的運算子會被忽略。`upsert` 篩選條件仍使用完全相符的值來尋找要更新的資料列。
 
 您也可以依資料列中繼資料進行篩選 — `id`、`table_id`、`created_at`、`updated_at`、`created_by`、`updated_by` — 這些中繼資料會儲存為實際的欄位，而非儲存於您的資料內。若為日期，請傳入完整值以進行範圍比較（例如 `{"created_at": {"$gt": "2026-06-04"}}`），或使用 `$contains` 進行部分文字比對（例如 `{"created_at": {"$contains": "2026-06-04"}}`）。若您自己的欄位名稱與中繼資料欄位相同，則以資料欄位優先。
 

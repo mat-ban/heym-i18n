@@ -7,7 +7,7 @@
 
 ## Sākt sarunu
 
-Pār workflow sarakstu ir čata lodziņš, kas sveicina Jūs pa vārdam un jautā, ko Jūs vēlaties automatizēt. Ievadiet prompt, pēc izvēles pievienojiet vienu failu un izvēlieties akreditācijas datus un modeli, ko vēlaties izmantot. Abi nolaižamie saraksti ir meklējami un sākas ar Jūsu [AI noklusējumiem](../reference/user-settings.md).
+Pār workflow sarakstu ir čata lodziņš, kas sveicina Jūs pa vārdam un jautā, ko Jūs vēlaties automatizēt. Ievadiet prompt, pēc izvēles pievienojiet up to 10 files un izvēlieties akreditācijas datus un modeli, ko vēlaties izmantot. Abi nolaižamie saraksti ir meklējami un sākas ar Jūsu [AI noklusējumiem](../reference/user-settings.md).
 
 Sūtīšana izveido jaunu sarunu un atver to [Chat cilnē](./chat-tab.md), kur atbilde tiek straumēta. Atbalstītie pielikumi ir teksta faili, attēli un PDF faili, pa vienam ziņojumā, tāpat kā čata kompozitorā.
 
@@ -84,6 +84,10 @@ Datorā apļa insignija augšējā rīkjoslā rāda, cik daudz workflow pašlaik
 ## Search
 
 Izmantojiet workflow meklēšanas lauku blakus **Status**, vai nospiediet **Ctrl+F** (vai **Cmd+F**), lai filtrētu workflow pēc nosaukuma vai apraksta. Atbilstošie workflow iekš mapēm tiek rādīti ar paplašinātām to mapju zarām. Nospiediet **Escape**, lai notīrītu meklēšanu.
+## Meklēšana
+
+Izmantojiet darbplūsmu meklēšanas lauku blakus **Statusam** vai nospiediet **Ctrl+F** (vai **Cmd+F**), lai filtrētu darbplūsmas pēc nosaukuma vai apraksta vai mapes pēc nosaukuma. Atbilstošās darbplūsmas mapēs tiek parādītas ar izvērstiem mapju zariem, un mape ar atbilstošu nosaukumu tiek parādīta ar visu tās saturu. Nospiediet **Escape**, lai notīrītu meklēšanu.
+
 ## Mapes
 
 - Organizējiet workflows [mapēs un apakšmapēs](../reference/workflow-organization.md).

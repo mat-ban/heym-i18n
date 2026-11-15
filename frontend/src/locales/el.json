@@ -84,7 +84,8 @@
     "dropFileOrClick": "Σύρετε ένα αρχείο εδώ ή κάντε κλικ για επιλογή",
     "removeFile": "Κατάργηση αρχείου",
     "chooseFileFor": "Επιλέξτε αρχείο για {label}",
-    "new": "Νέο"
+    "new": "Νέο",
+    "clearSearch": "Εκκαθάριση αναζήτησης"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Ενεργοποίηση",
     "disablePlugin": "Απενεργοποίηση",
     "uninstallPlugin": "Απεγκατάσταση",
-    "pluginOperationFailed": "Η ενέργεια προσθέτου απέτυχε"
+    "pluginOperationFailed": "Η ενέργεια προσθέτου απέτυχε",
+    "users": "Χρήστες",
+    "encryption": "Κρυπτογράφηση"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Αντιγραφή trace ID",
     "openTrace": "Άνοιγμα trace",
     "message": "Μήνυμα",
-    "emptyReply": "Κενή απάντηση."
+    "emptyReply": "Κενή απάντηση.",
+    "timeRange3h": "Τελευταίες 3 ώρες",
+    "timeRange6h": "Τελευταίες 6 ώρες"
   },
   "tables": {
     "title": "Πίνακες δεδομένων",
@@ -1215,7 +1220,9 @@
     "browseAll": "Περιήγηση σε όλα →",
     "askAi": "Ρωτήστε το AI",
     "dropToImport": "Αποθέστε JSON ή ZIP για εισαγωγή",
-    "noWorkflowsMatch": "Κανένα workflow δεν ταιριάζει με αυτό το φίλτρο."
+    "noWorkflowsMatch": "Κανένα workflow δεν ταιριάζει με αυτό το φίλτρο.",
+    "noWorkflowsMatchAll": "Δοκιμάστε διαφορετικό τίτλο, περιγραφή ή όνομα φακέλου.",
+    "noWorkflowsMatchFilter": "Δοκιμάστε διαφορετικό τίτλο, περιγραφή, όνομα φακέλου ή φίλτρο κατάστασης."
   },
   "schedules": {
     "title": "Χρονοδιαγράμματα",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Ξεκίνησε από MCP client",
     "newChatTitle": "Νέο chat",
     "subtitle": "Εκτελέστε Workflows και κάντε ερωτήσεις",
-    "modelsLoadFailedDisabled": "Η λίστα μοντέλων αυτών των διαπιστευτηρίων δεν μπόρεσε να φορτωθεί. Το Chat παραμένει απενεργοποιημένο μέχρι να μπορέσει να ληφθεί ένα μοντέλο."
+    "modelsLoadFailedDisabled": "Η λίστα μοντέλων αυτών των διαπιστευτηρίων δεν μπόρεσε να φορτωθεί. Το Chat παραμένει απενεργοποιημένο μέχρι να μπορέσει να ληφθεί ένα μοντέλο.",
+    "dropFilesToAttach": "Σύρετε αρχεία για επισύναψη",
+    "attachFiles": "Επισύναψη αρχείων"
   },
   "teams": {
     "title": "Teams",
@@ -1883,7 +1892,8 @@
       "skipped": "Παραλείφθηκε"
     },
     "permissionRead": "ανάγνωση",
-    "permissionWrite": "εγγραφή"
+    "permissionWrite": "εγγραφή",
+    "details": "Λεπτομέρειες"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "Ενέργειες",
       "failedToLoadWidget": "Αποτυχία φόρτωσης widget",
       "failedToUpdateCheckbox": "Αποτυχία ενημέρωσης του πλαισίου ελέγχου",
-      "refreshDashboard": "Ανανέωση dashboard"
+      "refreshDashboard": "Ανανέωση dashboard",
+      "revertPrevious": "Επαναφορά προηγούμενου"
     },
     "hitl": {
       "previousReview": "Προηγούμενη αξιολόγηση",

@@ -124,7 +124,7 @@ Nekas par to neparādās vienas instancē instalācijā: lauki ir tukši, nav re
 
 **Ja darbinieks mirst izpildes laikā**, tā sirdsdarbība kļūst novecojusi, un līdera esošā atjaunošanas procedūra atkārtoti izpilda uzdevumu dzīvajā instancē. Rindas ieraksts, ko tas bija pieprasījis, tiek atcelts atsevišķi: kad vairs nav aktīvas izpildes un ir pagājušas divas minūtes, līderis atzīmē ierakstu kā neizpildītu un pamodina tos, kas gaidīja rezultātu. Vecums pats par sevi nekad nav izsistējs, tāpēc likumīgi ilga izpilde paliek neskarta; un ieraksts tiek atzīmēts kā neizpildīts, nevis atkārtoti pieprasīts, jo atjaunošana jau pieder atkārtotai izpildei, un atkārtota pieprasīšana izpildītu to pašu workflow divreiz.
 
-**Ja galvenais mezgls avarē**, cron turpina darboties no darbinieka, un izpildes turpina notikt. Izpildes, kas prasa galveno, rindojas un gaida, un iztukšojas, kad tas atgriežas — bet tikai misfire žēlastības logā (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, pēc noklusējuma 600 sekundes). Viss vecāks tiek slēgts kā izlaists, ar iemeslu, kas reģistrēts, nevis atkārtoti izpildot stundām ilgu uzkrājumu vienlaikus.
+**Ja galvenais mezgls avarē**, cron turpina darboties no darbinieka, un izpildes turpina notikt. Izpildes, kas prasa galveno, rindojas un gaida, un iztukšojas, kad tas atgriežas — bet tikai misfire žēlastības logā (`CRON_MISFIRE_GRACE_SECONDS`, pēc noklusējuma 600 sekundes). Viss vecāks tiek slēgts kā izlaists, ar iemeslu, kas reģistrēts, nevis atkārtoti izpildot stundām ilgu uzkrājumu vienlaikus.
 
 Lietotāja saskarne, API, MCP un redaktors nav pieejami, kamēr galvenais mezgls ir avarējis, jo tur ir ieejas punkti.
 
@@ -134,3 +134,6 @@ Lietotāja saskarne, API, MCP un redaktors nav pieejami, kamēr galvenais mezgls
 - [Settings](./user-settings.md) – Instances cilne un tas, kas to var redzēt
 - [Traces](../tabs/traces-tab.md) – Salīdziniet reālo izpildes ilgumu starp instancēm pirms dalījuma maiņas
 - [Security](./security.md) – Kāpēc katrai instancei jādalās ar `SECRET_KEY` un `ENCRYPTION_KEY`
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).

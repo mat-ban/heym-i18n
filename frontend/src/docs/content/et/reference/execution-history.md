@@ -176,3 +176,7 @@ Lõuendi ja töölaua ajaloo dialoogid hoiavad oma käivitamise juhtelemente üh
 - [Muudatuste ajalugu](./edit-history.md) – Versioonihaldus workflow'de salvestamiseks (tagasivõtmine, diff)
 - [Kiire algus](../getting-started/quick-start.md) – Looge ja käivitage oma esimene workflow
 - [Workflows vahekaart](../tabs/workflows-tab.md) – Looge ja haldake workflow'sid
+
+## Related
+
+- [Operations Runbook (L1): Järjekorra mahajäämus](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Eristage järjekorras olevad, ootel, katkestatud ja taastatud käivitamised enne uuesti käivitamist

@@ -19,7 +19,7 @@ Niektoré integračné uzly **nevyžadujú** prihlasovacie údaje. [WebSocket Tr
 | **Linear** | [Uzol Linear](../nodes/linear-node.md) | `api_key`, alebo `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Uzol Sentry](../nodes/sentry-node.md) | `api_token`, voliteľné `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, voliteľné `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, voliteľné `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | prihlasovacie údaje rozhodovacieho modelu plus možnosti modelu odkazujúce na Vaše ostatné prihlasovacie údaje |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Niektoré integračné uzly **nevyžadujú** prihlasovacie údaje. [WebSocket Tr
 | **Grist** | [Uzol Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Uzol Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + súhlas OAuth2 |
 | **Google Drive** | [Uzol Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + súhlas OAuth2 (plný rozsah Drive) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Uzol BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + súhlas OAuth2 |
 | **Supabase** | [Uzol Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, voliteľné `supabase_schema` |
 | **ClickHouse** | [Uzol ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -895,3 +896,6 @@ na výber používa rozhodovací model. Ukladá iba referencie, nikdy vlastný k
 
 Názvy možností sú to, medzi čím rozhodovací model vyberá, preto musia byť jedinečné. Možnosť
 nemôže odkazovať na iný Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

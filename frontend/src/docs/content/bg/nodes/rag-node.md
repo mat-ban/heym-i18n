@@ -272,3 +272,5 @@ Id-то е поле **вътре в payload-а**, а не вътрешният p
 - [Интеграции с трети страни](../reference/integrations.md#qdrant) – Настройка на удостоверения за Qdrant и Postgres (pgvector)
 - [Agent Node](./agent-node.md) – Използване на RAG резултати като контекст за агента
 - [LLM Node](./llm-node.md) – Подаване на RAG резултати към системния prompt на LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

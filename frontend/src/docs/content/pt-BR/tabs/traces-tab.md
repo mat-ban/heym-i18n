@@ -12,7 +12,7 @@ A página abre com um resumo de estatísticas acima da lista de traces, calculad
 - **Cards de KPI** – Total de Chamadas, Total de Tokens, Custo Total (USD), Latência Média, % de Erros
 - **Tokens por Modelo** – Gráfico de rosca do volume de tokens por modelo
 - **Custo por Modelo** – Gráfico de rosca do gasto em USD por modelo. Modelos sem precificação exibem um link "Configurar precificação" para a [Tabela de Custos de LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Chamadas ao Longo do Tempo** – Gráfico de área empilhada de chamadas bem-sucedidas vs. com falha por bucket (5 min / 1 h / 6 h / 1 dia, escolhido automaticamente conforme o intervalo)
+- **Chamadas ao Longo do Tempo** – Gráfico de área empilhada de chamadas bem-sucedidas vs. com falha por bucket (5 min / 15 min / 30 min / 1 h / 6 h / 1 dia, escolhido automaticamente conforme o intervalo)
 - **Aviso de modelos sem precificação** – Aparece abaixo dos gráficos quando alguns modelos rastreados não possuem linha de precificação, com link para a Tabela de Custos de LLM
 
 ## Intervalo de Tempo
@@ -23,12 +23,13 @@ Um único seletor de **Intervalo de tempo** no topo da barra de filtros controla
 
 - Lista paginada de traces recentes dentro do intervalo de tempo selecionado
 - Cada trace exibe: workflow, nó, credencial, timestamp, duração
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Clique em um trace para abrir a visualização de detalhes
 - Use **Anterior / Próximo** dentro do diálogo de detalhes para navegar entre traces sem fechá-lo
 
 ## Filtragem
 
-- **Intervalo de tempo** – 1h / 24h / 7d / 30d / Tudo; filtra gráficos e lista em conjunto
+- **Intervalo de tempo** – 1h / 3h / 6h / 24h / 7d / 30d / Tudo; filtra gráficos e lista em conjunto
 - **Credencial** – Filtra pela credencial (API key) utilizada
 - **Origem** – Filtra por workflow ou origem de execução
 - **Busca** – Busca por modelo, workflow, credencial ou rótulo de nó

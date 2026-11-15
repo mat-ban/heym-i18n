@@ -97,3 +97,11 @@ Việc đọc từ Drive được giới hạn ở các tệp mà actor của wo
 
 ## Dọn dẹp
 Các share token hết hạn được tự động dọn dẹp hàng ngày. Bản thân các tệp vẫn tồn tại cho đến khi được xóa thủ công thông qua tab Drive. Sử dụng **Clear All** để xóa mọi tệp và share link của chúng trong một thao tác.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

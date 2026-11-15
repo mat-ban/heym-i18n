@@ -132,3 +132,6 @@ Panel ayrıca son 24 saatin çalışmalarından kaçının yalnızca ana instanc
 - [Security](./security.md) – Oturum yönetimi, hız sınırlama, kimlik bilgisi şifreleme
 - [Single Sign-On](./sso.md) – Harici bir OpenID Connect sağlayıcısı bağlayın
 - [OpenTelemetry Tracing](./opentelemetry.md) – Workflow ve node yürütmeleri için dağıtık tracing
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

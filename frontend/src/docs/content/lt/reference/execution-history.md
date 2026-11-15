@@ -169,3 +169,7 @@ Drobės ir informacijos suvestinės istorijos dialogai išlaiko savo vykdymo val
 - [Edit History](./edit-history.md) – Versijų valdymas workflow išsaugojimams (grąžinimas, skirtumas)
 - [Quick Start](../getting-started/quick-start.md) – Sukurkite ir vykdykite savo pirmąjį workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Kurkite ir valdykite workflows
+
+## Related
+
+- [Operations Runbook (L1): Eilės vėlavimas](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Atskirkite eilėje esančius, sulaikytus, nutrauktus ir atkurtus vykdymus prieš pakartojimą

@@ -22,7 +22,7 @@
 Izolacija izvršavanja odabire se pomoću `HEYM_OPENCODE_CLI_COMMAND`, točno kao i kod Codex čvora:
 
 - **Lokalni razvoj (`run.sh`)** ostavlja ga na zadanoj vrijednosti `opencode`, tako da OpenCode radi kao podproces domaćina protiv kloniranog radnog prostora — bez Docker-a, bez dodatnih zastavica.
-- **Docker implementacije (`deploy.sh` i jedinstvena GHCR slika)** postavljaju ga na `/usr/local/bin/heym-opencode-docker`, omotač koji pokreće `opencode run` unutar **zaštićenog, jednokratnog bratskog kontejnera** koji dijeli OpenCode radni prostor nazvan volumen.
+- **Docker implementacije (`deploy.sh` i jedinstvena GHCR slika)** postavljaju ga na `/usr/local/bin/heym-opencode-docker`, omotač koji pokreće `opencode run` unutar **zaštićenog, jednokratnog bratskog kontejnera** koji dijeli OpenCode radni prostor nazvan volumen. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Zaštićeni kontejner izvršitelja uklanja sve Linux mogućnosti, postavlja `no-new-privileges`, koristi samo za čitanje root s tmpfs `/tmp`, i primjenjuje ograničenja za pid/memoriju/CPU. Mrežni izlaz je dopušten (OpenCode mora doći do model gateway-a). **GitHub token nikada se ne stavlja unutar kontejnera** — sve git i GitHub operacije rade se na strani hosta, tako da su samo OpenCode API ključ i datoteke repozitorija unutar.
 

@@ -42,7 +42,7 @@
 
 ## Ανάπτυξη σε Kubernetes
 
-Ο τυπικός οδηγός [Εκτέλεσης & Ανάπτυξης](../getting-started/running-and-deployment.md) καλύπτει το Docker Compose για ρυθμίσεις παραγωγής σε έναν διακομιστή. Οι πελάτες Enterprise λαμβάνουν βοήθεια με αναπτύξεις Kubernetes παραγωγής για υψηλή διαθεσιμότητα και οριζόντια κλιμάκωση:
+Ο τυπικός οδηγός [Εκτέλεσης & Ανάπτυξης](../getting-started/running-and-deployment.md) καλύπτει το Docker Compose για ρυθμίσεις παραγωγής σε έναν διακομιστή. [Kubernetes Deployment](../getting-started/kubernetes.md). Οι πελάτες Enterprise λαμβάνουν βοήθεια με αναπτύξεις Kubernetes παραγωγής για υψηλή διαθεσιμότητα και οριζόντια κλιμάκωση:
 
 - **Πολλαπλοί worker nodes** — Κατανομή των backend workers του Heym σε πολλαπλούς κόμβους Kubernetes για πλεονασμό και εξισορρόπηση φόρτου
 - **Sidecar containers** — Διαμόρφωση μοτίβων sidecar για συλλογή logs, agents παρακολούθησης, service meshes (Istio, Linkerd) και έγχυση μυστικών (Vault)

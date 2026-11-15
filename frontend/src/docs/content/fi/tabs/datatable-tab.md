@@ -122,3 +122,6 @@ Jos mikään rivi ei täsmää, malli listataan Suoritukset-sivun **Hinnoittelem
 - [Suoritukset-välilehti](./traces-tab.md) - Käyttää LLM Cost Tablea kustannusdiagrammia ja KPI-kortteja varten
 - [Grist-solmu](../nodes/grist-node.md) - Vaihtoehtoinen ulkoinen laskentataulukko
 - [Muuttujat-välilehti](./global-variables-tab.md) - Vaihtoehtoinen avain-arvo -tallennus
+## Haku
+
+Käytä taulukkoluettelon yläpuolella olevaa hakukenttää tai paina **Ctrl+F** (tai **Cmd+F**) suodattaaksesi taulukoita nimen tai kuvauksen mukaan kirjoittaessasi. Tyhjennä haku painamalla **Escape**.

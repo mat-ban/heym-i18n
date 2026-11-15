@@ -87,6 +87,7 @@ Nogle noder gemmer `credentialId` (UUID) i `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse-forbindelsesdetaljer (vært, port, autentifikation, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram-bot-legitimationsoplysninger |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord-offentlig nøgle eller webhook-legitimationsoplysninger |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vektorlagre | `credential_id` | Qdrant eller Postgres (pgvector) vektor-DB, via Qdrant, Psql eller Custom Embeddings RAG-legitimationsoplysninger |
 | Evalueringer | `credential_id`, `judge_credential_id` | Modellegitimationsoplysninger; en model eller Decision Model-legitimationsoplysninger for LLM-as-Judge-dommeren |
 | [Playwright](../nodes/playwright-node.md) AI-trin | `credentialId` | LLM/Vision-model (til AI-trin og [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Efter udførelse maskerer `mask_sensitive_output()` legitimationsværdier i outp
 - [Expression DSL](./expression-dsl.md) – `$credentials` syntaks
 - [Node-typer](./node-types.md) – Noder, der bruger legitimationsoplysninger ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Bruger `credentialId` til LLM
+
+## Tilladelser til Google Meet-kalender
+
+Deling af en [Google Meet-legitimationsoplysning](../nodes/google-meet-node.md) giver workflows mulighed for at læse ledig/optaget-intervaller for tilgængelige kalendere og oprette, ændre eller slette begivenheder som den tilknyttede Google-konto, herunder afsendelse af invitationer og aflysninger. Den besøgendes deltager-e-mail ændrer ikke, hvilken konto der ejer eller godkender begivenheden. Kun ejeren af legitimationsoplysningen kan genoprette forbindelsen til sin Google-autorisation.

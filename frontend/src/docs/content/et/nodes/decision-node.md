@@ -157,6 +157,8 @@ Mandaadi redigeerimisel säilib salvestatud võti, kui võtmeväli jäetakse tü
 
 Sama mandaati saab kasutada [Hindamiste](../tabs/evals-tab.md) käivituste hindamiseks: kui **LLM-as-Judge** on valitud, valige see kohtunikuna ning otsustusmudel hindab iga vastust oodatud väljundi suhtes.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym blokeerib vaikimisi väljuvad päringud privaatsetele ja loopback-aadressidele, seega otsustus-endpoint, mida ise käitate aadressil `localhost` või privaatses vahemikus, vajab `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Otsustusmudelid ei ilmu Heymi sünkroonitavates LLM-i hinnatabelites, seega veerg **Cost** vahekaardil [Käivitused](../tabs/traces-tab.md) jääb nende päringute puhul tühjaks. Tokenite arv registreeritakse siiski ning oma hinna saab lisada hinnakohanduse (pricing override) abil.

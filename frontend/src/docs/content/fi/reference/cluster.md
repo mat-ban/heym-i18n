@@ -124,7 +124,7 @@ Tästä ei näy mitään yksittäisessä käyttöönotossa: kentät ovat tyhjiä
 
 **Jos worker-prosessi katkeaa kesken suorituksen**, sen sydämenlyönti (heartbeat) vanhenee ja johtavan instanssin (leader) olemassa oleva palautusmekanismi suorittaa workflow:n uudelleen aktiivisella instanssilla. Prosessin varaama jonotusrivi merkitään erikseen vanhentuneeksi: kun aktiivista suoritusta ei ole ja kaksi minuuttia on kulunut, leader merkitsee rivin epäonnistuneeksi ja herättää tulosta odottaneen osapuolen. Pelkkä aika ei koskaan laukaise toimintoa, joten pitkäkestoinen suoritus saa jatkua rauhassa; ja rivi merkitään epäonnistuneeksi sen sijaan että se laitetaan uudelleen jonoon, koska palautusmekanismi on jo vastuussa uudelleensuorituksesta ja uudelleenjonotus suorittaisi saman workflow:n kahdesti.
 
-**Jos pääinstanssi (main) kaatuu**, cron-jaksolliset suoritukset jatkavat worker-instansseilta ja jaettavat suoritukset (distributable runs) jatkavat normaalisti. Pääinstanssia vaativat suoritukset jonottavat ja odottavat sen paluuta – mutta vain määritetyn sietoaikajan sisällä (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, oletusarvoisesti 600 sekuntia). Vanhemmat suoritukset merkitään ohitetuiksi (skipped) syyn kera, sen sijaan että tuntien takana oleva työmäärä suoritettaisiin kerralla.
+**Jos pääinstanssi (main) kaatuu**, cron-jaksolliset suoritukset jatkavat worker-instansseilta ja jaettavat suoritukset (distributable runs) jatkavat normaalisti. Pääinstanssia vaativat suoritukset jonottavat ja odottavat sen paluuta – mutta vain määritetyn sietoaikajan sisällä (`CRON_MISFIRE_GRACE_SECONDS`, oletusarvoisesti 600 sekuntia). Vanhemmat suoritukset merkitään ohitetuiksi (skipped) syyn kera, sen sijaan että tuntien takana oleva työmäärä suoritettaisiin kerralla.
 
 Käyttöliittymä, API, MCP ja editori ovat käyttökelvottomia pääinstanssin ollessa alhaalla, koska ne ovat sen hallinnassa.
 
@@ -134,3 +134,6 @@ Käyttöliittymä, API, MCP ja editori ovat käyttökelvottomia pääinstanssin 
 - [Asetukset](./user-settings.md) – Instanssien välilehti ja sen näkyvyys
 - [Suoritusjäljet](../tabs/traces-tab.md) – Vertaile todellisia suoritusaikoja instanssien välillä ennen jakoasetusten muuttamista
 - [Turvallisuus](./security.md) – Miksi jokaisen instanssin on jaettava `SECRET_KEY` ja `ENCRYPTION_KEY`
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).

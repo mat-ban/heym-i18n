@@ -1,19 +1,19 @@
 import type { Component } from "vue";
 
-import A2AAgentTourVisual from "@/features/release-tour/components/visuals/A2AAgentTourVisual.vue";
-import AgentSuiteTourVisual from "@/features/release-tour/components/visuals/AgentSuiteTourVisual.vue";
-import ChatEvalsTourVisual from "@/features/release-tour/components/visuals/ChatEvalsTourVisual.vue";
-import ConcurrencyLimitTourVisual from "@/features/release-tour/components/visuals/ConcurrencyLimitTourVisual.vue";
+import ChatWidgetRevertTourVisual from "@/features/release-tour/components/visuals/ChatWidgetRevertTourVisual.vue";
+import DecisionRerankerTourVisual from "@/features/release-tour/components/visuals/DecisionRerankerTourVisual.vue";
 import FallbackTourVisual from "@/features/release-tour/components/visuals/FallbackTourVisual.vue";
-import PlanningWidgetsTourVisual from "@/features/release-tour/components/visuals/PlanningWidgetsTourVisual.vue";
+import ImapAttachmentsTourVisual from "@/features/release-tour/components/visuals/ImapAttachmentsTourVisual.vue";
+import McpEndpointTourVisual from "@/features/release-tour/components/visuals/McpEndpointTourVisual.vue";
+import RagMediaUploadTourVisual from "@/features/release-tour/components/visuals/RagMediaUploadTourVisual.vue";
 
 /** Maps a section's `tourVisual` key to the mock UI that demonstrates it. */
 export const TOUR_VISUALS: Record<string, Component> = {
-  "planning-widgets": PlanningWidgetsTourVisual,
-  "a2a-agent": A2AAgentTourVisual,
-  "agent-suite": AgentSuiteTourVisual,
-  "chat-evals": ChatEvalsTourVisual,
-  "concurrency-limit": ConcurrencyLimitTourVisual,
+  "decision-reranker": DecisionRerankerTourVisual,
+  "rag-media-upload": RagMediaUploadTourVisual,
+  "chat-widget-revert": ChatWidgetRevertTourVisual,
+  "imap-attachments": ImapAttachmentsTourVisual,
+  "mcp-endpoint": McpEndpointTourVisual,
 };
 
 export function resolveTourVisual(key: string): Component {

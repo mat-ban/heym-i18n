@@ -84,7 +84,8 @@
     "dropFileOrClick": "Húzzon ide egy fájlt, vagy kattintson a kiválasztáshoz",
     "removeFile": "Fájl eltávolítása",
     "chooseFileFor": "Fájl kiválasztása ehhez: {label}",
-    "new": "Új"
+    "new": "Új",
+    "clearSearch": "Keresés törlése"
   },
   "nav": {
     "workflows": "Workflow-k",
@@ -285,7 +286,9 @@
     "enablePlugin": "Engedélyezés",
     "disablePlugin": "Letiltás",
     "uninstallPlugin": "Eltávolítás",
-    "pluginOperationFailed": "A bővítményművelet sikertelen"
+    "pluginOperationFailed": "A bővítményművelet sikertelen",
+    "users": "Felhasználók",
+    "encryption": "Titkosítás"
   },
   "workflows": {
     "title": "Workflow-k",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Trace ID másolása",
     "openTrace": "Futtatás megnyitása",
     "message": "Üzenet",
-    "emptyReply": "Üres válasz."
+    "emptyReply": "Üres válasz.",
+    "timeRange3h": "Elmúlt 3 óra",
+    "timeRange6h": "Elmúlt 6 óra"
   },
   "tables": {
     "title": "Adattáblák",
@@ -1215,7 +1220,9 @@
     "browseAll": "Összes böngészése →",
     "askAi": "Kérdezze az AI-t",
     "dropToImport": "Húzzon ide JSON vagy ZIP fájlt az importáláshoz",
-    "noWorkflowsMatch": "Egyetlen Workflow sem felel meg ennek a szűrőnek."
+    "noWorkflowsMatch": "Egyetlen Workflow sem felel meg ennek a szűrőnek.",
+    "noWorkflowsMatchAll": "Próbáljon meg más címet, leírást vagy mappanevet.",
+    "noWorkflowsMatchFilter": "Próbáljon meg más címet, leírást, mappanevet vagy állapotszűrőt."
   },
   "schedules": {
     "title": "Ütemezések",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "MCP kliens indította",
     "newChatTitle": "Új chat",
     "subtitle": "Workflow-k futtatása és kérdések feltevése",
-    "modelsLoadFailedDisabled": "A hitelesítő adatok modelllistáját nem sikerült betölteni. A Chat letiltva marad, amíg nem lehet modellt lekérni."
+    "modelsLoadFailedDisabled": "A hitelesítő adatok modelllistáját nem sikerült betölteni. A Chat letiltva marad, amíg nem lehet modellt lekérni.",
+    "dropFilesToAttach": "Húzza ide a fájlokat a csatoláshoz",
+    "attachFiles": "Fájlok csatolása"
   },
   "teams": {
     "title": "Csapatok",
@@ -1883,7 +1892,8 @@
       "skipped": "Kihagyva"
     },
     "permissionRead": "olvasás",
-    "permissionWrite": "írás"
+    "permissionWrite": "írás",
+    "details": "Részletek"
   },
   "mcp": {
     "title": "MCP szerver",
@@ -2197,7 +2207,8 @@
       "actions": "Műveletek",
       "failedToLoadWidget": "A Widget betöltése sikertelen",
       "failedToUpdateCheckbox": "A jelölőnégyzet frissítése sikertelen",
-      "refreshDashboard": "Irányítópult frissítése"
+      "refreshDashboard": "Irányítópult frissítése",
+      "revertPrevious": "Előző visszaállítása"
     },
     "hitl": {
       "previousReview": "Előző ellenőrzés",

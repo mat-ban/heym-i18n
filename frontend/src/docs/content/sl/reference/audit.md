@@ -59,6 +59,10 @@ Vsaka sprememba stanja je zabeležena. Branja so zabeležena le, kjer je branje 
 | `auth.token_refresh` | `outcome=denied` z `reason=refresh_token_replayed_or_revoked` — signal kraje žetona, ki ga je vredno opozoriti. |
 | `auth.password_change` | `outcome=failure`, ko je bilo trenutno geslo napačno. |
 | `auth.sso_login` | Enotna prijava. `outcome=failure` nosi razlog, zakaj je bila zavrnjena odgovor ponudnika; `denied` nosi `email_not_verified`, `domain_not_allowed` ali `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Administrator je spremenil konfiguracijo [SSO](./sso.md). Zabeleženi so `enabled` in `password_login_disabled`, nikoli pa skrivnost stranke. |
 | `sso_settings.test` | Administrator je izvedel test povezave SSO. |
 

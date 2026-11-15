@@ -68,7 +68,9 @@ Akcia **aiStep** používa LLM na analýzu HTML stránky (a voliteľne snímky o
 
 **AI Auto Heal** robí workflowy odolné voči zmenám DOM. Keď selektor zlyhá dvakrát (napr. po redizajne stránky), Heym zavolá LLM, aby našiel alternatívny lokátor — typicky `role=button[name='Submit']` alebo `text=Exact text` namiesto CSS selektorov.
 
-Povoľte **Režim Auto heal** vo vlastnostiach AI kroku. Ak uložený krok zlyhá:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Povoľte **Režim Auto heal** vo vlastnostiach AI kroku. Ak uložený krok zlyhá:
 
 1. Heym zachytí aktuálne HTML a snímku obrazovky
 2. Pošle zlyhávajúci krok + kontext stránky LLM

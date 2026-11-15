@@ -106,3 +106,6 @@ Queste scorciatoie sono disponibili nella finestra di dialogo della Cronologia d
 - [Nodo Execute](../nodes/execute-node.md) – Richiama sub-workflow (`Ctrl + Shift + O`)
 - [Guida rapida](../getting-started/quick-start.md) – Crea il Suo primo workflow
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Le schede **Credenziali** e **DataTable** funzionano allo stesso modo: `Ctrl + F` / `Cmd + F` attiva il campo di ricerca, l'elenco si restringe durante la digitazione ed `Esc` lo cancella.

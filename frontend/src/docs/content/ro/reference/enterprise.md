@@ -42,7 +42,7 @@ Sesiuni de instruire practică adaptate nivelului de competență și cazurilor 
 
 ## Implementare Kubernetes
 
-Ghidul standard [Rulare și implementare](../getting-started/running-and-deployment.md) acoperă Docker Compose pentru configurații de producție pe un singur server. Clienții Enterprise primesc asistență pentru implementări Kubernetes în producție, pentru disponibilitate ridicată și scalare orizontală:
+Ghidul standard [Rulare și implementare](../getting-started/running-and-deployment.md) acoperă Docker Compose pentru configurații de producție pe un singur server. [Kubernetes Deployment](../getting-started/kubernetes.md). Clienții Enterprise primesc asistență pentru implementări Kubernetes în producție, pentru disponibilitate ridicată și scalare orizontală:
 
 - **Mai multe noduri worker** — Distribuirea workerilor backend Heym pe mai multe noduri Kubernetes pentru redundanță și echilibrare a încărcării
 - **Containere sidecar** — Configurarea modelelor sidecar pentru colectarea jurnalelor, agenți de monitorizare, service mesh-uri (Istio, Linkerd) și injectarea secretelor (Vault)

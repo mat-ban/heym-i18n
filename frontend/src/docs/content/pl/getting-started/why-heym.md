@@ -189,7 +189,7 @@ System traces jest stworzony specjalnie do debugowania zachowań agentowych, z p
 Każde wywołanie LLM w Heym jest automatycznie rozliczane kosztowo. Zakładka [Wykonania](../tabs/traces-tab.md) pokazuje liczbę tokenów wejściowych i wyjściowych dla każdego wykonania wraz z kosztem w USD obliczanym w czasie rzeczywistym na podstawie zsynchronizowanej tabeli cenowej.
 
 - **Koszt pojedynczego wykonania** – Tokeny wejściowe, tokeny wyjściowe oraz łączny koszt w USD widoczne w każdym wierszu wykonania
-- **Analityka kosztów** – Karty KPI oraz wykres kosztów według modelu aktualizują się wraz z wybranym zakresem czasu (1h / 24h / 7d / 30d / Wszystko)
+- **Analityka kosztów** – Karty KPI oraz wykres kosztów według modelu aktualizują się wraz z wybranym zakresem czasu (1h / 3h / 6h / 24h / 7d / 30d / Wszystko)
 - **Tabela kosztów LLM** – Tabela systemowa w zakładce [Tabele danych](../tabs/datatable-tab.md) jest zasilana z Helicone co 24 godziny; istnieje możliwość nadpisania cen lub dodania własnych wierszy dla modeli jeszcze nieuwzględnionych
 - **Ostrzeżenie o brakującej cenie** – Wykonania dla modeli bez wpisu cenowego wyświetlają ostrzeżenie w treści z bezpośrednim linkiem do tabeli kosztów
 
@@ -274,7 +274,7 @@ Workflows są wywoływalne przez HTTP pod adresem `/api/workflows/{workflow_id}/
 Heym ma natywne wsparcie [MCP](../tabs/mcp-tab.md) po obu stronach:
 
 - **Jako klient**: Węzły agentów łączą się z zewnętrznymi serwerami MCP (Filesystem, Browserbase, narzędzia niestandardowe) przez stdio lub SSE i automatycznie korzystają z ich narzędzi
-- **Jako serwer**: Workflows z włączonym MCP stają się narzędziami na domyślnym serwerze pod adresem `/api/mcp/sse` lub na serwerach nazwanych z własnym URL i API key, dzięki czemu Claude Desktop, Cursor i inni klienci MCP mogą wywoływać workflows Heym bezpośrednio
+- **Jako serwer**: Workflows z włączonym MCP stają się narzędziami na domyślnym serwerze pod adresem `/api/mcp (or /api/mcp/sse for legacy connections)` lub na serwerach nazwanych z własnym URL i API key, dzięki czemu Claude Desktop, Cursor i inni klienci MCP mogą wywoływać workflows Heym bezpośrednio
 
 Agenci mogą korzystać z kilku serwerów MCP jednocześnie, a dowolny workflow może stać się narzędziem dla zewnętrznego klienta MCP.
 

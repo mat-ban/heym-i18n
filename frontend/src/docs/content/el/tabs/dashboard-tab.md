@@ -2,6 +2,9 @@
 
 Η καρτέλα **Πίνακας ελέγχου** είναι ένας χώρος τύπου Grafana όπου δημιουργείτε πλέγματα από widgets γραφημάτων. Κάθε widget αποδίδεται από την έξοδο του δικού του κρυφού workflow του Heym, οπότε οποιαδήποτε δεδομένα μπορείτε να παράγετε σε ένα workflow — ερωτήματα βάσης δεδομένων, κλήσεις API, αναζητήσεις RAG, έξοδο LLM — μπορούν να γίνουν γράφημα. Μπορείτε να διατηρείτε πολλούς πίνακες ελέγχου και να μοιράζεστε τον καθένα με άτομα ή ομάδες.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Πίνακες ελέγχου
 
 Όλοι ξεκινούν με έναν πίνακα ελέγχου, που δημιουργείται την πρώτη φορά που ανοίγουν την καρτέλα. Χρησιμοποιήστε τον επιλογέα πίνακα ελέγχου στο επάνω μέρος της καρτέλας για να εναλλάσσεστε μεταξύ πινάκων ελέγχου, και το **+** δίπλα του για να δημιουργήσετε έναν νέο. Ο επιλογέας παραθέτει πρώτα τους δικούς σας πίνακες ελέγχου και μετά αυτούς που έχουν μοιραστεί μαζί σας, με ετικέτα το όνομα του ατόμου που τους μοιράστηκε.
@@ -27,6 +30,8 @@
 - **Entity relationships (DB)** (πίνακες, πεδία, κλειδιά PK/FK και συνδέσεις)
 - **Bar gauge** (ένα οριζόντιο gauge ανά γραμμή με διαβάθμιση κόκκινο→πράσινο και μια τιμή, π.χ. ελεύθερος χώρος δίσκου)
 - **Text** (ένα μήνυμα markdown, π.χ. μια σημείωση κατάστασης όπως "Last execution at 19:47"; υποστηρίζει [διαδραστικά πλαίσια ελέγχου](../nodes/chart-output-node.md#interactive-task-lists) όταν το markdown είναι στατικό, και [ρητές αριθμημένες λίστες](../nodes/chart-output-node.md#numbered-lists) για προσαρμοσμένη ή φθίνουσα αρίθμηση)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (οι εκκρεμείς ανθρώπινες αξιολογήσεις σας. Η κεφαλίδα εμφανίζει `1/n pending`. Το όνομα του workflow ανοίγει αυτή την εκτέλεση στον καμβά. Τα **Approve**, **Request changes** και **Reject** την επιλύουν. Το εικονίδιο ιστορικού δίπλα στον τίτλο του widget ανοίγει αυτή την εκτέλεση στο παράθυρο διαλόγου ιστορικού σε αυτή τη σελίδα. Το widget δεν χρησιμοποιεί ανάντη γραμμές, και κάθε άτομο βλέπει τη δική του ουρά. Μπορεί εναλλακτικά να εμφανίζει τις αξιολογήσεις ενός μόνο Workflow, για όσους έχουν δικαίωμα να ανοίξουν αυτό το Workflow· δείτε [Γραφικά στοιχεία HITL](#grafika-stoicheia-hitl))
 
 Εκτός από γραφήματα, ένα widget **Run a workflow** εκτελεί ένα από τα workflows σας από τον πίνακα ελέγχου: σε ένα αρχείο που αποθέσατε, με τα πεδία εισόδου του ή με ένα κουμπί Run· δείτε [Widgets εκτέλεσης](#run-widgets).
@@ -147,3 +152,5 @@ widget** στην κεφαλίδα του widget για να αντιγράψε�
 ## Χρονοδιαγράμματα και διαγράμματα βάσεων δεδομένων
 
 Επιλέξτε **Gantt** στην Προσθήκη widget για να εμφανίσετε εργασίες με την πάροδο του χρόνου με συνδέσμους ολοκλήρωσης και εξάρτησης, ή **Entity relationships (DB)** για να αντιστοιχίσετε πίνακες, πεδία και τις σχέσεις τους. Και οι δύο τύποι χρησιμοποιούν τον [κόμβο Chart Output](../nodes/chart-output-node.md#gantt-schedules) και είναι επίσης διαθέσιμοι στις σελίδες Heym Work. Όταν το Work προτείνει widget για ένα χρονοδιάγραμμα ή σχήμα βάσης δεδομένων, δημιουργεί προεπισκοπήσεις με βάση τις προτεινόμενες εργασίες ή οντότητες.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

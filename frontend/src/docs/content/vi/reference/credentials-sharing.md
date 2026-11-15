@@ -87,6 +87,7 @@ Một số node lưu trữ `credentialId` (UUID) trong `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Thông tin kết nối ClickHouse (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Credential bot Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Public key hoặc credential webhook Discord |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Vector DB Qdrant hoặc Postgres (pgvector), thông qua credential RAG Qdrant, Psql hoặc Custom Embeddings |
 | Evals | `credential_id`, `judge_credential_id` | Credential model; credential model hoặc Decision Model cho LLM-as-Judge judge |
 | [Playwright](../nodes/playwright-node.md) AI step | `credentialId` | Model LLM/Vision (cho AI step và [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Sau khi thực thi, `mask_sensitive_output()` che giấu các giá trị credent
 - [Expression DSL](./expression-dsl.md) – Cú pháp `$credentials`
 - [Các Loại Node](./node-types.md) – Các node sử dụng credentials ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Node Agent](../nodes/agent-node.md) – Sử dụng `credentialId` cho LLM
+
+## Quyền lịch Google Meet
+
+Chia sẻ [thông tin xác thực Google Meet](../nodes/google-meet-node.md) cho phép các workflow đọc các khoảng thời gian rảnh/bận của lịch có thể truy cập và tạo, thay đổi hoặc xóa các sự kiện dưới dạng tài khoản Google đã kết nối, bao gồm gửi lời mời và hủy bỏ. Email người tham dự của khách truy cập không thay đổi tài khoản nào sở hữu hoặc ủy quyền cho sự kiện. Chỉ chủ sở hữu thông tin xác thực mới có thể kết nối lại ủy quyền Google của mình.

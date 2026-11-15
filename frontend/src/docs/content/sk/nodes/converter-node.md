@@ -16,6 +16,7 @@ Uzol **Converter** konvertuje dáta a súbory medzi formátmi bez potreby písa�
 |-----------|------|-------------|
 | `label` | string | Identifikátor uzla (camelCase) |
 | `conversion` | string | `csvToJson` (text CSV → pole objektov riadkov), `jsonToCsv` (pole objektov/riadkov → text CSV), `xmlToJson` (text XML → objekt), `jsonToXml` (objekt → text XML), `imageToText` (OCR obrázka), `pdfToText` (OCR každej vybranej stránky PDF) alebo `fileConvert` (prepis uloženého súboru do iného formátu) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Dáta na konverziu. Ponechajte prázdne, ak chcete použiť prvý vstup uzla |
 | `delimiter` | string | Jednoznakový oddeľovač polí (predvolené `,`) |
 | `hasHeader` | boolean | Iba `csvToJson` — považovať prvý riadok za hlavičku (predvolené `true`) |
@@ -169,3 +170,6 @@ OCR volá `tesseract` a `pdftoppm` z poppleru a konverzia dokumentov používa p
 - [Drive](./drive-node.md) – Ukladanie, načítavanie a zdieľanie súborov
 - [Node Types](../reference/node-types.md) – Prehľad všetkých typov uzlov
 - [Expression DSL](../reference/expression-dsl.md) – Funkcie a syntax
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

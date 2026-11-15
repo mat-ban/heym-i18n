@@ -54,3 +54,5 @@
 - [Node Types](../reference/node-types.md) – 모든 노드 타입 개요
 - [Error Handler](./error-handler-node.md) – Workflow 실패 시 Slack 전송
 - [Credentials Tab](../tabs/credentials-tab.md) – Slack webhook 추가
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

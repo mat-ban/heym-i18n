@@ -17,190 +17,120 @@ import type { ReleaseEntry } from "@/features/release-tour/releaseTour.types";
  */
 export const RELEASE_REGISTRY: ReleaseEntry[] = [
   {
-    releaseId: "2026.24",
-    publishedAt: new Date("2026-10-30T12:00:00Z"),
-    headline: "Plan schedules and map database relationships with new widgets",
+    releaseId: "2026.33",
+    publishedAt: new Date("2026-11-15T00:00:00Z"),
+    headline: "Standardized /mcp server endpoints",
     releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription: "Gantt schedules and entity relationships, in Heym and Heym Work.",
-      tourEnabled: false,
-      sectionOrder: ["planning-widgets"],
+      label: "New in Heym", introTitle: "New in this release",
+      introDescription: "Connect new MCP clients through /mcp, with existing /sse servers preserved.",
+      tourEnabled: true,
+      sectionOrder: ["mcp-endpoint"],
+    },
+    sections: [
+      {
+        id: "mcp-endpoint", title: "Standardized /mcp endpoint for new MCP servers",
+        publishedAt: new Date("2026-11-15T00:00:00Z"),
+        blocks: [{ type: "prose", markdown: "New MCP servers get an address ending in `/mcp`. Servers you already have keep their `/sse` address, so connected clients keep working. Copy JSON and Add to Cursor always use the right address." }],
+        tour: {
+          description: "New MCP servers get an address ending in /mcp. Servers you already have keep their /sse address, so connected clients keep working. Copy JSON and Add to Cursor always use the right address.",
+          useCases: ["Connect MCP clients to /api/mcp", "Create named servers with the new /mcp route", "Keep existing /sse clients and Cursor integrations working as before"],
+          tourVisual: "mcp-endpoint",
+          docTarget: { categoryId: "tabs", slug: "mcp-tab", title: "MCP / A2A" },
+        },
+      },
+    ],
+  },
+
+  {
+    releaseId: "2026.32",
+    publishedAt: new Date("2026-11-14T21:00:00Z"),
+    headline: "Email attachments in Heym Drive",
+    releaseTour: {
+      label: "New in Heym", introTitle: "New in this release",
+      introDescription: "Work with the files an email brings, straight from the IMAP Trigger.",
+      tourEnabled: true,
+      sectionOrder: ["imap-attachments"],
     },
     sections: [{
-      id: "planning-widgets",
-      title: "Gantt schedules and database relationship diagrams",
-      publishedAt: new Date("2026-10-30T12:00:00Z"),
-      blocks: [{
-        type: "prose",
-        markdown: "Add a **Gantt** widget for tasks with start and end dates, completion percentages and dependencies. Choose **Entity relationships (DB)** to show tables, their fields, primary and foreign keys, and the relationships between them. Both types are available in Add widget and the Chart Output node. Heym Work can propose either view and draw a preview using the page’s own plan before you build it.",
-      }],
+      id: "imap-attachments", title: "Email attachments in Heym Drive",
+      publishedAt: new Date("2026-11-14T21:00:00Z"),
+      blocks: [{ type: "prose", markdown: "Turn on **Download attachments to Drive** in the IMAP Trigger and every attachment of a new email is saved to your Heym Drive while the run executes. The trigger output gets `attachments`, with each file's name, size and Drive link, and `file_ids`, which goes straight into an Agent's message, a Converter or a Drive node: read an invoice PDF, hand a contract to an Agent or pass a scan on. Up to 10 files per email are saved; a file over the Drive size limit is listed as skipped and the run keeps going. The email stays unread, and the toggle is off by default, so existing workflows behave as before." }],
       tour: {
-        description: "See project schedules and database relationships on your dashboards and Work pages.",
-        useCases: ["Track a delivery plan with task progress and dependencies", "Document a database with primary and foreign keys", "Preview a proposed timeline or schema in Heym Work"],
-        tourVisual: "planning-widgets",
-        docTarget: { categoryId: "nodes", slug: "chart-output-node", title: "Chart Output" },
+        description: "Save the files of each new email to Drive and let the next node read them.",
+        useCases: ["Extract totals and due dates from invoice PDFs sent to a billing inbox", "Hand contracts that arrive by email to an Agent for review", "File scans and delivery notes in Drive with the email they came with"],
+        tourVisual: "imap-attachments",
+        docTarget: { categoryId: "nodes", slug: "imap-trigger-node", title: "IMAP Trigger" },
       },
     }],
   },
+
   {
-    releaseId: "2026.23",
-    publishedAt: new Date("2026-10-27T12:00:00Z"),
-    headline: "Reach the Heym Agent from other agents over A2A",
+    releaseId: "2026.31",
+    publishedAt: new Date("2026-11-14T12:00:00Z"),
+    headline: "Revert a widget Chat changed",
     releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
+      label: "New in Heym", introTitle: "New in this release",
+      introDescription: "Undo an AI change to a dashboard widget in one click.",
       tourEnabled: true,
-      sectionOrder: ["a2a-agent"],
+      sectionOrder: ["chat-widget-revert"],
     },
-    sections: [
-      {
-        id: "a2a-agent",
-        title: "The Heym Agent, over MCP and A2A",
-        publishedAt: new Date("2026-10-27T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "The **MCP** tab is now **MCP / A2A**, and the Heym Chat tool is the **Heym Agent**: the same engine as the Chat tab, which MCP clients call as `heym_chat`. Tick **Enable A2A** on the global server or on any named server, and other agents can send it tasks over the Agent2Agent protocol (A2A 1.0). The card shows the Agent Card URL and the JSON-RPC endpoint to copy.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "A task streams what the agent is doing, step by step, and ends with the reply and links to every workflow or eval suite it saved. A clarifying question pauses the task as **input required**; a credential the agent needs opens on Heym's own page and pauses it as **auth required**, so no secret passes through the other agent. Every task is a conversation in the Chat tab, and MCP clients now see the agent's real steps as progress too.",
-          },
-        ],
-        tour: {
-          description:
-            "Tick Enable A2A and other agents can delegate work to the Heym Agent, with the same abilities as Chat.",
-          useCases: [
-            "Let a company assistant built on another platform build and run Heym workflows",
-            "Hand an agent's research results to Heym to turn into a scheduled workflow",
-            "Follow a long build from another agent with streamed progress",
-          ],
-          tourVisual: "a2a-agent",
-          docTarget: {
-            categoryId: "reference",
-            slug: "a2a",
-            title: "A2A",
-          },
-        },
+    sections: [{
+      id: "chat-widget-revert", title: "Revert a widget Chat changed",
+      publishedAt: new Date("2026-11-14T12:00:00Z"),
+      blocks: [{ type: "prose", markdown: "When Chat changes a dashboard widget, or you fine-tune one with AI, the card shows **Revert previous**. One click puts the widget back as it was before that change, together with any fix Chat made to its data in the same change: a change and its fixes are now one Edit History entry. The offer lasts until you reload or the widget changes again, and Heym never overwrites a save made since. Heym Work's pages offer the same button." }],
+      tour: {
+        description: "Undo the last AI change to a dashboard widget, from Chat or a fine-tune, in one click.",
+        useCases: ["Try another chart from Chat and go back if the old one was better", "Undo a fine-tune that left a widget empty", "Review AI edits to a page before keeping them"],
+        tourVisual: "chat-widget-revert",
+        docTarget: { categoryId: "tabs", slug: "dashboard-tab", title: "Dashboard" },
       },
-    ],
+    }],
   },
+
   {
-    releaseId: "2026.22",
-    publishedAt: new Date("2026-10-26T12:00:00Z"),
-    headline:
-      "Work on one canvas together, limit how many runs execute at once, and check agents against their real runs, from Evals or from Chat",
+    releaseId: "2026.30",
+    publishedAt: new Date("2026-11-10T22:00:00Z"),
+    headline: "Images, audio and any text file in vector stores",
     releaseTour: {
-      label: "New in Heym",
-      introTitle: "New in this release",
-      introDescription:
-        "A quick look at what changed since your last update. Takes about a minute.",
+      label: "New in Heym", introTitle: "New in this release",
+      introDescription: "Photos, recordings and scanned pages become searchable RAG sources.",
       tourEnabled: true,
-      sectionOrder: ["agent-suite", "chat-evals", "concurrency-limit"],
+      sectionOrder: ["rag-media-upload"],
     },
-    sections: [
-      {
-        id: "agent-suite",
-        title: "Agent suites: check an agent against its real runs",
-        publishedAt: new Date("2026-10-26T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "In **Evals**, choose **New Suite** and then **Agent suite**, and pick a workflow's agent node. The suite reads the agent's last runs from Traces and shows its latency, USD cost, tokens and tool calls, with every tool, MCP tool, sub-agent, sub-workflow and skill it called and how often.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "Mark each one **Must call** or **Must not call**, and keep the upper bounds for latency, cost, tokens and tool calls that start 20% above the baseline. **Results** runs the workflow as many times as you choose, with the last run's inputs or inputs an AI model writes, scores every run against the checks and links each failed run to its trace. The suite picker now lists prompt and agent suites together, with their type, and is searchable.",
-          },
-        ],
-        tour: {
-          description:
-            "Pick an agent, see its baseline from real runs, and fail any run that calls the wrong tool or costs too much.",
-          useCases: [
-            "Make sure a support agent always searches the docs before answering",
-            "Catch an agent that starts sending email it should only draft",
-            "Notice when a prompt change makes runs slower or more expensive",
-          ],
-          tourVisual: "agent-suite",
-          docTarget: {
-            categoryId: "tabs",
-            slug: "evals-tab",
-            title: "Evals",
-          },
-        },
+    sections: [{
+      id: "rag-media-upload", title: "Images, audio and any text file in vector stores",
+      publishedAt: new Date("2026-11-10T22:00:00Z"),
+      blocks: [{ type: "prose", markdown: "Drop a photo, a screenshot, a voice note (WhatsApp's `.opus` files too) or a call recording on a vector store and it becomes searchable. Images are read with the Converter's OCR, and audio is transcribed on your own instance with the same Whisper model, in the background, so a long recording does not hold the upload open. PDF pages without a text layer are now read with OCR instead of being skipped, and a plain-text file of any name, such as `notes` or `README`, goes in as text. Heym Work's Knowledge pages take the same files." }],
+      tour: {
+        description: "Put photos, recordings, scanned PDFs and plain-text files of any name into a vector store.",
+        useCases: ["Search call recordings from a RAG node", "Make photographed receipts and whiteboards searchable", "Index scanned contracts without a separate OCR step"],
+        tourVisual: "rag-media-upload",
+        docTarget: { categoryId: "tabs", slug: "vectorstores-tab", title: "Vectorstores" },
       },
-      {
-        id: "chat-evals",
-        title: "Create and run eval suites from Chat",
-        publishedAt: new Date("2026-10-26T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Ask **Chat** for an eval suite in plain words, for example *\"make a prompt suite for my support prompt and compare gpt-4o with gpt-4.1-mini\"*. Chat writes the test cases with their expected answers. It asks which credential and models to use, or uses your only one. Then it saves the suite in **Evals**, runs it, and reports each model's pass count and the cases that failed.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "For an **agent suite**, Chat picks the agent and writes the run inputs itself. It can run the workflow and save those runs as the baseline, take the baseline from the agent's latest runs, or store the numbers you give it. The same works from an MCP client through `heym_chat`.",
-          },
-        ],
-        tour: {
-          description:
-            "Describe the suite you want. Chat writes the test cases, picks the credential with you, and runs it.",
-          useCases: [
-            "Compare two models on a prompt without building the suite by hand",
-            "Build an agent's baseline from fresh runs when it has none yet",
-            "Re-run a suite from an MCP client and read what failed",
-          ],
-          tourVisual: "chat-evals",
-          docTarget: {
-            categoryId: "tabs",
-            slug: "chat-tab",
-            title: "Chat",
-          },
-        },
+    }],
+  },
+
+  {
+    releaseId: "2026.29",
+    publishedAt: new Date("2026-11-10T16:00:00Z"),
+    headline: "Rerank RAG search results with a Decision Model",
+    releaseTour: {
+      label: "New in Heym", introTitle: "New in this release",
+      introDescription: "The best answer first, scored by the model you already use for decisions.",
+      tourEnabled: true,
+      sectionOrder: ["decision-reranker"],
+    },
+    sections: [{
+      id: "decision-reranker", title: "Rerank search results with a Decision Model",
+      publishedAt: new Date("2026-11-10T16:00:00Z"),
+      blocks: [{ type: "prose", markdown: "Turn on **Enable Reranker** in a **RAG** search and the **Reranker Credential** list now offers your **Decision Model** credentials next to Cohere. Enter the model, for example `jev-latest`, and the node sends the question with each finding in its own request, several at a time: the decision model scores how relevant that finding is to the question, and the results come back ordered by that score, with `relevance_score` from 0 to 1 on each one. A failed call fails the node with the reason, so a workflow never continues with results in the wrong order, and each rerank shows up in Traces as one entry with every finding's answer and the total token usage. Cohere reranking works as before." }],
+      tour: {
+        description: "Let a decision model score every search result against the question and put the best answer first.",
+        useCases: ["Feed an Agent only the passages that answer the question", "Rerank support articles before drafting a reply", "Use one decision model for routing, judging and reranking"],
+        tourVisual: "decision-reranker",
+        docTarget: { categoryId: "nodes", slug: "rag-node", title: "RAG / Vector Store" },
       },
-      {
-        id: "concurrency-limit",
-        title: "Run a workflow one at a time, or N at a time",
-        publishedAt: new Date("2026-10-26T12:00:00Z"),
-        blocks: [
-          {
-            type: "prose",
-            markdown:
-              "Turn on **Concurrency limit** in the workflow's **Properties** panel and enter how many production runs may execute at once. Webhook, cron, MCP, Portal and trigger runs above the limit wait in a first-in, first-out queue. Editor test runs always start right away.",
-          },
-          {
-            type: "prose",
-            markdown:
-              "A webhook call that has to wait gets **202 Accepted** at once, with an `execution_id`, a status URL and its place in the queue. Poll the status URL with the same credentials until the result arrives. MCP clients get the same answer and poll with **heym_execution_status**. Optional **Max queue size** and **Max wait** fields bound the queue.",
-          },
-        ],
-        tour: {
-          description:
-            "Cap concurrent runs per workflow. Extra runs wait in order, and callers get an execution id to collect the result.",
-          useCases: [
-            "Process webhooks one at a time so two runs never update the same record",
-            "Keep a rate-limited API from seeing more than two calls at once",
-            "Let an MCP client queue work and pick up the result later",
-          ],
-          tourVisual: "concurrency-limit",
-          docTarget: {
-            categoryId: "reference",
-            slug: "webhooks",
-            title: "Webhooks",
-          },
-        },
-      },
-    ],
+    }],
   },
 ];
 

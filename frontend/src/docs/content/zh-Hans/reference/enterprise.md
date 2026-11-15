@@ -42,7 +42,7 @@ Heym 团队帮助您为业务流程设计、构建并加固 Agent 与 Workflow�
 
 ## Kubernetes 部署
 
-标准的[运行与部署](../getting-started/running-and-deployment.md)指南涵盖用于单服务器生产环境的 Docker Compose。企业版客户可获得面向高可用性与横向扩缩容的生产级 Kubernetes 部署协助：
+标准的[运行与部署](../getting-started/running-and-deployment.md)指南涵盖用于单服务器生产环境的 Docker Compose。 [Kubernetes 部署](../getting-started/kubernetes.md)指南涵盖清单、Helm、存储、网络策略和 worker。企业版客户可获得面向高可用性与横向扩缩容的生产级 Kubernetes 部署协助：
 
 - **多 worker 节点** — 将 Heym 后端 worker 分布到多个 Kubernetes 节点，以实现冗余与负载均衡
 - **Sidecar 容器** — 为日志采集、监控 Agent、服务网格（Istio、Linkerd）及密钥注入（Vault）配置 sidecar 模式

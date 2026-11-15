@@ -22,7 +22,7 @@ Le nœud requiert également un identifiant **GitHub** pour cloner les dépôts 
 L'isolation d'exécution est choisie via `HEYM_OPENCODE_CLI_COMMAND`, exactement comme pour le nœud Codex :
 
 - **Développement local (`run.sh`)** la laisse à la valeur par défaut `opencode`, de sorte qu'OpenCode s'exécute comme sous-processus hôte contre l'espace de travail cloné — aucun Docker requis, aucun flag supplémentaire.
-- **Déploiements Docker (`deploy.sh` et l'image GHCR unique)** la définissent sur `/usr/local/bin/heym-opencode-docker`, un wrapper qui exécute `opencode run` à l'intérieur d'un **conteneur frère jetable et durci** partageant le volume nommé de l'espace de travail OpenCode.
+- **Déploiements Docker (`deploy.sh` et l'image GHCR unique)** la définissent sur `/usr/local/bin/heym-opencode-docker`, un wrapper qui exécute `opencode run` à l'intérieur d'un **conteneur frère jetable et durci** partageant le volume nommé de l'espace de travail OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Le conteneur d'exécution durci supprime toutes les capacités Linux, active `no-new-privileges`, utilise une racine en lecture seule avec un tmpfs `/tmp`, et applique des limites de pid/mémoire/CPU. La sortie réseau est autorisée (OpenCode doit joindre la passerelle de modèles). Le **token GitHub n'est jamais placé à l'intérieur du conteneur** — toutes les opérations git et GitHub s'exécutent côté hôte, de sorte que seuls la clé API OpenCode et les fichiers du dépôt s'y trouvent.
 

@@ -50,3 +50,8 @@ Si l'inscription est ouverte, créez le compte administrateur de confiance avant
 - [Onglet Analytics](./analytics-tab.md) – Métriques d'exécution
 - [Onglet Workflows](./workflows-tab.md) – Gestion des workflows
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guide de page compact pour les surfaces du dashboard
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Acheminer les symptômes à l'exécution vers la bonne procédure d'incident
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnostiquer les pannes de base de données, services, clusters et sandboxes

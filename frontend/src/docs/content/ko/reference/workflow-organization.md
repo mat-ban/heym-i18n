@@ -71,6 +71,11 @@ Workflow 수준 **Properties** 패널의 **On error, run workflow** (`error_work
 
 협업자는 자신과 공유된 Workflow에 대해 실행 Token을 발급할 수 있습니다. 실행은 **Token을 발급한 사람**에게 귀속되므로, 소유자가 아닌 해당 사용자의 Credentials와 전역 변수를 사용합니다. 진정한 익명 호출 — 호출자가 없는 `auth_type: anonymous` — 만 소유자의 컨텍스트에서 실행됩니다.
 
+
+### Who counts as the caller
+
+On `/execute` and `/execute/stream`, a caller is someone who chose to run the workflow: a bearer token in the `Authorization` header (API clients, execution tokens), or Heym's own app, which marks its requests with `X-Heym-Client`. The browser's session cookie on its own does not make the visitor the caller. Opening an execute URL from a link, an e-mail or another site while signed in is therefore treated like a call with no session: an `Anonymous` workflow runs in the owner's context, and a `JWT` workflow answers `401`. This keeps a link from running a workflow with the credentials of whoever happens to click it.
+
 ## 삭제 예약
 
 Workflow는 즉시 제거하는 대신 삭제 예약할 수 있습니다.

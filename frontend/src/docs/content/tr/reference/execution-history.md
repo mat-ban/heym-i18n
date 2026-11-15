@@ -175,3 +175,7 @@ Tuval ve dashboard geçmiş iletişim kutuları, çalıştırma kontrollerini te
 - [Edit History](./edit-history.md) – Workflow kayıtları için sürüm kontrolü (geri alma, diff)
 - [Quick Start](../getting-started/quick-start.md) – İlk workflow'unuzu oluşturun ve çalıştırın
 - [Workflows Tab](../tabs/workflows-tab.md) – Workflow'ları oluşturun ve yönetin
+
+## Related
+
+- [Operations Runbook (L1): Kuyruk birikmesi](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Yeniden çalıştırmadan önce kuyruğa alınmış, bekletilen, kesintiye uğramış ve kurtarılmış çalıştırmaları ayırt edin

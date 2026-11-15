@@ -59,6 +59,10 @@ Minden állapotváltozás naplózásra kerül. Az olvasási műveletek csak ott 
 | `auth.token_refresh` | `outcome=denied` a `reason=refresh_token_replayed_or_revoked` értékkel — ez egy tokenlopásra utaló jelzés, amely riasztást érdemel. |
 | `auth.password_change` | `outcome=failure`, ha a jelenlegi jelszó hibás volt. |
 | `auth.sso_login` | Egyszeri bejelentkezés. Az `outcome=failure` tartalmazza az okot, amiért a szolgáltató válasza elutasításra került; a `denied` tartalmazza az `email_not_verified`, `domain_not_allowed` vagy `provisioning_disabled` értéket. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Egy adminisztrátor módosította az [SSO](./sso.md) konfigurációt. Rögzíti az `enabled` és `password_login_disabled` értékeket, soha nem a client secretet. |
 | `sso_settings.test` | Egy adminisztrátor lefuttatta az SSO kapcsolattesztet. |
 

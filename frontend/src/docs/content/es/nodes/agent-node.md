@@ -110,6 +110,10 @@ Seleccione workflows en la sección Sub-Workflows de la configuración del agent
 
 Puede conectar un nodo de workflow compatible al handle de **tools** de un agente para que este pueda llamar a ese nodo en tiempo de ejecución. Esto convierte acciones y transformaciones existentes del canvas en herramientas invocables sin escribir Python.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Utilice las herramientas de nodos del canvas cuando desee que el agente decida cuándo ejecutar un nodo configurado, manteniendo al mismo tiempo las credenciales, los campos estáticos y la configuración específica del workflow en la interfaz del nodo.
 
 ### Campos proporcionados por el agente
@@ -401,3 +405,6 @@ La compresión es automática y siempre está activa para los Nodos Agent. **No*
 - [Quick Start](../getting-started/quick-start.md) – Workflow básico con LLM y expresiones
 - [Credentials Tab](../tabs/credentials-tab.md) – Añadir claves de API para el agente
 - [MCP Tab](../tabs/mcp-tab.md) – Configurar MCP para herramientas de workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

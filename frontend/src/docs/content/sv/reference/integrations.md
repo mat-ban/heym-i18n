@@ -19,7 +19,7 @@ Vissa integrationsnoder kräver **inte** autentiseringsuppgifter. [WebSocket Tri
 | **Linear** | [Linear-nod](../nodes/linear-node.md) | `api_key`, eller `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry-nod](../nodes/sentry-node.md) | `api_token`, valfritt `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Utvärdering](../tabs/evals-tab.md) (LLM-as-Judge-domare) | `base_url`, valfritt `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Utvärdering](../tabs/evals-tab.md) (LLM-as-Judge-domare), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, valfritt `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI-standardvärden | en Decision Model-autentiseringsuppgift, plus modellalternativ som refererar till övriga autentiseringsuppgifter |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektorlager | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Vissa integrationsnoder kräver **inte** autentiseringsuppgifter. [WebSocket Tri
 | **Grist** | [Grist-nod](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets-nod](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2-samtycke |
 | **Google Drive** | [Google Drive-nod](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2-samtycke (full Drive-behörighet) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery-nod](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2-samtycke |
 | **Supabase** | [Supabase-nod](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, valfritt `supabase_schema` |
 | **ClickHouse** | [ClickHouse-nod](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -894,3 +895,6 @@ beslutsmodell för att välja. Den lagrar referenser, aldrig en egen nyckel.
 
 Det är mellan alternativens namn som beslutsmodellen väljer, så de måste vara distinkta. En
 post kan inte peka på en annan Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

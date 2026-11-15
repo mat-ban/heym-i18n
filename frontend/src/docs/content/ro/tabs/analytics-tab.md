@@ -65,3 +65,7 @@ Treceți cursorul peste un grafic pentru a vedea tipul de nod chiar lângă indi
 - [Contextual Showcase](../reference/contextual-showcase.md) – Ghid compact de pagină pentru suprafețele dashboard-ului
 
 Când un grafic arată o tendință despre care doriți să fiți notificat în loc să o urmăriți, transformați-o într-o [alertă](./alerts-tab.md): numărul de erori, durata rulării, cheltuiala LLM și numărul de execuții pot primi toate un prag pe o fereastră de timp.
+
+## Related
+
+- [Operations Runbook (L1): Utilizarea resurselor](../reference/operations-runbook.md#most-resource-consuming-workflows) - Găsiți workflow-uri de mare volum și durată lungă și corelați CPU, memorie și tokenuri

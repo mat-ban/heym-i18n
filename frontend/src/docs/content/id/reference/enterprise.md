@@ -42,7 +42,7 @@ Sesi pelatihan langsung yang disesuaikan dengan tingkat keterampilan dan use cas
 
 ## Kubernetes Deployment
 
-Panduan standar [Running & Deployment](../getting-started/running-and-deployment.md) mencakup Docker Compose untuk penyiapan produksi server tunggal. Pelanggan Enterprise menerima bantuan untuk deployment Kubernetes produksi guna mencapai ketersediaan tinggi dan scaling horizontal:
+Panduan standar [Running & Deployment](../getting-started/running-and-deployment.md) mencakup Docker Compose untuk penyiapan produksi server tunggal. [Kubernetes Deployment](../getting-started/kubernetes.md). Pelanggan Enterprise menerima bantuan untuk deployment Kubernetes produksi guna mencapai ketersediaan tinggi dan scaling horizontal:
 
 - **Multiple worker nodes** — Mendistribusikan worker backend Heym ke beberapa node Kubernetes untuk redundansi dan load balancing
 - **Sidecar containers** — Mengonfigurasi pola sidecar untuk pengumpulan log, monitoring agent, service mesh (Istio, Linkerd), dan injeksi secret (Vault)

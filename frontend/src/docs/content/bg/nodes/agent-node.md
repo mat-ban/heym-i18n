@@ -119,6 +119,10 @@ HITL е наличен само за agent изход в текстов режи
 
 Може да свържете поддържан workflow node към handle-а **tools** на агента, така че агентът да може да извиква този node по време на изпълнение. Това превръща съществуващите действия и трансформации от canvas в извикваеми инструменти без писане на Python.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Използвайте инструменти от canvas node, когато искате агентът да решава кога да стартира конфигуриран node, като същевременно запазвате удостоверенията, статичните полета и специфичните за workflow-а настройки в UI-а на node-а.
 
 ### Полета, предоставяни от агента
@@ -411,3 +415,6 @@ endpoint-а. С Google удостоверение остава изключен�
 - [Бърз старт](../getting-started/quick-start.md) – Основен workflow с LLM и изрази
 - [Credentials Tab](../tabs/credentials-tab.md) – Добавяне на API ключове за агента
 - [MCP Tab](../tabs/mcp-tab.md) – Конфигуриране на MCP за инструменти на workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

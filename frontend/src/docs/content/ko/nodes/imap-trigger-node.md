@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | 서버, 로그인, 메일함, SSL 설정을 포함하는 `imap` credential |
 | `pollIntervalMinutes` | Integer | Heym이 새 이메일을 확인하기 위해 메일함을 폴링하는 주기 |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## 설정 가이드
 
@@ -62,6 +63,8 @@
 | `$nodeLabel.email.text` | 일반 텍스트 본문 |
 | `$nodeLabel.email.html` | HTML 본문 |
 | `$nodeLabel.email.attachments` | 첨부 파일 메타데이터 배열 (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | 디코딩된 헤더 객체 |
 | `$nodeLabel.email.uid` | 중복 제거 또는 로깅을 위한 IMAP UID |
 | `$nodeLabel.triggered_by` | Trigger 소스 레이블 (`"imap"`) |

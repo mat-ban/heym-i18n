@@ -72,6 +72,7 @@ HEYM_OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 | `heym.agent.tool.args_bytes` | Μέγεθος UTF-8 των σειριοποιημένων ορισμάτων του εργαλείου. |
 | `heym.agent.tool.result_bytes` | Μέγεθος UTF-8 του σειριοποιημένου αποτελέσματος του εργαλείου. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` ή `cancelled`. Τα σφάλματα εργαλείου θέτουν την κατάσταση του span σε `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Τα ακατέργαστα ορίσματα και αποτελέσματα των εργαλείων δεν επισυνάπτονται στα spans από προεπιλογή.
 

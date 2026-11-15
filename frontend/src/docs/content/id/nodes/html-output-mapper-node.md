@@ -68,3 +68,5 @@ Aturan yang sama seperti [Output](./output-node.md): jangan tempatkan node ini d
 - [Output](./output-node.md) – Respons berbasis pesan atau skema dengan pembungkusan `result`
 - [Webhooks](../reference/webhooks.md) – Endpoint eksekusi, request method, dan respons
 - [Node Types](../reference/node-types.md) – Semua tipe node
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

@@ -95,7 +95,7 @@ Filtris `find` või `count` tähendab lihtväärtus võrdust; objektväärtus ra
 | `$contains` | Tõstutundetu alamstringi vaste |
 | `$in` | Väärtus on antud massiivis |
 
-Näide mitme kombineerimisest: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Tundmatuid operaatoreid eiratakse. `upsert` filtrid kasutavad endiselt täpse vastega väärtusi, et leida uuendatav rida.
+Näide mitme kombineerimisest: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Tundmatuid operaatoreid eiratakse. `upsert` filtrid kasutavad endiselt täpse vastega väärtusi, et leida uuendatav rida.
 
 Samuti saate filtreerida rea metaandmete järgi – `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` – mis on salvestatud päris veergudena, mitte teie andmete sees. Kuupäevade puhul edastage vahemiku võrdlemiseks täisväärtus (nt `{"created_at": {"$gt": "2026-06-04"}}`) või kasutage osalise tekstivaste jaoks `$contains` (nt `{"created_at": {"$contains": "2026-06-04"}}`). Kui mõni teie enda veerg on nimetatud samamoodi nagu metaandmete väli, on andmeveerul ülimus.
 

@@ -26,6 +26,8 @@ Node cũng yêu cầu credential **GitHub** để sao chép các kho lưu trữ 
 
 Trong các triển khai Docker, Heym chạy Codex bên trong một container anh em từ cùng image Heym (không phải image GHCR riêng biệt). Container đó chỉ mount volume workspace của Codex và cho phép sandbox bubblewrap của chính Codex tạo namespace và một `/proc` mới. Trình chạy thêm `SYS_ADMIN`, seccomp và AppArmor không giới hạn, và `systempaths=unconfined` (Docker Engine 25+). Nếu không có cờ cuối cùng, mọi lệnh đều thất bại trước khi khởi chạy với lỗi `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 Tài liệu tham khảo OpenAI:
 
 - [Xác thực Codex](https://developers.openai.com/codex/auth)

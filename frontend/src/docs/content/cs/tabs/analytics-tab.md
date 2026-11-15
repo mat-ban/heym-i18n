@@ -65,3 +65,7 @@ Najeďte myší na graf a uvidíte typ uzlu pod ukazatelem přímo vedle něj. T
 - [Contextual Showcase](../reference/contextual-showcase.md) – Kompaktní průvodce stránkou pro dashboardy
 
 Když graf zobrazuje trend, o kterém chcete být informováni, místo abyste ho sledovali, přeměňte ho na [alert](./alerts-tab.md): počet chyb, doba trvání spuštění, výdaje za LLM a počet spuštění – to vše lze opatřit prahovou hodnotou v rámci časového okna.
+
+## Related
+
+- [Operations Runbook (L1): Využití prostředků](../reference/operations-runbook.md#most-resource-consuming-workflows) - Nalezení náročných a dlouho běžících workflow a korelace CPU, paměti a tokenů

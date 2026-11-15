@@ -157,6 +157,8 @@ Redaguojant kredencialą, saugomas raktas, kai rakto laukas paliekamas tuščias
 
 Tas pats kredencialas gali vertinti [Evals](../tabs/evals-tab.md) vykdymus: pasirinkus **LLM-as-Verdiktas**, pasirinkite jį kaip vertintoją, o sprendimo modelis įvertins kiekvieną atsakymą pagal numatomą išvestį.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym pagal numatytuosius nustatymus blokuoja išorines užklausas į privačius ir loopback adresus, todėl sprendimo endpoint'as, kurį vykdote patys `localhost` arba privačiame intervale, turi turėti `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Sprendimo modeliai nepasirodo Heym sinchronizuotose LLM kainų lentelėse, todėl **Kainos** stulpelis [Vykdymuose](../tabs/traces-tab.md) lieka tuščias šiems skambučiams. Token'ų skaičiai vis tiek registruojami, ir galite pridėti savo kainą su kainų pakeitimu.

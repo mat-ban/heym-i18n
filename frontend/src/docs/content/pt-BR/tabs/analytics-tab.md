@@ -65,3 +65,7 @@ Passe o cursor sobre um gráfico para ver o tipo de nó sob o ponteiro, logo ao 
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacto de páginas para superfícies do dashboard
 
 Quando um gráfico mostra uma tendência sobre a qual você prefere ser notificado em vez de monitorar, transforme-a em um [alerta](./alerts-tab.md): contagem de erros, duração de execução, gasto com LLM e contagem de execuções podem todos receber um limite ao longo de uma janela de tempo.
+
+## Related
+
+- [Operations Runbook (L1): Uso de recursos](../reference/operations-runbook.md#most-resource-consuming-workflows) - Encontre workflows de alto volume e longa duração e correlacione CPU, memória e tokens

@@ -87,6 +87,7 @@ Beberapa node menyimpan `credentialId` (UUID) di `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Detail koneksi ClickHouse (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Credential bot Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Public key Discord atau credential webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Vector DB Qdrant atau Postgres (pgvector), melalui credential RAG Qdrant, Psql, atau Custom Embeddings |
 | Evals | `credential_id`, `judge_credential_id` | Credential model; credential model atau Decision Model untuk judge LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) langkah AI | `credentialId` | Model LLM/Vision (untuk langkah AI dan [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Setelah eksekusi, `mask_sensitive_output()` menyamarkan nilai credential pada ou
 - [Expression DSL](./expression-dsl.md) – Sintaks `$credentials`
 - [Tipe Node](./node-types.md) – Node yang menggunakan credential ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Node Agent](../nodes/agent-node.md) – Menggunakan `credentialId` untuk LLM
+
+## Izin kalender Google Meet
+
+Membagikan [kredensial Google Meet](../nodes/google-meet-node.md) memungkinkan workflow membaca interval luang/sibuk kalender yang dapat diakses dan membuat, mengubah, atau menghapus acara sebagai akun Google yang terhubung, termasuk mengirim undangan dan pembatalan. Email peserta pengunjung tidak mengubah akun mana yang memiliki atau mengotorisasi acara tersebut. Hanya pemilik kredensial yang dapat menghubungkan kembali otorisasi Google-nya.

@@ -12,7 +12,7 @@ Workflow는 **trigger 노드** 또는 **진입점**에 의해 시작됩니다. �
 | [Cron](../nodes/cron-node.md) | 일정에 따라 실행됩니다(cron 표현식, 예: 매시간 실행은 `0 * * * *`). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram이 노드별 webhook URL로 봇 webhook 업데이트를 전송할 때 시작됩니다. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Discord가 노드별 endpoint로 Interactions API webhook을 전송할 때 시작됩니다. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | IMAP 메일함을 폴링하고 새로 감지된 각 이메일마다 한 번씩 시작됩니다. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | IMAP 메일함을 폴링하고 새로 감지된 각 이메일마다 한 번씩 시작됩니다. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Heym이 플랫폼 이벤트를 발행할 때 시작됩니다. 하나의 디스패치 윈도우 내 이벤트는 배열로 함께 도착합니다. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | 외부 소켓으로 아웃바운드 클라이언트 연결을 열고 선택된 소켓 이벤트에서 시작됩니다. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | 일회용 업로드 URL을 발급하고 호출자가 대용량 multipart 파일을 게시할 때 시작됩니다. |

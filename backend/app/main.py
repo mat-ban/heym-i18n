@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import time
@@ -15,6 +16,9 @@ from starlette.responses import Response
 from app.api import (
     a2a,
     admin_cluster,
+    admin_k8s_credentials,
+    admin_key_rotation,
+    admin_users,
     agent_memory,
     agent_suite_runs,
     agent_suites,
@@ -22,6 +26,7 @@ from app.api import (
     alerts,
     analytics,
     auth,
+    auth_mfa,
     avatars,
     bigquery_oauth,
     boards,
@@ -44,6 +49,7 @@ from app.api import (
     folders,
     global_variables,
     google_drive_oauth,
+    google_meet_oauth,
     google_sheets,
     google_sheets_oauth,
     hitl,
@@ -85,6 +91,7 @@ from app.observability.tracing import setup_tracing, shutdown_tracing
 from app.services.chat_stream_bus import chat_stream_bus
 from app.services.clickhouse_pool import close_all_clients as close_clickhouse_clients
 from app.services.clickhouse_pool import warm_up_pools as warm_up_clickhouse_pools
+from app.services.cluster import registry as cluster_registry
 from app.services.cluster.dispatch import run_queue_worker
 from app.services.cluster.registry import heartbeat_service
 from app.services.cluster.run_result_bus import run_result_bus
@@ -97,6 +104,7 @@ from app.services.execution_cancellation import (
     mark_own_executions_orphaned,
 )
 from app.services.execution_recovery import execution_recovery_service
+from app.services.file_sandbox.chat_workspaces import run_idle_sweeper
 from app.services.google_triggers.poller import google_trigger_poller
 from app.services.grist_pool import close_all_clients as close_grist_clients
 from app.services.grist_pool import warm_up_pools as warm_up_grist_pools
@@ -108,6 +116,8 @@ from app.services.heym_event_service import (
 )
 from app.services.hitl_service import build_public_base_url, build_review_url
 from app.services.imap_trigger_service import imap_trigger_manager
+from app.services.k8s_credentials import lifecycle as k8s_credentials_lifecycle
+from app.services.key_rotation import key_rotation_service
 from app.services.notion_service import NotionService
 from app.services.qdrant_pool import close_all_clients as close_qdrant_clients
 from app.services.qdrant_pool import warm_up_pools as warm_up_qdrant_pools
@@ -189,7 +199,11 @@ async def _reinstall_plugin_dependencies() -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting Heym AI Workflow Platform v%s", settings.resolved_version)
+    # In cluster mode, only an instance compatible with the cluster may lead.
+    lock_service.set_eligibility(cluster_registry.may_lead)
     await lock_service.start()
+    # Before anything that reads credentials; it never waits for the first sync.
+    await k8s_credentials_lifecycle.start()
 
     async with async_session_maker() as _startup_db:
         await _startup_db.execute(
@@ -225,6 +239,7 @@ async def lifespan(app: FastAPI):
     await run_queue_worker.start()
     await execution_recovery_service.start()
     await cron_scheduler.start()
+    await key_rotation_service.start()
 
     _started_at = datetime.now(timezone.utc)
     await publish_event(
@@ -244,7 +259,13 @@ async def lifespan(app: FastAPI):
     await rabbitmq_consumer_manager.start()
     await websocket_trigger_manager.start()
     await heym_event_dispatcher.start()
+    from app.services.sandbox.kubernetes.janitor import run_janitor
+
+    sandbox_janitor = asyncio.create_task(run_janitor())
+    chat_workspace_sweeper = asyncio.create_task(run_idle_sweeper())
     yield
+    sandbox_janitor.cancel()
+    chat_workspace_sweeper.cancel()
     shutdown_tracing()
     await heym_event_dispatcher.stop()
     await websocket_trigger_manager.stop()
@@ -252,6 +273,7 @@ async def lifespan(app: FastAPI):
     await google_trigger_poller.stop()
     await imap_trigger_manager.stop()
     await RabbitMQPool.close_all()
+    await key_rotation_service.stop()
     await cron_scheduler.stop()
     await execution_recovery_service.stop()
     await run_queue_worker.stop()
@@ -263,6 +285,7 @@ async def lifespan(app: FastAPI):
     await active_execution_registry.stop()
     with suppress(Exception):
         await mark_own_executions_orphaned()
+    await k8s_credentials_lifecycle.stop()
     await lock_service.stop()
     close_redis_pools()
     close_grist_clients()
@@ -340,6 +363,7 @@ app.add_middleware(HeymIdentityMiddleware)
 
 app.include_router(oauth.router, tags=["OAuth"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(auth_mfa.router, prefix="/api/auth/mfa", tags=["Two-Factor Authentication"])
 app.include_router(avatars.router, prefix="/api/avatars", tags=["Avatars"])
 app.include_router(sso_auth.router, prefix="/api/auth/sso", tags=["SSO"])
 app.include_router(sso_admin.router, prefix="/api/admin/sso", tags=["SSO Admin"])
@@ -348,6 +372,15 @@ app.include_router(
 )
 app.include_router(work_channel.router, prefix="/api/integrations/work", tags=["Heym Work Channel"])
 app.include_router(admin_cluster.router, prefix="/api/admin/cluster", tags=["Cluster Admin"])
+app.include_router(
+    admin_k8s_credentials.router,
+    prefix="/api/admin/k8s-credentials",
+    tags=["Kubernetes Credentials Admin"],
+)
+app.include_router(
+    admin_key_rotation.router, prefix="/api/admin/key-rotation", tags=["Encryption Key Admin"]
+)
+app.include_router(admin_users.router, prefix="/api/admin/users", tags=["User Admin"])
 app.include_router(workflows.router, prefix="/api/workflows", tags=["Workflows"])
 app.include_router(collab.router, prefix="/api/workflows", tags=["Canvas Collaboration"])
 app.include_router(agent_memory.router, prefix="/api/workflows", tags=["Agent Memory"])
@@ -361,6 +394,11 @@ app.include_router(
     google_sheets_oauth.router,
     prefix="/api/credentials/google-sheets/oauth",
     tags=["Google Sheets OAuth"],
+)
+app.include_router(
+    google_meet_oauth.router,
+    prefix="/api/credentials/google-meet/oauth",
+    tags=["Google Meet OAuth"],
 )
 app.include_router(
     google_drive_oauth.router,

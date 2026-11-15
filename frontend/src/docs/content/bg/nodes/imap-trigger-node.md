@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap` удостоверение, съдържащо сървър, логин, пощенска кутия и SSL настройки |
 | `pollIntervalMinutes` | Integer | Колко често Heym проверява пощенската кутия за нови имейли |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Ръководство за настройка
 
@@ -62,6 +63,8 @@
 | `$nodeLabel.email.text` | Тяло в plain-text |
 | `$nodeLabel.email.html` | HTML тяло |
 | `$nodeLabel.email.attachments` | Масив от метаданни за прикачени файлове (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Декодиран header обект |
 | `$nodeLabel.email.uid` | IMAP UID за дедупликация или логване |
 | `$nodeLabel.triggered_by` | Етикет на източника на trigger (`"imap"`) |

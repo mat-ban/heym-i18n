@@ -50,3 +50,8 @@ Jeśli rejestracja jest otwarta, należy utworzyć zaufane konto administratora 
 - [Analytics Tab](./analytics-tab.md) – Metryki wykonania
 - [Workflows Tab](./workflows-tab.md) – Zarządzanie workflow
 - [Contextual Showcase](../reference/contextual-showcase.md) – Kompaktowy przewodnik po powierzchniach dashboardu
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Kierowanie objawów w czasie wykonywania do właściwej procedury incydentu
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnozowanie awarii bazy danych, usług, klastra i sandboxa

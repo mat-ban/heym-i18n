@@ -22,6 +22,20 @@ class RangeResolverTests(unittest.TestCase):
         self.assertEqual(start, now - timedelta(hours=1))
         self.assertEqual(bucket, 300)
 
+    def test_3h_window_15min_bucket(self):
+        now = self._fixed_now()
+        start, end, bucket = _resolve_range("3h", now=now)
+        self.assertEqual(end, now)
+        self.assertEqual(start, now - timedelta(hours=3))
+        self.assertEqual(bucket, 900)
+
+    def test_6h_window_30min_bucket(self):
+        now = self._fixed_now()
+        start, end, bucket = _resolve_range("6h", now=now)
+        self.assertEqual(end, now)
+        self.assertEqual(start, now - timedelta(hours=6))
+        self.assertEqual(bucket, 1800)
+
     def test_24h_window_1h_bucket(self):
         now = self._fixed_now()
         start, end, bucket = _resolve_range("24h", now=now)
@@ -62,6 +76,7 @@ class StatsEndpointTests(unittest.IsolatedAsyncioTestCase):
         kpi_row = MagicMock()
         kpi_row.total_calls = 0
         kpi_row.error_calls = 0
+        kpi_row.cancelled_calls = 0
         kpi_row.prompt_tokens = 0
         kpi_row.completion_tokens = 0
         kpi_row.total_tokens = 0
@@ -95,6 +110,7 @@ class StatsEndpointTests(unittest.IsolatedAsyncioTestCase):
         kpi_row = MagicMock()
         kpi_row.total_calls = 10
         kpi_row.error_calls = 2
+        kpi_row.cancelled_calls = 0
         kpi_row.prompt_tokens = 1000
         kpi_row.completion_tokens = 500
         kpi_row.total_tokens = 1500
@@ -186,6 +202,7 @@ class StatsEndpointTests(unittest.IsolatedAsyncioTestCase):
         kpi_row = MagicMock(
             total_calls=10,
             error_calls=0,
+            cancelled_calls=0,
             prompt_tokens=1000,
             completion_tokens=0,
             total_tokens=1000,

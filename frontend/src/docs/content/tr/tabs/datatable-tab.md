@@ -26,6 +26,10 @@ Her sütun şunlara sahiptir:
 
 Tablo detay görünümü başlığından sütun ekleyin, düzenleyin veya kaldırın.
 
+## Arama
+
+Tabloları yazarken ada veya açıklamaya göre filtrelemek için tablo listesinin üzerindeki arama alanını kullanın veya **Ctrl+F** (veya **Cmd+F**) tuşlarına basın. Aramayı temizlemek için **Escape** tuşuna basın.
+
 ## AI ile Sütun Oluşturma
 
 Sütunları elle eklemek yerine, tabloyu düz bir dille tanımlayabilir (veya örnek JSON yapıştırabilir) ve bir LLM'in şemayı önermesini sağlayabilirsiniz. Her iki giriş noktası da aynı iletişim kutusunu açar:

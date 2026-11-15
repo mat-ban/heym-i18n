@@ -109,6 +109,10 @@ Ajan yapılandırmasının Sub-Workflows bölümünde workflow'ları seçin. Aja
 
 Desteklenen bir workflow düğümünü bir ajanın **tools** tutamacına bağlayabilirsiniz, böylece ajan çalışma zamanında o düğümü çağırabilir. Bu, mevcut canvas eylemlerini ve dönüşümlerini Python yazmadan çağrılabilir araçlara dönüştürür.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Canvas düğüm araçlarını, kimlik bilgilerini, statik alanları ve workflow'a özgü ayarları düğüm arayüzünde tutarken ajanın yapılandırılmış bir düğümü ne zaman çalıştıracağına karar vermesini istediğinizde kullanın.
 
 ### Ajan tarafından sağlanan alanlar
@@ -385,3 +389,6 @@ Sıkıştırma otomatiktir ve Agent düğümleri için her zaman etkindir. LLM d
 - [Quick Start](../getting-started/quick-start.md) – LLM ve ifadelerle temel workflow
 - [Credentials Tab](../tabs/credentials-tab.md) – Agent için API anahtarları ekleme
 - [MCP Tab](../tabs/mcp-tab.md) – Workflow araçları için MCP yapılandırma
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

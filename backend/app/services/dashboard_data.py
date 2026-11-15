@@ -1,6 +1,7 @@
 import asyncio
 import copy
 import logging
+import threading
 import uuid
 from concurrent.futures import CancelledError
 from datetime import datetime, timezone
@@ -14,13 +15,16 @@ from sqlalchemy.orm.attributes import flag_modified
 from app.db.models import DashboardWidget, DashboardWidgetRecordCache, ExecutionHistory, Workflow
 from app.db.session import async_session_maker
 from app.models.dashboard_schemas import WidgetDataResponse
+from app.services.background_tasks import spawn_background_task
 from app.services.cluster.dispatch import dispatch_workflow
 from app.services.dashboard_widget_policy import dashboard_widget_blocked_nodes_error
+from app.services.execution_cancellation import clear_execution, register_execution
 from app.services.highlight.highlight_builder import build_highlight_payload
 from app.services.hitl_widget_filter import filter_payload, hitl_widget_filter
 from app.services.node_analytics_rollup import pending_on_first_write
 from app.services.page_params import page_inputs
 from app.services.workflow_executor import (
+    ExecutionResult,
     WorkflowCancelledError,
     WorkflowTimeoutError,
     _to_json_compatible,
@@ -46,6 +50,7 @@ _CHART_PAYLOAD_TYPES = frozenset(
         "erDiagram",
         "barGauge",
         "text",
+        "html",
         "hitl",
     )
 )
@@ -63,7 +68,12 @@ def _is_hitl_chart_workflow(nodes: list[dict[str, Any]] | None) -> bool:
 
 
 async def _record_widget_execution(
-    db: AsyncSession, workflow: Workflow, result, inputs: dict[str, Any]
+    db: AsyncSession,
+    workflow: Workflow,
+    result,
+    inputs: dict[str, Any],
+    *,
+    execution_id: uuid.UUID | None = None,
 ) -> ExecutionHistory | None:
     """Record an execution-history row + analytics snapshot for a widget run.
 
@@ -85,6 +95,7 @@ async def _record_widget_execution(
                 enriched_inputs=inputs,
                 execution_result=result,
                 trigger_source="dashboard",
+                history_entry_id=execution_id,
                 credentials_owner_id=workflow.owner_id,
                 trace_user_id=workflow.owner_id,
                 public_base_url=build_default_public_base_url(),
@@ -101,7 +112,7 @@ async def _record_widget_execution(
             return paused_entry
 
         history_entry = ExecutionHistory(
-            id=uuid.uuid4(),
+            id=execution_id or uuid.uuid4(),
             workflow_id=workflow.id,
             inputs=inputs,
             outputs=result.outputs,
@@ -191,6 +202,28 @@ def _field(value: Any, name: str) -> Any:
     if isinstance(value, dict):
         return value.get(name)
     return getattr(value, name, None)
+
+
+NO_CHART_OUTPUT_ERROR = "Workflow produced no chartOutput"
+
+
+def no_chart_error(result: Any) -> str:
+    """Why a widget run drew nothing: the first failed node and its error, when one failed.
+
+    The node's own error says what to fix (a missing column, a node that cannot run here);
+    without it a widget only says that no chart came out.
+    """
+    for node in getattr(result, "node_results", []) or []:
+        if _field(node, "status") != "error":
+            continue
+        error = _field(node, "error")
+        if error:
+            label = _field(node, "node_label") or _field(node, "node_type") or "A node"
+            return f"{NO_CHART_OUTPUT_ERROR}: {label} failed: {error}"
+    outputs = getattr(result, "outputs", None)
+    if isinstance(outputs, dict) and isinstance(outputs.get("error"), str) and outputs["error"]:
+        return f"{NO_CHART_OUTPUT_ERROR}: {outputs['error']}"
+    return NO_CHART_OUTPUT_ERROR
 
 
 def _highlight_rows(result: Any) -> list[dict]:
@@ -432,6 +465,7 @@ async def compute_widget_data(
             trace_user_id=run_as_user_id,
             actor_user_id=run_as_user_id,
             return_on_chart_output=True,
+            timeout_seconds=getattr(workflow, "workflow_timeout_seconds", None),
             concurrency_limit=workflow.concurrency_limit,
         )
     except Exception as exc:  # surface execution errors to the widget, never 500 the dashboard
@@ -459,7 +493,7 @@ async def compute_widget_data(
     await db.commit()
 
     if background_finalize:
-        asyncio.create_task(
+        spawn_background_task(
             _finalize_widget_allow_downstream(
                 history_entry_id=history_entry.id if history_entry is not None else None,
                 workflow_id=workflow.id,
@@ -476,7 +510,7 @@ async def compute_widget_data(
         payload=payload,
         cached=False,
         computed_at=now,
-        error=None if payload is not None else "Workflow produced no chartOutput",
+        error=None if payload is not None else no_chart_error(result),
         highlight=build_highlight_payload(_highlight_rows(result), nodes, None),
     )
 
@@ -486,6 +520,31 @@ async def run_widget_workflow(
     workflow: Workflow,
     run_as_user_id: uuid.UUID,
     inputs: dict[str, Any],
+) -> tuple[Any, ExecutionHistory | None]:
+    """Track a dashboard run from execution through history persistence."""
+    execution_id = uuid.uuid4()
+    cancel_event = register_execution(
+        workflow_id=workflow.id,
+        execution_id=execution_id,
+        inputs=inputs,
+        trigger_source="dashboard",
+        actor_user_id=run_as_user_id,
+    )
+    try:
+        return await _run_widget_workflow(
+            db, workflow, run_as_user_id, inputs, execution_id, cancel_event
+        )
+    finally:
+        clear_execution(execution_id, handle=getattr(cancel_event, "_execution_handle", None))
+
+
+async def _run_widget_workflow(
+    db: AsyncSession,
+    workflow: Workflow,
+    run_as_user_id: uuid.UUID,
+    inputs: dict[str, Any],
+    execution_id: uuid.UUID,
+    cancel_event: threading.Event,
 ) -> tuple[Any, ExecutionHistory | None]:
     """Run an ordinary workflow from a run widget, as the dashboard owner, and record the run.
 
@@ -498,33 +557,46 @@ async def run_widget_workflow(
         credentials_context,
         global_variables_context,
     ) = await _load_widget_execution_context(db, workflow, run_as_user_id)
-    result = await dispatch_workflow(
-        workflow_id=workflow.id,
-        nodes=nodes,
-        edges=workflow.edges or [],
-        inputs=inputs,
-        workflow_cache=workflow_cache,
-        test_run=False,
-        trigger_source="dashboard",
-        credentials_owner_id=run_as_user_id,
-        run_in_thread=True,
-        credentials_context=credentials_context,
-        global_variables_context=global_variables_context,
-        trace_user_id=run_as_user_id,
-        actor_user_id=run_as_user_id,
-        concurrency_limit=workflow.concurrency_limit,
-    )
+    await db.commit()
+    try:
+        result = await dispatch_workflow(
+            execution_id=execution_id,
+            cancel_event=cancel_event,
+            workflow_id=workflow.id,
+            nodes=nodes,
+            edges=workflow.edges or [],
+            inputs=inputs,
+            workflow_cache=workflow_cache,
+            test_run=False,
+            trigger_source="dashboard",
+            credentials_owner_id=run_as_user_id,
+            run_in_thread=True,
+            credentials_context=credentials_context,
+            global_variables_context=global_variables_context,
+            trace_user_id=run_as_user_id,
+            actor_user_id=run_as_user_id,
+            timeout_seconds=getattr(workflow, "workflow_timeout_seconds", None),
+            concurrency_limit=workflow.concurrency_limit,
+        )
+    except WorkflowCancelledError as exc:
+        result = ExecutionResult(
+            workflow_id=workflow.id,
+            status="cancelled",
+            outputs={"error": str(exc)},
+            execution_time_ms=0.0,
+        )
+
     history_entry = (
         None
         if getattr(result, "history_written", False) is True
-        else await _record_widget_execution(db, workflow, result, inputs)
+        else await _record_widget_execution(db, workflow, result, inputs, execution_id=execution_id)
     )
     background_finalize = bool(getattr(result, "allow_downstream_pending", False))
     if not background_finalize and result.status != "pending":
         await _persist_widget_global_variables(db, run_as_user_id, nodes, workflow_cache, result)
     await db.commit()
     if background_finalize:
-        asyncio.create_task(
+        spawn_background_task(
             _finalize_widget_allow_downstream(
                 history_entry_id=history_entry.id if history_entry is not None else None,
                 workflow_id=workflow.id,

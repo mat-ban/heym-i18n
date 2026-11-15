@@ -95,7 +95,7 @@ Rezultatul este disponibil ca `$activeAdults.count`. Un filtru gol sau omis num�
 | `$contains` | Potrivire de subșir fără a ține cont de majuscule/minuscule |
 | `$in` | Valoarea se află în tabloul dat |
 
-Exemplu care combină mai mulți operatori: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Operatorii necunoscuți sunt ignorați. Filtrele `upsert` utilizează în continuare valori cu potrivire exactă pentru a găsi rândul de actualizat.
+Exemplu care combină mai mulți operatori: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Operatorii necunoscuți sunt ignorați. Filtrele `upsert` utilizează în continuare valori cu potrivire exactă pentru a găsi rândul de actualizat.
 
 De asemenea, puteți filtra după metadatele rândului — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — care sunt stocate ca coloane reale, nu în interiorul datelor dvs. Pentru date, transmiteți o valoare completă pentru comparații de interval (de ex. `{"created_at": {"$gt": "2026-06-04"}}`) sau utilizați `$contains` pentru o potrivire parțială de text (de ex. `{"created_at": {"$contains": "2026-06-04"}}`). Dacă una dintre coloanele dvs. are același nume ca un câmp de metadate, coloana de date are prioritate.
 

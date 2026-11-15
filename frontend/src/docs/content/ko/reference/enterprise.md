@@ -42,7 +42,7 @@ Heym 팀은 비즈니스 프로세스를 위한 에이전트와 Workflow를 설�
 
 ## Kubernetes 배포
 
-표준 [실행 및 배포](../getting-started/running-and-deployment.md) 가이드는 단일 서버 프로덕션 구성을 위한 Docker Compose를 다룹니다. Enterprise 고객은 고가용성 및 수평적 스케일링을 위한 프로덕션 Kubernetes 배포 지원을 받으실 수 있습니다:
+표준 [실행 및 배포](../getting-started/running-and-deployment.md) 가이드는 단일 서버 프로덕션 구성을 위한 Docker Compose를 다룹니다. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise 고객은 고가용성 및 수평적 스케일링을 위한 프로덕션 Kubernetes 배포 지원을 받으실 수 있습니다:
 
 - **다중 워커 노드** — 중복성과 로드 밸런싱을 위해 Heym 백엔드 워커를 여러 Kubernetes 노드에 분산
 - **사이드카 컨테이너** — 로그 수집, 모니터링 에이전트, 서비스 메시(Istio, Linkerd) 및 시크릿 주입(Vault)을 위한 사이드카 패턴 구성

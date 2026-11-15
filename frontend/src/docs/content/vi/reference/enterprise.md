@@ -42,7 +42,7 @@ Các buổi đào tạo thực hành được thiết kế phù hợp với trì
 
 ## Triển khai Kubernetes
 
-Hướng dẫn tiêu chuẩn [Chạy & Triển khai](../getting-started/running-and-deployment.md) bao gồm Docker Compose cho thiết lập production trên một máy chủ. Khách hàng Enterprise nhận được hỗ trợ triển khai Kubernetes cho production nhằm đạt tính sẵn sàng cao (high availability) và mở rộng theo chiều ngang (horizontal scaling):
+Hướng dẫn tiêu chuẩn [Chạy & Triển khai](../getting-started/running-and-deployment.md) bao gồm Docker Compose cho thiết lập production trên một máy chủ. [Kubernetes Deployment](../getting-started/kubernetes.md). Khách hàng Enterprise nhận được hỗ trợ triển khai Kubernetes cho production nhằm đạt tính sẵn sàng cao (high availability) và mở rộng theo chiều ngang (horizontal scaling):
 
 - **Nhiều worker node** — Phân phối các backend worker của Heym trên nhiều node Kubernetes để dự phòng và cân bằng tải
 - **Sidecar container** — Cấu hình các pattern sidecar cho thu thập log, monitoring agent, service mesh (Istio, Linkerd), và tiêm secret (Vault)

@@ -12,7 +12,7 @@ Aloitussolmut (ilman saapuvia yhteyksiä), jotka käynnistävät suorituksen:
 | [Cron](../nodes/cron-node.md) | Suoritetaan aikataulun mukaisesti (cron-lauseke, esim. `0 * * * *` tunnin välein). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Käynnistyy, kun Telegram lähettää bottiin webhook-päivityksen solmukohtaiseen webhook-URL:iin. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Käynnistyy, kun Discord lähettää Interactions API -webhookin solmukohtaiseen endpointtiin. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Tarkistaa IMAP-postilaatikon ja käynnistyy jokaisesta uudesta havaitsemastaan sähköpostista. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Tarkistaa IMAP-postilaatikon ja käynnistyy jokaisesta uudesta havaitsemastaan sähköpostista. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Käynnistyy, kun Heym julkaisee alustatapahtuman. Yhden lähetysikkunan tapahtumat saapuvat yhdessä taulukkona. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Avaa ulospäin suuntautuvan asiakasyhteyden ulkoiseen socketiin ja käynnistyy valituista socket-tapahtumista. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Luo kertakäyttöisen lataus-URL:n ja käynnistyy, kun kutsuja lähettää suuren moniosaisen tiedoston. |

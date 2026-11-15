@@ -50,3 +50,8 @@ Se o registro estiver aberto, crie a conta de administrador confiável antes de 
 - [Aba Analytics](./analytics-tab.md) – Métricas de execução
 - [Aba Workflows](./workflows-tab.md) – Gerenciamento de Workflow
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacto de páginas para superfícies do dashboard
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Encaminhar sintomas em tempo de execução para o procedimento de incidente correto
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnosticar falhas de banco de dados, serviços, cluster e sandbox

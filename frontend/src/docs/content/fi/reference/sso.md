@@ -140,3 +140,6 @@ Epäonnistunut kirjautuminen palauttaa kirjautumisnäyttöön luettavalla viesti
 - **Useita samanaikaisia tunnistuspalveluita.** Yksi instanssi yhdistyy yhteen tunnistuspalveluun.
 - **Ryhmä- tai roolimäärityksiä** tunnistuspalvelun vaatimuksista.
 - **Yksittäistä uloskirjautumista.** Heymistä kirjautuminen ulos ei kirjaa sinua ulos tunnistuspalvelusta.
+
+- **Kaksivaiheinen kirjautuminen kuuluu tarjoajalle.** `HEYM_REQUIRE_MFA` koskee vain salasanakirjautumista; SSO-kirjautuminen ei koskaan kysy Heym-koodia. Vaadi MFA identiteetintarjoajaltasi.
+- **Käytöstäpoisto pätee myös tähän.** Tili, jonka ylläpitäjä on poistanut käytöstä kohdassa **Asetukset → Käyttäjät**, hylätään, vaikka tarjoaja edelleen todentaisi sen.

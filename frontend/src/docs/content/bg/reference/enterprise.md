@@ -42,7 +42,7 @@ Heym е безплатен за използване и самостоятелн
 
 ## Внедряване в Kubernetes
 
-Стандартното ръководство [Стартиране и внедряване](../getting-started/running-and-deployment.md) обхваща Docker Compose за продуктивни конфигурации на един сървър. Клиентите на Enterprise получават съдействие при продуктивни внедрявания в Kubernetes за висока наличност и хоризонтално мащабиране:
+Стандартното ръководство [Стартиране и внедряване](../getting-started/running-and-deployment.md) обхваща Docker Compose за продуктивни конфигурации на един сървър. [Kubernetes Deployment](../getting-started/kubernetes.md). Клиентите на Enterprise получават съдействие при продуктивни внедрявания в Kubernetes за висока наличност и хоризонтално мащабиране:
 
 - **Множество worker nodes** — Разпределяне на backend worker-ите на Heym върху множество Kubernetes nodes за резервираност и балансиране на натоварването
 - **Sidecar контейнери** — Конфигуриране на sidecar модели за събиране на логове, агенти за мониторинг, service meshes (Istio, Linkerd) и инжектиране на тайни (Vault)

@@ -68,7 +68,9 @@
 
 **AI Auto Heal** прави workflows устойчиви на промени в DOM. Когато даден selector се провали два пъти (напр. след редизайн на сайт), Heym извиква LLM, за да намери алтернативен локатор — обикновено `role=button[name='Submit']` или `text=Exact text` вместо CSS selectors.
 
-Активирайте **Auto heal mode** в свойствата на AI стъпката. Ако запазената стъпка се провали:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Активирайте **Auto heal mode** в свойствата на AI стъпката. Ако запазената стъпка се провали:
 
 1. Heym заснема текущия HTML и screenshot
 2. Изпраща неуспешната стъпка + контекст на страницата към LLM

@@ -368,3 +368,6 @@ Pri generiranju pripomočka z **AI** se pozivi, kot so ti, jasno preslikajo na v
 Gumbi postanejo samo naslovi `http://` in `https://` ter poti, ki se začnejo z enim samim `/`. Vsaka druga vrednost, na primer `javascript:` ali `//host`, ostane navadno besedilo, prazna celica pa ne prikaže ničesar.
 
 Gumb deluje ob [povezavi vrstice](../tabs/dashboard-tab.md#detail-pages): klik na gumb odpre njegovo povezavo v novem zavihku, klik kjer koli drugje v vrstici pa še vedno odpre stran s podrobnostmi.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

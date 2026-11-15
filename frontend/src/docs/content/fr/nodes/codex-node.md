@@ -26,6 +26,8 @@ Le nœud nécessite également un identifiant **GitHub** pour cloner les dépôt
 
 Dans les déploiements Docker, Heym exécute Codex dans un conteneur frère issu de la même image Heym (et non d'une image GHCR distincte). Ce conteneur monte uniquement le volume de l'espace de travail Codex et laisse le sandbox bubblewrap propre à Codex créer les namespaces et un `/proc` neuf. Le runner ajoute `SYS_ADMIN`, un seccomp et AppArmor non confinés, ainsi que `systempaths=unconfined` (Docker Engine 25+). Sans ce dernier flag, chaque commande échoue avant son lancement avec `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 Références OpenAI :
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

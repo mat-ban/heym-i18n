@@ -59,6 +59,10 @@ Jokainen tilan muutos kirjataan. Lukutoiminnot kirjataan vain, jos lukeminen its
 | `auth.token_refresh` | `outcome=denied` syyllä `reason=refresh_token_replayed_or_revoked` — merkki tokenin varastamisesta, joka kannattaa hälyttää. |
 | `auth.password_change` | `outcome=failure`, kun nykyinen salasana oli väärin. |
 | `auth.sso_login` | Yksittäinen kirjautuminen (SSO). `outcome=failure` sisältää syyn, miksi palveluntarjoajan vastaus hylättiin; `denied` sisältää `email_not_verified`, `domain_not_allowed` tai `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Ylläpitäjä muutti [SSO](./sso.md) -asetuksia. Kirjaa `enabled` ja `password_login_disabled`, ei koskaan asiakassalaisuutta. |
 | `sso_settings.test` | Ylläpitäjä suoritti SSO-yhteyden testin. |
 

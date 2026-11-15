@@ -65,3 +65,7 @@
 - [Contextual Showcase](../reference/contextual-showcase.md) – Συμπαγής οδηγός σελίδας για επιφάνειες dashboard
 
 Όταν ένα γράφημα εμφανίζει μια τάση για την οποία θέλετε να ειδοποιείστε αντί να την παρακολουθείτε, μετατρέψτε την σε [alert](./alerts-tab.md): το πλήθος σφαλμάτων, η διάρκεια εκτέλεσης, η δαπάνη LLM και το πλήθος εκτελέσεων μπορούν όλα να λάβουν ένα όριο σε ένα χρονικό παράθυρο.
+
+## Related
+
+- [Operations Runbook (L1): Χρήση πόρων](../reference/operations-runbook.md#most-resource-consuming-workflows) - Βρείτε workflows μεγάλου όγκου και μεγάλης διάρκειας και συσχετίστε CPU, μνήμη και tokens

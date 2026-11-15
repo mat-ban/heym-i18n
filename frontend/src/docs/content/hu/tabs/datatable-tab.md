@@ -122,3 +122,6 @@ Ha egyetlen sor sem egyezik, a modell a Traces oldalon az **Unpriced models** fi
 - [Traces lap](./traces-tab.md) – Az LLM Cost Table-t használja a költség-fánkdiagramhoz és a KPI-kártyákhoz
 - [Grist csomópont](../nodes/grist-node.md) – Külső táblázatkezelő alternatíva
 - [Változók lap](./global-variables-tab.md) – Kulcs-érték tárolási alternatíva
+## Keresés
+
+Használja a táblázatlista feletti keresőmezőt, vagy nyomja meg a **Ctrl+F** (vagy **Cmd+F**) billentyűkombinációt a táblázatok név vagy leírás szerinti szűréséhez gépelés közben. A keresés törléséhez nyomja meg az **Escape** billentyűt.

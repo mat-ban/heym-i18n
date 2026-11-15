@@ -2,6 +2,9 @@
 
 Fliken **Alerts** gör det möjligt att definiera tröskelvillkor över ett tidsfönster och få meddelande när de överskrids. Heym registrerar redan körningsresultat, körtid och LLM-kostnader, men rapporterar aldrig något av detta av sig självt. En alert är hur man ber om det.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Titta på Alerts-demo</a></p>
+
 Varje alert utvärderas över ett **tidsfönster** som väljs, aldrig på en enskild händelse. En misslyckad körning är brus. Tolv misslyckade körningar på tio minuter är en incident.
 
 ## Alert-typer

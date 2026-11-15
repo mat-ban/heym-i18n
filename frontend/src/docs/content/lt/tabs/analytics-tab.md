@@ -65,3 +65,7 @@ Užveskite pelės žymeklį ant diagramos, kad pamatytumėte mazgo tipą tiesiai
 - [Kontekstinis demonstravimas](../reference/contextual-showcase.md) – Kompaktiška puslapio gairė valdymo skydeliams
 
 Kai diagrama rodo tendenciją, apie kurią norite būti informuoti, o ne stebėti, paverskite ją [įspėjimu](./alerts-tab.md): klaidų skaičius, vykdymo trukmė, LLM išlaidos ir vykdymų skaičius gali turėti slenkstį per laiko langą.
+
+## Related
+
+- [Operations Runbook (L1): Išteklių naudojimas](../reference/operations-runbook.md#most-resource-consuming-workflows) - Raskite didelės apimties ir ilgai vykdomas darbo eigas bei susiekite procesoriaus, atminties ir prieigos raktų sąnaudas

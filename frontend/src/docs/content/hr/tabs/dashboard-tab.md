@@ -2,6 +2,9 @@
 
 Zavičajna kartica **Nadzorna ploča** je prostor u stilu Grafane gdje gradite mreže widgeta s grafikonima. Svaki widget se prikazuje iz izlaza vlastitog skrivenog Heym workflow-a, tako da svi podaci koje možete proizvesti u workflow-u — upiti prema bazi podataka, API pozivi, RAG pretraživanja, LLM izlazi — mogu postati grafikon. Možete zadržati nekoliko nadzornih ploča i dijeliti svaku s osobama ili timovima.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Nadzorne ploče
 
 Svi započinju s jednom nadzornom pločom, koja se stvara prvi put kada otvorite karticu. Koristite odabir nadzorne ploče na vrhu kartice za prebacivanje između nadzornih ploča, a **+** pored njega za stvaranje nove. Odabir prvo prikazuje vaše vlastite nadzorne ploče, a zatim one koje su s vama dijeljene, označene imenom osobe koja ih je podijelila.
@@ -27,6 +30,8 @@ Widget je jedan grafikon na mreži. Podržani tipovi grafikona:
 - **Entity relationships (DB)** (tablice, polja, PK/FK ključevi i veze)
 - **Bar gauge** (jedan horizontalni mjerač po redu s crvenom→zelenom gradijentom i vrijednošću, npr. slobodni prostor na disku)
 - **Text** (markdown poruka, npr. statusna napomena poput "Posljednje izvršavanje u 19:47"; podržava [interaktivne potvrdne okvire](../nodes/chart-output-node.md#interactive-task-lists) kada je markdown statičan, i [izričite numerirane popise](../nodes/chart-output-node.md#numbered-lists) za prilagođeno ili silazno numeriranje)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (vaši neodgovoreni ljudski pregledi. Naslov prikazuje `1/n pending`. Ime workflow-a otvara tu izvedbu na platnu. **Odobri**, **Zatraži promjene** i **Odbij** rješavaju to. Ikona povijesti pored naslova widgeta otvara tu izvedbu u dijalogu povijesti na ovoj stranici. Widget ne koristi uzvodne redove, a svaka osoba vidi svoju vlastitu čekajuću listu. Umjesto toga može prikazati provjere jednog Workflowa, za svakoga tko može otvoriti taj Workflow; pogledajte [HITL widgeti](#hitl-widgeti))
 
 Osim grafikona, widget **Run a workflow** pokreće jedan od vaših workflowa s nadzorne ploče: na ispuštenoj datoteci, sa svojim poljima za unos ili pomoću gumba Run; pogledajte [Widgeti za pokretanje](#run-widgets).
@@ -145,3 +150,5 @@ Uklanjanje dijeljenja ili smanjenje s pisanja na čitanje odmah stupa na snagu.
 ## Rasporedi i dijagrami baza podataka
 
 Odaberite **Gantt** u Dodaj widget za prikaz zadataka tijekom vremena s vezama dovršenosti i ovisnosti, ili **Entity relationships (DB)** za mapiranje tablica, polja i njihovih relacija. Obje vrste koriste [čvor Chart Output](../nodes/chart-output-node.md#gantt-schedules) i također su dostupne na Heym Work stranicama. Kada Work predlaže widgete za raspored ili shemu baze podataka, iscrtava preglede na temelju predloženih zadataka ili entiteta.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

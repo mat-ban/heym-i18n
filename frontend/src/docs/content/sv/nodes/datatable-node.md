@@ -95,7 +95,7 @@ I ett `find`- eller `count`-filter innebär ett vanligt värde lika med; ett obj
 | `$contains` | Skiftlägesokänslig delsträngsmatchning |
 | `$in` | Värdet finns i den angivna arrayen |
 
-Exempel som kombinerar flera: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Okända operatorer ignoreras. `upsert`-filter använder fortfarande exakt matchning för att hitta raden som ska uppdateras.
+Exempel som kombinerar flera: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Okända operatorer ignoreras. `upsert`-filter använder fortfarande exakt matchning för att hitta raden som ska uppdateras.
 
 Det går även att filtrera på radmetadata — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — som lagras som riktiga kolumner i stället för inuti data. För datum anges ett fullständigt värde för intervalljämförelser (t.ex. `{"created_at": {"$gt": "2026-06-04"}}`) eller används `$contains` för en partiell textmatchning (t.ex. `{"created_at": {"$contains": "2026-06-04"}}`). Om en egen kolumn har samma namn som ett metadatafält har datakolumnen företräde.
 

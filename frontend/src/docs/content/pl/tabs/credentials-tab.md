@@ -93,3 +93,7 @@ Informacje na temat przywoływania wartości opartych na danych logowania w wyra
 - [Karta Magazyny wektorowe](./vectorstores-tab.md) – Korzysta z danych logowania Qdrant lub Postgres (pgvector)
 - [Karta Chat](./chat-tab.md) – Korzysta z danych logowania OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Zwięzły przewodnik po stronach interfejsu panelu
+
+## Wyszukiwanie
+
+Użyj pola wyszukiwania nad listą lub naciśnij **Ctrl+F** (lub **Cmd+F**), aby filtrować dane logowania według nazwy lub typu w trakcie pisania. Naciśnij **Escape**, aby wyczyścić wyszukiwanie.

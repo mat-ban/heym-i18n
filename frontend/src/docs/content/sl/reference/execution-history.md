@@ -169,3 +169,7 @@ Pogovorna okna zgodovine platna in nadzorne plošče ohranjajo svoje kontrolnike
 - [Edit History](./edit-history.md) – Različice za nadzor različic pri shranjevanju workflow (vrni, razlika)
 - [Quick Start](../getting-started/quick-start.md) – Ustvarite in zaženite svoj prvi workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Ustvarite in upravljajte workflows
+
+## Related
+
+- [Operations Runbook (L1): Zaostanki v čakalni vrsti](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Razlikovanje med čakajočimi, zadržanimi, prekinjenimi in obnovljenimi izvedbami pred ponovitvijo

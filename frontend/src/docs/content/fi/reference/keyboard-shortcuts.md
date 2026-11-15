@@ -107,3 +107,6 @@ Nämä pikanäppäimet ovat käytettävissä Suoritushistoria-valintaikkunassa j
 - [Pika-aloitus](../getting-started/quick-start.md) – Rakenna ensimmäinen workflowsi
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+**Tunnistetiedot**- ja **DataTable**-välilehdet toimivat samalla tavalla: `Ctrl + F` / `Cmd + F` kohdistaa hakukenttään, luettelo tarkentuu kirjoittaessasi ja `Escape` tyhjentää sen.

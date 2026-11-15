@@ -368,3 +368,6 @@ Text(동적 — 메시지 문자열이 상위에서 생성되어 `valueField`를
 `http://` 및 `https://` 주소와 단일 `/`로 시작하는 경로만 버튼이 됩니다. `javascript:`나 `//host` 같은 다른 값은 일반 텍스트로 유지되며, 빈 셀에는 아무것도 표시되지 않습니다.
 
 이 버튼은 [행 링크](../tabs/dashboard-tab.md#detail-pages)와 함께 사용할 수 있습니다. 버튼을 클릭하면 해당 링크가 새 탭에서 열리고, 행의 다른 곳을 클릭하면 기존처럼 상세 페이지가 열립니다.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

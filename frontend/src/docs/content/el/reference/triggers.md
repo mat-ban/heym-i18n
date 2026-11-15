@@ -12,7 +12,7 @@
 | [Cron](../nodes/cron-node.md) | Εκτελείται βάσει χρονοδιαγράμματος (έκφραση cron, π.χ. `0 * * * *` για ωριαία εκτέλεση). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Ξεκινά όταν το Telegram στέλνει ενημέρωση webhook bot στο webhook URL που αντιστοιχεί στον κόμβο. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Ξεκινά όταν το Discord στέλνει webhook του Interactions API στο endpoint που αντιστοιχεί στον κόμβο. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Κάνει polling σε γραμματοκιβώτιο IMAP και ξεκινά μία φορά για κάθε νεοεντοπισμένο email. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Κάνει polling σε γραμματοκιβώτιο IMAP και ξεκινά μία φορά για κάθε νεοεντοπισμένο email. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Ξεκινά όταν το Heym δημοσιεύει ένα συμβάν πλατφόρμας. Τα συμβάντα σε ένα παράθυρο αποστολής φτάνουν μαζί ως array. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Ανοίγει εξερχόμενη σύνδεση client προς εξωτερικό socket και ξεκινά σε επιλεγμένα συμβάντα socket. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Δημιουργεί URL μεταφόρτωσης μίας χρήσης και ξεκινά όταν ένας caller στέλνει μεγάλο multipart αρχείο. |

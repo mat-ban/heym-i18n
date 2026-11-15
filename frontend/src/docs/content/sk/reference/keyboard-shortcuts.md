@@ -107,3 +107,6 @@ Tieto skratky sú dostupné v dialógu histórie spustení a v paneli spustení.
 - [Rýchly štart](../getting-started/quick-start.md) – Vytvorte svoj prvý workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Karty **Prihlasovacie údaje** a **DataTable** fungujú rovnako: `Ctrl + F` / `Cmd + F` zameria vyhľadávacie pole, zoznam sa zužuje počas písania a `Escape` ho vymaže.

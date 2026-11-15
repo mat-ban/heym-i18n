@@ -42,7 +42,7 @@ Praktične sesije obuke prilagođene razini vještina Vašeg tima i slučajevima
 
 ## Kubernetes implementacija
 
-Standardni [Vodič za pokretanje i implementaciju](../getting-started/running-and-deployment.md) pokriva Docker Compose za produkcijske postavke na jednom poslužitelju. Enterprise korisnici dobivaju pomoć pri produkcijskim Kubernetes implementacijama za visoku dostupnost i horizontalno skaliranje:
+Standardni [Vodič za pokretanje i implementaciju](../getting-started/running-and-deployment.md) pokriva Docker Compose za produkcijske postavke na jednom poslužitelju. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise korisnici dobivaju pomoć pri produkcijskim Kubernetes implementacijama za visoku dostupnost i horizontalno skaliranje:
 
 - **Više radnih čvorova** — Distribucija Heym backend radnika preko više Kubernetes čvorova za redundanciju i ravnotežu opterećenja
 - **Sidecar kontejneri** — Konfiguriranje sidecar obrazaca za prikupljanje logova, praćenje agenata, servisne mreže (Istio, Linkerd) i injekciju tajni (Vault)

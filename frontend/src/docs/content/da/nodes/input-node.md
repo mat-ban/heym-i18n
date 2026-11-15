@@ -45,7 +45,7 @@
 
 I editorens **Run**-fanen (Defined webhook-tilstand) understøttes der for hvert inputfelt både drag-and-drop og en inline-tilføjelseskontrol (nederst til højre i feltet):
 
-- **Tekstfiler** (`.txt`, `.md`, `.json`, `.csv` og lignende) læses som ren tekst.
+- **Tekstfiler** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Billeder** (JPEG, PNG, GIF, WebP) gemmes som en `data:`-URL (base64) i feltværdien – brug feltnøgler som `imageUrl` eller `base64` når efterfølgende noder forventer billeddata.
 - **PDF**-filer konverteres til ekstraheret tekst (maks 5 MB fil, 100.000 tegn indhold).
 

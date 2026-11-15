@@ -95,7 +95,7 @@ Tulos on saatavilla muodossa `$activeAdults.count`. Tyhjä tai puuttuva suodatin
 | `$contains` | Kirjainkoosta riippumaton osajonon täsmäys |
 | `$in` | Arvo on annetussa taulukossa |
 
-Esimerkki usean operaattorin yhdistelmästä: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Tuntemattomat operaattorit ohitetaan. `upsert`-suodattimet käyttävät edelleen täsmällisiä arvoja päivitettävän rivin löytämiseen.
+Esimerkki usean operaattorin yhdistelmästä: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Tuntemattomat operaattorit ohitetaan. `upsert`-suodattimet käyttävät edelleen täsmällisiä arvoja päivitettävän rivin löytämiseen.
 
 Voit suodattaa myös rivien metatietojen perusteella - `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` - jotka tallennetaan todellisina sarakkeina eikä datan sisälle. Päivämäärille anna täysi arvo aluevertailuja varten (esim. `{"created_at": {"$gt": "2026-06-04"}}`) tai käytä `$contains`-operaattoria osittaiselle tekstitäsmäykselle (esim. `{"created_at": {"$contains": "2026-06-04"}}`). Jos jokin omista sarakkeistasi on nimetty samaksi kuin metatietokenttä, data-sarake saa etusijan.
 

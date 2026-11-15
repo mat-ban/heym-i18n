@@ -253,3 +253,5 @@ Bilmenizde fayda var:
 - [Üçüncü Taraf Entegrasyonları](../reference/integrations.md#qdrant) – Qdrant ve Postgres (pgvector) kimlik bilgisi kurulumu
 - [Agent Düğümü](./agent-node.md) – RAG sonuçlarını agent bağlamı olarak kullanın
 - [LLM Düğümü](./llm-node.md) – RAG sonuçlarını LLM sistem prompt'una besleyin
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

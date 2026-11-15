@@ -93,3 +93,7 @@ Consulte [Expression DSL](../reference/expression-dsl.md) para referenciar valor
 - [Aba Vectorstores](./vectorstores-tab.md) – Usa credenciais Qdrant ou Postgres (pgvector)
 - [Aba Chat](./chat-tab.md) – Usa credenciais OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacto de páginas para superfícies do dashboard
+
+## Pesquisa
+
+Use o campo de pesquisa acima da lista ou pressione **Ctrl+F** (ou **Cmd+F**) para filtrar credenciais por nome ou tipo enquanto digita. Pressione **Escape** para limpar a pesquisa.

@@ -12,7 +12,7 @@ Pagina se deschide cu un rezumat de statistici deasupra listei de urme, calculat
 - **Carduri KPI** – Total apeluri, Total tokenuri, Cost total (USD), Latență medie, % erori
 - **Tokenuri pe model** – Diagramă inelară a volumului de tokenuri per model
 - **Cost pe model** – Diagramă inelară a cheltuielii în USD per model. Modelele fără preț afișează un link „Configure pricing" către [Tabelul de costuri LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Apeluri în timp** – Diagramă cu arie suprapusă a apelurilor reușite vs eșuate per interval (5 min / 1 h / 6 h / 1 zi, ales automat în funcție de interval)
+- **Apeluri în timp** – Diagramă cu arie suprapusă a apelurilor reușite vs eșuate per interval (5 min / 15 min / 30 min / 1 h / 6 h / 1 zi, ales automat în funcție de interval)
 - **Notificare modele fără preț** – Apare sub diagrame când unele modele urmărite nu au rând de preț, cu link către Tabelul de costuri LLM
 
 ## Interval de timp
@@ -23,12 +23,13 @@ Un singur selector **Time range** în partea de sus a barei de filtre controleaz
 
 - Listă paginată a urmelor recente din intervalul de timp selectat
 - Fiecare urmă afișează: workflow, nod, credential, marcaj temporal, durată
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Faceți clic pe o urmă pentru a deschide vizualizarea detaliată
 - Folosiți **Prev / Next** în dialogul de detalii pentru a naviga între urme fără a-l închide
 
 ## Filtrare
 
-- **Time range** – 1h / 24h / 7d / 30d / All; filtrează diagramele și lista împreună
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; filtrează diagramele și lista împreună
 - **Credential** – Filtrați după credentialul (cheia API) utilizat
 - **Source** – Filtrați după workflow sau sursa de execuție
 - **Search** – Căutați după model, workflow, credential sau eticheta nodului

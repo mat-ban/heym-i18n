@@ -157,6 +157,8 @@ Vid redigering av en autentiseringsuppgift behålls den lagrade nyckeln när nyc
 
 Samma autentiseringsuppgift kan bedöma [Utvärdering](../tabs/evals-tab.md)-körningar: med **LLM-as-Judge** valt väljs den som domare och beslutsmodellen poängsätter varje svar mot den förväntade utdatan.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym blockerar utgående förfrågningar till privata och loopback-adresser som standard, så en beslutsendpoint som körs själv på `localhost` eller ett privat intervall kräver `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Beslutsmodeller visas inte i de LLM-pristabeller som Heym synkroniserar, så kolumnen **Cost** i [Körningar](../tabs/traces-tab.md) förblir tom för dessa anrop. Tokenantal registreras fortfarande, och ett eget pris kan läggas till med en prisöverskridning.

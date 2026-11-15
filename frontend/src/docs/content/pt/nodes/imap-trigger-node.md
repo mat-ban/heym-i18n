@@ -16,6 +16,7 @@ O nó **Trigger IMAP** consulta periodicamente uma caixa de correio eletrónico 
 |-----------|------|-------------|
 | `credentialId` | UUID | Credencial `imap` contendo servidor, login, caixa de correio e definições de SSL |
 | `pollIntervalMinutes` | Integer | Frequência com que o Heym verifica a caixa de correio à procura de novo correio eletrónico |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Guia de Configuração
 
@@ -62,6 +63,8 @@ Após o disparo do nó, os nós a jusante podem aceder a:
 | `$nodeLabel.email.text` | Corpo em texto simples |
 | `$nodeLabel.email.html` | Corpo em HTML |
 | `$nodeLabel.email.attachments` | Matriz de metadados de anexos (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Objeto de cabeçalhos descodificado |
 | `$nodeLabel.email.uid` | UID IMAP para deduplicação ou registo |
 | `$nodeLabel.triggered_by` | Etiqueta da origem do trigger (`"imap"`) |

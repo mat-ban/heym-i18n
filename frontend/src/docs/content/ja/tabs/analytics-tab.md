@@ -65,3 +65,7 @@ Workflowの使用状況を示す2つのテーブルがあります：**Most Used
 - [Contextual Showcase](../reference/contextual-showcase.md) – ダッシュボード画面向けのコンパクトなページガイド
 
 チャートに表示されるトレンドを監視するのではなく通知してほしい場合は、[alert](./alerts-tab.md)に変換できます。エラー数、実行時間、LLM支出、実行回数は、いずれも時間枠に対してしきい値を設定できます。
+
+## Related
+
+- [Operations Runbook (L1): リソース使用状況](../reference/operations-runbook.md#most-resource-consuming-workflows) - 大量かつ長時間実行されるワークフローを特定し、CPU、メモリ、トークンを相互に関連付け

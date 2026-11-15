@@ -27,6 +27,7 @@ export const DOCS_MANIFEST: Record<string, DocCategory> = {
       { slug: "migrate-to-heym", title: "Migrate to Heym" },
       { slug: "core-concepts", title: "Core Concepts" },
       { slug: "running-and-deployment", title: "Running & Deployment" },
+      { slug: "kubernetes", title: "Kubernetes Deployment" },
     ],
   },
   nodes: {
@@ -77,6 +78,7 @@ export const DOCS_MANIFEST: Record<string, DocCategory> = {
       { slug: "linear-node", title: "Linear" },
       { slug: "google-sheets-node", title: "Google Sheets" },
       { slug: "google-drive-node", title: "Google Drive" },
+      { slug: "google-meet-node", title: "Google Meet" },
       { slug: "bigquery-node", title: "BigQuery" },
       { slug: "supabase-node", title: "Supabase" },
       { slug: "clickhouse-node", title: "ClickHouse" },
@@ -140,10 +142,13 @@ export const DOCS_MANIFEST: Record<string, DocCategory> = {
       { slug: "download-import", title: "Download & Import" },
       { slug: "portal", title: "Portal" },
       { slug: "file-generation", title: "File Generation" },
+      { slug: "file-analysis", title: "File Analysis" },
       { slug: "drive", title: "Drive" },
       { slug: "security", title: "Security" },
       { slug: "sso", title: "Single Sign-On" },
       { slug: "cluster", title: "Load Distribution" },
+      { slug: "incident-playbook", title: "Incident Playbook (L0)" },
+      { slug: "operations-runbook", title: "Operations Runbook (L1)" },
       { slug: "plugin-authoring", title: "Plugin Authoring" },
       { slug: "integrations", title: "Third-Party Integrations" },
       { slug: "guardrails", title: "Guardrails" },
@@ -327,6 +332,11 @@ export const GERMAN_DOC_TITLES: Record<string, string> = {
   "datatable-tab": "DataTable",
   "scheduled-tab": "Zeitpläne",
   "logs-tab": "Protokolle",
+  "kubernetes": "Kubernetes-Bereitstellung",
+  "google-meet-node": "Google Meet Knoten",
+  "file-analysis": "Dateianalyse",
+  "incident-playbook": "Störfall-Playbook",
+  "operations-runbook": "Betriebshandbuch",
 };
 
 export const POLISH_CATEGORY_LABELS: Record<string, string> = {
@@ -472,6 +482,11 @@ export const POLISH_DOC_TITLES: Record<string, string> = {
   "datatable-tab": "DataTable",
   "scheduled-tab": "Harmonogramy",
   "logs-tab": "Logi",
+  "kubernetes": "Wdrożenie Kubernetes",
+  "google-meet-node": "Węzeł Google Meet",
+  "file-analysis": "Analiza plików",
+  "incident-playbook": "Playbook incydentów",
+  "operations-runbook": "Runbook operacyjny",
 };
 
 export const FRENCH_CATEGORY_LABELS: Record<string, string> = {
@@ -616,7 +631,12 @@ export const FRENCH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Onglet Teams",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Onglet Planifications",
-  "logs-tab": "Onglet Logs"
+  "logs-tab": "Onglet Logs",
+  "kubernetes": "Déploiement Kubernetes",
+  "google-meet-node": "Nœud Google Meet",
+  "file-analysis": "Analyse de fichiers",
+  "incident-playbook": "Guide de gestion des incidents",
+  "operations-runbook": "Guide d'exploitation",
 };
 
 export const SPANISH_CATEGORY_LABELS: Record<string, string> = {
@@ -761,7 +781,12 @@ export const SPANISH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Pestaña Teams",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Pestaña Scheduled",
-  "logs-tab": "Pestaña Logs"
+  "logs-tab": "Pestaña Logs",
+  "kubernetes": "Despliegue en Kubernetes",
+  "google-meet-node": "Nodo Google Meet",
+  "file-analysis": "Análisis de archivos",
+  "incident-playbook": "Playbook de incidentes",
+  "operations-runbook": "Runbook de operaciones",
 };
 
 export const ITALIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -906,7 +931,12 @@ export const ITALIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Scheda Teams",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Scheda Pianificazioni",
-  "logs-tab": "Scheda Logs"
+  "logs-tab": "Scheda Logs",
+  "kubernetes": "Distribuzione Kubernetes",
+  "google-meet-node": "Nodo Google Meet",
+  "file-analysis": "Analisi file",
+  "incident-playbook": "Playbook per gli incidenti",
+  "operations-runbook": "Runbook operativo",
 };
 
 export const DUTCH_CATEGORY_LABELS: Record<string, string> = {
@@ -1051,7 +1081,12 @@ export const DUTCH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Teams-tabblad",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Tabblad Schema's",
-  "logs-tab": "Tabblad Logs"
+  "logs-tab": "Tabblad Logs",
+  "kubernetes": "Kubernetes-implementatie",
+  "google-meet-node": "Google Meet-knooppunt",
+  "file-analysis": "Bestandsanalyse",
+  "incident-playbook": "Incident-playbook",
+  "operations-runbook": "Operationeel handboek",
 };
 
 export const PORTUGUESE_CATEGORY_LABELS: Record<string, string> = {
@@ -1196,7 +1231,12 @@ export const PORTUGUESE_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Separador Teams",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Separador Agendamentos",
-  "logs-tab": "Separador Registos"
+  "logs-tab": "Separador Registos",
+  "kubernetes": "Implantação no Kubernetes",
+  "google-meet-node": "Nó Google Meet",
+  "file-analysis": "Análise de arquivos",
+  "incident-playbook": "Playbook de incidentes",
+  "operations-runbook": "Runbook de operações",
 };
 
 export const CZECH_CATEGORY_LABELS: Record<string, string> = {
@@ -1341,7 +1381,12 @@ export const CZECH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Karta Teams",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Záložka Scheduled",
-  "logs-tab": "Karta Logs"
+  "logs-tab": "Karta Logs",
+  "kubernetes": "Nasazení na Kubernetes",
+  "google-meet-node": "Uzel Google Meet",
+  "file-analysis": "Analýza souborů",
+  "incident-playbook": "Příručka pro incidenty",
+  "operations-runbook": "Provozní příručka",
 };
 
 export const ROMANIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -1486,7 +1531,12 @@ export const ROMANIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Filă Teams",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Filă Programate",
-  "logs-tab": "Filă Logs"
+  "logs-tab": "Filă Logs",
+  "kubernetes": "Implementare Kubernetes",
+  "google-meet-node": "Nod Google Meet",
+  "file-analysis": "Analiză fișiere",
+  "incident-playbook": "Ghid pentru incidente",
+  "operations-runbook": "Ghid de operare",
 };
 
 export const SWEDISH_CATEGORY_LABELS: Record<string, string> = {
@@ -1631,7 +1681,12 @@ export const SWEDISH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Teams-fliken",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Schemalagd flik",
-  "logs-tab": "Fliken Loggar"
+  "logs-tab": "Fliken Loggar",
+  "kubernetes": "Kubernetes-driftsättning",
+  "google-meet-node": "Google Meet-nod",
+  "file-analysis": "Filanalys",
+  "incident-playbook": "Incident-spelbok",
+  "operations-runbook": "Drifthandbok",
 };
 
 export const SLOVAK_CATEGORY_LABELS: Record<string, string> = {
@@ -1776,7 +1831,12 @@ export const SLOVAK_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Karta Teams",
   "datatable-tab": "Dátová tabuľka",
   "scheduled-tab": "Karta Plány",
-  "logs-tab": "Karta Logs"
+  "logs-tab": "Karta Logs",
+  "kubernetes": "Nasadenie na Kubernetes",
+  "google-meet-node": "Uzol Google Meet",
+  "file-analysis": "Analýza súborov",
+  "incident-playbook": "Príručka pre incidenty",
+  "operations-runbook": "Prevádzková príručka",
 };
 
 export const HUNGARIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -1921,7 +1981,12 @@ export const HUNGARIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Teams lap",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Ütemezések lap",
-  "logs-tab": "Naplók lap"
+  "logs-tab": "Naplók lap",
+  "kubernetes": "Kubernetes telepítés",
+  "google-meet-node": "Google Meet csomópont",
+  "file-analysis": "Fájlelemzés",
+  "incident-playbook": "Incidenskezelési útmutató",
+  "operations-runbook": "Üzemeltetési útmutató",
 };
 
 export const DANISH_CATEGORY_LABELS: Record<string, string> = {
@@ -2066,7 +2131,12 @@ export const DANISH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Teams-fanen",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Tidsplaner-fanen",
-  "logs-tab": "Log-fanen"
+  "logs-tab": "Log-fanen",
+  "kubernetes": "Kubernetes-udrulning",
+  "google-meet-node": "Google Meet-knude",
+  "file-analysis": "Filanalyse",
+  "incident-playbook": "Incident-playbook",
+  "operations-runbook": "Driftshåndbog",
 };
 
 export const FINNISH_CATEGORY_LABELS: Record<string, string> = {
@@ -2211,7 +2281,12 @@ export const FINNISH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Tiimivälilehti",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Aikataulut-välilehti",
-  "logs-tab": "Lokit-välilehti"
+  "logs-tab": "Lokit-välilehti",
+  "kubernetes": "Kubernetes-käyttöönotto",
+  "google-meet-node": "Google Meet -solmu",
+  "file-analysis": "Tiedostoanalyysi",
+  "incident-playbook": "Häiriönhallintasuunnitelma",
+  "operations-runbook": "Käyttöopas",
 };
 
 export const BULGARIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -2356,7 +2431,12 @@ export const BULGARIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Раздел Teams",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Раздел „Графици“",
-  "logs-tab": "Раздел Logs"
+  "logs-tab": "Раздел Logs",
+  "kubernetes": "Внедряване на Kubernetes",
+  "google-meet-node": "Възел Google Meet",
+  "file-analysis": "Анализ на файлове",
+  "incident-playbook": "Наръчник при инциденти",
+  "operations-runbook": "Оперативен наръчник",
 };
 
 export const GREEK_CATEGORY_LABELS: Record<string, string> = {
@@ -2501,7 +2581,12 @@ export const GREEK_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Καρτέλα Teams",
   "datatable-tab": "Πίνακας δεδομένων",
   "scheduled-tab": "Καρτέλα Χρονοδιαγραμμάτων",
-  "logs-tab": "Καρτέλα Logs"
+  "logs-tab": "Καρτέλα Logs",
+  "kubernetes": "Ανάπτυξη Kubernetes",
+  "google-meet-node": "Κόμβος Google Meet",
+  "file-analysis": "Ανάλυση αρχείων",
+  "incident-playbook": "Εγχειρίδιο περιστατικών",
+  "operations-runbook": "Εγχειρίδιο λειτουργιών",
 };
 
 export const CROATIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -2646,7 +2731,12 @@ export const CROATIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Teams Kartica",
   "datatable-tab": "Tablica podataka",
   "scheduled-tab": "Raspoređeni Tab",
-  "logs-tab": "Kartica Zapisa"
+  "logs-tab": "Kartica Zapisa",
+  "kubernetes": "Implementacija na Kubernetes",
+  "google-meet-node": "Čvor Google Meet",
+  "file-analysis": "Analiza datoteka",
+  "incident-playbook": "Priručnik za incidente",
+  "operations-runbook": "Operativni priručnik",
 };
 
 export const SLOVENIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -2791,7 +2881,12 @@ export const SLOVENIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Zavihek Ekipa",
   "datatable-tab": "Podatkovna tabela",
   "scheduled-tab": "Načrtovana Zavihek",
-  "logs-tab": "Zavihek Dnevniki"
+  "logs-tab": "Zavihek Dnevniki",
+  "kubernetes": "Namestitev na Kubernetes",
+  "google-meet-node": "Vozlišče Google Meet",
+  "file-analysis": "Analiza datotek",
+  "incident-playbook": "Priročnik za incidente",
+  "operations-runbook": "Operativni priročnik",
 };
 
 export const ESTONIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -2936,7 +3031,12 @@ export const ESTONIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Meeskondade vahekaart",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Ajakavade vahekaart",
-  "logs-tab": "Logide vahekaart"
+  "logs-tab": "Logide vahekaart",
+  "kubernetes": "Kubernetes paigaldus",
+  "google-meet-node": "Google Meet sõlm",
+  "file-analysis": "Failianalüüs",
+  "incident-playbook": "Intsidentide käsiraamat",
+  "operations-runbook": "Töökäsiraamat",
 };
 
 export const LATVIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -3081,7 +3181,12 @@ export const LATVIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Cilne Teams",
   "datatable-tab": "Datu tabula",
   "scheduled-tab": "Grafiku cilne",
-  "logs-tab": "Žurnālu cilne"
+  "logs-tab": "Žurnālu cilne",
+  "kubernetes": "Kubernetes izvietošana",
+  "google-meet-node": "Google Meet mezgls",
+  "file-analysis": "Failu analīze",
+  "incident-playbook": "Incidentu rokasgrāmata",
+  "operations-runbook": "Darbības rokasgrāmata",
 };
 
 export const LITHUANIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -3226,7 +3331,12 @@ export const LITHUANIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Komandų skirtukas",
   "datatable-tab": "Duomenų lentelė",
   "scheduled-tab": "Tvarkaraščio skirtukas",
-  "logs-tab": "Žurnalų skirtukas"
+  "logs-tab": "Žurnalų skirtukas",
+  "kubernetes": "Kubernetes diegimas",
+  "google-meet-node": "Google Meet mazgas",
+  "file-analysis": "Failų analizė",
+  "incident-playbook": "Incidentų vadovas",
+  "operations-runbook": "Operacijų vadovas",
 };
 
 export const CATALAN_CATEGORY_LABELS: Record<string, string> = {
@@ -3371,7 +3481,12 @@ export const CATALAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Equips",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Programats",
-  "logs-tab": "Registres"
+  "logs-tab": "Registres",
+  "kubernetes": "Desplegament a Kubernetes",
+  "google-meet-node": "Node Google Meet",
+  "file-analysis": "Anàlisi de fitxers",
+  "incident-playbook": "Playbook d'incidents",
+  "operations-runbook": "Guia d'operacions",
 };
 
 export const ZH_HANS_CATEGORY_LABELS: Record<string, string> = {
@@ -3516,7 +3631,12 @@ export const ZH_HANS_DOC_TITLES: Record<string, string> = {
   "teams-tab": "团队",
   "datatable-tab": "DataTable",
   "scheduled-tab": "计划任务",
-  "logs-tab": "日志"
+  "logs-tab": "日志",
+  "kubernetes": "Kubernetes 部署",
+  "google-meet-node": "Google Meet 节点",
+  "file-analysis": "文件分析",
+  "incident-playbook": "事件处理手册",
+  "operations-runbook": "运维手册",
 };
 
 export const ZH_HANT_CATEGORY_LABELS: Record<string, string> = {
@@ -3661,7 +3781,12 @@ export const ZH_HANT_DOC_TITLES: Record<string, string> = {
   "teams-tab": "團隊",
   "datatable-tab": "DataTable",
   "scheduled-tab": "排程任務",
-  "logs-tab": "記錄"
+  "logs-tab": "記錄",
+  "kubernetes": "Kubernetes 部署",
+  "google-meet-node": "Google Meet 節點",
+  "file-analysis": "檔案分析",
+  "incident-playbook": "事件處理手冊",
+  "operations-runbook": "維運手冊",
 };
 
 export const JAPANESE_CATEGORY_LABELS: Record<string, string> = {
@@ -3806,7 +3931,12 @@ export const JAPANESE_DOC_TITLES: Record<string, string> = {
   "teams-tab": "チーム",
   "datatable-tab": "DataTable",
   "scheduled-tab": "スケジュール",
-  "logs-tab": "ログ"
+  "logs-tab": "ログ",
+  "kubernetes": "Kubernetes デプロイ",
+  "google-meet-node": "Google Meet ノード",
+  "file-analysis": "ファイル分析",
+  "incident-playbook": "インシデントプレイブック",
+  "operations-runbook": "運用手順書",
 };
 
 export const KOREAN_CATEGORY_LABELS: Record<string, string> = {
@@ -3951,7 +4081,12 @@ export const KOREAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "팀",
   "datatable-tab": "DataTable",
   "scheduled-tab": "예약 작업",
-  "logs-tab": "로그"
+  "logs-tab": "로그",
+  "kubernetes": "Kubernetes 배포",
+  "google-meet-node": "Google Meet 노드",
+  "file-analysis": "파일 분석",
+  "incident-playbook": "인시던트 플레이북",
+  "operations-runbook": "운영 런북",
 };
 
 export const PT_BR_CATEGORY_LABELS: Record<string, string> = {
@@ -4096,7 +4231,12 @@ export const PT_BR_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Equipes",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Agendados",
-  "logs-tab": "Logs"
+  "logs-tab": "Logs",
+  "kubernetes": "Implantação no Kubernetes",
+  "google-meet-node": "Nó Google Meet",
+  "file-analysis": "Análise de arquivos",
+  "incident-playbook": "Playbook de incidentes",
+  "operations-runbook": "Runbook de operações",
 };
 
 export const INDONESIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -4241,7 +4381,12 @@ export const INDONESIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Tim",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Terjadwal",
-  "logs-tab": "Log"
+  "logs-tab": "Log",
+  "kubernetes": "Penerapan Kubernetes",
+  "google-meet-node": "Simpul Google Meet",
+  "file-analysis": "Analisis Berkas",
+  "incident-playbook": "Panduan Insiden",
+  "operations-runbook": "Buku Panduan Operasi",
 };
 
 export const VIETNAMESE_CATEGORY_LABELS: Record<string, string> = {
@@ -4386,7 +4531,12 @@ export const VIETNAMESE_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Đội ngũ",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Đã lên lịch",
-  "logs-tab": "Nhật ký"
+  "logs-tab": "Nhật ký",
+  "kubernetes": "Triển khai Kubernetes",
+  "google-meet-node": "Nút Google Meet",
+  "file-analysis": "Phân tích tệp",
+  "incident-playbook": "Sổ tay xử lý sự cố",
+  "operations-runbook": "Sổ tay vận hành",
 };
 
 export const TURKISH_CATEGORY_LABELS: Record<string, string> = {
@@ -4531,7 +4681,12 @@ export const TURKISH_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Ekipler",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Zamanlanmış",
-  "logs-tab": "Günlükler"
+  "logs-tab": "Günlükler",
+  "kubernetes": "Kubernetes Dağıtımı",
+  "google-meet-node": "Google Meet Düğümü",
+  "file-analysis": "Dosya Analizi",
+  "incident-playbook": "Olay Müdahale Kılavuzu",
+  "operations-runbook": "Operasyon Kılavuzu",
 };
 
 export const UKRAINIAN_CATEGORY_LABELS: Record<string, string> = {
@@ -4676,7 +4831,12 @@ export const UKRAINIAN_DOC_TITLES: Record<string, string> = {
   "teams-tab": "Команди",
   "datatable-tab": "DataTable",
   "scheduled-tab": "Розклади",
-  "logs-tab": "Журнали"
+  "logs-tab": "Журнали",
+  "kubernetes": "Розгортання в Kubernetes",
+  "google-meet-node": "Вузол Google Meet",
+  "file-analysis": "Аналіз файлів",
+  "incident-playbook": "Інструкція реагування на інциденти",
+  "operations-runbook": "Операційна інструкція",
 };
 
 export const CATEGORY_LABELS_BY_LOCALE: Record<string, Record<string, string>> = {

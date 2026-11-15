@@ -68,3 +68,5 @@ curl -X GET "https://your-host/api/workflows/<workflow-id>/execute?name=Ada"
 - [Output](./output-node.md) – 以訊息或結構描述為基礎、帶有 `result` 包裝的回應
 - [Webhooks](../reference/webhooks.md) – Execute Endpoint、請求方法及回應
 - [節點類型](../reference/node-types.md) – 所有節點類型
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

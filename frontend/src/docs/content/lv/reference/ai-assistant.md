@@ -48,6 +48,7 @@ Agent režīmā izvēles rūtiņa **YOLO mode** zem ziņojuma lauka liek asisten
 - Ierakstiet savu pieprasījumu ievades laukā (piem., "Create a workflow that takes user input and sends it to an LLM")
 - Nospiediet **Enter**, lai nosūtītu (Shift+Enter jaunai rindai)
 - AI straumē savu atbildi. **Agent** režīmā, ja atbilde satur workflow \`\`\`json koda blokā, tas tiek automātiski parsēts un piemērots kanvai. **Ask** režīmā kanva nekad netiek modificēta.
+- Darbplūsmas JSON straumēšanas laikā rindiņa zem atbildes nosauc darbplūsmu un līdz šim ierakstītos mezglus, piemēram, `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Izmantojiet **Clear**, lai atiestatītu sarunu
 - Novietojiet kursoru uz ziņojuma un noklikšķiniet uz tā kopēšanas ikonas, lai nokopētu tekstu, ko tas rāda, ieskaitot jebkuru workflow JSON
 - Velciet līniju virs ziņojuma lauka, lai padarītu lauku augstāku. Ievades apgabals var izaugt līdz 60% no paneļa, un tas atgriežas sākotnējā augstumā, kad lapa tiek pārlādēta

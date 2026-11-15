@@ -7,7 +7,7 @@ Fila **Workflows** este vizualizarea implicită a panoului de control. Afișeaz�
 
 ## Începeți o conversație
 
-Deasupra listei de workflow-uri se află o casetă de chat care vă salută pe nume și vă întreabă ce doriți să automatizați. Introduceți un prompt, atașați opțional un fișier și selectați credentialul și modelul dorit. Ambele liste derulante sunt căutabile și pornesc de la [valorile implicite AI](../reference/user-settings.md).
+Deasupra listei de workflow-uri se află o casetă de chat care vă salută pe nume și vă întreabă ce doriți să automatizați. Introduceți un prompt, atașați opțional up to 10 files și selectați credentialul și modelul dorit. Ambele liste derulante sunt căutabile și pornesc de la [valorile implicite AI](../reference/user-settings.md).
 
 Trimiterea creează o conversație nouă și o deschide în [fila Chat](./chat-tab.md), unde răspunsul este transmis în flux. Atașamentele acceptate sunt fișiere text, imagini și PDF-uri, câte unul per mesaj, la fel ca în compozitorul de chat.
 

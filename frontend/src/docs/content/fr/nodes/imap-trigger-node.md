@@ -16,6 +16,7 @@ Le nœud **IMAP Trigger** interroge une boîte de réception email à intervalle
 |-----------|------|-------------|
 | `credentialId` | UUID | Identifiant `imap` contenant le serveur, le login, la boîte aux lettres et les paramètres SSL |
 | `pollIntervalMinutes` | Integer | Fréquence à laquelle Heym vérifie la boîte aux lettres pour les nouveaux emails |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Guide de configuration
 
@@ -62,6 +63,8 @@ Une fois le nœud déclenché, les nœuds en aval peuvent accéder à :
 | `$nodeLabel.email.text` | Corps en texte brut |
 | `$nodeLabel.email.html` | Corps HTML |
 | `$nodeLabel.email.attachments` | Tableau des métadonnées de pièces jointes (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Objet d'en-têtes décodé |
 | `$nodeLabel.email.uid` | UID IMAP pour la déduplication ou la journalisation |
 | `$nodeLabel.triggered_by` | Libellé de la source du Trigger (`"imap"`) |

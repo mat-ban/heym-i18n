@@ -131,3 +131,6 @@ Panelei taip pat pranešama, kiek iš paskutinių 24 valandų vykdymų galėjo b
 - [Saugumas](./security.md) – Sesijų valdymas, greičio ribojimas, kredencialų šifravimas
 - [Vieningas prisijungimas](./sso.md) – Prijungti išorinį OpenID Connect teikėją
 - [OpenTelemetry Tracing](./opentelemetry.md) – Išskirstytas stebėjimas darbo eigos ir mazgų vykdymams
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

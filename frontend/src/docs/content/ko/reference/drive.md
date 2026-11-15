@@ -97,3 +97,11 @@ Drive 읽기는 Workflow 실행자(actor)가 접근할 수 있는 파일로 제�
 
 ## 정리
 만료된 공유 Token은 매일 자동으로 정리됩니다. 파일 자체는 Drive 탭을 통해 수동으로 삭제할 때까지 유지됩니다. **Clear All**을 사용하면 모든 파일과 해당 공유 링크를 한 번에 삭제할 수 있습니다.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

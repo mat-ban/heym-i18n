@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap` poverilnica, ki vsebuje nastavitve strežnika, prijave, predala in SSL |
 | `pollIntervalMinutes` | Celo število | Kako pogosto Heym preverja predal za novo e-pošto |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Navodila za nastavitev
 
@@ -62,6 +63,8 @@ Po sprožitvi vozlišča lahko spodnja vozlišča dostopajo do:
 | `$nodeLabel.email.text` | Besedilo telesa |
 | `$nodeLabel.email.html` | HTML telo |
 | `$nodeLabel.email.attachments` | Množica metapodatkov o priponkah (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekodiran objekt glave |
 | `$nodeLabel.email.uid` | IMAP UID za preprečevanje podvajanja ali beleženje |
 | `$nodeLabel.triggered_by` | Oznaka vira sprožitve (`"imap"`) |

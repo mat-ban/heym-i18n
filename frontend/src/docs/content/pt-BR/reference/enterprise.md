@@ -42,7 +42,7 @@ Sessões de treinamento prático adaptadas ao nível de habilidade e casos de us
 
 ## Implantação em Kubernetes
 
-O guia padrão de [Execução e Implantação](../getting-started/running-and-deployment.md) cobre o Docker Compose para configurações de produção em servidor único. Clientes Enterprise recebem assistência com implantações Kubernetes em produção para alta disponibilidade e escalonamento horizontal:
+O guia padrão de [Execução e Implantação](../getting-started/running-and-deployment.md) cobre o Docker Compose para configurações de produção em servidor único. [Kubernetes Deployment](../getting-started/kubernetes.md). Clientes Enterprise recebem assistência com implantações Kubernetes em produção para alta disponibilidade e escalonamento horizontal:
 
 - **Múltiplos worker nodes** — Distribuição dos workers de backend do Heym em vários nós Kubernetes para redundância e balanceamento de carga
 - **Sidecar containers** — Configuração de padrões sidecar para coleta de logs, agentes de monitoramento, service meshes (Istio, Linkerd) e injeção de secrets (Vault)

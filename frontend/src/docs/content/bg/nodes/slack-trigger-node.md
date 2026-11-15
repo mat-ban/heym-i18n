@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym отговаря с `200 OK` незабавно и изпълнява workflow във фонов режим — това удовлетворява изискването на Slack за отговор в рамките на 3 секунди
 - Webhook URL се извлича от ID на node и никога не се променя, дори след преименуване на workflow
 - Необходим е само един `slackTrigger` node на workflow; използвайте **Switch** или **Condition** nodes надолу по веригата, за да маршрутизирате различни типове събития
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

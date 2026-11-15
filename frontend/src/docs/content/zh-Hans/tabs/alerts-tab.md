@@ -2,6 +2,9 @@
 
 **Alerts** 标签页让您定义基于时间窗口的阈值条件，并在条件被触发时收到通知。Heym 已经记录了执行结果、运行时长和 LLM 花费，但它从不主动告知这些信息。Alert 就是您要求它主动通知的方式。
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ 观看 Alerts 演示</a></p>
+
 每个 alert 都在您选择的**时间窗口**上进行评估，绝不会基于单个事件。一次失败的运行只是噪声。十分钟内十二次失败的运行才是事故。
 
 ## Alert 类型

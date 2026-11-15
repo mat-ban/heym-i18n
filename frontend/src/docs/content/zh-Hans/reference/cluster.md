@@ -92,6 +92,9 @@ main 角色与 leader 选举是分开的。Heym 已经在整个集群中选举�
 
 **Worker 实例具有不同的出站 IP。** 任何对来源地址进行 allowlist 的 API 都会看到新的地址。Send Email 正是出于这个原因在 main 上运行；对于 HTTP 节点，要么为 Cluster 提供单一的 NAT 出口地址，要么将每个实例都加入 allowlist。
 
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## 在另一台机器上添加 worker
 
 仓库根目录下的 `docker-compose.worker.yml` 可在其自己的主机上运行一个 worker。它没有数据库也没有 UI：它连接到 main 实例的 PostgreSQL，并承担其份额的后台运行。
@@ -124,7 +127,7 @@ Workflow 的[并发限制](./webhooks.md#concurrency-limit-and-queued-runs)在 P
 
 **如果 worker 在运行中途死亡**，其心跳会变为过期状态，leader 现有的恢复扫描会在一个存活实例上重新运行该执行。它此前认领的队列行会被单独处理：一旦该行不再存在活跃执行，且经过两分钟的宽限期后，leader 会将该行标记为失败，并唤醒正在等待结果的各方。仅凭时间长短绝不会触发该机制，因此合法长时间运行的执行不会被干扰；并且该行会被标记为失败而非重新入队，因为恢复机制已经负责重跑，重新入队会导致同一 workflow 运行两次。
 
-**如果 main 宕机**，cron 会继续从某个 worker 触发，可分布式运行的执行也会继续执行。需要 main 的运行会排队等待，并在 main 恢复后清空——但仅限于未触发宽限窗口内（`HEYM_CRON_MISFIRE_GRACE_SECONDS`，默认 600 秒）。更早的内容会被关闭为已跳过，并记录原因，而不是一次性重放数小时的积压。
+**如果 main 宕机**，cron 会继续从某个 worker 触发，可分布式运行的执行也会继续执行。需要 main 的运行会排队等待，并在 main 恢复后清空——但仅限于未触发宽限窗口内（`CRON_MISFIRE_GRACE_SECONDS`，默认 600 秒）。更早的内容会被关闭为已跳过，并记录原因，而不是一次性重放数小时的积压。
 
 main 宕机期间，UI、API、MCP 和编辑器均不可用，因为入口点指向 main。
 

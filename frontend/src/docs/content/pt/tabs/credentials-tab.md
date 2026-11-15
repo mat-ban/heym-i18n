@@ -94,3 +94,7 @@ Consulte [Expression DSL](../reference/expression-dsl.md) para referenciar valor
 - [Separador Armazenamentos Vetoriais](./vectorstores-tab.md) – Utiliza credenciais Qdrant ou Postgres (pgvector)
 - [Separador Chat](./chat-tab.md) – Utiliza credenciais OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacto de páginas para as superfícies do dashboard
+
+## Pesquisa
+
+Utilize o campo de pesquisa acima da lista ou prima **Ctrl+F** (ou **Cmd+F**) para filtrar credenciais por nome ou tipo enquanto digita. Prima **Escape** para limpar a pesquisa.

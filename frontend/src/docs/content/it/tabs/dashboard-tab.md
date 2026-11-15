@@ -2,6 +2,9 @@
 
 La scheda **Dashboard** è uno spazio in stile Grafana in cui è possibile costruire griglie di widget grafici. Ogni widget viene renderizzato a partire dall'output del proprio workflow Heym nascosto, pertanto qualsiasi dato producibile in un workflow — query al database, chiamate API, ricerche RAG, output LLM — può diventare un grafico. È possibile mantenere più dashboard e condividerle con persone o team.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboard
 
 Ogni utente inizia con una dashboard, creata la prima volta che apre la scheda. Utilizzare il selettore di dashboard nella parte superiore della scheda per passare da una dashboard all'altra, e **+** accanto ad esso per crearne una nuova. Il selettore elenca prima le dashboard personali, poi quelle condivise, etichettate con il nome della persona che le ha condivise.
@@ -27,6 +30,8 @@ Un widget è un singolo grafico sulla griglia. Tipi di grafico supportati:
 - **Entity relationships (DB)** (tabelle, campi, chiavi PK/FK e collegamenti)
 - **Bar gauge** (un indicatore orizzontale per riga con gradiente dal rosso al verde e un valore, ad esempio lo spazio su disco libero)
 - **Text** (un messaggio markdown, ad esempio una nota di stato come "Ultima esecuzione alle 19:47"; supporta [caselle di controllo interattive](../nodes/chart-output-node.md#interactive-task-lists) quando il markdown è statico, ed [elenchi numerati espliciti](../nodes/chart-output-node.md#numbered-lists) per numerazioni personalizzate o decrescenti)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (le revisioni umane in sospeso. L'intestazione mostra `1/n pending`. Il nome del workflow apre quella esecuzione sul canvas. **Approve**, **Request changes** e **Reject** la risolvono. L'icona della cronologia accanto al titolo del widget apre quella esecuzione nella finestra di dialogo della cronologia su questa pagina. Il widget non utilizza le righe a monte e ogni persona vede la propria coda. Può invece mostrare le revisioni di un solo Workflow, per tutti coloro che possono aprire quel Workflow; vedere [Widget HITL](#widget-hitl))
 
 Oltre ai grafici, un widget **Run a workflow** esegue uno dei vostri workflow dalla dashboard: su un file trascinato, con i relativi campi di input o tramite un pulsante Run; vedere [Widget di esecuzione](#run-widgets).
@@ -146,3 +151,5 @@ La rimozione di una condivisione, o la sua riduzione da write a read, ha effetto
 ## Pianificazioni e diagrammi di database
 
 Scegliere **Gantt** in Aggiungi widget per visualizzare le attività nel tempo con collegamenti di avanzamento e dipendenza, oppure **Entity relationships (DB)** per mappare tabelle, campi e le relative relazioni. Entrambi i tipi utilizzano il [nodo Chart Output](../nodes/chart-output-node.md#gantt-schedules) e sono disponibili anche nelle pagine di Heym Work. Quando Work suggerisce widget per una pianificazione o uno schema di database, genera anteprime basate sulle attività o entità proposte.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

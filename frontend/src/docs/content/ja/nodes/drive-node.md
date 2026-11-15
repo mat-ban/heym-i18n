@@ -116,6 +116,8 @@
 
 base64 コンテンツを後続で参照します: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 `file_base64` を介して返された画像は、Workflow を実行するとデバッグパネルにインラインで表示されます。
 
 ## 例 — Drive ファイルの一覧表示

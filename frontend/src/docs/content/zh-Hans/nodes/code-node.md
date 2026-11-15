@@ -19,6 +19,7 @@
 | `codeParameters` | expression | 一个 JSON 对象，用于将工作流数据接入代码。表达式会在代码运行前解析 |
 | `codeRequirements` | string | `requirements.txt` 的内容，每行一个包。留空则跳过安装 |
 | `codeAllowNetwork` | boolean | 代码本身是否可以访问网络（默认 `false`） |
+| `codeFiles` | expression | Optional Drive files mounted read-only for the run: an id, several ids, or an expression such as `$Upload.file.id` |
 
 ## `main` 函数
 
@@ -112,6 +113,21 @@ feedparser
 | 运行另一个工作流 | [Execute](execute-node.md) |
 
 当逻辑确实不适合上述节点时——自定义数学运算、定制解析或某种算法——再使用 **Code**。
+## Reading Drive files
+
+Set **Files** (`codeFiles`) to give the code the files of the run. It accepts an id, ids separated by commas, a list, or an expression that resolves to a file or its id, such as `$Upload.file.id` or `$Upload.file`. A file opens when it came into this workflow: uploaded through its [File Upload trigger](./file-upload-trigger-node.md) or written to [Drive](../reference/drive.md) by one of its nodes. Other Drive files are not available to a run, so a workflow cannot be used to read someone's Drive.
+
+```python
+import heym_files
+import pandas as pd
+
+def main(params):
+    workbook = params.files[0]
+    df = pd.read_excel(heym_files.path(workbook.name), sheet_name="Summary")
+    return {"rows": len(df), "columns": list(df.columns)}
+```
+
+
 ## 示例
 
 由上游节点生成的评分行：

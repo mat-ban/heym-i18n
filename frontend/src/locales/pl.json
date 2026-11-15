@@ -84,7 +84,8 @@
     "dropFileOrClick": "Upuść plik tutaj lub kliknij, aby wybrać",
     "removeFile": "Usuń plik",
     "chooseFileFor": "Wybierz plik dla {label}",
-    "new": "Nowy"
+    "new": "Nowy",
+    "clearSearch": "Wyczyść wyszukiwanie"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Włącz",
     "disablePlugin": "Wyłącz",
     "uninstallPlugin": "Odinstaluj",
-    "pluginOperationFailed": "Operacja na wtyczce nie powiodła się"
+    "pluginOperationFailed": "Operacja na wtyczce nie powiodła się",
+    "users": "Użytkownicy",
+    "encryption": "Szyfrowanie"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopiuj ID wykonania",
     "openTrace": "Otwórz śledzenie",
     "message": "Wiadomość",
-    "emptyReply": "Pusta odpowiedź."
+    "emptyReply": "Pusta odpowiedź.",
+    "timeRange3h": "Ostatnie 3 godziny",
+    "timeRange6h": "Ostatnie 6 godzin"
   },
   "tables": {
     "title": "Tabele danych",
@@ -1215,7 +1220,9 @@
     "browseAll": "Przeglądaj wszystkie →",
     "askAi": "Zapytaj AI",
     "dropToImport": "Upuść JSON lub ZIP, aby zaimportować",
-    "noWorkflowsMatch": "Brak workflowów spełniających ten filtr."
+    "noWorkflowsMatch": "Brak workflowów spełniających ten filtr.",
+    "noWorkflowsMatchAll": "Spróbuj innego tytułu, opisu lub nazwy folderu.",
+    "noWorkflowsMatchFilter": "Spróbuj innego tytułu, opisu, nazwy folderu lub filtra stanu."
   },
   "schedules": {
     "title": "Harmonogramy",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Uruchomione przez klienta MCP",
     "newChatTitle": "Nowy chat",
     "subtitle": "Uruchamiaj Workflows i zadawaj pytania",
-    "modelsLoadFailedDisabled": "Nie udało się załadować listy modeli dla tych danych uwierzytelniających. Czat pozostaje wyłączony, dopóki nie będzie można pobrać modelu."
+    "modelsLoadFailedDisabled": "Nie udało się załadować listy modeli dla tych danych uwierzytelniających. Czat pozostaje wyłączony, dopóki nie będzie można pobrać modelu.",
+    "dropFilesToAttach": "Upuść pliki, aby załączyć",
+    "attachFiles": "Załącz pliki"
   },
   "teams": {
     "title": "Zespoły",
@@ -1883,7 +1892,8 @@
       "skipped": "Pominięto"
     },
     "permissionRead": "odczyt",
-    "permissionWrite": "zapis"
+    "permissionWrite": "zapis",
+    "details": "Szczegóły"
   },
   "mcp": {
     "title": "Serwer MCP",
@@ -2197,7 +2207,8 @@
       "actions": "Akcje",
       "failedToLoadWidget": "Nie udało się załadować widgetu",
       "failedToUpdateCheckbox": "Nie udało się zaktualizować pola wyboru",
-      "refreshDashboard": "Odśwież dashboard"
+      "refreshDashboard": "Odśwież dashboard",
+      "revertPrevious": "Przywróć poprzedni"
     },
     "hitl": {
       "previousReview": "Poprzedni przegląd",

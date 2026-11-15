@@ -65,6 +65,10 @@ Jeder Workflow besitzt ein Status-Badge:
 | **Pausiert** | Automatische Trigger sind temporär angehalten |
 | **Entwurf** | Der Workflow befindet sich im Aufbau |
 
+## Suche
+
+Verwenden Sie das Workflow-Suchfeld neben **Status** oder drücken Sie **Ctrl+F** (oder **Cmd+F**), um Workflows nach Titel oder Beschreibung oder Ordner nach Name zu filtern. Übereinstimmende Workflows in Ordnern werden mit erweiterten Ordnerzweigen angezeigt, und ein Ordner, dessen Name übereinstimmt, wird mit allen darin enthaltenen Elementen angezeigt. Drücken Sie **Escape**, um die Suche zurückzusetzen.
+
 ## Ordner & Organisation
 
 - Erstellen Sie Ordner zur logischen Trennung von Umgebungen, Teams oder Kunden

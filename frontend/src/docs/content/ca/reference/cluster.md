@@ -92,6 +92,10 @@ Això també defineix l'ordre d'actualització. Actualitzar main primer marca to
 
 **Les instàncies worker tenen una IP de sortida diferent.** Qualsevol API que permeti adreces d'origen a la llista blanca veurà la nova. Send Email s'executa a main exactament per aquest motiu; per al node HTTP, o bé doneu al clúster una única adreça de sortida NAT o bé afegiu cada instància a la llista blanca.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Afegir un worker en una altra màquina
 
 `docker-compose.worker.yml` a l'arrel del repositori executa un worker al seu propi host. No té base de dades ni interfície d'usuari: arriba al PostgreSQL de la instància main i pren la seva quota de les execucions en segon pla.
@@ -124,7 +128,7 @@ Res d'això no apareix en una instal·lació d'una sola instància: els camps s�
 
 **Si un worker mor a mig executar**, el seu heartbeat queda obsolet i l'escombratge de recuperació existent del líder torna a executar l'execució en una instància activa. La fila de la cua que havia reclamat es retira per separat: un cop no existeix cap execució activa per a ella i ha passat un marge de dos minuts, el líder marca la fila com a fallida i desperta qui esperava el resultat. L'antiguitat per si sola no és mai el trigger, de manera que una execució legítimament llarga es deixa tranquil·la; i la fila es marca com a fallida en lloc de tornar a la cua, perquè la recuperació ja s'encarrega de la reexecució i tornar-la a la cua executaria el mateix workflow dues vegades.
 
-**Si main cau**, el cron continua disparant-se des d'un worker i les execucions distribuïbles continuen executant-se. Les execucions que necessiten main s'encuen i esperen, i es drenen quan aquest torna — però només dins la finestra de gràcia de misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 segons per defecte). Qualsevol cosa més antiga es tanca com a omesa, amb el motiu registrat, en lloc de reproduir hores de backlog de cop.
+**Si main cau**, el cron continua disparant-se des d'un worker i les execucions distribuïbles continuen executant-se. Les execucions que necessiten main s'encuen i esperen, i es drenen quan aquest torna — però només dins la finestra de gràcia de misfire (`CRON_MISFIRE_GRACE_SECONDS`, 600 segons per defecte). Qualsevol cosa més antiga es tanca com a omesa, amb el motiu registrat, en lloc de reproduir hores de backlog de cop.
 
 La UI, l'API, MCP i l'editor no estan disponibles mentre main és caigut, perquè l'ingress apunta allà.
 

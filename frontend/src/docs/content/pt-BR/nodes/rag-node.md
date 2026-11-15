@@ -272,3 +272,5 @@ Bom saber:
 - [Integrações de Terceiros](../reference/integrations.md#qdrant) – Configuração de credenciais do Qdrant e Postgres (pgvector)
 - [Nó Agent](./agent-node.md) – Use resultados de RAG como contexto do agente
 - [Nó LLM](./llm-node.md) – Alimente o prompt de sistema do LLM com resultados de RAG
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

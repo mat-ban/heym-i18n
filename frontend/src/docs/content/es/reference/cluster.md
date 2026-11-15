@@ -92,6 +92,10 @@ Eso también define el orden de actualización. Actualizar main primero marca ca
 
 **Las instancias worker tienen una IP de salida diferente.** Cualquier API que permita direcciones de origen por allowlist verá la nueva. Send Email se ejecuta en main exactamente por esta razón; para el nodo HTTP, o bien asigne al cluster una única dirección de egreso NAT, o bien incluya en el allowlist cada instancia.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Añadir un worker en otra máquina
 
 `docker-compose.worker.yml` en la raíz del repositorio ejecuta un worker en su propio host. No tiene base de datos ni UI: alcanza el PostgreSQL de la instancia main y toma su cuota de las ejecuciones en segundo plano.
@@ -124,7 +128,7 @@ Nada de esto aparece en una instalación de instancia única: los campos están 
 
 **Si un worker muere a mitad de una ejecución**, su heartbeat queda obsoleto y el barrido de recuperación existente del líder vuelve a ejecutar la ejecución en una instancia activa. La fila de la cola que había reclamado se retira por separado: una vez que no existe ninguna ejecución activa para ella y ha transcurrido un margen de dos minutos, el líder marca la fila como fallida y despierta a quien estuviera esperando el resultado. La antigüedad por sí sola nunca es el trigger, por lo que una ejecución legítimamente larga se deja intacta; y la fila se marca como fallida en lugar de reencolarse, porque la recuperación ya se encarga de la reejecución y reencolarla ejecutaría el mismo workflow dos veces.
 
-**Si main cae**, el cron sigue disparándose desde un worker y las ejecuciones distribuibles siguen ejecutándose. Las ejecuciones que necesitan main se ponen en cola y esperan, y se drenan cuando este regresa, pero solo dentro de la ventana de gracia de misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 segundos por defecto). Todo lo más antiguo se cierra como omitido, con el motivo registrado, en lugar de reproducir horas de acumulación de una sola vez.
+**Si main cae**, el cron sigue disparándose desde un worker y las ejecuciones distribuibles siguen ejecutándose. Las ejecuciones que necesitan main se ponen en cola y esperan, y se drenan cuando este regresa, pero solo dentro de la ventana de gracia de misfire (`CRON_MISFIRE_GRACE_SECONDS`, 600 segundos por defecto). Todo lo más antiguo se cierra como omitido, con el motivo registrado, en lugar de reproducir horas de acumulación de una sola vez.
 
 La UI, la API, MCP y el editor no están disponibles mientras main está caído, porque el ingress apunta allí.
 

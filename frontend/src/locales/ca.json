@@ -214,7 +214,8 @@
     "confirmDeleteBoard": "Voleu suprimir el tauler \"{name}\" i totes les seves targetes?",
     "confirmDeleteCard": "Voleu suprimir la targeta \"{title}\"?",
     "confirmDeleteColumn": "Voleu suprimir aquesta columna? Ha d'estar buida.",
-    "confirmEmptyColumn": "Voleu suprimir totes les targetes de la columna \"{name}\"?"
+    "confirmEmptyColumn": "Voleu suprimir totes les targetes de la columna \"{name}\"?",
+    "details": "Detalls"
   },
   "canvas": {
     "analyze": "Analitzar",
@@ -503,7 +504,8 @@
     "dropFileOrClick": "Arrossegueu un fitxer aquí o feu clic per triar-ne un",
     "removeFile": "Eliminar el fitxer",
     "chooseFileFor": "Trieu un fitxer per a {label}",
-    "new": "Nou"
+    "new": "Nou",
+    "clearSearch": "Neteja la cerca"
   },
   "chat": {
     "suggestion6": "Quines plantilles de Workflow hi ha disponibles?",
@@ -543,7 +545,9 @@
     "suggestion4": "Afegir una tasca al meu tauler Kanban",
     "suggestion5": "Què hi ha emmagatzemat a les meves variables globals?",
     "subtitle": "Executar Workflows i fer preguntes",
-    "modelsLoadFailedDisabled": "No s'ha pogut carregar la llista de models d'aquesta credencial. El xat continua desactivat fins que es pugui obtenir un model."
+    "modelsLoadFailedDisabled": "No s'ha pogut carregar la llista de models d'aquesta credencial. El xat continua desactivat fins que es pugui obtenir un model.",
+    "dropFilesToAttach": "Deixeu anar fitxers per adjuntar",
+    "attachFiles": "Adjunta fitxers"
   },
   "credentials": {
     "accessVia": "Accés via",
@@ -762,7 +766,9 @@
     "noWorkflowsMatch": "Cap workflow coincideix amb aquest filtre.",
     "quickStartTemplates": "Plantilles d'inici ràpid",
     "subtitle": "Creeu, orquestreu i executeu els vostres agents autònoms modulars",
-    "whatToAutomate": "Què voleu automatitzar?"
+    "whatToAutomate": "Què voleu automatitzar?",
+    "noWorkflowsMatchAll": "Proveu amb un altre títol, descripció o nom de carpeta.",
+    "noWorkflowsMatchFilter": "Proveu amb un altre títol, descripció, nom de carpeta o filtre d'estat."
   },
   "dashboards": {
     "actions": {
@@ -777,7 +783,8 @@
       "refine": "Ajustar amb IA",
       "refresh": "Actualitzar",
       "refreshDashboard": "Actualitzar el tauler",
-      "settings": "Configuració"
+      "settings": "Configuració",
+      "revertPrevious": "Reverteix l'anterior"
     },
     "addDescriptionPlaceholder": "Opcional. Es mostra al canvas, no a la graella.",
     "addWidget": "Afegir widget",
@@ -2039,7 +2046,9 @@
     "enablePlugin": "Activa",
     "disablePlugin": "Desactiva",
     "uninstallPlugin": "Desinstal·la",
-    "pluginOperationFailed": "L'operació del connector ha fallat"
+    "pluginOperationFailed": "L'operació del connector ha fallat",
+    "users": "Usuaris",
+    "encryption": "Xifratge"
   },
   "showcase": {
     "askAboutDoc": "Preguntar sobre aquesta documentació",
@@ -2285,7 +2294,9 @@
     "tokensLower": "tokens",
     "traceDetail": "Detalls de la traça",
     "tracePosition": "{current} / {total}",
-    "unpricedModelsNotice": "{count} model(s) sense preu:"
+    "unpricedModelsNotice": "{count} model(s) sense preu:",
+    "timeRange3h": "Últimes 3 hores",
+    "timeRange6h": "Últimes 6 hores"
   },
   "variables": {
     "addVariable": "Afegir variable",

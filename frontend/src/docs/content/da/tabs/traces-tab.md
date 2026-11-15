@@ -23,6 +23,7 @@ Et enkelt **Tidsinterval**-vælger øverst i filterlinjen styrer både statistik
 
 - Pagineret liste over nylige spor inden for det valgte tidsinterval
 - Hvert spor viser: workflow, node, legitimationsoplysninger, tidsstempel, varighed
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Klik på et spor for at åbne detaljevisningen
 - Brug **Forrige / Næste** i detaljedialogen til at navigere mellem spor uden at lukke den
 
@@ -66,3 +67,7 @@ Når et spor åbnes:
 - [OpenTelemetry Tracing](../reference/opentelemetry.md) – Valgfri OTel-eksport for workflow-, node- og Agent-værktøjsspænd
 - [DataTable-fanen](./datatable-tab.md) – Indeholder LLM-omkostningstabellen brugt af omkostningsdiagrammet
 - [Kontekstuel showcase](../reference/contextual-showcase.md) – Kompakt sideguide til dashboard-overflader
+
+## Tidsinterval
+
+En enkelt **Tidsinterval**-vælger øverst i filterlinjen styrer både statistikheaderen og sporingslisten. Valgmuligheder: Sidste 1 time, Sidste 3 timer, Sidste 6 timer, Sidste 24 timer, Sidste 7 dage (standard), Sidste 30 dage, Hele perioden. Ændring af intervallet nulstiller pagineringen og genindlæser diagrammer og liste sammen.

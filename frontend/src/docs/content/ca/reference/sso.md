@@ -140,3 +140,6 @@ Un inici de sessió fallit torna a la pantalla d'inici de sessió amb un missatg
 - **Múltiples proveïdors simultanis.** Una instància es connecta a un proveïdor.
 - **Mapatge de grups o rols** a partir de les declaracions del proveïdor.
 - **Tancament de sessió únic.** Tancar la sessió de Heym no us tanca la sessió del proveïdor.
+
+- **L'autenticació de dos factors correspon al proveïdor.** `HEYM_REQUIRE_MFA` només s'aplica a l'inici de sessió amb contrasenya; l'inici de sessió amb SSO mai demana un codi Heym. Exigiu MFA al vostre proveïdor d'identitat.
+- **La desactivació també s'aplica aquí.** Un compte que un administrador ha desactivat a **Configuració → Usuaris** és rebutjat fins i tot quan el proveïdor encara l'autentica.

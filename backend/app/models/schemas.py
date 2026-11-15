@@ -124,6 +124,67 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
 
 
+class MfaSetupResponse(BaseModel):
+    """A secret offered for enrolment. Shown while it is being set up, never again."""
+
+    setup_token: str
+    secret: str
+    otpauth_uri: str
+    qr_code: str
+
+
+class MfaChallengeResponse(BaseModel):
+    """The password was right; the sign-in still needs a code, or an enrolment first."""
+
+    purpose: Literal["verify", "enroll"]
+    challenge_token: str
+    setup: MfaSetupResponse | None = None
+
+
+class LoginResponse(BaseModel):
+    """Tokens for a finished sign-in, or the challenge a second factor must answer."""
+
+    access_token: str | None = None
+    refresh_token: str | None = None
+    token_type: str = "bearer"
+    mfa: MfaChallengeResponse | None = None
+    recovery_codes: list[str] | None = None
+
+
+class MfaLoginRequest(BaseModel):
+    challenge_token: str = Field(min_length=1, max_length=4096)
+    code: str = Field(min_length=6, max_length=32)
+    setup_token: str | None = Field(default=None, max_length=4096)
+
+
+class MfaStatusResponse(BaseModel):
+    enabled: bool
+    required: bool
+    # On only with HEYM_REQUIRE_MFA, and only for accounts with a password.
+    available: bool
+    enabled_at: datetime | None = None
+    recovery_codes_remaining: int = 0
+
+
+class MfaSetupRequest(BaseModel):
+    password: str = Field(min_length=1, max_length=1024)
+    # A code from the current authenticator, when one is already set up.
+    code: str | None = Field(default=None, max_length=32)
+
+
+class MfaEnableRequest(BaseModel):
+    setup_token: str = Field(min_length=1, max_length=4096)
+    code: str = Field(min_length=6, max_length=32)
+
+
+class MfaCodeRequest(BaseModel):
+    code: str = Field(min_length=6, max_length=32)
+
+
+class MfaRecoveryCodesResponse(BaseModel):
+    recovery_codes: list[str]
+
+
 class TokenRefresh(BaseModel):
     refresh_token: str = ""
 
@@ -636,6 +697,7 @@ class CredentialType(str, Enum):
     clickhouse = "clickhouse"
     opencode = "opencode"
     google_drive = "google_drive"
+    google_meet = "google_meet"
     rag = "rag"
     decision = "decision"
     model_router = "model_router"
@@ -832,6 +894,10 @@ class CredentialResponse(BaseModel):
     name: str
     type: CredentialType
     masked_value: str | None = None
+    # `k8s:<namespace>/<secret-name>` when a Kubernetes Secret manages it (read-only).
+    source: str | None = None
+    # No configured key decrypts it; the owner can only delete and re-create it.
+    unreadable: bool = False
     header_key: str | None = None
     public_fields: dict[str, str | None] = Field(default_factory=dict)
     created_at: datetime
@@ -846,6 +912,10 @@ class CredentialListResponse(BaseModel):
     name: str
     type: CredentialType
     masked_value: str | None = None
+    # `k8s:<namespace>/<secret-name>` when a Kubernetes Secret manages it (read-only).
+    source: str | None = None
+    # No configured key decrypts it; the owner can only delete and re-create it.
+    unreadable: bool = False
     header_key: str | None = None
     public_fields: dict[str, str | None] = {}
     created_at: datetime
@@ -1074,6 +1144,14 @@ class VectorStoreUpdate(BaseModel):
     description: str | None = None
 
 
+class VectorStoreDeleteResponse(BaseModel):
+    """Row is already gone. `warning` is a fixed sentence, never a backend error."""
+
+    collection_dropped: bool
+    reason: Literal["dropped", "missing", "failed", "skipped"]
+    warning: str | None = None
+
+
 class VectorStoreStatsResponse(BaseModel):
     vector_count: int
     points_count: int
@@ -1128,6 +1206,29 @@ class VectorStoreShareResponse(BaseModel):
 class VectorStoreUploadResponse(BaseModel):
     chunks_processed: int
     points_inserted: int
+    # "queued": Heym reads the file in the background (audio, scanned PDF pages); it shows
+    # under GET /vector-stores/{id}/ingest-jobs until its chunks are in the store.
+    status: Literal["done", "queued"] = "done"
+    job_id: uuid.UUID | None = None
+
+
+class VectorStoreIngestJobResponse(BaseModel):
+    id: uuid.UUID
+    filename: str
+    file_size: int
+    kind: Literal["audio", "pdf"]
+    status: Literal["queued", "processing", "failed"]
+    error: str | None = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class VectorStoreIngestJobsResponse(BaseModel):
+    jobs: list[VectorStoreIngestJobResponse]
+    total: int
 
 
 class FileCheckItem(BaseModel):
@@ -1329,6 +1430,7 @@ class MCPServerResponse(BaseModel):
     api_key_set: bool = False
     created_at: datetime
     workflow_ids: list[uuid.UUID] = Field(default_factory=list)
+    endpoint_path: str = "mcp"
     chat_tool: MCPChatToolConfig = Field(default_factory=MCPChatToolConfig)
 
 
@@ -2138,6 +2240,13 @@ class ClusterInstanceResponse(BaseModel):
     db_latency_ms: float
     live: bool
     compatible: bool
+    # False while no process of the instance has synced its Kubernetes credentials;
+    # dispatch skips it until one has. Always True when that feature is off.
+    credentials_synced: bool = True
+    # Fingerprints (not keys) of the key it encrypts with and every key it decrypts
+    # with, so an admin can see where a key rotation stands.
+    primary_fingerprint: str = ""
+    decrypt_fingerprints: list[str] = []
     heartbeat_at: datetime | None = None
 
 

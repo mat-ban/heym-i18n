@@ -107,3 +107,6 @@ Need kiirklahvid on saadaval käivituste ajaloo dialoogis ja käivituste paneeli
 - [Kiire algus](../getting-started/quick-start.md) – Ehitage oma esimene workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Vahekaardid **Mandaadid** ja **DataTable** töötavad samamoodi: `Ctrl + F` / `Cmd + F` fokuseerib otsinguvälja, loend kitseneb tippimise ajal ja `Escape` tühjendab selle.

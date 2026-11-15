@@ -7,7 +7,7 @@ Fliken **Workflows** är standardvyn i instrumentpanelen. Den visar workflowlist
 
 ## Starta en chatt
 
-Ovanför workflowlistan finns en chattruta som hälsar med namn och frågar vad som ska automatiseras. Ange en prompt, bifoga eventuellt en fil och välj önskad credential och modell. Båda rullgardinsmenyerna är sökbara och utgår från [AI-standardinställningarna](../reference/user-settings.md).
+Ovanför workflowlistan finns en chattruta som hälsar med namn och frågar vad som ska automatiseras. Ange en prompt, bifoga eventuellt up to 10 files och välj önskad credential och modell. Båda rullgardinsmenyerna är sökbara och utgår från [AI-standardinställningarna](../reference/user-settings.md).
 
 När meddelandet skickas skapas en ny konversation som öppnas i [fliken Chat](./chat-tab.md), där svaret strömmas in. Tillgängliga bilagor är textfiler, bilder och PDF:er, en per meddelande, på samma sätt som i chattens inmatningsfält.
 

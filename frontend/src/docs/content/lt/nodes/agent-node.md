@@ -116,6 +116,10 @@ Pasirinkite workflow'us agento konfigūracijos skiltyje Sub-Workflows. Agentas j
 
 Galite prijungti palaikomą workflow mazgą prie agento **tools** rankenos, kad agentas galėtų iškviesti tą mazgą vykdymo metu. Tai paverčia esamus drobės veiksmus ir transformacijas iškviečiamais įrankiais nerašant Python kodo.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Naudokite drobės mazgų įrankius, kai norite, kad agentas nuspręstų, kada paleisti sukonfigūruotą mazgą, išlaikant kredencialus, statinius laukus ir workflow'ui būdingus nustatymus mazgo UI.
 
 ### Agento pateikiami laukai
@@ -407,3 +411,6 @@ Suspaudimas yra automatinis ir visada aktyvus Agent mazgams. Jis **netaikomas** 
 - [Quick Start](../getting-started/quick-start.md) – Pagrindinis workflow su LLM ir išraiškomis
 - [Credentials Tab](../tabs/credentials-tab.md) – API raktų pridėjimas agentui
 - [MCP Tab](../tabs/mcp-tab.md) – MCP konfigūravimas workflow įrankiams
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

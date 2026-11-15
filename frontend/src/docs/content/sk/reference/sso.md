@@ -140,3 +140,6 @@ Neúspešné prihlásenie sa vráti na prihlasovaciu obrazovku s čitateľnou sp
 - **Viacerí súčasní poskytovatelia.** Jedna inštancia sa pripája k jednému poskytovateľovi.
 - **Mapovanie skupín alebo rolí** z claimov poskytovateľa.
 - **Single logout.** Odhlásenie z Heym vás neodhlási z poskytovateľa.
+
+- **Dvojfaktorové prihlasovanie je v réžii poskytovateľa.** `HEYM_REQUIRE_MFA` sa vzťahuje iba na prihlásenie heslom; prihlásenie cez SSO nikdy nevyžaduje kód Heym. Vyžadujte MFA u svojho poskytovateľa identity.
+- **Deaktivácia platí aj tu.** Účet, ktorý administrátor deaktivoval v **Nastavenia → Používatelia**, je odmietnutý, aj keď ho poskytovateľ stále autentizuje.

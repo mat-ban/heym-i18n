@@ -107,3 +107,6 @@ Heym 在工作流编辑器和画布中提供了键盘快捷键，以加速常见
 - [快速开始](../getting-started/quick-start.md) – 构建你的第一个工作流
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+**凭证**和 **DataTable** 选项卡的工作方式相同：`Ctrl + F` / `Cmd + F` 聚焦搜索框，列表随输入即时收窄，`Escape` 清除筛选。

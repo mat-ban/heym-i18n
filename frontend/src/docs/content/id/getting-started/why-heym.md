@@ -189,7 +189,7 @@ Sistem trace dirancang khusus untuk men-debug perilaku agentic, dengan payload r
 Setiap panggilan LLM di Heym secara otomatis dihitung biayanya. [Traces Tab](../tabs/traces-tab.md) menampilkan jumlah token input dan output per-trace beserta biaya USD real-time yang berasal dari tabel harga yang tersinkronisasi.
 
 - **Biaya per-trace** – Token input, token output, dan total USD ditampilkan pada setiap baris trace
-- **Analitik biaya** – Kartu KPI dan grafik biaya per-model diperbarui sesuai rentang waktu yang dipilih (1h / 24h / 7d / 30d / All)
+- **Analitik biaya** – Kartu KPI dan grafik biaya per-model diperbarui sesuai rentang waktu yang dipilih (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **LLM Cost Table** – Tabel sistem di [DataTable tab](../tabs/datatable-tab.md) diisi dari Helicone setiap 24 jam; Anda dapat menimpa harga atau menambahkan baris kustom untuk model yang belum terdaftar
 - **Peringatan harga tidak tersedia** – Trace untuk model tanpa entri harga akan menampilkan peringatan inline dengan tautan langsung ke tabel biaya
 
@@ -274,7 +274,7 @@ Workflow dapat dipanggil melalui HTTP di `/api/workflows/{workflow_id}/execute`,
 Heym memiliki dukungan [MCP](../tabs/mcp-tab.md) native di kedua sisi:
 
 - **Sebagai klien**: Node Agent terhubung ke server MCP eksternal (Filesystem, Browserbase, tool kustom) melalui stdio atau SSE dan mengonsumsi tool-nya secara otomatis
-- **Sebagai server**: Workflow dengan MCP yang diaktifkan menjadi tool pada server default di `/api/mcp/sse`, atau pada server bernama dengan URL dan API key-nya sendiri, sehingga Claude Desktop, Cursor, dan klien MCP lainnya dapat memanggil Workflow Heym Anda secara langsung
+- **Sebagai server**: Workflow dengan MCP yang diaktifkan menjadi tool pada server default di `/api/mcp (or /api/mcp/sse for legacy connections)`, atau pada server bernama dengan URL dan API key-nya sendiri, sehingga Claude Desktop, Cursor, dan klien MCP lainnya dapat memanggil Workflow Heym Anda secara langsung
 
 Agen dapat mengonsumsi beberapa server MCP sekaligus, dan Workflow apa pun dapat menjadi tool bagi klien MCP eksternal.
 

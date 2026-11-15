@@ -131,3 +131,6 @@ User Rules се инжектират на системно ниво — те с�
 - [Security](./security.md) – Управление на сесии, rate limiting, криптиране на удостоверения
 - [Single Sign-On](./sso.md) – Свързване на външен OpenID Connect доставчик
 - [OpenTelemetry Tracing](./opentelemetry.md) – Разпределено проследяване за изпълнения на workflow и node
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

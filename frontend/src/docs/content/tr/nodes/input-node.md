@@ -45,7 +45,7 @@
 
 Editördeki **Run** sekmesinde (Defined webhook modu), her giriş alanı sürükle-bırak ve satır içi bir ek denetimini (alanın sağ alt köşesinde) destekler:
 
-- **Metin dosyaları** (`.txt`, `.md`, `.json`, `.csv` ve benzerleri) düz metin olarak okunur.
+- **Metin dosyaları** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Görseller** (JPEG, PNG, GIF, WebP) alan değerinde bir `data:` URL'si (base64) olarak saklanır — alt düğümler görsel verisi beklediğinde `imageUrl` veya `base64` gibi alan anahtarlarını kullanın.
 - **PDF** dosyaları çıkarılan metne dönüştürülür (maksimum 5 MB dosya, 100k karakter içerik).
 

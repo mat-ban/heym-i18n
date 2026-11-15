@@ -72,6 +72,9 @@ Diese Kürzel sind im Reiter Workflows aktiv, wenn keine andere Texteingabe akti
 | `Ctrl + F` / `Cmd + F` | Die Workflow-Suche fokussieren |
 | `Escape` | Die Workflow-Suche leeren, wenn sie Text enthält |
 
+
+Die Tabs **Anmeldedaten** und **DataTable** funktionieren auf dieselbe Weise: `Ctrl + F` / `Cmd + F` fokussiert das Suchfeld, die Liste wird während der Eingabe gefiltert und `Escape` setzt sie zurück.
+
 ## Kürzel im Eigenschaften-Panel
 
 Diese Kürzel sind aktiv, während ein Knoten ausgewählt und das Eigenschaften-Panel geöffnet ist.

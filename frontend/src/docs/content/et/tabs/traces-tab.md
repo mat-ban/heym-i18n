@@ -12,7 +12,7 @@ Leht avaneb statistika kokkuvõttega käivituste loendi kohal, mis arvutatakse v
 - **KPI-kaardid** – Kutsed kokku, tokenid kokku, kulu kokku (USD), keskmine latentsus, vigade %
 - **Tokenid mudeli kaupa** – Sõõrikdiagramm tokenite mahust mudeli kohta
 - **Kulu mudeli kaupa** – Sõõrikdiagramm USD-kulust mudeli kohta. Mudelid, millel puudub hinnastus, kuvavad lingi "Konfigureeri hinnastus" [LLM-i kulutabelisse](./datatable-tab.md#llm-cost-table-system-table)
-- **Kutsed ajas** – Virnastatud pinddiagramm õnnestunud ja ebaõnnestunud kutsetest vahemiku kohta (5 min / 1 h / 6 h / 1 päev, valitakse automaatselt vastavalt vahemikule)
+- **Kutsed ajas** – Virnastatud pinddiagramm õnnestunud ja ebaõnnestunud kutsetest vahemiku kohta (5 min / 15 min / 30 min / 1 h / 6 h / 1 päev, valitakse automaatselt vastavalt vahemikule)
 - **Hinnastamata mudelite teade** – Kuvatakse diagrammide all, kui mõnel jälgitud mudelil puudub hinnarida, viidates LLM-i kulutabelile
 
 ## Ajavahemik
@@ -23,12 +23,13 @@ Leht avaneb statistika kokkuvõttega käivituste loendi kohal, mis arvutatakse v
 
 - Lehekülgedeks jaotatud loend viimastest käivitustest valitud ajavahemikus
 - Iga käivitus kuvab: workflow, sõlm, mandaat, ajatempel, kestus
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Klõpsake käivitusel, et avada üksikasjavaade
 - Kasutage üksikasjade dialoogis **Eelmine / Järgmine**, et liikuda käivituste vahel ilma seda sulgemata
 
 ## Filtreerimine
 
-- **Ajavahemik** – 1h / 24h / 7d / 30d / Kõik; filtreerib diagramme ja loendit koos
+- **Ajavahemik** – 1h / 3h / 6h / 24h / 7d / 30d / Kõik; filtreerib diagramme ja loendit koos
 - **Mandaat** – Filtreerige kasutatud mandaadi (API-võti) järgi
 - **Allikas** – Filtreerige workflow või käivituse allika järgi
 - **Otsing** – Otsige mudeli, workflow, mandaadi või sõlme sildi järgi

@@ -92,6 +92,10 @@ Ciò definisce anche l'ordine di aggiornamento. Aggiornare prima main contrasseg
 
 **Le istanze worker hanno un IP in uscita diverso.** Qualsiasi API che applica un allowlist agli indirizzi di origine vede il nuovo indirizzo. Send Email viene eseguito su main proprio per questo motivo; per il nodo HTTP, o si assegna al cluster un unico indirizzo NAT in uscita, oppure si inseriscono tutte le istanze nell'allowlist.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Aggiungere un worker su un'altra macchina
 
 `docker-compose.worker.yml` nella radice del repository esegue un worker sul proprio host. Non ha database né interfaccia utente: raggiunge il PostgreSQL dell'istanza main e prende la propria quota delle esecuzioni in background.
@@ -124,7 +128,7 @@ Nulla di tutto ciò compare in un'installazione a istanza singola: i campi sono 
 
 **Se un worker si arresta durante un'esecuzione**, il suo heartbeat diventa obsoleto e la procedura di ripristino esistente del leader riesegue l'esecuzione su un'istanza attiva. La riga della coda che aveva reclamato viene ritirata separatamente: una volta che non esiste più alcuna esecuzione attiva per essa e sono trascorsi due minuti di tolleranza, il leader contrassegna la riga come fallita e risveglia chi era in attesa del risultato. La sola anzianità non è mai il trigger, quindi un'esecuzione legittimamente lunga viene lasciata invariata; e la riga viene contrassegnata come fallita anziché rimessa in coda, poiché il ripristino possiede già la riesecuzione e rimetterla in coda eseguirebbe due volte lo stesso workflow.
 
-**Se main va giù**, il cron continua a scattare da un worker e le esecuzioni distribuibili continuano a essere eseguite. Le esecuzioni che richiedono main si accodano e attendono, e si svuotano quando main ritorna — ma solo entro la finestra di tolleranza per i misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 secondi per impostazione predefinita). Qualsiasi esecuzione più vecchia viene chiusa come saltata, con la motivazione registrata, anziché rieseguire ore di arretrato in una sola volta.
+**Se main va giù**, il cron continua a scattare da un worker e le esecuzioni distribuibili continuano a essere eseguite. Le esecuzioni che richiedono main si accodano e attendono, e si svuotano quando main ritorna — ma solo entro la finestra di tolleranza per i misfire (`CRON_MISFIRE_GRACE_SECONDS`, 600 secondi per impostazione predefinita). Qualsiasi esecuzione più vecchia viene chiusa come saltata, con la motivazione registrata, anziché rieseguire ore di arretrato in una sola volta.
 
 L'interfaccia utente, l'API, MCP e l'editor non sono disponibili mentre main è inattivo, poiché l'ingress punta a esso.
 

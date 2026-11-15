@@ -95,7 +95,7 @@ I et `find`- eller `count`-filter betyder en simpel værdi 'lig med'; et objektv
 | `$contains` | Case-insensitiv delstrengsmatch |
 | `$in` | Værdi er i den givne array |
 
-Eksempel der kombinerer flere: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Ukendte operatorer ignoreres. `upsert`-filtre bruger stadig eksakte match-værdier for at finde rækken der skal opdateres.
+Eksempel der kombinerer flere: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Ukendte operatorer ignoreres. `upsert`-filtre bruger stadig eksakte match-værdier for at finde rækken der skal opdateres.
 
 Det er også muligt at filtrere på rækkemetadata - `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` - som gemmes som rigtige kolonner i stedet for inde i dataene. For datoer angives en fuld værdi for interval-sammenligninger (f.eks. `{"created_at": {"$gt": "2026-06-04"}}`) eller brug `$contains` for en delvis tekstmatch (f.eks. `{"created_at": {"$contains": "2026-06-04"}}`). Hvis en af de egne kolonner har samme navn som et metadatafelt, har datakolonnen forrang.
 

@@ -48,6 +48,7 @@ No modo Agent, a caixa **YOLO mode** abaixo do campo de mensagem faz o assistent
 - Digite sua solicitação no campo de entrada (ex.: "Crie um workflow que recebe entrada do usuário e a envia para um LLM")
 - Pressione **Enter** para enviar (Shift+Enter para nova linha)
 - A IA transmite sua resposta em streaming. No modo **Agent**, se a resposta incluir um workflow em um bloco de código \`\`\`json, ele é automaticamente analisado e aplicado ao canvas. No modo **Ask**, o canvas nunca é modificado.
+- Enquanto o JSON do workflow é transmitido, uma linha abaixo da resposta indica o nome do workflow e os nós escritos até o momento, por exemplo `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Utilize **Clear** para redefinir a conversa
 - Passe o mouse sobre uma mensagem e clique em seu ícone de cópia para copiar o texto exibido, incluindo qualquer JSON de workflow
 - Arraste a linha acima da caixa de mensagem para aumentar a altura da caixa. A área de entrada pode crescer até 60% do painel, e retorna à sua altura padrão quando a página é recarregada

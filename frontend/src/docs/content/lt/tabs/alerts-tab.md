@@ -2,6 +2,9 @@
 
 **Įspėjimų** skirtukas leidžia nustatyti slenkstines sąlygas per laiko intervalą ir gauti pranešimus, kai jos yra viršijamos. Heym jau registruoja vykdymo rezultatus, vykdymo trukmę ir LLM išlaidas, tačiau niekada to neskelbia. Įspėjimas yra būdas, kaip to paprašyti.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Žiūrėti Alerts demonstraciją</a></p>
+
 Kiekvienas įspėjimas vertinamas per **laiko intervalą**, kurį pasirinksite, niekada ne pagal vieną įvykį. Vienas nesėkmingas vykdymas yra triukšmas. Dvylika nesėkmingų vykdymų per dešimt minučių yra incidentas.
 
 ## Įspėjimų tipai

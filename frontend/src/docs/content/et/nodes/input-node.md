@@ -45,7 +45,7 @@
 
 Redaktori **Run** vahekaardil (Defined webhook režiim) toetab iga sisendväli lohistamist ja teksti sees olevat manuse juhtelementi (välja alumises paremas nurgas):
 
-- **Tekstifailid** (`.txt`, `.md`, `.json`, `.csv` ja sarnased) loetakse lihttekstina.
+- **Tekstifailid** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Pildid** (JPEG, PNG, GIF, WebP) salvestatakse välja väärtusesse `data:` URL-ina (base64) — kasutage välja võtmeid nagu `imageUrl` või `base64`, kui allavoolu node'id ootavad pildiandmeid.
 - **PDF** failid teisendatakse eraldatud tekstiks (fail max 5 MB, sisu 100k tähemärki).
 

@@ -50,3 +50,8 @@ Docker 기반 로그는 자체 호스팅 배포에서 기본적으로 비활성�
 - [Analytics Tab](./analytics-tab.md) – 실행 지표
 - [Workflows Tab](./workflows-tab.md) – Workflow 관리
 - [Contextual Showcase](../reference/contextual-showcase.md) – 대시보드 화면을 위한 간결한 페이지 가이드
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - 런타임 증상을 올바른 인시던트 절차로 라우팅
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - 데이터베이스, 서비스, 클러스터 및 샌드박스 장애 진단

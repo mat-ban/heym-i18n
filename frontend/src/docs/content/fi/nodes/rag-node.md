@@ -268,3 +268,5 @@ Hyvä tietää:
 - [Kolmannen osapuolen integraatiot](../reference/integrations.md#qdrant) – Qdrant- ja Postgres (pgvector) -tunnistetietojen määrittäminen
 - [Agenttisolmu](./agent-node.md) – Käytä RAG-tuloksia agentin kontekstina
 - [LLM-solmu](./llm-node.md) – Syötä RAG-tulokset LLM-järjestelmäkäskynä
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

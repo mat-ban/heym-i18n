@@ -7,7 +7,7 @@ Karta **Workflows** je predvolené zobrazenie dashboardu. Zobrazuje zoznam Vaši
 
 ## Spustenie Chatu
 
-Nad zoznamom workflowov sa nachádza chat box, ktorý Vás osloví menom a opýta sa, čo chcete automatizovať. Zadajte prompt, voliteľne priložte jeden súbor a vyberte prihlasovacie údaje a model, ktoré chcete použiť. Oba rozbaľovacie zoznamy sú prehľadávateľné a štartujú na Vašich [predvolených nastaveniach AI](../reference/user-settings.md).
+Nad zoznamom workflowov sa nachádza chat box, ktorý Vás osloví menom a opýta sa, čo chcete automatizovať. Zadajte prompt, voliteľne priložte up to 10 files a vyberte prihlasovacie údaje a model, ktoré chcete použiť. Oba rozbaľovacie zoznamy sú prehľadávateľné a štartujú na Vašich [predvolených nastaveniach AI](../reference/user-settings.md).
 
 Odoslaním sa vytvorí nová konverzácia a otvorí sa v [karte Chat](./chat-tab.md), kde sa odpoveď streamuje. Podporované prílohy sú textové súbory, obrázky a PDF, jeden na správu, rovnako ako v chat composer.
 

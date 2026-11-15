@@ -16,6 +16,7 @@
 |------------|-------|-----------|
 | `label` | string | Mazgo identifikatorius (camelCase) |
 | `conversion` | string | `csvToJson` (CSV tekstas → eilučių objektų masyvas), `jsonToCsv` (objektų/eilučių masyvas → CSV tekstas), `xmlToJson` (XML tekstas → objektas), `jsonToXml` (objektas → XML tekstas), `imageToText` (OCR vaizdui), `pdfToText` (OCR kiekvienai pasirinktos PDF puslapiui), arba `fileConvert` (perrašyti saugomą failą kitu formatu) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Duomenys, kuriuos reikia konvertuoti. Palikite tuščią, kad naudotumėte pirmą mazgo įvestį |
 | `delimiter` | string | Vieno simbolio laukų separatorius (numatytasis `,`) |
 | `hasHeader` | boolean | Tik `csvToJson` — laikyti pirmą eilutę kaip antraštę (numatytasis `true`) |
@@ -169,3 +170,6 @@ OCR naudoja `tesseract` ir poppler `pdftoppm`, o dokumentų konversija naudoja p
 - [Drive](./drive-node.md) – Saugojimas, gavimas ir failų dalijimasis
 - [Node Types](../reference/node-types.md) – Visų mazgų tipų apžvalga
 - [Expression DSL](../reference/expression-dsl.md) – Funkcijos ir sintaksė
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

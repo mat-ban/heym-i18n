@@ -26,6 +26,8 @@ Solmu vaatii myös **GitHub**-tunnistetiedot yksityisten repositorioiden kloonaa
 
 Docker-käyttöönotoissa Heym suorittaa Codexin sisarkontissa samasta Heym-kuvasta (ei erillisestä GHCR-kuvasta). Tämä kontti liittää vain Codex-työtilan tilavuuden ja antaa Codexin oman bubblewrap-hiekkalaatikon luoda nimiavaruudet ja uuden `/proc`-hakemiston. Suoritin lisää `SYS_ADMIN`-oikeudet, rajoittamattoman seccomp- ja AppArmor-suojauksen sekä `systempaths=unconfined` (Docker Engine 25+). Ilman viimeistä lippua jokainen komento epäonnistuu käynnistyksen yhteydessä virheellä `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI-viitteet:
 
 - [Codex-tunnistautuminen](https://developers.openai.com/codex/auth)

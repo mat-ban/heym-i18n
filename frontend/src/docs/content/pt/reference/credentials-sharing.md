@@ -87,6 +87,7 @@ Alguns nós armazenam `credentialId` (UUID) em `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Detalhes de conexão do ClickHouse (host, porta, autenticação, banco de dados) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Credencial do bot do Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Credencial de chave pública ou webhook do Discord |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Banco de dados vetorial Qdrant ou Postgres (pgvector), por meio de uma credencial RAG do Qdrant, Psql ou Custom Embeddings |
 | Evals | `credential_id`, `judge_credential_id` | Credencial de modelo; uma credencial de modelo ou de Decision Model para o juiz LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) etapa de IA | `credentialId` | Modelo LLM/Vision (para a etapa de IA e o [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Após a execução, `mask_sensitive_output()` mascara os valores das credenciais
 - [Expression DSL](./expression-dsl.md) – Sintaxe `$credentials`
 - [Tipos de Nó](./node-types.md) – Nós que utilizam credenciais ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Nó Agent](../nodes/agent-node.md) – Utiliza `credentialId` para o LLM
+
+## Permissões de calendário do Google Meet
+
+A partilha de uma [credencial Google Meet](../nodes/google-meet-node.md) permite que os workflows leiam os intervalos livres/ocupados dos calendários acessíveis e criem, alterem ou eliminem eventos como a conta Google associada, incluindo o envio de convites e cancelamentos. O e-mail de participante do visitante não altera qual conta detém ou autoriza o evento. Apenas o proprietário da credencial pode reconectar a autorização Google.

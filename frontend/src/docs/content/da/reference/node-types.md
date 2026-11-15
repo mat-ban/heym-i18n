@@ -68,6 +68,7 @@ Se [Triggers](./triggers.md) for alle indgangspunkter.
 | [Linear](../nodes/linear-node.md) | Håndter Linear-teams, projekter, issues, workflow-tilstande og kommentarer via GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Læs/skriv Google Sheets via OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | List, download, opdater og slet Google Drive-filer via OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Læs tilgængelighed og opret, opdater eller slet Meet-invitationer | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Kør SQL-forespørgsler og indsæt rækker i BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Forespørg og muter Supabase-tabeller via PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Udfør SQL, CRUD og tæloperationer mod ClickHouse | 1 | 1 |

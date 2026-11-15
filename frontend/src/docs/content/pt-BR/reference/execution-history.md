@@ -173,3 +173,7 @@ Os diálogos de histórico do canvas e do dashboard mantêm seus controles de ex
 - [Edit History](./edit-history.md) – Controle de versão para salvamentos de Workflow (reverter, diff)
 - [Quick Start](../getting-started/quick-start.md) – Crie e execute seu primeiro Workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Crie e gerencie Workflows
+
+## Related
+
+- [Operations Runbook (L1): Fila de espera](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Distinguir execuções em fila, retidas, interrompidas e recuperadas antes da repetição

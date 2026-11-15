@@ -69,6 +69,7 @@ Heym 提供多种节点类型用于构建 Workflow。在节点配置中使用[�
 | [Linear](../nodes/linear-node.md) | 通过 GraphQL 管理 Linear 团队、项目、issue、workflow 状态及评论 | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | 通过 OAuth2 读写 Google Sheets | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | 通过 OAuth2 列出、下载、更新及删除 Google Drive 文件 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | 读取空闲状态并创建、更新或删除 Meet 邀请 | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | 在 BigQuery 中运行 SQL 查询并插入行 | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | 通过 PostgREST 查询和修改 Supabase 表 | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | 对 ClickHouse 执行 SQL、CRUD 及计数操作 | 1 | 1 |

@@ -92,6 +92,9 @@ main 角色與 leader 選舉是分開的。Heym 已經會在整個叢集中選�
 
 **Worker 執行個體具有不同的對外 IP。** 任何會將來源位址加入允許清單的 API 都會看到這個新 IP。Send Email 正是基於這個原因而在 main 上執行；至於 HTTP 節點，請為 Cluster 提供單一的 NAT 出口位址，或將每個執行個體都加入允許清單。
 
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## 在另一台機器上新增 worker
 
 儲存庫根目錄中的 `docker-compose.worker.yml` 可在其專屬主機上執行一個 worker。它沒有資料庫，也沒有 UI：它會連上 main 執行個體的 PostgreSQL，並分擔一部分的背景執行。
@@ -124,7 +127,7 @@ Workflow 的[並行限制](./webhooks.md#concurrency-limit-and-queued-runs)是�
 
 **若 worker 在執行途中終止**，其 heartbeat 會變成過期狀態，而 leader 既有的復原清掃機制會在存活的執行個體上重新執行該次執行。該 worker 先前所佔用的佇列資料列則會另行處理：一旦該資料列已無任何進行中的執行，且兩分鐘的寬限期已過，leader 便會將該資料列標記為失敗，並喚醒正在等待結果的對象。單憑存在時間本身永遠不會是觸發條件，因此合法且長時間執行的作業不會受到干擾；而該資料列會被標記為失敗而非重新排入佇列，因為復原機制已負責重新執行，重新排入佇列將導致同一個 Workflow 執行兩次。
 
-**若 main 中斷**，cron 仍會從某個 worker 持續觸發，可分散執行的作業也會繼續執行。需要 main 的執行會排隊等待，並在 main 恢復時消化完畢——但僅限於未觸發寬限視窗內（`HEYM_CRON_MISFIRE_GRACE_SECONDS`，預設為 600 秒）。任何更舊的執行都會以略過作結，並記錄原因，而不是一次重播數小時的積壓作業。
+**若 main 中斷**，cron 仍會從某個 worker 持續觸發，可分散執行的作業也會繼續執行。需要 main 的執行會排隊等待，並在 main 恢復時消化完畢——但僅限於未觸發寬限視窗內（`CRON_MISFIRE_GRACE_SECONDS`，預設為 600 秒）。任何更舊的執行都會以略過作結，並記錄原因，而不是一次重播數小時的積壓作業。
 
 main 中斷期間，UI、API、MCP 與編輯器均無法使用，因為 ingress 指向該處。
 

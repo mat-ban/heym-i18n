@@ -107,3 +107,6 @@ Ces raccourcis sont disponibles dans la boîte de dialogue Historique d'exécuti
 - [Démarrage rapide](../getting-started/quick-start.md) – Créez votre premier workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Les onglets **Identifiants** et **DataTable** fonctionnent de la même manière : `Ctrl + F` / `Cmd + F` active le champ de recherche, la liste se filtre au fil de la frappe et `Échap` l'efface.

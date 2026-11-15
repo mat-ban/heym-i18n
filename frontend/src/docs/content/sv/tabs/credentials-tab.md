@@ -93,3 +93,7 @@ Se [Expression DSL](../reference/expression-dsl.md) för referering av autentise
 - [Fliken Vectorstores](./vectorstores-tab.md) – Använder Qdrant- eller Postgres-autentiseringsuppgifter (pgvector)
 - [Fliken Chat](./chat-tab.md) – Använder OpenAI/Google-autentiseringsuppgifter
 - [Kontextuell översikt](../reference/contextual-showcase.md) – Kompakt sidguide för dashboard-ytor
+
+## Sökning
+
+Använd sökfältet ovanför listan, eller tryck på **Ctrl+F** (eller **Cmd+F**), för att filtrera autentiseringsuppgifter efter namn eller typ medan du skriver. Tryck på **Escape** för att rensa sökningen.

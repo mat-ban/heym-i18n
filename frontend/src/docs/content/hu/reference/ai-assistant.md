@@ -48,6 +48,7 @@ Agent módban az üzenetmező alatti **YOLO mode** jelölőnégyzet hatására a
 - Írja be a kérését a beviteli mezőbe (pl. „Create a workflow that takes user input and sends it to an LLM")
 - Nyomja meg az **Enter** billentyűt a küldéshez (Shift+Enter az új sorhoz)
 - Az AI streameli a válaszát. **Agent** módban, ha a válasz tartalmaz egy workflow-t egy \`\`\`json kódblokkban, az automatikusan feldolgozásra kerül és a vászonra kerül. **Ask** módban a vászon soha nem módosul.
+- Miközben a workflow JSON kódja streamelődik, a válasz alatti sor megnevezi a workflow-t és az eddig megírt csomópontokat, például `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - A **Clear** gombbal állíthatja vissza a beszélgetést
 - Vigye az egérmutatót egy üzenet fölé, és kattintson a másolás ikonjára a megjelenített szöveg másolásához, beleértve a workflow JSON-t is
 - Húzza az üzenetmező feletti vonalat a mező magasabbá tételéhez. A beviteli terület a panel 60%-áig növekedhet, és az oldal újratöltésekor visszaáll az alapértelmezett magasságára

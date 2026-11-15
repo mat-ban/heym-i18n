@@ -94,3 +94,7 @@ Consulte [Expression DSL](../reference/expression-dsl.md) para hacer referencia 
 - [Pestaña Vectorstores](./vectorstores-tab.md) – Utiliza credenciales de Qdrant o Postgres (pgvector)
 - [Pestaña Chat](./chat-tab.md) – Utiliza credenciales de OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guía compacta de páginas para las superficies del panel
+
+## Búsqueda
+
+Utilice el campo de búsqueda situado sobre la lista o pulse **Ctrl+F** (o **Cmd+F**) para filtrar credenciales por nombre o tipo mientras escribe. Pulse **Escape** para borrar la búsqueda.

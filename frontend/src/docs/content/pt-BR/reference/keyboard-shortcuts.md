@@ -107,3 +107,6 @@ Esses atalhos estão disponíveis no diálogo de Execution History e no painel d
 - [Início Rápido](../getting-started/quick-start.md) – Construa seu primeiro workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+As guias **Credenciais** e **DataTable** funcionam da mesma maneira: `Ctrl + F` / `Cmd + F` foca o campo de pesquisa, a lista é filtrada enquanto você digita e `Escape` a limpa.

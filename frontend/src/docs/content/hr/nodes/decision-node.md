@@ -157,6 +157,8 @@ Uređivanje vjerodajnice zadržava pohranjeni ključ kada je polje ključa prazn
 
 Ista vjerodajnica može ocjenjivati [Evaluacije](../tabs/evals-tab.md): s odabranim **LLM-as-Judge**, odaberite je kao suca, a odluke modela ocjenjuju svaki odgovor prema očekivanom izlazu.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym prema zadanim postavkama blokira odlazne zahtjeve na privatne i loopback adrese, pa endpoint odluke koji sami pokrećete na `localhost` ili privatnom rasponu treba `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Modeli odluka ne pojavljuju se u tablicama cijena LLM-a koje Heym sinkronizira, pa kolona **Trošak** u [Izvještajima](../tabs/traces-tab.md) ostaje prazna za ove pozive. Broj tokena se i dalje bilježi, a možete dodati svoju cijenu s prepravkom cijene.

@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | Node identifier (camelCase) |
 | `conversion` | string | `csvToJson` (CSV text → array of row objects), `jsonToCsv` (array of objects/rows → CSV text), `xmlToJson` (XML text → object), `jsonToXml` (object → XML text), `imageToText` (OCR an image), `pdfToText` (OCR every selected PDF page), or `fileConvert` (rewrite a stored file in another format) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | The data to convert. Leave empty to use the node's first input |
 | `delimiter` | string | Single-character field separator (default `,`) |
 | `hasHeader` | boolean | `csvToJson` only — treat the first row as the header (default `true`) |
@@ -169,3 +170,6 @@ OCR kasutab välist käsku `tesseract` ja poppleri `pdftoppm`, dokumentide konve
 - [Drive](./drive-node.md) – Failide salvestamine, toomine ja jagamine
 - [Node Types](../reference/node-types.md) – Ülevaade kõigist sõlmetüüpidest
 - [Expression DSL](../reference/expression-dsl.md) – Funktsioonid ja süntaks
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

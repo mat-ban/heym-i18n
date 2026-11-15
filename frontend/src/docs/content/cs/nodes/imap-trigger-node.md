@@ -16,6 +16,7 @@ Uzel **IMAP Trigger** v pravidelných intervalech kontroluje e-mailovou schránk
 |-----------|------|-------------|
 | `credentialId` | UUID | Přihlašovací údaj `imap` obsahující server, přihlašovací údaje, schránku a nastavení SSL |
 | `pollIntervalMinutes` | Integer | Jak často Heym kontroluje schránku na nové e-maily |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Průvodce nastavením
 
@@ -62,6 +63,8 @@ Po spuštění uzlu mohou navazující uzly přistupovat k:
 | `$nodeLabel.email.text` | Tělo ve formátu prostého textu |
 | `$nodeLabel.email.html` | Tělo ve formátu HTML |
 | `$nodeLabel.email.attachments` | Pole metadat příloh (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekódovaný objekt hlaviček |
 | `$nodeLabel.email.uid` | IMAP UID pro deduplikaci nebo protokolování |
 | `$nodeLabel.triggered_by` | Označení zdroje triggeru (`"imap"`) |

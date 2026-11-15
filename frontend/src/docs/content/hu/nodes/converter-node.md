@@ -16,6 +16,7 @@ A **Converter** csomópont kód írása nélkül alakítja át az adatokat és f
 |-----------|------|-------------|
 | `label` | string | Csomópont-azonosító (camelCase) |
 | `conversion` | string | `csvToJson` (CSV szöveg → sorelemek tömbje), `jsonToCsv` (objektumok/sorok tömbje → CSV szöveg), `xmlToJson` (XML szöveg → objektum), `jsonToXml` (objektum → XML szöveg), `imageToText` (egy kép OCR-feldolgozása), `pdfToText` (a kiválasztott PDF-oldalak OCR-feldolgozása), vagy `fileConvert` (egy tárolt fájl átírása más formátumba) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Az átalakítandó adat. Hagyja üresen, hogy a csomópont első bemenetét használja |
 | `delimiter` | string | Egykarakteres mezőelválasztó (alapértelmezett: `,`) |
 | `hasHeader` | boolean | Csak `csvToJson` esetén — az első sor fejlécként való kezelése (alapértelmezett: `true`) |
@@ -169,3 +170,6 @@ Az OCR a `tesseract` és a poppler `pdftoppm` programját hívja meg, a dokument
 - [Drive](./drive-node.md) – Fájlok tárolása, lekérése és megosztása
 - [Node Types](../reference/node-types.md) – Az összes csomóponttípus áttekintése
 - [Expression DSL](../reference/expression-dsl.md) – Függvények és szintaxis
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

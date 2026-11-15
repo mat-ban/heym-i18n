@@ -116,6 +116,8 @@ Referensikan file yang disimpan di hilir: `$saveAudio.id`, `$saveAudio.download_
 
 Referensikan konten base64 di hilir: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Gambar yang dikembalikan melalui `file_base64` ditampilkan secara inline di panel debug ketika Anda menjalankan workflow.
 
 ## Contoh — Menampilkan Daftar File Drive

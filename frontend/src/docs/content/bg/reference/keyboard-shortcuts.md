@@ -107,3 +107,6 @@ Command Palette е достъпна от редактора, таблото, д�
 - [Бърз старт](../getting-started/quick-start.md) – Създайте своя първи Workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Разделите **Идентификационни данни** и **DataTable** работят по същия начин: `Ctrl + F` / `Cmd + F` фокусира полето за търсене, списъкът се стеснява при въвеждане, а `Escape` го изчиства.

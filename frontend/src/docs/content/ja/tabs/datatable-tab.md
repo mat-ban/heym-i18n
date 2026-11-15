@@ -123,3 +123,6 @@ Traces ダッシュボードがコストを計算する際、各 `trace.model` �
 - [Traces Tab](./traces-tab.md) - コストドーナツと KPI カードに LLM Cost Table を使用します
 - [Grist Node](../nodes/grist-node.md) - 外部スプレッドシートの代替
 - [Variables Tab](./global-variables-tab.md) - キーと値のストレージの代替
+## 検索
+
+テーブル一覧上部の検索フィールドを使用するか、**Ctrl+F**（または **Cmd+F**）を押して、入力中に名前や説明でテーブルを絞り込みます。検索をクリアするには **Escape** を押します。

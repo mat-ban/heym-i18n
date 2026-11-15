@@ -93,3 +93,7 @@ Consultați [Expression DSL](../reference/expression-dsl.md) pentru referirea va
 - [Fila Vectorstores](./vectorstores-tab.md) – Utilizează credențiale Qdrant sau Postgres (pgvector)
 - [Fila Chat](./chat-tab.md) – Utilizează credențiale OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Ghid compact de pagină pentru suprafețele dashboard-ului
+
+## Căutare
+
+Utilizați câmpul de căutare de deasupra listei sau apăsați **Ctrl+F** (sau **Cmd+F**) pentru a filtra acreditările după nume sau tip pe măsură ce tastați. Apăsați **Escape** pentru a goli căutarea.

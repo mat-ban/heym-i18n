@@ -16,6 +16,7 @@ Noden **IMAP-Trigger** pollar en e-postinkorg med ett fast intervall och startar
 |-----------|-----|-------------|
 | `credentialId` | UUID | `imap`-autentiseringsuppgift som innehåller server, inloggning, brevlåda och SSL-inställningar |
 | `pollIntervalMinutes` | Heltal | Hur ofta Heym kontrollerar brevlådan för ny e-post |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Installationsguide
 
@@ -62,6 +63,8 @@ Efter att noden har triggat kan efterföljande noder komma åt:
 | `$nodeLabel.email.text` | Brödtext i klartext |
 | `$nodeLabel.email.html` | HTML-brödtext |
 | `$nodeLabel.email.attachments` | Array med metadata för bilagor (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Avkodat header-objekt |
 | `$nodeLabel.email.uid` | IMAP UID för deduplicering eller loggning |
 | `$nodeLabel.triggered_by` | Etikett för trigger-källa (`"imap"`) |

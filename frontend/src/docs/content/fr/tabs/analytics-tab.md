@@ -65,3 +65,7 @@ Survolez un graphique pour afficher le type de nœud sous le curseur, juste à c
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guide de page compact pour les surfaces du dashboard
 
 Lorsqu'un graphique affiche une tendance que vous souhaitez voir signalée plutôt que surveiller vous-même, transformez-la en [alerte](./alerts-tab.md) : le nombre d'erreurs, la durée d'exécution, les dépenses LLM et le nombre d'exécutions peuvent tous se voir attribuer un seuil sur une fenêtre temporelle.
+
+## Related
+
+- [Operations Runbook (L1) : Utilisation des ressources](../reference/operations-runbook.md#most-resource-consuming-workflows) - Trouvez les workflows volumineux et longs, et corrélez CPU, mémoire et tokens

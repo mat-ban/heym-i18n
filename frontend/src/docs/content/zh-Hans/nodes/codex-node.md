@@ -26,6 +26,8 @@ Codex 凭证不接受 API key。该节点不会提交云端 Codex 任务；它�
 
 在 Docker 部署中，Heym 从同一个 Heym 镜像（而非单独的 GHCR 镜像）启动一个同级容器来运行 Codex。该容器仅挂载 Codex 工作区卷，并允许 Codex 自带的 bubblewrap 沙箱创建命名空间和全新的 `/proc`。运行器添加了 `SYS_ADMIN`、非限制的 seccomp 和 AppArmor，以及 `systempaths=unconfined`（Docker Engine 25+）。如果没有最后一个标志，每条命令都会在启动前失败，并报错 `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`。
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI 参考：
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

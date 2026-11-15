@@ -65,3 +65,7 @@ Zadržite pokazivač iznad grafikona kako biste vidjeli vrstu čvora ispod pokaz
 - [Kontekstualna Izložba](../reference/contextual-showcase.md) – Kompaktni vodič za površine nadzorne ploče
 
 Kada grafikon pokaže trend o kojem želite biti obaviješteni umjesto da ga pratite, pretvorite ga u [upozorenje](./alerts-tab.md): broj grešaka, trajanje pokretanja, LLM troškovi i broj izvršavanja mogu imati postavljenu granicu tijekom vremenskog razdoblja.
+
+## Related
+
+- [Operations Runbook (L1): Korištenje resursa](../reference/operations-runbook.md#most-resource-consuming-workflows) - Pronađite radne tokove velikog volumena i dugog izvođenja te korelirajte CPU, memoriju i tokene

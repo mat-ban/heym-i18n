@@ -69,6 +69,7 @@ Xem [Triggers](./triggers.md) để biết tất cả các điểm nhập.
 | [Linear](../nodes/linear-node.md) | Quản lý team, dự án, issue, trạng thái workflow và bình luận Linear thông qua GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Đọc/ghi Google Sheets qua OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Liệt kê, tải xuống, cập nhật và xóa tệp Google Drive qua OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Đọc tính khả dụng và tạo, cập nhật hoặc xóa lời mời Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Chạy truy vấn SQL và chèn hàng trong BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Truy vấn và thay đổi bảng Supabase thông qua PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Chạy SQL, CRUD và các thao tác đếm trên ClickHouse | 1 | 1 |

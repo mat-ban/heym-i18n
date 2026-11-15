@@ -6,8 +6,10 @@ One `ChatBuildSession` belongs to one chat turn that may build. The chat engine
 on the instance that received the request, so the audit trail stays where AGENTS.md wants it.
 """
 
+import asyncio
 import json
 import uuid
+from collections.abc import Sequence
 from threading import Event
 from typing import Any
 
@@ -30,8 +32,9 @@ from app.api.ai_assistant import (
 from app.api.chat_evals import ChatEvalTools
 from app.api.workflows import extract_input_fields_from_workflow, get_workflow_for_user
 from app.db.models import Credential, User, Workflow
-from app.services import template_service
+from app.services import file_intake_service, template_service
 from app.services.audit_log import audit
+from app.services.chat_attachments import run_attachment
 from app.services.chat_build_mode import (
     AI_BUILDER_TOOL_NAMES,
     BUDGET_SPENT_MESSAGE,
@@ -48,6 +51,8 @@ from app.services.chat_build_mode import (
     tool_error,
 )
 from app.services.chat_eval_mode import eval_instructions
+from app.services.chat_image_input import image_input
+from app.services.chat_progress import ToolProgress
 from app.services.collab.saves import queue_collab_saved
 from app.services.credential_access import load_accessible_credential_ids
 from app.services.credential_catalog import (
@@ -69,6 +74,8 @@ from app.services.data_table_catalog import (
     format_data_tables_prompt,
     load_data_table_catalog,
 )
+from app.services.file_sandbox.manifest import FileAccessError, resolve_files
+from app.services.file_sandbox.workspace import FileWorkspace
 from app.services.generated_credentials import (
     apply_generated_credentials,
     parse_credential_choices,
@@ -87,7 +94,7 @@ from app.services.skill_apply import (
 )
 from app.services.skill_archive import SkillBundle, decode_zip_payload, read_zip
 from app.services.workflow_access import user_can_write_workflow
-from app.services.workflow_dsl_prompt import build_assistant_prompt
+from app.services.workflow_dsl_prompt import build_assistant_prompt, workflow_dsl_reference
 from app.services.workflow_save import (
     WorkflowSnapshot,
     add_workflow_version,
@@ -150,6 +157,13 @@ RUN_WORKFLOW_TEST_TOOL_SCHEMA: dict[str, Any] = {
                 "expect": {
                     "type": "string",
                     "description": "One sentence describing what a successful run returns.",
+                },
+                "sample_file": {
+                    "type": "string",
+                    "description": (
+                        "Drive file id or exact name handed to the workflow's File Upload "
+                        "trigger. Defaults to the file attached in this conversation."
+                    ),
                 },
             },
             "required": ["inputs", "expect"],
@@ -227,6 +241,17 @@ FINISH_TOOL_SCHEMA: dict[str, Any] = {
 }
 
 
+def _resolve_sample_file(user_id: uuid.UUID, ref: str) -> uuid.UUID:
+    """A Drive file the Chat user reaches, by id or exact name (Chat's own access)."""
+    from app.db.session import SessionLocal
+
+    with SessionLocal() as db:
+        refs = resolve_files(db, user_id, [ref])
+    if not refs:
+        raise FileAccessError(f"File not found or not accessible: {ref}")
+    return refs[0].id
+
+
 class ChatBuildSession:
     """The build tools of one chat turn and what they have done."""
 
@@ -242,8 +267,9 @@ class ChatBuildSession:
         public_base_url: str,
         cancel_event: Event | None,
         llm_session_id: str | None,
-        attachment: FileAttachment | None = None,
+        attachments: Sequence[FileAttachment] = (),
         credential_form: CredentialFormTool | None = None,
+        conversation_id: uuid.UUID | None = None,
     ) -> None:
         self.db = db
         self.user = user
@@ -255,7 +281,8 @@ class ChatBuildSession:
         self.cancel_event = cancel_event
         # Every model request and test run in the turn carries one non-empty session id.
         self.llm_session_id = llm_session_id or str(uuid.uuid4())
-        self.attachment = attachment
+        self.attachments = list(attachments)
+        self.conversation_id = conversation_id
         # MCP turns: credentials are created on a Heym page, never in the chat.
         self.credential_form = credential_form
         self.progress = BuildProgress(workflow_id=request.target_workflow_id)
@@ -272,8 +299,17 @@ class ChatBuildSession:
     def builder_mode(self) -> CredentialPromptMode:
         return _builder_credential_mode(self.credential_mode)
 
-    async def prompt(self) -> str:
-        """The build mode instructions and the Workflow DSL reference for this user."""
+    def reference(self) -> str:
+        """The Workflow DSL reference, the same on every request, so it goes early and caches."""
+        if self.request.skill_only:
+            return ""
+        return f"\n\n## Workflow DSL reference\n\n{workflow_dsl_reference()}"
+
+    async def prompt(self, workflows: list[dict[str, Any]] | None = None) -> str:
+        """The build mode instructions and this user's part of the AI Builder prompt.
+
+        `workflows` is the user's workflow list when the caller already has it.
+        """
         target = await self._target_workflow()
         skill_block = skill_write_instructions(
             target.name if target is not None else None,
@@ -292,12 +328,14 @@ class ChatBuildSession:
             if target is not None
             else None
         )
+        if workflows is None:
+            workflows = await get_workflows_for_user_with_inputs(self.db, self.user.id)
         templates = await template_service.list_node_templates(self.db, self.user, None)
         catalog = await load_credential_catalog(self.db, self.user.id)
         table_catalog = await load_data_table_catalog(self.db, self.user.id)
-        reference = build_assistant_prompt(
+        user_context = build_assistant_prompt(
             current_workflow,
-            await get_workflows_for_user_with_inputs(self.db, self.user.id),
+            workflows,
             None,
             available_node_templates=[
                 {
@@ -315,15 +353,13 @@ class ChatBuildSession:
             data_tables_prompt=format_data_tables_prompt(
                 table_catalog, DataTablePromptMode.APPLY_CHOICES
             ),
+            include_reference=False,
         )
         instructions = build_mode_instructions(
             target.name if target is not None else None,
             target.id if target is not None else None,
         )
-        return (
-            f"{instructions}\n{eval_instructions()}\n{skill_block}\n"
-            f"## Workflow DSL reference\n\n{reference}"
-        )
+        return f"{instructions}\n{eval_instructions()}\n{skill_block}{user_context}"
 
     def tools(self, base_tools: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """The chat's own tools without the AI Builder, plus what build mode allows now."""
@@ -378,7 +414,7 @@ class ChatBuildSession:
             "edges": len(edges) if isinstance(edges, list) else 0,
         }
 
-    def step_label(self, name: str) -> str:
+    def step_label(self, name: str, _args: dict[str, Any] | None = None) -> str:
         if self.evals is not None and self.evals.handles(name):
             return self.evals.step_label(name)
         if name == REQUEST_CREDENTIAL_FORM_TOOL:
@@ -392,7 +428,10 @@ class ChatBuildSession:
             return f"Testing the workflow · attempt {attempt}/{MAX_BUILD_TEST_RUNS}..."
         return "Finishing..."
 
-    async def call(self, name: str, args: dict[str, Any]) -> BuildToolOutcome:
+    async def call(
+        self, name: str, args: dict[str, Any], *, progress: ToolProgress | None = None
+    ) -> BuildToolOutcome:
+        """Run one build tool; a test run describes its running node on `progress`."""
         if name == REQUEST_CREDENTIAL_FORM_TOOL and self.credential_form is not None:
             form = await self.credential_form.call(args, cancel_event=self.cancel_event)
             return BuildToolOutcome(result=form.result, summary=form.summary, status=form.status)
@@ -405,7 +444,7 @@ class ChatBuildSession:
         if name == SAVE_WORKFLOW_TOOL:
             return await self._save(args)
         if name == RUN_WORKFLOW_TEST_TOOL:
-            return await self._run_test(args)
+            return await self._run_test(args, progress)
         return await self._finish(args)
 
     async def _target_workflow(self) -> Workflow | None:
@@ -555,30 +594,34 @@ class ChatBuildSession:
         return BuildToolOutcome(result=result, summary=summary, status="success", events=[event])
 
     def _attached_bundle(self, skill_name: str | None) -> SkillBundle | BuildToolOutcome | None:
-        """The skill in this turn's zip, or None when the zip is ordinary context."""
-        if self.attachment is None or self.attachment.kind != "zip":
+        """The skill in this turn's zips, or None when the zips are ordinary context."""
+        zips = [attachment for attachment in self.attachments if attachment.kind == "zip"]
+        skills: list[SkillBundle] = []
+        for attachment in zips:
+            raw = decode_zip_payload(attachment.content)
+            if raw is None:
+                return tool_error(
+                    "The zip could not be read."
+                    if len(zips) == 1
+                    else f"The zip {attachment.name} could not be read."
+                )
+            skills.extend(read_zip(raw).skills)
+        if not skills:
             return None
-        raw = decode_zip_payload(self.attachment.content)
-        if raw is None:
-            return tool_error("The zip could not be read.")
-        reading = read_zip(raw)
-        if not reading.skills:
-            return None
-        if len(reading.skills) == 1:
-            return reading.skills[0]
+        if len(skills) == 1:
+            return skills[0]
         if skill_name:
-            matches = [
-                skill for skill in reading.skills if skill.name.casefold() == skill_name.casefold()
-            ]
+            matches = [skill for skill in skills if skill.name.casefold() == skill_name.casefold()]
             if len(matches) == 1:
                 return matches[0]
-        names = ", ".join(skill.name for skill in reading.skills)
+        names = ", ".join(skill.name for skill in skills)
+        source = "The zip has" if len(zips) == 1 else "The zips have"
         return BuildToolOutcome(
             result=json.dumps(
                 {
                     "status": "needs_choice",
-                    "message": f"The zip has several skills ({names}). Pass skill_name.",
-                    "skills": [skill.name for skill in reading.skills],
+                    "message": f"{source} several skills ({names}). Pass skill_name.",
+                    "skills": [skill.name for skill in skills],
                 }
             ),
             summary="Needs a choice of skill",
@@ -749,7 +792,9 @@ class ChatBuildSession:
             return tool_error(f"This turn changes workflow {target}; pass that id or none.")
         return requested
 
-    async def _run_test(self, args: dict[str, Any]) -> BuildToolOutcome:
+    async def _run_test(
+        self, args: dict[str, Any], progress: ToolProgress | None = None
+    ) -> BuildToolOutcome:
         if self.progress.budget_spent:
             return BuildToolOutcome(
                 result=json.dumps({"status": "refused", "error": BUDGET_SPENT_MESSAGE}),
@@ -761,12 +806,28 @@ class ChatBuildSession:
             return tool_error("Save the workflow with save_workflow before testing it.")
         inputs = dict(args.get("inputs") or {}) if isinstance(args.get("inputs"), dict) else {}
         expect = str(args.get("expect") or "").strip()
+        try:
+            sample_file_id = await self._sample_file_id(args, workflow)
+        except FileAccessError as exc:
+            return tool_error(str(exc))
         run_inputs = dict(inputs)
-        if self.attachment is not None and self.attachment.kind != "zip":
-            field_keys = [f.key for f in extract_input_fields_from_workflow(workflow)]
-            inject_key = _find_injection_field(field_keys, self.attachment.kind)
+        field_keys = [f.key for f in extract_input_fields_from_workflow(workflow)]
+        attachment = self._run_attachment(args)
+        if attachment is not None and attachment.kind not in ("zip", "file"):
+            inject_key = _find_injection_field(field_keys, attachment.kind)
             if inject_key:
-                run_inputs[inject_key] = self.attachment.content
+                run_inputs[inject_key] = attachment.injection_value()
+        elif attachment is not None and attachment.kind == "file":
+            # An image from Drive still reaches the workflow's image input as itself.
+            image = await image_input(
+                self.db,
+                self.user.id,
+                file_id=attachment.file_id,
+                mime=attachment.mime,
+                field_keys=field_keys,
+            )
+            if image is not None:
+                run_inputs[image[0]] = image[1]
         raw = await run_execute_workflow_tool(
             self.db,
             self.user.id,
@@ -775,6 +836,8 @@ class ChatBuildSession:
             self.public_base_url,
             self.cancel_event,
             llm_session_id=self.llm_session_id,
+            progress=progress,
+            sample_file_id=sample_file_id,
         )
         try:
             result = json.loads(raw)
@@ -785,6 +848,8 @@ class ChatBuildSession:
         attempt = self.progress.record_run(str(result.get("status") or "error"))
         report = build_run_report(result, attempt=attempt, inputs=inputs, expect=expect)
         report["test_runs_left"] = MAX_BUILD_TEST_RUNS - self.progress.runs_used
+        if result.get("sample_file"):
+            report["sample_file"] = result["sample_file"]
         if self.progress.budget_spent:
             report["budget_spent"] = BUDGET_SPENT_MESSAGE
         seconds = result.get("execution_time_ms")
@@ -795,6 +860,41 @@ class ChatBuildSession:
             summary=f"Attempt {attempt}/{MAX_BUILD_TEST_RUNS} · {status}{duration}",
             status="success" if status == "success" else "error",
         )
+
+    def _run_attachment(self, args: dict[str, Any]) -> FileAttachment | None:
+        """The turn's attachment a test run receives: the one its inputs or sample_file name."""
+        inputs = args.get("inputs") if isinstance(args.get("inputs"), dict) else {}
+        return run_attachment(
+            self.attachments, {"inputs": inputs, "sample_file": args.get("sample_file")}
+        )
+
+    async def _sample_file_id(self, args: dict[str, Any], workflow: Workflow) -> uuid.UUID | None:
+        """The Drive file a test run hands to the workflow's File Upload trigger.
+
+        The file the model names, else the turn's attachment its inputs name (or its first
+        Drive file), else the file this
+        conversation opened last (only when the workflow has an upload trigger).
+
+        Raises:
+            FileAccessError: the named file is missing or the user cannot reach it.
+        """
+        named = str(args.get("sample_file") or "").strip()
+        if named:
+            return await asyncio.to_thread(_resolve_sample_file, self.user.id, named)
+        attachment = self._run_attachment(args)
+        if attachment is not None and attachment.kind == "file":
+            return attachment.file_id
+        if self.conversation_id is None:
+            return None
+        if file_intake_service.find_file_upload_trigger(workflow.nodes or []) is None:
+            return None
+        workspace = FileWorkspace.for_chat(self.user.id, self.conversation_id)
+        for entry in reversed(await asyncio.to_thread(workspace.inputs)):
+            try:
+                return uuid.UUID(str(entry.get("id")))
+            except ValueError:
+                continue
+        return None
 
     async def _finish(self, args: dict[str, Any]) -> BuildToolOutcome:
         refusal = self.progress.finish_refusal()

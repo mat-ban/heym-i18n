@@ -87,6 +87,7 @@ Kai kurie mazgai saugo `credentialId` (UUID) `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse prisijungimo detalės (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot kredencialas |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord viešasis raktas arba webhook kredencialas |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vektorių saugykla | `credential_id` | Qdrant arba Postgres (pgvector) vektorinė DB, per Qdrant, Psql arba Custom Embeddings RAG kredencialą |
 | Vertinimai | `credential_id`, `judge_credential_id` | Modelio kredencialas; modelio arba Decision Model kredencialas LLM-as-Judge teisėjui |
 | [Playwright](../nodes/playwright-node.md) AI žingsnis | `credentialId` | LLM/Vizijos modelis (AI žingsniui ir [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Po vykdymo, `mask_sensitive_output()` maskuoja kredencialų reikšmes išvestyse
 - [Expression DSL](./expression-dsl.md) – `$credentials` sintaksė
 - [Mazgų tipai](./node-types.md) – Mazgai, kurie naudoja kredencialus ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Naudoja `credentialId` LLM.
+
+## Google Meet kalendoriaus leidimai
+
+[Google Meet kredencialo](../nodes/google-meet-node.md) bendrinimas leidžia darbo eigoms skaityti pasiekiamų kalendorių laisvo / užimto laiko intervalus ir kurti, modifikuoti arba ištrinti įvykius kaip prijungtai Google paskyrai, įskaitant kvietimų ir atšaukimų siuntimą. Lankytojo dalyvio el. paštas nekeičia paskyros, kuriai priklauso įvykis arba kuri jį autorizuoja. Tik kredencialo savininkas gali iš naujo prijungti savo Google autorizaciją.

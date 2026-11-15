@@ -8,6 +8,7 @@ distributed_lock.py's pid-based worker id is a different concept entirely.
 from __future__ import annotations
 
 import hashlib
+import hmac
 import re
 
 from app.config import settings
@@ -45,7 +46,26 @@ def keys_fingerprint() -> str:
     credentials, and the resulting run failures name nothing useful. Comparing
     digests turns that into a visible incompatibility. The keys themselves are
     never stored or returned.
+
+    Each half is an HMAC keyed by the key it stands for, not a plain hash of it:
+    the Fernet key is ``sha256(ENCRYPTION_KEY)`` itself (services/encryption.py),
+    so a prefix of that digest would store part of the signing key.
     """
-    enc = hashlib.sha256(settings.encryption_key.encode()).hexdigest()[:16]
-    sec = hashlib.sha256(settings.secret_key.encode()).hexdigest()[:16]
-    return f"{enc}{sec}"
+    return f"{_key_digest(settings.encryption_key)}{_key_digest(settings.secret_key)}"
+
+
+def primary_fingerprint() -> str:
+    """The ENCRYPTION_KEY half of keys_fingerprint: the key this instance encrypts with."""
+    return _key_digest(settings.encryption_key)
+
+
+def decrypt_fingerprints() -> list[str]:
+    """Fingerprints of every key this instance decrypts with, ENCRYPTION_KEY first."""
+    return [_key_digest(key) for key in settings.encryption_keys]
+
+
+_FINGERPRINT_LABEL = b"heym-keys-fingerprint"
+
+
+def _key_digest(key: str) -> str:
+    return hmac.new(key.encode(), _FINGERPRINT_LABEL, hashlib.sha256).hexdigest()[:16]

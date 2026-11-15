@@ -116,6 +116,8 @@ Parametr `driveBase64Content` přijímá nezpracovaný base64 řetězec nebo dat
 
 Na obsah base64 odkazujte v následujících uzlech: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Obrázky vrácené prostřednictvím `file_base64` se při spuštění workflow zobrazí přímo v panelu pro ladění.
 
 ## Příklad — Výpis souborů v Drive

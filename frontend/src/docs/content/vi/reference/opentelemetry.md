@@ -72,6 +72,7 @@ Tên: `heym.agent.tool.execute`, được tạo dưới Agent node span đang ho
 | `heym.agent.tool.args_bytes` | Kích thước UTF-8 của các đối số tool đã tuần tự hóa. |
 | `heym.agent.tool.result_bytes` | Kích thước UTF-8 của kết quả tool đã tuần tự hóa. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` hoặc `cancelled`. Lỗi tool sẽ đặt trạng thái span thành `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Các đối số và kết quả tool thô không được đính kèm vào span theo mặc định.
 

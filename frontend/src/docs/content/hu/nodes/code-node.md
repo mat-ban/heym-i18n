@@ -19,6 +19,7 @@ A **Kód** csomópont az Ön által írt Python kódot futtatja, saját `require
 | `codeParameters` | expression | Egy JSON objektum, amely a workflow adatait köti be a kódba. A kifejezések a kód futtatása előtt kerülnek kiértékelésre |
 | `codeRequirements` | string | A `requirements.txt` tartalma, soronként egy csomaggal. Üresen hagyva kihagyja a telepítést |
 | `codeAllowNetwork` | boolean | Engedélyezheti-e a kód számára a hálózati elérést (alapértelmezett: `false`) |
+| `codeFiles` | expression | Optional Drive files mounted read-only for the run: an id, several ids, or an expression such as `$Upload.file.id` |
 
 ## A `main` függvény
 
@@ -124,3 +125,16 @@ def main(params):
 ```
 
 Ha a `codeParameters` értéke `{ "rows": "$fetchRows.result" }`, az alsóbb csomópontok a `$scoreRows.result.total` értéket olvassák.
+## Reading Drive files
+
+Set **Files** (`codeFiles`) to give the code the files of the run. It accepts an id, ids separated by commas, a list, or an expression that resolves to a file or its id, such as `$Upload.file.id` or `$Upload.file`. A file opens when it came into this workflow: uploaded through its [File Upload trigger](./file-upload-trigger-node.md) or written to [Drive](../reference/drive.md) by one of its nodes. Other Drive files are not available to a run, so a workflow cannot be used to read someone's Drive.
+
+```python
+import heym_files
+import pandas as pd
+
+def main(params):
+    workbook = params.files[0]
+    df = pd.read_excel(heym_files.path(workbook.name), sheet_name="Summary")
+    return {"rows": len(df), "columns": list(df.columns)}
+```

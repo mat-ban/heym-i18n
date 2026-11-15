@@ -19,7 +19,7 @@ Alguns nós de integração **não** exigem credenciais. O [WebSocket Trigger](.
 | **Linear** | [Nó Linear](../nodes/linear-node.md) | `api_key`, ou `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Nó Sentry](../nodes/sentry-node.md) | `api_token`, `base_url` opcional |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Avaliações](../tabs/evals-tab.md) (juiz LLM-as-Judge) | `base_url`, `api_key` opcional |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Avaliações](../tabs/evals-tab.md) (juiz LLM-as-Judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, `api_key` opcional |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, Padrões de IA | uma credencial de modelo de decisão, além de opções de modelo que fazem referência às suas outras credenciais |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Alguns nós de integração **não** exigem credenciais. O [WebSocket Trigger](.
 | **Grist** | [Nó Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Nó Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + consentimento OAuth2 |
 | **Google Drive** | [Nó Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + consentimento OAuth2 (escopo completo do Drive) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Nó BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + consentimento OAuth2 |
 | **Supabase** | [Nó Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, `supabase_schema` opcional |
 | **ClickHouse** | [Nó ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -893,3 +894,6 @@ escolher. Ele armazena referências, nunca uma chave própria.
 
 Os nomes das opções são aquilo entre o que o modelo de decisão escolhe, portanto devem ser distintos. Uma
 opção não pode apontar para outro Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

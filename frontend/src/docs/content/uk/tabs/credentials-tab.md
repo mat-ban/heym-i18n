@@ -97,3 +97,7 @@ Credentials OAuth відкривають сторінку авторизації
 - [Vectorstores Tab](./vectorstores-tab.md) – Використовує credentials Qdrant або Postgres (pgvector)
 - [Chat Tab](./chat-tab.md) – Використовує credentials OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Компактний посібник зі сторінок для поверхонь dashboard
+
+## Пошук
+
+Використовуйте поле пошуку над списком або натисніть **Ctrl+F** (або **Cmd+F**), щоб фільтрувати облікові дані за назвою чи типом під час введення. Натисніть **Escape**, щоб очистити пошук.

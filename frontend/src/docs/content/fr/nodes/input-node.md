@@ -45,7 +45,7 @@ Le nœud **Input** est le point d'entrée des workflows qui reçoivent des donn�
 
 Dans l'onglet **Run** de l'éditeur (mode webhook Defined), chaque champ d'entrée prend en charge le glisser-déposer ainsi qu'un contrôle de pièce jointe intégré (en bas à droite du champ) :
 
-- **Fichiers texte** (`.txt`, `.md`, `.json`, `.csv` et similaires) sont lus comme du texte brut.
+- **Fichiers texte** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Images** (JPEG, PNG, GIF, WebP) sont stockées sous forme d'URL `data:` (base64) dans la valeur du champ — utilisez des clés de champ telles que `imageUrl` ou `base64` lorsque les nœuds en aval attendent des données d'image.
 - **Fichiers PDF** sont convertis en texte extrait (fichier de 5 Mo max, 100k caractères de contenu).
 

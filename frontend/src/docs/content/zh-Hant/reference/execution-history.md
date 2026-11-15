@@ -176,3 +176,7 @@ Execution history 會記錄 workflow 的執行：輸入、輸出、節點結果�
 - [Edit History](./edit-history.md) – Workflow 儲存的版本控制（還原、差異比對）
 - [Quick Start](../getting-started/quick-start.md) – 建立並執行您的第一個 workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – 建立與管理 workflow
+
+## Related
+
+- [Operations Runbook (L1): 佇列積壓](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - 在重播前區分排隊中、保留中、中斷和已復原的執行

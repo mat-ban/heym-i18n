@@ -94,3 +94,7 @@ Consultez [Expression DSL](../reference/expression-dsl.md) pour référencer des
 - [Onglet Bases vectorielles](./vectorstores-tab.md) – Utilise des identifiants Qdrant ou Postgres (pgvector)
 - [Onglet Chat](./chat-tab.md) – Utilise des identifiants OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guide compact des pages pour les surfaces du tableau de bord
+
+## Recherche
+
+Utilisez le champ de recherche au-dessus de la liste ou appuyez sur **Ctrl+F** (ou **Cmd+F**) pour filtrer les identifiants par nom ou type au fil de la frappe. Appuyez sur **Échap** pour effacer la recherche.

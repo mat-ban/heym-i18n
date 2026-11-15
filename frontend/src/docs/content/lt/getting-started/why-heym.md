@@ -192,7 +192,7 @@ Pėdsakų sistema sukurta specialiai agentinio elgesio derinimui, su pilnais už
 Kiekvienas LLM iškvietimas Heym aplinkoje automatiškai įkainojamas. [Pėdsakų skirtukas](../tabs/traces-tab.md) rodo kiekvieno pėdsako įvesties ir išvesties Token kiekius kartu su realaus laiko USD kaina, gauta iš sinchronizuotos kainų lentelės.
 
 - **Kaina pagal pėdsaką** – Įvesties Token, išvesties Token ir bendra USD suma rodoma kiekvienoje pėdsako eilutėje
-- **Kainų analitika** – KPI kortelės ir kainų pagal modelį diagrama atsinaujina pagal pasirinktą laiko intervalą (1h / 24h / 7d / 30d / Visi)
+- **Kainų analitika** – KPI kortelės ir kainų pagal modelį diagrama atsinaujina pagal pasirinktą laiko intervalą (1h / 3h / 6h / 24h / 7d / 30d / Visi)
 - **LLM kainų lentelė** – Sistemos lentelė [DataTable skirtuke](../tabs/datatable-tab.md) užpildoma iš Helicone kas 24 valandas; galite perrašyti kainas arba pridėti pasirinktinių eilučių modeliams, kurie dar neįtraukti
 - **Trūkstamos kainos įspėjimas** – Pėdsakai modeliams be kainos įrašo rodo tiesioginį įspėjimą su nuoroda į kainų lentelę
 
@@ -278,7 +278,7 @@ Workflow yra iškviečiami per HTTP adresu `/api/workflows/{workflow_id}/execute
 Heym turi natūralų [MCP](../tabs/mcp-tab.md) palaikymą abiejose pusėse:
 
 - **Kaip klientas**: Agent mazgai prisijungia prie išorinių MCP serverių (Filesystem, Browserbase, pasirinktiniai įrankiai) per stdio arba SSE ir automatiškai naudoja jų įrankius
-- **Kaip serveris**: Workflow su įjungtu MCP tampa įrankiais numatytajame serveryje adresu `/api/mcp/sse` arba vardiniuose serveriuose su savo URL ir API raktu, todėl Claude Desktop, Cursor ir kiti MCP klientai gali tiesiogiai iškviesti Jūsų Heym workflow
+- **Kaip serveris**: Workflow su įjungtu MCP tampa įrankiais numatytajame serveryje adresu `/api/mcp (or /api/mcp/sse for legacy connections)` arba vardiniuose serveriuose su savo URL ir API raktu, todėl Claude Desktop, Cursor ir kiti MCP klientai gali tiesiogiai iškviesti Jūsų Heym workflow
 
 Agentai gali vienu metu naudoti kelis MCP serverius, o bet kuris workflow gali tapti įrankiu išoriniam MCP klientui.
 

@@ -124,7 +124,7 @@ Ništa od ovoga ne pojavljuje se na instalaciji s jednom instancom: polja su pra
 
 **Ako radnik umre tijekom izvršavanja**, njegov heartbeat postaje zastario, a postojeći oporavak vođe ponovo pokreće izvršavanje na aktivnom čvoru. Redak u redu koji je preuzeo se posebno povlači: kada ne postoji aktivno izvršavanje za njega i kada prođe dvominutna milost, vođa označava redak kao neuspješan i budi onoga tko je čekao na rezultat. Sama starost nikada nije okidač, tako da se legitimno dugo izvršavanje ostavlja na miru; redak se označava kao neuspješan umjesto da se ponovo stavlja u red, jer oporavak već preuzima ponovni rad, a ponovno stavljanje u red bi pokrenulo isti workflow dvaput.
 
-**Ako glavni čvor padne**, cron nastavlja raditi s radnikom, a distribuirana izvršavanja se nastavljaju. Izvršavanja koja trebaju glavni čvor se redaju i čekaju, a ispražnjavaju se kada se vrati — ali samo unutar prozora milosti za pogrešno aktiviranje (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 sekundi prema zadanim postavkama). Sve što je starije zatvara se kao propušteno, uz zabilježen razlog, umjesto da se odjednom ponovo pokreće sati zaostataka.
+**Ako glavni čvor padne**, cron nastavlja raditi s radnikom, a distribuirana izvršavanja se nastavljaju. Izvršavanja koja trebaju glavni čvor se redaju i čekaju, a ispražnjavaju se kada se vrati — ali samo unutar prozora milosti za pogrešno aktiviranje (`CRON_MISFIRE_GRACE_SECONDS`, 600 sekundi prema zadanim postavkama). Sve što je starije zatvara se kao propušteno, uz zabilježen razlog, umjesto da se odjednom ponovo pokreće sati zaostataka.
 
 UI, API, MCP i uređivač nisu dostupni dok je glavni čvor nedostupan, jer su to ulazne točke.
 
@@ -134,3 +134,6 @@ UI, API, MCP i uređivač nisu dostupni dok je glavni čvor nedostupan, jer su t
 - [Postavke](./user-settings.md) – Kartica Instances i tko je može vidjeti
 - [Izvršavanja](../tabs/traces-tab.md) – Usporedite stvarna trajanja izvršavanja između instanci prije nego što promijenite podjelu
 - [Sigurnost](./security.md) – Zašto svaka instanca mora dijeliti `SECRET_KEY` i `ENCRYPTION_KEY`
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).

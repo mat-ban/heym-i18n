@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | Облікові дані `imap`, що містять сервер, логін, поштову скриньку та налаштування SSL |
 | `pollIntervalMinutes` | Integer | Як часто Heym перевіряє поштову скриньку на наявність нових листів |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Інструкція з налаштування
 
@@ -62,6 +63,8 @@
 | `$nodeLabel.email.text` | Тіло у форматі plain-text |
 | `$nodeLabel.email.html` | Тіло у форматі HTML |
 | `$nodeLabel.email.attachments` | Масив метаданих вкладень (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Декодований об'єкт заголовків |
 | `$nodeLabel.email.uid` | IMAP UID для дедуплікації або журналювання |
 | `$nodeLabel.triggered_by` | Мітка джерела trigger (`"imap"`) |

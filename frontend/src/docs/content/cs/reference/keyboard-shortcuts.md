@@ -107,3 +107,6 @@ Tyto zkratky jsou dostupné v dialogu Execution History a v panelu Traces.
 - [Rychlý start](../getting-started/quick-start.md) – Vytvořte své první workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Karty **Přihlašovací údaje** a **DataTable** fungují stejně: `Ctrl + F` / `Cmd + F` zaměří vyhledávací pole, seznam se zužuje během psaní a `Escape` jej vymaže.

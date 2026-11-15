@@ -116,6 +116,10 @@ Markdown.
 
 Μπορείτε να συνδέσετε έναν υποστηριζόμενο workflow node στη λαβή **tools** ενός agent, ώστε ο agent να μπορεί να καλέσει αυτόν τον node κατά την εκτέλεση. Αυτό μετατρέπει υπάρχουσες ενέργειες και μετασχηματισμούς του καμβά σε εργαλεία που μπορούν να κληθούν, χωρίς να χρειάζεται να γράψετε Python.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Χρησιμοποιήστε τα εργαλεία canvas node όταν θέλετε ο agent να αποφασίζει πότε θα εκτελεστεί ένας διαμορφωμένος node, διατηρώντας παράλληλα τα διαπιστευτήρια, τα στατικά πεδία και τις ρυθμίσεις που αφορούν το workflow στο UI του node.
 
 ### Πεδία που παρέχει ο agent
@@ -408,3 +412,6 @@ endpoint. Με ένα διαπιστευτήριο Google παραμένει α�
 - [Quick Start](../getting-started/quick-start.md) – Βασικό workflow με LLM και εκφράσεις
 - [Credentials Tab](../tabs/credentials-tab.md) – Προσθήκη API keys για τον agent
 - [MCP Tab](../tabs/mcp-tab.md) – Διαμόρφωση MCP για εργαλεία workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

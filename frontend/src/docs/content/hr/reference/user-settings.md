@@ -131,3 +131,6 @@ Panel također izvještava koliko je od posljednjih 24 sata radova moglo izvrši
 - [Sigurnost](./security.md) – Upravljanje sesijama, ograničavanje brzine, enkripcija vjerodajnica
 - [Jedinstvena prijava](./sso.md) – Povezivanje s vanjskim OpenID Connect pružateljem
 - [OpenTelemetry Tracing](./opentelemetry.md) – Distribuirano praćenje za izvršavanja workflow-a i čvorova
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

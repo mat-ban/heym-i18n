@@ -26,6 +26,8 @@ Vozlišče prav tako zahteva **GitHub** poverilnico za kloniranje zasebnih repoz
 
 V Docker namestitvah Heym izvaja Codex znotraj sosednjega kontejnerja iz istega Heym slike (ne ločene GHCR slike). Ta kontejner montira samo volumen Codex delovnega prostora in omogoča Codexovemu lastnemu bubblewrap peskovniku ustvarjanje prostorov imen in svežega `/proc`. Izvajalnik doda `SYS_ADMIN`, neomejen seccomp in AppArmor ter `systempaths=unconfined` (Docker Engine 25+). Brez zadnjega zastavice vsak ukaz ne uspe pred zagon s sporočilom `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 Reference OpenAI:
 
 - [Codex avtentikacija](https://developers.openai.com/codex/auth)

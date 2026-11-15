@@ -12,7 +12,7 @@ Start čvorovi (bez dolaznih rubova) koji iniciraju izvršavanje:
 | [Cron](../nodes/cron-node.md) | Izvršava se prema rasporedu (cron izraz, npr. `0 * * * *` za svake sat). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Započinje kada Telegram pošalje ažuriranje webhooka bota na URL specifičan za čvor. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Započinje kada Discord pošalje Interactions API webhook na endpoint specifičan za čvor. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Provjerava IMAP poštanski sandučić i započinje jednom za svaku novo otkrivenu e-poštu. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Provjerava IMAP poštanski sandučić i započinje jednom za svaku novo otkrivenu e-poštu. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Započinje kada Heym objavi događaj platforme. Događaji u jednom prozoru isporuke dolaze zajedno kao niz. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Otvara izlaznu klijentsku vezu na vanjskom socketu i započinje na odabranim socket događajima. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Stvara URL za jednokratno učitavanje i započinje kada pozivatelj pošalje veliki multipart datoteku. |

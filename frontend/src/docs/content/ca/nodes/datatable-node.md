@@ -95,7 +95,7 @@ En un filtre `find` o `count`, un valor simple significa igualtat; un valor d'ob
 | `$contains` | Coincidència de subcadena sense distinció de majúscules i minúscules |
 | `$in` | El valor és dins de la matriu donada |
 
-Exemple que en combina diversos: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Els operadors desconeguts s'ignoren. Els filtres d'`upsert` encara utilitzen valors de coincidència exacta per trobar la fila a actualitzar.
+Exemple que en combina diversos: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Els operadors desconeguts s'ignoren. Els filtres d'`upsert` encara utilitzen valors de coincidència exacta per trobar la fila a actualitzar.
 
 També podeu filtrar per les metadades de la fila — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — que s'emmagatzemen com a columnes reals en lloc de dins de les vostres dades. Per a dates, passeu un valor complet per a comparacions de rang (p. ex. `{"created_at": {"$gt": "2026-06-04"}}`) o utilitzeu `$contains` per a una coincidència de text parcial (p. ex. `{"created_at": {"$contains": "2026-06-04"}}`). Si una de les vostres columnes té el mateix nom que un camp de metadades, la columna de dades té prioritat.
 

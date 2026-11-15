@@ -2,6 +2,9 @@
 
 Het tabblad **Dashboard** is een ruimte in Grafana-stijl waar u rasters van grafiekwidgets bouwt. Elke widget wordt weergegeven op basis van de uitvoer van zijn eigen verborgen Heym-workflow, zodat alle gegevens die u in een workflow kunt produceren — databasequery's, API-aanroepen, RAG-opzoekacties, LLM-uitvoer — in een grafiek kunnen worden omgezet. U kunt meerdere dashboards bijhouden en elk dashboard delen met personen of teams.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboards
 
 Iedereen begint met één dashboard, dat wordt aangemaakt wanneer het tabblad voor het eerst wordt geopend. Gebruik de dashboardselector boven aan het tabblad om tussen dashboards te wisselen, en **+** ernaast om een nieuw dashboard te maken. De selector toont eerst uw eigen dashboards en daarna de dashboards die met u zijn gedeeld, voorzien van de naam van de persoon die ze heeft gedeeld.
@@ -27,6 +30,8 @@ Een widget is een enkele grafiek op het raster. Ondersteunde grafiektypen:
 - **Entity relationships (DB)** (tabellen, velden, PK/FK-sleutels en verbindingen)
 - **Bar gauge** (één horizontale gauge per rij met een rood→groen verloop en een waarde, bijvoorbeeld vrije schijfruimte)
 - **Text** (een markdown-bericht, bijvoorbeeld een statusnotitie zoals "Laatste uitvoering om 19:47"; ondersteunt [interactieve selectievakjes](../nodes/chart-output-node.md#interactive-task-lists) wanneer de markdown statisch is, en [expliciete genummerde lijsten](../nodes/chart-output-node.md#numbered-lists) voor aangepaste of aflopende nummering)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (uw openstaande menselijke beoordelingen. De kop toont `1/n pending`. De workflownaam opent die uitvoering op het canvas. **Approve**, **Request changes** en **Reject** lossen deze op. Het geschiedenis-pictogram naast de widgettitel opent die uitvoering in het geschiedenisdialoogvenster op deze pagina. De widget gebruikt geen bovenliggende rijen en elke persoon ziet zijn eigen wachtrij. Het kan in plaats daarvan de beoordelingen van één Workflow tonen, voor iedereen die die Workflow kan openen; zie [HITL-widgets](#hitl-widgets))
 
 Naast grafieken voert een **Run a workflow**-widget een van uw workflows rechtstreeks vanaf het dashboard uit: op een gesleept bestand, met de invoervelden ervan, of met een knop Run; zie [Run-widgets](#run-widgets).
@@ -146,3 +151,5 @@ Het verwijderen van een deling, of het verlagen van schrijven naar lezen, wordt 
 ## Planningen en databasediagrammen
 
 Kies **Gantt** in Widget toevoegen om taken in de loop van de tijd met voltooiing en afhankelijkheidskoppelingen weer te geven, of **Entity relationships (DB)** om tabellen, velden en hun relaties in kaart te brengen. Beide typen gebruiken de [Chart Output-node](../nodes/chart-output-node.md#gantt-schedules) en zijn ook beschikbaar op Heym Work-pagina's. Wanneer Work widgets voorstelt voor een planning of databaseschema, tekent het voorbeelden op basis van de voorgestelde taken of entiteiten.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

@@ -87,6 +87,7 @@ Jotkut solmut tallentavat `credentialId` (UUID) `node.data` -kenttään:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse-yhteyden tiedot (isäntä, portti, tunnistus, tietokanta) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram-botin tunnistetiedot |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discordin julkinen avain tai webhook-tunnistetiedot |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vektorivarasto | `credential_id` | Qdrant- tai Postgres (pgvector) -vektoritietokanta, käyttäen Qdrant-, Psql- tai Custom Embeddings RAG -tunnistetietoja |
 | Arvioinnit | `credential_id`, `judge_credential_id` | Mallin tunnistetiedot; malli tai Decision Model -tunnistetiedot LLM-as-Judge -arvioijalle |
 | [Playwright](../nodes/playwright-node.md) AI -vaihe | `credentialId` | LLM/Vision-malli (AI-vaihetta ja [Auto Heal](../nodes/playwright-node.md#ai-auto-heal) varten) |
@@ -105,3 +106,7 @@ Suorituksen jälkeen `mask_sensitive_output()` peittää tunnistetietojen arvot 
 - [Expression DSL](./expression-dsl.md) – `$credentials`-syntaksi
 - [Solmutyypit](./node-types.md) – Tunnistetietoja käyttävät solmut ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent-solmu](../nodes/agent-node.md) – Käyttää `credentialId` LLM:ää varten
+
+## Google Meet -kalenterin käyttöoikeudet
+
+[Google Meet -tunnistetiedon](../nodes/google-meet-node.md) jakaminen antaa työnkuluille mahdollisuuden lukea käytettävissä olevien kalenterien vapaa/varattu-välejä ja luoda, muuttaa tai poistaa tapahtumia yhdistettynä Google-tilinä, mukaan lukien kutsujen ja peruutusten lähettäminen. Vierailijan osallistujasähköposti ei muuta sitä, mikä tili omistaa tai valtuuttaa tapahtuman. Vain tunnistetiedon omistaja voi muodostaa Google-valtuutuksen uudelleen.

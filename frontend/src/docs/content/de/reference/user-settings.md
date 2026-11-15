@@ -131,3 +131,6 @@ Das Panel meldet außerdem, wie viele der Ausführungen der letzten 24 Stunden n
 - [Security](./security.md) – Session-Verwaltung, Rate Limiting, Anmeldedaten-Verschlüsselung
 - [Single Sign-On](./sso.md) – Externen OpenID Connect-Provider verbinden
 - [OpenTelemetry Tracing](./opentelemetry.md) – Verteiltes Tracing für Workflow- und Knoten-Ausführungen
+## Zwei-Faktor-Authentifizierung
+
+Wenn `HEYM_REQUIRE_MFA=true` von einem Administrator aktiviert wurde, müssen Benutzer mit Passwort-Anmeldung bei der ersten Anmeldung eine Authenticator-App (TOTP, RFC 6238) einrichten. Verwenden Sie **Einstellungen → Sicherheit**, um Ihre Authenticator-App zu verwalten, andere aktive Sitzungen abzumelden oder aktive Login-Tokens zu überprüfen.

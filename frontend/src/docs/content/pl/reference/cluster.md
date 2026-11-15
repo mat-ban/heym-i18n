@@ -92,6 +92,10 @@ Definiuje to również kolejność aktualizacji. Aktualizacja main w pierwszej k
 
 **Instancje worker mają inny wychodzący adres IP.** Każde API, które stosuje listę dozwolonych adresów źródłowych, zobaczy nowy adres. Send Email działa na main właśnie z tego powodu; w przypadku węzła HTTP należy albo zapewnić klastrowi jeden adres wyjściowy NAT, albo dodać każdą instancję do listy dozwolonych.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Dodawanie workera na innej maszynie
 
 Plik `docker-compose.worker.yml` w katalogu głównym repozytorium uruchamia workera na jego własnym hoście. Nie ma on bazy danych ani interfejsu użytkownika: łączy się z PostgreSQL instancji main i przejmuje swoją część uruchomień w tle.
@@ -124,7 +128,7 @@ Nic z tego nie pojawia się w instalacji z pojedynczą instancją: pola są pust
 
 **Jeśli worker ulegnie awarii w trakcie wykonywania**, jego heartbeat staje się nieaktualny, a istniejący mechanizm odzyskiwania po stronie leadera ponownie uruchamia wykonanie na aktywnej instancji. Wiersz kolejki, który został przez niego zarezerwowany, jest wycofywany osobno: gdy nie istnieje już żadne aktywne wykonanie dla tego wiersza i upłynie dwuminutowy okres karencji, leader oznacza wiersz jako nieudany i budzi podmiot oczekujący na wynik. Sam wiek wiersza nigdy nie jest triggerem, więc uzasadnione długotrwałe wykonanie pozostaje nietknięte; wiersz jest oznaczany jako nieudany, a nie przywracany do kolejki, ponieważ odzyskiwanie już odpowiada za ponowne uruchomienie, a przywrócenie do kolejki spowodowałoby dwukrotne wykonanie tego samego workflow.
 
-**Jeśli main ulegnie awarii**, cron nadal jest wyzwalany z workera, a wykonywania rozproszone nadal są realizowane. Wykonania wymagające main trafiają do kolejki i oczekują, a następnie są przetwarzane po jego powrocie — jednak wyłącznie w oknie karencji dla pominiętych uruchomień (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, domyślnie 600 sekund). Wszystko starsze jest zamykane jako pominięte, z zapisanym powodem, zamiast odtwarzania godzin zaległości naraz.
+**Jeśli main ulegnie awarii**, cron nadal jest wyzwalany z workera, a wykonywania rozproszone nadal są realizowane. Wykonania wymagające main trafiają do kolejki i oczekują, a następnie są przetwarzane po jego powrocie — jednak wyłącznie w oknie karencji dla pominiętych uruchomień (`CRON_MISFIRE_GRACE_SECONDS`, domyślnie 600 sekund). Wszystko starsze jest zamykane jako pominięte, z zapisanym powodem, zamiast odtwarzania godzin zaległości naraz.
 
 UI, API, MCP oraz edytor są niedostępne, gdy main jest niedostępny, ponieważ to tam znajdują się punkty wejścia.
 

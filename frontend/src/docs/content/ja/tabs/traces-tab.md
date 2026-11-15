@@ -23,12 +23,13 @@
 
 - 選択した時間範囲内の最近のトレースのページネーション付きリスト
 - 各トレースには、Workflow、ノード、Credential、タイムスタンプ、所要時間が表示されます
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - トレースをクリックすると詳細ビューが開きます
 - 詳細ダイアログ内の**Prev / Next**を使用すると、ダイアログを閉じずにトレース間を移動できます
 
 ## フィルタリング
 
-- **Time range** – 1h / 24h / 7d / 30d / All。チャートとリストをまとめてフィルタリングします
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All。チャートとリストをまとめてフィルタリングします
 - **Credential** – 使用されたCredential（APIキー）でフィルタリングします
 - **Source** – Workflowまたは実行ソースでフィルタリングします
 - **Search** – モデル、Workflow、Credential、またはノードラベルで検索します

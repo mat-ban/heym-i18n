@@ -141,3 +141,6 @@ Een mislukte aanmelding keert terug naar het aanmeldscherm met een leesbare meld
 - **Meerdere gelijktijdige providers.** Eén instantie verbindt met één provider.
 - **Groeps- of roltoewijzing** op basis van providerclaims.
 - **Single logout.** Afmelden bij Heym meldt u niet af bij de provider.
+
+- **Tweefactorauthenticatie ligt bij de provider.** `HEYM_REQUIRE_MFA` is alleen van toepassing op inloggen met wachtwoord; bij een SSO-aanmelding wordt nooit om een Heym-code gevraagd. Vereis MFA in uw identity provider.
+- **Deactivatie is ook hier van toepassing.** Een account dat door een beheerder is gedeactiveerd in **Instellingen → Gebruikers** wordt geweigerd, zelfs als de provider het nog steeds authenticeert.

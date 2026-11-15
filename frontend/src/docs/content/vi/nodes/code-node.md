@@ -19,6 +19,7 @@ Node **Code** chạy mã Python do bạn viết, với tệp `requirements.txt` 
 | `codeParameters` | expression | Một đối tượng JSON kết nối dữ liệu workflow vào mã. Các biểu thức được giải quyết trước khi mã chạy |
 | `codeRequirements` | string | Nội dung `requirements.txt`, mỗi dòng một gói. Để trống sẽ bỏ qua bước cài đặt |
 | `codeAllowNetwork` | boolean | Mã có được phép truy cập mạng hay không (mặc định `false`) |
+| `codeFiles` | expression | Optional Drive files mounted read-only for the run: an id, several ids, or an expression such as `$Upload.file.id` |
 
 ## Hàm `main`
 
@@ -124,3 +125,16 @@ def main(params):
 ```
 
 Với `codeParameters` được đặt thành `{ "rows": "$fetchRows.result" }`, các node hạ nguồn đọc `$scoreRows.result.total`.
+## Reading Drive files
+
+Set **Files** (`codeFiles`) to give the code the files of the run. It accepts an id, ids separated by commas, a list, or an expression that resolves to a file or its id, such as `$Upload.file.id` or `$Upload.file`. A file opens when it came into this workflow: uploaded through its [File Upload trigger](./file-upload-trigger-node.md) or written to [Drive](../reference/drive.md) by one of its nodes. Other Drive files are not available to a run, so a workflow cannot be used to read someone's Drive.
+
+```python
+import heym_files
+import pandas as pd
+
+def main(params):
+    workbook = params.files[0]
+    df = pd.read_excel(heym_files.path(workbook.name), sheet_name="Summary")
+    return {"rows": len(df), "columns": list(df.columns)}
+```

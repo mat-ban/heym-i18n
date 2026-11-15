@@ -19,7 +19,7 @@ credential은 [Settings → Credentials](../tabs/credentials-tab.md)에서 추�
 | **Linear** | [Linear 노드](../nodes/linear-node.md) | `api_key`, 또는 `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry 노드](../nodes/sentry-node.md) | `api_token`, 선택적 `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, 선택적 `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, 선택적 `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | decision model credential과, 다른 credential을 참조하는 모델 옵션 |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ credential은 [Settings → Credentials](../tabs/credentials-tab.md)에서 추�
 | **Grist** | [Grist 노드](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets 노드](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 동의 |
 | **Google Drive** | [Google Drive 노드](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 동의 (전체 Drive scope) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery 노드](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 동의 |
 | **Supabase** | [Supabase 노드](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, 선택적 `supabase_schema` |
 | **ClickHouse** | [ClickHouse 노드](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -883,3 +884,6 @@ OpenAI는 시스템 Prompt의 정적(변하지 않는) 접두사를 자동으로
 
 옵션 이름은 의사 결정 모델이 선택하는 대상이므로 반드시 서로 달라야 합니다. 옵션은
 다른 Model Router를 가리킬 수 없습니다.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

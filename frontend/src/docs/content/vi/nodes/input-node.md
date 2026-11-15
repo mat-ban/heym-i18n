@@ -45,7 +45,7 @@
 
 Trong tab **Run** của editor (chế độ Defined webhook), mỗi trường input hỗ trợ kéo-thả và một control đính kèm inline (ở góc dưới bên phải của trường):
 
-- **File văn bản** (`.txt`, `.md`, `.json`, `.csv`, và tương tự) được đọc dưới dạng văn bản thuần.
+- **File văn bản** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Hình ảnh** (JPEG, PNG, GIF, WebP) được lưu dưới dạng URL `data:` (base64) trong giá trị của trường — sử dụng các khóa trường như `imageUrl` hoặc `base64` khi các node downstream mong đợi dữ liệu hình ảnh.
 - **File PDF** được chuyển đổi thành văn bản trích xuất (tối đa file 5 MB, 100k ký tự nội dung).
 

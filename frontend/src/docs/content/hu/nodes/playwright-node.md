@@ -68,7 +68,9 @@ Az **aiStep** művelet egy LLM-et használ az oldal HTML-jének (és opcionális
 
 Az **AI Auto Heal** ellenállóvá teszi a workflow-kat a DOM-változásokkal szemben. Amikor egy szelektor kétszer meghiúsul (pl. egy webhely újratervezése után), a Heym meghívja az LLM-et, hogy találjon egy alternatív lokátort — jellemzően `role=button[name='Submit']` vagy `text=Exact text` formában CSS szelektorok helyett.
 
-Engedélyezze az **Auto heal mode** beállítást az AI step tulajdonságai között. Ha a mentett lépés meghiúsul:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Engedélyezze az **Auto heal mode** beállítást az AI step tulajdonságai között. Ha a mentett lépés meghiúsul:
 
 1. A Heym rögzíti az aktuális HTML-t és képernyőképet
 2. Elküldi a sikertelen lépést + az oldalkontextust az LLM-nek

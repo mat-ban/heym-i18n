@@ -65,3 +65,7 @@ Beweeg over een diagram om het nodetype onder de aanwijzer direct ernaast te zie
 - [Contextuele showcase](../reference/contextual-showcase.md) – Compacte paginagids voor dashboardoppervlakken
 
 Wanneer een grafiek een trend toont waarover u op de hoogte wilt worden gesteld in plaats van erop te letten, zet deze dan om in een [waarschuwing](./alerts-tab.md): foutenaantal, uitvoeringsduur, LLM-uitgaven en uitvoeringsaantal kunnen allemaal een drempel krijgen over een tijdvenster.
+
+## Related
+
+- [Operations Runbook (L1): Resourcegebruik](../reference/operations-runbook.md#most-resource-consuming-workflows) - Vind workflows met een hoog volume en een lange looptijd en correleer CPU, geheugen en tokens

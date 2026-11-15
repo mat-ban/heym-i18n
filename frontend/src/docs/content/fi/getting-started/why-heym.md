@@ -189,7 +189,7 @@ Jäljitysjärjestelmä on rakennettu erityisesti agenttisen käyttäytymisen vir
 Jokainen LLM-kutsu Heymissä hinnoitellaan automaattisesti. [Traces-välilehti](../tabs/traces-tab.md) näyttää jokaisen jäljityksen syöte- ja tulostemerkkimäärät sekä reaaliaikaisen USD-kustannuksen, joka on johdettu synkronoidusta hinnoittelutaulukosta.
 
 - **Jäljityskohtainen kustannus** – Syötemerkit, tulostemerkit ja kokonais-USD näytetään jokaisella jäljitysrivillä
-- **Kustannusanalytiikka** – KPI-kortit ja mallikohtainen kustannuskaavio päivittyvät valitun aikavälin mukaan (1h / 24h / 7d / 30d / Kaikki)
+- **Kustannusanalytiikka** – KPI-kortit ja mallikohtainen kustannuskaavio päivittyvät valitun aikavälin mukaan (1h / 3h / 6h / 24h / 7d / 30d / Kaikki)
 - **LLM-kustannustaulukko** – Järjestelmätaulukko [DataTable-välilehdellä](../tabs/datatable-tab.md) päivitetään Helicone-palvelusta 24 tunnin välein; hinnat voi ohittaa tai lisätä mukautettuja rivejä malleille, joita ei ole vielä lueteltu
 - **Puuttuvan hinnan varoitus** – Jäljitykset malleille, joilla ei ole hinnoittelumerkintää, näyttävät rivinsisäisen varoituksen, jossa on suora linkki kustannustaulukkoon
 
@@ -274,7 +274,7 @@ Työnkulut ovat kutsuttavissa HTTP:n kautta osoitteessa `/api/workflows/{workflo
 Heymissä on natiivi [MCP](../tabs/mcp-tab.md) -tuki molemmilla puolilla:
 
 - **Asiakkaana**: Agentsolmut yhdistävät ulkoisiin MCP-palvelimiin (Filesystem, Browserbase, mukautetut työkalut) stdio:n tai SSE:n kautta ja käyttävät niiden työkaluja automaattisesti
-- **Palvelimena**: Työnkulut, joissa MCP on käytössä, tulevat työkaluiksi oletuspalvelimella osoitteessa `/api/mcp/sse` tai nimetyillä palvelimilla, joilla on oma URL-osoite ja API-avain, jolloin Claude Desktop, Cursor ja muut MCP-asiakkaat voivat kutsua Heym-työnkulkuja suoraan
+- **Palvelimena**: Työnkulut, joissa MCP on käytössä, tulevat työkaluiksi oletuspalvelimella osoitteessa `/api/mcp (or /api/mcp/sse for legacy connections)` tai nimetyillä palvelimilla, joilla on oma URL-osoite ja API-avain, jolloin Claude Desktop, Cursor ja muut MCP-asiakkaat voivat kutsua Heym-työnkulkuja suoraan
 
 Agentit voivat käyttää useita MCP-palvelimia samanaikaisesti, ja mikä tahansa työnkulku voi tulla työkaluksi ulkoiselle MCP-asiakkaalle.
 

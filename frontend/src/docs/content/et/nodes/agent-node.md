@@ -169,6 +169,10 @@ def count_characters(text: str) -> int:
 
 > **Sandbox.** Pythoni tööriistad käivituvad vaikimisi mitteusaldusväärse koodina karastatud, isoleeritud Docker-konteineris (võrk puudub, Dockeri socket puudub, kirjutuskaitstud failisüsteem, mitte-root). Impordid on piiratud turvaliste standardteegi moodulite lubatud loendiga. Konfiguratsiooni (`HEYM_PYTHON_TOOL_SANDBOX`) kohta vt [Turvalisus → Pythoni tööriista sandbox](../reference/security.md#python-tool-sandbox).
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 | Parameeter | Tüüp | Kirjeldus |
 |-----------|------|-------------|
 | `toolTimeoutSeconds` | number | Maksimaalne sekundite arv tööriista käivitamise kohta (vaikimisi: 30) |
@@ -398,3 +402,6 @@ Kokkusurumine on automaatne ja alati aktiivne Agent-sõlmede puhul. See **ei** r
 - [Kiire algus](../getting-started/quick-start.md) – Põhiline workflow LLM-iga ja avaldistega
 - [Mandaatide vahekaart](../tabs/credentials-tab.md) – Lisa API-võtmed agendi jaoks
 - [MCP vahekaart](../tabs/mcp-tab.md) – Konfigureeri MCP workflow tööriistade jaoks
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

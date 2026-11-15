@@ -26,6 +26,8 @@ A csomópont emellett **GitHub** hitelesítési adatot igényel a privát reposi
 
 Docker telepítéseknél a Heym a Codexet egy testvérkonténerben futtatja ugyanabból a Heym image-ből (nem külön GHCR image-ből). Ez a konténer csak a Codex munkaterület volume-ot csatolja, és hagyja, hogy a Codex saját bubblewrap sandboxja hozzon létre namespace-eket és egy friss `/proc`-ot. A futtató hozzáadja a `SYS_ADMIN` jogosultságot, a nem korlátozott seccomp és AppArmor beállításokat, valamint a `systempaths=unconfined` opciót (Docker Engine 25+). Az utóbbi flag nélkül minden parancs meghiúsul az indítás előtt a következő hibával: `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI hivatkozások:
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

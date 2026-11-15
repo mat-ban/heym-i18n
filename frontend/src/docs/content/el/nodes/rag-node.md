@@ -272,3 +272,5 @@
 - [Third-Party Integrations](../reference/integrations.md#qdrant) – Ρύθμιση διαπιστευτηρίων Qdrant και Postgres (pgvector)
 - [Agent Node](./agent-node.md) – Χρήση αποτελεσμάτων RAG ως context agent
 - [LLM Node](./llm-node.md) – Τροφοδότηση αποτελεσμάτων RAG στο system prompt του LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

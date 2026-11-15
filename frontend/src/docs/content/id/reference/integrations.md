@@ -19,7 +19,7 @@ Beberapa node integrasi **tidak** memerlukan credential. [WebSocket Trigger](../
 | **Linear** | [Node Linear](../nodes/linear-node.md) | `api_key`, atau `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Node Sentry](../nodes/sentry-node.md) | `api_token`, opsional `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, opsional `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, opsional `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | credential decision model, plus opsi model yang merujuk ke credential Anda yang lain |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Beberapa node integrasi **tidak** memerlukan credential. [WebSocket Trigger](../
 | **Grist** | [Node Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Node Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + persetujuan OAuth2 |
 | **Google Drive** | [Node Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + persetujuan OAuth2 (scope Drive penuh) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Node BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + persetujuan OAuth2 |
 | **Supabase** | [Node Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, opsional `supabase_schema` |
 | **ClickHouse** | [Node ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -920,3 +921,6 @@ Mengarahkan setiap permintaan ke salah satu credentials model yang sudah Anda mi
 ### Catatan
 
 Nama opsi adalah pilihan yang dipertimbangkan oleh model keputusan, sehingga nama-nama tersebut harus berbeda. Sebuah opsi tidak dapat menunjuk ke Model Router lain.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

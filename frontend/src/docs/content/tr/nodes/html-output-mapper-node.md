@@ -68,3 +68,5 @@ Desteklenmez. Bu düğüm bir terminal sink olduğundan, bir [Agent Node](./agen
 - [Output](./output-node.md) – `result` sarmalaması ile mesaj veya şema tabanlı yanıt
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, request method'ları ve yanıtlar
 - [Node Types](../reference/node-types.md) – Tüm düğüm türleri
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

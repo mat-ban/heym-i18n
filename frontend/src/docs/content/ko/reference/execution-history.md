@@ -171,3 +171,7 @@ Inputs 또는 Outputs 옆의 **Copy**를 사용하여 JSON을 클립보드에 �
 - [Edit History](./edit-history.md) – Workflow 저장에 대한 버전 관리(되돌리기, 비교)
 - [Quick Start](../getting-started/quick-start.md) – 첫 번째 Workflow를 빌드하고 실행합니다
 - [Workflows Tab](../tabs/workflows-tab.md) – Workflow를 생성하고 관리합니다
+
+## Related
+
+- [Operations Runbook (L1): 대기열 백로그](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - 재생 전 대기 중, 보류됨, 중단됨 및 복구된 실행 구분

@@ -253,3 +253,5 @@ Mỗi kết quả mang điểm của cả hai tìm kiếm:
 - [Tích hợp bên thứ ba](../reference/integrations.md#qdrant) – Thiết lập credential Qdrant và Postgres (pgvector)
 - [Node Agent](./agent-node.md) – Sử dụng kết quả RAG làm ngữ cảnh cho agent
 - [Node LLM](./llm-node.md) – Đưa kết quả RAG vào system prompt của LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

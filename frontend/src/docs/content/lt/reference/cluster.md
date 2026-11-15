@@ -124,7 +124,7 @@ Nieko apie tai nepasirodo vieno mazgo diegime: laukai tušti, žymėjimas nerodo
 
 **Jei darbininkas miršta vykdymo metu**, jo širdies plakimas pasensta, o lyderio esamas atkūrimo procesas pakartoja vykdymą gyvame egzemplioriuje. Eilutė, kurią jis buvo užėmęs, yra atšaukta atskirai: kai nebelieka aktyvaus vykdymo ir praėjo dvi minutės malonės laikotarpis, lyderis pažymi eilutę kaip nesėkmingą ir pažadina tuos, kurie laukė rezultato. Amžius niekada nėra priežastis, todėl teisėtai ilgas vykdymas paliekamas ramybėje; eilutė pažymima kaip nesėkminga, o ne vėl įtraukiama į eilę, nes atkūrimas jau valdo pakartojimą, o vėl įtraukti būtų tas pats workflow vykdomas du kartus.
 
-**Jei pagrindinis mazgas sugenda**, cron toliau veikia iš darbininko, o paskirstomi vykdymai tęsiasi. Vykdymai, kuriems reikia pagrindinio mazgo, kaupiasi ir laukia, o kai jis grįžta, jie išsikrauna — tačiau tik per klaidų malonės langą (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, numatytasis 600 sekundžių). Viskas, kas senesnė, uždaroma kaip praleista, su priežastimi, užfiksuota, o ne atkuriant valandas atidėjimo vienu metu.
+**Jei pagrindinis mazgas sugenda**, cron toliau veikia iš darbininko, o paskirstomi vykdymai tęsiasi. Vykdymai, kuriems reikia pagrindinio mazgo, kaupiasi ir laukia, o kai jis grįžta, jie išsikrauna — tačiau tik per klaidų malonės langą (`CRON_MISFIRE_GRACE_SECONDS`, numatytasis 600 sekundžių). Viskas, kas senesnė, uždaroma kaip praleista, su priežastimi, užfiksuota, o ne atkuriant valandas atidėjimo vienu metu.
 
 UI, API, MCP ir redaktorius yra neprieinami, kol pagrindinis mazgas neveikia, nes tai yra įėjimo taškai.
 
@@ -134,3 +134,6 @@ UI, API, MCP ir redaktorius yra neprieinami, kol pagrindinis mazgas neveikia, ne
 - [Nustatymai](./user-settings.md) – Egzempliorių skirtukas ir kas gali jį matyti
 - [Vykdymo pėdsakai](../tabs/traces-tab.md) – Palyginkite realius vykdymo trukmės skirtumus tarp egzempliorių prieš keisdami padalijimą
 - [Saugumas](./security.md) – Kodėl kiekvienas egzempliorius turi dalintis `SECRET_KEY` ir `ENCRYPTION_KEY`
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).

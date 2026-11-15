@@ -68,7 +68,9 @@ Izslēgtie soļi nav redzami pārējai mezgla daļai: tie neatbilst autentifikā
 
 **AI Auto Heal** padara workflow noturīgus pret DOM izmaiņām. Kad selector neizdodas divas reizes (piem., pēc vietnes pārveides), Heym izsauc LLM, lai atrastu alternatīvu lokatoru — parasti `role=button[name='Submit']` vai `text=Exact text` CSS selector vietā.
 
-Iespējojiet **Auto heal mode** AI soļa īpašībās. Ja saglabātais solis neizdodas:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Iespējojiet **Auto heal mode** AI soļa īpašībās. Ja saglabātais solis neizdodas:
 
 1. Heym uztver pašreizējo HTML un ekrānuzņēmumu
 2. Nosūta neizdevušos soli + lapas kontekstu LLM

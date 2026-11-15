@@ -122,3 +122,6 @@ Hvis ingen række matcher, vises modellen under **Unpriced models**-notifikation
 - [Traces-fane](./traces-tab.md) - Bruger LLM Cost Table til omkostningsdonut og KPI-kort
 - [Grist-node](../nodes/grist-node.md) - Eksternt regnearkalternativ
 - [Variabler-fane](./global-variables-tab.md) - Nøgle-værdi-lageralternativ
+## Søgning
+
+Brug søgefeltet over tabellisten, eller tryk på **Ctrl+F** (eller **Cmd+F**), for at filtrere tabeller efter navn eller beskrivelse, mens du skriver. Tryk på **Escape** for at rydde søgningen.

@@ -50,3 +50,8 @@
 - [Καρτέλα Analytics](./analytics-tab.md) – Μετρικές εκτέλεσης
 - [Καρτέλα Workflows](./workflows-tab.md) – Διαχείριση workflow
 - [Contextual Showcase](../reference/contextual-showcase.md) – Συνοπτικός οδηγός σελίδας για τις επιφάνειες του dashboard
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Δρομολόγηση των συμπτωμάτων χρόνου εκτέλεσης στη σωστή διαδικασία συμβάντος
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Διάγνωση αποτυχιών βάσης δεδομένων, υπηρεσιών, cluster και sandbox

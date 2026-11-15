@@ -92,6 +92,10 @@ Det definierar också uppgraderingsordningen. Att uppgradera main först markera
 
 **Worker-instanser har en annan utgående IP.** Varje API som vitlistar källadresser ser den nya. Send Email körs på main av just denna anledning; för HTTP-noden, ge antingen klustret en enda NAT-utgångsadress eller vitlista varje instans.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Lägga till en worker på en annan maskin
 
 `docker-compose.worker.yml` i repots rot kör en worker på sin egen värd. Den har ingen databas och inget användargränssnitt: den når main-instansens PostgreSQL och tar sin andel av bakgrundskörningarna.
@@ -124,7 +128,7 @@ Inget av detta visas i en installation med en enda instans: fälten är tomma, i
 
 **Om en worker avslutas mitt under en körning** blir dess heartbeat inaktuellt och ledarens befintliga återställningssvep kör om körningen på en aktiv instans. Den körad som den hade tagit anspråk på avvecklas separat: när ingen aktiv körning finns för den och en tvåminuters frist har passerat, markerar ledaren raden som misslyckad och väcker den som väntade på resultatet. Enbart ålder är aldrig triggern, så en legitimt lång körning lämnas i fred; och raden markeras som misslyckad i stället för att köas om, eftersom återställningen redan äger omkörningen och en omköning skulle köra samma workflow två gånger.
 
-**Om main går ner** fortsätter cron att avfyras från en worker och distribuerbara körningar fortsätter att köras. Körningar som behöver main köas upp och väntar, och töms när den återkommer — men endast inom fönstret för misfire-frist (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 sekunder som standard). Allt äldre stängs som överhoppat, med orsaken registrerad, i stället för att spela upp timmar av eftersläpning på en gång.
+**Om main går ner** fortsätter cron att avfyras från en worker och distribuerbara körningar fortsätter att köras. Körningar som behöver main köas upp och väntar, och töms när den återkommer — men endast inom fönstret för misfire-frist (`CRON_MISFIRE_GRACE_SECONDS`, 600 sekunder som standard). Allt äldre stängs som överhoppat, med orsaken registrerad, i stället för att spela upp timmar av eftersläpning på en gång.
 
 UI, API, MCP och editorn är otillgängliga medan main är nere, eftersom ingress pekar dit.
 

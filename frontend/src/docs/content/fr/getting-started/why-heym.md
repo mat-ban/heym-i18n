@@ -192,7 +192,7 @@ Le système de traces est conçu spécifiquement pour le débogage du comporteme
 Chaque appel LLM dans Heym est automatiquement chiffré. L'[onglet Exécutions](../tabs/traces-tab.md) affiche, pour chaque exécution, le nombre de tokens d'entrée et de sortie ainsi qu'un coût en USD en temps réel, calculé à partir d'une table de tarification synchronisée.
 
 - **Coût par exécution** – Tokens d'entrée, tokens de sortie et total en USD affichés sur chaque ligne d'exécution
-- **Analyse des coûts** – Les cartes de KPI et le graphique des coûts par modèle se mettent à jour selon la plage temporelle sélectionnée (1h / 24h / 7j / 30j / Tout)
+- **Analyse des coûts** – Les cartes de KPI et le graphique des coûts par modèle se mettent à jour selon la plage temporelle sélectionnée (1h / 3h / 6h / 24h / 7j / 30j / Tout)
 - **Table des coûts LLM** – Une table système dans l'[onglet Tables de données](../tabs/datatable-tab.md) est alimentée depuis Helicone toutes les 24 heures ; il est possible de remplacer les prix ou d'ajouter des lignes personnalisées pour les modèles non encore répertoriés
 - **Avertissement de prix manquant** – Les exécutions concernant des modèles sans entrée de tarification affichent un avertissement en ligne avec un lien direct vers la table des coûts
 
@@ -278,7 +278,7 @@ Les workflows sont appelables via HTTP à `/api/workflows/{workflow_id}/execute`
 Heym dispose d'un support natif de [MCP](../tabs/mcp-tab.md) des deux côtés :
 
 - **En tant que client** : les Nœuds Agent se connectent à des serveurs MCP externes (Filesystem, Browserbase, outils personnalisés) via stdio ou SSE et consomment automatiquement leurs outils
-- **En tant que serveur** : les workflows avec MCP activé deviennent des outils sur le serveur par défaut à `/api/mcp/sse`, ou sur des serveurs nommés disposant de leur propre URL et clé API, afin que Claude Desktop, Cursor et d'autres clients MCP puissent appeler directement vos workflows Heym
+- **En tant que serveur** : les workflows avec MCP activé deviennent des outils sur le serveur par défaut à `/api/mcp (or /api/mcp/sse for legacy connections)`, ou sur des serveurs nommés disposant de leur propre URL et clé API, afin que Claude Desktop, Cursor et d'autres clients MCP puissent appeler directement vos workflows Heym
 
 Les agents peuvent consommer plusieurs serveurs MCP simultanément, et tout workflow peut devenir un outil pour un client MCP externe.
 

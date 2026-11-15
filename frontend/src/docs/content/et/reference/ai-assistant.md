@@ -48,6 +48,7 @@ Agent-režiimis laseb sõnumivälja all olev **YOLO mode** märkeruut assistendi
 - Sisestage oma taotlus sisendisse (nt "Loo workflow, mis võtab kasutaja sisendi ja saadab selle LLM-ile")
 - Saatmiseks vajutage **Enter** (uue rea jaoks Shift+Enter)
 - AI edastab oma vastuse voogesituses. **Agent**-režiimis, kui vastus sisaldab workflow'd \`\`\`json koodiplokis, parsitakse see automaatselt ja rakendatakse lõuendile. **Ask**-režiimis ei muudeta lõuendit kunagi.
+- Töövoo JSON-i voogesituse ajal nimetab vastuse all olev rida töövoo ja seni kirjutatud sõlmed, näiteks `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Vestluse lähtestamiseks kasutage **Clear**
 - Sõnumi kohal hõljudes ja selle kopeerimisikoonil klõpsates kopeerite kuvatava teksti, sealhulgas workflow JSON-i
 - Sõnumikasti kohal oleva joone lohistamisega saab kasti kõrgemaks muuta. Sisendala võib kasvada kuni 60% paneelist ning naaseb lehe uuesti laadimisel oma vaikekõrgusele

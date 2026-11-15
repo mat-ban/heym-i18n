@@ -96,3 +96,11 @@ Les lectures de Drive es limiten als fitxers accessibles per a l'actor del workf
 
 ## Neteja
 Els tokens de compartició caducats es netegen automàticament cada dia. Els fitxers mateixos persisteixen fins que s'eliminen manualment mitjançant la pestanya Drive. Utilitzeu **Esborra-ho tot** per eliminar tots els fitxers i els seus enllaços de compartició en una sola acció.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

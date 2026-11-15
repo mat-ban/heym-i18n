@@ -116,6 +116,8 @@ Saklanan dosyaya sonraki adımlarda başvurun: `$saveAudio.id`, `$saveAudio.down
 
 Base64 içeriğine sonraki adımlarda başvurun: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 `file_base64` aracılığıyla döndürülen görseller, workflow'u çalıştırdığınızda debug panelinde satır içi olarak görüntülenir.
 
 ## Örnek — Drive Dosyalarını Listeleme

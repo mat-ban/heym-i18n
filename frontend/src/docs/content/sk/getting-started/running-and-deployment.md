@@ -34,6 +34,7 @@ Pre každú podporovanú premennú, predvolenú hodnotu a produkčnú poznámku 
 |----------|-------------|
 | `SECRET_KEY` | **Povinné.** Tajný kľúč na podpisovanie JWT. Automaticky generovaný skriptmi `run.sh`/`deploy.sh`, ak je prázdny. |
 | `ENCRYPTION_KEY` | **Povinné.** Kľúč na šifrovanie prihlasovacích údajov. Automaticky generovaný skriptmi `run.sh`/`deploy.sh`, ak je prázdny. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Voliteľné prepísanie reťazca pripojenia k databáze. Ak je prázdne, Heym ho zostaví z nastavení `POSTGRES_*`. |
 | `BACKEND_PORT` | Port backend API — predvolene `10105` |
 | `FRONTEND_PORT` | Port frontendu — predvolene `4017` |
@@ -345,3 +346,11 @@ git pull
 - [Environment Variables](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Úplná referencia konfigurácie
 - [Security](../reference/security.md) – Nastavenia JWT, šifrovania a CORS
 - [Load Distribution](../reference/cluster.md) – Spustenie viacerých inštancií proti jednej databáze
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

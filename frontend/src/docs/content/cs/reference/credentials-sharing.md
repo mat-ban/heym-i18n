@@ -87,6 +87,7 @@ Některé uzly ukládají `credentialId` (UUID) do `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Podrobnosti připojení k ClickHouse (host, port, autentizace, databáze) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Přihlašovací údaje k Telegram botovi |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Veřejný klíč Discord nebo přihlašovací údaje k Webhooku |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Vektorová databáze Qdrant nebo Postgres (pgvector) prostřednictvím přihlašovacích údajů Qdrant, Psql nebo Custom Embeddings RAG |
 | Evals | `credential_id`, `judge_credential_id` | Přihlašovací údaje k modelu; přihlašovací údaje k modelu nebo Decision Model pro LLM-as-Judge judge |
 | [Playwright](../nodes/playwright-node.md) AI krok | `credentialId` | LLM/Vision model (pro AI krok a [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Po spuštění funkce `mask_sensitive_output()` maskuje hodnoty přihlašovacíc
 - [Expression DSL](./expression-dsl.md) – Syntaxe `$credentials`
 - [Typy uzlů](./node-types.md) – Uzly, které používají přihlašovací údaje ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Uzel Agent](../nodes/agent-node.md) – Používá `credentialId` pro LLM
+
+## Oprávnění kalendáře Google Meet
+
+Sdílení [přihlašovacích údajů Google Meet](../nodes/google-meet-node.md) umožňuje workflow číst intervaly volno/zaneprázdněn přístupných kalendářů a vytvářet, upravovat nebo mazat události jako připojený účet Google, včetně odesílání pozvánek a zrušení. E-mail účastníka nemění to, který účet událost vlastní nebo autorizuje. Pouze vlastník přihlašovacích údajů může znovu připojit svou autorizaci Google.

@@ -45,7 +45,7 @@
 
 Redaktora cilnē **Run** (Defined webhook režīms) katrs ievades lauks atbalsta drag-and-drop un iekļautu pielikuma vadīklu (lauka apakšējā labajā stūrī):
 
-- **Teksta faili** (`.txt`, `.md`, `.json`, `.csv` un līdzīgi) tiek nolasīti kā vienkāršs teksts.
+- **Teksta faili** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Attēli** (JPEG, PNG, GIF, WebP) tiek saglabāti kā `data:` URL (base64) lauka vērtībā — izmantojiet lauku atslēgas, piemēram, `imageUrl` vai `base64`, ja lejupstraumes mezgli sagaida attēla datus.
 - **PDF** faili tiek konvertēti uz izgūtu tekstu (maks. 5 MB fails, 100k rakstzīmju saturs).
 

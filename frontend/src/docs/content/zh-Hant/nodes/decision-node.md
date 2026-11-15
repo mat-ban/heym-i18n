@@ -157,6 +157,8 @@ Input → Decision (triage) → Condition ($triage.answers.department.confidence
 
 同一個 credential 可為 [Evals](../tabs/evals-tab.md) 執行進行評判：在選取 **LLM-as-Judge** 後，將其選為 judge，decision model 便會依據預期輸出為每個回答評分。
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym 預設會封鎖對私有位址與 loopback 位址的對外請求，因此您自行在 `localhost` 或私有網段上執行的 decision endpoint 需要設定 `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`。
 
 Decision model 不會出現在 Heym 所同步的 LLM 定價表中，因此這些呼叫在 [Traces](../tabs/traces-tab.md) 中的 **Cost** 欄位會保持空白。Token 數量仍會被記錄，而您可以透過 pricing override 自行新增價格。

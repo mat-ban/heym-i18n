@@ -2,6 +2,9 @@
 
 Zavihek **Opozorila** vam omogoča, da določite mejne pogoje v časovnem oknu in vas obvesti, ko so ti prekoračeni. Heym že beleži rezultate izvajanja, trajanje izvajanja in stroške LLM, vendar tega nikoli ne ponudi samodejno. Opozorilo je način, kako to zahtevate.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Oglejte si predstavitev Alerts</a></p>
+
 Vsako opozorilo se ocenjuje v **časovnem oknu**, ki ga izberete, nikoli na podlagi enega samega dogodka. En neuspešen zagon je šum. Dvanajst neuspešnih zagonov v desetih minutah je incident.
 
 ## Vrste opozoril

@@ -72,6 +72,7 @@ Nom: `heym.agent.tool.execute`, creat sota el span del Node d'Agent actiu.
 | `heym.agent.tool.args_bytes` | Mida UTF-8 dels arguments d'eina serialitzats. |
 | `heym.agent.tool.result_bytes` | Mida UTF-8 del resultat d'eina serialitzat. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` o `cancelled`. Els errors d'eina estableixen l'estat del span a `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Els arguments i resultats crus de les eines no s'adjunten als spans per defecte.
 

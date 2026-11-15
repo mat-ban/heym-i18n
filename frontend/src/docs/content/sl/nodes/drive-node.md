@@ -116,6 +116,8 @@ Referencirajte shranjeno datoteko v nadaljnjih korakih: `$saveAudio.id`, `$saveA
 
 Referencirajte base64 vsebino v nadaljnjih korakih: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Slike, vrnjene preko `file_base64`, so prikazane v vmesniku za odpravljanje napak, ko zaženete workflow.
 
 ## Primer — Seznam datotek Drive

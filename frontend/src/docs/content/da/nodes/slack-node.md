@@ -54,3 +54,5 @@ Brug sammen med [Error Handler](./error-handler-node.md) til fejlnotifikationer:
 - [Node-typer](../reference/node-types.md) – Oversigt over alle node-typer
 - [Error Handler](./error-handler-node.md) – Send Slack ved workflow-fejl
 - [Legitimationsoplysninger-fane](../tabs/credentials-tab.md) – Tilføj Slack-webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

@@ -26,6 +26,10 @@ Setiap kolom memiliki:
 
 Tambahkan, edit, atau hapus kolom dari header tampilan detail tabel.
 
+## Pencarian
+
+Gunakan bidang pencarian di atas daftar tabel, atau tekan **Ctrl+F** (atau **Cmd+F**), untuk memfilter tabel berdasarkan nama atau deskripsi saat Anda mengetik. Tekan **Escape** untuk menghapus pencarian.
+
 ## Membuat Kolom dengan AI
 
 Alih-alih menambahkan kolom secara manual, Anda dapat mendeskripsikan tabel dalam bahasa alami (atau menempelkan contoh JSON) dan membiarkan LLM mengusulkan skema. Kedua titik masuk membuka dialog yang sama:

@@ -11,7 +11,7 @@ Heym은 두 가지 모드를 지원합니다. 모든 MCP 활성화 Workflow를 �
 
 ## 기본 MCP 서버
 
-기본 서버는 항상 `{origin}/api/mcp/sse`에서 사용할 수 있습니다. MCP가 켜진 모든 Workflow가 여기에 도구로 나타납니다.
+기본 서버는 항상 `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)`에서 사용할 수 있습니다. MCP가 켜진 모든 Workflow가 여기에 도구로 나타납니다.
 
 ### MCP API Key
 
@@ -186,7 +186,7 @@ Workflow를 토글하면 할당 목록의 맨 위로 이동하므로, 방금 변
 
 | 서버 | Endpoint |
 |--------|----------|
-| Default | `{origin}/api/mcp/sse` |
+| Default | `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)` |
 | Named | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
 두 Endpoint 모두 SSE transport(GET, MCP spec 2024-11-05)와 Streamable HTTP transport(POST, MCP spec 2025-03-26)를 지원합니다. Claude, ChatGPT 및 Gemini는 두 경우 모두 보안 로그인을 위해 OAuth 2.1 / PKCE를 사용합니다.
@@ -201,3 +201,17 @@ Workflow를 토글하면 할당 목록의 맨 위로 이동하므로, 방금 변
 - [Workflows Tab](./workflows-tab.md) – Workflow 생성 및 관리
 - [Node Types](../reference/node-types.md) – AI 노드 개요
 - [Contextual Showcase](../reference/contextual-showcase.md) – 대시보드 화면을 위한 간결한 페이지 가이드
+
+### Memory tools: get_user_memory and set_user_memory
+
+The default server always lists two more tools, with or without `heym_chat`, so any MCP client shares one memory with Heym's Chat and Heym Work. The memory is your [User Rules](../reference/user-settings.md#user-rules-as-memory).
+
+| Tool | Arguments | Returns |
+|------|-----------|---------|
+| `get_user_memory` | none | `content` (your User Rules), `revision`, `length`, `max_length` |
+| `set_user_memory` | `mode` (`append` or `replace`), `content`, `revision` (required for `replace`) | `status` (`added`, `replaced`, `unchanged`, `conflict`, `refused`) and the memory after the write |
+
+- `append` adds one line.
+- `replace` rewrites the whole text and only lands when `revision` matches the stored text. On `conflict`, the result carries the current text and revision to merge and retry.
+- Text that looks like an API key, token, password or other credential is refused, and nothing is saved.
+- Named servers do not list these tools. A workflow named `get_user_memory` or `set_user_memory` is not listed on the default server.

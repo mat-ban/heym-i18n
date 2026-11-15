@@ -65,3 +65,7 @@
 - [Contextual Showcase](../reference/contextual-showcase.md) – 仪表盘界面的精简页面指南
 
 当图表显示出您希望被通知而非持续关注的趋势时，可将其转化为[告警](./alerts-tab.md)：错误计数、运行时长、LLM 支出和执行次数均可设置时间窗口内的阈值。
+
+## Related
+
+- [Operations Runbook (L1): 资源利用](../reference/operations-runbook.md#most-resource-consuming-workflows) - 查找高容量和长时间运行的工作流并关联 CPU、内存和 Token

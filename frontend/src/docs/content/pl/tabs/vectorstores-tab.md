@@ -50,3 +50,22 @@ W [węźle RAG](../nodes/rag-node.md) wybierz magazyn wektorowy po nazwie. Węze
 - [Węzeł RAG](../nodes/rag-node.md) – Dokumentacja węzła
 - [Zakładka Workflows](./workflows-tab.md) – Twórz workflow korzystające z RAG
 - [Contextual Showcase](../reference/contextual-showcase.md) – Zwięzły przewodnik po stronach panelu
+
+
+## Uploading Documents
+
+- **Upload files** – Drag and drop or pick several files. A store takes:
+  - **Documents** – PDF, Markdown, text, CSV and JSON
+  - **Images** – PNG, JPEG, TIFF, WebP and BMP, read with the same Tesseract OCR as the
+    [Converter](../nodes/converter-node.md) node, language detected automatically
+  - **Audio** – mp3, wav, ogg, opus (WhatsApp voice notes) and flac, transcribed with the Converter's Whisper model on your
+    own instance; each chunk keeps where it starts and ends in the recording
+    (`start_seconds`, `end_seconds`)
+  - **Any other plain-text file** – a file such as `notes` or `README` is read as text when
+    it is valid UTF-8
+- **Scanned PDFs** – pages without a text layer are read with OCR, up to 200 such pages per file
+- **Background uploads** – audio and PDFs with scanned pages take minutes, so Heym reads them in
+  the background. They show at the top of the store's items as *Transcribing* or *Reading scanned
+  pages* and turn into a normal source when their chunks are in. A failed one shows why and can
+  be dismissed. With **Override existing files**, the old version stays searchable until the new
+  one is ready

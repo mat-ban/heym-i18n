@@ -22,7 +22,7 @@ Node cũng yêu cầu credential **GitHub** để clone các kho lưu trữ riê
 Việc cô lập thực thi được chọn bởi `HEYM_OPENCODE_CLI_COMMAND`, hoàn toàn giống node Codex:
 
 - **Phát triển cục bộ (`run.sh`)** giữ nguyên giá trị mặc định `opencode`, nên OpenCode chạy như một tiến trình con trên máy chủ đối với workspace đã clone — không cần Docker, không cần cờ bổ sung.
-- **Triển khai Docker (`deploy.sh` và image GHCR đơn lẻ)** đặt nó thành `/usr/local/bin/heym-opencode-docker`, một wrapper chạy `opencode run` bên trong một **container anh em dùng một lần, được gia cố bảo mật** chia sẻ volume có tên OpenCode workspace.
+- **Triển khai Docker (`deploy.sh` và image GHCR đơn lẻ)** đặt nó thành `/usr/local/bin/heym-opencode-docker`, một wrapper chạy `opencode run` bên trong một **container anh em dùng một lần, được gia cố bảo mật** chia sẻ volume có tên OpenCode workspace. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Container runner được gia cố sẽ loại bỏ toàn bộ Linux capabilities, đặt `no-new-privileges`, sử dụng root chỉ đọc với tmpfs `/tmp`, và áp dụng giới hạn pid/memory/CPU. Lưu lượng mạng ra ngoài được cho phép (OpenCode phải kết nối được tới cổng model). **Token GitHub không bao giờ được đặt bên trong container** — mọi thao tác git và GitHub đều chạy phía máy chủ, nên chỉ có OpenCode API key và các tệp kho lưu trữ là nằm bên trong.
 

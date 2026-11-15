@@ -22,7 +22,7 @@ Vozlišče prav tako zahteva **GitHub** poverilnico za kloniranje zasebnih repoz
 Izolacija izvajanja je izbrana z `HEYM_OPENCODE_CLI_COMMAND`, prav tako kot pri vozlišču Codex:
 
 - **Lokalni razvoj (`run.sh`)** ga pusti na privzetem `opencode`, tako da OpenCode deluje kot podproces gostitelja proti kloniranemu delovnemu prostoru — Docker ni potreben, brez dodatnih zastavic.
-- **Docker implementacije (`deploy.sh` in enotna slika GHCR)** ga nastavijo na `/usr/local/bin/heym-opencode-docker`, ovitek, ki izvaja `opencode run` znotraj **utrjenega, enkratnega sosednjega vsebnika**, ki deli volumen delovnega prostora OpenCode.
+- **Docker implementacije (`deploy.sh` in enotna slika GHCR)** ga nastavijo na `/usr/local/bin/heym-opencode-docker`, ovitek, ki izvaja `opencode run` znotraj **utrjenega, enkratnega sosednjega vsebnika**, ki deli volumen delovnega prostora OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Utrjen izvajalni vsebnik odstrani vse Linux zmogljivosti, nastavi `no-new-privileges`, uporablja samo za branje koren z tmpfs `/tmp` in uporablja omejitve za pid/memory/CPU. Omogočen je izhod omrežja (OpenCode mora doseči modelni prehod). **GitHub token nikoli ni postavljen znotraj vsebnika** — vse git in GitHub operacije se izvajajo na strani gostitelja, tako da so znotraj le API ključ OpenCode in datoteke repozitorija.
 

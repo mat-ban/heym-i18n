@@ -72,6 +72,7 @@ Nimi: `heym.agent.tool.execute`, luodaan aktiivisen Agent-solmun jäljen alle.
 | `heym.agent.tool.args_bytes` | Työkalun argumenttien sarjoitetun koon UTF-8-tavuina. |
 | `heym.agent.tool.result_bytes` | Työkalun tuloksen sarjoitetun koon UTF-8-tavuina. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` tai `cancelled`. Työkaluvirheet asettavat jäljen tilan arvoon `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Raakoja työkalun argumentteja ja tuloksia ei oletusarvoisesti liitetä jälkiin.
 

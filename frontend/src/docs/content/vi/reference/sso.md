@@ -141,3 +141,6 @@ Một lần đăng nhập thất bại sẽ quay lại màn hình đăng nhập 
 - **Nhiều provider đồng thời.** Một instance kết nối tới một provider.
 - **Ánh xạ nhóm hoặc vai trò** từ các claim của provider.
 - **Đăng xuất một lần.** Đăng xuất khỏi Heym không đăng xuất bạn khỏi provider.
+
+- **Xác thực hai yếu tố thuộc về nhà cung cấp.** `HEYM_REQUIRE_MFA` chỉ áp dụng cho đăng nhập bằng mật khẩu; đăng nhập SSO không bao giờ yêu cầu mã Heym. Hãy yêu cầu MFA ở nhà cung cấp danh tính của bạn.
+- **Việc hủy kích hoạt cũng áp dụng ở đây.** Tài khoản bị quản trị viên hủy kích hoạt trong **Cài đặt → Người dùng** sẽ bị từ chối ngay cả khi nhà cung cấp vẫn xác thực tài khoản đó.

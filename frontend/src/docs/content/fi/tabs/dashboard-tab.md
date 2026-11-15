@@ -2,6 +2,9 @@
 
 **Dashboard**-välilehti on Grafana-tyylinen tila, jossa voit rakentaa ruudukon kaavio- ja mittarivimpaleista. Jokainen impala renderöidään oman piilotetun Heym-workflowin tulostuksesta, joten mikä tahansa workflowssa tuotettava data – tietokantakyselyt, API-kutsut, RAG-haut, LLM-tulosteet – voidaan muuttaa kaavioksi. Voit pitää useita dashboardeja ja jakaa kunkin niistä henkilöiden tai tiimien kanssa.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboardit
 
 Jokaisella käyttäjällä on aluksi yksi dashboard, joka luodaan ensimmäistä kertaa välilehteä avattaessa. Dashboard-valitsinta välilehden yläosassa käytetään vaihtamaan eri dashboardien välillä, ja sen vieressä olevaa **+**-painiketta uuden dashboardin luomiseen. Valitsin listaa ensin omat dashboardisi ja sitten kanssasi jaetut dashboardit, jotka on merkitty jakaneen henkilön nimellä.
@@ -27,6 +30,8 @@ Impala on yksittäinen kaavio ruudukossa. Tuetut kaaviotyypit:
 - **Entity relationships (DB)** (taulukot, kentät, PK/FK-avaimet ja yhteydet)
 - **Pylväsmittari** (vaakasuora mittari per rivi punaisesta vihreään gradientilla ja arvolla, esim. levytilaa)
 - **Teksti** (Markdown-viesti, esim. tilatieto kuten "Viimeisin suoritus klo 19:47"; tukee [interaktiivisia valintalistoja](../nodes/chart-output-node.md#interactive-task-lists) staattisessa Markdownissa ja [numeroituja listoja](../nodes/chart-output-node.md#numbered-lists) mukautettua tai laskevaa numerointia varten)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (odottavat ihmisten tekemät tarkistukset. Otsikko näyttää `1/n odottaa`. Workflown nimi avaa kyseisen suorituksen canvasilla. **Hyväksy**, **Pyydä muutoksia** ja **Hylkää** ratkaisevat tarkistuksen. Historia-kuvake impalan otsikon vieressä avaa kyseisen suorituksen historianäkymään tällä sivulla. Impala ei käytä yläpuolisia rivejä, ja jokainen näkee oman jononsa. Se voi sen sijaan näyttää yhden Workflowin tarkistukset kaikille, joilla on oikeus avata kyseinen Workflow; katso [HITL-widgetit](#hitl-widgetit))
 
 Kaavioiden lisäksi **Run a workflow** -impala suorittaa yhden workflowstasi suoraan dashboardilta: pudotetulla tiedostolla, syötekentillään tai Run-painikkeella; katso [Suoritusimpalat](#run-widgets).
@@ -145,3 +150,5 @@ Jaon poistaminen tai kirjoitusoikeuden muuttaminen luku-oikeudeksi tulee voimaan
 ## Aikataulut ja tietokantakaaviot
 
 Valitse Lisää widget -kohdasta **Gantt** näyttääksesi tehtävät ajassa valmistumisen ja riippuvuuslinkkien kera, tai **Entity relationships (DB)** kartoittaaksesi taulukot, kentät ja niiden suhteet. Molemmat tyypit käyttävät [Chart Output -solmua](../nodes/chart-output-node.md#gantt-schedules) ja ovat saatavilla myös Heym Work -sivuilla. Kun Work ehdottaa widgettejä aikataululle tai tietokantakaaviolle, se piirtää esikatselut ehdotetuista tehtävistä tai entiteeteistä.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

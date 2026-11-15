@@ -68,6 +68,7 @@ Heym предоставя разнообразие от типове възли 
 | [Linear](../nodes/linear-node.md) | Управление на Linear teams, projects, issues, workflow states и comments чрез GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Четене/запис в Google Sheets чрез OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Изброяване, изтегляне, обновяване и изтриване на файлове в Google Drive чрез OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Четене на наличност и създаване, актуализиране или изтриване на покани за Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Изпълнение на SQL заявки и вмъкване на редове в BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Заявки и промени в Supabase таблици чрез PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Изпълнение на SQL, CRUD и count операции върху ClickHouse | 1 | 1 |

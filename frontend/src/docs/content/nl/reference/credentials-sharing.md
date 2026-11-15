@@ -87,6 +87,7 @@ Sommige nodes slaan `credentialId` (UUID) op in `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse-verbindingsgegevens (host, poort, authenticatie, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot-referentie |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord public key of webhook-referentie |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant of Postgres (pgvector) vector DB, via een Qdrant-, Psql- of Custom Embeddings RAG-referentie |
 | Evals | `credential_id`, `judge_credential_id` | Modelreferentie; een model- of Decision Model-referentie voor de LLM-as-Judge judge |
 | [Playwright](../nodes/playwright-node.md) AI-stap | `credentialId` | LLM/Vision-model (voor AI-stap en [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Na uitvoering maskeert `mask_sensitive_output()` referentiewaarden in uitvoer, w
 - [Expression DSL](./expression-dsl.md) – `$credentials`-syntaxis
 - [Node Types](./node-types.md) – Nodes die referenties gebruiken ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Gebruikt `credentialId` voor LLM
+
+## Google Meet-agendatoestemmingen
+
+Het delen van een [Google Meet-referentie](../nodes/google-meet-node.md) stelt workflows in staat om de vrij/bezet-intervallen van toegankelijke agenda's te lezen en afspraken te maken, bij te werken of te verwijderen als het gekoppelde Google-account, inclusief het verzenden van uitnodigingen en annuleringen. Het e-mailadres van de bezoeker verandert niets aan welk account de afspraak bezit of autoriseert. Alleen de eigenaar van de referentie kan de Google-autorisatie opnieuw verbinden.

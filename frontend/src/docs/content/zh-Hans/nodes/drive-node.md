@@ -116,6 +116,8 @@
 
 在下游引用 base64 内容：`$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 通过 `file_base64` 返回的图像在运行工作流时会在调试面板中内联显示。
 
 ## 示例 — 列出 Drive 文件

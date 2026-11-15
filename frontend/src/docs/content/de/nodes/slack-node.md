@@ -54,3 +54,5 @@ Verwende ihn mit dem [Error Handler](./error-handler-node.md) für Fehlerbenachr
 - [Knotentypen](../reference/node-types.md) – Übersicht aller Knotentypen
 - [Error Handler](./error-handler-node.md) – Slack bei Workflow-Fehler senden
 - [Reiter Anmeldedaten](../tabs/credentials-tab.md) – Slack-Webhook hinzufügen
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

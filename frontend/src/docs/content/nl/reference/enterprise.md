@@ -42,7 +42,7 @@ Hands-on trainingssessies afgestemd op het vaardigheidsniveau en de use cases va
 
 ## Kubernetes Deployment
 
-De standaardgids [Running & Deployment](../getting-started/running-and-deployment.md) behandelt Docker Compose voor productieopstellingen op één server. Enterprise-klanten ontvangen ondersteuning bij productie-Kubernetes-deployments voor hoge beschikbaarheid en horizontale schaalbaarheid:
+De standaardgids [Running & Deployment](../getting-started/running-and-deployment.md) behandelt Docker Compose voor productieopstellingen op één server. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise-klanten ontvangen ondersteuning bij productie-Kubernetes-deployments voor hoge beschikbaarheid en horizontale schaalbaarheid:
 
 - **Meerdere worker-nodes** — Het verdelen van Heym-backend-workers over meerdere Kubernetes-nodes voor redundantie en load balancing
 - **Sidecar-containers** — Het configureren van sidecar-patronen voor logverzameling, monitoring-agents, service meshes (Istio, Linkerd) en secret injection (Vault)

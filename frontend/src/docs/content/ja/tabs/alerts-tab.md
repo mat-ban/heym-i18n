@@ -2,6 +2,9 @@
 
 **Alerts**タブでは、時間枠に対するしきい値条件を定義し、それを超えたときに通知を受け取ることができます。Heymはすでに実行結果、実行時間、LLMの消費額を記録していますが、それらを自発的に知らせることはありません。Alertは、それを知らせるようにHeymに依頼するための仕組みです。
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Alerts のデモを見る</a></p>
+
 すべてのAlertは、単一のイベントではなく、選択した**時間枠**に対して評価されます。1回の失敗はノイズにすぎません。10分間に12回の失敗があれば、それはインシデントです。
 
 ## Alertの種類

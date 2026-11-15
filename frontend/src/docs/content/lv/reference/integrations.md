@@ -19,7 +19,7 @@ Daži integrācijas mezgli **neprasa** akreditācijas datus. [WebSocket Trigger]
 | **Linear** | [Linear mezgls](../nodes/linear-node.md) | `api_key`, vai `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry mezgls](../nodes/sentry-node.md) | `api_token`, opcional `base_url` |
 | **Pielāgots** | [LLM](../nodes/llm-node.md), [Aģents](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Lēmumu Modelis** | [Lēmums](../nodes/decision-node.md), [Novērtējumi](../tabs/evals-tab.md) (LLM-as-Judge tiesnesis) | `base_url`, opcional `api_key` |
+| **Lēmumu Modelis** | [Lēmums](../nodes/decision-node.md), [Novērtējumi](../tabs/evals-tab.md) (LLM-as-Judge tiesnesis), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, opcional `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Aģents](../nodes/agent-node.md), Chat, AI Defaults | lēmumu modeļa akreditācijas dati, plus modeļa opcijas, kas atsaucas uz Jūsu citām akreditācijām |
 | **Cohere** | Iegultās | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektoru krātuves | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Daži integrācijas mezgli **neprasa** akreditācijas datus. [WebSocket Trigger]
 | **Grist** | [Grist mezgls](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets mezgls](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 piekrišana |
 | **Google Drive** | [Google Drive mezgls](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 piekrišana (pilna Drive piekļuve) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery mezgls](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 piekrišana |
 | **Supabase** | [Supabase mezgls](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, opcional `supabase_schema` |
 | **ClickHouse** | [ClickHouse mezgls](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -879,3 +880,6 @@ Maršrutē katru pieprasījumu uz vienu no Jūsu esošajiem modeļu akreditācij
 ### Piezīmes
 
 Iespēju nosaukumi ir tie, starp kuriem lēmumu modelis izvēlas, tāpēc tiem jābūt atšķirīgiem. Iespēja nevar norādīt uz citu modeļu maršrutētāju.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

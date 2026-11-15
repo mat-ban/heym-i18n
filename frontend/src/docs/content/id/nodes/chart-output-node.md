@@ -368,3 +368,6 @@ Sebuah `table` dapat mengubah satu kolom menjadi tombol yang membuka tautan. Atu
 Hanya alamat `http://` dan `https://` serta path yang diawali satu `/` yang menjadi tombol. Nilai lain apa pun, seperti `javascript:` atau `//host`, tetap berupa teks biasa, dan sel kosong tidak menampilkan apa pun.
 
 Tombol ini bekerja berdampingan dengan [tautan baris](../tabs/dashboard-tab.md#detail-pages): mengeklik tombol membuka tautannya di tab baru, dan mengeklik bagian lain pada baris tetap membuka halaman detail.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

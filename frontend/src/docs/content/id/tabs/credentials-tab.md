@@ -93,3 +93,7 @@ Lihat [Expression DSL](../reference/expression-dsl.md) untuk mereferensikan nila
 - [Tab Vectorstores](./vectorstores-tab.md) – Menggunakan credential Qdrant atau Postgres (pgvector)
 - [Tab Chat](./chat-tab.md) – Menggunakan credential OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Panduan halaman ringkas untuk tampilan dashboard
+
+## Pencarian
+
+Gunakan bidang pencarian di atas daftar, atau tekan **Ctrl+F** (atau **Cmd+F**), untuk memfilter kredensial berdasarkan nama atau tipe saat Anda mengetik. Tekan **Escape** untuk menghapus pencarian.

@@ -65,3 +65,7 @@ Passi il mouse su un grafico per visualizzare il tipo di nodo sotto il puntatore
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guida compatta alle pagine per le superfici della dashboard
 
 Quando un grafico mostra una tendenza sulla quale si desidera essere avvisati anziché monitorarla, trasformarla in un [avviso](./alerts-tab.md): conteggio errori, durata dell'esecuzione, spesa LLM e conteggio delle esecuzioni possono tutti ricevere una soglia su una finestra temporale.
+
+## Related
+
+- [Operations Runbook (L1): Utilizzo delle risorse](../reference/operations-runbook.md#most-resource-consuming-workflows) - Individuare i workflow ad alto volume e a lunga esecuzione e correlare CPU, memoria e token

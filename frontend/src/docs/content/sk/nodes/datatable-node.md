@@ -95,7 +95,7 @@ Vo filtri `find` alebo `count` jednoduchá hodnota znamená rovná sa; hodnota o
 | `$contains` | Zhoda podreťazca bez rozlišovania veľkosti písmen |
 | `$in` | Hodnota sa nachádza v danom poli |
 
-Príklad kombinujúci niekoľko: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Neznáme operátory sa ignorujú. Filtre `upsert` stále používajú hodnoty s presnou zhodou na nájdenie riadku na aktualizáciu.
+Príklad kombinujúci niekoľko: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Neznáme operátory sa ignorujú. Filtre `upsert` stále používajú hodnoty s presnou zhodou na nájdenie riadku na aktualizáciu.
 
 Môžete tiež filtrovať podľa metadát riadku — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — ktoré sú uložené ako skutočné stĺpce, nie vo vašich dátach. Pre dátumy zadajte úplnú hodnotu pre porovnania rozsahu (napr. `{"created_at": {"$gt": "2026-06-04"}}`) alebo použite `$contains` pre čiastočnú zhodu textu (napr. `{"created_at": {"$contains": "2026-06-04"}}`). Ak sa jeden z vašich vlastných stĺpcov volá rovnako ako pole metadát, prednosť má dátový stĺpec.
 

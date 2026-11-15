@@ -59,6 +59,10 @@ Loguje se každá změna stavu. Čtení se loguje pouze tam, kde je čtení samo
 | `auth.token_refresh` | `outcome=denied` s `reason=refresh_token_replayed_or_revoked` — signál krádeže tokenu, na který stojí za to nastavit výstrahu. |
 | `auth.password_change` | `outcome=failure`, když bylo současné heslo nesprávné. |
 | `auth.sso_login` | Single sign-on. `outcome=failure` nese důvod, proč byla odpověď poskytovatele odmítnuta; `denied` nese `email_not_verified`, `domain_not_allowed` nebo `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Administrátor změnil konfiguraci [SSO](./sso.md). Zaznamenává `enabled` a `password_login_disabled`, nikdy client secret. |
 | `sso_settings.test` | Administrátor spustil test připojení SSO. |
 

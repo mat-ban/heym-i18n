@@ -32,6 +32,7 @@ Credentials는 Workflow 노드에서 사용하는 API 키와 시크릿을 저장
 | [Grist](../nodes/grist-node.md) | Grist | API 키 + 서버 URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 동의 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 동의 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 동의 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | 프로젝트 URL + API 키(+ 선택적 기본 스키마) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | 호스트 + 포트 + 사용자 이름/비밀번호 + 데이터베이스(+ secure) |

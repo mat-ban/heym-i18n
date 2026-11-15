@@ -26,6 +26,8 @@ Mezglam ir nepieciešami arī **GitHub** akreditācijas dati, lai klonētu priv�
 
 Docker izvietojumos Heym palaiž Codex blakus esošā konteinerā no tā paša Heym attēla (nevis atsevišķa GHCR attēla). Šis konteiners montē tikai Codex darbvietas sējumu un ļauj Codex paša bubblewrap smilškastei izveidot nosaukumtelpas un svaigu `/proc`. Izpildītājs pievieno `SYS_ADMIN`, neierobežotu seccomp un AppArmor, kā arī `systempaths=unconfined` (Docker Engine 25+). Bez pēdējā karodziņa katra komanda neizdodas pirms palaišanas ar `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI atsauces:
 
 - [Codex authentication](https://developers.openai.com/codex/auth)

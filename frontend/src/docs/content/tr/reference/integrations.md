@@ -19,7 +19,7 @@ Bazı entegrasyon düğümleri credential **gerektirmez**. [WebSocket Trigger](.
 | **Linear** | [Linear düğümü](../nodes/linear-node.md) | `api_key` veya `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry düğümü](../nodes/sentry-node.md) | `api_token`, isteğe bağlı `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, isteğe bağlı `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, isteğe bağlı `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | bir decision model credential'ı ve diğer credential'larınıza başvuran model seçenekleri |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vectorstores | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Bazı entegrasyon düğümleri credential **gerektirmez**. [WebSocket Trigger](.
 | **Grist** | [Grist düğümü](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets düğümü](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 onayı |
 | **Google Drive** | [Google Drive düğümü](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 onayı (tam Drive kapsamı) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery düğümü](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 onayı |
 | **Supabase** | [Supabase düğümü](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, isteğe bağlı `supabase_schema` |
 | **ClickHouse** | [ClickHouse düğümü](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -880,3 +881,6 @@ Her isteği, karar vermek için bir karar modeli kullanarak mevcut model kimlik 
 ### Notlar
 
 Seçenek adları, karar modelinin aralarında seçim yaptığı adlardır, bu nedenle benzersiz olmalıdır. Bir seçenek başka bir Model Router'a işaret edemez.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

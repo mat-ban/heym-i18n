@@ -95,7 +95,7 @@ V `find` ali `count` filtru, navadna vrednost pomeni enako; objektna vrednost up
 | `$contains` | Ujemanje podniza brez upoštevanja velikosti črk |
 | `$in` | Vrednost je v danem naboru |
 
-Primer kombiniranja več: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Neznani operatorji se ignorirajo. `upsert` filtri še vedno uporabljajo natančne vrednosti za iskanje vrstice za posodobitev.
+Primer kombiniranja več: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Neznani operatorji se ignorirajo. `upsert` filtri še vedno uporabljajo natančne vrednosti za iskanje vrstice za posodobitev.
 
 Filtrirate lahko tudi po metapodatkih vrstice — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — ki so shranjeni kot pravi stolpci in ne znotraj vaših podatkov. Za datume posredujte polno vrednost za primerjave obsega (npr. `{"created_at": {"$gt": "2026-06-04"}}`) ali uporabite `$contains` za delno besedilno ujemanje (npr. `{"created_at": {"$contains": "2026-06-04"}}`). Če je eden od vaših stolpcev poimenovan enako kot metapodatkovno polje, ima prednost podatkovni stolpec.
 

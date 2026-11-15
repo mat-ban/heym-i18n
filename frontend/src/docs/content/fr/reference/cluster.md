@@ -92,6 +92,10 @@ Cela définit également l'ordre de mise à niveau. Mettre à niveau main en pre
 
 **Les instances worker ont une IP sortante différente.** Toute API qui applique une allowlist d'adresses sources verra la nouvelle. Send Email s'exécute sur main précisément pour cette raison ; pour le nœud HTTP, attribuez au cluster une adresse NAT egress unique ou ajoutez chaque instance à l'allowlist.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Ajouter un worker sur une autre machine
 
 `docker-compose.worker.yml` à la racine du dépôt exécute un worker sur son propre hôte. Il n'a ni base de données ni UI : il joint le PostgreSQL de l'instance main et prend sa part des exécutions en arrière-plan.
@@ -124,7 +128,7 @@ Rien de tout cela n'apparaît sur une installation mono-instance : les champs so
 
 **Si un worker meurt en cours d'exécution**, son heartbeat devient obsolète et la passe de récupération existante du leader relance l'exécution sur une instance live. La ligne de file qu'il avait réservée est retirée séparément : une fois qu'aucune exécution active n'existe pour elle et qu'un délai de grâce de deux minutes s'est écoulé, le leader fait échouer la ligne et réveille quiconque attendait le résultat. L'ancienneté seule n'est jamais le trigger, de sorte qu'une exécution légitimement longue est laissée tranquille ; et la ligne est mise en échec plutôt que remise en file, car la récupération prend déjà en charge la relance et une remise en file exécuterait le même workflow deux fois.
 
-**Si main tombe**, le cron continue de se déclencher depuis un worker et les exécutions distribuables continuent de s'exécuter. Les exécutions qui nécessitent main se mettent en file et attendent, puis s'écoulent à son retour — mais uniquement dans la fenêtre de grâce des misfires (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 secondes par défaut). Tout ce qui est plus ancien est clôturé comme ignoré, avec la raison enregistrée, plutôt que de rejouer des heures d'arriéré d'un coup.
+**Si main tombe**, le cron continue de se déclencher depuis un worker et les exécutions distribuables continuent de s'exécuter. Les exécutions qui nécessitent main se mettent en file et attendent, puis s'écoulent à son retour — mais uniquement dans la fenêtre de grâce des misfires (`CRON_MISFIRE_GRACE_SECONDS`, 600 secondes par défaut). Tout ce qui est plus ancien est clôturé comme ignoré, avec la raison enregistrée, plutôt que de rejouer des heures d'arriéré d'un coup.
 
 L'UI, l'API, MCP et l'éditeur sont indisponibles tant que main est down, car l'ingress pointe vers lui.
 

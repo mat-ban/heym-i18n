@@ -122,3 +122,6 @@ Ja neviena rinda neatbilst, modelis tiek uzskaitīts zem **Neapmaksātajiem mode
 - [Traces Tab](./traces-tab.md) - Izmanto LLM izmaksu tabulu izmaksu donuta un KPI kartēm
 - [Grist Node](../nodes/grist-node.md) - Ārējā izklājlapu alternatīva
 - [Variables Tab](./global-variables-tab.md) - Atslēgas-vērtības glabāšanas alternatīva
+## Meklēšana
+
+Izmantojiet meklēšanas lauku virs tabulu saraksta vai nospiediet **Ctrl+F** (vai **Cmd+F**), lai rakstīšanas laikā filtrētu tabulas pēc nosaukuma vai apraksta. Nospiediet **Escape**, lai notīrītu meklēšanu.

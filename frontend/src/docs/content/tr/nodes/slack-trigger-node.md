@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym hemen `200 OK` ile yanıt verir ve workflow'u arka planda çalıştırır — bu, Slack'in 3 saniyelik yanıt gereksinimini karşılar
 - Webhook URL'si düğüm ID'sinden türetilir ve workflow yeniden adlandırılsa bile asla değişmez
 - Workflow başına yalnızca bir `slackTrigger` düğümü gereklidir; farklı event türlerini yönlendirmek için aşağı akışta **Switch** veya **Condition** düğümlerini kullanın
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

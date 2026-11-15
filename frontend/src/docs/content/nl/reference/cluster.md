@@ -92,6 +92,10 @@ Dat bepaalt ook de upgrade-volgorde. Als u main eerst upgradet, wordt elke worke
 
 **Worker-instanties hebben een ander uitgaand IP.** Elke API die bronadressen op een allowlist zet, ziet het nieuwe adres. Send Email draait precies om deze reden op main; geef voor de HTTP-node het cluster ofwel één NAT-egressadres, of zet elke instantie op de allowlist.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Een worker toevoegen op een andere machine
 
 `docker-compose.worker.yml` in de hoofdmap van de repository draait een worker op zijn eigen host. Deze heeft geen database en geen UI: hij bereikt de PostgreSQL van de main-instantie en neemt zijn deel van de achtergronduitvoeringen voor zijn rekening.
@@ -124,7 +128,7 @@ Niets hiervan verschijnt op een installatie met één instantie: de velden zijn 
 
 **Als een worker tijdens een uitvoering uitvalt**, veroudert de heartbeat en voert de bestaande herstel-sweep van de leader de uitvoering opnieuw uit op een actieve instantie. De queuerij die deze had geclaimd, wordt afzonderlijk afgehandeld: zodra er geen actieve uitvoering meer voor bestaat en een respijtperiode van twee minuten is verstreken, markeert de leader de rij als mislukt en wekt iedereen die op het resultaat wachtte. Leeftijd alleen is nooit de trigger, zodat een legitiem langdurige uitvoering met rust wordt gelaten; en de rij wordt als mislukt gemarkeerd in plaats van opnieuw in de wachtrij te worden geplaatst, omdat het herstel al eigenaar is van de heruitvoering en het opnieuw in de wachtrij plaatsen dezelfde workflow tweemaal zou uitvoeren.
 
-**Als main uitvalt**, blijft cron vanaf een worker vuren en blijven distribueerbare uitvoeringen doorlopen. Uitvoeringen die main nodig hebben, worden in de wachtrij geplaatst en wachten, en worden afgehandeld zodra main terugkeert — maar alleen binnen het respijtvenster voor gemiste vuringen (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, standaard 600 seconden). Alles wat ouder is, wordt gesloten als overgeslagen, met de reden vastgelegd, in plaats van uren aan achterstand in één keer opnieuw af te spelen.
+**Als main uitvalt**, blijft cron vanaf een worker vuren en blijven distribueerbare uitvoeringen doorlopen. Uitvoeringen die main nodig hebben, worden in de wachtrij geplaatst en wachten, en worden afgehandeld zodra main terugkeert — maar alleen binnen het respijtvenster voor gemiste vuringen (`CRON_MISFIRE_GRACE_SECONDS`, standaard 600 seconden). Alles wat ouder is, wordt gesloten als overgeslagen, met de reden vastgelegd, in plaats van uren aan achterstand in één keer opnieuw af te spelen.
 
 De UI, de API, MCP en de editor zijn niet beschikbaar zolang main uitvalt, omdat de ingress daar naartoe wijst.
 

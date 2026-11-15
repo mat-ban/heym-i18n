@@ -72,6 +72,7 @@ Nama: `heym.agent.tool.execute`, dibuat di bawah span Node Agent yang aktif.
 | `heym.agent.tool.args_bytes` | Ukuran UTF-8 dari argumen tool yang diserialisasi. |
 | `heym.agent.tool.result_bytes` | Ukuran UTF-8 dari hasil tool yang diserialisasi. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout`, atau `cancelled`. Error tool menetapkan status span ke `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Argumen dan hasil tool mentah tidak dilampirkan ke span secara default.
 

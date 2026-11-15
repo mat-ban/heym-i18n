@@ -140,3 +140,6 @@ En misslyckad inloggning återvänder till inloggningsskärmen med ett läsbart 
 - **Flera samtidiga leverantörer.** En instans ansluter till en leverantör.
 - **Grupp- eller rollmappning** från leverantörens claims.
 - **Single logout.** Att logga ut från Heym loggar inte ut användarsessionen från leverantören.
+
+- **Tvåfaktorsinloggning hanteras av leverantören.** `HEYM_REQUIRE_MFA` gäller endast lösenordsinloggning; en SSO-inloggning frågar aldrig efter en Heym-kod. Kräv MFA hos din identitetsleverantör istället.
+- **Inaktivering gäller även här.** Ett konto som en administratör har inaktiverat i **Inställningar → Användare** avvisas även om leverantören fortfarande autentiserar det.

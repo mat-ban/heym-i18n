@@ -3,10 +3,14 @@ import { defineStore } from "pinia";
 
 import type { Conversation, ConversationDetail, ContextUsage, EvalSuitePreview, Message, QueuedMessage, ToolCall, WorkflowPreview } from "@/types/chat";
 import type { FileAttachmentPayload } from "@/services/api";
+import { DRIVE_ATTACHMENT_MARKER } from "@/lib/chatAttachment";
 import { CHAT_CONTEXT_HEADER } from "@/lib/chatContext";
+import { messagesBeforeEdit } from "@/lib/chatMessageEdit";
+import { applyChatLiveEvent, visibleDraft } from "@/lib/chatLive";
 import { mergeEvalSuite } from "@/lib/evalSuitePreview";
 import { chatApi } from "@/services/api";
 import { useAuthStore } from "@/stores/auth";
+import { useWidgetRevertsStore } from "@/stores/widgetReverts";
 import { randomUUID } from "@/lib/uuid";
 
 const DEFAULT_CONVERSATION_TITLE = "New Chat";
@@ -23,6 +27,13 @@ interface EncryptedChatCachePayload {
 
 type ConversationLoadResult = "loaded" | "not_found" | "error";
 
+/** A queued message's file names, in order; a server without the list sends only the first. */
+function queuedAttachmentNames(queued: QueuedMessage | undefined): string[] {
+  if (!queued) return [];
+  if (queued.attachment_names && queued.attachment_names.length > 0) return queued.attachment_names;
+  return queued.attachment_name ? [queued.attachment_name] : [];
+}
+
 function getInitialSidebarOpen(): boolean {
   if (typeof window === "undefined") return true;
   if (window.matchMedia(MOBILE_SIDEBAR_MEDIA_QUERY).matches) return false;
@@ -31,6 +42,8 @@ function getInitialSidebarOpen(): boolean {
 
 export const useChatStore = defineStore("chat", () => {
   const authStore = useAuthStore();
+  // A turn that changes dashboard widgets offers to revert them on the Dashboard tab.
+  const widgetReverts = useWidgetRevertsStore();
   const conversations = ref<Conversation[]>([]);
   const activeConversation = ref<ConversationDetail | null>(null);
   const isSidebarOpen = ref(getInitialSidebarOpen());
@@ -46,6 +59,11 @@ export const useChatStore = defineStore("chat", () => {
     evalSuites: EvalSuitePreview[];
     error: string | null;
     isStreaming: boolean;
+    /** The model's text while it writes, before it becomes the answer or a step's narration. */
+    draft: string;
+    draftRound: number;
+    /** The tool call being written, e.g. the workflow and its nodes so far. */
+    progress: string | null;
   }
   const EMPTY_STREAM_STATE: StreamState = Object.freeze({
     messageId: null,
@@ -57,6 +75,9 @@ export const useChatStore = defineStore("chat", () => {
     evalSuites: [],
     error: null,
     isStreaming: false,
+    draft: "",
+    draftRound: 0,
+    progress: null,
   }) as StreamState;
   const streamStatesByConv = ref<Record<string, StreamState>>({});
   const contextUsageByConv = ref<Record<string, ContextUsage>>({});
@@ -83,6 +104,9 @@ export const useChatStore = defineStore("chat", () => {
       evalSuites: [],
       error: null,
       isStreaming: false,
+      draft: "",
+      draftRound: 0,
+      progress: null,
     };
     streamStatesByConv.value = {
       ...streamStatesByConv.value,
@@ -174,6 +198,10 @@ export const useChatStore = defineStore("chat", () => {
         undefined, // onQueuedMessageStarted
         undefined, // onEvalSuiteSaved
         controller.signal,
+        undefined, // onLive
+        (change) => {
+          widgetReverts.receive(change);
+        },
       );
     } catch {
       backgroundSubscribedConvIds.delete(conversationId);
@@ -306,7 +334,7 @@ export const useChatStore = defineStore("chat", () => {
     content: string,
     credentialId: string,
     model: string,
-    attachment: FileAttachmentPayload | null = null,
+    attachments: FileAttachmentPayload[] = [],
   ): Promise<void> {
     if (!activeConversation.value || activeConversation.value.id !== conversationId) return;
 
@@ -315,7 +343,7 @@ export const useChatStore = defineStore("chat", () => {
     userCancelledConvIds.delete(conversationId);
 
     try {
-      const response = await chatApi.sendMessage(conversationId, content, credentialId, model, attachment);
+      const response = await chatApi.sendMessage(conversationId, content, credentialId, model, attachments);
       if (response.status === "queued" && response.queued_message) {
         _upsertQueuedMessage(conversationId, response.queued_message);
         _patchConversationFlag(conversationId, "is_running", true);
@@ -325,7 +353,7 @@ export const useChatStore = defineStore("chat", () => {
       const displayMessage: Message = {
         ...response.user_message,
         content,
-        ...(attachment ? { attachmentName: attachment.name } : {}),
+        ...(attachments.length > 0 ? { attachmentNames: attachments.map((item) => item.name) } : {}),
       };
       _appendMessageIfMissing(conversationId, displayMessage);
 
@@ -354,6 +382,49 @@ export const useChatStore = defineStore("chat", () => {
     }
   }
 
+  /**
+   * Edit an earlier user message and send it again with the chosen model. The server removes
+   * the message and everything after it, keeps its attachment, and starts a new turn; the
+   * thread rewinds to match. Throws when the server refuses, so the editor can say why.
+   */
+  async function editMessage(
+    conversationId: string,
+    messageId: string,
+    content: string,
+    credentialId: string,
+    model: string,
+    attachmentNames: string[] = [],
+  ): Promise<void> {
+    if (activeConversation.value?.id !== conversationId) return;
+    if (getStreamState(conversationId).isStreaming) return;
+    if (!messagesBeforeEdit(activeConversation.value.messages, messageId)) return;
+    userCancelledConvIds.delete(conversationId);
+
+    const response = await chatApi.sendMessage(
+      conversationId,
+      content,
+      credentialId,
+      model,
+      [],
+      messageId,
+    );
+    if (!response.user_message || activeConversation.value?.id !== conversationId) return;
+    const kept = messagesBeforeEdit(activeConversation.value.messages, messageId) ?? [];
+    const displayMessage: Message = {
+      ...response.user_message,
+      content,
+      ...(attachmentNames.length > 0 ? { attachmentNames } : {}),
+    };
+    activeConversation.value = {
+      ...activeConversation.value,
+      messages: [...kept, displayMessage],
+    };
+    void _writeCachedConversation(activeConversation.value);
+    _setStreamState(conversationId, _emptyStreamingPatch(true));
+    _patchConversationFlag(conversationId, "is_running", true);
+    void _subscribeToStream(conversationId);
+  }
+
   function _emptyStreamingPatch(isStreaming: boolean): Partial<StreamState> {
     return {
       messageId: null,
@@ -365,6 +436,9 @@ export const useChatStore = defineStore("chat", () => {
       evalSuites: [],
       error: null,
       isStreaming,
+      draft: "",
+      draftRound: 0,
+      progress: null,
     };
   }
 
@@ -450,6 +524,8 @@ export const useChatStore = defineStore("chat", () => {
           _setStreamState(conversationId, {
             messageId: payload.messageId ?? current.messageId,
             content: current.content + payload.text,
+            draft: "",
+            progress: null,
           });
         },
         () => {
@@ -469,6 +545,7 @@ export const useChatStore = defineStore("chat", () => {
         },
         (payload) => {
           const current = getStreamState(conversationId);
+          const narration = visibleDraft(current.draft).trim();
           _setStreamState(conversationId, {
             messageId: payload.messageId ?? current.messageId,
             toolCalls: [
@@ -479,8 +556,11 @@ export const useChatStore = defineStore("chat", () => {
                 label: payload.label,
                 args: payload.args,
                 status: "running",
+                ...(narration ? { narration } : {}),
               },
             ],
+            draft: "",
+            progress: null,
           });
         },
         (payload) => {
@@ -494,6 +574,7 @@ export const useChatStore = defineStore("chat", () => {
                     response_summary: payload.response_summary,
                     elapsed_ms: payload.elapsed_ms,
                     status: payload.status,
+                    progress: undefined,
                   }
                 : tc,
             ),
@@ -533,7 +614,15 @@ export const useChatStore = defineStore("chat", () => {
           _setStreamState(conversationId, { contextUsage: payload });
           contextUsageByConv.value = { ...contextUsageByConv.value, [conversationId]: payload };
         },
-        () => {
+        (payload) => {
+          if (payload.cancelled) {
+            const current = getStreamState(conversationId);
+            _setStreamState(conversationId, {
+              toolCalls: current.toolCalls.map((tool) => tool.status === "running"
+                ? { ...tool, status: "cancelled", response_summary: "Cancelled" }
+                : tool),
+            });
+          }
           const hasContent = _finalizeStreamingAssistant(conversationId);
           _setStreamState(conversationId, _emptyStreamingPatch(true));
           _refreshConversationTimestamp(conversationId);
@@ -556,10 +645,11 @@ export const useChatStore = defineStore("chat", () => {
             (message) => message.id === payload.queuedMessageId,
           );
           _removeQueuedMessage(conversationId, payload.queuedMessageId);
+          const names = queuedAttachmentNames(queued);
           _appendMessageIfMissing(conversationId, {
             ...payload.userMessage,
             content: queued?.content ?? payload.userMessage.content,
-            ...(queued?.attachment_name ? { attachmentName: queued.attachment_name } : {}),
+            ...(names.length > 0 ? { attachmentNames: names } : {}),
           });
           _setStreamState(conversationId, _emptyStreamingPatch(true));
         },
@@ -571,6 +661,19 @@ export const useChatStore = defineStore("chat", () => {
           });
         },
         controller.signal,
+        (event) => {
+          const current = getStreamState(conversationId);
+          const next = applyChatLiveEvent(current, event);
+          _setStreamState(conversationId, {
+            draft: next.draft,
+            draftRound: next.draftRound,
+            progress: next.progress,
+            toolCalls: next.toolCalls,
+          });
+        },
+        (change) => {
+          widgetReverts.receive(change);
+        },
       );
     } catch {
       if (!controller.signal.aborted) {
@@ -581,8 +684,8 @@ export const useChatStore = defineStore("chat", () => {
         _patchConversationFlag(conversationId, "is_running", false);
       }
     } finally {
-      foregroundSubscribedConvIds.delete(conversationId);
       if (activeControllersByConv.get(conversationId) === controller) {
+        foregroundSubscribedConvIds.delete(conversationId);
         activeControllersByConv.delete(conversationId);
       }
     }
@@ -654,6 +757,20 @@ export const useChatStore = defineStore("chat", () => {
     _removeQueuedMessage(conversationId, itemId);
   }
 
+  async function sendQueuedMessageNow(conversationId: string, itemId: string): Promise<void> {
+    await chatApi.sendQueuedMessageNow(conversationId, itemId);
+    userCancelledConvIds.delete(conversationId);
+    // Keep the current reader: it receives the cancelled partial reply, followed by
+    // queued_message_started and the new answer, with no gap in the conversation.
+    if (!foregroundSubscribedConvIds.has(conversationId) || !getStreamState(conversationId).isStreaming) {
+      activeControllersByConv.get(conversationId)?.abort();
+      activeControllersByConv.delete(conversationId);
+      foregroundSubscribedConvIds.delete(conversationId);
+      _patchConversationFlag(conversationId, "is_running", true);
+      void _subscribeToStream(conversationId);
+    }
+  }
+
   function _patchConversation(updated: Conversation): void {
     conversations.value = conversations.value.map((c) => (c.id === updated.id ? updated : c));
   }
@@ -686,7 +803,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   function _titleFromContent(content: string): string {
-    const cutIndexes = ["\n\n[ATTACHED FILE:", `\n\n${CHAT_CONTEXT_HEADER}`]
+    const cutIndexes = ["\n\n[ATTACHED FILE:", DRIVE_ATTACHMENT_MARKER, `\n\n${CHAT_CONTEXT_HEADER}`]
       .map((marker) => content.indexOf(marker))
       .filter((index) => index !== -1);
     const cutIdx = cutIndexes.length > 0 ? Math.min(...cutIndexes) : -1;
@@ -731,7 +848,14 @@ export const useChatStore = defineStore("chat", () => {
     current: ConversationDetail,
     fetched: ConversationDetail,
   ): ConversationDetail {
-    if (current.messages.length === 0) {
+    // A user message the server dropped and one the local copy has never seen mean the thread
+    // was edited elsewhere; the server's history is the one to show.
+    const currentIds = new Set(current.messages.map((message) => message.id));
+    const fetchedIds = new Set(fetched.messages.map((message) => message.id));
+    const editedElsewhere =
+      current.messages.some((message) => message.role === "user" && !fetchedIds.has(message.id)) &&
+      fetched.messages.some((message) => message.role === "user" && !currentIds.has(message.id));
+    if (current.messages.length === 0 || editedElsewhere) {
       return { ...fetched, queued_messages: fetched.queued_messages ?? [] };
     }
     if (fetched.messages.length <= current.messages.length) {
@@ -909,6 +1033,8 @@ export const useChatStore = defineStore("chat", () => {
     deleteConversation,
     clearConversations,
     sendMessage,
+    sendQueuedMessageNow,
+    editMessage,
     cancelStreaming,
     updateQueuedMessage,
     deleteQueuedMessage,

@@ -54,3 +54,5 @@
 - [節點類型](../reference/node-types.md) – 所有節點類型概觀
 - [錯誤處理器](./error-handler-node.md) – 於 Workflow 失敗時傳送 Slack
 - [認證頁籤](../tabs/credentials-tab.md) – 新增 Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

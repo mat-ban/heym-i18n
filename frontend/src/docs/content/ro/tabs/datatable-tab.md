@@ -122,3 +122,6 @@ Dacă niciun rând nu se potrivește, modelul este listat sub notificarea **Unpr
 - [Traces Tab](./traces-tab.md) - Utilizează LLM Cost Table pentru diagrama circulară a costurilor și cardurile KPI
 - [Grist Node](../nodes/grist-node.md) - Alternativă de foaie de calcul externă
 - [Variables Tab](./global-variables-tab.md) - Alternativă de stocare cheie-valoare
+## Căutare
+
+Utilizați câmpul de căutare de deasupra listei de tabele sau apăsați **Ctrl+F** (sau **Cmd+F**) pentru a filtra tabelele după nume sau descriere pe măsură ce tastați. Apăsați **Escape** pentru a goli căutarea.

@@ -121,3 +121,14 @@ Sandbox-Limits sind Konstanten statt Umgebungsvariablen — 512 MB Speicher, ein
 - [Reiter „Anmeldedaten"](../tabs/credentials-tab.md) – Verwalten Sie API-Schlüssel
 - [MCP-Reiter](../tabs/mcp-tab.md) – MCP-API-Schlüssel und OAuth-Clients
 - [Portal](./portal.md) – Zugriffskontrolle für das öffentliche Chat-Portal
+## Zwei-Faktor-Authentifizierung
+
+Setzen Sie `HEYM_REQUIRE_MFA=true`, um bei jeder Passwort-Anmeldung einen Code aus einer Authenticator-App (TOTP, RFC 6238) zu verlangen. Google Authenticator, Microsoft Authenticator, 1Password und jede andere TOTP-App funktionieren.
+
+- **Registrierung vor dem Zugriff.** Ein Konto ohne Authenticator scannt direkt nach Eingabe des Passworts einen QR-Code und bestätigt einen Einmalcode, bevor eine Sitzung aufgebaut wird. Das Aktivieren dieser Einstellung beendet auch Passwort-Sitzungen, die ohne Code begonnen wurden, sodass niemand unregistriert weiterarbeitet.
+- **SSO bleibt unberührt.** Die Anmeldung über [SSO](./sso.md) fragt niemals nach einem Heym-Code; verlangen Sie MFA stattdessen in Ihrem Identity Provider.
+- **Überall abmelden.** Unter **Einstellungen → Sicherheit → Andere Sitzungen abmelden** werden alle anderen aktiven Sitzungen des Kontos beendet; eine Passwortänderung bewirkt dasselbe. Vor diesem Zeitpunkt ausgestellte Access Tokens werden sofort abgewiesen, noch vor ihrem Ablauf, und Refresh- sowie MCP-OAuth-Tokens werden widerrufen.
+
+## Verschlüsselungsschlüssel rotieren
+
+Rotieren Sie `ENCRYPTION_KEY` ohne Ausfallzeit, indem Sie frühere Schlüssel in `ENCRYPTION_KEYS_EXTRA` angeben. Die Entschlüsselung versucht zuerst den aktiven Schlüssel, dann zusätzliche Schlüssel der Reihe nach. Administratoren können die Neuvorschlüsselung unter **Einstellungen → Administration → Sicherheit** oder per CLI anstoßen.

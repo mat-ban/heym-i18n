@@ -12,7 +12,7 @@ Stránka se otevírá souhrnem statistik nad seznamem průběhů, který se poč
 - **Karty KPI** – Celkem volání, Celkem tokenů, Celkové náklady (USD), Průměrná latence, % chyb
 - **Tokeny podle modelu** – Prstencový graf objemu tokenů podle modelu
 - **Náklady podle modelu** – Prstencový graf výdajů v USD podle modelu. Modely bez cen zobrazují odkaz „Configure pricing" na [LLM Cost Table](./datatable-tab.md#llm-cost-table-system-table)
-- **Volání v čase** – Skládaný plošný graf úspěšných a neúspěšných volání za interval (5 min / 1 h / 6 h / 1 den, zvoleno automaticky podle rozsahu)
+- **Volání v čase** – Skládaný plošný graf úspěšných a neúspěšných volání za interval (5 min / 15 min / 30 min / 1 h / 6 h / 1 den, zvoleno automaticky podle rozsahu)
 - **Upozornění na modely bez cen** – Zobrazí se pod grafy, pokud některé sledované modely nemají řádek s cenou, s odkazem na LLM Cost Table
 
 ## Časové období
@@ -23,12 +23,13 @@ Jediný přepínač **Time range** v horní části panelu filtrů řídí jak s
 
 - Stránkovaný seznam nedávných průběhů v rámci zvoleného časového období
 - Každý průběh zobrazuje: workflow, uzel, přihlašovací údaje, časové razítko, dobu trvání
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Kliknutím na průběh otevřete detailní zobrazení
 - Pomocí **Prev / Next** uvnitř dialogu s detailem se pohybujte mezi průběhy bez jeho zavření
 
 ## Filtrování
 
-- **Time range** – 1h / 24h / 7d / 30d / All; filtruje grafy a seznam společně
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; filtruje grafy a seznam společně
 - **Credential** – Filtrování podle použitých přihlašovacích údajů (API klíče)
 - **Source** – Filtrování podle workflow nebo zdroje spuštění
 - **Search** – Vyhledávání podle modelu, workflow, přihlašovacích údajů nebo popisku uzlu

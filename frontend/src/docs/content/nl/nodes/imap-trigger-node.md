@@ -16,6 +16,7 @@ De **IMAP Trigger**-node pollt een e-mailinbox met een vast interval en start ee
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap`-referentie met server-, login-, mailbox- en SSL-instellingen |
 | `pollIntervalMinutes` | Integer | Hoe vaak Heym de mailbox controleert op nieuwe e-mail |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Installatiehandleiding
 
@@ -62,6 +63,8 @@ Nadat de node is getriggerd, kunnen downstream-nodes het volgende benaderen:
 | `$nodeLabel.email.text` | Platte tekst-body |
 | `$nodeLabel.email.html` | HTML-body |
 | `$nodeLabel.email.attachments` | Array met metadata van bijlagen (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Gedecodeerd header-object |
 | `$nodeLabel.email.uid` | IMAP UID voor deduplicatie of logging |
 | `$nodeLabel.triggered_by` | Label van de triggerbron (`"imap"`) |

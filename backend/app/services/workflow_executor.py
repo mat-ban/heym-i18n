@@ -42,6 +42,11 @@ from app.services.cancellation_bridge import CancellationBridge
 from app.services.chart_payload import (
     build_chart_payload,  # noqa: F401 - public patch alias for node handlers
 )
+from app.services.credential_context import (
+    mask_credentials_context,  # noqa: F401 - re-exported for existing importers
+    refused_run_event,
+    refused_run_result,
+)
 from app.services.execution_cancellation import (
     buffer_live_execution_events,
     record_execution_node_completed,
@@ -61,6 +66,8 @@ from app.services.expression_evaluator import (
 from app.services.expression_evaluator import (
     is_top_level_ternary_expression as _is_top_level_ternary_expression,
 )
+from app.services.file_sandbox.scope import RunFileScope
+from app.services.file_sandbox.tools import FileToolbox
 from app.services.highlight.highlight_builder import build_highlight_payload
 from app.services.llm_trace import LLMTraceContext
 from app.services.model_router import ModelRouterConfigError, build_router_for_credential
@@ -209,12 +216,11 @@ def _build_data_table_filter_clauses(filter_dict: dict, columns: list) -> list:
     ``$eq``, ``$ne``, ``$gt``, ``$gte``, ``$lt``, ``$lte``, ``$contains`` (ILIKE
     substring) and ``$in`` (list membership).
 
-    User-defined schema columns live in the JSONB ``data`` blob and are matched as
-    text (numeric comparisons cast to ``NUMERIC`` when the column type is ``number``).
-    Row metadata (``id``, ``created_at``, ``updated_at``, ``created_by``,
-    ``updated_by``, ``table_id``) are real table columns, so they are matched against
-    the model attribute directly; ``$contains`` casts them to text. A schema column
-    that happens to share a metadata name still resolves against the JSONB blob.
+    User-defined schema columns live in the JSON ``data`` blob and are matched as text
+    (numeric comparisons cast to ``NUMERIC`` when ``number``; booleans use ``"true"``/``"false"``).
+    Row metadata (``id``, ``created_at``, ``updated_at``, ``created_by``, ``updated_by``,
+    ``table_id``) are real table columns matched directly; ``$contains`` casts them to text.
+    A schema column sharing a metadata name still resolves against the JSON blob.
     Unknown operators are ignored.
     """
     from sqlalchemy import Numeric, String, cast
@@ -225,31 +231,25 @@ def _build_data_table_filter_clauses(filter_dict: dict, columns: list) -> list:
         return []
 
     schema_cols = {c["name"]: c for c in (columns or [])}
-    meta_columns = {
-        "id": DataTableRow.id,
-        "table_id": DataTableRow.table_id,
-        "created_at": DataTableRow.created_at,
-        "updated_at": DataTableRow.updated_at,
-        "created_by": DataTableRow.created_by,
-        "updated_by": DataTableRow.updated_by,
-    }
+    meta_cols = {"id", "table_id", "created_at", "updated_at", "created_by", "updated_by"}
     clauses: list = []
 
     for col_name, condition in filter_dict.items():
-        is_meta = col_name not in schema_cols and col_name in meta_columns
+        is_meta = col_name not in schema_cols and col_name in meta_cols
         if is_meta:
-            # Real typed column (timestamp/uuid): compare natively, no text coercion.
-            field = meta_columns[col_name]
-            is_json = False
-            is_number = False
+            field, is_json, is_number = getattr(DataTableRow, col_name), False, False
         else:
-            # User data lives in JSONB; ``->>`` yields text.
             field = DataTableRow.data.op("->>")(col_name)
-            is_json = True
-            is_number = schema_cols.get(col_name, {}).get("type") == "number"
+            is_json, is_number = True, schema_cols.get(col_name, {}).get("type") == "number"
+
+        is_boolean = schema_cols.get(col_name, {}).get("type") == "boolean"
 
         def _coerce(value: object) -> object:
-            return str(value) if is_json else value
+            if not is_json:
+                return value
+            if is_boolean and isinstance(value, bool):
+                return "true" if value else "false"
+            return str(value)
 
         if isinstance(condition, dict):
             for op, raw_value in condition.items():
@@ -661,7 +661,8 @@ HTTP_TIMEOUT = 300.0
 @lru_cache(maxsize=2048)
 def _parse_expression_tree(expr: str) -> ast.AST:
     """Cache parsed ASTs for repeated workflow expressions."""
-    return SimpleEval.parse(expression_syntax.alias_reserved_context_names(expr))
+    parsed = SimpleEval.parse(expression_syntax.alias_reserved_context_names(expr))
+    return expression_syntax.restore_reserved_attribute_names(parsed, expr)
 
 
 def _is_valid_expression_syntax(expr: str) -> bool:
@@ -2030,6 +2031,9 @@ def _restore_sub_workflow_executions(executions: list[dict] | None) -> list[SubW
 
 
 class WorkflowExecutor:
+    # Drive files this run may open in the file sandbox; a sub-workflow keeps its parent's.
+    file_scope = RunFileScope()
+
     def __init__(
         self,
         nodes: list[dict],
@@ -2055,6 +2059,7 @@ class WorkflowExecutor:
         execution_id: str = "",
         node_pool: ThreadPoolExecutor | None = None,
         llm_session_id: str | None = None,
+        file_scope: RunFileScope | None = None,
     ) -> None:
         self.nodes = {node["id"]: node for node in nodes}
         self._node_pool = node_pool or _SHARED_EXECUTOR
@@ -2078,6 +2083,7 @@ class WorkflowExecutor:
         self.credentials_context = credentials_context or {}
         self.global_variables_context = global_variables_context or {}
         self.workflow_id = workflow_id
+        self.file_scope = (file_scope or RunFileScope()).including_workflow(workflow_id)
         self.workflow_name = workflow_name
         self.workflow_description = workflow_description
         self.execution_id = execution_id
@@ -2920,9 +2926,16 @@ class WorkflowExecutor:
         completed_nodes: set[str],
         pending_count: dict[str, int],
     ) -> None:
+        # Not across loop-back edges: that would un-skip a nested loop's body from its done.
+        loop_ids = {nid for nid, node in self.nodes.items() if node.get("type") == "loop"}
+        forward_edges = [
+            e
+            for e in active_edges
+            if not (e.get("targetHandle") == "loop" and e["target"] in loop_ids)
+        ]
         branch_nodes: set[str] = set()
         for start_node_id in start_node_ids:
-            branch_nodes.update(self.get_branch_node_ids(start_node_id, active_edges))
+            branch_nodes.update(self.get_branch_node_ids(start_node_id, forward_edges))
         self.reset_nodes_for_execution(branch_nodes, active_edges, completed_nodes, pending_count)
 
     def prepare_loop_for_reexecution(
@@ -2941,12 +2954,12 @@ class WorkflowExecutor:
         completed_nodes.discard(loop_node_id)
         with self.lock:
             self.skipped_nodes.discard(loop_node_id)
-        self.reset_nodes_for_execution(
-            self.get_loop_body_node_ids(loop_node_id, active_edges),
-            active_edges,
-            completed_nodes,
-            pending_count,
-        )
+        body_node_ids = self.get_loop_body_node_ids(loop_node_id, active_edges)
+        self.reset_nodes_for_execution(body_node_ids, active_edges, completed_nodes, pending_count)
+        # A loop nested in this body starts over on the next item, not where it left off.
+        for body_node_id in body_node_ids:
+            if self.nodes.get(body_node_id, {}).get("type") == "loop":
+                self.loop_states.pop(body_node_id, None)
         return True
 
     def get_execution_order(self) -> list[str]:
@@ -4148,6 +4161,7 @@ class WorkflowExecutor:
                 execution_id=str(_sub_execution_id),
                 llm_session_id=self.llm_session_id,
                 node_pool=self._node_pool,
+                file_scope=self.file_scope,
             )
             enriched_inputs = {
                 "headers": {},
@@ -5035,7 +5049,42 @@ class WorkflowExecutor:
         node_data: dict,
         guardrails_config: dict | None = None,
     ) -> dict:
-        """Execute agent node with optional tool calling."""
+        """Execute agent node with optional tool calling.
+
+        When the input or resolved prompt carries a file of this run (uploaded to the workflow
+        or written by its nodes), the agent gets the file sandbox tools for those files and a
+        workspace that lives for this one execution.
+        """
+        from app.services.file_sandbox.detect import agent_input_toolbox
+
+        resolved_prompts = tuple(
+            self._resolve_template(str(node_data.get(key) or ""), inputs, node_id or "")
+            for key in ("userMessage", "systemInstruction")
+        )
+        toolbox = agent_input_toolbox(
+            (self._visible_inputs(inputs), *resolved_prompts),
+            self.actor_user_id,
+            scope=self.file_scope,
+            source_label=str(node_data.get("label") or "Agent"),
+            workflow_id=self.workflow_id,
+        )
+        if toolbox is None:
+            return self._run_agent_node(node_id, inputs, node_data, guardrails_config)
+        try:
+            return self._run_agent_node(
+                node_id, inputs, node_data, guardrails_config, file_toolbox=toolbox
+            )
+        finally:
+            toolbox.workspace.delete()
+
+    def _run_agent_node(
+        self,
+        node_id: str | None,
+        inputs: dict,
+        node_data: dict,
+        guardrails_config: dict | None = None,
+        file_toolbox: FileToolbox | None = None,
+    ) -> dict:
         combined_input = ""
         for data in self._visible_inputs(inputs).values():
             if isinstance(data, dict) and "text" in data:
@@ -5513,6 +5562,16 @@ class WorkflowExecutor:
                 system_instruction = f"{system_instruction}\n\n{mcp_hint}"
             else:
                 system_instruction = mcp_hint
+
+        if file_toolbox is not None:
+            from app.services.file_sandbox.instructions import agent_file_instructions
+            from app.services.file_sandbox.tools import agent_tool_defs
+
+            merged_tools.extend(agent_tool_defs(file_toolbox))
+            file_rules = agent_file_instructions(file_toolbox.input_files)
+            system_instruction = (
+                f"{system_instruction}\n\n{file_rules}" if system_instruction else file_rules
+            )
 
         is_orchestrator = bool(node_data.get("isOrchestrator", False))
         sub_agent_labels = node_data.get("subAgentLabels") or []
@@ -6521,7 +6580,10 @@ class WorkflowExecutor:
         except Exception as e:
             if isinstance(e, ExpressionFunctionError):
                 raise
-            return processed
+            # Not arithmetic after all: text such as "$a.name - $a.email" or a "- $x"
+            # bullet list. `processed` holds repr()-quoted values ('Alice'), so render
+            # it as the text template it is, as the expression dialog does.
+            return self.evaluate_message_template(expression, inputs, current_node_id)
 
     def _fallback_after_eval_error(self, exc: BaseException, expr: str, combined: dict) -> object:
         """Use the simple-expression fallback only when the sandbox did not reject private access."""
@@ -8207,22 +8269,6 @@ def _mask_sub_execution_dict(row: dict, credentials_context: dict[str, str] | No
     return sc
 
 
-def mask_credentials_context(credentials_context: dict[str, str] | None) -> dict[str, str]:
-    """Return a preview-safe credentials context with secret values masked."""
-    if not credentials_context:
-        return {}
-
-    masked_context: dict[str, str] = {}
-    for name, value in credentials_context.items():
-        if not value:
-            masked_context[name] = value
-        elif len(value) > 7:
-            masked_context[name] = value[:7] + "**"
-        else:
-            masked_context[name] = "**"
-    return masked_context
-
-
 def execute_workflow(
     workflow_id: uuid.UUID,
     nodes: list[dict],
@@ -8243,7 +8289,10 @@ def execute_workflow(
     workflow_description: str = "",
     execution_id: str = "",
     llm_session_id: str | None = None,
+    file_scope: RunFileScope | None = None,
 ) -> ExecutionResult:
+    if refused := refused_run_result(workflow_id, credentials_context, nodes, workflow_cache):
+        return refused
     executor = WorkflowExecutor(
         nodes,
         edges,
@@ -8263,6 +8312,7 @@ def execute_workflow(
         workflow_description=workflow_description,
         execution_id=execution_id,
         llm_session_id=llm_session_id,
+        file_scope=file_scope,
     )
     try:
         result = executor.execute(workflow_id, inputs)
@@ -9506,6 +9556,9 @@ def _execute_workflow_streaming_impl(
 ):
     import queue
 
+    if refused := refused_run_event(workflow_id, credentials_context, nodes, workflow_cache):
+        yield refused
+        return
     event_queue: queue.Queue = queue.Queue()
     wf_executor = WorkflowExecutor(
         nodes,

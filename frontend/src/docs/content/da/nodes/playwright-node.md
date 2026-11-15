@@ -68,7 +68,9 @@ Deaktiverede trin er usynlige for resten af noden: de opfylder ikke "første tri
 
 **AI Auto Heal** gør workflows robuste over for DOM-ændringer. Når en selector fejler to gange (f.eks. efter en sideomdesign), kalder Heym LLM'en for at finde en alternativ locator — typisk `role=button[name='Submit']` eller `text=Exakt tekst` i stedet for CSS-selectors.
 
-Aktivér **Auto heal mode** i AI-trinets egenskaber. Hvis det gemte trin fejler:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Aktivér **Auto heal mode** i AI-trinets egenskaber. Hvis det gemte trin fejler:
 
 1. Heym indfanger den aktuelle HTML og screenshot
 2. Sender det fejlende trin + sidekontekst til LLM'en

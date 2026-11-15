@@ -72,6 +72,7 @@ Naam: `heym.agent.tool.execute`, aangemaakt onder de actieve Agent-node-span.
 | `heym.agent.tool.args_bytes` | UTF-8-grootte van geserialiseerde tool-argumenten. |
 | `heym.agent.tool.result_bytes` | UTF-8-grootte van geserialiseerd tool-resultaat. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` of `cancelled`. Tool-fouten zetten de span-status op `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Ruwe tool-argumenten en -resultaten worden standaard niet aan spans gekoppeld.
 

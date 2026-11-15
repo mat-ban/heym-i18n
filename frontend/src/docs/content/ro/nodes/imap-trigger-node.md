@@ -16,6 +16,7 @@ Nodul **Trigger IMAP** interoghează periodic o căsuță poștală de email la 
 |-----------|------|-------------|
 | `credentialId` | UUID | Acreditare `imap` care conține serverul, datele de autentificare, căsuța poștală și setările SSL |
 | `pollIntervalMinutes` | Integer | Cât de des verifică Heym căsuța poștală pentru emailuri noi |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Ghid de configurare
 
@@ -62,6 +63,8 @@ După ce nodul se declanșează, nodurile din aval pot accesa:
 | `$nodeLabel.email.text` | Corpul în text simplu |
 | `$nodeLabel.email.html` | Corpul HTML |
 | `$nodeLabel.email.attachments` | Matrice de metadate ale atașamentelor (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Obiect de anteturi decodate |
 | `$nodeLabel.email.uid` | UID IMAP pentru deduplicare sau jurnalizare |
 | `$nodeLabel.triggered_by` | Eticheta sursei trigger-ului (`"imap"`) |

@@ -116,6 +116,8 @@ Parameter `driveBase64Content` akceptuje surový reťazec base64 alebo data URL 
 
 Na obsah base64 odkážte v nadväzujúcich krokoch: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Obrázky vrátené prostredníctvom `file_base64` sa pri spustení workflowu zobrazia priamo v paneli ladenia.
 
 ## Príklad — Výpis súborov v Drive

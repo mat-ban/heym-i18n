@@ -2,6 +2,9 @@
 
 **Hälytykset**-välilehdellä voit määrittää kynnysarvoja tietyn aikavälin yli ja saada ilmoituksen, kun ne ylitetään. Heym tallentaa automaattisesti suoritustulokset, suoritusajan ja LLM-kustannukset, mutta ei koskaan ilmoita niistä aktiivisesti. Hälytys on keino pyytää näitä tietoja.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Katso Alerts-demo</a></p>
+
 Jokainen hälytys arvioidaan valitsemasi **aikavälin** yli, ei koskaan yksittäisen tapahtuman perusteella. Yksi epäonnistunut suoritus on kohinaa. Kaksitoista epäonnistunutta suoritusta kymmenessä minuutissa on häiriötilanne.
 
 ## Hälytystyypit

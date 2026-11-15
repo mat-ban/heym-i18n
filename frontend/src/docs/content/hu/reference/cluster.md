@@ -92,6 +92,10 @@ Ez egyben meghatározza a frissítési sorrendet is. A main először történő
 
 **A worker példányok kimenő IP-címe eltérő.** Minden olyan API, amely engedélyezési listán tartja a forráscímeket, látni fogja az újat. A Send Email éppen ezért fut a main példányon; az HTTP csomópont esetében vagy adjon a klaszternek egyetlen NAT kimenő címet, vagy vegyen fel minden példányt az engedélyezési listára.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Worker hozzáadása egy másik gépen
 
 A repository gyökerében található `docker-compose.worker.yml` egy workert futtat a saját hosztján. Nincs adatbázisa és nincs felülete: eléri a main példány PostgreSQL-jét, és kiveszi a részét a háttérben futó futtatásokból.
@@ -124,7 +128,7 @@ Mindebből semmi sem jelenik meg egy egyetlen példányos telepítésen: a mező
 
 **Ha egy worker futás közben leáll**, a heartbeat elavulttá válik, és a leader meglévő helyreállítási folyamata (recovery sweep) újrafuttatja az executiont egy élő instance-en. Az általa lefoglalt queue-sor külön kerül nyugdíjazásra: amint nem létezik aktív execution hozzá, és eltelt egy kétperces türelmi idő, a leader hibásnak jelöli a sort, és felébreszti azt, aki az eredményre várt. Kizárólag az életkor soha nem trigger, így egy jogosan hosszú futás érintetlen marad; a sor pedig hibásnak jelölődik az újra sorba állítás helyett, mert a helyreállítás már birtokolja az újrafuttatást, és az újra sorba állítás kétszer futtatná ugyanazt a workflow-t.
 
-**Ha a main leáll**, a cron továbbra is tüzel egy workerből, és a distributable futások továbbra is végrehajtódnak. A main-t igénylő futások sorba állnak és várnak, majd annak visszatérésekor kiürülnek — de csak a misfire türelmi ablakon belül (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, alapértelmezés szerint 600 másodperc). A régebbi elemek kihagyottként záródnak le, az ok rögzítésével, ahelyett hogy óráknyi elmaradást egyszerre játszanának vissza.
+**Ha a main leáll**, a cron továbbra is tüzel egy workerből, és a distributable futások továbbra is végrehajtódnak. A main-t igénylő futások sorba állnak és várnak, majd annak visszatérésekor kiürülnek — de csak a misfire türelmi ablakon belül (`CRON_MISFIRE_GRACE_SECONDS`, alapértelmezés szerint 600 másodperc). A régebbi elemek kihagyottként záródnak le, az ok rögzítésével, ahelyett hogy óráknyi elmaradást egyszerre játszanának vissza.
 
 A UI, az API, az MCP és a szerkesztő nem érhető el, amíg a main le van állva, mert az ingress oda mutat.
 

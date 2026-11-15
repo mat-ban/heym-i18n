@@ -368,3 +368,6 @@ Una `table` può trasformare una colonna in pulsanti che aprono un collegamento.
 Solo gli indirizzi `http://` e `https://` e i percorsi che iniziano con una sola `/` diventano pulsanti. Qualsiasi altro valore, come `javascript:` o `//host`, rimane testo semplice e una cella vuota non mostra nulla.
 
 Il pulsante funziona accanto a un [collegamento di riga](../tabs/dashboard-tab.md#detail-pages): facendo clic sul pulsante si apre il suo collegamento in una nuova scheda, mentre facendo clic in qualsiasi altro punto della riga si apre ancora la pagina di dettaglio.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

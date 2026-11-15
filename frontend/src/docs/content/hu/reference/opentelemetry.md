@@ -72,6 +72,7 @@ Név: `heym.agent.tool.execute`, az aktív Agent csomópont span-je alatt létre
 | `heym.agent.tool.args_bytes` | A szerializált eszközargumentumok UTF-8 mérete. |
 | `heym.agent.tool.result_bytes` | A szerializált eszközeremény UTF-8 mérete. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` vagy `cancelled`. Az eszközhibák a span állapotát `ERROR` értékre állítják. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 A nyers eszközargumentumok és -eredmények alapértelmezés szerint nem kerülnek csatolásra a span-ekhez.
 

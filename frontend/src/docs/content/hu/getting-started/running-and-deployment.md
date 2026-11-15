@@ -34,6 +34,7 @@ Az összes támogatott változóhoz, alapértékhez és éles környezeti megjeg
 |----------|-------------|
 | `SECRET_KEY` | **Kötelező.** JWT aláírási titok. A `run.sh`/`deploy.sh` automatikusan generálja, ha üres. |
 | `ENCRYPTION_KEY` | **Kötelező.** Hitelesítő adatok titkosítási kulcsa. A `run.sh`/`deploy.sh` automatikusan generálja, ha üres. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Opcionális adatbázis-kapcsolati sztring felülírás. Ha üres, a Heym a `POSTGRES_*` beállításokból építi fel. |
 | `BACKEND_PORT` | Backend API port — alapértéke `10105` |
 | `FRONTEND_PORT` | Frontend port — alapértéke `4017` |
@@ -345,3 +346,11 @@ git pull
 - [Environment Variables](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Full configuration reference
 - [Security](../reference/security.md) – JWT, encryption, and CORS settings
 - [Load Distribution](../reference/cluster.md) – Run several instances against one database
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

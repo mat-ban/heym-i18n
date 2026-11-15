@@ -32,6 +32,7 @@ Prihlasovacie údaje ukladajú API kľúče a tajné hodnoty používané uzlami
 | [Grist](../nodes/grist-node.md) | Grist | API kľúč + URL adresa servera |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + súhlas OAuth2 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + súhlas OAuth2 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + súhlas OAuth2 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL adresa projektu + API kľúč (+ voliteľná predvolená schéma) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Hostiteľ + port + používateľské meno/heslo + databáza (+ secure) |

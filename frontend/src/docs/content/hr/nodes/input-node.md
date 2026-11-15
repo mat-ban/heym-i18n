@@ -45,7 +45,7 @@
 
 U kartici **Izvršavanje** (Definirani webhook mod), svako ulazno polje podržava povlačenje i ispuštanje te inline kontrolu za privitke (donji desni kut polja):
 
-- **Tekstualne datoteke** (`.txt`, `.md`, `.json`, `.csv` i slične) se čitaju kao običan tekst.
+- **Tekstualne datoteke** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Slike** (JPEG, PNG, GIF, WebP) se pohranjuju kao `data:` URL (base64) u vrijednosti polja — koristite ključeve polja kao što su `imageUrl` ili `base64` kada dolazni čvorovi očekuju podatke o slikama.
 - **PDF** datoteke se pretvaraju u izdvojeni tekst (maksimalna veličina datoteke 5 MB, 100k znakova sadržaja).
 

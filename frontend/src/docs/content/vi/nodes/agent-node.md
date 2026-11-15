@@ -2,6 +2,10 @@
 
 Node **AI Agent** là một node LLM có khả năng gọi công cụ (tool calling). Node này có thể chạy các công cụ Python, gọi các node trên canvas đã kết nối như công cụ, kết nối tới các MCP server, sử dụng skills, tùy chọn hoạt động như một orchestrator điều phối tới các node agent khác, gọi các workflow khác như công cụ, và tạm dừng để [con người xem xét](../reference/human-in-the-loop.md).
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 ## Tổng quan
 
 | Thuộc tính | Giá trị |
@@ -408,3 +412,6 @@ Quá trình nén là tự động và luôn hoạt động đối với các nod
 - [Bắt đầu nhanh](../getting-started/quick-start.md) – Workflow cơ bản với LLM và biểu thức
 - [Tab Credentials](../tabs/credentials-tab.md) – Thêm API key cho agent
 - [Tab MCP](../tabs/mcp-tab.md) – Cấu hình MCP cho các công cụ workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

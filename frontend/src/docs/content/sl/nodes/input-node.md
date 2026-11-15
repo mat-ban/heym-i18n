@@ -45,7 +45,7 @@
 
 V zavihku **Izvajanje** (način definiranja webhook) vsako vhodno polje podpira povleci in spusti ter nadzor za priponke (spodaj desno od polja):
 
-- **Besedilne datoteke** (`.txt`, `.md`, `.json`, `.csv` in podobno) se berejo kot navadno besedilo.
+- **Besedilne datoteke** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Slike** (JPEG, PNG, GIF, WebP) se shranijo kot `data:` URL (base64) v vrednosti polja — uporabite ključe polja, kot sta `imageUrl` ali `base64`, ko spodnja vozlišča pričakujejo podatke o slikah.
 - **PDF** datoteke se pretvorijo v izluščeno besedilo (maksimalna velikost datoteke 5 MB, 100k znakov vsebine).
 

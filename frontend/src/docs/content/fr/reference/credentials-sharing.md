@@ -87,6 +87,7 @@ Certains nœuds stockent `credentialId` (UUID) dans `node.data` :
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Détails de connexion ClickHouse (hôte, port, authentification, base de données) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Identifiant de bot Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Clé publique Discord ou identifiant webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Base vectorielle Qdrant ou Postgres (pgvector), via un identifiant RAG Qdrant, Psql ou Custom Embeddings |
 | Evals | `credential_id`, `judge_credential_id` | Identifiant de modèle ; un identifiant de modèle ou de Decision Model pour le juge LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) étape AI | `credentialId` | Modèle LLM/Vision (pour l'étape AI et [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Après l'exécution, `mask_sensitive_output()` masque les valeurs d'identifiants
 - [Expression DSL](./expression-dsl.md) – Syntaxe `$credentials`
 - [Types de nœuds](./node-types.md) – Nœuds utilisant des identifiants ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Nœud Agent](../nodes/agent-node.md) – Utilise `credentialId` pour le LLM
+
+## Autorisations d'agenda Google Meet
+
+Le partage d'un [identifiant Google Meet](../nodes/google-meet-node.md) permet aux workflows qui l'utilisent de lire les intervalles libres/occupés des agendas accessibles et de créer, modifier ou supprimer des événements en tant que compte Google connecté, y compris l'envoi d'invitations et d'annulations. L'adresse e-mail de participant du visiteur ne modifie pas le compte qui possède ou autorise l'événement. Seul le propriétaire de l'identifiant peut reconnecter son autorisation Google.

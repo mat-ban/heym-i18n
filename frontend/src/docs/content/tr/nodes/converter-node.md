@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | Düğüm tanımlayıcısı (camelCase) |
 | `conversion` | string | `csvToJson` (CSV metni → satır nesneleri dizisi), `jsonToCsv` (nesne/satır dizisi → CSV metni), `xmlToJson` (XML metni → nesne), `jsonToXml` (nesne → XML metni), `imageToText` (bir görselde OCR), `pdfToText` (seçilen her PDF sayfasında OCR) veya `fileConvert` (depolanan bir dosyayı başka bir formatta yeniden yazar) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Dönüştürülecek veri. Düğümün ilk girişini kullanmak için boş bırakın |
 | `delimiter` | string | Tek karakterli alan ayırıcı (varsayılan `,`) |
 | `hasHeader` | boolean | Yalnızca `csvToJson` — ilk satırı başlık olarak değerlendir (varsayılan `true`) |
@@ -169,3 +170,6 @@ OCR, `tesseract` ve poppler'in `pdftoppm`'ine shell üzerinden çağrı yapar ve
 - [Drive](./drive-node.md) – Dosyaları saklayın, getirin ve paylaşın
 - [Node Types](../reference/node-types.md) – Tüm düğüm türlerine genel bakış
 - [Expression DSL](../reference/expression-dsl.md) – Fonksiyonlar ve sözdizimi
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

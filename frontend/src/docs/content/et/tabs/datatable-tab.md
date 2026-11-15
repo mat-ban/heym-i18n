@@ -122,3 +122,6 @@ Kui ükski rida ei sobi, loetletakse mudel Käivituste lehel **Unpriced models**
 - [Traces Tab](./traces-tab.md) - Kasutab LLM Cost Table'it kulutõusu ja KPI-kaartide jaoks
 - [Grist Node](../nodes/grist-node.md) - Väline arvutustabeli alternatiiv
 - [Variables Tab](./global-variables-tab.md) - Võti-väärtus salvestuse alternatiiv
+## Otsing
+
+Kasutage tabelite loendi kohal olevat otsinguvälja või vajutage **Ctrl+F** (või **Cmd+F**), et filtreerida tabeleid nime või kirjelduse järgi tippimise ajal. Vajutage otsingu tühjendamiseks **Escape**.

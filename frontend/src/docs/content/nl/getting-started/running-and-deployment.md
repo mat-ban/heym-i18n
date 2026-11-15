@@ -34,6 +34,7 @@ Zie [Omgevingsvariabelen](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-
 |----------|-------------|
 | `SECRET_KEY` | **Vereist.** JWT-ondertekeningsgeheim. Automatisch gegenereerd door `run.sh`/`deploy.sh` wanneer leeg. |
 | `ENCRYPTION_KEY` | **Vereist.** Versleutelingssleutel voor inloggegevens. Automatisch gegenereerd door `run.sh`/`deploy.sh` wanneer leeg. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Optionele overschrijving van de databaseverbindingsreeks. Indien leeg, bouwt Heym deze op basis van de `POSTGRES_*`-instellingen. |
 | `BACKEND_PORT` | Backend API-poort — standaard `10105` |
 | `FRONTEND_PORT` | Frontend-poort — standaard `4017` |
@@ -350,3 +351,11 @@ git pull
 - [Environment Variables](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Volledige configuratiereferentie
 - [Security](../reference/security.md) – JWT-, encryptie- en CORS-instellingen
 - [Load Distribution](../reference/cluster.md) – Voer meerdere instanties uit tegen één database
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

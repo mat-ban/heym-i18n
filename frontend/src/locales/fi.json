@@ -84,7 +84,8 @@
     "dropFileOrClick": "Pudota tiedosto tähän tai valitse napsauttamalla",
     "removeFile": "Poista tiedosto",
     "chooseFileFor": "Valitse tiedosto kohteelle {label}",
-    "new": "Uusi"
+    "new": "Uusi",
+    "clearSearch": "Tyhjennä haku"
   },
   "nav": {
     "workflows": "Workflowt",
@@ -285,7 +286,9 @@
     "enablePlugin": "Ota käyttöön",
     "disablePlugin": "Poista käytöstä",
     "uninstallPlugin": "Poista asennus",
-    "pluginOperationFailed": "Lisäosan toiminto epäonnistui"
+    "pluginOperationFailed": "Lisäosan toiminto epäonnistui",
+    "users": "Käyttäjät",
+    "encryption": "Salaus"
   },
   "workflows": {
     "title": "Workflow't",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopioi suorituksen tunnus",
     "openTrace": "Avaa suoritus",
     "message": "Viesti",
-    "emptyReply": "Tyhjä vastaus."
+    "emptyReply": "Tyhjä vastaus.",
+    "timeRange3h": "Viimeiset 3 tuntia",
+    "timeRange6h": "Viimeiset 6 tuntia"
   },
   "tables": {
     "title": "Datataulukot",
@@ -1215,7 +1220,9 @@
     "browseAll": "Selaa kaikkia →",
     "askAi": "Kysy AI:lta",
     "dropToImport": "Pudota JSON tai ZIP tuodaksesi",
-    "noWorkflowsMatch": "Yksikään Workflow ei vastaa tätä suodatinta."
+    "noWorkflowsMatch": "Yksikään Workflow ei vastaa tätä suodatinta.",
+    "noWorkflowsMatchAll": "Kokeile toista nimeä, kuvausta tai kansionimeä.",
+    "noWorkflowsMatchFilter": "Kokeile toista nimeä, kuvausta, kansionimeä tai tilasuodatinta."
   },
   "schedules": {
     "title": "Aikataulut",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "MCP-asiakasohjelman aloittama",
     "newChatTitle": "Uusi keskustelu",
     "subtitle": "Aja Workflowja ja esitä kysymyksiä",
-    "modelsLoadFailedDisabled": "Näiden tunnistetietojen mallilistaa ei voitu ladata. Chat pysyy pois käytöstä, kunnes malli voidaan hakea."
+    "modelsLoadFailedDisabled": "Näiden tunnistetietojen mallilistaa ei voitu ladata. Chat pysyy pois käytöstä, kunnes malli voidaan hakea.",
+    "dropFilesToAttach": "Pudota liitettävät tiedostot",
+    "attachFiles": "Liitä tiedostoja"
   },
   "teams": {
     "title": "Tiimit",
@@ -1883,7 +1892,8 @@
       "skipped": "Ohitettu"
     },
     "permissionRead": "luku",
-    "permissionWrite": "kirjoitus"
+    "permissionWrite": "kirjoitus",
+    "details": "Yksityiskohdat"
   },
   "mcp": {
     "title": "MCP-palvelin",
@@ -2197,7 +2207,8 @@
       "actions": "Toiminnot",
       "failedToLoadWidget": "Widgetin lataus epäonnistui",
       "failedToUpdateCheckbox": "Valintaruudun päivitys epäonnistui",
-      "refreshDashboard": "Päivitä dashboard"
+      "refreshDashboard": "Päivitä dashboard",
+      "revertPrevious": "Palauta edellinen"
     },
     "hitl": {
       "previousReview": "Edellinen tarkistus",

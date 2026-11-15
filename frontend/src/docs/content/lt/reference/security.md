@@ -121,3 +121,14 @@ Smėlio dėžės ribos yra konstantos, o ne aplinkos kintamosios — 512 MB atmi
 - [Kredencialų skirtukas](../tabs/credentials-tab.md) – Tvarkykite API raktus
 - [MCP skirtukas](../tabs/mcp-tab.md) – MCP API raktas ir OAuth klientai
 - [Portalas](./portal.md) – Viešo pokalbių portalo prieigos kontrolė
+## Two-Factor Authentication
+
+Set `HEYM_REQUIRE_MFA=true` to require a code from an authenticator app (TOTP, RFC 6238) at every password sign-in. Google Authenticator, Microsoft Authenticator, 1Password and any other TOTP app work.
+
+- **Enrolment before access.** An account without an authenticator scans a QR code and confirms a code right after its password, before it holds any session. Turning the setting on also ends password sessions that began without a code, so nobody keeps working unenrolled.
+- **SSO is not affected.** Sign-in through [SSO](./sso.md) never asks for a Heym code; require MFA at your identity provider instead.
+- **Sign out everywhere.** **Settings → Security → Sign out other sessions** ends every other session the account holds, and changing the password does the same. Access tokens issued before that moment are refused at once, even before they expire, and refresh and MCP OAuth tokens are revoked.
+
+## Rotating the encryption key
+
+Rotate `ENCRYPTION_KEY` without downtime by providing prior keys in `ENCRYPTION_KEYS_EXTRA`. Decryption tries the active key first, then extra keys in order. An admin can trigger key re-encryption from **Settings → Admin → Security** or CLI.

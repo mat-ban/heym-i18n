@@ -157,6 +157,8 @@ Khi chỉnh sửa credential, key đã lưu sẽ được giữ nguyên nếu tr
 
 Cùng một credential có thể đánh giá các lần chạy [Evals](../tabs/evals-tab.md): với **LLM-as-Judge** được chọn, hãy chọn nó làm judge và decision model sẽ chấm điểm mọi câu trả lời so với output mong đợi.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym chặn các request outbound đến địa chỉ private và loopback theo mặc định, vì vậy một decision endpoint bạn tự chạy trên `localhost` hoặc dải private cần `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Decision model không xuất hiện trong bảng giá LLM mà Heym đồng bộ, vì vậy cột **Cost** trong [Traces](../tabs/traces-tab.md) sẽ trống đối với các lần gọi này. Số lượng token vẫn được ghi lại, và bạn có thể thêm giá của riêng mình bằng một pricing override.

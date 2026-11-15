@@ -16,6 +16,7 @@ El node **Converter** converteix dades i fitxers entre formats sense escriure co
 |-----------|------|-------------|
 | `label` | string | Identificador del node (camelCase) |
 | `conversion` | string | `csvToJson` (text CSV → matriu d'objectes de fila), `jsonToCsv` (matriu d'objectes/files → text CSV), `xmlToJson` (text XML → objecte), `jsonToXml` (objecte → text XML), `imageToText` (OCR d'una imatge), `pdfToText` (OCR de cada pàgina PDF seleccionada), o `fileConvert` (reescriu un fitxer emmagatzemat en un altre format) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Les dades a convertir. Deixeu-ho buit per utilitzar la primera entrada del node |
 | `delimiter` | string | Separador de camps d'un sol caràcter (per defecte `,`) |
 | `hasHeader` | boolean | Només `csvToJson` — tracta la primera fila com a capçalera (per defecte `true`) |
@@ -168,3 +169,6 @@ L'OCR invoca `tesseract` i `pdftoppm` de poppler, i la conversió de documents u
 - [Drive](./drive-node.md) – Emmagatzemeu, recupereu i compartiu fitxers
 - [Node Types](../reference/node-types.md) – Visió general de tots els tipus de node
 - [Expression DSL](../reference/expression-dsl.md) – Funcions i sintaxi
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

@@ -2,6 +2,9 @@
 
 La pestanya **Tauler de control** és un espai a l'estil de Grafana on es construeixen graelles de ginys de gràfics. Cada giny es renderitza a partir de la sortida del seu propi Workflow de Heym ocult, de manera que qualsevol dada que es pugui produir en un Workflow —consultes a bases de dades, crides a API, cerques RAG, sortida d'un LLM— es pot convertir en un gràfic. Es poden mantenir diversos taulers de control i compartir cadascun amb persones o equips.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Taulers de control
 
 Tothom comença amb un tauler de control, creat la primera vegada que obre la pestanya. Utilitzeu el selector de taulers de control a la part superior de la pestanya per canviar entre taulers, i el **+** del costat per crear-ne un de nou. El selector llista primer els vostres taulers de control i després els que s'han compartit amb vosaltres, etiquetats amb el nom de la persona que els ha compartit.
@@ -27,6 +30,8 @@ Un giny és un sol gràfic a la graella. Tipus de gràfic compatibles:
 - **Entity relationships (DB)** (taules, camps, claus PK/FK i connexions)
 - **Indicador de barres** (un indicador horitzontal per fila amb un gradient de vermell→verd i un valor, per exemple espai de disc lliure)
 - **Text** (un missatge en markdown, per exemple una nota d'estat com "Última execució a les 19:47"; admet [caselles de selecció interactives](../nodes/chart-output-node.md#interactive-task-lists) quan el markdown és estàtic, i [llistes numerades explícites](../nodes/chart-output-node.md#numbered-lists) per a numeració personalitzada o descendent)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (les vostres revisions humanes pendents. La capçalera mostra `1/n pending`. El nom del Workflow obre aquesta execució al canvas. **Aprova**, **Sol·licita canvis** i **Rebutja** la resolen. La icona d'historial al costat del títol del giny obre aquesta execució al diàleg d'historial d'aquesta pàgina. El giny no utilitza files d'origen, i cada persona veu la seva pròpia cua. Pot mostrar en el seu lloc les revisions d'un sol Workflow, per a tothom que pugui obrir aquest Workflow; vegeu [Widgets HITL](#widgets-hitl))
 
 A més dels gràfics, un giny **Run a workflow** executa un dels vostres Workflows des del tauler de control: sobre un fitxer deixat anar, amb els seus camps d'entrada o amb un botó Run; vegeu [Ginys d'execució](#run-widgets).
@@ -145,3 +150,5 @@ Eliminar una compartició, o rebaixar-la d'escriptura a lectura, té efecte imme
 ## Cronogrames i diagrames de bases de dades
 
 Trieu **Gantt** a Afegeix un giny per mostrar tasques al llarg del temps amb finalització i enllaços de dependència, o **Entity relationships (DB)** per mapar taules, camps i les seves relacions. Tots dos tipus utilitzen el [node Chart Output](../nodes/chart-output-node.md#gantt-schedules) i també estan disponibles a les pàgines de Heym Work. Quan Work suggereix ginys per a un calendari o esquema de base de dades, dibuixa visualitzacions prèvies a partir de les tasques o entitats proposades.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | 노드 식별자 (camelCase) |
 | `conversion` | string | `csvToJson` (CSV 텍스트 → 행 객체 배열), `jsonToCsv` (객체/행 배열 → CSV 텍스트), `xmlToJson` (XML 텍스트 → 객체), `jsonToXml` (객체 → XML 텍스트), `imageToText` (이미지 OCR), `pdfToText` (선택한 모든 PDF 페이지 OCR), 또는 `fileConvert` (저장된 파일을 다른 형식으로 다시 작성) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | 변환할 데이터입니다. 비워 두면 노드의 첫 번째 입력을 사용합니다 |
 | `delimiter` | string | 단일 문자 필드 구분자 (기본값 `,`) |
 | `hasHeader` | boolean | `csvToJson` 전용 — 첫 번째 행을 헤더로 처리합니다 (기본값 `true`) |
@@ -169,3 +170,6 @@ OCR은 `tesseract`와 poppler의 `pdftoppm`을 외부 호출하며, 문서 변�
 - [Drive](./drive-node.md) – 파일 저장, 가져오기, 공유
 - [Node Types](../reference/node-types.md) – 모든 노드 유형 개요
 - [Expression DSL](../reference/expression-dsl.md) – 함수 및 구문
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

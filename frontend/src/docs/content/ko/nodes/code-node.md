@@ -19,6 +19,7 @@
 | `codeParameters` | expression | Workflow 데이터를 코드로 연결하는 JSON 객체. 표현식은 코드 실행 전에 해석됩니다 |
 | `codeRequirements` | string | `requirements.txt` 내용으로, 한 줄에 패키지 하나씩 기재합니다. 비어 있으면 설치를 건너뜁니다 |
 | `codeAllowNetwork` | boolean | 코드 자체가 네트워크에 접근할 수 있는지 여부 (기본값 `false`) |
+| `codeFiles` | expression | Optional Drive files mounted read-only for the run: an id, several ids, or an expression such as `$Upload.file.id` |
 
 ## `main` 함수
 
@@ -124,3 +125,16 @@ def main(params):
 ```
 
 `codeParameters`를 `{ "rows": "$fetchRows.result" }`로 설정하면, 다운스트림 노드에서 `$scoreRows.result.total`을 읽습니다.
+## Reading Drive files
+
+Set **Files** (`codeFiles`) to give the code the files of the run. It accepts an id, ids separated by commas, a list, or an expression that resolves to a file or its id, such as `$Upload.file.id` or `$Upload.file`. A file opens when it came into this workflow: uploaded through its [File Upload trigger](./file-upload-trigger-node.md) or written to [Drive](../reference/drive.md) by one of its nodes. Other Drive files are not available to a run, so a workflow cannot be used to read someone's Drive.
+
+```python
+import heym_files
+import pandas as pd
+
+def main(params):
+    workbook = params.files[0]
+    df = pd.read_excel(heym_files.path(workbook.name), sheet_name="Summary")
+    return {"rows": len(df), "columns": list(df.columns)}
+```

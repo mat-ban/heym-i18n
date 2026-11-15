@@ -84,7 +84,8 @@
     "dropFileOrClick": "Thả tệp vào đây hoặc nhấp để chọn",
     "removeFile": "Xóa tệp",
     "chooseFileFor": "Chọn tệp cho {label}",
-    "new": "Mới"
+    "new": "Mới",
+    "clearSearch": "Xóa tìm kiếm"
   },
   "auth": {
     "signInInstead": "Đăng nhập thay thế",
@@ -252,7 +253,9 @@
     "enablePlugin": "Bật",
     "disablePlugin": "Tắt",
     "uninstallPlugin": "Gỡ cài đặt",
-    "pluginOperationFailed": "Thao tác plugin thất bại"
+    "pluginOperationFailed": "Thao tác plugin thất bại",
+    "users": "Người dùng",
+    "encryption": "Mã hóa"
   },
   "nav": {
     "workflows": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Sao chép trace ID",
     "openTrace": "Mở trace",
     "message": "Tin nhắn",
-    "emptyReply": "Phản hồi trống."
+    "emptyReply": "Phản hồi trống.",
+    "timeRange3h": "3 giờ qua",
+    "timeRange6h": "6 giờ qua"
   },
   "tables": {
     "title": "DataTables",
@@ -1336,7 +1341,9 @@
     "browseAll": "Xem tất cả →",
     "askAi": "Hỏi AI",
     "dropToImport": "Kéo thả JSON hoặc ZIP để nhập",
-    "noWorkflowsMatch": "Không có workflow nào khớp với bộ lọc này."
+    "noWorkflowsMatch": "Không có workflow nào khớp với bộ lọc này.",
+    "noWorkflowsMatchAll": "Thử tiêu đề, mô tả hoặc tên thư mục khác.",
+    "noWorkflowsMatchFilter": "Thử tiêu đề, mô tả, tên thư mục hoặc bộ lọc trạng thái khác."
   },
   "schedules": {
     "title": "Lịch trình",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Được khởi tạo bởi một MCP client",
     "newChatTitle": "Cuộc trò chuyện mới",
     "subtitle": "Chạy Workflow và đặt câu hỏi",
-    "modelsLoadFailedDisabled": "Không thể tải danh sách mô hình của thông tin xác thực này. Chat vẫn bị tắt cho đến khi có thể lấy được mô hình."
+    "modelsLoadFailedDisabled": "Không thể tải danh sách mô hình của thông tin xác thực này. Chat vẫn bị tắt cho đến khi có thể lấy được mô hình.",
+    "dropFilesToAttach": "Thả tệp để đính kèm",
+    "attachFiles": "Đính kèm tệp"
   },
   "teams": {
     "title": "Teams",
@@ -1883,7 +1892,8 @@
       "skipped": "Đã bỏ qua"
     },
     "permissionRead": "đọc",
-    "permissionWrite": "ghi"
+    "permissionWrite": "ghi",
+    "details": "Chi tiết"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2169,7 +2179,8 @@
       "actions": "Hành động",
       "failedToLoadWidget": "Không thể tải widget",
       "failedToUpdateCheckbox": "Không thể cập nhật hộp kiểm",
-      "refreshDashboard": "Refresh dashboard"
+      "refreshDashboard": "Refresh dashboard",
+      "revertPrevious": "Hoàn tác trước đó"
     },
     "hitl": {
       "previousReview": "Đánh giá trước",

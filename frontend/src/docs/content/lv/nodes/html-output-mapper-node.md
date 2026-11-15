@@ -68,3 +68,5 @@ Tas pats noteikums kā [Output](./output-node.md): nenovietojiet šo mezglu cilp
 - [Output](./output-node.md) – Ziņojuma vai shēmas balstīta atbilde ar `result` iesaiņojumu
 - [Webhooks](../reference/webhooks.md) – Izpildes endpoint, pieprasījuma metodes un atbildes
 - [Mezglu tipi](../reference/node-types.md) – Visi mezglu tipi
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

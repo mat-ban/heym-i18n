@@ -140,3 +140,6 @@ En mislykket login returnerer til login-skærmen med en læsbar besked. Heym vis
 - **Flere samtidige udbydere.** En instans forbinder til én udbyder.
 - **Gruppe- eller rollemapping** fra provider-claims.
 - **Single logout.** Logout fra Heym logger ikke ud af udbyderen.
+
+- **Tofaktorgodkendelse tilhører udbyderen.** `HEYM_REQUIRE_MFA` gælder kun for adgangskodelogin; et SSO-login beder aldrig om en Heym-kode. Kræv MFA hos din identitetsudbyder i stedet.
+- **Deaktivering gælder også her.** En konto, som en administrator har deaktiveret i **Indstillinger → Brugere**, afvises, selv når udbyderen stadig godkender den.

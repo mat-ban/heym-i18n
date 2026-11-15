@@ -192,7 +192,7 @@ Izsekošanas sistēma ir speciāli izstrādāta aģentiskas uzvedības atkļūdo
 Katrs LLM izsaukums Heym tiek automātiski aprēķināts izmaksu ziņā. [Cilne Izsekošana](../tabs/traces-tab.md) parāda katrai izsekošanai ievades un izvades token skaitu kopā ar reāllaika USD izmaksām, kas iegūtas no sinhronizētas cenu tabulas.
 
 - **Izmaksas katrai izsekošanai** – Ievades token, izvades token un kopējās USD izmaksas redzamas katrā izsekošanas rindā
-- **Izmaksu analītika** – KPI kartītes un izmaksu diagramma pa modeļiem atjaunojas atbilstoši izvēlētajam laika diapazonam (1h / 24h / 7d / 30d / Visi)
+- **Izmaksu analītika** – KPI kartītes un izmaksu diagramma pa modeļiem atjaunojas atbilstoši izvēlētajam laika diapazonam (1h / 3h / 6h / 24h / 7d / 30d / Visi)
 - **LLM izmaksu tabula** – Sistēmas tabula [Cilnē DataTable](../tabs/datatable-tab.md) tiek aizpildīta no Helicone ik pēc 24 stundām; Jūs varat ignorēt cenas vai pievienot pielāgotas rindas modeļiem, kas vēl nav iekļauti
 - **Brīdinājums par trūkstošu cenu** – Izsekošanām modeļiem bez cenas ieraksta parādās iekļauts brīdinājums ar tiešu saiti uz izmaksu tabulu
 
@@ -278,7 +278,7 @@ Workflow ir izsaucami pa HTTP pie `/api/workflows/{workflow_id}/execute`, kas at
 Heym ir iebūvēts [MCP](../tabs/mcp-tab.md) atbalsts abās pusēs:
 
 - **Kā klientam**: Agent node izveido savienojumu ar ārējiem MCP serveriem (Filesystem, Browserbase, pielāgoti rīki) izmantojot stdio vai SSE un automātiski izmanto to rīkus
-- **Kā serverim**: Workflow ar ieslēgtu MCP kļūst par rīkiem noklusējuma serverī pie `/api/mcp/sse` vai nosauktos serveros ar savu URL un API key, tāpēc Claude Desktop, Cursor un citi MCP klienti var tieši izsaukt Jūsu Heym workflow
+- **Kā serverim**: Workflow ar ieslēgtu MCP kļūst par rīkiem noklusējuma serverī pie `/api/mcp (or /api/mcp/sse for legacy connections)` vai nosauktos serveros ar savu URL un API key, tāpēc Claude Desktop, Cursor un citi MCP klienti var tieši izsaukt Jūsu Heym workflow
 
 Agenti var vienlaikus izmantot vairākus MCP serverus, un jebkurš workflow var kļūt par rīku ārējam MCP klientam.
 

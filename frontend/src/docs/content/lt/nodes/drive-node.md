@@ -116,6 +116,8 @@ Nuorodą į saugomą failą žemiau: `$saveAudio.id`, `$saveAudio.download_url`
 
 Nuorodą į base64 turinį žemiau: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Vaizdai, grąžinti per `file_base64`, rodomi tiesiogiai derinimo skydelyje, kai vykdote darbo eigą.
 
 ## Pavyzdys — Išvardyti Drive failus

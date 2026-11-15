@@ -107,3 +107,6 @@ Komandu palete ir pieejama no redaktora, dashboard, dokumentācijas un novērtē
 - [Ātrā sākšana](../getting-started/quick-start.md) – Izveidojiet savu pirmo workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Cilnes **Akreditācijas dati** un **DataTable** darbojas tāpat: `Ctrl + F` / `Cmd + F` fokusē meklēšanas lauku, saraksts sašaurinās rakstīšanas laikā un `Escape` to notīra.

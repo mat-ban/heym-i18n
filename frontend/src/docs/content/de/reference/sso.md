@@ -140,3 +140,6 @@ Eine fehlgeschlagene Anmeldung kehrt mit einer lesbaren Meldung zum Anmeldebilds
 - **Mehrere gleichzeitige Provider.** Eine Instanz verbindet sich mit einem Provider.
 - **Gruppen- oder Rollenzuordnung** aus Provider-Claims.
 - **Single Logout.** Das Abmelden von Heym meldet Sie nicht vom Provider ab.
+
+- **Zwei-Faktor-Anmeldung obliegt dem Provider.** `HEYM_REQUIRE_MFA` gilt nur für die Passwort-Anmeldung; bei SSO-Anmeldungen wird niemals nach einem Heym-Code gefragt. Verlangen Sie MFA stattdessen in Ihrem Identity Provider.
+- **Deaktivierung greift auch hier.** Ein Konto, das ein Administrator unter **Einstellungen → Benutzer** deaktiviert hat, wird abgewiesen, selbst wenn der Provider es weiterhin authentifiziert.

@@ -22,7 +22,7 @@ El node també requereix una credencial de **GitHub** per clonar repositoris pri
 L'aïllament d'execució es tria mitjançant `HEYM_OPENCODE_CLI_COMMAND`, exactament igual que al node Codex:
 
 - **Desenvolupament local (`run.sh`)** el deixa amb el valor per defecte `opencode`, de manera que OpenCode s'executa com un subprocés de l'amfitrió contra l'espai de treball clonat — no cal Docker ni cap flag addicional.
-- **Desplegaments Docker (`deploy.sh` i la imatge única de GHCR)** el configuren com a `/usr/local/bin/heym-opencode-docker`, un embolcall que executa `opencode run` dins d'un **contenidor germà endurit i efímer** que comparteix el volum nomenat de l'espai de treball d'OpenCode.
+- **Desplegaments Docker (`deploy.sh` i la imatge única de GHCR)** el configuren com a `/usr/local/bin/heym-opencode-docker`, un embolcall que executa `opencode run` dins d'un **contenidor germà endurit i efímer** que comparteix el volum nomenat de l'espai de treball d'OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 El contenidor d'execució endurit elimina totes les capacitats de Linux, estableix `no-new-privileges`, utilitza una arrel de només lectura amb un tmpfs `/tmp` i aplica límits de pid/memòria/CPU. Es permet la sortida de xarxa (OpenCode ha d'arribar a la passarel·la de models). El **token de GitHub mai no s'introdueix dins del contenidor** — totes les operacions de git i GitHub s'executen a l'amfitrió, de manera que només la clau API d'OpenCode i els fitxers del repositori es troben mai a l'interior.
 

@@ -72,6 +72,7 @@ Ime: `heym.agent.tool.execute`, stvoren pod aktivnim spanom čvora Agenta.
 | `heym.agent.tool.args_bytes` | UTF-8 veličina serijaliziranih argumenata alata. |
 | `heym.agent.tool.result_bytes` | UTF-8 veličina serijaliziranog rezultata alata. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` ili `cancelled`. Greške alata postavljaju status spana na `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Sirovi argumenti alata i rezultati prema zadanim postavkama nisu pridruženi spanovima.
 

@@ -157,6 +157,8 @@ Beim Bearbeiten einer Anmeldedaten bleibt der gespeicherte Key erhalten, wenn da
 
 Dieselbe Anmeldedaten kann [Evaluierung](../tabs/evals-tab.md)-Läufe bewerten: mit ausgewähltem **LLM-as-Judge** wähle sie als Judge aus, und das Decision Model bewertet jede Antwort gegen die erwartete Ausgabe.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym blockiert standardmäßig ausgehende Anfragen an private und Loopback-Adressen, daher benötigt ein Decision-Endpoint, den du selbst auf `localhost` oder in einem privaten Bereich betreibst, `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Decision Models erscheinen nicht in den LLM-Preistabellen, die Heym synchronisiert, daher bleibt die Spalte **Cost** in [Traces](../tabs/traces-tab.md) für diese Aufrufe leer. Token-Zahlen werden dennoch aufgezeichnet, und du kannst deinen eigenen Preis mit einem Pricing Override hinzufügen.

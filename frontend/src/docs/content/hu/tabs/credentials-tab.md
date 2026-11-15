@@ -83,3 +83,7 @@ A hitelesítési adatokkal támogatott értékek kifejezésekben való hivatkoz�
 - [Vectorstores Tab](./vectorstores-tab.md) – Qdrant vagy Postgres (pgvector) hitelesítési adatokat használ
 - [Chat Tab](./chat-tab.md) – OpenAI/Google hitelesítési adatokat használ
 - [Contextual Showcase](../reference/contextual-showcase.md) – Kompakt oldalútmutató az irányítópult felületeihez
+
+## Keresés
+
+Használja a lista feletti keresőmezőt, vagy nyomja meg a **Ctrl+F** (vagy **Cmd+F**) billentyűkombinációt a hitelesítési adatok név vagy típus szerinti szűréséhez gépelés közben. A keresés törléséhez nyomja meg az **Escape** billentyűt.

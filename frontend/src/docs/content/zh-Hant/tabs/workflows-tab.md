@@ -86,6 +86,10 @@ API、SubWorker 與 Portal 標籤會讀取 workflow [執行歷史](./logs-tab.md
 
 使用 **Status** 旁的 workflow 搜尋欄位，或按 **Ctrl+F**（或 **Cmd+F**），即可依標題或描述篩選 workflow。資料夾內符合的 workflow 會顯示，並展開其資料夾分支。按 **Escape** 可清除搜尋。
 
+## 搜尋
+
+使用 **狀態** 旁邊的搜尋欄位，或按 **Ctrl+F**（或 **Cmd+F**），依標題或描述篩選工作流程，或依名稱篩選資料夾。資料夾內的相符工作流程會展開顯示其分支，名稱相符的資料夾會顯示其內部所有內容。按 **Escape** 清除搜尋。
+
 ## Folders
 
 - 將 workflows 組織到[資料夾與子資料夾](../reference/workflow-organization.md)中

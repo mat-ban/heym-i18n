@@ -48,7 +48,7 @@ See [Triggers](./triggers.md) for all entry points.
 | Node | Description | Inputs | Outputs |
 |------|-------------|--------|---------|
 | [Set](../nodes/set-node.md) | Transform and map data | 1 | 1 |
-| [Converter](../nodes/converter-node.md) | Convert data between formats (CSV, JSON, XML) and OCR images or PDFs to text | 1 | 1 |
+| [Converter](../nodes/converter-node.md) | Convert data between formats (CSV, JSON, XML), OCR images or PDFs to text, and transcribe audio to text | 1 | 1 |
 | [Code](../nodes/code-node.md) | Run Python in a disposable, network-isolated sandbox with its own requirements.txt | 1 | 1 |
 | [Variable](../nodes/variable-node.md) | Set or get a variable (workflow-local or [global](./global-variables.md)) | 1 | 1 |
 | [Execute](../nodes/execute-node.md) | Call another workflow | 1 | 1 |
@@ -71,6 +71,7 @@ See [Triggers](./triggers.md) for all entry points.
 | [Linear](../nodes/linear-node.md) | Manage Linear teams, projects, issues, workflow states, and comments through GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Read/write Google Sheets via OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | List, download, update, and delete Google Drive files via OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Read availability and create, update or delete Meet invitations | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Run SQL queries and insert rows in BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Query and mutate Supabase tables through PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Run SQL, CRUD, and count operations against ClickHouse | 1 | 1 |

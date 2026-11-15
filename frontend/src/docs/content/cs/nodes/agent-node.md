@@ -109,6 +109,10 @@ Workflow vyberte v sekci Sub-Workflows v konfiguraci agenta. Agent je bude volat
 
 Podporovaný uzel workflow můžete připojit k handle **tools** agenta, aby mohl agent tento uzel za běhu volat. Tím se stávající akce a transformace v canvasu změní na volatitelné nástroje bez psaní Pythonu.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Nástroje z uzlů canvasu použijte, když chcete, aby agent rozhodl, kdy spustit nakonfigurovaný uzel, a zároveň aby přihlašovací údaje, statická pole a nastavení specifická pro workflow zůstaly v UI uzlu.
 
 ### Pole poskytovaná agentem
@@ -401,3 +405,6 @@ Komprese je automatická a vždy aktivní pro uzly Agent. **Nevztahuje se** na u
 - [Rychlý start](../getting-started/quick-start.md) – Základní workflow s LLM a výrazy
 - [Karta Přihlašovací údaje](../tabs/credentials-tab.md) – Přidání API klíčů pro agenta
 - [Karta MCP](../tabs/mcp-tab.md) – Konfigurace MCP pro nástroje workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

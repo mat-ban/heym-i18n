@@ -12,7 +12,7 @@ Nós iniciais (sem arestas de entrada) que iniciam a execução:
 | [Cron](../nodes/cron-node.md) | É executado segundo um agendamento (expressão cron, por exemplo `0 * * * *` para execução horária). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Inicia quando o Telegram envia uma atualização de webhook do bot para o URL de webhook específico do nó. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Inicia quando o Discord envia um webhook da Interactions API para o endpoint específico do nó. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Consulta periodicamente uma caixa de correio IMAP e inicia uma vez por cada novo email detetado. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Consulta periodicamente uma caixa de correio IMAP e inicia uma vez por cada novo email detetado. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Inicia quando o Heym publica um evento da plataforma. Os eventos numa mesma janela de despacho chegam em conjunto como um array. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Abre uma ligação de cliente de saída para um socket externo e inicia em eventos de socket selecionados. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Gera um URL de upload de utilização única e inicia quando um chamador publica um ficheiro multipart de grandes dimensões. |

@@ -7,7 +7,7 @@
 
 ## Aloita keskustelu
 
-Workflow-luettelon yläpuolella on chat-ruutu, joka tervehtii Teitä nimellä ja kysyy, mitä haluatte automatisoida. Kirjoita prompt, liitä halutessasi yksi tiedosto ja valitse käytettävä tunnistetieto ja malli. Molemmat pudotusvalikot ovat hakukelpoisia ja alkavat käyttäjän [tekoäly-oletuksista](../reference/user-settings.md).
+Workflow-luettelon yläpuolella on chat-ruutu, joka tervehtii Teitä nimellä ja kysyy, mitä haluatte automatisoida. Kirjoita prompt, liitä halutessasi up to 10 files ja valitse käytettävä tunnistetieto ja malli. Molemmat pudotusvalikot ovat hakukelpoisia ja alkavat käyttäjän [tekoäly-oletuksista](../reference/user-settings.md).
 
 Lähettäminen luo uuden keskustelun ja avaa sen [Chat-välilehdelle](./chat-tab.md), jossa vastaus tulee suoratoistona. Tuetut liitteet ovat tekstitiedostoja, kuvia ja PDF-tiedostoja, yksi per viesti, kuten chatissä.
 

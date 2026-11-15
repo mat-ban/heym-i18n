@@ -272,3 +272,5 @@ Id — це поле **всередині payload**, а не внутрішні�
 - [Сторонні інтеграції](../reference/integrations.md#qdrant) – Налаштування облікових даних Qdrant і Postgres (pgvector)
 - [Вузол агента](./agent-node.md) – Використання результатів RAG як контексту агента
 - [Вузол LLM](./llm-node.md) – Передавання результатів RAG у системний prompt LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

@@ -45,7 +45,7 @@
 
 V záložce **Run** v editoru (režim Defined webhook) podporuje každé vstupní pole drag-and-drop a inline ovládací prvek pro přílohu (v pravém dolním rohu pole):
 
-- **Textové soubory** (`.txt`, `.md`, `.json`, `.csv` a podobné) se načítají jako prostý text.
+- **Textové soubory** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Obrázky** (JPEG, PNG, GIF, WebP) se ukládají jako `data:` URL (base64) do hodnoty pole — použijte klíče polí jako `imageUrl` nebo `base64`, pokud následné uzly očekávají obrazová data.
 - **PDF** soubory se převádějí na extrahovaný text (max. 5 MB soubor, 100k znaků obsahu).
 

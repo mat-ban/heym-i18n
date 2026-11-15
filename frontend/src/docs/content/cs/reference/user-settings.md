@@ -131,3 +131,6 @@ Panel také uvádí, kolik z úloh za posledních 24 hodin mohlo být spuštěno
 - [Zabezpečení](./security.md) – Správa relací, omezování rychlosti, šifrování přihlašovacích údajů
 - [Single Sign-On](./sso.md) – Připojení externího poskytovatele OpenID Connect
 - [OpenTelemetry Tracing](./opentelemetry.md) – Distribuované trasování spuštění Workflow a uzlů
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

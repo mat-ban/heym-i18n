@@ -2043,7 +2043,7 @@ class TestGlobalScopeReservedKeyword(unittest.TestCase):
             alias_reserved_context_names("a.link.replace('global', 'x')"),
             "a.link.replace('global', 'x')",
         )
-        self.assertEqual(alias_reserved_context_names("a.global"), "a.global")
+        self.assertEqual(alias_reserved_context_names("a.global"), "a.__heymKeyword_global")
         self.assertEqual(alias_reserved_context_names("a.b.upper()"), "a.b.upper()")
 
     def test_dotstr_methods_resolve_on_global_scope(self) -> None:
@@ -2299,3 +2299,256 @@ class TestDotBoolComparisonsAndPreview(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestReservedAttributeNames(unittest.TestCase):
+    """Email's `from` and other keyword keys retain normal dotted-field behavior."""
+
+    SENDER = "Leandoo Benachrichtigungen <HELLO@leandoo.com>"
+    CONTEXT = {"imapTrigger": {"email": {"from": SENDER}}}
+
+    def test_sender_contains_agrees_in_preview_execution_and_conditions(self) -> None:
+        executor = WorkflowExecutor(nodes=[], edges=[])
+        service = ExpressionEvaluatorService()
+        for address, expected in [("hello@leandoo.com", True), ("other@example.com", False)]:
+            expression = f'$imapTrigger.email.from.lower().contains("{address}")'
+            with self.subTest(expression=expression):
+                response = service.evaluate(expression, self.CONTEXT)
+                self.assertIs(response.result, expected)
+                self.assertEqual(response.result_type, "boolean")
+                self.assertTrue(response.preserved_type)
+                self.assertIsNone(response.error)
+                self.assertIs(
+                    executor.resolve_expression(expression, self.CONTEXT, preserve_type=True),
+                    expected,
+                )
+                self.assertIs(
+                    executor.resolve_arithmetic_expression(
+                        expression, self.CONTEXT, preserve_type=True
+                    ),
+                    expected,
+                )
+                self.assertIs(executor.evaluate_condition(expression, self.CONTEXT), expected)
+
+    def test_selected_sender_and_message_template_preserve_strings(self) -> None:
+        executor = WorkflowExecutor(nodes=[], edges=[])
+        expression = "$imapTrigger.email.from.lower()"
+        response = ExpressionEvaluatorService().evaluate(expression, self.CONTEXT)
+        self.assertEqual(response.result, self.SENDER.lower())
+        self.assertEqual(response.result_type, "string")
+        self.assertEqual(
+            executor.evaluate_message_template(f"Sender: {expression}", self.CONTEXT),
+            f"Sender: {self.SENDER.lower()}",
+        )
+
+    def test_all_python_keyword_fields_are_supported(self) -> None:
+        import keyword
+
+        for name in keyword.kwlist:
+            expression = f"$data.{name}.lower().contains('sender')"
+            with self.subTest(name=name):
+                response = ExpressionEvaluatorService().evaluate(
+                    expression, {"data": {name: "SENDER"}}
+                )
+                self.assertIs(response.result, True)
+
+    def test_reserved_fields_keep_missing_value_and_nested_item_behavior(self) -> None:
+        service = ExpressionEvaluatorService()
+        cases = [
+            ("$data.from.orEmpty()", {"data": {}}, ""),
+            ("$data.from.class.lower()", {"data": {"from": {"class": "SENDER"}}}, "sender"),
+            ("$data.from.replace('from', 'class')", {"data": {"from": "from"}}, "class"),
+            ("$data.map('item.from.lower()')", {"data": [{"from": "SENDER"}]}, ["sender"]),
+            ("$data.from == $data.class", {"data": {"from": "sender", "class": "sender"}}, True),
+        ]
+        for expression, context, expected in cases:
+            with self.subTest(expression=expression):
+                self.assertEqual(service.evaluate(expression, context).result, expected)
+
+    def test_literals_and_existing_alias_shaped_keys_are_not_reinterpreted(self) -> None:
+        service = ExpressionEvaluatorService()
+        expression = '$data.from.contains("__heymKeyword_from")'
+        self.assertIs(
+            service.evaluate(expression, {"data": {"from": "__heymKeyword_from"}}).result,
+            True,
+        )
+        self.assertIsNone(
+            service.evaluate("$data.__heymKeyword_from", {"data": {"from": "sender"}}).result
+        )
+        self.assertEqual(
+            alias_reserved_context_names('data.from.replace("data.class", "from")'),
+            'data.__heymKeyword_from.replace("data.class", "from")',
+        )
+
+
+class TestTextTemplatesWithOperatorCharacters(unittest.TestCase):
+    """A text template with "-", "*" or "/" after a $ref renders the same in a run and
+    in the dialog, without Python quotes around string values."""
+
+    BODY = {"name": "Alice", "email": "alice@example.com", "role": "admin", "count": 5}
+    CASES = {
+        "dash": (
+            "New signup: $userInput.body.name - $userInput.body.email",
+            "New signup: Alice - alice@example.com",
+        ),
+        "bullets": (
+            "Summary:\n- $userInput.body.name\n- $userInput.body.role",
+            "Summary:\n- Alice\n- admin",
+        ),
+        "separator": ("$userInput.body.name\n---\nSent by Heym", "Alice\n---\nSent by Heym"),
+        "refs": ("$userInput.body.name - $userInput.body.email", "Alice - alice@example.com"),
+        "numbers": ("Order $userInput.body.count - shipped", "Order 5 - shipped"),
+    }
+
+    def test_run_and_dialog_render_plain_text(self) -> None:
+        nodes = [
+            {"id": "in", "type": "textInput", "data": {"label": "userInput"}},
+            {
+                "id": "set1",
+                "type": "set",
+                "data": {
+                    "label": "compose",
+                    "mappings": [
+                        {"key": key, "value": template} for key, (template, _) in self.CASES.items()
+                    ],
+                },
+            },
+        ]
+        edges = [{"id": "e1", "source": "in", "target": "set1"}]
+        result = execute_workflow(
+            workflow_id=uuid.uuid4(),
+            nodes=nodes,
+            edges=edges,
+            inputs={"body": self.BODY},
+            test_run=True,
+        )
+        canvas = [
+            {"node_id": r["node_id"], "label": r["node_label"], "output": r["output"]}
+            for r in result.node_results
+        ]
+        run_output = next(r["output"] for r in result.node_results if r["node_id"] == "set1")
+        context = build_eval_context(
+            nodes,
+            canvas,
+            workflow_edges=edges,
+            current_node_id="set1",
+            initial_inputs={"body": self.BODY},
+        )
+        service = ExpressionEvaluatorService(
+            workflow_nodes=nodes,
+            workflow_edges=edges,
+            vars_context=build_vars_context(
+                nodes, canvas, workflow_edges=edges, current_node_id="set1"
+            ),
+            workflow_id=uuid.uuid4(),
+        )
+
+        for key, (template, expected) in self.CASES.items():
+            with self.subTest(key=key):
+                self.assertEqual(run_output[key], expected)
+                dialog = service.evaluate(template, context, current_node_id="set1").result
+                self.assertEqual(dialog, expected)
+
+
+class TestLeadingDollarTextTemplates(unittest.TestCase):
+    """Text that starts with a $ref, in an Execute input mapping or a Console Log message,
+    renders like the dialog shows it instead of resolving to None."""
+
+    BODY = {"name": "Alice", "plan": "pro", "count": 5, "other": 2}
+    TEXT = ("$userInput.body.name signed up for $userInput.body.plan", "Alice signed up for pro")
+
+    def _run(self, mappings: list[dict], log_message: str) -> tuple[dict, object]:
+        child_id = str(uuid.uuid4())
+        child_nodes = [
+            {"id": "c1", "type": "textInput", "data": {"label": "childInput"}},
+            {
+                "id": "c2",
+                "type": "output",
+                "data": {
+                    "label": "childOutput",
+                    "outputSchema": [
+                        {"key": m["key"], "value": f"$childInput.body.{m['key']}"} for m in mappings
+                    ],
+                },
+            },
+        ]
+        nodes = [
+            {"id": "in", "type": "textInput", "data": {"label": "userInput"}},
+            {
+                "id": "call",
+                "type": "execute",
+                "data": {
+                    "label": "notify",
+                    "executeWorkflowId": child_id,
+                    "executeInputMappings": mappings,
+                },
+            },
+            {
+                "id": "log",
+                "type": "consoleLog",
+                "data": {"label": "audit", "logMessage": log_message},
+            },
+        ]
+        edges = [
+            {"id": "e1", "source": "in", "target": "call"},
+            {"id": "e2", "source": "in", "target": "log"},
+        ]
+        workflow_id = uuid.uuid4()
+        executor = WorkflowExecutor(
+            nodes=nodes,
+            edges=edges,
+            workflow_cache={
+                child_id: {
+                    "nodes": child_nodes,
+                    "edges": [{"id": "ce1", "source": "c1", "target": "c2"}],
+                    "name": "Child",
+                }
+            },
+            workflow_id=workflow_id,
+        )
+        result = executor.execute(workflow_id, {"body": self.BODY})
+        outputs = {r["node_label"]: r["output"] for r in result.node_results}
+        child = outputs["notify"]["outputs"]["childOutput"]["result"]
+        return child, outputs["audit"]["logMessage"]
+
+    def test_text_starting_with_a_ref_renders_as_text(self) -> None:
+        child, logged = self._run([{"key": "subject", "value": self.TEXT[0]}], self.TEXT[0])
+
+        self.assertEqual(child["subject"], self.TEXT[1])
+        self.assertEqual(logged, self.TEXT[1])
+
+    def test_expressions_keep_their_type(self) -> None:
+        child, logged = self._run(
+            [
+                {"key": "count", "value": "$userInput.body.count"},
+                {"key": "difference", "value": "$userInput.body.count - $userInput.body.other"},
+                {"key": "pro", "value": "$userInput.body.plan == 'pro' and $userInput.body.count"},
+            ],
+            "$userInput.body.count",
+        )
+
+        self.assertEqual(child["count"], 5)
+        self.assertEqual(child["difference"], 3)
+        self.assertEqual(child["pro"], 5)
+        self.assertEqual(logged, 5)
+
+    def test_a_ternary_whose_branch_is_null_stays_null(self) -> None:
+        child, logged = self._run(
+            [{"key": "lang", "value": "$userInput.body.lang ? $userInput.body.lang : null"}],
+            "$userInput.body.lang ? $userInput.body.lang : null",
+        )
+
+        self.assertIsNone(child["lang"])
+        self.assertIsNone(logged)
+
+    def test_a_condition_is_not_turned_into_text(self) -> None:
+        from app.services.node_execution.leading_dollar import resolve_leading_dollar_value
+
+        condition = "$userInput.body.count > 3 && $userInput.body.other < 3"
+        executor = WorkflowExecutor(nodes=[], edges=[], workflow_id=uuid.uuid4())
+        inputs = {"userInput": {"body": self.BODY}}
+
+        self.assertEqual(
+            resolve_leading_dollar_value(executor, condition, inputs, "n1"),
+            executor.resolve_expression(condition, inputs, "n1", preserve_type=True),
+        )

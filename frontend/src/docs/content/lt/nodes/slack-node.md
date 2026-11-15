@@ -54,3 +54,5 @@ Naudokite su [Klaidų tvarkytoju](./error-handler-node.md) pranešimams apie nes
 - [Mazgų tipai](../reference/node-types.md) – Visų mazgų tipų apžvalga
 - [Klaidų tvarkytojas](./error-handler-node.md) – Siųsti Slack, kai workflow nepavyksta
 - [Kredencialų skiltis](../tabs/credentials-tab.md) – Pridėti Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

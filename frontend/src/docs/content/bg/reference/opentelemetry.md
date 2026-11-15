@@ -72,6 +72,7 @@ Node spans се влагат правилно под workflow span-а дори �
 | `heym.agent.tool.args_bytes` | UTF-8 размер на сериализираните аргументи на инструмента. |
 | `heym.agent.tool.result_bytes` | UTF-8 размер на сериализирания резултат от инструмента. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` или `cancelled`. Грешките на инструмента задават статус `ERROR` на span-а. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Суровите аргументи и резултати на инструментите не се прикачват към spans по подразбиране.
 

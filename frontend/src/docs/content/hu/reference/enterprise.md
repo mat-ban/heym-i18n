@@ -42,7 +42,7 @@ Az Ön csapatának készségszintjéhez és felhasználási eseteihez igazított
 
 ## Kubernetes Deployment
 
-A szabványos [Running & Deployment](../getting-started/running-and-deployment.md) útmutató a Docker Compose-t ismerteti egy szerveres éles környezetekhez. Az Enterprise ügyfelek segítséget kapnak éles Kubernetes telepítésekhez a magas rendelkezésre állás és a horizontális skálázás érdekében:
+A szabványos [Running & Deployment](../getting-started/running-and-deployment.md) útmutató a Docker Compose-t ismerteti egy szerveres éles környezetekhez. [Kubernetes Deployment](../getting-started/kubernetes.md). Az Enterprise ügyfelek segítséget kapnak éles Kubernetes telepítésekhez a magas rendelkezésre állás és a horizontális skálázás érdekében:
 
 - **Több worker-node** — A Heym backend workerek elosztása több Kubernetes node között a redundancia és a terheléselosztás érdekében
 - **Sidecar konténerek** — Sidecar minták konfigurálása loggyűjtéshez, monitoring ügynökökhöz, service mesh-ekhez (Istio, Linkerd) és secret-injektáláshoz (Vault)

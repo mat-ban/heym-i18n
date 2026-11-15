@@ -32,6 +32,7 @@ Dane logowania przechowują klucze API oraz sekrety wykorzystywane przez węzły
 | [Grist](../nodes/grist-node.md) | Grist | Klucz API + URL serwera |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + zgoda OAuth2 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + zgoda OAuth2 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + zgoda OAuth2 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL projektu + klucz API (+ opcjonalny domyślny schemat) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + nazwa użytkownika/hasło + baza danych (+ tryb secure) |

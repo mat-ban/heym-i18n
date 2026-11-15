@@ -95,7 +95,7 @@ En un filtro de `find` o `count`, un valor simple significa igualdad; un valor d
 | `$contains` | Coincidencia de subcadena sin distinguir mayúsculas y minúsculas |
 | `$in` | El valor está en el array indicado |
 
-Ejemplo que combina varios: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Los operadores desconocidos se ignoran. Los filtros de `upsert` siguen utilizando valores de coincidencia exacta para encontrar la fila que se debe actualizar.
+Ejemplo que combina varios: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Los operadores desconocidos se ignoran. Los filtros de `upsert` siguen utilizando valores de coincidencia exacta para encontrar la fila que se debe actualizar.
 
 También puede filtrar por los metadatos de la fila — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — que se almacenan como columnas reales en lugar de dentro de sus datos. Para fechas, introduzca un valor completo para las comparaciones de rango (p. ej. `{"created_at": {"$gt": "2026-06-04"}}`) o utilice `$contains` para una coincidencia parcial de texto (p. ej. `{"created_at": {"$contains": "2026-06-04"}}`). Si una de sus propias columnas tiene el mismo nombre que un campo de metadatos, prevalece la columna de datos.
 

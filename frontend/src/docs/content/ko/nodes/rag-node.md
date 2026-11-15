@@ -35,7 +35,7 @@
 | `metadataFilters` | JSON string | Metadata filters for search (values support expressions) |
 | `hybridSearch` | boolean | 벡터 검색과 BM25 키워드 검색 결합 (search 전용; 기본값: 꺼짐) |
 | `enableReranker` | boolean | Use Cohere to rerank search results |
-| `rerankerCredentialId` | UUID | Cohere credential for reranking |
+| `rerankerCredentialId` | UUID | Cohere or Decision Model credential for reranking |
 | `rerankerTopN` | number | Number of top results to keep after reranking |
 
 ## Operations
@@ -252,3 +252,5 @@ reranking이 활성화된 경우:
 - [Third-Party Integrations](../reference/integrations.md#qdrant) – Qdrant 및 Postgres (pgvector) credential 설정
 - [Agent Node](./agent-node.md) – RAG 결과를 에이전트 컨텍스트로 사용
 - [LLM Node](./llm-node.md) – RAG 결과를 LLM 시스템 Prompt에 공급
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

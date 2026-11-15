@@ -23,12 +23,13 @@
 
 - 所选时间范围内最近轨迹的分页列表
 - 每条轨迹显示：Workflow、节点、凭证、时间戳、耗时
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - 点击轨迹可打开详情视图
 - 在详情对话框中可使用 **Prev / Next** 在轨迹之间切换，无需关闭对话框
 
 ## 筛选
 
-- **Time range** – 1h / 24h / 7d / 30d / All；同时筛选图表和列表
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All；同时筛选图表和列表
 - **Credential** – 按使用的凭证（API key）筛选
 - **Source** – 按 Workflow 或执行来源筛选
 - **Search** – 按模型、Workflow、凭证或节点标签搜索

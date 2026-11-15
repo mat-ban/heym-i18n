@@ -12,7 +12,7 @@ Startknooppunten (zonder inkomende edges) die de uitvoering initiëren:
 | [Cron](../nodes/cron-node.md) | Draait volgens een schema (cron-expressie, bijvoorbeeld `0 * * * *` voor elk uur). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Start wanneer Telegram een bot-webhook-update naar de knooppuntspecifieke webhook-URL stuurt. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Start wanneer Discord een Interactions API-webhook naar het knooppuntspecifieke endpoint stuurt. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Pollt een IMAP-mailbox en start één keer voor elke nieuw gedetecteerde e-mail. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Pollt een IMAP-mailbox en start één keer voor elke nieuw gedetecteerde e-mail. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Start wanneer Heym een platformevent publiceert. Events binnen één dispatch-venster komen samen aan als een array. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Opent een uitgaande clientverbinding naar een externe socket en start bij geselecteerde socket-events. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Genereert een eenmalig bruikbare upload-URL en start wanneer een aanroeper een groot multipart-bestand plaatst. |

@@ -68,3 +68,5 @@ Même règle que pour [Output](./output-node.md) : ne placez pas ce nœud à l'i
 - [Output](./output-node.md) – Réponse basée sur un message ou un schéma avec enveloppe `result`
 - [Webhooks](../reference/webhooks.md) – Endpoint d'exécution, méthodes de requête et réponses
 - [Types de nœuds](../reference/node-types.md) – Tous les types de nœuds
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

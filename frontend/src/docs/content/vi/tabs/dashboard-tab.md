@@ -2,6 +2,9 @@
 
 Tab **Dashboard** là một không gian kiểu Grafana, nơi bạn xây dựng các lưới widget biểu đồ. Mỗi widget được render từ output của workflow Heym ẩn riêng của nó, vì vậy bất kỳ dữ liệu nào bạn có thể tạo ra trong một workflow — truy vấn cơ sở dữ liệu, gọi API, tra cứu RAG, output LLM — đều có thể trở thành biểu đồ. Bạn có thể giữ nhiều dashboard và chia sẻ từng dashboard với người dùng hoặc nhóm.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboards
 
 Mọi người bắt đầu với một dashboard, được tạo lần đầu khi họ mở tab. Sử dụng bộ chọn dashboard ở đầu tab để chuyển đổi giữa các dashboard, và **+** bên cạnh để tạo dashboard mới. Bộ chọn liệt kê các dashboard của riêng bạn trước, sau đó là những dashboard được chia sẻ với bạn, được gắn nhãn với tên của người đã chia sẻ chúng.
@@ -27,6 +30,8 @@ Một widget là một biểu đồ đơn lẻ trên lưới. Các loại biểu
 - **Entity relationships (DB)** (bảng, trường, khóa PK/FK và các kết nối)
 - **Bar gauge** (một gauge ngang cho mỗi hàng với gradient đỏ→xanh và một giá trị, ví dụ: dung lượng đĩa trống)
 - **Text** (một thông điệp markdown, ví dụ: ghi chú trạng thái như "Lần thực thi cuối lúc 19:47"; hỗ trợ [hộp kiểm tương tác](../nodes/chart-output-node.md#interactive-task-lists) khi markdown là tĩnh, và [danh sách đánh số rõ ràng](../nodes/chart-output-node.md#numbered-lists) cho đánh số tùy chỉnh hoặc giảm dần)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (các đánh giá thủ công đang chờ của bạn. Tiêu đề hiển thị `1/n pending`. Tên workflow mở lần chạy đó trên canvas. **Approve**, **Request changes**, và **Reject** giải quyết nó. Biểu tượng lịch sử bên cạnh tiêu đề widget mở lần chạy đó trong hộp thoại lịch sử trên trang này. Widget không sử dụng các hàng upstream, và mỗi người thấy hàng đợi của riêng họ. Nó có thể hiển thị các đánh giá của một Workflow duy nhất cho bất kỳ ai có thể mở Workflow đó; xem [Widget HITL](#widget-hitl))
 
 Bên cạnh biểu đồ, widget **Run a workflow** chạy một trong các workflow của bạn ngay từ dashboard: trên tệp được thả vào, với các trường đầu vào của nó hoặc bằng nút Run; xem [Widget chạy workflow](#run-widgets).
@@ -146,3 +151,5 @@ Việc gỡ bỏ một lượt chia sẻ, hoặc hạ nó từ write xuống rea
 ## Lịch biểu và sơ đồ cơ sở dữ liệu
 
 Chọn **Gantt** trong Thêm widget để hiển thị các nhiệm vụ theo thời gian kèm theo trạng thái hoàn thành và liên kết phụ thuộc, hoặc **Entity relationships (DB)** để ánh xạ các bảng, trường và mối quan hệ của chúng. Cả hai loại đều sử dụng [node Chart Output](../nodes/chart-output-node.md#gantt-schedules) và cũng có sẵn trên các trang Heym Work. Khi Work đề xuất các widget cho một lịch biểu hoặc lược đồ cơ sở dữ liệu, nó sẽ vẽ các bản xem trước từ các nhiệm vụ hoặc thực thể được đề xuất trước khi bạn xây dựng trang.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

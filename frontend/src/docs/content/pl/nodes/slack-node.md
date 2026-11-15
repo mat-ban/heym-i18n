@@ -54,3 +54,5 @@ Użycie z [Error Handler](./error-handler-node.md) do powiadomień o błędach:
 - [Typy węzłów](../reference/node-types.md) – Przegląd wszystkich typów węzłów
 - [Error Handler](./error-handler-node.md) – Wysyłanie wiadomości Slack przy niepowodzeniu workflow
 - [Zakładka Dane logowania](../tabs/credentials-tab.md) – Dodawanie webhooka Slack
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

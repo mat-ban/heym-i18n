@@ -72,6 +72,7 @@ Nome: `heym.agent.tool.execute`, criado sob o span do Nó Agente ativo.
 | `heym.agent.tool.args_bytes` | Tamanho em UTF-8 dos argumentos serializados da ferramenta. |
 | `heym.agent.tool.result_bytes` | Tamanho em UTF-8 do resultado serializado da ferramenta. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` ou `cancelled`. Erros de ferramenta definem o status do span como `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Argumentos e resultados brutos das ferramentas não são anexados aos spans por padrão.
 

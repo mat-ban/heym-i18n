@@ -12,7 +12,7 @@ La page s'ouvre sur un résumé statistique au-dessus de la liste des exécution
 - **Cartes KPI** – Appels totaux, Tokens totaux, Coût total (USD), Latence moyenne, % d'erreurs
 - **Tokens par modèle** – Graphique en anneau du volume de tokens par modèle
 - **Coût par modèle** – Graphique en anneau des dépenses en USD par modèle. Les modèles sans tarification affichent un lien « Configurer la tarification » vers la [Table des coûts LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Appels dans le temps** – Graphique en aires empilées des appels réussis vs échoués par intervalle (5 min / 1 h / 6 h / 1 jour, choisi automatiquement selon la plage)
+- **Appels dans le temps** – Graphique en aires empilées des appels réussis vs échoués par intervalle (5 min / 15 min / 30 min / 1 h / 6 h / 1 jour, choisi automatiquement selon la plage)
 - **Notification des modèles non tarifés** – Apparaît sous les graphiques lorsque certains modèles tracés n'ont pas de ligne de tarification, avec un lien vers la Table des coûts LLM
 
 ## Plage temporelle
@@ -23,12 +23,13 @@ Un unique sélecteur **Plage temporelle** en haut de la barre de filtres pilote 
 
 - Liste paginée des exécutions récentes dans la plage temporelle sélectionnée
 - Chaque exécution affiche : workflow, nœud, identifiant, horodatage, durée
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Cliquez sur une exécution pour ouvrir la vue détaillée
 - Utilisez **Précédent / Suivant** dans la boîte de dialogue de détail pour naviguer entre les exécutions sans la fermer
 
 ## Filtrage
 
-- **Plage temporelle** – 1h / 24h / 7j / 30j / Tout ; filtre les graphiques et la liste simultanément
+- **Plage temporelle** – 1h / 3h / 6h / 24h / 7j / 30j / Tout ; filtre les graphiques et la liste simultanément
 - **Identifiant** – Filtrer par identifiant (clé API) utilisé
 - **Source** – Filtrer par workflow ou source d'exécution
 - **Recherche** – Rechercher par modèle, workflow, identifiant ou libellé de nœud

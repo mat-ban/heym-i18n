@@ -72,6 +72,7 @@ Ime: `heym.agent.tool.execute`, ustvarjen pod aktivnim spanom vozlišča agenta.
 | `heym.agent.tool.args_bytes` | Velikost serializiranih argumentov orodja v UTF-8. |
 | `heym.agent.tool.result_bytes` | Velikost serializiranega rezultata orodja v UTF-8. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` ali `cancelled`. Napake orodja nastavi status spana na `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Nerazredčeni argumenti orodja in rezultati se privzeto ne priložijo spanom.
 

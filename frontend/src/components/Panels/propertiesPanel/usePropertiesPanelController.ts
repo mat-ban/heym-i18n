@@ -86,6 +86,8 @@ import {
   s3OperationOptions,
   supabaseOperationOptions,
 } from "./operationOptions";
+import { useGoogleMeetExpressionFields } from "./nodes/googleMeetExpressionFields";
+import { useCodeExpressionFields } from "./nodes/codeExpressionFields";
 import { randomUUID } from "@/lib/uuid";
 
 interface ExpandableFieldRef {
@@ -154,6 +156,7 @@ export function usePropertiesPanelController() {
     jira: "node-jira",
     linear: "node-linear",
     googleSheets: "node-google-sheets",
+    googleMeet: "node-google-meet",
     googleDrive: "node-google-drive",
     bigquery: "node-google-sheets",
     supabase: "node-datatable",
@@ -600,7 +603,10 @@ export function usePropertiesPanelController() {
   ];
   const crawlerUrlInputRef = ref<ExpandableFieldRef | null>(null);
   const consoleLogMessageInputRef = ref<ExpandableFieldRef | null>(null);
+  const googleMeetExpressionFields = useGoogleMeetExpressionFields(computed(() => workflowStore.selectedNode));
   const codeParametersInputRef = ref<ExpandableFieldRef | null>(null);
+  const codeExpressionFields = useCodeExpressionFields(codeParametersInputRef);
+  const codeFilesInputRef = codeExpressionFields.filesRef;
   type ConverterExpressionFieldKey = "source" | "converterFileId" | "ocrPageRange";
 
   interface ConverterExpressionField {
@@ -1032,6 +1038,11 @@ export function usePropertiesPanelController() {
           cohereCredentials.value = await credentialsApi.listByType("cohere");
         } catch {
           cohereCredentials.value = [];
+        }
+        try {
+          decisionCredentials.value = await credentialsApi.listDecision();
+        } catch {
+          decisionCredentials.value = [];
         }
       }
 
@@ -2183,7 +2194,8 @@ export function usePropertiesPanelController() {
     rabbitmqMessageBodyInputRef.value?.closeExpandDialog();
     crawlerUrlInputRef.value?.closeExpandDialog();
     consoleLogMessageInputRef.value?.closeExpandDialog();
-    codeParametersInputRef.value?.closeExpandDialog();
+    googleMeetExpressionFields.closeAll();
+    codeExpressionFields.closeAll();
     closeConverterExpressionDialogs();
     closeHeymExpressionDialogs();
     switchExpressionInputRef.value?.closeExpandDialog();
@@ -2830,11 +2842,19 @@ export function usePropertiesPanelController() {
         }
       };
       nextTick(() => tryOpenDialog());
+    } else if (nodeType === "googleMeet") {
+      const tryOpenDialog = (attempts = 0): void => {
+        if (attempts > 20 || workflowStore.selectedNode?.type !== "googleMeet") return;
+        const focus = workflowStore.focusField;
+        const index = Math.max(0, googleMeetExpressionFields.fields.value.findIndex((field) => field.key === focus));
+        if (!googleMeetExpressionFields.openAt(index)) setTimeout(() => tryOpenDialog(attempts + 1), 100);
+      };
+      nextTick(() => tryOpenDialog());
     } else if (nodeType === "code") {
       const tryOpenDialog = (attempts = 0): void => {
         if (attempts > 20) return;
         if (codeParametersInputRef.value) {
-          nextTick(() => codeParametersInputRef.value?.openExpandDialog());
+          nextTick(() => codeExpressionFields.openAt(0));
         } else {
           setTimeout(() => tryOpenDialog(attempts + 1), 100);
         }
@@ -5754,7 +5774,11 @@ export function usePropertiesPanelController() {
         { key: "ocrPageRange", label: "Page range" },
       ];
     }
-    if (conversion === "imageToText" || conversion === "fileConvert") {
+    if (
+      conversion === "imageToText" ||
+      conversion === "audioToText" ||
+      conversion === "fileConvert"
+    ) {
       return [{ key: "converterFileId", label: "File" }];
     }
     return [{ key: "source", label: "Source" }];
@@ -6558,35 +6582,6 @@ export function usePropertiesPanelController() {
       "Select Google Sheets credential...",
       "Shared Google Sheets credential (from owner)",
     );
-  });
-
-  const cohereCredentialOptions = computed(() => {
-    const node = selectedNode.value;
-    const selectedCredentialId =
-      node && node.type === "rag"
-        ? (node.data.rerankerCredentialId as string | undefined)
-        : undefined;
-
-    const options: { value: string; label: string }[] = [
-      { value: "", label: "Select Cohere credential..." },
-      ...cohereCredentials.value.map((c) => ({
-        value: c.id,
-        label: c.is_shared ? `${c.name} - shared` : c.name,
-      })),
-    ];
-
-    if (
-      selectedCredentialId &&
-      !cohereCredentials.value.some((c) => c.id === selectedCredentialId) &&
-      !options.some((opt) => opt.value === selectedCredentialId)
-    ) {
-      options.push({
-        value: selectedCredentialId,
-        label: "Shared Cohere credential (from owner)",
-      });
-    }
-
-    return options;
   });
 
   const googleSheetsAppendPlacementOptions = [
@@ -9293,6 +9288,9 @@ export function usePropertiesPanelController() {
     crawlerUrlInputRef,
     consoleLogMessageInputRef,
     codeParametersInputRef,
+    codeFilesInputRef,
+    codeExpressionFields,
+    googleMeetExpressionFields,
     converterExpressionFieldCount,
     converterExpressionFieldIndex,
     setConverterExpressionInputRef,
@@ -9651,7 +9649,7 @@ export function usePropertiesPanelController() {
     googleDriveOperationOptions,
     googleDriveExportFormatOptions,
     googleSheetsCredentialOptions,
-    cohereCredentialOptions,
+    cohereCredentials,
     gristOperationOptions,
     googleSheetsOperationOptions,
     googleSheetsAppendPlacementOptions,

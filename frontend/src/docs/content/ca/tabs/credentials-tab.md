@@ -93,3 +93,7 @@ Consulteu [Expression DSL](../reference/expression-dsl.md) per fer referència a
 - [Pestanya Vectorstores](./vectorstores-tab.md) – Utilitza credencials de Qdrant o Postgres (pgvector)
 - [Pestanya Chat](./chat-tab.md) – Utilitza credencials d'OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guia compacta de pàgines per a les interfícies del tauler
+
+## Cerca
+
+Utilitzeu el camp de cerca sobre la llista o premeu **Ctrl+F** (o **Cmd+F**) per filtrar les credencials per nom o tipus mentre escriviu. Premeu **Esc** per netejar la cerca.

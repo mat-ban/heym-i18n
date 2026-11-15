@@ -254,3 +254,5 @@ Labi zināt:
 - [Trešo pušu integrācijas](../reference/integrations.md#qdrant) – Qdrant un Postgres (pgvector) akreditācijas datu iestatīšana
 - [Aģenta mezgls](./agent-node.md) – Izmantot RAG rezultātus kā aģenta kontekstu
 - [LLM mezgls](./llm-node.md) – Padot RAG rezultātus LLM sistēmas promptā
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

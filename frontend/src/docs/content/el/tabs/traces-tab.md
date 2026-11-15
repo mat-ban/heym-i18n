@@ -12,23 +12,24 @@
 - **Κάρτες KPI** – Total Calls, Total Tokens, Total Cost (USD), Avg Latency, Error %
 - **Tokens by Model** – Γράφημα ντόνατ του όγκου tokens ανά μοντέλο
 - **Cost by Model** – Γράφημα ντόνατ της δαπάνης σε USD ανά μοντέλο. Τα μοντέλα χωρίς τιμολόγηση εμφανίζουν σύνδεσμο "Configure pricing" προς τον [LLM Cost Table](./datatable-tab.md#llm-cost-table-system-table)
-- **Calls Over Time** – Γράφημα στοιβαγμένης περιοχής επιτυχημένων vs αποτυχημένων κλήσεων ανά κάδο (5 min / 1 h / 6 h / 1 day, επιλεγμένο αυτόματα ανά εύρος)
+- **Calls Over Time** – Γράφημα στοιβαγμένης περιοχής επιτυχημένων vs αποτυχημένων κλήσεων ανά κάδο (5 min / 15 min / 30 min / 1 h / 6 h / 1 day, επιλεγμένο αυτόματα ανά εύρος)
 - **Unpriced models notice** – Εμφανίζεται κάτω από τα γραφήματα όταν ορισμένα traced μοντέλα δεν έχουν γραμμή τιμολόγησης, με σύνδεσμο προς τον LLM Cost Table
 
 ## Χρονικό Εύρος
 
-Ένας μόνο επιλογέας **Time range** στην κορυφή της γραμμής φίλτρων καθοδηγεί τόσο την επικεφαλίδα στατιστικών όσο και τη λίστα traces. Επιλογές: Last 1 hour, Last 24 hours, Last 7 days (προεπιλογή), Last 30 days, All time. Η αλλαγή του εύρους επαναφέρει τη σελιδοποίηση και επαναφορτώνει μαζί τα γραφήματα και τη λίστα.
+Ένας μόνο επιλογέας **Time range** στην κορυφή της γραμμής φίλτρων καθοδηγεί τόσο την επικεφαλίδα στατιστικών όσο και τη λίστα traces. Επιλογές: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days (προεπιλογή), Last 30 days, All time. Η αλλαγή του εύρους επαναφέρει τη σελιδοποίηση και επαναφορτώνει μαζί τα γραφήματα και τη λίστα.
 
 ## Λίστα Traces
 
 - Σελιδοποιημένη λίστα πρόσφατων traces εντός του επιλεγμένου χρονικού εύρους
 - Κάθε trace εμφανίζει: workflow, node, credential, χρονική σήμανση, διάρκεια
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Κάντε κλικ σε ένα trace για να ανοίξετε την προβολή λεπτομερειών
 - Χρησιμοποιήστε **Prev / Next** μέσα στο παράθυρο λεπτομερειών για να μετακινηθείτε μεταξύ traces χωρίς να το κλείσετε
 
 ## Φιλτράρισμα
 
-- **Time range** – 1h / 24h / 7d / 30d / All; φιλτράρει μαζί γραφήματα και λίστα
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; φιλτράρει μαζί γραφήματα και λίστα
 - **Credential** – Φιλτράρισμα κατά credential (API key) που χρησιμοποιήθηκε
 - **Source** – Φιλτράρισμα κατά πηγή workflow ή εκτέλεσης
 - **Search** – Αναζήτηση κατά μοντέλο, workflow, credential ή ετικέτα node

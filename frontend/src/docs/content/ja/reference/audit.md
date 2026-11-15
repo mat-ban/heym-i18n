@@ -59,6 +59,10 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `auth.token_refresh` | `outcome=denied` と `reason=refresh_token_replayed_or_revoked` — アラートを出す価値のある token 盗難のシグナルです。 |
 | `auth.password_change` | 現在のパスワードが誤っていた場合は `outcome=failure`。 |
 | `auth.sso_login` | シングルサインオン。`outcome=failure` はプロバイダーの応答が拒否された理由を伴います。`denied` は `email_not_verified`、`domain_not_allowed`、または `provisioning_disabled` を伴います。 |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | 管理者が [SSO](./sso.md) 設定を変更しました。`enabled` と `password_login_disabled` を記録し、client secret は決して記録しません。 |
 | `sso_settings.test` | 管理者が SSO 接続テストを実行しました。 |
 

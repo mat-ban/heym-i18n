@@ -68,6 +68,7 @@ Heym siūlo įvairius mazgų tipus, skirtus Workflow kūrimui. Naudokite [išrai
 | [Linear](../nodes/linear-node.md) | Tvarkyti Linear komandas, projektus, problemas, darbo eigos būsenas ir komentarus per GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Skaityti/rašyti Google Sheets per OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Sąrašas, atsisiuntimas, atnaujinimas ir Google Drive failų ištrynimas per OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Pasiekiamumo skaitymas ir Meet kvietimų kūrimas, atnaujinimas arba ištrynimas | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Vykdyti SQL užklausas ir įterpti eilutes BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Užklausti ir keisti Supabase lenteles per PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Vykdyti SQL, CRUD ir skaičiavimo operacijas ClickHouse | 1 | 1 |

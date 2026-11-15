@@ -16,6 +16,7 @@ Node **IMAP Trigger** melakukan polling pada kotak masuk email secara berkala da
 |-----------|------|-----------|
 | `credentialId` | UUID | Kredensial `imap` yang berisi server, login, kotak surat, dan pengaturan SSL |
 | `pollIntervalMinutes` | Integer | Seberapa sering Heym memeriksa kotak surat untuk email baru |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Panduan Penyiapan
 
@@ -62,6 +63,8 @@ Setelah node terpicu, node hilir dapat mengakses:
 | `$nodeLabel.email.text` | Isi teks biasa |
 | `$nodeLabel.email.html` | Isi HTML |
 | `$nodeLabel.email.attachments` | Array metadata lampiran (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Objek header yang telah didekode |
 | `$nodeLabel.email.uid` | IMAP UID untuk deduplikasi atau pencatatan log |
 | `$nodeLabel.triggered_by` | Label sumber trigger (`"imap"`) |

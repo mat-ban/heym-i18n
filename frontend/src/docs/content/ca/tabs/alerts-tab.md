@@ -2,6 +2,9 @@
 
 La pestanya **Alertes** us permet definir condicions llindar sobre una finestra temporal i rebre avisos quan es creuen. Heym ja registra els resultats d'execució, la durada de les execucions i la despesa en LLM, però no ho comparteix mai per iniciativa pròpia. Una alerta és la manera de demanar-ho.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Mira la demostració d'Alerts</a></p>
+
 Cada alerta s'avalua sobre una **finestra temporal** que trieu, mai sobre un esdeveniment aïllat. Una execució fallida és soroll. Dotze execucions fallides en deu minuts és un incident.
 
 ## Tipus d'alerta

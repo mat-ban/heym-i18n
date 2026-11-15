@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | サーバー、ログイン情報、メールボックス、SSL 設定を含む `imap` 認証情報 |
 | `pollIntervalMinutes` | Integer | Heym が新着メールをチェックする間隔（分） |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## セットアップガイド
 
@@ -62,6 +63,8 @@
 | `$nodeLabel.email.text` | プレーンテキスト本文 |
 | `$nodeLabel.email.html` | HTML 本文 |
 | `$nodeLabel.email.attachments` | 添付ファイルメタデータの配列（`filename`、`content_type`、`size_bytes`） |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | デコードされたヘッダーオブジェクト |
 | `$nodeLabel.email.uid` | 重複排除やログ記録に使用する IMAP UID |
 | `$nodeLabel.triggered_by` | Trigger ソースのラベル（`"imap"`） |

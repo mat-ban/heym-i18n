@@ -2,6 +2,9 @@
 
 **Vadības paneļa** cilne ir Grafana stila telpa, kurā Jūs veidojat diagrammu logrīku režģus. Katrs logrīks tiek attēlots no tā paša slēptā Heym workflow rezultāta, tāpēc visi dati, ko Jūs varat radīt workflow — datu bāzes vaicājumi, API izsaukumi, RAG meklējumi, LLM izejas — var kļūt par diagrammu. Jūs varat saglabāt vairākus vadības paneļus un dalīties ar katru no tiem ar cilvēkiem vai komandām.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Vadības paneļi
 
 Ikviens sāk ar vienu vadības paneli, kas tiek izveidots pirmo reizi atverot cilni. Izmantojiet vadības paneļa izvēlni cilnes augšdaļā, lai pārslēgtos starp vadības paneļiem, un **+** blakus tam, lai izveidotu jaunu. Izvēlne vispirms uzskaita Jūsu pašu vadības paneļus, pēc tam tos, kas ir kopīgoti ar Jums, apzīmēti ar personas vārdu, kas tos kopīgoja.
@@ -27,6 +30,8 @@ Logrīks ir viena diagramma uz režģa. Atbalstītie diagrammu tipi:
 - **Entity relationships (DB)** (tabulas, lauki, PK/FK atslēgas un savienojumi)
 - **Stabiņa mērītājs** (viens horizontāls mērītājs katrā rindā ar sarkano→zaļo gradientu un vērtību, piemēram, brīva diska vieta)
 - **Teksts** (markdown ziņojums, piemēram, statusa piezīme "Pēdējā izpilde plkst. 19:47"; atbalsta [interaktīvos izvēles rūtiņas](../nodes/chart-output-node.md#interactive-task-lists), kad markdown ir statisks, un [skaitliskās sarakstus](../nodes/chart-output-node.md#numbered-lists) pielāgotai vai dilstošai numurēšanai)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (jūsu gaidošās cilvēku atsauksmes. Galvene rāda `1/n gaidošs`. Workflow nosaukums atver šo izpildi kanvā. **Apstiprināt**, **Pieprasīt izmaiņas** un **Noraidīt** to atrisina. Vēstures ikona blakus logrīka nosaukumam atver šo izpildi vēstures dialogā šajā lapā. Logrīks neizmanto augšupējo rindas, un katra persona redz savu rindu. Tā vietā tā var rādīt viena Workflow pārskatīšanas ikvienam, kurš var atvērt šo Workflow; skatiet [HITL logrīki](#hitl-logriki))
 
 Papildus diagrammām logrīks **Run a workflow** palaiž vienu no jūsu workflow tieši no vadības paneļa: ar nomestu failu, ar tā ievades laukiem vai ar pogu Run; skatiet [Izpildes logrīki](#run-widgets).
@@ -145,3 +150,5 @@ Koplietošanas noņemšana vai samazināšana no rakstīšanas uz lasīšanu st�
 ## Grafiki un datubāzu diagrammas
 
 Izvēlieties **Gantt** sadaļā Pievienot logrīku, lai parādītu uzdevumus laikā ar izpildes un atkarību saitēm, vai **Entity relationships (DB)**, lai kartētu tabulas, laukus un to attiecības. Abi tipi izmanto [Chart Output mezglu](../nodes/chart-output-node.md#gantt-schedules) un ir pieejami arī Heym Work lapās. Kad Work iesaka logrīkus grafikam vai datubāzes shēmai, tas ģenerē priekšskatījumus, pamatojoties uz ierosinātajiem uzdevumiem vai entītijām.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

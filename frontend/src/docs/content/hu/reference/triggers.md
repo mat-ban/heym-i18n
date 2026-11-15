@@ -12,7 +12,7 @@ Olyan kezdő csomópontok (nincs bejövő élük), amelyek elindítják a végre
 | [Cron](../nodes/cron-node.md) | Ütemezés szerint fut (cron kifejezés, pl. `0 * * * *` az óránkénti futáshoz). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Akkor indul, amikor a Telegram bot webhook frissítést küld a csomópont-specifikus webhook URL-re. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Akkor indul, amikor a Discord Interactions API webhookot küld a csomópont-specifikus endpointra. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Egy IMAP postaládát figyel, és minden újonnan észlelt e-mail esetén egyszer indul el. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Egy IMAP postaládát figyel, és minden újonnan észlelt e-mail esetén egyszer indul el. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Akkor indul, amikor a Heym platform eseményt publikál. Egy dispatch ablakban érkező események együtt, tömbként érkeznek. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Kimenő klienskapcsolatot nyit egy külső socket felé, és a kiválasztott socket eseményekre indul el. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Egyszer használatos feltöltési URL-t generál, és akkor indul el, amikor a hívó egy nagy, multipart fájlt küld be. |

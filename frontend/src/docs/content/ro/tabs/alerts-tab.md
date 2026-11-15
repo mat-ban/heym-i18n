@@ -2,6 +2,9 @@
 
 Fila **Alerts** vă permite să definiți condiții de prag pe o fereastră de timp și să fiți notificat când acestea sunt depășite. Heym înregistrează deja rezultatele execuțiilor, durata rulărilor și cheltuielile LLM, dar nu oferă niciodată aceste informații din proprie inițiativă. O alertă este modalitatea prin care îi solicitați acest lucru.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Vizionați demonstrația Alerts</a></p>
+
 Fiecare alertă este evaluată pe o **fereastră de timp** pe care o alegeți, niciodată pe un singur eveniment. O rulare eșuată este zgomot. Douăsprezece rulări eșuate în zece minute reprezintă un incident.
 
 ## Tipuri de alerte

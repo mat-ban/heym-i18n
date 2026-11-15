@@ -171,3 +171,7 @@ Canvas ja dashboard-historia -valintojen suoritusvalvonta pysyy yhdellä rivill�
 - [Muokkaushistoria](./edit-history.md) – Versionhallinta workflow-tallennuksille (palautus, vertailu)
 - [Pika-aloitus](../getting-started/quick-start.md) – Rakenna ja suorita ensimmäinen workflow
 - [Workflowt-välilehti](../tabs/workflows-tab.md) – Workflowjen luominen ja hallinta
+
+## Related
+
+- [Operations Runbook (L1): Jonoruuhka](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Erota jonossa olevat, pidätetyt, keskeytetyt ja palautetut suoritukset ennen uudelleentoistoa

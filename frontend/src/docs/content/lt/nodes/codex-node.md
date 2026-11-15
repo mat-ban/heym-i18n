@@ -26,6 +26,8 @@ Mazgas taip pat reikalauja **GitHub** kredencialo, kad galėtų klonuoti privač
 
 Docker diegimuose, Heym vykdo Codex tame pačiame konteineryje iš to paties Heym vaizdo (ne atskirame GHCR vaizde). Tas konteineris montuoja tik Codex darbo erdvės tūrį ir leidžia Codex savo bubblewrap smėlio dėžėje kurti vardų erdves ir šviežią `/proc`. Vykdytojas prideda `SYS_ADMIN`, neapribotą seccomp ir AppArmor, ir `systempaths=unconfined` (Docker Engine 25+). Be paskutinio parametro, kiekviena komanda nepavyksta prieš paleidimą su `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
 
+
+On [Kubernetes](../getting-started/kubernetes.md), each Codex run is a restricted pod that mounts the same two directories. Bubblewrap cannot run there, so Codex runs with `danger-full-access` and the pod is the sandbox.
 OpenAI nuorodos:
 
 - [Codex autentifikacija](https://developers.openai.com/codex/auth)

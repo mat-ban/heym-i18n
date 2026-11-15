@@ -93,3 +93,7 @@ Pozrite si [Expression DSL](../reference/expression-dsl.md) pre referencovanie h
 - [Vectorstores Tab](./vectorstores-tab.md) – Používa prihlasovacie údaje Qdrant alebo Postgres (pgvector)
 - [Chat Tab](./chat-tab.md) – Používa prihlasovacie údaje OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Kompaktný sprievodca stránkou pre povrchy dashboardu
+
+## Vyhľadávanie
+
+Použite vyhľadávacie pole nad zoznamom alebo stlačte **Ctrl+F** (alebo **Cmd+F**) pre filtrovanie prihlasovacích údajov podľa názvu alebo typu počas písania. Stlačením **Escape** vyhľadávanie zrušíte.

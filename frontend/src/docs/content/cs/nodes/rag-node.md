@@ -272,3 +272,5 @@ Dobré vědět:
 - [Integrace třetích stran](../reference/integrations.md#qdrant) – Nastavení přihlašovacích údajů Qdrant a Postgres (pgvector)
 - [Uzel Agent](./agent-node.md) – Použití výsledků RAG jako kontextu agenta
 - [Uzel LLM](./llm-node.md) – Vložení výsledků RAG do systémového Promptu LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

@@ -32,6 +32,7 @@ Akreditācijas dati glabā API atslēgas un noslēpumus, ko izmanto workflow mez
 | [Grist](../nodes/grist-node.md) | Grist | API atslēga + servera URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 piekrišana |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 piekrišana |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 piekrišana |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Projekta URL + API atslēga (+ neobligāta noklusējuma shēma) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + lietotājvārds/parole + datubāze (+ secure) |

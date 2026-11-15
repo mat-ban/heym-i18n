@@ -65,3 +65,7 @@ Hovra över ett diagram för att se nodtypen under pekaren precis bredvid. En no
 - [Contextual Showcase](../reference/contextual-showcase.md) – Kompakt sidguide för dashboard-ytor
 
 När ett diagram visar en trend som bör meddelas snarare än bevakas, gör om den till en [alert](./alerts-tab.md): felantal, körtid, LLM-kostnad och körningsantal kan alla ges ett tröskelvärde över ett tidsfönster.
+
+## Related
+
+- [Operations Runbook (L1): Resursanvändning](../reference/operations-runbook.md#most-resource-consuming-workflows) - Hitta arbetsflöden med hög volym och lång körtid och korrelera CPU, minne och tokens

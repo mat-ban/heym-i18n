@@ -54,3 +54,5 @@ Gebruik met [Error Handler](./error-handler-node.md) voor storingsmeldingen:
 - [Node-typen](../reference/node-types.md) – Overzicht van alle node-typen
 - [Error Handler](./error-handler-node.md) – Slack verzenden bij workflowfout
 - [Tabblad Referenties](../tabs/credentials-tab.md) – Slack-webhook toevoegen
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

@@ -19,7 +19,7 @@ Egyes integrációs csomópontok **nem** igényelnek hitelesítési adatokat. A 
 | **Linear** | [Linear csomópont](../nodes/linear-node.md) | `api_key`, vagy `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry csomópont](../nodes/sentry-node.md) | `api_token`, opcionális `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge bíráló) | `base_url`, opcionális `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge bíráló), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, opcionális `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | egy decision model hitelesítési adat, valamint a többi hitelesítési adatra hivatkozó modellopciók |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektortárolók | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Egyes integrációs csomópontok **nem** igényelnek hitelesítési adatokat. A 
 | **Grist** | [Grist csomópont](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets csomópont](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 hozzájárulás |
 | **Google Drive** | [Google Drive csomópont](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 hozzájárulás (teljes Drive hatókör) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery csomópont](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 hozzájárulás |
 | **Supabase** | [Supabase csomópont](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, opcionális `supabase_schema` |
 | **ClickHouse** | [ClickHouse csomópont](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -891,3 +892,6 @@ Minden kérést az Ön meglévő modell-hitelesítési adatai közül az egyikhe
 ### Megjegyzések
 
 A lehetőségek nevei azok, amelyek között a döntési modell választ, ezért ezeknek különbözőeknek kell lenniük. Egy lehetőség nem mutathat egy másik Model Routerre.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

@@ -162,6 +162,10 @@ def count_characters(text: str) -> int:
 
 > **Sandbox.** As ferramentas Python são executadas como código não confiável em um contêiner Docker isolado e reforçado por padrão (sem rede, sem socket Docker, sistema de arquivos somente leitura, não-root). As importações são limitadas a uma lista de permissões de módulos seguros da biblioteca padrão. Consulte [Segurança → Sandbox de Ferramentas Python](../reference/security.md#python-tool-sandbox) para configuração (`HEYM_PYTHON_TOOL_SANDBOX`).
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 | Parâmetro | Tipo | Descrição |
 |-----------|------|-------------|
 | `toolTimeoutSeconds` | number | Máximo de segundos por execução de ferramenta (padrão: 30) |
@@ -402,3 +406,6 @@ A compressão é automática e está sempre ativa para os Nós Agent. **Não** s
 - [Quick Start](../getting-started/quick-start.md) – Workflow básico com LLM e expressões
 - [Separador Credenciais](../tabs/credentials-tab.md) – Adicionar chaves de API para o agente
 - [Separador MCP](../tabs/mcp-tab.md) – Configurar MCP para ferramentas de workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

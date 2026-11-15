@@ -34,6 +34,7 @@ Za svaku podržanu varijablu, zadanu vrijednost i produkcijsku napomenu pogledaj
 |----------|-------------|
 | `SECRET_KEY` | **Obavezno.** Tajna za potpisivanje JWT-a. Automatski generira `run.sh`/`deploy.sh` kada je prazna. |
 | `ENCRYPTION_KEY` | **Obavezno.** Ključ za šifriranje vjerodajnica. Automatski generira `run.sh`/`deploy.sh` kada je prazan. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Neobavezno nadjačavanje niza za povezivanje s bazom podataka. Ako je prazno, Heym ga sastavlja iz `POSTGRES_*` postavki. |
 | `BACKEND_PORT` | Port backend API-ja — zadano `10105` |
 | `FRONTEND_PORT` | Port frontenda — zadano `4017` |
@@ -349,3 +350,11 @@ git pull
 - [Varijable okruženja](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Potpuna referenca konfiguracije
 - [Sigurnost](../reference/security.md) – JWT, enkripcija i CORS postavke
 - [Raspodjela opterećenja](../reference/cluster.md) – Pokrenite nekoliko instanci prema jednoj bazi podataka
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

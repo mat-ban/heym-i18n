@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | Διαπιστευτήριο `imap` που περιέχει server, login, mailbox και ρυθμίσεις SSL |
 | `pollIntervalMinutes` | Integer | Πόσο συχνά το Heym ελέγχει το γραμματοκιβώτιο για νέα email |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Οδηγός Ρύθμισης
 
@@ -62,6 +63,8 @@
 | `$nodeLabel.email.text` | Σώμα απλού κειμένου |
 | `$nodeLabel.email.html` | Σώμα HTML |
 | `$nodeLabel.email.attachments` | Πίνακας μεταδεδομένων συνημμένων (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Αποκωδικοποιημένο αντικείμενο κεφαλίδων |
 | `$nodeLabel.email.uid` | IMAP UID για αποδιπλοποίηση ή καταγραφή |
 | `$nodeLabel.triggered_by` | Ετικέτα πηγής trigger (`"imap"`) |

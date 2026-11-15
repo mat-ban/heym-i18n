@@ -34,6 +34,7 @@ Untuk setiap variabel yang didukung, nilai default, dan catatan produksi, lihat 
 |----------|-------------|
 | `SECRET_KEY` | **Wajib.** Secret penandatanganan JWT. Dibuat otomatis oleh `run.sh`/`deploy.sh` ketika kosong. |
 | `ENCRYPTION_KEY` | **Wajib.** Kunci enkripsi kredensial. Dibuat otomatis oleh `run.sh`/`deploy.sh` ketika kosong. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Override string koneksi database opsional. Jika kosong, Heym akan membangunnya dari pengaturan `POSTGRES_*`. |
 | `BACKEND_PORT` | Port API backend — default ke `10105` |
 | `FRONTEND_PORT` | Port frontend — default ke `4017` |
@@ -346,3 +347,11 @@ git pull
 - [Environment Variables](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Referensi konfigurasi lengkap
 - [Security](../reference/security.md) – Pengaturan JWT, enkripsi, dan CORS
 - [Load Distribution](../reference/cluster.md) – Jalankan beberapa instance terhadap satu database
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

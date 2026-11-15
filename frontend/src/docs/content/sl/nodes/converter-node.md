@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | niz | Identifikator vozlišča (camelCase) |
 | `conversion` | niz | `csvToJson` (CSV besedilo → tabela objektov vrstic), `jsonToCsv` (tabela objektov/vrstic → CSV besedilo), `xmlToJson` (XML besedilo → objekt), `jsonToXml` (objekt → XML besedilo), `imageToText` (OCR slike), `pdfToText` (OCR vsake izbrane PDF strani) ali `fileConvert` (prepis shranjene datoteke v drug format) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | izraz | Podatki za pretvorbo. Pustite prazno, da uporabite prvi vhod vozlišča |
 | `delimiter` | niz | Enoznačni ločevalnik polj (privzeto `,`) |
 | `hasHeader` | boolean | Samo `csvToJson` — obravnava prvo vrstico kot glavo (privzeto `true`) |
@@ -169,3 +170,6 @@ OCR uporablja `tesseract` in popplerjev `pdftoppm`, dokumentna pretvorba pa upor
 - [Drive](./drive-node.md) – Shranite, pridobite in delite datoteke
 - [Node Types](../reference/node-types.md) – Pregled vseh vrst vozlišč
 - [Expression DSL](../reference/expression-dsl.md) – Funkcije in sintaksa
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

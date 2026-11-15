@@ -141,3 +141,6 @@ Un accesso non riuscito riporta alla schermata di login con un messaggio leggibi
 - **Provider multipli simultanei.** Un'istanza si connette a un solo provider.
 - **Mappatura di gruppi o ruoli** dai claim del provider.
 - **Single logout.** La disconnessione da Heym non comporta la disconnessione dal provider.
+
+- **L'autenticazione a due fattori è gestita dal provider.** `HEYM_REQUIRE_MFA` si applica solo all'accesso con password; l'accesso SSO non richiede mai un codice Heym. Richiedere l'MFA direttamente nel proprio identity provider.
+- **La disattivazione ha effetto anche qui.** Un account disattivato da un amministratore in **Impostazioni → Utenti** viene rifiutato anche se il provider continua ad autenticarlo.

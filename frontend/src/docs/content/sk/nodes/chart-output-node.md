@@ -368,3 +368,6 @@ Stĺpec v `table` možno zmeniť na tlačidlá, ktoré otvárajú odkaz. Nastavt
 Tlačidlami sa stanú iba adresy `http://` a `https://` a cesty začínajúce jedným `/`. Akákoľvek iná hodnota, napríklad `javascript:` alebo `//host`, zostane obyčajným textom a prázdna bunka nezobrazí nič.
 
 Tlačidlo funguje vedľa [odkazu riadka](../tabs/dashboard-tab.md#detail-pages): kliknutie na tlačidlo otvorí jeho odkaz v novej karte a kliknutie kdekoľvek inde na riadku stále otvorí stránku s detailmi.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

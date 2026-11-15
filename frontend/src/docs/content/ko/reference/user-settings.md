@@ -132,3 +132,6 @@ Observability 탭은 이 인스턴스의 [OpenTelemetry Tracing](./opentelemetry
 - [Security](./security.md) – 세션 관리, rate limiting, 자격 증명 암호화
 - [Single Sign-On](./sso.md) – 외부 OpenID Connect provider 연결
 - [OpenTelemetry Tracing](./opentelemetry.md) – workflow 및 노드 실행을 위한 분산 tracing
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

@@ -50,3 +50,8 @@
 - [Analytics Tab](./analytics-tab.md) – Метрики виконання
 - [Workflows Tab](./workflows-tab.md) – Керування Workflow
 - [Contextual Showcase](../reference/contextual-showcase.md) – Компактний посібник зі сторінок для поверхонь dashboard
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Спрямування симптомів під час виконання до правильної процедури інциденту
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Діагностика збоїв бази даних, служб, кластера та пісочниці (sandbox)

@@ -42,7 +42,7 @@ Praktilised koolituskohtumised, mis on kohandatud teie meeskonna oskuste tasemel
 
 ## Kubernetes juurutus
 
-Standardne [Käivitamise ja juurutamise](../getting-started/running-and-deployment.md) juhend katab Docker Compose'i ühe serveri tootmisseadistuste jaoks. Enterprise kliendid saavad abi tootmistasemel Kubernetes juurutuste puhul kõrge kättesaadavuse ja horisontaalse skaleerimise jaoks:
+Standardne [Käivitamise ja juurutamise](../getting-started/running-and-deployment.md) juhend katab Docker Compose'i ühe serveri tootmisseadistuste jaoks. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise kliendid saavad abi tootmistasemel Kubernetes juurutuste puhul kõrge kättesaadavuse ja horisontaalse skaleerimise jaoks:
 
 - **Mitu worker-node'i** — Heymi backend worker'ite jaotamine mitme Kubernetes node'i vahel koondamise ja koormuse tasakaalustamise jaoks
 - **Sidecar konteinerid** — Sidecar mustrite konfigureerimine logide kogumiseks, monitooringu agentideks, teenusevõrkudeks (Istio, Linkerd) ja saladuste süstimiseks (Vault)

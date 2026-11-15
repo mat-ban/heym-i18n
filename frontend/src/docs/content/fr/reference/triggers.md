@@ -12,7 +12,7 @@ Nœuds de départ (sans arêtes entrantes) qui initient l'exécution :
 | [Cron](../nodes/cron-node.md) | S'exécute selon une planification (expression cron, par ex. `0 * * * *` pour une exécution horaire). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Démarre lorsque Telegram envoie une mise à jour de webhook de bot vers l'URL de webhook propre au nœud. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Démarre lorsque Discord envoie un webhook de l'API Interactions vers l'endpoint propre au nœud. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Interroge une boîte aux lettres IMAP et démarre une fois pour chaque nouvel e-mail détecté. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Interroge une boîte aux lettres IMAP et démarre une fois pour chaque nouvel e-mail détecté. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Démarre lorsque Heym publie un événement de plateforme. Les événements d'une même fenêtre de dispatch arrivent ensemble sous forme de tableau. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Ouvre une connexion client sortante vers un socket externe et démarre sur les événements de socket sélectionnés. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Génère une URL d'upload à usage unique et démarre lorsqu'un appelant envoie un fichier multipart volumineux. |

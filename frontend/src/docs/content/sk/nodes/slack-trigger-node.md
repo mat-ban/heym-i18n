@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym odpovedá s `200 OK` okamžite a spúšťa workflow na pozadí — tým je splnená požiadavka Slacku na odpoveď do 3 sekúnd
 - Webhook URL je odvodená z ID uzla a nikdy sa nemení, a to ani po premenovaní workflowu
 - Na jeden workflow stačí jeden uzol `slackTrigger`; na smerovanie rôznych typov udalostí použite nadväzujúce uzly **Switch** alebo **Condition**
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

@@ -107,3 +107,6 @@ Command Palette 可從編輯器、儀表板、文件與 evals 檢視中使用。
 - [快速開始](../getting-started/quick-start.md) – 建立您的第一個 Workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+**認證**與 **DataTable** 分頁以相同方式運作：`Ctrl + F` / `Cmd + F` 聚焦搜尋欄位，清單隨鍵入即時收窄，`Escape` 清除篩選。

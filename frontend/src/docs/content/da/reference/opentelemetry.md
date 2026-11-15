@@ -72,6 +72,7 @@ Navn: `heym.agent.tool.execute`, oprettes under den aktive Agent-node-span.
 | `heym.agent.tool.args_bytes` | UTF-8-størrelse af serialiserede værktøjsargumenter. |
 | `heym.agent.tool.result_bytes` | UTF-8-størrelse af serialiseret værktøjsresultat. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` eller `cancelled`. Værktøjsfejl sætter span-status til `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Rå værktøjsargumenter og resultater vedhæftes ikke til spans som standard.
 

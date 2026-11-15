@@ -72,6 +72,7 @@ Nimi: `heym.agent.tool.execute`, loodud aktiivse Agent-node'i sõlme alla.
 | `heym.agent.tool.args_bytes` | Serialiseeritud tööriista argumentide UTF-8 suurus. |
 | `heym.agent.tool.result_bytes` | Serialiseeritud tööriista tulemuse UTF-8 suurus. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` või `cancelled`. Tööriista vead määravad sõlme olekuks `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Tooreid tööriista argumente ja tulemusi ei lisata sõlmedele vaikimisi.
 

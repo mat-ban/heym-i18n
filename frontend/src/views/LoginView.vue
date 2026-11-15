@@ -8,12 +8,14 @@ import Button from "@/components/ui/Button.vue";
 import Card from "@/components/ui/Card.vue";
 import Input from "@/components/ui/Input.vue";
 import Label from "@/components/ui/Label.vue";
+import MfaSignInStep from "@/components/Auth/MfaSignInStep.vue";
 import Select from "@/components/ui/Select.vue";
 import WorkflowHeroBackground from "@/components/Layout/WorkflowHeroBackground.vue";
 import { getCurrentLocale, setLocale, SUPPORTED_LOCALES, isSupportedLocale, type SupportedLocale } from "@/i18n";
 import { Globe } from "lucide-vue-next";
 import { getSsoStatus } from "@/services/sso";
 import { useAuthStore } from "@/stores/auth";
+import type { MfaChallenge } from "@/types/auth";
 import type { SsoStatus } from "@/types/sso";
 
 const currentLocale = ref<SupportedLocale>(getCurrentLocale());
@@ -34,6 +36,7 @@ const email = ref("");
 const password = ref("");
 const error = ref("");
 const loading = ref(false);
+const mfaChallenge = ref<MfaChallenge | null>(null);
 const sso = ref<SsoStatus>({
   enabled: false,
   button_label: "Sign in with SSO",
@@ -57,6 +60,7 @@ const SSO_ERRORS: Record<string, string> = {
   domain_not_allowed: "Your email domain is not allowed on this instance.",
   provisioning_disabled: "No Heym account exists for you. Ask an administrator to create one.",
   sso_disabled: "Single sign-on is not configured on this instance.",
+  account_deactivated: "This account has been deactivated. Contact your administrator.",
 };
 
 const ssoError = computed<string>(() => {
@@ -78,8 +82,8 @@ async function handleSubmit(): Promise<void> {
   loading.value = true;
 
   try {
-    await authStore.login({ email: email.value, password: password.value });
-    router.push(redirectTarget());
+    mfaChallenge.value = await authStore.login({ email: email.value, password: password.value });
+    if (!mfaChallenge.value) router.push(redirectTarget());
   } catch (err) {
     const detail = axios.isAxiosError(err) ? err.response?.data?.detail : null;
     error.value =
@@ -166,8 +170,15 @@ onMounted(async () => {
           {{ ssoError }}
         </div>
 
+        <MfaSignInStep
+          v-if="mfaChallenge"
+          :challenge="mfaChallenge"
+          @done="router.push(redirectTarget())"
+          @cancel="mfaChallenge = null; password = ''"
+        />
+
         <form
-          v-if="passwordFormVisible"
+          v-else-if="passwordFormVisible"
           class="space-y-5"
           @submit.prevent="handleSubmit"
         >
@@ -232,7 +243,7 @@ onMounted(async () => {
         </form>
 
         <div
-          v-if="sso.enabled && passwordFormVisible"
+          v-if="sso.enabled && passwordFormVisible && !mfaChallenge"
           class="divider relative my-8"
         >
           <div class="absolute inset-0 flex items-center">
@@ -243,7 +254,10 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div :class="passwordFormVisible ? '' : 'space-y-12 py-4'">
+        <div
+          v-if="!mfaChallenge"
+          :class="passwordFormVisible ? '' : 'space-y-12 py-4'"
+        >
           <Button
             v-if="sso.enabled"
             type="button"
@@ -273,7 +287,7 @@ onMounted(async () => {
         </div>
 
         <div
-          v-if="sso.password_login_enabled"
+          v-if="sso.password_login_enabled && !mfaChallenge"
           class="divider relative my-8"
         >
           <div class="absolute inset-0 flex items-center">
@@ -285,7 +299,7 @@ onMounted(async () => {
         </div>
 
         <router-link
-          v-if="sso.password_login_enabled"
+          v-if="sso.password_login_enabled && !mfaChallenge"
           to="/register"
           class="register-link flex items-center justify-center gap-3 w-full h-12 min-h-[44px] rounded-xl border border-border bg-muted/30 text-sm font-medium text-foreground hover:bg-muted/50 hover:border-primary/30 transition-all duration-300"
         >

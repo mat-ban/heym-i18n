@@ -87,6 +87,7 @@ $credentials.MyNotionWorkspace
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Деталі підключення ClickHouse (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Облікові дані бота Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Облікові дані публічного ключа Discord або webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Векторна БД Qdrant або Postgres (pgvector) через облікові дані Qdrant, Psql або Custom Embeddings RAG |
 | Evals | `credential_id`, `judge_credential_id` | Облікові дані моделі; облікові дані моделі або Decision Model для судді LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) AI step | `credentialId` | Модель LLM/Vision (для AI step та [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ $credentials.MyNotionWorkspace
 - [Expression DSL](./expression-dsl.md) – Синтаксис `$credentials`
 - [Типи вузлів](./node-types.md) – Вузли, що використовують облікові дані ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Вузол Agent](../nodes/agent-node.md) – Використовує `credentialId` для LLM
+
+## Дозволи календаря Google Meet
+
+Спільне використання [облікових даних Google Meet](../nodes/google-meet-node.md) дозволяє робочим процесам читати інтервали вільно/зайнято доступних календарів і створювати, змінювати або видаляти події як підключений обліковий запис Google, включаючи надсилання запрошень і скасувань. Електронна пошта учасника-відвідувача не змінює того, який обліковий запис володіє подією або авторизує її. Тільки власник облікових даних може повторно підключити свою авторизацію Google.

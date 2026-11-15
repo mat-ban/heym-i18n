@@ -107,3 +107,6 @@ Aceste scurături sunt disponibile în dialogul Istoric execuții și în panoul
 - [Ghid rapid](../getting-started/quick-start.md) – Creați primul dumneavoastră workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Filele **Acreditări** și **DataTable** funcționează în același mod: `Ctrl + F` / `Cmd + F` focalizează câmpul de căutare, lista se restrânge pe măsură ce tastați, iar `Escape` o resetează.

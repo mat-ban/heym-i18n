@@ -65,3 +65,7 @@ Z miško se pomaknite nad grafikon, da vidite vrsto vozlišča tik ob kazalcu. V
 - [Kontekstualna Predstavitev](../reference/contextual-showcase.md) – Kompaktni vodnik po straneh nadzorne plošče
 
 Ko graf prikazuje trend, o katerem želite biti obveščeni namesto da bi ga spremljali, ga spremenite v [opozorilo](./alerts-tab.md): število napak, trajanje zagonov, stroški LLM in število izvajanj lahko vsi dobijo prag čez časovno okno.
+
+## Related
+
+- [Operations Runbook (L1): Uporaba virov](../reference/operations-runbook.md#most-resource-consuming-workflows) - Poiščite delovne tokove z veliko obremenitvijo in dolgotrajnim izvajanjem ter povežite CPU, pomnilnik in žetone

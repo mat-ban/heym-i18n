@@ -879,3 +879,10 @@ Siehe auch [Drive](./drive.md), [Dateigenerierung](./file-generation.md) und [Dr
 Jeder mit geöffnetem Workflow teilt sich einen Live-Entwurf. Änderungen erscheinen sofort, Zeiger bewegen sich in eigener Farbe, Folgen spiegelt Aktionen und Sie können über Peer-to-Peer-Audio sprechen.
 
 Siehe auch [Canvas-Funktionen](./canvas-features.md), [Verlauf](./edit-history.md) und [Tastenkombinationen](./keyboard-shortcuts.md).
+### Dateianalyse
+
+Große Dateien (Tabellenkalkulationen, PDFs, DOCX, CSV, JSON), die über Datei-Upload-Trigger hochgeladen oder in Heym Drive gespeichert wurden, können selektiv in einer gehärteten, isolierten Python-Sandbox analysiert werden. Agents nutzen die Tools `list_files`, `inspect_file` und `run_python`, um Kopfzeilen zu untersuchen, Zeilen zusammenzufassen und Statistiken zu berechnen, ohne das Token-Kontextfenster zu erschöpfen. Siehe [Dateianalyse](./file-analysis.md).
+
+### Google Meet-Integration
+
+Verbinden Sie Google Calendar-Konten über OAuth2, um die Verfügbarkeit von Teilnehmern (Frei/Gebucht-Intervalle) abzufragen und Google Meet-Konferenzen direkt aus Workflows heraus zu erstellen, zu aktualisieren oder abzusagen. Siehe [Google Meet-Knoten](../nodes/google-meet-node.md).

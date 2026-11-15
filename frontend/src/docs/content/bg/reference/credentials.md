@@ -32,6 +32,7 @@
 | [Grist](../nodes/grist-node.md) | Grist | API ключ + URL на сървъра |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 съгласие |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 съгласие |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 съгласие |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL на проекта + API ключ (+ опционална схема по подразбиране) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + потребителско име/парола + база данни (+ secure) |

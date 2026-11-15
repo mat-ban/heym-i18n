@@ -32,6 +32,7 @@ A hitelesítési adatok tárolják a workflow-csomópontok által használt API-
 | [Grist](../nodes/grist-node.md) | Grist | API-kulcs + szerver URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 hozzájárulás |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 hozzájárulás |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 hozzájárulás |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Projekt URL + API-kulcs (+ opcionális alapértelmezett séma) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + felhasználónév/jelszó + adatbázis (+ secure) |

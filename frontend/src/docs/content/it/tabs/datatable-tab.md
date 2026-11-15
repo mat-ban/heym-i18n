@@ -123,3 +123,6 @@ Se nessuna riga corrisponde, il modello viene elencato nella notifica **Modelli 
 - [Scheda Tracce](./traces-tab.md) - Utilizza la tabella dei costi LLM per il grafico a ciambella dei costi e le schede KPI
 - [Nodo Grist](../nodes/grist-node.md) - Alternativa con foglio di calcolo esterno
 - [Scheda Variabili](./global-variables-tab.md) - Alternativa di archiviazione chiave-valore
+## Ricerca
+
+Utilizzare il campo di ricerca sopra l'elenco delle tabelle o premere **Ctrl+F** (o **Cmd+F**) per filtrare le tabelle per nome o descrizione durante la digitazione. Premere **Esc** per cancellare la ricerca.

@@ -50,3 +50,8 @@ Kayıt açıksa, Docker loglarını etkinleştirmeden önce güvenilir admin hes
 - [Analytics Tab](./analytics-tab.md) – Yürütme metrikleri
 - [Workflows Tab](./workflows-tab.md) – Workflow yönetimi
 - [Contextual Showcase](../reference/contextual-showcase.md) – Dashboard yüzeyleri için kompakt sayfa kılavuzu
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Çalışma zamanı belirtilerini doğru olay prosedürüne yönlendirin
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Veritabanı, servis, küme ve sandbox arızalarını teşhis edin

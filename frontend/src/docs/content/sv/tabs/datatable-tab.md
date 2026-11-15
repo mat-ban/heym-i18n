@@ -122,3 +122,6 @@ Om ingen rad matchar listas modellen under meddelandet **Unpriced models** på T
 - [Traces Tab](./traces-tab.md) - Använder LLM Cost Table för kostnadsdonut och KPI-kort
 - [Grist Node](../nodes/grist-node.md) - Alternativ för extern kalkylbladslösning
 - [Variables Tab](./global-variables-tab.md) - Alternativ för nyckel-värde-lagring
+## Sökning
+
+Använd sökfältet ovanför tabellistan, eller tryck på **Ctrl+F** (eller **Cmd+F**), för att filtrera tabeller efter namn eller beskrivning medan du skriver. Tryck på **Escape** för att rensa sökningen.

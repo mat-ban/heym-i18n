@@ -34,6 +34,7 @@ Par katru atbalstīto mainīgo, noklusējuma vērtību un ražošanas piezīmi s
 |----------|-------------|
 | `SECRET_KEY` | **Obligāts.** JWT parakstīšanas noslēpums. Automātiski ģenerē `run.sh`/`deploy.sh`, ja tukšs. |
 | `ENCRYPTION_KEY` | **Obligāts.** Akreditācijas datu šifrēšanas atslēga. Automātiski ģenerē `run.sh`/`deploy.sh`, ja tukšs. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Neobligāta datubāzes savienojuma virknes aizstāšana. Ja tukšs, Heym to veido no `POSTGRES_*` iestatījumiem. |
 | `BACKEND_PORT` | Aizmugursistēmas API ports — noklusējums `10105` |
 | `FRONTEND_PORT` | Priekšpuses ports — noklusējums `4017` |
@@ -349,3 +350,11 @@ git pull
 - [Vides mainīgie](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Pilnīga konfigurācijas uzziņa
 - [Drošība](../reference/security.md) – JWT, šifrēšanas un CORS iestatījumi
 - [Slodzes sadale](../reference/cluster.md) – Palaidiet vairākas instances pret vienu datubāzi
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

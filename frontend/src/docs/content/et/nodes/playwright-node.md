@@ -68,7 +68,9 @@ Keelatud sammud on ülejäänud node'i jaoks nähtamatud: need ei rahulda autent
 
 **AI Auto Heal** muudab workflow'd vastupidavaks DOM-i muutustele. Kui selector ebaõnnestub kaks korda (nt pärast saidi ümberkujundust), kutsub Heym LLM-i, et leida alternatiivne lokaator — tavaliselt `role=button[name='Submit']` või `text=Exact text` CSS-selectorite asemel.
 
-Lubage AI-sammu omadustes **Auto heal mode**. Kui salvestatud samm ebaõnnestub:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Lubage AI-sammu omadustes **Auto heal mode**. Kui salvestatud samm ebaõnnestub:
 
 1. Heym jäädvustab praeguse HTML-i ja kuvatõmmise
 2. Saadab ebaõnnestunud sammu + lehe konteksti LLM-ile

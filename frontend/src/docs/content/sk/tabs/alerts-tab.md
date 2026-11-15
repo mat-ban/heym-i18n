@@ -2,6 +2,9 @@
 
 Karta **Upozornenia** vám umožňuje definovať prahové podmienky v rámci časového okna a byť informovaný, keď dôjde k ich prekročeniu. Heym už zaznamenáva výsledky spustení, trvanie behu a výdavky na LLM, no nikdy ich neoznamuje z vlastnej iniciatívy. Upozornenie je spôsob, ako si o to požiadať.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Prehrať ukážku Alerts</a></p>
+
 Každé upozornenie sa vyhodnocuje v rámci vami zvoleného **časového okna**, nikdy nie na základe jedinej udalosti. Jedno zlyhané spustenie je šum. Dvanásť zlyhaných spustení za desať minút je incident.
 
 ## Typy upozornení

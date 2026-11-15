@@ -48,6 +48,7 @@ Agentti-tilassa **YOLO-tila** -valintaruutu viestikentän alla mahdollistaa avus
 - Kirjoita pyyntösi syötekenttään (esim. "Luo workflow, joka ottaa käyttäjän syötteen ja lähettää sen LLM:lle")
 - Paina **Enter** lähettääksesi (Shift+Enter rivinvaihtoa varten)
 - Tekoäly lähettää vastauksensa osissa. **Agentti**-tilassa, jos vastaus sisältää workflown \`\`\`json-koodilohkossa, se jäsennetään ja sovelletaan automaattisesti canvas-alueelle. **Kysely**-tilassa canvas-aluetta ei koskaan muokata.
+- Kun työnkulun JSON suoratoistetaan, vastauksen alla oleva rivi nimeää työnkulun ja tähän mennessä kirjoitetut solmut, esimerkiksi `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Käytä **Tyhjennä** -painiketta nollataksesi keskustelun
 - Vie hiiri viestin päälle ja klikkaa kopiointikuvaketta kopioidaksesi näkyvän tekstin, mukaan lukien mahdollinen workflow-JSON
 - Vedä viestikentän yläpuolella olevaa viivaa korkeammaksi. Syötealue voi kasvaa enintään 60 % paneelin korkeudesta, ja se palautuu oletuskorkeuteen sivun uudelleenlatauksessa

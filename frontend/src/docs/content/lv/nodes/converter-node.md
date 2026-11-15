@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | Mezglu identifikators (camelCase) |
 | `conversion` | string | `csvToJson` (CSV teksts → rindu objektu masīvs), `jsonToCsv` (objektu/rindu masīvs → CSV teksts), `xmlToJson` (XML teksts → objekts), `jsonToXml` (objekts → XML teksts), `imageToText` (attēla OCR), `pdfToText` (katras atlasītās PDF lapas OCR) vai `fileConvert` (saglabāta faila pārrakstīšana citā formātā) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Pārveidojamie dati. Atstājiet tukšu, lai izmantotu mezgla pirmo ievadi |
 | `delimiter` | string | Vienas rakstzīmes lauku atdalītājs (pēc noklusējuma `,`) |
 | `hasHeader` | boolean | Tikai `csvToJson` — uzskatīt pirmo rindu par galveni (pēc noklusējuma `true`) |
@@ -169,3 +170,6 @@ OCR izsauc `tesseract` un poppler `pdftoppm`, un dokumentu konvertēšana izmant
 - [Drive](./drive-node.md) – Saglabājiet, iegūstiet un kopīgojiet failus
 - [Node Types](../reference/node-types.md) – Visu mezglu tipu pārskats
 - [Expression DSL](../reference/expression-dsl.md) – Funkcijas un sintakse
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

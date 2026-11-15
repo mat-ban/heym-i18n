@@ -253,3 +253,5 @@ Perlu diketahui:
 - [Third-Party Integrations](../reference/integrations.md#qdrant) – Penyiapan kredensial Qdrant dan Postgres (pgvector)
 - [Agent Node](./agent-node.md) – Gunakan hasil RAG sebagai konteks agen
 - [LLM Node](./llm-node.md) – Suapkan hasil RAG ke dalam system prompt LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

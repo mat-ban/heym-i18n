@@ -368,3 +368,6 @@ Text (δυναμικό — το string μηνύματος παράγεται ups
 Μόνο οι διευθύνσεις `http://` και `https://` και οι διαδρομές που ξεκινούν με ένα μόνο `/` γίνονται κουμπιά. Οποιαδήποτε άλλη τιμή, όπως `javascript:` ή `//host`, παραμένει απλό κείμενο και ένα κενό κελί δεν εμφανίζει τίποτα.
 
 Το κουμπί λειτουργεί μαζί με έναν [σύνδεσμο γραμμής](../tabs/dashboard-tab.md#detail-pages): το κλικ στο κουμπί ανοίγει τον σύνδεσμό του σε νέα καρτέλα και το κλικ οπουδήποτε αλλού στη γραμμή ανοίγει και πάλι τη σελίδα λεπτομερειών.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

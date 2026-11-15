@@ -116,6 +116,8 @@ Viidake salvestatud failile allavoolu: `$saveAudio.id`, `$saveAudio.download_url
 
 Viidake base64-sisule allavoolu: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Pildid, mis tagastatakse `file_base64` kaudu, kuvatakse silumispaneelis reasiseselt, kui workflow käivitate.
 
 ## Näide — Drive'i failide loetlemine

@@ -123,3 +123,6 @@ Traces 대시보드에서 비용을 계산할 때 각 `trace.model`을 다음 �
 - [Traces 탭](./traces-tab.md) - 비용 도넛 및 KPI 카드에 LLM Cost Table을 사용합니다
 - [Grist 노드](../nodes/grist-node.md) - 외부 스프레드시트 대안
 - [Variables 탭](./global-variables-tab.md) - 키-값 저장소 대안
+## 검색
+
+테이블 목록 위의 검색 필드를 사용하거나 **Ctrl+F**(또는 **Cmd+F**)를 눌러 입력하는 동안 이름이나 설명별로 테이블을 필터링하세요. 검색을 지우려면 **Escape**를 누르세요.

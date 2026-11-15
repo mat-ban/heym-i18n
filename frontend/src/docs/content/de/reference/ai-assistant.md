@@ -48,6 +48,7 @@ Im Agent-Modus lässt das Kontrollkästchen **YOLO mode** unter dem Nachrichtenf
 - Gib deine Anfrage in das Eingabefeld ein (z. B. „Erstelle einen Workflow, der Benutzereingaben entgegennimmt und sie an ein LLM sendet")
 - Drücke **Enter** zum Senden (Shift+Enter für Zeilenumbruch)
 - Die AI streamt ihre Antwort. Im **Agent**-Modus wird, wenn die Antwort einen Workflow in einem \`\`\`json-Codeblock enthält, dieser automatisch geparst und auf den Canvas angewendet. Im **Ask**-Modus wird der Canvas nie geändert.
+- Während das Workflow-JSON gestreamt wird, benennt eine Zeile unter der Antwort den Workflow und die bisher geschriebenen Knoten, zum Beispiel `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Verwende **Clear**, um die Konversation zurückzusetzen
 - Fahre mit der Maus über eine Nachricht und klicke auf ihr Kopiersymbol, um den angezeigten Text zu kopieren, einschließlich etwaiger Workflow-JSON
 - Ziehe die Linie über dem Nachrichtenfeld, um das Feld höher zu machen. Der Eingabebereich kann auf 60 % des Panels anwachsen und kehrt beim Neuladen der Seite zu seiner Standardhöhe zurück

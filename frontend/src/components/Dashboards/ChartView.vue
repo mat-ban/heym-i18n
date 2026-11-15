@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n";
 import { i18n } from "@/i18n";
 
 import type { ChartPayload } from "@/types/dashboard";
+import ChartHtml from "@/components/Dashboards/ChartHtml.vue";
 import ChartMarkdown from "@/components/Dashboards/ChartMarkdown.vue";
 import ChartTable from "@/components/Dashboards/ChartTable.vue";
 import EntityRelationshipChart from "@/components/Dashboards/EntityRelationshipChart.vue";
@@ -164,6 +165,12 @@ const apexOptions = computed(() =>
     <ChartMarkdown
       v-else-if="chartPayload && chartPayload.type === 'text'"
       :text="chartPayload.text || ''"
+    />
+    <ChartHtml
+      v-else-if="chartPayload && chartPayload.type === 'html'"
+      :html="chartPayload.html || ''"
+      :dark="dark"
+      :title="chartPayload.title"
     />
 
     <div

@@ -95,7 +95,7 @@ Dans un filtre `find` ou `count`, une valeur simple signifie « égal à » ; un
 | `$contains` | Correspondance de sous-chaîne insensible à la casse |
 | `$in` | La valeur figure dans le tableau fourni |
 
-Exemple combinant plusieurs opérateurs : `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Les opérateurs inconnus sont ignorés. Les filtres `upsert` utilisent toujours des valeurs à correspondance exacte pour trouver la ligne à mettre à jour.
+Exemple combinant plusieurs opérateurs : `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Les opérateurs inconnus sont ignorés. Les filtres `upsert` utilisent toujours des valeurs à correspondance exacte pour trouver la ligne à mettre à jour.
 
 Vous pouvez également filtrer sur les métadonnées de ligne — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — qui sont stockées comme de véritables colonnes plutôt qu'à l'intérieur de vos données. Pour les dates, indiquez une valeur complète pour les comparaisons de plage (par ex. `{"created_at": {"$gt": "2026-06-04"}}`) ou utilisez `$contains` pour une correspondance textuelle partielle (par ex. `{"created_at": {"$contains": "2026-06-04"}}`). Si l'une de vos propres colonnes porte le même nom qu'un champ de métadonnées, la colonne de données est prioritaire.
 

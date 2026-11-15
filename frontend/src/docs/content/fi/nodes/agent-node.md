@@ -162,6 +162,10 @@ def count_characters(text: str) -> int:
 
 > **Hiekkalaatikko.** Python-työkalut suoritetaan oletusarvoisesti luottamattomana koodina eristetyssä, turvallistetussa Docker-säiliössä (ei verkkoyhteyttä, ei Docker-socketia, vain luku -tiedostojärjestelmä, ei pääkäyttäjän oikeuksia). Tuontirajoitukset koskevat vain turvallisten standardikirjastojen moduuleja. Katso lisätietoja kohdasta [Turvallisuus → Python-työkalujen hiekkalaatikko](../reference/security.md#python-tool-sandbox) (`HEYM_PYTHON_TOOL_SANDBOX`).
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 | Parametri | Tyyppi | Kuvaus |
 |-----------|------|-------------|
 | `toolTimeoutSeconds` | number | Enimmäisaika työkalun suoritukselle sekunteina (oletus: 30) |
@@ -369,6 +373,10 @@ Pakkausilmoitukset näkyvät muodossa `Konteksti pakattu (N viestiä → yhteenv
 - **Jälkikäynti-välilehdessä** `context.compression`-merkintänä
 
 Pakkaus on automaattinen ja aina käytössä Agent-solmuissa. Se **ei** koske LLM-solmuja, Keskustelu-välilehteä tai tekoälyavustajan istuntoja.
+
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).
 
 ## Aiheeseen Liittyvää
 

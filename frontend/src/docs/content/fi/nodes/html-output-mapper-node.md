@@ -68,3 +68,5 @@ Sama sääntö kuin [Output](./output-node.md) -solmussa: älä sijoita tätä s
 - [Output](./output-node.md) – Viesti- tai skeemapohjainen vastaus `result`-kääreellä
 - [Webhookit](../reference/webhooks.md) – Suoritusendpoint, pyyntömetodit ja vastaukset
 - [Solmutyypit](../reference/node-types.md) – Kaikki solmutyypit
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

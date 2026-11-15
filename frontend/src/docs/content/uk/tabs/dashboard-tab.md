@@ -2,6 +2,9 @@
 
 Вкладка **Dashboard** — це простір у стилі Grafana, де Ви будуєте сітки з віджетів-графіків. Кожен віджет рендериться з виводу власного прихованого Heym workflow, тож будь-які дані, які Ви можете отримати у workflow — запити до бази даних, виклики API, RAG-пошук, вивід LLM — можуть стати графіком. Ви можете мати кілька dashboard і ділитися кожним із них з людьми або командами.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboards
 
 Кожен починає з одним dashboard, який створюється під час першого відкриття вкладки. Використовуйте селектор dashboard угорі вкладки, щоб перемикатися між dashboard, а **+** поруч із ним — щоб створити новий. Селектор спершу показує Ваші власні dashboard, а потім ті, якими з Вами поділилися, з позначенням імені людини, яка ними поділилася.
@@ -27,6 +30,8 @@
 - **Entity relationships (DB)** (таблиці, поля, ключі PK/FK та зв'язки)
 - **Bar gauge** (один горизонтальний індикатор на рядок із градієнтом від червоного до зеленого та значенням, наприклад вільне місце на диску)
 - **Text** (повідомлення у форматі markdown, наприклад примітка про стан на кшталт "Last execution at 19:47"; підтримує [interactive checkboxes](../nodes/chart-output-node.md#interactive-task-lists), коли markdown статичний, та [explicit numbered lists](../nodes/chart-output-node.md#numbered-lists) для власної або спадної нумерації)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (Ваші незавершені human reviews. У заголовку показано `1/n pending`. Назва workflow відкриває цей запуск на canvas. **Approve**, **Request changes** і **Reject** завершують його. Іконка історії поруч із назвою віджета відкриває цей запуск у діалозі історії на цій сторінці. Віджет не використовує рядки з upstream, і кожна людина бачить власну чергу. Натомість він може показувати перевірки одного Workflow для всіх, хто може відкрити цей Workflow; див. [Віджети HITL](#vidzheti-hitl))
 
 Окрім діаграм, віджет **Run a workflow** запускає один із ваших workflow безпосередньо з dashboard: для перетягнутого файлу, з його полями введення або за допомогою кнопки Run; див. [Віджети запуску](#run-widgets).
@@ -148,3 +153,5 @@ API віджетів також може створити **картку ліч�
 ## Графіки та діаграми баз даних
 
 Виберіть **Gantt** у меню Додати віджет для відображення завдань у часі зі зв'язками завершення та залежностей, або **Entity relationships (DB)** для зіставлення таблиць, полів та їхніх взаємозв'язків. Обидва типи використовують [вузол Chart Output](../nodes/chart-output-node.md#gantt-schedules) і також доступні на сторінках Heym Work. Коли Work пропонує віджети для графіка або схеми бази даних, він формує попередній перегляд на основі запропонованих завдань або сутностей.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

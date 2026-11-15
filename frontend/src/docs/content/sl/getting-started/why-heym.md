@@ -192,7 +192,7 @@ Sistem sledenja je namensko zgrajen za razhroščevanje agentnega vedenja, s pop
 Vsak klic LLM v Heymu je samodejno obračunan. [Zavihek Sledi](../tabs/traces-tab.md) prikazuje število vhodnih in izhodnih žetonov na sled skupaj s sprotnim stroškom v USD, izpeljanim iz sinhronizirane cenovne tabele.
 
 - **Strošek na sled** – Vhodni žetoni, izhodni žetoni in skupni USD so prikazani v vsaki vrstici sledi
-- **Analitika stroškov** – KPI kartice in graf stroškov po modelu se posodabljajo z izbranim časovnim obdobjem (1h / 24h / 7d / 30d / All)
+- **Analitika stroškov** – KPI kartice in graf stroškov po modelu se posodabljajo z izbranim časovnim obdobjem (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **Tabela stroškov LLM** – Sistemska tabela v [zavihku DataTable](../tabs/datatable-tab.md) se osveži iz Helicone vsakih 24 ur; cene lahko prepišete ali dodate lastne vrstice za modele, ki še niso navedeni
 - **Opozorilo o manjkajoči ceni** – Sledi za modele brez vnosa cene prikažejo vgrajeno opozorilo z neposredno povezavo do tabele stroškov
 
@@ -278,7 +278,7 @@ Workflowi so klicljivi prek HTTP na `/api/workflows/{workflow_id}/execute`, ki v
 Heym ima vgrajeno podporo za [MCP](../tabs/mcp-tab.md) na obeh straneh:
 
 - **Kot odjemalec**: Agent nodes se povežejo z zunanjimi MCP strežniki (Filesystem, Browserbase, orodja po meri) prek stdio ali SSE in samodejno uporabljajo njihova orodja
-- **Kot strežnik**: Workflowi z vklopljenim MCP postanejo orodja na privzetem strežniku na `/api/mcp/sse` ali na imenovanih strežnikih z lastnim URL-jem in API ključem, tako da lahko Claude Desktop, Cursor in drugi MCP odjemalci neposredno kličejo Vaše Heym Workflowe
+- **Kot strežnik**: Workflowi z vklopljenim MCP postanejo orodja na privzetem strežniku na `/api/mcp (or /api/mcp/sse for legacy connections)` ali na imenovanih strežnikih z lastnim URL-jem in API ključem, tako da lahko Claude Desktop, Cursor in drugi MCP odjemalci neposredno kličejo Vaše Heym Workflowe
 
 Agenti lahko uporabljajo več MCP strežnikov hkrati, vsak Workflow pa lahko postane orodje za zunanjega MCP odjemalca.
 

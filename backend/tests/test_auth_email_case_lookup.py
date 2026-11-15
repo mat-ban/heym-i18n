@@ -86,6 +86,7 @@ class PasswordSignInEmailCaseTests(unittest.IsolatedAsyncioTestCase):
             id=uuid.uuid4(),
             email="Jane.Doe@corp.example",
             hashed_password=hash_password("Passw0rd!x"),
+            is_active=True,
         )
         db = AsyncMock()
         db.execute.return_value = _result(stored)
@@ -138,14 +139,20 @@ class OAuthConsentEmailCaseTests(unittest.IsolatedAsyncioTestCase):
             redirect_uris=["https://client.example/callback"],
             is_confidential=True,
         )
-        stored = SimpleNamespace(id=uuid.uuid4(), email="Jane@corp.example", hashed_password="h")
+        stored = SimpleNamespace(
+            id=uuid.uuid4(), email="Jane@corp.example", hashed_password="h", is_active=True
+        )
         db = AsyncMock()
         db.add = MagicMock()
         db.execute = AsyncMock(
-            side_effect=[_result(client), _result(stored), _result(_open_sso_row())]
+            side_effect=[_result(client), _result(_open_sso_row()), _result(stored)]
         )
 
-        with patch("app.api.oauth.verify_password", return_value=True):
+        with (
+            patch("app.api.auth.verify_password", return_value=True),
+            patch("app.api.auth.login_limiter") as limiter,
+        ):
+            limiter.is_allowed.return_value = (True, 0)
             response = await authorize_post(
                 request=_form_request(
                     {
@@ -164,7 +171,7 @@ class OAuthConsentEmailCaseTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(
             "lower(trim(users.email)) = 'jane@corp.example'",
-            _sql(db.execute.await_args_list[1].args[0]),
+            _sql(db.execute.await_args_list[2].args[0]),
         )
 
 

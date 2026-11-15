@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
+import type { User } from "@/types/auth";
 import type { CredentialListItem } from "@/types/credential";
 
 import Button from "@/components/ui/Button.vue";
@@ -13,6 +14,7 @@ import Select from "@/components/ui/Select.vue";
 import Textarea from "@/components/ui/Textarea.vue";
 import UserAvatar from "@/components/ui/UserAvatar.vue";
 import {
+  authApi,
   credentialsApi,
   observabilityApi,
   voiceApi,
@@ -20,12 +22,20 @@ import {
   type VoiceInfo,
 } from "@/services/api";
 import ClusterSettingsTab from "@/components/Layout/settings/ClusterSettingsTab.vue";
+import KeyRotationTab from "@/components/Layout/settings/KeyRotationTab.vue";
+import KubernetesCredentialsTab from "@/components/Layout/settings/KubernetesCredentialsTab.vue";
+import MfaSettingsSection from "@/components/Layout/settings/MfaSettingsSection.vue";
+import SessionsSettingsSection from "@/components/Layout/settings/SessionsSettingsSection.vue";
 import SettingsPluginsSection from "@/components/Layout/settings/SettingsPluginsSection.vue";
+import SettingsTabNav from "@/components/Layout/settings/SettingsTabNav.vue";
 import SsoSettingsTab from "@/components/Layout/settings/SsoSettingsTab.vue";
+import UsersSettingsTab from "@/components/Layout/settings/UsersSettingsTab.vue";
 import WorkIntegrationSettingsTab from "@/components/Layout/settings/WorkIntegrationSettingsTab.vue";
+import { k8sCredentialsEnabled } from "@/services/k8sCredentials";
 import { useAuthStore } from "@/stores/auth";
 
 import AiDefaultsTab from "@/components/Layout/aiDefaults/AiDefaultsTab.vue";
+import { mergeFreshProfile } from "@/components/Layout/userSettingsProfile";
 import { getCurrentLocale, setLocale, isSupportedLocale, SUPPORTED_LOCALES, type SupportedLocale } from "@/i18n";
 
 type SettingsTab =
@@ -36,7 +46,10 @@ type SettingsTab =
   | "observability"
   | "plugins"
   | "sso"
+  | "users"
   | "instances"
+  | "kubernetes"
+  | "encryption"
   | "work";
 
 const props = defineProps<{
@@ -54,7 +67,6 @@ const { t } = useI18n();
 
 const activeTab = ref<SettingsTab>("profile");
 const selectedLocale = ref<SupportedLocale>(getCurrentLocale());
-
 const languageOptions = SUPPORTED_LOCALES;
 
 async function handleLocaleChange(val: string | undefined): Promise<void> {
@@ -63,6 +75,39 @@ async function handleLocaleChange(val: string | undefined): Promise<void> {
     await setLocale(val);
   }
 }
+
+// Off on Docker installs, so the tab stays hidden until the backend says otherwise.
+const kubernetesTabVisible = ref(false);
+
+interface SettingsTabEntry {
+  id: SettingsTab;
+  label: string;
+  adminOnly?: boolean;
+  testId?: string;
+}
+
+const SETTINGS_TABS = computed<SettingsTabEntry[]>(() => [
+  { id: "profile", label: t("settings.profile") },
+  { id: "security", label: t("settings.security") },
+  { id: "voice", label: t("settings.voice") },
+  { id: "ai-defaults", label: t("settings.aiDefaults") },
+  { id: "observability", label: t("settings.observability") },
+  { id: "plugins", label: t("settings.plugins") },
+  { id: "users", label: t("settings.users"), adminOnly: true, testId: "settings-tab-users" },
+  { id: "sso", label: t("settings.sso"), adminOnly: true },
+  { id: "work", label: "Heym Work", adminOnly: true },
+  { id: "instances", label: t("settings.instances"), adminOnly: true },
+  { id: "kubernetes", label: "Kubernetes", adminOnly: true, testId: "settings-tab-kubernetes" },
+  { id: "encryption", label: t("settings.encryption"), adminOnly: true, testId: "settings-tab-encryption" },
+]);
+
+const visibleTabs = computed<SettingsTabEntry[]>(() =>
+  SETTINGS_TABS.value.filter((tab) => {
+    if (tab.adminOnly && !authStore.user?.is_admin) return false;
+    if (tab.id === "kubernetes" && !kubernetesTabVisible.value) return false;
+    return true;
+  }),
+);
 
 const observabilityStatus = ref<ObservabilityStatus | null>(null);
 const loadingObservability = ref(false);
@@ -78,112 +123,118 @@ async function loadObservabilityStatus(): Promise<void> {
   }
 }
 
-const savingProfile = ref(false);
-const savingPassword = ref(false);
-
 const name = ref("");
 const userRules = ref("");
-
-const elevenlabsCredentials = ref<CredentialListItem[]>([]);
-const voices = ref<VoiceInfo[]>([]);
-const selectedTtsCredentialId = ref<string>("");
-const selectedVoiceId = ref<string>("");
-const loadingVoices = ref(false);
-const voiceError = ref<string | null>(null);
-const savingVoice = ref(false);
-
-const credentialOptions = computed(() => [
-  { value: "", label: t("settings.selectCredential") },
-  ...elevenlabsCredentials.value.map((c) => ({ value: c.id, label: c.name })),
-]);
-const voiceOptions = computed(() => [
-  { value: "", label: t("settings.selectVoice") },
-  ...voices.value.map((v) => ({ value: v.voice_id, label: v.name })),
-]);
-
-async function loadElevenLabsCredentials(): Promise<void> {
-  elevenlabsCredentials.value = await credentialsApi.listByType("elevenlabs");
-}
-
-async function loadVoices(): Promise<void> {
-  if (!selectedTtsCredentialId.value) {
-    voices.value = [];
-    return;
-  }
-  loadingVoices.value = true;
-  voiceError.value = null;
-  try {
-    voices.value = await voiceApi.listVoices(selectedTtsCredentialId.value);
-  } catch {
-    voiceError.value = t("settings.voiceLoadError");
-    voices.value = [];
-  } finally {
-    loadingVoices.value = false;
-  }
-}
-
-watch(selectedTtsCredentialId, () => {
-  void loadVoices();
-});
-
-function goToCredentialsTab(): void {
-  emit("close");
-  void router.push({ name: "dashboard", query: { tab: "credentials" } });
-}
-
-async function handleSaveVoice(): Promise<void> {
-  savingVoice.value = true;
-  try {
-    await authStore.updateUser({
-      tts_credential_id: selectedTtsCredentialId.value || null,
-      tts_voice_id: selectedVoiceId.value || null,
-    });
-    emit("close");
-  } finally {
-    savingVoice.value = false;
-  }
-}
+const savingProfile = ref(false);
 
 const currentPassword = ref("");
 const newPassword = ref("");
 const confirmNewPassword = ref("");
 const passwordError = ref<string | null>(null);
 const passwordSuccess = ref<string | null>(null);
+const savingPassword = ref(false);
 
-const tabbarRef = ref<HTMLElement | null>(null);
-const showLeftShadow = ref(false);
-const showRightShadow = ref(false);
-let tabbarResizeObserver: ResizeObserver | null = null;
+const elevenLabsCredentials = ref<CredentialListItem[]>([]);
+const selectedTtsCredentialId = ref<string>("");
+const loadingElevenLabs = ref(false);
 
-function updateTabbarShadows(): void {
-  const container = tabbarRef.value;
-  if (!container) return;
-  showLeftShadow.value = container.scrollLeft > 2;
-  showRightShadow.value =
-    container.scrollLeft + container.clientWidth < container.scrollWidth - 2;
+const availableVoices = ref<VoiceInfo[]>([]);
+const selectedVoiceId = ref<string>("");
+const loadingVoices = ref(false);
+const savingVoice = ref(false);
+const voiceSaved = ref(false);
+
+async function loadElevenLabsCredentials(): Promise<void> {
+  loadingElevenLabs.value = true;
+  try {
+    const creds = await credentialsApi.list();
+    elevenLabsCredentials.value = creds.filter((c) => c.type === "elevenlabs");
+  } catch {
+    elevenLabsCredentials.value = [];
+  } finally {
+    loadingElevenLabs.value = false;
+  }
 }
 
-function setupTabbarObservers(): void {
-  nextTick(() => {
-    const container = tabbarRef.value;
-    if (!container) return;
-    updateTabbarShadows();
-    tabbarResizeObserver = new ResizeObserver(() => updateTabbarShadows());
-    tabbarResizeObserver.observe(container);
-  });
+async function loadVoices(): Promise<void> {
+  if (!selectedTtsCredentialId.value) {
+    availableVoices.value = [];
+    selectedVoiceId.value = "";
+    return;
+  }
+  loadingVoices.value = true;
+  try {
+    const res = await voiceApi.listVoices(selectedTtsCredentialId.value);
+    availableVoices.value = res;
+  } catch {
+    availableVoices.value = [];
+  } finally {
+    loadingVoices.value = false;
+  }
 }
 
-function teardownTabbarObservers(): void {
-  tabbarResizeObserver?.disconnect();
-  tabbarResizeObserver = null;
+function handleTtsCredentialChange(val: string | undefined): void {
+  selectedTtsCredentialId.value = val ?? "";
+  selectedVoiceId.value = "";
+  void loadVoices();
+}
+
+function handleVoiceChange(val: string | undefined): void {
+  selectedVoiceId.value = val ?? "";
+}
+
+function handleGoToCredentials(): void {
+  emit("close");
+  void router.push({ name: "credentials" });
+}
+
+async function handleSaveVoice(): Promise<void> {
+  savingVoice.value = true;
+  voiceSaved.value = false;
+  try {
+    await authStore.updateUser({
+      tts_credential_id: selectedTtsCredentialId.value || null,
+      tts_voice_id: selectedVoiceId.value || null,
+    });
+    voiceSaved.value = true;
+    setTimeout(() => {
+      voiceSaved.value = false;
+    }, 2500);
+  } finally {
+    savingVoice.value = false;
+  }
+}
+
+function populateFromUser(user: User): void {
+  name.value = user.name;
+  userRules.value = user.user_rules || "";
+  selectedTtsCredentialId.value = user.tts_credential_id ?? "";
+  selectedVoiceId.value = user.tts_voice_id ?? "";
+}
+
+async function refreshProfile(cached: User): Promise<void> {
+  try {
+    const fresh = await authApi.getMe();
+    if (!props.open) return;
+    const merged = mergeFreshProfile(
+      { name: name.value, userRules: userRules.value },
+      cached,
+      fresh,
+    );
+    name.value = merged.name;
+    userRules.value = merged.userRules;
+    authStore.user = fresh;
+  } catch {
+    // The cached profile stays in the form; saving still works.
+  }
 }
 
 watch(
   () => props.open,
   (isOpen) => {
     if (isOpen && authStore.user) {
-      name.value = authStore.user.name;
-      userRules.value = authStore.user.user_rules || "";
+      populateFromUser(authStore.user);
+      void refreshProfile(authStore.user);
       activeTab.value = props.initialTab ?? "profile";
       selectedLocale.value = getCurrentLocale();
       currentPassword.value = "";
@@ -191,17 +242,13 @@ watch(
       confirmNewPassword.value = "";
       passwordError.value = null;
       passwordSuccess.value = null;
-      selectedTtsCredentialId.value = authStore.user.tts_credential_id ?? "";
-      selectedVoiceId.value = authStore.user.tts_voice_id ?? "";
       void loadElevenLabsCredentials().then(loadVoices);
+      void k8sCredentialsEnabled().then((enabled) => {
+        kubernetesTabVisible.value = enabled;
+      });
       if (activeTab.value === "observability") {
         void loadObservabilityStatus();
       }
-      setupTabbarObservers();
-    } else {
-      teardownTabbarObservers();
-      showLeftShadow.value = false;
-      showRightShadow.value = false;
     }
   },
   { immediate: true },
@@ -227,14 +274,6 @@ async function handleSaveProfile(): Promise<void> {
     savingProfile.value = false;
   }
 }
-
-onMounted(() => {
-  setupTabbarObservers();
-});
-
-onUnmounted(() => {
-  teardownTabbarObservers();
-});
 
 async function handleChangePassword(): Promise<void> {
   passwordError.value = null;
@@ -288,7 +327,7 @@ async function handleChangePassword(): Promise<void> {
     currentPassword.value = "";
     newPassword.value = "";
     confirmNewPassword.value = "";
-    passwordSuccess.value = "Password updated successfully.";
+    passwordSuccess.value = "Password updated. Your other sessions were signed out.";
   } catch {
     passwordError.value = authStore.error || "Failed to change password. Please try again.";
   } finally {
@@ -301,453 +340,379 @@ async function handleChangePassword(): Promise<void> {
   <Dialog
     :open="props.open"
     :title="$t('settings.title')"
-    content-class="!max-w-[532px]"
+    content-class="!max-w-[760px] h-[min(90vh,calc(100dvh-2rem))] sm:h-[min(640px,calc(100dvh-3rem))]"
     @close="emit('close')"
   >
-    <div class="space-y-5 -mt-3">
-      <div class="relative">
-        <Transition name="tab-fade">
-          <div
-            v-if="showLeftShadow"
-            class="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10"
-            style="background: linear-gradient(to right, hsl(var(--card)) 0%, transparent 100%)"
-          />
-        </Transition>
-        <Transition name="tab-fade">
-          <div
-            v-if="showRightShadow"
-            class="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10"
-            style="background: linear-gradient(to left, hsl(var(--card)) 0%, transparent 100%)"
-          />
-        </Transition>
-        <div
-          ref="tabbarRef"
-          class="flex border-b border-border pb-1 overflow-x-auto scrollbar-thin"
-          @scroll="updateTabbarShadows"
-        >
-          <button
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'profile' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'profile'"
-          >
-            {{ $t('settings.profile') }}
-          </button>
-          <button
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'security' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'security'"
-          >
-            {{ $t('settings.security') }}
-          </button>
-          <button
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'voice' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'voice'"
-          >
-            {{ $t('settings.voice') }}
-          </button>
-          <button
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'ai-defaults' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'ai-defaults'"
-          >
-            {{ $t('settings.aiDefaults') }}
-          </button>
-          <button
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'observability' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'observability'"
-          >
-            {{ $t('settings.observability') }}
-          </button>
-          <button
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'plugins' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'plugins'"
-          >
-            {{ $t('settings.plugins') }}
-          </button>
-          <button
-            v-if="authStore.user?.is_admin"
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'sso' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'sso'"
-          >
-            {{ $t('settings.sso') }}
-          </button>
-          <button
-            v-if="authStore.user?.is_admin"
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'work' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'work'"
-          >
-            {{ $t('settings.work') }}
-          </button>
-          <button
-            v-if="authStore.user?.is_admin"
-            type="button"
-            class="px-3 py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap shrink-0"
-            :class="activeTab === 'instances' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
-            @click="activeTab = 'instances'"
-          >
-            {{ $t('settings.instances') }}
-          </button>
-        </div>
-      </div>
-
-      <form
-        v-if="activeTab === 'profile'"
-        class="space-y-5"
-        @submit.prevent="handleSaveProfile"
-      >
-        <div
-          v-if="authStore.user"
-          class="flex items-center gap-3"
-        >
-          <UserAvatar
-            :user-id="authStore.user.id"
-            :name="name || authStore.user.name"
-            :email="authStore.user.email"
-            class="h-12 w-12 bg-primary/15 text-lg font-semibold text-primary dark:bg-primary/25 dark:text-accent-foreground"
-          />
-          <p class="min-w-0 text-xs text-muted-foreground">
-            {{ $t('settings.pictureFrom') }}
-            <a
-              href="https://gravatar.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="font-medium text-primary hover:underline dark:text-accent-foreground"
-            >Gravatar</a>
-            for <span class="break-all font-medium text-foreground">{{ authStore.user.email }}</span>{{ $t('settings.gravatarNotice') }}
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <Label for="user-name">{{ $t('settings.name') }}</Label>
-          <Input
-            id="user-name"
-            v-model="name"
-            :placeholder="$t('settings.namePlaceholder')"
-            required
-          />
-        </div>
-
-        <div class="space-y-2">
-          <Label for="user-language">{{ $t('settings.language') }}</Label>
-          <Select
-            id="user-language"
-            :model-value="selectedLocale"
-            :options="languageOptions"
-            @update:model-value="handleLocaleChange"
-          />
-        </div>
-
-        <div class="space-y-2">
-          <Label for="user-rules">{{ $t('settings.userRules') }}</Label>
-          <p class="text-xs text-muted-foreground">
-            {{ $t('settings.userRulesDescription') }}
-          </p>
-          <Textarea
-            id="user-rules"
-            v-model="userRules"
-            :placeholder="$t('settings.userRulesPlaceholder')"
-            :rows="6"
-          />
-        </div>
-
-        <div class="flex justify-end gap-3 pt-2">
-          <Button
-            variant="outline"
-            type="button"
-            @click="emit('close')"
-          >
-            {{ $t('common.cancel') }}
-          </Button>
-          <Button
-            type="submit"
-            :loading="savingProfile"
-            :disabled="!name.trim()"
-          >
-            {{ $t('settings.saveChanges') }}
-          </Button>
-        </div>
-      </form>
-
-      <form
-        v-else-if="activeTab === 'security'"
-        class="space-y-5"
-        @submit.prevent="handleChangePassword"
-      >
-        <div class="space-y-2">
-          <Label for="current-password">{{ $t('settings.currentPassword') }}</Label>
-          <Input
-            id="current-password"
-            v-model="currentPassword"
-            type="password"
-            autocomplete="current-password"
-            required
-          />
-        </div>
-
-        <div class="space-y-2">
-          <Label for="new-password">{{ $t('settings.newPassword') }}</Label>
-          <Input
-            id="new-password"
-            v-model="newPassword"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
-          <p class="text-xs text-muted-foreground">
-            {{ $t('settings.passwordRequirements') }}
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <Label for="confirm-new-password">{{ $t('settings.confirmNewPassword') }}</Label>
-          <Input
-            id="confirm-new-password"
-            v-model="confirmNewPassword"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
-        </div>
-
-        <div
-          v-if="passwordError"
-          class="text-xs text-destructive"
-        >
-          {{ passwordError }}
-        </div>
-        <div
-          v-if="passwordSuccess"
-          class="text-xs text-emerald-500"
-        >
-          {{ passwordSuccess }}
-        </div>
-
-        <div class="flex justify-end gap-3 pt-2">
-          <Button
-            variant="outline"
-            type="button"
-            @click="emit('close')"
-          >
-            {{ $t('common.close') }}
-          </Button>
-          <Button
-            type="submit"
-            :loading="savingPassword"
-          >
-            {{ $t('settings.changePassword') }}
-          </Button>
-        </div>
-      </form>
-
-      <div
-        v-else-if="activeTab === 'voice'"
-        class="space-y-5"
-      >
-        <div class="space-y-2">
-          <Label>{{ $t("settings.voiceCredential") }}</Label>
-          <p class="text-xs text-muted-foreground">
-            {{ $t("settings.voiceCredentialDescription") }}
-          </p>
-          <Select
-            v-model="selectedTtsCredentialId"
-            :options="credentialOptions"
-          />
-          <Button
-            variant="outline"
-            type="button"
-            class="mt-1"
-            @click="goToCredentialsTab"
-          >
-            {{ $t("settings.addCredential") }}
-          </Button>
-        </div>
-
-        <div class="space-y-2">
-          <Label>{{ $t("settings.voiceSelect") }}</Label>
-          <Select
-            v-model="selectedVoiceId"
-            :options="voiceOptions"
-            :disabled="!selectedTtsCredentialId || loadingVoices"
-          />
-          <p
-            v-if="voiceError"
-            class="text-xs text-destructive"
-          >
-            {{ voiceError }}
-          </p>
-        </div>
-
-        <div class="flex justify-end gap-3 pt-2">
-          <Button
-            variant="outline"
-            type="button"
-            @click="emit('close')"
-          >
-            {{ $t('common.cancel') }}
-          </Button>
-          <Button
-            type="button"
-            :loading="savingVoice"
-            :disabled="!selectedTtsCredentialId || !selectedVoiceId"
-            @click="handleSaveVoice"
-          >
-            {{ $t('settings.saveVoiceSettings') }}
-          </Button>
-        </div>
-      </div>
-
-      <AiDefaultsTab
-        v-else-if="activeTab === 'ai-defaults'"
-        @close="emit('close')"
+    <div class="-mt-3 flex flex-col gap-5 sm:mt-0 sm:min-h-[26rem] sm:flex-row sm:gap-6">
+      <SettingsTabNav
+        v-model="activeTab"
+        :tabs="visibleTabs"
       />
 
-      <div
-        v-else-if="activeTab === 'observability'"
-        class="space-y-5"
-      >
-        <p class="text-xs text-muted-foreground">
-          {{ $t('settings.observabilityDescription') }}
-        </p>
+      <div class="min-w-0 flex-1 space-y-5">
+        <form
+          v-if="activeTab === 'profile'"
+          class="space-y-5"
+          @submit.prevent="handleSaveProfile"
+        >
+          <div
+            v-if="authStore.user"
+            class="flex items-center gap-3"
+          >
+            <UserAvatar
+              :user-id="authStore.user.id"
+              :name="name || authStore.user.name"
+              :email="authStore.user.email"
+              class="h-12 w-12 bg-primary/15 text-lg font-semibold text-primary dark:bg-primary/25 dark:text-accent-foreground"
+            />
+            <p class="min-w-0 text-xs text-muted-foreground">
+              {{ $t('settings.pictureFrom') }}
+              <a
+                href="https://gravatar.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium text-primary hover:underline dark:text-accent-foreground"
+              >Gravatar</a>
+              {{ $t('settings.gravatarNotice') }} <span class="break-all font-medium text-foreground">{{ authStore.user.email }}</span>.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <Label for="user-name">{{ $t('settings.name') }}</Label>
+            <Input
+              id="user-name"
+              v-model="name"
+              :placeholder="$t('settings.namePlaceholder')"
+              required
+            />
+          </div>
+
+          <div class="space-y-2">
+            <Label for="user-language">{{ $t('settings.language') }}</Label>
+            <Select
+              id="user-language"
+              :model-value="selectedLocale"
+              :options="languageOptions"
+              @update:model-value="handleLocaleChange"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <Label for="user-rules">{{ $t('settings.userRules') }}</Label>
+            <p class="text-xs text-muted-foreground">
+              {{ $t('settings.userRulesDescription') }}
+            </p>
+            <Textarea
+              id="user-rules"
+              v-model="userRules"
+              :placeholder="$t('settings.userRulesPlaceholder')"
+              :rows="4"
+              class="resize-y text-xs font-mono"
+            />
+          </div>
+
+          <div class="flex justify-end gap-3 pt-2">
+            <Button
+              variant="outline"
+              type="button"
+              @click="emit('close')"
+            >
+              {{ $t('common.cancel') }}
+            </Button>
+            <Button
+              type="submit"
+              :loading="savingProfile"
+            >
+              {{ $t('common.saveChanges') }}
+            </Button>
+          </div>
+        </form>
 
         <div
-          v-if="loadingObservability"
-          class="text-xs text-muted-foreground"
+          v-else-if="activeTab === 'security'"
+          class="space-y-6"
         >
-          {{ $t('common.loading') }}
+          <form
+            class="space-y-5"
+            @submit.prevent="handleChangePassword"
+          >
+            <div class="space-y-2">
+              <Label for="current-password">{{ $t('settings.currentPassword') }}</Label>
+              <Input
+                id="current-password"
+                v-model="currentPassword"
+                type="password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+
+            <div class="space-y-2">
+              <Label for="new-password">{{ $t('settings.newPassword') }}</Label>
+              <Input
+                id="new-password"
+                v-model="newPassword"
+                type="password"
+                autocomplete="new-password"
+                required
+              />
+              <p class="text-xs text-muted-foreground">
+                {{ $t('settings.passwordRequirements') }}
+              </p>
+            </div>
+
+            <div class="space-y-2">
+              <Label for="confirm-new-password">{{ $t('settings.confirmNewPassword') }}</Label>
+              <Input
+                id="confirm-new-password"
+                v-model="confirmNewPassword"
+                type="password"
+                autocomplete="new-password"
+                required
+              />
+            </div>
+
+            <div
+              v-if="passwordError"
+              class="text-xs text-destructive"
+            >
+              {{ passwordError }}
+            </div>
+            <div
+              v-if="passwordSuccess"
+              class="text-xs text-emerald-500"
+            >
+              {{ passwordSuccess }}
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+              <Button
+                variant="outline"
+                type="button"
+                @click="emit('close')"
+              >
+                {{ $t('common.close') }}
+              </Button>
+              <Button
+                type="submit"
+                :loading="savingPassword"
+              >
+                {{ $t('settings.changePassword') }}
+              </Button>
+            </div>
+          </form>
+          <MfaSettingsSection />
+          <SessionsSettingsSection />
         </div>
 
         <div
-          v-else-if="observabilityStatus"
-          class="space-y-3"
+          v-else-if="activeTab === 'voice'"
+          class="space-y-5"
         >
-          <div class="flex items-center gap-2">
-            <span class="text-sm font-medium">{{ $t('common.status') }}</span>
-            <span
-              class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold"
-              :class="observabilityStatus.enabled
-                ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
-                : 'bg-muted text-muted-foreground'"
-            >
-              {{ observabilityStatus.enabled ? $t('common.enabled') : $t('common.disabled') }}
-            </span>
+          <p class="text-xs text-muted-foreground">
+            {{ $t('settings.voiceCredentialDescription') }}
+          </p>
+
+          <div class="space-y-2">
+            <Label for="tts-credential">{{ $t('settings.voiceCredential') }}</Label>
+            <div class="flex items-center gap-2">
+              <Select
+                id="tts-credential"
+                :model-value="selectedTtsCredentialId"
+                :options="[
+                  { value: '', label: $t('common.disabled') },
+                  ...elevenLabsCredentials.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  })),
+                ]"
+                :disabled="loadingElevenLabs"
+                class="flex-1"
+                @update:model-value="handleTtsCredentialChange"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                type="button"
+                @click="handleGoToCredentials"
+              >
+                {{ $t('settings.addCredential') }}
+              </Button>
+            </div>
           </div>
-
-          <dl class="grid grid-cols-[max-content_1fr] items-baseline gap-x-4 gap-y-1.5 text-sm">
-            <dt class="text-muted-foreground">
-              {{ $t('settings.serviceName') }}
-            </dt>
-            <dd class="font-mono text-xs break-all">
-              {{ observabilityStatus.service_name }}
-            </dd>
-
-            <template v-if="observabilityStatus.enabled">
-              <dt class="text-muted-foreground">
-                {{ $t('settings.otlpEndpoint') }}
-              </dt>
-              <dd class="font-mono text-xs break-all">
-                {{ observabilityStatus.endpoint || $t('settings.sdkDefault') }}
-              </dd>
-
-              <dt class="text-muted-foreground">
-                {{ $t('settings.samplerRatio') }}
-              </dt>
-              <dd class="font-mono text-xs">
-                {{ observabilityStatus.sampler_ratio }}
-              </dd>
-
-              <dt class="text-muted-foreground">
-                {{ $t('settings.captureNodeIo') }}
-              </dt>
-              <dd class="font-mono text-xs">
-                {{ observabilityStatus.capture_node_io ? $t('common.on') : $t('common.off') }}
-              </dd>
-
-              <dt class="text-muted-foreground">
-                {{ $t('settings.instrumented') }}
-              </dt>
-              <dd class="text-xs">
-                {{ observabilityStatus.instrumented.join(", ") }}
-              </dd>
-
-              <dt class="text-muted-foreground">
-                {{ $t('settings.spans') }}
-              </dt>
-              <dd class="text-xs">
-                {{ observabilityStatus.spans.join(", ") }}
-              </dd>
-            </template>
-          </dl>
 
           <div
-            v-if="!observabilityStatus.enabled"
-            class="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground space-y-1"
+            v-if="selectedTtsCredentialId"
+            class="space-y-2"
           >
-            <p class="font-medium text-foreground">
-              {{ $t('settings.enableTracing') }}
-            </p>
-            <p>{{ $t('settings.enableTracingHint') }}</p>
-            <pre class="mt-1 whitespace-pre-wrap font-mono leading-relaxed">HEYM_OTEL_ENABLED=true
-HEYM_OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
-HEYM_OTEL_EXPORTER_OTLP_HEADERS=authorization=Bearer &lt;token&gt;</pre>
+            <Label for="tts-voice">{{ $t('settings.voiceSelect') }}</Label>
+            <div
+              v-if="loadingVoices"
+              class="text-xs text-muted-foreground"
+            >
+              {{ $t('common.loading') }}
+            </div>
+            <Select
+              v-else
+              id="tts-voice"
+              :model-value="selectedVoiceId"
+              :options="[
+                { value: '', label: $t('settings.sdkDefault') },
+                ...availableVoices.map((v) => ({
+                  value: v.voice_id,
+                  label: v.name,
+                })),
+              ]"
+              @update:model-value="handleVoiceChange"
+            />
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
+            <span
+              v-if="voiceSaved"
+              class="text-xs text-emerald-500"
+            >
+              {{ $t('settings.saveVoiceSettings') }}
+            </span>
+            <span v-else />
+            <div class="flex gap-3">
+              <Button
+                variant="outline"
+                type="button"
+                @click="emit('close')"
+              >
+                {{ $t('common.close') }}
+              </Button>
+              <Button
+                type="button"
+                :loading="savingVoice"
+                @click="handleSaveVoice"
+              >
+                {{ $t('common.saveChanges') }}
+              </Button>
+            </div>
           </div>
         </div>
 
+        <div v-else-if="activeTab === 'ai-defaults'">
+          <AiDefaultsTab @close="emit('close')" />
+        </div>
+
         <div
-          v-else
-          class="text-xs text-destructive"
+          v-else-if="activeTab === 'observability'"
+          class="space-y-4"
         >
-          {{ $t('settings.observabilityLoadError') }}
-        </div>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            {{ $t('settings.observabilityDescription') }}
+          </p>
 
-        <div class="flex justify-end gap-3 pt-2">
-          <Button
-            variant="outline"
-            type="button"
-            @click="emit('close')"
+          <div
+            v-if="loadingObservability"
+            class="text-xs text-muted-foreground"
           >
-            {{ $t('common.close') }}
-          </Button>
+            {{ $t('common.loading') }}
+          </div>
+
+          <div
+            v-else-if="observabilityStatus"
+            class="space-y-3"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium">{{ $t('common.status') }}</span>
+              <span
+                class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
+                :class="
+                  observabilityStatus.enabled
+                    ? 'bg-emerald-500/10 text-emerald-500'
+                    : 'bg-muted text-muted-foreground'
+                "
+              >
+                {{ observabilityStatus.enabled ? $t('common.enabled') : $t('common.disabled') }}
+              </span>
+            </div>
+
+            <div
+              v-if="observabilityStatus.enabled"
+              class="space-y-2 rounded-lg border border-border bg-muted/30 p-3 text-xs"
+            >
+              <div class="flex justify-between">
+                <span class="text-muted-foreground">{{ $t('settings.serviceName') }}</span>
+                <span class="font-mono">{{ observabilityStatus.service_name }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-muted-foreground">{{ $t('settings.otlpEndpoint') }}</span>
+                <span class="font-mono">{{ observabilityStatus.endpoint || 'http://localhost:4318' }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-muted-foreground">{{ $t('settings.samplerRatio') }}</span>
+                <span class="font-mono">{{ observabilityStatus.sampler_ratio }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-muted-foreground">{{ $t('settings.captureNodeIo') }}</span>
+                <span>{{ observabilityStatus.capture_node_io ? $t('common.on') : $t('common.off') }}</span>
+              </div>
+            </div>
+
+            <div
+              v-else
+              class="rounded-lg border border-border bg-muted/20 p-3 text-xs text-muted-foreground space-y-1.5"
+            >
+              <p class="font-medium text-foreground">
+                {{ $t('settings.enableTracing') }}
+              </p>
+              <p>{{ $t('settings.enableTracingHint') }}</p>
+              <pre class="mt-1 whitespace-pre-wrap font-mono leading-relaxed">HEYM_OTEL_ENABLED=true
+HEYM_OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
+HEYM_OTEL_EXPORTER_OTLP_HEADERS=authorization=Bearer &lt;token&gt;</pre>
+            </div>
+          </div>
+
+          <div
+            v-else
+            class="text-xs text-destructive"
+          >
+            {{ $t('settings.observabilityLoadError') }}
+          </div>
+
+          <div class="flex justify-end gap-3 pt-2">
+            <Button
+              variant="outline"
+              type="button"
+              @click="emit('close')"
+            >
+              {{ $t('common.close') }}
+            </Button>
+          </div>
         </div>
-      </div>
 
-      <div v-else-if="activeTab === 'plugins'">
-        <SettingsPluginsSection @close="emit('close')" />
-      </div>
+        <div v-else-if="activeTab === 'plugins'">
+          <SettingsPluginsSection @close="emit('close')" />
+        </div>
 
-      <div v-else-if="activeTab === 'instances' && authStore.user?.is_admin">
-        <ClusterSettingsTab />
-      </div>
+        <div v-else-if="activeTab === 'instances' && authStore.user?.is_admin">
+          <ClusterSettingsTab @close="emit('close')" />
+        </div>
 
-      <div v-else-if="activeTab === 'sso' && authStore.user?.is_admin">
-        <SsoSettingsTab />
-      </div>
-      <div v-else-if="activeTab === 'work' && authStore.user?.is_admin">
-        <WorkIntegrationSettingsTab />
+        <div v-else-if="activeTab === 'kubernetes' && authStore.user?.is_admin && kubernetesTabVisible">
+          <KubernetesCredentialsTab @close="emit('close')" />
+        </div>
+
+        <div v-else-if="activeTab === 'encryption' && authStore.user?.is_admin">
+          <KeyRotationTab @close="emit('close')" />
+        </div>
+
+        <div v-else-if="activeTab === 'users' && authStore.user?.is_admin">
+          <UsersSettingsTab @close="emit('close')" />
+        </div>
+
+        <div v-else-if="activeTab === 'sso' && authStore.user?.is_admin">
+          <SsoSettingsTab @close="emit('close')" />
+        </div>
+
+        <div v-else-if="activeTab === 'work' && authStore.user?.is_admin">
+          <WorkIntegrationSettingsTab @close="emit('close')" />
+        </div>
       </div>
     </div>
   </Dialog>
 </template>
-
-<style scoped>
-.tab-fade-enter-active,
-.tab-fade-leave-active {
-  transition: opacity 0.15s ease;
-}
-.tab-fade-enter-from,
-.tab-fade-leave-to {
-  opacity: 0;
-}
-</style>

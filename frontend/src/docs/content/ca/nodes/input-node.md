@@ -45,7 +45,7 @@ El node **Input** és el punt d'entrada per als workflows que reben dades de l'u
 
 A la pestanya **Run** de l'editor (mode Defined webhook), cada camp d'entrada admet arrossegar i deixar anar fitxers, així com un control d'adjunció integrat (a la part inferior dreta del camp):
 
-- Els **fitxers de text** (`.txt`, `.md`, `.json`, `.csv` i similars) es llegeixen com a text pla.
+- Els **fitxers de text** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - Les **imatges** (JPEG, PNG, GIF, WebP) s'emmagatzemen com a URL `data:` (base64) al valor del camp — utilitzeu claus de camp com ara `imageUrl` o `base64` quan els nodes posteriors esperin dades d'imatge.
 - Els fitxers **PDF** es converteixen a text extret (fitxer de màxim 5 MB, 100k caràcters de contingut).
 

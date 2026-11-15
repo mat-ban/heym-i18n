@@ -12,7 +12,7 @@ A página abre com um resumo de estatísticas acima da lista de rastreios, calcu
 - **Cartões KPI** – Total de Chamadas, Total de Tokens, Custo Total (USD), Latência Média, % de Erros
 - **Tokens por Modelo** – Gráfico circular do volume de tokens por modelo
 - **Custo por Modelo** – Gráfico circular do gasto em USD por modelo. Os modelos sem preços apresentam uma ligação "Configurar preços" para a [Tabela de Custos de LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Chamadas ao Longo do Tempo** – Gráfico de área empilhada de chamadas bem-sucedidas vs. falhadas por intervalo (5 min / 1 h / 6 h / 1 dia, escolhido automaticamente conforme o intervalo)
+- **Chamadas ao Longo do Tempo** – Gráfico de área empilhada de chamadas bem-sucedidas vs. falhadas por intervalo (5 min / 15 min / 30 min / 1 h / 6 h / 1 dia, escolhido automaticamente conforme o intervalo)
 - **Aviso de modelos sem preços** – Aparece abaixo dos gráficos quando alguns modelos rastreados não têm linha de preços, com ligação para a Tabela de Custos de LLM
 
 ## Intervalo Temporal
@@ -23,12 +23,13 @@ Um único seletor de **Intervalo temporal** no topo da barra de filtros controla
 
 - Lista paginada de rastreios recentes dentro do intervalo temporal selecionado
 - Cada rastreio apresenta: workflow, nó, credencial, data/hora, duração
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Clique num rastreio para abrir a vista de detalhe
 - Utilize **Anterior / Seguinte** dentro da caixa de diálogo de detalhe para navegar entre rastreios sem a fechar
 
 ## Filtragem
 
-- **Intervalo temporal** – 1h / 24h / 7d / 30d / Tudo; filtra os gráficos e a lista em conjunto
+- **Intervalo temporal** – 1h / 3h / 6h / 24h / 7d / 30d / Tudo; filtra os gráficos e a lista em conjunto
 - **Credencial** – Filtrar pela credencial (chave de API) utilizada
 - **Origem** – Filtrar pela origem do workflow ou da execução
 - **Pesquisa** – Pesquisar por modelo, workflow, credencial ou etiqueta de nó

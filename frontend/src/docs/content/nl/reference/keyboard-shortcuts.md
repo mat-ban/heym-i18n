@@ -107,3 +107,6 @@ Deze sneltoetsen zijn beschikbaar in het dialoogvenster Uitvoeringsgeschiedenis 
 - [Snelstart](../getting-started/quick-start.md) – Bouw uw eerste workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+De tabbladen **Referenties** en **DataTable** werken op dezelfde manier: `Ctrl + F` / `Cmd + F` activeert het zoekveld, de lijst wordt tijdens het typen gefilterd en `Escape` wist de zoekopdracht.

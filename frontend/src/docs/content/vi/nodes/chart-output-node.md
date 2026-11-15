@@ -368,3 +368,6 @@ Một `table` có thể biến một cột thành các nút mở liên kết. H�
 Chỉ các địa chỉ `http://` và `https://` cùng các đường dẫn bắt đầu bằng một dấu `/` duy nhất mới trở thành nút. Mọi giá trị khác, chẳng hạn `javascript:` hoặc `//host`, vẫn là văn bản thuần, và ô trống không hiển thị gì.
 
 Nút hoạt động cùng với [liên kết hàng](../tabs/dashboard-tab.md#detail-pages): nhấp vào nút sẽ mở liên kết của nó trong tab mới, còn nhấp vào bất kỳ vị trí nào khác trên hàng vẫn mở trang chi tiết.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

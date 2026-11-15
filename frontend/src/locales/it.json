@@ -103,7 +103,8 @@
     "pickCredentialModelTooltip": "Selezionare una credenziale e un modello sopra per utilizzare il board",
     "read": "Lettura",
     "remove": "Rimuovi",
-    "removeAttachmentAria": "Rimuovi {name}"
+    "removeAttachmentAria": "Rimuovi {name}",
+    "details": "Dettagli"
   },
   "canvas": {
     "analyze": "Analizza",
@@ -456,7 +457,9 @@
     "unpin": "Rimuovi fissaggio",
     "unreadMessage": "Messaggio non letto",
     "subtitle": "Eseguire Workflow e porre domande",
-    "modelsLoadFailedDisabled": "Impossibile caricare l'elenco dei modelli di questa credenziale. La chat resta disattivata finché non è possibile recuperare un modello."
+    "modelsLoadFailedDisabled": "Impossibile caricare l'elenco dei modelli di questa credenziale. La chat resta disattivata finché non è possibile recuperare un modello.",
+    "dropFilesToAttach": "Rilascia file da allegare",
+    "attachFiles": "Allega file"
   },
   "common": {
     "actions": "Azioni",
@@ -543,7 +546,8 @@
     "dropFileOrClick": "Trascina un file qui o fai clic per sceglierne uno",
     "removeFile": "Rimuovi file",
     "chooseFileFor": "Scegli un file per {label}",
-    "new": "Nuovo"
+    "new": "Nuovo",
+    "clearSearch": "Cancella ricerca"
   },
   "curl": {
     "command": "Comando",
@@ -762,7 +766,9 @@
     "noWorkflowsMatch": "Nessun workflow corrisponde a questo filtro.",
     "quickStartTemplates": "Modelli di avvio rapido",
     "subtitle": "Creare, orchestrare ed eseguire i propri agenti autonomi modulari",
-    "whatToAutomate": "Cosa si desidera automatizzare?"
+    "whatToAutomate": "Cosa si desidera automatizzare?",
+    "noWorkflowsMatchAll": "Prova con un titolo, una descrizione o un nome di cartella diversi.",
+    "noWorkflowsMatchFilter": "Prova con un titolo, una descrizione, un nome di cartella o un filtro di stato diversi."
   },
   "dashboards": {
     "actions": {
@@ -777,7 +783,8 @@
       "refine": "Ottimizza con l'IA",
       "refresh": "Aggiorna",
       "refreshDashboard": "Aggiorna dashboard",
-      "settings": "Impostazioni"
+      "settings": "Impostazioni",
+      "revertPrevious": "Ripristina precedente"
     },
     "addDescriptionPlaceholder": "Opzionale. Mostrato sul Canvas, non sulla griglia.",
     "addWidget": "Aggiungi widget",
@@ -2039,7 +2046,9 @@
     "enablePlugin": "Abilita",
     "disablePlugin": "Disabilita",
     "uninstallPlugin": "Disinstalla",
-    "pluginOperationFailed": "Operazione sul plugin non riuscita"
+    "pluginOperationFailed": "Operazione sul plugin non riuscita",
+    "users": "Utenti",
+    "encryption": "Crittografia"
   },
   "showcase": {
     "askAboutDoc": "Chiedi informazioni su questo documento",
@@ -2257,7 +2266,9 @@
     "noTraces": "Nessuna traccia presente.",
     "noTracesSubtitle": "Eseguire workflow con nodi LLM per esaminare span di esecuzione, latenza e utilizzo dei token.",
     "noTracesYet": "Nessuna traccia presente.",
-    "openTrace": "Apri traccia"
+    "openTrace": "Apri traccia",
+    "timeRange3h": "Ultime 3 ore",
+    "timeRange6h": "Ultime 6 ore"
   },
   "variables": {
     "addVariable": "Aggiungi variabile",

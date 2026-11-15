@@ -16,6 +16,7 @@ Node **Converter** chuyển đổi dữ liệu và tệp giữa các định d�
 |-----------|------|-------------|
 | `label` | string | Định danh node (camelCase) |
 | `conversion` | string | `csvToJson` (văn bản CSV → mảng các đối tượng hàng), `jsonToCsv` (mảng đối tượng/hàng → văn bản CSV), `xmlToJson` (văn bản XML → đối tượng), `jsonToXml` (đối tượng → văn bản XML), `imageToText` (OCR một hình ảnh), `pdfToText` (OCR mọi trang PDF được chọn), hoặc `fileConvert` (ghi lại một tệp đã lưu sang định dạng khác) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Dữ liệu cần chuyển đổi. Để trống để dùng đầu vào đầu tiên của node |
 | `delimiter` | string | Ký tự phân tách trường đơn (mặc định `,`) |
 | `hasHeader` | boolean | Chỉ `csvToJson` — coi hàng đầu tiên là header (mặc định `true`) |
@@ -169,3 +170,6 @@ OCR gọi ra ngoài tới `tesseract` và `pdftoppm` của poppler, còn việc 
 - [Drive](./drive-node.md) – Lưu trữ, truy xuất và chia sẻ tệp
 - [Node Types](../reference/node-types.md) – Tổng quan về tất cả các loại node
 - [Expression DSL](../reference/expression-dsl.md) – Các hàm và cú pháp
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

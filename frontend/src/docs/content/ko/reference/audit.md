@@ -59,6 +59,10 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `auth.token_refresh` | `reason=refresh_token_replayed_or_revoked`와 함께 `outcome=denied` — 경보를 울릴 가치가 있는 Token 도난 신호입니다. |
 | `auth.password_change` | 현재 비밀번호가 잘못된 경우 `outcome=failure`입니다. |
 | `auth.sso_login` | Single sign-on입니다. `outcome=failure`는 provider 응답이 거부된 이유를 담고, `denied`는 `email_not_verified`, `domain_not_allowed`, 또는 `provisioning_disabled`를 담습니다. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | 관리자가 [SSO](./sso.md) 구성을 변경했습니다. `enabled`와 `password_login_disabled`를 기록하며, client secret은 절대 기록하지 않습니다. |
 | `sso_settings.test` | 관리자가 SSO 연결 테스트를 실행했습니다. |
 

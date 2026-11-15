@@ -97,3 +97,11 @@ Drive-Lesevorgänge sind auf Dateien beschränkt, auf die der Workflow-Akteur zu
 
 ## Bereinigung
 Abgelaufene Freigabe-Token werden täglich automatisch bereinigt. Die Dateien selbst bleiben bestehen, bis sie manuell über den Reiter „Drive" gelöscht werden. Verwende **Alle löschen**, um jede Datei und ihre Freigabelinks in einer Aktion zu löschen.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

@@ -368,3 +368,6 @@ Kolumnę `table` można zamienić w przyciski otwierające link. Proszę ustawi�
 Przyciskami stają się tylko adresy `http://` i `https://` oraz ścieżki zaczynające się od pojedynczego `/`. Każda inna wartość, na przykład `javascript:` lub `//host`, pozostaje zwykłym tekstem, a pusta komórka nic nie pokazuje.
 
 Przycisk działa obok [linku wiersza](../tabs/dashboard-tab.md#detail-pages): kliknięcie przycisku otwiera jego link w nowej karcie, a kliknięcie w dowolnym innym miejscu wiersza nadal otwiera stronę szczegółów.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

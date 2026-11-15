@@ -97,3 +97,11 @@
 
 ## Καθαρισμός
 Τα ληγμένα share tokens καθαρίζονται αυτόματα καθημερινά. Τα ίδια τα αρχεία παραμένουν μέχρι να διαγραφούν χειροκίνητα μέσω της καρτέλας Drive. Χρησιμοποιήστε το **Clear All** για να διαγράψετε κάθε αρχείο και τους συνδέσμους διαμοιρασμού του με μία ενέργεια.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

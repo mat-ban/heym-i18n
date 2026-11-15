@@ -42,7 +42,7 @@ Heym チームは、お客様のビジネスプロセス向けにエージェン
 
 ## Kubernetes デプロイメント
 
-標準の[実行とデプロイメント](../getting-started/running-and-deployment.md)ガイドでは、単一サーバーの本番環境セットアップ向けの Docker Compose を扱っています。Enterprise のお客様には、高可用性と水平スケーリングのための本番 Kubernetes デプロイメントに関する支援を提供します：
+標準の[実行とデプロイメント](../getting-started/running-and-deployment.md)ガイドでは、単一サーバーの本番環境セットアップ向けの Docker Compose を扱っています。 [Kubernetes デプロイメント](../getting-started/kubernetes.md)ガイドでは、マニフェスト、Helm、ストレージ、ネットワークポリシー、ワーカーを扱っています。Enterprise のお客様には、高可用性と水平スケーリングのための本番 Kubernetes デプロイメントに関する支援を提供します：
 
 - **複数のワーカーノード** — 冗長性と負荷分散のために Heym バックエンドワーカーを複数の Kubernetes ノードに分散配置
 - **サイドカーコンテナ** — ログ収集、監視エージェント、サービスメッシュ（Istio、Linkerd）、シークレットインジェクション（Vault）のためのサイドカーパターンの構成

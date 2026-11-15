@@ -68,3 +68,5 @@ Sama reegel nagu [Output](./output-node.md) puhul: ärge paigutage seda node'i l
 - [Output](./output-node.md) – Sõnumi- või skeemipõhine vastus `result`-ümbrisega
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, request method'id ja vastused
 - [Node Types](../reference/node-types.md) – Kõik node'i tüübid
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | merkkijono | Solmun tunniste (camelCase) |
 | `conversion` | merkkijono | `csvToJson` (CSV-teksti → riviolioiden taulukko), `jsonToCsv` (olioiden/rivien taulukko → CSV-teksti), `xmlToJson` (XML-teksti → olio), `jsonToXml` (olio → XML-teksti), `imageToText` (OCR-kuvasta), `pdfToText` (OCR jokaiselta valitulta PDF-sivulta) tai `fileConvert` (tallentaa tiedoston uudessa muodossa) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | lauseke | Muunnettava data. Jätä tyhjäksi käyttääksesi solmun ensimmäistä syötettä |
 | `delimiter` | merkkijono | Yksittäinen merkkikenttäerotin (oletus `,`) |
 | `hasHeader` | totuusarvo | Vain `csvToJson` — käsittele ensimmäinen rivi otsikkorivinä (oletus `true`) |
@@ -169,3 +170,6 @@ OCR käyttää `tesseract`- ja popplerin `pdftoppm` -ohjelmia, ja asiakirjojen m
 - [Drive](./drive-node.md) – Tallenna, nouda ja jaa tiedostoja
 - [Node Types](../reference/node-types.md) – Yleiskatsaus kaikista solmutyypeistä
 - [Expression DSL](../reference/expression-dsl.md) – Funktiot ja syntaksi
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

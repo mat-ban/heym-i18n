@@ -54,3 +54,5 @@
 - [Типи вузлів](../reference/node-types.md) – Огляд усіх типів вузлів
 - [Error Handler](./error-handler-node.md) – Надсилання Slack у разі збою workflow
 - [Вкладка «Облікові дані»](../tabs/credentials-tab.md) – Додавання Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

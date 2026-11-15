@@ -23,12 +23,13 @@ Vienas **Laiko intervalo** pasirinkiklis virš filtrų juostos valdo tiek statis
 
 - Puslapiuojamas nesenų trasų sąrašas pasirinkto laiko intervalo viduje
 - Kiekviena trasa rodo: workflow, mazgą, kredencialą, laiko žymę, trukmę
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Paspauskite ant trasos, kad atidarytumėte detalių peržiūrą
 - Naudokite **Ankstesnis / Kitas** detaliame dialoge, kad judėtumėte tarp trasų, nesugrįždami atgal
 
 ## Filtravimas
 
-- **Laiko intervalas** – 1h / 24h / 7d / 30d / Visi; filtruoja diagramas ir sąrašą kartu
+- **Laiko intervalas** – 1h / 3h / 6h / 24h / 7d / 30d / Visi; filtruoja diagramas ir sąrašą kartu
 - **Kredencialas** – Filtruoti pagal naudojamą kredencialą (API raktą)
 - **Šaltinis** – Filtruoti pagal workflow arba vykdymo šaltinį
 - **Paieška** – Ieškoti pagal modelį, workflow, kredencialą ar mazgo etiketę

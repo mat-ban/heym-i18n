@@ -54,3 +54,5 @@ Használja az [Error Handler](./error-handler-node.md) csomóponttal hibákról 
 - [Node Types](../reference/node-types.md) – Az összes csomóponttípus áttekintése
 - [Error Handler](./error-handler-node.md) – Slack küldése workflow hiba esetén
 - [Credentials Tab](../tabs/credentials-tab.md) – Slack webhook hozzáadása
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

@@ -16,6 +16,7 @@ Le nœud **Converter** convertit des données et des fichiers entre différents 
 |-----------|------|-------------|
 | `label` | string | Identifiant du nœud (camelCase) |
 | `conversion` | string | `csvToJson` (texte CSV → tableau d'objets de ligne), `jsonToCsv` (tableau d'objets/lignes → texte CSV), `xmlToJson` (texte XML → objet), `jsonToXml` (objet → texte XML), `imageToText` (OCR d'une image), `pdfToText` (OCR de chaque page PDF sélectionnée), ou `fileConvert` (réécriture d'un fichier stocké dans un autre format) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Les données à convertir. Laisser vide pour utiliser la première entrée du nœud |
 | `delimiter` | string | Séparateur de champs à un seul caractère (par défaut `,`) |
 | `hasHeader` | boolean | `csvToJson` uniquement — traiter la première ligne comme en-tête (par défaut `true`) |
@@ -168,3 +169,6 @@ L'OCR fait appel à `tesseract` et à `pdftoppm` de poppler, et la conversion de
 - [Drive](./drive-node.md) – Stocker, récupérer et partager des fichiers
 - [Node Types](../reference/node-types.md) – Vue d'ensemble de tous les types de nœuds
 - [Expression DSL](../reference/expression-dsl.md) – Fonctions et syntaxe
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

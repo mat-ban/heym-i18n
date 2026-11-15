@@ -11,6 +11,7 @@ import {
   Settings,
   Sparkles,
   Trash2,
+  Undo2,
 } from "lucide-vue-next";
 
 import type { ChartPayload, DashboardWidget, FileRunPayload } from "@/types/dashboard";
@@ -33,6 +34,10 @@ const props = defineProps<{
   cloning: boolean;
   canWrite: boolean;
   record?: string | null;
+  /** The widget's last AI change, from Chat or a fine-tune, can be undone. */
+  revertible?: boolean;
+  /** Its revert is on the way. */
+  reverting?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -40,6 +45,7 @@ const emit = defineEmits<{
   (e: "delete", widgetId: string): void;
   (e: "clone", widgetId: string): void;
   (e: "refine", widget: DashboardWidget): void;
+  (e: "revert", widgetId: string): void;
   (e: "settings", widget: DashboardWidget): void;
   (e: "title-change", payload: { id: string; title: string }): void;
   (e: "open-record", dashboardId: string, page: DashboardPage): void;
@@ -96,6 +102,13 @@ const titleDraft = ref(props.widget.title);
 
 const actions = computed<WidgetAction[]>(() => [
   {
+    key: "revert",
+    icon: Undo2,
+    label: "Revert previous",
+    disabled: () => props.reverting === true,
+    run: () => emit("revert", props.widget.id),
+  },
+  {
     key: "refine",
     icon: Sparkles,
     label: t("dashboards.actions.refine"),
@@ -144,9 +157,13 @@ function openWidgetHistory(): void {
 
 // A read-only share keeps only Refresh; every other action changes the widget. A
 // file-run widget runs an existing workflow, so there is no widget graph to fine-tune.
-// History stays first so it shares the same gap as the widget icons.
+// Revert shows only while the last AI change can be undone. History stays first so it
+// shares the same gap as the widget icons.
 const visibleActions = computed<WidgetAction[]>(() => {
-  const writable = isFileRun.value ? actions.value.filter((action) => action.key !== "refine") : actions.value;
+  const hidden = new Set<string>();
+  if (isFileRun.value) hidden.add("refine");
+  if (!props.revertible) hidden.add("revert");
+  const writable = actions.value.filter((action) => !hidden.has(action.key));
   const base = props.canWrite ? writable : actions.value.filter((action) => action.key === "refresh");
   if (!hitlTarget.value) return base;
   return [

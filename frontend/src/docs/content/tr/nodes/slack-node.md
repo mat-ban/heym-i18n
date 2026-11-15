@@ -54,3 +54,5 @@ Hata bildirimleri için [Error Handler](./error-handler-node.md) ile birlikte ku
 - [Node Types](../reference/node-types.md) – Tüm düğüm türlerine genel bakış
 - [Error Handler](./error-handler-node.md) – Workflow hatasında Slack gönderin
 - [Credentials Tab](../tabs/credentials-tab.md) – Slack webhook ekleyin
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

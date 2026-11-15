@@ -107,3 +107,6 @@ Dessa genvägar är tillgängliga i dialogrutan för körningshistorik och i pan
 - [Snabbstart](../getting-started/quick-start.md) – Bygg det första workflowet
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Flikarna **Autentiseringsuppgifter** och **DataTable** fungerar på samma sätt: `Ctrl + F` / `Cmd + F` fokuserar sökfältet, listan smalnas av medan du skriver och `Escape` rensar den.

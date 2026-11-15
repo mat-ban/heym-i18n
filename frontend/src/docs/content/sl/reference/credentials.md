@@ -32,6 +32,7 @@ Poverilnice shranjujejo API ključe in skrivnosti, ki jih uporabljajo vozlišča
 | [Grist](../nodes/grist-node.md) | Grist | API ključ + URL strežnika |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | ID odjemalca + skrivnost odjemalca + soglasje OAuth2 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | ID odjemalca + skrivnost odjemalca + soglasje OAuth2 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | ID odjemalca + skrivnost odjemalca + soglasje OAuth2 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL projekta + API ključ (+ opcijski privzeti shema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Gostitelj + vrata + uporabniško ime/geslo + baza podatkov (+ varno) |

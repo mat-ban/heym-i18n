@@ -87,6 +87,7 @@ Alcuni nodi memorizzano `credentialId` (UUID) in `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Dettagli di connessione ClickHouse (host, porta, autenticazione, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Credenziale bot Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Credenziale chiave pubblica Discord o webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Vector DB Qdrant o Postgres (pgvector), tramite una credenziale RAG Qdrant, Psql o Custom Embeddings |
 | Evals | `credential_id`, `judge_credential_id` | Credenziale modello; una credenziale modello o Decision Model per il giudice LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) step AI | `credentialId` | Modello LLM/Vision (per lo step AI e [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Dopo l'esecuzione, `mask_sensitive_output()` maschera i valori delle credenziali
 - [Expression DSL](./expression-dsl.md) – Sintassi `$credentials`
 - [Tipi di nodo](./node-types.md) – Nodi che utilizzano credenziali ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Nodo Agent](../nodes/agent-node.md) – Utilizza `credentialId` per LLM
+
+## Autorizzazioni del calendario di Google Meet
+
+La condivisione di una [credenziale Google Meet](../nodes/google-meet-node.md) consente ai workflow che la utilizzano di leggere gli intervalli di disponibilità dei calendari accessibili e di creare, modificare o eliminare eventi come account Google collegato, compreso l'invio di inviti e cancellazioni. L'email dell'invitato non modifica l'account proprietario o autorizzatore dell'evento. Solo il proprietario delle credenziali può ricollegare l'autorizzazione Google.

@@ -227,13 +227,15 @@ In workflow expressions:
   - `credentialId`: UUID of a `slack_trigger` credential, or a `slack_bot` credential that has a signing secret
   - `slackEventScope` (optional, default `"all"`): `"all"` (every event) | `"messages"` (a person's message in a channel or DM; no duplicate for mentions) | `"directMessages"` (DMs to the bot, `channel_type` `im`) | `"mentions"` (`app_mention`) | `"channel"` (messages in `slackEventChannel`)
   - `slackEventChannel`: channel id (`C…`) for `slackEventScope: "channel"`
-- **Request URL**: `<Heym URL>/api/slack/events/<credentialId>` is one URL per Slack app that starts every Slack Trigger on that credential, each filtered by its own scope; `/api/slack/webhook/<node id>` starts only that node. With a `slack_bot` credential the bot's own posts and edits never start a run.
+  - `slackEventFilesOnly` (bool, optional): only messages that carry files start a run; follow it with a `slack` node `downloadFile` (`slackFile: "$slackEvent.event"`) to save them to Drive
+- **Request URL**: `<Heym URL>/api/slack/events/<credentialId>` is one URL per Slack app that starts every Slack Trigger on that credential, each filtered by its own scope; `/api/slack/webhook/<node id>` starts only that node. With a `slack_bot` credential the bot's own posts, uploads and edits never start a run.
 - **Output fields available downstream**:
   - `$<label>.event` — full Slack event object
   - `$<label>.event.channel_type` — `"im"` for a DM, `"channel"` or `"group"` otherwise
   - `$<label>.event.type` — event type (e.g., `"message"`, `"reaction_added"`)
   - `$<label>.event.text` — message text (when applicable)
   - `$<label>.event.user` — Slack user ID who triggered the event
+  - `$<label>.event.files` — files shared with the message (download them with the `slack` node's `downloadFile`)
   - `$<label>.headers` — sanitized HTTP headers from Slack
 
 **Example node JSON:**
@@ -275,6 +277,7 @@ In workflow expressions:
   - `label`: Node identifier (e.g., "supportInbox")
   - `credentialId`: UUID of an `imap` credential containing host, username, password, mailbox, and SSL settings
   - `pollIntervalMinutes`: Integer polling interval in minutes (minimum `1`, common values `1`, `5`, `15`)
+  - `imapDownloadAttachments`: Boolean, default `false`. When `true`, every attachment of the email is saved to the workflow owner's Heym Drive during the run (at most 10 per email, each within the Drive size limit). Set it whenever a later node must read the attached files (invoice PDF, contract, scan); leave it off when only the subject or body matters
 - **Output fields available downstream**:
   - `$<label>.email` — full parsed email payload
   - `$<label>.email.subject` — decoded email subject
@@ -286,12 +289,20 @@ In workflow expressions:
   - `$<label>.email.attachments` — attachment metadata array
   - `$<label>.email.headers` — decoded header map
   - `$<label>.email.uid` — IMAP UID for the message
+  - `$<label>.attachments` — one item per attachment, in email order. With `imapDownloadAttachments` on: `id` (Drive file id), `filename`, `content_type`, `size_bytes`, `download_url`, `skipped_reason` (`null` when saved, otherwise `"too_large"`, `"too_many"` or `"unavailable"`). With it off: the same metadata as `email.attachments`
+  - `$<label>.file_ids` — Drive file ids of the saved attachments only (`[]` when the toggle is off). Same shape as the Slack node's `file_ids`: put `$<label>.file_ids` in an Agent's user message for file analysis, or pass it to a Drive or Converter node
   - `$<label>.triggered_at` — ISO timestamp for the workflow run
 
 **Example node JSON:**
 ```json
 {"id": "n1", "type": "imapTrigger", "position": {"x": 100, "y": 100}, "data": {"label": "supportInbox", "credentialId": "imap-credential-uuid", "pollIntervalMinutes": 5}}
 ```
+
+**Example with attachments saved to Drive (invoice inbox → Agent reads the PDFs):**
+```json
+{"id": "n1", "type": "imapTrigger", "position": {"x": 100, "y": 100}, "data": {"label": "invoiceInbox", "credentialId": "imap-credential-uuid", "pollIntervalMinutes": 5, "imapDownloadAttachments": true}}
+```
+Then an Agent user message such as `"Extract vendor, total and due date from these invoices: $invoiceInbox.file_ids"`.
 
 ### 3b. telegramTrigger (Telegram Bot Webhook Trigger)
 - **Purpose**: Receive Telegram Bot API webhook updates and start the workflow automatically
@@ -806,6 +817,7 @@ The response includes `$llmNodeLabel.image` (base64 data URL) which can be used 
   - `tools`: Array of Python tool definitions (optional, empty array = no Python tools)
   - `mcpConnections`: Array of MCP server connections (optional). Each connection exposes tools from an MCP server.
   - `skills`: Array of skill bundles (optional). Each skill has `name`, `content`, optional `files`, optional `timeoutSeconds`, and optional `driveFilesEnabled` (default false). Set `driveFilesEnabled: true` only when that skill must read Heym Drive files by id or filename at runtime.
+  - File analysis is automatic, there is no field for it: when the agent's input or its resolved `userMessage`/`systemInstruction` carries the id of a file that came into this workflow (uploaded through its `fileUploadTrigger` or written by its nodes; PDF, XLSX/XLS, CSV/TSV, DOCX, JSON/JSONL, TXT/MD), the agent gets `list_files`, `inspect_file` and `run_python` for those files in that run. It opens them inside an isolated, network-less Python sandbox with pandas, openpyxl, pdfplumber, pypdf and python-docx, inspects their structure first and extracts only what it needs, without putting the whole file in context. Other Drive files stay closed to it. Files it writes to `heym_files.out_dir()` are saved to Drive. For open-ended questions about PDFs, spreadsheets, CSVs, DOCX or JSON that vary from run to run, pass the file id in `userMessage` (e.g. `"Summarize the risks in file $Upload.file.id"`).
   - `toolTimeoutSeconds`: Timeout per tool execution in seconds (default: 30)
   - `maxToolIterations`: Max tool-call loop iterations (default: 30)
   - `temperature`: Creativity (0.0-2.0, default 0.7)
@@ -1435,7 +1447,7 @@ Do NOT use downstream nodes that depend on `$notifyWorkflow.outputs` when `execu
   - `statusCode`: HTTP status for the response (default `200`)
   - `contentType`: Response content type (default `text/html; charset=utf-8`)
 
-**When to use**: Serving a page straight to a browser - a status dashboard, a generated report, a confirmation screen. Use `jsonOutputMapper` instead when the caller is an API client.
+**When to use**: Serving a page straight to a browser - a status dashboard, a generated report, a confirmation screen. Use `jsonOutputMapper` instead when the caller is an API client. For HTML inside a dashboard widget, use `chartOutput` with `chartType: "html"` and the same `html` template instead; a widget workflow ends in `chartOutput`.
 
 **Example**:
 ```json
@@ -1454,6 +1466,7 @@ Do NOT use downstream nodes that depend on `$notifyWorkflow.outputs` when `execu
 
 **Rules**:
 - Unwrapping applies **only when the sole terminal is one `htmlOutputMapper`**. With a second terminal the runtime falls back to the normal per-label JSON map.
+- Pages run **sandboxed** (`Content-Security-Policy: sandbox`, whatever `contentType` is). Scripts, forms, popups and downloads work, but the page has an opaque origin: cookies, localStorage and requests to the Heym API with the visitor's session are not available. Do not build a page that expects to call `/api/...` as the signed-in user.
 - Same loop restriction as `output`: **never** place `htmlOutputMapper` inside a loop iteration branch (only after `done`).
 - **Never** connect `htmlOutputMapper` to an agent's `tool-input` handle. It is a terminal sink, not a callable tool. The same applies to `jsonOutputMapper`.
 
@@ -1536,11 +1549,11 @@ The http node ALWAYS returns a structured response object:
 4. For modulo/math on set node output: `$generateRandom.randomNumber % 2 == 0` (use the key name, e.g., "randomNumber")
 
 ### 13b. converter (Data Format Conversion)
-- **Purpose**: Convert data between formats without writing code. CSV text <-> JSON rows, XML text <-> JSON objects, Tesseract OCR from an image or PDF to plain text, and file format conversion of a stored Drive file.
+- **Purpose**: Convert data between formats without writing code. CSV text <-> JSON rows, XML text <-> JSON objects, Tesseract OCR from an image or PDF to plain text, voice transcription (speech-to-text) from an audio file, and file format conversion of a stored Drive file.
 - **Inputs**: 1 | **Outputs**: 1
 - **Data fields**:
   - `label`: Node identifier
-  - `conversion`: `"csvToJson"` (CSV text -> array of row objects), `"jsonToCsv"` (array of objects/rows -> CSV text), `"xmlToJson"` (XML text -> object), `"jsonToXml"` (object -> XML text), `"imageToText"` (OCR an image file), `"pdfToText"` (OCR every selected PDF page), or `"fileConvert"` (rewrite a stored file in another format)
+  - `conversion`: `"csvToJson"` (CSV text -> array of row objects), `"jsonToCsv"` (array of objects/rows -> CSV text), `"xmlToJson"` (XML text -> object), `"jsonToXml"` (object -> XML text), `"imageToText"` (OCR an image file), `"pdfToText"` (OCR every selected PDF page), `"audioToText"` (voice transcribe: speech in an mp3, wav, ogg, opus (WhatsApp voice notes), or flac file -> text), or `"fileConvert"` (rewrite a stored file in another format)
   - `source`: Expression for the input to convert (e.g. `"$previousNode.body"` or `"$userInput.body.text"`). If empty, the first input is used. Text conversions only.
   - `delimiter`: Single-character field delimiter (default `,`). Use `"\\t"` for tab-separated values.
   - `hasHeader`: Boolean, `csvToJson` only — first row is the header (default true). When false each row is an array of cell values instead of an object.
@@ -1548,7 +1561,7 @@ The http node ALWAYS returns a structured response object:
   - `includeHeader`: Boolean, `jsonToCsv` only — write a header row (default true)
   - `converterColumns`: Optional explicit column order for `jsonToCsv` (comma-separated string). When omitted, columns are inferred from the row keys.
   - XML object convention: `xmlToJson` maps attributes to keys prefixed with `@`, text alongside attributes/children to `#text`, and repeated elements to arrays. `jsonToXml` accepts that same object shape and requires exactly one top-level key for the XML root. Entity expansion is disabled.
-  - `converterFileId`: File conversions (`imageToText`, `pdfToText`, `fileConvert`) — expression pointing at a Heym Drive file, e.g. `"$Upload.file.id"`. A file object such as `"$Upload.file"`, an agent file (`"$reportAgent._generated_files[0].id"`), or a Heym download URL works too. The file must already be in Heym Drive (upload it with a `fileUploadTrigger`, or fetch it with a `drive` node `downloadUrl` operation first). Falls back to `source`/the first input when empty.
+  - `converterFileId`: File conversions (`imageToText`, `pdfToText`, `audioToText`, `fileConvert`) — expression pointing at a Heym Drive file, e.g. `"$Upload.file.id"`. A file object such as `"$Upload.file"`, an agent file (`"$reportAgent._generated_files[0].id"`), or a Heym download URL works too. The file must already be in Heym Drive (upload it with a `fileUploadTrigger`, or fetch it with a `drive` node `downloadUrl` operation first). Falls back to `source`/the first input when empty.
   - `converterTargetFormat`: `fileConvert` only — output format. Document outputs `"pdf"` | `"docx"` | `"html"` | `"md"` | `"txt"` | `"epub"` go through pandoc; `"csv"` is only valid when the input is a JSON array of objects; image outputs `"jpg"` | `"png"` | `"bmp"` | `"webp"` are for image inputs. Document inputs are docx/html/md/txt/csv/pdf plus json. Images cannot become documents and documents cannot become images.
   - `ocrLanguage`: `"auto"` (default) detects the script and picks the matching model. Otherwise a Tesseract code such as `"tur"`, `"eng"`, `"deu"`, `"chi_sim"`, or several joined with `+` (`"eng+tur"`). Use `"custom"` together with `ocrLanguageCustom` when the UI select cannot express the codes.
   - `ocrLanguageCustom`: Free-text language codes used when `ocrLanguage` is `"custom"`.
@@ -1557,7 +1570,9 @@ The http node ALWAYS returns a structured response object:
   - `ocrPsm`: Tesseract page segmentation mode — `"3"` (default, automatic), `"1"`, `"4"`, `"6"` (single block), `"7"` (single line), `"11"`, `"12"`, `"13"`.
   - `ocrDpi`: `pdfToText` only — rasterization DPI (default 300, min 72). Raise it for small print, lower it for speed.
   - `ocrPageRange`: `pdfToText` only — `"3"` or `"2-5"`. Empty means every page.
-- **Output**: `$label.result` — parsed rows for `csvToJson`, CSV string for `jsonToCsv`, parsed object for `xmlToJson`, XML string for `jsonToXml`, extracted text for `imageToText`/`pdfToText`, new file metadata for `fileConvert`. `$label.conversion` echoes the conversion that ran. OCR conversions also expose `$label.language` (the model actually used), `$label.encoding`, `$label.page_count`, `$label.pages` (array of `{page, text}`), and `$label.file` (id, filename, mime_type, size_bytes). `fileConvert` stores the output as a new Drive file and exposes `$label.id`, `$label.filename`, `$label.mime_type`, `$label.size_bytes`, `$label.download_url`, and `$label.source_file`; the original file is left untouched.
+  - `sttLanguage`: `audioToText` only: `"auto"` (default) lets the model detect the spoken language; one multilingual model covers about a hundred languages. Otherwise a Whisper language code such as `"en"`, `"tr"`, `"de"`, `"es"`, `"zh"`. Use `"custom"` together with `sttLanguageCustom` when the UI select does not list the code. The `ocr*` fields do not apply to `audioToText`.
+  - `sttLanguageCustom`: Free-text language code used when `sttLanguage` is `"custom"`.
+- **Output**: `$label.result` — parsed rows for `csvToJson`, CSV string for `jsonToCsv`, parsed object for `xmlToJson`, XML string for `jsonToXml`, extracted text for `imageToText`/`pdfToText`, the transcript for `audioToText`, new file metadata for `fileConvert`. `$label.conversion` echoes the conversion that ran. OCR conversions also expose `$label.language` (the model actually used), `$label.encoding`, `$label.page_count`, `$label.pages` (array of `{page, text}`), and `$label.file` (id, filename, mime_type, size_bytes). `audioToText` also exposes `$label.language` (the detected or chosen language code), `$label.duration_seconds`, `$label.segments` (array of `{start, end, text}` with times in seconds), and `$label.file`. `fileConvert` stores the output as a new Drive file and exposes `$label.id`, `$label.filename`, `$label.mime_type`, `$label.size_bytes`, `$label.download_url`, and `$label.source_file`; the original file is left untouched.
 
 **Example** (CSV text -> rows):
 ```json
@@ -1592,6 +1607,20 @@ For `name,age\\nAda,36` downstream nodes read `$toRows.result` -> `[{ "name": "A
 ```
 Downstream nodes read `$readInvoice.result` for the whole document or `$readInvoice.pages` for per-page text.
 
+**Example** (voice note -> transcript):
+```json
+{
+  "type": "converter",
+  "data": {
+    "label": "transcribe",
+    "conversion": "audioToText",
+    "converterFileId": "$audio.file.id",
+    "sttLanguage": "auto"
+  }
+}
+```
+Downstream nodes read `$transcribe.result` for the transcript, `$transcribe.language` for the detected language, and `$transcribe.segments` for timestamped parts.
+
 **⚠️ USE `converter` INSTEAD OF `execute`/`llm` FOR CSV**: When the user asks to parse, read, or build CSV/TSV, use a `converter` node. Do NOT write Python in an `execute` node and do NOT ask an LLM to reformat the rows — quoting, embedded newlines, and BOM handling are already correct here. Loop over `$label.result` with a `loop` node to process rows one by one.
 
 **⚠️ USE `converter` FOR XML**: When the user asks to parse XML or create XML from an object, use `xmlToJson` or `jsonToXml`. Do NOT write XML parsing code in an `execute` node. XML results preserve repeated elements as arrays and attributes as `@attribute` keys.
@@ -1614,6 +1643,8 @@ Access the converted file downstream with `$convertDoc.id` and `$convertDoc.down
 
 **⚠️ USE `converter` FOR OCR**: When the user asks to read text out of a scan, screenshot, receipt, or image-only PDF, use `imageToText`/`pdfToText`. Do NOT send the raw file to an `llm` node for transcription and do NOT shell out to OCR tools from an `execute` node. The file has to live in Heym Drive first: chain `fileUploadTrigger` -> `converter`, or `drive` (`downloadUrl`) -> `converter`. Leave `ocrLanguage` at `"auto"` unless the user names a language.
 
+**⚠️ USE `converter` FOR VOICE TRANSCRIPTION**: When the user asks to transcribe a voice note, call recording, meeting audio, or any mp3/wav/ogg file, use `audioToText`. It runs locally and needs no credential. Do NOT send the audio to an `llm` node and do NOT call an external speech-to-text API from an `http` node unless the user asks for a specific provider. The file has to live in Heym Drive first: chain `fileUploadTrigger` -> `converter`, or `drive` (`downloadUrl`) -> `converter`, then pass `$label.result` to an `llm` or `agent` node to summarize or act on it. Recordings up to 30 minutes are supported; leave `sttLanguage` at `"auto"` unless the user names a language.
+
 ### 13c. code (Run Python)
 - **Purpose**: Run Python that Heym has no dedicated node for — custom maths, bespoke parsing, algorithms, or reshaping data in a way `set` cannot express. The code runs in a disposable, network-isolated container that is created and destroyed for every execution.
 - **Inputs**: 1 | **Outputs**: 1
@@ -1623,7 +1654,8 @@ Access the converted file downstream with `$convertDoc.id` and `$convertDoc.down
   - `codeRequirements`: `requirements.txt` contents, one package per line (e.g. `"requests==2.32.3\\npandas\\n"`). Leave it `""` when the standard library is enough — that skips dependency installation entirely and makes the node much faster.
   - `codeParameters`: A JSON object string wiring workflow data into the code, e.g. `"{\\"name\\": \\"$trigger.body.name\\", \\"rows\\": \\"$fetchRows.result\\"}"`. Expressions are resolved before the code runs. Inside `main`, read them with dot notation: `params.name`, `params.rows[0].id`. Keys that are not valid Python identifiers are read as `params["my key"]`.
   - `codeAllowNetwork`: Boolean, default `false`. When `false` the execution container has no network at all. Set `true` ONLY when the code itself must reach the internet. Dependency installation always has network regardless of this flag.
-- **Output**: `$label.result` is whatever `main` returned. `$label.logs` is the captured `print` output. `$label.install` is `{ok, tool, log}` describing the dependency install.
+  - `codeFiles`: (optional) files of this run to mount read-only: an expression resolving to a file id, a list of ids, or objects with an `id` (e.g. `"$Upload.file.id"`, `"$Upload.file"`). Only files that came into this workflow open: uploaded through its `fileUploadTrigger` or written by its own nodes. Any other Drive file id fails as not found. Inside `main`, `params.files` lists them (`id`, `name`, `mime`, `size`, `path`) and `import heym_files; heym_files.path("<name or id>")` returns a file's path. pandas, openpyxl, xlrd, pdfplumber, pypdf, python-docx and langdetect are preinstalled, so `codeRequirements` can stay `""`. Files written to `heym_files.out_dir()` are saved to Drive and returned in `$label.files`.
+- **Output**: `$label.result` is whatever `main` returned. `$label.logs` is the captured `print` output. `$label.install` is `{ok, tool, log}` describing the dependency install. With `codeFiles`, `$label.files` lists the files the code saved (`id`, `name`, `mime`, `size`, `download_path`).
 
 **Example** (compute a weighted score from upstream rows):
 ```json
@@ -1653,6 +1685,23 @@ Downstream nodes read `$scoreRows.result.total` and `$scoreRows.result.count`.
   }
 }
 ```
+
+**Example** (read one sheet of an uploaded workbook and total a column):
+```json
+{
+  "type": "code",
+  "data": {
+    "label": "totalSales",
+    "codeSource": "import heym_files\nimport pandas as pd\n\ndef main(params):\n    df = pd.read_excel(heym_files.path(params.files[0].id), sheet_name=\"Sales\", usecols=[\"Region\", \"Amount\"])\n    return {\"total\": float(df[\"Amount\"].sum()), \"rows\": len(df)}\n",
+    "codeRequirements": "",
+    "codeParameters": "{}",
+    "codeAllowNetwork": false,
+    "codeFiles": "$Upload.file.id"
+  }
+}
+```
+
+**⚠️ FILES: CODE NODE FOR FIXED EXTRACTION, AGENT FOR OPEN QUESTIONS**: When the same fields are pulled from the same kind of file every run (a sheet's column, a total, a table on a known page), use a `code` node with `codeFiles`. When the question about the document changes or needs judgement, use an `agent` whose `userMessage` carries the file id (file analysis turns on by itself). Start such workflows with a `fileUploadTrigger` and read `$<trigger label>.file.id`: at run time `codeFiles` and agent file tools open only files uploaded to the workflow or written by its nodes, never a Drive id typed into an input or a prompt. Never paste file contents into an `llm` prompt.
 
 **⚠️ `codeSource` MUST NOT CONTAIN BACKTICKS**: The code field is plain Python only. NEVER wrap it in triple backticks or use backticks inside the string. Backticks break workflow JSON extraction, exactly as they do for agent tool `code` (rule 36b).
 
@@ -1785,7 +1834,7 @@ Notes:
 - **Data fields**:
   - `label`: Node identifier
   - `credentialId`: UUID of a `slack` or `slack_bot` credential
-  - `slackOperation` (slack_bot only, default `sendMessage`): `sendMessage` | `sendDirectMessage` | `sendForm` | `sendButtons` | `requestApproval` | `replyInThread` | `updateMessage` | `postOutcome` | `addReaction` | `deleteMessage` | `getMessages` | `findUser`
+  - `slackOperation` (slack_bot only, default `sendMessage`): `sendMessage` | `sendDirectMessage` | `sendForm` | `sendButtons` | `requestApproval` | `replyInThread` | `updateMessage` | `postOutcome` | `addReaction` | `deleteMessage` | `getMessages` | `findUser` | `downloadFile` | `sendFile`
   - `slackChannel`: `#name`, channel id (`C…`), or a person (user id `U…` or email) to post in their DM; supports expressions such as `$slackEvent.event.channel`
   - `slackUser`: person for `sendDirectMessage` / `findUser`: user id or email
   - `message`: message text in Slack mrkdwn (`*bold*`, `_italic_`, `<url|text>`), supports expressions. Markdown from a model (`**bold**`, `## Title`, `[text](url)`, `- item`) is converted to mrkdwn before posting, so `$draft.text` can go in as it is.
@@ -1798,6 +1847,8 @@ Notes:
   - `slackOutcomeStatus` (`postOutcome`): `success` | `failure` | `warning` | `info`, or an expression such as `$approval.approval` (approved → success, rejected → failure, changes_requested → warning); `slackOutcomeTitle`: headline of the outcome card
   - `slackEmoji` (`addReaction`): emoji name such as `white_check_mark`
   - `slackLimit` (`getMessages`): number of messages, default 20
+  - `slackFile` (`downloadFile`): the Slack message whose files to download, usually `$slackEvent.event` (all its files plus its text); also a message link, a file link, a file id `F…`, a file object or a list of these
+  - `slackUploadFile` (`sendFile`): the run's Heym Drive files (from Download files, a `drive` node `get`, a Converter or Code node, or the File Upload trigger): an id, a file object with `id`, or a list, e.g. `$files.file_ids` or `$drive.id`; a Drive id typed in directly is refused, so put a `drive` `get` node before it for an existing Drive file; `sendFile` also uses `slackChannel`, optional `slackThreadTs` and optional `message` (shown with the files)
 - **Outputs**:
   - Posting operations: `$label.channel`, `$label.ts`, `$label.threadTs`, `$label.text`
   - `requestApproval`, `sendButtons`, `sendForm` PAUSE the run until someone answers in Slack (or decides the review in Heym), then output the posting fields plus `$label.answeredBy.id`, `$label.answeredBy.name`, `$label.answeredIn` (`slack` | `heym`) and:
@@ -1806,8 +1857,10 @@ Notes:
     - form: `$label.values.<field name>`
   - `getMessages`: `$label.transcript` (the messages oldest first, one `[time] name: text` per line: give this to an LLM to summarize), `$label.messages` (list of `{ts, threadTs, user, text, replyCount}`), `$label.count`
   - `findUser`: `$label.id`, `$label.realName`, `$label.email`, `$label.title`, `$label.timezone`
+  - `downloadFile`: saves the files to Heym Drive and outputs `$label.files` (list of `{id, slack_file_id, filename, mime_type, size_bytes, download_url}`), `$label.file_ids` (Drive ids), `$label.count`, the message's `$label.text`, `$label.channel`, `$label.ts`, `$label.user`, and the first file's fields at the top (`$label.id`, `$label.filename`). Put `$label.file_ids` in an agent's `userMessage` and the agent opens the files with file analysis; also usable as a Code node's `codeFiles` or Converter's file.
+  - `sendFile`: `$label.channel`, `$label.threadTs`, `$label.files` (list of `{slack_file_id, title, id}`), `$label.count`. Slack does not return the message ts for an upload.
 - **Branch after an answer** with a condition or switch on `$label.approval` or `$label.choice.value`.
-- **Interactivity**: approvals, buttons and forms need the Slack app's Interactivity Request URL set to `<Heym URL>/api/slack/interactions/<credentialId>` and the signing secret on the `slack_bot` credential. Bot scopes: `chat:write`, `chat:write.public`, `im:write`, `users:read`, `users:read.email`, `channels:read`, `groups:read`, `channels:history`, `groups:history`, `reactions:write`.
+- **Interactivity**: approvals, buttons and forms need the Slack app's Interactivity Request URL set to `<Heym URL>/api/slack/interactions/<credentialId>` and the signing secret on the `slack_bot` credential. Bot scopes: `chat:write`, `chat:write.public`, `im:write`, `users:read`, `users:read.email`, `channels:read`, `groups:read`, `channels:history`, `groups:history`, `im:history`, `app_mentions:read`, `reactions:write`, `files:read` (`downloadFile`), `files:write` (`sendFile`).
 
 **Example: request approval, then close the loop in the same thread**
 ```json
@@ -2348,6 +2401,11 @@ The last node in the iteration body MUST connect BACK to the loop node's `loop` 
   - `searchLimit`: Maximum number of results to return (only for "search" operation, default: 3)
   - `metadataFilters`: JSON object with metadata filters for search (only for "search" operation). String values support expressions and are resolved after the JSON is parsed, so `{"url": "$start.url"}` filters on the resolved value, and a whole-string expression keeps its type (`{"count": "$start.count"}` matches a stored number)
   - `hybridSearch`: Boolean (only for "search" operation, default false). When true, the vector search is fused with a BM25 keyword search over the stored text (reciprocal rank fusion), so exact terms such as ids, names and error codes are found next to semantic matches. Combines with `metadataFilters` and the reranker. Results then also carry `vector_score` and `keyword_score`, and `score` is the fused 0-1 score instead of a vector similarity
+  - `enableReranker`: Boolean (only for "search" operation, default false). Reranks the hits by relevance to `queryText`; the search then fetches a wider pool (at least 20) for the reranker to choose from. Results carry `relevance_score` (0-1, higher is more relevant) next to `score`, and `reranked` is true
+  - `rerankerCredentialId`: Credential that does the reranking: a `cohere` credential (Cohere Rerank) or a `decision` credential (Decision Model). A decision model scores each hit against the query in its own request, up to 8 at a time
+  - `rerankerModel`: Decision model name such as "jev-latest". Required when `rerankerCredentialId` is a `decision` credential, ignored for Cohere
+  - `rerankerTopN`: Number of results kept after reranking (default `searchLimit`)
+  - A reranker error (rejected key, provider failure, a hit the decision model did not score) fails the node; it never falls back to the unranked order
 
 **SETUP**: Requires a Vector Store created in the Vector Stores tab with a "RAG: Qdrant + OpenAI" credential (external Qdrant server), a "RAG: Psql + OpenAI" credential (vectors stored in Heym's own Postgres database via pgvector — no external service), or a "RAG: Custom Embeddings" credential (any OpenAI-compatible embedding endpoint by URL, targeting either backend). The same RAG operations, metadata filters, and reranking work identically with every backend.
 
@@ -2358,7 +2416,7 @@ The last node in the iteration body MUST connect BACK to the loop node's `loop` 
 | `insert` | documentContent, documentMetadata (optional) | Insert a document into the vector store |
 | `upsert` | documentId, documentContent, documentIdField (optional), documentMetadata (optional) | Replace every point whose id field matches, then insert the new version |
 | `delete` | documentId, documentIdField (optional) | Delete every point whose id field matches |
-| `search` | queryText, searchLimit (optional), metadataFilters (optional), hybridSearch (optional) | Search for similar documents; with hybridSearch, vector and BM25 keyword matches are fused |
+| `search` | queryText, searchLimit (optional), metadataFilters (optional), hybridSearch (optional), enableReranker + rerankerCredentialId (+ rerankerModel for a decision credential) (optional) | Search for similar documents; with hybridSearch, vector and BM25 keyword matches are fused; with the reranker, hits are reordered by relevance |
 
 **Document source**: a document stored without a `source` key in `documentMetadata` is stamped with `source: "workflow:<workflow name>"`, so the Vectorstores tab can show which workflow stored it. Set `source` yourself to override it.
 
@@ -3111,7 +3169,7 @@ accepts at most two nested levels of block children per request.
   - `label`: Node identifier
   - `dataTableId`: UUID of the DataTable to operate on (required)
   - `dataTableOperation`: Operation type - "find" | "getAll" | "count" | "getById" | "insert" | "update" | "remove" | "upsert"
-  - `dataTableFilter`: JSON object for filtering (for find, upsert, count). `find` and `count` support comparison operators via object values: {"age": {"$gt": 18}} — supported operators: $eq $ne $gt $gte $lt $lte $contains (case-insensitive substring) $in (array). A plain value still means equals. Numeric comparisons apply to columns typed as "number". You can also filter on row metadata (`id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by`) which are real columns outside the JSON data blob — use a full date for range comparisons (e.g. {"created_at": {"$gt": "2026-06-04"}}) or $contains for partial date text matches. `upsert` still uses exact-match {"column_name": "value"} to locate an existing row.
+  - `dataTableFilter`: JSON object for filtering (for find, upsert, count). Boolean columns use unquoted JSON `true` and `false` values (e.g. `{"is_active": true}`). `find` and `count` support comparison operators via object values: {"age": {"$gt": 18}} — supported operators: $eq $ne $gt $gte $lt $lte $contains (case-insensitive substring) $in (array). A plain value still means equals. Numeric comparisons apply to columns typed as "number". You can also filter on row metadata (`id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by`) which are real columns outside the JSON data blob — use a full date for range comparisons (e.g. {"created_at": {"$gt": "2026-06-04"}}) or $contains for partial date text matches. `upsert` uses the same type-aware exact-match {"column_name": "value"} filtering to locate an existing row (comparison operators are not supported for upsert).
   - `dataTableData`: JSON object mapping column names to values (for insert, update, upsert)
   - `dataTableRowId`: Row UUID for single-row operations (for getById, update, remove)
   - `dataTableLimit`: Maximum rows to return (default: 100, for find, getAll)
@@ -3883,7 +3941,7 @@ Access the saved file downstream: `$saveAudio.id`, `$saveAudio.download_url`
   `[{"month": "Jan", "revenue": 120}, ...]`).
 - **Data fields**:
   - `label`: Node identifier (camelCase)
-  - `chartType`: `"pie"` | `"bar"` | `"line"` | `"area"` | `"table"` | `"numeric"` | `"gauge"` | `"scatter"` | `"proportion"` | `"barGauge"` | `"gantt"` | `"erDiagram"` | `"text"` | `"hitl"` (required)
+  - `chartType`: `"pie"` | `"bar"` | `"line"` | `"area"` | `"table"` | `"numeric"` | `"gauge"` | `"scatter"` | `"proportion"` | `"barGauge"` | `"gantt"` | `"erDiagram"` | `"text"` | `"html"` | `"hitl"` (required)
   - `gantt`: `dataPath` selects task rows (no labelField/valueField mapping). Each row has
     `id`, `label`, `start`, `end` (ISO dates or datetimes; timezone-free values mean UTC),
     optional `progress` (0-100) and `dependencies` (existing predecessor task ids).
@@ -3922,6 +3980,12 @@ Access the saved file downstream: `$saveAudio.id`, `$saveAudio.download_url`
   - `unit`: optional unit string for `numeric`/`gauge`
   - `text`: markdown string for the `text` chart type (a static message; supports markdown). For a
     dynamic message, leave `text` empty and set `valueField` to a row key holding the string.
+  - `html`: HTML template for the `html` chart type, filled in exactly like an `htmlOutputMapper`
+    node's `html` (`$nodeLabel.field` expressions are interpolated). Write one self-contained
+    document with inline `<style>` and `<script>`. For HTML built upstream, leave `html` empty and
+    set `valueField` to the row key holding it. The dashboard runs it in a sandboxed frame without
+    network access: no `fetch`, no forms, no cookies or storage, no calls to the Heym API and no
+    popups, so the template must carry every value it shows. Links still open in a new tab.
   - `title`: optional chart title
   - `hitlWorkflowId` / `hitlNodeId`: `hitl` only. The workflow, and optionally the step, whose
     reviews the widget shows. Use only ids from the review sources you are given; leave both out
@@ -4045,6 +4109,12 @@ syntax (`- [ ]` / `- [x]`) in `text` — do not use plain bullets for checkbox i
 Text checklist (three items, one checked — put markdown in `text` so dashboard toggles persist):
 ```json
 {"type": "chartOutput", "data": {"label": "todoList", "chartType": "text", "text": "- [x] Option 1\\n- [ ] Option 2\\n- [ ] Option 3", "title": "Tasks"}}
+```
+
+HTML (a custom card the other types do not draw; values come from upstream expressions, as in
+`htmlOutputMapper`, e.g. `$stats.open` reads the `open` mapping of a `set` node labelled `stats`):
+```json
+{"type": "chartOutput", "data": {"label": "summaryCard", "chartType": "html", "html": "<style>body{font-family:system-ui;margin:0;padding:12px}.n{font-size:32px;font-weight:600}</style><div class=\"n\">$stats.open</div><div>open tickets</div>", "title": "Summary"}}
 ```
 
 **HITL inbox (`chartType: "hitl"`):** a dashboard carousel of the signed-in user's pending human
@@ -5112,6 +5182,25 @@ The credential requests the full `https://www.googleapis.com/auth/drive` scope, 
 }
 ```
 
+### 42a. googleMeet (Google Meet Invitations and Available Times)
+- **Purpose**: Read bookable gaps in Google Calendar, or create/update/delete calendar invitations with Google Meet conferencing.
+- **Inputs**: 1 | **Outputs**: 1. Can also be an Agent tool; all text fields accept expressions and agentProvidedFields.
+- **Credential**: `credentialId` references an owned `google_meet` OAuth2 credential, connected with Google login. Enable Google Calendar API and use `/api/credentials/google-meet/oauth/callback` as the OAuth redirect path. Scopes: calendar.events and calendar.events.freebusy. Never put client secrets or tokens in node data.
+- **Operation**: `gmOperation`: `read` (default), `create`, `update`, `delete`.
+- **Common fields**: `gmCalendarId` (default `primary`; calendar ID or accessible calendar email), `gmTimeZone` (default `UTC`; IANA zone such as `Europe/Berlin`).
+- **Read fields**: `gmStartDate` (optional ISO date/datetime; default current time), `gmEndDate` (optional exclusive ISO end; default first day of the next month in gmTimeZone). November 6 defaults through December 1 at 00:00. The window must be positive and no longer than 60 calendar days; a seven-day end is valid. Reading another person's calendar requires permission; unavailable data is an error, never "free". Uses FreeBusy for availability. `gmIncludeBusyDetails` is a boolean, default `false`, read only, configurable by Agent autofill but not an expression field. Set it to `true` only when the user wants Calendar item details (titles and attendees) in busy slots; it additionally pages through Events list with recurring occurrences in the same time window. When false or absent, event details are not fetched and the original busy-slot shape is preserved.
+- **Create/update fields**: `gmTitle`, `gmDescription`, `gmStartTime`, `gmEndTime`, `gmAttendees`, `gmLocation`. Title and both times are required on create. Attendees are email text (comma/semicolon/newline separated) or a JSON array of strings. All are expression-capable. Prefer UTC offsets on timestamps; otherwise gmTimeZone interprets them. End must follow start. Both times must be supplied when rescheduling.
+- **Update/delete field**: `gmEventId` (required; use the Calendar event ID, never the Meet URL). Updates patch only nonempty fields, preserve existing conference data, and replace attendees only when supplied (`"[]"` removes all guests). Update requires at least one changed field.
+- **Invitations**: create/update/delete notify every guest using sendUpdates=all. Create asks Google for a new hangoutsMeet conference with conferenceDataVersion=1.
+- **Read output**: `available_slots` and `busy_slots` arrays of `{start, end}` timestamps, `count` of free intervals, `calendar_id`, `time_zone`, `start`, `end`. Gaps include nights/weekends; no business-hours or meeting-duration filter. Reading does not reserve a slot. With `gmIncludeBusyDetails: true`, `busy_slots` entries have `{start, end, title, attendees}` for individual blocking events (overlapping/adjacent events stay separate); unseen/private titles or unmatched busy intervals use `title: null, attendees: null`. `attendees` contains invitee email strings; room/calendar resources (`resource: true`) are excluded. Events with no guests return `attendees: []`. Cancelled and transparent events do not supply details. Available slots/count remain based on FreeBusy. A failed events-list call fails the enabled read. No descriptions are requested. Existing Google Meet OAuth scopes suffice.
+- **Create/update output**: `event_id`, `meet_url`, `conference_status`, `event`, `calendar_id`. Google may return pending conference creation before the Meet URL is ready.
+- **Delete output**: `event_id`, `calendar_id`, `deleted: true`. All operations include `status` and `operation`.
+- **Book a calendar with me**: Read the owner's `primary` calendar, let the visitor pick a gap and enter email, recheck the selected range, then create using the owner's same credential and `gmAttendees: "$input.email"`, `gmStartTime: "$input.startTime"`, `gmEndTime: "$input.endTime"`. The invite goes from the owner account to the visitor. Availability and creation are separate requests, not an atomic reservation.
+
+```json
+{"id":"meeting","type":"googleMeet","position":{"x":400,"y":100},"data":{"label":"Booking","credentialId":"google-meet-credential-uuid","gmOperation":"create","gmCalendarId":"primary","gmTimeZone":"Europe/Berlin","gmTitle":"Meet with me","gmDescription":"Booked through Heym","gmAttendees":"$input.email","gmStartTime":"$input.startTime","gmEndTime":"$input.endTime"}}
+```
+
 ### 43. heym (Heym Platform Data)
 - **Purpose**: Read Heym's own data - the workflows the owner can reach, one workflow's structure, and its execution history
 - **Inputs**: 1 | **Outputs**: 1
@@ -5271,7 +5360,7 @@ Always include:
 21. **MULTIPLE INPUT FIELDS** - textInput nodes support multiple input fields via `inputFields` array. Define fields like `[{"key": "text"}, {"key": "base64"}]`. Access via `$nodeLabel.body.fieldKey`. Input values are sent in the `body` object.
 22. **⚠️ NO UNNECESSARY textInput!** - NEVER add textInput unless user explicitly needs to provide input data. For static URLs, scheduled tasks, or fixed operations, START DIRECTLY with http, cron, or other nodes. textInput is ONLY for workflows that receive dynamic data from users/API callers.
 23. **⚠️ PRESERVE CREDENTIALS & MODEL** - When modifying an existing workflow, ALWAYS preserve existing `credentialId` and `model` values in nodes. NEVER replace, remove, or change credential IDs or model names unless the user explicitly asks to use a different credential or model. If a node already has a `credentialId` or `model`, keep them exactly as is.
-23a. **⚠️ CREDENTIALS & INTEGRATIONS - OWNED ONLY (NO SHARED)** - For **every** node field that references a credential or secret (`credentialId`, `githubCredentialId`, `fallbackCredentialId`, `guardrailCredentialId`, Playwright `aiStep` credential, etc.), use ONLY credentials **owned** by the workflow owner. **NEVER** put shared credentials (shared with you by another user or via team share) in generated JSON—the UI labels these as shared; they must not appear in AI output. Use placeholders such as `YOUR_CREDENTIAL_ID`, `codex-credential-uuid`, `opencode-credential-uuid`, `github-credential-uuid`, `jira-credential-uuid`, `google-drive-credential-uuid`, `google-sheets-credential-uuid`, `slack-credential-uuid`, `telegram-credential-uuid`, or `imap-credential-uuid` and let the user pick an owned credential in the editor. Applies to: `llm`, `agent`, `codex`, `opencodeGo`, `slack`, `telegram`, `slackTrigger`, `telegramTrigger`, `imapTrigger`, `sendEmail`, `redis`, `grist`, `github`, `jira`, `linear`, `googleSheets`, `googleDrive`, `googleSheetsTrigger`, `googleDriveTrigger`, `bigquery`, `supabase`, `notion`, `rabbitmq`, `crawler`, `playwright` (including `aiStep`), and any other integration that stores a credential id. When modifying an existing workflow (rule 23), still preserve existing ids if they are already non-shared; when **adding** new nodes, never insert shared credential UUIDs.
+23a. **⚠️ CREDENTIALS & INTEGRATIONS - OWNED ONLY (NO SHARED)** - For **every** node field that references a credential or secret (`credentialId`, `githubCredentialId`, `fallbackCredentialId`, `guardrailCredentialId`, Playwright `aiStep` credential, etc.), use ONLY credentials **owned** by the workflow owner. **NEVER** put shared credentials (shared with you by another user or via team share) in generated JSON—the UI labels these as shared; they must not appear in AI output. Use placeholders such as `YOUR_CREDENTIAL_ID`, `codex-credential-uuid`, `opencode-credential-uuid`, `github-credential-uuid`, `jira-credential-uuid`, `google-drive-credential-uuid`, `google-sheets-credential-uuid`, `slack-credential-uuid`, `telegram-credential-uuid`, or `imap-credential-uuid` and let the user pick an owned credential in the editor. Applies to: `llm`, `agent`, `codex`, `opencodeGo`, `slack`, `telegram`, `slackTrigger`, `telegramTrigger`, `imapTrigger`, `sendEmail`, `redis`, `grist`, `github`, `jira`, `linear`, `googleSheets`, `googleDrive`, `googleMeet`, `googleSheetsTrigger`, `googleDriveTrigger`, `bigquery`, `supabase`, `notion`, `rabbitmq`, `crawler`, `playwright` (including `aiStep`), and any other integration that stores a credential id. When modifying an existing workflow (rule 23), still preserve existing ids if they are already non-shared; when **adding** new nodes, never insert shared credential UUIDs.
 24. **EXECUTE NODE OUTPUT** - Execute node returns `{status, outputs, workflow_id, execution_time_ms}`. Access the called workflow's result via `$executeNodeLabel.outputs.output.result`. The `outputs.output` object contains the result from the executed workflow's output node.
 25. **EXECUTE NODE MULTIPLE INPUTS** - When calling a workflow that expects multiple input fields: (1) Add matching `inputFields` to your textInput node to collect all required data, (2) Use `executeInputMappings` array to map each field. Example: If target needs `text` and `imageUrl`, your textInput should have `inputFields: [{"key": "prompt"}, {"key": "image"}]`, then execute node uses `"executeInputMappings": [{"key": "text", "value": "$userInput.body.prompt"}, {"key": "imageUrl", "value": "$userInput.body.image"}]`
 26. **REQUEST BODY, HEADERS & QUERY** - When workflow is executed via API, textInput nodes receive `body`, `headers` and `query` objects. Access via `$textInputLabel.body.fieldName`, `$textInputLabel.headers.headerName` and `$textInputLabel.query.paramName`. Useful for accessing raw request data, authentication, and dynamic behavior.
@@ -5557,8 +5646,11 @@ Rules for the clarify block:
   optional `options` (strings, or the option objects below), optional `allowOther`
   (boolean), optional `optional` (boolean).
 - Use `single` for one choice, `multi` for several, `text` for free input.
-- Provide `options` whenever sensible; set `allowOther: true` when a genuine free-form
-  answer is plausible.
+- Provide `options` whenever sensible. Every question must offer a free-text answer,
+  including credential choices: the UI always offers an Other button for `single` and
+  `multi` questions, even when `allowOther` is omitted or false; clicking it opens the
+  free-text input. Do not add a separate Other option. Free-text answers come back as
+  `Other: "<text>"`.
 - When a `single` choice needs one editable value (for example a header key), an option
   can be an object `{"label": "...", "prefill": "..."}` instead of a string, and the
   question's `prefillLabel` names that value. The selected option's `prefill` appears in
@@ -5674,6 +5766,14 @@ def is_dashboard_widget_workflow(workflow: dict | None) -> bool:
     return False
 
 
+def workflow_dsl_reference() -> str:
+    """The AI Builder prompt's fixed part: the DSL and its rules, the same on every request."""
+    from app.constants import RESERVED_VARIABLE_NAMES
+
+    reserved_names_str = ", ".join(f"`{name}`" for name in RESERVED_VARIABLE_NAMES)
+    return WORKFLOW_DSL_SYSTEM_PROMPT.replace("{RESERVED_VARIABLE_NAMES_LIST}", reserved_names_str)
+
+
 def build_assistant_prompt(
     current_workflow: dict | None = None,
     available_workflows: list[dict] | None = None,
@@ -5682,15 +5782,13 @@ def build_assistant_prompt(
     installed_plugins: list[dict] | None = None,
     credentials_prompt: str = "",
     data_tables_prompt: str = "",
+    *,
+    include_reference: bool = True,
 ) -> str:
+    """The AI Builder prompt; without `include_reference`, only the parts that vary per user."""
     import json
 
-    from app.constants import RESERVED_VARIABLE_NAMES
-
-    reserved_names_str = ", ".join(f"`{name}`" for name in RESERVED_VARIABLE_NAMES)
-    prompt = WORKFLOW_DSL_SYSTEM_PROMPT.replace(
-        "{RESERVED_VARIABLE_NAMES_LIST}", reserved_names_str
-    )
+    prompt = workflow_dsl_reference() if include_reference else ""
 
     if user_rules and user_rules.strip():
         prompt += "\n\n## User Custom Rules\n\n"

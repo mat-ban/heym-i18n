@@ -2,6 +2,9 @@
 
 Fliken **Dashboard** är ett Grafana-liknande utrymme där det går att bygga rutnät av diagramwidgetar. Varje widget renderas från utdata av sitt eget dolda Heym-workflow, så all data som kan produceras i ett workflow — databasfrågor, API-anrop, RAG-uppslagningar, LLM-utdata — kan bli ett diagram. Flera dashboards kan hållas och var och en kan delas med personer eller team.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboards
 
 Alla börjar med en dashboard, som skapas första gången fliken öppnas. Använd dashboardväljaren högst upp i fliken för att växla mellan dashboards, och **+** bredvid den för att skapa en ny. Väljaren listar egna dashboards först, därefter de som delats med en, märkta med namnet på personen som delade dem.
@@ -27,6 +30,8 @@ En widget är ett enskilt diagram i rutnätet. Diagramtyper som stöds:
 - **Entity relationships (DB)** (tabeller, fält, PK/FK-nycklar och kopplingar)
 - **Bar gauge** (en horisontell gauge per rad med en röd→grön gradient och ett värde, t.ex. ledigt diskutrymme)
 - **Text** (ett markdown-meddelande, t.ex. en statusnotis som "Senaste körning 19:47"; stöder [interaktiva kryssrutor](../nodes/chart-output-node.md#interactive-task-lists) när markdown är statisk, och [explicita numrerade listor](../nodes/chart-output-node.md#numbered-lists) för anpassad eller fallande numrering)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (egna väntande mänskliga granskningar. Rubriken visar `1/n pending`. Workflow-namnet öppnar den körningen på canvas. **Approve**, **Request changes** och **Reject** löser den. Historikikonen bredvid widgettiteln öppnar den körningen i historikdialogen på denna sida. Widgeten använder inte uppströms rader, och varje person ser sin egen kö. Den kan istället visa granskningarna för ett enskilt Workflow, för alla som har behörighet att öppna det; se [HITL-widgets](#hitl-widgets))
 
 Förutom diagram kan en **Run a workflow**-widget köra ett av dina workflows direkt från dashboarden: på en släppt fil, med dess inmatningsfält eller med en Run-knapp; se [Kör-widgetar](#run-widgets).
@@ -147,3 +152,5 @@ Att ta bort en delning, eller sänka den från write till read, träder i kraft 
 ## Scheman och databasdiagram
 
 Välj **Gantt** i Lägg till widget för att visa uppgifter över tid med slutförande och beroendelänkar, eller **Entity relationships (DB)** för att kartlägga tabeller, fält och deras relationer. Båda typerna använder [Chart Output-noden](../nodes/chart-output-node.md#gantt-schedules) och finns även tillgängliga på Heym Work-sidor. När Work föreslår widgets för ett schema eller ett databasschema ritar det förhandsgranskningar utifrån de föreslagna uppgifterna eller entiteterna.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

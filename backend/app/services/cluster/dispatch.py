@@ -51,6 +51,7 @@ from app.services.execution_cancellation import (
     register_execution,
     relinquish_execution,
 )
+from app.services.k8s_credentials.store import store as k8s_credential_store
 from app.services.workflow_executor import (
     WorkflowCancelledError,
     WorkflowTimeoutError,
@@ -76,8 +77,26 @@ def queue_full_result() -> OffloadedRun:
 
 
 async def _release_after_branches(futures: tuple[Any, ...], execution_id: uuid.UUID) -> None:
+    """Hold the slot while the branches run, then give it back.
+
+    The run's active-execution row is cleared when its early answer returns, so to the
+    leader's stale-slot sweep this slot looks unused. Refresh it until the branches join,
+    or after STALE_SLOT_GRACE_SECONDS the sweep frees it and the next run starts while
+    this one is still working. The slot's age counts from admission, not from the early
+    answer, so the first refresh happens right away, before the first wait.
+    """
+    branches = asyncio.ensure_future(asyncio.to_thread(concurrent.futures.wait, futures))
     try:
-        await asyncio.to_thread(concurrent.futures.wait, futures)
+        while True:
+            try:
+                await workflow_concurrency.refresh_slot(execution_id)
+            except Exception:
+                logger.exception("Could not refresh the concurrency slot of run %s", execution_id)
+            done, _ = await asyncio.wait(
+                {branches}, timeout=workflow_concurrency.SLOT_REFRESH_SECONDS
+            )
+            if done:
+                break
     finally:
         await workflow_concurrency.release(execution_id)
 
@@ -158,6 +177,25 @@ def log_offloaded_run(log: logging.Logger, *, workflow_id: Any, trigger: str, re
         instance,
         status,
     )
+
+
+# How long past an offloaded run's own timeout to keep waiting: long enough for the
+# worker's timeout result to arrive before the dispatcher gives up on it.
+RESULT_WAIT_GRACE_SECONDS = 30.0
+
+
+def result_wait_seconds(timeout_seconds: float | None, *, held: bool) -> float | None:
+    """How long a dispatcher waits for a run's result. Not the run timeout itself.
+
+    The timeout bounds the run; the wait also covers time in the queue. A run held by
+    the concurrency gate may wait its turn for a while, so it gets at least the default
+    wait. An offloaded run gets its timeout plus a grace, so the worker reports the
+    timeout (and fires the error workflow) before the caller sees a wait error.
+    """
+    if timeout_seconds is None:
+        return None
+    budget = timeout_seconds + RESULT_WAIT_GRACE_SECONDS
+    return max(budget, DEFAULT_WAIT_SECONDS) if held else budget
 
 
 async def wait_for_result(
@@ -311,7 +349,9 @@ async def dispatch_workflow(
             if not wait_for_completion:
                 return None
             # The worker writes history and fires the error workflow for queued runs.
-            waited = await wait_for_result(run_id, timeout_seconds=timeout_seconds)
+            waited = await wait_for_result(
+                run_id, timeout_seconds=result_wait_seconds(timeout_seconds, held=True)
+            )
             if not waited.reported:
                 # Retired before any instance ran it, so nothing else will record it.
                 await record_failed_dispatch(
@@ -435,7 +475,9 @@ async def dispatch_workflow(
     if not wait_for_completion:
         run_result_bus.release(run_id)
         return None
-    result = await wait_for_result(run_id, timeout_seconds=timeout_seconds)
+    result = await wait_for_result(
+        run_id, timeout_seconds=result_wait_seconds(timeout_seconds, held=False)
+    )
     if not result.reported:
         # Nothing executed this run, so nothing else will ever record it.
         await record_failed_dispatch(
@@ -473,6 +515,9 @@ class RunQueueWorker:
         self._task: asyncio.Task[None] | None = None
         self._bus: Any = None
         self._active_finalizers: set[asyncio.Task[Any]] = set()
+        # The event loop holds tasks weakly; a claimed run nobody references can be
+        # garbage collected mid-run and leave its row claimed.
+        self._claimed_tasks: set[asyncio.Task[None]] = set()
 
     async def start(self) -> None:
         # Always on: concurrency-queued runs reach this queue without a cluster too.
@@ -519,11 +564,16 @@ class RunQueueWorker:
         while self._running:
             try:
                 await bus.wait_for_work()
-                while self._running:
+                # Until this process has synced its Kubernetes credentials, a run that
+                # needs one would fail partway. Leave the row for a synced process; the
+                # bus's fallback poll brings this loop back once the sync completes.
+                while self._running and k8s_credential_store.ready():
                     row = await run_queue.claim_next(identity.instance_id())
                     if row is None:
                         break
-                    asyncio.create_task(self._execute_claimed(row))
+                    task = asyncio.create_task(self._execute_claimed(row))
+                    self._claimed_tasks.add(task)
+                    task.add_done_callback(self._claimed_tasks.discard)
             except asyncio.CancelledError:
                 raise
             except Exception:

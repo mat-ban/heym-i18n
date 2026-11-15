@@ -2,6 +2,9 @@
 
 Разделът **Табло** е пространство в стил Grafana, където изграждате мрежи от графични widget-и. Всеки widget се визуализира от изхода на собствен скрит Heym workflow, така че всякакви данни, които можете да произведете в даден workflow — заявки към бази данни, API извиквания, RAG справки, изход от LLM — могат да станат графика. Можете да поддържате няколко табла и да споделяте всяко от тях с хора или екипи.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Табла
 
 Всеки започва с едно табло, създадено при първото отваряне на раздела. Използвайте селектора за табла в горната част на раздела, за да превключвате между табла, и **+** до него, за да създадете ново. Селекторът изброява първо Вашите собствени табла, а след това споделените с Вас, обозначени с името на човека, който ги е споделил.
@@ -27,6 +30,8 @@ Widget-ът е единична графика върху мрежата. Под
 - **Entity relationships (DB)** (таблици, полета, PK/FK ключове и връзки)
 - **Bar gauge** (един хоризонтален gauge на ред с градиент от червено към зелено и стойност, напр. свободно дисково пространство)
 - **Text** (markdown съобщение, напр. бележка за състояние като "Последно изпълнение в 19:47"; поддържа [интерактивни отметки](../nodes/chart-output-node.md#interactive-task-lists), когато markdown-ът е статичен, и [изрични номерирани списъци](../nodes/chart-output-node.md#numbered-lists) за персонализирано или низходящо номериране)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (Вашите чакащи човешки прегледи. Заглавната част показва `1/n pending`. Името на workflow-а отваря това изпълнение върху canvas. **Approve**, **Request changes** и **Reject** го приключват. Иконата за история до заглавието на widget-а отваря това изпълнение в диалога за история на тази страница. Widget-ът не използва upstream редове и всеки вижда собствената си опашка. Вместо това може да показва прегледите на един Workflow за всеки, който може да отвори този Workflow; вижте [HITL уиджети](#hitl-uidzheti))
 
 Освен диаграми, widget **Run a workflow** стартира един от вашите workflow-и от таблото: върху пуснат файл, с неговите входни полета или с бутон Run; вижте [Widget-и за стартиране](#run-widgets).
@@ -145,3 +150,5 @@ API за уиджети може също да създаде **карта с б
 ## Графици и диаграми на бази данни
 
 Изберете **Gantt** в Добавяне на widget, за да покажете задачи във времето с връзки за завършване и зависимост, или **Entity relationships (DB)**, за да съпоставите таблици, полета и техните релации. И двата типа използват [Chart Output node](../nodes/chart-output-node.md#gantt-schedules) и са достъпни и на страниците на Heym Work. Когато Work предлага widget-и за график или схема на база данни, той генерира предварителен преглед въз основа на предложените задачи или същности.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

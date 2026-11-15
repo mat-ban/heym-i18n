@@ -63,6 +63,7 @@ NODE_CREDENTIAL_FIELDS: dict[str, tuple[CredentialField, ...]] = {
     "discordTrigger": (_field("credentialId", CredentialType.discord_trigger),),
     "github": (_field("credentialId", CredentialType.github),),
     "googleDrive": (_field("credentialId", CredentialType.google_drive),),
+    "googleMeet": (_field("credentialId", CredentialType.google_meet),),
     "googleDriveTrigger": (_field("credentialId", CredentialType.google_drive),),
     "googleSheets": (_field("credentialId", CredentialType.google_sheets),),
     "googleSheetsTrigger": (_field("credentialId", CredentialType.google_sheets),),
@@ -76,7 +77,14 @@ NODE_CREDENTIAL_FIELDS: dict[str, tuple[CredentialField, ...]] = {
         _field("githubCredentialId", CredentialType.github),
     ),
     "rabbitmq": (_field("credentialId", CredentialType.rabbitmq),),
-    "rag": (_field("rerankerCredentialId", CredentialType.cohere, required=False),),
+    "rag": (
+        _field(
+            "rerankerCredentialId",
+            CredentialType.cohere,
+            CredentialType.decision,
+            required=False,
+        ),
+    ),
     "redis": (_field("credentialId", CredentialType.redis),),
     "s3": (_field("credentialId", CredentialType.s3),),
     "sendEmail": (_field("credentialId", CredentialType.smtp),),
@@ -142,6 +150,7 @@ CREDENTIAL_TYPE_PURPOSE: dict[CredentialType, str] = {
         "Google OAuth client for Google Drive; Google Drive and Google Drive Trigger nodes, "
         "Drive API over http for operations the node lacks"
     ),
+    CredentialType.google_meet: "Google OAuth client for Calendar events and availability; Google Meet node",
     CredentialType.bigquery: "Google OAuth client for BigQuery; BigQuery node",
     CredentialType.supabase: "Supabase project URL and key; Supabase node",
     CredentialType.notion: (
@@ -153,7 +162,8 @@ CREDENTIAL_TYPE_PURPOSE: dict[CredentialType, str] = {
     CredentialType.clickhouse: "ClickHouse connection; ClickHouse node",
     CredentialType.rag: "Vector store and embedding settings; vector stores and the RAG node",
     CredentialType.decision: (
-        "Decision model endpoint such as TypeSafe Jev; Decision node and Model Router"
+        "Decision model endpoint such as TypeSafe Jev; Decision node, Model Router and RAG "
+        "reranking"
     ),
     CredentialType.model_router: (
         "Picks one of the user's LLM credentials per request; LLM and Agent nodes"
@@ -172,6 +182,7 @@ _DEFAULT_HEADER_KEYS: dict[CredentialType, str | None] = {
     CredentialType.elevenlabs: "xi-api-key",
     CredentialType.google_sheets: "Authorization",
     CredentialType.google_drive: "Authorization",
+    CredentialType.google_meet: "Authorization",
     CredentialType.github: "Authorization",
     CredentialType.notion: "Authorization",
     CredentialType.sentry: "Authorization",

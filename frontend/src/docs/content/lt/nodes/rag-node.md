@@ -251,3 +251,5 @@ Gera žinoti:
 - [Trečiųjų šalių integracijos](../reference/integrations.md#qdrant) – Qdrant ir Postgres (pgvector) kredencialų nustatymas
 - [Agentų mazgas](./agent-node.md) – Naudoti RAG rezultatus kaip agento kontekstą
 - [LLM mazgas](./llm-node.md) – Pateikti RAG rezultatus į LLM sistemos užklausą
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

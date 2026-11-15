@@ -109,6 +109,10 @@ Orchestrator が 1 ターンで複数のサブエージェントを呼び出す�
 
 サポートされている Workflow ノードをエージェントの **tools** ハンドルに接続すると、エージェントは実行時にそのノードを呼び出せるようになります。これにより、Python を書くことなく、既存のキャンバスアクションや変換処理を呼び出し可能なツールに変換できます。
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 キャンバスノードツールは、認証情報、静的フィールド、Workflow 固有の設定をノード UI に保持したまま、エージェントに設定済みノードの実行タイミングを判断させたい場合に便利です。
 
 ### エージェントが提供するフィールド
@@ -385,3 +389,6 @@ AI で編集する際、Heym はテキスト形式の `.md` および `.py` ス�
 - [Quick Start](../getting-started/quick-start.md) – LLM と式を使用した基本的な Workflow
 - [Credentials Tab](../tabs/credentials-tab.md) – エージェント用の API キーの追加
 - [MCP Tab](../tabs/mcp-tab.md) – Workflow ツール用の MCP の設定
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

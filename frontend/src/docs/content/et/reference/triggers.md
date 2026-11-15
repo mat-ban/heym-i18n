@@ -12,7 +12,7 @@ Algussõlmed (ilma sissetulevate servadeta), mis algatavad käivituse:
 | [Cron](../nodes/cron-node.md) | Käivitub ajakava alusel (cron-avaldis, nt `0 * * * *` iga tunni tagant). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Käivitub, kui Telegram saadab boti webhooki uuenduse sõlmepõhisele webhooki URL-ile. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Käivitub, kui Discord saadab Interactions API webhooki sõlmepõhisele endpointile. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Küsib IMAP-postkasti ja käivitub iga vastuvõetud uue e-kirja kohta. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Küsib IMAP-postkasti ja käivitub iga vastuvõetud uue e-kirja kohta. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Käivitub, kui Heym avaldab platvormi sündmuse. Ühes saatmisaknas saabuvad sündmused koos massiivina. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Avab väljamineva kliendiühenduse välise socketiga ja käivitub valitud socketi sündmuste korral. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Loob ühekordse üleslaadimise URL-i ja käivitub, kui kutsuja saadab suure multipart-faili. |

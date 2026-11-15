@@ -113,7 +113,7 @@ Der [Playwright-Knoten](../nodes/playwright-node.md) ermöglicht Web-Scraping un
 Heym implementiert MCP auf beiden Seiten:
 
 - **Client-Modus**: Verbinden Sie Agenten mit externen MCP-Servern über stdio oder SSE. Werkzeuge werden dynamisch erkannt und dem Agenten zur Verfügung gestellt.
-- **Server-Modus**: Veröffentlichen Sie Heym-Workflows als MCP-Tools unter `/api/mcp/sse`. Claude Desktop, Cursor und andere MCP-Clients können Ihre Workflows direkt aufrufen.
+- **Server-Modus**: Veröffentlichen Sie Heym-Workflows als MCP-Tools unter `/api/mcp (or /api/mcp/sse for legacy connections)`. Claude Desktop, Cursor und andere MCP-Clients können Ihre Workflows direkt aufrufen.
 
 ### Human-in-the-Loop (HITL)
 

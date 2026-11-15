@@ -2,6 +2,9 @@
 
 A **Riasztások** lap lehetővé teszi, hogy küszöbérték-feltételeket definiáljon egy adott időablakra vonatkozóan, és értesítést kapjon, amikor azok teljesülnek. A Heym már rögzíti a futtatások eredményeit, a futásidőt és az LLM-költségeket, de ezeket soha nem önként jelenti. A riasztás az a mód, ahogyan Ön erre kéri.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Alerts bemutató megtekintése</a></p>
+
 Minden riasztás egy Ön által választott **időablak** felett kerül kiértékelésre, soha nem egyetlen esemény alapján. Egy sikertelen futtatás csak zaj. Tizenkét sikertelen futtatás tíz perc alatt már incidens.
 
 ## Riasztástípusok

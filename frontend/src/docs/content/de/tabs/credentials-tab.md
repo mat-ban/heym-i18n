@@ -39,3 +39,6 @@ Der Reiter **Anmeldedaten** (Credentials) verwaltet alle API-Keys, Zugangsdaten 
 
 - [Sicherheit](../reference/security.md) – Verschlüsselung und Datenschutz
 - [Freigabe von Anmeldedaten](../reference/credentials-sharing.md) – RBAC und Team-Sharing\n
+## Suche
+
+Verwenden Sie das Suchfeld über der Liste oder drücken Sie **Ctrl+F** (oder **Cmd+F**), um Anmeldedaten während der Eingabe nach Name oder Typ zu filtern. Drücken Sie **Escape**, um die Suche zurückzusetzen.

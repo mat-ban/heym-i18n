@@ -192,7 +192,7 @@ Hệ thống trace được thiết kế riêng cho việc debug hành vi agenti
 Mọi lệnh gọi LLM trong Heym đều được tính chi phí tự động. [Tab Traces](../tabs/traces-tab.md) hiển thị số lượng token đầu vào và đầu ra theo từng trace cùng với chi phí USD theo thời gian thực được tính từ bảng giá đã đồng bộ.
 
 - **Chi phí theo từng trace** – Token đầu vào, token đầu ra và tổng USD hiển thị trên mỗi dòng trace
-- **Phân tích chi phí** – Các thẻ KPI và biểu đồ chi phí theo từng model cập nhật theo khoảng thời gian đã chọn (1h / 24h / 7d / 30d / Tất cả)
+- **Phân tích chi phí** – Các thẻ KPI và biểu đồ chi phí theo từng model cập nhật theo khoảng thời gian đã chọn (1h / 3h / 6h / 24h / 7d / 30d / Tất cả)
 - **Bảng chi phí LLM** – Một bảng hệ thống trong [tab DataTable](../tabs/datatable-tab.md) được khởi tạo từ Helicone mỗi 24 giờ; bạn có thể ghi đè giá hoặc thêm dòng tùy chỉnh cho các model chưa được liệt kê
 - **Cảnh báo thiếu giá** – Các trace của model không có mục giá sẽ hiển thị cảnh báo nội tuyến kèm liên kết trực tiếp đến bảng chi phí
 
@@ -278,7 +278,7 @@ Workflow có thể được gọi qua HTTP tại `/api/workflows/{workflow_id}/e
 Heym có hỗ trợ [MCP](../tabs/mcp-tab.md) gốc ở cả hai phía:
 
 - **Là client**: Các node Agent kết nối đến máy chủ MCP bên ngoài (Filesystem, Browserbase, công cụ tùy chỉnh) qua stdio hoặc SSE và tự động sử dụng các công cụ của chúng
-- **Là server**: Các workflow có bật MCP trở thành công cụ trên máy chủ mặc định tại `/api/mcp/sse`, hoặc trên các máy chủ được đặt tên với URL và API key riêng, để Claude Desktop, Cursor và các MCP client khác có thể gọi trực tiếp các workflow Heym của bạn
+- **Là server**: Các workflow có bật MCP trở thành công cụ trên máy chủ mặc định tại `/api/mcp (or /api/mcp/sse for legacy connections)`, hoặc trên các máy chủ được đặt tên với URL và API key riêng, để Claude Desktop, Cursor và các MCP client khác có thể gọi trực tiếp các workflow Heym của bạn
 
 Agent có thể sử dụng nhiều máy chủ MCP cùng lúc, và bất kỳ workflow nào cũng có thể trở thành công cụ cho một MCP client bên ngoài.
 

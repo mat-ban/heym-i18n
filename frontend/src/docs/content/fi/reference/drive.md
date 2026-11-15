@@ -98,3 +98,11 @@ Drive-lukeminen rajoittuu workflown toimijalle saatavilla oleviin tiedostoihin: 
 ## Siivous
 
 Vanhentuneet jakotokenit siivotaan automaattisesti päivittäin. Tiedostot säilyvät, kunnes ne poistetaan manuaalisesti Drive-välilehden kautta. Käytä **Tyhjennä kaikki** -toimintoa poistaaksesi kaikki tiedostot ja niiden jakolinkit yhdellä toiminnolla.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

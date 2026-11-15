@@ -116,6 +116,8 @@ Atsaucieties uz saglabāto failu tālāk plūsmā: `$saveAudio.id`, `$saveAudio.
 
 Atsaucieties uz base64 saturu tālāk plūsmā: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Attēli, kas atgriezti, izmantojot `file_base64`, tiek parādīti iekļauti atkļūdošanas panelī, kad Jūs palaižat workflow.
 
 ## Piemērs — Drive failu uzskaitīšana

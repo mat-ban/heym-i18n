@@ -68,3 +68,5 @@ Workflow без вузла Trigger, єдиним термінальним вуз
 - [Output](./output-node.md) – Відповідь на основі повідомлення або схеми з обгорткою `result`
 - [Webhooks](../reference/webhooks.md) – Endpoint виконання, методи запитів і відповіді
 - [Node Types](../reference/node-types.md) – Усі типи вузлів
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

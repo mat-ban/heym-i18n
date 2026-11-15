@@ -15,7 +15,48 @@ class AlembicMigrationGraphTest(unittest.TestCase):
         self.script = ScriptDirectory.from_config(config)
 
     def test_revision_graph_has_one_head(self) -> None:
-        self.assertEqual(self.script.get_heads(), ["148_node_analytics"])
+        self.assertEqual(self.script.get_heads(), ["155_mcp_server_endpoint_path"])
+
+    def test_mcp_server_endpoint_path_follows_vector_store_ingest_jobs(self) -> None:
+        revision = self.script.get_revision("155_mcp_server_endpoint_path")
+
+        self.assertIsNotNone(revision)
+        self.assertEqual(revision.down_revision, "154_vector_store_ingest_jobs")
+
+    def test_vector_store_ingest_jobs_follows_account_security(self) -> None:
+        revision = self.script.get_revision("154_vector_store_ingest_jobs")
+
+        self.assertIsNotNone(revision)
+        self.assertEqual(revision.down_revision, "153_account_security")
+
+    def test_account_security_follows_encryption_key_rotation(self) -> None:
+        revision = self.script.get_revision("153_account_security")
+
+        self.assertIsNotNone(revision)
+        self.assertEqual(revision.down_revision, "152_encryption_key_rotation")
+
+    def test_encryption_key_rotation_follows_k8s_secret_credentials(self) -> None:
+        revision = self.script.get_revision("152_encryption_key_rotation")
+
+        self.assertIsNotNone(revision)
+        self.assertEqual(revision.down_revision, "151_k8s_secret_credentials")
+
+    def test_k8s_secret_credentials_follows_google_meet_credential(self) -> None:
+        revision = self.script.get_revision("151_k8s_secret_credentials")
+
+        self.assertIsNotNone(revision)
+        self.assertEqual(revision.down_revision, "150_google_meet_credential")
+
+    def test_google_meet_credential_follows_board_auto_advance(self) -> None:
+        revision = self.script.get_revision("150_google_meet_credential")
+        self.assertIsNotNone(revision)
+        self.assertEqual(revision.down_revision, "149_board_auto_advance")
+
+    def test_board_auto_advance_follows_node_analytics(self) -> None:
+        revision = self.script.get_revision("149_board_auto_advance")
+
+        self.assertIsNotNone(revision)
+        self.assertEqual(revision.down_revision, "148_node_analytics")
 
     def test_node_analytics_follows_a2a_agent(self) -> None:
         revision = self.script.get_revision("148_node_analytics")

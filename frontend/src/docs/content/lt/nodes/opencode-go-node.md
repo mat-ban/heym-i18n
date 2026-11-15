@@ -22,7 +22,7 @@ Mazgas taip pat reikalauja **GitHub** kredencialo, kad galėtų klonuoti privač
 Vykdymo izoliacija pasirenkama naudojant `HEYM_OPENCODE_CLI_COMMAND`, lygiai taip pat kaip ir Codex mazge:
 
 - **Vietinis vystymas (`run.sh`)** palieka numatytąją reikšmę `opencode`, todėl OpenCode veikia kaip šeimininko subprocessas prieš klonuotą darbo aplinką — Docker nereikalingas, jokių papildomų vėliavų.
-- **Docker diegimai (`deploy.sh` ir vienas GHCR vaizdas)** nustato ją į `/usr/local/bin/heym-opencode-docker`, apvalkalą, kuris vykdo `opencode run` viduje **sustiprinto, laikino brolio konteinerio**, dalijantis OpenCode darbo aplinkos pavadinimu.
+- **Docker diegimai (`deploy.sh` ir vienas GHCR vaizdas)** nustato ją į `/usr/local/bin/heym-opencode-docker`, apvalkalą, kuris vykdo `opencode run` viduje **sustiprinto, laikino brolio konteinerio**, dalijantis OpenCode darbo aplinkos pavadinimu. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Sustiprintas vykdytojo konteineris atmeta visas Linux galimybes, nustato `no-new-privileges`, naudoja tik skaitymo režimo šaknį su tmpfs `/tmp` ir taiko pid/memory/CPU apribojimus. Tinklo išėjimas leidžiamas (OpenCode turi pasiekti modelio vartotojo sąsają). **GitHub tokenas niekada nėra dedamas į konteinerį** — visi git ir GitHub veiksmai vykdomi šeimininko pusėje, todėl tik OpenCode API raktas ir saugyklos failai yra viduje.
 

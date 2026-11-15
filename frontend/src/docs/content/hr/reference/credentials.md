@@ -32,6 +32,7 @@ Vjerodajnice pohranjuju API ključeve i tajne koje koriste čvorovi u workflow-i
 | [Grist](../nodes/grist-node.md) | Grist | API ključ + URL servera |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Klijent ID + Klijent tajna + OAuth2 suglasnost |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Klijent ID + Klijent tajna + OAuth2 suglasnost |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Klijent ID + Klijent tajna + OAuth2 suglasnost |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL projekta + API ključ (+ opcionalni zadani shema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + korisničko ime/lozinka + baza podataka (+ sigurno) |

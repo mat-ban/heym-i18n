@@ -45,7 +45,7 @@
 
 Redaktoriaus **Vykdymo** skirtuke (apibrėžtas webhook režimas) kiekvienas įvesties laukas palaiko vilkimo ir numetimo funkciją bei įterptą priedų valdymą (lauko apatiniame dešiniajame kampe):
 
-- **Teksto failai** (`.txt`, `.md`, `.json`, `.csv` ir panašūs) skaitomi kaip paprastas tekstas.
+- **Teksto failai** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Vaizdai** (JPEG, PNG, GIF, WebP) saugomi kaip `data:` URL (base64) lauko vertėje — naudokite lauko raktus, tokius kaip `imageUrl` arba `base64`, kai žemyn srauto mazgai tikisi vaizdo duomenų.
 - **PDF** failai konvertuojami į išgautą tekstą (maksimalus 5 MB failas, 100k simbolių turinys).
 

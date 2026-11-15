@@ -116,6 +116,8 @@ A `driveBase64Content` elfogad nyers base64 stringet vagy `data:...;base64,...` 
 
 Hivatkozás a base64 tartalomra a folyamat későbbi szakaszában: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 A `file_base64` útján visszaadott képek inline módon jelennek meg a debug panelen, amikor futtatja a workflow-t.
 
 ## Példa — Drive-fájlok listázása

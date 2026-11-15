@@ -107,3 +107,6 @@ Bu kısayollar, Execution History diyaloğunda ve Traces panelinde kullanılabil
 - [Hızlı Başlangıç](../getting-started/quick-start.md) – İlk workflow'unuzu oluşturun
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+**Credentials** ve **DataTable** sekmeleri aynı şekilde çalışır: `Ctrl + F` / `Cmd + F` arama alanına odaklanır, siz yazdıkça liste daralır ve `Escape` aramayı temizler.

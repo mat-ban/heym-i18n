@@ -10,7 +10,7 @@ Heym Work s'executa com a contenidor independent al costat de Heym, amb una llic
 |------|--------|
 | **Chat** | Descriviu una tasca escrivint o per veu. Heym demana les dades necessàries, construeix el workflow, el prova i el marca com a Verificat. |
 | **Flows** | Els editors creen un flow a partir d'opcions en lloc d'un canvas: què l'inicia, un esborrany d'IA opcional i accions a Slack, Google Sheets i correu electrònic. Les respostes de Slack continuen l'execució, i les aprovacions també esperen a Activitat. Vegeu [Flows](#flows). |
-| **Pàgines** | Pàgines fixades amb ginys: indicadors numèrics, gràfics, taules amb etiquetes d'estat, zones per deixar anar fitxers i aprovacions. Una fila de taula pot obrir la seva pròpia pàgina de detall. |
+| **Pàgines** | Pàgines fixades amb ginys: indicadors numèrics, gràfics, taules amb etiquetes d'estat, targetes HTML, zones per deixar anar fitxers i aprovacions. Una fila de taula pot obrir la seva pròpia pàgina de detall. |
 | **Aprovacions** | Les revisions dels passos de [Human-in-the-Loop](./human-in-the-loop.md) esperen a Activitat i a les pàgines, amb les opcions Aprova, Demana canvis i Rebutja. |
 | **Activitat** | Cada execució, amb la persona que la va iniciar i la instància que la va dur a terme. |
 | **Rols** | Propietari, Editor i Visor. L'inici de sessió es fa mitjançant el [Single Sign-On](./sso.md) que Heym ja utilitza. |

@@ -68,3 +68,5 @@ Mateixa regla que a [Sortida](./output-node.md): no col·loqueu aquest node dins
 - [Sortida](./output-node.md) – Resposta basada en missatge o esquema amb embolcall `result`
 - [Webhooks](../reference/webhooks.md) – Endpoint d'execució, mètodes de sol·licitud i respostes
 - [Tipus de nodes](../reference/node-types.md) – Tots els tipus de nodes
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

@@ -2,6 +2,9 @@
 
 **Brīdinājumu** cilne ļauj Jums definēt sliekšņa nosacījumus laika logā un saņemt paziņojumus, kad tie tiek pārkāpti. Heym jau reģistrē izpildes rezultātus, izpildes ilgumu un LLM izdevumus, taču nekad to neizsaka brīvprātīgi. Brīdinājums ir veids, kā Jūs to lūdzat.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Skatīt Alerts demonstrāciju</a></p>
+
 Katrs brīdinājums tiek novērtēts laika logā, ko Jūs izvēlaties, nekad nevis uz vienu notikumu. Viens neizdevies izpildījums ir troksnis. Divpadsmit neizdevušos izpildījumu desmit minūtēs ir incidents.
 
 ## Brīdinājumu veidi

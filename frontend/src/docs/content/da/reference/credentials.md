@@ -32,6 +32,7 @@ Legitimationsoplysninger lagrer API-nøgler og hemmeligheder, der bruges af work
 | [Grist](../nodes/grist-node.md) | Grist | API-nøgle + server-URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2-samtykke |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2-samtykke |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2-samtykke |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Projekt-URL + API-nøgle (+ valgfri standardskema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Vært + port + brugernavn/adgangskode + database (+ sikker) |

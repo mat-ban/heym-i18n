@@ -34,6 +34,7 @@ Per ogni variabile supportata, valore predefinito e nota di produzione, consulta
 |----------|-------------|
 | `SECRET_KEY` | **Obbligatoria.** Segreto per la firma JWT. Generata automaticamente da `run.sh`/`deploy.sh` quando vuota. |
 | `ENCRYPTION_KEY` | **Obbligatoria.** Chiave di cifratura delle credenziali. Generata automaticamente da `run.sh`/`deploy.sh` quando vuota. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Override opzionale della stringa di connessione al database. Se vuota, Heym la costruisce dalle impostazioni `POSTGRES_*`. |
 | `BACKEND_PORT` | Porta dell'API backend — valore predefinito `10105` |
 | `FRONTEND_PORT` | Porta del frontend — valore predefinito `4017` |
@@ -350,3 +351,11 @@ git pull
 - [Variabili d'Ambiente](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Riferimento completo alla configurazione
 - [Sicurezza](../reference/security.md) – Impostazioni JWT, crittografia e CORS
 - [Distribuzione del carico](../reference/cluster.md) – Eseguire più istanze su un unico database
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

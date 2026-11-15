@@ -68,6 +68,7 @@ Consultați [Triggers](./triggers.md) pentru toate punctele de intrare.
 | [Linear](../nodes/linear-node.md) | Gestionați echipe, proiecte, issues, stări de workflow și comentarii Linear prin GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Citiți/scrieți Google Sheets prin OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Listați, descărcați, actualizați și ștergeți fișiere Google Drive prin OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Citirea disponibilității și crearea, actualizarea sau ștergerea invitațiilor Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Rulați interogări SQL și inserați rânduri în BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Interogați și modificați tabele Supabase prin PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Rulați operațiuni SQL, CRUD și de numărare pe ClickHouse | 1 | 1 |

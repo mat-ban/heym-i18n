@@ -140,3 +140,6 @@ Sign-in yang gagal akan kembali ke layar login dengan pesan yang dapat dibaca. H
 - **Beberapa provider secara bersamaan.** Satu instance terhubung ke satu provider.
 - **Pemetaan grup atau role** dari claim provider.
 - **Single logout.** Sign out dari Heym tidak membuat Anda sign out dari provider.
+
+- **Autentikasi dua faktor ada pada penyedia.** `HEYM_REQUIRE_MFA` hanya berlaku untuk login kata sandi; login SSO tidak pernah meminta kode Heym. Wajibkan MFA di penyedia identitas Anda.
+- **Penonaktifan juga berlaku di sini.** Akun yang dinonaktifkan administrator di **Pengaturan → Pengguna** akan ditolak meskipun penyedia masih mengautentikasinya.

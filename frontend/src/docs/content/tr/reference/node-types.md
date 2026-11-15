@@ -69,6 +69,7 @@ Tüm giriş noktaları için [Triggers](./triggers.md) bölümüne bakın.
 | [Linear](../nodes/linear-node.md) | GraphQL aracılığıyla Linear takımlarını, projelerini, issue'ları, workflow durumlarını ve yorumlarını yönetin | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | OAuth2 aracılığıyla Google Sheets'i okuyun/yazın | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | OAuth2 aracılığıyla Google Drive dosyalarını listeleyin, indirin, güncelleyin ve silin | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Müsaitlik durumunu okuyun ve Meet davetleri oluşturun, güncelleyin veya silin | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery'de SQL sorguları çalıştırın ve satır ekleyin | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | PostgREST aracılığıyla Supabase tablolarını sorgulayın ve değiştirin | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse'a karşı SQL, CRUD ve sayım işlemleri çalıştırın | 1 | 1 |

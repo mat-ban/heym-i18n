@@ -42,7 +42,7 @@ Sessions de formació pràctica adaptades al nivell d'habilitat i als casos d'ú
 
 ## Desplegament a Kubernetes
 
-La guia estàndard d'[Execució i desplegament](../getting-started/running-and-deployment.md) cobreix Docker Compose per a configuracions de producció en un sol servidor. Els clients Enterprise reben assistència amb desplegaments de Kubernetes en producció per a alta disponibilitat i escalat horitzontal:
+La guia estàndard d'[Execució i desplegament](../getting-started/running-and-deployment.md) cobreix Docker Compose per a configuracions de producció en un sol servidor. [Kubernetes Deployment](../getting-started/kubernetes.md). Els clients Enterprise reben assistència amb desplegaments de Kubernetes en producció per a alta disponibilitat i escalat horitzontal:
 
 - **Múltiples nodes de treball** — Distribuir els workers del backend de Heym entre diversos nodes de Kubernetes per a redundància i equilibri de càrrega
 - **Contenidors sidecar** — Configurar patrons sidecar per a la recollida de logs, agents de monitoratge, malles de serveis (Istio, Linkerd) i injecció de secrets (Vault)

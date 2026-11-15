@@ -116,6 +116,10 @@ Izvēlieties workflow sadaļā Sub-Workflows aģenta konfigurācijā. Aģents to
 
 Varat savienot atbalstītu workflow mezglu ar aģenta **tools** rokturi, lai aģents izpildes laikā varētu izsaukt šo mezglu. Tas pārvērš esošās kanvas darbības un transformācijas izsaucamos rīkos, nerakstot Python kodu.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Izmantojiet kanvas mezglu rīkus, kad vēlaties, lai aģents izlemtu, kad palaist konfigurētu mezglu, vienlaikus saglabājot akreditācijas datus, statiskos laukus un workflow specifiskos iestatījumus mezgla UI.
 
 ### Aģenta nodrošinātie lauki
@@ -408,3 +412,6 @@ Saspiešana ir automātiska un vienmēr aktīva Agent node. Tā **neattiecas** u
 - [Ātrā sākšana](../getting-started/quick-start.md) – Pamata darbplūsma ar LLM un izteiksmēm
 - [Akreditācijas datu cilne](../tabs/credentials-tab.md) – API atslēgu pievienošana aģentam
 - [MCP cilne](../tabs/mcp-tab.md) – MCP konfigurēšana darbplūsmas rīkiem
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

@@ -2,6 +2,9 @@
 
 Op het tabblad **Waarschuwingen** definieert u drempelvoorwaarden over een tijdvenster en ontvangt u een melding wanneer deze worden overschreden. Heym registreert al uitvoeringsresultaten, uitvoeringsduur en LLM-kosten, maar geeft dit nooit uit eigen beweging door. Een waarschuwing is hoe u daarom vraagt.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Bekijk Alerts-demo</a></p>
+
 Elke waarschuwing wordt geëvalueerd over een **tijdvenster** dat u kiest, nooit op basis van één enkele gebeurtenis. Eén mislukte uitvoering is ruis. Twaalf mislukte uitvoeringen in tien minuten is een incident.
 
 ## Typen waarschuwingen

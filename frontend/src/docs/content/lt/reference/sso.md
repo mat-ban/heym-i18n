@@ -140,3 +140,6 @@ Nepavykęs prisijungimas grąžina į prisijungimo ekraną su aiškiu pranešimu
 - **Daugelis vienu metu veikiančių teikėjų.** Viena instancija jungiasi prie vieno teikėjo.
 - **Grupės ar vaidmenų žemėlapiai** iš teikėjo pretenzijų.
 - **Vieningas atsijungimas.** Atsijungimas iš Heym nereiškia atsijungimo iš teikėjo.
+
+- **Dviejų veiksnių prisijungimas priklauso teikėjui.** `HEYM_REQUIRE_MFA` taikoma tik prisijungimui su slaptažodžiu; prisijungiant per SSO niekada neprašoma Heym kodo. Reikalaukite MFA iš savo tapatybės teikėjo.
+- **Deaktyvavimas galioja ir čia.** Paskyra, kurią administratorius išjungė skiltyje **Nustatymai → Vartotojai**, atmetama net tada, kai teikėjas ją vis dar autentifikuoja.

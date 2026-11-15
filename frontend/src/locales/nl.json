@@ -103,7 +103,8 @@
     "pickCredentialModelTooltip": "Selecteer hierboven een referentie en model om het board te gebruiken",
     "read": "Lezen",
     "remove": "Verwijderen",
-    "removeAttachmentAria": "{name} verwijderen"
+    "removeAttachmentAria": "{name} verwijderen",
+    "details": "Details"
   },
   "canvas": {
     "analyze": "Analyseren",
@@ -448,7 +449,9 @@
     "unpin": "Losmaken",
     "unreadMessage": "Ongelezen bericht",
     "subtitle": "Workflows uitvoeren en vragen stellen",
-    "modelsLoadFailedDisabled": "De modellijst van deze inloggegevens kon niet worden geladen. De chat blijft uitgeschakeld totdat een model kan worden opgehaald."
+    "modelsLoadFailedDisabled": "De modellijst van deze inloggegevens kon niet worden geladen. De chat blijft uitgeschakeld totdat een model kan worden opgehaald.",
+    "dropFilesToAttach": "Sleep bestanden hierheen om bij te voegen",
+    "attachFiles": "Bestanden bijvoegen"
   },
   "activeWorkflows": {
     "activeRefreshFailed": "{count} actief · Laatste vernieuwing mislukt",
@@ -543,7 +546,8 @@
     "dropFileOrClick": "Sleep hier een bestand naartoe of klik om er een te kiezen",
     "removeFile": "Bestand verwijderen",
     "chooseFileFor": "Kies een bestand voor {label}",
-    "new": "Nieuw"
+    "new": "Nieuw",
+    "clearSearch": "Zoekopdracht wissen"
   },
   "credentials": {
     "accessVia": "Toegang via",
@@ -1036,7 +1040,8 @@
       "refine": "Verfijnen met AI",
       "refresh": "Vernieuwen",
       "refreshDashboard": "Dashboard vernieuwen",
-      "settings": "Instellingen"
+      "settings": "Instellingen",
+      "revertPrevious": "Vorige herstellen"
     },
     "addDescriptionPlaceholder": "Optioneel. Wordt weergegeven op het canvas, niet in het raster.",
     "addWidget": "Widget toevoegen",
@@ -1079,7 +1084,9 @@
     "noWorkflowsMatch": "Geen workflows komen overeen met dit filter.",
     "quickStartTemplates": "Snelstart-sjablonen",
     "subtitle": "Maak, orkestreer en voer uw modulaire autonome agenten uit",
-    "whatToAutomate": "Wat wilt u automatiseren?"
+    "whatToAutomate": "Wat wilt u automatiseren?",
+    "noWorkflowsMatchAll": "Probeer een andere titel, beschrijving of mapnaam.",
+    "noWorkflowsMatchFilter": "Probeer een andere titel, beschrijving, mapnaam of statusfilter."
   },
   "evals": {
     "optimizedPrompt": "Geoptimaliseerde Prompt",
@@ -2039,7 +2046,9 @@
     "enablePlugin": "Inschakelen",
     "disablePlugin": "Uitschakelen",
     "uninstallPlugin": "Verwijderen",
-    "pluginOperationFailed": "Plug-inbewerking mislukt"
+    "pluginOperationFailed": "Plug-inbewerking mislukt",
+    "users": "Gebruikers",
+    "encryption": "Versleuteling"
   },
   "showcase": {
     "askAboutDoc": "Vraag over deze documentatie",
@@ -2257,7 +2266,9 @@
     "noTraces": "Nog geen traces.",
     "noTracesSubtitle": "Voer workflows uit met LLM-nodes om uitvoeringsspans, latentie en tokengebruik te inspecteren.",
     "noTracesYet": "Nog geen traces.",
-    "openTrace": "Trace openen"
+    "openTrace": "Trace openen",
+    "timeRange3h": "Laatste 3 uur",
+    "timeRange6h": "Laatste 6 uur"
   },
   "variables": {
     "addVariable": "Variabele toevoegen",

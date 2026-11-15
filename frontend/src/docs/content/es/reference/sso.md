@@ -141,3 +141,6 @@ Un inicio de sesión fallido devuelve a la pantalla de inicio de sesión con un 
 - **Múltiples proveedores simultáneos.** Una instancia se conecta a un solo proveedor.
 - **Mapeo de grupos o roles** a partir de las claims del proveedor.
 - **Cierre de sesión único.** Cerrar sesión en Heym no cierra la sesión en el proveedor.
+
+- **La autenticación de dos factores corresponde al proveedor.** `HEYM_REQUIRE_MFA` se aplica únicamente al inicio de sesión con contraseña; el inicio de sesión con SSO nunca solicita un código de Heym. Exija MFA en su proveedor de identidades.
+- **La desactivación también se aplica aquí.** Las cuentas desactivadas por un administrador en **Configuración → Usuarios** son rechazadas incluso si el proveedor aún las autentica.

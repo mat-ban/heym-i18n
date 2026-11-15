@@ -95,7 +95,7 @@ Rezultatas yra prieinamas kaip `$activeAdults.count`. Tuščias arba praleistas 
 | `$contains` | Nereikšminis dalies atitikimas |
 | `$in` | Reikšmė yra nurodytame masyve |
 
-Pavyzdys, derinantis kelis: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nežinomi operatoriai ignoruojami. `upsert` filtrai vis tiek naudoja tikslius atitikmenis, kad rastų eilutę, kurią reikia atnaujinti.
+Pavyzdys, derinantis kelis: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nežinomi operatoriai ignoruojami. `upsert` filtrai vis tiek naudoja tikslius atitikmenis, kad rastų eilutę, kurią reikia atnaujinti.
 
 Taip pat galite filtruoti pagal eilutės metaduomenis — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — kurie saugomi kaip tikri stulpeliai, o ne jūsų duomenų viduje. Datoms perduokite pilną reikšmę diapazono palyginimams (pvz., `{"created_at": {"$gt": "2026-06-04"}}`) arba naudokite `$contains` daliniam teksto atitikimui (pvz., `{"created_at": {"$contains": "2026-06-04"}}`). Jei vienas iš jūsų stulpelių pavadintas taip pat kaip metaduomenų laukas, duomenų stulpelis turi pirmenybę.
 

@@ -116,6 +116,8 @@ Tham chiếu tệp đã lưu trữ ở các node sau: `$saveAudio.id`, `$saveAud
 
 Tham chiếu nội dung base64 ở các node sau: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Hình ảnh được trả về qua `file_base64` sẽ được hiển thị trực tiếp trong bảng debug khi bạn chạy workflow.
 
 ## Ví dụ — Liệt kê các tệp Drive

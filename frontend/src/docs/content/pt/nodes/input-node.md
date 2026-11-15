@@ -45,7 +45,7 @@ O nó **Input** é o ponto de entrada para workflows que recebem dados do usuár
 
 Na aba **Run** do editor (modo Defined webhook), cada campo de entrada oferece suporte a arrastar e soltar e a um controle de anexo inline (canto inferior direito do campo):
 
-- **Arquivos de texto** (`.txt`, `.md`, `.json`, `.csv` e similares) são lidos como texto simples.
+- **Arquivos de texto** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Imagens** (JPEG, PNG, GIF, WebP) são armazenadas como uma URL `data:` (base64) no valor do campo — utilize chaves de campo como `imageUrl` ou `base64` quando os nós subsequentes esperarem dados de imagem.
 - **Arquivos PDF** são convertidos em texto extraído (arquivo de no máximo 5 MB, 100 mil caracteres de conteúdo).
 

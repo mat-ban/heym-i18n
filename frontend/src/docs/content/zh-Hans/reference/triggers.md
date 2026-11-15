@@ -141,7 +141,7 @@ RabbitMQ 消费者在 leader worker 初始化时启动。包含 `rabbitmq` 节�
 
 - [Webhooks](./webhooks.md) – Webhook TTL、缓存、速率限制、认证
 - [Workflow Structure](./workflow-structure.md) – 节点与边
-- [Node Types](./node-types.md) – [Input](../nodes/input-node.md)、[Cron](../nodes/cron-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md)、[IMAP Trigger](../nodes/imap-trigger-node.md)、[Heym Trigger](../nodes/heym-trigger-node.md)、[WebSocket Trigger](../nodes/websocket-trigger-node.md)、[File Upload Trigger](../nodes/file-upload-trigger-node.md)、[RabbitMQ](../nodes/rabbitmq-node.md)
+- [Node Types](./node-types.md) – [Input](../nodes/input-node.md)、[Cron](../nodes/cron-node.md)、[Telegram Trigger](../nodes/telegram-trigger-node.md)、[IMAP Trigger](../nodes/imap-trigger-node.md)、[Heym Trigger](. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`../nodes/heym-trigger-node.md)、[WebSocket Trigger](../nodes/websocket-trigger-node.md)、[File Upload Trigger](../nodes/file-upload-trigger-node.md)、[RabbitMQ](../nodes/rabbitmq-node.md)
 - [Discord Trigger](../nodes/discord-trigger-node.md) – Discord 交互 Webhook Trigger
 - [Quick Start](../getting-started/quick-start.md) – 使用 Input 构建 Workflow
 - [Portal](./portal.md) – Portal Trigger 与对话 UI

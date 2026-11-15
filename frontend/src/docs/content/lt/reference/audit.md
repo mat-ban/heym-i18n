@@ -59,6 +59,10 @@ Kiekvienas būsenos pokytis yra užfiksuotas. Skaitymai yra fiksuojami tik ten, 
 | `auth.token_refresh` | `outcome=denied` su `reason=refresh_token_replayed_or_revoked` — signalas apie slaptažodžio vagystę, dėl kurio verta įspėti. |
 | `auth.password_change` | `outcome=failure`, kai dabartinis slaptažodis buvo neteisingas. |
 | `auth.sso_login` | Vieno prisijungimo sistema. `outcome=failure` nurodo priežastį, kodėl tiekėjo atsakymas buvo atmestas; `denied` nurodo `email_not_verified`, `domain_not_allowed` arba `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Administratorius pakeitė [SSO](./sso.md) konfigūraciją. Fiksuojama `enabled` ir `password_login_disabled`, niekada neatskleidžiant kliento slaptažodžio. |
 | `sso_settings.test` | Administratorius atliko SSO ryšio testą. |
 

@@ -157,6 +157,8 @@ Rediģējot akreditācijas datus, saglabātā atslēga tiek paturēta, ja atslē
 
 Tos pašus akreditācijas datus var izmantot, lai vērtētu [Novērtējumu](../tabs/evals-tab.md) izpildes: ar atlasītu **LLM-as-Judge** izvēlieties tos kā tiesnesi, un lēmumu modelis novērtēs katru atbildi pret gaidīto izvadi.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym pēc noklusējuma bloķē izejošos pieprasījumus uz privātām un loopback adresēm, tāpēc lēmumu endpoint, ko pats darbinat uz `localhost` vai privātā diapazonā, prasa `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Lēmumu modeļi neparādās LLM cenu tabulās, ko Heym sinhronizē, tāpēc kolonna **Cost** sadaļā [Izpildes](../tabs/traces-tab.md) šiem izsaukumiem paliek tukša. Tokenu skaits joprojām tiek reģistrēts, un jūs varat pievienot savu cenu ar cenas ignorēšanu.

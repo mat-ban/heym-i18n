@@ -19,7 +19,7 @@ Kai kurie integracijos mazgai **nereikalauja** kredencialų. [WebSocket Trigger]
 | **Linear** | [Linear mazgas](../nodes/linear-node.md) | `api_key`, arba `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry mazgas](../nodes/sentry-node.md) | `api_token`, pasirenkamas `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge teisėjas) | `base_url`, pasirenkamas `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evals](../tabs/evals-tab.md) (LLM-as-Judge teisėjas), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, pasirenkamas `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | kredencialas sprendimų modeliui, plius modelio parinktys, nurodančios Jūsų kitus kredencialus |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektorių saugyklos | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Kai kurie integracijos mazgai **nereikalauja** kredencialų. [WebSocket Trigger]
 | **Grist** | [Grist mazgas](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets mazgas](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 sutikimas |
 | **Google Drive** | [Google Drive mazgas](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 sutikimas (pilnas Drive apimtis) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery mazgas](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 sutikimas |
 | **Supabase** | [Supabase mazgas](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, pasirenkamas `supabase_schema` |
 | **ClickHouse** | [ClickHouse mazgas](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -882,3 +883,6 @@ Maršrutizuoja kiekvieną užklausą į vieną iš Jūsų esamų modelių kreden
 ### Pastabos
 
 Pasirinkimų pavadinimai yra tai, ką sprendimų modelis pasirenka, todėl jie turi būti skirtingi. Pasirinkimas negali rodyti į kitą modelių maršrutizatorių.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

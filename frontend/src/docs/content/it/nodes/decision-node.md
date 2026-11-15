@@ -157,6 +157,8 @@ La modifica di una credenziale conserva la chiave memorizzata quando il campo de
 
 La stessa credenziale può valutare le esecuzioni delle [Valutazioni](../tabs/evals-tab.md): con **LLM-as-Judge** selezionato, la scelga come giudice e il modello decisionale assegnerà un punteggio a ogni risposta rispetto all'output atteso.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym blocca per impostazione predefinita le richieste in uscita verso indirizzi privati e di loopback, pertanto un endpoint decisionale eseguito autonomamente su `localhost` o su un intervallo privato richiede `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 I modelli decisionali non compaiono nelle tabelle di prezzo degli LLM sincronizzate da Heym, quindi la colonna **Costo** in [Esecuzioni](../tabs/traces-tab.md) rimane vuota per queste chiamate. I conteggi dei token vengono comunque registrati ed è possibile aggiungere un prezzo personalizzato tramite un override dei prezzi.

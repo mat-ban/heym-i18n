@@ -157,6 +157,8 @@ Bij het bewerken van een referentie blijft de opgeslagen key behouden wanneer he
 
 Dezelfde referentie kan [Evaluatie](../tabs/evals-tab.md)-uitvoeringen beoordelen: met **LLM-as-Judge** geselecteerd, kiest u deze als de judge en het decision model beoordeelt elk antwoord tegen de verwachte uitvoer.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym blokkeert standaard uitgaande verzoeken naar private en loopback-adressen, dus een decision endpoint die u zelf draait op `localhost` of een private reeks heeft `HEYM_HTTP_ALLOW_PRIVATE_URLS=true` nodig.
 
 Decision models verschijnen niet in de LLM-prijstabellen die Heym synchroniseert, dus de kolom **Cost** in [Uitvoeringen](../tabs/traces-tab.md) blijft leeg voor deze aanroepen. Token-tellingen worden nog steeds vastgelegd en u kunt uw eigen prijs toevoegen met een pricing override.

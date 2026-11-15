@@ -123,3 +123,6 @@ Si aucune ligne ne correspond, le modèle est répertorié dans l'avis **Unprice
 - [Onglet Exécutions](./traces-tab.md) - Utilise la table des coûts LLM pour le graphique en anneau des coûts et les cartes d'indicateurs
 - [Nœud Grist](../nodes/grist-node.md) - Alternative de tableur externe
 - [Onglet Variables](./global-variables-tab.md) - Alternative de stockage clé-valeur
+## Recherche
+
+Utilisez le champ de recherche au-dessus de la liste des tables ou appuyez sur **Ctrl+F** (ou **Cmd+F**) pour filtrer les tables par nom ou description au fil de la frappe. Appuyez sur **Échap** pour effacer la recherche.

@@ -54,3 +54,5 @@ Použijte s [Error Handler](./error-handler-node.md) pro oznámení o selhání:
 - [Node Types](../reference/node-types.md) – Přehled všech typů uzlů
 - [Error Handler](./error-handler-node.md) – Odeslání Slack při selhání workflow
 - [Credentials Tab](../tabs/credentials-tab.md) – Přidání Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

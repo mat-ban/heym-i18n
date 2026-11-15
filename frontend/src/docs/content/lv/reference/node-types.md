@@ -68,6 +68,7 @@ Skatiet [Triggers](./triggers.md), lai uzzinātu par visiem ievades punktiem.
 | [Linear](../nodes/linear-node.md) | Pārvaldīt Linear komandas, projektus, problēmas, workflow statusus un komentārus, izmantojot GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Lasīt/rakstīt Google Sheets, izmantojot OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Uzskaitīt, lejupielādēt, atjaunināt un dzēst Google Drive failus, izmantojot OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Pieejamības lasīšana un Meet ielūgumu izveide, atjaunināšana vai dzēšana | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Palaist SQL vaicājumus un ievietot rindas BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Vaicāt un mainīt Supabase tabulas, izmantojot PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Palaist SQL, CRUD un skaitīšanas darbības pret ClickHouse | 1 | 1 |

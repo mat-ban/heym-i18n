@@ -68,6 +68,7 @@ Lihat [Trigger](./triggers.md) untuk semua titik masuk.
 | [Linear](../nodes/linear-node.md) | Mengelola tim, proyek, issue, status Workflow, dan komentar Linear melalui GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Membaca/menulis Google Sheets melalui OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Menampilkan daftar, mengunduh, memperbarui, dan menghapus file Google Drive melalui OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Membaca ketersediaan dan membuat, memperbarui, atau menghapus undangan Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Menjalankan kueri SQL dan menyisipkan baris di BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Melakukan kueri dan mutasi tabel Supabase melalui PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Menjalankan operasi SQL, CRUD, dan count terhadap ClickHouse | 1 | 1 |

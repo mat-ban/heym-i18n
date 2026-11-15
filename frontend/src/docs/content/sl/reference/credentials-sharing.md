@@ -87,6 +87,7 @@ Nekatera vozlišča shranjujejo `credentialId` (UUID) v `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Podrobnosti o povezavi ClickHouse (gostitelj, vrata, avtentikacija, baza podatkov) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Poverilnica za Telegram bot |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Javni ključ Discord ali poverilnica za webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vektorska shramba | `credential_id` | Qdrant ali Postgres (pgvector) vektorska baza podatkov, prek Qdrant, Psql ali Custom Embeddings RAG poverilnice |
 | Vrednotenja | `credential_id`, `judge_credential_id` | Poverilnica modela; poverilnica modela ali odločitev za LLM-as-Judge sodnika |
 | [Playwright](../nodes/playwright-node.md) AI korak | `credentialId` | LLM/Vizija model (za AI korak in [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Po izvedbi `mask_sensitive_output()` maskira vrednosti poverilnic v izhodih, pri
 - [Expression DSL](./expression-dsl.md) – Sintaksa `$credentials`
 - [Vrste vozlišč](./node-types.md) – Vozlišča, ki uporabljajo poverilnice ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Uporablja `credentialId` za LLM
+
+## Dovoljenja za koledar Google Meet
+
+Deljenje [poverilnice Google Meet](../nodes/google-meet-node.md) omogoča delovnim tokom branje intervalov prosto/zasedeno dostopnih koledarjev ter ustvarjanje, spreminjanje ali brisanje dogodkov kot povezani Google račun, vključno s pošiljanjem vabil in odpovedi. E-pošta udeleženca obiskovalca ne spremeni računa, ki si lasti ali pooblašča dogodek. Samo lastnik poverilnice lahko znova poveže svojo avtorizacijo Google.

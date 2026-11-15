@@ -54,3 +54,5 @@ Gunakan bersama [Error Handler](./error-handler-node.md) untuk notifikasi kegaga
 - [Node Types](../reference/node-types.md) – Ikhtisar semua tipe node
 - [Error Handler](./error-handler-node.md) – Kirim Slack saat workflow gagal
 - [Credentials Tab](../tabs/credentials-tab.md) – Tambahkan webhook Slack
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

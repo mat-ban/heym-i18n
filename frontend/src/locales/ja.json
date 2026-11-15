@@ -84,7 +84,8 @@
     "dropFileOrClick": "ここにファイルをドロップするか、クリックして選択",
     "removeFile": "ファイルを削除",
     "chooseFileFor": "{label} のファイルを選択",
-    "new": "新規"
+    "new": "新規",
+    "clearSearch": "検索をクリア"
   },
   "nav": {
     "workflows": "Workflow",
@@ -285,7 +286,9 @@
     "enablePlugin": "有効化",
     "disablePlugin": "無効化",
     "uninstallPlugin": "アンインストール",
-    "pluginOperationFailed": "プラグイン操作に失敗しました"
+    "pluginOperationFailed": "プラグイン操作に失敗しました",
+    "users": "ユーザー",
+    "encryption": "暗号化"
   },
   "workflows": {
     "title": "Workflow",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "トレースIDをコピー",
     "openTrace": "トレースを開く",
     "message": "メッセージ",
-    "emptyReply": "返信が空です。"
+    "emptyReply": "返信が空です。",
+    "timeRange3h": "過去 3 時間",
+    "timeRange6h": "過去 6 時間"
   },
   "tables": {
     "title": "データテーブル",
@@ -1215,7 +1220,9 @@
     "browseAll": "すべて表示 →",
     "askAi": "AIに質問",
     "dropToImport": "JSONまたはZIPをドロップしてインポート",
-    "noWorkflowsMatch": "このフィルターに一致するWorkflowはありません。"
+    "noWorkflowsMatch": "このフィルターに一致するWorkflowはありません。",
+    "noWorkflowsMatchAll": "別のタイトル、説明、またはフォルダ名をお試しください。",
+    "noWorkflowsMatchFilter": "別のタイトル、説明、フォルダ名、またはステータスフィルターをお試しください。"
   },
   "schedules": {
     "title": "スケジュール",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "MCPクライアントによって開始されました",
     "newChatTitle": "新しいチャット",
     "subtitle": "Workflow の実行と質問",
-    "modelsLoadFailedDisabled": "この認証情報のモデル一覧を読み込めませんでした。モデルを取得できるまで Chat は無効のままです。"
+    "modelsLoadFailedDisabled": "この認証情報のモデル一覧を読み込めませんでした。モデルを取得できるまで Chat は無効のままです。",
+    "dropFilesToAttach": "ファイルをドロップして添付",
+    "attachFiles": "ファイルを添付"
   },
   "teams": {
     "title": "チーム",
@@ -1883,7 +1892,8 @@
       "skipped": "スキップ済み"
     },
     "permissionRead": "読み取り",
-    "permissionWrite": "書き込み"
+    "permissionWrite": "書き込み",
+    "details": "詳細"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "アクション",
       "failedToLoadWidget": "ウィジェットの読み込みに失敗しました",
       "failedToUpdateCheckbox": "チェックボックスの更新に失敗しました",
-      "refreshDashboard": "ダッシュボードを更新"
+      "refreshDashboard": "ダッシュボードを更新",
+      "revertPrevious": "前のバージョンに戻す"
     },
     "hitl": {
       "previousReview": "前のレビュー",

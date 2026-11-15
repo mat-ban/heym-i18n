@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - A Heym azonnal `200 OK` választ ad, és a workflow-t a háttérben futtatja — ez kielégíti a Slack 3 másodperces válaszidő követelményét
 - A webhook URL a csomópont azonosítójából származik, és soha nem változik, még a workflow átnevezése után sem
 - Workflow-nként csak egy `slackTrigger` csomópontra van szükség; a különböző eseménytípusok irányításához használjon **Switch** vagy **Condition** csomópontokat downstream
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

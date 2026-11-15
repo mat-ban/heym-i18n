@@ -59,6 +59,10 @@ Setiap perubahan status dicatat. Pembacaan hanya dicatat ketika pembacaan itu se
 | `auth.token_refresh` | `outcome=denied` dengan `reason=refresh_token_replayed_or_revoked` — sinyal pencurian token yang layak untuk diwaspadai. |
 | `auth.password_change` | `outcome=failure` ketika password saat ini salah. |
 | `auth.sso_login` | Single sign-on. `outcome=failure` membawa alasan respons penyedia ditolak; `denied` membawa `email_not_verified`, `domain_not_allowed`, atau `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Administrator mengubah konfigurasi [SSO](./sso.md). Mencatat `enabled` dan `password_login_disabled`, tidak pernah mencatat client secret. |
 | `sso_settings.test` | Administrator menjalankan uji koneksi SSO. |
 

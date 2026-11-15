@@ -91,3 +91,7 @@ Skatiet [Expression DSL](../reference/expression-dsl.md), lai atsauktos uz akred
 - [Vektoru krātuves cilne](./vectorstores-tab.md) – Izmanto Qdrant vai Postgres (pgvector) akreditācijas datus
 - [Čata cilne](./chat-tab.md) – Izmanto OpenAI/Google akreditācijas datus
 - [Kontekstualais demonstrējums](../reference/contextual-showcase.md) – Kompakta lapas rokasgrāmata informācijas paneļa virsmām
+
+## Meklēšana
+
+Izmantojiet meklēšanas lauku virs saraksta vai nospiediet **Ctrl+F** (vai **Cmd+F**), lai rakstīšanas laikā filtrētu akreditācijas datus pēc nosaukuma vai veida. Nospiediet **Escape**, lai notīrītu meklēšanu.

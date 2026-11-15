@@ -174,3 +174,7 @@ Dialógy histórie plátna a dashboardu zachovávajú ovládacie prvky spustenia
 - [História úprav](./edit-history.md) – Verzionovanie ukladania workflowov (vrátenie, diff)
 - [Rýchly štart](../getting-started/quick-start.md) – Vytvorte a spustite svoj prvý workflow
 - [Karta Workflows](../tabs/workflows-tab.md) – Vytváranie a správa workflowov
+
+## Related
+
+- [Operations Runbook (L1): Nevybavený rad](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Rozlíšenie medzi zaradenými, pozastavenými, prerušenými a obnovenými spusteniami pred opakovaním

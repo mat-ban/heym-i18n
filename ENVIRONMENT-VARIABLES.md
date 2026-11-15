@@ -16,7 +16,65 @@ lifetimes) that override these code defaults when you copy it.
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `SECRET_KEY` | JWT signing key. Must be cryptographically random and at least 32 characters. Startup fails if missing or a known placeholder. | — (required) |
-| `ENCRYPTION_KEY` | Key used to encrypt stored credentials at rest. Generate with `python -c "import secrets; print(secrets.token_hex(32))"`. Startup fails if missing or the known placeholder. | — (required) |
+| `ENCRYPTION_KEY` | Key used to encrypt stored credentials at rest. Generate with `python -c "import secrets; print(secrets.token_hex(32))"`. Startup fails if missing, the known placeholder, or not the key this database was encrypted with (see [Rotating `ENCRYPTION_KEY`](#rotating-encryption_key)). | — (required) |
+| `ENCRYPTION_KEYS_EXTRA` | Comma-separated keys accepted for decryption only, never to encrypt. Used while rotating `ENCRYPTION_KEY`. Empty entries are ignored; the placeholder is refused. | — |
+| `HEYM_ACCEPT_CURRENT_ENCRYPTION_KEY` | Start the main instance once with `true` to accept `ENCRYPTION_KEY` as this database's key although nothing stored decrypts with it. Ignored on workers. See [Rotating `ENCRYPTION_KEY`](#rotating-encryption_key). Unset it afterwards. | `false` |
+
+## Rotating `ENCRYPTION_KEY`
+
+`ENCRYPTION_KEY` encrypts every stored credential, the SSO client secret and short-lived
+sign-in state. It can be replaced without downtime and without re-entering credentials.
+Rotation takes two configuration changes and one admin action, because during a rolling
+restart old and new configuration run side by side: no process may encrypt with the new
+key before every other one can decrypt it.
+
+| Phase | Configuration | Then |
+|---|---|---|
+| 1. Introduce | `ENCRYPTION_KEY=old`, `ENCRYPTION_KEYS_EXTRA=new` | Restart every instance. Nothing is encrypted with `new` yet. |
+| 2. Promote | `ENCRYPTION_KEY=new`, `ENCRYPTION_KEYS_EXTRA=old` | Restart every instance. New and changed values are encrypted with `new`. |
+| 3. Re-encrypt | unchanged | In **Settings → Encryption**, start the re-encryption once every instance encrypts with `new`. It converts existing values in the background; everything keeps working. |
+| 4. Retire | `ENCRYPTION_KEY=new`, no `old` | Only once phase 3 shows **Completed**, and no database backup taken before it will ever need restoring. |
+
+A single container restarts all its processes together, so it can go straight to
+phase 2. The phases matter for clusters and rolling updates on Kubernetes.
+
+- **The re-encryption pauses itself** when any live instance encrypts with another key,
+  and says which, so an instance that rolled back can't rotate values back.
+- **Values no configured key reads** (from an earlier key change) are listed in
+  **Settings → Encryption**, never counted as remaining, so the job can finish. Their
+  owners see them as **Unreadable** in Credentials, and can enter the value again in place
+  (workflows that use it keep pointing at it) or delete it.
+- **After phase 3, the old key is refused as `ENCRYPTION_KEY`.** An instance restarted
+  with an old `.env` fails to start with an error that says so, instead of writing
+  values nobody else can read.
+
+**What rotation protects.** Rotation protects backups taken afterwards. A leaked key
+together with a copy of the database still exposes every credential in that copy, so
+after a leak, also rotate the credentials themselves at their providers.
+
+### The key check
+
+Before the server starts, `python -m app.key_check` compares the keys with a check value
+stored in the database, and refuses to start with an error naming the cause. The image
+entrypoints run it after migrations. **Worker definitions that start uvicorn directly
+must run it too:** `docker-compose.worker.yml`, the `worker-a` service in
+`docker-compose.cluster.yml` and `deploy/kubernetes/overlays/orbstack-cluster/worker.yaml`
+do, as `uv run python -m app.key_check && exec uv run python -m uvicorn …`. If you copied
+one of them before this change, make the same edit. A worker left on the old command still
+runs without the check, and the cluster still keeps it from receiving work or leading if
+its keys don't fit.
+
+Only the main instance writes the check value. On its first start after upgrading, it
+creates it once one of the 20 most recently stored values decrypts, or when there are none.
+A worker only reads it, and starts without checking until main has written it. **If none of
+them decrypts**, because the key was changed at some point and nothing has been re-entered
+since, main refuses to start. If `ENCRYPTION_KEY` is the key you want to keep, start main
+once with `HEYM_ACCEPT_CURRENT_ENCRYPTION_KEY=true`, then remove it. A worker ignores the
+flag, so a forgotten one can't make the cluster accept a wrong key.
+
+**If the check refuses after phase 4**, the old key was most likely removed before phase 3
+completed: put it back in `ENCRYPTION_KEYS_EXTRA`, and finish the re-encryption first. Values stored under the lost key
+stay unreadable and are listed as described above.
 
 ## Database
 
@@ -39,7 +97,14 @@ lifetimes) that override these code defaults when you copy it.
 | `JWT_REFRESH_TOKEN_EXPIRE_DAYS` | Refresh-token lifetime in days. | `30` |
 | `ALLOW_REGISTER` | Allow new user self-registration. Set `false` to lock down production, but only after your admin account exists: registration is refused for everyone when this is off and there is no first-user bootstrap, so an empty database plus `false` leaves no way to create an account. | `true` |
 | `HEYM_ADMIN_EMAILS` | Comma-separated email addresses of instance administrators, matched case-insensitively. Administrators manage instance settings (**Settings → SSO**, **Settings → Instances**, the Heym Work integration), can open, edit, and delete any user's workflows, see every owner's schedules and execution history, and pause or resume a workflow's automatic triggers. They also keep password sign-in when it is disabled for SSO, so a misconfigured provider cannot lock the instance. Empty grants nobody this access. Restart the backend after changing it. Plugin installation uses the separate `HEYM_PLUGIN_ADMIN_EMAILS`. | — |
+| `HEYM_REQUIRE_MFA` | Turn on two-factor sign-in with an authenticator app (TOTP). Every password sign-in then asks for a 6-digit code, and an account that has none sets one up by scanning a QR code before it reaches anything. Password sessions that began without a code end, so everyone enrols at their next sign-in. SSO sign-in is never affected: the identity provider owns the second factor. Off means no account is asked for a code; stored authenticators are kept and apply again when it is turned back on. Restart the backend after changing it. | `false` |
 | `TRUST_PROXY_HEADERS` | Trust `X-Forwarded-*` headers (enable only behind a trusted proxy). | `false` |
+
+## Data retention
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `HEYM_DATA_RETENTION_DAYS` | Days of execution history and LLM traces to keep. Older rows are deleted once a day after 05:00 (in `TIMEZONE`) by the scheduler leader, in batches. A run still waiting on a human review or a Codex follow-up is kept whatever its age. `0` keeps everything. Takes effect on existing installs at the next daily pass after upgrading. In a cluster any instance can lead the scheduler, so set the same value on every instance. | `90` |
 
 ## OAuth (MCP / API clients)
 
@@ -61,6 +126,8 @@ lifetimes) that override these code defaults when you copy it.
 | `BACKEND_BIND_HOST` | Address the backend binds to (single-image runtime). | `127.0.0.1` |
 | `BACKEND_PROXY_HOST` | Host the frontend proxies API calls to (single-image runtime). | `127.0.0.1` |
 | `TIMEZONE` | IANA timezone for scheduling/display. Empty falls back to `TZ`, then `UTC`. | — |
+| `CRON_MISFIRE_GRACE_SECONDS` | How late a cron slot may still run, in seconds. Older slots are skipped. | `600` |
+| `CRON_MAX_PARALLEL_RUNS` | How many cron runs may be in flight at once. | `4` |
 | `HEYM_HTTP_ALLOW_PRIVATE_URLS` | Disable the instance-wide SSRF egress guard for the **HTTP, WebSocket Send, and WebSocket Trigger nodes**, plus credential-derived destinations used by Slack, Discord, Jira, Sentry, GitHub, Grist, Supabase, ClickHouse, custom LLM execution and model discovery, the AI assistant, guardrails, and RAG embeddings. The Crawler node's FlareSolverr URL is deliberately held to a narrower address rule: loopback and private addresses stay reachable, because FlareSolverr is normally deployed beside Heym, and the refused set is `169.254.0.0/16`, `fe80::/10`, the Alibaba Cloud and AWS IPv6 metadata addresses, and the IPv6 transition forms carrying one of them. That is a known-endpoint list rather than a guarantee about every provider, and it leaves other internal services on those addresses reachable through that field by design; the boundary there is who may author workflows plus your network rules. When `false` (default), target hosts must resolve only to public addresses; loopback, private, link-local, multicast, and cloud-metadata (`169.254.169.254`) targets are refused, and resolved IPs are pinned at dial time to defeat DNS rebinding. While the guard is on, guarded HTTP connections ignore `HTTP_PROXY` and `HTTPS_PROXY` so a proxy cannot route around the pin; setting this to `true` removes the pin and restores your proxy configuration. ClickHouse is the one exception to the pin: clickhouse-connect brings its own urllib3 transport, so its host is checked before the connection opens but is not pinned at dial time. Operator CA bundles configured through `SSL_CERT_FILE` or `SSL_CERT_DIR` remain supported. Guarded WebSocket connections also refuse redirects. URL scheme checks remain enabled when the address-policy opt-out is on. Set `true` only on trusted self-hosted instances that intentionally call internal services. **Upgrade note for v0.0.105:** existing integration credentials that point to loopback, private, or link-local addresses are now refused unless this setting is enabled. **Upgrade note for v0.0.109:** Slack and Discord credentials join that list, so a webhook URL pointing at an internal receiver now needs this setting. Crawler credentials are unaffected unless the FlareSolverr URL is link-local or a metadata address. This setting is also now forwarded by `docker-compose.yml`; before v0.0.109 Compose did not declare it, so setting it in the project `.env` had no effect. Keep `false` on hosted or multi-tenant deployments. | `false` |
 
 ## Files & storage
@@ -82,6 +149,20 @@ lifetimes) that override these code defaults when you copy it.
 
 > While the guard is on, MCP HTTP/SSE tool fetches connect directly (they do not honor `HTTP_PROXY`/`HTTPS_PROXY`) so the pinned target IP is authoritative, matching the Drive download guard.
 
+## Sandbox backend
+
+Every sandbox (Agent Python tools, skills, the Code node and its formatter, file analysis, custom Playwright, MCP `stdio`, Codex, OpenCode) runs through one sandbox backend: Docker sibling containers, or pods created through the Kubernetes API. Docker stays the default. The per-sandbox variables below (`HEYM_PYTHON_TOOL_SANDBOX`, `HEYM_PLAYWRIGHT_SANDBOX`, `HEYM_MCP_STDIO_SANDBOX`) still choose between a sandbox and `subprocess`; `HEYM_SANDBOX_BACKEND` chooses where sandboxes run. All three variables are optional: a Docker deployment needs none of them, and a backend pod with a ServiceAccount picks Kubernetes on its own.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `HEYM_SANDBOX_BACKEND` | `auto` uses Docker when a daemon answers, else Kubernetes when the backend runs in a pod with a ServiceAccount, else fails closed. `docker` and `kubernetes` force one backend and never fall back to the other. | `auto` |
+| `HEYM_SANDBOX_K8S_NAMESPACE` | Namespace for sandbox pods. Sandboxes that need a workspace (skills, Code node dependencies, file analysis, Codex, OpenCode) need the workspace PersistentVolumeClaim in that namespace. | the backend's namespace |
+| `HEYM_SANDBOX_K8S_POD_OVERRIDES` | JSON object with any of `nodeSelector`, `tolerations`, `runtimeClassName` (for example gVisor), `imagePullSecrets`, `priorityClassName`. Any other key disables the Kubernetes backend, so an override can never loosen a pod's security context. | none |
+
+On Kubernetes every sandbox is one pod under Pod Security `restricted`: non-root, all capabilities dropped, no privilege escalation, RuntimeDefault seccomp, and no ServiceAccount token. It needs Kubernetes 1.30+ and a CNI that enforces NetworkPolicy: before the first sandbox that must be offline, Heym starts a test pod and refuses offline sandboxes if that pod can still connect. A sandbox's workspace is mounted as a `subPath` of the PersistentVolumeClaim behind the backend's own workspace directory, never the whole claim. With a `ReadWriteOnce` claim, sandboxes run on the backend's node. `HEYM_MCP_STDIO_FILES_VOLUME` names a PersistentVolumeClaim there and `HEYM_MCP_STDIO_FILES_SUBPATH` its `subPath`; `HEYM_MCP_STDIO_FILES_HOST_DIR` is refused. Requirements, RBAC and example manifests: [deploy/kubernetes](frontend/src/docs/content/getting-started/kubernetes.md).
+
+Custom CA bundles need no extra setting. When `SSL_CERT_FILE`, `REQUESTS_CA_BUNDLE`, `CURL_CA_BUNDLE`, `NODE_EXTRA_CA_CERTS` or `CODEX_CA_CERTIFICATE` names a file, every sandbox that receives the variable also gets that file, read-only at the same path. A backend running on the host binds the file itself. A backend in a container or pod copies it to `_ca/` under `HEYM_CODEX_WORKSPACE_DIR` and mounts only that copy, so the workspace volume must be present; without it the sandbox runs without the file and the backend logs a warning.
+
 ## Playwright custom code sandbox
 
 The Playwright node's **Run Code** mode (`playwrightCode`) is off by default. When enabled it runs in a hardened throwaway sibling container (Compose / GHCR) or, for native `./run.sh`, falls back to `subprocess`. Step-based Playwright nodes are unaffected.
@@ -97,7 +178,7 @@ The Playwright node's **Run Code** mode (`playwrightCode`) is off by default. Wh
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `HEYM_PYTHON_TOOL_SANDBOX` | How user-defined Agent Python **tools** and **skills** run: `auto` (Docker sandbox, fail-closed), `docker` (never falls back), or `subprocess` (no security boundary; trusted/local only). Governs both paths. MCP `stdio` isolation is **not** affected by this and has its own `HEYM_MCP_STDIO_SANDBOX`. | `auto` |
+| `HEYM_PYTHON_TOOL_SANDBOX` | How user-defined Agent Python **tools** and **skills** run: `auto` (sandbox on the [sandbox backend](#sandbox-backend), fail-closed), `docker` (sandbox required, never falls back), or `subprocess` (no security boundary; trusted/local only). Governs both paths. MCP `stdio` isolation is **not** affected by this and has its own `HEYM_MCP_STDIO_SANDBOX`. | `auto` |
 | `HEYM_PYTHON_TOOL_IMAGE` | Image used for the Python tool Docker sandbox (also the skill sandbox fallback when `HEYM_SKILL_IMAGE` is empty). Empty auto-detects the running backend image. | — |
 
 ## Agent skill sandbox
@@ -119,7 +200,7 @@ Untrusted Agent Python **skills** run in a hardened, throwaway sibling container
 
 ## Code node sandbox
 
-**The Code node adds no variables of its own, and deliberately has no `subprocess` escape hatch.** It runs arbitrary user Python with arbitrary dependencies, so it always requires a reachable Docker daemon and fails closed without one — `HEYM_PYTHON_TOOL_SANDBOX` does not apply to it. Its limits (512m memory, 1 CPU, 256 PIDs, 120s install timeout, 60s execution timeout) are constants in `app/services/code_python_executor.py`, not configuration.
+**The Code node adds no variables of its own, and deliberately has no `subprocess` escape hatch.** It runs arbitrary user Python with arbitrary dependencies, so it always requires a reachable [sandbox backend](#sandbox-backend) (Docker or Kubernetes) and fails closed without one — `HEYM_PYTHON_TOOL_SANDBOX` does not apply to it. Its limits (512m memory, 1 CPU, 256 PIDs, 120s install timeout, 60s execution timeout) are constants in `app/services/code_python_executor.py`, not configuration.
 
 It reuses existing variables only: `HEYM_PYTHON_TOOL_IMAGE` then `HEYM_CODEX_DOCKER_IMAGE` for image resolution (falling back to inspecting the backend's own image), and `HEYM_CODEX_WORKSPACE_DIR` / `HEYM_CODEX_DOCKER_WORKSPACE_VOLUME` for the per-run dependency workspace when the backend is containerised. A native `run.sh` backend needs neither variable: it bind-mounts a local temporary directory instead. Code nodes with an empty `requirements.txt` mount nothing at all, since the install phase is skipped.
 
@@ -147,7 +228,7 @@ Only the env vars set on the connection reach the server. The backend's own envi
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `HEYM_MCP_STDIO_SANDBOX` | Isolation for MCP `stdio` servers: `auto` (Docker required, fail-closed), `docker` (never falls back), or `subprocess`. Independent of `HEYM_PYTHON_TOOL_SANDBOX`. ⚠️ `subprocess` removes the boundary entirely and runs the caller's command on the backend host, which is the GHSA-378x-q589-34mv condition: **trusted single-user instances only, never on a shared or hosted deployment.** | `auto` |
+| `HEYM_MCP_STDIO_SANDBOX` | Isolation for MCP `stdio` servers: `auto` (sandbox backend required, fail-closed), `docker` (sandbox required, never falls back), or `subprocess`. Independent of `HEYM_PYTHON_TOOL_SANDBOX`. ⚠️ `subprocess` removes the boundary entirely and runs the caller's command on the backend host, which is the GHSA-378x-q589-34mv condition: **trusted single-user instances only, never on a shared or hosted deployment.** | `auto` |
 | `HEYM_MCP_STDIO_IMAGE` | Image used to run non-`docker` stdio commands (`npx`, `uvx`, `node`, `python`, …). Compose defaults it to `HEYM_BACKEND_IMAGE`, the GHCR image to its own release tag; set it only for native `run.sh` (`heym-backend:local`) or a custom runner. Falls back to `HEYM_PYTHON_TOOL_IMAGE`, then `HEYM_CODEX_DOCKER_IMAGE`, then container inspect, then fails closed. The `docker run <image>` form names its own image. | — |
 | `HEYM_MCP_STDIO_FILES_PATH` | Mount point inside the sandbox for the optional file mount below. | `/mnt/heym-files` |
 | `HEYM_MCP_STDIO_FILES_VOLUME` | Docker volume to expose to MCP servers. **Nothing is mounted unless you set this** (or the host-dir variant); there is no fallback to application volumes. | — |
@@ -177,7 +258,7 @@ Only the env vars set on the connection reach the server. The backend's own envi
 
 ## Codex node
 
-The [Codex node](frontend/src/docs/content/nodes/codex-node.md) runs the OpenAI Codex CLI in an isolated workspace. It needs the `codex` CLI and `git` on PATH. Local `./run.sh` uses the native `codex` CLI. Docker deployments use the bundled `heym-codex-docker` wrapper, which starts a sibling container from the same Heym image so Codex's bubblewrap sandbox can create Linux namespaces outside the backend container. That container also passes `--security-opt systempaths=unconfined` (Docker Engine 25+). Docker's default masked `/proc` paths otherwise reject bubblewrap's fresh proc mount, and every Codex command fails with `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`.
+The [Codex node](frontend/src/docs/content/nodes/codex-node.md) runs the OpenAI Codex CLI in an isolated workspace. It needs the `codex` CLI and `git` on PATH. Local `./run.sh` uses the native `codex` CLI. Docker deployments use the bundled `heym-codex-docker` wrapper, which starts a sibling container from the same Heym image so Codex's bubblewrap sandbox can create Linux namespaces outside the backend container. That container also passes `--security-opt systempaths=unconfined` (Docker Engine 25+). Docker's default masked `/proc` paths otherwise reject bubblewrap's fresh proc mount, and every Codex command fails with `bwrap: Can't mount proc on /newroot/proc: Operation not permitted`. Each run mounts only its own workspace and its `<workspace>.codex-home` directory, never the rest of the workspace volume (Docker Engine 25+ for a named volume). On Kubernetes the run is a restricted pod, where bubblewrap cannot run, so Codex uses `--sandbox danger-full-access` and the pod is the boundary.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -185,7 +266,7 @@ The [Codex node](frontend/src/docs/content/nodes/codex-node.md) runs the OpenAI 
 | `HEYM_CODEX_WORKSPACE_DIR` | Directory for cloned repo workspaces (its `<workspace>.codex-home` sibling holds the auth bundle, outside the repo). | `./data/codex-workspaces` |
 | `HEYM_CODEX_NETWORK_ACCESS` | Allow outbound network access for commands inside Codex's `workspace-write` sandbox. Docker deploys set this to `true` so Codex can download files/dependencies while still writing only inside the workspace. | `false` |
 | `HEYM_CODEX_DOCKER_IMAGE` | Image used by `heym-codex-docker`. Compose defaults to the locally built backend image (`heym-backend:local`). The release image defaults to the same single GHCR image (`ghcr.io/heymrun/heym:<version>`). | auto |
-| `HEYM_CODEX_DOCKER_WORKSPACE_VOLUME` | Docker volume mounted into each Codex runner at `HEYM_CODEX_WORKSPACE_DIR`. Docker Compose uses `heym-codex-workspaces`. | — |
+| `HEYM_CODEX_DOCKER_WORKSPACE_VOLUME` | Docker volume holding `HEYM_CODEX_WORKSPACE_DIR`; each Codex runner mounts only its run's two directories from it. Docker Compose uses `heym-codex-workspaces`. | — |
 | `HEYM_CODEX_HOST_WORKSPACE_DIR` | Absolute host path for `HEYM_CODEX_WORKSPACE_DIR` when using bind mounts instead of a Docker volume. | — |
 | `HEYM_CODEX_DOCKER_NETWORK` | Docker network mode for Codex runner containers. | `bridge` |
 | `HEYM_CODEX_DOCKER_CPUS` | CPU limit passed to Codex runner containers. | `2` |
@@ -201,7 +282,7 @@ The [Codex node](frontend/src/docs/content/nodes/codex-node.md) runs the OpenAI 
 
 ## OpenCode Go node
 
-The [OpenCode Go node](frontend/src/docs/content/nodes/opencode-go-node.md) runs the OpenCode CLI (Go) in an isolated workspace against a GitHub repository. It needs the `opencode` CLI and `git` on PATH. Local `./run.sh` uses the native `opencode` CLI (host subprocess). Docker deployments use the bundled `heym-opencode-docker` wrapper, which starts a hardened sibling container from the same Heym image (all capabilities dropped, `no-new-privileges`, read-only root, resource limits) sharing the workspace named volume. All git/GitHub operations run host-side, so the GitHub token is never placed inside the OpenCode process/container.
+The [OpenCode Go node](frontend/src/docs/content/nodes/opencode-go-node.md) runs the OpenCode CLI (Go) in an isolated workspace against a GitHub repository. It needs the `opencode` CLI and `git` on PATH. Local `./run.sh` uses the native `opencode` CLI (host subprocess). Docker deployments use the bundled `heym-opencode-docker` wrapper, which starts a hardened sibling container from the same Heym image (all capabilities dropped, `no-new-privileges`, read-only root, resource limits) sharing the workspace named volume. All git/GitHub operations run host-side, so the GitHub token is never placed inside the OpenCode process/container. Each run mounts only its own workspace and its `<workspace>.oc-home` directory, never the rest of the workspace volume. With a named volume this needs Docker Engine 25+ (`volume-subpath`).
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -210,7 +291,7 @@ The [OpenCode Go node](frontend/src/docs/content/nodes/opencode-go-node.md) runs
 | `HEYM_OPENCODE_GIT_AUTHOR_NAME` | Author name for commits OpenCode creates. | `Heym OpenCode` |
 | `HEYM_OPENCODE_GIT_AUTHOR_EMAIL` | Author email for OpenCode commits. The GitHub avatar shown next to it is derived from this email (matching GitHub account, else Gravatar). | `support@heym.run` |
 | `HEYM_OPENCODE_DOCKER_IMAGE` | Image used by `heym-opencode-docker`. Compose defaults to the locally built backend image (`heym-backend:local`). The release image defaults to the same single GHCR image (`ghcr.io/heymrun/heym:<version>`). | auto |
-| `HEYM_OPENCODE_DOCKER_WORKSPACE_VOLUME` | Docker volume mounted into each OpenCode runner at `HEYM_OPENCODE_WORKSPACE_DIR`. Docker Compose uses `heym-opencode-workspaces`. | — |
+| `HEYM_OPENCODE_DOCKER_WORKSPACE_VOLUME` | Docker volume holding `HEYM_OPENCODE_WORKSPACE_DIR`; each OpenCode runner mounts only its run's two directories from it. Docker Compose uses `heym-opencode-workspaces`. | — |
 | `HEYM_OPENCODE_HOST_WORKSPACE_DIR` | Absolute host path for `HEYM_OPENCODE_WORKSPACE_DIR` when using bind mounts instead of a Docker volume. | — |
 | `HEYM_OPENCODE_DOCKER_NETWORK` | Docker network mode for OpenCode runner containers (egress is required to reach the model gateway). | `bridge` |
 | `HEYM_OPENCODE_DOCKER_CPUS` | CPU limit passed to OpenCode runner containers. | `2` |
@@ -241,11 +322,13 @@ needs no open port and no route back to the main instance.
 
 Two rules the cluster cannot enforce for you:
 
-- **`SECRET_KEY` and `ENCRYPTION_KEY` must be identical on every instance.** A
-  worker with a different `ENCRYPTION_KEY` cannot decrypt credentials. Heym
-  compares digests of both keys on each heartbeat and marks a mismatched
-  instance incompatible so it receives no work, rather than letting it fail
-  every credential-using run.
+- **`SECRET_KEY` and `ENCRYPTION_KEY` must be identical on every instance**,
+  except while [rotating `ENCRYPTION_KEY`](#rotating-encryption_key). A worker
+  with a different `ENCRYPTION_KEY` cannot decrypt credentials. Heym compares
+  digests of the keys on each heartbeat and marks an instance incompatible when
+  it can't read what main writes, or what main can't read from it, or what another
+  live instance writes. An incompatible instance receives no work and can't
+  become the leader that runs cron and the pollers.
 - **Point ingress at the main instance only.** Round-robining user traffic
   across instances would send a file upload to one machine and its download to
   another.
@@ -261,6 +344,13 @@ or allowlist every instance.
 | `HEYM_INSTANCE_ROLE` | `main` or `worker`. Main owns file storage, plugins and ingress. | `main` |
 | `HEYM_INSTANCE_NAME` | Display label for this instance; the admin UI can rename it later. | — |
 | `HEYM_INSTANCE_ID` | Stable id shared by all of this instance's processes. Derived from the name when empty. | — |
+
+### Credentials from Kubernetes Secrets
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `HEYM_K8S_CREDENTIALS` | Read credentials from Secrets labelled `heym.run/credential: "true"`. Needs `get`, `list` and `watch` on `secrets`, and refuses to start while any sandbox switch is `subprocess`. See [deploy/kubernetes](deploy/kubernetes/README.md#credentials-from-kubernetes-secrets). | `false` |
+| `HEYM_K8S_CREDENTIALS_NAMESPACE` | Namespace to watch. | Heym's own namespace |
 
 ## Miscellaneous
 

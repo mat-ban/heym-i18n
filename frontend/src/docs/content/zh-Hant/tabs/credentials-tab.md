@@ -84,3 +84,7 @@ OAuth credentials 會在彈出視窗中開啟供應商的授權頁面。若瀏�
 - [Vectorstores 分頁](./vectorstores-tab.md) – 使用 Qdrant 或 Postgres（pgvector）credentials
 - [Chat 分頁](./chat-tab.md) – 使用 OpenAI/Google credentials
 - [情境式展示](../reference/contextual-showcase.md) – 儀表板介面的精簡頁面指南
+
+## 搜尋
+
+使用清單上方的搜尋欄位，或按 **Ctrl+F**（或 **Cmd+F**），在鍵入時依名稱或類型篩選認證。按 **Escape** 清除搜尋。

@@ -107,3 +107,6 @@ Heym は、Workflow エディターとキャンバス全体でキーボードシ
 - [Quick Start](../getting-started/quick-start.md) – 最初の Workflow を構築する
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+**Credentials** タブと **DataTable** タブも同様に機能します：`Ctrl + F` / `Cmd + F` で検索フィールドにフォーカスし、入力に応じて一覧が絞り込まれ、`Escape` でクリアされます。

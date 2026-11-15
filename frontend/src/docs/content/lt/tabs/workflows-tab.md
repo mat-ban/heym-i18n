@@ -84,6 +84,10 @@ Darbalaukyje apvalus ženkliukas viršutiniame įrankių juostoje rodo, kiek wor
 ## Search
 
 Naudokite workflow paieškos laukelį šalia **Status**, arba paspauskite **Ctrl+F** (arba **Cmd+F**), kad filtruotumėte workflow pagal pavadinimą ar aprašymą. Atitinkantys workflow aplankuose rodomi su išplėstomis jų aplanko šakomis. Paspauskite **Escape**, kad išvalytumėte paiešką.
+## Paieška
+
+Naudokite darbo eigų paieškos lauką šalia **Būsenos** arba paspauskite **Ctrl+F** (arba **Cmd+F**), kad filtruotumėte darbo eigas pagal pavadinimą ar aprašą arba aplankus pagal pavadinimą. Atitinkamos darbo eigos aplankuose rodomos su išskleistomis šakomis, o atitinkamo pavadinimo aplankas rodomas su visu jo turiniu. Paspauskite **Escape**, kad išvalytumėte paiešką.
+
 ## Katalogai
 
 - Organizuoja workflows į [katalogus ir subkatalogus](../reference/workflow-organization.md)

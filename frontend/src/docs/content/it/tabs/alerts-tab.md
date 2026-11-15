@@ -2,6 +2,9 @@
 
 La scheda **Avvisi** consente di definire condizioni di soglia su una finestra temporale e di ricevere una notifica quando vengono superate. Heym registra già gli esiti delle esecuzioni, la durata delle esecuzioni e la spesa LLM, ma non ne comunica mai alcuna informazione spontaneamente. Un avviso è il modo in cui si richiede di farlo.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Guarda la demo di Alerts</a></p>
+
 Ogni avviso viene valutato su una **finestra temporale** scelta dall'utente, mai su un singolo evento. Un'esecuzione non riuscita è rumore. Dodici esecuzioni non riuscite in dieci minuti sono un incidente.
 
 ## Tipi di avviso

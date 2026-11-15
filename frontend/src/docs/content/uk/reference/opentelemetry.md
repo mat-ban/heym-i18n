@@ -72,6 +72,7 @@ Span'и вузлів коректно вкладаються під span workflo
 | `heym.agent.tool.args_bytes` | Розмір у UTF-8 серіалізованих аргументів інструмента. |
 | `heym.agent.tool.result_bytes` | Розмір у UTF-8 серіалізованого результату інструмента. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` або `cancelled`. Помилки інструмента встановлюють статус span'а в `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Сирі аргументи та результати інструментів за замовчуванням не додаються до span'ів.
 

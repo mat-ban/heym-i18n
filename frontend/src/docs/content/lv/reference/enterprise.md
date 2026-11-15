@@ -42,7 +42,7 @@ Praktiskas apmācību sesijas, kas pielāgotas Jūsu komandas prasmju līmenim u
 
 ## Kubernetes Deployment
 
-Standarta [Running & Deployment](../getting-started/running-and-deployment.md) rokasgrāmata aptver Docker Compose vienas servera ražošanas iestatījumiem. Enterprise klienti saņem palīdzību ar ražošanas Kubernetes izvietošanu augstai pieejamībai un horizontālai mērogošanai:
+Standarta [Running & Deployment](../getting-started/running-and-deployment.md) rokasgrāmata aptver Docker Compose vienas servera ražošanas iestatījumiem. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise klienti saņem palīdzību ar ražošanas Kubernetes izvietošanu augstai pieejamībai un horizontālai mērogošanai:
 
 - **Multiple worker nodes** — Heym backend worker izkliedēšana pa vairākiem Kubernetes mezgliem dublēšanai un slodzes balansēšanai
 - **Sidecar containers** — Sidecar modeļu konfigurēšana žurnālu vākšanai, monitoringa aģentiem, service meshes (Istio, Linkerd) un secret injection (Vault)

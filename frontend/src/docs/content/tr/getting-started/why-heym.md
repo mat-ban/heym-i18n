@@ -278,7 +278,7 @@ Workflow'lar HTTP üzerinden `/api/workflows/{workflow_id}/execute` adresinde ç
 Heym, her iki tarafta da yerel [MCP](../tabs/mcp-tab.md) desteğine sahiptir:
 
 - **Client olarak**: Agent node'ları harici MCP sunucularına (Filesystem, Browserbase, özel araçlar) stdio veya SSE aracılığıyla bağlanır ve araçlarını otomatik olarak tüketir
-- **Server olarak**: MCP etkinleştirilmiş workflow'lar, `/api/mcp/sse` adresindeki varsayılan sunucuda veya kendi URL'si ve API key'i olan adlandırılmış sunucularda araç haline gelir; böylece Claude Desktop, Cursor ve diğer MCP client'ları Heym workflow'larınızı doğrudan çağırabilir
+- **Server olarak**: MCP etkinleştirilmiş workflow'lar, `/api/mcp (or /api/mcp/sse for legacy connections)` adresindeki varsayılan sunucuda veya kendi URL'si ve API key'i olan adlandırılmış sunucularda araç haline gelir; böylece Claude Desktop, Cursor ve diğer MCP client'ları Heym workflow'larınızı doğrudan çağırabilir
 
 Agent'lar aynı anda birden fazla MCP sunucusunu tüketebilir ve herhangi bir workflow harici bir MCP client'ı için araç haline gelebilir.
 

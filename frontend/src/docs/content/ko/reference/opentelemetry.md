@@ -72,6 +72,7 @@ Workflow 컨텍스트가 워커 스레드로 전파되므로, 노드가 병렬�
 | `heym.agent.tool.args_bytes` | 직렬화된 도구 인수의 UTF-8 크기입니다. |
 | `heym.agent.tool.result_bytes` | 직렬화된 도구 결과의 UTF-8 크기입니다. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` 또는 `cancelled`입니다. 도구 오류는 span 상태를 `ERROR`로 설정합니다. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 원시 도구 인수 및 결과는 기본적으로 span에 첨부되지 않습니다.
 

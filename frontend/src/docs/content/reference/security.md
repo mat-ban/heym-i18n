@@ -22,6 +22,28 @@ These rules are enforced on both the frontend and the backend (Pydantic validato
 - Access tokens are stored in **HttpOnly** cookies, not `localStorage`. This prevents JavaScript (including XSS payloads) from reading the token.
 - The refresh token is scoped to the `/api/auth/refresh` path and cannot be sent to other endpoints.
 - Each `/api/auth/refresh` call **rotates** the refresh token: the old token is immediately revoked and a new one is issued. Replaying a used refresh token returns `401`.
+- **Sign out everywhere.** **Settings → Security → Sign out other sessions** ends every other session the account holds, and changing the password does the same. Access tokens issued before that moment are refused at once, even before they expire, and refresh and MCP OAuth tokens are revoked.
+- Session lifetimes come from `JWT_ACCESS_TOKEN_EXPIRE_MINUTES` and `JWT_REFRESH_TOKEN_EXPIRE_DAYS`. Because every refresh rotates the token, the refresh lifetime also works as an idle timeout: a session not used for that long has to sign in again.
+
+## Two-Factor Authentication
+
+Set `HEYM_REQUIRE_MFA=true` to require a code from an authenticator app (TOTP, RFC 6238) at every password sign-in. Google Authenticator, Microsoft Authenticator, 1Password and any other TOTP app work.
+
+- **Enrolment before access.** An account without an authenticator scans a QR code and confirms a code right after its password, before it holds any session. Turning the setting on also ends password sessions that began without a code, so nobody keeps working unenrolled.
+- **SSO is not affected.** Sign-in through [SSO](./sso.md) never asks for a Heym code; require MFA at your identity provider instead.
+- **Every password surface.** The web login, registration, [Heym Work](./heym-work.md) sign-in, and the MCP OAuth consent page all ask for the code.
+- **Recovery codes.** Ten single-use codes are shown once after enrolment. They are stored as SHA-256 digests, so a database copy does not contain them.
+- **Secrets at rest.** The authenticator secret is encrypted with `ENCRYPTION_KEY` and re-encrypted by [key rotation](#rotating-the-key) like credentials.
+- **Replay and guessing.** A code is accepted once, within one 30-second step either side of now, and five wrong codes lock that account's sign-in for 15 minutes.
+- **Lost phone.** An administrator resets two-factor sign-in from **Settings → Users**, and the person sets up a new authenticator at the next sign-in.
+
+## Account Deactivation
+
+Administrators deactivate an account from **Settings → Users** when someone leaves. A deactivated account authenticates nowhere: password, SSO, Heym Work, and the MCP consent page refuse it; its sessions end at once; refresh and MCP OAuth tokens are revoked; its MCP API keys and execution tokens stop working. The automatic triggers of every workflow it owns are paused, the same way **Pause triggers** pauses one workflow, so nothing keeps running in the name of someone who has left. Reactivation reverses all of it except the revoked sessions. See [Settings → Users](./user-settings.md#users-tab).
+
+## Data Retention
+
+Execution history and LLM traces older than `HEYM_DATA_RETENTION_DAYS` (default `90`) are deleted once a day. A run still waiting on a human review is kept. Set `0` to keep everything. Alert events have their own fixed 90-day window. The weekly execution-history maintenance then returns the freed disk space.
 
 ## Rate Limiting
 
@@ -30,19 +52,37 @@ The following endpoints are rate-limited per IP:
 | Endpoint | Limit | Ban duration |
 |----------|-------|--------------|
 | `POST /api/auth/login` | 10 req / 60 s | 15 min |
+| `POST /authorize` (MCP OAuth consent, password step) | Shares the `POST /api/auth/login` budget | 15 min |
 | `POST /api/auth/register` | 5 req / 60 s | 10 min |
 | `POST /register` (OAuth clients) | 5 req / 60 s | 10 min |
 | Portal login | 3 attempts | 24 h |
+
+Password attempts on the MCP consent page and on `POST /api/auth/login` count against the same per-IP budget, so a ban earned on one blocks the other. The authenticator-code step that follows a correct password is limited per account instead and does not spend that budget.
 
 When `REDIS_URL` is configured, rate limits are shared across all backend workers. Without it, limits apply per worker process.
 
 ## Credential Encryption
 
-All API keys, webhook URLs, and bearer tokens stored in the [Credentials](../tabs/credentials-tab.md) panel are encrypted at rest using AES-256 (Fernet) before being written to the database. The key is derived from the `ENCRYPTION_KEY` environment variable. The `run.sh` and `deploy.sh` scripts generate a strong value automatically when it is empty; the application refuses to start if `ENCRYPTION_KEY` is empty or left at a known placeholder.
+All API keys, webhook URLs, and bearer tokens stored in the [Credentials](../tabs/credentials-tab.md) panel are encrypted at rest with Fernet (AES-128 in CBC mode, authenticated with HMAC-SHA256) before being written to the database. The key is derived from the `ENCRYPTION_KEY` environment variable. The `run.sh` and `deploy.sh` scripts generate a strong value automatically when it is empty; the application refuses to start if `ENCRYPTION_KEY` is empty or left at a known placeholder.
+
+Before the server starts, Heym also checks `ENCRYPTION_KEY` against a value stored in the database, and refuses to start with a key the database wasn't encrypted with, instead of failing credential reads later with nothing useful in the error.
+
+### Rotating the key
+
+`ENCRYPTION_KEY` can be replaced without downtime and without re-entering credentials:
+
+1. **Introduce.** Set `ENCRYPTION_KEYS_EXTRA` to the new key, keeping `ENCRYPTION_KEY` as it is, and restart every instance.
+2. **Promote.** Make the new key `ENCRYPTION_KEY` and the old one `ENCRYPTION_KEYS_EXTRA`, and restart every instance.
+3. **Re-encrypt.** An admin starts it from **Settings → Encryption**. It runs in the background and pauses itself if any instance still encrypts with another key.
+4. **Retire.** Once it shows **Completed**, remove the old key, unless a backup taken before the rotation may need restoring.
+
+A single container can skip step 1. Credentials no configured key can read, from an earlier key change, are listed in **Settings → Encryption**; their owners see them as **Unreadable**, and can enter the value again in place, which keeps workflows pointing at it, or delete them.
+
+Rotation protects backups taken afterwards. A leaked key together with a copy of the database still exposes every credential in that copy, so after a leak, also rotate the credentials at their providers. The full procedure, including the first start after upgrading, is in `ENVIRONMENT-VARIABLES.md` under "Rotating `ENCRYPTION_KEY`".
 
 ## MCP API Key
 
-The MCP API key is used to authenticate external MCP clients connecting to the `/api/mcp/sse` endpoint. When the SSE connection is established, a short-lived (1-hour) session token is issued and embedded in the message endpoint URL instead of the real API key, preventing the key from appearing in server access logs. See [MCP Tab](../tabs/mcp-tab.md) for setup.
+The MCP API key is used to authenticate external MCP clients connecting to `/api/mcp`, `/api/mcp/servers/{id}/mcp`, and the legacy `/sse` routes. Clients send the MCP API key in the `X-MCP-Key` header, or an OAuth 2.0 access token as `Authorization: Bearer <token>`. On the legacy `/sse` routes, when the SSE connection is established, a short-lived (1-hour) session token is issued and embedded in the message endpoint URL instead of the real API key, preventing the key from appearing in server access logs. For Streamable HTTP, clients send the key or OAuth access token on each request, and the session is carried in the signed `Mcp-Session-Id` header. See [MCP Tab](../tabs/mcp-tab.md) for setup.
 
 ## OAuth / PKCE
 
@@ -76,7 +116,7 @@ The execution backend is controlled by the `HEYM_PYTHON_TOOL_SANDBOX` environmen
 
 | Value | Behavior |
 |-------|----------|
-| `auto` (default) | Run in the hardened Docker container. If Docker is unavailable, execution **fails closed** — it does not silently run untrusted code without OS isolation. |
+| `auto` (default) | Run in the hardened sandbox: a Docker container, or a restricted pod on [Kubernetes](../getting-started/running-and-deployment.md#kubernetes). If no sandbox backend is available, execution **fails closed** — it does not silently run untrusted code without OS isolation. |
 | `docker` | Same as `auto`, but never falls back. |
 | `subprocess` | Run in a local in-process subprocess guarded by an import allowlist. This is **not a security boundary** and is intended only for trusted code or local development. `run.sh` selects it for native dev. |
 

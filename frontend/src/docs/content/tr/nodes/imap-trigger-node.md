@@ -16,6 +16,7 @@
 |-----------|-----|----------|
 | `credentialId` | UUID | Sunucu, oturum açma bilgileri, posta kutusu ve SSL ayarlarını içeren `imap` credential |
 | `pollIntervalMinutes` | Integer | Heym'in posta kutusunu yeni e-posta için ne sıklıkla kontrol edeceği |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Kurulum Kılavuzu
 
@@ -62,6 +63,8 @@ Düğüm tetiklendikten sonra, aşağı akış düğümleri şunlara erişebilir
 | `$nodeLabel.email.text` | Düz metin gövdesi |
 | `$nodeLabel.email.html` | HTML gövdesi |
 | `$nodeLabel.email.attachments` | Ek meta verileri dizisi (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Çözümlenmiş başlık nesnesi |
 | `$nodeLabel.email.uid` | Yinelenenleri ayıklama veya günlükleme için IMAP UID |
 | `$nodeLabel.triggered_by` | Trigger kaynağı etiketi (`"imap"`) |

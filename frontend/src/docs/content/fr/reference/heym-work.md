@@ -10,7 +10,7 @@ Heym Work fonctionne dans son propre conteneur aux côtés de Heym, avec une lic
 |---------|----------------|
 | **Chat** | Décrivez une tâche par saisie de texte ou à la voix. Heym demande les éléments nécessaires, construit le workflow, le teste et le marque comme Vérifié. |
 | **Flows** | Les éditeurs créent un flow à partir de choix plutôt que sur un canevas : ce qui le démarre, un brouillon d'IA facultatif et des actions dans Slack, Google Sheets et e-mail. Les réponses de Slack poursuivent l'exécution, et les approbations attendent également dans Activité. Voir [Flows](#flows). |
-| **Pages** | Des pages épinglées composées de widgets : indicateurs chiffrés, graphiques, tableaux avec puces d'état, zones de dépôt de fichiers et approbations. Une ligne de tableau peut ouvrir sa propre page de détail. |
+| **Pages** | Des pages épinglées composées de widgets : indicateurs chiffrés, graphiques, tableaux avec puces d'état, cartes HTML, zones de dépôt de fichiers et approbations. Une ligne de tableau peut ouvrir sa propre page de détail. |
 | **Approbations** | Les révisions issues des étapes [Human-in-the-Loop](./human-in-the-loop.md) s'affichent dans Activité et sur les pages, avec les actions Approuver, Demander des modifications et Rejeter. |
 | **Activité** | Chaque exécution, avec la personne qui l'a lancée et l'instance d'exécution. |
 | **Rôles** | Propriétaire, Éditeur et Observateur. Les utilisateurs se connectent via le mécanisme [Single Sign-On](./sso.md) déjà configuré dans Heym. |

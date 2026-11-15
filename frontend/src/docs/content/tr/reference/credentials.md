@@ -32,6 +32,7 @@ Credentials, workflow node'ları tarafından kullanılan API anahtarlarını ve 
 | [Grist](../nodes/grist-node.md) | Grist | API key + server URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2 onayı |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2 onayı |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2 onayı |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Project URL + API key (+ isteğe bağlı varsayılan şema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + kullanıcı adı/parola + veritabanı (+ secure) |

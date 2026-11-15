@@ -68,3 +68,5 @@ Cùng quy tắc như [Output](./output-node.md): không đặt node này bên tr
 - [Output](./output-node.md) – Response dựa trên message hoặc schema với `result` wrapping
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, request methods và responses
 - [Node Types](../reference/node-types.md) – Tất cả các node type
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

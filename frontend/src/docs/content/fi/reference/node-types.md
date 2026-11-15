@@ -68,6 +68,7 @@ Katso [Käynnistimet](./triggers.md) kaikista aloituspisteistä.
 | [Linear](../nodes/linear-node.md) | Hallinnoi Linear-tiimejä, projekteja, issueita, workflow-tiloja ja kommentteja GraphQL:n kautta | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Lue/kirjoita Google Sheets -tiedostoja OAuth2:n kautta | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Listaa, lataa, päivitä ja poista Google Drive -tiedostoja OAuth2:n kautta | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Lue saatavuus ja luo, päivitä tai poista Meet-kutsuja | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Suorita SQL-kyselyitä ja lisää rivejä BigQueryssä | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Kysely ja muokkaus Supabase-taulukoissa PostgREST:n kautta | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Suorita SQL-, CRUD- ja laskentaoperaatioita ClickHouseen | 1 | 1 |

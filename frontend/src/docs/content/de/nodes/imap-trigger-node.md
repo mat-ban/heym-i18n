@@ -16,6 +16,7 @@ Der **IMAP Trigger**-Knoten fragt in einem festen Intervall ein E-Mail-Postfach 
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap`-Anmeldedaten mit Server-, Login-, Postfach- und SSL-Einstellungen |
 | `pollIntervalMinutes` | Integer | Wie oft Heym das Postfach auf neue E-Mails überprüft |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Einrichtungsanleitung
 
@@ -62,6 +63,8 @@ Nachdem der Knoten ausgelöst wurde, können nachgelagerte Knoten auf Folgendes 
 | `$nodeLabel.email.text` | Plain-Text-Body |
 | `$nodeLabel.email.html` | HTML-Body |
 | `$nodeLabel.email.attachments` | Array von Anhang-Metadaten (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekodiertes Header-Objekt |
 | `$nodeLabel.email.uid` | IMAP UID zur Deduplizierung oder Protokollierung |
 | `$nodeLabel.triggered_by` | Trigger-Quellbezeichnung (`"imap"`) |

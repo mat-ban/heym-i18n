@@ -97,3 +97,11 @@ Drive 读取仅限于 workflow 执行者有权访问的文件：拥有的文件�
 
 ## 清理
 过期的共享 Token 每天会自动清理。文件本身会一直保留，直到通过 Drive 标签页手动删除。使用 **Clear All** 可一次性删除所有文件及其共享链接。
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

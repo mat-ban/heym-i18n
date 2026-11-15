@@ -32,6 +32,7 @@ Zentrale Umgebungsvariablen:
 |---|---|
 | `SECRET_KEY` | **Erforderlich.** JWT-Signaturschlüssel. Wird automatisch generiert, falls leer. |
 | `ENCRYPTION_KEY` | **Erforderlich.** Verschlüsselungsschlüssel für Anmeldedaten. Wird automatisch generiert, falls leer. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Optionale Überschreibung des Datenbank-Verbindungsstrings. |
 | `BACKEND_PORT` | Backend-API-Port — Standard: `10105` |
 | `FRONTEND_PORT` | Frontend-Port — Standard: `4017` |
@@ -246,3 +247,11 @@ git pull
 - [Schnellstart](./quick-start.md) – Ersten Workflow erstellen
 - [Sicherheit](../reference/security.md) – JWT, Verschlüsselung und CORS-Einstellungen
 - [Lastverteilung](../reference/cluster.md) – Mehrere Instanzen im Cluster betreiben\n
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

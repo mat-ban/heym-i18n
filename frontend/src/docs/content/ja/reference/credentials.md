@@ -32,6 +32,7 @@ Credentialsは、Workflowノードで使用されるAPIキーとシークレッ�
 | [Grist](../nodes/grist-node.md) | Grist | APIキー + サーバーURL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2同意 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2同意 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2同意 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | プロジェクトURL + APIキー（+ オプションのデフォルトスキーマ） |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | ホスト + ポート + ユーザー名/パスワード + データベース（+ secure） |

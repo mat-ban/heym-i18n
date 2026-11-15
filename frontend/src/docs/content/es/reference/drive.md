@@ -96,3 +96,11 @@ Las lecturas de Drive están limitadas a los archivos accesibles para el actor d
 
 ## Limpieza
 Los tokens de uso compartido caducados se limpian automáticamente cada día. Los archivos en sí persisten hasta que se eliminan manualmente a través de la pestaña Drive. Utilice **Clear All** para eliminar todos los archivos y sus enlaces de uso compartido en una sola acción.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

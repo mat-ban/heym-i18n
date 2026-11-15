@@ -72,6 +72,7 @@ Ad: `heym.agent.tool.execute`, etkin Agent node span'inin altında oluşturulur.
 | `heym.agent.tool.args_bytes` | Serileştirilmiş tool argümanlarının UTF-8 boyutu. |
 | `heym.agent.tool.result_bytes` | Serileştirilmiş tool sonucunun UTF-8 boyutu. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` veya `cancelled`. Tool hataları, span durumunu `ERROR` olarak ayarlar. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Ham tool argümanları ve sonuçları varsayılan olarak span'lere eklenmez.
 

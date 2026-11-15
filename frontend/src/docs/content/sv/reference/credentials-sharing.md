@@ -87,6 +87,7 @@ Vissa noder lagrar `credentialId` (UUID) i `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse-anslutningsdetaljer (host, port, autentisering, databas) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot-autentiseringsuppgift |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord publik nyckel eller webhook-autentiseringsuppgift |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant eller Postgres (pgvector) vektordatabas, via en Qdrant-, Psql- eller Custom Embeddings RAG-autentiseringsuppgift |
 | Evals | `credential_id`, `judge_credential_id` | Modellautentiseringsuppgift; en modell- eller Decision Model-autentiseringsuppgift för LLM-as-Judge-domaren |
 | [Playwright](../nodes/playwright-node.md) AI-steg | `credentialId` | LLM/Vision-modell (för AI-steg och [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Efter körning maskerar `mask_sensitive_output()` autentiseringsuppgiftsvärden 
 - [Expression DSL](./expression-dsl.md) – `$credentials`-syntax
 - [Nodtyper](./node-types.md) – Noder som använder autentiseringsuppgifter ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent-nod](../nodes/agent-node.md) – Använder `credentialId` för LLM
+
+## Behörigheter för Google Meet-kalender
+
+Att dela en [Google Meet-autentiseringsuppgift](../nodes/google-meet-node.md) gör det möjligt för arbetsflöden att läsa lediga/upptagna intervall i tillgängliga kalendrar och skapa, ändra eller ta bort händelser som det anslutna Google-kontot, inklusive att skicka inbjudningar och avbokningar. Besökarens deltagare-e-post ändrar inte vilket konto som äger eller auktoriserar händelsen. Endast ägaren av autentiseringsuppgiften kan återansluta sin Google-auktorisering.

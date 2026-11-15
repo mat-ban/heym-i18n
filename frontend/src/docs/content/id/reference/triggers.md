@@ -12,7 +12,7 @@ Node awal (tanpa edge masuk) yang memulai eksekusi:
 | [Cron](../nodes/cron-node.md) | Berjalan sesuai jadwal (ekspresi cron, misalnya `0 * * * *` untuk setiap jam). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Dimulai saat Telegram mengirim pembaruan webhook bot ke URL webhook khusus Node. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Dimulai saat Discord mengirim webhook Interactions API ke endpoint khusus Node. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Melakukan polling ke kotak surat IMAP dan dimulai sekali untuk setiap email yang baru terdeteksi. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Melakukan polling ke kotak surat IMAP dan dimulai sekali untuk setiap email yang baru terdeteksi. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Dimulai saat Heym memublikasikan event platform. Event dalam satu jendela pengiriman tiba bersamaan sebagai array. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Membuka koneksi klien keluar ke socket eksternal dan dimulai pada event socket yang dipilih. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Membuat URL unggah sekali pakai dan dimulai saat pemanggil mengirim file multipart berukuran besar. |

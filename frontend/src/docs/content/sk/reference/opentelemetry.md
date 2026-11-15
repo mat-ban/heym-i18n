@@ -72,6 +72,7 @@ Názov: `heym.agent.tool.execute`, vytvorený pod aktívnym spanom uzla Agenta.
 | `heym.agent.tool.args_bytes` | Veľkosť serializovaných argumentov nástroja v UTF-8. |
 | `heym.agent.tool.result_bytes` | Veľkosť serializovaného výsledku nástroja v UTF-8. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` alebo `cancelled`. Chyby nástroja nastavia stav spanu na `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Surové argumenty a výsledky nástrojov sa k spanom predvolene nepripájajú.
 

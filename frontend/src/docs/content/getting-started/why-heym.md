@@ -192,7 +192,7 @@ The trace system is purpose-built for debugging agentic behavior, with full requ
 Every LLM call in Heym is automatically costed. The [Traces Tab](../tabs/traces-tab.md) shows per-trace input and output token counts alongside a real-time USD cost derived from a synced pricing table.
 
 - **Per-trace cost** – Input tokens, output tokens, and total USD shown on every trace row
-- **Cost analytics** – KPI cards and a per-model cost chart update with the selected time range (1h / 24h / 7d / 30d / All)
+- **Cost analytics** – KPI cards and a per-model cost chart update with the selected time range (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **LLM Cost Table** – A system table in the [DataTable tab](../tabs/datatable-tab.md) is seeded from Helicone every 24 hours; you can override prices or add custom rows for models not yet listed
 - **Missing-price warning** – Traces for models without a pricing entry surface an inline warning with a direct link to the cost table
 
@@ -278,7 +278,7 @@ Workflows are callable over HTTP at `/api/workflows/{workflow_id}/execute`, whic
 Heym has native [MCP](../tabs/mcp-tab.md) support on both sides:
 
 - **As a client**: Agent nodes connect to external MCP servers (Filesystem, Browserbase, custom tools) via stdio or SSE and consume their tools automatically
-- **As a server**: Workflows with MCP turned on become tools on the default server at `/api/mcp/sse`, or on named servers with their own URL and API key, so Claude Desktop, Cursor, and other MCP clients can call your Heym workflows directly
+- **As a server**: Workflows with MCP turned on become tools on the default server at `/api/mcp` (or `/api/mcp/sse` for legacy connections), or on named servers with their own URL and API key, so Claude Desktop, Cursor, and other MCP clients can call your Heym workflows directly
 
 Agents can consume several MCP servers at once, and any workflow can become a tool for an external MCP client.
 

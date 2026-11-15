@@ -157,6 +157,8 @@ Mengedit credential akan mempertahankan key yang tersimpan ketika kolom key dibi
 
 Credential yang sama dapat menilai proses [Evals](../tabs/evals-tab.md): dengan **LLM-as-Judge** dipilih, pilih credential tersebut sebagai judge dan decision model akan menilai setiap jawaban terhadap output yang diharapkan.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym memblokir permintaan keluar ke alamat privat dan loopback secara default, sehingga endpoint decision yang Anda jalankan sendiri di `localhost` atau rentang privat memerlukan `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Decision model tidak muncul dalam tabel harga LLM yang disinkronkan Heym, sehingga kolom **Cost** di [Traces](../tabs/traces-tab.md) tetap kosong untuk panggilan-panggilan ini. Jumlah token tetap dicatat, dan Anda dapat menambahkan harga Anda sendiri dengan pricing override.

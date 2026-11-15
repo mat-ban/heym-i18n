@@ -94,3 +94,7 @@ Consultare [Expression DSL](../reference/expression-dsl.md) per fare riferimento
 - [Scheda Archivi vettoriali](./vectorstores-tab.md) – Utilizza credenziali Qdrant o Postgres (pgvector)
 - [Scheda Chat](./chat-tab.md) – Utilizza credenziali OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guida compatta alla pagina per le superfici della dashboard
+
+## Ricerca
+
+Utilizzare il campo di ricerca sopra l'elenco o premere **Ctrl+F** (o **Cmd+F**) per filtrare le credenziali per nome o tipo durante la digitazione. Premere **Esc** per cancellare la ricerca.

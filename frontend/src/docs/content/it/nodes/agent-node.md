@@ -2,6 +2,10 @@
 
 Il nodo **AI Agent** è un nodo LLM con tool calling. Può eseguire tool Python, richiamare nodi collegati del canvas come tool, connettersi a server MCP, utilizzare skills, agire opzionalmente come orchestratore che delega ad altri nodi agent, richiamare altri workflow come tool e sospendersi per la [revisione umana](../reference/human-in-the-loop.md).
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 ## Panoramica
 
 | Proprietà | Valore |
@@ -408,3 +412,6 @@ La compressione è automatica e sempre attiva per i nodi Agent. **Non** si appli
 - [Guida rapida](../getting-started/quick-start.md) – Workflow di base con LLM ed espressioni
 - [Scheda Credenziali](../tabs/credentials-tab.md) – Aggiungere chiavi API per l'agente
 - [Scheda MCP](../tabs/mcp-tab.md) – Configurare MCP per gli strumenti del workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

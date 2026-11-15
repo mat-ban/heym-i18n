@@ -95,7 +95,7 @@ Trong bộ lọc `find` hoặc `count`, một giá trị đơn thuần nghĩa l�
 | `$contains` | Khớp chuỗi con không phân biệt chữ hoa chữ thường |
 | `$in` | Giá trị nằm trong mảng đã cho |
 
-Ví dụ kết hợp nhiều toán tử: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Các toán tử không xác định sẽ bị bỏ qua. Bộ lọc `upsert` vẫn sử dụng các giá trị khớp chính xác để tìm hàng cần cập nhật.
+Ví dụ kết hợp nhiều toán tử: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Các toán tử không xác định sẽ bị bỏ qua. Bộ lọc `upsert` vẫn sử dụng các giá trị khớp chính xác để tìm hàng cần cập nhật.
 
 Bạn cũng có thể lọc theo metadata của hàng — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — những trường này được lưu dưới dạng cột thực sự thay vì nằm trong dữ liệu của bạn. Đối với ngày tháng, hãy truyền một giá trị đầy đủ cho các so sánh khoảng (ví dụ: `{"created_at": {"$gt": "2026-06-04"}}`) hoặc dùng `$contains` để khớp văn bản một phần (ví dụ: `{"created_at": {"$contains": "2026-06-04"}}`). Nếu một trong các cột của riêng bạn có cùng tên với một trường metadata, cột dữ liệu sẽ được ưu tiên.
 

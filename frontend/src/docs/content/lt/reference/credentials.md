@@ -32,6 +32,7 @@ Kredencialai saugo API raktus ir slaptažodžius, naudojamus workflow mazguose. 
 | [Grist](../nodes/grist-node.md) | Grist | API raktas + serverio URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Kliento ID + Kliento slaptažodis + OAuth2 sutikimas |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Kliento ID + Kliento slaptažodis + OAuth2 sutikimas |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Kliento ID + Kliento slaptažodis + OAuth2 sutikimas |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Projekto URL + API raktas (+ neprivalomas numatytasis schemos) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + prievadas + vartotojo vardas/slaptažodis + duomenų bazė (+ saugus) |

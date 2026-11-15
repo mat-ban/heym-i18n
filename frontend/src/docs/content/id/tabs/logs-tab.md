@@ -50,3 +50,8 @@ Jika registrasi terbuka, buat akun admin tepercaya sebelum mengaktifkan log Dock
 - [Tab Analytics](./analytics-tab.md) – Metrik eksekusi
 - [Tab Workflows](./workflows-tab.md) – Manajemen Workflow
 - [Contextual Showcase](../reference/contextual-showcase.md) – Panduan halaman ringkas untuk permukaan dashboard
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Arahkan gejala runtime ke prosedur insiden yang tepat
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnosis kegagalan database, layanan, klaster, dan sandbox

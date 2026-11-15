@@ -65,3 +65,7 @@ Vie kohdistin kaavion päälle nähdäksesi osoittimen alla olevan solmutyypin a
 - [Contextual Showcase](../reference/contextual-showcase.md) – Tiivis sivun opas kojetaulun pintoja varten
 
 Jos haluat saada ilmoituksen kaavion näyttämästä trendistä sen sijaan, että seuraisit sitä aktiivisesti, muuta se [hälytykseksi](./alerts-tab.md): virhemäärä, suorituskesto, LLM-kulutus ja suoritusmäärä voidaan kaikki asettaa kynnysarvoille tietyn aikavälin yli.
+
+## Related
+
+- [Operations Runbook (L1): Resurssien käyttö](../reference/operations-runbook.md#most-resource-consuming-workflows) - Etsi suuren volyymin ja pitkäkestoiset työnkulut ja korreloi prosessori, muisti ja tokenit

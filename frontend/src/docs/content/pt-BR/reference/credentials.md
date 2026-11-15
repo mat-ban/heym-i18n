@@ -32,6 +32,7 @@ As credentials armazenam chaves de API e segredos usados pelos nós de workflow.
 | [Grist](../nodes/grist-node.md) | Grist | Chave de API + URL do servidor |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + consentimento OAuth2 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + consentimento OAuth2 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + consentimento OAuth2 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL do projeto + chave de API (+ schema padrão opcional) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + porta + usuário/senha + banco de dados (+ secure) |

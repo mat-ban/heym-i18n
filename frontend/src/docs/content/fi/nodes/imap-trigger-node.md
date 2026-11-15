@@ -16,6 +16,7 @@
 |-----------|--------|--------|
 | `credentialId` | UUID | `imap`-tunnistetiedot, jotka sisältävät palvelimen, kirjautumistiedot, postilaatikon ja SSL-asetukset |
 | `pollIntervalMinutes` | Kokonaisluku | Kuinka usein Heym tarkistaa postilaatikon uusien viestien varalta |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Asennusopas
 
@@ -62,6 +63,8 @@ Kun solmu on käynnistynyt, alaspäin suuntautuvat solmut voivat käyttää seur
 | `$nodeLabel.email.text` | Pelkkä tekstiviesti |
 | `$nodeLabel.email.html` | HTML-viesti |
 | `$nodeLabel.email.attachments` | Liitemetatiedon taulukko (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Dekoodattu otsakeobjekti |
 | `$nodeLabel.email.uid` | IMAP UID dedupointia tai lokitusta varten |
 | `$nodeLabel.triggered_by` | Trigger-lähde (`"imap"`) |

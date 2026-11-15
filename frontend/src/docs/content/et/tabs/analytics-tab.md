@@ -65,3 +65,7 @@ Hõljutage kursorit diagrammi kohal, et näha sõlmetüüpi otse kursori kõrval
 - [Kontekstuaalne showcase](../reference/contextual-showcase.md) – kompaktne lehejuhend armatuurlaua vaadetele
 
 Kui diagramm näitab trendi, millest soovite pigem teavitust kui ise jälgimist, muutke see [teavituseks](./alerts-tab.md): vigade arvule, käivituse kestusele, LLM kulule ja käivituste arvule saab kõigile määrata lävendi ajavahemiku kohta.
+
+## Related
+
+- [Operations Runbook (L1): Ressursikasutus](../reference/operations-runbook.md#most-resource-consuming-workflows) - Leidke suure mahuga ja kaua kestvad töövood ning korreleerige CPU, mälu ja tokenid

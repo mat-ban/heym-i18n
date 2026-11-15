@@ -2,6 +2,9 @@
 
 **Dashboard** sekmesi, grafik widget'larından oluşan ızgaralar oluşturduğunuz Grafana tarzı bir alandır. Her widget, kendi gizli Heym workflow'unun çıktısından oluşturulur; böylece bir workflow'da üretebileceğiniz her türlü veri — veritabanı sorguları, API çağrıları, RAG aramaları, LLM çıktısı — bir grafiğe dönüşebilir. Birden fazla dashboard tutabilir ve her birini kişilerle veya ekiplerle paylaşabilirsiniz.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboard'lar
 
 Herkes, sekmeyi ilk açtığında oluşturulan bir dashboard ile başlar. Dashboard'lar arasında geçiş yapmak için sekmenin üst kısmındaki dashboard seçiciyi, yeni bir tane oluşturmak için yanındaki **+** simgesini kullanın. Seçici önce kendi dashboard'larınızı, ardından sizinle paylaşılanları, paylaşan kişinin adıyla etiketlenmiş olarak listeler.
@@ -27,6 +30,8 @@ Bir widget, ızgara üzerindeki tek bir grafikdir. Desteklenen grafik türleri:
 - **Entity relationships (DB)** (tablolar, alanlar, PK/FK anahtarları ve bağlantılar)
 - **Bar gauge** (kırmızıdan yeşile gradyanlı ve değerli, her satır için bir yatay gösterge, örn. boş disk alanı)
 - **Text** (bir markdown mesajı, örn. "Son çalıştırma 19:47'de" gibi bir durum notu; markdown statik olduğunda [etkileşimli onay kutularını](../nodes/chart-output-node.md#interactive-task-lists) ve özel veya azalan numaralandırma için [açık numaralı listeleri](../nodes/chart-output-node.md#numbered-lists) destekler)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (bekleyen insan incelemeleriniz. Başlık `1/n pending` gösterir. Workflow adı, o çalıştırmayı canvas üzerinde açar. **Approve**, **Request changes** ve **Reject** bunu çözer. Widget başlığının yanındaki geçmiş simgesi, o çalıştırmayı bu sayfadaki geçmiş iletişim kutusunda açar. Widget, üst kaynak satırlarını kullanmaz ve her kişi kendi kuyruğunu görür. Bunun yerine, bu Workflow'u açabilen herkes için tek bir Workflow'un incelemelerini gösterebilir; bkz. [HITL widget'ları](#hitl-widgetlari))
 
 Grafiklerin yanı sıra, bir **Run a workflow** widget'ı workflow'larınızdan birini doğrudan dashboard üzerinden çalıştırır: bırakılan bir dosya üzerinde, giriş alanlarıyla veya bir Run düğmesiyle; bkz. [Çalıştırma widget'ları](#run-widgets).
@@ -146,3 +151,5 @@ Bir paylaşımı kaldırmak veya write'tan read'e düşürmek anında etkili olu
 ## Planlar ve veritabanı diyagramları
 
 Görevleri zaman içinde tamamlama ve bağımlılık bağlantılarıyla göstermek için Widget ekle bölümünden **Gantt**'ı veya tabloları, alanları ve ilişkilerini haritalamak için **Entity relationships (DB)**'yi seçin. Her iki tür de [Chart Output düğümünü](../nodes/chart-output-node.md#gantt-schedules) kullanır ve Heym Work sayfalarında da mevcuttur. Work bir plan veya veritabanı şeması için widget'lar önerdiğinde, sayfayı oluşturmadan önce önerilen görevlerden veya varlıklardan önizlemeler çizer.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

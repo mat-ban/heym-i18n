@@ -92,6 +92,10 @@ Hal itu juga menentukan urutan upgrade. Melakukan upgrade pada main terlebih dah
 
 **Instance worker memiliki IP keluar yang berbeda.** Setiap API yang memasukkan alamat sumber ke allowlist akan melihat IP yang baru. Send Email dijalankan di main justru karena alasan ini; untuk node HTTP, berikan cluster alamat egress NAT tunggal atau masukkan setiap instance ke allowlist.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Menambahkan worker di mesin lain
 
 `docker-compose.worker.yml` di root repositori menjalankan worker di host-nya sendiri. File ini tidak memiliki database dan tidak memiliki UI: ia menjangkau PostgreSQL instance main dan mengambil bagiannya dari eksekusi latar belakang.
@@ -124,7 +128,7 @@ Tidak ada hal ini yang muncul pada instalasi instance tunggal: field-nya kosong,
 
 **Jika worker mati di tengah proses**, heartbeat-nya menjadi usang dan proses recovery sweep milik leader yang sudah ada akan menjalankan ulang eksekusi pada instance yang masih hidup. Baris antrean yang telah diklaimnya akan dihentikan secara terpisah: setelah tidak ada eksekusi aktif untuknya dan masa tenggang dua menit telah berlalu, leader akan menggagalkan baris tersebut dan membangunkan siapa pun yang sedang menunggu hasilnya. Usia saja tidak pernah menjadi pemicunya, sehingga proses yang memang berjalan lama akan dibiarkan; dan baris tersebut digagalkan alih-alih dimasukkan kembali ke antrean, karena recovery sudah menangani proses jalankan ulang dan memasukkan kembali ke antrean akan menjalankan workflow yang sama dua kali.
 
-**Jika main mengalami gangguan**, cron tetap berjalan dari worker dan proses yang dapat didistribusikan tetap dieksekusi. Proses yang membutuhkan main akan mengantre dan menunggu, lalu diproses saat main kembali — tetapi hanya dalam jendela tenggang misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, secara default 600 detik). Apa pun yang lebih lama akan ditutup sebagai dilewati, dengan alasan yang tercatat, alih-alih memutar ulang tumpukan pekerjaan berjam-jam sekaligus.
+**Jika main mengalami gangguan**, cron tetap berjalan dari worker dan proses yang dapat didistribusikan tetap dieksekusi. Proses yang membutuhkan main akan mengantre dan menunggu, lalu diproses saat main kembali — tetapi hanya dalam jendela tenggang misfire (`CRON_MISFIRE_GRACE_SECONDS`, secara default 600 detik). Apa pun yang lebih lama akan ditutup sebagai dilewati, dengan alasan yang tercatat, alih-alih memutar ulang tumpukan pekerjaan berjam-jam sekaligus.
 
 UI, API, MCP, dan editor tidak tersedia selama main mengalami gangguan, karena ingress mengarah ke sana.
 

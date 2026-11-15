@@ -123,3 +123,6 @@ Nếu không có hàng nào khớp, model sẽ được liệt kê trong thông 
 - [Traces Tab](./traces-tab.md) - Sử dụng LLM Cost Table cho biểu đồ tròn chi phí và các thẻ KPI
 - [Grist Node](../nodes/grist-node.md) - Giải pháp thay thế bảng tính bên ngoài
 - [Variables Tab](./global-variables-tab.md) - Giải pháp thay thế lưu trữ key-value
+## Tìm kiếm
+
+Sử dụng trường tìm kiếm phía trên danh sách bảng hoặc nhấn **Ctrl+F** (hoặc **Cmd+F**) để lọc bảng theo tên hoặc mô tả khi bạn nhập. Nhấn **Escape** để xóa tìm kiếm.

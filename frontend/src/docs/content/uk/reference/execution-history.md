@@ -178,3 +178,7 @@ URL наживо — `/workflows/{workflowId}/{executionId}`. Спостеріг
 - [Edit History](./edit-history.md) – Контроль версій для збережень workflow (відкат, порівняння)
 - [Quick Start](../getting-started/quick-start.md) – Створіть і запустіть свій перший workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Створення workflow та керування ними
+
+## Related
+
+- [Operations Runbook (L1): Затримка в черзі](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Розрізнення затриманих, призупинених, перерваних і відновлених виконань перед повторенням

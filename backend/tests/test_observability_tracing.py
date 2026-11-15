@@ -456,6 +456,167 @@ class NodeSpanTest(_EnabledTracingTestBase):
         self.assertEqual(dict(tool_span.attributes)["heym.agent.tool.name"], "fetch_data")
         self.assertEqual(dict(tool_span.attributes)["heym.agent.tool.call_id"], "call-child")
 
+    def _run_refused_tool_turn(self, *, finish_reason: str, arguments: str) -> list[object]:
+        """Run one agent turn whose tool call is refused; return the finished tool spans."""
+        from types import SimpleNamespace
+
+        from app.db.models import CredentialType
+        from app.services.llm_service import LLMService
+        from app.services.workflow_executor import run_async
+
+        tool_call = SimpleNamespace(
+            id="call-refused",
+            type="function",
+            function=SimpleNamespace(name="fetch_data", arguments=arguments),
+        )
+        responses = [
+            SimpleNamespace(
+                choices=[
+                    SimpleNamespace(
+                        message=SimpleNamespace(content=None, tool_calls=[tool_call]),
+                        finish_reason=finish_reason,
+                    )
+                ],
+                usage=SimpleNamespace(prompt_tokens=1, completion_tokens=1),
+            ),
+            SimpleNamespace(
+                choices=[
+                    SimpleNamespace(
+                        message=SimpleNamespace(content="done", tool_calls=[]),
+                        finish_reason="stop",
+                    )
+                ],
+                usage=SimpleNamespace(prompt_tokens=1, completion_tokens=1),
+            ),
+        ]
+        client = SimpleNamespace(
+            base_url="http://test",
+            chat=SimpleNamespace(
+                completions=SimpleNamespace(create=lambda **_kwargs: responses.pop(0))
+            ),
+        )
+        service = LLMService(CredentialType.openai, "test-key")
+        executed: list[object] = []
+
+        def tool_executor(*tool_args: object) -> dict[str, object]:
+            executed.append(tool_args)
+            return {"ok": True, "status": "success"}
+
+        with patch.object(service, "_get_client", return_value=(client, "Test")):
+            run_async(
+                service.execute_with_tools(
+                    model="test-model",
+                    system_instruction=None,
+                    user_message="run tool",
+                    tools=[
+                        {
+                            "name": "fetch_data",
+                            "parameters": {"type": "object"},
+                            "_source": "node_tool",
+                        }
+                    ],
+                    tool_executor=tool_executor,
+                )
+            )
+        self.assertEqual(executed, [])
+        return [
+            s for s in self.exporter.get_finished_spans() if s.name == "heym.agent.tool.execute"
+        ]
+
+    def test_truncated_turn_tool_call_gets_a_refused_span(self) -> None:
+        spans = self._run_refused_tool_turn(finish_reason="length", arguments='{"url": "x"}')
+        self.assertEqual(len(spans), 1)
+        attrs = dict(spans[0].attributes)
+        self.assertEqual(attrs["heym.agent.tool.name"], "fetch_data")
+        self.assertEqual(attrs["heym.agent.tool.call_id"], "call-refused")
+        self.assertEqual(attrs["heym.agent.tool.status"], "error")
+        self.assertEqual(attrs["heym.agent.tool.refused"], "truncated")
+        self.assertNotIn("x", " ".join(str(v) for v in attrs.values() if v != "fetch_data"))
+
+    def test_invalid_arguments_tool_call_gets_a_refused_span(self) -> None:
+        spans = self._run_refused_tool_turn(finish_reason="tool_calls", arguments='{"url": ')
+        self.assertEqual(len(spans), 1)
+        attrs = dict(spans[0].attributes)
+        self.assertEqual(attrs["heym.agent.tool.status"], "error")
+        self.assertEqual(attrs["heym.agent.tool.refused"], "invalid_arguments")
+        self.assertNotIn("heym.agent.tool.args", attrs)
+
+    def test_sibling_of_a_malformed_review_call_gets_a_review_deferred_span(self) -> None:
+        from types import SimpleNamespace
+
+        from app.db.models import CredentialType
+        from app.services.llm_service import HumanReviewPause, LLMService
+        from app.services.workflow_executor import run_async
+
+        def call(call_id: str, name: str, arguments: str) -> SimpleNamespace:
+            return SimpleNamespace(
+                id=call_id,
+                type="function",
+                function=SimpleNamespace(name=name, arguments=arguments),
+            )
+
+        def completion(calls: list[SimpleNamespace]) -> SimpleNamespace:
+            return SimpleNamespace(
+                choices=[
+                    SimpleNamespace(
+                        message=SimpleNamespace(content=None, tool_calls=calls),
+                        finish_reason="tool_calls",
+                    )
+                ],
+                usage=SimpleNamespace(prompt_tokens=1, completion_tokens=1),
+            )
+
+        responses = [
+            completion(
+                [
+                    call("call-review", "review", "{'review_markdown': 'x'}"),
+                    call("call-sibling", "fetch_data", '{"url": "x"}'),
+                ]
+            ),
+            completion([call("call-review-2", "review", '{"review_markdown": "x"}')]),
+        ]
+        client = SimpleNamespace(
+            base_url="http://test",
+            chat=SimpleNamespace(
+                completions=SimpleNamespace(create=lambda **_kwargs: responses.pop(0))
+            ),
+        )
+        service = LLMService(CredentialType.openai, "test-key")
+        executed: list[str] = []
+
+        def tool_executor(_tool_def: object, name: str, *_rest: object) -> object:
+            executed.append(name)
+            return HumanReviewPause(review_markdown="x")
+
+        with patch.object(service, "_get_client", return_value=(client, "Test")):
+            result = run_async(
+                service.execute_with_tools(
+                    model="test-model",
+                    system_instruction=None,
+                    user_message="run tool",
+                    tools=[
+                        {"name": "review", "parameters": {"type": "object"}, "_source": "hitl"},
+                        {
+                            "name": "fetch_data",
+                            "parameters": {"type": "object"},
+                            "_source": "node_tool",
+                        },
+                    ],
+                    tool_executor=tool_executor,
+                )
+            )
+
+        self.assertIn("_hitl_pending", result)
+        self.assertEqual(executed, ["review"])
+        spans = {
+            dict(s.attributes)["heym.agent.tool.call_id"]: dict(s.attributes)
+            for s in self.exporter.get_finished_spans()
+            if s.name == "heym.agent.tool.execute"
+        }
+        self.assertEqual(spans["call-review"]["heym.agent.tool.refused"], "invalid_arguments")
+        self.assertEqual(spans["call-sibling"]["heym.agent.tool.refused"], "review_deferred")
+        self.assertEqual(spans["call-sibling"]["heym.agent.tool.status"], "error")
+
     def test_agent_tool_span_nests_when_run_async_uses_worker_thread(self) -> None:
         """When a loop is already running, run_async must reattach OTel context."""
         import asyncio

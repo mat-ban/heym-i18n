@@ -45,7 +45,7 @@ Węzeł **Input** (wejściowy) stanowi punkt wejścia dla workflow, które odbie
 
 W zakładce **Run** edytora (tryb Defined webhook) każde pole wejściowe obsługuje przeciąganie i upuszczanie oraz wbudowaną kontrolkę załącznika (w prawym dolnym narożniku pola):
 
-- **Pliki tekstowe** (`.txt`, `.md`, `.json`, `.csv` i podobne) są odczytywane jako zwykły tekst.
+- **Pliki tekstowe** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Obrazy** (JPEG, PNG, GIF, WebP) są przechowywane jako adres URL typu `data:` (base64) w wartości pola — należy używać kluczy pól takich jak `imageUrl` lub `base64`, gdy kolejne węzły oczekują danych obrazu.
 - **Pliki PDF** są konwertowane na wyodrębniony tekst (maks. 5 MB pliku, 100 tys. znaków treści).
 

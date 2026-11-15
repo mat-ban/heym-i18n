@@ -12,7 +12,7 @@ Počáteční uzly (bez příchozích hran), které zahajují vykonávání:
 | [Cron](../nodes/cron-node.md) | Spouští se podle plánu (cron výraz, např. `0 * * * *` pro každou hodinu). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Spustí se, když Telegram odešle webhook aktualizaci bota na webhook URL specifickou pro daný uzel. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Spustí se, když Discord odešle webhook Interactions API na endpoint specifický pro daný uzel. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Dotazuje se IMAP schránky a spustí se jednou pro každý nově zjištěný e-mail. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Dotazuje se IMAP schránky a spustí se jednou pro každý nově zjištěný e-mail. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Spustí se, když Heym publikuje platformní událost. Události v jednom dispatch okně dorazí společně jako pole. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Otevře odchozí klientské připojení k externímu socketu a spustí se při vybraných událostech socketu. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Vytvoří jednorázovou upload URL a spustí se, když volající odešle velký multipart soubor. |

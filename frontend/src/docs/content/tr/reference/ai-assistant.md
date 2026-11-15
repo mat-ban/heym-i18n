@@ -48,6 +48,7 @@ Agent modunda, mesaj alanının altındaki **YOLO mode** kutusu asistanın oluş
 - İsteğinizi girişe yazın (örn. "Kullanıcı girdisini alıp bir LLM'e gönderen bir workflow oluştur")
 - Göndermek için **Enter** tuşuna basın (yeni satır için Shift+Enter)
 - AI yanıtını akış halinde verir. **Agent** modunda, yanıt \`\`\`json kod bloğu içinde bir workflow içeriyorsa, otomatik olarak ayrıştırılır ve canvas'a uygulanır. **Ask** modunda canvas asla değiştirilmez.
+- İş akışı JSON'ı akış olarak gelirken, yanıtın altındaki bir satır iş akışını ve şimdiye kadar yazılan düğümleri adlandırır, örneğin `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Konuşmayı sıfırlamak için **Clear** kullanın
 - Bir mesajın üzerine gelin ve gösterdiği metni (workflow JSON dahil) kopyalamak için kopyalama simgesine tıklayın
 - Kutuyu daha uzun yapmak için mesaj kutusunun üstündeki çizgiyi sürükleyin. Giriş alanı panelin %60'ına kadar büyüyebilir ve sayfa yenilendiğinde varsayılan yüksekliğine döner

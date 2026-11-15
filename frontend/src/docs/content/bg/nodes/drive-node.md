@@ -116,6 +116,8 @@
 
 Референцирайте base64 съдържанието надолу по веригата: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Изображенията, върнати чрез `file_base64`, се показват inline в панела за debug, когато стартирате workflow.
 
 ## Пример — Списък на Drive файлове

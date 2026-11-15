@@ -68,6 +68,7 @@ Consulteu [Triggers](./triggers.md) per a tots els punts d'entrada.
 | [Linear](../nodes/linear-node.md) | Gestioneu equips, projectes, incidències, estats de Workflow i comentaris de Linear mitjançant GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Llegiu/escrigueu Google Sheets via OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Llisteu, descarregueu, actualitzeu i suprimiu fitxers de Google Drive via OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Llegir disponibilitat i crear, actualitzar o eliminar invitacions de Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Executeu consultes SQL i inseriu files a BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Consulteu i modifiqueu taules de Supabase mitjançant PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Executeu operacions SQL, CRUD i de recompte a ClickHouse | 1 | 1 |

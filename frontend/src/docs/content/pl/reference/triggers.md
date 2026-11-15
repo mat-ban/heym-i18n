@@ -12,7 +12,7 @@ Węzły startowe (bez krawędzi przychodzących), które inicjują wykonanie:
 | [Cron](../nodes/cron-node.md) | Uruchamiany według harmonogramu (wyrażenie cron, np. `0 * * * *` dla uruchomienia co godzinę). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Uruchamiany, gdy Telegram wysyła aktualizację webhook bota na adres webhook przypisany do danego węzła. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Uruchamiany, gdy Discord wysyła webhook Interactions API na endpoint przypisany do danego węzła. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Odpytuje skrzynkę IMAP i uruchamia się raz dla każdego nowo wykrytego e-maila. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Odpytuje skrzynkę IMAP i uruchamia się raz dla każdego nowo wykrytego e-maila. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Uruchamiany, gdy Heym publikuje zdarzenie platformowe. Zdarzenia w jednym oknie dyspozycji docierają razem jako tablica. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Otwiera wychodzące połączenie klienckie do zewnętrznego gniazda i uruchamia się dla wybranych zdarzeń gniazda. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Generuje jednorazowy URL do przesyłania i uruchamia się, gdy wywołujący wyśle duży plik multipart. |

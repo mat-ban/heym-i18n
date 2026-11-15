@@ -132,3 +132,6 @@ Observability 标签页显示此实例的 [OpenTelemetry Tracing](./opentelemetr
 - [Security](./security.md) – 会话管理、速率限制、凭证加密
 - [Single Sign-On](./sso.md) – 连接外部 OpenID Connect 提供商
 - [OpenTelemetry Tracing](./opentelemetry.md) – 用于 workflow 和节点执行的分布式追踪
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

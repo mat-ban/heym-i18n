@@ -157,6 +157,8 @@ Input → Decision (triage) → Condition ($triage.answers.department.confidence
 
 Ті самі облікові дані можуть оцінювати запуски [Оцінювання](../tabs/evals-tab.md): з вибраним **LLM-as-Judge** оберіть їх як суддю, і модель рішень оцінить кожну відповідь щодо очікуваного результату.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym блокує вихідні запити до приватних і loopback-адрес за замовчуванням, тож endpoint рішень, який Ви запускаєте самостійно на `localhost` або в приватному діапазоні, потребує `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Моделі рішень не з'являються в таблицях ціноутворення LLM, які синхронізує Heym, тож стовпець **Cost** у [Трасуванні](../tabs/traces-tab.md) залишається порожнім для цих викликів. Кількість токенів усе одно записується, і Ви можете додати власну ціну за допомогою перевизначення ціноутворення.

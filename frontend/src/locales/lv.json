@@ -84,7 +84,8 @@
     "dropFileOrClick": "Ievelciet failu šeit vai noklikšķiniet, lai izvēlētos",
     "removeFile": "Noņemt failu",
     "chooseFileFor": "Izvēlieties failu vienumam {label}",
-    "new": "Jauns"
+    "new": "Jauns",
+    "clearSearch": "Notīrīt meklēšanu"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Iespējot",
     "disablePlugin": "Atspējot",
     "uninstallPlugin": "Atinstalēt",
-    "pluginOperationFailed": "Spraudņa darbība neizdevās"
+    "pluginOperationFailed": "Spraudņa darbība neizdevās",
+    "users": "Lietotāji",
+    "encryption": "Šifrēšana"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopēt trace ID",
     "openTrace": "Atvērt trace",
     "message": "Ziņojums",
-    "emptyReply": "Tukša atbilde."
+    "emptyReply": "Tukša atbilde.",
+    "timeRange3h": "Pēdējās 3 stundas",
+    "timeRange6h": "Pēdējās 6 stundas"
   },
   "tables": {
     "title": "Datu tabulas",
@@ -1215,7 +1220,9 @@
     "browseAll": "Pārlūkot visas →",
     "askAi": "Jautāt AI",
     "dropToImport": "Nometiet JSON vai ZIP, lai importētu",
-    "noWorkflowsMatch": "Neviens workflow neatbilst šim filtram."
+    "noWorkflowsMatch": "Neviens workflow neatbilst šim filtram.",
+    "noWorkflowsMatchAll": "Mēģiniet citu nosaukumu, aprakstu vai mapes nosaukumu.",
+    "noWorkflowsMatchFilter": "Mēģiniet citu nosaukumu, aprakstu, mapes nosaukumu vai statusa filtru."
   },
   "schedules": {
     "title": "Grafiki",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Palaists ar MCP klientu",
     "newChatTitle": "Jauns chat",
     "subtitle": "Palaidiet Workflows un uzdodiet jautājumus",
-    "modelsLoadFailedDisabled": "Šo akreditācijas datu modeļu sarakstu neizdevās ielādēt. Chat paliek atspējots, līdz var iegūt modeli."
+    "modelsLoadFailedDisabled": "Šo akreditācijas datu modeļu sarakstu neizdevās ielādēt. Chat paliek atspējots, līdz var iegūt modeli.",
+    "dropFilesToAttach": "Velciet failus, lai pievienotu",
+    "attachFiles": "Pievienot failus"
   },
   "teams": {
     "title": "Teams",
@@ -1883,7 +1892,8 @@
       "skipped": "Izlaists"
     },
     "permissionRead": "lasīt",
-    "permissionWrite": "rakstīt"
+    "permissionWrite": "rakstīt",
+    "details": "Sīkāka informācija"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "Darbības",
       "failedToLoadWidget": "Neizdevās ielādēt logrīku",
       "failedToUpdateCheckbox": "Neizdevās atjaunot atzīmēšanas lodziņu",
-      "refreshDashboard": "Atjaunot informācijas paneli"
+      "refreshDashboard": "Atjaunot informācijas paneli",
+      "revertPrevious": "Atjaunot iepriekšējo"
     },
     "hitl": {
       "previousReview": "Iepriekšējā pārskatīšana",

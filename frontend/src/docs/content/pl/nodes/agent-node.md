@@ -109,6 +109,10 @@ Workflow należy wybrać w sekcji Sub-Workflows w konfiguracji agenta. Agent bę
 
 Obsługiwany węzeł workflow można podłączyć do uchwytu **tools** agenta, aby agent mógł wywołać ten węzeł w czasie działania. Dzięki temu istniejące akcje i transformacje z canvasu stają się wywoływalnymi narzędziami bez pisania kodu w Pythonie.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Narzędzia węzłów canvas stosuje się, gdy agent ma decydować o momencie uruchomienia skonfigurowanego węzła, przy zachowaniu danych logowania, pól statycznych i ustawień specyficznych dla workflow w interfejsie węzła.
 
 ### Pola dostarczane przez agenta
@@ -385,3 +389,6 @@ Kompresja jest automatyczna i zawsze aktywna dla węzłów Agent. **Nie** ma zas
 - [Szybki start](../getting-started/quick-start.md) – Podstawowy workflow z LLM i wyrażeniami
 - [Zakładka Dane logowania](../tabs/credentials-tab.md) – Dodawanie kluczy API dla agenta
 - [Zakładka MCP](../tabs/mcp-tab.md) – Konfiguracja MCP dla narzędzi workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

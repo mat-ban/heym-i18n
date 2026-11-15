@@ -42,7 +42,7 @@ Sessions de formation pratiques adaptées au niveau de compétence et aux cas d'
 
 ## Déploiement Kubernetes
 
-Le guide standard [Exécution et déploiement](../getting-started/running-and-deployment.md) couvre Docker Compose pour les configurations de production sur serveur unique. Les clients Enterprise bénéficient d'une assistance pour les déploiements Kubernetes en production, en vue d'une haute disponibilité et d'une mise à l'échelle horizontale :
+Le guide standard [Exécution et déploiement](../getting-started/running-and-deployment.md) couvre Docker Compose pour les configurations de production sur serveur unique. [Kubernetes Deployment](../getting-started/kubernetes.md). Les clients Enterprise bénéficient d'une assistance pour les déploiements Kubernetes en production, en vue d'une haute disponibilité et d'une mise à l'échelle horizontale :
 
 - **Plusieurs worker nodes** — Répartition des workers backend Heym sur plusieurs nœuds Kubernetes pour la redondance et l'équilibrage de charge
 - **Sidecar containers** — Configuration des patterns sidecar pour la collecte de logs, les agents de monitoring, les service meshes (Istio, Linkerd) et l'injection de secrets (Vault)

@@ -7,20 +7,21 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode, urlparse
 
 import bcrypt
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.auth import password_sign_in
 from app.api.deps import get_client_ip
 from app.config import settings
-from app.db.models import OAuthAccessToken, OAuthAuthorizationCode, OAuthClient
+from app.db.models import OAuthAccessToken, OAuthAuthorizationCode, OAuthClient, User
 from app.db.session import get_db
-from app.services.auth import verify_password
+from app.models.schemas import UserLogin
+from app.services import mfa
 from app.services.auth_rate_limiter import oauth_register_limiter
 from app.services.oauth_tokens import hash_oauth_token
-from app.services.sso_settings import get_sso_settings, password_login_blocked
-from app.services.user_lookup import find_user_by_email
 
 router = APIRouter()
 
@@ -160,10 +161,27 @@ def _render_consent_page(
     code_challenge_method: str,
     csrf_token: str,
     error: str | None,
+    mfa_challenge: str | None = None,
 ) -> str:
     error_html = ""
     if error:
         error_html = f'<div class="error">{_h(error)}</div>'
+    if mfa_challenge:
+        credential_fields = f"""<input type="hidden" name="mfa_challenge" value="{_h(mfa_challenge)}" />
+    <div class="field">
+      <label for="code">Authentication code</label>
+      <input type="text" id="code" name="code" required autofocus inputmode="numeric"
+        autocomplete="one-time-code" placeholder="6-digit code or a recovery code" />
+    </div>"""
+    else:
+        credential_fields = """<div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required autocomplete="email" />
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required autocomplete="current-password" />
+    </div>"""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -225,20 +243,36 @@ def _render_consent_page(
     <input type="hidden" name="code_challenge" value="{_h(code_challenge)}" />
     <input type="hidden" name="code_challenge_method" value="{_h(code_challenge_method)}" />
     <input type="hidden" name="csrf_token" value="{_h(csrf_token)}" />
-    <div class="field">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required autocomplete="email" />
-    </div>
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required autocomplete="current-password" />
-    </div>
+    {credential_fields}
     <button type="submit">Authorize</button>
   </form>
   <div class="scope-info">Scope: {_h(scope)}</div>
 </div>
 </body>
 </html>"""
+
+
+def _consent_client(client_id: str) -> str:
+    # Binds a consent challenge to one OAuth client, so it cannot finish a web sign-in.
+    return f"oauth:{client_id}"
+
+
+async def _verify_consent_second_factor(
+    db: AsyncSession, challenge_token: str, code: str, client_id: str
+) -> User | None:
+    claims = mfa.read_challenge_token(challenge_token)
+    if claims is None or claims.client != _consent_client(client_id):
+        return None
+    allowed, _retry_after = mfa.mfa_limiter.is_allowed(str(claims.user_id))
+    if not allowed:
+        return None
+    user = await db.get(User, claims.user_id)
+    if user is None or not user.is_active:
+        return None
+    if await mfa.verify_second_factor(db, user, code) is None:
+        return None
+    mfa.mfa_limiter.record_success(str(user.id))
+    return user
 
 
 async def _get_client(db: AsyncSession, client_id: str) -> OAuthClient | None:
@@ -319,6 +353,10 @@ def _validate_pkce_request(
 
 
 async def _issue_tokens(db: AsyncSession, client_id: str, user_id, scope: str) -> dict:
+    # Both grants end here, so a deactivated account can neither redeem a code nor refresh.
+    user = await db.get(User, user_id)
+    if user is None or not user.is_active:
+        raise HTTPException(400, detail={"error": "invalid_grant"})
     access_token = secrets.token_urlsafe(40)
     refresh_token = secrets.token_urlsafe(40)
     expires_at = datetime.now(timezone.utc) + timedelta(
@@ -538,17 +576,13 @@ async def authorize_post(
             400, detail="Invalid or expired form token. Please reload and try again."
         )
 
-    # Authenticate user
-    user = await find_user_by_email(db, email)
-
-    # The same gate as /api/auth/login. Closing only that one would make the setting a lie.
-    sso_row = await get_sso_settings(db)
-    if (
-        password_login_blocked(sso_row, email)
-        or user is None
-        or not verify_password(password, user.hashed_password)
-    ):
-        new_csrf = _generate_csrf_token(client_id)
+    def consent_error(
+        error: str,
+        mfa_challenge: str | None = None,
+        *,
+        status_code: int = status.HTTP_400_BAD_REQUEST,
+        headers: dict[str, str] | None = None,
+    ) -> HTMLResponse:
         return HTMLResponse(
             _render_consent_page(
                 client_name=client.client_name,
@@ -558,11 +592,48 @@ async def authorize_post(
                 state=state,
                 code_challenge=code_challenge,
                 code_challenge_method=code_challenge_method,
-                csrf_token=new_csrf,
-                error="Invalid email or password",
+                csrf_token=_generate_csrf_token(client_id),
+                error=error,
+                mfa_challenge=mfa_challenge,
             ),
-            status_code=400,
+            status_code=status_code,
+            headers=headers,
         )
+
+    challenge_token = str(form.get("mfa_challenge", ""))
+    if challenge_token:
+        user = await _verify_consent_second_factor(
+            db, challenge_token, str(form.get("code", "")), client_id
+        )
+        if user is None:
+            return consent_error("That code is not valid, or the attempt expired.", challenge_token)
+    else:
+        try:
+            credentials = UserLogin(email=email, password=password)
+        except ValidationError:
+            return consent_error("Invalid email or password")
+        # The same gate as /api/auth/login, not a copy of it: one per-IP budget, the
+        # SSO-only rule and the auth.login audit line, so the two doors cannot drift apart.
+        try:
+            user = await password_sign_in(
+                db, credentials, get_client_ip(request), client=_consent_client(client_id)
+            )
+        except HTTPException as exc:
+            if exc.status_code == status.HTTP_429_TOO_MANY_REQUESTS:
+                return consent_error(
+                    str(exc.detail), status_code=exc.status_code, headers=exc.headers
+                )
+            return consent_error(str(exc.detail))
+        requirement = mfa.password_sign_in_requirement(user)
+        if requirement == mfa.PURPOSE_ENROLL:
+            return consent_error(
+                "Set up two-factor authentication in Heym first, then connect this client."
+            )
+        if requirement == mfa.PURPOSE_VERIFY:
+            pending = mfa.create_challenge_token(
+                user.id, mfa.PURPOSE_VERIFY, client=_consent_client(client_id)
+            )
+            return consent_error("Enter the code from your authenticator app.", pending)
 
     # Generate authorization code
     code = secrets.token_urlsafe(32)

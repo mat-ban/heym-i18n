@@ -19,6 +19,7 @@
 | `codeParameters` | expression | 一個 JSON 物件，將 Workflow 資料接入程式碼。Expression 會在程式碼執行前解析完畢 |
 | `codeRequirements` | string | `requirements.txt` 的內容，每行一個套件。留空則略過安裝 |
 | `codeAllowNetwork` | boolean | 程式碼本身是否可以存取網路（預設為 `false`） |
+| `codeFiles` | expression | Optional Drive files mounted read-only for the run: an id, several ids, or an expression such as `$Upload.file.id` |
 
 ## `main` 函式
 
@@ -112,6 +113,21 @@ feedparser
 | 執行另一個 Workflow | [Execute](execute-node.md) |
 
 當邏輯確實無法以上述節點滿足時——自訂數學運算、特殊解析，或某種演算法——才使用 **Code**。
+## Reading Drive files
+
+Set **Files** (`codeFiles`) to give the code the files of the run. It accepts an id, ids separated by commas, a list, or an expression that resolves to a file or its id, such as `$Upload.file.id` or `$Upload.file`. A file opens when it came into this workflow: uploaded through its [File Upload trigger](./file-upload-trigger-node.md) or written to [Drive](../reference/drive.md) by one of its nodes. Other Drive files are not available to a run, so a workflow cannot be used to read someone's Drive.
+
+```python
+import heym_files
+import pandas as pd
+
+def main(params):
+    workbook = params.files[0]
+    df = pd.read_excel(heym_files.path(workbook.name), sheet_name="Summary")
+    return {"rows": len(df), "columns": list(df.columns)}
+```
+
+
 ## 範例
 
 由上游節點產生的評分資料列：

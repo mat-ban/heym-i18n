@@ -2,6 +2,9 @@
 
 Az **Irányítópult** fül egy Grafana-stílusú felület, ahol diagram widgetekből álló rácsokat építhet. Minden widget a saját rejtett Heym workflow-jának kimenetéből renderelődik, így bármilyen adat, amelyet workflow-ban elő tud állítani — adatbázis-lekérdezések, API-hívások, RAG-keresések, LLM-kimenet — diagrammá alakítható. Több irányítópultot is fenntarthat, és mindegyiket megoszthatja személyekkel vagy csapatokkal.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Irányítópultok
 
 Mindenki egy irányítópulttal kezd, amely az első megnyitáskor jön létre. A fül tetején található irányítópult-választóval válthat az irányítópultok között, a mellette lévő **+** gombbal pedig újat hozhat létre. A választó először a saját irányítópultjait listázza, majd az Önnel megosztottakat, amelyek annak a személynek a nevével vannak jelölve, aki megosztotta őket.
@@ -27,6 +30,8 @@ A widget egyetlen diagram a rácson. Támogatott diagramtípusok:
 - **Entity relationships (DB)** (táblák, mezők, PK/FK kulcsok és kapcsolatok)
 - **Bar gauge** (egy vízszintes gauge soronként piros→zöld színátmenettel és egy értékkel, pl. szabad lemezterület)
 - **Text** (markdown üzenet, pl. egy állapotjelző megjegyzés, mint „Utolsó futtatás 19:47-kor"; támogatja az [interaktív jelölőnégyzeteket](../nodes/chart-output-node.md#interactive-task-lists), ha a markdown statikus, valamint a [kifejezett számozott listákat](../nodes/chart-output-node.md#numbered-lists) egyéni vagy csökkenő számozáshoz)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (az Ön függőben lévő emberi felülvizsgálatai. A fejléc `1/n pending` értéket mutat. A workflow neve megnyitja azt a futtatást a vásznon. Az **Approve**, a **Request changes** és a **Reject** gombok lezárják. A widget címe melletti előzmények ikon megnyitja azt a futtatást az előzmények párbeszédablakban ezen az oldalon. A widget nem használ upstream sorokat, és mindenki a saját sorát látja. Ehelyett megjelenítheti egyetlen Workflow ellenőrzéseit is mindazok számára, akik megnyithatják azt a Workflow-t; lásd: [HITL widgetek](#hitl-widgetek))
 
 A diagramok mellett a **Run a workflow** widget közvetlenül az irányítópultról futtatja az egyik workflow-ját: egy ráhúzott fájlon, a bemeneti mezőivel vagy egy Run gombbal; lásd: [Futtató widgetek](#run-widgets).
@@ -145,3 +150,5 @@ Egy megosztás eltávolítása vagy írásról olvasásra való csökkentése az
 ## Ütemezések és adatbázis-diagramok
 
 Válassza a **Gantt** lehetőséget a Widget hozzáadása menüben a feladatok időbeli megjelenítéséhez befejezési és függőségi kapcsolatokkal, vagy az **Entity relationships (DB)** lehetőséget a táblák, mezők és kapcsolataik feltérképezéséhez. Mindkét típus a [Chart Output csomópontot](../nodes/chart-output-node.md#gantt-schedules) használja, és a Heym Work oldalakon is elérhető. Amikor a Work widgeteket javasol egy ütemezéshez vagy adatbázissémához, előnézeteket rajzol a javasolt feladatokból vagy entitásokból.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

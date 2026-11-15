@@ -69,6 +69,7 @@ Heym надає різноманітні типи вузлів для побуд
 | [Linear](../nodes/linear-node.md) | Керуйте командами Linear, проєктами, issues, станами workflow і коментарями через GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Читання/запис Google Sheets через OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Переглядайте, завантажуйте, оновлюйте та видаляйте файли Google Drive через OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Зчитування доступності та створення, оновлення або видалення запрошень Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Виконуйте SQL-запити та вставляйте рядки в BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Виконуйте запити та змінюйте таблиці Supabase через PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Виконуйте SQL, CRUD та операції підрахунку в ClickHouse | 1 | 1 |

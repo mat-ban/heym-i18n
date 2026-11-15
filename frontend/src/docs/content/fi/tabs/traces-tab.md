@@ -12,7 +12,7 @@ Sivu avautuu tilastoyhteenvedolla suorituslistan yläpuolella, laskettuna valitu
 - **KPI-kortit** – Kutsut yhteensä, Tokenit yhteensä, Kustannukset yhteensä (USD), Keskimääräinen viive, Virheprosentti
 - **Tokenit mallin mukaan** – Donitsikaavio tokenimäärästä mallikohtaisesti
 - **Kustannukset mallin mukaan** – Donitsikaavio USD-kuluista mallikohtaisesti. Hinnoittelemattomille malleille näkyy linkki "Määritä hinnat" kohteeseen [LLM-kustannustaulu](./datatable-tab.md#llm-cost-table-system-table)
-- **Kutsut ajan funktiona** – Pinottu aluekaavio onnistuneista ja epäonnistuneista kutsusta aikaväleittäin (5 min / 1 h / 6 h / 1 vrk, valitaan automaattisesti valitun aikavälin mukaan)
+- **Kutsut ajan funktiona** – Pinottu aluekaavio onnistuneista ja epäonnistuneista kutsusta aikaväleittäin (5 min / 15 min / 30 min / 1 h / 6 h / 1 vrk, valitaan automaattisesti valitun aikavälin mukaan)
 - **Huomio hinnoittelemattomista malleista** – Näkyy kaavioiden alla, kun joillakin jäljitetyillä malleilla ei ole hintariviä, ja sisältää linkin LLM-kustannustauluun
 
 ## Aikaväli
@@ -23,12 +23,13 @@ Yksi **Aikaväli**-valitsin suodatinpalkin yläosassa ohjaa sekä tilastoyläots
 
 - Sivutettu lista viimeisimmistä suorituksista valitulla aikavälillä
 - Jokainen suoritus näyttää: workflow, solmu, tunnistetiedot, aikaleima, kesto
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Klikkaa suoritusta avataksesi yksityiskohtaisen näkymän
 - Käytä **Edellinen / Seuraava** -painikkeita yksityiskohtaisessa näkymässä liikkuaksesi suoritusten välillä sulkematta ikkunaa
 
 ## Suodatus
 
-- **Aikaväli** – 1h / 24h / 7d / 30d / Kaikki; suodattaa sekä kaaviot että listan
+- **Aikaväli** – 1h / 3h / 6h / 24h / 7d / 30d / Kaikki; suodattaa sekä kaaviot että listan
 - **Tunnistetiedot** – Suodata käytetyn tunnistetiedon (API-avain) mukaan
 - **Lähde** – Suodata workflown tai suorituksen lähteen mukaan
 - **Haku** – Hae mallin, workflown, tunnistetiedon tai solmun tunnisteen perusteella

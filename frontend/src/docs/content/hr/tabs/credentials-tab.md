@@ -83,3 +83,7 @@ Pogledajte [Expression DSL](../reference/expression-dsl.md) za referenciranje vr
 - [Vektorska spremišta](./vectorstores-tab.md) – Koristi Qdrant ili Postgres (pgvector) vjerodajnice
 - [Chat Tab](./chat-tab.md) – Koristi OpenAI/Google vjerodajnice
 - [Kontekstualna prezentacija](../reference/contextual-showcase.md) – Kompaktni vodič za površine nadzorne ploče
+
+## Pretraživanje
+
+Koristite polje za pretraživanje iznad popisa ili pritisnite **Ctrl+F** (ili **Cmd+F**) za filtriranje vjerodajnica prema nazivu ili vrsti tijekom tipkanja. Pritisnite **Escape** za brisanje pretraživanja.

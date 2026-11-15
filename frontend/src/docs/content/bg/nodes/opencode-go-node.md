@@ -22,7 +22,7 @@ Node също изисква **GitHub** удостоверение за клон
 Изолацията на изпълнението се избира от `HEYM_OPENCODE_CLI_COMMAND`, точно както при Codex node:
 
 - **Локална разработка (`run.sh`)** го оставя на стойността по подразбиране `opencode`, така че OpenCode се изпълнява като подпроцес на хоста срещу клонираното работно пространство — не е необходим Docker, без допълнителни флагове.
-- **Docker внедрявания (`deploy.sh` и единичният GHCR образ)** го задават на `/usr/local/bin/heym-opencode-docker`, wrapper, който изпълнява `opencode run` вътре в **усилено защитен, временен sibling контейнер**, споделящ именувания volume на OpenCode работното пространство.
+- **Docker внедрявания (`deploy.sh` и единичният GHCR образ)** го задават на `/usr/local/bin/heym-opencode-docker`, wrapper, който изпълнява `opencode run` вътре в **усилено защитен, временен sibling контейнер**, споделящ именувания volume на OpenCode работното пространство. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Усилено защитеният runner контейнер премахва всички Linux capabilities, задава `no-new-privileges`, използва read-only root с tmpfs `/tmp` и прилага ограничения за pid/memory/CPU. Мрежовият изход е разрешен (OpenCode трябва да достигне до model gateway). **GitHub token никога не се поставя вътре в контейнера** — всички git и GitHub операции се изпълняват от страната на хоста, така че само OpenCode API key и файловете на хранилището са вътре.
 

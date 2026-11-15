@@ -19,7 +19,7 @@ Některé integrační uzly **nevyžadují** přihlašovací údaje. [WebSocket 
 | **Linear** | [Uzel Linear](../nodes/linear-node.md) | `api_key`, nebo `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Uzel Sentry](../nodes/sentry-node.md) | `api_token`, volitelně `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evaluace](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, volitelně `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evaluace](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, volitelně `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, výchozí nastavení AI | přihlašovací údaje rozhodovacího modelu plus volby modelu odkazující na Vaše další přihlašovací údaje |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektorová úložiště | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Některé integrační uzly **nevyžadují** přihlašovací údaje. [WebSocket 
 | **Grist** | [Uzel Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Uzel Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + souhlas OAuth2 |
 | **Google Drive** | [Uzel Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + souhlas OAuth2 (plný rozsah Drive) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Uzel BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + souhlas OAuth2 |
 | **Supabase** | [Uzel Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, volitelně `supabase_schema` |
 | **ClickHouse** | [Uzel ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -891,3 +892,6 @@ Směruje každý požadavek na jeden z Vašich stávajících přihlašovacích 
 ### Poznámky
 
 Názvy možností jsou to, mezi čím decision model volí, proto musí být jedinečné. Možnost nemůže odkazovat na jiný Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

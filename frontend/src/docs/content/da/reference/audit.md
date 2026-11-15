@@ -59,6 +59,10 @@ Alle tilstandsændringer logges. Læsninger logges kun, hvor læsningen i sig se
 | `auth.token_refresh` | `outcome=denied` med `reason=refresh_token_replayed_or_revoked` — et signal om token-tyveri, der bør udløse en advarsel. |
 | `auth.password_change` | `outcome=failure` når det nuværende password var forkert. |
 | `auth.sso_login` | Single sign-on. `outcome=failure` indeholder årsagen til, at provider-responset blev afvist; `denied` indeholder `email_not_verified`, `domain_not_allowed` eller `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | En administrator har ændret [SSO](./sso.md)-konfigurationen. Registrerer `enabled` og `password_login_disabled`, aldrig klienthemmeligheden. |
 | `sso_settings.test` | En administrator har kørt SSO-forbindelsestesten. |
 

@@ -131,3 +131,6 @@ Paneel teatab ka, kui palju viimase 24 tunni käivitustest sai toimuda ainult p�
 - [Turvalisus](./security.md) – Sessioonihaldus, rate limiting, mandaatide krüpteerimine
 - [Ühekordne sisselogimine](./sso.md) – Ühendage väline OpenID Connect pakkuja
 - [OpenTelemetry Tracing](./opentelemetry.md) – Hajutatud jälgimine workflow'de ja sõlmede käivituste jaoks
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

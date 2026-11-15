@@ -12,7 +12,7 @@ Startknoten (keine eingehenden Kanten), die die Ausführung initiieren:
 | [Cron](../nodes/cron-node.md) | Läuft nach Zeitplan (Cron-Ausdruck, z. B. `0 * * * *` für stündlich). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Startet, wenn Telegram ein Bot-Webhook-Update an die knotenspezifische Webhook-URL sendet. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Startet, wenn Discord einen Interactions-API-Webhook an den knotenspezifischen Endpoint sendet. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Fragt ein IMAP-Postfach ab und startet einmal für jede neu erkannte E-Mail. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Fragt ein IMAP-Postfach ab und startet einmal für jede neu erkannte E-Mail. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Startet, wenn Heym ein Plattform-Ereignis veröffentlicht. Ereignisse in einem Dispatch-Fenster treffen gemeinsam als Array ein. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Öffnet eine ausgehende Client-Verbindung zu einem externen Socket und startet bei ausgewählten Socket-Ereignissen. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Erzeugt eine einmalig verwendbare Upload-URL und startet, wenn ein Aufrufer eine große Multipart-Datei sendet. |

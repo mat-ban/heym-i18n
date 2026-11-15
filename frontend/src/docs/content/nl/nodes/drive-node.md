@@ -116,6 +116,8 @@ Verwijs stroomafwaarts naar het opgeslagen bestand: `$saveAudio.id`, `$saveAudio
 
 Verwijs stroomafwaarts naar de base64-inhoud: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Afbeeldingen die via `file_base64` worden geretourneerd, worden inline weergegeven in het debug-paneel wanneer u de workflow uitvoert.
 
 ## Voorbeeld — Drive-bestanden weergeven

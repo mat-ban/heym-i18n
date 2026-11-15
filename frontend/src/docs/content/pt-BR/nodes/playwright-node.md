@@ -68,7 +68,9 @@ A ação **aiStep** usa um LLM para analisar o HTML da página (e, opcionalmente
 
 O **AI Auto Heal** torna os workflows resilientes a mudanças no DOM. Quando um selector falha duas vezes (por exemplo, após um redesign do site), o Heym chama o LLM para encontrar um localizador alternativo — tipicamente `role=button[name='Submit']` ou `text=Exact text` em vez de selectors CSS.
 
-Habilite o **Auto heal mode** nas propriedades da etapa de IA. Se a etapa salva falhar:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Habilite o **Auto heal mode** nas propriedades da etapa de IA. Se a etapa salva falhar:
 
 1. O Heym captura o HTML atual e o screenshot
 2. Envia a etapa com falha + o contexto da página ao LLM

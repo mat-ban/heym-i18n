@@ -192,7 +192,7 @@ Trace 시스템은 완전한 요청 및 응답 Payload와 호출별 타이밍을
 Heym의 모든 LLM 호출은 자동으로 비용이 산정됩니다. [Traces 탭](../tabs/traces-tab.md)은 동기화된 가격 테이블에서 산출된 실시간 USD 비용과 함께 트레이스별 입력 및 출력 Token 수를 표시합니다.
 
 - **트레이스별 비용** – 모든 트레이스 행에 입력 Token, 출력 Token, 총 USD가 표시됩니다
-- **비용 분석** – KPI 카드와 모델별 비용 차트가 선택한 시간 범위(1h / 24h / 7d / 30d / All)에 따라 갱신됩니다
+- **비용 분석** – KPI 카드와 모델별 비용 차트가 선택한 시간 범위(1h / 3h / 6h / 24h / 7d / 30d / All)에 따라 갱신됩니다
 - **LLM Cost Table** – [DataTable 탭](../tabs/datatable-tab.md)의 시스템 테이블이 24시간마다 Helicone에서 시드되며, 아직 등록되지 않은 모델의 가격을 재정의하거나 사용자 정의 행을 추가할 수 있습니다
 - **가격 누락 경고** – 가격 항목이 없는 모델의 트레이스에는 비용 테이블로 직접 연결되는 인라인 경고가 표시됩니다
 
@@ -278,7 +278,7 @@ Workflow는 `/api/workflows/{workflow_id}/execute`에서 HTTP로 호출 가능�
 Heym은 양측 모두에서 네이티브 [MCP](../tabs/mcp-tab.md) 지원을 제공합니다:
 
 - **클라이언트로서**: Agent 노드가 stdio 또는 SSE를 통해 외부 MCP 서버(Filesystem, Browserbase, 사용자 정의 도구)에 연결하고 해당 도구를 자동으로 사용합니다
-- **서버로서**: MCP가 활성화된 Workflow는 `/api/mcp/sse`의 기본 서버 또는 자체 URL과 API key를 가진 명명된 서버에서 도구가 되어, Claude Desktop, Cursor 및 기타 MCP 클라이언트가 귀하의 Heym Workflow를 직접 호출할 수 있습니다
+- **서버로서**: MCP가 활성화된 Workflow는 `/api/mcp (or /api/mcp/sse for legacy connections)`의 기본 서버 또는 자체 URL과 API key를 가진 명명된 서버에서 도구가 되어, Claude Desktop, Cursor 및 기타 MCP 클라이언트가 귀하의 Heym Workflow를 직접 호출할 수 있습니다
 
 Agent는 여러 MCP 서버를 동시에 사용할 수 있으며, 모든 Workflow는 외부 MCP 클라이언트의 도구가 될 수 있습니다.
 

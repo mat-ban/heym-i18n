@@ -12,7 +12,7 @@ Stranica se otvara sa sažetkom statistike iznad popisa tragova, izračunatim za
 - **KPI kartice** – Ukupni pozivi, Ukupni tokeni, Ukupni trošak (USD), Prosječna latencija, Postotak pogrešaka
 - **Tokeni po modelu** – Donut grafikon volumena tokena po modelu
 - **Trošak po modelu** – Donut grafikon troškova u USD po modelu. Modeli bez cijena prikazuju poveznicu "Konfigurirajte cijene" na [Tablicu troškova LLM-a](./datatable-tab.md#llm-cost-table-system-table)
-- **Pozivi tijekom vremena** – Stacked area grafikon uspješnih naspram neuspješnih poziva po intervalu (5 min / 1 h / 6 h / 1 dan, automatski odabran po rasponu)
+- **Pozivi tijekom vremena** – Stacked area grafikon uspješnih naspram neuspješnih poziva po intervalu (5 min / 15 min / 30 min / 1 h / 6 h / 1 dan, automatski odabran po rasponu)
 - **Obavijest o modelima bez cijena** – Pojavljuje se ispod grafikona kada neki modela u tragovima nemaju redak cijene, povezujući se na Tablicu troškova LLM-a
 
 ## Vremenski Raspon
@@ -23,12 +23,13 @@ Jedan **Odabir vremenskog raspona** na vrhu trake filtra upravlja i zaglavljem s
 
 - Paginirani popis nedavnih tragova unutar odabranog vremenskog raspona
 - Svaki trag prikazuje: workflow, čvor, vjerodajnicu, vremensku oznaku, trajanje
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Kliknite na trag za otvaranje prikaza detalja
 - Koristite **Prethodni / Sljedeći** unutar dijaloga detalja za kretanje između tragova bez zatvaranja
 
 ## Filtriranje
 
-- **Vremenski raspon** – 1h / 24h / 7d / 30d / Sve; filtrira grafikone i popis zajedno
+- **Vremenski raspon** – 1h / 3h / 6h / 24h / 7d / 30d / Sve; filtrira grafikone i popis zajedno
 - **Vjerodajnica** – Filtrirajte prema korištenoj vjerodajnici (API ključ)
 - **Izvor** – Filtrirajte prema workflow-u ili izvoru izvršavanja
 - **Pretraživanje** – Pretražujte prema modelu, workflow-u, vjerodajnici ili oznaci čvora

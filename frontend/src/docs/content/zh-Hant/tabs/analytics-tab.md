@@ -65,3 +65,7 @@
 - [Contextual Showcase](../reference/contextual-showcase.md) – 儀表板介面的精簡頁面指南
 
 當圖表顯示出您希望收到通知、而非持續觀察的趨勢時，請將其轉換為 [alert](./alerts-tab.md)：錯誤計數、執行持續時間、LLM 花費與執行次數，皆可設定時間範圍內的閾值。
+
+## Related
+
+- [Operations Runbook (L1): 資源利用](../reference/operations-runbook.md#most-resource-consuming-workflows) - 尋找高容量和長時間執行的工作流程並關聯 CPU、記憶體和 Token

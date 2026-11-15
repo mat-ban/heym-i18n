@@ -65,3 +65,7 @@ Pase el cursor sobre un gráfico para ver el tipo de nodo bajo el puntero, justo
 - [Contextual Showcase](../reference/contextual-showcase.md) – Guía compacta de páginas para las superficies del dashboard
 
 Cuando un gráfico muestre una tendencia sobre la que prefiera recibir aviso en lugar de vigilarla, conviértala en una [alerta](./alerts-tab.md): el recuento de errores, la duración de ejecución, el gasto en LLM y el recuento de ejecuciones pueden recibir un umbral sobre una ventana temporal.
+
+## Related
+
+- [Operations Runbook (L1): Uso de recursos](../reference/operations-runbook.md#most-resource-consuming-workflows) - Encuentre workflows de gran volumen y larga duración y correlacione CPU, memoria y tokens

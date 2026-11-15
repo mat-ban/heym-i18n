@@ -11,7 +11,7 @@ Heym 支持两种模式：**默认服务器**，在单一 endpoint 下暴露所�
 
 ## 默认 MCP 服务器
 
-默认服务器始终可通过 `{origin}/api/mcp/sse` 访问。所有开启了 MCP 开关的 workflow 都会在此处作为工具出现。
+默认服务器始终可通过 `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)` 访问。所有开启了 MCP 开关的 workflow 都会在此处作为工具出现。
 
 ### MCP API Key
 
@@ -186,7 +186,7 @@ Workflow 分配是按服务器进行的，独立于默认服务器的切换。�
 
 | 服务器 | Endpoint |
 |--------|----------|
-| 默认 | `{origin}/api/mcp/sse` |
+| 默认 | `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)` |
 | 命名 | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
 两个 endpoints 均支持 SSE 传输（GET，MCP 规范 2024-11-05）和 Streamable HTTP 传输（POST，MCP 规范 2025-03-26）。Claude、ChatGPT 和 Gemini 在两者上均使用 OAuth 2.1 / PKCE 进行安全登录。
@@ -201,3 +201,17 @@ Workflow 分配是按服务器进行的，独立于默认服务器的切换。�
 - [Workflows Tab](./workflows-tab.md) – 创建和管理 workflows
 - [Node Types](../reference/node-types.md) – AI 节点概览
 - [Contextual Showcase](../reference/contextual-showcase.md) – 仪表板界面的紧凑页面指南
+
+### Memory tools: get_user_memory and set_user_memory
+
+The default server always lists two more tools, with or without `heym_chat`, so any MCP client shares one memory with Heym's Chat and Heym Work. The memory is your [User Rules](../reference/user-settings.md#user-rules-as-memory).
+
+| Tool | Arguments | Returns |
+|------|-----------|---------|
+| `get_user_memory` | none | `content` (your User Rules), `revision`, `length`, `max_length` |
+| `set_user_memory` | `mode` (`append` or `replace`), `content`, `revision` (required for `replace`) | `status` (`added`, `replaced`, `unchanged`, `conflict`, `refused`) and the memory after the write |
+
+- `append` adds one line.
+- `replace` rewrites the whole text and only lands when `revision` matches the stored text. On `conflict`, the result carries the current text and revision to merge and retry.
+- Text that looks like an API key, token, password or other credential is refused, and nothing is saved.
+- Named servers do not list these tools. A workflow named `get_user_memory` or `set_user_memory` is not listed on the default server.

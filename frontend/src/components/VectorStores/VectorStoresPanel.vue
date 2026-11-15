@@ -14,7 +14,9 @@ import Label from "@/components/ui/Label.vue";
 import Select from "@/components/ui/Select.vue";
 import Textarea from "@/components/ui/Textarea.vue";
 import UserAvatar from "@/components/ui/UserAvatar.vue";
+import VectorStoreIngestJobs from "@/components/VectorStores/VectorStoreIngestJobs.vue";
 import { onDismissOverlays } from "@/composables/useOverlayBackHandler";
+import { RAG_FORMATS_LINE } from "@/lib/ragFileTypes";
 import { formatDate, formatFileSize } from "@/lib/utils";
 import {
   credentialsApi,
@@ -34,6 +36,7 @@ const showDeleteDialog = ref(false);
 const showUploadDialog = ref(false);
 const deletingStore = ref<VectorStoreListItem | null>(null);
 const deleteCollection = ref(true);
+const deleteWarning = ref("");
 const uploadingStore = ref<VectorStoreListItem | null>(null);
 
 const showShareDialog = ref(false);
@@ -203,11 +206,13 @@ function openDeleteDialog(store: VectorStoreListItem, event: Event): void {
 async function confirmDelete(): Promise<void> {
   if (!deletingStore.value) return;
 
+  const storeId = deletingStore.value.id;
   try {
-    await vectorStoresApi.delete(deletingStore.value.id, deleteCollection.value);
-    vectorStores.value = vectorStores.value.filter((s) => s.id !== deletingStore.value?.id);
+    const result = await vectorStoresApi.delete(storeId, deleteCollection.value);
+    vectorStores.value = vectorStores.value.filter((s) => s.id !== storeId);
     showDeleteDialog.value = false;
     deletingStore.value = null;
+    deleteWarning.value = result.warning ?? "";
   } catch {
     createError.value = "Failed to delete vector store";
   }
@@ -349,6 +354,7 @@ async function submitUpload(): Promise<void> {
 
     let totalChunks = 0;
     let totalPoints = 0;
+    let queued = 0;
     uploadProgress.value = { current: 0, total: uploadFiles.value.length };
 
     for (let i = 0; i < uploadFiles.value.length; i++) {
@@ -360,11 +366,19 @@ async function submitUpload(): Promise<void> {
         file,
         overrideDuplicates.value
       );
-      totalChunks += result.chunks_processed;
-      totalPoints += result.points_inserted;
+      if (result.status === "queued") {
+        queued += 1;
+      } else {
+        totalChunks += result.chunks_processed;
+        totalPoints += result.points_inserted;
+      }
     }
 
-    uploadSuccess.value = `Uploaded ${uploadFiles.value.length} file(s): ${totalChunks} chunks, ${totalPoints} vectors`;
+    const added = uploadFiles.value.length - queued;
+    const notes: string[] = [];
+    if (added > 0) notes.push(`Uploaded ${added} file(s): ${totalChunks} chunks, ${totalPoints} vectors`);
+    if (queued > 0) notes.push(`${queued} file(s) are being read in the background; open the store to follow them`);
+    uploadSuccess.value = notes.join(". ");
     uploadFiles.value = [];
     overrideDuplicates.value = false;
     await loadVectorStores();
@@ -569,6 +583,13 @@ async function deleteItem(pointId: string): Promise<void> {
         {{ $t('vectorStores.newStore') }}
       </Button>
     </div>
+
+    <p
+      v-if="deleteWarning"
+      class="mb-4 text-sm text-amber-500"
+    >
+      {{ deleteWarning }}
+    </p>
 
     <div
       v-if="loading"
@@ -878,7 +899,9 @@ async function deleteItem(pointId: string): Promise<void> {
     >
       <div class="space-y-4">
         <p class="text-sm text-muted-foreground">
-          {{ $t('vectorStores.uploadDescription', { name: uploadingStore?.name }) }}
+          Upload files to <strong>{{ uploadingStore?.name }}</strong>.
+          Supported formats: {{ RAG_FORMATS_LINE }}.
+>>>>>>> upstream/main
         </p>
 
         <div
@@ -896,7 +919,6 @@ async function deleteItem(pointId: string): Promise<void> {
             <span class="text-primary hover:underline text-sm">{{ $t('vectorStores.browse') }}</span>
             <input
               type="file"
-              accept=".pdf,.md,.markdown,.txt,.csv,.json"
               multiple
               class="hidden"
               @change="handleFileSelect"
@@ -1250,6 +1272,13 @@ async function deleteItem(pointId: string): Promise<void> {
         >
           {{ itemsError }}
         </p>
+
+        <VectorStoreIngestJobs
+          v-if="itemsStore"
+          :key="itemsStore.id"
+          :store-id="itemsStore.id"
+          @finished="loadItems"
+        />
 
         <div
           v-if="itemsLoading && itemsSourceGroups.length === 0"

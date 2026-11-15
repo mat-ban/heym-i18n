@@ -93,3 +93,7 @@ Vt [Expression DSL](../reference/expression-dsl.md), et viidata mandaadipõhiste
 - [Vectorstores Tab](./vectorstores-tab.md) – Kasutab Qdranti või Postgresi (pgvector) mandaate
 - [Chat Tab](./chat-tab.md) – Kasutab OpenAI/Google'i mandaate
 - [Contextual Showcase](../reference/contextual-showcase.md) – Kompaktne lehejuhend armatuurlaua vaadete jaoks
+
+## Otsing
+
+Kasutage loendi kohal olevat otsinguvälja või vajutage **Ctrl+F** (või **Cmd+F**), et filtreerida mandaate nime või tüübi järgi tippimise ajal. Vajutage otsingu tühjendamiseks **Escape**.

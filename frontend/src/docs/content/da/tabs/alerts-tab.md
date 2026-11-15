@@ -2,6 +2,9 @@
 
 **Alarmer**-fanen gør det muligt at definere grænseværdibetingelser over et tidsvindue og blive underrettet, når de overskrides. Heym registrerer allerede kørselsresultater, køretid og LLM-forbrug, men tilbyder aldrig disse oplysninger aktivt. En alarm er den måde, hvorpå man anmoder om dem.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Se Alerts-demo</a></p>
+
 Hver alarm evalueres over et valgfrit **tidsvindue**, aldrig på en enkelt hændelse. En mislykket kørsel er støj. Tolv mislykkede kørsler på ti minutter er en hændelse.
 
 ## Alarmtyper

@@ -34,6 +34,7 @@ Per a cada variable compatible, valor per defecte i nota de producció, consulte
 |----------|-------------|
 | `SECRET_KEY` | **Obligatòria.** Secret de signatura JWT. Generada automàticament per `run.sh`/`deploy.sh` quan està buida. |
 | `ENCRYPTION_KEY` | **Obligatòria.** Clau de xifrat de credencials. Generada automàticament per `run.sh`/`deploy.sh` quan està buida. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | Cadena de connexió a la base de dades opcional que substitueix la predeterminada. Si està buida, Heym la construeix a partir de la configuració `POSTGRES_*`. |
 | `BACKEND_PORT` | Port de l'API del backend — per defecte `10105` |
 | `FRONTEND_PORT` | Port del frontend — per defecte `4017` |
@@ -360,3 +361,11 @@ git pull
 - [Environment Variables](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – Referència completa de configuració
 - [Security](../reference/security.md) – Configuració de JWT, xifratge i CORS
 - [Load Distribution](../reference/cluster.md) – Executeu diverses instàncies contra una sola base de dades
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

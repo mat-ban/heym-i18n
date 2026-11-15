@@ -7,9 +7,9 @@ Tab **Workflows** là chế độ xem mặc định của dashboard. Nó hiển 
 
 ## Bắt đầu một Chat
 
-Phía trên danh sách workflow có một hộp chat chào bạn bằng tên và hỏi bạn muốn tự động hóa điều gì. Nhập một prompt, tùy chọn đính kèm một tệp và chọn credential cùng model bạn muốn. Cả hai dropdown đều có thể tìm kiếm và khởi tạo theo [AI defaults](../reference/user-settings.md) của bạn.
+Phía trên danh sách workflow có một hộp chat chào bạn bằng tên và hỏi bạn muốn tự động hóa điều gì. Nhập một prompt, tùy chọn đính kèm up to 10 files và chọn credential cùng model bạn muốn. Cả hai dropdown đều có thể tìm kiếm và khởi tạo theo [AI defaults](../reference/user-settings.md) của bạn.
 
-Gửi sẽ tạo một cuộc trò chuyện mới và mở nó trong [tab Chat](./chat-tab.md), nơi phản hồi được stream về. Các tệp đính kèm được hỗ trợ là tệp văn bản, hình ảnh và PDF, mỗi tin nhắn một tệp, giống như trình soạn chat.
+Gửi sẽ tạo một cuộc trò chuyện mới và mở nó trong [tab Chat](./chat-tab.md), nơi phản hồi được stream về. Các tệp đính kèm được hỗ trợ là tệp văn bản, hình ảnh và PDF, mỗi tin nhắn up to 10 files, giống như trình soạn chat.
 
 Nếu bạn chưa có LLM credential, hộp sẽ hiển thị liên kết đến [tab Credentials](./credentials-tab.md) và việc gửi sẽ bị vô hiệu hóa.
 

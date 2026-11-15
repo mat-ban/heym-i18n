@@ -157,6 +157,8 @@ Pri úprave prihlasovacích údajov sa uložený kľúč zachová, ak pole pre k
 
 Rovnaké prihlasovacie údaje môžu hodnotiť spustenia [Evals](../tabs/evals-tab.md): pri zvolenej možnosti **LLM-as-Judge** ich vyberte ako hodnotiaceho sudcu a model rozhodovania ohodnotí každú odpoveď voči očakávanému výstupu.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym štandardne blokuje odchádzajúce požiadavky na súkromné a loopback adresy, takže rozhodovací endpoint, ktorý prevádzkujete sami na `localhost` alebo v súkromnom rozsahu, vyžaduje `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Modely rozhodovania sa nezobrazujú v cenových tabuľkách LLM, ktoré Heym synchronizuje, takže stĺpec **Cost** v [Spusteniach](../tabs/traces-tab.md) zostáva pri týchto volaniach prázdny. Počty tokenov sa stále zaznamenávajú a vlastnú cenu môžete pridať pomocou prepísania ceny.

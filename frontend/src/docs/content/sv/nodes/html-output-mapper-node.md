@@ -68,3 +68,5 @@ Samma regel som för [Output](./output-node.md): placera inte denna nod inuti en
 - [Output](./output-node.md) – Meddelande- eller schemabaserat svar med `result`-omslutning
 - [Webhooks](../reference/webhooks.md) – Execute-endpoint, request-metoder och svar
 - [Nodtyper](../reference/node-types.md) – Alla nodtyper
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

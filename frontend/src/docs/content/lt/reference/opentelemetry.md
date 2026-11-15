@@ -72,6 +72,7 @@ Pavadinimas: `heym.agent.tool.execute`, sukurtas aktyvaus Agent mazgo span'e.
 | `heym.agent.tool.args_bytes` | UTF-8 serializuotų įrankio argumentų dydis baitais. |
 | `heym.agent.tool.result_bytes` | UTF-8 serializuoto įrankio rezultato dydis baitais. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout`, arba `cancelled`. Įrankio klaidos nustato span'o būseną į `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Brutalūs įrankio argumentai ir rezultatai pagal numatytuosius nustatymus nėra pridedami prie span'ų.
 

@@ -45,7 +45,7 @@ El nodo **Input** es el punto de entrada para los workflows que reciben datos de
 
 En la pestaña **Run** del editor (modo Defined webhook), cada campo de entrada admite arrastrar y soltar, así como un control de adjuntar archivo en línea (en la esquina inferior derecha del campo):
 
-- **Archivos de texto** (`.txt`, `.md`, `.json`, `.csv` y similares) se leen como texto sin formato.
+- **Archivos de texto** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Imágenes** (JPEG, PNG, GIF, WebP) se almacenan como una URL `data:` (base64) en el valor del campo; utilice claves de campo como `imageUrl` o `base64` cuando los nodos posteriores esperen datos de imagen.
 - **Archivos PDF** se convierten a texto extraído (archivo de máx. 5 MB, 100 000 caracteres de contenido).
 

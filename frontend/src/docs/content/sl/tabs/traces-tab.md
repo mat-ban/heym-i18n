@@ -12,7 +12,7 @@ Stran se odpre s povzetkom statistik nad seznamom sledi, izračunanih v izbranem
 - **KPI kartice** – Skupaj klici, Skupaj tokeni, Skupni stroški (USD), Povprečna latenca, Stopnja napak %
 - **Tokeni po modelu** – Donut grafikon obsega tokenov po modelu
 - **Stroški po modelu** – Donut grafikon stroškov v USD po modelu. Modeli brez cenovne politike prikazujejo povezavo "Nastavi ceno" do [Tabele stroškov LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Klici skozi čas** – Složen grafikon uspešnih proti neuspešnim klicem po skupinah (5 min / 1 h / 6 h / 1 dan, izbrano samodejno glede na obseg)
+- **Klici skozi čas** – Složen grafikon uspešnih proti neuspešnim klicem po skupinah (5 min / 15 min / 30 min / 1 h / 6 h / 1 dan, izbrano samodejno glede na obseg)
 - **Obvestilo o modelih brez cen** – Pojavi se pod grafikoni, ko nekateri sledi modeli nimajo cenovne vrstice, povezane s Tabelo stroškov LLM
 
 ## Časovno Obdobje
@@ -23,12 +23,13 @@ En sam **Izbira časovnega obdobja** na vrhu traku filtrov upravlja tako glavo s
 
 - Paginiran seznam nedavnih sledi znotraj izbranega časovnega obdobja
 - Vsaka sled prikazuje: workflow, vozlišče, poverilnico, časovni žig, trajanje
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Kliknite na sled, da odprete podrobnosti
 - Uporabite **Prejšnji / Naslednji** znotraj pogovornega okna podrobnosti za premikanje med sledmi brez zapiranja
 
 ## Filtriranje
 
-- **Časovno obdobje** – 1h / 24h / 7d / 30d / Vse; filtrira grafikone in seznam skupaj
+- **Časovno obdobje** – 1h / 3h / 6h / 24h / 7d / 30d / Vse; filtrira grafikone in seznam skupaj
 - **Poverilnica** – Filtrirajte po poverilnici (API ključ), ki je bila uporabljena
 - **Vir** – Filtrirajte po viru workflow ali izvajanja
 - **Iskanje** – Iščite po modelu, workflow, poverilnici ali oznaki vozlišča

@@ -368,3 +368,6 @@ Een `table` kan één kolom omzetten in knoppen die een link openen. Stel **Link
 Alleen `http://`- en `https://`-adressen en paden die met één enkele `/` beginnen, worden knoppen. Elke andere waarde, zoals `javascript:` of `//host`, blijft gewone tekst, en een lege cel toont niets.
 
 De knop werkt naast een [rijlink](../tabs/dashboard-tab.md#detail-pages): klikken op de knop opent de link in een nieuw tabblad, en klikken ergens anders op de rij opent nog steeds de detailpagina.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

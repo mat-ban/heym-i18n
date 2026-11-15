@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | Node-identifikator (camelCase) |
 | `conversion` | string | `csvToJson` (CSV-tekst → array af rækkeobjekter), `jsonToCsv` (array af objekter/rækker → CSV-tekst), `xmlToJson` (XML-tekst → objekt), `jsonToXml` (objekt → XML-tekst), `imageToText` (OCR et billede), `pdfToText` (OCR hver valgte PDF-side), eller `fileConvert` (omskriv en gemt fil i et andet format) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Dataene, der skal konverteres. Lad være tom for at bruge nodens første input |
 | `delimiter` | string | Enkelttegns-feltseparator (standard `,`) |
 | `hasHeader` | boolean | Kun `csvToJson` — behandl den første række som header (standard `true`) |
@@ -169,3 +170,6 @@ OCR bruger `tesseract` og popplers `pdftoppm`, og dokumentkonvertering bruger pa
 - [Drive](./drive-node.md) – Gem, hent og del filer
 - [Node Types](../reference/node-types.md) – Oversigt over alle nodetyper
 - [Expression DSL](../reference/expression-dsl.md) – Funktioner og syntaks
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

@@ -84,7 +84,8 @@
     "dropFileOrClick": "Slip en fil her, eller klik for at vælge",
     "removeFile": "Fjern fil",
     "chooseFileFor": "Vælg en fil til {label}",
-    "new": "Ny"
+    "new": "Ny",
+    "clearSearch": "Ryd søgning"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Aktivér",
     "disablePlugin": "Deaktivér",
     "uninstallPlugin": "Afinstaller",
-    "pluginOperationFailed": "Pluginhandling mislykkedes"
+    "pluginOperationFailed": "Pluginhandling mislykkedes",
+    "users": "Brugere",
+    "encryption": "Kryptering"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopiér kørsel-ID",
     "openTrace": "Åbn kørsel",
     "message": "Besked",
-    "emptyReply": "Tomt svar."
+    "emptyReply": "Tomt svar.",
+    "timeRange3h": "Sidste 3 timer",
+    "timeRange6h": "Sidste 6 timer"
   },
   "tables": {
     "title": "Datatabeller",
@@ -1215,7 +1220,9 @@
     "browseAll": "Gennemse alle →",
     "askAi": "Spørg AI",
     "dropToImport": "Slip JSON eller ZIP for at importere",
-    "noWorkflowsMatch": "Ingen workflows matcher dette filter."
+    "noWorkflowsMatch": "Ingen workflows matcher dette filter.",
+    "noWorkflowsMatchAll": "Prøv en anden titel, beskrivelse eller mappenavn.",
+    "noWorkflowsMatchFilter": "Prøv en anden titel, beskrivelse, mappenavn eller statusfilter."
   },
   "schedules": {
     "title": "Tidsplaner",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Startet af en MCP-klient",
     "newChatTitle": "Ny chat",
     "subtitle": "Kør Workflows og stil spørgsmål",
-    "modelsLoadFailedDisabled": "Modellisten for disse legitimationsoplysninger kunne ikke indlæses. Chatten forbliver deaktiveret, indtil en model kan hentes."
+    "modelsLoadFailedDisabled": "Modellisten for disse legitimationsoplysninger kunne ikke indlæses. Chatten forbliver deaktiveret, indtil en model kan hentes.",
+    "dropFilesToAttach": "Slip filer for at vedhæfte",
+    "attachFiles": "Vedhæft filer"
   },
   "teams": {
     "title": "Teams",
@@ -1883,7 +1892,8 @@
       "skipped": "Sprunget over"
     },
     "permissionRead": "læs",
-    "permissionWrite": "skriv"
+    "permissionWrite": "skriv",
+    "details": "Detaljer"
   },
   "mcp": {
     "title": "MCP-server",
@@ -2197,7 +2207,8 @@
       "actions": "Handlinger",
       "failedToLoadWidget": "Kunne ikke indlæse widget",
       "failedToUpdateCheckbox": "Kunne ikke opdatere afkrydsningsfelt",
-      "refreshDashboard": "Opdater dashboard"
+      "refreshDashboard": "Opdater dashboard",
+      "revertPrevious": "Gendan forrige"
     },
     "hitl": {
       "previousReview": "Forrige gennemgang",

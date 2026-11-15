@@ -7,7 +7,7 @@ A **Workflow-k** fül az alapértelmezett irányítópult-nézet. Itt látható 
 
 ## Chat indítása
 
-A workflow-lista felett egy chat-doboz található, amely név szerint üdvözli Önt, és megkérdezi, mit szeretne automatizálni. Írjon be egy promptot, opcionálisan csatoljon egy fájlt, majd válassza ki a kívánt hitelesítési adatokat és modellt. Mindkét legördülő lista kereshető, és az [AI alapértelmezésekkel](../reference/user-settings.md) indul.
+A workflow-lista felett egy chat-doboz található, amely név szerint üdvözli Önt, és megkérdezi, mit szeretne automatizálni. Írjon be egy promptot, opcionálisan csatoljon up to 10 filest, majd válassza ki a kívánt hitelesítési adatokat és modellt. Mindkét legördülő lista kereshető, és az [AI alapértelmezésekkel](../reference/user-settings.md) indul.
 
 A küldés új beszélgetést hoz létre, és megnyitja azt a [Chat fülön](./chat-tab.md), ahol a válasz streamelve érkezik. A támogatott mellékletek szöveges fájlok, képek és PDF-ek, üzenetenként egy, ugyanúgy, mint a chat-szerkesztőben.
 

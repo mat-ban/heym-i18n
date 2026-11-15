@@ -50,3 +50,8 @@
 - [Раздел Analytics](./analytics-tab.md) – Метрики за изпълнения
 - [Раздел Workflows](./workflows-tab.md) – Управление на Workflows
 - [Контекстуална витрина](../reference/contextual-showcase.md) – Компактно ръководство за страниците на таблото
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Насочване на симптомите при изпълнение към правилната процедура за инциденти
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Диагностициране на сривове в базата данни, услугите, клъстера и sandbox средата

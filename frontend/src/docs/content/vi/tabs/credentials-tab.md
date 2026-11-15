@@ -94,3 +94,7 @@ Xem [Expression DSL](../reference/expression-dsl.md) để tham chiếu các gi�
 - [Vectorstores Tab](./vectorstores-tab.md) – Sử dụng credentials Qdrant hoặc Postgres (pgvector)
 - [Chat Tab](./chat-tab.md) – Sử dụng credentials OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Hướng dẫn trang ngắn gọn cho các giao diện dashboard
+
+## Tìm kiếm
+
+Sử dụng trường tìm kiếm phía trên danh sách hoặc nhấn **Ctrl+F** (hoặc **Cmd+F**) để lọc thông tin xác thực theo tên hoặc loại khi bạn nhập. Nhấn **Escape** để xóa tìm kiếm.

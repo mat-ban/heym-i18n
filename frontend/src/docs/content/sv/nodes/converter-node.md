@@ -16,6 +16,7 @@ Noden **Converter** konverterar data och filer mellan format utan att kod behöv
 |-----------|-----|-------------|
 | `label` | string | Nodidentifierare (camelCase) |
 | `conversion` | string | `csvToJson` (CSV-text → array av radobjekt), `jsonToCsv` (array av objekt/rader → CSV-text), `xmlToJson` (XML-text → objekt), `jsonToXml` (objekt → XML-text), `imageToText` (OCR på en bild), `pdfToText` (OCR på varje vald PDF-sida) eller `fileConvert` (skriv om en lagrad fil i ett annat format) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Data som ska konverteras. Lämna tomt för att använda nodens första indata |
 | `delimiter` | string | Fältavgränsare med ett tecken (standard `,`) |
 | `hasHeader` | boolean | Endast `csvToJson` — behandla första raden som rubrik (standard `true`) |
@@ -169,3 +170,6 @@ OCR anropar `tesseract` och popplers `pdftoppm` via skalet, och dokumentkonverte
 - [Drive](./drive-node.md) – Lagra, hämta och dela filer
 - [Node Types](../reference/node-types.md) – Översikt över alla nodtyper
 - [Expression DSL](../reference/expression-dsl.md) – Funktioner och syntax
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

@@ -2,6 +2,9 @@
 
 Tab **Alerts** memungkinkan Anda menentukan kondisi ambang batas (threshold) dalam suatu rentang waktu (time window) dan diberi tahu saat kondisi tersebut terlampaui. Heym telah mencatat hasil eksekusi, durasi proses, dan pengeluaran LLM, tetapi tidak pernah menyampaikannya secara proaktif. Alert adalah cara Anda memintanya.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Tonton demo Alerts</a></p>
+
 Setiap alert dievaluasi dalam **time window** yang Anda pilih, tidak pernah berdasarkan satu peristiwa tunggal. Satu eksekusi gagal hanyalah noise. Dua belas eksekusi gagal dalam sepuluh menit adalah sebuah insiden.
 
 ## Jenis Alert

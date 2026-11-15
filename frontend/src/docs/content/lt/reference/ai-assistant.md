@@ -48,6 +48,7 @@ Agentų režime, **YOLO režimo** langelis po žinutės lauku leidžia asistentu
 - Įveskite savo užklausą į įvedimo lauką (pvz., "Sukurkite workflow, kuris priima vartotojo įvestį ir siunčia ją LLM")
 - Paspauskite **Enter**, kad siųstumėte (Shift+Enter naujai eilutei)
 - AI transliuoja savo atsakymą. **Agent** režime, jei atsakymas apima workflow JSON bloką \`\`\`json kodo bloke, jis automatiškai analizuojamas ir taikomas drobėje. **Ask** režime drobė niekada nėra keičiama.
+- Kol transliuojamas darbo eigos JSON, eilutėje po atsakymu nurodomas darbo eigos pavadinimas ir iki šiol parašyti mazgai, pavyzdžiui, `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Naudokite **Išvalyti**, kad atstatytumėte pokalbį
 - Užveskite pelę ant žinutės ir paspauskite jos kopijavimo ikoną, kad nukopijuotumėte tekstą, kurį ji rodo, įskaitant bet kokį workflow JSON
 - Vilkite liniją virš žinutės lango, kad padidintumėte lango aukštį. Įvedimo zona gali augti iki 60% panelės, ir ji grįžta į numatytąjį aukštį, kai puslapis perkraunamas

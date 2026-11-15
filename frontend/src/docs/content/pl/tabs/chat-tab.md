@@ -16,6 +16,9 @@ Rozmowę można również rozpocząć z poziomu pola czatu w zakładce [Workflow
 ## Funkcje
 
 - **Kontekst zmiennych globalnych** – [Zmienne globalne](../reference/global-variables.md) są dostępne dla LLM, dzięki czemu można pytać o zapisane wartości lub się do nich odwoływać
+- **Kanban boards** – Ask naturally to add, assign, move, update or comment on a task, list your overdue tasks or what waits for a review, or create and arrange boards and columns. When you have multiple boards and do not name one, Chat presents a board picker before creating a card. See [Board › From Chat and MCP](./board-tab.md#from-chat-and-mcp)
+- **Send now** – Click **Send now** beside a queued message to stop the active reply and send that message immediately. The partial reply stays in the conversation, followed by your message and the new answer. The message keeps its files and chosen model; the other queued messages remain and resume in order afterward
+- **Changing direction** – After **Send now**, your latest message controls the task. A cancelled question stays as context and is not another pending job. Interrupted requests appear as **cancelled** in Traces and run history, including ones stopped before the model answers
 - **Kontekst szablonów przestrzeni roboczej** – Udostępniane szablony workflow i węzłów w przestrzeni roboczej są dołączane jako kontekst, dzięki czemu Chat może odpowiadać na pytania o dostępne szablony
 - **Długotrwały agent** – Chat kontynuuje pracę w backendzie nawet po zamknięciu przeglądarki, więc można wrócić z innego urządzenia i kontynuować tę samą rozmowę
 - **Tworzenie workflow** – Wystarczy poprosić Chat o utworzenie lub skonfigurowanie workflow, a użyje on tego samego silnika Workflow AI Builder co asystent w edytorze, aby wygenerować i zapisać workflow

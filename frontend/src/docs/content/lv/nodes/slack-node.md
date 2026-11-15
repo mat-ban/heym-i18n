@@ -54,3 +54,5 @@ Izmantojiet kopā ar [Error Handler](./error-handler-node.md) kļūdu paziņojum
 - [Mezglu tipi](../reference/node-types.md) – Visu mezglu tipu pārskats
 - [Error Handler](./error-handler-node.md) – Sūtīt Slack, ja workflow neizdodas
 - [Akreditācijas datu cilne](../tabs/credentials-tab.md) – Pievienot Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

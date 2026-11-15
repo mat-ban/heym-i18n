@@ -453,7 +453,14 @@ function goNext(): void {
 
 function getStatusClass(status: string): string {
   if (status === "error") return "bg-destructive/10 text-destructive";
+  if (status === "cancelled") return "bg-muted text-muted-foreground";
   return "text-emerald-600 bg-emerald-500/10";
+}
+
+function getStatusTextClass(status: string): string {
+  if (status === "error") return "text-destructive";
+  if (status === "cancelled") return "text-muted-foreground";
+  return "text-emerald-600";
 }
 
 function formatMillis(value: number | null): string {
@@ -1023,8 +1030,8 @@ onMounted(async () => {
               {{ $t('common.status') }}
             </div>
             <div
-              class="mt-1 text-sm font-medium"
-              :class="cn(selectedTrace.status === 'error' ? 'text-destructive' : 'text-emerald-600')"
+              class="mt-1 text-sm font-bold"
+              :class="getStatusTextClass(selectedTrace.status)"
             >
               {{ selectedTrace.status === 'success' ? $t('common.success') : selectedTrace.status === 'error' ? $t('common.error') : selectedTrace.status }}
             </div>

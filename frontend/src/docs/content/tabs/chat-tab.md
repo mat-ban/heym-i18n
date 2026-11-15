@@ -19,17 +19,21 @@ You can also start a conversation from the chat box on the [Workflows tab](./wor
 - **Workspace template context** – Shared workflow and node templates in your workspace are included as context, so Chat can answer questions about available templates
 - **Long-running agent** – Chat keeps working on the backend even if the browser closes, so you can come back from another device and continue the same conversation
 - **Workflow creation** – Ask Chat to create or change a workflow, and it saves the workflow, test-runs it with sample inputs, fixes what failed, and finishes when a run passes. See [Creating Workflows](#creating-workflows)
-- **Kanban task creation** – Ask naturally to add a task or create a card. Chat adds it to the first column of the requested board; when you have multiple boards and do not name one, Chat presents a board picker before creating the card
+- **Kanban boards** – Ask naturally to add, assign, move, update or comment on a task, list your overdue tasks or what waits for a review, or create and arrange boards and columns. When you have multiple boards and do not name one, Chat presents a board picker before creating a card. See [Board › From Chat and MCP](./board-tab.md#from-chat-and-mcp)
 - **Queued follow-ups** – Send more messages while an answer is streaming. Queued messages are persisted, can be edited or deleted before they start, and run in order after the active response
+- **Send now** – Click **Send now** beside a queued message to stop the active reply and send that message immediately. The partial reply stays in the conversation, followed by your message and the new answer. The message keeps its files and chosen model; the other queued messages remain and resume in order afterward
+- **Changing direction** – After **Send now**, your latest message controls the task. A cancelled question stays as context and is not another pending job. Interrupted requests appear as **cancelled** in Traces and run history, including ones stopped before the model answers
 - **Planning pauses** – When Chat needs planning details, it asks clarification questions and pauses queued follow-ups until you answer. After the planning answer finishes, queued messages resume
 - **Credentials** – When a workflow Chat creates or edits needs a credential, Chat asks which one to use, offers to create a new one in the conversation, or lets you continue without. You can also ask Chat to create a credential or to update one you own; it opens the credential form in the conversation. The model sees the credential's name and type, never its values, for credentials you own and ones shared with you. LLM and Agent nodes Chat adds run on the credential and model selected for the chat, shared credentials included; when Chat edits a workflow, its existing LLM and Agent nodes keep their credential and model. See [AI Assistant › Credentials](../reference/ai-assistant.md#credentials)
-- **Dashboards** – Ask which [dashboards](./dashboard-tab.md) you have, what is on one, or which dashboard a workflow is on, ask Chat to add a new widget to a dashboard (it puts an empty widget there, then builds and tests its workflow), put an existing workflow on a dashboard as a widget, rename or delete a widget, or tidy a dashboard's layout. Heym Work shows these dashboards as its pages. See [Dashboard › From Chat and MCP](./dashboard-tab.md#from-chat-and-mcp)
+- **Dashboards** – Ask which [dashboards](./dashboard-tab.md) you have, what is on one, or which dashboard a workflow is on, ask Chat to create a dashboard and build its widgets (several at once, in parallel), change several widgets in one message, add a new widget to a dashboard (it puts an empty widget there, then builds and tests its workflow), put an existing workflow on a dashboard as a widget, rename or delete a widget, or tidy a dashboard's layout. Heym Work shows these dashboards as its pages. See [Dashboard › From Chat and MCP](./dashboard-tab.md#from-chat-and-mcp)
 - **Data tables** – When a workflow Chat creates or edits stores records, Chat asks which [data table](./datatable-tab.md) to use or offers to create one with the columns the workflow needs. It can also inspect rows, add or remove columns, and insert, update or delete rows directly on tables you own or can write. Give it a table name or DataTable link. Column removal and clearing all rows ask for confirmation; adding columns preserves existing data. See [AI Assistant › Data tables](../reference/ai-assistant.md#data-tables)
-- **Streaming responses** – See the model's output as it streams
+- **Streaming responses** – See the model's output as it streams. While the model writes a step, the turn says what it is preparing; while it writes a workflow, it names the workflow and the nodes written so far, for example `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`
+- **Live step progress** – A step that runs a workflow shows the node that is running under its row, such as `Running node Qualify`, until the step finishes
 - **Stop response** – Interrupt the current streaming answer at any time; stopping also clears queued messages for that conversation
 - **Markdown rendering** – Responses support markdown formatting, including inline images
 - **Image display** – Images embedded in responses (e.g. from LLM image generation) appear inline; click any image to view it fullscreen. Press **Esc** or the back button (mobile) to close the fullscreen view
 - **Copy messages** – Copy any message to the clipboard
+- **Edit and resend** – Hover one of your messages and click the pencil next to **Copy** to edit it in place. **Save and send** (or **Enter**) removes that message and every message after it, then sends the edited text with the model selected above, so the conversation continues as if the later turns never happened. Context chips and the attached files stay with the message. Press **Esc** or **Cancel** to keep the conversation as it is. Editing waits until a running reply finishes or is stopped. Anything the removed turns already did, such as a saved workflow, stays as it is
 - **Clear chat** – Start a new conversation
 - **Voice input** – Use the microphone button for speech-to-text (browser-supported). When recording stops, Heym can lightly clean up the transcript before you send it
 - **Scheduled workflows** – Ask when cron workflows run (today, this week, this month, or a custom date range). The assistant uses the same schedule data as the [Scheduled](./scheduled-tab.md) tab and can limit results to workflows you own or include those shared with you
@@ -37,6 +41,7 @@ You can also start a conversation from the chat box on the [Workflows tab](./wor
 - **Where runs fail and why they are slow** – Ask where your workflows fail or why they are slow and Chat names the workflows that ran most, failed most and are slowest, and the node types that take the most time (average per call and total), fail most and run most, the same numbers as the [Analytics](./analytics-tab.md) tab. Node types are counted for runs from the release that added node analytics. Ask about the last hour, 3 or 6 hours, 24 hours, 7 or 30 days, or all time; the hour windows start on the hour, so "the last hour" at 15:20 covers 14:00 until now.
 - **Live run status** – Ask what is running right now and Chat answers with the count, the workflow names, how long each run has been going, which node it is on, and a link straight to the live run
 - **Run context chips** – **Ask AI** in [Execution History](../reference/execution-history.md#ask-ai) opens a new conversation with the selected workflow run attached as chips. See [Asking About a Run](#asking-about-a-run)
+- **Files** – Attach up to 10 files at once: PDFs, spreadsheets, DOCX, CSV or JSON files, images, or plain text files of any name. You can also name a file already in Drive. Each file is stored in your [Drive](../reference/drive.md) and Chat opens it in an isolated sandbox: it inspects the structure first and reads only the part your question needs, so large files never fill the context. See [Working with Files](#working-with-files)
 
 ## Using Chat from an MCP Client
 
@@ -61,7 +66,7 @@ When you ask Chat to create, build, generate, or set up a workflow, it saves a n
 3. **Fix:** When the run failed or returned the wrong thing, Chat changes only what the report shows is wrong, saves again and runs again.
 4. **Finish:** When the latest run of the latest save passes, Chat ends the turn with one sentence on what the workflow now does.
 
-Each step appears as a row in the conversation: **Saving the workflow**, **Testing the workflow · attempt 1/5**, and **Finishing** with the result **Verified**.
+Each step appears as a row in the conversation: **Saving the workflow**, **Testing the workflow · attempt 1/5**, and **Finishing** with the result **Verified**. Before the save, the turn shows the workflow being written, with its name and the nodes written so far; during a test run, the step row shows the node that is running.
 
 - Test runs are real runs. Their side effects happen, and they appear in the workflow's run history like any other run.
 - A turn has at most five test runs. When they are used up, Chat stops and tells you what still fails and what it would change next.
@@ -72,12 +77,27 @@ Follow-up feedback in the same chat changes that workflow instead of creating an
 
 This is best for requests where you want the work done as a reusable automation, not just a one-off answer.
 
-## Creating Kanban Tasks
+## Working with Files
 
-Ask Chat in ordinary language, for example, “Add a task called Fix login bug” or
-“Create a new card Update documentation on the Launch board.” You can include a
-description in the same request. Chat always creates the card in the selected board's
-first column.
+Drop files on the composer, paste them (a screenshot, or files copied from your file manager), or pick several with the paperclip. One message carries up to 10 files, and each one shows as a chip while it uploads; remove one with its **×**.
+
+Documents (PDF, XLSX, XLS, CSV, TSV, DOCX, JSON, TXT, MD), images (PNG, JPG, GIF, WebP) and plain text files of any name go to your Drive with the source **Chat**, and the message carries only each file's name and id. A plain text file is anything that reads as UTF-8 text, such as `notes`, `Makefile` or `todo.list`. Code files (PY, TS, JS, HTML, XML, YAML, LOG) are read into the message. Chat reads an image's text with OCR in the sandbox. Skill zips are attached as before. A file that cannot be attached is listed by name, and the other files still go with the message.
+
+Chat answers file questions with [File Analysis](../reference/file-analysis.md): it calls `inspect_file` for the type, structure and a short sample, then `run_python` for the specific operation, such as "take the Total field on the Summary sheet and add the value from the last page". Results come back as tables or short extracts, and files Chat creates (xlsx, csv, json) are saved to Drive with a link.
+
+Each conversation keeps a working folder, so follow-ups reuse what was already read and computed. It is deleted when you delete the conversation, when you ask Chat to clear it, or after 30 days without use.
+
+When you ask Chat to build a workflow around a file, it inspects the real file first so the workflow uses the right sheet, column and page names, then tests the workflow with that file.
+
+## Managing Kanban Tasks
+
+Ask Chat in ordinary language, for example, “Add a task called Fix login bug”,
+“Assign the NDA card to Ada, due Friday, high priority”, “Move it to Review”, “Comment on
+the NDA card that the signed copy is in Drive” or “What is overdue on the Legal board?”
+You can include a description in the same request. Comments are posted as you; one on a
+card waiting at the planning step answers its agent's questions and lets it move on. Chat
+creates a card in the selected board's first column unless you name a column, and it
+never approves a review by moving a card.
 
 If your workspace has several boards and you do not identify one, Chat pauses with a
 single-choice board picker. Select a board to finish creating the card. No slash command
@@ -154,6 +174,8 @@ The editor's AI Assistant does not create suites.
 
 [User Rules](../reference/user-settings.md) (configured in Settings) are automatically injected into every Chat conversation as system-level instructions. Set them once to apply persistent preferences to all chat requests.
 
+They are also Chat's memory. Ask Chat to remember something, or state a lasting preference or decision, and it adds one line to your User Rules. Ask it to forget or change something and it rewrites them. Each save shows as a tool row in the conversation, and credentials are never saved. See [User Rules as memory](../reference/user-settings.md#user-rules-as-memory).
+
 ## Related
 
 - [MCP / A2A Tab](./mcp-tab.md) – Expose this engine to MCP clients as the `heym_chat` tool
@@ -163,6 +185,7 @@ The editor's AI Assistant does not create suites.
 - [Variables Tab](./global-variables-tab.md) – Global variables available to Chat
 - [Node Types](../reference/node-types.md) – LLM and Agent nodes for workflows
 - [Agent Node](../nodes/agent-node.md) – AI Agent with tool calling
+- [File Analysis](../reference/file-analysis.md) – How Chat and workflows open large files in an isolated sandbox
 - [AI Assistant](../reference/ai-assistant.md) – Editor assistant powered by the same workflow builder DSL
 - [Execution History](../reference/execution-history.md) – View past runs (History button in header)
 - [Scheduled Tab](./scheduled-tab.md) – Calendar of upcoming cron runs (same data Chat can summarize)

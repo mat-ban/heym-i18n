@@ -171,3 +171,7 @@ Los diálogos de historial del canvas y del panel conservan sus controles de eje
 - [Historial de edición](./edit-history.md) – Control de versiones para los guardados de workflows (revertir, comparar)
 - [Inicio rápido](../getting-started/quick-start.md) – Cree y ejecute su primer workflow
 - [Pestaña Workflows](../tabs/workflows-tab.md) – Cree y gestione workflows
+
+## Related
+
+- [Operations Runbook (L1): Cola de espera](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Distinguir ejecuciones en cola, retenidas, interrumpidas y recuperadas antes de reintentar

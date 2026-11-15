@@ -132,3 +132,6 @@ El panel también informa cuántas de las ejecuciones de las últimas 24 horas s
 - [Security](./security.md) – Gestión de sesiones, limitación de velocidad, cifrado de credenciales
 - [Single Sign-On](./sso.md) – Conectar un proveedor externo de OpenID Connect
 - [OpenTelemetry Tracing](./opentelemetry.md) – Tracing distribuido para ejecuciones de workflows y nodos
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

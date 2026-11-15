@@ -174,3 +174,7 @@ Els diàlegs d'historial del llenç i del tauler de control mantenen els control
 - [Historial d'edicions](./edit-history.md) – Control de versions per als desaments de Workflow (revertir, diferències)
 - [Inici ràpid](../getting-started/quick-start.md) – Creeu i executeu el vostre primer Workflow
 - [Pestanya de Workflows](../tabs/workflows-tab.md) – Creeu i gestioneu Workflows
+
+## Related
+
+- [Operations Runbook (L1): Cua d'espera](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Distingir execucions en cua, retingudes, interrompudes i recuperades abans de reintentar

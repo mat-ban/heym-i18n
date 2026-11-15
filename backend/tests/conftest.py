@@ -21,7 +21,34 @@ def cluster_disabled_unless_a_test_asks_for_it():
 
 
 @pytest.fixture(autouse=True)
+def account_security_defaults_unless_a_test_sets_them():
+    """Two-factor sign-in off and retention at its default, whatever the developer's .env says."""
+    with (
+        patch.object(settings, "require_mfa", False),
+        patch.object(settings, "data_retention_days", 90),
+    ):
+        yield
+
+
+@pytest.fixture(autouse=True)
 def instance_admins_empty_unless_a_test_configures_them():
     """Never grant permissions or change query paths from a developer's .env."""
     with patch.object(settings, "admin_emails", ""):
         yield
+
+
+@pytest.fixture(autouse=True)
+def docker_sandbox_backend_unless_a_test_selects_one():
+    """Pin the sandbox backend to Docker and build the manager before the test body.
+
+    Built lazily inside a test, the manager would probe Docker through whatever
+    subprocess function that test patches. Tests about backend selection reset the
+    manager themselves.
+    """
+    from app.services.sandbox import get_sandbox_manager, reset_sandbox_manager
+
+    with patch.dict("os.environ", {"HEYM_SANDBOX_BACKEND": "docker"}):
+        reset_sandbox_manager()
+        get_sandbox_manager()
+        yield
+    reset_sandbox_manager()

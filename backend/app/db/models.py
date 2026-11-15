@@ -6,6 +6,7 @@ from enum import Enum as PyEnum
 from sqlalchemy import (
     BigInteger,
     Boolean,
+    CheckConstraint,
     DateTime,
     Enum,
     Float,
@@ -19,11 +20,13 @@ from sqlalchemy import (
     event,
     func,
     literal,
+    literal_column,
     select,
+    true,
 )
 from sqlalchemy.dialects.postgresql import JSON, JSONB, UUID
 from sqlalchemy.engine import Connection
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, validates
 from sqlalchemy.sql.elements import ColumnElement
 
 
@@ -66,6 +69,7 @@ class CredentialType(str, PyEnum):
     clickhouse = "clickhouse"
     opencode = "opencode"
     google_drive = "google_drive"
+    google_meet = "google_meet"
     rag = "rag"
     decision = "decision"
     model_router = "model_router"
@@ -131,6 +135,21 @@ class User(Base):
     mcp_chat_model: Mapped[str | None] = mapped_column(String(128), nullable=True)
     # Makes the global server's Heym Agent reachable over A2A too. Needs mcp_chat_enabled.
     mcp_a2a_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # A deactivated account authenticates nowhere: no sign-in, no session, no key.
+    is_active: Mapped[bool] = mapped_column(
+        Boolean, default=True, server_default=true(), nullable=False
+    )
+    deactivated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # Access tokens issued before this instant are refused.
+    sessions_revoked_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # Fernet ciphertext under ENCRYPTION_KEY; a TOTP secret must be read back to verify.
+    mfa_secret: Mapped[str | None] = mapped_column(Text, nullable=True)
+    mfa_enabled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # The last accepted TOTP time step, so a code cannot be replayed inside its window.
+    mfa_last_step: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -209,6 +228,10 @@ class MCPServer(Base):
     chat_model: Mapped[str | None] = mapped_column(String(128), nullable=True)
     # Makes this server's Heym Agent reachable over A2A too. Needs chat_enabled.
     a2a_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # Endpoint format: "sse" for legacy servers, "mcp" for new servers.
+    endpoint_path: Mapped[str] = mapped_column(
+        String(16), default="mcp", server_default="mcp", nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -903,6 +926,8 @@ class LLMTrace(Base):
     __table_args__ = (
         Index("ix_llm_traces_user_created", "user_id", "created_at"),
         Index("ix_llm_traces_workflow_node_created", "workflow_id", "node_id", "created_at"),
+        # Created by migration 023; declared so the retention delete's index is visible here.
+        Index("ix_llm_traces_created_at", "created_at"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -1107,9 +1132,27 @@ class GlobalVariableTeamShare(Base):
     team: Mapped["Team"] = relationship("Team")
 
 
+class CredentialWriteBackError(ValueError):
+    """A Secret-backed credential row was about to store something other than its pointer."""
+
+
+# A row holds a Fernet ciphertext, or, when `source` is set, exactly its Secret pointer.
+# Enforced twice: by `Credential._guard_secret_backed_row` on every ORM write, which
+# fails early and names the row, and by this constraint, which also covers raw SQL,
+# data migrations and admin scripts. The second half stops a row without `source`
+# from holding a pointer, so nothing but the watcher can make a row resolve from a Secret.
+CREDENTIAL_SOURCE_CHECK = (
+    "(source IS NULL AND encrypted_config NOT LIKE 'k8s:%') "
+    "OR (source IS NOT NULL AND encrypted_config = source)"
+)
+
+
 class Credential(Base):
     __tablename__ = "credentials"
-    __table_args__ = (UniqueConstraint("owner_id", "name", name="uq_credential_name"),)
+    __table_args__ = (
+        UniqueConstraint("owner_id", "name", name="uq_credential_name"),
+        CheckConstraint(CREDENTIAL_SOURCE_CHECK, name="ck_credentials_source_pointer"),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     owner_id: Mapped[uuid.UUID] = mapped_column(
@@ -1120,6 +1163,9 @@ class Credential(Base):
         Enum(CredentialType, name="credential_type"), nullable=False
     )
     encrypted_config: Mapped[str] = mapped_column(Text, nullable=False)
+    # `k8s:<namespace>/<secret-name>` for a credential declared as a Kubernetes Secret.
+    # Such a row is read-only, and its value lives in memory only (services/k8s_credentials).
+    source: Mapped[str | None] = mapped_column(String(320), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -1131,6 +1177,39 @@ class Credential(Base):
     shares: Mapped[list["CredentialShare"]] = relationship(
         "CredentialShare", back_populates="credential", cascade="all, delete-orphan"
     )
+
+    @validates("encrypted_config", "source")
+    def _guard_secret_backed_row(self, key: str, value: str | None) -> str | None:
+        """Refuse to put a real value on a Secret-backed row, at the line that tries.
+
+        OAuth refresh, the Codex node and the update endpoint all decrypt, change and
+        re-encrypt a credential; on a Secret-backed row that would write the value into
+        the database. Validators run for constructor arguments too, in either order.
+        """
+        stored = value if key == "encrypted_config" else self.encrypted_config
+        source = value if key == "source" else self.source
+        if stored is not None and source is not None and stored != source:
+            raise CredentialWriteBackError(
+                f"credential {self.id} is managed by Kubernetes Secret "
+                f"{source.removeprefix('k8s:')}; its value cannot be stored in the database"
+            )
+        return value
+
+
+@event.listens_for(Credential, "before_insert")
+@event.listens_for(Credential, "before_update")
+def _credential_pointer_needs_source(
+    _mapper: object, _connection: Connection, target: Credential
+) -> None:
+    """Refuse a Secret pointer on a row without `source`, so only the watcher makes one.
+
+    Checked at flush rather than on assignment: a constructor may set
+    `encrypted_config` before `source`, and only the final pair matters.
+    """
+    if target.source is None and str(target.encrypted_config or "").startswith("k8s:"):
+        raise CredentialWriteBackError(
+            f"credential {target.id}: a Secret pointer needs a matching source"
+        )
 
 
 class CredentialShare(Base):
@@ -1218,6 +1297,41 @@ class VectorStoreShare(Base):
 
     vector_store: Mapped["VectorStore"] = relationship("VectorStore", back_populates="shares")
     user: Mapped["User"] = relationship("User", back_populates="vector_store_shares")
+
+
+class VectorStoreIngestJob(Base):
+    """A vector store upload read in the background: audio, or a PDF with scanned pages.
+
+    The row lives while the file is read and is deleted once its chunks are in the store. A
+    failed row keeps its error until someone dismisses it. `heartbeat_at` moves every 30
+    seconds while the process that runs the job is alive; see rag_ingest_jobs.py.
+    """
+
+    __tablename__ = "vector_store_ingest_jobs"
+    __table_args__ = (
+        Index("ix_vector_store_ingest_jobs_store_status", "vector_store_id", "status"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    vector_store_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("vector_stores.id", ondelete="CASCADE"), nullable=False
+    )
+    created_by_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    filename: Mapped[str] = mapped_column(String(512), nullable=False)
+    file_size: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    kind: Mapped[str] = mapped_column(String(16), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="queued")
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    override_duplicates: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    heartbeat_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
 
 
 class VectorStoreTeamShare(Base):
@@ -1554,6 +1668,22 @@ class RefreshToken(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     user: Mapped["User"] = relationship("User")
+
+
+class UserMfaRecoveryCode(Base):
+    """One single-use recovery code, stored as its SHA-256 digest and deleted when used."""
+
+    __tablename__ = "user_mfa_recovery_codes"
+    __table_args__ = (UniqueConstraint("user_id", "code_hash", name="uq_user_mfa_recovery_code"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    code_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
 
 
 class WorkflowExecutionToken(Base):
@@ -2308,7 +2438,8 @@ class DashboardChatQueueItem(Base):
         nullable=False,
     )
     model: Mapped[str] = mapped_column(String(255), nullable=False)
-    attachment: Mapped[dict | None] = mapped_column(JSONB, nullable=True, default=None)
+    # A list of attachments; rows queued before several files hold one dict.
+    attachment: Mapped[list[dict] | dict | None] = mapped_column(JSONB, nullable=True, default=None)
     # A queued build turn keeps its build mode and AI edit target until it runs.
     allow_build: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="false"
@@ -2372,6 +2503,10 @@ class Board(Base):
     mapper_model: Mapped[str | None] = mapped_column(String(128), nullable=True)
     mapper_credential_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("credentials.id", ondelete="SET NULL"), nullable=True
+    )
+    # Off for a plain team task board: cards then stay in the column people put them in.
+    auto_advance: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True, server_default=true()
     )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -2793,9 +2928,90 @@ class ClusterInstance(Base):
     heartbeat_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now(), index=True
     )
+    # Last heartbeat from a process whose Kubernetes credentials were synced (every
+    # process, when that feature is off). All processes upsert this one row, so it
+    # keeps the newest value and an unsynced process never clears it.
+    credentials_synced_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    # Fingerprints of every key this instance decrypts with: ENCRYPTION_KEY, then
+    # ENCRYPTION_KEYS_EXTRA. The primary's is the first half of keys_fingerprint.
+    decrypt_fingerprints: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default="[]"
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
+
+ENCRYPTION_CANARY_ID = 1
+
+
+class EncryptionCanary(Base):
+    """A value encrypted with this database's key, so a wrong key is caught at startup.
+
+    One row. `python -m app.key_check` writes it once a stored value has decrypted,
+    and refuses to start a process whose keys can't read it.
+    """
+
+    __tablename__ = "encryption_canary"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, default=ENCRYPTION_CANARY_ID)
+    token: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+
+class KeyRotationState(str, PyEnum):
+    running = "running"
+    paused = "paused"
+    completed = "completed"
+
+
+class KeyRotation(Base):
+    """One re-encryption of stored values under ENCRYPTION_KEY, started by an admin.
+
+    Progress lives here rather than in a process, so it survives a leader change and
+    every instance reports the same numbers. A completed row's retired fingerprints are
+    the keys it moved the database away from: the key check refuses them as a primary.
+    """
+
+    __tablename__ = "key_rotations"
+    __table_args__ = (
+        # At most one rotation in progress.
+        Index(
+            "ix_key_rotations_one_active",
+            "active",
+            unique=True,
+            postgresql_where=literal_column("active"),
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    state: Mapped[str] = mapped_column(String(16), nullable=False, default="running")
+    # True while running or paused; the partial unique index allows one such row.
+    active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    target_fingerprint: Mapped[str] = mapped_column(String(32), nullable=False)
+    retired_fingerprints: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default="[]"
+    )
+    started_by_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    done: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    remaining: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    unreadable: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    # The last credential id rewritten in the current pass, so a new leader resumes there.
+    cursor: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    message: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
+    )
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class WorkflowRunQueue(Base):

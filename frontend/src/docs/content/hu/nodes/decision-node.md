@@ -157,6 +157,8 @@ Egy hitelesítési adat szerkesztésekor a tárolt kulcs megmarad, ha a kulcs me
 
 Ugyanez a hitelesítési adat képes megítélni az [Evals](../tabs/evals-tab.md) futtatásokat: az **LLM-as-Judge** kiválasztásával válassza ki bírálóként, és a döntési modell minden választ az elvárt kimenethez viszonyítva pontoz.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 A Heym alapértelmezés szerint blokkolja a privát és loopback címekre irányuló kimenő kéréseket, így a `localhost`-on vagy privát tartományban saját maga által futtatott döntési endpointhoz a `HEYM_HTTP_ALLOW_PRIVATE_URLS=true` beállítás szükséges.
 
 A döntési modellek nem jelennek meg a Heym által szinkronizált LLM árazási táblázatokban, így a **Cost** oszlop a [Traces](../tabs/traces-tab.md) nézetben üresen marad ezeknél a hívásoknál. A tokenek száma továbbra is rögzítésre kerül, és saját árat adhat meg egy árazási felülírással.

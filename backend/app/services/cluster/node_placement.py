@@ -27,7 +27,7 @@ NODE_PLACEMENT: dict[str, Placement] = {
     "bigquery": _ANY,
     "chartOutput": _ANY,
     "clickhouse": _ANY,
-    "code": _ANY,
+    "code": _ANY,  # narrowed to MAIN_ONLY by _code_placement when codeFiles is set
     "codex": _MAIN,
     "condition": _ANY,
     "consoleLog": _ANY,
@@ -45,6 +45,7 @@ NODE_PLACEMENT: dict[str, Placement] = {
     "fileUploadTrigger": _MAIN,
     "github": _ANY,
     "googleDrive": _MAIN,
+    "googleMeet": _ANY,
     "googleDriveTrigger": _ANY,  # polling runs on the leader; the run keeps no local state
     "googleSheets": _ANY,
     "googleSheetsTrigger": _ANY,  # polling runs on the leader; the run keeps no local state
@@ -53,7 +54,7 @@ NODE_PLACEMENT: dict[str, Placement] = {
     "heymTrigger": _ANY,
     "htmlOutputMapper": _ANY,
     "http": _ANY,
-    "imapTrigger": _ANY,
+    "imapTrigger": _ANY,  # narrowed to MAIN_ONLY by _imap_placement when it saves attachments
     "jira": _ANY,
     "jsonOutputMapper": _ANY,
     "linear": _ANY,
@@ -75,7 +76,7 @@ NODE_PLACEMENT: dict[str, Placement] = {
     "sendEmail": _MAIN,
     "sentry": _ANY,
     "set": _ANY,
-    "slack": _ANY,
+    "slack": _ANY,  # narrowed to MAIN_ONLY by _slack_placement for its Drive file operations
     "slackTrigger": _ANY,
     "sticky": _ANY,
     "supabase": _ANY,
@@ -96,12 +97,49 @@ def _agent_placement(data: dict) -> Placement:
 
     Skill code reads and writes Heym Drive through _load_skill_drive_files /
     _persist_skill_files in llm_service.py. Python tools, MCP tools and
-    sub-workflow tools have no local file dependency.
+    sub-workflow tools have no local file dependency. The file sandbox turns on
+    only for a Drive file whose content is on this instance, and the nodes that
+    put Drive files into a run (upload trigger, drive, googleDrive, converter,
+    code with codeFiles, slack downloadFile, imapTrigger saving attachments) already
+    pin it to the main instance.
     """
-    return _MAIN if (data.get("skills") or []) else _ANY
+    if data.get("skills"):
+        return _MAIN
+    return _ANY
 
 
-_CONDITIONAL: dict[str, Callable[[dict], Placement]] = {"agent": _agent_placement}
+def _code_placement(data: dict) -> Placement:
+    """A Code node pins the run only when it reads Drive files (``codeFiles``)."""
+    files = data.get("codeFiles")
+    if isinstance(files, list):
+        return _MAIN if files else _ANY
+    return _MAIN if str(files or "").strip() else _ANY
+
+
+# Slack node operations that read or write Heym Drive (see slack_files.py).
+_SLACK_FILE_OPERATIONS = frozenset({"downloadFile", "sendFile"})
+
+
+def _slack_placement(data: dict) -> Placement:
+    """A Slack node pins the run only when it downloads files into Drive or sends Drive files."""
+    return _MAIN if data.get("slackOperation") in _SLACK_FILE_OPERATIONS else _ANY
+
+
+def _imap_placement(data: dict) -> Placement:
+    """An IMAP Trigger pins the run only when it saves the email's attachments to Drive.
+
+    The handler checks the same ``is True`` (see nodes/imap_trigger_node.py), so a run that saves
+    files can never be placed on an instance without Drive storage.
+    """
+    return _MAIN if data.get("imapDownloadAttachments") is True else _ANY
+
+
+_CONDITIONAL: dict[str, Callable[[dict], Placement]] = {
+    "agent": _agent_placement,
+    "code": _code_placement,
+    "imapTrigger": _imap_placement,
+    "slack": _slack_placement,
+}
 
 
 def node_placement(node: dict) -> Placement:

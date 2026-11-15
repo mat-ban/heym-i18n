@@ -92,6 +92,10 @@ Dette definerer også opgraderingsrækkefølgen. Hvis main opgraderes først, ma
 
 **Worker-instanser har en anden udgående IP.** Enhver API, der tillader kildeadresser, vil se den nye. Send Email kører på main af netop denne grund; for HTTP-noden skal der enten gives clusteret en enkelt NAT-udgangsadresse eller tillades hver enkelt instans.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Tilføjelse af en worker på en anden maskine
 
 `docker-compose.worker.yml` i repository-roden kører en worker på sin egen vært. Den har ingen database og ingen brugergrænseflade: den når main-instansens PostgreSQL og tager sin del af baggrundskørslerne.
@@ -124,7 +128,7 @@ Intet af dette vises på en enkeltinstans-installation: felterne er tomme, intet
 
 **Hvis en worker afbrydes midt i en kørsel**, bliver dens heartbeat inaktiv, og lederens eksisterende gendannelsesscanning genkører kørslen på en aktiv instans. Den kø-række, der var blevet påbegyndt, håndteres separat: Når der ikke findes en aktiv kørsel for den, og en nådeperiode på to minutter er udløbet, markerer lederen rækken som fejlet og vækker den, der ventede på resultatet. Alder alene udløser aldrig handlingen, så en legitim lang kørsel forbliver uberørt; og rækken markeres som fejlet i stedet for at blive genindkørt, fordi gendannelsen allerede har overtaget genkørslen, og genindkøring ville køre det samme workflow to gange.
 
-**Hvis main-instansen går ned**, fortsætter cron med at udløse fra en worker, og distribuerbare kørsler fortsætter med at eksekvere. Kørsler, der kræver main, sættes i kø og venter, og afvikles, når main er tilgængelig igen — men kun inden for nådevinduet for misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, standard 600 sekunder). Alt ældre lukkes som sprunget over, med årsagen registreret, i stedet for at afvikle timers bagkø på én gang.
+**Hvis main-instansen går ned**, fortsætter cron med at udløse fra en worker, og distribuerbare kørsler fortsætter med at eksekvere. Kørsler, der kræver main, sættes i kø og venter, og afvikles, når main er tilgængelig igen — men kun inden for nådevinduet for misfire (`CRON_MISFIRE_GRACE_SECONDS`, standard 600 sekunder). Alt ældre lukkes som sprunget over, med årsagen registreret, i stedet for at afvikle timers bagkø på én gang.
 
 Brugerfladen, API'en, MCP og editoren er utilgængelige, mens main er nede, fordi indgangspunkterne ligger der.
 

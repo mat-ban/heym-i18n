@@ -12,7 +12,7 @@ Yürütmeyi başlatan başlangıç node'ları (gelen kenarı olmayan):
 | [Cron](../nodes/cron-node.md) | Bir zamanlamaya göre çalışır (cron ifadesi, örn. saatlik için `0 * * * *`). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Telegram, node'a özel webhook URL'sine bir bot webhook güncellemesi gönderdiğinde başlar. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Discord, node'a özel endpoint'e bir Interactions API webhook'u gönderdiğinde başlar. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Bir IMAP posta kutusunu yoklar ve yeni algılanan her e-posta için bir kez başlar. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Bir IMAP posta kutusunu yoklar ve yeni algılanan her e-posta için bir kez başlar. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Heym bir platform olayı yayımladığında başlar. Bir dispatch penceresindeki olaylar bir dizi olarak birlikte gelir. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Harici bir socket'e giden bir istemci bağlantısı açar ve seçilen socket olaylarında başlar. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Tek kullanımlık bir yükleme URL'si üretir ve bir çağıran büyük bir multipart dosya gönderdiğinde başlar. |

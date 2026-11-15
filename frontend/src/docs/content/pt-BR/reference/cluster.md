@@ -92,6 +92,10 @@ Isso também define a ordem de atualização. Atualizar a main primeiro marca to
 
 **Instâncias worker têm um IP de saída diferente.** Qualquer API que permita endereços de origem por allowlist verá o novo IP. O Send Email é executado na main exatamente por esse motivo; para o nó HTTP, ou forneça ao cluster um único endereço de saída NAT, ou inclua todas as instâncias na allowlist.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Adicionando um worker em outra máquina
 
 O `docker-compose.worker.yml` na raiz do repositório executa um worker em seu próprio host. Ele não tem banco de dados nem UI: ele alcança o PostgreSQL da instância main e assume sua parcela das execuções em segundo plano.
@@ -124,7 +128,7 @@ Nada disso aparece em uma instalação de instância única: os campos ficam vaz
 
 **Se um worker morrer durante a execução**, seu heartbeat fica desatualizado e a varredura de recuperação existente do leader reexecuta a execução em uma instância ativa. A linha da fila que ele havia reivindicado é encerrada separadamente: assim que não existir mais nenhuma execução ativa para ela e tiver transcorrido um período de carência de dois minutos, o leader marca a linha como falha e desperta quem estiver aguardando o resultado. A idade por si só nunca é o gatilho, portanto uma execução legitimamente longa é deixada em paz; e a linha é marcada como falha em vez de recolocada na fila, porque a recuperação já é responsável pela reexecução e recolocá-la na fila executaria o mesmo workflow duas vezes.
 
-**Se o main ficar indisponível**, o cron continua disparando a partir de um worker e as execuções distribuíveis continuam sendo executadas. As execuções que precisam do main entram na fila e aguardam, sendo drenadas quando ele retornar — mas apenas dentro da janela de carência de misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, 600 segundos por padrão). Qualquer coisa mais antiga é encerrada como ignorada, com o motivo registrado, em vez de reproduzir horas de backlog de uma só vez.
+**Se o main ficar indisponível**, o cron continua disparando a partir de um worker e as execuções distribuíveis continuam sendo executadas. As execuções que precisam do main entram na fila e aguardam, sendo drenadas quando ele retornar — mas apenas dentro da janela de carência de misfire (`CRON_MISFIRE_GRACE_SECONDS`, 600 segundos por padrão). Qualquer coisa mais antiga é encerrada como ignorada, com o motivo registrado, em vez de reproduzir horas de backlog de uma só vez.
 
 A UI, a API, o MCP e o editor ficam indisponíveis enquanto o main estiver fora do ar, porque o ingress aponta para lá.
 

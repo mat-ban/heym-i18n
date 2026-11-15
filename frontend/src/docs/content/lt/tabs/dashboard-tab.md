@@ -2,6 +2,9 @@
 
 **Valdymo pulto** skirtukas yra Grafana stiliaus erdvė, kurioje kuriate diagramų valdiklių tinklus. Kiekvienas valdiklis yra generuojamas iš savo paslėpto Heym workflow rezultato, todėl bet kokie duomenys, kuriuos galite gauti workflow — duomenų bazės užklausos, API skambučiai, RAG paieškos, LLM išvestis — gali tapti diagrama. Galite turėti kelis valdymo pultus ir dalintis kiekvienu su žmonėmis ar komandomis.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Valdymo pultai
 
 Kiekvienas pradeda nuo vieno valdymo pulto, sukurtos pirmą kartą atidarius skirtuką. Naudokite valdymo pulto pasirinkimo mygtuką viršuje, kad pereitumėte tarp valdymo pultų, ir **+** šalia jo, kad sukurtumėte naują. Pasirinkimo sąraše pirmiausia rodomi jūsų patys valdymo pultai, o po to tie, kurie buvo su jumis pasidalinti, pažymėti asmens, kuris juos pasidalino, vardu.
@@ -27,6 +30,8 @@ Valdiklis yra viena diagrama tinkle. Palaikomi diagramų tipai:
 - **Entity relationships (DB)** (lentelės, laukai, PK/FK raktai ir ryšiai)
 - **Stulpelinio matuoklio** (vienas horizontalus matuoklis kiekviename eilutėje su raudona→žalia gradientu ir verte, pvz., laisvos disko vietos)
 - **Tekstas** (markdown žinutė, pvz., statuso pastaba kaip "Paskutinis vykdymas 19:47"; palaiko [interaktyvius žymeklius](../nodes/chart-output-node.md#interactive-task-lists), kai markdown yra statinis, ir [aiškius numeruotus sąrašus](../nodes/chart-output-node.md#numbered-lists) pagal užsakymą arba mažėjimo tvarka)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (jūsų laukiančios žmogaus apžvalgos. Antraštėje rodomas `1/n laukia`. Workflow pavadinimas atidaro tą vykdymą drobėje. **Patvirtinti**, **Prašyti pakeitimų** ir **Atmesti** išsprendžia tai. Istorijos piktograma šalia valdiklio pavadinimo atidaro tą vykdymą istorijos dialoge šioje pusėje. Valdiklis nenaudoja aukštesnių eilučių, ir kiekvienas asmuo mato savo eilę. Vietoj to jis gali rodyti vieno Workflow peržiūras visiems, kurie gali atverti tą Workflow; žr. [HITL valdikliai](#hitl-valdikliai))
 
 Be diagramų, **Run a workflow** valdiklis paleidžia vieną iš jūsų workflow tiesiai iš valdymo pulto: su numestu failu, su įvesties laukais arba mygtuku Run; žr. [Vykdymo valdikliai](#run-widgets).
@@ -145,3 +150,5 @@ Pašalinus dalijimąsi arba sumažinus jį iš rašymo į skaitymą, tai įsigal
 ## Grafikai ir duomenų bazių diagramos
 
 Pasirinkite **Gantt** skiltyje Pridėti valdiklį, kad parodytumėte užduotis laike su užbaigimo ir priklausomybės ryšiais, arba **Entity relationships (DB)**, kad susietumėte lenteles, laukus ir jų ryšius. Abu tipai naudoja [Chart Output mazgą](../nodes/chart-output-node.md#gantt-schedules) ir yra prieinami Heym Work puslapiuose. Kai Work siūlo valdiklius grafikui ar duomenų bazės schemai, ji nubraižo peržiūras pagal siūlomas užduotis ar esybes.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

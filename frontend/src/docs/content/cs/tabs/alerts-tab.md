@@ -2,6 +2,9 @@
 
 Karta **Alerts** vám umožňuje definovat prahové podmínky v rámci časového okna a nechat si oznámit, když jsou překročeny. Heym již zaznamenává výsledky spuštění, dobu běhu a útratu za LLM, ale nikdy je sám od sebe nehlásí. Alert je způsob, jakým si o to řeknete.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Přehrát ukázku Alerts</a></p>
+
 Každý alert se vyhodnocuje v rámci **časového okna**, které si zvolíte, nikdy ne na základě jediné události. Jedno neúspěšné spuštění je šum. Dvanáct neúspěšných spuštění za deset minut je incident.
 
 ## Typy alertů

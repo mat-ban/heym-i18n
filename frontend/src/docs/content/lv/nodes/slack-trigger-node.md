@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym nekavējoties atbild ar `200 OK` un palaiž workflow fonā — tas apmierina Slack 3 sekunžu atbildes prasību
 - Webhook URL tiek atvasināts no mezgla ID un nekad nemainās, pat pēc workflow pārdēvēšanas
 - Vienā workflow ir nepieciešams tikai viens `slackTrigger` mezgls; izmantojiet **Switch** vai **Condition** mezglus lejupstraumē, lai maršrutētu dažādus notikumu tipus
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

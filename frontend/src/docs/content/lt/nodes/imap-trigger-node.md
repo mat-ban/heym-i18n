@@ -16,6 +16,7 @@
 |------------|-------|-----------|
 | `credentialId` | UUID | `imap` kredencialas, kuriame yra serverio, prisijungimo, pašto dėžutės ir SSL nustatymai |
 | `pollIntervalMinutes` | Sveikasis skaičius | Kaip dažnai Heym tikrina pašto dėžutę dėl naujų el. laiškų |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Nustatymo vadovas
 
@@ -62,6 +63,8 @@ Po to, kai mazgas suaktyvinamas, žemiau esantys mazgai gali pasiekti:
 | `$nodeLabel.email.text` | Paprasto teksto turinys |
 | `$nodeLabel.email.html` | HTML turinys |
 | `$nodeLabel.email.attachments` | Prisegtų failų metaduomenų masyvas (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Iššifruotas antraščių objektas |
 | `$nodeLabel.email.uid` | IMAP UID dedupingui arba žurnalo vedimui |
 | `$nodeLabel.triggered_by` | Trigger šaltinio etiketė (`"imap"`) |

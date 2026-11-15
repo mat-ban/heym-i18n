@@ -192,7 +192,7 @@ Trace 系統專為除錯 agentic 行為而打造，提供完整的請求與回�
 Heym 中的每一次 LLM 呼叫都會自動計算成本。[Traces 分頁](../tabs/traces-tab.md)會顯示每個 trace 的輸入與輸出 Token 數量，以及根據同步定價表即時計算出的 USD 成本。
 
 - **單一 trace 成本** – 每一列 trace 都會顯示輸入 Token、輸出 Token 與總計 USD
-- **成本分析** – KPI 卡片與各模型成本圖表會隨選定的時間範圍（1h / 24h / 7d / 30d / All）更新
+- **成本分析** – KPI 卡片與各模型成本圖表會隨選定的時間範圍（1h / 3h / 6h / 24h / 7d / 30d / All）更新
 - **LLM 成本表** – [DataTable 分頁](../tabs/datatable-tab.md)中的系統表每 24 小時從 Helicone 同步一次；您可以覆寫價格，或為尚未列出的模型新增自訂資料列
 - **缺少價格警告** – 若某模型的 trace 沒有對應的定價項目，會顯示內嵌警告並附上直接前往成本表的連結
 
@@ -278,7 +278,7 @@ Workflow 可透過 HTTP 呼叫，位於 `/api/workflows/{workflow_id}/execute`�
 Heym 在兩端皆原生支援 [MCP](../tabs/mcp-tab.md)：
 
 - **作為客戶端**：Agent 節點透過 stdio 或 SSE 連接外部 MCP 伺服器（Filesystem、Browserbase、自訂工具），並自動取用其工具
-- **作為伺服器**：啟用 MCP 的 Workflow 會成為預設伺服器上位於 `/api/mcp/sse` 的工具，或成為具有各自 URL 與 API key 的具名伺服器上的工具，因此 Claude Desktop、Cursor 與其他 MCP 客戶端可直接呼叫您的 Heym Workflow
+- **作為伺服器**：啟用 MCP 的 Workflow 會成為預設伺服器上位於 `/api/mcp (or /api/mcp/sse for legacy connections)` 的工具，或成為具有各自 URL 與 API key 的具名伺服器上的工具，因此 Claude Desktop、Cursor 與其他 MCP 客戶端可直接呼叫您的 Heym Workflow
 
 Agent 可同時取用多個 MCP 伺服器，且任何 Workflow 都能成為外部 MCP 客戶端的工具。
 

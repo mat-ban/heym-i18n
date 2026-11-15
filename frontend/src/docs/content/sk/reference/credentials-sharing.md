@@ -87,6 +87,7 @@ Niektoré uzly ukladajú `credentialId` (UUID) v `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse podrobnosti pripojenia (host, port, auth, databáza) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot prihlasovacie údaje |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord verejný kľúč alebo webhook prihlasovacie údaje |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant alebo Postgres (pgvector) vector DB, cez Qdrant, Psql alebo Custom Embeddings RAG prihlasovacie údaje |
 | Evals | `credential_id`, `judge_credential_id` | Model prihlasovacie údaje; model alebo Decision Model prihlasovacie údaje pre LLM-as-Judge judge |
 | [Playwright](../nodes/playwright-node.md) AI krok | `credentialId` | LLM/Vision model (pre AI krok a [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Po vykonaní `mask_sensitive_output()` maskuje hodnoty prihlasovacích údajov v
 - [Expression DSL](./expression-dsl.md) – `$credentials` syntax
 - [Node Types](./node-types.md) – Uzly, ktoré používajú prihlasovacie údaje ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Používa `credentialId` pre LLM
+
+## Oprávnenia kalendára Google Meet
+
+Zdieľanie [prihlasovacích údajov Google Meet](../nodes/google-meet-node.md) umožňuje workflow čítať intervaly voľno/zaneprázdnený prístupných kalendárov a vytvárať, upravovať alebo mazať udalosti ako pripojený účet Google vrátane odosielania pozvánok a zrušení. E-mail účastníka nemení to, ktorý účet udalosť vlastní alebo autorizuje. Iba vlastník prihlasovacích údajov môže znova pripojiť svoju autorizáciu Google.

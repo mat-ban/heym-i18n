@@ -122,3 +122,6 @@ Ak sa nezhoduje žiadny riadok, model sa uvedie v upozornení **Unpriced models*
 - [Karta Spustenia](./traces-tab.md) – Používa tabuľku nákladov LLM pre koláčový graf nákladov a KPI karty
 - [Uzol Grist](../nodes/grist-node.md) – Alternatíva externého tabuľkového procesora
 - [Karta Premenné](./global-variables-tab.md) – Alternatíva úložiska kľúč-hodnota
+## Vyhľadávanie
+
+Použite vyhľadávacie pole nad zoznamom tabuliek alebo stlačte **Ctrl+F** (alebo **Cmd+F**) pre filtrovanie tabuliek podľa názvu alebo popisu počas písania. Stlačením **Escape** vyhľadávanie zrušíte.

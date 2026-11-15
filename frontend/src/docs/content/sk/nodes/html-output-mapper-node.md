@@ -68,3 +68,5 @@ Rovnaké pravidlo ako pri [Output](./output-node.md): neumiestňujte tento uzol 
 - [Output](./output-node.md) – Odpoveď založená na správe alebo schéme s obalom `result`
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, metódy požiadaviek a odpovede
 - [Node Types](../reference/node-types.md) – Všetky typy uzlov
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

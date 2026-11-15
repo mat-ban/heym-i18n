@@ -95,7 +95,7 @@ U `find` ili `count` filtru, obična vrijednost znači jednako; objektna vrijedn
 | `$contains` | Usporedba podstringa bez obzira na velika/mala slova |
 | `$in` | Vrijednost je u danom nizu |
 
-Primjer kombiniranja nekoliko: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nepoznata podudaranja se ignoriraju. `upsert` filtri i dalje koriste točne vrijednosti za pronalaženje retka koji će se ažurirati.
+Primjer kombiniranja nekoliko: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nepoznata podudaranja se ignoriraju. `upsert` filtri i dalje koriste točne vrijednosti za pronalaženje retka koji će se ažurirati.
 
 Možete također filtrirati prema metapodacima retka — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — koji se pohranjuju kao stvarni stupci, a ne unutar Vaših podataka. Za datume, proslijedite punu vrijednost za usporedbe raspona (npr. `{"created_at": {"$gt": "2026-06-04"}}`) ili koristite `$contains` za djelomično podudaranje teksta (npr. `{"created_at": {"$contains": "2026-06-04"}}`). Ako je jedan od Vaših vlastitih stupaca imenovan isto kao metapodatkovno polje, stupac podataka ima prednost.
 

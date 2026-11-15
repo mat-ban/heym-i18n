@@ -87,6 +87,7 @@ Daži mezgli glabā `credentialId` (UUID) laukā `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse savienojuma informācija (host, port, autentifikācija, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bota akreditācijas dati |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord publiskās atslēgas vai webhook akreditācijas dati |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant vai Postgres (pgvector) vektoru DB, izmantojot Qdrant, Psql vai Custom Embeddings RAG akreditācijas datus |
 | Evals | `credential_id`, `judge_credential_id` | Modeļa akreditācijas dati; modeļa vai Decision Model akreditācijas dati LLM-as-Judge tiesnesim |
 | [Playwright](../nodes/playwright-node.md) AI solis | `credentialId` | LLM/Vision modelis (AI solim un [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Pēc izpildes `mask_sensitive_output()` maskē akreditācijas datu vērtības iz
 - [Expression DSL](./expression-dsl.md) – `$credentials` sintakse
 - [Mezglu tipi](./node-types.md) – Mezgli, kas izmanto akreditācijas datus ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent mezgls](../nodes/agent-node.md) – Izmanto `credentialId` LLM vajadzībām
+
+## Google Meet kalendāra atļaujas
+
+[Google Meet akreditācijas datu](../nodes/google-meet-node.md) kopīgošana ļauj darbplūsmām lasīt pieejamo kalendāru brīvs/aizņemts intervālus un izveidot, mainīt vai dzēst pasākumus kā pievienotajam Google kontam, tostarp nosūtīt ielūgumus un atcelšanas paziņojumus. Apmeklētāja dalībnieka e-pasts nemaina to, kuram kontam pieder pasākums vai kurš to autorizē. Tikai akreditācijas datu īpašnieks var atkārtoti izveidot savienojumu ar savu Google autorizāciju.

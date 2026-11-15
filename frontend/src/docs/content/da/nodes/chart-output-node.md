@@ -368,3 +368,6 @@ En `table` kan gøre én kolonne til knapper, der åbner et link. Angiv **Link c
 Kun `http://`- og `https://`-adresser samt stier, der starter med ét enkelt `/`, bliver til knapper. Enhver anden værdi, f.eks. `javascript:` eller `//host`, forbliver almindelig tekst, og en tom celle viser intet.
 
 Knappen fungerer ved siden af et [rælink](../tabs/dashboard-tab.md#detail-pages): et klik på knappen åbner dens link i en ny fane, og et klik et hvilket som helst andet sted på rækken åbner stadig detaljesiden.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

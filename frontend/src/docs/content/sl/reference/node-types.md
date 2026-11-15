@@ -68,6 +68,7 @@ Oglejte si [Triggers](./triggers.md) za vse vhodne točke.
 | [Linear](../nodes/linear-node.md) | Upravljanje z Linear ekipami, projekti, težavami, stanji delovnega toka in komentarji preko GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Branje/pisanje Google Sheets preko OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Seznam, prenos, posodobitev in brisanje datotek Google Drive preko OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Branje razpoložljivosti ter ustvarjanje, posodabljanje ali brisanje vabil Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Izvajanje SQL poizvedb in vstavljanje vrstic v BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Poizvedovanje in spreminjanje tabel Supabase preko PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Izvajanje SQL, CRUD in štetja operacij proti ClickHouse | 1 | 1 |

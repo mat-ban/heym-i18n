@@ -42,7 +42,7 @@ Sessioni di formazione hands-on personalizzate in base al livello di competenza 
 
 ## Deployment Kubernetes
 
-La guida standard [Running & Deployment](../getting-started/running-and-deployment.md) copre Docker Compose per configurazioni di produzione su singolo server. I clienti Enterprise ricevono assistenza per deployment Kubernetes di produzione finalizzati ad alta disponibilità e scalabilità orizzontale:
+La guida standard [Running & Deployment](../getting-started/running-and-deployment.md) copre Docker Compose per configurazioni di produzione su singolo server. [Kubernetes Deployment](../getting-started/kubernetes.md). I clienti Enterprise ricevono assistenza per deployment Kubernetes di produzione finalizzati ad alta disponibilità e scalabilità orizzontale:
 
 - **Worker node multipli** — Distribuzione dei worker backend di Heym su più nodi Kubernetes per ridondanza e bilanciamento del carico
 - **Container sidecar** — Configurazione di pattern sidecar per la raccolta dei log, agenti di monitoraggio, service mesh (Istio, Linkerd) e iniezione dei segreti (Vault)

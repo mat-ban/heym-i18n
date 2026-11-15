@@ -22,7 +22,7 @@
 Η απομόνωση εκτέλεσης επιλέγεται από τη μεταβλητή `HEYM_OPENCODE_CLI_COMMAND`, ακριβώς όπως στον κόμβο Codex:
 
 - **Τοπική ανάπτυξη (`run.sh`)** την αφήνει στην προεπιλεγμένη τιμή `opencode`, οπότε το OpenCode εκτελείται ως υποδιεργασία του host με αντικείμενο τον κλωνοποιημένο χώρο εργασίας — χωρίς ανάγκη για Docker, χωρίς πρόσθετες παραμέτρους.
-- **Αναπτύξεις Docker (`deploy.sh` και το ενιαίο image GHCR)** την ορίζουν σε `/usr/local/bin/heym-opencode-docker`, ένα wrapper που εκτελεί το `opencode run` μέσα σε ένα **ενισχυμένο, εφήμερο sibling container** που μοιράζεται το named volume του χώρου εργασίας του OpenCode.
+- **Αναπτύξεις Docker (`deploy.sh` και το ενιαίο image GHCR)** την ορίζουν σε `/usr/local/bin/heym-opencode-docker`, ένα wrapper που εκτελεί το `opencode run` μέσα σε ένα **ενισχυμένο, εφήμερο sibling container** που μοιράζεται το named volume του χώρου εργασίας του OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Το ενισχυμένο runner container απορρίπτει όλες τις δυνατότητες Linux, ορίζει `no-new-privileges`, χρησιμοποιεί read-only root με tmpfs `/tmp` και εφαρμόζει όρια σε pid/memory/CPU. Η δικτυακή έξοδος επιτρέπεται (το OpenCode πρέπει να φτάσει στην πύλη μοντέλων). Το **token του GitHub δεν τοποθετείται ποτέ μέσα στο container** — όλες οι ενέργειες git και GitHub εκτελούνται στην πλευρά του host, οπότε μόνο το κλειδί API του OpenCode και τα αρχεία του αποθετηρίου βρίσκονται ποτέ στο εσωτερικό.
 

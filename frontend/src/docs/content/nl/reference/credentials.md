@@ -32,6 +32,7 @@ Referenties (Credentials) slaan API keys en secrets op die door workflow-knooppu
 | [Grist](../nodes/grist-node.md) | Grist | API key + server URL |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + OAuth2-toestemming |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + OAuth2-toestemming |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + OAuth2-toestemming |
 | [Supabase](../nodes/supabase-node.md) | Supabase | Project URL + API key (+ optioneel standaardschema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + poort + gebruikersnaam/wachtwoord + database (+ secure) |

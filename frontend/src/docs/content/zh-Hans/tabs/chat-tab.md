@@ -21,6 +21,9 @@
 - **Workflow 创建** – 让 Chat 创建或设置一个 Workflow，它会使用与编辑器助手相同的 Workflow AI Builder 引擎来生成并保存该 Workflow
 - **看板任务创建** – 用自然语言请求添加任务或创建卡片。Chat 会将其添加到所请求看板的第一列；当您有多个看板且未指定时，Chat 会在创建卡片前呈现看板选择器
 - **排队后续消息** – 在答案流式输出期间发送更多消息。排队的消息会被持久化，可在开始前编辑或删除，并在当前响应完成后按顺序运行
+- **Kanban boards** – Ask naturally to add, assign, move, update or comment on a task, list your overdue tasks or what waits for a review, or create and arrange boards and columns. When you have multiple boards and do not name one, Chat presents a board picker before creating a card. See [Board › From Chat and MCP](./board-tab.md#from-chat-and-mcp)
+- **Send now** – Click **Send now** beside a queued message to stop the active reply and send that message immediately. The partial reply stays in the conversation, followed by your message and the new answer. The message keeps its files and chosen model; the other queued messages remain and resume in order afterward
+- **Changing direction** – After **Send now**, your latest message controls the task. A cancelled question stays as context and is not another pending job. Interrupted requests appear as **cancelled** in Traces and run history, including ones stopped before the model answers
 - **规划暂停** – 当 Chat 需要规划细节时，它会提出澄清问题并暂停排队的后续消息，直到您回答。规划答案完成后，排队的消息会恢复
 - **凭据** – 当 Chat 创建或编辑的 Workflow 需要凭据时，Chat 会询问使用哪一个，提供在对话中创建新凭据的选项，或允许您跳过。您也可以让 Chat 创建凭据或更新您拥有的凭据；它会在对话中打开凭据表单。模型只能看到凭据的名称和类型，永远看不到其值，对于您拥有的凭据和与您共享的凭据均是如此。Chat 添加的 LLM 和 Agent 节点使用为该聊天选择的凭据和模型运行（包括共享凭据）；当 Chat 编辑 Workflow 时，其原有的 LLM 和 Agent 节点将保留各自的凭据和模型。参见 [AI Assistant › 凭据](../reference/ai-assistant.md#credentials)
 - **Dashboards** – 询问您有哪些[仪表盘](./dashboard-tab.md)、某个仪表盘上有什么内容，或者某个 Workflow 位于哪个仪表盘上。让 Chat 向仪表盘添加新小组件（它会在那里放置一个空小组件，然后构建并测试其 Workflow）、将现有 Workflow 作为小组件放入仪表盘、重命名或删除小组件，或整理仪表盘的布局。Heym Work 将这些仪表盘显示为其页面。请参阅 [Dashboard › 来自 Chat 和 MCP](./dashboard-tab.md#来自-chat-和-mcp)

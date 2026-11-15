@@ -2,6 +2,9 @@
 
 Karta **Alerty** umożliwia definiowanie warunków progowych w oknie czasowym oraz otrzymywanie powiadomień w momencie ich przekroczenia. Heym rejestruje wyniki wykonania, czas trwania uruchomień oraz wydatki na LLM, ale nigdy nie udostępnia tych danych z własnej inicjatywy. Alert to sposób, w jaki można o nie poprosić.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Zobacz demo Alerts</a></p>
+
 Każdy alert jest oceniany w wybranym **oknie czasowym**, nigdy na podstawie pojedynczego zdarzenia. Jedno nieudane uruchomienie to szum. Dwanaście nieudanych uruchomień w ciągu dziesięciu minut to incydent.
 
 ## Typy alertów

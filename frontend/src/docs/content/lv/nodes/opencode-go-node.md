@@ -22,7 +22,7 @@ Mezglam ir nepieciešami arī **GitHub** akreditācijas dati, lai klonētu priv�
 Izpildes izolāciju nosaka `HEYM_OPENCODE_CLI_COMMAND`, tieši tāpat kā Codex mezglā:
 
 - **Vietējā izstrāde (`run.sh`)** atstāj to noklusējuma vērtībā `opencode`, tāpēc OpenCode darbojas kā resursdatora apakšprocess pret klonēto darbvietu — nav nepieciešams Docker, nav papildu karodziņu.
-- **Docker izvietojumi (`deploy.sh` un vienotais GHCR attēls)** iestata to uz `/usr/local/bin/heym-opencode-docker`, iesaiņotāju, kas palaiž `opencode run` **drošinātā, vienreizlietojamā blakus konteinerā**, kas koplieto OpenCode darbvietas nosaukto sējumu.
+- **Docker izvietojumi (`deploy.sh` un vienotais GHCR attēls)** iestata to uz `/usr/local/bin/heym-opencode-docker`, iesaiņotāju, kas palaiž `opencode run` **drošinātā, vienreizlietojamā blakus konteinerā**, kas koplieto OpenCode darbvietas nosaukto sējumu. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Drošinātais izpildītāja konteiners atmet visas Linux iespējas, iestata `no-new-privileges`, izmanto tikai lasāmu sakni ar tmpfs `/tmp` un piemēro pid/atmiņas/CPU ierobežojumus. Tīkla izeja ir atļauta (OpenCode ir jāsasniedz modeļu vārteja). **GitHub token nekad netiek ievietots konteinerā** — visas git un GitHub darbības tiek veiktas resursdatora pusē, tāpēc konteinerā vienmēr atrodas tikai OpenCode API atslēga un repozitorija faili.
 

@@ -157,6 +157,8 @@ credential を編集する際、キーフィールドを空欄のままにする
 
 同じ credential で [Evals](../tabs/evals-tab.md) の実行を判定できます。**LLM-as-Judge** を選択した状態で、これを judge として選択すると、decision model がすべての回答を期待される出力と照らして採点します。
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym はデフォルトでプライベートアドレスおよびループバックアドレスへの送信リクエストをブロックするため、`localhost` やプライベートレンジでご自身が運用する decision endpoint には `HEYM_HTTP_ALLOW_PRIVATE_URLS=true` が必要です。
 
 Decision model は Heym が同期する LLM 価格テーブルに表示されないため、[Traces](../tabs/traces-tab.md) の **Cost** 列はこれらの呼び出しでは空のままです。Token 数は引き続き記録され、pricing override で独自の価格を追加できます。

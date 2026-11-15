@@ -132,3 +132,6 @@ Instance 管理員可在此處連線業務團隊介面 [Heym Work](./heym-work.m
 - [Security](./security.md) – Session 管理、速率限制、認證加密
 - [Single Sign-On](./sso.md) – 連接外部 OpenID Connect 提供者
 - [OpenTelemetry Tracing](./opentelemetry.md) – 用於 workflow 與節點執行的分散式追蹤
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

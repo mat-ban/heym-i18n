@@ -72,6 +72,7 @@ Name: `heym.agent.tool.execute`, erzeugt unter dem aktiven Agent-Knoten-Span.
 | `heym.agent.tool.args_bytes` | UTF-8-Größe der serialisierten Tool-Argumente. |
 | `heym.agent.tool.result_bytes` | UTF-8-Größe des serialisierten Tool-Ergebnisses. |
 | `heym.agent.tool.status` | `success`, `error`, `pending`, `timeout` oder `cancelled`. Tool-Fehler setzen den Span-Status auf `ERROR`. |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 Rohe Tool-Argumente und -Ergebnisse werden standardmäßig nicht an Spans angehängt.
 

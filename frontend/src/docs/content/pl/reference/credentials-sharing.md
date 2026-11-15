@@ -87,6 +87,7 @@ Niektóre węzły przechowują `credentialId` (UUID) w `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Szczegóły połączenia ClickHouse (host, port, uwierzytelnianie, baza danych) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Dane logowania bota Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Klucz publiczny Discord lub dane logowania Webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Baza wektorowa Qdrant lub Postgres (pgvector), poprzez dane logowania RAG Qdrant, Psql lub Custom Embeddings |
 | Evals | `credential_id`, `judge_credential_id` | Dane logowania modelu; dane logowania modelu lub Decision Model dla sędziego LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) krok AI | `credentialId` | Model LLM/Vision (dla kroku AI oraz [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ Po wykonaniu funkcja `mask_sensitive_output()` maskuje wartości danych logowani
 - [Expression DSL](./expression-dsl.md) – Składnia `$credentials`
 - [Node Types](./node-types.md) – Węzły korzystające z danych logowania ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Wykorzystuje `credentialId` dla LLM
+
+## Uprawnienia kalendarza Google Meet
+
+Udostępnienie [danych logowania Google Meet](../nodes/google-meet-node.md) pozwala workflowom na odczyt interwałów wolny/zajęty dostępnych kalendarzy oraz tworzenie, modyfikowanie lub usuwanie wydarzeń jako połączone konto Google, w tym wysyłanie zaproszeń i odwołań. Adres e-mail uczestnika nie zmienia tego, które konto jest właścicielem lub autoryzuje wydarzenie. Tylko właściciel danych logowania może ponownie połączyć autoryzację Google.

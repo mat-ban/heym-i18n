@@ -116,6 +116,10 @@ HITL доступний лише для виходу агента в текст�
 
 Ви можете під'єднати підтримуваний вузол workflow до ручки **tools** агента, щоб агент міг викликати цей вузол під час виконання. Це перетворює наявні дії та перетворення на canvas на інструменти, які можна викликати, без написання Python.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Використовуйте інструменти вузлів canvas, коли потрібно, щоб агент вирішував, коли запускати налаштований вузол, зберігаючи при цьому облікові дані, статичні поля та специфічні для workflow налаштування в інтерфейсі вузла.
 
 ### Поля, які надає агент
@@ -403,3 +407,6 @@ Completions. За замовчуванням його вимкнено.
 - [Швидкий старт](../getting-started/quick-start.md) – Базовий workflow з LLM та виразами
 - [Вкладка «Облікові дані»](../tabs/credentials-tab.md) – Додавання API-ключів для агента
 - [Вкладка MCP](../tabs/mcp-tab.md) – Налаштування MCP для інструментів workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

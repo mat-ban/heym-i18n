@@ -84,7 +84,8 @@
     "dropFileOrClick": "将文件拖放到此处，或点击选择",
     "removeFile": "移除文件",
     "chooseFileFor": "为 {label} 选择文件",
-    "new": "新建"
+    "new": "新建",
+    "clearSearch": "清除搜索"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "启用",
     "disablePlugin": "禁用",
     "uninstallPlugin": "卸载",
-    "pluginOperationFailed": "插件操作失败"
+    "pluginOperationFailed": "插件操作失败",
+    "users": "用户",
+    "encryption": "加密"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "复制执行记录 ID",
     "openTrace": "打开执行记录",
     "message": "消息",
-    "emptyReply": "空回复。"
+    "emptyReply": "空回复。",
+    "timeRange3h": "最近 3 小时",
+    "timeRange6h": "最近 6 小时"
   },
   "tables": {
     "title": "数据表",
@@ -1215,7 +1220,9 @@
     "browseAll": "浏览全部 →",
     "askAi": "询问 AI",
     "dropToImport": "拖入 JSON 或 ZIP 文件以导入",
-    "noWorkflowsMatch": "没有 Workflow 匹配此筛选条件。"
+    "noWorkflowsMatch": "没有 Workflow 匹配此筛选条件。",
+    "noWorkflowsMatchAll": "尝试其他标题、描述或文件夹名称。",
+    "noWorkflowsMatchFilter": "尝试其他标题、描述、文件夹名称或状态筛选器。"
   },
   "schedules": {
     "title": "调度计划",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "由 MCP 客户端发起",
     "newChatTitle": "新建对话",
     "subtitle": "运行 Workflow 并提问",
-    "modelsLoadFailedDisabled": "无法加载此凭据的模型列表。在能够获取模型之前，Chat 将保持禁用。"
+    "modelsLoadFailedDisabled": "无法加载此凭据的模型列表。在能够获取模型之前，Chat 将保持禁用。",
+    "dropFilesToAttach": "拖放文件以附加",
+    "attachFiles": "附加文件"
   },
   "teams": {
     "title": "团队",
@@ -1883,7 +1892,8 @@
       "skipped": "已跳过"
     },
     "permissionRead": "读取",
-    "permissionWrite": "写入"
+    "permissionWrite": "写入",
+    "details": "详情"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "操作",
       "failedToLoadWidget": "加载组件失败",
       "failedToUpdateCheckbox": "更新复选框失败",
-      "refreshDashboard": "刷新看板"
+      "refreshDashboard": "刷新看板",
+      "revertPrevious": "恢复上一版本"
     },
     "hitl": {
       "previousReview": "上一条审核",

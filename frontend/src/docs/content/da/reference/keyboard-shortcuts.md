@@ -107,3 +107,6 @@ Disse genveje er tilgængelige i dialogen Eksekveringshistorik og panelet Kørsl
 - [Hurtig start](../getting-started/quick-start.md) – Byg det første workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Fanerne **Legitimationsoplysninger** og **DataTable** fungerer på samme måde: `Ctrl + F` / `Cmd + F` fokuserer søgefeltet, listen indsnævres, mens du skriver, og `Escape` rydder den.

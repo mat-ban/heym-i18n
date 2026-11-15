@@ -84,7 +84,8 @@
     "dropFileOrClick": "여기에 파일을 드롭하거나 클릭하여 선택",
     "removeFile": "파일 제거",
     "chooseFileFor": "{label}용 파일 선택",
-    "new": "새로 만들기"
+    "new": "새로 만들기",
+    "clearSearch": "검색 지우기"
   },
   "nav": {
     "workflows": "Workflow",
@@ -285,7 +286,9 @@
     "enablePlugin": "활성화",
     "disablePlugin": "비활성화",
     "uninstallPlugin": "제거",
-    "pluginOperationFailed": "플러그인 작업에 실패했습니다"
+    "pluginOperationFailed": "플러그인 작업에 실패했습니다",
+    "users": "사용자",
+    "encryption": "암호화"
   },
   "workflows": {
     "title": "Workflow",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "실행 기록 ID 복사",
     "openTrace": "실행 기록 열기",
     "message": "메시지",
-    "emptyReply": "빈 응답입니다."
+    "emptyReply": "빈 응답입니다.",
+    "timeRange3h": "지난 3시간",
+    "timeRange6h": "지난 6시간"
   },
   "tables": {
     "title": "데이터 테이블",
@@ -1215,7 +1220,9 @@
     "browseAll": "전체 보기 →",
     "askAi": "AI에게 질문",
     "dropToImport": "JSON 또는 ZIP을 드롭하여 가져오기",
-    "noWorkflowsMatch": "이 필터와 일치하는 Workflow가 없습니다."
+    "noWorkflowsMatch": "이 필터와 일치하는 Workflow가 없습니다.",
+    "noWorkflowsMatchAll": "다른 제목, 설명 또는 폴더 이름을 시도해 보세요.",
+    "noWorkflowsMatchFilter": "다른 제목, 설명, 폴더 이름 또는 상태 필터를 시도해 보세요."
   },
   "schedules": {
     "title": "일정",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "MCP 클라이언트에 의해 시작됨",
     "newChatTitle": "새 채팅",
     "subtitle": "Workflow를 실행하고 질문하기",
-    "modelsLoadFailedDisabled": "이 자격 증명의 모델 목록을 불러오지 못했습니다. 모델을 가져올 수 있을 때까지 Chat은 비활성 상태로 유지됩니다."
+    "modelsLoadFailedDisabled": "이 자격 증명의 모델 목록을 불러오지 못했습니다. 모델을 가져올 수 있을 때까지 Chat은 비활성 상태로 유지됩니다.",
+    "dropFilesToAttach": "첨부할 파일을 여기에 놓으세요",
+    "attachFiles": "파일 첨부"
   },
   "teams": {
     "title": "팀",
@@ -1883,7 +1892,8 @@
       "skipped": "건너뜀"
     },
     "permissionRead": "읽기",
-    "permissionWrite": "쓰기"
+    "permissionWrite": "쓰기",
+    "details": "세부정보"
   },
   "mcp": {
     "title": "MCP 서버",
@@ -2197,7 +2207,8 @@
       "actions": "작업",
       "failedToLoadWidget": "위젯을 불러오지 못했습니다",
       "failedToUpdateCheckbox": "체크박스를 업데이트하지 못했습니다",
-      "refreshDashboard": "대시보드 새로 고침"
+      "refreshDashboard": "대시보드 새로 고침",
+      "revertPrevious": "이전 버전으로 되돌리기"
     },
     "hitl": {
       "previousReview": "이전 검토",

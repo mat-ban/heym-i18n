@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `credentialId` | UUID | `imap` akreditācijas dati, kas satur servera, pieteikšanās, pastkastes un SSL iestatījumus |
 | `pollIntervalMinutes` | Integer | Cik bieži Heym pārbauda pastkasti, vai nav jaunu e-pastu |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Iestatīšanas pamācība
 
@@ -62,6 +63,8 @@ Pēc tam, kad mezgls ir izraisījis trigger, lejupstraumes mezgli var piekļūt:
 | `$nodeLabel.email.text` | Vienkārša teksta pamatteksts |
 | `$nodeLabel.email.html` | HTML pamatteksts |
 | `$nodeLabel.email.attachments` | Pielikumu metadatu masīvs (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Atkodēts galveņu objekts |
 | `$nodeLabel.email.uid` | IMAP UID dublēšanās novēršanai vai žurnālēšanai |
 | `$nodeLabel.triggered_by` | Trigger avota apzīmējums (`"imap"`) |

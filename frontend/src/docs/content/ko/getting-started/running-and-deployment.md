@@ -34,6 +34,7 @@ cp .env.example .env
 |----------|-------------|
 | `SECRET_KEY` | **필수.** JWT 서명 시크릿. 비어 있으면 `run.sh`/`deploy.sh`가 자동 생성합니다. |
 | `ENCRYPTION_KEY` | **필수.** 자격 증명 암호화 키. 비어 있으면 `run.sh`/`deploy.sh`가 자동 생성합니다. |
+| `ENCRYPTION_KEYS_EXTRA` | Keys accepted for decryption only, while [rotating `ENCRYPTION_KEY`](../reference/security.md#rotating-the-key). |
 | `DATABASE_URL` | 선택적 데이터베이스 연결 문자열 재정의. 비어 있으면 Heym이 `POSTGRES_*` 설정으로부터 이를 구성합니다. |
 | `BACKEND_PORT` | 백엔드 API 포트 — 기본값은 `10105` |
 | `FRONTEND_PORT` | 프런트엔드 포트 — 기본값은 `4017` |
@@ -350,3 +351,11 @@ git pull
 - [Environment Variables](https://github.com/heymrun/heym/blob/main/ENVIRONMENT-VARIABLES.md) – 전체 구성 참조
 - [Security](../reference/security.md) – JWT, 암호화, CORS 설정
 - [Load Distribution](../reference/cluster.md) – 하나의 데이터베이스에 대해 여러 인스턴스 실행
+
+## Kubernetes
+
+See [Kubernetes Deployment](./kubernetes.md) for the full manifest installation guide, Helm chart, storage, custom CA bundles, OpenShift and Cilium policies, sandbox scheduling, workers, and local OrbStack tests.
+
+Heym runs on clusters without a Docker daemon (containerd-only nodes, Talos, Bottlerocket, OpenShift). When the backend runs in a pod with a ServiceAccount, every sandbox (Agent Python tools, skills, the Code node, file analysis, custom Playwright, MCP `stdio`, Codex and OpenCode) runs as its own pod through the Kubernetes API: non-root, all capabilities dropped, no ServiceAccount token, Pod Security `restricted`. Docker deployments keep running sandboxes as sibling containers; nothing changes for them.
+
+Start from the example manifests in [`deploy/kubernetes`](https://github.com/heymrun/heym/tree/main/deploy/kubernetes); on OpenShift, use `overlays/openshift`.

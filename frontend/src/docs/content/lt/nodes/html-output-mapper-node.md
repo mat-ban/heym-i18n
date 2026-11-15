@@ -68,3 +68,5 @@ Ta pati taisyklė kaip [Išvestis](./output-node.md): neįdėkite šio mazgo į 
 - [Išvestis](./output-node.md) – Pranešimo arba schemos pagrindu sukurtas atsakymas su `result` apvyniojimu
 - [Webhooks](../reference/webhooks.md) – Vykdymo galas, užklausos metodai ir atsakymai
 - [Mazgų tipai](../reference/node-types.md) – Visi mazgų tipai
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

@@ -174,3 +174,7 @@ Canvasens och dashboardens historikdialoger behåller sina körningskontroller p
 - [Edit History](./edit-history.md) – Versionshantering för workflow-sparningar (återställ, diff)
 - [Quick Start](../getting-started/quick-start.md) – Bygg och kör det första workflowet
 - [Workflows Tab](../tabs/workflows-tab.md) – Skapa och hantera workflows
+
+## Related
+
+- [Operations Runbook (L1): Köeftersläpning](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Särskilj köade, pausade, avbrutna och återställda körningar före återuppspelning

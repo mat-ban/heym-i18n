@@ -2,6 +2,9 @@
 
 O separador **Alertas** permite definir condições de limiar ao longo de uma janela temporal e ser notificado quando estas são ultrapassadas. O Heym já registra os resultados de execução, a duração das execuções e os gastos com LLM, mas nunca os comunica por iniciativa própria. Um alerta é a forma de o solicitar.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Ver demonstração de Alerts</a></p>
+
 Cada alerta é avaliado ao longo de uma **janela temporal** que escolher, nunca com base num único evento. Uma execução falhada é ruído. Doze execuções falhadas em dez minutos é um incidente.
 
 ## Tipos de Alerta

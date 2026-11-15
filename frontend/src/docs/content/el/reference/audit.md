@@ -59,6 +59,10 @@ docker logs heym-backend 2>&1 | grep 'target=credential:3a91d7e2-55c8-4b19-b0a1-
 | `auth.token_refresh` | `outcome=denied` με `reason=refresh_token_replayed_or_revoked` — σήμα κλοπής token που αξίζει ειδοποίηση. |
 | `auth.password_change` | `outcome=failure` όταν ο τρέχων κωδικός ήταν λανθασμένος. |
 | `auth.sso_login` | Single sign-on. Το `outcome=failure` φέρει τον λόγο απόρριψης της απάντησης του παρόχου· το `denied` φέρει `email_not_verified`, `domain_not_allowed` ή `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Ένας διαχειριστής άλλαξε τη διαμόρφωση [SSO](./sso.md). Καταγράφει `enabled` και `password_login_disabled`, ποτέ το client secret. |
 | `sso_settings.test` | Ένας διαχειριστής εκτέλεσε τη δοκιμή σύνδεσης SSO. |
 

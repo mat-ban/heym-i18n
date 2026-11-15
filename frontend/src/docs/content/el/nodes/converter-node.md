@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | Αναγνωριστικό κόμβου (camelCase) |
 | `conversion` | string | `csvToJson` (κείμενο CSV → πίνακας αντικειμένων γραμμών), `jsonToCsv` (πίνακας αντικειμένων/γραμμών → κείμενο CSV), `xmlToJson` (κείμενο XML → αντικείμενο), `jsonToXml` (αντικείμενο → κείμενο XML), `imageToText` (OCR σε εικόνα), `pdfToText` (OCR σε κάθε επιλεγμένη σελίδα PDF), ή `fileConvert` (ξαναγράφει ένα αποθηκευμένο αρχείο σε άλλη μορφή) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Τα δεδομένα προς μετατροπή. Αφήστε το κενό για να χρησιμοποιηθεί η πρώτη είσοδος του κόμβου |
 | `delimiter` | string | Διαχωριστικό πεδίου ενός χαρακτήρα (προεπιλογή `,`) |
 | `hasHeader` | boolean | Μόνο για `csvToJson` — να αντιμετωπίζεται η πρώτη γραμμή ως επικεφαλίδα (προεπιλογή `true`) |
@@ -169,3 +170,6 @@
 - [Drive](./drive-node.md) – Αποθήκευση, ανάκτηση και κοινή χρήση αρχείων
 - [Node Types](../reference/node-types.md) – Επισκόπηση όλων των τύπων node
 - [Expression DSL](../reference/expression-dsl.md) – Συναρτήσεις και σύνταξη
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

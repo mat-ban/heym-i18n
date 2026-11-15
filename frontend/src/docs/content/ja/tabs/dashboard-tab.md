@@ -2,6 +2,9 @@
 
 **ダッシュボード**タブは、Grafana スタイルの空間で、チャートウィジェットのグリッドを構築できます。各ウィジェットは、それぞれの背後に隠れた Heym Workflow の出力からレンダリングされます。そのため、Workflow で生成できるあらゆるデータ — データベースクエリ、API 呼び出し、RAG 検索、LLM 出力 — をチャートにできます。複数のダッシュボードを保持し、それぞれを個人またはチームと共有できます。
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## ダッシュボード
 
 誰もが最初にタブを開いたときに 1 つのダッシュボードが作成されます。タブ上部のダッシュボードセレクターでダッシュボードを切り替え、その隣の **+** で新しいダッシュボードを作成できます。セレクターには、まず自分のダッシュボードが一覧表示され、次に共有されたダッシュボードが、共有した人の名前とともに表示されます。
@@ -27,6 +30,8 @@
 - **Entity relationships (DB)**（テーブル、フィールド、PK/FK キー、接続）
 - **Bar gauge**（赤→緑のグラデーションと値を持つ、行ごとに 1 本の水平ゲージ、例：空きディスク容量）
 - **Text**（markdown メッセージ、例：「Last execution at 19:47」のようなステータスノート。markdown が静的な場合は[インタラクティブなチェックボックス](../nodes/chart-output-node.md#interactive-task-lists)を、カスタムまたは降順の番号付けには[明示的な番号付きリスト](../nodes/chart-output-node.md#numbered-lists)をサポート）
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL**（保留中のヒューマンレビュー。ヘッダーには `1/n pending` と表示されます。Workflow 名をクリックすると、キャンバス上でその実行が開きます。**Approve**、**Request changes**、**Reject** で解決できます。ウィジェットタイトルの横の履歴アイコンをクリックすると、このページの履歴ダイアログでその実行が開きます。このウィジェットは上流の行を使用せず、各人が自分のキューを表示します。 代わりに、その Workflow を開くことができる全員に向けて、単一の Workflow のレビューを表示することもできます。[HITL ウィジェット](#hitl-uizietto) を参照してください）
 
 チャートのほかに、**Run a workflow** ウィジェットを使うとダッシュボードから自分の Workflow を実行できます。ファイルのドロップ、入力フィールドの入力、または Run ボタンで実行します（[実行ウィジェット](#run-widgets)を参照）。
@@ -146,3 +151,5 @@
 ## スケジュールとデータベース図
 
 ウィジェットの追加で **Gantt** を選択するとタスクの時間経過に伴う完了状況と依存関係リンクが表示され、**Entity relationships (DB)** を選択するとテーブル、フィールド、およびそれらのリレーションシップがマッピングされます。どちらのタイプも [Chart Output ノード](../nodes/chart-output-node.md#gantt-schedules) を使用し、Heym Work ページでも利用できます。Work がスケジュールやデータベーススキーマのウィジェットを提案するとき、ページを構築する前に提案されたタスクやエンティティからプレビューを描画します。
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

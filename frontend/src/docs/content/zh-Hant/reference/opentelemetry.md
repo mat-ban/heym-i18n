@@ -72,6 +72,7 @@ HEYM_OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 | `heym.agent.tool.args_bytes` | 序列化後工具引數的 UTF-8 大小。 |
 | `heym.agent.tool.result_bytes` | 序列化後工具結果的 UTF-8 大小。 |
 | `heym.agent.tool.status` | `success`、`error`、`pending`、`timeout` 或 `cancelled`。工具錯誤會將 span 狀態設為 `ERROR`。 |
+| `heym.agent.tool.refused` | `truncated`, `invalid_arguments`, or `review_deferred` (held back because the human review call in the same turn did not parse). Set only on tool calls that were refused without being executed. |
 
 原始工具引數與結果預設不會附加至 span。
 

@@ -2,6 +2,9 @@
 
 Záložka **Dashboard** je prostor ve stylu Grafanu, kde sestavujete mřížky s widgety grafů. Každý widget se vykresluje z výstupu vlastního skrytého Heym workflow, takže jakákoli data, která dokážete ve workflow vytvořit — databázové dotazy, volání API, RAG vyhledávání, výstup LLM — se mohou stát grafem. Můžete mít několik dashboardů a každý z nich sdílet s lidmi nebo týmy.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboardy
 
 Každý začíná s jedním dashboardem, který se vytvoří při prvním otevření záložky. Mezi dashboardy přepínejte pomocí selektoru v horní části záložky a nový vytvořte pomocí **+** vedle něj. Selektor nejprve vypisuje vaše vlastní dashboardy, poté ty, které jsou s vámi sdílené, označené jménem osoby, která je sdílela.
@@ -27,6 +30,8 @@ Widget je jediný graf v mřížce. Podporované typy grafů:
 - **Entity relationships (DB)** (tabulky, pole, klíče PK/FK a propojení)
 - **Bar gauge** (jeden vodorovný gauge na řádek s přechodem červená→zelená a hodnotou, např. volné místo na disku)
 - **Text** (markdown zpráva, např. stavová poznámka jako „Poslední spuštění v 19:47"; podporuje [interaktivní zaškrtávací políčka](../nodes/chart-output-node.md#interactive-task-lists), když je markdown statický, a [explicitní číslované seznamy](../nodes/chart-output-node.md#numbered-lists) pro vlastní nebo sestupné číslování)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (vaše čekající lidské revize. Záhlaví zobrazuje `1/n pending`. Název workflow otevře daný běh na plátně. **Approve**, **Request changes** a **Reject** jej vyřeší. Ikona historie vedle názvu widgetu otevře daný běh v dialogu historie na této stránce. Widget nepoužívá řádky z upstreamu a každý vidí svou vlastní frontu. Může místo toho zobrazovat kontroly jediného Workflow pro každého, kdo může daný Workflow otevřít; viz [Widgety HITL](#widgety-hitl))
 
 Kromě grafů spouští widget **Run a workflow** jeden z vašich workflow přímo z dashboardu: nad přetaženým souborem, s jeho vstupními poli nebo pomocí tlačítka Run; viz [Spouštěcí widgety](#run-widgets).
@@ -145,3 +150,5 @@ Odebrání sdílení nebo jeho snížení z write na read nabývá účinnosti o
 ## Časové plány a databázové diagramy
 
 Zvolte **Gantt** v Přidat widget pro zobrazení úkolů v čase s vazbami na dokončení a závislosti, nebo **Entity relationships (DB)** pro zmapování tabulek, polí a jejich relací. Oba typy používají [uzel Chart Output](../nodes/chart-output-node.md#gantt-schedules) a jsou také k dispozici na stránkách Heym Work. Když Work navrhuje widgety pro časový plán nebo databázové schéma, vykresluje náhledy z navržených úkolů nebo entit.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

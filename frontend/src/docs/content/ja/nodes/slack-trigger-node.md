@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym は即座に `200 OK` を返し、Workflow をバックグラウンドで実行します — これにより Slack の 3 秒応答要件を満たします
 - Webhook URL はノード ID から生成され、Workflow の名前を変更しても変わることはありません
 - `slackTrigger` ノードは Workflow ごとに 1 つだけ必要です。異なるイベントタイプをルーティングするには、下流で **Switch** または **Condition** ノードを使用してください
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

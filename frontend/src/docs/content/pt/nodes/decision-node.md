@@ -157,6 +157,8 @@ Editar uma credencial mantém a chave armazenada quando o campo de chave é deix
 
 A mesma credencial pode avaliar execuções de [Avaliações](../tabs/evals-tab.md): com **LLM-as-Judge** selecionado, escolha-a como juiz e o modelo de decisão pontuará cada resposta em relação à saída esperada.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 O Heym bloqueia requisições de saída para endereços privados e de loopback por padrão, portanto um endpoint de decisão executado por você mesmo em `localhost` ou em um intervalo privado precisa de `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Os modelos de decisão não aparecem nas tabelas de preços de LLM sincronizadas pelo Heym, portanto a coluna **Cost** em [Execuções](../tabs/traces-tab.md) permanece vazia para essas chamadas. As contagens de tokens ainda são registradas, e você pode adicionar seu próprio preço com uma substituição de preço.

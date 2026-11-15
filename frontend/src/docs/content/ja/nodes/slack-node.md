@@ -54,3 +54,5 @@
 - [Node Types](../reference/node-types.md) – すべてのノードタイプの概要
 - [Error Handler](./error-handler-node.md) – Workflow 失敗時に Slack を送信
 - [Credentials Tab](../tabs/credentials-tab.md) – Slack webhook の追加
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

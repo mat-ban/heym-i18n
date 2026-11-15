@@ -7,7 +7,7 @@ La scheda **Workflows** è la vista predefinita della dashboard. Mostra l'elenco
 
 ## Avviare una Chat
 
-Sopra l'elenco dei workflow è presente una casella di chat che saluta l'utente per nome e chiede cosa si desidera automatizzare. Digitare un prompt, allegare facoltativamente un file e selezionare la credenziale e il modello desiderati. Entrambi i menu a discesa sono ricercabili e si aprono sui [valori predefiniti AI](../reference/user-settings.md).
+Sopra l'elenco dei workflow è presente una casella di chat che saluta l'utente per nome e chiede cosa si desidera automatizzare. Digitare un prompt, allegare facoltativamente up to 10 files e selezionare la credenziale e il modello desiderati. Entrambi i menu a discesa sono ricercabili e si aprono sui [valori predefiniti AI](../reference/user-settings.md).
 
 L'invio crea una nuova conversazione e la apre nella [scheda Chat](./chat-tab.md), dove la risposta viene trasmessa in streaming. Gli allegati supportati sono file di testo, immagini e PDF, uno per messaggio, come nel compositore della chat.
 

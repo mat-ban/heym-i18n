@@ -218,6 +218,7 @@ export type NodeType =
   | "linear"
   | "googleSheets"
   | "googleDrive"
+  | "googleMeet"
   | "googleDriveTrigger"
   | "googleSheetsTrigger"
   | "bigquery"
@@ -525,12 +526,19 @@ export interface NodeData {
   slackOutcomeTitle?: string;
   slackEmoji?: string;
   slackLimit?: string;
+  /** slack downloadFile: a message, a link, a file id or a list; sendFile: Drive files. */
+  slackFile?: string;
+  slackUploadFile?: string;
   /** slackTrigger: which events start a run (default all) and the channel for `channel`. */
   slackEventScope?: string;
   slackEventChannel?: string;
+  /** slackTrigger: only messages that carry files start a run. */
+  slackEventFilesOnly?: boolean;
   duration?: number;
   cronExpression?: string;
   pollIntervalMinutes?: number;
+  /** imapTrigger: save each attachment of the email to the owner's Heym Drive during the run. */
+  imapDownloadAttachments?: boolean;
   /** heymTrigger: platform events to subscribe to; empty means every event. */
   eventNames?: string[];
   /** heym: which Heym read to perform. */
@@ -559,7 +567,7 @@ export interface NodeData {
   outputSchema?: OutputSchemaField[];
   inputCount?: number;
   mappings?: MappingField[];
-  /** htmlOutputMapper: the page template, with $node.field spans interpolated in place. */
+  /** htmlOutputMapper page, or a chartOutput `html` widget: a template with $node.field spans filled in. */
   html?: string;
   statusCode?: number;
   contentType?: string;
@@ -576,6 +584,8 @@ export interface NodeData {
   codeRequirements?: string;
   codeParameters?: string;
   codeAllowNetwork?: boolean;
+  /** Drive files mounted read-only for the run: an id, ids, or an expression resolving to them. */
+  codeFiles?: string;
   ocrLanguage?: string;
   ocrLanguageCustom?: string;
   ocrEncoding?: string;
@@ -583,6 +593,8 @@ export interface NodeData {
   ocrPsm?: string;
   ocrDpi?: string | number;
   ocrPageRange?: string;
+  sttLanguage?: string;
+  sttLanguageCustom?: string;
   pinnedData?: Record<string, unknown> | null;
   credentialId?: string;
   githubCredentialId?: string;
@@ -683,6 +695,8 @@ export interface NodeData {
   enableReranker?: boolean;
   rerankerCredentialId?: string;
   rerankerTopN?: number;
+  /** Decision model name; used only when `rerankerCredentialId` is a Decision Model credential. */
+  rerankerModel?: string;
   gristOperation?: GristOperation;
   gristDocId?: string;
   gristTableId?: string;
@@ -1077,6 +1091,20 @@ export interface NodeData {
   gsValuesSelectiveRows?: string;
   gsValuesSelectiveCols?: string;
   gsValues?: string;
+  gmOperation?: "create" | "read" | "update" | "delete";
+  gmCalendarId?: string;
+  gmTimeZone?: string;
+  gmStartDate?: string;
+  gmEndDate?: string;
+  gmIncludeBusyTitles?: boolean;
+  gmIncludeBusyDetails?: boolean;
+  gmEventId?: string;
+  gmTitle?: string;
+  gmDescription?: string;
+  gmStartTime?: string;
+  gmEndTime?: string;
+  gmAttendees?: string | string[];
+  gmLocation?: string;
   gdOperation?: string;
   gdFolderId?: string;
   gdFileId?: string;
@@ -1125,6 +1153,7 @@ export interface NodeData {
     | "erDiagram"
     | "barGauge"
     | "text"
+    | "html"
     | "hitl";
   orientation?: "horizontal" | "vertical";
   dataPath?: string;

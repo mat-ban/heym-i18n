@@ -381,10 +381,11 @@ describe("shipped release registry", () => {
     const catalog = buildReleaseTourCatalog(RELEASE_REGISTRY);
 
     expect(catalog?.slides.map((slide) => slide.id)).toEqual([
-      "a2a-agent",
-      "agent-suite",
-      "chat-evals",
-      "concurrency-limit",
+      "mcp-endpoint",
+      "imap-attachments",
+      "chat-widget-revert",
+      "rag-media-upload",
+      "decision-reranker",
     ]);
   });
 
@@ -397,10 +398,11 @@ describe("shipped release registry", () => {
       section.tour ? [section.tour] : [],
     );
 
-    expect(tours.map((tour) => tour.tourVisual)).toContain("concurrency-limit");
-    expect(tours.map((tour) => tour.tourVisual)).toContain("planning-widgets");
-    expect(tours.map((tour) => tour.tourVisual)).toContain("agent-suite");
-    expect(tours.map((tour) => tour.tourVisual)).toContain("chat-evals");
+    expect(tours.map((tour) => tour.tourVisual)).toContain("decision-reranker");
+    expect(tours.map((tour) => tour.tourVisual)).toContain("chat-widget-revert");
+    expect(tours.map((tour) => tour.tourVisual)).toContain("imap-attachments");
+    expect(tours.map((tour) => tour.tourVisual)).toContain("rag-media-upload");
+    expect(tours.map((tour) => tour.tourVisual)).toContain("mcp-endpoint");
     for (const tour of tours) {
       expect(TOUR_VISUALS[tour.tourVisual], `missing visual for "${tour.tourVisual}"`)
         .toBeDefined();

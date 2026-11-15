@@ -84,7 +84,8 @@
     "dropFileOrClick": "Sem presuňte súbor alebo kliknite pre výber",
     "removeFile": "Odstrániť súbor",
     "chooseFileFor": "Vyberte súbor pre {label}",
-    "new": "Nový"
+    "new": "Nový",
+    "clearSearch": "Vymazať vyhľadávanie"
   },
   "nav": {
     "workflows": "Workflowy",
@@ -285,7 +286,9 @@
     "enablePlugin": "Povoliť",
     "disablePlugin": "Zakázať",
     "uninstallPlugin": "Odinštalovať",
-    "pluginOperationFailed": "Operácia s pluginom zlyhala"
+    "pluginOperationFailed": "Operácia s pluginom zlyhala",
+    "users": "Používatelia",
+    "encryption": "Šifrovanie"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopírovať ID spustenia",
     "openTrace": "Otvoriť spustenie",
     "message": "Správa",
-    "emptyReply": "Prázdna odpoveď."
+    "emptyReply": "Prázdna odpoveď.",
+    "timeRange3h": "Posledné 3 hodiny",
+    "timeRange6h": "Posledných 6 hodín"
   },
   "tables": {
     "title": "Dátové tabuľky",
@@ -1215,7 +1220,9 @@
     "browseAll": "Prezrieť všetky →",
     "askAi": "Opýtať sa AI",
     "dropToImport": "Presuňte JSON alebo ZIP na import",
-    "noWorkflowsMatch": "Tomuto filtru nezodpovedajú žiadne Workflow."
+    "noWorkflowsMatch": "Tomuto filtru nezodpovedajú žiadne Workflow.",
+    "noWorkflowsMatchAll": "Skúste iný názov, popis alebo názov priečinka.",
+    "noWorkflowsMatchFilter": "Skúste iný názov, popis, názov priečinka alebo filter stavu."
   },
   "schedules": {
     "title": "Plány",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Spustené MCP klientom",
     "newChatTitle": "Nový chat",
     "subtitle": "Spúšťajte Workflows a kladte otázky",
-    "modelsLoadFailedDisabled": "Zoznam modelov pre tieto prihlasovacie údaje sa nepodarilo načítať. Chat zostane vypnutý, kým sa nepodarí získať model."
+    "modelsLoadFailedDisabled": "Zoznam modelov pre tieto prihlasovacie údaje sa nepodarilo načítať. Chat zostane vypnutý, kým sa nepodarí získať model.",
+    "dropFilesToAttach": "Presuňte súbory na pripojenie",
+    "attachFiles": "Pripojiť súbory"
   },
   "teams": {
     "title": "Tímy",
@@ -1883,7 +1892,8 @@
       "skipped": "Preskočené"
     },
     "permissionRead": "čítať",
-    "permissionWrite": "zapisovať"
+    "permissionWrite": "zapisovať",
+    "details": "Podrobnosti"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "Akcie",
       "failedToLoadWidget": "Nepodarilo sa načítať widget",
       "failedToUpdateCheckbox": "Nepodarilo sa aktualizovať zaškrtávacie pole",
-      "refreshDashboard": "Obnoviť dashboard"
+      "refreshDashboard": "Obnoviť dashboard",
+      "revertPrevious": "Vrátiť predchádzajúci"
     },
     "hitl": {
       "previousReview": "Predchádzajúca recenzia",

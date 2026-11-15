@@ -59,6 +59,10 @@ Jede Zustandsänderung wird protokolliert. Lesezugriffe werden nur dort protokol
 | `auth.token_refresh` | `outcome=denied` mit `reason=refresh_token_replayed_or_revoked` — ein Token-Diebstahl-Signal, das eine Warnung wert ist. |
 | `auth.password_change` | `outcome=failure`, wenn das aktuelle Passwort falsch war. |
 | `auth.sso_login` | Single Sign-on. `outcome=failure` trägt den Grund, warum die Provider-Antwort abgelehnt wurde; `denied` trägt `email_not_verified`, `domain_not_allowed` oder `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Ein Administrator hat die [SSO](./sso.md)-Konfiguration geändert. Zeichnet `enabled` und `password_login_disabled` auf, niemals das Client-Secret. |
 | `sso_settings.test` | Ein Administrator hat den SSO-Verbindungstest ausgeführt. |
 

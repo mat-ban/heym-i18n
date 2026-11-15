@@ -84,7 +84,8 @@
     "dropFileOrClick": "Ispustite datoteku ovdje ili kliknite za odabir",
     "removeFile": "Ukloni datoteku",
     "chooseFileFor": "Odaberite datoteku za {label}",
-    "new": "Novo"
+    "new": "Novo",
+    "clearSearch": "Očisti pretragu"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Omogući",
     "disablePlugin": "Onemogući",
     "uninstallPlugin": "Deinstaliraj",
-    "pluginOperationFailed": "Operacija dodatka nije uspjela"
+    "pluginOperationFailed": "Operacija dodatka nije uspjela",
+    "users": "Korisnici",
+    "encryption": "Šifriranje"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopiraj ID tracea",
     "openTrace": "Otvori trace",
     "message": "Poruka",
-    "emptyReply": "Prazan odgovor."
+    "emptyReply": "Prazan odgovor.",
+    "timeRange3h": "Zadnja 3 sata",
+    "timeRange6h": "Zadnjih 6 sati"
   },
   "tables": {
     "title": "Tablice podataka",
@@ -1215,7 +1220,9 @@
     "browseAll": "Pregledaj sve →",
     "askAi": "Pitaj AI",
     "dropToImport": "Ispustite JSON ili ZIP za uvoz",
-    "noWorkflowsMatch": "Nijedan workflow ne odgovara ovom filtru."
+    "noWorkflowsMatch": "Nijedan workflow ne odgovara ovom filtru.",
+    "noWorkflowsMatchAll": "Pokušajte s drugim naslovom, opisom ili nazivom mape.",
+    "noWorkflowsMatchFilter": "Pokušajte s drugim naslovom, opisom, nazivom mape ili filtrom statusa."
   },
   "schedules": {
     "title": "Rasporedi",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Pokrenuo MCP klijent",
     "newChatTitle": "Novi Chat",
     "subtitle": "Pokrećite Workflows i postavljajte pitanja",
-    "modelsLoadFailedDisabled": "Popis modela za ove vjerodajnice nije moguće učitati. Chat ostaje onemogućen dok se model ne može dohvatiti."
+    "modelsLoadFailedDisabled": "Popis modela za ove vjerodajnice nije moguće učitati. Chat ostaje onemogućen dok se model ne može dohvatiti.",
+    "dropFilesToAttach": "Ispustite datoteke za privitak",
+    "attachFiles": "Priloži datoteke"
   },
   "teams": {
     "title": "Timovi",
@@ -1883,7 +1892,8 @@
       "skipped": "Preskočeno"
     },
     "permissionRead": "čitanje",
-    "permissionWrite": "pisanje"
+    "permissionWrite": "pisanje",
+    "details": "Pojedinosti"
   },
   "mcp": {
     "title": "MCP poslužitelj",
@@ -2197,7 +2207,8 @@
       "actions": "Radnje",
       "failedToLoadWidget": "Widget nije moguće učitati",
       "failedToUpdateCheckbox": "Potvrdni okvir nije moguće ažurirati",
-      "refreshDashboard": "Osvježi dashboard"
+      "refreshDashboard": "Osvježi dashboard",
+      "revertPrevious": "Vrati prethodno"
     },
     "hitl": {
       "previousReview": "Prethodni pregled",

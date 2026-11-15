@@ -831,3 +831,10 @@ Lásd még: [Drive](./drive.md), [Fájlgenerálás](./file-generation.md) és [D
 Everyone with a workflow open shares one live draft. Edits appear instantly, each person's pointer moves in their color, following mirrors everything they see and do, and you can talk over direct peer-to-peer audio.
 
 See also [Canvas Features](./canvas-features.md), [Edit History](./edit-history.md), and [Keyboard Shortcuts](./keyboard-shortcuts.md).
+### File Analysis
+
+Large files (spreadsheets, PDFs, DOCX, CSV, JSON) uploaded via File Upload triggers or stored in Heym Drive can be analyzed selectively in a hardened, disposable Python sandbox. Agents use `list_files`, `inspect_file` and `run_python` tools to inspect headers, summarize rows, and calculate statistics without exhausting token context windows. See [File Analysis](./file-analysis.md).
+
+### Google Meet Integration
+
+Connect Google Calendar accounts via OAuth2 to query attendee availability (free/busy intervals) and create, update or cancel Google Meet conference calls directly from workflows. See [Google Meet Node](../nodes/google-meet-node.md).

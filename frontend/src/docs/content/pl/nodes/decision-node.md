@@ -157,6 +157,8 @@ Podczas edycji danych logowania zapisany klucz jest zachowywany, gdy pole klucza
 
 Te same dane logowania mogą oceniać uruchomienia [Ewaluacji](../tabs/evals-tab.md): po wybraniu **LLM-as-Judge** należy wskazać je jako sędziego, a model decyzyjny oceni każdą odpowiedź względem oczekiwanego wyniku.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym domyślnie blokuje wychodzące żądania do adresów prywatnych i loopback, więc endpoint decyzyjny uruchamiany samodzielnie na `localhost` lub w zakresie prywatnym wymaga ustawienia `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Modele decyzyjne nie pojawiają się w tabelach cenowych LLM synchronizowanych przez Heym, więc kolumna **Cost** w zakładce [Wykonania](../tabs/traces-tab.md) pozostaje pusta dla tych wywołań. Liczby tokenów są nadal rejestrowane, a własną cenę można dodać poprzez nadpisanie ceny.

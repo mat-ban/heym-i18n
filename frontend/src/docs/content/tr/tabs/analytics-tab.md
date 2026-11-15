@@ -65,3 +65,7 @@ Gecikme yüzdeliklerinin altında, görünümdeki workflow'lar genelinde düğü
 - [Bağlamsal Vitrin](../reference/contextual-showcase.md) – Dashboard yüzeyleri için kompakt sayfa kılavuzu
 
 Bir grafik, izlemek yerine kendisi hakkında bilgilendirilmek istediğiniz bir eğilim gösterdiğinde, onu bir [alert](./alerts-tab.md) haline getirin: hata sayısı, çalıştırma süresi, LLM harcaması ve yürütme sayısının tümüne bir zaman penceresi üzerinden eşik değeri atanabilir.
+
+## Related
+
+- [Operations Runbook (L1): Kaynak kullanımı](../reference/operations-runbook.md#most-resource-consuming-workflows) - Yüksek hacimli ve uzun süreli iş akışlarını bulun ve CPU, bellek ve token'ları ilişkilendirin

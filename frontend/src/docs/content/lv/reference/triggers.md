@@ -12,7 +12,7 @@ Sākuma node (bez ienākošajām šķautnēm), kas uzsāk izpildi:
 | [Cron](../nodes/cron-node.md) | Darbojas pēc grafika (cron izteiksme, piem., `0 * * * *` katru stundu). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Palaidjas, kad Telegram nosūta bota webhook atjauninājumu uz node specifisko webhook URL. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Palaidjas, kad Discord nosūta Interactions API webhook uz node specifisko endpoint. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Aptaujā IMAP pastkasti un palaidjas vienu reizi par katru jaunu atrasto e-pastu. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Aptaujā IMAP pastkasti un palaidjas vienu reizi par katru jaunu atrasto e-pastu. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Palaidjas, kad Heym publicē platformas notikumu. Notikumi vienā nosūtīšanas logā ierodas kopā kā masīvs. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Atver izejošu klienta savienojumu uz ārēju socket un palaidjas uz atlasītajiem socket notikumiem. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Izveido vienreiz lietojamu augšupielādes URL un palaidjas, kad izsaucējs nosūta lielu multipart failu. |

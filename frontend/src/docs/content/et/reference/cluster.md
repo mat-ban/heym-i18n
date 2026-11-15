@@ -92,6 +92,10 @@ See määratleb ka uuendamise järjekorra. Main-instantsi esimesena uuendamine m
 
 **Worker-instantsidel on erinev väljuv IP.** Iga API, mis lubab lähteaadresse, näeb uut. Send Email töötab main-instantsil täpselt sel põhjusel; HTTP node'i puhul andke klastrile kas üks NAT-i väljumisaadress või lubage iga instants.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Workeri lisamine teisele masinale
 
 `docker-compose.worker.yml` hoidla juurkaustas käitab workerit selle enda hostil. Sellel pole andmebaasi ega UI-d: see jõuab main-instantsi PostgreSQL-ini ja võtab oma osa taustakäivitustest.
@@ -124,7 +128,7 @@ Miski sellest ei ilmne üksikinstantsilisele paigaldusele: väljad on tühjad, s
 
 **Kui worker sureb keset käivitust**, muutub selle heartbeat aegunuks ja leader'i olemasolev taastamise ülevaatus käivitab käivituse uuesti elusal instantsil. Järjekorra rida, mille see oli hõivanud, lõpetatakse eraldi: kui selle jaoks ei eksisteeri enam ühtegi aktiivset käivitust ja kaheminutiline armuaeg on möödunud, märgib leader rea ebaõnnestunuks ja äratab kõik, kes tulemust ootasid. Ainuüksi vanus ei ole kunagi triggeriks, seega õiguspäraselt pikk käivitus jäetakse puutumata; ning rida märgitakse pigem ebaõnnestunuks kui uuesti järjekorda panduks, sest taastamine juba haldab korduskäivitust ja uuesti järjekorda panek käivitaks sama workflow kaks korda.
 
-**Kui main läheb maha**, jätkab cron worker'ist käivitumist ja distribueeritavad käivitused jätkavad töötamist. Käivitused, mis vajavad main'i, lähevad järjekorda ja ootavad ning tühjendatakse, kui see naaseb — kuid ainult möödalaskmise armuaja akna sees (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, vaikimisi 600 sekundit). Kõik vanem suletakse vahelejäetuna, põhjus kirja pandud, selle asemel et korraga tunde tagantjärele mängida.
+**Kui main läheb maha**, jätkab cron worker'ist käivitumist ja distribueeritavad käivitused jätkavad töötamist. Käivitused, mis vajavad main'i, lähevad järjekorda ja ootavad ning tühjendatakse, kui see naaseb — kuid ainult möödalaskmise armuaja akna sees (`CRON_MISFIRE_GRACE_SECONDS`, vaikimisi 600 sekundit). Kõik vanem suletakse vahelejäetuna, põhjus kirja pandud, selle asemel et korraga tunde tagantjärele mängida.
 
 UI, API, MCP ja redaktor on main'i maasoleku ajal kättesaamatud, sest ingress osutab sinna.
 

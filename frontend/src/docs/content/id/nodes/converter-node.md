@@ -16,6 +16,7 @@ Node **Converter** mengonversi data dan file antar format tanpa menulis kode. No
 |-----------|------|-------------|
 | `label` | string | Pengenal node (camelCase) |
 | `conversion` | string | `csvToJson` (teks CSV → array objek baris), `jsonToCsv` (array objek/baris → teks CSV), `xmlToJson` (teks XML → objek), `jsonToXml` (objek → teks XML), `imageToText` (OCR pada gambar), `pdfToText` (OCR setiap halaman PDF yang dipilih), atau `fileConvert` (menulis ulang file yang tersimpan dalam format lain) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Data yang akan dikonversi. Biarkan kosong untuk menggunakan input pertama node |
 | `delimiter` | string | Pemisah field satu karakter (default `,`) |
 | `hasHeader` | boolean | Hanya `csvToJson` — perlakukan baris pertama sebagai header (default `true`) |
@@ -169,3 +170,6 @@ OCR memanggil `tesseract` dan `pdftoppm` dari poppler, dan konversi dokumen meng
 - [Drive](./drive-node.md) – Simpan, ambil, dan bagikan file
 - [Node Types](../reference/node-types.md) – Ikhtisar semua tipe node
 - [Expression DSL](../reference/expression-dsl.md) – Fungsi dan sintaks
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

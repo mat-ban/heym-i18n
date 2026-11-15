@@ -22,7 +22,7 @@
 실행 격리는 Codex 노드와 동일하게 `HEYM_OPENCODE_CLI_COMMAND`로 선택됩니다.
 
 - **로컬 개발(`run.sh`)** 에서는 기본값 `opencode`로 유지되므로, OpenCode가 복제된 워크스페이스를 대상으로 호스트 서브프로세스로 실행됩니다. Docker가 필요하지 않으며 추가 플래그도 없습니다.
-- **Docker 배포(`deploy.sh` 및 단일 GHCR 이미지)** 에서는 이를 `/usr/local/bin/heym-opencode-docker`로 설정합니다. 이는 OpenCode 워크스페이스 명명 볼륨을 공유하는 **강화된 일회용 형제 컨테이너** 내부에서 `opencode run`을 실행하는 래퍼입니다.
+- **Docker 배포(`deploy.sh` 및 단일 GHCR 이미지)** 에서는 이를 `/usr/local/bin/heym-opencode-docker`로 설정합니다. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod. 이는 OpenCode 워크스페이스 명명 볼륨을 공유하는 **강화된 일회용 형제 컨테이너** 내부에서 `opencode run`을 실행하는 래퍼입니다.
 
 강화된 러너 컨테이너는 모든 Linux capability를 제거하고, `no-new-privileges`를 설정하며, 읽기 전용 루트와 tmpfs `/tmp`를 사용하고, pid/memory/CPU 제한을 적용합니다. 네트워크 이그레스는 허용됩니다(OpenCode가 모델 게이트웨이에 접근해야 함). **GitHub token은 컨테이너 내부에 절대 배치되지 않습니다**. 모든 git 및 GitHub 작업은 호스트 측에서 실행되므로, OpenCode API key와 리포지토리 파일만 내부에 존재합니다.
 

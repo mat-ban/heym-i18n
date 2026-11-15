@@ -50,3 +50,8 @@ Nếu đăng ký đang mở, hãy tạo tài khoản admin tin cậy trước kh
 - [Tab Analytics](./analytics-tab.md) – Số liệu thực thi
 - [Tab Workflows](./workflows-tab.md) – Quản lý workflow
 - [Contextual Showcase](../reference/contextual-showcase.md) – Hướng dẫn trang gọn cho các bề mặt dashboard
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Định tuyến các triệu chứng trong thời gian chạy đến quy trình xử lý sự cố phù hợp
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Chẩn đoán sự cố cơ sở dữ liệu, dịch vụ, cụm và sandbox

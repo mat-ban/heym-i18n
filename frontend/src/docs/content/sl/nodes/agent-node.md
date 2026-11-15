@@ -116,6 +116,10 @@ Workflowe izberite v razdelku Sub-Workflows v konfiguraciji agenta. Agent jih bo
 
 Podprto workflow vozlišče lahko povežete z ročajem **tools** agenta, da lahko agent to vozlišče pokliče med izvajanjem. To spremeni obstoječa dejanja in transformacije na platnu v klicljiva orodja brez pisanja Pythona.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Orodja vozlišč na platnu uporabite, ko želite, da se agent odloči, kdaj bo zagnal konfigurirano vozlišče, hkrati pa ohranite poverilnice, statična polja in nastavitve, specifične za workflow, v UI vozlišča.
 
 ### Polja, ki jih zagotovi agent
@@ -408,3 +412,6 @@ Stiskanje je samodejno in vedno aktivno za vozlišča Agent. Ne velja za vozliš
 - [Quick Start](../getting-started/quick-start.md) – Osnovni workflow z LLM in izrazi
 - [Credentials Tab](../tabs/credentials-tab.md) – Dodajanje API ključev za agenta
 - [MCP Tab](../tabs/mcp-tab.md) – Konfiguracija MCP za orodja workflowa
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

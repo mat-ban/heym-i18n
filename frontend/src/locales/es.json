@@ -103,7 +103,8 @@
     "pickCredentialModelTooltip": "Seleccione una credencial y un modelo arriba para usar el tablero",
     "read": "Lectura",
     "remove": "Eliminar",
-    "removeAttachmentAria": "Eliminar {name}"
+    "removeAttachmentAria": "Eliminar {name}",
+    "details": "Detalles"
   },
   "canvas": {
     "analyze": "Analizar",
@@ -355,7 +356,9 @@
     "unpin": "Desanclar",
     "unreadMessage": "Mensaje no leído",
     "subtitle": "Ejecutar Workflows y hacer preguntas",
-    "modelsLoadFailedDisabled": "No se pudo cargar la lista de modelos de esta credencial. El chat permanece desactivado hasta que se pueda obtener un modelo."
+    "modelsLoadFailedDisabled": "No se pudo cargar la lista de modelos de esta credencial. El chat permanece desactivado hasta que se pueda obtener un modelo.",
+    "dropFilesToAttach": "Suelte archivos para adjuntar",
+    "attachFiles": "Adjuntar archivos"
   },
   "alerts": {
     "wizard": {
@@ -543,7 +546,8 @@
     "dropFileOrClick": "Suelte un archivo aquí o haga clic para elegir uno",
     "removeFile": "Eliminar archivo",
     "chooseFileFor": "Elegir un archivo para {label}",
-    "new": "Nuevo"
+    "new": "Nuevo",
+    "clearSearch": "Borrar búsqueda"
   },
   "credentials": {
     "accessVia": "Acceso vía",
@@ -797,7 +801,8 @@
       "refine": "Ajustar con IA",
       "refresh": "Actualizar",
       "refreshDashboard": "Actualizar dashboard",
-      "settings": "Configuración"
+      "settings": "Configuración",
+      "revertPrevious": "Revertir anterior"
     },
     "addDescriptionPlaceholder": "Opcional. Se muestra en el canvas, no en la cuadrícula.",
     "addWidget": "Añadir widget",
@@ -1079,7 +1084,9 @@
     "noWorkflowsMatch": "Ningún workflow coincide con este filtro.",
     "quickStartTemplates": "Plantillas de inicio rápido",
     "subtitle": "Cree, orqueste y ejecute sus agentes autónomos modulares",
-    "whatToAutomate": "¿Qué desea automatizar?"
+    "whatToAutomate": "¿Qué desea automatizar?",
+    "noWorkflowsMatchAll": "Pruebe con otro título, descripción o nombre de carpeta.",
+    "noWorkflowsMatchFilter": "Pruebe con otro título, descripción, nombre de carpeta o filtro de estado."
   },
   "evals": {
     "optimizedPrompt": "Prompt optimizado",
@@ -2039,7 +2046,9 @@
     "enablePlugin": "Habilitar",
     "disablePlugin": "Deshabilitar",
     "uninstallPlugin": "Desinstalar",
-    "pluginOperationFailed": "Error en la operación del plugin"
+    "pluginOperationFailed": "Error en la operación del plugin",
+    "users": "Usuarios",
+    "encryption": "Cifrado"
   },
   "showcase": {
     "askAboutDoc": "Consultar sobre esta documentación",
@@ -2285,7 +2294,9 @@
     "tokensLower": "tokens",
     "traceDetail": "Detalles de la traza",
     "tracePosition": "{current} / {total}",
-    "unpricedModelsNotice": "{count} modelo(s) sin precios:"
+    "unpricedModelsNotice": "{count} modelo(s) sin precios:",
+    "timeRange3h": "Últimas 3 horas",
+    "timeRange6h": "Últimas 6 horas"
   },
   "variables": {
     "addVariable": "Añadir variable",

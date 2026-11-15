@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { useMediaQuery } from "@vueuse/core";
-import { Brain, Database, Globe, Key, MessageSquare, Plus, Search, Share2, Shield, Terminal, Trash2, Users, X } from "lucide-vue-next";
+import { Boxes, Brain, Database, Globe, Key, KeyRound, MessageSquare, Plus, Search, Share2, Shield, Terminal, Trash2, Users, X } from "lucide-vue-next";
 
 import type { Credential, CredentialListItem, CredentialShare, CredentialType } from "@/types/credential";
 import type { Team, TeamShare } from "@/types/team";
@@ -16,6 +15,7 @@ import Label from "@/components/ui/Label.vue";
 import Select from "@/components/ui/Select.vue";
 import UserAvatar from "@/components/ui/UserAvatar.vue";
 import { refreshCredentialsCache } from "@/composables/useExpressionCompletion";
+import { useListSearchShortcut } from "@/composables/useListSearchShortcut";
 import { contextReference } from "@/lib/contextReference";
 import { cn, formatDate } from "@/lib/utils";
 import { credentialsApi, teamsApi } from "@/services/api";
@@ -31,12 +31,20 @@ const editingCredential = ref<Credential | null>(null);
 
 const credentialSearchQuery = ref("");
 const credentialSearchInput = ref<HTMLInputElement | null>(null);
-const isMobile = useMediaQuery("(max-width: 767px)");
+const showShareDialog = ref(false);
 
-const normalizedCredentialSearchQuery = computed((): string =>
-  credentialSearchQuery.value.trim().toLowerCase(),
-);
-const isCredentialSearchActive = computed((): boolean => normalizedCredentialSearchQuery.value.length > 0);
+const {
+  normalizedQuery: normalizedCredentialSearchQuery,
+  isActive: isCredentialSearchActive,
+  placeholder: searchPlaceholder,
+  clear: clearCredentialSearch,
+  clearAndKeepFocus: clearCredentialSearchAndKeepFocus,
+} = useListSearchShortcut({
+  input: credentialSearchInput,
+  query: credentialSearchQuery,
+  noun: "credentials",
+  isEnabled: () => !showDialog.value && !showShareDialog.value,
+});
 
 function matchesCredentialSearch(credential: CredentialListItem, normalizedQuery: string): boolean {
   if (normalizedQuery.length === 0) {
@@ -72,80 +80,6 @@ const credentialCountLabel = computed((): string => {
   return `${credentialSearchMatchCount.value}/${credentials.value.length}`;
 });
 
-const isMac = computed((): boolean => {
-  if (typeof navigator === "undefined") {
-    return false;
-  }
-
-  return navigator.platform.toLowerCase().startsWith("mac") || navigator.userAgent.includes("Mac");
-});
-
-const searchShortcutLabel = computed((): string => {
-  if (isMobile.value) return "";
-  return isMac.value ? "⌘F" : "Ctrl+F";
-});
-
-const searchPlaceholder = computed((): string => {
-  const label = searchShortcutLabel.value;
-  return label ? `${t('credentials.searchPlaceholder')} (${label})` : t('credentials.searchPlaceholder');
-});
-
-function clearCredentialSearch(): void {
-  credentialSearchQuery.value = "";
-  credentialSearchInput.value?.blur();
-}
-
-function clearCredentialSearchAndKeepFocus(): void {
-  credentialSearchQuery.value = "";
-  credentialSearchInput.value?.focus();
-}
-
-function focusCredentialSearch(): void {
-  requestAnimationFrame(() => {
-    credentialSearchInput.value?.focus();
-    credentialSearchInput.value?.select();
-  });
-}
-
-function isTypingTarget(target: EventTarget | null): boolean {
-  if (!target) return false;
-  const element = target as HTMLElement;
-  return (
-    element.tagName === "INPUT" ||
-    element.tagName === "TEXTAREA" ||
-    element.isContentEditable ||
-    element.closest("input, textarea, [contenteditable]") !== null
-  );
-}
-
-function handleCredentialKeyDown(event: KeyboardEvent): void {
-  if (showDialog.value || showShareDialog.value) return;
-
-  const isTyping = isTypingTarget(event.target);
-  const isMeta = event.metaKey || event.ctrlKey;
-  const key = event.key.toLowerCase();
-
-  if (
-    key === "escape" &&
-    isCredentialSearchActive.value &&
-    (!isTyping || event.target === credentialSearchInput.value)
-  ) {
-    event.preventDefault();
-    clearCredentialSearch();
-    return;
-  }
-
-  if (
-    isMeta &&
-    key === "f" &&
-    (!isTyping || event.target === credentialSearchInput.value)
-  ) {
-    event.preventDefault();
-    focusCredentialSearch();
-  }
-}
-
-const showShareDialog = ref(false);
 const sharingCredential = ref<CredentialListItem | null>(null);
 const credentialShares = ref<CredentialShare[]>([]);
 const credentialTeamShares = ref<TeamShare[]>([]);
@@ -155,19 +89,13 @@ const shareTeamId = ref("");
 const sharingLoading = ref(false);
 const shareError = ref("");
 
-onMounted(async () => {
-  await loadCredentials();
-  window.addEventListener("keydown", handleCredentialKeyDown);
-  const unsub = onDismissOverlays(() => {
-    showDialog.value = false;
-    showShareDialog.value = false;
-    clearCredentialSearch();
-  });
-  onUnmounted(() => {
-    window.removeEventListener("keydown", handleCredentialKeyDown);
-    unsub();
-  });
+onMounted(loadCredentials);
+
+const unsubscribeDismissOverlays = onDismissOverlays(() => {
+  showDialog.value = false;
+  showShareDialog.value = false;
 });
+onUnmounted(unsubscribeDismissOverlays);
 
 async function loadCredentials(): Promise<void> {
   loading.value = true;
@@ -509,10 +437,10 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
         :data-testid="`credential-card-${credential.id}`"
         :class="cn(
           'credential-card p-5 cursor-pointer group',
-          credential.is_shared && 'shared-card'
+          (credential.is_shared || credential.source) && 'shared-card'
         )"
         :style="{ animationDelay: `${index * 50}ms` }"
-        @click="!credential.is_shared && openEditDialog(credential)"
+        @click="!credential.is_shared && !credential.source && openEditDialog(credential)"
       >
         <div class="flex items-start justify-between mb-3">
           <div class="flex items-center gap-3">
@@ -539,6 +467,24 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
                   <Users class="w-3 h-3" />
                   {{ $t('credentials.shared') }}
                 </span>
+                <span
+                  v-if="credential.source"
+                  :data-testid="`credential-kubernetes-${credential.id}`"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-accent-orange/10 text-accent-orange"
+                  :title="`Managed by Kubernetes Secret ${credential.source.replace(/^k8s:/, '')}. Change it where the Secret is managed.`"
+                >
+                  <Boxes class="w-3 h-3" />
+                  Kubernetes
+                </span>
+                <span
+                  v-if="credential.unreadable"
+                  :data-testid="`credential-unreadable-${credential.id}`"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-destructive/10 text-destructive"
+                  title="Stored with an encryption key this instance no longer has, so its value can't be read. Open it to enter the value again (workflows keep using it), or delete it."
+                >
+                  <KeyRound class="w-3 h-3" />
+                  Unreadable
+                </span>
               </div>
               <p class="text-xs text-muted-foreground">
                 {{ CREDENTIAL_TYPE_LABELS[credential.type] }}
@@ -546,10 +492,11 @@ async function removeCredentialTeamShare(teamId: string): Promise<void> {
             </div>
           </div>
           <div
-            v-if="!credential.is_shared"
+            v-if="!credential.is_shared && !credential.source"
             class="flex items-center gap-0.5"
           >
             <Button
+              v-if="!credential.unreadable"
               variant="ghost"
               size="icon"
               class="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary h-8 w-8"

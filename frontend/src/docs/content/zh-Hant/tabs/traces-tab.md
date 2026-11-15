@@ -23,12 +23,13 @@
 
 - 所選時間範圍內近期追蹤紀錄的分頁清單
 - 每筆追蹤紀錄顯示：Workflow、節點、認證、時間戳記、持續時間
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - 點擊追蹤紀錄以開啟詳細檢視
 - 在詳細資料對話框內使用 **Prev / Next** 即可在追蹤紀錄之間移動，無需關閉對話框
 
 ## 篩選
 
-- **Time range** – 1h / 24h / 7d / 30d / All；同時篩選圖表與清單
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All；同時篩選圖表與清單
 - **Credential** – 依所使用的認證（API 金鑰）篩選
 - **Source** – 依 Workflow 或執行來源篩選
 - **Search** – 依模型、Workflow、認證或節點標籤搜尋

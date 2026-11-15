@@ -92,6 +92,10 @@ To také určuje pořadí upgradu. Upgrade main jako první označí každého w
 
 **Worker instance mají odlišnou odchozí IP.** Každé API, které povoluje zdrojové adresy, uvidí tu novou. Send Email běží na main právě z tohoto důvodu; pro uzel HTTP buď přidělte clusteru jednu NAT egress adresu, nebo povolte každou instanci.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Přidání workera na jiný stroj
 
 `docker-compose.worker.yml` v kořeni repozitáře spouští workera na jeho vlastním hostiteli. Nemá databázi ani UI: připojuje se k PostgreSQL instance main a bere si svůj podíl běhů na pozadí.
@@ -124,7 +128,7 @@ Nic z toho se neobjevuje u instalace s jednou instancí: pole jsou prázdná, ž
 
 **Pokud worker zemře během běhu**, jeho heartbeat zastará a stávající recovery sweep leadera znovu spustí dané spuštění na živé instanci. Řádek ve frontě, který si nárokoval, je vyřazen samostatně: jakmile pro něj neexistuje žádné aktivní spuštění a uplyne dvouminutová lhůta, leader řádek označí jako neúspěšný a probudí toho, kdo na výsledek čekal. Samotné stáří nikdy není triggerem, takže legitimně dlouhý běh zůstává nedotčen; a řádek je označen jako neúspěšný namísto opětovného zařazení do fronty, protože recovery už vlastní opětovné spuštění a opětovné zařazení by spustilo stejný workflow dvakrát.
 
-**Pokud main spadne**, cron dál spouští úlohy z workera a distributovatelné běhy se dál vykonávají. Běhy, které vyžadují main, se řadí do fronty a čekají, a vyprázdní se, až se vrátí — ale pouze v rámci okna tolerance misfire (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, ve výchozím nastavení 600 sekund). Cokoli staršího je uzavřeno jako přeskočené, s zaznamenaným důvodem, namísto přehrání hodin nahromaděných úloh najednou.
+**Pokud main spadne**, cron dál spouští úlohy z workera a distributovatelné běhy se dál vykonávají. Běhy, které vyžadují main, se řadí do fronty a čekají, a vyprázdní se, až se vrátí — ale pouze v rámci okna tolerance misfire (`CRON_MISFIRE_GRACE_SECONDS`, ve výchozím nastavení 600 sekund). Cokoli staršího je uzavřeno jako přeskočené, s zaznamenaným důvodem, namísto přehrání hodin nahromaděných úloh najednou.
 
 UI, API, MCP a editor jsou po dobu výpadku mainu nedostupné, protože ingress směřuje tam.
 

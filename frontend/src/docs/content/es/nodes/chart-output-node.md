@@ -368,3 +368,6 @@ Una `table` puede convertir una columna en botones que abren un enlace. Establez
 Solo las direcciones `http://` y `https://` y las rutas que empiezan por una única `/` se convierten en botones. Cualquier otro valor, como `javascript:` o `//host`, permanece como texto sin formato, y una celda vacía no muestra nada.
 
 El botón funciona junto con un [enlace de fila](../tabs/dashboard-tab.md#detail-pages): al hacer clic en el botón se abre su enlace en una pestaña nueva, y al hacer clic en cualquier otro punto de la fila se sigue abriendo la página de detalle.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

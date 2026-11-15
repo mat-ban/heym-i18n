@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 
+import { heymClientHeaders } from "../src/constants/httpIdentity";
 import { createWorkflow, deleteWorkflow, prepareAuthenticatedPage } from "./support";
 
 test.beforeEach(async ({ page }) => {
@@ -17,7 +18,8 @@ const WAIT_NODES = [
     id: "wait",
     type: "wait",
     position: { x: 340, y: 160 },
-    data: { label: "pause", duration: 5000 },
+    // Holds the slot until History has opened, even on a slow CI runner (seen at ~6 s).
+    data: { label: "pause", duration: 15000 },
   },
   {
     id: "out",
@@ -81,6 +83,7 @@ test("a second production run waits in the queue and shows in History", async ({
 
     const first = page.request.post(`/api/workflows/${workflow.id}/execute`, {
       data: { inputs: {} },
+      headers: heymClientHeaders,
       timeout: 60_000,
     });
     await expect
@@ -93,6 +96,7 @@ test("a second production run waits in the queue and shows in History", async ({
 
     const second = await page.request.post(`/api/workflows/${workflow.id}/execute`, {
       data: { inputs: {} },
+      headers: heymClientHeaders,
     });
     expect(second.status()).toBe(202);
     const body = (await second.json()) as {
@@ -116,7 +120,7 @@ test("a second production run waits in the queue and shows in History", async ({
           const status = await page.request.get(new URL(body.status_url).pathname);
           return ((await status.json()) as { status: string }).status;
         },
-        { timeout: 30_000 },
+        { timeout: 45_000 },
       )
       .toBe("success");
 

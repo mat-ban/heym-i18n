@@ -50,3 +50,8 @@ Docker-backedログは、セルフホスト環境ではデフォルトで無効�
 - [Analytics Tab](./analytics-tab.md) – 実行メトリクス
 - [Workflows Tab](./workflows-tab.md) – Workflow管理
 - [Contextual Showcase](../reference/contextual-showcase.md) – ダッシュボード画面向けのコンパクトなページガイド
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - 実行時の兆候を適切なインシデント手順にルーティング
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - データベース、サービス、クラスター、サンドボックスの障害を診断

@@ -114,6 +114,7 @@ class MCPInitializeVersionTests(unittest.TestCase):
 class DefaultSSEOriginTests(unittest.IsolatedAsyncioTestCase):
     """Tests for mcp_sse_endpoint in app/api/mcp.py."""
 
+    @patch("app.api.mcp.session_user_active", AsyncMock(return_value=True))
     async def test_session_token_auth_does_not_query_database(self) -> None:
         """Session-token message auth is stateless and does not consume DB pool slots."""
         from app.services.mcp_session import mcp_session_store
@@ -381,7 +382,7 @@ class MCPConfigURLTests(unittest.IsolatedAsyncioTestCase):
 
         result = await get_mcp_config(request=request, current_user=user, db=_make_empty_db())
 
-        self.assertEqual(result.mcp_endpoint_url, "https://aiwf.asuka.com.tr/api/mcp/sse")
+        self.assertEqual(result.mcp_endpoint_url, "https://aiwf.asuka.com.tr/api/mcp")
         self.assertNotIn("127.0.0.1", result.mcp_endpoint_url)
 
     @patch("app.api.mcp.get_all_user_workflows", new_callable=AsyncMock, return_value=[])
@@ -404,7 +405,7 @@ class MCPConfigURLTests(unittest.IsolatedAsyncioTestCase):
 
         result = await get_mcp_config(request=request, current_user=user, db=_make_empty_db())
 
-        self.assertEqual(result.mcp_endpoint_url, "http://localhost:10105/api/mcp/sse")
+        self.assertEqual(result.mcp_endpoint_url, "http://localhost:10105/api/mcp")
 
     @patch("app.api.mcp.get_all_user_workflows", new_callable=AsyncMock, return_value=[])
     async def test_config_forwarded_headers_take_priority_over_host_header(
@@ -432,7 +433,7 @@ class MCPConfigURLTests(unittest.IsolatedAsyncioTestCase):
 
         result = await get_mcp_config(request=request, current_user=user, db=_make_empty_db())
 
-        self.assertEqual(result.mcp_endpoint_url, "https://prod.example.com/api/mcp/sse")
+        self.assertEqual(result.mcp_endpoint_url, "https://prod.example.com/api/mcp")
 
     @patch("app.api.mcp.get_all_user_workflows", new_callable=AsyncMock, return_value=[])
     async def test_config_uses_host_header_when_x_forwarded_host_absent(self, _: AsyncMock) -> None:
@@ -458,4 +459,4 @@ class MCPConfigURLTests(unittest.IsolatedAsyncioTestCase):
 
         result = await get_mcp_config(request=request, current_user=user, db=_make_empty_db())
 
-        self.assertEqual(result.mcp_endpoint_url, "https://example.com/api/mcp/sse")
+        self.assertEqual(result.mcp_endpoint_url, "https://example.com/api/mcp")

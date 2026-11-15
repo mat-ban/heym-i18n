@@ -140,3 +140,6 @@ Ebaõnnestunud sisselogimine naaseb sisselogimisekraanile loetava teatega. Heym 
 - **Mitu samaaegset teenusepakkujat.** Üks instants ühendub ühe teenusepakkujaga.
 - **Grupi või rolli kaardistamine** teenusepakkuja väidetest.
 - **Ühekordne väljalogimine.** Heymist väljalogimine ei logi teid välja teenusepakkujast.
+
+- **Kaheastmeline sisselogimine kuulub teenusepakkujale.** `HEYM_REQUIRE_MFA` kehtib ainult parooliga sisselogimisel; SSO sisselogimisel ei küsita kunagi Heymi koodi. Nõudke MFA-d oma identiteedipakkujalt.
+- **Deaktiveerimine kehtib ka siin.** Konto, mille administraator on jaotises **Seaded → Kasutajad** deaktiveerinud, lükatakse tagasi isegi siis, kui pakkuja seda endiselt autendib.

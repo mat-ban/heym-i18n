@@ -50,3 +50,8 @@ Als registratie open is, maakt u het vertrouwde beheerdersaccount aan voordat u 
 - [Tabblad Analytics](./analytics-tab.md) – Uitvoeringsstatistieken
 - [Tabblad Workflows](./workflows-tab.md) – Workflowbeheer
 - [Contextuele showcase](../reference/contextual-showcase.md) – Compacte paginagids voor dashboardoppervlakken
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Leid runtime-symptomen naar de juiste incidentprocedure
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnoseer database-, service-, cluster- en sandbox-storingen

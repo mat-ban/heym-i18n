@@ -16,6 +16,9 @@ Você também pode iniciar uma conversa a partir da caixa de chat na [aba Workfl
 ## Recursos
 
 - **Contexto de variáveis globais** – Suas [Variáveis Globais](../reference/global-variables.md) ficam disponíveis para o LLM, permitindo que você pergunte sobre ou referencie valores armazenados
+- **Kanban boards** – Ask naturally to add, assign, move, update or comment on a task, list your overdue tasks or what waits for a review, or create and arrange boards and columns. When you have multiple boards and do not name one, Chat presents a board picker before creating a card. See [Board › From Chat and MCP](./board-tab.md#from-chat-and-mcp)
+- **Send now** – Click **Send now** beside a queued message to stop the active reply and send that message immediately. The partial reply stays in the conversation, followed by your message and the new answer. The message keeps its files and chosen model; the other queued messages remain and resume in order afterward
+- **Changing direction** – After **Send now**, your latest message controls the task. A cancelled question stays as context and is not another pending job. Interrupted requests appear as **cancelled** in Traces and run history, including ones stopped before the model answers
 - **Contexto de templates do workspace** – Templates compartilhados de Workflow e de Nó no seu workspace são incluídos como contexto, permitindo que o Chat responda a perguntas sobre os templates disponíveis
 - **Agente de longa duração** – O Chat continua funcionando no backend mesmo se o navegador for fechado, então você pode retornar de outro dispositivo e continuar a mesma conversa
 - **Criação de Workflow** – Peça ao Chat para criar ou configurar um Workflow, e ele usa o mesmo motor do Workflow AI Builder do assistente do editor para gerar e salvar o Workflow

@@ -87,6 +87,7 @@ Unele noduri stochează `credentialId` (UUID) în `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Detalii de conexiune ClickHouse (host, port, autentificare, bază de date) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Acreditare bot Telegram |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Acreditare cheie publică Discord sau webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Bază de date vectorială Qdrant sau Postgres (pgvector), prin intermediul unei acreditări RAG Qdrant, Psql sau Custom Embeddings |
 | Evals | `credential_id`, `judge_credential_id` | Acreditare model; o acreditare model sau Decision Model pentru judecătorul LLM-as-Judge |
 | [Playwright](../nodes/playwright-node.md) pas AI | `credentialId` | Model LLM/Vision (pentru pasul AI și [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ După execuție, `mask_sensitive_output()` maschează valorile acreditărilor î
 - [Expression DSL](./expression-dsl.md) – Sintaxa `$credentials`
 - [Tipuri de Noduri](./node-types.md) – Noduri care utilizează acreditări ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Nod Agent](../nodes/agent-node.md) – Utilizează `credentialId` pentru LLM
+
+## Permisiuni pentru calendarul Google Meet
+
+Partajarea unei [acreditări Google Meet](../nodes/google-meet-node.md) permite workflow-urilor să citească intervalele liber/ocupat ale calendarelor accesibile și să creeze, să modifice sau să șteargă evenimente ca și cont Google conectat, inclusiv trimiterea de invitații și anulări. Adresa de e-mail a participantului nu modifică ce cont deține sau autorizează evenimentul. Doar proprietarul acreditării poate reconecta autorizarea Google.

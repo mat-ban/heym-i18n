@@ -22,7 +22,7 @@ Sõlm nõuab ka **GitHub** mandaati privaatsete hoidlate kloonimiseks, tööharu
 Täitmise isolatsiooni valib `HEYM_OPENCODE_CLI_COMMAND`, täpselt nagu Codex sõlme puhul:
 
 - **Kohalik arendus (`run.sh`)** jätab selle vaikeväärtusele `opencode`, seega OpenCode töötab hosti alamprotsessina kloonitud tööruumi vastu — Dockerit pole vaja, lisalippe pole vaja.
-- **Dockeri juurutus (`deploy.sh` ja üksik GHCR image)** määrab selle väärtusele `/usr/local/bin/heym-opencode-docker`, mis on wrapper, mis käivitab `opencode run` **karastatud, ühekordses sõsarkonteineris**, mis jagab OpenCode'i tööruumi nimega volume'it.
+- **Dockeri juurutus (`deploy.sh` ja üksik GHCR image)** määrab selle väärtusele `/usr/local/bin/heym-opencode-docker`, mis on wrapper, mis käivitab `opencode run` **karastatud, ühekordses sõsarkonteineris**, mis jagab OpenCode'i tööruumi nimega volume'it. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Karastatud runner-konteiner eemaldab kõik Linuxi võimekused, seab `no-new-privileges`, kasutab kirjutuskaitstud juurt koos tmpfs-iga `/tmp` ja rakendab pid/mälu/CPU piiranguid. Võrgu väljuv liiklus on lubatud (OpenCode peab mudelilüüsini jõudma). **GitHubi token ei asetata kunagi konteineri sisse** — kõik git- ja GitHubi-toimingud töötavad hosti poolel, seega konteineri sees on alati ainult OpenCode API võti ja hoidla failid.
 

@@ -348,7 +348,7 @@ export const NODE_DEFINITIONS: Record<NodeType, NodeDefinition> = {
   converter: {
     type: "converter",
     label: "Converter",
-    description: "Convert data and files between formats (CSV, JSON, XML, documents, images) and OCR images or PDFs to text",
+    description: "Convert data and files between formats (CSV, JSON, XML, documents, images), OCR images or PDFs to text, and transcribe audio to text",
     color: "node-set",
     icon: "Repeat",
     inputs: 1,
@@ -371,6 +371,8 @@ export const NODE_DEFINITIONS: Record<NodeType, NodeDefinition> = {
       ocrPsm: "3",
       ocrDpi: 300,
       ocrPageRange: "",
+      sttLanguage: "auto",
+      sttLanguageCustom: "",
     },
   },
   code: {
@@ -388,6 +390,7 @@ export const NODE_DEFINITIONS: Record<NodeType, NodeDefinition> = {
       codeRequirements: "",
       codeParameters: '{\n  "name": "Heym"\n}',
       codeAllowNetwork: false,
+      codeFiles: "",
     },
   },
   jsonOutputMapper: {
@@ -503,6 +506,7 @@ export const NODE_DEFINITIONS: Record<NodeType, NodeDefinition> = {
       label: "imapTrigger",
       credentialId: "",
       pollIntervalMinutes: 5,
+      imapDownloadAttachments: false,
     },
   },
   googleDriveTrigger: {
@@ -901,6 +905,22 @@ export const NODE_DEFINITIONS: Record<NodeType, NodeDefinition> = {
       gsValues: "[]",
     },
   },
+  googleMeet: {
+    type: "googleMeet",
+    label: "Google Meet",
+    description: "Find available times and create, update or delete Google Meet invitations",
+    color: "node-google-meet",
+    icon: "CalendarClock",
+    inputs: 1,
+    outputs: 1,
+    defaultData: {
+      label: "googleMeet", credentialId: "", gmOperation: "read",
+      gmCalendarId: "primary", gmTimeZone: "UTC", gmStartDate: "", gmEndDate: "",
+      gmIncludeBusyDetails: false,
+      gmEventId: "", gmTitle: "", gmDescription: "", gmStartTime: "", gmEndTime: "",
+      gmAttendees: "", gmLocation: "",
+    },
+  },
   googleDrive: {
     type: "googleDrive",
     label: "Google Drive",
@@ -1258,6 +1278,7 @@ export const NODE_DEFINITIONS: Record<NodeType, NodeDefinition> = {
         | "erDiagram"
         | "barGauge"
         | "text"
+        | "html"
         | "hitl",
       orientation: "vertical" as "horizontal" | "vertical",
       dataPath: "",

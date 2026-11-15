@@ -157,6 +157,8 @@ Tunnistetietojen muokkaaminen säilyttää tallennetun avaimen, kun avainkenttä
 
 Samaa tunnistetietoja voidaan käyttää [Arvioinnit](../tabs/evals-tab.md)-ajojen arviointiin: kun **LLM-as-Judge** on valittuna, valitse se tuomariksi, ja päätösmalli pisteyttää jokaisen vastauksen odotetun tuloksen mukaisesti.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym estää oletusarvoisesti lähtevät pyynnöt yksityisiin ja loopback-osoitteisiin, joten paikallisesti (`localhost`) tai yksityisellä alueella ajettava päätösendpoint vaatii `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Päätösmallit eivät näy Heymin synkronoimissa LLM-hinnoittelutauluissa, joten **Cost**-sarake [Suoritukset](../tabs/traces-tab.md)-välilehdessä pysyy tyhjänä näissä kutsussa. Token-määrät silti tallennetaan, ja voit lisätä oman hinnan hinnoittelun ohituksella.

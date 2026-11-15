@@ -257,3 +257,5 @@ Jó tudni:
 - [Harmadik féltől származó integrációk](../reference/integrations.md#qdrant) – Qdrant és Postgres (pgvector) hitelesítési adatok beállítása
 - [Ügynök csomópont](./agent-node.md) – A RAG eredmények használata ügynök kontextusként
 - [LLM csomópont](./llm-node.md) – A RAG eredmények betáplálása az LLM rendszer promptba
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

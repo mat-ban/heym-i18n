@@ -92,6 +92,10 @@ To zároveň určuje poradie upgrade. Upgrade main ako prvého označí každý 
 
 **Worker inštancie majú odlišnú odchádzajúcu IP.** Každé API, ktoré povoľuje zdrojové adresy, uvidí tú novú. Send Email beží na main presne z tohto dôvodu; pre uzol HTTP buď dajte clusteru jednu NAT egress adresu, alebo povoľte každú inštanciu.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Pridanie workera na inom stroji
 
 `docker-compose.worker.yml` v koreni repozitára spúšťa workera na jeho vlastnom hostiteľovi. Nemá databázu ani UI: pripája sa k PostgreSQL inštancie main a preberá svoj podiel behov na pozadí.
@@ -124,7 +128,7 @@ Nič z toho sa nezobrazuje pri inštalácii s jednou inštanciou: polia sú prá
 
 **Ak počas behu zlyhá worker**, jeho heartbeat zostarne a existujúci recovery sweep leadera znovu spustí dané spustenie na živom instance. Riadok vo fronte, ktorý si nárokoval, sa ukončí samostatne: keď preň neexistuje žiadne aktívne spustenie a uplynie dvojminútová ochranná lehota, leader označí riadok ako zlyhaný a prebudí toho, kto čakal na výsledok. Samotný vek nikdy nie je triggerom, takže legitímne dlhý beh zostáva nedotknutý; a riadok sa označí ako zlyhaný namiesto opätovného zaradenia do frontu, pretože recovery už vlastní opätovné spustenie a opätovné zaradenie by spustilo ten istý workflow dvakrát.
 
-**Ak vypadne main**, cron naďalej spúšťa z workera a distribovateľné behy sa naďalej vykonávajú. Behy, ktoré potrebujú main, sa zaraďujú do frontu a čakajú, a vyprázdnia sa, keď sa vráti — ale iba v rámci okna tolerancie zmeškania (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, predvolene 600 sekúnd). Čokoľvek staršie sa uzavrie ako preskočené, s zaznamenaným dôvodom, namiesto prehratia hodín nahromadených úloh naraz.
+**Ak vypadne main**, cron naďalej spúšťa z workera a distribovateľné behy sa naďalej vykonávajú. Behy, ktoré potrebujú main, sa zaraďujú do frontu a čakajú, a vyprázdnia sa, keď sa vráti — ale iba v rámci okna tolerancie zmeškania (`CRON_MISFIRE_GRACE_SECONDS`, predvolene 600 sekúnd). Čokoľvek staršie sa uzavrie ako preskočené, s zaznamenaným dôvodom, namiesto prehratia hodín nahromadených úloh naraz.
 
 UI, API, MCP a editor sú počas výpadku main nedostupné, pretože ingress smeruje tam.
 

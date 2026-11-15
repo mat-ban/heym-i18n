@@ -48,6 +48,7 @@ En mode Agent, la case **YOLO mode** sous le champ de message permet à l'assist
 - Saisissez votre demande dans le champ de saisie (ex. « Crée un workflow qui prend une entrée utilisateur et l'envoie à un LLM »)
 - Appuyez sur **Entrée** pour envoyer (Maj+Entrée pour un saut de ligne)
 - L'IA diffuse sa réponse en streaming. En mode **Agent**, si la réponse contient un workflow dans un bloc de code \`\`\`json, il est automatiquement analysé et appliqué au canvas. En mode **Ask**, le canvas n'est jamais modifié.
+- Pendant la diffusion du flux JSON du workflow, une ligne sous la réponse indique le nom du workflow et les nœuds rédigés jusqu'à présent, par exemple `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Utilisez **Clear** pour réinitialiser la conversation
 - Survolez un message et cliquez sur son icône de copie pour copier le texte affiché, y compris tout JSON de workflow
 - Faites glisser la ligne au-dessus de la zone de message pour agrandir celle-ci. La zone de saisie peut atteindre 60 % du panneau, et elle revient à sa hauteur par défaut lors du rechargement de la page

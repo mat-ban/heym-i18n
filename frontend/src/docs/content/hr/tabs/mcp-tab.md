@@ -11,7 +11,7 @@ Oba načina mogu izložiti dvije vrste alata: pojedinačne **workflows** i **Hey
 
 ## Zadani MCP Poslužitelj
 
-Zadani poslužitelj uvijek je dostupan na `{origin}/api/mcp/sse`. Svi workflows s uključenim MCP-om pojavljuju se kao alati ovdje.
+Zadani poslužitelj uvijek je dostupan na `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)`. Svi workflows s uključenim MCP-om pojavljuju se kao alati ovdje.
 
 ### MCP API Ključ
 
@@ -180,7 +180,7 @@ Kliknite na ikonu **X** na zaglavlju kartice poslužitelja. Brisanje uklanja pos
 
 | Poslužitelj | Endpoint |
 |-------------|----------|
-| Zadani | `{origin}/api/mcp/sse` |
+| Zadani | `{origin}/api/mcp (with backwards compatibility for existing connections at {origin}/api/mcp/sse)` |
 | Imenovani | `{origin}/api/mcp/servers/{server-uuid}/sse` |
 
 Oba endpoint-a podržavaju SSE transport (GET, MCP specifikacija 2024-11-05) i Streamable HTTP transport (POST, MCP specifikacija 2025-03-26). Claude, ChatGPT i Gemini koriste OAuth 2.1 / PKCE za sigurnu prijavu na oba.
@@ -195,3 +195,17 @@ Oba endpoint-a podržavaju SSE transport (GET, MCP specifikacija 2024-11-05) i S
 - [Workflows Tab](./workflows-tab.md) – Kreirajte i upravljajte workflows-ima
 - [Tipovi Čvorova](../reference/node-types.md) – Pregled AI čvorova
 - [Kontekstualna Izložba](../reference/contextual-showcase.md) – Kompaktni vodič za površine nadzorne ploče
+
+### Memory tools: get_user_memory and set_user_memory
+
+The default server always lists two more tools, with or without `heym_chat`, so any MCP client shares one memory with Heym's Chat and Heym Work. The memory is your [User Rules](../reference/user-settings.md#user-rules-as-memory).
+
+| Tool | Arguments | Returns |
+|------|-----------|---------|
+| `get_user_memory` | none | `content` (your User Rules), `revision`, `length`, `max_length` |
+| `set_user_memory` | `mode` (`append` or `replace`), `content`, `revision` (required for `replace`) | `status` (`added`, `replaced`, `unchanged`, `conflict`, `refused`) and the memory after the write |
+
+- `append` adds one line.
+- `replace` rewrites the whole text and only lands when `revision` matches the stored text. On `conflict`, the result carries the current text and revision to merge and retry.
+- Text that looks like an API key, token, password or other credential is refused, and nothing is saved.
+- Named servers do not list these tools. A workflow named `get_user_memory` or `set_user_memory` is not listed on the default server.

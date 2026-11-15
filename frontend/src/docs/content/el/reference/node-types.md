@@ -68,6 +68,7 @@
 | [Linear](../nodes/linear-node.md) | Διαχείριση ομάδων, έργων, issues, καταστάσεων workflow και σχολίων του Linear μέσω GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Ανάγνωση/εγγραφή Google Sheets μέσω OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Καταγραφή, λήψη, ενημέρωση και διαγραφή αρχείων Google Drive μέσω OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Ανάγνωση διαθεσιμότητας και δημιουργία, ενημέρωση ή διαγραφή προσκλήσεων Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Εκτέλεση ερωτημάτων SQL και εισαγωγή γραμμών στο BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Υποβολή ερωτημάτων και τροποποίηση πινάκων Supabase μέσω PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Εκτέλεση λειτουργιών SQL, CRUD και count στο ClickHouse | 1 | 1 |

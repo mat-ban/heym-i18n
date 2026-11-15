@@ -12,23 +12,24 @@ La pàgina s'obre amb un resum d'estadístiques per sobre de la llista de traces
 - **Targetes KPI** – Total de crides, total de tokens, cost total (USD), latència mitjana, % d'errors
 - **Tokens per model** – Gràfic de dònuts del volum de tokens per model
 - **Cost per model** – Gràfic de dònuts de la despesa en USD per model. Els models sense preu mostren un enllaç "Configure pricing" a la [Taula de costos d'LLM](./datatable-tab.md#llm-cost-table-system-table)
-- **Crides al llarg del temps** – Gràfic d'àrea apilada de crides correctes vs fallides per interval (5 min / 1 h / 6 h / 1 dia, triat automàticament segons el rang)
+- **Crides al llarg del temps** – Gràfic d'àrea apilada de crides correctes vs fallides per interval (5 min / 15 min / 30 min / 1 h / 6 h / 1 dia, triat automàticament segons el rang)
 - **Avís de models sense preu** – Apareix sota els gràfics quan alguns models traçats no tenen fila de preus, amb un enllaç a la Taula de costos d'LLM
 
 ## Rang temporal
 
-Un únic selector de **Time range** a la part superior de la barra de filtres controla tant la capçalera d'estadístiques com la llista de traces. Opcions: Last 1 hour, Last 24 hours, Last 7 days (per defecte), Last 30 days, All time. Canviar el rang reinicia la paginació i recarrega els gràfics i la llista conjuntament.
+Un únic selector de **Time range** a la part superior de la barra de filtres controla tant la capçalera d'estadístiques com la llista de traces. Opcions: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days (per defecte), Last 30 days, All time. Canviar el rang reinicia la paginació i recarrega els gràfics i la llista conjuntament.
 
 ## Llista de traces
 
 - Llista paginada de traces recents dins del rang temporal seleccionat
 - Cada traça mostra: workflow, node, credencial, marca temporal, durada
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Feu clic en una traça per obrir la vista de detall
 - Utilitzeu **Prev / Next** dins del diàleg de detall per moure's entre traces sense tancar-lo
 
 ## Filtratge
 
-- **Time range** – 1h / 24h / 7d / 30d / All; filtra els gràfics i la llista conjuntament
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; filtra els gràfics i la llista conjuntament
 - **Credential** – Filtra per credencial (clau API) utilitzada
 - **Source** – Filtra per workflow o font d'execució
 - **Search** – Cerca per model, workflow, credencial o etiqueta de node

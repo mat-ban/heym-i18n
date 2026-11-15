@@ -123,3 +123,6 @@ Se nenhuma linha corresponder, o modelo é listado no aviso **Unpriced models** 
 - [Separador Rastreios](./traces-tab.md) - Utiliza a Tabela de Custos LLM para o gráfico circular de custos e os cartões de KPI
 - [Nó Grist](../nodes/grist-node.md) - Alternativa de folha de cálculo externa
 - [Separador Variáveis](./global-variables-tab.md) - Alternativa de armazenamento de chave-valor
+## Pesquisa
+
+Utilize o campo de pesquisa acima da lista de tabelas ou prima **Ctrl+F** (ou **Cmd+F**) para filtrar tabelas por nome ou descrição enquanto digita. Prima **Escape** para limpar a pesquisa.

@@ -17,18 +17,19 @@ Halaman dibuka dengan ringkasan statistik di atas daftar trace, yang dihitung be
 
 ## Rentang Waktu
 
-Satu pemilih **Time range** di bagian atas bilah filter mengendalikan header statistik dan daftar trace sekaligus. Pilihan: Last 1 hour, Last 24 hours, Last 7 days (default), Last 30 days, All time. Mengubah rentang akan mengatur ulang paginasi dan memuat ulang diagram serta daftar secara bersamaan.
+Satu pemilih **Time range** di bagian atas bilah filter mengendalikan header statistik dan daftar trace sekaligus. Pilihan: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days (default), Last 30 days, All time. Mengubah rentang akan mengatur ulang paginasi dan memuat ulang diagram serta daftar secara bersamaan.
 
 ## Daftar Trace
 
 - Daftar trace terbaru yang dipaginasi dalam rentang waktu yang dipilih
 - Setiap trace menampilkan: workflow, node, credential, timestamp, durasi
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Klik trace untuk membuka tampilan detail
 - Gunakan **Prev / Next** di dalam dialog detail untuk berpindah antar trace tanpa menutupnya
 
 ## Pemfilteran
 
-- **Time range** – 1h / 24h / 7d / 30d / All; memfilter diagram dan daftar sekaligus
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; memfilter diagram dan daftar sekaligus
 - **Credential** – Filter berdasarkan credential (API key) yang digunakan
 - **Source** – Filter berdasarkan workflow atau sumber eksekusi
 - **Search** – Cari berdasarkan model, workflow, credential, atau label node

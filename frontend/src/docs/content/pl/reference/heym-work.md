@@ -10,7 +10,7 @@ Heym Work działa jako osobny kontener obok Heym, na oddzielnej licencji od zesp
 |--------|-----------|
 | **Chat** | Opisywanie zadań tekstem lub głosem. Heym pyta o potrzebne informacje, tworzy workflow, testuje go i oznacza jako Zweryfikowany. |
 | **Flows** | Redaktorzy budują flow z opcji zamiast na canvasie: co go uruchamia, opcjonalny szkic AI oraz akcje w Slacku, Google Sheets i poczcie e-mail. Odpowiedzi ze Slacka wznawiają uruchomienie, a zatwierdzenia oczekują również w Aktywności. Zobacz [Flows](#flows). |
-| **Strony** | Przypięte strony z widżetami: liczby, wykresy, tabele ze wskaźnikami statusu, strefy upuszczania plików i zatwierdzenia. Wiersz tabeli może otwierać własną stronę szczegółów. |
+| **Strony** | Przypięte strony z widżetami: liczby, wykresy, tabele ze wskaźnikami statusu, kartami HTML, strefy upuszczania plików i zatwierdzenia. Wiersz tabeli może otwierać własną stronę szczegółów. |
 | **Zatwierdzenia** | Weryfikacje z kroków [Human-in-the-Loop](./human-in-the-loop.md) oczekują w sekcji Aktywność oraz na stronach, z opcjami Zatwierdź, Poproś o zmiany i Odrzuć. |
 | **Aktywność** | Każde wykonanie z informacją o osobie, która je uruchomiła, oraz instancji realizującej. |
 | **Role** | Właściciel, Edytor i Przeglądający. Logowanie odbywa się przez mechanizm [Single Sign-On](./sso.md) skonfigurowany w Heym. |

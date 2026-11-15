@@ -38,7 +38,17 @@ curl -X GET "https://your-host/api/workflows/<workflow-id>/execute?name=Ada"
 
 Read those values with `$input.query.name`. See [Webhooks](../reference/webhooks.md) for the full method contract.
 
+Set the workflow's auth to **Anonymous** for a page people open from a link. A browser navigation cannot send an `Authorization` header, so a **JWT** or **Header Auth** workflow answers `401` there, even for a signed-in member. An Anonymous page runs in the owner's context, with the owner's credentials and global variables, even when the visitor is signed in to Heym. See [Who counts as the caller](../reference/workflow-organization.md#who-counts-as-the-caller).
+
 A workflow with no trigger node whose only terminal is this node shows a **WEB** chip in the [Workflows tab](../tabs/workflows-tab.md).
+
+### Pages run sandboxed
+
+Every page response carries `Content-Security-Policy: sandbox …` and `X-Content-Type-Options: nosniff`, whatever `contentType` you set. Scripts, forms, popups, dialogs and downloads still work, but the page gets an opaque origin: it cannot read cookies or localStorage, and it cannot call the Heym API with the session of whoever opens it. A page that needs data should get it from the workflow (template expressions such as `$llm.text`), not by calling `/api/…` from its script.
+
+## On a dashboard
+
+To show HTML inside a [dashboard widget](../tabs/dashboard-tab.md#html-widgets), use a [Chart Output](./chart-output-node.md#html-widgets) node with chart type **HTML** instead. Its `html` field takes the same template and resolves expressions the same way; the widget runs it in a sandboxed frame without network access.
 
 ## Agent tool usage
 
@@ -65,6 +75,7 @@ Same rule as [Output](./output-node.md): do not place this node inside a loop it
 ## Related
 
 - [JSON output mapper](./json-output-mapper-node.md) – Same idea for API clients expecting JSON
+- [Chart Output](./chart-output-node.md#html-widgets) – The same template as a sandboxed dashboard widget
 - [Output](./output-node.md) – Message or schema-based response with `result` wrapping
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, request methods, and responses
 - [Node Types](../reference/node-types.md) – All node types

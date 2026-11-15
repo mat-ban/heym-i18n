@@ -10,7 +10,7 @@ Heym Work läuft als eigener Container neben Heym, mit einer separaten Lizenz de
 |---------|----------|
 | **Chat** | Beschreiben Sie eine Aufgabe per Texteingabe oder Sprache. Heym fragt nach benötigten Informationen, erstellt den Workflow, testet ihn und markiert ihn als Verifiziert. |
 | **Flows** | Editoren erstellen einen Flow aus Optionen statt auf einer Arbeitsfläche: was ihn startet, ein optionaler KI-Entwurf und Aktionen in Slack, Google Sheets und E-Mail. Antworten aus Slack setzen den Lauf fort, und Freigaben warten auch in der Aktivität. Siehe [Flows](#flows). |
-| **Seiten** | Angeheftete Seiten mit Widgets: Zahlen, Diagramme, Tabellen mit Status-Chips, Datei-Uploads und Genehmigungen. Eine Tabellenzeile kann eine eigene Detailseite öffnen. |
+| **Seiten** | Angeheftete Seiten mit Widgets: Zahlen, Diagramme, Tabellen mit Status-Chips, HTML cards, Datei-Uploads und Genehmigungen. Eine Tabellenzeile kann eine eigene Detailseite öffnen. |
 | **Genehmigungen** | Überprüfungen aus [Human-in-the-Loop](./human-in-the-loop.md)-Schritten warten in Aktivitäten und auf Seiten mit den Optionen Genehmigen, Änderungen anfordern und Ablehnen. |
 | **Aktivität** | Jeder Durchlauf mit der Person, die ihn gestartet hat, und der ausführenden Instanz. |
 | **Rollen** | Eigentümer, Editor und Betrachter. Die Anmeldung erfolgt über das von Heym bereits genutzte [Single Sign-On](./sso.md). |

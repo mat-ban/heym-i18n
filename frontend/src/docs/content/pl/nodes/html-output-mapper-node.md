@@ -68,3 +68,5 @@ Ta sama zasada co w przypadku [Output](./output-node.md): nie należy umieszcza�
 - [Output](./output-node.md) – Odpowiedź oparta na komunikacie lub schemacie z opakowaniem `result`
 - [Webhooks](../reference/webhooks.md) – Endpoint execute, metody żądań i odpowiedzi
 - [Node Types](../reference/node-types.md) – Wszystkie typy węzłów
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

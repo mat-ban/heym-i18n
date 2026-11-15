@@ -251,3 +251,5 @@
 - [Third-Party Integrations](../reference/integrations.md#qdrant) – Qdrant 和 Postgres (pgvector) 凭证设置
 - [Agent Node](./agent-node.md) – 将 RAG 结果用作 Agent 上下文
 - [LLM Node](./llm-node.md) – 将 RAG 结果输入 LLM 系统 Prompt
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym vastaa välittömästi `200 OK` -statuskoodilla ja suorittaa workflown taustalla - tämä täyttää Slackin 3 sekunnin vastausvaatimuksen
 - Webhook URL -osoite johdetaan solmun ID:stä eikä muutu workflown nimeämisen jälkeen
 - Workflowssa tarvitaan vain yksi `slackTrigger` -solmu; eri tapahtumatyypit voidaan ohjata eteenpäin **Switch**- tai **Condition** -solmuilla
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

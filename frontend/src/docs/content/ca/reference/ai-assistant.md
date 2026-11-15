@@ -48,6 +48,7 @@ En mode Agent, la casella **Mode YOLO** sota el camp de missatge fa que l'assist
 - Escriviu la vostra sol·licitud a l'entrada (p. ex. "Creeu un Workflow que prengui l'entrada de l'usuari i l'enviï a un LLM")
 - Premeu **Enter** per enviar (Maj+Enter per a una nova línia)
 - La IA transmet la seva resposta. En mode **Agent**, si la resposta inclou un Workflow en un bloc de codi \`\`\`json, s'analitza automàticament i s'aplica al Canvas. En mode **Ask** el Canvas no es modifica mai.
+- Mentre es transmet el JSON del workflow, una línia sota la resposta indica el nom del workflow i els nodes escrits fins al moment, per exemple `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Utilitzeu **Esborra** per restablir la conversa
 - Passeu el cursor per sobre d'un missatge i feu clic a la seva icona de còpia per copiar el text que mostra, incloent-hi qualsevol JSON de Workflow
 - Arrossegueu la línia per sobre de la caixa de missatge per fer-la més alta. L'àrea d'entrada pot créixer fins al 60% del panell, i torna a la seva alçada per defecte quan es recarrega la pàgina

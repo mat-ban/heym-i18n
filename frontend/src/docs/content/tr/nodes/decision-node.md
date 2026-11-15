@@ -157,6 +157,8 @@ Bir credential düzenlenirken anahtar alanı boş bırakılırsa saklanan anahta
 
 Aynı credential, [Evals](../tabs/evals-tab.md) çalıştırmalarını da değerlendirebilir: **LLM-as-Judge** seçiliyken bunu judge olarak seçin ve decision model her yanıtı beklenen çıktıya göre puanlar.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym varsayılan olarak özel ve loopback adreslerine giden istekleri engeller; bu nedenle `localhost` veya özel bir aralıkta kendi çalıştırdığınız bir decision endpoint'i için `HEYM_HTTP_ALLOW_PRIVATE_URLS=true` gerekir.
 
 Decision modelleri, Heym'in senkronize ettiği LLM fiyatlandırma tablolarında görünmez; bu nedenle bu çağrılar için [Traces](../tabs/traces-tab.md) içindeki **Cost** sütunu boş kalır. Token sayıları yine de kaydedilir ve bir fiyatlandırma geçersiz kılmasıyla kendi fiyatınızı ekleyebilirsiniz.

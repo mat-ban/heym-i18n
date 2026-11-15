@@ -2,6 +2,9 @@
 
 L'onglet **Tableau de bord** est un espace de type Grafana dans lequel vous construisez des grilles de widgets graphiques. Chaque widget est généré à partir de la sortie de son propre workflow Heym masqué : ainsi, toute donnée que vous pouvez produire dans un workflow — requêtes de base de données, appels API, recherches RAG, sortie LLM — peut devenir un graphique. Vous pouvez conserver plusieurs tableaux de bord et partager chacun d'eux avec des personnes ou des équipes.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Tableaux de bord
 
 Chaque utilisateur commence avec un tableau de bord, créé lors de sa première ouverture de l'onglet. Utilisez le sélecteur de tableaux de bord en haut de l'onglet pour passer d'un tableau de bord à l'autre, et le bouton **+** adjacent pour en créer un nouveau. Le sélecteur liste d'abord vos propres tableaux de bord, puis ceux partagés avec vous, accompagnés du nom de la personne qui les a partagés.
@@ -27,6 +30,8 @@ Un widget est un graphique unique sur la grille. Types de graphiques pris en cha
 - **Entity relationships (DB)** (tables, champs, clés PK/FK et liaisons)
 - **Jauge à barres** (une jauge horizontale par ligne avec un dégradé rouge→vert et une valeur, par exemple l'espace disque libre)
 - **Texte** (un message markdown, par exemple une note de statut telle que « Dernière exécution à 19:47 » ; prend en charge les [cases à cocher interactives](../nodes/chart-output-node.md#interactive-task-lists) lorsque le markdown est statique, ainsi que les [listes numérotées explicites](../nodes/chart-output-node.md#numbered-lists) pour une numérotation personnalisée ou décroissante)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (vos revues humaines en attente. L'en-tête affiche `1/n pending`. Le nom du workflow ouvre cette exécution sur le canvas. **Approve**, **Request changes** et **Reject** permettent de la résoudre. L'icône d'historique à côté du titre du widget ouvre cette exécution dans la boîte de dialogue d'historique de cette page. Le widget n'utilise pas les lignes en amont, et chaque personne voit sa propre file d'attente. Il peut afficher à la place les validations d'un seul Workflow, pour toutes les personnes pouvant ouvrir ce Workflow ; voir [Widgets HITL](#widgets-hitl))
 
 Outre les graphiques, un widget **Run a workflow** exécute l'un de vos workflows depuis le tableau de bord : sur un fichier déposé, avec ses champs de saisie ou avec un bouton Run ; voir [Widgets d'exécution](#run-widgets).
@@ -146,3 +151,5 @@ La suppression d'un partage, ou son abaissement d'écriture à lecture, prend ef
 ## Plannings et diagrammes de bases de données
 
 Choisissez **Gantt** dans Ajouter un widget pour afficher les tâches dans le temps avec l'état d'achèvement et les liens de dépendance, ou **Entity relationships (DB)** pour cartographier les tables, les champs et leurs relations. Les deux types utilisent le [nœud Chart Output](../nodes/chart-output-node.md#gantt-schedules) et sont également disponibles sur les pages Heym Work. Lorsque Work suggère des widgets pour un planning ou un schéma de base de données, il génère des aperçus à partir des tâches ou entités proposées.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

@@ -2,6 +2,9 @@
 
 L'onglet **Alertes** permet de définir des conditions de seuil sur une fenêtre temporelle et d'être averti lorsqu'elles sont franchies. Heym enregistre déjà les résultats d'exécution, la durée des exécutions et les dépenses LLM, mais il ne les communique jamais spontanément. Une alerte est la manière de le lui demander.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Regarder la démo d'Alerts</a></p>
+
 Chaque alerte est évaluée sur une **fenêtre temporelle** que vous choisissez, jamais sur un événement isolé. Une exécution en échec est du bruit. Douze exécutions en échec en dix minutes constituent un incident.
 
 ## Types d'alerte

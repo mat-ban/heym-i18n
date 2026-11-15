@@ -42,7 +42,7 @@ Praktyczne sesje szkoleniowe dostosowane do poziomu umiejętności i przypadków
 
 ## Wdrożenie Kubernetes
 
-Standardowy przewodnik [Uruchamianie i wdrażanie](../getting-started/running-and-deployment.md) obejmuje Docker Compose dla konfiguracji produkcyjnych na pojedynczym serwerze. Klienci Enterprise otrzymują pomoc w produkcyjnych wdrożeniach Kubernetes dla wysokiej dostępności i skalowania poziomego:
+Standardowy przewodnik [Uruchamianie i wdrażanie](../getting-started/running-and-deployment.md) obejmuje Docker Compose dla konfiguracji produkcyjnych na pojedynczym serwerze. [Kubernetes Deployment](../getting-started/kubernetes.md). Klienci Enterprise otrzymują pomoc w produkcyjnych wdrożeniach Kubernetes dla wysokiej dostępności i skalowania poziomego:
 
 - **Wiele węzłów worker** — Rozmieszczenie workerów backendu Heym na wielu węzłach Kubernetes dla redundancji i równoważenia obciążenia
 - **Kontenery sidecar** — Konfiguracja wzorców sidecar dla zbierania logów, agentów monitorujących, service mesh (Istio, Linkerd) i wstrzykiwania sekretów (Vault)

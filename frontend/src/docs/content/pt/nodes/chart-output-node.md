@@ -368,3 +368,6 @@ Uma `table` pode transformar uma coluna em botões que abrem uma ligação. Defi
 Apenas os endereços `http://` e `https://` e os caminhos que começam por uma única `/` se tornam botões. Qualquer outro valor, como `javascript:` ou `//host`, permanece texto simples, e uma célula vazia não mostra nada.
 
 O botão funciona junto de uma [ligação de linha](../tabs/dashboard-tab.md#detail-pages): clicar no botão abre a respetiva ligação num novo separador, e clicar em qualquer outro ponto da linha continua a abrir a página de detalhe.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

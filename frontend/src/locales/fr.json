@@ -103,7 +103,8 @@
     "confirmDeleteBoard": "Supprimer le tableau \"{name}\" et toutes ses cartes ?",
     "confirmDeleteCard": "Supprimer la carte \"{title}\" ?",
     "confirmDeleteColumn": "Supprimer cette colonne ? Elle doit être vide.",
-    "confirmEmptyColumn": "Supprimer toutes les cartes de la colonne \"{name}\" ?"
+    "confirmEmptyColumn": "Supprimer toutes les cartes de la colonne \"{name}\" ?",
+    "details": "Détails"
   },
   "canvas": {
     "analyze": "Analyser",
@@ -355,7 +356,9 @@
     "unpin": "Désépingler",
     "unreadMessage": "Message non lu",
     "subtitle": "Exécuter des Workflows et poser des questions",
-    "modelsLoadFailedDisabled": "La liste des modèles de ces identifiants n'a pas pu être chargée. Le chat reste désactivé tant qu'un modèle ne peut pas être récupéré."
+    "modelsLoadFailedDisabled": "La liste des modèles de ces identifiants n'a pas pu être chargée. Le chat reste désactivé tant qu'un modèle ne peut pas être récupéré.",
+    "dropFilesToAttach": "Déposez des fichiers à joindre",
+    "attachFiles": "Joindre des fichiers"
   },
   "alerts": {
     "wizard": {
@@ -543,7 +546,8 @@
     "dropFileOrClick": "Déposez un fichier ici ou cliquez pour en choisir un",
     "removeFile": "Supprimer le fichier",
     "chooseFileFor": "Choisir un fichier pour {label}",
-    "new": "Nouveau"
+    "new": "Nouveau",
+    "clearSearch": "Effacer la recherche"
   },
   "credentials": {
     "accessVia": "Accès via",
@@ -1036,7 +1040,8 @@
       "refine": "Affiner avec l'IA",
       "refresh": "Actualiser",
       "refreshDashboard": "Actualiser le tableau de bord",
-      "settings": "Paramètres"
+      "settings": "Paramètres",
+      "revertPrevious": "Rétablir précédent"
     },
     "addDescriptionPlaceholder": "Facultatif. Affiché sur le Canvas, pas sur la grille.",
     "addWidget": "Ajouter un widget",
@@ -1079,7 +1084,9 @@
     "noWorkflowsMatch": "Aucun workflow ne correspond à ce filtre.",
     "quickStartTemplates": "Modèles de démarrage rapide",
     "subtitle": "Créez, orchestrez et exécutez vos agents autonomes modulaires",
-    "whatToAutomate": "Que souhaitez-vous automatiser ?"
+    "whatToAutomate": "Que souhaitez-vous automatiser ?",
+    "noWorkflowsMatchAll": "Essayez un autre titre, description ou nom de dossier.",
+    "noWorkflowsMatchFilter": "Essayez un autre titre, description, nom de dossier ou filtre de statut."
   },
   "evals": {
     "accuracySummary": "Précision : {accuracy}% ({pass}/{total} ≥50%)",
@@ -2027,7 +2034,9 @@
     "enablePlugin": "Activer",
     "disablePlugin": "Désactiver",
     "uninstallPlugin": "Désinstaller",
-    "pluginOperationFailed": "Échec de l'opération sur le plugin"
+    "pluginOperationFailed": "Échec de l'opération sur le plugin",
+    "users": "Utilisateurs",
+    "encryption": "Chiffrement"
   },
   "showcase": {
     "askAboutDoc": "Poser une question sur cette documentation",
@@ -2273,7 +2282,9 @@
     "tokensLower": "tokens",
     "traceDetail": "Détails de la trace",
     "tracePosition": "{current} / {total}",
-    "unpricedModelsNotice": "{count} modèle(s) sans tarification :"
+    "unpricedModelsNotice": "{count} modèle(s) sans tarification :",
+    "timeRange3h": "3 dernières heures",
+    "timeRange6h": "6 dernières heures"
   },
   "variables": {
     "addVariable": "Ajouter une variable",

@@ -12,7 +12,7 @@ Noduri de start (fără muchii de intrare) care inițiază execuția:
 | [Cron](../nodes/cron-node.md) | Rulează conform unui program (expresie cron, de ex. `0 * * * *` pentru fiecare oră). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Pornește când Telegram trimite o actualizare webhook de bot către URL-ul webhook specific nodului. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Pornește când Discord trimite un webhook Interactions API către endpoint-ul specific nodului. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Interoghează periodic o căsuță poștală IMAP și pornește o dată pentru fiecare e-mail nou detectat. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Interoghează periodic o căsuță poștală IMAP și pornește o dată pentru fiecare e-mail nou detectat. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Pornește când Heym publică un eveniment de platformă. Evenimentele dintr-o fereastră de dispatch sosesc împreună ca un array. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Deschide o conexiune client de ieșire către un socket extern și pornește la evenimentele de socket selectate. |
 | [File Upload Trigger](../nodes/file-upload-trigger-node.md) | Generează un URL de încărcare de unică folosință și pornește când un apelant trimite un fișier multipart de dimensiuni mari. |

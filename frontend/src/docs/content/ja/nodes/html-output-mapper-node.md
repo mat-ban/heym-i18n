@@ -68,3 +68,5 @@ Trigger ノードを持たず、唯一の終端がこのノードである Workf
 - [Output](./output-node.md) – `result` ラッピングを伴うメッセージまたはスキーマベースのレスポンス
 - [Webhooks](../reference/webhooks.md) – execute エンドポイント、リクエストメソッド、レスポンス
 - [Node Types](../reference/node-types.md) – すべてのノードタイプ
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

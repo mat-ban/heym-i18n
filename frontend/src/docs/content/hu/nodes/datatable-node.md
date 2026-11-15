@@ -95,7 +95,7 @@ A `find` vagy `count` szűrőben egy egyszerű érték egyenlőséget jelent; eg
 | `$contains` | Kis- és nagybetűt nem megkülönböztető részstring-egyezés |
 | `$in` | Az érték szerepel a megadott tömbben |
 
-Példa több operátor kombinálására: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Az ismeretlen operátorokat a rendszer figyelmen kívül hagyja. Az `upsert` szűrők továbbra is pontos egyezésű értékeket használnak a frissítendő sor megtalálásához.
+Példa több operátor kombinálására: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Az ismeretlen operátorokat a rendszer figyelmen kívül hagyja. Az `upsert` szűrők továbbra is pontos egyezésű értékeket használnak a frissítendő sor megtalálásához.
 
 A sor metaadataira is szűrhet — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` —, amelyek valódi oszlopokként tárolódnak, nem az adatai között. Dátumok esetén adjon meg teljes értéket a tartomány-összehasonlításhoz (pl. `{"created_at": {"$gt": "2026-06-04"}}`), vagy használja a `$contains` operátort részleges szövegegyezéshez (pl. `{"created_at": {"$contains": "2026-06-04"}}`). Ha az Ön egyik oszlopa ugyanazt a nevet viseli, mint egy metaadat-mező, az adatoszlop élvez elsőbbséget.
 

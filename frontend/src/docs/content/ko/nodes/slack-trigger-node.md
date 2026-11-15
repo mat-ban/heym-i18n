@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym은 즉시 `200 OK`로 응답하고 백그라운드에서 워크플로우를 실행합니다 — 이는 Slack의 3초 응답 요구 사항을 충족합니다
 - Webhook URL은 노드 ID에서 파생되며, 워크플로우 이름이 변경되어도 절대 변경되지 않습니다
 - 워크플로우당 하나의 `slackTrigger` 노드만 필요합니다. 서로 다른 이벤트 타입을 라우팅하려면 다운스트림에서 **Switch** 또는 **Condition** 노드를 사용하십시오
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

@@ -2,6 +2,9 @@
 
 **Dashboard** 탭은 차트 위젯의 그리드를 구성하는 Grafana 스타일의 공간입니다. 각 위젯은 자체적인 숨겨진 Heym Workflow의 출력으로부터 렌더링되므로, Workflow에서 생성할 수 있는 모든 데이터 — 데이터베이스 쿼리, API 호출, RAG 조회, LLM 출력 — 을 차트로 만들 수 있습니다. 여러 개의 Dashboard를 유지하고 각각을 개인 또는 팀과 공유할 수 있습니다.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboards
 
 모든 사용자는 탭을 처음 열 때 생성되는 하나의 Dashboard로 시작합니다. 탭 상단의 Dashboard 선택기를 사용하여 Dashboard 간에 전환하고, 옆의 **+** 를 사용하여 새 Dashboard를 생성하십시오. 선택기에는 본인의 Dashboard가 먼저 나열되고, 그다음에 공유받은 Dashboard가 공유한 사람의 이름과 함께 표시됩니다.
@@ -27,6 +30,8 @@
 - **Entity relationships (DB)** (테이블, 필드, PK/FK 키 및 연결)
 - **Bar gauge** (빨강→초록 그라디언트와 값이 있는 행당 하나의 가로 게이지, 예: 여유 디스크 공간)
 - **Text** (markdown 메시지, 예: "Last execution at 19:47"과 같은 상태 메모. markdown이 정적인 경우 [interactive checkboxes](../nodes/chart-output-node.md#interactive-task-lists)를 지원하며, 사용자 지정 또는 내림차순 번호 매기기를 위한 [explicit numbered lists](../nodes/chart-output-node.md#numbered-lists)도 지원합니다)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (대기 중인 human review. 헤더에 `1/n pending`이 표시됩니다. Workflow 이름을 클릭하면 캔버스에서 해당 실행이 열립니다. **Approve**, **Request changes**, **Reject** 로 처리합니다. 위젯 제목 옆의 기록 아이콘은 이 페이지의 기록 대화상자에서 해당 실행을 엽니다. 이 위젯은 업스트림 행을 사용하지 않으며, 각 사용자는 자신의 큐를 봅니다. 대신 해당 Workflow를 열 수 있는 모든 사람을 위해 단일 Workflow의 검토를 표시할 수도 있습니다. [HITL 위젯](#hitl-wi-jes)을 참조하세요)
 
 차트 외에도 **Run a workflow** 위젯은 대시보드에서 바로 사용자의 Workflow 중 하나를 실행합니다. 드롭된 파일, 입력 필드 또는 Run 버튼으로 실행할 수 있습니다([실행 위젯](#run-widgets) 참조).
@@ -146,3 +151,5 @@
 ## 일정 및 데이터베이스 다이어그램
 
 위젯 추가에서 **Gantt**를 선택하면 완료 상황 및 종속성 링크와 함께 시간 경과에 따른 작업을 표시할 수 있고, **Entity relationships (DB)**를 선택하면 테이블, 필드 및 해당 관계를 매핑할 수 있습니다. 두 유형 모두 [Chart Output 노드](../nodes/chart-output-node.md#gantt-schedules)를 사용하며 Heym Work 페이지에서도 사용할 수 있습니다. Work가 일정이나 데이터베이스 스키마에 대한 위젯을 제안할 때 페이지를 작성하기 전에 제안된 작업이나 엔티티에서 미리보기를 그립니다.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

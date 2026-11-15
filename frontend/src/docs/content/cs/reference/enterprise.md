@@ -42,7 +42,7 @@ Praktická školení přizpůsobená úrovni dovedností a případům použití
 
 ## Nasazení Kubernetes
 
-Standardní průvodce [Provoz a nasazení](../getting-started/running-and-deployment.md) pokrývá Docker Compose pro produkční nastavení na jednom serveru. Zákazníci plánu Enterprise obdrží asistenci s produkčními nasazeními Kubernetes pro vysokou dostupnost a horizontální škálování:
+Standardní průvodce [Provoz a nasazení](../getting-started/running-and-deployment.md) pokrývá Docker Compose pro produkční nastavení na jednom serveru. [Kubernetes Deployment](../getting-started/kubernetes.md). Zákazníci plánu Enterprise obdrží asistenci s produkčními nasazeními Kubernetes pro vysokou dostupnost a horizontální škálování:
 
 - **Více worker nodů** — Distribuce backendových workerů Heym napříč více Kubernetes nody pro redundanci a vyvažování zátěže
 - **Sidecar kontejnery** — Konfigurace sidecar vzorů pro sběr logů, monitorovací agenty, service meshes (Istio, Linkerd) a injektování secretů (Vault)

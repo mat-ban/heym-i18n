@@ -50,3 +50,8 @@ Dnevniki, podprti z Dockerjem, so privzeto onemogočeni v samo-gostovanih namest
 - [Zavihek Analitika](./analytics-tab.md) – Metrični podatki izvajanja
 - [Zavihek Workflows](./workflows-tab.md) – Upravljanje workflow
 - [Kontekstna Predstavitev](../reference/contextual-showcase.md) – Kompaktni vodnik po straneh nadzorne plošče
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Usmerjanje simptomov ob izvajanju v ustrezen postopek za incidente
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnosticiranje napak baze podatkov, storitev, gruče in peskovnika (sandbox)

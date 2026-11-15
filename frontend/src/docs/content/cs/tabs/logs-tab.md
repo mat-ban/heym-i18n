@@ -50,3 +50,8 @@ Pokud je registrace otevřená, vytvořte důvěryhodný admin účet před povo
 - [Analytics Tab](./analytics-tab.md) – Metriky spouštění
 - [Workflows Tab](./workflows-tab.md) – Správa workflow
 - [Contextual Showcase](../reference/contextual-showcase.md) – Kompaktní průvodce stránkou pro dashboard plochy
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Směrování příznaků za běhu k příslušnému postupu řešení incidentu
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Diagnostika selhání databáze, služeb, clusteru a sandboxu

@@ -2,6 +2,9 @@
 
 Der Reiter **Dashboard** ist ein Arbeitsbereich im Grafana-Stil, in dem Sie Raster aus Diagramm-Widgets zusammenstellen. Jedes Widget wird aus der Ausgabe seines eigenen verdeckten Heym-Workflows gerendert — alle Daten, die Sie in einem Workflow erzeugen können (Datenbankabfragen, API-Aufrufe, RAG-Abfragen, LLM-Ausgaben), lassen sich so als Diagramm darstellen. Sie können mehrere Dashboards verwalten und jedes davon mit einzelnen Personen oder Teams teilen.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboards
 
 Jeder Benutzer beginnt mit einem Dashboard, das beim ersten Öffnen des Reiters automatisch angelegt wird. Über die Dashboard-Auswahl oben im Reiter wechseln Sie zwischen Dashboards, und mit **+** daneben erstellen Sie ein neues. Die Auswahl listet zuerst Ihre eigenen Dashboards auf und danach die mit Ihnen geteilten, versehen mit dem Namen der Person, die sie freigegeben hat.
@@ -27,6 +30,8 @@ Ein Widget ist ein einzelnes Diagramm im Raster. Unterstützte Diagrammtypen:
 - **Entity relationships (DB)** (Tabellen, Felder, PK/FK-Schlüssel und Verbindungen)
 - **Bar gauge** (eine horizontale Anzeige pro Zeile mit Rot→Grün-Verlauf und Wert, z. B. freier Speicherplatz)
 - **Text** (eine Markdown-Nachricht, z. B. eine Statusnotiz wie „Letzte Ausführung um 19:47"; unterstützt [interaktive Kontrollkästchen](../nodes/chart-output-node.md#interactive-task-lists) bei statischem Markdown sowie [explizite nummerierte Listen](../nodes/chart-output-node.md#numbered-lists) für benutzerdefinierte oder absteigende Nummerierung)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (Ihre ausstehenden menschlichen Prüfungen. Die Kopfzeile zeigt `1/n pending`. Der Workflow-Name öffnet diesen Lauf auf der Arbeitsfläche. **Approve**, **Request changes** und **Reject** schließen ihn ab. Das Verlaufssymbol neben dem Widget-Titel öffnet diesen Lauf im Verlaufsdialog auf dieser Seite. Das Widget verwendet keine vorgelagerten Zeilen, und jede Person sieht ihre eigene Warteschlange. Es kann stattdessen die Prüfungen eines Workflows anzeigen, für alle, die diesen Workflow öffnen können; siehe [HITL-Widgets](#hitl-widgets))
 
 Neben Diagrammen führt ein **Run a workflow**-Widget einen Ihrer Workflows direkt über das Dashboard aus: über eine abgelegte Datei, über seine Eingabefelder oder über eine Schaltfläche **Run**; siehe [Ausführungs-Widgets](#run-widgets).
@@ -148,3 +153,5 @@ Das Entfernen einer Freigabe oder das Herabstufen von Schreiben auf Lesen wird s
 ## Zeitpläne und Datenbankdiagramme
 
 Wählen Sie **Gantt** unter „Ein Widget hinzufügen“, um Aufgaben im Zeitverlauf mit Fertigstellung und Abhängigkeitsverknüpfungen darzustellen, oder **Entity relationships (DB)**, um Tabellen, Felder und deren Beziehungen abzubilden. Beide Typen nutzen den [Chart-Output-Knoten](../nodes/chart-output-node.md#gantt-schedules) und stehen auch auf Heym Work-Seiten zur Verfügung. Schlägt Work Widgets für einen Zeitplan oder ein Datenbankschema vor, generiert es Vorschauen anhand der vorgeschlagenen Aufgaben oder Entitäten.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

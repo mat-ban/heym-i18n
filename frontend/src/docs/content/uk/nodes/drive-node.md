@@ -116,6 +116,8 @@
 
 Посилання на вміст base64 далі за потоком: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Зображення, повернуті через `file_base64`, відображаються безпосередньо на панелі налагодження під час запуску робочого процесу.
 
 ## Приклад — Перелік файлів Drive

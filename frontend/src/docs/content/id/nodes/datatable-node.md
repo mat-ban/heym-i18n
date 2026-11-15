@@ -95,7 +95,7 @@ Dalam filter `find` atau `count`, nilai biasa berarti sama dengan; nilai objek m
 | `$contains` | Pencocokan substring tanpa membedakan huruf besar/kecil |
 | `$in` | Nilai ada dalam array yang diberikan |
 
-Contoh menggabungkan beberapa: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Operator yang tidak dikenal akan diabaikan. Filter `upsert` tetap menggunakan nilai pencocokan persis untuk menemukan baris yang akan diperbarui.
+Contoh menggabungkan beberapa: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Operator yang tidak dikenal akan diabaikan. Filter `upsert` tetap menggunakan nilai pencocokan persis untuk menemukan baris yang akan diperbarui.
 
 Anda juga dapat memfilter berdasarkan metadata baris — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — yang disimpan sebagai kolom sesungguhnya, bukan di dalam data Anda. Untuk tanggal, berikan nilai lengkap untuk perbandingan rentang (misalnya `{"created_at": {"$gt": "2026-06-04"}}`) atau gunakan `$contains` untuk pencocokan teks sebagian (misalnya `{"created_at": {"$contains": "2026-06-04"}}`). Jika salah satu kolom Anda memiliki nama yang sama dengan field metadata, kolom data yang diutamakan.
 

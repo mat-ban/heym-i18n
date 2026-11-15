@@ -16,6 +16,7 @@
 |-----------|------|-------------|
 | `label` | string | 节点标识符（camelCase） |
 | `conversion` | string | `csvToJson`（CSV 文本 → 行对象数组）、`jsonToCsv`（对象/行数组 → CSV 文本）、`xmlToJson`（XML 文本 → 对象）、`jsonToXml`（对象 → XML 文本）、`imageToText`（对图像进行 OCR）、`pdfToText`（对每个选定的 PDF 页面进行 OCR）或 `fileConvert`（以另一种格式重写已存储的文件） |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | 要转换的数据。留空则使用节点的第一个输入 |
 | `delimiter` | string | 单字符字段分隔符（默认 `,`） |
 | `hasHeader` | boolean | 仅 `csvToJson` — 将第一行视为表头（默认 `true`） |
@@ -169,3 +170,6 @@ OCR 会调用 `tesseract` 和 poppler 的 `pdftoppm`，文档转换则使用 pan
 - [Drive](./drive-node.md) – 存储、获取和分享文件
 - [Node Types](../reference/node-types.md) – 所有节点类型概览
 - [Expression DSL](../reference/expression-dsl.md) – 函数与语法
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

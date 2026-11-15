@@ -84,7 +84,8 @@
     "dropFileOrClick": "Пуснете файл тук или щракнете за избор",
     "removeFile": "Премахване на файла",
     "chooseFileFor": "Изберете файл за {label}",
-    "new": "Нов"
+    "new": "Нов",
+    "clearSearch": "Изчистване на търсенето"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Активирай",
     "disablePlugin": "Деактивирай",
     "uninstallPlugin": "Деинсталирай",
-    "pluginOperationFailed": "Операцията с добавката е неуспешна"
+    "pluginOperationFailed": "Операцията с добавката е неуспешна",
+    "users": "Потребители",
+    "encryption": "Криптиране"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Копиране на ID за проследяване",
     "openTrace": "Отваряне на проследяване",
     "message": "Съобщение",
-    "emptyReply": "Празен отговор."
+    "emptyReply": "Празен отговор.",
+    "timeRange3h": "Последните 3 часа",
+    "timeRange6h": "Последните 6 часа"
   },
   "tables": {
     "title": "Таблици с данни",
@@ -1215,7 +1220,9 @@
     "browseAll": "Преглед на всички →",
     "askAi": "Попитайте AI",
     "dropToImport": "Пуснете JSON или ZIP за импортиране",
-    "noWorkflowsMatch": "Няма Workflows, отговарящи на този филтър."
+    "noWorkflowsMatch": "Няма Workflows, отговарящи на този филтър.",
+    "noWorkflowsMatchAll": "Опитайте с друго заглавие, описание или име на папка.",
+    "noWorkflowsMatchFilter": "Опитайте с друго заглавие, описание, име на папка или филтър за състояние."
   },
   "schedules": {
     "title": "Графици",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Стартирано от MCP клиент",
     "newChatTitle": "Нов Chat",
     "subtitle": "Изпълнявайте Workflows и задавайте въпроси",
-    "modelsLoadFailedDisabled": "Списъкът с модели на тези идентификационни данни не можа да бъде зареден. Chat остава изключен, докато не може да бъде получен модел."
+    "modelsLoadFailedDisabled": "Списъкът с модели на тези идентификационни данни не можа да бъде зареден. Chat остава изключен, докато не може да бъде получен модел.",
+    "dropFilesToAttach": "Пуснете файлове за прикачване",
+    "attachFiles": "Прикачване на файлове"
   },
   "teams": {
     "title": "Екипи",
@@ -1883,7 +1892,8 @@
       "skipped": "Пропуснато"
     },
     "permissionRead": "четене",
-    "permissionWrite": "запис"
+    "permissionWrite": "запис",
+    "details": "Подробности"
   },
   "mcp": {
     "title": "MCP Server",
@@ -2197,7 +2207,8 @@
       "actions": "Действия",
       "failedToLoadWidget": "Неуспешно зареждане на widget",
       "failedToUpdateCheckbox": "Неуспешно обновяване на отметката",
-      "refreshDashboard": "Обновяване на таблото"
+      "refreshDashboard": "Обновяване на таблото",
+      "revertPrevious": "Възстановяване на предишното"
     },
     "hitl": {
       "previousReview": "Предишно ревю",

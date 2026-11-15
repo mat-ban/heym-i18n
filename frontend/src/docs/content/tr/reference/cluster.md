@@ -92,6 +92,10 @@ Bu aynı zamanda yükseltme sırasını da tanımlar. Önce main'i yükseltmek h
 
 **Worker instance'larının giden IP'si farklıdır.** Kaynak adresleri allowlist'e alan her API yeni adresi görür. Send Email tam da bu nedenle main üzerinde çalışır; HTTP düğümü için ya cluster'a tek bir NAT çıkış adresi verin ya da her instance'ı allowlist'e alın.
 
+
+
+For Kubernetes workers, see [Kubernetes Deployment → Load distribution](../getting-started/kubernetes.md#load-distribution).
+
 ## Başka bir makinede worker ekleme
 
 Depo kökündeki `docker-compose.worker.yml`, bir worker'ı kendi ana makinesinde çalıştırır. Veritabanı ve UI'si yoktur: main instance'ının PostgreSQL'ine ulaşır ve arka plan çalışmalarından kendi payını alır.
@@ -124,7 +128,7 @@ Bunların hiçbiri tek instance'lık bir kurulumda görünmez: alanlar boştur, 
 
 **Bir worker çalışma ortasında çökerse**, heartbeat'i bayatlar ve leader'ın mevcut kurtarma taraması execution'ı canlı bir instance üzerinde yeniden çalıştırır. Sahiplendiği kuyruk satırı ayrı olarak kapatılır: bu satır için etkin bir execution kalmadığında ve iki dakikalık bir ek süre geçtiğinde, leader satırı başarısız olarak işaretler ve sonucu bekleyen kim varsa onu uyandırır. Tek başına yaş hiçbir zaman tetikleyici değildir, bu nedenle meşru şekilde uzun süren bir çalışma olduğu gibi bırakılır; ve satır yeniden kuyruğa alınmak yerine başarısız olarak işaretlenir, çünkü kurtarma zaten yeniden çalıştırmanın sahibidir ve yeniden kuyruğa alma aynı workflow'u iki kez çalıştırırdı.
 
-**Main çökerse**, cron bir worker'dan ateşlenmeye devam eder ve dağıtılabilir çalışmalar yürütülmeye devam eder. Main'e ihtiyaç duyan çalışmalar kuyruğa girip bekler ve main geri döndüğünde boşalır — ancak yalnızca misfire ek süresi penceresi içinde (`HEYM_CRON_MISFIRE_GRACE_SECONDS`, varsayılan olarak 600 saniye). Bundan daha eski olan her şey, saatlerce birikmiş işi tek seferde yeniden oynatmak yerine, nedeni kaydedilerek atlanmış olarak kapatılır.
+**Main çökerse**, cron bir worker'dan ateşlenmeye devam eder ve dağıtılabilir çalışmalar yürütülmeye devam eder. Main'e ihtiyaç duyan çalışmalar kuyruğa girip bekler ve main geri döndüğünde boşalır — ancak yalnızca misfire ek süresi penceresi içinde (`CRON_MISFIRE_GRACE_SECONDS`, varsayılan olarak 600 saniye). Bundan daha eski olan her şey, saatlerce birikmiş işi tek seferde yeniden oynatmak yerine, nedeni kaydedilerek atlanmış olarak kapatılır.
 
 Main çökmüşken UI, API, MCP ve editör kullanılamaz, çünkü giriş noktaları oraya yönlenir.
 

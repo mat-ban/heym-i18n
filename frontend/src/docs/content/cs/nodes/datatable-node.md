@@ -95,7 +95,7 @@ Ve filtru `find` nebo `count` prostá hodnota znamená rovnost; objektová hodno
 | `$contains` | Podřetězec bez rozlišení velikosti písmen |
 | `$in` | Hodnota je v daném poli |
 
-Příklad kombinující několik operátorů: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Neznámé operátory jsou ignorovány. Filtry `upsert` stále používají hodnoty s přesnou shodou pro nalezení řádku k aktualizaci.
+Příklad kombinující několik operátorů: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Neznámé operátory jsou ignorovány. Filtry `upsert` stále používají hodnoty s přesnou shodou pro nalezení řádku k aktualizaci.
 
 Můžete také filtrovat podle metadat řádku — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — která jsou uložena jako skutečné sloupce, nikoli uvnitř vašich dat. Pro data předávejte plnou hodnotu pro porovnání rozsahu (např. `{"created_at": {"$gt": "2026-06-04"}}`) nebo použijte `$contains` pro částečnou textovou shodu (např. `{"created_at": {"$contains": "2026-06-04"}}`). Pokud se některý z vašich vlastních sloupců jmenuje stejně jako pole metadat, má datový sloupec přednost.
 

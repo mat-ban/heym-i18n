@@ -95,7 +95,7 @@ Bir `find` veya `count` filtresinde, düz bir değer eşittir anlamına gelir; b
 | `$contains` | Büyük/küçük harf duyarsız alt dize eşleşmesi |
 | `$in` | Değer verilen dizide bulunur |
 
-Birkaçını birleştiren örnek: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Bilinmeyen operatörler yok sayılır. `upsert` filtreleri, güncellenecek satırı bulmak için hâlâ tam eşleşme değerlerini kullanır.
+Birkaçını birleştiren örnek: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Bilinmeyen operatörler yok sayılır. `upsert` filtreleri, güncellenecek satırı bulmak için hâlâ tam eşleşme değerlerini kullanır.
 
 Ayrıca satır meta verileri üzerinde de filtreleme yapabilirsiniz — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — bunlar verilerinizin içinde değil, gerçek sütunlar olarak saklanır. Tarihler için, aralık karşılaştırmaları için tam bir değer iletin (örn. `{"created_at": {"$gt": "2026-06-04"}}`) veya kısmi metin eşleşmesi için `$contains` kullanın (örn. `{"created_at": {"$contains": "2026-06-04"}}`). Kendi sütunlarınızdan biri bir meta veri alanıyla aynı ada sahipse, veri sütunu öncelik kazanır.
 

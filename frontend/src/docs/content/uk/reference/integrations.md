@@ -19,7 +19,7 @@ Heym підключається до зовнішніх сервісів чер�
 | **Linear** | [Вузол Linear](../nodes/linear-node.md) | `api_key` або `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Вузол Sentry](../nodes/sentry-node.md) | `api_token`, необов'язковий `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Оцінювання](../tabs/evals-tab.md) (суддя LLM-as-Judge) | `base_url`, необов'язковий `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Оцінювання](../tabs/evals-tab.md) (суддя LLM-as-Judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, необов'язковий `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | облікові дані моделі прийняття рішень, а також параметри моделей, що посилаються на інші Ваші облікові дані |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Векторні сховища | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Heym підключається до зовнішніх сервісів чер�
 | **Grist** | [Вузол Grist](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Вузол Google Sheets](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + згода OAuth2 |
 | **Google Drive** | [Вузол Google Drive](../nodes/google-drive-node.md) | `client_id`, `client_secret` + згода OAuth2 (повний обсяг доступу Drive) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [Вузол BigQuery](../nodes/bigquery-node.md) | `client_id`, `client_secret` + згода OAuth2 |
 | **Supabase** | [Вузол Supabase](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, необов'язковий `supabase_schema` |
 | **ClickHouse** | [Вузол ClickHouse](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -896,3 +897,6 @@ OpenAI автоматично кешує статичний (незмінний)
 
 Назви варіантів — це те, з-поміж чого обирає модель прийняття рішень, тож вони мають бути
 унікальними. Варіант не може вказувати на інший Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

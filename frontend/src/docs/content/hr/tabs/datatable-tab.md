@@ -122,3 +122,6 @@ Ako nijedan redak ne odgovara, model se navodi pod obavijesti **Unpriced models*
 - [Traces Tab](./traces-tab.md) - Koristi LLM Cost Table za trošak donut i KPI kartice
 - [Grist Node](../nodes/grist-node.md) - Alternativa vanjskom proračunu
 - [Variables Tab](./global-variables-tab.md) - Alternativa za pohranu ključ-vrijednost
+## Pretraživanje
+
+Koristite polje za pretraživanje iznad popisa tablica ili pritisnite **Ctrl+F** (ili **Cmd+F**) za filtriranje tablica prema nazivu ili opisu tijekom tipkanja. Pritisnite **Escape** za brisanje pretraživanja.

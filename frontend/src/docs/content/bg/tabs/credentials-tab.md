@@ -93,3 +93,7 @@ API Base URL** празен запазва съществуващия Enterprise
 - [Vectorstores Tab](./vectorstores-tab.md) – Използва Qdrant или Postgres (pgvector) удостоверения
 - [Chat Tab](./chat-tab.md) – Използва OpenAI/Google удостоверения
 - [Contextual Showcase](../reference/contextual-showcase.md) – Компактно ръководство за страници на таблото
+
+## Търсене
+
+Използвайте полето за търсене над списъка или натиснете **Ctrl+F** (или **Cmd+F**), за да филтрирате идентификационните данни по име или тип, докато пишете. Натиснете **Escape**, за да изчистите търсенето.

@@ -16,6 +16,7 @@ Il nodo **IMAP Trigger** esegue il polling di una casella di posta elettronica a
 |-----------|------|-------------|
 | `credentialId` | UUID | Credenziale `imap` contenente server, login, casella di posta e impostazioni SSL |
 | `pollIntervalMinutes` | Integer | Frequenza con cui Heym controlla la casella di posta per nuove email |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Guida alla configurazione
 
@@ -62,6 +63,8 @@ Dopo l'attivazione del nodo, i nodi a valle possono accedere a:
 | `$nodeLabel.email.text` | Corpo in testo semplice |
 | `$nodeLabel.email.html` | Corpo HTML |
 | `$nodeLabel.email.attachments` | Array di metadati degli allegati (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Oggetto degli header decodificato |
 | `$nodeLabel.email.uid` | IMAP UID per deduplicazione o logging |
 | `$nodeLabel.triggered_by` | Etichetta dell'origine del trigger (`"imap"`) |

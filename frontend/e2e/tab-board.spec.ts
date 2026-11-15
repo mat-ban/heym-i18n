@@ -97,6 +97,31 @@ async function createBoardWithCard(
   return { boardId: board.id, cardId: card.id, columns };
 }
 
+async function contrastRatio(locator: Locator): Promise<number> {
+  return locator.evaluate((element) => {
+    const rgba = (value: string): number[] => value.match(/[\d.]+/g)!.map(Number);
+    const luminance = (rgb: number[]): number => {
+      const linear = rgb.map((channel) => {
+        const value = channel / 255;
+        return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+      });
+      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+    };
+    const backgrounds: number[][] = [];
+    for (let node: Element | null = element; node; node = node.parentElement) {
+      backgrounds.unshift(rgba(getComputedStyle(node).backgroundColor));
+    }
+    const background = backgrounds.reduce((base, color) => {
+      const alpha = color[3] ?? 1;
+      return base.map((channel, index) => color[index] * alpha + channel * (1 - alpha));
+    }, [255, 255, 255]);
+    const foreground = rgba(getComputedStyle(element).color).slice(0, 3);
+    const light = luminance(foreground);
+    const dark = luminance(background);
+    return (Math.max(light, dark) + 0.05) / (Math.min(light, dark) + 0.05);
+  });
+}
+
 async function dispatchSingleTouch(
   target: Locator,
   type: "touchstart" | "touchmove" | "touchend" | "touchcancel",
@@ -568,10 +593,12 @@ test("keeps desktop card drag and drop working", async ({ page }) => {
     .toBe(planning.id);
 });
 
-test("moves a card to the top whenever it is updated", async ({ page }) => {
-  const { boardId, cardId, columns } = await createBoardWithCard(page, "Older card");
+test("keeps a card's place when it is updated and keeps a dragged order", async ({ page }) => {
+  const mapperCredentialId = await setUpMapperCredential(page);
+  const { boardId, cardId, columns } = await createBoardWithCard(page, "Older card", {
+    mapperCredentialId,
+  });
   const backlog = columns.find((column) => column.name === "Backlog")!;
-  await page.waitForTimeout(20);
   const newerCard = await (
     await page.request.post(`/api/boards/${boardId}/cards`, {
       data: { title: "Newer card", column_id: backlog.id },
@@ -580,6 +607,7 @@ test("moves a card to the top whenever it is updated", async ({ page }) => {
 
   await page.goto(`/?tab=board&board=${boardId}`);
   const cards = page.getByTestId(`board-column-cards-${backlog.id}`).locator("[data-board-card]");
+  // A new card goes on top of its column.
   await expect(cards.nth(0)).toContainText("Newer card");
   await expect(cards.nth(1)).toContainText("Older card");
 
@@ -589,9 +617,75 @@ test("moves a card to the top whenever it is updated", async ({ page }) => {
   await expect(page.getByTestId("card-description-saved")).toBeVisible();
   await page.keyboard.press("Escape");
 
+  // Editing a card no longer moves it.
+  await expect(cards.nth(0)).toContainText("Newer card");
+  await expect(cards.nth(1)).toContainText("Older card");
+
+  // Drop the older card above the newer one; the order survives a reload.
+  const dataTransfer = await page.evaluateHandle(() => new DataTransfer());
+  await page.getByTestId(`board-card-${cardId}`).dispatchEvent("dragstart", { dataTransfer });
+  await page.getByTestId("board-column-Backlog").dispatchEvent("drop", { dataTransfer });
+  await expect(cards.nth(0)).toContainText("Older card");
+  await page.reload();
   await expect(cards.nth(0)).toContainText("Older card");
   await expect(cards.nth(1)).toContainText("Newer card");
   await expect(page.getByTestId(`board-card-${newerCard.id}`)).toBeVisible();
+});
+
+test("sets a card's assignee, priority, due date and labels and shows them", async ({ page }) => {
+  const mapperCredentialId = await setUpMapperCredential(page);
+  const { boardId, cardId } = await createBoardWithCard(page, "NDA for Acme", {
+    mapperCredentialId,
+  });
+  const members = await (await page.request.get(`/api/boards/${boardId}/members`)).json() as
+    { user_id: string; name: string | null; email: string }[];
+  const owner = members[0];
+
+  await page.goto(`/?tab=board&board=${boardId}`);
+  await page.getByTestId(`board-card-${cardId}`).click();
+  await page.locator("#card-field-assignee").click();
+  await page.getByRole("option", { name: owner.name || owner.email, exact: true }).click();
+  await page.locator("#card-field-priority").click();
+  await page.getByRole("option", { name: "Urgent", exact: true }).click();
+  await page.getByTestId("card-field-due").fill("2020-01-15");
+  await page.getByTestId("card-field-labels").fill("Acme, NDA");
+  await page.getByTestId("card-fields-save").click();
+  await expect(page.getByText("Details saved")).toBeVisible();
+  await page.keyboard.press("Escape");
+
+  await expect(page.getByTestId(`board-card-priority-${cardId}`)).toContainText("Urgent");
+  await expect(page.getByTestId(`board-card-due-${cardId}`)).toHaveAttribute("data-due", "overdue");
+  await expect(page.getByTestId(`board-card-assignee-${cardId}`)).toContainText(
+    owner.name || owner.email,
+  );
+  await expect(page.getByTestId(`board-card-label-${cardId}`)).toHaveCount(2);
+
+  const state = await (await page.request.get(`/api/boards/${boardId}`)).json();
+  const saved = (state.cards as { id: string; fields: { priority: string; labels: string[] } }[])
+    .find((card) => card.id === cardId)!;
+  expect(saved.fields.priority).toBe("urgent");
+  expect(saved.fields.labels).toEqual(["Acme", "NDA"]);
+});
+
+test("refuses to overwrite a card someone else changed", async ({ page }) => {
+  const mapperCredentialId = await setUpMapperCredential(page);
+  const { boardId, cardId } = await createBoardWithCard(page, "Shared card", {
+    mapperCredentialId,
+  });
+  await page.goto(`/?tab=board&board=${boardId}`);
+  await page.getByTestId(`board-card-${cardId}`).click();
+  await page.locator("#card-field-priority").click();
+  await page.getByRole("option", { name: "Low", exact: true }).click();
+
+  // Someone else sets the priority while the dialog is open.
+  const other = await page.request.patch(`/api/boards/${boardId}/cards/${cardId}`, {
+    data: { priority: "high" },
+  });
+  expect(other.ok()).toBeTruthy();
+
+  await page.getByTestId("card-fields-save").click();
+  await expect(page.getByText("This card was changed by someone else.")).toBeVisible();
+  await expect(page.locator("#card-field-priority")).toHaveValue("High");
 });
 
 test("runs a column workflow chain to completion when a card enters", async ({ page }) => {
@@ -959,6 +1053,99 @@ test("opens card detail, saves the description and posts a comment", async ({ pa
   await page.getByTestId("card-comment-input").fill("Focus on developer onboarding");
   await page.getByTestId("card-comment-submit").click();
   await expect(page.getByText("Focus on developer onboarding")).toBeVisible();
+});
+
+test("previews Markdown descriptions without saving or losing edits in a wider dialog", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const { boardId, cardId } = await createBoardWithCard(page, "Formatted brief");
+  await page.goto(`/?tab=board&board=${boardId}`);
+  await page.getByTestId(`board-card-${cardId}`).click();
+
+  const dialog = page.getByRole("dialog", { name: "Formatted brief", exact: true });
+  await expect.poll(async () => (await dialog.boundingBox())?.width ?? 0).toBe(896);
+  await dialog.getByRole("button", { name: "Preview", exact: true }).click();
+  const preview = page.getByTestId("card-description-preview");
+  await expect(preview).toContainText("No description yet.");
+  await expect(page.getByTestId("card-description-save")).toHaveCount(0);
+  await dialog.getByRole("button", { name: "Edit", exact: true }).click();
+
+  const markdown = [
+    "## Launch plan",
+    "Share the **beta brief** with [the team](https://example.com).",
+    "- Collect feedback",
+    "",
+    "```text",
+    "A long code sample " + "word ".repeat(100),
+    "```",
+    "",
+    "| Task | Owner |",
+    "| --- | --- |",
+    "| Review | Team |",
+    '<img src="x" onerror="window.__boardPreviewUnsafe = true">',
+    '<a href="javascript:alert(1)">Unsafe link</a>',
+  ].join("\n");
+  const editor = page.getByPlaceholder("Describe the job for this card");
+  await editor.fill(markdown);
+  await dialog.getByRole("button", { name: "Preview", exact: true }).click();
+  await expect(dialog.getByRole("button", { name: "Edit", exact: true }))
+    .toHaveAttribute("aria-pressed", "true");
+  await expect(preview.getByRole("heading", { name: "Launch plan" })).toBeVisible();
+  await expect(preview.locator("strong")).toHaveText("beta brief");
+  await expect(preview.getByRole("listitem")).toHaveText("Collect feedback");
+  await expect(preview.getByRole("link", { name: "the team" }))
+    .toHaveAttribute("href", "https://example.com");
+  expect(await contrastRatio(preview.getByRole("link", { name: "the team" })))
+    .toBeGreaterThanOrEqual(4.5);
+  await expect(preview.getByRole("cell", { name: "Review", exact: true })).toBeVisible();
+  await expect(preview.locator("[onerror], a[href^='javascript:'], script")).toHaveCount(0);
+  await expect(editor).toHaveCount(0);
+  const unsaved = await page.request.get(`/api/boards/${boardId}/cards/${cardId}`);
+  expect((await unsaved.json()).card.content).toBe("");
+  await dialog.screenshot({ path: testInfo.outputPath("description-preview-desktop.png") });
+
+  await dialog.getByRole("button", { name: "Edit", exact: true }).click();
+  await expect(editor).toHaveValue(markdown);
+  await dialog.getByRole("button", { name: "Preview", exact: true }).click();
+  await page.getByTestId("card-description-save").click();
+  await expect(page.getByTestId("card-description-saved")).toBeVisible();
+  const saved = await page.request.get(`/api/boards/${boardId}/cards/${cardId}`);
+  expect((await saved.json()).card.content).toBe(markdown);
+
+  await page.keyboard.press("Escape");
+  await page.getByTestId(`board-card-${cardId}`).click();
+  await expect(editor).toHaveValue(markdown);
+  await expect(preview).toHaveCount(0);
+
+  await page.setViewportSize({ width: 320, height: 800 });
+  await dialog.getByRole("button", { name: "Preview", exact: true }).click();
+  await expect(preview).toBeVisible();
+  const mobileLayout = await dialog.evaluate((element) => ({
+    width: element.getBoundingClientRect().width,
+    scrollWidth: element.scrollWidth,
+    clientWidth: element.clientWidth,
+  }));
+  expect(mobileLayout.width).toBeLessThanOrEqual(288);
+  expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
+  await dialog.screenshot({ path: testInfo.outputPath("description-preview-mobile.png") });
+});
+
+test("keeps label chips readable in both themes and exposes their full names", async ({ page }) => {
+  const { boardId, cardId } = await createBoardWithCard(page, "Labeled brief");
+  const label = "Customer onboarding project";
+  const response = await page.request.patch(`/api/boards/${boardId}/cards/${cardId}`, {
+    data: { labels: [label] },
+  });
+  expect(response.ok()).toBeTruthy();
+  await page.goto(`/?tab=board&board=${boardId}`);
+
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate((value) => localStorage.setItem("theme", value), theme);
+    await page.reload();
+    const chip = page.getByTestId(`board-card-label-${cardId}`);
+    await expect(chip).toBeVisible();
+    await expect(chip).toHaveAttribute("title", label);
+    expect(await contrastRatio(chip), `${theme} label contrast`).toBeGreaterThanOrEqual(4.5);
+  }
 });
 
 test("attaches a file to a card and removes it", async ({ page }) => {

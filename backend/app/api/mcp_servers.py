@@ -33,6 +33,7 @@ from app.api.mcp import (
     build_tools_with_chat,
     dispatch_chat_tool_call,
     get_credentials_context_for_user,
+    session_user_active,
     validate_chat_tool_credential,
 )
 from app.api.workflow_run_audit import RunActor, audit_workflow_run
@@ -124,6 +125,7 @@ def _server_response(
         api_key_set=bool(server.api_key),
         created_at=server.created_at,
         workflow_ids=workflow_ids,
+        endpoint_path=getattr(server, "endpoint_path", "mcp") or "mcp",
         chat_tool=MCPChatToolConfig(
             # `chat_enabled` is a column default, so it is still None before the
             # INSERT that a freshly created server has not yet had.
@@ -146,6 +148,7 @@ def _session_server_from_id(server_id: uuid.UUID, user_id: uuid.UUID) -> MCPServ
         user_id=user_id,
         name="",
         api_key="",
+        endpoint_path="mcp",
     )
 
 
@@ -175,6 +178,11 @@ async def _get_named_server_context(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Session token not valid for this server",
             )
+        if not await session_user_active(user_id_str):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or expired session token",
+            )
         user = _session_user_from_id(user_id_str)
         return user, _session_server_from_id(server_id, user.id)
 
@@ -203,7 +211,7 @@ async def _get_named_server_context(
             )
         user_res = await db.execute(select(User).where(User.id == token_record.user_id))
         user = user_res.scalar_one_or_none()
-        if user is None:
+        if user is None or not user.is_active:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
         server_res = await db.execute(
             select(MCPServer).where(MCPServer.id == server_id, MCPServer.user_id == user.id)
@@ -231,7 +239,7 @@ async def _get_named_server_context(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API key")
     user_res = await db.execute(select(User).where(User.id == server.user_id))
     user = user_res.scalar_one_or_none()
-    if user is None:
+    if user is None or not user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     return user, server
 
@@ -285,6 +293,7 @@ async def create_mcp_server(
         user_id=current_user.id,
         name=body.name,
         api_key=hash_secret(api_key),
+        endpoint_path="mcp",
     )
     db.add(server)
     await db.commit()
@@ -448,6 +457,8 @@ async def named_server_sse(
     )
 
 
+@router.post("/{server_id}/mcp", response_model=None)
+@router.post("/{server_id}/mcp/", response_model=None, include_in_schema=False)
 @router.post("/{server_id}/sse", response_model=None)
 async def named_server_sse_post(
     server_id: uuid.UUID,
@@ -610,6 +621,7 @@ async def _dispatch_named_server_jsonrpc(
                 trace_user_id=user.id,
                 actor_user_id=user.id,
                 cancel_event=cancel_event,
+                timeout_seconds=getattr(target_workflow, "workflow_timeout_seconds", None),
                 concurrency_limit=target_workflow.concurrency_limit,
                 on_queued="return",
             )

@@ -368,3 +368,6 @@ Egy `table` egyik oszlopa gombokká alakítható, amelyek egy linket nyitnak meg
 Csak a `http://` és `https://` címek, valamint az egyetlen `/` jellel kezdődő útvonalak válnak gombbá. Bármely más érték, például `javascript:` vagy `//host`, egyszerű szöveg marad, az üres cella pedig nem jelenít meg semmit.
 
 A gomb a [sorlink](../tabs/dashboard-tab.md#detail-pages) mellett is működik: a gombra kattintva a link új lapon nyílik meg, a sor bármely más pontjára kattintva pedig továbbra is a részletes oldal nyílik meg.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

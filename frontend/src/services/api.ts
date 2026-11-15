@@ -17,7 +17,15 @@ import type {
   AlertTeamShareEntry,
   AlertUpdatePayload,
 } from "@/types/alerts";
-import type { LoginRequest, PasswordChangeRequest, RegisterRequest, User, UserUpdateRequest } from "@/types/auth";
+import type {
+  LoginRequest,
+  LoginResponse,
+  PasswordChangeRequest,
+  RegisterRequest,
+  User,
+  UserUpdateRequest,
+} from "@/types/auth";
+import type { FileAttachmentPayload } from "@/types/chat";
 import type {
   CreateTemplateRequest,
   NodeTemplate,
@@ -151,6 +159,7 @@ import type {
 } from "@/types/agentMemory";
 import type { ExpressionGenerateRequest, ExpressionGenerateResponse } from "@/types/expression";
 import type {
+  ChatWidgetChange,
   DashboardData,
   DashboardShare,
   DashboardSharePermission,
@@ -167,10 +176,12 @@ import type {
   WidgetUpdateRequest,
 } from "@/types/dashboard";
 import type { FileRunResult } from "@/types/quickDrawer";
+import type { RagIngestJobList } from "@/types/ragIngest";
 import type {
   BoardCard,
   BoardColumn,
   BoardCreatePayload,
+  BoardMember,
   BoardShare,
   BoardTeamShare,
   BoardUpdatePayload,
@@ -186,6 +197,7 @@ import type {
 import type {
   AssistantToolEndEvent,
   AssistantToolStartEvent,
+  ChatLiveEvent,
   Conversation,
   ConversationCreate,
   ConversationDetail,
@@ -198,6 +210,7 @@ import type {
   ToolCallTerminalStatus,
   WorkflowPreview,
 } from "@/types/chat";
+import { parseChatWidgetChange } from "@/lib/chatWidgetChange";
 import { parseEvalSuiteSaved } from "@/lib/evalSuitePreview";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
@@ -427,12 +440,23 @@ api.interceptors.response.use(
 );
 
 export const authApi = {
-  login: async (data: LoginRequest): Promise<void> => {
-    await api.post("/auth/login", data);
+  login: async (data: LoginRequest): Promise<LoginResponse> => {
+    const response = await api.post<LoginResponse>("/auth/login", data);
+    return response.data;
   },
 
-  register: async (data: RegisterRequest): Promise<void> => {
-    await api.post("/auth/register", data);
+  completeMfa: async (data: {
+    challenge_token: string;
+    code: string;
+    setup_token?: string | null;
+  }): Promise<LoginResponse> => {
+    const response = await api.post<LoginResponse>("/auth/login/mfa", data);
+    return response.data;
+  },
+
+  register: async (data: RegisterRequest): Promise<LoginResponse> => {
+    const response = await api.post<LoginResponse>("/auth/register", data);
+    return response.data;
   },
 
   logout: async (): Promise<void> => {
@@ -1623,6 +1647,13 @@ export const credentialsApi = {
     return response.data;
   },
 
+  googleMeetOAuthAuthorize: async (credentialId: string): Promise<{ auth_url: string }> => {
+    const response = await api.post<{ auth_url: string }>(
+      "/credentials/google-meet/oauth/authorize", { credential_id: credentialId },
+    );
+    return response.data;
+  },
+
   googleDriveOAuthAuthorize: async (credentialId: string): Promise<{ auth_url: string }> => {
     const response = await api.post<{ auth_url: string }>(
       "/credentials/google-drive/oauth/authorize",
@@ -1908,6 +1939,14 @@ export const dashboardApi = {
     return response.data;
   },
 
+  /** Undo an AI change: Heym restores the snapshot it stored before it, if nothing changed since. */
+  revertWidget: async (id: string, versionNumber: number): Promise<DashboardWidget> => {
+    const response = await api.post<DashboardWidget>(`/dashboards/widgets/${id}/revert`, {
+      version_number: versionNumber,
+    });
+    return response.data;
+  },
+
   listShares: async (dashboardId: string): Promise<DashboardShare[]> => {
     const response = await api.get<DashboardShare[]>(`/dashboards/${dashboardId}/shares`);
     return response.data;
@@ -1991,8 +2030,21 @@ export const boardApi = {
     );
     return response.data;
   },
-  deleteColumn: async (boardId: string, columnId: string): Promise<void> => {
-    await api.delete(`/boards/${boardId}/columns/${columnId}`);
+  /** Delete a column; a column with cards needs `moveCardsTo`, another column of the board. */
+  deleteColumn: async (boardId: string, columnId: string, moveCardsTo?: string): Promise<void> => {
+    await api.delete(`/boards/${boardId}/columns/${columnId}`, {
+      params: moveCardsTo ? { move_cards_to_column_id: moveCardsTo } : undefined,
+    });
+  },
+  /** Everyone who can open the board, for assigning cards. */
+  members: async (boardId: string): Promise<BoardMember[]> => {
+    const response = await api.get<BoardMember[]>(`/boards/${boardId}/members`);
+    return response.data;
+  },
+  /** A fingerprint of the board's state; reload the board only when it changes. */
+  revision: async (boardId: string): Promise<string> => {
+    const response = await api.get<{ revision: string }>(`/boards/${boardId}/revision`);
+    return response.data.revision;
   },
   emptyColumn: async (boardId: string, columnId: string): Promise<void> => {
     await api.delete(`/boards/${boardId}/columns/${columnId}/cards`);
@@ -2329,11 +2381,7 @@ export interface FixTranscriptionResponse {
   fixed_text: string;
 }
 
-export interface FileAttachmentPayload {
-  name: string;
-  kind: "text" | "image" | "pdf" | "zip";
-  content: string;
-}
+export type { FileAttachmentPayload } from "@/types/chat";
 
 export interface DashboardChatRequest {
   credentialId: string;
@@ -2394,6 +2442,12 @@ export interface VectorStore {
   backend?: string;
 }
 
+export interface VectorStoreDeleteResult {
+  collection_dropped: boolean;
+  reason: "dropped" | "missing" | "failed" | "skipped";
+  warning: string | null;
+}
+
 export interface VectorStoreShare {
   id: string;
   user_id: string;
@@ -2405,6 +2459,9 @@ export interface VectorStoreShare {
 export interface VectorStoreUploadResponse {
   chunks_processed: number;
   points_inserted: number;
+  /** "queued": Heym reads the file in the background; see `listIngestJobs`. */
+  status?: "done" | "queued";
+  job_id?: string | null;
 }
 
 export interface FileCheckItem {
@@ -2470,8 +2527,14 @@ export const vectorStoresApi = {
     return response.data;
   },
 
-  delete: async (id: string, deleteCollection: boolean = true): Promise<void> => {
-    await api.delete(`/vector-stores/${id}?delete_collection=${deleteCollection}`);
+  delete: async (
+    id: string,
+    deleteCollection: boolean = true,
+  ): Promise<VectorStoreDeleteResult> => {
+    const response = await api.delete<VectorStoreDeleteResult>(
+      `/vector-stores/${id}?delete_collection=${deleteCollection}`,
+    );
+    return response.data;
   },
 
   clone: async (id: string): Promise<VectorStore> => {
@@ -2558,6 +2621,15 @@ export const vectorStoresApi = {
   deleteItem: async (id: string, pointId: string): Promise<void> => {
     await api.delete(`/vector-stores/${id}/items/${pointId}`);
   },
+
+  listIngestJobs: async (id: string): Promise<RagIngestJobList> => {
+    const response = await api.get<RagIngestJobList>(`/vector-stores/${id}/ingest-jobs`);
+    return response.data;
+  },
+
+  dismissIngestJob: async (id: string, jobId: string): Promise<void> => {
+    await api.delete(`/vector-stores/${id}/ingest-jobs/${jobId}`);
+  },
 };
 
 export interface MCPInputField {
@@ -2624,6 +2696,7 @@ export interface MCPServerItem {
   api_key_set: boolean;
   created_at: string;
   workflow_ids: string[];
+  endpoint_path?: string;
   chat_tool: MCPChatToolConfig;
 }
 
@@ -3687,12 +3760,17 @@ export const filesApi = {
     await api.delete("/files");
   },
 
-  upload: async (file: File, shareWithMyTeams = false): Promise<GeneratedFile> => {
+  upload: async (
+    file: File,
+    shareWithMyTeams = false,
+    source: "manual" | "chat" = "manual",
+  ): Promise<GeneratedFile> => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("share_with_my_teams", String(shareWithMyTeams));
     const response = await api.post<GeneratedFile>("/files/upload", formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      params: { source },
     });
     return response.data;
   },
@@ -3941,14 +4019,17 @@ export const chatApi = {
     content: string,
     credentialId: string,
     model: string,
-    attachment: FileAttachmentPayload | null,
+    attachments: FileAttachmentPayload[],
+    editMessageId: string | null = null,
   ): Promise<SendMessageResponse> => {
     const response = await api.post<SendMessageResponse>(`/chats/${id}/messages`, {
       content,
       credential_id: credentialId,
       model,
       allow_build: true,
-      ...(attachment ? { attachment } : {}),
+      ...(attachments.length > 0 ? { attachments } : {}),
+      // Edit and resend: the server removes this message and everything after it first.
+      ...(editMessageId ? { edit_message_id: editMessageId } : {}),
     });
     return response.data;
   },
@@ -3967,6 +4048,10 @@ export const chatApi = {
 
   deleteQueuedMessage: async (conversationId: string, itemId: string): Promise<void> => {
     await api.delete(`/chats/${conversationId}/queue/${itemId}`);
+  },
+
+  sendQueuedMessageNow: async (conversationId: string, itemId: string): Promise<void> => {
+    await api.post(`/chats/${conversationId}/queue/${itemId}/send-now`);
   },
 
   cancelStream: async (id: string): Promise<void> => {
@@ -3993,6 +4078,8 @@ export const chatApi = {
     onQueuedMessageStarted?: (payload: { queuedMessageId: string; userMessage: Message }) => void,
     onEvalSuiteSaved?: (suite: EvalSuitePreview, messageId?: string) => void,
     signal?: AbortSignal,
+    onLive?: (event: ChatLiveEvent) => void,
+    onWidgetChange?: (change: ChatWidgetChange) => void,
   ): Promise<void> => {
     const base = import.meta.env.VITE_API_URL || "";
     const url = `${base}/api/chats/${id}/stream`;
@@ -4033,6 +4120,19 @@ export const chatApi = {
             });
           }
           else if (parsed.type === "done") { onDone(); reading = false; break; }
+          else if (parsed.type === "draft" && typeof parsed.text === "string") {
+            onLive?.({ type: "draft", round: Number(parsed.round) || 0, text: parsed.text });
+          }
+          else if (parsed.type === "progress" && typeof parsed.message === "string") {
+            onLive?.({ type: "progress", round: Number(parsed.round) || 0, message: parsed.message });
+          }
+          else if (
+            parsed.type === "tool_progress" &&
+            typeof parsed.id === "string" &&
+            typeof parsed.message === "string"
+          ) {
+            onLive?.({ type: "tool_progress", id: parsed.id, message: parsed.message });
+          }
           else if (parsed.type === "assistant_done") {
             onAssistantDone?.({
               messageId,
@@ -4117,6 +4217,9 @@ export const chatApi = {
           } else if (parsed.type === "eval_suite_saved") {
             const suite = parseEvalSuiteSaved(parsed);
             if (suite) onEvalSuiteSaved?.(suite, messageId);
+          } else if (parsed.type === "dashboard") {
+            const change = parseChatWidgetChange(parsed);
+            if (change) onWidgetChange?.(change);
           } else if (parsed.type === "queued_message_created" && parsed.queued_message) {
             onQueuedMessageCreated?.(parsed.queued_message as QueuedMessage);
           } else if (parsed.type === "queued_message_updated" && parsed.queued_message) {

@@ -93,3 +93,7 @@ API Base URL** κενό διατηρείται το υπάρχον endpoint Ente
 - [Vectorstores Tab](./vectorstores-tab.md) – Χρησιμοποιεί διαπιστευτήρια Qdrant ή Postgres (pgvector)
 - [Chat Tab](./chat-tab.md) – Χρησιμοποιεί διαπιστευτήρια OpenAI/Google
 - [Contextual Showcase](../reference/contextual-showcase.md) – Συνοπτικός οδηγός σελίδας για τις επιφάνειες του dashboard
+
+## Αναζήτηση
+
+Χρησιμοποιήστε το πεδίο αναζήτησης πάνω από τη λίστα ή πατήστε **Ctrl+F** (ή **Cmd+F**) για να φιλτράρετε τα διαπιστευτήρια κατά όνομα ή τύπο καθώς πληκτρολογείτε. Πατήστε **Escape** για εκκαθάριση της αναζήτησης.

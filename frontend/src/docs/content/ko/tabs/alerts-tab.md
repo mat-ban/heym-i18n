@@ -2,6 +2,9 @@
 
 **Alerts** 탭에서는 시간 범위(time window)에 대한 임계값 조건을 정의하고, 해당 조건이 충족될 때 알림을 받을 수 있습니다. Heym은 이미 실행 결과, 실행 시간, LLM 비용을 기록하고 있지만, 이를 먼저 알려주지는 않습니다. 알림은 이를 요청하는 방법입니다.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Alerts 데모 보기</a></p>
+
 모든 알림은 선택한 **시간 범위**에 걸쳐 평가되며, 단일 이벤트에 대해서는 평가되지 않습니다. 한 번의 실패한 실행은 노이즈에 불과합니다. 10분 동안 12번의 실패한 실행은 인시던트입니다.
 
 ## 알림 유형

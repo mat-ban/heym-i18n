@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym takoj odgovori z `200 OK` in izvaja workflow v ozadju — to zadostuje Slackovemu zahtevku po 3-sekundnem odgovoru
 - Webhook URL je izpeljan iz ID-ja vozlišča in se nikoli ne spremeni, tudi po preimenovanju workflow
 - Potrebno je le eno `slackTrigger` vozlišče na workflow; uporabite **Switch** ali **Condition** vozlišča spodaj za usmerjanje različnih tipov dogodkov
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

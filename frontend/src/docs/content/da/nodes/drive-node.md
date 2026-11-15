@@ -116,6 +116,8 @@ Referer til den gemte fil nedstrøms: `$saveAudio.id`, `$saveAudio.download_url`
 
 Referer til base64-indholdet nedstrøms: `$fetchImage.file_base64`
 
+
+A file a **Get** step fetched belongs to the run from then on: a later [Agent](./agent-node.md) can analyze it, a Code node can read it through **Files**, and a [Slack](./slack-node.md) node can send it with **Send files** (`$fetchImage.id`).
 Billeder returneret via `file_base64` vises inline i debug-panelet, når workflowet køres.
 
 ## Eksempel — List Drive-filer

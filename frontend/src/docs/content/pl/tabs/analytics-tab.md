@@ -65,3 +65,7 @@ Najedź kursorem na wykres, aby zobaczyć typ węzła tuż obok wskaźnika myszy
 - [Contextual Showcase](../reference/contextual-showcase.md) – Zwięzły przewodnik po powierzchniach dashboardu
 
 Gdy wykres prezentuje trend, o którym lepiej być informowanym niż go obserwować, można przekształcić go w [alert](./alerts-tab.md): liczba błędów, czas trwania uruchomienia, wydatki na LLM oraz liczba wykonań mogą otrzymać próg w oknie czasowym.
+
+## Related
+
+- [Operations Runbook (L1): Zużycie zasobów](../reference/operations-runbook.md#most-resource-consuming-workflows) - Znajdowanie obciążających i długo działających workflowów oraz korelacja CPU, pamięci i tokenów

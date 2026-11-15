@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym phản hồi `200 OK` ngay lập tức và chạy workflow trong nền — điều này đáp ứng yêu cầu phản hồi trong 3 giây của Slack
 - Webhook URL được tạo từ ID node và không bao giờ thay đổi, ngay cả sau khi đổi tên workflow
 - Chỉ cần một node `slackTrigger` cho mỗi workflow; sử dụng các node **Switch** hoặc **Condition** phía sau để định tuyến các loại sự kiện khác nhau
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

@@ -45,7 +45,7 @@ Nodul **Input** reprezintă punctul de intrare pentru workflow-urile care primes
 
 În fila **Run** a editorului (modul Defined webhook), fiecare câmp de intrare acceptă drag-and-drop și un control de atașare inline (în colțul din dreapta jos al câmpului):
 
-- **Fișierele text** (`.txt`, `.md`, `.json`, `.csv` și similare) sunt citite ca text simplu.
+- **Fișierele text** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **Imaginile** (JPEG, PNG, GIF, WebP) sunt stocate ca URL `data:` (base64) în valoarea câmpului — utilizați chei de câmp precum `imageUrl` sau `base64` atunci când nodurile din aval așteaptă date de imagine.
 - **Fișierele PDF** sunt convertite în text extras (fișier de maximum 5 MB, 100k caractere de conținut).
 

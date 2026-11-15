@@ -16,6 +16,9 @@ Konverzaci můžete zahájit také z chatovacího pole na kartě [Workflows](./w
 ## Funkce
 
 - **Kontext globálních proměnných** – Vaše [globální proměnné](../reference/global-variables.md) jsou dostupné LLM, takže se můžete dotazovat na uložené hodnoty nebo na ně odkazovat
+- **Kanban boards** – Ask naturally to add, assign, move, update or comment on a task, list your overdue tasks or what waits for a review, or create and arrange boards and columns. When you have multiple boards and do not name one, Chat presents a board picker before creating a card. See [Board › From Chat and MCP](./board-tab.md#from-chat-and-mcp)
+- **Send now** – Click **Send now** beside a queued message to stop the active reply and send that message immediately. The partial reply stays in the conversation, followed by your message and the new answer. The message keeps its files and chosen model; the other queued messages remain and resume in order afterward
+- **Changing direction** – After **Send now**, your latest message controls the task. A cancelled question stays as context and is not another pending job. Interrupted requests appear as **cancelled** in Traces and run history, including ones stopped before the model answers
 - **Kontext šablon pracovního prostoru** – Sdílené šablony workflow a uzlů ve vašem pracovním prostoru jsou zahrnuty jako kontext, takže Chat může odpovídat na otázky o dostupných šablonách
 - **Dlouho běžící agent** – Chat pokračuje v práci na backendu, i když zavřete prohlížeč, takže se můžete vrátit z jiného zařízení a pokračovat ve stejné konverzaci
 - **Vytváření workflow** – Požádejte Chat o vytvoření nebo nastavení workflow a on použije stejný engine Workflow AI Builder jako asistent v editoru ke generování a uložení workflow

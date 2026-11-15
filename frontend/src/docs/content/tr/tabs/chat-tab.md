@@ -16,6 +16,9 @@
 ## Özellikler
 
 - **Global variables bağlamı** – [Global Variables](../reference/global-variables.md) LLM tarafından kullanılabilir, böylece depolanan değerler hakkında soru sorabilir veya bunlara başvurabilirsiniz
+- **Kanban boards** – Ask naturally to add, assign, move, update or comment on a task, list your overdue tasks or what waits for a review, or create and arrange boards and columns. When you have multiple boards and do not name one, Chat presents a board picker before creating a card. See [Board › From Chat and MCP](./board-tab.md#from-chat-and-mcp)
+- **Send now** – Click **Send now** beside a queued message to stop the active reply and send that message immediately. The partial reply stays in the conversation, followed by your message and the new answer. The message keeps its files and chosen model; the other queued messages remain and resume in order afterward
+- **Changing direction** – After **Send now**, your latest message controls the task. A cancelled question stays as context and is not another pending job. Interrupted requests appear as **cancelled** in Traces and run history, including ones stopped before the model answers
 - **Workspace template bağlamı** – Workspace'inizdeki paylaşılan workflow ve node template'leri bağlam olarak dahil edilir, böylece Chat mevcut template'ler hakkındaki soruları yanıtlayabilir
 - **Uzun süreli agent** – Tarayıcı kapansa bile Chat arka planda çalışmaya devam eder, böylece başka bir cihazdan geri dönüp aynı sohbete devam edebilirsiniz
 - **Workflow oluşturma** – Chat'ten bir workflow oluşturmasını veya kurmasını isteyin; editör asistanıyla aynı Workflow AI Builder motorunu kullanarak workflow'u üretir ve kaydeder

@@ -84,7 +84,8 @@
     "dropFileOrClick": "Datei hier ablegen oder klicken, um eine auszuwählen",
     "removeFile": "Datei entfernen",
     "chooseFileFor": "Datei für {label} auswählen",
-    "new": "Neu"
+    "new": "Neu",
+    "clearSearch": "Suche leeren"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Aktivieren",
     "disablePlugin": "Deaktivieren",
     "uninstallPlugin": "Deinstallieren",
-    "pluginOperationFailed": "Plugin-Vorgang fehlgeschlagen"
+    "pluginOperationFailed": "Plugin-Vorgang fehlgeschlagen",
+    "users": "Benutzer",
+    "encryption": "Verschlüsselung"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Trace-ID kopieren",
     "openTrace": "Trace öffnen",
     "message": "Nachricht",
-    "emptyReply": "Leere Antwort."
+    "emptyReply": "Leere Antwort.",
+    "timeRange3h": "Letzte 3 Stunden",
+    "timeRange6h": "Letzte 6 Stunden"
   },
   "tables": {
     "title": "DataTables",
@@ -1215,7 +1220,9 @@
     "browseAll": "Alle durchsuchen →",
     "askAi": "KI fragen",
     "dropToImport": "JSON oder ZIP zum Importieren hier ablegen",
-    "noWorkflowsMatch": "Keine Workflows entsprechen diesem Filter."
+    "noWorkflowsMatch": "Keine Workflows entsprechen diesem Filter.",
+    "noWorkflowsMatchAll": "Versuchen Sie einen anderen Titel, eine andere Beschreibung oder einen anderen Ordnernamen.",
+    "noWorkflowsMatchFilter": "Versuchen Sie einen anderen Titel, eine andere Beschreibung, einen anderen Ordnernamen oder Statusfilter."
   },
   "schedules": {
     "title": "Zeitpläne",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Von einem MCP-Client gestartet",
     "newChatTitle": "Neuer Chat",
     "subtitle": "Workflows ausführen und Fragen stellen",
-    "modelsLoadFailedDisabled": "Die Modellliste dieser Anmeldedaten konnte nicht geladen werden. Der Chat bleibt deaktiviert, bis ein Modell abgerufen werden kann."
+    "modelsLoadFailedDisabled": "Die Modellliste dieser Anmeldedaten konnte nicht geladen werden. Der Chat bleibt deaktiviert, bis ein Modell abgerufen werden kann.",
+    "dropFilesToAttach": "Dateien zum Anhängen hier ablegen",
+    "attachFiles": "Dateien anhängen"
   },
   "teams": {
     "title": "Teams",
@@ -1883,7 +1892,8 @@
       "skipped": "Übersprungen"
     },
     "permissionRead": "lesen",
-    "permissionWrite": "schreiben"
+    "permissionWrite": "schreiben",
+    "details": "Details"
   },
   "mcp": {
     "title": "MCP-Server",
@@ -2197,7 +2207,8 @@
       "actions": "Aktionen",
       "failedToLoadWidget": "Widget konnte nicht geladen werden",
       "failedToUpdateCheckbox": "Checkbox konnte nicht aktualisiert werden",
-      "refreshDashboard": "Dashboard aktualisieren"
+      "refreshDashboard": "Dashboard aktualisieren",
+      "revertPrevious": "Vorherigen Stand wiederherstellen"
     },
     "hitl": {
       "previousReview": "Vorherige Überprüfung",

@@ -19,6 +19,8 @@ const { t } = useI18n();
 
 const options = computed<Array<{ value: TraceTimeRange; label: string }>>(() => [
   { value: "1h", label: t("traces.timeRange1h") },
+  { value: "3h", label: t("traces.timeRange3h") },
+  { value: "6h", label: t("traces.timeRange6h") },
   { value: "24h", label: t("traces.timeRange24h") },
   { value: "7d", label: t("traces.timeRange7d") },
   { value: "30d", label: t("traces.timeRange30d") },

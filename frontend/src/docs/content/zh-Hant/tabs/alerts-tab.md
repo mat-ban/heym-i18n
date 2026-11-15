@@ -2,6 +2,9 @@
 
 **Alerts** 分頁讓您定義一段時間窗口內的閾值條件，並在條件被跨越時收到通知。Heym 已經記錄了執行結果、執行時長與 LLM 花費，但它從不主動告知您任何一項。Alert 就是您要求它這麼做的方式。
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ 觀看 Alerts 示範</a></p>
+
 每個 Alert 都會在您選擇的**時間窗口**內進行評估，絕不會只針對單一事件。一次失敗的執行只是雜訊。十分鐘內十二次失敗的執行則是一起事故。
 
 ## Alert 類型

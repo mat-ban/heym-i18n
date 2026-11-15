@@ -140,3 +140,6 @@ Um login malsucedido retorna à tela de login com uma mensagem legível. O Heym 
 - **Múltiplos provedores simultâneos.** Uma instância se conecta a um provedor.
 - **Mapeamento de grupo ou papel** a partir das claims do provedor.
 - **Single logout.** Sair do Heym não desconecta você do provedor.
+
+- **A autenticação de dois fatores cabe ao provedor.** `HEYM_REQUIRE_MFA` aplica-se apenas ao login com senha; um login via SSO nunca solicita um código Heym. Exija MFA no seu provedor de identidade.
+- **A desativação também se aplica aqui.** Uma conta desativada por um administrador em **Configurações → Usuários** é recusada mesmo que o provedor ainda a autentique.

@@ -65,3 +65,7 @@ Arahkan kursor ke grafik untuk melihat tipe node tepat di samping penunjuk. Tipe
 - [Contextual Showcase](../reference/contextual-showcase.md) – Panduan halaman ringkas untuk tampilan dashboard
 
 Ketika sebuah grafik menunjukkan tren yang ingin Anda ketahui secara otomatis alih-alih dipantau, ubah menjadi [alert](./alerts-tab.md): jumlah kesalahan, durasi eksekusi, pengeluaran LLM, dan jumlah eksekusi semuanya dapat diberikan ambang batas pada jendela waktu tertentu.
+
+## Related
+
+- [Operations Runbook (L1): Penggunaan sumber daya](../reference/operations-runbook.md#most-resource-consuming-workflows) - Temukan workflow bervolume tinggi dan berjalan lama lalu korelasikan CPU, memori, dan token

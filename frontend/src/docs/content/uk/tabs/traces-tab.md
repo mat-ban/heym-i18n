@@ -17,18 +17,19 @@
 
 ## Часовий діапазон
 
-Єдиний селектор **Time range** у верхній частині панелі фільтрів керує як заголовком зі статистикою, так і списком traces. Варіанти: Last 1 hour, Last 24 hours, Last 7 days (за замовчуванням), Last 30 days, All time. Зміна діапазону скидає пагінацію та одночасно перезавантажує діаграми й список.
+Єдиний селектор **Time range** у верхній частині панелі фільтрів керує як заголовком зі статистикою, так і списком traces. Варіанти: Last Last 1 hour, Last 3 hours, Last 6 hours, 24 hours, Last 7 days (за замовчуванням), Last 30 days, All time. Зміна діапазону скидає пагінацію та одночасно перезавантажує діаграми й список.
 
 ## Список traces
 
 - Пагінований список останніх traces у вибраному часовому діапазоні
 - Кожен trace показує: workflow, node, credential, часову мітку, тривалість
+- [Playwright](../nodes/playwright-node.md) AI step and Auto Heal calls appear under the workflow and Playwright node that made them
 - Натисніть на trace, щоб відкрити детальний перегляд
 - Використовуйте **Prev / Next** у діалозі деталей, щоб переміщатися між traces, не закриваючи його
 
 ## Фільтрування
 
-- **Time range** – 1h / 24h / 7d / 30d / All; фільтрує діаграми та список разом
+- **Time range** – 1h / 3h / 6h / 24h / 7d / 30d / All; фільтрує діаграми та список разом
 - **Credential** – Фільтр за використаним credential (API key)
 - **Source** – Фільтр за workflow або джерелом виконання
 - **Search** – Пошук за моделлю, workflow, credential або міткою node

@@ -42,7 +42,7 @@ Heym можна безкоштовно використовувати та ро�
 
 ## Розгортання в Kubernetes
 
-Стандартний посібник [Запуск і розгортання](../getting-started/running-and-deployment.md) охоплює Docker Compose для production-налаштувань на одному сервері. Клієнти Enterprise отримують допомогу з production-розгортаннями в Kubernetes для високої доступності та горизонтального масштабування:
+Стандартний посібник [Запуск і розгортання](../getting-started/running-and-deployment.md) охоплює Docker Compose для production-налаштувань на одному сервері. [Kubernetes Deployment](../getting-started/kubernetes.md). Клієнти Enterprise отримують допомогу з production-розгортаннями в Kubernetes для високої доступності та горизонтального масштабування:
 
 - **Кілька worker-вузлів** — Розподіл backend-worker'ів Heym між кількома вузлами Kubernetes для резервування та балансування навантаження
 - **Sidecar-контейнери** — Налаштування патернів sidecar для збору логів, агентів моніторингу, service mesh (Istio, Linkerd) та ін'єкції секретів (Vault)

@@ -94,3 +94,7 @@ Zie [Expression DSL](../reference/expression-dsl.md) voor het verwijzen naar waa
 - [Tabblad Vectoropslag](./vectorstores-tab.md) – Gebruikt Qdrant- of Postgres (pgvector)-inloggegevens
 - [Tabblad Chat](./chat-tab.md) – Gebruikt OpenAI/Google-inloggegevens
 - [Contextuele showcase](../reference/contextual-showcase.md) – Compacte paginagids voor dashboard-oppervlakken
+
+## Zoeken
+
+Gebruik het zoekveld boven de lijst of druk op **Ctrl+F** (of **Cmd+F**) om referenties tijdens het typen op naam of type te filteren. Druk op **Escape** om de zoekopdracht te wissen.

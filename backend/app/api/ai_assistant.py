@@ -6,6 +6,7 @@ import logging
 import re
 import time
 import uuid
+from collections.abc import Callable, Sequence
 from dataclasses import asdict, replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,7 +17,7 @@ from urllib.parse import urlparse
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 from openai import OpenAI
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, Field, ValidationError
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -25,11 +26,26 @@ from app.api.analytics import (
     compute_analytics_stats,
     upsert_workflow_analytics_snapshot,
 )
-from app.api.boards import create_card as create_board_card
+from app.api.chat_boards import (
+    BOARD_TOOL_NAMES,
+    BOARD_TOOL_SCHEMAS,
+    board_tool_label,
+    call_board_tool,
+    summarize_board_tool,
+)
+from app.api.chat_dashboard_builds import (
+    DASHBOARD_BUILD_TOOL_NAMES,
+    DASHBOARD_BUILD_TOOL_SCHEMAS,
+    WidgetModel,
+    call_dashboard_build_tool,
+    dashboard_build_tool_label,
+    summarize_dashboard_build_tool,
+)
 from app.api.chat_dashboards import (
     DASHBOARD_TOOL_NAMES,
     DASHBOARD_TOOL_SCHEMAS,
     call_dashboard_tool,
+    dashboard_change_events,
     dashboard_tool_label,
     summarize_dashboard_tool,
 )
@@ -39,6 +55,14 @@ from app.api.chat_data_tables import (
     call_data_table_tool,
     data_table_tool_label,
     summarize_data_table_tool,
+)
+from app.api.chat_memory import (
+    USER_MEMORY_PROMPT,
+    USER_MEMORY_TOOL_NAMES,
+    USER_MEMORY_TOOL_SCHEMAS,
+    call_user_memory_tool,
+    summarize_user_memory_tool,
+    user_memory_tool_label,
 )
 from app.api.data_tables import create_data_table as create_data_table_route
 from app.api.deps import get_current_user
@@ -56,11 +80,6 @@ from app.api.workflows import (
 )
 from app.db.models import (
     LLM_CREDENTIAL_TYPES,
-    Board,
-    BoardCard,
-    BoardCardActivity,
-    BoardCardRun,
-    BoardColumn,
     CodexFollowupRequest,
     Credential,
     CredentialType,
@@ -74,9 +93,8 @@ from app.db.models import (
     WorkflowTeamShare,
 )
 from app.db.session import get_db
-from app.models.board_schemas import CardCreateRequest
 from app.models.schemas import DataTableColumnDef, DataTableCreate
-from app.services import template_service
+from app.services import file_intake_service, template_service
 from app.services.active_execution_overview import build_active_execution_overview
 from app.services.agent_tool_observability import summarize_tool_calls
 from app.services.assistant_node_edit import NODE_EDIT_TRACE_NODE_LABEL, build_node_edit_prompt
@@ -86,6 +104,17 @@ from app.services.assistant_yolo import (
     YoloToolOutcome,
     stream_until_disconnect,
     stream_yolo_assistant_turn,
+)
+from app.services.background_tasks import spawn_background_task
+from app.services.chat_attachments import MAX_CHAT_ATTACHMENTS, run_attachment
+from app.services.chat_image_input import IMAGE_FIELD_KEYWORDS, image_input
+from app.services.chat_progress import ToolProgress, follow_tool, workflow_draft_message
+from app.services.chat_round_stream import (
+    RoundAnswer,
+    RoundDraft,
+    RoundProgress,
+    complete_round,
+    stream_round,
 )
 from app.services.codex_followup_service import get_codex_followup_by_token
 from app.services.credential_access import (
@@ -110,7 +139,10 @@ from app.services.data_table_catalog import (
     table_summary,
 )
 from app.services.doc_index import read_node_doc
+from app.services.drive_file_access import get_accessible_file
 from app.services.encryption import decrypt_config
+from app.services.execution_cancellation import watch_execution_nodes
+from app.services.file_sandbox.scope import RunFileScope
 from app.services.generated_credentials import (
     CredentialChoice,
     CredentialPassResult,
@@ -143,6 +175,14 @@ from app.services.hitl_service import (
 from app.services.llm_chat_bridge import completion_caller, gateway_protocol, skip_compression
 from app.services.llm_provider import is_reasoning_model
 from app.services.llm_trace import LLMTraceContext, record_llm_trace
+from app.services.llm_transport import (
+    MAX_TRUNCATED_TOOL_TURNS,
+    TRUNCATED_TOOL_CALL_ERROR,
+    is_truncated_turn,
+    parse_tool_arguments,
+    rejects_disable_reasoning,
+)
+from app.services.mcp_progress import running_node_message
 from app.services.model_router import (
     RouteDecision,
     build_router_for_credential,
@@ -173,6 +213,7 @@ from app.services.workflow_save import WorkflowSnapshot, add_workflow_version
 
 if TYPE_CHECKING:
     from app.api.chat_build import ChatBuildSession
+    from app.api.chat_files import ChatFileTools
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -234,8 +275,19 @@ class AnalyzeWorkflowRequest(BaseModel):
 
 class FileAttachment(BaseModel):
     name: str
-    kind: Literal["text", "image", "pdf", "zip"]
-    content: str  # plain text for text/pdf, base64 data URL for images and zips
+    kind: Literal["text", "image", "pdf", "zip", "file"]
+    # Plain text for text/pdf, a base64 data URL for images and zips, empty for a Drive file.
+    content: str = ""
+    # kind "file": a Drive file the model opens with the file tools; never inlined.
+    file_id: uuid.UUID | None = None
+    size: int | None = None
+    mime: str | None = None
+
+    def injection_value(self) -> str:
+        """What a workflow input receives for this attachment: the Drive id or the content."""
+        if self.kind == "file":
+            return str(self.file_id or "")
+        return self.content
 
 
 class DashboardChatRequest(BaseModel):
@@ -248,6 +300,12 @@ class DashboardChatRequest(BaseModel):
     user_rules: str | None = None
     client_local_datetime: str | None = None
     attachment: FileAttachment | None = None
+    attachments: list[FileAttachment] = Field(default_factory=list, max_length=MAX_CHAT_ATTACHMENTS)
+
+    def requested_attachments(self) -> list[FileAttachment]:
+        """Every attached file in order: `attachment` first, then `attachments`."""
+        single = [self.attachment] if self.attachment is not None else []
+        return [*single, *self.attachments]
 
 
 class FixTranscriptionRequest(BaseModel):
@@ -443,11 +501,16 @@ _ATTACHMENT_ROUTING_INSTRUCTIONS = (
     "workflow input field when calling a workflow tool:\n"
     '- Image attachment → fields named "image", "base64", "photo", "picture", or similar\n'
     '- Text/PDF attachment → fields named "text", "document", "content", "file", "data", or similar\n'
-    "- If no dedicated field exists → embed the content in the primary message/query/input field"
+    '- Drive file attachment → fields named "file_id", "file", "document", "attachment", or '
+    "similar; pass the file id\n"
+    "- An image attached as a Drive file reaches image fields by itself; leave those out\n"
+    "- If no dedicated field exists → embed the content in the primary message/query/input field\n"
+    "- Several files attached → put the id (or name) of the file a run is for in its inputs, "
+    "and run the workflow once per file when each file needs its own run"
 )
 
 
-_IMAGE_FIELD_KEYWORDS = {"image", "base64", "photo", "picture", "img"}
+_IMAGE_FIELD_KEYWORDS = IMAGE_FIELD_KEYWORDS
 _TEXT_FIELD_KEYWORDS = {"text", "document", "content", "file", "data"}
 
 
@@ -460,36 +523,50 @@ def _find_injection_field(input_fields: list[str], kind: str) -> str | None:
     return input_fields[0] if input_fields else None
 
 
-def _build_user_message(message: str, attachment: FileAttachment | None) -> dict:
-    """Build the user role message dict.
+def _attachment_block(attachment: FileAttachment) -> str:
+    """The block one attachment adds after the message text."""
+    if attachment.kind == "zip":
+        from app.services.skill_archive import decode_zip_payload, prompt_for_zip, read_zip
+
+        raw = decode_zip_payload(attachment.content)
+        if raw is None:
+            return f"\n\n[ATTACHED ZIP: {attachment.name}]\nThe zip could not be read."
+        return f"\n\n{prompt_for_zip(attachment.name, read_zip(raw))}"
+    if attachment.kind == "file":
+        details = " · ".join(
+            part
+            for part in (
+                f"id {attachment.file_id}",
+                f"{attachment.size} bytes" if attachment.size is not None else "",
+                attachment.mime or "",
+            )
+            if part
+        )
+        return (
+            f"\n\n[ATTACHED DRIVE FILE: {attachment.name} · {details}]\n"
+            "The file is in Heym Drive; its content is not in this message. Open it with "
+            "inspect_file and run_python."
+        )
+    if attachment.kind == "image":
+        return (
+            f"\n\n[ATTACHED IMAGE: {attachment.name}]\n"
+            f"IMPORTANT: Do NOT include image data or any image field in the workflow inputs — "
+            f"the image is handled server-side automatically. "
+            f"Only include the non-image input fields (e.g. text, query, instruction) in your execute_workflow call."
+        )
+    return f"\n\n[ATTACHED FILE: {attachment.name}]\n{attachment.content}"
+
+
+def _build_user_message(message: str, attachments: Sequence[FileAttachment] = ()) -> dict:
+    """Build the user role message dict, with one block per attachment in order.
 
     For text/PDF: embeds content inline so the LLM can use it directly.
     For images: embeds only metadata (not the base64) to avoid context overflow on
     non-vision models. The actual image bytes are auto-injected into the workflow input
     field by the execute_workflow tool handler at call time.
     """
-    if attachment is None:
-        return {"role": "user", "content": message}
-    if attachment.kind == "zip":
-        from app.services.skill_archive import decode_zip_payload, prompt_for_zip, read_zip
-
-        raw = decode_zip_payload(attachment.content)
-        if raw is None:
-            body = f"{message}\n\n[ATTACHED ZIP: {attachment.name}]\nThe zip could not be read."
-        else:
-            body = f"{message}\n\n{prompt_for_zip(attachment.name, read_zip(raw))}"
-        return {"role": "user", "content": body}
-    if attachment.kind == "image":
-        embedded = (
-            f"{message}\n\n"
-            f"[ATTACHED IMAGE: {attachment.name}]\n"
-            f"IMPORTANT: Do NOT include image data or any image field in the workflow inputs — "
-            f"the image is handled server-side automatically. "
-            f"Only include the non-image input fields (e.g. text, query, instruction) in your execute_workflow call."
-        )
-        return {"role": "user", "content": embedded}
-    embedded = f"{message}\n\n[ATTACHED FILE: {attachment.name}]\n{attachment.content}"
-    return {"role": "user", "content": embedded}
+    blocks = "".join(_attachment_block(attachment) for attachment in attachments)
+    return {"role": "user", "content": f"{message}{blocks}"}
 
 
 def _format_user_message_date(now: datetime | None = None) -> str:
@@ -545,8 +622,8 @@ DASHBOARD_CHAT_SYSTEM_PROMPT = """You are an assistant that helps the user with 
 6. When the user asks for details of what ran or what came in (e.g. what ran, show details, list recent runs), use get_recent_executions with the appropriate time_range and optionally limit. Summarize the list (workflow name, time, status, brief output) in the user's language.
 6e. When the user asks about the runs of one specific workflow (how many times it ran, whether it failed, when it last ran, what its last status was, why a run failed), use list_workflows to find the workflow_id, then get_workflow_run_history(workflow_id) for metadata: total_runs, status_counts, first_run_at, last_run_at, last_run, avg_execution_time_ms and a page of runs. Answer from that metadata first. Only if the user wants the content of a run, or the reason for a failure, call get_workflow_run_history again with the execution_id of the relevant run (from runs or last_run) to read its inputs, outputs and per-node trace; look at nodes with status error. Use the status argument to list only failed runs, and offset when has_more is true. Do not use get_recent_executions for a question about one named workflow: it only returns the latest runs across all workflows, so the workflow may be missing.
 6a. When the user asks about scheduled cron runs, the calendar, or when workflows will run (today, this week, this month, upcoming times), use get_schedule_events with view_window day, week, or month, optional reference_date (YYYY-MM-DD), include_shared false for owned-only or true to include shared workflows, or start_iso/end_iso for a custom range. Summarize events (workflow name and time) in the user's language.
-6b. When the user asks about kanban boards or their tasks (which boards exist, how many boards, what jobs/tasks are on a board, their status, what is running/pending/failed/done, or what is in a column), use list_boards for an overview and get_board_tasks (optional board_id to scope, optional status filter) for the tasks. For a specific task/card (what it is, its description, the comments/conversation on it, what happened, its output or error), use get_card_detail with the card_id from get_board_tasks. Answer from the results in the user's language; do not execute workflows for these questions.
-6c. When the user naturally asks to add or create a kanban task/card, use create_board_task; this is a board action, not a request to create a workflow, and no command prefix is needed. Pass the user's requested title and optional description. If the user clearly names a board, call list_boards first to resolve its exact board_id. If no board is specified, call create_board_task without board_id: it will create the task when there is exactly one board, or return requires_board_selection with the available boards when there are several. For requires_board_selection, emit one heym-clarify question of type single whose options are the returned board names, then stop and wait. After the user selects a board, call list_boards again to resolve the selected name to its board_id, then call create_board_task exactly once. If a named board is missing or ambiguous, use the same single-choice board selection. Never ask which column to use: create_board_task always places the task in the first column.
+6b. Kanban boards: list_boards lists the boards the user owns or that are shared with them, with their permission. get_board reads one board's columns and tasks; get_board_tasks lists tasks across boards. Both take the filters assignee (me, unassigned or a user_id), column_name or column_id, priority, due (overdue, today, week), label and run_status, where pending means the task waits for a review. get_card_detail reads one task with its comments and runs. list_board_members turns a person's name into the user_id that assignee filters and assignments take. Answer status questions from these tools in the user's language; do not execute workflows for them.
+6c. Board changes are direct actions, not workflow builds, and need no command prefix. Resolve every board, column, task and person with the read tools; never guess an id. create_board_task adds a task to the first column unless the user names a column, with optional assignee_user_id, priority, due_date (YYYY-MM-DD) and labels. Without board_id it uses the only board the user can write to or returns requires_board_selection; then emit one heym-clarify question of type single whose options are the returned board names, stop, and after the answer resolve the name with list_boards and call create_board_task once. update_board_task changes only the fields you pass (null clears one), and assigns or reassigns. move_board_task moves or reorders a task (position 0 is the top). Moving into a column with workflows starts them; moving a task that waits for a review cancels that review and never approves it, so say so. add_board_task_comment posts a comment on a task as the user; post only what the user asked to say. On a task waiting at the planning step the comment answers the agent's questions and the task moves on (chain_started): say so. A comment never approves a review. Approve or reject reviews only with the review tools. create_board, update_board, create_board_column, update_board_column and delete_board_column manage boards and columns; when the user wants a plain team task board, create it with auto_advance false so tasks stay where people put them. A board's agentic_kanban_model is the model that maps its cards; while it is null the Board tab cannot add or move cards there. create_board sets it to this chat's model; when a board the user owns has none, offer update_board with use_chat_model true, and if a result carries a note, tell the user. Delete a task, column or board only when the user asked for exactly that; delete_board needs confirm_name equal to the board's name, so ask the user to confirm the name first. A board with permission read cannot be changed: say so.
 6d. When the user asks what is running right now (e.g. "what is running?", "how many workflows are active?", "is anything still going?", "which node is it on?", "how long has it been running?"), use get_active_executions. It takes no arguments and returns count, running_count, pending_count, and one entry per in-progress run with workflow_name, running_for (human-readable elapsed time), current_nodes (the node or nodes executing right now), last_completed_node, and url. Answer with the count first, then one line per run: workflow name, how long it has been running, the current node label, and the url as a markdown link. If count is 0, say plainly that nothing is running right now. Entries with status "pending" are not executing; they are waiting for human review (pending_kind hitl or codex), so say that instead of reporting them as running. Entries with status "queued" are not executing either; they are waiting for a concurrency slot of their workflow, at queue_position of queue_size, so say they are queued and where they stand. Do not use get_recent_executions for this question: that tool lists finished runs.
 7. When a workflow is waiting for human review (HITL review, with review_url or kind "hitl") and the user says to approve, continue, edit, or refuse it, use resolve_hitl_review. Prefer the latest pending request_id or review_url from recent tool results in the conversation. Never call resolve_hitl_review for Codex follow-up pauses (with answer_url or kind "codex"): Codex questions cannot be resolved via resolve_hitl_review.
 8. When the user asks you to wait, monitor, or check again for a workflow that is still running or pending, use wait_for_execution_update instead of repeatedly polling yourself. Default to 5 seconds between checks and at most 5 checks unless the user explicitly asks otherwise.
@@ -567,18 +644,20 @@ Respond in the same language the user uses. Be concise and helpful. When you run
 
 If a tool returns an error or no relevant data, do not invent an answer. Say clearly that you do not have that information (e.g. "I don't have this information"). Base your answers only on data from the tools (workflows, analytics, execution results); when you do not know something, say so.
 
-When the user asks for something you cannot do with your tools (e.g. console logs, server logs) AND no workflow matches, say clearly that you do not have access to that, then offer what you can do in a short numbered list. Always include: (1) I can show recent runs, (2) I can show what is running right now (with elapsed time and current node), (3) I can show analytics stats and where workflows fail or slow down, (4) I can show scheduled cron times (day/week/month), (5) I can run a workflow and show its result, (6) I can list workflows and you can talk about them or ask me to run one, (7) I can list your teams, (8) I can inspect your data tables, add or remove columns, and read, add, update or delete rows, (9) I can list your dashboards and the widgets on each, and add, rename, delete or tidy widgets. End with something like: Which would you like?
+When the user asks for something you cannot do with your tools (e.g. console logs, server logs) AND no workflow matches, say clearly that you do not have access to that, then offer what you can do in a short numbered list. Always include: (1) I can show recent runs, (2) I can show what is running right now (with elapsed time and current node), (3) I can show analytics stats and where workflows fail or slow down, (4) I can show scheduled cron times (day/week/month), (5) I can run a workflow and show its result, (6) I can list workflows and you can talk about them or ask me to run one, (7) I can list your teams, (8) I can inspect your data tables, add or remove columns, and read, add, update or delete rows, (9) I can list your dashboards and the widgets on each, and add, rename, delete or tidy widgets, (10) I can show, add, assign, move and update tasks on your kanban boards. End with something like: Which would you like?
 
 11. When the user asks about teams (e.g. "my teams", "which teams am I in?", "who is in team X?"), use get_teams. Optionally pass team_name to filter by name.
-12. When the user asks about Heym features, nodes, expressions, workflows, or how to use the platform, use search_documentation. Call search_documentation at most 2 times per user message. Use one comprehensive query first (e.g. "canvas features", "portal"). Only call again with a different query if the first returns no relevant docs. In your response, cite the documentation with markdown links: [Document Title](/docs/category/slug). Example: [LLM Node](/docs/nodes/llm-node). When the documentation contains a video tag (e.g. `<video src="/features/showcase/..."`), include it in your response so the user can watch a demo directly in chat. Respond in the user's language.
+12. When the user asks about Heym features, nodes, expressions, workflows, or how to use the platform, use search_documentation. Call search_documentation at most 2 times per user message. Use one focused topic query first (e.g. "canvas features", "portal", "L0"). Long results are marked excerpted; call again with a more specific query if the first returns no relevant docs or the excerpts omit the requested detail. In your response, cite the documentation with markdown links: [Document Title](/docs/category/slug). Example: [LLM Node](/docs/nodes/llm-node). When the documentation contains a video tag (e.g. `<video src="/features/showcase/..."`), include it in your response so the user can watch a demo directly in chat. Respond in the user's language.
 13. When the user asks you to create, build, generate, or set up a new workflow/automation, call create_workflow. This tool uses the Workflow AI Builder engine to generate Heym DSL and saves it. It does NOT run the workflow; the user runs it from the Run button on the workflow card. Do not run the workflow yourself unless the user explicitly asks you to. After it succeeds, do not include a separate workflow link in your prose; the chat UI shows a workflow preview card with its own Open workflow link. Do not answer with only instructions, platform alternatives, or raw workflow JSON for these requests.
 14. When the user gives feedback in the same chat about a workflow you just created (for example "make it do X", "change it like this", "add a step", "remove that", "şöyle yap", "böyle değiştir"), call edit_workflow with the workflow_id from the previous workflow link, hidden workflow context marker, or tool result. Do not create a second workflow for feedback on the existing generated workflow unless the user explicitly asks for a new separate workflow.
 15. When the user asks about alerts — what alerts exist, whether something is being monitored, which alerts are firing, or why/when an alert triggered — use list_alerts, get_alert_detail, and get_alert_events. For a "why did it fire" question always call get_alert_events and quote the actual observed value, the threshold, and the time window from the event, plus the contributing detail in its context (failing executions and error messages, per-model spend, or trigger source). Do not guess a reason and do not recompute the numbers yourself; the event stores what was true when it fired. Respond in the user's language.
 16. Heym DataTables store records inside Heym. Call list_data_tables when a workflow will save, store, log or look up records and the user names no other store, or when the user mentions a data table, asks to create one, or asks which tables or columns they have. When the user names a table that fits, use it. Otherwise emit one single heym-clarify question with up to five fitting tables as table options and one createTable option (see the Clarification Protocol), with allowOther, then stop. An answer `Created data table "<name>" (id <id>)` means the table exists: never create it again. Call create_data_table when an answer picks your createTable option without saying Created (a typed answer), or when the user asks for a table and names its columns; when the user asks for a table without naming its columns, emit the same question with only the createTable option. Pass the chosen tables to create_workflow and edit_workflow in data_table_choices, with an empty table_id when the user wants to pick the table later. If a tool returns requires_data_table, ask the same way, then call it again. If a result lists data_table_warnings, name the missing columns and offer to add them with add_data_table_columns.
 16a. Direct DataTable actions are real actions, not advice or workflow builds. When the user asks to inspect rows, add or remove columns, or insert, update, delete or clear rows, use the DataTable tools directly. Do not build a workflow for a one-off table edit and do not send the user to the DataTable tab. A table UUID or a link such as https://heym.example/?tab=datatable/<uuid> identifies the table; inspect it with get_data_table. For a name, resolve it with list_data_tables; ask only if ambiguous. Owner and write access (direct or team) allow column and row changes; read access permits inspection only. Preserve existing columns and row values when adding columns. Use string for columns whose type the user did not specify. Use list_data_table_rows to find actual row UUIDs before changing or deleting selected rows, paginating when has_more is true. Report validation errors and partial imports accurately; never claim a failed action succeeded. Removing columns and clearing all rows follow the DataTable tab's confirmation: first call without confirmed, show the returned warning (including the affected rows and irreversible value loss), emit a heym-clarify confirmation question and stop. Only after the user confirms in a follow-up may you call the same action with confirmed=true. Single-row deletion on request needs no extra confirmation. The workflow DSL catalog contains no row values; its builder-only restrictions do not prohibit these direct DataTable tools.
-17. Dashboards hold widgets, and Heym Work shows each dashboard as a page. When the user asks which dashboards or pages exist, what is on one, or which dashboard or page a widget or workflow is on, call list_dashboards (dashboard_id to read one, workflow_id to find where a workflow is placed) and answer from it, linking each dashboard's url. When the user asks for a new widget, chart or metric on a dashboard or page, resolve the dashboard with list_dashboards and call add_dashboard_widget without workflow_id, with a short title and the chart_type: it puts an empty widget on the dashboard. Then follow its next_step: write the widget's graph with save_workflow and the widget's workflow_id, test it with run_workflow_test and finish. Never build a separate workflow to copy onto a dashboard. When the user asks to put, add or place an existing workflow on a dashboard or page, resolve the workflow with list_workflows and call add_dashboard_widget with its workflow_id. Call add_dashboard_widget once per widget. If the user names no dashboard and several have permission owner or write, emit one heym-clarify question of type single whose options are those dashboard names, then stop and wait. A dashboard with permission read cannot take widgets: say so. After adding, say whether it became a chart widget or a run widget and link the dashboard url. Changes to a chart widget go to the widget's workflow_id from the result, never to the workflow it was copied from. To rename a widget, call rename_dashboard_widget with its id from list_dashboards. Call delete_dashboard_widget only when the user asked to delete or remove that widget; if their words match more than one widget, ask which with one heym-clarify question first. Deleting a chart widget deletes its workflow too. When the user asks to tidy, arrange or clean up a dashboard or page, also when they ask in the same message as adding widgets, call tidy_dashboard once the widgets are added, with per_row when they name how many widgets go in a row; another call gives another arrangement. tidy_dashboard arranges the dashboard in Heym. A Heym Work page keeps its own arrangement, which the Tidy up button on that page changes: say so when the user means a page in Heym Work."""
+17. Dashboards hold widgets, and Heym Work shows each dashboard as a page. When the user asks which dashboards or pages exist, what is on one, or which dashboard or page a widget or workflow is on, call list_dashboards (dashboard_id to read one, workflow_id to find where a workflow is placed) and answer from it, linking each dashboard's url. When the user asks for a new dashboard or page, call create_dashboard with a short name and then fill it in the same turn. When the user asks for new widgets, charts or metrics on a dashboard or page, resolve the dashboard with list_dashboards (or use the one create_dashboard returned) and the data tables the widgets read with list_data_tables, then call build_dashboard_widgets once with every widget: a short title, a prompt that says what it shows from which data, and the data_table_ids. It builds them in parallel, checks their data, fixes a widget that shows nothing or an error up to twice, and returns what was built and what failed. When a result of build_dashboard_widgets or refine_dashboard_widgets lists still_failing, call refine_dashboard_widgets once more for those widgets with an instruction that builds each a different way and avoids what its error names; if one still fails, tell the user which widget and why. If the user did not say what the page should show and no data table fits, ask with one heym-clarify question first. If build_dashboard_widgets says the chat's model cannot build widgets, call add_dashboard_widget without workflow_id, with a short title and the chart_type: it puts an empty widget on the dashboard. Then follow its next_step: write the widget's graph with save_workflow and the widget's workflow_id, test it with run_workflow_test and finish. Never build a separate workflow to copy onto a dashboard. When the user asks to put, add or place an existing workflow on a dashboard or page, resolve the workflow with list_workflows and call add_dashboard_widget with its workflow_id. Call add_dashboard_widget once per widget. If the user names no dashboard and several have permission owner or write, emit one heym-clarify question of type single whose options are those dashboard names, then stop and wait. A dashboard with permission read cannot take widgets: say so. After adding, say whether it became a chart widget or a run widget and link the dashboard url. Changes to a chart widget go to the widget's workflow_id from the result, never to the workflow it was copied from. When the user asks to change what one or more widgets show or how they draw it, call refine_dashboard_widgets once with every change. A message from Heym Work's page view lists the user's notes on a page's widgets, each with its widget_id: apply every note in that one call, except a note that asks to rename or delete a widget, which goes to those tools. Afterwards say per widget what changed, and what could not be changed and why. To rename a widget, call rename_dashboard_widget with its id from list_dashboards. Call delete_dashboard_widget only when the user asked to delete or remove that widget; if their words match more than one widget, ask which with one heym-clarify question first. Deleting a chart widget deletes its workflow too. When the user asks to tidy, arrange or clean up a dashboard or page, also when they ask in the same message as adding widgets, call tidy_dashboard once the widgets are added, with per_row when they name how many widgets go in a row; another call gives another arrangement. tidy_dashboard arranges the dashboard in Heym. A Heym Work page keeps its own arrangement, which the Tidy up button on that page changes: say so when the user means a page in Heym Work."""
 
-DASHBOARD_CHAT_SYSTEM_PROMPT = DASHBOARD_CHAT_SYSTEM_PROMPT + CLARIFY_PROTOCOL_PROMPT
+DASHBOARD_CHAT_SYSTEM_PROMPT = (
+    DASHBOARD_CHAT_SYSTEM_PROMPT + CLARIFY_PROTOCOL_PROMPT + USER_MEMORY_PROMPT
+)
 
 _CREDENTIAL_CHOICES_SCHEMA: dict[str, Any] = {
     "type": "array",
@@ -907,7 +986,7 @@ DASHBOARD_CHAT_TOOLS = [
         "type": "function",
         "function": {
             "name": "search_documentation",
-            "description": "Search Heym platform documentation. Returns full markdown content of up to 5 matching docs. Use when the user asks about features, nodes, expressions, workflows, or how to use the app. Call at most 2 times per message. Use one comprehensive query (e.g. 'canvas features', 'portal', 'LLM node'). Always cite docs in your response with links like [Title](/docs/category/slug).",
+            "description": "Search Heym platform documentation. Returns markdown content of up to 5 matching docs, with query-relevant excerpts for oversized results (marked excerpted). Use a focused topic query, especially when refining excerpts (e.g. 'L0', 'L1 database recovery', 'LLM node'). Use when the user asks about features, nodes, expressions, workflows, or how to use the app. Call at most 2 times per message. Always cite docs in your response with links like [Title](/docs/category/slug).",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -986,80 +1065,6 @@ DASHBOARD_CHAT_TOOLS = [
                     },
                 },
                 "required": [],
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "list_boards",
-            "description": "List the user's agentic kanban boards. Use when the user asks which boards exist, how many boards there are, or for an overview of boards. Returns id, name, description, column_count, card_count, and how many cards are active/succeeded/failed for each board.",
-            "parameters": {"type": "object", "properties": {}},
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "create_board_task",
-            "description": "Create a task/card on a kanban board from a natural-language request. Pass title and optional description. Pass board_id when the user identified a board (resolve names with list_boards); otherwise omit it. With one board, omission selects it automatically. With multiple boards, omission returns requires_board_selection and board options without creating anything. The task is always placed in the board's first column.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "board_id": {
-                        "type": "string",
-                        "description": "Optional UUID of the selected board. Omit when the user did not specify a board.",
-                    },
-                    "title": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 500,
-                        "description": "Task/card title requested by the user.",
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "Optional task/card description or details requested by the user.",
-                    },
-                },
-                "required": ["title"],
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "get_board_tasks",
-            "description": "List the tasks (cards) on kanban boards with their column and run status (idle, running, pending, success, failed). Use when the user asks what jobs/tasks are on a board, their status, what is running/failed/done, or what is in a column. Optional board_id to scope to one board (get it from list_boards); omit to include all boards. Optional status to filter (idle|running|pending|success|failed).",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "board_id": {
-                        "type": "string",
-                        "description": "Optional UUID of a board to scope to. Omit for all boards.",
-                    },
-                    "status": {
-                        "type": "string",
-                        "enum": ["idle", "running", "pending", "success", "failed"],
-                        "description": "Optional run status filter.",
-                    },
-                },
-                "required": [],
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "get_card_detail",
-            "description": "Read the full detail of one kanban card/task: its description/content, run status, board and column, the comment thread, the activity timeline, and its workflow runs (with outputs and errors). Use when the user asks about a specific task/card — what it is, what was said on it, what happened, its output or error. Get the card_id from get_board_tasks.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "card_id": {
-                        "type": "string",
-                        "description": "UUID of the card to read (from get_board_tasks).",
-                    },
-                },
-                "required": ["card_id"],
             },
         },
     },
@@ -1180,7 +1185,10 @@ DASHBOARD_CHAT_TOOLS = [
         },
     },
     *DASHBOARD_TOOL_SCHEMAS,
+    *DASHBOARD_BUILD_TOOL_SCHEMAS,
     *DATA_TABLE_TOOL_SCHEMAS,
+    *BOARD_TOOL_SCHEMAS,
+    *USER_MEMORY_TOOL_SCHEMAS,
 ]
 
 
@@ -1344,248 +1352,6 @@ async def get_credential_for_user(
     db: AsyncSession,
 ) -> Credential | None:
     return await get_accessible_credential(db, credential_id, user.id)
-
-
-async def list_boards_for_chat(db: AsyncSession, user_id: uuid.UUID) -> dict:
-    """Read-only overview of the user's kanban boards for the chat assistant."""
-    boards = (
-        (
-            await db.execute(
-                select(Board).where(Board.owner_id == user_id).order_by(Board.created_at)
-            )
-        )
-        .scalars()
-        .all()
-    )
-    out = []
-    for board in boards:
-        column_count = (
-            await db.execute(
-                select(func.count(BoardColumn.id)).where(BoardColumn.board_id == board.id)
-            )
-        ).scalar() or 0
-        statuses = (
-            (await db.execute(select(BoardCard.run_status).where(BoardCard.board_id == board.id)))
-            .scalars()
-            .all()
-        )
-        status_counts: dict[str, int] = {}
-        for stat in statuses:
-            status_counts[stat] = status_counts.get(stat, 0) + 1
-        out.append(
-            {
-                "id": str(board.id),
-                "name": board.name,
-                "description": board.description,
-                "column_count": column_count,
-                "card_count": len(statuses),
-                "status_counts": status_counts,
-            }
-        )
-    return {"count": len(out), "boards": out}
-
-
-async def create_board_task_for_chat(
-    db: AsyncSession,
-    user: User,
-    title: str,
-    description: str | None = None,
-    board_id: str | None = None,
-) -> dict:
-    """Create a chat-requested card in the selected board's first column."""
-    if not isinstance(title, str) or not title.strip():
-        return {"error": "Task title is required"}
-    clean_title = title.strip()
-    if len(clean_title) > 500:
-        return {"error": "Task title must be 500 characters or fewer"}
-    if description is not None and not isinstance(description, str):
-        return {"error": "Task description must be text"}
-
-    board: Board | None = None
-    if board_id:
-        try:
-            selected_board_id = uuid.UUID(board_id)
-        except (ValueError, TypeError):
-            return {"error": "Invalid board_id"}
-        board = (
-            await db.execute(
-                select(Board).where(
-                    Board.id == selected_board_id,
-                    Board.owner_id == user.id,
-                )
-            )
-        ).scalar_one_or_none()
-        if board is None:
-            return {"error": "Board not found"}
-    else:
-        boards = (
-            (
-                await db.execute(
-                    select(Board).where(Board.owner_id == user.id).order_by(Board.created_at)
-                )
-            )
-            .scalars()
-            .all()
-        )
-        if not boards:
-            return {"error": "No boards available"}
-        if len(boards) > 1:
-            return {
-                "requires_board_selection": True,
-                "count": len(boards),
-                "boards": [
-                    {
-                        "id": str(candidate.id),
-                        "name": candidate.name,
-                        "description": candidate.description,
-                    }
-                    for candidate in boards
-                ],
-            }
-        board = boards[0]
-
-    try:
-        card = await create_board_card(
-            board_id=board.id,
-            request=CardCreateRequest(
-                title=clean_title,
-                content=description.strip() if description else "",
-            ),
-            db=db,
-            current_user=user,
-        )
-    except HTTPException as exc:
-        return {"error": str(exc.detail)}
-    return {
-        "created": True,
-        "task": {
-            "id": str(card.id),
-            "title": card.title,
-            "description": card.content,
-        },
-        "board": {"id": str(board.id), "name": board.name},
-        "placement": {"column": "first", "column_id": str(card.column_id)},
-    }
-
-
-async def get_board_tasks_for_chat(
-    db: AsyncSession,
-    user_id: uuid.UUID,
-    board_id: str | None = None,
-    status: str | None = None,
-) -> dict:
-    """Read-only list of board cards with column + run status for the chat assistant."""
-    filters = [Board.owner_id == user_id]
-    if board_id:
-        try:
-            filters.append(Board.id == uuid.UUID(board_id))
-        except (ValueError, TypeError):
-            return {"error": "Invalid board_id"}
-    boards = (await db.execute(select(Board).where(*filters))).scalars().all()
-    board_ids = [b.id for b in boards]
-    if not board_ids:
-        return {"count": 0, "tasks": []}
-    board_names = {b.id: b.name for b in boards}
-    columns = (
-        (await db.execute(select(BoardColumn).where(BoardColumn.board_id.in_(board_ids))))
-        .scalars()
-        .all()
-    )
-    column_names = {c.id: c.name for c in columns}
-    query = select(BoardCard).where(BoardCard.board_id.in_(board_ids))
-    if status:
-        query = query.where(BoardCard.run_status == status)
-    cards = (await db.execute(query.order_by(BoardCard.position).limit(500))).scalars().all()
-    tasks = [
-        {
-            "id": str(card.id),
-            "title": card.title,
-            "status": card.run_status,
-            "board": board_names.get(card.board_id),
-            "column": column_names.get(card.column_id),
-        }
-        for card in cards
-    ]
-    return {"count": len(tasks), "tasks": tasks}
-
-
-async def get_card_detail_for_chat(db: AsyncSession, user_id: uuid.UUID, card_id: str) -> dict:
-    """Read-only detail of one board card (content, comments, activity, runs)."""
-    try:
-        cid = uuid.UUID(card_id)
-    except (ValueError, TypeError):
-        return {"error": "Invalid card_id"}
-    card = (
-        await db.execute(
-            select(BoardCard)
-            .join(Board, Board.id == BoardCard.board_id)
-            .where(BoardCard.id == cid, Board.owner_id == user_id)
-        )
-    ).scalar_one_or_none()
-    if card is None:
-        return {"error": "Card not found"}
-    column = await db.get(BoardColumn, card.column_id)
-    board = await db.get(Board, card.board_id)
-    activities = (
-        (
-            await db.execute(
-                select(BoardCardActivity)
-                .where(BoardCardActivity.card_id == cid)
-                .order_by(BoardCardActivity.created_at)
-            )
-        )
-        .scalars()
-        .all()
-    )
-    runs = (
-        (
-            await db.execute(
-                select(BoardCardRun)
-                .where(BoardCardRun.card_id == cid)
-                .order_by(BoardCardRun.started_at.desc())
-                .limit(20)
-            )
-        )
-        .scalars()
-        .all()
-    )
-    return {
-        "id": str(card.id),
-        "title": card.title,
-        "content": card.content,
-        "status": card.run_status,
-        "board": board.name if board else None,
-        "column": column.name if column else None,
-        "comments": [
-            {
-                "author": a.author_type,
-                "content": a.content,
-                "created_at": a.created_at.isoformat() if a.created_at else None,
-            }
-            for a in activities
-            if a.kind == "comment"
-        ],
-        "activity": [
-            {
-                "kind": a.kind,
-                "author": a.author_type,
-                "content": a.content,
-                "created_at": a.created_at.isoformat() if a.created_at else None,
-            }
-            for a in activities
-        ],
-        "runs": [
-            {
-                "workflow": r.workflow_name,
-                "status": r.status,
-                "output": r.output or {},
-                "error": r.error,
-                "started_at": r.started_at.isoformat() if r.started_at else None,
-                "finished_at": r.finished_at.isoformat() if r.finished_at else None,
-            }
-            for r in runs
-        ],
-    }
 
 
 MAX_CHAT_TABLE_COLUMNS = 50
@@ -2278,6 +2044,18 @@ def _saved_workflow_extra(
     return extra or None
 
 
+def _report_workflow_draft(progress: ToolProgress | None) -> Callable[[str], None] | None:
+    """Tell `progress` which workflow and nodes the AI Builder has written so far."""
+    if progress is None:
+        return None
+    target = progress
+
+    def report(text: str) -> None:
+        target.message = workflow_draft_message(text)
+
+    return report
+
+
 async def create_and_run_generated_workflow_tool(
     *,
     db: AsyncSession,
@@ -2295,6 +2073,7 @@ async def create_and_run_generated_workflow_tool(
     credential_choices: list[CredentialChoice] | None = None,
     credential_mode: CredentialPromptMode = CredentialPromptMode.ASK_AND_CREATE,
     data_table_choices: list[DataTableChoice] | None = None,
+    progress: ToolProgress | None = None,
 ) -> str:
     """Generate a workflow with the AI Builder prompt and save it (no execution)."""
     if cancel_event is not None and cancel_event.is_set():
@@ -2349,7 +2128,9 @@ async def create_and_run_generated_workflow_tool(
         }
         if not is_reasoning_model(model):
             builder_kwargs["temperature"] = WORKFLOW_BUILDER_TEMPERATURE
-        builder_response = await _await_chat_completions(client, cancel_event, **builder_kwargs)
+        builder_response = await complete_round(
+            client, cancel_event, on_text=_report_workflow_draft(progress), **builder_kwargs
+        )
         if builder_response is None:
             return json.dumps({"status": "cancelled", "error": "Execution cancelled"})
         builder_choice = builder_response.choices[0] if builder_response.choices else None
@@ -2431,6 +2212,7 @@ async def edit_and_run_generated_workflow_tool(
     credential_choices: list[CredentialChoice] | None = None,
     credential_mode: CredentialPromptMode = CredentialPromptMode.ASK_AND_CREATE,
     data_table_choices: list[DataTableChoice] | None = None,
+    progress: ToolProgress | None = None,
 ) -> str:
     """Edit a saved workflow with the AI Builder prompt and save it (no execution)."""
     if cancel_event is not None and cancel_event.is_set():
@@ -2508,7 +2290,9 @@ async def edit_and_run_generated_workflow_tool(
         }
         if not is_reasoning_model(model):
             builder_kwargs["temperature"] = WORKFLOW_BUILDER_TEMPERATURE
-        builder_response = await _await_chat_completions(client, cancel_event, **builder_kwargs)
+        builder_response = await complete_round(
+            client, cancel_event, on_text=_report_workflow_draft(progress), **builder_kwargs
+        )
         if builder_response is None:
             return json.dumps({"status": "cancelled", "error": "Execution cancelled"})
         builder_choice = builder_response.choices[0] if builder_response.choices else None
@@ -2598,6 +2382,45 @@ async def _record_chat_workflow_edit_version(
     return await add_workflow_version(db, workflow, before, user_id)
 
 
+_NO_UPLOAD_TRIGGER_NOTE = (
+    "The sample file was not passed in: this workflow has no File Upload trigger. At run "
+    "time a Code node's Files and an agent's file tools open only files uploaded to the "
+    "workflow, so start it with a fileUploadTrigger and read `$<trigger label>.file.id`."
+)
+
+
+async def _feed_sample_file(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    workflow: Workflow,
+    file_id: uuid.UUID,
+    public_base_url: str,
+) -> tuple[list[dict], RunFileScope | None, dict[str, Any]]:
+    """Hand a Chat file to the workflow's File Upload trigger, the way an upload arrives.
+
+    The run may then open that one file besides the workflow's own; nothing else.
+    """
+    trigger = file_intake_service.find_file_upload_trigger(workflow.nodes or [])
+    if trigger is None:
+        return workflow.nodes, None, {"passed": False, "note": _NO_UPLOAD_TRIGGER_NOTE}
+    found = await get_accessible_file(db, file_id, user_id)
+    if found is None:
+        return workflow.nodes, None, {"passed": False, "note": "The sample file is not available."}
+    row = found.file
+    payload = {
+        "id": str(row.id),
+        "name": row.filename,
+        "mime": row.mime_type,
+        "size": row.size_bytes,
+        "download_url": f"{public_base_url.rstrip('/')}/api/files/{row.id}",
+    }
+    initial = {"file": payload, "uploaded_at": datetime.now(timezone.utc).isoformat()}
+    nodes = file_intake_service.with_trigger_inputs(workflow.nodes, str(trigger["id"]), initial)
+    label = str((trigger.get("data") or {}).get("label") or "trigger")
+    note = {"passed": True, "trigger": label, "name": row.filename}
+    return nodes, RunFileScope(file_ids=frozenset({row.id})), note
+
+
 async def run_execute_workflow_tool(
     db: AsyncSession,
     user_id: uuid.UUID,
@@ -2607,8 +2430,14 @@ async def run_execute_workflow_tool(
     cancel_event: Event | None = None,
     llm_session_id: str | None = None,
     trigger_source: str = "dashboard_chat",
+    progress: ToolProgress | None = None,
+    sample_file_id: uuid.UUID | None = None,
 ) -> str:
-    """Execute a workflow and return JSON string result for tool. Raises no exception; errors are returned in the result."""
+    """Execute a workflow and return JSON string result for tool. Raises no exception; errors are returned in the result.
+
+    With `progress`, the running node is described while the run lasts. With
+    `sample_file_id`, Chat hands that Drive file to the workflow's File Upload trigger.
+    """
     if cancel_event is not None and cancel_event.is_set():
         return json.dumps({"status": "cancelled", "error": "Execution cancelled"})
 
@@ -2633,23 +2462,40 @@ async def run_execute_workflow_tool(
         "query": {},
         "body": inputs,
     }
+    run_nodes, file_scope, sample_note = workflow.nodes, None, None
+    if sample_file_id is not None:
+        run_nodes, file_scope, sample_note = await _feed_sample_file(
+            db, user_id, workflow, sample_file_id, public_base_url
+        )
 
     try:
-        execution_result = await asyncio.to_thread(
-            execute_workflow,
-            workflow_id=workflow.id,
-            nodes=workflow.nodes,
-            edges=workflow.edges or [],
-            inputs=enriched_inputs,
-            workflow_cache=workflow_cache,
-            test_run=False,
-            credentials_context=credentials_context,
-            global_variables_context=global_variables_context,
-            trace_user_id=user_id,
-            actor_user_id=user_id,
-            cancel_event=cancel_event,
-            llm_session_id=llm_session_id,
-        )
+        run_kwargs: dict[str, Any] = {}
+        watch: contextlib.AbstractContextManager[None] = contextlib.nullcontext()
+        if progress is not None:
+            execution_id = uuid.uuid4()
+            run_kwargs["execution_id"] = str(execution_id)
+            watch = watch_execution_nodes(workflow_id=workflow.id, execution_id=execution_id)
+            progress.describe = lambda: running_node_message(execution_id, workflow)
+        with watch:
+            execution_result = await asyncio.to_thread(
+                execute_workflow,
+                workflow_id=workflow.id,
+                nodes=run_nodes,
+                edges=workflow.edges or [],
+                inputs=enriched_inputs,
+                workflow_cache=workflow_cache,
+                test_run=False,
+                credentials_context=credentials_context,
+                global_variables_context=global_variables_context,
+                trace_user_id=user_id,
+                actor_user_id=user_id,
+                cancel_event=cancel_event,
+                llm_session_id=llm_session_id,
+                file_scope=file_scope,
+                **run_kwargs,
+            )
+        if progress is not None:
+            progress.describe = None
 
         history_entry_id: str | None = None
         if execution_result.status == "pending":
@@ -2761,18 +2607,18 @@ async def run_execute_workflow_tool(
             execution_result.outputs,
             node_results_serializable,
         )
-        return json.dumps(
-            {
-                "status": execution_result.status,
-                "outputs": execution_result.outputs,
-                "node_results": node_results_serializable,
-                "execution_time_ms": execution_result.execution_time_ms,
-                "execution_history_id": history_entry_id,
-                "pending_review": pending_review,
-                "error": getattr(execution_result, "error", None),
-            },
-            default=str,
-        )
+        run_report: dict[str, Any] = {
+            "status": execution_result.status,
+            "outputs": execution_result.outputs,
+            "node_results": node_results_serializable,
+            "execution_time_ms": execution_result.execution_time_ms,
+            "execution_history_id": history_entry_id,
+            "pending_review": pending_review,
+            "error": getattr(execution_result, "error", None),
+        }
+        if sample_note is not None:
+            run_report["sample_file"] = sample_note
+        return json.dumps(run_report, default=str)
     except WorkflowCancelledError:
         return json.dumps({"status": "cancelled", "error": "Execution cancelled"})
     except Exception as e:
@@ -2929,11 +2775,11 @@ async def resolve_hitl_review_tool(
     hitl_request.resolved_output = build_hitl_resolved_output(hitl_request)
     await db.commit()
 
-    asyncio.create_task(resume_hitl_request_in_background(hitl_request.id))
+    spawn_background_task(resume_hitl_request_in_background(hitl_request.id))
     if isinstance((hitl_request.original_agent_output or {}).get("_slack"), dict):
         from app.services.slack_interactions import sync_message_after_heym_decision
 
-        asyncio.create_task(sync_message_after_heym_decision(hitl_request.id))
+        spawn_background_task(sync_message_after_heym_decision(hitl_request.id))
     return json.dumps(
         {
             "status": "resolved",
@@ -3589,20 +3435,6 @@ def _summarize_tool_result(tool_name: str, result_json: str) -> str:
         if isinstance(data, dict) and "total" in data:
             return f"{int(data.get('total') or 0)} scheduled occurrence(s)"
         return result_json[:200] + ("..." if len(result_json) > 200 else "")
-    if tool_name == "list_boards":
-        if isinstance(data, dict) and "count" in data:
-            return f"{int(data.get('count') or 0)} board(s) listed"
-        return result_json[:150] + ("..." if len(result_json) > 150 else "")
-    if tool_name == "create_board_task":
-        if isinstance(data, dict) and data.get("error"):
-            return f"Error: {str(data.get('error'))[:150]}"
-        if isinstance(data, dict) and data.get("requires_board_selection"):
-            return f"Board selection required ({int(data.get('count') or 0)} available)"
-        if isinstance(data, dict) and data.get("created"):
-            task = data.get("task") or {}
-            board = data.get("board") or {}
-            return f"Created task {task.get('title')!r} on board {board.get('name')!r}"
-        return result_json[:200] + ("..." if len(result_json) > 200 else "")
     if tool_name == "list_data_tables":
         if isinstance(data, dict) and "count" in data:
             return f"{int(data.get('count') or 0)} data table(s) listed"
@@ -3617,22 +3449,14 @@ def _summarize_tool_result(tool_name: str, result_json: str) -> str:
         return result_json[:200] + ("..." if len(result_json) > 200 else "")
     if tool_name in DASHBOARD_TOOL_NAMES:
         return summarize_dashboard_tool(tool_name, data)
+    if tool_name in DASHBOARD_BUILD_TOOL_NAMES:
+        return summarize_dashboard_build_tool(tool_name, data)
     if tool_name in DATA_TABLE_TOOL_NAMES:
         return summarize_data_table_tool(tool_name, data)
-    if tool_name == "get_board_tasks":
-        if isinstance(data, dict) and "error" in data:
-            return f"Error: {str(data.get('error'))[:150]}"
-        if isinstance(data, dict) and "count" in data:
-            return f"{int(data.get('count') or 0)} task(s) listed"
-        return result_json[:200] + ("..." if len(result_json) > 200 else "")
-    if tool_name == "get_card_detail":
-        if isinstance(data, dict) and "error" in data:
-            return f"Error: {str(data.get('error'))[:150]}"
-        if isinstance(data, dict) and "title" in data:
-            runs = data.get("runs") or []
-            comments = data.get("comments") or []
-            return f"Card {data.get('title')!r}: {data.get('status')}, {len(comments)} comment(s), {len(runs)} run(s)"
-        return result_json[:200] + ("..." if len(result_json) > 200 else "")
+    if tool_name in USER_MEMORY_TOOL_NAMES:
+        return summarize_user_memory_tool(tool_name, data)
+    if tool_name in BOARD_TOOL_NAMES:
+        return summarize_board_tool(tool_name, data if isinstance(data, dict) else {})
     return result_json[:200] + ("..." if len(result_json) > 200 else "")
 
 
@@ -3714,6 +3538,25 @@ def _tool_end_yield(
     )
 
 
+def _can_build_dashboards(build: "ChatBuildSession | None") -> bool:
+    """Whether a turn may create dashboards and build widget graphs: a build turn that is not an
+    AI edit of one workflow or a skill-only turn."""
+    return (
+        build is not None
+        and not build.request.skill_only
+        and build.request.target_workflow_id is None
+    )
+
+
+def _turn_session_id(
+    trace_context: LLMTraceContext | None, build: "ChatBuildSession | None"
+) -> str | None:
+    """The conversation's OpenCode session, which the turn's own widget model calls share."""
+    if trace_context is not None and trace_context.session_id:
+        return trace_context.session_id
+    return build.llm_session_id if build is not None else None
+
+
 def _cancelled_tool_end_yield(
     tc_id: str,
     *,
@@ -3737,6 +3580,15 @@ def _cancelled_tool_end_yield(
         }
     )
     return _tool_end_yield(tc_id, summary, step_ms, status="cancelled")
+
+
+def _round_event(event: RoundDraft | RoundProgress, round_number: int) -> str:
+    """A streamed round's draft text or tool-writing line as a chat stream event."""
+    if isinstance(event, RoundDraft):
+        payload: dict[str, Any] = {"type": "draft", "round": round_number, "text": event.text}
+    else:
+        payload = {"type": "progress", "round": round_number, "message": event.message}
+    return "data: " + json.dumps(payload) + "\n\n"
 
 
 def _context_breakdown(
@@ -3775,16 +3627,18 @@ async def stream_dashboard_chat(
     public_base_url: str,
     trace_context: LLMTraceContext | None = None,
     cancel_event: Event | None = None,
-    attachment: FileAttachment | None = None,
+    attachments: Sequence[FileAttachment] = (),
     selected_credential: Credential | None = None,
     *,
     system_prompt_parts: Any | None = None,
     credential_mode: CredentialPromptMode = CredentialPromptMode.ASK_AND_CREATE,
     build: "ChatBuildSession | None" = None,
+    files: "ChatFileTools | None" = None,
 ) -> AsyncGenerator[str, None]:
     """Run dashboard chat with tool use: loop non-streaming calls with tools until no tool_calls, then yield final content.
 
     With `build`, the turn may save, test-run and finish workflows (chat build mode).
+    With `files`, it may open Drive files in the file sandbox.
     """
     user_id = user.id
     is_reasoning = is_reasoning_model(model)
@@ -3812,6 +3666,8 @@ async def stream_dashboard_chat(
     trace_tools: list[dict[str, Any]] = []
     llm_call_started: float | None = None
     turn_trace_recorded = False
+    turn_run_recorded = False
+    active_tool: dict[str, Any] | None = None
 
     from app.services.context_compressor import (
         _estimate_tokens,
@@ -3837,13 +3693,14 @@ async def stream_dashboard_chat(
         else:
             breakdown = _context_breakdown(
                 base_system_prompt=system_prompt_parts.base_system_prompt
+                + getattr(system_prompt_parts, "build_reference", "")
                 + getattr(system_prompt_parts, "credentials_block", "")
                 + getattr(system_prompt_parts, "build_block", ""),
                 agents_md=system_prompt_parts.agents_md,
                 workflows_block=system_prompt_parts.workflows_block,
                 user_rules=system_prompt_parts.user_rules,
                 history=messages_to_use,
-                attachment_content=attachment.content if attachment else None,
+                attachment_content="".join(item.content for item in attachments) or None,
             )
         return (
             "data: "
@@ -3879,6 +3736,8 @@ async def stream_dashboard_chat(
     def _call_kwargs() -> dict[str, Any]:
         # Build mode's tools change during the turn: the test budget can run out.
         tools = build.tools(DASHBOARD_CHAT_TOOLS) if build is not None else DASHBOARD_CHAT_TOOLS
+        if files is not None:
+            tools = [*tools, *files.schemas()]
         return {
             **base_kwargs,
             "tools": tools,
@@ -3890,9 +3749,10 @@ async def stream_dashboard_chat(
         duration_ms: float,
         *,
         usage: Any = None,
-        tool_calls: int = 0,
+        tool_calls: int | None = 0,
         text: str | None = None,
         error: str | None = None,
+        cancelled: bool = False,
     ) -> None:
         entry: dict[str, Any] = {
             "turn": len(trace_turns) + 1,
@@ -3914,6 +3774,8 @@ async def stream_dashboard_chat(
             entry["textChars"] = len(text)
         if error:
             entry["error"] = error
+        if cancelled:
+            entry["cancelled"] = True
         trace_turns.append(entry)
 
     def _turn_token_total(key: str) -> int | None:
@@ -3924,11 +3786,16 @@ async def stream_dashboard_chat(
         nonlocal turn_trace_recorded, llm_call_started
         if turn_trace_recorded or trace_context is None:
             return
-        if error and llm_call_started is not None:
-            _record_llm_turn(llm_call_started, (time.time() - llm_call_started) * 1000, error=error)
+        if llm_call_started is not None:
+            _record_llm_turn(
+                llm_call_started,
+                (time.time() - llm_call_started) * 1000,
+                tool_calls=None,
+                error=error,
+                cancelled=cancelled,
+            )
         llm_call_started = None
-        # A turn stopped before the model answered anything cost nothing to trace.
-        if not trace_turns and error is None:
+        if not trace_turns and error is None and not cancelled:
             return
         turn_trace_recorded = True
         elapsed_ms = round((time.time() - start_time) * 1000, 2)
@@ -3946,9 +3813,19 @@ async def stream_dashboard_chat(
             "elapsed_ms": elapsed_ms,
             "turn_timings": trace_turns,
         }
-        if trace_tools:
-            response["tool_calls"] = trace_tools
-            response["tool_metrics"] = summarize_tool_calls(trace_tools)
+        tools = list(trace_tools)
+        if cancelled and active_tool is not None:
+            tools.append(
+                {
+                    **active_tool,
+                    "status": "cancelled",
+                    "elapsed_ms": round(elapsed_ms + trace_offset_ms - active_tool["start_ms"], 2),
+                    "result_chars": 0,
+                }
+            )
+        if tools:
+            response["tool_calls"] = tools
+            response["tool_metrics"] = summarize_tool_calls(tools)
         if cancelled:
             response["cancelled"] = True
         record_llm_trace(
@@ -3971,7 +3848,10 @@ async def stream_dashboard_chat(
     def _record_dashboard_run(
         status: str, elapsed_ms: float, trace_error: str | None = None
     ) -> None:
-        # Every exit passes through here, so the turn's one trace is written here too.
+        nonlocal turn_run_recorded
+        if turn_run_recorded:
+            return
+        turn_run_recorded = True
         _record_turn_trace(trace_error, cancelled=status == "cancelled")
         record_run_history(
             user_id=user_id,
@@ -3986,6 +3866,7 @@ async def stream_dashboard_chat(
         )
 
     finished_summary: str | None = None
+    truncated_rounds = 0
     try:
         while rounds < MAX_DASHBOARD_CHAT_TOOL_ROUNDS:
             if cancel_event is not None and cancel_event.is_set():
@@ -4028,7 +3909,12 @@ async def stream_dashboard_chat(
             round_start = time.time()
             llm_call_started = round_start
             try:
-                response = await _await_chat_completions(client, cancel_event, **kwargs)
+                response = None
+                async for event in stream_round(client, cancel_event, **kwargs):
+                    if isinstance(event, RoundAnswer):
+                        response = event.completion
+                    else:
+                        yield _round_event(event, rounds)
                 if response is None:
                     elapsed_ms = (time.time() - start_time) * 1000
                     _record_dashboard_run("cancelled", round(elapsed_ms, 2))
@@ -4053,7 +3939,12 @@ async def stream_dashboard_chat(
                 kwargs = _call_kwargs()
                 round_start = time.time()
                 llm_call_started = round_start
-                response = await _await_chat_completions(client, cancel_event, **kwargs)
+                response = None
+                async for event in stream_round(client, cancel_event, **kwargs):
+                    if isinstance(event, RoundAnswer):
+                        response = event.completion
+                    else:
+                        yield _round_event(event, rounds)
                 if response is None:
                     elapsed_ms = (time.time() - start_time) * 1000
                     _record_dashboard_run("cancelled", round(elapsed_ms, 2))
@@ -4111,6 +4002,8 @@ async def stream_dashboard_chat(
                 yield f"data: {json.dumps({'type': 'done'})}\n\n"
                 return
 
+            # Every call of a round cut at the output token limit is refused, complete or not.
+            round_truncated = is_truncated_turn(getattr(choice, "finish_reason", None))
             messages_to_use.append(
                 {
                     "role": "assistant",
@@ -4136,13 +4029,57 @@ async def stream_dashboard_chat(
                     elapsed_ms = (time.time() - start_time) * 1000
                     _record_dashboard_run("cancelled", round(elapsed_ms, 2))
                     return
-                try:
-                    args = json.loads(tc.function.arguments) if tc.function.arguments else {}
-                except json.JSONDecodeError:
-                    args = {}
-                if build is not None and build.handles(name):
-                    step_label = build.step_label(name)
-                    display_args = build.display_args(name, args)
+                args, args_error = parse_tool_arguments(tc.function.arguments)
+                if round_truncated:
+                    args_error = TRUNCATED_TOOL_CALL_ERROR
+                active_tool = {
+                    "tool_call_id": tc.id,
+                    "name": name,
+                    "arguments": args,
+                    "start_ms": _offset_ms(tool_started),
+                }
+                tool_group = (
+                    build
+                    if build is not None and build.handles(name)
+                    else files
+                    if files is not None and files.handles(name)
+                    else None
+                )
+                if args_error is not None:
+                    step_label = f"Not running {name}"
+                    yield (
+                        "data: "
+                        + json.dumps(
+                            {
+                                "type": "tool_start",
+                                "id": tc.id,
+                                "name": name,
+                                "label": step_label,
+                                "args": {},
+                            }
+                        )
+                        + "\n\n"
+                    )
+                    result = json.dumps({"error": args_error, "status": "error"})
+                    run_steps.append(
+                        {
+                            "label": step_label,
+                            "tool": name,
+                            "request": {},
+                            "response_summary": _summarize_tool_result(name, result),
+                            "execution_time_ms": 0.0,
+                        }
+                    )
+                    yield _tool_end_yield(
+                        tc.id,
+                        run_steps[-1]["response_summary"],
+                        run_steps[-1]["execution_time_ms"],
+                        status="error",
+                    )
+                elif tool_group is not None:
+                    step_label = tool_group.step_label(name, args)
+                    display_args = tool_group.display_args(name, args)
+                    active_tool["arguments"] = display_args
                     yield (
                         "data: "
                         + json.dumps(
@@ -4158,7 +4095,13 @@ async def stream_dashboard_chat(
                         + "\n\n"
                     )
                     step_start = time.time()
-                    outcome = await build.call(name, args)
+                    tool_progress = ToolProgress()
+                    build_task = asyncio.ensure_future(
+                        tool_group.call(name, args, progress=tool_progress)
+                    )
+                    async for event in follow_tool(build_task, tc.id, tool_progress):
+                        yield event
+                    outcome = build_task.result()
                     result = outcome.result
                     args = display_args
                     if cancel_event is not None and cancel_event.is_set():
@@ -4256,20 +4199,43 @@ async def stream_dashboard_chat(
                     # Auto-inject attachment content into the matching workflow input field.
                     # The LLM only received metadata for images (no base64 in its context),
                     # so we inject the actual content here before execution.
-                    if attachment is not None and w is not None:
+                    sample_file_id = None
+                    attachment = run_attachment(attachments, inputs)
+                    if attachment is not None and attachment.kind == "file":
+                        sample_file_id = attachment.file_id
+                        # An image from Drive still reaches a workflow's image input as itself.
+                        if w is not None:
+                            image = await image_input(
+                                db,
+                                user_id,
+                                file_id=attachment.file_id,
+                                mime=attachment.mime,
+                                field_keys=[f.key for f in extract_input_fields_from_workflow(w)],
+                            )
+                            if image is not None:
+                                inputs[image[0]] = image[1]
+                    elif attachment is not None and w is not None:
                         field_keys = [f.key for f in extract_input_fields_from_workflow(w)]
                         inject_key = _find_injection_field(field_keys, attachment.kind)
                         if inject_key:
-                            inputs[inject_key] = attachment.content
-                    result = await run_execute_workflow_tool(
-                        db,
-                        user_id,
-                        workflow_id_str,
-                        inputs,
-                        public_base_url,
-                        cancel_event,
-                        llm_session_id=trace_context.session_id if trace_context else None,
+                            inputs[inject_key] = attachment.injection_value()
+                    tool_progress = ToolProgress()
+                    run_task = asyncio.ensure_future(
+                        run_execute_workflow_tool(
+                            db,
+                            user_id,
+                            workflow_id_str,
+                            inputs,
+                            public_base_url,
+                            cancel_event,
+                            llm_session_id=trace_context.session_id if trace_context else None,
+                            progress=tool_progress,
+                            sample_file_id=sample_file_id,
+                        )
                     )
+                    async for event in follow_tool(run_task, tc.id, tool_progress):
+                        yield event
+                    result = run_task.result()
                     tool_request = {
                         "workflow_id": workflow_id_str,
                         "inputs": args.get("inputs") or {},
@@ -4410,23 +4376,30 @@ async def stream_dashboard_chat(
                         )
                         step_start = time.time()
                         workflows = await get_workflows_for_user_with_inputs(db, user_id)
-                        result = await create_and_run_generated_workflow_tool(
-                            db=db,
-                            user=user,
-                            client=client,
-                            model=model,
-                            selected_credential=selected_credential,
-                            selected_model=model,
-                            goal=goal,
-                            inputs=dict(inputs),
-                            available_workflows=workflows,
-                            public_base_url=public_base_url,
-                            attachment=attachment,
-                            cancel_event=cancel_event,
-                            credential_choices=choices,
-                            credential_mode=credential_mode,
-                            data_table_choices=table_choices,
+                        tool_progress = ToolProgress()
+                        builder_task = asyncio.ensure_future(
+                            create_and_run_generated_workflow_tool(
+                                db=db,
+                                user=user,
+                                client=client,
+                                model=model,
+                                selected_credential=selected_credential,
+                                selected_model=model,
+                                goal=goal,
+                                inputs=dict(inputs),
+                                available_workflows=workflows,
+                                public_base_url=public_base_url,
+                                attachment=run_attachment(attachments, inputs),
+                                cancel_event=cancel_event,
+                                credential_choices=choices,
+                                credential_mode=credential_mode,
+                                data_table_choices=table_choices,
+                                progress=tool_progress,
+                            )
                         )
+                        async for event in follow_tool(builder_task, tc.id, tool_progress):
+                            yield event
+                        result = builder_task.result()
                         tool_request = {
                             "goal": goal,
                             "inputs": inputs,
@@ -4579,24 +4552,31 @@ async def stream_dashboard_chat(
                         )
                         step_start = time.time()
                         workflows = await get_workflows_for_user_with_inputs(db, user_id)
-                        result = await edit_and_run_generated_workflow_tool(
-                            db=db,
-                            user=user,
-                            client=client,
-                            model=model,
-                            selected_credential=selected_credential,
-                            selected_model=model,
-                            workflow_id=workflow_id_str,
-                            instructions=instructions,
-                            inputs=dict(inputs),
-                            available_workflows=workflows,
-                            public_base_url=public_base_url,
-                            attachment=attachment,
-                            cancel_event=cancel_event,
-                            credential_choices=choices,
-                            credential_mode=credential_mode,
-                            data_table_choices=table_choices,
+                        tool_progress = ToolProgress()
+                        builder_task = asyncio.ensure_future(
+                            edit_and_run_generated_workflow_tool(
+                                db=db,
+                                user=user,
+                                client=client,
+                                model=model,
+                                selected_credential=selected_credential,
+                                selected_model=model,
+                                workflow_id=workflow_id_str,
+                                instructions=instructions,
+                                inputs=dict(inputs),
+                                available_workflows=workflows,
+                                public_base_url=public_base_url,
+                                attachment=run_attachment(attachments, inputs),
+                                cancel_event=cancel_event,
+                                credential_choices=choices,
+                                credential_mode=credential_mode,
+                                data_table_choices=table_choices,
+                                progress=tool_progress,
+                            )
                         )
+                        async for event in follow_tool(builder_task, tc.id, tool_progress):
+                            yield event
+                        result = builder_task.result()
                         tool_request = {
                             "workflow_id": workflow_id_str,
                             "instructions": instructions,
@@ -5253,80 +5233,6 @@ async def stream_dashboard_chat(
                         run_steps[-1]["execution_time_ms"],
                         status=_chat_tool_lifecycle_status(name, result),
                     )
-                elif name == "list_boards":
-                    step_label = "Listing boards..."
-                    yield (
-                        "data: "
-                        + json.dumps(
-                            {
-                                "type": "tool_start",
-                                "id": tc.id,
-                                "name": name,
-                                "label": step_label,
-                                "args": args,
-                            }
-                        )
-                        + "\n\n"
-                    )
-                    step_start = time.time()
-                    result = json.dumps(await list_boards_for_chat(db, user_id))
-                    step_ms = round((time.time() - step_start) * 1000, 2)
-                    run_steps.append(
-                        {
-                            "label": step_label,
-                            "tool": name,
-                            "request": {},
-                            "response_summary": _summarize_tool_result(name, result),
-                            "execution_time_ms": step_ms,
-                        }
-                    )
-                    yield _tool_end_yield(
-                        tc.id,
-                        run_steps[-1]["response_summary"],
-                        run_steps[-1]["execution_time_ms"],
-                        status=_chat_tool_lifecycle_status(name, result),
-                    )
-                elif name == "create_board_task":
-                    step_label = "Adding task to board..."
-                    yield (
-                        "data: "
-                        + json.dumps(
-                            {
-                                "type": "tool_start",
-                                "id": tc.id,
-                                "name": name,
-                                "label": step_label,
-                                "args": args,
-                            }
-                        )
-                        + "\n\n"
-                    )
-                    step_start = time.time()
-                    result = json.dumps(
-                        await create_board_task_for_chat(
-                            db,
-                            user,
-                            title=args.get("title") or "",
-                            description=args.get("description"),
-                            board_id=args.get("board_id") or None,
-                        )
-                    )
-                    step_ms = round((time.time() - step_start) * 1000, 2)
-                    run_steps.append(
-                        {
-                            "label": step_label,
-                            "tool": name,
-                            "request": args,
-                            "response_summary": _summarize_tool_result(name, result),
-                            "execution_time_ms": step_ms,
-                        }
-                    )
-                    yield _tool_end_yield(
-                        tc.id,
-                        run_steps[-1]["response_summary"],
-                        run_steps[-1]["execution_time_ms"],
-                        status=_chat_tool_lifecycle_status(name, result),
-                    )
                 elif name == "list_data_tables":
                     step_label = "Checking data tables..."
                     yield (
@@ -5401,8 +5307,8 @@ async def stream_dashboard_chat(
                         run_steps[-1]["execution_time_ms"],
                         status=_chat_tool_lifecycle_status(name, result),
                     )
-                elif name == "get_board_tasks":
-                    step_label = "Reading board tasks..."
+                elif name in BOARD_TOOL_NAMES:
+                    step_label = board_tool_label(name)
                     yield (
                         "data: "
                         + json.dumps(
@@ -5417,13 +5323,10 @@ async def stream_dashboard_chat(
                         + "\n\n"
                     )
                     step_start = time.time()
+                    # A board the chat creates maps cards with the chat's own model.
+                    chat_llm = (selected_credential.id, model) if selected_credential else None
                     result = json.dumps(
-                        await get_board_tasks_for_chat(
-                            db,
-                            user_id,
-                            board_id=args.get("board_id") or None,
-                            status=args.get("status") or None,
-                        )
+                        await call_board_tool(db, user, name, args, public_base_url, chat_llm)
                     )
                     step_ms = round((time.time() - step_start) * 1000, 2)
                     run_steps.append(
@@ -5438,11 +5341,11 @@ async def stream_dashboard_chat(
                     yield _tool_end_yield(
                         tc.id,
                         run_steps[-1]["response_summary"],
-                        run_steps[-1]["execution_time_ms"],
+                        step_ms,
                         status=_chat_tool_lifecycle_status(name, result),
                     )
-                elif name == "get_card_detail":
-                    step_label = "Reading card detail..."
+                elif name in USER_MEMORY_TOOL_NAMES:
+                    step_label = user_memory_tool_label(name)
                     yield (
                         "data: "
                         + json.dumps(
@@ -5458,7 +5361,7 @@ async def stream_dashboard_chat(
                     )
                     step_start = time.time()
                     result = json.dumps(
-                        await get_card_detail_for_chat(db, user_id, args.get("card_id", "") or "")
+                        await call_user_memory_tool(db, user, name, args, source="chat")
                     )
                     step_ms = round((time.time() - step_start) * 1000, 2)
                     run_steps.append(
@@ -5473,7 +5376,7 @@ async def stream_dashboard_chat(
                     yield _tool_end_yield(
                         tc.id,
                         run_steps[-1]["response_summary"],
-                        run_steps[-1]["execution_time_ms"],
+                        step_ms,
                         status=_chat_tool_lifecycle_status(name, result),
                     )
                 elif name in DATA_TABLE_TOOL_NAMES:
@@ -5525,18 +5428,82 @@ async def stream_dashboard_chat(
                         + "\n\n"
                     )
                     step_start = time.time()
-                    result = json.dumps(
-                        await call_dashboard_tool(
+                    dashboard_result = await call_dashboard_tool(
+                        db,
+                        user,
+                        name,
+                        args,
+                        public_base_url,
+                        can_build=_can_build_dashboards(build),
+                    )
+                    result = json.dumps(dashboard_result)
+                    step_ms = round((time.time() - step_start) * 1000, 2)
+                    run_steps.append(
+                        {
+                            "label": step_label,
+                            "tool": name,
+                            "request": args,
+                            "response_summary": _summarize_tool_result(name, result),
+                            "execution_time_ms": step_ms,
+                        }
+                    )
+                    for event in dashboard_change_events(name, dashboard_result):
+                        yield "data: " + json.dumps(event) + "\n\n"
+                    yield _tool_end_yield(
+                        tc.id,
+                        run_steps[-1]["response_summary"],
+                        run_steps[-1]["execution_time_ms"],
+                        status=_chat_tool_lifecycle_status(name, result),
+                    )
+                elif name in DASHBOARD_BUILD_TOOL_NAMES:
+                    step_label = dashboard_build_tool_label(name)
+                    yield (
+                        "data: "
+                        + json.dumps(
+                            {
+                                "type": "tool_start",
+                                "id": tc.id,
+                                "name": name,
+                                "label": step_label,
+                                "args": args,
+                            }
+                        )
+                        + "\n\n"
+                    )
+                    step_start = time.time()
+                    tool_progress = ToolProgress()
+                    widget_task = asyncio.ensure_future(
+                        call_dashboard_build_tool(
                             db,
                             user,
                             name,
                             args,
                             public_base_url,
-                            can_build=build is not None
-                            and not build.request.skill_only
-                            and build.request.target_workflow_id is None,
+                            can_build=_can_build_dashboards(build),
+                            llm=WidgetModel(
+                                credential=selected_credential,
+                                model=model,
+                                session_id=_turn_session_id(trace_context, build),
+                            ),
+                            progress=tool_progress,
                         )
                     )
+                    async for event in follow_tool(widget_task, tc.id, tool_progress):
+                        yield event
+                    result = json.dumps(widget_task.result())
+                    if cancel_event is not None and cancel_event.is_set():
+                        yield _cancelled_tool_end_yield(
+                            tc.id,
+                            name=name,
+                            step_label=step_label,
+                            request=args,
+                            result=result,
+                            step_start=step_start,
+                            run_steps=run_steps,
+                        )
+                        elapsed_ms = (time.time() - start_time) * 1000
+                        _record_dashboard_run("cancelled", round(elapsed_ms, 2))
+                        return
                     step_ms = round((time.time() - step_start) * 1000, 2)
                     run_steps.append(
                         {
@@ -5603,9 +5570,21 @@ async def stream_dashboard_chat(
                         "result_chars": len(content_for_llm),
                     }
                 )
+                active_tool = None
                 messages_to_use.append(
                     {"role": "tool", "content": content_for_llm, "tool_call_id": tc.id}
                 )
+            truncated_rounds = truncated_rounds + 1 if round_truncated else 0
+            if truncated_rounds >= MAX_TRUNCATED_TOOL_TURNS:
+                cut_error = (
+                    f"The model reached its output token limit in {truncated_rounds} tool-calling "
+                    "rounds in a row, so their tool calls were not run. Ask for a smaller step, or "
+                    "use a model with a larger output limit."
+                )
+                elapsed_ms = (time.time() - start_time) * 1000
+                _record_dashboard_run("error", round(elapsed_ms, 2), trace_error=cut_error)
+                yield f"data: {json.dumps({'type': 'error', 'message': cut_error})}\n\n"
+                return
             if finished_summary is not None:
                 # finish ends the turn: its summary is the reply, the Verified card shows it.
                 response_parts.append(finished_summary)
@@ -5628,8 +5607,7 @@ async def stream_dashboard_chat(
         _record_dashboard_run("error", round(elapsed_ms, 2), trace_error=str(e))
         yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
     finally:
-        # A task cancelled mid-call skips every exit above; keep the calls it finished.
-        _record_turn_trace(cancelled=True)
+        _record_dashboard_run("cancelled", round((time.time() - start_time) * 1000, 2))
 
 
 async def stream_llm_response(
@@ -6046,7 +6024,9 @@ async def workflow_assistant_stream(
         ),
         source="assistant",
     )
-    client, provider, model, trace_context = resolve_model_binding(
+    # A Model Router decision is a blocking model call; keep it off the event loop.
+    client, provider, model, trace_context = await asyncio.to_thread(
+        resolve_model_binding,
         credential,
         config,
         request.model,
@@ -6122,7 +6102,8 @@ async def dashboard_chat_stream(
     if len(history) > MAX_DASHBOARD_CHAT_HISTORY:
         history = history[-MAX_DASHBOARD_CHAT_HISTORY:]
     messages: list[dict] = list(history)
-    messages.append(_build_user_message(request.message, request.attachment))
+    attachments = request.requested_attachments()
+    messages.append(_build_user_message(request.message, attachments))
 
     trace_context = LLMTraceContext(
         session_id=session_id,
@@ -6167,10 +6148,12 @@ async def dashboard_chat_stream(
             + "\n\nCurrent user local date and time: "
             + request.client_local_datetime.strip()
         )
-    if request.attachment:
+    if attachments:
         system_prompt = system_prompt + "\n\n" + _ATTACHMENT_ROUTING_INSTRUCTIONS
 
-    client, provider, model, trace_context = resolve_model_binding(
+    # A Model Router decision is a blocking model call; keep it off the event loop.
+    client, provider, model, trace_context = await asyncio.to_thread(
+        resolve_model_binding,
         credential,
         config,
         request.model,
@@ -6209,7 +6192,7 @@ async def dashboard_chat_stream(
                     public_base_url,
                     trace_context,
                     cancel_event,
-                    request.attachment,
+                    attachments,
                     credential,
                 ):
                     if cancel_event.is_set():
@@ -6322,7 +6305,20 @@ async def fix_transcription(
     if not is_reasoning:
         kwargs["temperature"] = 0.3
 
-    response = completion_caller(client, model)(**kwargs)
+    caller = completion_caller(client, model)
+    try:
+        response = caller(**kwargs)
+    except Exception as exc:
+        if rejects_disable_reasoning(exc, kwargs.get("extra_body")):
+            kwargs.pop("extra_body", None)
+            logger.info(
+                "Retrying fix_transcription without extra_body (disable_reasoning not supported by model %s)",
+                model,
+            )
+            response = caller(**kwargs)
+        else:
+            raise
+
     fixed_text = response.choices[0].message.content or request.text
 
     return FixTranscriptionResponse(fixed_text=fixed_text.strip())

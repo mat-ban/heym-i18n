@@ -68,3 +68,5 @@ Aceeași regulă ca la [Ieșire](./output-node.md): nu plasați acest nod în in
 - [Ieșire](./output-node.md) – Răspuns bazat pe mesaj sau schemă cu împachetare `result`
 - [Webhooks](../reference/webhooks.md) – Endpoint-ul de execuție, metodele de cerere și răspunsurile
 - [Tipuri de noduri](../reference/node-types.md) – Toate tipurile de noduri
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

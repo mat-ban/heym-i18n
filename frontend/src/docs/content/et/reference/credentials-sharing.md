@@ -87,6 +87,7 @@ Mõned node'id salvestavad `credentialId` (UUID) väljale `node.data`:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse'i ühenduse andmed (host, port, autentimine, andmebaas) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegrami boti mandaat |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discordi avalik võti või webhooki mandaat |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdranti või Postgresi (pgvector) vektorandmebaas, Qdranti, Psqli või Custom Embeddings RAG mandaadi kaudu |
 | Evals | `credential_id`, `judge_credential_id` | Mudeli mandaat; mudeli või Decision Modeli mandaat LLM-as-Judge kohtuniku jaoks |
 | [Playwright](../nodes/playwright-node.md) AI samm | `credentialId` | LLM/Vision mudel (AI sammu ja [Auto Heal](../nodes/playwright-node.md#ai-auto-heal) jaoks) |
@@ -105,3 +106,7 @@ Pärast täitmist maskeerib `mask_sensitive_output()` mandaadi väärtused välj
 - [Expression DSL](./expression-dsl.md) – `$credentials` süntaks
 - [Node'i tüübid](./node-types.md) – Node'id, mis kasutavad mandaate ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Kasutab LLM-i jaoks `credentialId`-d
+
+## Google Meeti kalendri õigused
+
+[Google Meeti mandaadi](../nodes/google-meet-node.md) jagamine võimaldab töövoogudel lugeda kättesaadavate kalendrite vaba/hõivatud intervalle ning luua, muuta või kustutada sündmusi ühendatud Google'i kontona, sealhulgas saata kutseid ja tühistamisi. Külalise osaleja e-post ei muuda seda, milline konto sündmust omab või volitab. Ainult mandaadi omanik saab oma Google'i autoriseerimise uuesti ühendada.

@@ -22,7 +22,7 @@ Der Knoten benötigt außerdem GitHub-Anmeldedaten für das Klonen privater Repo
 Die Ausführungsisolation wird durch `HEYM_OPENCODE_CLI_COMMAND` gewählt, genau wie beim Codex-Knoten:
 
 - **Lokale Entwicklung (`run.sh`)** belässt es beim Standard `opencode`, sodass OpenCode als Host-Subprozess gegen den geklonten Workspace läuft — kein Docker erforderlich, keine zusätzlichen Flags.
-- **Docker-Deployments (`deploy.sh` und das einzelne GHCR-Image)** setzen es auf `/usr/local/bin/heym-opencode-docker`, einen Wrapper, der `opencode run` in einem **gehärteten, wegwerfbaren Schwester-Container** ausführt, der das OpenCode-Workspace-named-volume teilt.
+- **Docker-Deployments (`deploy.sh` und das einzelne GHCR-Image)** setzen es auf `/usr/local/bin/heym-opencode-docker`, einen Wrapper, der `opencode run` in einem **gehärteten, wegwerfbaren Schwester-Container** ausführt, der das OpenCode-Workspace-named-volume teilt. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Der gehärtete Runner-Container entfernt alle Linux-Capabilities, setzt `no-new-privileges`, verwendet ein schreibgeschütztes Root mit einem tmpfs `/tmp` und wendet pid/memory/CPU-Limits an. Netzwerk-Egress ist erlaubt (OpenCode muss das Modell-Gateway erreichen). Der **GitHub-Token wird niemals im Container platziert** — alle git- und GitHub-Operationen laufen hostseitig, sodass sich nur der OpenCode-API-Schlüssel und Repository-Dateien jemals darin befinden.
 

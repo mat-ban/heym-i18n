@@ -2,6 +2,9 @@
 
 A aba **Alerts** permite definir condições de limite em uma janela de tempo e ser notificado quando elas forem ultrapassadas. O Heym já registra os resultados de execução, a duração das execuções e os gastos com LLM, mas nunca oferece essas informações por conta própria. Um alerta é como você solicita isso.
 
+<video src="/features/showcase/alerts.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/alerts.webm">▶ Ver demonstração de Alerts</a></p>
+
 Cada alerta é avaliado em uma **janela de tempo** que você escolhe, nunca em um único evento. Uma execução com falha é ruído. Doze execuções com falha em dez minutos é um incidente.
 
 ## Tipos de Alerta

@@ -48,6 +48,7 @@ Trong chế độ Agent, hộp **YOLO mode** bên dưới ô nhập tin nhắn c
 - Nhập yêu cầu của bạn vào ô nhập (ví dụ: "Tạo một workflow nhận đầu vào từ người dùng và gửi đến một LLM")
 - Nhấn **Enter** để gửi (Shift+Enter để xuống dòng)
 - AI truyền phát phản hồi của nó. Trong chế độ **Agent**, nếu phản hồi chứa một workflow trong khối mã \`\`\`json, nó sẽ được tự động phân tích và áp dụng lên canvas. Trong chế độ **Ask**, canvas không bao giờ bị thay đổi.
+- Khi JSON của workflow được truyền trực tuyến, một dòng bên dưới câu trả lời sẽ ghi tên workflow và các nút đã viết cho đến nay, ví dụ `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Sử dụng **Clear** để đặt lại cuộc hội thoại
 - Di chuột qua một tin nhắn và nhấp vào biểu tượng sao chép của nó để sao chép văn bản mà nó hiển thị, bao gồm cả JSON workflow nếu có
 - Kéo đường phía trên ô tin nhắn để làm cho ô cao hơn. Khu vực nhập có thể mở rộng đến 60% của bảng, và nó trở về chiều cao mặc định khi trang tải lại

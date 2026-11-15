@@ -68,6 +68,7 @@ Az összes belépési pontot lásd a [Triggers](./triggers.md) oldalon.
 | [Linear](../nodes/linear-node.md) | Linear csapatok, projektek, issue-k, workflow állapotok és hozzászólások kezelése GraphQL-en keresztül | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets olvasása/írása OAuth2-n keresztül | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive fájlok listázása, letöltése, frissítése és törlése OAuth2-n keresztül | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Elérhetőség olvasása, valamint Meet-meghívók létrehozása, frissítése vagy törlése | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | SQL lekérdezések futtatása és sorok beszúrása a BigQuery-ben | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Supabase táblák lekérdezése és módosítása PostgREST-en keresztül | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | SQL, CRUD és count műveletek futtatása a ClickHouse ellen | 1 | 1 |

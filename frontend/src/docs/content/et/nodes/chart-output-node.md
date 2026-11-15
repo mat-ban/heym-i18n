@@ -368,3 +368,6 @@ Kui genereerite vidinat **AI** abil, vastavad sellised promptid selgelt igale t�
 Nupuks muutuvad ainult `http://` ja `https://` aadressid ning teed, mis algavad ühe `/`-ga. Mis tahes muu väärtus, näiteks `javascript:` või `//host`, jääb lihtteksti ja tühi lahter ei näita midagi.
 
 Nupp töötab [reaalingi](../tabs/dashboard-tab.md#detail-pages) kõrval: nupul klõpsamine avab selle lingi uuel vahelehel ja klõps mujal real avab endiselt üksikasjade lehe.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

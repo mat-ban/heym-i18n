@@ -16,6 +16,7 @@ El node **Trigger IMAP** consulta una bústia de correu electrònic a intervals 
 |-----------|------|-------------|
 | `credentialId` | UUID | Credencial `imap` que conté el servidor, l'inici de sessió, la bústia i la configuració SSL |
 | `pollIntervalMinutes` | Enter | Freqüència amb què Heym comprova la bústia per detectar correu nou |
+| `imapDownloadAttachments` | Boolean | **Download attachments to Drive**. Saves each attachment to the workflow owner's Heym Drive during the run. Off by default |
 
 ## Guia de configuració
 
@@ -62,6 +63,8 @@ Un cop el node s'activa, els nodes posteriors poden accedir a:
 | `$nodeLabel.email.text` | Cos en text pla |
 | `$nodeLabel.email.html` | Cos HTML |
 | `$nodeLabel.email.attachments` | Matriu de metadades dels adjunts (`filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.attachments` | Array of Drive file objects for downloaded attachments (`id`, `filename`, `content_type`, `size_bytes`) |
+| `$nodeLabel.file_ids` | Array of Drive file UUIDs, ready to pass into an Agent or Code node |
 | `$nodeLabel.email.headers` | Objecte de capçaleres descodificat |
 | `$nodeLabel.email.uid` | UID IMAP per a la deduplicació o el registre |
 | `$nodeLabel.triggered_by` | Etiqueta d'origen del trigger (`"imap"`) |

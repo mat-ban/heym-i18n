@@ -368,3 +368,6 @@ Une `table` peut transformer une colonne en boutons qui ouvrent un lien. Défini
 Seules les adresses `http://` et `https://` ainsi que les chemins commençant par un seul `/` deviennent des boutons. Toute autre valeur, comme `javascript:` ou `//host`, reste du texte brut, et une cellule vide n'affiche rien.
 
 Le bouton fonctionne à côté d'un [lien de ligne](../tabs/dashboard-tab.md#detail-pages) : un clic sur le bouton ouvre son lien dans un nouvel onglet, et un clic ailleurs sur la ligne ouvre toujours la page de détail.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

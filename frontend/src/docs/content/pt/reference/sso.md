@@ -141,3 +141,6 @@ Um início de sessão falhado regressa ao ecrã de início de sessão com uma me
 - **Vários fornecedores em simultâneo.** Uma instância liga-se a um fornecedor.
 - **Mapeamento de grupos ou funções** a partir das claims do fornecedor.
 - **Single logout.** Terminar sessão no Heym não termina a sessão no fornecedor.
+
+- **A autenticação de dois fatores cabe ao fornecedor.** `HEYM_REQUIRE_MFA` aplica-se apenas ao início de sessão com palavra-passe; um início de sessão por SSO nunca pede um código Heym. Exija MFA no seu fornecedor de identidade.
+- **A desativação também se aplica aqui.** Uma conta desativada por um administrador em **Definições → Utilizadores** é recusada mesmo que o fornecedor ainda a autentique.

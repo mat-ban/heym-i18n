@@ -140,3 +140,6 @@ Neizdevusies pieteikšanās atgriež pieteikšanās ekrānā ar saprotamu ziņoj
 - **Vairāki vienlaicīgi pakalpojumu sniedzēji.** Viena instance savienojas ar vienu pakalpojumu sniedzēju.
 - **Grupu vai lomu kartēšana** no pakalpojumu sniedzēja prasībām.
 - **Vienotā izrakstīšanās.** Izrakstīšanās no Heym nenozīmē izrakstīšanos no pakalpojumu sniedzēja.
+
+- **Divfaktoru pieteikšanās ir pakalpojumu sniedzēja pārziņā.** `HEYM_REQUIRE_MFA` attiecas tikai uz pieteikšanos ar paroli; SSO pieteikšanās laikā nekad netiek prasīts Heym kods. Pieprasiet MFA savā identitātes nodrošinātājā.
+- **Deaktivizēšana attiecas arī šeit.** Konts, kuru administrators deaktivizējis sadaļā **Iestatījumi → Lietotāji**, tiek noraidīts pat tad, ja pakalpojumu sniedzējs to joprojām autentificē.

@@ -107,3 +107,6 @@ Command Palette доступна з редактора, панелі керув�
 - [Швидкий старт](../getting-started/quick-start.md) – Створіть свій перший workflow
 
 - **Esc**: Stop following another collaborator in [Canvas Collaboration](./canvas-collaboration.md).
+
+
+Вкладки **Облікові дані** та **DataTable** працюють так само: `Ctrl + F` / `Cmd + F` фокусує поле пошуку, список звужується під час введення, а `Escape` очищає його.

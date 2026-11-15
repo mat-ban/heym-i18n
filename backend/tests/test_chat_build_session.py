@@ -14,6 +14,7 @@ from app.db.models import CredentialType, Workflow, WorkflowVersion
 from app.services.chat_build_mode import MAX_BUILD_TEST_RUNS, BuildRequest, BuildToolOutcome
 from app.services.chat_eval_mode import EVAL_TOOL_NAMES
 from app.services.credential_catalog import CatalogCredential, CredentialPromptMode
+from app.services.file_sandbox.manifest import FileAccessError
 
 DSL = {
     "name": "Lead intake",
@@ -136,9 +137,12 @@ class ChatBuildSessionTests(unittest.IsolatedAsyncioTestCase):
         target: uuid.UUID | None = None,
         session_id: str | None = "conv-1",
         attachment: FileAttachment | None = None,
+        attachments: list[FileAttachment] | None = None,
         selected_credential: Any = None,
         model: str = "gpt-5.5",
     ) -> chat_build.ChatBuildSession:
+        if attachments is None:
+            attachments = [attachment] if attachment is not None else []
         return chat_build.ChatBuildSession(
             db=self.db,
             user=self.user,
@@ -150,7 +154,7 @@ class ChatBuildSessionTests(unittest.IsolatedAsyncioTestCase):
             public_base_url="http://localhost",
             cancel_event=None,
             llm_session_id=session_id,
-            attachment=attachment,
+            attachments=attachments,
         )
 
     async def test_save_creates_a_workflow_when_the_turn_has_no_target(self) -> None:
@@ -400,6 +404,75 @@ class ChatBuildSessionTests(unittest.IsolatedAsyncioTestCase):
         run_inputs = self.runner.await_args.args[3]
         self.assertEqual(run_inputs, {"text": "email\na@example.com"})
         self.assertEqual(json.loads(outcome.result)["inputs"], {})
+        self.assertIsNone(self.runner.await_args.kwargs["sample_file_id"])
+
+    async def test_a_drive_file_goes_to_the_upload_trigger_not_into_inputs(self) -> None:
+        file_id = uuid.uuid4()
+        session = self._session(
+            attachment=FileAttachment(name="q3.xlsx", kind="file", file_id=file_id)
+        )
+        await session.call("save_workflow", {"workflow": DSL})
+
+        await session.call("run_workflow_test", {"inputs": {}, "expect": "Totals"})
+
+        self.assertEqual(self.runner.await_args.args[3], {})
+        self.assertEqual(self.runner.await_args.kwargs["sample_file_id"], file_id)
+
+    async def test_an_image_from_drive_still_reaches_the_image_input(self) -> None:
+        file_id = uuid.uuid4()
+        session = self._session(
+            attachment=FileAttachment(
+                name="screen.png", kind="file", file_id=file_id, mime="image/png"
+            )
+        )
+        await session.call("save_workflow", {"workflow": DSL})
+        image = AsyncMock(return_value=("image", "data:image/png;base64,AAAA"))
+
+        with patch.object(chat_build, "image_input", image):
+            await session.call("run_workflow_test", {"inputs": {"text": "hi"}, "expect": "x"})
+
+        self.assertEqual(
+            self.runner.await_args.args[3], {"text": "hi", "image": "data:image/png;base64,AAAA"}
+        )
+        self.assertEqual(self.runner.await_args.kwargs["sample_file_id"], file_id)
+        kwargs = image.await_args.kwargs
+        self.assertEqual((kwargs["file_id"], kwargs["mime"]), (file_id, "image/png"))
+        self.assertEqual(image.await_args.args[1], self.user.id)
+
+    async def test_a_named_sample_file_is_resolved_for_the_chat_user(self) -> None:
+        session = self._session()
+        await session.call("save_workflow", {"workflow": DSL})
+        picked = uuid.uuid4()
+        with patch.object(chat_build, "_resolve_sample_file", return_value=picked) as resolve:
+            await session.call(
+                "run_workflow_test", {"inputs": {}, "expect": "x", "sample_file": "q3.xlsx"}
+            )
+        resolve.assert_called_once_with(self.user.id, "q3.xlsx")
+        self.assertEqual(self.runner.await_args.kwargs["sample_file_id"], picked)
+
+    async def test_an_unreachable_sample_file_is_refused_before_running(self) -> None:
+        session = self._session()
+        await session.call("save_workflow", {"workflow": DSL})
+        refusal = FileAccessError("File not found or not accessible: x")
+        with patch.object(chat_build, "_resolve_sample_file", side_effect=refusal):
+            outcome = await session.call(
+                "run_workflow_test", {"inputs": {}, "expect": "x", "sample_file": "x"}
+            )
+        self.assertEqual(outcome.status, "error")
+        self.runner.assert_not_awaited()
+        self.assertEqual(session.progress.runs_used, 0)
+
+    async def test_the_conversation_file_feeds_only_an_upload_trigger(self) -> None:
+        older, latest = uuid.uuid4(), uuid.uuid4()
+        session = self._session()
+        session.conversation_id = uuid.uuid4()
+        workspace = SimpleNamespace(inputs=lambda: [{"id": str(older)}, {"id": str(latest)}])
+        upload = SimpleNamespace(nodes=[{"id": "t", "type": "fileUploadTrigger", "data": {}}])
+        text = SimpleNamespace(nodes=[{"id": "s", "type": "textInput", "data": {}}])
+        with patch.object(chat_build.FileWorkspace, "for_chat", return_value=workspace) as ws:
+            self.assertEqual(await session._sample_file_id({}, upload), latest)
+            self.assertIsNone(await session._sample_file_id({}, text))
+        ws.assert_called_once_with(self.user.id, session.conversation_id)
 
     async def test_finish_needs_a_passing_run_then_emits_verified(self) -> None:
         session = self._session()
@@ -430,14 +503,32 @@ class ChatBuildSessionTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch.object(chat_build, "_load_installed_plugins", AsyncMock(return_value=[])),
         ):
-            prompt = await self._session(target=self.target.id).prompt()
+            session = self._session(target=self.target.id)
+            prompt = await session.prompt()
 
         self.assertIn("## Build mode", prompt)
         self.assertIn("## Skills", prompt)
         self.assertIn(f'"Lead intake" ({self.target.id})', prompt)
-        self.assertIn("## Workflow DSL reference", prompt)
         self.assertIn("## Current Workflow Context", prompt)
         self.assertIn("## Eval suites", prompt)
+        # The DSL reference is the same on every request, so it goes early in the prompt.
+        self.assertNotIn("## Workflow DSL reference", prompt)
+        self.assertIn("## Workflow DSL reference", session.reference())
+
+    async def test_prompt_reuses_the_workflow_list_it_is_given(self) -> None:
+        listed = AsyncMock(return_value=[])
+        given = [{"id": str(uuid.uuid4()), "name": "Invoice parser", "input_fields": []}]
+        with (
+            patch.object(
+                chat_build.template_service, "list_node_templates", AsyncMock(return_value=[])
+            ),
+            patch.object(chat_build, "get_workflows_for_user_with_inputs", listed),
+            patch.object(chat_build, "_load_installed_plugins", AsyncMock(return_value=[])),
+        ):
+            prompt = await self._session().prompt(given)
+
+        listed.assert_not_awaited()
+        self.assertIn("Invoice parser", prompt)
 
     async def test_build_turns_offer_the_eval_tools_and_hand_them_over(self) -> None:
         session = self._session()

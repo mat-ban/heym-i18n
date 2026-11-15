@@ -59,6 +59,10 @@ Mọi thay đổi trạng thái đều được ghi nhật ký. Các thao tác �
 | `auth.token_refresh` | `outcome=denied` với `reason=refresh_token_replayed_or_revoked` — một dấu hiệu đánh cắp token đáng để cảnh báo. |
 | `auth.password_change` | `outcome=failure` khi mật khẩu hiện tại sai. |
 | `auth.sso_login` | Đăng nhập một lần. `outcome=failure` mang lý do phản hồi của nhà cung cấp bị từ chối; `denied` mang `email_not_verified`, `domain_not_allowed`, hoặc `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Quản trị viên đã thay đổi cấu hình [SSO](./sso.md). Ghi lại `enabled` và `password_login_disabled`, không bao giờ ghi client secret. |
 | `sso_settings.test` | Quản trị viên đã chạy kiểm tra kết nối SSO. |
 

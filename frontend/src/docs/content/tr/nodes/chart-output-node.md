@@ -368,3 +368,6 @@ Bir `table`, bir sütunu bağlantı açan düğmelere dönüştürebilir. Düğ�
 Yalnızca `http://` ve `https://` adresleri ile tek bir `/` ile başlayan yollar düğme olur. `javascript:` veya `//host` gibi diğer tüm değerler düz metin olarak kalır ve boş bir hücre hiçbir şey göstermez.
 
 Düğme, bir [satır bağlantısı](../tabs/dashboard-tab.md#detail-pages) ile birlikte çalışır: düğmeye tıklamak bağlantısını yeni sekmede açar, satırın başka herhangi bir yerine tıklamak ise yine ayrıntı sayfasını açar.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

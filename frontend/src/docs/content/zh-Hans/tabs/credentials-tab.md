@@ -84,3 +84,7 @@ OAuth 凭据会在弹窗中打开提供方的授权页面。如果浏览器阻�
 - [Vectorstores 标签页](./vectorstores-tab.md) – 使用 Qdrant 或 Postgres (pgvector) 凭证
 - [Chat 标签页](./chat-tab.md) – 使用 OpenAI/Google 凭证
 - [上下文展示](../reference/contextual-showcase.md) – 仪表盘界面的精简页面指南
+
+## 搜索
+
+使用列表上方的搜索框，或按 **Ctrl+F**（或 **Cmd+F**），在键入时按名称或类型筛选凭证。按 **Escape** 清除搜索。

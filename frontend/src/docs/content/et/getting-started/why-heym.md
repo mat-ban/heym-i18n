@@ -192,7 +192,7 @@ Jälgisüsteem on loodud spetsiaalselt agentsema käitumise silumiseks, pakkudes
 Iga LLM-i kutse Heymis arvutatakse automaatselt. [Traces Tab](../tabs/traces-tab.md) kuvab iga jälje sisend- ja väljundtokenite arvu koos reaalajas USD kuluga, mis on tuletatud sünkroonitud hinnatabelist.
 
 - **Kulu jälje kohta** – Sisendtokenid, väljundtokenid ja kogu USD summa kuvatakse igal jäljereal
-- **Kuluanalüütika** – KPI-kaardid ja mudelipõhine kulugraafik uuenevad vastavalt valitud ajavahemikule (1h / 24h / 7d / 30d / Kõik)
+- **Kuluanalüütika** – KPI-kaardid ja mudelipõhine kulugraafik uuenevad vastavalt valitud ajavahemikule (1h / 3h / 6h / 24h / 7d / 30d / Kõik)
 - **LLM Cost Table** – Süsteemitabel [DataTable tab](../tabs/datatable-tab.md) täiendatakse Helicone'ist iga 24 tunni tagant; saate hindu üle kirjutada või lisada kohandatud ridu mudelitele, mida veel loetletud pole
 - **Puuduva hinna hoiatus** – Mudelite jäljed, millel puudub hinnakirje, kuvavad reasisese hoiatuse otselingiga kulutabelile
 
@@ -278,7 +278,7 @@ Workflow'd on HTTP kaudu kutsutavad aadressil `/api/workflows/{workflow_id}/exec
 Heym toetab natiivselt [MCP-d](../tabs/mcp-tab.md) mõlemal pool:
 
 - **Kliendina**: Agent node'id ühenduvad väliste MCP serveritega (Filesystem, Browserbase, kohandatud tööriistad) stdio või SSE kaudu ja kasutavad nende tööriistu automaatselt
-- **Serverina**: Workflow'd, millel on MCP sisse lülitatud, muutuvad tööriistadeks vaikeserveris aadressil `/api/mcp/sse` või nimetatud serverites, millel on oma URL ja API key, nii et Claude Desktop, Cursor ja teised MCP kliendid saavad teie Heym workflow'sid otse kutsuda
+- **Serverina**: Workflow'd, millel on MCP sisse lülitatud, muutuvad tööriistadeks vaikeserveris aadressil `/api/mcp (or /api/mcp/sse for legacy connections)` või nimetatud serverites, millel on oma URL ja API key, nii et Claude Desktop, Cursor ja teised MCP kliendid saavad teie Heym workflow'sid otse kutsuda
 
 Agent'id saavad kasutada mitut MCP serverit korraga ja iga workflow võib saada tööriistaks välisele MCP kliendile.
 

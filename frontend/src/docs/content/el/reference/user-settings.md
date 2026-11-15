@@ -131,3 +131,6 @@
 - [Ασφάλεια](./security.md) – Διαχείριση συνεδριών, περιορισμός ρυθμού, κρυπτογράφηση διαπιστευτηρίων
 - [Single Sign-On](./sso.md) – Σύνδεση εξωτερικού παρόχου OpenID Connect
 - [OpenTelemetry Tracing](./opentelemetry.md) – Κατανεμημένη ιχνηλάτηση για εκτελέσεις workflow και κόμβων
+## Two-Factor Authentication
+
+When `HEYM_REQUIRE_MFA=true` is enabled by an administrator, password users must configure an authenticator app (TOTP, RFC 6238) on first sign-in. Use **Settings → Security** to manage your authenticator app, sign out other active sessions, or review active login tokens.

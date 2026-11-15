@@ -173,3 +173,7 @@ Dijalozi povijesti platna i nadzorne ploče zadržavaju svoje kontrole izvođenj
 - [Edit History](./edit-history.md) – Kontrola verzija za spremanja workflow-a (vrati, razlika)
 - [Quick Start](../getting-started/quick-start.md) – Izradite i pokrenite svoj prvi workflow
 - [Workflows Tab](../tabs/workflows-tab.md) – Kreirajte i upravljajte workflow-ima
+
+## Related
+
+- [Operations Runbook (L1): Zaostatak u redu čekanja](./operations-runbook.md#queue-backlog-or-apparently-stuck-runs) - Razlikovanje izvršavanja u redu čekanja, zadržanih, prekinutih i oporavljenih prije ponavljanja

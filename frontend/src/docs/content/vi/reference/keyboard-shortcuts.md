@@ -72,6 +72,9 @@ Các phím tắt này hoạt động trên tab Workflows khi không có ô nhậ
 | `Ctrl + F` / `Cmd + F` | Focus vào ô tìm kiếm workflow |
 | `Escape` | Xóa nội dung tìm kiếm workflow khi ô tìm kiếm có văn bản |
 
+
+Các tab **Thông tin xác thực** và **DataTable** hoạt động theo cùng một cách: `Ctrl + F` / `Cmd + F` tập trung vào trường tìm kiếm, danh sách thu hẹp khi bạn nhập và `Escape` sẽ xóa tìm kiếm.
+
 ## Phím tắt trên bảng Properties
 
 Các phím tắt này hoạt động khi một node đang được chọn và bảng properties đang mở.

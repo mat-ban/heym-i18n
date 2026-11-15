@@ -42,7 +42,7 @@ Käytännön koulutussessiot, jotka on räätälöity tiimisi osaamistasolle ja 
 
 ## Kubernetes-käyttöönotto
 
-Standardiohje [Running & Deployment](../getting-started/running-and-deployment.md) kattaa Docker Composen yksittäiselle palvelimelle tuotantokäyttöön. Enterprise-asiakkaat saavat apua tuotantokäyttöön soveltuvien Kubernetes-käyttöönottojen kanssa korkean saatavuuden ja vaakasuuntaisen skaalautuvuuden saavuttamiseksi:
+Standardiohje [Running & Deployment](../getting-started/running-and-deployment.md) kattaa Docker Composen yksittäiselle palvelimelle tuotantokäyttöön. [Kubernetes Deployment](../getting-started/kubernetes.md). Enterprise-asiakkaat saavat apua tuotantokäyttöön soveltuvien Kubernetes-käyttöönottojen kanssa korkean saatavuuden ja vaakasuuntaisen skaalautuvuuden saavuttamiseksi:
 
 - **Useat työntekijäsolmut** — Heymin taustaprosessien jakaminen useille Kubernetes-solmuille redundanssin ja kuormantasauksen vuoksi
 - **Sidecar-säiliöt** — Sidecar-mallien konfigurointi lokien keräykseen, seuranta-agenteille, palvelumäsille (Istio, Linkerd) ja salaisuuksien injektointiin (Vault)

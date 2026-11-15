@@ -45,7 +45,7 @@
 
 에디터의 **Run** 탭(Defined webhook 모드)에서 각 입력 필드는 드래그 앤 드롭과 인라인 첨부 컨트롤(필드 우측 하단)을 지원합니다:
 
-- **텍스트 파일** (`.txt`, `.md`, `.json`, `.csv` 등)은 일반 텍스트로 읽힙니다.
+- **텍스트 파일** (`.txt`, `.md`, `.json`, `.csv`, and any other file that reads as UTF-8 text, such as `notes` or `todo.list`) are read as plain text, up to 500 KB.
 - **이미지** (JPEG, PNG, GIF, WebP)는 `data:` URL (base64)로 필드 값에 저장됩니다 — 다운스트림 노드가 이미지 데이터를 기대하는 경우 `imageUrl` 또는 `base64`와 같은 필드 키를 사용하십시오.
 - **PDF** 파일은 추출된 텍스트로 변환됩니다 (최대 5 MB 파일, 100k 문자 콘텐츠).
 

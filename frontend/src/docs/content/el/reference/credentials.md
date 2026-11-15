@@ -32,6 +32,7 @@
 | [Grist](../nodes/grist-node.md) | Grist | API key + URL διακομιστή |
 | [Google Sheets](../nodes/google-sheets-node.md) | Google Sheets (OAuth2) | Client ID + Client Secret + συγκατάθεση OAuth2 |
 | [Google Drive](../nodes/google-drive-node.md) | Google Drive (OAuth2) | Client ID + Client Secret + συγκατάθεση OAuth2 |
+| [Google Meet](../nodes/google-meet-node.md) | `google_meet` | OAuth2 (`client_id`, `client_secret`) |
 | [BigQuery](../nodes/bigquery-node.md) | BigQuery (OAuth2) | Client ID + Client Secret + συγκατάθεση OAuth2 |
 | [Supabase](../nodes/supabase-node.md) | Supabase | URL έργου + API key (+ προαιρετικό προεπιλεγμένο schema) |
 | [ClickHouse](../nodes/clickhouse-node.md) | ClickHouse | Host + port + username/password + database (+ secure) |

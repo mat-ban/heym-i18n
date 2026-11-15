@@ -368,3 +368,6 @@ Text (dinamisks — ziņojuma virkne tiek izveidota augšupēji un iegūta ar `v
 Par pogām kļūst tikai `http://` un `https://` adreses un ceļi, kas sākas ar vienu `/`. Jebkura cita vērtība, piemēram, `javascript:` vai `//host`, paliek vienkāršs teksts, un tukša šūna neko nerāda.
 
 Poga darbojas līdzās [rindas saitei](../tabs/dashboard-tab.md#detail-pages): noklikšķinot uz pogas, tās saite tiek atvērta jaunā cilnē, bet noklikšķinot jebkur citur rindā, joprojām tiek atvērta detalizētās informācijas lapa.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

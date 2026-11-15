@@ -368,3 +368,6 @@ Kun luot widgetin **tekoälyllä**, seuraavat kehotukset vastaavat siististi jok
 Vain `http://`- ja `https://`-osoitteista sekä yhdellä `/`-merkillä alkavista poluista tulee painikkeita. Mikä tahansa muu arvo, kuten `javascript:` tai `//host`, pysyy tavallisena tekstinä, ja tyhjä solu ei näytä mitään.
 
 Painike toimii [rivilinkin](../tabs/dashboard-tab.md#detail-pages) rinnalla: painikkeen napsauttaminen avaa sen linkin uuteen välilehteen, ja napsautus muualle riville avaa edelleen tietosivun.
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

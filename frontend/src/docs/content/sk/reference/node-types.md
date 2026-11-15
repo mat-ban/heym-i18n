@@ -68,6 +68,7 @@ Všetky vstupné body nájdete v časti [Triggers](./triggers.md).
 | [Linear](../nodes/linear-node.md) | Správa tímov, projektov, issues, workflow stavov a komentárov v Linear prostredníctvom GraphQL | 1 | 1 |
 | [Google Sheets](../nodes/google-sheets-node.md) | Čítanie a zápis Google Sheets cez OAuth2 | 1 | 1 |
 | [Google Drive](../nodes/google-drive-node.md) | Výpis, sťahovanie, aktualizácia a mazanie súborov Google Drive cez OAuth2 | 1 | 1 |
+| [Google Meet](../nodes/google-meet-node.md) | Čítanie dostupnosti a vytváranie, aktualizácia alebo mazanie pozvánok Meet | 1 | 1 |
 | [BigQuery](../nodes/bigquery-node.md) | Spúšťanie SQL dotazov a vkladanie riadkov v BigQuery | 1 | 1 |
 | [Supabase](../nodes/supabase-node.md) | Dotazovanie a úprava tabuliek Supabase prostredníctvom PostgREST | 1 | 1 |
 | [ClickHouse](../nodes/clickhouse-node.md) | Spúšťanie SQL, CRUD a count operácií nad ClickHouse | 1 | 1 |

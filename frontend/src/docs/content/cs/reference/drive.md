@@ -97,3 +97,11 @@ Agent skilly se mohou přihlásit ke čtení z Drive pomocí nastavení **Enable
 
 ## Úklid
 Expirované share tokeny jsou automaticky uklizeny denně. Soubory samotné přetrvávají, dokud nejsou ručně smazány prostřednictvím karty Drive. Použijte **Clear All** pro smazání všech souborů a jejich share linků jednou akcí.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

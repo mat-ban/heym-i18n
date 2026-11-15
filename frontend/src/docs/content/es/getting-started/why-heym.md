@@ -192,7 +192,7 @@ El sistema de trazas está diseñado específicamente para depurar el comportami
 Cada llamada a un LLM en Heym se costea automáticamente. La [Pestaña Trazas](../tabs/traces-tab.md) muestra los recuentos de tokens de entrada y salida por traza junto con un coste en USD en tiempo real derivado de una tabla de precios sincronizada.
 
 - **Coste por traza** – Tokens de entrada, tokens de salida y USD total mostrados en cada fila de traza
-- **Analítica de costes** – Las tarjetas de KPI y un gráfico de coste por modelo se actualizan con el rango de tiempo seleccionado (1h / 24h / 7d / 30d / All)
+- **Analítica de costes** – Las tarjetas de KPI y un gráfico de coste por modelo se actualizan con el rango de tiempo seleccionado (1h / 3h / 6h / 24h / 7d / 30d / All)
 - **Tabla de costes de LLM** – Una tabla del sistema en la [Pestaña DataTable](../tabs/datatable-tab.md) se inicializa desde Helicone cada 24 horas; es posible sobrescribir precios o añadir filas personalizadas para modelos aún no listados
 - **Aviso de precio ausente** – Las trazas de modelos sin entrada de precios muestran un aviso en línea con un enlace directo a la tabla de costes
 
@@ -278,7 +278,7 @@ Los workflows son invocables por HTTP en `/api/workflows/{workflow_id}/execute`,
 Heym tiene soporte nativo de [MCP](../tabs/mcp-tab.md) en ambos lados:
 
 - **Como cliente**: los Nodos de agente se conectan a servidores MCP externos (Filesystem, Browserbase, herramientas personalizadas) mediante stdio o SSE y consumen sus herramientas automáticamente
-- **Como servidor**: los workflows con MCP activado se convierten en herramientas en el servidor predeterminado en `/api/mcp/sse`, o en servidores con nombre propio, con su propia URL y API key, de modo que Claude Desktop, Cursor y otros clientes MCP pueden invocar sus workflows de Heym directamente
+- **Como servidor**: los workflows con MCP activado se convierten en herramientas en el servidor predeterminado en `/api/mcp (or /api/mcp/sse for legacy connections)`, o en servidores con nombre propio, con su propia URL y API key, de modo que Claude Desktop, Cursor y otros clientes MCP pueden invocar sus workflows de Heym directamente
 
 Los agentes pueden consumir varios servidores MCP a la vez, y cualquier workflow puede convertirse en una herramienta para un cliente MCP externo.
 

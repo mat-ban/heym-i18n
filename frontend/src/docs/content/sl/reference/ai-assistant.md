@@ -48,6 +48,7 @@ V načinu Agenta omogoča polje **YOLO način** pod poljem za sporočila, da asi
 - Vnesite svojo zahtevo v vnosno polje (npr. "Ustvarite workflow, ki vzame uporabniški vnos in ga pošlje LLM")
 - Pritisnite **Enter**, da pošljete (Shift+Enter za novo vrstico)
 - AI pretaka svoj odgovor. V **Agent** načinu, če odgovor vključuje workflow v \`\`\`json bloku kode, se samodejno analizira in uporabi na platnu. V **Vprašaj** načinu platno nikoli ni spremenjeno.
+- Medtem ko se JSON delovnega toka pretaka, vrstica pod odgovorom navede ime delovnega toka in doslej zapisana vozlišča, na primer `Writing "Lead intake" · 3 nodes (start, Qualify, Save lead)`.
 - Uporabite **Počisti**, da ponastavite pogovor
 - Premaknite kurzor nad sporočilo in kliknite ikono za kopiranje, da kopirate besedilo, ki ga prikazuje, vključno z morebitnim workflow JSON
 - Povlecite črto nad poljem za sporočila, da povečate višino polja. Vhodno območje se lahko razširi do 60% plošče, ob ponovnem nalaganju strani pa se vrne na privzeto višino.

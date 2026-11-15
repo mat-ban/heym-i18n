@@ -157,6 +157,8 @@ La modification d'un identifiant conserve la clé stockée lorsque le champ de c
 
 Le même identifiant peut évaluer les exécutions d'[Évaluations](../tabs/evals-tab.md) : avec **LLM-as-Judge** sélectionné, choisissez-le comme juge et le modèle de décision note chaque réponse par rapport à la sortie attendue.
 
+
+It can also rerank search results in a [RAG](./rag-node.md#reranking) node: pick it as the **Reranker Credential** and the decision model scores every result against the query.
 Heym bloque par défaut les requêtes sortantes vers les adresses privées et de bouclage, de sorte qu'un endpoint de décision que vous exécutez vous-même sur `localhost` ou sur une plage privée nécessite `HEYM_HTTP_ALLOW_PRIVATE_URLS=true`.
 
 Les modèles de décision n'apparaissent pas dans les tables de tarification LLM synchronisées par Heym, de sorte que la colonne **Cost** dans [Traces](../tabs/traces-tab.md) reste vide pour ces appels. Les décomptes de tokens sont toutefois enregistrés, et vous pouvez ajouter votre propre tarif via une substitution de tarification.

@@ -16,6 +16,7 @@ Nodul **Converter** transformă date și fișiere între formate fără a scrie 
 |-----------|------|-------------|
 | `label` | string | Identificatorul nodului (camelCase) |
 | `conversion` | string | `csvToJson` (text CSV → matrice de obiecte rând), `jsonToCsv` (matrice de obiecte/rânduri → text CSV), `xmlToJson` (text XML → obiect), `jsonToXml` (obiect → text XML), `imageToText` (OCR pe o imagine), `pdfToText` (OCR pe fiecare pagină PDF selectată) sau `fileConvert` (rescrie un fișier stocat într-un alt format) |
+| `audio` | Transcribe voice notes and recordings (mp3, wav, ogg, opus, flac) to text using Whisper on your instance | `text`, `segments`, `language` |
 | `source` | expression | Datele de convertit. Lăsați gol pentru a utiliza prima intrare a nodului |
 | `delimiter` | string | Separator de câmp cu un singur caracter (implicit `,`) |
 | `hasHeader` | boolean | Doar `csvToJson` — tratează primul rând ca antet (implicit `true`) |
@@ -169,3 +170,6 @@ OCR apelează `tesseract` și `pdftoppm` din poppler, iar conversia documentelor
 - [Drive](./drive-node.md) – Stocați, preluați și partajați fișiere
 - [Node Types](../reference/node-types.md) – Prezentare generală a tuturor tipurilor de noduri
 - [Expression DSL](../reference/expression-dsl.md) – Funcții și sintaxă
+## Voice Transcription (Whisper)
+
+The Converter node transcribes spoken audio locally using an embedded Whisper model without sending voice data to external APIs. It outputs full `text` alongside timestamped `segments` (`start_seconds`, `end_seconds`, `text`) and detected `language`.

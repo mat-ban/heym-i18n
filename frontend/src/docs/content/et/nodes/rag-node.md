@@ -38,7 +38,7 @@ suunatud. Vt [Custom Embeddings](../reference/integrations.md#custom-embeddings-
 | `metadataFilters` | JSON string | Metadata filters for search (values support expressions) |
 | `hybridSearch` | boolean | Vektorotsingu kombineerimine BM25 märksõnaotsinguga (ainult search; vaikimisi: väljas) |
 | `enableReranker` | boolean | Use Cohere to rerank search results |
-| `rerankerCredentialId` | UUID | Cohere credential for reranking |
+| `rerankerCredentialId` | UUID | Cohere or Decision Model credential for reranking |
 | `rerankerTopN` | number | Number of top results to keep after reranking |
 
 ## Toimingud
@@ -272,3 +272,5 @@ Hea teada:
 - [Kolmandate osapoolte integratsioonid](../reference/integrations.md#qdrant) – Qdranti ja Postgresi (pgvector) mandaatide seadistamine
 - [Agendi sõlm](./agent-node.md) – RAG tulemuste kasutamine agendi kontekstina
 - [LLM sõlm](./llm-node.md) – RAG tulemuste suunamine LLM-i süsteemi prompti
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

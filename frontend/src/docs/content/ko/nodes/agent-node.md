@@ -109,6 +109,10 @@ Orchestrator가 단일 턴에서 여러 Sub-agent를 호출하면, 이들은 병
 
 지원되는 Workflow 노드를 에이전트의 **tools** 핸들에 연결하면 에이전트가 런타임에 해당 노드를 호출할 수 있습니다. 이를 통해 Python을 작성하지 않고도 기존 캔버스 액션과 변환을 호출 가능한 도구로 전환할 수 있습니다.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 자격 증명, 정적 필드, Workflow별 설정을 노드 UI에 그대로 유지하면서 에이전트가 구성된 노드의 실행 시점을 결정하도록 하려면 캔버스 노드 도구를 사용하십시오.
 
 ### 에이전트 제공 필드
@@ -385,3 +389,6 @@ AI로 편집할 때 Heym은 텍스트 `.md` 및 `.py` Skill 파일만 빌더로 
 - [Quick Start](../getting-started/quick-start.md) – LLM과 표현식을 사용한 기본 Workflow
 - [Credentials Tab](../tabs/credentials-tab.md) – 에이전트용 API 키 추가
 - [MCP Tab](../tabs/mcp-tab.md) – Workflow 도구용 MCP 구성
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

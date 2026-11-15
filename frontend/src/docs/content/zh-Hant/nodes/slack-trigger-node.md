@@ -84,3 +84,5 @@ slackTrigger → llm → slack
 - Heym 會立即回應 `200 OK` 並在背景執行 workflow — 這滿足了 Slack 的 3 秒回應要求
 - Webhook URL 衍生自節點 ID，且永遠不會變更，即使 workflow 重新命名後亦然
 - 每個 workflow 僅需一個 `slackTrigger` 節點；請在下游使用 **Switch** 或 **Condition** 節點來路由不同的事件類型
+
+When messages contain file attachments, attachment metadata is provided in the trigger payload for downstream nodes to download or analyze.

@@ -50,3 +50,8 @@ Ako je registracija otvorena, kreirajte povjereni administratorski račun prije 
 - [Kartica Analitika](./analytics-tab.md) – Metrički podaci o izvršavanju
 - [Kartica Workflows](./workflows-tab.md) – Upravljanje workflow-ima
 - [Kontekstualna Izložba](../reference/contextual-showcase.md) – Kompaktni vodič za površine nadzorne ploče
+
+## Related
+
+- [Incident Playbook (L0)](../reference/incident-playbook.md) - Usmjeravanje simptoma tijekom izvođenja na odgovarajući postupak za incidente
+- [Operations Runbook (L1)](../reference/operations-runbook.md) - Dijagnosticiranje kvarova baze podataka, usluga, klastera i sandboxa

@@ -65,3 +65,7 @@ Di chuột qua biểu đồ để xem loại node ngay cạnh con trỏ. Loại 
 - [Contextual Showcase](../reference/contextual-showcase.md) – Hướng dẫn trang gọn nhẹ cho các bề mặt dashboard
 
 Khi một biểu đồ hiển thị xu hướng mà bạn muốn được thông báo thay vì tự theo dõi, hãy biến nó thành một [alert](./alerts-tab.md): số lỗi, thời lượng chạy, chi phí LLM và số lần thực thi đều có thể được đặt ngưỡng theo khoảng thời gian.
+
+## Related
+
+- [Operations Runbook (L1): Sử dụng tài nguyên](../reference/operations-runbook.md#most-resource-consuming-workflows) - Tìm các workflow có khối lượng lớn và thời gian chạy dài, đồng thời tương quan giữa CPU, bộ nhớ và token

@@ -22,7 +22,7 @@ Node ini juga memerlukan kredensial **GitHub** untuk mengkloning repositori priv
 Isolasi eksekusi dipilih oleh `HEYM_OPENCODE_CLI_COMMAND`, persis seperti node Codex:
 
 - **Pengembangan lokal (`run.sh`)** membiarkannya pada default `opencode`, sehingga OpenCode berjalan sebagai subproses host terhadap workspace yang dikloning — tidak memerlukan Docker, tanpa flag tambahan.
-- **Deployment Docker (`deploy.sh` dan image GHCR tunggal)** mengaturnya ke `/usr/local/bin/heym-opencode-docker`, sebuah wrapper yang menjalankan `opencode run` di dalam **container saudara sekali pakai yang diperkuat** yang berbagi named volume workspace OpenCode.
+- **Deployment Docker (`deploy.sh` dan image GHCR tunggal)** mengaturnya ke `/usr/local/bin/heym-opencode-docker`, sebuah wrapper yang menjalankan `opencode run` di dalam **container saudara sekali pakai yang diperkuat** yang berbagi named volume workspace OpenCode. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Container runner yang diperkuat menghapus semua kapabilitas Linux, menetapkan `no-new-privileges`, menggunakan root read-only dengan tmpfs `/tmp`, dan menerapkan batas pid/memori/CPU. Egress jaringan diizinkan (OpenCode harus menjangkau gateway model). **Token GitHub tidak pernah ditempatkan di dalam container** — semua operasi git dan GitHub berjalan di sisi host, sehingga hanya API key OpenCode dan file repositori yang berada di dalamnya.
 

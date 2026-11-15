@@ -12,7 +12,7 @@ Pradžios mazgai (be įeinančių kraštų), kurie inicijuoja vykdymą:
 | [Cron](../nodes/cron-node.md) | Veikia pagal tvarkaraštį (cron išraiška, pvz., `0 * * * *` kas valandą). |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md) | Prasideda, kai Telegram siunčia bot webhook atnaujinimą į mazgo specifinį webhook URL. |
 | [Discord Trigger](../nodes/discord-trigger-node.md) | Prasideda, kai Discord siunčia Interactions API webhook į mazgo specifinį galinį tašką. |
-| [IMAP Trigger](../nodes/imap-trigger-node.md) | Tikrina IMAP pašto dėžutę ir prasideda kiekvieną kartą, kai aptinkamas naujas el. laiškas. |
+| [IMAP Trigger](../nodes/imap-trigger-node.md) | Tikrina IMAP pašto dėžutę ir prasideda kiekvieną kartą, kai aptinkamas naujas el. With **Download attachments to Drive** on, it downloads each attachment to Heym Drive and outputs `attachments` and `file_ids`. laiškas. |
 | [Heym Trigger](../nodes/heym-trigger-node.md) | Prasideda, kai Heym paskelbia platformos įvykį. Įvykiai viename išsiuntimo lange atvyksta kartu kaip masyvas. |
 | [WebSocket Trigger](../nodes/websocket-trigger-node.md) | Atidaro išorinį kliento ryšį su išoriniu socket'u ir prasideda pasirinktu socket įvykiu. |
 | [Failo Įkėlimo Trigger](../nodes/file-upload-trigger-node.md) | Sukuria vienkartinį įkėlimo URL ir prasideda, kai skambintojas įkelia didelį multipart failą. |

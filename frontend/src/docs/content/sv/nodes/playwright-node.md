@@ -68,7 +68,9 @@ Inaktiverade steg är osynliga för resten av noden: de uppfyller inte regeln at
 
 **AI Auto Heal** gör Workflows motståndskraftiga mot DOM-ändringar. När en selector misslyckas två gånger (t.ex. efter en omdesign av en webbplats) anropar Heym LLM:en för att hitta en alternativ locator—vanligtvis `role=button[name='Submit']` eller `text=Exact text` i stället för CSS-selectors.
 
-Aktivera **Auto heal mode** i AI-stegets egenskaper. Om det sparade steget misslyckas:
+
+
+In [Traces](../tabs/traces-tab.md), calls made by AI steps and Auto Heal appear under the workflow and Playwright node that made them.Aktivera **Auto heal mode** i AI-stegets egenskaper. Om det sparade steget misslyckas:
 
 1. Heym fångar aktuell HTML och skärmbild
 2. Skickar det misslyckade steget + sidkontext till LLM:en

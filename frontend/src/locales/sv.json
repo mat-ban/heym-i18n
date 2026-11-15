@@ -84,7 +84,8 @@
     "dropFileOrClick": "Släpp en fil här eller klicka för att välja",
     "removeFile": "Ta bort fil",
     "chooseFileFor": "Välj en fil för {label}",
-    "new": "Ny"
+    "new": "Ny",
+    "clearSearch": "Rensa sökning"
   },
   "nav": {
     "workflows": "Workflows",
@@ -285,7 +286,9 @@
     "enablePlugin": "Aktivera",
     "disablePlugin": "Inaktivera",
     "uninstallPlugin": "Avinstallera",
-    "pluginOperationFailed": "Pluginåtgärden misslyckades"
+    "pluginOperationFailed": "Pluginåtgärden misslyckades",
+    "users": "Användare",
+    "encryption": "Kryptering"
   },
   "workflows": {
     "title": "Workflows",
@@ -1136,7 +1139,9 @@
     "copyTraceId": "Kopiera trace-ID",
     "openTrace": "Öppna körning",
     "message": "Meddelande",
-    "emptyReply": "Tomt svar."
+    "emptyReply": "Tomt svar.",
+    "timeRange3h": "Senaste 3 timmarna",
+    "timeRange6h": "Senaste 6 timmarna"
   },
   "tables": {
     "title": "Datatabeller",
@@ -1215,7 +1220,9 @@
     "browseAll": "Bläddra bland alla →",
     "askAi": "Fråga AI",
     "dropToImport": "Släpp JSON eller ZIP för import",
-    "noWorkflowsMatch": "Inga Workflows matchar detta filter."
+    "noWorkflowsMatch": "Inga Workflows matchar detta filter.",
+    "noWorkflowsMatchAll": "Prova en annan titel, beskrivning eller mappnamn.",
+    "noWorkflowsMatchFilter": "Prova en annan titel, beskrivning, mappnamn eller statusfilter."
   },
   "schedules": {
     "title": "Scheman",
@@ -1477,7 +1484,9 @@
     "startedByMcp": "Startad av en MCP-klient",
     "newChatTitle": "Ny chatt",
     "subtitle": "Kör Workflows och ställ frågor",
-    "modelsLoadFailedDisabled": "Modelllistan för de här inloggningsuppgifterna kunde inte läsas in. Chatten förblir inaktiverad tills en modell kan hämtas."
+    "modelsLoadFailedDisabled": "Modelllistan för de här inloggningsuppgifterna kunde inte läsas in. Chatten förblir inaktiverad tills en modell kan hämtas.",
+    "dropFilesToAttach": "Släpp filer för att bifoga",
+    "attachFiles": "Bifoga filer"
   },
   "teams": {
     "title": "Team",
@@ -1883,7 +1892,8 @@
       "skipped": "Överhoppad"
     },
     "permissionRead": "läs",
-    "permissionWrite": "skriv"
+    "permissionWrite": "skriv",
+    "details": "Detaljer"
   },
   "mcp": {
     "title": "MCP-server",
@@ -2197,7 +2207,8 @@
       "actions": "Åtgärder",
       "failedToLoadWidget": "Det gick inte att läsa in widget",
       "failedToUpdateCheckbox": "Det gick inte att uppdatera kryssruta",
-      "refreshDashboard": "Uppdatera dashboard"
+      "refreshDashboard": "Uppdatera dashboard",
+      "revertPrevious": "Återställ föregående"
     },
     "hitl": {
       "previousReview": "Föregående granskning",

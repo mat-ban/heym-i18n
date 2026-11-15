@@ -2,6 +2,9 @@
 
 Vahekaart **Töölaud** on Grafana-stiilis ala, kus saate koostada diagrammi vidinate ruudustikke. Iga vidin renderdatakse selle enda peidetud Heymi workflow väljundi põhjal, seega iga andmed, mida saate workflow's luua — andmebaasipäringud, API-kutsed, RAG-otsingud, LLM-i väljund — võivad saada diagrammiks. Võite pidada mitut töölauda ja jagada igaüht neist inimestega või meeskondadega.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Töölauad
 
 Igaüks alustab ühe töölauaga, mis luuakse vahekaardi esmakordsel avamisel. Kasutage vahekaardi ülaosas olevat töölaua valijat töölaudade vahel vahetamiseks ja selle kõrval olevat **+** uue loomiseks. Valija loetleb esmalt teie enda töölauad, seejärel need, mis on teiega jagatud, märgistatuna nende jagaja nimega.
@@ -27,6 +30,8 @@ Vidin on üksik diagramm ruudustikul. Toetatud diagrammitüübid:
 - **Entity relationships (DB)** (tabelid, väljad, PK/FK võtmed ja seosed)
 - **Tulpmõõdik** (üks horisontaalne mõõdik rea kohta punasest roheliseks gradiendiga ja väärtusega, nt vaba kettaruum)
 - **Tekst** (markdown-sõnum, nt olekumärkus nagu "Viimane käivitus 19:47"; toetab [interaktiivseid märkeruute](../nodes/chart-output-node.md#interactive-task-lists), kui markdown on staatiline, ja [selgesõnalisi nummerdatud loendeid](../nodes/chart-output-node.md#numbered-lists) kohandatud või kahaneva nummerduse jaoks)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (teie ootel inimülevaatused. Päis näitab `1/n pending`. Workflow nimi avab selle käivituse lõuendil. **Kinnita**, **Taotle muudatusi** ja **Lükka tagasi** lahendavad selle. Vidinа pealkirja kõrval olev ajaloo ikoon avab selle käivituse selle lehe ajaloo dialoogis. Vidin ei kasuta ülemvoo ridu ja iga inimene näeb oma järjekorda. See võib selle asemel kuvada ühe Workflow ülevaatusi kõigile, kes saavad seda Workflow'd avada; vaadake [HITL-vidinad](#hitl-vidinad))
 
 Lisaks diagrammidele käivitab vidin **Run a workflow** ühe teie workflow'dest otse töölaualt: lohistatud failiga, sisestusväljadega või nupuga Run; vt [Käivitusvidinad](#run-widgets).
@@ -145,3 +150,5 @@ Jagamise eemaldamine või selle alandamine write'ilt read'ile jõustub kohe.
 ## Ajakavad ja andmebaasidiagrammid
 
 Valige jaotises Lisa vidin **Gantt**, et kuvada ülesandeid ajas koos lõpetamise ja sõltuvuste linkidega, või **Entity relationships (DB)**, et kaardistada tabeleid, välju ja nende seoseid. Mõlemad tüübid kasutavad [Chart Output sõlme](../nodes/chart-output-node.md#gantt-schedules) ja on saadaval ka Heym Work lehtedel. Kui Work soovitab vidinaid ajakava või andmebaasiskeemi jaoks, joonistab see ettepanekute põhjal eelvaated.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

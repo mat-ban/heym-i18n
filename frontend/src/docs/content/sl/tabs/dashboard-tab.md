@@ -2,6 +2,9 @@
 
 Zavihek **Nadzorna plošča** je prostor v slogu Grafana, kjer gradite mreže grafičnih pripomočkov. Vsak pripomoček se prikaže iz izhoda svojega skritega Heym workflow-a, tako da lahko vsak podatek, ki ga lahko ustvarite v workflow-u — poizvedbe v bazi podatkov, API klici, RAG iskanja, izhodi LLM — postane graf. Ohranite lahko več nadzornih plošč in vsako delite z ljudmi ali ekipami.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Nadzorne plošče
 
 Vsakdo začne z eno nadzorno ploščo, ki je ustvarjena ob prvem odprtju zavihka. Uporabite izbirnik nadzorne plošče na vrhu zavihka za preklapljanje med nadzornimi ploščami, in **+** poleg njega za ustvarjanje nove. Izbirnik najprej prikaže vaše lastne nadzorne plošče, nato tiste, ki so z vami deljene, označene z imenom osebe, ki jih je delila.
@@ -27,6 +30,8 @@ Pripomoček je en sam graf na mreži. Podprti tipi grafov:
 - **Entity relationships (DB)** (tabele, polja, ključi PK/FK in povezave)
 - **Stolpčni merilnik** (ena vodoravna merilna enota na vrstico z rdeče→zelena gradientom in vrednostjo, npr. prosti prostor na disku)
 - **Besedilo** (sporočilo v markdown formatu, npr. statusna opomba kot "Zadnje izvajanje ob 19:47"; podpira [interaktivne potrditvene okvirčke](../nodes/chart-output-node.md#interactive-task-lists), ko je markdown statičen, in [izrecne številčne sezname](../nodes/chart-output-node.md#numbered-lists) za prilagojeno ali padajoče številčenje)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (vaši čakajoči človeški pregledi. Glava prikazuje `1/n čakajočih`. Ime workflow-a odpre to izvajanje na platnu. **Odobri**, **Zahtevaj spremembe** in **Zavrni** ga rešijo. Ikona zgodovine poleg naslova pripomočka odpre to izvajanje v pogovornem oknu zgodovine na tej strani. Pripomoček ne uporablja zgornjih vrstic, in vsakdo vidi svojo lastno vrsto. Namesto tega lahko prikazuje preglede enega samega Workflowa za vsakogar, ki lahko ta Workflow odpre; glejte [Gradniki HITL](#gradniki-hitl))
 
 Poleg grafikonov pripomoček **Run a workflow** zažene enega od vaših workflowov z nadzorne plošče: na odloženi datoteki, s svojimi vnosnimi polji ali z gumbom Run; glejte [Pripomočki za zagon](#run-widgets).
@@ -145,3 +150,5 @@ Odstranitev deljenja ali znižanje pravic z pisanja na branje začne veljati tak
 ## Urniki in diagrami zbirk podatkov
 
 Izberite **Gantt** v Dodaj pripomoček za prikaz opravil skozi čas s povezavami dokončanja in odvisnosti, ali **Entity relationships (DB)** za preslikavo tabel, polj in njihovih relacij. Obe vrsti uporabljata [vozlišče Chart Output](../nodes/chart-output-node.md#gantt-schedules) in sta na voljo tudi na straneh Heym Work. Ko Work predlaga pripomočke za urnik ali shemo zbirke podatkov, izriše predoglede na podlagi predlaganih opravil ali entitet.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

@@ -2,6 +2,9 @@
 
 Tab **Dashboard** adalah ruang bergaya Grafana tempat Anda membangun kisi-kisi widget chart. Setiap widget dirender dari output Workflow Heym tersembunyinya sendiri, sehingga data apa pun yang dapat Anda hasilkan dalam sebuah Workflow — kueri database, panggilan API, pencarian RAG, output LLM — dapat menjadi sebuah chart. Anda dapat menyimpan beberapa dashboard dan membagikan masing-masing kepada orang atau tim.
 
+<video src="/features/showcase/dashboard.webm" controls playsinline muted preload="metadata" style="width:100%;border-radius:12px;margin:16px 0"></video>
+<p class="github-video-link"><a href="../../../../public/features/showcase/dashboard.webm">▶ Watch Dashboard demo</a></p>
+
 ## Dashboard
 
 Setiap orang memulai dengan satu dashboard, yang dibuat saat pertama kali mereka membuka tab ini. Gunakan pemilih dashboard di bagian atas tab untuk beralih antar dashboard, dan **+** di sebelahnya untuk membuat dashboard baru. Pemilih tersebut mencantumkan dashboard milik Anda terlebih dahulu, lalu dashboard yang dibagikan kepada Anda, dengan label nama orang yang membagikannya.
@@ -27,6 +30,8 @@ Widget adalah satu chart pada kisi. Jenis chart yang didukung:
 - **Entity relationships (DB)** (tabel, bidang, kunci PK/FK, dan koneksi)
 - **Bar gauge** (satu gauge horizontal per baris dengan gradien merah→hijau dan sebuah nilai, misalnya ruang disk kosong)
 - **Text** (pesan markdown, misalnya catatan status seperti "Last execution at 19:47"; mendukung [interactive checkboxes](../nodes/chart-output-node.md#interactive-task-lists) ketika markdown bersifat statis, dan [explicit numbered lists](../nodes/chart-output-node.md#numbered-lists) untuk penomoran kustom atau menurun)
+- **HTML** (your own HTML, CSS and JavaScript, filled in like the [HTML output mapper](../nodes/html-output-mapper-node.md) node. It runs in a sandboxed frame without network access or your Heym session; see [HTML widgets](#html-widgets))
+
 - **HITL** (tinjauan human review Anda yang tertunda. Header menampilkan `1/n pending`. Nama Workflow membuka run tersebut di canvas. **Approve**, **Request changes**, dan **Reject** menyelesaikannya. Ikon riwayat di samping judul widget membuka run tersebut dalam dialog riwayat di halaman ini. Widget ini tidak menggunakan baris upstream, dan setiap orang melihat antreannya sendiri. Widget ini juga dapat menampilkan tinjauan dari satu Workflow untuk semua orang yang dapat membuka Workflow tersebut; lihat [Widget HITL](#widget-hitl))
 
 Selain grafik, widget **Run a workflow** menjalankan salah satu Workflow Anda dari dashboard: pada file yang dijatuhkan, dengan kolom inputnya, atau dengan tombol Run; lihat [Widget Run](#run-widgets).
@@ -145,3 +150,5 @@ Menghapus pembagian, atau menurunkannya dari write menjadi read, berlaku segera.
 ## Jadwal dan diagram database
 
 Pilih **Gantt** di Tambah widget untuk menampilkan tugas dari waktu ke waktu dengan penyelesaian dan tautan dependensi, atau **Entity relationships (DB)** untuk memetakan tabel, bidang, dan relasinya. Kedua jenis menggunakan [node Chart Output](../nodes/chart-output-node.md#gantt-schedules), dan juga tersedia di halaman Heym Work. Ketika Work menyarankan widget untuk jadwal atau skema database, Work akan menggambar pratinjau dari tugas atau entitas yang diusulkan sebelum Anda membuat halaman.
+
+After a fine-tune, or a change Chat made, the widget shows **Revert previous** (an undo arrow). It puts the widget back as it was before that change. The button stays until you reload the page, revert, or the widget changes again. When the widget's workflow was saved after the change, Heym refuses the revert and says so, so a later edit is never overwritten; restore an older version from the workflow's Edit History instead.

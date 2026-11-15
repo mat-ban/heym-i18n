@@ -19,7 +19,7 @@ Mõned integratsioonisõlmed **ei** vaja mandaate. [WebSocket Trigger](../nodes/
 | **Linear** | [Linear node](../nodes/linear-node.md) | `api_key` või `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry node](../nodes/sentry-node.md) | `api_token`, valikuline `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Hindamised](../tabs/evals-tab.md) (LLM-as-Judge kohtunik) | `base_url`, valikuline `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Hindamised](../tabs/evals-tab.md) (LLM-as-Judge kohtunik), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, valikuline `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI vaikeväärtused | decision model mandaat, millele lisanduvad mudelivalikud, mis viitavad teie teistele mandaatidele |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektorhoidlad | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Mõned integratsioonisõlmed **ei** vaja mandaate. [WebSocket Trigger](../nodes/
 | **Grist** | [Grist node](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets node](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 nõusolek |
 | **Google Drive** | [Google Drive node](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 nõusolek (täielik Drive'i ulatus) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery node](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 nõusolek |
 | **Supabase** | [Supabase node](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, valikuline `supabase_schema` |
 | **ClickHouse** | [ClickHouse node](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -912,3 +913,6 @@ otsustusmudelit. See hoiab viiteid, mitte kunagi oma võtit.
 
 Valikute nimed on need, mille vahel otsustusmudel valib, seega peavad need olema eristatavad. Üks
 valik ei saa osutada teisele mudeli marsruuterile.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

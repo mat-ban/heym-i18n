@@ -368,3 +368,6 @@ Text（动态 — 消息字符串由上游生成，并通过 `valueField` 拉取
 
 - [Dashboard tab](../tabs/dashboard-tab.md) — 构建和排列 widget
 - [Output 节点](output-node.md) — 常规 Workflow 的终端节点
+## HTML Widgets
+
+The **HTML** output format lets you render bespoke visualizations using HTML, CSS and JavaScript. The output is displayed in a sandboxed `<iframe>` on the Dashboard without access to parent storage, cookies, or the network.

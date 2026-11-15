@@ -54,3 +54,5 @@ Le nœud **Slack** envoie un message vers un canal Slack via un Incoming Webhook
 - [Types de nœuds](../reference/node-types.md) – Aperçu de tous les types de nœuds
 - [Error Handler](./error-handler-node.md) – Envoyer un message Slack en cas d'échec du workflow
 - [Onglet Identifiants](../tabs/credentials-tab.md) – Ajouter un webhook Slack
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

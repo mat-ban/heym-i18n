@@ -95,7 +95,7 @@ Rezultāts ir pieejams kā `$activeAdults.count`. Tukšs vai izlaists filtrs sas
 | `$contains` | Apakšvirknes atbilstība bez reģistrjutības |
 | `$in` | Vērtība ir dotajā masīvā |
 
-Piemērs, apvienojot vairākus: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nezināmi operatori tiek ignorēti. `upsert` filtri joprojām izmanto precīzas atbilstības vērtības, lai atrastu atjaunināmo rindu.
+Piemērs, apvienojot vairākus: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Nezināmi operatori tiek ignorēti. `upsert` filtri joprojām izmanto precīzas atbilstības vērtības, lai atrastu atjaunināmo rindu.
 
 Varat arī filtrēt pēc rindas metadatiem — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — kas tiek glabāti kā īstas kolonnas, nevis jūsu datu ietvaros. Datumiem nododiet pilnu vērtību diapazona salīdzinājumiem (piem., `{"created_at": {"$gt": "2026-06-04"}}`) vai izmantojiet `$contains` daļējai teksta atbilstībai (piem., `{"created_at": {"$contains": "2026-06-04"}}`). Ja viena no jūsu pašu kolonnām ir nosaukta tāpat kā metadatu lauks, datu kolonnai ir prioritāte.
 

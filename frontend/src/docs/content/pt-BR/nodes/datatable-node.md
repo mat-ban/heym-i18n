@@ -95,7 +95,7 @@ Em um filtro `find` ou `count`, um valor simples significa igual; um valor de ob
 | `$contains` | Correspondência de substring sem distinção entre maiúsculas e minúsculas |
 | `$in` | O valor está no array fornecido |
 
-Exemplo combinando vários: `{"status": "active", "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Operadores desconhecidos são ignorados. Filtros `upsert` ainda utilizam valores de correspondência exata para localizar a linha a ser atualizada.
+Exemplo combinando vários: `{"status": "active", "is_active": true, "age": {"$gte": 18}, "plan": {"$in": ["pro", "team"]}, "name": {"$contains": "jo"}}`. Operadores desconhecidos são ignorados. Filtros `upsert` ainda utilizam valores de correspondência exata para localizar a linha a ser atualizada.
 
 Você também pode filtrar pelos metadados da linha — `id`, `table_id`, `created_at`, `updated_at`, `created_by`, `updated_by` — que são armazenados como colunas reais em vez de dentro dos seus dados. Para datas, passe um valor completo para comparações de intervalo (ex.: `{"created_at": {"$gt": "2026-06-04"}}`) ou use `$contains` para uma correspondência parcial de texto (ex.: `{"created_at": {"$contains": "2026-06-04"}}`). Se uma de suas próprias colunas tiver o mesmo nome de um campo de metadados, a coluna de dados tem precedência.
 

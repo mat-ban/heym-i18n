@@ -141,3 +141,6 @@ Une connexion échouée renvoie à l'écran de connexion avec un message lisible
 - **Plusieurs fournisseurs simultanés.** Une instance se connecte à un seul fournisseur.
 - **Le mappage de groupes ou de rôles** à partir des revendications du fournisseur.
 - **La déconnexion unique.** Se déconnecter de Heym ne vous déconnecte pas du fournisseur.
+
+- **La double authentification relève du fournisseur.** `HEYM_REQUIRE_MFA` s'applique uniquement à la connexion par mot de passe ; une connexion SSO ne demande jamais de code Heym. Exigez la MFA au niveau de votre fournisseur d'identité.
+- **La désactivation s'applique également ici.** Un compte qu'un administrateur a désactivé dans **Paramètres → Utilisateurs** est refusé même si le fournisseur continue de l'authentifier.

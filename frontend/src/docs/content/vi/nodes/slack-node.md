@@ -54,3 +54,5 @@ Sử dụng với [Error Handler](./error-handler-node.md) để thông báo khi
 - [Node Types](../reference/node-types.md) – Tổng quan về tất cả các loại node
 - [Error Handler](./error-handler-node.md) – Gửi Slack khi workflow thất bại
 - [Credentials Tab](../tabs/credentials-tab.md) – Thêm Slack webhook
+
+Set **Files** (`slackFiles`) to upload Drive files with the message. A file is read if it came into this run through File Upload trigger or was created by an upstream node.

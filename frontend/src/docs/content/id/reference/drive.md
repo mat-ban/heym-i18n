@@ -97,3 +97,11 @@ Pembacaan Drive dibatasi pada file yang dapat diakses oleh aktor workflow: file 
 
 ## Pembersihan
 Token berbagi yang kedaluwarsa dibersihkan secara otomatis setiap hari. File itu sendiri tetap ada hingga dihapus secara manual melalui tab Drive. Gunakan **Clear All** untuk menghapus setiap file dan tautan berbaginya dalam satu tindakan.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

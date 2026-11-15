@@ -68,3 +68,5 @@ Workflow без trigger възел, чийто единствен термина
 - [Output](./output-node.md) – Отговор на базата на съобщение или схема с обвивка `result`
 - [Webhooks](../reference/webhooks.md) – Execute endpoint, request методи и отговори
 - [Node Types](../reference/node-types.md) – Всички типове възли
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

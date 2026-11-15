@@ -253,3 +253,5 @@ Warto wiedzieć:
 - [Integracje zewnętrzne](../reference/integrations.md#qdrant) – Konfiguracja danych logowania Qdrant i Postgres (pgvector)
 - [Węzeł Agent](./agent-node.md) – Wykorzystanie wyników RAG jako kontekstu agenta
 - [Węzeł LLM](./llm-node.md) – Przekazanie wyników RAG do promptu systemowego LLM
+
+Set **Reranker Credential** (`rerankerCredentialId`) to a Cohere or Decision Model credential to rerank retrieved chunks against the query before returning them to context.

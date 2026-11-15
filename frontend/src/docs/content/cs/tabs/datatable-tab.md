@@ -122,3 +122,6 @@ Pokud žádný řádek neodpovídá, model je uveden v upozornění **Unpriced m
 - [Traces Tab](./traces-tab.md) - Používá LLM Cost Table pro donut nákladů a KPI karty
 - [Grist Node](../nodes/grist-node.md) - Alternativa externí tabulky
 - [Variables Tab](./global-variables-tab.md) - Alternativa úložiště klíč-hodnota
+## Hledání
+
+Použijte vyhledávací pole nad seznamem tabulek nebo stiskněte **Ctrl+F** (nebo **Cmd+F**) pro filtrování tabulek podle názvu nebo popisu během psaní. Stisknutím **Escape** vyhledávání zrušíte.

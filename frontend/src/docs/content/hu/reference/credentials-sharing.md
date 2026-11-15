@@ -87,6 +87,7 @@ Egyes csomópontok a `credentialId` (UUID) értéket a `node.data` mezőben tár
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse kapcsolati adatok (host, port, hitelesítés, adatbázis) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot hitelesítési adat |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord public key vagy webhook hitelesítési adat |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vektortároló | `credential_id` | Qdrant vagy Postgres (pgvector) vektor adatbázis, Qdrant, Psql vagy Custom Embeddings RAG hitelesítési adaton keresztül |
 | Értékelések | `credential_id`, `judge_credential_id` | Modell hitelesítési adat; modell vagy Decision Model hitelesítési adat az LLM-as-Judge bírálathoz |
 | [Playwright](../nodes/playwright-node.md) AI lépés | `credentialId` | LLM/Vision modell (az AI lépéshez és az [Auto Heal](../nodes/playwright-node.md#ai-auto-heal) funkcióhoz) |
@@ -105,3 +106,7 @@ A végrehajtás után a `mask_sensitive_output()` maszkolja a hitelesítési ada
 - [Expression DSL](./expression-dsl.md) – `$credentials` szintaxis
 - [Csomópont típusok](./node-types.md) – Hitelesítési adatokat használó csomópontok ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent csomópont](../nodes/agent-node.md) – `credentialId` használata az LLM-hez
+
+## Google Meet naptárengedélyek
+
+A [Google Meet hitelesítési adatok](../nodes/google-meet-node.md) megosztása lehetővé teszi a workflow-k számára a hozzáférhető naptárak szabad/elfoglalt időközeinek olvasását, valamint események létrehozását, módosítását vagy törlését a csatlakoztatott Google-fiókként, beleértve a meghívók és lemondások küldését is. A látogató résztvevői e-mail-címe nem változtatja meg, hogy melyik fiók a tulajdonosa vagy jogosultja az eseménynek. Csak a hitelesítési adat tulajdonosa csatlakoztathatja újra a Google-engedélyezést.

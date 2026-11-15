@@ -7,7 +7,7 @@ Zakładka **Workflows** to domyślny widok pulpitu nawigacyjnego. Wyświetla lis
 
 ## Rozpoczęcie czatu
 
-Nad listą workflow znajduje się pole czatu, które wita użytkownika po imieniu i pyta, co chce zautomatyzować. Należy wpisać prompt, opcjonalnie dołączyć jeden plik oraz wybrać dane logowania i model. Oba menu rozwijane są przeszukiwalne i domyślnie korzystają z [ustawień domyślnych AI](../reference/user-settings.md).
+Nad listą workflow znajduje się pole czatu, które wita użytkownika po imieniu i pyta, co chce zautomatyzować. Należy wpisać prompt, opcjonalnie dołączyć up to 10 files oraz wybrać dane logowania i model. Oba menu rozwijane są przeszukiwalne i domyślnie korzystają z [ustawień domyślnych AI](../reference/user-settings.md).
 
 Wysłanie wiadomości tworzy nową rozmowę i otwiera ją w [zakładce Chat](./chat-tab.md), gdzie odpowiedź jest strumieniowana. Obsługiwane załączniki to pliki tekstowe, obrazy i pliki PDF — jeden na wiadomość, tak samo jak w kompozytorze czatu.
 

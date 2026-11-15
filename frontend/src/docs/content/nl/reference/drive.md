@@ -97,3 +97,11 @@ Drive-leesbewerkingen zijn beperkt tot bestanden die toegankelijk zijn voor de w
 
 ## Opruimen
 Vervallen share-tokens worden dagelijks automatisch opgeruimd. Bestanden zelf blijven bestaan totdat ze handmatig via het tabblad Drive worden verwijderd. Gebruik **Alles wissen** om elk bestand en de bijbehorende deellinks in één actie te verwijderen.
+
+## Related
+
+- [File Analysis](./file-analysis.md) - Inspect and process large Drive files in an isolated sandbox
+
+## Opening Drive Files in a Sandbox
+
+Chat, an Agent node that receives a file and the Code node's **Files** field open Drive files in an isolated Python sandbox and read them selectively. Chat sees owned files and files shared with the user's teams. A workflow run sees only its own files: those uploaded through its File Upload trigger and those its nodes wrote. See [File Analysis](./file-analysis.md).

@@ -72,6 +72,9 @@ Pintasan ini aktif pada tab Workflows saat tidak ada input teks lain yang aktif.
 | `Ctrl + F` / `Cmd + F` | Fokuskan pencarian workflow |
 | `Escape` | Hapus pencarian workflow saat berisi teks |
 
+
+Tab **Kredensial** dan **DataTable** bekerja dengan cara yang sama: `Ctrl + F` / `Cmd + F` memfokuskan bidang pencarian, daftar menyempit saat Anda mengetik, dan `Escape` menghapusnya.
+
 ## Pintasan Panel Properti
 
 Pintasan ini aktif saat sebuah node dipilih dan panel properti terbuka.

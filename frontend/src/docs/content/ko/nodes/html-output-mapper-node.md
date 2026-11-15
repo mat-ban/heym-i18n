@@ -68,3 +68,5 @@ Trigger 노드가 없고 이 노드만 유일한 터미널인 Workflow는 [Workf
 - [Output](./output-node.md) – `result` 래핑을 사용하는 메시지 또는 스키마 기반 응답
 - [Webhooks](../reference/webhooks.md) – Execute Endpoint, 요청 메서드, 응답
 - [Node Types](../reference/node-types.md) – 모든 노드 타입
+
+In the [Dashboard](../tabs/dashboard-tab.md), an **HTML** widget renders custom HTML, CSS and JavaScript in a sandboxed frame without network access or your Heym session. See [HTML widgets](../tabs/dashboard-tab.md#html-widgets).

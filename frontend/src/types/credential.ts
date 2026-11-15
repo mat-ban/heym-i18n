@@ -26,6 +26,7 @@ export type CredentialType =
   | "flaresolverr"
   | "google_sheets"
   | "google_drive"
+  | "google_meet"
   | "bigquery"
   | "supabase"
   | "notion"
@@ -44,6 +45,10 @@ export interface Credential {
   masked_value: string | null;
   header_key: string | null;
   public_fields?: Record<string, string | null>;
+  /** `k8s:<namespace>/<secret-name>` when a Kubernetes Secret manages it (read-only). */
+  source?: string | null;
+  /** No configured ENCRYPTION_KEY decrypts it: it can only be deleted and re-created. */
+  unreadable?: boolean;
   created_at: string;
   updated_at?: string;
 }
@@ -55,6 +60,10 @@ export interface CredentialListItem {
   masked_value: string | null;
   header_key: string | null;
   public_fields?: Record<string, string | null>;
+  /** `k8s:<namespace>/<secret-name>` when a Kubernetes Secret manages it (read-only). */
+  source?: string | null;
+  /** No configured ENCRYPTION_KEY decrypts it: it can only be deleted and re-created. */
+  unreadable?: boolean;
   created_at: string;
   is_shared?: boolean;
   shared_by?: string | null;
@@ -521,6 +530,7 @@ export const CREDENTIAL_TYPE_LABELS: Record<CredentialType, string> = {
   flaresolverr: "FlareSolverr",
   google_sheets: "Google Sheets (OAuth2)",
   google_drive: "Google Drive (OAuth2)",
+  google_meet: "Google Meet (OAuth2)",
   bigquery: "BigQuery (OAuth2)",
   supabase: "Supabase",
   clickhouse: "ClickHouse",
@@ -565,6 +575,7 @@ export const CREDENTIAL_TYPE_DESCRIPTIONS: Record<CredentialType, string> = {
   flaresolverr: "Connect to FlareSolverr for web scraping with browser automation",
   google_sheets: "Connect to Google Sheets via OAuth2 — read, write, append, and query spreadsheets",
   google_drive: "Connect to Google Drive via OAuth2 — list, download, update, and delete files",
+  google_meet: "Connect Google Calendar to find free times and manage Meet invitations",
   bigquery: "Connect to Google BigQuery via OAuth2 — run SQL queries and insert rows",
   supabase: "Connect to Supabase PostgREST — query and mutate Postgres-backed tables",
   clickhouse:

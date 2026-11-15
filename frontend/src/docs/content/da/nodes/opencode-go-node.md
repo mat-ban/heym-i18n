@@ -22,7 +22,7 @@ Noden kræver også **GitHub**-legitimationsoplysninger for at klone private rep
 Eksekveringsisolation vælges via `HEYM_OPENCODE_CLI_COMMAND`, præcis som med Codex-noden:
 
 - **Lokal udvikling (`run.sh`)** lader den være standard `opencode`, så OpenCode kører som en subproces på værten mod den klonede arbejdsmappe – ingen Docker nødvendig, ingen ekstra flag.
-- **Docker-deployment (`deploy.sh` og det enkelte GHCR-image)** sætter den til `/usr/local/bin/heym-opencode-docker`, en wrapper der kører `opencode run` i en **hærdet, engangsbrugbar sibling-container** der deler OpenCode-arbejdsmappens navngivne volumen.
+- **Docker-deployment (`deploy.sh` og det enkelte GHCR-image)** sætter den til `/usr/local/bin/heym-opencode-docker`, en wrapper der kører `opencode run` i en **hærdet, engangsbrugbar sibling-container** der deler OpenCode-arbejdsmappens navngivne volumen. On [Kubernetes](../getting-started/kubernetes.md) the same wrapper runs it as a restricted pod.
 
 Den hærdede runner-container dropper alle Linux-capabilities, sætter `no-new-privileges`, bruger en read-only root med en tmpfs `/tmp`, og anvender pid/hukommelse/CPU-begrænsninger. Netværksegress er tilladt (OpenCode skal kunne nå model-gatewayen). **GitHub-tokenet placeres aldrig i containeren** – alle git- og GitHub-operationer kører på værtsiden, så kun OpenCode API-nøglen og repository-filerne nogensinde er inde i containeren.
 

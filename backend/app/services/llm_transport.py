@@ -8,6 +8,7 @@ must survive every turn. The loop never inspects a history's contents.
 from __future__ import annotations
 
 import copy
+import json
 import logging
 from dataclasses import dataclass, field, replace
 from typing import Any, Protocol
@@ -41,6 +42,40 @@ class TurnResult:
     total_tokens: int = 0
     finish_reason: str | None = None
     raw_items: list[Any] = field(default_factory=list)
+
+
+# How each API says the reply stopped at the output token limit: Chat Completions,
+# Anthropic Messages, Gemini, and the Responses API's `status`. A tool call in such a turn
+# may be cut short, and on the last three its arguments still arrive as valid JSON.
+TRUNCATED_FINISH_REASONS = frozenset({"length", "max_tokens", "MAX_TOKENS", "incomplete"})
+# Cut turns in a row before a tool loop gives up instead of asking the model to retry.
+MAX_TRUNCATED_TOOL_TURNS = 2
+TRUNCATED_TOOL_CALL_ERROR = (
+    "Not run: the reply reached the output token limit before this turn's tool calls were "
+    "complete, so none of them ran. Call the tools again with shorter arguments."
+)
+
+
+def is_truncated_turn(finish_reason: Any) -> bool:
+    """True when the provider stopped the turn at its output token limit."""
+    return isinstance(finish_reason, str) and finish_reason in TRUNCATED_FINISH_REASONS
+
+
+def parse_tool_arguments(raw: str | None) -> tuple[dict[str, Any], str | None]:
+    """Parse a tool call's arguments, or say why they cannot be used.
+
+    A call whose arguments do not parse to an object must not run with `{}` in their place.
+    """
+    try:
+        parsed = json.loads(raw or "{}")
+    except json.JSONDecodeError as exc:
+        return {}, (
+            f"Not run: the tool call arguments are not valid JSON ({exc.msg} at position "
+            f"{exc.pos}). Send the call again with its arguments as a JSON object."
+        )
+    if not isinstance(parsed, dict):
+        return {}, "Not run: the tool call arguments must be a JSON object."
+    return parsed, None
 
 
 @dataclass
@@ -124,6 +159,51 @@ def provider_detail(exc: Exception, limit: int = 300) -> str:
 def rejects_response_format(exc: Exception) -> bool:
     """A 400/422 naming `response_format`: the model cannot honour that structured-output type."""
     return getattr(exc, "status_code", None) in (400, 422) and "response_format" in str(exc).lower()
+
+
+def is_disable_reasoning_error(exc: Exception) -> bool:
+    """Return True if exc is an HTTP 400 or 422 specifically rejecting disable_reasoning."""
+    code = getattr(exc, "status_code", None)
+    if code is None and hasattr(exc, "response"):
+        code = getattr(getattr(exc, "response", None), "status_code", None)
+
+    parts = [str(exc)]
+    message = getattr(exc, "message", None)
+    if isinstance(message, str):
+        parts.append(message)
+    body = getattr(exc, "body", None)
+    if isinstance(body, dict):
+        try:
+            parts.append(json.dumps(body))
+        except (TypeError, ValueError):
+            pass
+    elif isinstance(body, str):
+        parts.append(body)
+
+    err_text = " ".join(parts).lower()
+
+    if code is not None:
+        if code not in (400, 422):
+            return False
+    else:
+        if "400" not in err_text and "422" not in err_text:
+            return False
+
+    return (
+        "disable_reasoning" in err_text
+        or "disabling reasoning" in err_text
+        or "disable reasoning" in err_text
+    )
+
+
+def rejects_disable_reasoning(
+    exc: Exception,
+    extra_body: dict[str, Any] | None = None,
+) -> bool:
+    """Return True when an HTTP 400/422 explicitly rejects disable_reasoning from extra_body."""
+    if not isinstance(extra_body, dict) or "disable_reasoning" not in extra_body:
+        return False
+    return is_disable_reasoning_error(exc)
 
 
 def _weaker_response_format(response_format: dict[str, Any]) -> dict[str, Any] | None:

@@ -19,7 +19,7 @@ Nogle integrationsnoder kræver **ikke** legitimationsoplysninger. [WebSocket Tr
 | **Linear** | [Linear node](../nodes/linear-node.md) | `api_key`, eller `client_id` + `client_secret` OAuth2 |
 | **Sentry** | [Sentry node](../nodes/sentry-node.md) | `api_token`, valgfri `base_url` |
 | **Custom** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md) | `api_key`, `base_url` |
-| **Decision Model** | [Decision](../nodes/decision-node.md), [Evalueringer](../tabs/evals-tab.md) (LLM-as-Judge judge) | `base_url`, valgfri `api_key` |
+| **Decision Model** | [Decision](../nodes/decision-node.md), [Evalueringer](../tabs/evals-tab.md) (LLM-as-Judge judge), [RAG](../nodes/rag-node.md#reranking) reranking | `base_url`, valgfri `api_key` |
 | **Model Router (Auto Model)** | [LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), Chat, AI Defaults | en beslutningsmodel-legitimationsoplysning plus modelmuligheder, der refererer til andre legitimationsoplysninger |
 | **Cohere** | Embeddings | `api_key` |
 | **RAG: Qdrant + OpenAI** | [RAG](../nodes/rag-node.md), Vektorlagre | `qdrant_host`, `openai_api_key` |
@@ -28,6 +28,7 @@ Nogle integrationsnoder kræver **ikke** legitimationsoplysninger. [WebSocket Tr
 | **Grist** | [Grist node](../nodes/grist-node.md) | `api_key`, `server_url` |
 | **Google Sheets** | [Google Sheets node](../nodes/google-sheets-node.md) | `client_id`, `client_secret` + OAuth2 samtykke |
 | **Google Drive** | [Google Drive node](../nodes/google-drive-node.md) | `client_id`, `client_secret` + OAuth2 samtykke (fuld Drive-scope) |
+| **Google Meet** | [Google Meet node](../nodes/google-meet-node.md) | `client_id`, `client_secret` + OAuth2 consent |
 | **BigQuery** | [BigQuery node](../nodes/bigquery-node.md) | `client_id`, `client_secret` + OAuth2 samtykke |
 | **Supabase** | [Supabase node](../nodes/supabase-node.md) | `supabase_url`, `supabase_key`, valgfri `supabase_schema` |
 | **ClickHouse** | [ClickHouse node](../nodes/clickhouse-node.md) | `host`, `port`, `username`, `password`, `database`, `secure` |
@@ -877,3 +878,6 @@ Dirigerer hver anmodning til en af de eksisterende model-legitimationsoplysninge
 ### Bemærkninger
 
 Option-navne er, hvad beslutningsmodellen vælger imellem, så de skal være unikke. En option kan ikke pege på en anden Model Router.
+## Google Meet
+
+Read availability and create, update or delete calendar meetings with Google Meet conferences through OAuth2. Tokens refresh automatically. See the [Google Meet node](../nodes/google-meet-node.md) for full configuration and calendar permission requirements.

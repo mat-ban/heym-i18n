@@ -84,3 +84,7 @@ GitHub Enterprise Server에서 **GitHub** 자격 증명을 편집할 때 선택�
 - [Vectorstores 탭](./vectorstores-tab.md) – Qdrant 또는 Postgres(pgvector) 자격 증명을 사용합니다
 - [Chat 탭](./chat-tab.md) – OpenAI/Google 자격 증명을 사용합니다
 - [Contextual Showcase](../reference/contextual-showcase.md) – 대시보드 화면을 위한 간결한 페이지 가이드
+
+## 검색
+
+목록 위의 검색 필드를 사용하거나 **Ctrl+F**(또는 **Cmd+F**)를 눌러 입력하는 동안 이름이나 유형별로 credential을 필터링하세요. 검색을 지우려면 **Escape**를 누르세요.

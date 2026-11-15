@@ -87,6 +87,7 @@ Bazı düğümler `node.data` içinde `credentialId` (UUID) saklar:
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | ClickHouse bağlantı ayrıntıları (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Telegram bot kimlik bilgisi |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Discord public key veya webhook kimlik bilgisi |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant veya Postgres (pgvector) vector DB, bir Qdrant, Psql veya Custom Embeddings RAG kimlik bilgisi aracılığıyla |
 | Evals | `credential_id`, `judge_credential_id` | Model kimlik bilgisi; LLM-as-Judge judge için bir model veya Decision Model kimlik bilgisi |
 | [Playwright](../nodes/playwright-node.md) AI adımı | `credentialId` | LLM/Vision modeli (AI adımı ve [Auto Heal](../nodes/playwright-node.md#ai-auto-heal) için) |
@@ -105,3 +106,7 @@ Yürütmeden sonra, `mask_sensitive_output()` çıktılardaki kimlik bilgisi de�
 - [Expression DSL](./expression-dsl.md) – `$credentials` sözdizimi
 - [Node Types](./node-types.md) – Kimlik bilgilerini kullanan düğümler ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – LLM için `credentialId` kullanır
+
+## Google Meet takvim izinleri
+
+Bir [Google Meet kimlik bilgisini](../nodes/google-meet-node.md) paylaşmak, iş akışlarının erişilebilir takvimlerin boş/dolu aralıklarını okumasına ve davetler ile iptaller gönderme dahil olmak üzere bağlı Google hesabı olarak etkinlikler oluşturmasına, değiştirmesine veya silmesine olanak tanır. Ziyaretçinin katılımcı e-postası, etkinliğin hangi hesaba ait olduğunu veya yetkilendirildiğini değiştirmez. Yalnızca kimlik bilgisi sahibi Google yetkilendirmesini yeniden bağlayabilir.

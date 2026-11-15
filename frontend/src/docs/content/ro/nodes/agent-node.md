@@ -109,6 +109,10 @@ Selectați workflow-urile în secțiunea Sub-Workflows din configurația agentul
 
 Puteți conecta un nod de workflow acceptat la mânerul **tools** al unui agent, astfel încât agentul să poată apela acel nod la runtime. Aceasta transformă acțiunile și transformările existente din canvas în instrumente apelabile, fără a scrie cod Python.
 
+
+> **Sandbox.** Python tools run as untrusted code in a hardened, isolated sandbox by default (a Docker container, or a restricted pod on Kubernetes) (no network, no Docker socket, read-only filesystem, non-root). Imports are limited to an allowlist of safe standard-library modules. See [Security → Python Tool Sandbox](../reference/security.md#python-tool-sandbox) for configuration (`HEYM_PYTHON_TOOL_SANDBOX`).
+
+
 Utilizați instrumentele de tip nod din canvas atunci când doriți ca agentul să decidă când să ruleze un nod configurat, păstrând în același timp acreditările, câmpurile statice și setările specifice workflow-ului în interfața nodului.
 
 ### Câmpuri furnizate de agent
@@ -396,3 +400,6 @@ Compresia este automată și întotdeauna activă pentru nodurile Agent. Aceasta
 - [Pornire rapidă](../getting-started/quick-start.md) – Workflow de bază cu LLM și expresii
 - [Fila Acreditări](../tabs/credentials-tab.md) – Adăugați chei API pentru agent
 - [Fila MCP](../tabs/mcp-tab.md) – Configurați MCP pentru unelte de workflow
+## File analysis
+
+File analysis turns on by itself. When the agent's input or its resolved message carries a file of the run (a PDF, spreadsheet, CSV, DOCX, JSON or text file uploaded through the workflow's File Upload trigger or written by one of its nodes), the agent opens it in an isolated Python sandbox with no network. It gets `list_files`, `inspect_file` and `run_python` tools to explore large files without loading entire documents into context. See [File Analysis](../reference/file-analysis.md).

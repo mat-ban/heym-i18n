@@ -87,6 +87,7 @@ $credentials.MyNotionWorkspace
 | [ClickHouse](../nodes/clickhouse-node.md) | `credentialId` | Детайли за връзка с ClickHouse (host, port, auth, database) |
 | [Telegram Trigger](../nodes/telegram-trigger-node.md), [Telegram](../nodes/telegram-node.md) | `credentialId` | Удостоверение за Telegram bot |
 | [Discord Trigger](../nodes/discord-trigger-node.md), [Discord](../nodes/discord-node.md) | `credentialId` | Удостоверение за Discord public key или webhook |
+| [RAG](../nodes/rag-node.md) reranker | `rerankerCredentialId` | Cohere or Decision Model credential |
 | Vector Store | `credential_id` | Qdrant или Postgres (pgvector) векторна база данни, чрез Qdrant, Psql или Custom Embeddings RAG удостоверение |
 | Evals | `credential_id`, `judge_credential_id` | Удостоверение за модел; удостоверение за модел или Decision Model за LLM-as-Judge съдията |
 | [Playwright](../nodes/playwright-node.md) AI стъпка | `credentialId` | LLM/Vision модел (за AI стъпка и [Auto Heal](../nodes/playwright-node.md#ai-auto-heal)) |
@@ -105,3 +106,7 @@ $credentials.MyNotionWorkspace
 - [Expression DSL](./expression-dsl.md) – Синтаксис `$credentials`
 - [Node Types](./node-types.md) – Nodes, които използват удостоверения ([LLM](../nodes/llm-node.md), [Agent](../nodes/agent-node.md), [Codex](../nodes/codex-node.md), [Jira](../nodes/jira-node.md), [Linear](../nodes/linear-node.md), [RAG](../nodes/rag-node.md), [Playwright](../nodes/playwright-node.md), [HTTP](../nodes/http-node.md), [Notion](../nodes/notion-node.md), [Sentry](../nodes/sentry-node.md), [Supabase](../nodes/supabase-node.md), [ClickHouse](../nodes/clickhouse-node.md), [Telegram](../nodes/telegram-node.md), [Telegram Trigger](../nodes/telegram-trigger-node.md), [Discord](../nodes/discord-node.md), [Discord Trigger](../nodes/discord-trigger-node.md), [Slack](../nodes/slack-node.md))
 - [Agent Node](../nodes/agent-node.md) – Използва `credentialId` за LLM
+
+## Разрешения за календара на Google Meet
+
+Споделянето на [идентификационни данни за Google Meet](../nodes/google-meet-node.md) позволява на работните процеси да четат интервалите за заетост на достъпните календари и да създават, променят или изтриват събития като свързания акаунт в Google, включително изпращане на покани и анулации. Имейлът на участника не променя кой акаунт притежава или упълномощава събитието. Само собственикът на идентификационните данни може да свърже отново своето упълномощаване в Google.

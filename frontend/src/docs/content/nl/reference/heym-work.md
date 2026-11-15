@@ -10,7 +10,7 @@ Heym Work draait als een eigen container naast Heym, met een aparte licentie van
 |--------|-----------------|
 | **Chat** | Beschrijf een taak via tekst of spraak. Heym vraagt wat nodig is, bouwt de workflow, test deze en markeert deze als Geverifieerd. |
 | **Flows** | Editors bouwen een flow op basis van keuzes in plaats van een canvas: wat deze start, een optioneel AI-concept en acties in Slack, Google Sheets en e-mail. Antwoorden vanuit Slack vervolgen de run, en goedkeuringen wachten ook in Activiteit. Zie [Flows](#flows). |
-| **Pagina's** | Vastgezette pagina's met widgets: getallen, grafieken, tabellen met statuschips, bestandsuploads en goedkeuringen. Een tabelrij kan een eigen detailpagina openen. |
+| **Pagina's** | Vastgezette pagina's met widgets: getallen, grafieken, tabellen met statuschips, HTML-kaarten, bestandsuploads en goedkeuringen. Een tabelrij kan een eigen detailpagina openen. |
 | **Goedkeuringen** | Beoordelingen uit [Human-in-the-Loop](./human-in-the-loop.md)-stappen wachten in Activiteit en op pagina's, met Goedkeuren, Wijzigingen aanvragen en Afwijzen. |
 | **Activiteit** | Elke uitvoering, inclusief de persoon die deze heeft gestart en het uitvoerende exemplaar. |
 | **Rollen** | Eigenaar, Editor en Kijker. Gebruikers melden zich aan met de [Single Sign-On](./sso.md) die Heym al gebruikt. |

@@ -19,6 +19,7 @@ El nodo **Code** ejecuta el código Python que usted escriba, con su propio `req
 | `codeParameters` | expression | Un objeto JSON que conecta los datos del workflow con el código. Las expresiones se resuelven antes de que se ejecute el código |
 | `codeRequirements` | string | Contenido de `requirements.txt`, un paquete por línea. Si está vacío, se omite la instalación |
 | `codeAllowNetwork` | boolean | Indica si el propio código puede acceder a la red (por defecto `false`) |
+| `codeFiles` | expression | Optional Drive files mounted read-only for the run: an id, several ids, or an expression such as `$Upload.file.id` |
 
 ## La función `main`
 
@@ -124,3 +125,16 @@ def main(params):
 ```
 
 Con `codeParameters` establecido en `{ "rows": "$fetchRows.result" }`, los nodos posteriores leen `$scoreRows.result.total`.
+## Reading Drive files
+
+Set **Files** (`codeFiles`) to give the code the files of the run. It accepts an id, ids separated by commas, a list, or an expression that resolves to a file or its id, such as `$Upload.file.id` or `$Upload.file`. A file opens when it came into this workflow: uploaded through its [File Upload trigger](./file-upload-trigger-node.md) or written to [Drive](../reference/drive.md) by one of its nodes. Other Drive files are not available to a run, so a workflow cannot be used to read someone's Drive.
+
+```python
+import heym_files
+import pandas as pd
+
+def main(params):
+    workbook = params.files[0]
+    df = pd.read_excel(heym_files.path(workbook.name), sheet_name="Summary")
+    return {"rows": len(df), "columns": list(df.columns)}
+```

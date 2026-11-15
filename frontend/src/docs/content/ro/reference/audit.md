@@ -59,6 +59,10 @@ Fiecare schimbare de stare este jurnalizată. Citirile sunt jurnalizate doar aco
 | `auth.token_refresh` | `outcome=denied` cu `reason=refresh_token_replayed_or_revoked` — un semnal de furt de token care merită alertat. |
 | `auth.password_change` | `outcome=failure` când parola curentă a fost greșită. |
 | `auth.sso_login` | Autentificare unică. `outcome=failure` conține motivul pentru care răspunsul furnizorului a fost respins; `denied` conține `email_not_verified`, `domain_not_allowed` sau `provisioning_disabled`. |
+| `admin.rotate_encryption_key` | Master encryption key rotated; previous keys stored in extra list |
+| `auth.mfa_enrol` | User enrolled an authenticator app (TOTP) |
+| `auth.mfa_login` | User completed two-factor authentication |
+| `auth.mfa_reset` | Administrator reset a user's two-factor enrollment |
 | `sso_settings.update` | Un administrator a modificat configurația [SSO](./sso.md). Înregistrează `enabled` și `password_login_disabled`, niciodată secretul clientului. |
 | `sso_settings.test` | Un administrator a rulat testul de conexiune SSO. |
 
